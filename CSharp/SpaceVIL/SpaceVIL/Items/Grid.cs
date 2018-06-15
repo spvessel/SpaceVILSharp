@@ -176,16 +176,6 @@ namespace SpaceVIL
                     _cells[index].UpdateBehavior();
 
                     x_offset += _cells[index].GetWidth() + GetSpacing().Horizontal;
-
-                    /*Console.WriteLine(
-                        "X: " + item.GetX() +
-                        " Y: " + item.GetY() +
-                        " H: " + item.GetHeight() +
-                        " W: " + item.GetWidth() +
-                        " R: " + _cells[index].GetRow() +
-                        " C: " + _cells[index].GetColumn() +
-                        " I: " + index
-                        );*/
                 }
                 y_offset += _cells[index].GetHeight() + GetSpacing().Vertical;
                 x_offset = 0;
