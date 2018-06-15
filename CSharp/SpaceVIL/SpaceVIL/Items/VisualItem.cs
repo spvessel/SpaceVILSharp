@@ -9,6 +9,30 @@ namespace SpaceVIL
 
     abstract public class VisualItem : BaseItem
     {
+        //style
+        public virtual void SetStyle(Style style)
+        {
+            if (style == null)
+                return;
+
+            SetBackground(style.Background);
+            SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
+            SetSize(style.Width, style.Height);
+            SetMinSize(style.MinWidth, style.MinHeight);
+            SetMaxSize(style.MaxWidth, style.MaxHeight);
+            SetAlignment(style.Alignment);
+            SetPosition(style.X, style.Y);
+            SetPadding(style.Padding);
+            SetSpacing(style.Spacing);
+            SetMargin(style.Margin);
+            Border.Radius = style.BorderRadius;
+            Border.Thickness = style.BorderThickness;
+            foreach (var state in style.ItemStates)
+            {
+                AddItemState(true, state.Key, state.Value);
+            }
+        }
+
         //container
         private Spacing _spacing = new Spacing();
         public Spacing GetSpacing()
@@ -180,6 +204,11 @@ namespace SpaceVIL
                 }
                 eventManager.NotifyListeners(EventManager.ResizeHeight, value);
             }
+        }
+        public void SetPosition(int _x, int _y)
+        {
+            this.SetX(_x);
+            this.SetY(_y);
         }
         public override void SetX(int _x)
         {

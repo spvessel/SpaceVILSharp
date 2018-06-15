@@ -67,7 +67,7 @@ namespace SpaceVIL
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Cells row and colums out of range.");
+                Console.WriteLine("Cells row and colums out of range.\n" + ex.ToString());
                 return cell;
             }
             return cell;

@@ -17,16 +17,16 @@ namespace SpaceVIL
             ItemsLayoutBox.InitLayout(_layout.Id);
 
             //add filling frame
-            _layout.Window = new Frame();
-            _layout.Window.SetHandler(_layout);
-            _layout.Window.SetItemName(_layout.GetWindowName());
-            _layout.Window.SetWidth(_layout.GetWidth());
-            _layout.Window.SetHeight(_layout.GetHeight());
-            _layout.Window.SetX(0);
-            _layout.Window.SetY(0);
-            _layout.Window.SetWidthPolicy(SizePolicy.Expand);
-            _layout.Window.SetHeightPolicy(SizePolicy.Expand);
-            ItemsLayoutBox.AddItem(_layout, _layout.Window);
+            //ALL ATTRIBUTES STRICTLY NEEDED!!!
+            _layout.SetWindow(new Frame());
+            _layout.GetWindow().SetHandler(_layout);
+            _layout.GetWindow().SetItemName(_layout.GetWindowName());
+            _layout.GetWindow().SetWidth(_layout.GetWidth());
+            _layout.GetWindow().SetHeight(_layout.GetHeight());
+            _layout.GetWindow().SetWidthPolicy(SizePolicy.Expand);
+            _layout.GetWindow().SetHeightPolicy(SizePolicy.Expand);
+
+            ItemsLayoutBox.AddItem(_layout, _layout.GetWindow());
         }
         static public WindowLayout GetWindowInstance(string name)
         {

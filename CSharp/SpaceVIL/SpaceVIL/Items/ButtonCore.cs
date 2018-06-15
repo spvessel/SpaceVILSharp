@@ -71,5 +71,13 @@ namespace SpaceVIL
             //update text data
             _text_object.UpdateData(UpdateType.Critical);
         }
+
+        //style
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
+        }
     }
 }

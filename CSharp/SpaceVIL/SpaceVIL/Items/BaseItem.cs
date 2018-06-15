@@ -56,8 +56,6 @@ namespace SpaceVIL
             var grid_stack = item.GetParent() as IGrid;
             if (grid_stack != null)
             {
-                //item.UpdateBehavior();
-                Console.WriteLine("grid founded");
                 return;
             }
             
@@ -243,6 +241,16 @@ namespace SpaceVIL
         {
             _itemGeometry.SetWidth(width);
             _itemGeometry.SetHeight(height);
+        }
+        public void SetMinSize(int width, int height)
+        {
+            _itemGeometry.SetMinWidth(width);
+            _itemGeometry.SetMinHeight(height);
+        }
+        public void SetMaxSize(int width, int height)
+        {
+            _itemGeometry.SetMaxWidth(width);
+            _itemGeometry.SetMaxHeight(height);
         }
         public int[] GetSize()
         {

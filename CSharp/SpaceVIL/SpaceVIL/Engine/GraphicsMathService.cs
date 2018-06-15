@@ -132,7 +132,7 @@ namespace SpaceVIL
 
             return circleSect;
         }
-        static internal List<float[]> ToGL(BaseItem item, WindowLayout handler)
+        static internal List<float[]> ToGL(BaseItem item, WindowLayout handler) //where TLayout : VisualItem
         {
             List<float[]> result = new List<float[]>();
 
@@ -144,7 +144,7 @@ namespace SpaceVIL
             }
             return result;
         }
-        static internal List<float[]> ToGL(List<float[]> triangles, WindowLayout handler)
+        static internal List<float[]> ToGL(List<float[]> triangles, WindowLayout handler) //where TLayout : VisualItem
         {
             List<float[]> result = new List<float[]>();
 

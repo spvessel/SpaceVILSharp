@@ -11,6 +11,7 @@ using System.Threading;
 namespace SpaceVIL
 {
     internal class DrawEngine : GL.WGL.OpenWGL
+        //where TLayout : VisualItem
     {
         private BaseItem _isStencilSet = null;
         public InputDeviceEvent EngineEvent = new InputDeviceEvent();
@@ -37,14 +38,14 @@ namespace SpaceVIL
         private Pointer ptrPress = new Pointer();
         private Pointer ptrRelease = new Pointer();
 
-        public WindowLayout wnd = new WindowLayout();
+        public WindowLayout wnd;
 
         Glfw.Window window;
         private uint[] gVAO = new uint[1];
         private uint ProgramPrimitives;
         uint vShader, fShader;
 
-        public DrawEngine(WindowLayout handler)
+        public DrawEngine (WindowLayout handler) 
         {
             wnd = handler;
             window_position.X = 0;
@@ -360,7 +361,7 @@ namespace SpaceVIL
         private void Render()
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-            DrawItems(wnd.Window);
+            DrawItems(wnd.GetWindow());
             Glfw.SwapBuffers(window);
         }
 
