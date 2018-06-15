@@ -8,6 +8,7 @@ using System.Drawing;
 namespace SpaceVIL
 {
     public class WindowLayout : ISize, IPosition
+        //where TLayout : VisualItem
     {
         private Thread thread;
         private DrawEngine engine;

@@ -56,8 +56,6 @@ namespace SpaceVIL
             var grid_stack = item.GetParent() as IGrid;
             if (grid_stack != null)
             {
-                //item.UpdateBehavior();
-                Console.WriteLine("grid founded");
                 return;
             }
             
