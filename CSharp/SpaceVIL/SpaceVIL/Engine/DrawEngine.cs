@@ -361,7 +361,7 @@ namespace SpaceVIL
         private void Render()
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-            DrawItems(wnd.Window);
+            DrawItems(wnd.GetWindow());
             Glfw.SwapBuffers(window);
         }
 

@@ -10,7 +10,7 @@ namespace Glfw3
     /// </summary>
     public static partial class Glfw
     {
-        const string kLibrary = "glfw3_32.dll";
+        const string kLibrary = "glfw3_64.dll";
 
         /// <summary>
         /// Adds the specified native directory path to the Path environment variable to facilitate

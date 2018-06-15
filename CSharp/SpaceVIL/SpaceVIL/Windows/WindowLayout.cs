@@ -27,10 +27,10 @@ namespace SpaceVIL
             SetWindowTitle(title);
             SetWidth(width);
             SetMinWidth(0);
-            SetMaxWidth(1920); //wide of screen
+            SetMaxWidth(7680); //wide of screen
             SetHeight(height);
             SetMinHeight(0);
-            SetMaxHeight(1080); //height of screen
+            SetMaxHeight(4320); //height of screen
             IsBorderHidden = !border;
             IsHidden = true;
             IsCentered = true;
@@ -48,7 +48,67 @@ namespace SpaceVIL
             if (engine != null)
                 engine.SetWindowSize();
         }
-        public Frame Window { get; internal set; }
+        private Frame _window;
+        internal Frame GetWindow()
+        {
+            return _window;
+        }
+        internal void SetWindow(Frame window)
+        {
+            _window = window;
+        }
+        public void SetBackground(Color color)
+        {
+            _window.SetBackground(color);
+        }
+        public void SetBackground(int r, int g, int b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            _window.SetBackground(Color.FromArgb(255, r, g, b));
+        }
+        public void SetBackground(int r, int g, int b, int a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            _window.SetBackground(Color.FromArgb(a, r, g, b));
+        }
+        public void SetBackground(float r, float g, float b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            _window.SetBackground(Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+        }
+        public void SetBackground(float r, float g, float b, float a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            _window.SetBackground(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+        }
+        public Color GetBackground()
+        {
+            return _window.GetBackground();
+        }
+        public void SetPadding(int left = 0, int top = 0, int right = 0, int bottom = 0)
+        {
+            _window.SetPadding(left, top, right, bottom);
+        }
+        public void AddItem(BaseItem item)
+        {
+            _window.AddItem(item);
+        }
+        public void AddItems(params BaseItem[] items)
+        {
+            foreach (var item in items)
+            {
+                _window.AddItem(item);
+            }
+        }
+
         public int Id { get; set; }
 
         private string _name;
@@ -80,8 +140,8 @@ namespace SpaceVIL
         public virtual void SetWidth(int width)
         {
             _itemGeometry.SetWidth(width);
-            if (Window != null)
-                Window.SetWidth(width);
+            if (_window != null)
+                _window.SetWidth(width);
         }
         public void SetMaxWidth(int width)
         {
@@ -94,8 +154,8 @@ namespace SpaceVIL
         public virtual void SetHeight(int height)
         {
             _itemGeometry.SetHeight(height);
-            if (Window != null)
-                Window.SetHeight(height);
+            if (_window != null)
+                _window.SetHeight(height);
         }
         public void SetMaxHeight(int height)
         {

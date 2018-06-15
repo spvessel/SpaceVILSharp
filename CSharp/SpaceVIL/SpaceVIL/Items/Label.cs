@@ -74,5 +74,13 @@ namespace SpaceVIL
         {
             if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
+
+        //style
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
+        }
     }
 }
