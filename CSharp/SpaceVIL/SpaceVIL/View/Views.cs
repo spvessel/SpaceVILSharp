@@ -559,8 +559,8 @@ namespace View
             layout.AddItem(frame);
 
             //Label
-            Label label = new Label("Hello World! Enjoy!");
-            label.SetFont(new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Regular));
+            Label label = new Label("Hello world 12345!");
+            label.SetFont(new Font(new FontFamily("Times New Roman"), 16, FontStyle.Regular));
             //label.SetFont(new Font(new FontFamily("Panforte Pro"), 16, FontStyle.Regular));
             label.SetForeground(Color.FromArgb(255, 210, 210, 210));
             label.Border.Radius = 10;
@@ -593,7 +593,7 @@ namespace View
             {
                 Console.WriteLine(label.GetText());
                 label.SetForeground(Color.FromArgb(255, 210, 210, 210));
-                label.SetFont(new Font(new FontFamily("Open Sans Light"), 13, FontStyle.Bold));
+                label.SetFont(new Font(new FontFamily("Calibri"), 30, FontStyle.Italic));
             };
             toolbar.AddItem(show_info);
 
@@ -630,7 +630,7 @@ namespace View
             });
             change_font.EventMouseClick += (sender) =>
             {
-                label.SetFont(new Font(new FontFamily("Times New Roman"), 30, FontStyle.Italic));
+                label.SetFont(new Font(new FontFamily("Open Sans Light"), 30, FontStyle.Bold));
                 Console.WriteLine(label.GetFont());
             };
             toolbar.AddItem(change_font);

@@ -14,6 +14,8 @@ namespace SpaceVIL
 
         internal static PixMapData GetPixMap(string text, Font font)
         {
+            //return Tests.FontReview.getTextArrays(text, font);
+
             if (!fonts.ContainsKey(font))
             {
                 fonts.Add(font, new Alphabet(font));
@@ -24,6 +26,8 @@ namespace SpaceVIL
 
         internal static int[] GetSpacerDims(Font font)
         {
+            //return Tests.FontReview.getDims();
+
             if (!fonts.ContainsKey(font))
             {
                 fonts.Add(font, new Alphabet(font));
@@ -176,7 +180,7 @@ namespace SpaceVIL
             {
                 String str = "a"; // bcdefghijklmnopqrstuvwxyz";
                 str += str.ToUpper();
-                str += "-";// ".,?!1234567890-+=_";
+                str += "-"; //".,?!1234567890-+=_"; //
 
 
                 char[] defLetters = str.ToCharArray();
@@ -251,8 +255,8 @@ namespace SpaceVIL
 
                 double[,] alph = new double[x1 - x0 + 1, y1 - y0 + 1];
 
-                Dictionary<int, List<double>> crossY = new Dictionary<int, List<double>>();
-                Dictionary<int, List<double>> crossX = new Dictionary<int, List<double>>();
+                Dictionary<int, List<InOutCoord>> crossY = new Dictionary<int, List<InOutCoord>>();
+                Dictionary<int, List<InOutCoord>> crossX = new Dictionary<int, List<InOutCoord>>();
 
                 double xx1, xx2, yy1, yy2;
 
@@ -260,7 +264,7 @@ namespace SpaceVIL
                 {
                     subpathPoints = myPathIterator.NextSubpath(myPathSection, out IsClosed2);
 
-                    List<PointF> subpathList = new List<PointF>();
+                    List<PointF> subpathList = new List<PointF>(); //Список всех точек замкнутой фигуры
 
                     float xcurr = myPathSection.PathPoints[myPathSection.PathPoints.Length - 1].X;
                     float ycurr = myPathSection.PathPoints[myPathSection.PathPoints.Length - 1].Y;
@@ -278,6 +282,20 @@ namespace SpaceVIL
 
                         if (yprev == ycurr && ycurr == ynext) continue;
 
+                        if ((Math.Truncate(xcurr) == xcurr) && (Math.Sign(xprev - xcurr) == Math.Sign(xnext - xcurr)))
+                        {
+                            subpathList.Add(new PointF(xcurr - 0.1f, ycurr));
+                            subpathList.Add(new PointF(xcurr + 0.1f, ycurr));
+                            continue;
+                        }
+
+                        if ((Math.Truncate(ycurr) == ycurr) && (Math.Sign(yprev - ycurr) == Math.Sign(ynext - ycurr)))
+                        {
+                            subpathList.Add(new PointF(xcurr, ycurr - 0.1f));
+                            subpathList.Add(new PointF(xcurr, ycurr + 0.1f));
+                            continue;
+                        }
+
                         subpathList.Add(new PointF(xcurr, ycurr));
                     }
 
@@ -286,7 +304,21 @@ namespace SpaceVIL
                     xnext = myPathSection.PathPoints[0].X; ynext = myPathSection.PathPoints[0].Y;
 
                     if (!(xprev == xcurr && xcurr == xnext) && !(yprev == ycurr && ycurr == ynext))
-                        subpathList.Add(new PointF(xcurr, ycurr));
+                    {
+                        if ((Math.Truncate(xcurr) == xcurr) && (Math.Sign(xprev - xcurr) == Math.Sign(xnext - xcurr)))
+                        {
+                            subpathList.Add(new PointF(xcurr - 0.1f, ycurr));
+                            subpathList.Add(new PointF(xcurr + 0.1f, ycurr));
+                            continue;
+                        }
+                        else if ((Math.Truncate(ycurr) == ycurr) && (Math.Sign(yprev - ycurr) == Math.Sign(ynext - ycurr)))
+                        {
+                            subpathList.Add(new PointF(xcurr, ycurr - 0.1f));
+                            subpathList.Add(new PointF(xcurr, ycurr + 0.1f));
+                            continue;
+                        }
+                        else subpathList.Add(new PointF(xcurr, ycurr));
+                    }
 
                     subpathList.Add(subpathList[0]);
 
@@ -296,6 +328,10 @@ namespace SpaceVIL
                         yy2 = subpathList[j + 1].Y;
                         xx1 = subpathList[j].X;
                         xx2 = subpathList[j + 1].X;
+
+                        bool isIn;
+                        if (yy2 - yy1 < 0) isIn = true; //Долбаный перевернутый Y
+                        else isIn = false;
 
                         if (Math.Abs(Math.Truncate(yy2) - Math.Truncate(yy1)) >= 1)
                         {
@@ -317,19 +353,30 @@ namespace SpaceVIL
                             for (int yinc = ybeg; yinc < yend; yinc++)
                             {
                                 xtmp = (yinc - yy1) * (xx2 - xx1) / (yy2 - yy1) + xx1;
-                                if (!crossY.ContainsKey(yinc)) crossY.Add(yinc, new List<double>() { xtmp });
-                                else crossY[yinc].Add(xtmp);
+
+                                if (!crossY.ContainsKey(yinc)) crossY.Add(yinc, new List<InOutCoord>() { new InOutCoord(isIn, (float)xtmp) });
+                                else crossY[yinc].Add(new InOutCoord(isIn, (float)xtmp));
                             }
                         }
                         else if (Math.Truncate(yy1) == yy1)
                         {
                             int yinc = (int)yy1;
-                            if (!crossY.ContainsKey(yinc)) crossY.Add(yinc, new List<double>() { xx1 });
-                            else crossY[yinc].Add(xx1);
+                            if (!crossY.ContainsKey(yinc)) crossY.Add(yinc, new List<InOutCoord>() { });
+                            
+                            if (yy1 == yy2)
+                            {
+                                crossY[yinc].Add(new InOutCoord(true, (float)Math.Min(xx1, xx2)));
+                                crossY[yinc].Add(new InOutCoord(false, (float)Math.Max(xx1, xx2)));
+                            }
+                            else crossY[yinc].Add(new InOutCoord(isIn, (float)xx1));
                         }
+
+                        if (xx2 - xx1 > 0) isIn = true;
+                        else isIn = false;
 
                         if (Math.Abs(Math.Truncate(xx2) - Math.Truncate(xx1)) >= 1)
                         {
+
                             int xbeg, xend;
 
                             if (xx1 < xx2)
@@ -349,38 +396,67 @@ namespace SpaceVIL
                             {
                                 ytmp = (xinc - xx1) * (yy2 - yy1) / (xx2 - xx1) + yy1;
 
-                                if (!crossX.ContainsKey(xinc)) crossX.Add(xinc, new List<double>() { ytmp });
-                                else crossX[xinc].Add(ytmp);
+                                if (!crossX.ContainsKey(xinc)) crossX.Add(xinc, new List<InOutCoord>() { new InOutCoord(isIn, (float)ytmp) });
+                                else crossX[xinc].Add(new InOutCoord(isIn, (float)ytmp));
                             }
                         }
                         else if (Math.Truncate(xx1) == xx1)
                         {
                             int xinc = (int)xx1;
-                            if (!crossX.ContainsKey(xinc)) crossX.Add(xinc, new List<double>() { yy1 });
-                            else crossX[xinc].Add(yy1);
+                            if (!crossX.ContainsKey(xinc)) crossX.Add(xinc, new List<InOutCoord>() { });
+                            
+                            if (xx1 == xx2)
+                            {
+                                crossX[xinc].Add(new InOutCoord(true, (float)Math.Min(yy1, yy2)));
+                                crossX[xinc].Add(new InOutCoord(false, (float)Math.Max(yy1, yy2)));
+                            }
+                            else crossX[xinc].Add(new InOutCoord(isIn, (float)yy1));
                         }
                     }
+
                 }
 
-                List<double> tmpYList;
+
+                List<InOutCoord> tmpYList;
+                List<InOutCoord> tmpList;
                 foreach (int ykey in crossY.Keys)
                 {
+                    tmpList = new List<InOutCoord>();
+                    tmpYList = new List<InOutCoord>();
+                    tmpList.AddRange(crossY[ykey]);
+                    
+                    tmpList.Sort((x, y) => x._coord.CompareTo(y._coord));
+
                     int inc = 0;
-                    tmpYList = new List<double>();
-                    tmpYList.AddRange(crossY[ykey]);
-                    tmpYList.Sort();
-                    tmpYList = tmpYList.Distinct().ToList(); //!!! Возможно, после исправления дистинкт больше не нужен
+                    while (inc < tmpList.Count)
+                    {
+                        tmpYList.Add(tmpList[inc]); //(tmpList[inc]._isIn == true)
+                        inc++;
+                        while (inc < tmpList.Count && tmpList[inc]._isIn) inc++;
 
-
+                        if (inc < tmpList.Count)
+                        {
+                            while (inc < tmpList.Count && tmpList[inc]._isIn == false) inc++;
+                            tmpYList.Add(tmpList[inc - 1]);
+                        }
+                    }
+                    inc = 0;
+                    
+                    for (int i = 0; i < tmpYList.Count; i+=2) {
+                        for (int j = (int)Math.Ceiling(tmpYList[i]._coord); j <= (int)Math.Truncate(tmpYList[i + 1]._coord); j++) {
+                            alph[j - x0, ykey - y0] = 1;
+                        }
+                    }
+                    /*
                     for (int xinc = x0; xinc <= x1; xinc++)
                     {
-                        while ((inc < tmpYList.Count) && (xinc > tmpYList[inc]))
+                        while ((inc < tmpYList.Count) && (xinc > tmpYList[inc]._coord))
                         {
                             inc++;
                         }
 
                         if (inc >= tmpYList.Count) continue;
-                        if (xinc == tmpYList[inc])
+                        if (xinc == tmpYList[inc]._coord)
                         {
                             alph[xinc - x0, ykey - y0] = 1;
 
@@ -390,39 +466,70 @@ namespace SpaceVIL
                             alph[xinc - x0, ykey - y0] = 1;
                         }
 
-                    }
-
-                    for (int i = 0; i < tmpYList.Count; i += 2)
+                    }*/
+                    
+                    for (int i = 0; i < tmpYList.Count; i ++)
                     {
-                        int xhalf = (int)Math.Truncate(tmpYList[i]);
-                        double diff = tmpYList[i] - xhalf;
-                        if (diff < 0.5) alph[xhalf - x0, ykey - y0] = (alph[xhalf - x0, ykey - y0] + (0.5 - diff)); // /2.0
-                        xhalf = (int)Math.Truncate(tmpYList[i + 1]) + 1;
-                        diff = xhalf - tmpYList[i + 1];
-                        if (diff < 0.5) alph[xhalf - x0, ykey - y0] = (alph[xhalf - x0, ykey - y0] + (0.5 - diff)); // /2.0
+                        int xhalf;
+                        double diff;
+
+                        if (tmpYList[i]._isIn)
+                        {
+                            xhalf = (int)Math.Truncate(tmpYList[i]._coord);
+                            diff = tmpYList[i]._coord - xhalf;
+                            if (diff < 0.5) alph[xhalf - x0, ykey - y0] = (alph[xhalf - x0, ykey - y0] + (0.5 - diff)); // /2.0
+                        }
+                        else { 
+                            xhalf = (int)Math.Truncate(tmpYList[i]._coord) + 1;
+                            diff = xhalf - tmpYList[i]._coord;
+                            if (diff < 0.5) alph[xhalf - x0, ykey - y0] = (alph[xhalf - x0, ykey - y0] + (0.5 - diff)); // /2.0
+                        }
                     }
+                    
                 }
 
 
-                List<double> tmpXList;
+                List<InOutCoord> tmpXList;
                 foreach (int xkey in crossX.Keys)
                 {
-                    tmpXList = new List<double>();
-                    tmpXList.AddRange(crossX[xkey]);
-                    tmpXList.Sort();
-                    tmpXList = tmpXList.Distinct().ToList(); //Скорее всего не нужен уже
+                    tmpList = new List<InOutCoord>();
+                    tmpXList = new List<InOutCoord>();
+                    tmpList.AddRange(crossX[xkey]);
+                    tmpList.Sort((x, y) => x._coord.CompareTo(y._coord));
 
-
-                    for (int i = 0; i < tmpXList.Count; i += 2)
+                    int inc = 0;
+                    while (inc < tmpList.Count)
                     {
-                        int yhalf = (int)Math.Round(tmpXList[i]);
-                        double diff = Math.Abs(tmpXList[i] - yhalf);
-                        if (diff < 0.5) alph[xkey - x0, yhalf - y0] = (alph[xkey - x0, yhalf - y0] + (0.5 - diff)); // /2.0
-                        yhalf = (int)Math.Truncate(tmpXList[i + 1]) + 1;
-                        diff = yhalf - tmpXList[i + 1];
-                        if (diff < 0.5) alph[xkey - x0, yhalf - y0] = (alph[xkey - x0, yhalf - y0] + (0.5 - diff)); // /2.0
-                    }
+                        tmpXList.Add(tmpList[inc]); //(tmpList[inc]._isIn == true)
+                        inc++;
+                        while (inc < tmpList.Count && tmpList[inc]._isIn) inc++;
 
+                        if (inc < tmpList.Count)
+                        {
+                            while (inc < tmpList.Count && tmpList[inc]._isIn == false) inc++;
+                            tmpXList.Add(tmpList[inc - 1]);
+                        }
+                    }
+                    
+                    for (int i = 0; i < tmpXList.Count; i++)
+                    {
+                        int yhalf;
+                        double diff;
+
+                        if (tmpXList[i]._isIn)
+                        {
+                            yhalf = (int)Math.Round(tmpXList[i]._coord);
+                            diff = Math.Abs(tmpXList[i]._coord - yhalf);
+                            if (diff < 0.5) alph[xkey - x0, yhalf - y0] = (alph[xkey - x0, yhalf - y0] + (0.5 - diff)); // /2.0
+                        }
+                        else
+                        {
+                            yhalf = (int)Math.Truncate(tmpXList[i]._coord) + 1;
+                            diff = yhalf - tmpXList[i]._coord;
+                            if (diff < 0.5) alph[xkey - x0, yhalf - y0] = (alph[xkey - x0, yhalf - y0] + (0.5 - diff)); // /2.0
+                        }
+                    }
+                    
                 }
 
 
@@ -500,6 +607,18 @@ namespace SpaceVIL
 
                     }
                 }
+            }
+        }
+
+        private class InOutCoord
+        {
+            public bool _isIn;
+            public float _coord;
+
+            public InOutCoord(bool isIn, float coord)
+            {
+                _isIn = isIn;
+                _coord = coord;
             }
         }
     }

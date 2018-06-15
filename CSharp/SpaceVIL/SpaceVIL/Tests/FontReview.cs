@@ -15,7 +15,7 @@ namespace SpaceVIL.Tests
             StringFormat format = StringFormat.GenericDefault;
             shape.AddString(text, font.FontFamily, (int)font.Style, font.Size, new PointF(0f, 0f), format);
 
-            return likeFontEngine(shape);
+            return newLikeFontEngine(shape);
         }
 
         internal static int[] getDims() {
@@ -329,7 +329,278 @@ namespace SpaceVIL.Tests
             return new PixMapData(pix, col, 0);
         }
 
+        private static PixMapData newLikeFontEngine(GraphicsPath shape) {
+            List<float> pix = new List<float>();
+            List<float> col = new List<float>();
 
+            RectangleF rec = shape.GetBounds();
+            int x0 = (int)Math.Floor(rec.Left);
+            int x1 = (int)Math.Ceiling(rec.Right);
+            int y0 = (int)Math.Floor(rec.Top);
+            int y1 = (int)Math.Ceiling(rec.Bottom);
+
+            minY = y0;
+            maxY = y1;
+
+            GraphicsPathIterator myPathIterator = new GraphicsPathIterator(shape);
+            // Rewind the iterator.
+            myPathIterator.Rewind();
+            // Create the GraphicsPath section.
+            GraphicsPath myPathSection = new GraphicsPath();
+            int subpathPoints;
+            bool IsClosed2;
+
+            double[,] alph = new double[x1 - x0 + 1, y1 - y0 + 1];
+
+            Dictionary<int, List<InOutCoord>> crossY = new Dictionary<int, List<InOutCoord>>();
+            Dictionary<int, List<InOutCoord>> crossX = new Dictionary<int, List<InOutCoord>>();
+
+            double xx1, xx2, yy1, yy2;
+
+            for (int i = 0; i < myPathIterator.SubpathCount; i++)
+            {
+                subpathPoints = myPathIterator.NextSubpath(myPathSection, out IsClosed2);
+
+                List<PointF> subpathList = new List<PointF>(); //Список всех точек замкнутой фигуры
+
+                float xcurr = myPathSection.PathPoints[myPathSection.PathPoints.Length - 1].X;
+                float ycurr = myPathSection.PathPoints[myPathSection.PathPoints.Length - 1].Y;
+                float xprev, yprev, xnext, ynext;
+                for (int j = 0; j < myPathSection.PathPoints.Length - 1; j++)
+                {
+                    xprev = xcurr;
+                    yprev = ycurr;
+                    xcurr = myPathSection.PathPoints[j].X;
+                    ycurr = myPathSection.PathPoints[j].Y;
+                    xnext = myPathSection.PathPoints[j + 1].X;
+                    ynext = myPathSection.PathPoints[j + 1].Y;
+
+                    if (xprev == xcurr && xcurr == xnext) continue;
+
+                    if (yprev == ycurr && ycurr == ynext) continue;
+
+                    if ((Math.Truncate(xcurr) == xcurr) && (Math.Sign(xprev - xcurr) == Math.Sign(xnext - xcurr)))
+                    {
+                        subpathList.Add(new PointF(xcurr - 0.1f, ycurr));
+                        subpathList.Add(new PointF(xcurr + 0.1f, ycurr));
+                        continue;
+                    }
+
+                    if ((Math.Truncate(ycurr) == ycurr) && (Math.Sign(yprev - ycurr) == Math.Sign(ynext - ycurr)))
+                    {
+                        subpathList.Add(new PointF(xcurr, ycurr - 0.1f));
+                        subpathList.Add(new PointF(xcurr, ycurr + 0.1f));
+                        continue;
+                    }
+                    
+                    subpathList.Add(new PointF(xcurr, ycurr));
+                }
+                
+                xprev = myPathSection.PathPoints[myPathSection.PathPoints.Length - 2].X; yprev = myPathSection.PathPoints[myPathSection.PathPoints.Length - 2].Y;
+                xcurr = myPathSection.PathPoints[myPathSection.PathPoints.Length - 1].X; ycurr = myPathSection.PathPoints[myPathSection.PathPoints.Length - 1].Y;
+                xnext = myPathSection.PathPoints[0].X; ynext = myPathSection.PathPoints[0].Y;
+
+                if (!(xprev == xcurr && xcurr == xnext) && !(yprev == ycurr && ycurr == ynext))
+                {
+                    if ((Math.Truncate(xcurr) == xcurr) && (Math.Sign(xprev - xcurr) == Math.Sign(xnext - xcurr)))
+                    {
+                        subpathList.Add(new PointF(xcurr - 0.1f, ycurr));
+                        subpathList.Add(new PointF(xcurr + 0.1f, ycurr));
+                        continue;
+                    }
+                    else if ((Math.Truncate(ycurr) == ycurr) && (Math.Sign(yprev - ycurr) == Math.Sign(ynext - ycurr)))
+                    {
+                        subpathList.Add(new PointF(xcurr, ycurr - 0.1f));
+                        subpathList.Add(new PointF(xcurr, ycurr + 0.1f));
+                        continue;
+                    }
+                    else subpathList.Add(new PointF(xcurr, ycurr));
+                }
+                
+                subpathList.Add(subpathList[0]);
+
+                for (int j = 0; j < subpathList.Count - 1; j++)
+                {
+                    yy1 = subpathList[j].Y;
+                    yy2 = subpathList[j + 1].Y;
+                    xx1 = subpathList[j].X;
+                    xx2 = subpathList[j + 1].X;
+
+                    bool isIn;
+                    if (yy2 - yy1 < 0) isIn = true; //Долбаный перевернутый Y
+                    else isIn = false;
+
+                    if (Math.Abs(Math.Truncate(yy2) - Math.Truncate(yy1)) >= 1)
+                    {
+                        int ybeg, yend;
+
+                        if (yy1 < yy2)
+                        {
+                            ybeg = (int)Math.Ceiling(yy1);
+                            yend = (int)Math.Ceiling(yy2);
+                        }
+                        else
+                        {
+                            yend = (int)Math.Truncate(yy1) + 1;
+                            ybeg = (int)Math.Truncate(yy2) + 1;
+                        }
+
+                        double xtmp;
+
+                        for (int yinc = ybeg; yinc < yend; yinc++)
+                        {
+                            xtmp = (yinc - yy1) * (xx2 - xx1) / (yy2 - yy1) + xx1;
+
+                            if (!crossY.ContainsKey(yinc)) crossY.Add(yinc, new List<InOutCoord>() { new InOutCoord(isIn, (float)xtmp) });
+                            else crossY[yinc].Add(new InOutCoord(isIn, (float)xtmp));
+
+                            alph[(int)Math.Round(xtmp) - x0, yinc - y0] = 1;
+                        }
+                    }
+                    else if (Math.Truncate(yy1) == yy1)
+                    {
+                        int yinc = (int)yy1;
+                        if (!crossY.ContainsKey(yinc)) crossY.Add(yinc, new List<InOutCoord>() { });
+                        //new InOutCoord(isIn, (float)xx1) });
+                        //else crossY[yinc].Add(new InOutCoord(isIn, (float)xx1));
+                        if (yy1 == yy2)
+                        {
+                            crossY[yinc].Add(new InOutCoord(true, (float)Math.Min(xx1, xx2)));
+                            crossY[yinc].Add(new InOutCoord(false, (float)Math.Max(xx1, xx2)));
+                        } else crossY[yinc].Add(new InOutCoord(isIn, (float)xx1));
+                    }
+
+                    if (xx2 - xx1 > 0) isIn = true;
+                    else isIn = false;
+
+                    if (Math.Abs(Math.Truncate(xx2) - Math.Truncate(xx1)) >= 1)
+                    {
+
+                        int xbeg, xend;
+                        //double xb = Math.Min(xx1, xx2);
+
+                        if (xx1 < xx2)
+                        {
+                            xbeg = (int)Math.Ceiling(xx1);
+                            xend = (int)Math.Ceiling(xx2);
+                        }
+                        else
+                        {
+                            xend = (int)Math.Truncate(xx1) + 1;
+                            xbeg = (int)Math.Truncate(xx2) + 1;
+                        }
+
+                        double ytmp;
+
+                        for (int xinc = xbeg; xinc < xend; xinc++)
+                        {
+                            ytmp = (xinc - xx1) * (yy2 - yy1) / (xx2 - xx1) + yy1;
+
+                            if (!crossX.ContainsKey(xinc)) crossX.Add(xinc, new List<InOutCoord>() { new InOutCoord(isIn, (float)ytmp) });
+                            else crossX[xinc].Add(new InOutCoord(isIn, (float)ytmp));
+
+                            alph[xinc - x0, (int)Math.Round(ytmp) - y0] = 1;
+                        }
+                    }
+                    else if (Math.Truncate(xx1) == xx1)
+                    {
+                        int xinc = (int)xx1;
+                        if (!crossX.ContainsKey(xinc)) crossX.Add(xinc, new List<InOutCoord>() { });
+                        //new InOutCoord(isIn, (float)yy1) });
+                        //else crossX[xinc].Add(new InOutCoord(isIn, (float)yy1));
+                        if (xx1 == xx2) { 
+                            crossX[xinc].Add(new InOutCoord(true, (float)Math.Min(yy1, yy2)));
+                            crossX[xinc].Add(new InOutCoord(false, (float)Math.Max(yy1, yy2)));
+                        } else crossX[xinc].Add(new InOutCoord(isIn, (float)yy1));
+                    }
+
+                    Console.WriteLine("(" + Math.Round(xx1, 2) + ", " + Math.Round(xx2, 2) + ") (" + Math.Round(yy1, 2) + ", " + Math.Round(yy2, 2) + ")");
+                }
+
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+
+            List<InOutCoord> tmpYList;
+            List<InOutCoord> tmpList;
+            foreach (int ykey in crossY.Keys)
+            {
+                tmpList = new List<InOutCoord>();
+                tmpYList = new List<InOutCoord>();
+                tmpList.AddRange(crossY[ykey]);
+                //list_height.Sort((x, y) => y[1].CompareTo(x[1]));
+                tmpList.Sort((x, y) => x._coord.CompareTo(y._coord));
+
+                int inc = 0;
+                while (inc < tmpList.Count) {
+                    tmpYList.Add(tmpList[inc]); //(tmpList[inc]._isIn == true)
+                    inc++;
+                    while (inc < tmpList.Count && tmpList[inc]._isIn) inc++;
+
+                    if (inc < tmpList.Count) {
+                        while (inc < tmpList.Count && tmpList[inc]._isIn == false) inc++;
+                        tmpYList.Add(tmpList[inc - 1]);
+                    }
+                }
+                
+
+                Console.Write("ykey = " + ykey + ", " + tmpYList.Count + " ");
+                foreach (InOutCoord d in tmpYList)
+                    Console.Write(Math.Round(d._coord, 2) + ", " + d._isIn + " ");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+
+            List<InOutCoord> tmpXList;
+            foreach (int xkey in crossX.Keys)
+            {
+                tmpList = new List<InOutCoord>();
+                tmpXList = new List<InOutCoord>();
+                tmpList.AddRange(crossX[xkey]);
+                tmpList.Sort((x, y) => x._coord.CompareTo(y._coord));
+
+                int inc = 0;
+                while (inc < tmpList.Count)
+                {
+                    tmpXList.Add(tmpList[inc]); //(tmpList[inc]._isIn == true)
+                    inc++;
+                    while (inc < tmpList.Count && tmpList[inc]._isIn) inc++;
+
+                    if (inc < tmpList.Count)
+                    {
+                        while (inc < tmpList.Count && tmpList[inc]._isIn == false) inc++;
+                        tmpXList.Add(tmpList[inc - 1]);
+                    }
+                }
+
+                Console.Write("xkey = " + xkey + ", " + tmpXList.Count + " ");
+                foreach (InOutCoord d in tmpXList)
+                    Console.Write(Math.Round(d._coord, 2) + ", " + d._isIn + " ");
+                Console.WriteLine();
+            }
+
+            for (int i = x0; i <= x1; i++)
+            {
+                for (int j = y0; j <= y1; j++)
+                {
+                    if (alph[i - x0, j - y0] > 0)
+                    {
+                        pix.Add(i);
+                        pix.Add(j);
+                        pix.Add(0);
+
+                        col.Add((float)alph[i - x0, j - y0]);
+                    }
+                }
+            }
+
+            return new PixMapData(pix, col, 0);
+        }
 
         static internal PixMapData MakeNewText(String text, Font font)
         {
@@ -341,29 +612,6 @@ namespace SpaceVIL.Tests
             GraphicsPath shape = new GraphicsPath();
             StringFormat format = StringFormat.GenericDefault;
             shape.AddString(text, font.FontFamily, (int)font.Style, font.Size, new PointF(0f, 0f), format);
-
-            /*
-            for (int i = 0; i < shape.PathPoints.Length; i++)
-            {
-                PointF pt = shape.PathPoints[i];
-                pix.Add(pt.X);
-                pix.Add(pt.Y);
-                pix.Add(0);
-
-                col.Add(1);
-
-            //Console.WriteLine(pt.X + " " + pt.Y);
-            }
-            */
-
-            //pix.Add(shape.PathPoints[0].X);
-            //pix.Add(shape.PathPoints[0].Y);
-            //pix.Add(0);
-
-            //col.Add(1);
-
-            //Console.WriteLine(shape.PathPoints.Length);
-
 
             GraphicsPathIterator myPathIterator = new
                 GraphicsPathIterator(shape);
@@ -379,23 +627,6 @@ namespace SpaceVIL.Tests
             // to the screen.
             int subpathPoints;
             bool IsClosed2;
-
-            // Iterate to the third subpath.
-            //Console.WriteLine(myPathIterator.SubpathCount);
-            /*
-            subpathPoints = myPathIterator.NextSubpath(
-                myPathSection, out IsClosed2);
-            Console.WriteLine(subpathPoints + " " + IsClosed2 + " " + myPathSection.PathPoints[0].X + " " + myPathSection.PathPoints[0].Y);
-            subpathPoints = myPathIterator.NextSubpath(
-                myPathSection, out IsClosed2);
-            Console.WriteLine(subpathPoints + " " + IsClosed2 + " " + myPathSection.PathPoints[0].X + " " + myPathSection.PathPoints[0].Y);
-            subpathPoints = myPathIterator.NextSubpath(
-                myPathSection, out IsClosed2);
-            Console.WriteLine(subpathPoints + " " + IsClosed2 + " " + myPathSection.PathPoints[0].X + " " + myPathSection.PathPoints[0].Y);
-            subpathPoints = myPathIterator.NextSubpath(
-                myPathSection, out IsClosed2);
-            Console.WriteLine(subpathPoints + " " + IsClosed2 + " " + myPathSection.PathPoints[0].X + " " + myPathSection.PathPoints[0].Y);
-            */
 
             RectangleF rec = shape.GetBounds();
             int x0 = (int)Math.Floor(rec.Left);
@@ -436,32 +667,6 @@ namespace SpaceVIL.Tests
                             else crossY[yinc].Add(xtmp);
                         }
                     }
-                    /*else {
-                        if (Math.Abs(Math.Truncate(xx2) - Math.Truncate(xx1)) >= 1)
-                        {
-                            double xb = Math.Min(xx1, xx2);
-                            int xbeg = (int)Math.Truncate(xb);
-                            xbeg = (xbeg == xb) ? xbeg : xbeg + 1;
-                            int xend = (int)Math.Ceiling(Math.Max(xx1, xx2));
-
-                            int yr1 = (int)Math.Round(Math.Min(yy1, yy2));
-                            int yr2 = (int)Math.Round(Math.Max(yy1, yy2));
-
-                            double xmiddle = xend;
-                            if (yr1 != yr2) xmiddle = (xend - xbeg) * 1.0 / 2.0;
-
-                            for (int xinc = xbeg; xinc < xend; xinc++)
-                            {
-                                if (xinc < xmiddle)
-                                    moarPoints.Add(new Point(xinc, yr1));
-                                else moarPoints.Add(new Point(xinc, yr2));
-                            }
-                        }
-                        else {
-                            moarPoints.Add(new Point((int)Math.Round(xx1), (int)Math.Round(yy1)));
-                            moarPoints.Add(new Point((int)Math.Round(xx2), (int)Math.Round(yy2)));
-                        }
-                    }*/
 
                     if (Math.Abs(Math.Truncate(xx2) - Math.Truncate(xx1)) >= 1)
                     {
@@ -520,30 +725,6 @@ namespace SpaceVIL.Tests
                         else crossX[xinc].Add(ytmp);
                     }
                 }
-
-                /*else
-                {
-                    if (Math.Abs(Math.Truncate(xx2) - Math.Truncate(xx1)) >= 1)
-                    {
-                        double xb = Math.Min(xx1, xx2);
-                        int xbeg = (int)Math.Truncate(xb);
-                        xbeg = (xbeg == xb) ? xbeg : xbeg + 1;
-                        int xend = (int)Math.Ceiling(Math.Max(xx1, xx2));
-
-                        int yr1 = (int)Math.Round(Math.Min(yy1, yy2));
-                        int yr2 = (int)Math.Round(Math.Max(yy1, yy2));
-
-                        double xmiddle = xend;
-                        if (yr1 != yr2) xmiddle = (xend - xbeg) * 1.0 / 2.0;
-
-                        for (int xinc = xbeg; xinc < xend; xinc++)
-                        {
-                            if (xinc < xmiddle)
-                                moarPoints.Add(new Point(xinc, yr1));
-                            else moarPoints.Add(new Point(xinc, yr2));
-                        }
-                    }
-                }*/
             }
 
 
@@ -565,28 +746,15 @@ namespace SpaceVIL.Tests
                 for (int xinc = x0; xinc <= x1; xinc++)
                 {
                     while ((inc < crossY[yinc].Count) && (xinc > crossY[yinc][inc]))
-                    {
                         inc++;
-                    }
 
                     if (inc >= crossY[yinc].Count) continue;
                     if (xinc == crossY[yinc][inc])
-                    {
                         alph[xinc - x0, yinc - y0] = 1;
-                        //pix.Add(xinc);
-                        //pix.Add(yinc);
-                        //pix.Add(0);
-                        //col.Add((float)alph[xinc - x0, yinc - y0]);
-
-                    }
+                     
                     else if (inc % 2 == 1)
-                    {
                         alph[xinc - x0, yinc - y0] = 1;
-                        //pix.Add(xinc);
-                        //pix.Add(yinc);
-                        //pix.Add(0);
-                        //col.Add((float)alph[xinc - x0, yinc - y0]);
-                    }
+                    
 
                 }
 
@@ -630,25 +798,7 @@ namespace SpaceVIL.Tests
             for (int yinc = y0; yinc <= y1; yinc++)
             {
                 for (int xinc = x0; xinc <= x1; xinc++)
-                {/*
-                        if (alph[xinc - x0, yinc - y0] < 1)
-                        {
-                            float inc = 9;
-                            int incb = 0;
-
-                            if (alph[xinc - x0 - 1, yinc - y0 - 1] == 1) incb++;
-                            if (alph[xinc - x0 - 1, yinc - y0] == 1) incb++;
-                            if (alph[xinc - x0 - 1, yinc - y0 + 1] == 1) incb++;
-                            if (alph[xinc - x0, yinc - y0 - 1] == 1) incb++;
-                            if (alph[xinc - x0, yinc - y0 + 1] == 1) incb++;
-                            if (alph[xinc - x0 + 1, yinc - y0 - 1] == 1) incb++;
-                            if (alph[xinc - x0 + 1, yinc - y0] == 1) incb++;
-                            if (alph[xinc - x0 + 1, yinc - y0 + 1] == 1) incb++;
-
-                            alph[xinc - x0, yinc - y0] = incb * 1.0 / inc;
-                            
-                        }*/
-
+                {
                     if (alph[xinc - x0, yinc - y0] > 0)
                     {
                         pix.Add(xinc);
@@ -662,6 +812,17 @@ namespace SpaceVIL.Tests
             }
 
             return new PixMapData(pix, col, (float)x0);
+        }
+
+        private class InOutCoord
+        {
+            public bool _isIn;
+            public float _coord;
+
+            public InOutCoord(bool isIn, float coord) {
+                _isIn = isIn;
+                _coord = coord;
+            }
         }
     }
 }

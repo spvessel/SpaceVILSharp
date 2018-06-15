@@ -13,15 +13,15 @@ namespace Program
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            MainWindow mw = new MainWindow();
-            Settings sets = new Settings();
-            LayoutsTest lt = new LayoutsTest();
+            //MainWindow mw = new MainWindow();
+            //Settings sets = new Settings();
+            //LayoutsTest lt = new LayoutsTest();
             LabelTest label = new LabelTest();
-            GridTest grid = new GridTest();
+            //GridTest grid = new GridTest();
             //Settings.Show();
-            mw.Show();
+            //mw.Show();
             //lt.Show();
-            //label.Show();
+            label.Show();
             //grid.Show();
             //mw = null;
             //sets = null;
