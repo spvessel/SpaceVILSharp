@@ -82,5 +82,16 @@ namespace SpaceVIL
             SetForeground(style.Foreground);
             SetFont(style.Font);
         }
+        
+        public int GetTextWidth()
+        {
+            return _text_object.GetWidth();
+        }
+
+        public int GetTextHeight()
+        {
+            return _text_object.GetHeight();
+        }
+        
     }
 }

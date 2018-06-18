@@ -457,5 +457,50 @@ namespace SpaceVIL
             }
             return figure;
         }
+
+        public static List<float> GetRectBorder(int w, int h) {
+            return GetRectBorderIgnoreTop(w, h, 0, 0);
+        }
+
+        public static List<float> GetRectBorderIgnoreTop(int w, int h, int ignoreFrom, int ignoreWidth) {
+            List<float> borderCoords = new List<float>();
+
+            ignoreFrom = (ignoreFrom > w - 1) ? w - 1 : ignoreFrom;
+            borderCoords.AddRange(ParallLineToArray(0, ignoreFrom, 0, LineDir.Horiz));
+            borderCoords.AddRange(ParallLineToArray(ignoreFrom + ignoreWidth, w - 1, 0, LineDir.Horiz));
+            borderCoords.AddRange(ParallLineToArray(0, w - 1, h - 1, LineDir.Horiz));
+            borderCoords.AddRange(ParallLineToArray(1, h - 2, 0, LineDir.Vert));
+            borderCoords.AddRange(ParallLineToArray(1, h - 2, w - 1, LineDir.Vert));
+
+            return borderCoords;
+        }
+
+        private static List<float> ParallLineToArray(int min, int max, int permanent, LineDir dir)
+        {
+            List<float> arr = new List<float>();
+
+            for (int i = min; i <= max; i++)
+            {
+                if (dir.Equals(LineDir.Horiz))
+                {
+                    arr.Add(i);
+                    arr.Add(permanent);
+                }
+                else
+                { //Vert
+                    arr.Add(permanent);
+                    arr.Add(i);
+                }
+
+                arr.Add(0);
+            }
+
+            return arr;
+        }
+
+        enum LineDir {
+            Horiz,
+            Vert
+        }
     }
 }

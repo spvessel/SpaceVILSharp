@@ -371,7 +371,16 @@ namespace SpaceVIL
             if (!root.IsVisible)
                 return;
 
-            if (root is ITextContainer)
+            if (root is IPixelDrawable) {
+                glDisable(GL_MULTISAMPLE);
+                DrawPixels((root as IPixelDrawable));
+                foreach (var child in (root as VisualItem).GetItems())
+                {
+                    DrawItems(child);
+                }
+                glEnable(GL_MULTISAMPLE);
+            }
+            else if (root is ITextContainer)
             {
                 glDisable(GL_MULTISAMPLE);
                 DrawText((root as ITextContainer).GetText());
@@ -546,6 +555,34 @@ namespace SpaceVIL
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
             float[] data = item.Shape();
+            float[] colorData = item.GetColors();
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(0);
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(1);
+
+            // draw
+            glDrawArrays(GL_POINTS, 0, data.Length / 3);
+
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+
+            // Clear VBO and shader
+            glDeleteBuffers(2, buffers);
+        }
+
+        void DrawPixels(IPixelDrawable item)
+        {
+            //Console.WriteLine(item.GetItemText());
+            uint[] buffers = new uint[2];
+            glGenBuffers(2, buffers);
+            float[] data = item.GetCoords();
             float[] colorData = item.GetColors();
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);

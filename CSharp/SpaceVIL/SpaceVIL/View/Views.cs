@@ -600,9 +600,16 @@ namespace View
             ProgressBar progb = new ProgressBar();
             progb.SetWidthPolicy(SizePolicy.Expand);
             //progb.SetHeightPolicy(SizePolicy.Expand);
-            layout.AddItem(progb);
             progb.SetMinValue(35);
             progb.SetMaxValue(78);
+            layout.AddItem(progb);
+
+            //BorderShape
+            BorderElement be = new BorderElement();
+            be.SetBackground(Color.Green);
+            be.SetWidthPolicy(SizePolicy.Expand);
+            be.SetHeight(50);
+            layout.AddItem(be);
 
             //Label
             Label label = new Label("Hello world 12345!");
