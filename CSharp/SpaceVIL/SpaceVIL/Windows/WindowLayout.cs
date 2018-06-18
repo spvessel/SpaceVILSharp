@@ -48,6 +48,10 @@ namespace SpaceVIL
             if (engine != null)
                 engine.SetWindowSize();
         }
+        public void UpdateScene()
+        {
+            engine.Render();
+        }
         private Frame _window;
         internal Frame GetWindow()
         {

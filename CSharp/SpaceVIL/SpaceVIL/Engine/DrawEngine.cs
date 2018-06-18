@@ -358,7 +358,7 @@ namespace SpaceVIL
             Glfw.DestroyWindow(window);
         }
 
-        private void Render()
+        internal void Render()
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
             DrawItems(wnd.GetWindow());
