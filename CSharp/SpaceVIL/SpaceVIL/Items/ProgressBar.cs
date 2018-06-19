@@ -12,9 +12,9 @@ namespace SpaceVIL
         static int count = 0;
         private Label _text;
         private Rectangle _rect;
-        int _maxValue = 100;
-        int _minValue = 0;
-        int _currentValue = 0;
+        private int _maxValue = 100;
+        private int _minValue = 0;
+        private int _currentValue = 0;
 
         public ProgressBar()
         {
@@ -32,7 +32,7 @@ namespace SpaceVIL
             _text.SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
             _text.SetPadding(10);
             _text.SetText("0%");
-            _text.SetFont(new Font(new FontFamily("Courier New"), 16, FontStyle.Regular));
+            _text.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
 
             //rectangle
             _rect = new Rectangle();
