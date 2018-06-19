@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    interface IImage
+    interface IImageItem
     {
         String GetImageUrl();
         void SetImageUrl(String url);
-        float[] GetPixMapImage();
+        byte[] GetPixMapImage();
     }
 }

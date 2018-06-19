@@ -32,6 +32,10 @@ namespace SpaceVIL
         {
             _text_object.SetTextAlignment(alignment);
         }
+        public void SetTextMargin(Margin margin)
+        {
+            _text_object.SetMargin(margin);
+        }
         public void SetFont(Font font)
         {
             _text_object.SetFont(font);

@@ -138,7 +138,7 @@ namespace View
 
             btn_toggle.EventToggle += (sender) =>
             {
-                WindowLayoutBox.GetWindowInstance("LabelTest")?.Show();
+                WindowLayoutBox.GetWindowInstance("ImageTest")?.Show();
             };
 
             frame.AddItem(btn_toggle);
@@ -561,8 +561,8 @@ namespace View
             wnd_handler = new WindowLayout(name: nameof(LabelTest));
             wnd_handler.SetWidth(500);
             wnd_handler.SetMinWidth(500);
-            wnd_handler.SetHeight(300);
-            wnd_handler.SetMinHeight(300);
+            wnd_handler.SetHeight(500);
+            wnd_handler.SetMinHeight(500);
             wnd_handler.SetWindowTitle(nameof(LabelTest));
             WindowLayoutBox.InitWindow(wnd_handler);
             Handler.SetBackground(Color.FromArgb(255, 76, 76, 76));
@@ -660,6 +660,68 @@ namespace View
                 Console.WriteLine(label.GetFont());
             };
             toolbar.AddItem(change_font);
+        }
+
+        public void Show()
+        {
+            wnd_handler.Show();
+        }
+    }
+    //ImageTest
+    partial class ImageTest
+    {
+        WindowLayout wnd_handler;
+        public WindowLayout Handler
+        {
+            get
+            {
+                return wnd_handler;
+            }
+            set
+            {
+                wnd_handler = value;
+            }
+        }
+        private void InitWindow()
+        {
+            wnd_handler = new WindowLayout(name: nameof(ImageTest));
+            wnd_handler.SetWidth(500);
+            wnd_handler.SetMinWidth(500);
+            wnd_handler.SetHeight(500);
+            wnd_handler.SetMinHeight(500);
+            wnd_handler.SetWindowTitle(nameof(ImageTest));
+            WindowLayoutBox.InitWindow(wnd_handler);
+            Handler.SetBackground(Color.FromArgb(255, 76, 76, 76));
+
+            ButtonCore btn_action = new ButtonCore();
+
+            btn_action.SetBackground(100, 255, 150);
+            btn_action.SetText("Columnar");
+            btn_action.SetTextMargin(new Margin(0, 45, 0, 0));
+            btn_action.SetForeground(Color.Black);
+            btn_action.SetItemName("Action");
+            btn_action.SetWidth(256);
+            btn_action.SetHeight(128);
+            btn_action.SetWidthPolicy(SizePolicy.Fixed);
+            btn_action.SetHeightPolicy(SizePolicy.Fixed);
+            btn_action.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            btn_action.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(125, 255, 255, 255)
+            });
+            btn_action.Border.Radius = 10;
+            Handler.AddItem(btn_action);
+
+            //Image img1 = Image.FromFile("D:\\icon.png");
+            Image img1 = Image.FromFile("D:\\columnar.png");
+            //Image img1 = Image.FromFile("D:\\sample.png");
+            //Image img1 = Image.FromFile("D:\\icon.jpg");
+
+            ImageItem image = new ImageItem(img1);
+            image.SetBackground(Color.Transparent);
+            image.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            image.SetAlignment(ItemAlignment.VCenter | ItemAlignment.HCenter);
+            btn_action.AddItem(image);
         }
 
         public void Show()

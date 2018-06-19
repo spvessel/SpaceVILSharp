@@ -125,6 +125,10 @@ namespace SpaceVIL
         {
             _text.SetTextAlignment(alignment);
         }
+        public void SetTextMargin(Margin margin)
+        {
+            _text.SetMargin(margin);
+        }
         public void SetFont(Font font)
         {
             _text.SetFont(font);
