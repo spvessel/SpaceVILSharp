@@ -737,7 +737,7 @@ namespace View
             btn_action.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
             btn_action.AddItemState(true, ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(125, 255, 255, 255)
+                Background = Color.FromArgb(80, 255, 255, 255)
             });
             btn_action.Border.Radius = 10;
             Handler.AddItem(btn_action);

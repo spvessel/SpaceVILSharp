@@ -390,7 +390,8 @@ namespace SpaceVIL
             if (!root.IsVisible)
                 return;
 
-            if (root is IPixelDrawable) {
+            if (root is IPixelDrawable)
+            {
                 glDisable(GL_MULTISAMPLE);
                 DrawPixels((root as IPixelDrawable));
                 foreach (var child in (root as VisualItem).GetItems())
@@ -635,7 +636,7 @@ namespace SpaceVIL
         {
             float i_x0 = ((float)image.GetX() / (float)wnd.GetWidth() * 2.0f) - 1.0f;
             float i_y0 = ((float)image.GetY() / (float)wnd.GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)wnd.GetWidth() * 2.0f) -1.0f;
+            float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)wnd.GetWidth() * 2.0f) - 1.0f;
             float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)wnd.GetHeight() * 2.0f - 1.0f) * (-1.0f);
 
             //VBO
@@ -690,7 +691,8 @@ namespace SpaceVIL
             glActiveTexture(GL_TEXTURE0);
 
             int location = glGetUniformLocation(ProgramTexture, "tex".ToCharArray());
-            glUniform1i(location, 0);
+            if (location >= 0)
+                glUniform1i(location, 0);
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
 
