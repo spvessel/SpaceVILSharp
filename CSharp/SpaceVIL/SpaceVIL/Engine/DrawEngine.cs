@@ -631,7 +631,7 @@ namespace SpaceVIL
             glDeleteBuffers(2, buffers);
         }
 
-        void DrawImage(Image image)
+        void DrawImage(ImageItem image)
         {
             float i_x0 = ((float)image.GetX() / (float)wnd.GetWidth() * 2.0f) - 1.0f;
             float i_y0 = ((float)image.GetY() / (float)wnd.GetHeight() * 2.0f - 1.0f) * (-1.0f);

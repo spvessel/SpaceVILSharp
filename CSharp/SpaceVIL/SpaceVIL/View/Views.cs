@@ -605,11 +605,11 @@ namespace View
             layout.AddItem(progb);
 
             //BorderShape
-            BorderElement be = new BorderElement();
+            /*BorderElement be = new BorderElement();
             be.SetBackground(Color.Green);
             be.SetWidthPolicy(SizePolicy.Expand);
             be.SetHeight(50);
-            layout.AddItem(be);
+            layout.AddItem(be);*/
 
             //Label
             Label label = new Label("Hello world 12345!");
