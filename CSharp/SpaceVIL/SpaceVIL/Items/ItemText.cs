@@ -128,7 +128,7 @@ namespace SpaceVIL
                 f = coord[i + 2];
                 outCoord[i + 2] = f;
             }
-
+            
             SetWidth((int)Math.Abs(xmax - xmin));
             SetHeight((int)Math.Abs(ymax - ymin));
 

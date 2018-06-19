@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using SpaceVIL;
+using System.Threading;
 
 namespace View
 {
@@ -595,6 +596,21 @@ namespace View
             frame.SetHeightPolicy(SizePolicy.Expand);
             layout.AddItem(frame);
 
+            //ProgressBar
+            ProgressBar progb = new ProgressBar();
+            progb.SetWidthPolicy(SizePolicy.Expand);
+            //progb.SetHeightPolicy(SizePolicy.Expand);
+            progb.SetMinValue(35);
+            progb.SetMaxValue(78);
+            layout.AddItem(progb);
+
+            //BorderShape
+            BorderElement be = new BorderElement();
+            be.SetBackground(Color.Green);
+            be.SetWidthPolicy(SizePolicy.Expand);
+            be.SetHeight(50);
+            layout.AddItem(be);
+
             //Label
             Label label = new Label("Hello world 12345!");
             label.SetFont(new Font(new FontFamily("Times New Roman"), 16, FontStyle.Regular));
@@ -638,6 +654,8 @@ namespace View
                 Console.WriteLine(label.GetText());
                 label.SetForeground(Color.FromArgb(255, 210, 210, 210));
                 label.SetFont(new Font(new FontFamily("Calibri"), 30, FontStyle.Italic));
+
+                progb.SetCurrentValue(33);
             };
             toolbar.AddItem(show_info);
 
@@ -648,6 +666,8 @@ namespace View
             {
                 label.SetForeground(Color.FromArgb(255, 50, 255, 80));
                 Console.WriteLine(label.GetForeground());
+
+                progb.SetCurrentValue(55);
             };
             toolbar.AddItem(change_color);
 
@@ -658,6 +678,16 @@ namespace View
             {
                 label.SetFont(new Font(new FontFamily("Open Sans Light"), 30, FontStyle.Bold));
                 Console.WriteLine(label.GetFont());
+
+                    //Thread tr = new Thread(() =>
+                    //{
+                        for (int i = 35; i <= 78; i++)
+                        {
+                            progb.SetCurrentValue(i);
+                            Thread.Sleep(50);
+                        }
+                    //});
+                    //tr.Start();
             };
             toolbar.AddItem(change_font);
         }

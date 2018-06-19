@@ -377,7 +377,7 @@ namespace SpaceVIL
             Glfw.DestroyWindow(window);
         }
 
-        private void Render()
+        internal void Render()
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
             DrawItems(wnd.GetWindow());
@@ -390,7 +390,16 @@ namespace SpaceVIL
             if (!root.IsVisible)
                 return;
 
-            if (root is ITextContainer)
+            if (root is IPixelDrawable) {
+                glDisable(GL_MULTISAMPLE);
+                DrawPixels((root as IPixelDrawable));
+                foreach (var child in (root as VisualItem).GetItems())
+                {
+                    DrawItems(child);
+                }
+                glEnable(GL_MULTISAMPLE);
+            }
+            else if (root is ITextContainer)
             {
                 glDisable(GL_MULTISAMPLE);
                 DrawText((root as ITextContainer).GetText());
@@ -594,7 +603,35 @@ namespace SpaceVIL
             glDeleteBuffers(2, buffers);
         }
 
-        void DrawImage(ImageItem image)
+        void DrawPixels(IPixelDrawable item)
+        {
+            //Console.WriteLine(item.GetItemText());
+            uint[] buffers = new uint[2];
+            glGenBuffers(2, buffers);
+            float[] data = item.GetCoords();
+            float[] colorData = item.GetColors();
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(0);
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(1);
+
+            // draw
+            glDrawArrays(GL_POINTS, 0, data.Length / 3);
+
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+
+            // Clear VBO and shader
+            glDeleteBuffers(2, buffers);
+        }
+
+        void DrawImage(Image image)
         {
             float i_x0 = ((float)image.GetX() / (float)wnd.GetWidth() * 2.0f) - 1.0f;
             float i_y0 = ((float)image.GetY() / (float)wnd.GetHeight() * 2.0f - 1.0f) * (-1.0f);
