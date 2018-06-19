@@ -54,10 +54,10 @@ namespace SpaceVIL
 
         public void SetCurrentValue(int currentValue) {
             _currentValue = currentValue;
-            UpdateState();
+            UpdateProgressBar();
         }
 
-        private void UpdateState()
+        private void UpdateProgressBar()
         {
             float AllLength = _maxValue - _minValue;
             float DonePercent;

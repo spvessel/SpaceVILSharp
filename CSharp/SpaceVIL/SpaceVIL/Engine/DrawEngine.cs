@@ -575,7 +575,7 @@ namespace SpaceVIL
             crd_array.Clear();
         }
 
-        void DrawText(ItemText item)
+        void DrawText(TextItem item)
         {
             //Console.WriteLine(item.GetItemText());
             uint[] buffers = new uint[2];

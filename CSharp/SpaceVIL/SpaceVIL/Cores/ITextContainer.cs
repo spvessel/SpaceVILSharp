@@ -8,6 +8,6 @@ namespace SpaceVIL
 {
     interface ITextContainer
     {
-        ItemText GetText();
+        TextItem GetText();
     }
 }

@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    abstract class ItemText : Primitive
+    abstract class TextItem : Primitive
     {
         private List<float> _alphas;
         private float[] _coordinates;
@@ -17,14 +17,14 @@ namespace SpaceVIL
         private bool _coordsFlag = true;
         private bool _colorFlag = true;
 
-        public ItemText()
+        public TextItem()
         {
             SetBackground(Color.Black);
             SetWidthPolicy(SizePolicy.Expand);
             SetHeightPolicy(SizePolicy.Expand);
         }
 
-        public ItemText(String text, Font font, String name) : this()
+        public TextItem(String text, Font font, String name) : this()
         {
             _itemText = text;
             this._font = font;
