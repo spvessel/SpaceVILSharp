@@ -84,6 +84,8 @@ namespace View
             btn_action.Border.Radius = 10;
             frame.AddItem(btn_action);
 
+            if (true)
+                Console.WriteLine(Handler.GetWindowName());
             //Button Settings
             ButtonCore btn_settings = new ButtonCore();
             btn_settings.SetBackground(Color.FromArgb(255, 255, 181, 111));
@@ -114,6 +116,7 @@ namespace View
                 WindowLayoutBox.GetWindowInstance("LayoutsTest")?.Show();
                 Console.WriteLine(ItemsLayoutBox.GetLayoutItems(wnd_handler.Id).Count);
                 WindowLayoutBox.PrintStoredWindows();
+
             };
 
             //Button Toggle
@@ -679,15 +682,15 @@ namespace View
                 label.SetFont(new Font(new FontFamily("Open Sans Light"), 30, FontStyle.Bold));
                 Console.WriteLine(label.GetFont());
 
-                    //Thread tr = new Thread(() =>
-                    //{
-                        for (int i = 35; i <= 78; i++)
-                        {
-                            progb.SetCurrentValue(i);
-                            Thread.Sleep(50);
-                        }
-                    //});
-                    //tr.Start();
+                //Thread tr = new Thread(() =>
+                //{
+                for (int i = 35; i <= 78; i++)
+                {
+                    progb.SetCurrentValue(i);
+                    Thread.Sleep(50);
+                }
+                //});
+                //tr.Start();
             };
             toolbar.AddItem(change_font);
         }

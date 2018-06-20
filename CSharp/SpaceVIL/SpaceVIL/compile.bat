@@ -11,4 +11,3 @@
 -res:Shaders\fs_texture.glsl,SpaceVIL.Shaders.fs_texture.glsl ^
 -res:Shaders\vs_texture.glsl,SpaceVIL.Shaders.vs_texture.glsl ^
 -recurse:*.cs
-spacevil.exe
