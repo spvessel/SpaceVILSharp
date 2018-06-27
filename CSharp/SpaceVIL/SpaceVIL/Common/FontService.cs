@@ -9,8 +9,6 @@ namespace SpaceVIL
 {
     static class FontService
     {
-        
-
         public static void AddPreloadFont(Font font) {
             FontEngine.SavePreloadFont(font);
         }

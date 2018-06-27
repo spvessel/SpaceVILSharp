@@ -236,24 +236,35 @@ namespace View
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    ButtonCore rect = new ButtonCore();
-                    rect.SetBackground(125, 45, 78);
-                    rect.SetItemName("r: " + i + " c: " + j);
-                    rect.SetText(rect.GetItemName());
-                    rect.SetSize(100, 100);
-                    rect.Border.Radius = 20;
-                    rect.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-                    rect.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
-                    rect.SetMargin(6, 6, 6, 6);
-                    rect.AddItemState(true, ItemStateType.Hovered, new ItemState()
+                    if (i == 0)
                     {
-                        Background = Color.FromArgb(125, 255, 255, 255)
-                    });
-                    rect.EventMouseClick += (sender) =>
+
+                    }
+                    else if (i == 1)
                     {
-                        Console.WriteLine(rect.GetItemName());
-                    };
-                    grid.AddItem(rect, i, j);
+
+                    }
+                    else
+                    {
+                        ButtonCore rect = new ButtonCore();
+                        rect.SetBackground(125, 45, 78);
+                        rect.SetItemName("r: " + i + " c: " + j);
+                        rect.SetText(rect.GetItemName());
+                        rect.SetSize(100, 100);
+                        rect.Border.Radius = 20;
+                        rect.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+                        rect.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
+                        rect.SetMargin(6, 6, 6, 6);
+                        rect.AddItemState(true, ItemStateType.Hovered, new ItemState()
+                        {
+                            Background = Color.FromArgb(125, 255, 255, 255)
+                        });
+                        rect.EventMouseClick += (sender) =>
+                        {
+                            Console.WriteLine(rect.GetItemName());
+                        };
+                        grid.AddItem(rect, i, j);
+                    }
                 }
             }
             //btn add_at_begin
@@ -653,13 +664,8 @@ namespace View
             be.SetBackground(Color.Green);
             be.SetWidthPolicy(SizePolicy.Expand);
             be.SetHeight(50);
-<<<<<<< HEAD
             layout.AddItem(be);
             */
-=======
-            layout.AddItem(be);*/
-
->>>>>>> ff537f62162ced53ec9a7c69e6df2a3730bbcdf0
             //Label
             Label label = new Label("Hello world 12345!");
             label.SetFont(new Font(new FontFamily("Times New Roman"), 16, FontStyle.Regular));
@@ -700,13 +706,13 @@ namespace View
             show_info.SetStyle(btn_style);
             show_info.EventMouseClick += (sender) =>
             {
-                
+
                 Console.WriteLine(label.GetText());
                 label.SetForeground(Color.FromArgb(255, 210, 210, 210));
                 label.SetFont(new Font(new FontFamily("Calibri"), 30, FontStyle.Italic));
 
                 progb.SetCurrentValue(33);
-                
+
             };
             toolbar.AddItem(show_info);
 
@@ -715,12 +721,12 @@ namespace View
             change_color.SetStyle(btn_style);
             change_color.EventMouseClick += (sender) =>
             {
-                
+
                 label.SetForeground(Color.FromArgb(255, 50, 255, 80));
                 Console.WriteLine(label.GetForeground());
 
                 progb.SetCurrentValue(55);
-                
+
             };
             toolbar.AddItem(change_color);
 
@@ -729,22 +735,10 @@ namespace View
             change_font.SetStyle(btn_style);
             change_font.EventMouseClick += (sender) =>
             {
-                
+
                 label.SetFont(new Font(new FontFamily("Open Sans Light"), 30, FontStyle.Bold));
                 Console.WriteLine(label.GetFont());
 
-<<<<<<< HEAD
-                    //Thread tr = new Thread(() =>
-                    //{
-                        for (int i = 35; i <= 78; i++)
-                        {
-                            progb.SetCurrentValue(i);
-                            Thread.Sleep(50);
-                        }
-                    //});
-                    //tr.Start();
-                
-=======
                 //Thread tr = new Thread(() =>
                 //{
                 for (int i = 35; i <= 78; i++)
@@ -754,7 +748,7 @@ namespace View
                 }
                 //});
                 //tr.Start();
->>>>>>> ff537f62162ced53ec9a7c69e6df2a3730bbcdf0
+
             };
             toolbar.AddItem(change_font);
         }
@@ -832,7 +826,6 @@ namespace View
     #endregion
 
     #region  InputTest
-
     partial class InputTest
     {
         WindowLayout wnd_handler;
