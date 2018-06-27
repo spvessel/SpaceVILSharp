@@ -315,7 +315,7 @@ namespace GL.WGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexCoordPointer(int size, uint type, int stride, float[] pointer);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexEnvf(uint target, uint pname, float param);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexEnvfv(uint target, uint pname, float[] params_notkeyword);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexEnvi(uint target, uint pname, int param);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexEnvi(uint target, uint pname, uint param);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexEnviv(uint target, uint pname, int[] params_notkeyword);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexGend(uint coord, uint pname, double param);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexGendv(uint coord, uint pname, double[] params_notkeyword);
@@ -328,10 +328,10 @@ namespace GL.WGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexImage2D(uint target, int level, uint internalformat, int width, int height, int border, uint format, uint type, IntPtr pixels);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameterf(uint target, uint pname, float param);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameterfv(uint target, uint pname, float[] params_notkeyword);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameteri(uint target, uint pname, int param);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameteriv(uint target, uint pname, int[] params_notkeyword);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameteri(uint target, uint pname, uint param);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameteriv(uint target, uint pname, uint[] params_notkeyword);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexSubImage1D(uint target, int level, int xoffset, int width, uint format, uint type, int[] pixels);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexSubImage2D(uint target, int level, int xoffset, int yoffset, int width, int height, uint format, uint type, int[] pixels);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexSubImage2D(uint target, int level, int xoffset, int yoffset, int width, int height, uint format, uint type, byte[] pixels);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTranslated(double x, double y, double z);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTranslatef(float x, float y, float z);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glVertex2d(double x, double y);
@@ -559,6 +559,16 @@ namespace GL.WGL
 
             Marshal.FreeHGlobal(ptr);
         }
+        public void glBufferData(uint target, int[] data, uint usage)
+        {
+            IntPtr ptr = Marshal.AllocHGlobal(data.Length * sizeof(float));
+            Marshal.Copy(data, 0, ptr, data.Length);
+
+            Delegate wgl = InvokeWGL<bufferData>("glBufferData");
+            wgl.DynamicInvoke(target, data.Length * sizeof(uint), ptr, usage);
+
+            Marshal.FreeHGlobal(ptr);
+        }
 
         public delegate void vertexAttribPointer(uint index, int size, uint type, bool normalized, int stride, IntPtr pointer);
         public void glVertexAttribPointer(uint index, int size, uint type, bool normalized, int stride, IntPtr pointer)
@@ -587,8 +597,8 @@ namespace GL.WGL
             Delegate wgl = InvokeWGL<deleteBuffers>("glDeleteBuffers");
             wgl.DynamicInvoke(n, buffers);
         }
-        //Work with Textures
 
+        //Work with Textures
         public delegate void generateMipmap(uint target);
         public void glGenerateMipmap(uint target)
         {
@@ -704,15 +714,29 @@ namespace GL.WGL
         public delegate void uniform3iv(int location, int count, int[] value);
         public void glUniform3(int location, int count, int[] value)
         {
-            Delegate wgl = InvokeWGL<shaderSource>("glUniform3iv");
+            Delegate wgl = InvokeWGL<uniform3iv>("glUniform3iv");
             wgl.DynamicInvoke(location, count, value);
         }
 
         public delegate void uniform4iv(int location, int count, int[] value);
         public void glUniform4(int location, int count, int[] value)
         {
-            Delegate wgl = InvokeWGL<shaderSource>("glUniform4iv");
+            Delegate wgl = InvokeWGL<uniform4iv>("glUniform4iv");
             wgl.DynamicInvoke(location, count, value);
+        }
+
+        public delegate int getuniformlocation(uint shader, char[] value);
+        public int glGetUniformLocation(uint shader, char[] value)
+        {
+            Delegate wgl = InvokeWGL<getuniformlocation>("glGetUniformLocation");
+            return (int)wgl.DynamicInvoke(shader, value);
+        }
+
+        public delegate void texStorage2D(uint target, int level, uint internalformat, int width, int height);
+        public void glTexStorage2D(uint target, int level, uint internalformat, int width, int height)
+        {
+            Delegate wgl = InvokeWGL<texStorage2D>("glTexStorage2D");
+            wgl.DynamicInvoke(target, level, internalformat, width, height);
         }
     }
 }

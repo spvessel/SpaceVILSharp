@@ -20,7 +20,7 @@ namespace SpaceVIL
 
             //text
             _text = new Label();
-            _text.SetItemName(GetItemName()+"_text");
+            _text.SetItemName(GetItemName() + "_text");
             _text.SetBackground(255, 255, 255, 20);
             _text.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             _text.SetAlignment(ItemAlignment.VCenter);
@@ -32,7 +32,5 @@ namespace SpaceVIL
         {
             AddItem(_text);
         }
-
-
     }
 }

@@ -630,7 +630,7 @@ namespace SpaceVIL
                     {
                         if (alph[xx, yy] != 0)
                         {
-                            alph[xx, yy] = (alph[xx, yy] < 1) ? alph[xx, yy] + 0.10f : alph[xx, yy];
+                            alph[xx, yy] = (alph[xx, yy] < 1) ? alph[xx, yy] + 0.05f : alph[xx, yy];
                             alph[xx, yy] = (alph[xx, yy] > 1) ? 1 : alph[xx, yy];
                         }
                         alphas[xx - x0shift, yy - y0shift] = alph[xx, yy];

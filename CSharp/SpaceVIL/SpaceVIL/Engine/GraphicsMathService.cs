@@ -458,11 +458,13 @@ namespace SpaceVIL
             return figure;
         }
 
-        public static List<float> GetRectBorder(int w, int h) {
+        public static List<float> GetRectBorder(int w, int h)
+        {
             return GetRectBorderIgnoreTop(w, h, 0, 0);
         }
 
-        public static List<float> GetRectBorderIgnoreTop(int w, int h, int ignoreFrom, int ignoreWidth) {
+        public static List<float> GetRectBorderIgnoreTop(int w, int h, int ignoreFrom, int ignoreWidth)
+        {
             List<float> borderCoords = new List<float>();
 
             ignoreFrom = (ignoreFrom > w - 1) ? w - 1 : ignoreFrom;
@@ -498,7 +500,8 @@ namespace SpaceVIL
             return arr;
         }
 
-        enum LineDir {
+        enum LineDir
+        {
             Horiz,
             Vert
         }

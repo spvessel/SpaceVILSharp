@@ -7,6 +7,7 @@ using System.Threading;
 
 namespace View
 {
+    #region MaimWindow
     //MainWindow
     partial class MainWindow
     {
@@ -25,13 +26,13 @@ namespace View
         private void InitWindow()
         {
             wnd_handler = new WindowLayout(name: nameof(MainWindow));
-            wnd_handler.SetWidth(500);
-            wnd_handler.SetMinWidth(500);
-            wnd_handler.SetHeight(300);
-            wnd_handler.SetMinHeight(300);
+            wnd_handler.SetWidth(1000);
+            wnd_handler.SetMinWidth(1000);
+            wnd_handler.SetHeight(600);
+            wnd_handler.SetMinHeight(600);
             wnd_handler.SetWindowTitle(nameof(MainWindow));
             WindowLayoutBox.InitWindow(wnd_handler);
-            wnd_handler.SetPadding(30, 50, 30, 50);
+            wnd_handler.SetPadding(60, 100, 60, 100);
             Handler.SetBackground(Color.FromArgb(255, 76, 76, 76));
 
             //Frame
@@ -41,7 +42,7 @@ namespace View
             frame.SetWidth(400);
             frame.SetHeight(200);
 
-            frame.SetPadding(50, 15, 15, 15);
+            frame.SetPadding(100, 30, 30, 30);
             frame.SetWidthPolicy(SizePolicy.Expand);
             frame.SetHeightPolicy(SizePolicy.Expand);
             wnd_handler.AddItem(frame);
@@ -50,8 +51,8 @@ namespace View
             CheckBox checkBox = new CheckBox();
             checkBox.SetItemName("CheckBox");
             checkBox.SetText("Show window with grid testing.");
-            checkBox.SetFont(new Font(new FontFamily("Courier New"), 16, FontStyle.Regular));
-            checkBox.SetHeight(20);
+            checkBox.SetFont(new Font(new FontFamily("Courier New"), 32, FontStyle.Regular));
+            checkBox.SetHeight(40);
             checkBox.SetWidthPolicy(SizePolicy.Expand);
             checkBox.SetAlignment(ItemAlignment.Top | ItemAlignment.HCenter);
             checkBox.EventMouseClick += (sender) =>
@@ -71,10 +72,10 @@ namespace View
             btn_action.SetText("Layout Test");
             btn_action.SetForeground(Color.Black);
             btn_action.SetItemName("Action");
-            btn_action.SetWidth(95);
-            btn_action.SetMaxWidth(195);
-            btn_action.SetHeight(50);
-            btn_action.SetMaxHeight(100);
+            btn_action.SetWidth(190);
+            btn_action.SetMaxWidth(390);
+            btn_action.SetHeight(100);
+            btn_action.SetMaxHeight(200);
             btn_action.SetWidthPolicy(SizePolicy.Expand);
             btn_action.SetHeightPolicy(SizePolicy.Expand);
             btn_action.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
@@ -83,7 +84,17 @@ namespace View
                 Background = Color.FromArgb(125, 255, 255, 255)
             });
             btn_action.Border.Radius = 10;
+            btn_action.EventMouseClick += (sender) =>
+            {
+                WindowLayoutBox.GetWindowInstance("LayoutsTest")?.Show();
+                Console.WriteLine(ItemsLayoutBox.GetLayoutItems(wnd_handler.Id).Count);
+                WindowLayoutBox.PrintStoredWindows();
+
+            };
             frame.AddItem(btn_action);
+
+            if (true)
+                Console.WriteLine(Handler.GetWindowName());
 
             //Button Settings
             ButtonCore btn_settings = new ButtonCore();
@@ -91,10 +102,10 @@ namespace View
             btn_settings.SetText("Settings");
             btn_settings.SetForeground(Color.Black);
             btn_settings.SetItemName("Settings");
-            btn_settings.SetWidth(95);
-            btn_settings.SetHeight(50);
-            btn_settings.SetX(50);
-            btn_settings.SetY(50);
+            btn_settings.SetWidth(190);
+            btn_settings.SetHeight(100);
+            btn_settings.SetX(100);
+            btn_settings.SetY(100);
             btn_settings.SetWidthPolicy(SizePolicy.Fixed);
             btn_settings.SetHeightPolicy(SizePolicy.Fixed);
             btn_settings.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
@@ -102,7 +113,7 @@ namespace View
             {
                 Background = Color.FromArgb(125, 255, 255, 255)
             });
-            btn_settings.Border.Radius = 10;
+            btn_settings.Border.Radius = 20;
             btn_settings.EventMouseClick += (sender) =>
             {
                 WindowLayoutBox.GetWindowInstance("Settings")?.Show();
@@ -110,19 +121,35 @@ namespace View
             };
             frame.AddItem(btn_settings);
 
-            btn_action.EventMouseClick += (sender) =>
+            //Button Inputs
+            ButtonCore btn_input = new ButtonCore();
+            btn_input.SetBackground(100, 175, 255);
+            btn_input.SetText("Inputs");
+            btn_input.SetForeground(Color.Black);
+            btn_input.SetItemName("Inputs");
+            btn_input.SetWidth(190);
+            btn_input.SetHeight(60);
+            btn_input.SetWidthPolicy(SizePolicy.Fixed);
+            btn_input.SetHeightPolicy(SizePolicy.Fixed);
+            btn_input.SetAlignment(ItemAlignment.Left | ItemAlignment.Bottom);
+            btn_input.AddItemState(true, ItemStateType.Hovered, new ItemState()
             {
-                WindowLayoutBox.GetWindowInstance("LayoutsTest")?.Show();
-                Console.WriteLine(ItemsLayoutBox.GetLayoutItems(wnd_handler.Id).Count);
-                WindowLayoutBox.PrintStoredWindows();
+                Background = Color.FromArgb(125, 255, 255, 255)
+            });
+            btn_input.Border.Radius = 12;
+            btn_input.EventMouseClick += (sender) =>
+            {
+                WindowLayoutBox.GetWindowInstance("InputTest")?.Show();
+                Console.WriteLine(btn_input.GetAlignment());
             };
+            frame.AddItem(btn_input);
 
             //Button Toggle
             ButtonToggle btn_toggle = new ButtonToggle();
             btn_toggle.SetBackground(Color.FromArgb(255, 111, 181, 255));
             btn_toggle.SetItemName("Toggle");
-            btn_toggle.SetWidth(25);
-            btn_toggle.SetHeight(25);
+            btn_toggle.SetWidth(50);
+            btn_toggle.SetHeight(50);
             btn_toggle.SetWidthPolicy(SizePolicy.Fixed);
             btn_toggle.SetHeightPolicy(SizePolicy.Fixed);
             btn_toggle.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
@@ -134,13 +161,13 @@ namespace View
             {
                 Background = Color.FromArgb(255, 100, 255, 150)
             });
-            btn_toggle.Border.Radius = 10;
+            btn_toggle.Border.Radius = 20;
             btn_toggle.IsCustom = true;
             btn_toggle.SetTriangles(GraphicsMathService.GetCross(25, 25, 8, 45));
 
             btn_toggle.EventToggle += (sender) =>
             {
-                WindowLayoutBox.GetWindowInstance("LabelTest")?.Show();
+                WindowLayoutBox.GetWindowInstance("ImageTest")?.Show();
             };
 
             frame.AddItem(btn_toggle);
@@ -150,6 +177,9 @@ namespace View
             wnd_handler.Show();
         }
     }
+    #endregion
+
+    #region GridTest
     //GridTest
     partial class GridTest
     {
@@ -175,13 +205,13 @@ namespace View
             wnd_handler.SetMinWidth(500);
             wnd_handler.SetHeight(500);
             wnd_handler.SetMinHeight(500);
-            wnd_handler.SetPadding(1, 1, 1, 1);
+            wnd_handler.SetPadding(2, 2, 2, 2);
             wnd_handler.SetBackground(Color.FromArgb(255, 51, 51, 51));
 
             //ToolBar
             VerticalStack layout = new VerticalStack();
-            layout.SetPadding(3, 3, 3, 3);
-            layout.SetSpacing(vertical: 5);
+            layout.SetPadding(6, 6, 6, 6);
+            layout.SetSpacing(vertical: 10);
             layout.SetBackground(255, 255, 255, 20);
 
             //adding toolbar
@@ -191,15 +221,15 @@ namespace View
             HorizontalStack toolbar = new HorizontalStack();
             toolbar.SetBackground(Color.FromArgb(255, 100, 100, 100));
             toolbar.SetItemName(nameof(toolbar));
-            toolbar.SetHeight(40);
-            toolbar.SetPadding(10);
-            toolbar.SetSpacing(10);
+            toolbar.SetHeight(80);
+            toolbar.SetPadding(20);
+            toolbar.SetSpacing(20);
             toolbar.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             layout.AddItem(toolbar);
 
             //grid
             Grid grid = new Grid(2, 3);
-            grid.SetSpacing(3, 3);
+            grid.SetSpacing(6, 6);
             layout.AddItem(grid);
 
             for (int i = 0; i < 2; i++)
@@ -210,11 +240,11 @@ namespace View
                     rect.SetBackground(125, 45, 78);
                     rect.SetItemName("r: " + i + " c: " + j);
                     rect.SetText(rect.GetItemName());
-                    rect.SetSize(50, 50);
-                    rect.Border.Radius = 10;
+                    rect.SetSize(100, 100);
+                    rect.Border.Radius = 20;
                     rect.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
                     rect.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
-                    rect.SetMargin(3, 3, 3, 3);
+                    rect.SetMargin(6, 6, 6, 6);
                     rect.AddItemState(true, ItemStateType.Hovered, new ItemState()
                     {
                         Background = Color.FromArgb(125, 255, 255, 255)
@@ -230,9 +260,9 @@ namespace View
             ButtonCore add_at_begin = new ButtonCore();
             add_at_begin.SetBackground(13, 176, 255);
             add_at_begin.SetItemName(nameof(add_at_begin));
-            add_at_begin.Border.Radius = 6;
-            add_at_begin.SetWidth(30);
-            add_at_begin.SetHeight(30);
+            add_at_begin.Border.Radius = 12;
+            add_at_begin.SetWidth(60);
+            add_at_begin.SetHeight(60);
             add_at_begin.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             add_at_begin.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
             add_at_begin.AddItemState(true, ItemStateType.Hovered, new ItemState()
@@ -252,9 +282,9 @@ namespace View
             ButtonCore add_at_center = new ButtonCore();
             add_at_center.SetBackground(121, 223, 152);
             add_at_center.SetItemName(nameof(add_at_center));
-            add_at_center.Border.Radius = 6;
-            add_at_center.SetWidth(30);
-            add_at_center.SetHeight(30);
+            add_at_center.Border.Radius = 12;
+            add_at_center.SetWidth(60);
+            add_at_center.SetHeight(60);
             add_at_center.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             add_at_center.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
             add_at_center.AddItemState(true, ItemStateType.Hovered, new ItemState()
@@ -270,9 +300,9 @@ namespace View
             ButtonCore add_at_end = new ButtonCore();
             add_at_end.SetBackground(238, 174, 128);
             add_at_end.SetItemName(nameof(add_at_end));
-            add_at_end.Border.Radius = 6;
-            add_at_end.SetWidth(30);
-            add_at_end.SetHeight(30);
+            add_at_end.Border.Radius = 12;
+            add_at_end.SetWidth(60);
+            add_at_end.SetHeight(60);
             add_at_end.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             add_at_end.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
             add_at_end.AddItemState(true, ItemStateType.Hovered, new ItemState()
@@ -298,6 +328,9 @@ namespace View
             wnd_handler.Show();
         }
     }
+    #endregion
+
+    #region  Settings
     //Settings
     partial class Settings
     {
@@ -378,6 +411,10 @@ namespace View
             btn1.SetAlignment(ItemAlignment.HCenter);
             btn1.AddItemState(true, ItemStateType.Hovered, new ItemState() { Background = Color.FromArgb(125, 255, 255, 255) });
             btn1.SetWidthPolicy(SizePolicy.Fixed);
+            btn1.EventMouseClick += (sender) =>
+            {
+                Console.WriteLine(btn1.GetItemName());
+            };
 
             ButtonCore btn2 = new ButtonCore();
             btn2.SetBackground(Color.FromArgb(255, 46, 112, 204));
@@ -403,6 +440,9 @@ namespace View
             wnd_handler.Show();
         }
     }
+    #endregion
+
+    #region  LayoutTest
     //LayoutsTest
     partial class LayoutsTest
     {
@@ -543,6 +583,9 @@ namespace View
             wnd_handler.Show();
         }
     }
+    #endregion
+
+    #region  LabelTest
     //LabelTest
     partial class LabelTest
     {
@@ -563,8 +606,8 @@ namespace View
             wnd_handler = new WindowLayout(name: nameof(LabelTest));
             wnd_handler.SetWidth(500);
             wnd_handler.SetMinWidth(500);
-            wnd_handler.SetHeight(300);
-            wnd_handler.SetMinHeight(300);
+            wnd_handler.SetHeight(500);
+            wnd_handler.SetMinHeight(500);
             wnd_handler.SetWindowTitle(nameof(LabelTest));
             WindowLayoutBox.InitWindow(wnd_handler);
             Handler.SetBackground(Color.FromArgb(255, 76, 76, 76));
@@ -606,12 +649,17 @@ namespace View
             layout.AddItem(progb);
             /*
             //BorderShape
-            BorderElement be = new BorderElement();
+            /*BorderElement be = new BorderElement();
             be.SetBackground(Color.Green);
             be.SetWidthPolicy(SizePolicy.Expand);
             be.SetHeight(50);
+<<<<<<< HEAD
             layout.AddItem(be);
             */
+=======
+            layout.AddItem(be);*/
+
+>>>>>>> ff537f62162ced53ec9a7c69e6df2a3730bbcdf0
             //Label
             Label label = new Label("Hello world 12345!");
             label.SetFont(new Font(new FontFamily("Times New Roman"), 16, FontStyle.Regular));
@@ -685,6 +733,7 @@ namespace View
                 label.SetFont(new Font(new FontFamily("Open Sans Light"), 30, FontStyle.Bold));
                 Console.WriteLine(label.GetFont());
 
+<<<<<<< HEAD
                     //Thread tr = new Thread(() =>
                     //{
                         for (int i = 35; i <= 78; i++)
@@ -695,6 +744,17 @@ namespace View
                     //});
                     //tr.Start();
                 
+=======
+                //Thread tr = new Thread(() =>
+                //{
+                for (int i = 35; i <= 78; i++)
+                {
+                    progb.SetCurrentValue(i);
+                    Thread.Sleep(50);
+                }
+                //});
+                //tr.Start();
+>>>>>>> ff537f62162ced53ec9a7c69e6df2a3730bbcdf0
             };
             toolbar.AddItem(change_font);
         }
@@ -704,4 +764,206 @@ namespace View
             wnd_handler.Show();
         }
     }
+    #endregion
+
+    #region  ImageTest
+    //ImageTest
+    partial class ImageTest
+    {
+        WindowLayout wnd_handler;
+        public WindowLayout Handler
+        {
+            get
+            {
+                return wnd_handler;
+            }
+            set
+            {
+                wnd_handler = value;
+            }
+        }
+        private void InitWindow()
+        {
+            wnd_handler = new WindowLayout(name: nameof(ImageTest));
+            wnd_handler.SetWidth(500);
+            wnd_handler.SetMinWidth(500);
+            wnd_handler.SetHeight(500);
+            wnd_handler.SetMinHeight(500);
+            wnd_handler.SetWindowTitle(nameof(ImageTest));
+            WindowLayoutBox.InitWindow(wnd_handler);
+            Handler.SetBackground(Color.FromArgb(255, 76, 76, 76));
+
+            ButtonCore btn_action = new ButtonCore();
+
+            btn_action.SetBackground(100, 255, 150);
+            btn_action.SetText("Columnar");
+            btn_action.SetTextMargin(new Margin(0, 45, 0, 0));
+            btn_action.SetForeground(Color.Black);
+            btn_action.SetItemName("Action");
+            btn_action.SetWidth(256);
+            btn_action.SetHeight(128);
+            btn_action.SetWidthPolicy(SizePolicy.Fixed);
+            btn_action.SetHeightPolicy(SizePolicy.Fixed);
+            btn_action.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            btn_action.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(80, 255, 255, 255)
+            });
+            btn_action.Border.Radius = 10;
+            Handler.AddItem(btn_action);
+
+            //Image img1 = Image.FromFile("D:\\icon.png");
+            Image img1 = Image.FromFile("D:\\columnar.png");
+            //Image img1 = Image.FromFile("D:\\sample.png");
+            //Image img1 = Image.FromFile("D:\\icon.jpg");
+
+            ImageItem image = new ImageItem(img1);
+            image.SetBackground(Color.Transparent);
+            image.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            image.SetAlignment(ItemAlignment.VCenter | ItemAlignment.HCenter);
+            btn_action.AddItem(image);
+        }
+
+        public void Show()
+        {
+            wnd_handler.Show();
+        }
+    }
+    #endregion
+
+    #region  InputTest
+
+    partial class InputTest
+    {
+        WindowLayout wnd_handler;
+        public WindowLayout Handler
+        {
+            get
+            {
+                return wnd_handler;
+            }
+            set
+            {
+                wnd_handler = value;
+            }
+        }
+        private void InitWindow()
+        {
+            wnd_handler = new WindowLayout(name: nameof(InputTest));
+            wnd_handler.SetWidth(500);
+            wnd_handler.SetMinWidth(500);
+            wnd_handler.SetHeight(200);
+            wnd_handler.SetMinHeight(200);
+            wnd_handler.SetWindowTitle(nameof(InputTest));
+            WindowLayoutBox.InitWindow(wnd_handler);
+            Handler.SetBackground(Color.FromArgb(255, 76, 76, 76));
+
+            //ToolBar
+            VerticalStack layout = new VerticalStack();
+            layout.SetPadding(3, 3, 3, 3);
+            layout.SetSpacing(vertical: 5);
+            layout.SetBackground(255, 255, 255, 20);
+
+            //adding toolbar
+            wnd_handler.AddItem(layout);
+
+            //Frame
+            HorizontalStack toolbar = new HorizontalStack();
+            toolbar.SetBackground(Color.FromArgb(255, 60, 60, 60));
+            toolbar.SetItemName(nameof(toolbar));
+            toolbar.SetHeight(40);
+            toolbar.SetPadding(10);
+            toolbar.SetSpacing(10);
+            toolbar.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            layout.AddItem(toolbar);
+
+            //Frame
+            Frame frame = new Frame();
+            frame.SetBackground(Color.FromArgb(255, 51, 51, 51));
+            frame.SetItemName("Container");
+            frame.SetPadding(15, 15, 15, 15);
+            frame.SetWidthPolicy(SizePolicy.Expand);
+            frame.SetHeightPolicy(SizePolicy.Expand);
+            layout.AddItem(frame);
+
+            //password input
+            PasswordLine pwd = new PasswordLine();
+            pwd.Border.Radius = 4;
+            pwd.SetHeight(30);
+            pwd.SetAlignment(ItemAlignment.VCenter);
+            pwd.SetTextAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
+            pwd.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            pwd.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(60, 255, 255, 255)
+            });
+            pwd.SetFont(new Font(new FontFamily("Arial"), 12, FontStyle.Regular));
+            frame.AddItem(pwd);
+
+            //text input
+            TextEdit text = new TextEdit();
+            text.Border.Radius = 4;
+            text.SetHeight(30);
+            text.SetAlignment(ItemAlignment.Bottom);
+            text.SetTextAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
+            text.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            text.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(60, 255, 255, 255)
+            });
+            text.SetFont(new Font(new FontFamily("Courier New"), 16, FontStyle.Regular));
+
+            frame.AddItem(text);
+
+            //style
+            Style btn_style = new Style();
+            btn_style.Background = Color.FromArgb(255, 13, 176, 255);
+            btn_style.BorderRadius = 6;
+            btn_style.Width = 30;
+            btn_style.Height = 30;
+            btn_style.WidthPolicy = SizePolicy.Fixed;
+            btn_style.HeightPolicy = SizePolicy.Fixed;
+            btn_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            ItemState brighter = new ItemState();
+            brighter.Background = Color.FromArgb(125, 255, 255, 255);
+            btn_style.ItemStates.Add(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(125, 255, 255, 255)
+            });
+
+            //btn add_at_begin
+            ButtonCore show_info = new ButtonCore();
+            show_info.SetItemName(nameof(show_info));
+            show_info.SetStyle(btn_style);
+            show_info.EventMouseClick += (sender) =>
+            {
+                Console.WriteLine(pwd.GetPassword());
+            };
+            toolbar.AddItem(show_info);
+
+            ButtonCore change_color = new ButtonCore();
+            change_color.SetItemName(nameof(change_color));
+            change_color.SetStyle(btn_style);
+            change_color.EventMouseClick += (sender) =>
+            {
+
+            };
+            toolbar.AddItem(change_color);
+
+            ButtonCore change_font = new ButtonCore();
+            change_font.SetItemName(nameof(change_font));
+            change_font.SetStyle(btn_style);
+            change_font.EventMouseClick += (sender) =>
+            {
+
+            };
+            toolbar.AddItem(change_font);
+        }
+        public void Show()
+        {
+            wnd_handler.Show();
+        }
+    }
+
+    #endregion
 }

@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SpaceVIL;
 
-namespace SpaceVIL
+namespace View
 {
-    interface ITextContainer
+    partial class ImageTest
     {
-        TextItem GetText();
+        public ImageTest()
+        {
+            InitWindow();
+        }
     }
 }

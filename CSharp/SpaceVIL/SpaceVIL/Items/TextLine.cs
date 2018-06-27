@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class TextLine : ItemText, ITextContainer
+    class TextLine : TextItem, ITextContainer
     {
         private static int count = 0;
 
@@ -134,7 +134,7 @@ namespace SpaceVIL
             }
         }
 
-        public ItemText GetText()
+        public TextItem GetText()
         {
             return this;
         }

@@ -7,11 +7,12 @@ using System.Text;
 
 using Glfw3;
 using System.Threading;
+using System.Drawing;
 
 namespace SpaceVIL
 {
     internal class DrawEngine : GL.WGL.OpenWGL
-        //where TLayout : VisualItem
+    //where TLayout : VisualItem
     {
         private BaseItem _isStencilSet = null;
         public InputDeviceEvent EngineEvent = new InputDeviceEvent();
@@ -24,8 +25,9 @@ namespace SpaceVIL
         Glfw.ScrollFunc mouseScrollCallback;
         Glfw.WindowCloseFunc windowCloseCallback;
         Glfw.WindowPosFunc windowPosCallback;
-        //Glfw.WindowFocusFunc windowFocusCallback;
         Glfw.KeyFunc keyPressCallback;
+        Glfw.CharModsFunc keyInputText;
+        //Glfw.WindowFocusFunc windowFocusCallback;
         ///////////////////////////////////////////////
 
         public bool borderHidden;
@@ -35,6 +37,7 @@ namespace SpaceVIL
         public bool alwaysOnTop;
         public Pointer window_position = new Pointer();
         private VisualItem HoveredItem;
+        private VisualItem FocusedItem;
         private Pointer ptrPress = new Pointer();
         private Pointer ptrRelease = new Pointer();
 
@@ -43,9 +46,12 @@ namespace SpaceVIL
         Glfw.Window window;
         private uint[] gVAO = new uint[1];
         private uint ProgramPrimitives;
-        uint vShader, fShader;
+        private uint VertexPrimitiveShader, FragmentPrimitiveShader;
 
-        public DrawEngine (WindowLayout handler) 
+        private uint ProgramTexture;
+        private uint VertexTextureShader, FragmentTextureShader;
+
+        public DrawEngine(WindowLayout handler)
         {
             wnd = handler;
             window_position.X = 0;
@@ -67,6 +73,7 @@ namespace SpaceVIL
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
             //устанавливаем параметры отрисовки
+            glEnable(GL_TEXTURE_2D);
             glEnable(GL_MULTISAMPLE);
             glEnable(GL_BLEND);
             glEnable(GL_CULL_FACE);
@@ -75,13 +82,23 @@ namespace SpaceVIL
             glDisable(GL_DEPTH_TEST);
             glEnable(GL_ALPHA_TEST);
 
-            CreateShaderProgram(
+            ProgramPrimitives = CreateShaderProgram(
             Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fill.glsl"),
-            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fill.glsl")
+            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fill.glsl"),
+            ref VertexPrimitiveShader,
+            ref FragmentPrimitiveShader
             );
             if (ProgramPrimitives == 0)
-                Console.WriteLine("Could not create the fill shaders");
+                Console.WriteLine("Could not create primitive shaders");
 
+            ProgramTexture = CreateShaderProgram(
+            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_texture.glsl"),
+            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_texture.glsl"),
+            ref VertexTextureShader,
+            ref FragmentTextureShader
+            );
+            if (ProgramTexture == 0)
+                Console.WriteLine("Could not create textured shaders");
             Run();
         }
 
@@ -94,9 +111,9 @@ namespace SpaceVIL
                 Environment.Exit(-1);
             }
 
-            Glfw.WindowHint(Glfw.Hint.Samples, 4);
-            //Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             //Glfw.WindowHint(Glfw.Hint.OpenglDebugContext, true);
+            Glfw.WindowHint(Glfw.Hint.Samples, 4);
+            Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 4);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
             Glfw.WindowHint(Glfw.Hint.Resizable, true);
@@ -126,7 +143,7 @@ namespace SpaceVIL
             Glfw.SetWindowSizeLimits(window, wnd.GetMinWidth(), wnd.GetMinHeight(), wnd.GetMaxWidth(), wnd.GetMaxHeight());
         }
 
-        private void CreateShaderProgram(Stream vertex_shader, Stream fragment_shader)
+        private uint CreateShaderProgram(Stream vertex_shader, Stream fragment_shader, ref uint vertex, ref uint fragment)
         {
             StringBuilder v_code = new StringBuilder();
             StringBuilder f_code = new StringBuilder();
@@ -149,19 +166,22 @@ namespace SpaceVIL
                 Console.WriteLine("The file could not be read:");
                 Console.WriteLine(e.Message);
             }
+            Console.WriteLine(v_code);
+            Console.WriteLine(f_code);
+            vertex = glCreateShader(GL_VERTEX_SHADER);
+            glShaderSource(vertex, 1, new[] { v_code.ToString() }, new[] { v_code.ToString().Length });
+            glCompileShader(vertex);
 
-            vShader = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vShader, 1, new[] { v_code.ToString() }, new[] { v_code.ToString().Length });
-            glCompileShader(vShader);
+            fragment = glCreateShader(GL_FRAGMENT_SHADER);
+            glShaderSource(fragment, 1, new[] { f_code.ToString() }, new[] { f_code.ToString().Length });
+            glCompileShader(fragment);
 
-            fShader = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fShader, 1, new[] { f_code.ToString() }, new[] { f_code.ToString().Length });
-            glCompileShader(fShader);
+            uint shader = glCreateProgram();
+            glAttachShader(shader, vertex);
+            glAttachShader(shader, fragment);
+            glLinkProgram(shader);
 
-            ProgramPrimitives = glCreateProgram();
-            glAttachShader(ProgramPrimitives, vShader);
-            glAttachShader(ProgramPrimitives, fShader);
-            glLinkProgram(ProgramPrimitives);
+            return shader;
         }
 
         private void SetEventsCallbacks()
@@ -182,6 +202,8 @@ namespace SpaceVIL
             //Glfw.SetWindowFocusCallback(window, windowFocusCallback);
             keyPressCallback = KeyPress;
             Glfw.SetKeyCallback(window, keyPressCallback);
+            keyInputText = TextInput;
+            Glfw.SetCharModsCallback(window, keyInputText);
         }
         private void ClearEventsCallbacks()
         {
@@ -211,14 +233,14 @@ namespace SpaceVIL
             }
         }
 
-        private void KeyPress(Glfw.Window glfwwnd, Glfw.KeyCode key, int scancode, Glfw.InputState action, Glfw.KeyMods mods)
+        private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
-            if (key == Glfw.KeyCode.Space && action == Glfw.InputState.Release)
-            {
-
-            }
+            FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);
         }
-
+        private void TextInput(Glfw.Window glfwwnd, uint codepoint, KeyMods mods)
+        {
+            FocusedItem?.InvokeInputTextEvents(codepoint, mods);
+        }
         private void Focus(Glfw.Window glfwwnd, bool value)
         {
             if (focusable)
@@ -296,6 +318,14 @@ namespace SpaceVIL
             {
                 HoveredItem._mouse_ptr.SetPosition((float)xpos, (float)ypos);
                 HoveredItem.InvokePoolEvents();
+
+                //Focus get
+                if (FocusedItem != null)
+                    FocusedItem.IsFocused = false;
+
+                FocusedItem = HoveredItem;
+                FocusedItem.IsFocused = true;
+
             }
             else
             {
@@ -306,21 +336,28 @@ namespace SpaceVIL
             }
         }
 
-        protected void MouseClick(Glfw.Window window, Glfw.MouseButton button, Glfw.InputState state, Glfw.KeyMods mods)
+        protected void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
             switch (state)
             {
-                case Glfw.InputState.Release:
+                case InputState.Release:
                     if (HoveredItem != null)
                     {
                         HoveredItem.InvokePoolEvents();
+
+                        //Focus get
+                        if (FocusedItem != null)
+                            FocusedItem.IsFocused = false;
+
+                        FocusedItem = HoveredItem;
+                        FocusedItem.IsFocused = true;
                     }
                     EngineEvent.SetEvent(EventType.MouseRelease);
                     break;
-                case Glfw.InputState.Press:
+                case InputState.Press:
                     EngineEvent.SetEvent(EventType.MousePressed);
                     break;
-                case Glfw.InputState.Repeat:
+                case InputState.Repeat:
                     break;
                 default:
                     break;
@@ -332,27 +369,28 @@ namespace SpaceVIL
             glGenVertexArrays(1, gVAO);
             glBindVertexArray(gVAO[0]);
             glUseProgram(ProgramPrimitives);
+            //pre render
             Render();
 
             while (!Glfw.WindowShouldClose(window))
             {
-                //Glfw.PollEvents();
-                //if (EngineEvent.IsEvent())
-                {
-                    Render();
-                }
+                Render();
                 Glfw.WaitEvents();
-                //ev.WaitOne();
-                //Thread.Sleep(1000 / 60);
             }
 
-            glDetachShader(ProgramPrimitives, vShader);
-            glDetachShader(ProgramPrimitives, fShader);
-            glDeleteShader(vShader);
-            glDeleteShader(fShader);
+            glDetachShader(ProgramPrimitives, VertexPrimitiveShader);
+            glDetachShader(ProgramPrimitives, FragmentPrimitiveShader);
+            glDeleteShader(VertexPrimitiveShader);
+            glDeleteShader(FragmentPrimitiveShader);
+
+            glDetachShader(ProgramTexture, VertexTextureShader);
+            glDetachShader(ProgramTexture, FragmentTextureShader);
+            glDeleteShader(VertexTextureShader);
+            glDeleteShader(FragmentTextureShader);
 
             glDeleteVertexArrays(1, gVAO);
             glDeleteProgram(ProgramPrimitives);
+            glDeleteProgram(ProgramTexture);
 
             ClearEventsCallbacks();
             Glfw.DestroyWindow(window);
@@ -371,7 +409,8 @@ namespace SpaceVIL
             if (!root.IsVisible)
                 return;
 
-            if (root is IPixelDrawable) {
+            if (root is IPixelDrawable)
+            {
                 glDisable(GL_MULTISAMPLE);
                 DrawPixels((root as IPixelDrawable));
                 foreach (var child in (root as VisualItem).GetItems())
@@ -385,6 +424,13 @@ namespace SpaceVIL
                 glDisable(GL_MULTISAMPLE);
                 DrawText((root as ITextContainer).GetText());
                 glEnable(GL_MULTISAMPLE);
+            }
+            if (root is IImageItem)
+            {
+                DrawShell(root);
+                glUseProgram(ProgramTexture);
+                DrawImage(root as ImageItem);
+                glUseProgram(ProgramPrimitives);
             }
             else
             {
@@ -549,7 +595,7 @@ namespace SpaceVIL
             crd_array.Clear();
         }
 
-        void DrawText(ItemText item)
+        void DrawText(TextItem item)
         {
             //Console.WriteLine(item.GetItemText());
             uint[] buffers = new uint[2];
@@ -605,9 +651,75 @@ namespace SpaceVIL
             glDeleteBuffers(2, buffers);
         }
 
-        void DrawImage(Image image)
+        void DrawImage(ImageItem image)
         {
-            
+            float i_x0 = ((float)image.GetX() / (float)wnd.GetWidth() * 2.0f) - 1.0f;
+            float i_y0 = ((float)image.GetY() / (float)wnd.GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)wnd.GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)wnd.GetHeight() * 2.0f - 1.0f) * (-1.0f);
+
+            //VBO
+            float[] vertexData = new float[]
+            {
+                //X    Y      Z         //U     V
+                i_x0,  i_y0,  0.0f,     0.0f, 0.0f, //x0
+                i_x0,  i_y1,  0.0f,     1.0f, 0.0f, //x1
+                i_x1,  i_y1,  0.0f,     1.0f, 1.0f, //x2
+                i_x1,  i_y0,  0.0f,     0.0f, 1.0f, //x3
+            };
+            int[] ibo = new int[]
+            {
+                0, 1, 2, //first triangle
+                2, 3, 0, // second triangle
+            };
+
+            uint[] buffers = new uint[2];
+            glGenBuffers(2, buffers);
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_STATIC_DRAW);
+
+            //Position attribute
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * sizeof(float), IntPtr.Zero);
+            glEnableVertexAttribArray(0);
+            //TexCoord attribute
+            glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * sizeof(float), IntPtr.Zero + (3 * sizeof(float)));
+            glEnableVertexAttribArray(1);
+
+            //texture
+            byte[] bitmap = image.GetPixMapImage();
+            int w = image.GetImageWidth(), h = image.GetImageHeight();
+
+            uint[] texture = new uint[1];
+            glGenTextures(1, texture);
+
+            glBindTexture(GL_TEXTURE_2D, texture[0]);
+
+            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, h, w);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, h, w, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+            //glGenerateMipmap(GL_TEXTURE_2D);
+            glActiveTexture(GL_TEXTURE0);
+
+            int location = glGetUniformLocation(ProgramTexture, "tex".ToCharArray());
+            if (location >= 0)
+                glUniform1i(location, 0);
+
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
+
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+
+            glDeleteBuffers(2, buffers);
+            glDeleteTextures(1, texture);
         }
     }
 }
