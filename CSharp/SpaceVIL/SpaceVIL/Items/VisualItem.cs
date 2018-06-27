@@ -5,7 +5,10 @@ using System.Linq;
 
 namespace SpaceVIL
 {
-    public delegate void CallBackMethodState(IItem sender);
+    public delegate void EventCommonMethodState(IItem sender);
+    public delegate void EventMouseMethodState(IItem sender);
+    public delegate void EventKeyMethodState(IItem sender, int key, KeyMods mods);
+    public delegate void EventInputTextMethodState(IItem sender, uint character, KeyMods mods);
 
     abstract public class VisualItem : BaseItem
     {
@@ -230,16 +233,21 @@ namespace SpaceVIL
         }
 
         //common events
-        public CallBackMethodState EventMouseHover;
-        public CallBackMethodState EventMouseClick;
-        public CallBackMethodState EventMousePressed;
-        public CallBackMethodState EventMouseRelease;
-        public CallBackMethodState EventMouseDrag;
-        public CallBackMethodState EventMouseDrop;
-        public CallBackMethodState EventFocusGet;
-        public CallBackMethodState EventFocusLost;
-        public CallBackMethodState EventResized;
-        public CallBackMethodState EventDestroyed;
+        public EventCommonMethodState EventFocusGet;
+        public EventCommonMethodState EventFocusLost;
+        public EventCommonMethodState EventResized;
+        public EventCommonMethodState EventDestroyed;
+        //mouse input
+        public EventMouseMethodState EventMouseHover;
+        public EventMouseMethodState EventMouseClick;
+        public EventMouseMethodState EventMousePressed;
+        public EventMouseMethodState EventMouseRelease;
+        public EventMouseMethodState EventMouseDrag;
+        public EventMouseMethodState EventMouseDrop;
+        //keyboard input
+        public EventKeyMethodState EventKeyPress;
+        public EventKeyMethodState EventKeyRelease;
+        public EventInputTextMethodState EventTextInput;
 
         //common properties
         private bool _disabled;
@@ -269,8 +277,35 @@ namespace SpaceVIL
         private bool _focused;
         public virtual bool IsFocused
         {
-            get { return _focused; }
-            set { _focused = value; }
+            get
+            {
+                return _focused;
+            }
+            set
+            {
+                _focused = value;
+            }
+        }
+
+        internal void InvokeKeyboardInputEvents(int scancode, InputState action, KeyMods mods)
+        {
+            if (action == InputState.Press)
+            {
+                EventKeyPress?.Invoke(this, scancode, mods);
+            }
+            if (action == InputState.Repeat)
+            {
+                EventKeyPress?.Invoke(this, scancode, mods);
+            }
+            if (action == InputState.Release)
+            {
+                EventKeyRelease?.Invoke(this, scancode, mods);
+            }
+        }
+
+        internal void InvokeInputTextEvents(uint codepoint, KeyMods mods)
+        {
+            EventTextInput?.Invoke(this, codepoint, mods);
         }
 
         //common methods

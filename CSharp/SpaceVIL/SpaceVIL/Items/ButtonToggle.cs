@@ -12,6 +12,7 @@ namespace SpaceVIL
         {
             SetItemName("ButtonToggle" + count);
             IsToggled = false;
+            EventKeyPress += OnKeyPress;
             EventToggle += (sender) => IsToggled = !_toggled;
             count++;
 
@@ -31,6 +32,12 @@ namespace SpaceVIL
             SetText(text);
         }
 
+        protected virtual void OnKeyPress(object sender, int key, KeyMods mods)
+        {
+            if (key == 0x1C)
+                EventMouseClick?.Invoke(this);
+        }
+        
         //private for class
         private bool _toggled;
         public bool IsToggled
@@ -50,7 +57,7 @@ namespace SpaceVIL
             }
         }
 
-        public CallBackMethodState EventToggle;
+        public EventMouseMethodState EventToggle;
 
         public override void InvokePoolEvents()
         {

@@ -19,6 +19,7 @@ namespace Program
             LabelTest label = new LabelTest();
             GridTest grid = new GridTest();
             ImageTest im = new ImageTest();
+            InputTest it = new InputTest();
             //Settings.Show();
             mw.Show();
             //lt.Show();

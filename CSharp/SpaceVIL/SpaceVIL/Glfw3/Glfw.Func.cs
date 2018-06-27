@@ -3,7 +3,7 @@ namespace Glfw3
     using System;
     using System.Runtime.InteropServices;
     using System.Security;
-
+    using SpaceVIL;
     public static partial class Glfw
     {
         /// <summary>

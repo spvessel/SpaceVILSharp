@@ -25,7 +25,7 @@ namespace SpaceVIL
         {
             return _step;
         }
-        public CallBackMethodState EventValueChanged;
+        public EventCommonMethodState EventValueChanged;
         private float _current_value = 0;
         public int Direction = 0;
         public void SetCurrentValue(float value)

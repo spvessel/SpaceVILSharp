@@ -22,7 +22,7 @@ namespace SpaceVIL
             SetItemName("CheckBox" + count);
             SetBackground(Color.Transparent);
             SetSpacing(5, 0);
-            EventMouseClick += EmptyEvent;
+            EventKeyPress += OnKeyPress;
             count++;
 
             //text
@@ -39,6 +39,12 @@ namespace SpaceVIL
             _indicator.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
         }
 
+        protected virtual void OnKeyPress(object sender, int key, KeyMods mods)
+        {
+            if (key == 0x1C)
+                EventMouseClick?.Invoke(this);
+        }
+        
         public override void InitElements()
         {
             //adding

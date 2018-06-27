@@ -25,8 +25,9 @@ namespace SpaceVIL
         Glfw.ScrollFunc mouseScrollCallback;
         Glfw.WindowCloseFunc windowCloseCallback;
         Glfw.WindowPosFunc windowPosCallback;
-        //Glfw.WindowFocusFunc windowFocusCallback;
         Glfw.KeyFunc keyPressCallback;
+        Glfw.CharModsFunc keyInputText;
+        //Glfw.WindowFocusFunc windowFocusCallback;
         ///////////////////////////////////////////////
 
         public bool borderHidden;
@@ -36,6 +37,7 @@ namespace SpaceVIL
         public bool alwaysOnTop;
         public Pointer window_position = new Pointer();
         private VisualItem HoveredItem;
+        private VisualItem FocusedItem;
         private Pointer ptrPress = new Pointer();
         private Pointer ptrRelease = new Pointer();
 
@@ -109,9 +111,9 @@ namespace SpaceVIL
                 Environment.Exit(-1);
             }
 
-            Glfw.WindowHint(Glfw.Hint.Samples, 4);
-            //Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             //Glfw.WindowHint(Glfw.Hint.OpenglDebugContext, true);
+            Glfw.WindowHint(Glfw.Hint.Samples, 4);
+            Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 4);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
             Glfw.WindowHint(Glfw.Hint.Resizable, true);
@@ -200,6 +202,8 @@ namespace SpaceVIL
             //Glfw.SetWindowFocusCallback(window, windowFocusCallback);
             keyPressCallback = KeyPress;
             Glfw.SetKeyCallback(window, keyPressCallback);
+            keyInputText = TextInput;
+            Glfw.SetCharModsCallback(window, keyInputText);
         }
         private void ClearEventsCallbacks()
         {
@@ -229,14 +233,14 @@ namespace SpaceVIL
             }
         }
 
-        private void KeyPress(Glfw.Window glfwwnd, Glfw.KeyCode key, int scancode, Glfw.InputState action, Glfw.KeyMods mods)
+        private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
-            if (key == Glfw.KeyCode.Space && action == Glfw.InputState.Release)
-            {
-
-            }
+            FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);
         }
-
+        private void TextInput(Glfw.Window glfwwnd, uint codepoint, KeyMods mods)
+        {
+            FocusedItem?.InvokeInputTextEvents(codepoint, mods);
+        }
         private void Focus(Glfw.Window glfwwnd, bool value)
         {
             if (focusable)
@@ -314,6 +318,14 @@ namespace SpaceVIL
             {
                 HoveredItem._mouse_ptr.SetPosition((float)xpos, (float)ypos);
                 HoveredItem.InvokePoolEvents();
+
+                //Focus get
+                if (FocusedItem != null)
+                    FocusedItem.IsFocused = false;
+
+                FocusedItem = HoveredItem;
+                FocusedItem.IsFocused = true;
+
             }
             else
             {
@@ -324,21 +336,28 @@ namespace SpaceVIL
             }
         }
 
-        protected void MouseClick(Glfw.Window window, Glfw.MouseButton button, Glfw.InputState state, Glfw.KeyMods mods)
+        protected void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
             switch (state)
             {
-                case Glfw.InputState.Release:
+                case InputState.Release:
                     if (HoveredItem != null)
                     {
                         HoveredItem.InvokePoolEvents();
+
+                        //Focus get
+                        if (FocusedItem != null)
+                            FocusedItem.IsFocused = false;
+
+                        FocusedItem = HoveredItem;
+                        FocusedItem.IsFocused = true;
                     }
                     EngineEvent.SetEvent(EventType.MouseRelease);
                     break;
-                case Glfw.InputState.Press:
+                case InputState.Press:
                     EngineEvent.SetEvent(EventType.MousePressed);
                     break;
-                case Glfw.InputState.Repeat:
+                case InputState.Repeat:
                     break;
                 default:
                     break;

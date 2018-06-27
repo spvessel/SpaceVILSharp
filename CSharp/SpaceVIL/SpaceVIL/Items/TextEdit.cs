@@ -1,47 +1,47 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Drawing;
-
 namespace SpaceVIL
 {
-    class ButtonCore : VisualItem
+    class TextEdit : VisualItem
     {
         static int count = 0;
         private TextLine _text_object;
 
-        public ButtonCore()
+        public TextEdit()
         {
-            SetItemName("ButtonCore" + count);
-            EventMouseClick += EmptyEvent;
-            EventMouseHover += (sender) => IsMouseHover = !IsMouseHover;
-            count++;
-
             _text_object = new TextLine();
+            SetItemName("TextEdit" + count);
+            SetBackground(180, 180, 180);
+            SetForeground(Color.Black);
+            SetPadding(5);
+            count++;
+            EventMouseClick += EmptyEvent;
             EventKeyPress += OnKeyPress;
-
-        }
-        protected virtual void OnKeyPress(object sender, int key, KeyMods mods)
-        {
-            if (key == 0x1C)
-                EventMouseClick?.Invoke(this);
-        }
-        public ButtonCore(String text = "") : this()
-        {
-            SetText(text);
+            EventTextInput += OnTextInput;
         }
 
-        public override void InvokePoolEvents()
+        protected virtual void OnKeyPress(object sender, int scancode, KeyMods mods)
         {
-            if (EventMouseClick != null) EventMouseClick.Invoke(this);
+            if (scancode == 14 && !GetText().Equals(String.Empty))
+            {
+                SetText(GetText().Substring(0, GetText().Length - 1));
+            }
         }
 
-        //text init
+        protected virtual void OnTextInput(object sender, uint codepoint, KeyMods mods)
+        {
+            byte[] input = BitConverter.GetBytes(codepoint);
+            string str = Encoding.UTF32.GetString(input);
+            SetText(GetText() + str);
+        }
+
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _text_object.SetTextAlignment(alignment);
-        }
-        public void SetTextMargin(Margin margin)
-        {
-            _text_object.SetMargin(margin);
         }
         public void SetFont(Font font)
         {
@@ -71,10 +71,10 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //text
-            _text_object.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
             //aligment
-            SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            ////SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
             //adding
             AddItem(_text_object);
@@ -83,12 +83,27 @@ namespace SpaceVIL
             _text_object.UpdateData(UpdateType.Critical);
         }
 
+        public override void InvokePoolEvents()
+        {
+            if (EventMouseClick != null) EventMouseClick.Invoke(this);
+        }
+
         //style
         public override void SetStyle(Style style)
         {
             base.SetStyle(style);
             SetForeground(style.Foreground);
             SetFont(style.Font);
+        }
+
+        public int GetTextWidth()
+        {
+            return _text_object.GetWidth();
+        }
+
+        public int GetTextHeight()
+        {
+            return _text_object.GetHeight();
         }
     }
 }
