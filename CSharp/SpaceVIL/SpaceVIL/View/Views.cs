@@ -236,35 +236,41 @@ namespace View
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (i == 0)
+                    ButtonCore rect = new ButtonCore();
+                    rect.SetBackground(125, 45, 78);
+                    rect.SetItemName("r: " + i + " c: " + j);
+                    rect.SetText(rect.GetItemName());
+                    rect.SetMargin(6, 6, 6, 6);
+                    rect.Border.Radius = 20;
+                    rect.AddItemState(true, ItemStateType.Hovered, new ItemState()
                     {
+                        Background = Color.FromArgb(125, 255, 255, 255)
+                    });
+                    rect.EventMouseClick += (sender) =>
+                    {
+                        Console.WriteLine(rect.GetItemName());
+                    };
 
+                    if (i == 0 && j == 0)
+                    {
+                        rect.SetSize(100, 100);
+                        rect.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+                        rect.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
                     }
-                    else if (i == 1)
+                    else if (i == 1 && j == 1)
                     {
-
+                        rect.SetSize(100, 100);
+                        rect.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+                        rect.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
                     }
                     else
                     {
-                        ButtonCore rect = new ButtonCore();
-                        rect.SetBackground(125, 45, 78);
-                        rect.SetItemName("r: " + i + " c: " + j);
-                        rect.SetText(rect.GetItemName());
                         rect.SetSize(100, 100);
-                        rect.Border.Radius = 20;
                         rect.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
                         rect.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
-                        rect.SetMargin(6, 6, 6, 6);
-                        rect.AddItemState(true, ItemStateType.Hovered, new ItemState()
-                        {
-                            Background = Color.FromArgb(125, 255, 255, 255)
-                        });
-                        rect.EventMouseClick += (sender) =>
-                        {
-                            Console.WriteLine(rect.GetItemName());
-                        };
-                        grid.AddItem(rect, i, j);
                     }
+
+                    grid.AddItem(rect, i, j);
                 }
             }
             //btn add_at_begin
