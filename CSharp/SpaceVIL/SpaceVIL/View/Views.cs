@@ -4,6 +4,7 @@ using System.Drawing;
 using SpaceVIL;
 using System.Threading;
 
+
 namespace View
 {
     //MainWindow
@@ -603,14 +604,14 @@ namespace View
             progb.SetMinValue(35);
             progb.SetMaxValue(78);
             layout.AddItem(progb);
-
+            /*
             //BorderShape
             BorderElement be = new BorderElement();
             be.SetBackground(Color.Green);
             be.SetWidthPolicy(SizePolicy.Expand);
             be.SetHeight(50);
             layout.AddItem(be);
-
+            */
             //Label
             Label label = new Label("Hello world 12345!");
             label.SetFont(new Font(new FontFamily("Times New Roman"), 16, FontStyle.Regular));
@@ -651,11 +652,13 @@ namespace View
             show_info.SetStyle(btn_style);
             show_info.EventMouseClick += (sender) =>
             {
+                
                 Console.WriteLine(label.GetText());
                 label.SetForeground(Color.FromArgb(255, 210, 210, 210));
                 label.SetFont(new Font(new FontFamily("Calibri"), 30, FontStyle.Italic));
 
                 progb.SetCurrentValue(33);
+                
             };
             toolbar.AddItem(show_info);
 
@@ -664,10 +667,12 @@ namespace View
             change_color.SetStyle(btn_style);
             change_color.EventMouseClick += (sender) =>
             {
+                
                 label.SetForeground(Color.FromArgb(255, 50, 255, 80));
                 Console.WriteLine(label.GetForeground());
 
                 progb.SetCurrentValue(55);
+                
             };
             toolbar.AddItem(change_color);
 
@@ -676,6 +681,7 @@ namespace View
             change_font.SetStyle(btn_style);
             change_font.EventMouseClick += (sender) =>
             {
+                
                 label.SetFont(new Font(new FontFamily("Open Sans Light"), 30, FontStyle.Bold));
                 Console.WriteLine(label.GetFont());
 
@@ -688,6 +694,7 @@ namespace View
                         }
                     //});
                     //tr.Start();
+                
             };
             toolbar.AddItem(change_font);
         }

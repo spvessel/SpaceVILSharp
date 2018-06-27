@@ -8,9 +8,15 @@ using System.Drawing.Drawing2D;
 
 namespace SpaceVIL
 {
-    static public class FontEngine
+    static internal class FontEngine
     {
+        static String _preloadDefFile = "./somefile.dat";
+
         static Dictionary<Font, Alphabet> fonts = new Dictionary<Font, Alphabet>();
+
+        static FontEngine() {
+            
+        }
 
         internal static PixMapData GetPixMap(string text, Font font)
         {
@@ -34,6 +40,17 @@ namespace SpaceVIL
             }
             Alphabet a = fonts[font];
             return new int[] { a.lineSpacer, a.minY, a.maxY };
+        }
+
+        internal static bool SavePreloadFont(Font font) {
+            if (!fonts.ContainsKey(font))
+            {
+                fonts.Add(font, new Alphabet(font));
+            }
+
+            fonts[font].AddMoarLetters(); //Заполнить весь алфавит
+            //Сохранить в файл или куда там
+            return true;
         }
 
         //Alphabet
@@ -186,6 +203,19 @@ namespace SpaceVIL
                 char[] defLetters = str.ToCharArray();
                 foreach (char c in defLetters)
                     AddLetter(c);
+            }
+
+            internal void AddMoarLetters()
+            {
+                String str = "abcdefghijklmnopqrstuvwxyz";
+                str += str.ToUpper();
+                str += "-.,?!1234567890-+=_";
+
+
+                char[] defLetters = str.ToCharArray();
+                foreach (char c in defLetters)
+                    if (!letters.ContainsKey(c))
+                        AddLetter(c);
             }
 
             private Letter MakeLetter(String let)
