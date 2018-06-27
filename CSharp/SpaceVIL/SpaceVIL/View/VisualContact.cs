@@ -12,7 +12,7 @@ namespace Contact
     {
         public VisualContact()
         {
-            //self view
+            //self view attr
             SetBackground(Color.Transparent);
             SetHeight(60);
             SetHeightPolicy(SizePolicy.Fixed);

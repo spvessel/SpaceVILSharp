@@ -11,6 +11,7 @@ namespace View
     {
         public ImageTest()
         {
+            //
             InitWindow();
         }
     }

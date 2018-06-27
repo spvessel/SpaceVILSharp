@@ -166,8 +166,8 @@ namespace SpaceVIL
                 Console.WriteLine("The file could not be read:");
                 Console.WriteLine(e.Message);
             }
-            Console.WriteLine(v_code);
-            Console.WriteLine(f_code);
+            //Console.WriteLine(v_code);
+            //Console.WriteLine(f_code);
             vertex = glCreateShader(GL_VERTEX_SHADER);
             glShaderSource(vertex, 1, new[] { v_code.ToString() }, new[] { v_code.ToString().Length });
             glCompileShader(vertex);

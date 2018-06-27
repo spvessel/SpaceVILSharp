@@ -10,6 +10,7 @@ namespace View
     {
         public LabelTest()
         {
+            //
             InitWindow();
         }
     }
