@@ -10,15 +10,19 @@ namespace SpaceVIL
     {
         static int count = 0;
         private TextLine _text_object;
-
+        private Rectangle _cursor;
+        private int _cursor_position = 0;
         public TextEdit()
         {
             _text_object = new TextLine();
+            _cursor = new Rectangle();
+
             SetItemName("TextEdit" + count);
             SetBackground(180, 180, 180);
             SetForeground(Color.Black);
             SetPadding(5);
             count++;
+
             EventMouseClick += EmptyEvent;
             EventKeyPress += OnKeyPress;
             EventTextInput += OnTextInput;
@@ -26,9 +30,36 @@ namespace SpaceVIL
 
         protected virtual void OnKeyPress(object sender, int scancode, KeyMods mods)
         {
-            if (scancode == 14 && !GetText().Equals(String.Empty))
+            //Console.WriteLine(scancode);
+            if (scancode == 14 && _cursor_position > 0)//backspace
             {
-                SetText(GetText().Substring(0, GetText().Length - 1));
+                SetText(GetText().Remove(_cursor_position - 1, 1));
+                _cursor_position--;
+                _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
+            }
+            if (scancode == 339 && _cursor_position < GetText().Length)//delete
+            {
+                SetText(GetText().Remove(_cursor_position, 1));
+            }
+            if (scancode == 331 && _cursor_position > 0)//arrow left
+            {
+                _cursor_position--;
+                _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
+            }
+            if (scancode == 333 && _cursor_position < GetText().Length)//arrow right
+            {
+                _cursor_position++;
+                _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
+            }
+            if (scancode == 335)//home
+            {
+                _cursor_position = GetText().Length;
+                _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
+            }
+            if (scancode == 327)//end
+            {
+                _cursor_position = 0;
+                _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
             }
         }
 
@@ -36,7 +67,25 @@ namespace SpaceVIL
         {
             byte[] input = BitConverter.GetBytes(codepoint);
             string str = Encoding.UTF32.GetString(input);
-            SetText(GetText() + str);
+            SetText(GetText().Insert(_cursor_position, str));
+            _cursor_position++;
+            _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
+        }
+
+        public override bool IsFocused
+        {
+            get
+            {
+                return base.IsFocused;
+            }
+            set
+            {
+                base.IsFocused = value;
+                if (IsFocused)
+                    _cursor.IsVisible = true;
+                else
+                    _cursor.IsVisible = false;
+            }
         }
 
         public void SetTextAlignment(ItemAlignment alignment)
@@ -72,12 +121,15 @@ namespace SpaceVIL
         {
             //text
             _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-
-            //aligment
-            ////SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            //cursor
+            _cursor.IsVisible = false;
+            _cursor.SetBackground(0, 0, 0);
+            _cursor.SetMargin(0, 5, 0, 5);
+            _cursor.SetWidth(2);
+            _cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
 
             //adding
-            AddItem(_text_object);
+            AddItems(_text_object, _cursor);
 
             //update text data
             _text_object.UpdateData(UpdateType.Critical);

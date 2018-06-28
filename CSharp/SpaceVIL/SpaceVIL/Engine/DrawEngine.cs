@@ -235,7 +235,13 @@ namespace SpaceVIL
 
         private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
-            FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);
+            if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.V)
+            {
+                string paste_str = Glfw.GetClipboardString(window);
+                (FocusedItem as TextEdit).SetText(paste_str);
+            }
+            else
+                FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);
         }
         private void TextInput(Glfw.Window glfwwnd, uint codepoint, KeyMods mods)
         {
@@ -502,44 +508,73 @@ namespace SpaceVIL
             crd_array.Clear();
         }
 
-        private void DrawShell(BaseItem shell)
+        private bool CheckOutsideBorders(BaseItem shell)
         {
-            //проверка: полностью ли влезает объект в свой контейнер
-            //refactor
+            var outside = new Dictionary<ItemAlignment, Int32[]>();
+
             if (shell.GetParent() != null && _isStencilSet == null)
             {
-                int y = 0, h = 0;
-
                 //bottom
                 if (shell.GetParent().GetY() + shell.GetParent().GetHeight() > shell.GetY()
                     && shell.GetParent().GetY() + shell.GetParent().GetHeight() < shell.GetY() + shell.GetHeight())
                 {
                     //match
-                    _isStencilSet = shell;
-                    y = shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom;
-                    h = shell.GetHeight();
+                    int y = shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom;
+                    int h = shell.GetHeight();
+                    outside.Add(ItemAlignment.Bottom, new int[] { y, h });
                 }
                 //top
-                else if (shell.GetParent().GetY() + shell.GetParent().GetPadding().Top > shell.GetY())
+                if (shell.GetParent().GetY() + shell.GetParent().GetPadding().Top > shell.GetY())
                 {
                     //match
-                    _isStencilSet = shell;
-                    y = shell.GetY();
-                    h = shell.GetParent().GetY() + shell.GetParent().GetPadding().Top - shell.GetY();
+                    int y = shell.GetY();
+                    int h = shell.GetParent().GetY() + shell.GetParent().GetPadding().Top - shell.GetY();
+                    outside.Add(ItemAlignment.Top, new int[] { y, h });
                 }
-                if (_isStencilSet != null)
+                //right
+                if (shell.GetParent().GetX() + shell.GetParent().GetWidth() > shell.GetX()
+                    && shell.GetParent().GetX() + shell.GetParent().GetWidth() < shell.GetX() + shell.GetWidth())
                 {
+                    //match
+                    int x = shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right;
+                    int w = shell.GetWidth();
+                    outside.Add(ItemAlignment.Right, new int[] { x, w });
+                }
+                //left
+                if (shell.GetParent().GetX() + shell.GetParent().GetPadding().Left > shell.GetX())
+                {
+                    //match
+                    int x = shell.GetX();
+                    int w = shell.GetParent().GetX() + shell.GetParent().GetPadding().Left - shell.GetX();
+                    outside.Add(ItemAlignment.Left, new int[] { x, w });
+                }
+
+                if (outside.Count > 0)
+                {
+                    _isStencilSet = shell;
                     //stencil
                     glClearStencil(1);
                     glStencilMask(0xFF);
                     glStencilFunc(GL_NEVER, 2, 0);
                     glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-                    //draw mask
-                    SetStencilMask(shell.GetWidth() + 2, h, shell.GetX() - 1, y);
+                    foreach (var side in outside)
+                    {
+                        //draw mask
+                        if (side.Key.HasFlag(ItemAlignment.Bottom) || side.Key.HasFlag(ItemAlignment.Top))
+                            SetStencilMask(shell.GetWidth() + 2, side.Value[1], shell.GetX() - 1, side.Value[0]);
+                        else
+                            SetStencilMask(side.Value[1], shell.GetHeight(), side.Value[0], shell.GetY());
+                    }
                     //set stencil mask
                     glStencilFunc(GL_NOTEQUAL, 2, 255);
                 }
             }
+            return true;
+        }
+        private void DrawShell(BaseItem shell)
+        {
+            //проверка: полностью ли влезает объект в свой контейнер
+            CheckOutsideBorders(shell);
 
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
