@@ -415,6 +415,7 @@ namespace SpaceVIL
             if (!root.IsVisible)
                 return;
 
+            //refactor paths
             if (root is IPixelDrawable)
             {
                 glDisable(GL_MULTISAMPLE);
@@ -425,11 +426,16 @@ namespace SpaceVIL
                 }
                 glEnable(GL_MULTISAMPLE);
             }
-            else if (root is ITextContainer)
+            if (root is TextItem)
             {
                 glDisable(GL_MULTISAMPLE);
-                DrawText((root as ITextContainer).GetText());
+                DrawText(root as TextItem);
                 glEnable(GL_MULTISAMPLE);
+                if (_isStencilSet == root)
+                {
+                    glDisable(GL_STENCIL_TEST);
+                    _isStencilSet = null;
+                }
             }
             if (root is IImageItem)
             {
@@ -458,6 +464,12 @@ namespace SpaceVIL
 
         private void SetStencilMask(int w, int h, int x, int y)
         {
+            /*Console.WriteLine(
+                w + " " +
+                h + " " +
+                x + " " +
+                y
+                );*/
             glEnable(GL_STENCIL_TEST);
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
@@ -532,8 +544,8 @@ namespace SpaceVIL
                     outside.Add(ItemAlignment.Top, new int[] { y, h });
                 }
                 //right
-                if (shell.GetParent().GetX() + shell.GetParent().GetWidth() > shell.GetX()
-                    && shell.GetParent().GetX() + shell.GetParent().GetWidth() < shell.GetX() + shell.GetWidth())
+                if (shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right <
+                    shell.GetX() + shell.GetWidth())
                 {
                     //match
                     int x = shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right;
@@ -563,13 +575,14 @@ namespace SpaceVIL
                         if (side.Key.HasFlag(ItemAlignment.Bottom) || side.Key.HasFlag(ItemAlignment.Top))
                             SetStencilMask(shell.GetWidth() + 2, side.Value[1], shell.GetX() - 1, side.Value[0]);
                         else
-                            SetStencilMask(side.Value[1], shell.GetHeight(), side.Value[0], shell.GetY());
+                            SetStencilMask(side.Value[1], shell.GetParent().GetHeight(), side.Value[0], shell.GetY());
                     }
                     //set stencil mask
                     glStencilFunc(GL_NOTEQUAL, 2, 255);
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
         private void DrawShell(BaseItem shell)
         {
@@ -632,11 +645,12 @@ namespace SpaceVIL
 
         void DrawText(TextItem item)
         {
-            //Console.WriteLine(item.GetItemText());
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
             float[] data = item.Shape();
             float[] colorData = item.GetColors();
+
+            bool ok = CheckOutsideBorders(item as BaseItem);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
             glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
@@ -688,6 +702,9 @@ namespace SpaceVIL
 
         void DrawImage(ImageItem image)
         {
+            //проверка: полностью ли влезает объект в свой контейнер
+            CheckOutsideBorders(image as BaseItem);
+
             float i_x0 = ((float)image.GetX() / (float)wnd.GetWidth() * 2.0f) - 1.0f;
             float i_y0 = ((float)image.GetY() / (float)wnd.GetHeight() * 2.0f - 1.0f) * (-1.0f);
             float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)wnd.GetWidth() * 2.0f) - 1.0f;

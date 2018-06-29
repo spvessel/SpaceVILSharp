@@ -23,7 +23,7 @@ namespace SpaceVIL
         }
 
         public TextLine(string text, Font font)
-            : base(text, font, "TextLine" + count)
+            : base(text, font, "TextLine_" + count)
         {
             count++;
             int[] output = FontEngine.GetSpacerDims(font);

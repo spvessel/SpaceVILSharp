@@ -17,10 +17,10 @@ namespace SpaceVIL
             _text_object = new TextLine();
             _cursor = new Rectangle();
 
-            SetItemName("TextEdit" + count);
+            SetItemName("TextEdit_" + count);
             SetBackground(180, 180, 180);
             SetForeground(Color.Black);
-            SetPadding(5);
+            SetPadding(5, 0, 5, 0);
             count++;
 
             EventMouseClick += EmptyEvent;
