@@ -25,7 +25,7 @@ namespace SpaceVIL
         {
             return _parent;
         }
-        private void SetParent(VisualItem parent)
+        internal void SetParent(VisualItem parent)
         {
             _parent = parent;
         }

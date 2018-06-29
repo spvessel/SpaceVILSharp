@@ -36,6 +36,15 @@ namespace SpaceVIL
             }
         }
 
+        private String _tooltip = String.Empty;
+        public String GetToolTip()
+        {
+            return _tooltip;
+        }
+        public void SetToolTip(String text)
+        {
+            _tooltip = text;
+        }
         //container
         private Spacing _spacing = new Spacing();
         public Spacing GetSpacing()

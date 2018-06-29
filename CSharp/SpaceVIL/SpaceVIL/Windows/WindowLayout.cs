@@ -50,7 +50,8 @@ namespace SpaceVIL
         }
         public void UpdateScene()
         {
-            engine.Render();
+            //Console.WriteLine("update");
+            engine.Update();
         }
         private Frame _window;
         internal Frame GetWindow()
