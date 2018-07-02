@@ -85,7 +85,7 @@ namespace View
             layout.AddItem(ce);
             
             //Label
-            Label label = new Label("вапоэопр");
+            Label label = new Label("Hello world, my dear explorer!");
             label.SetFont(new Font(new FontFamily("Times New Roman"), 16, FontStyle.Regular));
             //label.SetFont(new Font(new FontFamily("Panforte Pro"), 16, FontStyle.Regular));
             label.SetForeground(Color.FromArgb(255, 210, 210, 210));
