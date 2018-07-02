@@ -8,7 +8,7 @@ namespace View
     {
         public MainWindow()
         {
-            InitWindow();
+            //InitWindow();
         }
 
         public void OnButtonActionClick()

@@ -10,7 +10,7 @@ namespace View
     {
         public LayoutsTest()
         {
-            InitWindow();
+            //InitWindow();
         }
     }
 }

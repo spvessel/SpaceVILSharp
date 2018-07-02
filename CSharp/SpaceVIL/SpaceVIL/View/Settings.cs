@@ -7,7 +7,7 @@ namespace View
     {
         public Settings()
         {
-            InitWindow();
+            //InitWindow();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace View
     {
         public GridTest()
         {
-            InitWindow();
+            //InitWindow();
         }
     }
 }

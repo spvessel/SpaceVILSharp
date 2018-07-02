@@ -20,7 +20,7 @@ namespace SpaceVIL
 
         internal static PixMapData GetPixMap(string text, Font font)
         {
-            //return Tests.FontReview.getTextArrays(text, font);
+            //return FontReview.getTextArrays(text, font);
 
             if (!fonts.ContainsKey(font))
             {
@@ -32,7 +32,7 @@ namespace SpaceVIL
 
         internal static int[] GetSpacerDims(Font font)
         {
-            //return Tests.FontReview.getDims();
+            //return FontReview.getDims();
 
             if (!fonts.ContainsKey(font))
             {
@@ -61,6 +61,7 @@ namespace SpaceVIL
             internal int minY = Int32.MaxValue;
             internal int maxY = Int32.MinValue;
             internal int lineSpacer;
+            internal Letter bugLetter;
 
             public Alphabet(Font font)
             {
@@ -69,6 +70,7 @@ namespace SpaceVIL
 
                 FillABC();
                 FillSpecLetters();
+                MakeBugLetter();
             }
 
             private void FillSpecLetters()
@@ -224,7 +226,13 @@ namespace SpaceVIL
                 StringFormat format = StringFormat.GenericDefault;
                 shape.AddString(let, font.FontFamily, (int)font.Style, font.Size, new PointF(0f, 0f), format);
 
-                return new Letter(let, shape);
+                try {
+                    return new Letter(let, shape);
+                }
+                catch (Exception ex) {
+                    Console.WriteLine("Bug letter exception");
+                    return bugLetter;
+                }
             }
             /*
             private List<float> AddShift(float x0, List<float> coord)
@@ -246,6 +254,24 @@ namespace SpaceVIL
                 return outCoord;
             }
             */
+
+            private void MakeBugLetter() {
+                bugLetter = new Letter("bug", null);
+                bugLetter.width = lineSpacer;
+                bugLetter.height = Math.Abs(maxY - minY + 1);
+                bugLetter.minY = minY;
+                bugLetter.isSpec = false;
+                double[,] arr = new double[bugLetter.width, bugLetter.height];
+                for (int i = 0; i < bugLetter.width; i++) {
+                    arr[i, 0] = 1;
+                    arr[i, bugLetter.height - 1] = 1;
+                }
+                for (int i = 1; i < bugLetter.height - 1; i++) {
+                    arr[0, i] = 1;
+                    arr[bugLetter.width - 1, i] = 1;
+                }
+                bugLetter.alphas = arr;
+            }
         }
 
         private class Letter
@@ -274,7 +300,7 @@ namespace SpaceVIL
                 int x1 = (int)Math.Ceiling(rec.Right);
                 int y0 = (int)Math.Floor(rec.Top);
                 int y1 = (int)Math.Ceiling(rec.Bottom);
-
+                
                 GraphicsPathIterator myPathIterator = new GraphicsPathIterator(shape);
                 // Rewind the iterator.
                 myPathIterator.Rewind();
@@ -339,13 +365,13 @@ namespace SpaceVIL
                         {
                             subpathList.Add(new PointF(xcurr - 0.1f, ycurr));
                             subpathList.Add(new PointF(xcurr + 0.1f, ycurr));
-                            continue;
+                            //continue;
                         }
                         else if ((Math.Truncate(ycurr) == ycurr) && (Math.Sign(yprev - ycurr) == Math.Sign(ynext - ycurr)))
                         {
                             subpathList.Add(new PointF(xcurr, ycurr - 0.1f));
                             subpathList.Add(new PointF(xcurr, ycurr + 0.1f));
-                            continue;
+                            //continue;
                         }
                         else subpathList.Add(new PointF(xcurr, ycurr));
                     }

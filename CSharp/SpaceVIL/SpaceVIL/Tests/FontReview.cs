@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace SpaceVIL.Tests
+
+namespace SpaceVIL
 {
     static class FontReview
     {
@@ -14,8 +15,8 @@ namespace SpaceVIL.Tests
             GraphicsPath shape = new GraphicsPath();
             StringFormat format = StringFormat.GenericDefault;
             shape.AddString(text, font.FontFamily, (int)font.Style, font.Size, new PointF(0f, 0f), format);
-
-            return newLikeFontEngine(shape);
+            //return newLikeFontEngine(shape);
+            return useContour(shape);
         }
 
         internal static int[] getDims() {
@@ -338,10 +339,9 @@ namespace SpaceVIL.Tests
             int x1 = (int)Math.Ceiling(rec.Right);
             int y0 = (int)Math.Floor(rec.Top);
             int y1 = (int)Math.Ceiling(rec.Bottom);
-
             minY = y0;
             maxY = y1;
-
+            //Console.WriteLine(x0 + " " + x1 + " " + y0 + " " + y1);
             GraphicsPathIterator myPathIterator = new GraphicsPathIterator(shape);
             // Rewind the iterator.
             myPathIterator.Rewind();
@@ -406,13 +406,15 @@ namespace SpaceVIL.Tests
                     {
                         subpathList.Add(new PointF(xcurr - 0.1f, ycurr));
                         subpathList.Add(new PointF(xcurr + 0.1f, ycurr));
-                        continue;
+                        Console.WriteLine("It's a strange place");
+                        //continue;
                     }
                     else if ((Math.Truncate(ycurr) == ycurr) && (Math.Sign(yprev - ycurr) == Math.Sign(ynext - ycurr)))
                     {
                         subpathList.Add(new PointF(xcurr, ycurr - 0.1f));
                         subpathList.Add(new PointF(xcurr, ycurr + 0.1f));
-                        continue;
+                        Console.WriteLine("It's a strange place");
+                        //continue;
                     }
                     else subpathList.Add(new PointF(xcurr, ycurr));
                 }
@@ -595,6 +597,48 @@ namespace SpaceVIL.Tests
                         pix.Add(0);
 
                         col.Add((float)alph[i - x0, j - y0]);
+                    }
+                }
+            }
+
+            return new PixMapData(pix, col, 0);
+        }
+
+        private static PixMapData useContour(GraphicsPath shape) {
+            List<float> pix = new List<float>();
+            List<float> col = new List<float>();
+
+            //!!! Здесь возможны проблемы
+            RectangleF rec = shape.GetBounds();
+            int x0 = (int)Math.Floor(rec.Left);
+            int x1 = (int)Math.Ceiling(rec.Right);
+            int y0 = (int)Math.Floor(rec.Top);
+            int y1 = (int)Math.Ceiling(rec.Bottom);
+
+            minY = y0;
+            maxY = y1;
+
+            if (x0 == x1 && y0 == y1) return new PixMapData(pix, col, 0);
+
+            double[,] alph = ContourService.CrossContours(shape);
+            
+            for (int i = 0; i < alph.GetLength(0); i++)
+            {
+                for (int j = 0; j < alph.GetLength(1); j++)
+                {
+                    if (alph[i, j] > 0)
+                    {
+                        if (alph[i, j] != 0)
+                        {
+                            alph[i, j] = (alph[i, j] < 1) ? alph[i, j] + 0.15f : alph[i, j];
+                            alph[i, j] = (alph[i, j] > 1) ? 1 : alph[i, j];
+                        }
+
+                        pix.Add(i + x0);
+                        pix.Add(j + y0);
+                        pix.Add(0);
+
+                        col.Add((float)alph[i, j]);
                     }
                 }
             }
