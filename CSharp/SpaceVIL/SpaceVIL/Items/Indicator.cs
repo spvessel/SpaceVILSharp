@@ -37,7 +37,6 @@ namespace SpaceVIL
             _indicator.SetBackground(Color.FromArgb(255, 32, 32, 32));
             _indicator.SetWidthPolicy(SizePolicy.Expand);
             _indicator.SetHeightPolicy(SizePolicy.Expand);
-            SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
             _indicator.AddItemState(true, ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(125, 255, 255, 255)

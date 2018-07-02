@@ -16,12 +16,14 @@ namespace SpaceVIL
         private bool _criticalFlag = true;
         private bool _coordsFlag = true;
         private bool _colorFlag = true;
-
+        static int count = 0;
         public TextItem()
         {
+            SetItemName("TextItem_" + count);
             SetBackground(Color.Black);
             SetWidthPolicy(SizePolicy.Expand);
             SetHeightPolicy(SizePolicy.Expand);
+            count++;
         }
 
         public TextItem(String text, Font font, String name) : this()

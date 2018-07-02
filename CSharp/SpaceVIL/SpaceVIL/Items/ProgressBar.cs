@@ -70,6 +70,5 @@ namespace SpaceVIL
 
             GetHandler().UpdateScene();
         }
-
     }
 }

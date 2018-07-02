@@ -1,34 +1,35 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace SpaceVIL
 {
-    class ButtonCore : VisualItem
+    class MenuBar : VisualItem //not finished
     {
         static int count = 0;
         private TextLine _text_object;
 
-        public ButtonCore()
+        public MenuBar()
         {
-            SetItemName("ButtonCore_" + count);
+            SetItemName("MenuBar_" + count);
             EventMouseClick += EmptyEvent;
             EventMouseHover += (sender) => IsMouseHover = !IsMouseHover;
             count++;
 
-            _text_object = new TextLine();
             EventKeyPress += OnKeyPress;
 
+            _text_object = new TextLine();
         }
-        public ButtonCore(String text = "") : this()
+        public MenuBar(String text = "") : this()
         {
             SetText(text);
         }
+
         protected virtual void OnKeyPress(object sender, int key, KeyMods mods)
         {
             if (key == 0x1C)
                 EventMouseClick?.Invoke(this);
         }
-
         public override void InvokePoolEvents()
         {
             if (EventMouseClick != null) EventMouseClick.Invoke(this);

@@ -182,7 +182,7 @@ namespace SpaceVIL
             }
         }
 
-        private Int32[] GetRowsHeight()//странные дела, следует проверить
+        private Int32[] GetRowsHeight()
         {
             Int32[] rows_height = new Int32[_row_count];
             List<int[]> list_height = new List<int[]>();
@@ -213,23 +213,38 @@ namespace SpaceVIL
                     }
                 }
             }
-            //
-            list_height.Sort((x, y) => y[1].CompareTo(x[1]));
-            foreach (var pair in list_height)
+            ///////////
+            List<int[]> m_height = new List<int[]>();
+            for (int r = 0; r < _row_count; r++)
             {
-                if (pair[1] <= prefer_height)
+                int max = -1;
+                for (int c = 0; c < _column_count; c++)
+                {
+                    if (list_height[c + r * _column_count][1] > max)
+                        max = list_height[c + r * _column_count][1];
+                }
+                m_height.Add(new int[2] { r, max });
+            }
+            m_height.Sort((x, y) => y[1].CompareTo(x[1]));
+            foreach (var pair in m_height)
+            {
+                if (pair[1] <= 0)
                     pair[1] = prefer_height;
                 else
                 {
                     free_space -= pair[1];
                     count--;
+                    if (count == 0)
+                        count++;
                     prefer_height = (free_space - GetSpacing().Vertical * count) / count;
                 }
             }
 
-            list_height.Sort((x, y) => x[0].CompareTo(y[0]));
+            m_height.Sort((x, y) => x[0].CompareTo(y[0]));
+
             for (int i = 0; i < rows_height.Length; i++)
-                rows_height[i] = list_height[i][1];
+                rows_height[i] = m_height[i][1];
+
             return rows_height;
         }
 
@@ -253,7 +268,6 @@ namespace SpaceVIL
                         list_width.Add(new int[2] { c, 0 });
                         continue;
                     }
-
                     if (item.GetWidthPolicy() == SizePolicy.Fixed)
                     {
                         list_width.Add(new int[2] { c, item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right });
@@ -264,24 +278,37 @@ namespace SpaceVIL
                     }
                 }
             }
-
-            //
-            list_width.Sort((x, y) => y[1].CompareTo(x[1]));
-            foreach (var pair in list_width)
+            //////////
+            List<int[]> m_width = new List<int[]>();
+            for (int c = 0; c < _column_count; c++)
             {
-                if (pair[1] <= prefer_width)
+                int max = -1;
+                for (int r = 0; r < _row_count; r++)
+                {
+                    if (list_width[r + c * _row_count][1] > max)
+                        max = list_width[r + c * _row_count][1];
+                }
+                m_width.Add(new int[2] { c, max });
+            }
+            m_width.Sort((x, y) => y[1].CompareTo(x[1]));
+            foreach (var pair in m_width)
+            {
+                if (pair[1] == 0)
                     pair[1] = prefer_width;
                 else
                 {
                     free_space -= pair[1];
                     count--;
+                    if (count == 0)
+                        count++;
                     prefer_width = (free_space - GetSpacing().Horizontal * count) / count;
                 }
             }
 
-            list_width.Sort((x, y) => x[0].CompareTo(y[0]));
+            m_width.Sort((x, y) => x[0].CompareTo(y[0]));
+
             for (int i = 0; i < columns_width.Length; i++)
-                columns_width[i] = list_width[i][1];
+                columns_width[i] = m_width[i][1];
 
             return columns_width;
         }

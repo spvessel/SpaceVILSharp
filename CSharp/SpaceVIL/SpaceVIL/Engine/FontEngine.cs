@@ -293,7 +293,93 @@ namespace SpaceVIL
                 else isSpec = true;
             }
 
-            private void MakeLetterArrays(GraphicsPath shape)
+            private void MakeLetterArrays(GraphicsPath shape) {
+                RectangleF rec = shape.GetBounds();
+                int x0 = (int)Math.Floor(rec.Left);
+                int x1 = (int)Math.Ceiling(rec.Right);
+                int y0 = (int)Math.Floor(rec.Top);
+                int y1 = (int)Math.Ceiling(rec.Bottom);
+
+                double[,] alph = ContourService.CrossContours(shape);
+
+                height = y1 - y0 + 1;
+                width = x1 - x0 + 1;
+                int x0shift = 0;
+                bool isBraked = false;
+                while (x0shift < width)
+                {
+                    for (int i = 0; i < height; i++)
+                    {
+                        if (alph[x0shift, i] > 0)
+                        {
+                            isBraked = true;
+                            break;
+                        }
+                    }
+                    if (isBraked) break;
+                    x0shift++;
+                }
+
+                int x1shift = width - 1;
+                isBraked = false;
+                while (x1shift >= 0)
+                {
+                    for (int i = 0; i < height; i++)
+                    {
+                        if (alph[x1shift, i] > 0) isBraked = true;
+                    }
+                    if (isBraked) break;
+                    x1shift--;
+                }
+
+                int y0shift = 0;
+                isBraked = false;
+                while (y0shift < height)
+                {
+                    for (int i = 0; i < width; i++)
+                    {
+                        if (alph[i, y0shift] > 0) isBraked = true;
+                    }
+                    if (isBraked) break;
+                    y0shift++;
+                }
+
+                int y1shift = height - 1;
+                isBraked = false;
+                while (y1shift >= 0)
+                {
+                    for (int i = 0; i < width; i++)
+                    {
+                        if (alph[i, y1shift] > 0) isBraked = true;
+                    }
+                    if (isBraked) break;
+                    y1shift--;
+                }
+
+                minX = 0;// x0 + x0shift;
+                minY = y0 + y0shift;
+
+                height = y1shift - y0shift + 1;
+                width = x1shift - x0shift + 1;
+
+                alphas = new double[width, height];
+                for (int xx = x0shift; xx <= x1shift; xx++)
+                {
+                    for (int yy = y0shift; yy <= y1shift; yy++)
+                    {
+                        if (alph[xx, yy] != 0)
+                        {
+                            alph[xx, yy] = (alph[xx, yy] < 1) ? alph[xx, yy] + 0.15f : alph[xx, yy];
+                            alph[xx, yy] = (alph[xx, yy] > 1) ? 1 : alph[xx, yy];
+                        }
+                        alphas[xx - x0shift, yy - y0shift] = alph[xx, yy];
+
+                    }
+                }
+            
+            }
+            /*
+            private void MakeLetterArraysOld(GraphicsPath shape)
             {
                 RectangleF rec = shape.GetBounds();
                 int x0 = (int)Math.Floor(rec.Left);
@@ -503,26 +589,6 @@ namespace SpaceVIL
                             alph[j - x0, ykey - y0] = 1;
                         }
                     }
-                    /*
-                    for (int xinc = x0; xinc <= x1; xinc++)
-                    {
-                        while ((inc < tmpYList.Count) && (xinc > tmpYList[inc]._coord))
-                        {
-                            inc++;
-                        }
-
-                        if (inc >= tmpYList.Count) continue;
-                        if (xinc == tmpYList[inc]._coord)
-                        {
-                            alph[xinc - x0, ykey - y0] = 1;
-
-                        }
-                        else if (inc % 2 == 1)
-                        {
-                            alph[xinc - x0, ykey - y0] = 1;
-                        }
-
-                    }*/
                     
                     for (int i = 0; i < tmpYList.Count; i ++)
                     {
@@ -664,8 +730,9 @@ namespace SpaceVIL
                     }
                 }
             }
+            */
         }
-
+        /*
         private class InOutCoord
         {
             public bool _isIn;
@@ -677,5 +744,6 @@ namespace SpaceVIL
                 _coord = coord;
             }
         }
+        */
     }
 }

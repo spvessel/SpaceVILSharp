@@ -25,7 +25,7 @@ namespace SpaceVIL
         {
             return _parent;
         }
-        private void SetParent(VisualItem parent)
+        internal void SetParent(VisualItem parent)
         {
             _parent = parent;
         }
@@ -40,16 +40,16 @@ namespace SpaceVIL
             var v_stack = item.GetParent() as IVLayout;
             if (v_stack != null)
             {
-                AddEventListener(EventManager.ResizeWidth, item);
-                AddEventListener(EventManager.Moved_X, item);
+                AddEventListener(GeometryEventType.ResizeWidth, item);
+                AddEventListener(GeometryEventType.Moved_X, item);
                 item.UpdateBehavior();
                 return;
             }
             var h_stack = item.GetParent() as IHLayout;
             if (h_stack != null)
             {
-                AddEventListener(EventManager.ResizeHeight, item);
-                AddEventListener(EventManager.Moved_Y, item);
+                AddEventListener(GeometryEventType.ResizeHeight, item);
+                AddEventListener(GeometryEventType.Moved_Y, item);
                 item.UpdateBehavior();
                 return;
             }
@@ -59,20 +59,20 @@ namespace SpaceVIL
                 return;
             }
             
-            AddEventListener(EventManager.ResizeWidth, item);
-            AddEventListener(EventManager.ResizeHeight, item);
-            AddEventListener(EventManager.Moved_X, item);
-            AddEventListener(EventManager.Moved_Y, item);
+            AddEventListener(GeometryEventType.ResizeWidth, item);
+            AddEventListener(GeometryEventType.ResizeHeight, item);
+            AddEventListener(GeometryEventType.Moved_X, item);
+            AddEventListener(GeometryEventType.Moved_Y, item);
             item.UpdateBehavior();
         }
-        protected virtual void AddEventListener(int eventType, BaseItem listener) { }
-        protected virtual void RemoveEventListener(int eventType, BaseItem listener) { }
+        protected virtual void AddEventListener(GeometryEventType type, BaseItem listener) { }
+        protected virtual void RemoveEventListener(GeometryEventType type, BaseItem listener) { }
         public void RemoveItemFromListeners()
         {
-            GetParent().RemoveEventListener(EventManager.ResizeWidth, this);
-            GetParent().RemoveEventListener(EventManager.ResizeHeight, this);
-            GetParent().RemoveEventListener(EventManager.Moved_X, this);
-            GetParent().RemoveEventListener(EventManager.Moved_Y, this);
+            GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this);
+            GetParent().RemoveEventListener(GeometryEventType.ResizeHeight, this);
+            GetParent().RemoveEventListener(GeometryEventType.Moved_X, this);
+            GetParent().RemoveEventListener(GeometryEventType.Moved_Y, this);
         }
 
         public virtual void InitElements()
@@ -349,21 +349,21 @@ namespace SpaceVIL
         }
 
         //update
-        public void Update(int eventType, int value = 0)
+        public void Update(GeometryEventType type, int value = 0)
         {
             //lock (DrawEngine.engine_locker)
             {
-                switch (eventType)
+                switch (type)
                 {
-                    case EventManager.Moved_X:
+                    case GeometryEventType.Moved_X:
                         SetX(GetX() + value);
                         break;
 
-                    case EventManager.Moved_Y:
+                    case GeometryEventType.Moved_Y:
                         SetY(GetY() + value);
                         break;
 
-                    case EventManager.ResizeWidth:
+                    case GeometryEventType.ResizeWidth:
                         if (GetWidthPolicy() == SizePolicy.Fixed)
                         {
                             if (GetAlignment().HasFlag(ItemAlignment.Right))
@@ -407,7 +407,7 @@ namespace SpaceVIL
                         }
                         break;
 
-                    case EventManager.ResizeHeight:
+                    case GeometryEventType.ResizeHeight:
                         if (GetHeightPolicy() == SizePolicy.Fixed)
                         {
                             if (GetAlignment().HasFlag(ItemAlignment.Bottom))
@@ -458,10 +458,10 @@ namespace SpaceVIL
         }
         public virtual void UpdateGeometry()
         {
-            Update(EventManager.ResizeWidth);
-            Update(EventManager.ResizeHeight);
-            Update(EventManager.Moved_X);
-            Update(EventManager.Moved_Y);
+            Update(GeometryEventType.ResizeWidth);
+            Update(GeometryEventType.ResizeHeight);
+            Update(GeometryEventType.Moved_X);
+            Update(GeometryEventType.Moved_Y);
         }
     }
 }

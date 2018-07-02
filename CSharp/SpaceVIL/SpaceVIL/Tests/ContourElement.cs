@@ -22,7 +22,7 @@ namespace SpaceVIL
             SetBackground(Color.Transparent);
         }
 
-        private List<List<PointF>> MakeShape() {
+        private List<List<PointF>> MakeContourFigure() {
             List<List<PointF>> shapeList = new List<List<PointF>>();
             
             List<PointF> tmpShape = new List<PointF>();
@@ -78,7 +78,7 @@ namespace SpaceVIL
             _coordsList = new List<float>();
             _colorsList = new List<float>();
             
-            double[,] alph = ContourService.CrossContours(MakeShape());
+            double[,] alph = ContourService.CrossContours(MakeContourFigure());
 
             for (int i = 0; i < alph.GetLength(0); i++)
             {

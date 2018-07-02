@@ -7,7 +7,7 @@ namespace SpaceVIL
         static int count = 0;
         public Frame()
         {
-            SetItemName("Frame" + count);
+            SetItemName("Frame_" + count);
             count++;
         }
 

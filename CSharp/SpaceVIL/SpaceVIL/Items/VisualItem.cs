@@ -36,6 +36,15 @@ namespace SpaceVIL
             }
         }
 
+        private String _tooltip = String.Empty;
+        public String GetToolTip()
+        {
+            return _tooltip;
+        }
+        public void SetToolTip(String text)
+        {
+            _tooltip = text;
+        }
         //container
         private Spacing _spacing = new Spacing();
         public Spacing GetSpacing()
@@ -108,16 +117,30 @@ namespace SpaceVIL
         }
         public void RemoveItem(BaseItem item)
         {
+            //add removing from layoutbox
             _content.Remove(item);
             item.RemoveItemFromListeners();
+
+            try
+            {
+                ItemsLayoutBox.RemoveItem(GetHandler(), item);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(item.GetItemName());
+                throw ex;
+            }
+
+            //needs to force update all attributes
+            UpdateGeometry();
         }
-        protected override void AddEventListener(int eventType, BaseItem listener)
+        protected override void AddEventListener(GeometryEventType type, BaseItem listener)
         {
-            eventManager.Subscribe(eventType, listener);
+            eventManager.Subscribe(type, listener);
         }
-        protected override void RemoveEventListener(int eventType, BaseItem listener)
+        protected override void RemoveEventListener(GeometryEventType type, BaseItem listener)
         {
-            eventManager.Unsubscribe(eventType, listener);
+            eventManager.Unsubscribe(type, listener);
         }
 
         //item
@@ -182,7 +205,7 @@ namespace SpaceVIL
                     if (grid != null)
                         grid.UpdateLayout();
                 }
-                eventManager.NotifyListeners(EventManager.ResizeWidth, value);
+                eventManager.NotifyListeners(GeometryEventType.ResizeWidth, value);
             }
         }
         public override void SetHeight(int height)
@@ -205,7 +228,7 @@ namespace SpaceVIL
                     if (grid != null)
                         grid.UpdateLayout();
                 }
-                eventManager.NotifyListeners(EventManager.ResizeHeight, value);
+                eventManager.NotifyListeners(GeometryEventType.ResizeHeight, value);
             }
         }
         public void SetPosition(int _x, int _y)
@@ -219,7 +242,7 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetX(_x);
-                eventManager.NotifyListeners(EventManager.Moved_X, value);
+                eventManager.NotifyListeners(GeometryEventType.Moved_X, value);
             }
         }
         public override void SetY(int _y)
@@ -228,7 +251,7 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetY(_y);
-                eventManager.NotifyListeners(EventManager.Moved_Y, value);
+                eventManager.NotifyListeners(GeometryEventType.Moved_Y, value);
             }
         }
 
