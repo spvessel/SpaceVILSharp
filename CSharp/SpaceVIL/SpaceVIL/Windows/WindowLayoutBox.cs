@@ -18,11 +18,13 @@ namespace SpaceVIL
 
             //add filling frame
             //ALL ATTRIBUTES STRICTLY NEEDED!!!
-            _layout.SetWindow(new Frame());
+            _layout.SetWindow(new WContainer());
             _layout.GetWindow().SetHandler(_layout);
             _layout.GetWindow().SetItemName(_layout.GetWindowName());
-            _layout.GetWindow().SetWidth(_layout.GetWidth());
-            _layout.GetWindow().SetHeight(_layout.GetHeight());
+            _layout.GetWindow().SetMinWidth(_layout.GetMinWidth());
+            _layout.GetWindow().SetMaxWidth(_layout.GetMaxWidth());
+            _layout.GetWindow().SetMinHeight(_layout.GetMinHeight());
+            _layout.GetWindow().SetMaxHeight(_layout.GetMaxHeight());
             _layout.GetWindow().SetWidthPolicy(SizePolicy.Expand);
             _layout.GetWindow().SetHeightPolicy(SizePolicy.Expand);
 

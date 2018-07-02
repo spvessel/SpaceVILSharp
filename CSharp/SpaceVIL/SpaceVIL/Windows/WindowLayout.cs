@@ -53,12 +53,12 @@ namespace SpaceVIL
             //Console.WriteLine("update");
             engine.Update();
         }
-        private Frame _window;
-        internal Frame GetWindow()
+        private WContainer _window;
+        internal WContainer GetWindow()
         {
             return _window;
         }
-        internal void SetWindow(Frame window)
+        internal void SetWindow(WContainer window)
         {
             _window = window;
         }
@@ -268,6 +268,16 @@ namespace SpaceVIL
                 if (engine != null)
                     engine.focused = value;
             }
+        }
+
+        public void Minimize()
+        {
+            engine.MinimizeWindow();
+        }
+
+        public void IsFixed(bool flag)
+        {
+            _window._is_fixed = flag;
         }
     }
 }

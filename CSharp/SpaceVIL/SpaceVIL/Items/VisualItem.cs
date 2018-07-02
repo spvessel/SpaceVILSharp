@@ -432,17 +432,19 @@ namespace SpaceVIL
             }
             return IsMouseHover;
         }
-        private bool _is_custom = false;
-        public virtual bool IsCustom { get => _is_custom; set => _is_custom = value; }
+
+        public CustomFigure IsCustom = null;
 
         public override List<float[]> MakeShape()
         {
-            if (IsCustom)
+            if (IsCustom != null)
             {
-                if (GetTriangles() == null || GetTriangles().Count == 0)
-                    return null;
+                SetTriangles(IsCustom.GetFigure());
 
-                return GraphicsMathService.ToGL(UpdateShape(), GetHandler());
+                if (IsCustom.IsFixed())
+                    return GraphicsMathService.ToGL(IsCustom.UpdatePosition(GetX(), GetY()), GetHandler());
+                else
+                    return GraphicsMathService.ToGL(UpdateShape(), GetHandler());
             }
 
             SetTriangles(GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));

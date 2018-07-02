@@ -42,6 +42,7 @@ namespace SpaceVIL
 
         public ListBox()
         {
+            EventMouseClick += EmptyEvent;
             EventScrollUp += EmptyEvent;
             EventScrollDown += EmptyEvent;
             SetItemName("ListBox" + count);

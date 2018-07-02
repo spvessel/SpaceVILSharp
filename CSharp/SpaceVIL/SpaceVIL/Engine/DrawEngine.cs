@@ -279,28 +279,28 @@ namespace SpaceVIL
         private void Resize(Glfw.Window glfwwnd, int width, int height)
         {
             _tooltip.InitTimer(false);
-            if (width <= wnd_handler.GetMinWidth())
-            {
-                width = wnd_handler.GetMinWidth();
-            }
             wnd_handler.SetWidth(width);
-            if (height <= wnd_handler.GetMinHeight())
-            {
-                height = wnd_handler.GetMinHeight();
-            }
             wnd_handler.SetHeight(height);
-
-            glViewport(0, 0, wnd_handler.GetWidth(), wnd_handler.GetHeight());
-            Render();
+            if (!wnd_handler.IsBorderHidden)
+            {
+                glViewport(0, 0, wnd_handler.GetWidth(), wnd_handler.GetHeight());
+                Render();
+            }
         }
 
         public void SetWindowSize()
         {
             Glfw.SetWindowSize(window, wnd_handler.GetWidth(), wnd_handler.GetHeight());
+            glViewport(0, 0, wnd_handler.GetWidth(), wnd_handler.GetHeight());
+            Render();
         }
 
+        public void MinimizeWindow()
+        {
+            Glfw.IconifyWindow(window);
+        }
         //OpenGL input interaction function
-        private VisualItem GetHoverVisualItem(int xpos, int ypos)
+        private VisualItem GetHoverVisualItem(float xpos, float ypos)
         {
             int index = -1;
 
@@ -310,6 +310,7 @@ namespace SpaceVIL
                 {
                     if (!(item as VisualItem).IsVisible)
                         continue;
+
                     if ((item as VisualItem).GetHoverVerification(xpos, ypos))
                     {
                         index = ItemsLayoutBox.GetLayoutItems(wnd_handler.Id).ToList().IndexOf(item);
@@ -347,6 +348,28 @@ namespace SpaceVIL
                 window_position.Y += (ptrRelease.Y - ptrPress.Y);
                 MoveWindowPos();
             }
+            else if (EngineEvent.LastEvent() == InputEventType.MousePressed && HoveredItem is IWindow)
+            {
+                int w = wnd_handler.GetWidth();
+                int h = wnd_handler.GetHeight();
+
+                ItemAlignment sides = (HoveredItem as IWindow).GetSides((float)xpos, (float)ypos);
+
+                if (sides.HasFlag(ItemAlignment.Right))
+                {
+                    w += (ptrRelease.X - ptrPress.X);
+                }
+                if (sides.HasFlag(ItemAlignment.Bottom))
+                {
+                    h += (ptrRelease.Y - ptrPress.Y);
+                }
+
+                Resize(window, w, h);
+                SetWindowSize();
+
+                ptrPress.X = ptrRelease.X;
+                ptrPress.Y = ptrRelease.Y;
+            }
             else
             {
                 HoveredItem = GetHoverVisualItem(ptrRelease.X, ptrRelease.Y);
@@ -374,6 +397,11 @@ namespace SpaceVIL
                 case InputState.Release:
                     if (HoveredItem != null)
                     {
+                        if (HoveredItem is IWindow)
+                        {
+                            (HoveredItem as WContainer)._sides = 0;
+                            (HoveredItem as WContainer)._resizing = false;
+                        }
                         HoveredItem.EventMouseClick.Invoke(HoveredItem);
 
                         //Focus get
@@ -386,6 +414,10 @@ namespace SpaceVIL
                     EngineEvent.SetEvent(InputEventType.MouseRelease);
                     break;
                 case InputState.Press:
+                    if (HoveredItem is IWindow)
+                    {
+                        (HoveredItem as WContainer)._resizing = true;
+                    }
                     EngineEvent.SetEvent(InputEventType.MousePressed);
                     break;
                 case InputState.Repeat:
@@ -407,7 +439,8 @@ namespace SpaceVIL
 
             while (!Glfw.WindowShouldClose(window))
             {
-                Glfw.WaitEvents();
+                //Glfw.WaitEvents();
+                Glfw.PollEvents();
                 if (focused)
                     Render();
             }
