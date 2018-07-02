@@ -120,7 +120,18 @@ namespace SpaceVIL
             //add removing from layoutbox
             _content.Remove(item);
             item.RemoveItemFromListeners();
-            ItemsLayoutBox.RemoveItem(GetHandler(), item);
+
+            try
+            {
+                ItemsLayoutBox.RemoveItem(GetHandler(), item);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(item.GetItemName());
+                throw ex;
+            }
+
+            //needs to force update all attributes
             UpdateGeometry();
         }
         protected override void AddEventListener(GeometryEventType type, BaseItem listener)

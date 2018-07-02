@@ -78,7 +78,9 @@ namespace SpaceVIL
 
         internal void InitTimer(bool flag)
         {
-            if(flag)
+            IsVisible = flag;
+
+            if (flag)
             {
                 if (_stop != null)
                     return;
@@ -92,7 +94,6 @@ namespace SpaceVIL
                 if (_stop == null)
                     return;
 
-                IsVisible = false;
                 _stop.Stop();
                 _stop.Dispose();
                 _stop = null;
@@ -102,6 +103,7 @@ namespace SpaceVIL
         private void VisibleSelf()
         {
             IsVisible = true;
+            
             _stop.Stop();
             _stop.Dispose();
             _stop = null;

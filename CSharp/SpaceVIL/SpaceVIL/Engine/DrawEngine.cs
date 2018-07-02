@@ -341,6 +341,12 @@ namespace SpaceVIL
                 FocusedItem = HoveredItem;
                 FocusedItem.IsFocused = true;
             }
+            else if (EngineEvent.LastEvent() == InputEventType.MousePressed && HoveredItem is IWindowAnchor)
+            {
+                window_position.X += (ptrRelease.X - ptrPress.X);
+                window_position.Y += (ptrRelease.Y - ptrPress.Y);
+                MoveWindowPos();
+            }
             else
             {
                 HoveredItem = GetHoverVisualItem(ptrRelease.X, ptrRelease.Y);
@@ -356,11 +362,6 @@ namespace SpaceVIL
                         _tooltip.SetText(HoveredItem.GetToolTip());
                     }
                 }
-                /*else
-                {
-                    _tooltip.InitTimer(false);
-                    _tooltip.SetText(String.Empty);
-                }*/
                 EngineEvent.SetEvent(InputEventType.MouseMove);
             }
         }
