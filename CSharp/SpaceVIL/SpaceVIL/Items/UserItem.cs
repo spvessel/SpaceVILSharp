@@ -8,7 +8,7 @@ namespace SpaceVIL
 {
     class UserItem : VisualItem, IUserItem
     {
-        static int count = 0;
+        public static int count = 0;
         public UserItem()
         {
             SetItemName("UserItem" + count);

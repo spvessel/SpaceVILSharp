@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
+    public enum GeometryEventType
+    {
+        Focused = 0x01,
+        Moved_X = 0x02,
+        Moved_Y = 0x04,
+        ResizeWidth = 0x08,
+        ResizeHeight = 0x10
+    }
     public class EventManager
     {
-        public const int Focused = 0;
-        public const int Moved_X = 1;
-        public const int Moved_Y = 2;
-        public const int ResizeWidth = 3;
-        public const int ResizeHeight = 4;
 
-        Dictionary<int, List<IEventUpdate>> listeners = new Dictionary<int, List<IEventUpdate>>();
+        Dictionary<GeometryEventType, List<IEventUpdate>> listeners = new Dictionary<GeometryEventType, List<IEventUpdate>>();
 
-        public void SetListeners(params int[] events)
+        public void SetListeners(params GeometryEventType[] events)
         {
             foreach (var s in events)
             {
@@ -24,28 +27,33 @@ namespace SpaceVIL
             }
         }
 
-        public void Subscribe(int eventType, IEventUpdate listener)
+        public void Subscribe(GeometryEventType type, IEventUpdate listener)
         {
-            if (!listeners.ContainsKey(eventType))
-                listeners.Add(eventType, new List<IEventUpdate>());
+            if (!listeners.ContainsKey(type))
+                listeners.Add(type, new List<IEventUpdate>());
 
-            if (!listeners[eventType].Contains(listener))
-                listeners[eventType].Add(listener);
+            if (!listeners[type].Contains(listener))
+                listeners[type].Add(listener);
         }
 
-        public void Unsubscribe(int eventType, IEventUpdate listener)
+        public void Unsubscribe(GeometryEventType type, IEventUpdate listener)
         {
-            if (listeners[eventType].Contains(listener))
-                listeners[eventType].Remove(listener);
-        }
-
-        public void NotifyListeners(int eventType, int value)
-        {
-            if (listeners.ContainsKey(eventType))
+            if (listeners.ContainsKey(type))
             {
-                foreach (var _ in listeners[eventType])
+                if (listeners[type].Contains(listener))
                 {
-                    _.Update(eventType, value);
+                    listeners[type].Remove(listener);
+                }
+            }
+        }
+
+        public void NotifyListeners(GeometryEventType type, int value)
+        {
+            if (listeners.ContainsKey(type))
+            {
+                foreach (var _ in listeners[type])
+                {
+                    _.Update(type, value);
                 }
             }
         }

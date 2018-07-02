@@ -29,13 +29,13 @@ namespace SpaceVIL
         Glfw.WindowPosFunc windowPosCallback;
         Glfw.KeyFunc keyPressCallback;
         Glfw.CharModsFunc keyInputText;
-        //Glfw.WindowFocusFunc windowFocusCallback;
+        Glfw.WindowFocusFunc windowFocusCallback;
         ///////////////////////////////////////////////
 
         public bool borderHidden;
         public bool appearInCenter;
         public bool focusable;
-        public bool focused;
+        public bool focused = true;
         public bool alwaysOnTop;
         public Pointer window_position = new Pointer();
         private VisualItem HoveredItem;
@@ -205,8 +205,8 @@ namespace SpaceVIL
             Glfw.SetWindowPosCallback(window, windowPosCallback);
             mouseScrollCallback = MouseScroll;
             Glfw.SetScrollCallback(window, mouseScrollCallback);
-            //windowFocusCallback = Focus;
-            //Glfw.SetWindowFocusCallback(window, windowFocusCallback);
+            windowFocusCallback = Focus;
+            Glfw.SetWindowFocusCallback(window, windowFocusCallback);
             keyPressCallback = KeyPress;
             Glfw.SetKeyCallback(window, keyPressCallback);
             keyInputText = TextInput;
@@ -223,6 +223,7 @@ namespace SpaceVIL
 
         private void MouseScroll(Glfw.Window glfwwnd, double xoffset, double yoffset)
         {
+            _tooltip.InitTimer(false);
             BaseItem root = HoveredItem;
             while (root != null) //down event
             {
@@ -236,12 +237,13 @@ namespace SpaceVIL
                     (root as IScrollable).InvokeScrollUp();
                 if (yoffset < 0 || xoffset > 0)
                     (root as IScrollable).InvokeScrollDown();
-                EngineEvent.SetEvent(EventType.MouseScroll);
+                EngineEvent.SetEvent(InputEventType.MouseScroll);
             }
         }
 
         private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
+            _tooltip.InitTimer(false);
             if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.V)
             {
                 string paste_str = Glfw.GetClipboardString(window);
@@ -252,15 +254,13 @@ namespace SpaceVIL
         }
         private void TextInput(Glfw.Window glfwwnd, uint codepoint, KeyMods mods)
         {
+            _tooltip.InitTimer(false);
             FocusedItem?.InvokeInputTextEvents(codepoint, mods);
         }
         private void Focus(Glfw.Window glfwwnd, bool value)
         {
-            if (focusable)
-            {
-                focused = value;
-                Glfw.FocusWindow(window);
-            }
+            _tooltip.InitTimer(false);
+            focused = value;
         }
 
         internal void MoveWindowPos()
@@ -278,6 +278,7 @@ namespace SpaceVIL
         }
         private void Resize(Glfw.Window glfwwnd, int width, int height)
         {
+            _tooltip.InitTimer(false);
             if (width <= wnd_handler.GetMinWidth())
             {
                 width = wnd_handler.GetMinWidth();
@@ -328,7 +329,7 @@ namespace SpaceVIL
             ptrRelease.X = (int)xpos;
             ptrRelease.Y = (int)ypos;
 
-            if (EngineEvent.LastEvent() == EventType.MousePressed && HoveredItem is IDraggable)
+            if (EngineEvent.LastEvent() == InputEventType.MousePressed && HoveredItem is IDraggable)
             {
                 HoveredItem._mouse_ptr.SetPosition((float)xpos, (float)ypos);
                 HoveredItem.InvokePoolEvents();
@@ -355,18 +356,24 @@ namespace SpaceVIL
                         _tooltip.SetText(HoveredItem.GetToolTip());
                     }
                 }
-                EngineEvent.SetEvent(EventType.MouseMove);
+                /*else
+                {
+                    _tooltip.InitTimer(false);
+                    _tooltip.SetText(String.Empty);
+                }*/
+                EngineEvent.SetEvent(InputEventType.MouseMove);
             }
         }
 
         protected void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
+            _tooltip.InitTimer(false);
             switch (state)
             {
                 case InputState.Release:
                     if (HoveredItem != null)
                     {
-                        HoveredItem.InvokePoolEvents();
+                        HoveredItem.EventMouseClick.Invoke(HoveredItem);
 
                         //Focus get
                         if (FocusedItem != null)
@@ -375,10 +382,10 @@ namespace SpaceVIL
                         FocusedItem = HoveredItem;
                         FocusedItem.IsFocused = true;
                     }
-                    EngineEvent.SetEvent(EventType.MouseRelease);
+                    EngineEvent.SetEvent(InputEventType.MouseRelease);
                     break;
                 case InputState.Press:
-                    EngineEvent.SetEvent(EventType.MousePressed);
+                    EngineEvent.SetEvent(InputEventType.MousePressed);
                     break;
                 case InputState.Repeat:
                     break;
@@ -399,8 +406,9 @@ namespace SpaceVIL
 
             while (!Glfw.WindowShouldClose(window))
             {
-                Render();
                 Glfw.WaitEvents();
+                if (focused)
+                    Render();
             }
 
             glDetachShader(ProgramPrimitives, VertexPrimitiveShader);

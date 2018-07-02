@@ -15,17 +15,21 @@ namespace SpaceVIL
 
         static private Dictionary<int, ItemsLayout> layouts = new Dictionary<int, ItemsLayout>();
 
-        static public void InitLayout(int _layout)
+        static internal void InitLayout(int _layout)
         {
             ItemsLayout l = new ItemsLayout(_layout);
             layouts.Add(l.Id, l);
         }
-        static public void AddItem(WindowLayout layout, IItem item)
+        static internal void AddItem(WindowLayout layout, IItem item)
         {
             layouts[layout.Id].Items.Add(item);
 
             if (item is IUserItem)
                 (item as IUserItem).Init();
+        }
+        static internal void RemoveItem(WindowLayout layout, IItem item)
+        {
+            layouts[layout.Id].Items.Remove(item);
         }
         static public string[] GetListOfItemsNames(WindowLayout layout) => layouts[layout.Id].Items.Select(_ => _.GetItemName()).ToArray();
         static public string[] GetListOfItemsColors(WindowLayout layout) => layouts[layout.Id].Items.Select(_ => _.GetBackground().ToString()).ToArray();

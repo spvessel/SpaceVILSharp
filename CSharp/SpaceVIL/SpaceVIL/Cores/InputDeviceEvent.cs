@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    public enum EventType
+    public enum InputEventType
     {
         Empty,
         MouseMove,
@@ -21,8 +21,8 @@ namespace SpaceVIL
     public class InputDeviceEvent
     {
         internal bool isHappen = false;
-        private EventType EType = EventType.Empty;
-        public void SetEvent(EventType type)
+        private InputEventType EType = InputEventType.Empty;
+        public void SetEvent(InputEventType type)
         {
             EType = type;
             isHappen = true;
@@ -33,7 +33,7 @@ namespace SpaceVIL
             isHappen = false;
             return tmp;
         }
-        public EventType LastEvent()
+        public InputEventType LastEvent()
         {
             return EType;
         }

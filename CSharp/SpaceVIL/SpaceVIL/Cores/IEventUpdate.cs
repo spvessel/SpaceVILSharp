@@ -8,6 +8,6 @@ namespace SpaceVIL
 {
     public interface IEventUpdate
     {
-        void Update(int eventType, int value);
+        void Update(GeometryEventType type, int value);
     }
 }
