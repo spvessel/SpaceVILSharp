@@ -17,7 +17,7 @@ namespace SpaceVIL
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             SetBackground(Color.FromArgb(255, 51, 51, 51));
             SetAlignment(ItemAlignment.Top);
-            SetPadding(20, 0, 5, 0);
+            SetPadding(20, 0, 10, 0);
             EventMouseClick += EmptyEvent;
             count++;
 

@@ -402,7 +402,6 @@ namespace SpaceVIL
                             (HoveredItem as WContainer)._sides = 0;
                             (HoveredItem as WContainer)._resizing = false;
                         }
-
                         HoveredItem.EventMouseClick.Invoke(HoveredItem);
 
                         //Focus get
