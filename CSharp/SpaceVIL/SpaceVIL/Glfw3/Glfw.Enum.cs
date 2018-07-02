@@ -104,7 +104,8 @@ namespace Glfw3
             /// <summary>
             /// The vertical resize arrow shape.
             /// </summary>
-            ResizeY = 0x00036006
+            ResizeY = 0x00036006,
+            ResizeXY = 0x00036007
         }
 
         /// <summary>

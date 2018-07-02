@@ -77,9 +77,7 @@ namespace SpaceVIL
             {
                 Background = Color.FromArgb(125, 255, 255, 255)
             });
-            _btn_close.IsCustom = true;
-            _btn_close.SetTriangles(GraphicsMathService.GetCross(10, 10, 3, 45));
-
+            _btn_close.IsCustom = new CustomFigure(false, GraphicsMathService.GetCross(10, 10, 3, 45));
             _btn_close.EventMouseClick += (sender) =>
             {
                 RemoveSelf();
