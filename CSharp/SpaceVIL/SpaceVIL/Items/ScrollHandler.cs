@@ -23,7 +23,7 @@ namespace SpaceVIL
 
         public override void InvokePoolEvents()
         {
-            if (EventMouseClick != null) EventMouseClick.Invoke(this);
+            //if (EventMouseClick != null) EventMouseClick.Invoke(this);
             if (EventMouseDrag != null) EventMouseDrag.Invoke(this);
             if (EventMouseDrop != null) EventMouseDrop.Invoke(this);
         }

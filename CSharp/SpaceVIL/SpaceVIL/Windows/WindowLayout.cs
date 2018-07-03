@@ -144,6 +144,7 @@ namespace SpaceVIL
         public void SetMinWidth(int width)
         {
             _itemGeometry.SetMinWidth(width);
+            _window?.SetMinWidth(width);
         }
         public virtual void SetWidth(int width)
         {
@@ -154,10 +155,12 @@ namespace SpaceVIL
         public void SetMaxWidth(int width)
         {
             _itemGeometry.SetMaxWidth(width);
+            _window?.SetMaxWidth(width);
         }
         public void SetMinHeight(int height)
         {
             _itemGeometry.SetMinHeight(height);
+            _window?.SetMinHeight(height);
         }
         public virtual void SetHeight(int height)
         {
@@ -168,6 +171,7 @@ namespace SpaceVIL
         public void SetMaxHeight(int height)
         {
             _itemGeometry.SetMaxHeight(height);
+            _window?.SetMaxHeight(height);
         }
         public int GetMinWidth()
         {

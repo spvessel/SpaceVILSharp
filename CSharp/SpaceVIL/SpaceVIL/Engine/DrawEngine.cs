@@ -15,6 +15,13 @@ namespace SpaceVIL
     internal class DrawEngine : GL.WGL.OpenWGL
     //where TLayout : VisualItem
     {
+        //cursors 
+        Glfw.Cursor _arrow;
+        Glfw.Cursor _input;
+        Glfw.Cursor _hand;
+        Glfw.Cursor _resize_h;
+        Glfw.Cursor _resize_v;
+
         private ToolTip _tooltip = new ToolTip();
         private BaseItem _isStencilSet = null;
         public InputDeviceEvent EngineEvent = new InputDeviceEvent();
@@ -77,6 +84,13 @@ namespace SpaceVIL
         {
             CreateWindow(wnd_handler.GetWindowTitle(), 4, wnd_handler.GetWidth(), wnd_handler.GetHeight());
             SetEventsCallbacks();
+            //cursors
+            _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
+            _input = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
+            _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
+            _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
+            _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
+
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
             //устанавливаем параметры отрисовки
@@ -334,6 +348,7 @@ namespace SpaceVIL
             {
                 HoveredItem._mouse_ptr.SetPosition((float)xpos, (float)ypos);
                 HoveredItem.InvokePoolEvents();
+                //(HoveredItem as ScrollHandler).EventMouseDrag.Invoke(HoveredItem);
 
                 //Focus get
                 if (FocusedItem != null)
@@ -384,6 +399,22 @@ namespace SpaceVIL
                         _tooltip.InitTimer(true);
                         _tooltip.SetText(HoveredItem.GetToolTip());
                     }
+
+                    if(HoveredItem is ITextEditable)
+                    {
+                        Glfw.SetCursor(window, _input);
+                    }
+                    else if (HoveredItem is IWindow)
+                    {
+                        if(xpos > HoveredItem.GetWidth() - 5)
+                            Glfw.SetCursor(window, _resize_h);
+                        if(ypos > HoveredItem.GetHeight() - 5)
+                            Glfw.SetCursor(window, _resize_v);
+                    }
+                    else
+                    {
+                        Glfw.SetCursor(window, _arrow);
+                    }
                 }
                 EngineEvent.SetEvent(InputEventType.MouseMove);
             }
@@ -397,12 +428,14 @@ namespace SpaceVIL
                 case InputState.Release:
                     if (HoveredItem != null)
                     {
+                        Console.WriteLine(HoveredItem.GetItemName());
                         if (HoveredItem is IWindow)
                         {
                             (HoveredItem as WContainer)._sides = 0;
                             (HoveredItem as WContainer)._resizing = false;
                         }
                         HoveredItem.EventMouseClick.Invoke(HoveredItem);
+                        //HoveredItem.InvokePoolEvents();
 
                         //Focus get
                         if (FocusedItem != null)
