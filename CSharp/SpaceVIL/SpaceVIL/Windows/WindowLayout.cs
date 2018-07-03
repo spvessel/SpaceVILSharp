@@ -37,6 +37,9 @@ namespace SpaceVIL
             IsFocusable = true;
             IsAlwaysOnTop = false;
             IsOutsideClickClosable = false;
+            
+            //InitWindow
+            WindowLayoutBox.InitWindow(this);
         }
         public void UpdatePosition()
         {
