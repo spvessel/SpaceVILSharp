@@ -206,25 +206,30 @@ namespace SpaceVIL
             Dictionary<int, List<InOutCoord>> _globalCrossX = new Dictionary<int, List<InOutCoord>>();
             Dictionary<int, List<InOutCoord>> _globalCrossY = new Dictionary<int, List<InOutCoord>>();
 
+            int x0 = int.MaxValue;// = _globalCrossX.Keys.Min() - 1; //Это с запасом, но должно хватить
+            int y0 = int.MaxValue;// = _globalCrossY.Keys.Min() - 1;
+            int x1 = int.MinValue;// = _globalCrossX.Keys.Max() + 1;
+            int y1 = int.MinValue;// = _globalCrossY.Keys.Max() + 1;
+
             for (int i = 0; i < contours.Count; i++) {
                 foreach (int xkey in contours[i]._crossX.Keys) {
                     if (!_globalCrossX.ContainsKey(xkey)) _globalCrossX.Add(xkey, new List<InOutCoord>() { });
                     _globalCrossX[xkey].AddRange(contours[i]._crossX[xkey]);
-                    
                 }
 
                 foreach (int ykey in contours[i]._crossY.Keys) {
                     if(!_globalCrossY.ContainsKey(ykey)) _globalCrossY.Add(ykey, new List<InOutCoord>() { });
                     _globalCrossY[ykey].AddRange(contours[i]._crossY[ykey]);
                 }
+
+                x0 = (x0 > contours[i].minX) ? contours[i].minX : x0;
+                x1 = (x1 < contours[i].maxX) ? contours[i].maxX : x1;
+                y0 = (y0 > contours[i].minY) ? contours[i].minY : y0;
+                y1 = (y1 < contours[i].maxY) ? contours[i].maxY : y1;
             }
 
-            //Console.WriteLine(_globalCrossX.Keys.Count + " " + _globalCrossY.Keys.Count);
-
-            int x0 = _globalCrossX.Keys.Min() - 1; //Это с запасом, но должно хватить
-            int y0 = _globalCrossY.Keys.Min() - 1;
-            int x1 = _globalCrossX.Keys.Max() + 1;
-            int y1 = _globalCrossY.Keys.Max() + 1;
+            //Console.WriteLine(x0 + " " + x1 + " " + y0 + " " + y1);
+            //Console.WriteLine("Old " + _globalCrossX.Keys.Min() + " " + _globalCrossX.Keys.Max() + " " + (_globalCrossY.Keys.Min()) + " " + (_globalCrossY.Keys.Max()));
 
             double[,] alph = new double[x1 - x0 + 1, y1 - y0 + 1];
             int isInside;
@@ -336,6 +341,10 @@ namespace SpaceVIL
             public bool _clockwise;
             public Dictionary<int, List<InOutCoord>> _crossX;
             public Dictionary<int, List<InOutCoord>> _crossY;
+            public int minX = int.MaxValue;
+            public int maxX = int.MinValue;
+            public int minY = int.MaxValue;
+            public int maxY = int.MinValue;
 
             public Contour(Dictionary<int, List<InOutCoord>> crossX,
                 Dictionary<int, List<InOutCoord>> crossY, bool clockwise) {
@@ -352,17 +361,6 @@ namespace SpaceVIL
                 List<InOutCoord> tmpYList;
                 List<InOutCoord> tmpList;
 
-                /*
-                tmpList = new List<InOutCoord>();
-                tmpList.AddRange(crossY[crossY.Keys.First()]);
-                tmpList.Sort((x, y) => x._coord.CompareTo(y._coord));
-                if (tmpList[0]._isIn == false) {
-
-                    _reverse = true;
-                    crossX = ReverseDict(crossX);
-                    crossY = ReverseDict(crossY);
-                }
-                */
                 foreach (int ykey in crossY.Keys)
                 {
                     tmpList = new List<InOutCoord>();
@@ -370,6 +368,8 @@ namespace SpaceVIL
                     tmpList.AddRange(crossY[ykey]);
                     //tmpList.Distinct();
                     tmpList.Sort((x, y) => x._coord.CompareTo(y._coord));
+                    minX = (minX > (int)Math.Truncate(tmpList[0]._coord)) ? (int)Math.Truncate(tmpList[0]._coord) : minX;
+                    maxX = (maxX < (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1) ? (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1 : maxX;
 
                     int inc = 0;
                     while (inc < tmpList.Count)
@@ -388,7 +388,6 @@ namespace SpaceVIL
                     _crossY.Add(ykey, new List<InOutCoord>(tmpYList));
                 }
 
-
                 List<InOutCoord> tmpXList;
                 foreach (int xkey in crossX.Keys)
                 {
@@ -396,6 +395,9 @@ namespace SpaceVIL
                     tmpXList = new List<InOutCoord>();
                     tmpList.AddRange(crossX[xkey]);
                     tmpList.Sort((x, y) => x._coord.CompareTo(y._coord));
+
+                    minY = (minY > (int)Math.Truncate(tmpList[0]._coord)) ? (int)Math.Truncate(tmpList[0]._coord) : minY;
+                    maxY = (maxY < (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1) ? (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1 : maxY;
 
                     int inc = 0;
                     while (inc < tmpList.Count)
@@ -413,24 +415,26 @@ namespace SpaceVIL
 
                     _crossX.Add(xkey, new List<InOutCoord>(tmpXList));
                 }
-            }
 
-            /*
-            private Dictionary<int, List<InOutCoord>> ReverseDict(Dictionary<int, List<InOutCoord>> dict) {
-                //reverse all bool values
-                foreach (int ykey in dict.Keys)
+                if (_crossY.Count != 0)
                 {
-                    int inc = 0;
-                    while (inc < dict[ykey].Count)
+                    minY = (minY > _crossY.Keys.Min() - 1) ? _crossY.Keys.Min() - 1 : minY;
+                    maxY = (maxY < _crossY.Keys.Max() + 1) ? _crossY.Keys.Max() + 1 : maxY;
+                }
+                else
+                {
+                    if (_crossX.Count == 0)
                     {
-                        dict[ykey][inc]._isIn = (dict[ykey][inc]._isIn) ? false : true;
-                        dict[ykey][inc]._reverse = true;
-                        inc++;   
+                        minX = 0; maxX = 0; minY = 0; maxY = 0;
                     }
                 }
-                return dict;
+
+                if (_crossX.Count != 0) {
+                    minX = (minX > _crossX.Keys.Min() - 1) ? _crossX.Keys.Min() - 1 : minX; //Это с запасом, но должно хватить
+                    maxX = (maxX < _crossX.Keys.Max() + 1) ? _crossX.Keys.Max() + 1 : maxX;
+                }
             }
-            */
+
         }
 
         private class InOutCoord
