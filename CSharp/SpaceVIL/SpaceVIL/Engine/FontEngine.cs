@@ -20,7 +20,7 @@ namespace SpaceVIL
 
         internal static PixMapData GetPixMap(string text, Font font)
         {
-            return FontReview.getTextArrays(text, font);
+            //return FontReview.getTextArrays(text, font);
 
             if (!fonts.ContainsKey(font))
             {
@@ -32,7 +32,7 @@ namespace SpaceVIL
 
         internal static int[] GetSpacerDims(Font font)
         {
-            return FontReview.getDims();
+            //return FontReview.getDims();
 
             if (!fonts.ContainsKey(font))
             {
