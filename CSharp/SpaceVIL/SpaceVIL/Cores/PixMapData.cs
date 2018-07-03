@@ -10,13 +10,17 @@ namespace SpaceVIL
     {
         private List<float> pixels;
         private List<float> colors;
+        private List<int> letEndPos;
         private float alpha;
 
-        public PixMapData(List<float> pixels, List<float> colors, float alpha)
+        public PixMapData(List<float> pixels, List<float> colors, List<int> letEndPos) //float alpha)
         {
             this.pixels = pixels;
             this.colors = colors;
-            this.alpha = alpha;
+            this.letEndPos = letEndPos;
+            if (letEndPos.Count > 0)
+                alpha = letEndPos[letEndPos.Count - 1];
+            else alpha = 0;
         }
 
         public List<float> GetPixels()
@@ -29,8 +33,12 @@ namespace SpaceVIL
             return colors;
         }
 
-        public float GetAlpha()
+        public List<int> GetEndPositions()
         {
+            return letEndPos;
+        }
+
+        public float GetAlpha() {
             return alpha;
         }
     }

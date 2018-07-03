@@ -35,7 +35,7 @@ namespace SpaceVIL
             {
                 SetText(GetText().Remove(_cursor_position - 1, 1));
                 _cursor_position--;
-                _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
+                UpdateCursorCoord(); //_cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
             }
             if (scancode == 339 && _cursor_position < GetText().Length)//delete
             {
@@ -44,23 +44,33 @@ namespace SpaceVIL
             if (scancode == 331 && _cursor_position > 0)//arrow left
             {
                 _cursor_position--;
-                _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
+                UpdateCursorCoord(); //_cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
             }
             if (scancode == 333 && _cursor_position < GetText().Length)//arrow right
             {
                 _cursor_position++;
-                _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
+                UpdateCursorCoord(); //_cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
             }
             if (scancode == 335)//home
             {
                 _cursor_position = GetText().Length;
-                _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
+                UpdateCursorCoord(); //_cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
             }
             if (scancode == 327)//end
             {
                 _cursor_position = 0;
-                _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
+                UpdateCursorCoord(); //_cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
             }
+        }
+
+        private void UpdateCursorCoord() {
+            int pos = 0;
+            int letCount = _text_object.GetLetPosArray().Count;
+            _cursor_position = (_cursor_position < 0) ? 0 : _cursor_position;
+            _cursor_position = (_cursor_position > letCount) ? letCount : _cursor_position;
+            if (_cursor_position > 0)
+                pos = _text_object.GetLetPosArray()[_cursor_position - 1];
+            _cursor.SetX(GetX() + GetPadding().Left + pos);// 8 * _cursor_position);
         }
 
         protected virtual void OnTextInput(object sender, uint codepoint, KeyMods mods)
@@ -69,7 +79,8 @@ namespace SpaceVIL
             string str = Encoding.UTF32.GetString(input);
             SetText(GetText().Insert(_cursor_position, str));
             _cursor_position++;
-            _cursor.SetX(GetX() + GetPadding().Left + 8 * _cursor_position);
+            _text_object.UpdateData(UpdateType.Critical); //Console.WriteLine(_cursor_position + " " + _text_object.GetLetPosArray().Count);
+            UpdateCursorCoord();
         }
 
         public override bool IsFocused

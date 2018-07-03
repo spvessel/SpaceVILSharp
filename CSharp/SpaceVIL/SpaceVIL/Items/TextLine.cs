@@ -16,6 +16,7 @@ namespace SpaceVIL
         private int _maxFontY;
         private List<List<float>> _coordArray;
         private float[] _lineWidth;
+        private List<int> _letEndPos;
 
         public TextLine()
         {
@@ -51,6 +52,7 @@ namespace SpaceVIL
                 alphas.AddRange(obj.GetColors());
                 _lineWidth[inc] = obj.GetAlpha();
                 inc++;
+                _letEndPos = obj.GetEndPositions();
             }
 
             SetAlphas(alphas);
@@ -143,6 +145,10 @@ namespace SpaceVIL
         {
             AddAllShifts();
             return base.Shape();
+        }
+
+        internal List<int> GetLetPosArray() {
+            return _letEndPos;
         }
     }
 }

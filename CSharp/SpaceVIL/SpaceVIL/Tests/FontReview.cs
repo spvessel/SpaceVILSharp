@@ -327,7 +327,7 @@ namespace SpaceVIL
                 }
             }
 
-            return new PixMapData(pix, col, 0);
+            return new PixMapData(pix, col, new List<int>(0));
         }
 
         private static PixMapData newLikeFontEngine(GraphicsPath shape) {
@@ -601,7 +601,7 @@ namespace SpaceVIL
                 }
             }
 
-            return new PixMapData(pix, col, 0);
+            return new PixMapData(pix, col, new List<int>(0));
         }
 
         private static PixMapData useContour(GraphicsPath shape) {
@@ -618,7 +618,7 @@ namespace SpaceVIL
             minY = y0;
             maxY = y1;
 
-            if (x0 == x1 && y0 == y1) return new PixMapData(pix, col, 0);
+            if (x0 == x1 && y0 == y1) return new PixMapData(pix, col, new List<int>(0));
 
             double[,] alph = ContourService.CrossContours(shape);
             
@@ -643,7 +643,7 @@ namespace SpaceVIL
                 }
             }
 
-            return new PixMapData(pix, col, 0);
+            return new PixMapData(pix, col, new List<int>(0));
         }
 
         static internal PixMapData MakeNewText(String text, Font font)
@@ -855,7 +855,7 @@ namespace SpaceVIL
                 }
             }
 
-            return new PixMapData(pix, col, (float)x0);
+            return new PixMapData(pix, col, new List<int>(x0));
         }
 
         private class InOutCoord

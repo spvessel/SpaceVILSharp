@@ -109,6 +109,7 @@ namespace SpaceVIL
 
                 List<float> pix = new List<float>();
                 List<float> col = new List<float>();
+                List<int> letEndPos = new List<int>();
 
                 Letter currLet;
                 Letter prevLet = null;
@@ -187,12 +188,11 @@ namespace SpaceVIL
                     }
 
                     x0 += currLet.width;
-
                     prevLet = currLet;
-
+                    letEndPos.Add((int)x0);
                 }
 
-                return new PixMapData(pix, col, (float)x0);
+                return new PixMapData(pix, col, letEndPos);// (float)x0);
             }
 
             private void FillABC()
