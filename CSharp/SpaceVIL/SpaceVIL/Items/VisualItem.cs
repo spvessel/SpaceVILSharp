@@ -115,7 +115,7 @@ namespace SpaceVIL
             item.UpdateGeometry();
             item.InitElements();
         }
-        public void RemoveItem(BaseItem item)
+        public virtual void RemoveItem(BaseItem item)
         {
             //add removing from layoutbox
             _content.Remove(item);

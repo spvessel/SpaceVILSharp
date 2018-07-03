@@ -44,7 +44,14 @@ namespace SpaceVIL
         {
             item.IsVisible = false;
             base.AddItem(item);
+            //item.SetParent(GetParent());//проверить это все, так как тут заменен хендлер-владелец
             UpdateLayout();
+        }
+        public override void RemoveItem(BaseItem item)
+        {
+            base.RemoveItem(item);
+            UpdateLayout();
+            (GetParent() as ListBox)?.UpdateElements();//хрееееееень
         }
         public override void SetHeight(int height)
         {

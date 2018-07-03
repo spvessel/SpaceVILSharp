@@ -52,12 +52,9 @@ namespace SpaceVIL
 
         internal void UpdateHandler()
         {
-            float offset =
-                _current_value
-                * ((float)GetHeight() - Handler.GetHeight())
-                / (_max_value - _min_value)
-                + GetY();
-            Handler.SetOffset((int)offset + Handler.GetHeight() / 2);
+            float offset = _current_value * ((float)GetHeight() - Handler.GetHeight()) / (_max_value - _min_value);// + GetY();
+            //Console.WriteLine(offset);
+            //Handler.SetOffset((int)offset /*+ Handler.GetHeight() / 2*/);
         }
         public float GetCurrentValue()
         {
@@ -133,10 +130,10 @@ namespace SpaceVIL
 
         public void OnDropHandler(object sender)//что-то с тобой не так
         {
-            SetCurrentValue(
-                (float)(Handler.GetY() - GetY())
-                * (_max_value - _min_value)
-                / ((float)GetHeight() - Handler.GetHeight()));
+            //иногда число NAN 
+            float result = (float)(Handler.GetY() - GetY()) * (_max_value - _min_value) / ((float)GetHeight() - Handler.GetHeight());
+            if (!Single.IsNaN(result))
+                SetCurrentValue(result);
         }
 
         public virtual void OnTrackClick(object sender)
@@ -148,7 +145,7 @@ namespace SpaceVIL
                     (float)(_mouse_ptr.Y - GetY() - Handler.GetHeight() / 2)
                     * (_max_value - _min_value)
                     / ((float)GetHeight() - Handler.GetHeight()));
-                Handler.SetOffset(_mouse_ptr.Y);
+                //Handler.SetOffset(_mouse_ptr.Y - _mouse_ptr.PrevY);
             }
         }
 
@@ -159,7 +156,7 @@ namespace SpaceVIL
                 * (float)GetHeight()
                 / (_max_value - _min_value)
                 + GetY();
-            Handler.SetOffset((int)offset);
+            //Handler.SetOffset((int)offset);
         }
 
         public void InvokeScrollUp()

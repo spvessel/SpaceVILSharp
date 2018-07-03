@@ -21,6 +21,7 @@ namespace SpaceVIL
         Glfw.Cursor _hand;
         Glfw.Cursor _resize_h;
         Glfw.Cursor _resize_v;
+        Glfw.Cursor _resize_all;
 
         private ToolTip _tooltip = new ToolTip();
         private BaseItem _isStencilSet = null;
@@ -90,6 +91,7 @@ namespace SpaceVIL
             _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
             _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
             _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
+            _resize_all = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
 
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -304,9 +306,12 @@ namespace SpaceVIL
 
         public void SetWindowSize()
         {
-            Glfw.SetWindowSize(window, wnd_handler.GetWidth(), wnd_handler.GetHeight());
-            glViewport(0, 0, wnd_handler.GetWidth(), wnd_handler.GetHeight());
-            Render();
+            if (wnd_handler.IsBorderHidden)
+            {
+                Glfw.SetWindowSize(window, wnd_handler.GetWidth(), wnd_handler.GetHeight());
+                glViewport(0, 0, wnd_handler.GetWidth(), wnd_handler.GetHeight());
+                Render();
+            }
         }
 
         public void MinimizeWindow()
@@ -363,27 +368,30 @@ namespace SpaceVIL
                 window_position.Y += (ptrRelease.Y - ptrPress.Y);
                 MoveWindowPos();
             }
-            else if (EngineEvent.LastEvent() == InputEventType.MousePressed && HoveredItem is IWindow)
+            else if (EngineEvent.LastEvent() == InputEventType.MousePressed && HoveredItem is IWindow)//for refactor
             {
-                int w = wnd_handler.GetWidth();
-                int h = wnd_handler.GetHeight();
-
-                ItemAlignment sides = (HoveredItem as IWindow).GetSides((float)xpos, (float)ypos);
-
-                if (sides.HasFlag(ItemAlignment.Right))
+                if (wnd_handler.IsBorderHidden)
                 {
-                    w += (ptrRelease.X - ptrPress.X);
-                }
-                if (sides.HasFlag(ItemAlignment.Bottom))
-                {
-                    h += (ptrRelease.Y - ptrPress.Y);
-                }
+                    int w = wnd_handler.GetWidth();
+                    int h = wnd_handler.GetHeight();
 
-                Resize(window, w, h);
-                SetWindowSize();
+                    ItemAlignment sides = (HoveredItem as IWindow).GetSides((float)xpos, (float)ypos);
 
-                ptrPress.X = ptrRelease.X;
-                ptrPress.Y = ptrRelease.Y;
+                    if (sides.HasFlag(ItemAlignment.Right))
+                    {
+                        w += (ptrRelease.X - ptrPress.X);
+                    }
+                    if (sides.HasFlag(ItemAlignment.Bottom))
+                    {
+                        h += (ptrRelease.Y - ptrPress.Y);
+                    }
+
+                    Resize(window, w, h);
+                    SetWindowSize();
+
+                    ptrPress.X = ptrRelease.X;
+                    ptrPress.Y = ptrRelease.Y;
+                }
             }
             else
             {
@@ -400,22 +408,32 @@ namespace SpaceVIL
                         _tooltip.SetText(HoveredItem.GetToolTip());
                     }
 
-                    if(HoveredItem is ITextEditable)
+                    if (HoveredItem is ITextEditable)
                     {
                         Glfw.SetCursor(window, _input);
                     }
-                    else if (HoveredItem is IWindow)
+                    else if (HoveredItem is IWindow)//for refactor
                     {
-                        if(xpos > HoveredItem.GetWidth() - 5)
-                            Glfw.SetCursor(window, _resize_h);
-                        if(ypos > HoveredItem.GetHeight() - 5)
-                            Glfw.SetCursor(window, _resize_v);
+                        if (xpos > HoveredItem.GetWidth() - 5 && ypos > HoveredItem.GetHeight() - 5)
+                            Glfw.SetCursor(window, _resize_all);
+                        else
+                        {
+                            if (xpos > HoveredItem.GetWidth() - 5)
+                                Glfw.SetCursor(window, _resize_h);
+
+                            if (ypos > HoveredItem.GetHeight() - 5)
+                                Glfw.SetCursor(window, _resize_v);
+
+                            if ((xpos < HoveredItem.GetWidth() - 5) && (ypos < HoveredItem.GetHeight() - 5))
+                                Glfw.SetCursor(window, _arrow);
+                        }
                     }
                     else
                     {
                         Glfw.SetCursor(window, _arrow);
                     }
                 }
+
                 EngineEvent.SetEvent(InputEventType.MouseMove);
             }
         }
@@ -472,8 +490,8 @@ namespace SpaceVIL
 
             while (!Glfw.WindowShouldClose(window))
             {
-                //Glfw.WaitEvents();
-                Glfw.PollEvents();
+                Glfw.WaitEvents();
+                //Glfw.PollEvents();
                 if (focused)
                     Render();
             }
@@ -500,6 +518,7 @@ namespace SpaceVIL
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
             DrawItems(wnd_handler.GetWindow());
+            //draw tooltip if needed
             DrawToolTip();
             Glfw.SwapBuffers(window);
         }

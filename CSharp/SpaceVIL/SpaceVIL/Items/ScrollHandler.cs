@@ -11,7 +11,7 @@ namespace SpaceVIL
         static int count = 0;
         public Orientation Orientation;
         private int _offset = 0;
-        
+
         public ScrollHandler()
         {
             SetItemName("ScrollHandler" + count);
@@ -31,15 +31,16 @@ namespace SpaceVIL
         public void OnDragging(object sender)
         {
             if (Orientation == Orientation.Horizontal)
-                SetOffset(_mouse_ptr.X);
+                SetOffset(_mouse_ptr.X - _mouse_ptr.PrevX);
             else
-                SetOffset(_mouse_ptr.Y);
+                SetOffset(_mouse_ptr.Y - _mouse_ptr.PrevY);
         }
 
         public void SetOffset(int offset)
         {
             if (GetParent() == null)
                 return;
+
             int parent_crd, parent_size, item_size;
 
             switch (Orientation)
@@ -61,16 +62,27 @@ namespace SpaceVIL
                     break;
             }
 
-            _offset = offset - item_size / 2;
-            if (_offset < parent_crd)
-                _offset = parent_crd;
-            if (_offset > parent_crd + parent_size - item_size)
-                _offset = parent_crd + parent_size - item_size;
+            /*Console.WriteLine(
+                _offset + " " +
+                offset + " " +
+                parent_crd + " " +
+                parent_size + " " +
+                parent_size + " " +
+                item_size
+            );*/
+            //_offset = offset - item_size / 2;
+            _offset += offset;
+
+            if (_offset + parent_crd < parent_crd)
+                _offset = 0;
+
+            if (_offset + parent_crd > parent_crd + parent_size - item_size)
+                _offset = parent_size - item_size;
 
             if (Orientation == Orientation.Horizontal)
-                SetX(_offset);
+                SetX(_offset + parent_crd);
             else
-                SetY(_offset);
+                SetY(_offset + parent_crd);
         }
 
         public void InvokeScrollUp()
