@@ -69,7 +69,7 @@ namespace SpaceVIL
             //text
             _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
             SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            SetFont(new Font(new FontFamily("Segoe UI"), 16, FontStyle.Regular));
+            SetFont(new Font(new FontFamily("Courier New"), 16, FontStyle.Regular));
             SetForeground(Color.FromArgb(255, 180, 180, 180));
 
             //_close

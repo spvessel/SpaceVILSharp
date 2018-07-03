@@ -67,7 +67,7 @@ namespace SpaceVIL
             {
                 this.font = font;
                 letters = new Dictionary<char, Letter>();
-
+                //Console.WriteLine("Make " + font.FontFamily + " " + font.Size);
                 FillABC();
                 FillSpecLetters();
                 MakeBugLetter();
@@ -229,7 +229,7 @@ namespace SpaceVIL
                 try {
                     return new Letter(let, shape);
                 }
-                catch (Exception ex) {
+                catch (Exception) {
                     Console.WriteLine("Bug letter exception");
                     return bugLetter;
                 }

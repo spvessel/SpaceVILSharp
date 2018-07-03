@@ -83,7 +83,7 @@ namespace SpaceVIL
         {
             return _max_value;
         }
-        #endregion
+        #endregion///////////
 
         public VerticalSlider()
         {
@@ -131,7 +131,7 @@ namespace SpaceVIL
             if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
-        public void OnDropHandler(object sender)
+        public void OnDropHandler(object sender)//что-то с тобой не так
         {
             SetCurrentValue(
                 (float)(Handler.GetY() - GetY())
