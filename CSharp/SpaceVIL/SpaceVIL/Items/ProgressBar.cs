@@ -18,7 +18,7 @@ namespace SpaceVIL
 
         public ProgressBar()
         {
-            SetItemName("ProgressBar" + count);
+            SetItemName("ProgressBar_" + count);
             SetBackground(Color.Transparent);
             SetHeight(20);
             count++;

@@ -414,6 +414,8 @@ namespace SpaceVIL
                     }
                     else if (HoveredItem is IWindow)//for refactor
                     {
+                        if (!wnd_handler.IsBorderHidden)
+                            return;
                         if (xpos > HoveredItem.GetWidth() - 5 && ypos > HoveredItem.GetHeight() - 5)
                             Glfw.SetCursor(window, _resize_all);
                         else

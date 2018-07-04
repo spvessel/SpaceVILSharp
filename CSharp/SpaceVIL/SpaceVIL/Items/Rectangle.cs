@@ -8,7 +8,7 @@ namespace SpaceVIL
     {
         static int count = 0;
         public Rectangle()
-            : base(name: "Rectangle" + count)
+            : base(name: "Rectangle_" + count)
         {
             count++;
         }

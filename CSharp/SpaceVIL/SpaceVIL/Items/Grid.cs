@@ -13,7 +13,7 @@ namespace SpaceVIL
 
         public Grid()
         {
-            SetItemName("Grid" + count);
+            SetItemName("Grid_" + count);
             SetBackground(Color.Transparent);
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             count++;

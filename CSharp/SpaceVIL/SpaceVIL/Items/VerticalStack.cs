@@ -8,7 +8,7 @@ namespace SpaceVIL
         static int count = 0;
         public VerticalStack()
         {
-            SetItemName("VerticalStack" + count);
+            SetItemName("VerticalStack_" + count);
             SetBackground(Color.Transparent);
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             count++;

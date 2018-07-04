@@ -17,7 +17,7 @@ namespace SpaceVIL
 
         public VerticalScrollBar()
         {
-            SetItemName("VerticalScrollBar" + count);
+            SetItemName("VerticalScrollBar_" + count);
             count++;
             EventScrollUp += EmptyEvent;
             EventScrollDown += EmptyEvent;

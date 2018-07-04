@@ -15,7 +15,7 @@ namespace SpaceVIL
 
         public Label()
         {
-            SetItemName("Label" + count);
+            SetItemName("Label_" + count);
             SetBackground(Color.Transparent);
             count++;
             EventMouseClick += EmptyEvent;

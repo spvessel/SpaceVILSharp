@@ -7,7 +7,7 @@ namespace SpaceVIL
     {
         static int count = 0;
         public Ellipse()
-            : base(name: "Ellipse" + count)
+            : base(name: "Ellipse_" + count)
         {
             count++;
         }

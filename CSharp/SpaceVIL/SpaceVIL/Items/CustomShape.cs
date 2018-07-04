@@ -9,7 +9,7 @@ namespace SpaceVIL
     {
         static int count = 0;
         public CustomShape()
-            : base(name: "CustomShape" + count)
+            : base(name: "CustomShape_" + count)
         {
             count++;
         }

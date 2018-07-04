@@ -19,7 +19,7 @@ namespace SpaceVIL
 
         public RadioButton()
         {
-            SetItemName("RadioButton" + count);
+            SetItemName("RadioButton_" + count);
             SetBackground(Color.FromArgb(0, 0, 0, 0));
             SetSpacing(5, 0);
             EventKeyPress += OnKeyPress;

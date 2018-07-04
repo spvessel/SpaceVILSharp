@@ -86,7 +86,7 @@ namespace SpaceVIL
             SetHeightPolicy(SizePolicy.Expand);
             SetWidth(25);
             SetBackground(Color.Transparent);
-            SetItemName("VerticalSlider" + count);
+            SetItemName("VerticalSlider_" + count);
             EventValueChanged += EmptyEvent;
             EventMouseClick += OnTrackClick;
             EventMouseHover += (sender) => IsMouseHover = !IsMouseHover;

@@ -25,7 +25,7 @@ namespace SpaceVIL
         static int count = 0;
         public ListArea()
         {
-            SetItemName("ListArea" + count);
+            SetItemName("ListArea_" + count);
             count++;
         }
 
@@ -98,8 +98,7 @@ namespace SpaceVIL
 
             foreach (var child in GetItems())
             {
-                child.SetX((int)_xOffset + GetParent().GetX() + GetParent().GetPadding().Left);
-                
+                child.SetX((int)_xOffset + GetX() + GetPadding().Left);
                 Int64 child_Y = startY + offset;
                 offset += child.GetHeight() + GetSpacing().Vertical;
 

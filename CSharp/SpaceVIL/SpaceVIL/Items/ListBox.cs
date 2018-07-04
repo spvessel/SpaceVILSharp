@@ -45,7 +45,7 @@ namespace SpaceVIL
             EventMouseClick += EmptyEvent;
             EventScrollUp += EmptyEvent;
             EventScrollDown += EmptyEvent;
-            SetItemName("ListBox" + count);
+            SetItemName("ListBox_" + count);
             count++;
 
             //Basic Attributes
@@ -83,7 +83,6 @@ namespace SpaceVIL
             _area.SetScrollOffset(global_offset);
 
             float h_value = HScrollBar.Slider.GetCurrentValue();
-            Console.WriteLine(h_value);
             Int64 h_offset = ((Int64)((float)max_size / 100.0f * (float)h_value)) * (-1);
             _area.SetHorizontalOffset(h_offset);
         }

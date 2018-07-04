@@ -14,7 +14,7 @@ namespace SpaceVIL
 
         public ScrollHandler()
         {
-            SetItemName("ScrollHandler" + count);
+            SetItemName("ScrollHandler_" + count);
             EventMouseClick += EmptyEvent;
             EventMouseDrag += OnDragging;
             EventMouseHover += (sender) => IsMouseHover = !IsMouseHover;

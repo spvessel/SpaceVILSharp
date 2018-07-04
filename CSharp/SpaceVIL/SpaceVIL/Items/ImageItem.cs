@@ -15,7 +15,7 @@ namespace SpaceVIL
 
         public ImageItem()
         {
-            SetItemName("Image" + count);
+            SetItemName("Image_" + count);
             count++;
         }
         public ImageItem(Image picture) : this()

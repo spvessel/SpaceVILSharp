@@ -10,7 +10,7 @@ namespace SpaceVIL
             int ypos = 0,
             int width = 0,
             int height = 0,
-            string name = "Primitive")
+            string name = "Primitive_")
         {
             SetItemName(name);
         }
