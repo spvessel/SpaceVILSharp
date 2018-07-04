@@ -11,7 +11,7 @@ namespace SpaceVIL
         public static int count = 0;
         public UserItem()
         {
-            SetItemName("UserItem" + count);
+            SetItemName("UserItem_" + count);
             count++;
         }
 

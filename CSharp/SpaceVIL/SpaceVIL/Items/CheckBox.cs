@@ -19,7 +19,7 @@ namespace SpaceVIL
 
         public CheckBox()
         {
-            SetItemName("CheckBox" + count);
+            SetItemName("CheckBox_" + count);
             SetBackground(Color.Transparent);
             SetSpacing(5, 0);
             EventKeyPress += OnKeyPress;

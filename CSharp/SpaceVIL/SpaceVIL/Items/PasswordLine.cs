@@ -21,7 +21,7 @@ namespace SpaceVIL
             _text_object = new TextLine();
             _show_pwd_btn = new ButtonToggle();
 
-            SetItemName("PasswordLine" + count);
+            SetItemName("PasswordLine_" + count);
             SetBackground(180, 180, 180);
             SetForeground(Color.Black);
             SetPadding(5, 0, 5, 0);

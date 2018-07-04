@@ -52,9 +52,8 @@ namespace SpaceVIL
 
         internal void UpdateHandler()
         {
-            float offset = _current_value * ((float)GetHeight() - Handler.GetHeight()) / (_max_value - _min_value);// + GetY();
-            //Console.WriteLine(offset);
-            //Handler.SetOffset((int)offset /*+ Handler.GetHeight() / 2*/);
+            float offset = ((float)GetHeight() - Handler.GetHeight()) / (_max_value - _min_value) * _current_value;
+            Handler.SetOffset((int)offset);
         }
         public float GetCurrentValue()
         {
@@ -87,7 +86,7 @@ namespace SpaceVIL
             SetHeightPolicy(SizePolicy.Expand);
             SetWidth(25);
             SetBackground(Color.Transparent);
-            SetItemName("VerticalSlider" + count);
+            SetItemName("VerticalSlider_" + count);
             EventValueChanged += EmptyEvent;
             EventMouseClick += OnTrackClick;
             EventMouseHover += (sender) => IsMouseHover = !IsMouseHover;
@@ -145,18 +144,13 @@ namespace SpaceVIL
                     (float)(_mouse_ptr.Y - GetY() - Handler.GetHeight() / 2)
                     * (_max_value - _min_value)
                     / ((float)GetHeight() - Handler.GetHeight()));
-                //Handler.SetOffset(_mouse_ptr.Y - _mouse_ptr.PrevY);
             }
         }
 
         public override void SetY(int _y)
         {
             base.SetY(_y);
-            float offset = _current_value
-                * (float)GetHeight()
-                / (_max_value - _min_value)
-                + GetY();
-            //Handler.SetOffset((int)offset);
+            UpdateHandler();
         }
 
         public void InvokeScrollUp()

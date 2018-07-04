@@ -14,7 +14,7 @@ namespace SpaceVIL
 
         public GroupBox()
         {
-            SetItemName("GroupBox" + count);
+            SetItemName("GroupBox_" + count);
             count++;
             SetBackground(Color.Transparent);
 

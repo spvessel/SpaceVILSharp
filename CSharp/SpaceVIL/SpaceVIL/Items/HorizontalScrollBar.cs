@@ -17,7 +17,7 @@ namespace SpaceVIL
 
         public HorizontalScrollBar()
         {
-            SetItemName("HorizontalScrollBar" + count);
+            SetItemName("HorizontalScrollBar_" + count);
             count++;
             EventScrollUp += EmptyEvent;
             EventScrollDown += EmptyEvent;

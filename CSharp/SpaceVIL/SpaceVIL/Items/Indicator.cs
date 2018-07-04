@@ -19,7 +19,7 @@ namespace SpaceVIL
 
         public Indicator()
         {
-            SetItemName("Indicator" + count);
+            SetItemName("Indicator_" + count);
             SetWidth(20);
             SetHeight(20);
             SetPadding(4,4,4,4);

@@ -16,7 +16,7 @@ namespace SpaceVIL
 
         #region Values definition
         //Values
-        private float _step = 1;
+        private float _step = 1.0f;
         public void SetStep(float value)
         {
             _step = value;
@@ -25,10 +25,19 @@ namespace SpaceVIL
         {
             return _step;
         }
-
+        public EventCommonMethodState EventValueChanged;
         private float _current_value = 0;
+        public int Direction = 0;
         public void SetCurrentValue(float value)
         {
+            if (value == _current_value)
+                return;
+
+            if (_current_value > value)
+                Direction = -1; //up
+            else
+                Direction = 1; //down
+
             _current_value = value;
 
             if (_current_value < _min_value)
@@ -36,12 +45,15 @@ namespace SpaceVIL
             if (_current_value > _max_value)
                 _current_value = _max_value;
 
-            float offset = _current_value 
-                * ((float)GetWidth() - Handler.GetWidth())
-                / (_max_value - _min_value) 
-                + GetX();
+            UpdateHandler(); //refactor!!
 
-            Handler.SetOffset((int)offset + Handler.GetWidth() / 2);
+            if (EventValueChanged != null) EventValueChanged.Invoke(this);
+        }
+
+        internal void UpdateHandler()
+        {
+            float offset = ((float)GetWidth() - Handler.GetWidth()) / (_max_value - _min_value) * _current_value;
+            Handler.SetOffset((int)offset);
         }
         public float GetCurrentValue()
         {
@@ -67,14 +79,15 @@ namespace SpaceVIL
         {
             return _max_value;
         }
-        #endregion
+        #endregion///////////
 
         public HorizontalSlider()
         {
             SetWidthPolicy(SizePolicy.Expand);
             SetHeight(25);
             SetBackground(Color.Transparent);
-            SetItemName("HorizontalSlider" + count);
+            SetItemName("HorizontalSlider_" + count);
+            EventValueChanged += EmptyEvent;
             EventMouseClick += OnTrackClick;
             EventMouseHover += (sender) => IsMouseHover = !IsMouseHover;
             count++;
@@ -105,7 +118,8 @@ namespace SpaceVIL
             AddItems(Track, Handler);
 
             //Event connections
-            Handler.EventMouseDrop += OnDropHandler;
+            EventMouseDrop += OnDropHandler;
+            Handler.EventMouseDrop += EventMouseDrop.Invoke;
         }
 
         public override void InvokePoolEvents()
@@ -113,12 +127,12 @@ namespace SpaceVIL
             if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
-        public void OnDropHandler(object sender)
+        public void OnDropHandler(object sender)//что-то с тобой не так
         {
-            SetCurrentValue(
-                (float)(Handler.GetX() - GetX()) 
-                * (_max_value - _min_value) 
-                / ((float)GetWidth() - Handler.GetWidth()));
+            //иногда число NAN 
+            float result = (float)(Handler.GetX() - GetX()) * (_max_value - _min_value) / ((float)GetWidth() - Handler.GetWidth());
+            if (!Single.IsNaN(result))
+                SetCurrentValue(result);
         }
 
         public virtual void OnTrackClick(object sender)
@@ -127,21 +141,16 @@ namespace SpaceVIL
             if (_mouse_ptr.IsSet())
             {
                 SetCurrentValue(
-                    (float)(_mouse_ptr.X - GetX() - Handler.GetWidth() / 2) 
-                    * (_max_value - _min_value) 
+                    (float)(_mouse_ptr.X - GetX() - Handler.GetWidth() / 2)
+                    * (_max_value - _min_value)
                     / ((float)GetWidth() - Handler.GetWidth()));
-                Handler.SetOffset(_mouse_ptr.X);
             }
         }
 
         public override void SetX(int _x)
         {
             base.SetX(_x);
-            float offset = _current_value 
-                * (float)GetWidth() 
-                / (_max_value - _min_value) 
-                + GetX();
-            Handler.SetOffset((int)offset);
+            UpdateHandler();
         }
 
         public void InvokeScrollUp()

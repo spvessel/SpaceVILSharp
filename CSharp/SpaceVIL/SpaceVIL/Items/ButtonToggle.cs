@@ -10,7 +10,7 @@ namespace SpaceVIL
 
         public ButtonToggle()
         {
-            SetItemName("ButtonToggle" + count);
+            SetItemName("ButtonToggle_" + count);
             IsToggled = false;
             EventKeyPress += OnKeyPress;
             EventMouseClick += (sender) => EventToggle.Invoke(sender); //remember
