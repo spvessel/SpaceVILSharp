@@ -30,10 +30,29 @@ namespace SpaceVIL
 
         public void OnDragging(object sender)
         {
+            int parent_crd, parent_size, item_size, offset;
+
             if (Orientation == Orientation.Horizontal)
-                SetOffset(_mouse_ptr.X - _mouse_ptr.PrevX);
+            {
+                offset = _mouse_ptr.X - _mouse_ptr.PrevX + _offset;
+                parent_crd = GetParent().GetX();
+                parent_size = GetParent().GetWidth();
+                item_size = GetWidth();
+            }
             else
-                SetOffset(_mouse_ptr.Y - _mouse_ptr.PrevY);
+            {
+                offset = _mouse_ptr.Y - _mouse_ptr.PrevY + _offset;
+                parent_crd = GetParent().GetY();
+                parent_size = GetParent().GetHeight();
+                item_size = GetHeight();
+            }
+            if (offset + parent_crd < parent_crd)
+                offset = 0;
+
+            if (offset + parent_crd > parent_crd + parent_size - item_size)
+                offset = parent_size - item_size;
+
+            SetOffset(offset);
         }
 
         public void SetOffset(int offset)
@@ -41,48 +60,12 @@ namespace SpaceVIL
             if (GetParent() == null)
                 return;
 
-            int parent_crd, parent_size, item_size;
-
-            switch (Orientation)
-            {
-                case Orientation.Vertical:
-                    parent_crd = GetParent().GetY();
-                    parent_size = GetParent().GetHeight();
-                    item_size = GetHeight();
-                    break;
-                case Orientation.Horizontal:
-                    parent_crd = GetParent().GetX();
-                    parent_size = GetParent().GetWidth();
-                    item_size = GetWidth();
-                    break;
-                default:
-                    parent_crd = GetParent().GetY();
-                    parent_size = GetParent().GetHeight();
-                    item_size = GetHeight();
-                    break;
-            }
-
-            /*Console.WriteLine(
-                _offset + " " +
-                offset + " " +
-                parent_crd + " " +
-                parent_size + " " +
-                parent_size + " " +
-                item_size
-            );*/
-            //_offset = offset - item_size / 2;
-            _offset += offset;
-
-            if (_offset + parent_crd < parent_crd)
-                _offset = 0;
-
-            if (_offset + parent_crd > parent_crd + parent_size - item_size)
-                _offset = parent_size - item_size;
+            _offset = offset;
 
             if (Orientation == Orientation.Horizontal)
-                SetX(_offset + parent_crd);
+                SetX(_offset + GetParent().GetX());
             else
-                SetY(_offset + parent_crd);
+                SetY(_offset + GetParent().GetY());
         }
 
         public void InvokeScrollUp()
