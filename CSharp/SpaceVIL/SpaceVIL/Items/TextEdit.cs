@@ -82,7 +82,7 @@ namespace SpaceVIL
                     }
                     _isSelect = false;
                     MakeSelectedArea(0, 0);
-                    _selectFrom = 0;
+                     _selectFrom = 0;
                     _selectTo = 0;
                 }
                 else {
@@ -276,6 +276,8 @@ namespace SpaceVIL
             string text = GetText();
             string newText = text.Substring(0, _cursor_position) + pasteStr + text.Substring(_cursor_position);
             SetText(newText);
+            _cursor_position += pasteStr.Length;
+            ReplaceCursor();
         }
     }
 }
