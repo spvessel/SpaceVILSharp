@@ -13,6 +13,10 @@ namespace SpaceVIL
         private Rectangle _cursor;
         private int _cursor_position = 0;
         private Rectangle _selectedArea;
+        public Rectangle GetSelectionArea()
+        {
+            return _selectedArea;
+        }
         private int _selectFrom = 0;
         private int _selectTo = 0;
         private bool _isSelect = false;
@@ -36,7 +40,7 @@ namespace SpaceVIL
             _text_object = new TextLine();
             _cursor = new Rectangle();
             _selectedArea = new Rectangle();
-            _selectedArea.SetBackground(Color.FromArgb(255, 0, 191, 255));
+            _selectedArea.SetBackground(Color.FromArgb(50, 0, 0, 0));
 
             SetItemName("TextEdit_" + count);
             SetBackground(180, 180, 180);
@@ -86,10 +90,11 @@ namespace SpaceVIL
                     }
                     _isSelect = false;
                     MakeSelectedArea(0, 0);
-                     _selectFrom = 0;
+                    _selectFrom = 0;
                     _selectTo = 0;
                 }
-                else {
+                else
+                {
                     if (scancode == BackspaceCode && _cursor_position > 0)//backspace
                     {
                         SetText(GetText().Remove(_cursor_position - 1, 1));
@@ -125,23 +130,25 @@ namespace SpaceVIL
                 _cursor_position = 0;
                 ReplaceCursor();
             }
-            
+
             if (mods == KeyMods.Control && scancode == ACode)
             { //����� ��������� ���������
                 _selectFrom = 0;
                 _cursor_position = GetText().Length;
                 ReplaceCursor();
-                
+
                 _isSelect = true;
             }
-            
-            if (_isSelect) {
+
+            if (_isSelect)
+            {
                 _selectTo = _cursor_position;// UpdateCursorCoord();
                 MakeSelectedArea(CursorPosToCoord(_selectFrom), CursorPosToCoord(_selectTo));
             }
         }
 
-        private int CursorPosToCoord(int cPos) {
+        private int CursorPosToCoord(int cPos)
+        {
             int coord = 0;
             int letCount = _text_object.GetLetPosArray().Count;
             //_cursor_position = (_cursor_position < 0) ? 0 : _cursor_position;
@@ -151,7 +158,8 @@ namespace SpaceVIL
             return coord;
         }
 
-        private void ReplaceCursor() {
+        private void ReplaceCursor()
+        {
             int pos = CursorPosToCoord(_cursor_position);
             _cursor.SetX(GetX() + GetPadding().Left + pos);// 8 * _cursor_position);
         }
@@ -254,9 +262,11 @@ namespace SpaceVIL
             return _text_object.GetHeight();
         }
 
-        private void MakeSelectedArea(int from, int to) {
+        private void MakeSelectedArea(int from, int to)
+        {
             //Console.WriteLine("from " + from + " to " + to);
-            if (from == to) {
+            if (from == to)
+            {
                 _selectedArea.SetWidth(0);
                 return;
             }
@@ -267,16 +277,18 @@ namespace SpaceVIL
             _selectedArea.SetWidth(width);
         }
 
-        public string GetSelectedText() {
+        public string GetSelectedText()
+        {
             string text = GetText();
             if (_selectFrom == _selectTo) return "";
             int fromReal = Math.Min(_selectFrom, _selectTo);
             int toReal = Math.Max(_selectFrom, _selectTo);
-            string selectedText = text.Substring(fromReal, toReal - fromReal);            
+            string selectedText = text.Substring(fromReal, toReal - fromReal);
             return selectedText;
         }
 
-        public void PasteText(string pasteStr) {
+        public void PasteText(string pasteStr)
+        {
             string text = GetText();
             string newText = text.Substring(0, _cursor_position) + pasteStr + text.Substring(_cursor_position);
             SetText(newText);
