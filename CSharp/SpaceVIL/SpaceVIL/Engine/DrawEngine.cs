@@ -453,7 +453,7 @@ namespace SpaceVIL
                 case InputState.Release:
                     if (HoveredItem != null)
                     {
-                        Console.WriteLine(HoveredItem.GetItemName());
+                        //Console.WriteLine(HoveredItem.GetItemName());
                         if (HoveredItem is IWindow)
                         {
                             (HoveredItem as WContainer)._sides = 0;
