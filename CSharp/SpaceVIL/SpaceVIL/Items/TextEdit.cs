@@ -46,12 +46,16 @@ namespace SpaceVIL
 
             EventMouseClick += EmptyEvent;
             EventKeyPress += OnKeyPress;
+            EventKeyRelease += OnKeyRelease;
             EventTextInput += OnTextInput;
 
             ShiftValCodes = new List<int>() {LeftArrowCode, RightArrowCode, EndCode,
                 HomeCode, LeftShiftCode, RightShiftCode };//, LeftCtrlCode, RightCtrlCode};
         }
 
+        protected virtual void OnKeyRelease(object sender, int scancode, KeyMods mods)
+        {
+        }
         protected virtual void OnKeyPress(object sender, int scancode, KeyMods mods)
         {
             //Console.WriteLine(scancode);
@@ -123,7 +127,7 @@ namespace SpaceVIL
             }
             
             if (mods == KeyMods.Control && scancode == ACode)
-            { //Нужно отключить выделение
+            { //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 _selectFrom = 0;
                 _cursor_position = GetText().Length;
                 ReplaceCursor();

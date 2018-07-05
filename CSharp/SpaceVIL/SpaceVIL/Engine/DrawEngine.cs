@@ -260,15 +260,13 @@ namespace SpaceVIL
         private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
             _tooltip.InitTimer(false);
-            if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.V)
+            if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.V && action == InputState.Press)
             {
-                Console.WriteLine("Paste");
                 string paste_str = Glfw.GetClipboardString(window);
                 (FocusedItem as TextEdit).PasteText(paste_str);
             }
-            else if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.C)
+            else if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.C && action == InputState.Press)
             {
-                Console.WriteLine("Copy");
                 string copy_str = (FocusedItem as TextEdit).GetSelectedText();
                 Glfw.SetClipboardString(window, copy_str);
             }

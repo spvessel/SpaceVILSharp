@@ -55,14 +55,12 @@ namespace SpaceVIL
             //VBar
             VScrollBar.SetAlignment(ItemAlignment.Right);
             VScrollBar.IsVisible = true;
-            VScrollBar.Slider.SetStep(5);
             VScrollBar.SetItemName(GetItemName() + "_" + VScrollBar.GetItemName());
             VScrollBar.SetMargin(0, 0, 0, 10);
 
             //HBar
             HScrollBar.SetAlignment(ItemAlignment.Bottom);
             HScrollBar.IsVisible = true;
-            HScrollBar.Slider.SetStep(5);
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
             HScrollBar.SetMargin(0, 0, 10, 0);
 
@@ -78,22 +76,36 @@ namespace SpaceVIL
 
         private void UpdateListAreaAttributes(object sender)
         {
-            float current_value = VScrollBar.Slider.GetCurrentValue();
-            Int64 global_offset = ((Int64)((float)total_size / 100.0f * (float)current_value)) * (-1);
-            _area.SetScrollOffset(global_offset);
-
-            float h_value = HScrollBar.Slider.GetCurrentValue();
-            Int64 h_offset = ((Int64)((float)max_size / 100.0f * (float)h_value)) * (-1);
-            _area.SetHorizontalOffset(h_offset);
+            UpdateVListArea();
+            UpdateHListArea();
         }
-
-        private Int64 total_size = 0;
-        private Int64 max_size = 0;
-        public void UpdateSliderAttributes()
+        private Int64 v_size = 0;
+        private Int64 h_size = 0;
+        private void UpdateVListArea()
         {
-            UpdateVerticalSlider();
-            UpdateHorizontalSlider();
+            //vertical slider
+            float v_value = VScrollBar.Slider.GetCurrentValue();
+            Int64 v_offset = ((Int64)((float)v_size / 100.0f * (float)v_value));
+            _area.SetVScrollOffset(v_offset);
         }
+        private void UpdateHListArea()
+        {
+            /*Console.Write(
+                _area.GetHScrollOffset() + " "
+            );*/
+
+            //horizontal slider
+            //h_value = 100.0f / h_size * h_offset);
+            float h_value = HScrollBar.Slider.GetCurrentValue();
+            int h_offset = (int)((float)(h_size * h_value) / 100.0f);
+            _area.SetHScrollOffset(h_offset);
+
+            /*Console.WriteLine(
+                h_value + " " +
+                _area.GetHScrollOffset()
+            );*/
+        }
+
         private void UpdateVerticalSlider()
         {
             if (_area.AreaPosition == ListPosition.No)
@@ -112,61 +124,78 @@ namespace SpaceVIL
 
                 Int64 total = total_invisible_size - _area.GetSpacing().Vertical;
                 total_invisible_size -= (_area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom - _area.GetSpacing().Vertical);
-                total_size = total_invisible_size;
+                v_size = total_invisible_size;
 
                 if (total_invisible_size > 0)
                 {
-                    int size_slider = VScrollBar.Slider.GetHeight();
                     float size_handler = (float)(_area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom)
                         / (float)total * 100.0f;
-                    size_handler = VScrollBar.Slider.GetHeight() / 100.0f * size_handler;
+                    size_handler = (float)VScrollBar.Slider.GetHeight() / 100.0f * size_handler;
                     //size of handler
                     VScrollBar.Slider.Handler.SetHeight((int)size_handler);
                 }
                 //step of slider
                 float step_count = total_invisible_size / _area.GetStep();
                 VScrollBar.Slider.SetStep((VScrollBar.Slider.GetMaxValue() - VScrollBar.Slider.GetMinValue()) / step_count);
-                VScrollBar.Slider.SetCurrentValue((100.0f / total_invisible_size) * (-1) * _area.GetScrollOffset());
+                VScrollBar.Slider.SetCurrentValue((100.0f / total_invisible_size) * _area.GetVScrollOffset());
             }
         }
         private void UpdateHorizontalSlider()
         {
-            max_size = 0;
+            int max_size = 0;
+            int visible_area = _area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right;
             foreach (var item in _area.GetItems())
             {
                 if (max_size < item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right)
                     max_size = item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right;
             }
-            Int64 total_invisible_size = max_size - _area.GetWidth();
+            if (max_size <= visible_area)
+            {
+                HScrollBar.Slider.Handler.SetWidth(HScrollBar.Slider.GetWidth());
+                HScrollBar.Slider.SetStep(HScrollBar.Slider.GetMaxValue());
+                return;
+            }
+            Int64 total_invisible_size = max_size - visible_area;
+            h_size = total_invisible_size;
 
-            int size_slider = HScrollBar.Slider.GetWidth();
-            float size_handler = (float)(_area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right) / (float)max_size * 100.0f;
-            size_handler = HScrollBar.Slider.GetWidth() / 100.0f * size_handler;
-            //size of handler
-            HScrollBar.Slider.Handler.SetWidth((int)size_handler);
-
+            if (total_invisible_size > 0)
+            {
+                float size_handler = (float)(visible_area) / (float)max_size * 100.0f;
+                size_handler = (float)HScrollBar.Slider.GetWidth() / 100.0f * size_handler;
+                //size of handler
+                HScrollBar.Slider.Handler.SetWidth((int)size_handler);
+            }
             //step of slider
-            float step_count = total_invisible_size / _area.GetStep();
+            float step_count = (float)total_invisible_size / (float)_area.GetStep();
             HScrollBar.Slider.SetStep((HScrollBar.Slider.GetMaxValue() - HScrollBar.Slider.GetMinValue()) / step_count);
-            HScrollBar.Slider.SetCurrentValue((100.0f / total_invisible_size) * (-1) * _area.GetScrollOffset());        
-            max_size = total_invisible_size;    
+            HScrollBar.Slider.SetCurrentValue((100.0f / (float)total_invisible_size) * (float)_area.GetHScrollOffset());
         }
+
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
-            UpdateElements();
+            UpdateHorizontalSlider();
+            HScrollBar.Slider.UpdateHandler();
         }
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
-            UpdateElements();
+            UpdateVerticalSlider();
+            VScrollBar.Slider.UpdateHandler();
         }
-
         public override void AddItem(BaseItem item)
         {
             _area.AddItem(item);
             UpdateElements();
         }
+        public void UpdateElements()
+        {
+            UpdateVerticalSlider();
+            VScrollBar.Slider.UpdateHandler();
+            UpdateHorizontalSlider();
+            HScrollBar.Slider.UpdateHandler();
+        }
+
         public override void InitElements()
         {
             //Adding
@@ -177,14 +206,8 @@ namespace SpaceVIL
             //Events Connections
             EventScrollUp += VScrollBar.EventScrollUp.Invoke;
             EventScrollDown += VScrollBar.EventScrollDown.Invoke;
-            VScrollBar.Slider.EventValueChanged += UpdateListAreaAttributes;
-            HScrollBar.Slider.EventValueChanged += UpdateListAreaAttributes;
-        }
-        public void UpdateElements()
-        {
-            UpdateSliderAttributes();
-            VScrollBar.Slider.UpdateHandler();
-            HScrollBar.Slider.UpdateHandler();
+            VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); };
+            HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };
         }
 
         public EventMouseMethodState EventScrollUp;
@@ -193,7 +216,7 @@ namespace SpaceVIL
         public void InvokeScrollUp()
         {
             if (_area.AreaPosition.HasFlag(ListPosition.Top))
-                _area.SetScrollOffset(_area.GetScrollOffset() + _area.GetStep());
+                _area.SetVScrollOffset(_area.GetVScrollOffset() + _area.GetStep());
 
             if (EventScrollUp != null) EventScrollUp.Invoke(this);
         }
@@ -201,7 +224,8 @@ namespace SpaceVIL
         public void InvokeScrollDown()
         {
             if (_area.AreaPosition.HasFlag(ListPosition.Bottom))
-                _area.SetScrollOffset(_area.GetScrollOffset() - _area.GetStep());
+                _area.SetVScrollOffset(_area.GetVScrollOffset() - _area.GetStep());
+
             if (EventScrollDown != null) EventScrollDown.Invoke(this);
         }
     }
