@@ -262,8 +262,15 @@ namespace SpaceVIL
             _tooltip.InitTimer(false);
             if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.V)
             {
+                Console.WriteLine("Paste");
                 string paste_str = Glfw.GetClipboardString(window);
-                (FocusedItem as TextEdit).SetText(paste_str);
+                (FocusedItem as TextEdit).PasteText(paste_str);
+            }
+            else if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.C)
+            {
+                Console.WriteLine("Copy");
+                string copy_str = (FocusedItem as TextEdit).GetSelectedText();
+                Glfw.SetClipboardString(window, copy_str);
             }
             else
                 FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);

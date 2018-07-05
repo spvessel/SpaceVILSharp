@@ -26,6 +26,8 @@ namespace SpaceVIL
         private const int LeftShiftCode = 42;
         private const int RightShiftCode = 54;
         private const int ACode = 30;
+        private const int LeftCtrlCode = 29;
+        private const int RightCtrlCode = 285;
 
         private List<int> ShiftValCodes;
 
@@ -47,7 +49,7 @@ namespace SpaceVIL
             EventTextInput += OnTextInput;
 
             ShiftValCodes = new List<int>() {LeftArrowCode, RightArrowCode, EndCode,
-                HomeCode, LeftShiftCode, RightShiftCode};
+                HomeCode, LeftShiftCode, RightShiftCode };//, LeftCtrlCode, RightCtrlCode};
         }
 
         protected virtual void OnKeyPress(object sender, int scancode, KeyMods mods)
@@ -60,6 +62,10 @@ namespace SpaceVIL
                     _isSelect = true;
                     _selectFrom = _cursor_position;// UpdateCursorCoord();
                 }
+            }
+            else if (mods == KeyMods.Control)
+            {
+
             }
             else
             {
@@ -76,18 +82,20 @@ namespace SpaceVIL
                     }
                     _isSelect = false;
                     MakeSelectedArea(0, 0);
+                    _selectFrom = 0;
+                    _selectTo = 0;
                 }
-                else { 
-                if (scancode == BackspaceCode && _cursor_position > 0)//backspace
-                {
-                    SetText(GetText().Remove(_cursor_position - 1, 1));
-                    _cursor_position--;
-                    ReplaceCursor();
-                }
-                if (scancode == DeleteCode && _cursor_position < GetText().Length)//delete
-                {
-                    SetText(GetText().Remove(_cursor_position, 1));
-                }
+                else {
+                    if (scancode == BackspaceCode && _cursor_position > 0)//backspace
+                    {
+                        SetText(GetText().Remove(_cursor_position - 1, 1));
+                        _cursor_position--;
+                        ReplaceCursor();
+                    }
+                    if (scancode == DeleteCode && _cursor_position < GetText().Length)//delete
+                    {
+                        SetText(GetText().Remove(_cursor_position, 1));
+                    }
                 }
 
             }
@@ -255,6 +263,19 @@ namespace SpaceVIL
             _selectedArea.SetWidth(width);
         }
 
-        //public void SelectText
+        public string GetSelectedText() {
+            string text = GetText();
+            if (_selectFrom == _selectTo) return "";
+            int fromReal = Math.Min(_selectFrom, _selectTo);
+            int toReal = Math.Max(_selectFrom, _selectTo);
+            string selectedText = text.Substring(fromReal, toReal - fromReal);            
+            return selectedText;
+        }
+
+        public void PasteText(string pasteStr) {
+            string text = GetText();
+            string newText = text.Substring(0, _cursor_position) + pasteStr + text.Substring(_cursor_position);
+            SetText(newText);
+        }
     }
 }
