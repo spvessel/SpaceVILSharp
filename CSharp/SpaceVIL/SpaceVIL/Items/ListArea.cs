@@ -8,7 +8,7 @@ namespace SpaceVIL
 {
     class ListArea : VisualItem, IVLayout
     {
-        private int _step = 10;
+        private int _step = 15;
         public void SetStep(int value)
         {
             _step = value;
@@ -51,17 +51,6 @@ namespace SpaceVIL
             UpdateLayout();
             (GetParent() as ListBox)?.UpdateElements();//хрееееееень
         }
-        public override void SetHeight(int height)
-        {
-            int value = height - GetHeight();
-
-            base.SetHeight(height);
-
-            if (AreaPosition == ListPosition.No)
-                SetScrollOffset(0);
-            else if (AreaPosition == ListPosition.Top)
-                SetScrollOffset(GetScrollOffset() + value);
-        }
         public override void SetY(int _y)
         {
             base.SetY(_y);
@@ -69,18 +58,22 @@ namespace SpaceVIL
         }
 
         //update content position
-        private Int64 _scrollOffset = 0;
+        private Int64 _yOffset = 0;
         private Int64 _xOffset = 0;
-        public Int64 GetScrollOffset()
+        public Int64 GetVScrollOffset()
         {
-            return _scrollOffset;
+            return _yOffset;
         }
-        public void SetScrollOffset(Int64 value)
+        public void SetVScrollOffset(Int64 value)
         {
-            _scrollOffset = value;
+            _yOffset = value;
             UpdateLayout();
         }
-        public void SetHorizontalOffset(Int64 value)
+        public Int64 GetHScrollOffset()
+        {
+            return _xOffset;
+        }
+        public void SetHScrollOffset(Int64 value)
         {
             _xOffset = value;
             UpdateLayout();
@@ -93,12 +86,13 @@ namespace SpaceVIL
 
             AreaPosition = ListPosition.No;
 
-            Int64 offset = GetScrollOffset();
+            Int64 offset = (-1) * GetVScrollOffset();
             int startY = GetY() + GetPadding().Top;
 
             foreach (var child in GetItems())
             {
-                child.SetX((int)_xOffset + GetX() + GetPadding().Left);
+                child.SetX((-1) * (int)_xOffset + GetX() + GetPadding().Left);
+
                 Int64 child_Y = startY + offset;
                 offset += child.GetHeight() + GetSpacing().Vertical;
 
