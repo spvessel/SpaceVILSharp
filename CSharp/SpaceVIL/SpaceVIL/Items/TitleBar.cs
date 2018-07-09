@@ -7,6 +7,11 @@ namespace SpaceVIL
     {
         static int count = 0;
         private TextLine _text_object;
+        private ImageItem _icon;
+        public ImageItem GetIcon()
+        {
+            return _icon;
+        }
         private ButtonCore _close;
         private ButtonCore _minimize;
 
@@ -15,7 +20,7 @@ namespace SpaceVIL
             SetItemName("TitleBar_" + count);
             SetHeight(30);
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-            SetBackground(Color.FromArgb(255, 51, 51, 51));
+            SetBackground(Color.FromArgb(255, 45, 45, 45));
             SetAlignment(ItemAlignment.Top);
             SetPadding(20, 0, 10, 0);
             EventMouseClick += EmptyEvent;
@@ -24,6 +29,9 @@ namespace SpaceVIL
             _text_object = new TextLine();
             _minimize = new ButtonCore();
             _close = new ButtonCore();
+
+            Image icon = Image.FromFile("D:\\battery_full.png");
+            _icon = new ImageItem(icon);
         }
         public TitleBar(String text = "") : this()
         {
@@ -68,6 +76,7 @@ namespace SpaceVIL
         {
             //text
             _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            _text_object.SetMargin(50, 0, 30, 8);
             SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
             SetFont(new Font(new FontFamily("Segoe UI"), 14, FontStyle.Regular));
             SetForeground(Color.FromArgb(255, 180, 180, 180));
@@ -83,7 +92,7 @@ namespace SpaceVIL
             });
             _close.EventMouseClick += (sender) =>
             {
-                Environment.Exit(0);
+                GetHandler().Close();
             };
 
             //_minimize
@@ -101,8 +110,14 @@ namespace SpaceVIL
                 GetHandler().Minimize();
             };
 
+            //icon
+            _icon.SetBackground(Color.Transparent);
+            _icon.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            _icon.SetSize(40, 20);
+            _icon.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);//????
+
             //adding
-            AddItems(_text_object, _minimize, _close);
+            AddItems(_icon, _text_object, _minimize, _close);
 
             //update text data
             _text_object.UpdateData(UpdateType.Critical);

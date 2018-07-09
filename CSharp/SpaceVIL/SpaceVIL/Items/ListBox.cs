@@ -56,20 +56,20 @@ namespace SpaceVIL
             VScrollBar.SetAlignment(ItemAlignment.Right);
             VScrollBar.IsVisible = true;
             VScrollBar.SetItemName(GetItemName() + "_" + VScrollBar.GetItemName());
-            VScrollBar.SetMargin(0, 0, 0, 10);
+            VScrollBar.SetMargin(0, 0, 0, 15);
 
             //HBar
             HScrollBar.SetAlignment(ItemAlignment.Bottom);
             HScrollBar.IsVisible = true;
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
-            HScrollBar.SetMargin(0, 0, 10, 0);
+            HScrollBar.SetMargin(0, 0, 15, 0);
 
             //Area
             _area.SetItemName(GetItemName() + "_" + _area.GetItemName());
             _area.SetBackground(Color.Transparent);
             _area.SetAlignment(ItemAlignment.Bottom);
             _area.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            _area.SetMargin(0, 0, 10, 10);//упростить доступ к элементам области
+            _area.SetMargin(0, 0, 15, 15);//упростить доступ к элементам области
             _area.SetPadding(5, 5, 5, 5);
             _area.SetSpacing(0, 5);
         }

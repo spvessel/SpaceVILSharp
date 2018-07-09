@@ -24,21 +24,26 @@ namespace SpaceVIL
 
             SetBackground(Color.FromArgb(255, 50, 50, 50));
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-            SetHeight(10);
+            SetHeight(16);
 
             //Slider
             Slider.SetHeightPolicy(SizePolicy.Expand);
             Slider.Handler.SetMinWidth(30);
-            Slider.Handler.SetBackground(Color.FromArgb(100, 255, 255, 255));
+            Slider.Handler.SetHeight(10);
+            Slider.Handler.SetHeightPolicy(SizePolicy.Fixed);
+            Slider.Handler.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            Slider.Handler.SetBackground(Color.FromArgb(50, 255, 255, 255));
             Slider.Handler.Orientation = Orientation.Horizontal;
             Slider.Track.SetBackground(Color.Transparent);
 
             //Arrows
             UpArrow.SetBackground(Color.FromArgb(50, 255, 255, 255));
-            UpArrow.SetWidth(10);
-            UpArrow.SetHeightPolicy(SizePolicy.Expand);
+            UpArrow.SetWidth(16);
+            UpArrow.SetHeight(16);
+            UpArrow.SetHeightPolicy(SizePolicy.Fixed);
             UpArrow.SetWidthPolicy(SizePolicy.Fixed);
-            UpArrow.SetAlignment(ItemAlignment.Left);
+            UpArrow.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            UpArrow.IsCustom = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 3, 4, -90));
             UpArrow.AddItemState(true, ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
@@ -53,10 +58,12 @@ namespace SpaceVIL
             };
 
             DownArrow.SetBackground(Color.FromArgb(50, 255, 255, 255));
-            DownArrow.SetWidth(10);
-            DownArrow.SetHeightPolicy(SizePolicy.Expand);
+            DownArrow.SetWidth(16);
+            DownArrow.SetHeight(16);
+            DownArrow.SetHeightPolicy(SizePolicy.Fixed);
             DownArrow.SetWidthPolicy(SizePolicy.Fixed);
-            DownArrow.SetAlignment(ItemAlignment.Right);
+            DownArrow.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
+            DownArrow.IsCustom = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 3, 4, 90));
             DownArrow.AddItemState(true, ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)

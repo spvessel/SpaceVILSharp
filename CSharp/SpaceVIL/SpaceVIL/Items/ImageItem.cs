@@ -11,6 +11,7 @@ namespace SpaceVIL
     {
         static int count = 0;
         private Image _image;
+        private List<byte> _bitmap;
         private String _url;
 
         public ImageItem()
@@ -21,6 +22,20 @@ namespace SpaceVIL
         public ImageItem(Image picture) : this()
         {
             _image = picture;
+
+            _bitmap = new List<byte>();
+            Bitmap bmp = new Bitmap(_image);
+            for (int i = 0; i < _image.Width; i++)
+            {
+                for (int j = 0; j < _image.Height; j++)
+                {
+                    Color pixel = bmp.GetPixel(i, j);
+                    _bitmap.Add(pixel.R);
+                    _bitmap.Add(pixel.G);
+                    _bitmap.Add(pixel.B);
+                    _bitmap.Add(pixel.A);
+                }
+            }
         }
 
         //IImage implements
@@ -43,22 +58,24 @@ namespace SpaceVIL
 
         public byte[] GetPixMapImage()
         {
-            Bitmap bmp = new Bitmap(_image);
-            byte[] pixel_buffer = new byte[_image.Width * _image.Height * 4];
-            int skew = 0;
-            for (int i = 0; i < _image.Width; i++)
+            if (_bitmap == null)
             {
-                for (int j = 0; j < _image.Height; j++)
+                _bitmap = new List<byte>();
+                Bitmap bmp = new Bitmap(_image);
+                for (int i = 0; i < _image.Width; i++)
                 {
-                    Color pixel = bmp.GetPixel(i, j);
-                    pixel_buffer[0 + skew] = pixel.R;
-                    pixel_buffer[1 + skew] = pixel.G;
-                    pixel_buffer[2 + skew] = pixel.B;
-                    pixel_buffer[3 + skew] = pixel.A;
-                    skew += 4;
+                    for (int j = 0; j < _image.Height; j++)
+                    {
+                        Color pixel = bmp.GetPixel(i, j);
+                        _bitmap.Add(pixel.R);
+                        _bitmap.Add(pixel.G);
+                        _bitmap.Add(pixel.B);
+                        _bitmap.Add(pixel.A);
+                    }
                 }
             }
-            return pixel_buffer;
+
+            return _bitmap.ToArray();
         }
         public int GetImageWidth()
         {
