@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class ListArea : VisualItem, IVLayout
+    class ListArea : VisualItem, IVLayout, IHLayout
     {
         private int _step = 15;
         public void SetStep(int value)

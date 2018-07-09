@@ -446,7 +446,8 @@ namespace Glfw3
             /// <para><b>Wayland, Mir:</b> The EGL API is the native context creation API, so this
             /// hint will have no effect.</para>
             /// </remarks>
-            ContextCreationApi = 0x0002200b
+            ContextCreationApi = 0x0002200b,
+            TranspatentFramebuffer = 0x0002000A
         }
 
         /// <seealso cref="Hint.OpenglProfile"/>

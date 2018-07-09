@@ -619,6 +619,9 @@ namespace Glfw3
         /// <seealso cref="GetWindowPos(Window, out int, out int)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetWindowPos"), SuppressUnmanagedCodeSecurity]
         public static extern void SetWindowPos([MarshalAs(UnmanagedType.Struct)] Window window, int xpos, int ypos);
+        
+        [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetWindowOpacity"), SuppressUnmanagedCodeSecurity]
+        public static extern void SetWindowOpacity([MarshalAs(UnmanagedType.Struct)] Window window, float opacity);
 
         /// <summary>
         /// This function retrieves the size, in screen coordinates, of the client area of the

@@ -46,6 +46,7 @@ namespace SpaceVIL
         public bool focused = true;
         public bool alwaysOnTop;
         public Pointer window_position = new Pointer();
+        private List<VisualItem> HoveredItems;
         private VisualItem HoveredItem;
         private VisualItem FocusedItem;
         private Pointer ptrPress = new Pointer();
@@ -63,6 +64,7 @@ namespace SpaceVIL
 
         public DrawEngine(WindowLayout handler)
         {
+            HoveredItems = new List<VisualItem>();
             wnd_handler = handler;
             window_position.X = 0;
             window_position.Y = 0;
@@ -102,7 +104,7 @@ namespace SpaceVIL
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glDisable(GL_DEPTH_TEST);
+            //glEnable(GL_DEPTH_TEST);
             glEnable(GL_ALPHA_TEST);
 
             ProgramPrimitives = CreateShaderProgram(
@@ -143,6 +145,9 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Decorated, !borderHidden);//make borderless window
             Glfw.WindowHint(Glfw.Hint.Focused, focusable);
             Glfw.WindowHint(Glfw.Hint.Floating, alwaysOnTop);
+            //Glfw.WindowHint(Glfw.Hint.DepthBits, 16);
+            //Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, true);
+
 
             window = Glfw.CreateWindow(w, h, title);
             if (!window)
@@ -164,6 +169,7 @@ namespace SpaceVIL
 
             Glfw.MakeContextCurrent(window);
             Glfw.SetWindowSizeLimits(window, wnd_handler.GetMinWidth(), wnd_handler.GetMinHeight(), wnd_handler.GetMaxWidth(), wnd_handler.GetMaxHeight());
+            //Glfw.SetWindowOpacity(window, 0.8f);
         }
 
         private uint CreateShaderProgram(Stream vertex_shader, Stream fragment_shader, ref uint vertex, ref uint fragment)
@@ -324,9 +330,21 @@ namespace SpaceVIL
             Glfw.IconifyWindow(window);
         }
         //OpenGL input interaction function
-        private VisualItem GetHoverVisualItem(float xpos, float ypos)
+        private VisualItem IsInListHoveredItems<T>()
         {
-            int index = -1;
+            foreach (var item in HoveredItems)
+            {
+                if (item is T)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        private bool GetHoverVisualItem(float xpos, float ypos)
+        {
+            HoveredItems.Clear();
 
             foreach (var item in ItemsLayoutBox.GetLayoutItems(wnd_handler.Id))
             {
@@ -337,18 +355,22 @@ namespace SpaceVIL
 
                     if ((item as VisualItem).GetHoverVerification(xpos, ypos))
                     {
-                        index = ItemsLayoutBox.GetLayoutItems(wnd_handler.Id).ToList().IndexOf(item);
+                        HoveredItems.Add(item as VisualItem);
                     }
                 }
             }
 
-            if (index != -1)
-                return (VisualItem)ItemsLayoutBox.GetLayoutItems(wnd_handler.Id).ElementAt(index);
+            if (HoveredItems.Count > 0)
+            {
+                HoveredItem = HoveredItems.Last();
+                return true;
+            }
             else
-                return null;
+                return false;
         }
         protected void MouseMove(Glfw.Window wnd, double xpos, double ypos)
         {
+            //Console.WriteLine(xpos);
             _tooltip.InitTimer(false);
             //logic of hovers
             ptrRelease.X = (int)xpos;
@@ -400,12 +422,11 @@ namespace SpaceVIL
             }
             else
             {
-                HoveredItem = GetHoverVisualItem(ptrRelease.X, ptrRelease.Y);
                 ptrPress.X = ptrRelease.X;
                 ptrPress.Y = ptrRelease.Y;
 
                 //check tooltip
-                if (HoveredItem != null)
+                if (GetHoverVisualItem(ptrRelease.X, ptrRelease.Y))
                 {
                     if (HoveredItem.GetToolTip() != String.Empty)
                     {
@@ -417,7 +438,7 @@ namespace SpaceVIL
                     {
                         Glfw.SetCursor(window, _input);
                     }
-                    else if (HoveredItem is IWindow)//for refactor
+                    else if (HoveredItem is IWindow)
                     {
                         if (!wnd_handler.IsBorderHidden)
                             return;

@@ -100,3 +100,5 @@ CSharp/SpaceVIL/SpaceVIL/View/LabelTest.cs
 CSharp/SpaceVIL/SpaceVIL/View/Views.cs
 CSharp/SpaceVIL/SpaceVIL/View/VisualContact.cs
 CSharp/SpaceVIL/SpaceVIL/View/FlowTest.cs
+*.exp
+*.lib
