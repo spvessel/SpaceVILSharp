@@ -88,7 +88,7 @@ namespace SpaceVIL
             base.AddItem(item);
             UpdateLayout();
         }
-        public void AddItem(BaseItem item, int row, int column)
+        public void InsertItem(BaseItem item, int row, int column)
         {
             AddItem(item);
             _cells[row + column * _row_count].SetItem(item);

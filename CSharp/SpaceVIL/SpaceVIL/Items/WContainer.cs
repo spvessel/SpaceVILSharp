@@ -5,7 +5,7 @@ namespace SpaceVIL
     internal class WContainer : VisualItem, IWindow
     {
         static int count = 0;
-        internal int _resizeBorderThickness = 5;
+        internal int _resizeBorderThickness = 10;
         internal ItemAlignment _sides = 0;
         internal bool _is_fixed = false;
         internal bool _resizing = false;

@@ -13,6 +13,10 @@ namespace SpaceVIL
         private Rectangle _cursor;
         private int _cursor_position = 0;
         private Rectangle _selectedArea;
+        public Rectangle GetSelectionArea()
+        {
+            return _selectedArea;
+        }
         private int _selectFrom = 0;
         private int _selectTo = 0;
         private bool _isSelect = false;
@@ -39,7 +43,7 @@ namespace SpaceVIL
             _text_object = new TextLine();
             _cursor = new Rectangle();
             _selectedArea = new Rectangle();
-            _selectedArea.SetBackground(Color.FromArgb(255, 0, 191, 255));
+            _selectedArea.SetBackground(Color.FromArgb(50, 0, 0, 0));
 
             SetItemName("TextEdit_" + count);
             SetBackground(180, 180, 180);
@@ -142,7 +146,8 @@ namespace SpaceVIL
             }
         }
 
-        private int CursorPosToCoord(int cPos) {
+        private int CursorPosToCoord(int cPos)
+        {
             int coord = 0;
             int letCount = _text_object.GetLetPosArray().Count;
             //_cursor_position = (_cursor_position < 0) ? 0 : _cursor_position;
@@ -153,7 +158,8 @@ namespace SpaceVIL
             return coord;
         }
 
-        private void ReplaceCursor() {
+        private void ReplaceCursor()
+        {
             int pos = CursorPosToCoord(_cursor_position);
             _cursor.SetX(GetX() + GetPadding().Left + pos);// 8 * _cursor_position);
         }
@@ -257,9 +263,11 @@ namespace SpaceVIL
             return _text_object.GetHeight();
         }
 
-        private void MakeSelectedArea(int from, int to) {
+        private void MakeSelectedArea(int from, int to)
+        {
             //Console.WriteLine("from " + from + " to " + to);
-            if (from == to) {
+            if (from == to)
+            {
                 _selectedArea.SetWidth(0);
                 return;
             }

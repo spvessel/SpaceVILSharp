@@ -24,21 +24,26 @@ namespace SpaceVIL
 
             SetBackground(Color.FromArgb(255, 50, 50, 50));
             SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            SetWidth(10);
+            SetWidth(16);
 
             //Slider
             Slider.SetWidthPolicy(SizePolicy.Expand);
             Slider.Handler.SetMinHeight(30);
-            Slider.Handler.SetBackground(Color.FromArgb(100, 255, 255, 255));
+            Slider.Handler.SetWidth(10);
+            Slider.Handler.SetWidthPolicy(SizePolicy.Fixed);
+            Slider.Handler.SetAlignment(ItemAlignment.Top | ItemAlignment.HCenter);
+            Slider.Handler.SetBackground(Color.FromArgb(50, 255, 255, 255));
             Slider.Handler.Orientation = Orientation.Vertical;
             Slider.Track.SetBackground(Color.Transparent);
 
             //Arrows
             UpArrow.SetBackground(Color.FromArgb(50, 255, 255, 255));
-            UpArrow.SetHeight(10);
-            UpArrow.SetWidthPolicy(SizePolicy.Expand);
+            UpArrow.SetHeight(16);
+            UpArrow.SetWidth(16);
+            UpArrow.SetWidthPolicy(SizePolicy.Fixed);
             UpArrow.SetHeightPolicy(SizePolicy.Fixed);
-            UpArrow.SetAlignment(ItemAlignment.Top);
+            UpArrow.SetAlignment(ItemAlignment.Top | ItemAlignment.HCenter);
+            UpArrow.IsCustom = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 3, 4, 0));
             UpArrow.AddItemState(true, ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
@@ -53,10 +58,12 @@ namespace SpaceVIL
             };
 
             DownArrow.SetBackground(Color.FromArgb(50, 255, 255, 255));
-            DownArrow.SetWidthPolicy(SizePolicy.Expand);
-            DownArrow.SetHeight(10);
+            DownArrow.SetHeight(16);
+            DownArrow.SetWidth(16);
+            DownArrow.SetWidthPolicy(SizePolicy.Fixed);
             DownArrow.SetHeightPolicy(SizePolicy.Fixed);
-            DownArrow.SetAlignment(ItemAlignment.Bottom);
+            DownArrow.SetAlignment(ItemAlignment.Bottom | ItemAlignment.HCenter);
+            DownArrow.IsCustom = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 3, 4, 180));
             DownArrow.AddItemState(true, ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
@@ -80,7 +87,7 @@ namespace SpaceVIL
             EventScrollUp += UpArrow.EventMouseClick.Invoke;
             EventScrollDown += DownArrow.EventMouseClick.Invoke;
         }
-        
+
         public void SetArrowsVisible(bool value)
         {
             UpArrow.IsVisible = value;
