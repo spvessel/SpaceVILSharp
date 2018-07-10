@@ -30,6 +30,10 @@ namespace SpaceVIL
 
             ItemsLayoutBox.AddItem(_layout, _layout.GetWindow());
         }
+        static public void RemoveWindow(WindowLayout _layout)
+        {
+            windows.Remove(_layout.GetWindowName());
+        }
         static public WindowLayout GetWindowInstance(string name)
         {
             if (windows.ContainsKey(name))

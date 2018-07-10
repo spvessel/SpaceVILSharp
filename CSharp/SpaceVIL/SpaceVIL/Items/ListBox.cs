@@ -8,15 +8,16 @@ namespace SpaceVIL
     {
         static int count = 0;
 
+        private Grid _grid = new Grid(2, 2);
         private ListArea _area = new ListArea();
         public VerticalScrollBar VScrollBar = new VerticalScrollBar();
         public HorizontalScrollBar HScrollBar = new HorizontalScrollBar();
         private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.Always;
-        public ScrollBarVisibility GetVScrollBarPolicy()
+        public ScrollBarVisibility GetVScrollBarVisible()
         {
             return _v_scrollBarPolicy;
         }
-        public void SetVScrollBarPolicy(ScrollBarVisibility policy)
+        public void SetVScrollBarVisible(ScrollBarVisibility policy)
         {
             _v_scrollBarPolicy = policy;
 
@@ -24,13 +25,17 @@ namespace SpaceVIL
                 VScrollBar.IsVisible = false;
             else
                 VScrollBar.IsVisible = true;
+
+            _grid.UpdateLayout();
+            UpdateHorizontalSlider();
+            HScrollBar.Slider.UpdateHandler();
         }
         private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.Always;
-        public ScrollBarVisibility GetHScrollBarPolicy()
+        public ScrollBarVisibility GetHScrollBarVisible()
         {
             return _h_scrollBarPolicy;
         }
-        public void SetHScrollBarPolicy(ScrollBarVisibility policy)
+        public void SetHScrollBarVisible(ScrollBarVisibility policy)
         {
             _h_scrollBarPolicy = policy;
 
@@ -38,6 +43,10 @@ namespace SpaceVIL
                 HScrollBar.IsVisible = false;
             else
                 HScrollBar.IsVisible = true;
+
+            _grid.UpdateLayout();
+            UpdateVerticalSlider();
+            VScrollBar.Slider.UpdateHandler();
         }
 
         public ListBox()
@@ -53,23 +62,23 @@ namespace SpaceVIL
             SetHeightPolicy(SizePolicy.Expand);
 
             //VBar
-            VScrollBar.SetAlignment(ItemAlignment.Right);
+            VScrollBar.SetAlignment(ItemAlignment.Right | ItemAlignment.Top);
             VScrollBar.IsVisible = true;
             VScrollBar.SetItemName(GetItemName() + "_" + VScrollBar.GetItemName());
-            VScrollBar.SetMargin(0, 0, 0, 15);
+            //VScrollBar.SetMargin(0, 0, 0, 15);
 
             //HBar
-            HScrollBar.SetAlignment(ItemAlignment.Bottom);
+            HScrollBar.SetAlignment(ItemAlignment.Bottom | ItemAlignment.Left);
             HScrollBar.IsVisible = true;
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
-            HScrollBar.SetMargin(0, 0, 15, 0);
+            //HScrollBar.SetMargin(0, 0, 15, 0);
 
             //Area
             _area.SetItemName(GetItemName() + "_" + _area.GetItemName());
             _area.SetBackground(Color.Transparent);
             _area.SetAlignment(ItemAlignment.Bottom);
             _area.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            _area.SetMargin(0, 0, 15, 15);//упростить доступ к элементам области
+            //_area.SetMargin(0, 0, 15, 15);//упростить доступ к элементам области
             _area.SetPadding(5, 5, 5, 5);
             _area.SetSpacing(0, 5);
         }
@@ -107,7 +116,7 @@ namespace SpaceVIL
             int total = total_invisible_size - _area.GetSpacing().Vertical;
             if (total_invisible_size <= visible_area)
             {
-                VScrollBar.Slider.Handler.SetHeight(VScrollBar.Slider.GetHeight());
+                VScrollBar.Slider.Handler.SetHeight(/*VScrollBar.Slider.GetHeight()*/0);
                 VScrollBar.Slider.SetStep(VScrollBar.Slider.GetMaxValue());
                 v_size = 0;
                 VScrollBar.Slider.SetCurrentValue(0);
@@ -140,7 +149,7 @@ namespace SpaceVIL
             }
             if (max_size <= visible_area)
             {
-                HScrollBar.Slider.Handler.SetWidth(HScrollBar.Slider.GetWidth());
+                HScrollBar.Slider.Handler.SetWidth(/*HScrollBar.Slider.GetWidth()*/0);
                 HScrollBar.Slider.SetStep(HScrollBar.Slider.GetMaxValue());
                 h_size = 0;
                 HScrollBar.Slider.SetCurrentValue(0);
@@ -159,7 +168,7 @@ namespace SpaceVIL
             //step of slider
             int step_count = (int)((float)total_invisible_size / (float)_area.GetStep());
             if (step_count == 0) HScrollBar.Slider.SetStep(HScrollBar.Slider.GetMaxValue());
-            else 
+            else
                 HScrollBar.Slider.SetStep((HScrollBar.Slider.GetMaxValue() - HScrollBar.Slider.GetMinValue()) / step_count);
 
             float f = (100.0f / (float)total_invisible_size) * (float)_area.GetHScrollOffset();
@@ -194,9 +203,10 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //Adding
-            base.AddItem(_area);
-            base.AddItem(VScrollBar);
-            base.AddItem(HScrollBar);
+            base.AddItem(_grid);
+            _grid.InsertItem(_area, 0, 0);
+            _grid.InsertItem(VScrollBar, 0, 1);
+            _grid.InsertItem(HScrollBar, 1, 0);
 
             //Events Connections
             EventScrollUp += VScrollBar.EventScrollUp.Invoke;

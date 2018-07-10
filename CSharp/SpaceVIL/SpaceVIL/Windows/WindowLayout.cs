@@ -8,7 +8,7 @@ using System.Drawing;
 namespace SpaceVIL
 {
     public class WindowLayout : ISize, IPosition
-        //where TLayout : VisualItem
+    //where TLayout : VisualItem
     {
         private Thread thread;
         private DrawEngine engine;
@@ -37,7 +37,7 @@ namespace SpaceVIL
             IsFocusable = true;
             IsAlwaysOnTop = false;
             IsOutsideClickClosable = false;
-            
+
             //InitWindow
             WindowLayoutBox.InitWindow(this);
         }
@@ -226,12 +226,10 @@ namespace SpaceVIL
             return _itemPosition.GetY();
         }
 
+        public bool IsDialog = false;
         //methods
         public void Show()
         {
-            if (thread != null && thread.IsAlive)
-                return;
-
             engine = new DrawEngine(this)
             {
                 borderHidden = IsBorderHidden,
@@ -242,20 +240,43 @@ namespace SpaceVIL
             engine.window_position.X = GetX();
             engine.window_position.Y = GetY();
 
-            thread = new Thread(() => engine.Init());
-            thread.Start();
-
             WindowLayoutBox.ActiveWindow = Id;
             IsHidden = false;
+
+            if (IsDialog)
+            {
+                if (thread != null && thread.IsAlive)
+                    return;
+
+                thread = new Thread(() => engine.Init());
+                thread.Start();
+                thread.Join();
+            }
+            else
+            {
+                if (thread != null && thread.IsAlive)
+                    return;
+
+                thread = new Thread(() => engine.Init());
+                thread.Start();
+            }
         }
         public bool IsHidden { get; set; }
         public void Close()
         {
-            if (thread != null && thread.IsAlive)
+            if (!IsDialog)
             {
-                thread.Abort();
+                if (thread != null && thread.IsAlive)
+                {
+                    thread.Abort();
+                }
+                IsHidden = true;
             }
-            IsHidden = true;
+            else
+            {
+                engine.Close();
+                WindowLayoutBox.RemoveWindow(this);
+            }
         }
         public bool IsAlwaysOnTop { get; set; }
         public bool IsBorderHidden { get; set; }

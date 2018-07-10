@@ -28,7 +28,6 @@ namespace SpaceVIL
 
             //Slider
             Slider.SetWidthPolicy(SizePolicy.Expand);
-            Slider.Handler.SetMinHeight(30);
             Slider.Handler.SetWidth(10);
             Slider.Handler.SetWidthPolicy(SizePolicy.Fixed);
             Slider.Handler.SetAlignment(ItemAlignment.Top | ItemAlignment.HCenter);

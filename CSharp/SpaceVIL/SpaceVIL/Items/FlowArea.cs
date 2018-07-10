@@ -28,7 +28,6 @@ namespace SpaceVIL
         {
             _xOffset -= _mouse_ptr.PrevX - _mouse_ptr.X;
             _yOffset -= _mouse_ptr.PrevY - _mouse_ptr.Y;
-            //Console.WriteLine(_xOffset + " " + _yOffset);
             UpdateLayout();
         }
 

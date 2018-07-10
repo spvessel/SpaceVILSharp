@@ -28,7 +28,7 @@ namespace SpaceVIL
             //text
             _text = new Label();
             _text.SetItemName(GetItemName() + "_text");
-            _text.SetBackground(255,255,255,20);
+            _text.SetBackground(255, 255, 255, 20);
             _text.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             _text.SetAlignment(ItemAlignment.VCenter);
             _text.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
@@ -44,7 +44,7 @@ namespace SpaceVIL
             if (key == 0x1C)
                 EventMouseClick?.Invoke(this);
         }
-        
+
         public override void InitElements()
         {
             //adding
@@ -52,11 +52,15 @@ namespace SpaceVIL
             AddItem(_text);
 
             //connect events
-            _indicator.GetIndicatorMarker().EventToggle += EventMouseClick.Invoke;//????
-            EventMouseClick += _indicator.GetIndicatorMarker().EventToggle;//???? узнать почему работает и не плохо ли это
+            _indicator.GetIndicatorMarker().EventToggle += EventMouseClick.Invoke;
             _text.EventMouseClick += EventMouseClick.Invoke;
         }
 
+        protected internal override bool GetHoverVerification(float xpos, float ypos)
+        {
+            bool hover = base.GetHoverVerification(xpos, ypos);
+            return hover;
+        }
         public override bool IsVisible
         {
             get => base.IsVisible;

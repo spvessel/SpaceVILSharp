@@ -5,7 +5,7 @@ namespace SpaceVIL
 {
     class ButtonCore : VisualItem
     {
-        static int count = 0;
+        private static int count = 0;
         private TextLine _text_object;
 
         public ButtonCore()

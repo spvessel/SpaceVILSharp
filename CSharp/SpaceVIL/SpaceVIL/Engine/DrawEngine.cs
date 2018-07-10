@@ -83,6 +83,10 @@ namespace SpaceVIL
             //статический метод Glfw.Terminate() является общим для всех экземпляров классов, что создают окна с помощью GLFW
             Glfw.Terminate();
         }
+        public void Close()
+        {
+            Glfw.SetWindowShouldClose(window, true);
+        }
 
         public void Init()
         {
@@ -170,6 +174,7 @@ namespace SpaceVIL
 
             Glfw.MakeContextCurrent(window);
             Glfw.SetWindowSizeLimits(window, wnd_handler.GetMinWidth(), wnd_handler.GetMinHeight(), wnd_handler.GetMaxWidth(), wnd_handler.GetMaxHeight());
+            Glfw.FocusWindow(window);
         }
 
         private uint CreateShaderProgram(Stream vertex_shader, Stream fragment_shader, ref uint vertex, ref uint fragment)
@@ -294,6 +299,7 @@ namespace SpaceVIL
         {
             _tooltip.InitTimer(false);
             focused = value;
+           // Console.WriteLine(wnd_handler.GetWindowName() + " " + value);
         }
 
         internal void MoveWindowPos()
@@ -475,19 +481,21 @@ namespace SpaceVIL
         protected void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
             _tooltip.InitTimer(false);
+            if (!GetHoverVisualItem(ptrRelease.X, ptrRelease.Y))
+            {
+                return;
+            }
             switch (state)
             {
                 case InputState.Release:
                     if (HoveredItem != null)
                     {
-                        //Console.WriteLine(HoveredItem.GetItemName());
                         if (HoveredItem is IWindow)
                         {
                             (HoveredItem as WContainer)._sides = 0;
                             (HoveredItem as WContainer)._resizing = false;
                         }
                         HoveredItem.EventMouseClick.Invoke(HoveredItem);
-                        //HoveredItem.InvokePoolEvents();
 
                         //Focus get
                         if (FocusedItem != null)
@@ -537,7 +545,6 @@ namespace SpaceVIL
             while (!Glfw.WindowShouldClose(window))
             {
                 Glfw.WaitEvents();
-                //Glfw.PollEvents();
                 if (focused)
                     Render();
             }

@@ -6,18 +6,8 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class UserItem : VisualItem, IUserItem
+    abstract class UserItem : VisualItem, IUserItem
     {
-        public static int count = 0;
-        public UserItem()
-        {
-            SetItemName("UserItem_" + count);
-            count++;
-        }
-
-        public virtual void Init()
-        {
-
-        }
+        abstract public void Init();
     }
 }

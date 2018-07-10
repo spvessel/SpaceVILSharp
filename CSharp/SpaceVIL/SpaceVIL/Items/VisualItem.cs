@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 
 namespace SpaceVIL
 {
@@ -124,6 +125,11 @@ namespace SpaceVIL
             try
             {
                 ItemsLayoutBox.RemoveItem(GetHandler(), item);
+
+                Type myType = Type.GetType(item.ToString());
+                var field = myType.GetField("count", BindingFlags.NonPublic | BindingFlags.Static);
+                if (field != null)
+                    field.SetValue(item, (int)field.GetValue(null) - 1);
             }
             catch (Exception ex)
             {
@@ -274,7 +280,7 @@ namespace SpaceVIL
 
         //common properties
         private bool _disabled;
-        public bool Disabled
+        public bool IsDisabled
         {
             get { return _disabled; }
             set { _disabled = value; }

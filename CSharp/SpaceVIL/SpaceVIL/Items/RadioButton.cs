@@ -57,13 +57,9 @@ namespace SpaceVIL
             _text.Border.Radius = _indicator.Border.Radius;
 
             //connect events
-            _indicator.GetIndicatorMarker().EventToggle = (sender) => _indicator.GetIndicatorMarker().IsToggled = true;
+            _indicator.GetIndicatorMarker().EventToggle = EventMouseClick.Invoke;
             _indicator.GetIndicatorMarker().EventToggle += UncheckOthers;
-            EventMouseClick += _indicator.GetIndicatorMarker().EventToggle.Invoke;
-
-            EventMouseClick += _indicator.GetIndicatorMarker().EventToggle;//???? узнать почему работает и не плохо ли это
             _text.EventMouseClick += EventMouseClick.Invoke;
-
         }
 
         private void UncheckOthers(object sender)

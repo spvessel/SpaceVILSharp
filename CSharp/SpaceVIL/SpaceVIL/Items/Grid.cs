@@ -144,6 +144,10 @@ namespace SpaceVIL
             Int32[] columns_width = GetColumnsWidth();
             //3, 4
             Int32[] rows_height = GetRowsHeight();
+            /*foreach (var item in rows_height)
+            {
+                Console.WriteLine(item + " ");
+            }*/
             //5
             int x_offset = 0;
             int y_offset = 0;
@@ -197,9 +201,13 @@ namespace SpaceVIL
                 for (int c = 0; c < _column_count; c++)
                 {
                     BaseItem item = _cells[r + c * _row_count].GetItem();
-                    if (item == null)
+                    if (item == null || !item.IsVisible)
                     {
-                        list_height.Add(new int[2] { r, 0 });
+                        list_height.Add(new int[2] { r, -1 });
+                        count--;
+                        if (count == 0)
+                            count++;
+                        prefer_height = (free_space - GetSpacing().Vertical * count) / count;
                         continue;
                     }
 
@@ -217,7 +225,7 @@ namespace SpaceVIL
             List<int[]> m_height = new List<int[]>();
             for (int r = 0; r < _row_count; r++)
             {
-                int max = -1;
+                int max = -10;
                 for (int c = 0; c < _column_count; c++)
                 {
                     if (list_height[c + r * _column_count][1] > max)
@@ -228,8 +236,12 @@ namespace SpaceVIL
             m_height.Sort((x, y) => y[1].CompareTo(x[1]));
             foreach (var pair in m_height)
             {
-                if (pair[1] <= 0)
+                if (pair[1] == 0)
                     pair[1] = prefer_height;
+                else if (pair[1] < 0)
+                {
+                    pair[1] = 0;
+                }
                 else
                 {
                     free_space -= pair[1];
@@ -263,11 +275,16 @@ namespace SpaceVIL
                 for (int r = 0; r < _row_count; r++)
                 {
                     BaseItem item = _cells[r + c * _row_count].GetItem();
-                    if (item == null)
+                    if (item == null || !item.IsVisible)
                     {
-                        list_width.Add(new int[2] { c, 0 });
+                        list_width.Add(new int[2] { c, -1 });
+                        count--;
+                        if (count == 0)
+                            count++;
+                        prefer_width = (free_space - GetSpacing().Horizontal * count) / count;
                         continue;
                     }
+
                     if (item.GetWidthPolicy() == SizePolicy.Fixed)
                     {
                         list_width.Add(new int[2] { c, item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right });
@@ -295,6 +312,10 @@ namespace SpaceVIL
             {
                 if (pair[1] == 0)
                     pair[1] = prefer_width;
+                else if (pair[1] < 0)
+                {
+                    pair[1] = 0;
+                }
                 else
                 {
                     free_space -= pair[1];
