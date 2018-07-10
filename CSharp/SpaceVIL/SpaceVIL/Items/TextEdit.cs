@@ -28,8 +28,11 @@ namespace SpaceVIL
         private const int ACode = 30;
         private const int LeftCtrlCode = 29;
         private const int RightCtrlCode = 285;
+        private const int EscCode = 1;
+        private const int CapsCode = 58;
 
         private List<int> ShiftValCodes;
+        //private List<int> CtrlValCodes;
 
         public TextEdit()
         {
@@ -50,7 +53,8 @@ namespace SpaceVIL
             EventTextInput += OnTextInput;
 
             ShiftValCodes = new List<int>() {LeftArrowCode, RightArrowCode, EndCode,
-                HomeCode, LeftShiftCode, RightShiftCode };//, LeftCtrlCode, RightCtrlCode};
+                HomeCode};//, LeftShiftCode, RightShiftCode , LeftCtrlCode, RightCtrlCode};
+            //CtrlValCodes = new List<int>() {LeftCtrlCode, RightCtrlCode, ACode};
         }
 
         protected virtual void OnKeyRelease(object sender, int scancode, KeyMods mods)
@@ -59,51 +63,57 @@ namespace SpaceVIL
         protected virtual void OnKeyPress(object sender, int scancode, KeyMods mods)
         {
             //Console.WriteLine(scancode);
-            if (mods == KeyMods.Shift && ShiftValCodes.Contains(scancode))
+            if (mods != 0)
             {
-                if (!_isSelect)
+                //Выделение не сбрасывается, проверяются сочетания
+                switch (mods)
                 {
-                    _isSelect = true;
-                    _selectFrom = _cursor_position;// UpdateCursorCoord();
-                }
-            }
-            else if (mods == KeyMods.Control)
-            {
+                    case KeyMods.Shift:
+                        if (ShiftValCodes.Contains(scancode)) {
+                            if (!_isSelect)
+                            {
+                                _isSelect = true;
+                                _selectFrom = _cursor_position;
+                            }
+                        }
+                        
+                        break;
 
+                    case KeyMods.Control:
+                        if (scancode == ACode) {
+                            _selectFrom = 0;
+                            _cursor_position = GetText().Length;
+                            ReplaceCursor();
+
+                            _isSelect = true;
+                        }
+                        break;
+
+                        //alt, super ?
+                }
             }
             else
             {
-                if (_isSelect)
-                {
-                    if (!ShiftValCodes.Contains(scancode) && (_selectFrom != _selectTo))
+                if (scancode == BackspaceCode || scancode == DeleteCode) {
+                    if (_isSelect)
+                        CutText();
+                    else
                     {
-                        //Console.WriteLine(_selectFrom + " " + _selectTo);
-                        int minPos = Math.Min(_selectFrom, _selectTo);
-                        int maxPos = Math.Max(_selectFrom, _selectTo);
-                        SetText(GetText().Remove(minPos, (maxPos - minPos)));
-                        _cursor_position = minPos;
-                        ReplaceCursor();
-                    }
-                    _isSelect = false;
-                    MakeSelectedArea(0, 0);
-                     _selectFrom = 0;
-                    _selectTo = 0;
-                }
-                else {
-                    if (scancode == BackspaceCode && _cursor_position > 0)//backspace
-                    {
-                        SetText(GetText().Remove(_cursor_position - 1, 1));
-                        _cursor_position--;
-                        ReplaceCursor();
-                    }
-                    if (scancode == DeleteCode && _cursor_position < GetText().Length)//delete
-                    {
-                        SetText(GetText().Remove(_cursor_position, 1));
+                        if (scancode == BackspaceCode && _cursor_position > 0)//backspace
+                        {
+                            SetText(GetText().Remove(_cursor_position - 1, 1));
+                            _cursor_position--;
+                            ReplaceCursor();
+                        }
+                        if (scancode == DeleteCode && _cursor_position < GetText().Length)//delete
+                        {
+                            SetText(GetText().Remove(_cursor_position, 1));
+                        }
                     }
                 }
-
+                else
+                    UnselectText();
             }
-
 
             if (scancode == LeftArrowCode && _cursor_position > 0)//arrow left
             {
@@ -126,17 +136,8 @@ namespace SpaceVIL
                 ReplaceCursor();
             }
             
-            if (mods == KeyMods.Control && scancode == ACode)
-            { //����� ��������� ���������
-                _selectFrom = 0;
-                _cursor_position = GetText().Length;
-                ReplaceCursor();
-                
-                _isSelect = true;
-            }
-            
             if (_isSelect) {
-                _selectTo = _cursor_position;// UpdateCursorCoord();
+                _selectTo = _cursor_position;
                 MakeSelectedArea(CursorPosToCoord(_selectFrom), CursorPosToCoord(_selectTo));
             }
         }
@@ -146,6 +147,7 @@ namespace SpaceVIL
             int letCount = _text_object.GetLetPosArray().Count;
             //_cursor_position = (_cursor_position < 0) ? 0 : _cursor_position;
             //_cursor_position = (_cursor_position > letCount) ? letCount : _cursor_position;
+            //Console.WriteLine(cPos + " " + letCount);
             if (cPos > 0)
                 coord = _text_object.GetLetPosArray()[cPos - 1];
             return coord;
@@ -160,9 +162,9 @@ namespace SpaceVIL
         {
             byte[] input = BitConverter.GetBytes(codepoint);
             string str = Encoding.UTF32.GetString(input);
+            if (_isSelect) CutText();
             SetText(GetText().Insert(_cursor_position, str));
             _cursor_position++;
-            _text_object.UpdateData(UpdateType.Critical); //Console.WriteLine(_cursor_position + " " + _text_object.GetLetPosArray().Count);
             ReplaceCursor();
         }
 
@@ -197,6 +199,7 @@ namespace SpaceVIL
         public void SetText(String text)
         {
             _text_object.SetItemText(text);
+            _text_object.UpdateData(UpdateType.Critical);
         }
         public String GetText()
         {
@@ -268,20 +271,40 @@ namespace SpaceVIL
         }
 
         public string GetSelectedText() {
-            string text = GetText();
             if (_selectFrom == _selectTo) return "";
+            string text = GetText();
             int fromReal = Math.Min(_selectFrom, _selectTo);
             int toReal = Math.Max(_selectFrom, _selectTo);
-            string selectedText = text.Substring(fromReal, toReal - fromReal);            
+            string selectedText = text.Substring(fromReal, toReal - fromReal);
             return selectedText;
         }
 
         public void PasteText(string pasteStr) {
+            if (_isSelect) CutText();
             string text = GetText();
             string newText = text.Substring(0, _cursor_position) + pasteStr + text.Substring(_cursor_position);
             SetText(newText);
             _cursor_position += pasteStr.Length;
             ReplaceCursor();
+        }
+
+        public string CutText() {
+            string str = GetSelectedText();
+            if (_selectFrom == _selectTo) return str;
+            int fromReal = Math.Min(_selectFrom, _selectTo);
+            int toReal = Math.Max(_selectFrom, _selectTo);
+            SetText(GetText().Remove(fromReal, toReal - fromReal));
+            _cursor_position = fromReal;
+            ReplaceCursor();
+            UnselectText();
+            return str;
+        }
+
+        private void UnselectText() {
+            _isSelect = false;
+            MakeSelectedArea(0, 0);
+            _selectFrom = 0;
+            _selectTo = 0;
         }
     }
 }
