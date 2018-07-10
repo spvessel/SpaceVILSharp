@@ -18,4 +18,8 @@ namespace SpaceVIL
     {
         void UpdateLayout();
     }
+    interface IFlow
+    {
+        void UpdateLayout();
+    }
 }
