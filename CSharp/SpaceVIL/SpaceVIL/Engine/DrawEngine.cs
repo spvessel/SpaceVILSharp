@@ -40,6 +40,7 @@ namespace SpaceVIL
         Glfw.WindowFocusFunc windowFocusCallback;
         ///////////////////////////////////////////////
 
+        private float _opacity_anim = 0.0f;
         public bool borderHidden;
         public bool appearInCenter;
         public bool focusable;
@@ -169,7 +170,6 @@ namespace SpaceVIL
 
             Glfw.MakeContextCurrent(window);
             Glfw.SetWindowSizeLimits(window, wnd_handler.GetMinWidth(), wnd_handler.GetMinHeight(), wnd_handler.GetMaxWidth(), wnd_handler.GetMaxHeight());
-            //Glfw.SetWindowOpacity(window, 0.8f);
         }
 
         private uint CreateShaderProgram(Stream vertex_shader, Stream fragment_shader, ref uint vertex, ref uint fragment)
@@ -522,6 +522,18 @@ namespace SpaceVIL
             glBindVertexArray(gVAO[0]);
             glUseProgram(ProgramPrimitives);
 
+            //starting animation
+            while (_opacity_anim < 1.0f)
+            {
+                _opacity_anim += 0.1f;
+                Glfw.SetWindowOpacity(window, _opacity_anim);
+                Render();
+                Thread.Sleep(1000 / 90);
+                Glfw.PollEvents();
+            }
+
+            //core rendering
+            Glfw.SetWindowOpacity(window, 1.0f);
             while (!Glfw.WindowShouldClose(window))
             {
                 Glfw.WaitEvents();

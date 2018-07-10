@@ -58,6 +58,11 @@ namespace SpaceVIL
             {
                 return;
             }
+            var flow_stack = item.GetParent() as IFlow;
+            if (flow_stack != null)
+            {
+                return;
+            }
             
             AddEventListener(GeometryEventType.ResizeWidth, item);
             AddEventListener(GeometryEventType.ResizeHeight, item);
@@ -372,7 +377,7 @@ namespace SpaceVIL
                             }
                             if (GetAlignment().HasFlag(ItemAlignment.HCenter))
                             {
-                                SetX(GetParent().GetX() + (GetParent().GetWidth() - GetWidth()) / 2);
+                                SetX(GetParent().GetX() + (GetParent().GetWidth() - GetWidth()) / 2 + GetMargin().Left - GetMargin().Right);
                             }
                         }
                         else if (GetWidthPolicy() == SizePolicy.Expand)
@@ -416,7 +421,7 @@ namespace SpaceVIL
                             }
                             if (GetAlignment().HasFlag(ItemAlignment.VCenter))
                             {
-                                SetY(GetParent().GetY() + (GetParent().GetHeight() - GetHeight()) / 2);
+                                SetY(GetParent().GetY() + (GetParent().GetHeight() - GetHeight()) / 2 + GetMargin().Top - GetMargin().Bottom);
                             }
                         }
                         else if (GetHeightPolicy() == SizePolicy.Expand)
