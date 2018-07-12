@@ -333,9 +333,9 @@ namespace SpaceVIL
         public void SetWindowSize()
         {
             EngineEvent.SetEvent(InputEventType.WindowResize);
+            Glfw.SetWindowSize(window, wnd_handler.GetWidth(), wnd_handler.GetHeight());
             if (wnd_handler.IsBorderHidden)
             {
-                Glfw.SetWindowSize(window, wnd_handler.GetWidth(), wnd_handler.GetHeight());
                 glViewport(0, 0, wnd_handler.GetWidth(), wnd_handler.GetHeight());
                 Render();
             }
@@ -408,7 +408,6 @@ namespace SpaceVIL
                         {
                             window_position.X += (ptrRelease.X - ptrPress.X);
                             w -= (ptrRelease.X - ptrPress.X);
-                            SetWindowPos();
                         }
                     }
                     if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Right))
@@ -425,7 +424,6 @@ namespace SpaceVIL
                         {
                             window_position.Y += (ptrRelease.Y - ptrPress.Y);
                             h -= (ptrRelease.Y - ptrPress.Y);
-                            SetWindowPos();
                         }
                     }
                     if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Bottom))
@@ -439,7 +437,10 @@ namespace SpaceVIL
 
                     if (wnd_handler.GetWindow()._sides != 0)
                     {
-                        Resize(window, w, h);
+                        wnd_handler.SetWidth(w);
+                        wnd_handler.SetHeight(h);
+                        if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Left) || wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Top))
+                            SetWindowPos();
                         SetWindowSize();
                     }
                 }
@@ -498,11 +499,11 @@ namespace SpaceVIL
                         }
                         else //refactor!!
                         {
-                            if ((xpos >= wnd_handler.GetWindow().GetWidth() - 5 && ypos <= 5)
-                             || (xpos >= wnd_handler.GetWindow().GetWidth() - 5 && ypos >= wnd_handler.GetWindow().GetHeight() - 5)
-                             || (ypos >= wnd_handler.GetWindow().GetHeight() - 5 && xpos <= 5)
-                             || (ypos >= wnd_handler.GetWindow().GetHeight() - 5 && xpos >= wnd_handler.GetWindow().GetWidth() - 5)
-                             || (xpos <= 5 && ypos <= 5))
+                            if ((xpos > wnd_handler.GetWindow().GetWidth() - 5 && ypos < 5)
+                             || (xpos > wnd_handler.GetWindow().GetWidth() - 5 && ypos > wnd_handler.GetWindow().GetHeight() - 5)
+                             || (ypos > wnd_handler.GetWindow().GetHeight() - 5 && xpos < 5)
+                             || (ypos > wnd_handler.GetWindow().GetHeight() - 5 && xpos > wnd_handler.GetWindow().GetWidth() - 5)
+                             || (xpos < 5 && ypos < 5))
                             {
                                 Glfw.SetCursor(window, _resize_all);
                             }
@@ -606,7 +607,11 @@ namespace SpaceVIL
             Glfw.SetWindowOpacity(window, 1.0f);
             while (!Glfw.WindowShouldClose(window))
             {
-                Glfw.WaitEvents();
+                if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize))
+                    Glfw.PollEvents();
+                else
+                    Glfw.WaitEvents();
+
                 if (focused)
                     Render();
             }
