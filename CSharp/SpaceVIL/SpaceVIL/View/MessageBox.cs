@@ -15,9 +15,9 @@ namespace SpaceVIL
 
         override internal void InitWindow()
         {
-           Handler = new WindowLayout();
+           Handler = new WindowLayout("MessageBox_" + GetCount());
             //window's attr
-           Handler.SetWindowName("MessageBox_" + GetCount());
+           //Handler.SetWindowName("MessageBox_" + GetCount());
            Handler.SetWindowTitle(DialogTitle);
            Handler.SetWidth(400);
            Handler.SetMinWidth(400);
