@@ -7,6 +7,27 @@ namespace SpaceVIL
     class ListBox : VisualItem, IScrollable
     {
         static int count = 0;
+        
+        public int GetSelection()
+        {
+            return _area.GetSelection();
+        }
+        public void SetSelection(int index)
+        {
+            _area.SetSelection(index);
+        }
+        public void Unselect()
+        {
+            _area.Unselect();
+        }
+        public void SetSelectionVisibility(bool visibility)
+        {
+            _area.SetSelectionVisibility(visibility);
+        }
+        public bool GetSelectionVisibility()
+        {
+            return _area.GetSelectionVisibility();
+        }
 
         private Grid _grid = new Grid(2, 2);
         private ListArea _area = new ListArea();
@@ -65,20 +86,17 @@ namespace SpaceVIL
             VScrollBar.SetAlignment(ItemAlignment.Right | ItemAlignment.Top);
             VScrollBar.IsVisible = true;
             VScrollBar.SetItemName(GetItemName() + "_" + VScrollBar.GetItemName());
-            //VScrollBar.SetMargin(0, 0, 0, 15);
 
             //HBar
             HScrollBar.SetAlignment(ItemAlignment.Bottom | ItemAlignment.Left);
             HScrollBar.IsVisible = true;
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
-            //HScrollBar.SetMargin(0, 0, 15, 0);
 
             //Area
             _area.SetItemName(GetItemName() + "_" + _area.GetItemName());
             _area.SetBackground(Color.Transparent);
             _area.SetAlignment(ItemAlignment.Bottom);
             _area.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            //_area.SetMargin(0, 0, 15, 15);//упростить доступ к элементам области
             _area.SetPadding(5, 5, 5, 5);
             _area.SetSpacing(0, 5);
         }

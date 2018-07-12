@@ -9,14 +9,24 @@ namespace SpaceVIL
 {
     class MessageBox : DialogWindow
     {
+<<<<<<< HEAD
         public MessageBox(String m, String t) : base(m, t) {
 
+=======
+        private static int count = 0;
+        WindowLayout wnd_handler;
+        bool _result = false;
+        public MessageBox(String message, String title)
+        {
+            InitWindow(message, title);
+>>>>>>> 4361347998b9a2e2441593dbbfa22c805c2fc637
         }
 
         override internal void InitWindow()
         {
            Handler = new WindowLayout();
             //window's attr
+<<<<<<< HEAD
            Handler.SetWindowName("MessageBox_" + GetCount());
            Handler.SetWindowTitle(DialogTitle);
            Handler.SetWidth(400);
@@ -27,6 +37,19 @@ namespace SpaceVIL
            Handler.SetBackground(Color.FromArgb(255, 45, 45, 45));
            Handler.IsBorderHidden = true;
            Handler.IsAlwaysOnTop = true;
+=======
+            wnd_handler.SetWindowName("MessageBox_" + count);
+            count++;
+            wnd_handler.SetWindowTitle(title);
+            wnd_handler.SetWidth(400);
+            wnd_handler.SetMinWidth(400);
+            wnd_handler.SetHeight(250);
+            wnd_handler.SetMinHeight(250);
+            wnd_handler.SetPadding(2, 2, 2, 2);
+            wnd_handler.SetBackground(Color.FromArgb(255, 45, 45, 45));
+            wnd_handler.IsBorderHidden = true;
+            wnd_handler.IsAlwaysOnTop = true;
+>>>>>>> 4361347998b9a2e2441593dbbfa22c805c2fc637
 
             //DragAnchor
             TitleBar titleBar = new TitleBar(DialogTitle);

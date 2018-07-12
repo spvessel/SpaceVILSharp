@@ -5,7 +5,6 @@ namespace SpaceVIL
     internal class WContainer : VisualItem, IWindow
     {
         static int count = 0;
-        internal int _resizeBorderThickness = 10;
         internal ItemAlignment _sides = 0;
         internal bool _is_fixed = false;
         internal bool _resizing = false;
@@ -40,21 +39,26 @@ namespace SpaceVIL
             return IsMouseHover;
         }
 
-        public ItemAlignment GetSides(float xpos, float ypos)
+        public ItemAlignment GetSides(float xpos, float ypos) //проблемы с глобальным курсором
         {
-            if (xpos > GetWidth() - _resizeBorderThickness || _sides.HasFlag(ItemAlignment.Right))
+            if (xpos <= 5)
+            {
+                _sides |= ItemAlignment.Left;
+            }
+            if (xpos >= GetWidth() - 5)
             {
                 _sides |= ItemAlignment.Right;
-                if (xpos < GetMinWidth() && GetWidth() == GetMinWidth())
-                    _sides &= ~ItemAlignment.Right;
             }
 
-            if (ypos > GetHeight() - _resizeBorderThickness || _sides.HasFlag(ItemAlignment.Bottom))
+            if (ypos <= 5)
+            {
+                _sides |= ItemAlignment.Top;
+            }
+            if (ypos >= GetHeight() - 5)
             {
                 _sides |= ItemAlignment.Bottom;
-                if (ypos < GetMinHeight() && GetHeight() == GetMinHeight())
-                    _sides &= ~ItemAlignment.Bottom;
             }
+
             return _sides;
         }
     }

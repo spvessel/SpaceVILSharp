@@ -44,7 +44,7 @@ namespace SpaceVIL
         public void UpdatePosition()
         {
             if (engine != null)
-                engine.MoveWindowPos();
+                engine.SetWindowPos();
         }
         public void UpdateSize()
         {

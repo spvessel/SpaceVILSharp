@@ -165,11 +165,11 @@ namespace SpaceVIL
             {
                 window_position.X = (Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - w) / 2;
                 window_position.Y = (Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - h) / 2;
-                MoveWindowPos();
+                SetWindowPos();
             }
             else
             {
-                MoveWindowPos();
+                SetWindowPos();
             }
 
             Glfw.MakeContextCurrent(window);
@@ -271,7 +271,7 @@ namespace SpaceVIL
         private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
             _tooltip.InitTimer(false);
-            if (FocusedItem is TextEdit && ((mods == KeyMods.Control && key == KeyCode.V) || 
+            if (FocusedItem is TextEdit && ((mods == KeyMods.Control && key == KeyCode.V) ||
                 (mods == KeyMods.Shift && key == KeyCode.Insert)) && action == InputState.Press)
             {
                 string paste_str = Glfw.GetClipboardString(window);
@@ -297,13 +297,16 @@ namespace SpaceVIL
         }
         private void Focus(Glfw.Window glfwwnd, bool value)
         {
+            EngineEvent.ResetAllEvents();
             _tooltip.InitTimer(false);
             focused = value;
-           // Console.WriteLine(wnd_handler.GetWindowName() + " " + value);
         }
 
-        internal void MoveWindowPos()
+        internal void SetWindowPos()
         {
+            EngineEvent.SetEvent(InputEventType.WindowMove);
+            wnd_handler.SetX(window_position.X);
+            wnd_handler.SetY(window_position.Y);
             Glfw.SetWindowPos(window, window_position.X, window_position.Y);
         }
         private void Position(Glfw.Window glfwwnd, int xpos, int ypos)
@@ -329,6 +332,7 @@ namespace SpaceVIL
 
         public void SetWindowSize()
         {
+            EngineEvent.SetEvent(InputEventType.WindowResize);
             if (wnd_handler.IsBorderHidden)
             {
                 Glfw.SetWindowSize(window, wnd_handler.GetWidth(), wnd_handler.GetHeight());
@@ -339,6 +343,7 @@ namespace SpaceVIL
 
         public void MinimizeWindow()
         {
+            EngineEvent.SetEvent(InputEventType.WindowMinimize);
             Glfw.IconifyWindow(window);
         }
         //OpenGL input interaction function
@@ -382,54 +387,88 @@ namespace SpaceVIL
         }
         protected void MouseMove(Glfw.Window wnd, double xpos, double ypos)
         {
-            //Console.WriteLine(xpos);
+            //Console.WriteLine(EngineEvent.LastEvent());
+
             _tooltip.InitTimer(false);
+            EngineEvent.SetEvent(InputEventType.MouseMove);
             //logic of hovers
             ptrRelease.X = (int)xpos;
             ptrRelease.Y = (int)ypos;
 
-            if (EngineEvent.LastEvent() == InputEventType.MousePressed && HoveredItem is IDraggable)
-            {
-                HoveredItem._mouse_ptr.SetPosition((float)xpos, (float)ypos);
-                HoveredItem.InvokePoolEvents();
-                //(HoveredItem as ScrollHandler).EventMouseDrag.Invoke(HoveredItem);
-
-                //Focus get
-                if (FocusedItem != null)
-                    FocusedItem.IsFocused = false;
-
-                FocusedItem = HoveredItem;
-                FocusedItem.IsFocused = true;
-            }
-            else if (EngineEvent.LastEvent() == InputEventType.MousePressed && HoveredItem is IWindowAnchor)
-            {
-                window_position.X += (ptrRelease.X - ptrPress.X);
-                window_position.Y += (ptrRelease.Y - ptrPress.Y);
-                MoveWindowPos();
-            }
-            else if (EngineEvent.LastEvent() == InputEventType.MousePressed && HoveredItem is IWindow)//for refactor
+            if (EngineEvent.LastEvent().HasFlag(InputEventType.MousePressed)) // жость какая-то ХЕРОТАААА!!!
             {
                 if (wnd_handler.IsBorderHidden)
                 {
                     int w = wnd_handler.GetWidth();
                     int h = wnd_handler.GetHeight();
 
-                    ItemAlignment sides = (HoveredItem as IWindow).GetSides((float)xpos, (float)ypos);
-
-                    if (sides.HasFlag(ItemAlignment.Right))
+                    if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Left))
                     {
-                        w += (ptrRelease.X - ptrPress.X);
+                        if (!(wnd_handler.GetMinWidth() == wnd_handler.GetWidth() && (ptrRelease.X - ptrPress.X) >= 0))
+                        {
+                            window_position.X += (ptrRelease.X - ptrPress.X);
+                            w -= (ptrRelease.X - ptrPress.X);
+                            SetWindowPos();
+                        }
                     }
-                    if (sides.HasFlag(ItemAlignment.Bottom))
+                    if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Right))
                     {
-                        h += (ptrRelease.Y - ptrPress.Y);
+                        if (!(ptrRelease.X < wnd_handler.GetMinWidth() && wnd_handler.GetWidth() == wnd_handler.GetMinWidth()))
+                        {
+                            w += (ptrRelease.X - ptrPress.X);
+                        }
+                        ptrPress.X = ptrRelease.X;
+                    }
+                    if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Top))
+                    {
+                        if (!(wnd_handler.GetMinHeight() == wnd_handler.GetHeight() && (ptrRelease.Y - ptrPress.Y) >= 0))
+                        {
+                            window_position.Y += (ptrRelease.Y - ptrPress.Y);
+                            h -= (ptrRelease.Y - ptrPress.Y);
+                            SetWindowPos();
+                        }
+                    }
+                    if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Bottom))
+                    {
+                        if (!(ptrRelease.Y < wnd_handler.GetMinHeight() && wnd_handler.GetHeight() == wnd_handler.GetMinHeight()))
+                        {
+                            h += (ptrRelease.Y - ptrPress.Y);
+                        }
+                        ptrPress.Y = ptrRelease.Y;
                     }
 
-                    Resize(window, w, h);
-                    SetWindowSize();
+                    if (wnd_handler.GetWindow()._sides != 0)
+                    {
+                        Resize(window, w, h);
+                        SetWindowSize();
+                    }
+                }
+                if (wnd_handler.GetWindow()._sides == 0)
+                {
+                    VisualItem draggable = IsInListHoveredItems<IDraggable>();
+                    VisualItem anchor = IsInListHoveredItems<IWindowAnchor>();
+                    if (draggable != null)
+                    {
+                        draggable._mouse_ptr.SetPosition((float)xpos, (float)ypos);
+                        draggable.InvokePoolEvents();
+                        //(HoveredItem as ScrollHandler).EventMouseDrag.Invoke(HoveredItem);
 
-                    ptrPress.X = ptrRelease.X;
-                    ptrPress.Y = ptrRelease.Y;
+                        //Focus get
+                        if (FocusedItem != null)
+                            FocusedItem.IsFocused = false;
+
+                        FocusedItem = HoveredItem;
+                        FocusedItem.IsFocused = true;
+                    }
+                    else if (anchor != null)
+                    {
+                        if ((ptrRelease.X - ptrPress.X) != 0 || (ptrRelease.Y - ptrPress.Y) != 0)
+                        {
+                            window_position.X += (ptrRelease.X - ptrPress.X);
+                            window_position.Y += (ptrRelease.Y - ptrPress.Y);
+                            SetWindowPos();
+                        }
+                    }
                 }
             }
             else
@@ -445,36 +484,46 @@ namespace SpaceVIL
                         _tooltip.InitTimer(true);
                         _tooltip.SetText(HoveredItem.GetToolTip());
                     }
-
-                    if (HoveredItem is ITextEditable)
+                    Glfw.SetCursor(window, _arrow);
+                    if (wnd_handler.IsBorderHidden)
                     {
-                        Glfw.SetCursor(window, _input);
-                    }
-                    else if (HoveredItem is IWindow)
-                    {
-                        if (!wnd_handler.IsBorderHidden)
-                            return;
-                        if (xpos > HoveredItem.GetWidth() - 5 && ypos > HoveredItem.GetHeight() - 5)
-                            Glfw.SetCursor(window, _resize_all);
-                        else
+                        //resize
+                        if ((xpos < wnd_handler.GetWindow().GetWidth() - 5)
+                            && (xpos > 5)
+                            && (ypos < wnd_handler.GetWindow().GetHeight() - 5)
+                            && ypos > 5)
                         {
-                            if (xpos > HoveredItem.GetWidth() - 5)
-                                Glfw.SetCursor(window, _resize_h);
+                            if (HoveredItem is ITextEditable)
+                                Glfw.SetCursor(window, _input);
+                        }
+                        else //refactor!!
+                        {
+                            if ((xpos >= wnd_handler.GetWindow().GetWidth() - 5 && ypos <= 5)
+                             || (xpos >= wnd_handler.GetWindow().GetWidth() - 5 && ypos >= wnd_handler.GetWindow().GetHeight() - 5)
+                             || (ypos >= wnd_handler.GetWindow().GetHeight() - 5 && xpos <= 5)
+                             || (ypos >= wnd_handler.GetWindow().GetHeight() - 5 && xpos >= wnd_handler.GetWindow().GetWidth() - 5)
+                             || (xpos <= 5 && ypos <= 5))
+                            {
+                                Glfw.SetCursor(window, _resize_all);
+                            }
+                            else
+                            {
+                                if (xpos > wnd_handler.GetWindow().GetWidth() - 5 || xpos < 5)
+                                    Glfw.SetCursor(window, _resize_h);
 
-                            if (ypos > HoveredItem.GetHeight() - 5)
-                                Glfw.SetCursor(window, _resize_v);
-
-                            if ((xpos < HoveredItem.GetWidth() - 5) && (ypos < HoveredItem.GetHeight() - 5))
-                                Glfw.SetCursor(window, _arrow);
+                                if (ypos > wnd_handler.GetWindow().GetHeight() - 5 || ypos < 5)
+                                    Glfw.SetCursor(window, _resize_v);
+                            }
                         }
                     }
                     else
                     {
-                        Glfw.SetCursor(window, _arrow);
+                        if (HoveredItem is ITextEditable)
+                        {
+                            Glfw.SetCursor(window, _input);
+                        }
                     }
                 }
-
-                EngineEvent.SetEvent(InputEventType.MouseMove);
             }
         }
 
@@ -483,19 +532,30 @@ namespace SpaceVIL
             _tooltip.InitTimer(false);
             if (!GetHoverVisualItem(ptrRelease.X, ptrRelease.Y))
             {
+                EngineEvent.ResetAllEvents();
+                EngineEvent.SetEvent(InputEventType.MouseRelease);
                 return;
             }
+            wnd_handler.GetWindow().GetSides(ptrRelease.X, ptrRelease.Y);
             switch (state)
             {
                 case InputState.Release:
+                    wnd_handler.GetWindow()._sides = 0;
+                    if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize) || EngineEvent.LastEvent().HasFlag(InputEventType.WindowMove))
+                    {
+                        EngineEvent.ResetAllEvents();
+                        EngineEvent.SetEvent(InputEventType.MouseRelease);
+                        return;
+                    }
+
                     if (HoveredItem != null)
                     {
-                        if (HoveredItem is IWindow)
+                        foreach (var item in HoveredItems)
                         {
-                            (HoveredItem as WContainer)._sides = 0;
-                            (HoveredItem as WContainer)._resizing = false;
+                            item._mouse_ptr.X = ptrRelease.X;
+                            item._mouse_ptr.Y = ptrRelease.Y;
+                            item.EventMouseClick?.Invoke(HoveredItem);
                         }
-                        HoveredItem.EventMouseClick.Invoke(HoveredItem);
 
                         //Focus get
                         if (FocusedItem != null)
@@ -504,6 +564,7 @@ namespace SpaceVIL
                         FocusedItem = HoveredItem;
                         FocusedItem.IsFocused = true;
                     }
+                    EngineEvent.ResetAllEvents();
                     EngineEvent.SetEvent(InputEventType.MouseRelease);
                     break;
                 case InputState.Press:
@@ -511,6 +572,7 @@ namespace SpaceVIL
                     {
                         (HoveredItem as WContainer)._resizing = true;
                     }
+                    EngineEvent.ResetAllEvents();
                     EngineEvent.SetEvent(InputEventType.MousePressed);
                     break;
                 case InputState.Repeat:
@@ -581,13 +643,30 @@ namespace SpaceVIL
                 return;
 
             _tooltip.GetTextLine().UpdateData(UpdateType.Critical);
-            _tooltip.SetX(ptrRelease.X - 10);
-            _tooltip.SetY(ptrRelease.Y - _tooltip.GetHeight() - 2);
             _tooltip.SetWidth(
                 _tooltip.GetPadding().Left +
                 _tooltip.GetPadding().Right +
                 _tooltip.GetTextWidth()
                 );
+
+            //проверка сверху
+            if (ptrRelease.Y > _tooltip.GetHeight())
+            {
+                _tooltip.SetY(ptrRelease.Y - _tooltip.GetHeight() - 2);
+            }
+            else
+            {
+                _tooltip.SetY(ptrRelease.Y + _tooltip.GetHeight() + 2);
+            }
+            //проверка справа
+            if (ptrRelease.X - 10 + _tooltip.GetWidth() > wnd_handler.GetWidth())
+            {
+                _tooltip.SetX(wnd_handler.GetWidth() - _tooltip.GetWidth() - 10);
+            }
+            else
+            {
+                _tooltip.SetX(ptrRelease.X - 10);
+            }
             DrawShell(_tooltip);
             glDisable(GL_MULTISAMPLE);
             _tooltip.GetTextLine().UpdateGeometry();
@@ -779,6 +858,9 @@ namespace SpaceVIL
         }
         private void DrawShell(BaseItem shell)
         {
+            if (shell.GetBackground().A == 0)
+                return;
+
             //проверка: полностью ли влезает объект в свой контейнер
             CheckOutsideBorders(shell);
 
