@@ -9,6 +9,7 @@ namespace SpaceVIL
 {
     class MessageBox
     {
+        private static int count = 0;
         WindowLayout wnd_handler;
         bool _result = false;
         public MessageBox(String message, String title)
@@ -19,6 +20,8 @@ namespace SpaceVIL
         {
             wnd_handler = new WindowLayout(title);
             //window's attr
+            wnd_handler.SetWindowName("MessageBox_" + count);
+            count++;
             wnd_handler.SetWindowTitle(title);
             wnd_handler.SetWidth(400);
             wnd_handler.SetMinWidth(400);
