@@ -44,6 +44,32 @@ namespace SpaceVIL
             return MakeCrossArray(contoursList);
         }
 
+        internal static double[,] CrossContoursAntiAl(GraphicsPath shape)
+        {
+            List<Contour> contoursList = new List<Contour>();
+
+            GraphicsPathIterator myPathIterator = new GraphicsPathIterator(shape);
+            // Rewind the iterator.
+            myPathIterator.Rewind();
+            // Create the GraphicsPath section.
+            GraphicsPath myPathSection = new GraphicsPath();
+            int subpathPoints;
+            bool IsClosed2;
+
+            for (int i = 0; i < myPathIterator.SubpathCount; i++)
+            {
+                subpathPoints = myPathIterator.NextSubpath(myPathSection, out IsClosed2);
+                List<PointF> pathSection = new List<PointF>();
+                for (int j = 0; j < myPathSection.PathPoints.Length; j++)
+                {
+                    pathSection.Add(new PointF(myPathSection.PathPoints[j].X, myPathSection.PathPoints[j].Y));
+                }
+                contoursList.Add(AnalizeCotour(pathSection));
+            }
+
+            return MakeCrossArrayAntiAl(contoursList);
+        }
+
         private static Contour AnalizeCotour(List<PointF> pathSection) {
             List<PointF> contour = new List<PointF>();
             double xx1, xx2, yy1, yy2;
@@ -313,6 +339,122 @@ namespace SpaceVIL
 
             return alph;
         }
+
+
+        private static double[,] MakeCrossArrayAntiAl(List<Contour> contours)
+        {
+            Dictionary<int, List<InOutCoord>> _globalCrossX = new Dictionary<int, List<InOutCoord>>();
+            Dictionary<int, List<InOutCoord>> _globalCrossY = new Dictionary<int, List<InOutCoord>>();
+
+            int x0 = int.MaxValue;// = _globalCrossX.Keys.Min() - 1; //Это с запасом, но должно хватить
+            int y0 = int.MaxValue;// = _globalCrossY.Keys.Min() - 1;
+            int x1 = int.MinValue;// = _globalCrossX.Keys.Max() + 1;
+            int y1 = int.MinValue;// = _globalCrossY.Keys.Max() + 1;
+
+            for (int i = 0; i < contours.Count; i++)
+            {
+                foreach (int xkey in contours[i]._crossX.Keys)
+                {
+                    if (!_globalCrossX.ContainsKey(xkey)) _globalCrossX.Add(xkey, new List<InOutCoord>() { });
+                    _globalCrossX[xkey].AddRange(contours[i]._crossX[xkey]);
+                }
+
+                foreach (int ykey in contours[i]._crossY.Keys)
+                {
+                    if (!_globalCrossY.ContainsKey(ykey)) _globalCrossY.Add(ykey, new List<InOutCoord>() { });
+                    _globalCrossY[ykey].AddRange(contours[i]._crossY[ykey]);
+                }
+
+                x0 = (x0 > contours[i].minX) ? contours[i].minX : x0;
+                x1 = (x1 < contours[i].maxX) ? contours[i].maxX : x1;
+                y0 = (y0 > contours[i].minY) ? contours[i].minY : y0;
+                y1 = (y1 < contours[i].maxY) ? contours[i].maxY : y1;
+            }
+
+            double[,] alph = new double[x1 - x0 + 1, y1 - y0 + 1];
+            int isInside;
+            int add;
+            int incCoord;
+            double diff;
+
+            foreach (int ykey in _globalCrossY.Keys)
+            {
+                _globalCrossY[ykey].Sort((x, y) => x._coord.CompareTo(y._coord));
+                isInside = 0;
+                incCoord = (int)Math.Truncate(_globalCrossY[ykey][0]._coord);
+                for (int i = 0; i < _globalCrossY[ykey].Count; i++)
+                {
+                    add = (_globalCrossY[ykey][i]._isIn == _globalCrossY[ykey][i]._clockwiae) ? 1 : -1;
+                    if (isInside != 0) //Был внутри
+                    {
+                        while (incCoord <= _globalCrossY[ykey][i]._coord)
+                        {
+                            alph[incCoord - x0, ykey - y0] = 1;
+                            incCoord++;
+                        }
+
+                        isInside += add;
+                        diff = incCoord - _globalCrossY[ykey][i]._coord;
+                        if (isInside == 0 && diff > 0 && diff < 1) //Стал снаружи, т.е. точка выхода
+                        {
+                            alph[incCoord - x0, ykey - y0] = 200 + Math.Round((1 - diff)*100);
+                            //if (diff < 0.5) alph[incCoord - x0, ykey - y0] = (alph[incCoord - x0, ykey - y0] + (0.5 - diff)); // /2.0
+                        }
+
+                    }
+                    else
+                    {
+
+                        while (incCoord < _globalCrossY[ykey][i]._coord)
+                        {
+                            incCoord++;
+                        }
+
+                        isInside += add;
+                        diff = incCoord - _globalCrossY[ykey][i]._coord;
+                        if (isInside != 0 && diff > 0 && diff < 1) //точка выхода
+                        {
+                            alph[incCoord - 1 - x0, ykey - y0] = 100 + Math.Round(diff * 100);
+                            //diff = 1 - diff;
+                            //if (diff < 0.5) alph[incCoord - 1 - x0, ykey - y0] = (alph[incCoord - 1 - x0, ykey - y0] + (0.5 - diff)); // /2.0
+                        }
+                    }
+                }
+            }
+
+            foreach (int xkey in _globalCrossX.Keys)
+            {
+                _globalCrossX[xkey].Sort((x, y) => x._coord.CompareTo(y._coord));
+                isInside = 0;
+                for (int i = 0; i < _globalCrossX[xkey].Count; i++)
+                {
+                    add = (_globalCrossX[xkey][i]._isIn == _globalCrossX[xkey][i]._clockwiae) ? 1 : -1;
+
+                    if (isInside != 0 && isInside + add == 0) //Точка выхода
+                    {
+                        incCoord = (int)Math.Truncate(_globalCrossX[xkey][i]._coord) + 1;
+                        if (alph[xkey - x0, incCoord - y0] < 100)
+                        {
+                            diff = incCoord - _globalCrossX[xkey][i]._coord;
+                            if (diff < 0.5 && diff > 0) alph[xkey - x0, incCoord - y0] = (alph[xkey - x0, incCoord - y0] + (0.5 - diff)); // /2.0
+                        }
+                    }
+                    else if (isInside == 0 && isInside + add != 0) //Точка входа
+                    {
+                        incCoord = (int)Math.Round(_globalCrossX[xkey][i]._coord);
+                        if (alph[xkey - x0, incCoord - y0] < 100) { 
+                            diff = Math.Abs(_globalCrossX[xkey][i]._coord - incCoord);
+                            if (diff < 0.5 && diff > 0) alph[xkey - x0, incCoord - y0] = (alph[xkey - x0, incCoord - y0] + (0.5 - diff)); // /2.0
+                        }
+                    }
+
+                    isInside += add;
+                }
+            }
+
+            return alph;
+        }
+
 
         private static bool IsClockwise(List<PointF> pointsList) {
             float sum = 0;

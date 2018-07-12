@@ -163,10 +163,76 @@ namespace SpaceVIL
             int inc = 0;
             foreach (float f in alphas)
             {
-                _colors[inc] = r; inc++;
-                _colors[inc] = g; inc++;
-                _colors[inc] = b; inc++;
-                _colors[inc] = f; inc++;
+                //Console.WriteLine(f);
+                float tmp = f;
+                float one = r;
+                float two = g;
+                float three = b;/*
+                if (f > 100) {
+                    if (tmp >= 200) //in
+                    {
+                        tmp -= 200;
+                        if (tmp >= 200f / 3f)
+                        {
+                            one = 1;
+                            two = 1;
+                            three = (tmp - 2 * 100f / 3f) * 100f / 3f;
+                        }
+                        else if (tmp >= 100f / 3f)
+                        {
+                            one = 1;
+                            two = (tmp - 100f / 3f) * 100f / 3f;
+                            three = 0;
+                        }
+                        else 
+                        {
+                            one = tmp * 100f / 3f;
+                            two = 0;
+                            three = 0;
+                        }
+                        one *= 255;
+                        two *= 255;
+                        three *= 255;
+
+                        tmp /= 100f;
+                    }
+                    else //out
+                    {
+                        tmp -= 100;
+
+                        if (tmp > 200f / 3f)
+                        {
+                            one = 0;
+                            two = 0;
+                            three = (tmp - 2 * 100f / 3f) * 100f / 3f;
+                        }
+                        else if (tmp > 100f / 3f)
+                        {
+                            one = 0;
+                            two = (tmp - 100f / 3f) * 100f / 3f;
+                            three = 1;
+                        }
+                        else
+                        {
+                            one = tmp * 100f / 3f;
+                            two = 1;
+                            three = 1;
+                        }
+                        one *= 255;
+                        two *= 255;
+                        three *= 255;
+
+                        tmp /= 100f;
+                    }
+                    tmp /= 5f;
+                    //Console.WriteLine(tmp);
+                }
+                
+                if (tmp > 1) tmp = 1;*/
+                _colors[inc] = one; inc++;
+                _colors[inc] = two; inc++;
+                _colors[inc] = three; inc++;
+                _colors[inc] = tmp; inc++;
             }
         }
 

@@ -7,31 +7,30 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class MessageBox
+    class MessageBox : DialogWindow
     {
-        WindowLayout wnd_handler;
-        bool _result = false;
-        public MessageBox(String message, String title)
-        {
-            InitWindow(message, title);
+        public MessageBox(String m, String t) : base(m, t) {
+
         }
-        private void InitWindow(String message, String title)
+
+        override internal void InitWindow()
         {
-            wnd_handler = new WindowLayout(title);
+           Handler = new WindowLayout();
             //window's attr
-            wnd_handler.SetWindowTitle(title);
-            wnd_handler.SetWidth(400);
-            wnd_handler.SetMinWidth(400);
-            wnd_handler.SetHeight(250);
-            wnd_handler.SetMinHeight(250);
-            wnd_handler.SetPadding(2, 2, 2, 2);
-            wnd_handler.SetBackground(Color.FromArgb(255, 45, 45, 45));
-            wnd_handler.IsBorderHidden = true;
-            wnd_handler.IsAlwaysOnTop = true;
+           Handler.SetWindowName("MessageBox_" + GetCount());
+           Handler.SetWindowTitle(DialogTitle);
+           Handler.SetWidth(400);
+           Handler.SetMinWidth(400);
+           Handler.SetHeight(250);
+           Handler.SetMinHeight(250);
+           Handler.SetPadding(2, 2, 2, 2);
+           Handler.SetBackground(Color.FromArgb(255, 45, 45, 45));
+           Handler.IsBorderHidden = true;
+           Handler.IsAlwaysOnTop = true;
 
             //DragAnchor
-            TitleBar titleBar = new TitleBar(title);
-            wnd_handler.AddItem(titleBar);
+            TitleBar titleBar = new TitleBar(DialogTitle);
+            Handler.AddItem(titleBar);
 
             VerticalStack layout = new VerticalStack();
             layout.SetAlignment(ItemAlignment.Top | ItemAlignment.HCenter);
@@ -41,10 +40,10 @@ namespace SpaceVIL
             layout.SetBackground(255, 255, 255, 20);
 
             //adding toolbar
-            wnd_handler.AddItem(layout);
+            Handler.AddItem(layout);
 
             //message
-            Label msg = new Label(message);
+            Label msg = new Label(DialogMessage);
             msg.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
             msg.SetForeground(Color.FromArgb(255, 210, 210, 210));
             msg.SetAlignment(ItemAlignment.VCenter | ItemAlignment.HCenter);
@@ -66,18 +65,14 @@ namespace SpaceVIL
             });
             ok.EventMouseClick += (sender) =>
             {
-                _result = true;
-                wnd_handler.Close();
+                DialogResult = true;
+                Handler.Close();
             };
             layout.AddItems(msg, ok);
 
             //show
-            wnd_handler.IsDialog = true;
-            wnd_handler.Show();
-        }
-        public bool Result()
-        {
-            return _result;
+            Handler.IsDialog = true;
+            Handler.Show();
         }
     }
 }
