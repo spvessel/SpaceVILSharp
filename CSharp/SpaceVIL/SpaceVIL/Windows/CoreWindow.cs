@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    abstract class ItemWindow
+    abstract class CoreWindow
     {
         private static int count = 0;
         private Guid windowGuid;
 
-        public ItemWindow() {
+        public CoreWindow() {
             windowGuid = Guid.NewGuid();
             count++;
         }
@@ -37,5 +37,7 @@ namespace SpaceVIL
         abstract internal void InitWindow();
 
         public int GetCount() { return count; }
+
+        public Guid GetWindowGuid() { return windowGuid; }
     }
 }

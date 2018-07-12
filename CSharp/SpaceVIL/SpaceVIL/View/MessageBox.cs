@@ -15,18 +15,18 @@ namespace SpaceVIL
 
         override internal void InitWindow()
         {
-           Handler = new WindowLayout("MessageBox_" + GetCount());
+            Handler = new WindowLayout("MessageBox_" + GetCount());
             //window's attr
-           //Handler.SetWindowName("MessageBox_" + GetCount());
-           Handler.SetWindowTitle(DialogTitle);
-           Handler.SetWidth(400);
-           Handler.SetMinWidth(400);
-           Handler.SetHeight(250);
-           Handler.SetMinHeight(250);
-           Handler.SetPadding(2, 2, 2, 2);
-           Handler.SetBackground(Color.FromArgb(255, 45, 45, 45));
-           Handler.IsBorderHidden = true;
-           Handler.IsAlwaysOnTop = true;
+            //Handler.SetWindowName("MessageBox_" + GetCount());
+            Handler.SetWindowTitle(DialogTitle);
+            Handler.SetWidth(400);
+            Handler.SetMinWidth(400);
+            Handler.SetHeight(250);
+            Handler.SetMinHeight(250);
+            Handler.SetPadding(2, 2, 2, 2);
+            Handler.SetBackground(Color.FromArgb(255, 45, 45, 45));
+            Handler.IsBorderHidden = true;
+            Handler.IsAlwaysOnTop = true;
 
             //DragAnchor
             TitleBar titleBar = new TitleBar(DialogTitle);
