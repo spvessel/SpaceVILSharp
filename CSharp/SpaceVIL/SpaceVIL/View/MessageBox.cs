@@ -9,9 +9,7 @@ namespace SpaceVIL
 {
     class MessageBox : DialogWindow
     {
-
-        public MessageBox(String m, String t) : base(m, t) {
-        }
+        public MessageBox(String m, String t) : base(m, t) { }
 
         override internal void InitWindow()
         {
@@ -55,7 +53,7 @@ namespace SpaceVIL
             ok.SetBackground(100, 255, 150);
             ok.SetForeground(Color.Black);
             ok.SetItemName("OK");
-            ok.SetSize(100,30);
+            ok.SetSize(100, 30);
             ok.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             ok.SetAlignment(ItemAlignment.HCenter | ItemAlignment.Bottom);
             ok.Border.Radius = 6;

@@ -138,7 +138,9 @@ namespace SpaceVIL
             }
 
             //needs to force update all attributes
-            if (!(this is WContainer))
+            if ((this is WContainer))
+                GetHandler().UpdateScene();
+            else
                 UpdateGeometry();
         }
         protected override void AddEventListener(GeometryEventType type, BaseItem listener)

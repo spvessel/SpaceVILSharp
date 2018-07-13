@@ -444,6 +444,7 @@ namespace SpaceVIL
         internal void Update()
         {
             Glfw.PostEmptyEvent();
+            SetWindowSize();
         }
         public void Run()
         {
