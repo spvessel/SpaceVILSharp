@@ -126,10 +126,10 @@ namespace SpaceVIL
             {
                 ItemsLayoutBox.RemoveItem(GetHandler(), item);
 
-                Type myType = Type.GetType(item.ToString());
+                /*Type myType = Type.GetType(item.ToString());
                 var field = myType.GetField("count", BindingFlags.NonPublic | BindingFlags.Static);
                 if (field != null)
-                    field.SetValue(item, (int)field.GetValue(null) - 1);
+                    field.SetValue(item, (int)field.GetValue(null) - 1);*/
             }
             catch (Exception ex)
             {
@@ -138,7 +138,8 @@ namespace SpaceVIL
             }
 
             //needs to force update all attributes
-            UpdateGeometry();
+            if (!(this is WContainer))
+                UpdateGeometry();
         }
         protected override void AddEventListener(GeometryEventType type, BaseItem listener)
         {

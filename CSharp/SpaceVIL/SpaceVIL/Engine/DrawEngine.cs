@@ -13,65 +13,30 @@ using System.Drawing;
 namespace SpaceVIL
 {
     internal class DrawEngine : GL.WGL.OpenWGL
-    //where TLayout : VisualItem
     {
-        //cursors 
-        Glfw.Cursor _arrow;
-        Glfw.Cursor _input;
-        Glfw.Cursor _hand;
-        Glfw.Cursor _resize_h;
-        Glfw.Cursor _resize_v;
-        Glfw.Cursor _resize_all;
+
 
         private ToolTip _tooltip = new ToolTip();
         private BaseItem _isStencilSet = null;
         public InputDeviceEvent EngineEvent = new InputDeviceEvent();
-        public readonly object engine_locker = new object();
 
-        ///////////////////////////////////////////////
-        Glfw.WindowSizeFunc resizeCallback;
-        Glfw.CursorPosFunc mouseMoveCallback;
-        Glfw.MouseButtonFunc mouseClickCallback;
-        Glfw.ScrollFunc mouseScrollCallback;
-        Glfw.WindowCloseFunc windowCloseCallback;
-        Glfw.WindowPosFunc windowPosCallback;
-        Glfw.KeyFunc keyPressCallback;
-        Glfw.CharModsFunc keyInputText;
-        Glfw.WindowFocusFunc windowFocusCallback;
-        ///////////////////////////////////////////////
-
-        private float _opacity_anim = 0.0f;
-        public bool borderHidden;
-        public bool appearInCenter;
-        public bool focusable;
-        public bool focused = true;
-        public bool alwaysOnTop;
-        public Pointer window_position = new Pointer();
         private List<VisualItem> HoveredItems;
         private VisualItem HoveredItem;
         private VisualItem FocusedItem;
         private Pointer ptrPress = new Pointer();
         private Pointer ptrRelease = new Pointer();
 
-        public WindowLayout wnd_handler;
-
-        Glfw.Window window;
-        private uint[] gVAO = new uint[1];
-        private uint ProgramPrimitives;
-        private uint VertexPrimitiveShader, FragmentPrimitiveShader;
-
-        private uint ProgramTexture;
-        private uint VertexTextureShader, FragmentTextureShader;
+        internal GLWHandler _handler;
+        private Shader _primitive;
+        private Shader _texture;
 
         public DrawEngine(WindowLayout handler)
         {
             HoveredItems = new List<VisualItem>();
-            wnd_handler = handler;
-            window_position.X = 0;
-            window_position.Y = 0;
+            _handler = new GLWHandler(handler);
 
-            _tooltip.SetHandler(wnd_handler);
-            _tooltip.GetTextLine().SetHandler(wnd_handler);
+            _tooltip.SetHandler(handler);
+            _tooltip.GetTextLine().SetHandler(handler);
             _tooltip.GetTextLine().SetParent(_tooltip);
             _tooltip.InitElements();
         }
@@ -85,23 +50,14 @@ namespace SpaceVIL
         }
         public void Close()
         {
-            Glfw.SetWindowShouldClose(window, true);
+            _handler.SetToClose();
         }
 
         public void Init()
         {
-            CreateWindow(wnd_handler.GetWindowTitle(), 4, wnd_handler.GetWidth(), wnd_handler.GetHeight());
+            _handler.CreateWindow();
+            SetWindowPos();
             SetEventsCallbacks();
-            //cursors
-            _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
-            _input = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
-            _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
-            _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
-            _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
-            _resize_all = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
-
-            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
             //устанавливаем параметры отрисовки
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_MULTISAMPLE);
@@ -111,141 +67,37 @@ namespace SpaceVIL
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             //glEnable(GL_DEPTH_TEST);
             glEnable(GL_ALPHA_TEST);
-
-            ProgramPrimitives = CreateShaderProgram(
-            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fill.glsl"),
-            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fill.glsl"),
-            ref VertexPrimitiveShader,
-            ref FragmentPrimitiveShader
-            );
-            if (ProgramPrimitives == 0)
+            ////////////////////////////////////////////////
+            _primitive = new Shader(
+                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fill.glsl"),
+                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fill.glsl"));
+            _primitive.Compile();
+            if (_primitive.GetProgramID() == 0)
                 Console.WriteLine("Could not create primitive shaders");
-
-            ProgramTexture = CreateShaderProgram(
-            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_texture.glsl"),
-            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_texture.glsl"),
-            ref VertexTextureShader,
-            ref FragmentTextureShader
-            );
-            if (ProgramTexture == 0)
+            ///////////////////////////////////////////////
+            _texture = new Shader(
+                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_texture.glsl"),
+                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_texture.glsl"));
+            _texture.Compile();
+            if (_texture.GetProgramID() == 0)
                 Console.WriteLine("Could not create textured shaders");
+
+            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
             Run();
-        }
-
-        private void CreateWindow(string title, int msaa, int w, int h)
-        {
-            //path to c++ glfw3.dll (x32 or x64)
-            //Glfw.ConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
-            if (!Glfw.Init())
-            {
-                Environment.Exit(-1);
-            }
-
-            //Glfw.WindowHint(Glfw.Hint.OpenglDebugContext, true);
-            Glfw.WindowHint(Glfw.Hint.Samples, 4);
-            Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
-            Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 4);
-            Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
-            Glfw.WindowHint(Glfw.Hint.Resizable, true);
-            Glfw.WindowHint(Glfw.Hint.Decorated, !borderHidden);//make borderless window
-            Glfw.WindowHint(Glfw.Hint.Focused, focusable);
-            Glfw.WindowHint(Glfw.Hint.Floating, alwaysOnTop);
-            //Glfw.WindowHint(Glfw.Hint.DepthBits, 16);
-            //Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, true);
-
-
-            window = Glfw.CreateWindow(w, h, title);
-            if (!window)
-            {
-                Glfw.Terminate();
-                Environment.Exit(-1);
-            }
-
-            if (appearInCenter)
-            {
-                window_position.X = (Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - w) / 2;
-                window_position.Y = (Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - h) / 2;
-                SetWindowPos();
-            }
-            else
-            {
-                SetWindowPos();
-            }
-
-            Glfw.MakeContextCurrent(window);
-            Glfw.SetWindowSizeLimits(window, wnd_handler.GetMinWidth(), wnd_handler.GetMinHeight(), wnd_handler.GetMaxWidth(), wnd_handler.GetMaxHeight());
-            Glfw.FocusWindow(window);
-        }
-
-        private uint CreateShaderProgram(Stream vertex_shader, Stream fragment_shader, ref uint vertex, ref uint fragment)
-        {
-            StringBuilder v_code = new StringBuilder();
-            StringBuilder f_code = new StringBuilder();
-            try
-            {
-                using (StreamReader sr = new StreamReader(vertex_shader))
-                {
-                    while (!sr.EndOfStream)
-                        v_code.Append(sr.ReadLine() + "\n");
-                }
-
-                using (StreamReader sr = new StreamReader(fragment_shader))
-                {
-                    while (!sr.EndOfStream)
-                        f_code.Append(sr.ReadLine() + "\n");
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
-            }
-            //Console.WriteLine(v_code);
-            //Console.WriteLine(f_code);
-            vertex = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vertex, 1, new[] { v_code.ToString() }, new[] { v_code.ToString().Length });
-            glCompileShader(vertex);
-
-            fragment = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fragment, 1, new[] { f_code.ToString() }, new[] { f_code.ToString().Length });
-            glCompileShader(fragment);
-
-            uint shader = glCreateProgram();
-            glAttachShader(shader, vertex);
-            glAttachShader(shader, fragment);
-            glLinkProgram(shader);
-
-            return shader;
         }
 
         private void SetEventsCallbacks()
         {
-            mouseMoveCallback = MouseMove;
-            Glfw.SetCursorPosCallback(window, mouseMoveCallback);
-            mouseClickCallback = MouseClick;
-            Glfw.SetMouseButtonCallback(window, mouseClickCallback);
-            resizeCallback = Resize;
-            Glfw.SetWindowSizeCallback(window, resizeCallback);
-            windowCloseCallback = Close;
-            Glfw.SetWindowCloseCallback(window, windowCloseCallback);
-            windowPosCallback = Position;
-            Glfw.SetWindowPosCallback(window, windowPosCallback);
-            mouseScrollCallback = MouseScroll;
-            Glfw.SetScrollCallback(window, mouseScrollCallback);
-            windowFocusCallback = Focus;
-            Glfw.SetWindowFocusCallback(window, windowFocusCallback);
-            keyPressCallback = KeyPress;
-            Glfw.SetKeyCallback(window, keyPressCallback);
-            keyInputText = TextInput;
-            Glfw.SetCharModsCallback(window, keyInputText);
-        }
-        private void ClearEventsCallbacks()
-        {
-            mouseMoveCallback -= MouseMove;
-            mouseClickCallback -= MouseClick;
-            resizeCallback -= Resize;
-            windowCloseCallback -= Close;
-            windowPosCallback -= Position;
+            _handler.SetCallbackMouseMove(MouseMove);
+            _handler.SetCallbackMouseClick(MouseClick);
+            _handler.SetCallbackMouseScroll(MouseScroll);
+            _handler.SetCallbackKeyPress(KeyPress);
+            _handler.SetCallbackTextInput(TextInput);
+            _handler.SetCallbackClose(Close);
+            _handler.SetCallbackPosition(Position);
+            _handler.SetCallbackFocus(Focus);
+            _handler.SetCallbackResize(Resize);
         }
 
         private void MouseScroll(Glfw.Window glfwwnd, double xoffset, double yoffset)
@@ -274,18 +126,18 @@ namespace SpaceVIL
             if (FocusedItem is TextEdit && ((mods == KeyMods.Control && key == KeyCode.V) ||
                 (mods == KeyMods.Shift && key == KeyCode.Insert)) && action == InputState.Press)
             {
-                string paste_str = Glfw.GetClipboardString(window);
+                string paste_str = Glfw.GetClipboardString(_handler.GetWindow());
                 (FocusedItem as TextEdit).PasteText(paste_str);
             }
             else if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.C && action == InputState.Press)
             {
                 string copy_str = (FocusedItem as TextEdit).GetSelectedText();
-                Glfw.SetClipboardString(window, copy_str);
+                Glfw.SetClipboardString(_handler.GetWindow(), copy_str);
             }
             else if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.X && action == InputState.Press)
             {
                 string cut_str = (FocusedItem as TextEdit).CutText();
-                Glfw.SetClipboardString(window, cut_str);
+                Glfw.SetClipboardString(_handler.GetWindow(), cut_str);
             }
             else
                 FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);
@@ -299,20 +151,20 @@ namespace SpaceVIL
         {
             EngineEvent.ResetAllEvents();
             _tooltip.InitTimer(false);
-            focused = value;
+            _handler.Focused = value;
         }
 
         internal void SetWindowPos()
         {
             EngineEvent.SetEvent(InputEventType.WindowMove);
-            wnd_handler.SetX(window_position.X);
-            wnd_handler.SetY(window_position.Y);
-            Glfw.SetWindowPos(window, window_position.X, window_position.Y);
+            _handler.GetLayout().SetX(_handler.WPosition.X);
+            _handler.GetLayout().SetY(_handler.WPosition.Y);
+            Glfw.SetWindowPos(_handler.GetWindow(), _handler.WPosition.X, _handler.WPosition.Y);
         }
         private void Position(Glfw.Window glfwwnd, int xpos, int ypos)
         {
-            window_position.X = xpos;
-            window_position.Y = ypos;
+            _handler.WPosition.X = xpos;
+            _handler.WPosition.Y = ypos;
         }
         private void Close(Glfw.Window glfwwnd)
         {
@@ -321,11 +173,11 @@ namespace SpaceVIL
         private void Resize(Glfw.Window glfwwnd, int width, int height)
         {
             _tooltip.InitTimer(false);
-            wnd_handler.SetWidth(width);
-            wnd_handler.SetHeight(height);
-            if (!wnd_handler.IsBorderHidden)
+            _handler.GetLayout().SetWidth(width);
+            _handler.GetLayout().SetHeight(height);
+            if (!_handler.GetLayout().IsBorderHidden)
             {
-                glViewport(0, 0, wnd_handler.GetWidth(), wnd_handler.GetHeight());
+                glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
                 Render();
             }
         }
@@ -333,10 +185,10 @@ namespace SpaceVIL
         public void SetWindowSize()
         {
             EngineEvent.SetEvent(InputEventType.WindowResize);
-            Glfw.SetWindowSize(window, wnd_handler.GetWidth(), wnd_handler.GetHeight());
-            if (wnd_handler.IsBorderHidden)
+            Glfw.SetWindowSize(_handler.GetWindow(), _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
+            if (_handler.GetLayout().IsBorderHidden)
             {
-                glViewport(0, 0, wnd_handler.GetWidth(), wnd_handler.GetHeight());
+                glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
                 Render();
             }
         }
@@ -344,13 +196,14 @@ namespace SpaceVIL
         public void MinimizeWindow()
         {
             EngineEvent.SetEvent(InputEventType.WindowMinimize);
-            Glfw.IconifyWindow(window);
+            Glfw.IconifyWindow(_handler.GetWindow());
         }
         //OpenGL input interaction function
         private VisualItem IsInListHoveredItems<T>()
         {
             foreach (var item in HoveredItems)
             {
+                //Console.WriteLine(item.GetItemName());
                 if (item is T)
                 {
                     return item;
@@ -363,7 +216,7 @@ namespace SpaceVIL
         {
             HoveredItems.Clear();
 
-            foreach (var item in ItemsLayoutBox.GetLayoutItems(wnd_handler.Id))
+            foreach (var item in ItemsLayoutBox.GetLayoutItems(_handler.GetLayout().Id))
             {
                 if (item is VisualItem)
                 {
@@ -397,54 +250,54 @@ namespace SpaceVIL
 
             if (EngineEvent.LastEvent().HasFlag(InputEventType.MousePressed)) // жость какая-то ХЕРОТАААА!!!
             {
-                if (wnd_handler.IsBorderHidden)
+                if (_handler.GetLayout().IsBorderHidden)
                 {
-                    int w = wnd_handler.GetWidth();
-                    int h = wnd_handler.GetHeight();
+                    int w = _handler.GetLayout().GetWidth();
+                    int h = _handler.GetLayout().GetHeight();
 
-                    if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Left))
+                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left))
                     {
-                        if (!(wnd_handler.GetMinWidth() == wnd_handler.GetWidth() && (ptrRelease.X - ptrPress.X) >= 0))
+                        if (!(_handler.GetLayout().GetMinWidth() == _handler.GetLayout().GetWidth() && (ptrRelease.X - ptrPress.X) >= 0))
                         {
-                            window_position.X += (ptrRelease.X - ptrPress.X);
+                            _handler.WPosition.X += (ptrRelease.X - ptrPress.X);
                             w -= (ptrRelease.X - ptrPress.X);
                         }
                     }
-                    if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Right))
+                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Right))
                     {
-                        if (!(ptrRelease.X < wnd_handler.GetMinWidth() && wnd_handler.GetWidth() == wnd_handler.GetMinWidth()))
+                        if (!(ptrRelease.X < _handler.GetLayout().GetMinWidth() && _handler.GetLayout().GetWidth() == _handler.GetLayout().GetMinWidth()))
                         {
                             w += (ptrRelease.X - ptrPress.X);
                         }
                         ptrPress.X = ptrRelease.X;
                     }
-                    if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Top))
+                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Top))
                     {
-                        if (!(wnd_handler.GetMinHeight() == wnd_handler.GetHeight() && (ptrRelease.Y - ptrPress.Y) >= 0))
+                        if (!(_handler.GetLayout().GetMinHeight() == _handler.GetLayout().GetHeight() && (ptrRelease.Y - ptrPress.Y) >= 0))
                         {
-                            window_position.Y += (ptrRelease.Y - ptrPress.Y);
+                            _handler.WPosition.Y += (ptrRelease.Y - ptrPress.Y);
                             h -= (ptrRelease.Y - ptrPress.Y);
                         }
                     }
-                    if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Bottom))
+                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Bottom))
                     {
-                        if (!(ptrRelease.Y < wnd_handler.GetMinHeight() && wnd_handler.GetHeight() == wnd_handler.GetMinHeight()))
+                        if (!(ptrRelease.Y < _handler.GetLayout().GetMinHeight() && _handler.GetLayout().GetHeight() == _handler.GetLayout().GetMinHeight()))
                         {
                             h += (ptrRelease.Y - ptrPress.Y);
                         }
                         ptrPress.Y = ptrRelease.Y;
                     }
 
-                    if (wnd_handler.GetWindow()._sides != 0)
+                    if (_handler.GetLayout().GetWindow()._sides != 0)
                     {
-                        wnd_handler.SetWidth(w);
-                        wnd_handler.SetHeight(h);
-                        if (wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Left) || wnd_handler.GetWindow()._sides.HasFlag(ItemAlignment.Top))
+                        _handler.GetLayout().SetWidth(w);
+                        _handler.GetLayout().SetHeight(h);
+                        if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left) || _handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Top))
                             SetWindowPos();
                         SetWindowSize();
                     }
                 }
-                if (wnd_handler.GetWindow()._sides == 0)
+                if (_handler.GetLayout().GetWindow()._sides == 0)
                 {
                     VisualItem draggable = IsInListHoveredItems<IDraggable>();
                     VisualItem anchor = IsInListHoveredItems<IWindowAnchor>();
@@ -465,8 +318,8 @@ namespace SpaceVIL
                     {
                         if ((ptrRelease.X - ptrPress.X) != 0 || (ptrRelease.Y - ptrPress.Y) != 0)
                         {
-                            window_position.X += (ptrRelease.X - ptrPress.X);
-                            window_position.Y += (ptrRelease.Y - ptrPress.Y);
+                            _handler.WPosition.X += (ptrRelease.X - ptrPress.X);
+                            _handler.WPosition.Y += (ptrRelease.Y - ptrPress.Y);
                             SetWindowPos();
                         }
                     }
@@ -485,35 +338,35 @@ namespace SpaceVIL
                         _tooltip.InitTimer(true);
                         _tooltip.SetText(HoveredItem.GetToolTip());
                     }
-                    Glfw.SetCursor(window, _arrow);
-                    if (wnd_handler.IsBorderHidden)
+                    _handler.SetCursorType(Glfw.CursorType.Arrow);
+                    if (_handler.GetLayout().IsBorderHidden)
                     {
                         //resize
-                        if ((xpos < wnd_handler.GetWindow().GetWidth() - 5)
+                        if ((xpos < _handler.GetLayout().GetWindow().GetWidth() - 5)
                             && (xpos > 5)
-                            && (ypos < wnd_handler.GetWindow().GetHeight() - 5)
+                            && (ypos < _handler.GetLayout().GetWindow().GetHeight() - 5)
                             && ypos > 5)
                         {
                             if (HoveredItem is ITextEditable)
-                                Glfw.SetCursor(window, _input);
+                                _handler.SetCursorType(Glfw.CursorType.Beam);
                         }
                         else //refactor!!
                         {
-                            if ((xpos > wnd_handler.GetWindow().GetWidth() - 5 && ypos < 5)
-                             || (xpos > wnd_handler.GetWindow().GetWidth() - 5 && ypos > wnd_handler.GetWindow().GetHeight() - 5)
-                             || (ypos > wnd_handler.GetWindow().GetHeight() - 5 && xpos < 5)
-                             || (ypos > wnd_handler.GetWindow().GetHeight() - 5 && xpos > wnd_handler.GetWindow().GetWidth() - 5)
+                            if ((xpos > _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos < 5)
+                             || (xpos > _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos > _handler.GetLayout().GetWindow().GetHeight() - 5)
+                             || (ypos > _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos < 5)
+                             || (ypos > _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos > _handler.GetLayout().GetWindow().GetWidth() - 5)
                              || (xpos < 5 && ypos < 5))
                             {
-                                Glfw.SetCursor(window, _resize_all);
+                                _handler.SetCursorType(Glfw.CursorType.Crosshair);
                             }
                             else
                             {
-                                if (xpos > wnd_handler.GetWindow().GetWidth() - 5 || xpos < 5)
-                                    Glfw.SetCursor(window, _resize_h);
+                                if (xpos > _handler.GetLayout().GetWindow().GetWidth() - 5 || xpos < 5)
+                                    _handler.SetCursorType(Glfw.CursorType.ResizeX);
 
-                                if (ypos > wnd_handler.GetWindow().GetHeight() - 5 || ypos < 5)
-                                    Glfw.SetCursor(window, _resize_v);
+                                if (ypos > _handler.GetLayout().GetWindow().GetHeight() - 5 || ypos < 5)
+                                    _handler.SetCursorType(Glfw.CursorType.ResizeY);
                             }
                         }
                     }
@@ -521,8 +374,13 @@ namespace SpaceVIL
                     {
                         if (HoveredItem is ITextEditable)
                         {
-                            Glfw.SetCursor(window, _input);
+                            _handler.SetCursorType(Glfw.CursorType.Beam);
                         }
+                    }
+                    VisualItem popup = IsInListHoveredItems<IPopUp>();
+                    if (popup != null)
+                    {
+                        (popup as PopUpMessage).HoldSelf(true);
                     }
                 }
             }
@@ -537,11 +395,11 @@ namespace SpaceVIL
                 EngineEvent.SetEvent(InputEventType.MouseRelease);
                 return;
             }
-            wnd_handler.GetWindow().GetSides(ptrRelease.X, ptrRelease.Y);
+            _handler.GetLayout().GetWindow().GetSides(ptrRelease.X, ptrRelease.Y);
             switch (state)
             {
                 case InputState.Release:
-                    wnd_handler.GetWindow()._sides = 0;
+                    _handler.GetLayout().GetWindow()._sides = 0;
                     if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize) || EngineEvent.LastEvent().HasFlag(InputEventType.WindowMove))
                     {
                         EngineEvent.ResetAllEvents();
@@ -589,58 +447,55 @@ namespace SpaceVIL
         }
         public void Run()
         {
-            glGenVertexArrays(1, gVAO);
-            glBindVertexArray(gVAO[0]);
-            glUseProgram(ProgramPrimitives);
+            glGenVertexArrays(1, _handler.GVAO);
+            glBindVertexArray(_handler.GVAO[0]);
+
+            _primitive.UseShader();
 
             //starting animation
+            float _opacity_anim = 0.0f;
             while (_opacity_anim < 1.0f)
             {
-                _opacity_anim += 0.1f;
-                Glfw.SetWindowOpacity(window, _opacity_anim);
+                _opacity_anim += 0.2f;
+                _handler.SetOpacity(_opacity_anim);
                 Render();
                 Thread.Sleep(1000 / 90);
                 Glfw.PollEvents();
             }
+            _handler.SetOpacity(1.0f);
 
             //core rendering
-            Glfw.SetWindowOpacity(window, 1.0f);
-            while (!Glfw.WindowShouldClose(window))
+            while (!_handler.IsClosing())
             {
+                lock (CommonService.engine_locker)
+                {
+                    if (_handler.Focused)
+                    {
+                        Render();
+                    }
+                }
                 if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize))
                     Glfw.PollEvents();
                 else
                     Glfw.WaitEvents();
-
-                if (focused)
-                    Render();
             }
 
-            glDetachShader(ProgramPrimitives, VertexPrimitiveShader);
-            glDetachShader(ProgramPrimitives, FragmentPrimitiveShader);
-            glDeleteShader(VertexPrimitiveShader);
-            glDeleteShader(FragmentPrimitiveShader);
+            _primitive.DeleteShader();
+            _texture.DeleteShader();
 
-            glDetachShader(ProgramTexture, VertexTextureShader);
-            glDetachShader(ProgramTexture, FragmentTextureShader);
-            glDeleteShader(VertexTextureShader);
-            glDeleteShader(FragmentTextureShader);
+            glDeleteVertexArrays(1, _handler.GVAO);
 
-            glDeleteVertexArrays(1, gVAO);
-            glDeleteProgram(ProgramPrimitives);
-            glDeleteProgram(ProgramTexture);
-
-            ClearEventsCallbacks();
-            Glfw.DestroyWindow(window);
+            _handler.ClearEventsCallbacks();
+            _handler.Destroy();
         }
 
         internal void Render()
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-            DrawItems(wnd_handler.GetWindow());
+            DrawItems(_handler.GetLayout().GetWindow());
             //draw tooltip if needed
             DrawToolTip();
-            Glfw.SwapBuffers(window);
+            _handler.Swap();
         }
         private void DrawToolTip()//refactor
         {
@@ -664,9 +519,9 @@ namespace SpaceVIL
                 _tooltip.SetY(ptrRelease.Y + _tooltip.GetHeight() + 2);
             }
             //проверка справа
-            if (ptrRelease.X - 10 + _tooltip.GetWidth() > wnd_handler.GetWidth())
+            if (ptrRelease.X - 10 + _tooltip.GetWidth() > _handler.GetLayout().GetWidth())
             {
-                _tooltip.SetX(wnd_handler.GetWidth() - _tooltip.GetWidth() - 10);
+                _tooltip.SetX(_handler.GetLayout().GetWidth() - _tooltip.GetWidth() - 10);
             }
             else
             {
@@ -714,16 +569,12 @@ namespace SpaceVIL
             if (root is IImageItem)
             {
                 DrawShell(root);
-                glUseProgram(ProgramTexture);
+                _texture.UseShader();
                 DrawImage(root as ImageItem);
-                glUseProgram(ProgramPrimitives);
+                _primitive.UseShader();
             }
             else
             {
-                if (root is PopUpMessage)
-                {
-                    (root as PopUpMessage).InitTimer();
-                }
                 DrawShell(root);
                 if (root is VisualItem)
                 {
@@ -753,7 +604,7 @@ namespace SpaceVIL
 
             //Vertex
             List<float[]> crd_array;
-            crd_array = GraphicsMathService.ToGL(GraphicsMathService.GetRectangle(w, h, x, y), wnd_handler);
+            crd_array = GraphicsMathService.ToGL(GraphicsMathService.GetRectangle(w, h, x, y), _handler.GetLayout());
 
             float[] vertexData = new float[crd_array.Count * 3];
 
@@ -985,10 +836,10 @@ namespace SpaceVIL
             //проверка: полностью ли влезает объект в свой контейнер
             CheckOutsideBorders(image as BaseItem);
 
-            float i_x0 = ((float)image.GetX() / (float)wnd_handler.GetWidth() * 2.0f) - 1.0f;
-            float i_y0 = ((float)image.GetY() / (float)wnd_handler.GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)wnd_handler.GetWidth() * 2.0f) - 1.0f;
-            float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)wnd_handler.GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x0 = ((float)image.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y0 = ((float)image.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
 
             //VBO
             float[] vertexData = new float[]
@@ -1041,7 +892,7 @@ namespace SpaceVIL
             //glGenerateMipmap(GL_TEXTURE_2D);
             glActiveTexture(GL_TEXTURE0);
 
-            int location = glGetUniformLocation(ProgramTexture, "tex".ToCharArray());
+            int location = glGetUniformLocation(_texture.GetProgramID(), "tex".ToCharArray());
             if (location >= 0)
                 glUniform1i(location, 0);
 

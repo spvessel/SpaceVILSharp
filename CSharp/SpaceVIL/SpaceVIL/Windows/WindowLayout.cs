@@ -53,7 +53,6 @@ namespace SpaceVIL
         }
         public void UpdateScene()
         {
-            //Console.WriteLine("update");
             engine.Update();
         }
         private WContainer _window;
@@ -230,15 +229,13 @@ namespace SpaceVIL
         //methods
         public void Show()
         {
-            engine = new DrawEngine(this)
-            {
-                borderHidden = IsBorderHidden,
-                appearInCenter = IsCentered,
-                focusable = IsFocusable,
-                alwaysOnTop = IsAlwaysOnTop
-            };
-            engine.window_position.X = GetX();
-            engine.window_position.Y = GetY();
+            engine = new DrawEngine(this);
+            engine._handler.BorderHidden = IsBorderHidden;
+            engine._handler.AppearInCenter = IsCentered;
+            engine._handler.Focusable = IsFocusable;
+            engine._handler.AlwaysOnTop = IsAlwaysOnTop;
+            engine._handler.WPosition.X = GetX();
+            engine._handler.WPosition.Y = GetY();
 
             WindowLayoutBox.ActiveWindow = Id;
             IsHidden = false;
@@ -288,13 +285,13 @@ namespace SpaceVIL
             get
             {
                 if (engine != null)
-                    return engine.focused;
+                    return engine._handler.Focused;
                 return false;
             }
             set
             {
                 if (engine != null)
-                    engine.focused = value;
+                    engine._handler.Focused = value;
             }
         }
 

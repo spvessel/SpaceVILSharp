@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    abstract class ItemWindow : CoreWindow
+    abstract class ActiveWindow : CoreWindow
     {
-        public ItemWindow() : base() {
+        public ActiveWindow() : base() {
             
             InitWindow();
         }
