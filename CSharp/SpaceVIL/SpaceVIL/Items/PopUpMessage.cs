@@ -13,6 +13,7 @@ namespace SpaceVIL
         private ButtonCore _btn_close;
         internal Timer _stop;
         private int _timeout = 5000;
+        internal bool _holded = false;
         public void SetTimeOut(int milliseconds)
         {
             _timeout = milliseconds;
@@ -25,7 +26,7 @@ namespace SpaceVIL
         {
             _btn_close = new ButtonCore();
             _text_object = new TextLine();
-
+            EventMouseClick += EmptyEvent;
             SetItemName("PopUpMessage_" + count);
             SetBackground(32, 32, 32, 240);
             SetForeground(Color.White);
@@ -99,6 +100,7 @@ namespace SpaceVIL
             SetHandler(wnd);
             wnd.GetWindow().AddItem(this);
             SetText(message);
+            InitTimer();
         }
         internal void InitTimer()
         {
@@ -106,28 +108,34 @@ namespace SpaceVIL
                 return;
 
             _stop = new System.Timers.Timer(_timeout);
-            _stop.Elapsed += (sender, e) => RemoveSelf();
+            _stop.Elapsed += (sender, e) =>
+            {
+                lock (CommonService.engine_locker)
+                    RemoveSelf();
+            };
             _stop.Start();
         }
 
         private void RemoveSelf()
         {
+
+            if (_stop != null)
+            {
+                _stop.Stop();
+                _stop.Dispose();
+                _stop = null;
+            }
             GetParent().RemoveItem(this);
-            _stop.Stop();
-            _stop.Dispose();
-            _stop = null;
-            GetHandler().UpdateScene();
         }
 
         internal void HoldSelf(bool ok)
         {
-            _stop.Stop();
-            _stop.Dispose();
-            _stop = null;
-
-            if (!ok)
+            _holded = ok;
+            if (_stop != null)
             {
-                InitTimer();
+                _stop.Stop();
+                _stop.Dispose();
+                _stop = null;
             }
         }
     }
