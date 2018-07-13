@@ -159,7 +159,7 @@ namespace SpaceVIL
             float r = col.R * 1f / 255f;
             float g = col.G * 1f / 255f;
             float b = col.B * 1f / 255f;
-
+            //Console.WriteLine(r + " " + g + " " + b);
             int inc = 0;
             foreach (float f in alphas)
             {
@@ -167,68 +167,76 @@ namespace SpaceVIL
                 float tmp = f;
                 float one = r;
                 float two = g;
-                float three = b;/*
-                if (f > 100) {
+                float three = b;
+                /*if (f > 100) {
+                    float t1, t2, t3;
                     if (tmp >= 200) //in
                     {
                         tmp -= 200;
-                        if (tmp >= 200f / 3f)
+                        tmp /= 100f;
+                        if (tmp >= 2f / 3f)
                         {
-                            one = 1;
-                            two = 1;
-                            three = (tmp - 2 * 100f / 3f) * 100f / 3f;
+                            t1 = 1;
+                            t2 = 1;
+                            t3 = (tmp - 2f / 3f) * 1f / 3f;
                         }
-                        else if (tmp >= 100f / 3f)
+                        else if (tmp >= 1f / 3f)
                         {
-                            one = 1;
-                            two = (tmp - 100f / 3f) * 100f / 3f;
-                            three = 0;
+                            t1 = 1;
+                            t2 = (tmp - 1f / 3f) * 1f / 3f;
+                            t3 = 0;
                         }
                         else 
                         {
-                            one = tmp * 100f / 3f;
-                            two = 0;
-                            three = 0;
+                            t1 = tmp * 1f / 3f;
+                            t2 = 0;
+                            t3 = 0;
                         }
-                        one *= 255;
-                        two *= 255;
-                        three *= 255;
 
-                        tmp /= 100f;
+                        one = t1 / 3f + t2 * 2 / 9f + t3 / 9f;
+                        two = t1 * 2 / 9f + t2 / 3f + t3 * 2 / 9f + 1 / 9f;
+                        three = t1 / 9f + t2 * 2 / 9f + t3 / 3f + 2 / 9f + 1 / 9f;
                     }
                     else //out
                     {
                         tmp -= 100;
-
-                        if (tmp > 200f / 3f)
+                        tmp /= 100f;
+                        if (tmp > 2f / 3f)
                         {
-                            one = 0;
-                            two = 0;
-                            three = (tmp - 2 * 100f / 3f) * 100f / 3f;
+                            t1 = 0;
+                            t2 = 0;
+                            t3 = (tmp - 2f / 3f) * 1f / 3f;
                         }
-                        else if (tmp > 100f / 3f)
+                        else if (tmp > 1f / 3f)
                         {
-                            one = 0;
-                            two = (tmp - 100f / 3f) * 100f / 3f;
-                            three = 1;
+                            t1 = 0;
+                            t2 = (tmp - 1f / 3f) * 1f / 3f;
+                            t3 = 1;
                         }
                         else
                         {
-                            one = tmp * 100f / 3f;
-                            two = 1;
-                            three = 1;
+                            t1 = tmp * 1f / 3f;
+                            t2 = 1;
+                            t3 = 1;
                         }
-                        one *= 255;
-                        two *= 255;
-                        three *= 255;
 
-                        tmp /= 100f;
+                        one = 1 / 9f + 2 / 9f + t1 / 3f + t2 * 2 / 9f + t3 / 9f;
+                        two = 1 / 9f + t1 * 2 / 9f + t2 / 3f + t3 * 2 / 9f;
+                        three = t1 / 9f + t2 * 2 / 9f + t3 / 3f;
+                        
                     }
-                    tmp /= 5f;
-                    //Console.WriteLine(tmp);
-                }
-                
-                if (tmp > 1) tmp = 1;*/
+                    //tmp /= 5f;
+                    tmp = 1 / 4f + tmp / 2f;
+                    //if (one * r > one) Console.WriteLine("one " + r);
+                    //if (two * g > two) Console.WriteLine("two " + g);
+                    //if (three * b > three) Console.WriteLine("three " + b);
+                    //one *= r;
+                    //two *= g;
+                    //three *= b;
+                    //Console.WriteLine(one + " " + two + " " + three); 
+                }*/
+
+                if (tmp > 1) tmp = 1;
                 _colors[inc] = one; inc++;
                 _colors[inc] = two; inc++;
                 _colors[inc] = three; inc++;
