@@ -397,6 +397,7 @@ namespace SpaceVIL
                         diff = incCoord - _globalCrossY[ykey][i]._coord;
                         if (isInside == 0 && diff > 0 && diff < 1) //Стал снаружи, т.е. точка выхода
                         {
+                            if (alph[incCoord - x0, ykey - y0] > 0)
                             alph[incCoord - x0, ykey - y0] = 200 + Math.Round((1 - diff)*100);
                             //if (diff < 0.5) alph[incCoord - x0, ykey - y0] = (alph[incCoord - x0, ykey - y0] + (0.5 - diff)); // /2.0
                         }
@@ -412,7 +413,7 @@ namespace SpaceVIL
 
                         isInside += add;
                         diff = incCoord - _globalCrossY[ykey][i]._coord;
-                        if (isInside != 0 && diff > 0 && diff < 1) //точка выхода
+                        if (isInside != 0 && diff > 0 && diff < 1) //точка входа
                         {
                             alph[incCoord - 1 - x0, ykey - y0] = 100 + Math.Round(diff * 100);
                             //diff = 1 - diff;
