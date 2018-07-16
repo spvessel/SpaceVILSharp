@@ -21,6 +21,7 @@ namespace SpaceVIL
 
         public static double[,] CrossContours(GraphicsPath shape)
         {
+            shape.Flatten();
             List<Contour> contoursList = new List<Contour>();
 
             GraphicsPathIterator myPathIterator = new GraphicsPathIterator(shape);
@@ -30,6 +31,7 @@ namespace SpaceVIL
             GraphicsPath myPathSection = new GraphicsPath();
             int subpathPoints;
             bool IsClosed2;
+            //Console.WriteLine(myPathIterator.Count);
 
             for (int i = 0; i < myPathIterator.SubpathCount; i++)
             {

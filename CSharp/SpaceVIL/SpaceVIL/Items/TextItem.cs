@@ -11,7 +11,8 @@ namespace SpaceVIL
         private float[] _colors;
         private String _itemText = "";
 
-        private Font _font = new Font(new FontFamily("Courier New"), 22, FontStyle.Regular);
+        private Font _font = new Font(new FontFamily("Courier New"), 16, FontStyle.Regular);
+        //private Font _font = new Font("Times New Roman", 16, FontStyle.Bold, GraphicsUnit.Pixel);
 
         private bool _criticalFlag = true;
         private bool _coordsFlag = true;
@@ -65,6 +66,30 @@ namespace SpaceVIL
             if (!this._font.Equals(font))
             {
                 this._font = font;
+                _criticalFlag = true;
+            }
+        }
+        internal void SetFontSize(int size)
+        {
+            if (this._font.Size != size)
+            {
+                this._font = new Font(this._font.FontFamily, size, this._font.Style);
+                _criticalFlag = true;
+            }
+        }
+        internal void SetFontStyle(FontStyle style)
+        {
+            if (this._font.Style != style)
+            {
+                this._font = new Font(this._font.FontFamily, this._font.Size, style);
+                _criticalFlag = true;
+            }
+        }
+        internal void SetFontFamily(FontFamily font_family)
+        {
+            if (this._font.FontFamily != font_family)
+            {
+                this._font = new Font(font_family, this._font.Size, this._font.Style);
                 _criticalFlag = true;
             }
         }

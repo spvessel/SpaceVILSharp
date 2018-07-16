@@ -32,6 +32,7 @@ namespace SpaceVIL
         public void Unselect()
         {
             _selection = -1;
+            _substrate.IsVisible = false;
         }
         public void SetSelectionVisibility(bool visibility)
         {
@@ -73,9 +74,11 @@ namespace SpaceVIL
             if (!_show_selection)
                 return;
 
-            //_substrate.IsVisible = true;
             for (int i = FirstVisibleItem; i <= LastVisibleItem; i++)//?????? fuck!!!
             {
+                if (i == GetItems().Count)
+                    break;
+
                 if (GetItems().ElementAt(i).Equals(_substrate))
                     continue;
 
@@ -100,6 +103,8 @@ namespace SpaceVIL
         }
         public override void RemoveItem(BaseItem item)
         {
+            Console.WriteLine("remove");
+            Unselect();
             base.RemoveItem(item);
             UpdateLayout();
             (GetParent() as ListBox)?.UpdateElements();//хрееееееень
@@ -134,8 +139,8 @@ namespace SpaceVIL
 
         public void UpdateLayout()
         {
-            if (GetItems().Count == 0)
-                return;
+            /*if (GetItems().Count == 0)
+                return;*/
 
             AreaPosition = ListPosition.No;
 

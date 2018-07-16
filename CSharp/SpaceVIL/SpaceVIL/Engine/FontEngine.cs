@@ -227,9 +227,10 @@ namespace SpaceVIL
             private Letter MakeLetter(String let)
             {
                 GraphicsPath shape = new GraphicsPath();
-                StringFormat format = StringFormat.GenericDefault;
-                shape.AddString(let, font.FontFamily, (int)font.Style, font.Size, new PointF(0f, 0f), format);
-
+                StringFormat format = StringFormat.GenericTypographic;
+                //float emSize = font.Height * font.FontFamily.GetCellAscent(font.Style) / font.FontFamily.GetEmHeight(font.Style);
+                float emSize = font.Size;
+                shape.AddString(let, font.FontFamily, (int)font.Style, emSize, new PointF(0f, 0f), format);
                 try
                 {
                     return new Letter(let, shape);

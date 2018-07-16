@@ -122,6 +122,18 @@ namespace SpaceVIL
         {
             _text.SetFont(font);
         }
+        internal void SetFontSize(int size)
+        {
+            _text.SetFontSize(size);
+        }
+        internal void SetFontStyle(FontStyle style)
+        {
+            _text.SetFontStyle(style);
+        }
+        internal void SetFontFamily(FontFamily font_family)
+        {
+            _text.SetFontFamily(font_family);
+        }
         public Font GetFont()
         {
             return _text.GetFont();
