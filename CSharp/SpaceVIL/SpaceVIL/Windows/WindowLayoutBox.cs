@@ -7,13 +7,22 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
+    internal class WindowPair
+    {
+        public Guid GUID;
+        public WindowLayout WINDOW;
+    }
     static class WindowLayoutBox
     {
-        static public Dictionary<string, WindowLayout> windows = new Dictionary<string, WindowLayout>();
-        static public int ActiveWindow;
+        static public Dictionary<string, WindowLayout> windows_name = new Dictionary<string, WindowLayout>();
+        static public Dictionary<Guid, WindowLayout> windows_guid = new Dictionary<Guid, WindowLayout>();
+        static internal List<WindowPair> current_calling_pair = new List<WindowPair>();
+        static public WindowLayout LastFocusedWindow;
+
         static public void InitWindow(WindowLayout _layout)
         {
-            windows.Add(_layout.GetWindowName(), _layout);
+            windows_name.Add(_layout.GetWindowName(), _layout);
+            windows_guid.Add(_layout.Id, _layout);
             ItemsLayoutBox.InitLayout(_layout.Id);
 
             //add filling frame
@@ -32,27 +41,65 @@ namespace SpaceVIL
         }
         static public void RemoveWindow(WindowLayout _layout)
         {
-            windows.Remove(_layout.GetWindowName());
+            windows_name.Remove(_layout.GetWindowName());
+            windows_guid.Remove(_layout.Id);
         }
         static public WindowLayout GetWindowInstance(string name)
         {
-            if (windows.ContainsKey(name))
-                return windows[name];
+            if (windows_name.ContainsKey(name))
+                return windows_name[name];
             else return null;
         }
-        static public void WindowDispatcher(int sender_id)
+        static public WindowLayout GetWindowInstance(Guid guid)
         {
-            ActiveWindow = sender_id;
-            foreach (var wnd in windows)
-            {
-                if (wnd.Value.IsOutsideClickClosable && (wnd.Value.Id != ActiveWindow))
-                    wnd.Value.Close();
-            }
+            if (windows_guid.ContainsKey(guid))
+                return windows_guid[guid];
+            else return null;
         }
-        static public string[] GetListOfWindows() => windows.Keys.ToArray();
+
+        static internal void AddToWindowDispatcher(WindowLayout sender_wnd)
+        {
+            WindowPair pair = new WindowPair();
+            pair.WINDOW = sender_wnd;
+            if (LastFocusedWindow == null)
+            {
+                pair.GUID = sender_wnd.Id;//root
+                LastFocusedWindow = sender_wnd;
+            }
+            else
+                pair.GUID = LastFocusedWindow.Id;
+            current_calling_pair.Add(pair);
+
+            // Console.WriteLine("main: " + LastFocusedWindow?.GetWindowName() + " invoked: " + pair.WINDOW.GetWindowName());
+            //LastFocusedWindow = sender_wnd;
+        }
+        static internal void SetCurrentFocusedWindow(WindowLayout wnd)
+        {
+            LastFocusedWindow = wnd;
+            //Console.WriteLine(LastFocusedWindow.GetWindowName());
+        }
+        static internal void RemoveFromWindowDispatcher(WindowLayout sender_wnd)
+        {
+            List<WindowPair> pairs_to_delete = new List<WindowPair>();
+            foreach (var windows_pair in current_calling_pair)
+            {
+                if (windows_pair.WINDOW.Equals(sender_wnd))
+                {
+                    pairs_to_delete.Add(windows_pair);
+                }
+            }
+
+            foreach (var pairs in pairs_to_delete)
+            {
+                current_calling_pair.Remove(pairs);
+            }
+
+            pairs_to_delete = null;
+        }
+        static public string[] GetListOfWindows() => windows_name.Keys.ToArray();
         static public void PrintStoredWindows()
         {
-            foreach (var item in windows.Keys.ToArray())
+            foreach (var item in windows_name.Keys.ToArray())
             {
                 Console.WriteLine(item);
             }

@@ -13,17 +13,17 @@ namespace SpaceVIL
 
         override internal void InitWindow()
         {
-            Handler = new WindowLayout("MessageBox_" + GetCount());
+            Handler = new WindowLayout(this, "MessageBox_" + GetCount());
             //window's attr
-            //Handler.SetWindowName("MessageBox_" + GetCount());
             Handler.SetWindowTitle(DialogTitle);
-            Handler.SetWidth(400);
-            Handler.SetMinWidth(400);
-            Handler.SetHeight(250);
-            Handler.SetMinHeight(250);
+            Handler.SetWidth(300);
+            Handler.SetMinWidth(300);
+            Handler.SetHeight(150);
+            Handler.SetMinHeight(150);
             Handler.SetPadding(2, 2, 2, 2);
             Handler.SetBackground(Color.FromArgb(255, 45, 45, 45));
             Handler.IsBorderHidden = true;
+            Handler.IsDialog = true;
             Handler.IsAlwaysOnTop = true;
 
             //DragAnchor
@@ -67,10 +67,6 @@ namespace SpaceVIL
                 Handler.Close();
             };
             layout.AddItems(msg, ok);
-
-            //show
-            Handler.IsDialog = true;
-            Handler.Show();
         }
     }
 }

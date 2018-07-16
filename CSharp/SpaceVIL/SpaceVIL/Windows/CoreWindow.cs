@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    abstract class CoreWindow
+    public abstract class CoreWindow
     {
         private static int count = 0;
         private Guid windowGuid;

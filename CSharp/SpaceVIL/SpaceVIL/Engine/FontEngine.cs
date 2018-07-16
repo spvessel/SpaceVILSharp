@@ -14,17 +14,20 @@ namespace SpaceVIL
 
         static Dictionary<Font, Alphabet> fonts = new Dictionary<Font, Alphabet>();
 
-        static FontEngine() {
-            
+        static FontEngine()
+        {
+
         }
 
         internal static PixMapData GetPixMap(string text, Font font)
         {
             //return FontReview.getTextArrays(text, font);
-
-            if (!fonts.ContainsKey(font))
+            lock (CommonService.engine_locker)
             {
-                fonts.Add(font, new Alphabet(font));
+                if (!fonts.ContainsKey(font))
+                {
+                    fonts.Add(font, new Alphabet(font));
+                }
             }
 
             return fonts[font].MakeText(text);
@@ -42,7 +45,8 @@ namespace SpaceVIL
             return new int[] { a.lineSpacer, a.minY, a.maxY };
         }
 
-        internal static bool SavePreloadFont(Font font) {
+        internal static bool SavePreloadFont(Font font)
+        {
             if (!fonts.ContainsKey(font))
             {
                 fonts.Add(font, new Alphabet(font));
@@ -226,10 +230,12 @@ namespace SpaceVIL
                 StringFormat format = StringFormat.GenericDefault;
                 shape.AddString(let, font.FontFamily, (int)font.Style, font.Size, new PointF(0f, 0f), format);
 
-                try {
+                try
+                {
                     return new Letter(let, shape);
                 }
-                catch (Exception) {
+                catch (Exception)
+                {
                     Console.WriteLine("Bug letter exception");
                     return bugLetter;
                 }
@@ -255,18 +261,21 @@ namespace SpaceVIL
             }
             */
 
-            private void MakeBugLetter() {
+            private void MakeBugLetter()
+            {
                 bugLetter = new Letter("bug", null);
                 bugLetter.width = lineSpacer;
                 bugLetter.height = Math.Abs(maxY - minY + 1);
                 bugLetter.minY = minY;
                 bugLetter.isSpec = false;
                 double[,] arr = new double[bugLetter.width, bugLetter.height];
-                for (int i = 0; i < bugLetter.width; i++) {
+                for (int i = 0; i < bugLetter.width; i++)
+                {
                     arr[i, 0] = 1;
                     arr[i, bugLetter.height - 1] = 1;
                 }
-                for (int i = 1; i < bugLetter.height - 1; i++) {
+                for (int i = 1; i < bugLetter.height - 1; i++)
+                {
                     arr[0, i] = 1;
                     arr[bugLetter.width - 1, i] = 1;
                 }
@@ -293,7 +302,8 @@ namespace SpaceVIL
                 else isSpec = true;
             }
 
-            private void MakeLetterArrays(GraphicsPath shape) {
+            private void MakeLetterArrays(GraphicsPath shape)
+            {
                 RectangleF rec = shape.GetBounds();
                 int x0 = (int)Math.Floor(rec.Left);
                 //int x1 = (int)Math.Ceiling(rec.Right);
@@ -319,7 +329,7 @@ namespace SpaceVIL
                     if (isBraked) break;
                     x0shift++;
                 }
-                
+
                 int x1shift = width - 1;
                 isBraked = false;
                 while (x1shift >= 0)
@@ -331,7 +341,7 @@ namespace SpaceVIL
                     if (isBraked) break;
                     x1shift--;
                 }
-                
+
                 int y0shift = 0;
                 isBraked = false;
                 while (y0shift < height)
@@ -343,7 +353,7 @@ namespace SpaceVIL
                     if (isBraked) break;
                     y0shift++;
                 }
-                
+
                 int y1shift = height - 1;
                 isBraked = false;
                 while (y1shift >= 0)
@@ -355,7 +365,7 @@ namespace SpaceVIL
                     if (isBraked) break;
                     y1shift--;
                 }
-                
+
                 minX = 0;// x0 + x0shift;
                 minY = y0 + y0shift;
 
@@ -376,7 +386,7 @@ namespace SpaceVIL
 
                     }
                 }
-            
+
             }
             /*
             private void MakeLetterArraysOld(GraphicsPath shape)

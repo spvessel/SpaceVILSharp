@@ -6,13 +6,13 @@ namespace SpaceVIL
 {
     internal class ItemsLayout
     {
-        private int _id;
-        protected internal int Id
+        private Guid _id;
+        protected internal Guid Id
 		{
 			get { return  _id; }
 			set { _id = value; }
 		}
-        protected internal ItemsLayout(int layoutId)
+        protected internal ItemsLayout(Guid layoutId)
         {
             Id = layoutId;
         }

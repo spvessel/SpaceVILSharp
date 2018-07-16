@@ -8,14 +8,14 @@ namespace SpaceVIL
 {
     static class ItemsLayoutBox
     {
-        static public List<IItem> GetLayoutItems(int id)
+        static public List<IItem> GetLayoutItems(Guid id)
         {
             return layouts[id].Items.Select(_ => _ as IItem).ToList();
         }
 
-        static private Dictionary<int, ItemsLayout> layouts = new Dictionary<int, ItemsLayout>();
+        static private Dictionary<Guid, ItemsLayout> layouts = new Dictionary<Guid, ItemsLayout>();
 
-        static internal void InitLayout(int _layout)
+        static internal void InitLayout(Guid _layout)
         {
             ItemsLayout l = new ItemsLayout(_layout);
             layouts.Add(l.Id, l);

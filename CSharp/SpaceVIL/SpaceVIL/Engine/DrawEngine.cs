@@ -122,6 +122,9 @@ namespace SpaceVIL
 
         private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
+            if (!_handler.Focusable)
+                return;
+
             _tooltip.InitTimer(false);
             if (FocusedItem is TextEdit && ((mods == KeyMods.Control && key == KeyCode.V) ||
                 (mods == KeyMods.Shift && key == KeyCode.Insert)) && action == InputState.Press)
@@ -144,14 +147,36 @@ namespace SpaceVIL
         }
         private void TextInput(Glfw.Window glfwwnd, uint codepoint, KeyMods mods)
         {
+            if (!_handler.Focusable)
+                return;
+
             _tooltip.InitTimer(false);
             FocusedItem?.InvokeInputTextEvents(codepoint, mods);
         }
-        private void Focus(Glfw.Window glfwwnd, bool value)
+        internal void Focus(Glfw.Window glfwwnd, bool value)
         {
             EngineEvent.ResetAllEvents();
             _tooltip.InitTimer(false);
-            _handler.Focused = value;
+
+            if (value)
+            {
+                if (_handler.Focusable)
+                {
+                    WindowLayoutBox.SetCurrentFocusedWindow(_handler.GetLayout());
+                    _handler.Focused = value;
+                }
+            }
+            else
+            {
+                if (_handler.GetLayout().IsDialog)
+                {
+                    _handler.Focused = true;
+                }
+                else
+                {
+                    _handler.Focused = value;
+                }
+            }
         }
 
         internal void SetWindowPos()
@@ -240,7 +265,8 @@ namespace SpaceVIL
         }
         protected void MouseMove(Glfw.Window wnd, double xpos, double ypos)
         {
-            //Console.WriteLine(EngineEvent.LastEvent());
+            if (!_handler.Focusable)
+                return;
 
             _tooltip.InitTimer(false);
             EngineEvent.SetEvent(InputEventType.MouseMove);
@@ -314,7 +340,7 @@ namespace SpaceVIL
                         FocusedItem = HoveredItem;
                         FocusedItem.IsFocused = true;
                     }
-                    else if (anchor != null)
+                    else if (anchor != null && !(HoveredItem is ButtonCore))
                     {
                         if ((ptrRelease.X - ptrPress.X) != 0 || (ptrRelease.Y - ptrPress.Y) != 0)
                         {
@@ -388,6 +414,9 @@ namespace SpaceVIL
 
         protected void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
+            if (!_handler.Focusable)
+                return;
+
             _tooltip.InitTimer(false);
             if (!GetHoverVisualItem(ptrRelease.X, ptrRelease.Y))
             {
@@ -452,6 +481,7 @@ namespace SpaceVIL
             glBindVertexArray(_handler.GVAO[0]);
 
             _primitive.UseShader();
+            Focus(_handler.GetWindow(), true);
 
             //starting animation
             float _opacity_anim = 0.0f;
@@ -465,6 +495,7 @@ namespace SpaceVIL
             }
             _handler.SetOpacity(1.0f);
 
+
             //core rendering
             while (!_handler.IsClosing())
             {
@@ -472,9 +503,11 @@ namespace SpaceVIL
                 {
                     if (_handler.Focused)
                     {
+                        // Console.WriteLine("render");
                         Render();
                     }
                 }
+
                 if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize))
                     Glfw.PollEvents();
                 else

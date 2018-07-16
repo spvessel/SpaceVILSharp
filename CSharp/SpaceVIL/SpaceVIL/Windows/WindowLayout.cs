@@ -10,10 +10,14 @@ namespace SpaceVIL
     public class WindowLayout : ISize, IPosition
     //where TLayout : VisualItem
     {
+
+        private CoreWindow handler;
+        private Guid ParentGUID;
         private Thread thread;
         private DrawEngine engine;
 
         public WindowLayout(
+            CoreWindow window,
             string name = "WindowLayout",
             string title = "WindowLayout",
             int width = 300,
@@ -21,8 +25,8 @@ namespace SpaceVIL
             bool border = true
             )
         {
-            //refactor for unique Id
-            Id = GetHashCode();
+            handler = window;
+            Id = handler.GetWindowGuid();
             SetWindowName(name);
             SetWindowTitle(title);
             SetWidth(width);
@@ -116,7 +120,7 @@ namespace SpaceVIL
             }
         }
 
-        public int Id { get; set; }
+        internal Guid Id { get; set; }
 
         private string _name;
         public void SetWindowName(string name)
@@ -237,11 +241,13 @@ namespace SpaceVIL
             engine._handler.WPosition.X = GetX();
             engine._handler.WPosition.Y = GetY();
 
-            WindowLayoutBox.ActiveWindow = Id;
             IsHidden = false;
-
             if (IsDialog)
             {
+                WindowLayoutBox.AddToWindowDispatcher(this);
+                ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
+                WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
+
                 if (thread != null && thread.IsAlive)
                     return;
 
@@ -273,7 +279,13 @@ namespace SpaceVIL
             {
                 engine.Close();
                 WindowLayoutBox.RemoveWindow(this);
+                lock (CommonService.engine_locker)
+                {
+                    SetWindowFocused();
+                    WindowLayoutBox.RemoveFromWindowDispatcher(this);
+                }
             }
+
         }
         public bool IsAlwaysOnTop { get; set; }
         public bool IsBorderHidden { get; set; }
@@ -294,7 +306,12 @@ namespace SpaceVIL
                     engine._handler.Focused = value;
             }
         }
-
+        internal void SetWindowFocused()
+        {
+            WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = true;
+            WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Focus(WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.GetWindow(), true);
+            WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
+        }
         public void Minimize()
         {
             engine.MinimizeWindow();

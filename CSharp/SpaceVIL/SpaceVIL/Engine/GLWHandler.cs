@@ -102,7 +102,6 @@ namespace SpaceVIL
 
             Glfw.MakeContextCurrent(_window);
             Glfw.SetWindowSizeLimits(_window, _w_layout.GetMinWidth(), _w_layout.GetMinHeight(), _w_layout.GetMaxWidth(), _w_layout.GetMaxHeight());
-            Glfw.FocusWindow(_window);
 
             //cursors
             _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
