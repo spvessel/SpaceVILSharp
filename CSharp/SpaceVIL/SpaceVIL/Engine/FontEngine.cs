@@ -108,7 +108,7 @@ namespace SpaceVIL
 
             internal PixMapData MakeText(String text)
             {
-                double err = 0; //переехало из буквы
+                double err = 0.15; //переехало из буквы
                 double x0 = 0;
 
                 List<float> pix = new List<float>();
@@ -379,7 +379,7 @@ namespace SpaceVIL
                     {
                         if (alph[xx, yy] != 0)
                         {
-                            alph[xx, yy] = (alph[xx, yy] < 1) ? alph[xx, yy] + 0.15f : alph[xx, yy];
+                            //alph[xx, yy] = (alph[xx, yy] < 1) ? alph[xx, yy] + 0.15f : alph[xx, yy];
                             //alph[xx, yy] = (alph[xx, yy] > 1) ? 1 : alph[xx, yy];
                         }
                         alphas[xx - x0shift, yy - y0shift] = alph[xx, yy];
