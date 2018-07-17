@@ -129,6 +129,8 @@ namespace SpaceVIL
             int visible_area = _area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom;
             foreach (var item in _area.GetItems())
             {
+                if(item.Equals(_area.GetSubstrate()))
+                    continue;
                 total_invisible_size += (item.GetHeight() + _area.GetSpacing().Vertical);
             }
             int total = total_invisible_size - _area.GetSpacing().Vertical;
@@ -162,6 +164,8 @@ namespace SpaceVIL
             int visible_area = _area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right;
             foreach (var item in _area.GetItems())
             {
+                if (item.Equals(_area.GetSubstrate()))
+                    continue;
                 if (max_size < item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right)
                     max_size = item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right;
             }
@@ -233,9 +237,6 @@ namespace SpaceVIL
             VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); };
             HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };
         }
-
-        public EventMouseMethodState EventScrollUp;
-        public EventMouseMethodState EventScrollDown;
 
         public void InvokeScrollUp()
         {

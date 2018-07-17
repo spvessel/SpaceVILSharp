@@ -235,6 +235,11 @@ namespace SpaceVIL
         public void Show()
         {
             manager = new ActionManager(this);
+            /*manager.ActionsDone += () =>
+            {
+               lock (CommonService.engine_locker)
+                   UpdateScene();
+            };*/
 
             engine = new DrawEngine(this);
             engine._handler.BorderHidden = IsBorderHidden;
@@ -287,6 +292,7 @@ namespace SpaceVIL
                     thread_manager.Abort();
                 IsHidden = true;
             }
+            //manager.ActionsDone -= () => UpdateScene();
         }
         public bool IsAlwaysOnTop { get; set; }
         public bool IsBorderHidden { get; set; }
@@ -329,6 +335,8 @@ namespace SpaceVIL
         internal void ExecutePollActions()
         {
             manager.Execute.Set();
+            manager.Execute.WaitOne();
+            UpdateScene();//нужно обновлять после выполения задания
         }
     }
 }

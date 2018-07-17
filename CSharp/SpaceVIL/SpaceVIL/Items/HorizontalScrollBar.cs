@@ -94,9 +94,6 @@ namespace SpaceVIL
             DownArrow.IsVisible = value;
         }
 
-        public EventMouseMethodState EventScrollUp;
-        public EventMouseMethodState EventScrollDown;
-
         public void InvokeScrollUp()
         {
             if (EventScrollUp != null) EventScrollUp.Invoke(this);

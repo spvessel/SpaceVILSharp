@@ -25,6 +25,7 @@ namespace SpaceVIL
         private VisualItem FocusedItem;
         private Pointer ptrPress = new Pointer();
         private Pointer ptrRelease = new Pointer();
+        private Pointer ptrClick = new Pointer();
 
         internal GLWHandler _handler;
         private Shader _primitive;
@@ -228,7 +229,6 @@ namespace SpaceVIL
         {
             foreach (var item in HoveredItems)
             {
-                //Console.WriteLine(item.GetItemName());
                 if (item is T)
                 {
                     return item;
@@ -270,6 +270,7 @@ namespace SpaceVIL
 
             _tooltip.InitTimer(false);
             EngineEvent.SetEvent(InputEventType.MouseMove);
+
             //logic of hovers
             ptrRelease.X = (int)xpos;
             ptrRelease.Y = (int)ypos;
@@ -428,28 +429,30 @@ namespace SpaceVIL
             switch (state)
             {
                 case InputState.Release:
+                    //Console.WriteLine(EngineEvent.LastEvent());
                     _handler.GetLayout().GetWindow()._sides = 0;
-                    if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize) || EngineEvent.LastEvent().HasFlag(InputEventType.WindowMove))
+
+                    if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize)
+                        || EngineEvent.LastEvent().HasFlag(InputEventType.WindowMove))
                     {
                         EngineEvent.ResetAllEvents();
                         EngineEvent.SetEvent(InputEventType.MouseRelease);
                         return;
                     }
+                    if (EngineEvent.LastEvent().HasFlag(InputEventType.MouseMove))
+                    {
+                        float len = (float)Math.Sqrt(Math.Pow(ptrRelease.X - ptrClick.X, 2) + Math.Pow(ptrRelease.Y - ptrClick.Y, 2));
+                        if (len > 3.0f)
+                        {
+                            EngineEvent.ResetAllEvents();
+                            EngineEvent.SetEvent(InputEventType.MouseRelease);
+                            return;
+                        }
+                    }
 
                     if (HoveredItem != null)
                     {
-                        foreach (var item in HoveredItems)
-                        {
-                            item._mouse_ptr.X = ptrRelease.X;
-                            item._mouse_ptr.Y = ptrRelease.Y;
-                            //item.EventMouseClick?.Invoke(HoveredItem);
-                            _handler.GetLayout().SetEventTask(new EventTask()
-                            {
-                                Item = item,
-                                Action = InputEventType.MouseRelease
-                            });
-                        }
-                        _handler.GetLayout().ExecutePollActions();
+                        AssignActions(InputEventType.MouseRelease, false);
 
                         //Focus get
                         if (FocusedItem != null)
@@ -462,6 +465,12 @@ namespace SpaceVIL
                     EngineEvent.SetEvent(InputEventType.MouseRelease);
                     break;
                 case InputState.Press:
+                    Glfw.GetCursorPos(_handler.GetWindow(), out double xpos, out double ypos);
+                    ptrClick.X = (int)xpos;
+                    ptrClick.Y = (int)ypos;
+
+                    AssignActions(InputEventType.MousePressed, false);
+
                     if (HoveredItem is IWindow)
                     {
                         (HoveredItem as WContainer)._resizing = true;
@@ -474,6 +483,32 @@ namespace SpaceVIL
                 default:
                     break;
             }
+        }
+
+        private void AssignActions(InputEventType action, bool only_last)
+        {
+            if (only_last)
+            {
+                _handler.GetLayout().SetEventTask(new EventTask()
+                {
+                    Item = HoveredItem,
+                    Action = action
+                });
+            }
+            else
+            {
+                foreach (var item in HoveredItems)
+                {
+                    item._mouse_ptr.X = ptrRelease.X;
+                    item._mouse_ptr.Y = ptrRelease.Y;
+                    _handler.GetLayout().SetEventTask(new EventTask()
+                    {
+                        Item = item,
+                        Action = action
+                    });
+                }
+            }
+            _handler.GetLayout().ExecutePollActions();
         }
 
         internal void Update()

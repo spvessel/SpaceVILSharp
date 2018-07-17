@@ -6,6 +6,7 @@ using System.Reflection;
 
 namespace SpaceVIL
 {
+    public delegate void EventCommonMethod();
     public delegate void EventCommonMethodState(IItem sender);
     public delegate void EventMouseMethodState(IItem sender);
     public delegate void EventKeyMethodState(IItem sender, int key, KeyMods mods);
@@ -79,7 +80,7 @@ namespace SpaceVIL
         }
         public EventManager eventManager = null;
         private List<BaseItem> _content = new List<BaseItem>();
-        public List<BaseItem> GetItems()
+        public virtual List<BaseItem> GetItems()
         {
             return _content;
         }
@@ -276,6 +277,8 @@ namespace SpaceVIL
         public EventMouseMethodState EventMouseRelease;
         public EventMouseMethodState EventMouseDrag;
         public EventMouseMethodState EventMouseDrop;
+        public EventMouseMethodState EventScrollUp;
+        public EventMouseMethodState EventScrollDown;
         //keyboard input
         public EventKeyMethodState EventKeyPress;
         public EventKeyMethodState EventKeyRelease;
