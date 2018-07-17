@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class TextLine : TextItem, ITextContainer
+    class TextBlock : TextItem, ITextContainer
     {
         private static int count = 0;
 
@@ -18,12 +18,12 @@ namespace SpaceVIL
         private float[] _lineWidth;
         private List<int> _letEndPos;
 
-        public TextLine()
+        public TextBlock()
         {
             count++;
         }
 
-        public TextLine(string text, Font font)
+        public TextBlock(string text, Font font)
             : base(text, font, "TextLine_" + count)
         {
             count++;
@@ -38,7 +38,7 @@ namespace SpaceVIL
         {
             String text = GetItemText();
             Font font = GetFont();
-            String[] line = new String[1] { text };//.Split('\n');
+            String[] line = text.Split('\n');
             PixMapData obj;
             _coordArray = new List<List<float>>();
             _lineWidth = new float[line.Length];
@@ -86,7 +86,7 @@ namespace SpaceVIL
 
                 //Vertical
                 if (alignments.HasFlag(ItemAlignment.Bottom))
-                    alignShiftY = GetParent().GetHeight() - height ;
+                    alignShiftY = GetParent().GetHeight() - height;
 
                 else if (alignments.HasFlag(ItemAlignment.VCenter))
                     alignShiftY = (GetParent().GetHeight() - height) / 2f;
@@ -102,6 +102,7 @@ namespace SpaceVIL
 
             SetRealCoords(outRealCoords);
         }
+
 
         private int _lineSpacer;
         void SetLineSpacer(int lineSpacer)
@@ -147,7 +148,8 @@ namespace SpaceVIL
             return base.Shape();
         }
 
-        internal List<int> GetLetPosArray() {
+        internal List<int> GetLetPosArray()
+        {
             return _letEndPos;
         }
     }
