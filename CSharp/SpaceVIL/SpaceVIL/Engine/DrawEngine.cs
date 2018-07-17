@@ -442,8 +442,14 @@ namespace SpaceVIL
                         {
                             item._mouse_ptr.X = ptrRelease.X;
                             item._mouse_ptr.Y = ptrRelease.Y;
-                            item.EventMouseClick?.Invoke(HoveredItem);
+                            //item.EventMouseClick?.Invoke(HoveredItem);
+                            _handler.GetLayout().SetEventTask(new EventTask()
+                            {
+                                Item = item,
+                                Action = InputEventType.MouseRelease
+                            });
                         }
+                        _handler.GetLayout().ExecutePollActions();
 
                         //Focus get
                         if (FocusedItem != null)
@@ -503,7 +509,6 @@ namespace SpaceVIL
                 {
                     if (_handler.Focused)
                     {
-                        // Console.WriteLine("render");
                         Render();
                     }
                 }
@@ -529,6 +534,15 @@ namespace SpaceVIL
             DrawItems(_handler.GetLayout().GetWindow());
             //draw tooltip if needed
             DrawToolTip();
+            if (!_handler.Focusable)
+            {
+                Rectangle dark_fill = new Rectangle();
+                dark_fill.SetSize(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
+                dark_fill.SetBackground(0, 0, 0, 150);
+                dark_fill.SetParent(_handler.GetLayout().GetWindow());
+                dark_fill.SetHandler(_handler.GetLayout());
+                DrawShell(dark_fill);
+            }
             _handler.Swap();
         }
         private void DrawToolTip()//refactor
@@ -581,19 +595,15 @@ namespace SpaceVIL
             //refactor paths
             if (root is IPixelDrawable)
             {
-                glDisable(GL_MULTISAMPLE);
                 DrawPixels((root as IPixelDrawable));
                 foreach (var child in (root as VisualItem).GetItems())
                 {
                     DrawItems(child);
                 }
-                glEnable(GL_MULTISAMPLE);
             }
             if (root is TextItem)
             {
-                glDisable(GL_MULTISAMPLE);
                 DrawText(root as TextItem);
-                glEnable(GL_MULTISAMPLE);
                 if (_isStencilSet == root)
                 {
                     glDisable(GL_STENCIL_TEST);
@@ -810,6 +820,8 @@ namespace SpaceVIL
 
         void DrawText(TextItem item)
         {
+            glDisable(GL_MULTISAMPLE);
+
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
             float[] data = item.Shape();
@@ -835,10 +847,14 @@ namespace SpaceVIL
 
             // Clear VBO and shader
             glDeleteBuffers(2, buffers);
+
+            glEnable(GL_MULTISAMPLE);
         }
 
         void DrawPixels(IPixelDrawable item)
         {
+            glDisable(GL_MULTISAMPLE);
+
             //Console.WriteLine(item.GetItemText());
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
@@ -863,10 +879,17 @@ namespace SpaceVIL
 
             // Clear VBO and shader
             glDeleteBuffers(2, buffers);
+
+            glEnable(GL_MULTISAMPLE);
         }
 
         void DrawImage(ImageItem image)
         {
+            byte[] bitmap = image.GetPixMapImage();
+
+            if (bitmap == null)
+                return;
+
             //проверка: полностью ли влезает объект в свой контейнер
             CheckOutsideBorders(image as BaseItem);
 
@@ -907,7 +930,6 @@ namespace SpaceVIL
             glEnableVertexAttribArray(1);
 
             //texture
-            byte[] bitmap = image.GetPixMapImage();
             int w = image.GetImageWidth(), h = image.GetImageHeight();
 
             uint[] texture = new uint[1];

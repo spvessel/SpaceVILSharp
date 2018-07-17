@@ -12,7 +12,6 @@ namespace SpaceVIL
         private String _itemText = "";
 
         private Font _font = new Font(new FontFamily("Courier New"), 16, FontStyle.Regular);
-        //private Font _font = new Font("Times New Roman", 16, FontStyle.Bold, GraphicsUnit.Pixel);
 
         private bool _criticalFlag = true;
         private bool _coordsFlag = true;

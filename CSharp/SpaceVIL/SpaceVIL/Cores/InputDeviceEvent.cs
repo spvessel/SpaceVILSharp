@@ -9,19 +9,30 @@ namespace SpaceVIL
     [Flags]
     public enum InputEventType
     {
-        MouseMove = 0x01,
-        MousePressed = 0x02,
-        MouseRelease = 0x04,
-        MouseScroll = 0x08,
-        KeyPress = 0x10,
-        KeyRepeat = 0x20,
-        KeyRelease = 0x40,
-        WindowResize = 0x80,
-        WindowMove = 0x100,
-        WindowMinimize = 0x200,
-        WindowRestore = 0x400,
-        WindowGetFocus = 0x800,
-        WindowLostFocus = 0x1000
+        FocusGet = 0x01,
+        FocusLost = 0x02,
+        Resized = 0x04,
+        Destroy = 0x08,
+        ValueChanged = 0x10,
+        SelectionChanged = 0x20,
+        IndexChanged = 0x40,
+
+        MouseMove = 0x80,
+        MousePressed = 0x100,
+        MouseRelease = 0x200,
+        MouseScroll = 0x400,
+
+        KeyPress = 0x800,
+        KeyRepeat = 0x1000,
+        KeyRelease = 0x2000,
+
+        WindowResize = 0x4000,
+        WindowMove = 0x8000,
+        WindowMinimize = 0x10000,
+        WindowRestore = 0x20000,
+        WindowClose = 0x40000,
+        WindowGetFocus = 0x80000,
+        WindowLostFocus = 0x100000
     }
 
     public class InputDeviceEvent
