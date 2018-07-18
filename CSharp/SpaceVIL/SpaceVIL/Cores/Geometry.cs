@@ -11,7 +11,7 @@ namespace SpaceVIL
         //width
         private int _minWidth = 0;
         private int _width = 0;
-        private int _maxWidth = 1920;
+        private int _maxWidth = 7680;
         public void SetWidth(int width)
         {
             if (width < 0)
@@ -73,7 +73,7 @@ namespace SpaceVIL
         //height
         private int _minHeight = 0;
         private int _height = 0;
-        private int _maxHeight = 1920;
+        private int _maxHeight = 4320;
         public void SetHeight(int height)
         {
             if (height < 0)

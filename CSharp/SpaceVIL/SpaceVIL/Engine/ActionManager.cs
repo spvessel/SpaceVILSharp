@@ -18,9 +18,7 @@ namespace SpaceVIL
         internal ManualResetEvent Execute = new ManualResetEvent(false);
         WindowLayout _handler;
         bool _stoped = false;
-        internal EventCommonMethod ActionsDone;
         //int _interval = 1000 / 60;
-
         public ActionManager(WindowLayout wnd)
         {
             _handler = wnd;
@@ -31,8 +29,8 @@ namespace SpaceVIL
             {
                 Execute.WaitOne();
                 ExecuteActions();
-                //ActionsDone?.Invoke();
                 Execute.Set();
+                Execute.Reset();
             }
         }
 
