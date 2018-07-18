@@ -151,6 +151,7 @@ namespace SpaceVIL
                 return;
 
             _tooltip.InitTimer(false);
+            Console.WriteLine(FocusedItem?.GetItemName());
             FocusedItem?.InvokeInputTextEvents(codepoint, mods);
         }
         internal void Focus(Glfw.Window glfwwnd, bool value)

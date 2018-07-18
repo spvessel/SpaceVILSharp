@@ -285,7 +285,7 @@ namespace SpaceVIL
                         if (isInside == 0 && diff > 0) //Стал снаружи
                         {
                             //if (diff < 0.5) alph[incCoord - x0, ykey - y0] = (alph[incCoord - x0, ykey - y0] + (0.5 - diff)); // /2.0
-                            if (alph[incCoord - x0, ykey - y0] < 1 - diff - 0.3)
+                            if (alph[incCoord - x0, ykey - y0] < (1 - diff - 0.3) * 3f / 4)
                                 alph[incCoord - x0, ykey - y0] = (1 - diff - 0.3)*3f/4;
                         }
                         
@@ -302,7 +302,7 @@ namespace SpaceVIL
                         if (isInside != 0 && diff > 0) {
                             //diff = 1 - diff;
                             //if (diff < 0.5) alph[incCoord - 1 - x0, ykey - y0] = (alph[incCoord - 1 - x0, ykey - y0] + (0.5 - diff)); // /2.0
-                            if (alph[incCoord - 1 - x0, ykey - y0] < diff - 0.3)
+                            if (alph[incCoord - 1 - x0, ykey - y0] < (diff - 0.3) * 3f / 4)
                                 alph[incCoord - 1 - x0, ykey - y0] = (diff - 0.3) * 3f / 4;
                         }
                     }
@@ -334,14 +334,14 @@ namespace SpaceVIL
 
                         if (isInside != 0 && isInside + add == 0) //Точка выхода
                         {
-                            if (alph[xkey - x0, incCoord - y0] < 1 - diff - 0.3)
+                            if (alph[xkey - x0, incCoord - y0] < (1 - diff - 0.3) * 3f / 4)
                                 alph[xkey - x0, incCoord - y0] = (1 - diff - 0.3) * 3f / 4;
                             //if (diff < 0.5 && diff > 0) alph[xkey - x0, incCoord - y0] = (alph[xkey - x0, incCoord - y0] + (0.5 - diff)); // /2.0
                             
                         }
                         else if (isInside == 0 && isInside + add != 0) //Точка входа
                         {
-                            if (alph[xkey - x0, incCoord - 1 - y0] < diff - 0.3)
+                            if (alph[xkey - x0, incCoord - 1 - y0] < (diff - 0.3) * 3f / 4)
                                 alph[xkey - x0, incCoord - 1 - y0] = (diff - 0.3)*3f/4;
                             //diff = Math.Abs(_globalCrossX[xkey][i]._coord - incCoord);
                             //if (diff < 0.5 && diff > 0) alph[xkey - x0, incCoord - y0] = (alph[xkey - x0, incCoord - y0] + (0.5 - diff)); // /2.0
@@ -411,9 +411,24 @@ namespace SpaceVIL
                         diff = incCoord - _globalCrossY[ykey][i]._coord;
                         if (isInside == 0 && diff > 0 && diff < 1) //Стал снаружи, т.е. точка выхода
                         {
+                            /*
                             if (alph[incCoord - x0, ykey - y0] > 0)
                             alph[incCoord - x0, ykey - y0] = 200 + Math.Round((1 - diff)*100);
                             //if (diff < 0.5) alph[incCoord - x0, ykey - y0] = (alph[incCoord - x0, ykey - y0] + (0.5 - diff)); // /2.0
+                            */
+
+                            double d = alph[incCoord - x0, ykey - y0];
+                            if (alph[incCoord - x0, ykey - y0] > 100)
+                            {
+                                d -= 100;
+                                d = (d > 100) ? d - 100 : d;
+                                d /= 100;   
+                            }
+
+                            if (d < (1 - diff - 0.3) * 3f / 4)
+                            {
+                                alph[incCoord - x0, ykey - y0] = 200 + Math.Round(((1 - diff - 0.3) * 3f / 4) * 100);
+                            }
                         }
 
                     }
@@ -429,9 +444,22 @@ namespace SpaceVIL
                         diff = incCoord - _globalCrossY[ykey][i]._coord;
                         if (isInside != 0 && diff > 0 && diff < 1) //точка входа
                         {
+                            /*
                             alph[incCoord - 1 - x0, ykey - y0] = 100 + Math.Round(diff * 100);
                             //diff = 1 - diff;
                             //if (diff < 0.5) alph[incCoord - 1 - x0, ykey - y0] = (alph[incCoord - 1 - x0, ykey - y0] + (0.5 - diff)); // /2.0
+                            */
+
+                            double d = alph[incCoord - 1 - x0, ykey - y0];
+                            if (alph[incCoord - x0, ykey - y0] > 100)
+                            {
+                                d -= 100;
+                                d = (d > 100) ? d - 100 : d;
+                                d /= 100;
+                            }
+
+                            if (d < (diff - 0.3) * 3f / 4)
+                                alph[incCoord - 1 - x0, ykey - y0] = 100 + Math.Round(((diff - 0.3) * 3f / 4) * 100);
                         }
                     }
                 }
@@ -445,21 +473,25 @@ namespace SpaceVIL
                 {
                     add = (_globalCrossX[xkey][i]._isIn == _globalCrossX[xkey][i]._clockwiae) ? 1 : -1;
 
-                    if (isInside != 0 && isInside + add == 0) //Точка выхода
+                    incCoord = (int)Math.Truncate(_globalCrossX[xkey][i]._coord);
+                    if (incCoord != _globalCrossX[xkey][i]._coord)
                     {
-                        incCoord = (int)Math.Truncate(_globalCrossX[xkey][i]._coord) + 1;
-                        if (alph[xkey - x0, incCoord - y0] < 100)
+                        incCoord++;
+                        diff = incCoord - _globalCrossX[xkey][i]._coord;
+
+                        if (isInside != 0 && isInside + add == 0) //Точка выхода
                         {
-                            diff = incCoord - _globalCrossX[xkey][i]._coord;
-                            if (diff < 0.5 && diff > 0) alph[xkey - x0, incCoord - y0] = (alph[xkey - x0, incCoord - y0] + (0.5 - diff)); // /2.0
+                            if (alph[xkey - x0, incCoord - y0] < (1 - diff - 0.3) * 3f / 4)
+                                alph[xkey - x0, incCoord - y0] = (1 - diff - 0.3) * 3f / 4;
+                            //if (diff < 0.5 && diff > 0) alph[xkey - x0, incCoord - y0] = (alph[xkey - x0, incCoord - y0] + (0.5 - diff)); // /2.0
+
                         }
-                    }
-                    else if (isInside == 0 && isInside + add != 0) //Точка входа
-                    {
-                        incCoord = (int)Math.Round(_globalCrossX[xkey][i]._coord);
-                        if (alph[xkey - x0, incCoord - y0] < 100) { 
-                            diff = Math.Abs(_globalCrossX[xkey][i]._coord - incCoord);
-                            if (diff < 0.5 && diff > 0) alph[xkey - x0, incCoord - y0] = (alph[xkey - x0, incCoord - y0] + (0.5 - diff)); // /2.0
+                        else if (isInside == 0 && isInside + add != 0) //Точка входа
+                        {
+                            if (alph[xkey - x0, incCoord - 1 - y0] < (diff - 0.3) * 3f / 4)
+                                alph[xkey - x0, incCoord - 1 - y0] = (diff - 0.3) * 3f / 4;
+                            //diff = Math.Abs(_globalCrossX[xkey][i]._coord - incCoord);
+                            //if (diff < 0.5 && diff > 0) alph[xkey - x0, incCoord - y0] = (alph[xkey - x0, incCoord - y0] + (0.5 - diff)); // /2.0
                         }
                     }
 

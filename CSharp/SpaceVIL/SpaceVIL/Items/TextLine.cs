@@ -14,9 +14,10 @@ namespace SpaceVIL
         private int _minLineSpacer;
         private int _minFontY;
         private int _maxFontY;
-        private List<List<float>> _coordArray;
-        private float[] _lineWidth;
+        private List<float> _coordArray; //private List<List<float>> _coordArray;
+        private float _lineWidth; //private float[] _lineWidth;
         private List<int> _letEndPos;
+        private float _lineYShift = 0;
 
         public TextLine()
         {
@@ -31,29 +32,29 @@ namespace SpaceVIL
             _minLineSpacer = output[0];
             _minFontY = output[1];
             _maxFontY = output[2];
-            _lineSpacer = _minLineSpacer;
+            //_lineSpacer = _minLineSpacer;
         }
 
         public void CreateText()
         {
             String text = GetItemText();
             Font font = GetFont();
-            String[] line = new String[1] { text };//.Split('\n');
+            //String[] line = new String[1] { text };//.Split('\n');
             PixMapData obj;
-            _coordArray = new List<List<float>>();
-            _lineWidth = new float[line.Length];
+            _coordArray = new List<float>(); //_coordArray = new List<List<float>>();
+            //_lineWidth = new float[line.Length];
             List<float> alphas = new List<float>();
 
             int inc = 0;
-            foreach (String textLine in line)
-            {
-                obj = FontEngine.GetPixMap(textLine, font);
-                _coordArray.Add(obj.GetPixels());
+            //foreach (String textLine in line)
+            //{
+            obj = FontEngine.GetPixMap(text, font); //obj = FontEngine.GetPixMap(textLine, font);
+                _coordArray.AddRange(obj.GetPixels()); //_coordArray.Add(obj.GetPixels());
                 alphas.AddRange(obj.GetColors());
-                _lineWidth[inc] = obj.GetAlpha();
+                _lineWidth = obj.GetAlpha();
                 inc++;
                 _letEndPos = obj.GetEndPositions();
-            }
+            //}
 
             SetAlphas(alphas);
 
@@ -72,51 +73,52 @@ namespace SpaceVIL
             float alignShiftY = 0;
 
             float height = Math.Abs(_maxFontY - _minFontY);
-            float bigSpacer = height + _lineSpacer;
-            float addSpace = -_minFontY;
-
-            for (int i = 0; i < _coordArray.Count; i++)
-            {
-                //Horizontal
-                if (alignments.HasFlag(ItemAlignment.Right))
-                    alignShiftX = GetParent().GetWidth() - _lineWidth[i];
+            //float bigSpacer = height + _lineSpacer;
+            //float addSpace = -_minFontY;
+            if (_lineYShift == 0)
+                _lineYShift = -_minFontY;
+            //for (int i = 0; i < _coordArray.Count; i++)
+            //{
+            //Horizontal
+            if (alignments.HasFlag(ItemAlignment.Right))
+                alignShiftX = GetParent().GetWidth() - _lineWidth; //[i];
 
                 else if (alignments.HasFlag(ItemAlignment.HCenter))
-                    alignShiftX = (GetParent().GetWidth() - _lineWidth[i]) / 2f;
+                    alignShiftX = (GetParent().GetWidth() - _lineWidth) / 2f; //[i]) / 2f;
 
-                //Vertical
-                if (alignments.HasFlag(ItemAlignment.Bottom))
+            //Vertical
+            if (alignments.HasFlag(ItemAlignment.Bottom))
                     alignShiftY = GetParent().GetHeight() - height ;
 
                 else if (alignments.HasFlag(ItemAlignment.VCenter))
                     alignShiftY = (GetParent().GetHeight() - height) / 2f;
 
-                for (int j = 0; j < _coordArray[i].Count / 3; j++)
+                for (int j = 0; j < _coordArray.Count / 3; j++) //_coordArray[i]...
                 {
-                    outRealCoords.Add(_coordArray[i][j * 3] + alignShiftX);
-                    outRealCoords.Add(_coordArray[i][j * 3 + 1] + addSpace + alignShiftY);
-                    outRealCoords.Add(_coordArray[i][j * 3 + 2]);
+                    outRealCoords.Add(_coordArray[j * 3] + alignShiftX); //_coordArray[i]...
+                    outRealCoords.Add(_coordArray[j * 3 + 1] + alignShiftY + _lineYShift); //_coordArray[i]...
+                    outRealCoords.Add(_coordArray[j * 3 + 2]); //_coordArray[i]...
                 }
-                addSpace += bigSpacer;
-            }
+                //addSpace += bigSpacer;
+            //}
 
             SetRealCoords(outRealCoords);
         }
 
-        private int _lineSpacer;
-        void SetLineSpacer(int lineSpacer)
-        {
-            if ((lineSpacer != this._lineSpacer) && (lineSpacer >= _minLineSpacer))
-            {
-                SetCoordsFlag(true);
-                this._lineSpacer = lineSpacer;
-            }
-        }
+        //private int _lineSpacer;
+        //void SetLineSpacer(int lineSpacer)
+        //{
+        //    if ((lineSpacer != this._lineSpacer) && (lineSpacer >= _minLineSpacer))
+        //    {
+        //        SetCoordsFlag(true);
+        //        this._lineSpacer = lineSpacer;
+        //    }
+        //}
 
-        public int GetLineSpacer()
-        {
-            return _lineSpacer;
-        }
+        //public int GetLineSpacer()
+        //{
+        //    return _lineSpacer;
+        //}
 
         public override void UpdateData(UpdateType updateType)
         {
@@ -127,7 +129,7 @@ namespace SpaceVIL
                     _minLineSpacer = output[0];
                     _minFontY = output[1];
                     _maxFontY = output[2];
-                    _lineSpacer = _minLineSpacer;
+                    //_lineSpacer = _minLineSpacer;
                     CreateText();
                     break;
                 case UpdateType.CoordsOnly:
@@ -149,6 +151,11 @@ namespace SpaceVIL
 
         internal List<int> GetLetPosArray() {
             return _letEndPos;
+        }
+
+        internal void SetLineYShift(float sp) {
+            _lineYShift = sp;
+            SetCoordsFlag(true);
         }
     }
 }

@@ -7,110 +7,58 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class TextBlock : TextItem, ITextContainer
+    class TextBlock : VisualItem, ITextEditable
     {
         private static int count = 0;
+        private string _wholeText = "";
+        
+        private List<TextEdit> _linesList;
 
         private int _minLineSpacer;
         private int _minFontY;
         private int _maxFontY;
-        private List<List<float>> _coordArray;
-        private float[] _lineWidth;
-        private List<int> _letEndPos;
+        private int _lineHeight;
+
+        private Font _elementFont;
 
         public TextBlock()
         {
             count++;
+            SetItemName("TextBlock_" + count);
+            
+            _linesList = new List<TextEdit>();
+            TextEdit te = new TextEdit();
+            _linesList.Add(te);
+            
         }
-
+        /*
         public TextBlock(string text, Font font)
-            : base(text, font, "TextLine_" + count)
         {
             count++;
+            SetItemName("TextBlock_" + count);
+            _elementFont = font;
             int[] output = FontEngine.GetSpacerDims(font);
             _minLineSpacer = output[0];
             _minFontY = output[1];
             _maxFontY = output[2];
+            _lineHeight = Math.Abs(_maxFontY - _minFontY);
             _lineSpacer = _minLineSpacer;
+            
+            SplitAndMakeLines(text);
         }
-
-        public void CreateText()
-        {
-            String text = GetItemText();
-            Font font = GetFont();
-            String[] line = text.Split('\n');
-            PixMapData obj;
-            _coordArray = new List<List<float>>();
-            _lineWidth = new float[line.Length];
-            List<float> alphas = new List<float>();
-
-            int inc = 0;
-            foreach (String textLine in line)
-            {
-                obj = FontEngine.GetPixMap(textLine, font);
-                _coordArray.Add(obj.GetPixels());
-                alphas.AddRange(obj.GetColors());
-                _lineWidth[inc] = obj.GetAlpha();
-                inc++;
-                _letEndPos = obj.GetEndPositions();
-            }
-
-            SetAlphas(alphas);
-
-            AddAllShifts();
-        }
-
-        private void AddAllShifts()
-        {
-            if (_coordArray == null)
-                return;
-
-            List<float> outRealCoords = new List<float>();
-
-            ItemAlignment alignments = GetTextAlignment();
-            float alignShiftX = 1;
-            float alignShiftY = 0;
-
-            float height = Math.Abs(_maxFontY - _minFontY);
-            float bigSpacer = height + _lineSpacer;
-            float addSpace = -_minFontY;
-
-            for (int i = 0; i < _coordArray.Count; i++)
-            {
-                //Horizontal
-                if (alignments.HasFlag(ItemAlignment.Right))
-                    alignShiftX = GetParent().GetWidth() - _lineWidth[i];
-
-                else if (alignments.HasFlag(ItemAlignment.HCenter))
-                    alignShiftX = (GetParent().GetWidth() - _lineWidth[i]) / 2f;
-
-                //Vertical
-                if (alignments.HasFlag(ItemAlignment.Bottom))
-                    alignShiftY = GetParent().GetHeight() - height;
-
-                else if (alignments.HasFlag(ItemAlignment.VCenter))
-                    alignShiftY = (GetParent().GetHeight() - height) / 2f;
-
-                for (int j = 0; j < _coordArray[i].Count / 3; j++)
-                {
-                    outRealCoords.Add(_coordArray[i][j * 3] + alignShiftX);
-                    outRealCoords.Add(_coordArray[i][j * 3 + 1] + addSpace + alignShiftY);
-                    outRealCoords.Add(_coordArray[i][j * 3 + 2]);
-                }
-                addSpace += bigSpacer;
-            }
-
-            SetRealCoords(outRealCoords);
-        }
-
-
+        */
         private int _lineSpacer;
         void SetLineSpacer(int lineSpacer)
         {
-            if ((lineSpacer != this._lineSpacer) && (lineSpacer >= _minLineSpacer))
+            if ((lineSpacer != _lineSpacer) && (lineSpacer >= _minLineSpacer))
             {
-                SetCoordsFlag(true);
-                this._lineSpacer = lineSpacer;
+                _lineSpacer = lineSpacer;
+                if (_linesList == null) return;
+                foreach (TextEdit te in _linesList)
+                {
+                    te.SetLineYShift(_lineHeight + _lineSpacer);
+                }
+                
             }
         }
 
@@ -119,38 +67,145 @@ namespace SpaceVIL
             return _lineSpacer;
         }
 
-        public override void UpdateData(UpdateType updateType)
+        internal string GetWholeText() {
+            StringBuilder sb = new StringBuilder();
+            if (_linesList == null) return "";
+            if (_linesList.Count == 1) {
+                sb.Append(_linesList[0].GetText());
+            }
+            else
+            { 
+                foreach (TextEdit te in _linesList)
+                {
+                    sb.Append(te.GetText());
+                    sb.Append("\n");
+                }
+                sb.Remove(sb.Length - 3, 2);
+            }
+            _wholeText = sb.ToString();
+            return _wholeText;
+        }
+
+        public void SetTextAlignment(ItemAlignment alignment)
         {
-            switch (updateType)
-            {
-                case UpdateType.Critical:
-                    int[] output = FontEngine.GetSpacerDims(GetFont());
-                    _minLineSpacer = output[0];
-                    _minFontY = output[1];
-                    _maxFontY = output[2];
+            if (_linesList == null) return;
+            foreach (TextEdit te in _linesList)
+                te.SetTextAlignment(alignment);
+        }
+        public void SetFont(Font font)
+        {
+            if (!font.Equals(_elementFont))
+            { 
+                _elementFont = font;
+
+                int[] output = FontEngine.GetSpacerDims(font);
+                _minLineSpacer = output[0];
+                _minFontY = output[1];
+                _maxFontY = output[2];
+                _lineHeight = Math.Abs(_maxFontY - _minFontY);
+                if (_lineSpacer < _minLineSpacer)
                     _lineSpacer = _minLineSpacer;
-                    CreateText();
-                    break;
-                case UpdateType.CoordsOnly:
-                    AddAllShifts();
-                    break;
+
+                if (_linesList == null) return;
+                foreach (TextEdit te in _linesList)
+                    te.SetFont(font);
+            }
+        }
+        public Font GetFont()
+        {
+            return _elementFont;
+        }
+        public void SetText(String text)
+        {
+            if (!text.Equals(GetWholeText()))
+            {
+                SplitAndMakeLines(text);
             }
         }
 
-        public TextItem GetText()
+        public int GetTextWidth()
         {
-            return this;
+            int w = 0, w0;
+            if (_linesList == null) return w;
+            foreach (TextEdit te in _linesList)
+            {
+                w0 = te.GetWidth();
+                w = (w < w0) ? w0 : w;
+            }
+            return w;
         }
 
-        public override float[] Shape()
+        public int GetTextHeight()
         {
-            AddAllShifts();
-            return base.Shape();
+            return _lineHeight*_linesList.Count + _lineSpacer*(_linesList.Count - 1);
         }
 
-        internal List<int> GetLetPosArray()
+        private void SplitAndMakeLines(String text) {
+            _linesList = new List<TextEdit>();
+            RemoveAllLines();
+            _wholeText = text;
+            //Console.WriteLine(text + " " + _elementFont.Name);
+            string[] line = text.Split('\n');
+            int inc = 0;
+            //if (_linesList == null) return;
+            foreach (String textPart in line)
+            {
+                TextEdit te = new TextEdit();
+                //te.SetHeight(30);
+                //te.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+                te.SetFont(_elementFont);
+                AddItem(te);
+                te.SetText(textPart);
+                te.SetLineYShift((_lineHeight + _lineSpacer) * inc);
+                _linesList.Add(te);
+                te.IsFocused = false;
+                inc++;
+            }
+            _linesList[_linesList.Count - 1].IsFocused = true;
+            _linesList[_linesList.Count - 1].SetCursorPosition(_linesList[_linesList.Count - 1].GetTextWidth());
+            //AddAllLines();
+        }
+        /*
+        internal void UpdateData(UpdateType updateType) {
+            //foreach (TextEdit te in _linesList)
+                //te.Up
+        }
+        */
+        public void SetForeground(Color color)
         {
-            return _letEndPos;
+            if (_linesList != null && !color.Equals(GetForeground())) { 
+                foreach (TextEdit te in _linesList)
+                    te.SetForeground(color);
+            }
+        }
+        public Color GetForeground()
+        {
+            if (_linesList == null) return Color.White; //?????
+            return _linesList[0].GetForeground();
+        }
+
+        private void RemoveAllLines() {
+            if (_linesList == null) return;
+            foreach (TextEdit te in _linesList)
+                RemoveItem(te);
+        }
+
+        private void AddAllLines() {
+            if (_linesList == null) return;
+            foreach (TextEdit te in _linesList)
+                AddItem(te);
+        }
+
+        public override void InitElements()
+        {
+            AddAllLines();
+        }
+
+        internal void OnTextInput(object sender, uint codepoint, KeyMods mods)
+        {
+            _linesList[0]?.InvokeInputTextEvents(codepoint, mods);
         }
     }
+
 }
+

@@ -27,13 +27,13 @@ namespace SpaceVIL
         private const int RightArrowCode = 333;
         private const int EndCode = 335;
         private const int HomeCode = 327;
-        private const int LeftShiftCode = 42;
-        private const int RightShiftCode = 54;
+        //private const int LeftShiftCode = 42;
+        //private const int RightShiftCode = 54;
         private const int ACode = 30;
-        private const int LeftCtrlCode = 29;
-        private const int RightCtrlCode = 285;
-        private const int EscCode = 1;
-        private const int CapsCode = 58;
+        //private const int LeftCtrlCode = 29;
+        //private const int RightCtrlCode = 285;
+        //private const int EscCode = 1;
+        //private const int CapsCode = 58;
 
         private List<int> ShiftValCodes;
         //private List<int> CtrlValCodes;
@@ -172,6 +172,7 @@ namespace SpaceVIL
             SetText(GetText().Insert(_cursor_position, str));
             _cursor_position++;
             ReplaceCursor();
+            //Console.WriteLine("input in TextEdit " + _cursor_position);
         }
 
         public override bool IsFocused
@@ -325,6 +326,28 @@ namespace SpaceVIL
             MakeSelectedArea(0, 0);
             _selectFrom = 0;
             _selectTo = 0;
+        }
+        /*
+        internal void ShowCursor(bool isShow) {
+            if (isShow)
+                _cursor.SetWidth(2);
+            else
+                _cursor.SetWidth(0);
+        }
+        */
+        private int NearestPosToCursor(double xPos) {
+            List<int> endPos = _text_object.GetLetPosArray();
+            int pos = endPos.OrderBy(x => Math.Abs(x - xPos)).First();
+            return pos;
+        }
+
+        internal void SetCursorPosition(double newPos) {
+            _cursor_position = NearestPosToCursor(newPos);
+        }
+
+        internal void SetLineYShift(float sp)
+        {
+            _text_object.SetLineYShift(sp);
         }
     }
 }

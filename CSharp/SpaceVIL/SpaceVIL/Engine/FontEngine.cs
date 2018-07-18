@@ -201,7 +201,7 @@ namespace SpaceVIL
 
             private void FillABC()
             {
-                String str = "a"; // bcdefghijklmnopqrstuvwxyz";
+                String str = "|"; // bcdefghijklmnopqrstuvwxyz";
                 str += str.ToUpper();
                 str += "-"; //".,?!1234567890-+=_"; //
 
