@@ -547,6 +547,12 @@ namespace SpaceVIL
                         Render();
                         //Thread.Sleep(_interval);
                     }
+                    if (!_handler.Focusable)
+                    {
+                        Render();
+                        DrawShadePillow();
+                    }
+                    _handler.Swap();
                 }
 
                 /*if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize))
@@ -555,7 +561,7 @@ namespace SpaceVIL
                     Thread.Sleep(_interval);
                 }
                 else*/
-                    Glfw.WaitEvents();
+                Glfw.WaitEvents();
                 //
             }
 
@@ -574,16 +580,16 @@ namespace SpaceVIL
             DrawItems(_handler.GetLayout().GetWindow());
             //draw tooltip if needed
             DrawToolTip();
-            if (!_handler.Focusable)
-            {
-                Rectangle dark_fill = new Rectangle();
-                dark_fill.SetSize(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
-                dark_fill.SetBackground(0, 0, 0, 150);
-                dark_fill.SetParent(_handler.GetLayout().GetWindow());
-                dark_fill.SetHandler(_handler.GetLayout());
-                DrawShell(dark_fill);
-            }
-            _handler.Swap();
+            //_handler.Swap();
+        }
+        private void DrawShadePillow()
+        {
+            Rectangle dark_fill = new Rectangle();
+            dark_fill.SetSize(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
+            dark_fill.SetBackground(0, 0, 0, 150);
+            dark_fill.SetParent(_handler.GetLayout().GetWindow());
+            dark_fill.SetHandler(_handler.GetLayout());
+            DrawShell(dark_fill);
         }
         private void DrawToolTip()//refactor
         {
@@ -990,7 +996,21 @@ namespace SpaceVIL
 
             int location = glGetUniformLocation(_texture.GetProgramID(), "tex".ToCharArray());
             if (location >= 0)
-                glUniform1i(location, 0);
+            {
+                try
+                {
+                    glUniform1i(location, 0);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.GetType() + " " + image.GetItemName() + " " + _handler.GetLayout().GetWindowName());
+                    return;
+                    // Unhandled Exception: System.Exception: Extension function glUniform1i not supported
+                    // at GL.WGL.OpenWGL.InvokeWGL[T](String name)
+                    // at GL.WGL.OpenWGL.glUniform1i(Int32 location, Int32 v0)
+                    // at SpaceVIL.DrawEngine.DrawImage(ImageItem image)
+                }
+            }
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
 
