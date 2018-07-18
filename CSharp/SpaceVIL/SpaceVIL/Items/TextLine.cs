@@ -75,8 +75,8 @@ namespace SpaceVIL
             float height = Math.Abs(_maxFontY - _minFontY);
             //float bigSpacer = height + _lineSpacer;
             //float addSpace = -_minFontY;
-            if (_lineYShift == 0)
-                _lineYShift = -_minFontY;
+            //if (_lineYShift == 0)
+            //    _lineYShift = -_minFontY;
             //for (int i = 0; i < _coordArray.Count; i++)
             //{
             //Horizontal
@@ -96,7 +96,7 @@ namespace SpaceVIL
                 for (int j = 0; j < _coordArray.Count / 3; j++) //_coordArray[i]...
                 {
                     outRealCoords.Add(_coordArray[j * 3] + alignShiftX); //_coordArray[i]...
-                    outRealCoords.Add(_coordArray[j * 3 + 1] + alignShiftY + _lineYShift); //_coordArray[i]...
+                    outRealCoords.Add(_coordArray[j * 3 + 1] + alignShiftY + _lineYShift - _minFontY); //_coordArray[i]...
                     outRealCoords.Add(_coordArray[j * 3 + 2]); //_coordArray[i]...
                 }
                 //addSpace += bigSpacer;
@@ -156,6 +156,10 @@ namespace SpaceVIL
         internal void SetLineYShift(float sp) {
             _lineYShift = sp;
             SetCoordsFlag(true);
+        }
+
+        internal float GetLineYShift() {
+            return _lineYShift;
         }
     }
 }

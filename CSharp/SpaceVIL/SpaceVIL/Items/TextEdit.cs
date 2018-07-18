@@ -116,7 +116,8 @@ namespace SpaceVIL
                     }
                 }
                 else
-                    UnselectText();
+                    if (_isSelect)
+                        UnselectText();
             }
 
             if (scancode == LeftArrowCode && _cursor_position > 0)//arrow left
@@ -141,8 +142,11 @@ namespace SpaceVIL
             }
             
             if (_isSelect) {
-                _selectTo = _cursor_position;
-                MakeSelectedArea(CursorPosToCoord(_selectFrom), CursorPosToCoord(_selectTo));
+                if (_selectTo != _cursor_position)
+                { 
+                    _selectTo = _cursor_position;
+                    MakeSelectedArea(CursorPosToCoord(_selectFrom), CursorPosToCoord(_selectTo));
+                }
             }
         }
 
@@ -345,9 +349,5 @@ namespace SpaceVIL
             _cursor_position = NearestPosToCursor(newPos);
         }
 
-        internal void SetLineYShift(float sp)
-        {
-            _text_object.SetLineYShift(sp);
-        }
     }
 }
