@@ -25,6 +25,7 @@ namespace SpaceVIL
         private VisualItem FocusedItem;
         private Pointer ptrPress = new Pointer();
         private Pointer ptrRelease = new Pointer();
+        private Pointer ptrClick = new Pointer();
 
         internal GLWHandler _handler;
         private Shader _primitive;
@@ -229,7 +230,6 @@ namespace SpaceVIL
         {
             foreach (var item in HoveredItems)
             {
-                //Console.WriteLine(item.GetItemName());
                 if (item is T)
                 {
                     return item;
@@ -271,6 +271,7 @@ namespace SpaceVIL
 
             _tooltip.InitTimer(false);
             EngineEvent.SetEvent(InputEventType.MouseMove);
+
             //logic of hovers
             ptrRelease.X = (int)xpos;
             ptrRelease.Y = (int)ypos;
@@ -429,22 +430,30 @@ namespace SpaceVIL
             switch (state)
             {
                 case InputState.Release:
+                    //Console.WriteLine(EngineEvent.LastEvent());
                     _handler.GetLayout().GetWindow()._sides = 0;
-                    if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize) || EngineEvent.LastEvent().HasFlag(InputEventType.WindowMove))
+
+                    if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize)
+                        || EngineEvent.LastEvent().HasFlag(InputEventType.WindowMove))
                     {
                         EngineEvent.ResetAllEvents();
                         EngineEvent.SetEvent(InputEventType.MouseRelease);
                         return;
                     }
+                    if (EngineEvent.LastEvent().HasFlag(InputEventType.MouseMove))
+                    {
+                        float len = (float)Math.Sqrt(Math.Pow(ptrRelease.X - ptrClick.X, 2) + Math.Pow(ptrRelease.Y - ptrClick.Y, 2));
+                        if (len > 3.0f)
+                        {
+                            EngineEvent.ResetAllEvents();
+                            EngineEvent.SetEvent(InputEventType.MouseRelease);
+                            return;
+                        }
+                    }
 
                     if (HoveredItem != null)
                     {
-                        foreach (var item in HoveredItems)
-                        {
-                            item._mouse_ptr.X = ptrRelease.X;
-                            item._mouse_ptr.Y = ptrRelease.Y;
-                            item.EventMouseClick?.Invoke(HoveredItem);
-                        }
+                        AssignActions(InputEventType.MouseRelease, false);
 
                         //Focus get
                         if (FocusedItem != null)
@@ -457,6 +466,12 @@ namespace SpaceVIL
                     EngineEvent.SetEvent(InputEventType.MouseRelease);
                     break;
                 case InputState.Press:
+                    Glfw.GetCursorPos(_handler.GetWindow(), out double xpos, out double ypos);
+                    ptrClick.X = (int)xpos;
+                    ptrClick.Y = (int)ypos;
+
+                    AssignActions(InputEventType.MousePressed, false);
+
                     if (HoveredItem is IWindow)
                     {
                         (HoveredItem as WContainer)._resizing = true;
@@ -469,6 +484,32 @@ namespace SpaceVIL
                 default:
                     break;
             }
+        }
+
+        private void AssignActions(InputEventType action, bool only_last)
+        {
+            if (only_last)
+            {
+                _handler.GetLayout().SetEventTask(new EventTask()
+                {
+                    Item = HoveredItem,
+                    Action = action
+                });
+            }
+            else
+            {
+                foreach (var item in HoveredItems)
+                {
+                    item._mouse_ptr.X = ptrRelease.X;
+                    item._mouse_ptr.Y = ptrRelease.Y;
+                    _handler.GetLayout().SetEventTask(new EventTask()
+                    {
+                        Item = item,
+                        Action = action
+                    });
+                }
+            }
+            _handler.GetLayout().ExecutePollActions();
         }
 
         internal void Update()
@@ -496,23 +537,33 @@ namespace SpaceVIL
             }
             _handler.SetOpacity(1.0f);
 
-
             //core rendering
+            //int _interval = 2;
             while (!_handler.IsClosing())
             {
                 lock (CommonService.engine_locker)
                 {
                     if (_handler.Focused)
                     {
-                        // Console.WriteLine("render");
                         Render();
+                        //Thread.Sleep(_interval);
                     }
+                    if (!_handler.Focusable)
+                    {
+                        Render();
+                        DrawShadePillow();
+                    }
+                    _handler.Swap();
                 }
 
-                if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize))
+                /*if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize))
+                {
                     Glfw.PollEvents();
-                else
-                    Glfw.WaitEvents();
+                    Thread.Sleep(_interval);
+                }
+                else*/
+                Glfw.WaitEvents();
+                //
             }
 
             _primitive.DeleteShader();
@@ -530,7 +581,16 @@ namespace SpaceVIL
             DrawItems(_handler.GetLayout().GetWindow());
             //draw tooltip if needed
             DrawToolTip();
-            _handler.Swap();
+            //_handler.Swap();
+        }
+        private void DrawShadePillow()
+        {
+            Rectangle dark_fill = new Rectangle();
+            dark_fill.SetSize(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
+            dark_fill.SetBackground(0, 0, 0, 150);
+            dark_fill.SetParent(_handler.GetLayout().GetWindow());
+            dark_fill.SetHandler(_handler.GetLayout());
+            DrawShell(dark_fill);
         }
         private void DrawToolTip()//refactor
         {
@@ -582,19 +642,15 @@ namespace SpaceVIL
             //refactor paths
             if (root is IPixelDrawable)
             {
-                glDisable(GL_MULTISAMPLE);
                 DrawPixels((root as IPixelDrawable));
                 foreach (var child in (root as VisualItem).GetItems())
                 {
                     DrawItems(child);
                 }
-                glEnable(GL_MULTISAMPLE);
             }
             if (root is TextItem)
             {
-                glDisable(GL_MULTISAMPLE);
                 DrawText(root as TextItem);
-                glEnable(GL_MULTISAMPLE);
                 if (_isStencilSet == root)
                 {
                     glDisable(GL_STENCIL_TEST);
@@ -811,6 +867,8 @@ namespace SpaceVIL
 
         void DrawText(TextItem item)
         {
+            glDisable(GL_MULTISAMPLE);
+
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
             float[] data = item.Shape();
@@ -836,10 +894,14 @@ namespace SpaceVIL
 
             // Clear VBO and shader
             glDeleteBuffers(2, buffers);
+
+            glEnable(GL_MULTISAMPLE);
         }
 
         void DrawPixels(IPixelDrawable item)
         {
+            glDisable(GL_MULTISAMPLE);
+
             //Console.WriteLine(item.GetItemText());
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
@@ -864,10 +926,17 @@ namespace SpaceVIL
 
             // Clear VBO and shader
             glDeleteBuffers(2, buffers);
+
+            glEnable(GL_MULTISAMPLE);
         }
 
         void DrawImage(ImageItem image)
         {
+            byte[] bitmap = image.GetPixMapImage();
+
+            if (bitmap == null)
+                return;
+
             //проверка: полностью ли влезает объект в свой контейнер
             CheckOutsideBorders(image as BaseItem);
 
@@ -908,7 +977,6 @@ namespace SpaceVIL
             glEnableVertexAttribArray(1);
 
             //texture
-            byte[] bitmap = image.GetPixMapImage();
             int w = image.GetImageWidth(), h = image.GetImageHeight();
 
             uint[] texture = new uint[1];
@@ -929,7 +997,21 @@ namespace SpaceVIL
 
             int location = glGetUniformLocation(_texture.GetProgramID(), "tex".ToCharArray());
             if (location >= 0)
-                glUniform1i(location, 0);
+            {
+                try
+                {
+                    glUniform1i(location, 0);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.GetType() + " " + image.GetItemName() + " " + _handler.GetLayout().GetWindowName());
+                    return;
+                    // Unhandled Exception: System.Exception: Extension function glUniform1i not supported
+                    // at GL.WGL.OpenWGL.InvokeWGL[T](String name)
+                    // at GL.WGL.OpenWGL.glUniform1i(Int32 location, Int32 v0)
+                    // at SpaceVIL.DrawEngine.DrawImage(ImageItem image)
+                }
+            }
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
 

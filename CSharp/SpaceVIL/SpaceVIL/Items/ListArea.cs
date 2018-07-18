@@ -45,6 +45,15 @@ namespace SpaceVIL
         }
 
         private CustomShape _substrate = new CustomShape();
+        public CustomShape GetSubstrate()
+        {
+            return _substrate;
+        }
+        public void SetSubstrate(CustomShape shape)
+        {
+            _substrate = shape;
+            UpdateLayout();
+        }
         public ListPosition AreaPosition = ListPosition.No;
         public int FirstVisibleItem = 0;
         public int LastVisibleItem = 0;
@@ -103,7 +112,13 @@ namespace SpaceVIL
         }
         public override void RemoveItem(BaseItem item)
         {
-            Console.WriteLine("remove");
+            /*int index = GetItems().IndexOf(item) - 1;
+
+            if (index == _selection)
+                Unselect();
+            if (index < _selection)
+                _selection--;*/
+
             Unselect();
             base.RemoveItem(item);
             UpdateLayout();
@@ -139,9 +154,6 @@ namespace SpaceVIL
 
         public void UpdateLayout()
         {
-            /*if (GetItems().Count == 0)
-                return;*/
-
             AreaPosition = ListPosition.No;
 
             Int64 offset = (-1) * GetVScrollOffset();

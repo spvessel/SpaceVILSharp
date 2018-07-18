@@ -10,11 +10,12 @@ namespace SpaceVIL
     public class WindowLayout : ISize, IPosition
     //where TLayout : VisualItem
     {
-
         private CoreWindow handler;
         private Guid ParentGUID;
-        private Thread thread;
+        private Thread thread_engine;
+        private Thread thread_manager;
         private DrawEngine engine;
+        private ActionManager manager;
 
         public WindowLayout(
             CoreWindow window,
@@ -233,6 +234,13 @@ namespace SpaceVIL
         //methods
         public void Show()
         {
+            manager = new ActionManager(this);
+            /*manager.ActionsDone += () =>
+            {
+               lock (CommonService.engine_locker)
+                   UpdateScene();
+            };*/
+
             engine = new DrawEngine(this);
             engine._handler.BorderHidden = IsBorderHidden;
             engine._handler.AppearInCenter = IsCentered;
@@ -241,51 +249,50 @@ namespace SpaceVIL
             engine._handler.WPosition.X = GetX();
             engine._handler.WPosition.Y = GetY();
 
+            if (thread_engine != null && thread_engine.IsAlive)
+                return;
+
+            thread_manager = new Thread(() => manager.StartManager());
+            thread_manager.Start();
+
+            thread_engine = new Thread(() => engine.Init());
             IsHidden = false;
+
             if (IsDialog)
             {
                 WindowLayoutBox.AddToWindowDispatcher(this);
                 ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
                 WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
+                WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
 
-                if (thread != null && thread.IsAlive)
-                    return;
-
-                thread = new Thread(() => engine.Init());
-                thread.Start();
-                thread.Join();
+                thread_engine.Start();
+                thread_engine.Join();
             }
             else
-            {
-                if (thread != null && thread.IsAlive)
-                    return;
-
-                thread = new Thread(() => engine.Init());
-                thread.Start();
-            }
+                thread_engine.Start();
         }
         public bool IsHidden { get; set; }
         public void Close()
         {
-            if (!IsDialog)
+            if (IsDialog)
             {
-                if (thread != null && thread.IsAlive)
-                {
-                    thread.Abort();
-                }
-                IsHidden = true;
+                SetWindowFocused();
+                WindowLayoutBox.RemoveWindow(this);
+                engine.Close();
+                lock (CommonService.engine_locker)
+                    WindowLayoutBox.RemoveFromWindowDispatcher(this);
+                if (thread_manager != null && thread_manager.IsAlive)
+                    thread_manager.Abort();
             }
             else
             {
-                engine.Close();
-                WindowLayoutBox.RemoveWindow(this);
-                lock (CommonService.engine_locker)
-                {
-                    SetWindowFocused();
-                    WindowLayoutBox.RemoveFromWindowDispatcher(this);
-                }
+                if (thread_engine != null && thread_engine.IsAlive)
+                    thread_engine.Abort();
+                if (thread_manager != null && thread_manager.IsAlive)
+                    thread_manager.Abort();
+                IsHidden = true;
             }
-
+            //manager.ActionsDone -= () => UpdateScene();
         }
         public bool IsAlwaysOnTop { get; set; }
         public bool IsBorderHidden { get; set; }
@@ -320,6 +327,17 @@ namespace SpaceVIL
         public void IsFixed(bool flag)
         {
             _window._is_fixed = flag;
+        }
+        internal void SetEventTask(EventTask task)
+        {
+            manager.StackEvents.Enqueue(task);
+        }
+        internal void ExecutePollActions()
+        {
+            UpdateScene();//нужно обновлять перед выполением задания
+            manager.Execute.Set();
+            manager.Execute.WaitOne();
+            UpdateScene();//нужно обновлять после выполения задания
         }
     }
 }

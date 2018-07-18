@@ -29,13 +29,20 @@ namespace SpaceVIL
             _text_object = new TextLine();
             _minimize = new ButtonCore();
             _close = new ButtonCore();
-
-            Image icon = Image.FromFile("D:\\battery_full.png");
-            _icon = new ImageItem(icon);
+            _icon = new ImageItem();
         }
         public TitleBar(String text = "") : this()
         {
             SetText(text);
+        }
+        
+        public void SetIcon(Image icon)
+        {
+            _icon.SetImage(icon);
+        }
+        public void SetIcon(String url)
+        {
+            _icon.SetImageUrl(url);
         }
 
         //text init
@@ -90,7 +97,7 @@ namespace SpaceVIL
             _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
             _text_object.SetMargin(50, 0, 30, 8);
             SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            SetFont(new Font(new FontFamily("Segoe UI"), 14, FontStyle.Regular));
+            SetFont(new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold));
             SetForeground(Color.FromArgb(255, 180, 180, 180));
 
             //_close

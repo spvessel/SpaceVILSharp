@@ -28,6 +28,7 @@ namespace SpaceVIL
 
             //DragAnchor
             TitleBar titleBar = new TitleBar(DialogTitle);
+            titleBar.SetPadding(0, 0, 10, 0);
             Handler.AddItem(titleBar);
 
             VerticalStack layout = new VerticalStack();

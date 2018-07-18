@@ -21,6 +21,8 @@ namespace SpaceVIL
         }
         public ImageItem(Image picture) : this()
         {
+            if (picture == null)
+                return;
             _image = picture;
 
             _bitmap = new List<byte>();
@@ -58,6 +60,12 @@ namespace SpaceVIL
 
         public byte[] GetPixMapImage()
         {
+            /*if (_image == null)
+                return new byte[] { 0 };*/
+                
+            if (_image == null)
+                return null;
+
             if (_bitmap == null)
             {
                 _bitmap = new List<byte>();
