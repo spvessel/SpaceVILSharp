@@ -335,7 +335,6 @@ namespace SpaceVIL
         internal void ExecutePollActions()
         {
             manager.Execute.Set();
-            manager.Execute.Reset();
             manager.Execute.WaitOne();
             UpdateScene();//нужно обновлять после выполения задания
         }

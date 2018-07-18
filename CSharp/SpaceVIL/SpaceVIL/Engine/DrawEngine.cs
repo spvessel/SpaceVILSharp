@@ -537,7 +537,7 @@ namespace SpaceVIL
             _handler.SetOpacity(1.0f);
 
             //core rendering
-            int _interval = 2;
+            //int _interval = 2;
             while (!_handler.IsClosing())
             {
                 lock (CommonService.engine_locker)
@@ -545,7 +545,7 @@ namespace SpaceVIL
                     if (_handler.Focused)
                     {
                         Render();
-                        Thread.Sleep(_interval);
+                        //Thread.Sleep(_interval);
                     }
                 }
 
