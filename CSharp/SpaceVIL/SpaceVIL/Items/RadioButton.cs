@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class RadioButton : VisualItem
+    public class RadioButton : VisualItem
     {
         static int count = 0;
         private Label _text;

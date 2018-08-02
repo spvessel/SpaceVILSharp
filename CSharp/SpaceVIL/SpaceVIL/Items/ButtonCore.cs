@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class ButtonCore : VisualItem
+    public class ButtonCore : VisualItem
     {
         private static int count = 0;
         private TextLine _text_object;

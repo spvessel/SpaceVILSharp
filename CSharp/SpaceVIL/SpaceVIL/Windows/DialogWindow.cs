@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    abstract class DialogWindow : CoreWindow
+    public abstract class DialogWindow : CoreWindow
     {
         
         public DialogWindow(String message, String title) : base()

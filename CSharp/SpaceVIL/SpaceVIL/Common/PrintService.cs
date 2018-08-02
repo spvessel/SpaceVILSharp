@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    static class PrintService
+    public static class PrintService
     {
         public static void PrintArray<TValue>(bool flat, TValue[] array)
         {

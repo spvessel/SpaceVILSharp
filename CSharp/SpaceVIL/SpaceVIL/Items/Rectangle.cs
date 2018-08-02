@@ -4,7 +4,7 @@ using System;
 
 namespace SpaceVIL
 {
-    class Rectangle : Primitive
+    public class Rectangle : Primitive
     {
         static int count = 0;
         public Rectangle()

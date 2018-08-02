@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class HorizontalSlider : VisualItem, IScrollable
+    public class HorizontalSlider : VisualItem, IScrollable
     {
         static int count = 0;
 

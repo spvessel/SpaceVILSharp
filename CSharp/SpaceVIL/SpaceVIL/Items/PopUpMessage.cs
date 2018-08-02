@@ -122,8 +122,7 @@ namespace SpaceVIL
             _stop = new System.Timers.Timer(_timeout);
             _stop.Elapsed += (sender, e) =>
             {
-                lock (CommonService.engine_locker)
-                    RemoveSelf();
+                RemoveSelf();
             };
             _stop.Start();
         }

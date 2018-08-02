@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    abstract class ActiveWindow : CoreWindow
+    public abstract class ActiveWindow : CoreWindow
     {
         public ActiveWindow() : base() {
             

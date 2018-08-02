@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SpaceVIL
 {
-    class CustomShape : Primitive
+    public class CustomShape : Primitive
     {
         static int count = 0;
         public CustomShape()

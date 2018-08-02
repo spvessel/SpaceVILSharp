@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class TitleBar : WindowAnchor
+    public class TitleBar : WindowAnchor
     {
         static int count = 0;
         private TextLine _text_object;
@@ -95,7 +95,7 @@ namespace SpaceVIL
         {
             //text
             _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            _text_object.SetMargin(50, 0, 30, 8);
+            _text_object.SetMargin(0, 0, 30, 8);
             SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
             SetFont(new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold));
             SetForeground(Color.FromArgb(255, 180, 180, 180));
@@ -130,13 +130,13 @@ namespace SpaceVIL
             };
 
             //icon
-            _icon.SetBackground(Color.Transparent);
+            /*_icon.SetBackground(Color.Transparent);
             _icon.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            _icon.SetSize(40, 20);
-            _icon.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);//????
+            _icon.SetSize(20, 20);
+            _icon.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);//????*/
 
             //adding
-            AddItems(_icon, _text_object, _minimize, _close);
+            AddItems(/*_icon,*/ _text_object, _minimize, _close);
 
             //update text data
             _text_object.UpdateData(UpdateType.Critical);

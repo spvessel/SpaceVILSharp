@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SpaceVIL
 {
-    static class GraphicsMathService
+    public static class GraphicsMathService
     {
         public static Color MixColors(params Color[] m_colors)
         {

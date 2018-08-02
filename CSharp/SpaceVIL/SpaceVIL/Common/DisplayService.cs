@@ -1,6 +1,6 @@
 ﻿namespace SpaceVIL
 {
-    class DisplayService
+    public class DisplayService
     {
         
     }

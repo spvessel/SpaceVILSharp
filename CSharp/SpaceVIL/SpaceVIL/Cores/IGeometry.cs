@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    interface IGeometry
+    public interface IGeometry
     {
         //void UpdateW(SizePolicy policy, ISize ancestor, Padding padding);
         //void UpdateH(SizePolicy policy, ISize ancestor, Padding padding);

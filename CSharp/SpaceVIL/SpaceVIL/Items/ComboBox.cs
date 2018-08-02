@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class ComboBox : VisualItem //not finished
+    public class ComboBox : VisualItem //not finished
     {
         static int count = 0;
 

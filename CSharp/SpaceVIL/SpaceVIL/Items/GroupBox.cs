@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class GroupBox : Frame
+    public class GroupBox : Frame
     {
         private static int count = 0;
         private Label _text;

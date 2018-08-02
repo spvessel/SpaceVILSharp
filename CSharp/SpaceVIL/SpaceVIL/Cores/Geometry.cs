@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    internal class Geometry : IGeometry, ISize
+    public class Geometry : IGeometry, ISize
     {
         //width
         private int _minWidth = 0;

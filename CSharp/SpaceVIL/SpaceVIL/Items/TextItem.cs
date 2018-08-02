@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    abstract class TextItem : Primitive
+    abstract public class TextItem : Primitive
     {
         private List<float> _alphas;
         private float[] _coordinates;

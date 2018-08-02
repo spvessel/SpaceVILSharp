@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class ListBox : VisualItem, IScrollable
+    public class ListBox : VisualItem, IScrollable
     {
         static int count = 0;
         
@@ -213,6 +213,7 @@ namespace SpaceVIL
         {
             _area.AddItem(item);
             UpdateElements();
+            Console.WriteLine(_area.GetWidth());
         }
         public void UpdateElements()
         {

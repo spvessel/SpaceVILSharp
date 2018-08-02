@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SpaceVIL
 {
-    class Ellipse : Primitive
+    public class Ellipse : Primitive
     {
         static int count = 0;
         public Ellipse()

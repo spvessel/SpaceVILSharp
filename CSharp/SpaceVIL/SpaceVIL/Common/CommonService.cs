@@ -4,10 +4,8 @@ using System.Collections.Generic;
 
 namespace SpaceVIL
 {
-    static class CommonService
+    public static class CommonService
     {
-        public static object engine_locker = new object();
-
         public static void LinkColors(ref Color t1, ref Color t2)
         {
             t1 = t2;

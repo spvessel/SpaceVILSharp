@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    abstract class UserItem : VisualItem, IUserItem
+    abstract public class UserItem : VisualItem, IUserItem
     {
         abstract public void Init();
     }

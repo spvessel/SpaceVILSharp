@@ -10,6 +10,7 @@ namespace SpaceVIL
     public class WindowLayout : ISize, IPosition
     //where TLayout : VisualItem
     {
+        internal object engine_locker = new object();
         private CoreWindow handler;
         private Guid ParentGUID;
         private Thread thread_engine;
@@ -263,7 +264,6 @@ namespace SpaceVIL
                 WindowLayoutBox.AddToWindowDispatcher(this);
                 ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
                 WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
-                WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
 
                 thread_engine.Start();
                 thread_engine.Join();
@@ -279,17 +279,26 @@ namespace SpaceVIL
                 SetWindowFocused();
                 WindowLayoutBox.RemoveWindow(this);
                 engine.Close();
-                lock (CommonService.engine_locker)
+                lock (engine_locker)
                     WindowLayoutBox.RemoveFromWindowDispatcher(this);
                 if (thread_manager != null && thread_manager.IsAlive)
+                {
+                    manager.StopManager();
                     thread_manager.Abort();
+                }
             }
             else
             {
                 if (thread_engine != null && thread_engine.IsAlive)
+                {
+                    engine.Close();
                     thread_engine.Abort();
+                }
                 if (thread_manager != null && thread_manager.IsAlive)
+                {
+                    manager.StopManager();
                     thread_manager.Abort();
+                }
                 IsHidden = true;
             }
             //manager.ActionsDone -= () => UpdateScene();

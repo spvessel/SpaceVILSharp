@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    interface IBehavior
+    public interface IBehavior
     {
         void SetAlignment(ItemAlignment alignment);
         ItemAlignment GetAlignment();

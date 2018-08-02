@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class TextBlock : VisualItem, ITextEditable
+    public class TextBlock : TextItem, ITextContainer
     {
         private static int count = 0;
         private string _wholeText = "";
@@ -366,6 +366,10 @@ namespace SpaceVIL
             return w;
         }
 
+        public String GetText()
+        {
+            return null;
+        }
         public int GetTextHeight()
         {
             return _lineHeight*_linesList.Count + _lineSpacer*(_linesList.Count - 1);
