@@ -7,11 +7,11 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class CustomSelecter : Primitive
+    class CustomSelector : Primitive
     {
         static int count = 0;
-        public CustomSelecter()
-            : base(name: "CustomSelecter_" + count)
+        public CustomSelector()
+            : base(name: "CustomSelector_" + count)
         {
             count++;
         }

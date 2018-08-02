@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class TextBlock : VisualItem, ITextEditable
+    internal class TextBlock : VisualItem, ITextEditable
     {
         private static int count = 0;
         private string _wholeText = "";   
         private Rectangle _cursor;
         private Point _cursor_position = new Point(0, 0);
-        private CustomSelecter _selectedArea;
+        private CustomSelector _selectedArea;
         private List<TextLine> _linesList;
 
         private Point _selectFrom = new Point(0, 0);
@@ -53,7 +53,7 @@ namespace SpaceVIL
             _linesList.Add(te);
 
             _cursor = new Rectangle();
-            _selectedArea = new CustomSelecter();
+            _selectedArea = new CustomSelector();
             _selectedArea.SetBackground(Color.FromArgb(50, 0, 0, 0));
 
             EventMouseClick += EmptyEvent;

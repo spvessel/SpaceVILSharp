@@ -10,15 +10,34 @@ namespace SpaceVIL
     public class TextArea : VisualItem, ITextEditable
     {
         static int count = 0;
-        private TextBlock _text_object;
-        private Rectangle _cursor;
-        private int _cursor_position = 0;
+        private TextBlock _editLines;
+        //private Rectangle _cursor;
+        private int _cursor_Xposition = 0;
+        private int _cursor_Yposition = 0;
+        private int _symbol_position = 0;
+
+        private const int BackspaceCode = 14;
+        private const int DeleteCode = 339;
+        private const int LeftArrowCode = 331;
+        private const int RightArrowCode = 333;
+        private const int EndCode = 335;
+        private const int HomeCode = 327;
+        //private const int LeftShiftCode = 42;
+        //private const int RightShiftCode = 54;
+        private const int ACode = 30;
+        //private const int LeftCtrlCode = 29;
+        //private const int RightCtrlCode = 285;
+        //private const int EscCode = 1;
+        //private const int CapsCode = 58;
+        private const int EnterCode = 28;
+
+        private List<int> ShiftValCodes;
 
         public TextArea()
         {
-            _text_object = new TextBlock();
-            _cursor = new Rectangle();
-            
+            _editLines = new TextBlock();
+            //_cursor = new Rectangle();
+
             SetItemName("TextArea_" + count);
             SetBackground(180, 180, 180);
             SetForeground(Color.Black);
@@ -30,6 +49,8 @@ namespace SpaceVIL
             EventKeyRelease += OnKeyRelease;
             EventTextInput += OnTextInput;
 
+            ShiftValCodes = new List<int>() {LeftArrowCode, RightArrowCode, EndCode,
+                HomeCode};
         }
 
         protected virtual void OnKeyRelease(object sender, int scancode, KeyMods mods)
@@ -37,12 +58,29 @@ namespace SpaceVIL
         }
         protected virtual void OnKeyPress(object sender, int scancode, KeyMods mods)
         {
-        }
-        protected virtual void OnTextInput(object sender, uint codepoint, KeyMods mods)
-        {
-            
+            //Console.WriteLine(scancode);
+
+            if (scancode == EnterCode)
+            {
+                SetText(GetText().Insert(_cursor_Xposition, "\n"));
+                _cursor_Xposition++;
+            }
+
         }
 
+        protected virtual void OnTextInput(object sender, uint codepoint, KeyMods mods)
+        {
+            byte[] input = BitConverter.GetBytes(codepoint);
+            string str = Encoding.UTF32.GetString(input);
+            //if (_isSelect) CutText();
+
+            //SetText(GetText().Insert(_cursor_Xposition, str));
+            //_cursor_Xposition++;
+            //Console.WriteLine("input in TextArea");
+            _editLines.OnTextInput(sender, codepoint, mods);
+            //ReplaceCursor();
+        }
+        /*
         public override bool IsFocused
         {
             get
@@ -58,55 +96,63 @@ namespace SpaceVIL
                     _cursor.IsVisible = false;
             }
         }
-
+        */
         public void SetTextAlignment(ItemAlignment alignment)
         {
-            _text_object.SetTextAlignment(alignment);
+            _editLines.SetTextAlignment(alignment);
         }
         public void SetFont(Font font)
         {
-            _text_object.SetFont(font);
+            _editLines.SetFont(font);
         }
         public Font GetFont()
         {
-            return _text_object.GetFont();
+            return _editLines.GetFont();
         }
         public void SetText(String text)
         {
-            _text_object.SetItemText(text);
-            _text_object.UpdateData(UpdateType.Critical);
+            _editLines.SetText(text);
         }
         public String GetText()
         {
-            return _text_object.GetItemText();
+            return _editLines.GetWholeText();
         }
         public void SetForeground(Color color)
         {
-            _text_object.SetForeground(color);
+            _editLines.SetForeground(color);
         }
         public Color GetForeground()
         {
-            return _text_object.GetForeground();
+            return _editLines.GetForeground();
         }
 
         public override void InitElements()
         {
             //text
-            _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            SetTextAlignment(ItemAlignment.Left | ItemAlignment.Top);
             //cursor
-            _cursor.IsVisible = false;
-            _cursor.SetBackground(0, 0, 0);
-            _cursor.SetMargin(0, 5, 0, 5);
-            _cursor.SetWidth(2);
-            _cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            //_cursor.IsVisible = false;
+            //_cursor.SetBackground(0, 0, 0);
+            //_cursor.SetMargin(0, 5, 0, 5);
+            //_cursor.SetWidth(2);
+            //_cursor.SetHeight(15);// _text_object.GetSize()[1]);
+            //_cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             //selectedArea
             //_selectedArea.SetMargin(0, 5, 0, 5);
             //_selectedArea.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+
+            _editLines.SetBackground(Color.Transparent);
+            _editLines.SetAlignment(ItemAlignment.Top);
+            _editLines.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            _editLines.SetSpacing(0, 5);
+
             //adding
-            AddItems(_text_object, _cursor); //_selectedArea, 
+
+            AddItems(_editLines); //, _cursor); //_selectedArea, 
 
             //update text data
-            _text_object.UpdateData(UpdateType.Critical);
+            //_editLines.UpdateData(UpdateType.Critical);
         }
 
         public override void InvokePoolEvents()
@@ -124,12 +170,12 @@ namespace SpaceVIL
 
         public int GetTextWidth()
         {
-            return _text_object.GetWidth();
+            return _editLines.GetTextWidth();
         }
 
         public int GetTextHeight()
         {
-            return _text_object.GetHeight();
+            return _editLines.GetTextHeight();
         }
     }
 }
