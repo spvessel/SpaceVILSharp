@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    internal sealed class Cell : Geometry, IPosition
+    public sealed class Cell : Geometry, IPosition
     {
         private Grid _parent = null;
         public Grid GetParentGrid()

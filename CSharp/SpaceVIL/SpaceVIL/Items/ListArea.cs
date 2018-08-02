@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class ListArea : VisualItem, IVLayout, IHLayout
+    public class ListArea : VisualItem, IVLayout, IHLayout
     {
         private int _step = 15;
         public void SetStep(int value)
@@ -112,17 +112,10 @@ namespace SpaceVIL
         }
         public override void RemoveItem(BaseItem item)
         {
-            /*int index = GetItems().IndexOf(item) - 1;
-
-            if (index == _selection)
-                Unselect();
-            if (index < _selection)
-                _selection--;*/
-
             Unselect();
             base.RemoveItem(item);
             UpdateLayout();
-            (GetParent() as ListBox)?.UpdateElements();//хрееееееень
+            (GetParent() as ListBox)?.UpdateElements();
         }
         public override void SetY(int _y)
         {

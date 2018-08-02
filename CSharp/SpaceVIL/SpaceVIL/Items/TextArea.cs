@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class TextArea : VisualItem, ITextEditable
+    public class TextArea : VisualItem, ITextEditable
     {
         static int count = 0;
         private TextBlock _text_object;

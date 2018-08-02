@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class Indicator : VisualItem
+    public class Indicator : VisualItem
     {
         private static int count = 0;
 

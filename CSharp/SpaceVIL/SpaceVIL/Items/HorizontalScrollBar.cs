@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class HorizontalScrollBar : HorizontalStack, IScrollable
+    public class HorizontalScrollBar : HorizontalStack, IScrollable
     {
         private static int count = 0;
 

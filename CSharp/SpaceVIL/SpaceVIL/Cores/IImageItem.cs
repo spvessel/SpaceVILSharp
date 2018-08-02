@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    interface IImageItem
+    public interface IImageItem
     {
         String GetImageUrl();
         void SetImageUrl(String url);

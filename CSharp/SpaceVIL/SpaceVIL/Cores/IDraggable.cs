@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    interface IDraggable
+    public interface IDraggable
     {
     }
 }

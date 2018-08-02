@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class HorizontalStack : VisualItem, IHLayout
+    public class HorizontalStack : VisualItem, IHLayout
     {
         static int count = 0;
         public HorizontalStack()

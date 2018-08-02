@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 namespace SpaceVIL
 {
-    class PasswordLine : VisualItem, ITextEditable
+    public class PasswordLine : VisualItem, ITextEditable
     {
         static int count = 0;
 

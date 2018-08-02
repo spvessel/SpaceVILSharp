@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class ContextMenu : VisualItem //not finished
+    public class ContextMenu : VisualItem //not finished
     {
         static int count = 0;
         private TextLine _text_object;

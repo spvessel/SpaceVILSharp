@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    abstract class Primitive : BaseItem
+    abstract public class Primitive : BaseItem
     {
         public Primitive(
             int xpos = 0,

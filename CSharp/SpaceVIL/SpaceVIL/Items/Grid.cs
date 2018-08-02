@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class Grid : VisualItem, IGrid
+    public class Grid : VisualItem, IGrid
     {
         static int count = 0;
 

@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class ProgressBar : VisualItem
+    public class ProgressBar : VisualItem
     {
         static int count = 0;
         private Label _text;

@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class MenuBar : VisualItem //not finished
+    public class MenuBar : VisualItem //not finished
     {
         static int count = 0;
         private TextLine _text_object;

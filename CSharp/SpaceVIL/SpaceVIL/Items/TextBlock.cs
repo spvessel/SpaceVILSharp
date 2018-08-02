@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class TextBlock : TextItem, ITextContainer
+    public class TextBlock : TextItem, ITextContainer
     {
         private static int count = 0;
 

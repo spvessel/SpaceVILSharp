@@ -14,8 +14,6 @@ namespace SpaceVIL
 {
     internal class DrawEngine : GL.WGL.OpenWGL
     {
-
-
         private ToolTip _tooltip = new ToolTip();
         private BaseItem _isStencilSet = null;
         public InputDeviceEvent EngineEvent = new InputDeviceEvent();
@@ -186,6 +184,7 @@ namespace SpaceVIL
             _handler.GetLayout().SetX(_handler.WPosition.X);
             _handler.GetLayout().SetY(_handler.WPosition.Y);
             Glfw.SetWindowPos(_handler.GetWindow(), _handler.WPosition.X, _handler.WPosition.Y);
+            //Update();
         }
         private void Position(Glfw.Window glfwwnd, int xpos, int ypos)
         {
@@ -204,7 +203,7 @@ namespace SpaceVIL
             if (!_handler.GetLayout().IsBorderHidden)
             {
                 glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
-                Render();
+                //Update();
             }
         }
 
@@ -215,7 +214,7 @@ namespace SpaceVIL
             if (_handler.GetLayout().IsBorderHidden)
             {
                 glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
-                Render();
+                Update();
             }
         }
 
@@ -508,14 +507,14 @@ namespace SpaceVIL
                     });
                 }
             }
-            _handler.GetLayout().ExecutePollActions();
         }
 
         internal void Update()
         {
-            Glfw.PostEmptyEvent();
-            SetWindowSize();
+            lock (_handler.GetLayout().engine_locker)
+                Render();
         }
+
         public void Run()
         {
             glGenVertexArrays(1, _handler.GVAO);
@@ -537,32 +536,11 @@ namespace SpaceVIL
             _handler.SetOpacity(1.0f);
 
             //core rendering
-            //int _interval = 2;
+            //double _interval = 1000 / 60;
             while (!_handler.IsClosing())
             {
-                lock (CommonService.engine_locker)
-                {
-                    if (_handler.Focused)
-                    {
-                        Render();
-                        //Thread.Sleep(_interval);
-                    }
-                    if (!_handler.Focusable)
-                    {
-                        Render();
-                        DrawShadePillow();
-                    }
-                    _handler.Swap();
-                }
-
-                /*if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize))
-                {
-                    Glfw.PollEvents();
-                    Thread.Sleep(_interval);
-                }
-                else*/
                 Glfw.WaitEvents();
-                //
+                _handler.GetLayout().ExecutePollActions();
             }
 
             _primitive.DeleteShader();
@@ -576,11 +554,18 @@ namespace SpaceVIL
 
         internal void Render()
         {
-            glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-            DrawItems(_handler.GetLayout().GetWindow());
-            //draw tooltip if needed
-            DrawToolTip();
-            //_handler.Swap();
+            if (_handler.Focused)
+            {
+                glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+                DrawItems(_handler.GetLayout().GetWindow());
+                //draw tooltip if needed
+                DrawToolTip();
+                /*if (!_handler.Focusable)
+                {
+                    DrawShadePillow();
+                }*/
+                _handler.Swap();
+            }
         }
         private void DrawShadePillow()
         {
@@ -659,7 +644,6 @@ namespace SpaceVIL
             if (root is IImageItem)
             {
                 DrawShell(root);
-                _texture.UseShader();
                 DrawImage(root as ImageItem);
                 _primitive.UseShader();
             }
@@ -994,6 +978,7 @@ namespace SpaceVIL
             //glGenerateMipmap(GL_TEXTURE_2D);
             glActiveTexture(GL_TEXTURE0);
 
+            _texture.UseShader();
             int location = glGetUniformLocation(_texture.GetProgramID(), "tex".ToCharArray());
             if (location >= 0)
             {

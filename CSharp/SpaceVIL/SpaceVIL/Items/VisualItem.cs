@@ -117,32 +117,45 @@ namespace SpaceVIL
             item.UpdateGeometry();
             item.InitElements();
         }
+
+        internal void CascadeRemoving(BaseItem item)
+        {
+            VisualItem container = item as VisualItem;// предполагаю что элемент контейнер
+            if (container != null)//и если это действительно контейнер
+            {
+                //то каждому вложенному элементу вызвать команду удалить своих вложенных элементов
+                while (container.GetItems().Count > 0)
+                {
+                    BaseItem child = container.GetItems().ElementAt(0);
+                    container.CascadeRemoving(child);
+
+                    container.GetItems().Remove(child);
+                    child.RemoveItemFromListeners();
+
+                    ItemsLayoutBox.RemoveItem(GetHandler(), child);
+
+                }
+            }
+        }
+
         public virtual void RemoveItem(BaseItem item)
         {
-            //add removing from layoutbox
-            _content.Remove(item);
-            item.RemoveItemFromListeners();
-
-            try
+            lock (GetHandler().engine_locker)
             {
+                CascadeRemoving(item);
+
+                //removing
+                _content.Remove(item);
+                item.RemoveItemFromListeners();
+
                 ItemsLayoutBox.RemoveItem(GetHandler(), item);
-
-                /*Type myType = Type.GetType(item.ToString());
-                var field = myType.GetField("count", BindingFlags.NonPublic | BindingFlags.Static);
-                if (field != null)
-                    field.SetValue(item, (int)field.GetValue(null) - 1);*/
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(item.GetItemName());
-                throw ex;
             }
 
             //needs to force update all attributes
-            if ((this is WContainer))
+            /*if ((this is WContainer))
                 GetHandler().UpdateScene();
             else
-                UpdateGeometry();
+                UpdateGeometry();*/
         }
         protected override void AddEventListener(GeometryEventType type, BaseItem listener)
         {

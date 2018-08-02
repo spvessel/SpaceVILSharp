@@ -22,14 +22,10 @@ namespace SpaceVIL
         internal static PixMapData GetPixMap(string text, Font font)
         {
             //return FontReview.getTextArrays(text, font);
-            lock (CommonService.engine_locker)
+            if (!fonts.ContainsKey(font))
             {
-                if (!fonts.ContainsKey(font))
-                {
-                    fonts.Add(font, new Alphabet(font));
-                }
+                fonts.Add(font, new Alphabet(font));
             }
-
             return fonts[font].MakeText(text);
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SpaceVIL
 {
-    class Triangle : Primitive
+    public class Triangle : Primitive
     {
         static int count = 0;
         public Triangle()

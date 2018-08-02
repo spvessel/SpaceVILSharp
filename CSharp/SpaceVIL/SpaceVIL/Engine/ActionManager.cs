@@ -41,6 +41,9 @@ namespace SpaceVIL
 
         internal void ExecuteActions()
         {
+            if(StackEvents.Count == 0)
+                return;
+
             while (StackEvents.Count > 0)
             {
                 EventTask tmp = null;

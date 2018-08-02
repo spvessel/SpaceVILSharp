@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class CheckBox : VisualItem
+    public class CheckBox : VisualItem
     {
         static int count = 0;
         private Label _text;

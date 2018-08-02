@@ -56,7 +56,7 @@ namespace SpaceVIL
         Never
     }
     [Flags]
-    internal enum ListPosition
+    public enum ListPosition
     {
         No = 0x00,
         Top = 0x01,

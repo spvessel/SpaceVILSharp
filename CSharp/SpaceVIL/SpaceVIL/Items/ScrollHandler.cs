@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class ScrollHandler : VisualItem, IDraggable, IScrollable
+    public class ScrollHandler : VisualItem, IDraggable, IScrollable
     {
         static int count = 0;
         public Orientation Orientation;
