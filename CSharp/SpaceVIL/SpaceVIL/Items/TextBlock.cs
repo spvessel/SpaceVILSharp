@@ -10,7 +10,7 @@ namespace SpaceVIL
     class TextBlock : VisualItem, ITextEditable
     {
         private static int count = 0;
-        private string _wholeText = "";   
+        private string _wholeText = "";
         private Rectangle _cursor;
         private Point _cursor_position = new Point(0, 0);
         private CustomSelecter _selectedArea;
