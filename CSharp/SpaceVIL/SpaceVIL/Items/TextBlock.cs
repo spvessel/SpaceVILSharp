@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    class TextBlock : VisualItem, ITextEditable
+    internal class TextBlock : VisualItem, ITextEditable
     {
         private static int count = 0;
         private string _wholeText = "";   

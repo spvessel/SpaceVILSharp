@@ -37,7 +37,7 @@ namespace SpaceVIL
         {
             _editLines = new TextBlock();
             //_cursor = new Rectangle();
-            
+
             SetItemName("TextArea_" + count);
             SetBackground(180, 180, 180);
             SetForeground(Color.Black);
@@ -60,13 +60,14 @@ namespace SpaceVIL
         {
             //Console.WriteLine(scancode);
 
-            if (scancode == EnterCode) {
+            if (scancode == EnterCode)
+            {
                 SetText(GetText().Insert(_cursor_Xposition, "\n"));
                 _cursor_Xposition++;
             }
 
         }
-        
+
         protected virtual void OnTextInput(object sender, uint codepoint, KeyMods mods)
         {
             byte[] input = BitConverter.GetBytes(codepoint);
