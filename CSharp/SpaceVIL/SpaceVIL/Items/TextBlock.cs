@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    public class TextBlock : TextItem, ITextContainer
+    class TextBlock : VisualItem, ITextEditable
     {
         private static int count = 0;
-        private string _wholeText = "";
+        private string _wholeText = "";   
         private Rectangle _cursor;
         private Point _cursor_position = new Point(0, 0);
         private CustomSelecter _selectedArea;
@@ -366,10 +366,6 @@ namespace SpaceVIL
             return w;
         }
 
-        public String GetText()
-        {
-            return null;
-        }
         public int GetTextHeight()
         {
             return _lineHeight*_linesList.Count + _lineSpacer*(_linesList.Count - 1);
