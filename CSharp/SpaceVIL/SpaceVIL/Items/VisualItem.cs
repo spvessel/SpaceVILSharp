@@ -84,7 +84,7 @@ namespace SpaceVIL
         {
             return _content;
         }
-        public void AddItems(params BaseItem[] items)
+        public virtual void AddItems(params BaseItem[] items)
         {
             foreach (var item in items)
             {
@@ -133,7 +133,6 @@ namespace SpaceVIL
                     child.RemoveItemFromListeners();
 
                     ItemsLayoutBox.RemoveItem(GetHandler(), child);
-
                 }
             }
         }
@@ -333,6 +332,10 @@ namespace SpaceVIL
             {
                 _focused = value;
             }
+        }
+        public void SetFocus()
+        {
+            GetHandler().SetFocusedItem(this);
         }
 
         internal void InvokeKeyboardInputEvents(int scancode, InputState action, KeyMods mods)

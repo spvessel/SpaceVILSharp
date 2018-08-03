@@ -46,6 +46,8 @@ namespace SpaceVIL
 
             //InitWindow
             WindowLayoutBox.InitWindow(this);
+            manager = new ActionManager(this);
+            engine = new DrawEngine(this);
         }
         public void UpdatePosition()
         {
@@ -235,14 +237,12 @@ namespace SpaceVIL
         //methods
         public void Show()
         {
-            manager = new ActionManager(this);
             /*manager.ActionsDone += () =>
             {
                lock (CommonService.engine_locker)
                    UpdateScene();
             };*/
 
-            engine = new DrawEngine(this);
             engine._handler.BorderHidden = IsBorderHidden;
             engine._handler.AppearInCenter = IsCentered;
             engine._handler.Focusable = IsFocusable;
@@ -347,6 +347,10 @@ namespace SpaceVIL
             manager.Execute.Set();
             manager.Execute.WaitOne();
             UpdateScene();//нужно обновлять после выполения задания
+        }
+        public void SetFocusedItem(VisualItem item)
+        {
+            engine.SetFucusedItem(item);
         }
     }
 }

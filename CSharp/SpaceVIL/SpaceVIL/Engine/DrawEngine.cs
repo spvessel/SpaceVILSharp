@@ -21,6 +21,15 @@ namespace SpaceVIL
         private List<VisualItem> HoveredItems;
         private VisualItem HoveredItem;
         private VisualItem FocusedItem;
+        public void SetFucusedItem(VisualItem item)
+        {
+            if (FocusedItem != null)
+            {
+                FocusedItem.IsFocused = false;
+            }
+            FocusedItem = item;
+            FocusedItem.IsFocused = true;
+        }
         private Pointer ptrPress = new Pointer();
         private Pointer ptrRelease = new Pointer();
         private Pointer ptrClick = new Pointer();
@@ -125,6 +134,7 @@ namespace SpaceVIL
                 return;
 
             _tooltip.InitTimer(false);
+
             if (FocusedItem is TextEdit && ((mods == KeyMods.Control && key == KeyCode.V) ||
                 (mods == KeyMods.Shift && key == KeyCode.Insert)) && action == InputState.Press)
             {
@@ -745,7 +755,7 @@ namespace SpaceVIL
                     //match
                     int y = shell.GetY();
                     int h = shell.GetParent().GetY() + shell.GetParent().GetPadding().Top - shell.GetY();
-                    outside.Add(ItemAlignment.Top, new int[] { y, h });
+                    outside.Add(ItemAlignment.Top, new int[] { y, h }); 
                 }
                 //right
                 if (shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right <
@@ -790,11 +800,11 @@ namespace SpaceVIL
         }
         private void DrawShell(BaseItem shell)
         {
-            if (shell.GetBackground().A == 0)
-                return;
-
             //проверка: полностью ли влезает объект в свой контейнер
             CheckOutsideBorders(shell);
+
+            if (shell.GetBackground().A == 0)
+                return;
 
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);

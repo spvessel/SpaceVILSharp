@@ -34,15 +34,15 @@ namespace SpaceVIL
         {
             Background = Color.White;
             Foreground = Color.Black;
-            Font = new Font(new FontFamily("Courier New"), 16, FontStyle.Regular);
+            Font = new Font(new FontFamily("Courier New"), 14, FontStyle.Regular);
             WidthPolicy = SizePolicy.Fixed;
             HeightPolicy = SizePolicy.Fixed;
-            Width = 0;
-            Height = 0;
+            Width = 30;
+            Height = 30;
             MinHeight = 0;
             MinWidth = 0;
-            MaxWidth = 1920;
-            MaxHeight = 1080;
+            MaxWidth = 7680;
+            MaxHeight = 4320;
             Alignment = ItemAlignment.Left | ItemAlignment.Top;
             X = 0;
             Y = 0;

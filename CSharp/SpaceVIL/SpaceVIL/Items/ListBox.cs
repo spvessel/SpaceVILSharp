@@ -214,7 +214,6 @@ namespace SpaceVIL
         {
             _area.AddItem(item);
             UpdateElements();
-            Console.WriteLine(_area.GetWidth());
         }
         public void UpdateElements()
         {
