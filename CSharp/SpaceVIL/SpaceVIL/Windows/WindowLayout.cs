@@ -352,5 +352,11 @@ namespace SpaceVIL
         {
             engine.SetFucusedItem(item);
         }
+
+        public void SetIcon(Image icon_big, Image icon_small)
+        {
+            engine.SetBigIcon(icon_big);
+            engine.SetSmallIcon(icon_small);
+        }
     }
 }

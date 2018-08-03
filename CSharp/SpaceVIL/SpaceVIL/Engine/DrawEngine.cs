@@ -61,6 +61,60 @@ namespace SpaceVIL
             _handler.SetToClose();
         }
 
+        private Glfw.Image _icon_big;
+        private Glfw.Image _icon_small;
+
+        public void SetBigIcon(Image icon)
+        {
+            if (_icon_big.Pixels == null)
+            {
+                if (icon == null)
+                    return;
+
+                List<byte> _map = new List<byte>();
+                Bitmap bmp = new Bitmap(icon);
+                _icon_big.Width = icon.Width;
+                _icon_big.Height = icon.Height;
+                for (int i = 0; i < icon.Width; i++)
+                {
+                    for (int j = 0; j < icon.Height; j++)
+                    {
+                        Color pixel = bmp.GetPixel(i, j);
+                        _map.Add(pixel.R);
+                        _map.Add(pixel.G);
+                        _map.Add(pixel.B);
+                        _map.Add(pixel.A);
+                    }
+                }
+                _icon_big.Pixels = _map.ToArray();
+            }
+        }
+        public void SetSmallIcon(Image icon)
+        {
+            if (_icon_small.Pixels == null)
+            {
+                if (icon == null)
+                    return;
+
+                List<byte> _map = new List<byte>();
+                Bitmap bmp = new Bitmap(icon);
+                _icon_small.Width = icon.Width;
+                _icon_small.Height = icon.Height;
+                for (int i = 0; i < icon.Width; i++)
+                {
+                    for (int j = 0; j < icon.Height; j++)
+                    {
+                        Color pixel = bmp.GetPixel(i, j);
+                        _map.Add(pixel.R);
+                        _map.Add(pixel.G);
+                        _map.Add(pixel.B);
+                        _map.Add(pixel.A);
+                    }
+                }
+                _icon_small.Pixels = _map.ToArray();
+            }
+        }
+
         public void Init()
         {
             _handler.CreateWindow();
@@ -91,6 +145,14 @@ namespace SpaceVIL
                 Console.WriteLine("Could not create textured shaders");
 
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+            if (_icon_big.Pixels != null && _icon_small.Pixels != null)
+            {
+                Glfw.Image[] images = new Glfw.Image[2];
+                images[0] = _icon_big;
+                images[1] = _icon_small;
+                Glfw.SetWindowIcon(_handler.GetWindow(), images);
+            }
 
             Run();
         }
@@ -755,7 +817,7 @@ namespace SpaceVIL
                     //match
                     int y = shell.GetY();
                     int h = shell.GetParent().GetY() + shell.GetParent().GetPadding().Top - shell.GetY();
-                    outside.Add(ItemAlignment.Top, new int[] { y, h }); 
+                    outside.Add(ItemAlignment.Top, new int[] { y, h });
                 }
                 //right
                 if (shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right <
