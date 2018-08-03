@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace SpaceVIL
 {
@@ -247,6 +248,18 @@ namespace SpaceVIL
         public void InvokeScrollDown()
         {
             if (EventScrollDown != null) EventScrollDown.Invoke(this);
+        }
+
+        public List<BaseItem> GetListContent()
+        {
+            List<BaseItem> result = new List<BaseItem>();
+            foreach (var item in _area.GetItems())
+            {
+                if (item is CustomShape)
+                    continue;
+                result.Add(item);
+            }
+            return result;
         }
     }
 }

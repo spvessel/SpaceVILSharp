@@ -11,7 +11,7 @@ namespace SpaceVIL
     {
         public MessageBox(String m, String t) : base(m, t) { }
 
-        override internal void InitWindow()
+        public override void InitWindow()
         {
             Handler = new WindowLayout(this, "MessageBox_" + GetCount());
             //window's attr

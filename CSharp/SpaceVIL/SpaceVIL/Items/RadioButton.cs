@@ -135,15 +135,15 @@ namespace SpaceVIL
         {
             _text.SetFont(font);
         }
-        internal void SetFontSize(int size)
+        public void SetFontSize(int size)
         {
             _text.SetFontSize(size);
         }
-        internal void SetFontStyle(FontStyle style)
+        public void SetFontStyle(FontStyle style)
         {
             _text.SetFontStyle(style);
         }
-        internal void SetFontFamily(FontFamily font_family)
+        public void SetFontFamily(FontFamily font_family)
         {
             _text.SetFontFamily(font_family);
         }

@@ -214,7 +214,7 @@ namespace SpaceVIL
             if (_handler.GetLayout().IsBorderHidden)
             {
                 glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
-                Update();
+                //Update();
             }
         }
 
@@ -321,6 +321,7 @@ namespace SpaceVIL
                         if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left) || _handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Top))
                             SetWindowPos();
                         SetWindowSize();
+                        Update();
                     }
                 }
                 if (_handler.GetLayout().GetWindow()._sides == 0)
@@ -347,6 +348,7 @@ namespace SpaceVIL
                             _handler.WPosition.X += (ptrRelease.X - ptrPress.X);
                             _handler.WPosition.Y += (ptrRelease.Y - ptrPress.Y);
                             SetWindowPos();
+                            Update();
                         }
                     }
                 }
@@ -576,7 +578,7 @@ namespace SpaceVIL
             dark_fill.SetHandler(_handler.GetLayout());
             DrawShell(dark_fill);
         }
-        private void DrawToolTip()//refactor
+        private void DrawToolTip() //refactor
         {
             if (!_tooltip.IsVisible)
                 return;

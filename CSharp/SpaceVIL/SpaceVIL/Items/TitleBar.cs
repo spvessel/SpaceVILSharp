@@ -13,7 +13,15 @@ namespace SpaceVIL
             return _icon;
         }
         private ButtonCore _close;
+        public ButtonCore GetCloseButton()
+        {
+            return _close;
+        }
         private ButtonCore _minimize;
+        public ButtonCore GetMinimizeButton()
+        {
+            return _minimize;
+        }
 
         public TitleBar()
         {
@@ -58,15 +66,15 @@ namespace SpaceVIL
         {
             _text_object.SetFont(font);
         }
-        internal void SetFontSize(int size)
+        public void SetFontSize(int size)
         {
             _text_object.SetFontSize(size);
         }
-        internal void SetFontStyle(FontStyle style)
+        public void SetFontStyle(FontStyle style)
         {
             _text_object.SetFontStyle(style);
         }
-        internal void SetFontFamily(FontFamily font_family)
+        public void SetFontFamily(FontFamily font_family)
         {
             _text_object.SetFontFamily(font_family);
         }

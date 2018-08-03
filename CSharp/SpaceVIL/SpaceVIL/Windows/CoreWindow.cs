@@ -34,7 +34,7 @@ namespace SpaceVIL
             wnd_handler.Show();
         }
 
-        abstract internal void InitWindow();
+        abstract public void InitWindow();
 
         public int GetCount() { return count; }
 

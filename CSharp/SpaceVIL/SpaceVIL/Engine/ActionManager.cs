@@ -30,7 +30,7 @@ namespace SpaceVIL
                 Execute.WaitOne();
                 ExecuteActions();
                 Execute.Set();
-                Execute.Reset();
+                //Execute.Reset();
             }
         }
 
