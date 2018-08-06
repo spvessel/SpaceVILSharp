@@ -63,7 +63,7 @@ namespace SpaceVIL
             {
                 return;
             }
-            
+
             AddEventListener(GeometryEventType.ResizeWidth, item);
             AddEventListener(GeometryEventType.ResizeHeight, item);
             AddEventListener(GeometryEventType.Moved_X, item);
@@ -159,7 +159,7 @@ namespace SpaceVIL
             if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
             if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
             if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            _item.SetBackground(Color.FromArgb( 255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+            _item.SetBackground(Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
         }
         public virtual void SetBackground(float r, float g, float b, float a)
         {
@@ -468,5 +468,16 @@ namespace SpaceVIL
             Update(GeometryEventType.Moved_X);
             Update(GeometryEventType.Moved_Y);
         }
+
+        public virtual void SetStyle(Style style) { }
+        public virtual void CheckDefaults() 
+        { 
+            //checking all attributes
+            //SetStyle(default theme)
+            //foreach inners SetStyle(from item default style)
+             
+            SetDefaults();
+        }
+        public virtual void SetDefaults() { }
     }
 }

@@ -15,7 +15,7 @@ namespace SpaceVIL
     abstract public class VisualItem : BaseItem
     {
         //style
-        public virtual void SetStyle(Style style)
+        public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
@@ -115,6 +115,7 @@ namespace SpaceVIL
 
             //needs to force update all attributes
             item.UpdateGeometry();
+            item.CheckDefaults();
             item.InitElements();
         }
 

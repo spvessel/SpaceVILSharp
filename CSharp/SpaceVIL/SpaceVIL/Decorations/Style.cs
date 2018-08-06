@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,9 @@ namespace SpaceVIL
 {
     public class Style
     {
+        private ConcurrentDictionary<BaseItem, Style> _inner_styles = new ConcurrentDictionary<BaseItem, Style>();
+
+        //defaults values
         public Color Background;
         public Color Foreground;
         public Font Font;
@@ -48,6 +52,22 @@ namespace SpaceVIL
             Y = 0;
             BorderRadius = 0;
             BorderThickness = 0;
+        }
+
+        public void AddInnerStyle(BaseItem item, Style style)
+        {
+            if (_inner_styles.ContainsKey(item))
+                _inner_styles[item] = style;
+            else
+                _inner_styles.TryAdd(item, style);
+        }
+        
+        public void RemoveInnerStyle(BaseItem item, Style style)
+        {
+            if (_inner_styles.ContainsKey(item))
+                _inner_styles.TryRemove(item, out style);
+            else
+                return;
         }
     }
 }

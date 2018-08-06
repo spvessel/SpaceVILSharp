@@ -52,8 +52,9 @@ namespace SpaceVIL
             AddItem(_text);
 
             //connect events
-            _indicator.GetIndicatorMarker().EventToggle += EventMouseClick.Invoke;
-            _text.EventMouseClick += EventMouseClick.Invoke;
+            // _indicator.GetIndicatorMarker().EventToggle += EventMouseClick.Invoke;
+            //EventMouseClick += _indicator.GetIndicatorMarker().EventToggle;
+            _text.EventMouseClick += _indicator.GetIndicatorMarker().EventToggle;
         }
 
         protected internal override bool GetHoverVerification(float xpos, float ypos)

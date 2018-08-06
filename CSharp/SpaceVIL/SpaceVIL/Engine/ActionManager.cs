@@ -17,7 +17,7 @@ namespace SpaceVIL
 
         internal ManualResetEvent Execute = new ManualResetEvent(false);
         WindowLayout _handler;
-        bool _stoped = false;
+        bool _stoped;
         //int _interval = 1000 / 60;
         public ActionManager(WindowLayout wnd)
         {
@@ -25,6 +25,7 @@ namespace SpaceVIL
         }
         public void StartManager()
         {
+            _stoped = false;
             while (!_stoped)
             {
                 Execute.WaitOne();

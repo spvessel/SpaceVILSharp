@@ -27,12 +27,13 @@ namespace SpaceVIL
             SetHeightPolicy(SizePolicy.Fixed);
             SetBackground(Color.FromArgb(255, 32, 32, 32));
             count++;
+            
+            _indicator = new ButtonToggle();
         }
 
         public override void InitElements()
         {
             //marker
-            _indicator = new ButtonToggle();
             _indicator.SetItemName(GetItemName() + "_marker");
             _indicator.SetBackground(Color.FromArgb(255, 32, 32, 32));
             _indicator.SetWidthPolicy(SizePolicy.Expand);

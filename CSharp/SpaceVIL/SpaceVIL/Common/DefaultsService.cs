@@ -6,15 +6,10 @@ namespace SpaceVIL
 {
     public static class DefaultsService
     {
-        public static Style DefaultStyle = new Style();
-
-        public static Color GetDefaultBackground()
+        private static ThemeStyle DefaultTheme = new ThemeStyle();
+        public static void SetDefaultTheme(ThemeStyle theme)
         {
-            return DefaultStyle.Background;
-        }
-        public static Color GetDefaultForeground()
-        {
-            return DefaultStyle.Foreground;
+            DefaultTheme = theme;
         }
     }
 }
