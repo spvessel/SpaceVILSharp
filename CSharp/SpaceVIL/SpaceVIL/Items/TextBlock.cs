@@ -216,17 +216,31 @@ namespace SpaceVIL
             byte[] input = BitConverter.GetBytes(codepoint);
             string str = Encoding.UTF32.GetString(input);
             if (_isSelect) CutText();
+            _cursor_position = CheckLineFits(_cursor_position);
             SetTextInLine(_linesList[_cursor_position.Y].GetItemText().Insert(_cursor_position.X, str));
             _cursor_position.X++;
             ReplaceCursor();
         }
 
-        private Point CursorPosToCoord(Point cPos)
+        private Point CheckLineFits(Point checkPoint) {
+            Point outPt = new Point();
+            //??? check line count
+            outPt.Y = checkPoint.Y;
+            int letCount = GetLineLetCount(checkPoint.Y);
+            outPt.X = checkPoint.X;
+            if (checkPoint.X > letCount)
+                outPt.X = letCount;
+
+            return outPt;
+        }
+
+        private Point CursorPosToCoord(Point cPos0)
         {
             //Console.WriteLine(cPos.X + " " + cPos.Y);
             //Console.WriteLine(_linesList[cPos.Y].GetLetPosArray().Count);
 
             Point coord = new Point(0, 0);
+            Point cPos = CheckLineFits(cPos0);
             int letCount = GetLineLetCount(cPos.Y);
             coord.Y = (int)_linesList[cPos.Y].GetLineYShift();
             if (letCount == 0)
@@ -243,14 +257,14 @@ namespace SpaceVIL
             {
                 if (!(cPos.X == 0 && cPos.Y == 0))
                 {
-                    if (cPos.X > letCount)
-                    {
-                        coord.X = _linesList[cPos.Y].GetLetPosArray()[letCount - 1];
-                    }
-                    else
-                    {
+                    //if (cPos.X > letCount)
+                    //{
+                    //    coord.X = _linesList[cPos.Y].GetLetPosArray()[letCount - 1];
+                    //}
+                    //else
+                    //{
                         coord.X = _linesList[cPos.Y].GetLetPosArray()[cPos.X - 1];
-                    }
+                    //}
                 }
             }
             return coord;
