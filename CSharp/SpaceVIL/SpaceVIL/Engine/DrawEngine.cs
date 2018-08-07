@@ -129,6 +129,7 @@ namespace SpaceVIL
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             //glEnable(GL_DEPTH_TEST);
             glEnable(GL_ALPHA_TEST);
+            glEnable(GL_STENCIL_TEST);
             ////////////////////////////////////////////////
             _primitive = new Shader(
                 Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fill.glsl"),
@@ -265,7 +266,7 @@ namespace SpaceVIL
         }
         private void Close(Glfw.Window glfwwnd)
         {
-            Glfw.SetWindowShouldClose(glfwwnd, true);
+            _handler.GetLayout().Close();
         }
         private void Resize(Glfw.Window glfwwnd, int width, int height)
         {
@@ -598,7 +599,7 @@ namespace SpaceVIL
             Focus(_handler.GetWindow(), true);
 
             //starting animation
-            float _opacity_anim = 0.0f;
+            /*float _opacity_anim = 0.0f;
             while (_opacity_anim < 1.0f)
             {
                 _opacity_anim += 0.2f;
@@ -607,12 +608,13 @@ namespace SpaceVIL
                 Thread.Sleep(1000 / 90);
                 Glfw.PollEvents();
             }
-            _handler.SetOpacity(1.0f);
+            _handler.SetOpacity(1.0f);*/
 
             //core rendering
             //double _interval = 1000 / 60;
             while (!_handler.IsClosing())
             {
+                //Glfw.PollEvents();
                 Glfw.WaitEvents();
                 _handler.GetLayout().ExecutePollActions();
             }
@@ -795,8 +797,74 @@ namespace SpaceVIL
             //clear array
             crd_array.Clear();
         }
+        private void SetStencilMask(List<float[]> crd_array)
+        {
+            uint[] buffers = new uint[2];
+            glGenBuffers(2, buffers);
 
-        private bool CheckOutsideBorders(BaseItem shell)
+            //Vertex
+            float[] vertexData = new float[crd_array.Count * 3];
+
+            for (int i = 0; i < vertexData.Length / 3; i++)
+            {
+                vertexData[i * 3 + 0] = crd_array.ElementAt(i)[0];
+                vertexData[i * 3 + 1] = crd_array.ElementAt(i)[1];
+                vertexData[i * 3 + 2] = crd_array.ElementAt(i)[2];
+            }
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(0);
+
+            //Color
+            float[] argb = { 1.0f, 1.0f, 1.0f, 0.5f };
+            float[] colorData = new float[crd_array.Count * 4];
+            for (int i = 0; i < colorData.Length / 4; i++)
+            {
+                colorData[i * 4 + 0] = argb[0];
+                colorData[i * 4 + 1] = argb[1];
+                colorData[i * 4 + 2] = argb[2];
+                colorData[i * 4 + 3] = argb[3];
+            }
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(1);
+
+            // draw
+            glDrawArrays(GL_TRIANGLES, 0, crd_array.Count);
+
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+
+            // Clear VBO and shader
+            glDeleteBuffers(2, buffers);
+
+            //clear array
+            //crd_array.Clear();
+        }
+
+        private void CheckOutsideBorders(BaseItem shell)
+        {
+            //if (shell.CutBehaviour == StencilBehaviour.Strict)
+            // StrictStencil(shell);
+            //else
+            LazyStencil(shell);
+        }
+
+        private void StrictStencil(BaseItem shell)
+        {
+            glEnable(GL_STENCIL_TEST);
+            glClearStencil(1);
+            glStencilMask(0xFF);
+            glStencilFunc(GL_NEVER, 2, 0);
+            glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
+            SetStencilMask(shell.GetParent().MakeShape());
+            glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+        }
+
+        private bool LazyStencil(BaseItem shell)
         {
             var outside = new Dictionary<ItemAlignment, Int32[]>();
 
@@ -837,11 +905,15 @@ namespace SpaceVIL
                     outside.Add(ItemAlignment.Left, new int[] { x, w });
                 }
 
+
                 if (outside.Count > 0)
                 {
                     _isStencilSet = shell;
+                    StrictStencil(shell);
+                    // Console.WriteLine(shell.GetItemName());
+
                     //stencil
-                    glClearStencil(1);
+                    /*glClearStencil(1);
                     glStencilMask(0xFF);
                     glStencilFunc(GL_NEVER, 2, 0);
                     glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
@@ -854,7 +926,7 @@ namespace SpaceVIL
                             SetStencilMask(side.Value[1], shell.GetParent().GetHeight(), side.Value[0], shell.GetY());
                     }
                     //set stencil mask
-                    glStencilFunc(GL_NOTEQUAL, 2, 255);
+                    glStencilFunc(GL_NOTEQUAL, 2, 255);*/
                     return true;
                 }
             }
@@ -920,6 +992,7 @@ namespace SpaceVIL
 
             //clear array
             crd_array.Clear();
+            glClearStencil(1);
         }
 
         void DrawText(TextItem item)
@@ -931,7 +1004,8 @@ namespace SpaceVIL
             float[] data = item.Shape();
             float[] colorData = item.GetColors();
 
-            bool ok = CheckOutsideBorders(item as BaseItem);
+            //bool ok = CheckOutsideBorders(item as BaseItem); //deprecated
+            CheckOutsideBorders(item as BaseItem);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
             glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);

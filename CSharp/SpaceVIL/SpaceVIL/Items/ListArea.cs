@@ -63,6 +63,7 @@ namespace SpaceVIL
         {
             SetItemName("ListArea_" + count);
             count++;
+            //Border.Radius = 50;
 
             EventMouseClick += OnMouseClick;
         }
