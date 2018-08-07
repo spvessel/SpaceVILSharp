@@ -56,6 +56,7 @@ namespace SpaceVIL
         protected virtual void OnKeyRelease(object sender, int scancode, KeyMods mods)
         {
         }
+
         protected virtual void OnKeyPress(object sender, int scancode, KeyMods mods)
         {
             //Console.WriteLine(scancode);
