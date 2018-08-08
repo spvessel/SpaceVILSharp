@@ -479,6 +479,6 @@ namespace SpaceVIL
             SetDefaults();
         }
         public virtual void SetDefaults() { }
-        //public StencilBehaviour CutBehaviour = StencilBehaviour.Strict;
+        public ItemRule HoverRule = ItemRule.Lazy;
     }
 }

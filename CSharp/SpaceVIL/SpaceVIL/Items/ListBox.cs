@@ -32,6 +32,10 @@ namespace SpaceVIL
 
         private Grid _grid = new Grid(2, 2);
         private ListArea _area = new ListArea();
+        public ListArea GetArea()
+        {
+            return _area;
+        }
         public VerticalScrollBar VScrollBar = new VerticalScrollBar();
         public HorizontalScrollBar HScrollBar = new HorizontalScrollBar();
         private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.Always;

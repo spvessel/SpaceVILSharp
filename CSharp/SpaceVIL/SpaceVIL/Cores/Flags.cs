@@ -64,7 +64,7 @@ namespace SpaceVIL
         Left = 0x04,
         Right = 0x08,
     }
-    public enum ItemBehaviour
+    public enum ItemRule
     {
         Lazy,
         Strict

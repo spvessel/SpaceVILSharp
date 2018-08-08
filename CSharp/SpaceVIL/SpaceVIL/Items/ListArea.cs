@@ -8,6 +8,8 @@ namespace SpaceVIL
 {
     public class ListArea : VisualItem, IVLayout, IHLayout
     {
+        public EventCommonMethod SelectionChanged;
+
         private int _step = 15;
         public void SetStep(int value)
         {
@@ -27,6 +29,7 @@ namespace SpaceVIL
         public void SetSelection(int index)
         {
             _selection = index;
+            SelectionChanged?.Invoke();
             UpdateLayout();
         }
         public void Unselect()
@@ -100,6 +103,7 @@ namespace SpaceVIL
                     break;
                 }
             }
+            SelectionChanged?.Invoke();
         }
         public override void InvokePoolEvents()
         {

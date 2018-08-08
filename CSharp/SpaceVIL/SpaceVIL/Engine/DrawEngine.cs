@@ -247,6 +247,8 @@ namespace SpaceVIL
                 else
                 {
                     _handler.Focused = value;
+                    if(_handler.GetLayout().IsOutsideClickClosable)
+                        _handler.GetLayout().Close();
                 }
             }
         }
@@ -349,7 +351,7 @@ namespace SpaceVIL
 
             if (EngineEvent.LastEvent().HasFlag(InputEventType.MousePressed)) // жость какая-то ХЕРОТАААА!!!
             {
-                if (_handler.GetLayout().IsBorderHidden)
+                if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble)
                 {
                     int w = _handler.GetLayout().GetWidth();
                     int h = _handler.GetLayout().GetHeight();
@@ -404,8 +406,8 @@ namespace SpaceVIL
                     if (draggable != null)
                     {
                         draggable._mouse_ptr.SetPosition((float)xpos, (float)ypos);
-                        draggable.InvokePoolEvents();
-                        //(HoveredItem as ScrollHandler).EventMouseDrag.Invoke(HoveredItem);
+                        //draggable.InvokePoolEvents();
+                        draggable.EventMouseDrag.Invoke(HoveredItem);
 
                         //Focus get
                         if (FocusedItem != null)
@@ -440,7 +442,7 @@ namespace SpaceVIL
                         _tooltip.SetText(HoveredItem.GetToolTip());
                     }
                     _handler.SetCursorType(Glfw.CursorType.Arrow);
-                    if (_handler.GetLayout().IsBorderHidden)
+                    if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble)
                     {
                         //resize
                         if ((xpos < _handler.GetLayout().GetWindow().GetWidth() - 5)
