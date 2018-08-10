@@ -20,6 +20,7 @@ namespace SpaceVIL
         private int _selectFrom = 0;
         private int _selectTo = 0;
         private bool _isSelect = false;
+        private bool _justSelected = false;
 
         private const int BackspaceCode = 14;
         private const int DeleteCode = 339;
@@ -67,6 +68,14 @@ namespace SpaceVIL
         protected virtual void OnKeyPress(object sender, int scancode, KeyMods mods)
         {
             //Console.WriteLine(scancode);
+
+            if (!_isSelect && _justSelected)
+            {
+                _selectFrom = 0;
+                _selectTo = 0;
+                _justSelected = false;
+            }
+
             if (mods != 0)
             {
                 //Выделение не сбрасывается, проверяются сочетания
@@ -172,7 +181,8 @@ namespace SpaceVIL
         {
             byte[] input = BitConverter.GetBytes(codepoint);
             string str = Encoding.UTF32.GetString(input);
-            if (_isSelect) CutText();
+            //if (_isSelect) CutText();
+            if (_justSelected) CutText();
             SetText(GetText().Insert(_cursor_position, str));
             _cursor_position++;
             ReplaceCursor();
@@ -327,9 +337,10 @@ namespace SpaceVIL
 
         private void UnselectText() {
             _isSelect = false;
+            _justSelected = true;
             MakeSelectedArea(0, 0);
-            _selectFrom = 0;
-            _selectTo = 0;
+            //_selectFrom = 0;
+            //_selectTo = 0;
         }
         /*
         internal void ShowCursor(bool isShow) {
