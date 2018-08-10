@@ -6,13 +6,13 @@ using System.Drawing;
 using System.Timers;
 namespace SpaceVIL
 {
-    public class PopUpMessage : VisualItem, IPopUp
+    public class PopUpMessage : VisualItem/*, IPopUp*/
     {
         static int count = 0;
         private TextLine _text_object;
         private ButtonCore _btn_close;
         internal Timer _stop;
-        private int _timeout = 5000;
+        private int _timeout = 2000;
         internal bool _holded = false;
         public void SetTimeOut(int milliseconds)
         {
@@ -22,11 +22,14 @@ namespace SpaceVIL
         {
             return _timeout;
         }
-        public PopUpMessage()
+        public PopUpMessage(String message, WindowLayout handler)
         {
             _btn_close = new ButtonCore();
             _text_object = new TextLine();
+            _text_object.SetItemText(message);
+
             EventMouseClick += EmptyEvent;
+
             SetItemName("PopUpMessage_" + count);
             SetBackground(32, 32, 32, 240);
             SetForeground(Color.White);
@@ -37,6 +40,8 @@ namespace SpaceVIL
             SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             Border.Radius = 10;
             count++;
+
+            handler.GetWindow().AddItem(this);
         }
         public void SetTextAlignment(ItemAlignment alignment)
         {
@@ -107,11 +112,8 @@ namespace SpaceVIL
             _text_object.UpdateData(UpdateType.Critical);
         }
 
-        public void Execute(WindowLayout wnd, String message)
+        public void Show()
         {
-            SetHandler(wnd);
-            wnd.GetWindow().AddItem(this);
-            SetText(message);
             InitTimer();
         }
         internal void InitTimer()
@@ -129,7 +131,6 @@ namespace SpaceVIL
 
         private void RemoveSelf()
         {
-
             if (_stop != null)
             {
                 _stop.Stop();

@@ -10,7 +10,7 @@ namespace SpaceVIL
         public ButtonCore _selected = new ButtonCore();
         public ButtonCore _dropdown = new ButtonCore();
         public CustomShape _arrow = new CustomShape();
-        public DropDownList _dropdownarea = new DropDownList("", "");
+        public ComboBoxDropDown _dropdownarea = new ComboBoxDropDown();
 
         public ComboBox()
         {
@@ -21,6 +21,7 @@ namespace SpaceVIL
             count++;
 
             EventKeyPress += OnKeyPress;
+            EventMousePressed += (sender) => ShowDropDownList();
         }
 
         protected virtual void OnKeyPress(object sender, int key, KeyMods mods)
@@ -88,10 +89,6 @@ namespace SpaceVIL
             _selected.SetMargin(0, 0, 20, 0);
             _selected.SetPadding(10, 0, 0, 0);
             _selected.SetBackground(220, 220, 220);
-            _selected.EventMouseClick += (sender) =>
-            {
-                ShowDropDownList();
-            };
 
             //dropdown
             _dropdown.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
@@ -102,10 +99,6 @@ namespace SpaceVIL
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
             });
-            _dropdown.EventMouseClick += (sender) =>
-            {
-                ShowDropDownList();
-            };
 
             //arrow
             _arrow.SetTriangles(GraphicsMathService.GetTriangle(a: 180));
@@ -123,23 +116,14 @@ namespace SpaceVIL
             _dropdownarea.Selection = _selected;
         }
 
-        bool ok = false;
         private void ShowDropDownList()
         {
             //dropdownarea
-            //if (!ok)
-            {
-                _dropdownarea.Handler.SetWidth(_selected.GetWidth());
-                _dropdownarea.Handler.SetHeight(100);
-                _dropdownarea.Handler.SetX(GetHandler().GetX() + _selected.GetX());
-                _dropdownarea.Handler.SetY(GetHandler().GetY() + _selected.GetY() + _selected.GetHeight());
-                _dropdownarea.Show();
-                ok = true;
-            }
-            //else
-            {
-                ok = false;
-            }
+            _dropdownarea.Handler.SetWidth(_selected.GetWidth());
+            _dropdownarea.Handler.SetHeight(100);
+            _dropdownarea.Handler.SetX(GetHandler().GetX() + _selected.GetX());
+            _dropdownarea.Handler.SetY(GetHandler().GetY() + _selected.GetY() + _selected.GetHeight());
+            _dropdownarea.Show();
         }
 
         public void AddToLIst(BaseItem item)

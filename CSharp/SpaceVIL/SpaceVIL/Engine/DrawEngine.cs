@@ -14,19 +14,33 @@ namespace SpaceVIL
 {
     internal class DrawEngine : GL.WGL.OpenWGL
     {
+        public void ResetItems()
+        {
+            if (FocusedItem != null)
+                FocusedItem.IsFocused = false;
+            FocusedItem = null;
+            if (HoveredItem != null)
+                HoveredItem.IsMouseHover = false;
+            HoveredItem = null;
+
+            HoveredItems.Clear();
+        }
         private ToolTip _tooltip = new ToolTip();
         private BaseItem _isStencilSet = null;
         public InputDeviceEvent EngineEvent = new InputDeviceEvent();
 
         private List<VisualItem> HoveredItems;
-        private VisualItem HoveredItem;
-        private VisualItem FocusedItem;
-        public void SetFucusedItem(VisualItem item)
+        private VisualItem HoveredItem = null;
+        private VisualItem FocusedItem = null;
+        public void SetFocusedItem(VisualItem item)
         {
-            if (FocusedItem != null)
+            if (item == null)
             {
-                FocusedItem.IsFocused = false;
+                FocusedItem = null;
+                return;
             }
+            if (FocusedItem != null)
+                FocusedItem.IsFocused = false;
             FocusedItem = item;
             FocusedItem.IsFocused = true;
         }
@@ -129,7 +143,7 @@ namespace SpaceVIL
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             //glEnable(GL_DEPTH_TEST);
             glEnable(GL_ALPHA_TEST);
-            glEnable(GL_STENCIL_TEST);
+            //glEnable(GL_STENCIL_TEST);
             ////////////////////////////////////////////////
             _primitive = new Shader(
                 Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fill.glsl"),
@@ -247,8 +261,11 @@ namespace SpaceVIL
                 else
                 {
                     _handler.Focused = value;
-                    if(_handler.GetLayout().IsOutsideClickClosable)
+                    if (_handler.GetLayout().IsOutsideClickClosable)
+                    {
+                        ResetItems();
                         _handler.GetLayout().Close();
+                    }
                 }
             }
         }
@@ -342,8 +359,8 @@ namespace SpaceVIL
             if (!_handler.Focusable)
                 return;
 
-            _tooltip.InitTimer(false);
             EngineEvent.SetEvent(InputEventType.MouseMove);
+            _tooltip.InitTimer(false);
 
             //logic of hovers
             ptrRelease.X = (int)xpos;
@@ -406,7 +423,6 @@ namespace SpaceVIL
                     if (draggable != null)
                     {
                         draggable._mouse_ptr.SetPosition((float)xpos, (float)ypos);
-                        //draggable.InvokePoolEvents();
                         draggable.EventMouseDrag.Invoke(HoveredItem);
 
                         //Focus get
@@ -438,9 +454,10 @@ namespace SpaceVIL
                 {
                     if (HoveredItem.GetToolTip() != String.Empty)
                     {
-                        _tooltip.InitTimer(true);
                         _tooltip.SetText(HoveredItem.GetToolTip());
+                        _tooltip.InitTimer(true);
                     }
+
                     _handler.SetCursorType(Glfw.CursorType.Arrow);
                     if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble)
                     {
@@ -480,7 +497,7 @@ namespace SpaceVIL
                             _handler.SetCursorType(Glfw.CursorType.Beam);
                         }
                     }
-                    VisualItem popup = IsInListHoveredItems<IPopUp>();
+                    VisualItem popup = IsInListHoveredItems<PopUpMessage>();
                     if (popup != null)
                     {
                         (popup as PopUpMessage).HoldSelf(true);
@@ -540,6 +557,7 @@ namespace SpaceVIL
                     EngineEvent.ResetAllEvents();
                     EngineEvent.SetEvent(InputEventType.MouseRelease);
                     break;
+
                 case InputState.Press:
                     Glfw.GetCursorPos(_handler.GetWindow(), out double xpos, out double ypos);
                     ptrClick.X = (int)xpos;
@@ -586,6 +604,11 @@ namespace SpaceVIL
             }
         }
 
+        internal void UpdateGL()
+        {
+            Glfw.PostEmptyEvent();
+        }
+
         internal void Update()
         {
             lock (_handler.GetLayout().engine_locker)
@@ -600,20 +623,6 @@ namespace SpaceVIL
             _primitive.UseShader();
             Focus(_handler.GetWindow(), true);
 
-            //starting animation
-            /*float _opacity_anim = 0.0f;
-            while (_opacity_anim < 1.0f)
-            {
-                _opacity_anim += 0.2f;
-                _handler.SetOpacity(_opacity_anim);
-                Render();
-                Thread.Sleep(1000 / 90);
-                Glfw.PollEvents();
-            }
-            _handler.SetOpacity(1.0f);*/
-
-            //core rendering
-            //double _interval = 1000 / 60;
             while (!_handler.IsClosing())
             {
                 //Glfw.PollEvents();
@@ -638,33 +647,69 @@ namespace SpaceVIL
                 DrawItems(_handler.GetLayout().GetWindow());
                 //draw tooltip if needed
                 DrawToolTip();
-                /*if (!_handler.Focusable)
+                if (!_handler.Focusable)
                 {
                     DrawShadePillow();
-                }*/
+                }
                 _handler.Swap();
             }
         }
         private void DrawShadePillow()
         {
-            Rectangle dark_fill = new Rectangle();
-            dark_fill.SetSize(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
-            dark_fill.SetBackground(0, 0, 0, 150);
-            dark_fill.SetParent(_handler.GetLayout().GetWindow());
-            dark_fill.SetHandler(_handler.GetLayout());
-            DrawShell(dark_fill);
+            uint[] buffers = new uint[2];
+            glGenBuffers(2, buffers);
+
+            //Vertex
+            float[] vertexData = new float[6 * 3]
+            {
+		        //X     Y		Z
+		        -1.0f,  1.0f,   0.0f,
+                -1.0f,  -1.0f,  0.0f,
+                1.0f,   -1.0f,  0.0f,
+
+                1.0f,   -1.0f,  0.0f,
+                1.0f,   1.0f,   0.0f,
+                -1.0f,  1.0f,   0.0f,
+            };
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(0);
+
+            //Color
+            float[] argb = {
+                0.0f,
+                0.0f,
+                0.0f,
+                (float)150 / 255.0f};
+
+            float[] colorData = new float[6 * 4];
+            for (int i = 0; i < colorData.Length / 4; i++)
+            {
+                colorData[i * 4 + 0] = argb[0];
+                colorData[i * 4 + 1] = argb[1];
+                colorData[i * 4 + 2] = argb[2];
+                colorData[i * 4 + 3] = argb[3];
+            }
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(1);
+
+            // draw
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+
+            // Clear VBO and shader
+            glDeleteBuffers(2, buffers);
         }
         private void DrawToolTip() //refactor
         {
             if (!_tooltip.IsVisible)
                 return;
-
-            _tooltip.GetTextLine().UpdateData(UpdateType.Critical);
-            _tooltip.SetWidth(
-                _tooltip.GetPadding().Left +
-                _tooltip.GetPadding().Right +
-                _tooltip.GetTextWidth()
-                );
 
             //проверка сверху
             if (ptrRelease.Y > _tooltip.GetHeight())
@@ -684,7 +729,14 @@ namespace SpaceVIL
             {
                 _tooltip.SetX(ptrRelease.X - 10);
             }
+            /*Console.WriteLine(_tooltip.GetText() + " " +
+                _tooltip.GetWidth() + " " +
+                _tooltip.GetHeight() + " " +
+                _tooltip.GetX() + " " +
+                _tooltip.GetY());*/
+
             DrawShell(_tooltip);
+
             glDisable(GL_MULTISAMPLE);
             _tooltip.GetTextLine().UpdateGeometry();
             DrawText(_tooltip.GetTextLine());
@@ -694,6 +746,13 @@ namespace SpaceVIL
                 glDisable(GL_STENCIL_TEST);
                 _isStencilSet = null;
             }
+
+            _tooltip.GetTextLine().UpdateData(UpdateType.Critical);
+            _tooltip.SetWidth(
+                _tooltip.GetPadding().Left +
+                _tooltip.GetPadding().Right +
+                _tooltip.GetTextWidth()
+                );
         }
         //Common Draw function
         private void DrawItems(BaseItem root)
@@ -911,11 +970,11 @@ namespace SpaceVIL
                 if (outside.Count > 0)
                 {
                     _isStencilSet = shell;
-                    StrictStencil(shell);
+                    //StrictStencil(shell);
                     // Console.WriteLine(shell.GetItemName());
 
                     //stencil
-                    /*glClearStencil(1);
+                    glClearStencil(1);
                     glStencilMask(0xFF);
                     glStencilFunc(GL_NEVER, 2, 0);
                     glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
@@ -928,7 +987,7 @@ namespace SpaceVIL
                             SetStencilMask(side.Value[1], shell.GetParent().GetHeight(), side.Value[0], shell.GetY());
                     }
                     //set stencil mask
-                    glStencilFunc(GL_NOTEQUAL, 2, 255);*/
+                    glStencilFunc(GL_NOTEQUAL, 2, 255);
                     return true;
                 }
             }
@@ -940,7 +999,9 @@ namespace SpaceVIL
             CheckOutsideBorders(shell);
 
             if (shell.GetBackground().A == 0)
+            {
                 return;
+            }
 
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
@@ -994,7 +1055,7 @@ namespace SpaceVIL
 
             //clear array
             crd_array.Clear();
-            glClearStencil(1);
+            //glClearStencil(1);
         }
 
         void DrawText(TextItem item)

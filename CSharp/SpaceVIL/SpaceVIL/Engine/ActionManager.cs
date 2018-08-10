@@ -60,6 +60,9 @@ namespace SpaceVIL
                 case InputEventType.MouseRelease:
                     InvokeMouseClickEvent(task.Item);
                     break;
+                case InputEventType.MousePressed:
+                    InvokeMousePressedEvent(task.Item);
+                    break;
                 default:
                     break;
             }
@@ -93,6 +96,7 @@ namespace SpaceVIL
         }
         private void InvokeMousePressedEvent(VisualItem sender)
         {
+           
             sender.EventMousePressed?.Invoke(sender);
         }
         private void InvokeMouseReleaseEvent(VisualItem sender)

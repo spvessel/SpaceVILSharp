@@ -10,6 +10,10 @@ namespace SpaceVIL
     public class WindowLayout : ISize, IPosition
     //where TLayout : VisualItem
     {
+        public EventCommonMethod EventClose;
+        public EventCommonMethod EventMinimize;
+        public EventCommonMethod EventHide;
+
         internal object engine_locker = new object();
         private CoreWindow handler;
         private Guid ParentGUID;
@@ -49,6 +53,9 @@ namespace SpaceVIL
             WindowLayoutBox.InitWindow(this);
             manager = new ActionManager(this);
             engine = new DrawEngine(this);
+
+            //events
+            // EventClose += Close;
         }
         public void UpdatePosition()
         {
@@ -62,7 +69,7 @@ namespace SpaceVIL
         }
         public void UpdateScene()
         {
-            engine.Update();
+            engine.UpdateGL();
         }
         private WContainer _window;
         internal WContainer GetWindow()
@@ -304,6 +311,7 @@ namespace SpaceVIL
                 IsHidden = true;
             }
             //manager.ActionsDone -= () => UpdateScene();
+            EventClose?.Invoke();
         }
         public bool IsResizeble { get; set; }
         public bool IsAlwaysOnTop { get; set; }
@@ -346,14 +354,18 @@ namespace SpaceVIL
         }
         internal void ExecutePollActions()
         {
-            UpdateScene();//нужно обновлять перед выполением задания
+            engine.Update();//нужно обновлять перед выполением задания
             manager.Execute.Set();
             manager.Execute.WaitOne();
-            UpdateScene();//нужно обновлять после выполения задания
+            engine.Update();//нужно обновлять после выполения задания
         }
         public void SetFocusedItem(VisualItem item)
         {
-            engine.SetFucusedItem(item);
+            engine.SetFocusedItem(item);
+        }
+        public void ResetItems()
+        {
+            engine.ResetItems();
         }
 
         public void SetIcon(Image icon_big, Image icon_small)
