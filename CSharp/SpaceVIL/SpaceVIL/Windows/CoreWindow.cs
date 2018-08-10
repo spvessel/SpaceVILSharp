@@ -33,6 +33,10 @@ namespace SpaceVIL
         {
             wnd_handler.Show();
         }
+        public void Close()
+        {
+            wnd_handler.Close();
+        }
 
         abstract public void InitWindow();
 

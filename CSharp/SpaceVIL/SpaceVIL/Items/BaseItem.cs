@@ -479,5 +479,6 @@ namespace SpaceVIL
             SetDefaults();
         }
         public virtual void SetDefaults() { }
+        public ItemRule HoverRule = ItemRule.Lazy;
     }
 }

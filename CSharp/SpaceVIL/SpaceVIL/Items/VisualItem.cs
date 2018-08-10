@@ -426,8 +426,91 @@ namespace SpaceVIL
         protected internal Pointer _mouse_ptr = new Pointer();
         protected internal virtual bool GetHoverVerification(float xpos, float ypos)
         {
+            switch (HoverRule)
+            {
+                case ItemRule.Lazy:
+                    return LazyHoverVerification(xpos, ypos);
+                case ItemRule.Strict:
+                    return StrictHoverVerification(xpos, ypos);
+                default:
+                    return false;
+            }
+        }
+        private bool StrictHoverVerification(float xpos, float ypos)
+        {
+            /*
+            function IsPIn_Vector(aAx, aAy, aBx, aBy, aCx, aCy, aPx, aPy: single): boolean;
+            var
+              Bx, By, Cx, Cy, Px, Py : single;
+              m, l: single; // мю и лямбда
+            begin
+              Result := False;
+              // переносим треугольник точкой А в (0;0).
+              Bx:= aBx - aAx; By:= aBy - aAy;
+              Cx:= aCx - aAx; Cy:= aCy - aAy;
+              Px:= aPx - aAx; Py:= aPy - aAy;
+              //
+              m:= (Px * By - Bx * Py) / (Cx * By - Bx * Cy);
+              if (m >= 0) and(m <= 1) then
+               begin
+                l:= (Px - m * Cx) / Bx;
+                  if (l >= 0) and((m + l) <= 1) then
+                   Result := True;
+               end;
+            end;*/
+
+            List<float[]> tmp = UpdateShape();
+
+            float Ax, Ay, Bx, By, Cx, Cy, Px, Py, m, l;
+            IsMouseHover = false;
+            //Console.WriteLine(GetItemName());
+            for (int point = 0; point < tmp.Count; point += 3)
+            {
+                Px = xpos;
+                Py = ypos;
+                Ax = tmp[point][0];
+                Ay = tmp[point][1];
+                Bx = tmp[point + 1][0];
+                By = tmp[point + 1][1];
+                Cx = tmp[point + 2][0];
+                Cy = tmp[point + 2][1];
+
+                /*Console.WriteLine(
+                    Ax + " " +
+                    Ay + " " +
+                    Bx + " " +
+                    By + " " +
+                    Cx + " " +
+                    Cy + " " +
+                    Px + " " +
+                    Py + " "
+                );*/
+                // переносим треугольник точкой А в (0;0).
+                Bx = Bx - Ax; By = By - Ay;
+                Cx = Cx - Ax; Cy = Cy - Ay;
+                Px = Px - Ax; Py = Py - Ay;
+                Ax = 0; Ay = 0;
+
+                m = (Px * By - Bx * Py) / (Cx * By - Bx * Cy);
+                if (m >= 0)
+                {
+                    l = (Px - m * Cx) / Bx;
+                    if (l >= 0 && (m + l) <= 1)
+                    {
+                        IsMouseHover = true;
+                        _mouse_ptr.SetPosition(xpos, ypos);
+                        return IsMouseHover;
+                    }
+                }
+            }
+
+            _mouse_ptr.Clear();
+            return IsMouseHover;
+        }
+        private bool LazyHoverVerification(float xpos, float ypos)
+        {
             //parent border
-            float left_border = (GetParent().GetX() / (float)GetHandler().GetWidth()) * 2.0f - 1.0f;
+            /*float left_border = (GetParent().GetX() / (float)GetHandler().GetWidth()) * 2.0f - 1.0f;
             float right_border = ((GetParent().GetWidth() + GetParent().GetX()) / (float)GetHandler().GetWidth()) * 2.0f - 1.0f;
             float top_border = (((GetParent().GetHeight() + GetParent().GetY()) / (float)GetHandler().GetHeight()) * 2.0f - 1.0f) * (-1.0f);
             float bottom_border = ((GetParent().GetY() / (float)GetHandler().GetHeight()) * 2.0f - 1.0f) * (-1.0f);
@@ -450,6 +533,25 @@ namespace SpaceVIL
                 && x_gl <= maxx
                 && y_gl >= miny
                 && y_gl <= maxy)
+            {
+                IsMouseHover = true;
+                _mouse_ptr.SetPosition(xpos, ypos);
+            }
+            else
+            {
+                IsMouseHover = false;
+                _mouse_ptr.Clear();
+            }
+            return IsMouseHover;*/
+
+            float minx = GetX();
+            float maxx = GetX() + GetWidth();
+            float miny = GetY();
+            float maxy = GetY() + GetHeight();
+            if (xpos >= minx
+                && xpos <= maxx
+                && ypos >= miny
+                && ypos <= maxy)
             {
                 IsMouseHover = true;
                 _mouse_ptr.SetPosition(xpos, ypos);

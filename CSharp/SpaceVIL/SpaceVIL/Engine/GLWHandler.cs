@@ -42,6 +42,7 @@ namespace SpaceVIL
         internal bool AppearInCenter;
         internal bool Focusable;
         internal bool Focused = true;
+        internal bool Resizeble;
         internal bool AlwaysOnTop;
         internal Pointer WPosition = new Pointer();
         ///////////////////////////////////////////////
@@ -80,7 +81,7 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 4);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
-            Glfw.WindowHint(Glfw.Hint.Resizable, true);
+            Glfw.WindowHint(Glfw.Hint.Resizable, Resizeble);
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window
             Glfw.WindowHint(Glfw.Hint.Focused, Focusable);
             Glfw.WindowHint(Glfw.Hint.Floating, AlwaysOnTop);
@@ -98,6 +99,11 @@ namespace SpaceVIL
             {
                 WPosition.X = (Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - _w_layout.GetWidth()) / 2;
                 WPosition.Y = (Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - _w_layout.GetHeight()) / 2;
+            }
+            else
+            {
+                WPosition.X = _w_layout.GetX();
+                WPosition.Y = _w_layout.GetY();
             }
 
             Glfw.MakeContextCurrent(_window);

@@ -39,6 +39,7 @@ namespace SpaceVIL
             SetMaxHeight(4320); //height of screen
             IsBorderHidden = !border;
             IsHidden = true;
+            IsResizeble = true;
             IsCentered = true;
             IsFocusable = true;
             IsAlwaysOnTop = false;
@@ -243,6 +244,7 @@ namespace SpaceVIL
                    UpdateScene();
             };*/
 
+            engine._handler.Resizeble = IsResizeble;
             engine._handler.BorderHidden = IsBorderHidden;
             engine._handler.AppearInCenter = IsCentered;
             engine._handler.Focusable = IsFocusable;
@@ -292,17 +294,18 @@ namespace SpaceVIL
                 if (thread_engine != null && thread_engine.IsAlive)
                 {
                     engine.Close();
-                    thread_engine.Abort();
+                    //thread_engine.Abort();
                 }
                 if (thread_manager != null && thread_manager.IsAlive)
                 {
                     manager.StopManager();
-                    thread_manager.Abort();
+                    //thread_manager.Abort();
                 }
                 IsHidden = true;
             }
             //manager.ActionsDone -= () => UpdateScene();
         }
+        public bool IsResizeble { get; set; }
         public bool IsAlwaysOnTop { get; set; }
         public bool IsBorderHidden { get; set; }
         public bool IsCentered { get; set; }
