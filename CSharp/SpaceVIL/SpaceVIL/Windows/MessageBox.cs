@@ -37,7 +37,9 @@ namespace SpaceVIL
             DialogTitle = t;
 
             //ref
+            //DragAnchor
             titleBar.SetText(DialogTitle);
+            titleBar.SetPadding(0, 0, 10, 0);
             msg.SetText(MessageBoxText);
         }
 
@@ -54,9 +56,6 @@ namespace SpaceVIL
             Handler.IsBorderHidden = true;
             Handler.IsDialog = true;
             Handler.IsAlwaysOnTop = true;
-
-            //DragAnchor
-            titleBar.SetPadding(0, 0, 10, 0);
             Handler.AddItem(titleBar);
 
             VerticalStack layout = new VerticalStack();

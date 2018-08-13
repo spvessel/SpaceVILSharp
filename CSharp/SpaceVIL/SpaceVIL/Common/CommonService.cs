@@ -6,6 +6,8 @@ namespace SpaceVIL
 {
     public static class CommonService
     {
+        public static readonly object GlobalLocker = new object();
+        
         public static void LinkColors(ref Color t1, ref Color t2)
         {
             t1 = t2;

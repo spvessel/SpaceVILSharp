@@ -11,7 +11,8 @@ namespace SpaceVIL
         private static int count = 0;
         private Guid windowGuid;
 
-        public CoreWindow() {
+        public CoreWindow()
+        {
             windowGuid = Guid.NewGuid();
             count++;
         }
@@ -29,7 +30,7 @@ namespace SpaceVIL
             }
         }
 
-        public void Show()
+        public virtual void Show()
         {
             wnd_handler.Show();
         }
