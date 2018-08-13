@@ -979,11 +979,11 @@ namespace SpaceVIL
                 if (outside.Count > 0)
                 {
                     _isStencilSet = shell;
-                    //StrictStencil(shell);
+                    StrictStencil(shell);
                     // Console.WriteLine(shell.GetItemName());
 
                     //stencil
-                    glClearStencil(1);
+                    /*glClearStencil(1);
                     glStencilMask(0xFF);
                     glStencilFunc(GL_NEVER, 2, 0);
                     glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
@@ -996,7 +996,7 @@ namespace SpaceVIL
                             SetStencilMask(side.Value[1], shell.GetParent().GetHeight(), side.Value[0], shell.GetY());
                     }
                     //set stencil mask
-                    glStencilFunc(GL_NOTEQUAL, 2, 255);
+                    glStencilFunc(GL_NOTEQUAL, 2, 255);*/
                     return true;
                 }
             }
