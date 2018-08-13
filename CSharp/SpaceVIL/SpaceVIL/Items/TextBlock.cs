@@ -85,14 +85,27 @@ namespace SpaceVIL
         }
 
         protected virtual void OnMouseClick(object sender) {
-
+            ReplaceCursorAccordingCoord(new Point(_mouse_ptr.X, _mouse_ptr.Y));
+            if (_isSelect)
+                UnselectText();
         }
 
         protected virtual void OnDragging(object sender) {
-            Point realPos = new Point();
-            realPos.X = _mouse_ptr.X;
-            realPos.Y = _mouse_ptr.Y;
+            ReplaceCursorAccordingCoord(new Point(_mouse_ptr.X, _mouse_ptr.Y));
+            if (!_isSelect)
+            {
+                _isSelect = true;
+                _selectFrom = _cursor_position;
+            }
+            else
+            {
+                _selectTo = _cursor_position;
+                MakeSelectedArea(_selectFrom, _selectTo);
+            }
+        }
 
+        private void ReplaceCursorAccordingCoord(Point realPos)
+        {
             //Вроде бы и без этого норм, но пусть пока будет
             //if (_linesList != null)
             //    realPos.Y -= (int)_linesList[0].GetLineTopCoord(); //???????!!!!!!
