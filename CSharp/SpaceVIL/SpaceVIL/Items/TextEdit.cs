@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 namespace SpaceVIL
 {
-    public class TextEdit : VisualItem, ITextEditable, ITextShortcuts
+    public class TextEdit : VisualItem, ITextEditable, ITextShortcuts, IDraggable
     {
         static int count = 0;
         private TextLine _text_object;
@@ -53,6 +53,7 @@ namespace SpaceVIL
             count++;
 
             EventMouseClick += EmptyEvent;
+            EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;
             EventTextInput += OnTextInput;
@@ -60,6 +61,32 @@ namespace SpaceVIL
             ShiftValCodes = new List<int>() {LeftArrowCode, RightArrowCode, EndCode,
                 HomeCode};//, LeftShiftCode, RightShiftCode , LeftCtrlCode, RightCtrlCode};
             //CtrlValCodes = new List<int>() {LeftCtrlCode, RightCtrlCode, ACode};
+        }
+
+        protected virtual void OnDragging(object sender)
+        {
+            int realPosX = _mouse_ptr.X;
+            
+            realPosX -= GetX() + GetPadding().Left;
+
+            _cursor_position = CoordXToPos(realPosX);
+            ReplaceCursor();
+        }
+
+        private int CoordXToPos(int coordX)
+        {
+            int pos = 0;
+            
+            List<int> lineLetPos = _text_object.GetLetPosArray();
+
+            for (int i = 0; i < lineLetPos.Count; i++)
+            {
+                if (lineLetPos[i] <= coordX + 3)
+                    pos = i + 1;
+                else break;
+            }
+
+            return pos;
         }
 
         protected virtual void OnKeyRelease(object sender, int scancode, KeyMods mods)

@@ -161,5 +161,21 @@ namespace SpaceVIL
         internal float GetLineYShift() {
             return _lineYShift;
         }
+
+        internal float GetLineTopCoord()
+        {
+            float lineTopCoord = 0;
+            ItemAlignment alignments = GetTextAlignment();
+            float height = Math.Abs(_maxFontY - _minFontY);
+            if (alignments.HasFlag(ItemAlignment.Bottom))
+                lineTopCoord = GetParent().GetHeight() - height;
+
+            else if (alignments.HasFlag(ItemAlignment.VCenter))
+                lineTopCoord = (GetParent().GetHeight() - height) / 2f;
+
+            lineTopCoord += _lineYShift - _minFontY;
+            
+            return lineTopCoord;
+        }
     }
 }

@@ -57,7 +57,7 @@ namespace SpaceVIL
             _selectedArea = new CustomSelector();
             _selectedArea.SetBackground(111, 181, 255);
 
-            EventMouseClick += EmptyEvent;
+            EventMouseClick += OnMouseClick;
             EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;
@@ -84,8 +84,47 @@ namespace SpaceVIL
             if (EventMouseDrop != null) EventMouseDrop.Invoke(this);
         }
 
-        public void OnDragging(object sender) {
-            Console.WriteLine(_mouse_ptr.X + " " + _mouse_ptr.Y);
+        protected virtual void OnMouseClick(object sender) {
+
+        }
+
+        protected virtual void OnDragging(object sender) {
+            Point realPos = new Point();
+            realPos.X = _mouse_ptr.X;
+            realPos.Y = _mouse_ptr.Y;
+
+            //Вроде бы и без этого норм, но пусть пока будет
+            //if (_linesList != null)
+            //    realPos.Y -= (int)_linesList[0].GetLineTopCoord(); //???????!!!!!!
+
+            //Console.WriteLine(_lineSpacer);
+
+            realPos.Y -= GetY() + GetPadding().Top;
+            int lineNumb = realPos.Y / (_lineHeight + _lineSpacer);
+            if (lineNumb >= _linesList.Count)
+                lineNumb = _linesList.Count - 1;
+            if (lineNumb < 0) lineNumb = 0;
+
+            realPos.X -= GetX() + GetPadding().Left;
+
+            _cursor_position.Y = lineNumb;
+            _cursor_position.X = CoordXToPos(realPos.X, lineNumb);
+            ReplaceCursor();
+        }
+
+        private int CoordXToPos(int coordX, int lineNumb) {
+            int pos = 0;
+            
+            List<int> lineLetPos = _linesList[lineNumb].GetLetPosArray();
+            
+            for (int i = 0; i < lineLetPos.Count; i++)
+            {
+                if (lineLetPos[i] <= coordX + 3)
+                    pos = i + 1;
+                else break;
+            }
+
+            return pos;
         }
 
         protected virtual void OnKeyRelease(object sender, int scancode, KeyMods mods)
