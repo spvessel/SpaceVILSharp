@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 namespace SpaceVIL
 {
-    public class TextEdit : VisualItem, ITextEditable
+    public class TextEdit : VisualItem, ITextEditable, ITextShortcuts, IDraggable
     {
         static int count = 0;
         private TextLine _text_object;
@@ -52,7 +52,8 @@ namespace SpaceVIL
             SetPadding(5, 0, 5, 0);
             count++;
 
-            EventMouseClick += EmptyEvent;
+            EventMouseClick += OnMouseClick;
+            EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;
             EventTextInput += OnTextInput;
@@ -60,6 +61,53 @@ namespace SpaceVIL
             ShiftValCodes = new List<int>() {LeftArrowCode, RightArrowCode, EndCode,
                 HomeCode};//, LeftShiftCode, RightShiftCode , LeftCtrlCode, RightCtrlCode};
             //CtrlValCodes = new List<int>() {LeftCtrlCode, RightCtrlCode, ACode};
+        }
+
+        protected virtual void OnMouseClick(object sender)
+        {
+            ReplaceCursorAccordingCoord(_mouse_ptr.X);
+            if (_isSelect)
+                UnselectText();
+        }
+
+        protected virtual void OnDragging(object sender)
+        {
+            ReplaceCursorAccordingCoord(_mouse_ptr.X);
+            Console.WriteLine(_cursor_position);
+            if (!_isSelect)
+            {
+                _isSelect = true;
+                _selectFrom = _cursor_position;
+            }
+            else
+            {
+                _selectTo = _cursor_position;
+                MakeSelectedArea(_selectFrom, _selectTo);
+            }
+        }
+
+        private void ReplaceCursorAccordingCoord(int realPos)
+        {   
+            realPos -= GetX() + GetPadding().Left;
+
+            _cursor_position = CoordXToPos(realPos);
+            ReplaceCursor();
+        }
+
+        private int CoordXToPos(int coordX)
+        {
+            int pos = 0;
+            
+            List<int> lineLetPos = _text_object.GetLetPosArray();
+
+            for (int i = 0; i < lineLetPos.Count; i++)
+            {
+                if (lineLetPos[i] <= coordX + 3)
+                    pos = i + 1;
+                else break;
+            }
+
+            return pos;
         }
 
         protected virtual void OnKeyRelease(object sender, int scancode, KeyMods mods)
@@ -154,7 +202,7 @@ namespace SpaceVIL
                 if (_selectTo != _cursor_position)
                 { 
                     _selectTo = _cursor_position;
-                    MakeSelectedArea(CursorPosToCoord(_selectFrom), CursorPosToCoord(_selectTo));
+                    MakeSelectedArea(_selectFrom, _selectTo);
                 }
             }
         }
@@ -290,16 +338,19 @@ namespace SpaceVIL
             return _text_object.GetHeight();
         }
 
-        private void MakeSelectedArea(int from, int to)
+        private void MakeSelectedArea(int fromPt, int toPt)
         {
             //Console.WriteLine("from " + from + " to " + to);
-            if (from == to)
+            fromPt = CursorPosToCoord(fromPt);
+            toPt = CursorPosToCoord(toPt);
+
+            if (fromPt == toPt)
             {
                 _selectedArea.SetWidth(0);
                 return;
             }
-            int fromReal = Math.Min(from, to);
-            int toReal = Math.Max(from, to);
+            int fromReal = Math.Min(fromPt, toPt);
+            int toReal = Math.Max(fromPt, toPt);
             int width = toReal - fromReal + 1;
             _selectedArea.SetX(GetX() + GetPadding().Left + fromReal);
             _selectedArea.SetWidth(width);
