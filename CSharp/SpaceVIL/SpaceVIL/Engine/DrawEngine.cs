@@ -131,42 +131,45 @@ namespace SpaceVIL
 
         public void Init()
         {
-            _handler.CreateWindow();
-            SetWindowPos();
-            SetEventsCallbacks();
-            //устанавливаем параметры отрисовки
-            glEnable(GL_TEXTURE_2D);
-            glEnable(GL_MULTISAMPLE);
-            glEnable(GL_BLEND);
-            glEnable(GL_CULL_FACE);
-            glCullFace(GL_BACK);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            //glEnable(GL_DEPTH_TEST);
-            glEnable(GL_ALPHA_TEST);
-            //glEnable(GL_STENCIL_TEST);
-            ////////////////////////////////////////////////
-            _primitive = new Shader(
-                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fill.glsl"),
-                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fill.glsl"));
-            _primitive.Compile();
-            if (_primitive.GetProgramID() == 0)
-                Console.WriteLine("Could not create primitive shaders");
-            ///////////////////////////////////////////////
-            _texture = new Shader(
-                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_texture.glsl"),
-                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_texture.glsl"));
-            _texture.Compile();
-            if (_texture.GetProgramID() == 0)
-                Console.WriteLine("Could not create textured shaders");
-
-            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
-            if (_icon_big.Pixels != null && _icon_small.Pixels != null)
+            lock (CommonService.GlobalLocker)
             {
-                Glfw.Image[] images = new Glfw.Image[2];
-                images[0] = _icon_big;
-                images[1] = _icon_small;
-                Glfw.SetWindowIcon(_handler.GetWindow(), images);
+                _handler.CreateWindow();
+                SetWindowPos();
+                SetEventsCallbacks();
+                //устанавливаем параметры отрисовки
+                glEnable(GL_TEXTURE_2D);
+                glEnable(GL_MULTISAMPLE);
+                glEnable(GL_BLEND);
+                glEnable(GL_CULL_FACE);
+                glCullFace(GL_BACK);
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                //glEnable(GL_DEPTH_TEST);
+                glEnable(GL_ALPHA_TEST);
+                //glEnable(GL_STENCIL_TEST);
+                ////////////////////////////////////////////////
+                _primitive = new Shader(
+                    Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fill.glsl"),
+                    Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fill.glsl"));
+                _primitive.Compile();
+                if (_primitive.GetProgramID() == 0)
+                    Console.WriteLine("Could not create primitive shaders");
+                ///////////////////////////////////////////////
+                _texture = new Shader(
+                    Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_texture.glsl"),
+                    Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_texture.glsl"));
+                _texture.Compile();
+                if (_texture.GetProgramID() == 0)
+                    Console.WriteLine("Could not create textured shaders");
+
+                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+                if (_icon_big.Pixels != null && _icon_small.Pixels != null)
+                {
+                    Glfw.Image[] images = new Glfw.Image[2];
+                    images[0] = _icon_big;
+                    images[1] = _icon_small;
+                    Glfw.SetWindowIcon(_handler.GetWindow(), images);
+                }
             }
 
             Run();
@@ -647,10 +650,10 @@ namespace SpaceVIL
                 DrawItems(_handler.GetLayout().GetWindow());
                 //draw tooltip if needed
                 DrawToolTip();
-                if (!_handler.Focusable)
+                /*if (!_handler.Focusable)
                 {
                     DrawShadePillow();
-                }
+                }*/
                 _handler.Swap();
             }
         }

@@ -26,5 +26,11 @@ namespace SpaceVIL
                 _title = value;
             }
         }
+
+        public override void Show()
+        {
+            //InitWindow();
+            base.Show();
+        }
     }
 }

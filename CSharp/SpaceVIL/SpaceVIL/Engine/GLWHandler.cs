@@ -73,10 +73,11 @@ namespace SpaceVIL
             //Glfw.ConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
             if (!Glfw.Init())
             {
+                Console.WriteLine("Init window fail - " + GetLayout().GetWindowTitle());
                 Environment.Exit(-1);
             }
 
-            //Glfw.WindowHint(Glfw.Hint.OpenglDebugContext, true);
+            Glfw.WindowHint(Glfw.Hint.OpenglDebugContext, true);
             Glfw.WindowHint(Glfw.Hint.Samples, 4);
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 4);
@@ -91,9 +92,11 @@ namespace SpaceVIL
             _window = Glfw.CreateWindow(_w_layout.GetWidth(), _w_layout.GetHeight(), _w_layout.GetWindowTitle());
             if (!_window)
             {
+                Console.WriteLine("Create window fail - " + GetLayout().GetWindowTitle());
                 Glfw.Terminate();
                 Environment.Exit(-1);
             }
+            
 
             if (AppearInCenter)
             {

@@ -83,7 +83,7 @@ namespace SpaceVIL
 
         internal void UpdateBehavior()
         {
-            if (GetParentGrid() == null)
+            if (GetParentGrid() == null || _item_link == null)
                 return;
 
             ItemAlignment alignment = _item_link.GetAlignment();
