@@ -183,7 +183,7 @@ namespace SpaceVIL
                         {
                             _selectFrom.X = 0;
                             _selectFrom.Y = 0;
-                            _cursor_position.Y = _linesList.Count();
+                            _cursor_position.Y = _linesList.Count() - 1;
                             _cursor_position.X = GetLineLetCount(_cursor_position.Y);
                             ReplaceCursor();
 
