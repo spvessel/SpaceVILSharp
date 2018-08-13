@@ -976,7 +976,7 @@ namespace SpaceVIL
                 }
 
 
-                if (outside.Count > 0)
+                if (outside.Count > 0 || shell.GetParent() is TextBlock)
                 {
                     _isStencilSet = shell;
                     StrictStencil(shell);
