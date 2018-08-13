@@ -93,30 +93,33 @@ namespace SpaceVIL
         }
         public virtual void AddItem(BaseItem item)
         {
-            if (item.Equals(this))
+            lock (GetHandler().engine_locker)
             {
-                Console.WriteLine("Trying to add current item in himself.");
-                return;
-            }
-            item.SetHandler(GetHandler());
+                if (item.Equals(this))
+                {
+                    Console.WriteLine("Trying to add current item in himself.");
+                    return;
+                }
+                item.SetHandler(GetHandler());
 
-            AddChildren(item);
-            _content.Add(item);
+                AddChildren(item);
+                _content.Add(item);
 
-            try
-            {
-                ItemsLayoutBox.AddItem(GetHandler(), item);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(item.GetItemName());
-                throw ex;
-            }
+                try
+                {
+                    ItemsLayoutBox.AddItem(GetHandler(), item);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(item.GetItemName());
+                    throw ex;
+                }
 
-            //needs to force update all attributes
-            item.UpdateGeometry();
-            item.CheckDefaults();
-            item.InitElements();
+                //needs to force update all attributes
+                item.UpdateGeometry();
+                item.CheckDefaults();
+                item.InitElements();
+            }
         }
 
         internal void CascadeRemoving(BaseItem item)
@@ -149,6 +152,8 @@ namespace SpaceVIL
                 item.RemoveItemFromListeners();
 
                 ItemsLayoutBox.RemoveItem(GetHandler(), item);
+
+                GetHandler().UpdateScene();
             }
 
             //needs to force update all attributes

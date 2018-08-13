@@ -14,7 +14,7 @@ namespace SpaceVIL
             return _text_object;
         }
         internal Timer _stop;
-        private int _timeout = 500;
+        private int _timeout = 300;
         public void SetTimeOut(int milliseconds)
         {
             _timeout = milliseconds;
@@ -90,7 +90,6 @@ namespace SpaceVIL
 
         internal void InitTimer(bool flag)
         {
-
             if (flag)
             {
                 if (_stop != null)
@@ -102,7 +101,7 @@ namespace SpaceVIL
             }
             else
             {
-                IsVisible = flag;
+                IsVisible = false;
                 
                 if (_stop == null)
                     return;
@@ -115,11 +114,12 @@ namespace SpaceVIL
 
         private void VisibleSelf()
         {
-            IsVisible = true;
+             IsVisible = true;
 
             _stop.Stop();
             _stop.Dispose();
             _stop = null;
+
             GetHandler().UpdateScene();
         }
     }

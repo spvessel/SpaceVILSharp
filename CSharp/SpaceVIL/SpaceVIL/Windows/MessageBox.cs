@@ -9,13 +9,42 @@ namespace SpaceVIL
 {
     class MessageBox : DialogWindow
     {
-        public MessageBox(String m, String t) : base(m, t) { }
+        bool _result = false;
+        public bool Result()
+        {
+            return _result;
+        }
+
+        String _message = String.Empty;
+        public String MessageBoxText
+        {
+            get
+            {
+                return _message;
+            }
+            set
+            {
+                _message = value;
+            }
+        }
+
+        TitleBar titleBar = new TitleBar();
+        Label msg = new Label();
+
+        public MessageBox(String m = "", String t = "")
+        {
+            _message = m;
+            DialogTitle = t;
+
+            //ref
+            titleBar.SetText(DialogTitle);
+            msg.SetText(MessageBoxText);
+        }
 
         public override void InitWindow()
         {
             Handler = new WindowLayout(this, "MessageBox_" + GetCount());
             //window's attr
-            Handler.SetWindowTitle(DialogTitle);
             Handler.SetWidth(300);
             Handler.SetMinWidth(300);
             Handler.SetHeight(150);
@@ -27,7 +56,6 @@ namespace SpaceVIL
             Handler.IsAlwaysOnTop = true;
 
             //DragAnchor
-            TitleBar titleBar = new TitleBar(DialogTitle);
             titleBar.SetPadding(0, 0, 10, 0);
             Handler.AddItem(titleBar);
 
@@ -42,7 +70,6 @@ namespace SpaceVIL
             Handler.AddItem(layout);
 
             //message
-            Label msg = new Label(DialogMessage);
             msg.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
             msg.SetForeground(Color.FromArgb(255, 210, 210, 210));
             msg.SetAlignment(ItemAlignment.VCenter | ItemAlignment.HCenter);
@@ -64,7 +91,7 @@ namespace SpaceVIL
             });
             ok.EventMouseClick += (sender) =>
             {
-                DialogResult = true;
+                _result = true;
                 Handler.Close();
             };
             layout.AddItems(msg, ok);

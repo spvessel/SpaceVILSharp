@@ -7,22 +7,18 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class DropDownList : DialogWindow
+    public class ComboBoxDropDown : DropDown
     {
-        public DropDownList(String m, String t) : base(m, t) { }
         public ListBox ItemList = new ListBox();
         public ButtonCore Selection;
+        
+        public ComboBoxDropDown() { }
         public override void InitWindow()
         {
-            Handler = new WindowLayout(this, "DropDownList_" + GetCount());
-            Handler.SetWindowTitle(DialogTitle);
+            base.InitWindow();
             Handler.SetPadding(2, 2, 2, 2);
             Handler.SetBackground(255, 255, 255);
-            Handler.IsBorderHidden = true;
-            Handler.IsAlwaysOnTop = true;
-            Handler.IsOutsideClickClosable = true;
-            Handler.IsCentered = false;
-            Handler.IsResizeble = false;
+            Handler.SetWindowName("ComboBoxDropDown_" + GetCount());
 
             ItemList.GetArea().SetSpacing(0, 0);
             ItemList.GetArea().SetPadding(0);
@@ -31,6 +27,7 @@ namespace SpaceVIL
             ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.GetArea().SelectionChanged += OnSelectionChanged;
+
             Handler.AddItem(ItemList);
         }
 
@@ -49,6 +46,7 @@ namespace SpaceVIL
             if (l != null)
             {
                 Selection.SetText(l.GetText());
+                Handler.ResetItems();
                 Close();
             }
         }
