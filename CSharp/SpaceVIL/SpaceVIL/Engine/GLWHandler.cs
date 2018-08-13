@@ -67,7 +67,7 @@ namespace SpaceVIL
             WPosition.Y = 0;
         }
 
-        internal void CreateWindow()
+        internal void InitGlfw()
         {
             //path to c++ glfw3.dll (x32 or x64)
             //Glfw.ConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
@@ -77,6 +77,16 @@ namespace SpaceVIL
                 Environment.Exit(-1);
             }
 
+            //cursors
+            _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
+            _input = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
+            _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
+            _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
+            _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
+            _resize_all = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
+        }
+        internal void CreateWindow()
+        {
             Glfw.WindowHint(Glfw.Hint.OpenglDebugContext, true);
             Glfw.WindowHint(Glfw.Hint.Samples, 4);
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
@@ -88,7 +98,6 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Floating, AlwaysOnTop);
             //Glfw.WindowHint(Glfw.Hint.DepthBits, 16);
             //Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, true);
-
             _window = Glfw.CreateWindow(_w_layout.GetWidth(), _w_layout.GetHeight(), _w_layout.GetWindowTitle());
             if (!_window)
             {
@@ -96,7 +105,6 @@ namespace SpaceVIL
                 Glfw.Terminate();
                 Environment.Exit(-1);
             }
-            
 
             if (AppearInCenter)
             {
@@ -111,14 +119,6 @@ namespace SpaceVIL
 
             Glfw.MakeContextCurrent(_window);
             Glfw.SetWindowSizeLimits(_window, _w_layout.GetMinWidth(), _w_layout.GetMinHeight(), _w_layout.GetMaxWidth(), _w_layout.GetMaxHeight());
-
-            //cursors
-            _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
-            _input = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
-            _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
-            _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
-            _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
-            _resize_all = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
         }
 
         internal void ClearEventsCallbacks()

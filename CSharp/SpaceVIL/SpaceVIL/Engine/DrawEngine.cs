@@ -133,9 +133,8 @@ namespace SpaceVIL
         {
             lock (CommonService.GlobalLocker)
             {
+                _handler.InitGlfw();
                 _handler.CreateWindow();
-                SetWindowPos();
-                SetEventsCallbacks();
                 //устанавливаем параметры отрисовки
                 glEnable(GL_TEXTURE_2D);
                 glEnable(GL_MULTISAMPLE);
@@ -161,8 +160,6 @@ namespace SpaceVIL
                 if (_texture.GetProgramID() == 0)
                     Console.WriteLine("Could not create textured shaders");
 
-                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
                 if (_icon_big.Pixels != null && _icon_small.Pixels != null)
                 {
                     Glfw.Image[] images = new Glfw.Image[2];
@@ -170,6 +167,10 @@ namespace SpaceVIL
                     images[1] = _icon_small;
                     Glfw.SetWindowIcon(_handler.GetWindow(), images);
                 }
+                SetWindowPos();
+                SetEventsCallbacks();
+
+                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             }
 
             Run();
@@ -437,6 +438,8 @@ namespace SpaceVIL
 
                         FocusedItem = HoveredItem;
                         FocusedItem.IsFocused = true;
+
+                        Update();
                     }
                     else if (anchor != null && !(HoveredItem is ButtonCore))
                     {

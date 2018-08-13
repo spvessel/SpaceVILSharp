@@ -10,7 +10,7 @@ namespace SpaceVIL
     internal class TextBlock : VisualItem, ITextEditable, IDraggable, ITextShortcuts
     {
         private static int count = 0;
-        private string _wholeText = "";   
+        private string _wholeText = "";
         private Rectangle _cursor;
         private Point _cursor_position = new Point(0, 0);
         private CustomSelector _selectedArea;
@@ -46,7 +46,7 @@ namespace SpaceVIL
             SetItemName("TextBlock_" + count);
             SetBackground(180, 180, 180);
             SetForeground(Color.Black);
-            SetPadding(5, 0, 5, 0);
+            //SetPadding(5, 0, 5, 0);
             count++;
 
             _linesList = new List<TextLine>();
@@ -75,7 +75,7 @@ namespace SpaceVIL
             if (_lineSpacer < _minLineSpacer)
                 _lineSpacer = _minLineSpacer;
 
-            _cursor.SetHeight(_lineHeight + _lineSpacer);
+            _cursor.SetHeight(_lineHeight + _lineSpacer + 6);
         }
 
         public override void InvokePoolEvents()
@@ -86,13 +86,15 @@ namespace SpaceVIL
             if (EventMouseDrop != null) EventMouseDrop.Invoke(this);
         }
 
-        protected virtual void OnMousePressed(object sender) {
+        protected virtual void OnMousePressed(object sender)
+        {
             ReplaceCursorAccordingCoord(new Point(_mouse_ptr.X, _mouse_ptr.Y));
             if (_isSelect)
                 UnselectText();
         }
 
-        protected virtual void OnDragging(object sender) {
+        protected virtual void OnDragging(object sender)
+        {
             ReplaceCursorAccordingCoord(new Point(_mouse_ptr.X, _mouse_ptr.Y));
             if (!_isSelect)
             {
@@ -127,11 +129,12 @@ namespace SpaceVIL
             ReplaceCursor();
         }
 
-        private int CoordXToPos(int coordX, int lineNumb) {
+        private int CoordXToPos(int coordX, int lineNumb)
+        {
             int pos = 0;
-            
+
             List<int> lineLetPos = _linesList[lineNumb].GetLetPosArray();
-            
+
             for (int i = 0; i < lineLetPos.Count; i++)
             {
                 if (lineLetPos[i] <= coordX + 3)
@@ -149,7 +152,8 @@ namespace SpaceVIL
         {
             //Console.WriteLine(scancode);
 
-            if (!_isSelect && _justSelected) {
+            if (!_isSelect && _justSelected)
+            {
                 _selectFrom.X = 0;
                 _selectFrom.Y = 0;
                 _selectTo.X = 0;
@@ -206,7 +210,8 @@ namespace SpaceVIL
                                 SetTextInLine(_linesList[_cursor_position.Y].GetItemText().Remove(_cursor_position.X - 1, 1));
                                 _cursor_position.X--;
                             }
-                            else if (_cursor_position.Y > 0) {
+                            else if (_cursor_position.Y > 0)
+                            {
                                 _cursor_position.Y--;
                                 _cursor_position.X = GetLineLetCount(_cursor_position.Y);
                                 CombineLines(_cursor_position.Y);
@@ -219,19 +224,20 @@ namespace SpaceVIL
                             {
                                 SetTextInLine(_linesList[_cursor_position.Y].GetItemText().Remove(_cursor_position.X, 1));
                             }
-                            else if (_cursor_position.Y < _linesList.Count - 1) {
+                            else if (_cursor_position.Y < _linesList.Count - 1)
+                            {
                                 CombineLines(_cursor_position.Y);
                             }
                         }
                     }
-                    
+
                 }
                 else
                     if (_isSelect)
-                    {
-                        UnselectText();
-                        //_justSelected = true;
-                    }
+                {
+                    UnselectText();
+                    //_justSelected = true;
+                }
             }
 
             if (scancode == LeftArrowCode)//arrow left
@@ -291,14 +297,14 @@ namespace SpaceVIL
                 BreakLine();
                 _cursor_position.Y++;
                 _cursor_position.X = 0;
-                
+
                 ReplaceCursor();
             }
-            
+
             if (_isSelect)
             {
                 if (_selectTo != _cursor_position)
-                { 
+                {
                     _selectTo = _cursor_position;
                     MakeSelectedArea(_selectFrom, _selectTo);
                 }
@@ -317,7 +323,8 @@ namespace SpaceVIL
             ReplaceCursor();
         }
 
-        private Point CheckLineFits(Point checkPoint) {
+        private Point CheckLineFits(Point checkPoint)
+        {
             Point outPt = new Point();
             //??? check line count
             outPt.Y = checkPoint.Y;
@@ -336,7 +343,7 @@ namespace SpaceVIL
             int letCount = GetLineLetCount(cPos.Y);
             //Console.WriteLine(cPos0.X + " " + cPos0.Y + " " + _linesList[cPos.Y].GetLetPosArray());
             coord.Y = (int)_linesList[cPos.Y].GetLineYShift();
-            
+
             if (letCount == 0)
             {
                 coord.X = 0;
@@ -361,7 +368,7 @@ namespace SpaceVIL
         {
             Point pos = AddXYShifts(0, 0, _cursor_position);
             _cursor.SetX(pos.X);
-            _cursor.SetY(pos.Y);
+            _cursor.SetY(pos.Y - 3);
         }
 
         private int _lineSpacer;
@@ -381,7 +388,7 @@ namespace SpaceVIL
                 }
             }
 
-            _cursor.SetHeight(_lineHeight + _lineSpacer);
+            _cursor.SetHeight(_lineHeight + _lineSpacer + 6);
         }
 
         public int GetLineSpacer()
@@ -389,14 +396,16 @@ namespace SpaceVIL
             return _lineSpacer;
         }
 
-        internal string GetWholeText() {
+        internal string GetWholeText()
+        {
             StringBuilder sb = new StringBuilder();
             if (_linesList == null) return "";
-            if (_linesList.Count == 1) {
+            if (_linesList.Count == 1)
+            {
                 sb.Append(_linesList[0].GetText());
             }
             else
-            { 
+            {
                 foreach (TextLine te in _linesList)
                 {
                     sb.Append(te.GetText());
@@ -417,7 +426,7 @@ namespace SpaceVIL
         public void SetFont(Font font)
         {
             if (!font.Equals(_elementFont))
-            { 
+            {
                 _elementFont = font;
 
                 int[] output = FontEngine.GetSpacerDims(font);
@@ -432,7 +441,7 @@ namespace SpaceVIL
                 foreach (TextLine te in _linesList)
                     te.SetFont(font);
 
-                _cursor.SetHeight(_lineHeight + _lineSpacer);
+                _cursor.SetHeight(_lineHeight + _lineSpacer + 6);
             }
         }
         public Font GetFont()
@@ -467,17 +476,18 @@ namespace SpaceVIL
 
         public int GetTextHeight()
         {
-            return _lineHeight*_linesList.Count + _lineSpacer*(_linesList.Count - 1);
+            return _lineHeight * _linesList.Count + _lineSpacer * (_linesList.Count - 1);
         }
 
-        private void SplitAndMakeLines(String text) {
+        private void SplitAndMakeLines(String text)
+        {
             _linesList = new List<TextLine>();
-            
+
             _wholeText = text;
-            
+
             string[] line = text.Split('\n');
             int inc = 0;
-            
+
             foreach (String textPart in line)
             {
                 AddNewLine(textPart, inc);
@@ -496,7 +506,8 @@ namespace SpaceVIL
         */
         public void SetForeground(Color color)
         {
-            if (_linesList != null && !color.Equals(GetForeground())) { 
+            if (_linesList != null && !color.Equals(GetForeground()))
+            {
                 foreach (TextLine te in _linesList)
                     te.SetForeground(color);
             }
@@ -516,8 +527,8 @@ namespace SpaceVIL
             _cursor.SetBackground(0, 0, 0);
             //_cursor.SetMargin(0, 5, 0, 5);
             _cursor.SetWidth(2);
-            
-            _cursor.SetHeight(_lineHeight + _lineSpacer);
+
+            _cursor.SetHeight(_lineHeight + _lineSpacer + 6);
             _cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             //selectedArea
             //_selectedArea.SetMargin(0, 5, 0, 5);
@@ -530,24 +541,28 @@ namespace SpaceVIL
             UpdateLinesData(UpdateType.Critical);
         }
 
-        private void SetLineContainerAlignment(ItemAlignment alignment) {
+        private void SetLineContainerAlignment(ItemAlignment alignment)
+        {
             foreach (TextLine tl in _linesList)
                 tl.SetAlignment(alignment);
         }
 
-        private void UpdateLinesData(UpdateType updateType) {
+        private void UpdateLinesData(UpdateType updateType)
+        {
             foreach (TextLine tl in _linesList)
                 tl.UpdateData(updateType);
         }
 
-        private void AddAllLines() {
+        private void AddAllLines()
+        {
             RemoveItem(_cursor);
             foreach (TextLine tl in _linesList)
                 AddItem(tl);
             AddItem(_cursor);
         }
 
-        private void RemoveAllLines() {
+        private void RemoveAllLines()
+        {
             foreach (TextLine tl in _linesList)
                 RemoveItem(tl);
         }
@@ -568,7 +583,8 @@ namespace SpaceVIL
             }
         }
 
-        private int GetLineLetCount(int lineNum) {
+        private int GetLineLetCount(int lineNum)
+        {
             if (lineNum >= _linesList.Count)
                 return 0;
             else
@@ -608,7 +624,7 @@ namespace SpaceVIL
             tmp.Y = toReal.Y;
             selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight(), tmp));
             selectionRectangles.Add(AddXYShifts(0, 0, toReal));
-            
+
             for (int i = fromReal.Y + 1; i < toReal.Y; i++)
             {
                 tmp.X = 0;
@@ -618,11 +634,12 @@ namespace SpaceVIL
                 tmp.Y = i;
                 selectionRectangles.Add(AddXYShifts(0, 0, tmp));
             }
-            
+
             _selectedArea.SetRectangles(selectionRectangles);
         }
 
-        private List<Point> RealFromTo(Point from, Point to) {
+        private List<Point> RealFromTo(Point from, Point to)
+        {
             List<Point> ans = new List<Point>();
             Point fromReal, toReal;
             if (from.Y == to.Y)
@@ -666,7 +683,8 @@ namespace SpaceVIL
             return outPoint;
         }
 
-        public string GetSelectedText() {
+        public string GetSelectedText()
+        {
             _selectFrom = CheckLineFits(_selectFrom);
             _selectTo = CheckLineFits(_selectTo);
             if (_selectFrom.X == _selectTo.X && _selectFrom.Y == _selectTo.Y) return "";
@@ -676,30 +694,34 @@ namespace SpaceVIL
             Point toReal = listPt[1];
 
             string stmp;
-            if (fromReal.Y == toReal.Y) {
+            if (fromReal.Y == toReal.Y)
+            {
                 stmp = _linesList[fromReal.Y].GetItemText();
                 sb.Append(stmp.Substring(fromReal.X, toReal.X - fromReal.X));
                 return sb.ToString();
             }
-            
+
             if (fromReal.X >= GetLineLetCount(fromReal.Y))
                 sb.Append("\n");
-            else { 
+            else
+            {
                 stmp = _linesList[fromReal.Y].GetItemText();
                 sb.Append(stmp.Substring(fromReal.X) + "\n");
             }
-            for (int i = fromReal.Y + 1; i < toReal.Y; i++) {
+            for (int i = fromReal.Y + 1; i < toReal.Y; i++)
+            {
                 stmp = _linesList[i].GetItemText();
                 sb.Append(stmp + "\n");
             }
-            
+
             stmp = _linesList[toReal.Y].GetItemText();
             sb.Append(stmp.Substring(0, toReal.X));
 
             return sb.ToString();
         }
 
-        public void PasteText(string pasteStr) {
+        public void PasteText(string pasteStr)
+        {
             //Console.WriteLine("paste");
             if (_isSelect) CutText();
             if (pasteStr == null || pasteStr.Equals("")) return;
@@ -711,7 +733,8 @@ namespace SpaceVIL
 
             string[] line = pasteStr.Split('\n');
 
-            if (line.Length == 1) { 
+            if (line.Length == 1)
+            {
                 _linesList[_cursor_position.Y].SetItemText(textBeg + line[0] + textEnd);
                 _cursor_position.X += pasteStr.Length;
             }
@@ -719,7 +742,8 @@ namespace SpaceVIL
             {
                 _linesList[_cursor_position.Y].SetItemText(textBeg + line[0]);
                 int ind = _cursor_position.Y + 1;
-                for (int i = 1; i < line.Length - 1; i++) {
+                for (int i = 1; i < line.Length - 1; i++)
+                {
                     AddNewLine(line[i], ind);
                     ind++;
                 }
@@ -732,7 +756,7 @@ namespace SpaceVIL
 
             }
             //Console.WriteLine(_cursor_position.X + " " + _cursor_position.Y);
-            
+
             ReplaceCursor();
         }
 
@@ -748,9 +772,10 @@ namespace SpaceVIL
 
             if (fromReal.Y == toReal.Y)
                 _linesList[toReal.Y].SetItemText(_linesList[toReal.Y].GetItemText().Remove(fromReal.X, toReal.X - fromReal.X));
-            else {
+            else
+            {
                 RemoveLines(fromReal.Y + 1, toReal.Y - 1);
-                
+
                 _linesList[fromReal.Y].SetItemText(_linesList[fromReal.Y].GetItemText().Substring(0, fromReal.X));
                 _linesList[fromReal.Y + 1].SetItemText(_linesList[fromReal.Y + 1].GetItemText().Substring(toReal.X));
                 CombineLines(fromReal.Y);
@@ -778,6 +803,7 @@ namespace SpaceVIL
         {
             RemoveItem(_cursor);
             TextLine te = new TextLine();
+            te.SetForeground(GetForeground());
             if (_elementFont != null)
                 te.SetFont(_elementFont);
             AddItem(te);
@@ -790,7 +816,8 @@ namespace SpaceVIL
             te.UpdateData(UpdateType.Critical);
         }
 
-        private void BreakLine() {
+        private void BreakLine()
+        {
             string newText;
             if (_cursor_position.X >= GetLineLetCount(_cursor_position.Y))
                 newText = "";
@@ -804,7 +831,8 @@ namespace SpaceVIL
             AddNewLine(newText, _cursor_position.Y + 1);
         }
 
-        private void CombineLines(int topLineY) {
+        private void CombineLines(int topLineY)
+        {
             string text = _linesList[topLineY].GetItemText();
             text += _linesList[topLineY + 1].GetItemText();
             _linesList[topLineY].SetItemText(text);
@@ -819,9 +847,11 @@ namespace SpaceVIL
             */
         }
 
-        private void RemoveLines(int fromLine, int toLine) {
+        private void RemoveLines(int fromLine, int toLine)
+        {
             int inc = fromLine;
-            while (inc <= toLine) {
+            while (inc <= toLine)
+            {
                 _linesList[fromLine].SetItemText("");
                 _linesList.RemoveAt(fromLine);
                 inc++;

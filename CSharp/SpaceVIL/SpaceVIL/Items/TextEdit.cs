@@ -74,7 +74,7 @@ namespace SpaceVIL
         protected virtual void OnDragging(object sender)
         {
             ReplaceCursorAccordingCoord(_mouse_ptr.X);
-            
+
             if (!_isSelect)
             {
                 _isSelect = true;
@@ -88,7 +88,7 @@ namespace SpaceVIL
         }
 
         private void ReplaceCursorAccordingCoord(int realPos)
-        {   
+        {
             realPos -= GetX() + GetPadding().Left;
 
             _cursor_position = CoordXToPos(realPos);
@@ -98,7 +98,7 @@ namespace SpaceVIL
         private int CoordXToPos(int coordX)
         {
             int pos = 0;
-            
+
             List<int> lineLetPos = _text_object.GetLetPosArray();
 
             for (int i = 0; i < lineLetPos.Count; i++)
@@ -131,18 +131,20 @@ namespace SpaceVIL
                 switch (mods)
                 {
                     case KeyMods.Shift:
-                        if (ShiftValCodes.Contains(scancode)) {
+                        if (ShiftValCodes.Contains(scancode))
+                        {
                             if (!_isSelect)
                             {
                                 _isSelect = true;
                                 _selectFrom = _cursor_position;
                             }
                         }
-                        
+
                         break;
 
                     case KeyMods.Control:
-                        if (scancode == ACode) {
+                        if (scancode == ACode)
+                        {
                             _selectFrom = 0;
                             _cursor_position = GetText().Length;
                             ReplaceCursor();
@@ -156,7 +158,8 @@ namespace SpaceVIL
             }
             else
             {
-                if (scancode == BackspaceCode || scancode == DeleteCode) {
+                if (scancode == BackspaceCode || scancode == DeleteCode)
+                {
                     if (_isSelect)
                         CutText();
                     else
@@ -175,7 +178,7 @@ namespace SpaceVIL
                 }
                 else
                     if (_isSelect)
-                        UnselectText();
+                    UnselectText();
             }
 
             if (scancode == LeftArrowCode && _cursor_position > 0)//arrow left
@@ -198,10 +201,11 @@ namespace SpaceVIL
                 _cursor_position = 0;
                 ReplaceCursor();
             }
-            
-            if (_isSelect) {
+
+            if (_isSelect)
+            {
                 if (_selectTo != _cursor_position)
-                { 
+                {
                     _selectTo = _cursor_position;
                     MakeSelectedArea(_selectFrom, _selectTo);
                 }
@@ -357,7 +361,8 @@ namespace SpaceVIL
             _selectedArea.SetWidth(width);
         }
 
-        public string GetSelectedText() {
+        public string GetSelectedText()
+        {
             if (_selectFrom == _selectTo) return "";
             string text = GetText();
             int fromReal = Math.Min(_selectFrom, _selectTo);
@@ -366,7 +371,8 @@ namespace SpaceVIL
             return selectedText;
         }
 
-        public void PasteText(string pasteStr) {
+        public void PasteText(string pasteStr)
+        {
             if (_isSelect) CutText();
             string text = GetText();
             string newText = text.Substring(0, _cursor_position) + pasteStr + text.Substring(_cursor_position);
@@ -375,7 +381,8 @@ namespace SpaceVIL
             ReplaceCursor();
         }
 
-        public string CutText() {
+        public string CutText()
+        {
             string str = GetSelectedText();
             if (_selectFrom == _selectTo) return str;
             int fromReal = Math.Min(_selectFrom, _selectTo);
@@ -387,7 +394,8 @@ namespace SpaceVIL
             return str;
         }
 
-        private void UnselectText() {
+        private void UnselectText()
+        {
             _isSelect = false;
             _justSelected = true;
             MakeSelectedArea(0, 0);
@@ -402,13 +410,15 @@ namespace SpaceVIL
                 _cursor.SetWidth(0);
         }
         */
-        private int NearestPosToCursor(double xPos) {
+        private int NearestPosToCursor(double xPos)
+        {
             List<int> endPos = _text_object.GetLetPosArray();
             int pos = endPos.OrderBy(x => Math.Abs(x - xPos)).First();
             return pos;
         }
 
-        internal void SetCursorPosition(double newPos) {
+        internal void SetCursorPosition(double newPos)
+        {
             _cursor_position = NearestPosToCursor(newPos);
         }
 
