@@ -74,7 +74,7 @@ namespace SpaceVIL
         protected virtual void OnDragging(object sender)
         {
             ReplaceCursorAccordingCoord(_mouse_ptr.X);
-            Console.WriteLine(_cursor_position);
+            
             if (!_isSelect)
             {
                 _isSelect = true;

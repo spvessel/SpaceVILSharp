@@ -700,7 +700,7 @@ namespace SpaceVIL
         }
 
         public void PasteText(string pasteStr) {
-            Console.WriteLine("paste");
+            //Console.WriteLine("paste");
             if (_isSelect) CutText();
             if (pasteStr == null || pasteStr.Equals("")) return;
 
