@@ -3,6 +3,6 @@ namespace SpaceVIL
 {
     public interface ITextEditable
     {
-
+        
     }
 }

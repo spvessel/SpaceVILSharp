@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 namespace SpaceVIL
 {
-    public class TextEdit : VisualItem, ITextEditable
+    public class TextEdit : VisualItem, ITextEditable, ITextShortcuts
     {
         static int count = 0;
         private TextLine _text_object;

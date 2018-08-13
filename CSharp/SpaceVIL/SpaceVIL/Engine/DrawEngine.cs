@@ -198,22 +198,25 @@ namespace SpaceVIL
 
             _tooltip.InitTimer(false);
 
-            if (FocusedItem is TextEdit && ((mods == KeyMods.Control && key == KeyCode.V) ||
-                (mods == KeyMods.Shift && key == KeyCode.Insert)) && action == InputState.Press)
-            {
-                string paste_str = Glfw.GetClipboardString(_handler.GetWindow());
-                (FocusedItem as TextEdit).PasteText(paste_str);
-            }
-            else if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.C && action == InputState.Press)
-            {
-                string copy_str = (FocusedItem as TextEdit).GetSelectedText();
-                Glfw.SetClipboardString(_handler.GetWindow(), copy_str);
-            }
-            else if (FocusedItem is TextEdit && mods == KeyMods.Control && key == KeyCode.X && action == InputState.Press)
-            {
-                string cut_str = (FocusedItem as TextEdit).CutText();
-                Glfw.SetClipboardString(_handler.GetWindow(), cut_str);
-            }
+            if ((FocusedItem is ITextShortcuts) && action == InputState.Press) {
+                if ((mods == KeyMods.Control && key == KeyCode.V) || (mods == KeyMods.Shift && key == KeyCode.Insert))
+                {
+                    string paste_str = Glfw.GetClipboardString(_handler.GetWindow());
+                    (FocusedItem as ITextShortcuts).PasteText(paste_str);
+                }
+                else if (mods == KeyMods.Control && key == KeyCode.C)
+                {
+                    string copy_str = (FocusedItem as ITextShortcuts).GetSelectedText();
+                    Glfw.SetClipboardString(_handler.GetWindow(), copy_str);
+                }
+                else if (mods == KeyMods.Control && key == KeyCode.X)
+                {
+                    string cut_str = (FocusedItem as ITextShortcuts).CutText();
+                    Glfw.SetClipboardString(_handler.GetWindow(), cut_str);
+                }
+                else
+                    FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);
+            } //Нехорошо это все
             else
                 FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);
         }
