@@ -52,7 +52,8 @@ namespace SpaceVIL
             SetPadding(5, 0, 5, 0);
             count++;
 
-            EventMouseClick += OnMouseClick;
+            EventMouseClick += EmptyEvent;
+            EventMousePressed += OnMousePressed;
             EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;
@@ -63,7 +64,7 @@ namespace SpaceVIL
             //CtrlValCodes = new List<int>() {LeftCtrlCode, RightCtrlCode, ACode};
         }
 
-        protected virtual void OnMouseClick(object sender)
+        protected virtual void OnMousePressed(object sender)
         {
             ReplaceCursorAccordingCoord(_mouse_ptr.X);
             if (_isSelect)

@@ -57,7 +57,8 @@ namespace SpaceVIL
             _selectedArea = new CustomSelector();
             _selectedArea.SetBackground(111, 181, 255);
 
-            EventMouseClick += OnMouseClick;
+            EventMouseClick += EmptyEvent;
+            EventMousePressed += OnMousePressed;
             EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;
@@ -80,11 +81,12 @@ namespace SpaceVIL
         public override void InvokePoolEvents()
         {
             if (EventMouseClick != null) EventMouseClick.Invoke(this);
+            if (EventMousePressed != null) EventMousePressed.Invoke(this);
             if (EventMouseDrag != null) EventMouseDrag.Invoke(this);
             if (EventMouseDrop != null) EventMouseDrop.Invoke(this);
         }
 
-        protected virtual void OnMouseClick(object sender) {
+        protected virtual void OnMousePressed(object sender) {
             ReplaceCursorAccordingCoord(new Point(_mouse_ptr.X, _mouse_ptr.Y));
             if (_isSelect)
                 UnselectText();
