@@ -443,32 +443,11 @@ namespace SpaceVIL
         }
         private bool StrictHoverVerification(float xpos, float ypos)
         {
-            /*
-            function IsPIn_Vector(aAx, aAy, aBx, aBy, aCx, aCy, aPx, aPy: single): boolean;
-            var
-              Bx, By, Cx, Cy, Px, Py : single;
-              m, l: single; // мю и лямбда
-            begin
-              Result := False;
-              // переносим треугольник точкой А в (0;0).
-              Bx:= aBx - aAx; By:= aBy - aAy;
-              Cx:= aCx - aAx; Cy:= aCy - aAy;
-              Px:= aPx - aAx; Py:= aPy - aAy;
-              //
-              m:= (Px * By - Bx * Py) / (Cx * By - Bx * Cy);
-              if (m >= 0) and(m <= 1) then
-               begin
-                l:= (Px - m * Cx) / Bx;
-                  if (l >= 0) and((m + l) <= 1) then
-                   Result := True;
-               end;
-            end;*/
-
             List<float[]> tmp = UpdateShape();
 
             float Ax, Ay, Bx, By, Cx, Cy, Px, Py, m, l;
             IsMouseHover = false;
-            //Console.WriteLine(GetItemName());
+
             for (int point = 0; point < tmp.Count; point += 3)
             {
                 Px = xpos;
@@ -480,17 +459,7 @@ namespace SpaceVIL
                 Cx = tmp[point + 2][0];
                 Cy = tmp[point + 2][1];
 
-                /*Console.WriteLine(
-                    Ax + " " +
-                    Ay + " " +
-                    Bx + " " +
-                    By + " " +
-                    Cx + " " +
-                    Cy + " " +
-                    Px + " " +
-                    Py + " "
-                );*/
-                // переносим треугольник точкой А в (0;0).
+
                 Bx = Bx - Ax; By = By - Ay;
                 Cx = Cx - Ax; Cy = Cy - Ay;
                 Px = Px - Ax; Py = Py - Ay;
@@ -553,6 +522,19 @@ namespace SpaceVIL
             float maxx = GetX() + GetWidth();
             float miny = GetY();
             float maxy = GetY() + GetHeight();
+
+            if (_confines_x_0 > minx)
+                minx = _confines_x_0;
+
+            if (_confines_x_1 < maxx)
+                maxx = _confines_x_1;
+
+            if (_confines_y_0 > miny)
+                miny = _confines_y_0;
+
+            if (_confines_y_1 < maxy)
+                maxy = _confines_y_1;
+
             if (xpos >= minx
                 && xpos <= maxx
                 && ypos >= miny

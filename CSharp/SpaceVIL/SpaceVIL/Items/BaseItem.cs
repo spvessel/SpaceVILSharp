@@ -7,6 +7,11 @@ namespace SpaceVIL
 {
     public abstract class BaseItem : IGeometry, IReaction, IBehavior, IAncestor, IEventUpdate, IItem
     {
+        internal int _confines_x_0 = 0;
+        internal int _confines_x_1 = 0;
+        internal int _confines_y_0 = 0;
+        internal int _confines_y_1 = 0;
+
         private WindowLayout _handler;
         public void SetHandler(WindowLayout handler)
         {
@@ -354,8 +359,16 @@ namespace SpaceVIL
         }
 
         //update
+        public void SetConfines()
+        {
+            _confines_x_0 = GetParent().GetX() + GetParent().GetPadding().Left;
+            _confines_x_1 = GetParent().GetX() + GetParent().GetWidth() - GetParent().GetPadding().Right;
+            _confines_y_0 = GetParent().GetY() + GetParent().GetPadding().Top;
+            _confines_y_1 = GetParent().GetY() + GetParent().GetHeight() - GetParent().GetPadding().Bottom;
+        }
         public void Update(GeometryEventType type, int value = 0)
         {
+            SetConfines();
             //lock (DrawEngine.engine_locker)
             {
                 switch (type)
@@ -459,8 +472,9 @@ namespace SpaceVIL
                     default:
                         break;
                 }
-            }
+            } 
         }
+
         public virtual void UpdateGeometry()
         {
             Update(GeometryEventType.ResizeWidth);
@@ -470,12 +484,12 @@ namespace SpaceVIL
         }
 
         public virtual void SetStyle(Style style) { }
-        public virtual void CheckDefaults() 
-        { 
+        public virtual void CheckDefaults()
+        {
             //checking all attributes
             //SetStyle(default theme)
             //foreach inners SetStyle(from item default style)
-             
+
             SetDefaults();
         }
         public virtual void SetDefaults() { }

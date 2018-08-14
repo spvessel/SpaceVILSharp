@@ -216,7 +216,8 @@ namespace SpaceVIL
 
             _tooltip.InitTimer(false);
 
-            if ((FocusedItem is ITextShortcuts) && action == InputState.Press) {
+            if ((FocusedItem is ITextShortcuts) && action == InputState.Press)
+            {
                 if ((mods == KeyMods.Control && key == KeyCode.V) || (mods == KeyMods.Shift && key == KeyCode.Insert))
                 {
                     string paste_str = Glfw.GetClipboardString(_handler.GetWindow());
@@ -618,6 +619,7 @@ namespace SpaceVIL
             Glfw.PostEmptyEvent();
         }
 
+        internal int _interval = 1000 / 90;
         internal void Update()
         {
             lock (_handler.GetLayout().engine_locker)
@@ -637,6 +639,7 @@ namespace SpaceVIL
                 //Glfw.PollEvents();
                 Glfw.WaitEvents();
                 _handler.GetLayout().ExecutePollActions();
+                Thread.Sleep(_interval);
             }
 
             _primitive.DeleteShader();
@@ -662,6 +665,7 @@ namespace SpaceVIL
                 }*/
                 _handler.Swap();
             }
+            Thread.Sleep(_interval);
         }
         private void DrawShadePillow()
         {
@@ -888,7 +892,7 @@ namespace SpaceVIL
             glEnableVertexAttribArray(0);
 
             //Color
-            float[] argb = { 1.0f, 1.0f, 1.0f, 0.5f };
+            float[] argb = { 0.0f, 0.0f, 0.0f, 0.0f };
             float[] colorData = new float[crd_array.Count * 4];
             for (int i = 0; i < colorData.Length / 4; i++)
             {
@@ -918,7 +922,9 @@ namespace SpaceVIL
         private void CheckOutsideBorders(BaseItem shell)
         {
             //if (shell.CutBehaviour == StencilBehaviour.Strict)
-            // StrictStencil(shell);
+            //if(shell.GetParent() != null)
+            // _isStencilSet = shell;
+            //StrictStencil(shell);
             //else
             LazyStencil(shell);
         }
@@ -926,12 +932,44 @@ namespace SpaceVIL
         private void StrictStencil(BaseItem shell)
         {
             glEnable(GL_STENCIL_TEST);
-            glClearStencil(1);
+            /*glClearStencil(1);
             glStencilMask(0xFF);
             glStencilFunc(GL_NEVER, 2, 0);
             glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
             SetStencilMask(shell.GetParent().MakeShape());
-            glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+            glStencilFunc(GL_NOTEQUAL, 1, 0xFF);*/
+            glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+            glClear(GL_STENCIL_BUFFER_BIT);
+            glStencilMask(0x00);
+
+            glStencilFunc(GL_ALWAYS, 1, 0xFF);
+            glStencilMask(0xFF);
+            SetStencilMask(shell.GetParent().MakeShape());
+
+            glStencilFunc(GL_EQUAL, 1, 0xFF);
+
+            shell.GetParent()._confines_x_0 = shell.GetParent().GetX() + shell.GetParent().GetPadding().Left;
+            shell.GetParent()._confines_x_1 = shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right;
+            shell.GetParent()._confines_y_0 = shell.GetParent().GetY() + shell.GetParent().GetPadding().Top;
+            shell.GetParent()._confines_y_1 = shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom;
+            SetConfines(shell);
+        }
+
+        private void SetConfines(BaseItem shell)
+        {
+            shell._confines_x_0 = shell.GetParent()._confines_x_0;
+            shell._confines_x_1 = shell.GetParent()._confines_x_1;
+            shell._confines_y_0 = shell.GetParent()._confines_y_0;
+            shell._confines_y_1 = shell.GetParent()._confines_y_1;
+
+            VisualItem root = shell as VisualItem;
+            if (root != null)
+            {
+                foreach (var item in root.GetItems())
+                {
+                    SetConfines(item);
+                }
+            }
         }
 
         private bool LazyStencil(BaseItem shell)

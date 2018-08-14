@@ -95,6 +95,9 @@ namespace SpaceVIL
 
                     offset += child.GetHeight() + GetSpacing().Vertical + child.GetMargin().Top + child.GetMargin().Bottom;//
                 }
+                
+                //refactor
+                child.SetConfines();
             }
         }
     }
