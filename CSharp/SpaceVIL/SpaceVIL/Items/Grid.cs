@@ -28,7 +28,7 @@ namespace SpaceVIL
 
         //rows and counts
         private List<Cell> _cells;
-        private void InitCells()
+        internal void InitCells()
         {
             _cells = new List<Cell>();
             for (int i = 0; i < _row_count; i++)
@@ -42,7 +42,8 @@ namespace SpaceVIL
         private int _row_count = 1;
         public void SetRowCount(int capacity)
         {
-            _row_count = capacity;
+            if (!capacity.Equals(_row_count))
+                _row_count = capacity;
         }
         public int GetRowCount()
         {
@@ -51,7 +52,9 @@ namespace SpaceVIL
         private int _column_count = 1;
         public void SetColumnCount(int capacity)
         {
-            _column_count = capacity;
+            if (!capacity.Equals(_column_count))
+                _column_count = capacity;
+            //Need to InitCells REFACTOR!
         }
         public int GetColumnCount()
         {
@@ -117,6 +120,15 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
+        //TMP
+        private Int32[] colWidth;
+        private Int32[] rowHeight;
+        internal Int32[] GetColWidth() {
+            return colWidth;
+        }
+        internal Int32[] GetRowHeight() {
+            return rowHeight;
+        }
         //Update Layout
         public void UpdateLayout()
         {
@@ -126,10 +138,10 @@ namespace SpaceVIL
              * 2. запомнить размеры по ширине каждой ячейки
              * 3. найти все максимумы по высоте в строках
              * 4. запомнить размеры по высоте каждой ячейки
-             * 5. цикл по каждой ячейки
+             * 5. цикл по каждой ячейке
              * 6. установть размеры ячейки
              * 7. разместить элемент в ячейке
-             * 8. повторить цикл с пункта 5 пока есть ячейки
+             * 8. повторить цикл с пункта 5, пока есть ячейки
              * 9. готово, пить кофе
              */
 
@@ -144,6 +156,7 @@ namespace SpaceVIL
 
             //1, 2
             Int32[] columns_width = GetColumnsWidth();
+            colWidth = columns_width;
             /*foreach (var item in columns_width)
             {
                 Console.Write(item + " ");
@@ -151,6 +164,7 @@ namespace SpaceVIL
             Console.WriteLine();*/
             //3, 4
             Int32[] rows_height = GetRowsHeight();
+            rowHeight = rows_height;
             /*foreach (var item in rows_height)
             {
                 Console.Write(item + " ");
