@@ -719,6 +719,13 @@ namespace SpaceVIL
             if (!_tooltip.IsVisible)
                 return;
 
+            _tooltip.GetTextLine().UpdateData(UpdateType.Critical);
+            _tooltip.SetWidth(
+                _tooltip.GetPadding().Left +
+                _tooltip.GetPadding().Right +
+                _tooltip.GetTextWidth()
+                );
+
             //проверка сверху
             if (ptrRelease.Y > _tooltip.GetHeight())
             {
@@ -754,14 +761,8 @@ namespace SpaceVIL
                 glDisable(GL_STENCIL_TEST);
                 _isStencilSet = null;
             }
-
-            _tooltip.GetTextLine().UpdateData(UpdateType.Critical);
-            _tooltip.SetWidth(
-                _tooltip.GetPadding().Left +
-                _tooltip.GetPadding().Right +
-                _tooltip.GetTextWidth()
-                );
         }
+        
         //Common Draw function
         private void DrawItems(BaseItem root)
         {
