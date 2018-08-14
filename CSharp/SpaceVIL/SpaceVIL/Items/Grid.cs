@@ -201,6 +201,7 @@ namespace SpaceVIL
 
                         if (item.GetHeightPolicy().HasFlag(SizePolicy.Expand))
                             item.SetHeight(rows_height[r] - item.GetMargin().Top - item.GetMargin().Bottom);
+                        item.SetConfines();
                     }
 
                     //7
@@ -212,6 +213,7 @@ namespace SpaceVIL
                 y_offset += _cells[index].GetHeight() + GetSpacing().Vertical;
                 x_offset = 0;
             }
+
         }
 
         private Int32[] GetRowsHeight()

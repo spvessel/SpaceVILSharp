@@ -98,9 +98,9 @@ namespace SpaceVIL
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
 
             //Area
-            _area.SetItemName(GetItemName() + "_" + _area.GetItemName());
+            //_area.SetItemName(GetItemName() + "_" + _area.GetItemName());
             _area.SetBackground(Color.Transparent);
-            _area.SetAlignment(ItemAlignment.Bottom);
+            _area.SetAlignment(ItemAlignment.Top | ItemAlignment.Left);
             _area.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             _area.SetPadding(5, 5, 5, 5);
             _area.SetSpacing(0, 5);
@@ -234,6 +234,7 @@ namespace SpaceVIL
             _grid.InsertItem(_area, 0, 0);
             _grid.InsertItem(VScrollBar, 0, 1);
             _grid.InsertItem(HScrollBar, 1, 0);
+            //Console.WriteLine(_grid.GetParent().GetItemName() + " " + _grid.GetParent().GetX());
 
             //Events Connections
             EventScrollUp += VScrollBar.EventScrollUp.Invoke;

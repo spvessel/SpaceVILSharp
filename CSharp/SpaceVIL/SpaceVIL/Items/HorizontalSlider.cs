@@ -119,7 +119,7 @@ namespace SpaceVIL
 
             //Event connections
             EventMouseDrop += OnDropHandler;
-            Handler.EventMouseDrop += EventMouseDrop.Invoke;
+            Handler.EventMouseDrag += EventMouseDrop.Invoke;
         }
 
         public override void InvokePoolEvents()

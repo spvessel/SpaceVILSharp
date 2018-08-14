@@ -293,7 +293,8 @@ namespace SpaceVIL
                 if (thread_manager != null && thread_manager.IsAlive)
                 {
                     manager.StopManager();
-                    thread_manager.Abort();
+                    manager.Execute.Set();
+                    // thread_manager.Abort();
                 }
             }
             else
@@ -306,6 +307,7 @@ namespace SpaceVIL
                 if (thread_manager != null && thread_manager.IsAlive)
                 {
                     manager.StopManager();
+                    manager.Execute.Set();
                     //thread_manager.Abort();
                 }
                 IsHidden = true;
@@ -355,9 +357,13 @@ namespace SpaceVIL
         internal void ExecutePollActions()
         {
             engine.Update();//нужно обновлять перед выполением задания
-            manager.Execute.Set();
-            manager.Execute.WaitOne();
-            engine.Update();//нужно обновлять после выполения задания
+            if (manager.StackEvents.Count > 0)
+            {
+                manager.Execute.Set();
+                manager.Execute.WaitOne();
+                manager.Execute.Reset();
+                engine.Update();//нужно обновлять после выполения задания
+            }
         }
         public void SetFocusedItem(VisualItem item)
         {

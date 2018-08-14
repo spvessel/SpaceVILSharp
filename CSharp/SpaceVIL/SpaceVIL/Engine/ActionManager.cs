@@ -18,11 +18,12 @@ namespace SpaceVIL
         internal ManualResetEvent Execute = new ManualResetEvent(false);
         WindowLayout _handler;
         bool _stoped;
-        //int _interval = 1000 / 60;
+        int _interval = 1000 / 30;
         public ActionManager(WindowLayout wnd)
         {
             _handler = wnd;
         }
+        Int64 ccc = 0;
         public void StartManager()
         {
             _stoped = false;
@@ -30,8 +31,10 @@ namespace SpaceVIL
             {
                 Execute.WaitOne();
                 ExecuteActions();
-                Execute.Set();
-                //Execute.Reset();
+                //Execute.Set();
+                //Thread.Sleep(_interval);
+                Execute.Reset();
+                //Thread.Sleep(1000 / 60);
             }
         }
 
@@ -48,9 +51,12 @@ namespace SpaceVIL
             while (StackEvents.Count > 0)
             {
                 EventTask tmp = null;
-                StackEvents.TryDequeue(out tmp);
-                if (tmp != null)
+                if (StackEvents.TryDequeue(out tmp))
+                {
                     ExecuteAction(tmp);
+                    /*ccc++;
+                    Console.WriteLine(StackEvents.Count + " " + ccc);*/
+                }
             }
         }
         private void ExecuteAction(EventTask task)
