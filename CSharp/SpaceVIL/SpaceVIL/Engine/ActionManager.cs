@@ -15,26 +15,24 @@ namespace SpaceVIL
     {
         internal ConcurrentQueue<EventTask> StackEvents = new ConcurrentQueue<EventTask>();
 
-        internal ManualResetEvent Execute = new ManualResetEvent(false);
+        internal ManualResetEventSlim Execute = new ManualResetEventSlim(false);
         WindowLayout _handler;
         bool _stoped;
-        int _interval = 1000 / 30;
+        //int _interval = 1000 / 30;
         public ActionManager(WindowLayout wnd)
         {
             _handler = wnd;
         }
-        Int64 ccc = 0;
+
         public void StartManager()
         {
             _stoped = false;
             while (!_stoped)
             {
-                Execute.WaitOne();
+                Execute.Wait();
                 ExecuteActions();
-                //Execute.Set();
-                //Thread.Sleep(_interval);
                 Execute.Reset();
-                //Thread.Sleep(1000 / 60);
+                _handler.Execute.Set();
             }
         }
 
@@ -54,8 +52,6 @@ namespace SpaceVIL
                 if (StackEvents.TryDequeue(out tmp))
                 {
                     ExecuteAction(tmp);
-                    /*ccc++;
-                    Console.WriteLine(StackEvents.Count + " " + ccc);*/
                 }
             }
         }

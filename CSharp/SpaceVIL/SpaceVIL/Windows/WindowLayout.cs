@@ -10,6 +10,8 @@ namespace SpaceVIL
     public class WindowLayout : ISize, IPosition
     //where TLayout : VisualItem
     {
+        internal ManualResetEventSlim Execute = new ManualResetEventSlim(false);
+
         public EventCommonMethod EventClose;
         public EventCommonMethod EventMinimize;
         public EventCommonMethod EventHide;
@@ -245,12 +247,6 @@ namespace SpaceVIL
         //methods
         public void Show()
         {
-            /*manager.ActionsDone += () =>
-            {
-               lock (CommonService.engine_locker)
-                   UpdateScene();
-            };*/
-
             engine._handler.Resizeble = IsResizeble;
             engine._handler.BorderHidden = IsBorderHidden;
             engine._handler.AppearInCenter = IsCentered;
@@ -273,7 +269,8 @@ namespace SpaceVIL
                 WindowLayoutBox.AddToWindowDispatcher(this);
                 ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
                 WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
-
+                // Console.WriteLine(WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable);
+                // WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
                 thread_engine.Start();
                 thread_engine.Join();
             }
@@ -356,14 +353,11 @@ namespace SpaceVIL
         }
         internal void ExecutePollActions()
         {
-            engine.Update();//нужно обновлять перед выполением задания
-            if (manager.StackEvents.Count > 0)
-            {
-                manager.Execute.Set();
-                manager.Execute.WaitOne();
-                manager.Execute.Reset();
-                engine.Update();//нужно обновлять после выполения задания
-            }
+            //engine.Update();//нужно обновлять перед выполением задания
+            manager.Execute.Set();
+            Execute.Wait();
+            Execute.Reset();
+            engine.Update();//нужно обновлять после выполения задания
         }
         public void SetFocusedItem(VisualItem item)
         {

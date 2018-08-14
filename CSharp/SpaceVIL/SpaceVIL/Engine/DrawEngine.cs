@@ -284,7 +284,6 @@ namespace SpaceVIL
             _handler.GetLayout().SetX(_handler.WPosition.X);
             _handler.GetLayout().SetY(_handler.WPosition.Y);
             Glfw.SetWindowPos(_handler.GetWindow(), _handler.WPosition.X, _handler.WPosition.Y);
-            //Update();
         }
         private void Position(Glfw.Window glfwwnd, int xpos, int ypos)
         {
@@ -303,7 +302,6 @@ namespace SpaceVIL
             if (!_handler.GetLayout().IsBorderHidden)
             {
                 glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
-                //Update();
             }
         }
 
@@ -314,7 +312,6 @@ namespace SpaceVIL
             if (_handler.GetLayout().IsBorderHidden)
             {
                 glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
-                //Update();
             }
         }
 
@@ -619,7 +616,7 @@ namespace SpaceVIL
             Glfw.PostEmptyEvent();
         }
 
-        internal int _interval = 1000 / 90;
+        //internal int _interval = 1000 / 60;
         internal void Update()
         {
             lock (_handler.GetLayout().engine_locker)
@@ -636,10 +633,8 @@ namespace SpaceVIL
 
             while (!_handler.IsClosing())
             {
-                //Glfw.PollEvents();
                 Glfw.WaitEvents();
                 _handler.GetLayout().ExecutePollActions();
-                Thread.Sleep(_interval);
             }
 
             _primitive.DeleteShader();
@@ -665,7 +660,7 @@ namespace SpaceVIL
                 }*/
                 _handler.Swap();
             }
-            Thread.Sleep(_interval);
+            //Thread.Sleep(1000/60);
         }
         private void DrawShadePillow()
         {
