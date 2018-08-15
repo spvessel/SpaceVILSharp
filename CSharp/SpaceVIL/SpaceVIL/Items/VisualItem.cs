@@ -117,7 +117,7 @@ namespace SpaceVIL
 
                 //needs to force update all attributes
                 item.UpdateGeometry();
-                item.CheckDefaults();
+                // item.CheckDefaults();
                 item.InitElements();
             }
         }

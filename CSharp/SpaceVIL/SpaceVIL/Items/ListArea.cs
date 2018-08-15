@@ -218,6 +218,9 @@ namespace SpaceVIL
                 if (_selection == index)
                     SetSubstrate(child);
                 index++;
+
+                //refactor
+                child.SetConfines();
             }
         }
         private void SetSubstrate(BaseItem child)

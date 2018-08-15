@@ -93,6 +93,7 @@ namespace SpaceVIL
         private void InvokeMouseClickEvent(VisualItem sender)
         {
             sender.EventMouseClick?.Invoke(sender);
+            // Console.WriteLine(sender.GetItemName());
         }
         private void InvokeMouseHoverEvent(VisualItem sender)
         {
