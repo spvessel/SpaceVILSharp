@@ -369,20 +369,40 @@ namespace SpaceVIL
         public void Update(GeometryEventType type, int value = 0)
         {
             SetConfines();
-            //lock (DrawEngine.engine_locker)
+            switch (type)
             {
-                switch (type)
-                {
-                    case GeometryEventType.Moved_X:
-                        SetX(GetX() + value);
-                        break;
+                case GeometryEventType.Moved_X:
+                    SetX(GetX() + value);
+                    break;
 
-                    case GeometryEventType.Moved_Y:
-                        SetY(GetY() + value);
-                        break;
+                case GeometryEventType.Moved_Y:
+                    SetY(GetY() + value);
+                    break;
 
-                    case GeometryEventType.ResizeWidth:
-                        if (GetWidthPolicy() == SizePolicy.Fixed)
+                case GeometryEventType.ResizeWidth:
+                    if (GetWidthPolicy() == SizePolicy.Fixed)
+                    {
+                        if (GetAlignment().HasFlag(ItemAlignment.Right))
+                        {
+                            SetX(GetParent().GetX() + GetParent().GetWidth() - GetWidth() - GetParent().GetPadding().Right - GetMargin().Right);//
+                        }
+                        if (GetAlignment().HasFlag(ItemAlignment.HCenter))
+                        {
+                            SetX(GetParent().GetX() + (GetParent().GetWidth() - GetWidth()) / 2 + GetMargin().Left - GetMargin().Right);
+                        }
+                    }
+                    else if (GetWidthPolicy() == SizePolicy.Expand)
+                    {
+                        int prefered = GetParent().GetWidth() - GetParent().GetPadding().Left - GetParent().GetPadding().Right - GetMargin().Right - GetMargin().Left;//
+                        prefered = (prefered > GetMaxWidth()) ? GetMaxWidth() : prefered;
+                        prefered = (prefered < GetMinWidth()) ? GetMinWidth() : prefered;
+                        SetWidth(prefered);
+
+                        if (prefered + GetParent().GetPadding().Left + GetParent().GetPadding().Right + GetMargin().Right + GetMargin().Left == GetParent().GetWidth())//
+                        {
+                            SetX(GetParent().GetX() + GetParent().GetPadding().Left + GetMargin().Left);//
+                        }
+                        else if (prefered + GetParent().GetPadding().Left + GetParent().GetPadding().Right + GetMargin().Right + GetMargin().Left < GetParent().GetWidth())//
                         {
                             if (GetAlignment().HasFlag(ItemAlignment.Right))
                             {
@@ -390,43 +410,43 @@ namespace SpaceVIL
                             }
                             if (GetAlignment().HasFlag(ItemAlignment.HCenter))
                             {
-                                SetX(GetParent().GetX() + (GetParent().GetWidth() - GetWidth()) / 2 + GetMargin().Left - GetMargin().Right);
+                                SetX(GetParent().GetX() + (GetParent().GetWidth() - GetWidth()) / 2 + GetMargin().Left);//
                             }
                         }
-                        else if (GetWidthPolicy() == SizePolicy.Expand)
+                        else if (prefered + GetParent().GetPadding().Left + GetParent().GetPadding().Right + GetMargin().Right + GetMargin().Left > GetParent().GetWidth())//
                         {
-                            int prefered = GetParent().GetWidth() - GetParent().GetPadding().Left - GetParent().GetPadding().Right - GetMargin().Right - GetMargin().Left;//
-                            prefered = (prefered > GetMaxWidth()) ? GetMaxWidth() : prefered;
-                            prefered = (prefered < GetMinWidth()) ? GetMinWidth() : prefered;
+                            //никогда не должен зайти
+                            SetX(GetParent().GetX() + GetParent().GetPadding().Left + GetMargin().Left);//
+                            prefered = GetParent().GetWidth() - GetParent().GetPadding().Left - GetParent().GetPadding().Right - GetMargin().Left - GetMargin().Right;//
                             SetWidth(prefered);
-
-                            if (prefered + GetParent().GetPadding().Left + GetParent().GetPadding().Right + GetMargin().Right + GetMargin().Left == GetParent().GetWidth())//
-                            {
-                                SetX(GetParent().GetX() + GetParent().GetPadding().Left + GetMargin().Left);//
-                            }
-                            else if (prefered + GetParent().GetPadding().Left + GetParent().GetPadding().Right + GetMargin().Right + GetMargin().Left < GetParent().GetWidth())//
-                            {
-                                if (GetAlignment().HasFlag(ItemAlignment.Right))
-                                {
-                                    SetX(GetParent().GetX() + GetParent().GetWidth() - GetWidth() - GetParent().GetPadding().Right - GetMargin().Right);//
-                                }
-                                if (GetAlignment().HasFlag(ItemAlignment.HCenter))
-                                {
-                                    SetX(GetParent().GetX() + (GetParent().GetWidth() - GetWidth()) / 2 + GetMargin().Left);//
-                                }
-                            }
-                            else if (prefered + GetParent().GetPadding().Left + GetParent().GetPadding().Right + GetMargin().Right + GetMargin().Left > GetParent().GetWidth())//
-                            {
-                                //никогда не должен зайти
-                                SetX(GetParent().GetX() + GetParent().GetPadding().Left + GetMargin().Left);//
-                                prefered = GetParent().GetWidth() - GetParent().GetPadding().Left - GetParent().GetPadding().Right - GetMargin().Left - GetMargin().Right;//
-                                SetWidth(prefered);
-                            }
                         }
-                        break;
+                    }
+                    break;
 
-                    case GeometryEventType.ResizeHeight:
-                        if (GetHeightPolicy() == SizePolicy.Fixed)
+                case GeometryEventType.ResizeHeight:
+                    if (GetHeightPolicy() == SizePolicy.Fixed)
+                    {
+                        if (GetAlignment().HasFlag(ItemAlignment.Bottom))
+                        {
+                            SetY(GetParent().GetY() + GetParent().GetHeight() - GetHeight() - GetParent().GetPadding().Bottom - GetMargin().Bottom);//
+                        }
+                        if (GetAlignment().HasFlag(ItemAlignment.VCenter))
+                        {
+                            SetY(GetParent().GetY() + (GetParent().GetHeight() - GetHeight()) / 2 + GetMargin().Top - GetMargin().Bottom);
+                        }
+                    }
+                    else if (GetHeightPolicy() == SizePolicy.Expand)
+                    {
+                        int prefered = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom - GetMargin().Bottom - GetMargin().Top;//
+                        prefered = (prefered > GetMaxHeight()) ? GetMaxHeight() : prefered;
+                        prefered = (prefered < GetMinHeight()) ? GetMinHeight() : prefered;
+                        SetHeight(prefered);
+
+                        if (prefered + GetParent().GetPadding().Top + GetParent().GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top == GetParent().GetHeight())//
+                        {
+                            SetY(GetParent().GetY() + GetParent().GetPadding().Top + GetMargin().Top);//
+                        }
+                        else if (prefered + GetParent().GetPadding().Top + GetParent().GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top < GetParent().GetHeight())//
                         {
                             if (GetAlignment().HasFlag(ItemAlignment.Bottom))
                             {
@@ -434,45 +454,22 @@ namespace SpaceVIL
                             }
                             if (GetAlignment().HasFlag(ItemAlignment.VCenter))
                             {
-                                SetY(GetParent().GetY() + (GetParent().GetHeight() - GetHeight()) / 2 + GetMargin().Top - GetMargin().Bottom);
+                                SetY(GetParent().GetY() + (GetParent().GetHeight() - GetHeight()) / 2 + GetMargin().Top);//
                             }
                         }
-                        else if (GetHeightPolicy() == SizePolicy.Expand)
+                        else if (prefered + GetParent().GetPadding().Top + GetParent().GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top > GetParent().GetHeight())//
                         {
-                            int prefered = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom - GetMargin().Bottom - GetMargin().Top;//
-                            prefered = (prefered > GetMaxHeight()) ? GetMaxHeight() : prefered;
-                            prefered = (prefered < GetMinHeight()) ? GetMinHeight() : prefered;
+                            //никогда не должен зайти
+                            SetY(GetParent().GetY() + GetParent().GetPadding().Top + GetMargin().Top);//
+                            prefered = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom - GetMargin().Top - GetMargin().Bottom;//
                             SetHeight(prefered);
-
-                            if (prefered + GetParent().GetPadding().Top + GetParent().GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top == GetParent().GetHeight())//
-                            {
-                                SetY(GetParent().GetY() + GetParent().GetPadding().Top + GetMargin().Top);//
-                            }
-                            else if (prefered + GetParent().GetPadding().Top + GetParent().GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top < GetParent().GetHeight())//
-                            {
-                                if (GetAlignment().HasFlag(ItemAlignment.Bottom))
-                                {
-                                    SetY(GetParent().GetY() + GetParent().GetHeight() - GetHeight() - GetParent().GetPadding().Bottom - GetMargin().Bottom);//
-                                }
-                                if (GetAlignment().HasFlag(ItemAlignment.VCenter))
-                                {
-                                    SetY(GetParent().GetY() + (GetParent().GetHeight() - GetHeight()) / 2 + GetMargin().Top);//
-                                }
-                            }
-                            else if (prefered + GetParent().GetPadding().Top + GetParent().GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top > GetParent().GetHeight())//
-                            {
-                                //никогда не должен зайти
-                                SetY(GetParent().GetY() + GetParent().GetPadding().Top + GetMargin().Top);//
-                                prefered = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom - GetMargin().Top - GetMargin().Bottom;//
-                                SetHeight(prefered);
-                            }
                         }
-                        break;
+                    }
+                    break;
 
-                    default:
-                        break;
-                }
-            } 
+                default:
+                    break;
+            }
         }
 
         public virtual void UpdateGeometry()

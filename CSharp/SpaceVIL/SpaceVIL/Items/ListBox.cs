@@ -239,6 +239,7 @@ namespace SpaceVIL
             //Events Connections
             EventScrollUp += VScrollBar.EventScrollUp.Invoke;
             EventScrollDown += VScrollBar.EventScrollDown.Invoke;
+            _area.ItemListChanged += UpdateElements;
 
             VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); };
             HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };

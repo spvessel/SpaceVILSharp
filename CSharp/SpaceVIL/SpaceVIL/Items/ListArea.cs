@@ -9,6 +9,7 @@ namespace SpaceVIL
     public class ListArea : VisualItem, IVLayout, IHLayout
     {
         public EventCommonMethod SelectionChanged;
+        public EventCommonMethod ItemListChanged;
 
         private int _step = 15;
         public void SetStep(int value)
@@ -120,7 +121,7 @@ namespace SpaceVIL
             Unselect();
             base.RemoveItem(item);
             UpdateLayout();
-            (GetParent() as ListBox)?.UpdateElements();
+            ItemListChanged?.Invoke();
         }
         public override void SetY(int _y)
         {

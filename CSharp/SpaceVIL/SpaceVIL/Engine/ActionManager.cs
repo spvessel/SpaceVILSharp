@@ -23,7 +23,6 @@ namespace SpaceVIL
         {
             _handler = wnd;
         }
-
         public void StartManager()
         {
             _stoped = false;
@@ -43,7 +42,7 @@ namespace SpaceVIL
 
         internal void ExecuteActions()
         {
-            if(StackEvents.Count == 0)
+            if (StackEvents.Count == 0)
                 return;
 
             while (StackEvents.Count > 0)
@@ -64,6 +63,9 @@ namespace SpaceVIL
                     break;
                 case InputEventType.MousePressed:
                     InvokeMousePressedEvent(task.Item);
+                    break;
+                case InputEventType.FocusGet:
+                    InvokeFocusGetEvent(task.Item);
                     break;
                 default:
                     break;
@@ -98,7 +100,7 @@ namespace SpaceVIL
         }
         private void InvokeMousePressedEvent(VisualItem sender)
         {
-           
+
             sender.EventMousePressed?.Invoke(sender);
         }
         private void InvokeMouseReleaseEvent(VisualItem sender)
