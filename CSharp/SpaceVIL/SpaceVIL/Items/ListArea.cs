@@ -9,6 +9,7 @@ namespace SpaceVIL
     public class ListArea : VisualItem, IVLayout, IHLayout
     {
         public EventCommonMethod SelectionChanged;
+        public EventCommonMethod ItemListChanged;
 
         private int _step = 15;
         public void SetStep(int value)
@@ -82,7 +83,7 @@ namespace SpaceVIL
             base.AddItem(_substrate);
         }
 
-        public void OnMouseClick(IItem sender)
+        public void OnMouseClick(IItem sender, MouseArgs args)
         {
             if (!_show_selection)
                 return;
@@ -107,7 +108,7 @@ namespace SpaceVIL
         }
         public override void InvokePoolEvents()
         {
-            EventMouseClick?.Invoke(this);
+            //EventMouseClick?.Invoke(this);
         }
         public override void AddItem(BaseItem item)
         {
@@ -120,7 +121,7 @@ namespace SpaceVIL
             Unselect();
             base.RemoveItem(item);
             UpdateLayout();
-            (GetParent() as ListBox)?.UpdateElements();
+            ItemListChanged?.Invoke();
         }
         public override void SetY(int _y)
         {
@@ -217,6 +218,9 @@ namespace SpaceVIL
                 if (_selection == index)
                     SetSubstrate(child);
                 index++;
+
+                //refactor
+                child.SetConfines();
             }
         }
         private void SetSubstrate(BaseItem child)

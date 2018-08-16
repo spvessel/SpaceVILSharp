@@ -43,6 +43,7 @@ namespace SpaceVIL
         internal bool Focusable;
         internal bool Focused = true;
         internal bool Resizeble;
+        internal bool Visible;
         internal bool AlwaysOnTop;
         internal Pointer WPosition = new Pointer();
         ///////////////////////////////////////////////
@@ -96,6 +97,7 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window
             Glfw.WindowHint(Glfw.Hint.Focused, Focusable);
             Glfw.WindowHint(Glfw.Hint.Floating, AlwaysOnTop);
+            Glfw.WindowHint(Glfw.Hint.Visible, !Visible);
             //Glfw.WindowHint(Glfw.Hint.DepthBits, 16);
             //Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, true);
             _window = Glfw.CreateWindow(_w_layout.GetWidth(), _w_layout.GetHeight(), _w_layout.GetWindowTitle());
@@ -227,6 +229,14 @@ namespace SpaceVIL
         internal void SetOpacity(float level)
         {
             Glfw.SetWindowOpacity(_window, level);
+        }
+
+        internal void SetHidden(bool value)
+        {
+            if (value)
+                Glfw.HideWindow(_window);
+            else
+                Glfw.ShowWindow(_window);
         }
     }
 }

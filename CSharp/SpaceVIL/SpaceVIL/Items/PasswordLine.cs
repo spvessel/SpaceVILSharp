@@ -26,7 +26,7 @@ namespace SpaceVIL
             SetForeground(Color.Black);
             SetPadding(5, 0, 5, 0);
             count++;
-            EventMouseClick += EmptyEvent;
+            // EventMouseClick += EmptyEvent;
             EventKeyPress += OnKeyPress;
             EventTextInput += OnTextInput;
         }
@@ -47,18 +47,18 @@ namespace SpaceVIL
             }
             //_text_object.UpdateData(UpdateType.Critical);
         }
-        protected virtual void OnKeyPress(object sender, int scancode, KeyMods mods)
+        protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
-            if (scancode == 14 && !GetText().Equals(String.Empty))
+            if (args.Scancode == 14 && !GetText().Equals(String.Empty))
             {
                 SetText(GetText().Substring(0, GetText().Length - 1));
                 _pwd = _pwd.Substring(0, _pwd.Length - 1);
             }
         }
 
-        protected virtual void OnTextInput(object sender, uint codepoint, KeyMods mods)
+        protected virtual void OnTextInput(object sender, TextInputArgs args)
         {
-            byte[] input = BitConverter.GetBytes(codepoint);
+            byte[] input = BitConverter.GetBytes(args.Character);
             string str = Encoding.UTF32.GetString(input);
             _pwd += str;
             if (_show_pwd_btn.IsToggled)
@@ -115,7 +115,7 @@ namespace SpaceVIL
                 Background = Color.FromArgb(255, 80, 80, 80)
             });
             _show_pwd_btn.Border.Radius = 4;
-            _show_pwd_btn.EventToggle += ShowPassword;
+            _show_pwd_btn.EventToggle += (sender, args) => ShowPassword(sender);
             //text
             _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
@@ -129,7 +129,7 @@ namespace SpaceVIL
 
         public override void InvokePoolEvents()
         {
-            if (EventMouseClick != null) EventMouseClick.Invoke(this);
+            //if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
         //style

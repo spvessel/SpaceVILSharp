@@ -20,6 +20,7 @@ namespace SpaceVIL
         private CoreWindow handler;
         private Guid ParentGUID;
         private Thread thread_engine;
+        private Task refresh_waiter;
         private Thread thread_manager;
         private DrawEngine engine;
         private ActionManager manager;
@@ -44,7 +45,8 @@ namespace SpaceVIL
             SetMinHeight(0);
             SetMaxHeight(4320); //height of screen
             IsBorderHidden = !border;
-            IsHidden = true;
+            IsClosed = true;
+            IsHidden = false;
             IsResizeble = true;
             IsCentered = true;
             IsFocusable = true;
@@ -56,8 +58,18 @@ namespace SpaceVIL
             manager = new ActionManager(this);
             engine = new DrawEngine(this);
 
+            refresh_waiter = new Task(
+                () => LocalRefresh()
+            );
             //events
             // EventClose += Close;
+        }
+        private void LocalRefresh()
+        {
+            Execute.Wait();
+            engine.Update();
+            //UpdateScene();
+            Execute.Reset();
         }
         public void UpdatePosition()
         {
@@ -243,10 +255,10 @@ namespace SpaceVIL
             return _itemPosition.GetY();
         }
 
-        public bool IsDialog = false;
         //methods
         public void Show()
         {
+            engine._handler.Resizeble = IsHidden;
             engine._handler.Resizeble = IsResizeble;
             engine._handler.BorderHidden = IsBorderHidden;
             engine._handler.AppearInCenter = IsCentered;
@@ -262,36 +274,35 @@ namespace SpaceVIL
             thread_manager.Start();
 
             thread_engine = new Thread(() => engine.Init());
-            IsHidden = false;
+            IsClosed = false;
 
             if (IsDialog)
             {
                 WindowLayoutBox.AddToWindowDispatcher(this);
                 ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
                 WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
-                // Console.WriteLine(WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable);
-                // WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
+                //WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
                 thread_engine.Start();
                 thread_engine.Join();
             }
             else
                 thread_engine.Start();
         }
-        public bool IsHidden { get; set; }
         public void Close()
         {
             if (IsDialog)
             {
-                SetWindowFocused();
-                WindowLayoutBox.RemoveWindow(this);
                 engine.Close();
+                SetWindowFocused();
                 lock (engine_locker)
+                {
+                    WindowLayoutBox.RemoveWindow(this);
                     WindowLayoutBox.RemoveFromWindowDispatcher(this);
+                }
                 if (thread_manager != null && thread_manager.IsAlive)
                 {
                     manager.StopManager();
                     manager.Execute.Set();
-                    // thread_manager.Abort();
                 }
             }
             else
@@ -299,19 +310,23 @@ namespace SpaceVIL
                 if (thread_engine != null && thread_engine.IsAlive)
                 {
                     engine.Close();
-                    //thread_engine.Abort();
                 }
                 if (thread_manager != null && thread_manager.IsAlive)
                 {
                     manager.StopManager();
                     manager.Execute.Set();
-                    //thread_manager.Abort();
                 }
-                IsHidden = true;
+                IsClosed = true;
             }
-            //manager.ActionsDone -= () => UpdateScene();
             EventClose?.Invoke();
         }
+        public void Hidden(bool value)
+        {
+            engine._handler.SetHidden(IsHidden);
+        }
+        public bool IsDialog { get; set; }
+        public bool IsClosed { get; set; }
+        public bool IsHidden { get; set; }
         public bool IsResizeble { get; set; }
         public bool IsAlwaysOnTop { get; set; }
         public bool IsBorderHidden { get; set; }
@@ -335,8 +350,9 @@ namespace SpaceVIL
         internal void SetWindowFocused()
         {
             WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = true;
-            WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Focus(WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.GetWindow(), true);
-            WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
+            //WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
+            WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Focus(
+                WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.GetWindow(), true);
         }
         public void Minimize()
         {
@@ -353,11 +369,19 @@ namespace SpaceVIL
         }
         internal void ExecutePollActions()
         {
-            //engine.Update();//нужно обновлять перед выполением задания
-            manager.Execute.Set();
-            Execute.Wait();
-            Execute.Reset();
-            engine.Update();//нужно обновлять после выполения задания
+            engine.Update();//нужно обновлять перед выполением задания
+            if (!manager.Execute.IsSet)
+                manager.Execute.Set();
+
+            //LocalRefresh();
+
+           /* if (refresh_waiter.IsCompleted)
+            {
+                refresh_waiter = new Task(() => LocalRefresh());
+                refresh_waiter.Start();
+            }*/
+
+            //engine.Update();//нужно обновлять после выполения задания
         }
         public void SetFocusedItem(VisualItem item)
         {

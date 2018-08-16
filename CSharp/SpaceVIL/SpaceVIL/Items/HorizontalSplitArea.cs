@@ -81,7 +81,8 @@ namespace SpaceVIL
                     spacerStart = _handlerGrid.GetY() + arr[0];
                     spacerEnd = spacerStart + _handlerGrid.GetSpacing().Horizontal;
                     //Console.WriteLine(spacerStart + " " + _mouse_ptr.Y + " " + spacerEnd);
-                    if (_mouse_ptr.Y >= spacerStart && _mouse_ptr.Y <= spacerEnd) { 
+                    if (_mouse_ptr.Y >= spacerStart && _mouse_ptr.Y <= spacerEnd)
+                    {
                         _isSpacerDragging = true;
                         _dragFrom.Y = _mouse_ptr.Y;
                     }
@@ -95,7 +96,7 @@ namespace SpaceVIL
                     //Console.WriteLine(spacerStart + " " + _mouse_ptr.X + " " + spacerEnd);
 
                     if (_mouse_ptr.X >= spacerStart && _mouse_ptr.X <= spacerEnd)
-                    { 
+                    {
                         _isSpacerDragging = true;
                         _dragFrom.X = _mouse_ptr.X;
                     }
@@ -104,10 +105,11 @@ namespace SpaceVIL
             }
         }
 
-        protected virtual void OnDragging(object sender)
+        protected virtual void OnDragging(object sender, MouseArgs args)
         {
             //Console.WriteLine("Mouse " + _mouse_ptr.X + " " + _mouse_ptr.Y);
-            if (_isSpacerDragging) {
+            if (_isSpacerDragging)
+            {
                 //Int32[] arr;
                 switch (_orientation)
                 {

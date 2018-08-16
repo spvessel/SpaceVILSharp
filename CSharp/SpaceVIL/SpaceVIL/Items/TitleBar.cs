@@ -31,7 +31,7 @@ namespace SpaceVIL
             SetBackground(Color.FromArgb(255, 45, 45, 45));
             SetAlignment(ItemAlignment.Top);
             SetPadding(20, 0, 10, 0);
-            EventMouseClick += EmptyEvent;
+            // EventMouseClick += EmptyEvent;
             count++;
 
             _text_object = new TextLine();
@@ -117,7 +117,7 @@ namespace SpaceVIL
             {
                 Background = Color.FromArgb(255, 186, 95, 97)
             });
-            _close.EventMouseClick += (sender) =>
+            _close.EventMouseClick += (sender, args) =>
             {
                 GetHandler().Close();
             };
@@ -132,7 +132,7 @@ namespace SpaceVIL
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
-            _minimize.EventMouseClick += (sender) =>
+            _minimize.EventMouseClick += (sender, args) =>
             {
                 GetHandler().Minimize();
             };

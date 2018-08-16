@@ -9,6 +9,7 @@ namespace SpaceVIL
     {
         public InputEventType Action = 0;
         public VisualItem Item = null;
+        public InputEventArgs Args = null;
     }
 
     internal class ActionManager
@@ -19,11 +20,11 @@ namespace SpaceVIL
         WindowLayout _handler;
         bool _stoped;
         //int _interval = 1000 / 30;
+
         public ActionManager(WindowLayout wnd)
         {
             _handler = wnd;
         }
-
         public void StartManager()
         {
             _stoped = false;
@@ -43,7 +44,7 @@ namespace SpaceVIL
 
         internal void ExecuteActions()
         {
-            if(StackEvents.Count == 0)
+            if (StackEvents.Count == 0)
                 return;
 
             while (StackEvents.Count > 0)
@@ -60,10 +61,13 @@ namespace SpaceVIL
             switch (task.Action)
             {
                 case InputEventType.MouseRelease:
-                    InvokeMouseClickEvent(task.Item);
+                    InvokeMouseClickEvent(task.Item, task.Args as MouseArgs);
                     break;
                 case InputEventType.MousePressed:
-                    InvokeMousePressedEvent(task.Item);
+                    InvokeMousePressedEvent(task.Item, task.Args as MouseArgs);
+                    break;
+                case InputEventType.FocusGet:
+                    InvokeFocusGetEvent(task.Item);
                     break;
                 default:
                     break;
@@ -88,38 +92,39 @@ namespace SpaceVIL
             sender.EventDestroyed?.Invoke(sender);
         }
         //mouse input
-        private void InvokeMouseClickEvent(VisualItem sender)
+        private void InvokeMouseClickEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventMouseClick?.Invoke(sender);
+            sender.EventMouseClick?.Invoke(sender, args);
+            // Console.WriteLine(sender.GetItemName());
         }
-        private void InvokeMouseHoverEvent(VisualItem sender)
+        private void InvokeMouseHoverEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventMouseHover?.Invoke(sender);
+            sender.EventMouseHover?.Invoke(sender, args);
         }
-        private void InvokeMousePressedEvent(VisualItem sender)
+        private void InvokeMousePressedEvent(VisualItem sender, MouseArgs args)
         {
-           
-            sender.EventMousePressed?.Invoke(sender);
+
+            sender.EventMousePressed?.Invoke(sender, args);
         }
-        private void InvokeMouseReleaseEvent(VisualItem sender)
+        private void InvokeMouseReleaseEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventMouseRelease?.Invoke(sender);
+            sender.EventMouseRelease?.Invoke(sender, args);
         }
-        private void InvokeMouseDragEvent(VisualItem sender)
+        private void InvokeMouseDragEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventMouseDrop.Invoke(sender);
+            sender.EventMouseDrop.Invoke(sender, args);
         }
-        private void InvokeMouseDropEvent(VisualItem sender)
+        private void InvokeMouseDropEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventMouseDrag.Invoke(sender);
+            sender.EventMouseDrag.Invoke(sender, args);
         }
-        private void InvokeMouseScrollUpEvent(VisualItem sender)
+        private void InvokeMouseScrollUpEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventScrollUp.Invoke(sender);
+            sender.EventScrollUp.Invoke(sender, args);
         }
-        private void InvokeMouseScrollDownEvent(VisualItem sender)
+        private void InvokeMouseScrollDownEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventScrollDown.Invoke(sender);
+            sender.EventScrollDown.Invoke(sender, args);
         }
         //keyboard input
         private void InvokeKeyPressEvent(VisualItem sender)

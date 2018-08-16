@@ -28,6 +28,7 @@ namespace SpaceVIL
         private ToolTip _tooltip = new ToolTip();
         private BaseItem _isStencilSet = null;
         public InputDeviceEvent EngineEvent = new InputDeviceEvent();
+        private MouseArgs _margs = new MouseArgs();
 
         private List<VisualItem> HoveredItems;
         private VisualItem HoveredItem = null;
@@ -202,9 +203,9 @@ namespace SpaceVIL
             if (root != null)
             {
                 if (yoffset > 0 || xoffset < 0)
-                    (root as IScrollable).InvokeScrollUp();
+                    (root as IScrollable).InvokeScrollUp(_margs);
                 if (yoffset < 0 || xoffset > 0)
-                    (root as IScrollable).InvokeScrollDown();
+                    (root as IScrollable).InvokeScrollDown(_margs);
                 EngineEvent.SetEvent(InputEventType.MouseScroll);
             }
         }
@@ -234,10 +235,10 @@ namespace SpaceVIL
                     Glfw.SetClipboardString(_handler.GetWindow(), cut_str);
                 }
                 else
-                    FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);
+                    FocusedItem?.InvokeKeyboardInputEvents(key, scancode, action, mods);
             } //Нехорошо это все
             else
-                FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);
+                FocusedItem?.InvokeKeyboardInputEvents(key, scancode, action, mods);
         }
         private void TextInput(Glfw.Window glfwwnd, uint codepoint, KeyMods mods)
         {
@@ -337,7 +338,11 @@ namespace SpaceVIL
         {
             HoveredItems.Clear();
 
-            foreach (var item in ItemsLayoutBox.GetLayoutItems(_handler.GetLayout().Id))
+            List<IItem> layout_box_of_items;
+            lock (_handler.GetLayout().engine_locker)
+                layout_box_of_items = ItemsLayoutBox.GetLayoutItems(_handler.GetLayout().Id);
+
+            foreach (var item in layout_box_of_items)
             {
                 if (item is VisualItem)
                 {
@@ -370,6 +375,8 @@ namespace SpaceVIL
             //logic of hovers
             ptrRelease.X = (int)xpos;
             ptrRelease.Y = (int)ypos;
+
+            _margs.Position.SetPosition((float)xpos, (float)ypos);
 
             if (EngineEvent.LastEvent().HasFlag(InputEventType.MousePressed)) // жость какая-то ХЕРОТАААА!!!
             {
@@ -428,7 +435,7 @@ namespace SpaceVIL
                     if (draggable != null)
                     {
                         draggable._mouse_ptr.SetPosition((float)xpos, (float)ypos);
-                        draggable.EventMouseDrag?.Invoke(HoveredItem);
+                        draggable.EventMouseDrag.Invoke(HoveredItem, _margs);
 
                         //Focus get
                         if (FocusedItem != null)
@@ -437,7 +444,7 @@ namespace SpaceVIL
                         FocusedItem = HoveredItem;
                         FocusedItem.IsFocused = true;
 
-                        Update();
+                        //Update();
                     }
                     else if (anchor != null && !(HoveredItem is ButtonCore))
                     {
@@ -446,7 +453,7 @@ namespace SpaceVIL
                             _handler.WPosition.X += (ptrRelease.X - ptrPress.X);
                             _handler.WPosition.Y += (ptrRelease.Y - ptrPress.Y);
                             SetWindowPos();
-                            Update();
+                            //Update();
                         }
                     }
                 }
@@ -519,6 +526,10 @@ namespace SpaceVIL
                 return;
 
             _tooltip.InitTimer(false);
+            _margs.Button = button;
+            _margs.State = state;
+            _margs.Mods = mods;
+
             if (!GetHoverVisualItem(ptrRelease.X, ptrRelease.Y))
             {
                 EngineEvent.ResetAllEvents();
@@ -526,6 +537,7 @@ namespace SpaceVIL
                 return;
             }
             _handler.GetLayout().GetWindow().GetSides(ptrRelease.X, ptrRelease.Y);
+
             switch (state)
             {
                 case InputState.Release:
@@ -593,7 +605,8 @@ namespace SpaceVIL
                 _handler.GetLayout().SetEventTask(new EventTask()
                 {
                     Item = HoveredItem,
-                    Action = action
+                    Action = action,
+                    Args = _margs
                 });
             }
             else
@@ -605,7 +618,8 @@ namespace SpaceVIL
                     _handler.GetLayout().SetEventTask(new EventTask()
                     {
                         Item = item,
-                        Action = action
+                        Action = action,
+                        Args = _margs
                     });
                 }
             }
@@ -616,7 +630,11 @@ namespace SpaceVIL
             Glfw.PostEmptyEvent();
         }
 
-        //internal int _interval = 1000 / 60;
+        // internal int _interval = 33;//1000 / 30;
+        internal float _interval = 0.2f;//1000 / 60;
+        // internal int _interval = 11;//1000 / 90;
+        // internal int _interval = 08;//1000 / 120;
+
         internal void Update()
         {
             lock (_handler.GetLayout().engine_locker)
@@ -630,10 +648,11 @@ namespace SpaceVIL
 
             _primitive.UseShader();
             Focus(_handler.GetWindow(), true);
+            // Update();
 
             while (!_handler.IsClosing())
             {
-                Glfw.WaitEvents();
+                Glfw.WaitEventsTimeout(_interval);
                 _handler.GetLayout().ExecutePollActions();
             }
 
@@ -654,10 +673,10 @@ namespace SpaceVIL
                 DrawItems(_handler.GetLayout().GetWindow());
                 //draw tooltip if needed
                 DrawToolTip();
-                /*if (!_handler.Focusable)
+                if (!_handler.Focusable)
                 {
                     DrawShadePillow();
-                }*/
+                }
                 _handler.Swap();
             }
             //Thread.Sleep(1000/60);
@@ -714,6 +733,7 @@ namespace SpaceVIL
             // Clear VBO and shader
             glDeleteBuffers(2, buffers);
         }
+
         private void DrawToolTip() //refactor
         {
             if (!_tooltip.IsVisible)
@@ -744,6 +764,7 @@ namespace SpaceVIL
             {
                 _tooltip.SetX(ptrRelease.X - 10);
             }
+
             /*Console.WriteLine(_tooltip.GetText() + " " +
                 _tooltip.GetWidth() + " " +
                 _tooltip.GetHeight() + " " +
@@ -762,7 +783,7 @@ namespace SpaceVIL
                 _isStencilSet = null;
             }
         }
-        
+
         //Common Draw function
         private void DrawItems(BaseItem root)
         {

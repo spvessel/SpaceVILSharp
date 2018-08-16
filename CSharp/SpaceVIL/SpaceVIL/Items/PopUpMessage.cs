@@ -28,7 +28,7 @@ namespace SpaceVIL
             _text_object = new TextLine();
             _text_object.SetItemText(message);
 
-            EventMouseClick += EmptyEvent;
+            // EventMouseClick += EmptyEvent;
 
             SetItemName("PopUpMessage_" + count);
             SetBackground(32, 32, 32, 240);
@@ -96,7 +96,7 @@ namespace SpaceVIL
                 Background = Color.FromArgb(125, 255, 255, 255)
             });
             _btn_close.IsCustom = new CustomFigure(false, GraphicsMathService.GetCross(10, 10, 3, 45));
-            _btn_close.EventMouseClick += (sender) =>
+            _btn_close.EventMouseClick += (sender, args) =>
             {
                 RemoveSelf();
             };

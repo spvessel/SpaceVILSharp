@@ -15,7 +15,7 @@ namespace SpaceVIL
             count++;
 
             //Events
-            EventMouseClick += EmptyEvent;
+            // EventMouseClick += EmptyEvent;
         }
 
         protected internal override bool GetHoverVerification(float xpos, float ypos)

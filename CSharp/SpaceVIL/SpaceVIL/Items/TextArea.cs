@@ -44,7 +44,7 @@ namespace SpaceVIL
             SetPadding(5, 0, 5, 0);
             count++;
 
-            EventMouseClick += EmptyEvent;
+            // EventMouseClick += EmptyEvent;
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;
             EventTextInput += OnTextInput;
@@ -53,15 +53,15 @@ namespace SpaceVIL
                 HomeCode};
         }
 
-        protected virtual void OnKeyRelease(object sender, int scancode, KeyMods mods)
+        protected virtual void OnKeyRelease(object sender, KeyArgs args)
         {
-        }
 
-        protected virtual void OnKeyPress(object sender, int scancode, KeyMods mods)
+        }
+        protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
             //Console.WriteLine(scancode);
 
-            if (scancode == EnterCode)
+            if (args.Scancode == EnterCode)
             {
                 SetText(GetText().Insert(_cursor_Xposition, "\n"));
                 _cursor_Xposition++;
@@ -69,16 +69,16 @@ namespace SpaceVIL
 
         }
 
-        protected virtual void OnTextInput(object sender, uint codepoint, KeyMods mods)
+        protected virtual void OnTextInput(object sender, TextInputArgs args)
         {
-            byte[] input = BitConverter.GetBytes(codepoint);
+            byte[] input = BitConverter.GetBytes(args.Character);
             string str = Encoding.UTF32.GetString(input);
             //if (_isSelect) CutText();
 
             //SetText(GetText().Insert(_cursor_Xposition, str));
             //_cursor_Xposition++;
             //Console.WriteLine("input in TextArea");
-            _editLines.OnTextInput(sender, codepoint, mods);
+            _editLines.OnTextInput(sender, args);
             //ReplaceCursor();
         }
         /*
@@ -158,7 +158,7 @@ namespace SpaceVIL
 
         public override void InvokePoolEvents()
         {
-            if (EventMouseClick != null) EventMouseClick.Invoke(this);
+            //if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
         //style

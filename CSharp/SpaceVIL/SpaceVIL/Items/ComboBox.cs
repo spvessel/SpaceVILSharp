@@ -16,22 +16,23 @@ namespace SpaceVIL
         {
             SetBackground(Color.Transparent);
             SetItemName("ComboBox_" + count);
-            EventMouseClick += EmptyEvent;
-            EventMouseHover += (sender) => IsMouseHover = !IsMouseHover;
+            //EventMouseClick += EmptyEvent;
+            EventMouseHover += (sender, args) => IsMouseHover = !IsMouseHover;
             count++;
 
             EventKeyPress += OnKeyPress;
-            EventMousePressed += (sender) => ShowDropDownList();
+            EventMousePressed += (sender, args) => ShowDropDownList();
         }
 
-        protected virtual void OnKeyPress(object sender, int key, KeyMods mods)
+        protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
-            if (key == 0x1C)
-                EventMouseClick?.Invoke(this);
+            if (args.Scancode == 0x1C)
+                EventMouseClick?.Invoke(this, new MouseArgs());
         }
+
         public override void InvokePoolEvents()
         {
-            if (EventMouseClick != null) EventMouseClick.Invoke(this);
+            // if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
         //text init

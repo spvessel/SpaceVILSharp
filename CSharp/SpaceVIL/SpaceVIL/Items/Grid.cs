@@ -191,8 +191,8 @@ namespace SpaceVIL
                     //6
                     _cells[index].SetWidth(columns_width[c]);
                     _cells[index].SetHeight(rows_height[r]);
-                    _cells[index].SetX(GetX() + x_offset);
-                    _cells[index].SetY(GetY() + y_offset);
+                    _cells[index].SetX(GetX() + GetPadding().Left + x_offset);
+                    _cells[index].SetY(GetY() + GetPadding().Top + y_offset);
 
                     if (item != null)
                     {

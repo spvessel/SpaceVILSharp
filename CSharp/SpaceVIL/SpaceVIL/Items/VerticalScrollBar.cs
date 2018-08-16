@@ -19,8 +19,8 @@ namespace SpaceVIL
         {
             SetItemName("VerticalScrollBar_" + count);
             count++;
-            EventScrollUp += EmptyEvent;
-            EventScrollDown += EmptyEvent;
+            // EventScrollUp += EmptyEvent;
+            // EventScrollDown += EmptyEvent;
 
             SetBackground(Color.FromArgb(255, 50, 50, 50));
             SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
@@ -47,7 +47,7 @@ namespace SpaceVIL
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
-            UpArrow.EventMouseClick += (sender) =>
+            UpArrow.EventMouseClick += (sender, args) =>
             {
                 float value = Slider.GetCurrentValue();
                 value -= Slider.GetStep();
@@ -67,7 +67,7 @@ namespace SpaceVIL
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
-            DownArrow.EventMouseClick += (sender) =>
+            DownArrow.EventMouseClick += (sender, args) =>
             {
                 float value = Slider.GetCurrentValue();
                 value += Slider.GetStep();
@@ -92,15 +92,15 @@ namespace SpaceVIL
             UpArrow.IsVisible = value;
             DownArrow.IsVisible = value;
         }
-        
-        public void InvokeScrollUp()
+
+        public void InvokeScrollUp(MouseArgs args)
         {
-            if (EventScrollUp != null) EventScrollUp.Invoke(this);
+            if (EventScrollUp != null) EventScrollUp.Invoke(this, args);
         }
 
-        public void InvokeScrollDown()
+        public void InvokeScrollDown(MouseArgs args)
         {
-            if (EventScrollDown != null) EventScrollDown.Invoke(this);
+            if (EventScrollDown != null) EventScrollDown.Invoke(this, args);
         }
     }
 }

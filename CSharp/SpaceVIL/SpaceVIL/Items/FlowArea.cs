@@ -13,18 +13,18 @@ namespace SpaceVIL
         {
             SetItemName("FlowArea_" + count);
             count++;
-            EventMouseClick += EmptyEvent;
-            EventMouseDrop += EmptyEvent;
+            // EventMouseClick += EmptyEvent;
+            // EventMouseDrop += EmptyEvent;
             EventMouseDrag += OnDragging;
             _stored_crd = new Dictionary<BaseItem, int[]>();
         }
 
         public override void InvokePoolEvents()
         {
-            if (EventMouseDrag != null) EventMouseDrag.Invoke(this);
+            //if (EventMouseDrag != null) EventMouseDrag.Invoke(this);
         }
 
-        public void OnDragging(object sender)
+        public void OnDragging(object sender, MouseArgs args)
         {
             _xOffset -= _mouse_ptr.PrevX - _mouse_ptr.X;
             _yOffset -= _mouse_ptr.PrevY - _mouse_ptr.Y;
