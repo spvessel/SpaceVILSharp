@@ -34,7 +34,7 @@ namespace SpaceVIL
         public override void InitElements()
         {
             _splitHolder.SetBackground(Color.FromArgb(255, 71, 71, 71));
-            _splitHolder.EventMouseDrag += OnDragging;
+            //_splitHolder.EventMouseDrag += OnDragging;
 
             //Adding
             AddItem(_splitHolder);
