@@ -15,20 +15,20 @@ namespace SpaceVIL
         public ScrollHandler()
         {
             SetItemName("ScrollHandler_" + count);
-            EventMouseClick += EmptyEvent;
+            // EventMouseClick += EmptyEvent;
             EventMouseDrag += OnDragging;
-            EventMouseHover += (sender) => IsMouseHover = !IsMouseHover;
+            EventMouseHover += (sender, args) => IsMouseHover = !IsMouseHover;
             count++;
         }
 
         public override void InvokePoolEvents()
         {
             //if (EventMouseClick != null) EventMouseClick.Invoke(this);
-            if (EventMouseDrag != null) EventMouseDrag.Invoke(this);
-            if (EventMouseDrop != null) EventMouseDrop.Invoke(this);
+            // if (EventMouseDrag != null) EventMouseDrag.Invoke(this);
+            // if (EventMouseDrop != null) EventMouseDrop.Invoke(this);
         }
 
-        public void OnDragging(object sender)
+        public void OnDragging(object sender, MouseArgs args)
         {
             int parent_crd, parent_size, item_size, offset;
 
@@ -68,14 +68,14 @@ namespace SpaceVIL
                 SetY(_offset + GetParent().GetY());
         }
 
-        public void InvokeScrollUp()
+        public void InvokeScrollUp(MouseArgs args)
         {
-            (GetParent() as IScrollable)?.InvokeScrollUp();
+            (GetParent() as IScrollable)?.InvokeScrollUp(args);
         }
 
-        public void InvokeScrollDown()
+        public void InvokeScrollDown(MouseArgs args)
         {
-            (GetParent() as IScrollable)?.InvokeScrollDown();
+            (GetParent() as IScrollable)?.InvokeScrollDown(args);
         }
     }
 }

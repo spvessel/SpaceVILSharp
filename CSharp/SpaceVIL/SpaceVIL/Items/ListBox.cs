@@ -8,7 +8,7 @@ namespace SpaceVIL
     public class ListBox : VisualItem, IScrollable
     {
         static int count = 0;
-        
+
         public int GetSelection()
         {
             return _area.GetSelection();
@@ -77,9 +77,9 @@ namespace SpaceVIL
 
         public ListBox()
         {
-            EventMouseClick += EmptyEvent;
-            EventScrollUp += EmptyEvent;
-            EventScrollDown += EmptyEvent;
+            // EventMouseClick += EmptyEvent;
+            // EventScrollUp += EmptyEvent;
+            // EventScrollDown += EmptyEvent;
             SetItemName("ListBox_" + count);
             count++;
 
@@ -134,7 +134,7 @@ namespace SpaceVIL
             int visible_area = _area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom;
             foreach (var item in _area.GetItems())
             {
-                if(item.Equals(_area.GetSubstrate()))
+                if (item.Equals(_area.GetSubstrate()))
                     continue;
                 total_invisible_size += (item.GetHeight() + _area.GetSpacing().Vertical);
             }
@@ -245,14 +245,14 @@ namespace SpaceVIL
             HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };
         }
 
-        public void InvokeScrollUp()
+        public void InvokeScrollUp(MouseArgs args)
         {
-            if (EventScrollUp != null) EventScrollUp.Invoke(this);
+            if (EventScrollUp != null) EventScrollUp.Invoke(this, args);
         }
 
-        public void InvokeScrollDown()
+        public void InvokeScrollDown(MouseArgs args)
         {
-            if (EventScrollDown != null) EventScrollDown.Invoke(this);
+            if (EventScrollDown != null) EventScrollDown.Invoke(this, args);
         }
 
         public List<BaseItem> GetListContent()

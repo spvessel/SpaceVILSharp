@@ -28,6 +28,7 @@ namespace SpaceVIL
         private ToolTip _tooltip = new ToolTip();
         private BaseItem _isStencilSet = null;
         public InputDeviceEvent EngineEvent = new InputDeviceEvent();
+        private MouseArgs _margs = new MouseArgs();
 
         private List<VisualItem> HoveredItems;
         private VisualItem HoveredItem = null;
@@ -202,9 +203,9 @@ namespace SpaceVIL
             if (root != null)
             {
                 if (yoffset > 0 || xoffset < 0)
-                    (root as IScrollable).InvokeScrollUp();
+                    (root as IScrollable).InvokeScrollUp(_margs);
                 if (yoffset < 0 || xoffset > 0)
-                    (root as IScrollable).InvokeScrollDown();
+                    (root as IScrollable).InvokeScrollDown(_margs);
                 EngineEvent.SetEvent(InputEventType.MouseScroll);
             }
         }
@@ -234,10 +235,10 @@ namespace SpaceVIL
                     Glfw.SetClipboardString(_handler.GetWindow(), cut_str);
                 }
                 else
-                    FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);
+                    FocusedItem?.InvokeKeyboardInputEvents(key, scancode, action, mods);
             } //Нехорошо это все
             else
-                FocusedItem?.InvokeKeyboardInputEvents(scancode, action, mods);
+                FocusedItem?.InvokeKeyboardInputEvents(key, scancode, action, mods);
         }
         private void TextInput(Glfw.Window glfwwnd, uint codepoint, KeyMods mods)
         {
@@ -375,6 +376,8 @@ namespace SpaceVIL
             ptrRelease.X = (int)xpos;
             ptrRelease.Y = (int)ypos;
 
+            _margs.Position.SetPosition((float)xpos, (float)ypos);
+
             if (EngineEvent.LastEvent().HasFlag(InputEventType.MousePressed)) // жость какая-то ХЕРОТАААА!!!
             {
                 if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble)
@@ -432,7 +435,7 @@ namespace SpaceVIL
                     if (draggable != null)
                     {
                         draggable._mouse_ptr.SetPosition((float)xpos, (float)ypos);
-                        draggable.EventMouseDrag.Invoke(HoveredItem);
+                        draggable.EventMouseDrag.Invoke(HoveredItem, _margs);
 
                         //Focus get
                         if (FocusedItem != null)
@@ -523,6 +526,10 @@ namespace SpaceVIL
                 return;
 
             _tooltip.InitTimer(false);
+            _margs.Button = button;
+            _margs.State = state;
+            _margs.Mods = mods;
+
             if (!GetHoverVisualItem(ptrRelease.X, ptrRelease.Y))
             {
                 EngineEvent.ResetAllEvents();
@@ -530,6 +537,7 @@ namespace SpaceVIL
                 return;
             }
             _handler.GetLayout().GetWindow().GetSides(ptrRelease.X, ptrRelease.Y);
+
             switch (state)
             {
                 case InputState.Release:
@@ -597,7 +605,8 @@ namespace SpaceVIL
                 _handler.GetLayout().SetEventTask(new EventTask()
                 {
                     Item = HoveredItem,
-                    Action = action
+                    Action = action,
+                    Args = _margs
                 });
             }
             else
@@ -609,7 +618,8 @@ namespace SpaceVIL
                     _handler.GetLayout().SetEventTask(new EventTask()
                     {
                         Item = item,
-                        Action = action
+                        Action = action,
+                        Args = _margs
                     });
                 }
             }
@@ -638,6 +648,7 @@ namespace SpaceVIL
 
             _primitive.UseShader();
             Focus(_handler.GetWindow(), true);
+            // Update();
 
             while (!_handler.IsClosing())
             {

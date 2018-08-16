@@ -83,7 +83,7 @@ namespace SpaceVIL
             base.AddItem(_substrate);
         }
 
-        public void OnMouseClick(IItem sender)
+        public void OnMouseClick(IItem sender, MouseArgs args)
         {
             if (!_show_selection)
                 return;
@@ -108,7 +108,7 @@ namespace SpaceVIL
         }
         public override void InvokePoolEvents()
         {
-            EventMouseClick?.Invoke(this);
+            //EventMouseClick?.Invoke(this);
         }
         public override void AddItem(BaseItem item)
         {

@@ -8,9 +8,9 @@ namespace SpaceVIL
 {
     public delegate void EventCommonMethod();
     public delegate void EventCommonMethodState(IItem sender);
-    public delegate void EventMouseMethodState(IItem sender);
-    public delegate void EventKeyMethodState(IItem sender, int key, KeyMods mods);
-    public delegate void EventInputTextMethodState(IItem sender, uint character, KeyMods mods);
+    public delegate void EventMouseMethodState(IItem sender, MouseArgs args);
+    public delegate void EventKeyMethodState(IItem sender, KeyArgs args);
+    public delegate void EventInputTextMethodState(IItem sender, TextInputArgs args);
 
     abstract public class VisualItem : BaseItem
     {
@@ -203,13 +203,13 @@ namespace SpaceVIL
             SetItemName(name);
 
             //bind events
-            EventMouseHover += EmptyEvent;
-            EventMousePressed += EmptyEvent;
-            EventFocusGet += EmptyEvent;
-            EventFocusLost += EmptyEvent;
-            EventMouseDrop += EmptyEvent;
-            EventResized += EmptyEvent;
-            EventDestroyed += EmptyEvent;
+            // EventMouseHover += EmptyEvent;
+            // EventMousePressed += EmptyEvent;
+            // EventFocusGet += EmptyEvent;
+            // EventFocusLost += EmptyEvent;
+            // EventMouseDrop += EmptyEvent;
+            // EventResized += EmptyEvent;
+            // EventDestroyed += EmptyEvent;
         }
 
         //overrides
@@ -344,25 +344,35 @@ namespace SpaceVIL
             GetHandler().SetFocusedItem(this);
         }
 
-        internal void InvokeKeyboardInputEvents(int scancode, InputState action, KeyMods mods)
+        internal void InvokeKeyboardInputEvents(KeyCode key, int scancode, InputState action, KeyMods mods)
         {
+            KeyArgs args = new KeyArgs();
+            args.Key = key;
+            args.Scancode = scancode;
+            args.State = action;
+            args.Mods = mods;
+
             if (action == InputState.Press)
             {
-                EventKeyPress?.Invoke(this, scancode, mods);
+                EventKeyPress?.Invoke(this, args);
             }
             if (action == InputState.Repeat)
             {
-                EventKeyPress?.Invoke(this, scancode, mods);
+                EventKeyPress?.Invoke(this, args);
             }
             if (action == InputState.Release)
             {
-                EventKeyRelease?.Invoke(this, scancode, mods);
+                EventKeyRelease?.Invoke(this, args);
             }
         }
 
         internal void InvokeInputTextEvents(uint codepoint, KeyMods mods)
         {
-            EventTextInput?.Invoke(this, codepoint, mods);
+            TextInputArgs args = new TextInputArgs();
+            args.Character = codepoint;
+            args.Mods = mods;
+
+            EventTextInput?.Invoke(this, args);
         }
 
         //common methods

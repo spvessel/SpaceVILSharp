@@ -18,7 +18,7 @@ namespace SpaceVIL
             SetItemName("Label_" + count);
             SetBackground(Color.Transparent);
             count++;
-            EventMouseClick += EmptyEvent;
+            //EventMouseClick += EmptyEvent;
             _text_object = new TextLine();
         }
         public Label(String text = "") : this()
@@ -84,7 +84,7 @@ namespace SpaceVIL
 
         public override void InvokePoolEvents()
         {
-            if (EventMouseClick != null) EventMouseClick.Invoke(this);
+            //if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
         //style

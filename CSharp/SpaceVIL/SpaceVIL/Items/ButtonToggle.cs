@@ -13,8 +13,8 @@ namespace SpaceVIL
             SetItemName("ButtonToggle_" + count);
             IsToggled = false;
             EventKeyPress += OnKeyPress;
-            EventMouseClick += (sender) => EventToggle.Invoke(sender); //remember
-            EventToggle += (sender) => IsToggled = !_toggled;
+            EventMouseClick += (sender, args) => EventToggle.Invoke(sender, args); //remember
+            EventToggle += (sender, args) => IsToggled = !_toggled;
             count++;
 
             states.Add(ItemStateType.Toggled, new ItemState()
@@ -33,10 +33,10 @@ namespace SpaceVIL
             SetText(text);
         }
 
-        protected virtual void OnKeyPress(object sender, int key, KeyMods mods)
+        protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
-            if (key == 0x1C)
-                EventMouseClick?.Invoke(this);
+            if (args.Scancode == 0x1C)
+                EventMouseClick?.Invoke(this, new MouseArgs());
         }
         
         //private for class
@@ -62,7 +62,7 @@ namespace SpaceVIL
 
         public override void InvokePoolEvents()
         {
-            if (EventToggle != null)  EventToggle.Invoke(this);
+            //if (EventToggle != null)  EventToggle.Invoke(this);
         }
 
         //text init

@@ -11,8 +11,8 @@ namespace SpaceVIL
             count++;
             
             //events
-            EventMouseClick += EmptyEvent;
-            EventMouseHover += (sender) => IsMouseHover = !IsMouseHover;
+            // EventMouseClick += EmptyEvent;
+            EventMouseHover += (sender, args) => IsMouseHover = !IsMouseHover;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace SpaceVIL
 {
     interface IScrollable
     {
-        void InvokeScrollUp();
-        void InvokeScrollDown();
+        void InvokeScrollUp(MouseArgs args);
+        void InvokeScrollDown(MouseArgs args);
     }
 }

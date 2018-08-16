@@ -27,17 +27,20 @@ namespace SpaceVIL
 
             EventMouseDrag += OnDragging;
             EventMousePressed += OnMousePressed;
-            
+
         }
 
-        public void SetOrientation(Orientation or) {
-            if (!or.Equals(_orientation)) { 
+        public void SetOrientation(Orientation or)
+        {
+            if (!or.Equals(_orientation))
+            {
                 _orientation = or;
                 InitSplitArea();
             }
         }
 
-        private void InitSplitArea() {
+        private void InitSplitArea()
+        {
             switch (_orientation)
             {
                 case Orientation.Horizontal:
@@ -58,13 +61,15 @@ namespace SpaceVIL
             }
         }
 
-        public Orientation GetOrientation() {
+        public Orientation GetOrientation()
+        {
             return _orientation;
         }
 
         private bool _isSpacerDragging = false;
         private Point _dragFrom = new Point();
-        protected virtual void OnMousePressed(object sender) {
+        protected virtual void OnMousePressed(object sender, MouseArgs args)
+        {
             Int32[] arr;
             int spacerStart = 0, spacerEnd = 0;
             switch (_orientation)
@@ -74,7 +79,8 @@ namespace SpaceVIL
                     spacerStart = _handlerGrid.GetY() + arr[0];
                     spacerEnd = spacerStart + _handlerGrid.GetSpacing().Horizontal;
                     //Console.WriteLine(spacerStart + " " + _mouse_ptr.Y + " " + spacerEnd);
-                    if (_mouse_ptr.Y >= spacerStart && _mouse_ptr.Y <= spacerEnd) { 
+                    if (_mouse_ptr.Y >= spacerStart && _mouse_ptr.Y <= spacerEnd)
+                    {
                         _isSpacerDragging = true;
                         _dragFrom.Y = _mouse_ptr.Y;
                     }
@@ -88,7 +94,7 @@ namespace SpaceVIL
                     //Console.WriteLine(spacerStart + " " + _mouse_ptr.X + " " + spacerEnd);
 
                     if (_mouse_ptr.X >= spacerStart && _mouse_ptr.X <= spacerEnd)
-                    { 
+                    {
                         _isSpacerDragging = true;
                         _dragFrom.X = _mouse_ptr.X;
                     }
@@ -97,10 +103,11 @@ namespace SpaceVIL
             }
         }
 
-        protected virtual void OnDragging(object sender)
+        protected virtual void OnDragging(object sender, MouseArgs args)
         {
             //Console.WriteLine("Mouse " + _mouse_ptr.X + " " + _mouse_ptr.Y);
-            if (_isSpacerDragging) {
+            if (_isSpacerDragging)
+            {
                 //Int32[] arr;
                 switch (_orientation)
                 {
@@ -149,22 +156,22 @@ namespace SpaceVIL
             _button1.SetBackground(Color.FromArgb(255, 255, 151, 153));
             _button1.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             _button1.SetSize(600, 30);
-             
+
             _button2.SetToolTip("Show LayoutTest window.");
             _button2.SetStyle(style);
             _button2.SetItemName("Layout");
             _button2.SetBackground(Color.FromArgb(255, 255, 181, 111));
-            
-            
+
+
             _frame1.SetBackground(Color.FromArgb(255, 71, 71, 71));
             _frame1.SetWidthPolicy(SizePolicy.Expand);
             _frame1.SetHeightPolicy(SizePolicy.Expand);
-            
+
 
             _frame2.SetBackground(Color.FromArgb(255, 71, 71, 71));
             _frame2.SetWidthPolicy(SizePolicy.Expand);
             _frame2.SetHeightPolicy(SizePolicy.Expand);
-            
+
 
             AddItem(_handlerGrid);
             InitSplitArea();

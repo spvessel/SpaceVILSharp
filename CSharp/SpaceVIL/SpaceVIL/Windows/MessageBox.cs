@@ -88,7 +88,7 @@ namespace SpaceVIL
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
-            ok.EventMouseClick += (sender) =>
+            ok.EventMouseClick += (sender, args) =>
             {
                 _result = true;
                 Handler.Close();

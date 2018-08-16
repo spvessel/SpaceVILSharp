@@ -87,9 +87,9 @@ namespace SpaceVIL
             SetHeight(25);
             SetBackground(Color.Transparent);
             SetItemName("HorizontalSlider_" + count);
-            EventValueChanged += EmptyEvent;
+            //EventValueChanged += EmptyEvent;
             EventMouseClick += OnTrackClick;
-            EventMouseHover += (sender) => IsMouseHover = !IsMouseHover;
+            EventMouseHover += (sender, args) => IsMouseHover = !IsMouseHover;
             count++;
 
             //Track
@@ -124,10 +124,10 @@ namespace SpaceVIL
 
         public override void InvokePoolEvents()
         {
-            if (EventMouseClick != null) EventMouseClick.Invoke(this);
+            //if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
-        public void OnDropHandler(object sender)//что-то с тобой не так
+        public void OnDropHandler(object sender, MouseArgs args)//что-то с тобой не так
         {
             //иногда число NAN 
             float result = (float)(Handler.GetX() - GetX()) * (_max_value - _min_value) / ((float)GetWidth() - Handler.GetWidth());
@@ -135,7 +135,7 @@ namespace SpaceVIL
                 SetCurrentValue(result);
         }
 
-        public virtual void OnTrackClick(object sender)
+        public virtual void OnTrackClick(object sender, MouseArgs args)
         {
             //Compute CurrentValue
             if (_mouse_ptr.IsSet())
@@ -153,14 +153,14 @@ namespace SpaceVIL
             UpdateHandler();
         }
 
-        public void InvokeScrollUp()
+        public void InvokeScrollUp(MouseArgs args)
         {
-            (GetParent() as IScrollable)?.InvokeScrollUp();
+            (GetParent() as IScrollable)?.InvokeScrollUp(args);
         }
 
-        public void InvokeScrollDown()
+        public void InvokeScrollDown(MouseArgs args)
         {
-            (GetParent() as IScrollable)?.InvokeScrollDown();
+            (GetParent() as IScrollable)?.InvokeScrollDown(args);
         }
     }
 }

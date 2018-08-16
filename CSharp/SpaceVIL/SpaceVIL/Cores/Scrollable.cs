@@ -11,7 +11,7 @@ namespace SpaceVIL
         public EventMouseMethodState EventScrollUp = null;
         public EventMouseMethodState EventScrollDown = null;
 
-        abstract public void InvokeScrollUp();
-        abstract public void InvokeScrollDown();
+        abstract public void InvokeScrollUp(MouseArgs args);
+        abstract public void InvokeScrollDown(MouseArgs args);
     }
 }

@@ -57,7 +57,7 @@ namespace SpaceVIL
             _selectedArea = new CustomSelector();
             _selectedArea.SetBackground(111, 181, 255);
 
-            EventMouseClick += EmptyEvent;
+            // EventMouseClick += EmptyEvent;
             EventMousePressed += OnMousePressed;
             EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
@@ -80,20 +80,20 @@ namespace SpaceVIL
 
         public override void InvokePoolEvents()
         {
-            if (EventMouseClick != null) EventMouseClick.Invoke(this);
-            if (EventMousePressed != null) EventMousePressed.Invoke(this);
-            if (EventMouseDrag != null) EventMouseDrag.Invoke(this);
-            if (EventMouseDrop != null) EventMouseDrop.Invoke(this);
+            // if (EventMouseClick != null) EventMouseClick.Invoke(this);
+            // if (EventMousePressed != null) EventMousePressed.Invoke(this);
+            // if (EventMouseDrag != null) EventMouseDrag.Invoke(this);
+            // if (EventMouseDrop != null) EventMouseDrop.Invoke(this);
         }
 
-        protected virtual void OnMousePressed(object sender)
+        protected virtual void OnMousePressed(object sender, MouseArgs args)
         {
             ReplaceCursorAccordingCoord(new Point(_mouse_ptr.X, _mouse_ptr.Y));
             if (_isSelect)
                 UnselectText();
         }
 
-        protected virtual void OnDragging(object sender)
+        protected virtual void OnDragging(object sender, MouseArgs args)
         {
             ReplaceCursorAccordingCoord(new Point(_mouse_ptr.X, _mouse_ptr.Y));
             if (!_isSelect)
@@ -145,10 +145,11 @@ namespace SpaceVIL
             return pos;
         }
 
-        protected virtual void OnKeyRelease(object sender, int scancode, KeyMods mods)
+        protected virtual void OnKeyRelease(object sender, KeyArgs args)
         {
+
         }
-        protected virtual void OnKeyPress(object sender, int scancode, KeyMods mods)
+        protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
             //Console.WriteLine(scancode);
 
@@ -161,13 +162,13 @@ namespace SpaceVIL
                 _justSelected = false;
             }
 
-            if (mods != 0)
+            if (args.Mods != 0)
             {
                 //Выделение не сбрасывается, проверяются сочетания
-                switch (mods)
+                switch (args.Mods)
                 {
                     case KeyMods.Shift:
-                        if (ShiftValCodes.Contains(scancode))
+                        if (ShiftValCodes.Contains(args.Scancode))
                         {
                             if (!_isSelect)
                             {
@@ -179,7 +180,7 @@ namespace SpaceVIL
                         break;
 
                     case KeyMods.Control:
-                        if (scancode == ACode)
+                        if (args.Scancode == ACode)
                         {
                             _selectFrom.X = 0;
                             _selectFrom.Y = 0;
@@ -196,14 +197,14 @@ namespace SpaceVIL
             }
             else
             {
-                if (scancode == BackspaceCode || scancode == DeleteCode)
+                if (args.Scancode == BackspaceCode || args.Scancode == DeleteCode)
                 {
                     if (_isSelect)
                         CutText();
                     else
                     {
                         _cursor_position = CheckLineFits(_cursor_position);
-                        if (scancode == BackspaceCode)//backspace
+                        if (args.Scancode == BackspaceCode)//backspace
                         {
                             if (_cursor_position.X > 0)
                             {
@@ -218,7 +219,7 @@ namespace SpaceVIL
                             }
                             ReplaceCursor();
                         }
-                        if (scancode == DeleteCode)//delete
+                        if (args.Scancode == DeleteCode)//delete
                         {
                             if (_cursor_position.X < GetLineLetCount(_cursor_position.Y))
                             {
@@ -240,7 +241,7 @@ namespace SpaceVIL
                 }
             }
 
-            if (scancode == LeftArrowCode)//arrow left
+            if (args.Scancode == LeftArrowCode)//arrow left
             {
                 _cursor_position = CheckLineFits(_cursor_position);
                 if (_cursor_position.X > 0)
@@ -252,7 +253,7 @@ namespace SpaceVIL
                 }
                 ReplaceCursor();
             }
-            if (scancode == RightArrowCode)//arrow right
+            if (args.Scancode == RightArrowCode)//arrow right
             {
                 if (_cursor_position.X < GetLineLetCount(_cursor_position.Y))
                     _cursor_position.X++;
@@ -264,7 +265,7 @@ namespace SpaceVIL
 
                 ReplaceCursor();
             }
-            if (scancode == UpArrowCode)//arrow up
+            if (args.Scancode == UpArrowCode)//arrow up
             {
                 if (_cursor_position.Y > 0)
                     _cursor_position.Y--;
@@ -272,7 +273,7 @@ namespace SpaceVIL
 
                 ReplaceCursor();
             }
-            if (scancode == DownArrowCode)//arrow down
+            if (args.Scancode == DownArrowCode)//arrow down
             {
                 if (_cursor_position.Y < _linesList.Count - 1)
                     _cursor_position.Y++;
@@ -281,18 +282,18 @@ namespace SpaceVIL
                 ReplaceCursor();
             }
 
-            if (scancode == EndCode)//end
+            if (args.Scancode == EndCode)//end
             {
                 _cursor_position.X = GetLineLetCount(_cursor_position.Y);
                 ReplaceCursor();
             }
-            if (scancode == HomeCode)//home
+            if (args.Scancode == HomeCode)//home
             {
                 _cursor_position.X = 0;
                 ReplaceCursor();
             }
 
-            if (scancode == EnterCode)//enter
+            if (args.Scancode == EnterCode)//enter
             {
                 BreakLine();
                 _cursor_position.Y++;
@@ -311,9 +312,9 @@ namespace SpaceVIL
             }
         }
 
-        public virtual void OnTextInput(object sender, uint codepoint, KeyMods mods)
+        public virtual void OnTextInput(object sender, TextInputArgs args)
         {
-            byte[] input = BitConverter.GetBytes(codepoint);
+            byte[] input = BitConverter.GetBytes(args.Character);
             string str = Encoding.UTF32.GetString(input);
             //if (_isSelect) CutText();
             if (_justSelected) CutText();
