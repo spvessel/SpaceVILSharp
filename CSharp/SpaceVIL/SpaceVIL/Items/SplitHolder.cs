@@ -20,7 +20,7 @@ namespace SpaceVIL
             count++;
             //_holderShape = new Rectangle();
             MakeHolderShape();
-            EventMouseClick += EmptyEvent;
+            // EventMouseClick += EmptyEvent;
             //EventMouseDrag += OnDragging;
             //EventMouseDrop += EmptyEvent;
         }
