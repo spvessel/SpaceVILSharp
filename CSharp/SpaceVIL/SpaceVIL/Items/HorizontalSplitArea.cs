@@ -7,63 +7,70 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class SplitArea : VisualItem, IDraggable
-    {
+    class HorizontalSplitArea : VisualItem, IDraggable, IHLayout
+    { 
         private static int count = 0;
-        private Orientation _orientation = Orientation.Vertical;
-        private Frame _frame1;
-        private Frame _frame2;
-        private Grid _handlerGrid;
+        private SimpleCell _leftAnchor = new SimpleCell();
+        private SimpleCell _rightAnchor = new SimpleCell();
+        public SplitHolder _splitHolder = new SplitHolder(Orientation.Horizontal);
 
-        public SplitArea()
+            
+
+        public HorizontalSplitArea()
         {
             SetItemName("SplitArea_" + count);
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             count++;
 
-            _frame1 = new Frame();
-            _frame2 = new Frame();
-            _handlerGrid = new Grid();
-
-            EventMouseDrag += OnDragging;
-            EventMousePressed += OnMousePressed;
-            
+            //EventMouseDrag += OnDragging;
+            //EventMousePressed += OnMousePressed;
         }
 
-        public void SetOrientation(Orientation or) {
-            if (!or.Equals(_orientation)) { 
-                _orientation = or;
-                InitSplitArea();
-            }
+        public void OnDragging(object sender)
+        {
+
         }
 
-        private void InitSplitArea() {
-            switch (_orientation)
-            {
-                case Orientation.Horizontal:
-                    _handlerGrid.SetRowCount(2);
-                    _handlerGrid.SetColumnCount(1);
-                    _handlerGrid.InitCells();
-                    _handlerGrid.InsertItem(_frame1, 0, 0);
-                    _handlerGrid.InsertItem(_frame2, 1, 0);
-                    break;
+        public override void InitElements()
+        {
+            _splitHolder.SetBackground(Color.FromArgb(255, 71, 71, 71));
+            _splitHolder.EventMouseDrag += OnDragging;
 
-                case Orientation.Vertical:
-                    _handlerGrid.SetRowCount(1);
-                    _handlerGrid.SetColumnCount(2);
-                    _handlerGrid.InitCells();
-                    _handlerGrid.InsertItem(_frame1, 0, 0);
-                    _handlerGrid.InsertItem(_frame2, 0, 1);
-                    break;
-            }
+            //Adding
+            AddItem(_splitHolder);
+            UpdateLayout();
         }
 
-        public Orientation GetOrientation() {
-            return _orientation;
+        public void SetLeftAnchor(BaseItem item) {
+            AddItem(item);
+            _leftAnchor.SetItem(item);
+            //_leftAnchor.SetWidth(item.GetWidth());
+            //_leftAnchor.SetHeight(item.GetHeight());
+            UpdateLayout();
+        }
+
+        public void SetRightAnchor(BaseItem item) {
+            AddItem(item);
+            _rightAnchor.SetItem(item);
+            //_rightAnchor.SetWidth(item.GetWidth());
+            //_rightAnchor.SetHeight(item.GetHeight());
+            UpdateLayout();
+        }
+
+        public override void SetWidth(int width)
+        {
+            base.SetWidth(width);
+            UpdateLayout();
+        }
+        public override void SetX(int _x)
+        {
+            base.SetX(_x);
+            UpdateLayout();
         }
 
         private bool _isSpacerDragging = false;
         private Point _dragFrom = new Point();
+        /*
         protected virtual void OnMousePressed(object sender) {
             Int32[] arr;
             int spacerStart = 0, spacerEnd = 0;
@@ -120,12 +127,11 @@ namespace SpaceVIL
                 }
             }
         }
-
+        */
+        /*
         public override void InitElements()
         {
-            _handlerGrid.SetSpacing(6, 6);
-            _handlerGrid.SetMargin(10, 10, 10, 10);
-
+            
             Style style = new Style();
             style.Background = Color.FromArgb(255, 13, 176, 255);
             style.Foreground = Color.Black;
@@ -143,38 +149,94 @@ namespace SpaceVIL
 
             ButtonCore _button1 = new ButtonCore("btn1");
             ButtonCore _button2 = new ButtonCore("btn2");
+            
             _button1.SetToolTip("Show LayoutTest window.");
             _button1.SetStyle(style);
             _button1.SetItemName("Layout");
-            _button1.SetBackground(Color.FromArgb(255, 255, 151, 153));
-            _button1.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            _button1.SetSize(600, 30);
-             
+            _button1.SetBackground(Color.FromArgb(255, 255, 181, 111));
+
             _button2.SetToolTip("Show LayoutTest window.");
             _button2.SetStyle(style);
             _button2.SetItemName("Layout");
             _button2.SetBackground(Color.FromArgb(255, 255, 181, 111));
-            
-            
-            _frame1.SetBackground(Color.FromArgb(255, 71, 71, 71));
-            _frame1.SetWidthPolicy(SizePolicy.Expand);
-            _frame1.SetHeightPolicy(SizePolicy.Expand);
-            
 
-            _frame2.SetBackground(Color.FromArgb(255, 71, 71, 71));
-            _frame2.SetWidthPolicy(SizePolicy.Expand);
-            _frame2.SetHeightPolicy(SizePolicy.Expand);
             
+            _leftAnchor.SetBackground(Color.FromArgb(255, 71, 71, 71));
+            _leftAnchor.SetWidthPolicy(SizePolicy.Expand);
+            _leftAnchor.SetHeightPolicy(SizePolicy.Expand);
 
-            AddItem(_handlerGrid);
-            InitSplitArea();
-            _frame1.AddItem(_button1);
-            _frame2.AddItem(_button2);
+
+            _rightAnchor.SetBackground(Color.FromArgb(255, 71, 71, 71));
+            _rightAnchor.SetWidthPolicy(SizePolicy.Expand);
+            _rightAnchor.SetHeightPolicy(SizePolicy.Expand);
+            
+            _splitHolder.SetBackground(Color.FromArgb(255, 71, 71, 71));
+
+            //AddItems(_leftAnchor, _splitHolder, _rightAnchor);
+
+            //InitSplitArea();
+
+            SetLeftAnchor(_button1);
+            SetRightAnchor(_button2);
             //_handlerGrid.AddItems(_frame1, _frame2);
             //_handlerGrid.InsertItem(_frame1, 0, 0);
             //_handlerGrid.InsertItem(_frame2, 0, 1);
+            UpdateLayout();
+        }
+        */
+
+        public void UpdateLayout()
+        {
+            //_frame1.SetWidthPolicy(SizePolicy.Fixed);
+            //_frame2.SetWidthPolicy(SizePolicy.Fixed);
+            int total_space = GetWidth() - _splitHolder.GetSpacerSize();
+            Console.Write(total_space + " ");
+
+            _leftAnchor.SetHeight(GetHeight());
+            _rightAnchor.SetHeight(GetHeight());
+
+            BaseItem item;
+
+            int startX = GetX();
+            _leftAnchor.SetX(startX);
+            _leftAnchor.SetWidth(total_space / 2);
+
+            item = _leftAnchor.GetItem();
+
+            if (item != null)
+            {
+                item.SetX(startX);
+            item.SetWidth(_leftAnchor.GetWidth());
+
+            }
+
+
+            startX += total_space / 2;
+            total_space -= total_space / 2;
+            Console.Write(total_space + " \n");
+            _rightAnchor.SetWidth(total_space);
+
+            _splitHolder.SetX(startX);
+
+            startX += _splitHolder.GetSpacerSize();
+            _rightAnchor.SetX(startX);
+
+            item = _rightAnchor.GetItem();
+            if (item != null)
+            {
+                item.SetX(startX);
+            item.SetWidth(_rightAnchor.GetWidth());
+
+            }
 
         }
 
+        public void SetSpacerWidth(int spWidth)
+        {
+            _splitHolder.SetSpacerSize(spWidth);
+        }
+
+
+        
     }
 }

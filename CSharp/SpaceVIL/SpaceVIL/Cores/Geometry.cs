@@ -11,7 +11,7 @@ namespace SpaceVIL
         //width
         private int _minWidth = 0;
         private int _width = 0;
-        private int _maxWidth = 7680;
+        private int _maxWidth = Int32.MaxValue;
         public void SetWidth(int width)
         {
             if (width < 0)
@@ -73,7 +73,7 @@ namespace SpaceVIL
         //height
         private int _minHeight = 0;
         private int _height = 0;
-        private int _maxHeight = 4320;
+        private int _maxHeight = Int32.MaxValue;
         public void SetHeight(int height)
         {
             if (height < 0)

@@ -428,7 +428,7 @@ namespace SpaceVIL
                     if (draggable != null)
                     {
                         draggable._mouse_ptr.SetPosition((float)xpos, (float)ypos);
-                        draggable.EventMouseDrag.Invoke(HoveredItem);
+                        draggable.EventMouseDrag?.Invoke(HoveredItem);
 
                         //Focus get
                         if (FocusedItem != null)
