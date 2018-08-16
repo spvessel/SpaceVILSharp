@@ -26,7 +26,7 @@ namespace SpaceVIL
             //EventMousePressed += OnMousePressed;
         }
 
-        public void OnDragging(object sender)
+        public void OnDragging(object sender, MouseArgs args)
         {
 
         }
