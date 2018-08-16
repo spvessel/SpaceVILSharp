@@ -23,8 +23,13 @@ namespace SpaceVIL
             SetHeight(20);
             count++;
 
-            //text
             _text = new Label();
+            _rect = new Rectangle();
+        }
+
+        public override void InitElements()
+        {
+            //text
             _text.SetItemName(GetItemName() + "_text");
             _text.SetBackground(255, 255, 255, 20);
             _text.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
@@ -35,16 +40,11 @@ namespace SpaceVIL
             _text.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
 
             //rectangle
-            _rect = new Rectangle();
             _rect.SetBackground(Color.FromArgb(255, 0, 191, 255)); //Перегрузить метод
             _rect.SetAlignment(ItemAlignment.Left);
             _rect.SetHeightPolicy(SizePolicy.Expand);
             _rect.SetWidthPolicy(SizePolicy.Fixed);
             _rect.SetWidth(0);
-        }
-
-        public override void InitElements()
-        {
             AddItems(_rect, _text);
         }
 
@@ -52,7 +52,8 @@ namespace SpaceVIL
 
         public void SetMinValue(int minValue) { _minValue = minValue; }
 
-        public void SetCurrentValue(int currentValue) {
+        public void SetCurrentValue(int currentValue)
+        {
             _currentValue = currentValue;
             UpdateProgressBar();
         }

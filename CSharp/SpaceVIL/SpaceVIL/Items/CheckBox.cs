@@ -47,21 +47,15 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
+            //events
+            EventMouseClick += _indicator.GetIndicatorMarker().EventToggle;
+            _text.EventMouseHover += (sender, args) => _indicator.GetIndicatorMarker().IsMouseHover = _text.IsMouseHover;
+            
             //adding
             AddItem(_indicator);
             AddItem(_text);
-
-            //connect events
-            // _indicator.GetIndicatorMarker().EventToggle += EventMouseClick.Invoke;
-            //EventMouseClick += _indicator.GetIndicatorMarker().EventToggle;
-            _text.EventMouseClick += _indicator.GetIndicatorMarker().EventToggle;
         }
 
-        protected internal override bool GetHoverVerification(float xpos, float ypos)
-        {
-            bool hover = base.GetHoverVerification(xpos, ypos);
-            return hover;
-        }
         public override bool IsVisible
         {
             get => base.IsVisible;
@@ -71,10 +65,6 @@ namespace SpaceVIL
                 foreach (var child in GetItems())
                     child.IsVisible = value;
             }
-        }
-        public override void InvokePoolEvents()
-        {
-            //if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
         //Layout rules

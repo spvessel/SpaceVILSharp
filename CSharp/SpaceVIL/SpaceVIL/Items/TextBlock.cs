@@ -57,7 +57,6 @@ namespace SpaceVIL
             _selectedArea = new CustomSelector();
             _selectedArea.SetBackground(111, 181, 255);
 
-            // EventMouseClick += EmptyEvent;
             EventMousePressed += OnMousePressed;
             EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
@@ -76,14 +75,6 @@ namespace SpaceVIL
                 _lineSpacer = _minLineSpacer;
 
             _cursor.SetHeight(_lineHeight + _lineSpacer + 6);
-        }
-
-        public override void InvokePoolEvents()
-        {
-            // if (EventMouseClick != null) EventMouseClick.Invoke(this);
-            // if (EventMousePressed != null) EventMousePressed.Invoke(this);
-            // if (EventMouseDrag != null) EventMouseDrag.Invoke(this);
-            // if (EventMouseDrop != null) EventMouseDrop.Invoke(this);
         }
 
         protected virtual void OnMousePressed(object sender, MouseArgs args)

@@ -352,6 +352,7 @@ namespace SpaceVIL
                     if ((item as VisualItem).GetHoverVerification(xpos, ypos))
                     {
                         HoveredItems.Add(item as VisualItem);
+                        (item as VisualItem).EventMouseHover?.Invoke(item, _margs);
                     }
                 }
             }
@@ -435,7 +436,7 @@ namespace SpaceVIL
                     if (draggable != null)
                     {
                         draggable._mouse_ptr.SetPosition((float)xpos, (float)ypos);
-                        draggable.EventMouseDrag.Invoke(HoveredItem, _margs);
+                        draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
 
                         //Focus get
                         if (FocusedItem != null)

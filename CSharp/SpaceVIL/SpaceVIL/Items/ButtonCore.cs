@@ -11,8 +11,6 @@ namespace SpaceVIL
         public ButtonCore()
         {
             SetItemName("ButtonCore_" + count);
-            // EventMouseClick += EmptyEvent;
-            EventMouseHover += (sender, args) => IsMouseHover = !IsMouseHover;
             count++;
 
             _text_object = new TextLine();

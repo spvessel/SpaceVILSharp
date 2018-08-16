@@ -4,23 +4,24 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class ContextMenu : VisualItem //not finished
+    public class MenuItem : VisualItem //not finished
     {
         static int count = 0;
         private TextLine _text_object;
+        public ContextMenu _dropdownmenu;
+        public bool IsActionItem = false;
 
-        public ContextMenu()
+        public MenuItem()
         {
-            SetItemName("ContextMenu_" + count);
-            //EventMouseClick += EmptyEvent;
-            EventMouseHover += (sender, args) => IsMouseHover = !IsMouseHover;
+            SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            SetBackground(Color.Transparent);
+            SetItemName("MenuItem_" + count);
             count++;
-
             EventKeyPress += OnKeyPress;
 
             _text_object = new TextLine();
         }
-        public ContextMenu(String text = "") : this()
+        public MenuItem(String text = "") : this()
         {
             SetText(text);
         }
@@ -29,10 +30,6 @@ namespace SpaceVIL
         {
             if (args.Scancode == 0x1C)
                 EventMouseClick?.Invoke(this, new MouseArgs());
-        }
-        public override void InvokePoolEvents()
-        {
-            //if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
         //text init
@@ -72,10 +69,11 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //text
-            _text_object.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            SetForeground(Color.Black);
+            _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
             //aligment
-            SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
             //adding
             AddItem(_text_object);

@@ -97,7 +97,7 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window
             Glfw.WindowHint(Glfw.Hint.Focused, Focusable);
             Glfw.WindowHint(Glfw.Hint.Floating, AlwaysOnTop);
-            Glfw.WindowHint(Glfw.Hint.Visible, !Visible);
+            Glfw.WindowHint(Glfw.Hint.Visible, Visible);
             //Glfw.WindowHint(Glfw.Hint.DepthBits, 16);
             //Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, true);
             _window = Glfw.CreateWindow(_w_layout.GetWidth(), _w_layout.GetHeight(), _w_layout.GetWindowTitle());

@@ -258,7 +258,7 @@ namespace SpaceVIL
         //methods
         public void Show()
         {
-            engine._handler.Resizeble = IsHidden;
+            engine._handler.Visible = !IsHidden;
             engine._handler.Resizeble = IsResizeble;
             engine._handler.BorderHidden = IsBorderHidden;
             engine._handler.AppearInCenter = IsCentered;

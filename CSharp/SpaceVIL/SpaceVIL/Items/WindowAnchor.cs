@@ -9,10 +9,6 @@ namespace SpaceVIL
         {
             SetItemName("WindowAnchor_" + count);
             count++;
-            
-            //events
-            // EventMouseClick += EmptyEvent;
-            EventMouseHover += (sender, args) => IsMouseHover = !IsMouseHover;
         }
     }
 }

@@ -7,20 +7,21 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class ComboBoxDropDown : DropDown
+    public class ContextMenu : DropDown
     {
         public ListBox ItemList = new ListBox();
-        public ButtonCore Selection;
-        
-        public ComboBoxDropDown() { }
+
+        public ContextMenu() { }
+
         public override void InitWindow()
         {
             base.InitWindow();
+
             Handler.SetPadding(2, 2, 2, 2);
             Handler.SetBackground(255, 255, 255);
-            Handler.SetWindowName("ComboBoxDropDown_" + GetCount());
-            Handler.IsOutsideClickClosable = true;
+            Handler.SetWindowName("ContexMenu_" + GetCount());
 
+            ItemList.SetSelectionVisibility(false);
             ItemList.GetArea().SetSpacing(0, 0);
             ItemList.GetArea().SetPadding(0);
             ItemList.SetBackground(Color.Transparent);
@@ -31,7 +32,6 @@ namespace SpaceVIL
 
             Handler.AddItem(ItemList);
         }
-
         public void Add(BaseItem item)
         {
             ItemList.AddItem(item);
@@ -41,19 +41,26 @@ namespace SpaceVIL
             ItemList.RemoveItem(item);
         }
 
-        private void OnSelectionChanged()
+        protected virtual void OnSelectionChanged()
         {
-            MenuItem l = ItemList.GetListContent().ElementAt(ItemList.GetSelection()) as MenuItem;
-            if (l != null)
-            {
-                Selection.SetText(l.GetText());
-                Handler.ResetItems();
-                Close();
-            }
+            Handler.ResetItems();
+            Close();
         }
         public void SetCurrentIndex(int index)
         {
             ItemList.SetSelection(index);
+        }
+        public int GetCurrentIndex()
+        {
+            return ItemList.GetSelection();
+        }
+        public int GetListCount()
+        {
+            return ItemList.GetListContent().Count;
+        }
+        public List<BaseItem> GetListContent()
+        {
+            return ItemList.GetListContent();
         }
     }
 }

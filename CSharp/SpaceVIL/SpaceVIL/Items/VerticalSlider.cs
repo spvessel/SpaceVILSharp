@@ -89,7 +89,6 @@ namespace SpaceVIL
             SetItemName("VerticalSlider_" + count);
             EventValueChanged += EmptyEvent;
             EventMouseClick += OnTrackClick;
-            EventMouseHover += (sender, args) => IsMouseHover = !IsMouseHover;
             count++;
 
             //Track
@@ -120,11 +119,6 @@ namespace SpaceVIL
             //Event connections
             EventMouseDrop += OnDropHandler;
             Handler.EventMouseDrag += EventMouseDrop.Invoke;
-        }
-
-        public override void InvokePoolEvents()
-        {
-            //if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
         public void OnDropHandler(object sender, MouseArgs args)//что-то с тобой не так

@@ -11,46 +11,32 @@ namespace SpaceVIL
         static int count = 0;
         public Orientation Orientation;
         private int _offset = 0;
+        private int _diff = 0;
 
         public ScrollHandler()
         {
             SetItemName("ScrollHandler_" + count);
-            // EventMouseClick += EmptyEvent;
+            EventMousePressed += OnMousePress;
             EventMouseDrag += OnDragging;
-            EventMouseHover += (sender, args) => IsMouseHover = !IsMouseHover;
             count++;
         }
 
-        public override void InvokePoolEvents()
+        protected virtual void OnMousePress(object sender, MouseArgs args)
         {
-            //if (EventMouseClick != null) EventMouseClick.Invoke(this);
-            // if (EventMouseDrag != null) EventMouseDrag.Invoke(this);
-            // if (EventMouseDrop != null) EventMouseDrop.Invoke(this);
+            if (Orientation == Orientation.Horizontal)
+                _diff = args.Position.X - GetX();
+            else
+                _diff = args.Position.Y - GetY();
         }
 
-        public void OnDragging(object sender, MouseArgs args)
+        protected virtual void OnDragging(object sender, MouseArgs args)
         {
-            int parent_crd, parent_size, item_size, offset;
+            int offset;
 
             if (Orientation == Orientation.Horizontal)
-            {
-                offset = _mouse_ptr.X - _mouse_ptr.PrevX + _offset;
-                parent_crd = GetParent().GetX();
-                parent_size = GetParent().GetWidth();
-                item_size = GetWidth();
-            }
+                offset = args.Position.X - GetParent().GetX() - _diff;
             else
-            {
-                offset = _mouse_ptr.Y - _mouse_ptr.PrevY + _offset;
-                parent_crd = GetParent().GetY();
-                parent_size = GetParent().GetHeight();
-                item_size = GetHeight();
-            }
-            if (offset + parent_crd < parent_crd)
-                offset = 0;
-
-            if (offset + parent_crd > parent_crd + parent_size - item_size)
-                offset = parent_size - item_size;
+                offset = args.Position.Y - GetParent().GetY() - _diff;
 
             SetOffset(offset);
         }

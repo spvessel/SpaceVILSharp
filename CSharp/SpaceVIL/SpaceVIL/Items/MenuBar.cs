@@ -12,8 +12,6 @@ namespace SpaceVIL
         public MenuBar()
         {
             SetItemName("MenuBar_" + count);
-            // EventMouseClick += EmptyEvent;
-            EventMouseHover += (sender, args) => IsMouseHover = !IsMouseHover;
             count++;
 
             EventKeyPress += OnKeyPress;
