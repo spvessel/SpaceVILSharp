@@ -435,7 +435,7 @@ namespace SpaceVIL
                     if (draggable != null)
                     {
                         draggable._mouse_ptr.SetPosition((float)xpos, (float)ypos);
-                        draggable.EventMouseDrag.Invoke(HoveredItem, _margs);
+                        draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
 
                         //Focus get
                         if (FocusedItem != null)
@@ -483,6 +483,10 @@ namespace SpaceVIL
                         {
                             if (HoveredItem is ITextEditable)
                                 _handler.SetCursorType(Glfw.CursorType.Beam);
+                            if (HoveredItem is SplitHolder)
+                            {
+                                _handler.SetCursorType(Glfw.CursorType.ResizeX);
+                            }
                         }
                         else //refactor!!
                         {
@@ -509,6 +513,10 @@ namespace SpaceVIL
                         if (HoveredItem is ITextEditable)
                         {
                             _handler.SetCursorType(Glfw.CursorType.Beam);
+                        }
+                        if (HoveredItem is SplitHolder)
+                        {
+                            _handler.SetCursorType(Glfw.CursorType.ResizeX);
                         }
                     }
                     VisualItem popup = IsInListHoveredItems<PopUpMessage>();

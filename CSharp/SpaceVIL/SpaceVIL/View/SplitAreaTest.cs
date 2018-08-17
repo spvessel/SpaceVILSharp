@@ -13,7 +13,7 @@ namespace View
         override public void InitWindow() {
             Handler = new WindowLayout(this, name: nameof(SplitAreaTest));
             Handler.SetWidth(500);
-            Handler.SetMinWidth(500);
+            Handler.SetMinWidth(50);
             Handler.SetHeight(500);
             Handler.SetMinHeight(500);
             Handler.SetWindowTitle(nameof(SplitAreaTest));
@@ -51,14 +51,16 @@ namespace View
             _button1.SetStyle(style);
             _button1.SetItemName("Layout");
             _button1.SetBackground(Color.FromArgb(255, 255, 181, 111));
+            _button1.SetMinWidth(30);
 
             _button2.SetToolTip("Show LayoutTest window.");
             _button2.SetStyle(style);
             _button2.SetItemName("Layout");
             _button2.SetBackground(Color.FromArgb(255, 255, 181, 111));
+            _button2.SetMinWidth(50);
 
-            splitArea.SetLeftAnchor(_button2);
-            splitArea.SetRightAnchor(_button1);
+            splitArea.AssignLeftItem(_button2);
+            splitArea.AssignRightItem(_button1);
         }
     }
 }

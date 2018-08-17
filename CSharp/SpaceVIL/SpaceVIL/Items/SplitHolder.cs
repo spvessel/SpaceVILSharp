@@ -23,6 +23,8 @@ namespace SpaceVIL
             // EventMouseClick += EmptyEvent;
             //EventMouseDrag += OnDragging;
             //EventMouseDrop += EmptyEvent;
+
+
         }
 
         public void SetSpacerSize(int spSize)
@@ -45,11 +47,13 @@ namespace SpaceVIL
 
                     SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
                     SetHeight(_spacerSize);
+                    SetMinHeight(_spacerSize);
                     break;
 
                 case Orientation.Horizontal:
                     SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
                     SetWidth(_spacerSize);
+                    SetMinWidth(_spacerSize);
                     break;
             }
         }
