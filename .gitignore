@@ -103,3 +103,5 @@ CSharp/SpaceVIL/SpaceVIL/View/FlowTest.cs
 *.exp
 *.lib
 CSharp/SpaceVIL/SpaceVIL/View/ComplexTest.cs
+*.png
+*.jpg
