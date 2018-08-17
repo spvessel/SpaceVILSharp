@@ -85,9 +85,6 @@ namespace SpaceVIL
 
         public void OnMouseClick(IItem sender, MouseArgs args)
         {
-            if (!_show_selection)
-                return;
-
             for (int i = FirstVisibleItem; i <= LastVisibleItem; i++)//?????? fuck!!!
             {
                 if (i == GetItems().Count)

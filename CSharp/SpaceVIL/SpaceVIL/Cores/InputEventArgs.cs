@@ -49,4 +49,34 @@ namespace SpaceVIL
             Mods = 0;
         }
     }
+
+    public static class PrintArgs
+    {
+        public static void MouseArgs(MouseArgs args)
+        {
+            Console.WriteLine(
+                args.Button + " " +
+                args.State + " " +
+                args.Mods + " " +
+                args.Position.X + " " +
+                args.Position.Y + " "
+            );
+        }
+        public static void KeyArgs(KeyArgs args)
+        {
+            Console.WriteLine(
+                args.Key + " " +
+                args.Scancode + " " +
+                args.State + " " +
+                args.Mods + " "
+            );
+        }
+        public static void TextInputArgs(TextInputArgs args)
+        {
+            Console.WriteLine(
+                args.Character + " " +
+                args.Mods + " "
+            );
+        }
+    }
 }

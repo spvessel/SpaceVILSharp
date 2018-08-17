@@ -77,9 +77,6 @@ namespace SpaceVIL
 
         public ListBox()
         {
-            // EventMouseClick += EmptyEvent;
-            // EventScrollUp += EmptyEvent;
-            // EventScrollDown += EmptyEvent;
             SetItemName("ListBox_" + count);
             count++;
 
@@ -98,7 +95,7 @@ namespace SpaceVIL
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
 
             //Area
-            //_area.SetItemName(GetItemName() + "_" + _area.GetItemName());
+            _area.SetItemName(GetItemName() + "_" + _area.GetItemName());
             _area.SetBackground(Color.Transparent);
             _area.SetAlignment(ItemAlignment.Top | ItemAlignment.Left);
             _area.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);

@@ -352,6 +352,7 @@ namespace SpaceVIL
                     if ((item as VisualItem).GetHoverVerification(xpos, ypos))
                     {
                         HoveredItems.Add(item as VisualItem);
+                        (item as VisualItem).EventMouseHover?.Invoke(item, _margs);
                     }
                 }
             }

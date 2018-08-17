@@ -60,11 +60,6 @@ namespace SpaceVIL
 
         public EventMouseMethodState EventToggle;
 
-        public override void InvokePoolEvents()
-        {
-            //if (EventToggle != null)  EventToggle.Invoke(this);
-        }
-
         //text init
         public void SetTextAlignment(ItemAlignment alignment)
         {

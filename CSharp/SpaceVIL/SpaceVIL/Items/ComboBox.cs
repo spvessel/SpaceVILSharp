@@ -16,8 +16,6 @@ namespace SpaceVIL
         {
             SetBackground(Color.Transparent);
             SetItemName("ComboBox_" + count);
-            //EventMouseClick += EmptyEvent;
-            EventMouseHover += (sender, args) => IsMouseHover = !IsMouseHover;
             count++;
 
             EventKeyPress += OnKeyPress;
@@ -28,11 +26,6 @@ namespace SpaceVIL
         {
             if (args.Scancode == 0x1C)
                 EventMouseClick?.Invoke(this, new MouseArgs());
-        }
-
-        public override void InvokePoolEvents()
-        {
-            // if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
         //text init
@@ -110,6 +103,7 @@ namespace SpaceVIL
 
             //adding
             AddItems(_selected, _dropdown);
+
             _dropdown.AddItem(_arrow);
             _selected.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
@@ -127,11 +121,11 @@ namespace SpaceVIL
             _dropdownarea.Show();
         }
 
-        public void AddToLIst(BaseItem item)
+        public void AddToList(BaseItem item)
         {
             _dropdownarea.Add(item);
         }
-        public void RemoveFromLIst(BaseItem item)
+        public void RemoveFromLst(BaseItem item)
         {
             _dropdownarea.Remove(item);
         }

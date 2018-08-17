@@ -26,7 +26,6 @@ namespace SpaceVIL
             SetForeground(Color.Black);
             SetPadding(5, 0, 5, 0);
             count++;
-            // EventMouseClick += EmptyEvent;
             EventKeyPress += OnKeyPress;
             EventTextInput += OnTextInput;
         }

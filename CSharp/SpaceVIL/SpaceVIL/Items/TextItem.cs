@@ -20,7 +20,7 @@ namespace SpaceVIL
         public TextItem()
         {
             SetItemName("TextItem_" + count);
-            SetBackground(Color.Black);
+            SetBackground(Color.Transparent);
             SetWidthPolicy(SizePolicy.Expand);
             SetHeightPolicy(SizePolicy.Expand);
             count++;
@@ -161,7 +161,7 @@ namespace SpaceVIL
             return outCoord;
         }
 
-        private Color _foreground = Color.White; //default
+        private Color _foreground = Color.Black; //default
         public Color GetForeground()
         {
             return _foreground;

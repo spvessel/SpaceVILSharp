@@ -31,7 +31,6 @@ namespace SpaceVIL
             SetBackground(Color.FromArgb(255, 45, 45, 45));
             SetAlignment(ItemAlignment.Top);
             SetPadding(20, 0, 10, 0);
-            // EventMouseClick += EmptyEvent;
             count++;
 
             _text_object = new TextLine();

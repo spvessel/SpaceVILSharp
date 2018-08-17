@@ -57,8 +57,9 @@ namespace SpaceVIL
             _text.Border.Radius = _indicator.Border.Radius;
 
             //connect events
+            EventMouseClick += _indicator.GetIndicatorMarker().EventToggle;
+            _text.EventMouseHover += (sender, args) => _indicator.GetIndicatorMarker().IsMouseHover = _text.IsMouseHover;
             _indicator.GetIndicatorMarker().EventToggle += (sender, args) => UncheckOthers(sender);
-            _text.EventMouseClick += _indicator.GetIndicatorMarker().EventToggle;
         }
 
         private void UncheckOthers(object sender)

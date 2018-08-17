@@ -13,9 +13,6 @@ namespace SpaceVIL
         {
             SetItemName("WContainer_" + count);
             count++;
-
-            //Events
-            // EventMouseClick += EmptyEvent;
         }
 
         protected internal override bool GetHoverVerification(float xpos, float ypos)

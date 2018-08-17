@@ -18,7 +18,6 @@ namespace SpaceVIL
             SetItemName("Label_" + count);
             SetBackground(Color.Transparent);
             count++;
-            //EventMouseClick += EmptyEvent;
             _text_object = new TextLine();
         }
         public Label(String text = "") : this()

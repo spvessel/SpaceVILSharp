@@ -52,7 +52,6 @@ namespace SpaceVIL
             SetPadding(5, 0, 5, 0);
             count++;
 
-            //EventMouseClick += EmptyEvent;
             EventMousePressed += OnMousePressed;
             EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
@@ -319,11 +318,6 @@ namespace SpaceVIL
 
             //update text data
             _text_object.UpdateData(UpdateType.Critical);
-        }
-
-        public override void InvokePoolEvents()
-        {
-            //if (EventMouseClick != null) EventMouseClick.Invoke(this);
         }
 
         //style

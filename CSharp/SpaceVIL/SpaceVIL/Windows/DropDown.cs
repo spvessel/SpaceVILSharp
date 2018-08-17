@@ -17,7 +17,6 @@ namespace SpaceVIL
             Handler.SetWindowTitle(DialogTitle);
             Handler.IsBorderHidden = true;
             Handler.IsAlwaysOnTop = true;
-            Handler.IsOutsideClickClosable = true;
             Handler.IsCentered = false;
             Handler.IsResizeble = false;
         }

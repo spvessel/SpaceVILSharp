@@ -19,8 +19,6 @@ namespace SpaceVIL
         {
             SetItemName("HorizontalScrollBar_" + count);
             count++;
-            // EventScrollUp += EmptyEvent;
-            // EventScrollDown += EmptyEvent;
 
             SetBackground(Color.FromArgb(255, 50, 50, 50));
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
