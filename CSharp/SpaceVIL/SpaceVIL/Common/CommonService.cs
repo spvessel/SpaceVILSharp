@@ -6,6 +6,7 @@ namespace SpaceVIL
 {
     public static class CommonService
     {
+        public static String ClipboardTextStorage = String.Empty;
         public static readonly object GlobalLocker = new object();
         
         public static void LinkColors(ref Color t1, ref Color t2)

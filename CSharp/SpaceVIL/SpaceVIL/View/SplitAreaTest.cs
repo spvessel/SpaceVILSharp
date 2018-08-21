@@ -10,16 +10,13 @@ namespace View
 {
     class SplitAreaTest : ActiveWindow
     {
-        override public void InitWindow() {
-            Handler = new WindowLayout(this, name: nameof(SplitAreaTest));
-            Handler.SetWidth(500);
+        override public void InitWindow()
+        {
+            Handler = new WindowLayout(this, nameof(SplitAreaTest), nameof(SplitAreaTest), 500, 500, true);
             Handler.SetMinWidth(50);
-            Handler.SetHeight(500);
             Handler.SetMinHeight(50);
-            Handler.SetWindowTitle(nameof(SplitAreaTest));
             Handler.SetPadding(2, 2, 2, 2);
             Handler.SetBackground(Color.FromArgb(255, 45, 45, 45));
-            Handler.IsBorderHidden = true;
 
             //DragAnchor
             TitleBar title = new TitleBar(nameof(SplitAreaTest));
@@ -27,7 +24,7 @@ namespace View
 
             //SplitArea
             VerticalSplitArea splitArea = new VerticalSplitArea();
-            splitArea.SetMargin(0,30,0,0);
+            splitArea.SetMargin(0, 30, 0, 0);
             Handler.AddItem(splitArea);
 
             Style style = new Style();

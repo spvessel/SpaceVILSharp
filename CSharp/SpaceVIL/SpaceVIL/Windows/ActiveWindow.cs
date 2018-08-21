@@ -8,8 +8,8 @@ namespace SpaceVIL
 {
     public abstract class ActiveWindow : CoreWindow
     {
-        public ActiveWindow() : base() {
-            
+        public ActiveWindow() : base()
+        {
             InitWindow();
         }
     }

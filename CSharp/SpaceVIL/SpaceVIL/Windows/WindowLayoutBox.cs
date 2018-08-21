@@ -23,6 +23,7 @@ namespace SpaceVIL
         {
             windows_name.Add(_layout.GetWindowName(), _layout);
             windows_guid.Add(_layout.Id, _layout);
+
             ItemsLayoutBox.InitLayout(_layout.Id);
 
             //add filling frame
@@ -30,8 +31,10 @@ namespace SpaceVIL
             _layout.SetWindow(new WContainer());
             _layout.GetWindow().SetHandler(_layout);
             _layout.GetWindow().SetItemName(_layout.GetWindowName());
+            _layout.GetWindow().SetWidth(_layout.GetWidth());
             _layout.GetWindow().SetMinWidth(_layout.GetMinWidth());
             _layout.GetWindow().SetMaxWidth(_layout.GetMaxWidth());
+            _layout.GetWindow().SetHeight(_layout.GetHeight());
             _layout.GetWindow().SetMinHeight(_layout.GetMinHeight());
             _layout.GetWindow().SetMaxHeight(_layout.GetMaxHeight());
             _layout.GetWindow().SetWidthPolicy(SizePolicy.Expand);

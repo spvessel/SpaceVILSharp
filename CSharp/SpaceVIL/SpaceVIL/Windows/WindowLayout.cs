@@ -10,7 +10,7 @@ namespace SpaceVIL
     public class WindowLayout : ISize, IPosition
     //where TLayout : VisualItem
     {
-        internal ManualResetEventSlim Execute = new ManualResetEventSlim(false);
+        //internal ManualResetEventSlim Execute = new ManualResetEventSlim(false);
 
         public EventCommonMethod EventClose;
         public EventCommonMethod EventMinimize;
@@ -18,20 +18,32 @@ namespace SpaceVIL
 
         internal object engine_locker = new object();
         private CoreWindow handler;
+        public CoreWindow Handler
+        {
+            get
+            {
+                return handler;
+            }
+            set
+            {
+                handler = value;
+            }
+        }
         private Guid ParentGUID;
+
         private Thread thread_engine;
-        private Task refresh_waiter;
-        private Thread thread_manager;
         private DrawEngine engine;
+
+        private Thread thread_manager;
         private ActionManager manager;
 
         public WindowLayout(
             CoreWindow window,
-            string name = "WindowLayout",
-            string title = "WindowLayout",
+            string name,
+            string title,
             int width = 300,
             int height = 300,
-            bool border = true
+            bool border_hidden = true
             )
         {
             handler = window;
@@ -39,12 +51,9 @@ namespace SpaceVIL
             SetWindowName(name);
             SetWindowTitle(title);
             SetWidth(width);
-            SetMinWidth(0);
-            SetMaxWidth(7680); //wide of screen
             SetHeight(height);
-            SetMinHeight(0);
-            SetMaxHeight(4320); //height of screen
-            IsBorderHidden = !border;
+
+            IsBorderHidden = border_hidden;
             IsClosed = true;
             IsHidden = false;
             IsResizeble = true;
@@ -53,24 +62,14 @@ namespace SpaceVIL
             IsAlwaysOnTop = false;
             IsOutsideClickClosable = false;
 
-            //InitWindow
-            WindowLayoutBox.InitWindow(this);
             manager = new ActionManager(this);
             engine = new DrawEngine(this);
 
-            refresh_waiter = new Task(
-                () => LocalRefresh()
-            );
+            WindowLayoutBox.InitWindow(this);
             //events
             // EventClose += Close;
         }
-        private void LocalRefresh()
-        {
-            Execute.Wait();
-            engine.Update();
-            //UpdateScene();
-            Execute.Reset();
-        }
+
         public void UpdatePosition()
         {
             if (engine != null)
@@ -83,8 +82,9 @@ namespace SpaceVIL
         }
         public void UpdateScene()
         {
-            engine.UpdateGL();
+            engine.Update();
         }
+
         private WContainer _window;
         internal WContainer GetWindow()
         {
@@ -281,7 +281,6 @@ namespace SpaceVIL
                 WindowLayoutBox.AddToWindowDispatcher(this);
                 ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
                 WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
-                //WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
                 thread_engine.Start();
                 thread_engine.Join();
             }
@@ -350,7 +349,6 @@ namespace SpaceVIL
         internal void SetWindowFocused()
         {
             WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = true;
-            //WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
             WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Focus(
                 WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.GetWindow(), true);
         }
@@ -367,22 +365,15 @@ namespace SpaceVIL
         {
             manager.StackEvents.Enqueue(task);
         }
+        volatile bool set = true;
+
         internal void ExecutePollActions()
         {
-            engine.Update();//нужно обновлять перед выполением задания
-            if (!manager.Execute.IsSet)
+            set = manager.Execute.IsSet;
+            if (!set)
                 manager.Execute.Set();
-
-            //LocalRefresh();
-
-           /* if (refresh_waiter.IsCompleted)
-            {
-                refresh_waiter = new Task(() => LocalRefresh());
-                refresh_waiter.Start();
-            }*/
-
-            //engine.Update();//нужно обновлять после выполения задания
         }
+
         public void SetFocusedItem(VisualItem item)
         {
             engine.SetFocusedItem(item);

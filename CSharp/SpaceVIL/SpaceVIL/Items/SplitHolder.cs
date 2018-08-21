@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace SpaceVIL
 {
@@ -17,6 +18,7 @@ namespace SpaceVIL
         {
             _orientation = or;
             SetItemName("SplitHolder_" + count);
+            SetBackground(Color.Transparent);
             count++;
             //_holderShape = new Rectangle();
             MakeHolderShape();

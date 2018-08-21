@@ -130,6 +130,9 @@ namespace SpaceVIL
 
         public virtual void OnTrackClick(object sender, MouseArgs args)
         {
+            if (Handler.IsMouseHover)
+                return;
+                
             //Compute CurrentValue
             if (_mouse_ptr.IsSet())
             {

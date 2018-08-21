@@ -40,6 +40,7 @@ namespace SpaceVIL
         }
 
         abstract public void InitWindow();
+        // abstract public void InitElements();
 
         public int GetCount() { return count; }
 

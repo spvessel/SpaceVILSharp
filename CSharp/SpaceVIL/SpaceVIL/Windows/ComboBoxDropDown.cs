@@ -11,7 +11,7 @@ namespace SpaceVIL
     {
         public ListBox ItemList = new ListBox();
         public ButtonCore Selection;
-        
+
         public ComboBoxDropDown() { }
         public override void InitWindow()
         {
@@ -28,7 +28,7 @@ namespace SpaceVIL
             ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.GetArea().SelectionChanged += OnSelectionChanged;
-
+            
             Handler.AddItem(ItemList);
         }
 

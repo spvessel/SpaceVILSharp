@@ -45,7 +45,7 @@ namespace SpaceVIL
 
         public override void InitWindow()
         {
-            Handler = new WindowLayout(this, "MessageBox_" + GetCount());
+            Handler = new WindowLayout(this, "MessageBox_" + GetCount(), "MessageBox_" + GetCount());
             //window's attr
             Handler.SetWidth(300);
             Handler.SetMinWidth(300);

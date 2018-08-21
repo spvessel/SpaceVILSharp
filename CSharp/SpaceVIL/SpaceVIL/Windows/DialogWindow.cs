@@ -29,7 +29,6 @@ namespace SpaceVIL
 
         public override void Show()
         {
-            //InitWindow();
             base.Show();
         }
     }
