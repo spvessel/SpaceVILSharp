@@ -70,7 +70,7 @@ namespace SpaceVIL
 
         public void AssignTopItem(BaseItem item)
         {
-            item.SetHeightPolicy(SizePolicy.Ignored);
+            //item.SetHeightPolicy(SizePolicy.Ignored);
             AddItem(item);
             _topBlock = item;
             _tMin = _topBlock.GetMinHeight();
@@ -83,7 +83,7 @@ namespace SpaceVIL
 
         public void AssignBottomItem(BaseItem item)
         {
-            item.SetHeightPolicy(SizePolicy.Ignored);
+            //item.SetHeightPolicy(SizePolicy.Ignored);
             AddItem(item);
             _bottomBlock = item;
             _bMin = _bottomBlock.GetMinHeight();
