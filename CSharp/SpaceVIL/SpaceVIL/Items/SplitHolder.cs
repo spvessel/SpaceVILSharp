@@ -44,16 +44,15 @@ namespace SpaceVIL
             switch (_orientation)
             {
                 case Orientation.Vertical:
-
-                    SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-                    SetHeight(_spacerSize);
-                    SetMinHeight(_spacerSize);
-                    break;
-
-                case Orientation.Horizontal:
                     SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
                     SetWidth(_spacerSize);
                     SetMinWidth(_spacerSize);
+                    break;
+
+                case Orientation.Horizontal:
+                    SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+                    SetHeight(_spacerSize);
+                    SetMinHeight(_spacerSize);
                     break;
             }
         }

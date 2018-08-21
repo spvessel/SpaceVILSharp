@@ -8,25 +8,25 @@ using System.Drawing;
 namespace SpaceVIL
 {
     class HorizontalSplitArea : VisualItem, IGrid
-    { 
+    {
         private static int count = 0;
-        private BaseItem _leftBlock;
-        private BaseItem _rightBlock;
+        private BaseItem _topBlock;
+        private BaseItem _bottomBlock;
         public SplitHolder _splitHolder = new SplitHolder(Orientation.Horizontal);
-        private int _leftWidth = 0;
-        private int _lMin = 0;
-        private int _rMin = 0;
+        private int _topHeight = 0;
+        private int _tMin = 0;
+        private int _bMin = 0;
 
-        public void SetSplitHolderPosition(int pos) {
-            
-            _leftWidth = pos;
-            _splitHolder.SetX(pos + GetX());
-            
+        public void SetSplitHolderPosition(int pos)
+        {
+            _topHeight = pos;
+            _splitHolder.SetY(pos + GetY());
+
         }
 
         public HorizontalSplitArea()
         {
-            SetItemName("HSplitArea_" + count);
+            SetItemName("VSplitArea_" + count);
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             count++;
 
@@ -38,156 +38,140 @@ namespace SpaceVIL
         {
             //Console.WriteLine(args.Position.X + " " + args.Position.PrevX);
 
-            
-            if (args.Position.X + _splitHolder.GetSpacerSize() <= GetWidth() + GetX() &&
-                (args.Position.X >= GetX())) { 
-                int dif = args.Position.X - args.Position.PrevX;
+
+            if (args.Position.Y + _splitHolder.GetSpacerSize() <= GetHeight() + GetY() &&
+                (args.Position.Y >= GetY()))
+            {
+                int dif = args.Position.Y - args.Position.PrevY;
                 /*
                 if (_leftBlock != null)
                     _leftBlock.SetWidth(_leftBlock.GetWidth() + dif);
                 */
 
-                
-                int totalSize = GetWidth() - _splitHolder.GetSpacerSize();
-                if ((_leftWidth + dif >= _lMin) && 
-                    (totalSize - _leftWidth - dif) >= _rMin)
-                    SetSplitHolderPosition(_leftWidth + dif);
+
+                int totalSize = GetHeight() - _splitHolder.GetSpacerSize();
+                if ((_topHeight + dif >= _tMin) &&
+                    (totalSize - _topHeight - dif) >= _bMin)
+                    SetSplitHolderPosition(_topHeight + dif);
                 UpdateLayout();
             }
-            
+
         }
 
         public override void InitElements()
         {
             _splitHolder.SetBackground(Color.FromArgb(255, 71, 71, 71));
-            SetSplitHolderPosition((GetWidth() - _splitHolder.GetSpacerSize()) / 2);
-            
+            SetSplitHolderPosition((GetHeight() - _splitHolder.GetSpacerSize()) / 2);
+
             //Adding
             AddItem(_splitHolder);
             UpdateLayout();
         }
 
-        public void AssignLeftItem(BaseItem item) {
-            item.SetWidthPolicy(SizePolicy.Ignored);
+        public void AssignTopItem(BaseItem item)
+        {
+            item.SetHeightPolicy(SizePolicy.Ignored);
             AddItem(item);
-            _leftBlock = item;
-            _lMin = _leftBlock.GetMinWidth();
+            _topBlock = item;
+            _tMin = _topBlock.GetMinHeight();
             //Console.Write("Left " + _leftBlock.GetWidth());
             //if (_leftBlock.GetWidth() == 0)
-                //_leftBlock.SetWidth((GetWidth() - _splitHolder.GetSpacerSize()) / 2);
-            
+            //_leftBlock.SetWidth((GetWidth() - _splitHolder.GetSpacerSize()) / 2);
+
             UpdateLayout();
         }
 
-        public void AssignRightItem(BaseItem item) {
-            item.SetWidthPolicy(SizePolicy.Ignored);
+        public void AssignBottomItem(BaseItem item)
+        {
+            item.SetHeightPolicy(SizePolicy.Ignored);
             AddItem(item);
-            _rightBlock = item;
-            _rMin = _rightBlock.GetMinWidth();
+            _bottomBlock = item;
+            _bMin = _bottomBlock.GetMinHeight();
             //Console.Write(" Right " + _rightBlock.GetWidth());
             //if (_rightBlock.GetWidth() == 0)
-                //_rightBlock.SetWidth(GetWidth() - _splitHolder.GetSpacerSize() - (GetWidth() - _splitHolder.GetSpacerSize()) / 2);
-            
-            
+            //_rightBlock.SetWidth(GetWidth() - _splitHolder.GetSpacerSize() - (GetWidth() - _splitHolder.GetSpacerSize()) / 2);
+
+
             UpdateLayout();
         }
 
         public override void SetWidth(int width)
         {
-            //Поставить ограничитель на ширину холдэра
             base.SetWidth(width);
-            /*
-            if (_leftWidth >= width)
-            {
-                SetSplitHolderPosition(width - _splitHolder.GetSpacerSize());
-            }
-            */
-            CheckMins();
-            /*
-            if (_leftBlock != null && _rightBlock != null)
-            { 
-                int sz = GetWidth() - _splitHolder.GetSpacerSize() - _leftBlock.GetWidth();
-                if (sz >= 0)
-                    _rightBlock.SetWidth(sz);
-                else
-                    _leftBlock.SetWidth(GetWidth() + sz);
-            }
-            */
             UpdateLayout();
         }
         public override void SetX(int _x)
         {
             base.SetX(_x);
-            SetSplitHolderPosition(_leftWidth);
             UpdateLayout();
         }
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
+            CheckMins();
             UpdateLayout();
         }
         public override void SetY(int _y)
         {
             base.SetY(_y);
+            SetSplitHolderPosition(_topHeight);
             UpdateLayout();
         }
 
-        private void CheckMins() {
-            int totalSize = GetWidth() - _splitHolder.GetSpacerSize();
-            if (totalSize < _lMin)
+        private void CheckMins()
+        {
+            int totalSize = GetHeight() - _splitHolder.GetSpacerSize();
+            if (totalSize < _tMin)
             {
                 SetSplitHolderPosition(totalSize);
             }
-            else if (totalSize <= _lMin + _rMin)
+            else if (totalSize <= _tMin + _bMin)
             {
-                SetSplitHolderPosition(_lMin);
+                SetSplitHolderPosition(_tMin);
             }
             else
             {
-                if (totalSize - _leftWidth < _rMin)
+                if (totalSize - _topHeight < _bMin)
                 {
-                    SetSplitHolderPosition(totalSize - _rMin);
+                    SetSplitHolderPosition(totalSize - _bMin);
                 }
             }
-            
+
         }
 
         public void UpdateLayout()
         {
-            _splitHolder.SetY(GetY());
-            _splitHolder.SetHeight(GetHeight());
+            _splitHolder.SetX(GetX());
+            _splitHolder.SetWidth(GetWidth());
             //Console.WriteLine(_leftWidth + " " + GetWidth() + " " + _splitHolder.GetX() + " " + test);
-            int tmpWidth = _leftWidth;// _splitHolder.GetX() - GetX();
+            int tmpHeight = _topHeight;
 
-            if (_leftBlock != null)
+            if (_topBlock != null)
             {
-                _leftBlock.SetY(GetY());
-                _leftBlock.SetHeight(GetHeight());
-                _leftBlock.SetX(GetX());
-                if (tmpWidth >= 0) _leftBlock.SetWidth(tmpWidth);
-                else _leftBlock.SetWidth(0);
+                _topBlock.SetY(GetY());
+                _topBlock.SetWidth(GetWidth());
+                _topBlock.SetX(GetX());
+                if (tmpHeight >= 0) _topBlock.SetHeight(tmpHeight);
+                else _topBlock.SetHeight(0);
             }
 
-            tmpWidth = GetWidth() - tmpWidth - _splitHolder.GetSpacerSize();
-            if (_rightBlock != null)
+            tmpHeight = GetHeight() - tmpHeight - _splitHolder.GetSpacerSize();
+            if (_bottomBlock != null)
             {
-                _rightBlock.SetHeight(GetHeight());
-                _rightBlock.SetY(GetY());
-                _rightBlock.SetX(_leftWidth + GetX() + _splitHolder.GetSpacerSize());
-                if (tmpWidth >= 0) _rightBlock.SetWidth(tmpWidth);
-                else _rightBlock.SetWidth(0);
+                _bottomBlock.SetWidth(GetWidth());
+                _bottomBlock.SetX(GetX());
+                _bottomBlock.SetY(_topHeight + GetY() + _splitHolder.GetSpacerSize());
+                if (tmpHeight >= 0) _bottomBlock.SetHeight(tmpHeight);
+                else _bottomBlock.SetHeight(0);
             }
 
             foreach (var item in GetItems())
                 item.SetConfines();
         }
 
-        public void SetSpacerWidth(int spWidth)
+        public void SetSpacerHeight(int spHeight)
         {
-            _splitHolder.SetSpacerSize(spWidth);
+            _splitHolder.SetSpacerSize(spHeight);
         }
-
-
-        
     }
 }
