@@ -21,7 +21,6 @@ namespace SpaceVIL
             
             _leftWidth = pos;
             _splitHolder.SetX(pos + GetX());
-            
         }
 
         public HorizontalSplitArea()

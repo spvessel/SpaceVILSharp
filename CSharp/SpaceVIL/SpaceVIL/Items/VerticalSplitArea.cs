@@ -38,7 +38,6 @@ namespace SpaceVIL
         {
             //Console.WriteLine(args.Position.X + " " + args.Position.PrevX);
 
-
             if (args.Position.Y + _splitHolder.GetSpacerSize() <= GetHeight() + GetY() &&
                 (args.Position.Y >= GetY()))
             {
