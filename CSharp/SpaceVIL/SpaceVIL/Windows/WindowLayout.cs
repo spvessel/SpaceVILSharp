@@ -66,6 +66,7 @@ namespace SpaceVIL
             engine = new DrawEngine(this);
 
             WindowLayoutBox.InitWindow(this);
+            SetFocusedItem(_window);
             //events
             // EventClose += Close;
         }

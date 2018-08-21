@@ -125,19 +125,19 @@ namespace SpaceVIL
         }
         private void InvokeMouseDragEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventMouseDrag.Invoke(sender, args);
+            sender.EventMouseDrag?.Invoke(sender, args);
         }
         private void InvokeMouseDropEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventMouseDrag.Invoke(sender, args);
+            sender.EventMouseDrag?.Invoke(sender, args);
         }
         private void InvokeMouseScrollUpEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventScrollUp.Invoke(sender, args);
+            sender.EventScrollUp?.Invoke(sender, args);
         }
         private void InvokeMouseScrollDownEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventScrollDown.Invoke(sender, args);
+            sender.EventScrollDown?.Invoke(sender, args);
         }
 
         //keyboard input
