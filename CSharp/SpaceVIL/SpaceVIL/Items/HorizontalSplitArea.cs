@@ -7,230 +7,179 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class HorizontalSplitArea : VisualItem, IDraggable, IHLayout
+    class HorizontalSplitArea : VisualItem, IGrid
     { 
         private static int count = 0;
-        private SimpleCell _leftAnchor = new SimpleCell();
-        private SimpleCell _rightAnchor = new SimpleCell();
+        private BaseItem _leftBlock;
+        private BaseItem _rightBlock;
         public SplitHolder _splitHolder = new SplitHolder(Orientation.Horizontal);
+        private int _leftWidth = 0;
+        private int _lMin = 0;
+        private int _rMin = 0;
 
+        public void SetSplitHolderPosition(int pos) {
             
+            _leftWidth = pos;
+            _splitHolder.SetX(pos + GetX());
+            
+        }
 
         public HorizontalSplitArea()
         {
-            SetItemName("SplitArea_" + count);
+            SetItemName("HSplitArea_" + count);
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             count++;
 
-            //EventMouseDrag += OnDragging;
+            _splitHolder.EventMouseDrag += OnDragging;
             //EventMousePressed += OnMousePressed;
         }
 
-        public void OnDragging(object sender, MouseArgs args)
+        public virtual void OnDragging(object sender, MouseArgs args)
         {
+            //Console.WriteLine(args.Position.X + " " + args.Position.PrevX);
 
+            
+            if (args.Position.X + _splitHolder.GetSpacerSize() <= GetWidth() + GetX() &&
+                (args.Position.X >= GetX())) { 
+                int dif = args.Position.X - args.Position.PrevX;
+                /*
+                if (_leftBlock != null)
+                    _leftBlock.SetWidth(_leftBlock.GetWidth() + dif);
+                */
+
+                
+                int totalSize = GetWidth() - _splitHolder.GetSpacerSize();
+                if ((_leftWidth + dif >= _lMin) && 
+                    (totalSize - _leftWidth - dif) >= _rMin)
+                    SetSplitHolderPosition(_leftWidth + dif);
+                UpdateLayout();
+            }
+            
         }
 
         public override void InitElements()
         {
             _splitHolder.SetBackground(Color.FromArgb(255, 71, 71, 71));
-            //_splitHolder.EventMouseDrag += OnDragging;
-
+            SetSplitHolderPosition((GetWidth() - _splitHolder.GetSpacerSize()) / 2);
+            
             //Adding
             AddItem(_splitHolder);
             UpdateLayout();
         }
 
-        public void SetLeftAnchor(BaseItem item) {
+        public void AssignLeftItem(BaseItem item) {
+            item.SetWidthPolicy(SizePolicy.Ignored);
             AddItem(item);
-            _leftAnchor.SetItem(item);
-            //_leftAnchor.SetWidth(item.GetWidth());
-            //_leftAnchor.SetHeight(item.GetHeight());
+            _leftBlock = item;
+            _lMin = _leftBlock.GetMinWidth();
+            //Console.Write("Left " + _leftBlock.GetWidth());
+            //if (_leftBlock.GetWidth() == 0)
+                //_leftBlock.SetWidth((GetWidth() - _splitHolder.GetSpacerSize()) / 2);
+            
             UpdateLayout();
         }
 
-        public void SetRightAnchor(BaseItem item) {
+        public void AssignRightItem(BaseItem item) {
+            item.SetWidthPolicy(SizePolicy.Ignored);
             AddItem(item);
-            _rightAnchor.SetItem(item);
-            //_rightAnchor.SetWidth(item.GetWidth());
-            //_rightAnchor.SetHeight(item.GetHeight());
+            _rightBlock = item;
+            _rMin = _rightBlock.GetMinWidth();
+            //Console.Write(" Right " + _rightBlock.GetWidth());
+            //if (_rightBlock.GetWidth() == 0)
+                //_rightBlock.SetWidth(GetWidth() - _splitHolder.GetSpacerSize() - (GetWidth() - _splitHolder.GetSpacerSize()) / 2);
+            
+            
             UpdateLayout();
         }
 
         public override void SetWidth(int width)
         {
+            //Поставить ограничитель на ширину холдэра
             base.SetWidth(width);
+            /*
+            if (_leftWidth >= width)
+            {
+                SetSplitHolderPosition(width - _splitHolder.GetSpacerSize());
+            }
+            */
+            CheckMins();
+            /*
+            if (_leftBlock != null && _rightBlock != null)
+            { 
+                int sz = GetWidth() - _splitHolder.GetSpacerSize() - _leftBlock.GetWidth();
+                if (sz >= 0)
+                    _rightBlock.SetWidth(sz);
+                else
+                    _leftBlock.SetWidth(GetWidth() + sz);
+            }
+            */
             UpdateLayout();
         }
         public override void SetX(int _x)
         {
             base.SetX(_x);
+            SetSplitHolderPosition(_leftWidth);
+            UpdateLayout();
+        }
+        public override void SetHeight(int height)
+        {
+            base.SetHeight(height);
+            UpdateLayout();
+        }
+        public override void SetY(int _y)
+        {
+            base.SetY(_y);
             UpdateLayout();
         }
 
-        private bool _isSpacerDragging = false;
-        private Point _dragFrom = new Point();
-        /*
-        protected virtual void OnMousePressed(object sender) {
-            Int32[] arr;
-            int spacerStart = 0, spacerEnd = 0;
-            switch (_orientation)
+        private void CheckMins() {
+            int totalSize = GetWidth() - _splitHolder.GetSpacerSize();
+            if (totalSize < _lMin)
             {
-                case Orientation.Horizontal:
-                    arr = _handlerGrid.GetRowHeight();
-                    spacerStart = _handlerGrid.GetY() + arr[0];
-                    spacerEnd = spacerStart + _handlerGrid.GetSpacing().Horizontal;
-                    //Console.WriteLine(spacerStart + " " + _mouse_ptr.Y + " " + spacerEnd);
-                    if (_mouse_ptr.Y >= spacerStart && _mouse_ptr.Y <= spacerEnd)
-                    {
-                        _isSpacerDragging = true;
-                        _dragFrom.Y = _mouse_ptr.Y;
-                    }
-                    else _isSpacerDragging = false;
-                    break;
-
-                case Orientation.Vertical:
-                    arr = _handlerGrid.GetColWidth();
-                    spacerStart = _handlerGrid.GetX() + arr[0];
-                    spacerEnd = spacerStart + _handlerGrid.GetSpacing().Vertical;
-                    //Console.WriteLine(spacerStart + " " + _mouse_ptr.X + " " + spacerEnd);
-
-                    if (_mouse_ptr.X >= spacerStart && _mouse_ptr.X <= spacerEnd)
-                    {
-                        _isSpacerDragging = true;
-                        _dragFrom.X = _mouse_ptr.X;
-                    }
-                    else _isSpacerDragging = false;
-                    break;
+                SetSplitHolderPosition(totalSize);
             }
-        }
-
-        protected virtual void OnDragging(object sender, MouseArgs args)
-        {
-            //Console.WriteLine("Mouse " + _mouse_ptr.X + " " + _mouse_ptr.Y);
-            if (_isSpacerDragging)
+            else if (totalSize <= _lMin + _rMin)
             {
-                //Int32[] arr;
-                switch (_orientation)
+                SetSplitHolderPosition(_lMin);
+            }
+            else
+            {
+                if (totalSize - _leftWidth < _rMin)
                 {
-                    case Orientation.Horizontal:
-                        //arr = _handlerGrid.GetRowHeight();
-                        _frame1.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-                        _frame1.SetHeight(_frame1.GetHeight() + (_mouse_ptr.Y - _dragFrom.Y));
-                        _dragFrom.Y = _mouse_ptr.Y;
-                        break;
-
-                    case Orientation.Vertical:
-                        //arr = _handlerGrid.GetColWidth();
-                        _frame1.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-                        _frame1.SetWidth(_frame1.GetWidth() + (_mouse_ptr.X - _dragFrom.X));
-                        _dragFrom.X = _mouse_ptr.X;
-                        break;
+                    SetSplitHolderPosition(totalSize - _rMin);
                 }
             }
+            
         }
-        */
-        /*
-        public override void InitElements()
-        {
-            
-            Style style = new Style();
-            style.Background = Color.FromArgb(255, 13, 176, 255);
-            style.Foreground = Color.Black;
-            style.BorderRadius = 6;
-            style.Font = new Font(new FontFamily("Courier New"), 20, FontStyle.Regular);
-            style.WidthPolicy = SizePolicy.Expand;
-            style.HeightPolicy = SizePolicy.Expand;
-            style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            ItemState brighter = new ItemState();
-            brighter.Background = Color.FromArgb(125, 255, 255, 255);
-            style.ItemStates.Add(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(60, 255, 255, 255)
-            });
-
-            ButtonCore _button1 = new ButtonCore("btn1");
-            ButtonCore _button2 = new ButtonCore("btn2");
-            
-            _button1.SetToolTip("Show LayoutTest window.");
-            _button1.SetStyle(style);
-            _button1.SetItemName("Layout");
-            _button1.SetBackground(Color.FromArgb(255, 255, 181, 111));
-
-            _button2.SetToolTip("Show LayoutTest window.");
-            _button2.SetStyle(style);
-            _button2.SetItemName("Layout");
-            _button2.SetBackground(Color.FromArgb(255, 255, 181, 111));
-
-            
-            _leftAnchor.SetBackground(Color.FromArgb(255, 71, 71, 71));
-            _leftAnchor.SetWidthPolicy(SizePolicy.Expand);
-            _leftAnchor.SetHeightPolicy(SizePolicy.Expand);
-
-
-            _rightAnchor.SetBackground(Color.FromArgb(255, 71, 71, 71));
-            _rightAnchor.SetWidthPolicy(SizePolicy.Expand);
-            _rightAnchor.SetHeightPolicy(SizePolicy.Expand);
-            
-            _splitHolder.SetBackground(Color.FromArgb(255, 71, 71, 71));
-
-            //AddItems(_leftAnchor, _splitHolder, _rightAnchor);
-
-            //InitSplitArea();
-
-            SetLeftAnchor(_button1);
-            SetRightAnchor(_button2);
-            //_handlerGrid.AddItems(_frame1, _frame2);
-            //_handlerGrid.InsertItem(_frame1, 0, 0);
-            //_handlerGrid.InsertItem(_frame2, 0, 1);
-            UpdateLayout();
-        }
-        */
 
         public void UpdateLayout()
         {
-            //_frame1.SetWidthPolicy(SizePolicy.Fixed);
-            //_frame2.SetWidthPolicy(SizePolicy.Fixed);
-            int total_space = GetWidth() - _splitHolder.GetSpacerSize();
-            Console.Write(total_space + " ");
+            _splitHolder.SetY(GetY());
+            _splitHolder.SetHeight(GetHeight());
+            //Console.WriteLine(_leftWidth + " " + GetWidth() + " " + _splitHolder.GetX() + " " + test);
+            int tmpWidth = _leftWidth;// _splitHolder.GetX() - GetX();
 
-            _leftAnchor.SetHeight(GetHeight());
-            _rightAnchor.SetHeight(GetHeight());
-
-            BaseItem item;
-
-            int startX = GetX();
-            _leftAnchor.SetX(startX);
-            _leftAnchor.SetWidth(total_space / 2);
-
-            item = _leftAnchor.GetItem();
-
-            if (item != null)
+            if (_leftBlock != null)
             {
-                item.SetX(startX);
-            item.SetWidth(_leftAnchor.GetWidth());
-
+                _leftBlock.SetY(GetY());
+                _leftBlock.SetHeight(GetHeight());
+                _leftBlock.SetX(GetX());
+                if (tmpWidth >= 0) _leftBlock.SetWidth(tmpWidth);
+                else _leftBlock.SetWidth(0);
             }
 
-
-            startX += total_space / 2;
-            total_space -= total_space / 2;
-            Console.Write(total_space + " \n");
-            _rightAnchor.SetWidth(total_space);
-
-            _splitHolder.SetX(startX);
-
-            startX += _splitHolder.GetSpacerSize();
-            _rightAnchor.SetX(startX);
-
-            item = _rightAnchor.GetItem();
-            if (item != null)
+            tmpWidth = GetWidth() - tmpWidth - _splitHolder.GetSpacerSize();
+            if (_rightBlock != null)
             {
-                item.SetX(startX);
-            item.SetWidth(_rightAnchor.GetWidth());
-
+                _rightBlock.SetHeight(GetHeight());
+                _rightBlock.SetY(GetY());
+                _rightBlock.SetX(_leftWidth + GetX() + _splitHolder.GetSpacerSize());
+                if (tmpWidth >= 0) _rightBlock.SetWidth(tmpWidth);
+                else _rightBlock.SetWidth(0);
             }
 
+            foreach (var item in GetItems())
+                item.SetConfines();
         }
 
         public void SetSpacerWidth(int spWidth)

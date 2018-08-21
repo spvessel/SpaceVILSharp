@@ -537,6 +537,12 @@ namespace SpaceVIL
                         {
                             if (HoveredItem is ITextEditable)
                                 _handler.SetCursorType(Glfw.CursorType.Beam);
+                            if (HoveredItem is SplitHolder)
+                            {
+                                if (((SplitHolder)HoveredItem).GetOrientation().Equals(Orientation.Horizontal))
+                                    _handler.SetCursorType(Glfw.CursorType.ResizeX);
+                                else _handler.SetCursorType(Glfw.CursorType.ResizeY);
+                            }
                         }
                         else //refactor!!
                         {
@@ -563,6 +569,12 @@ namespace SpaceVIL
                         if (HoveredItem is ITextEditable)
                         {
                             _handler.SetCursorType(Glfw.CursorType.Beam);
+                        }
+                        if (HoveredItem is SplitHolder)
+                        {
+                            if (((SplitHolder)HoveredItem).GetOrientation().Equals(Orientation.Horizontal))
+                                _handler.SetCursorType(Glfw.CursorType.ResizeX);
+                            else _handler.SetCursorType(Glfw.CursorType.ResizeY);
                         }
                     }
                     VisualItem popup = IsInListHoveredItems<PopUpMessage>();
