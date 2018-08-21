@@ -57,5 +57,10 @@ namespace SpaceVIL
                     break;
             }
         }
+
+        public Orientation GetOrientation()
+        {
+            return _orientation;
+        }
     }
 }

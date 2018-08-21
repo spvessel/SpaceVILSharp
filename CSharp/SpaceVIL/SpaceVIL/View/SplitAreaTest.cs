@@ -15,7 +15,7 @@ namespace View
             Handler.SetWidth(500);
             Handler.SetMinWidth(50);
             Handler.SetHeight(500);
-            Handler.SetMinHeight(500);
+            Handler.SetMinHeight(50);
             Handler.SetWindowTitle(nameof(SplitAreaTest));
             Handler.SetPadding(2, 2, 2, 2);
             Handler.SetBackground(Color.FromArgb(255, 45, 45, 45));
@@ -26,7 +26,7 @@ namespace View
             Handler.AddItem(title);
 
             //SplitArea
-            HorizontalSplitArea splitArea = new HorizontalSplitArea();
+            VerticalSplitArea splitArea = new VerticalSplitArea();
             splitArea.SetMargin(0,30,0,0);
             Handler.AddItem(splitArea);
 
@@ -51,16 +51,16 @@ namespace View
             _button1.SetStyle(style);
             _button1.SetItemName("Layout");
             _button1.SetBackground(Color.FromArgb(255, 255, 181, 111));
-            _button1.SetMinWidth(30);
+            _button1.SetMinHeight(30);
 
             _button2.SetToolTip("Show LayoutTest window.");
             _button2.SetStyle(style);
             _button2.SetItemName("Layout");
             _button2.SetBackground(Color.FromArgb(255, 255, 181, 111));
-            _button2.SetMinWidth(50);
+            _button2.SetMinHeight(30);
 
-            splitArea.AssignLeftItem(_button2);
-            splitArea.AssignRightItem(_button1);
+            splitArea.AssignTopItem(_button2);
+            splitArea.AssignBottomItem(_button1);
         }
     }
 }

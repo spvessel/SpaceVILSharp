@@ -14,18 +14,19 @@ namespace SpaceVIL
         private BaseItem _rightBlock;
         public SplitHolder _splitHolder = new SplitHolder(Orientation.Horizontal);
         private int _leftWidth = 0;
-        private bool test = false;
+        private int _lMin = 0;
+        private int _rMin = 0;
 
         public void SetSplitHolderPosition(int pos) {
-            //Console.Write(pos + " getX " + GetX());
+            
             _leftWidth = pos;
             _splitHolder.SetX(pos + GetX());
-            //Console.WriteLine(" spX " + _splitHolder.GetX() + " " + test);
+            
         }
 
         public HorizontalSplitArea()
         {
-            SetItemName("SplitArea_" + count);
+            SetItemName("HSplitArea_" + count);
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             count++;
 
@@ -45,7 +46,12 @@ namespace SpaceVIL
                 if (_leftBlock != null)
                     _leftBlock.SetWidth(_leftBlock.GetWidth() + dif);
                 */
-                SetSplitHolderPosition(_leftWidth + dif);
+
+                
+                int totalSize = GetWidth() - _splitHolder.GetSpacerSize();
+                if ((_leftWidth + dif >= _lMin) && 
+                    (totalSize - _leftWidth - dif) >= _rMin)
+                    SetSplitHolderPosition(_leftWidth + dif);
                 UpdateLayout();
             }
             
@@ -55,10 +61,9 @@ namespace SpaceVIL
         {
             _splitHolder.SetBackground(Color.FromArgb(255, 71, 71, 71));
             SetSplitHolderPosition((GetWidth() - _splitHolder.GetSpacerSize()) / 2);
-            //Console.WriteLine("Init elements " + _splitHolder.GetX());
+            
             //Adding
             AddItem(_splitHolder);
-            test = true;
             UpdateLayout();
         }
 
@@ -66,7 +71,7 @@ namespace SpaceVIL
             item.SetWidthPolicy(SizePolicy.Ignored);
             AddItem(item);
             _leftBlock = item;
-            
+            _lMin = _leftBlock.GetMinWidth();
             //Console.Write("Left " + _leftBlock.GetWidth());
             //if (_leftBlock.GetWidth() == 0)
                 //_leftBlock.SetWidth((GetWidth() - _splitHolder.GetSpacerSize()) / 2);
@@ -78,7 +83,7 @@ namespace SpaceVIL
             item.SetWidthPolicy(SizePolicy.Ignored);
             AddItem(item);
             _rightBlock = item;
-            
+            _rMin = _rightBlock.GetMinWidth();
             //Console.Write(" Right " + _rightBlock.GetWidth());
             //if (_rightBlock.GetWidth() == 0)
                 //_rightBlock.SetWidth(GetWidth() - _splitHolder.GetSpacerSize() - (GetWidth() - _splitHolder.GetSpacerSize()) / 2);
@@ -91,11 +96,13 @@ namespace SpaceVIL
         {
             //Поставить ограничитель на ширину холдэра
             base.SetWidth(width);
+            /*
             if (_leftWidth >= width)
             {
                 SetSplitHolderPosition(width - _splitHolder.GetSpacerSize());
             }
-
+            */
+            CheckMins();
             /*
             if (_leftBlock != null && _rightBlock != null)
             { 
@@ -125,66 +132,25 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
-        /*
-        protected virtual void OnMousePressed(object sender) {
-            Int32[] arr;
-            int spacerStart = 0, spacerEnd = 0;
-            switch (_orientation)
+        private void CheckMins() {
+            int totalSize = GetWidth() - _splitHolder.GetSpacerSize();
+            if (totalSize < _lMin)
             {
-                case Orientation.Horizontal:
-                    arr = _handlerGrid.GetRowHeight();
-                    spacerStart = _handlerGrid.GetY() + arr[0];
-                    spacerEnd = spacerStart + _handlerGrid.GetSpacing().Horizontal;
-                    //Console.WriteLine(spacerStart + " " + _mouse_ptr.Y + " " + spacerEnd);
-                    if (_mouse_ptr.Y >= spacerStart && _mouse_ptr.Y <= spacerEnd)
-                    {
-                        _isSpacerDragging = true;
-                        _dragFrom.Y = _mouse_ptr.Y;
-                    }
-                    else _isSpacerDragging = false;
-                    break;
-
-                case Orientation.Vertical:
-                    arr = _handlerGrid.GetColWidth();
-                    spacerStart = _handlerGrid.GetX() + arr[0];
-                    spacerEnd = spacerStart + _handlerGrid.GetSpacing().Vertical;
-                    //Console.WriteLine(spacerStart + " " + _mouse_ptr.X + " " + spacerEnd);
-
-                    if (_mouse_ptr.X >= spacerStart && _mouse_ptr.X <= spacerEnd)
-                    {
-                        _isSpacerDragging = true;
-                        _dragFrom.X = _mouse_ptr.X;
-                    }
-                    else _isSpacerDragging = false;
-                    break;
+                SetSplitHolderPosition(totalSize);
             }
-        }
-
-        protected virtual void OnDragging(object sender, MouseArgs args)
-        {
-            //Console.WriteLine("Mouse " + _mouse_ptr.X + " " + _mouse_ptr.Y);
-            if (_isSpacerDragging)
+            else if (totalSize <= _lMin + _rMin)
             {
-                //Int32[] arr;
-                switch (_orientation)
+                SetSplitHolderPosition(_lMin);
+            }
+            else
+            {
+                if (totalSize - _leftWidth < _rMin)
                 {
-                    case Orientation.Horizontal:
-                        //arr = _handlerGrid.GetRowHeight();
-                        _frame1.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-                        _frame1.SetHeight(_frame1.GetHeight() + (_mouse_ptr.Y - _dragFrom.Y));
-                        _dragFrom.Y = _mouse_ptr.Y;
-                        break;
-
-                    case Orientation.Vertical:
-                        //arr = _handlerGrid.GetColWidth();
-                        _frame1.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-                        _frame1.SetWidth(_frame1.GetWidth() + (_mouse_ptr.X - _dragFrom.X));
-                        _dragFrom.X = _mouse_ptr.X;
-                        break;
+                    SetSplitHolderPosition(totalSize - _rMin);
                 }
             }
+            
         }
-        */
 
         public void UpdateLayout()
         {
@@ -200,7 +166,6 @@ namespace SpaceVIL
                 _leftBlock.SetX(GetX());
                 if (tmpWidth >= 0) _leftBlock.SetWidth(tmpWidth);
                 else _leftBlock.SetWidth(0);
-                //_leftBlock.SetConfines();
             }
 
             tmpWidth = GetWidth() - tmpWidth - _splitHolder.GetSpacerSize();
@@ -211,10 +176,10 @@ namespace SpaceVIL
                 _rightBlock.SetX(_leftWidth + GetX() + _splitHolder.GetSpacerSize());
                 if (tmpWidth >= 0) _rightBlock.SetWidth(tmpWidth);
                 else _rightBlock.SetWidth(0);
-                //_rightBlock.SetConfines();
             }
 
-            //_splitHolder?.SetConfines();
+            foreach (var item in GetItems())
+                item.SetConfines();
         }
 
         public void SetSpacerWidth(int spWidth)
