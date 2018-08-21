@@ -62,7 +62,7 @@ namespace SpaceVIL
         {
             /*if (_image == null)
                 return new byte[] { 0 };*/
-                
+
             if (_image == null)
                 return null;
 
@@ -79,10 +79,17 @@ namespace SpaceVIL
                         _bitmap.Add(pixel.G);
                         _bitmap.Add(pixel.B);
                         _bitmap.Add(pixel.A);
+                        Console.Write(
+                            pixel.R + " " +
+                            pixel.G + " " +
+                            pixel.B + " " +
+                            pixel.A + " "
+                        );
                     }
+                    Console.WriteLine();
                 }
+                //Environment.Exit(-1);
             }
-
             return _bitmap.ToArray();
         }
         public int GetImageWidth()

@@ -19,7 +19,6 @@ namespace SpaceVIL
         internal ManualResetEventSlim Execute = new ManualResetEventSlim(false);
         WindowLayout _handler;
         bool _stoped;
-        //int _interval = 1000 / 30;
 
         public ActionManager(WindowLayout wnd)
         {
@@ -33,7 +32,7 @@ namespace SpaceVIL
                 Execute.Wait();
                 ExecuteActions();
                 Execute.Reset();
-                _handler.Execute.Set();
+                //_handler.Execute.Set();
             }
         }
 
@@ -66,8 +65,23 @@ namespace SpaceVIL
                 case InputEventType.MousePressed:
                     InvokeMousePressedEvent(task.Item, task.Args as MouseArgs);
                     break;
+                case InputEventType.MouseHover:
+                    InvokeMouseHoverEvent(task.Item, task.Args as MouseArgs);
+                    break;
+                case InputEventType.MouseDrag:
+                    InvokeMouseDragEvent(task.Item, task.Args as MouseArgs);
+                    break;
                 case InputEventType.FocusGet:
                     InvokeFocusGetEvent(task.Item);
+                    break;
+                case InputEventType.KeyPress:
+                    InvokeKeyPressEvent(task.Item, task.Args as KeyArgs);
+                    break;
+                case InputEventType.KeyRelease:
+                    InvokeKeyReleaseEvent(task.Item, task.Args as KeyArgs);
+                    break;
+                case InputEventType.TextInput:
+                    InvokeTextInputEvent(task.Item, task.Args as TextInputArgs);
                     break;
                 default:
                     break;
@@ -91,11 +105,11 @@ namespace SpaceVIL
         {
             sender.EventDestroyed?.Invoke(sender);
         }
+
         //mouse input
         private void InvokeMouseClickEvent(VisualItem sender, MouseArgs args)
         {
             sender.EventMouseClick?.Invoke(sender, args);
-            // Console.WriteLine(sender.GetItemName());
         }
         private void InvokeMouseHoverEvent(VisualItem sender, MouseArgs args)
         {
@@ -103,7 +117,6 @@ namespace SpaceVIL
         }
         private void InvokeMousePressedEvent(VisualItem sender, MouseArgs args)
         {
-
             sender.EventMousePressed?.Invoke(sender, args);
         }
         private void InvokeMouseReleaseEvent(VisualItem sender, MouseArgs args)
@@ -112,7 +125,7 @@ namespace SpaceVIL
         }
         private void InvokeMouseDragEvent(VisualItem sender, MouseArgs args)
         {
-            sender.EventMouseDrop.Invoke(sender, args);
+            sender.EventMouseDrag.Invoke(sender, args);
         }
         private void InvokeMouseDropEvent(VisualItem sender, MouseArgs args)
         {
@@ -126,18 +139,19 @@ namespace SpaceVIL
         {
             sender.EventScrollDown.Invoke(sender, args);
         }
+
         //keyboard input
-        private void InvokeKeyPressEvent(VisualItem sender)
+        private void InvokeKeyPressEvent(VisualItem sender, KeyArgs args)
         {
-
+            sender.EventKeyPress?.Invoke(sender, args);
         }
-        private void InvokeKeyReleaseEvent(VisualItem sender)
+        private void InvokeKeyReleaseEvent(VisualItem sender, KeyArgs args)
         {
-
+            sender.EventKeyRelease?.Invoke(sender, args);
         }
-        private void InvokeTextInputEvent(VisualItem sender)
+        private void InvokeTextInputEvent(VisualItem sender, TextInputArgs args)
         {
-
+            sender.EventTextInput?.Invoke(sender, args);
         }
     }
 }

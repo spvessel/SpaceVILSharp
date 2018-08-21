@@ -138,7 +138,8 @@ namespace SpaceVIL
 
         protected virtual void OnKeyRelease(object sender, KeyArgs args)
         {
-
+            if(args.Scancode == 0x2F && args.Mods == KeyMods.Control)
+                PasteText(CommonService.ClipboardTextStorage);
         }
         protected virtual void OnKeyPress(object sender, KeyArgs args)
         {

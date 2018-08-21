@@ -35,6 +35,7 @@ namespace SpaceVIL
         protected void SetRealCoords(List<float> realCoords)
         {
             _coordinates = ToGL(realCoords);
+            // _coordinates = realCoords.ToArray();//ToGL(realCoords);
         }
 
         protected void SetAlphas(List<float> alphas)

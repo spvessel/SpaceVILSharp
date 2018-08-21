@@ -49,11 +49,13 @@ namespace SpaceVIL
             //foreach (String textLine in line)
             //{
             obj = FontEngine.GetPixMap(text, font); //obj = FontEngine.GetPixMap(textLine, font);
-                _coordArray.AddRange(obj.GetPixels()); //_coordArray.Add(obj.GetPixels());
-                alphas.AddRange(obj.GetColors());
-                _lineWidth = obj.GetAlpha();
-                inc++;
-                _letEndPos = obj.GetEndPositions();
+
+            _coordArray.AddRange(obj.GetPixels()); //_coordArray.Add(obj.GetPixels());
+            alphas.AddRange(obj.GetColors());
+            _lineWidth = obj.GetAlpha();
+
+            inc++;
+            _letEndPos = obj.GetEndPositions();
             //}
 
             SetAlphas(alphas);
@@ -83,23 +85,23 @@ namespace SpaceVIL
             if (alignments.HasFlag(ItemAlignment.Right))
                 alignShiftX = GetParent().GetWidth() - _lineWidth; //[i];
 
-                else if (alignments.HasFlag(ItemAlignment.HCenter))
-                    alignShiftX = (GetParent().GetWidth() - _lineWidth) / 2f; //[i]) / 2f;
+            else if (alignments.HasFlag(ItemAlignment.HCenter))
+                alignShiftX = (GetParent().GetWidth() - _lineWidth) / 2f; //[i]) / 2f;
 
             //Vertical
             if (alignments.HasFlag(ItemAlignment.Bottom))
-                    alignShiftY = GetParent().GetHeight() - height ;
+                alignShiftY = GetParent().GetHeight() - height;
 
-                else if (alignments.HasFlag(ItemAlignment.VCenter))
-                    alignShiftY = (GetParent().GetHeight() - height) / 2f;
+            else if (alignments.HasFlag(ItemAlignment.VCenter))
+                alignShiftY = (GetParent().GetHeight() - height) / 2f;
 
-                for (int j = 0; j < _coordArray.Count / 3; j++) //_coordArray[i]...
-                {
-                    outRealCoords.Add(_coordArray[j * 3] + alignShiftX); //_coordArray[i]...
-                    outRealCoords.Add(_coordArray[j * 3 + 1] + alignShiftY + _lineYShift - _minFontY); //_coordArray[i]...
-                    outRealCoords.Add(_coordArray[j * 3 + 2]); //_coordArray[i]...
-                }
-                //addSpace += bigSpacer;
+            for (int j = 0; j < _coordArray.Count / 3; j++) //_coordArray[i]...
+            {
+                outRealCoords.Add(_coordArray[j * 3] + alignShiftX); //_coordArray[i]...
+                outRealCoords.Add(_coordArray[j * 3 + 1] + alignShiftY + _lineYShift - _minFontY); //_coordArray[i]...
+                outRealCoords.Add(_coordArray[j * 3 + 2]); //_coordArray[i]...
+            }
+            //addSpace += bigSpacer;
             //}
 
             SetRealCoords(outRealCoords);
@@ -149,16 +151,19 @@ namespace SpaceVIL
             return base.Shape();
         }
 
-        internal List<int> GetLetPosArray() {
+        internal List<int> GetLetPosArray()
+        {
             return _letEndPos;
         }
 
-        internal void SetLineYShift(float sp) {
+        internal void SetLineYShift(float sp)
+        {
             _lineYShift = sp;
             SetCoordsFlag(true);
         }
 
-        internal float GetLineYShift() {
+        internal float GetLineYShift()
+        {
             return _lineYShift;
         }
 
@@ -174,7 +179,7 @@ namespace SpaceVIL
                 lineTopCoord = (GetParent().GetHeight() - height) / 2f;
 
             lineTopCoord += _lineYShift - _minFontY;
-            
+
             return lineTopCoord;
         }
     }

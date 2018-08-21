@@ -123,6 +123,11 @@ namespace SpaceVIL
             Glfw.SetWindowSizeLimits(_window, _w_layout.GetMinWidth(), _w_layout.GetMinHeight(), _w_layout.GetMaxWidth(), _w_layout.GetMaxHeight());
         }
 
+        internal void SwitchContext()
+        {
+            Glfw.MakeContextCurrent(_window);
+        }
+        
         internal void ClearEventsCallbacks()
         {
             MouseMoveCallback = null;

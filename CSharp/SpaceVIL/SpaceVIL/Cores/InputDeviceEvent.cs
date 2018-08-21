@@ -18,6 +18,8 @@ namespace SpaceVIL
         IndexChanged = 0x40,
 
         MouseMove = 0x80,
+        MouseHover = 0x400000,
+        MouseDrag = 0x800000,
         MousePressed = 0x100,
         MouseRelease = 0x200,
         MouseScroll = 0x400,
@@ -25,6 +27,7 @@ namespace SpaceVIL
         KeyPress = 0x800,
         KeyRepeat = 0x1000,
         KeyRelease = 0x2000,
+        TextInput = 0x200000,
 
         WindowResize = 0x4000,
         WindowMove = 0x8000,
@@ -32,7 +35,7 @@ namespace SpaceVIL
         WindowRestore = 0x20000,
         WindowClose = 0x40000,
         WindowGetFocus = 0x80000,
-        WindowLostFocus = 0x100000
+        WindowLostFocus = 0x100000,
     }
 
     public class InputDeviceEvent
