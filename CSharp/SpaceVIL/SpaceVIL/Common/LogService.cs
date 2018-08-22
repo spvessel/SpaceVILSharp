@@ -26,6 +26,7 @@ namespace SpaceVIL
                     try
                     {
                         fstream = new StreamWriter(logPath, false, Encoding.Default);
+                        fstream.Close();
                     }
                     catch(Exception ex) {
                         Console.WriteLine("Unable to comply\n" + ex);
@@ -45,10 +46,9 @@ namespace SpaceVIL
             if (!isLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
-            outText.AppendLine();
+            //outText.AppendLine();
             outText.Append(describe + ": ");
-            outText.Append(par.ToString());
-            outText.AppendLine();
+            outText.AppendLine(par.ToString());
             outText.AppendLine();
             AddText(outText.ToString());
         }
@@ -57,15 +57,19 @@ namespace SpaceVIL
             if (!isLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
-            outText.AppendLine();
-            outText.Append(describe);
-            outText.AppendLine();
+            //outText.AppendLine();
+            outText.AppendLine(describe);
 
             foreach (T o in list)
             {
-                outText.Append(o.ToString());
-                if (flat) outText.Append(" ");
-                else outText.AppendLine();
+                if (flat)
+                {
+                    outText.Append(o.ToString() + " ");
+                }
+                else
+                {
+                    outText.AppendLine("    " + o.ToString());
+                }
             }
             outText.AppendLine();
 
@@ -77,15 +81,19 @@ namespace SpaceVIL
             if (!isLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
-            outText.AppendLine();
-            outText.Append(describe);
-            outText.AppendLine();
+            //outText.AppendLine();
+            outText.AppendLine(describe);
 
             foreach (T o in list)
             {
-                outText.Append(o.ToString());
-                if (flat) outText.Append(" ");
-                else outText.AppendLine();
+                if (flat)
+                {
+                    outText.Append(o.ToString() + " ");
+                }
+                else
+                {
+                    outText.AppendLine("    " + o.ToString());
+                }
             }
             outText.AppendLine();
 
@@ -97,12 +105,12 @@ namespace SpaceVIL
             if (!isLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
-            outText.AppendLine();
-            outText.Append(describe);
-            outText.AppendLine();
+            //outText.AppendLine();
+            outText.AppendLine(describe);
 
             foreach (T[] o in list)
             {
+                outText.Append("    ");
                 for (int i = 0; i < o.Length; i++)
                 {
                     outText.Append(o[i].ToString() + " ");
@@ -119,12 +127,11 @@ namespace SpaceVIL
             if (!isLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
-            outText.AppendLine();
-            outText.Append("Item name: " + item.GetItemName() +
+            //outText.AppendLine();
+            outText.AppendLine("Item name: " + item.GetItemName() +
                 ", Handler: " + item.GetHandler().GetWindowName());
-            outText.AppendLine();
-            outText.Append("Exception: " + ex.ToString());
-            outText.AppendLine();
+            outText.AppendLine("Exception: " + ex.ToString());
+            
             AddText(outText.ToString());
         }
 
@@ -132,28 +139,25 @@ namespace SpaceVIL
             if (!isLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
-            outText.AppendLine();
-            outText.Append("Item name: " + item.GetItemName() + 
+            //outText.AppendLine();
+            outText.AppendLine("Item name: " + item.GetItemName() + 
                 ", Handler: " + item.GetHandler().GetWindowName());
-            outText.AppendLine();
 
             if (props.HasFlag(LogProps.Geometry)) {
                 outText.AppendLine("Geometry:");
-                outText.Append("    Width " + item.GetWidth() +
+                outText.AppendLine("    Width " + item.GetWidth() +
                     " (minWidth " + item.GetMinWidth() + ", maxWidth " + 
                     item.GetMaxWidth() + ")");
-                outText.AppendLine();
-                outText.Append("    Height " + item.GetHeight() +
+                
+                outText.AppendLine("    Height " + item.GetHeight() +
                     " (minHeight " + item.GetMinHeight() + ", maxHeight " +
                     item.GetMaxHeight() + ")");
-                outText.AppendLine();
 
                 outText.AppendLine();
             }
 
             if (props.HasFlag(LogProps.Position)) {
-                outText.Append("Position: (" + item.GetX() + ", " + item.GetY() + ")");
-                outText.AppendLine();
+                outText.AppendLine("Position: (" + item.GetX() + ", " + item.GetY() + ")");
                 outText.AppendLine();
             }
 
@@ -232,7 +236,7 @@ namespace SpaceVIL
             if (props.HasFlag(LogProps.Spacing))
             {
                 Spacing spi = item.GetSpacing();
-                outText.Append("Spacing: Horizontal = " + spi.Horizontal + 
+                outText.AppendLine("Spacing: Horizontal = " + spi.Horizontal + 
                     ", Vertical = " + spi.Vertical);
                 outText.AppendLine();
             }
@@ -292,9 +296,9 @@ namespace SpaceVIL
         {
             if (!isLogging) return;
             StringBuilder outText = new StringBuilder(GetTime());
-            outText.AppendLine();
-            outText.Append(describe + " " + sender.GetItemName());
-            outText.AppendLine();
+            //outText.AppendLine();
+            outText.AppendLine(describe + " " + sender.GetItemName());
+            
 
             outText.Append(CheckColNShape(sender, props));
             AddText(outText.ToString());
@@ -320,7 +324,7 @@ namespace SpaceVIL
             LogEvent(sender, describe, props);
 
             StringBuilder outText = new StringBuilder();
-            outText.Append("Key: " + args.Key + ", Scancode: " + args.Scancode + ", State: " + 
+            outText.AppendLine("Key: " + args.Key + ", Scancode: " + args.Scancode + ", State: " + 
                 args.State + ", Mods: " + args.Mods);
 
             outText.AppendLine();
@@ -333,7 +337,7 @@ namespace SpaceVIL
             LogEvent(sender, describe, props);
 
             StringBuilder outText = new StringBuilder();
-            outText.Append("Car: " + args.Character + ", Mods: " + args.Mods);
+            outText.AppendLine("Char: " + args.Character + ", Mods: " + args.Mods);
 
             outText.AppendLine();
             AddText(outText.ToString());
@@ -343,30 +347,29 @@ namespace SpaceVIL
             if (!isLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
-            outText.AppendLine();
-            outText.Append("Window name: " + window.GetWindowName() +
+            //outText.AppendLine();
+            outText.AppendLine("Window name: " + window.GetWindowName() +
                 ", Title: " + window.GetWindowTitle());
             outText.AppendLine();
 
             if (props.HasFlag(LogProps.Geometry))
             {
                 outText.AppendLine("Geometry:");
-                outText.Append("    Width " + window.GetWidth() +
+                outText.AppendLine("    Width " + window.GetWidth() +
                     " (minWidth " + window.GetMinWidth() + ", maxWidth " +
                     window.GetMaxWidth() + ")");
-                outText.AppendLine();
-                outText.Append("    Height " + window.GetHeight() +
+                
+                outText.AppendLine("    Height " + window.GetHeight() +
                     " (minHeight " + window.GetMinHeight() + ", maxHeight " +
                     window.GetMaxHeight() + ")");
-                outText.AppendLine();
+                
 
                 outText.AppendLine();
             }
 
             if (props.HasFlag(LogProps.Position))
             {
-                outText.Append("Position: (" + window.GetX() + ", " + window.GetY() + ")");
-                outText.AppendLine();
+                outText.AppendLine("Position: (" + window.GetX() + ", " + window.GetY() + ")");
                 outText.AppendLine();
             }
             /*
@@ -420,13 +423,14 @@ namespace SpaceVIL
             if (props.HasFlag(LogProps.IsFocused))
             {
                 outText.AppendLine("IsFocused: " + window.IsFocused);
+                outText.AppendLine();
             }
 
             if (props.HasFlag(LogProps.Color))
             {
                 Color ic = window.GetBackground();
-                outText.Append("Background(a,r,g,b): (" + ic.A + ", " + ic.R + ", " +
-                     ic.G + ", " + ic.B + ")\n");
+                outText.AppendLine("Background(a,r,g,b): (" + ic.A + ", " + ic.R + ", " +
+                     ic.G + ", " + ic.B + ")");
                 outText.AppendLine();
             }
 
@@ -435,6 +439,8 @@ namespace SpaceVIL
 
 
         public void EndLogging() {
+            //Console.WriteLine("end");
+            //fstream.Flush();
             fstream.Close();
         }
 
@@ -466,11 +472,16 @@ namespace SpaceVIL
 
         private string GetTime() {
             DateTime now = DateTime.Now;
-            return now.ToString("hh:mm:ss");
+            StringBuilder str = new StringBuilder();
+            str.AppendLine("/////////////////////////////////////////////////////////////");
+            str.AppendLine(now.ToString("hh:mm:ss"));
+            return str.ToString();
         }
 
         private void AddText(string text) {
-            fstream.Write(text);
+            fstream = new StreamWriter(logPath, true, Encoding.Default);
+            fstream.WriteLine(text);
+            fstream.Close();
             Console.WriteLine(text);
         }
     }

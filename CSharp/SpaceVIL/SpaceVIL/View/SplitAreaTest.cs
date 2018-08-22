@@ -69,7 +69,7 @@ namespace View
                 */
             LogService.Log().LogVisualItem(_button1, LogProps.AllGeometry);
             LogService.Log().LogWindow(Handler, LogProps.AllProps);
-            LogService.Log().EndLogging();
+            
         }
     }
 }
