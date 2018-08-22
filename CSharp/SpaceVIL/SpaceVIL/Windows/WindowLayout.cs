@@ -81,10 +81,10 @@ namespace SpaceVIL
             if (engine != null)
                 engine.SetWindowSize();
         }
-        public void UpdateScene()
+        /*public void UpdateScene()
         {
             engine.Update();
-        }
+        }*/
 
         private WContainer _window;
         internal WContainer GetWindow()

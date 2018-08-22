@@ -67,8 +67,6 @@ namespace SpaceVIL
         {
             SetItemName("ListArea_" + count);
             count++;
-            //Border.Radius = 50;
-
             EventMouseClick += OnMouseClick;
         }
 
@@ -76,7 +74,7 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //substrate
-            _substrate.SetBackground(121, 223, 152);
+            _substrate.SetBackground(111, 181, 255);
             _substrate.SetAlignment(ItemAlignment.Left | ItemAlignment.Top);
             _substrate.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             _substrate.IsVisible = false;
@@ -101,12 +99,9 @@ namespace SpaceVIL
                     break;
                 }
             }
-            SelectionChanged?.Invoke();
+            //SelectionChanged?.Invoke();
         }
-        public override void InvokePoolEvents()
-        {
-            //EventMouseClick?.Invoke(this);
-        }
+
         public override void AddItem(BaseItem item)
         {
             item.IsVisible = false;
@@ -230,7 +225,13 @@ namespace SpaceVIL
 
             _substrate.IsVisible = true;
             _substrate.SetHeight(child.GetHeight() + 2);
-            _substrate.SetTriangles(GraphicsMathService.GetRoundSquare(_substrate.GetWidth(), _substrate.GetHeight(), (child as VisualItem).Border.Radius, _substrate.GetX(), _substrate.GetY()));
+            _substrate.SetMargin(
+                -GetParent().GetPadding().Left,
+                -GetParent().GetPadding().Top,
+                -GetParent().GetPadding().Right,
+                -GetParent().GetPadding().Bottom
+                );
+            _substrate.SetTriangles(GraphicsMathService.GetRoundSquare(child.GetWidth(), _substrate.GetHeight(), 0, _substrate.GetX(), _substrate.GetY()));
             _substrate.SetY(child.GetY() - 1);
         }
     }

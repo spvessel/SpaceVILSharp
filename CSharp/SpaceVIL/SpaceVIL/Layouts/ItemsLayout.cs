@@ -16,11 +16,17 @@ namespace SpaceVIL
         {
             Id = layoutId;
         }
-        List<IItem> items = new List<IItem>();
-        protected internal List<IItem> Items
+        List<BaseItem> items = new List<BaseItem>();
+        protected internal List<BaseItem> Items
 		{
 			get { return items; }
 			set { items = value; }
 		}
+        List<BaseItem> float_items = new List<BaseItem>();
+        protected internal List<BaseItem> FloatItems
+        {
+            get { return float_items; }
+            set { float_items = value; }
+        }
     }
 }

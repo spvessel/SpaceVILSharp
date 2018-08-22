@@ -40,7 +40,7 @@ namespace SpaceVIL
             _layout.GetWindow().SetWidthPolicy(SizePolicy.Expand);
             _layout.GetWindow().SetHeightPolicy(SizePolicy.Expand);
 
-            ItemsLayoutBox.AddItem(_layout, _layout.GetWindow());
+            ItemsLayoutBox.AddItem(_layout, _layout.GetWindow(), LayoutType.Static);
         }
         static public void RemoveWindow(WindowLayout _layout)
         {

@@ -87,7 +87,6 @@ namespace SpaceVIL
             SetWidth(25);
             SetBackground(Color.Transparent);
             SetItemName("VerticalSlider_" + count);
-            EventValueChanged += EmptyEvent;
             EventMouseClick += OnTrackClick;
             count++;
 

@@ -61,6 +61,22 @@ namespace SpaceVIL
         {
             _text_object.SetForeground(color);
         }
+        public void SetForeground(int r, int g, int b)
+        {
+            _text_object.SetForeground(r, g, b);
+        }
+        public void SetForeground(int r, int g, int b, int a)
+        {
+            _text_object.SetForeground(r, g, b, a);
+        }
+        public void SetForeground(float r, float g, float b)
+        {
+            _text_object.SetForeground(r, g, b);
+        }
+        public void SetForeground(float r, float g, float b, float a)
+        {
+            _text_object.SetForeground(r, g, b, a);
+        }
         public Color GetForeground()
         {
             return _text_object.GetForeground();

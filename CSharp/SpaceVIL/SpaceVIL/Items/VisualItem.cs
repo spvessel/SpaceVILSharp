@@ -107,7 +107,7 @@ namespace SpaceVIL
 
                 try
                 {
-                    ItemsLayoutBox.AddItem(GetHandler(), item);
+                    ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
                 }
                 catch (Exception ex)
                 {
@@ -122,7 +122,7 @@ namespace SpaceVIL
             }
         }
 
-        internal void CascadeRemoving(BaseItem item)
+        internal void CascadeRemoving(BaseItem item, LayoutType type)
         {
             VisualItem container = item as VisualItem;// предполагаю что элемент контейнер
             if (container != null)//и если это действительно контейнер
@@ -131,12 +131,12 @@ namespace SpaceVIL
                 while (container.GetItems().Count > 0)
                 {
                     BaseItem child = container.GetItems().ElementAt(0);
-                    container.CascadeRemoving(child);
+                    container.CascadeRemoving(child, type);
 
                     container.GetItems().Remove(child);
                     child.RemoveItemFromListeners();
 
-                    ItemsLayoutBox.RemoveItem(GetHandler(), child);
+                    ItemsLayoutBox.RemoveItem(GetHandler(), child, type);
                 }
             }
         }
@@ -145,15 +145,25 @@ namespace SpaceVIL
         {
             lock (GetHandler().engine_locker)
             {
-                CascadeRemoving(item);
+                LayoutType type;
+                if (item is IFloating)
+                {
+                    CascadeRemoving(item, LayoutType.Floating);
+                    type = LayoutType.Floating;
+                }
+                else
+                {
+                    CascadeRemoving(item, LayoutType.Static);
+                    type = LayoutType.Static;
+                }
 
                 //removing
                 _content.Remove(item);
                 item.RemoveItemFromListeners();
 
-                ItemsLayoutBox.RemoveItem(GetHandler(), item);
+                ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
 
-                GetHandler().UpdateScene();
+                //GetHandler().UpdateScene();
             }
 
             //needs to force update all attributes
@@ -342,37 +352,6 @@ namespace SpaceVIL
         public void SetFocus()
         {
             GetHandler().SetFocusedItem(this);
-        }
-
-        internal void InvokeKeyboardInputEvents(KeyCode key, int scancode, InputState action, KeyMods mods)
-        {
-            KeyArgs args = new KeyArgs();
-            args.Key = key;
-            args.Scancode = scancode;
-            args.State = action;
-            args.Mods = mods;
-
-            if (action == InputState.Press)
-            {
-                EventKeyPress?.Invoke(this, args);
-            }
-            if (action == InputState.Repeat)
-            {
-                EventKeyPress?.Invoke(this, args);
-            }
-            if (action == InputState.Release)
-            {
-                EventKeyRelease?.Invoke(this, args);
-            }
-        }
-
-        internal void InvokeInputTextEvents(uint codepoint, KeyMods mods)
-        {
-            TextInputArgs args = new TextInputArgs();
-            args.Character = codepoint;
-            args.Mods = mods;
-
-            EventTextInput?.Invoke(this, args);
         }
 
         //common methods
@@ -577,10 +556,6 @@ namespace SpaceVIL
 
             SetTriangles(GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));
             return GraphicsMathService.ToGL(this as BaseItem, GetHandler());
-        }
-        public override void InvokePoolEvents()
-        {
-            //do nothing
         }
     }
 }

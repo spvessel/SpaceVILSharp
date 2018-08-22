@@ -386,9 +386,14 @@ namespace SpaceVIL
         {
             HoveredItems.Clear();
 
-            List<IItem> layout_box_of_items;
+            List<BaseItem> layout_box_of_items = new List<BaseItem>();
             lock (_handler.GetLayout().engine_locker)
-                layout_box_of_items = ItemsLayoutBox.GetLayoutItems(_handler.GetLayout().Id);
+            {
+                foreach (var item in ItemsLayoutBox.GetLayoutFloatItems(_handler.GetLayout().Id))
+                    layout_box_of_items.Add(item);
+                foreach (var item in ItemsLayoutBox.GetLayoutItems(_handler.GetLayout().Id))
+                    layout_box_of_items.Add(item);
+            }
 
             foreach (var item in layout_box_of_items)
             {
@@ -396,11 +401,9 @@ namespace SpaceVIL
                 {
                     if (!(item as VisualItem).IsVisible)
                         continue;
-
                     if ((item as VisualItem).GetHoverVerification(xpos, ypos))
                     {
                         HoveredItems.Add(item as VisualItem);
-                        //(item as VisualItem).EventMouseHover?.Invoke(item, _margs);
                         AssignActions(InputEventType.MouseHover, _margs, item as VisualItem);
                     }
                     AssignActions(InputEventType.MouseMove, _margs, false);
@@ -592,7 +595,7 @@ namespace SpaceVIL
                 return;
 
             _tooltip.InitTimer(false);
-            
+
             _margs.Button = button;
             _margs.State = state;
             _margs.Mods = mods;
@@ -748,13 +751,16 @@ namespace SpaceVIL
             {
                 glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
                 DrawItems(_handler.GetLayout().GetWindow());
+                foreach (var item in ItemsLayoutBox.GetLayout(_handler.GetLayout().Id).FloatItems)
+                {
+                    DrawItems(item as BaseItem);
+                }
                 //draw tooltip if needed
                 DrawToolTip();
-                if (!_handler.Focusable)
-                {
-                    //Console.WriteLine("shade pillow");
-                    DrawShadePillow();
-                }
+                // if (!_handler.Focusable)
+                // {
+                //     DrawShadePillow();
+                // }
                 _handler.Swap();
             }
             //Thread.Sleep(1000/60);

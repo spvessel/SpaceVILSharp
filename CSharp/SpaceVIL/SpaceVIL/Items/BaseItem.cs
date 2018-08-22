@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SpaceVIL
 {
-    public abstract class BaseItem : IGeometry, IReaction, IBehavior, IAncestor, IEventUpdate, IItem
+    public abstract class BaseItem : IGeometry, IBehavior, IAncestor, IEventUpdate, IItem
     {
         internal int _confines_x_0 = 0;
         internal int _confines_x_1 = 0;
@@ -21,8 +21,6 @@ namespace SpaceVIL
         {
             return _handler;
         }
-        abstract public void InvokePoolEvents();
-        public void EmptyEvent(IItem sender) { }
 
         //parent
         private VisualItem _parent = null;
@@ -359,7 +357,7 @@ namespace SpaceVIL
         }
 
         //update
-        public void SetConfines()
+        public virtual void SetConfines()
         {
             _confines_x_0 = GetParent().GetX() + GetParent().GetPadding().Left;
             _confines_x_1 = GetParent().GetX() + GetParent().GetWidth() - GetParent().GetPadding().Right;

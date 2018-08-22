@@ -99,7 +99,7 @@ namespace SpaceVIL
             _area.SetBackground(Color.Transparent);
             _area.SetAlignment(ItemAlignment.Top | ItemAlignment.Left);
             _area.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            _area.SetPadding(5, 5, 5, 5);
+            //_area.SetPadding(5, 5, 5, 5);
             _area.SetSpacing(0, 5);
         }
 

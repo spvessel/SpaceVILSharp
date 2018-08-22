@@ -11,6 +11,7 @@ namespace SpaceVIL
     {
         public ListBox ItemList = new ListBox();
         public ButtonCore Selection;
+        public EventCommonMethod SelectionChanged;
 
         public ComboBoxDropDown() { }
         public override void InitWindow()
@@ -49,11 +50,16 @@ namespace SpaceVIL
                 Selection.SetText(l.GetText());
                 Handler.ResetItems();
                 Close();
+                SelectionChanged?.Invoke();
             }
         }
         public void SetCurrentIndex(int index)
         {
             ItemList.SetSelection(index);
+        }
+        public int GetCurrentIndex()
+        {
+            return ItemList.GetSelection();
         }
     }
 }

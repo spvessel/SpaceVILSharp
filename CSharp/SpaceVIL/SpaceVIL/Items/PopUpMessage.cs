@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Timers;
 namespace SpaceVIL
 {
-    public class PopUpMessage : VisualItem/*, IPopUp*/
+    public class PopUpMessage : VisualItem
     {
         static int count = 0;
         private TextLine _text_object;
@@ -79,6 +79,22 @@ namespace SpaceVIL
         {
             _text_object.SetForeground(color);
         }
+        public void SetForeground(int r, int g, int b)
+        {
+            _text_object.SetForeground(r, g, b);
+        }
+        public void SetForeground(int r, int g, int b, int a)
+        {
+            _text_object.SetForeground(r, g, b, a);
+        }
+        public void SetForeground(float r, float g, float b)
+        {
+            _text_object.SetForeground(r, g, b);
+        }
+        public void SetForeground(float r, float g, float b, float a)
+        {
+            _text_object.SetForeground(r, g, b, a);
+        }
         public Color GetForeground()
         {
             return _text_object.GetForeground();
@@ -109,7 +125,7 @@ namespace SpaceVIL
             AddItems(_text_object, _btn_close);
 
             //update text data
-            _text_object.UpdateData(UpdateType.Critical);
+            //_text_object.UpdateData(UpdateType.Critical);
         }
 
         public void Show()

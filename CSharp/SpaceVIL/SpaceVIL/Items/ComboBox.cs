@@ -11,6 +11,7 @@ namespace SpaceVIL
         public ButtonCore _dropdown = new ButtonCore();
         public CustomShape _arrow = new CustomShape();
         public ComboBoxDropDown _dropdownarea = new ComboBoxDropDown();
+        public EventCommonMethod SelectionChanged;
 
         public ComboBox()
         {
@@ -69,6 +70,22 @@ namespace SpaceVIL
         {
             _selected.SetForeground(color);
         }
+        public void SetForeground(int r, int g, int b)
+        {
+            _selected.SetForeground(r, g, b);
+        }
+        public void SetForeground(int r, int g, int b, int a)
+        {
+            _selected.SetForeground(r, g, b, a);
+        }
+        public void SetForeground(float r, float g, float b)
+        {
+            _selected.SetForeground(r, g, b);
+        }
+        public void SetForeground(float r, float g, float b, float a)
+        {
+            _selected.SetForeground(r, g, b, a);
+        }
         public Color GetForeground()
         {
             return _selected.GetForeground();
@@ -109,6 +126,7 @@ namespace SpaceVIL
 
             //dropdownarea
             _dropdownarea.Selection = _selected;
+            _dropdownarea.SelectionChanged += OnSelectionChanged;
         }
 
         private void ShowDropDownList()
@@ -132,6 +150,14 @@ namespace SpaceVIL
         public void SetCurrentIndex(int index)
         {
             _dropdownarea.SetCurrentIndex(index);
+        }
+        public int GetCurrentIndex()
+        {
+            return _dropdownarea.GetCurrentIndex();
+        }
+        private void OnSelectionChanged()
+        {
+            SelectionChanged?.Invoke();
         }
     }
 }

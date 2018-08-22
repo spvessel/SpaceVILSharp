@@ -10,7 +10,7 @@ namespace SpaceVIL
     public class CheckBox : VisualItem
     {
         static int count = 0;
-        private Label _text;
+        private Label _text_object;
         private Indicator _indicator;
         public Indicator GetIndicator()
         {
@@ -26,13 +26,13 @@ namespace SpaceVIL
             count++;
 
             //text
-            _text = new Label();
-            _text.SetItemName(GetItemName() + "_text");
-            _text.SetBackground(255, 255, 255, 20);
-            _text.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            _text.SetAlignment(ItemAlignment.VCenter);
-            _text.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            _text.SetPadding(10);
+            _text_object = new Label();
+            _text_object.SetItemName(GetItemName() + "_text_object");
+            _text_object.SetBackground(255, 255, 255, 20);
+            _text_object.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            _text_object.SetAlignment(ItemAlignment.VCenter);
+            _text_object.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            _text_object.SetPadding(10);
 
             //indicator
             _indicator = new Indicator();
@@ -49,11 +49,11 @@ namespace SpaceVIL
         {
             //events
             EventMouseClick += _indicator.GetIndicatorMarker().EventToggle;
-            _text.EventMouseHover += (sender, args) => _indicator.GetIndicatorMarker().IsMouseHover = _text.IsMouseHover;
+            _text_object.EventMouseHover += (sender, args) => _indicator.GetIndicatorMarker().IsMouseHover = _text_object.IsMouseHover;
             
             //adding
             AddItem(_indicator);
-            AddItem(_text);
+            AddItem(_text_object);
         }
 
         public override bool IsVisible
@@ -103,47 +103,63 @@ namespace SpaceVIL
         //text init
         public void SetTextAlignment(ItemAlignment alignment)
         {
-            _text.SetTextAlignment(alignment);
+            _text_object.SetTextAlignment(alignment);
         }
         public void SetTextMargin(Margin margin)
         {
-            _text.SetMargin(margin);
+            _text_object.SetMargin(margin);
         }
         public void SetFont(Font font)
         {
-            _text.SetFont(font);
+            _text_object.SetFont(font);
         }
         public void SetFontSize(int size)
         {
-            _text.SetFontSize(size);
+            _text_object.SetFontSize(size);
         }
         public void SetFontStyle(FontStyle style)
         {
-            _text.SetFontStyle(style);
+            _text_object.SetFontStyle(style);
         }
         public void SetFontFamily(FontFamily font_family)
         {
-            _text.SetFontFamily(font_family);
+            _text_object.SetFontFamily(font_family);
         }
         public Font GetFont()
         {
-            return _text.GetFont();
+            return _text_object.GetFont();
         }
         public void SetText(String text)
         {
-            _text.SetText(text);
+            _text_object.SetText(text);
         }
         public String GetText()
         {
-            return _text.GetText();
+            return _text_object.GetText();
         }
         public void SetForeground(Color color)
         {
-            _text.SetForeground(color);
+            _text_object.SetForeground(color);
+        }
+        public void SetForeground(int r, int g, int b)
+        {
+            _text_object.SetForeground(r, g, b);
+        }
+        public void SetForeground(int r, int g, int b, int a)
+        {
+            _text_object.SetForeground(r, g, b, a);
+        }
+        public void SetForeground(float r, float g, float b)
+        {
+            _text_object.SetForeground(r, g, b);
+        }
+        public void SetForeground(float r, float g, float b, float a)
+        {
+            _text_object.SetForeground(r, g, b, a);
         }
         public Color GetForeground()
         {
-            return _text.GetForeground();
+            return _text_object.GetForeground();
         }
 
         //style

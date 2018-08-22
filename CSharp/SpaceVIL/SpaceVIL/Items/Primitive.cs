@@ -19,10 +19,5 @@ namespace SpaceVIL
         {
             return GetTriangles();
         }
-
-        public override void InvokePoolEvents()
-        {
-            //do nothing
-        }
     }
 }

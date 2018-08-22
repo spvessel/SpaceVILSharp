@@ -120,7 +120,7 @@ namespace SpaceVIL
             _stop.Dispose();
             _stop = null;
 
-            GetHandler().UpdateScene();
+            //GetHandler().UpdateScene();
         }
     }
 }

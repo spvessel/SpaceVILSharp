@@ -100,7 +100,5 @@ namespace SpaceVIL
         {
             return _image.Height;
         }
-
-        public override void InvokePoolEvents() { }
     }
 }
