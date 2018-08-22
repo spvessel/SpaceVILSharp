@@ -58,6 +58,18 @@ namespace View
 
             splitArea.AssignLeftItem(_button2);
             splitArea.AssignRightItem(_button1);
+
+            /*
+            Console.WriteLine(LogProps.AllGeometry.HasFlag(LogProps.Geometry) + " " +
+                LogProps.AllGeometry.HasFlag(LogProps.Behavior) + " " +
+                LogProps.AllGeometry.HasFlag(LogProps.Position) + " " +
+                LogProps.AllGeometry.HasFlag(LogProps.Margin) + " " +
+                LogProps.AllGeometry.HasFlag(LogProps.Spacing) + " " +
+                LogProps.AllGeometry.HasFlag(LogProps.Color));
+                */
+            LogService.Log().LogVisualItem(_button1, LogProps.AllGeometry);
+            LogService.Log().LogWindow(Handler, LogProps.AllProps);
+            LogService.Log().EndLogging();
         }
     }
 }

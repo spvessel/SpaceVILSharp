@@ -1,0 +1,37 @@
+06:18:21
+Item name: Layout, Handler: SplitAreaTest
+Geometry:
+    Width 245 (minWidth 30, maxWidth 7680)
+    Height 466 (minHeight 0, maxHeight 4320)
+
+Position: (253, 32)
+
+Alignment: Left, 
+
+WidthPolicy: Ignored 
+HeightPolicy: Expand 
+
+Margin: Left = 0, Right = 0, Top = 0, Bottom = 0
+
+Spacing: Horizontal = 0, Vertical = 0
+Padding: Left = 0, Top = 0, Right = 0, Bottom = 0
+
+06:18:21
+Window name: SplitAreaTest, Title: SplitAreaTest
+Geometry:
+    Width 500 (minWidth 50, maxWidth 2147483647)
+    Height 500 (minHeight 50, maxHeight 2147483647)
+
+Position: (0, 0)
+
+Padding: Left = 2, Top = 2, Right = 2, Bottom = 2
+
+Events:
+
+Children:
+    TitleBar_3
+    HSplitArea_0
+
+IsFocused: True
+Background(a,r,g,b): (255, 45, 45, 45)
+

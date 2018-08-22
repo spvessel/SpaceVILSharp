@@ -753,7 +753,7 @@ namespace SpaceVIL
                 if (!_handler.Focusable)
                 {
                     //Console.WriteLine("shade pillow");
-                    DrawShadePillow();
+                    //DrawShadePillow();
                 }
                 _handler.Swap();
             }
