@@ -59,7 +59,7 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            _splitHolder.SetBackground(Color.FromArgb(255, 71, 71, 71));
+            _splitHolder.SetBackground(45, 45, 45);
             SetSplitHolderPosition((GetWidth() - _splitHolder.GetSpacerSize()) / 2);
             
             //Adding
@@ -68,7 +68,7 @@ namespace SpaceVIL
         }
 
         public void AssignLeftItem(BaseItem item) {
-            item.SetWidthPolicy(SizePolicy.Ignored);
+            //item.SetWidthPolicy(SizePolicy.Ignored);
             AddItem(item);
             _leftBlock = item;
             _lMin = _leftBlock.GetMinWidth();
@@ -80,7 +80,7 @@ namespace SpaceVIL
         }
 
         public void AssignRightItem(BaseItem item) {
-            item.SetWidthPolicy(SizePolicy.Ignored);
+            //item.SetWidthPolicy(SizePolicy.Ignored);
             AddItem(item);
             _rightBlock = item;
             _rMin = _rightBlock.GetMinWidth();
