@@ -1,0 +1,297 @@
+/////////////////////////////////////////////////////////////
+06:49:42
+Item name: Layout, Handler: SplitAreaTest
+Geometry:
+    Width 245 (minWidth 30, maxWidth 7680)
+    Height 466 (minHeight 0, maxHeight 4320)
+
+Position: (253, 32)
+
+Alignment: Left, 
+
+WidthPolicy: Expand 
+HeightPolicy: Expand 
+
+Margin: Left = 0, Right = 0, Top = 0, Bottom = 0
+
+
+Spacing: Horizontal = 0, Vertical = 0
+
+Padding: Left = 0, Top = 0, Right = 0, Bottom = 0
+
+
+/////////////////////////////////////////////////////////////
+06:49:42
+Window name: SplitAreaTest, Title: SplitAreaTest
+
+Geometry:
+    Width 500 (minWidth 50, maxWidth 2147483647)
+    Height 500 (minHeight 50, maxHeight 2147483647)
+
+Position: (0, 0)
+
+Padding: Left = 2, Top = 2, Right = 2, Bottom = 2
+
+Events:
+
+Children:
+    TitleBar_3
+    HSplitArea_0
+
+IsFocused: True
+
+Background(a,r,g,b): (255, 45, 45, 45)
+
+
+/////////////////////////////////////////////////////////////
+06:49:44
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (253, 306)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (254, 306)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (255, 306)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (256, 306)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (261, 305)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (268, 303)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (277, 301)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (289, 299)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (299, 298)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (308, 297)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (317, 295)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (325, 295)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (329, 294)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (331, 294)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (330, 294)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (329, 294)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (327, 294)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (319, 297)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (308, 300)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (296, 303)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (281, 306)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (267, 307)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (255, 308)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (247, 308)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (240, 309)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (234, 309)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (226, 309)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (216, 309)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (204, 309)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (192, 308)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (180, 308)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (172, 308)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (169, 308)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (166, 308)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (165, 308)
+
+
+/////////////////////////////////////////////////////////////
+06:49:45
+EventMouse from SplitHolder_0
+
+Button: Button1, State: Press, Mods: 0, Pos: (163, 308)
+
+

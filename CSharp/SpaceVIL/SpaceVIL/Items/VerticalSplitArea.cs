@@ -34,10 +34,10 @@ namespace SpaceVIL
             //EventMousePressed += OnMousePressed;
         }
 
-        public virtual void OnDragging(object sender, MouseArgs args)
+        public virtual void OnDragging(IItem sender, MouseArgs args)
         {
             //Console.WriteLine(args.Position.X + " " + args.Position.PrevX);
-
+            LogService.Log().LogEvent(sender, args);
             
             if (args.Position.X + _splitHolder.GetSpacerSize() <= GetWidth() + GetX() &&
                 (args.Position.X >= GetX())) { 
