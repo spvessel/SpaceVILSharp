@@ -231,8 +231,8 @@ namespace SpaceVIL
             {
                 if ((mods == KeyMods.Control && key == KeyCode.V) || (mods == KeyMods.Shift && key == KeyCode.Insert))
                 {
-                    //CommonService.ClipboardTextStorage = Glfw.GetClipboardString(_handler.GetWindow());
-                    //AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
+                    // CommonService.ClipboardTextStorage = Glfw.GetClipboardString(_handler.GetWindow());
+                    // AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
                     string paste_str = Glfw.GetClipboardString(_handler.GetWindow());
                     (FocusedItem as ITextShortcuts).PasteText(paste_str);//!!!!!!!!!!!
                 }
@@ -294,8 +294,8 @@ namespace SpaceVIL
             _tooltip.InitTimer(false);
             _tiargs.Character = codepoint;
             _tiargs.Mods = mods;
-            // FocusedItem?.InvokeInputTextEvents(codepoint, mods);
-            AssignActions(InputEventType.TextInput, _tiargs, FocusedItem);
+            FocusedItem?.EventTextInput?.Invoke(FocusedItem, _tiargs);
+            // AssignActions(InputEventType.TextInput, _tiargs, FocusedItem);
         }
         internal void Focus(Glfw.Window glfwwnd, bool value)
         {
