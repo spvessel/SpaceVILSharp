@@ -12,21 +12,14 @@ namespace SpaceVIL
         private static int count = 0;
         private Orientation _orientation;
         private int _spacerSize = 6;
-        //private Rectangle _holderShape;
 
-        public SplitHolder(Orientation or)
+        public SplitHolder(Orientation orientation)
         {
-            _orientation = or;
+            _orientation = orientation;
             SetItemName("SplitHolder_" + count);
             SetBackground(Color.Transparent);
             count++;
-            //_holderShape = new Rectangle();
             MakeHolderShape();
-            // EventMouseClick += EmptyEvent;
-            //EventMouseDrag += OnDragging;
-            //EventMouseDrop += EmptyEvent;
-
-
         }
 
         public void SetSpacerSize(int spSize)
@@ -38,11 +31,13 @@ namespace SpaceVIL
             }
         }
 
-        public int GetSpacerSize() {
+        public int GetHolderSize()
+        {
             return _spacerSize;
         }
 
-        private void MakeHolderShape() {
+        private void MakeHolderShape()
+        {
             switch (_orientation)
             {
                 case Orientation.Vertical:

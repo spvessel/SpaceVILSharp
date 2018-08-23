@@ -357,6 +357,11 @@ namespace SpaceVIL
         {
             engine.MinimizeWindow();
         }
+        internal bool _maximized = false;
+        public void Maximize()
+        {
+            engine.MaximizeWindow();
+        }
 
         public void IsFixed(bool flag)
         {

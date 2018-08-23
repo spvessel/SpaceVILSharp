@@ -329,7 +329,7 @@ namespace SpaceVIL
                     }
                     else
                     {
-                        list_width.Add(new int[2] { c, 0 });
+                        list_width.Add(new int[2] { c, 0});
                     }
                 }
             }
