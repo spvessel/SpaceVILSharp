@@ -3,9 +3,17 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
+    public enum HDirection
+    {
+        FromLeftToRight,
+        FromRightToLeft,
+    }
+
     public class TitleBar : WindowAnchor
     {
         static int count = 0;
+        private HorizontalStack _layout;
+        public HDirection Direction = HDirection.FromLeftToRight;
         private TextLine _text_object;
         private ImageItem _icon;
         public ImageItem GetIcon()
@@ -22,6 +30,11 @@ namespace SpaceVIL
         {
             return _minimize;
         }
+        private ButtonCore _maximize;
+        public ButtonCore GetMaximizeButton()
+        {
+            return _maximize;
+        }
 
         public TitleBar()
         {
@@ -30,11 +43,13 @@ namespace SpaceVIL
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             SetBackground(Color.FromArgb(255, 45, 45, 45));
             SetAlignment(ItemAlignment.Top);
-            SetPadding(20, 0, 10, 0);
+            SetPadding(10, 0, 10, 0);
             count++;
 
+            _layout = new HorizontalStack();
             _text_object = new TextLine();
             _minimize = new ButtonCore();
+            _maximize = new ButtonCore();
             _close = new ButtonCore();
             _icon = new ImageItem();
         }
@@ -42,14 +57,18 @@ namespace SpaceVIL
         {
             SetText(text);
         }
-        
-        public void SetIcon(Image icon)
+
+        public void SetIcon(Image icon, int width, int height)
         {
+            _icon.SetSize(width, height);
             _icon.SetImage(icon);
+            _icon.IsVisible = false;
         }
-        public void SetIcon(String url)
+        public void SetIcon(String url, int width, int height)
         {
+            _icon.SetSize(width, height);
             _icon.SetImageUrl(url);
+            _icon.IsVisible = false;
         }
 
         //text init
@@ -116,9 +135,14 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
+            _layout.SetSpacing(5);
+            AddItem(_layout);
+
             //text
             _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            _text_object.SetMargin(0, 0, 30, 8);
+            _text_object.SetMargin(0, 0, 0, 8);
+            _text_object.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+
             SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
             SetFont(new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold));
             SetForeground(Color.FromArgb(255, 180, 180, 180));
@@ -139,10 +163,10 @@ namespace SpaceVIL
 
             //_minimize
             _minimize.SetBackground(100, 100, 100);
-            _minimize.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
+            _minimize.SetAlignment(ItemAlignment.Left | ItemAlignment.Bottom);
             _minimize.IsCustom = new CustomFigure(true, GraphicsMathService.GetRectangle(15, 2, 0, 13));
-            _minimize.SetSize(15, 15);
-            _minimize.SetMargin(0, 0, 30, 8);
+            _minimize.SetSize(12, 15);
+            _minimize.SetMargin(0, 0, 5, 9);
             _minimize.AddItemState(true, ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
@@ -152,14 +176,47 @@ namespace SpaceVIL
                 GetHandler().Minimize();
             };
 
+            //_maximize
+            _maximize.SetBackground(100, 100, 100);
+            _maximize.SetAlignment(ItemAlignment.Left | ItemAlignment.Bottom);
+            _maximize.SetSize(12, 12);
+            _maximize.IsCustom = new CustomFigure(false, GraphicsMathService.GetRectangle());
+            _maximize.SetMargin(0, 0, 0, 9);
+            _maximize.SetPadding(2, 2, 2, 2);
+            _maximize.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(40, 0, 255, 64)
+            });
+            _maximize.EventMouseClick += (sender, args) =>
+            {
+                GetHandler().Maximize();
+            };
+            Rectangle center = new Rectangle();
+            center.SetBackground(GetBackground());
+            center.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+
+
             //icon
-            /*_icon.SetBackground(Color.Transparent);
+            _icon.IsVisible = false;
+            _icon.SetBackground(Color.Transparent);
             _icon.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            _icon.SetSize(20, 20);
-            _icon.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);//????*/
+            //_icon.SetSize(20, 20);
+            _icon.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
 
             //adding
-            AddItems(/*_icon,*/ _text_object, _minimize, _close);
+            switch (Direction)
+            {
+                case HDirection.FromLeftToRight:
+                    _layout.AddItems(_icon, _text_object, _minimize, _maximize, _close);
+                    break;
+                case HDirection.FromRightToLeft:
+                    _layout.AddItems(_close, _maximize, _minimize, _icon, _text_object);
+                    break;
+                default:
+                    _layout.AddItems(_icon, _text_object, _minimize, _maximize, _close);
+                    break;
+            }
+            _maximize.AddItem(center);
 
             //update text data
             _text_object.UpdateData(UpdateType.Critical);

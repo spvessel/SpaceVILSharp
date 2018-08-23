@@ -30,26 +30,18 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //tab view
-            // _tab_view = new Grid(2, 1);
             _tab_view = new VerticalStack();
-            // _tab_view.SetSpacing(vertical: 5);
             AddItem(_tab_view);
 
             //_tab_bar
             _tab_bar = new HorizontalStack();
-            _tab_bar.SetBackground(80, 80, 80);
             _tab_bar.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             _tab_bar.SetHeight(30);
-            // _tab_bar.SetSpacing(5);
-
-            // _tab_view.InsertItem(_tab_bar, 0, 0);
             _tab_view.AddItem(_tab_bar);
         }
 
         private void HideOthers(IItem sender, MouseArgs args)
         {
-            // _tab_view.InsertItem(_tab_list[sender as ButtonToggle], 1, 0);
-            // _tab_view.InsertItem(_tab_list[sender as ButtonToggle], 1, 0);
             foreach (var tab in _tab_bar.GetItems())
             {
                 if (tab.GetItemName() != sender.GetItemName())
@@ -65,14 +57,15 @@ namespace SpaceVIL
             _tab_view.UpdateLayout();
         }
 
-        public void AddTab(String name)
+        public void AddTab(String tab_name)
         {
-            ButtonToggle tab = new ButtonToggle(name);
-            tab.SetItemName(name);
+            ButtonToggle tab = new ButtonToggle(tab_name);
+            tab.SetItemName(tab_name);
             tab.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             tab.SetWidth(100);
-            tab.SetBackground(_tab_bar.GetBackground());
-            tab.SetForeground(Color.Black);
+            tab.SetBackground(45, 45, 45);
+            tab.SetForeground(180, 180, 180);
+            tab.SetFont(_font);
             tab.SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
             tab.AddItemState(true, ItemStateType.Hovered, new ItemState()
             {
@@ -80,28 +73,39 @@ namespace SpaceVIL
             });
             tab.AddItemState(true, ItemStateType.Toggled, new ItemState()
             {
-                Background = Color.FromArgb(255, 255, 181, 111)
+                Background = Color.FromArgb(71, 71, 71)
             });
             tab.EventMouseClick += HideOthers;
 
             _tab_bar.AddItem(tab);
 
             Frame view = new Frame();
-            view.SetItemName(name + "_view");
-            view.SetBackground(Color.Gray);
+            view.SetPadding(2, 2, 2, 2);
+            view.SetItemName(tab_name + "_view");
+            view.SetBackground(71, 71, 71);
             view.IsVisible = false;
-            // _tab_view.InsertItem(view, 1, 0);
             _tab_view.AddItem(view);
             _tab_list.Add(tab, view);
+
             if (_tab_bar.GetItems().Count == 1)
             {
                 tab.IsToggled = true;
                 view.IsVisible = true;
             }
         }
-        public void RemoveTab(String name)
+        public void AddTab(String tab_name, Style tab_style, Style view_style)
         {
-
+            //refactor
+        }
+        public void RemoveTab(String tab_name)
+        {
+            foreach (var tab in _tab_bar.GetItems())
+            {
+                if (tab_name == tab.GetItemName())
+                {
+                    _tab_list.Remove(tab as ButtonToggle);
+                }
+            }
         }
         public void AddItemToTab(String tab_name, BaseItem item)
         {
@@ -109,10 +113,78 @@ namespace SpaceVIL
             {
                 if (tab_name == tab.GetItemName())
                 {
-                    // Console.WriteLine(_tab_list[tab as ButtonToggle].GetItemName());
                     _tab_list[tab as ButtonToggle].AddItem(item);
                 }
             }
+        }
+
+        //text init
+        private ItemAlignment _textAlignment;
+        public void SetTextAlignment(ItemAlignment alignment)
+        {
+            _textAlignment = alignment;
+        }
+        private Margin _textMargin = new Margin();
+        public void SetTextMargin(Margin margin)
+        {
+            _textMargin = margin;
+        }
+        private Font _font =  new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold);
+        public void SetFont(Font font)
+        {
+            _font = font;
+        }
+        private int _font_size = 16;
+        public void SetFontSize(int size)
+        {
+            _font_size = size;
+        }
+        private FontStyle _font_style = FontStyle.Bold;
+        public void SetFontStyle(FontStyle style)
+        {
+            _font_style = style;
+        }
+        private FontFamily _font_family =  new FontFamily("Open Sans Light");
+        public void SetFontFamily(FontFamily font_family)
+        {
+            _font_family = font_family;
+        }
+        public Font GetFont()
+        {
+            return _font;
+        }
+        private Color _foreground = Color.White;
+        public void SetForeground(Color color)
+        {
+            _foreground = color;
+        }
+        public void SetForeground(int r, int g, int b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            SetForeground(Color.FromArgb(255, r, g, b));
+        }
+        public void SetForeground(int r, int g, int b, int a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            SetForeground(Color.FromArgb(a, r, g, b));
+        }
+        public void SetForeground(float r, float g, float b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            SetForeground(Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+        }
+        public void SetForeground(float r, float g, float b, float a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            SetForeground(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
         }
     }
 }

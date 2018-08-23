@@ -65,6 +65,7 @@ namespace SpaceVIL
         static int count = 0;
         public ListArea()
         {
+            SetPadding(2, 2, 2, 2);
             SetItemName("ListArea_" + count);
             count++;
             EventMouseClick += OnMouseClick;

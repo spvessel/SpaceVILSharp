@@ -13,7 +13,7 @@ namespace SpaceVIL
         private static LogService _instance;
         private static object logLocker = new object();
         static bool isLogging = true;
-        public static string logPath = @".\Log\LogNote.txt";
+        public static string logPath = @".\LogNote.txt";
         private static StreamWriter fstream;
 
         private LogService() { }
@@ -482,7 +482,7 @@ namespace SpaceVIL
             fstream = new StreamWriter(logPath, true, Encoding.Default);
             fstream.WriteLine(text);
             fstream.Close();
-            Console.WriteLine(text);
+            //Console.WriteLine(text);
         }
     }
 

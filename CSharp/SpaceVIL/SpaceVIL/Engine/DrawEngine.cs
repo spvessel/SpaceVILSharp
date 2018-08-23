@@ -232,7 +232,7 @@ namespace SpaceVIL
                 if ((mods == KeyMods.Control && key == KeyCode.V) || (mods == KeyMods.Shift && key == KeyCode.Insert))
                 {
                     CommonService.ClipboardTextStorage = Glfw.GetClipboardString(_handler.GetWindow());
-                    //AssignActions(InputEventType.KeyRelease, _kargs, FocusedItem);
+                    AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
                     // string paste_str = Glfw.GetClipboardString(_handler.GetWindow());
                     //(FocusedItem as ITextShortcuts).PasteText(paste_str);//!!!!!!!!!!!
                 }
@@ -369,6 +369,27 @@ namespace SpaceVIL
         {
             EngineEvent.SetEvent(InputEventType.WindowMinimize);
             Glfw.IconifyWindow(_handler.GetWindow());
+        }
+        public void MaximizeWindow()
+        {
+            if (_handler.GetLayout()._maximized)
+            {
+                Glfw.RestoreWindow(_handler.GetWindow());
+                _handler.GetLayout()._maximized = false;
+                int w, h;
+                Glfw.GetWindowSize(_handler.GetWindow(), out w, out h);
+                _handler.GetLayout().SetWidth(w);
+                _handler.GetLayout().SetHeight(h);
+            }
+            else
+            {
+                Glfw.MaximizeWindow(_handler.GetWindow());
+                _handler.GetLayout()._maximized = true;
+                int w, h;
+                Glfw.GetWindowSize(_handler.GetWindow(), out w, out h);
+                _handler.GetLayout().SetWidth(w);
+                _handler.GetLayout().SetHeight(h);
+            }
         }
         //OpenGL input interaction function
         private VisualItem IsInListHoveredItems<T>()
@@ -719,7 +740,11 @@ namespace SpaceVIL
         internal void Update()
         {
             lock (_handler.GetLayout().engine_locker)
+            {
+                if (_handler.GetLayout().IsBorderHidden)
+                    glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
                 Render();
+            }
         }
 
         public void Run()
