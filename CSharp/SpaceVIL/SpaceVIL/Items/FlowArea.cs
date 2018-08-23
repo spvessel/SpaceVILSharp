@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class FlowArea : VisualItem, IFlow, IDraggable
+    public class FlowArea : VisualItem, IGrid, IDraggable
     {
         static int count = 0;
         Dictionary<BaseItem, int[]> _stored_crd;
@@ -72,6 +72,11 @@ namespace SpaceVIL
         {
             base.AddItem(item);
             _stored_crd.Add(item, new int[] { item.GetX(), item.GetY() });
+            ResizableItem wanted = item as ResizableItem;
+            if (wanted != null)
+            {
+                wanted.PositionChanged += () => CorrectPosition(wanted);
+            }
             UpdateLayout();
         }
         public override void RemoveItem(BaseItem item)
@@ -85,11 +90,25 @@ namespace SpaceVIL
             foreach (var child in GetItems())
             {
                 child.SetX((int)_xOffset + GetX() + GetPadding().Left + _stored_crd[child][0] + child.GetMargin().Left);
-                child.SetY((int)_yOffset + GetY() + GetPadding().Top + +_stored_crd[child][1] + child.GetMargin().Top);
+                child.SetY((int)_yOffset + GetY() + GetPadding().Top + _stored_crd[child][1] + child.GetMargin().Top);
             }
         }
 
         //ContexMenu
+        private void CorrectPosition(ResizableItem item)
+        {
+            int actual_x = item.GetX();
+            int stored_x = _stored_crd[item][0];
+            int actual_y = item.GetY();
+            int stored_y = _stored_crd[item][1];
+
+            _stored_crd[item] = new int[]
+            {
+                actual_x - (int)_xOffset - GetX() - GetPadding().Left - item.GetMargin().Left,
+                actual_y - (int)_yOffset - GetY() - GetPadding().Top - item.GetMargin().Top
+            };
+        }
+
         public void PrepElements()
         {
             Font font = new Font(new FontFamily("Courier New"), 16, FontStyle.Regular);

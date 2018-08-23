@@ -5,6 +5,7 @@ namespace SpaceVIL
 {
     public class FloatItem : VisualItem, IFloating, IDraggable //create abstract!!!!
     {
+        private bool IsFloating = true;
         private bool init = false;
         static int count = 0;
         private int _diff_x = 0;
@@ -95,6 +96,9 @@ namespace SpaceVIL
 
         protected virtual void OnDragging(object sender, MouseArgs args)
         {
+            if (!IsFloating)
+                return;
+
             int offset_x;
             int offset_y;
 

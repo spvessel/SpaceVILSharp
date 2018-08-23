@@ -200,7 +200,6 @@ namespace SpaceVIL
             _icon.IsVisible = false;
             _icon.SetBackground(Color.Transparent);
             _icon.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            //_icon.SetSize(20, 20);
             _icon.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
 
             //adding

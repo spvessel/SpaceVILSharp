@@ -113,7 +113,7 @@ namespace SpaceVIL
 
                 Letter currLet;
                 Letter prevLet = null;
-                foreach (char c in text.ToCharArray())
+                foreach (char c in text.TrimEnd().ToCharArray())
                 {
                     if (!letters.ContainsKey(c)) AddLetter(c);
 
