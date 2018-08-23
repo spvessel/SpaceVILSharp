@@ -219,7 +219,7 @@ namespace SpaceVIL
             _maximize.AddItem(center);
 
             //update text data
-            _text_object.UpdateData(UpdateType.Critical);
+            //_text_object.UpdateData(UpdateType.Critical);
         }
     }
 }

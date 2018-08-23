@@ -139,7 +139,7 @@ namespace SpaceVIL
             AddItem(_show_pwd_btn);
 
             //update text data
-            _text_object.UpdateData(UpdateType.Critical);
+            //_text_object.UpdateData(UpdateType.Critical);
         }
 
         //style

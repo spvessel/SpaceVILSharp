@@ -849,7 +849,7 @@ namespace SpaceVIL
             if (!_tooltip.IsVisible)
                 return;
 
-            _tooltip.GetTextLine().UpdateData(UpdateType.Critical);
+            //_tooltip.GetTextLine().UpdateData(UpdateType.Critical);
             _tooltip.SetWidth(
                 _tooltip.GetPadding().Left +
                 _tooltip.GetPadding().Right +
@@ -1356,7 +1356,9 @@ namespace SpaceVIL
             glGenBuffers(2, buffers);
 
             float[] data = item.Shape();
+            if (data == null) return;
             float[] colorData = item.GetColors();
+            if (colorData == null) return;
 
             //bool ok = CheckOutsideBorders(item as BaseItem); //deprecated
             CheckOutsideBorders(item as BaseItem);

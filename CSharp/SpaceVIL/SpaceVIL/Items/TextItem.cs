@@ -7,15 +7,17 @@ namespace SpaceVIL
     abstract public class TextItem : Primitive
     {
         private List<float> _alphas;
+        private List<float> _interCoords;
         private float[] _coordinates;
         private float[] _colors;
         private String _itemText = "";
+        //private bool _needToGl = false;
 
         private Font _font = new Font(new FontFamily("Courier New"), 16, FontStyle.Regular);
 
-        private bool _criticalFlag = true;
-        private bool _coordsFlag = true;
-        private bool _colorFlag = true;
+        //private bool _criticalFlag = true;
+        //private bool _coordsFlag = true;
+        //private bool _colorFlag = true;
         static int count = 0;
         public TextItem()
         {
@@ -29,18 +31,28 @@ namespace SpaceVIL
         public TextItem(String text, Font font, String name) : this()
         {
             _itemText = text;
-            this._font = font;
+            _font = font;
         }
 
         protected void SetRealCoords(List<float> realCoords)
         {
-            _coordinates = ToGL(realCoords);
+            /*
+            if (GetHandler() == null)
+            {
+                _interCoords = realCoords;
+                _needToGl = true;
+            }
+            else
+            {*/
+                _coordinates = ToGL(realCoords);
+            //    _needToGl = false;
+            //}
             // _coordinates = realCoords.ToArray();//ToGL(realCoords);
         }
 
         protected void SetAlphas(List<float> alphas)
         {
-            this._alphas = alphas;
+            _alphas = alphas;
             SetColor(alphas);
         }
 
@@ -50,10 +62,10 @@ namespace SpaceVIL
         }
         internal void SetItemText(String itemText)
         {
-            if (!this._itemText.Equals(itemText))
+            if (!_itemText.Equals(itemText))
             {
-                this._itemText = itemText;
-                _criticalFlag = true;
+                _itemText = itemText;
+                UpdateData(); //_criticalFlag = true;
             }
         }
 
@@ -63,41 +75,43 @@ namespace SpaceVIL
         }
         internal void SetFont(Font font)
         {
-            if (!this._font.Equals(font))
+            if (!_font.Equals(font))
             {
-                this._font = font;
-                _criticalFlag = true;
+                _font = font;
+                UpdateData(); //_criticalFlag = true;
             }
         }
         internal void SetFontSize(int size)
         {
-            if (this._font.Size != size)
+            if (_font.Size != size)
             {
-                this._font = new Font(this._font.FontFamily, size, this._font.Style);
-                _criticalFlag = true;
+                _font = new Font(_font.FontFamily, size, _font.Style);
+                UpdateData(); //_criticalFlag = true;
             }
         }
         internal void SetFontStyle(FontStyle style)
         {
-            if (this._font.Style != style)
+            if (_font.Style != style)
             {
-                this._font = new Font(this._font.FontFamily, this._font.Size, style);
-                _criticalFlag = true;
+                _font = new Font(_font.FontFamily, _font.Size, style);
+                UpdateData(); //_criticalFlag = true;
             }
         }
         internal void SetFontFamily(FontFamily font_family)
         {
-            if (this._font.FontFamily != font_family)
+            if (_font.FontFamily != font_family)
             {
-                this._font = new Font(font_family, this._font.Size, this._font.Style);
-                _criticalFlag = true;
+                _font = new Font(font_family, _font.Size, _font.Style);
+                UpdateData(); //_criticalFlag = true;
             }
         }
 
-        public abstract void UpdateData(UpdateType updateType);
+        public abstract void UpdateData(); //UpdateType updateType);
+        protected abstract void UpdateCoords();
 
         internal float[] GetCoordinates()
         {
+            /*
             if (_criticalFlag)
             {
                 UpdateData(UpdateType.Critical);
@@ -109,16 +123,22 @@ namespace SpaceVIL
                 UpdateData(UpdateType.CoordsOnly);
                 _coordsFlag = false;
             }
+            */
+
+            //if (_needToGl) SetRealCoords(_interCoords);
+
             return _coordinates;
         }
 
         internal float[] GetColors()
         {
+            /*
             if (_colorFlag)
             {
                 SetAlphas(_alphas);
                 _colorFlag = false;
             }
+            */
             return _colors;
         }
 
@@ -169,10 +189,10 @@ namespace SpaceVIL
         }
         public void SetForeground(Color foreground)
         {
-            if (!this._foreground.Equals(foreground))
+            if (!_foreground.Equals(foreground))
             {
-                this._foreground = foreground;
-                _colorFlag = true;
+                _foreground = foreground;
+                SetColor(_alphas); //_colorFlag = true;
             }
         }
         public void SetForeground(int r, int g, int b)
@@ -206,6 +226,8 @@ namespace SpaceVIL
 
         private void SetColor(List<float> alphas)
         {
+            if (alphas == null)
+                return;
             _colors = new float[alphas.Count * 4];
             
             Color col = GetForeground();
@@ -304,18 +326,18 @@ namespace SpaceVIL
         }
         public void SetTextAlignment(ItemAlignment value)
         {
-            //Bottomif (!_textAlignment.Equals(value))
+            //if (!_textAlignment.Equals(value))
             {
                 _textAlignment = value;
-                _coordsFlag = true;
+                UpdateCoords(); //_coordsFlag = true;
             }
         }
-
+        /*
         protected void SetCoordsFlag(bool flag)
         {
             _coordsFlag = flag;
         }
-
+        */
         public virtual float[] Shape()
         {
             return GetCoordinates();

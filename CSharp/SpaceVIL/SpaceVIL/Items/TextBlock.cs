@@ -125,6 +125,7 @@ namespace SpaceVIL
             int pos = 0;
 
             List<int> lineLetPos = _linesList[lineNumb].GetLetPosArray();
+            if (lineLetPos == null) return pos;
 
             for (int i = 0; i < lineLetPos.Count; i++)
             {
@@ -332,11 +333,12 @@ namespace SpaceVIL
         private Point CursorPosToCoord(Point cPos0)
         {
             Point coord = new Point(0, 0);
+            
             Point cPos = CheckLineFits(cPos0);
             int letCount = GetLineLetCount(cPos.Y);
             //Console.WriteLine(cPos0.X + " " + cPos0.Y + " " + _linesList[cPos.Y].GetLetPosArray());
             coord.Y = (int)_linesList[cPos.Y].GetLineYShift();
-
+            
             if (letCount == 0)
             {
                 coord.X = 0;
@@ -452,7 +454,7 @@ namespace SpaceVIL
         private void SetTextInLine(String text)
         {
             _linesList[_cursor_position.Y].SetItemText(text);
-            _linesList[_cursor_position.Y].UpdateData(UpdateType.Critical);
+            //_linesList[_cursor_position.Y].UpdateData(UpdateType.Critical); //Doing in TextItem
         }
 
         public int GetTextWidth()
@@ -559,7 +561,7 @@ namespace SpaceVIL
             AddAllLines();
 
             //update text data
-            UpdateLinesData(UpdateType.Critical);
+            //UpdateLinesData(UpdateType.Critical);
         }
 
         private void SetLineContainerAlignment(ItemAlignment alignment)
@@ -567,13 +569,13 @@ namespace SpaceVIL
             foreach (TextLine tl in _linesList)
                 tl.SetAlignment(alignment);
         }
-
+        /*
         private void UpdateLinesData(UpdateType updateType)
         {
             foreach (TextLine tl in _linesList)
                 tl.UpdateData(updateType);
         }
-
+        */
         private void AddAllLines()
         {
             RemoveItem(_cursor);
@@ -834,7 +836,7 @@ namespace SpaceVIL
                 _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * (i + 1));
             _linesList.Insert(lineNum, te);
             AddItem(_cursor);
-            te.UpdateData(UpdateType.Critical);
+            //te.UpdateData(UpdateType.Critical); //Doing when SetItemText
         }
 
         private void BreakLine()

@@ -91,7 +91,7 @@ namespace SpaceVIL
             AddItem(_text_object);
 
             //update text data
-            _text_object.UpdateData(UpdateType.Critical);
+            //_text_object.UpdateData(UpdateType.Critical);
         }
 
         //style

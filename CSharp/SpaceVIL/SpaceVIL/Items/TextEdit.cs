@@ -99,6 +99,7 @@ namespace SpaceVIL
             int pos = 0;
 
             List<int> lineLetPos = _text_object.GetLetPosArray();
+            if (lineLetPos == null) return pos;
 
             for (int i = 0; i < lineLetPos.Count; i++)
             {
@@ -215,6 +216,7 @@ namespace SpaceVIL
         private int CursorPosToCoord(int cPos)
         {
             int coord = 0;
+            if (_text_object.GetLetPosArray() == null) return coord;
             int letCount = _text_object.GetLetPosArray().Count;
             //_cursor_position = (_cursor_position < 0) ? 0 : _cursor_position;
             //_cursor_position = (_cursor_position > letCount) ? letCount : _cursor_position;
@@ -285,7 +287,7 @@ namespace SpaceVIL
         public void SetText(String text)
         {
             _text_object.SetItemText(text);
-            _text_object.UpdateData(UpdateType.Critical);
+            //_text_object.UpdateData(UpdateType.Critical); //Doing in _text_object
         }
         public String GetText()
         {
@@ -333,7 +335,7 @@ namespace SpaceVIL
             AddItems(_selectedArea, _text_object, _cursor);
 
             //update text data
-            _text_object.UpdateData(UpdateType.Critical);
+            //_text_object.UpdateData(UpdateType.Critical);
         }
 
         //style

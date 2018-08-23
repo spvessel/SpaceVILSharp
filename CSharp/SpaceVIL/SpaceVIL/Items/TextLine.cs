@@ -61,10 +61,14 @@ namespace SpaceVIL
             SetAlphas(alphas);
 
             AddAllShifts();
+            
         }
 
         private void AddAllShifts()
         {
+            if (GetParent() == null)
+                return;
+
             if (_coordArray == null)
                 return;
 
@@ -122,22 +126,27 @@ namespace SpaceVIL
         //    return _lineSpacer;
         //}
 
-        public override void UpdateData(UpdateType updateType)
+        public override void UpdateData() //UpdateType updateType)
         {
-            switch (updateType)
-            {
-                case UpdateType.Critical:
+            //switch (updateType)
+            //{
+            //    case UpdateType.Critical:
                     int[] output = FontEngine.GetSpacerDims(GetFont());
                     _minLineSpacer = output[0];
                     _minFontY = output[1];
                     _maxFontY = output[2];
                     //_lineSpacer = _minLineSpacer;
                     CreateText();
-                    break;
-                case UpdateType.CoordsOnly:
-                    AddAllShifts();
-                    break;
-            }
+            //        break;
+            //    case UpdateType.CoordsOnly:
+            //        AddAllShifts();
+            //        break;
+            //}
+        }
+
+        protected override void UpdateCoords()
+        {
+            AddAllShifts();
         }
 
         public TextItem GetText()
@@ -159,7 +168,7 @@ namespace SpaceVIL
         internal void SetLineYShift(float sp)
         {
             _lineYShift = sp;
-            SetCoordsFlag(true);
+            UpdateCoords(); //SetCoordsFlag(true);
         }
 
         internal float GetLineYShift()
