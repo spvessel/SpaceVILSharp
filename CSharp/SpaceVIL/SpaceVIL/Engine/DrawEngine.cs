@@ -231,10 +231,10 @@ namespace SpaceVIL
             {
                 if ((mods == KeyMods.Control && key == KeyCode.V) || (mods == KeyMods.Shift && key == KeyCode.Insert))
                 {
-                    CommonService.ClipboardTextStorage = Glfw.GetClipboardString(_handler.GetWindow());
-                    AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
-                    // string paste_str = Glfw.GetClipboardString(_handler.GetWindow());
-                    //(FocusedItem as ITextShortcuts).PasteText(paste_str);//!!!!!!!!!!!
+                    //CommonService.ClipboardTextStorage = Glfw.GetClipboardString(_handler.GetWindow());
+                    //AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
+                    string paste_str = Glfw.GetClipboardString(_handler.GetWindow());
+                    (FocusedItem as ITextShortcuts).PasteText(paste_str);//!!!!!!!!!!!
                 }
                 else if (mods == KeyMods.Control && key == KeyCode.C)
                 {
