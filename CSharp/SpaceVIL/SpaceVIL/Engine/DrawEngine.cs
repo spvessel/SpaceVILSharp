@@ -171,7 +171,7 @@ namespace SpaceVIL
                     Glfw.Image[] images = new Glfw.Image[2];
                     images[0] = _icon_big;
                     images[1] = _icon_small;
-                    Glfw.SetWindowIcon(_handler.GetWindow(), images);
+                    Glfw.SetWindowIcon(_handler.GetWindowId(), images);
                 }
                 SetWindowPos();
                 SetEventsCallbacks();
@@ -233,18 +233,18 @@ namespace SpaceVIL
                 {
                     // CommonService.ClipboardTextStorage = Glfw.GetClipboardString(_handler.GetWindow());
                     // AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
-                    string paste_str = Glfw.GetClipboardString(_handler.GetWindow());
+                    string paste_str = Glfw.GetClipboardString(_handler.GetWindowId());
                     (FocusedItem as ITextShortcuts).PasteText(paste_str);//!!!!!!!!!!!
                 }
                 else if (mods == KeyMods.Control && key == KeyCode.C)
                 {
                     string copy_str = (FocusedItem as ITextShortcuts).GetSelectedText();
-                    Glfw.SetClipboardString(_handler.GetWindow(), copy_str);
+                    Glfw.SetClipboardString(_handler.GetWindowId(), copy_str);
                 }
                 else if (mods == KeyMods.Control && key == KeyCode.X)
                 {
                     string cut_str = (FocusedItem as ITextShortcuts).CutText();
-                    Glfw.SetClipboardString(_handler.GetWindow(), cut_str);
+                    Glfw.SetClipboardString(_handler.GetWindowId(), cut_str);
                 }
                 else
                 {
@@ -333,7 +333,7 @@ namespace SpaceVIL
             EngineEvent.SetEvent(InputEventType.WindowMove);
             _handler.GetLayout().SetX(_handler.WPosition.X);
             _handler.GetLayout().SetY(_handler.WPosition.Y);
-            Glfw.SetWindowPos(_handler.GetWindow(), _handler.WPosition.X, _handler.WPosition.Y);
+            Glfw.SetWindowPos(_handler.GetWindowId(), _handler.WPosition.X, _handler.WPosition.Y);
         }
         private void Position(Glfw.Window glfwwnd, int xpos, int ypos)
         {
@@ -358,7 +358,7 @@ namespace SpaceVIL
         public void SetWindowSize()
         {
             EngineEvent.SetEvent(InputEventType.WindowResize);
-            Glfw.SetWindowSize(_handler.GetWindow(), _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
+            Glfw.SetWindowSize(_handler.GetWindowId(), _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
             if (_handler.GetLayout().IsBorderHidden)
             {
                 glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
@@ -368,25 +368,25 @@ namespace SpaceVIL
         public void MinimizeWindow()
         {
             EngineEvent.SetEvent(InputEventType.WindowMinimize);
-            Glfw.IconifyWindow(_handler.GetWindow());
+            Glfw.IconifyWindow(_handler.GetWindowId());
         }
         public void MaximizeWindow()
         {
-            if (_handler.GetLayout()._maximized)
+            if (_handler.GetLayout().IsMaximized)
             {
-                Glfw.RestoreWindow(_handler.GetWindow());
-                _handler.GetLayout()._maximized = false;
+                Glfw.RestoreWindow(_handler.GetWindowId());
+                _handler.GetLayout().IsMaximized = false;
                 int w, h;
-                Glfw.GetWindowSize(_handler.GetWindow(), out w, out h);
+                Glfw.GetWindowSize(_handler.GetWindowId(), out w, out h);
                 _handler.GetLayout().SetWidth(w);
                 _handler.GetLayout().SetHeight(h);
             }
             else
             {
-                Glfw.MaximizeWindow(_handler.GetWindow());
-                _handler.GetLayout()._maximized = true;
+                Glfw.MaximizeWindow(_handler.GetWindowId());
+                _handler.GetLayout().IsMaximized = true;
                 int w, h;
-                Glfw.GetWindowSize(_handler.GetWindow(), out w, out h);
+                Glfw.GetWindowSize(_handler.GetWindowId(), out w, out h);
                 _handler.GetLayout().SetWidth(w);
                 _handler.GetLayout().SetHeight(h);
             }
@@ -394,14 +394,17 @@ namespace SpaceVIL
         //OpenGL input interaction function
         private VisualItem IsInListHoveredItems<T>()
         {
+            VisualItem wanted = null;
             foreach (var item in HoveredItems)
             {
                 if (item is T)
                 {
-                    return item;
+                    wanted = item;
+                    if (wanted is IFloating)
+                        return wanted;
                 }
             }
-            return null;
+            return wanted;
         }
 
         private bool GetHoverVisualItem(float xpos, float ypos)
@@ -496,7 +499,7 @@ namespace SpaceVIL
                         ptrPress.Y = ptrRelease.Y;
                     }
 
-                    if (_handler.GetLayout().GetWindow()._sides != 0)
+                    if (_handler.GetLayout().GetWindow()._sides != 0 && !_handler.GetLayout().IsMaximized)
                     {
                         _handler.GetLayout().SetWidth(w);
                         _handler.GetLayout().SetHeight(h);
@@ -525,7 +528,7 @@ namespace SpaceVIL
 
                         //Update();
                     }
-                    else if (anchor != null && !(HoveredItem is ButtonCore))
+                    else if (anchor != null && !(HoveredItem is ButtonCore) && !_handler.GetLayout().IsMaximized)
                     {
                         if ((ptrRelease.X - ptrPress.X) != 0 || (ptrRelease.Y - ptrPress.Y) != 0)
                         {
@@ -552,7 +555,7 @@ namespace SpaceVIL
                     }
 
                     _handler.SetCursorType(Glfw.CursorType.Arrow);
-                    if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble)
+                    if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble && !_handler.GetLayout().IsMaximized)
                     {
                         //resize
                         if ((xpos < _handler.GetLayout().GetWindow().GetWidth() - 5)
@@ -634,14 +637,12 @@ namespace SpaceVIL
             {
                 case InputState.Release:
                     _handler.GetLayout().GetWindow()._sides = 0;
-                    EngineEvent.ResetAllEvents();
-                    EngineEvent.SetEvent(InputEventType.MouseRelease);
 
                     if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize)
                         || EngineEvent.LastEvent().HasFlag(InputEventType.WindowMove))
                     {
-                        // EngineEvent.SetEvent(InputEventType.MouseRelease);
-                        // EngineEvent.ResetAllEvents();
+                        EngineEvent.SetEvent(InputEventType.MouseRelease);
+                        EngineEvent.ResetAllEvents();
                         return;
                     }
                     if (EngineEvent.LastEvent().HasFlag(InputEventType.MouseMove))
@@ -649,8 +650,8 @@ namespace SpaceVIL
                         float len = (float)Math.Sqrt(Math.Pow(ptrRelease.X - ptrClick.X, 2) + Math.Pow(ptrRelease.Y - ptrClick.Y, 2));
                         if (len > 3.0f)
                         {
-                            // EngineEvent.ResetAllEvents();
-                            // EngineEvent.SetEvent(InputEventType.MouseRelease);
+                            EngineEvent.ResetAllEvents();
+                            EngineEvent.SetEvent(InputEventType.MouseRelease);
                             return;
                         }
                     }
@@ -666,10 +667,13 @@ namespace SpaceVIL
                         FocusedItem = HoveredItem;
                         FocusedItem.IsFocused = true;
                     }
+                    EngineEvent.ResetAllEvents();
+                    EngineEvent.SetEvent(InputEventType.MouseRelease);
                     break;
 
                 case InputState.Press:
-                    Glfw.GetCursorPos(_handler.GetWindow(), out double xpos, out double ypos);
+
+                    Glfw.GetCursorPos(_handler.GetWindowId(), out double xpos, out double ypos);
                     ptrClick.X = (int)xpos;
                     ptrClick.Y = (int)ypos;
 
@@ -753,7 +757,7 @@ namespace SpaceVIL
             glBindVertexArray(_handler.GVAO[0]);
 
             _primitive.UseShader();
-            Focus(_handler.GetWindow(), true);
+            Focus(_handler.GetWindowId(), true);
 
             while (!_handler.IsClosing())
             {
@@ -783,10 +787,10 @@ namespace SpaceVIL
                 }
                 //draw tooltip if needed
                 DrawToolTip();
-                // if (!_handler.Focusable)
-                // {
-                //     DrawShadePillow();
-                // }
+                if (!_handler.Focusable)
+                {
+                    DrawShadePillow();
+                }
                 _handler.Swap();
             }
             //Thread.Sleep(1000/60);

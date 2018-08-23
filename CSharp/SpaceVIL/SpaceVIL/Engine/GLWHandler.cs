@@ -45,6 +45,7 @@ namespace SpaceVIL
         internal bool Resizeble;
         internal bool Visible;
         internal bool AlwaysOnTop;
+        internal bool Maximized;
         internal Pointer WPosition = new Pointer();
         ///////////////////////////////////////////////
 
@@ -54,7 +55,7 @@ namespace SpaceVIL
             return _w_layout;
         }
         Glfw.Window _window;
-        internal Glfw.Window GetWindow()
+        internal Glfw.Window GetWindowId()
         {
             return _window;
         }
@@ -97,6 +98,7 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window
             Glfw.WindowHint(Glfw.Hint.Focused, Focusable);
             Glfw.WindowHint(Glfw.Hint.Floating, AlwaysOnTop);
+            Glfw.WindowHint(Glfw.Hint.Maximized, Maximized);
             Glfw.WindowHint(Glfw.Hint.Visible, Visible);
             //Glfw.WindowHint(Glfw.Hint.DepthBits, 16);
             //Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, true);

@@ -61,6 +61,7 @@ namespace SpaceVIL
             IsFocusable = true;
             IsAlwaysOnTop = false;
             IsOutsideClickClosable = false;
+            IsMaximized = false;
 
             manager = new ActionManager(this);
             engine = new DrawEngine(this);
@@ -259,6 +260,7 @@ namespace SpaceVIL
         //methods
         public void Show()
         {
+            engine._handler.Maximized = IsMaximized;
             engine._handler.Visible = !IsHidden;
             engine._handler.Resizeble = IsResizeble;
             engine._handler.BorderHidden = IsBorderHidden;
@@ -351,13 +353,13 @@ namespace SpaceVIL
         {
             WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = true;
             WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Focus(
-                WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.GetWindow(), true);
+                WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.GetWindowId(), true);
         }
         public void Minimize()
         {
             engine.MinimizeWindow();
         }
-        internal bool _maximized = false;
+        public bool IsMaximized = false;
         public void Maximize()
         {
             engine.MaximizeWindow();

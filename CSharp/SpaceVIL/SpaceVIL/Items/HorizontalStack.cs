@@ -67,7 +67,6 @@ namespace SpaceVIL
             int startX = GetX() + GetPadding().Left;
             foreach (var child in GetItems())
             {
-
                 //if (child.IsVisible)
                 {
                     child.SetX(startX + offset + child.GetMargin().Left);//
