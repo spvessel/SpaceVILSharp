@@ -487,6 +487,7 @@ namespace SpaceVIL
                             _handler.WPosition.X += (ptrRelease.X - ptrPress.X);
                             w -= (ptrRelease.X - ptrPress.X);
                         }
+                        //ptrPress.X = ptrRelease.X;
                     }
                     if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Right))
                     {
