@@ -74,7 +74,7 @@ namespace SpaceVIL
             if (_lineSpacer < _minLineSpacer)
                 _lineSpacer = _minLineSpacer;
 
-            _cursor.SetHeight(_lineHeight + _lineSpacer + 6);
+            _cursor.SetHeight(_lineHeight + _lineSpacer); // + 6);
         }
 
         protected virtual void OnMousePressed(object sender, MouseArgs args)
@@ -363,7 +363,7 @@ namespace SpaceVIL
         {
             Point pos = AddXYShifts(0, 0, _cursor_position);
             _cursor.SetX(pos.X);
-            _cursor.SetY(pos.Y - 3);
+            _cursor.SetY(pos.Y);// - 3);
         }
 
         private int _lineSpacer;
@@ -377,13 +377,21 @@ namespace SpaceVIL
                 _lineSpacer = lineSpacer;
 
                 if (_linesList == null) return;
+
+                /*????????????????????
                 foreach (TextLine te in _linesList)
                 {
                     te.SetLineYShift(_lineHeight + _lineSpacer);
                 }
+                */
+
+                for (int i = 0; i < _linesList.Count; i++)
+                {
+                    _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * i + _lineSpacer);
+                }
             }
 
-            _cursor.SetHeight(_lineHeight + _lineSpacer + 6);
+            _cursor.SetHeight(_lineHeight + _lineSpacer); // + 6);
         }
 
         public int GetLineSpacer()
@@ -436,7 +444,7 @@ namespace SpaceVIL
                 foreach (TextLine te in _linesList)
                     te.SetFont(font);
 
-                _cursor.SetHeight(_lineHeight + _lineSpacer + 6);
+                _cursor.SetHeight(_lineHeight + _lineSpacer); // + 6);
             }
         }
         public Font GetFont()
@@ -551,7 +559,7 @@ namespace SpaceVIL
             //_cursor.SetMargin(0, 5, 0, 5);
             _cursor.SetWidth(2);
 
-            _cursor.SetHeight(_lineHeight + _lineSpacer + 6);
+            _cursor.SetHeight(_lineHeight + _lineSpacer);// + 6
             _cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             //selectedArea
             //_selectedArea.SetMargin(0, 5, 0, 5);
@@ -633,6 +641,8 @@ namespace SpaceVIL
             Point tmp = new Point();
             if (from.Y == to.Y)
             {
+                Console.WriteLine("Font: " + (_maxFontY - _minFontY));
+                Console.WriteLine("Cur: " + _cursor.GetHeight());
                 selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight(), fromReal));
                 selectionRectangles.Add(AddXYShifts(0, 0, toReal));
                 _selectedArea.SetRectangles(selectionRectangles);
@@ -831,9 +841,9 @@ namespace SpaceVIL
                 te.SetFont(_elementFont);
             AddItem(te);
             te.SetItemText(text);
-            te.SetLineYShift((_lineHeight + _lineSpacer) * lineNum);
+            te.SetLineYShift((_lineHeight + _lineSpacer) * lineNum + +_lineSpacer);
             for (int i = lineNum; i < _linesList.Count; i++)
-                _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * (i + 1));
+                _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * (i + 1) + _lineSpacer);
             _linesList.Insert(lineNum, te);
             AddItem(_cursor);
             //te.UpdateData(UpdateType.Critical); //Doing when SetItemText
@@ -882,7 +892,7 @@ namespace SpaceVIL
 
             for (int i = fromLine; i < _linesList.Count; i++)
             {
-                _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * i);
+                _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * i + _lineSpacer);
             }
         }
     }
