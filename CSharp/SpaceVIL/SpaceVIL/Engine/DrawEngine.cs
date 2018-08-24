@@ -392,7 +392,7 @@ namespace SpaceVIL
             }
         }
         //OpenGL input interaction function
-        private VisualItem IsInListHoveredItems<T>()
+        private VisualItem IsInListHoveredItems<T>()//idraggable adaptations
         {
             VisualItem wanted = null;
             foreach (var item in HoveredItems)
@@ -407,7 +407,7 @@ namespace SpaceVIL
             return wanted;
         }
 
-        private bool GetHoverVisualItem(float xpos, float ypos)
+        private bool GetHoverVisualItem(float xpos, float ypos, InputEventType action)
         {
             HoveredItems.Clear();
 
@@ -426,10 +426,24 @@ namespace SpaceVIL
                 {
                     if (!(item as VisualItem).IsVisible)
                         continue;
+
                     if ((item as VisualItem).GetHoverVerification(xpos, ypos))
                     {
                         HoveredItems.Add(item as VisualItem);
                         AssignActions(InputEventType.MouseHover, _margs, item as VisualItem);
+                    }
+                    else
+                    {
+                        IFloating float_item = item as IFloating;
+                        if (float_item != null && action == InputEventType.MouseRelease)
+                        {
+                            if (float_item.IsOutsideClickClosable())
+                            {
+                                ContextMenu to_close = (item as ContextMenu);
+                                if (to_close != null && to_close.CloseDependencies(_margs))
+                                    float_item.Hide();
+                            }
+                        }
                     }
                     AssignActions(InputEventType.MouseMove, _margs, false);
                 }
@@ -473,6 +487,7 @@ namespace SpaceVIL
                             _handler.WPosition.X += (ptrRelease.X - ptrPress.X);
                             w -= (ptrRelease.X - ptrPress.X);
                         }
+                        //ptrPress.X = ptrRelease.X;
                     }
                     if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Right))
                     {
@@ -546,7 +561,7 @@ namespace SpaceVIL
                 ptrPress.Y = ptrRelease.Y;
 
                 //check tooltip
-                if (GetHoverVisualItem(ptrRelease.X, ptrRelease.Y))
+                if (GetHoverVisualItem(ptrRelease.X, ptrRelease.Y, InputEventType.MouseMove))
                 {
                     if (HoveredItem.GetToolTip() != String.Empty)
                     {
@@ -620,12 +635,17 @@ namespace SpaceVIL
                 return;
 
             _tooltip.InitTimer(false);
-
             _margs.Button = button;
             _margs.State = state;
             _margs.Mods = mods;
 
-            if (!GetHoverVisualItem(ptrRelease.X, ptrRelease.Y))
+            InputEventType m_state;
+            if (state == InputState.Press)
+                m_state = InputEventType.MousePressed;
+            else
+                m_state = InputEventType.MouseRelease;
+
+            if (!GetHoverVisualItem(ptrRelease.X, ptrRelease.Y, m_state))
             {
                 EngineEvent.ResetAllEvents();
                 EngineEvent.SetEvent(InputEventType.MouseRelease);

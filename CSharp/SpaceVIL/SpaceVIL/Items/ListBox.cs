@@ -216,6 +216,11 @@ namespace SpaceVIL
             _area.AddItem(item);
             UpdateElements();
         }
+        public override void RemoveItem(BaseItem item)
+        {
+            _area.RemoveItem(item);
+            UpdateElements();
+        }
         public void UpdateElements()
         {
             UpdateVerticalSlider();
@@ -262,6 +267,11 @@ namespace SpaceVIL
                 result.Add(item);
             }
             return result;
+        }
+        public BaseItem GetSelectionItem()
+        {
+            List<BaseItem> result = new List<BaseItem>();
+            return _area.GetSelectionItem();
         }
     }
 }

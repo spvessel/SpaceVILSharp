@@ -5,11 +5,22 @@ namespace SpaceVIL
 {
     public class FloatItem : VisualItem, IFloating, IDraggable //create abstract!!!!
     {
+        private int _stored_offset = 0;
         private bool IsFloating = true;
-        private bool init = false;
+        private bool _init = false;
         static int count = 0;
         private int _diff_x = 0;
         private int _diff_y = 0;
+
+        private bool _ouside = true;
+        public bool IsOutsideClickClosable()
+        {
+            return _ouside;
+        }
+        public void SetOutsideClickClosable(bool value)
+        {
+            _ouside = value;
+        }
 
         public FloatItem(WindowLayout handler)
         {
@@ -33,6 +44,7 @@ namespace SpaceVIL
             _confines_y_0 = GetY();
             _confines_y_1 = GetY() + GetHeight();
         }
+
         private ButtonCore _btn_close;
         public override void InitElements()
         {
@@ -64,6 +76,7 @@ namespace SpaceVIL
             rb_1.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             rb_1.SetHeight(20);
             rb_1.SetMargin(10, 25, 40, 0);
+            // rb_1.EventMouseClick += (sender, arg) => Console.WriteLine("rb_1");
 
             RadioButton rb_2 = new RadioButton();
             rb_2.SetText("Second radio.");
@@ -75,16 +88,21 @@ namespace SpaceVIL
             rb_2.SetMargin(10, 0, 40, 25);
 
             AddItems(_btn_close, rb_1, rb_2);
-            init = true;
+
+            _init = true;
         }
-        public void Show()
+        public void Show(IItem sender, MouseArgs args)
         {
-            if (!init)
+            if (!_init)
                 InitElements();
+            if (GetX() == -GetWidth()) //refactor?
+                SetX(_stored_offset);
             IsVisible = true;
         }
         public void Hide()
         {
+            _stored_offset = GetX();
+            SetX(-GetWidth());
             IsVisible = false;
         }
 
