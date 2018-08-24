@@ -27,6 +27,10 @@ namespace SpaceVIL
         {
             return _selection;
         }
+        public BaseItem GetSelectionItem()
+        {
+            return GetItems().ElementAt(_selection + 1);
+        }
         public void SetSelection(int index)
         {
             _selection = index;

@@ -6,10 +6,20 @@ namespace SpaceVIL
     public class FloatItem : VisualItem, IFloating, IDraggable //create abstract!!!!
     {
         private bool IsFloating = true;
-        private bool init = false;
+        private bool _init = false;
         static int count = 0;
         private int _diff_x = 0;
         private int _diff_y = 0;
+
+        private bool _ouside = true;
+        public bool IsOutsideClickClosable()
+        {
+            return _ouside;
+        }
+        public void SetOutsideClickClosable(bool value)
+        {
+            _ouside = value;
+        }
 
         public FloatItem(WindowLayout handler)
         {
@@ -75,11 +85,12 @@ namespace SpaceVIL
             rb_2.SetMargin(10, 0, 40, 25);
 
             AddItems(_btn_close, rb_1, rb_2);
-            init = true;
+
+            _init = true;
         }
-        public void Show()
+        public void Show(IItem sender, MouseArgs args)
         {
-            if (!init)
+            if (!_init)
                 InitElements();
             IsVisible = true;
         }

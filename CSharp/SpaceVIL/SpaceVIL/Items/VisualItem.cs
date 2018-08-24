@@ -512,6 +512,17 @@ namespace SpaceVIL
             float miny = GetY();
             float maxy = GetY() + GetHeight();
 
+            // IFloating float_item = this as IFloating;
+            // if (float_item != null)
+            // {
+            //     Console.WriteLine(
+            //         _confines_x_0 + " " +
+            //         _confines_x_1 + " " +
+            //         _confines_y_0 + " " +
+            //         _confines_y_1
+            //     );
+            // }
+
             if (_confines_x_0 > minx)
                 minx = _confines_x_0;
 

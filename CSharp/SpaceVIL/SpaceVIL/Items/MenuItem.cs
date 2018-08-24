@@ -6,23 +6,55 @@ namespace SpaceVIL
 {
     public class MenuItem : VisualItem //not finished
     {
+        public bool IsActionItem = false;
         static int count = 0;
         private TextLine _text_object;
-        public ContextMenu _dropdownmenu;
-        public bool IsActionItem = false;
+        //internal ContextMenu _invoked_menu;
+        private ContextMenu _context_menu;
+        public ContextMenu GetSubCintextMenu()
+        {
+            return _context_menu;
+        }
+        public bool IsReadyToClose(MouseArgs args)
+        {
+            if (!_context_menu.GetHoverVerification(args.Position.X, args.Position.Y)
+                && _context_menu.CloseDependencies(args))
+                return true;
+            return false;
+        }
+        CustomShape _arrow;
+
+        public void AssignContexMenu(ContextMenu context_menu)
+        {
+            _context_menu = context_menu;
+            _context_menu.SetOutsideClickClosable(false);
+            IsActionItem = true;
+        }
 
         public MenuItem()
         {
+            SetHeight(30);
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             SetBackground(Color.Transparent);
             SetItemName("MenuItem_" + count);
+            SetPadding(10, 0, 0, 0);
+            AddItemState(true, ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(255, 150, 150, 150)
+            });
             count++;
             EventKeyPress += OnKeyPress;
+            EventMousePressed += (sender, args) => OnMouseAction();
 
             _text_object = new TextLine();
         }
         public MenuItem(String text = "") : this()
         {
+            SetText(text);
+        }
+        public MenuItem(ContextMenu context_menu, String text = "") : this()
+        {
+            AssignContexMenu(context_menu);
             SetText(text);
         }
 
@@ -93,6 +125,9 @@ namespace SpaceVIL
 
             //adding
             AddItem(_text_object);
+            if (_arrow != null)
+                AddItem(_arrow);
+
 
             //update text data
             //_text_object.UpdateData(UpdateType.Critical);
@@ -104,6 +139,40 @@ namespace SpaceVIL
             base.SetStyle(style);
             SetForeground(style.Foreground);
             SetFont(style.Font);
+        }
+
+        public void AddArrow(CustomShape arrow)
+        {
+            _arrow = arrow;
+        }
+
+        public void Show()
+        {
+            MouseArgs args = new MouseArgs();
+            args.Button = MouseButton.ButtonRight;
+            args.Position.SetPosition(GetParent().GetX() + GetParent().GetWidth() + 2, GetY());
+            _context_menu?.Show(this, args);
+        }
+        public void Hide()
+        {
+            _context_menu?.Hide();
+        }
+
+        private void OnMouseAction()
+        {
+            if (_context_menu != null)
+            {
+                if (_context_menu.IsVisible)
+                {
+                    Hide();
+                    MouseArgs args = new MouseArgs();
+                    args.Button = MouseButton.ButtonRight;
+                    args.Position.SetPosition(GetX(), GetY());
+                    _context_menu.CloseDependencies(args);
+                }
+                else
+                    Show();
+            }
         }
     }
 }
