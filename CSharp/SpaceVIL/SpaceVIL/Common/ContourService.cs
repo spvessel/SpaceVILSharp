@@ -10,7 +10,7 @@ namespace SpaceVIL
 {
     static class ContourService
     {
-        public static double[,] CrossContours(List<List<PointF>> innerList) {
+        public static CrossOut CrossContours(List<List<PointF>> innerList) {
             List<Contour> contoursList = new List<Contour>();
             for (int i = 0; i < innerList.Count; i++) {
                 contoursList.Add(AnalizeCotour(innerList[i]));
@@ -19,7 +19,7 @@ namespace SpaceVIL
             return MakeCrossArray(contoursList);
         }
 
-        public static double[,] CrossContours(GraphicsPath shape)
+        public static CrossOut CrossContours(GraphicsPath shape)
         {
             shape.Flatten();
             List<Contour> contoursList = new List<Contour>();
@@ -230,7 +230,7 @@ namespace SpaceVIL
             return new Contour(crossX, crossY, clockWise);
         }
 
-        private static double[,] MakeCrossArray(List<Contour> contours) {
+        private static CrossOut MakeCrossArray(List<Contour> contours) {
             Dictionary<int, List<InOutCoord>> _globalCrossX = new Dictionary<int, List<InOutCoord>>();
             Dictionary<int, List<InOutCoord>> _globalCrossY = new Dictionary<int, List<InOutCoord>>();
 
@@ -238,7 +238,7 @@ namespace SpaceVIL
             int y0 = int.MaxValue;// = _globalCrossY.Keys.Min() - 1;
             int x1 = int.MinValue;// = _globalCrossX.Keys.Max() + 1;
             int y1 = int.MinValue;// = _globalCrossY.Keys.Max() + 1;
-
+            
             for (int i = 0; i < contours.Count; i++) {
                 foreach (int xkey in contours[i]._crossX.Keys) {
                     if (!_globalCrossX.ContainsKey(xkey)) _globalCrossX.Add(xkey, new List<InOutCoord>() { });
@@ -264,14 +264,16 @@ namespace SpaceVIL
             int add;
             int incCoord;
             double diff;
-
+            //LogService.Log().LogArr(new double[] {alph.GetLength(0) , alph.GetLength(1), x0, x1, y0, y1 });
             foreach (int ykey in _globalCrossY.Keys) {
                 _globalCrossY[ykey].Sort((x, y) => x._coord.CompareTo(y._coord));
                 isInside = 0;
                 incCoord = (int)Math.Truncate(_globalCrossY[ykey][0]._coord);
+                //LogService.Log().LogArr(new double[] { ykey, y0, y1 }, "keys");
                 for (int i = 0; i < _globalCrossY[ykey].Count; i++) {
                     add = (_globalCrossY[ykey][i]._isIn == _globalCrossY[ykey][i]._clockwiae) ? 1 : -1;
                     //Console.Write(isInside + add + " ");
+                    //LogService.Log().LogOne(_globalCrossY[ykey][i]._coord);
                     if (isInside != 0) //Был внутри
                     {
                         while (incCoord <= _globalCrossY[ykey][i]._coord)
@@ -286,7 +288,7 @@ namespace SpaceVIL
                         {
                             //if (diff < 0.5) alph[incCoord - x0, ykey - y0] = (alph[incCoord - x0, ykey - y0] + (0.5 - diff)); // /2.0
                             if (alph[incCoord - x0, ykey - y0] < 1 - diff - 0.3)
-                                alph[incCoord - x0, ykey - y0] = (1 - diff - 0.3)*3f/4;
+                                alph[incCoord - x0, ykey - y0] = (1 - diff - 0.3) * 3f / 4;
                         }
                         
                     }
@@ -302,7 +304,7 @@ namespace SpaceVIL
                         if (isInside != 0 && diff > 0) {
                             //diff = 1 - diff;
                             //if (diff < 0.5) alph[incCoord - 1 - x0, ykey - y0] = (alph[incCoord - 1 - x0, ykey - y0] + (0.5 - diff)); // /2.0
-                            if (alph[incCoord - 1 - x0, ykey - y0] < diff - 0.3)
+                            if ((incCoord != x0) && (alph[incCoord - 1 - x0, ykey - y0] < diff - 0.3))
                                 alph[incCoord - 1 - x0, ykey - y0] = (diff - 0.3) * 3f / 4;
                         }
                     }
@@ -319,7 +321,7 @@ namespace SpaceVIL
                 }
                 */
             }
-
+            
             foreach (int xkey in _globalCrossX.Keys) {
                 _globalCrossX[xkey].Sort((x, y) => x._coord.CompareTo(y._coord));
                 isInside = 0;
@@ -351,7 +353,7 @@ namespace SpaceVIL
                 }
             }
 
-            return alph;
+            return new CrossOut(alph, x0, y0);
         }
 
 
@@ -525,8 +527,8 @@ namespace SpaceVIL
                     tmpList.AddRange(crossY[ykey]);
                     //tmpList.Distinct();
                     tmpList.Sort((x, y) => x._coord.CompareTo(y._coord));
-                    minX = (minX > (int)Math.Truncate(tmpList[0]._coord)) ? (int)Math.Truncate(tmpList[0]._coord) : minX;
-                    maxX = (maxX < (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1) ? (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1 : maxX;
+                    //minX = (minX > (int)Math.Truncate(tmpList[0]._coord)) ? (int)Math.Truncate(tmpList[0]._coord) : minX;
+                    //maxX = (maxX < (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1) ? (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1 : maxX;
 
                     int inc = 0;
                     while (inc < tmpList.Count)
@@ -553,8 +555,8 @@ namespace SpaceVIL
                     tmpList.AddRange(crossX[xkey]);
                     tmpList.Sort((x, y) => x._coord.CompareTo(y._coord));
 
-                    minY = (minY > (int)Math.Truncate(tmpList[0]._coord)) ? (int)Math.Truncate(tmpList[0]._coord) : minY;
-                    maxY = (maxY < (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1) ? (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1 : maxY;
+                    //minY = (minY > (int)Math.Truncate(tmpList[0]._coord)) ? (int)Math.Truncate(tmpList[0]._coord) : minY;
+                    //maxY = (maxY < (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1) ? (int)Math.Truncate(tmpList[tmpList.Count - 1]._coord) + 1 : maxY;
 
                     int inc = 0;
                     while (inc < tmpList.Count)
@@ -575,8 +577,10 @@ namespace SpaceVIL
 
                 if (_crossY.Count != 0)
                 {
-                    minY = (minY > _crossY.Keys.Min() - 1) ? _crossY.Keys.Min() - 1 : minY;
-                    maxY = (maxY < _crossY.Keys.Max() + 1) ? _crossY.Keys.Max() + 1 : maxY;
+                    minY = _crossY.Keys.Min() - 1;
+                    maxY = _crossY.Keys.Max() + 1;
+                    //minY = (minY > _crossY.Keys.Min() - 1) ? _crossY.Keys.Min() - 1 : minY;
+                    //maxY = (maxY < _crossY.Keys.Max() + 1) ? _crossY.Keys.Max() + 1 : maxY;
                 }
                 else
                 {
@@ -587,8 +591,10 @@ namespace SpaceVIL
                 }
 
                 if (_crossX.Count != 0) {
-                    minX = (minX > _crossX.Keys.Min() - 1) ? _crossX.Keys.Min() - 1 : minX; //Это с запасом, но должно хватить
-                    maxX = (maxX < _crossX.Keys.Max() + 1) ? _crossX.Keys.Max() + 1 : maxX;
+                    minX = _crossX.Keys.Min() - 1;
+                    maxX = _crossX.Keys.Max() + 1;
+                    //minX = (minX > _crossX.Keys.Min() - 1) ? _crossX.Keys.Min() - 1 : minX; //Это с запасом, но должно хватить
+                    //maxX = (maxX < _crossX.Keys.Max() + 1) ? _crossX.Keys.Max() + 1 : maxX;
                 }
             }
 
@@ -606,6 +612,20 @@ namespace SpaceVIL
                 _coord = coord;
                 _clockwiae = clockwise;
             }
+        }
+    }
+
+    internal class CrossOut
+    {
+        internal double[,] _arr;
+        internal int _minY;
+        internal int _minX;
+
+        internal CrossOut(double[,] arr, int minX, int minY)
+        {
+            _arr = arr;
+            _minY = minY;
+            _minX = minX;
         }
     }
 }

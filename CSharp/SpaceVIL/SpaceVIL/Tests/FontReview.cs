@@ -620,7 +620,9 @@ namespace SpaceVIL
 
             if (x0 == x1 && y0 == y1) return new PixMapData(pix, col, new List<int>(0));
 
-            double[,] alph = ContourService.CrossContours(shape);
+            CrossOut crossOut = ContourService.CrossContours(shape);
+            double[,] alph = crossOut._arr;
+            minY = crossOut._minY;
             
             for (int i = 0; i < alph.GetLength(0); i++)
             {

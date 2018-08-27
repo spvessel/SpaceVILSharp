@@ -28,10 +28,13 @@ namespace SpaceVIL
             : base(text, font, "TextLine_" + count)
         {
             count++;
+            GetFontDims();
+            /*
             int[] output = FontEngine.GetSpacerDims(font);
             _minLineSpacer = output[0];
             _minFontY = output[1];
             _maxFontY = output[2];
+            */
             //_lineSpacer = _minLineSpacer;
         }
 
@@ -190,6 +193,14 @@ namespace SpaceVIL
             lineTopCoord += _lineYShift - _minFontY;
 
             return lineTopCoord;
+        }
+
+        internal int[] GetFontDims() {
+            int[] output = FontEngine.GetSpacerDims(GetFont());
+            _minLineSpacer = output[0];
+            _minFontY = output[1];
+            _maxFontY = output[2];
+            return output;
         }
     }
 }

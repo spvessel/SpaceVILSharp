@@ -67,9 +67,37 @@ namespace View
                 LogProps.AllGeometry.HasFlag(LogProps.Spacing) + " " +
                 LogProps.AllGeometry.HasFlag(LogProps.Color));
                 */
-            LogService.Log().LogVisualItem(_button1, LogProps.AllGeometry);
-            LogService.Log().LogWindow(Handler, LogProps.AllProps);
-            
+            //LogService.Log().LogVisualItem(_button1, LogProps.AllGeometry);
+            //LogService.Log().LogWindow(Handler, LogProps.AllProps);
+            ComboBox combo = new ComboBox();
+            combo.SetHeight(30);
+            combo.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            combo.SetMargin(25, 200, 25, 25);
+            combo.SelectionChanged += () =>
+            {/*
+                for (int i = 0; i <= 10 * combo.GetCurrentIndex(); i++)
+                {
+                    pb.SetCurrentValue(i);
+                    Thread.Sleep(30);
+                }*/
+            };
+
+            Handler.AddItem(combo);
+
+            Font font = new Font(new FontFamily("Courier New"), 16, FontStyle.Regular);
+            for (int i = 0; i < 10; i++)
+            {
+                MenuItem menu_item = new MenuItem("Custom item for selection #" + i);
+                menu_item.SetFont(font);
+                menu_item.SetHeight(25);
+                menu_item.SetPadding(10);
+                menu_item.AddItemState(true, ItemStateType.Hovered, new ItemState()
+                {
+                    Background = Color.FromArgb(255, 180, 180, 180)
+                });
+                combo.AddToList(menu_item);
+            }
+            combo.SetCurrentIndex(0);
         }
     }
 }
