@@ -5,6 +5,22 @@ using System.Linq;
 
 namespace SpaceVIL
 {
+    public struct CornerRadius
+    {
+        public float leftTop;
+        public float rightTop;
+        public float leftBottom;
+        public float rightBottom;
+
+        public CornerRadius(float lt, float rt, float lb, float rb)
+        {
+            leftTop = lt;
+            rightTop = rt;
+            leftBottom = lb;
+            rightBottom = rb;
+        }
+    }
+
     public static class GraphicsMathService
     {
         public static Color MixColors(params Color[] m_colors)
@@ -45,15 +61,99 @@ namespace SpaceVIL
                 new float[] { x, y, 0.0f }
             };
         }
+
+        static internal List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100, 
+            int x = 0, int y = 0)
+        {
+            if (cornerRadius.leftTop < 0)
+                cornerRadius.leftTop = 0;
+            if (cornerRadius.rightTop < 0)
+                cornerRadius.rightTop = 0;
+            if (cornerRadius.leftBottom < 0)
+                cornerRadius.leftBottom = 0;
+            if (cornerRadius.rightBottom < 0)
+                cornerRadius.rightBottom = 0;
+
+
+            List<float[]> triangles = new List<float[]>();
+            //Начало координат в левом углу
+
+            //1
+            triangles.AddRange(RectToTri(new PointF(cornerRadius.leftTop, 0.0f), new PointF(width / 2f, height / 2f)));
+            triangles.AddRange(RectToTri(new PointF(0.0f, cornerRadius.leftTop), new PointF(cornerRadius.leftTop, height / 2f)));
+
+            //2
+            triangles.AddRange(RectToTri(new PointF(width / 2f, 0.0f), new PointF(width - cornerRadius.rightTop, height / 2f)));
+            triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightTop, cornerRadius.rightTop), new PointF(width, height / 2f)));
+
+            //3
+            triangles.AddRange(RectToTri(new PointF(cornerRadius.leftBottom, height / 2f), new PointF(width / 2f, height)));
+            triangles.AddRange(RectToTri(new PointF(0, height / 2f), new PointF(cornerRadius.leftBottom, height - cornerRadius.leftBottom)));
+
+            //4
+            triangles.AddRange(RectToTri(new PointF(width / 2f, height / 2f), new PointF(width - cornerRadius.rightBottom, height)));
+            triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightBottom, height / 2f), new PointF(width, height - cornerRadius.rightBottom)));
+
+
+            //if (radius < 1)
+            //    return triangles;
+
+            float x0, y0;
+
+            if (cornerRadius.rightBottom >= 1)
+            { 
+                x0 = width - cornerRadius.rightBottom + x;
+                y0 = height - cornerRadius.rightBottom + y;
+                triangles.AddRange(CountCircleSector(0, 90, x0, y0, cornerRadius.rightBottom));
+            }
+
+            if (cornerRadius.rightTop >= 1)
+            {
+            x0 = width - cornerRadius.rightTop + x;
+            y0 = cornerRadius.rightTop + y;
+            triangles.AddRange(CountCircleSector(270, 360, x0, y0, cornerRadius.rightTop));
+            }
+
+            if (cornerRadius.leftTop >= 1)
+            {
+            x0 = cornerRadius.leftTop + x;
+            y0 = cornerRadius.leftTop + y;
+            triangles.AddRange(CountCircleSector(180, 270, x0, y0, cornerRadius.leftTop));
+            }
+
+            if (cornerRadius.leftBottom >= 1)
+            {
+            x0 = cornerRadius.leftBottom + x;
+            y0 = height - cornerRadius.leftBottom + y;
+            triangles.AddRange(CountCircleSector(90, 180, x0, y0, cornerRadius.leftBottom));
+            }
+
+            return triangles;
+        }
+
+        static internal List<float[]> RectToTri(PointF leftTop, PointF rightBottom)
+        {
+            //Начало координат в левом верхнем углу
+            List<float[]> tri = new List<float[]>();
+
+            tri.Add(new float[] { leftTop.X, leftTop.Y, 0.0f});
+            tri.Add(new float[] { leftTop.X, rightBottom.Y, 0.0f });
+            tri.Add(new float[] { rightBottom.X, rightBottom.Y, 0.0f });
+
+            tri.Add(new float[] { rightBottom.X, rightBottom.Y, 0.0f });
+            tri.Add(new float[] { rightBottom.X, leftTop.Y, 0.0f });
+            tri.Add(new float[] { leftTop.X, leftTop.Y, 0.0f });
+
+            return tri;
+        }
+
         static internal List<float[]> GetRoundSquare(float width = 100, float height = 100, float radius = 0.0f, int x = 0, int y = 0)
         {
             if (radius < 0)
                 radius = 0;
 
             List<float[]> triangles = new List<float[]>();
-            //Начало координат предполагается посередине прямоугольника.
-            //Если хочется сделать в левом нижнем углу, то ко всем иксовым координатам нужно прибавить width/2,
-            //а ко всем игрековым прибавить height/2
+            //Начало координат в углу
 
             triangles.Add(new float[] { radius + x, height + y, 0.0f });
             triangles.Add(new float[] { width - radius + x, y, 0.0f });
@@ -107,6 +207,7 @@ namespace SpaceVIL
 
             return triangles;
         }
+
         static private List<float[]> CountCircleSector(int alph1, int alph2, float x0, float y0, float radius)
         {
             List<float[]> circleSect = new List<float[]>();

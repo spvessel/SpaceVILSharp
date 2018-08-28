@@ -88,6 +88,7 @@ namespace SpaceVIL
                 letter1.width = letter.width * 4;
                 letter1.height = 0;
                 /*
+                //!Может стоит вернуть это, если новые модификации текста будут работать нормально
                 specLet = "\r"[0];
                 Letter letter2 = new Letter("\t", null);
                 letters.Add(specLet, letter2);
