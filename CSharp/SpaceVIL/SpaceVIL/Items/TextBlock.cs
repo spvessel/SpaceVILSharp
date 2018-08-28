@@ -485,15 +485,17 @@ namespace SpaceVIL
         private void SplitAndMakeLines(String text)
         {
             _linesList = new List<TextLine>();
-
+            
             _wholeText = text;
 
             string[] line = text.Split('\n');
             int inc = 0;
+            string s;
 
-            foreach (String textPart in line)
+            foreach (string textPart in line)
             {
-                AddNewLine(textPart, inc);
+                s = textPart.TrimEnd('\r');
+                AddNewLine(s, inc);
                 inc++;
             }
 
@@ -763,8 +765,12 @@ namespace SpaceVIL
             string textBeg = _linesList[_cursor_position.Y].GetItemText().Substring(0, _cursor_position.X);
             string textEnd = "";
             if (_cursor_position.X < GetLineLetCount(_cursor_position.Y)) textEnd = _linesList[_cursor_position.Y].GetItemText().Substring(_cursor_position.X);
-
+            
             string[] line = pasteStr.Split('\n');
+            for (int i = 0; i < line.Length; i++)
+            { 
+                line[i] = line[i].TrimEnd('\r');
+            }
 
             if (line.Length == 1)
             {
@@ -840,6 +846,7 @@ namespace SpaceVIL
             if (_elementFont != null)
                 te.SetFont(_elementFont);
             AddItem(te);
+            //text.TrimEnd('\r');
             te.SetItemText(text);
             te.SetLineYShift((_lineHeight + _lineSpacer) * lineNum);
             for (int i = lineNum; i < _linesList.Count; i++)

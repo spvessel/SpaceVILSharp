@@ -87,6 +87,13 @@ namespace SpaceVIL
                 letters.Add(specLet, letter1);
                 letter1.width = letter.width * 4;
                 letter1.height = 0;
+                /*
+                specLet = "\r"[0];
+                Letter letter2 = new Letter("\t", null);
+                letters.Add(specLet, letter2);
+                letter2.width = 0;
+                letter2.height = 0;
+                */
             }
 
             private double UpdateSpecX0(Letter letter, double x0)
@@ -235,6 +242,7 @@ namespace SpaceVIL
                 }
                 catch (Exception)
                 {
+                    //Console.WriteLine(let.Equals("\r"));
                     Console.WriteLine("Bug letter exception");
                     return bugLetter;
                 }
@@ -263,9 +271,9 @@ namespace SpaceVIL
             private void MakeBugLetter()
             {
                 bugLetter = new Letter("bug", null);
-                bugLetter.width = (int)(font.Size / 3);// lineSpacer;
-                bugLetter.height = (int)font.Size * 2/3;// Math.Abs(maxY - minY + 1);
-                bugLetter.minY = (int)font.Size / 2;// minY;
+                bugLetter.width = (int)(font.Size / 3f);// lineSpacer;
+                bugLetter.height = (int)(font.Size * 2/ 3f);// Math.Abs(maxY - minY + 1);
+                bugLetter.minY = (int)(font.Size / 3f);// minY;
                 bugLetter.isSpec = false;
                 double[,] arr = new double[bugLetter.width, bugLetter.height];
                 for (int i = 0; i < bugLetter.width; i++)
@@ -306,7 +314,7 @@ namespace SpaceVIL
             private void MakeLetterArrays(GraphicsPath shape)
             {
                 RectangleF rec = shape.GetBounds();
-                int x0;// = (int)Math.Floor(rec.Left);
+                //int x0 = (int)Math.Floor(rec.Left);
                 //int x1 = (int)Math.Ceiling(rec.Right);
                 int y0;// = (int)Math.Floor(rec.Top);
                 //int y1 = (int)Math.Ceiling(rec.Bottom);
