@@ -65,6 +65,7 @@ namespace SpaceVIL
         static internal List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100, 
             int x = 0, int y = 0)
         {
+            
             if (cornerRadius.leftTop < 0)
                 cornerRadius.leftTop = 0;
             if (cornerRadius.rightTop < 0)
@@ -73,7 +74,7 @@ namespace SpaceVIL
                 cornerRadius.leftBottom = 0;
             if (cornerRadius.rightBottom < 0)
                 cornerRadius.rightBottom = 0;
-
+                
 
             List<float[]> triangles = new List<float[]>();
             //Начало координат в левом углу
