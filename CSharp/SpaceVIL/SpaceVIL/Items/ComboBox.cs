@@ -6,6 +6,8 @@ namespace SpaceVIL
 {
     public class ComboBox : VisualItem
     {
+        // Queue<BaseItem> _queue = new Queue<BaseItem>();
+
         static int count = 0;
         public ButtonCore _selected = new ButtonCore();
         public ButtonCore _dropdown = new ButtonCore();
@@ -106,7 +108,7 @@ namespace SpaceVIL
             _dropdown.SetWidth(20);
             _dropdown.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
             _dropdown.SetBackground(255, 181, 111);
-            _dropdown.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            _dropdown.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
             });
@@ -134,14 +136,22 @@ namespace SpaceVIL
             //dropdownarea
             _dropdownarea.Handler.SetWidth(_selected.GetWidth());
             _dropdownarea.Handler.SetHeight(100);
+            // _dropdownarea.Handler.UpdateSize();
             _dropdownarea.Handler.SetX(GetHandler().GetX() + _selected.GetX());
             _dropdownarea.Handler.SetY(GetHandler().GetY() + _selected.GetY() + _selected.GetHeight());
+            // _dropdownarea.Handler.UpdatePosition(_dropdownarea.Handler.GetX(), _dropdownarea.Handler.GetY());
+            /*while(_queue.Count > 0)
+            {
+                _dropdownarea.Add(_queue.Dequeue());
+            }*/
             _dropdownarea.Show();
+            // _dropdownarea.Unhide();
         }
 
         public void AddToList(BaseItem item)
         {
             _dropdownarea.Add(item);
+            // _queue.Enqueue(item);
         }
         public void RemoveFromLst(BaseItem item)
         {

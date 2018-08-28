@@ -67,11 +67,11 @@ namespace SpaceVIL
             tab.SetForeground(180, 180, 180);
             tab.SetFont(_font);
             tab.SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
-            tab.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            tab.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
-            tab.AddItemState(true, ItemStateType.Toggled, new ItemState()
+            tab.AddItemState(ItemStateType.Toggled, new ItemState()
             {
                 Background = Color.FromArgb(71, 71, 71)
             });

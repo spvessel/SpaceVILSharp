@@ -33,6 +33,7 @@ namespace SpaceVIL
 
         public MessageBox(String m = "", String t = "")
         {
+
             _message = m;
             DialogTitle = t;
 
@@ -84,7 +85,7 @@ namespace SpaceVIL
             ok.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             ok.SetAlignment(ItemAlignment.HCenter | ItemAlignment.Bottom);
             ok.Border.Radius = 6;
-            ok.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            ok.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
@@ -94,6 +95,12 @@ namespace SpaceVIL
                 Handler.Close();
             };
             layout.AddItems(msg, ok);
+        }
+
+        public override void Show()
+        {
+            _result = false;
+            base.Show();
         }
     }
 }

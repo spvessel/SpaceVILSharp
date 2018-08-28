@@ -6,7 +6,7 @@ namespace SpaceVIL
 {
     public static class DefaultsService
     {
-        private static ThemeStyle DefaultTheme = new ThemeStyle();
+        private static ThemeStyle DefaultTheme = ThemeStyle.GetInstance();
         public static void SetDefaultTheme(ThemeStyle theme)
         {
             DefaultTheme = theme;

@@ -50,6 +50,7 @@ namespace SpaceVIL
             Id = handler.GetWindowGuid();
             SetWindowName(name);
             SetWindowTitle(title);
+
             SetWidth(width);
             SetHeight(height);
 
@@ -230,8 +231,18 @@ namespace SpaceVIL
         }
         public void SetSize(int width, int height)
         {
-            _itemGeometry.SetWidth(width);
-            _itemGeometry.SetHeight(height);
+            SetWidth(width);
+            SetHeight(height);
+        }
+        public void SetMinSize(int width, int height)
+        {
+            SetMinWidth(width);
+            SetMinHeight(height);
+        }
+        public void SetMaxSize(int width, int height)
+        {
+            SetMaxWidth(width);
+            SetMaxHeight(height);
         }
         public int[] GetSize()
         {
@@ -260,6 +271,8 @@ namespace SpaceVIL
         //methods
         public void Show()
         {
+            IsClosed = false;
+
             engine._handler.Maximized = IsMaximized;
             engine._handler.Visible = !IsHidden;
             engine._handler.Resizeble = IsResizeble;
@@ -275,20 +288,24 @@ namespace SpaceVIL
 
             thread_manager = new Thread(() => manager.StartManager());
             thread_manager.Start();
-
+            
             thread_engine = new Thread(() => engine.Init());
-            IsClosed = false;
 
             if (IsDialog)
             {
-                WindowLayoutBox.AddToWindowDispatcher(this);
-                ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
-                WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
+                lock (engine_locker)
+                {
+                    WindowLayoutBox.AddToWindowDispatcher(this);
+                    ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
+                    WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
+                }
                 thread_engine.Start();
                 thread_engine.Join();
             }
             else
+            {
                 thread_engine.Start();
+            }
         }
         public void Close()
         {
@@ -322,10 +339,7 @@ namespace SpaceVIL
             }
             EventClose?.Invoke();
         }
-        public void Hidden(bool value)
-        {
-            engine._handler.SetHidden(IsHidden);
-        }
+
         public bool IsDialog { get; set; }
         public bool IsClosed { get; set; }
         public bool IsHidden { get; set; }
@@ -396,5 +410,12 @@ namespace SpaceVIL
             engine.SetBigIcon(icon_big);
             engine.SetSmallIcon(icon_small);
         }
+
+        public void SetHidden(bool value)
+        {
+            engine._handler.SetHidden(value);
+            IsHidden = value;
+        }
+
     }
 }

@@ -123,10 +123,12 @@ namespace SpaceVIL
         //TMP
         private Int32[] colWidth;
         private Int32[] rowHeight;
-        internal Int32[] GetColWidth() {
+        internal Int32[] GetColWidth()
+        {
             return colWidth;
         }
-        internal Int32[] GetRowHeight() {
+        internal Int32[] GetRowHeight()
+        {
             return rowHeight;
         }
         //Update Layout
@@ -308,7 +310,9 @@ namespace SpaceVIL
 
             int total_space = GetWidth() - GetPadding().Left - GetPadding().Right;
             int free_space = total_space;
-            int prefer_width = (total_space - GetSpacing().Horizontal * (_column_count - 1)) / _column_count;
+            int prefer_width = (int)Math.Round((float)(total_space - GetSpacing().Horizontal * (_column_count - 1)) / (float)_column_count, MidpointRounding.AwayFromZero);
+            // int prefer_width = (total_space - GetSpacing().Horizontal * (_column_count - 1)) / _column_count;
+            // Console.WriteLine(prefer_width);
             int count = _column_count;
 
             for (int c = 0; c < _column_count; c++)
@@ -329,7 +333,7 @@ namespace SpaceVIL
                     }
                     else
                     {
-                        list_width.Add(new int[2] { c, 0});
+                        list_width.Add(new int[2] { c, 0 });
                     }
                 }
             }
@@ -366,7 +370,7 @@ namespace SpaceVIL
             foreach (var pair in m_width)
             {
                 if (pair[1] == 0)
-                    pair[1] = prefer_width;
+                    pair[1] = (int)prefer_width;
                 else if (pair[1] < 0)
                 {
                     pair[1] = 0;

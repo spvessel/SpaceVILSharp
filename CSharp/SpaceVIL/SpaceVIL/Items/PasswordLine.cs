@@ -125,7 +125,7 @@ namespace SpaceVIL
             _show_pwd_btn.SetHeight(16);
             _show_pwd_btn.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             _show_pwd_btn.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Right);
-            _show_pwd_btn.AddItemState(true, ItemStateType.Toggled, new ItemState()
+            _show_pwd_btn.AddItemState(ItemStateType.Toggled, new ItemState()
             {
                 Background = Color.FromArgb(255, 80, 80, 80)
             });

@@ -140,44 +140,44 @@ namespace SpaceVIL
                 //InitWindow
                 _handler.InitGlfw();
                 _handler.CreateWindow();
-
-                //устанавливаем параметры отрисовки
-                glEnable(GL_TEXTURE_2D);
-                glEnable(GL_MULTISAMPLE);
-                glEnable(GL_BLEND);
-                glEnable(GL_CULL_FACE);
-                glCullFace(GL_BACK);
-                glEnable(GL_ALPHA_TEST);
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                //glEnable(GL_DEPTH_TEST);
-                //glEnable(GL_STENCIL_TEST);
-                ////////////////////////////////////////////////
-                _primitive = new Shader(
-                    Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fill.glsl"),
-                    Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fill.glsl"));
-                _primitive.Compile();
-                if (_primitive.GetProgramID() == 0)
-                    Console.WriteLine("Could not create primitive shaders");
-                ///////////////////////////////////////////////
-                _texture = new Shader(
-                    Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_texture.glsl"),
-                    Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_texture.glsl"));
-                _texture.Compile();
-                if (_texture.GetProgramID() == 0)
-                    Console.WriteLine("Could not create textured shaders");
-
-                if (_icon_big.Pixels != null && _icon_small.Pixels != null)
-                {
-                    Glfw.Image[] images = new Glfw.Image[2];
-                    images[0] = _icon_big;
-                    images[1] = _icon_small;
-                    Glfw.SetWindowIcon(_handler.GetWindowId(), images);
-                }
-                SetWindowPos();
-                SetEventsCallbacks();
-
-                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             }
+
+            //устанавливаем параметры отрисовки
+            glEnable(GL_TEXTURE_2D);
+            glEnable(GL_MULTISAMPLE);
+            glEnable(GL_BLEND);
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_BACK);
+            glEnable(GL_ALPHA_TEST);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            //glEnable(GL_DEPTH_TEST);
+            //glEnable(GL_STENCIL_TEST);
+            ////////////////////////////////////////////////
+            _primitive = new Shader(
+                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fill.glsl"),
+                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fill.glsl"));
+            _primitive.Compile();
+            if (_primitive.GetProgramID() == 0)
+                Console.WriteLine("Could not create primitive shaders");
+            ///////////////////////////////////////////////
+            _texture = new Shader(
+                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_texture.glsl"),
+                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_texture.glsl"));
+            _texture.Compile();
+            if (_texture.GetProgramID() == 0)
+                Console.WriteLine("Could not create textured shaders");
+
+            if (_icon_big.Pixels != null && _icon_small.Pixels != null)
+            {
+                Glfw.Image[] images = new Glfw.Image[2];
+                images[0] = _icon_big;
+                images[1] = _icon_small;
+                Glfw.SetWindowIcon(_handler.GetWindowId(), images);
+            }
+            SetWindowPos();
+            SetEventsCallbacks();
+
+            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
             Run();
         }
@@ -299,6 +299,7 @@ namespace SpaceVIL
         }
         internal void Focus(Glfw.Window glfwwnd, bool value)
         {
+            // Console.WriteLine(_handler.GetLayout().GetWindowName() + " " + value);
             EngineEvent.ResetAllEvents();
             _tooltip.InitTimer(false);
 
@@ -312,6 +313,7 @@ namespace SpaceVIL
             }
             else
             {
+                // WindowLayoutBox.LastFocusedWindow = _handler.GetLayout();
                 if (_handler.GetLayout().IsDialog)
                 {
                     _handler.Focused = true;
@@ -346,6 +348,7 @@ namespace SpaceVIL
         }
         private void Resize(Glfw.Window glfwwnd, int width, int height)
         {
+            // Console.WriteLine(true);
             _tooltip.InitTimer(false);
             _handler.GetLayout().SetWidth(width);
             _handler.GetLayout().SetHeight(height);
@@ -353,6 +356,7 @@ namespace SpaceVIL
             {
                 glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
             }
+            Update();
         }
 
         public void SetWindowSize()
@@ -679,7 +683,7 @@ namespace SpaceVIL
                     if (HoveredItem != null)
                     {
                         AssignActions(InputEventType.MouseRelease, _margs, false);
-
+                        HoveredItem.IsMousePressed = false;
                         //Focus get
                         if (FocusedItem != null)
                             FocusedItem.IsFocused = false;
@@ -696,8 +700,11 @@ namespace SpaceVIL
                     Glfw.GetCursorPos(_handler.GetWindowId(), out double xpos, out double ypos);
                     ptrClick.X = (int)xpos;
                     ptrClick.Y = (int)ypos;
-
-                    AssignActions(InputEventType.MousePressed, _margs, false);
+                    if (HoveredItem != null)
+                    {
+                        HoveredItem.IsMousePressed = true;
+                        AssignActions(InputEventType.MousePressed, _margs, false);
+                    }
 
                     if (HoveredItem is IWindow)
                     {
@@ -715,7 +722,7 @@ namespace SpaceVIL
 
         private void AssignActions(InputEventType action, InputEventArgs args, bool only_last)
         {
-            if (only_last)
+            if (only_last && !HoveredItem.IsDisabled)
             {
                 _handler.GetLayout().SetEventTask(new EventTask()
                 {
@@ -728,6 +735,9 @@ namespace SpaceVIL
             {
                 foreach (var item in HoveredItems)
                 {
+                    if (item.Equals(HoveredItem) && HoveredItem.IsDisabled)
+                        continue;//пропустить
+
                     item._mouse_ptr.X = ptrRelease.X;
                     item._mouse_ptr.Y = ptrRelease.Y;
                     _handler.GetLayout().SetEventTask(new EventTask()
@@ -742,6 +752,9 @@ namespace SpaceVIL
         }
         private void AssignActions(InputEventType action, InputEventArgs args, VisualItem sender)
         {
+            if (sender.IsDisabled)
+                return;
+
             _handler.GetLayout().SetEventTask(new EventTask()
             {
                 Item = sender,
@@ -751,10 +764,10 @@ namespace SpaceVIL
             _handler.GetLayout().ExecutePollActions();
         }
 
-        internal void UpdateGL()
+        /*internal void UpdateGL()
         {
             Glfw.PostEmptyEvent();
-        }
+        }*/
 
         internal float _interval = 1.0f / 30.0f;//1000 / 60;
         // internal float _interval = 1.0f / 60.0f;//1000 / 60;
@@ -773,14 +786,27 @@ namespace SpaceVIL
 
         public void Run()
         {
+            //_handler.GetLayout().Handler.InitWindow();
+
             glGenVertexArrays(1, _handler.GVAO);
             glBindVertexArray(_handler.GVAO[0]);
 
             _primitive.UseShader();
             Focus(_handler.GetWindowId(), true);
 
+            /*foreach (var item in _handler.GetLayout().GetWindow().GetItems())
+            {
+                ComboBox combo = item as ComboBox;
+                if (combo != null)
+                {
+                    AssignActions(InputEventType.MousePressed, _margs, combo);
+                    // combo._dropdownarea.Handler.Show();
+                }
+            }*/
+
             while (!_handler.IsClosing())
             {
+                // Glfw.PollEvents();
                 //Glfw.WaitEvents();
                 Glfw.WaitEventsTimeout(_interval);
                 Update();
@@ -907,11 +933,11 @@ namespace SpaceVIL
 
             DrawShell(_tooltip);
 
-            //glDisable(GL_MULTISAMPLE);
             _tooltip.GetTextLine().UpdateGeometry();
             //DrawText_new(_tooltip.GetTextLine());
+            glDisable(GL_MULTISAMPLE);
             DrawText_deprecated(_tooltip.GetTextLine());
-            //glEnable(GL_MULTISAMPLE);
+            glEnable(GL_MULTISAMPLE);
             if (_isStencilSet == _tooltip.GetTextLine())
             {
                 glDisable(GL_STENCIL_TEST);
@@ -937,6 +963,7 @@ namespace SpaceVIL
             if (root is TextItem)
             {
                 // DrawText_new(root as TextItem);
+                /*glDisable(GL_MULTISAMPLE);
                 try
                 {
                     DrawText_deprecated(root as TextItem);
@@ -945,6 +972,12 @@ namespace SpaceVIL
                 {
                     Console.WriteLine(ex);
                 }
+                glEnable(GL_MULTISAMPLE);*/
+
+                glDisable(GL_MULTISAMPLE);
+                DrawText_deprecated(root as TextItem);
+                glEnable(GL_MULTISAMPLE);
+
                 if (_isStencilSet == root)
                 {
                     glDisable(GL_STENCIL_TEST);
@@ -1374,7 +1407,7 @@ namespace SpaceVIL
 
         void DrawText_deprecated(TextItem item)
         {
-            glDisable(GL_MULTISAMPLE);
+            //glDisable(GL_MULTISAMPLE);
 
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
@@ -1406,12 +1439,45 @@ namespace SpaceVIL
             // Clear VBO and shader
             glDeleteBuffers(2, buffers);
 
-            glEnable(GL_MULTISAMPLE);
+            //glEnable(GL_MULTISAMPLE);
+        }
+
+        void DrawPoints(BaseItem item)
+        {
+            // uint[] buffers = new uint[2];
+            // glGenBuffers(2, buffers);
+
+            // float[] data = item.MakeShape().ToArray();
+            // if (data == null) return;
+            // float[] colorData = item.GetColors();
+            // if (colorData == null) return;
+
+            // //bool ok = CheckOutsideBorders(item as BaseItem); //deprecated
+            // CheckOutsideBorders(item as BaseItem);
+
+            // glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            // glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
+            // glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
+            // glEnableVertexAttribArray(0);
+
+            // glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+            // glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            // glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
+            // glEnableVertexAttribArray(1);
+
+            // // draw
+            // glDrawArrays(GL_POINTS, 0, data.Length / 3);
+
+            // glDisableVertexAttribArray(0);
+            // glDisableVertexAttribArray(1);
+
+            // // Clear VBO and shader
+            // glDeleteBuffers(2, buffers);
         }
 
         void DrawPixels(IPixelDrawable item)
         {
-            glDisable(GL_MULTISAMPLE);
+            //glDisable(GL_MULTISAMPLE);
 
             //Console.WriteLine(item.GetItemText());
             uint[] buffers = new uint[2];
@@ -1438,12 +1504,12 @@ namespace SpaceVIL
             // Clear VBO and shader
             glDeleteBuffers(2, buffers);
 
-            glEnable(GL_MULTISAMPLE);
+            //glEnable(GL_MULTISAMPLE);
         }
 
         void DrawImage(ImageItem image)
         {
-            glDisable(GL_MULTISAMPLE);
+            //glDisable(GL_MULTISAMPLE);
 
             byte[] bitmap = image.GetPixMapImage();
 
@@ -1537,6 +1603,8 @@ namespace SpaceVIL
 
             glDeleteBuffers(2, buffers);
             glDeleteTextures(1, texture);
+
+            //glEnable(GL_MULTISAMPLE);
         }
     }
 }

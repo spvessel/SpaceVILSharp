@@ -118,6 +118,9 @@ namespace SpaceVIL
         }
         internal List<float[]> UpdateShape()
         {
+            if (GetTriangles().Count == 0)
+                return null;
+                
             //clone triangles
             List<float[]> result = new List<float[]>();
             for (int i = 0; i < GetTriangles().Count; i++)

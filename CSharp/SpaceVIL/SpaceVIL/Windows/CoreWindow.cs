@@ -34,7 +34,7 @@ namespace SpaceVIL
         {
             wnd_handler.Show();
         }
-        public void Close()
+        public virtual void Close()
         {
             wnd_handler.Close();
         }

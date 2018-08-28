@@ -104,7 +104,7 @@ namespace SpaceVIL
             Handler.SetWidthPolicy(SizePolicy.Expand);
             Handler.SetHeightPolicy(SizePolicy.Fixed);
             Handler.SetAlignment(ItemAlignment.Top);
-            Handler.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            Handler.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
