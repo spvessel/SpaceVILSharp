@@ -66,7 +66,7 @@ namespace SpaceVIL
             ShiftValCodes = new List<int>() {LeftArrowCode, RightArrowCode, EndCode,
                 HomeCode, UpArrowCode, DownArrowCode};
 
-            int[] output = FontEngine.GetSpacerDims(te.GetFont());
+            int[] output = te.GetFontDims();// FontEngine.GetSpacerDims(te.GetFont());
             _minLineSpacer = 3;// output[0];
             _minFontY = output[1];
             _maxFontY = output[2];
@@ -387,7 +387,7 @@ namespace SpaceVIL
 
                 for (int i = 0; i < _linesList.Count; i++)
                 {
-                    _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * i + _lineSpacer);
+                    _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * i);
                 }
             }
 
@@ -485,15 +485,17 @@ namespace SpaceVIL
         private void SplitAndMakeLines(String text)
         {
             _linesList = new List<TextLine>();
-
+            
             _wholeText = text;
 
             string[] line = text.Split('\n');
             int inc = 0;
+            string s;
 
-            foreach (String textPart in line)
+            foreach (string textPart in line)
             {
-                AddNewLine(textPart, inc);
+                s = textPart.TrimEnd('\r');
+                AddNewLine(s, inc);
                 inc++;
             }
 
@@ -641,8 +643,8 @@ namespace SpaceVIL
             Point tmp = new Point();
             if (from.Y == to.Y)
             {
-                Console.WriteLine("Font: " + (_maxFontY - _minFontY));
-                Console.WriteLine("Cur: " + _cursor.GetHeight());
+                //Console.WriteLine("Font: " + (_maxFontY - _minFontY));
+                //Console.WriteLine("Cur: " + _cursor.GetHeight());
                 selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight(), fromReal));
                 selectionRectangles.Add(AddXYShifts(0, 0, toReal));
                 _selectedArea.SetRectangles(selectionRectangles);
@@ -763,8 +765,12 @@ namespace SpaceVIL
             string textBeg = _linesList[_cursor_position.Y].GetItemText().Substring(0, _cursor_position.X);
             string textEnd = "";
             if (_cursor_position.X < GetLineLetCount(_cursor_position.Y)) textEnd = _linesList[_cursor_position.Y].GetItemText().Substring(_cursor_position.X);
-
+            
             string[] line = pasteStr.Split('\n');
+            for (int i = 0; i < line.Length; i++)
+            { 
+                line[i] = line[i].TrimEnd('\r');
+            }
 
             if (line.Length == 1)
             {
@@ -840,10 +846,11 @@ namespace SpaceVIL
             if (_elementFont != null)
                 te.SetFont(_elementFont);
             AddItem(te);
+            //text.TrimEnd('\r');
             te.SetItemText(text);
-            te.SetLineYShift((_lineHeight + _lineSpacer) * lineNum + +_lineSpacer);
+            te.SetLineYShift((_lineHeight + _lineSpacer) * lineNum);
             for (int i = lineNum; i < _linesList.Count; i++)
-                _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * (i + 1) + _lineSpacer);
+                _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * (i + 1));
             _linesList.Insert(lineNum, te);
             AddItem(_cursor);
             //te.UpdateData(UpdateType.Critical); //Doing when SetItemText

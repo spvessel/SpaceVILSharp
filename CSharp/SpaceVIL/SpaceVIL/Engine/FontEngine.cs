@@ -68,9 +68,9 @@ namespace SpaceVIL
                 this.font = font;
                 letters = new Dictionary<char, Letter>();
                 //Console.WriteLine("Make " + font.FontFamily + " " + font.Size);
+                MakeBugLetter();
                 FillABC();
                 FillSpecLetters();
-                MakeBugLetter();
             }
 
             private void FillSpecLetters()
@@ -87,6 +87,14 @@ namespace SpaceVIL
                 letters.Add(specLet, letter1);
                 letter1.width = letter.width * 4;
                 letter1.height = 0;
+                /*
+                //!Может стоит вернуть это, если новые модификации текста будут работать нормально
+                specLet = "\r"[0];
+                Letter letter2 = new Letter("\t", null);
+                letters.Add(specLet, letter2);
+                letter2.width = 0;
+                letter2.height = 0;
+                */
             }
 
             private double UpdateSpecX0(Letter letter, double x0)
@@ -96,6 +104,7 @@ namespace SpaceVIL
 
             private void AddLetter(char c)
             {
+                //Console.WriteLine(font.Name + " " + font.Size + " Add letter " + c);
                 Letter letter = MakeLetter(char.ToString(c));
                 letters.Add(c, letter);
                 minY = (minY > letter.minY) ? letter.minY : minY;
@@ -222,6 +231,7 @@ namespace SpaceVIL
 
             private Letter MakeLetter(String let)
             {
+                //LogService.Log().LogText("Letter " + let);
                 GraphicsPath shape = new GraphicsPath();
                 StringFormat format = StringFormat.GenericTypographic;
                 //float emSize = font.Height * font.FontFamily.GetCellAscent(font.Style) / font.FontFamily.GetEmHeight(font.Style);
@@ -233,6 +243,7 @@ namespace SpaceVIL
                 }
                 catch (Exception)
                 {
+                    //Console.WriteLine(let.Equals("\r"));
                     Console.WriteLine("Bug letter exception");
                     return bugLetter;
                 }
@@ -261,9 +272,9 @@ namespace SpaceVIL
             private void MakeBugLetter()
             {
                 bugLetter = new Letter("bug", null);
-                bugLetter.width = lineSpacer;
-                bugLetter.height = Math.Abs(maxY - minY + 1);
-                bugLetter.minY = minY;
+                bugLetter.width = (int)(font.Size / 3f);// lineSpacer;
+                bugLetter.height = (int)(font.Size * 2/ 3f);// Math.Abs(maxY - minY + 1);
+                bugLetter.minY = (int)(font.Size / 3f);// minY;
                 bugLetter.isSpec = false;
                 double[,] arr = new double[bugLetter.width, bugLetter.height];
                 for (int i = 0; i < bugLetter.width; i++)
@@ -297,18 +308,24 @@ namespace SpaceVIL
                 if (shape != null)
                     MakeLetterArrays(shape);
                 else isSpec = true;
+
+                //LogService.Log().LogArr(new int[] {minY, height}, "Let " + name);
             }
 
             private void MakeLetterArrays(GraphicsPath shape)
             {
                 RectangleF rec = shape.GetBounds();
-                int x0 = (int)Math.Floor(rec.Left);
+                //int x0 = (int)Math.Floor(rec.Left);
                 //int x1 = (int)Math.Ceiling(rec.Right);
-                int y0 = (int)Math.Floor(rec.Top);
+                int y0;// = (int)Math.Floor(rec.Top);
                 //int y1 = (int)Math.Ceiling(rec.Bottom);
 
-                double[,] alph = ContourService.CrossContours(shape);
+                //LogService.Log().LogOne(rec.Top, "Let " + name);
 
+                CrossOut crossOut = ContourService.CrossContours(shape);
+                double[,] alph = crossOut._arr;
+                y0 = crossOut._minY;
+                
                 height = alph.GetLength(1);// y1 - y0 + 1;
                 width = alph.GetLength(0);// x1 - x0 + 1;
                 int x0shift = 0;
@@ -383,8 +400,9 @@ namespace SpaceVIL
 
                     }
                 }
-
+                
             }
+            #region OldThings
             /*
             private void MakeLetterArraysOld(GraphicsPath shape)
             {
@@ -752,5 +770,6 @@ namespace SpaceVIL
             }
         }
         */
+        #endregion
     }
 }

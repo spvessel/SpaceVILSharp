@@ -325,8 +325,14 @@ namespace SpaceVIL
             //cursor
             _cursor.IsVisible = false;
             _cursor.SetBackground(0, 0, 0);
-            _cursor.SetMargin(0, 5, 0, 5);
+            //_cursor.SetMargin(0, 5, 0, 5);
             _cursor.SetWidth(2);
+            //int[] otp = _text_object.GetFontDims();
+            //int _minLineSpacer = otp[0];
+            //int _minFontY = otp[1];
+            //int _maxFontY = otp[2];
+            //Console.WriteLine(_minLineSpacer);
+            //_cursor.SetHeight(_maxFontY - _minFontY + _minLineSpacer);
             _cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             //selectedArea
             _selectedArea.SetMargin(0, 5, 0, 5);

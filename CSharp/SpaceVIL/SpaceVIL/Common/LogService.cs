@@ -38,10 +38,12 @@ namespace SpaceVIL
 
         public void LogText(string text) {
             if (!isLogging) return;
-            AddText(text + "\n");
+            StringBuilder outText = new StringBuilder(GetTime());
+            outText.AppendLine(text);
+            AddText(outText.ToString());
         }
 
-        public void LogOne<T>(string describe, T par, bool flat = true)
+        public void LogOne<T>(T par, string describe = "", bool flat = true)
         {
             if (!isLogging) return;
 
