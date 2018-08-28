@@ -10,10 +10,20 @@ namespace SpaceVIL
 {
     public class ThemeStyle
     {
-        private ConcurrentDictionary<String, Style> DefaultItemsStyle = new ConcurrentDictionary<String, Style>();
-        private ConcurrentDictionary<BaseItem, Style> SpecificItemsStyle = new ConcurrentDictionary<BaseItem, Style>();
+        private static ThemeStyle _instance;
+        private ThemeStyle() { }
+        public static ThemeStyle GetInstance()
+        {
+            if(_instance == null)
+                _instance = new ThemeStyle();
+            return _instance;
+        }
+        private Dictionary<Type, Style> DefaultItemsStyle = new Dictionary<Type, Style>()
+        {
+            {typeof(SpaceVIL.ButtonCore), Style.GetButtonCoreStyle()}
+        };
 
-        public ThemeStyle() { }
+        private ConcurrentDictionary<BaseItem, Style> SpecificItemsStyle = new ConcurrentDictionary<BaseItem, Style>();
 
         public void SetCurrentAsDefault()
         {
@@ -34,21 +44,21 @@ namespace SpaceVIL
                 SpecificItemsStyle.TryRemove(current_item, out style);
         }
 
-        public bool ReplaceDefaultItemStyle(String class_name, Style style)
+        public bool ReplaceDefaultItemStyle(Type class_type, Style style)
         {
-            if (DefaultItemsStyle.ContainsKey(class_name))
+            if (DefaultItemsStyle.ContainsKey(class_type))
             {
-                DefaultItemsStyle[class_name] = style;
+                DefaultItemsStyle[class_type] = style;
                 return true;
             }
             return false;
         }
-        public void AddDefaultCustomItemStyle(String class_name, Style style)
+        public void AddDefaultCustomItemStyle(Type class_type, Style style)
         {
-            if (DefaultItemsStyle.ContainsKey(class_name))
-                DefaultItemsStyle[class_name] = style;
+            if (DefaultItemsStyle.ContainsKey(class_type))
+                DefaultItemsStyle[class_type] = style;
             else
-                DefaultItemsStyle.TryAdd(class_name, style);
+                DefaultItemsStyle.Add(class_type, style);
         }
     }
 }

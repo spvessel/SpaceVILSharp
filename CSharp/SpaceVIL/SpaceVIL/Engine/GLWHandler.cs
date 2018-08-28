@@ -19,12 +19,12 @@ namespace SpaceVIL
     internal class GLWHandler
     {
         //cursors 
-        Glfw.Cursor _arrow;
-        Glfw.Cursor _input;
-        Glfw.Cursor _hand;
-        Glfw.Cursor _resize_h;
-        Glfw.Cursor _resize_v;
-        Glfw.Cursor _resize_all;
+        // Glfw.Cursor _arrow;
+        // Glfw.Cursor _input;
+        // Glfw.Cursor _hand;
+        // Glfw.Cursor _resize_h;
+        // Glfw.Cursor _resize_v;
+        // Glfw.Cursor _resize_all;
         ///////////////////////////////////////////////
 
         internal Glfw.WindowSizeFunc ResizeCallback;
@@ -72,20 +72,20 @@ namespace SpaceVIL
         internal void InitGlfw()
         {
             //path to c++ glfw3.dll (x32 or x64)
-            //Glfw.ConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
-            if (!Glfw.Init())
-            {
-                Console.WriteLine("Init window fail - " + GetLayout().GetWindowTitle());
-                Environment.Exit(-1);
-            }
+            // Glfw.ConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            // if (!Glfw.Init())
+            // {
+            //     Console.WriteLine("Init window fail - " + GetLayout().GetWindowTitle());
+            //     Environment.Exit(-1);
+            // }
 
             //cursors
-            _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
-            _input = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
-            _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
-            _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
-            _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
-            _resize_all = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
+            // _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
+            // _input = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
+            // _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
+            // _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
+            // _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
+            // _resize_all = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
         }
         internal void CreateWindow()
         {
@@ -93,19 +93,20 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Samples, 4);
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 4);
-            Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
+            Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 2);
             Glfw.WindowHint(Glfw.Hint.Resizable, Resizeble);
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window
-            Glfw.WindowHint(Glfw.Hint.Focused, Focusable);
+            Glfw.WindowHint(Glfw.Hint.Focused, Focused);
             Glfw.WindowHint(Glfw.Hint.Floating, AlwaysOnTop);
             Glfw.WindowHint(Glfw.Hint.Maximized, Maximized);
             Glfw.WindowHint(Glfw.Hint.Visible, Visible);
             //Glfw.WindowHint(Glfw.Hint.DepthBits, 16);
             //Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, true);
             _window = Glfw.CreateWindow(_w_layout.GetWidth(), _w_layout.GetHeight(), _w_layout.GetWindowTitle());
+
             if (!_window)
             {
-                Console.WriteLine("Create window fail - " + GetLayout().GetWindowTitle());
+                LogService.Log().LogText("Create window fail - " + GetLayout().GetWindowTitle());
                 Glfw.Terminate();
                 Environment.Exit(-1);
             }
@@ -120,15 +121,21 @@ namespace SpaceVIL
                 WPosition.X = _w_layout.GetX();
                 WPosition.Y = _w_layout.GetY();
             }
-
             Glfw.MakeContextCurrent(_window);
             Glfw.SetWindowSizeLimits(_window, _w_layout.GetMinWidth(), _w_layout.GetMinHeight(), _w_layout.GetMaxWidth(), _w_layout.GetMaxHeight());
+            // Console.WriteLine(
+            //     _w_layout.GetMinWidth() + " " + 
+            //     _w_layout.GetMinHeight() + " " + 
+            //     _w_layout.GetMaxWidth() + " " + 
+            //     _w_layout.GetMaxHeight() + " "
+            //     );
+            LogService.Log().LogWindow(GetLayout(), LogProps.AllGeometry);
         }
 
-        internal void SwitchContext()
-        {
-            Glfw.MakeContextCurrent(_window);
-        }
+        // internal void SwitchContext()
+        // {
+        //     Glfw.MakeContextCurrent(_window);
+        // }
         
         internal void ClearEventsCallbacks()
         {
@@ -148,25 +155,25 @@ namespace SpaceVIL
             switch (type)
             {
                 case Glfw.CursorType.Arrow:
-                    Glfw.SetCursor(_window, _arrow);
+                    Glfw.SetCursor(_window, CommonService._arrow);
                     break;
                 case Glfw.CursorType.Beam:
-                    Glfw.SetCursor(_window, _input);
+                    Glfw.SetCursor(_window, CommonService._input);
                     break;
                 case Glfw.CursorType.Crosshair:
-                    Glfw.SetCursor(_window, _resize_all);
+                    Glfw.SetCursor(_window, CommonService._resize_all);
                     break;
                 case Glfw.CursorType.Hand:
-                    Glfw.SetCursor(_window, _hand);
+                    Glfw.SetCursor(_window, CommonService._hand);
                     break;
                 case Glfw.CursorType.ResizeX:
-                    Glfw.SetCursor(_window, _resize_h);
+                    Glfw.SetCursor(_window, CommonService._resize_h);
                     break;
                 case Glfw.CursorType.ResizeY:
-                    Glfw.SetCursor(_window, _resize_v);
+                    Glfw.SetCursor(_window, CommonService._resize_v);
                     break;
                 default:
-                    Glfw.SetCursor(_window, _arrow);
+                    Glfw.SetCursor(_window, CommonService._arrow);
                     break;
             }
         }

@@ -15,6 +15,7 @@ namespace SpaceVIL
     abstract public class VisualItem : BaseItem
     {
         //style
+        internal bool _is_style_set = false;
         public override void SetStyle(Style style)
         {
             if (style == null)
@@ -34,8 +35,9 @@ namespace SpaceVIL
             Border.Thickness = style.BorderThickness;
             foreach (var state in style.ItemStates)
             {
-                AddItemState(true, state.Key, state.Value);
+                AddItemState(state.Key, state.Value);
             }
+            _is_style_set = true;
         }
 
         private String _tooltip = String.Empty;
@@ -117,7 +119,9 @@ namespace SpaceVIL
 
                 //needs to force update all attributes
                 item.UpdateGeometry();
-                // item.CheckDefaults();
+                VisualItem vi = item as VisualItem;
+                if (vi != null)
+                    vi.UpdateState();
                 item.InitElements();
             }
         }
@@ -214,7 +218,7 @@ namespace SpaceVIL
 
             //bind events
             // EventMouseHover += EmptyEvent;
-            // EventMousePressed += EmptyEvent;
+            // EventMousePressed += (sender, args) => IsMousePressed = !IsMousePressed;
             // EventFocusGet += EmptyEvent;
             // EventFocusLost += EmptyEvent;
             // EventMouseDrop += EmptyEvent;
@@ -317,7 +321,13 @@ namespace SpaceVIL
         public bool IsDisabled
         {
             get { return _disabled; }
-            set { _disabled = value; }
+            set
+            {
+                if (_disabled == value)
+                    return;
+                _disabled = value;
+                UpdateState();
+            }
         }
         private bool _hover;
         public virtual bool IsMouseHover
@@ -335,7 +345,13 @@ namespace SpaceVIL
         public virtual bool IsMousePressed
         {
             get { return _pressed; }
-            set { _pressed = value; }
+            set
+            {
+                if (_pressed == value)
+                    return;
+                _pressed = value;
+                UpdateState();
+            }
         }
         private bool _focused;
         public virtual bool IsFocused
@@ -346,7 +362,10 @@ namespace SpaceVIL
             }
             set
             {
+                if (_focused == value)
+                    return;
                 _focused = value;
+                UpdateState();
             }
         }
         public void SetFocus()
@@ -355,11 +374,11 @@ namespace SpaceVIL
         }
 
         //common methods
-        public void AddItemState(bool value, ItemStateType type, ItemState state)
+        public void AddItemState(ItemStateType type, ItemState state)
         {
             if (states.ContainsKey(type))
             {
-                state.Value = value;
+                state.Value = true;
                 states[type] = state;
             }
             else
@@ -413,8 +432,20 @@ namespace SpaceVIL
         protected virtual void UpdateState()
         {
             base.SetBackground(GetState(_state).Background);
+            if (IsDisabled && states.ContainsKey(ItemStateType.Disabled))
+            {
+                base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Disabled).Background));
+                return;
+            }
+            
+            if (IsFocused && states.ContainsKey(ItemStateType.Focused))
+                base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Focused).Background));
+
             if (IsMouseHover && states.ContainsKey(ItemStateType.Hovered))
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Hovered).Background));
+
+            if (IsMousePressed && states.ContainsKey(ItemStateType.Pressed))
+                base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Pressed).Background));
         }
 
         protected internal Pointer _mouse_ptr = new Pointer();
@@ -433,6 +464,8 @@ namespace SpaceVIL
         private bool StrictHoverVerification(float xpos, float ypos)
         {
             List<float[]> tmp = UpdateShape();
+            if (tmp == null)
+                return false;
 
             float Ax, Ay, Bx, By, Cx, Cy, Px, Py, m, l;
             IsMouseHover = false;

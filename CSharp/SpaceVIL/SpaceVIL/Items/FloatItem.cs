@@ -58,7 +58,7 @@ namespace SpaceVIL
             _btn_close.SetMargin(0, 10, 10, 0);
             _btn_close.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             _btn_close.SetAlignment(ItemAlignment.Top | ItemAlignment.Right);
-            _btn_close.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            _btn_close.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(125, 255, 255, 255)
             });

@@ -7,20 +7,28 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class ComboBoxDropDown : DropDown
+    public class ComboBoxDropDown : DialogWindow, IDisposable
     {
         public ListBox ItemList = new ListBox();
         public ButtonCore Selection;
         public EventCommonMethod SelectionChanged;
 
-        public ComboBoxDropDown() { }
+        public ComboBoxDropDown()
+        {
+        }
+
         public override void InitWindow()
         {
-            base.InitWindow();
+            Handler = new WindowLayout(this, "DropDown_" + GetCount(), "DropDown_" + GetCount());
             Handler.SetPadding(2, 2, 2, 2);
             Handler.SetBackground(255, 255, 255);
-            Handler.SetWindowName("ComboBoxDropDown_" + GetCount());
             Handler.IsOutsideClickClosable = true;
+            Handler.IsBorderHidden = true;
+            // Handler.IsHidden = true;
+            Handler.IsAlwaysOnTop = true;
+            Handler.IsCentered = false;
+            Handler.IsResizeble = false;
+            // Handler.IsFocused = false;
 
             ItemList.GetArea().SetSpacing(0, 0);
             ItemList.GetArea().SetPadding(0);
@@ -29,8 +37,11 @@ namespace SpaceVIL
             ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.GetArea().SelectionChanged += OnSelectionChanged;
-            
+
             Handler.AddItem(ItemList);
+
+            //Handler.Show();
+            // Show();
         }
 
         public void Add(BaseItem item)
@@ -60,6 +71,26 @@ namespace SpaceVIL
         public int GetCurrentIndex()
         {
             return ItemList.GetSelection();
+        }
+
+        // public override void Show()
+        // {
+        //     base.Show();
+        // }
+
+        // public override void Close()
+        // {
+        //     Handler.SetHidden(true);
+        // }
+
+        // public void Unhide()
+        // {
+        //     Handler.SetHidden(false);
+        // }
+
+        public void Dispose()
+        {
+            Handler.Close();
         }
     }
 }

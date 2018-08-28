@@ -42,7 +42,7 @@ namespace SpaceVIL
             UpArrow.SetWidthPolicy(SizePolicy.Fixed);
             UpArrow.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
             UpArrow.IsCustom = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 3, 4, -90));
-            UpArrow.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            UpArrow.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
@@ -62,7 +62,7 @@ namespace SpaceVIL
             DownArrow.SetWidthPolicy(SizePolicy.Fixed);
             DownArrow.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
             DownArrow.IsCustom = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 3, 4, 90));
-            DownArrow.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            DownArrow.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });

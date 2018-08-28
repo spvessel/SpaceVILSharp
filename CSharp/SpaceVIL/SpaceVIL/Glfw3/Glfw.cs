@@ -20,13 +20,13 @@ namespace Glfw3
         /// in.</param>
         /// <exception cref="DirectoryNotFoundException">When <paramref name="nativeDirectory"/> is
         /// not found.</exception>
-        public static void ConfigureNativesDirectory(string nativeDirectory)
-        {
-            /*if (Directory.Exists(nativeDirectory))
-                Environment.SetEnvironmentVariable("Path", Environment.GetEnvironmentVariable("Path") + ";" + Path.GetFullPath(nativeDirectory) + ";");
-            else
-                throw new DirectoryNotFoundException(nativeDirectory);*/
-        }
+        // public static void ConfigureNativesDirectory(string nativeDirectory)
+        // {
+        //     // if (Directory.Exists(nativeDirectory))
+        //     //     Environment.SetEnvironmentVariable("Path", Environment.GetEnvironmentVariable("Path") + ";" + Path.GetFullPath(nativeDirectory) + ";");
+        //     // else
+        //     //     throw new DirectoryNotFoundException(nativeDirectory);
+        // }
 
         /// <summary>
         /// GLFW_DONT_CARE

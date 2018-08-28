@@ -36,22 +36,22 @@ namespace SpaceVIL
 
         public Style()//default
         {
-            Background = Color.White;
-            Foreground = Color.Black;
-            Font = new Font(new FontFamily("Courier New"), 14, FontStyle.Regular);
-            WidthPolicy = SizePolicy.Fixed;
-            HeightPolicy = SizePolicy.Fixed;
-            Width = 30;
-            Height = 30;
-            MinHeight = 0;
-            MinWidth = 0;
+            // Background = Color.White;
+            // Foreground = Color.Black;
+            // Font = new Font(new FontFamily("Courier New"), 14, FontStyle.Regular);
+            // WidthPolicy = SizePolicy.Fixed;
+            // HeightPolicy = SizePolicy.Fixed;
+            // Width = 30;
+            // Height = 30;
+            // MinHeight = 0;
+            // MinWidth = 0;
             MaxWidth = 7680;
             MaxHeight = 4320;
-            Alignment = ItemAlignment.Left | ItemAlignment.Top;
-            X = 0;
-            Y = 0;
-            BorderRadius = 0;
-            BorderThickness = 0;
+            // Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            // X = 0;
+            // Y = 0;
+            // BorderRadius = 0;
+            // BorderThickness = 0;
         }
 
         public void AddInnerStyle(BaseItem item, Style style)
@@ -68,6 +68,33 @@ namespace SpaceVIL
                 _inner_styles.TryRemove(item, out style);
             else
                 return;
+        }
+
+        public static Style GetButtonCoreStyle()
+        {
+            Style style = new Style();
+            style.Background = Color.FromArgb(255, 13, 176, 255);
+            style.Foreground = Color.Black;
+            style.Font = new Font(new FontFamily("Courier New"), 14, FontStyle.Regular);
+            style.WidthPolicy = SizePolicy.Fixed;
+            style.HeightPolicy = SizePolicy.Fixed;
+            style.Width = 60;
+            style.Height = 30;
+            style.MinHeight = 0;
+            style.MinWidth = 0;
+            style.MaxWidth = Int16.MaxValue;
+            style.MaxHeight = Int16.MaxValue;
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            style.X = 0;
+            style.Y = 0;
+            style.BorderRadius = 0;
+            style.BorderThickness = 0;
+            style.ItemStates.Add(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(60, 255, 255, 255)
+            });
+
+            return style;
         }
     }
 }

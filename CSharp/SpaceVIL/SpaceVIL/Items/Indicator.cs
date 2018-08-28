@@ -38,11 +38,11 @@ namespace SpaceVIL
             _indicator.SetBackground(Color.FromArgb(255, 32, 32, 32));
             _indicator.SetWidthPolicy(SizePolicy.Expand);
             _indicator.SetHeightPolicy(SizePolicy.Expand);
-            _indicator.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            _indicator.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(125, 255, 255, 255)
             });
-            _indicator.AddItemState(true, ItemStateType.Toggled, new ItemState()
+            _indicator.AddItemState(ItemStateType.Toggled, new ItemState()
             {
                 Background = Color.FromArgb(255, 255, 181, 111)
             });

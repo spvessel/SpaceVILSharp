@@ -78,7 +78,7 @@ namespace SpaceVIL
         }
         public override void RemoveItem(BaseItem item)
         {
-            base.AddItem(item);
+            base.RemoveItem(item);
             _stored_crd.Remove(item);
             UpdateLayout();
         }

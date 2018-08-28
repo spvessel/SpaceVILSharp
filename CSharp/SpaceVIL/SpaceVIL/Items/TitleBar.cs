@@ -152,7 +152,7 @@ namespace SpaceVIL
             _close.SetSize(15, 15);
             _close.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
             _close.IsCustom = new CustomFigure(true, GraphicsMathService.GetCross(15, 15, 2, 45));
-            _close.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            _close.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(255, 186, 95, 97)
             });
@@ -167,7 +167,7 @@ namespace SpaceVIL
             _minimize.IsCustom = new CustomFigure(true, GraphicsMathService.GetRectangle(15, 2, 0, 13));
             _minimize.SetSize(12, 15);
             _minimize.SetMargin(0, 0, 5, 9);
-            _minimize.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            _minimize.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
@@ -183,7 +183,7 @@ namespace SpaceVIL
             _maximize.IsCustom = new CustomFigure(false, GraphicsMathService.GetRectangle());
             _maximize.SetMargin(0, 0, 0, 9);
             _maximize.SetPadding(2, 2, 2, 2);
-            _maximize.AddItemState(true, ItemStateType.Hovered, new ItemState()
+            _maximize.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(40, 0, 255, 64)
             });

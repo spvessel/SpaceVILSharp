@@ -38,7 +38,7 @@ namespace SpaceVIL
             SetBackground(Color.Transparent);
             SetItemName("MenuItem_" + count);
             SetPadding(10, 0, 0, 0);
-            AddItemState(true, ItemStateType.Hovered, new ItemState()
+            AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(255, 150, 150, 150)
             });
