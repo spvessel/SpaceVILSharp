@@ -171,6 +171,8 @@ namespace SpaceVIL
                 if (ia.HasFlag(ItemAlignment.Right)) outText.Append("Right, ");
                 if (ia.HasFlag(ItemAlignment.Top)) outText.Append("Top ");
                 if (ia.HasFlag(ItemAlignment.Bottom)) outText.Append("Bottom ");
+                if (ia.HasFlag(ItemAlignment.HCenter)) outText.Append("HCenter ");
+                if (ia.HasFlag(ItemAlignment.VCenter)) outText.Append("VCenter ");
 
                 outText.AppendLine();
                 outText.AppendLine();

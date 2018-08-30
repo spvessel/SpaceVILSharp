@@ -22,6 +22,10 @@ namespace SpaceVIL
         {
             {typeof(SpaceVIL.ButtonCore), Style.GetButtonCoreStyle()}
         };
+        public Style GetThemeStyle(Type type)
+        {
+            return DefaultItemsStyle[type];
+        }
 
         private ConcurrentDictionary<BaseItem, Style> SpecificItemsStyle = new ConcurrentDictionary<BaseItem, Style>();
 

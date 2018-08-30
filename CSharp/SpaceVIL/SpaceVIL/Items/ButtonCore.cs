@@ -16,6 +16,7 @@ namespace SpaceVIL
             _text_object = new TextLine();
             EventKeyPress += OnKeyPress;
 
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ButtonCore)));
         }
         public ButtonCore(String text = "") : this()
         {

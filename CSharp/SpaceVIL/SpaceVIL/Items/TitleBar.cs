@@ -148,8 +148,10 @@ namespace SpaceVIL
             SetForeground(Color.FromArgb(255, 180, 180, 180));
 
             //_close
+            _close.SetItemName(GetItemName() + "_close");
             _close.SetBackground(100, 100, 100);
             _close.SetSize(15, 15);
+            _minimize.SetMargin(0, 0, 0, 0);
             _close.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
             _close.IsCustom = new CustomFigure(true, GraphicsMathService.GetCross(15, 15, 2, 45));
             _close.AddItemState(ItemStateType.Hovered, new ItemState()
@@ -195,7 +197,6 @@ namespace SpaceVIL
             center.SetBackground(GetBackground());
             center.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
 
-
             //icon
             _icon.IsVisible = false;
             _icon.SetBackground(Color.Transparent);
@@ -219,6 +220,7 @@ namespace SpaceVIL
 
             //update text data
             //_text_object.UpdateData(UpdateType.Critical);
+            LogService.Log().LogBaseItem(_close, LogProps.Behavior | LogProps.AllGeometry);
         }
     }
 }

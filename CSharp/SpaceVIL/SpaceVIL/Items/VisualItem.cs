@@ -21,6 +21,8 @@ namespace SpaceVIL
             if (style == null)
                 return;
 
+            _is_style_set = true;
+
             SetBackground(style.Background);
             SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
             SetSize(style.Width, style.Height);
@@ -33,11 +35,10 @@ namespace SpaceVIL
             SetMargin(style.Margin);
             Border.Radius = style.BorderRadius;
             Border.Thickness = style.BorderThickness;
-            foreach (var state in style.ItemStates)
+            foreach (var state in style.GetAllStates())
             {
                 AddItemState(state.Key, state.Value);
             }
-            _is_style_set = true;
         }
 
         private String _tooltip = String.Empty;

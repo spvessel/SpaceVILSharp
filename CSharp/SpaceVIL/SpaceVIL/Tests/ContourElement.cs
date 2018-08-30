@@ -78,7 +78,9 @@ namespace SpaceVIL
             _coordsList = new List<float>();
             _colorsList = new List<float>();
             
-            double[,] alph = ContourService.CrossContours(MakeContourFigure());
+            //double[,] alph = ContourService.CrossContours(MakeContourFigure());
+            CrossOut crossOut = ContourService.CrossContours(MakeContourFigure());
+            double[,] alph = crossOut._arr;
 
             for (int i = 0; i < alph.GetLength(0); i++)
             {
