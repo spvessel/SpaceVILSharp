@@ -96,7 +96,8 @@ namespace SpaceVIL
         }
         public virtual void AddItem(BaseItem item)
         {
-            lock (GetHandler().engine_locker)
+            // lock (GetHandler().engine_locker)
+            lock (CommonService.GlobalLocker)
             {
                 if (item.Equals(this))
                 {
@@ -148,7 +149,8 @@ namespace SpaceVIL
 
         public virtual void RemoveItem(BaseItem item)
         {
-            lock (GetHandler().engine_locker)
+            // lock (GetHandler().engine_locker)
+            lock (CommonService.GlobalLocker)
             {
                 LayoutType type;
                 if (item is IFloating)

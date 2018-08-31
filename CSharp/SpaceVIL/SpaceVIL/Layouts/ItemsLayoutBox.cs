@@ -38,17 +38,20 @@ namespace SpaceVIL
         }
         static internal void AddItem(WindowLayout layout, BaseItem item, LayoutType type)
         {
-            switch (type)
+            lock (CommonService.GlobalLocker)
             {
-                case LayoutType.Static:
-                    layouts[layout.Id].Items.Add(item);
-                    break;
-                case LayoutType.Floating:
-                    layouts[layout.Id].FloatItems.Add(item);
-                    break;
-                default:
-                    layouts[layout.Id].Items.Add(item);
-                    break;
+                switch (type)
+                {
+                    case LayoutType.Static:
+                        layouts[layout.Id].Items.Add(item);
+                        break;
+                    case LayoutType.Floating:
+                        layouts[layout.Id].FloatItems.Add(item);
+                        break;
+                    default:
+                        layouts[layout.Id].Items.Add(item);
+                        break;
+                }
             }
 
             if (item is IUserItem)
@@ -56,17 +59,20 @@ namespace SpaceVIL
         }
         static internal void RemoveItem(WindowLayout layout, BaseItem item, LayoutType type)
         {
-            switch (type)
+            lock (CommonService.GlobalLocker)
             {
-                case LayoutType.Static:
-                    layouts[layout.Id].Items.Remove(item);
-                    break;
-                case LayoutType.Floating:
-                    layouts[layout.Id].FloatItems.Remove(item);
-                    break;
-                default:
-                    layouts[layout.Id].Items.Remove(item);
-                    break;
+                switch (type)
+                {
+                    case LayoutType.Static:
+                        layouts[layout.Id].Items.Remove(item);
+                        break;
+                    case LayoutType.Floating:
+                        layouts[layout.Id].FloatItems.Remove(item);
+                        break;
+                    default:
+                        layouts[layout.Id].Items.Remove(item);
+                        break;
+                }
             }
         }
 

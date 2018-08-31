@@ -11,26 +11,26 @@ namespace SpaceVIL
         static CommonService()
         {
             //Glfw.ConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
-            if (!Glfw.Init())
-            {
-                LogService.Log().LogText("Glfw initialization failed.");
-                Environment.Exit(-1);
-            }
+            // if (!Glfw.Init())
+            // {
+            //     LogService.Log().LogText("Glfw initialization failed.");
+            //     Environment.Exit(-1);
+            // }
 
-            _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
-            _input = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
-            _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
-            _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
-            _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
-            _resize_all = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
+            // _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
+            // _input = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
+            // _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
+            // _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
+            // _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
+            // _resize_all = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
         }
 
-        public static Glfw.Cursor _arrow;
-        public static Glfw.Cursor _input;
-        public static Glfw.Cursor _hand;
-        public static Glfw.Cursor _resize_h;
-        public static Glfw.Cursor _resize_v;
-        public static Glfw.Cursor _resize_all;
+        // public static Glfw.Cursor _arrow;
+        // public static Glfw.Cursor _input;
+        // public static Glfw.Cursor _hand;
+        // public static Glfw.Cursor _resize_h;
+        // public static Glfw.Cursor _resize_v;
+        // public static Glfw.Cursor _resize_all;
 
         public static String ClipboardTextStorage = String.Empty;
         public static readonly object GlobalLocker = new object();

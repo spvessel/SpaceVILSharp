@@ -19,12 +19,12 @@ namespace SpaceVIL
     internal class GLWHandler
     {
         //cursors 
-        // Glfw.Cursor _arrow;
-        // Glfw.Cursor _input;
-        // Glfw.Cursor _hand;
-        // Glfw.Cursor _resize_h;
-        // Glfw.Cursor _resize_v;
-        // Glfw.Cursor _resize_all;
+        Glfw.Cursor _arrow;
+        Glfw.Cursor _input;
+        Glfw.Cursor _hand;
+        Glfw.Cursor _resize_h;
+        Glfw.Cursor _resize_v;
+        Glfw.Cursor _resize_all;
         ///////////////////////////////////////////////
 
         internal Glfw.WindowSizeFunc ResizeCallback;
@@ -73,19 +73,19 @@ namespace SpaceVIL
         {
             //path to c++ glfw3.dll (x32 or x64)
             // Glfw.ConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
-            // if (!Glfw.Init())
-            // {
-            //     Console.WriteLine("Init window fail - " + GetLayout().GetWindowTitle());
-            //     Environment.Exit(-1);
-            // }
+            if (!Glfw.Init())
+            {
+                Console.WriteLine("Init GLFW fail - " + GetLayout().GetWindowTitle());
+                Environment.Exit(-1);
+            }
 
             //cursors
-            // _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
-            // _input = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
-            // _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
-            // _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
-            // _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
-            // _resize_all = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
+            _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
+            _input = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
+            _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
+            _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
+            _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
+            _resize_all = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
         }
         internal void CreateWindow()
         {
@@ -155,26 +155,47 @@ namespace SpaceVIL
             switch (type)
             {
                 case Glfw.CursorType.Arrow:
-                    Glfw.SetCursor(_window, CommonService._arrow);
+                    Glfw.SetCursor(_window, _arrow);
                     break;
                 case Glfw.CursorType.Beam:
-                    Glfw.SetCursor(_window, CommonService._input);
+                    Glfw.SetCursor(_window, _input);
                     break;
                 case Glfw.CursorType.Crosshair:
-                    Glfw.SetCursor(_window, CommonService._resize_all);
+                    Glfw.SetCursor(_window, _resize_all);
                     break;
                 case Glfw.CursorType.Hand:
-                    Glfw.SetCursor(_window, CommonService._hand);
+                    Glfw.SetCursor(_window, _hand);
                     break;
                 case Glfw.CursorType.ResizeX:
-                    Glfw.SetCursor(_window, CommonService._resize_h);
+                    Glfw.SetCursor(_window, _resize_h);
                     break;
                 case Glfw.CursorType.ResizeY:
-                    Glfw.SetCursor(_window, CommonService._resize_v);
+                    Glfw.SetCursor(_window, _resize_v);
                     break;
                 default:
-                    Glfw.SetCursor(_window, CommonService._arrow);
+                    Glfw.SetCursor(_window, _arrow);
                     break;
+                // case Glfw.CursorType.Arrow:
+                //     Glfw.SetCursor(_window, CommonService._arrow);
+                //     break;
+                // case Glfw.CursorType.Beam:
+                //     Glfw.SetCursor(_window, CommonService._input);
+                //     break;
+                // case Glfw.CursorType.Crosshair:
+                //     Glfw.SetCursor(_window, CommonService._resize_all);
+                //     break;
+                // case Glfw.CursorType.Hand:
+                //     Glfw.SetCursor(_window, CommonService._hand);
+                //     break;
+                // case Glfw.CursorType.ResizeX:
+                //     Glfw.SetCursor(_window, CommonService._resize_h);
+                //     break;
+                // case Glfw.CursorType.ResizeY:
+                //     Glfw.SetCursor(_window, CommonService._resize_v);
+                //     break;
+                // default:
+                //     Glfw.SetCursor(_window, CommonService._arrow);
+                //     break;
             }
         }
 

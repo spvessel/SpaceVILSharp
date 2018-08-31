@@ -18,8 +18,10 @@ namespace SpaceVIL
 
         private LogService() { }
 
-        public static LogService Log() {
-            lock (logLocker) { 
+        public static LogService Log()
+        {
+            lock (logLocker)
+            {
                 if (_instance == null)
                 {
                     _instance = new LogService();
@@ -28,7 +30,8 @@ namespace SpaceVIL
                         fstream = new StreamWriter(logPath, false, Encoding.Default);
                         fstream.Close();
                     }
-                    catch(Exception ex) {
+                    catch (Exception ex)
+                    {
                         Console.WriteLine("Unable to comply\n" + ex);
                     }
                 }
@@ -36,7 +39,8 @@ namespace SpaceVIL
             }
         }
 
-        public void LogText(string text) {
+        public void LogText(string text)
+        {
             if (!isLogging) return;
             StringBuilder outText = new StringBuilder(GetTime());
             outText.AppendLine(text);
@@ -55,7 +59,8 @@ namespace SpaceVIL
             AddText(outText.ToString());
         }
 
-        public void LogList<T>(List<T> list, string describe = "List", bool flat = true) {
+        public void LogList<T>(List<T> list, string describe = "List", bool flat = true)
+        {
             if (!isLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
@@ -133,24 +138,26 @@ namespace SpaceVIL
             outText.AppendLine("Item name: " + item.GetItemName() +
                 ", Handler: " + item.GetHandler().GetWindowName());
             outText.AppendLine("Exception: " + ex.ToString());
-            
+
             AddText(outText.ToString());
         }
 
-        public void LogBaseItem(BaseItem item, LogProps props) {
+        public void LogBaseItem(BaseItem item, LogProps props)
+        {
             if (!isLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
             //outText.AppendLine();
-            outText.AppendLine("Item name: " + item.GetItemName() + 
+            outText.AppendLine("Item name: " + item.GetItemName() +
                 ", Handler: " + item.GetHandler().GetWindowName());
 
-            if (props.HasFlag(LogProps.Geometry)) {
+            if (props.HasFlag(LogProps.Geometry))
+            {
                 outText.AppendLine("Geometry:");
                 outText.AppendLine("    Width " + item.GetWidth() +
-                    " (minWidth " + item.GetMinWidth() + ", maxWidth " + 
+                    " (minWidth " + item.GetMinWidth() + ", maxWidth " +
                     item.GetMaxWidth() + ")");
-                
+
                 outText.AppendLine("    Height " + item.GetHeight() +
                     " (minHeight " + item.GetMinHeight() + ", maxHeight " +
                     item.GetMaxHeight() + ")");
@@ -158,7 +165,8 @@ namespace SpaceVIL
                 outText.AppendLine();
             }
 
-            if (props.HasFlag(LogProps.Position)) {
+            if (props.HasFlag(LogProps.Position))
+            {
                 outText.AppendLine("Position: (" + item.GetX() + ", " + item.GetY() + ")");
                 outText.AppendLine();
             }
@@ -176,7 +184,7 @@ namespace SpaceVIL
 
                 outText.AppendLine();
                 outText.AppendLine();
-                
+
                 SizePolicy sp = item.GetWidthPolicy();
                 outText.Append("WidthPolicy: ");
                 if (sp.HasFlag(SizePolicy.Expand)) outText.AppendLine("Expand ");
@@ -197,7 +205,7 @@ namespace SpaceVIL
             if (props.HasFlag(LogProps.Margin))
             {
                 Margin im = item.GetMargin();
-                outText.AppendLine("Margin: Left = " + im.Left + ", Right = " + 
+                outText.AppendLine("Margin: Left = " + im.Left + ", Right = " +
                     im.Right + ", Top = " + im.Top + ", Bottom = " + im.Bottom);
                 outText.AppendLine();
             }
@@ -232,7 +240,8 @@ namespace SpaceVIL
             AddText(outText.ToString());
         }
 
-        public void LogVisualItem(VisualItem item, LogProps props) {
+        public void LogVisualItem(VisualItem item, LogProps props)
+        {
             if (!isLogging) return;
 
             LogBaseItem(item, props);
@@ -240,7 +249,7 @@ namespace SpaceVIL
             if (props.HasFlag(LogProps.Spacing))
             {
                 Spacing spi = item.GetSpacing();
-                outText.AppendLine("Spacing: Horizontal = " + spi.Horizontal + 
+                outText.AppendLine("Spacing: Horizontal = " + spi.Horizontal +
                     ", Vertical = " + spi.Vertical);
                 outText.AppendLine();
             }
@@ -302,7 +311,7 @@ namespace SpaceVIL
             StringBuilder outText = new StringBuilder(GetTime());
             //outText.AppendLine();
             outText.AppendLine(describe + " " + sender.GetItemName());
-            
+
 
             outText.Append(CheckColNShape(sender, props));
             AddText(outText.ToString());
@@ -314,8 +323,8 @@ namespace SpaceVIL
             LogEvent(sender, describe, props);
 
             StringBuilder outText = new StringBuilder();
-            outText.AppendLine("Button: " + args.Button + ", State: " + args.State + 
-                ", Mods: " + args.Mods + ", Pos: (" + args.Position.X + ", " + 
+            outText.AppendLine("Button: " + args.Button + ", State: " + args.State +
+                ", Mods: " + args.Mods + ", Pos: (" + args.Position.X + ", " +
                 args.Position.Y + ")");
 
             outText.AppendLine();
@@ -328,7 +337,7 @@ namespace SpaceVIL
             LogEvent(sender, describe, props);
 
             StringBuilder outText = new StringBuilder();
-            outText.AppendLine("Key: " + args.Key + ", Scancode: " + args.Scancode + ", State: " + 
+            outText.AppendLine("Key: " + args.Key + ", Scancode: " + args.Scancode + ", State: " +
                 args.State + ", Mods: " + args.Mods);
 
             outText.AppendLine();
@@ -347,7 +356,8 @@ namespace SpaceVIL
             AddText(outText.ToString());
         }
 
-        public void LogWindow(WindowLayout window, LogProps props) {
+        public void LogWindow(WindowLayout window, LogProps props)
+        {
             if (!isLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
@@ -362,11 +372,11 @@ namespace SpaceVIL
                 outText.AppendLine("    Width " + window.GetWidth() +
                     " (minWidth " + window.GetMinWidth() + ", maxWidth " +
                     window.GetMaxWidth() + ")");
-                
+
                 outText.AppendLine("    Height " + window.GetHeight() +
                     " (minHeight " + window.GetMinHeight() + ", maxHeight " +
                     window.GetMaxHeight() + ")");
-                
+
 
                 outText.AppendLine();
             }
@@ -442,7 +452,8 @@ namespace SpaceVIL
         }
 
 
-        public void EndLogging() {
+        public void EndLogging()
+        {
             //Console.WriteLine("end");
             //fstream.Flush();
             fstream.Close();
@@ -474,7 +485,8 @@ namespace SpaceVIL
             return outText;
         }
 
-        private string GetTime() {
+        private string GetTime()
+        {
             DateTime now = DateTime.Now;
             StringBuilder str = new StringBuilder();
             str.AppendLine("/////////////////////////////////////////////////////////////");
@@ -482,7 +494,8 @@ namespace SpaceVIL
             return str.ToString();
         }
 
-        private void AddText(string text) {
+        private void AddText(string text)
+        {
             fstream = new StreamWriter(logPath, true, Encoding.Default);
             fstream.WriteLine(text);
             fstream.Close();
@@ -505,14 +518,14 @@ namespace SpaceVIL
 
         Parent = 0x80,
         Children = 0x100,
-            Family = 0xC0, //Parent + Children
+        Family = 0xC0, //Parent + Children
 
         IsFocused = 0x200,
 
         Spacing = 0x400,
         Padding = 0x800,
-            AllGeometry = 0xC0F, //Geometry + Position + Behavior + Margin + Spacing + Padding
+        AllGeometry = 0xC0F, //Geometry + Position + Behavior + Margin + Spacing + Padding
 
-            AllProps = 0xFFF,
+        AllProps = 0xFFF,
     }
 }
