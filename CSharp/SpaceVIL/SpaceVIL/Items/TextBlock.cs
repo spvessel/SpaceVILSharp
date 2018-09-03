@@ -148,9 +148,9 @@ namespace SpaceVIL
 
             if (!_isSelect && _justSelected)
             {
-                _selectFrom.X = 0;
+                _selectFrom.X = -1;// 0;
                 _selectFrom.Y = 0;
-                _selectTo.X = 0;
+                _selectTo.X = -1;// 0;
                 _selectTo.Y = 0;
                 _justSelected = false;
             }
@@ -237,40 +237,51 @@ namespace SpaceVIL
             if (args.Scancode == LeftArrowCode)//arrow left
             {
                 _cursor_position = CheckLineFits(_cursor_position);
-                if (_cursor_position.X > 0)
-                    _cursor_position.X--;
-                else if (_cursor_position.Y > 0)
+                if (!_justSelected)
                 {
-                    _cursor_position.Y--;
-                    _cursor_position.X = GetLineLetCount(_cursor_position.Y);
+                    if (_cursor_position.X > 0)
+                       _cursor_position.X--;
+                    else if (_cursor_position.Y > 0)
+                    {
+                        _cursor_position.Y--;
+                        _cursor_position.X = GetLineLetCount(_cursor_position.Y);
+                    }
                 }
                 ReplaceCursor();
             }
             if (args.Scancode == RightArrowCode)//arrow right
             {
-                if (_cursor_position.X < GetLineLetCount(_cursor_position.Y))
-                    _cursor_position.X++;
-                else if (_cursor_position.Y < _linesList.Count - 1)
-                {
-                    _cursor_position.Y++;
-                    _cursor_position.X = 0;
+                if (!_justSelected) {
+                    if (_cursor_position.X < GetLineLetCount(_cursor_position.Y))
+                        _cursor_position.X++;
+                    else if (_cursor_position.Y < _linesList.Count - 1)
+                    {
+                        _cursor_position.Y++;
+                        _cursor_position.X = 0;
+                    }
                 }
 
                 ReplaceCursor();
             }
             if (args.Scancode == UpArrowCode)//arrow up
             {
-                if (_cursor_position.Y > 0)
+                if (!_justSelected)
+                {
+                    if (_cursor_position.Y > 0)
                     _cursor_position.Y--;
-                //?????
+                    //?????
+                }
 
                 ReplaceCursor();
             }
             if (args.Scancode == DownArrowCode)//arrow down
             {
-                if (_cursor_position.Y < _linesList.Count - 1)
+                if (!_justSelected)
+                {
+                    if (_cursor_position.Y < _linesList.Count - 1)
                     _cursor_position.Y++;
-                //?????
+                    //?????
+                }
 
                 ReplaceCursor();
             }
@@ -297,7 +308,7 @@ namespace SpaceVIL
 
             if (_isSelect)
             {
-                if (_selectTo != _cursor_position)
+                if (!_selectTo.Equals(_cursor_position))
                 {
                     _selectTo = _cursor_position;
                     MakeSelectedArea(_selectFrom, _selectTo);
@@ -309,7 +320,7 @@ namespace SpaceVIL
         {
             byte[] input = BitConverter.GetBytes(args.Character);
             string str = Encoding.UTF32.GetString(input);
-            //if (_isSelect) CutText();
+            if (_isSelect) UnselectText();// CutText();
             if (_justSelected) CutText();
             _cursor_position = CheckLineFits(_cursor_position);
             SetTextInLine(_linesList[_cursor_position.Y].GetItemText().Insert(_cursor_position.X, str));
@@ -322,8 +333,10 @@ namespace SpaceVIL
             Point outPt = new Point();
             //??? check line count
             outPt.Y = checkPoint.Y;
+            if (outPt.Y == -1) outPt.Y = 0;
             int letCount = GetLineLetCount(checkPoint.Y);
             outPt.X = checkPoint.X;
+            if (outPt.X == -1) outPt.X = 0;
             if (checkPoint.X > letCount)
                 outPt.X = letCount;
 
@@ -335,6 +348,7 @@ namespace SpaceVIL
             Point coord = new Point(0, 0);
             
             Point cPos = CheckLineFits(cPos0);
+            
             int letCount = GetLineLetCount(cPos.Y);
             //Console.WriteLine(cPos0.X + " " + cPos0.Y + " " + _linesList[cPos.Y].GetLetPosArray());
             coord.Y = (int)_linesList[cPos.Y].GetLineYShift();
@@ -453,7 +467,8 @@ namespace SpaceVIL
         }
         public void SetText(String text)
         {
-            if (!text.Equals(GetWholeText()))
+            if (text.Equals("") || text == null) Clear();
+            else if (!text.Equals(GetWholeText()))
             {
                 SplitAndMakeLines(text);
             }
@@ -484,7 +499,9 @@ namespace SpaceVIL
 
         private void SplitAndMakeLines(String text)
         {
-            _linesList = new List<TextLine>();
+            Clear();
+            //RemoveLines(0, _linesList.Count - 1);
+            //_linesList = new List<TextLine>();
             
             _wholeText = text;
 
@@ -492,14 +509,16 @@ namespace SpaceVIL
             int inc = 0;
             string s;
 
-            foreach (string textPart in line)
+            _linesList[0].SetItemText(line[0]);
+
+            for (int i = 1; i < line.Length; i++)
             {
-                s = textPart.TrimEnd('\r');
+                s = line[i].TrimEnd('\r');
                 AddNewLine(s, inc);
                 inc++;
             }
 
-            _cursor_position.Y = line.Length;
+            _cursor_position.Y = line.Length - 1;
             _cursor_position.X = GetLineLetCount(_cursor_position.Y);
             ReplaceCursor();
         }
@@ -593,13 +612,13 @@ namespace SpaceVIL
                 AddItem(tl);
             AddItem(_cursor);
         }
-
+        /*
         private void RemoveAllLines()
         {
             foreach (TextLine tl in _linesList)
                 RemoveItem(tl);
         }
-
+        */
         public override bool IsFocused
         {
             get
@@ -823,6 +842,7 @@ namespace SpaceVIL
             _cursor_position = fromReal;
             ReplaceCursor();
             UnselectText();
+            _justSelected = false;
             //Console.WriteLine(str);
             return str;
         }
@@ -892,7 +912,8 @@ namespace SpaceVIL
             int inc = fromLine;
             while (inc <= toLine)
             {
-                _linesList[fromLine].SetItemText("");
+                //_linesList[fromLine].SetItemText("");
+                RemoveItem(_linesList[fromLine]);
                 _linesList.RemoveAt(fromLine);
                 inc++;
             }
@@ -901,6 +922,16 @@ namespace SpaceVIL
             {
                 _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * i + _lineSpacer);
             }
+            //LogService.Log().LogVisualItem(this, LogProps.Family);
+        }
+
+        public void Clear()
+        {
+            //SetText("");
+            _linesList[0].SetItemText("");
+            RemoveLines(1, _linesList.Count - 1);
+            _cursor_position.X = 0;
+            _cursor_position.Y = 0;
         }
     }
 

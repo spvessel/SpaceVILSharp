@@ -50,7 +50,7 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            _splitHolder.SetBackground(45, 45, 45);
+            _splitHolder.SetBackground(Color.Red);
             SetSplitHolderPosition((GetWidth() - _splitHolder.GetHolderSize()) / 2);
 
             //Adding

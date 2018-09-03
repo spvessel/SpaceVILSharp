@@ -17,7 +17,7 @@ namespace SpaceVIL
         {
             _orientation = orientation;
             SetItemName("SplitHolder_" + count);
-            SetBackground(Color.Transparent);
+            //SetBackground(Color.Transparent);
             count++;
             MakeHolderShape();
         }

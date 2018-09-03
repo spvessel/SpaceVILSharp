@@ -38,7 +38,7 @@ namespace SpaceVIL
         {
             // Background = Color.White;
             // Foreground = Color.Black;
-            // Font = new Font(new FontFamily("Courier New"), 14, FontStyle.Regular);
+            Font = new Font(new FontFamily("Courier New"), 14, FontStyle.Regular);
             // WidthPolicy = SizePolicy.Fixed;
             // HeightPolicy = SizePolicy.Fixed;
             // Width = 30;

@@ -13,7 +13,7 @@ namespace SpaceVIL
         private Rectangle _cursor;
         private int _cursor_position = 0;
         private Rectangle _selectedArea;
-        public Rectangle GetSelectionArea()
+        public Rectangle GetSelectionArea() //Зачем это?
         {
             return _selectedArea;
         }
@@ -44,7 +44,7 @@ namespace SpaceVIL
             _text_object = new TextLine();
             _cursor = new Rectangle();
             _selectedArea = new Rectangle();
-            _selectedArea.SetBackground(Color.FromArgb(50, 0, 0, 0));
+            _selectedArea.SetBackground(111, 181, 255);
 
             SetItemName("TextEdit_" + count);
             SetBackground(180, 180, 180);
@@ -117,12 +117,12 @@ namespace SpaceVIL
         }
         protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
-            //Console.WriteLine(scancode);
-
+            //Console.WriteLine(args.Scancode);
+            
             if (!_isSelect && _justSelected)
             {
-                _selectFrom = 0;
-                _selectTo = 0;
+                _selectFrom = -1;// 0;
+                _selectTo = -1;// 0;
                 _justSelected = false;
             }
 
@@ -184,12 +184,12 @@ namespace SpaceVIL
 
             if (args.Scancode == LeftArrowCode && _cursor_position > 0)//arrow left
             {
-                _cursor_position--;
+                if (!_justSelected) _cursor_position--;
                 ReplaceCursor();
             }
             if (args.Scancode == RightArrowCode && _cursor_position < GetText().Length)//arrow right
             {
-                _cursor_position++;
+                if (!_justSelected) _cursor_position++;
                 ReplaceCursor();
             }
             if (args.Scancode == EndCode)//end
@@ -236,7 +236,7 @@ namespace SpaceVIL
         {
             byte[] input = BitConverter.GetBytes(args.Character);
             string str = Encoding.UTF32.GetString(input);
-            //if (_isSelect) CutText();
+            if (_isSelect) UnselectText();// CutText();
             if (_justSelected) CutText();
             SetText(GetText().Insert(_cursor_position, str));
             _cursor_position++;
@@ -322,6 +322,7 @@ namespace SpaceVIL
         {
             //text
             _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            _text_object.SetTextAlignment(ItemAlignment.VCenter);
             //cursor
             _cursor.IsVisible = false;
             _cursor.SetBackground(0, 0, 0);
@@ -335,7 +336,7 @@ namespace SpaceVIL
             //_cursor.SetHeight(_maxFontY - _minFontY + _minLineSpacer);
             _cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             //selectedArea
-            _selectedArea.SetMargin(0, 5, 0, 5);
+            //_selectedArea.SetMargin(0, 5, 0, 5);
             _selectedArea.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             //adding
             AddItems(_selectedArea, _text_object, _cursor);
@@ -364,7 +365,7 @@ namespace SpaceVIL
 
         private void MakeSelectedArea(int fromPt, int toPt)
         {
-            //Console.WriteLine("from " + from + " to " + to);
+            //Console.WriteLine("from " + fromPt + " to " + toPt);
             fromPt = CursorPosToCoord(fromPt);
             toPt = CursorPosToCoord(toPt);
 
@@ -410,6 +411,7 @@ namespace SpaceVIL
             _cursor_position = fromReal;
             ReplaceCursor();
             UnselectText();
+            _justSelected = false;
             return str;
         }
 
@@ -441,5 +443,9 @@ namespace SpaceVIL
             _cursor_position = NearestPosToCursor(newPos);
         }
 
+        public void Clear()
+        {
+            SetText("");
+        }
     }
 }
