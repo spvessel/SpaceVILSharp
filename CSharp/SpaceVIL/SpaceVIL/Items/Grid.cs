@@ -310,8 +310,8 @@ namespace SpaceVIL
 
             int total_space = GetWidth() - GetPadding().Left - GetPadding().Right;
             int free_space = total_space;
-            int prefer_width = (int)Math.Round((float)(total_space - GetSpacing().Horizontal * (_column_count - 1)) / (float)_column_count, MidpointRounding.AwayFromZero);
-            // int prefer_width = (total_space - GetSpacing().Horizontal * (_column_count - 1)) / _column_count;
+            //int prefer_width = (int)Math.Round((float)(total_space - GetSpacing().Horizontal * (_column_count - 1)) / (float)_column_count, MidpointRounding.AwayFromZero);
+            int prefer_width = (total_space - GetSpacing().Horizontal * (_column_count - 1)) / _column_count;
             // Console.WriteLine(prefer_width);
             int count = _column_count;
 

@@ -4,13 +4,16 @@ using System.Text;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Linq;
+using System.Reflection;
+using System.IO;
 
 namespace GL.LGL
 {
 	public partial class OpenLGL
 	{
 		#region OpenGL_Basic_Functions
-		public const string LIBRARY_OPENGL = "libGL.so";
+		public const string LIBRARY_OPENGL = "libGL.so.1";
 
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glAccum(uint op, float value);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glAlphaFunc (uint func, float ref_notkeword);
@@ -327,10 +330,11 @@ namespace GL.LGL
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexImage2D (uint target, int level, uint internalformat, int width, int height, int border, uint format, uint type, IntPtr pixels);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameterf (uint target, uint pname, float param);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameterfv (uint target, uint pname,  float []params_notkeyword);
-		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameteri (uint target, uint pname, int param);
+		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameteri (uint target, uint pname, uint param);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameteriv (uint target, uint pname,  int []params_notkeyword);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexSubImage1D (uint target, int level, int xoffset, int width, uint format, uint type,  int[] pixels);
-		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexSubImage2D (uint target, int level, int xoffset, int yoffset, int width, int height, uint format, uint type,  int[] pixels);
+		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexSubImage2D (uint target, int level, int xoffset, int yoffset, int width, int height, uint format, uint type,  byte[] pixels);
+		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexStorage2D (uint target, int level, uint internalformat, int width, int height);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTranslated (double x, double y, double z);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTranslatef (float x, float y, float z);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glVertex2d (double x, double y);
@@ -366,6 +370,7 @@ namespace GL.LGL
 		#endregion
 
 		//OpenGL Extensions Functions
+		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern int glGetUniformLocation(uint shader, char[] value);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern uint glCreateShader(uint type);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glShaderSource(uint shader, int count, string[] source, int[] length);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glCompileShader(uint shader);
@@ -382,11 +387,24 @@ namespace GL.LGL
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenBuffers(int n, uint[] buffers);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glBindBuffer(uint target, uint buffer);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glBufferData(uint target, int size, IntPtr data, uint usage);
+		public static void glBufferData(uint target, float[] data, uint usage)
+        {
+			IntPtr vp = Marshal.AllocHGlobal(data.Length * sizeof(float));
+			Marshal.Copy(data, 0, vp, data.Length);
+			glBufferData(target, data.Length * sizeof(float), vp, usage);
+			Marshal.FreeHGlobal(vp);
+        }
+		public static void glBufferData(uint target, int[] data, uint usage)
+        {
+			IntPtr vp = Marshal.AllocHGlobal(data.Length * sizeof(float));
+			Marshal.Copy(data, 0, vp, data.Length);
+			glBufferData(target, data.Length * sizeof(float), vp, usage);
+			Marshal.FreeHGlobal(vp);
+        }
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glVertexAttribPointer(uint index, int size, uint type, bool normalized, int stride, IntPtr pointer);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDisableVertexAttribArray(uint index);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glEnableVertexAttribArray(uint index);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDeleteBuffers(int n, uint[] buffers);
-
 		//Work with Textures
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenerateMipmap(uint target);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glActiveTexture(uint texture);

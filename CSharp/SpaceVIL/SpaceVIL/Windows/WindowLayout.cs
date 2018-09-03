@@ -67,7 +67,8 @@ namespace SpaceVIL
             manager = new ActionManager(this);
             engine = new DrawEngine(this);
 
-            WindowLayoutBox.InitWindow(this);
+            lock (CommonService.GlobalLocker)
+                WindowLayoutBox.InitWindow(this);
             SetFocusedItem(_window);
             //events
             // EventClose += Close;
@@ -288,12 +289,12 @@ namespace SpaceVIL
 
             thread_manager = new Thread(() => manager.StartManager());
             thread_manager.Start();
-            
+
             thread_engine = new Thread(() => engine.Init());
 
             if (IsDialog)
             {
-                lock (engine_locker)
+                lock (CommonService.GlobalLocker)
                 {
                     WindowLayoutBox.AddToWindowDispatcher(this);
                     ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
@@ -313,7 +314,7 @@ namespace SpaceVIL
             {
                 engine.Close();
                 SetWindowFocused();
-                lock (engine_locker)
+                lock (CommonService.GlobalLocker)
                 {
                     WindowLayoutBox.RemoveWindow(this);
                     WindowLayoutBox.RemoveFromWindowDispatcher(this);
@@ -365,9 +366,13 @@ namespace SpaceVIL
         }
         internal void SetWindowFocused()
         {
-            WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = true;
-            WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Focus(
-                WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.GetWindowId(), true);
+            lock (CommonService.GlobalLocker)
+            {
+
+                WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = true;
+                WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Focus(
+                    WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.GetWindowId(), true);
+            }
         }
         public void Minimize()
         {

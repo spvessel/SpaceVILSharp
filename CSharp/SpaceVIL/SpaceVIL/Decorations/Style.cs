@@ -10,7 +10,7 @@ namespace SpaceVIL
 {
     public class Style
     {
-        private ConcurrentDictionary<BaseItem, Style> _inner_styles = new ConcurrentDictionary<BaseItem, Style>();
+        private Lazy<ConcurrentDictionary<String, Style>> _inner_styles = new Lazy<ConcurrentDictionary<String, Style>>(() => new ConcurrentDictionary<String, Style>());
 
         //defaults values
         public Color Background;
@@ -27,7 +27,10 @@ namespace SpaceVIL
         public ItemAlignment Alignment;
         public int X;
         public int Y;
-        public Dictionary<ItemStateType, ItemState> ItemStates = new Dictionary<ItemStateType, ItemState>();
+        private Lazy<Dictionary<ItemStateType, ItemState>> _item_states = new Lazy<Dictionary<ItemStateType, ItemState>>(() => new Dictionary<ItemStateType, ItemState>());
+        // public Lazy<Padding> Padding = new Lazy<Padding>(() => new Padding());
+        // public Lazy<Spacing> Spacing = new Lazy<Spacing>(() => new Spacing());
+        // public Lazy<Margin> Margin = new Lazy<Margin>(() => new Margin());
         public Padding Padding = new Padding();
         public Spacing Spacing = new Spacing();
         public Margin Margin = new Margin();
@@ -54,18 +57,47 @@ namespace SpaceVIL
             // BorderThickness = 0;
         }
 
-        public void AddInnerStyle(BaseItem item, Style style)
+        public void AddInnerStyle(String item_name, Style style)
         {
-            if (_inner_styles.ContainsKey(item))
-                _inner_styles[item] = style;
+            if (_inner_styles.Value.ContainsKey(item_name))
+                _inner_styles.Value[item_name] = style;
             else
-                _inner_styles.TryAdd(item, style);
+                _inner_styles.Value.TryAdd(item_name, style);
         }
-        
-        public void RemoveInnerStyle(BaseItem item, Style style)
+        public void AddItemState(ItemStateType type, ItemState state)
         {
-            if (_inner_styles.ContainsKey(item))
-                _inner_styles.TryRemove(item, out style);
+            if (_item_states.Value.ContainsKey(type))
+            {
+                state.Value = true;
+                _item_states.Value[type] = state;
+            }
+            else
+            {
+                _item_states.Value.Add(type, state);
+            }
+        }
+        public ItemState GetState(ItemStateType type)
+        {
+            if (_item_states.Value.ContainsKey(type))
+                return _item_states.Value[type];
+            return null;
+        }
+        public Dictionary<ItemStateType, ItemState> GetAllStates()
+        {
+            return _item_states.Value;
+        }
+        public void RemoveItemState(ItemStateType type)
+        {
+            if (type == ItemStateType.Base)
+                return;
+            if (_item_states.Value.ContainsKey(type))
+                _item_states.Value.Remove(type);
+        }
+
+        public void RemoveInnerStyle(String item_name, Style style)
+        {
+            if (_inner_styles.Value.ContainsKey(item_name))
+                _inner_styles.Value.TryRemove(item_name, out style);
             else
                 return;
         }
@@ -78,8 +110,8 @@ namespace SpaceVIL
             style.Font = new Font(new FontFamily("Courier New"), 14, FontStyle.Regular);
             style.WidthPolicy = SizePolicy.Fixed;
             style.HeightPolicy = SizePolicy.Fixed;
-            style.Width = 60;
-            style.Height = 30;
+            style.Width = 10;
+            style.Height = 10;
             style.MinHeight = 0;
             style.MinWidth = 0;
             style.MaxWidth = Int16.MaxValue;
@@ -87,9 +119,9 @@ namespace SpaceVIL
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.X = 0;
             style.Y = 0;
-            style.BorderRadius = 0;
+            style.BorderRadius = 6;
             style.BorderThickness = 0;
-            style.ItemStates.Add(ItemStateType.Hovered, new ItemState()
+            style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(60, 255, 255, 255)
             });

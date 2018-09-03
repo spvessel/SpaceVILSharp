@@ -21,6 +21,8 @@ namespace SpaceVIL
             if (style == null)
                 return;
 
+            _is_style_set = true;
+
             SetBackground(style.Background);
             SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
             SetSize(style.Width, style.Height);
@@ -33,11 +35,10 @@ namespace SpaceVIL
             SetMargin(style.Margin);
             Border.Radius = style.BorderRadius;
             Border.Thickness = style.BorderThickness;
-            foreach (var state in style.ItemStates)
+            foreach (var state in style.GetAllStates())
             {
                 AddItemState(state.Key, state.Value);
             }
-            _is_style_set = true;
         }
 
         private String _tooltip = String.Empty;
@@ -95,7 +96,8 @@ namespace SpaceVIL
         }
         public virtual void AddItem(BaseItem item)
         {
-            lock (GetHandler().engine_locker)
+            // lock (GetHandler().engine_locker)
+            lock (CommonService.GlobalLocker)
             {
                 if (item.Equals(this))
                 {
@@ -147,7 +149,8 @@ namespace SpaceVIL
 
         public virtual void RemoveItem(BaseItem item)
         {
-            lock (GetHandler().engine_locker)
+            // lock (GetHandler().engine_locker)
+            lock (CommonService.GlobalLocker)
             {
                 LayoutType type;
                 if (item is IFloating)

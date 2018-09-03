@@ -141,6 +141,7 @@ namespace SpaceVIL
                 _handler.InitGlfw();
                 _handler.CreateWindow();
             }
+            SetWindowPos();
 
             //устанавливаем параметры отрисовки
             glEnable(GL_TEXTURE_2D);
@@ -174,7 +175,6 @@ namespace SpaceVIL
                 images[1] = _icon_small;
                 Glfw.SetWindowIcon(_handler.GetWindowId(), images);
             }
-            SetWindowPos();
             SetEventsCallbacks();
 
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -307,7 +307,8 @@ namespace SpaceVIL
             {
                 if (_handler.Focusable)
                 {
-                    WindowLayoutBox.SetCurrentFocusedWindow(_handler.GetLayout());
+                    lock (CommonService.GlobalLocker)
+                        WindowLayoutBox.SetCurrentFocusedWindow(_handler.GetLayout());
                     _handler.Focused = value;
                 }
             }
