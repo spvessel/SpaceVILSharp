@@ -8,8 +8,9 @@ namespace SpaceVIL
         public Frame()
         {
             SetItemName("Frame_" + count);
-            SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             count++;
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Frame)));
         }
 
         protected internal override bool GetHoverVerification(float xpos, float ypos)

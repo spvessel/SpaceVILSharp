@@ -90,9 +90,9 @@ namespace SpaceVIL
         internal void CreateWindow()
         {
             Glfw.WindowHint(Glfw.Hint.OpenglDebugContext, true);
-            Glfw.WindowHint(Glfw.Hint.Samples, 4);
+            Glfw.WindowHint(Glfw.Hint.Samples, 8);
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
-            Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 4);
+            Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 3);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 2);
             Glfw.WindowHint(Glfw.Hint.Resizable, Resizeble);
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window
@@ -132,10 +132,11 @@ namespace SpaceVIL
             LogService.Log().LogWindow(GetLayout(), LogProps.AllGeometry);
         }
 
-        // internal void SwitchContext()
-        // {
-        //     Glfw.MakeContextCurrent(_window);
-        // }
+        internal void SwitchContext()
+        {
+            Glfw.MakeContextCurrent(Glfw.Window.None);
+            Glfw.MakeContextCurrent(_window);
+        }
         
         internal void ClearEventsCallbacks()
         {

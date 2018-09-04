@@ -9,9 +9,8 @@ namespace SpaceVIL
         public HorizontalStack()
         {
             SetItemName("HorizontalStack_" + count);
-            SetBackground(Color.Transparent);
-            SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             count++;
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.HorizontalStack)));
         }
 
         //overrides

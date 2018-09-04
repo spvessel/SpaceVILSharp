@@ -20,7 +20,41 @@ namespace SpaceVIL
         }
         private Dictionary<Type, Style> DefaultItemsStyle = new Dictionary<Type, Style>()
         {
-            {typeof(SpaceVIL.ButtonCore), Style.GetButtonCoreStyle()}
+            {typeof(SpaceVIL.ButtonCore), Style.GetButtonCoreStyle()},
+            {typeof(SpaceVIL.ButtonToggle), Style.GetButtonToggleStyle()},
+            {typeof(SpaceVIL.CheckBox), Style.GetCheckBoxStyle()},
+            {typeof(SpaceVIL.ComboBox), Style.GetComboBoxStyle()},
+            {typeof(SpaceVIL.ComboBoxDropDown), Style.GetComboBoxDropDownStyle()},
+            {typeof(SpaceVIL.ContextMenu), Style.GetContextMenuStyle()},
+            // {typeof(SpaceVIL.CustomSelector), Style.GetCustomSelectorStyle()},
+            {typeof(SpaceVIL.FlowArea), Style.GetFlowAreaStyle()},
+            {typeof(SpaceVIL.Frame), Style.GetFrameStyle()},
+            {typeof(SpaceVIL.Grid), Style.GetGridStyle()},
+            {typeof(SpaceVIL.HorizontalScrollBar), Style.GetHorizontalScrollBarStyle()},
+            {typeof(SpaceVIL.HorizontalSlider), Style.GetHorizontalSliderStyle()},
+            {typeof(SpaceVIL.HorizontalSplitArea), Style.GetHorizontalSplitAreaStyle()},
+            {typeof(SpaceVIL.HorizontalStack), Style.GetHorizontalStackStyle()},
+            {typeof(SpaceVIL.Label), Style.GetLabelStyle()},
+            {typeof(SpaceVIL.ListArea), Style.GetListAreaStyle()},
+            {typeof(SpaceVIL.ListBox), Style.GetListBoxStyle()},
+            {typeof(SpaceVIL.MenuItem), Style.GetMenuItemStyle()},
+            {typeof(SpaceVIL.Indicator), Style.GetIndicatorStyle()},
+            {typeof(SpaceVIL.VerticalScrollBar), Style.GetVerticalScrollBarStyle()},
+            {typeof(SpaceVIL.VerticalSlider), Style.GetVerticalSliderStyle()},
+            {typeof(SpaceVIL.VerticalSplitArea), Style.GetVerticalSplitAreaStyle()},
+            {typeof(SpaceVIL.VerticalStack), Style.GetVerticalStackStyle()},
+            {typeof(SpaceVIL.RadioButton), Style.GetRadioButtonStyle()},
+            {typeof(SpaceVIL.WContainer), Style.GetWContainerStyle()},
+
+
+            // {typeof(SpaceVIL.PasswordLine), Style.GetPasswordLineStyle()},
+            // {typeof(SpaceVIL.PopUpMessage), Style.GetPopUpMessageStyle()},
+            // {typeof(SpaceVIL.ProgressBar), Style.GetProgressBarStyle()},
+            // {typeof(SpaceVIL.TabView), Style.GetTabViewStyle()},
+            // {typeof(SpaceVIL.TextBlock), Style.GetTextBlockStyle()},
+            // {typeof(SpaceVIL.TextEdit), Style.GetTextEditStyle()},
+            // {typeof(SpaceVIL.TitleBar), Style.GetTitleBarStyle()},
+            // {typeof(SpaceVIL.ToolTip), Style.GetToolTipStyle()},
         };
         public Style GetThemeStyle(Type type)
         {

@@ -33,20 +33,22 @@ namespace SpaceVIL
 
         public MenuItem()
         {
-            SetHeight(30);
-            SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-            SetBackground(Color.Transparent);
             SetItemName("MenuItem_" + count);
-            SetPadding(10, 0, 0, 0);
-            AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(255, 150, 150, 150)
-            });
+            // SetHeight(30);
+            // SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            // SetBackground(Color.Transparent);
+            // SetPadding(10, 0, 0, 0);
+            // AddItemState(ItemStateType.Hovered, new ItemState()
+            // {
+            //     Background = Color.FromArgb(255, 150, 150, 150)
+            // });
             count++;
             EventKeyPress += OnKeyPress;
             EventMousePressed += (sender, args) => OnMouseAction();
 
             _text_object = new TextLine();
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MenuItem)));
         }
         public MenuItem(String text = "") : this()
         {
@@ -69,7 +71,7 @@ namespace SpaceVIL
         {
             _text_object.SetTextAlignment(alignment);
         }
-        public void SetTextMargin(Margin margin)
+        public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
         }
@@ -118,16 +120,15 @@ namespace SpaceVIL
         {
             //text
             SetForeground(Color.Black);
-            _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            //_text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
             //aligment
-            SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            // SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
             //adding
             AddItem(_text_object);
-            if (_arrow != null)
+            if (IsActionItem)
                 AddItem(_arrow);
-
 
             //update text data
             //_text_object.UpdateData(UpdateType.Critical);
@@ -137,8 +138,18 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             base.SetStyle(style);
+
             SetForeground(style.Foreground);
             SetFont(style.Font);
+            SetTextAlignment(style.TextAlignment);
+
+            Style inner_style = style.GetInnerStyle("arrow");
+            if (inner_style != null)
+            {
+                if (_arrow == null)
+                    _arrow = new CustomShape();
+                _arrow.SetStyle(inner_style);
+            }
         }
 
         public void AddArrow(CustomShape arrow)

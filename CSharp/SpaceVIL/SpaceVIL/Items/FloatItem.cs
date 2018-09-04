@@ -12,7 +12,7 @@ namespace SpaceVIL
         private int _diff_x = 0;
         private int _diff_y = 0;
 
-        private bool _ouside = true;
+        private bool _ouside = false;
         public bool IsOutsideClickClosable()
         {
             return _ouside;
@@ -35,7 +35,8 @@ namespace SpaceVIL
             EventMouseDrag += OnDragging;
             count++;
 
-            ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
+            lock (CommonService.GlobalLocker)
+                ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
         }
         public override void SetConfines()
         {
@@ -93,6 +94,7 @@ namespace SpaceVIL
         }
         public void Show(IItem sender, MouseArgs args)
         {
+            //LogService.Log().LogBaseItem(this, LogProps.AllGeometry);
             if (!_init)
                 InitElements();
             if (GetX() == -GetWidth()) //refactor?

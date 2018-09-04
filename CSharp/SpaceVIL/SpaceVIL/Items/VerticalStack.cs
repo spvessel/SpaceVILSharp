@@ -9,9 +9,8 @@ namespace SpaceVIL
         public VerticalStack()
         {
             SetItemName("VerticalStack_" + count);
-            SetBackground(Color.Transparent);
-            SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             count++;
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.VerticalStack)));
         }
 
         //overrides
@@ -67,7 +66,7 @@ namespace SpaceVIL
             int startY = GetY() + GetPadding().Top;
             foreach (var child in GetItems())
             {
-                if (child.IsVisible)
+                //if (child.IsVisible)
                 {
                     child.SetY(startY + offset + child.GetMargin().Top);//
                     if (child.GetHeightPolicy() == SizePolicy.Expand)
@@ -86,16 +85,13 @@ namespace SpaceVIL
 
                     if (child.GetY() + child.GetHeight() + child.GetMargin().Top + child.GetMargin().Bottom >= startY //
                         && child.GetY() <= GetY() + GetHeight() - GetPadding().Bottom)
-                    {
-                        if (child.IsVisible) //refactor
-                            child.IsVisible = true;
-                    }
+                        child.IsVisible = true;
                     else
                         child.IsVisible = false;
 
                     offset += child.GetHeight() + GetSpacing().Vertical + child.GetMargin().Top + child.GetMargin().Bottom;//
                 }
-                
+
                 //refactor
                 child.SetConfines();
             }

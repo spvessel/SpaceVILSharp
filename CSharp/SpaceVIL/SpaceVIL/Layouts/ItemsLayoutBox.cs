@@ -38,7 +38,7 @@ namespace SpaceVIL
         }
         static internal void AddItem(WindowLayout layout, BaseItem item, LayoutType type)
         {
-            lock (CommonService.GlobalLocker)
+            //lock (CommonService.GlobalLocker)
             {
                 switch (type)
                 {
@@ -59,7 +59,7 @@ namespace SpaceVIL
         }
         static internal void RemoveItem(WindowLayout layout, BaseItem item, LayoutType type)
         {
-            lock (CommonService.GlobalLocker)
+            //lock (CommonService.GlobalLocker)
             {
                 switch (type)
                 {

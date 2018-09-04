@@ -79,27 +79,18 @@ namespace SpaceVIL
         {
             SetItemName("ListBox_" + count);
             count++;
-
-            //Basic Attributes
-            SetWidthPolicy(SizePolicy.Expand);
-            SetHeightPolicy(SizePolicy.Expand);
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListBox)));
 
             //VBar
-            VScrollBar.SetAlignment(ItemAlignment.Right | ItemAlignment.Top);
             VScrollBar.IsVisible = true;
             VScrollBar.SetItemName(GetItemName() + "_" + VScrollBar.GetItemName());
 
             //HBar
-            HScrollBar.SetAlignment(ItemAlignment.Bottom | ItemAlignment.Left);
             HScrollBar.IsVisible = true;
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
 
             //Area
             _area.SetItemName(GetItemName() + "_" + _area.GetItemName());
-            _area.SetBackground(Color.Transparent);
-            _area.SetAlignment(ItemAlignment.Top | ItemAlignment.Left);
-            _area.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            //_area.SetPadding(5, 5, 5, 5);
             _area.SetSpacing(0, 5);
         }
 
@@ -272,6 +263,23 @@ namespace SpaceVIL
         {
             List<BaseItem> result = new List<BaseItem>();
             return _area.GetSelectionItem();
+        }
+
+        //style
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+
+            Style inner_style = style.GetInnerStyle("vscrollbar");
+            if (inner_style != null)
+            {
+                VScrollBar.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("hscrollbar");
+            if (inner_style != null)
+            {
+                HScrollBar.SetStyle(inner_style);
+            }
         }
     }
 }

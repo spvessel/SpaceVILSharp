@@ -78,7 +78,7 @@ namespace SpaceVIL
         {
             _text_object.SetTextAlignment(alignment);
         }
-        public void SetTextMargin(Margin margin)
+        public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
         }

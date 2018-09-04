@@ -71,6 +71,8 @@ namespace SpaceVIL
 
         internal Font GetFont()
         {
+            if(_font == null)
+                _font = DefaultsService.GetDefaultFont();
             return _font;
         }
         internal void SetFont(Font font)

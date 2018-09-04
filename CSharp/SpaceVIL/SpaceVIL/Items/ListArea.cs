@@ -69,19 +69,21 @@ namespace SpaceVIL
         static int count = 0;
         public ListArea()
         {
-            SetPadding(2, 2, 2, 2);
+            // SetPadding(2, 2, 2, 2);
             SetItemName("ListArea_" + count);
             count++;
             EventMouseClick += OnMouseClick;
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListArea)));
         }
 
         //overrides
         public override void InitElements()
         {
             //substrate
-            _substrate.SetBackground(111, 181, 255);
-            _substrate.SetAlignment(ItemAlignment.Left | ItemAlignment.Top);
-            _substrate.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            // _substrate.SetBackground(111, 181, 255);
+            // _substrate.SetAlignment(ItemAlignment.Left | ItemAlignment.Top);
+            // _substrate.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             _substrate.IsVisible = false;
             base.AddItem(_substrate);
         }
@@ -238,6 +240,18 @@ namespace SpaceVIL
                 );
             _substrate.SetTriangles(GraphicsMathService.GetRoundSquare(child.GetWidth(), _substrate.GetHeight(), 0, _substrate.GetX(), _substrate.GetY()));
             _substrate.SetY(child.GetY() - 1);
+        }
+
+        //style
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+
+            Style inner_style = style.GetInnerStyle("substrate");
+            if (inner_style != null)
+            {
+                _substrate.SetStyle(inner_style);
+            }
         }
     }
 }

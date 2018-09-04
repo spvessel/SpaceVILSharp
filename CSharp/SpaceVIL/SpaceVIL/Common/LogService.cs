@@ -204,7 +204,7 @@ namespace SpaceVIL
 
             if (props.HasFlag(LogProps.Margin))
             {
-                Margin im = item.GetMargin();
+                Indents im = item.GetMargin();
                 outText.AppendLine("Margin: Left = " + im.Left + ", Right = " +
                     im.Right + ", Top = " + im.Top + ", Bottom = " + im.Bottom);
                 outText.AppendLine();
@@ -256,7 +256,7 @@ namespace SpaceVIL
 
             if (props.HasFlag(LogProps.Padding))
             {
-                Padding pdi = item.GetPadding();
+                Indents pdi = item.GetPadding();
                 outText.AppendLine("Padding: Left = " + pdi.Left + ", Top = " + pdi.Top +
                     ", Right = " + pdi.Right + ", Bottom = " + pdi.Bottom);
                 outText.AppendLine();
@@ -394,7 +394,7 @@ namespace SpaceVIL
             */
             if (props.HasFlag(LogProps.Padding))
             {
-                Padding pdi = window.GetWindow().GetPadding();
+                Indents pdi = window.GetWindow().GetPadding();
                 outText.AppendLine("Padding: Left = " + pdi.Left + ", Top = " + pdi.Top +
                     ", Right = " + pdi.Right + ", Bottom = " + pdi.Bottom);
                 outText.AppendLine();

@@ -10,8 +10,7 @@ namespace SpaceVIL
     class CustomSelector : Primitive
     {
         static int count = 0;
-        public CustomSelector()
-            : base(name: "CustomSelector_" + count)
+        public CustomSelector() : base(name: "CustomSelector_" + count)
         {
             count++;
         }
@@ -27,7 +26,8 @@ namespace SpaceVIL
             List<float[]> triangles = new List<float[]>();
             int w1 = 0, w2 = 0;
             int h1 = 0, h2 = 0;
-            if (points != null) {
+            if (points != null)
+            {
                 w1 = points[0].X;
                 w2 = w1;
                 h1 = points[0].Y;

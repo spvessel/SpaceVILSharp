@@ -1,0 +1,166 @@
+/////////////////////////////////////////////////////////////
+01:35:08
+Item name: TitleBar_0_close, Handler: MainWindow
+Geometry:
+    Width 15 (minWidth 0, maxWidth 32767)
+    Height 15 (minHeight 0, maxHeight 32767)
+
+Position: (773, 9)
+
+Alignment: Right, VCenter 
+
+WidthPolicy: Fixed 
+HeightPolicy: Fixed 
+
+Margin: Left = 0, Right = 0, Top = 0, Bottom = 0
+
+
+/////////////////////////////////////////////////////////////
+01:35:08
+Item name: TitleBar_1_close, Handler: MessageBox_2
+Geometry:
+    Width 15 (minWidth 0, maxWidth 32767)
+    Height 15 (minHeight 0, maxHeight 32767)
+
+Position: (273, 9)
+
+Alignment: Right, VCenter 
+
+WidthPolicy: Fixed 
+HeightPolicy: Fixed 
+
+Margin: Left = 0, Right = 0, Top = 0, Bottom = 0
+
+
+/////////////////////////////////////////////////////////////
+01:35:08
+Item name: TitleBar_2_close, Handler: Settings
+Geometry:
+    Width 15 (minWidth 0, maxWidth 32767)
+    Height 15 (minHeight 0, maxHeight 32767)
+
+Position: (573, 9)
+
+Alignment: Right, VCenter 
+
+WidthPolicy: Fixed 
+HeightPolicy: Fixed 
+
+Margin: Left = 0, Right = 0, Top = 0, Bottom = 0
+
+
+/////////////////////////////////////////////////////////////
+01:35:08
+Item name: TitleBar_3_close, Handler: LayoutsTest
+Geometry:
+    Width 15 (minWidth 0, maxWidth 32767)
+    Height 15 (minHeight 0, maxHeight 32767)
+
+Position: (973, 9)
+
+Alignment: Right, VCenter 
+
+WidthPolicy: Fixed 
+HeightPolicy: Fixed 
+
+Margin: Left = 0, Right = 0, Top = 0, Bottom = 0
+
+
+/////////////////////////////////////////////////////////////
+01:35:08
+Item name: TitleBar_4_close, Handler: LabelTest
+Geometry:
+    Width 15 (minWidth 0, maxWidth 32767)
+    Height 15 (minHeight 0, maxHeight 32767)
+
+Position: (473, 9)
+
+Alignment: Right, VCenter 
+
+WidthPolicy: Fixed 
+HeightPolicy: Fixed 
+
+Margin: Left = 0, Right = 0, Top = 0, Bottom = 0
+
+
+/////////////////////////////////////////////////////////////
+01:35:08
+Item name: TitleBar_5_close, Handler: FlowTest
+Geometry:
+    Width 15 (minWidth 0, maxWidth 32767)
+    Height 15 (minHeight 0, maxHeight 32767)
+
+Position: (1173, 9)
+
+Alignment: Right, VCenter 
+
+WidthPolicy: Fixed 
+HeightPolicy: Fixed 
+
+Margin: Left = 0, Right = 0, Top = 0, Bottom = 0
+
+
+/////////////////////////////////////////////////////////////
+01:35:08
+Item name: TitleBar_6_close, Handler: ImageTest
+Geometry:
+    Width 15 (minWidth 0, maxWidth 32767)
+    Height 15 (minHeight 0, maxHeight 32767)
+
+Position: (473, 9)
+
+Alignment: Right, VCenter 
+
+WidthPolicy: Fixed 
+HeightPolicy: Fixed 
+
+Margin: Left = 0, Right = 0, Top = 0, Bottom = 0
+
+
+/////////////////////////////////////////////////////////////
+01:35:08
+Item name: TitleBar_7_close, Handler: InputTest
+Geometry:
+    Width 15 (minWidth 0, maxWidth 32767)
+    Height 15 (minHeight 0, maxHeight 32767)
+
+Position: (973, 9)
+
+Alignment: Right, VCenter 
+
+WidthPolicy: Fixed 
+HeightPolicy: Fixed 
+
+Margin: Left = 0, Right = 0, Top = 0, Bottom = 0
+
+
+/////////////////////////////////////////////////////////////
+01:35:08
+Item name: TitleBar_8_close, Handler: ComplexTest
+Geometry:
+    Width 15 (minWidth 0, maxWidth 32767)
+    Height 15 (minHeight 0, maxHeight 32767)
+
+Position: (1173, 9)
+
+Alignment: Right, VCenter 
+
+WidthPolicy: Fixed 
+HeightPolicy: Fixed 
+
+Margin: Left = 0, Right = 0, Top = 0, Bottom = 0
+
+
+/////////////////////////////////////////////////////////////
+01:35:09
+Window name: MainWindow, Title: MainWindow
+
+Geometry:
+    Width 800 (minWidth 500, maxWidth 32767)
+    Height 200 (minHeight 100, maxHeight 32767)
+
+Position: (0, 0)
+
+Padding: Left = 2, Top = 2, Right = 2, Bottom = 2
+
+

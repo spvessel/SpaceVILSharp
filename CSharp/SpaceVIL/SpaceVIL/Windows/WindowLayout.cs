@@ -134,6 +134,10 @@ namespace SpaceVIL
         {
             return _window.GetBackground();
         }
+        public void SetPadding(Indents padding)
+        {
+            _window.SetPadding(padding);
+        }
         public void SetPadding(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
             _window.SetPadding(left, top, right, bottom);
@@ -368,7 +372,6 @@ namespace SpaceVIL
         {
             lock (CommonService.GlobalLocker)
             {
-
                 WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = true;
                 WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Focus(
                     WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.GetWindowId(), true);

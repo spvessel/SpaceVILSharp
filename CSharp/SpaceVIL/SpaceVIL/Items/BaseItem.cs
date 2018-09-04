@@ -88,12 +88,12 @@ namespace SpaceVIL
             //do nothing
         }
         private Item _item = new Item();
-        private Margin _margin = new Margin();
-        public Margin GetMargin()
+        private Indents _margin = new Indents();
+        public Indents GetMargin()
         {
             return _margin;
         }
-        public void SetMargin(Margin margin)
+        public void SetMargin(Indents margin)
         {
             _margin = margin;
         }

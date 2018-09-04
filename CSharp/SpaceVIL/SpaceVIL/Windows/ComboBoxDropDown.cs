@@ -9,7 +9,7 @@ namespace SpaceVIL
 {
     public class ComboBoxDropDown : DialogWindow, IDisposable
     {
-        public ListBox ItemList = new ListBox();
+        public ListBox ItemList; // = new ListBox();
         public ButtonCore Selection;
         public EventCommonMethod SelectionChanged;
 
@@ -19,9 +19,11 @@ namespace SpaceVIL
 
         public override void InitWindow()
         {
+            ItemList = new ListBox();
             Handler = new WindowLayout(this, "DropDown_" + GetCount(), "DropDown_" + GetCount());
-            Handler.SetPadding(2, 2, 2, 2);
-            Handler.SetBackground(255, 255, 255);
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBoxDropDown)));
+            // Handler.SetPadding(2, 2, 2, 2);
+            // Handler.SetBackground(255, 255, 255);
             Handler.IsOutsideClickClosable = true;
             Handler.IsBorderHidden = true;
             // Handler.IsHidden = true;
@@ -30,10 +32,10 @@ namespace SpaceVIL
             Handler.IsResizeble = false;
             // Handler.IsFocused = false;
 
-            ItemList.GetArea().SetSpacing(0, 0);
-            ItemList.GetArea().SetPadding(0);
-            ItemList.SetBackground(Color.Transparent);
-            ItemList.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            // ItemList.GetArea().SetSpacing(0, 0);
+            // ItemList.GetArea().SetPadding(0);
+            // ItemList.SetBackground(Color.Transparent);
+            // ItemList.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
             ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.GetArea().SelectionChanged += OnSelectionChanged;
@@ -91,6 +93,19 @@ namespace SpaceVIL
         public void Dispose()
         {
             Handler.Close();
+        }
+
+        public void SetStyle(Style style)
+        {
+            Handler.SetBackground(style.Background);
+            Handler.SetPadding(style.Padding);
+
+            Style itemlist_style = style.GetInnerStyle("itemlist");
+            if(itemlist_style != null)
+            {
+                ItemList.SetBackground(itemlist_style.Background);
+                ItemList.SetAlignment(itemlist_style.Alignment);
+            }
         }
     }
 }

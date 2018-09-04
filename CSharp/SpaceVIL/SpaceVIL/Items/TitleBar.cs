@@ -76,7 +76,7 @@ namespace SpaceVIL
         {
             _text_object.SetTextAlignment(alignment);
         }
-        public void SetTextMargin(Margin margin)
+        public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
         }
@@ -220,7 +220,7 @@ namespace SpaceVIL
 
             //update text data
             //_text_object.UpdateData(UpdateType.Critical);
-            LogService.Log().LogBaseItem(_close, LogProps.Behavior | LogProps.AllGeometry);
+            //LogService.Log().LogBaseItem(_close, LogProps.Behavior | LogProps.AllGeometry);
         }
     }
 }

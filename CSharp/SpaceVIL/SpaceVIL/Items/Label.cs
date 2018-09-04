@@ -16,9 +16,9 @@ namespace SpaceVIL
         public Label()
         {
             SetItemName("Label_" + count);
-            SetBackground(Color.Transparent);
             count++;
             _text_object = new TextLine();
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Label)));
         }
         public Label(String text = "") : this()
         {
@@ -85,7 +85,7 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //text
-            _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            //_text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
             //aligment
             ////SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
@@ -101,8 +101,9 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             base.SetStyle(style);
-            SetForeground(style.Foreground);
+            
             SetFont(style.Font);
+            SetForeground(style.Foreground);
         }
         
         public int GetTextWidth()

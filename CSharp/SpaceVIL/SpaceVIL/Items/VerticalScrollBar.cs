@@ -20,31 +20,10 @@ namespace SpaceVIL
             SetItemName("VerticalScrollBar_" + count);
             count++;
 
-            SetBackground(Color.FromArgb(255, 50, 50, 50));
-            SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            SetWidth(16);
-
             //Slider
-            Slider.SetWidthPolicy(SizePolicy.Expand);
-            Slider.Handler.SetWidth(10);
-            Slider.Handler.SetWidthPolicy(SizePolicy.Fixed);
-            Slider.Handler.SetAlignment(ItemAlignment.Top | ItemAlignment.HCenter);
-            Slider.Handler.SetBackground(Color.FromArgb(50, 255, 255, 255));
             Slider.Handler.Orientation = Orientation.Vertical;
-            Slider.Track.SetBackground(Color.Transparent);
 
             //Arrows
-            UpArrow.SetBackground(Color.FromArgb(50, 255, 255, 255));
-            UpArrow.SetHeight(16);
-            UpArrow.SetWidth(16);
-            UpArrow.SetWidthPolicy(SizePolicy.Fixed);
-            UpArrow.SetHeightPolicy(SizePolicy.Fixed);
-            UpArrow.SetAlignment(ItemAlignment.Top | ItemAlignment.HCenter);
-            UpArrow.IsCustom = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 3, 4, 0));
-            UpArrow.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(80, 255, 255, 255)
-            });
             UpArrow.EventMouseClick += (sender, args) =>
             {
                 float value = Slider.GetCurrentValue();
@@ -54,17 +33,6 @@ namespace SpaceVIL
                 Slider.SetCurrentValue(value);
             };
 
-            DownArrow.SetBackground(Color.FromArgb(50, 255, 255, 255));
-            DownArrow.SetHeight(16);
-            DownArrow.SetWidth(16);
-            DownArrow.SetWidthPolicy(SizePolicy.Fixed);
-            DownArrow.SetHeightPolicy(SizePolicy.Fixed);
-            DownArrow.SetAlignment(ItemAlignment.Bottom | ItemAlignment.HCenter);
-            DownArrow.IsCustom = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 3, 4, 180));
-            DownArrow.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(80, 255, 255, 255)
-            });
             DownArrow.EventMouseClick += (sender, args) =>
             {
                 float value = Slider.GetCurrentValue();
@@ -99,6 +67,27 @@ namespace SpaceVIL
         public void InvokeScrollDown(MouseArgs args)
         {
             if (EventScrollDown != null) EventScrollDown.Invoke(this, args);
+        }
+
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+
+            Style inner_style = style.GetInnerStyle("uparrow");
+            if (inner_style != null)
+            {
+                UpArrow.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("downarrow");
+            if (inner_style != null)
+            {
+                DownArrow.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("slider");
+            if (inner_style != null)
+            {
+                Slider.SetStyle(inner_style);
+            }
         }
     }
 }

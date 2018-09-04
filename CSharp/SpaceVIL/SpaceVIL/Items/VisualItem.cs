@@ -39,6 +39,10 @@ namespace SpaceVIL
             {
                 AddItemState(state.Key, state.Value);
             }
+            if(style.Shape != null)
+            {
+                IsCustom = new CustomFigure(style.IsFixedShape, style.Shape);
+            }
         }
 
         private String _tooltip = String.Empty;
@@ -65,12 +69,12 @@ namespace SpaceVIL
             _spacing.Horizontal = horizontal;
             _spacing.Vertical = vertical;
         }
-        private Padding _padding = new Padding();
-        public Padding GetPadding()
+        private Indents _padding = new Indents();
+        public Indents GetPadding()
         {
             return _padding;
         }
-        public void SetPadding(Padding padding)
+        public void SetPadding(Indents padding)
         {
             _padding = padding;
         }
@@ -96,8 +100,8 @@ namespace SpaceVIL
         }
         public virtual void AddItem(BaseItem item)
         {
-            // lock (GetHandler().engine_locker)
-            lock (CommonService.GlobalLocker)
+            lock (GetHandler().engine_locker)
+            // lock (CommonService.GlobalLocker)
             {
                 if (item.Equals(this))
                 {
@@ -107,6 +111,8 @@ namespace SpaceVIL
                 item.SetHandler(GetHandler());
 
                 AddChildren(item);
+
+                //lock (GetHandler().engine_locker)
                 _content.Add(item);
 
                 try
@@ -121,10 +127,11 @@ namespace SpaceVIL
 
                 //needs to force update all attributes
                 item.UpdateGeometry();
+                item.InitElements();
+
                 VisualItem vi = item as VisualItem;
                 if (vi != null)
                     vi.UpdateState();
-                item.InitElements();
             }
         }
 
@@ -149,8 +156,8 @@ namespace SpaceVIL
 
         public virtual void RemoveItem(BaseItem item)
         {
-            // lock (GetHandler().engine_locker)
-            lock (CommonService.GlobalLocker)
+            lock (GetHandler().engine_locker)
+            // lock (CommonService.GlobalLocker)
             {
                 LayoutType type;
                 if (item is IFloating)
@@ -165,13 +172,17 @@ namespace SpaceVIL
                 }
 
                 //removing
+                //lock (GetHandler().engine_locker)
                 _content.Remove(item);
-                item.RemoveItemFromListeners();
 
+                item.RemoveItemFromListeners();
                 ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
 
                 //GetHandler().UpdateScene();
             }
+
+            // if (item is PopUpMessage)
+            //     Console.WriteLine("remove popup");
 
             //needs to force update all attributes
             /*if ((this is WContainer))
@@ -440,7 +451,7 @@ namespace SpaceVIL
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Disabled).Background));
                 return;
             }
-            
+
             if (IsFocused && states.ContainsKey(ItemStateType.Focused))
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Focused).Background));
 
@@ -601,6 +612,15 @@ namespace SpaceVIL
                     return GraphicsMathService.ToGL(UpdateShape(), GetHandler());
             }
 
+            // if (this is ButtonCore)
+            // {
+            //     Console.WriteLine(
+            //         GetWidth() + " " +
+            //         GetHeight() + " " +
+            //         GetX() + " " +
+            //         GetY() + " "
+            //         );
+            // }
             SetTriangles(GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));
             return GraphicsMathService.ToGL(this as BaseItem, GetHandler());
         }

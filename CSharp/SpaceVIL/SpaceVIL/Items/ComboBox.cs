@@ -23,6 +23,8 @@ namespace SpaceVIL
 
             EventKeyPress += OnKeyPress;
             EventMousePressed += (sender, args) => ShowDropDownList();
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBox)));
         }
 
         protected virtual void OnKeyPress(object sender, KeyArgs args)
@@ -36,7 +38,7 @@ namespace SpaceVIL
         {
             _selected.SetTextAlignment(alignment);
         }
-        public void SetTextMargin(Margin margin)
+        public void SetTextMargin(Indents margin)
         {
             _selected.SetMargin(margin);
         }
@@ -96,35 +98,35 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //selected
-            _selected.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            _selected.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
-            _selected.SetForeground(Color.Black);
-            _selected.SetMargin(0, 0, 20, 0);
-            _selected.SetPadding(10, 0, 0, 0);
-            _selected.SetBackground(220, 220, 220);
+            // _selected.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            // _selected.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
+            // _selected.SetForeground(Color.Black);
+            // _selected.SetMargin(0, 0, 20, 0);
+            // _selected.SetPadding(10, 0, 0, 0);
+            // _selected.SetBackground(220, 220, 220);
 
             //dropdown
-            _dropdown.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            _dropdown.SetWidth(20);
-            _dropdown.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
-            _dropdown.SetBackground(255, 181, 111);
-            _dropdown.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(40, 255, 255, 255)
-            });
+            // _dropdown.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            // _dropdown.SetWidth(20);
+            // _dropdown.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
+            // _dropdown.SetBackground(255, 181, 111);
+            // _dropdown.AddItemState(ItemStateType.Hovered, new ItemState()
+            // {
+            //     Background = Color.FromArgb(40, 255, 255, 255)
+            // });
 
             //arrow
-            _arrow.SetTriangles(GraphicsMathService.GetTriangle(a: 180));
-            _arrow.SetBackground(50, 50, 50);
-            _arrow.SetSize(14, 6);
-            _arrow.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            _arrow.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            // _arrow.SetTriangles(GraphicsMathService.GetTriangle(a: 180));
+            // _arrow.SetBackground(50, 50, 50);
+            // _arrow.SetSize(14, 6);
+            // _arrow.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            // _arrow.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
 
             //adding
             AddItems(_selected, _dropdown);
 
             _dropdown.AddItem(_arrow);
-            _selected.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            // _selected.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
             //dropdownarea
             _dropdownarea.Selection = _selected;
@@ -168,6 +170,32 @@ namespace SpaceVIL
         private void OnSelectionChanged()
         {
             SelectionChanged?.Invoke();
+        }
+
+        public override void SetStyle(Style style)
+        {
+            if (style == null)
+                return;
+
+            base.SetStyle(style);
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
+
+            Style inner_style = style.GetInnerStyle("selection");
+            if (inner_style != null)
+            {
+                _selected.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("dropdownbutton");
+            if (inner_style != null)
+            {
+                _dropdown.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("arrow");
+            if (inner_style != null)
+            {
+                _arrow.SetStyle(inner_style);
+            }
         }
     }
 }

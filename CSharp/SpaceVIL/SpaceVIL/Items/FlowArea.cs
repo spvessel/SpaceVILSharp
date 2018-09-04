@@ -18,6 +18,8 @@ namespace SpaceVIL
             EventMousePressed += OnMousePress;
             EventMouseDrag += OnDragging;
             _stored_crd = new Dictionary<BaseItem, int[]>();
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.FlowArea)));
         }
 
         public void AddContextMenu(ContextMenu context_menu)
@@ -74,13 +76,14 @@ namespace SpaceVIL
             {
                 wanted.PositionChanged += () => CorrectPosition(wanted);
             }
-            UpdateLayout();
+            // UpdateLayout();
         }
         public override void RemoveItem(BaseItem item)
         {
+            // Console.WriteLine("flow remove");
             base.RemoveItem(item);
             _stored_crd.Remove(item);
-            UpdateLayout();
+            // UpdateLayout();
         }
         public void UpdateLayout()
         {
@@ -105,6 +108,8 @@ namespace SpaceVIL
                 actual_y - (int)_yOffset - GetY() - GetPadding().Top - item.GetMargin().Top
             };
         }
+
+
 
         // public void PrepElements()
         // {

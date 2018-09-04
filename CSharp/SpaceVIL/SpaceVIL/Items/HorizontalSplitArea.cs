@@ -30,8 +30,8 @@ namespace SpaceVIL
         public HorizontalSplitArea()
         {
             SetItemName("HSplitArea_" + count);
-            SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             count++;
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.HorizontalSplitArea)));
 
             _splitHolder.EventMouseDrag += OnDragging;
             _splitHolder.EventMousePressed += OnMousePress;
@@ -49,7 +49,6 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            _splitHolder.SetBackground(45, 45, 45);
             SetSplitHolderPosition((GetHeight() - _splitHolder.GetHolderSize()) / 2);
 
             //Adding
@@ -138,6 +137,17 @@ namespace SpaceVIL
         public void SetSpacerHeight(int spHeight)
         {
             _splitHolder.SetSpacerSize(spHeight);
+        }
+
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+
+            Style inner_style = style.GetInnerStyle("splitholder");
+            if (inner_style != null)
+            {
+                _splitHolder.SetStyle(inner_style);
+            }
         }
     }
 }

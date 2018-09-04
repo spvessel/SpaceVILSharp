@@ -29,7 +29,7 @@ namespace SpaceVIL
             _text_object.SetItemText(message);
 
             // EventMouseClick += EmptyEvent;
-
+            //SetHandler(handler);
             SetItemName("PopUpMessage_" + count);
             SetBackground(32, 32, 32, 240);
             SetForeground(Color.White);

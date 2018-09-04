@@ -33,7 +33,7 @@ namespace SpaceVIL
         {
             _text_object.SetTextAlignment(alignment);
         }
-        public void SetTextMargin(Margin margin)
+        public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
         }
@@ -93,10 +93,10 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //text
-            _text_object.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            // _text_object.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
 
             //aligment
-            SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            // SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
 
             //adding
             AddItem(_text_object);
@@ -112,6 +112,7 @@ namespace SpaceVIL
             
             SetForeground(style.Foreground);
             SetFont(style.Font);
+            SetTextAlignment(style.TextAlignment);
         }
     }
 }

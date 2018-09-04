@@ -14,9 +14,9 @@ namespace SpaceVIL
         public Grid()
         {
             SetItemName("Grid_" + count);
-            SetBackground(Color.Transparent);
-            SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             count++;
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Grid)));
         }
 
         public Grid(int rows, int columns) : this()

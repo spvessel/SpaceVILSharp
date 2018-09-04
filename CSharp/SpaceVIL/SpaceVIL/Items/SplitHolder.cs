@@ -17,7 +17,6 @@ namespace SpaceVIL
         {
             _orientation = orientation;
             SetItemName("SplitHolder_" + count);
-            SetBackground(Color.Transparent);
             count++;
             MakeHolderShape();
         }
@@ -57,6 +56,13 @@ namespace SpaceVIL
         public Orientation GetOrientation()
         {
             return _orientation;
+        }
+
+        public override void SetStyle(Style style)
+        {
+            if (style == null)
+                return;
+            SetBackground(style.Background);
         }
     }
 }

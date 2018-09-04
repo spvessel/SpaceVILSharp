@@ -9,44 +9,47 @@ namespace SpaceVIL
 {
     public class Indicator : VisualItem
     {
+        internal class CustomToggle : ButtonToggle
+        {
+            protected internal override bool GetHoverVerification(float xpos, float ypos)
+            {
+                return false;
+            }
+        }
+
         private static int count = 0;
 
-        private ButtonToggle _indicator;
+        private CustomToggle _marker;
         public ButtonToggle GetIndicatorMarker()
         {
-            return _indicator;
+            return _marker;
         }
 
         public Indicator()
         {
             SetItemName("Indicator_" + count);
-            SetWidth(20);
-            SetHeight(20);
-            SetPadding(4,4,4,4);
-            SetWidthPolicy(SizePolicy.Fixed);
-            SetHeightPolicy(SizePolicy.Fixed);
-            SetBackground(Color.FromArgb(255, 32, 32, 32));
             count++;
-            
-            _indicator = new ButtonToggle();
+
+            _marker = new CustomToggle();
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Indicator)));
         }
 
         public override void InitElements()
         {
             //marker
-            _indicator.SetItemName(GetItemName() + "_marker");
-            _indicator.SetBackground(Color.FromArgb(255, 32, 32, 32));
-            _indicator.SetWidthPolicy(SizePolicy.Expand);
-            _indicator.SetHeightPolicy(SizePolicy.Expand);
-            _indicator.AddItemState(ItemStateType.Hovered, new ItemState()
+            _marker.SetItemName(GetItemName() + "_marker");
+            AddItem(_marker);
+        }
+
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+            Style marker_style = style.GetInnerStyle("marker");
+            if(marker_style != null)
             {
-                Background = Color.FromArgb(125, 255, 255, 255)
-            });
-            _indicator.AddItemState(ItemStateType.Toggled, new ItemState()
-            {
-                Background = Color.FromArgb(255, 255, 181, 111)
-            });
-            AddItem(_indicator);
+                _marker.SetStyle(marker_style);
+            }
         }
     }
 }

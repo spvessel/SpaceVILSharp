@@ -33,7 +33,7 @@ namespace SpaceVIL
         // public static Glfw.Cursor _resize_all;
 
         public static String ClipboardTextStorage = String.Empty;
-        public static readonly object GlobalLocker = new object();
+        internal static readonly object GlobalLocker = new object();
 
         public static void LinkColors(ref Color t1, ref Color t2)
         {

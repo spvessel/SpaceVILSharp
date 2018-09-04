@@ -202,5 +202,13 @@ namespace SpaceVIL
             _maxFontY = output[2];
             return output;
         }
+
+        public override void SetStyle(Style style)
+        {
+            SetAlignment(style.Alignment);
+            SetTextAlignment(style.TextAlignment);
+            SetMargin(style.Margin);
+            SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
+        }
     }
 }

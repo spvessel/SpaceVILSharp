@@ -145,7 +145,7 @@ namespace SpaceVIL
 
             //устанавливаем параметры отрисовки
             glEnable(GL_TEXTURE_2D);
-            glEnable(GL_MULTISAMPLE);
+            // glEnable(GL_MULTISAMPLE);
             glEnable(GL_BLEND);
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
@@ -377,6 +377,7 @@ namespace SpaceVIL
         }
         public void MaximizeWindow()
         {
+            // _handler.SwitchContext();
             if (_handler.GetLayout().IsMaximized)
             {
                 Glfw.RestoreWindow(_handler.GetWindowId());
@@ -395,6 +396,7 @@ namespace SpaceVIL
                 _handler.GetLayout().SetWidth(w);
                 _handler.GetLayout().SetHeight(h);
             }
+            // _handler.SwitchContext();
         }
         //OpenGL input interaction function
         private VisualItem IsInListHoveredItems<T>()//idraggable adaptations
@@ -697,8 +699,8 @@ namespace SpaceVIL
                     break;
 
                 case InputState.Press:
-
-                    Glfw.GetCursorPos(_handler.GetWindowId(), out double xpos, out double ypos);
+                    double xpos, ypos;
+                    Glfw.GetCursorPos(_handler.GetWindowId(), out xpos, out ypos);
                     ptrClick.X = (int)xpos;
                     ptrClick.Y = (int)ypos;
                     if (HoveredItem != null)
@@ -808,7 +810,7 @@ namespace SpaceVIL
             while (!_handler.IsClosing())
             {
                 // Glfw.PollEvents();
-                //Glfw.WaitEvents();
+                // Glfw.WaitEvents();
                 Glfw.WaitEventsTimeout(_interval);
                 Update();
             }
@@ -827,7 +829,9 @@ namespace SpaceVIL
             if (_handler.Focused)
             {
                 glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+                //draw static
                 DrawItems(_handler.GetLayout().GetWindow());
+                //draw float
                 foreach (var item in ItemsLayoutBox.GetLayout(_handler.GetLayout().Id).FloatItems)
                 {
                     DrawItems(item as BaseItem);
@@ -964,17 +968,6 @@ namespace SpaceVIL
             if (root is TextItem)
             {
                 // DrawText_new(root as TextItem);
-                /*glDisable(GL_MULTISAMPLE);
-                try
-                {
-                    DrawText_deprecated(root as TextItem);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-                glEnable(GL_MULTISAMPLE);*/
-
                 glDisable(GL_MULTISAMPLE);
                 DrawText_deprecated(root as TextItem);
                 glEnable(GL_MULTISAMPLE);
@@ -1005,7 +998,10 @@ namespace SpaceVIL
 
                 if (root is VisualItem)
                 {
-                    foreach (var child in (root as VisualItem).GetItems())
+                    List<BaseItem> list;
+                    //lock (CommonService.GlobalLocker)
+                        list = (root as VisualItem).GetItems();
+                    foreach (var child in list)
                     {
                         DrawItems(child);
                     }
@@ -1250,6 +1246,7 @@ namespace SpaceVIL
 
             if (shell.GetBackground().A == 0)
             {
+                // Console.WriteLine(shell.GetItemName() + " is transparent");
                 return;
             }
 

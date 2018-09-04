@@ -13,19 +13,12 @@ namespace SpaceVIL
             SetItemName("ButtonToggle_" + count);
             IsToggled = false;
             EventKeyPress += OnKeyPress;
-            EventMouseClick += (sender, args) => EventToggle.Invoke(sender, args); //remember
+            EventMouseClick += (sender, args) => EventToggle?.Invoke(sender, args); //remember
             EventToggle += (sender, args) => IsToggled = !_toggled;
             count++;
-
-            states.Add(ItemStateType.Toggled, new ItemState()
-            {
-                Value = true,
-                Background = Color.Gray,
-                Text = null,
-                ImageUri = null
-            });
-
             _text_object = new TextLine();
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ButtonToggle)));
         }
 
         public ButtonToggle(String text = "") : this()
@@ -65,7 +58,7 @@ namespace SpaceVIL
         {
             _text_object.SetTextAlignment(alignment);
         }
-        public void SetTextMargin(Margin margin)
+        public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
         }

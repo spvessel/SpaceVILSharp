@@ -9,9 +9,17 @@ namespace SpaceVIL
 {
     public class RadioButton : VisualItem
     {
+        internal class CustomIndicator : Indicator
+        {
+            protected internal override bool GetHoverVerification(float xpos, float ypos)
+            {
+                return false;
+            }
+        }
+
         static int count = 0;
-        private Label _text_object;
-        private Indicator _indicator;
+        private TextLine _text_object;
+        private CustomIndicator _indicator;
         public Indicator GetIndicator()
         {
             return _indicator;
@@ -20,23 +28,24 @@ namespace SpaceVIL
         public RadioButton()
         {
             SetItemName("RadioButton_" + count);
-            SetBackground(Color.FromArgb(0, 0, 0, 0));
+            SetBackground(255, 255, 255, 20);
             SetSpacing(5, 0);
             EventKeyPress += OnKeyPress;
             count++;
 
             //text
-            _text_object = new Label();
+            _text_object = new TextLine();
             _text_object.SetItemName(GetItemName() + "_text_object");
-            _text_object.SetBackground(255, 255, 255, 15);
             _text_object.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             _text_object.SetAlignment(ItemAlignment.VCenter);
             _text_object.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            _text_object.SetPadding(10);
+            _text_object.SetMargin(10);
 
             //indicator
-            _indicator = new Indicator();
-            _indicator.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
+            _indicator = new CustomIndicator();
+            // _indicator.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.RadioButton)));
         }
 
         protected virtual void OnKeyPress(object sender, KeyArgs args)
@@ -44,22 +53,38 @@ namespace SpaceVIL
             if (args.Scancode == 0x1C)
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
-        
+
+        public override bool IsMouseHover
+        {
+            get { return base.IsMouseHover; }
+            set
+            {
+                base.IsMouseHover = value;
+                _indicator.GetIndicatorMarker().IsMouseHover = IsMouseHover;
+                UpdateState();
+            }
+        }
         public override void InitElements()
         {
+
+            //border radius
+            // _indicator.Border.Radius = _indicator.GetWidth() / 2;
+            // _indicator.GetIndicatorMarker().Border.Radius = _indicator.GetIndicatorMarker().GetWidth() / 2;
+            // _text_object.Border.Radius = _indicator.Border.Radius;
+
+            //connect events
+            _indicator.GetIndicatorMarker().EventToggle = null;
+            EventMouseClick += (sender, args) =>
+            {
+                _indicator.GetIndicatorMarker().IsToggled = !_indicator.GetIndicatorMarker().IsToggled;
+                if (_indicator.GetIndicatorMarker().IsToggled)
+                    UncheckOthers(sender);
+            };
+            // _indicator.GetIndicatorMarker().EventToggle += (sender, args) => UncheckOthers(sender);
+
             //adding
             AddItem(_indicator);
             AddItem(_text_object);
-
-            //border radius
-            _indicator.Border.Radius = _indicator.GetWidth() / 2;
-            _indicator.GetIndicatorMarker().Border.Radius = _indicator.GetIndicatorMarker().GetWidth() / 2;
-            _text_object.Border.Radius = _indicator.Border.Radius;
-
-            //connect events
-            _indicator.GetIndicatorMarker().EventToggle += (sender, args) => UncheckOthers(sender);
-            EventMouseClick += _indicator.GetIndicatorMarker().EventToggle;
-            _text_object.EventMouseHover += (sender, args) => _indicator.GetIndicatorMarker().IsMouseHover = _text_object.IsMouseHover;
         }
 
         private void UncheckOthers(object sender)
@@ -109,8 +134,8 @@ namespace SpaceVIL
 
             foreach (var child in GetItems())
             {
-                child.SetX(startX + offset);
-                if(child.GetWidthPolicy() == SizePolicy.Expand)
+                child.SetX(startX + offset + child.GetMargin().Left);
+                if (child.GetWidthPolicy() == SizePolicy.Expand)
                 {
                     child.SetWidth(GetWidth() - offset);
                 }
@@ -123,7 +148,7 @@ namespace SpaceVIL
         {
             _text_object.SetTextAlignment(alignment);
         }
-        public void SetTextMargin(Margin margin)
+        public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
         }
@@ -149,11 +174,11 @@ namespace SpaceVIL
         }
         public void SetText(String text)
         {
-            _text_object.SetText(text);
+            _text_object.SetItemText(text);
         }
         public String GetText()
         {
-            return _text_object.GetText();
+            return _text_object.GetItemText();
         }
         public void SetForeground(Color color)
         {
@@ -186,6 +211,17 @@ namespace SpaceVIL
             base.SetStyle(style);
             SetForeground(style.Foreground);
             SetFont(style.Font);
+
+            Style inner_style = style.GetInnerStyle("indicator");
+            if (inner_style != null)
+            {
+                _indicator.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("textline");
+            if (inner_style != null)
+            {
+                _text_object.SetStyle(inner_style);
+            }
         }
     }
 }

@@ -124,8 +124,8 @@ namespace SpaceVIL
         {
             _textAlignment = alignment;
         }
-        private Margin _textMargin = new Margin();
-        public void SetTextMargin(Margin margin)
+        private Indents _textMargin = new Indents();
+        public void SetTextMargin(Indents margin)
         {
             _textMargin = margin;
         }

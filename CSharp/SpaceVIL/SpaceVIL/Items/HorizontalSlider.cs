@@ -83,31 +83,13 @@ namespace SpaceVIL
 
         public HorizontalSlider()
         {
-            SetWidthPolicy(SizePolicy.Expand);
-            SetHeight(25);
-            SetBackground(Color.Transparent);
             SetItemName("HorizontalSlider_" + count);
             EventMouseClick += OnTrackClick;
             count++;
 
-            //Track
-            Track.SetBackground(Color.FromArgb(255, 100, 100, 100));
-            Track.SetAlignment(ItemAlignment.VCenter);
-            Track.SetWidthPolicy(SizePolicy.Expand);
-            Track.SetHeightPolicy(SizePolicy.Fixed);
-            Track.SetHeight(5);
-
-            //Handler
             Handler.Orientation = Orientation.Horizontal;
-            Handler.SetBackground(Color.FromArgb(255, 255, 181, 111));
-            Handler.SetWidth(10);
-            Handler.SetWidthPolicy(SizePolicy.Fixed);
-            Handler.SetHeightPolicy(SizePolicy.Expand);
-            Handler.SetAlignment(ItemAlignment.Left);
-            Handler.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(80, 255, 255, 255)
-            });
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.HorizontalSlider)));
         }
 
         public override void InitElements()
@@ -157,6 +139,22 @@ namespace SpaceVIL
         public void InvokeScrollDown(MouseArgs args)
         {
             (GetParent() as IScrollable)?.InvokeScrollDown(args);
+        }
+
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+
+            Style inner_style = style.GetInnerStyle("track");
+            if (inner_style != null)
+            {
+                Track.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("handler");
+            if (inner_style != null)
+            {
+                Handler.SetStyle(inner_style);
+            }
         }
     }
 }

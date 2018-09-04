@@ -27,12 +27,13 @@ namespace SpaceVIL
             IsVisible = false;
             SetHandler(handler);
             SetItemName("ContextMenu_" + count);
-            SetPadding(2, 2, 2, 2);
-            SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            SetBackground(Color.FromArgb(255, 210, 210, 210));
+            // SetPadding(2, 2, 2, 2);
+            // SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            // SetBackground(Color.FromArgb(255, 210, 210, 210));
             count++;
-
             ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ButtonCore)));
         }
 
         public override void InitElements()
@@ -40,10 +41,10 @@ namespace SpaceVIL
             SetConfines();
 
             ItemList.SetSelectionVisibility(false);
-            ItemList.GetArea().SetSpacing(0, 0);
-            ItemList.GetArea().SetPadding(0);
-            ItemList.SetBackground(Color.Transparent);
-            ItemList.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            // ItemList.GetArea().SetSpacing(0, 0);
+            // ItemList.GetArea().SetPadding(0);
+            // ItemList.SetBackground(Color.Transparent);
+            // ItemList.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
             ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.GetArea().SelectionChanged += OnSelectionChanged;
@@ -144,6 +145,22 @@ namespace SpaceVIL
             }
             return true;
         }
-        // ремантадин
+
+        //style
+        public override void SetStyle(Style style)
+        {
+            if (style == null)
+                return;
+            SetPadding(style.Padding);
+            SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
+            SetBackground(style.Background);
+
+            Style itemlist_style = style.GetInnerStyle("itemlist");
+            if (itemlist_style != null)
+            {
+                ItemList.SetBackground(itemlist_style.Background);
+                ItemList.SetAlignment(itemlist_style.Alignment);
+            }
+        }
     }
 }
