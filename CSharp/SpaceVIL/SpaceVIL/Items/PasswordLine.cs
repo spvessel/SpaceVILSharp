@@ -19,8 +19,8 @@ namespace SpaceVIL
         //private int _saveCurs = 0;
         private Rectangle _selectedArea;
 
-        private int _selectFrom = 0;
-        private int _selectTo = 0;
+        private int _selectFrom = -1;
+        private int _selectTo = -1;
         private bool _isSelect = false;
         private bool _justSelected = false;
 
