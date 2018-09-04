@@ -44,8 +44,8 @@ namespace SpaceVIL
         public TextBlock()
         {
             SetItemName("TextBlock_" + count);
-            SetBackground(180, 180, 180);
-            SetForeground(Color.Black);
+            // SetBackground(180, 180, 180);
+            // SetForeground(Color.Black);
             //SetPadding(5, 0, 5, 0);
             count++;
 
@@ -55,7 +55,7 @@ namespace SpaceVIL
 
             _cursor = new Rectangle();
             _selectedArea = new CustomSelector();
-            _selectedArea.SetBackground(111, 181, 255);
+            // _selectedArea.SetBackground(111, 181, 255);
 
             EventMousePressed += OnMousePressed;
             EventMouseDrag += OnDragging;
@@ -75,6 +75,8 @@ namespace SpaceVIL
                 _lineSpacer = _minLineSpacer;
 
             _cursor.SetHeight(_lineHeight + _lineSpacer); // + 6);
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextBlock)));
         }
 
         protected virtual void OnMousePressed(object sender, MouseArgs args)
@@ -573,18 +575,18 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //text
-            SetLineContainerAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            //SetLineContainerAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
             //cursor
-            _cursor.IsVisible = false;
-            _cursor.SetBackground(0, 0, 0);
-            //_cursor.SetMargin(0, 5, 0, 5);
-            _cursor.SetWidth(2);
+            // _cursor.IsVisible = false;
+            // _cursor.SetBackground(0, 0, 0);
+            // //_cursor.SetMargin(0, 5, 0, 5);
+            // _cursor.SetWidth(2);
 
             _cursor.SetHeight(_lineHeight + _lineSpacer);// + 6
-            _cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            // _cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             //selectedArea
             //_selectedArea.SetMargin(0, 5, 0, 5);
-            _selectedArea.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            // _selectedArea.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             //adding
             AddItems(_selectedArea, _cursor);
             AddAllLines();
@@ -933,6 +935,26 @@ namespace SpaceVIL
             _cursor_position.X = 0;
             _cursor_position.Y = 0;
         }
-    }
 
+        //style
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
+            // SetTextAlignment(style.TextAlignment);
+            SetLineContainerAlignment(style.TextAlignment);
+
+            Style inner_style = style.GetInnerStyle("selection");
+            if (inner_style != null)
+            {
+                _selectedArea.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("cursor");
+            if (inner_style != null)
+            {
+                _cursor.SetStyle(inner_style);
+            }
+        }
+    }
 }

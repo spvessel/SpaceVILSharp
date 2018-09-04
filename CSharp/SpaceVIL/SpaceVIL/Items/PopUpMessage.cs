@@ -24,23 +24,16 @@ namespace SpaceVIL
         }
         public PopUpMessage(String message, WindowLayout handler)
         {
+            SetItemName("PopUpMessage_" + count);
+
             _btn_close = new ButtonCore();
+            _btn_close.SetItemName("ClosePopUp");
             _text_object = new TextLine();
             _text_object.SetItemText(message);
-
-            // EventMouseClick += EmptyEvent;
-            //SetHandler(handler);
-            SetItemName("PopUpMessage_" + count);
-            SetBackground(32, 32, 32, 240);
-            SetForeground(Color.White);
-            SetPadding(5, 5, 5, 5);
-            SetMargin(10, 10, 10, 10);
-            SetAlignment(ItemAlignment.Bottom | ItemAlignment.HCenter);
-            SetSize(300, 70);
-            SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            Border.Radius = 10;
             count++;
 
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.PopUpMessage)));
             handler.GetWindow().AddItem(this);
         }
         public void SetTextAlignment(ItemAlignment alignment)
@@ -102,36 +95,16 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            _btn_close.SetBackground(Color.FromArgb(255, 100, 100, 100));
-            _btn_close.SetItemName("ClosePopUp");
-            _btn_close.SetSize(10, 10);
-            _btn_close.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            _btn_close.SetAlignment(ItemAlignment.Right | ItemAlignment.Top);
-            _btn_close.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(125, 255, 255, 255)
-            });
-            _btn_close.IsCustom = new CustomFigure(false, GraphicsMathService.GetCross(10, 10, 3, 45));
-            _btn_close.EventMouseClick += (sender, args) =>
-            {
-                RemoveSelf();
-            };
-
-            //text
-            _text_object.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
-            _text_object.SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
-
+            _btn_close.EventMouseClick += (sender, args) => RemoveSelf();
             //adding
             AddItems(_text_object, _btn_close);
-
-            //update text data
-            //_text_object.UpdateData(UpdateType.Critical);
         }
 
         public void Show()
         {
             InitTimer();
         }
+        
         internal void InitTimer()
         {
             if (_stop != null)
@@ -164,6 +137,21 @@ namespace SpaceVIL
                 _stop.Stop();
                 _stop.Dispose();
                 _stop = null;
+            }
+        }
+
+        //style
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
+            SetTextAlignment(style.TextAlignment);
+
+            Style inner_style = style.GetInnerStyle("closebutton");
+            if (inner_style != null)
+            {
+                _btn_close.SetStyle(inner_style);
             }
         }
     }

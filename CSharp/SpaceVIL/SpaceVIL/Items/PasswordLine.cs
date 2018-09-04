@@ -36,26 +36,25 @@ namespace SpaceVIL
 
         public PasswordLine()
         {
-            _hide_sign = Encoding.UTF32.GetString(BitConverter.GetBytes(0x23fa)); //big point
+            SetItemName("PasswordLine_" + count);
+
+            // _hide_sign = Encoding.UTF32.GetString(BitConverter.GetBytes(0x23fa)); //big point
+            _hide_sign = Encoding.UTF32.GetString(BitConverter.GetBytes(0x25CF)); //big point
             _text_object = new TextLine();
             _show_pwd_btn = new ButtonToggle();
-
+            _show_pwd_btn.SetItemName(GetItemName() + "_marker");
             _cursor = new Rectangle();
             _selectedArea = new Rectangle();
-            _selectedArea.SetBackground(111, 181, 255);
-
-            SetItemName("PasswordLine_" + count);
-            SetBackground(180, 180, 180);
-            SetForeground(Color.Black);
-            SetPadding(5, 0, 5, 0);
             count++;
+
             EventKeyPress += OnKeyPress;
             EventTextInput += OnTextInput;
             EventMousePressed += OnMousePressed;
             EventMouseDrag += OnDragging;
 
-            ShiftValCodes = new List<int>() {LeftArrowCode, RightArrowCode, EndCode,
-                HomeCode};
+            ShiftValCodes = new List<int>() { LeftArrowCode, RightArrowCode, EndCode, HomeCode };
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.PasswordLine)));
         }
 
         protected virtual void OnMousePressed(object sender, MouseArgs args)
@@ -125,7 +124,6 @@ namespace SpaceVIL
 
             if (args.Mods != 0)
             {
-                //Выделение не сбрасывается, проверяются сочетания
                 switch (args.Mods)
                 {
                     case KeyMods.Shift:
@@ -240,6 +238,22 @@ namespace SpaceVIL
             _cursor_position++;
             ReplaceCursor();
         }
+        
+        public override bool IsFocused
+        {
+            get
+            {
+                return base.IsFocused;
+            }
+            set
+            {
+                base.IsFocused = value;
+                if (IsFocused)
+                    _cursor.IsVisible = true;
+                else
+                    _cursor.IsVisible = false;
+            }
+        }
 
         public void SetTextAlignment(ItemAlignment alignment)
         {
@@ -309,47 +323,11 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            //_show_pwd_btn
-            _show_pwd_btn = new ButtonToggle();
-            _show_pwd_btn.SetItemName(GetItemName() + "_marker");
-            _show_pwd_btn.SetBackground(Color.FromArgb(255, 120, 120, 120));
-            _show_pwd_btn.SetWidth(16);
-            _show_pwd_btn.SetHeight(16);
-            _show_pwd_btn.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            _show_pwd_btn.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Right);
-            _show_pwd_btn.AddItemState(ItemStateType.Toggled, new ItemState()
-            {
-                Background = Color.FromArgb(255, 80, 80, 80)
-            });
-            _show_pwd_btn.Border.Radius = 4;
-            _show_pwd_btn.EventToggle += (sender, args) => ShowPassword(sender);
-            //text
-            _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-
-            //cursor
-            _cursor.SetBackground(0, 0, 0);
-            _cursor.SetWidth(2);
-            _cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand); //???
-
-            //selectedArea
-            //_selectedArea.SetMargin(0, 5, 0, 5); //???
-            _selectedArea.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-
+            // _cursor.IsVisible = false;
             //adding
-            AddItems(_selectedArea, _text_object, _cursor);
-            AddItem(_show_pwd_btn);
-
-            //update text data
-            //_text_object.UpdateData(UpdateType.Critical);
-            GetHandler().SetFocusedItem(this);
-        }
-
-        //style
-        public override void SetStyle(Style style)
-        {
-            base.SetStyle(style);
-            SetForeground(style.Foreground);
-            SetFont(style.Font);
+            _show_pwd_btn.EventToggle += (sender, args) => ShowPassword(sender);
+            AddItems(_selectedArea, _text_object, _cursor, _show_pwd_btn);
+            // GetHandler().SetFocusedItem(this);
         }
 
         public int GetTextWidth()
@@ -398,7 +376,7 @@ namespace SpaceVIL
             _cursor_position = NearestPosToCursor(newPos);
         }
 
-        private string CutText() //Наружу не передается, пароль, секретность, все такое
+        private string CutText() //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         {
             string str = GetSelectedText();
             if (_selectFrom == _selectTo) return str;
@@ -412,7 +390,7 @@ namespace SpaceVIL
             return str;
         }
 
-        private string GetSelectedText() //Наружу не передается, пароль, секретность, все такое
+        private string GetSelectedText() //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         {
             if (_selectFrom == _selectTo) return "";
             string text = GetText();
@@ -425,6 +403,31 @@ namespace SpaceVIL
         public void Clear()
         {
             SetText("");
+        }
+
+        //style
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
+            SetTextAlignment(style.TextAlignment);
+
+            Style inner_style = style.GetInnerStyle("selection");
+            if (inner_style != null)
+            {
+                _selectedArea.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("cursor");
+            if (inner_style != null)
+            {
+                _cursor.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("showmarker");
+            if (inner_style != null)
+            {
+                _show_pwd_btn.SetStyle(inner_style);
+            }
         }
     }
 }

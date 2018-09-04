@@ -39,11 +39,14 @@ namespace SpaceVIL
         public Indents Margin;// = new Indents();
         public int BorderRadius;
         public int BorderThickness;
+        public Color BorderColor;
         public List<float[]> Shape;// = new List<float[]>();
         public bool IsFixedShape;
+        public bool IsVisible;
 
         public Style()//default
         {
+            IsVisible = true;
             MaxWidth = Int16.MaxValue;
             MaxHeight = Int16.MaxValue;
             // Background = Color.White;
@@ -62,6 +65,18 @@ namespace SpaceVIL
             // Y = 0;
             // BorderRadius = 0;
             // BorderThickness = 0;
+        }
+
+        public void SetSize(int width, int height)
+        {
+            Width = width;
+            Height = height;
+        }
+
+        public void SetSizePolicy(SizePolicy width_policy, SizePolicy height_policy)
+        {
+            WidthPolicy = width_policy;
+            HeightPolicy = height_policy;
         }
 
         public void AddInnerStyle(String item_name, Style style)
@@ -220,7 +235,7 @@ namespace SpaceVIL
             marker_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             marker_style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(125, 255, 255, 255)
+                Background = Color.FromArgb(60, 255, 255, 255)
             });
             marker_style.AddItemState(ItemStateType.Toggled, new ItemState()
             {
@@ -363,7 +378,9 @@ namespace SpaceVIL
         {
             Style style = new Style();
 
-            style.Background = Color.Transparent;
+            // style.Background = Color.Transparent;
+            style.Background = Color.FromArgb(255, 70, 70, 70);
+
             style.Padding = new Indents(2, 2, 2, 2);
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Expand;
@@ -711,6 +728,7 @@ namespace SpaceVIL
             Style style = new Style();
             return style;
         }
+
         public static Style GetRadioButtonStyle()//нужен ли?
         {
             Style style = new Style();
@@ -720,7 +738,6 @@ namespace SpaceVIL
             style.Font = DefaultsService.GetDefaultFont();
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
-            style.Width = 10;
             style.Height = 20;
             style.MinHeight = 20;
             style.MinWidth = 20;
@@ -742,6 +759,182 @@ namespace SpaceVIL
             Style marker_style = indicator_style.GetInnerStyle("marker");
             marker_style.Shape = GraphicsMathService.GetEllipse();
             indicator_style.AddInnerStyle("marker", marker_style);
+
+            return style;
+        }
+
+        public static Style GetPasswordLineStyle()
+        {
+            Style style = new Style();
+            style.Background = Color.FromArgb(255, 210, 210, 210);
+            style.Foreground = Color.Black;
+            style.Font = DefaultsService.GetDefaultFont();
+            style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            style.Height = 30;
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Fixed;
+            style.Padding = new Indents(5, 0, 5, 0);
+            style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(60, 255, 255, 255)
+            });
+
+            Style marker_style = GetIndicatorStyle().GetInnerStyle("marker");
+            marker_style.Background = Color.FromArgb(255, 130, 130, 130);
+            marker_style.SetSize(16, 16);
+            marker_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            marker_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Right;
+            marker_style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            marker_style.BorderRadius = 4;
+            marker_style.AddItemState(ItemStateType.Toggled, new ItemState()
+            {
+                Background = Color.FromArgb(255, 60, 60, 60)
+            });
+            style.AddInnerStyle("showmarker", marker_style);
+
+            Style cursor_style = new Style();
+            cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
+            cursor_style.Width = 2;
+            cursor_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            cursor_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            cursor_style.Margin = new Indents(0, 5, 0, 5);
+            cursor_style.IsVisible = false;
+            style.AddInnerStyle("cursor", cursor_style);
+
+            Style selection_style = new Style();
+            selection_style.Background = Color.FromArgb(255, 111, 181, 255);
+            selection_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            selection_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            style.AddInnerStyle("selection", selection_style);
+
+            return style;
+        }
+
+        public static Style GetTextEditStyle()
+        {
+            Style style = new Style();
+            style.Background = Color.FromArgb(255, 210, 210, 210);
+            style.Foreground = Color.Black;
+            style.Font = DefaultsService.GetDefaultFont();
+            style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            style.Height = 30;
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Fixed;
+            style.Padding = new Indents(5, 0, 5, 0);
+            style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(60, 255, 255, 255)
+            });
+
+            Style cursor_style = new Style();
+            cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
+            cursor_style.Width = 2;
+            cursor_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            cursor_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            cursor_style.Margin = new Indents(0, 5, 0, 5);
+            cursor_style.IsVisible = false;
+            style.AddInnerStyle("cursor", cursor_style);
+
+            Style selection_style = new Style();
+            selection_style.Background = Color.FromArgb(255, 111, 181, 255);
+            selection_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            selection_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            style.AddInnerStyle("selection", selection_style);
+
+            return style;
+        }
+
+        public static Style GetTextBlockStyle()
+        {
+            Style style = new Style();
+            style.Background = Color.FromArgb(255, 210, 210, 210);
+            style.Foreground = Color.Black;
+            style.Font = DefaultsService.GetDefaultFont();
+            style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            style.TextAlignment = ItemAlignment.Left | ItemAlignment.Top;
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Expand;
+            style.Padding = new Indents(5, 5, 5, 5);
+            style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(60, 255, 255, 255)
+            });
+
+            Style cursor_style = new Style();
+            cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
+            cursor_style.Width = 2;
+            cursor_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            // cursor_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            cursor_style.Margin = new Indents(0, 5, 0, 5);
+            cursor_style.IsVisible = false;
+            style.AddInnerStyle("cursor", cursor_style);
+
+            Style selection_style = new Style();
+            selection_style.Background = Color.FromArgb(255, 111, 181, 255);
+            selection_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            // selection_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            style.AddInnerStyle("selection", selection_style);
+
+            return style;
+        }
+
+        public static Style GetPopUpMessageStyle()
+        {
+            Style style = new Style();
+            style.Background = Color.FromArgb(240, 45, 45, 45);
+            style.Foreground = Color.LightGray;
+            style.Font = DefaultsService.GetDefaultFont();
+            style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
+            style.Alignment = ItemAlignment.Bottom | ItemAlignment.Right;
+            style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+            style.SetSize(300, 70);
+            style.WidthPolicy = SizePolicy.Fixed;
+            style.HeightPolicy = SizePolicy.Fixed;
+            style.Padding = new Indents(5, 5, 5, 5);
+            style.Margin = new Indents(10, 10, 10, 10);
+            style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(10, 255, 255, 255)
+            });
+
+            Style close_style = new Style();
+            close_style.Background = Color.FromArgb(255, 100, 100, 100);
+            close_style.SetSize(10, 10);
+            close_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            close_style.Alignment = ItemAlignment.Top | ItemAlignment.Right;
+            close_style.Margin = new Indents(0, 5, 0, 5);
+            close_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(60, 255, 255, 255)
+            });
+            close_style.Shape = GraphicsMathService.GetCross(10, 10, 3, 45);
+            close_style.IsFixedShape = false;
+            style.AddInnerStyle("closebutton", close_style);
+
+            return style;
+        }
+
+        public static Style GetProgressBarStyle()
+        {
+            Style style = new Style();
+
+            style.Background = Color.FromArgb(255, 70, 70, 70);
+            style.Height = 20;
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Fixed;
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+
+            Style pgbar_style = new Style();
+            pgbar_style.Background = Color.FromArgb(255, 0, 191, 255);
+            pgbar_style.Alignment = ItemAlignment.Left | ItemAlignment.HCenter;
+            pgbar_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            style.AddInnerStyle("progressbar", pgbar_style);
 
             return style;
         }
