@@ -44,7 +44,6 @@ namespace SpaceVIL
             {typeof(SpaceVIL.VerticalSplitArea), Style.GetVerticalSplitAreaStyle()},
             {typeof(SpaceVIL.VerticalStack), Style.GetVerticalStackStyle()},
             {typeof(SpaceVIL.RadioButton), Style.GetRadioButtonStyle()},
-            {typeof(SpaceVIL.WContainer), Style.GetWContainerStyle()},
 
 
             // {typeof(SpaceVIL.PasswordLine), Style.GetPasswordLineStyle()},
@@ -55,6 +54,7 @@ namespace SpaceVIL
             // {typeof(SpaceVIL.TextEdit), Style.GetTextEditStyle()},
             // {typeof(SpaceVIL.TitleBar), Style.GetTitleBarStyle()},
             // {typeof(SpaceVIL.ToolTip), Style.GetToolTipStyle()},
+            // {typeof(SpaceVIL.WContainer), Style.GetWContainerStyle()},
         };
         public Style GetThemeStyle(Type type)
         {
