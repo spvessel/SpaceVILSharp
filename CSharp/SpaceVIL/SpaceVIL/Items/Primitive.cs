@@ -42,7 +42,9 @@ namespace SpaceVIL
             SetAlignment(style.Alignment);
             SetPosition(style.X, style.Y);
             SetMargin(style.Margin);
-            SetTriangles(style.Shape);
+            if (style.Shape != null)
+                SetTriangles(style.Shape);
+            IsVisible = style.IsVisible;
         }
     }
 }

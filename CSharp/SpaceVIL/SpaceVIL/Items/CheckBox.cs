@@ -29,22 +29,15 @@ namespace SpaceVIL
         public CheckBox()
         {
             SetItemName("CheckBox_" + count);
-            // SetBackground(255, 255, 255, 20);
-            // SetSpacing(5, 0);
-            EventKeyPress += OnKeyPress;
             count++;
+            EventKeyPress += OnKeyPress;
 
             //text
             _text_object = new TextLine();
             _text_object.SetItemName(GetItemName() + "_text_object");
-            // _text_object.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            // _text_object.SetAlignment(ItemAlignment.VCenter);
-            // _text_object.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            // _text_object.SetMargin(10);
 
             //indicator
             _indicator = new CustomIndicator();
-            //_indicator.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.CheckBox)));
         }
@@ -70,11 +63,6 @@ namespace SpaceVIL
             //events
             _indicator.GetIndicatorMarker().EventToggle = null;
             EventMouseClick += (sender, args) => _indicator.GetIndicatorMarker().IsToggled = !_indicator.GetIndicatorMarker().IsToggled;
-            // EventMouseHover += (sender, args) =>
-            // {
-            //     //if (_indicator.GetIndicatorMarker().IsMouseHover != IsMouseHover)
-            //         _indicator.GetIndicatorMarker().IsMouseHover = IsMouseHover;
-            // };
 
             //adding
             AddItem(_indicator);

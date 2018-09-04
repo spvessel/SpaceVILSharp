@@ -35,6 +35,7 @@ namespace SpaceVIL
             SetMargin(style.Margin);
             Border.Radius = style.BorderRadius;
             Border.Thickness = style.BorderThickness;
+            IsVisible = style.IsVisible;
             foreach (var state in style.GetAllStates())
             {
                 AddItemState(state.Key, state.Value);

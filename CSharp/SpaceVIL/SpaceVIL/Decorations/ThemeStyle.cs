@@ -44,16 +44,17 @@ namespace SpaceVIL
             {typeof(SpaceVIL.VerticalSplitArea), Style.GetVerticalSplitAreaStyle()},
             {typeof(SpaceVIL.VerticalStack), Style.GetVerticalStackStyle()},
             {typeof(SpaceVIL.RadioButton), Style.GetRadioButtonStyle()},
+            {typeof(SpaceVIL.PasswordLine), Style.GetPasswordLineStyle()},
+            {typeof(SpaceVIL.TextEdit), Style.GetTextEditStyle()},
+            {typeof(SpaceVIL.TextBlock), Style.GetTextBlockStyle()},
+            {typeof(SpaceVIL.PopUpMessage), Style.GetPopUpMessageStyle()},
+            {typeof(SpaceVIL.ProgressBar), Style.GetProgressBarStyle()},
 
 
-            // {typeof(SpaceVIL.PasswordLine), Style.GetPasswordLineStyle()},
-            // {typeof(SpaceVIL.PopUpMessage), Style.GetPopUpMessageStyle()},
-            // {typeof(SpaceVIL.ProgressBar), Style.GetProgressBarStyle()},
-            // {typeof(SpaceVIL.TabView), Style.GetTabViewStyle()},
-            // {typeof(SpaceVIL.TextBlock), Style.GetTextBlockStyle()},
-            // {typeof(SpaceVIL.TextEdit), Style.GetTextEditStyle()},
-            // {typeof(SpaceVIL.TitleBar), Style.GetTitleBarStyle()},
             // {typeof(SpaceVIL.ToolTip), Style.GetToolTipStyle()},
+            // {typeof(SpaceVIL.TitleBar), Style.GetTitleBarStyle()},
+            // {typeof(SpaceVIL.TabView), Style.GetTabViewStyle()},
+
             // {typeof(SpaceVIL.WContainer), Style.GetWContainerStyle()},
         };
         public Style GetThemeStyle(Type type)

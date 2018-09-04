@@ -44,12 +44,8 @@ namespace SpaceVIL
             _text_object = new TextLine();
             _cursor = new Rectangle();
             _selectedArea = new Rectangle();
-            _selectedArea.SetBackground(111, 181, 255);
 
             SetItemName("TextEdit_" + count);
-            SetBackground(180, 180, 180);
-            SetForeground(Color.Black);
-            SetPadding(5, 0, 5, 0);
             count++;
 
             EventMousePressed += OnMousePressed;
@@ -58,9 +54,9 @@ namespace SpaceVIL
             EventKeyRelease += OnKeyRelease;
             EventTextInput += OnTextInput;
 
-            ShiftValCodes = new List<int>() {LeftArrowCode, RightArrowCode, EndCode,
-                HomeCode};//, LeftShiftCode, RightShiftCode , LeftCtrlCode, RightCtrlCode};
+            ShiftValCodes = new List<int>() { LeftArrowCode, RightArrowCode, EndCode, HomeCode };//, LeftShiftCode, RightShiftCode , LeftCtrlCode, RightCtrlCode};
             //CtrlValCodes = new List<int>() {LeftCtrlCode, RightCtrlCode, ACode};
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextEdit)));
         }
 
         protected virtual void OnMousePressed(object sender, MouseArgs args)
@@ -118,7 +114,7 @@ namespace SpaceVIL
         protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
             //Console.WriteLine(args.Scancode);
-            
+
             if (!_isSelect && _justSelected)
             {
                 _selectFrom = -1;// 0;
@@ -320,37 +316,23 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            //text
-            _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            _text_object.SetTextAlignment(ItemAlignment.VCenter);
+            // _cursor.IsVisible = false;
             //cursor
-            _cursor.IsVisible = false;
-            _cursor.SetBackground(0, 0, 0);
-            //_cursor.SetMargin(0, 5, 0, 5);
-            _cursor.SetWidth(2);
             //int[] otp = _text_object.GetFontDims();
             //int _minLineSpacer = otp[0];
             //int _minFontY = otp[1];
             //int _maxFontY = otp[2];
             //Console.WriteLine(_minLineSpacer);
             //_cursor.SetHeight(_maxFontY - _minFontY + _minLineSpacer);
-            _cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            // _cursor.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             //selectedArea
             //_selectedArea.SetMargin(0, 5, 0, 5);
-            _selectedArea.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            // _selectedArea.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             //adding
             AddItems(_selectedArea, _text_object, _cursor);
 
             //update text data
             //_text_object.UpdateData(UpdateType.Critical);
-        }
-
-        //style
-        public override void SetStyle(Style style)
-        {
-            base.SetStyle(style);
-            SetForeground(style.Foreground);
-            SetFont(style.Font);
         }
 
         public int GetTextWidth()
@@ -446,6 +428,26 @@ namespace SpaceVIL
         public void Clear()
         {
             SetText("");
+        }
+
+        //style
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
+            SetTextAlignment(style.TextAlignment);
+
+            Style inner_style = style.GetInnerStyle("selection");
+            if (inner_style != null)
+            {
+                _selectedArea.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("cursor");
+            if (inner_style != null)
+            {
+                _cursor.SetStyle(inner_style);
+            }
         }
     }
 }
