@@ -18,6 +18,7 @@ namespace SpaceVIL
         internal bool _is_style_set = false;
         public override void SetStyle(Style style)
         {
+
             if (style == null)
                 return;
 
@@ -36,11 +37,12 @@ namespace SpaceVIL
             Border.Radius = style.BorderRadius;
             Border.Thickness = style.BorderThickness;
             IsVisible = style.IsVisible;
+            RemoveAllItemStates();
             foreach (var state in style.GetAllStates())
             {
                 AddItemState(state.Key, state.Value);
             }
-            if(style.Shape != null)
+            if (style.Shape != null)
             {
                 IsCustom = new CustomFigure(style.IsFixedShape, style.Shape);
             }
@@ -332,6 +334,17 @@ namespace SpaceVIL
         public EventInputTextMethodState EventTextInput;
 
         //common properties
+        private bool _pass_events = true;
+        public virtual bool IsPassEvents
+        {
+            get { return _pass_events; }
+            set
+            {
+                if (_pass_events == value)
+                    return;
+                _pass_events = value;
+            }
+        }
         private bool _disabled;
         public bool IsDisabled
         {
@@ -407,6 +420,12 @@ namespace SpaceVIL
                 return;
             if (states.ContainsKey(type))
                 states.Remove(type);
+        }
+        public void RemoveAllItemStates()
+        {
+            var itemsToRemove = states.Where(f => f.Key != ItemStateType.Base).ToArray();
+            foreach (var item in itemsToRemove)
+                states.Remove(item.Key);
         }
         public ItemState GetState(ItemStateType type)
         {

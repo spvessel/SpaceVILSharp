@@ -66,7 +66,7 @@ namespace SpaceVIL
             int startY = GetY() + GetPadding().Top;
             foreach (var child in GetItems())
             {
-                //if (child.IsVisible)
+                if (child.IsVisible)
                 {
                     child.SetY(startY + offset + child.GetMargin().Top);//
                     if (child.GetHeightPolicy() == SizePolicy.Expand)
@@ -83,11 +83,11 @@ namespace SpaceVIL
                         }
                     }
 
-                    if (child.GetY() + child.GetHeight() + child.GetMargin().Top + child.GetMargin().Bottom >= startY //
-                        && child.GetY() <= GetY() + GetHeight() - GetPadding().Bottom)
-                        child.IsVisible = true;
-                    else
-                        child.IsVisible = false;
+                    // if (child.GetY() + child.GetHeight() + child.GetMargin().Top + child.GetMargin().Bottom >= startY //
+                    //     && child.GetY() <= GetY() + GetHeight() - GetPadding().Bottom)
+                    //     child.IsVisible = true;
+                    // else
+                    //     child.IsVisible = false;
 
                     offset += child.GetHeight() + GetSpacing().Vertical + child.GetMargin().Top + child.GetMargin().Bottom;//
                 }

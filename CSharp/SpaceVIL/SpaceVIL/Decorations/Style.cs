@@ -41,6 +41,7 @@ namespace SpaceVIL
         public int BorderThickness;
         public Color BorderColor;
         public List<float[]> Shape;// = new List<float[]>();
+        public List<BaseItem> InnerShapes;// = new List<float[]>();
         public bool IsFixedShape;
         public bool IsVisible;
 
@@ -78,7 +79,12 @@ namespace SpaceVIL
             WidthPolicy = width_policy;
             HeightPolicy = height_policy;
         }
-
+        public void AddInnerShape(BaseItem shape)
+        {
+            if (InnerShapes == null)
+                InnerShapes = new List<BaseItem>();
+            InnerShapes.Add(shape);
+        }
         public void AddInnerStyle(String item_name, Style style)
         {
             if (_inner_styles.ContainsKey(item_name))
@@ -645,7 +651,7 @@ namespace SpaceVIL
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
 
             Style splitter_style = new Style();
-            splitter_style.Background = Color.FromArgb(255, 32, 32, 32);
+            splitter_style.Background = Color.FromArgb(255, 42, 42, 42);
             splitter_style.Width = 6;
             style.AddInnerStyle("splitholder", splitter_style);
 
@@ -662,7 +668,7 @@ namespace SpaceVIL
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
 
             Style splitter_style = new Style();
-            splitter_style.Background = Color.FromArgb(255, 32, 32, 32);
+            splitter_style.Background = Color.FromArgb(255, 42, 42, 42);
             splitter_style.Height = 6;
             style.AddInnerStyle("splitholder", splitter_style);
 
@@ -707,7 +713,7 @@ namespace SpaceVIL
         {
             Style style = new Style();
 
-            style.Background = Color.Transparent;
+            style.Background = Color.FromArgb(255, 70, 70, 70);
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Expand;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
@@ -932,9 +938,122 @@ namespace SpaceVIL
 
             Style pgbar_style = new Style();
             pgbar_style.Background = Color.FromArgb(255, 0, 191, 255);
-            pgbar_style.Alignment = ItemAlignment.Left | ItemAlignment.HCenter;
-            pgbar_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            pgbar_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            pgbar_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             style.AddInnerStyle("progressbar", pgbar_style);
+
+            return style;
+        }
+
+        public static Style GetToolTipStyle()
+        {
+            Style style = new Style();
+
+            style.Font = DefaultsService.GetDefaultFont();
+            style.Background = Color.White;
+            style.Foreground = Color.Black;
+            style.Height = 30;
+            style.WidthPolicy = SizePolicy.Fixed;
+            style.HeightPolicy = SizePolicy.Fixed;
+            style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            style.Padding = new Indents(5, 0, 5, 0);
+            style.BorderRadius = 4;
+
+            return style;
+        }
+
+        public static Style GetTitleBarStyle()
+        {
+            Style style = new Style();
+
+            style.Font = DefaultsService.GetDefaultFont();
+            // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
+            style.Background = Color.FromArgb(255, 45, 45, 45);
+            style.Foreground = Color.FromArgb(255, 180, 180, 180);
+            style.Height = 30;
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Fixed;
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            style.Padding = new Indents(10, 0, 10, 0);
+            style.Spacing = new Spacing(5);
+
+            Style close_style = new Style();
+            close_style.Background = Color.FromArgb(255, 100, 100, 100);
+            close_style.SetSize(15, 15);
+            close_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            close_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Right;
+            close_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(255, 186, 95, 97)
+            });
+            close_style.Shape = GraphicsMathService.GetCross(15, 15, 2, 45);
+            close_style.IsFixedShape = true;
+            style.AddInnerStyle("closebutton", close_style);
+
+            Style minimize_style = new Style();
+            minimize_style.Background = Color.FromArgb(255, 100, 100, 100);
+            minimize_style.SetSize(12, 15);
+            minimize_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            minimize_style.Alignment = ItemAlignment.Bottom | ItemAlignment.Right;
+            minimize_style.Margin = new Indents(0, 0, 5, 9);
+            minimize_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(80, 255, 255, 255)
+            });
+            minimize_style.Shape = GraphicsMathService.GetRectangle(15, 2, 0, 13);
+            minimize_style.IsFixedShape = true;
+            style.AddInnerStyle("minimizebutton", minimize_style);
+
+            Style maximize_style = new Style();
+            maximize_style.Background = Color.FromArgb(255, 100, 100, 100);
+            maximize_style.SetSize(12, 12);
+            maximize_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            maximize_style.Alignment = ItemAlignment.Bottom | ItemAlignment.Right;
+            maximize_style.Margin = new Indents(0, 0, 0, 9);
+            maximize_style.Padding = new Indents(2, 2, 2, 2);
+            maximize_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(40, 0, 255, 64)
+            });
+            maximize_style.Shape = GraphicsMathService.GetRectangle();
+
+            style.AddInnerStyle("maximizebutton", maximize_style);
+
+            return style;
+        }
+
+        public static Style GetTabViewStyle()
+        {
+            Style style = new Style();
+
+            style.Background = Color.Transparent;
+            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+
+            Style view_style = new Style();
+            view_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            view_style.Background = Color.FromArgb(255, 71, 71, 71);
+            view_style.IsVisible = false;
+            view_style.Padding = new Indents(2, 2, 2, 2);
+            style.AddInnerStyle("tabview", view_style);
+
+            Style tab_style = new Style();
+            tab_style.Font = DefaultsService.GetDefaultFont();
+            tab_style.Background = Color.FromArgb(255, 45, 45, 45);
+            tab_style.Foreground = Color.FromArgb(255, 210, 210, 210);
+            tab_style.Width = 100;
+            tab_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            tab_style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+            tab_style.Padding = new Indents(2, 2, 2, 2);
+            tab_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(80, 255, 255, 255)
+            });
+            tab_style.AddItemState(ItemStateType.Toggled, new ItemState()
+            {
+                Background = Color.FromArgb(71, 71, 71)
+            });
+            style.AddInnerStyle("tab", tab_style);
 
             return style;
         }

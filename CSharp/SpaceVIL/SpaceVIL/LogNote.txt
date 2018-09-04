@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////
-03:34:38
+06:14:01
 Item name: Layout, Handler: MainWindow
 Geometry:
     Width 787 (minWidth 0, maxWidth 32767)
@@ -21,7 +21,7 @@ Triangles:
 Parent: Grid_0
 
 /////////////////////////////////////////////////////////////
-03:34:39
+06:14:02
 Window name: MainWindow, Title: MainWindow
 
 Geometry:
@@ -34,7 +34,7 @@ Padding: Left = 2, Top = 2, Right = 2, Bottom = 2
 
 
 /////////////////////////////////////////////////////////////
-03:34:40
+06:14:03
 Window name: ImageTest, Title: ImageTest
 
 Geometry:
@@ -42,6 +42,32 @@ Geometry:
     Height 500 (minHeight 250, maxHeight 32767)
 
 Position: (0, 0)
+
+Padding: Left = 2, Top = 2, Right = 2, Bottom = 2
+
+
+/////////////////////////////////////////////////////////////
+06:14:04
+Window name: DropDown_8, Title: DropDown_8
+
+Geometry:
+    Width 472 (minWidth 0, maxWidth 32767)
+    Height 100 (minHeight 0, maxHeight 32767)
+
+Position: (714, 570)
+
+Padding: Left = 2, Top = 2, Right = 2, Bottom = 2
+
+
+/////////////////////////////////////////////////////////////
+06:14:20
+Window name: DropDown_8, Title: DropDown_8
+
+Geometry:
+    Width 472 (minWidth 0, maxWidth 32767)
+    Height 100 (minHeight 0, maxHeight 32767)
+
+Position: (714, 570)
 
 Padding: Left = 2, Top = 2, Right = 2, Bottom = 2
 

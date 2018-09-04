@@ -736,8 +736,12 @@ namespace SpaceVIL
             }
             else
             {
+                HoveredItems.Reverse();
                 foreach (var item in HoveredItems)
                 {
+                    if (!item.IsPassEvents)
+                        break;//остановить передачу событий последующим элементам
+                        
                     if (item.Equals(HoveredItem) && HoveredItem.IsDisabled)
                         continue;//пропустить
 
@@ -750,6 +754,7 @@ namespace SpaceVIL
                         Args = args
                     });
                 }
+                HoveredItems.Reverse();
             }
             _handler.GetLayout().ExecutePollActions();
         }
@@ -1000,7 +1005,7 @@ namespace SpaceVIL
                 {
                     List<BaseItem> list;
                     //lock (CommonService.GlobalLocker)
-                        list = (root as VisualItem).GetItems();
+                    list = (root as VisualItem).GetItems();
                     foreach (var child in list)
                     {
                         DrawItems(child);
