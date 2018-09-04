@@ -16,8 +16,8 @@ namespace SpaceVIL
         private CustomSelector _selectedArea;
         private List<TextLine> _linesList;
 
-        private Point _selectFrom = new Point(0, 0);
-        private Point _selectTo = new Point(0, 0);
+        private Point _selectFrom = new Point(-1, 0);
+        private Point _selectTo = new Point(-1, 0);
         private bool _isSelect = false;
         private bool _justSelected = false;
 
@@ -190,7 +190,7 @@ namespace SpaceVIL
             }
             else
             {
-                if (args.Scancode == BackspaceCode || args.Scancode == DeleteCode)
+                if (args.Scancode == BackspaceCode || args.Scancode == DeleteCode || args.Scancode == EnterCode)
                 {
                     if (_isSelect)
                         CutText();

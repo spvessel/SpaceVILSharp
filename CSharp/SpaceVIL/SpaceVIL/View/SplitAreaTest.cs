@@ -37,11 +37,12 @@
              style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
              ItemState brighter = new ItemState();
              brighter.Background = Color.FromArgb(125, 255, 255, 255);
+             /*
              style.ItemStates.Add(ItemStateType.Hovered, new ItemState()
              {
                  Background = Color.FromArgb(60, 255, 255, 255)
              });
-
+             */
              ButtonCore _button1 = new ButtonCore("btn1");
              ButtonCore _button2 = new ButtonCore("btn2");
              _button1.SetToolTip("Show LayoutTest window.");
