@@ -15,6 +15,7 @@ namespace SpaceVIL
         private Point _cursor_position = new Point(0, 0);
         private CustomSelector _selectedArea;
         private List<TextLine> _linesList;
+        private bool _isEditable = true;
 
         private Point _selectFrom = new Point(-1, 0);
         private Point _selectTo = new Point(-1, 0);
@@ -27,6 +28,9 @@ namespace SpaceVIL
         private int _lineHeight;
 
         private Font _elementFont;
+        private int _lineSpacer;
+        private ItemAlignment _blockAlignment = ItemAlignment.Left | ItemAlignment.Top;
+        private Color _blockForeground;
 
         private const int BackspaceCode = 14;
         private const int DeleteCode = 339;
@@ -147,6 +151,21 @@ namespace SpaceVIL
         protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
             //Console.WriteLine(scancode);
+            if (!_isEditable)
+            {
+                if (args.Mods.Equals(KeyMods.Control) && args.Scancode == ACode)
+                {
+                    _selectFrom.X = 0;
+                    _selectFrom.Y = 0;
+                    _cursor_position.Y = _linesList.Count() - 1;
+                    _cursor_position.X = GetLineLetCount(_cursor_position.Y);
+                    _selectTo = _cursor_position;
+                    ReplaceCursor();
+                    _isSelect = true;
+                    MakeSelectedArea(_selectFrom, _selectTo);
+                }
+                return;
+            }
 
             if (!_isSelect && _justSelected)
             {
@@ -320,6 +339,7 @@ namespace SpaceVIL
 
         public virtual void OnTextInput(object sender, TextInputArgs args)
         {
+            if (!_isEditable) return;
             byte[] input = BitConverter.GetBytes(args.Character);
             string str = Encoding.UTF32.GetString(input);
             if (_isSelect) UnselectText();// CutText();
@@ -382,7 +402,6 @@ namespace SpaceVIL
             _cursor.SetY(pos.Y);// - 3);
         }
 
-        private int _lineSpacer;
         void SetLineSpacer(int lineSpacer)
         {
             if (lineSpacer < _minLineSpacer)
@@ -438,9 +457,13 @@ namespace SpaceVIL
 
         public void SetTextAlignment(ItemAlignment alignment)
         {
+            //Ignore all changes
+            /*
+            _blockAlignment = alignment;
             if (_linesList == null) return;
             foreach (TextLine te in _linesList)
                 te.SetTextAlignment(alignment);
+            */
         }
         public void SetFont(Font font)
         {
@@ -534,6 +557,7 @@ namespace SpaceVIL
         {
             if (_linesList != null && !color.Equals(GetForeground()))
             {
+                _blockForeground = color;
                 foreach (TextLine te in _linesList)
                     te.SetForeground(color);
             }
@@ -568,8 +592,24 @@ namespace SpaceVIL
         }
         public Color GetForeground()
         {
-            if (_linesList == null) return Color.White; //?????
-            return _linesList[0].GetForeground();
+            //if (_linesList == null) return Color.White; //?????
+            //return _linesList[0].GetForeground();
+            return _blockForeground;
+        }
+        public virtual bool IsEditable
+        {
+            get { return _isEditable; }
+            set
+            {
+                if (_isEditable == value)
+                    return;
+                _isEditable = value;
+
+                if (_isEditable)
+                    _cursor.IsVisible = true;
+                else
+                    _cursor.IsVisible = false;
+            }
         }
 
         public override void InitElements()
@@ -630,7 +670,7 @@ namespace SpaceVIL
             set
             {
                 base.IsFocused = value;
-                if (IsFocused)
+                if (IsFocused && _isEditable)
                     _cursor.IsVisible = true;
                 else
                     _cursor.IsVisible = false;
@@ -778,7 +818,7 @@ namespace SpaceVIL
 
         public void PasteText(string pasteStr)
         {
-            //Console.WriteLine("paste");
+            if (!_isEditable) return;
             if (_isSelect) CutText();
             if (pasteStr == null || pasteStr.Equals("")) return;
 
@@ -822,6 +862,7 @@ namespace SpaceVIL
 
         public string CutText()
         {
+            if (!_isEditable) return "";
             string str = GetSelectedText();
             _selectFrom = CheckLineFits(_selectFrom);
             _selectTo = CheckLineFits(_selectTo);
@@ -853,11 +894,7 @@ namespace SpaceVIL
         {
             _isSelect = false;
             _justSelected = true;
-            //_selectFrom.X = 0;
-            //_selectFrom.Y = 0;
-            //_selectTo.X = 0;
-            //_selectTo.Y = 0;
-            MakeSelectedArea(new Point(0, 0), new Point(0, 0)); // _selectFrom, _selectTo);
+            MakeSelectedArea(new Point(0, 0), new Point(0, 0));
         }
 
         private void AddNewLine(String text, int lineNum)
@@ -865,6 +902,7 @@ namespace SpaceVIL
             RemoveItem(_cursor);
             TextLine te = new TextLine();
             te.SetForeground(GetForeground());
+            te.SetTextAlignment(_blockAlignment);
             if (_elementFont != null)
                 te.SetFont(_elementFont);
             AddItem(te);

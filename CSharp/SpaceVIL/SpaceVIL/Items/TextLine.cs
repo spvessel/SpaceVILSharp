@@ -90,14 +90,14 @@ namespace SpaceVIL
             //{
             //Horizontal
             if (alignments.HasFlag(ItemAlignment.Right))
-                alignShiftX = GetParent().GetWidth() - _lineWidth; //[i];
+                alignShiftX = GetParent().GetWidth() - _lineWidth - GetParent().GetPadding().Right; //[i];
 
             else if (alignments.HasFlag(ItemAlignment.HCenter))
                 alignShiftX = (GetParent().GetWidth() - _lineWidth) / 2f; //[i]) / 2f;
 
             //Vertical
             if (alignments.HasFlag(ItemAlignment.Bottom))
-                alignShiftY = GetParent().GetHeight() - height;
+                alignShiftY = GetParent().GetHeight() - height - GetParent().GetPadding().Bottom;
 
             else if (alignments.HasFlag(ItemAlignment.VCenter))
                 alignShiftY = (GetParent().GetHeight() - height) / 2f;

@@ -13,10 +13,13 @@ namespace SpaceVIL
         private Rectangle _cursor;
         private int _cursor_position = 0;
         private Rectangle _selectedArea;
-        public Rectangle GetSelectionArea() //Зачем это?
+        private bool _isEditable = true;
+
+        public Rectangle GetSelectionArea()
         {
             return _selectedArea;
         }
+
         private int _selectFrom = -1;
         private int _selectTo = -1;
         private bool _isSelect = false;
@@ -84,7 +87,10 @@ namespace SpaceVIL
 
         private void ReplaceCursorAccordingCoord(int realPos)
         {
-            realPos -= GetX() + GetPadding().Left;
+            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
+                realPos -= GetX() + (GetWidth() - GetTextWidth());
+            else
+                realPos -= GetX() + GetPadding().Left;
 
             _cursor_position = CoordXToPos(realPos);
             ReplaceCursor();
@@ -114,6 +120,19 @@ namespace SpaceVIL
         protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
             //Console.WriteLine(args.Scancode);
+            if (!_isEditable)
+            {
+                if (args.Mods.Equals(KeyMods.Control) && args.Scancode == ACode)
+                {
+                    _selectFrom = 0;
+                    _cursor_position = GetText().Length;
+                    _selectTo = _cursor_position;
+                    ReplaceCursor();
+                    _isSelect = true;
+                    MakeSelectedArea(_selectFrom, _selectTo);
+                }
+                return;
+            }
 
             if (!_isSelect && _justSelected)
             {
@@ -224,12 +243,17 @@ namespace SpaceVIL
 
         private void ReplaceCursor()
         {
+            //if (!_isEditable) return;
             int pos = CursorPosToCoord(_cursor_position);
-            _cursor.SetX(GetX() + GetPadding().Left + pos);// 8 * _cursor_position);
+            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
+                _cursor.SetX(GetX() + GetWidth() - GetTextWidth() + pos - _cursor.GetWidth());
+            else
+                _cursor.SetX(GetX() + GetPadding().Left + pos);
         }
 
         protected virtual void OnTextInput(object sender, TextInputArgs args)
         {
+            if (!_isEditable) return;
             byte[] input = BitConverter.GetBytes(args.Character);
             string str = Encoding.UTF32.GetString(input);
             if (_isSelect) UnselectText();// CutText();
@@ -249,7 +273,7 @@ namespace SpaceVIL
             set
             {
                 base.IsFocused = value;
-                if (IsFocused)
+                if (IsFocused && _isEditable)
                     _cursor.IsVisible = true;
                 else
                     _cursor.IsVisible = false;
@@ -258,7 +282,12 @@ namespace SpaceVIL
 
         public void SetTextAlignment(ItemAlignment alignment)
         {
-            _text_object.SetTextAlignment(alignment);
+            ItemAlignment ial;
+            if (alignment.HasFlag(ItemAlignment.Right))
+                ial = ItemAlignment.Right | ItemAlignment.VCenter;
+            else
+                ial = ItemAlignment.Left | ItemAlignment.VCenter;
+            _text_object.SetTextAlignment(ial);
         }
         public void SetFont(Font font)
         {
@@ -313,6 +342,21 @@ namespace SpaceVIL
         {
             return _text_object.GetForeground();
         }
+        public virtual bool IsEditable
+        {
+            get { return _isEditable; }
+            set
+            {
+                if (_isEditable == value)
+                    return;
+                _isEditable = value;
+
+                if (_isEditable)
+                    _cursor.IsVisible = true;
+                else
+                    _cursor.IsVisible = false;
+            }
+        }
 
         public override void InitElements()
         {
@@ -359,7 +403,11 @@ namespace SpaceVIL
             int fromReal = Math.Min(fromPt, toPt);
             int toReal = Math.Max(fromPt, toPt);
             int width = toReal - fromReal + 1;
-            _selectedArea.SetX(GetX() + GetPadding().Left + fromReal);
+
+            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
+                _selectedArea.SetX(GetX() + GetWidth() - GetTextWidth() + fromReal);
+            else
+                _selectedArea.SetX(GetX() + GetPadding().Left + fromReal);
             _selectedArea.SetWidth(width);
         }
 
@@ -375,6 +423,7 @@ namespace SpaceVIL
 
         public void PasteText(string pasteStr)
         {
+            if (!_isEditable) return;
             if (_isSelect) CutText();
             string text = GetText();
             string newText = text.Substring(0, _cursor_position) + pasteStr + text.Substring(_cursor_position);
@@ -385,6 +434,7 @@ namespace SpaceVIL
 
         public string CutText()
         {
+            if (!_isEditable) return "";
             string str = GetSelectedText();
             if (_selectFrom == _selectTo) return str;
             int fromReal = Math.Min(_selectFrom, _selectTo);
@@ -402,8 +452,6 @@ namespace SpaceVIL
             _isSelect = false;
             _justSelected = true;
             MakeSelectedArea(0, 0);
-            //_selectFrom = 0;
-            //_selectTo = 0;
         }
         /*
         internal void ShowCursor(bool isShow) {

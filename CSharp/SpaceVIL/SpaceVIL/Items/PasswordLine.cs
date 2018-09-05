@@ -18,6 +18,7 @@ namespace SpaceVIL
         private int _cursor_position = 0;
         //private int _saveCurs = 0;
         private Rectangle _selectedArea;
+        private bool _isEditable = true;
 
         private int _selectFrom = -1;
         private int _selectTo = -1;
@@ -55,6 +56,7 @@ namespace SpaceVIL
             ShiftValCodes = new List<int>() { LeftArrowCode, RightArrowCode, EndCode, HomeCode };
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.PasswordLine)));
+            _text_object.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
         }
 
         protected virtual void OnMousePressed(object sender, MouseArgs args)
@@ -115,6 +117,8 @@ namespace SpaceVIL
         protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
             //Console.WriteLine(_cursor_position);
+            if (!_isEditable) return;
+
             if (!_isSelect && _justSelected)
             {
                 _selectFrom = -1;// 0;
@@ -227,6 +231,7 @@ namespace SpaceVIL
 
         protected virtual void OnTextInput(object sender, TextInputArgs args)
         {
+            if (!_isEditable) return;
             byte[] input = BitConverter.GetBytes(args.Character);
             string str = Encoding.UTF32.GetString(input);
 
@@ -248,7 +253,7 @@ namespace SpaceVIL
             set
             {
                 base.IsFocused = value;
-                if (IsFocused)
+                if (IsFocused && _isEditable)
                     _cursor.IsVisible = true;
                 else
                     _cursor.IsVisible = false;
@@ -257,7 +262,8 @@ namespace SpaceVIL
 
         public void SetTextAlignment(ItemAlignment alignment)
         {
-            _text_object.SetTextAlignment(alignment);
+            //Ignore all changes
+            //_text_object.SetTextAlignment(alignment);
         }
         public void SetFont(Font font)
         {
@@ -320,6 +326,21 @@ namespace SpaceVIL
         {
             return _text_object.GetForeground();
         }
+        public virtual bool IsEditable
+        {
+            get { return _isEditable; }
+            set
+            {
+                if (_isEditable == value)
+                    return;
+                _isEditable = value;
+
+                if (_isEditable)
+                    _cursor.IsVisible = true;
+                else
+                    _cursor.IsVisible = false;
+            }
+        }
 
         public override void InitElements()
         {
@@ -378,6 +399,7 @@ namespace SpaceVIL
 
         private string CutText() //������ �� ����������, ������, �����������, ��� �����
         {
+            if (!_isEditable) return "";
             string str = GetSelectedText();
             if (_selectFrom == _selectTo) return str;
             int fromReal = Math.Min(_selectFrom, _selectTo);
