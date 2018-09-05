@@ -10,6 +10,7 @@ namespace SpaceVIL
         private Queue<BaseItem> _queue = new Queue<BaseItem>();
 
         private static int count = 0;
+        public MouseButton ActiveButton = MouseButton.ButtonRight;
 
         private bool _init = false;
         private bool _ouside = true;
@@ -33,7 +34,7 @@ namespace SpaceVIL
             count++;
             ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
 
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ButtonCore)));
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ContextMenu)));
         }
 
         public override void InitElements()
@@ -99,7 +100,7 @@ namespace SpaceVIL
 
         public void Show(IItem sender, MouseArgs args)
         {
-            if (args.Button == MouseButton.ButtonRight)
+            if (args.Button == ActiveButton)
             {
                 if (!_init)
                     InitElements();

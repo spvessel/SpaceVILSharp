@@ -29,7 +29,7 @@ namespace SpaceVIL
             SetItemName("FloatItem_" + count);
             SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             SetBackground(51, 51, 51);
-            Border.Radius = 6;
+            Border.Radius = 0;
             EventMouseHover += OnMousePress;
             EventMousePressed += OnMousePress;
             EventMouseDrag += OnDragging;
@@ -38,6 +38,7 @@ namespace SpaceVIL
             lock (CommonService.GlobalLocker)
                 ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
         }
+        
         public override void SetConfines()
         {
             _confines_x_0 = GetX();
@@ -76,7 +77,7 @@ namespace SpaceVIL
             rb_1.SetAlignment(ItemAlignment.Top | ItemAlignment.Left);
             rb_1.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             rb_1.SetHeight(20);
-            rb_1.SetMargin(10, 25, 40, 0);
+            rb_1.SetMargin(10, 25, 25, 0);
             // rb_1.EventMouseClick += (sender, arg) => Console.WriteLine("rb_1");
 
             RadioButton rb_2 = new RadioButton();
@@ -86,7 +87,7 @@ namespace SpaceVIL
             rb_2.SetAlignment(ItemAlignment.Bottom | ItemAlignment.Left);
             rb_2.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             rb_2.SetHeight(20);
-            rb_2.SetMargin(10, 0, 40, 25);
+            rb_2.SetMargin(10, 0, 25, 25);
 
             AddItems(_btn_close, rb_1, rb_2);
 

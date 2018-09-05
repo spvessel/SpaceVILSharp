@@ -975,7 +975,7 @@ namespace SpaceVIL
             style.HeightPolicy = SizePolicy.Fixed;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            style.Padding = new Indents(10, 0, 10, 0);
+            style.Padding = new Indents(10, 0, 5, 0);
             style.Spacing = new Spacing(5);
 
             Style close_style = new Style();

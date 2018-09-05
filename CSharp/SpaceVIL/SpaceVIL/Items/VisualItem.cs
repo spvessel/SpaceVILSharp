@@ -129,7 +129,8 @@ namespace SpaceVIL
                 }
 
                 //needs to force update all attributes
-                item.UpdateGeometry();
+                // if (!EventManager.IsLocked)
+                    item.UpdateGeometry();
                 item.InitElements();
 
                 VisualItem vi = item as VisualItem;

@@ -179,6 +179,7 @@ namespace SpaceVIL
 
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+            //EventManager.IsLocked = false;
             Run();
         }
 
@@ -357,7 +358,7 @@ namespace SpaceVIL
             {
                 glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
             }
-            Update();
+            // Update();
         }
 
         public void SetWindowSize()
@@ -442,7 +443,7 @@ namespace SpaceVIL
                     else
                     {
                         IFloating float_item = item as IFloating;
-                        if (float_item != null && action == InputEventType.MouseRelease)
+                        if (float_item != null && action == InputEventType.MousePressed)
                         {
                             if (float_item.IsOutsideClickClosable())
                             {
@@ -741,7 +742,7 @@ namespace SpaceVIL
                 {
                     if (!item.IsPassEvents)
                         break;//остановить передачу событий последующим элементам
-                        
+
                     if (item.Equals(HoveredItem) && HoveredItem.IsDisabled)
                         continue;//пропустить
 
@@ -962,13 +963,21 @@ namespace SpaceVIL
                 return;
 
             //refactor paths
-            if (root is IPixelDrawable)
+            // if (root is IPixelDrawable)
+            // {
+            //     DrawPixels((root as IPixelDrawable));
+            //     foreach (var child in (root as VisualItem).GetItems())
+            //     {
+            //         DrawItems(child);
+            //     }
+            // }
+            if (root is ILine)
             {
-                DrawPixels((root as IPixelDrawable));
-                foreach (var child in (root as VisualItem).GetItems())
-                {
-                    DrawItems(child);
-                }
+                DrawLines((root as ILine));
+            }
+            if (root is IPoints)
+            {
+                DrawPoints((root as IPoints));
             }
             if (root is TextItem)
             {
@@ -1250,10 +1259,7 @@ namespace SpaceVIL
             CheckOutsideBorders(shell);
 
             if (shell.GetBackground().A == 0)
-            {
-                // Console.WriteLine(shell.GetItemName() + " is transparent");
                 return;
-            }
 
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
@@ -1410,8 +1416,6 @@ namespace SpaceVIL
 
         void DrawText_deprecated(TextItem item)
         {
-            //glDisable(GL_MULTISAMPLE);
-
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
 
@@ -1420,7 +1424,6 @@ namespace SpaceVIL
             float[] colorData = item.GetColors();
             if (colorData == null) return;
 
-            //bool ok = CheckOutsideBorders(item as BaseItem); //deprecated
             CheckOutsideBorders(item as BaseItem);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
@@ -1441,41 +1444,130 @@ namespace SpaceVIL
 
             // Clear VBO and shader
             glDeleteBuffers(2, buffers);
-
-            //glEnable(GL_MULTISAMPLE);
         }
 
-        void DrawPoints(BaseItem item)
+        void DrawPoints(IPoints item)
         {
-            // uint[] buffers = new uint[2];
-            // glGenBuffers(2, buffers);
+            //Console.WriteLine();
+            if (item.GetPointColor().A == 0)
+                return;
 
-            // float[] data = item.MakeShape().ToArray();
-            // if (data == null) return;
-            // float[] colorData = item.GetColors();
-            // if (colorData == null) return;
+            uint[] buffers = new uint[2];
+            glGenBuffers(2, buffers);
 
-            // //bool ok = CheckOutsideBorders(item as BaseItem); //deprecated
-            // CheckOutsideBorders(item as BaseItem);
+            List<float[]> crd_array;
+            crd_array = item.MakeShape();
+            if (crd_array == null)
+                return;
 
-            // glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            // glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
-            // glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
-            // glEnableVertexAttribArray(0);
+            float[] vertexData = new float[crd_array.Count * 3];
 
-            // glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            // glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
-            // glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
-            // glEnableVertexAttribArray(1);
+            for (int i = 0; i < vertexData.Length / 3; i++)
+            {
+                vertexData[i * 3 + 0] = crd_array.ElementAt(i)[0];
+                vertexData[i * 3 + 1] = crd_array.ElementAt(i)[1];
+                vertexData[i * 3 + 2] = crd_array.ElementAt(i)[2];
+            }
 
-            // // draw
-            // glDrawArrays(GL_POINTS, 0, data.Length / 3);
+            //Color
+            float[] argb = {
+                (float)item.GetPointColor().R / 255.0f,
+                (float)item.GetPointColor().G / 255.0f,
+                (float)item.GetPointColor().B / 255.0f,
+                (float)item.GetPointColor().A / 255.0f};
 
-            // glDisableVertexAttribArray(0);
-            // glDisableVertexAttribArray(1);
+            float[] colorData = new float[crd_array.Count * 4];
+            for (int i = 0; i < colorData.Length / 4; i++)
+            {
+                colorData[i * 4 + 0] = argb[0];
+                colorData[i * 4 + 1] = argb[1];
+                colorData[i * 4 + 2] = argb[2];
+                colorData[i * 4 + 3] = argb[3];
+            }
 
-            // // Clear VBO and shader
-            // glDeleteBuffers(2, buffers);
+            CheckOutsideBorders(item as BaseItem);
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(0);
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(1);
+
+            // draw
+            glEnable(GL_POINT_SMOOTH);
+            glPointSize(item.GetPointThickness());
+            glDrawArrays(GL_POINTS, 0, vertexData.Length / 3);
+            glPointSize(1.0f);
+
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+
+            // Clear VBO and shader
+            glDeleteBuffers(2, buffers);
+        }
+        void DrawLines(ILine item)
+        {
+            //Console.WriteLine();
+            if (item.GetLineColor().A == 0)
+                return;
+
+            uint[] buffers = new uint[2];
+            glGenBuffers(2, buffers);
+
+            List<float[]> crd_array;
+            crd_array = item.MakeShape();
+            if (crd_array == null)
+                return;
+
+            float[] vertexData = new float[crd_array.Count * 3];
+
+            for (int i = 0; i < vertexData.Length / 3; i++)
+            {
+                vertexData[i * 3 + 0] = crd_array.ElementAt(i)[0];
+                vertexData[i * 3 + 1] = crd_array.ElementAt(i)[1];
+                vertexData[i * 3 + 2] = crd_array.ElementAt(i)[2];
+            }
+
+            //Color
+            float[] argb = {
+                (float)item.GetLineColor().R / 255.0f,
+                (float)item.GetLineColor().G / 255.0f,
+                (float)item.GetLineColor().B / 255.0f,
+                (float)item.GetLineColor().A / 255.0f};
+
+            float[] colorData = new float[crd_array.Count * 4];
+            for (int i = 0; i < colorData.Length / 4; i++)
+            {
+                colorData[i * 4 + 0] = argb[0];
+                colorData[i * 4 + 1] = argb[1];
+                colorData[i * 4 + 2] = argb[2];
+                colorData[i * 4 + 3] = argb[3];
+            }
+
+            CheckOutsideBorders(item as BaseItem);
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(0);
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
+            glEnableVertexAttribArray(1);
+
+            // draw
+            glDrawArrays(GL_LINE_STRIP, 0, vertexData.Length / 3);
+
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+
+            // Clear VBO and shader
+            glDeleteBuffers(2, buffers);
         }
 
         void DrawPixels(IPixelDrawable item)

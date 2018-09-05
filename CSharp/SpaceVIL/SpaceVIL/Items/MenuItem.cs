@@ -34,14 +34,6 @@ namespace SpaceVIL
         public MenuItem()
         {
             SetItemName("MenuItem_" + count);
-            // SetHeight(30);
-            // SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-            // SetBackground(Color.Transparent);
-            // SetPadding(10, 0, 0, 0);
-            // AddItemState(ItemStateType.Hovered, new ItemState()
-            // {
-            //     Background = Color.FromArgb(255, 150, 150, 150)
-            // });
             count++;
             EventKeyPress += OnKeyPress;
             EventMousePressed += (sender, args) => OnMouseAction();
@@ -119,7 +111,7 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //text
-            SetForeground(Color.Black);
+            // SetForeground(Color.Black);
             //_text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
             //aligment
