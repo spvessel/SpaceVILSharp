@@ -38,7 +38,7 @@ namespace SpaceVIL
 
         public ItemAlignment GetSides(float xpos, float ypos) //проблемы с глобальным курсором
         {
-            if (xpos < 5)
+            if (xpos <= 5)
             {
                 _sides |= ItemAlignment.Left;
             }
@@ -47,7 +47,7 @@ namespace SpaceVIL
                 _sides |= ItemAlignment.Right;
             }
 
-            if (ypos < 5)
+            if (ypos <= 5)
             {
                 _sides |= ItemAlignment.Top;
             }

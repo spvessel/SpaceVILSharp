@@ -66,7 +66,7 @@ namespace SpaceVIL
             int startX = GetX() + GetPadding().Left;
             foreach (var child in GetItems())
             {
-                //if (child.IsVisible)
+                if (child.IsVisible)
                 {
                     child.SetX(startX + offset + child.GetMargin().Left);//
                     if (child.GetWidthPolicy() == SizePolicy.Expand)
@@ -83,11 +83,11 @@ namespace SpaceVIL
                         }
                     }
 
-                    if (child.GetX() + child.GetWidth() + child.GetMargin().Left + child.GetMargin().Right >= startX //
-                        && child.GetX() <= GetX() + GetWidth() - GetPadding().Right)
-                        child.IsVisible = true;
-                    else
-                        child.IsVisible = false;
+                    // if (child.GetX() + child.GetWidth() + child.GetMargin().Left + child.GetMargin().Right >= startX //
+                    //     && child.GetX() <= GetX() + GetWidth() - GetPadding().Right)
+                    //     child.IsVisible = true;
+                    // else
+                    //     child.IsVisible = false;
 
                     offset += child.GetWidth() + GetSpacing().Horizontal + child.GetMargin().Left + child.GetMargin().Right;//
                 }

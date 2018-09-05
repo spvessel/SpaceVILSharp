@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////
-03:34:38
+07:23:33
 Item name: Layout, Handler: MainWindow
 Geometry:
     Width 787 (minWidth 0, maxWidth 32767)
@@ -21,7 +21,7 @@ Triangles:
 Parent: Grid_0
 
 /////////////////////////////////////////////////////////////
-03:34:39
+07:23:34
 Window name: MainWindow, Title: MainWindow
 
 Geometry:
@@ -34,12 +34,12 @@ Padding: Left = 2, Top = 2, Right = 2, Bottom = 2
 
 
 /////////////////////////////////////////////////////////////
-03:34:40
-Window name: ImageTest, Title: ImageTest
+07:23:36
+Window name: ComplexTest, Title: ComplexTest
 
 Geometry:
-    Width 500 (minWidth 500, maxWidth 32767)
-    Height 500 (minHeight 250, maxHeight 32767)
+    Width 1200 (minWidth 500, maxWidth 32767)
+    Height 700 (minHeight 500, maxHeight 32767)
 
 Position: (0, 0)
 

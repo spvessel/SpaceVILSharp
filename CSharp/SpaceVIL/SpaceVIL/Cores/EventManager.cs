@@ -14,9 +14,10 @@ namespace SpaceVIL
         ResizeWidth = 0x08,
         ResizeHeight = 0x10
     }
+
     public class EventManager
     {
-
+        internal static bool IsLocked = true;
         Dictionary<GeometryEventType, List<IEventUpdate>> listeners = new Dictionary<GeometryEventType, List<IEventUpdate>>();
 
         public void SetListeners(params GeometryEventType[] events)
@@ -49,6 +50,10 @@ namespace SpaceVIL
 
         public void NotifyListeners(GeometryEventType type, int value)
         {
+            // return;
+            // if(IsLocked)
+            //     return;
+
             if (listeners.ContainsKey(type))
             {
                 foreach (var _ in listeners[type])

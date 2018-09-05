@@ -12,14 +12,20 @@ namespace SpaceVIL
         private VerticalStack _tab_view;
         private HorizontalStack _tab_bar;
         private Dictionary<ButtonToggle, Frame> _tab_list;
+        private Style _stored_style;
 
         public TabView()
         {
-            SetBackground(Color.Transparent);
-            SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            // SetBackground(Color.Transparent);
+            // SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             SetItemName("TabView_" + count);
             count++;
+
+            _tab_view = new VerticalStack();
             _tab_list = new Dictionary<ButtonToggle, Frame>();
+            _tab_bar = new HorizontalStack();
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TabView)));
         }
 
         protected internal override bool GetHoverVerification(float xpos, float ypos)
@@ -30,11 +36,9 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //tab view
-            _tab_view = new VerticalStack();
             AddItem(_tab_view);
 
             //_tab_bar
-            _tab_bar = new HorizontalStack();
             _tab_bar.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             _tab_bar.SetHeight(30);
             _tab_view.AddItem(_tab_bar);
@@ -42,16 +46,16 @@ namespace SpaceVIL
 
         private void HideOthers(IItem sender, MouseArgs args)
         {
-            foreach (var tab in _tab_bar.GetItems())
+            foreach (var tab in _tab_list)
             {
-                if (tab.GetItemName() != sender.GetItemName())
+                if (tab.Key.GetItemName() != sender.GetItemName())
                 {
-                    (tab as ButtonToggle).IsToggled = false;
-                    _tab_list[(tab as ButtonToggle)].IsVisible = false;
+                    tab.Key.IsToggled = false;
+                    _tab_list[tab.Key].IsVisible = false;
                 }
                 else
                 {
-                    _tab_list[(tab as ButtonToggle)].IsVisible = true;
+                    _tab_list[tab.Key].IsVisible = true;
                 }
             }
             _tab_view.UpdateLayout();
@@ -59,31 +63,25 @@ namespace SpaceVIL
 
         public void AddTab(String tab_name)
         {
+            Style tab_style = _stored_style.GetInnerStyle("tab");
+            Style view_style = _stored_style.GetInnerStyle("tabview");
+
             ButtonToggle tab = new ButtonToggle(tab_name);
             tab.SetItemName(tab_name);
-            tab.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            tab.SetWidth(100);
-            tab.SetBackground(45, 45, 45);
-            tab.SetForeground(180, 180, 180);
-            tab.SetFont(_font);
-            tab.SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
-            tab.AddItemState(ItemStateType.Hovered, new ItemState()
+            if (tab_style != null)
             {
-                Background = Color.FromArgb(80, 255, 255, 255)
-            });
-            tab.AddItemState(ItemStateType.Toggled, new ItemState()
-            {
-                Background = Color.FromArgb(71, 71, 71)
-            });
+                // tab.RemoveItemState(ItemStateType.Pressed);
+                tab.SetStyle(tab_style);
+            }
             tab.EventMouseClick += HideOthers;
-
             _tab_bar.AddItem(tab);
 
             Frame view = new Frame();
-            view.SetPadding(2, 2, 2, 2);
             view.SetItemName(tab_name + "_view");
-            view.SetBackground(71, 71, 71);
-            view.IsVisible = false;
+
+            if (view_style != null)
+                view.SetStyle(view_style);
+
             _tab_view.AddItem(view);
             _tab_list.Add(tab, view);
 
@@ -129,7 +127,7 @@ namespace SpaceVIL
         {
             _textMargin = margin;
         }
-        private Font _font =  new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold);
+        private Font _font = new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold);
         public void SetFont(Font font)
         {
             _font = font;
@@ -144,7 +142,7 @@ namespace SpaceVIL
         {
             _font_style = style;
         }
-        private FontFamily _font_family =  new FontFamily("Open Sans Light");
+        private FontFamily _font_family = new FontFamily("Open Sans Light");
         public void SetFontFamily(FontFamily font_family)
         {
             _font_family = font_family;
@@ -185,6 +183,27 @@ namespace SpaceVIL
             if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
             if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
             SetForeground(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+        }
+
+        //style
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+            _stored_style = style;
+
+            // SetForeground(style.Foreground);
+            // SetFont(style.Font);
+            // SetTextAlignment(style.TextAlignment);
+
+            Style tab_style = style.GetInnerStyle("tab");
+            Style view_style = style.GetInnerStyle("tabview");
+            foreach (var item in _tab_list)
+            {
+                if (tab_style != null)
+                    item.Key.SetStyle(tab_style);
+                if (view_style != null)
+                    item.Value.SetStyle(view_style);
+            }
         }
     }
 }

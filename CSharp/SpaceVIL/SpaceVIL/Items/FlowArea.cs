@@ -76,7 +76,7 @@ namespace SpaceVIL
             {
                 wanted.PositionChanged += () => CorrectPosition(wanted);
             }
-            // UpdateLayout();
+            UpdateLayout();
         }
         public override void RemoveItem(BaseItem item)
         {

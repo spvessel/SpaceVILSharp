@@ -10,8 +10,10 @@ namespace SpaceVIL
         public EventCommonMethod PositionChanged;
         public EventCommonMethod SizeChanged;
 
+        public bool IsLocked = false;
         public bool IsResizable = true;
-        public bool IsFloating = true;
+        public bool IsHFloating = true;
+        public bool IsVFloating = true;
 
         private bool _is_moved;
 
@@ -35,6 +37,10 @@ namespace SpaceVIL
 
         protected virtual void OnMousePress(object sender, MouseArgs args)
         {
+            
+            if (IsLocked)
+                return;
+
             _pressed_x = args.Position.X;
             _pressed_y = args.Position.Y;
 
@@ -42,6 +48,7 @@ namespace SpaceVIL
             _diff_y = args.Position.Y - GetY();
 
             GetSides(_diff_x, _diff_y);
+            // Console.WriteLine(GetX() + " " + GetY() + " " + GetWidth() + " " + GetHeight() + " " + _sides);
 
             if (_sides == 0)
             {
@@ -57,19 +64,26 @@ namespace SpaceVIL
 
         protected virtual void OnDragging(object sender, MouseArgs args)
         {
+            // Console.WriteLine(GetX() + " " + GetY() + " " + GetWidth() + " " + GetHeight());
+            if (IsLocked)
+                return;
+
             int offset_x;
             int offset_y;
 
             switch (_is_moved)
             {
                 case true:
-                    if (!IsFloating)
-                        break;
-
-                    offset_x = args.Position.X - _diff_x;
-                    offset_y = args.Position.Y - _diff_y;
-                    SetX(offset_x);
-                    SetY(offset_y);
+                    if (IsHFloating)
+                    {
+                        offset_x = args.Position.X - _diff_x;
+                        SetX(offset_x);
+                    }
+                    if (IsVFloating)
+                    {
+                        offset_y = args.Position.Y - _diff_y;
+                        SetY(offset_y);
+                    }
                     PositionChanged?.Invoke();
                     SetConfines();
                     break;

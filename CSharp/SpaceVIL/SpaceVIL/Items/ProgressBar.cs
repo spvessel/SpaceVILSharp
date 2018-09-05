@@ -19,8 +19,6 @@ namespace SpaceVIL
         public ProgressBar()
         {
             SetItemName("ProgressBar_" + count);
-            // SetBackground(Color.Transparent);
-            // SetHeight(20);
             count++;
 
             _text_object = new Label();
@@ -33,20 +31,7 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //text
-            // _text_object.SetBackground(255, 255, 255, 20);
-            // _text_object.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            // _text_object.SetAlignment(ItemAlignment.VCenter);
-            // _text_object.SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
-            // _text_object.SetPadding(0, 2, 0, 0);
             _text_object.SetText("0%");
-            // _text_object.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
-
-            //rectangle
-            // _rect.SetBackground(Color.FromArgb(255, 0, 191, 255)); //Перегрузить метод
-            // _rect.SetAlignment(ItemAlignment.Left);
-            // _rect.SetHeightPolicy(SizePolicy.Expand);
-            // _rect.SetWidthPolicy(SizePolicy.Fixed);
-            // _rect.SetWidth(0);
             AddItems(_rect, _text_object);
         }
 

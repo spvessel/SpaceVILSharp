@@ -26,7 +26,6 @@ namespace SpaceVIL
             {typeof(SpaceVIL.ComboBox), Style.GetComboBoxStyle()},
             {typeof(SpaceVIL.ComboBoxDropDown), Style.GetComboBoxDropDownStyle()},
             {typeof(SpaceVIL.ContextMenu), Style.GetContextMenuStyle()},
-            // {typeof(SpaceVIL.CustomSelector), Style.GetCustomSelectorStyle()},
             {typeof(SpaceVIL.FlowArea), Style.GetFlowAreaStyle()},
             {typeof(SpaceVIL.Frame), Style.GetFrameStyle()},
             {typeof(SpaceVIL.Grid), Style.GetGridStyle()},
@@ -39,22 +38,21 @@ namespace SpaceVIL
             {typeof(SpaceVIL.ListBox), Style.GetListBoxStyle()},
             {typeof(SpaceVIL.MenuItem), Style.GetMenuItemStyle()},
             {typeof(SpaceVIL.Indicator), Style.GetIndicatorStyle()},
-            {typeof(SpaceVIL.VerticalScrollBar), Style.GetVerticalScrollBarStyle()},
-            {typeof(SpaceVIL.VerticalSlider), Style.GetVerticalSliderStyle()},
-            {typeof(SpaceVIL.VerticalSplitArea), Style.GetVerticalSplitAreaStyle()},
-            {typeof(SpaceVIL.VerticalStack), Style.GetVerticalStackStyle()},
             {typeof(SpaceVIL.RadioButton), Style.GetRadioButtonStyle()},
             {typeof(SpaceVIL.PasswordLine), Style.GetPasswordLineStyle()},
             {typeof(SpaceVIL.TextEdit), Style.GetTextEditStyle()},
             {typeof(SpaceVIL.TextBlock), Style.GetTextBlockStyle()},
             {typeof(SpaceVIL.PopUpMessage), Style.GetPopUpMessageStyle()},
             {typeof(SpaceVIL.ProgressBar), Style.GetProgressBarStyle()},
+            {typeof(SpaceVIL.ToolTip), Style.GetToolTipStyle()},
+            {typeof(SpaceVIL.TitleBar), Style.GetTitleBarStyle()},
+            {typeof(SpaceVIL.VerticalScrollBar), Style.GetVerticalScrollBarStyle()},
+            {typeof(SpaceVIL.VerticalSlider), Style.GetVerticalSliderStyle()},
+            {typeof(SpaceVIL.VerticalSplitArea), Style.GetVerticalSplitAreaStyle()},
+            {typeof(SpaceVIL.VerticalStack), Style.GetVerticalStackStyle()},
+            {typeof(SpaceVIL.TabView), Style.GetTabViewStyle()},
 
-
-            // {typeof(SpaceVIL.ToolTip), Style.GetToolTipStyle()},
-            // {typeof(SpaceVIL.TitleBar), Style.GetTitleBarStyle()},
-            // {typeof(SpaceVIL.TabView), Style.GetTabViewStyle()},
-
+            // {typeof(SpaceVIL.CustomSelector), Style.GetCustomSelectorStyle()},
             // {typeof(SpaceVIL.WContainer), Style.GetWContainerStyle()},
         };
         public Style GetThemeStyle(Type type)

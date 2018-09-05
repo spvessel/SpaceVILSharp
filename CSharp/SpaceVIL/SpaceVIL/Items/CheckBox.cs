@@ -179,6 +179,7 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             base.SetStyle(style);
+            
             SetForeground(style.Foreground);
             SetFont(style.Font);
 

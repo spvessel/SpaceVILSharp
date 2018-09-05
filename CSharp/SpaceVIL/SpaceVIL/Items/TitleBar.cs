@@ -39,11 +39,6 @@ namespace SpaceVIL
         public TitleBar()
         {
             SetItemName("TitleBar_" + count);
-            SetHeight(30);
-            SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-            SetBackground(Color.FromArgb(255, 45, 45, 45));
-            SetAlignment(ItemAlignment.Top);
-            SetPadding(10, 0, 10, 0);
             count++;
 
             _layout = new HorizontalStack();
@@ -52,6 +47,8 @@ namespace SpaceVIL
             _maximize = new ButtonCore();
             _close = new ButtonCore();
             _icon = new ImageItem();
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TitleBar)));
         }
         public TitleBar(String text = "") : this()
         {
@@ -135,73 +132,28 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            _layout.SetSpacing(5);
             AddItem(_layout);
 
             //text
-            _text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            _text_object.SetMargin(0, 0, 0, 8);
-            _text_object.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-
-            SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            SetFont(new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold));
-            SetForeground(Color.FromArgb(255, 180, 180, 180));
+            // SetFont(new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold));
 
             //_close
-            _close.SetItemName(GetItemName() + "_close");
-            _close.SetBackground(100, 100, 100);
-            _close.SetSize(15, 15);
-            _minimize.SetMargin(0, 0, 0, 0);
-            _close.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
-            _close.IsCustom = new CustomFigure(true, GraphicsMathService.GetCross(15, 15, 2, 45));
-            _close.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(255, 186, 95, 97)
-            });
             _close.EventMouseClick += (sender, args) =>
             {
                 GetHandler().Close();
             };
 
             //_minimize
-            _minimize.SetBackground(100, 100, 100);
-            _minimize.SetAlignment(ItemAlignment.Left | ItemAlignment.Bottom);
-            _minimize.IsCustom = new CustomFigure(true, GraphicsMathService.GetRectangle(15, 2, 0, 13));
-            _minimize.SetSize(12, 15);
-            _minimize.SetMargin(0, 0, 5, 9);
-            _minimize.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(80, 255, 255, 255)
-            });
             _minimize.EventMouseClick += (sender, args) =>
             {
                 GetHandler().Minimize();
             };
 
             //_maximize
-            _maximize.SetBackground(100, 100, 100);
-            _maximize.SetAlignment(ItemAlignment.Left | ItemAlignment.Bottom);
-            _maximize.SetSize(12, 12);
-            _maximize.IsCustom = new CustomFigure(false, GraphicsMathService.GetRectangle());
-            _maximize.SetMargin(0, 0, 0, 9);
-            _maximize.SetPadding(2, 2, 2, 2);
-            _maximize.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(40, 0, 255, 64)
-            });
             _maximize.EventMouseClick += (sender, args) =>
             {
                 GetHandler().Maximize();
             };
-            Rectangle center = new Rectangle();
-            center.SetBackground(GetBackground());
-            center.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-
-            //icon
-            _icon.IsVisible = false;
-            _icon.SetBackground(Color.Transparent);
-            _icon.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            _icon.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
 
             //adding
             switch (Direction)
@@ -216,11 +168,47 @@ namespace SpaceVIL
                     _layout.AddItems(_icon, _text_object, _minimize, _maximize, _close);
                     break;
             }
-            _maximize.AddItem(center);
 
+            Rectangle center = new Rectangle();
+            center.SetBackground(GetBackground());
+            center.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            _maximize.AddItem(center);
+            
             //update text data
             //_text_object.UpdateData(UpdateType.Critical);
             //LogService.Log().LogBaseItem(_close, LogProps.Behavior | LogProps.AllGeometry);
+        }
+
+        //style
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
+            SetTextAlignment(style.TextAlignment);
+            _layout.SetSpacing(style.Spacing);
+
+            Style inner_style = style.GetInnerStyle("closebutton");
+            if (inner_style != null)
+            {
+                _close.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("minimizebutton");
+            if (inner_style != null)
+            {
+                _minimize.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("maximizebutton");
+            if (inner_style != null)
+            {
+                _maximize.SetStyle(inner_style);
+            }
+
+            //icon
+            _icon.IsVisible = false;
+            _icon.SetBackground(Color.Transparent);
+            _icon.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            _icon.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
         }
     }
 }

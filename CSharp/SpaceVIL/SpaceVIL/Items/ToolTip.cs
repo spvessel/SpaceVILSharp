@@ -29,12 +29,7 @@ namespace SpaceVIL
             _text_object = new TextLine();
 
             SetItemName("ToolTip");
-            SetBackground(225, 225, 225, 255);
-            SetForeground(Color.Black);
-            SetPadding(5, 0, 5, 0);
-            SetHeight(30);
-            SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            Border.Radius = 4;
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ToolTip)));
         }
         public void SetTextAlignment(ItemAlignment alignment)
         {
@@ -84,8 +79,8 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //text
-            _text_object.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            _text_object.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
+            // _text_object.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            // _text_object.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
         }
 
         internal void InitTimer(bool flag)
@@ -121,6 +116,15 @@ namespace SpaceVIL
             _stop = null;
 
             //GetHandler().UpdateScene();
+        }
+
+        //style
+        public override void SetStyle(Style style)
+        {
+            base.SetStyle(style);
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
+            SetTextAlignment(style.TextAlignment);
         }
     }
 }
