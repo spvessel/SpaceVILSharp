@@ -81,6 +81,10 @@ namespace SpaceVIL
             LastFocusedWindow = wnd;
             //Console.WriteLine(LastFocusedWindow.GetWindowName());
         }
+        static internal void SetFocusedWindow(CoreWindow window)
+        {
+            window.Handler.SetFocus(true);
+        }
         static internal void RemoveFromWindowDispatcher(WindowLayout sender_wnd)
         {
             List<WindowPair> pairs_to_delete = new List<WindowPair>();

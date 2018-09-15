@@ -25,12 +25,10 @@ namespace SpaceVIL
 
         public ContextMenu(WindowLayout handler)
         {
+            IsPassEvents = false;
             IsVisible = false;
             SetHandler(handler);
             SetItemName("ContextMenu_" + count);
-            // SetPadding(2, 2, 2, 2);
-            // SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            // SetBackground(Color.FromArgb(255, 210, 210, 210));
             count++;
             ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
 
@@ -40,17 +38,15 @@ namespace SpaceVIL
         public override void InitElements()
         {
             SetConfines();
-
             ItemList.SetSelectionVisibility(false);
-            // ItemList.GetArea().SetSpacing(0, 0);
-            // ItemList.GetArea().SetPadding(0);
-            // ItemList.SetBackground(Color.Transparent);
-            // ItemList.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
             ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.GetArea().SelectionChanged += OnSelectionChanged;
 
             base.AddItem(ItemList);
+
+            ItemList.EventScrollUp = null;
+            ItemList.EventScrollDown = null;
 
             foreach (var item in _queue)
                 ItemList.AddItem(item);
@@ -91,7 +87,17 @@ namespace SpaceVIL
         public override void AddItem(BaseItem item)
         {
             // (item as MenuItem)._invoked_menu = this;
+            MenuItem tmp = (item as MenuItem);
+            if (tmp != null)
+                tmp._context_menu = this;
             _queue.Enqueue(item);
+            
+            BaseItem[] list = _queue.ToArray();
+            int height = 0;
+            foreach (var h in list)
+                if (h.IsVisible && h.IsDrawable)
+                    height += (h.GetHeight() + ItemList.GetArea().GetSpacing().Vertical);
+            SetHeight(GetPadding().Top + GetPadding().Bottom + height);
         }
         public override void RemoveItem(BaseItem item)
         {
@@ -106,8 +112,27 @@ namespace SpaceVIL
                     InitElements();
 
                 IsVisible = true;
-                SetX(args.Position.X);
-                SetY(args.Position.Y);
+
+                //проверка снизу
+                if (args.Position.Y + GetHeight() > GetHandler().GetHeight())
+                {
+                    SetY(args.Position.Y - GetHeight());
+                }
+                else
+                {
+                    SetY(args.Position.Y);
+                }
+                //проверка справа
+                if (args.Position.X + GetWidth() > GetHandler().GetWidth())
+                {
+                    SetX(args.Position.X - GetWidth());
+                }
+                else
+                {
+                    SetX(args.Position.X);
+                }
+                // SetX(args.Position.X);
+                // SetY(args.Position.Y);
                 SetConfines();
             }
         }
@@ -161,6 +186,7 @@ namespace SpaceVIL
             {
                 ItemList.SetBackground(itemlist_style.Background);
                 ItemList.SetAlignment(itemlist_style.Alignment);
+                ItemList.SetPadding(itemlist_style.Padding);
             }
         }
     }

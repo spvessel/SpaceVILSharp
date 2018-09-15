@@ -69,4 +69,31 @@ namespace SpaceVIL
         Lazy,
         Strict
     }
+
+    public enum PrimitiveType
+    {
+        No,
+        Rectangle,
+        RoundedRectangle,
+        Ellipse,
+        Triangle,
+        Star,
+        CustomShape
+    }
+
+    public enum EmbeddedFont
+    {
+        OpenSans,
+        Exo2,
+        TitilliumWeb,
+        Verdana,
+        Muli,
+        Nunito,
+        Quicksand,
+        Ubuntu,
+        GlacialIndifference,
+        SansLight,
+        RobotoMono,
+        OpenGostTypeA
+    }
 }

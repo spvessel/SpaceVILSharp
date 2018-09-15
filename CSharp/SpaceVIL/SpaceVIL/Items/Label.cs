@@ -18,6 +18,7 @@ namespace SpaceVIL
             SetItemName("Label_" + count);
             count++;
             _text_object = new TextLine();
+
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Label)));
         }
         public Label(String text = "") : this()
@@ -97,14 +98,6 @@ namespace SpaceVIL
             //_text_object.UpdateData(UpdateType.Critical);
         }
 
-        //style
-        public override void SetStyle(Style style)
-        {
-            base.SetStyle(style);
-            
-            SetFont(style.Font);
-            SetForeground(style.Foreground);
-        }
         
         public int GetTextWidth()
         {
@@ -116,5 +109,16 @@ namespace SpaceVIL
             return _text_object.GetHeight();
         }
         
+        //style
+        public override void SetStyle(Style style)
+        {
+            if (style == null)
+                return;
+            base.SetStyle(style);
+            
+            SetFont(style.Font);
+            SetForeground(style.Foreground);
+            SetTextAlignment(style.TextAlignment);
+        }
     }
 }

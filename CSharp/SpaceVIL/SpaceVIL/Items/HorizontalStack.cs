@@ -56,7 +56,7 @@ namespace SpaceVIL
                     }
                 }
             }
-            free_space -= GetSpacing().Horizontal * (GetItems().Count - 1);
+            free_space -= GetSpacing().Horizontal * ((expanded_count + fixed_count) - 1);
 
             int width_for_expanded = 1;
             if (expanded_count > 0 && free_space > expanded_count)

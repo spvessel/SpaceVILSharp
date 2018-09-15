@@ -122,7 +122,7 @@ namespace SpaceVIL
             int visible_area = _area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom;
             foreach (var item in _area.GetItems())
             {
-                if (item.Equals(_area.GetSubstrate()))
+                if (item.Equals(_area.GetSubstrate()) || !item.IsVisible)
                     continue;
                 total_invisible_size += (item.GetHeight() + _area.GetSpacing().Vertical);
             }
@@ -207,6 +207,11 @@ namespace SpaceVIL
             _area.AddItem(item);
             UpdateElements();
         }
+        internal override void InsertItem(BaseItem item, Int32 index)
+        {
+            _area.InsertItem(item, index);
+            UpdateElements();
+        }
         public override void RemoveItem(BaseItem item)
         {
             _area.RemoveItem(item);
@@ -240,12 +245,12 @@ namespace SpaceVIL
 
         public void InvokeScrollUp(MouseArgs args)
         {
-            if (EventScrollUp != null) EventScrollUp.Invoke(this, args);
+            EventScrollUp?.Invoke(this, args);
         }
 
         public void InvokeScrollDown(MouseArgs args)
         {
-            if (EventScrollDown != null) EventScrollDown.Invoke(this, args);
+            EventScrollDown?.Invoke(this, args);
         }
 
         public List<BaseItem> GetListContent()
@@ -259,6 +264,11 @@ namespace SpaceVIL
             }
             return result;
         }
+        public void SetListContent(List<BaseItem> content)
+        {
+            content.Insert(0, _area.GetSubstrate());
+            _area.SetContent(content);
+        }
         public BaseItem GetSelectionItem()
         {
             List<BaseItem> result = new List<BaseItem>();
@@ -268,6 +278,8 @@ namespace SpaceVIL
         //style
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
 
             Style inner_style = style.GetInnerStyle("vscrollbar");

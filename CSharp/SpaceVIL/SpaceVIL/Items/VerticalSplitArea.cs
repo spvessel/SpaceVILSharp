@@ -113,7 +113,7 @@ namespace SpaceVIL
             if (_leftBlock != null)
             {
                 _leftBlock.SetX(GetX() + GetPadding().Left);
-                if (tmpWidth >= 0)
+                if (tmpWidth > 0)
                     _leftBlock.SetWidth(tmpWidth);
                 else
                     _leftBlock.SetWidth(0);
@@ -124,7 +124,7 @@ namespace SpaceVIL
             if (_rightBlock != null)
             {
                 _rightBlock.SetX(_leftWidth + GetX() + _splitHolder.GetHolderSize());
-                if (tmpWidth >= 0)
+                if (tmpWidth > 0)
                     _rightBlock.SetWidth(tmpWidth);
                 else
                     _rightBlock.SetWidth(0);
@@ -141,6 +141,8 @@ namespace SpaceVIL
 
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
 
             Style inner_style = style.GetInnerStyle("splitholder");

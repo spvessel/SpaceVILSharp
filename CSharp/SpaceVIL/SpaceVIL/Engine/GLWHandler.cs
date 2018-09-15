@@ -89,11 +89,11 @@ namespace SpaceVIL
         }
         internal void CreateWindow()
         {
-            Glfw.WindowHint(Glfw.Hint.OpenglDebugContext, true);
+            // Glfw.WindowHint(Glfw.Hint.OpenglDebugContext, true);
             Glfw.WindowHint(Glfw.Hint.Samples, 8);
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 3);
-            Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 2);
+            Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
             Glfw.WindowHint(Glfw.Hint.Resizable, Resizeble);
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window
             Glfw.WindowHint(Glfw.Hint.Focused, Focused);
@@ -101,7 +101,7 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Maximized, Maximized);
             Glfw.WindowHint(Glfw.Hint.Visible, Visible);
             //Glfw.WindowHint(Glfw.Hint.DepthBits, 16);
-            //Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, true);
+            // Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, true);
             _window = Glfw.CreateWindow(_w_layout.GetWidth(), _w_layout.GetHeight(), _w_layout.GetWindowTitle());
 
             if (!_window)

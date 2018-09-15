@@ -13,7 +13,7 @@ namespace SpaceVIL
         private String _itemText = "";
         //private bool _needToGl = false;
 
-        private Font _font = new Font(new FontFamily("Courier New"), 16, FontStyle.Regular);
+        private Font _font = DefaultsService.GetDefaultFont();
 
         //private bool _criticalFlag = true;
         //private bool _coordsFlag = true;
@@ -21,6 +21,8 @@ namespace SpaceVIL
         static int count = 0;
         public TextItem()
         {
+            // SetFont(DefaultsService.GetDefaultFont());
+
             SetItemName("TextItem_" + count);
             SetBackground(Color.Transparent);
             SetWidthPolicy(SizePolicy.Expand);
@@ -44,7 +46,7 @@ namespace SpaceVIL
             }
             else
             {*/
-                _coordinates = ToGL(realCoords);
+            _coordinates = ToGL(realCoords);
             //    _needToGl = false;
             //}
             // _coordinates = realCoords.ToArray();//ToGL(realCoords);
@@ -71,13 +73,14 @@ namespace SpaceVIL
 
         internal Font GetFont()
         {
-            if(_font == null)
-                _font = DefaultsService.GetDefaultFont();
+            // if(_font == null)
+            //     _font = DefaultsService.GetDefaultFont();
             return _font;
         }
         internal void SetFont(Font font)
         {
-            if (!_font.Equals(font))
+            // if (!_font.Equals(font))
+            if (_font != font)
             {
                 _font = font;
                 UpdateData(); //_criticalFlag = true;
@@ -177,7 +180,7 @@ namespace SpaceVIL
                 f = coord[i + 2];
                 outCoord[i + 2] = f;
             }
-            
+
             SetWidth((int)Math.Abs(xmax - xmin));
             SetHeight((int)Math.Abs(ymax - ymin));
 
@@ -231,7 +234,7 @@ namespace SpaceVIL
             if (alphas == null)
                 return;
             _colors = new float[alphas.Count * 4];
-            
+
             Color col = GetForeground();
             float r = col.R * 1f / 255f;
             float g = col.G * 1f / 255f;
@@ -245,7 +248,8 @@ namespace SpaceVIL
                 float one = r;
                 float two = g;
                 float three = b;
-                if (f > 100) {
+                if (f > 100)
+                {
                     float t1, t2, t3;
                     if (tmp >= 200) //in
                     {
@@ -263,7 +267,7 @@ namespace SpaceVIL
                             t2 = (tmp - 1f / 3f) * 1f / 3f;
                             t3 = 0;
                         }
-                        else 
+                        else
                         {
                             t1 = tmp * 1f / 3f;
                             t2 = 0;
@@ -300,7 +304,7 @@ namespace SpaceVIL
                         one = 1 / 9f + 2 / 9f + t1 / 3f + t2 * 2 / 9f + t3 / 9f;
                         two = 1 / 9f + t1 * 2 / 9f + t2 / 3f + t3 * 2 / 9f;
                         three = t1 / 9f + t2 * 2 / 9f + t3 / 3f;
-                        
+
                     }
                     //tmp /= 5f;
                     tmp = 1 / 4f + tmp / 2f;

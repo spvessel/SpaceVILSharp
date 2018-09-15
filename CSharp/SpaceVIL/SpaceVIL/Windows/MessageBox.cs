@@ -70,7 +70,7 @@ namespace SpaceVIL
             Handler.AddItem(layout);
 
             //message
-            msg.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
+            // msg.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
             msg.SetForeground(Color.FromArgb(255, 210, 210, 210));
             msg.SetAlignment(ItemAlignment.VCenter | ItemAlignment.HCenter);
             msg.SetTextAlignment(ItemAlignment.VCenter | ItemAlignment.HCenter);

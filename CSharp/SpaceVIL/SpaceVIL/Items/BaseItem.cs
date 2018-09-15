@@ -120,7 +120,7 @@ namespace SpaceVIL
         {
             if (GetTriangles().Count == 0)
                 return null;
-                
+
             //clone triangles
             List<float[]> result = new List<float[]>();
             for (int i = 0; i < GetTriangles().Count; i++)
@@ -186,6 +186,20 @@ namespace SpaceVIL
         {
             return _item.GetItemName();
         }
+        
+        internal bool IsDrawable = true;
+        // private bool _drawable = true;
+        // internal virtual bool IsDrawable
+        // {
+        //     get { return _drawable; }
+        //     set
+        //     {
+        //         if (_drawable == value)
+        //             return;
+        //         _drawable = value;
+        //         // UpdateInnersDrawable(value);
+        //     }
+        // }
         private bool _visible = true;
         public virtual bool IsVisible
         {
@@ -195,7 +209,13 @@ namespace SpaceVIL
                 if (_visible == value)
                     return;
                 _visible = value;
+                //UpdateInnersDrawable(value);
             }
+        }
+
+        protected virtual void UpdateInnersDrawable(bool value)
+        {
+
         }
 
         //geometry
@@ -367,6 +387,18 @@ namespace SpaceVIL
             _confines_y_0 = GetParent().GetY() + GetParent().GetPadding().Top;
             _confines_y_1 = GetParent().GetY() + GetParent().GetHeight() - GetParent().GetPadding().Bottom;
         }
+        internal bool IsOutConfines()
+        {
+            if (
+                GetX() >= _confines_x_1 ||
+                GetX() + GetWidth() <= _confines_x_0 ||
+                GetY() >= _confines_y_1 ||
+                GetY() + GetHeight() <= _confines_y_0
+               )
+                return true;
+            return false;
+        }
+
         public void Update(GeometryEventType type, int value = 0)
         {
             SetConfines();

@@ -41,6 +41,9 @@ namespace SpaceVIL
                     value = Slider.GetMaxValue();
                 Slider.SetCurrentValue(value);
             };
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.VerticalScrollBar)));
+
         }
 
         public override void InitElements()
@@ -71,6 +74,8 @@ namespace SpaceVIL
 
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
 
             Style inner_style = style.GetInnerStyle("uparrow");

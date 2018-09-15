@@ -37,7 +37,6 @@ namespace SpaceVIL
 
         protected virtual void OnMousePress(object sender, MouseArgs args)
         {
-            
             if (IsLocked)
                 return;
 
@@ -148,6 +147,28 @@ namespace SpaceVIL
                     break;
             }
         }
+
+        public override void SetWidth(int width)
+        {
+            base.SetWidth(width);
+            SizeChanged?.Invoke();
+        }
+        public override void SetHeight(int height)
+        {
+            base.SetHeight(height);
+            SizeChanged?.Invoke();
+        }
+        
+        // public override void SetX(int _x)
+        // {
+        //     base.SetX(_x);
+        //     PositionChanged?.Invoke();
+        // }
+        // public override void SetY(int _y)
+        // {
+        //     base.SetY(_y);
+        //     PositionChanged?.Invoke();
+        // }
 
         public void GetSides(float xpos, float ypos)
         {

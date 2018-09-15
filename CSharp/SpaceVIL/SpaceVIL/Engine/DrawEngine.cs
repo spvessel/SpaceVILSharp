@@ -63,7 +63,7 @@ namespace SpaceVIL
             _tooltip.SetHandler(handler);
             _tooltip.GetTextLine().SetHandler(handler);
             _tooltip.GetTextLine().SetParent(_tooltip);
-            _tooltip.InitElements();
+            // _tooltip.InitElements();
         }
 
         public void Dispose()
@@ -142,10 +142,10 @@ namespace SpaceVIL
                 _handler.CreateWindow();
             }
             SetWindowPos();
+            // Focus(_handler.GetWindowId(), true);
 
             //устанавливаем параметры отрисовки
             glEnable(GL_TEXTURE_2D);
-            // glEnable(GL_MULTISAMPLE);
             glEnable(GL_BLEND);
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
@@ -300,7 +300,6 @@ namespace SpaceVIL
         }
         internal void Focus(Glfw.Window glfwwnd, bool value)
         {
-            // Console.WriteLine(_handler.GetLayout().GetWindowName() + " " + value);
             EngineEvent.ResetAllEvents();
             _tooltip.InitTimer(false);
 
@@ -325,6 +324,7 @@ namespace SpaceVIL
                     _handler.Focused = value;
                     if (_handler.GetLayout().IsOutsideClickClosable)
                     {
+                        //Console.WriteLine(_handler.GetLayout().GetWindowName() + " " + value);
                         ResetItems();
                         _handler.GetLayout().Close();
                     }
@@ -415,6 +415,21 @@ namespace SpaceVIL
             return wanted;
         }
 
+        private List<BaseItem> GetInnerItems(VisualItem root)
+        {
+            List<BaseItem> list = new List<BaseItem>();
+
+            foreach (var item in root.GetItems())
+            {
+                if (!item.IsVisible || !item.IsDrawable)
+                    continue;
+                list.Add(item);
+                VisualItem leaf = item as VisualItem;
+                if (leaf != null)
+                    list.AddRange(GetInnerItems(leaf));
+            }
+            return list;
+        }
         private bool GetHoverVisualItem(float xpos, float ypos, InputEventType action)
         {
             HoveredItems.Clear();
@@ -422,23 +437,36 @@ namespace SpaceVIL
             List<BaseItem> layout_box_of_items = new List<BaseItem>();
             lock (_handler.GetLayout().engine_locker)
             {
+                // foreach (var item in ItemsLayoutBox.GetLayoutFloatItems(_handler.GetLayout().Id))
+                //     layout_box_of_items.Add(item);
+                // foreach (var item in ItemsLayoutBox.GetLayoutItems(_handler.GetLayout().Id))
+                //     layout_box_of_items.Add(item);
+
+                layout_box_of_items.Add(_handler.GetLayout().GetWindow());
+                layout_box_of_items.AddRange(GetInnerItems(_handler.GetLayout().GetWindow()));
+
                 foreach (var item in ItemsLayoutBox.GetLayoutFloatItems(_handler.GetLayout().Id))
+                {
+                    if (!item.IsVisible || !item.IsDrawable)
+                        continue;
                     layout_box_of_items.Add(item);
-                foreach (var item in ItemsLayoutBox.GetLayoutItems(_handler.GetLayout().Id))
-                    layout_box_of_items.Add(item);
+                    VisualItem leaf = item as VisualItem;
+                    if (leaf != null)
+                        layout_box_of_items.AddRange(GetInnerItems(leaf));
+                }
             }
 
             foreach (var item in layout_box_of_items)
             {
                 if (item is VisualItem)
                 {
-                    if (!(item as VisualItem).IsVisible)
+                    if (!item.IsVisible || !item.IsDrawable)
                         continue;
 
                     if ((item as VisualItem).GetHoverVerification(xpos, ypos))
                     {
                         HoveredItems.Add(item as VisualItem);
-                        AssignActions(InputEventType.MouseHover, _margs, item as VisualItem);
+                        //AssignActions(InputEventType.MouseHover, _margs, item as VisualItem);
                     }
                     else
                     {
@@ -573,7 +601,7 @@ namespace SpaceVIL
                 {
                     if (HoveredItem.GetToolTip() != String.Empty)
                     {
-                        _tooltip.SetText(HoveredItem.GetToolTip());
+                        // _tooltip.SetText(HoveredItem.GetToolTip());
                         _tooltip.InitTimer(true);
                     }
 
@@ -687,6 +715,7 @@ namespace SpaceVIL
                     if (HoveredItem != null)
                     {
                         AssignActions(InputEventType.MouseRelease, _margs, false);
+                        // HoveredItem.EventMouseClick.Invoke(HoveredItem, _margs);
                         HoveredItem.IsMousePressed = false;
                         //Focus get
                         if (FocusedItem != null)
@@ -740,9 +769,6 @@ namespace SpaceVIL
                 HoveredItems.Reverse();
                 foreach (var item in HoveredItems)
                 {
-                    if (!item.IsPassEvents)
-                        break;//остановить передачу событий последующим элементам
-
                     if (item.Equals(HoveredItem) && HoveredItem.IsDisabled)
                         continue;//пропустить
 
@@ -754,10 +780,13 @@ namespace SpaceVIL
                         Action = action,
                         Args = args
                     });
+                    if (!item.IsPassEvents)
+                        break;//остановить передачу событий последующим элементам
                 }
                 HoveredItems.Reverse();
             }
             _handler.GetLayout().ExecutePollActions();
+            // Console.WriteLine();
         }
         private void AssignActions(InputEventType action, InputEventArgs args, VisualItem sender)
         {
@@ -783,25 +812,15 @@ namespace SpaceVIL
         // internal int _interval = 11;//1000 / 90;
         // internal int _interval = 08;//1000 / 120;
 
-        internal void Update()
-        {
-            lock (_handler.GetLayout().engine_locker)
-            {
-                if (_handler.GetLayout().IsBorderHidden)
-                    glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
-                Render();
-            }
-        }
-
         public void Run()
         {
             //_handler.GetLayout().Handler.InitWindow();
+            Focus(_handler.GetWindowId(), true);
 
             glGenVertexArrays(1, _handler.GVAO);
             glBindVertexArray(_handler.GVAO[0]);
 
             _primitive.UseShader();
-            Focus(_handler.GetWindowId(), true);
 
             /*foreach (var item in _handler.GetLayout().GetWindow().GetItems())
             {
@@ -830,6 +849,16 @@ namespace SpaceVIL
             _handler.Destroy();
         }
 
+        internal void Update()
+        {
+            lock (_handler.GetLayout().engine_locker)
+            {
+                if (_handler.GetLayout().IsBorderHidden)
+                    glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
+                Render();
+            }
+        }
+
         internal void Render()
         {
             if (_handler.Focused)
@@ -844,10 +873,10 @@ namespace SpaceVIL
                 }
                 //draw tooltip if needed
                 DrawToolTip();
-                if (!_handler.Focusable)
-                {
-                    DrawShadePillow();
-                }
+                // if (!_handler.Focusable)
+                // {
+                //     DrawShadePillow();
+                // }
                 _handler.Swap();
             }
             //Thread.Sleep(1000/60);
@@ -909,8 +938,15 @@ namespace SpaceVIL
         {
             if (!_tooltip.IsVisible)
                 return;
-
+            // Console.WriteLine("tooltip");
+            // _tooltip.SetFont(DefaultsService.GetDefaultFont());
             //_tooltip.GetTextLine().UpdateData(UpdateType.Critical);
+            // foreach (var item in DefaultsService.privateFontCollection.Families)
+            // {
+            //     Console.WriteLine(item.Name);
+            // }
+            // Console.WriteLine(_tooltip.GetFont().FontFamily);
+            _tooltip.SetText(HoveredItem.GetToolTip());
             _tooltip.SetWidth(
                 _tooltip.GetPadding().Left +
                 _tooltip.GetPadding().Right +
@@ -945,10 +981,7 @@ namespace SpaceVIL
             DrawShell(_tooltip);
 
             _tooltip.GetTextLine().UpdateGeometry();
-            //DrawText_new(_tooltip.GetTextLine());
-            glDisable(GL_MULTISAMPLE);
             DrawText_deprecated(_tooltip.GetTextLine());
-            glEnable(GL_MULTISAMPLE);
             if (_isStencilSet == _tooltip.GetTextLine())
             {
                 glDisable(GL_STENCIL_TEST);
@@ -959,7 +992,7 @@ namespace SpaceVIL
         //Common Draw function
         private void DrawItems(BaseItem root)
         {
-            if (!root.IsVisible)
+            if (!root.IsVisible || !root.IsDrawable)
                 return;
 
             //refactor paths
@@ -981,17 +1014,13 @@ namespace SpaceVIL
             }
             if (root is TextItem)
             {
-                // DrawText_new(root as TextItem);
-                glDisable(GL_MULTISAMPLE);
                 DrawText_deprecated(root as TextItem);
-                glEnable(GL_MULTISAMPLE);
 
                 if (_isStencilSet == root)
                 {
                     glDisable(GL_STENCIL_TEST);
                     _isStencilSet = null;
                 }
-                //_primitive.UseShader();
             }
             if (root is IImageItem)
             {
@@ -1257,6 +1286,8 @@ namespace SpaceVIL
         {
             //проверка: полностью ли влезает объект в свой контейнер
             CheckOutsideBorders(shell);
+            // if (shell.IsOutConfines() /*&& !(shell is WContainer)*/)
+            //     return;
 
             if (shell.GetBackground().A == 0)
                 return;
@@ -1416,6 +1447,7 @@ namespace SpaceVIL
 
         void DrawText_deprecated(TextItem item)
         {
+            glDisable(GL_MULTISAMPLE_ARB);
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
 
@@ -1444,6 +1476,8 @@ namespace SpaceVIL
 
             // Clear VBO and shader
             glDeleteBuffers(2, buffers);
+
+            glEnable(GL_MULTISAMPLE_ARB);
         }
 
         void DrawPoints(IPoints item)
@@ -1455,18 +1489,30 @@ namespace SpaceVIL
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
 
-            List<float[]> crd_array;
-            crd_array = item.MakeShape();
+            List<float[]> crd_array = item.MakeShape();
             if (crd_array == null)
                 return;
-
-            float[] vertexData = new float[crd_array.Count * 3];
+            List<float[]> result = new List<float[]>();
+            foreach (var shape in crd_array)
+            {
+                // Console.WriteLine(shape[0] + " " + shape[1]);
+                result.AddRange(GraphicsMathService.MoveShape(
+                    item.GetShapePointer(),
+                    shape[0] - item.GetPointThickness() / 2.0f,
+                    shape[1] - item.GetPointThickness() / 2.0f
+                    ));
+            }
+            result = GraphicsMathService.ToGL(result, _handler.GetLayout());
+            // Console.WriteLine(crd_array.Count + " " + result.Count);
+            // PrintService.PrintList(result);
+            // Console.WriteLine(result.ElementAt(0)[0]);
+            float[] vertexData = new float[result.Count * 3];
 
             for (int i = 0; i < vertexData.Length / 3; i++)
             {
-                vertexData[i * 3 + 0] = crd_array.ElementAt(i)[0];
-                vertexData[i * 3 + 1] = crd_array.ElementAt(i)[1];
-                vertexData[i * 3 + 2] = crd_array.ElementAt(i)[2];
+                vertexData[i * 3 + 0] = result.ElementAt(i)[0];
+                vertexData[i * 3 + 1] = result.ElementAt(i)[1];
+                vertexData[i * 3 + 2] = result.ElementAt(i)[2];
             }
 
             //Color
@@ -1476,7 +1522,7 @@ namespace SpaceVIL
                 (float)item.GetPointColor().B / 255.0f,
                 (float)item.GetPointColor().A / 255.0f};
 
-            float[] colorData = new float[crd_array.Count * 4];
+            float[] colorData = new float[result.Count * 4];
             for (int i = 0; i < colorData.Length / 4; i++)
             {
                 colorData[i * 4 + 0] = argb[0];
@@ -1498,10 +1544,7 @@ namespace SpaceVIL
             glEnableVertexAttribArray(1);
 
             // draw
-            glEnable(GL_POINT_SMOOTH);
-            glPointSize(item.GetPointThickness());
-            glDrawArrays(GL_POINTS, 0, vertexData.Length / 3);
-            glPointSize(1.0f);
+            glDrawArrays(GL_TRIANGLES, 0, result.Count);
 
             glDisableVertexAttribArray(0);
             glDisableVertexAttribArray(1);
@@ -1518,8 +1561,7 @@ namespace SpaceVIL
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
 
-            List<float[]> crd_array;
-            crd_array = item.MakeShape();
+            List<float[]> crd_array = GraphicsMathService.ToGL(item.MakeShape(), _handler.GetLayout()); ;
             if (crd_array == null)
                 return;
 
@@ -1572,9 +1614,6 @@ namespace SpaceVIL
 
         void DrawPixels(IPixelDrawable item)
         {
-            //glDisable(GL_MULTISAMPLE);
-
-            //Console.WriteLine(item.GetItemText());
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
             float[] data = item.GetCoords();
@@ -1598,14 +1637,10 @@ namespace SpaceVIL
 
             // Clear VBO and shader
             glDeleteBuffers(2, buffers);
-
-            //glEnable(GL_MULTISAMPLE);
         }
 
         void DrawImage(ImageItem image)
         {
-            //glDisable(GL_MULTISAMPLE);
-
             byte[] bitmap = image.GetPixMapImage();
 
             if (bitmap == null)
@@ -1698,8 +1733,6 @@ namespace SpaceVIL
 
             glDeleteBuffers(2, buffers);
             glDeleteTextures(1, texture);
-
-            //glEnable(GL_MULTISAMPLE);
         }
     }
 }

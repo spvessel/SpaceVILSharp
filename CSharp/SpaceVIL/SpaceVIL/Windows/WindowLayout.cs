@@ -276,6 +276,8 @@ namespace SpaceVIL
         //methods
         public void Show()
         {
+            if (IsHidden)
+                SetHidden(false);
             IsClosed = false;
 
             engine._handler.Maximized = IsMaximized;
@@ -300,9 +302,10 @@ namespace SpaceVIL
             {
                 lock (CommonService.GlobalLocker)
                 {
-                    WindowLayoutBox.AddToWindowDispatcher(this);
                     ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
+                    WindowLayoutBox.AddToWindowDispatcher(this);
                     WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
+                    WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
                 }
                 thread_engine.Start();
                 thread_engine.Join();
@@ -407,6 +410,10 @@ namespace SpaceVIL
         public void SetFocusedItem(VisualItem item)
         {
             engine.SetFocusedItem(item);
+        }
+        public void SetFocus(bool value)
+        {
+            engine.Focus(engine._handler.GetWindowId(), value);
         }
         public void ResetItems()
         {

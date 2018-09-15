@@ -10,7 +10,7 @@ namespace SpaceVIL
     public class ProgressBar : VisualItem
     {
         static int count = 0;
-        private Label _text_object;
+        private TextLine _text_object;
         private Rectangle _rect;
         private int _maxValue = 100;
         private int _minValue = 0;
@@ -21,7 +21,7 @@ namespace SpaceVIL
             SetItemName("ProgressBar_" + count);
             count++;
 
-            _text_object = new Label();
+            _text_object = new TextLine();
             _text_object.SetItemName(GetItemName() + "_text_object");
             _rect = new Rectangle();
 
@@ -31,22 +31,22 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //text
-            _text_object.SetText("0%");
+            SetText("0%");
             AddItems(_rect, _text_object);
         }
 
         public void SetMaxValue(int value) { _maxValue = value; }
-        public int GetMaxValue() { return _maxValue;  }
+        public int GetMaxValue() { return _maxValue; }
 
         public void SetMinValue(int value) { _minValue = value; }
-        public int GetMinValue() { return _minValue;  }
+        public int GetMinValue() { return _minValue; }
 
         public void SetCurrentValue(int currentValue)
         {
             _currentValue = currentValue;
             UpdateProgressBar();
         }
-        public int GetCurrentValue() { return _currentValue;  }
+        public int GetCurrentValue() { return _currentValue; }
 
         private void UpdateProgressBar()
         {
@@ -55,12 +55,16 @@ namespace SpaceVIL
             _currentValue = (_currentValue > _maxValue) ? _maxValue : _currentValue;
             _currentValue = (_currentValue < _minValue) ? _minValue : _currentValue;
             DonePercent = (_currentValue - _minValue) / AllLength;
-
-            _text_object.SetText(Math.Round(DonePercent * 100f, 1).ToString() + "%");
+            string text = Math.Round(DonePercent * 100f, 1).ToString() + "%";
+            _text_object.SetItemText(text);
             _rect.SetWidth((int)Math.Round(GetWidth() * DonePercent));
         }
 
         //text init
+        public void SetText(String text)
+        {
+            _text_object.SetItemText(text);
+        }
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _text_object.SetTextAlignment(alignment);
@@ -142,7 +146,10 @@ namespace SpaceVIL
         //style
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
+
             SetForeground(style.Foreground);
             SetFont(style.Font);
             SetTextAlignment(style.TextAlignment);

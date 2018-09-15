@@ -141,6 +141,8 @@ namespace SpaceVIL
 
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
 
             Style inner_style = style.GetInnerStyle("splitholder");
