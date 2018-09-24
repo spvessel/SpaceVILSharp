@@ -48,7 +48,7 @@ namespace SpaceVIL
             }
             return Color.FromArgb((int)a, (int)r, (int)g, (int)b);
         }
-        static internal List<float[]> GetRectangle(int w = 100, int h = 100, int x = 0, int y = 0)
+        static internal List<float[]> GetRectangle(float w = 100, float h = 100, float x = 0, float y = 0)
         {
             return new List<float[]>
             {
@@ -62,10 +62,10 @@ namespace SpaceVIL
             };
         }
 
-        static internal List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100, 
+        static internal List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100,
             int x = 0, int y = 0)
         {
-            
+
             if (cornerRadius.leftTop < 0)
                 cornerRadius.leftTop = 0;
             if (cornerRadius.rightTop < 0)
@@ -74,7 +74,7 @@ namespace SpaceVIL
                 cornerRadius.leftBottom = 0;
             if (cornerRadius.rightBottom < 0)
                 cornerRadius.rightBottom = 0;
-                
+
 
             List<float[]> triangles = new List<float[]>();
             //Начало координат в левом углу
@@ -102,7 +102,7 @@ namespace SpaceVIL
             float x0, y0;
 
             if (cornerRadius.rightBottom >= 1)
-            { 
+            {
                 x0 = width - cornerRadius.rightBottom + x;
                 y0 = height - cornerRadius.rightBottom + y;
                 triangles.AddRange(CountCircleSector(0, 90, x0, y0, cornerRadius.rightBottom));
@@ -110,23 +110,23 @@ namespace SpaceVIL
 
             if (cornerRadius.rightTop >= 1)
             {
-            x0 = width - cornerRadius.rightTop + x;
-            y0 = cornerRadius.rightTop + y;
-            triangles.AddRange(CountCircleSector(270, 360, x0, y0, cornerRadius.rightTop));
+                x0 = width - cornerRadius.rightTop + x;
+                y0 = cornerRadius.rightTop + y;
+                triangles.AddRange(CountCircleSector(270, 360, x0, y0, cornerRadius.rightTop));
             }
 
             if (cornerRadius.leftTop >= 1)
             {
-            x0 = cornerRadius.leftTop + x;
-            y0 = cornerRadius.leftTop + y;
-            triangles.AddRange(CountCircleSector(180, 270, x0, y0, cornerRadius.leftTop));
+                x0 = cornerRadius.leftTop + x;
+                y0 = cornerRadius.leftTop + y;
+                triangles.AddRange(CountCircleSector(180, 270, x0, y0, cornerRadius.leftTop));
             }
 
             if (cornerRadius.leftBottom >= 1)
             {
-            x0 = cornerRadius.leftBottom + x;
-            y0 = height - cornerRadius.leftBottom + y;
-            triangles.AddRange(CountCircleSector(90, 180, x0, y0, cornerRadius.leftBottom));
+                x0 = cornerRadius.leftBottom + x;
+                y0 = height - cornerRadius.leftBottom + y;
+                triangles.AddRange(CountCircleSector(90, 180, x0, y0, cornerRadius.leftBottom));
             }
 
             return triangles;
@@ -137,7 +137,7 @@ namespace SpaceVIL
             //Начало координат в левом верхнем углу
             List<float[]> tri = new List<float[]>();
 
-            tri.Add(new float[] { leftTop.X, leftTop.Y, 0.0f});
+            tri.Add(new float[] { leftTop.X, leftTop.Y, 0.0f });
             tri.Add(new float[] { leftTop.X, rightBottom.Y, 0.0f });
             tri.Add(new float[] { rightBottom.X, rightBottom.Y, 0.0f });
 
@@ -258,10 +258,11 @@ namespace SpaceVIL
             }
             return result;
         }
-        static public List<float[]> GetStar(float R = 100, float r = 50, int n = 6)
+
+        static public List<float[]> GetStar(float R = 100, float r = 50, int n = 5)
         {
-            float x_center = R;
-            float y_center = R;
+            float x_center = r;
+            float y_center = r;
 
             List<float[]> triangles = new List<float[]>();
 
@@ -337,7 +338,7 @@ namespace SpaceVIL
                 alpha = alpha + 180.0f / n;
                 count++;
             }
-
+            triangles.RemoveAt(triangles.Count - 1);
             return triangles;
         }
         static public List<float[]> GetRegularPolygon(float r = 100, int n = 6)
@@ -376,9 +377,8 @@ namespace SpaceVIL
 
             return triangles;
         }
-        static public List<float[]> GetEllipse(float r = 100)
+        static public List<float[]> GetEllipse(float r = 100, int n = 32)
         {
-            int n = 180;
             float x_center = r;
             float y_center = r;
 
@@ -413,9 +413,8 @@ namespace SpaceVIL
 
             return triangles;
         }
-        static public List<float[]> GetEllipse(float w, float h, int x = 0, int y = 0)
+        static public List<float[]> GetEllipse(float w, float h, int x = 0, int y = 0, int n = 32)
         {
-            int n = 180;
             float rX = w / 2;
             float rY = h / 2;
             float x_center = x + rX;
@@ -661,6 +660,36 @@ namespace SpaceVIL
             }*/
 
             return _bitmap;
+        }
+
+        public static List<float[]> MoveShape(List<float[]> shape, float x, float y)
+        {
+            if (shape.Count == 0)
+                return null;
+
+            //clone triangles
+            List<float[]> result = new List<float[]>();
+            for (int i = 0; i < shape.Count; i++)
+            {
+                result.Add(new float[] { shape.ElementAt(i)[0], shape.ElementAt(i)[1], shape.ElementAt(i)[2] });
+            }
+            //to the left top corner
+            foreach (var point in result)
+            {
+                point[0] += x;
+                point[1] += y;
+            }
+
+            return result;
+        }
+
+        public static List<float[]> GetFolderIconShape(float w = 20.0f, float h = 15.0f, float x = 0, float y = 0)
+        {
+            List<float[]> triangles = new List<float[]>();
+            triangles.AddRange(GraphicsMathService.GetRectangle(w / 3, h));
+            triangles.AddRange(GraphicsMathService.GetRectangle(2 * w / 3, h - h / 4, w / 3, h / 4));
+            triangles.AddRange(GraphicsMathService.GetRectangle(w / 4, h / 8, w / 3 + 2));
+            return triangles;
         }
     }
 }

@@ -233,6 +233,7 @@ namespace SpaceVIL
                 for (int c = 0; c < _column_count; c++)
                 {
                     BaseItem item = _cells[c + r * _column_count].GetItem();
+   
                     if (item == null || !item.IsVisible)
                     {
                         list_height.Add(new int[2] { r, -1 });

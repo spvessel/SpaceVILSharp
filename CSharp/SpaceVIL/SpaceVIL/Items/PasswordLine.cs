@@ -371,6 +371,7 @@ namespace SpaceVIL
         {
             // _cursor.IsVisible = false;
             //adding
+            _show_pwd_btn.IsPassEvents = false;
             _show_pwd_btn.EventToggle += (sender, args) => ShowPassword(sender);
             AddItems(_selectedArea, _text_object, _cursor, _show_pwd_btn);
             // GetHandler().SetFocusedItem(this);
@@ -461,6 +462,8 @@ namespace SpaceVIL
         //style
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
             SetForeground(style.Foreground);
             SetFont(style.Font);

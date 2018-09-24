@@ -69,7 +69,6 @@ namespace SpaceVIL
         static int count = 0;
         public ListArea()
         {
-            // SetPadding(2, 2, 2, 2);
             SetItemName("ListArea_" + count);
             count++;
             EventMouseClick += OnMouseClick;
@@ -109,9 +108,15 @@ namespace SpaceVIL
             //SelectionChanged?.Invoke();
         }
 
+        internal override void InsertItem(BaseItem item, Int32 index)
+        {
+            item.IsDrawable = false;
+            base.InsertItem(item, index);
+            UpdateLayout();
+        }
         public override void AddItem(BaseItem item)
         {
-            item.IsVisible = false;
+            item.IsDrawable = false;
             base.AddItem(item);
             UpdateLayout();
         }
@@ -159,7 +164,7 @@ namespace SpaceVIL
             int index = 0;
             foreach (var child in GetItems())
             {
-                if (child.Equals(_substrate))
+                if (child.Equals(_substrate) || !child.IsVisible)
                     continue;
 
                 child.SetX((-1) * (int)_xOffset + GetX() + GetPadding().Left + child.GetMargin().Left);
@@ -173,14 +178,14 @@ namespace SpaceVIL
                     AreaPosition |= ListPosition.Top;
                     if (child_Y + child.GetHeight() <= startY)
                     {
-                        child.IsVisible = false;
+                        child.IsDrawable = false;
                         if (_selection == index)
-                            _substrate.IsVisible = false;
+                            _substrate.IsDrawable = false;
                     }
                     else
                     {
                         child.SetY((int)child_Y);
-                        child.IsVisible = true;
+                        child.IsDrawable = true;
                         FirstVisibleItem = index + 1;
                         if (_selection == index)
                             SetSubstrate(child);
@@ -195,14 +200,14 @@ namespace SpaceVIL
                     AreaPosition |= ListPosition.Bottom;
                     if (child_Y >= GetY() + GetHeight() - GetPadding().Bottom)
                     {
-                        child.IsVisible = false;
+                        child.IsDrawable = false;
                         if (_selection == index)
                             _substrate.IsVisible = false;
                     }
                     else
                     {
                         child.SetY((int)child_Y);
-                        child.IsVisible = true;
+                        child.IsDrawable = true;
                         LastVisibleItem = index + 1;
                         if (_selection == index)
                             SetSubstrate(child);
@@ -212,7 +217,7 @@ namespace SpaceVIL
                 }
 
                 child.SetY((int)child_Y);
-                child.IsVisible = true;
+                child.IsDrawable = true;
                 LastVisibleItem = index + 1;
                 if (_selection == index)
                     SetSubstrate(child);
@@ -245,6 +250,8 @@ namespace SpaceVIL
         //style
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
 
             Style inner_style = style.GetInnerStyle("substrate");

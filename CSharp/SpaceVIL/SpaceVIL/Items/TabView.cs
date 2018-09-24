@@ -188,6 +188,9 @@ namespace SpaceVIL
         //style
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
+                
             base.SetStyle(style);
             _stored_style = style;
 

@@ -27,9 +27,10 @@ namespace SpaceVIL
         {
             IsVisible = false;
             _text_object = new TextLine();
-
             SetItemName("ToolTip");
+
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ToolTip)));
+            // SetStyle(Style.GetToolTipStyle());
         }
         public void SetTextAlignment(ItemAlignment alignment)
         {
@@ -97,7 +98,7 @@ namespace SpaceVIL
             else
             {
                 IsVisible = false;
-                
+
                 if (_stop == null)
                     return;
 
@@ -109,7 +110,7 @@ namespace SpaceVIL
 
         private void VisibleSelf()
         {
-             IsVisible = true;
+            IsVisible = true;
 
             _stop.Stop();
             _stop.Dispose();
@@ -121,6 +122,8 @@ namespace SpaceVIL
         //style
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
             SetForeground(style.Foreground);
             SetFont(style.Font);

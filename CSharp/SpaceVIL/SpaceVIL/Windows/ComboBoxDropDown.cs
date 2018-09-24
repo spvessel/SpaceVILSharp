@@ -75,10 +75,11 @@ namespace SpaceVIL
             return ItemList.GetSelection();
         }
 
-        // public override void Show()
-        // {
-        //     base.Show();
-        // }
+        public override void Show()
+        {
+            base.Show();
+            WindowLayoutBox.SetFocusedWindow(this);
+        }
 
         // public override void Close()
         // {
@@ -97,6 +98,9 @@ namespace SpaceVIL
 
         public void SetStyle(Style style)
         {
+            if (style == null)
+                return;
+                
             Handler.SetBackground(style.Background);
             Handler.SetPadding(style.Padding);
 

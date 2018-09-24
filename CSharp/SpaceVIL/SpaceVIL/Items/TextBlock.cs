@@ -68,6 +68,7 @@ namespace SpaceVIL
             _cursor = new Rectangle();
             _selectedArea = new CustomSelector();
             // _selectedArea.SetBackground(111, 181, 255);
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextBlock)));
 
             EventMousePressed += OnMousePressed;
             EventMouseDrag += OnDragging;
@@ -87,8 +88,6 @@ namespace SpaceVIL
                 _lineSpacer = _minLineSpacer;
 
             _cursor.SetHeight(_lineHeight + _lineSpacer); // + 6);
-
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextBlock)));
         }
 
         protected virtual void OnMousePressed(object sender, MouseArgs args)
@@ -153,7 +152,7 @@ namespace SpaceVIL
 
         protected virtual void OnKeyRelease(object sender, KeyArgs args)
         {
-            if(args.Scancode == 0x2F && args.Mods == KeyMods.Control)
+            if (args.Scancode == 0x2F && args.Mods == KeyMods.Control)
                 PasteText(CommonService.ClipboardTextStorage);
         }
         protected virtual void OnKeyPress(object sender, KeyArgs args)
@@ -269,7 +268,7 @@ namespace SpaceVIL
                 if (!_justSelected)
                 {
                     if (_cursor_position.X > 0)
-                       _cursor_position.X--;
+                        _cursor_position.X--;
                     else if (_cursor_position.Y > 0)
                     {
                         _cursor_position.Y--;
@@ -280,7 +279,8 @@ namespace SpaceVIL
             }
             if (args.Scancode == RightArrowCode)//arrow right
             {
-                if (!_justSelected) {
+                if (!_justSelected)
+                {
                     if (_cursor_position.X < GetLineLetCount(_cursor_position.Y))
                         _cursor_position.X++;
                     else if (_cursor_position.Y < _linesList.Count - 1)
@@ -378,7 +378,7 @@ namespace SpaceVIL
             Point coord = new Point(0, 0);
             //return coord;
             Point cPos = CheckLineFits(cPos0);
-            
+
             int letCount = GetLineLetCount(cPos.Y);
             coord.Y = _linesList[cPos.Y].GetLineYShift();
             
@@ -478,7 +478,8 @@ namespace SpaceVIL
             if (!font.Equals(_elementFont))
             {
                 _elementFont = font;
-
+                if (_elementFont == null)
+                    return;
                 int[] output = FontEngine.GetSpacerDims(font);
                 _minLineSpacer = 3; // output[0];
                 _minFontY = output[1];
@@ -546,7 +547,7 @@ namespace SpaceVIL
             Clear();
             //RemoveLines(0, _linesList.Count - 1);
             //_linesList = new List<TextLine>();
-            
+
             _wholeText = text;
 
             string[] line = text.Split('\n');
@@ -900,10 +901,10 @@ namespace SpaceVIL
             string textBeg = _linesList[_cursor_position.Y].GetItemText().Substring(0, _cursor_position.X);
             string textEnd = "";
             if (_cursor_position.X < GetLineLetCount(_cursor_position.Y)) textEnd = _linesList[_cursor_position.Y].GetItemText().Substring(_cursor_position.X);
-            
+
             string[] line = pasteStr.Split('\n');
             for (int i = 0; i < line.Length; i++)
-            { 
+            {
                 line[i] = line[i].TrimEnd('\r');
             }
 
@@ -1051,6 +1052,8 @@ namespace SpaceVIL
         //style
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
             SetForeground(style.Foreground);
             SetFont(style.Font);

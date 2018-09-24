@@ -14,11 +14,29 @@ namespace SpaceVIL
 
     abstract public class VisualItem : BaseItem
     {
+        //common events
+        internal EventCommonMethodState EventFocusGet;
+        internal EventCommonMethodState EventFocusLost;
+        public EventCommonMethodState EventResized;
+        public EventCommonMethodState EventDestroyed;
+        //mouse input
+        public EventMouseMethodState EventMouseHover;
+        public EventMouseMethodState EventMouseClick;
+        public EventMouseMethodState EventMousePressed;
+        public EventMouseMethodState EventMouseRelease;
+        public EventMouseMethodState EventMouseDrag;
+        public EventMouseMethodState EventMouseDrop;
+        public EventMouseMethodState EventScrollUp;
+        public EventMouseMethodState EventScrollDown;
+        //keyboard input
+        public EventKeyMethodState EventKeyPress;
+        public EventKeyMethodState EventKeyRelease;
+        public EventInputTextMethodState EventTextInput;
+
         //style
         internal bool _is_style_set = false;
         public override void SetStyle(Style style)
         {
-
             if (style == null)
                 return;
 
@@ -94,6 +112,10 @@ namespace SpaceVIL
         {
             return _content;
         }
+        internal void SetContent(List<BaseItem> content)
+        {
+            _content = content;
+        }
         public virtual void AddItems(params BaseItem[] items)
         {
             foreach (var item in items)
@@ -130,7 +152,47 @@ namespace SpaceVIL
 
                 //needs to force update all attributes
                 // if (!EventManager.IsLocked)
-                    item.UpdateGeometry();
+                item.UpdateGeometry();
+                item.InitElements();
+
+                VisualItem vi = item as VisualItem;
+                if (vi != null)
+                    vi.UpdateState();
+            }
+        }
+        internal virtual void InsertItem(BaseItem item, Int32 index)
+        {
+            lock (GetHandler().engine_locker)
+            // lock (CommonService.GlobalLocker)
+            {
+                if (item.Equals(this))
+                {
+                    Console.WriteLine("Trying to add current item in himself.");
+                    return;
+                }
+                item.SetHandler(GetHandler());
+
+                AddChildren(item);
+
+                //lock (GetHandler().engine_locker)
+                if (index > _content.Count)
+                    _content.Add(item);
+                else
+                    _content.Insert(index, item);
+
+                try
+                {
+                    ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(item.GetItemName());
+                    throw ex;
+                }
+
+                //needs to force update all attributes
+                // if (!EventManager.IsLocked)
+                item.UpdateGeometry();
                 item.InitElements();
 
                 VisualItem vi = item as VisualItem;
@@ -226,8 +288,8 @@ namespace SpaceVIL
             {
                 Value = true,
                 Background = GetBackground(),
-                Text = null,
-                ImageUri = null
+                // Text = null,
+                // ImageUri = null
             });
 
             //common default prop
@@ -315,25 +377,6 @@ namespace SpaceVIL
             }
         }
 
-        //common events
-        public EventCommonMethodState EventFocusGet;
-        public EventCommonMethodState EventFocusLost;
-        public EventCommonMethodState EventResized;
-        public EventCommonMethodState EventDestroyed;
-        //mouse input
-        public EventMouseMethodState EventMouseHover;
-        public EventMouseMethodState EventMouseClick;
-        public EventMouseMethodState EventMousePressed;
-        public EventMouseMethodState EventMouseRelease;
-        public EventMouseMethodState EventMouseDrag;
-        public EventMouseMethodState EventMouseDrop;
-        public EventMouseMethodState EventScrollUp;
-        public EventMouseMethodState EventScrollDown;
-        //keyboard input
-        public EventKeyMethodState EventKeyPress;
-        public EventKeyMethodState EventKeyRelease;
-        public EventInputTextMethodState EventTextInput;
-
         //common properties
         private bool _pass_events = true;
         public virtual bool IsPassEvents
@@ -402,6 +445,13 @@ namespace SpaceVIL
             GetHandler().SetFocusedItem(this);
         }
 
+        protected override void UpdateInnersDrawable(bool value)
+        {
+            foreach (var item in _content)
+            {
+                item.IsVisible = value;
+            }
+        }
         //common methods
         public void AddItemState(ItemStateType type, ItemState state)
         {
@@ -467,6 +517,10 @@ namespace SpaceVIL
         protected virtual void UpdateState()
         {
             base.SetBackground(GetState(_state).Background);
+            if (GetState(_state).Shape != null)
+                IsCustom = GetState(_state).Shape;
+
+            //mixing    
             if (IsDisabled && states.ContainsKey(ItemStateType.Disabled))
             {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Disabled).Background));
@@ -474,13 +528,22 @@ namespace SpaceVIL
             }
 
             if (IsFocused && states.ContainsKey(ItemStateType.Focused))
+            {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Focused).Background));
+                // IsCustom = GetState(_state).Shape;
+            }
 
             if (IsMouseHover && states.ContainsKey(ItemStateType.Hovered))
+            {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Hovered).Background));
+                // IsCustom = GetState(_state).Shape;
+            }
 
             if (IsMousePressed && states.ContainsKey(ItemStateType.Pressed))
+            {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Pressed).Background));
+                // IsCustom = GetState(_state).Shape;
+            }
         }
 
         protected internal Pointer _mouse_ptr = new Pointer();
@@ -626,6 +689,8 @@ namespace SpaceVIL
             if (IsCustom != null)
             {
                 SetTriangles(IsCustom.GetFigure());
+                if (GetState(ItemStateType.Base).Shape == null)
+                    GetState(ItemStateType.Base).Shape = IsCustom;
 
                 if (IsCustom.IsFixed())
                     return GraphicsMathService.ToGL(IsCustom.UpdatePosition(GetX(), GetY()), GetHandler());
@@ -633,16 +698,8 @@ namespace SpaceVIL
                     return GraphicsMathService.ToGL(UpdateShape(), GetHandler());
             }
 
-            // if (this is ButtonCore)
-            // {
-            //     Console.WriteLine(
-            //         GetWidth() + " " +
-            //         GetHeight() + " " +
-            //         GetX() + " " +
-            //         GetY() + " "
-            //         );
-            // }
             SetTriangles(GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));
+            //GetState(ItemStateType.Base).Shape = new CustomFigure(true, GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));
             return GraphicsMathService.ToGL(this as BaseItem, GetHandler());
         }
     }

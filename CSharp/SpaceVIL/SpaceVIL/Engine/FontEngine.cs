@@ -370,9 +370,11 @@ namespace SpaceVIL
 
             private Letter MakeLetter(String let)
             {
+                // Console.WriteLine(font);
+                // font = DefaultsService.GetDefaultFont();
                 //LogService.Log().LogText("Letter " + let);
                 GraphicsPath shape = new GraphicsPath();
-                StringFormat format = StringFormat.GenericTypographic;
+                StringFormat format = StringFormat.GenericDefault;
                 //float emSize = font.Height * font.FontFamily.GetCellAscent(font.Style) / font.FontFamily.GetEmHeight(font.Style);
                 float emSize = font.Size;
                 shape.AddString(let, font.FontFamily, (int)font.Style, emSize, new PointF(0f, 0f), format);
@@ -412,7 +414,7 @@ namespace SpaceVIL
             {
                 bugLetter = new Letter("bug", null);
                 bugLetter.width = (int)(font.Size / 3f);// lineSpacer;
-                bugLetter.height = (int)(font.Size * 2/ 3f);// Math.Abs(maxY - minY + 1);
+                bugLetter.height = (int)(font.Size * 2 / 3f);// Math.Abs(maxY - minY + 1);
                 bugLetter.minY = (int)(font.Size / 3f);// minY;
                 bugLetter.isSpec = false;
                 //double[,] arr = new double[bugLetter.width, bugLetter.height];
@@ -492,7 +494,7 @@ namespace SpaceVIL
                 CrossOut crossOut = ContourService.CrossContours(shape);
                 double[,] alph = crossOut._arr;
                 y0 = crossOut._minY;
-                
+
                 height = alph.GetLength(1);// y1 - y0 + 1;
                 width = alph.GetLength(0);// x1 - x0 + 1;
                 int x0shift = 0;
@@ -590,11 +592,13 @@ namespace SpaceVIL
                 {
                     for (int yy = y0shift; yy <= y1shift; yy++)
                     {
-                        if (alph[xx, yy] != 0)
-                        {
-                            //alph[xx, yy] = (alph[xx, yy] < 1) ? alph[xx, yy] + 0.15f : alph[xx, yy];
-                            //alph[xx, yy] = (alph[xx, yy] > 1) ? 1 : alph[xx, yy];
-                        }
+                        // if (alph[xx, yy] != 0.0f)
+                        // {
+                        //     if (alph[xx, yy] < 0.21f)
+                        //         alph[xx, yy] = 0.0f;
+                        //     //alph[xx, yy] = (alph[xx, yy] < 1) ? alph[xx, yy] + 0.15f : alph[xx, yy];
+                        //     //alph[xx, yy] = (alph[xx, yy] > 1) ? 1 : alph[xx, yy];
+                        // }
                         alphas[xx - x0shift, yy - y0shift] = alph[xx, yy];
 
                     }

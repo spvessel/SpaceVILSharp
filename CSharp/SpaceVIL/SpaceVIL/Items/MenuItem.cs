@@ -10,15 +10,16 @@ namespace SpaceVIL
         static int count = 0;
         private TextLine _text_object;
         //internal ContextMenu _invoked_menu;
-        private ContextMenu _context_menu;
+        internal ContextMenu _context_menu;
+        private ContextMenu _sub_context_menu;
         public ContextMenu GetSubCintextMenu()
         {
-            return _context_menu;
+            return _sub_context_menu;
         }
         public bool IsReadyToClose(MouseArgs args)
         {
-            if (!_context_menu.GetHoverVerification(args.Position.X, args.Position.Y)
-                && _context_menu.CloseDependencies(args))
+            if (!_sub_context_menu.GetHoverVerification(args.Position.X, args.Position.Y)
+                && _sub_context_menu.CloseDependencies(args))
                 return true;
             return false;
         }
@@ -26,8 +27,8 @@ namespace SpaceVIL
 
         public void AssignContexMenu(ContextMenu context_menu)
         {
-            _context_menu = context_menu;
-            _context_menu.SetOutsideClickClosable(false);
+            _sub_context_menu = context_menu;
+            _sub_context_menu.SetOutsideClickClosable(false);
             IsActionItem = true;
         }
 
@@ -129,6 +130,8 @@ namespace SpaceVIL
         //style
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
 
             SetForeground(style.Foreground);
@@ -151,27 +154,50 @@ namespace SpaceVIL
 
         public void Show()
         {
+            if (_sub_context_menu == null)
+                return;
+
             MouseArgs args = new MouseArgs();
             args.Button = MouseButton.ButtonRight;
-            args.Position.SetPosition(GetParent().GetX() + GetParent().GetWidth() + 2, GetY());
-            _context_menu?.Show(this, args);
+            // args.Position.SetPosition(_context_menu.GetX() + _context_menu.GetWidth() + 2, GetY());
+
+            //проверка снизу
+            // if (args.Position.Y + GetHeight() > GetHandler().GetHeight())
+            // {
+            //     args.Position.Y = (args.Position.Y - GetHeight());
+            // }
+
+            //проверка справа
+            args.Position.X = (_context_menu.GetX() + _context_menu.GetWidth() + 2);
+            if (args.Position.X + _sub_context_menu.GetWidth() > GetHandler().GetWidth())
+            {
+                args.Position.X = (_context_menu.GetX() - _sub_context_menu.GetWidth() - 2);
+            }
+            //проверка снизу
+            args.Position.Y = GetY();
+            if (args.Position.Y + _sub_context_menu.GetHeight() > GetHandler().GetHeight())
+            {
+                args.Position.Y = _context_menu.GetY() + _context_menu.GetHeight() - _sub_context_menu.GetHeight();
+            }
+
+            _sub_context_menu.Show(this, args);
         }
         public void Hide()
         {
-            _context_menu?.Hide();
+            _sub_context_menu?.Hide();
         }
 
         private void OnMouseAction()
         {
-            if (_context_menu != null)
+            if (_sub_context_menu != null)
             {
-                if (_context_menu.IsVisible)
+                if (_sub_context_menu.IsVisible)
                 {
                     Hide();
                     MouseArgs args = new MouseArgs();
                     args.Button = MouseButton.ButtonRight;
                     args.Position.SetPosition(GetX(), GetY());
-                    _context_menu.CloseDependencies(args);
+                    _sub_context_menu.CloseDependencies(args);
                 }
                 else
                     Show();

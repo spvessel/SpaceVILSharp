@@ -44,6 +44,8 @@ namespace SpaceVIL
 
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
             Style marker_style = style.GetInnerStyle("marker");
             if(marker_style != null)

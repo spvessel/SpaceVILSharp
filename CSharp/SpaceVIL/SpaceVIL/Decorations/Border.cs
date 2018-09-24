@@ -9,6 +9,13 @@ namespace SpaceVIL
 {
     public class Border
     {
+        // private CornerRadius _border_radius;
+        // public CornerRadius Radius
+        // {
+        //     get { return _border_radius; }
+        //     set { _border_radius = value; }
+        // }
+
         private int _border_radius;
         public int Radius
 		{

@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class RadioButton : VisualItem
+    public class RadioButton : VisualItem, IHLayout
     {
         internal class CustomIndicator : Indicator
         {
@@ -99,16 +99,16 @@ namespace SpaceVIL
             }
         }
 
-        public override bool IsVisible
-        {
-            get => base.IsVisible;
-            set
-            {
-                base.IsVisible = value;
-                foreach (var child in GetItems())
-                    child.IsVisible = value;
-            }
-        }
+        // public override bool IsVisible
+        // {
+        //     get => base.IsVisible;
+        //     set
+        //     {
+        //         base.IsVisible = value;
+        //         foreach (var child in GetItems())
+        //             child.IsVisible = value;
+        //     }
+        // }
 
         //Layout rules
         public new void AddItem(BaseItem item)
@@ -127,7 +127,7 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
-        protected virtual void UpdateLayout()
+        public virtual void UpdateLayout()
         {
             int offset = 0;
             int startX = GetX() + GetPadding().Left;
@@ -208,6 +208,8 @@ namespace SpaceVIL
         //style
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
             SetForeground(style.Foreground);
             SetFont(style.Font);

@@ -108,8 +108,9 @@ namespace SpaceVIL
         //style
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
             base.SetStyle(style);
-            
             SetForeground(style.Foreground);
             SetFont(style.Font);
             SetTextAlignment(style.TextAlignment);

@@ -33,6 +33,7 @@ namespace SpaceVIL
         public virtual void Show()
         {
             wnd_handler.Show();
+            // WindowLayoutBox.SetFocusedWindow(this);
         }
         public virtual void Close()
         {

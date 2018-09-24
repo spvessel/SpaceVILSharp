@@ -90,7 +90,7 @@ namespace SpaceVIL
             
 
             AddAllShifts();
-            
+
         }
 
         private void AddAllShifts()
@@ -178,12 +178,16 @@ namespace SpaceVIL
             //switch (updateType)
             //{
             //    case UpdateType.Critical:
-                    int[] output = FontEngine.GetSpacerDims(GetFont());
-                    _minLineSpacer = output[0];
-                    _minFontY = output[1];
-                    _maxFontY = output[2];
-                    //_lineSpacer = _minLineSpacer;
-                    CreateText();
+
+            if (GetFont() == null)
+                return;
+
+            int[] output = FontEngine.GetSpacerDims(GetFont());
+            _minLineSpacer = output[0];
+            _minFontY = output[1];
+            _maxFontY = output[2];
+            //_lineSpacer = _minLineSpacer;
+            CreateText();
             //        break;
             //    case UpdateType.CoordsOnly:
             //        AddAllShifts();
@@ -259,7 +263,8 @@ namespace SpaceVIL
             return lineTopCoord;
         }
 
-        internal int[] GetFontDims() {
+        internal int[] GetFontDims()
+        {
             int[] output = FontEngine.GetSpacerDims(GetFont());
             _minLineSpacer = output[0];
             _minFontY = output[1];
