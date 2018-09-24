@@ -45,6 +45,14 @@ namespace SpaceVIL
 
         private List<int> ShiftValCodes;
 
+        private int globalXShift = 0;
+        private int globalYShift = 0;
+        //private int _cursorXMin = 0;
+        private int _cursorXMax = int.MaxValue;
+        //private int _cursorYMin = 0;
+        private int _cursorYMax = int.MaxValue;
+        private int maxLineWidth = 0;
+
         public TextBlock()
         {
             SetItemName("TextBlock_" + count);
@@ -134,7 +142,7 @@ namespace SpaceVIL
 
             for (int i = 0; i < lineLetPos.Count; i++)
             {
-                if (lineLetPos[i] <= coordX + 3)
+                if (lineLetPos[i] + globalXShift <= coordX + 3)
                     pos = i + 1;
                 else break;
             }
@@ -248,10 +256,10 @@ namespace SpaceVIL
                 }
                 else
                     if (_isSelect)
-                {
-                    UnselectText();
-                    //_justSelected = true;
-                }
+                    {
+                        UnselectText();
+                        //_justSelected = true;
+                    }
             }
 
             if (args.Scancode == LeftArrowCode)//arrow left
@@ -266,8 +274,8 @@ namespace SpaceVIL
                         _cursor_position.Y--;
                         _cursor_position.X = GetLineLetCount(_cursor_position.Y);
                     }
+                    ReplaceCursor();
                 }
-                ReplaceCursor();
             }
             if (args.Scancode == RightArrowCode)//arrow right
             {
@@ -280,9 +288,9 @@ namespace SpaceVIL
                         _cursor_position.Y++;
                         _cursor_position.X = 0;
                     }
+                    ReplaceCursor();
                 }
 
-                ReplaceCursor();
             }
             if (args.Scancode == UpArrowCode)//arrow up
             {
@@ -291,9 +299,9 @@ namespace SpaceVIL
                     if (_cursor_position.Y > 0)
                         _cursor_position.Y--;
                     //?????
+                    ReplaceCursor();
                 }
 
-                ReplaceCursor();
             }
             if (args.Scancode == DownArrowCode)//arrow down
             {
@@ -302,9 +310,9 @@ namespace SpaceVIL
                     if (_cursor_position.Y < _linesList.Count - 1)
                         _cursor_position.Y++;
                     //?????
+                    ReplaceCursor();
                 }
 
-                ReplaceCursor();
             }
 
             if (args.Scancode == EndCode)//end
@@ -368,13 +376,12 @@ namespace SpaceVIL
         private Point CursorPosToCoord(Point cPos0)
         {
             Point coord = new Point(0, 0);
-
+            //return coord;
             Point cPos = CheckLineFits(cPos0);
 
             int letCount = GetLineLetCount(cPos.Y);
-            //Console.WriteLine(cPos0.X + " " + cPos0.Y + " " + _linesList[cPos.Y].GetLetPosArray());
-            coord.Y = (int)_linesList[cPos.Y].GetLineYShift();
-
+            coord.Y = _linesList[cPos.Y].GetLineYShift();
+            
             if (letCount == 0)
             {
                 coord.X = 0;
@@ -387,11 +394,12 @@ namespace SpaceVIL
             }
             else
             {
-                if (!(cPos.X == 0 && cPos.Y == 0))
+                if (!(cPos.X == 0 && cPos.Y == 0)) //???
                 {
                     coord.X = _linesList[cPos.Y].GetLetPosArray()[cPos.X - 1];
                 }
             }
+
             return coord;
         }
 
@@ -498,12 +506,23 @@ namespace SpaceVIL
             {
                 SplitAndMakeLines(text);
             }
+            //globalXShift = _cursorXMax; ???
+            //UpdLinesXShift(); ???
         }
 
         private void SetTextInLine(String text)
         {
             _linesList[_cursor_position.Y].SetItemText(text);
             //_linesList[_cursor_position.Y].UpdateData(UpdateType.Critical); //Doing in TextItem
+            
+            //int test0 = _linesList[_cursor_position.Y].GetLineXShift();
+            //_linesList[_cursor_position.Y].CheckXShift(_cursorXMax);
+            //int test1 = _linesList[_cursor_position.Y].GetLineXShift();
+            //if (test0 != test1)
+            //{
+            //    globalXShift = test1;
+            //    UpdLinesXShift();
+            //}
         }
 
         public int GetTextWidth()
@@ -612,6 +631,20 @@ namespace SpaceVIL
                     _cursor.IsVisible = false;
             }
         }
+        public override void SetWidth(int width)
+        {
+            base.SetWidth(width);
+            _cursorXMax = GetWidth() - _cursor.GetWidth() - GetPadding().Left - GetPadding().Right; //_cursorXMin;// ;
+            SetAllowWidth();
+            UpdLinesXShift();
+        }
+        public override void SetHeight(int height)
+        {
+            base.SetHeight(height);
+            _cursorYMax = GetHeight() - GetPadding().Top - GetPadding().Bottom; //_cursorYMin;
+            SetAllowHeight();
+            UpdLinesYShift();
+        }
 
         public override void InitElements()
         {
@@ -634,6 +667,17 @@ namespace SpaceVIL
 
             //update text data
             //UpdateLinesData(UpdateType.Critical);
+
+            //_cursorXMin = GetPadding().Left;
+            _cursorXMax = GetWidth() - _cursor.GetWidth() - GetPadding().Left - GetPadding().Right; //_cursorXMin;// ;
+            //_cursorYMin = GetPadding().Top;
+            _cursorYMax = GetHeight() - GetPadding().Top - GetPadding().Bottom; //_cursorYMin;
+            SetAllowWidth();
+            SetAllowHeight();
+            UpdLinesXShift();
+            UpdLinesYShift();
+
+            //Console.WriteLine(GetWidth() + " " + _cursorYMax);
         }
 
         private void SetLineContainerAlignment(ItemAlignment alignment)
@@ -774,6 +818,36 @@ namespace SpaceVIL
         private Point AddXYShifts(int xShift, int yShift, Point point)
         {
             Point outPoint = CursorPosToCoord(point);
+            int offset = _cursorXMax/3;
+
+            if (globalXShift + outPoint.X < 0) //_cursorXMin)
+            {
+                globalXShift = -outPoint.X;
+                globalXShift += offset;
+                if (globalXShift > 0) globalXShift = 0;
+                UpdLinesXShift(); // _lineXShift + _text_object.GetLetWidth(_cursor_position));
+            }
+            if (globalXShift + outPoint.X > _cursorXMax)
+            {
+                globalXShift = _cursorXMax - outPoint.X;
+                globalXShift -= offset;
+                UpdLinesXShift(); // _lineXShift - _text_object.GetLetWidth(_cursor_position - 1));
+            }
+
+            if (outPoint.Y < 0) //globalYShift + 
+            {
+                globalYShift = -outPoint.Y; // _lineXShift + _text_object.GetLetWidth(_cursor_position));
+                UpdLinesYShift();
+            }
+            if (outPoint.Y > _cursorYMax) //globalYShift + 
+            {
+                globalYShift = _cursorYMax - outPoint.Y;
+                UpdLinesYShift();
+            }
+
+            outPoint.X += globalXShift;
+            outPoint.Y += globalYShift;
+
             outPoint.X += GetX() + GetPadding().Left + xShift;
             outPoint.Y += GetY() + GetPadding().Top + yShift;
 
@@ -997,5 +1071,49 @@ namespace SpaceVIL
                 _cursor.SetStyle(inner_style);
             }
         }
+
+        private int GetLineXShift(int n)
+        {
+            if (_linesList.Count > n)
+                return _linesList[n].GetLineXShift();
+            else
+                return 0;
+        }
+
+        private void UpdLinesYShift()
+        {
+            int inc = 0;
+            foreach (TextLine line in _linesList)
+            {
+                line.SetLineYShift((_lineHeight + _lineSpacer) * inc + globalYShift);
+                inc++;
+            }
+
+        }
+
+        private void UpdLinesXShift()
+        {
+            foreach (TextLine line in _linesList)
+            {
+                line.SetLineXShift(globalXShift);
+            }
+        }
+
+        private void SetAllowHeight()
+        {
+            foreach (TextLine line in _linesList)
+            {
+                line.SetAllowHeight(_cursorYMax);
+            }
+        }
+
+        private void SetAllowWidth()
+        {
+            foreach (TextLine line in _linesList)
+            {
+                line.SetAllowWidth(_cursorXMax);
+            }
+        }
+        
     }
 }

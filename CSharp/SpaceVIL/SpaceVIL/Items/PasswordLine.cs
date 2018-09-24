@@ -20,6 +20,9 @@ namespace SpaceVIL
         private Rectangle _selectedArea;
         private bool _isEditable = true;
 
+        //private int _cursorXMin = 0;
+        private int _cursorXMax = int.MaxValue;
+
         private int _selectFrom = -1;
         private int _selectTo = -1;
         private bool _isSelect = false;
@@ -100,7 +103,7 @@ namespace SpaceVIL
 
             for (int i = 0; i < lineLetPos.Count; i++)
             {
-                if (lineLetPos[i] <= coordX + 3)
+                if (lineLetPos[i] + GetLineXShift() <= coordX + 3)
                     pos = i + 1;
                 else break;
             }
@@ -173,23 +176,30 @@ namespace SpaceVIL
                         if (args.Scancode == DeleteCode && _cursor_position < GetText().Length)//delete
                         {
                             SetText(GetText().Remove(_cursor_position, 1));
+                            ReplaceCursor();
                         }
                     }
                 }
                 else
                     if (_isSelect)
-                    UnselectText();
+                        UnselectText();
             }
 
             if (args.Scancode == LeftArrowCode && _cursor_position > 0)//arrow left
             {
-                if (!_justSelected) _cursor_position--;
-                ReplaceCursor();
+                if (!_justSelected)
+                {
+                    _cursor_position--;
+                    ReplaceCursor();
+                }
             }
             if (args.Scancode == RightArrowCode && _cursor_position < GetText().Length)//arrow right
             {
-                if (!_justSelected) _cursor_position++;
-                ReplaceCursor();
+                if (!_justSelected)
+                {
+                    _cursor_position++;
+                    ReplaceCursor();
+                }
             }
             if (args.Scancode == EndCode)//end
             {
@@ -220,7 +230,13 @@ namespace SpaceVIL
 
             if (cPos > 0)
                 coord = _text_object.GetLetPosArray()[cPos - 1];
-            return coord;
+
+            if (GetLineXShift() + coord < 0) //_cursorXMin)
+                _text_object.SetLineXShift(-coord); // _lineXShift + _text_object.GetLetWidth(_cursor_position));
+            if (GetLineXShift() + coord > _cursorXMax)
+                _text_object.SetLineXShift(_cursorXMax - coord); // _lineXShift - _text_object.GetLetWidth(_cursor_position - 1));
+
+            return GetLineXShift() + coord;
         }
 
         private void ReplaceCursor()
@@ -293,6 +309,7 @@ namespace SpaceVIL
             }
 
             //_text_object.SetItemText(text);
+            _text_object.CheckXShift(_cursorXMax);
         }
         private String GetText()
         {
@@ -341,6 +358,14 @@ namespace SpaceVIL
                     _cursor.IsVisible = false;
             }
         }
+        public override void SetWidth(int width)
+        {
+            base.SetWidth(width);
+            _cursorXMax = GetWidth() - _cursor.GetWidth() - GetPadding().Left - GetPadding().Right - 
+                _show_pwd_btn.GetWidth(); //_cursorXMin;// ;
+            _text_object.SetAllowWidth(_cursorXMax);
+            _text_object.CheckXShift(_cursorXMax); //_text_object.SetLineXShift();
+        }
 
         public override void InitElements()
         {
@@ -350,6 +375,12 @@ namespace SpaceVIL
             _show_pwd_btn.EventToggle += (sender, args) => ShowPassword(sender);
             AddItems(_selectedArea, _text_object, _cursor, _show_pwd_btn);
             // GetHandler().SetFocusedItem(this);
+
+            //_cursorXMin = GetPadding().Left;
+            _cursorXMax = GetWidth() - _cursor.GetWidth() - GetPadding().Left - GetPadding().Right -
+                _show_pwd_btn.GetWidth(); //_cursorXMin;// ;
+            _text_object.SetAllowWidth(_cursorXMax);
+            _text_object.SetLineXShift();
         }
 
         public int GetTextWidth()
@@ -454,5 +485,11 @@ namespace SpaceVIL
                 _show_pwd_btn.SetStyle(inner_style);
             }
         }
+
+        private int GetLineXShift()
+        {
+            return _text_object.GetLineXShift();
+        }
+
     }
 }
