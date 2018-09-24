@@ -17,11 +17,20 @@ namespace SpaceVIL
         public List<TreeItem> GetTreeItems()
         {
             return _list_inners;
-        } 
+        }
         private TreeItem _branch;
         internal TreeView _parent;
         internal int _nesting_level = 0;
         private int _indent_size = 20;
+        public int GetIndentSize()
+        {
+            return _indent_size;
+        }
+        public void SetIndentSize(int size)
+        {
+            _indent_size = size;
+            ResetIndents();
+        }
         public bool IsRoot = false;
         internal UInt32 Index = 0;
         private TreeItemType _item_type;
@@ -155,7 +164,7 @@ namespace SpaceVIL
             });
             new_leaf.EventMouseClick += (sender, args) =>
             {
-                AddTreeItem(GetTreeLeaf());
+                this.AddItem(GetTreeLeaf());
             };
             MenuItem new_branch = new MenuItem("New Branch");
             new_branch.SetForeground(Color.LightGray);
@@ -165,7 +174,7 @@ namespace SpaceVIL
             });
             new_branch.EventMouseClick += (sender, args) =>
             {
-                AddTreeItem(GetTreeBranch());
+                this.AddItem(GetTreeBranch());
             };
 
             EventMouseClick += (_, x) => _menu.Show(_, x);
@@ -180,7 +189,8 @@ namespace SpaceVIL
                     _icon_shape.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
                     _icon_shape.SetTriangles(GraphicsMathService.GetEllipse(3, 8));
                     _icon_shape.SetMargin(2, 0, 0, 0);
-                    AddItems(_icon_shape, _text_object);
+                    base.AddItem(_icon_shape);
+                    base.AddItem(_text_object);
 
                     _menu.SetSize(100, 4 + 30 * 2 - 5);
                     _menu.AddItems(rename, remove, copy);
@@ -206,15 +216,15 @@ namespace SpaceVIL
                     _indicator.Border.Radius = 0;
                     _indicator.EventToggle += (sender, args) => OnToggleHide(_indicator.IsToggled);
 
-                    AddItem(_indicator);
-                    AddItem(_icon_shape);
-                    AddItem(_text_object);
+                    base.AddItem(_indicator);
+                    base.AddItem(_icon_shape);
+                    base.AddItem(_text_object);
 
                     _menu.SetSize(100, 4 + 30 * 3 - 5);
                     _menu.AddItems(new_branch, new_leaf, rename, paste);
                     break;
                 default:
-                    AddItem(_text_object);
+                    base.AddItem(_text_object);
                     break;
             }
         }
@@ -239,7 +249,7 @@ namespace SpaceVIL
             //update layout
             _parent.UpdateElements();
         }
-        public void AddTreeItem(TreeItem item)
+        private void AddTreeItem(TreeItem item)
         {
             _indicator.IsToggled = true;
             _list_inners.Add(item);
@@ -248,10 +258,11 @@ namespace SpaceVIL
             item._nesting_level = _nesting_level + 1;
             _parent.RefreshTree(item);
         }
-        public new void AddItem(BaseItem item)
+        public override void AddItem(BaseItem item)
         {
-            base.AddItem(item);
-            UpdateLayout();
+            TreeItem tmp = item as TreeItem;
+            if (tmp != null)
+                AddTreeItem(tmp);
         }
         public override void SetWidth(int width)
         {

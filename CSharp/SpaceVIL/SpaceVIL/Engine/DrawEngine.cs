@@ -403,7 +403,10 @@ namespace SpaceVIL
         private VisualItem IsInListHoveredItems<T>()//idraggable adaptations
         {
             VisualItem wanted = null;
-            foreach (var item in HoveredItems)
+            VisualItem[] list;
+            lock (_handler.GetLayout().engine_locker)
+                list = HoveredItems.ToArray();
+            foreach (var item in list)
             {
                 if (item is T)
                 {
@@ -432,16 +435,12 @@ namespace SpaceVIL
         }
         private bool GetHoverVisualItem(float xpos, float ypos, InputEventType action)
         {
+            List<VisualItem> queue = new List<VisualItem>();
             HoveredItems.Clear();
 
             List<BaseItem> layout_box_of_items = new List<BaseItem>();
             lock (_handler.GetLayout().engine_locker)
             {
-                // foreach (var item in ItemsLayoutBox.GetLayoutFloatItems(_handler.GetLayout().Id))
-                //     layout_box_of_items.Add(item);
-                // foreach (var item in ItemsLayoutBox.GetLayoutItems(_handler.GetLayout().Id))
-                //     layout_box_of_items.Add(item);
-
                 layout_box_of_items.Add(_handler.GetLayout().GetWindow());
                 layout_box_of_items.AddRange(GetInnerItems(_handler.GetLayout().GetWindow()));
 
@@ -458,15 +457,15 @@ namespace SpaceVIL
 
             foreach (var item in layout_box_of_items)
             {
-                if (item is VisualItem)
+                VisualItem tmp = item as VisualItem;
+                if (tmp != null)
                 {
-                    if (!item.IsVisible || !item.IsDrawable)
+                    if (!tmp.IsVisible || !tmp.IsDrawable)
                         continue;
-
-                    if ((item as VisualItem).GetHoverVerification(xpos, ypos))
+                    tmp.IsMouseHover = false;
+                    if (tmp.GetHoverVerification(xpos, ypos))
                     {
-                        HoveredItems.Add(item as VisualItem);
-                        //AssignActions(InputEventType.MouseHover, _margs, item as VisualItem);
+                        queue.Add(tmp);
                     }
                     else
                     {
@@ -485,9 +484,22 @@ namespace SpaceVIL
                 }
             }
 
-            if (HoveredItems.Count > 0)
+            if (queue.Count > 0)
             {
-                HoveredItem = HoveredItems.Last();
+                HoveredItem = queue.Last();
+                HoveredItem.IsMouseHover = true;
+
+                HoveredItems = queue;
+                HoveredItems.Reverse();
+                foreach (var item in HoveredItems)
+                {
+                    if (item.Equals(HoveredItem) && HoveredItem.IsDisabled)
+                        continue;//пропустить
+                        item.IsMouseHover = true;
+                    if (!item.IsPassEvents)
+                        break;//остановить передачу событий последующим элементам
+                }
+                HoveredItems.Reverse();
                 return true;
             }
             else
@@ -507,7 +519,7 @@ namespace SpaceVIL
 
             _margs.Position.SetPosition((float)xpos, (float)ypos);
 
-            AssignActions(InputEventType.MouseMove, _margs, _handler.GetLayout().GetWindow());
+            //AssignActions(InputEventType.MouseMove, _margs, _handler.GetLayout().GetWindow());
 
             if (EngineEvent.LastEvent().HasFlag(InputEventType.MousePressed)) // жость какая-то ХЕРОТАААА!!!
             {
@@ -873,10 +885,10 @@ namespace SpaceVIL
                 }
                 //draw tooltip if needed
                 DrawToolTip();
-                // if (!_handler.Focusable)
-                // {
-                //     DrawShadePillow();
-                // }
+                if (!_handler.Focusable)
+                {
+                    DrawShadePillow();
+                }
                 _handler.Swap();
             }
             //Thread.Sleep(1000/60);

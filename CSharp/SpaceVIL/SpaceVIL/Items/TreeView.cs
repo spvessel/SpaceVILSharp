@@ -20,7 +20,7 @@ namespace SpaceVIL
                 foreach (var item in list)
                 {
                     TreeItem tmp = item as TreeItem;
-                    if(tmp != null)
+                    if (tmp != null)
                         tmp.ResetIndents();
                 }
             }
@@ -42,7 +42,7 @@ namespace SpaceVIL
             SetSelectionVisibility(true);
             _root._parent = this;
             _root.IsRoot = true;
-            AddItem(_root);
+            base.AddItem(_root);
             SetRootVisibility(false);
 
             _menu = new ContextMenu(GetHandler());
@@ -66,7 +66,7 @@ namespace SpaceVIL
             });
             new_leaf.EventMouseClick += (sender, args) =>
             {
-                AddTreeItem(GetTreeLeaf());
+                AddItem(GetTreeLeaf());
             };
             MenuItem new_branch = new MenuItem("New Branch");
             new_branch.SetForeground(Color.LightGray);
@@ -76,7 +76,7 @@ namespace SpaceVIL
             });
             new_branch.EventMouseClick += (sender, args) =>
             {
-                AddTreeItem(GetTreeBranch());
+                AddItem(GetTreeBranch());
             };
 
             EventMouseClick += (_, x) => _menu.Show(_, x);
@@ -98,7 +98,7 @@ namespace SpaceVIL
         }
         internal void RefreshTree(TreeItem item)
         {
-            AddItem(item);
+            base.AddItem(item);
             OnSortTree();
             UpdateElements();
         }
@@ -112,7 +112,7 @@ namespace SpaceVIL
             SetListContent(outList.Select(_ => _ as BaseItem).ToList());
         }
 
-        private List<TreeItem> SortHelper(TreeItem item) 
+        private List<TreeItem> SortHelper(TreeItem item)
         {
             List<TreeItem> tmpList = item.GetTreeItems();
             tmpList.Sort(CompareInAlphabet);
@@ -138,13 +138,9 @@ namespace SpaceVIL
             return ti1.GetText().CompareTo(ti2.GetText());
         }
 
-        public void AddTreeItem(TreeItem item)
-        {
-            _root.AddTreeItem(item);
-        }
         public override void AddItem(BaseItem item)
         {
-            base.AddItem(item);
+            _root.AddItem(item);
         }
 
         public override void SetStyle(Style style)

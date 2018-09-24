@@ -39,11 +39,6 @@ namespace SpaceVIL
         {
             t1 = t2;
         }
-
-        public static void LogWrite(string file_path = "log.txt")
-        {
-
-        }
         // internal static String ScanCodeToASCII(int scancode, KeyMods mods, int layout)
         // {
         //     String str = String.Empty;

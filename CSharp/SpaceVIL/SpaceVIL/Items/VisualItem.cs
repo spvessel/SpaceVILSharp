@@ -33,39 +33,6 @@ namespace SpaceVIL
         public EventKeyMethodState EventKeyRelease;
         public EventInputTextMethodState EventTextInput;
 
-        //style
-        internal bool _is_style_set = false;
-        public override void SetStyle(Style style)
-        {
-            if (style == null)
-                return;
-
-            _is_style_set = true;
-
-            SetBackground(style.Background);
-            SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
-            SetSize(style.Width, style.Height);
-            SetMinSize(style.MinWidth, style.MinHeight);
-            SetMaxSize(style.MaxWidth, style.MaxHeight);
-            SetAlignment(style.Alignment);
-            SetPosition(style.X, style.Y);
-            SetPadding(style.Padding);
-            SetSpacing(style.Spacing);
-            SetMargin(style.Margin);
-            Border.Radius = style.BorderRadius;
-            Border.Thickness = style.BorderThickness;
-            IsVisible = style.IsVisible;
-            RemoveAllItemStates();
-            foreach (var state in style.GetAllStates())
-            {
-                AddItemState(state.Key, state.Value);
-            }
-            if (style.Shape != null)
-            {
-                IsCustom = new CustomFigure(style.IsFixedShape, style.Shape);
-            }
-        }
-
         private String _tooltip = String.Empty;
         public String GetToolTip()
         {
@@ -566,7 +533,7 @@ namespace SpaceVIL
                 return false;
 
             float Ax, Ay, Bx, By, Cx, Cy, Px, Py, m, l;
-            IsMouseHover = false;
+            bool result = false;
 
             for (int point = 0; point < tmp.Count; point += 3)
             {
@@ -591,68 +558,23 @@ namespace SpaceVIL
                     l = (Px - m * Cx) / Bx;
                     if (l >= 0 && (m + l) <= 1)
                     {
-                        IsMouseHover = true;
+                        result = true;
                         _mouse_ptr.SetPosition(xpos, ypos);
-                        return IsMouseHover;
+                        return result;
                     }
                 }
             }
 
             _mouse_ptr.Clear();
-            return IsMouseHover;
+            return result;
         }
         private bool LazyHoverVerification(float xpos, float ypos)
         {
-            //parent border
-            /*float left_border = (GetParent().GetX() / (float)GetHandler().GetWidth()) * 2.0f - 1.0f;
-            float right_border = ((GetParent().GetWidth() + GetParent().GetX()) / (float)GetHandler().GetWidth()) * 2.0f - 1.0f;
-            float top_border = (((GetParent().GetHeight() + GetParent().GetY()) / (float)GetHandler().GetHeight()) * 2.0f - 1.0f) * (-1.0f);
-            float bottom_border = ((GetParent().GetY() / (float)GetHandler().GetHeight()) * 2.0f - 1.0f) * (-1.0f);
-
-            //item border
-            float minx = (GetX() / (float)GetHandler().GetWidth()) * 2.0f - 1.0f;
-            minx = (minx < left_border) ? left_border : minx;
-            float maxx = ((GetWidth() + GetX()) / (float)GetHandler().GetWidth()) * 2.0f - 1.0f;
-            maxx = (maxx > right_border) ? right_border : maxx;
-            float miny = (((GetHeight() + GetY()) / (float)GetHandler().GetHeight()) * 2.0f - 1.0f) * (-1.0f);
-            miny = (miny < top_border) ? top_border : miny;
-            float maxy = ((GetY() / (float)GetHandler().GetHeight()) * 2.0f - 1.0f) * (-1.0f);
-            maxy = (maxy > bottom_border) ? bottom_border : maxy;
-
-            //current mouse cursor
-            float x_gl = (xpos / (float)GetHandler().GetWidth()) * 2.0f - 1.0f;
-            float y_gl = (((float)ypos / (float)GetHandler().GetHeight()) * 2.0f - 1.0f) * (-1.0f);
-
-            if (x_gl >= minx
-                && x_gl <= maxx
-                && y_gl >= miny
-                && y_gl <= maxy)
-            {
-                IsMouseHover = true;
-                _mouse_ptr.SetPosition(xpos, ypos);
-            }
-            else
-            {
-                IsMouseHover = false;
-                _mouse_ptr.Clear();
-            }
-            return IsMouseHover;*/
-
+            bool result = false;
             float minx = GetX();
             float maxx = GetX() + GetWidth();
             float miny = GetY();
             float maxy = GetY() + GetHeight();
-
-            // IFloating float_item = this as IFloating;
-            // if (float_item != null)
-            // {
-            //     Console.WriteLine(
-            //         _confines_x_0 + " " +
-            //         _confines_x_1 + " " +
-            //         _confines_y_0 + " " +
-            //         _confines_y_1
-            //     );
-            // }
 
             if (_confines_x_0 > minx)
                 minx = _confines_x_0;
@@ -671,15 +593,14 @@ namespace SpaceVIL
                 && ypos >= miny
                 && ypos <= maxy)
             {
-                IsMouseHover = true;
+                result = true;
                 _mouse_ptr.SetPosition(xpos, ypos);
             }
             else
             {
-                IsMouseHover = false;
                 _mouse_ptr.Clear();
             }
-            return IsMouseHover;
+            return result;
         }
 
         public CustomFigure IsCustom = null;
@@ -701,6 +622,39 @@ namespace SpaceVIL
             SetTriangles(GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));
             //GetState(ItemStateType.Base).Shape = new CustomFigure(true, GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));
             return GraphicsMathService.ToGL(this as BaseItem, GetHandler());
+        }
+
+        //style
+        internal bool _is_style_set = false;
+        public override void SetStyle(Style style)
+        {
+            if (style == null)
+                return;
+
+            _is_style_set = true;
+
+            SetBackground(style.Background);
+            SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
+            SetSize(style.Width, style.Height);
+            SetMinSize(style.MinWidth, style.MinHeight);
+            SetMaxSize(style.MaxWidth, style.MaxHeight);
+            SetAlignment(style.Alignment);
+            SetPosition(style.X, style.Y);
+            SetPadding(style.Padding);
+            SetSpacing(style.Spacing);
+            SetMargin(style.Margin);
+            Border.Radius = style.BorderRadius;
+            Border.Thickness = style.BorderThickness;
+            IsVisible = style.IsVisible;
+            RemoveAllItemStates();
+            foreach (var state in style.GetAllStates())
+            {
+                AddItemState(state.Key, state.Value);
+            }
+            if (style.Shape != null)
+            {
+                IsCustom = new CustomFigure(style.IsFixedShape, style.Shape);
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 namespace SpaceVIL
 {
-    internal interface IFloating
+    public interface IFloating
     {
         void Show(IItem sender, MouseArgs args);
         void Hide();
