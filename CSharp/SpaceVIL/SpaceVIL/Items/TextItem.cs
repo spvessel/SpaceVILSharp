@@ -245,6 +245,7 @@ namespace SpaceVIL
                 float one = r;
                 float two = g;
                 float three = b;
+                /*
                 if (f > 100) {
                     float t1, t2, t3;
                     if (tmp >= 200) //in
@@ -312,7 +313,7 @@ namespace SpaceVIL
                     //three *= b;
                     //Console.WriteLine(one + " " + two + " " + three); 
                 }
-
+                */
                 if (tmp > 1) tmp = 1;
                 _colors[inc] = one; inc++;
                 _colors[inc] = two; inc++;

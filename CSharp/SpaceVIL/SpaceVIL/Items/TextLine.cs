@@ -14,10 +14,15 @@ namespace SpaceVIL
         private int _minLineSpacer;
         private int _minFontY;
         private int _maxFontY;
-        private List<float> _coordArray; //private List<List<float>> _coordArray;
+        //private List<float> _coordArray; //private List<List<float>> _coordArray;
         private float _lineWidth; //private float[] _lineWidth;
         private List<int> _letEndPos;
-        private float _lineYShift = 0;
+        private int _lineYShift = 0;
+        private int _lineXShift = 0;
+        private int _parentAllowWidth = int.MaxValue;
+        private int _parentAllowHeight = int.MaxValue;
+
+        private List<FontEngine.ModifyLetter> _letters;
 
         public TextLine()
         {
@@ -43,25 +48,46 @@ namespace SpaceVIL
             String text = GetItemText();
             Font font = GetFont();
             //String[] line = new String[1] { text };//.Split('\n');
-            PixMapData obj;
-            _coordArray = new List<float>(); //_coordArray = new List<List<float>>();
+            //PixMapData obj;
+            //_coordArray = new List<float>(); //_coordArray = new List<List<float>>();
             //_lineWidth = new float[line.Length];
-            List<float> alphas = new List<float>();
+            //List<float> alphas = new List<float>();
 
-            int inc = 0;
+            //int inc = 0;
             //foreach (String textLine in line)
             //{
+
+            /*
             obj = FontEngine.GetPixMap(text, font); //obj = FontEngine.GetPixMap(textLine, font);
 
             _coordArray.AddRange(obj.GetPixels()); //_coordArray.Add(obj.GetPixels());
             alphas.AddRange(obj.GetColors());
             _lineWidth = obj.GetAlpha();
 
-            inc++;
+            //inc++;
             _letEndPos = obj.GetEndPositions();
-            //}
+            */
 
-            SetAlphas(alphas);
+            //}
+            //LogService.Log().LogText("Text " + text + ", creation begin");
+            _letters = FontEngine.GetPixMap(text, font);
+            _letEndPos = new List<int>();
+            //LogService.Log().LogText("Text " + text + ", creation end");
+            //LogService.Log().LogOne(_letters.Count, "letters count");
+
+            if (_letters.Count > 0)
+                _lineWidth = _letters[_letters.Count - 1].xShift + _letters[_letters.Count - 1].width +
+                    _letters[_letters.Count - 1].xBeg; //xBeg не обязательно, т.к. везде 0, но вдруг
+
+            
+            foreach (FontEngine.ModifyLetter modL in _letters)
+            {
+                //alphas.AddRange(modL.GetCol());
+                _letEndPos.Add(modL.xBeg + modL.xShift + modL.width);
+            }
+
+            //SetAlphas(alphas);
+            
 
             AddAllShifts();
             
@@ -72,27 +98,30 @@ namespace SpaceVIL
             if (GetParent() == null)
                 return;
 
-            if (_coordArray == null)
+            if (_letters == null)
                 return;
 
             List<float> outRealCoords = new List<float>();
+            List<float> alphas = new List<float>();
 
             ItemAlignment alignments = GetTextAlignment();
             float alignShiftX = 1;
             float alignShiftY = 0;
 
             float height = Math.Abs(_maxFontY - _minFontY);
-            //float bigSpacer = height + _lineSpacer;
-            //float addSpace = -_minFontY;
-            //if (_lineYShift == 0)
-            //    _lineYShift = -_minFontY;
-            //for (int i = 0; i < _coordArray.Count; i++)
-            //{
+
+            if (_lineYShift - _minFontY + height < 0 || _lineYShift - _minFontY > _parentAllowHeight)
+            {
+                SetAlphas(alphas);
+                SetRealCoords(outRealCoords);
+                return;
+            }
+
             //Horizontal
-            if (alignments.HasFlag(ItemAlignment.Right))
+            if (alignments.HasFlag(ItemAlignment.Right) && (_lineWidth < _parentAllowWidth))
                 alignShiftX = GetParent().GetWidth() - _lineWidth - GetParent().GetPadding().Right; //[i];
 
-            else if (alignments.HasFlag(ItemAlignment.HCenter))
+            else if (alignments.HasFlag(ItemAlignment.HCenter) && (_lineWidth < _parentAllowWidth))
                 alignShiftX = (GetParent().GetWidth() - _lineWidth) / 2f; //[i]) / 2f;
 
             //Vertical
@@ -102,15 +131,30 @@ namespace SpaceVIL
             else if (alignments.HasFlag(ItemAlignment.VCenter))
                 alignShiftY = (GetParent().GetHeight() - height) / 2f;
 
-            for (int j = 0; j < _coordArray.Count / 3; j++) //_coordArray[i]...
-            {
-                outRealCoords.Add(_coordArray[j * 3] + alignShiftX); //_coordArray[i]...
-                outRealCoords.Add(_coordArray[j * 3 + 1] + alignShiftY + _lineYShift - _minFontY); //_coordArray[i]...
-                outRealCoords.Add(_coordArray[j * 3 + 2]); //_coordArray[i]...
-            }
-            //addSpace += bigSpacer;
-            //}
+            List<float> tmpList;
+            float xCoord, yCoord;
 
+            foreach (FontEngine.ModifyLetter modL in _letters) {
+                tmpList = modL.GetPix();
+                xCoord = alignShiftX + modL.xBeg + modL.xShift + _lineXShift;
+                yCoord = alignShiftY + _lineYShift - _minFontY + modL.yBeg;
+
+                if (xCoord + modL.width < 0) continue;
+                if (xCoord > _parentAllowWidth) break;
+
+
+                alphas.AddRange(modL.GetCol());
+                //_letEndPos.Add(modL.xBeg + modL.xShift + modL.width);
+
+                for (int j = 0; j < tmpList.Count / 3; j++)
+                {
+                    outRealCoords.Add(tmpList[j * 3] + xCoord);
+                    outRealCoords.Add(tmpList[j * 3 + 1] + yCoord);
+                    outRealCoords.Add(tmpList[j * 3 + 2]);
+                }
+            }
+
+            SetAlphas(alphas);
             SetRealCoords(outRealCoords);
         }
 
@@ -168,15 +212,35 @@ namespace SpaceVIL
             return _letEndPos;
         }
 
-        internal void SetLineYShift(float sp)
-        {
-            _lineYShift = sp;
-            UpdateCoords(); //SetCoordsFlag(true);
+        internal int GetLetWidth(int count) {
+            if (_letters == null) return 0;
+            if ((count < 0) || (count >= _letters.Count)) return 0;
+            
+            return _letters[count].width;
         }
 
-        internal float GetLineYShift()
+        internal void SetLineYShift(int sp)
+        {
+            _lineYShift = sp;
+            //_parentAllowHeight = allowHeight;
+            UpdateCoords();
+        }
+
+        internal int GetLineYShift()
         {
             return _lineYShift;
+        }
+
+        internal void SetLineXShift(int sp)
+        {
+            _lineXShift = sp;
+            //_parentAllowWidth = allowWidth;
+            UpdateCoords();
+        }
+
+        internal int GetLineXShift()
+        {
+            return _lineXShift;
         }
 
         internal float GetLineTopCoord()
@@ -209,6 +273,42 @@ namespace SpaceVIL
             SetTextAlignment(style.TextAlignment);
             SetMargin(style.Margin);
             SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
+        }
+        /*
+        internal void UpdXLineShift(int xls)
+        {
+            _lineXShift = xls;
+            SetLineXShift(_lineXShift);
+        }
+        */
+        internal void SetLineXShift() {
+            SetLineXShift(_lineXShift);
+        }
+        
+        internal void CheckXShift(int _cursorXMax)
+        {
+            if (GetLetPosArray() == null || GetLetPosArray().Count == 0)
+                return;
+            int s = GetLetPosArray().Last() - _cursorXMax;
+            if (s <= 0) SetLineXShift(0);
+            else if ((s > 0) && (s + _lineXShift < 0))
+            {
+                SetLineXShift(-s);
+            }
+        }
+
+        internal void SetLineYShift() {
+            SetLineYShift(_lineYShift);
+        }
+
+        internal void SetAllowWidth(int allowWidth)
+        {
+            _parentAllowWidth = allowWidth;
+        }
+
+        internal void SetAllowHeight(int allowHeight)
+        {
+            _parentAllowHeight = allowHeight;
         }
     }
 }
