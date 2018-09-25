@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="lwjgl">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../../../lwjgl" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/../../../../../lwjgl" recursive="false" />
+  </library>
+</component>

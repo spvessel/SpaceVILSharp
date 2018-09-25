@@ -1,0 +1,22 @@
+{
+    "workbench.sideBar.location": "left",
+    "workbench.activityBar.visible": false,
+    "workbench.colorCustomizations": {
+        "editor.background": "#24262c",
+        "sideBar.background": "#202228",
+        "contrastBorder": "#24262c",
+        "tab.activeBorderTop": "#0084ff",
+        "tab.activeBackground": "#24262c",
+        "tab.inactiveBackground": "#2c2f37",
+        "tab.border": "#24262c",
+        "editorGroupHeader.tabsBackground": "#2a2c33",
+        "scrollbar.shadow": "#ffffff00",
+        "widget.shadow": "#ffffff00",
+        "editorIndentGuide.background": "#2f323a",
+        "editorGroup.border": "#363943",
+        "scrollbarSlider.background": "#ffffff0A",
+        "terminal.background": "#1d1d1d",
+    },
+    "editor.smoothScrolling": true,
+    "java.configuration.updateBuildConfiguration": "automatic"
+}
