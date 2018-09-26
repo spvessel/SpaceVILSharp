@@ -112,3 +112,10 @@ CSharp/SpaceVIL/SpaceVIL/bin/Release/LogNote.txt
 CSharp/SpaceVIL/SpaceVIL/View/BlockList.cs
 CSharp/SpaceVIL/SpaceVIL/View/SplitAreaTest.cs
 *.jar
+*.class
+*.txt
+*.dylib
+Java/SpaceVIL/spacevil/target/surefire-reports/TEST-com.spvessel.AppTest.xml
+*.so
+*.jnilib
+*.prefs
