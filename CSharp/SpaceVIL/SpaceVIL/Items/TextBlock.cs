@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    internal class TextBlock : VisualItem, ITextEditable, IDraggable, ITextShortcuts
+    internal class TextBlock : VisualItem, ITextEditable, IDraggable, ITextShortcuts, IScrollable
     {
         private static int count = 0;
         private string _wholeText = "";
@@ -51,7 +50,6 @@ namespace SpaceVIL
         private int _cursorXMax = int.MaxValue;
         //private int _cursorYMin = 0;
         private int _cursorYMax = int.MaxValue;
-        private int maxLineWidth = 0;
 
         public TextBlock()
         {
@@ -75,11 +73,13 @@ namespace SpaceVIL
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;
             EventTextInput += OnTextInput;
+            EventScrollUp += OnScrollUp;
+            EventScrollDown += OnScrollDown;
 
             ShiftValCodes = new List<int>() {LeftArrowCode, RightArrowCode, EndCode,
                 HomeCode, UpArrowCode, DownArrowCode};
 
-            int[] output = te.GetFontDims();// FontEngine.GetSpacerDims(te.GetFont());
+            int[] output = te.GetFontDims();
             _minLineSpacer = 3;// output[0];
             _minFontY = output[1];
             _maxFontY = output[2];
@@ -112,6 +112,49 @@ namespace SpaceVIL
             }
         }
 
+        protected virtual void OnScrollUp(object sender, MouseArgs args)
+        {
+            int h = GetTextHeight();
+            if (h < _cursorYMax) return;
+            if (globalYShift >= 0) return;
+
+            int curCoord = _cursor.GetY() - globalYShift;
+
+            globalYShift += GetLineY(1);
+            if (globalYShift > 0) globalYShift = 0;
+
+            UpdLinesYShift();
+            _cursor.SetY(curCoord + globalYShift);
+            //ReplaceCursor();
+        }
+
+        protected virtual void OnScrollDown(object sender, MouseArgs args)
+        {
+            int h = GetTextHeight();
+            if (h < _cursorYMax) return;
+            if (h + globalYShift <= _cursorYMax) return;
+
+            int curCoord = _cursor.GetY() - globalYShift;
+
+            globalYShift -= GetLineY(1);
+            if (h + globalYShift < _cursorYMax)
+                globalYShift = _cursorYMax - h;
+
+            UpdLinesYShift();
+            _cursor.SetY(curCoord + globalYShift);
+            //ReplaceCursor();
+        }
+
+        public void InvokeScrollUp(MouseArgs args)
+        {
+            EventScrollUp?.Invoke(this, args);
+        }
+
+        public void InvokeScrollDown(MouseArgs args)
+        {
+            EventScrollDown?.Invoke(this, args);
+        }
+
         private void ReplaceCursorAccordingCoord(Point realPos)
         {
             //Вроде бы и без этого норм, но пусть пока будет
@@ -120,8 +163,8 @@ namespace SpaceVIL
 
             //Console.WriteLine(_lineSpacer);
 
-            realPos.Y -= GetY() + GetPadding().Top;
-            int lineNumb = realPos.Y / (_lineHeight + _lineSpacer);
+            realPos.Y -= GetY() + GetPadding().Top + globalYShift;
+            int lineNumb = realPos.Y / GetLineY(1);// (_lineHeight + _lineSpacer);
             if (lineNumb >= _linesList.Count)
                 lineNumb = _linesList.Count - 1;
             if (lineNumb < 0) lineNumb = 0;
@@ -380,7 +423,7 @@ namespace SpaceVIL
             Point cPos = CheckLineFits(cPos0);
 
             int letCount = GetLineLetCount(cPos.Y);
-            coord.Y = _linesList[cPos.Y].GetLineYShift();
+            coord.Y = GetLineY(cPos.Y);
             
             if (letCount == 0)
             {
@@ -421,17 +464,13 @@ namespace SpaceVIL
 
                 if (_linesList == null) return;
 
-                /*????????????????????
-                foreach (TextLine te in _linesList)
-                {
-                    te.SetLineYShift(_lineHeight + _lineSpacer);
-                }
-                */
-
+                UpdLinesYShift();
+                /*
                 for (int i = 0; i < _linesList.Count; i++)
                 {
                     _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * i);
                 }
+                */
             }
 
             _cursor.SetHeight(_lineHeight + _lineSpacer); // + 6);
@@ -539,7 +578,8 @@ namespace SpaceVIL
 
         public int GetTextHeight()
         {
-            return _lineHeight * _linesList.Count + _lineSpacer * (_linesList.Count - 1);
+            //return _lineHeight * _linesList.Count + _lineSpacer * (_linesList.Count - 1);
+            return GetLineY(_linesList.Count);
         }
 
         private void SplitAndMakeLines(String text)
@@ -820,28 +860,28 @@ namespace SpaceVIL
             Point outPoint = CursorPosToCoord(point);
             int offset = _cursorXMax/3;
 
-            if (globalXShift + outPoint.X < 0) //_cursorXMin)
+            if (globalXShift + outPoint.X < 0)
             {
                 globalXShift = -outPoint.X;
                 globalXShift += offset;
                 if (globalXShift > 0) globalXShift = 0;
-                UpdLinesXShift(); // _lineXShift + _text_object.GetLetWidth(_cursor_position));
+                UpdLinesXShift();
             }
             if (globalXShift + outPoint.X > _cursorXMax)
             {
                 globalXShift = _cursorXMax - outPoint.X;
                 globalXShift -= offset;
-                UpdLinesXShift(); // _lineXShift - _text_object.GetLetWidth(_cursor_position - 1));
+                UpdLinesXShift();
             }
-
-            if (outPoint.Y < 0) //globalYShift + 
+            if (outPoint.Y + globalYShift < 0)
             {
-                globalYShift = -outPoint.Y; // _lineXShift + _text_object.GetLetWidth(_cursor_position));
+                globalYShift = -outPoint.Y;
                 UpdLinesYShift();
+
             }
-            if (outPoint.Y > _cursorYMax) //globalYShift + 
+            if (outPoint.Y + _lineHeight + globalYShift > _cursorYMax)
             {
-                globalYShift = _cursorYMax - outPoint.Y;
+                globalYShift = _cursorYMax - outPoint.Y - _lineHeight;
                 UpdLinesYShift();
             }
 
@@ -851,6 +891,7 @@ namespace SpaceVIL
             outPoint.X += GetX() + GetPadding().Left + xShift;
             outPoint.Y += GetY() + GetPadding().Top + yShift;
 
+            //Console.WriteLine(outPoint.X + " " + outPoint.Y + " " + globalYShift);
             return outPoint;
         }
 
@@ -983,12 +1024,16 @@ namespace SpaceVIL
             AddItem(te);
             //text.TrimEnd('\r');
             te.SetItemText(text);
+            /*
             te.SetLineYShift((_lineHeight + _lineSpacer) * lineNum);
             for (int i = lineNum; i < _linesList.Count; i++)
                 _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * (i + 1));
+            */
             _linesList.Insert(lineNum, te);
+
+            UpdLinesYShift(); //Пока обновляются все, но в принципе, нужно только под lineNum
+
             AddItem(_cursor);
-            //te.UpdateData(UpdateType.Critical); //Doing when SetItemText
         }
 
         private void BreakLine()
@@ -1033,16 +1078,17 @@ namespace SpaceVIL
                 inc++;
             }
 
+            UpdLinesYShift(); //Пока обновляются все, но в принципе, нужно только под fromLine
+            /*
             for (int i = fromLine; i < _linesList.Count; i++)
             {
-                _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * i + _lineSpacer);
+                _linesList[i].SetLineYShift((_lineHeight + _lineSpacer) * i); // + _lineSpacer);
             }
-            //LogService.Log().LogVisualItem(this, LogProps.Family);
+            */
         }
 
         public void Clear()
         {
-            //SetText("");
             _linesList[0].SetItemText("");
             RemoveLines(1, _linesList.Count - 1);
             _cursor_position.X = 0;
@@ -1085,7 +1131,7 @@ namespace SpaceVIL
             int inc = 0;
             foreach (TextLine line in _linesList)
             {
-                line.SetLineYShift((_lineHeight + _lineSpacer) * inc + globalYShift);
+                line.SetLineYShift(GetLineY(inc) + globalYShift);
                 inc++;
             }
 
@@ -1114,6 +1160,11 @@ namespace SpaceVIL
                 line.SetAllowWidth(_cursorXMax);
             }
         }
-        
+
+
+        private int GetLineY(int num)
+        {
+            return (_lineHeight + _lineSpacer) * num;
+        }
     }
 }

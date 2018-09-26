@@ -15,7 +15,7 @@ namespace SpaceVIL
         private int _minFontY;
         private int _maxFontY;
         //private List<float> _coordArray; //private List<List<float>> _coordArray;
-        private float _lineWidth; //private float[] _lineWidth;
+        private int _lineWidth; //private float[] _lineWidth;
         private List<int> _letEndPos;
         private int _lineYShift = 0;
         private int _lineXShift = 0;
@@ -79,7 +79,9 @@ namespace SpaceVIL
                 _lineWidth = _letters[_letters.Count - 1].xShift + _letters[_letters.Count - 1].width +
                     _letters[_letters.Count - 1].xBeg; //xBeg не обязательно, т.к. везде 0, но вдруг
 
-            
+            SetWidth(_lineWidth);
+            SetHeight(Math.Abs(_maxFontY - _minFontY));
+
             foreach (FontEngine.ModifyLetter modL in _letters)
             {
                 //alphas.AddRange(modL.GetCol());
@@ -225,8 +227,8 @@ namespace SpaceVIL
 
         internal void SetLineYShift(int sp)
         {
+            //if (_lineYShift == sp) return;
             _lineYShift = sp;
-            //_parentAllowHeight = allowHeight;
             UpdateCoords();
         }
 
@@ -237,8 +239,8 @@ namespace SpaceVIL
 
         internal void SetLineXShift(int sp)
         {
+            //if (_lineXShift == sp) return;
             _lineXShift = sp;
-            //_parentAllowWidth = allowWidth;
             UpdateCoords();
         }
 
