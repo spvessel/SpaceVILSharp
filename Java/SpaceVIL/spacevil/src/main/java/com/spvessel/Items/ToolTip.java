@@ -19,4 +19,12 @@ public class ToolTip extends VisualItem {
     public void initTimer(boolean value) {
 
     }
+
+    public int getTextWidth() {
+        return 0;
+    }
+
+    public void setText(String text) {
+
+    }
 }

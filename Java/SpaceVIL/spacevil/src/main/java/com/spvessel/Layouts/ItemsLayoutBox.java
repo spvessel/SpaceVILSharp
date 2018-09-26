@@ -27,12 +27,12 @@ public class ItemsLayoutBox {
 
     static private Map<UUID, ItemsLayout> layouts = new HashMap<UUID, ItemsLayout>();
 
-    static protected void initLayout(UUID _layout) {
+    static public void initLayout(UUID _layout) {
         ItemsLayout l = new ItemsLayout(_layout);
         layouts.put(l.getId(), l);
     }
 
-    static protected void addItem(WindowLayout layout, BaseItem item, LayoutType type) {
+    static public void addItem(WindowLayout layout, BaseItem item, LayoutType type) {
         switch (type) {
         case STATIC:
             layouts.get(layout.getId()).getItems().add(item);

@@ -8,12 +8,12 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class BaseItem implements InterfaceItem, InterfaceSize, InterfacePosition {
+public abstract class BaseItem implements InterfaceItem, InterfaceSize, InterfacePosition, InterfaceEventUpdate {
 
-    protected int _confines_x_0 = 0;
-    protected int _confines_x_1 = 0;
-    protected int _confines_y_0 = 0;
-    protected int _confines_y_1 = 0;
+    public int _confines_x_0 = 0;
+    public int _confines_x_1 = 0;
+    public int _confines_y_0 = 0;
+    public int _confines_y_1 = 0;
 
     private WindowLayout _handler;
 
@@ -220,21 +220,21 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
         return _item.getItemName();
     }
 
-    protected Boolean isDrawable = true;
+    public boolean isDrawable = true;
 
-    private Boolean _visible = true;
+    private boolean _visible = true;
 
-    public Boolean getVisible() {
+    public boolean getVisible() {
         return _visible;
     }
 
-    public void setVisible(Boolean value) {
+    public void setVisible(boolean value) {
         if (_visible == value)
             return;
         _visible = value;
     }
 
-    protected void updateInnersDrawable(Boolean value) {
+    protected void updateInnersDrawable(boolean value) {
     }
 
     // geometry
@@ -404,7 +404,7 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
         _confines_y_1 = getParent().getY() + getParent().getHeight() - getParent().getPadding().bottom;
     }
 
-    protected Boolean IsOutConfines() {
+    protected boolean IsOutConfines() {
         if (getX() >= _confines_x_1 || getX() + getWidth() <= _confines_x_0 || getY() >= _confines_y_1
                 || getY() + getHeight() <= _confines_y_0)
             return true;

@@ -13,6 +13,32 @@ import java.util.stream.Collectors;
 
 public class WindowLayout {
 
+    class DrawThread extends Thread {
+        DrawEngine engine;
+
+        DrawThread(String name, DrawEngine engine) {
+            super(name);
+            this.engine = engine;
+        }
+
+        public void run() {
+            engine.init();
+        }
+    }
+
+    class TaskThread extends Thread {
+        ActionManager manager;
+
+        TaskThread(String name, ActionManager manager) {
+            super(name);
+            this.manager = manager;
+        }
+
+        public void run() {
+            manager.startManager();
+        }
+    }
+
     public InterfaceCommonMethod eventClose;
     public InterfaceCommonMethod eventMinimize;
     public InterfaceCommonMethod eventHide;
@@ -37,10 +63,10 @@ public class WindowLayout {
 
     private UUID ParentGUID;
 
-    private Thread thread_engine;
-    private DrawEngine engine;
+    private DrawThread thread_engine;
+    public DrawEngine engine;
 
-    private Thread thread_manager;
+    private TaskThread thread_manager;
     private ActionManager manager;
 
     public WindowLayout(CoreWindow window, String name, String title, int width, int height, Boolean border_hidden) {
@@ -52,10 +78,11 @@ public class WindowLayout {
         setWidth(width);
         setHeight(height);
 
+        isDialog = false;
         isBorderHidden = border_hidden;
         isClosed = true;
         isHidden = false;
-        isResizeble = true;
+        isResizable = true;
         isCentered = true;
         isFocusable = true;
         isAlwaysOnTop = false;
@@ -192,7 +219,7 @@ public class WindowLayout {
     }
 
     public String getWindowName() {
-        return "";
+        return _name;
     }
 
     private String _title;
@@ -307,24 +334,84 @@ public class WindowLayout {
     }
 
     public void show() {
+        if (isHidden)
+            setHidden(false);
+        isClosed = false;
 
+        engine._handler.maximized = isMaximized;
+        engine._handler.visible = !isHidden;
+        engine._handler.resizeble = isResizable;
+        engine._handler.borderHidden = isBorderHidden;
+        engine._handler.appearInCenter = isCentered;
+        engine._handler.focusable = isFocusable;
+        engine._handler.alwaysOnTop = isAlwaysOnTop;
+        engine._handler.wPosition.X = getX();
+        engine._handler.wPosition.Y = getY();
+
+        if (thread_engine != null && thread_engine.isAlive())
+            return;
+
+        thread_manager = new TaskThread(getWindowName() + "_" + "actions", manager);
+        thread_manager.start();
+
+        thread_engine = new DrawThread(getWindowName() + "_" + "engine", engine);
+
+        if (isDialog) {
+            synchronized (CommonService.GlobalLocker) {
+                ParentGUID = WindowLayoutBox.lastFocusedWindow.getId();
+                WindowLayoutBox.addToWindowDispatcher(this);
+                WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.focusable = false;
+                WindowLayoutBox.getWindowInstance(ParentGUID).engine.update();
+            }
+            thread_engine.start();
+            try {
+                thread_engine.join();
+            } catch (InterruptedException e) {
+                // e.printStackTrace();
+            }
+        }
+        else {
+            thread_engine.start();
+        }
     }
 
     public void close() {
-
+        if (isDialog) {
+            engine.close();
+            setWindowFocused();
+            synchronized (CommonService.GlobalLocker) {
+                WindowLayoutBox.removeWindow(this);
+                WindowLayoutBox.removeFromWindowDispatcher(this);
+            }
+            if (thread_manager != null && thread_manager.isAlive()) {
+                manager.stopManager();
+                manager.execute.set();
+            }
+        } else {
+            if (thread_engine != null && thread_engine.isAlive()) {
+                engine.close();
+            }
+            if (thread_manager != null && thread_manager.isAlive()) {
+                manager.stopManager();
+                manager.execute.set();
+            }
+            isClosed = true;
+        }
+        if (eventClose != null)
+            eventClose.execute();
     }
 
-    public Boolean isDialog;
-    public Boolean isClosed;
-    public Boolean isHidden;
-    public Boolean isResizeble;
-    public Boolean isAlwaysOnTop;
-    public Boolean isBorderHidden;
-    public Boolean isCentered;
-    public Boolean isFocusable;
-    public Boolean isOutsideClickClosable;
-    public Boolean isFocused;
-    public Boolean isMaximized = false;
+    public boolean isDialog;
+    public boolean isClosed;
+    public boolean isHidden;
+    public boolean isResizable;
+    public boolean isAlwaysOnTop;
+    public boolean isBorderHidden;
+    public boolean isCentered;
+    public boolean isFocusable;
+    public boolean isOutsideClickClosable;
+    public boolean isFocused;
+    public boolean isMaximized = false;
 
     public void setFocus(Boolean value) {
         if (isFocused == value)
@@ -335,44 +422,42 @@ public class WindowLayout {
     }
 
     void setWindowFocused() {
-        // synchronized (CommonService.GlobalLocker) {
-        // WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.Focusable =
-        // true;
-        // WindowLayoutBox.getWindowInstance(ParentGUID).engine
-        // .Focus(WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.GetWindowId(),
-        // true);
-        // }
+        synchronized (CommonService.GlobalLocker) {
+            WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.focusable = true;
+            WindowLayoutBox.getWindowInstance(ParentGUID).engine
+                    .focus(WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.getWindowId(), true);
+        }
     }
 
     public void minimize() {
-        // engine.minimizeWindow();
+        engine.minimizeWindow();
     }
 
     public void maximize() {
-        // engine.maximizeWindow();
+        engine.maximizeWindow();
     }
 
     public void IsFixed(Boolean flag) {
     }
 
-    void SetEventTask(EventTask task) {
-        // manager.StackEvents.Enqueue(task);
+    public void setEventTask(EventTask task) {
+        manager.stackEvents.add(task);
     }
 
     volatile Boolean set = true;
 
-    void ExecutePollActions() {
-        // set = manager.Execute.IsSet;
-        // if (!set)
-        // manager.Execute.Set();
+    public void executePollActions() {
+//        manager.execute.release();
+//        manager.notify();
+        manager.execute.set();
     }
 
     public void setFocusedItem(VisualItem item) {
-        // engine.setFocusedItem(item);
+        engine.setFocusedItem(item);
     }
 
     public void resetItems() {
-        // engine.resetItems();
+        engine.resetItems();
     }
 
     public void setIcon(Image icon_big, Image icon_small) {
@@ -381,7 +466,7 @@ public class WindowLayout {
     }
 
     public void setHidden(Boolean value) {
-        // engine._handler.setHidden(value);
-        // isHidden = value;
+        engine._handler.setHidden(value);
+        isHidden = value;
     }
 }

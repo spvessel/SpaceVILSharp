@@ -1,6 +1,6 @@
 package com.spvessel.Cores;
 
-interface InterfaceTextShortcuts {
+public interface InterfaceTextShortcuts {
     void pasteText(String pasteStr);
 
     String getSelectedText();

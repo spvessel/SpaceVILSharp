@@ -37,7 +37,7 @@ public final class GraphicsMathService {
                 b = b * (1.0f - item.getAlpha() / 255.0f) + item.getBlue() * (item.getAlpha() / 255.0f);
             }
         }
-        return new Color(r * 255.0f, g * 255.0f, b * 255.0f, a * 255.0f);
+        return new Color((int)r, (int)g , (int)b , (int)a);
     }
 
     static public List<float[]> toGL(BaseItem item, WindowLayout handler) // where TLayout : VisualItem
@@ -291,7 +291,7 @@ public final class GraphicsMathService {
         return figure;
     }
 
-    public static List<float[]> MoveShape(List<float[]> shape, float x, float y) {
+    public static List<float[]> moveShape(List<float[]> shape, float x, float y) {
         if (shape.size() == 0)
             return null;
 

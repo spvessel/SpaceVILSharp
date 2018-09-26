@@ -1,5 +1,10 @@
 package com.spvessel.Windows;
 
+import com.spvessel.Flags.LayoutType;
+import com.spvessel.Flags.SizePolicy;
+import com.spvessel.Items.WContainer;
+import com.spvessel.Layouts.ItemsLayoutBox;
+
 import java.util.*;
 import java.util.stream.*;
 
@@ -10,7 +15,28 @@ public class WindowLayoutBox {
     static public WindowLayout lastFocusedWindow;
 
     static public void initWindow(WindowLayout _layout) {
-        /////////////////////////////////
+        windowsName.put(_layout.getWindowName(), _layout);
+        windowsUUID.put(_layout.getId(), _layout);
+
+        ItemsLayoutBox.initLayout(_layout.getId());
+
+        //add filling frame
+        //ALL ATTRIBUTES STRICTLY NEEDED!!!
+        WContainer container = new WContainer();
+        container.setHandler(_layout);
+//        System.out.println(_layout.getWindowName());
+        container.setItemName(_layout.getWindowName());
+        container.setWidth(_layout.getWidth());
+        container.setMinWidth(_layout.getMinWidth());
+        container.setMaxWidth(_layout.getMaxWidth());
+        container.setHeight(_layout.getHeight());
+        container.setMinHeight(_layout.getMinHeight());
+        container.setMaxHeight(_layout.getMaxHeight());
+        container.setWidthPolicy(SizePolicy.EXPAND);
+        container.setHeightPolicy(SizePolicy.EXPAND);
+
+        _layout.setWindow(container);
+        ItemsLayoutBox.addItem(_layout, container, LayoutType.STATIC);
     }
 
     static public void removeWindow(WindowLayout _layout) {
@@ -52,7 +78,7 @@ public class WindowLayoutBox {
         window.getHandler().setFocus(true);
     }
 
-    static protected void RemoveFromWindowDispatcher(WindowLayout sender_wnd) {
+    static protected void removeFromWindowDispatcher(WindowLayout sender_wnd) {
         List<WindowPair> pairs_to_delete = new LinkedList<WindowPair>();
         for (WindowPair windows_pair : currentCallingPair) {
             if (windows_pair.WINDOW.equals(sender_wnd)) {
@@ -73,7 +99,7 @@ public class WindowLayoutBox {
         return result;
     }
 
-    static public void PrintStoredWindows() {
+    static public void printStoredWindows() {
         for (String item : getListOfWindows()) {
             System.out.println(item);
         }
