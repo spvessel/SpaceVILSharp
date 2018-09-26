@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 namespace SpaceVIL
 {
-    public class TextEdit : VisualItem, ITextEditable, ITextShortcuts, IDraggable
+    public class TextEdit : VisualItem, ITextEditable, ITextShortcuts, IDraggable, IScrollable
     {
         static int count = 0;
         private TextLine _text_object;
@@ -53,6 +53,8 @@ namespace SpaceVIL
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;
             EventTextInput += OnTextInput;
+            EventScrollUp += OnScrollUp;
+            EventScrollDown += OnScrollDown;
 
             ShiftValCodes = new List<int>() { LeftArrowCode, RightArrowCode, EndCode, HomeCode };//, LeftShiftCode, RightShiftCode , LeftCtrlCode, RightCtrlCode};
             //CtrlValCodes = new List<int>() {LeftCtrlCode, RightCtrlCode, ACode};
@@ -80,6 +82,51 @@ namespace SpaceVIL
                 _selectTo = _cursor_position;
                 MakeSelectedArea(_selectFrom, _selectTo);
             }
+        }
+
+        protected virtual void OnScrollUp(object sender, MouseArgs args)
+        {
+            int w = GetTextWidth();
+            
+            if (w < _cursorXMax) return;
+            int sh = GetLineXShift();
+            if (sh >= 0) return;
+
+            int curCoord = _cursor.GetX() - sh;
+
+            sh += _text_object.GetFontDims()[0];
+            if (sh > 0) sh = 0;
+
+            _text_object.SetLineXShift(sh);
+            _cursor.SetX(curCoord + sh);
+        }
+
+        protected virtual void OnScrollDown(object sender, MouseArgs args)
+        {
+            int w = GetTextWidth();
+            
+            if (w < _cursorXMax) return;
+            int sh = GetLineXShift();
+            if (w + sh <= _cursorXMax) return;
+
+            int curCoord = _cursor.GetX() - sh;
+
+            sh -= _text_object.GetFontDims()[0];
+            if (w + sh < _cursorXMax)
+                sh = _cursorXMax - w;
+            
+            _text_object.SetLineXShift(sh);
+            _cursor.SetX(curCoord + sh);
+        }
+
+        public void InvokeScrollUp(MouseArgs args)
+        {
+            EventScrollUp?.Invoke(this, args);
+        }
+
+        public void InvokeScrollDown(MouseArgs args)
+        {
+            EventScrollDown?.Invoke(this, args);
         }
 
         private void ReplaceCursorAccordingCoord(int realPos)
@@ -245,10 +292,12 @@ namespace SpaceVIL
             if (cPos > 0)
                 coord = _text_object.GetLetPosArray()[cPos - 1];
 
-            if (GetLineXShift() + coord < 0) //_cursorXMin)
-                _text_object.SetLineXShift( - coord); // _lineXShift + _text_object.GetLetWidth(_cursor_position));
+            if (GetLineXShift() + coord < 0)
+            {
+                _text_object.SetLineXShift(-coord);
+            }
             if (GetLineXShift() + coord > _cursorXMax)
-                _text_object.SetLineXShift(_cursorXMax - coord); // _lineXShift - _text_object.GetLetWidth(_cursor_position - 1));
+                _text_object.SetLineXShift(_cursorXMax - coord);
 
             return GetLineXShift() + coord;
         }

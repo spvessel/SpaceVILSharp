@@ -156,23 +156,23 @@ namespace SpaceVIL
             float windowH = GetHandler().GetHeight() / 2f;
             float windowW = GetHandler().GetWidth() / 2f;
 
-            float xmin = Int32.MaxValue;
-            float xmax = Int32.MinValue;
-            float ymin = Int32.MaxValue;
-            float ymax = Int32.MinValue;
+            //float xmin = Int32.MaxValue;
+            //float xmax = Int32.MinValue;
+            //float ymin = Int32.MaxValue;
+            //float ymax = Int32.MinValue;
 
             for (int i = 0; i < coord.Count; i += 3)
             {
                 f = coord[i];
-                xmin = (xmin > f) ? f : xmin;
-                xmax = (xmax < f) ? f : xmax;
+                //xmin = (xmin > f) ? f : xmin;
+                //xmax = (xmax < f) ? f : xmax;
                 f += x0;
                 f = f / windowW - 1.0f;
                 outCoord[i] = f;
 
                 f = coord[i + 1];
-                ymin = (ymin > f) ? f : ymin;
-                ymax = (ymax < f) ? f : ymax;
+                //ymin = (ymin > f) ? f : ymin;
+                //ymax = (ymax < f) ? f : ymax;
                 f += y0;
                 f = -(f / windowH - 1.0f);
                 outCoord[i + 1] = f;
@@ -181,8 +181,8 @@ namespace SpaceVIL
                 outCoord[i + 2] = f;
             }
 
-            SetWidth((int)Math.Abs(xmax - xmin));
-            SetHeight((int)Math.Abs(ymax - ymin));
+            //SetWidth((int)Math.Abs(xmax - xmin));
+            //SetHeight((int)Math.Abs(ymax - ymin));
 
             return outCoord;
         }
