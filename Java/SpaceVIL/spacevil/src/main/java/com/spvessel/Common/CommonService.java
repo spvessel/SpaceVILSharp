@@ -11,7 +11,7 @@ public final class CommonService {
     }
 
     public static String ClipboardTextStorage = "";
-    public static Object GlobalLocker = new Object();
+    public final static Object GlobalLocker = new Object();
 
     public String getResourceString(String resource) {
 

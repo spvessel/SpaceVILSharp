@@ -13,4 +13,27 @@ public enum MouseButton {
     public int getValue() {
         return button;
     }
+
+    public static MouseButton getEnum(int button) {
+        switch (button) {
+        case 0:
+            return MouseButton.BUTTON_1;
+        case 1:
+            return MouseButton.BUTTON_2;
+        case 2:
+            return MouseButton.BUTTON_3;
+        case 3:
+            return MouseButton.BUTTON_4;
+        case 4:
+            return MouseButton.BUTTON_5;
+        case 5:
+            return MouseButton.BUTTON_6;
+        case 6:
+            return MouseButton.BUTTON_7;
+        case 7:
+            return MouseButton.BUTTON_8;
+        default:
+            return MouseButton.UNKNOWN;
+        }
+    }
 }

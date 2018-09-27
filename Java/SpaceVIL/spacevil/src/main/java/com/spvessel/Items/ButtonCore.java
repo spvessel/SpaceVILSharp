@@ -1,5 +1,7 @@
 package com.spvessel.Items;
 
+import com.spvessel.Decorations.*;
+import com.spvessel.Common.*;
 import com.spvessel.Cores.*;
 
 public class ButtonCore extends VisualItem {
@@ -8,5 +10,14 @@ public class ButtonCore extends VisualItem {
     public ButtonCore() {
         setItemName("ButtonCore_" + count);
         count++;
+        setStyle(Style.getButtonCoreStyle());
     }
+
+    @Override
+    public void setStyle(Style style)
+        {
+            if (style == null)
+            return;
+            super.setStyle(style);
+        }
 }

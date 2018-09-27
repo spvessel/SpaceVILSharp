@@ -9,13 +9,17 @@ import java.util.List;
 import com.spvessel.Common.*;
 import com.spvessel.Cores.*;
 import com.spvessel.Windows.*;
-import org.lwjgl.input.*;
+//import org.lwjgl.glfw.;
 import org.lwjgl.glfw.*;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.system.*;
+
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.system.MemoryUtil.*;
 import java.nio.ByteBuffer;
 
-class GLWHandler {
+public class GLWHandler {
     // cursors
 
     long _arrow;
@@ -37,15 +41,15 @@ class GLWHandler {
     GLFWWindowFocusCallback windowFocusCallback;
     ///////////////////////////////////////////////
 
-    protected Boolean borderHidden;
-    protected Boolean appearInCenter;
-    protected Boolean focusable;
-    protected Boolean focused = true;
-    protected Boolean resizeble;
-    protected Boolean visible;
-    protected Boolean alwaysOnTop;
-    protected Boolean maximized;
-    protected Pointer wPosition = new Pointer();
+    public Boolean borderHidden;
+    public Boolean appearInCenter;
+    public Boolean focusable;
+    public Boolean focused = true;
+    public Boolean resizeble;
+    public Boolean visible;
+    public Boolean alwaysOnTop;
+    public Boolean maximized;
+    public com.spvessel.Cores.Pointer wPosition = new com.spvessel.Cores.Pointer();
     ///////////////////////////////////////////////
 
     private WindowLayout _w_layout;
@@ -56,7 +60,7 @@ class GLWHandler {
 
     long _window;
 
-    protected long getWindowId() {
+    public long getWindowId() {
         return _window;
     }
 
@@ -68,7 +72,7 @@ class GLWHandler {
         wPosition.Y = 0;
     }
 
-    protected void InitGlfw() {
+    protected void initGlfw() {
         // path to c++ glfw3.dll (x32 or x64)
         // glfwConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
         if (!glfwInit()) {
@@ -85,7 +89,7 @@ class GLWHandler {
         _resize_all = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
     }
 
-    protected void CreateWindow() {
+    protected void createWindow() {
 
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
@@ -119,10 +123,10 @@ class GLWHandler {
         else
             glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
 
-        if (visible)
-            glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-        else
             glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+//        if (visible)
+//            glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+//        else
 
         _window = glfwCreateWindow(_w_layout.getWidth(), _w_layout.getHeight(), _w_layout.getWindowTitle(), NULL, NULL);
 
@@ -131,10 +135,12 @@ class GLWHandler {
             // getLayout().getWindowTitle());
             glfwTerminate();
         }
+        long monitor = glfwGetPrimaryMonitor();
+        GLFWVidMode vidmode = glfwGetVideoMode(monitor);
+        int width = vidmode.width();
+        int height = vidmode.height();
 
         if (appearInCenter) {
-            int width = glfwGetVideoMode(glfwGetPrimaryMonitor()).WIDTH;
-            int height = glfwGetVideoMode(glfwGetPrimaryMonitor()).HEIGHT;
             wPosition.X = (width - _w_layout.getWidth()) / 2;
             wPosition.Y = (height - _w_layout.getHeight()) / 2;
         } else {
@@ -142,8 +148,10 @@ class GLWHandler {
             wPosition.Y = _w_layout.getY();
         }
         glfwMakeContextCurrent(_window);
+        GL.createCapabilities();
         glfwSetWindowSizeLimits(_window, _w_layout.getMinWidth(), _w_layout.getMinHeight(), _w_layout.getMaxWidth(),
                 _w_layout.getMaxHeight());
+        glfwSetWindowPos(_window, wPosition.X, wPosition.Y);
         // Console.WriteLine(
         // _w_layout.getMinWidth() + " " +
         // _w_layout.getMinHeight() + " " +
@@ -151,6 +159,8 @@ class GLWHandler {
         // _w_layout.getMaxHeight() + " "
         // );
         // LogService.Log().LogWindow(getLayout(), LogProps.AllGeometry);
+        if (visible)
+            glfwShowWindow(_window);
     }
 
     protected void switchContext() {
@@ -257,7 +267,7 @@ class GLWHandler {
         glfwSetWindowSizeCallback(_window, resizeCallback);
     }
 
-    protected void setHidden(Boolean value) {
+    public void setHidden(Boolean value) {
         if (value)
             glfwHideWindow(_window);
         else

@@ -17,7 +17,7 @@ public abstract class CoreWindow {
         return wnd_handler;
     }
 
-    public void getHandler(WindowLayout value) {
+    public void setHandler(WindowLayout value) {
         wnd_handler = value;
     }
 

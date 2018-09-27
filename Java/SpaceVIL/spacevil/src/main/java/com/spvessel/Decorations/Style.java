@@ -121,7 +121,7 @@ public class Style {
         Style style = new Style();
         style.background = new Color(13, 176, 255);
         style.foreground = new Color(32, 32, 32);
-        ;
+
         style.font = DefaultsService.getDefaultFont();
         style.widthPolicy = SizePolicy.FIXED;
         style.heightPolicy = SizePolicy.FIXED;
@@ -139,6 +139,10 @@ public class Style {
         ItemState pressed = new ItemState();
         pressed.background = new Color(30, 0, 0, 60);
         style.addItemState(ItemStateType.PRESSED, pressed);
+
+        style.padding = new Indents();
+        style.margin = new Indents();
+        style.spacing = new Spacing();
 
         return style;
     }

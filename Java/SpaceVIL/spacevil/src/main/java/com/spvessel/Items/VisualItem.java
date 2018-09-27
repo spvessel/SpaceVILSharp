@@ -10,6 +10,7 @@ import com.spvessel.Decorations.*;
 import com.spvessel.Flags.*;
 import com.spvessel.Cores.*;
 import com.spvessel.Engine.*;
+import com.spvessel.Layouts.ItemsLayoutBox;
 
 public abstract class VisualItem extends BaseItem {
 
@@ -178,14 +179,64 @@ public abstract class VisualItem extends BaseItem {
         _content = content;
     }
 
-    public void addItem(BaseItem item) {
+    public void addItems(BaseItem... items)
+    {
+        for (BaseItem item : items)
+        {
+            this.addItem(item);
+        }
+    }
 
+    public void addItem(BaseItem item) {
+        synchronized (getHandler().engine_locker)
+        // lock (CommonService.GlobalLocker)
+        {
+            if (item.equals(this))
+            {
+                System.out.println("Trying to add current item in himself.");
+                return;
+            }
+            item.setHandler(getHandler());
+
+            addChildren(item);
+
+            //lock (GetHandler().engine_locker)
+            _content.add(item);
+
+            try
+            {
+                ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
+            }
+            catch (Exception ex)
+            {
+                System.out.println(item.getItemName());
+                throw ex;
+            }
+
+            //needs to force update all attributes
+            // if (!EventManager.IsLocked)
+            item.updateGeometry();
+            item.initElements();
+
+            if (item instanceof  VisualItem){
+                ((VisualItem)item).updateState();
+            }
+        }
     }
 
     public void removeItem(BaseItem item) {
 
     }
-
+    @Override
+    protected void addEventListener(GeometryEventType type, BaseItem listener)
+    {
+        eventManager.subscribe(type, listener);
+    }
+    @Override
+    protected void removeEventListener(GeometryEventType type, BaseItem listener)
+    {
+        eventManager.unsubscribe(type, listener);
+    }
     public void addItemState(ItemStateType type, ItemState state) {
         if (states.containsKey(type)) {
             state.value = true;
@@ -254,64 +305,64 @@ public abstract class VisualItem extends BaseItem {
     }
 
     // common properties
-    private Boolean _pass_events = true;
+    private boolean _pass_events = true;
 
-    public Boolean getPassEvents() {
+    public boolean getPassEvents() {
         return _pass_events;
     }
 
-    public void setPassEvents(Boolean value) {
+    public void setPassEvents(boolean value) {
         if (_pass_events == value)
             return;
         _pass_events = value;
     }
 
-    private Boolean _disabled;
+    private boolean _disabled;
 
-    public Boolean GetDisabled() {
+    public boolean getDisabled() {
         return _disabled;
     }
 
-    public void SetDisabled(Boolean value) {
+    public void setDisabled(boolean value) {
         if (_disabled == value)
             return;
         _disabled = value;
         updateState();
     }
 
-    private Boolean _hover;
+    private boolean _hover;
 
-    public Boolean getMouseHover() {
+    public boolean getMouseHover() {
         return _hover;
     }
 
-    public void setMouseHover(Boolean value) {
+    public void setMouseHover(boolean value) {
         if (_hover == value)
             return;
         _hover = value;
         updateState();
     }
 
-    private Boolean _pressed;
+    private boolean _pressed;
 
-    public Boolean getMousePressed() {
+    public boolean getMousePressed() {
         return _pressed;
     }
 
-    public void setMousePressed(Boolean value) {
+    public void setMousePressed(boolean value) {
         if (_pressed == value)
             return;
         _pressed = value;
         updateState();
     }
 
-    private Boolean _focused;
+    private boolean _focused;
 
-    public Boolean getFocused() {
+    public boolean getFocused() {
         return _focused;
     }
 
-    public void setFocused(Boolean value) {
+    public void setFocused(boolean value) {
         if (_focused == value)
             return;
         _focused = value;
@@ -323,7 +374,7 @@ public abstract class VisualItem extends BaseItem {
     }
 
     @Override
-    protected void updateInnersDrawable(Boolean value) {
+    protected void updateInnersDrawable(boolean value) {
         for (BaseItem item : _content) {
             item.setVisible(value);
         }
@@ -335,7 +386,7 @@ public abstract class VisualItem extends BaseItem {
             isCustom = getState(_state).shape;
 
         // mixing
-        if (GetDisabled() && states.containsKey(ItemStateType.DISABLED)) {
+        if (getDisabled() && states.containsKey(ItemStateType.DISABLED)) {
             super.setBackground(GraphicsMathService.MixColors(getState(_state).background,
                     getState(ItemStateType.DISABLED).background));
             return;
@@ -357,9 +408,9 @@ public abstract class VisualItem extends BaseItem {
         }
     }
 
-    protected Pointer _mouse_ptr = new Pointer();
+    public Pointer _mouse_ptr = new Pointer();
 
-    protected boolean getHoverVerification(float xpos, float ypos) {
+    public boolean getHoverVerification(float xpos, float ypos) {
         switch (HoverRule) {
         case LAZY:
             return lazyHoverVerification(xpos, ypos);
@@ -454,8 +505,42 @@ public abstract class VisualItem extends BaseItem {
             else
                 return GraphicsMathService.toGL(updateShape(), getHandler());
         }
-
         setTriangles(GraphicsMathService.getRoundSquare(getWidth(), getHeight(), border.getRadius(), getX(), getY()));
+//        System.out.println(getItemName() + " " + getTriangles().size());
         return GraphicsMathService.toGL(this, getHandler());
+    }
+
+    //style
+    private boolean _is_style_set = false;
+    @Override
+    public void setStyle(Style style)
+    {
+        if (style == null)
+            return;
+
+        _is_style_set = true;
+
+        setBackground(style.background);
+        setSizePolicy(style.widthPolicy, style.heightPolicy);
+        setSize(style.width, style.height);
+        setMinSize(style.minWidth, style.minHeight);
+        setMaxSize(style.maxWidth, style.maxHeight);
+        setAlignment(style.alignment);
+        setPosition(style.x, style.y);
+        setPadding(style.padding);
+        setSpacing(style.spacing);
+        setMargin(style.margin);
+        border.setRadius(style.borderRadius);
+        border.setThickness(style.borderThickness);
+        setVisible(style.isVisible);
+        removeAllItemStates();
+        for (Map.Entry<ItemStateType, ItemState> state : style.getAllStates().entrySet())
+        {
+            addItemState(state.getKey(), state.getValue());
+        }
+        if (style.shape != null)
+        {
+            isCustom = new CustomFigure(style.isFixedShape, style.shape);
+        }
     }
 }
