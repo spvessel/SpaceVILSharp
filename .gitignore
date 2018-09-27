@@ -119,3 +119,5 @@ Java/SpaceVIL/spacevil/target/surefire-reports/TEST-com.spvessel.AppTest.xml
 *.so
 *.jnilib
 *.prefs
+Java/SpaceVIL/spacevil/.idea/libraries/Maven__junit_junit_4_11.xml
+Java/SpaceVIL/spacevil/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml

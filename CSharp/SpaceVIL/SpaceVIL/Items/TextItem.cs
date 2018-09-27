@@ -338,12 +338,7 @@ namespace SpaceVIL
                 UpdateCoords(); //_coordsFlag = true;
             }
         }
-        /*
-        protected void SetCoordsFlag(bool flag)
-        {
-            _coordsFlag = flag;
-        }
-        */
+
         public virtual float[] Shape()
         {
             return GetCoordinates();

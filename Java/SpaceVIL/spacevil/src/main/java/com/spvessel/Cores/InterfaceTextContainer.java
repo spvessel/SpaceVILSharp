@@ -2,6 +2,6 @@ package com.spvessel.Cores;
 
 import com.spvessel.Items.*;
 
-interface ITextContainer {
+public interface InterfaceTextContainer {
     TextItem getText();
 }
