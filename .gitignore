@@ -134,3 +134,15 @@ Java/SpaceVIL/spacevil/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml
 Java/SpaceVIL/spacevil/.idea/libraries/lwjgl.xml
 Java/SpaceVIL/spacevil/.idea/compiler.xml
 >>>>>>> 70c80ad5452860993934bfd3d8b0abbb74c59dab
+*.bin
+*.lock
+*.properties
+*.xml
+*.gradle
+Java/SpaceVIL/spacevil/gradlew.bat
+Java/SpaceVIL/spacevil/gradlew
+Java/SpaceVIL/spacevil/out/production/resources/fonts/Ubuntu-Regular.ttf
+Java/SpaceVIL/spacevil/out/production/resources/shaders/fs_fill.glsl
+Java/SpaceVIL/spacevil/out/production/resources/shaders/fs_texture.glsl
+Java/SpaceVIL/spacevil/out/production/resources/shaders/vs_fill.glsl
+Java/SpaceVIL/spacevil/out/production/resources/shaders/vs_texture.glsl
