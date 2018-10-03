@@ -164,3 +164,12 @@ Java/SpaceVIL/spacevil/bin/main/shaders/fs_texture.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_fill.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_texture.glsl
 *.bat
+Java/SpaceVIL/spacevil/.vscode/settings.json
+Java/SpaceVIL/spacevil/build/distributions/spacevil-0.3-alpha/bin/spacevil
+Java/SpaceVIL/spacevil/src/main/java/com/spvessel/.idea/spvessel.iml
+Java/.idea/Java.iml
+Java/SpaceVIL/spacevil/.vscode/settings.json
+Java/SpaceVIL/spacevil/build/distributions/spacevil-0.3-alpha/bin/spacevil
+Java/SpaceVIL/spacevil/.idea/modules/spacevil_test.iml
+Java/SpaceVIL/spacevil/.idea/modules/spacevil_main.iml
+Java/SpaceVIL/spacevil/.vscode/settings.json
