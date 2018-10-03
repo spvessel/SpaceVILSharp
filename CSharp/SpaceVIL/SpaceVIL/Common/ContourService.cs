@@ -19,6 +19,133 @@ namespace SpaceVIL
             return MakeCrossArray(contoursList);
         }
 
+        /*
+        internal static CrossOut DoSomething(GraphicsPath shape) {
+
+            //RectangleF r = new RectangleF(5.1f, 10.3f, 10.2f, 5.1f);
+            //shape = new GraphicsPath();
+            //shape.AddRectangle(r);
+
+
+            RectangleF rf = shape.GetBounds();
+            int x0, y0, x1, y1;
+            x0 = (int)rf.X - 1;
+            y0 = (int)rf.Y - 1;
+            x1 = (int)(rf.X + rf.Width) + 1;
+            y1 = (int)(y0 + rf.Height) + 1;
+
+
+            ForNew forNew = new ForNew(new double[(x1 - x0 + 1), (y1 - y0 + 1)], new int[(x1 - x0 + 1), 
+                (y1 - y0 + 1)], new Point(x0, y0), new Point(x1, y1));
+
+            for (int ix = x0; ix <= x1; ix++)
+            {
+                for (int iy = y0; iy <= y1; iy++)
+                {
+                    //if (forNew.log[ix - x0, iy - y0] == 0)
+                    {
+                        bool b = shape.IsVisible(new Point(ix, iy));
+                        if (b)
+                        {
+                            forNew.alph[ix - x0, iy - y0] = 1;
+                            forNew.log[ix - x0, iy - y0] = 1;
+                            //forNew = CheckNeib(shape, new Point(ix, iy), forNew);
+                        }
+                        else
+                        {
+                            forNew.log[ix - x0, iy - y0] = -1;
+                            double d = IntersectionPercent(shape, new Point(ix, iy));
+                            if (forNew.alph[ix - x0, iy - y0] < d)
+                                forNew.alph[ix - x0, iy - y0] = d;
+                        }
+                    }
+                    //else if (forNew.log[ix - x0, iy - y0] == 1)
+                    //    forNew = CheckNeib(shape, new Point(ix, iy), forNew);
+                }
+            }
+
+
+
+            return new CrossOut(forNew.alph, x0, y0);
+        }
+
+        private static ForNew CheckNeib(GraphicsPath shape, Point pi, ForNew forNew)
+        {
+            if (pi.Y - 1 >= forNew.pMin.Y) {
+                //-1,-1
+                if (pi.X - 1 >= forNew.pMin.X)
+                    forNew = CheckN0(shape, new Point(pi.X - 1, pi.Y - 1), forNew);
+                // 0,-1
+                forNew = CheckN0(shape, new Point(pi.X, pi.Y - 1), forNew);
+                //+1,-1
+                if (pi.X + 1 <= forNew.pMax.X)
+                    forNew = CheckN0(shape, new Point(pi.X + 1, pi.Y - 1), forNew);
+            }
+
+            //-1, 0
+            if (pi.X - 1 >= forNew.pMin.X)
+                forNew = CheckN0(shape, new Point(pi.X - 1, pi.Y), forNew);
+            //+1, 0
+            if (pi.X + 1 <= forNew.pMax.X)
+                forNew = CheckN0(shape, new Point(pi.X + 1, pi.Y), forNew);
+
+            if (pi.Y + 1 <= forNew.pMax.Y)
+            {
+                //-1,+1
+                if (pi.X - 1 >= forNew.pMin.X)
+                    forNew = CheckN0(shape, new Point(pi.X - 1, pi.Y + 1), forNew);
+                // 0,+1
+                forNew = CheckN0(shape, new Point(pi.X, pi.Y + 1), forNew);
+                //+1,+1
+                if (pi.X + 1 <= forNew.pMax.X)
+                    forNew = CheckN0(shape, new Point(pi.X + 1, pi.Y + 1), forNew);
+            }
+
+            return forNew;
+        }
+
+        private static ForNew CheckN0(GraphicsPath shape, Point pi, ForNew forNew)
+        {
+            double b1 = 0;
+            if (forNew.log[pi.X - forNew.pMin.X, pi.Y - forNew.pMin.Y] == -1)
+                b1 = IntersectionPercent(shape, pi);
+            else if (forNew.log[pi.X - forNew.pMin.X, pi.Y - forNew.pMin.Y] == 0)
+            {
+                bool b0 = shape.IsVisible(pi);
+                if (b0)
+                    b1 = 1;
+                else
+                    b1 = IntersectionPercent(shape, pi);
+            }
+
+            forNew.log[pi.X - forNew.pMin.X, pi.Y - forNew.pMin.Y] = 1;
+            if (forNew.alph[pi.X - forNew.pMin.X, pi.Y - forNew.pMin.Y] < b1)
+                forNew.alph[pi.X - forNew.pMin.X, pi.Y - forNew.pMin.Y] = b1;
+
+            return forNew;
+        }
+
+        private static double IntersectionPercent(GraphicsPath shape, Point pi)
+        {
+            //Pen pen = new Pen(Color.Black);
+            //Первый вариант, возможно не оптимальный
+            int sum = 0;
+            int s = 0;
+            for (float fx = pi.X - 1 + 0.1f; fx <= pi.X + 1 - 0.1f; fx += 0.1f)
+            {
+                for (float fy = pi.Y - 1 + 0.1f; fy <= pi.Y + 1 - 0.1f; fy += 0.1f)
+                {
+                    s++;
+                    if (shape.IsVisible(new PointF(fx, fy)))// || shape.IsOutlineVisible(new PointF(fx, fy), pen))
+                        sum++;
+                }
+            }
+            
+            //if (sum > 0) Console.WriteLine(s + " " + sum);
+            return sum / (float)s;
+        }
+        */
+
         public static CrossOut CrossContours(GraphicsPath shape)
         {
             shape.Flatten();
@@ -42,7 +169,7 @@ namespace SpaceVIL
                 }
                 contoursList.Add(AnalizeCotour(pathSection));
             }
-
+            
             return MakeCrossArray(contoursList);
         }
 
@@ -611,6 +738,22 @@ namespace SpaceVIL
                 _isIn = isIn;
                 _coord = coord;
                 _clockwiae = clockwise;
+            }
+        }
+
+        private class ForNew
+        {
+            public double[,] alph;
+            public int[,] log;
+            public Point pMin;
+            public Point pMax;
+
+            public ForNew(double[,] alph, int[,] log, Point pMin, Point pMax)
+            {
+                this.alph = alph;
+                this.log = log;
+                this.pMin = pMin;
+                this.pMax = pMax;
             }
         }
     }

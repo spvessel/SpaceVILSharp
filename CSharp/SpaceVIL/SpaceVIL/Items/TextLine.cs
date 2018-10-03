@@ -41,6 +41,7 @@ namespace SpaceVIL
             _maxFontY = output[2];
             */
             //_lineSpacer = _minLineSpacer;
+            UpdateData();
         }
 
         public void CreateText()
@@ -79,8 +80,8 @@ namespace SpaceVIL
                 _lineWidth = _letters[_letters.Count - 1].xShift + _letters[_letters.Count - 1].width +
                     _letters[_letters.Count - 1].xBeg; //xBeg не обязательно, т.к. везде 0, но вдруг
 
-            SetWidth(_lineWidth);
-            SetHeight(Math.Abs(_maxFontY - _minFontY));
+            base.SetWidth(_lineWidth);
+            base.SetHeight(Math.Abs(_maxFontY - _minFontY));
 
             foreach (FontEngine.ModifyLetter modL in _letters)
             {
@@ -94,7 +95,19 @@ namespace SpaceVIL
             AddAllShifts();
 
         }
+        
+        public override void SetWidth(int width)
+        {
+            //base.SetWidth(width);
+            SetAllowWidth(width);
+        }
 
+        public override void SetHeight(int height)
+        {
+            //base.SetWidth(width);
+            SetAllowHeight(height);
+        }
+        
         private void AddAllShifts()
         {
             if (GetParent() == null)

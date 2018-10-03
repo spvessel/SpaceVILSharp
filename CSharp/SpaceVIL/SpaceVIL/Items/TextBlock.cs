@@ -80,7 +80,7 @@ namespace SpaceVIL
                 HomeCode, UpArrowCode, DownArrowCode};
 
             int[] output = te.GetFontDims();
-            _minLineSpacer = 3;// output[0];
+            _minLineSpacer = output[0];
             _minFontY = output[1];
             _maxFontY = output[2];
             _lineHeight = Math.Abs(_maxFontY - _minFontY);
@@ -450,7 +450,7 @@ namespace SpaceVIL
         {
             Point pos = AddXYShifts(0, 0, _cursor_position);
             _cursor.SetX(pos.X);
-            _cursor.SetY(pos.Y);// - 3);
+            _cursor.SetY(pos.Y - _lineSpacer / 2 + 1);// - 3);
         }
 
         void SetLineSpacer(int lineSpacer)
@@ -520,7 +520,7 @@ namespace SpaceVIL
                 if (_elementFont == null)
                     return;
                 int[] output = FontEngine.GetSpacerDims(font);
-                _minLineSpacer = 3; // output[0];
+                _minLineSpacer = output[0];
                 _minFontY = output[1];
                 _maxFontY = output[2];
                 _lineHeight = Math.Abs(_maxFontY - _minFontY);
@@ -791,29 +791,29 @@ namespace SpaceVIL
             {
                 //Console.WriteLine("Font: " + (_maxFontY - _minFontY));
                 //Console.WriteLine("Cur: " + _cursor.GetHeight());
-                selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight(), fromReal));
-                selectionRectangles.Add(AddXYShifts(0, 0, toReal));
+                selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight() - _lineSpacer / 2 + 1, fromReal));
+                selectionRectangles.Add(AddXYShifts(0, -_lineSpacer / 2 + 1, toReal));
                 _selectedArea.SetRectangles(selectionRectangles);
                 return;
             }
 
-            selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight(), fromReal));
+            selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight() - _lineSpacer / 2 + 1, fromReal));
             tmp.X = GetLineLetCount(fromReal.Y);
             tmp.Y = fromReal.Y;
-            selectionRectangles.Add(AddXYShifts(0, 0, tmp));
+            selectionRectangles.Add(AddXYShifts(0, -_lineSpacer / 2 + 1, tmp));
             tmp.X = 0;
             tmp.Y = toReal.Y;
-            selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight(), tmp));
-            selectionRectangles.Add(AddXYShifts(0, 0, toReal));
+            selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight() - _lineSpacer / 2 + 1, tmp));
+            selectionRectangles.Add(AddXYShifts(0, -_lineSpacer / 2 + 1, toReal));
 
             for (int i = fromReal.Y + 1; i < toReal.Y; i++)
             {
                 tmp.X = 0;
                 tmp.Y = i;
-                selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight(), tmp));
+                selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight() - _lineSpacer / 2 + 1, tmp));
                 tmp.X = GetLineLetCount(i);
                 tmp.Y = i;
-                selectionRectangles.Add(AddXYShifts(0, 0, tmp));
+                selectionRectangles.Add(AddXYShifts(0, -_lineSpacer / 2 + 1, tmp));
             }
 
             _selectedArea.SetRectangles(selectionRectangles);
@@ -1161,10 +1161,9 @@ namespace SpaceVIL
             }
         }
 
-
         private int GetLineY(int num)
         {
-            return (_lineHeight + _lineSpacer) * num;
+            return (_lineHeight + _lineSpacer) * num;//_lineSpacer / 2 + 
         }
     }
 }

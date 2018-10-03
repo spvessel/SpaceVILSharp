@@ -107,6 +107,26 @@ namespace SpaceVIL
             AddText(outText.ToString());
         }
 
+        public void LogTwoDimArr<T>(T[,] list, string describe = "TwoDim Array")
+        {
+            if (!isLogging) return;
+
+            StringBuilder outText = new StringBuilder(GetTime());
+            //outText.AppendLine();
+            outText.AppendLine(describe);
+
+            for (int i = 0; i < list.GetLength(0); i++)
+            {
+                for (int j = 0; j < list.GetLength(1); j++)
+                    outText.Append(list[i, j].ToString() + " ");
+                
+                outText.AppendLine();
+            }
+            outText.AppendLine();
+
+            AddText(outText.ToString());
+        }
+
         public void LogListOfArr<T>(List<T[]> list, string describe = "List of arrays")
         {
             if (!isLogging) return;
