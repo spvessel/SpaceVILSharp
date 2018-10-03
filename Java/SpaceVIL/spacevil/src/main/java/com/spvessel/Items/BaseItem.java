@@ -96,10 +96,7 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
     }
 
     public void setMargin(int left, int top, int right, int bottom) {
-        _margin.left = left;
-        _margin.top = top;
-        _margin.right = right;
-        _margin.bottom = bottom;
+        _margin = new Indents(left, top, right, bottom);
     }
 
     public List<float[]> getTriangles() {
@@ -173,7 +170,7 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
             b = Math.abs(b);
         if (b > 255)
             b = 255;
-        _item.setBackground(new Color((int) (r * 255), (int) (g * 255), (int) (b * 255), (int) (a * 255)));
+        _item.setBackground(new Color(r, g, b, a));
     }
 
     public void setBackground(float r, float g, float b) {
@@ -314,6 +311,7 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
         _itemBehavior.setAlignment(alignment);
         updateBehavior();
     }
+
     public void setAlignment(List<ItemAlignment> alignment) {
         _itemBehavior.setAlignment(alignment);
         updateBehavior();

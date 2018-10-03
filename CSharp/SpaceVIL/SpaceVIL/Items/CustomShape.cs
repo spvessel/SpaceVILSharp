@@ -13,6 +13,10 @@ namespace SpaceVIL
         {
             count++;
         }
+        public CustomShape(List<float[]> shape) : this()
+        {
+            SetTriangles(shape);
+        }
 
         public override List<float[]> MakeShape()
         {

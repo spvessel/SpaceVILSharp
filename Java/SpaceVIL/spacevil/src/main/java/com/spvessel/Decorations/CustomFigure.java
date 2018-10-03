@@ -10,13 +10,13 @@ public class CustomFigure {
         return _figure;
     }
 
-    private Boolean _is_fixed = false;
+    private boolean _is_fixed = false;
 
-    public Boolean isFixed() {
+    public boolean isFixed() {
         return _is_fixed;
     }
 
-    public CustomFigure(Boolean isFixed, List<float[]> triangles) {
+    public CustomFigure(boolean isFixed, List<float[]> triangles) {
         _is_fixed = isFixed;
         _figure = triangles;
     }

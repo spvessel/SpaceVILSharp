@@ -79,17 +79,21 @@ public class DrawEngine {
         _handler = new GLWHandler(handler);
 
         _tooltip.setHandler(handler);
-//        _tooltip.getTextLine().setHandler(handler);
-//        _tooltip.getTextLine().setParent(_tooltip);
-        // _tooltip.InitElements();
+        _tooltip.getTextLine().setHandler(handler);
+        _tooltip.getTextLine().setParent(_tooltip);
+        _tooltip.initElements();
     }
 
     public void dispose() {
         // полностью аннигилирует библиотеку GLFW, что приводит к закрытию всех окон и
+        // 
         // уничтожает все что использует библиотеку GLFW
+        // 
         // должно вызываться только при закрытии приложения или если необходимо -
+        // 
         // уничтожении всех окон
-        // статический метод Glfw.Terminate() является общим для всех экземпляров
+        // статический метод Glfw.Terminate() является общим для всех экземпля
+        // ов
         // классов, что создают окна с помощью GLFW
         // LogService.Log().EndLogging();
         glfwTerminate();
@@ -110,7 +114,7 @@ public class DrawEngine {
     }
 
     public void applyIcon() {
-//        Display.setIcon(_icon);
+        // Display.setIcon(_icon);
     }
 
     private String getResourceString(String resource) {
@@ -120,7 +124,7 @@ public class DrawEngine {
         // System.out.println( "URI: " + DrawEngine.class.getResource(resource));
         InputStream inputStream = DrawEngine.class.getResourceAsStream(resource);
 
-        try (BufferedReader  scanner = new BufferedReader (new InputStreamReader(inputStream))) {
+        try (BufferedReader scanner = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = scanner.readLine()) != null) {
                 result.append(line).append("\n");
@@ -139,7 +143,7 @@ public class DrawEngine {
             _handler.initGlfw();
             _handler.createWindow();
         }
-//        _handler.switchContext();
+        // _handler.switchContext();
         setWindowPos();
         // Focus(_handler.getWindowId(), true);
 
@@ -153,11 +157,10 @@ public class DrawEngine {
         // glEnable(GL_DEPTH_TEST);
         // glEnable(GL_STENCIL_TEST);
         ////////////////////////////////////////////////
-        _primitive = new Shader(getResourceString("/shaders/vs_fill.glsl"),
-                getResourceString("/shaders/fs_fill.glsl"));
+        _primitive = new Shader(getResourceString("/shaders/vs_fill.glsl"), getResourceString("/shaders/fs_fill.glsl"));
         _primitive.compile();
-//        System.out.println(_primitive.getCode(ShaderType.FRAGMENT));
-//        System.out.println(_primitive.getCode(ShaderType.VERTEX));
+        // System.out.println(_primitive.getCode(ShaderType.FRAGMENT));
+        // System.out.println(_primitive.getCode(ShaderType.VERTEX));
         if (_primitive.getProgramID() == 0)
             System.out.println("Could not create primitive shaders");
         ///////////////////////////////////////////////
@@ -172,7 +175,7 @@ public class DrawEngine {
         }
         setEventsCallbacks();
 
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         // EventManager.IsLocked = false;
         run();
@@ -335,9 +338,11 @@ public class DrawEngine {
 
         _margs.position.setPosition((float) xpos, (float) ypos);
 
-        //assignActions(InputEventType.MOUSE_MOVE, _margs, _handler.getLayout().getWindow());
+        // assignActions(InputEventType.MOUSE_MOVE, _margs,
+        // _handler.getLayout().getWindow());
 
-        if (engineEvent.lastEvent().contains(InputEventType.MOUSE_PRESS)) // жость какая-то ХЕРОТАААА!!!
+        if (engineEvent.lastEvent().contains(InputEventType.MOUSE_PRESS)) // жость какая-то ХЕРОТАААА!!
+                                                                          // 
         {
             if (_handler.getLayout().isBorderHidden && _handler.getLayout().isResizable) {
                 int w = _handler.getLayout().getWidth();
@@ -380,7 +385,7 @@ public class DrawEngine {
                             || _handler.getLayout().getWindow()._sides.contains(ItemAlignment.TOP))
                         setWindowPos();
                     setWindowSize();
-                    update();
+                    // update();
                 }
             }
             if (_handler.getLayout().getWindow()._sides.size() == 0) {
@@ -574,20 +579,19 @@ public class DrawEngine {
                 if (tmp.getHoverVerification(xpos, ypos)) {
                     queue.add(tmp);
                 } else {
-                    try{
-                    InterfaceFloating float_item = (InterfaceFloating) item;
-                    if (float_item != null && action == InputEventType.MOUSE_PRESS) {
-                        if (float_item.isOutsideClickClosable()) {
-                            if (item instanceof ContextMenu) {
-                                ContextMenu to_close = (ContextMenu) item;
-                                if (to_close.closeDependencies(_margs))
-                                    float_item.hide();
+                    try {
+                        InterfaceFloating float_item = (InterfaceFloating) item;
+                        if (float_item != null && action == InputEventType.MOUSE_PRESS) {
+                            if (float_item.isOutsideClickClosable()) {
+                                if (item instanceof ContextMenu) {
+                                    ContextMenu to_close = (ContextMenu) item;
+                                    if (to_close.closeDependencies(_margs))
+                                        float_item.hide();
+                                }
                             }
                         }
-                    }
 
-                    }
-                    catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                 }
@@ -607,6 +611,7 @@ public class DrawEngine {
                 item.setMouseHover(true);
                 if (!item.getPassEvents())
                     break;// остановить передачу событий последующим элементам
+                          // 
             }
             Collections.reverse(hoveredItems);
             return true;
@@ -652,18 +657,18 @@ public class DrawEngine {
 
     private void mouseScroll(long wnd, double dx, double dy) {
         _tooltip.initTimer(false);
-        BaseItem root = hoveredItem;
-        while (root != null) {
-            if (root instanceof InterfaceScrollable)
-                break;
-            root = root.getParent();
-        }
+        VisualItem root = hoveredItem;
+        // while (root != null) {
+        // if (root instanceof InterfaceScrollable)
+        // break;
+        // root = root.getParent();
+        // }
         if (root != null) {
-            InterfaceScrollable tmp = (InterfaceScrollable) root;
+            // InterfaceScrollable tmp = (InterfaceScrollable) root;
             if (dy > 0 || dx < 0)
-                tmp.invokeScrollUp(_margs);
+                root.eventScrollUp.execute(root, _margs);
             if (dy < 0 || dx > 0)
-                tmp.invokeScrollDown(_margs);
+                root.eventScrollDown.execute(root, _margs);
             engineEvent.setEvent(InputEventType.MOUSE_SCROLL);
         }
     }
@@ -674,7 +679,7 @@ public class DrawEngine {
 
         _tooltip.initTimer(false);
         _kargs.key = KeyCode.getEnum(key);
-//        System.out.println(_kargs.key);
+        // System.out.println(_kargs.key);
         _kargs.scancode = scancode;
         _kargs.state = InputState.getEnum(action);
         _kargs.mods = KeyMods.getEnum(mods);
@@ -715,9 +720,8 @@ public class DrawEngine {
         _tooltip.initTimer(false);
         _tiargs.character = character;
         _tiargs.mods = KeyMods.getEnum(mods);
-        if (focusedItem != null)
-        {
-            if(focusedItem.eventTextInput != null)
+        if (focusedItem != null) {
+            if (focusedItem.eventTextInput != null)
                 focusedItem.eventTextInput.execute(focusedItem, _tiargs);
         }
     }
@@ -745,6 +749,7 @@ public class DrawEngine {
                 _handler.getLayout().setEventTask(task);
                 if (!item.getPassEvents())
                     break;// остановить передачу событий последующим элементам
+                          // 
             }
             Collections.reverse(hoveredItems);
         }
@@ -779,11 +784,11 @@ public class DrawEngine {
         _primitive.useShader();
 
         while (!_handler.isClosing()) {
-//             glfwPollEvents();
+            // glfwPollEvents();
             // glfwWaitEvents();
             glfwWaitEventsTimeout(_interval);
             update();
-//            System.out.println("loop");
+            // System.out.println("loop");
         }
         _primitive.deleteShader();
         _texture.deleteShader();
@@ -799,7 +804,7 @@ public class DrawEngine {
             if (_handler.getLayout().isBorderHidden)
                 glViewport(0, 0, _handler.getLayout().getWidth(), _handler.getLayout().getHeight());
         }
-            render();
+        render();
     }
 
     private void render() {
@@ -809,12 +814,12 @@ public class DrawEngine {
 
             drawItems(_handler.getLayout().getWindow());
             // draw float
-//            for (BaseItem item : ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getItems())
-//                drawItems((BaseItem) item);
+            for (BaseItem item : ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getItems())
+                drawItems((BaseItem) item);
             // draw tooltip if needed
-//            drawToolTip();
-//            if (!_handler.focusable)
-//                drawShadePillow();
+            drawToolTip();
+            // if (!_handler.focusable)
+            // drawShadePillow();
         }
         _handler.swap();
     }
@@ -836,7 +841,7 @@ public class DrawEngine {
             vertexData.put(i * 3 + 1, crd_array.get(i)[1]);
             vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
         }
-        vertexData.flip();
+        vertexData.rewind();
 
         glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
@@ -855,7 +860,7 @@ public class DrawEngine {
             colorData.put(i * 4 + 2, argb[2]);
             colorData.put(i * 4 + 3, argb[3]);
         }
-        colorData.flip();
+        colorData.rewind();
 
         glBufferData(GL15.GL_ARRAY_BUFFER, colorData, GL15.GL_STATIC_DRAW);
         glEnableVertexAttribArray(1);
@@ -875,7 +880,7 @@ public class DrawEngine {
         crd_array.clear();
     }
 
-    private void SetStencilMask(List<float[]> crd_array) {
+    private void setStencilMask(List<float[]> crd_array) {
 
         int vertexbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -886,7 +891,7 @@ public class DrawEngine {
             vertexData.put(i * 3 + 1, crd_array.get(i)[1]);
             vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
         }
-        vertexData.flip();
+        vertexData.rewind();
         glBufferData(GL15.GL_ARRAY_BUFFER, vertexData, GL15.GL_STATIC_DRAW);
 
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
@@ -905,7 +910,7 @@ public class DrawEngine {
             colorData.put(i * 4 + 2, argb[2]);
             colorData.put(i * 4 + 3, argb[3]);
         }
-        colorData.flip();
+        colorData.rewind();
 
         glBufferData(GL15.GL_ARRAY_BUFFER, colorData, GL15.GL_STATIC_DRAW);
         glEnableVertexAttribArray(1);
@@ -929,6 +934,7 @@ public class DrawEngine {
         // _isStencilSet = shell;
         // StrictStencil(shell);
         // else
+
         lazyStencil(shell);
     }
 
@@ -940,13 +946,14 @@ public class DrawEngine {
          * SetStencilMask(shell.getParent().MakeShape()); glStencilFunc(GL_NOTEQUAL, 1,
          * 0xFF);
          */
+
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         glClear(GL_STENCIL_BUFFER_BIT);
         glStencilMask(0x00);
 
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
         glStencilMask(0xFF);
-        SetStencilMask(shell.getParent().makeShape());
+        setStencilMask(shell.getParent().makeShape());
 
         glStencilFunc(GL_EQUAL, 1, 0xFF);
 
@@ -965,8 +972,8 @@ public class DrawEngine {
         shell._confines_y_0 = shell.getParent()._confines_y_0;
         shell._confines_y_1 = shell.getParent()._confines_y_1;
 
-        VisualItem root = (VisualItem) shell;
-        if (root != null) {
+        if (shell instanceof VisualItem) {
+            VisualItem root = (VisualItem) shell;
             for (BaseItem item : root.getItems()) {
                 setConfines(item);
             }
@@ -977,6 +984,9 @@ public class DrawEngine {
         Map<ItemAlignment, int[]> outside = new HashMap<ItemAlignment, int[]>();
 
         if (shell.getParent() != null && _isStencilSet == null) {
+            // System.out.println(shell.getParent().getItemName() + " " +
+            // shell.getParent().getWidth() + " " + shell.getItemName() + " " +
+            // shell.getWidth());
             // bottom
             if (shell.getParent().getY() + shell.getParent().getHeight() > shell.getY()
                     && shell.getParent().getY() + shell.getParent().getHeight() < shell.getY() + shell.getHeight()) {
@@ -1000,6 +1010,7 @@ public class DrawEngine {
                 int x = shell.getParent().getX() + shell.getParent().getWidth() - shell.getParent().getPadding().right;
                 int w = shell.getWidth();
                 outside.put(ItemAlignment.RIGHT, new int[] { x, w });
+                // System.out.println(x + " " + w + " " + (shell.getX() + shell.getWidth()));
             }
             // left
             if (shell.getParent().getX() + shell.getParent().getPadding().left > shell.getX()) {
@@ -1039,16 +1050,20 @@ public class DrawEngine {
         }
         if (root instanceof ImageItem) {
             drawShell(root);
+            _texture.useShader();
             drawImage((ImageItem) root);
             _primitive.useShader();
+            if (_isStencilSet == root) {
+                glDisable(GL_STENCIL_TEST);
+                _isStencilSet = null;
+            }
         } else {
-                drawShell(root);
+            drawShell(root);
 
             if (root instanceof VisualItem) {
                 List<BaseItem> list;
-                synchronized (CommonService.GlobalLocker)
-                {
-                list = ((VisualItem) root).getItems();
+                synchronized (CommonService.GlobalLocker) {
+                    list = ((VisualItem) root).getItems();
 
                 }
                 for (BaseItem child : list) {
@@ -1066,14 +1081,14 @@ public class DrawEngine {
         checkOutsideBorders(shell);
         if (shell.getBackground().getAlpha() == 0)
             return;
-//
+        //
         // Vertex
         List<float[]> crd_array = shell.makeShape();
-        if(crd_array == null)
+        if (crd_array == null)
             return;
 
         int vertexbuffer = glGenBuffers();
-//        System.out.println(shell.getItemName() + " start");
+        // System.out.println(shell.getItemName() + " start");
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 
         int length = crd_array.size() * 3;
@@ -1120,19 +1135,16 @@ public class DrawEngine {
         // Clear VBO and shader
         glDeleteBuffers(vertexbuffer);
         glDeleteBuffers(colorbuffer);
-//        System.out.println(shell.getItemName() + " end");
+        // System.out.println(shell.getItemName() + " end");
 
         // clear array
         crd_array.clear();
     }
 
     private void drawText(TextItem item) {
-        // glDisable(GL_MULTISAMPLE);
-
         float[] data = item.shape();
-        if (data == null)
-        {
-            //System.out.println("null");
+        if (data == null) {
+            // System.out.println("null");
             return;
         }
 
@@ -1163,8 +1175,6 @@ public class DrawEngine {
         // Clear VBO and shader
         glDeleteBuffers(vertexbuffer);
         glDeleteBuffers(colorbuffer);
-
-        // glEnable(GL_MULTISAMPLE);
     }
 
     private void drawPoints(InterfacePoints item) {
@@ -1300,6 +1310,7 @@ public class DrawEngine {
         bb.rewind();
 
         // проверка: полностью ли влезает объект в свой контейнер
+        // 
         checkOutsideBorders((BaseItem) image);
 
         float i_x0 = ((float) image.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
@@ -1360,15 +1371,14 @@ public class DrawEngine {
         // glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE,
         // bitmap);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 256);
 
         // glActiveTexture(GL_TEXTURE0);
 
-        _texture.useShader();
         int location = glGetUniformLocation((int) _texture.getProgramID(), "tex");
         if (location >= 0) {
             try {
@@ -1414,7 +1424,9 @@ public class DrawEngine {
         drawShell(_tooltip);
 
         _tooltip.getTextLine().updateGeometry();
+        glDisable(GL_MULTISAMPLE);
         drawText(_tooltip.getTextLine());
+        glEnable(GL_MULTISAMPLE);
         if (_isStencilSet == _tooltip.getTextLine()) {
             glDisable(GL_STENCIL_TEST);
             _isStencilSet = null;

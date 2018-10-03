@@ -19,7 +19,7 @@ public class ThemeStyle {
             defaultItemsStyle.put("SpaceVIL.ComboBox", Style.getComboBoxStyle());
             defaultItemsStyle.put("SpaceVIL.ComboBoxDropDown", Style.getComboBoxDropDownStyle());
             defaultItemsStyle.put("SpaceVIL.ContextMenu", Style.getContextMenuStyle());
-            defaultItemsStyle.put("SpaceVIL.FlowArea", Style.getFlowAreaStyle());
+            defaultItemsStyle.put("SpaceVIL.FreeArea", Style.getFlowAreaStyle());
             defaultItemsStyle.put("SpaceVIL.Frame", Style.getFrameStyle());
             defaultItemsStyle.put("SpaceVIL.Grid", Style.getGridStyle());
             defaultItemsStyle.put("SpaceVIL.HorizontalScrollBar", Style.getHorizontalScrollBarStyle());

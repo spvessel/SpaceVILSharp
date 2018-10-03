@@ -590,8 +590,8 @@ namespace SpaceVIL
             Style style = new Style();
 
             style.Background = Color.Transparent;
-            style.WidthPolicy = SizePolicy.Expand;
-            style.HeightPolicy = SizePolicy.Fixed;
+            style.WidthPolicy = SizePolicy.Fixed;
+            style.HeightPolicy = SizePolicy.Expand;
             style.Width = 25;
 
             Style track_style = new Style();

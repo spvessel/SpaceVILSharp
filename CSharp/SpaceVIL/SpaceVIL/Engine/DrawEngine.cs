@@ -495,7 +495,7 @@ namespace SpaceVIL
                 {
                     if (item.Equals(HoveredItem) && HoveredItem.IsDisabled)
                         continue;//пропустить
-                        item.IsMouseHover = true;
+                    item.IsMouseHover = true;
                     if (!item.IsPassEvents)
                         break;//остановить передачу событий последующим элементам
                 }
@@ -1034,11 +1034,17 @@ namespace SpaceVIL
                     _isStencilSet = null;
                 }
             }
-            if (root is IImageItem)
+            if (root is ImageItem)
             {
                 DrawShell(root);
+                _texture.UseShader();
                 DrawImage(root as ImageItem);
                 _primitive.UseShader();
+                if (_isStencilSet == root)
+                {
+                    glDisable(GL_STENCIL_TEST);
+                    _isStencilSet = null;
+                }
             }
             else
             {
@@ -1711,15 +1717,14 @@ namespace SpaceVIL
             // glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
             // glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 256);
+            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 256);
 
             // glActiveTexture(GL_TEXTURE0);
 
-            _texture.UseShader();
             int location = glGetUniformLocation(_texture.GetProgramID(), "tex".ToCharArray());
             if (location >= 0)
             {

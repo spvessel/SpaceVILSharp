@@ -88,12 +88,20 @@ namespace SpaceVIL
         public override void AddItem(BaseItem item)
         {
             //ignore if it is out of space, add in free cell, attach row and collumn numbers
-            base.AddItem(item);
-            UpdateLayout();
+            foreach (Cell cell in _cells)
+            {
+                if (cell.GetItem() == null)
+                {
+                    base.AddItem(item);
+                    cell.SetItem(item);
+                    UpdateLayout();
+                    return;
+                }
+            }
         }
         public void InsertItem(BaseItem item, int row, int column)
         {
-            AddItem(item);
+            base.AddItem(item);
             //_cells[row + column * _row_count].SetItem(item);
             //Console.WriteLine(column + row * _column_count);
             _cells[column + row * _column_count].SetItem(item);

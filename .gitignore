@@ -163,3 +163,4 @@ Java/SpaceVIL/spacevil/bin/main/shaders/fs_fill.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/fs_texture.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_fill.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_texture.glsl
+*.bat

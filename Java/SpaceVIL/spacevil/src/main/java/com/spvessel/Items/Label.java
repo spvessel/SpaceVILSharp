@@ -1,82 +1,26 @@
 package com.spvessel.Items;
 
-import com.spvessel.Cores.*;
 import java.awt.*;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.List;
 import com.spvessel.Decorations.*;
 import com.spvessel.Common.*;
+import com.spvessel.Cores.*;
 import com.spvessel.Flags.*;
-import com.spvessel.Flags.SizePolicy;
 
-public class ToolTip extends VisualItem {
+public class Label extends VisualItem {
     private static int count = 0;
-
     private TextLine _text_object;
 
-    public TextLine getTextLine() {
-        return _text_object;
-    }
-
-    protected Timer _stop;
-    private int _timeout = 300;
-
-    public void setTimeOut(int milliseconds) {
-        _timeout = milliseconds;
-    }
-
-    public int getTimeOut() {
-        return _timeout;
-    }
-
-    public ToolTip() {
-        setVisible(false);
-        _text_object = new TextLine();
-        setItemName("ToolTip_" + count);
+    public Label() {
+        setItemName("Label_" + count);
         count++;
-
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ToolTip"));
+        _text_object = new TextLine();
+        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Label"));
     }
 
-    @Override
-    public void initElements() {
-    }
-
-    public void initTimer(boolean value) {
-        if (value) {
-            if (_stop != null)
-                return;
-
-            _stop = new Timer();
-            TimerTask task = new TimerTask() {
-
-                @Override
-                public void run() {
-                    visibleSelf();
-                }
-            };
-            _stop.schedule(task, _timeout);
-        } else {
-            setVisible(false);
-
-            if (_stop == null)
-                return;
-
-            _stop.cancel();
-            _stop = null;
-        }
-    }
-
-    private void visibleSelf() {
-        setVisible(true);
-
-        _stop.cancel();
-        _stop = null;
-    }
-
-    public int getTextWidth() {
-        return _text_object.getWidth();
+    public Label(String text) {
+        this();
+        setText(text);
     }
 
     // text init
@@ -138,6 +82,19 @@ public class ToolTip extends VisualItem {
 
     public Color getForeground() {
         return _text_object.getForeground();
+    }
+
+    public int getTextWidth() {
+        return _text_object.getWidth();
+    }
+
+    public int getTextHeight() {
+        return _text_object.getHeight();
+    }
+
+    @Override
+    public void initElements() {
+        addItem(_text_object);
     }
 
     @Override

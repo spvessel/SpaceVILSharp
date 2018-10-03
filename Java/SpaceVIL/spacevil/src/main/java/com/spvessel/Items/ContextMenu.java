@@ -13,4 +13,8 @@ public class ContextMenu extends VisualItem {
     public boolean closeDependencies(MouseArgs args) {
         return true;
     }
+
+    public void show(InterfaceItem sender, MouseArgs args) {
+
+    }
 }

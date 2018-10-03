@@ -610,8 +610,6 @@ namespace SpaceVIL
             if (IsCustom != null)
             {
                 SetTriangles(IsCustom.GetFigure());
-                if (GetState(ItemStateType.Base).Shape == null)
-                    GetState(ItemStateType.Base).Shape = IsCustom;
 
                 if (IsCustom.IsFixed())
                     return GraphicsMathService.ToGL(IsCustom.UpdatePosition(GetX(), GetY()), GetHandler());
@@ -654,6 +652,7 @@ namespace SpaceVIL
             if (style.Shape != null)
             {
                 IsCustom = new CustomFigure(style.IsFixedShape, style.Shape);
+                GetState(ItemStateType.Base).Shape = IsCustom;
             }
         }
     }

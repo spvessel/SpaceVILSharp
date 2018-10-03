@@ -12,7 +12,7 @@ public final class Cell extends Geometry implements InterfacePosition {
         return _parent;
     }
 
-    protected Cell(Grid grid, int row, int column) {
+    public Cell(Grid grid, int row, int column) {
         _parent = grid;
         _row_index = row;
         _column_index = column;
@@ -69,7 +69,7 @@ public final class Cell extends Geometry implements InterfacePosition {
         _item_link = item;
     }
 
-    protected void updateBehavior() {
+    public void updateBehavior() {
         if (getParentGrid() == null || _item_link == null)
             return;
 

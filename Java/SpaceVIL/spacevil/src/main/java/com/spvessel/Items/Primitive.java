@@ -2,6 +2,7 @@ package com.spvessel.Items;
 
 import java.util.List;
 import com.spvessel.Decorations.*;
+import com.spvessel.Flags.ItemAlignment;
 
 abstract public class Primitive extends BaseItem {
 
@@ -11,6 +12,7 @@ abstract public class Primitive extends BaseItem {
 
     public Primitive(int xpos, int ypos, int width, int height, String name) {
         setItemName(name);
+        setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
     }
 
     @Override

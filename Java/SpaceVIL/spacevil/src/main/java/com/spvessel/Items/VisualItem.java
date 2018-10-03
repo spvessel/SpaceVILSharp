@@ -15,22 +15,23 @@ import com.spvessel.Layouts.ItemsLayoutBox;
 public abstract class VisualItem extends BaseItem {
 
     // common events
-    public InterfaceCommonMethodState eventFocusGet;
-    public InterfaceCommonMethodState eventFocusLost;
-    public InterfaceCommonMethodState eventResized;
-    public InterfaceCommonMethodState eventDestroyed;
+    public EventCommonMethodState eventFocusGet = new EventCommonMethodState();
+    public EventCommonMethodState eventFocusLost = new EventCommonMethodState();
+    public EventCommonMethodState eventResized = new EventCommonMethodState();
+    public EventCommonMethodState eventDestroyed = new EventCommonMethodState();
     // mouse input
-    public InterfaceMouseMethodState eventMouseHover;
-    public InterfaceMouseMethodState eventMouseClick;
-    public InterfaceMouseMethodState eventMousePressed;
-    public InterfaceMouseMethodState eventMouseRelease;
-    public InterfaceMouseMethodState eventMouseDrag;
-    public InterfaceMouseMethodState eventMouseDrop;
-    public InterfaceMouseMethodState eventScrollUp;
-    public InterfaceMouseMethodState eventScrollDown;
+    public EventMouseMethodState eventMouseHover = new EventMouseMethodState();
+    public EventMouseMethodState eventMouseClick = new EventMouseMethodState();
+    public EventMouseMethodState eventMousePressed = new EventMouseMethodState();
+    public EventMouseMethodState eventMouseRelease = new EventMouseMethodState();
+    public EventMouseMethodState eventMouseDrag = new EventMouseMethodState();
+    public EventMouseMethodState eventMouseDrop = new EventMouseMethodState();
+    public EventMouseMethodState eventScrollUp = new EventMouseMethodState();
+    public EventMouseMethodState eventScrollDown = new EventMouseMethodState();
     // keyboard input
-    public InterfaceKeyMethodState eventKeyPress;
-    public InterfaceKeyMethodState eventKeyRelease;
+    public EventKeyMethodState eventKeyPress = new EventKeyMethodState();
+    public EventKeyMethodState eventKeyRelease = new EventKeyMethodState();;
+    // text input
     public InterfaceInputTextMethodState eventTextInput;
 
     public VisualItem() {
@@ -147,8 +148,7 @@ public abstract class VisualItem extends BaseItem {
     }
 
     public void setSpacing(int horizontal, int vertical) {
-        _spacing.horizontal = horizontal;
-        _spacing.vertical = vertical;
+        _spacing = new Spacing(horizontal, vertical);
     }
 
     private Indents _padding = new Indents();
@@ -162,10 +162,7 @@ public abstract class VisualItem extends BaseItem {
     }
 
     public void setPadding(int left, int top, int right, int bottom) {
-        _padding.left = left;
-        _padding.top = top;
-        _padding.right = right;
-        _padding.bottom = bottom;
+        _padding = new Indents(left, top, right, bottom);
     }
 
     public EventManager eventManager = null;
@@ -188,6 +185,7 @@ public abstract class VisualItem extends BaseItem {
     }
 
     public void addItem(BaseItem item) {
+        // System.out.println(getItemName() + " " + item.getItemName() + " " + getHandler());
         synchronized (getHandler().engine_locker)
         // lock (CommonService.GlobalLocker)
         {
@@ -497,8 +495,8 @@ public abstract class VisualItem extends BaseItem {
     public List<float[]> makeShape() {
         if (isCustom != null) {
             setTriangles(isCustom.getFigure());
-            if (getState(ItemStateType.BASE).shape == null)
-                getState(ItemStateType.BASE).shape = isCustom;
+            // if (getState(ItemStateType.BASE).shape == null)
+            //     getState(ItemStateType.BASE).shape = isCustom;
 
             if (isCustom.isFixed())
                 return GraphicsMathService.toGL(isCustom.updatePosition(getX(), getY()), getHandler());
@@ -541,6 +539,7 @@ public abstract class VisualItem extends BaseItem {
         if (style.shape != null)
         {
             isCustom = new CustomFigure(style.isFixedShape, style.shape);
+            getState(ItemStateType.BASE).shape = isCustom;
         }
     }
 }

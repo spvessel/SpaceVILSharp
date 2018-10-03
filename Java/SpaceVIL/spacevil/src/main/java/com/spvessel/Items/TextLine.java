@@ -16,8 +16,8 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     private int _minLineSpacer;
     private int _minFontY;
     private int _maxFontY;
-    //private List<float> _coordArray; //private List<List<float>> _coordArray;
-    private int _lineWidth = 0; //private float[] _lineWidth;
+    // private List<float> _coordArray; //private List<List<float>> _coordArray;
+    private int _lineWidth = 0; // private float[] _lineWidth;
     private List<Integer> _letEndPos;
     private int _lineYShift = 0;
     private int _lineXShift = 0;
@@ -45,17 +45,28 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         _letEndPos = new LinkedList<>();
 
         if (_letters.size() > 0)
-            _lineWidth = _letters.get(_letters.size() - 1).xShift + _letters.get(_letters.size() - 1).width +
-                    _letters.get(_letters.size() - 1).xBeg; //xBeg не обязательно, т.к. везде 0, но вдруг
+            _lineWidth = _letters.get(_letters.size() - 1).xShift + _letters.get(_letters.size() - 1).width
+                    + _letters.get(_letters.size() - 1).xBeg; // xBeg не обязательно, т.к. везде 0, но вдруг
+                                                              // 
 
-        setWidth(_lineWidth);
-        setHeight(Math.abs(_maxFontY - _minFontY));
+        super.setWidth(_lineWidth);
+        super.setHeight(Math.abs(_maxFontY - _minFontY));
 
         for (Alphabet.ModifyLetter modL : _letters) {
             _letEndPos.add(modL.xBeg + modL.xShift + modL.width);
         }
 
         addAllShifts();
+    }
+
+    @Override
+    public void setWidth(int width) {
+        setAllowWidth(width);
+    }
+
+    @Override
+    public void setHeight(int height) {
+        setAllowHeight(height);
     }
 
     private void addAllShifts() {
@@ -80,14 +91,14 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             return;
         }
 
-        //Horizontal
+        // Horizontal
         if (alignments.contains(ItemAlignment.RIGHT) && (_lineWidth < _parentAllowWidth))
             alignShiftX = getParent().getWidth() - _lineWidth - getParent().getPadding().right;
 
         else if (alignments.contains(ItemAlignment.HCENTER) && (_lineWidth < _parentAllowWidth))
             alignShiftX = (getParent().getWidth() - _lineWidth) / 2f;
 
-        //Vertical
+        // Vertical
         if (alignments.contains(ItemAlignment.BOTTOM))
             alignShiftY = getParent().getHeight() - height - getParent().getPadding().bottom;
 
@@ -102,8 +113,10 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             xCoord = alignShiftX + modL.xBeg + modL.xShift + _lineXShift;
             yCoord = alignShiftY + _lineYShift - _minFontY + modL.yBeg;
 
-            if (xCoord + modL.width < 0) continue;
-            if (xCoord > _parentAllowWidth) break;
+            if (xCoord + modL.width < 0)
+                continue;
+            if (xCoord > _parentAllowWidth)
+                break;
 
             alphas.addAll(modL.getCol());
 
@@ -119,8 +132,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     }
 
     @Override
-    public void updateData()
-    {
+    public void updateData() {
         if (getFont() == null)
             return;
 
@@ -151,8 +163,10 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     }
 
     public int getLetWidth(int count) {
-        if (_letters == null) return 0;
-        if ((count < 0) || (count >= _letters.size())) return 0;
+        if (_letters == null)
+            return 0;
+        if ((count < 0) || (count >= _letters.size()))
+            return 0;
 
         return _letters.get(count).width;
     }
@@ -167,7 +181,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     }
 
     public void setLineXShift(int sp) {
-        //if (_lineXShift == sp) return;
+        // if (_lineXShift == sp) return;
         _lineXShift = sp;
         updateCoords();
     }
@@ -214,8 +228,9 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     public void checkXShift(int _cursorXMax) {
         if (getLetPosArray() == null || getLetPosArray().size() == 0)
             return;
-        int s = getLetPosArray().get(getLetPosArray().size() - 1)- _cursorXMax;
-        if (s <= 0) setLineXShift(0);
+        int s = getLetPosArray().get(getLetPosArray().size() - 1) - _cursorXMax;
+        if (s <= 0)
+            setLineXShift(0);
         else if ((s > 0) && (s + _lineXShift < 0)) {
             setLineXShift(-s);
         }

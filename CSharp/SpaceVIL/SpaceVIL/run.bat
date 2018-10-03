@@ -1,1 +1,1 @@
-spacevil.exe
+compile.bat && spacevil.exe

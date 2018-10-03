@@ -92,7 +92,7 @@ namespace SpaceVIL
             List<BaseItem> items = GetParent().GetItems();
             foreach (var item in items)
             {
-                if (item is RadioButton && !item.GetItemName().Equals(this.GetItemName()))
+                if (item is RadioButton && !item.Equals(this))
                 {
                     (item as RadioButton).GetIndicator().GetIndicatorMarker().IsToggled = false;
                 }

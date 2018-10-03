@@ -37,7 +37,7 @@ public final class GraphicsMathService {
                 b = b * (1.0f - item.getAlpha() / 255.0f) + item.getBlue() * (item.getAlpha() / 255.0f);
             }
         }
-        return new Color((int)r, (int)g , (int)b , (int)a);
+        return new Color((int) r, (int) g, (int) b, (int) a);
     }
 
     static public List<float[]> toGL(BaseItem item, WindowLayout handler) // where TLayout : VisualItem
@@ -130,7 +130,8 @@ public final class GraphicsMathService {
         x1 = radius * (float) Math.cos(alph1 * Math.PI / 180.0f) + x0;
         y1 = radius * (float) Math.sin(alph1 * Math.PI / 180.0f) + y0;
 
-        for (int alf = alph1 + 1; alf <= alph2; alf += 5) { // Шаг можно сделать больше 1 градуса, нужны тестирования
+        for (int alf = alph1 + 1; alf <= alph2; alf += 5) { // Шаг можно сделать больше 1 градуса, нужны тести
+                                                            // ования
             x2 = radius * (float) Math.cos(alf * Math.PI / 180.0f) + x0;
             y2 = radius * (float) Math.sin(alf * Math.PI / 180.0f) + y0;
             circleSect.add(new float[] { x0, y0, 0.0f });
@@ -314,6 +315,78 @@ public final class GraphicsMathService {
         triangles.addAll(getRectangle(w / 3, h, 0, 0));
         triangles.addAll(getRectangle(2 * w / 3, h - h / 4, w / 3, h / 4));
         triangles.addAll(getRectangle(w / 4, h / 8, w / 3 + 2, 0));
+        return triangles;
+    }
+
+    static public List<float[]> getStar(float R, float r, int n) {
+        float x_center = r;
+        float y_center = r;
+
+        List<float[]> triangles = new LinkedList<float[]>();
+
+        float alpha = 0.0f;
+        for (int i = 0; i < n; i++) {
+            triangles.add(new float[] { x_center, y_center, 0.0f });
+
+            triangles.add(new float[] { (float) (x_center + r / 2 * Math.cos(alpha * Math.PI / 180.0f)),
+                    (float) (y_center - r / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
+
+            alpha = alpha + 360.0f / n;
+
+            triangles.add(new float[] { (float) (x_center + r / 2 * Math.cos(alpha * Math.PI / 180.0f)),
+                    (float) (y_center - r / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
+        }
+
+        alpha = 0.0f;
+        int count = 1;
+        for (int i = 1; i < n * 2 + 2; i++) {
+            if ((i % 2) != 0) // При выполнении условия четности следующие формулы
+                              // 
+            {
+                triangles.add(new float[] { (float) (x_center + r / 2 * Math.cos(alpha * Math.PI / 180.0f)),
+                        (float) (y_center - r / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
+                if (count % 3 == 0) {
+                    triangles.add(new float[] { (float) (x_center + r / 2 * Math.cos(alpha * Math.PI / 180.0f)),
+                            (float) (y_center - r / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
+                    count = 1;
+                }
+            } else // При невыполнении условия четности следующие формулы
+                   // 
+            {
+                triangles.add(new float[] { (float) (x_center + R / 2 * Math.cos(alpha * Math.PI / 180.0f)),
+                        (float) (y_center - R / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
+                if (count % 3 == 0) {
+                    triangles.add(new float[] { (float) (x_center + R / 2 * Math.cos(alpha * Math.PI / 180.0f)),
+                            (float) (y_center - R / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
+                    count = 1;
+                }
+            }
+            alpha = alpha + 180.0f / n;
+            count++;
+        }
+        triangles.remove(triangles.size() - 1);
+        return triangles;
+    }
+
+    static public List<float[]> getRegularPolygon(float r, int n) {
+        float x_center = r;
+        float y_center = r;
+
+        List<float[]> triangles = new LinkedList<float[]>();
+
+        float alpha = 0;
+        for (int i = 0; i < n; i++) {
+            triangles.add(new float[] { x_center, y_center, 0.0f });
+
+            triangles.add(new float[] { (float) (x_center + r / 2 * Math.cos(alpha * Math.PI / 180.0f)),
+                    (float) (y_center - r / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
+
+            alpha = alpha + 360.0f / n;
+
+            triangles.add(new float[] { (float) (x_center + r / 2 * Math.cos(alpha * Math.PI / 180.0f)),
+                    (float) (y_center - r / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
+        }
+
         return triangles;
     }
 }
