@@ -378,6 +378,7 @@ namespace SpaceVIL
                 //float emSize = font.Height * font.FontFamily.GetCellAscent(font.Style) / font.FontFamily.GetEmHeight(font.Style);
                 float emSize = font.Size;
                 shape.AddString(let, font.FontFamily, (int)font.Style, emSize, new PointF(0f, 0f), format);
+                
                 try
                 {
                     return new Letter(let, shape);
@@ -493,6 +494,9 @@ namespace SpaceVIL
 
                 CrossOut crossOut = ContourService.CrossContours(shape);
                 double[,] alph = crossOut._arr;
+
+                //LogService.Log().LogTwoDimArr(alph, "Letter " + name);
+
                 y0 = crossOut._minY;
 
                 height = alph.GetLength(1);// y1 - y0 + 1;

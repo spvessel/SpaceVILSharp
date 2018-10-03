@@ -262,7 +262,7 @@ public class Alphabet {
             height = (y1 - y0 + 1);
             width = (x1 - x0 + 1);
 
-            double[][] alph = new double[height][width];
+            double[][] alph = new double[width][height];
 
             minX = x0;
             minY = y0;
@@ -275,7 +275,7 @@ public class Alphabet {
 
                 for (int d = x0; d <= x1; d++) {
                     if (shape.contains(d, dd)) {
-                        alph[boolInd][d - x0] = 1;
+                        alph[d - x0][boolInd] = 1;
                         /*
                         coords.add((float) (d - minX));
                         coords.add((float) dd);
@@ -300,7 +300,7 @@ public class Alphabet {
 
                         inter = count * 1.0 / countTmp;
 
-                        alph[boolInd][d - x0] = inter; //TODO: значения здесь можно усилить
+                        alph[d - x0][boolInd] = inter; //TODO: значения здесь можно усилить
                         /*
                         coords.add((float) (d - minX));
                         coords.add((float) dd);
