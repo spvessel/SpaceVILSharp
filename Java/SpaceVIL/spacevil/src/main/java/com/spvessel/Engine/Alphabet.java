@@ -241,6 +241,7 @@ public class Alphabet {
         List<Float> pix;
 
         public Letter(String name, Shape shape) {//GraphicsPath shape) {
+            //System.out.println("make letter " + name);
             col = new LinkedList<>();
             pix = new LinkedList<>();
 
@@ -248,7 +249,6 @@ public class Alphabet {
             if (shape != null)
                 makeLetterArrays(shape);
             else isSpec = true;
-
         }
 
         private void makeLetterArrays(Shape shape) {

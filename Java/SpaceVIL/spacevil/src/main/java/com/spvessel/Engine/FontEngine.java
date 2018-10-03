@@ -24,6 +24,7 @@ public class FontEngine {
         if (!fonts.containsKey(font)) {
             fonts.put(font, new Alphabet(font));
         }
+
         return fonts.get(font).makeTextNew(text);// MakeText(text);
     }
 

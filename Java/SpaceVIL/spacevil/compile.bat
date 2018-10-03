@@ -1,1 +1,1 @@
-mvn compile && mvn package
+./gradlew build

@@ -6,6 +6,7 @@ import com.spvessel.Flags.SizePolicy;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,13 +16,13 @@ public abstract class TextItem extends Primitive {
     private float[] _coordinates;
     private float[] _colors;
     private String _itemText = "";
-    //private bool _needToGl = false;
+    // private bool _needToGl = false;
 
     private Font _font = DefaultsService.getDefaultFont();
 
-    //private bool _criticalFlag = true;
-    //private bool _coordsFlag = true;
-    //private bool _colorFlag = true;
+    // private bool _criticalFlag = true;
+    // private bool _coordsFlag = true;
+    // private bool _colorFlag = true;
     static int count = 0;
 
     public TextItem() {
@@ -31,7 +32,6 @@ public abstract class TextItem extends Primitive {
         setHeightPolicy(SizePolicy.EXPAND);
         count++;
     }
-
 
     public TextItem(String text, Font font, String name) {
         this();
@@ -52,7 +52,7 @@ public abstract class TextItem extends Primitive {
         return _itemText;
     }
 
-    void setItemText(String itemText) {
+    public void setItemText(String itemText) {
         if (!_itemText.equals(itemText)) {
             _itemText = itemText;
             updateData();
@@ -61,7 +61,7 @@ public abstract class TextItem extends Primitive {
 
     Font getFont() {
         // if(_font == null)
-        //     _font = DefaultsService.GetDefaultFont();
+        // _font = DefaultsService.GetDefaultFont();
         return _font;
     }
 
@@ -90,7 +90,7 @@ public abstract class TextItem extends Primitive {
     void setFontFamily(String font_family) {
         if (_font.getFamily() != font_family) {
             _font = new Font(font_family, _font.getSize(), _font.getStyle());
-            updateData(); //_criticalFlag = true;
+            updateData(); // _criticalFlag = true;
         }
     }
 
@@ -102,7 +102,7 @@ public abstract class TextItem extends Primitive {
         return _coordinates;
     }
 
-    float[] getColors() {
+    public float[] getColors() {
         return _colors;
     }
 
@@ -132,7 +132,7 @@ public abstract class TextItem extends Primitive {
         return outCoord;
     }
 
-    private Color _foreground = Color.BLACK; //default
+    private Color _foreground = Color.BLACK; // default
 
     public Color getForeground() {
         return _foreground;
@@ -141,48 +141,72 @@ public abstract class TextItem extends Primitive {
     public void setForeground(Color foreground) {
         if (!_foreground.equals(foreground)) {
             _foreground = foreground;
-            setColor(_alphas); //_colorFlag = true;
+            setColor(_alphas); // _colorFlag = true;
         }
     }
 
     public void setForeground(int r, int g, int b) {
-        if (r < 0) r = Math.abs(r);
-        if (r > 255) r = 255;
-        if (g < 0) g = Math.abs(g);
-        if (g > 255) g = 255;
-        if (b < 0) b = Math.abs(b);
-        if (b > 255) b = 255;
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 255)
+            r = 255;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 255)
+            g = 255;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 255)
+            b = 255;
 
         setForeground(new Color(r, g, b, 255));
     }
 
     public void setForeground(int r, int g, int b, int a) {
-        if (r < 0) r = Math.abs(r);
-        if (r > 255) r = 255;
-        if (g < 0) g = Math.abs(g);
-        if (g > 255) g = 255;
-        if (b < 0) b = Math.abs(b);
-        if (b > 255) b = 255;
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 255)
+            r = 255;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 255)
+            g = 255;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 255)
+            b = 255;
         setForeground(new Color(r, g, b, a));
     }
 
     public void setForeground(float r, float g, float b) {
-        if (r < 0) r = Math.abs(r);
-        if (r > 1.0f) r = 1.0f;
-        if (g < 0) g = Math.abs(g);
-        if (g > 1.0f) g = 1.0f;
-        if (b < 0) b = Math.abs(b);
-        if (b > 1.0f) b = 1.0f;
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 1.0f)
+            r = 1.0f;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 1.0f)
+            g = 1.0f;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 1.0f)
+            b = 1.0f;
         setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
     }
 
     public void setForeground(float r, float g, float b, float a) {
-        if (r < 0) r = Math.abs(r);
-        if (r > 1.0f) r = 1.0f;
-        if (g < 0) g = Math.abs(g);
-        if (g > 1.0f) g = 1.0f;
-        if (b < 0) b = Math.abs(b);
-        if (b > 1.0f) b = 1.0f;
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 1.0f)
+            r = 1.0f;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 1.0f)
+            g = 1.0f;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 1.0f)
+            b = 1.0f;
         setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
     }
 
@@ -195,7 +219,7 @@ public abstract class TextItem extends Primitive {
         float r = col.getRed() * 1f / 255f;
         float g = col.getGreen() * 1f / 255f;
         float b = col.getBlue() * 1f / 255f;
-        //Console.WriteLine(r + " " + g + " " + b);
+        // Console.WriteLine(r + " " + g + " " + b);
         int inc = 0;
         for (float f : alphas) {
             float tmp = f;
@@ -203,7 +227,8 @@ public abstract class TextItem extends Primitive {
             float two = g;
             float three = b;
 
-            if (tmp > 1) tmp = 1;
+            if (tmp > 1)
+                tmp = 1;
             _colors[inc] = one;
             inc++;
             _colors[inc] = two;
@@ -215,26 +240,25 @@ public abstract class TextItem extends Primitive {
         }
     }
 
-    private List<ItemAlignment> _textAlignment;
+    private List<ItemAlignment> _textAlignment = new LinkedList<>();
 
-    public List<ItemAlignment> getTextAlignment() { return _textAlignment; }
+    public List<ItemAlignment> getTextAlignment() {
+        return _textAlignment;
+    }
 
     public void setTextAlignment(ItemAlignment... value) {
         List<ItemAlignment> list = Arrays.stream(value).collect(Collectors.toList());
         setTextAlignment(list);
     }
 
-    public void setTextAlignment(List<ItemAlignment> list)
-    {
-        if (!_textAlignment.equals(list))
-        {
+    public void setTextAlignment(List<ItemAlignment> list) {
+        if (!_textAlignment.equals(list)) {
             _textAlignment = list;
-            updateCoords(); //_coordsFlag = true;
+            updateCoords(); // _coordsFlag = true;
         }
     }
 
     public float[] shape() {
         return getCoordinates();
     }
-
 }

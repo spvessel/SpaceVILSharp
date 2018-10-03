@@ -20,11 +20,11 @@ public class WindowLayoutBox {
 
         ItemsLayoutBox.initLayout(_layout.getId());
 
-        //add filling frame
-        //ALL ATTRIBUTES STRICTLY NEEDED!!!
+        // add filling frame
+        // ALL ATTRIBUTES STRICTLY NEEDED!!!
         WContainer container = new WContainer();
         container.setHandler(_layout);
-//        System.out.println(_layout.getWindowName());
+        // System.out.println(_layout.getWindowName());
         container.setItemName(_layout.getWindowName());
         container.setWidth(_layout.getWidth());
         container.setMinWidth(_layout.getMinWidth());
@@ -42,6 +42,24 @@ public class WindowLayoutBox {
     static public void removeWindow(WindowLayout _layout) {
         windowsName.remove(_layout.getWindowName());
         windowsUUID.remove(_layout.getId());
+    }
+
+    static public boolean tryShow(UUID guid) {
+        WindowLayout wnd = WindowLayoutBox.getWindowInstance(guid);
+        if (wnd != null) {
+            wnd.show();
+            return true;
+        }
+        return false;
+    }
+
+    static public boolean tryShow(String name) {
+        WindowLayout wnd = WindowLayoutBox.getWindowInstance(name);
+        if (wnd != null) {
+            wnd.show();
+            return true;
+        }
+        return false;
     }
 
     static public WindowLayout getWindowInstance(String name) {

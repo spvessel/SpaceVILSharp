@@ -17,7 +17,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     private int _minFontY;
     private int _maxFontY;
     //private List<float> _coordArray; //private List<List<float>> _coordArray;
-    private int _lineWidth; //private float[] _lineWidth;
+    private int _lineWidth = 0; //private float[] _lineWidth;
     private List<Integer> _letEndPos;
     private int _lineYShift = 0;
     private int _lineXShift = 0;
@@ -34,6 +34,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         super(text, font, "TextLine_" + count);
         count++;
         getFontDims();
+        updateData();
     }
 
     public void createText() {
@@ -127,7 +128,6 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         _minLineSpacer = output[0];
         _minFontY = output[1];
         _maxFontY = output[2];
-
         createText();
     }
 

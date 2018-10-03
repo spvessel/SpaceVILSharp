@@ -35,4 +35,12 @@ public enum KeyCode {
     public int getValue() {
         return key;
     }
+
+    public static KeyCode getEnum(int key) {
+        for(KeyCode k : KeyCode.values()){
+            if(k.getValue() == key)
+                return  k;
+        }
+        return UNKNOWN;
+    }
 }

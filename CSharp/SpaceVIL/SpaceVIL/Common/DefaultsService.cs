@@ -48,7 +48,7 @@ namespace SpaceVIL
             if (_default_font == null)
             {
                 AddFontFromMemory();
-                _default_font = new Font(privateFontCollection.Families[0], 13, FontStyle.Regular);
+                _default_font = new Font(privateFontCollection.Families[0], 12, FontStyle.Regular);
             }
             return new Font(_default_font.FontFamily, _default_font.Size, _default_font.Style);
         }

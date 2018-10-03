@@ -1,21 +1,12 @@
-package app;
+package com.spvessel;
 
-import com.spvessel.Engine.*;
-import com.spvessel.Items.*;
-import com.spvessel.View.MainWindow;
-import com.spvessel.Windows.WindowLayoutBox;
-
-import java.util.*;
-import java.io.*;
-import java.nio.*;
-import java.net.URL;
+import com.spvessel.View.*;
 
 public class App {
-    static List<VisualItem> list = new LinkedList<VisualItem>();
-
     public static void main(String[] args) {
-        System.out.println("Hello World! My dear friend!");
+        System.out.println("Hello World! My dear friend! I'm here!");
         MainWindow mw = new MainWindow();
+        FlowTest ft = new FlowTest();
         mw.show();
 //        WindowLayoutBox.getWindowInstance("MainWindow").show();
     }

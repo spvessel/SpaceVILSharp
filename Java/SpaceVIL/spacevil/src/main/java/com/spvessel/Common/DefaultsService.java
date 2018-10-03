@@ -19,6 +19,10 @@ public final class DefaultsService {
     }
     public static Font getDefaultFont(int size)
     {
-        return new Font("Verdana", Font.PLAIN, size);
+        return new Font("Ubuntu", Font.PLAIN, size);
+    }
+    public static Font getDefaultFont(int style, int size)
+    {
+        return new Font("Ubuntu", style, size);
     }
 }

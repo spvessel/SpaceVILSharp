@@ -115,9 +115,9 @@ public class DrawEngine {
 
     private String getResourceString(String resource) {
 
-        StringBuilder result = new StringBuilder("");
+        StringBuilder result = new StringBuilder();
 
-            System.out.println( "URI: " + DrawEngine.class.getResource(resource));
+        // System.out.println( "URI: " + DrawEngine.class.getResource(resource));
         InputStream inputStream = DrawEngine.class.getResourceAsStream(resource);
 
         try (BufferedReader  scanner = new BufferedReader (new InputStreamReader(inputStream))) {
@@ -153,16 +153,16 @@ public class DrawEngine {
         // glEnable(GL_DEPTH_TEST);
         // glEnable(GL_STENCIL_TEST);
         ////////////////////////////////////////////////
-        _primitive = new Shader(getResourceString("/resources/shaders/vs_fill.glsl"),
-                getResourceString("/resources/shaders/fs_fill.glsl"));
+        _primitive = new Shader(getResourceString("/shaders/vs_fill.glsl"),
+                getResourceString("/shaders/fs_fill.glsl"));
         _primitive.compile();
 //        System.out.println(_primitive.getCode(ShaderType.FRAGMENT));
 //        System.out.println(_primitive.getCode(ShaderType.VERTEX));
         if (_primitive.getProgramID() == 0)
             System.out.println("Could not create primitive shaders");
         ///////////////////////////////////////////////
-        _texture = new Shader(getResourceString("/resources/shaders/vs_texture.glsl"),
-                getResourceString("/resources/shaders/fs_texture.glsl"));
+        _texture = new Shader(getResourceString("/shaders/vs_texture.glsl"),
+                getResourceString("/shaders/fs_texture.glsl"));
         _texture.compile();
         if (_texture.getProgramID() == 0)
             System.out.println("Could not create textured shaders");
@@ -673,8 +673,8 @@ public class DrawEngine {
             return;
 
         _tooltip.initTimer(false);
-
-        _kargs.key = KeyCode.values()[key];
+        _kargs.key = KeyCode.getEnum(key);
+//        System.out.println(_kargs.key);
         _kargs.scancode = scancode;
         _kargs.state = InputState.getEnum(action);
         _kargs.mods = KeyMods.getEnum(mods);
@@ -716,7 +716,10 @@ public class DrawEngine {
         _tiargs.character = character;
         _tiargs.mods = KeyMods.getEnum(mods);
         if (focusedItem != null)
-            focusedItem.eventTextInput.execute(focusedItem, _tiargs);
+        {
+            if(focusedItem.eventTextInput != null)
+                focusedItem.eventTextInput.execute(focusedItem, _tiargs);
+        }
     }
 
     private void assignActions(InputEventType action, InputEventArgs args, Boolean only_last) {
@@ -1026,8 +1029,9 @@ public class DrawEngine {
             drawPoints((InterfacePoints) root);
         }
         if (root instanceof TextItem) {
+            glDisable(GL_MULTISAMPLE);
             drawText((TextItem) root);
-
+            glEnable(GL_MULTISAMPLE);
             if (_isStencilSet == root) {
                 glDisable(GL_STENCIL_TEST);
                 _isStencilSet = null;
@@ -1123,33 +1127,30 @@ public class DrawEngine {
     }
 
     private void drawText(TextItem item) {
-        glDisable(GL_MULTISAMPLE);
+        // glDisable(GL_MULTISAMPLE);
 
         float[] data = item.shape();
         if (data == null)
+        {
+            //System.out.println("null");
             return;
-        FloatBuffer vertexData = BufferUtils.createFloatBuffer(data.length);
-        vertexData.put(data);
-        vertexData.rewind();
+        }
 
         float[] color = item.getColors();
         if (color == null)
             return;
-        FloatBuffer colorData = BufferUtils.createFloatBuffer(color.length);
-        colorData.put(color);
-        colorData.rewind();
 
         checkOutsideBorders((BaseItem) item);
 
         int vertexbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(0);
 
         int colorbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-        glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, color, GL_STATIC_DRAW);
         glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(1);
 
@@ -1163,7 +1164,7 @@ public class DrawEngine {
         glDeleteBuffers(vertexbuffer);
         glDeleteBuffers(colorbuffer);
 
-        glEnable(GL_MULTISAMPLE);
+        // glEnable(GL_MULTISAMPLE);
     }
 
     private void drawPoints(InterfacePoints item) {

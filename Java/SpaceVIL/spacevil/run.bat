@@ -1,1 +1,1 @@
-java -cp ./target/classes com.spvessel.App
+./gradlew run
