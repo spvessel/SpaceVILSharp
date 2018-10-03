@@ -85,17 +85,6 @@ public class DrawEngine {
     }
 
     public void dispose() {
-        // полностью аннигилирует библиотеку GLFW, что приводит к закрытию всех окон и
-        // 
-        // уничтожает все что использует библиотеку GLFW
-        // 
-        // должно вызываться только при закрытии приложения или если необходимо -
-        // 
-        // уничтожении всех окон
-        // статический метод Glfw.Terminate() является общим для всех экземпля
-        // ов
-        // классов, что создают окна с помощью GLFW
-        // LogService.Log().EndLogging();
         glfwTerminate();
     }
 
@@ -341,9 +330,7 @@ public class DrawEngine {
         // assignActions(InputEventType.MOUSE_MOVE, _margs,
         // _handler.getLayout().getWindow());
 
-        if (engineEvent.lastEvent().contains(InputEventType.MOUSE_PRESS)) // жость какая-то ХЕРОТАААА!!
-                                                                          // 
-        {
+        if (engineEvent.lastEvent().contains(InputEventType.MOUSE_PRESS)) {
             if (_handler.getLayout().isBorderHidden && _handler.getLayout().isResizable) {
                 int w = _handler.getLayout().getWidth();
                 int h = _handler.getLayout().getHeight();
@@ -610,8 +597,7 @@ public class DrawEngine {
                     continue;// пропустить
                 item.setMouseHover(true);
                 if (!item.getPassEvents())
-                    break;// остановить передачу событий последующим элементам
-                          // 
+                    break;
             }
             Collections.reverse(hoveredItems);
             return true;
@@ -748,14 +734,11 @@ public class DrawEngine {
                 task.args = args;
                 _handler.getLayout().setEventTask(task);
                 if (!item.getPassEvents())
-                    break;// остановить передачу событий последующим элементам
-                          // 
+                    break;
             }
             Collections.reverse(hoveredItems);
         }
         _handler.getLayout().executePollActions();
-
-        // Console.WriteLine();
     }
 
     private void assignActions(InputEventType action, InputEventArgs args, VisualItem sender) {
@@ -814,70 +797,17 @@ public class DrawEngine {
 
             drawItems(_handler.getLayout().getWindow());
             // draw float
-            for (BaseItem item : ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getItems())
+            for (BaseItem item : ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems())
                 drawItems((BaseItem) item);
             // draw tooltip if needed
             drawToolTip();
             // if (!_handler.focusable)
             // drawShadePillow();
+            // drawLines(GraphicsMathService.toGL(GraphicsMathService.getTriangle(300, 300,
+            // 300, 300, 0),
+            // _handler.getLayout()));
         }
         _handler.swap();
-    }
-
-    private void setStencilMask(int w, int h, int x, int y) {
-
-        glEnable(GL_STENCIL_TEST);
-        int vertexbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-
-        // Vertex
-        List<float[]> crd_array;
-        crd_array = GraphicsMathService.toGL(GraphicsMathService.getRectangle(w, h, x, y), _handler.getLayout());
-
-        int length = crd_array.size() * 3;
-        FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 3; i++) {
-            vertexData.put(i * 3 + 0, crd_array.get(i)[0]);
-            vertexData.put(i * 3 + 1, crd_array.get(i)[1]);
-            vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
-        }
-        vertexData.rewind();
-
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
-
-        // Color
-        float[] argb = { 1.0f, 1.0f, 1.0f, 0.5f };
-        int colorbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-
-        length = crd_array.size() * 4;
-        FloatBuffer colorData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 4; i++) {
-            colorData.put(i * 4 + 0, argb[0]);
-            colorData.put(i * 4 + 1, argb[1]);
-            colorData.put(i * 4 + 2, argb[2]);
-            colorData.put(i * 4 + 3, argb[3]);
-        }
-        colorData.rewind();
-
-        glBufferData(GL15.GL_ARRAY_BUFFER, colorData, GL15.GL_STATIC_DRAW);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
-
-        // draw
-        glDrawArrays(GL_TRIANGLES, 0, crd_array.size());
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        // Clear VBO and shader
-        glDeleteBuffers(vertexbuffer);
-        glDeleteBuffers(colorbuffer);
-
-        // clear array
-        crd_array.clear();
     }
 
     private void setStencilMask(List<float[]> crd_array) {
@@ -940,12 +870,6 @@ public class DrawEngine {
 
     private void strictStencil(BaseItem shell) {
         glEnable(GL_STENCIL_TEST);
-        /*
-         * glClearStencil(1); glStencilMask(0xFF); glStencilFunc(GL_NEVER, 2, 0);
-         * glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-         * SetStencilMask(shell.getParent().MakeShape()); glStencilFunc(GL_NOTEQUAL, 1,
-         * 0xFF);
-         */
 
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         glClear(GL_STENCIL_BUFFER_BIT);
@@ -1020,6 +944,16 @@ public class DrawEngine {
                 outside.put(ItemAlignment.LEFT, new int[] { x, w });
             }
 
+            // if (shell instanceof VerticalSlider) {
+            // System.out.println(
+            // shell.getX() + " " +
+            // shell.getParent().getX() + " " +
+            // shell.getY() + " " +
+            // shell.getParent().getY() + " " +
+            // outside.toString()
+            // );
+            // }
+
             if (outside.size() > 0 || shell.getParent() instanceof TextBlock) {
                 _isStencilSet = shell;
                 strictStencil(shell);
@@ -1063,8 +997,7 @@ public class DrawEngine {
             if (root instanceof VisualItem) {
                 List<BaseItem> list;
                 synchronized (CommonService.GlobalLocker) {
-                    list = ((VisualItem) root).getItems();
-
+                    list = new LinkedList<>(((VisualItem) root).getItems());
                 }
                 for (BaseItem child : list) {
                     drawItems(child);
@@ -1178,31 +1111,45 @@ public class DrawEngine {
     }
 
     private void drawPoints(InterfacePoints item) {
-        // Console.WriteLine();
+        // glPointSize(1.0f);
+
         if (item.getPointColor().getAlpha() == 0)
             return;
 
         List<float[]> crd_array = item.makeShape();
         if (crd_array == null)
             return;
-        List<float[]> result = new LinkedList<float[]>();
+        // long startTime = System.nanoTime();
+        float[] result = new float[item.getShapePointer().size() * crd_array.size() * 3];
+        int skew = 0;
         for (float[] shape : crd_array) {
-            // Console.WriteLine(shape[0] + " " + shape[1]);
-            result.addAll(GraphicsMathService.moveShape(item.getShapePointer(),
-                    shape[0] - item.getPointThickness() / 2.0f, shape[1] - item.getPointThickness() / 2.0f));
+
+            List<float[]> fig = GraphicsMathService.toGL(GraphicsMathService.moveShape(item.getShapePointer(),
+                    shape[0] - item.getPointThickness() / 2.0f, shape[1] - item.getPointThickness() / 2.0f),
+                    _handler.getLayout());
+
+            for (int i = 0; i < fig.size(); i++) {
+                result[skew + i * 3 + 0] = fig.get(i)[0];
+                result[skew + i * 3 + 1] = fig.get(i)[1];
+                result[skew + i * 3 + 2] = fig.get(i)[2];
+            }
+            skew += fig.size() * 3;
         }
-        result = GraphicsMathService.toGL(result, _handler.getLayout());
+        // long estimatedTime = (System.nanoTime() - startTime) / 1000000;
+        // System.out.println(estimatedTime);
 
         int vertexbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        int length = result.size() * 3;
+        int length = result.length;
+
         FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 3; i++) {
-            vertexData.put(i * 3 + 0, result.get(i)[0]);
-            vertexData.put(i * 3 + 1, result.get(i)[1]);
-            vertexData.put(i * 3 + 2, result.get(i)[2]);
-        }
+        vertexData.put(result);
         vertexData.rewind();
+
+        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(0);
+
         // Color
         float[] argb = { (float) item.getPointColor().getRed() / 255.0f,
                 (float) item.getPointColor().getGreen() / 255.0f, (float) item.getPointColor().getBlue() / 255.0f,
@@ -1210,7 +1157,7 @@ public class DrawEngine {
 
         int colorbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-        length = crd_array.size() * 4;
+        length = result.length / 3 * 4;
         FloatBuffer colorData = BufferUtils.createFloatBuffer(length);
         for (int i = 0; i < length / 4; i++) {
             colorData.put(i * 4 + 0, argb[0]);
@@ -1220,18 +1167,14 @@ public class DrawEngine {
         }
         colorData.rewind();
 
-        checkOutsideBorders((BaseItem) item);
-
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
-
         glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
         glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(1);
 
+        checkOutsideBorders((BaseItem) item);
+
         // draw
-        glDrawArrays(GL_TRIANGLES, 0, result.size());
+        glDrawArrays(GL_TRIANGLES, 0, result.length / 3);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
@@ -1239,6 +1182,7 @@ public class DrawEngine {
         // Clear VBO and shader
         glDeleteBuffers(vertexbuffer);
         glDeleteBuffers(colorbuffer);
+
     }
 
     private void drawLines(InterfaceLine item) {
@@ -1247,7 +1191,7 @@ public class DrawEngine {
             return;
 
         List<float[]> crd_array = GraphicsMathService.toGL(item.makeShape(), _handler.getLayout());
-        ;
+
         if (crd_array == null)
             return;
 
@@ -1262,6 +1206,9 @@ public class DrawEngine {
             vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
         }
         vertexData.rewind();
+        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
         // Color
         float[] argb = { (float) item.getLineColor().getRed() / 255.0f, (float) item.getLineColor().getGreen() / 255.0f,
@@ -1280,13 +1227,9 @@ public class DrawEngine {
 
         checkOutsideBorders((BaseItem) item);
 
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
-
         glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
 
         // draw
         glDrawArrays(GL_LINE_STRIP, 0, crd_array.size());
@@ -1297,6 +1240,8 @@ public class DrawEngine {
         // Clear VBO and shader
         glDeleteBuffers(vertexbuffer);
         glDeleteBuffers(colorbuffer);
+
+        // crd_array.clear();
     }
 
     private void drawImage(ImageItem image) {
@@ -1308,9 +1253,6 @@ public class DrawEngine {
         ByteBuffer bb = BufferUtils.createByteBuffer(bitmap.length);
         bb.put(bitmap);
         bb.rewind();
-
-        // проверка: полностью ли влезает объект в свой контейнер
-        // 
         checkOutsideBorders((BaseItem) image);
 
         float i_x0 = ((float) image.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;

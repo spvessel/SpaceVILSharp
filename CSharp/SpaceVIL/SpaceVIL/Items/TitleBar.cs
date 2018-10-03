@@ -14,7 +14,7 @@ namespace SpaceVIL
         static int count = 0;
         private HorizontalStack _layout;
         public HDirection Direction = HDirection.FromLeftToRight;
-        private TextLine _text_object;
+        private Label _text_object;
         private ImageItem _icon;
         public ImageItem GetIcon()
         {
@@ -42,7 +42,7 @@ namespace SpaceVIL
             count++;
 
             _layout = new HorizontalStack();
-            _text_object = new TextLine();
+            _text_object = new Label();
             _minimize = new ButtonCore();
             _maximize = new ButtonCore();
             _close = new ButtonCore();
@@ -99,11 +99,11 @@ namespace SpaceVIL
         }
         public void SetText(String text)
         {
-            _text_object.SetItemText(text);
+            _text_object.SetText(text);
         }
         public String GetText()
         {
-            return _text_object.GetItemText();
+            return _text_object.GetText();
         }
         public void SetForeground(Color color)
         {

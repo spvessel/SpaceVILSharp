@@ -410,18 +410,21 @@ public class Style {
     public static Style getHorizontalScrollBarStyle() {
         Style style = new Style();
 
-        style.background = new Color(255, 50, 50, 50);
+        style.background = new Color(50, 50, 50);
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.FIXED;
         style.height = 16;
+        style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
 
-        Style uparrow_style = new Style();
+        Style uparrow_style = getButtonCoreStyle();
         uparrow_style.widthPolicy = SizePolicy.FIXED;
         uparrow_style.heightPolicy = SizePolicy.FIXED;
-        uparrow_style.background = new Color(50, 255, 255, 255);
+        uparrow_style.background = new Color(255, 255, 255, 50);
         uparrow_style.width = 16;
         uparrow_style.height = 16;
         uparrow_style.alignment = new LinkedList<ItemAlignment>(
+                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        uparrow_style.textAlignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         uparrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, -90);
         uparrow_style.isFixedShape = true;
@@ -432,10 +435,10 @@ public class Style {
 
         style.addInnerStyle("uparrow", uparrow_style);
 
-        Style downarrow_style = new Style();
+        Style downarrow_style = getButtonCoreStyle();
         downarrow_style.widthPolicy = SizePolicy.FIXED;
         downarrow_style.heightPolicy = SizePolicy.FIXED;
-        downarrow_style.background = new Color(50, 255, 255, 255);
+        downarrow_style.background = new Color(255, 255, 255, 50);
         downarrow_style.width = 16;
         downarrow_style.height = 16;
         downarrow_style.alignment = new LinkedList<ItemAlignment>(
@@ -446,22 +449,25 @@ public class Style {
 
         style.addInnerStyle("downarrow", downarrow_style);
 
-        Style slider_style = new Style();
+        Style slider_style = getButtonCoreStyle();
         slider_style.widthPolicy = SizePolicy.EXPAND;
         slider_style.heightPolicy = SizePolicy.EXPAND;
         slider_style.background = new Color(0, 0, 0, 0);
+        slider_style.alignment = new LinkedList<ItemAlignment>(
+                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.addInnerStyle("slider", slider_style);
 
         Style track_style = new Style();
         track_style.widthPolicy = SizePolicy.EXPAND;
         track_style.heightPolicy = SizePolicy.EXPAND;
         track_style.background = new Color(0, 0, 0, 0);
+        track_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         slider_style.addInnerStyle("track", track_style);
 
         Style handler_style = new Style();
         handler_style.widthPolicy = SizePolicy.EXPAND;
         handler_style.heightPolicy = SizePolicy.EXPAND;
-        handler_style.background = new Color(50, 255, 255, 255);
+        handler_style.background = new Color(255, 255, 255, 50);
         handler_style.margin = new Indents(0, 3, 0, 3);
         handler_style.alignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
@@ -475,15 +481,16 @@ public class Style {
     public static Style getVerticalScrollBarStyle() {
         Style style = new Style();
 
-        style.background = new Color(255, 50, 50, 50);
+        style.background = new Color(50, 50, 50);
         style.widthPolicy = SizePolicy.FIXED;
         style.heightPolicy = SizePolicy.EXPAND;
         style.width = 16;
+        style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
 
-        Style uparrow_style = new Style();
+        Style uparrow_style = getButtonCoreStyle();
         uparrow_style.widthPolicy = SizePolicy.FIXED;
         uparrow_style.heightPolicy = SizePolicy.FIXED;
-        uparrow_style.background = new Color(50, 255, 255, 255);
+        uparrow_style.background = new Color(255, 255, 255, 50);
         uparrow_style.width = 16;
         uparrow_style.height = 16;
         uparrow_style.alignment = new LinkedList<ItemAlignment>(
@@ -497,10 +504,10 @@ public class Style {
 
         style.addInnerStyle("uparrow", uparrow_style);
 
-        Style downarrow_style = new Style();
+        Style downarrow_style = getButtonCoreStyle();
         downarrow_style.widthPolicy = SizePolicy.FIXED;
         downarrow_style.heightPolicy = SizePolicy.FIXED;
-        downarrow_style.background = new Color(50, 255, 255, 255);
+        downarrow_style.background = new Color(255, 255, 255, 50);
         downarrow_style.width = 16;
         downarrow_style.height = 16;
         downarrow_style.alignment = new LinkedList<ItemAlignment>(
@@ -510,7 +517,7 @@ public class Style {
         downarrow_style.addItemState(ItemStateType.HOVERED, hovered);
         style.addInnerStyle("downarrow", downarrow_style);
 
-        Style slider_style = new Style();
+        Style slider_style = getButtonCoreStyle();
         slider_style.widthPolicy = SizePolicy.EXPAND;
         slider_style.heightPolicy = SizePolicy.EXPAND;
         slider_style.background = new Color(0, 0, 0, 0);
@@ -520,12 +527,13 @@ public class Style {
         track_style.widthPolicy = SizePolicy.EXPAND;
         track_style.heightPolicy = SizePolicy.EXPAND;
         track_style.background = new Color(0, 0, 0, 0);
+        track_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         slider_style.addInnerStyle("track", track_style);
 
         Style handler_style = new Style();
         handler_style.widthPolicy = SizePolicy.EXPAND;
         handler_style.heightPolicy = SizePolicy.EXPAND;
-        handler_style.background = new Color(50, 255, 255, 255);
+        handler_style.background = new Color(255, 255, 255, 50);
         handler_style.margin = new Indents(3, 0, 3, 0);
         handler_style.alignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
@@ -543,7 +551,7 @@ public class Style {
         style.heightPolicy = SizePolicy.FIXED;
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         style.height = 25;
-        
+
         Style track_style = new Style();
         track_style.widthPolicy = SizePolicy.EXPAND;
         track_style.heightPolicy = SizePolicy.FIXED;
@@ -551,26 +559,26 @@ public class Style {
         track_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.VCENTER));
         track_style.background = new Color(100, 100, 100);
         style.addInnerStyle("track", track_style);
-        
+
         Style handler_style = new Style();
         handler_style.widthPolicy = SizePolicy.FIXED;
         handler_style.heightPolicy = SizePolicy.EXPAND;
         handler_style.width = 10;
         handler_style.background = new Color(255, 181, 111);
         handler_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT));
-        
+
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
         handler_style.addItemState(ItemStateType.HOVERED, hovered);
-        
+
         style.addInnerStyle("handler", handler_style);
-        
+
         return style;
     }
-    
+
     public static Style getVerticalSliderStyle() {
         Style style = new Style();
-        
+
         style.background = new Color(0, 0, 0, 0);
         style.widthPolicy = SizePolicy.FIXED;
         style.heightPolicy = SizePolicy.EXPAND;
@@ -871,8 +879,8 @@ public class Style {
 
     public static Style getPopUpMessageStyle() {
         Style style = new Style();
-        style.background = new Color(240, 45, 45, 45);
-        style.foreground = new Color(150, 150, 150);
+        style.background = new Color(45, 45, 45, 240);
+        style.foreground = new Color(210, 210, 210);
         style.font = DefaultsService.getDefaultFont(16);
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
         style.textAlignment = new LinkedList<ItemAlignment>(
@@ -888,12 +896,13 @@ public class Style {
 
         Style close_style = new Style();
         close_style.background = new Color(100, 100, 100);
+        close_style.foreground = new Color(210, 210, 210);
         close_style.setSize(10, 10);
         close_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         close_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.RIGHT));
         close_style.margin = new Indents(0, 5, 0, 5);
         ItemState close_hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 60);
+        close_hovered.background = new Color(255, 255, 255, 60);
         close_style.addItemState(ItemStateType.HOVERED, close_hovered);
         close_style.shape = GraphicsMathService.getCross(10, 10, 3, 45);
         close_style.isFixedShape = false;

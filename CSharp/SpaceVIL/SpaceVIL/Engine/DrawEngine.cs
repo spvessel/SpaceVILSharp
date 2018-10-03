@@ -9,6 +9,7 @@ using Glfw3;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace SpaceVIL
 {
@@ -1007,15 +1008,6 @@ namespace SpaceVIL
             if (!root.IsVisible || !root.IsDrawable)
                 return;
 
-            //refactor paths
-            // if (root is IPixelDrawable)
-            // {
-            //     DrawPixels((root as IPixelDrawable));
-            //     foreach (var child in (root as VisualItem).GetItems())
-            //     {
-            //         DrawItems(child);
-            //     }
-            // }
             if (root is ILine)
             {
                 DrawLines((root as ILine));
@@ -1500,6 +1492,9 @@ namespace SpaceVIL
 
         void DrawPoints(IPoints item)
         {
+            // Stopwatch stopWatch = new Stopwatch();
+            // stopWatch.Start();
+
             //Console.WriteLine();
             if (item.GetPointColor().A == 0)
                 return;
@@ -1521,6 +1516,7 @@ namespace SpaceVIL
                     ));
             }
             result = GraphicsMathService.ToGL(result, _handler.GetLayout());
+
             // Console.WriteLine(crd_array.Count + " " + result.Count);
             // PrintService.PrintList(result);
             // Console.WriteLine(result.ElementAt(0)[0]);
@@ -1569,6 +1565,13 @@ namespace SpaceVIL
 
             // Clear VBO and shader
             glDeleteBuffers(2, buffers);
+
+            // stopWatch.Stop();
+            // TimeSpan ts = stopWatch.Elapsed;
+            // string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            // ts.Hours, ts.Minutes, ts.Seconds,
+            // ts.Milliseconds / 10);
+            // Console.WriteLine("AddRange: " + elapsedTime);
         }
         void DrawLines(ILine item)
         {
@@ -1582,7 +1585,10 @@ namespace SpaceVIL
             List<float[]> crd_array = GraphicsMathService.ToGL(item.MakeShape(), _handler.GetLayout()); ;
             if (crd_array == null)
                 return;
-
+            // foreach (var crd in crd_array)
+            // {
+            //     Console.WriteLine(crd[0] + " " + crd[1] + " " + crd[2]);
+            // }
             float[] vertexData = new float[crd_array.Count * 3];
 
             for (int i = 0; i < vertexData.Length / 3; i++)

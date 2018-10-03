@@ -10,6 +10,7 @@ public class App {
         FlowTest ft = new FlowTest();
         mw.show();
         // im.show();
+        // ft.show();
 //        WindowLayoutBox.getWindowInstance("MainWindow").show();
     }
 }

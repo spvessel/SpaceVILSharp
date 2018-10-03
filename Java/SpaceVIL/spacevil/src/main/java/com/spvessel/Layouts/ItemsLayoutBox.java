@@ -46,7 +46,7 @@ public class ItemsLayoutBox {
         }
     }
 
-    static protected void removeItem(WindowLayout layout, BaseItem item, LayoutType type) {
+    static public void removeItem(WindowLayout layout, BaseItem item, LayoutType type) {
         // lock (CommonService.GlobalLocker)
         {
             switch (type) {
@@ -79,7 +79,7 @@ public class ItemsLayoutBox {
         return result;
     }
 
-    static public void PrintListOfItems(WindowLayout layout) {
+    static public void printListOfItems(WindowLayout layout) {
         String[] list = getListOfItemsNames(layout);
         for (String item : list) {
             System.out.println(item);
