@@ -84,6 +84,7 @@ namespace SpaceVIL
             // foreach (var shape in figure)
             //     result.AddRange(GraphicsMathService.MoveShape(GetShapePointer(), shape[0], shape[1]));
             // return GraphicsMathService.ToGL(result, GetHandler());
+            // Console.WriteLine("update?");
             return UpdateShape();
             // return GraphicsMathService.ToGL(UpdateShape(), GetHandler());
         }

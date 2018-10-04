@@ -69,6 +69,32 @@ public class WindowLayout {
     private TaskThread thread_manager;
     private ActionManager manager;
 
+    public WindowLayout(CoreWindow window, String name, String title) {
+        handler = window;
+        _id = handler.getWindowGuid();
+        setWindowName(name);
+        setWindowTitle(title);
+
+        isDialog = false;
+        isBorderHidden = false;
+        isClosed = true;
+        isHidden = false;
+        isResizable = true;
+        isCentered = true;
+        isFocusable = true;
+        isAlwaysOnTop = false;
+        isOutsideClickClosable = false;
+        isMaximized = false;
+
+        manager = new ActionManager(this);
+        engine = new DrawEngine(this);
+
+        synchronized (CommonService.GlobalLocker) {
+            WindowLayoutBox.initWindow(this);
+        }
+        setFocusedItem(_window);
+    }
+
     public WindowLayout(CoreWindow window, String name, String title, int width, int height, Boolean border_hidden) {
         handler = window;
         _id = handler.getWindowGuid();
@@ -96,8 +122,6 @@ public class WindowLayout {
             WindowLayoutBox.initWindow(this);
         }
         setFocusedItem(_window);
-        // events
-        // EventClose += Close;
     }
 
     public void updatePosition() {
@@ -361,7 +385,7 @@ public class WindowLayout {
                 ParentGUID = WindowLayoutBox.lastFocusedWindow.getId();
                 WindowLayoutBox.addToWindowDispatcher(this);
                 WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.focusable = false;
-                WindowLayoutBox.getWindowInstance(ParentGUID).engine.update();
+                // WindowLayoutBox.getWindowInstance(ParentGUID).engine.update();
             }
             thread_engine.start();
             try {
@@ -423,9 +447,10 @@ public class WindowLayout {
 
     void setWindowFocused() {
         synchronized (CommonService.GlobalLocker) {
+            if(WindowLayoutBox.getWindowInstance(ParentGUID) != null)
             WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.focusable = true;
-            WindowLayoutBox.getWindowInstance(ParentGUID).engine
-                    .focus(WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.getWindowId(), true);
+            // WindowLayoutBox.getWindowInstance(ParentGUID).engine
+            //         .focus(WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.getWindowId(), true);
         }
     }
 

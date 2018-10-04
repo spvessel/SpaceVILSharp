@@ -5,7 +5,7 @@ import com.spvessel.Engine.*;
 
 public class Ellipse extends Primitive {
     static int count = 0;
-    public int N = 32;
+    public int N = 16;
     public Ellipse() {
         setItemName("Ellipse_" + count);
         count++;

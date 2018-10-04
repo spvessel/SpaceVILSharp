@@ -52,6 +52,8 @@ public class MainWindow extends ActiveWindow {
         btn_layout.setToolTip("Show Layout window.");
         btn_layout.setBackground(255, 151, 153);
         btn_layout.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        InterfaceMouseMethodState layout_click = (sender, args) -> WindowLayoutBox.tryShow("LayoutsTest");
+        btn_layout.eventMouseClick.add(layout_click);
 
         ButtonCore btn_label = new ButtonCore("Label");
         btn_label.setFont(font);
@@ -66,12 +68,14 @@ public class MainWindow extends ActiveWindow {
         btn_flow.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         InterfaceMouseMethodState flow_click = (sender, args) -> WindowLayoutBox.tryShow("FlowTest");
         btn_flow.eventMouseClick.add(flow_click);
-
+        
         ButtonCore btn_complex = new ButtonCore("Complex");
         btn_complex.setFont(font);
         btn_complex.setToolTip("Show Complex window.");
         btn_complex.setBackground(114, 153, 211);
         btn_complex.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        InterfaceMouseMethodState complex_click = (sender, args) -> WindowLayoutBox.tryShow("ComplexTest");
+        btn_complex.eventMouseClick.add(complex_click);
 
         ButtonCore btn_image = new ButtonCore("Image");
         btn_image.setFont(font);

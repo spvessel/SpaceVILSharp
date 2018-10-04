@@ -570,6 +570,18 @@ namespace SpaceVIL
         }
         private bool LazyHoverVerification(float xpos, float ypos)
         {
+            if (this is ContextMenu)
+            {
+                Console.WriteLine("context menu");
+                Console.WriteLine(
+                    _confines_x_0 + " " +
+                    _confines_x_1 + " " +
+                    _confines_y_0 + " " +
+                    _confines_y_1 + " " +
+                    GetParent().GetItemName()
+                );
+            }
+
             bool result = false;
             float minx = GetX();
             float maxx = GetX() + GetWidth();

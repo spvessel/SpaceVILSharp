@@ -64,6 +64,15 @@ public final class GraphicsMathService {
         return result;
     }
 
+    static public float[] toGL(float[] triangles, WindowLayout handler) // where TLayout : VisualItem
+    {
+        for (int i = 0; i < triangles.length / 2; i++) {
+            triangles[i * 2 + 0] /= (((float) handler.getWidth()) * 2.0f - 1.0f);
+            triangles[i * 2 + 1] /= (((float) handler.getHeight() * 2.0f - 1.0f) * (-1.0f));
+        }
+        return triangles;
+    }
+
     public static List<float[]> getRoundSquare(float width, float height, float radius, int x, int y) {
         if (radius < 0)
             radius = 0;
@@ -131,6 +140,7 @@ public final class GraphicsMathService {
         y1 = radius * (float) Math.sin(alph1 * Math.PI / 180.0f) + y0;
 
         for (int alf = alph1 + 1; alf <= alph2; alf += 5) { // Шаг можно сделать больше 1 градуса, нужны тести
+                                                            // 
                                                             // ования
             x2 = radius * (float) Math.cos(alf * Math.PI / 180.0f) + x0;
             y2 = radius * (float) Math.sin(alf * Math.PI / 180.0f) + y0;
@@ -342,6 +352,7 @@ public final class GraphicsMathService {
         for (int i = 1; i < n * 2 + 2; i++) {
             if ((i % 2) != 0) // При выполнении условия четности следующие формулы
                               // 
+                              //
             {
                 triangles.add(new float[] { (float) (x_center + r / 2 * Math.cos(alpha * Math.PI / 180.0f)),
                         (float) (y_center - r / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
@@ -352,6 +363,7 @@ public final class GraphicsMathService {
                 }
             } else // При невыполнении условия четности следующие формулы
                    // 
+                   //
             {
                 triangles.add(new float[] { (float) (x_center + R / 2 * Math.cos(alpha * Math.PI / 180.0f)),
                         (float) (y_center - R / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });

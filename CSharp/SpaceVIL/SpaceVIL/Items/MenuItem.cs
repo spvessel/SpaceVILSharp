@@ -18,9 +18,13 @@ namespace SpaceVIL
         }
         public bool IsReadyToClose(MouseArgs args)
         {
-            if (!_sub_context_menu.GetHoverVerification(args.Position.X, args.Position.Y)
-                && _sub_context_menu.CloseDependencies(args))
-                return true;
+            if (_sub_context_menu != null)
+            {
+                if (!_sub_context_menu.GetHoverVerification(args.Position.X, args.Position.Y)
+                    && _sub_context_menu.CloseDependencies(args))
+                    return true;
+            }
+            Console.WriteLine("false?");
             return false;
         }
         CustomShape _arrow;

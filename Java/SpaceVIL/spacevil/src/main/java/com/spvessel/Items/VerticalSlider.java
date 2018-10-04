@@ -48,7 +48,7 @@ public class VerticalSlider extends VisualItem {
             eventValueChanged.execute(this);
     }
 
-    void updateHandler() {
+    public void updateHandler() {
         float offset = ((float) getHeight() - handler.getHeight()) / (_max_value - _min_value) * _current_value;
         handler.setOffset((int) offset);
     }

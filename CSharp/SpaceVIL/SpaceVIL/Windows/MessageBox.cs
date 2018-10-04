@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class MessageBox : DialogWindow
+    public class MessageBox : DialogWindow
     {
         bool _result = false;
         public bool Result()

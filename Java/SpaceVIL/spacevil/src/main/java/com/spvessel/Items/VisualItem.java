@@ -176,21 +176,17 @@ public abstract class VisualItem extends BaseItem {
         _content = content;
     }
 
-    public void addItems(BaseItem... items)
-    {
-        for (BaseItem item : items)
-        {
+    public void addItems(BaseItem... items) {
+        for (BaseItem item : items) {
             this.addItem(item);
         }
     }
 
     public void addItem(BaseItem item) {
-        // System.out.println(getItemName() + " " + item.getItemName() + " " + getHandler());
-        synchronized (getHandler().engine_locker)
-        // lock (CommonService.GlobalLocker)
-        {
-            if (item.equals(this))
-            {
+        // System.out.println(getItemName() + " " + item.getItemName() + " " +
+        // getHandler());
+        synchronized (getHandler().engine_locker) {
+            if (item.equals(this)) {
                 System.out.println("Trying to add current item in himself.");
                 return;
             }
@@ -198,43 +194,105 @@ public abstract class VisualItem extends BaseItem {
 
             addChildren(item);
 
-            //lock (GetHandler().engine_locker)
             _content.add(item);
 
-            try
-            {
+            try {
                 ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 System.out.println(item.getItemName());
                 throw ex;
             }
 
-            //needs to force update all attributes
-            // if (!EventManager.IsLocked)
+            // needs to force update all attributes
             item.updateGeometry();
             item.initElements();
 
-            if (item instanceof  VisualItem){
-                ((VisualItem)item).updateState();
+            if (item instanceof VisualItem) {
+                ((VisualItem) item).updateState();
+            }
+        }
+    }
+
+    public void insertItem(BaseItem item, int index) {
+        synchronized (getHandler().engine_locker) {
+            if (item.equals(this)) {
+                System.out.println("Trying to add current item in himself.");
+                return;
+            }
+            item.setHandler(getHandler());
+
+            addChildren(item);
+
+            if (index > _content.size())
+                _content.add(item);
+            else
+                _content.add(index, item);
+
+            try {
+                ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
+            } catch (Exception ex) {
+                System.out.println(item.getItemName());
+                throw ex;
+            }
+
+            // needs to force update all attributes
+            item.updateGeometry();
+            item.initElements();
+
+            if (item instanceof VisualItem) {
+                ((VisualItem) item).updateState();
+            }
+        }
+    }
+
+    private void cascadeRemoving(BaseItem item, LayoutType type) {
+        if (item instanceof VisualItem)// и если это действительно контейнер
+        {
+            VisualItem container = (VisualItem) item;// предполагаю что элемент контейнер
+            // то каждому вложенному элементу вызвать команду удалить своих вложенных
+            // 
+            // элементов
+            while (container.getItems().size() > 0) {
+                BaseItem child = container.getItems().get(0);
+                container.cascadeRemoving(child, type);
+
+                container.getItems().remove(child);
+                child.removeItemFromListeners();
+
+                ItemsLayoutBox.removeItem(getHandler(), child, type);
             }
         }
     }
 
     public void removeItem(BaseItem item) {
+        synchronized (getHandler().engine_locker) {
+            LayoutType type;
+            if (item instanceof InterfaceFloating) {
+                cascadeRemoving(item, LayoutType.FLOATING);
+                type = LayoutType.FLOATING;
+            } else {
+                cascadeRemoving(item, LayoutType.STATIC);
+                type = LayoutType.STATIC;
+            }
 
+            // removing
+            _content.remove(item);
+
+            item.removeItemFromListeners();
+            ItemsLayoutBox.removeItem(getHandler(), item, type);
+        }
     }
+
     @Override
-    protected void addEventListener(GeometryEventType type, BaseItem listener)
-    {
+    protected void addEventListener(GeometryEventType type, BaseItem listener) {
         eventManager.subscribe(type, listener);
     }
+
     @Override
-    protected void removeEventListener(GeometryEventType type, BaseItem listener)
-    {
+    protected void removeEventListener(GeometryEventType type, BaseItem listener) {
         eventManager.unsubscribe(type, listener);
     }
+
     public void addItemState(ItemStateType type, ItemState state) {
         if (states.containsKey(type)) {
             state.value = true;
@@ -462,6 +520,16 @@ public abstract class VisualItem extends BaseItem {
     }
 
     private boolean lazyHoverVerification(float xpos, float ypos) {
+        // if(this instanceof ContextMenu)
+        // {
+        //     System.out.println("context menu");
+        //     System.out.println(
+        //         _confines_x_0 + " " +
+        //         _confines_x_1 + " " +
+        //         _confines_y_0 + " " +
+        //         _confines_y_1 + " "
+        //     );
+        // }
         boolean result = false;
         float minx = getX();
         float maxx = getX() + getWidth();
@@ -482,10 +550,11 @@ public abstract class VisualItem extends BaseItem {
 
         if (xpos >= minx && xpos <= maxx && ypos >= miny && ypos <= maxy) {
             result = true;
-            _mouse_ptr.setPosition(xpos, ypos);
-        } else {
-            _mouse_ptr.clear();
-        }
+            // _mouse_ptr.setPosition(xpos, ypos);
+        } 
+        // else {
+        //     _mouse_ptr.clear();
+        // }
         return result;
     }
 
@@ -496,7 +565,7 @@ public abstract class VisualItem extends BaseItem {
         if (isCustom != null) {
             setTriangles(isCustom.getFigure());
             // if (getState(ItemStateType.BASE).shape == null)
-            //     getState(ItemStateType.BASE).shape = isCustom;
+            // getState(ItemStateType.BASE).shape = isCustom;
 
             if (isCustom.isFixed())
                 return GraphicsMathService.toGL(isCustom.updatePosition(getX(), getY()), getHandler());
@@ -504,15 +573,15 @@ public abstract class VisualItem extends BaseItem {
                 return GraphicsMathService.toGL(updateShape(), getHandler());
         }
         setTriangles(GraphicsMathService.getRoundSquare(getWidth(), getHeight(), border.getRadius(), getX(), getY()));
-//        System.out.println(getItemName() + " " + getTriangles().size());
+        // System.out.println(getItemName() + " " + getTriangles().size());
         return GraphicsMathService.toGL(this, getHandler());
     }
 
-    //style
+    // style
     private boolean _is_style_set = false;
+
     @Override
-    public void setStyle(Style style)
-    {
+    public void setStyle(Style style) {
         if (style == null)
             return;
 
@@ -532,12 +601,10 @@ public abstract class VisualItem extends BaseItem {
         border.setThickness(style.borderThickness);
         setVisible(style.isVisible);
         removeAllItemStates();
-        for (Map.Entry<ItemStateType, ItemState> state : style.getAllStates().entrySet())
-        {
+        for (Map.Entry<ItemStateType, ItemState> state : style.getAllStates().entrySet()) {
             addItemState(state.getKey(), state.getValue());
         }
-        if (style.shape != null)
-        {
+        if (style.shape != null) {
             isCustom = new CustomFigure(style.isFixedShape, style.shape);
             getState(ItemStateType.BASE).shape = isCustom;
         }

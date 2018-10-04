@@ -21,7 +21,7 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
         count++;
         _stored_crd = new HashMap<BaseItem, int[]>();
 
-        InterfaceMouseMethodState click = (sender, args) -> onMousePress(sender, args);
+        InterfaceMouseMethodState click = (sender, args) -> onMouseRelease(sender, args);
         eventMouseClick.add(click);
         InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
         eventMousePressed.add(press);
@@ -32,8 +32,8 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
     }
 
     public void addContextMenu(ContextMenu context_menu) {
-        InterfaceMouseMethodState click = (sender, args) -> context_menu.show(sender, args);
-        eventMouseClick.add(click);
+        InterfaceMouseMethodState context_show = (sender, args) -> context_menu.show(sender, args);
+        eventMouseClick.add(context_show);
     }
 
     protected void onMousePress(InterfaceItem sender, MouseArgs args) {
@@ -103,13 +103,15 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
     // ContexMenu
     private void correctPosition(ResizableItem item) {
         int actual_x = item.getX();
-        int stored_x = _stored_crd.get(item)[0];
+        // int stored_x = _stored_crd.get(item)[0];
         int actual_y = item.getY();
-        int stored_y = _stored_crd.get(item)[1];
+        // int stored_y = _stored_crd.get(item)[1];
 
         _stored_crd.remove(item);
-        _stored_crd.put(item,
-                new int[] { actual_x - (int) _xOffset - getX() - getPadding().left - item.getMargin().left,
-                        actual_y - (int) _yOffset - getY() - getPadding().top - item.getMargin().top });
+        _stored_crd.put(item, new int[] 
+        { 
+            actual_x - (int) _xOffset - getX() - getPadding().left - item.getMargin().left,
+            actual_y - (int) _yOffset - getY() - getPadding().top - item.getMargin().top 
+        });
     }
 }

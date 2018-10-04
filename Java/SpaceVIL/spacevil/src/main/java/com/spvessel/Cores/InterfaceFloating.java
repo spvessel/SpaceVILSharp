@@ -4,6 +4,6 @@ public interface InterfaceFloating
     {
         void show(InterfaceItem sender, MouseArgs args);
         void hide();
-        Boolean isOutsideClickClosable();
-        void setOutsideClickClosable(Boolean value);
+        boolean getOutsideClickClosable();
+        void setOutsideClickClosable(boolean value);
     }

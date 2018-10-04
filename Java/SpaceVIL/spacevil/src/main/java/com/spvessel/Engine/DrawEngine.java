@@ -85,17 +85,6 @@ public class DrawEngine {
     }
 
     public void dispose() {
-        // полностью аннигилирует библиотеку GLFW, что приводит к закрытию всех окон и
-        // 
-        // уничтожает все что использует библиотеку GLFW
-        // 
-        // должно вызываться только при закрытии приложения или если необходимо -
-        // 
-        // уничтожении всех окон
-        // статический метод Glfw.Terminate() является общим для всех экземпля
-        // ов
-        // классов, что создают окна с помощью GLFW
-        // LogService.Log().EndLogging();
         glfwTerminate();
     }
 
@@ -341,9 +330,7 @@ public class DrawEngine {
         // assignActions(InputEventType.MOUSE_MOVE, _margs,
         // _handler.getLayout().getWindow());
 
-        if (engineEvent.lastEvent().contains(InputEventType.MOUSE_PRESS)) // жость какая-то ХЕРОТАААА!!
-                                                                          // 
-        {
+        if (engineEvent.lastEvent().contains(InputEventType.MOUSE_PRESS)) {
             if (_handler.getLayout().isBorderHidden && _handler.getLayout().isResizable) {
                 int w = _handler.getLayout().getWidth();
                 int h = _handler.getLayout().getHeight();
@@ -393,8 +380,8 @@ public class DrawEngine {
                 VisualItem anchor = isInListHoveredItems(InterfaceWindowAnchor.class);
                 if (draggable != null) {
                     draggable._mouse_ptr.setPosition((float) xpos, (float) ypos);
-                    // draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
-                    assignActions(InputEventType.MOUSE_DRAG, _margs, draggable);
+                    draggable.eventMouseDrag.execute(hoveredItem, _margs);
+                    // assignActions(InputEventType.MOUSE_DRAG, _margs, draggable);
 
                     // Focus get
                     if (focusedItem != null)
@@ -431,9 +418,9 @@ public class DrawEngine {
                             _handler.setCursorType(GLFW_IBEAM_CURSOR);
                         if (hoveredItem instanceof SplitHolder) {
                             if (((SplitHolder) hoveredItem).getOrientation().equals(Orientation.HORIZONTAL))
-                                _handler.setCursorType(GLFW_HRESIZE_CURSOR);
-                            else
                                 _handler.setCursorType(GLFW_VRESIZE_CURSOR);
+                            else
+                                _handler.setCursorType(GLFW_HRESIZE_CURSOR);
                         }
                     } else // refactor!!
                     {
@@ -565,6 +552,9 @@ public class DrawEngine {
                 if (!item.getVisible() || !item.isDrawable)
                     continue;
                 layout_box_of_items.add(item);
+
+                // System.out.println(item.getItemName() + " " +
+                // layout_box_of_items.contains(item));
                 if (item instanceof VisualItem)
                     layout_box_of_items.addAll(getInnerItems((VisualItem) item));
             }
@@ -576,23 +566,25 @@ public class DrawEngine {
                 if (!tmp.getVisible() || !tmp.isDrawable)
                     continue;
                 tmp.setMouseHover(false);
+                // if (item instanceof ContextMenu)
+                // System.out.println(item.getItemName() + " " + tmp.getHoverVerification(xpos,
+                // ypos));
                 if (tmp.getHoverVerification(xpos, ypos)) {
                     queue.add(tmp);
                 } else {
-                    try {
+                    if (item instanceof InterfaceFloating && action == InputEventType.MOUSE_PRESS) {
+                        // System.out.println("1");
                         InterfaceFloating float_item = (InterfaceFloating) item;
-                        if (float_item != null && action == InputEventType.MOUSE_PRESS) {
-                            if (float_item.isOutsideClickClosable()) {
-                                if (item instanceof ContextMenu) {
-                                    ContextMenu to_close = (ContextMenu) item;
-                                    if (to_close.closeDependencies(_margs))
-                                        float_item.hide();
+                        if (float_item.getOutsideClickClosable()) {
+                            // System.out.println("2");
+                            if (item instanceof ContextMenu) {
+                                ContextMenu to_close = (ContextMenu) item;
+                                if (to_close.closeDependencies(_margs)) {
+                                    // System.out.println("3");
+                                    float_item.hide();
                                 }
                             }
                         }
-
-                    } catch (Exception ex) {
-
                     }
                 }
                 assignActions(InputEventType.MOUSE_MOVE, _margs, false);
@@ -610,8 +602,7 @@ public class DrawEngine {
                     continue;// пропустить
                 item.setMouseHover(true);
                 if (!item.getPassEvents())
-                    break;// остановить передачу событий последующим элементам
-                          // 
+                    break;
             }
             Collections.reverse(hoveredItems);
             return true;
@@ -657,20 +648,19 @@ public class DrawEngine {
 
     private void mouseScroll(long wnd, double dx, double dy) {
         _tooltip.initTimer(false);
-        VisualItem root = hoveredItem;
-        // while (root != null) {
-        // if (root instanceof InterfaceScrollable)
-        // break;
-        // root = root.getParent();
-        // }
-        if (root != null) {
-            // InterfaceScrollable tmp = (InterfaceScrollable) root;
+        if (hoveredItems.size() == 0)
+            return;
+        Collections.reverse(hoveredItems);
+        for (VisualItem item : hoveredItems) {
+            if (!item.getPassEvents())
+                continue;
             if (dy > 0 || dx < 0)
-                root.eventScrollUp.execute(root, _margs);
+                item.eventScrollUp.execute(item, _margs);
             if (dy < 0 || dx > 0)
-                root.eventScrollDown.execute(root, _margs);
+                item.eventScrollDown.execute(item, _margs);
             engineEvent.setEvent(InputEventType.MOUSE_SCROLL);
         }
+        Collections.reverse(hoveredItems);
     }
 
     private void keyPress(long wnd, int key, int scancode, int action, int mods) {
@@ -748,14 +738,11 @@ public class DrawEngine {
                 task.args = args;
                 _handler.getLayout().setEventTask(task);
                 if (!item.getPassEvents())
-                    break;// остановить передачу событий последующим элементам
-                          // 
+                    break;
             }
             Collections.reverse(hoveredItems);
         }
         _handler.getLayout().executePollActions();
-
-        // Console.WriteLine();
     }
 
     private void assignActions(InputEventType action, InputEventArgs args, VisualItem sender) {
@@ -810,74 +797,21 @@ public class DrawEngine {
     private void render() {
         if (_handler.focused) {
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+            
             // draw static
-
             drawItems(_handler.getLayout().getWindow());
+            
             // draw float
-            for (BaseItem item : ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getItems())
+            for (BaseItem item : ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems())
                 drawItems((BaseItem) item);
+
             // draw tooltip if needed
             drawToolTip();
-            // if (!_handler.focusable)
-            // drawShadePillow();
+
+            if (!_handler.focusable)
+                drawShadePillow();
         }
         _handler.swap();
-    }
-
-    private void setStencilMask(int w, int h, int x, int y) {
-
-        glEnable(GL_STENCIL_TEST);
-        int vertexbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-
-        // Vertex
-        List<float[]> crd_array;
-        crd_array = GraphicsMathService.toGL(GraphicsMathService.getRectangle(w, h, x, y), _handler.getLayout());
-
-        int length = crd_array.size() * 3;
-        FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 3; i++) {
-            vertexData.put(i * 3 + 0, crd_array.get(i)[0]);
-            vertexData.put(i * 3 + 1, crd_array.get(i)[1]);
-            vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
-        }
-        vertexData.rewind();
-
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
-
-        // Color
-        float[] argb = { 1.0f, 1.0f, 1.0f, 0.5f };
-        int colorbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-
-        length = crd_array.size() * 4;
-        FloatBuffer colorData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 4; i++) {
-            colorData.put(i * 4 + 0, argb[0]);
-            colorData.put(i * 4 + 1, argb[1]);
-            colorData.put(i * 4 + 2, argb[2]);
-            colorData.put(i * 4 + 3, argb[3]);
-        }
-        colorData.rewind();
-
-        glBufferData(GL15.GL_ARRAY_BUFFER, colorData, GL15.GL_STATIC_DRAW);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
-
-        // draw
-        glDrawArrays(GL_TRIANGLES, 0, crd_array.size());
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        // Clear VBO and shader
-        glDeleteBuffers(vertexbuffer);
-        glDeleteBuffers(colorbuffer);
-
-        // clear array
-        crd_array.clear();
     }
 
     private void setStencilMask(List<float[]> crd_array) {
@@ -940,12 +874,6 @@ public class DrawEngine {
 
     private void strictStencil(BaseItem shell) {
         glEnable(GL_STENCIL_TEST);
-        /*
-         * glClearStencil(1); glStencilMask(0xFF); glStencilFunc(GL_NEVER, 2, 0);
-         * glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-         * SetStencilMask(shell.getParent().MakeShape()); glStencilFunc(GL_NOTEQUAL, 1,
-         * 0xFF);
-         */
 
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         glClear(GL_STENCIL_BUFFER_BIT);
@@ -1020,6 +948,16 @@ public class DrawEngine {
                 outside.put(ItemAlignment.LEFT, new int[] { x, w });
             }
 
+            // if (shell instanceof VerticalSlider) {
+            // System.out.println(
+            // shell.getX() + " " +
+            // shell.getParent().getX() + " " +
+            // shell.getY() + " " +
+            // shell.getParent().getY() + " " +
+            // outside.toString()
+            // );
+            // }
+
             if (outside.size() > 0 || shell.getParent() instanceof TextBlock) {
                 _isStencilSet = shell;
                 strictStencil(shell);
@@ -1061,10 +999,9 @@ public class DrawEngine {
             drawShell(root);
 
             if (root instanceof VisualItem) {
-                List<BaseItem> list;
+                List<BaseItem> list;// = ((VisualItem)root).getItems();
                 synchronized (CommonService.GlobalLocker) {
-                    list = ((VisualItem) root).getItems();
-
+                    list = new LinkedList<>(((VisualItem) root).getItems());
                 }
                 for (BaseItem child : list) {
                     drawItems(child);
@@ -1178,31 +1115,45 @@ public class DrawEngine {
     }
 
     private void drawPoints(InterfacePoints item) {
-        // Console.WriteLine();
+        // glPointSize(1.0f);
+
         if (item.getPointColor().getAlpha() == 0)
             return;
 
         List<float[]> crd_array = item.makeShape();
         if (crd_array == null)
             return;
-        List<float[]> result = new LinkedList<float[]>();
+        // long startTime = System.nanoTime();
+        float[] result = new float[item.getShapePointer().size() * crd_array.size() * 3];
+        int skew = 0;
         for (float[] shape : crd_array) {
-            // Console.WriteLine(shape[0] + " " + shape[1]);
-            result.addAll(GraphicsMathService.moveShape(item.getShapePointer(),
-                    shape[0] - item.getPointThickness() / 2.0f, shape[1] - item.getPointThickness() / 2.0f));
+
+            List<float[]> fig = GraphicsMathService.toGL(GraphicsMathService.moveShape(item.getShapePointer(),
+                    shape[0] - item.getPointThickness() / 2.0f, shape[1] - item.getPointThickness() / 2.0f),
+                    _handler.getLayout());
+
+            for (int i = 0; i < fig.size(); i++) {
+                result[skew + i * 3 + 0] = fig.get(i)[0];
+                result[skew + i * 3 + 1] = fig.get(i)[1];
+                result[skew + i * 3 + 2] = fig.get(i)[2];
+            }
+            skew += fig.size() * 3;
         }
-        result = GraphicsMathService.toGL(result, _handler.getLayout());
+        // long estimatedTime = (System.nanoTime() - startTime) / 1000000;
+        // System.out.println(estimatedTime);
 
         int vertexbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        int length = result.size() * 3;
-        FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 3; i++) {
-            vertexData.put(i * 3 + 0, result.get(i)[0]);
-            vertexData.put(i * 3 + 1, result.get(i)[1]);
-            vertexData.put(i * 3 + 2, result.get(i)[2]);
-        }
-        vertexData.rewind();
+        int length = result.length;
+
+        // FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
+        // vertexData.put(result);
+        // vertexData.rewind();
+
+        glBufferData(GL_ARRAY_BUFFER, result, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(0);
+
         // Color
         float[] argb = { (float) item.getPointColor().getRed() / 255.0f,
                 (float) item.getPointColor().getGreen() / 255.0f, (float) item.getPointColor().getBlue() / 255.0f,
@@ -1210,7 +1161,7 @@ public class DrawEngine {
 
         int colorbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-        length = crd_array.size() * 4;
+        length = result.length / 3 * 4;
         FloatBuffer colorData = BufferUtils.createFloatBuffer(length);
         for (int i = 0; i < length / 4; i++) {
             colorData.put(i * 4 + 0, argb[0]);
@@ -1220,18 +1171,14 @@ public class DrawEngine {
         }
         colorData.rewind();
 
-        checkOutsideBorders((BaseItem) item);
-
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
-
         glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
         glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(1);
 
+        checkOutsideBorders((BaseItem) item);
+
         // draw
-        glDrawArrays(GL_TRIANGLES, 0, result.size());
+        glDrawArrays(GL_TRIANGLES, 0, result.length / 3);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
@@ -1239,6 +1186,7 @@ public class DrawEngine {
         // Clear VBO and shader
         glDeleteBuffers(vertexbuffer);
         glDeleteBuffers(colorbuffer);
+
     }
 
     private void drawLines(InterfaceLine item) {
@@ -1247,7 +1195,7 @@ public class DrawEngine {
             return;
 
         List<float[]> crd_array = GraphicsMathService.toGL(item.makeShape(), _handler.getLayout());
-        ;
+
         if (crd_array == null)
             return;
 
@@ -1262,6 +1210,9 @@ public class DrawEngine {
             vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
         }
         vertexData.rewind();
+        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
         // Color
         float[] argb = { (float) item.getLineColor().getRed() / 255.0f, (float) item.getLineColor().getGreen() / 255.0f,
@@ -1280,13 +1231,9 @@ public class DrawEngine {
 
         checkOutsideBorders((BaseItem) item);
 
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
-
         glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
 
         // draw
         glDrawArrays(GL_LINE_STRIP, 0, crd_array.size());
@@ -1297,6 +1244,8 @@ public class DrawEngine {
         // Clear VBO and shader
         glDeleteBuffers(vertexbuffer);
         glDeleteBuffers(colorbuffer);
+
+        // crd_array.clear();
     }
 
     private void drawImage(ImageItem image) {
@@ -1308,9 +1257,6 @@ public class DrawEngine {
         ByteBuffer bb = BufferUtils.createByteBuffer(bitmap.length);
         bb.put(bitmap);
         bb.rewind();
-
-        // проверка: полностью ли влезает объект в свой контейнер
-        // 
         checkOutsideBorders((BaseItem) image);
 
         float i_x0 = ((float) image.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
@@ -1446,6 +1392,7 @@ public class DrawEngine {
         int length = vertex.length;
         FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
         vertexData.put(vertex);
+        vertexData.rewind();
         glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(0);

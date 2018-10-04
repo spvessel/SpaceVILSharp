@@ -118,7 +118,10 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             if (xCoord > _parentAllowWidth)
                 break;
 
-            alphas.addAll(modL.getCol());
+            // alphas.addAll(modL.getCol());
+            for (Float var : modL.getCol()) {
+                alphas.add(var);
+            }
 
             for (int j = 0; j < tmpList.size() / 3; j++) {
                 outRealCoords.add(tmpList.get(j * 3) + xCoord);

@@ -112,16 +112,18 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
     }
 
     protected List<float[]> updateShape() {
-        if (getTriangles().isEmpty())
+        if (getTriangles().size() == 0)
             return null;
 
         // clone triangles
-        List<float[]> result = new LinkedList<float[]>();
+        // List<float[]> result = new LinkedList<float[]>();
 
-        for (int i = 0; i < getTriangles().size(); i++) {
-            result.add(new float[] { getTriangles().get(i)[0], getTriangles().get(i)[1], getTriangles().get(i)[2] });
-        }
+        // for (int i = 0; i < getTriangles().size(); i++) {
+        // result.add(new float[] { getTriangles().get(i)[0], getTriangles().get(i)[1],
+        // getTriangles().get(i)[2] });
+        // }
 
+        List<float[]> result = getTriangles();
         // max and min
         Float maxX = result.stream().map(i -> i[0]).max(Float::compare).get();
         Float maxY = result.stream().map(i -> i[1]).max(Float::compare).get();

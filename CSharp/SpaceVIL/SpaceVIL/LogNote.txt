@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////
-11:13:00
+01:11:50
 Window name: MainWindow, Title: MainWindow
 
 Geometry:
@@ -12,12 +12,12 @@ Padding: Left = 2, Top = 2, Right = 2, Bottom = 2
 
 
 /////////////////////////////////////////////////////////////
-11:13:01
-Window name: ImageTest, Title: ImageTest
+01:11:52
+Window name: FlowTest, Title: FlowTest
 
 Geometry:
-    Width 500 (minWidth 0, maxWidth 32767)
-    Height 500 (minHeight 0, maxHeight 32767)
+    Width 1200 (minWidth 500, maxWidth 32767)
+    Height 800 (minHeight 500, maxHeight 32767)
 
 Position: (0, 0)
 

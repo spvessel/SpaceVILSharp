@@ -30,7 +30,7 @@ public final class ItemsLayout {
 
     List<BaseItem> _float_items = new LinkedList<BaseItem>();
 
-    protected List<BaseItem> getFloatItems() {
+    public List<BaseItem> getFloatItems() {
         return _float_items;
     }
 
