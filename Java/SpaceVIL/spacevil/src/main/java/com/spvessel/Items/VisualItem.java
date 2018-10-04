@@ -356,7 +356,7 @@ public abstract class VisualItem extends BaseItem {
 
     private boolean _focused;
 
-    public boolean getFocused() {
+    public boolean isFocused() {
         return _focused;
     }
 
@@ -390,7 +390,7 @@ public abstract class VisualItem extends BaseItem {
             return;
         }
 
-        if (getFocused() && states.containsKey(ItemStateType.FOCUSED)) {
+        if (isFocused() && states.containsKey(ItemStateType.FOCUSED)) {
             super.setBackground(GraphicsMathService.MixColors(getState(_state).background,
                     getState(ItemStateType.FOCUSED).background));
         }
