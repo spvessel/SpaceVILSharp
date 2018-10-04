@@ -223,8 +223,14 @@ public class Alphabet {
             }
 
             //bugLetter.alphas = arr;
-            bugLetter.col.addAll(col);
-            bugLetter.pix.addAll(pix);
+            // bugLetter.col.addAll(col);
+            for (Float var : col) {
+                bugLetter.col.add(var);
+            }
+            // bugLetter.pix.addAll(pix);
+            for (Float var : pix) {
+                bugLetter.pix.add(var);
+            }
         }
     //}
 
