@@ -185,8 +185,7 @@ public abstract class VisualItem extends BaseItem {
     public void addItem(BaseItem item) {
         // System.out.println(getItemName() + " " + item.getItemName() + " " +
         // getHandler());
-        synchronized (getHandler().engine_locker)
-        {
+        synchronized (getHandler().engine_locker) {
             if (item.equals(this)) {
                 System.out.println("Trying to add current item in himself.");
                 return;
@@ -214,11 +213,44 @@ public abstract class VisualItem extends BaseItem {
         }
     }
 
+    public void insertItem(BaseItem item, int index) {
+        synchronized (getHandler().engine_locker) {
+            if (item.equals(this)) {
+                System.out.println("Trying to add current item in himself.");
+                return;
+            }
+            item.setHandler(getHandler());
+
+            addChildren(item);
+
+            if (index > _content.size())
+                _content.add(item);
+            else
+                _content.add(index, item);
+
+            try {
+                ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
+            } catch (Exception ex) {
+                System.out.println(item.getItemName());
+                throw ex;
+            }
+
+            // needs to force update all attributes
+            item.updateGeometry();
+            item.initElements();
+
+            if (item instanceof VisualItem) {
+                ((VisualItem) item).updateState();
+            }
+        }
+    }
+
     private void cascadeRemoving(BaseItem item, LayoutType type) {
         if (item instanceof VisualItem)// и если это действительно контейнер
         {
             VisualItem container = (VisualItem) item;// предполагаю что элемент контейнер
             // то каждому вложенному элементу вызвать команду удалить своих вложенных
+            // 
             // элементов
             while (container.getItems().size() > 0) {
                 BaseItem child = container.getItems().get(0);
@@ -488,6 +520,16 @@ public abstract class VisualItem extends BaseItem {
     }
 
     private boolean lazyHoverVerification(float xpos, float ypos) {
+        // if(this instanceof ContextMenu)
+        // {
+        //     System.out.println("context menu");
+        //     System.out.println(
+        //         _confines_x_0 + " " +
+        //         _confines_x_1 + " " +
+        //         _confines_y_0 + " " +
+        //         _confines_y_1 + " "
+        //     );
+        // }
         boolean result = false;
         float minx = getX();
         float maxx = getX() + getWidth();
@@ -508,10 +550,11 @@ public abstract class VisualItem extends BaseItem {
 
         if (xpos >= minx && xpos <= maxx && ypos >= miny && ypos <= maxy) {
             result = true;
-            _mouse_ptr.setPosition(xpos, ypos);
-        } else {
-            _mouse_ptr.clear();
-        }
+            // _mouse_ptr.setPosition(xpos, ypos);
+        } 
+        // else {
+        //     _mouse_ptr.clear();
+        // }
         return result;
     }
 

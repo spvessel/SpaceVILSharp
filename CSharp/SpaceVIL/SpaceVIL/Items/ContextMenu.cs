@@ -138,6 +138,7 @@ namespace SpaceVIL
         }
         public void Hide()
         {
+            Console.WriteLine("4");
             SetX(-GetWidth());
             IsVisible = false;
         }

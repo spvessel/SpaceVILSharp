@@ -8,6 +8,8 @@ public class App {
         MainWindow mw = new MainWindow();
         ImageTest im = new ImageTest();
         FlowTest ft = new FlowTest();
+        LayoutsTest lt = new LayoutsTest();
+        ComplexTest ct = new ComplexTest();
         mw.show();
         // im.show();
         // ft.show();

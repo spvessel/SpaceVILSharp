@@ -1,32 +1,17 @@
 package com.spvessel.View;
 
-import com.spvessel.Common.DefaultsService;
-import com.spvessel.Cores.InterfaceMouseMethodState;
-import com.spvessel.Decorations.ItemState;
+import com.spvessel.Cores.*;
+import com.spvessel.Decorations.*;
 import com.spvessel.Engine.GraphicsMathService;
-import com.spvessel.Flags.ItemAlignment;
-import com.spvessel.Flags.ItemStateType;
-import com.spvessel.Flags.SizePolicy;
-import com.spvessel.Items.ButtonCore;
-import com.spvessel.Items.FloatItem;
-import com.spvessel.Items.Frame;
-import com.spvessel.Items.FreeArea;
-import com.spvessel.Items.HorizontalScrollBar;
-import com.spvessel.Items.PointsContainer;
-import com.spvessel.Items.PopUpMessage;
-import com.spvessel.Items.ResizableItem;
-import com.spvessel.Items.TextLine;
-import com.spvessel.Items.TitleBar;
-import com.spvessel.Items.Triangle;
-import com.spvessel.Items.VerticalScrollBar;
-import com.spvessel.Items.VerticalSlider;
-import com.spvessel.Windows.ActiveWindow;
-import com.spvessel.Windows.WindowLayout;
+import com.spvessel.Flags.*;
+import com.spvessel.Items.*;
+import com.spvessel.Windows.*;
 
 import java.awt.*;
 
 public class FlowTest extends ActiveWindow {
     int count = 0;
+    ContextMenu _context_menu;
 
     @Override
     public void initWindow() {
@@ -45,6 +30,52 @@ public class FlowTest extends ActiveWindow {
         layout.setPadding(6, 6, 6, 6);
         layout.setBackground(70, 70, 70);
         Handler.addItem(layout);
+
+        // context
+        _context_menu = new ContextMenu(Handler);
+        _context_menu.setWidth(110);
+        com.spvessel.Items.MenuItem restore = new com.spvessel.Items.MenuItem("Restore");
+        // restore.EventMouseClick += (sender, args) =>
+        // {
+        // flow.setHScrollOffset(0);
+        // flow.setVScrollOffset(0);
+        // };
+        com.spvessel.Items.MenuItem x_plus = new com.spvessel.Items.MenuItem("X += 100");
+        // x_plus.EventMouseClick += (sender, args) =>
+        // {
+        // flow.setHScrollOffset(flow.getHScrollOffset() + 10);
+        // };
+        com.spvessel.Items.MenuItem y_plus = new com.spvessel.Items.MenuItem("Y += 100");
+        // y_plus.EventMouseClick += (sender, args) =>
+        // {
+        // flow.setVScrollOffset(flow.getVScrollOffset() + 10);
+        // };
+        com.spvessel.Items.MenuItem addition = new com.spvessel.Items.MenuItem("Addition");
+
+        _context_menu.addItems(restore, x_plus, y_plus, addition);
+
+        ContextMenu addition_menu = new ContextMenu(Handler);
+        addition_menu.setSize(110, 94);
+        com.spvessel.Items.MenuItem x_minus = new com.spvessel.Items.MenuItem("X -= 100");
+        // x_minus.EventMouseClick += (sender, args) =>
+        // {
+        // flow.setHScrollOffset(flow.getHScrollOffset() - 10);
+        // };
+        com.spvessel.Items.MenuItem y_minus = new com.spvessel.Items.MenuItem("Y -= 100");
+        // y_minus.EventMouseClick += (sender, args) =>
+        // {
+        // Console.WriteLine("y minus");
+        // flow.setVScrollOffset(flow.getVScrollOffset() - 10);
+        // };
+        com.spvessel.Items.MenuItem ex_addition = new com.spvessel.Items.MenuItem("Addition");
+        addition_menu.addItems(x_minus, y_minus, ex_addition);
+
+        addition.assignContexMenu(addition_menu);
+
+        ContextMenu ex_menu = new ContextMenu(Handler);
+        ex_menu.setSize(110, 64);
+        ex_addition.assignContexMenu(ex_menu);
+        layout.addContextMenu(_context_menu);
 
         VerticalScrollBar v_slider = new VerticalScrollBar();
         v_slider.setHeightPolicy(SizePolicy.FIXED);
@@ -106,7 +137,7 @@ public class FlowTest extends ActiveWindow {
         // crd.Add(new float[3] { 100.0f, 0.0f, 0.0f });
         // crd.Add(new float[3] { 50.0f, 100.0f, 0.0f });
         // crd.Add(new float[3] { 150.0f, 100.0f, 0.0f });
-        // graph_points.SetPointsCoord(crd);
+        // graph_points.setPointsCoord(crd);
         graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50, 0, 0));
         // graph_points.setPointsCoord(GraphicsMathService.getTriangle(100, 100, 0, 0,
         // 0));
@@ -114,12 +145,12 @@ public class FlowTest extends ActiveWindow {
         // graph_points.setHeight(300);
         // graph_points.setX(200);
         // graph_points.setY(200);
-        // graph_points.SetShapePointer(GraphicsMathService.GetTriangle(graph_points.GetPointThickness(),
-        // graph_points.GetPointThickness()));
-        graph_points.setShapePointer(GraphicsMathService.getCross(graph_points.getPointThickness(),
-                graph_points.getPointThickness(), 2, 45));
-        // graph_points.SetShapePointer(GraphicsMathService.GetStar(graph_points.GetPointThickness(),
-        // graph_points.GetPointThickness() / 2.0f));
+        // graph_points.setShapePointer(GraphicsMathService.getTriangle(graph_points.getPointThickness(),
+        // graph_points.getPointThickness()));
+        // graph_points.setShapePointer(GraphicsMathService.getCross(graph_points.getPointThickness(),
+        // graph_points.getPointThickness(), 2, 45));
+        // graph_points.setShapePointer(GraphicsMathService.getStar(graph_points.getPointThickness(),
+        // graph_points.getPointThickness() / 2.0f));
         return graph_points;
     }
 }

@@ -8,18 +8,22 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.spvessel.Cores.InterfaceCommonMethodState;
+import com.spvessel.Cores.InterfaceMouseMethodState;
 import com.spvessel.Decorations.Indents;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.SizePolicy;
 import com.spvessel.Items.ButtonCore;
+import com.spvessel.Items.ComboBox;
 import com.spvessel.Items.Frame;
 import com.spvessel.Items.HorizontalSlider;
 import com.spvessel.Items.HorizontalStack;
 import com.spvessel.Items.ImageItem;
+import com.spvessel.Items.MenuItem;
 import com.spvessel.Items.ProgressBar;
 import com.spvessel.Items.Rectangle;
 import com.spvessel.Items.TitleBar;
 import com.spvessel.Windows.ActiveWindow;
+import com.spvessel.Windows.MessageBox;
 import com.spvessel.Windows.WindowLayout;
 
 public class ImageTest extends ActiveWindow {
@@ -66,14 +70,13 @@ public class ImageTest extends ActiveWindow {
 
         ProgressBar pb = new ProgressBar();
         pb.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
-        // pb.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        // pb.setHeight(15);
         pb.setMargin(25, 25, 25, 25);
         frame.addItem(pb);
 
+        MessageBox ms = new MessageBox("Send result?", "Message:");
+        
         ButtonCore btn_action = new ButtonCore();
         btn_action.setBackground(100, 255, 150);
-        // btn_action.setBackground(45, 45, 45);
         btn_action.setText("Columnar");
         btn_action.setTextMargin(new Indents(0, 45, 0, 0));
         btn_action.setForeground(0, 0, 0);
@@ -85,6 +88,11 @@ public class ImageTest extends ActiveWindow {
         btn_action.setAlignment(ItemAlignment.HCENTER, ItemAlignment.TOP);
         btn_action.setMargin(0, 50, 0, 0);
         btn_action.border.setRadius(10);
+        InterfaceMouseMethodState btn_action_click = (sender, args) -> {
+            ms.show();
+            System.out.println(ms.getResult());
+        };
+        btn_action.eventMouseClick.add(btn_action_click);
         frame.addItem(btn_action);
 
         // Image img1 = Image.FromFile("icon.png");
@@ -113,5 +121,15 @@ public class ImageTest extends ActiveWindow {
         InterfaceCommonMethodState valueChanged = (sender) -> pb.setCurrentValue((int) h_slider.getCurrentValue());
         h_slider.eventValueChanged.add(valueChanged);
         frame.addItem(h_slider);
+
+        ComboBox combo = new ComboBox();
+        combo.setMargin(25, 0, 25, 0);
+        frame.addItem(combo);
+
+        for (int i = 0; i < 5; i++) {
+            MenuItem menu_item = new MenuItem("Custom item for selection #" + i);
+            combo.addToList(menu_item);
+        }
+        combo.setCurrentIndex(0);
     }
 }

@@ -17,7 +17,7 @@ public class FloatItem extends VisualItem implements InterfaceFloating, Interfac
 
     private boolean _ouside = false;
 
-    public boolean isOutsideClickClosable() {
+    public boolean getOutsideClickClosable() {
         return _ouside;
     }
 

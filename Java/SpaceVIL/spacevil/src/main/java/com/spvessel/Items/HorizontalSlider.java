@@ -42,13 +42,13 @@ public class HorizontalSlider extends VisualItem {
         if (_current_value > _max_value)
             _current_value = _max_value;
 
-        updatehandler(); // refactor!!
+        updateHandler(); // refactor!!
 
         if (eventValueChanged != null)
             eventValueChanged.execute(this);
     }
 
-    void updatehandler() {
+    void updateHandler() {
         float offset = ((float) getWidth() - handler.getWidth()) / (_max_value - _min_value) * _current_value;
         handler.setOffset((int) offset);
     }
@@ -121,7 +121,7 @@ public class HorizontalSlider extends VisualItem {
     @Override
     public void setX(int _x) {
         super.setX(_x);
-        updatehandler();
+        updateHandler();
     }
 
     @Override

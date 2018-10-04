@@ -32,8 +32,8 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
     }
 
     public void addContextMenu(ContextMenu context_menu) {
-        InterfaceMouseMethodState click = (sender, args) -> context_menu.show(sender, args);
-        eventMouseClick.add(click);
+        InterfaceMouseMethodState context_show = (sender, args) -> context_menu.show(sender, args);
+        eventMouseClick.add(context_show);
     }
 
     protected void onMousePress(InterfaceItem sender, MouseArgs args) {

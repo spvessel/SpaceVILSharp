@@ -380,8 +380,8 @@ public class DrawEngine {
                 VisualItem anchor = isInListHoveredItems(InterfaceWindowAnchor.class);
                 if (draggable != null) {
                     draggable._mouse_ptr.setPosition((float) xpos, (float) ypos);
-                    // draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
-                    assignActions(InputEventType.MOUSE_DRAG, _margs, draggable);
+                    draggable.eventMouseDrag.execute(hoveredItem, _margs);
+                    // assignActions(InputEventType.MOUSE_DRAG, _margs, draggable);
 
                     // Focus get
                     if (focusedItem != null)
@@ -418,9 +418,9 @@ public class DrawEngine {
                             _handler.setCursorType(GLFW_IBEAM_CURSOR);
                         if (hoveredItem instanceof SplitHolder) {
                             if (((SplitHolder) hoveredItem).getOrientation().equals(Orientation.HORIZONTAL))
-                                _handler.setCursorType(GLFW_HRESIZE_CURSOR);
-                            else
                                 _handler.setCursorType(GLFW_VRESIZE_CURSOR);
+                            else
+                                _handler.setCursorType(GLFW_HRESIZE_CURSOR);
                         }
                     } else // refactor!!
                     {
@@ -552,6 +552,9 @@ public class DrawEngine {
                 if (!item.getVisible() || !item.isDrawable)
                     continue;
                 layout_box_of_items.add(item);
+
+                // System.out.println(item.getItemName() + " " +
+                // layout_box_of_items.contains(item));
                 if (item instanceof VisualItem)
                     layout_box_of_items.addAll(getInnerItems((VisualItem) item));
             }
@@ -563,23 +566,25 @@ public class DrawEngine {
                 if (!tmp.getVisible() || !tmp.isDrawable)
                     continue;
                 tmp.setMouseHover(false);
+                // if (item instanceof ContextMenu)
+                // System.out.println(item.getItemName() + " " + tmp.getHoverVerification(xpos,
+                // ypos));
                 if (tmp.getHoverVerification(xpos, ypos)) {
                     queue.add(tmp);
                 } else {
-                    try {
+                    if (item instanceof InterfaceFloating && action == InputEventType.MOUSE_PRESS) {
+                        // System.out.println("1");
                         InterfaceFloating float_item = (InterfaceFloating) item;
-                        if (float_item != null && action == InputEventType.MOUSE_PRESS) {
-                            if (float_item.isOutsideClickClosable()) {
-                                if (item instanceof ContextMenu) {
-                                    ContextMenu to_close = (ContextMenu) item;
-                                    if (to_close.closeDependencies(_margs))
-                                        float_item.hide();
+                        if (float_item.getOutsideClickClosable()) {
+                            // System.out.println("2");
+                            if (item instanceof ContextMenu) {
+                                ContextMenu to_close = (ContextMenu) item;
+                                if (to_close.closeDependencies(_margs)) {
+                                    // System.out.println("3");
+                                    float_item.hide();
                                 }
                             }
                         }
-
-                    } catch (Exception ex) {
-
                     }
                 }
                 assignActions(InputEventType.MOUSE_MOVE, _margs, false);
@@ -643,20 +648,19 @@ public class DrawEngine {
 
     private void mouseScroll(long wnd, double dx, double dy) {
         _tooltip.initTimer(false);
-        VisualItem root = hoveredItem;
-        // while (root != null) {
-        // if (root instanceof InterfaceScrollable)
-        // break;
-        // root = root.getParent();
-        // }
-        if (root != null) {
-            // InterfaceScrollable tmp = (InterfaceScrollable) root;
+        if (hoveredItems.size() == 0)
+            return;
+        Collections.reverse(hoveredItems);
+        for (VisualItem item : hoveredItems) {
+            if (!item.getPassEvents())
+                continue;
             if (dy > 0 || dx < 0)
-                root.eventScrollUp.execute(root, _margs);
+                item.eventScrollUp.execute(item, _margs);
             if (dy < 0 || dx > 0)
-                root.eventScrollDown.execute(root, _margs);
+                item.eventScrollDown.execute(item, _margs);
             engineEvent.setEvent(InputEventType.MOUSE_SCROLL);
         }
+        Collections.reverse(hoveredItems);
     }
 
     private void keyPress(long wnd, int key, int scancode, int action, int mods) {
@@ -793,19 +797,19 @@ public class DrawEngine {
     private void render() {
         if (_handler.focused) {
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+            
             // draw static
-
             drawItems(_handler.getLayout().getWindow());
+            
             // draw float
             for (BaseItem item : ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems())
                 drawItems((BaseItem) item);
+
             // draw tooltip if needed
             drawToolTip();
-            // if (!_handler.focusable)
-            // drawShadePillow();
-            // drawLines(GraphicsMathService.toGL(GraphicsMathService.getTriangle(300, 300,
-            // 300, 300, 0),
-            // _handler.getLayout()));
+
+            if (!_handler.focusable)
+                drawShadePillow();
         }
         _handler.swap();
     }
@@ -995,7 +999,7 @@ public class DrawEngine {
             drawShell(root);
 
             if (root instanceof VisualItem) {
-                List<BaseItem> list;
+                List<BaseItem> list;// = ((VisualItem)root).getItems();
                 synchronized (CommonService.GlobalLocker) {
                     list = new LinkedList<>(((VisualItem) root).getItems());
                 }
@@ -1142,11 +1146,11 @@ public class DrawEngine {
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         int length = result.length;
 
-        FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
-        vertexData.put(result);
-        vertexData.rewind();
+        // FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
+        // vertexData.put(result);
+        // vertexData.rewind();
 
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, result, GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(0);
 
@@ -1388,6 +1392,7 @@ public class DrawEngine {
         int length = vertex.length;
         FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
         vertexData.put(vertex);
+        vertexData.rewind();
         glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(0);

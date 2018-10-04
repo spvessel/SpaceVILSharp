@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class HorizontalSplitArea : VisualItem, IVLayout
+    public class HorizontalSplitArea : VisualItem, IVLayout
     {
         private static int count = 0;
         private BaseItem _topBlock;

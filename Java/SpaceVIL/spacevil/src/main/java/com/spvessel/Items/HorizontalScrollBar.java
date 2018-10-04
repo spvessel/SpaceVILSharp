@@ -17,6 +17,7 @@ public class HorizontalScrollBar extends HorizontalStack {
         count++;
 
         slider.handler.direction = Orientation.HORIZONTAL;
+        
         InterfaceMouseMethodState up_click = (sender, args) -> {
             float value = slider.getCurrentValue();
             value -= slider.getStep();

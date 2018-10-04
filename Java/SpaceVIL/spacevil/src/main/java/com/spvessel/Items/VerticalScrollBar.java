@@ -10,7 +10,7 @@ public class VerticalScrollBar extends VerticalStack {
 
     public ButtonCore upArrow = new ButtonCore();
     public ButtonCore downArrow = new ButtonCore();
-    public HorizontalSlider slider = new HorizontalSlider();
+    public VerticalSlider slider = new VerticalSlider();
 
     public VerticalScrollBar() {
         setItemName("VerticalScrollBar_" + count);
