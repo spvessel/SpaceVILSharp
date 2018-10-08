@@ -64,8 +64,8 @@ public class VisualContact extends VisualItem {
         ItemState hover = new ItemState();
         hover.background = new Color(255, 255, 255, 125);
         close.addItemState(ItemStateType.HOVERED, hover);
-        InterfaceMouseMethodState click = (sender, args) -> disposeSelf();
-        close.eventMouseClick.add(click);
+
+        close.eventMouseClick.add((sender, args) -> disposeSelf());
 
         // adding
         addItem(border);

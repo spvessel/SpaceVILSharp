@@ -10,6 +10,7 @@ public class App {
         FlowTest ft = new FlowTest();
         LayoutsTest lt = new LayoutsTest();
         ComplexTest ct = new ComplexTest();
+        InputTest it = new InputTest();
         mw.show();
         // im.show();
         // ft.show();

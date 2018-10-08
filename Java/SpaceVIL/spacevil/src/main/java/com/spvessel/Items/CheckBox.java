@@ -27,8 +27,8 @@ public class CheckBox extends VisualItem implements InterfaceHLayout {
     public CheckBox() {
         setItemName("CheckBox_" + count);
         count++;
-        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(key_press);
+        //InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
+        eventKeyPress.add(this::onKeyPress); //key_press);
 
         // text
         _text_object = new TextLine();
@@ -154,9 +154,10 @@ public class CheckBox extends VisualItem implements InterfaceHLayout {
     public void initElements() {
         // events
         _indicator.getIndicatorMarker().eventToggle = null;
-        InterfaceMouseMethodState btn_click = (sender, args) -> _indicator.getIndicatorMarker()
-                .setToggled(!_indicator.getIndicatorMarker().getToggled());
-        eventMouseClick.add(btn_click);
+        //InterfaceMouseMethodState btn_click = (sender, args) -> _indicator.getIndicatorMarker()
+        //        .setToggled(!_indicator.getIndicatorMarker().isToggled());
+        eventMouseClick.add((sender, args) -> _indicator.getIndicatorMarker()
+                .setToggled(!_indicator.getIndicatorMarker().isToggled())); //btn_click);
 
         // adding
         addItem(_indicator);

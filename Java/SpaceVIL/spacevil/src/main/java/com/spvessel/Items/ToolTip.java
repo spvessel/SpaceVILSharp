@@ -1,6 +1,5 @@
 package com.spvessel.Items;
 
-import com.spvessel.Cores.*;
 import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -8,7 +7,6 @@ import java.util.List;
 import com.spvessel.Decorations.*;
 import com.spvessel.Common.*;
 import com.spvessel.Flags.*;
-import com.spvessel.Flags.SizePolicy;
 
 public class ToolTip extends VisualItem {
     private static int count = 0;

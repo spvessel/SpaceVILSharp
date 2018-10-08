@@ -38,8 +38,8 @@ public class TreeView extends ListBox {
         _root = new TreeItem(TreeItemType.BRANCH, "root");
 
         // setStyle(DefaultsService.getDefaultStyle(typeof(SpaceVIL.TreeView)));
-        InterfaceCommonMethod onSort = () -> onSortTree();
-        eventSortTree.add(onSort);
+        //InterfaceCommonMethod onSort = () -> onSortTree();
+        eventSortTree.add(this::onSortTree); //onSort);
     }
 
     @Override
@@ -65,21 +65,17 @@ public class TreeView extends ListBox {
         MenuItem new_leaf = new MenuItem("New Leaf");
         new_leaf.setForeground(new Color(210, 210, 210));
         new_leaf.addItemState(ItemStateType.HOVERED, hovered);
-        InterfaceMouseMethodState leaf_click = (sender, args) -> {
-            this.addItem(getTreeLeaf());
-        };
-        new_leaf.eventMouseClick.add(leaf_click);
+        //InterfaceMouseMethodState leaf_click = (sender, args) -> this.addItem(getTreeLeaf());
+        new_leaf.eventMouseClick.add((sender, args) -> this.addItem(getTreeLeaf())); //leaf_click);
 
         MenuItem new_branch = new MenuItem("New Branch");
         new_branch.setForeground(new Color(210, 210, 210));
         new_branch.addItemState(ItemStateType.HOVERED, hovered);
-        InterfaceMouseMethodState branch_click = (sender, args) -> {
-            this.addItem(getTreeBranch());
-        };
-        new_branch.eventMouseClick.add(branch_click);
+        //InterfaceMouseMethodState branch_click = (sender, args) -> this.addItem(getTreeBranch());
+        new_branch.eventMouseClick.add((sender, args) -> this.addItem(getTreeBranch())); //branch_click);
 
-        InterfaceMouseMethodState menu_click = (sender, args) -> _menu.show(sender, args);
-        eventMouseClick.add(menu_click);
+        //InterfaceMouseMethodState menu_click = (sender, args) -> _menu.show(sender, args);
+        eventMouseClick.add(_menu::show); //menu_click);
 
         _menu.setSize(100, 4 + 30 * 3 - 5);
         _menu.addItems(new_branch, new_leaf, paste);

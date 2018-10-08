@@ -106,8 +106,8 @@ public class PopUpMessage extends VisualItem {
 
     @Override
     public void initElements() {
-        InterfaceMouseMethodState click = (sender, args) -> removeSelf();
-        _btn_close.eventMouseClick.add(click);
+        //InterfaceMouseMethodState click = (sender, args) -> removeSelf();
+        _btn_close.eventMouseClick.add((sender, args) -> removeSelf()); //click);
         // adding
         addItems(_text_object, _btn_close);
     }

@@ -31,10 +31,10 @@ public class VerticalSplitArea extends VisualItem implements InterfaceHLayout {
         count++;
         setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalSplitArea"));
 
-        InterfaceMouseMethodState h_press = (sender, args) -> onMousePress(sender, args);
-        _splitHolder.eventMousePressed.add(h_press);
-        InterfaceMouseMethodState h_dragg = (sender, args) -> onDragging(sender, args);
-        _splitHolder.eventMouseDrag.add(h_dragg);
+        //InterfaceMouseMethodState h_press = (sender, args) -> onMousePress(sender, args);
+        _splitHolder.eventMousePressed.add(this::onMousePress); //h_press);
+        //InterfaceMouseMethodState h_dragg = (sender, args) -> onDragging(sender, args);
+        _splitHolder.eventMouseDrag.add(this::onDragging); //h_dragg);
     }
 
     protected void onMousePress(InterfaceItem sender, MouseArgs args) {

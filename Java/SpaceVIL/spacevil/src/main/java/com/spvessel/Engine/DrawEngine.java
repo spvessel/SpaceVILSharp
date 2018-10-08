@@ -1,6 +1,5 @@
 package com.spvessel.Engine;
 
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.*;
@@ -21,8 +20,6 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.system.MemoryUtil.*;
 
 import com.spvessel.Common.*;
 import com.spvessel.Items.*;
@@ -38,7 +35,7 @@ public class DrawEngine {
         focusedItem = null;
         if (hoveredItem != null)
             hoveredItem.setMouseHover(false);
-        ;
+
         hoveredItem = null;
 
         hoveredItems.clear();
@@ -75,7 +72,7 @@ public class DrawEngine {
     private Shader _texture;
 
     public DrawEngine(WindowLayout handler) {
-        hoveredItems = new LinkedList<VisualItem>();
+        hoveredItems = new LinkedList<>();
         _handler = new GLWHandler(handler);
 
         _tooltip.setHandler(handler);
@@ -549,7 +546,7 @@ public class DrawEngine {
             layout_box_of_items.addAll(getInnerItems(_handler.getLayout().getWindow()));
 
             for (BaseItem item : ItemsLayoutBox.getLayoutFloatItems(_handler.getLayout().getId())) {
-                if (!item.getVisible() || !item.isDrawable)
+                if (!item.isVisible() || !item.isDrawable)
                     continue;
                 layout_box_of_items.add(item);
 
@@ -563,7 +560,7 @@ public class DrawEngine {
         for (BaseItem item : layout_box_of_items) {
             if (item instanceof VisualItem) {
                 VisualItem tmp = (VisualItem) item;
-                if (!tmp.getVisible() || !tmp.isDrawable)
+                if (!tmp.isVisible() || !tmp.isDrawable)
                     continue;
                 tmp.setMouseHover(false);
                 // if (item instanceof ContextMenu)
@@ -598,10 +595,10 @@ public class DrawEngine {
             hoveredItems = queue;
             Collections.reverse(hoveredItems);
             for (VisualItem item : hoveredItems) {
-                if (item.equals(hoveredItem) && hoveredItem.getDisabled())
+                if (item.equals(hoveredItem) && hoveredItem.isDisabled())
                     continue;// пропустить
                 item.setMouseHover(true);
-                if (!item.getPassEvents())
+                if (!item.isPassEvents())
                     break;
             }
             Collections.reverse(hoveredItems);
@@ -614,7 +611,7 @@ public class DrawEngine {
         List<BaseItem> list = new LinkedList<BaseItem>();
 
         for (BaseItem item : root.getItems()) {
-            if (!item.getVisible() || !item.isDrawable)
+            if (!item.isVisible() || !item.isDrawable)
                 continue;
             list.add(item);
             if (item instanceof VisualItem)
@@ -652,7 +649,7 @@ public class DrawEngine {
             return;
         Collections.reverse(hoveredItems);
         for (VisualItem item : hoveredItems) {
-            if (!item.getPassEvents())
+            if (!item.isPassEvents())
                 continue;
             if (dy > 0 || dx < 0)
                 item.eventScrollUp.execute(item, _margs);
@@ -717,7 +714,7 @@ public class DrawEngine {
     }
 
     private void assignActions(InputEventType action, InputEventArgs args, Boolean only_last) {
-        if (only_last && !hoveredItem.getDisabled()) {
+        if (only_last && !hoveredItem.isDisabled()) {
             EventTask task = new EventTask();
             task.item = hoveredItem;
             task.action = action;
@@ -727,7 +724,7 @@ public class DrawEngine {
         } else {
             Collections.reverse(hoveredItems);
             for (VisualItem item : hoveredItems) {
-                if (item.equals(hoveredItem) && hoveredItem.getDisabled())
+                if (item.equals(hoveredItem) && hoveredItem.isDisabled())
                     continue;// пропустить
 
                 item._mouse_ptr.X = ptrRelease.X;
@@ -737,7 +734,7 @@ public class DrawEngine {
                 task.action = action;
                 task.args = args;
                 _handler.getLayout().setEventTask(task);
-                if (!item.getPassEvents())
+                if (!item.isPassEvents())
                     break;
             }
             Collections.reverse(hoveredItems);
@@ -746,7 +743,7 @@ public class DrawEngine {
     }
 
     private void assignActions(InputEventType action, InputEventArgs args, VisualItem sender) {
-        if (sender.getDisabled())
+        if (sender.isDisabled())
             return;
 
         EventTask task = new EventTask();
@@ -968,7 +965,7 @@ public class DrawEngine {
     }
 
     private void drawItems(BaseItem root) {
-        if (!root.getVisible() || !root.isDrawable)
+        if (!root.isVisible() || !root.isDrawable)
             return;
 
         if (root instanceof InterfaceLine) {
@@ -1348,7 +1345,7 @@ public class DrawEngine {
     }
 
     private void drawToolTip() {
-        if (!_tooltip.getVisible())
+        if (!_tooltip.isVisible())
             return;
 
         _tooltip.setText(hoveredItem.getToolTip());

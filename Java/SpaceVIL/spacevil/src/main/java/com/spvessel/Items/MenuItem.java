@@ -48,11 +48,11 @@ public class MenuItem extends VisualItem {
     public MenuItem() {
         setItemName("MenuItem_" + count);
         count++;
-        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(key_press);
+        //InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
+        eventKeyPress.add(this::onKeyPress); //key_press);
 
-        InterfaceMouseMethodState m_press = (sender, args) -> onMouseAction();
-        eventMousePressed.add(m_press);
+        //InterfaceMouseMethodState m_press = (sender, args) -> onMouseAction();
+        eventMousePressed.add((sender, args) -> onMouseAction()); //m_press);
         _text_object = new TextLine();
 
         setStyle(DefaultsService.getDefaultStyle("SpaceVIL.MenuItem"));
@@ -188,7 +188,7 @@ public class MenuItem extends VisualItem {
 
     private void onMouseAction() {
         if (_sub_context_menu != null) {
-            if (_sub_context_menu.getVisible()) {
+            if (_sub_context_menu.isVisible()) {
                 hide();
                 MouseArgs args = new MouseArgs();
                 args.button = MouseButton.BUTTON_RIGHT;

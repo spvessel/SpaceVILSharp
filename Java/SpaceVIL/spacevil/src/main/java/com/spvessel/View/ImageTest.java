@@ -88,11 +88,10 @@ public class ImageTest extends ActiveWindow {
         btn_action.setAlignment(ItemAlignment.HCENTER, ItemAlignment.TOP);
         btn_action.setMargin(0, 50, 0, 0);
         btn_action.border.setRadius(10);
-        InterfaceMouseMethodState btn_action_click = (sender, args) -> {
+        btn_action.eventMouseClick.add((sender, args) -> {
             ms.show();
             System.out.println(ms.getResult());
-        };
-        btn_action.eventMouseClick.add(btn_action_click);
+        });
         frame.addItem(btn_action);
 
         // Image img1 = Image.FromFile("icon.png");
@@ -118,8 +117,8 @@ public class ImageTest extends ActiveWindow {
         HorizontalSlider h_slider = new HorizontalSlider();
         h_slider.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
         h_slider.setMargin(25, 25, 25, 100);
-        InterfaceCommonMethodState valueChanged = (sender) -> pb.setCurrentValue((int) h_slider.getCurrentValue());
-        h_slider.eventValueChanged.add(valueChanged);
+
+        h_slider.eventValueChanged.add((sender) -> pb.setCurrentValue((int) h_slider.getCurrentValue()));
         frame.addItem(h_slider);
 
         ComboBox combo = new ComboBox();

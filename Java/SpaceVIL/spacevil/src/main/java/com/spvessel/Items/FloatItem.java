@@ -30,11 +30,11 @@ public class FloatItem extends VisualItem implements InterfaceFloating, Interfac
         setHandler(handler);
         setItemName("FloatItem_" + count);
         setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
+        //InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
         // eventMouseHover.add(press);
-        eventMousePressed.add(press);
-        InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
-        eventMouseDrag.add(dragg);
+        eventMousePressed.add(this::onMousePress); //press);
+        //InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
+        eventMouseDrag.add(this::onDragging); //dragg);
         count++;
 
         synchronized (CommonService.GlobalLocker) {

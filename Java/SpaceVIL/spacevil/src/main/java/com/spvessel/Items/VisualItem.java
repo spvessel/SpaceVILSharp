@@ -30,9 +30,9 @@ public abstract class VisualItem extends BaseItem {
     public EventMouseMethodState eventScrollDown = new EventMouseMethodState();
     // keyboard input
     public EventKeyMethodState eventKeyPress = new EventKeyMethodState();
-    public EventKeyMethodState eventKeyRelease = new EventKeyMethodState();;
+    public EventKeyMethodState eventKeyRelease = new EventKeyMethodState();
     // text input
-    public InterfaceInputTextMethodState eventTextInput;
+    public EventInputTextMethodState eventTextInput = new EventInputTextMethodState();
 
     public VisualItem() {
         this("VisualItem_");
@@ -363,7 +363,7 @@ public abstract class VisualItem extends BaseItem {
     // common properties
     private boolean _pass_events = true;
 
-    public boolean getPassEvents() {
+    public boolean isPassEvents() {
         return _pass_events;
     }
 
@@ -375,7 +375,7 @@ public abstract class VisualItem extends BaseItem {
 
     private boolean _disabled;
 
-    public boolean getDisabled() {
+    public boolean isDisabled() {
         return _disabled;
     }
 
@@ -388,7 +388,7 @@ public abstract class VisualItem extends BaseItem {
 
     private boolean _hover;
 
-    public boolean getMouseHover() {
+    public boolean isMouseHover() {
         return _hover;
     }
 
@@ -401,7 +401,7 @@ public abstract class VisualItem extends BaseItem {
 
     private boolean _pressed;
 
-    public boolean getMousePressed() {
+    public boolean isMousePressed() {
         return _pressed;
     }
 
@@ -425,7 +425,7 @@ public abstract class VisualItem extends BaseItem {
         updateState();
     }
 
-    public void SetFocus() {
+    public void setFocus() {
         getHandler().setFocusedItem(this);
     }
 
@@ -442,7 +442,7 @@ public abstract class VisualItem extends BaseItem {
             isCustom = getState(_state).shape;
 
         // mixing
-        if (getDisabled() && states.containsKey(ItemStateType.DISABLED)) {
+        if (isDisabled() && states.containsKey(ItemStateType.DISABLED)) {
             super.setBackground(GraphicsMathService.MixColors(getState(_state).background,
                     getState(ItemStateType.DISABLED).background));
             return;
@@ -453,12 +453,12 @@ public abstract class VisualItem extends BaseItem {
                     getState(ItemStateType.FOCUSED).background));
         }
 
-        if (getMouseHover() && states.containsKey(ItemStateType.HOVERED)) {
+        if (isMouseHover() && states.containsKey(ItemStateType.HOVERED)) {
             super.setBackground(GraphicsMathService.MixColors(getState(_state).background,
                     getState(ItemStateType.HOVERED).background));
         }
 
-        if (getMousePressed() && states.containsKey(ItemStateType.PRESSED)) {
+        if (isMousePressed() && states.containsKey(ItemStateType.PRESSED)) {
             super.setBackground(GraphicsMathService.MixColors(getState(_state).background,
                     getState(ItemStateType.PRESSED).background));
         }

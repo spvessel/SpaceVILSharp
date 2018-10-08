@@ -9,9 +9,9 @@ import java.util.*;
 import java.util.stream.*;
 
 public class WindowLayoutBox {
-    static public Map<String, WindowLayout> windowsName = new HashMap<String, WindowLayout>();
-    static public Map<UUID, WindowLayout> windowsUUID = new HashMap<UUID, WindowLayout>();
-    static public List<WindowPair> currentCallingPair = new LinkedList<WindowPair>();
+    static public Map<String, WindowLayout> windowsName = new HashMap<>();
+    static public Map<UUID, WindowLayout> windowsUUID = new HashMap<>();
+    static public List<WindowPair> currentCallingPair = new LinkedList<>();
     static public WindowLayout lastFocusedWindow;
 
     static public void initWindow(WindowLayout _layout) {

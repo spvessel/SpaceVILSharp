@@ -8,26 +8,27 @@ import com.spvessel.Flags.KeyMods;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PasswordLine extends VisualItem implements InterfaceTextEditable, InterfaceDraggable {
+public class TextEdit extends VisualItem implements InterfaceTextEditable, InterfaceTextShortcuts, InterfaceDraggable, InterfaceScrollable {
     static int count = 0;
-
-    private ButtonToggle _show_pwd_btn;
-    private String _pwd = "";
-    private String _hide_sign;
     private TextLine _text_object;
     private Rectangle _cursor;
     private int _cursor_position = 0;
-    //private int _saveCurs = 0;
     private Rectangle _selectedArea;
     private boolean _isEditable = true;
 
     //private int _cursorXMin = 0;
     private int _cursorXMax = Integer.MAX_VALUE;
+    //private int _lineXShift = 0;
+
+    public Rectangle getSelectionArea() {
+        return _selectedArea;
+    }
 
     private int _selectFrom = -1;
     private int _selectTo = -1;
@@ -44,38 +45,33 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
 
     private List<Integer> ShiftValCodes;
 
-    public PasswordLine() {
-        setItemName("PasswordLine_" + count);
-
-        // _hide_sign = Encoding.UTF32.getString(BitConverter.getBytes(0x23fa)); //big point
-        _hide_sign = "\u25CF"; //Encoding.UTF32.getString(BitConverter.getBytes(0x25CF)); //big point
-
+    public TextEdit() {
         _text_object = new TextLine();
-        _show_pwd_btn = new ButtonToggle();
-        _show_pwd_btn.setItemName(getItemName() + "_marker");
         _cursor = new Rectangle();
         _selectedArea = new Rectangle();
+
+        setItemName("TextEdit_" + count);
         count++;
 
-        eventKeyPress.add(this::onKeyPress); //(sender, args) -> onKeyPress(sender, args));
-        eventTextInput.add(this::onTextInput); //(sender, args) -> onTextInput(sender, args));
-        eventMousePressed.add(this::onMousePressed); //(sender, args) -> onMousePressed(sender, args));
-        eventMouseDrag.add(this::onDragging); //(sender, args) -> onDragging(sender, args));
+        eventMousePressed.add(this::onMousePressed);
+        eventMouseDrag.add(this::onDragging);
+        eventKeyPress.add(this::onKeyPress);
+        eventKeyRelease.add(this::onKeyRelease);
+        eventTextInput.add(this::onTextInput);
+        eventScrollUp.add(this::onScrollUp);
+        eventScrollDown.add(this::onScrollDown);
 
         ShiftValCodes = new LinkedList<>(Arrays.asList(LeftArrowCode, RightArrowCode, EndCode, HomeCode));
-
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.PasswordLine"));
-        _text_object.setTextAlignment(new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER)));
+        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.TextEdit"));
     }
 
-    protected void onMousePressed(InterfaceItem sender, MouseArgs args) {
-        //_saveCurs = _cursor_position;
+    protected void onMousePressed(Object sender, MouseArgs args) {
         replaceCursorAccordingCoord(_mouse_ptr.X);
         if (_isSelect)
             unselectText();
     }
 
-    protected void onDragging(InterfaceItem sender, MouseArgs args) {
+    protected void onDragging(Object sender, MouseArgs args) {
         replaceCursorAccordingCoord(_mouse_ptr.X);
 
         if (!_isSelect) {
@@ -87,8 +83,53 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
         }
     }
 
+    protected void onScrollUp(Object sender, MouseArgs args) {
+        int w = getTextWidth();
+
+        if (w < _cursorXMax) return;
+        int sh = getLineXShift();
+        if (sh >= 0) return;
+
+        int curCoord = _cursor.getX() - sh;
+
+        sh += _text_object.getFontDims()[0];
+        if (sh > 0) sh = 0;
+
+        _text_object.setLineXShift(sh);
+        _cursor.setX(curCoord + sh);
+    }
+
+    protected void onScrollDown(Object sender, MouseArgs args) {
+        int w = getTextWidth();
+
+        if (w < _cursorXMax) return;
+        int sh = getLineXShift();
+        if (w + sh <= _cursorXMax) return;
+
+        int curCoord = _cursor.getX() - sh;
+
+        sh -= _text_object.getFontDims()[0];
+        if (w + sh < _cursorXMax)
+            sh = _cursorXMax - w;
+
+        _text_object.setLineXShift(sh);
+        _cursor.setX(curCoord + sh);
+    }
+
+    public void invokeScrollUp(MouseArgs args) {
+        eventScrollUp.execute(this, args);
+    }
+
+    public void invokeScrollDown(MouseArgs args) {
+        eventScrollDown.execute(this, args);
+    }
+
     private void replaceCursorAccordingCoord(int realPos) {
-        realPos -= getX() + getPadding().left;
+        int w = getTextWidth();
+        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
+            realPos -= getX() + (getWidth() - w);// - getPadding().Right);
+        else
+            realPos -= getX() + getPadding().left;
 
         _cursor_position = coordXToPos(realPos);
         replaceCursor();
@@ -109,23 +150,32 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
         return pos;
     }
 
-    private void showPassword(InterfaceItem sender) {
-        setText(_pwd);
-        replaceCursor();
-        getHandler().setFocusedItem(this);
+    protected void onKeyRelease(Object sender, KeyArgs args) {
+
     }
 
     protected void onKeyPress(Object sender, KeyArgs args) {
-        //Console.WriteLine(_cursor_position);
-        if (!_isEditable) return;
+        //Console.WriteLine(args.Scancode);
+        if (!_isEditable) {
+            if (args.mods.equals(KeyMods.CONTROL) && args.scancode == ACode) {
+                _selectFrom = 0;
+                _cursor_position = getText().length();
+                _selectTo = _cursor_position;
+                replaceCursor();
+                _isSelect = true;
+                makeSelectedArea(_selectFrom, _selectTo);
+            }
+            return;
+        }
 
         if (!_isSelect && _justSelected) {
-            _selectFrom = -1; // 0;
-            _selectTo = -1; // 0;
+            _selectFrom = -1;// 0;
+            _selectTo = -1;// 0;
             _justSelected = false;
         }
 
         if (args.mods != KeyMods.NO) {
+            //Выделение не сбрасывается, проверяются сочетания
             switch (args.mods) {
                 case SHIFT:
                     if (ShiftValCodes.contains(args.scancode)) {
@@ -209,36 +259,46 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
         int coord = 0;
         if (_text_object.getLetPosArray() == null) return coord;
         int letCount = _text_object.getLetPosArray().size();
+        //_cursor_position = (_cursor_position < 0) ? 0 : _cursor_position;
+        //_cursor_position = (_cursor_position > letCount) ? letCount : _cursor_position;
 
         if (cPos > 0)
             coord = _text_object.getLetPosArray().get(cPos - 1);
 
-        if (getLineXShift() + coord < 0) //_cursorXMin)
-            _text_object.setLineXShift(-coord); // _lineXShift + _text_object.getLetWidth(_cursor_position));
+        if (getLineXShift() + coord < 0) {
+            _text_object.setLineXShift(-coord);
+        }
         if (getLineXShift() + coord > _cursorXMax)
-            _text_object.setLineXShift(_cursorXMax - coord); // _lineXShift - _text_object.getLetWidth(_cursor_position - 1));
+            _text_object.setLineXShift(_cursorXMax - coord);
 
         return getLineXShift() + coord;
     }
 
     private void replaceCursor() {
+
         int pos = cursorPosToCoord(_cursor_position);
-        _cursor.setX(getX() + getPadding().left + pos);
+        //Console.WriteLine(pos);
+
+        int w = getTextWidth();
+        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
+            _cursor.setX(getX() + getWidth() - w + pos - _cursor.getWidth());// - getPadding().Right);
+        } else
+            _cursor.setX(getX() + getPadding().left + pos);
     }
 
-    protected void onTextInput(InterfaceItem sender, TextInputArgs args) {
+    protected void onTextInput(Object sender, TextInputArgs args) {
         if (!_isEditable) return;
-        byte[] input = ByteBuffer.allocate(4).putInt(args.character).array(); //BitConverter.getBytes(args.character);
-        String str = new String(input, StandardCharsets.UTF_8);//Charset.forName("UTF-32LE")); //Encoding.UTF32.getString(input);
+        byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
+        String str = new String(input, Charset.forName("UTF-32")); //StandardCharsets.UTF_16);
 
-        if (_isSelect) unselectText();
+        if (_isSelect) unselectText();// cutText();
         if (_justSelected) cutText();
 
         StringBuilder sb = new StringBuilder(getText());
         setText(sb.insert(_cursor_position, str).toString());
-
         _cursor_position++;
         replaceCursor();
+        //System.out.println("input in TextEdit " + _cursor_position + " " + _cursor.getX());
     }
 
     @Override
@@ -250,44 +310,47 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
             _cursor.setVisible(false);
     }
 
-
     public void setTextAlignment(List<ItemAlignment> alignment) {
-        //Ignore all changes
-        //_text_object.setTextAlignment(alignment);
+        List<ItemAlignment> ial = new LinkedList<>();
+        if (alignment.contains(ItemAlignment.RIGHT)) {
+            ial.add(ItemAlignment.RIGHT);
+            ial.add(ItemAlignment.VCENTER);
+        } else {
+            ial.add(ItemAlignment.LEFT);
+            ial.add(ItemAlignment.VCENTER);
+        }
+        _text_object.setTextAlignment(ial);
     }
 
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
 
+    public void setFontSize(int size) {
+        _text_object.setFontSize(size);
+    }
+
+    public void setFontStyle(int style) {
+        _text_object.setFontStyle(style);
+    }
+
+    public void setFontFamily(String font_family) {
+        _text_object.setFontFamily(font_family);
+    }
+
     public Font getFont() {
         return _text_object.getFont();
     }
 
-    private void setText(String text) {
-        _pwd = text;
-        if (_show_pwd_btn.isToggled()) {
-            //setText(text);
-            _text_object.setItemText(text);
-        } else {
-            StringBuilder txt = new StringBuilder();
-            for (char item : text.toCharArray()) {
-                txt.append(_hide_sign);
-            }
-            _text_object.setItemText(txt.toString());
-            //setText(txt.ToString());
-        }
-
-        //_text_object.setItemText(text);
+    public void setText(String text) {
+        //_text_object.setLineXShift(_lineXShift, getWidth());
+        _text_object.setItemText(text);
         _text_object.checkXShift(_cursorXMax);
+        //_text_object.UpdateData(UpdateType.Critical); //Doing in the _text_object
     }
 
-    private String getText() {
-        return _pwd;// _text_object.getItemText();
-    }
-
-    public String getPassword() {
-        return _pwd;
+    public String getText() {
+        return _text_object.getItemText();
     }
 
     public void setForeground(Color color) {
@@ -314,13 +377,11 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
         return _text_object.getForeground();
     }
 
-
     public boolean isEditable() {
         return _isEditable;
     }
 
-    public void set_isEditable(boolean value) {
-
+    public void setEditable(boolean value) {
         if (_isEditable == value)
             return;
         _isEditable = value;
@@ -334,23 +395,17 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
-        _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right -
-                _show_pwd_btn.getWidth(); //_cursorXMin;// ;
+        _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right;
         _text_object.setAllowWidth(_cursorXMax);
-        _text_object.checkXShift(_cursorXMax); //_text_object.setLineXShift();
+        _text_object.checkXShift(_cursorXMax);
+        replaceCursor();
     }
 
+    @Override
     public void initElements() {
-        // _cursor.IsVisible = false;
-        //adding
-        _show_pwd_btn.setPassEvents(false);
-        _show_pwd_btn.eventToggle.add((sender, args) -> showPassword(sender));
-        addItems(_selectedArea, _text_object, _cursor, _show_pwd_btn);
-        // getHandler().setFocusedItem(this);
-
-        //_cursorXMin = getPadding().Left;
-        _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right -
-                _show_pwd_btn.getWidth(); //_cursorXMin;// ;
+        addItems(_selectedArea, _text_object, _cursor);
+        
+        _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right;
         _text_object.setAllowWidth(_cursorXMax);
         _text_object.setLineXShift();
     }
@@ -364,6 +419,7 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
     }
 
     private void makeSelectedArea(int fromPt, int toPt) {
+        //Console.WriteLine("from " + fromPt + " to " + toPt);
         fromPt = cursorPosToCoord(fromPt);
         toPt = cursorPosToCoord(toPt);
 
@@ -374,28 +430,35 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
         int fromReal = Math.min(fromPt, toPt);
         int toReal = Math.max(fromPt, toPt);
         int width = toReal - fromReal + 1;
-        _selectedArea.setX(getX() + getPadding().left + fromReal);
+
+        int w = getTextWidth();
+        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
+            _selectedArea.setX(getX() + getWidth() - w + fromReal);
+        else
+            _selectedArea.setX(getX() + getPadding().left + fromReal);
         _selectedArea.setWidth(width);
     }
 
-    private void unselectText() {
-        _isSelect = false;
-        _justSelected = true;
-        makeSelectedArea(0, 0);
+    public String getSelectedText() {
+        if (_selectFrom == _selectTo) return "";
+        String text = getText();
+        int fromReal = Math.min(_selectFrom, _selectTo);
+        int toReal = Math.max(_selectFrom, _selectTo);
+        String selectedText = text.substring(fromReal, toReal); // - fromReal
+        return selectedText;
     }
 
-    private int nearestPosToCursor(double xPos) {
-        List<Integer> endPos = _text_object.getLetPosArray();
-        int pos = (int)endPos.stream().map(x -> Math.abs(x - xPos)).sorted().toArray()[0]; //endPos.OrderBy(x = > Math.Abs(x - xPos)).First();
-        return pos;
+    public void pasteText(String pasteStr) {
+        if (!_isEditable) return;
+        if (_isSelect) cutText();
+        String text = getText();
+        String newText = text.substring(0, _cursor_position - 1) + pasteStr + text.substring(_cursor_position);
+        setText(newText);
+        _cursor_position += pasteStr.length();
+        replaceCursor();
     }
 
-    void setCursorPosition(double newPos) {
-        _cursor_position = nearestPosToCursor(newPos);
-    }
-
-    private String cutText() //������ �� ����������, ������, �����������, ��� �����
-    {
+    public String cutText() {
         if (!_isEditable) return "";
         String str = getSelectedText();
         if (_selectFrom == _selectTo) return str;
@@ -410,21 +473,35 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
         return str;
     }
 
-    private String getSelectedText() //������ �� ����������, ������, �����������, ��� �����
-    {
-        if (_selectFrom == _selectTo) return "";
-        String text = getText();
-        int fromReal = Math.min(_selectFrom, _selectTo);
-        int toReal = Math.max(_selectFrom, _selectTo);
-        String selectedText = text.substring(fromReal, toReal); // - fromReal
-        return selectedText;
+    private void unselectText() {
+        _isSelect = false;
+        _justSelected = true;
+        makeSelectedArea(_cursor_position, _cursor_position);
+    }
+
+    /*
+    internal void ShowCursor(bool isShow) {
+        if (isShow)
+            _cursor.setWidth(2);
+        else
+            _cursor.setWidth(0);
+    }
+    */
+    private int nearestPosToCursor(double xPos) {
+        List<Integer> endPos = _text_object.getLetPosArray();
+        int pos = (int)endPos.stream().map(x -> Math.abs(x - xPos)).sorted().toArray()[0]; //endPos.OrderBy(x = > Math.Abs(x - xPos)).First();
+        return pos;
+    }
+
+    void setCursorPosition(double newPos) {
+        _cursor_position = nearestPosToCursor(newPos);
     }
 
     public void clear() {
         setText("");
     }
 
-    //style
+//style
     @Override
     public void setStyle(Style style) {
         if (style == null)
@@ -441,10 +518,6 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
         inner_style = style.getInnerStyle("cursor");
         if (inner_style != null) {
             _cursor.setStyle(inner_style);
-        }
-        inner_style = style.getInnerStyle("showmarker");
-        if (inner_style != null) {
-            _show_pwd_btn.setStyle(inner_style);
         }
     }
 

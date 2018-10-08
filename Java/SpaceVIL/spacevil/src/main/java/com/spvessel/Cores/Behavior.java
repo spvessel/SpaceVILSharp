@@ -19,6 +19,11 @@ public class Behavior implements InterfaceBehavior {
         if (_alignment.equals(alignment))
             return;
 
+        if (alignment == null) {
+            _alignment = new LinkedList<>();
+            return;
+        }
+
         ItemAlignment _left = null;
         ItemAlignment _right = null;
         ItemAlignment _top = null;

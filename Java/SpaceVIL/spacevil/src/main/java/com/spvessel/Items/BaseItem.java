@@ -223,7 +223,7 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
 
     private boolean _visible = true;
 
-    public boolean getVisible() {
+    public boolean isVisible() {
         return _visible;
     }
 
@@ -523,7 +523,7 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
     public void setStyle(Style style) {
     }
 
-    public void CheckDefaults() {
+    public void checkDefaults() {
         // checking all attributes
         // setStyle(default theme)
         // foreach inners setStyle(from item default style)

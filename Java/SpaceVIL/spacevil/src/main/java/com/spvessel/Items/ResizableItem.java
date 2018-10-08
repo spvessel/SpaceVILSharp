@@ -40,10 +40,10 @@ public class ResizableItem extends VisualItem implements InterfaceDraggable {
         setItemName("ResizableItem_" + count);
         setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
 
-        InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
-        eventMousePressed.add(press);
-        InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
-        eventMouseDrag.add(dragg);
+        //InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
+        eventMousePressed.add(this::onMousePress); //press);
+        //InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
+        eventMouseDrag.add(this::onDragging); //dragg);
         count++;
     }
 

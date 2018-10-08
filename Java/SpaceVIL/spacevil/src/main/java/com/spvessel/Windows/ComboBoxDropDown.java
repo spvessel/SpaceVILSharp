@@ -28,8 +28,8 @@ public class ComboBoxDropDown extends DialogWindow {
         
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
-        InterfaceCommonMethod selection_changed = () -> onSelectionChanged();
-        itemList.getArea().selectionChanged.add(selection_changed);
+        //InterfaceCommonMethod selection_changed = () -> onSelectionChanged();
+        itemList.getArea().selectionChanged.add(this::onSelectionChanged); //selection_changed);
         
         Handler.addItem(itemList);
 

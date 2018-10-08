@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import com.spvessel.Decorations.*;
 import com.spvessel.Common.*;
-import com.spvessel.Cores.*;
 import com.spvessel.Flags.*;
 import com.spvessel.Flags.SizePolicy;
 
@@ -139,22 +138,16 @@ public class TitleBar extends WindowAnchor {
         // setFont(new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold));
 
         // _close
-        InterfaceMouseMethodState close_click = (sender, args) -> {
-            getHandler().close();
-        };
-        _close.eventMouseClick.add(close_click);
+        //InterfaceMouseMethodState close_click = (sender, args) -> getHandler().close();
+        _close.eventMouseClick.add((sender, args) -> getHandler().close()); //close_click);
 
         // _minimize
-        InterfaceMouseMethodState minimize_click = (sender, args) -> {
-            getHandler().minimize();
-        };
-        _minimize.eventMouseClick.add(minimize_click);
+        //InterfaceMouseMethodState minimize_click = (sender, args) -> getHandler().minimize();
+        _minimize.eventMouseClick.add((sender, args) -> getHandler().minimize()); //minimize_click);
 
         // _maximize
-        InterfaceMouseMethodState maximize_click = (sender, args) -> {
-            getHandler().maximize();
-        };
-        _maximize.eventMouseClick.add(maximize_click);
+        //InterfaceMouseMethodState maximize_click = (sender, args) -> getHandler().maximize();
+        _maximize.eventMouseClick.add((sender, args) -> getHandler().maximize()); //maximize_click);
 
         // adding
         switch (Direction) {

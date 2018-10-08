@@ -21,19 +21,19 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
         count++;
         _stored_crd = new HashMap<BaseItem, int[]>();
 
-        InterfaceMouseMethodState click = (sender, args) -> onMouseRelease(sender, args);
-        eventMouseClick.add(click);
-        InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
-        eventMousePressed.add(press);
-        InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
-        eventMouseDrag.add(dragg);
+        //InterfaceMouseMethodState click = (sender, args) -> onMouseRelease(sender, args);
+        eventMouseClick.add(this::onMouseRelease); //click);
+        //InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
+        eventMousePressed.add(this::onMousePress); //press);
+        //InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
+        eventMouseDrag.add(this::onDragging); //dragg);
 
         setStyle(DefaultsService.getDefaultStyle("SpaceVIL.FreeArea"));
     }
 
     public void addContextMenu(ContextMenu context_menu) {
-        InterfaceMouseMethodState context_show = (sender, args) -> context_menu.show(sender, args);
-        eventMouseClick.add(context_show);
+        //InterfaceMouseMethodState context_show = (sender, args) -> context_menu.show(sender, args);
+        eventMouseClick.add(context_menu::show); //context_show);
     }
 
     protected void onMousePress(InterfaceItem sender, MouseArgs args) {
@@ -80,8 +80,8 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
         _stored_crd.put(item, new int[] { item.getX(), item.getY() });
         if (item instanceof ResizableItem) {
             ResizableItem wanted = (ResizableItem) item;
-            InterfaceCommonMethod changed = () -> correctPosition(wanted);
-            wanted.positionChanged.add(changed);
+            //InterfaceCommonMethod changed = () -> correctPosition(wanted);
+            wanted.positionChanged.add(() -> correctPosition(wanted)); //changed);
         }
         updateLayout();
     }

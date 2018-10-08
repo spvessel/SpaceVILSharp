@@ -7,12 +7,16 @@ import com.spvessel.Flags.ItemAlignment;
 abstract public class Primitive extends BaseItem {
 
     public Primitive() {
-        this(0, 0, 0, 0, "Primitive_");
+        this("Primitive_");
     }
 
     public Primitive(int xpos, int ypos, int width, int height, String name) {
         setItemName(name);
         setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+    }
+
+    public Primitive(String name) {
+        this(0, 0, 0, 0, name);
     }
 
     @Override

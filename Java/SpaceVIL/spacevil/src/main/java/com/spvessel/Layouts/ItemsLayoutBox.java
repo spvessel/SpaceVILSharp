@@ -4,7 +4,6 @@ import com.spvessel.Items.*;
 import com.spvessel.Flags.*;
 import com.spvessel.Windows.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ItemsLayoutBox {
     private ItemsLayoutBox() {
@@ -25,7 +24,7 @@ public class ItemsLayoutBox {
         return layouts.get(id);
     }
 
-    static private Map<UUID, ItemsLayout> layouts = new HashMap<UUID, ItemsLayout>();
+    static private Map<UUID, ItemsLayout> layouts = new HashMap<>();
 
     static public void initLayout(UUID _layout) {
         ItemsLayout l = new ItemsLayout(_layout);

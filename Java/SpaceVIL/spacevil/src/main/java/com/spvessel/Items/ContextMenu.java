@@ -49,8 +49,8 @@ public class ContextMenu extends VisualItem implements InterfaceFloating {
         itemList.setSelectionVisibility(false);
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
-        InterfaceCommonMethod selectionChanged = () -> onSelectionChanged();
-        itemList.getArea().selectionChanged.add(selectionChanged);
+        //InterfaceCommonMethod selectionChanged = () -> onSelectionChanged();
+        itemList.getArea().selectionChanged.add(this::onSelectionChanged); //selectionChanged);
 
         super.addItem(itemList);
 
@@ -103,7 +103,7 @@ public class ContextMenu extends VisualItem implements InterfaceFloating {
         BaseItem[] list = _queue.toArray(new BaseItem[_queue.size()]);
         int height = 0;
         for (BaseItem h : list)
-            if (h.getVisible() && h.isDrawable)
+            if (h.isVisible() && h.isDrawable)
                 height += (h.getHeight() + itemList.getArea().getSpacing().vertical);
         setHeight(getPadding().top + getPadding().bottom + height);
     }

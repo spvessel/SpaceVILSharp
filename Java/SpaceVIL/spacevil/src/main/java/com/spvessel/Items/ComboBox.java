@@ -25,11 +25,11 @@ public class ComboBox extends VisualItem {
         setItemName("ComboBox_" + count);
         count++;
 
-        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(key_press);
+        //InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
+        eventKeyPress.add(this::onKeyPress);//key_press);
 
-        InterfaceMouseMethodState press = (sender, args) -> showDropDownList();
-        eventMousePressed.add(press);
+        //InterfaceMouseMethodState press = (sender, args) -> showDropDownList();
+        eventMousePressed.add((sender, args) -> showDropDownList()); //press);
 
         setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ComboBox"));
     }
@@ -110,8 +110,8 @@ public class ComboBox extends VisualItem {
 
         // dropdownarea
         _dropdownarea.selection = _selected;
-        InterfaceCommonMethod selection_changed = () -> onSelectionChanged();
-        _dropdownarea.selectionChanged.add(selection_changed);
+        //InterfaceCommonMethod selection_changed = () -> onSelectionChanged();
+        _dropdownarea.selectionChanged.add(this::onSelectionChanged); //selection_changed);
     }
 
     private void showDropDownList() {

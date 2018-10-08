@@ -44,7 +44,7 @@ public class VerticalStack extends VisualItem implements InterfaceVLayout {
         int expanded_count = 0;
 
         for (BaseItem child : getItems()) {
-            if (child.getVisible()) {
+            if (child.isVisible()) {
                 if (child.getHeightPolicy() == SizePolicy.FIXED) {
                     fixed_count++;
                     free_space -= (child.getHeight() + child.getMargin().top + child.getMargin().bottom);//
@@ -63,7 +63,7 @@ public class VerticalStack extends VisualItem implements InterfaceVLayout {
         int startY = getY() + getPadding().top;
 
         for (BaseItem child : getItems()) {
-            if (child.getVisible()) {
+            if (child.isVisible()) {
                 child.setY(startY + offset + child.getMargin().top);//
                 if (child.getHeightPolicy() == SizePolicy.EXPAND) {
                     if (height_for_expanded - child.getMargin().top - child.getMargin().bottom < child.getMaxHeight())//

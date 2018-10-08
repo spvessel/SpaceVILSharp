@@ -1,23 +1,11 @@
 package com.spvessel.Engine;
 
-import java.util.*;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.spvessel.Common.*;
-import com.spvessel.Cores.*;
 import com.spvessel.Windows.*;
-//import org.lwjgl.glfw.;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.system.*;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.system.MemoryUtil.*;
-import java.nio.ByteBuffer;
 
 public class GLWHandler {
     // cursors
