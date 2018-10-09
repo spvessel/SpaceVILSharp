@@ -174,3 +174,10 @@ Java/SpaceVIL/spacevil/.idea/modules/spacevil_test.iml
 Java/SpaceVIL/spacevil/.idea/modules/spacevil_main.iml
 Java/SpaceVIL/spacevil/.vscode/settings.json
 *.log
+Java/SpaceVIL/spacevil/.idea/modules/spacevil.iml
+Java/SpaceVIL/spacevil/bin/main/META-INF/MANIFEST.MF
+Java/SpaceVIL/spacevil/build/distributions/spacevil-0.3-alpha/bin/spacevil
+Java/SpaceVIL/spacevil/build/distributions/spacevil-0.3-alpha/bin/spacevil.bat
+Java/SpaceVIL/spacevil/build/tmp/fatJar/MANIFEST.MF
+Java/SpaceVIL/spacevil/META-INF/MANIFEST.MF
+Java/SpaceVIL/spacevil/src/main/java/META-INF/MANIFEST.MF

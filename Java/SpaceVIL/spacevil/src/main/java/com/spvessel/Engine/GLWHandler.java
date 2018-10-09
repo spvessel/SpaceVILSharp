@@ -123,10 +123,10 @@ public class GLWHandler {
         else
             glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
 
-            glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-//        if (visible)
-//            glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-//        else
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        // if (visible)
+        // glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+        // else
 
         _window = glfwCreateWindow(_w_layout.getWidth(), _w_layout.getHeight(), _w_layout.getWindowTitle(), NULL, NULL);
 
@@ -165,6 +165,9 @@ public class GLWHandler {
 
     protected void switchContext() {
         glfwMakeContextCurrent(0);
+        glfwMakeContextCurrent(_window);
+    }
+    protected void setContext() {
         glfwMakeContextCurrent(_window);
     }
 
@@ -219,7 +222,16 @@ public class GLWHandler {
     }
 
     protected void setToClose() {
-        glfwSetWindowShouldClose(_window, true);
+        if (_window != 0)
+            glfwSetWindowShouldClose(_window, true);
+        // try
+        // {
+        // glfwSetWindowShouldClose(_window, true);
+        // }
+        // catch(Exception ex)
+        // {
+        // System.out.println(ex.toString());
+        // }
     }
 
     protected void setCallbackMouseMove(GLFWCursorPosCallback function) {

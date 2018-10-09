@@ -393,9 +393,11 @@ public class WindowLayout {
             } catch (InterruptedException e) {
                 // e.printStackTrace();
             }
+            // engine.init();
         }
         else {
             thread_engine.start();
+            // engine.init();
         }
     }
 
