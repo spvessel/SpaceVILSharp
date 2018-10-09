@@ -8,6 +8,7 @@ import com.spvessel.Items.*;
 import com.spvessel.Items.Frame;
 import com.spvessel.Windows.ActiveWindow;
 import com.spvessel.Windows.WindowLayout;
+import sun.font.FontFamily;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -19,7 +20,7 @@ public class InputTest extends ActiveWindow {
         WindowLayout Handler = new WindowLayout(this, "InputTest", "InputTest");
         Handler.setWidth(500);
         Handler.setMinWidth(200);
-        Handler.setHeight(250);
+        Handler.setHeight(500);
         Handler.setMinHeight(200);
         Handler.setWindowTitle("InputTest");
         Handler.setPadding(2, 2, 2, 2);
@@ -66,14 +67,14 @@ public class InputTest extends ActiveWindow {
         //listbox.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         frame.addItem(listbox);
 
-        TextBlock _editLines = new TextBlock();
-        //_editLines.setFont(new Font(new FontFamily("Arial"), 16, FontStyle.Regular));
+        TextEdit _editLines = new TextEdit();
+        _editLines.setFont(new Font("Arial", Font.PLAIN, 150));
         _editLines.setAlignment(ItemAlignment.TOP);
         _editLines.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         _editLines.setSpacing(0, 5);
         _editLines.setPadding(2, 2, 2, 2);
         //_editLines.setForeground(Color.White);
-        //_editLines.setTextAlignment(ItemAlignment.Right);
+        //_editLines.setTextAlignment(ItemAlignment.RIGHT);
         //frame.AddItem(_editLines);
         listbox.addItem(_editLines);
 

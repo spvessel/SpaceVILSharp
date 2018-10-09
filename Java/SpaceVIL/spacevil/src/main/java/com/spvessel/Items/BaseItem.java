@@ -5,6 +5,7 @@ import com.spvessel.Cores.*;
 import com.spvessel.Windows.*;
 import com.spvessel.Flags.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -310,8 +311,7 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
     private Behavior _itemBehavior = new Behavior();
 
     public void setAlignment(ItemAlignment... alignment) {
-        _itemBehavior.setAlignment(alignment);
-        updateBehavior();
+        setAlignment(Arrays.asList(alignment));
     }
 
     public void setAlignment(List<ItemAlignment> alignment) {

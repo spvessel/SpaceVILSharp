@@ -9,7 +9,6 @@ import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.KeyMods;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -460,7 +459,8 @@ public class TextBlock extends VisualItem implements InterfaceTextEditable, Inte
         return _wholeText;
     }
 
-    public void setTextAlignment(ItemAlignment alignment) {
+    public void setTextAlignment(ItemAlignment... alignment) {
+        setTextAlignment(Arrays.asList(alignment));
         //Ignore all changes
             /*
             _blockAlignment = alignment;
@@ -468,6 +468,10 @@ public class TextBlock extends VisualItem implements InterfaceTextEditable, Inte
             foreach (TextLine te in _linesList)
                 te.setTextAlignment(alignment);
             */
+    }
+
+    public void setTextAlignment(List<ItemAlignment> alignment) {
+        //Ignore all changes
     }
 
     public void setFont(Font font) {

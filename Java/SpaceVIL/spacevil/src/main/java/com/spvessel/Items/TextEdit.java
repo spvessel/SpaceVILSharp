@@ -310,6 +310,10 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
             _cursor.setVisible(false);
     }
 
+    public void setTextAlignment(ItemAlignment... alignment) {
+        setTextAlignment(Arrays.asList(alignment));
+    }
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
         List<ItemAlignment> ial = new LinkedList<>();
         if (alignment.contains(ItemAlignment.RIGHT)) {

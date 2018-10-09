@@ -250,6 +250,9 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
             _cursor.setVisible(false);
     }
 
+    public void setTextAlignment(ItemAlignment... alignment) {
+        setTextAlignment(Arrays.asList(alignment));
+    }
 
     public void setTextAlignment(List<ItemAlignment> alignment) {
         //Ignore all changes
