@@ -14,10 +14,10 @@ public class ScrollHandler extends VisualItem implements InterfaceDraggable {
 
     public ScrollHandler() {
         setItemName("ScrollHandler_" + count);
-        InterfaceMouseMethodState h_press = (sender, args) -> onMousePress(sender, args);
-        eventMousePressed.add(h_press);
-        InterfaceMouseMethodState h_dragg = (sender, args) -> onDragging(sender, args);
-        eventMouseDrag.add(h_dragg);
+        //InterfaceMouseMethodState h_press = (sender, args) -> onMousePress(sender, args);
+        eventMousePressed.add(this::onMousePress); //h_press);
+        //InterfaceMouseMethodState h_dragg = (sender, args) -> onDragging(sender, args);
+        eventMouseDrag.add(this::onDragging); //h_dragg);
         count++;
     }
 

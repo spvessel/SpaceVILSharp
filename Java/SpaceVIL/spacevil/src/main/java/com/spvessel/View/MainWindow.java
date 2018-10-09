@@ -52,8 +52,8 @@ public class MainWindow extends ActiveWindow {
         btn_layout.setToolTip("Show Layout window.");
         btn_layout.setBackground(255, 151, 153);
         btn_layout.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        InterfaceMouseMethodState layout_click = (sender, args) -> WindowLayoutBox.tryShow("LayoutsTest");
-        btn_layout.eventMouseClick.add(layout_click);
+        //InterfaceMouseMethodState layout_click = (sender, args) -> WindowLayoutBox.tryShow("LayoutsTest");
+        btn_layout.eventMouseClick.add((sender, args) -> WindowLayoutBox.tryShow("LayoutsTest"));//layout_click);
 
         ButtonCore btn_label = new ButtonCore("Label");
         btn_label.setFont(font);
@@ -66,30 +66,31 @@ public class MainWindow extends ActiveWindow {
         btn_flow.setToolTip("Show Flow window.");
         btn_flow.setBackground(193, 142, 221);
         btn_flow.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        InterfaceMouseMethodState flow_click = (sender, args) -> WindowLayoutBox.tryShow("FlowTest");
-        btn_flow.eventMouseClick.add(flow_click);
+        //InterfaceMouseMethodState flow_click = (sender, args) -> WindowLayoutBox.tryShow("FlowTest");
+        btn_flow.eventMouseClick.add((sender, args) -> WindowLayoutBox.tryShow("FlowTest")); //flow_click);
         
         ButtonCore btn_complex = new ButtonCore("Complex");
         btn_complex.setFont(font);
         btn_complex.setToolTip("Show Complex window.");
         btn_complex.setBackground(114, 153, 211);
         btn_complex.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        InterfaceMouseMethodState complex_click = (sender, args) -> WindowLayoutBox.tryShow("ComplexTest");
-        btn_complex.eventMouseClick.add(complex_click);
+        //InterfaceMouseMethodState complex_click = (sender, args) -> WindowLayoutBox.tryShow("ComplexTest");
+        btn_complex.eventMouseClick.add((sender, args) -> WindowLayoutBox.tryShow("ComplexTest")); //complex_click);
 
         ButtonCore btn_image = new ButtonCore("Image");
         btn_image.setFont(font);
         btn_image.setToolTip("Show Image window.");
         btn_image.setBackground(238, 174, 128);
         btn_image.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        InterfaceMouseMethodState img_click = (sender, args) -> WindowLayoutBox.tryShow("ImageTest");
-        btn_image.eventMouseClick.add(img_click);
+        //InterfaceMouseMethodState img_click = (sender, args) -> WindowLayoutBox.tryShow("ImageTest");
+        btn_image.eventMouseClick.add((sender, args) -> WindowLayoutBox.tryShow("ImageTest")); //img_click);
 
         ButtonCore btn_input = new ButtonCore("Input");
         btn_input.setFont(font);
         btn_input.setToolTip("Show Input window.");
         btn_input.setBackground(121, 223, 152);
         btn_input.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        btn_input.eventMouseClick.add((sender, args) -> WindowLayoutBox.tryShow("InputTest"));
 
         grid.addItems(btn_layout, btn_label, btn_flow, btn_input, btn_image, btn_complex);
     }

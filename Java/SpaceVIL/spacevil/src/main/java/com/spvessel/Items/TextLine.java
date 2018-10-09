@@ -26,6 +26,15 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
 
     private List<Alphabet.ModifyLetter> _letters;
 
+    private List<Float> px0;
+    private List<ItemAlignment> _needCheckAlignment = new LinkedList<>();
+    private int _needCheckPaddingRight;
+    private int _needCheckPaddingBottom;
+    private int _needCheckWidth;
+    private int _needCheckHeight;
+    private int _needCheckX;
+    private int _needCheckY;
+
     public TextLine() {
         count++;
     }
@@ -38,10 +47,14 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     }
 
     public void createText() {
+        long time = System.nanoTime();
         String text = getItemText();
         Font font = getFont();
 
         _letters = FontEngine.getPixMap(text, font);
+        long time0 = System.nanoTime();
+        System.out.println("get pix map " + (time0 - time) / 100000f);
+
         _letEndPos = new LinkedList<>();
 
         if (_letters.size() > 0)
@@ -52,11 +65,36 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         super.setWidth(_lineWidth);
         super.setHeight(Math.abs(_maxFontY - _minFontY));
 
+
+        px0 = new LinkedList<>();
+        List<Float> cl0 = new LinkedList<>();
+        List<Float> tmpPx;
+        float xc, yc;
         for (Alphabet.ModifyLetter modL : _letters) {
             _letEndPos.add(modL.xBeg + modL.xShift + modL.width);
+            //px0.addAll(modL.getPix());
+            tmpPx = modL.getPix();
+            for (int i = 0; i < tmpPx.size() / 3; i++) {
+                xc = modL.xBeg + modL.xShift;
+                yc = - _minFontY + modL.yBeg;
+                px0.add(tmpPx.get(i * 3) + xc);
+                px0.add(tmpPx.get(i * 3 + 1) + yc);
+                px0.add(tmpPx.get(i * 3 + 2));
+            }
+
+            cl0.addAll(modL.getCol());
         }
 
+        long time1 = System.nanoTime();
+        System.out.println("new arrays " + (time1 - time0) / 100000f);
+
         addAllShifts();
+
+        long time2 = System.nanoTime();
+        System.out.println("Add all shifts " + (time2 - time1) / 100000f);
+        System.out.println();
+
+        setAlphas(cl0);
     }
 
     @Override
@@ -70,6 +108,85 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     }
 
     private void addAllShifts() {
+        //long time0 = System.nanoTime();
+
+        if (getParent() == null)
+            return;
+
+        if (_letters == null)
+            return;
+
+        List<Float> outRealCoords = new LinkedList<>(px0);
+        //List<Float> alphas = new LinkedList<>();
+
+        List<ItemAlignment> alignments = getTextAlignment();
+        float alignShiftX = 1;
+        float alignShiftY = 0;
+
+        float height = Math.abs(_maxFontY - _minFontY);
+
+        if (_lineYShift - _minFontY + height < 0 || _lineYShift - _minFontY > _parentAllowHeight) {
+            //setAlphas(alphas);
+            setRealCoords(outRealCoords);
+            return;
+        }
+
+        // Horizontal
+        if (alignments.contains(ItemAlignment.RIGHT) && (_lineWidth < _parentAllowWidth))
+            alignShiftX = getParent().getWidth() - _lineWidth - getParent().getPadding().right;
+
+        else if (alignments.contains(ItemAlignment.HCENTER) && (_lineWidth < _parentAllowWidth))
+            alignShiftX = (getParent().getWidth() - _lineWidth) / 2f;
+
+        // Vertical
+        if (alignments.contains(ItemAlignment.BOTTOM))
+            alignShiftY = getParent().getHeight() - height - getParent().getPadding().bottom;
+
+        else if (alignments.contains(ItemAlignment.VCENTER))
+            alignShiftY = (getParent().getHeight() - height) / 2f;
+
+        //List<Float> tmpList;
+        float xCoord, yCoord;
+
+        //long time1 = System.nanoTime();
+        //System.out.println("Prepare is end " + (time1 - time0) / 100000f);
+
+        for (int j = 0; j < px0.size() / 3; j++) {
+            //tmpList = modL.getPix();
+            xCoord = alignShiftX + _lineXShift + px0.get(j * 3);
+            yCoord = alignShiftY + _lineYShift + px0.get(j * 3 + 1);
+
+            if (xCoord < 0)
+                continue;
+            if (xCoord > _parentAllowWidth)
+                break;
+
+            //alphas.addAll(modL.getCol());
+
+            outRealCoords.set(j * 3, xCoord);
+            outRealCoords.set(j * 3 + 1, yCoord);
+            outRealCoords.set(j * 3 + 2, px0.get(j * 3 + 2));
+
+        }
+
+        //long time2 = System.nanoTime();
+        //System.out.println("Add alphas and colors " + (time2 - time1) / 100000f);
+        //System.out.println("shifts");
+        //setAlphas(alphas);
+        setRealCoords(outRealCoords);
+
+        _needCheckAlignment = alignments;
+        _needCheckPaddingRight = getParent().getPadding().right;
+        _needCheckPaddingBottom = getParent().getPadding().bottom;
+        _needCheckWidth = getParent().getWidth();
+        _needCheckHeight = getParent().getHeight();
+        _needCheckX = getParent().getX();
+        _needCheckY = getParent().getY();
+    }
+
+    private void oldaddAllShifts() {
+        //long time0 = System.nanoTime();
+
         if (getParent() == null)
             return;
 
@@ -108,6 +225,9 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         List<Float> tmpList;
         float xCoord, yCoord;
 
+        //long time1 = System.nanoTime();
+        //System.out.println("Prepare is end " + (time1 - time0) / 100000f);
+
         for (Alphabet.ModifyLetter modL : _letters) {
             tmpList = modL.getPix();
             xCoord = alignShiftX + modL.xBeg + modL.xShift + _lineXShift;
@@ -118,10 +238,10 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             if (xCoord > _parentAllowWidth)
                 break;
 
-            // alphas.addAll(modL.getCol());
-            for (Float var : modL.getCol()) {
-                alphas.add(var);
-            }
+            alphas.addAll(modL.getCol());
+            //for (Float var : modL.getCol())
+            //    alphas.add(var);
+
 
             for (int j = 0; j < tmpList.size() / 3; j++) {
                 outRealCoords.add(tmpList.get(j * 3) + xCoord);
@@ -130,6 +250,9 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             }
         }
 
+        //long time2 = System.nanoTime();
+        //System.out.println("Add alphas and colors " + (time2 - time1) / 100000f);
+        //System.out.println();
         setAlphas(alphas);
         setRealCoords(outRealCoords);
     }
@@ -157,8 +280,25 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
 
     @Override
     public float[] shape() {
-        addAllShifts();
+        if (needCoordUpd())
+            addAllShifts();
         return super.shape();
+    }
+
+    private boolean needCoordUpd() {
+        if (_needCheckWidth != getParent().getWidth())
+            return true;
+        if (_needCheckHeight != getParent().getHeight())
+            return true;
+        if (_needCheckX != getParent().getX())
+            return true;
+        if (_needCheckY != getParent().getY())
+            return true;
+        if (!_needCheckAlignment.equals(getTextAlignment()))
+            return true;
+        if (_needCheckPaddingRight != getParent().getPadding().right)
+            return true;
+        return (_needCheckPaddingBottom != getParent().getPadding().bottom);
     }
 
     public List<Integer> getLetPosArray() {

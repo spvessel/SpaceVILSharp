@@ -28,7 +28,7 @@ public class Grid extends VisualItem implements InterfaceGrid {
     private List<Cell> _cells;
 
     void initCells() {
-        _cells = new LinkedList<Cell>();
+        _cells = new LinkedList<>();
         for (int i = 0; i < _row_count; i++) {
             for (int j = 0; j < _column_count; j++) {
                 _cells.add(new Cell(this, i, j));
@@ -189,7 +189,7 @@ public class Grid extends VisualItem implements InterfaceGrid {
 
     private int[] getRowsHeight() {
         int[] rows_height = new int[_row_count];
-        List<int[]> list_height = new LinkedList<int[]>();
+        List<int[]> list_height = new LinkedList<>();
 
         int total_space = getHeight() - getPadding().top - getPadding().bottom;
         int free_space = total_space;
@@ -200,7 +200,7 @@ public class Grid extends VisualItem implements InterfaceGrid {
             for (int c = 0; c < _column_count; c++) {
                 BaseItem item = _cells.get(c + r * _column_count).getItem();
 
-                if (item == null || !item.getVisible()) {
+                if (item == null || !item.isVisible()) {
                     list_height.add(new int[] { r, -1 });
                     continue;
                 }
@@ -213,7 +213,7 @@ public class Grid extends VisualItem implements InterfaceGrid {
             }
         }
         ///////////
-        List<Integer[]> m_height = new LinkedList<Integer[]>();
+        List<Integer[]> m_height = new LinkedList<>();
         for (int r = 0; r < _row_count; r++) {
             int max = -10;
             for (int c = 0; c < _column_count; c++) {
@@ -265,7 +265,7 @@ public class Grid extends VisualItem implements InterfaceGrid {
         for (int c = 0; c < _column_count; c++) {
             for (int r = 0; r < _row_count; r++) {
                 BaseItem item = _cells.get(c + r * _column_count).getItem();
-                if (item == null || !item.getVisible()) {
+                if (item == null || !item.isVisible()) {
                     list_width.add(new int[] { c, -1 });
                     continue;
                 }

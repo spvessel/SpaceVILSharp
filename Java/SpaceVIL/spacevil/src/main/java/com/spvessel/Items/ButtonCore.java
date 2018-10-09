@@ -15,8 +15,8 @@ public class ButtonCore extends VisualItem {
         setItemName("ButtonCore_" + count);
         count++;
         _text_object = new TextLine();
-        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(key_press);
+        //InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
+        eventKeyPress.add((sender, args) -> onKeyPress(sender, args)); //key_press);
         setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ButtonCore"));
     }
 

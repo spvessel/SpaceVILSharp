@@ -4,9 +4,7 @@ import java.awt.*;
 import java.util.List;
 import com.spvessel.Decorations.*;
 import com.spvessel.Common.*;
-import com.spvessel.Cores.*;
 import com.spvessel.Flags.*;
-import com.spvessel.Flags.SizePolicy;
 
 public class ProgressBar extends VisualItem {
     static int count = 0;
@@ -67,7 +65,7 @@ public class ProgressBar extends VisualItem {
         DonePercent = (_currentValue - _minValue) / AllLength;
         String text = Math.round(DonePercent * 100f) + "%";
         _text_object.setItemText(text);
-        _rect.setWidth((int) Math.round(getWidth() * DonePercent));
+        _rect.setWidth(Math.round(getWidth() * DonePercent));
     }
 
     // text init

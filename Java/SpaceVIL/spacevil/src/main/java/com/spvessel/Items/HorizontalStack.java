@@ -44,7 +44,7 @@ public class HorizontalStack extends VisualItem implements InterfaceHLayout {
         int expanded_count = 0;
 
         for (BaseItem child : getItems()) {
-            if (child.getVisible()) {
+            if (child.isVisible()) {
                 if (child.getWidthPolicy() == SizePolicy.FIXED) {
                     fixed_count++;
                     free_space -= (child.getWidth() + child.getMargin().left + child.getMargin().right);//
@@ -63,7 +63,7 @@ public class HorizontalStack extends VisualItem implements InterfaceHLayout {
         int startX = getX() + getPadding().left;
         
         for (BaseItem child : getItems()) {
-            if (child.getVisible()) {
+            if (child.isVisible()) {
                 child.setX(startX + offset + child.getMargin().left);//
                 if (child.getWidthPolicy() == SizePolicy.EXPAND) {
                     if (width_for_expanded - child.getMargin().left - child.getMargin().right < child.getMaxWidth())

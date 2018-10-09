@@ -10,7 +10,7 @@ public class CustomSelector extends Primitive {
     static int count = 0;
 
     public CustomSelector() {
-        setItemName("CustomSelector_" + count);
+        super("CustomSelector_" + count);
         count++;
     }
 
@@ -19,8 +19,8 @@ public class CustomSelector extends Primitive {
         return GraphicsMathService.toGL(this, getHandler());
     }
 
-    public void SetRectangles(List<Point> points) {
-        List<float[]> triangles = new LinkedList<float[]>();
+    public void setRectangles(List<Point> points) {
+        List<float[]> triangles = new LinkedList<>();
         int w1 = 0, w2 = 0;
         int h1 = 0, h2 = 0;
         if (points != null) {
@@ -31,6 +31,7 @@ public class CustomSelector extends Primitive {
             for (int i = 0; i < points.size() / 2; i++) {
                 Point p1 = points.get(i * 2 + 0);
                 Point p2 = points.get(i * 2 + 1);
+                //System.out.println((p2.x - p1.x) + " " + (p2.y - p1.y) + " " + p1.x + " " + p2.y);
                 triangles.addAll(GraphicsMathService.getRectangle((p2.x - p1.x), (p2.y - p1.y), p1.x, p2.y));
                 w1 = (p1.x < w1) ? p1.x : w1;
                 w2 = (p2.x > w2) ? p2.x : w2;

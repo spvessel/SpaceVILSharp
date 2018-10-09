@@ -2,7 +2,7 @@ package com.spvessel.Windows;
 
 import java.util.*;
 
-class WindowPair {
+class WindowsPair {
     public UUID GUID;
     public WindowLayout WINDOW;
 }

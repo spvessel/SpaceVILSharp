@@ -16,19 +16,29 @@ public class ButtonToggle extends VisualItem {
         setItemName("ButtonToggle_" + count);
         count++;
         _text_object = new TextLine();
-        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(key_press);
+        //InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
+        eventKeyPress.add(this::onKeyPress); //key_press);
+        /*
         InterfaceMouseMethodState btn_click = (sender, args) -> {
             if (eventToggle != null)
             eventToggle.execute(sender, args); // remember
         };
-        eventMouseClick.add(btn_click);
-        
+        */
+        eventMouseClick.add((sender, args) -> {
+            if (eventToggle != null)
+                eventToggle.execute(sender, args); // remember
+        }); //btn_click);
+
+        /*
         InterfaceMouseMethodState toggle = (sender, args) -> {
             _toggled = !_toggled;
             setToggled(_toggled);
         };
-        eventToggle.add(toggle);
+        */
+        eventToggle.add((sender, args) -> {
+            _toggled = !_toggled;
+            setToggled(_toggled);
+        }); //toggle);
         setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ButtonToggle"));
     }
 
@@ -40,7 +50,7 @@ public class ButtonToggle extends VisualItem {
     // private for class
     private boolean _toggled = false;
 
-    public boolean getToggled() {
+    public boolean isToggled() {
         return _toggled;
     }
 

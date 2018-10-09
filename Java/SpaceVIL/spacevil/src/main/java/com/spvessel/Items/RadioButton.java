@@ -27,8 +27,8 @@ public class RadioButton extends VisualItem implements InterfaceHLayout {
     public RadioButton() {
         setItemName("RadioButton_" + count);
         count++;
-        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(key_press);
+        //InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
+        eventKeyPress.add(this::onKeyPress); //key_press);
 
         // text
         _text_object = new TextLine();
@@ -154,12 +154,11 @@ public class RadioButton extends VisualItem implements InterfaceHLayout {
     public void initElements() {
         // events
         _indicator.getIndicatorMarker().eventToggle = null;
-        InterfaceMouseMethodState btn_click = (sender, args) -> {
-            _indicator.getIndicatorMarker().setToggled(!_indicator.getIndicatorMarker().getToggled());
-            if (_indicator.getIndicatorMarker().getToggled())
+        eventMouseClick.add((sender, args) -> {
+            _indicator.getIndicatorMarker().setToggled(!_indicator.getIndicatorMarker().isToggled());
+            if (_indicator.getIndicatorMarker().isToggled())
                 uncheckOthers(sender);
-        };
-        eventMouseClick.add(btn_click);
+        });
 
         // adding
         addItem(_indicator);

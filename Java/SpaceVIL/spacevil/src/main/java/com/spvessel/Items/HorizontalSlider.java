@@ -79,8 +79,8 @@ public class HorizontalSlider extends VisualItem {
 
     public HorizontalSlider() {
         setItemName("HorizontalSlider_" + count);
-        InterfaceMouseMethodState t_click = (sender, args) -> onTrackClick(sender, args);
-        eventMouseClick.add(t_click);
+        //InterfaceMouseMethodState t_click = (sender, args) -> onTrackClick(sender, args);
+        eventMouseClick.add(this::onTrackClick); //t_click);
         count++;
 
         handler.direction = Orientation.HORIZONTAL;
@@ -94,10 +94,10 @@ public class HorizontalSlider extends VisualItem {
         addItems(track, handler);
 
         // Event connections
-        InterfaceMouseMethodState h_drop = (sender, args) -> onDrophandler(sender, args);
-        eventMouseDrop.add(h_drop);
-        InterfaceMouseMethodState m_dragg = (sender, args) -> eventMouseDrop.execute(sender, args);
-        handler.eventMouseDrag.add(m_dragg);
+        //InterfaceMouseMethodState h_drop = (sender, args) -> onDrophandler(sender, args);
+        eventMouseDrop.add(this::onDrophandler); //h_drop);
+        //InterfaceMouseMethodState m_dragg = (sender, args) -> eventMouseDrop.execute(sender, args);
+        handler.eventMouseDrag.add(eventMouseDrop::execute); //m_dragg);
     }
 
     public void onDrophandler(InterfaceItem sender, MouseArgs args)// что-то с тобой не так
@@ -110,7 +110,7 @@ public class HorizontalSlider extends VisualItem {
     }
 
     public void onTrackClick(InterfaceItem sender, MouseArgs args) {
-        if (handler.getMouseHover())
+        if (handler.isMouseHover())
             return;
 
         // Compute CurrentValue

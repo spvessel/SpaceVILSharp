@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.LinkedList;
 
 import com.spvessel.Common.DefaultsService;
-import com.spvessel.Cores.InterfaceCommonMethodState;
-import com.spvessel.Cores.InterfaceMouseMethodState;
 import com.spvessel.Decorations.*;
 import com.spvessel.Engine.GraphicsMathService;
 import com.spvessel.Flags.*;
@@ -109,7 +107,7 @@ public class TreeItem extends VisualItem {
 
     protected void resetIndents() {
         int level = _nesting_level;
-        if (!_parent._root.getVisible())
+        if (!_parent._root.isVisible())
             level--;
         setPadding(2 + _indent_size * level, 0, 0, 0);
     }
@@ -127,10 +125,8 @@ public class TreeItem extends VisualItem {
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
         remove.addItemState(ItemStateType.HOVERED, hovered);
-        InterfaceMouseMethodState remove_click = (sender, args) -> {
-            getParent().removeItem(this);
-        };
-        remove.eventMouseClick.add(remove_click);
+        //InterfaceMouseMethodState remove_click = (sender, args) -> getParent().removeItem(this);
+        remove.eventMouseClick.add((sender, args) -> getParent().removeItem(this)); //remove_click);
 
         MenuItem rename = new MenuItem("Rename");
         rename.setForeground(new Color(210, 210, 210));
@@ -147,21 +143,17 @@ public class TreeItem extends VisualItem {
         MenuItem new_leaf = new MenuItem("New Leaf");
         new_leaf.setForeground(new Color(210, 210, 210));
         new_leaf.addItemState(ItemStateType.HOVERED, hovered);
-        InterfaceMouseMethodState leaf_click = (sender, args) -> {
-            this.addItem(getTreeLeaf());
-        };
-        new_leaf.eventMouseClick.add(leaf_click);
+        //InterfaceMouseMethodState leaf_click = (sender, args) -> this.addItem(getTreeLeaf());
+        new_leaf.eventMouseClick.add((sender, args) -> this.addItem(getTreeLeaf())); //leaf_click);
 
         MenuItem new_branch = new MenuItem("New Branch");
         new_branch.setForeground(new Color(210, 210, 210));
         new_branch.addItemState(ItemStateType.HOVERED, hovered);
-        InterfaceMouseMethodState branch_click = (sender, args) -> {
-            this.addItem(getTreeBranch());
-        };
-        new_branch.eventMouseClick.add(branch_click);
+        //InterfaceMouseMethodState branch_click = (sender, args) -> this.addItem(getTreeBranch());
+        new_branch.eventMouseClick.add((sender, args) -> this.addItem(getTreeBranch())); //branch_click);
 
-        InterfaceMouseMethodState menu_click = (sender, args) -> _menu.show(sender, args);
-        eventMouseClick.add(menu_click);
+        //InterfaceMouseMethodState menu_click = (sender, args) -> _menu.show(sender, args);
+        eventMouseClick.add(_menu::show); //menu_click);
 
         switch (_item_type) {
         case LEAF:
@@ -196,8 +188,8 @@ public class TreeItem extends VisualItem {
             toggled.shape = new CustomFigure(true, GraphicsMathService.getTriangle(10, 8, 0, 3, 180));
             _indicator.addItemState(ItemStateType.TOGGLED, toggled);
             _indicator.border.setRadius(0);
-            InterfaceMouseMethodState e_toggle = (sender, args) -> onToggleHide(_indicator.getToggled());
-            _indicator.eventToggle.add(e_toggle);
+            //InterfaceMouseMethodState e_toggle = (sender, args) -> onToggleHide(_indicator.isToggled());
+            _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled())); //e_toggle);
 
             super.addItem(_indicator);
             super.addItem(_icon_shape);
@@ -216,7 +208,7 @@ public class TreeItem extends VisualItem {
     {
         for (TreeItem item : _list_inners) {
             if (value) {
-                if (_indicator.getToggled()) {
+                if (_indicator.isToggled()) {
                     item.setVisible(true);
                     item.onToggleHide(value);
                 }
@@ -344,6 +336,5 @@ public class TreeItem extends VisualItem {
             return;
         super.setStyle(style);
         // additional
-
     }
 }

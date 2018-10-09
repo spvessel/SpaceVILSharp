@@ -38,11 +38,11 @@ public class ComplexTest extends ActiveWindow {
         treeview.setMinWidth(100);
 
         ButtonCore b1 = getButton("b1", 26, 30, SizePolicy.FIXED);
-        InterfaceMouseMethodState b1_click = (sender, args) -> treeview.setRootVisibility(false);
-        b1.eventMouseClick.add(b1_click);
+        //InterfaceMouseMethodState b1_click = (sender, args) -> treeview.setRootVisibility(false);
+        b1.eventMouseClick.add((sender, args) -> treeview.setRootVisibility(false)); //b1_click);
         ButtonCore b2 = getButton("b2", 26, 30, SizePolicy.FIXED);
-        InterfaceMouseMethodState b2_click = (sender, args) -> treeview.setRootVisibility(true);
-        b2.eventMouseClick.add(b2_click);
+        //InterfaceMouseMethodState b2_click = (sender, args) -> treeview.setRootVisibility(true);
+        b2.eventMouseClick.add((sender, args) -> treeview.setRootVisibility(true)); //b2_click);
         ButtonCore b3 = getButton("b3", 26, 30, SizePolicy.FIXED);
         ButtonCore b4 = getButton("b4", 26, 30, SizePolicy.FIXED);
         ButtonCore b5 = getButton("b5", 26, 30, SizePolicy.FIXED);

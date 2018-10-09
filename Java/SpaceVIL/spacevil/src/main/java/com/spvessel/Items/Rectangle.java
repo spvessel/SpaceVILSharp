@@ -14,6 +14,6 @@ public class Rectangle extends Primitive {
     @Override
     public List<float[]> makeShape() {
         setTriangles(GraphicsMathService.getRectangle(getWidth(), getHeight(), getX(), getY()));
-        return GraphicsMathService.toGL((BaseItem) this, getHandler());
+        return GraphicsMathService.toGL(this, getHandler());
     }
 }

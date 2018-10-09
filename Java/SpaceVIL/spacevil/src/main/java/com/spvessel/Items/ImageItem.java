@@ -38,7 +38,7 @@ public class ImageItem extends VisualItem implements InterfaceImageItem {
     }
 
     private byte[] createByteImage() {
-        List<Byte> bmp = new LinkedList<Byte>();
+        List<Byte> bmp = new LinkedList<>();
         for (int i = 0; i < _image.getWidth(); i++) {
             for (int j = 0; j < _image.getHeight(); j++) {
                 byte[] bytes = ByteBuffer.allocate(4).putInt(_image.getRGB(i, j)).array();

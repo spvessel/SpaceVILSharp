@@ -75,21 +75,22 @@ public abstract class TextItem extends Primitive {
 
     void setFontSize(int size) {
         if (_font.getSize() != size) {
-            _font = new Font(_font.getFamily(), size, _font.getStyle());
+            _font = new Font(_font.getFamily(), _font.getStyle(), size);
             updateData();
         }
     }
 
     void setFontStyle(int style) {
         if (_font.getStyle() != style) {
-            _font = new Font(_font.getFamily(), _font.getSize(), style);
+
+            _font = new Font(_font.getFamily(), style, _font.getSize());
             updateData();
         }
     }
 
     void setFontFamily(String font_family) {
         if (_font.getFamily() != font_family) {
-            _font = new Font(font_family, _font.getSize(), _font.getStyle());
+            _font = new Font(font_family, _font.getStyle(), _font.getSize());
             updateData(); // _criticalFlag = true;
         }
     }
@@ -247,8 +248,7 @@ public abstract class TextItem extends Primitive {
     }
 
     public void setTextAlignment(ItemAlignment... value) {
-        List<ItemAlignment> list = Arrays.stream(value).collect(Collectors.toList());
-        setTextAlignment(list);
+        setTextAlignment(Arrays.asList(value));
     }
 
     public void setTextAlignment(List<ItemAlignment> list) {

@@ -103,12 +103,11 @@ public class FlowTest extends ActiveWindow {
         btn_action.setHeightPolicy(SizePolicy.FIXED);
         btn_action.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         btn_action.border.setRadius(10);
-        InterfaceMouseMethodState flow_click = (sender, args) -> {
+        btn_action.eventMouseClick.add((sender, args) -> {
             // flow_item.show(sender, args);
             // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!", Handler);
             // pop.show();
-        };
-        btn_action.eventMouseClick.add(flow_click);
+        });
 
         ResizableItem frame = new ResizableItem();
         frame.setPadding(10, 10, 10, 10);

@@ -287,8 +287,12 @@ namespace SpaceVIL
             int letCount = _text_object.GetLetPosArray().Count;
             //_cursor_position = (_cursor_position < 0) ? 0 : _cursor_position;
             //_cursor_position = (_cursor_position > letCount) ? letCount : _cursor_position;
-            //Console.WriteLine(cPos + " " + letCount);
-            //Console.WriteLine(" " + _text_object.GetLetPosArray().Count);
+            /*
+            for (int i = 0; i < letCount; i++)
+                Console.Write(_text_object.GetLetPosArray()[i] + " ");
+            Console.WriteLine();
+            */
+
             if (cPos > 0)
                 coord = _text_object.GetLetPosArray()[cPos - 1];
 

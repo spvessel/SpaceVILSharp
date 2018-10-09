@@ -467,21 +467,21 @@ namespace SpaceVIL
                     if (tmp.GetHoverVerification(xpos, ypos))
                     {
                         queue.Add(tmp);
-                        Console.WriteLine(tmp.GetItemName());
+                        //Console.WriteLine(tmp.GetItemName());
                     }
                     else
                     {
                         IFloating float_item = item as IFloating;
                         if (float_item != null && action == InputEventType.MousePressed)
                         {
-                            Console.WriteLine("1");
+                            //Console.WriteLine("1");
                             if (float_item.IsOutsideClickClosable())
                             {
-                                Console.WriteLine("2");
+                                //Console.WriteLine("2");
                                 ContextMenu to_close = (item as ContextMenu);
                                 if (to_close != null && to_close.CloseDependencies(_margs))
                                 {
-                                    Console.WriteLine("3");
+                                    //Console.WriteLine("3");
                                     float_item.Hide();
                                 }
                             }
