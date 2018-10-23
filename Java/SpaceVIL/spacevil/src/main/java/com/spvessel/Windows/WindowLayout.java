@@ -468,7 +468,8 @@ public class WindowLayout {
     }
 
     public void setEventTask(EventTask task) {
-        manager.stackEvents.add(task);
+        // manager.stackEvents.add(task);
+        manager.addTask(task);
     }
 
     volatile Boolean set = true;

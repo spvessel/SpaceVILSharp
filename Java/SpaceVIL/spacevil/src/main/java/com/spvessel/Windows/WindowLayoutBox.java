@@ -3,6 +3,7 @@ package com.spvessel.Windows;
 import com.spvessel.Flags.LayoutType;
 import com.spvessel.Flags.SizePolicy;
 import com.spvessel.Items.WContainer;
+import com.spvessel.Windows.*;
 import com.spvessel.Layouts.ItemsLayoutBox;
 
 import java.util.*;
@@ -11,7 +12,7 @@ import java.util.stream.*;
 public class WindowLayoutBox {
     static public Map<String, WindowLayout> windowsName = new HashMap<>();
     static public Map<UUID, WindowLayout> windowsUUID = new HashMap<>();
-    static public List<WindowPair> currentCallingPair = new LinkedList<>();
+    static public List<WindowsPair> currentCallingPair = new LinkedList<>();
     static public WindowLayout lastFocusedWindow;
 
     static public void initWindow(WindowLayout _layout) {
@@ -77,7 +78,7 @@ public class WindowLayoutBox {
     }
 
     static protected void addToWindowDispatcher(WindowLayout sender_wnd) {
-        WindowPair pair = new WindowPair();
+        WindowsPair pair = new WindowsPair();
         pair.WINDOW = sender_wnd;
         if (lastFocusedWindow == null) {
             pair.GUID = sender_wnd.getId();// root
@@ -97,14 +98,14 @@ public class WindowLayoutBox {
     }
 
     static protected void removeFromWindowDispatcher(WindowLayout sender_wnd) {
-        List<WindowPair> pairs_to_delete = new LinkedList<WindowPair>();
-        for (WindowPair windows_pair : currentCallingPair) {
+        List<WindowsPair> pairs_to_delete = new LinkedList<WindowsPair>();
+        for (WindowsPair windows_pair : currentCallingPair) {
             if (windows_pair.WINDOW.equals(sender_wnd)) {
                 pairs_to_delete.add(windows_pair);
             }
         }
 
-        for (WindowPair pairs : pairs_to_delete) {
+        for (WindowsPair pairs : pairs_to_delete) {
             currentCallingPair.remove(pairs);
         }
 

@@ -114,15 +114,12 @@ namespace SpaceVIL
         {
             if (Handler.IsMouseHover)
                 return;
-                
+
             //Compute CurrentValue
-            if (_mouse_ptr.IsSet())
-            {
-                SetCurrentValue(
-                    (float)(_mouse_ptr.X - GetX() - Handler.GetWidth() / 2)
-                    * (_max_value - _min_value)
-                    / ((float)GetWidth() - Handler.GetWidth()));
-            }
+            SetCurrentValue(
+                (float)(args.Position.GetX() - GetX() - Handler.GetWidth() / 2)
+                * (_max_value - _min_value)
+                / ((float)GetWidth() - Handler.GetWidth()));
         }
 
         public override void SetX(int _x)

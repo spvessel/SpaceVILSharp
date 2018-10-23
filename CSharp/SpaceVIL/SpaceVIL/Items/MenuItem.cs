@@ -20,11 +20,10 @@ namespace SpaceVIL
         {
             if (_sub_context_menu != null)
             {
-                if (!_sub_context_menu.GetHoverVerification(args.Position.X, args.Position.Y)
+                if (!_sub_context_menu.GetHoverVerification(args.Position.GetX(), args.Position.GetY())
                     && _sub_context_menu.CloseDependencies(args))
                     return true;
             }
-            Console.WriteLine("false?");
             return false;
         }
         CustomShape _arrow;
@@ -163,25 +162,18 @@ namespace SpaceVIL
 
             MouseArgs args = new MouseArgs();
             args.Button = MouseButton.ButtonRight;
-            // args.Position.SetPosition(_context_menu.GetX() + _context_menu.GetWidth() + 2, GetY());
-
-            //проверка снизу
-            // if (args.Position.Y + GetHeight() > GetHandler().GetHeight())
-            // {
-            //     args.Position.Y = (args.Position.Y - GetHeight());
-            // }
 
             //проверка справа
-            args.Position.X = (_context_menu.GetX() + _context_menu.GetWidth() + 2);
-            if (args.Position.X + _sub_context_menu.GetWidth() > GetHandler().GetWidth())
+            args.Position.SetX(_context_menu.GetX() + _context_menu.GetWidth() + 2);
+            if (args.Position.GetX() + _sub_context_menu.GetWidth() > GetHandler().GetWidth())
             {
-                args.Position.X = (_context_menu.GetX() - _sub_context_menu.GetWidth() - 2);
+                args.Position.SetX(_context_menu.GetX() - _sub_context_menu.GetWidth() - 2);
             }
             //проверка снизу
-            args.Position.Y = GetY();
-            if (args.Position.Y + _sub_context_menu.GetHeight() > GetHandler().GetHeight())
+            args.Position.SetY(GetY());
+            if (args.Position.GetY() + _sub_context_menu.GetHeight() > GetHandler().GetHeight())
             {
-                args.Position.Y = _context_menu.GetY() + _context_menu.GetHeight() - _sub_context_menu.GetHeight();
+                args.Position.SetY(_context_menu.GetY() + _context_menu.GetHeight() - _sub_context_menu.GetHeight());
             }
 
             _sub_context_menu.Show(this, args);

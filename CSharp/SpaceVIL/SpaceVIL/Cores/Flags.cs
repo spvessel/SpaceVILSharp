@@ -83,17 +83,6 @@ namespace SpaceVIL
 
     public enum EmbeddedFont
     {
-        OpenSans,
-        Exo2,
-        TitilliumWeb,
-        Verdana,
-        Muli,
-        Nunito,
-        Quicksand,
-        Ubuntu,
-        GlacialIndifference,
-        SansLight,
-        RobotoMono,
-        OpenGostTypeA
+        Ubuntu
     }
 }

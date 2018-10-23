@@ -61,7 +61,7 @@ namespace SpaceVIL
                 DefaultItemsStyle.Add(typeof(SpaceVIL.ComboBox), Style.GetComboBoxStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.ComboBoxDropDown), Style.GetComboBoxDropDownStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.ContextMenu), Style.GetContextMenuStyle());
-                DefaultItemsStyle.Add(typeof(SpaceVIL.FlowArea), Style.GetFlowAreaStyle());
+                DefaultItemsStyle.Add(typeof(SpaceVIL.FreeArea), Style.GetFlowAreaStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.Frame), Style.GetFrameStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.Grid), Style.GetGridStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.HorizontalScrollBar), Style.GetHorizontalScrollBarStyle());

@@ -33,7 +33,6 @@ namespace SpaceVIL
         public virtual void Show()
         {
             wnd_handler.Show();
-            // WindowLayoutBox.SetFocusedWindow(this);
         }
         public virtual void Close()
         {
@@ -41,7 +40,6 @@ namespace SpaceVIL
         }
 
         abstract public void InitWindow();
-        // abstract public void InitElements();
 
         public int GetCount() { return count; }
 

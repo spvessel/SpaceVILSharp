@@ -91,7 +91,7 @@ namespace SpaceVIL
             if (tmp != null)
                 tmp._context_menu = this;
             _queue.Enqueue(item);
-            
+
             BaseItem[] list = _queue.ToArray();
             int height = 0;
             foreach (var h in list)
@@ -114,22 +114,22 @@ namespace SpaceVIL
                 IsVisible = true;
 
                 //проверка снизу
-                if (args.Position.Y + GetHeight() > GetHandler().GetHeight())
+                if (args.Position.GetY() + GetHeight() > GetHandler().GetHeight())
                 {
-                    SetY(args.Position.Y - GetHeight());
+                    SetY(args.Position.GetY() - GetHeight());
                 }
                 else
                 {
-                    SetY(args.Position.Y);
+                    SetY(args.Position.GetY());
                 }
                 //проверка справа
-                if (args.Position.X + GetWidth() > GetHandler().GetWidth())
+                if (args.Position.GetX() + GetWidth() > GetHandler().GetWidth())
                 {
-                    SetX(args.Position.X - GetWidth());
+                    SetX(args.Position.GetX() - GetWidth());
                 }
                 else
                 {
-                    SetX(args.Position.X);
+                    SetX(args.Position.GetX());
                 }
                 // SetX(args.Position.X);
                 // SetY(args.Position.Y);

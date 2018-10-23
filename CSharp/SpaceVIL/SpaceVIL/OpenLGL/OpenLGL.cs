@@ -370,7 +370,7 @@ namespace GL.LGL
 		#endregion
 
 		//OpenGL Extensions Functions
-		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern int glGetUniformLocation(uint shader, char[] value);
+		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern int glGetUniformLocation(uint shader, string value);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern uint glCreateShader(uint type);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glShaderSource(uint shader, int count, string[] source, int[] length);
 		[DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glCompileShader(uint shader);

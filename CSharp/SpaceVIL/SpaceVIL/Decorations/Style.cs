@@ -143,7 +143,7 @@ namespace SpaceVIL
         {
             Style style = new Style();
             style.Background = Color.FromArgb(255, 13, 176, 255);
-            style.Foreground = Color.FromArgb(255, 32, 32, 32);;
+            style.Foreground = Color.FromArgb(255, 32, 32, 32); ;
             style.Font = DefaultsService.GetDefaultFont();
             style.WidthPolicy = SizePolicy.Fixed;
             style.HeightPolicy = SizePolicy.Fixed;
@@ -168,7 +168,7 @@ namespace SpaceVIL
         {
             Style style = new Style();
             style.Background = Color.FromArgb(255, 13, 176, 255);
-            style.Foreground = Color.FromArgb(255, 70, 70, 70);;
+            style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
             style.Font = DefaultsService.GetDefaultFont();
             style.WidthPolicy = SizePolicy.Fixed;
             style.HeightPolicy = SizePolicy.Fixed;
@@ -207,7 +207,7 @@ namespace SpaceVIL
             style.MinWidth = 20;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
 
-            Style textline_style = new Style();
+            Style textline_style = GetLabelStyle();
             textline_style.WidthPolicy = SizePolicy.Expand;
             textline_style.HeightPolicy = SizePolicy.Expand;
             textline_style.Alignment = ItemAlignment.VCenter;
@@ -234,7 +234,7 @@ namespace SpaceVIL
 
             Style marker_style = new Style();
             marker_style.Background = Color.FromArgb(255, 32, 32, 32);
-            marker_style.Foreground = Color.FromArgb(255, 70, 70, 70);;
+            marker_style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
             marker_style.Font = DefaultsService.GetDefaultFont();
             marker_style.WidthPolicy = SizePolicy.Expand;
             marker_style.HeightPolicy = SizePolicy.Expand;
@@ -267,7 +267,7 @@ namespace SpaceVIL
         {
             Style style = new Style();
             style.Background = Color.Transparent;
-            style.Foreground = Color.FromArgb(255, 70, 70, 70);;
+            style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
             style.Font = DefaultsService.GetDefaultFont();
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
@@ -278,7 +278,7 @@ namespace SpaceVIL
 
             Style selection_style = new Style();
             selection_style.Background = Color.FromArgb(255, 220, 220, 220);
-            selection_style.Foreground = Color.FromArgb(255, 70, 70, 70);;
+            selection_style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
             selection_style.Font = DefaultsService.GetDefaultFont();
             selection_style.WidthPolicy = SizePolicy.Expand;
             selection_style.HeightPolicy = SizePolicy.Expand;
@@ -332,7 +332,7 @@ namespace SpaceVIL
         {
             Style style = new Style();
             style.Background = Color.Transparent;
-            style.Foreground = Color.FromArgb(255, 70, 70, 70);;
+            style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
             style.Font = DefaultsService.GetDefaultFont();
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
@@ -741,7 +741,7 @@ namespace SpaceVIL
 
             style.Background = Color.FromArgb(255, 80, 80, 80);
             style.Foreground = Color.LightGray;
-            style.Font = DefaultsService.GetDefaultFont();
+            style.Font = DefaultsService.GetDefaultFont(0);
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
             style.Height = 20;
@@ -750,10 +750,10 @@ namespace SpaceVIL
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.BorderRadius = 10;
 
-            Style textline_style = new Style();
+            Style textline_style = GetLabelStyle();
             textline_style.WidthPolicy = SizePolicy.Expand;
             textline_style.HeightPolicy = SizePolicy.Expand;
-            textline_style.Alignment = ItemAlignment.VCenter;
+            textline_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             textline_style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             textline_style.Margin = new Indents(10, 0, 0, 0);
             style.AddInnerStyle("textline", textline_style);
@@ -774,8 +774,8 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont();
-            style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
+            style.Font = DefaultsService.GetDefaultFont(12);
+            // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Height = 30;
@@ -786,7 +786,10 @@ namespace SpaceVIL
             {
                 Background = Color.FromArgb(30, 255, 255, 255)
             });
-
+            style.AddItemState(ItemStateType.Focused, new ItemState()
+            {
+                Background = Color.FromArgb(30, 255, 255, 255)
+            });
             Style marker_style = GetIndicatorStyle().GetInnerStyle("marker");
             marker_style.Background = Color.FromArgb(255, 130, 130, 130);
             marker_style.SetSize(16, 16);
@@ -823,8 +826,8 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont();
-            style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
+            style.Font = DefaultsService.GetDefaultFont(12);
+            // style.Font = new Font(style.Font.FontFamily, 14, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Height = 30;
@@ -835,7 +838,10 @@ namespace SpaceVIL
             {
                 Background = Color.FromArgb(30, 255, 255, 255)
             });
-
+            style.AddItemState(ItemStateType.Focused, new ItemState()
+            {
+                Background = Color.FromArgb(30, 255, 255, 255)
+            });
             Style cursor_style = new Style();
             cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
             cursor_style.Width = 2;
@@ -860,14 +866,18 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont();
-            style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
+            style.Font = DefaultsService.GetDefaultFont(12);
+            // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.Top;
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Expand;
             style.Padding = new Indents(5, 5, 5, 5);
             style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(30, 255, 255, 255)
+            });
+            style.AddItemState(ItemStateType.Focused, new ItemState()
             {
                 Background = Color.FromArgb(30, 255, 255, 255)
             });
@@ -895,8 +905,8 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(240, 45, 45, 45);
             style.Foreground = Color.LightGray;
-            style.Font = DefaultsService.GetDefaultFont();
-            style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
+            style.Font = DefaultsService.GetDefaultFont(14);
+            // style.Font = new Font(style.Font.FontFamily, 14, style.Font.Style);
             style.Alignment = ItemAlignment.Bottom | ItemAlignment.Right;
             style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.SetSize(300, 70);
@@ -951,9 +961,9 @@ namespace SpaceVIL
         {
             Style style = new Style();
 
-            style.Font = DefaultsService.GetDefaultFont();
+            style.Font = DefaultsService.GetDefaultFont(10);
             style.Background = Color.White;
-            style.Foreground = Color.FromArgb(255, 70, 70, 70);;
+            style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
             style.Height = 30;
             style.WidthPolicy = SizePolicy.Fixed;
             style.HeightPolicy = SizePolicy.Fixed;

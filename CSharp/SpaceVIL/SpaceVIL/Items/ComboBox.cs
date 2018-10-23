@@ -97,31 +97,6 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            //selected
-            // _selected.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            // _selected.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
-            // _selected.SetForeground(Color.Black);
-            // _selected.SetMargin(0, 0, 20, 0);
-            // _selected.SetPadding(10, 0, 0, 0);
-            // _selected.SetBackground(220, 220, 220);
-
-            //dropdown
-            // _dropdown.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            // _dropdown.SetWidth(20);
-            // _dropdown.SetAlignment(ItemAlignment.Right | ItemAlignment.VCenter);
-            // _dropdown.SetBackground(255, 181, 111);
-            // _dropdown.AddItemState(ItemStateType.Hovered, new ItemState()
-            // {
-            //     Background = Color.FromArgb(40, 255, 255, 255)
-            // });
-
-            //arrow
-            // _arrow.SetTriangles(GraphicsMathService.GetTriangle(a: 180));
-            // _arrow.SetBackground(50, 50, 50);
-            // _arrow.SetSize(14, 6);
-            // _arrow.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            // _arrow.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
-
             //adding
             AddItems(_selected, _dropdown);
 
@@ -138,16 +113,13 @@ namespace SpaceVIL
             //dropdownarea
             _dropdownarea.Handler.SetWidth(_selected.GetWidth());
             _dropdownarea.Handler.SetHeight(100);
-            // _dropdownarea.Handler.UpdateSize();
+
             _dropdownarea.Handler.SetX(GetHandler().GetX() + _selected.GetX());
             _dropdownarea.Handler.SetY(GetHandler().GetY() + _selected.GetY() + _selected.GetHeight());
-            // _dropdownarea.Handler.UpdatePosition(_dropdownarea.Handler.GetX(), _dropdownarea.Handler.GetY());
-            /*while(_queue.Count > 0)
-            {
-                _dropdownarea.Add(_queue.Dequeue());
-            }*/
+
+            Console.WriteLine(_dropdownarea.Handler.GetX() + " " + _dropdownarea.Handler.GetY());
+
             _dropdownarea.Show();
-            // _dropdownarea.Unhide();
         }
 
         public void AddToList(BaseItem item)

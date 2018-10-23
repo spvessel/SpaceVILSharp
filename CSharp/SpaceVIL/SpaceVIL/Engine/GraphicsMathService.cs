@@ -607,60 +607,44 @@ namespace SpaceVIL
             Vert
         }
 
-        internal static byte[] PointsToTexture(TextItem text)
-        {
-            float[] _points = text.Shape();
-            float[] _colors = text.GetColors();
+        // internal static byte[] PointsToTexture(TextItem text)
+        // {
+        //     float[] _points = text.Shape();
+        //     float[] _colors = text.GetColors();
 
-            if (_colors == null || _points == null)
-                return null;
+        //     if (_colors == null || _points == null)
+        //         return null;
 
-            int _w = text.GetWidth();
-            int _h = text.GetHeight();
+        //     int _w = text.GetWidth();
+        //     int _h = text.GetHeight();
 
-            byte[] _bitmap = new byte[_w * _h * 4];
-            for (int i = 0; i < _bitmap.Length; i++)
-            {
-                _bitmap[i] = 0;
-            }
+        //     byte[] _bitmap = new byte[_w * _h * 4];
+        //     for (int i = 0; i < _bitmap.Length; i++)
+        //     {
+        //         _bitmap[i] = 0;
+        //     }
 
-            int color_index = 0;
+        //     int color_index = 0;
 
-            for (int i = 0; i < _points.Length; i += 3)
-            {
-                int r = (int)_points[i + 1];
-                int c = (int)_points[i];
-                int pos = (r + c * _h) * 4;
-                if (pos + 3 > _bitmap.Length)
-                    break;
+        //     for (int i = 0; i < _points.Length; i += 3)
+        //     {
+        //         int r = (int)_points[i + 1];
+        //         int c = (int)_points[i];
+        //         int pos = (r + c * _h) * 4;
+        //         if (pos + 3 > _bitmap.Length)
+        //             break;
 
-                _bitmap[pos + 0] = (byte)(_colors[color_index + 0] * 255);
-                _bitmap[pos + 1] = (byte)(_colors[color_index + 1] * 255);
-                _bitmap[pos + 2] = (byte)(_colors[color_index + 2] * 255);
-                _bitmap[pos + 3] = (byte)(_colors[color_index + 3] * 255);
+        //         _bitmap[pos + 0] = (byte)(_colors[color_index + 0] * 255);
+        //         _bitmap[pos + 1] = (byte)(_colors[color_index + 1] * 255);
+        //         _bitmap[pos + 2] = (byte)(_colors[color_index + 2] * 255);
+        //         _bitmap[pos + 3] = (byte)(_colors[color_index + 3] * 255);
 
-                color_index += 4;
-            }
+        //         color_index += 4;
+        //     }
 
-            color_index = 0;
-
-            /*for (int i = 0; i < _w; i++)
-            {
-                for (int j = 0; j < _h; j++)
-                {
-                    Console.Write(
-                        _bitmap[color_index + 0] + " " + 
-                        _bitmap[color_index + 1] + " " + 
-                        _bitmap[color_index + 2] + " " + 
-                        _bitmap[color_index + 3] + " | " 
-                    );
-                    color_index += 4;
-                }
-                Console.WriteLine();
-            }*/
-
-            return _bitmap;
-        }
+        //     color_index = 0;
+        //     return _bitmap;
+        // }
 
         public static List<float[]> MoveShape(List<float[]> shape, float x, float y)
         {

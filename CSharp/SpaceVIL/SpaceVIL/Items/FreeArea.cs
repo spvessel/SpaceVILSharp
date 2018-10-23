@@ -5,21 +5,25 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class FlowArea : VisualItem, IGrid, IDraggable
+    public class FreeArea : VisualItem, IGrid, IDraggable
     {
         static int count = 0;
+        private int _x_press = 0;
+        private int _y_press = 0;
+        private int _diff_x = 0;
+        private int _diff_y = 0;
         Dictionary<BaseItem, int[]> _stored_crd;
         // public ContextMenu _dropdownmenu = new ContextMenu();
-        public FlowArea()
+        public FreeArea()
         {
-            SetItemName("FlowArea_" + count);
+            SetItemName("FreeArea_" + count);
             count++;
             EventMouseClick += OnMouseRelease;
             EventMousePressed += OnMousePress;
             EventMouseDrag += OnDragging;
             _stored_crd = new Dictionary<BaseItem, int[]>();
 
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.FlowArea)));
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.FreeArea)));
         }
 
         public void AddContextMenu(ContextMenu context_menu)
@@ -28,7 +32,10 @@ namespace SpaceVIL
         }
         protected virtual void OnMousePress(IItem sender, MouseArgs args)
         {
-            
+            _x_press = args.Position.GetX();
+            _y_press = args.Position.GetY();
+            _diff_x = (int)_xOffset;
+            _diff_y = (int)_yOffset;
         }
 
         protected virtual void OnMouseRelease(IItem sender, MouseArgs args)
@@ -40,8 +47,8 @@ namespace SpaceVIL
 
         protected virtual void OnDragging(IItem sender, MouseArgs args)
         {
-            _xOffset -= _mouse_ptr.PrevX - _mouse_ptr.X;
-            _yOffset -= _mouse_ptr.PrevY - _mouse_ptr.Y;
+            _xOffset = _diff_x - _x_press + args.Position.GetX();
+            _yOffset = _diff_y + args.Position.GetY() - _y_press;
             UpdateLayout();
         }
 
@@ -83,14 +90,17 @@ namespace SpaceVIL
             // Console.WriteLine("flow remove");
             base.RemoveItem(item);
             _stored_crd.Remove(item);
-            // UpdateLayout();
+            UpdateLayout();
         }
         public void UpdateLayout()
         {
-            foreach (var child in GetItems())
+            lock (this)
             {
-                child.SetX((int)_xOffset + GetX() + GetPadding().Left + _stored_crd[child][0] + child.GetMargin().Left);
-                child.SetY((int)_yOffset + GetY() + GetPadding().Top + _stored_crd[child][1] + child.GetMargin().Top);
+                foreach (var child in GetItems())
+                {
+                    child.SetX((int)_xOffset + GetX() + GetPadding().Left + _stored_crd[child][0] + child.GetMargin().Left);
+                    child.SetY((int)_yOffset + GetY() + GetPadding().Top + _stored_crd[child][1] + child.GetMargin().Top);
+                }
             }
         }
 

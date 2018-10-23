@@ -12,12 +12,14 @@ namespace SpaceVIL
         public Guid GUID;
         public WindowLayout WINDOW;
     }
+
     static class WindowLayoutBox
     {
         static public Dictionary<string, WindowLayout> windows_name = new Dictionary<string, WindowLayout>();
         static public Dictionary<Guid, WindowLayout> windows_guid = new Dictionary<Guid, WindowLayout>();
         static internal List<WindowPair> current_calling_pair = new List<WindowPair>();
         static public WindowLayout LastFocusedWindow;
+        static Object locker = new Object();
 
         static public void InitWindow(WindowLayout _layout)
         {
@@ -47,6 +49,28 @@ namespace SpaceVIL
             windows_name.Remove(_layout.GetWindowName());
             windows_guid.Remove(_layout.Id);
         }
+        static public bool TryShow(Guid guid)
+        {
+            WindowLayout wnd = WindowLayoutBox.GetWindowInstance(guid);
+            if (wnd != null)
+            {
+                wnd.Show();
+                return true;
+            }
+            return false;
+        }
+
+        static public bool TryShow(String name)
+        {
+            WindowLayout wnd = WindowLayoutBox.GetWindowInstance(name);
+            if (wnd != null)
+            {
+                wnd.Show();
+                return true;
+            }
+            return false;
+        }
+
         static public WindowLayout GetWindowInstance(string name)
         {
             if (windows_name.ContainsKey(name))
@@ -72,14 +96,10 @@ namespace SpaceVIL
             else
                 pair.GUID = LastFocusedWindow.Id;
             current_calling_pair.Add(pair);
-
-            // Console.WriteLine("main: " + LastFocusedWindow?.GetWindowName() + " invoked: " + pair.WINDOW.GetWindowName());
-            //LastFocusedWindow = sender_wnd;
         }
         static internal void SetCurrentFocusedWindow(WindowLayout wnd)
         {
             LastFocusedWindow = wnd;
-            //Console.WriteLine(LastFocusedWindow.GetWindowName());
         }
         static internal void SetFocusedWindow(CoreWindow window)
         {

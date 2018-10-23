@@ -10,7 +10,7 @@ namespace SpaceVIL
     public class WindowLayout : ISize, IPosition
     //where TLayout : VisualItem
     {
-        //internal ManualResetEventSlim Execute = new ManualResetEventSlim(false);
+        private Object wndLock = new Object();
 
         public EventCommonMethod EventClose;
         public EventCommonMethod EventMinimize;
@@ -67,22 +67,27 @@ namespace SpaceVIL
             manager = new ActionManager(this);
             engine = new DrawEngine(this);
 
-            lock (CommonService.GlobalLocker)
+            Monitor.Enter(wndLock);
+            try
+            {
                 WindowLayoutBox.InitWindow(this);
+            }
+            finally
+            {
+                Monitor.Exit(wndLock);
+            }
             SetFocusedItem(_window);
-            //events
-            // EventClose += Close;
         }
 
         public void UpdatePosition()
         {
-            if (engine != null)
-                engine.SetWindowPos();
+            // if (engine != null)
+            //     engine.SetWindowPos();
         }
         public void UpdateSize()
         {
-            if (engine != null)
-                engine.SetWindowSize();
+            // if (engine != null)
+            //     engine.SetWindowSize();
         }
         /*public void UpdateScene()
         {
@@ -273,6 +278,12 @@ namespace SpaceVIL
             return _itemPosition.GetY();
         }
 
+        private bool _is_main = false;
+
+        public void SetMainThread()
+        {
+            _is_main = true;
+        }
         //methods
         public void Show()
         {
@@ -287,32 +298,42 @@ namespace SpaceVIL
             engine._handler.AppearInCenter = IsCentered;
             engine._handler.Focusable = IsFocusable;
             engine._handler.AlwaysOnTop = IsAlwaysOnTop;
-            engine._handler.WPosition.X = GetX();
-            engine._handler.WPosition.Y = GetY();
+            engine._handler.GetPointer().SetX(GetX());
+            engine._handler.GetPointer().SetY(GetY());
 
             if (thread_engine != null && thread_engine.IsAlive)
                 return;
 
             thread_manager = new Thread(() => manager.StartManager());
+            thread_manager.IsBackground = true;
             thread_manager.Start();
 
-            thread_engine = new Thread(() => engine.Init());
+            if (!_is_main)
+                thread_engine = new Thread(() => engine.Init());
 
             if (IsDialog)
             {
-                lock (CommonService.GlobalLocker)
+                Monitor.Enter(wndLock);
+                try
                 {
                     ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
                     WindowLayoutBox.AddToWindowDispatcher(this);
                     WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
-                    WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Update();
                 }
+                finally
+                {
+                    Monitor.Exit(wndLock);
+                }
+
                 thread_engine.Start();
                 thread_engine.Join();
             }
             else
             {
-                thread_engine.Start();
+                if (!_is_main)
+                    thread_engine.Start();
+                else
+                    engine.Init();
             }
         }
         public void Close()
@@ -321,10 +342,15 @@ namespace SpaceVIL
             {
                 engine.Close();
                 SetWindowFocused();
-                lock (CommonService.GlobalLocker)
+                Monitor.Enter(wndLock);
+                try
                 {
                     WindowLayoutBox.RemoveWindow(this);
                     WindowLayoutBox.RemoveFromWindowDispatcher(this);
+                }
+                finally
+                {
+                    Monitor.Exit(wndLock);
                 }
                 if (thread_manager != null && thread_manager.IsAlive)
                 {
@@ -334,10 +360,16 @@ namespace SpaceVIL
             }
             else
             {
-                if (thread_engine != null && thread_engine.IsAlive)
+                if (!_is_main)
                 {
-                    engine.Close();
+                    if (thread_engine != null && thread_engine.IsAlive)
+                    {
+                        engine.Close();
+                    }
                 }
+                else
+                    engine.Close();
+
                 if (thread_manager != null && thread_manager.IsAlive)
                 {
                     manager.StopManager();
@@ -373,11 +405,15 @@ namespace SpaceVIL
         }
         internal void SetWindowFocused()
         {
-            lock (CommonService.GlobalLocker)
+            Monitor.Enter(wndLock);
+            try
             {
-                WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = true;
-                WindowLayoutBox.GetWindowInstance(ParentGUID).engine.Focus(
-                    WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.GetWindowId(), true);
+                if (WindowLayoutBox.GetWindowInstance(ParentGUID) != null)
+                    WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = true;
+            }
+            finally
+            {
+                Monitor.Exit(wndLock);
             }
         }
         public void Minimize()

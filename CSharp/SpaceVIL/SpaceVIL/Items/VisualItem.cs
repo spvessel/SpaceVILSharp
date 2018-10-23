@@ -93,7 +93,6 @@ namespace SpaceVIL
         public virtual void AddItem(BaseItem item)
         {
             lock (GetHandler().engine_locker)
-            // lock (CommonService.GlobalLocker)
             {
                 if (item.Equals(this))
                 {
@@ -104,7 +103,6 @@ namespace SpaceVIL
 
                 AddChildren(item);
 
-                //lock (GetHandler().engine_locker)
                 _content.Add(item);
 
                 try
@@ -118,7 +116,6 @@ namespace SpaceVIL
                 }
 
                 //needs to force update all attributes
-                // if (!EventManager.IsLocked)
                 item.UpdateGeometry();
                 item.InitElements();
 
@@ -130,7 +127,6 @@ namespace SpaceVIL
         internal virtual void InsertItem(BaseItem item, Int32 index)
         {
             lock (GetHandler().engine_locker)
-            // lock (CommonService.GlobalLocker)
             {
                 if (item.Equals(this))
                 {
@@ -141,7 +137,6 @@ namespace SpaceVIL
 
                 AddChildren(item);
 
-                //lock (GetHandler().engine_locker)
                 if (index > _content.Count)
                     _content.Add(item);
                 else
@@ -158,7 +153,6 @@ namespace SpaceVIL
                 }
 
                 //needs to force update all attributes
-                // if (!EventManager.IsLocked)
                 item.UpdateGeometry();
                 item.InitElements();
 
@@ -190,7 +184,6 @@ namespace SpaceVIL
         public virtual void RemoveItem(BaseItem item)
         {
             lock (GetHandler().engine_locker)
-            // lock (CommonService.GlobalLocker)
             {
                 LayoutType type;
                 if (item is IFloating)
@@ -205,23 +198,11 @@ namespace SpaceVIL
                 }
 
                 //removing
-                //lock (GetHandler().engine_locker)
                 _content.Remove(item);
 
                 item.RemoveItemFromListeners();
                 ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
-
-                //GetHandler().UpdateScene();
             }
-
-            // if (item is PopUpMessage)
-            //     Console.WriteLine("remove popup");
-
-            //needs to force update all attributes
-            /*if ((this is WContainer))
-                GetHandler().UpdateScene();
-            else
-                UpdateGeometry();*/
         }
         protected override void AddEventListener(GeometryEventType type, BaseItem listener)
         {
@@ -513,7 +494,6 @@ namespace SpaceVIL
             }
         }
 
-        protected internal Pointer _mouse_ptr = new Pointer();
         protected internal virtual bool GetHoverVerification(float xpos, float ypos)
         {
             switch (HoverRule)
@@ -559,28 +539,26 @@ namespace SpaceVIL
                     if (l >= 0 && (m + l) <= 1)
                     {
                         result = true;
-                        _mouse_ptr.SetPosition(xpos, ypos);
                         return result;
                     }
                 }
             }
 
-            _mouse_ptr.Clear();
             return result;
         }
         private bool LazyHoverVerification(float xpos, float ypos)
         {
-            if (this is ContextMenu)
-            {
-                Console.WriteLine("context menu");
-                Console.WriteLine(
-                    _confines_x_0 + " " +
-                    _confines_x_1 + " " +
-                    _confines_y_0 + " " +
-                    _confines_y_1 + " " +
-                    GetParent().GetItemName()
-                );
-            }
+            // if (this is ContextMenu)
+            // {
+            //     Console.WriteLine("context menu");
+            //     Console.WriteLine(
+            //         _confines_x_0 + " " +
+            //         _confines_x_1 + " " +
+            //         _confines_y_0 + " " +
+            //         _confines_y_1 + " " +
+            //         GetParent().GetItemName()
+            //     );
+            // }
 
             bool result = false;
             float minx = GetX();
@@ -606,11 +584,9 @@ namespace SpaceVIL
                 && ypos <= maxy)
             {
                 result = true;
-                _mouse_ptr.SetPosition(xpos, ypos);
             }
             else
             {
-                _mouse_ptr.Clear();
             }
             return result;
         }

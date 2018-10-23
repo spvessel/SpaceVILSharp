@@ -725,8 +725,8 @@ namespace GL.WGL
             wgl.DynamicInvoke(location, count, value);
         }
 
-        public delegate int getuniformlocation(uint shader, char[] value);
-        public int glGetUniformLocation(uint shader, char[] value)
+        public delegate int getuniformlocation(uint shader, string value);
+        public int glGetUniformLocation(uint shader, string value)
         {
             Delegate wgl = InvokeWGL<getuniformlocation>("glGetUniformLocation");
             return (int)wgl.DynamicInvoke(shader, value);

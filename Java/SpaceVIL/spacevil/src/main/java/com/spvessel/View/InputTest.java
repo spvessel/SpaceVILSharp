@@ -8,7 +8,7 @@ import com.spvessel.Items.*;
 import com.spvessel.Items.Frame;
 import com.spvessel.Windows.ActiveWindow;
 import com.spvessel.Windows.WindowLayout;
-import sun.font.FontFamily;
+// import sun.font.FontFamily;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -67,7 +67,7 @@ public class InputTest extends ActiveWindow {
         //listbox.setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         frame.addItem(listbox);
 
-        TextEdit _editLines = new TextEdit();
+        com.spvessel.Items.TextEdit _editLines = new com.spvessel.Items.TextEdit();
         _editLines.setFont(new Font("Arial", Font.PLAIN, 150));
         _editLines.setAlignment(ItemAlignment.TOP);
         _editLines.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);

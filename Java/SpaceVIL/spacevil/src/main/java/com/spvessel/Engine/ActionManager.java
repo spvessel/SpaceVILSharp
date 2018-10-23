@@ -4,12 +4,14 @@ import com.spvessel.Cores.*;
 import com.spvessel.Items.*;
 import com.spvessel.Windows.WindowLayout;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ActionManager {
-    public  ConcurrentLinkedQueue<EventTask> stackEvents = new ConcurrentLinkedQueue<EventTask>();
+    public ConcurrentLinkedQueue<EventTask> stackEvents = new ConcurrentLinkedQueue<EventTask>();
 
-     public ManualResetEvent execute = new ManualResetEvent(false);
-//    public final Semaphore execute = new Semaphore(1);
+    public ManualResetEvent execute = new ManualResetEvent(false);
+    // public final Semaphore execute = new Semaphore(1);
     WindowLayout _handler;
     boolean _stoped;
 
@@ -17,18 +19,28 @@ public class ActionManager {
         _handler = wnd;
     }
 
+    private Lock managerLock = new ReentrantLock();
+
     public void startManager() {
         _stoped = false;
         while (!_stoped) {
             try {
-//                execute.acquire();
-//                wait();
                 execute.waitOne();
             } catch (InterruptedException e) {
             }
+            managerLock.lock();
             executeActions();
             execute.reset();
-//            execute.release();
+            managerLock.unlock();
+        }
+    }
+
+    public void addTask(EventTask task) {
+        managerLock.lock();
+        try {
+            stackEvents.add(task);
+        } finally {
+            managerLock.unlock();
         }
     }
 

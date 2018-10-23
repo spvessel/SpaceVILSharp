@@ -26,12 +26,10 @@ namespace SpaceVIL
                 && ypos <= GetHandler().GetHeight())
             {
                 IsMouseHover = true;
-                _mouse_ptr.SetPosition(xpos, ypos);
             }
             else
             {
                 IsMouseHover = false;
-                _mouse_ptr.Clear();
             }
             return IsMouseHover;
         }
