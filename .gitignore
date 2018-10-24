@@ -181,3 +181,9 @@ Java/SpaceVIL/spacevil/build/distributions/spacevil-0.3-alpha/bin/spacevil.bat
 Java/SpaceVIL/spacevil/build/tmp/fatJar/MANIFEST.MF
 Java/SpaceVIL/spacevil/META-INF/MANIFEST.MF
 Java/SpaceVIL/spacevil/src/main/java/META-INF/MANIFEST.MF
+Java/SpaceVIL/spacevil/build/resources/main/shaders/fs_blur.glsl
+Java/SpaceVIL/spacevil/build/resources/main/shaders/fs_char.glsl
+Java/SpaceVIL/spacevil/build/resources/main/shaders/fs_fxaa.glsl
+Java/SpaceVIL/spacevil/build/resources/main/shaders/vs_blur.glsl
+Java/SpaceVIL/spacevil/build/resources/main/shaders/vs_char.glsl
+Java/SpaceVIL/spacevil/build/resources/main/shaders/vs_fxaa.glsl

@@ -55,23 +55,5 @@ public class LabelTest extends ActiveWindow {
         frame.setWidthPolicy(SizePolicy.EXPAND);
         frame.setHeightPolicy(SizePolicy.EXPAND);
         layout.addItem(frame);
-
-
-        List<float[]> tmp = GraphicsMathService.getRoundSquareBorder(200, 200, 50, 10, 10);
-        /*
-        for (int i = 0; i < tmp.size() / 3; i++) {
-            System.out.println(tmp.get(i * 3)[0] + " " + tmp.get(i * 3)[1]);
-            System.out.println(tmp.get(i * 3 + 1)[0] + " " + tmp.get(i * 3 + 1)[1]);
-            System.out.println(tmp.get(i * 3 + 2)[0] + " " + tmp.get(i * 3 + 2)[1]);
-            System.out.println();
-        }
-        */
-        CustomShape cs = new CustomShape(tmp);
-        cs.setBackground(new Color(10, 255, 10));
-        cs.setSize(200, 200);
-        cs.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        //cs.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        frame.addItem(cs);
-
     }
 }
