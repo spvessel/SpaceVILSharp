@@ -19,6 +19,7 @@ namespace SpaceVIL
         internal ManualResetEventSlim Execute = new ManualResetEventSlim(false);
         WindowLayout _handler;
         bool _stoped;
+        private Object managerLock = new Object();
 
         public ActionManager(WindowLayout wnd)
         {
@@ -30,9 +31,29 @@ namespace SpaceVIL
             while (!_stoped)
             {
                 Execute.Wait();
-                ExecuteActions();
-                Execute.Reset();
-                //_handler.Execute.Set();
+                Monitor.Enter(managerLock);
+                try
+                {
+                    ExecuteActions();
+                }
+                finally
+                {
+                    Execute.Reset();
+                    Monitor.Exit(managerLock);
+                }
+            }
+        }
+
+        public void AddTask(EventTask task)
+        {
+            Monitor.Enter(managerLock);
+            try
+            {
+                StackEvents.Enqueue(task);
+            }
+            finally
+            {
+                Monitor.Exit(managerLock);
             }
         }
 

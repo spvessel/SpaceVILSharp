@@ -773,6 +773,7 @@ public class DrawEngine {
             // glfwWaitEvents();
             glfwWaitEventsTimeout(_interval);
             update();
+            _handler.setContext();
             // System.out.println("loop");
         }
         _primitive.deleteShader();

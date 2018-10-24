@@ -46,7 +46,11 @@ namespace SpaceVIL
         internal bool Visible;
         internal bool AlwaysOnTop;
         internal bool Maximized;
-        internal Pointer WPosition = new Pointer();
+        private Pointer WPosition = new Pointer();
+        public Pointer GetPointer()
+        {
+            return WPosition;
+        }
         ///////////////////////////////////////////////
 
         private WindowLayout _w_layout;
@@ -65,8 +69,8 @@ namespace SpaceVIL
         internal GLWHandler(WindowLayout handler)
         {
             _w_layout = handler;
-            WPosition.X = 0;
-            WPosition.Y = 0;
+            WPosition.SetX(0);
+            WPosition.SetY(0);
         }
 
         internal void InitGlfw()
@@ -89,19 +93,25 @@ namespace SpaceVIL
         }
         internal void CreateWindow()
         {
-            // Glfw.WindowHint(Glfw.Hint.OpenglDebugContext, true);
+            //important!!! may be the best combination of WINDOW HINTS!!!
+            Glfw.DefaultWindowHints();
+            Glfw.WindowHint(Glfw.Hint.OpenglProfile, Glfw.OpenGLProfile.Compat);
             Glfw.WindowHint(Glfw.Hint.Samples, 8);
-            Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
-            Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 3);
+            Glfw.WindowHint(Glfw.Hint.GreenBits, 8);
+            Glfw.WindowHint(Glfw.Hint.BlueBits, 8);
+            Glfw.WindowHint(Glfw.Hint.AlphaBits, 8);
+            Glfw.WindowHint(Glfw.Hint.DepthBits, 0);
+            Glfw.WindowHint(Glfw.Hint.StencilBits, 8);
+
+            Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 4);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
             Glfw.WindowHint(Glfw.Hint.Resizable, Resizeble);
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window
             Glfw.WindowHint(Glfw.Hint.Focused, Focused);
             Glfw.WindowHint(Glfw.Hint.Floating, AlwaysOnTop);
             Glfw.WindowHint(Glfw.Hint.Maximized, Maximized);
-            Glfw.WindowHint(Glfw.Hint.Visible, Visible);
-            //Glfw.WindowHint(Glfw.Hint.DepthBits, 16);
-            // Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, true);
+            Glfw.WindowHint(Glfw.Hint.Visible, false);
+
             _window = Glfw.CreateWindow(_w_layout.GetWidth(), _w_layout.GetHeight(), _w_layout.GetWindowTitle());
 
             if (!_window)
@@ -113,23 +123,28 @@ namespace SpaceVIL
 
             if (AppearInCenter)
             {
-                WPosition.X = (Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - _w_layout.GetWidth()) / 2;
-                WPosition.Y = (Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - _w_layout.GetHeight()) / 2;
+                WPosition.SetX((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - _w_layout.GetWidth()) / 2);
+                WPosition.SetY((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - _w_layout.GetHeight()) / 2);
+                _w_layout.SetX(WPosition.GetX());
+                _w_layout.SetY(WPosition.GetY());
             }
             else
             {
-                WPosition.X = _w_layout.GetX();
-                WPosition.Y = _w_layout.GetY();
+                WPosition.SetX(_w_layout.GetX());
+                WPosition.SetY(_w_layout.GetY());
             }
             Glfw.MakeContextCurrent(_window);
             Glfw.SetWindowSizeLimits(_window, _w_layout.GetMinWidth(), _w_layout.GetMinHeight(), _w_layout.GetMaxWidth(), _w_layout.GetMaxHeight());
+            Glfw.SetWindowPos(_window, WPosition.GetX(), WPosition.GetY());
             // Console.WriteLine(
             //     _w_layout.GetMinWidth() + " " + 
             //     _w_layout.GetMinHeight() + " " + 
             //     _w_layout.GetMaxWidth() + " " + 
             //     _w_layout.GetMaxHeight() + " "
             //     );
-            LogService.Log().LogWindow(GetLayout(), LogProps.AllGeometry);
+            // LogService.Log().LogWindow(GetLayout(), LogProps.AllGeometry);
+            if (Visible)
+                Glfw.ShowWindow(_window);
         }
 
         internal void SwitchContext()
@@ -137,7 +152,7 @@ namespace SpaceVIL
             Glfw.MakeContextCurrent(Glfw.Window.None);
             Glfw.MakeContextCurrent(_window);
         }
-        
+
         internal void ClearEventsCallbacks()
         {
             MouseMoveCallback = null;
@@ -176,27 +191,27 @@ namespace SpaceVIL
                 default:
                     Glfw.SetCursor(_window, _arrow);
                     break;
-                // case Glfw.CursorType.Arrow:
-                //     Glfw.SetCursor(_window, CommonService._arrow);
-                //     break;
-                // case Glfw.CursorType.Beam:
-                //     Glfw.SetCursor(_window, CommonService._input);
-                //     break;
-                // case Glfw.CursorType.Crosshair:
-                //     Glfw.SetCursor(_window, CommonService._resize_all);
-                //     break;
-                // case Glfw.CursorType.Hand:
-                //     Glfw.SetCursor(_window, CommonService._hand);
-                //     break;
-                // case Glfw.CursorType.ResizeX:
-                //     Glfw.SetCursor(_window, CommonService._resize_h);
-                //     break;
-                // case Glfw.CursorType.ResizeY:
-                //     Glfw.SetCursor(_window, CommonService._resize_v);
-                //     break;
-                // default:
-                //     Glfw.SetCursor(_window, CommonService._arrow);
-                //     break;
+                    // case Glfw.CursorType.Arrow:
+                    //     Glfw.SetCursor(_window, CommonService._arrow);
+                    //     break;
+                    // case Glfw.CursorType.Beam:
+                    //     Glfw.SetCursor(_window, CommonService._input);
+                    //     break;
+                    // case Glfw.CursorType.Crosshair:
+                    //     Glfw.SetCursor(_window, CommonService._resize_all);
+                    //     break;
+                    // case Glfw.CursorType.Hand:
+                    //     Glfw.SetCursor(_window, CommonService._hand);
+                    //     break;
+                    // case Glfw.CursorType.ResizeX:
+                    //     Glfw.SetCursor(_window, CommonService._resize_h);
+                    //     break;
+                    // case Glfw.CursorType.ResizeY:
+                    //     Glfw.SetCursor(_window, CommonService._resize_v);
+                    //     break;
+                    // default:
+                    //     Glfw.SetCursor(_window, CommonService._arrow);
+                    //     break;
             }
         }
 

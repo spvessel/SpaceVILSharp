@@ -132,13 +132,10 @@ namespace SpaceVIL
         public virtual void OnTrackClick(object sender, MouseArgs args)
         {
             //Compute CurrentValue
-            if (_mouse_ptr.IsSet())
-            {
-                SetCurrentValue(
-                    (float)(_mouse_ptr.Y - GetY() - Handler.GetHeight() / 2)
+            SetCurrentValue(
+                    (float)(args.Position.GetY() - GetY() - Handler.GetHeight() / 2)
                     * (_max_value - _min_value)
                     / ((float)GetHeight() - Handler.GetHeight()));
-            }
         }
 
         public override void SetY(int _y)

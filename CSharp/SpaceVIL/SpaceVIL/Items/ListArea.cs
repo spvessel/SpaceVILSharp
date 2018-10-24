@@ -99,7 +99,7 @@ namespace SpaceVIL
 
                 int y = GetItems().ElementAt(i).GetY();
                 int h = GetItems().ElementAt(i).GetHeight();
-                if (_mouse_ptr.Y > y && _mouse_ptr.Y < (y + h))
+                if (args.Position.GetY() > y && args.Position.GetY() < (y + h))
                 {
                     SetSelection(i - 1);
                     break;

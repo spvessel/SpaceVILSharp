@@ -20,6 +20,8 @@ namespace SpaceVIL
         static int count = 0;
         private int _pressed_x = 0;
         private int _pressed_y = 0;
+        private int _x_global = 0;
+        private int _y_global = 0;
         private int _width = 0;
         private int _height = 0;
         private int _diff_x = 0;
@@ -40,14 +42,16 @@ namespace SpaceVIL
             if (IsLocked)
                 return;
 
-            _pressed_x = args.Position.X;
-            _pressed_y = args.Position.Y;
-
-            _diff_x = args.Position.X - GetX();
-            _diff_y = args.Position.Y - GetY();
+            _x_global = GetX();
+            _y_global = GetY();
+            _pressed_x = args.Position.GetX();
+            _pressed_y = args.Position.GetY();
+            _diff_x = args.Position.GetX() - GetX();
+            _diff_y = args.Position.GetY() - GetY();
+            _width = GetWidth();
+            _height = GetHeight();
 
             GetSides(_diff_x, _diff_y);
-            // Console.WriteLine(GetX() + " " + GetY() + " " + GetWidth() + " " + GetHeight() + " " + _sides);
 
             if (_sides == 0)
             {
@@ -55,15 +59,12 @@ namespace SpaceVIL
             }
             else
             {
-                _width = GetWidth();
-                _height = GetHeight();
                 _is_moved = false;
             }
         }
 
         protected virtual void OnDragging(object sender, MouseArgs args)
         {
-            // Console.WriteLine(GetX() + " " + GetY() + " " + GetWidth() + " " + GetHeight());
             if (IsLocked)
                 return;
 
@@ -75,68 +76,64 @@ namespace SpaceVIL
                 case true:
                     if (IsHFloating)
                     {
-                        offset_x = args.Position.X - _diff_x;
+                        offset_x = args.Position.GetX() - _diff_x;
                         SetX(offset_x);
                     }
                     if (IsVFloating)
                     {
-                        offset_y = args.Position.Y - _diff_y;
+                        offset_y = args.Position.GetY() - _diff_y;
                         SetY(offset_y);
                     }
-                    PositionChanged?.Invoke();
                     SetConfines();
+                    PositionChanged?.Invoke();
                     break;
 
                 case false:
                     if (!IsResizable)
                         break;
 
-                    int x = GetX();
-                    int y = GetY();
+                    int x_handler = GetX();
+                    int y_handler = GetY();
+                    int x_release = args.Position.GetX();
+                    int y_release = args.Position.GetY();
                     int w = GetWidth();
                     int h = GetHeight();
 
                     if (_sides.HasFlag(ItemAlignment.Left))
                     {
-                        if (!(GetMinWidth() == GetWidth() && (args.Position.X - _pressed_x) >= 0))
+                        if (!(GetMinWidth() == GetWidth() && (args.Position.GetX() - _pressed_x) >= 0))
                         {
-                            x += (args.Position.X - _pressed_x);
-                            w -= (args.Position.X - _pressed_x);
+                            int diff = _x_global - x_release;
+                            x_handler = _x_global - diff;
+                            w = _width + diff;
                         }
-                        _pressed_x = args.Position.X;
                     }
                     if (_sides.HasFlag(ItemAlignment.Right))
                     {
-                        if (!(args.Position.X < GetMinWidth() && GetWidth() == GetMinWidth()))
-                        {
-                            w += (args.Position.X - _pressed_x);
-                        }
-                        _pressed_x = args.Position.X;
+                        if (!(args.Position.GetX() < GetMinWidth() && GetWidth() == GetMinWidth()))
+                            w = x_release - x_handler;
                     }
                     if (_sides.HasFlag(ItemAlignment.Top))
                     {
-                        if (!(GetMinHeight() == GetHeight() && (args.Position.Y - _pressed_y) >= 0))
+                        if (!(GetMinHeight() == GetHeight() && (args.Position.GetY() - _pressed_y) >= 0))
                         {
-                            y += (args.Position.Y - _pressed_y);
-                            h -= (args.Position.Y - _pressed_y);
+                            int diff = _y_global - y_release;
+                            y_handler = _y_global - diff;
+                            h = _height + diff;
                         }
-                        _pressed_y = args.Position.Y;
                     }
                     if (_sides.HasFlag(ItemAlignment.Bottom))
                     {
-                        if (!(args.Position.Y < GetMinHeight() && GetHeight() == GetMinHeight()))
-                        {
-                            h += (args.Position.Y - _pressed_y);
-                        }
-                        _pressed_y = args.Position.Y;
+                        if (!(args.Position.GetY() < GetMinHeight() && GetHeight() == GetMinHeight()))
+                            h = y_release - y_handler;
                     }
 
                     if (_sides != 0)
                     {
                         if (_sides.HasFlag(ItemAlignment.Left) || _sides.HasFlag(ItemAlignment.Top))
                         {
-                            SetX(x);
-                            SetY(y);
+                            SetX(x_handler);
+                            SetY(y_handler);
                             PositionChanged?.Invoke();
                         }
                         SetWidth(w);
@@ -158,7 +155,7 @@ namespace SpaceVIL
             base.SetHeight(height);
             SizeChanged?.Invoke();
         }
-        
+
         // public override void SetX(int _x)
         // {
         //     base.SetX(_x);

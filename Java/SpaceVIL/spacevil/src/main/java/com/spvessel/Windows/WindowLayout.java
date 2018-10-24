@@ -393,9 +393,11 @@ public class WindowLayout {
             } catch (InterruptedException e) {
                 // e.printStackTrace();
             }
+            // engine.init();
         }
         else {
             thread_engine.start();
+            // engine.init();
         }
     }
 
@@ -466,7 +468,8 @@ public class WindowLayout {
     }
 
     public void setEventTask(EventTask task) {
-        manager.stackEvents.add(task);
+        // manager.stackEvents.add(task);
+        manager.addTask(task);
     }
 
     volatile Boolean set = true;

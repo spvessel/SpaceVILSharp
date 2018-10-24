@@ -12,7 +12,7 @@ namespace SpaceVIL
     {
         private static LogService _instance;
         private static object logLocker = new object();
-        static bool isLogging = true;
+        static public bool IsLogging = true;
         public static string logPath = @".\LogNote.txt";
         private static StreamWriter fstream;
 
@@ -41,7 +41,7 @@ namespace SpaceVIL
 
         public void LogText(string text)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
             StringBuilder outText = new StringBuilder(GetTime());
             outText.AppendLine(text);
             AddText(outText.ToString());
@@ -49,7 +49,7 @@ namespace SpaceVIL
 
         public void LogOne<T>(T par, string describe = "", bool flat = true)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
             //outText.AppendLine();
@@ -61,7 +61,7 @@ namespace SpaceVIL
 
         public void LogList<T>(List<T> list, string describe = "List", bool flat = true)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
             //outText.AppendLine();
@@ -85,7 +85,7 @@ namespace SpaceVIL
 
         public void LogArr<T>(T[] list, string describe = "Array", bool flat = true)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
             //outText.AppendLine();
@@ -109,7 +109,7 @@ namespace SpaceVIL
 
         public void LogTwoDimArr<T>(T[,] list, string describe = "TwoDim Array")
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
             //outText.AppendLine();
@@ -129,7 +129,7 @@ namespace SpaceVIL
 
         public void LogListOfArr<T>(List<T[]> list, string describe = "List of arrays")
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
             //outText.AppendLine();
@@ -151,7 +151,7 @@ namespace SpaceVIL
 
         public void LogException(Exception ex, BaseItem item)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
             //outText.AppendLine();
@@ -164,7 +164,7 @@ namespace SpaceVIL
 
         public void LogBaseItem(BaseItem item, LogProps props)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
             //outText.AppendLine();
@@ -262,7 +262,7 @@ namespace SpaceVIL
 
         public void LogVisualItem(VisualItem item, LogProps props)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
 
             LogBaseItem(item, props);
             StringBuilder outText = new StringBuilder();
@@ -327,7 +327,7 @@ namespace SpaceVIL
 
         public void LogEvent(IItem sender, string describe = "EventCommon from", LogProps props = LogProps.None)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
             StringBuilder outText = new StringBuilder(GetTime());
             //outText.AppendLine();
             outText.AppendLine(describe + " " + sender.GetItemName());
@@ -339,13 +339,13 @@ namespace SpaceVIL
 
         public void LogEvent(IItem sender, MouseArgs args, string describe = "EventMouse from", LogProps props = LogProps.None)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
             LogEvent(sender, describe, props);
 
             StringBuilder outText = new StringBuilder();
             outText.AppendLine("Button: " + args.Button + ", State: " + args.State +
-                ", Mods: " + args.Mods + ", Pos: (" + args.Position.X + ", " +
-                args.Position.Y + ")");
+                ", Mods: " + args.Mods + ", Pos: (" + args.Position.GetX() + ", " +
+                args.Position.GetY() + ")");
 
             outText.AppendLine();
             AddText(outText.ToString());
@@ -353,7 +353,7 @@ namespace SpaceVIL
 
         public void LogEvent(IItem sender, KeyArgs args, string describe = "EventKey from", LogProps props = LogProps.None)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
             LogEvent(sender, describe, props);
 
             StringBuilder outText = new StringBuilder();
@@ -366,7 +366,7 @@ namespace SpaceVIL
 
         public void LogEvent(IItem sender, TextInputArgs args, string describe = "EventTextInput from", LogProps props = LogProps.None)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
             LogEvent(sender, describe, props);
 
             StringBuilder outText = new StringBuilder();
@@ -378,7 +378,7 @@ namespace SpaceVIL
 
         public void LogWindow(WindowLayout window, LogProps props)
         {
-            if (!isLogging) return;
+            if (!IsLogging) return;
 
             StringBuilder outText = new StringBuilder(GetTime());
             //outText.AppendLine();

@@ -13,10 +13,31 @@ namespace SpaceVIL
         {
             return _is_set;
         }
-        public int X = -1;
-        public int Y = -1;
-        public int PrevX = -1;
-        public int PrevY = -1;
+        private int X = -1;
+
+        public int GetX()
+        {
+            return X;
+        }
+
+        public void SetX(int x)
+        {
+            X = x;
+        }
+
+        private int Y = -1;
+
+        public int GetY()
+        {
+            return Y;
+        }
+
+        public void SetY(int y)
+        {
+            Y = y;
+        }
+        private int PrevX = -1;
+        private int PrevY = -1;
         public void SetPosition(float x, float y)
         {
             if (PrevX == -1 || PrevY == -1)

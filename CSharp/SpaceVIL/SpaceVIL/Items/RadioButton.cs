@@ -18,7 +18,7 @@ namespace SpaceVIL
         }
 
         static int count = 0;
-        private TextLine _text_object;
+        private Label _text_object;
         private CustomIndicator _indicator;
         public Indicator GetIndicator()
         {
@@ -34,7 +34,7 @@ namespace SpaceVIL
             count++;
 
             //text
-            _text_object = new TextLine();
+            _text_object = new Label();
             _text_object.SetItemName(GetItemName() + "_text_object");
             _text_object.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             _text_object.SetAlignment(ItemAlignment.VCenter);
@@ -174,11 +174,11 @@ namespace SpaceVIL
         }
         public void SetText(String text)
         {
-            _text_object.SetItemText(text);
+            _text_object.SetText(text);
         }
         public String GetText()
         {
-            return _text_object.GetItemText();
+            return _text_object.GetText();
         }
         public void SetForeground(Color color)
         {
@@ -211,9 +211,6 @@ namespace SpaceVIL
             if (style == null)
                 return;
             base.SetStyle(style);
-            SetForeground(style.Foreground);
-            SetFont(style.Font);
-
             Style inner_style = style.GetInnerStyle("indicator");
             if (inner_style != null)
             {
@@ -224,6 +221,8 @@ namespace SpaceVIL
             {
                 _text_object.SetStyle(inner_style);
             }
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 
 namespace SpaceVIL
 {
@@ -19,26 +20,44 @@ namespace SpaceVIL
 
         }
 
-        internal static List<ModifyLetter> GetPixMap(string text, Font font) // PixMapData
+        internal static List<ModifyLetter> GetPixMap(string text, Font font)
         {
             //return FontReview.getTextArrays(text, font);
+
+            // Font biggerFont = font;
+            // float cof = 1f;
+
+            // if (font.Size < 20) {
+            //     biggerFont = new Font(font.FontFamily, 50, font.Style);
+            //     cof = font.Size * 1f / 50f;
+            // }
+
             if (!fonts.ContainsKey(font))
             {
                 fonts.Add(font, new Alphabet(font));
             }
-            return fonts[font].MakeTextNew(text);// MakeText(text);
+            return fonts[font].MakeTextNew(text); //, cof);
         }
 
         internal static int[] GetSpacerDims(Font font)
         {
+            if (font == null)
+                return new int[] { 0, 0, 0 };
             //return FontReview.getDims();
+
+            // Font biggerFont = font;
+            // float cof = 1f;
+            // if (font.Size < 20) {
+            //     biggerFont = new Font(font.FontFamily, 50, font.Style);
+            //     cof = font.Size * 1f / 50f;
+            // }
 
             if (!fonts.ContainsKey(font))
             {
                 fonts.Add(font, new Alphabet(font));
             }
             Alphabet a = fonts[font];
-            return new int[] { a.lineSpacer, a.minY, a.maxY };
+            return new int[] { a.lineSpacer, a.alphMinY, a.alphHeight }; //(int)(a.lineSpacer * cof), (int)(a.alphMinY * cof), (int)(a.alphHeight * cof), a.alphHeight, a.alphMinY };
         }
 
         internal static bool SavePreloadFont(Font font)
@@ -58,9 +77,9 @@ namespace SpaceVIL
         {
             internal Font font;
             internal Dictionary<char, Letter> letters;
-            //internal Dictionary<char, ModifyLetter> newLetters;
-            internal int minY = Int32.MaxValue;
-            internal int maxY = Int32.MinValue;
+            internal int alphMinY = Int32.MaxValue;
+            internal int alphMaxY = Int32.MinValue;
+            internal int alphHeight = 0;
             internal int lineSpacer;
             internal Letter bugLetter;
 
@@ -68,7 +87,6 @@ namespace SpaceVIL
             {
                 this.font = font;
                 letters = new Dictionary<char, Letter>();
-                //newLetters = new Dictionary<char, ModifyLetter>();
                 //Console.WriteLine("Make " + font.FontFamily + " " + font.Size);
                 MakeBugLetter();
                 FillABC();
@@ -78,22 +96,17 @@ namespace SpaceVIL
             private void FillSpecLetters()
             {
                 char specLet = " "[0];
-                Letter letter = new Letter(" ", null);
+                Letter letter = new Letter(" ");
                 letters.Add(specLet, letter);
                 letter.width = letters["-"[0]].width;
                 letter.height = 0;
                 lineSpacer = (int)letter.width;
 
-                //newLetters.Add(specLet, new ModifyLetter(letter));
-
                 specLet = "\t"[0];
-                Letter letter1 = new Letter("\t", null);
+                Letter letter1 = new Letter("\t");
                 letters.Add(specLet, letter1);
                 letter1.width = letter.width * 4;
                 letter1.height = 0;
-
-                //newLetters.Add(specLet, new ModifyLetter(letter1));
-
                 /*
                 //!Может стоит вернуть это, если новые модификации текста будут работать нормально
                 specLet = "\r"[0];
@@ -114,16 +127,15 @@ namespace SpaceVIL
                 //Console.WriteLine(font.Name + " " + font.Size + " Add letter " + c);
                 Letter letter = MakeLetter(char.ToString(c));
                 letters.Add(c, letter);
-                minY = (minY > letter.minY) ? letter.minY : minY;
-                maxY = (maxY < letter.minY + letter.height - 1) ? letter.minY + letter.height - 1 : maxY;
-
-                //newLetters.Add(c, new ModifyLetter(letter));
+                alphMinY = (alphMinY > letter.minY) ? letter.minY : alphMinY;
+                alphMaxY = (alphMaxY < letter.minY + letter.height - 1) ? letter.minY + letter.height - 1 : alphMaxY;
+                alphHeight = Math.Abs(alphMaxY - alphMinY + 1);
             }
             /*
             internal PixMapData MakeText(String text)
             {
                 double err = 0.15; //переехало из буквы
-                int x0 = 0; //double
+                double x0 = 0;
 
                 List<float> pix = new List<float>();
                 List<float> col = new List<float>();
@@ -207,19 +219,20 @@ namespace SpaceVIL
 
                     x0 += currLet.width;
                     prevLet = currLet;
-                    letEndPos.Add(x0);
+                    letEndPos.Add((int)x0);
                 }
 
                 return new PixMapData(pix, col, letEndPos);// (float)x0);
             }
             */
-            internal List<ModifyLetter> MakeTextNew(String text)
+
+            internal List<ModifyLetter> MakeTextNew(String text) //, float cof)
             {
                 //Console.WriteLine(text);
                 List<ModifyLetter> letList = new List<ModifyLetter>();
 
 
-                double err = 0.15; //переехало из буквы
+                double err = 0.25; //переехало из буквы
                 int x0 = 0;
 
                 Letter currLet;
@@ -236,116 +249,65 @@ namespace SpaceVIL
                     }
                     else
                     {
-                        if (prevLet != null)
-                        {
-                            int ly0 = prevLet.minY;
-                            int ly1 = ly0 + prevLet.height - 1;
-                            int ry0 = currLet.minY;
-                            int ry1 = ry0 + currLet.height - 1;
+                        
+                        // if (prevLet != null)
+                        // {
+                        //     int ly0 = prevLet.minY;
+                        //     int ly1 = ly0 + prevLet.height - 1;
+                        //     int ry0 = currLet.minY;
+                        //     int ry1 = ry0 + currLet.height - 1;
 
-                            bool b1 = false, b2 = false;
-                            for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
-                            {
-                                //if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
-                                if (prevLet.rightArr[1, i - ly0] > err && currLet.leftArr[0, i - ry0] > err)
-                                {
-                                    b1 = true;
-                                    break;
-                                }
-                            }
+                        //     bool b1 = false, b2 = false;
+                        //     for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
+                        //     {
+                        //         //if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
+                        //         if (prevLet.rightArr[1, i - ly0] > err && currLet.leftArr[0, i - ry0] > err)
+                        //         {
+                        //             b1 = true;
+                        //             break;
+                        //         }
+                        //     }
 
-                            if (b1) x0++;
-                            else
-                            {
-                                for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
-                                {
-                                    //if (prevLet.alphas[prevLet.width - 2, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
-                                    if (prevLet.rightArr[0, i - ly0] > err && currLet.leftArr[0, i - ry0] > err)
-                                    {
-                                        b2 = true;
-                                        break;
-                                    }
-                                    //if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[1, i - ry0] > err)
-                                    if (prevLet.rightArr[1, i - ly0] > err && currLet.leftArr[1, i - ry0] > err)
-                                    {
-                                        b2 = true;
-                                        break;
-                                    }
-                                }
+                        //     if (b1) x0++;
+                        //     else
+                        //     {
+                        //         for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
+                        //         {
+                        //             //if (prevLet.alphas[prevLet.width - 2, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
+                        //             if (prevLet.rightArr[0, i - ly0] > err && currLet.leftArr[0, i - ry0] > err)
+                        //             {
+                        //                 b2 = true;
+                        //                 break;
+                        //             }
+                        //             //if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[1, i - ry0] > err)
+                        //             if (prevLet.rightArr[1, i - ly0] > err && currLet.leftArr[1, i - ry0] > err)
+                        //             {
+                        //                 b2 = true;
+                        //                 break;
+                        //             }
+                        //         }
 
-                                if (!b2) x0--;
-                            }
-                        }
-
-
-                        //col.AddRange(currLet.GetAlphas());
-                        //pix.AddRange(AddShift((float)x0, currLet.GetCoords()));
-
-                        //Вместо AddShift
-                        /*
-                        int xBeg = currLet.minX;
-                        int yBeg = currLet.minY;
-                        for (int ix = 0; ix < currLet.width; ix++)
-                        {
-                            for (int iy = 0; iy < currLet.height; iy++)
-                            {
-                                if (currLet.alphas[ix, iy] > 0)
-                                {
-                                    col.Add((float)currLet.alphas[ix, iy]);
-                                    pix.Add(ix + xBeg + (float)x0);
-                                    pix.Add(iy + yBeg);
-                                    pix.Add(0);
-                                }
-                            }
-                        }
-                        */
-
+                        //         if (!b2) x0--;
+                        //     }
+                        // }
+                         
+                        //  x0++;
+                         x0++;
                     }
 
-                    letList.Add(new ModifyLetter(currLet, x0));
+                    letList.Add(new ModifyLetter(currLet, x0)); //, cof));
 
                     x0 += currLet.width;
                     prevLet = currLet;
                     //letEndPos.Add(x0);
                 }
 
-
-                /*
-                int x0 = 0;
-
-                Letter currLet;
-                //ModifyLetter prevLet = null;
-                foreach (char c in text.ToCharArray())
-                {
-                    if (!letters.ContainsKey(c)) AddLetter(c);
-
-                    currLet = letters[c];
-
-                    if (currLet.isSpec)
-                    {
-                        x0 += 2; // UpdateSpecX0(currLet, x0);
-                    }
-
-                    ModifyLetter ml = new ModifyLetter(currLet, x0);
-                    //newLetters[c].xShift = x0;
-                    letList.Add(ml); // (newLetters[c]);
-
-                    x0 += ml.xEnd + ml.xBeg;
-                    //prevLet = currLet;
-                    //letEndPos.Add((int)x0);
-
-                }
-                */
-
-
-
-
                 return letList;
             }
 
             private void FillABC()
             {
-                String str = "a"; // bcdefghijklmnopqrstuvwxyz";
+                String str = "aj"; // bcdefghijklmnopqrstuvwxyz";
                 str += str.ToUpper();
                 str += "-"; //".,?!1234567890-+=_"; //
 
@@ -370,25 +332,41 @@ namespace SpaceVIL
 
             private Letter MakeLetter(String let)
             {
-                // Console.WriteLine(font);
-                // font = DefaultsService.GetDefaultFont();
-                //LogService.Log().LogText("Letter " + let);
-                GraphicsPath shape = new GraphicsPath();
-                StringFormat format = StringFormat.GenericDefault;
-                //float emSize = font.Height * font.FontFamily.GetCellAscent(font.Style) / font.FontFamily.GetEmHeight(font.Style);
-                float emSize = font.Size;
-                shape.AddString(let, font.FontFamily, (int)font.Style, emSize, new PointF(0f, 0f), format);
-                
+                // GraphicsPath shape = new GraphicsPath();
+                // StringFormat format = StringFormat.GenericTypographic;
+                // float emSize = font.Height * font.FontFamily.GetCellAscent(font.Style) / font.FontFamily.GetEmHeight(font.Style);
+                // // float emSize = font.Size;
+                // shape.AddString(let, font.FontFamily, (int)font.Style, emSize, new PointF(0f, 0f), format);
+                // try
+                // {
+                //     return new Letter(let, shape);
+                // }
+                // catch (Exception)
+                // {
+                //     Console.WriteLine("Bug letter exception");
+                //     return bugLetter;
+                // }
+
+
+                Bitmap bm = new Bitmap((int)(font.Size * 2), (int)(font.Size * 2));
+                Graphics g = Graphics.FromImage(bm);
+                g.SmoothingMode = SmoothingMode.HighQuality;
+                // g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+                // g.PixelOffsetMode = PixelOffsetMode.HighQuality; // or PixelOffsetMode.Half
+                g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                g.DrawString(let, font, Brushes.White, new PointF(0f, 0f));
+                g.Dispose();
+
                 try
                 {
-                    return new Letter(let, shape);
+                    return new Letter(let, bm);
                 }
                 catch (Exception)
                 {
-                    //Console.WriteLine(let.Equals("\r"));
                     Console.WriteLine("Bug letter exception");
                     return bugLetter;
                 }
+
             }
             /*
             private List<float> AddShift(float x0, List<float> coord)
@@ -413,45 +391,46 @@ namespace SpaceVIL
 
             private void MakeBugLetter()
             {
-                bugLetter = new Letter("bug", null);
+                bugLetter = new Letter("bug");
                 bugLetter.width = (int)(font.Size / 3f);// lineSpacer;
                 bugLetter.height = (int)(font.Size * 2 / 3f);// Math.Abs(maxY - minY + 1);
                 bugLetter.minY = (int)(font.Size / 3f);// minY;
                 bugLetter.isSpec = false;
-                //double[,] arr = new double[bugLetter.width, bugLetter.height];
-                List<float> col = new List<float>();
-                List<float> pix = new List<float>();
+                float[,] arr = new float[bugLetter.width, bugLetter.height];
+                //List<float> col = new List<float>();
+                //List<float> pix = new List<float>();
                 for (int i = 0; i < bugLetter.width; i++)
                 {
-                    //arr[i, 0] = 1;
-                    col.Add(1);
-                    pix.Add(bugLetter.minX + i);
-                    pix.Add(bugLetter.minY);
-                    pix.Add(0f);
-                    //arr[i, bugLetter.height - 1] = 1;
-                    col.Add(1);
-                    pix.Add(bugLetter.minX + i);
-                    pix.Add(bugLetter.minY + bugLetter.height - 1);
-                    pix.Add(0f);
+                    arr[i, 0] = 1;
+                    // col.Add(1);
+                    // pix.Add(bugLetter.minX + i);
+                    // pix.Add(bugLetter.minY);
+                    // pix.Add(0f);
+                    arr[i, bugLetter.height - 1] = 1;
+                    // col.Add(1);
+                    // pix.Add(bugLetter.minX + i);
+                    // pix.Add(bugLetter.minY + bugLetter.height - 1);
+                    // pix.Add(0f);
                 }
                 for (int i = 1; i < bugLetter.height - 1; i++)
                 {
-                    //arr[0, i] = 1;
-                    col.Add(1);
-                    pix.Add(bugLetter.minX);
-                    pix.Add(bugLetter.minY + i);
-                    pix.Add(0f);
-                    //arr[bugLetter.width - 1, i] = 1;
-                    col.Add(1);
-                    pix.Add(bugLetter.minX + bugLetter.width - 1);
-                    pix.Add(bugLetter.minY + i);
-                    pix.Add(0f);
-
+                    arr[0, i] = 1;
+                    // col.Add(1);
+                    // pix.Add(bugLetter.minX);
+                    // pix.Add(bugLetter.minY + i);
+                    // pix.Add(0f);
+                    arr[bugLetter.width - 1, i] = 1;
+                    // col.Add(1);
+                    // pix.Add(bugLetter.minX + bugLetter.width - 1);
+                    // pix.Add(bugLetter.minY + i);
+                    // pix.Add(0f);
                 }
 
                 //bugLetter.alphas = arr;
-                bugLetter.col.AddRange(col);
-                bugLetter.pix.AddRange(pix);
+                //bugLetter.col.AddRange(col);
+                //bugLetter.pix.AddRange(pix);
+
+                bugLetter.TwoDimToOne(arr);
             }
         }
 
@@ -466,13 +445,21 @@ namespace SpaceVIL
             internal bool isSpec = false;
             internal float[,] leftArr;
             internal float[,] rightArr;
-            internal List<float> col;
-            internal List<float> pix;
+            //internal List<float> col;
+            //internal List<float> pix;
+            internal byte[] arr;
+
+            public Letter(String name)
+            {
+                //for bug letter
+                this.name = name;
+                isSpec = true;
+            }
 
             public Letter(String name, GraphicsPath shape)
             {
-                col = new List<float>();
-                pix = new List<float>();
+                //col = new List<float>();
+                //pix = new List<float>();
                 //Console.WriteLine("Creating letter " + name);
                 this.name = name;
                 if (shape != null)
@@ -480,6 +467,33 @@ namespace SpaceVIL
                 else isSpec = true;
                 //Console.Write(name + " ");
                 //LogService.Log().LogArr(new int[] {minY, height}, "Let " + name);
+            }
+
+            public Letter(String name, Bitmap bm)
+            {
+                this.name = name;
+                BitmapToArrays(bm);
+            }
+
+            internal void TwoDimToOne(float[,] twoDim)
+            {
+                arr = new byte[(this.width * this.height) * 4];
+                // System.out.println(name + " width " + this.width + " " + this.height);
+                int i = 0;
+                for (int xx = 0; xx < width; xx++)
+                {
+                    for (int yy = 0; yy < height; yy++)
+                    {
+                        arr[i] = (byte)255;
+                        i++;
+                        arr[i] = (byte)255;
+                        i++;
+                        arr[i] = (byte)255;
+                        i++;
+                        arr[i] = (byte)(twoDim[xx, yy] * 255);
+                        i++;
+                    }
+                }
             }
 
             private void MakeLetterArrays(GraphicsPath shape)
@@ -491,12 +505,8 @@ namespace SpaceVIL
                 //int y1 = (int)Math.Ceiling(rec.Bottom);
 
                 //LogService.Log().LogOne(rec.Top, "Let " + name);
-
                 CrossOut crossOut = ContourService.CrossContours(shape);
                 double[,] alph = crossOut._arr;
-
-                //LogService.Log().LogTwoDimArr(alph, "Letter " + name);
-
                 y0 = crossOut._minY;
 
                 height = alph.GetLength(1);// y1 - y0 + 1;
@@ -505,9 +515,9 @@ namespace SpaceVIL
                 bool isBraked = false;
                 while (x0shift < width)
                 {
-                    for (int i = 0; i < height; i++)
+                    for (int d = 0; d < height; d++)
                     {
-                        if (alph[x0shift, i] > 0)
+                        if (alph[x0shift, d] > 0)
                         {
                             isBraked = true;
                             break;
@@ -521,9 +531,9 @@ namespace SpaceVIL
                 isBraked = false;
                 while (x1shift >= 0)
                 {
-                    for (int i = 0; i < height; i++)
+                    for (int d = 0; d < height; d++)
                     {
-                        if (alph[x1shift, i] > 0) isBraked = true;
+                        if (alph[x1shift, d] > 0) isBraked = true;
                     }
                     if (isBraked) break;
                     x1shift--;
@@ -533,9 +543,9 @@ namespace SpaceVIL
                 isBraked = false;
                 while (y0shift < height)
                 {
-                    for (int i = 0; i < width; i++)
+                    for (int d = 0; d < width; d++)
                     {
-                        if (alph[i, y0shift] > 0) isBraked = true;
+                        if (alph[d, y0shift] > 0) isBraked = true;
                     }
                     if (isBraked) break;
                     y0shift++;
@@ -545,9 +555,9 @@ namespace SpaceVIL
                 isBraked = false;
                 while (y1shift >= 0)
                 {
-                    for (int i = 0; i < width; i++)
+                    for (int d = 0; d < width; d++)
                     {
-                        if (alph[i, y1shift] > 0) isBraked = true;
+                        if (alph[d, y1shift] > 0) isBraked = true;
                     }
                     if (isBraked) break;
                     y1shift--;
@@ -561,6 +571,28 @@ namespace SpaceVIL
 
                 //--------------------------------------------------------------------------------------
 
+                arr = new byte[(this.width * this.height) * 4];
+                // System.out.println(name + " width " + this.width + " " + this.height);
+                int i = 0;
+                for (int xx = x0shift; xx <= x1shift; xx++)
+                {
+                    for (int yy = y0shift; yy <= y1shift; yy++)
+                    {
+                        arr[i] = (byte)255;
+                        i++;
+                        arr[i] = (byte)255;
+                        i++;
+                        arr[i] = (byte)255;
+                        i++;
+                        // if (alph[xx, yy] < 1)
+                        //     arr[i] = (byte) (0 * 255);
+                        // else
+                        arr[i] = (byte)(alph[xx, yy] * 255);
+                        i++;
+                    }
+                }
+
+                /*
                 for (int xx = x0shift; xx <= x1shift; xx++)
                 {
                     for (int yy = y0shift; yy <= y1shift; yy++)
@@ -575,7 +607,7 @@ namespace SpaceVIL
 
                     }
                 }
-
+                */
                 leftArr = new float[2, height];
                 rightArr = new float[2, height];
                 for (int yy = y0shift; yy <= y1shift; yy++)
@@ -591,7 +623,7 @@ namespace SpaceVIL
 
                 //--------------------------------------------------------------------------------------
                 /*
-                //alphas = new double[width, height];
+                alphas = new double[width, height];
                 for (int xx = x0shift; xx <= x1shift; xx++)
                 {
                     for (int yy = y0shift; yy <= y1shift; yy++)
@@ -603,6 +635,7 @@ namespace SpaceVIL
                         //     //alph[xx, yy] = (alph[xx, yy] < 1) ? alph[xx, yy] + 0.15f : alph[xx, yy];
                         //     //alph[xx, yy] = (alph[xx, yy] > 1) ? 1 : alph[xx, yy];
                         // }
+                        
                         alphas[xx - x0shift, yy - y0shift] = alph[xx, yy];
 
                     }
@@ -610,6 +643,99 @@ namespace SpaceVIL
                 */
             }
 
+            private void BitmapToArrays(Bitmap bm)
+            {
+
+                int x0shift = 0;
+                bool isBraked = false;
+                while (x0shift < bm.Width)
+                {
+                    for (int d = 0; d < bm.Height; d++)
+                    {
+                        if (bm.GetPixel(x0shift, d).A > 0)
+                        {
+                            isBraked = true;
+                            break;
+                        }
+                    }
+                    if (isBraked) break;
+                    x0shift++;
+                }
+
+                int x1shift = bm.Width - 1;
+                isBraked = false;
+                while (x1shift >= 0)
+                {
+                    for (int d = 0; d < bm.Height; d++)
+                    {
+                        if (bm.GetPixel(x1shift, d).A > 0) isBraked = true;
+                    }
+                    if (isBraked) break;
+                    x1shift--;
+                }
+
+                int y0shift = 0;
+                isBraked = false;
+                while (y0shift < bm.Height)
+                {
+                    for (int d = 0; d < bm.Width; d++)
+                    {
+                        if (bm.GetPixel(d, y0shift).A > 0) isBraked = true;
+                    }
+                    if (isBraked) break;
+                    y0shift++;
+                }
+
+                int y1shift = bm.Height - 1;
+                isBraked = false;
+                while (y1shift >= 0)
+                {
+                    for (int d = 0; d < bm.Width; d++)
+                    {
+                        if (bm.GetPixel(d, y1shift).A > 0) isBraked = true;
+                    }
+                    if (isBraked) break;
+                    y1shift--;
+                }
+
+                minX = 0;// x0 + x0shift;
+                minY = y0shift;
+
+                height = y1shift - y0shift + 1;
+                width = x1shift - x0shift + 1;
+                //--------------------------------------------------------------------------------------
+                arr = new byte[(this.width * this.height) * 4];
+                // System.out.println(name + " width " + this.width + " " + this.height);
+                int i = 0;
+                for (int xx = x0shift; xx <= x1shift; xx++)
+                {
+                    for (int yy = y0shift; yy <= y1shift; yy++)
+                    {
+                        arr[i] = bm.GetPixel(xx, yy).R;
+                        i++;
+                        arr[i] = bm.GetPixel(xx, yy).G;
+                        i++;
+                        arr[i] = bm.GetPixel(xx, yy).B;
+                        i++;
+                        arr[i] = bm.GetPixel(xx, yy).A;
+                        i++;
+                    }
+                }
+
+                leftArr = new float[2, height];
+                rightArr = new float[2, height];
+                for (int yy = y0shift; yy <= y1shift; yy++)
+                {
+                    int xx = x0shift;
+                    leftArr[0, yy - y0shift] = (float) (bm.GetPixel(xx, yy).A / 255f);
+                    if (xx + 1 < width) leftArr[1, yy - y0shift] = (float) (bm.GetPixel(xx, yy).A / 255f);
+                    xx = x1shift;
+                    if (xx - 1 >= 0) rightArr[0, yy - y0shift] = (float) (bm.GetPixel(xx, yy).A / 255f);
+                    rightArr[1, yy - y0shift] = (float) (bm.GetPixel(xx, yy).A / 255f);
+
+                }
+                //--------------------------------------------------------------------------------------
+            }
 
             #region OldThings
             /*
@@ -986,34 +1112,26 @@ namespace SpaceVIL
             internal String name;
             internal int xBeg = 0;
             internal int yBeg = 0;
-            //internal int xEnd = 0;
             internal int width = 0;
+            internal int height = 0;
             internal int xShift = 0;
             private Letter _letter;
-            //internal List<float> col;
-            //internal List<float> pix;
-
-            //readonly float err = 0.25f; //переехало из буквы
             internal bool isSpec;
+            //internal int somethUnReal = 0;
 
-            internal ModifyLetter(Letter let, int xShift)
+            internal ModifyLetter(Letter let, int xShift) //, float cof)
             {
-                //LogService.Log().LogText("ModifyLetter " + let.name);
                 this.xShift = xShift;
                 name = let.name;
                 width = let.width;
+                height = let.height;
                 yBeg = let.minY;
                 xBeg = let.minX;
-                //xEnd = width;
                 isSpec = let.isSpec;
-                //col = new List<float>();
-                //pix = new List<float>();
-                //if (isSpec) return;
-                //MakeLetArrays(let);
-                //LogService.Log().LogText("Successful");
                 _letter = let;
+                //somethUnReal = (int)((xShift + let.width + let.minX) * cof);
             }
-
+            /*
             internal List<float> GetCol() {
                 return _letter.col;
             }
@@ -1021,43 +1139,11 @@ namespace SpaceVIL
             internal List<float> GetPix() {
                 return _letter.pix;
             }
-
-            /*
-            private void MakeLetArrays(Letter let) {
-                col.AddRange(let.col);
-                pix.AddRange(let.pix);
-
-                int x = let.alphas.GetLength(1) - 1;
-                float maxL = 0, maxR = 0;
-                float f;
-                for (int i = 0; i < let.alphas.GetLength(0); i++)
-                {
-                    f = (float)let.alphas[i, 0];
-                    maxL = (maxL >= f) ? maxL : f;
-                    f = (float)let.alphas[i, x];
-                    maxR = (maxR >= f) ? maxR : f;
-                }
-
-                if (maxL > err) xBeg = 1;
-                if (maxR <= err) xEnd--;
-
-                //int xBeg = currLet.minX;
-                //int yBeg = currLet.minY;
-                for (int ix = 0; ix < let.width; ix++)
-                {
-                    for (int iy = 0; iy < let.height; iy++)
-                    {
-                        if (let.alphas[ix, iy] > 0)
-                        {
-                            col.Add((float)let.alphas[ix, iy]);
-                            pix.Add(ix); // + xBeg
-                            pix.Add(iy); // + yBeg
-                            pix.Add(0);
-                        }
-                    }
-                }
-            }
             */
+            internal byte[] getArr()
+            {
+                return _letter.arr;
+            }
         }
     }
 }

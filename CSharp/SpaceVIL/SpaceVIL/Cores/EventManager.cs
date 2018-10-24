@@ -50,10 +50,6 @@ namespace SpaceVIL
 
         public void NotifyListeners(GeometryEventType type, int value)
         {
-            // return;
-            // if(IsLocked)
-            //     return;
-
             if (listeners.ContainsKey(type))
             {
                 foreach (var _ in listeners[type])

@@ -18,7 +18,7 @@ namespace SpaceVIL
         }
 
         static int count = 0;
-        private TextLine _text_object;
+        private Label _text_object;
         //private bool _toggled = false;
         private CustomIndicator _indicator;
         public Indicator GetIndicator()
@@ -33,7 +33,7 @@ namespace SpaceVIL
             EventKeyPress += OnKeyPress;
 
             //text
-            _text_object = new TextLine();
+            _text_object = new Label();
             _text_object.SetItemName(GetItemName() + "_text_object");
 
             //indicator
@@ -144,11 +144,11 @@ namespace SpaceVIL
         }
         public void SetText(String text)
         {
-            _text_object.SetItemText(text);
+            _text_object.SetText(text);
         }
         public String GetText()
         {
-            return _text_object.GetItemText();
+            return _text_object.GetText();
         }
         public void SetForeground(Color color)
         {

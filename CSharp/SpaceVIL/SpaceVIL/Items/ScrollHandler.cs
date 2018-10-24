@@ -24,9 +24,9 @@ namespace SpaceVIL
         protected virtual void OnMousePress(object sender, MouseArgs args)
         {
             if (Orientation == Orientation.Horizontal)
-                _diff = args.Position.X - GetX();
+                _diff = args.Position.GetX() - GetX();
             else
-                _diff = args.Position.Y - GetY();
+                _diff = args.Position.GetY() - GetY();
         }
 
         protected virtual void OnDragging(object sender, MouseArgs args)
@@ -34,9 +34,9 @@ namespace SpaceVIL
             int offset;
 
             if (Orientation == Orientation.Horizontal)
-                offset = args.Position.X - GetParent().GetX() - _diff;
+                offset = args.Position.GetX() - GetParent().GetX() - _diff;
             else
-                offset = args.Position.Y - GetParent().GetY() - _diff;
+                offset = args.Position.GetY() - GetParent().GetY() - _diff;
 
             SetOffset(offset);
         }

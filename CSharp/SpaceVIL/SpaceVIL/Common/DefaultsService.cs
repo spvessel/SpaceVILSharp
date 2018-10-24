@@ -41,16 +41,32 @@ namespace SpaceVIL
             privateFontCollection.AddMemoryFont(data, (int)font_stream.Length);
             font_stream.Close();
             Marshal.FreeCoTaskMem(data);
-            _default_font = new Font(privateFontCollection.Families[0], 13, FontStyle.Regular);
+            _default_font = new Font(privateFontCollection.Families[0], 10, FontStyle.Regular);
         }
-        public Font GetDefaultFont() //объекты не инициализируются почему-то, выяснить
+        // public Font GetDefaultFont() //объекты не инициализируются почему-то, выяснить
+        // {
+        //     if (_default_font == null)
+        //     {
+        //         AddFontFromMemory();
+        //         _default_font = new Font(privateFontCollection.Families[0], 10, FontStyle.Regular);
+        //     }
+        //     return new Font(_default_font.FontFamily, 10, _default_font.Style);
+        //     // return new Font(new FontFamily("Ubuntu"), 10, FontStyle.Regular);
+        // }
+        public Font GetDefaultFont(int size = 10) //объекты не инициализируются почему-то, выяснить
         {
+            Console.WriteLine(size);
+            if (size == 0)
+            {
+                size = 10;
+            }
             if (_default_font == null)
             {
                 AddFontFromMemory();
-                _default_font = new Font(privateFontCollection.Families[0], 12, FontStyle.Regular);
+                _default_font = new Font(privateFontCollection.Families[0], 10, FontStyle.Regular);
             }
-            return new Font(_default_font.FontFamily, _default_font.Size, _default_font.Style);
+            return new Font(_default_font.FontFamily, size, _default_font.Style);
+            // return new Font(new FontFamily("Ubuntu"), size, FontStyle.Regular);
         }
         public Font GetEmbeddedFont(EmbeddedFont font, int size, FontStyle style)
         {
@@ -86,45 +102,12 @@ namespace SpaceVIL
         {
             switch (font)
             {
-                case EmbeddedFont.Verdana:
-                    _embedded_font = "SpaceVIL.Fonts.Verdana.ttf";
-                    break;
-                case EmbeddedFont.Exo2:
-                    _embedded_font = "SpaceVIL.Fonts.Exo2-Regular.ttf";
-                    break;
-                case EmbeddedFont.TitilliumWeb:
-                    _embedded_font = "SpaceVIL.Fonts.TitilliumWeb-Regular.ttf";
-                    break;
-                case EmbeddedFont.OpenSans:
-                    _embedded_font = "SpaceVIL.Fonts.OpenSans-Regular.ttf";
-                    break;
-                case EmbeddedFont.SansLight:
-                    _embedded_font = "SpaceVIL.Fonts.Sans-Light.ttf";
-                    break;
-                case EmbeddedFont.Muli:
-                    _embedded_font = "SpaceVIL.Fonts.Muli-Regular.ttf";
-                    break;
-                case EmbeddedFont.Nunito:
-                    _embedded_font = "SpaceVIL.Fonts.Nunito-Regular.ttf";
-                    break;
-                case EmbeddedFont.Quicksand:
-                    _embedded_font = "SpaceVIL.Fonts.Quicksand-Regular.ttf";
-                    break;
                 case EmbeddedFont.Ubuntu:
                     _embedded_font = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
                     break;
-                case EmbeddedFont.GlacialIndifference:
-                    _embedded_font = "SpaceVIL.Fonts.GlacialIndifference-Regular.otf";
-                    break;
-                case EmbeddedFont.RobotoMono:
-                    _embedded_font = "SpaceVIL.Fonts.RobotoMono-Regular.ttf";
-                    break;
-                case EmbeddedFont.OpenGostTypeA:
-                    _embedded_font = "SpaceVIL.Fonts.OpenGostTypeA-Regular.ttf";
-                    break;
 
                 default:
-                    _embedded_font = "SpaceVIL.Fonts.Verdana.ttf";
+                    _embedded_font = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
                     break;
             }
         }
@@ -133,45 +116,12 @@ namespace SpaceVIL
             String path;
             switch (font)
             {
-                case EmbeddedFont.Verdana:
-                    path = "SpaceVIL.Fonts.Verdana.ttf";
-                    break;
-                case EmbeddedFont.Exo2:
-                    path = "SpaceVIL.Fonts.Exo2-Regular.ttf";
-                    break;
-                case EmbeddedFont.TitilliumWeb:
-                    path = "SpaceVIL.Fonts.TitilliumWeb-Regular.ttf";
-                    break;
-                case EmbeddedFont.OpenSans:
-                    path = "SpaceVIL.Fonts.OpenSans-Regular.ttf";
-                    break;
-                case EmbeddedFont.SansLight:
-                    path = "SpaceVIL.Fonts.Sans-Light.ttf";
-                    break;
-                case EmbeddedFont.Muli:
-                    path = "SpaceVIL.Fonts.Muli-Regular.ttf";
-                    break;
-                case EmbeddedFont.Nunito:
-                    path = "SpaceVIL.Fonts.Nunito-Regular.ttf";
-                    break;
-                case EmbeddedFont.Quicksand:
-                    path = "SpaceVIL.Fonts.Quicksand-Regular.ttf";
-                    break;
                 case EmbeddedFont.Ubuntu:
                     path = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
                     break;
-                case EmbeddedFont.GlacialIndifference:
-                    path = "SpaceVIL.Fonts.GlacialIndifference-Regular.otf";
-                    break;
-                case EmbeddedFont.RobotoMono:
-                    path = "SpaceVIL.Fonts.RobotoMono-Regular.ttf";
-                    break;
-                case EmbeddedFont.OpenGostTypeA:
-                    path = "SpaceVIL.Fonts.OpenGostTypeA-Regular.ttf";
-                    break;
 
                 default:
-                    path = "SpaceVIL.Fonts.Verdana.ttf";
+                    path = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
                     break;
             }
             return path;
@@ -208,6 +158,10 @@ namespace SpaceVIL
         public static Font GetDefaultFont()
         {
             return _default_font.GetDefaultFont();
+        }
+        public static Font GetDefaultFont(int size)
+        {
+            return _default_font.GetDefaultFont(size);
         }
         public static void SetDefaultEmbeddedFont(EmbeddedFont font)
         {

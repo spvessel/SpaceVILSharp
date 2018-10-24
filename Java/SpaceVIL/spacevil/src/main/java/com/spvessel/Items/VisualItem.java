@@ -250,7 +250,7 @@ public abstract class VisualItem extends BaseItem {
         {
             VisualItem container = (VisualItem) item;// предполагаю что элемент контейнер
             // то каждому вложенному элементу вызвать команду удалить своих вложенных
-            // 
+            //
             // элементов
             while (container.getItems().size() > 0) {
                 BaseItem child = container.getItems().get(0);
@@ -522,13 +522,13 @@ public abstract class VisualItem extends BaseItem {
     private boolean lazyHoverVerification(float xpos, float ypos) {
         // if(this instanceof ContextMenu)
         // {
-        //     System.out.println("context menu");
-        //     System.out.println(
-        //         _confines_x_0 + " " +
-        //         _confines_x_1 + " " +
-        //         _confines_y_0 + " " +
-        //         _confines_y_1 + " "
-        //     );
+        // System.out.println("context menu");
+        // System.out.println(
+        // _confines_x_0 + " " +
+        // _confines_x_1 + " " +
+        // _confines_y_0 + " " +
+        // _confines_y_1 + " "
+        // );
         // }
         boolean result = false;
         float minx = getX();
@@ -551,9 +551,9 @@ public abstract class VisualItem extends BaseItem {
         if (xpos >= minx && xpos <= maxx && ypos >= miny && ypos <= maxy) {
             result = true;
             // _mouse_ptr.setPosition(xpos, ypos);
-        } 
+        }
         // else {
-        //     _mouse_ptr.clear();
+        // _mouse_ptr.clear();
         // }
         return result;
     }
@@ -561,11 +561,11 @@ public abstract class VisualItem extends BaseItem {
     public CustomFigure isCustom = null;
 
     @Override
-    public List<float[]> makeShape() {
+    public synchronized List<float[]> makeShape() {
         if (isCustom != null) {
             setTriangles(isCustom.getFigure());
             // if (getState(ItemStateType.BASE).shape == null)
-            // getState(ItemStateType.BASE).shape = isCustom;
+            //     getState(ItemStateType.BASE).shape = isCustom;
 
             if (isCustom.isFixed())
                 return GraphicsMathService.toGL(isCustom.updatePosition(getX(), getY()), getHandler());

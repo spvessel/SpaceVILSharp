@@ -39,7 +39,7 @@ namespace SpaceVIL
             return _item_type;
         }
         static int count = 0;
-        private TextLine _text_object;
+        private Label _text_object;
         private ButtonToggle _indicator;
         public ButtonToggle GetIndicator()
         {
@@ -66,7 +66,7 @@ namespace SpaceVIL
             _list_inners = new List<TreeItem>();
             _indicator = new ButtonToggle();
             _indicator.SetItemName("Indicator_" + count);
-            _text_object = new TextLine();
+            _text_object = new Label();
 
             //SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeBranch)));
             IsPassEvents = false;
@@ -325,12 +325,12 @@ namespace SpaceVIL
         }
         public void SetText(String text)
         {
-            _text_object.SetItemText(text);
+            _text_object.SetText(text);
             UpdateLayout();
         }
         public String GetText()
         {
-            return _text_object.GetItemText();
+            return _text_object.GetText();
         }
         public int GetTextWidth()
         {

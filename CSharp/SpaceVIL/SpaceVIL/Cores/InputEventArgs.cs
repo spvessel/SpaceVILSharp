@@ -58,8 +58,8 @@ namespace SpaceVIL
                 args.Button + " " +
                 args.State + " " +
                 args.Mods + " " +
-                args.Position.X + " " +
-                args.Position.Y + " "
+                args.Position.GetX() + " " +
+                args.Position.GetY() + " "
             );
         }
         public static void KeyArgs(KeyArgs args)

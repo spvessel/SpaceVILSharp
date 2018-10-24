@@ -39,11 +39,11 @@ namespace SpaceVIL
 
         protected virtual void OnMousePress(object sender, MouseArgs args)
         {
-            _diff = args.Position.Y - _splitHolder.GetY();
+            _diff = args.Position.GetY() - _splitHolder.GetY();
         }
-        public virtual void OnDragging(object sender, MouseArgs args)
+        protected virtual void OnDragging(object sender, MouseArgs args)
         {
-            int offset = args.Position.Y - GetY() - _diff;
+            int offset = args.Position.GetY() - GetY() - _diff;
             SetSplitHolderPosition(offset);
         }
 
