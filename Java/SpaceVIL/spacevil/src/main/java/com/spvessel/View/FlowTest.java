@@ -115,9 +115,15 @@ public class FlowTest extends ActiveWindow {
         frame.setSize(300, 300);
         frame.setPosition(200, 200);
         layout.addItem(frame);
-        PointsContainer graph = getPointsContainer();
-        frame.addItem(graph);
+        //PointsContainer graph = getPointsContainer();
+        //frame.addItem(graph);
 
+        CustomShape cs = new CustomShape(GraphicsMathService.getRoundSquareBorder(250, 250, 0, 10, 10));
+        cs.setBackground(new Color(10, 255, 10));
+        cs.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        //cs.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+
+        frame.addItem(cs);
         // ResizableItem res = new ResizableItem();
         // res.setSize(300, 300);
         // res.setBackground(55, 55, 55);

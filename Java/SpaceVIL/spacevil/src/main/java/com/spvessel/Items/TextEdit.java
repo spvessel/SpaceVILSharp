@@ -4,6 +4,7 @@ import com.spvessel.Common.DefaultsService;
 import com.spvessel.Cores.*;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.ItemAlignment;
+import com.spvessel.Flags.KeyCode;
 import com.spvessel.Flags.KeyMods;
 
 import java.awt.*;
@@ -35,6 +36,7 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
     private boolean _isSelect = false;
     private boolean _justSelected = false;
 
+    /*
     private final int BackspaceCode = 14;
     private final int DeleteCode = 339;
     private final int LeftArrowCode = 331;
@@ -42,8 +44,9 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
     private final int EndCode = 335;
     private final int HomeCode = 327;
     private final int ACode = 30;
+    */
 
-    private List<Integer> ShiftValCodes;
+    private List<KeyCode> ShiftValCodes;
 
     public TextEdit() {
         _text_object = new TextLine();
@@ -61,7 +64,8 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
         eventScrollUp.add(this::onScrollUp);
         eventScrollDown.add(this::onScrollDown);
 
-        ShiftValCodes = new LinkedList<>(Arrays.asList(LeftArrowCode, RightArrowCode, EndCode, HomeCode));
+        //ShiftValCodes = new LinkedList<>(Arrays.asList(LeftArrowCode, RightArrowCode, EndCode, HomeCode));
+        ShiftValCodes = new LinkedList<>(Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME));
         setStyle(DefaultsService.getDefaultStyle("SpaceVIL.TextEdit"));
     }
 
@@ -155,9 +159,9 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
     }
 
     protected void onKeyPress(Object sender, KeyArgs args) {
-        //Console.WriteLine(args.Scancode);
+        //System.out.println(args.scancode);
         if (!_isEditable) {
-            if (args.mods.equals(KeyMods.CONTROL) && args.scancode == ACode) {
+            if (args.mods.equals(KeyMods.CONTROL) && (args.key == KeyCode.a || args.key == KeyCode.A)) {
                 _selectFrom = 0;
                 _cursor_position = getText().length();
                 _selectTo = _cursor_position;
@@ -178,7 +182,7 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
             //Выделение не сбрасывается, проверяются сочетания
             switch (args.mods) {
                 case SHIFT:
-                    if (ShiftValCodes.contains(args.scancode)) {
+                    if (ShiftValCodes.contains(args.key)) {
                         if (!_isSelect) {
                             _isSelect = true;
                             _selectFrom = _cursor_position;
@@ -188,7 +192,7 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
                     break;
 
                 case CONTROL:
-                    if (args.scancode == ACode) {
+                    if (args.key == KeyCode.a || args.key == KeyCode.A) {
                         _selectFrom = 0;
                         _cursor_position = getText().length();
                         replaceCursor();
@@ -200,18 +204,18 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
                 //alt, super ?
             }
         } else {
-            if (args.scancode == BackspaceCode || args.scancode == DeleteCode) {
+            if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE) {
                 if (_isSelect)
                     cutText();
                 else {
-                    if (args.scancode == BackspaceCode && _cursor_position > 0) //backspace
+                    if (args.key == KeyCode.BACKSPACE && _cursor_position > 0) //backspace
                     {
                         StringBuilder sb = new StringBuilder(getText());
                         setText(sb.deleteCharAt(_cursor_position - 1).toString());
                         _cursor_position--;
                         replaceCursor();
                     }
-                    if (args.scancode == DeleteCode && _cursor_position < getText().length()) //delete
+                    if (args.key == KeyCode.DELETE && _cursor_position < getText().length()) //delete
                     {
                         StringBuilder sb = new StringBuilder(getText());
                         setText(sb.deleteCharAt(_cursor_position).toString());
@@ -222,26 +226,26 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
                 unselectText();
         }
 
-        if (args.scancode == LeftArrowCode && _cursor_position > 0) //arrow left
+        if (args.key == KeyCode.LEFT && _cursor_position > 0) //arrow left
         {
             if (!_justSelected) {
                 _cursor_position--;
                 replaceCursor();
             }
         }
-        if (args.scancode == RightArrowCode && _cursor_position < getText().length()) //arrow right
+        if (args.key == KeyCode.RIGHT && _cursor_position < getText().length()) //arrow right
         {
             if (!_justSelected) {
                 _cursor_position++;
                 replaceCursor();
             }
         }
-        if (args.scancode == EndCode) //end
+        if (args.key == KeyCode.END) //end
         {
             _cursor_position = getText().length();
             replaceCursor();
         }
-        if (args.scancode == HomeCode) //home
+        if (args.key == KeyCode.HOME) //home
         {
             _cursor_position = 0;
             replaceCursor();
@@ -448,6 +452,8 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
         String text = getText();
         int fromReal = Math.min(_selectFrom, _selectTo);
         int toReal = Math.max(_selectFrom, _selectTo);
+        if (fromReal < 0)
+            return "";
         String selectedText = text.substring(fromReal, toReal); // - fromReal
         return selectedText;
     }
@@ -456,7 +462,7 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
         if (!_isEditable) return;
         if (_isSelect) cutText();
         String text = getText();
-        String newText = text.substring(0, _cursor_position - 1) + pasteStr + text.substring(_cursor_position);
+        String newText = text.substring(0, _cursor_position) + pasteStr + text.substring(_cursor_position);
         setText(newText);
         _cursor_position += pasteStr.length();
         replaceCursor();
@@ -472,7 +478,8 @@ public class TextEdit extends VisualItem implements InterfaceTextEditable, Inter
         setText(sb.delete(fromReal, toReal).toString()); // - fromReal
         _cursor_position = fromReal;
         replaceCursor();
-        unselectText();
+        if (_isSelect)
+            unselectText();
         _justSelected = false;
         return str;
     }

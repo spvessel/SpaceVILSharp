@@ -312,6 +312,7 @@ public class DrawEngine {
     }
 
     private void mouseMove(long wnd, double xpos, double ypos) {
+        System.out.println("move " + count + " " + xpos + " " + ypos);
         if (!_handler.focusable)
             return;
 
@@ -790,8 +791,9 @@ public class DrawEngine {
         }
         render();
     }
-
+private long count = 0;
     private void render() {
+        System.out.println("render " + count);
         if (_handler.focused) {
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
             

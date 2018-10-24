@@ -504,6 +504,8 @@ namespace SpaceVIL
             string text = GetText();
             int fromReal = Math.Min(_selectFrom, _selectTo);
             int toReal = Math.Max(_selectFrom, _selectTo);
+            if (fromReal < 0)
+                return "";
             string selectedText = text.Substring(fromReal, toReal - fromReal);
             return selectedText;
         }
@@ -529,7 +531,8 @@ namespace SpaceVIL
             SetText(GetText().Remove(fromReal, toReal - fromReal));
             _cursor_position = fromReal;
             ReplaceCursor();
-            UnselectText();
+            if (_isSelect)
+                UnselectText();
             _justSelected = false;
             return str;
         }

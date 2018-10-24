@@ -61,6 +61,11 @@ namespace SpaceVIL
 
             _linesList = new List<TextLine>();
             TextLine te = new TextLine();
+            if (GetForeground() != null)
+                te.SetForeground(GetForeground());
+            te.SetTextAlignment(_blockAlignment);
+            if (_elementFont != null)
+                te.SetFont(_elementFont);
             _linesList.Add(te);
 
             _cursor = new Rectangle();
@@ -1000,7 +1005,8 @@ namespace SpaceVIL
 
             _cursor_position = fromReal;
             ReplaceCursor();
-            UnselectText();
+            if (_isSelect)
+                UnselectText();
             _justSelected = false;
             //Console.WriteLine(str);
             return str;

@@ -158,16 +158,18 @@ namespace SpaceVIL
             GraphicsPath myPathSection = new GraphicsPath();
             int subpathPoints;
             bool IsClosed2;
-            //Console.WriteLine(myPathIterator.Count);
+            //Console.WriteLine(myPathIterator.SubpathCount);
 
             for (int i = 0; i < myPathIterator.SubpathCount; i++)
             {
                 subpathPoints = myPathIterator.NextSubpath(myPathSection, out IsClosed2);
-                List<PointF> pathSection = new List<PointF>();
-                for (int j = 0; j < myPathSection.PathPoints.Length; j++) {
-                    pathSection.Add(new PointF(myPathSection.PathPoints[j].X, myPathSection.PathPoints[j].Y));
+                if (myPathSection.PathPoints.Length > 1) {
+                    List<PointF> pathSection = new List<PointF>();
+                    for (int j = 0; j < myPathSection.PathPoints.Length; j++) {
+                        pathSection.Add(new PointF(myPathSection.PathPoints[j].X, myPathSection.PathPoints[j].Y));
+                    }
+                    contoursList.Add(AnalizeCotour(pathSection));
                 }
-                contoursList.Add(AnalizeCotour(pathSection));
             }
             
             return MakeCrossArray(contoursList);

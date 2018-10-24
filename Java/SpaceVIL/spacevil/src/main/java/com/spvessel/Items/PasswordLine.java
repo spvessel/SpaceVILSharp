@@ -8,6 +8,7 @@ import com.spvessel.Flags.KeyMods;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -229,7 +230,7 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
     protected void onTextInput(InterfaceItem sender, TextInputArgs args) {
         if (!_isEditable) return;
         byte[] input = ByteBuffer.allocate(4).putInt(args.character).array(); //BitConverter.getBytes(args.character);
-        String str = new String(input, StandardCharsets.UTF_8);//Charset.forName("UTF-32LE")); //Encoding.UTF32.getString(input);
+        String str = new String(input, Charset.forName("UTF-32")); //Encoding.UTF32.getString(input);
 
         if (_isSelect) unselectText();
         if (_justSelected) cutText();
@@ -322,7 +323,7 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
         return _isEditable;
     }
 
-    public void set_isEditable(boolean value) {
+    public void setEditable(boolean value) {
 
         if (_isEditable == value)
             return;
@@ -408,7 +409,8 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
         setText(sb.delete(fromReal, toReal).toString()); // - fromReal
         _cursor_position = fromReal;
         replaceCursor();
-        unselectText();
+        if (_isSelect)
+            unselectText();
         _justSelected = false;
         return str;
     }

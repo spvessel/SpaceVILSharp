@@ -77,7 +77,7 @@ public final class GraphicsMathService {
         if (radius < 0)
             radius = 0;
 
-        List<float[]> triangles = new LinkedList<float[]>();
+        List<float[]> triangles = new LinkedList<>();
         // Начало координат в углу
 
         triangles.add(new float[] { radius + x, height + y, 0.0f });
@@ -134,14 +134,12 @@ public final class GraphicsMathService {
     }
 
     static private List<float[]> countCircleSector(int alph1, int alph2, float x0, float y0, float radius) {
-        List<float[]> circleSect = new LinkedList<float[]>();
+        List<float[]> circleSect = new LinkedList<>();
         float x1, y1, x2, y2;
         x1 = radius * (float) Math.cos(alph1 * Math.PI / 180.0f) + x0;
         y1 = radius * (float) Math.sin(alph1 * Math.PI / 180.0f) + y0;
 
-        for (int alf = alph1 + 1; alf <= alph2; alf += 5) { // Шаг можно сделать больше 1 градуса, нужны тести
-                                                            // 
-                                                            // ования
+        for (int alf = alph1 + 1; alf <= alph2; alf += 5) { // Шаг можно сделать больше 1 градуса, нужны тестирования
             x2 = radius * (float) Math.cos(alf * Math.PI / 180.0f) + x0;
             y2 = radius * (float) Math.sin(alf * Math.PI / 180.0f) + y0;
             circleSect.add(new float[] { x0, y0, 0.0f });
@@ -163,7 +161,7 @@ public final class GraphicsMathService {
         float x0 = x + w / 2;
         float y0 = y + h / 2;
 
-        List<float[]> figure = new LinkedList<float[]>();
+        List<float[]> figure = new LinkedList<>();
 
         figure.add(new float[] { x + w / 2, y, 0.0f });
         figure.add(new float[] { x, y + h, 0.0f });
@@ -351,7 +349,7 @@ public final class GraphicsMathService {
         int count = 1;
         for (int i = 1; i < n * 2 + 2; i++) {
             if ((i % 2) != 0) // При выполнении условия четности следующие формулы
-                              // 
+                              //
                               //
             {
                 triangles.add(new float[] { (float) (x_center + r / 2 * Math.cos(alpha * Math.PI / 180.0f)),
@@ -362,7 +360,7 @@ public final class GraphicsMathService {
                     count = 1;
                 }
             } else // При невыполнении условия четности следующие формулы
-                   // 
+                   //
                    //
             {
                 triangles.add(new float[] { (float) (x_center + R / 2 * Math.cos(alpha * Math.PI / 180.0f)),
@@ -384,7 +382,7 @@ public final class GraphicsMathService {
         float x_center = r;
         float y_center = r;
 
-        List<float[]> triangles = new LinkedList<float[]>();
+        List<float[]> triangles = new LinkedList<>();
 
         float alpha = 0;
         for (int i = 0; i < n; i++) {
@@ -401,4 +399,150 @@ public final class GraphicsMathService {
 
         return triangles;
     }
+
+    public static List<float[]> getRoundSquareBorder(float width, float height, float radius, int x, int y) {
+        if (radius < 0)
+            radius = 0;
+
+        List<BorderSection> border = new LinkedList<>();
+        // Начало координат в углу
+
+        border.add(new BorderSection(width - radius + x, y, radius + x, y, radius + x, height + y));
+        //triangles.add(new float[] { radius + x, height + y, 0.0f });
+        //    triangles.add(new float[] { width - radius + x, y, 0.0f });
+        //    triangles.add(new float[] { radius + x, y, 0.0f });
+
+        border.add(new BorderSection(width - radius + x, height + y, radius + x, height + y, width - radius + x, y));
+        //    triangles.add(new float[] { radius + x, height + y, 0.0f });
+        //    triangles.add(new float[] { width - radius + x, height + y, 0.0f });
+        //triangles.add(new float[] { width - radius + x, y, 0.0f });
+
+        border.add(new BorderSection(width + x, height - radius + y, width + x, radius + y, width - radius + x, height - radius + y));
+        //triangles.add(new float[] { width - radius + x, height - radius + y, 0.0f });
+        //    triangles.add(new float[] { width + x, height - radius + y, 0.0f });
+        //    triangles.add(new float[] { width + x, radius + y, 0.0f });
+
+        border.add(new BorderSection(x, height - radius + y, x, radius + y, radius + x, radius + y));
+        //    triangles.add(new float[] { x, height - radius + y, 0.0f });
+        //triangles.add(new float[] { radius + x, radius + y, 0.0f });
+        //    triangles.add(new float[] { x, radius + y, 0.0f });
+
+        if (radius < 1)
+            return makeBorder(border);
+
+        List<float[]> tmpList;
+        float x0, y0;
+        x0 = width - radius + x;
+        y0 = height - radius + y;
+        tmpList = countCircleSector(0, 90, x0, y0, radius);
+
+        x0 = width - radius + x;
+        y0 = radius + y;
+        tmpList.addAll(countCircleSector(270, 360, x0, y0, radius));
+
+        x0 = radius + x;
+        y0 = radius + y;
+        tmpList.addAll(countCircleSector(180, 270, x0, y0, radius));
+
+        x0 = radius + x;
+        y0 = height - radius + y;
+        tmpList.addAll(countCircleSector(90, 180, x0, y0, radius));
+
+        for (int i = 0; i < tmpList.size() / 3; i++) {
+            border.add(new BorderSection(tmpList.get(i * 3 + 1)[0], tmpList.get(i * 3 + 1)[1], tmpList.get(i * 3 + 2)[0], tmpList.get(i * 3 + 2)[1], tmpList.get(i * 3)[0], tmpList.get(i * 3)[1]));
+        }
+
+        return makeBorder(border);
+    }
+
+
+    private static List<float[]> makeBorder(List<BorderSection> borders) {
+        List<float[]> borderTris = new LinkedList<>();
+
+        float bw = 5; //border width
+        float x3, y3, x4, y4;
+        float x1, y1, x2, y2;
+        for (int i = 0; i < borders.size(); i++) {
+            x1 = borders.get(i).x1;
+            x2 = borders.get(i).x2;
+            y1 = borders.get(i).y1;
+            y2 = borders.get(i).y2;
+
+            x3 = x1 + borders.get(i).nx * bw;
+            y3 = y1 + borders.get(i).ny * bw;
+            x4 = x2 + borders.get(i).nx * bw;
+            y4 = y2 + borders.get(i).ny * bw;
+
+            borderTris.addAll(wherePoint(x1, y1, x2, y2, x4, y4));
+            borderTris.addAll(wherePoint(x1, y1, x4, y4, x3, y3));
+
+        }
+
+        return borderTris;
+    }
+
+    private static List<float[]> wherePoint(float x1, float y1, float x2, float y2, float x3, float y3) {
+        List<float[]> clockwise = new LinkedList<>();
+        float f = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
+        if (f < 0) {
+            clockwise.add(new float[] {x1, y1, 0});
+            clockwise.add(new float[] {x2, y2, 0});
+            clockwise.add(new float[] {x3, y3, 0});
+        } else {
+            clockwise.add(new float[] {x2, y2, 0});
+            clockwise.add(new float[] {x1, y1, 0});
+            clockwise.add(new float[] {x3, y3, 0});
+        }
+        return clockwise;
+    }
 }
+    class BorderSection {
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        float nx;
+        float ny;
+
+        public BorderSection(float x1, float y1, float x2, float y2, float x3, float y3) {
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
+
+            checkNormDir(x3, y3);
+        }
+
+        private void checkNormDir(float x3, float y3) {
+            nx = y1 - y2;
+            ny = x2 - x1;
+
+            float k = Math.signum((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1));
+            /*
+            if (nx == 0 || ny == 0) {
+                System.out.println();
+                System.out.println("nx " + nx + " ny " + ny);
+                System.out.println("x1 " + x1 + " y1 " + y1);
+                System.out.println("x2 " + x2 + " y2 " + y2);
+                System.out.println("k " + k);
+            }
+            */
+            if (k != 0) {
+                nx *= k;
+                ny *= k;
+            }
+
+            float d = (float) Math.sqrt(Math.pow(nx, 2.0) + Math.pow(ny, 2.0));
+            if (d != 0) {
+                nx /= d;
+                ny /= d;
+            }
+            /*
+            if (nx == 0 || ny == 0) {
+
+                System.out.println("after nx " + nx + " ny " + ny);
+                System.out.println();
+            }
+            */
+        }
+    }

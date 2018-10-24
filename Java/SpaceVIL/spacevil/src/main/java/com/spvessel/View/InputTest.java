@@ -68,7 +68,7 @@ public class InputTest extends ActiveWindow {
         frame.addItem(listbox);
 
         TextEdit _editLines = new TextEdit();
-        _editLines.setFont(new Font("Arial", Font.PLAIN, 150));
+        _editLines.setFont(new Font("Arial", Font.PLAIN, 15));
         _editLines.setAlignment(ItemAlignment.TOP);
         _editLines.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         _editLines.setSpacing(0, 5);

@@ -60,6 +60,7 @@ public class MainWindow extends ActiveWindow {
         btn_label.setToolTip("Show Label window.");
         btn_label.setBackground(111, 181, 255);
         btn_label.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        btn_label.eventMouseClick.add((sender, args) -> WindowLayoutBox.tryShow("LabelTest"));
 
         ButtonCore btn_flow = new ButtonCore("Flow");
         btn_flow.setFont(font);

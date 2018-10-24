@@ -69,6 +69,11 @@ public class TextBlock extends VisualItem implements InterfaceTextEditable, Inte
 
         _linesList = new LinkedList<>();
         TextLine te = new TextLine();
+        if (getForeground() != null)
+            te.setForeground(getForeground());
+        te.setTextAlignment(_blockAlignment);
+        if (_elementFont != null)
+            te.setFont(_elementFont);
         _linesList.add(te);
 
         _cursor = new Rectangle();
@@ -189,8 +194,8 @@ public class TextBlock extends VisualItem implements InterfaceTextEditable, Inte
     }
 
     protected void onKeyRelease(Object sender, KeyArgs args) {
-        if (args.scancode == 0x2F && args.mods == KeyMods.CONTROL)
-            pasteText(CommonService.ClipboardTextStorage);
+        //if (args.scancode == 0x2F && args.mods == KeyMods.CONTROL)
+        //    pasteText(CommonService.ClipboardTextStorage);
     }
 
     protected void onKeyPress(Object sender, KeyArgs args) {
@@ -911,7 +916,8 @@ public class TextBlock extends VisualItem implements InterfaceTextEditable, Inte
 
         _cursor_position = fromReal;
         replaceCursor();
-        unselectText();
+        if (_isSelect)
+            unselectText();
         _justSelected = false;
         //Console.WriteLine(str);
         return str;

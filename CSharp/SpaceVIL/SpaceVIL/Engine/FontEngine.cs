@@ -478,7 +478,7 @@ namespace SpaceVIL
                 if (shape != null)
                     MakeLetterArrays(shape);
                 else isSpec = true;
-
+                //Console.Write(name + " ");
                 //LogService.Log().LogArr(new int[] {minY, height}, "Let " + name);
             }
 

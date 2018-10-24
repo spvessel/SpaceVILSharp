@@ -47,13 +47,13 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     }
 
     public void createText() {
-        long time = System.nanoTime();
+        //long time = System.nanoTime();
         String text = getItemText();
         Font font = getFont();
 
         _letters = FontEngine.getPixMap(text, font);
-        long time0 = System.nanoTime();
-        System.out.println("get pix map " + (time0 - time) / 100000f);
+        //long time0 = System.nanoTime();
+        //System.out.println("get pix map " + (time0 - time) / 100000f);
 
         _letEndPos = new LinkedList<>();
 
@@ -85,14 +85,14 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             cl0.addAll(modL.getCol());
         }
 
-        long time1 = System.nanoTime();
-        System.out.println("new arrays " + (time1 - time0) / 100000f);
+        //long time1 = System.nanoTime();
+        //System.out.println("new arrays " + (time1 - time0) / 100000f);
 
         addAllShifts();
 
-        long time2 = System.nanoTime();
-        System.out.println("Add all shifts " + (time2 - time1) / 100000f);
-        System.out.println();
+        //long time2 = System.nanoTime();
+        //System.out.println("Add all shifts " + (time2 - time1) / 100000f);
+        //System.out.println();
 
         setAlphas(cl0);
     }
@@ -109,7 +109,8 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
 
     private void addAllShifts() {
         //long time0 = System.nanoTime();
-
+        if (getItemText().equals("b1"))
+            System.out.println(getItemText() + " " + _parentAllowWidth);
         if (getParent() == null)
             return;
 
@@ -280,7 +281,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
 
     @Override
     public float[] shape() {
-        if (needCoordUpd())
+        //if (needCoordUpd())
             addAllShifts();
         return super.shape();
     }

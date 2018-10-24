@@ -439,7 +439,8 @@ namespace SpaceVIL
             SetText(GetText().Remove(fromReal, toReal - fromReal));
             _cursor_position = fromReal;
             ReplaceCursor();
-            UnselectText();
+            if (_isSelect)
+                UnselectText();
             _justSelected = false;
             return str;
         }

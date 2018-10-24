@@ -66,8 +66,8 @@ public class Alphabet {
             maxY = (maxY < letter.minY + letter.height - 1) ? letter.minY + letter.height - 1 : maxY;
         }
 
-        public java.util.List<ModifyLetter> makeTextNew(String text) {
-            java.util.List<ModifyLetter> letList = new LinkedList<>();
+        public List<ModifyLetter> makeTextNew(String text) {
+            List<ModifyLetter> letList = new LinkedList<>();
 
             double err = 0.15; //переехало из буквы
             int x0 = 0;

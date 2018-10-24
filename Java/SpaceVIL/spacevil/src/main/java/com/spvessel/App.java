@@ -11,6 +11,7 @@ public class App {
         LayoutsTest lt = new LayoutsTest();
         ComplexTest ct = new ComplexTest();
         InputTest it = new InputTest();
+        LabelTest lbt = new LabelTest();
         mw.show();
         // im.show();
         // ft.show();
