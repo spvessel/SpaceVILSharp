@@ -8,7 +8,8 @@ public class Frame extends VisualItem {
     public Frame() {
         setItemName("Frame_" + count);
         count++;
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Frame"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Frame"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.Frame.class));
     }
 
     @Override

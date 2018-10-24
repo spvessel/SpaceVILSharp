@@ -45,7 +45,7 @@ public abstract class TextItem extends Primitive {
 
     protected void setAlphas(List<Float> alphas) {
         _alphas = alphas;
-        setColor(alphas);
+        //setColor(alphas);
     }
 
     String getItemText() {
@@ -97,15 +97,15 @@ public abstract class TextItem extends Primitive {
 
     public abstract void updateData();
 
-    protected abstract void updateCoords();
+    //protected abstract void updateCoords();
 
     float[] getCoordinates() {
         return _coordinates;
     }
 
-    public float[] getColors() {
-        return _colors;
-    }
+    // public float[] getColors() {
+    //     return _colors;
+    // }
 
     private float[] toGL(List<Float> coord) {
         float[] outCoord = new float[coord.size()];
@@ -142,7 +142,7 @@ public abstract class TextItem extends Primitive {
     public void setForeground(Color foreground) {
         if (!_foreground.equals(foreground)) {
             _foreground = foreground;
-            setColor(_alphas); // _colorFlag = true;
+            //setColor(_alphas); // _colorFlag = true;
         }
     }
 
@@ -211,35 +211,35 @@ public abstract class TextItem extends Primitive {
         setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
     }
 
-    private void setColor(List<Float> alphas) {
-        if (alphas == null)
-            return;
-        _colors = new float[alphas.size() * 4];
+    // private void setColor(List<Float> alphas) {
+    //     if (alphas == null)
+    //         return;
+    //     _colors = new float[alphas.size() * 4];
 
-        Color col = getForeground();
-        float r = col.getRed() * 1f / 255f;
-        float g = col.getGreen() * 1f / 255f;
-        float b = col.getBlue() * 1f / 255f;
-        // Console.WriteLine(r + " " + g + " " + b);
-        int inc = 0;
-        for (float f : alphas) {
-            float tmp = f;
-            float one = r;
-            float two = g;
-            float three = b;
+    //     Color col = getForeground();
+    //     float r = col.getRed() * 1f / 255f;
+    //     float g = col.getGreen() * 1f / 255f;
+    //     float b = col.getBlue() * 1f / 255f;
+    //     // Console.WriteLine(r + " " + g + " " + b);
+    //     int inc = 0;
+    //     for (float f : alphas) {
+    //         float tmp = f;
+    //         float one = r;
+    //         float two = g;
+    //         float three = b;
 
-            if (tmp > 1)
-                tmp = 1;
-            _colors[inc] = one;
-            inc++;
-            _colors[inc] = two;
-            inc++;
-            _colors[inc] = three;
-            inc++;
-            _colors[inc] = tmp;
-            inc++;
-        }
-    }
+    //         if (tmp > 1)
+    //             tmp = 1;
+    //         _colors[inc] = one;
+    //         inc++;
+    //         _colors[inc] = two;
+    //         inc++;
+    //         _colors[inc] = three;
+    //         inc++;
+    //         _colors[inc] = tmp;
+    //         inc++;
+    //     }
+    // }
 
     private List<ItemAlignment> _textAlignment = new LinkedList<>();
 
@@ -254,7 +254,7 @@ public abstract class TextItem extends Primitive {
     public void setTextAlignment(List<ItemAlignment> list) {
         if (!_textAlignment.equals(list)) {
             _textAlignment = list;
-            updateCoords(); // _coordsFlag = true;
+            //updateCoords(); // _coordsFlag = true;
         }
     }
 

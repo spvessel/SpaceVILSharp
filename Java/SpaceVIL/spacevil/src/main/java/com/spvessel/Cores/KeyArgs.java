@@ -5,7 +5,7 @@ import com.spvessel.Flags.*;
 public final class KeyArgs extends InputEventArgs
 {
     public KeyCode key;
-    public Integer scancode;
+    public int scancode;
     public InputState state;
     public KeyMods mods;
 

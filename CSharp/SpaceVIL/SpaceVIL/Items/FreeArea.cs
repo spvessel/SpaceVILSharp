@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class FreeArea : VisualItem, IGrid, IDraggable
+    public class FlowArea : VisualItem, IGrid, IDraggable
     {
         static int count = 0;
         private int _x_press = 0;
@@ -14,16 +14,16 @@ namespace SpaceVIL
         private int _diff_y = 0;
         Dictionary<BaseItem, int[]> _stored_crd;
         // public ContextMenu _dropdownmenu = new ContextMenu();
-        public FreeArea()
+        public FlowArea()
         {
-            SetItemName("FreeArea_" + count);
+            SetItemName("FlowArea_" + count);
             count++;
             EventMouseClick += OnMouseRelease;
             EventMousePressed += OnMousePress;
             EventMouseDrag += OnDragging;
             _stored_crd = new Dictionary<BaseItem, int[]>();
 
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.FreeArea)));
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.FlowArea)));
         }
 
         public void AddContextMenu(ContextMenu context_menu)

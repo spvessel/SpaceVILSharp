@@ -17,12 +17,14 @@ public class CustomFigure {
     }
 
     public CustomFigure(boolean isFixed, List<float[]> triangles) {
-        _is_fixed = isFixed;
-        _figure = triangles;
+        synchronized (this) {
+            _is_fixed = isFixed;
+            _figure = new LinkedList<>(triangles);
+        }
     }
 
     public List<float[]> updatePosition(int _x, int _y) {
-        List<float[]> result = new LinkedList<>();
+        List<float[]> result = new LinkedList<float[]>();
         for (float[] item : _figure) {
             result.add(new float[] { item[0] + _x, item[1] + _y, 0.0f });
         }

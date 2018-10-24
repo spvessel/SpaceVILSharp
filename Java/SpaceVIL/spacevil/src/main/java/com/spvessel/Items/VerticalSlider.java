@@ -3,6 +3,7 @@ package com.spvessel.Items;
 import com.spvessel.Common.DefaultsService;
 import com.spvessel.Cores.EventCommonMethodState;
 import com.spvessel.Cores.InterfaceItem;
+import com.spvessel.Cores.InterfaceMouseMethodState;
 import com.spvessel.Cores.MouseArgs;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.Orientation;
@@ -78,13 +79,14 @@ public class VerticalSlider extends VisualItem {
 
     public VerticalSlider() {
         setItemName("VerticalSlider_" + count);
-        //InterfaceMouseMethodState t_click = (sender, args) -> onTrackClick(sender, args);
-        eventMouseClick.add(this::onTrackClick); //t_click);
+        InterfaceMouseMethodState t_click = (sender, args) -> onTrackClick(sender, args);
+        eventMouseClick.add(t_click);
         count++;
 
         // Handler
         handler.direction = Orientation.VERTICAL;
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalSlider"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalSlider"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.VerticalSlider.class));
     }
 
     @Override
@@ -93,10 +95,10 @@ public class VerticalSlider extends VisualItem {
         addItems(track, handler);
 
         // Event connections
-        //InterfaceMouseMethodState h_drop = (sender, args) -> onDropHandler(sender, args);
-        eventMouseDrop.add(this::onDropHandler); //h_drop);
-        //InterfaceMouseMethodState m_dragg = (sender, args) -> eventMouseDrop.execute(sender, args);
-        handler.eventMouseDrag.add(eventMouseDrop::execute); //m_dragg);
+        InterfaceMouseMethodState h_drop = (sender, args) -> onDropHandler(sender, args);
+        eventMouseDrop.add(h_drop);
+        InterfaceMouseMethodState m_dragg = (sender, args) -> eventMouseDrop.execute(sender, args);
+        handler.eventMouseDrag.add(m_dragg);
     }
 
     public void onDropHandler(InterfaceItem sender, MouseArgs args)// что-то с тобой не так
@@ -110,7 +112,7 @@ public class VerticalSlider extends VisualItem {
 
     public void onTrackClick(InterfaceItem sender, MouseArgs args) {
         // Compute CurrentValue
-        setCurrentValue((float) (_mouse_ptr.Y - getY() - handler.getHeight() / 2) * (_max_value - _min_value)
+        setCurrentValue((float) (args.position.getY() - getY() - handler.getHeight() / 2) * (_max_value - _min_value)
                 / ((float) getHeight() - handler.getHeight()));
     }
 

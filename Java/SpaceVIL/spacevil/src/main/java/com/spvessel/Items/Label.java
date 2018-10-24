@@ -15,7 +15,8 @@ public class Label extends VisualItem {
         setItemName("Label_" + count);
         count++;
         _text_object = new TextLine();
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Label"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Label"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.Label.class));
     }
 
     public Label(String text) {

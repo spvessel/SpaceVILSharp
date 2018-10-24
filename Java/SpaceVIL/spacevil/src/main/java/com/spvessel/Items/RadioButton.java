@@ -17,7 +17,7 @@ public class RadioButton extends VisualItem implements InterfaceHLayout {
     }
 
     static int count = 0;
-    private TextLine _text_object;
+    private Label _text_object;
     private CustomIndicator _indicator;
 
     public Indicator getIndicator() {
@@ -27,17 +27,18 @@ public class RadioButton extends VisualItem implements InterfaceHLayout {
     public RadioButton() {
         setItemName("RadioButton_" + count);
         count++;
-        //InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(this::onKeyPress); //key_press);
+        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
+        eventKeyPress.add(key_press);
 
         // text
-        _text_object = new TextLine();
+        _text_object = new Label();
         _text_object.setItemName(getItemName() + "_text_object");
 
         // indicator
         _indicator = new CustomIndicator();
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.RadioButton"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.RadioButton"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.RadioButton.class));
     }
 
     public RadioButton(String text) {
@@ -46,8 +47,9 @@ public class RadioButton extends VisualItem implements InterfaceHLayout {
     }
 
     protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (args.scancode == 0x1C && eventMouseClick != null)
+        if (args.key == KeyCode.ENTER && eventMouseClick != null) {
             eventMouseClick.execute(this, new MouseArgs());
+        }
     }
 
     @Override
@@ -90,6 +92,10 @@ public class RadioButton extends VisualItem implements InterfaceHLayout {
     }
 
     // text init
+    public void setTextAlignment(ItemAlignment... alignment) {
+        _text_object.setTextAlignment(alignment);
+    }
+    
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
@@ -119,11 +125,11 @@ public class RadioButton extends VisualItem implements InterfaceHLayout {
     }
 
     public void setText(String text) {
-        _text_object.setItemText(text);
+        _text_object.setText(text);
     }
 
     public String getText() {
-        return _text_object.getItemText();
+        return _text_object.getText();
     }
 
     public void setForeground(Color color) {
@@ -154,11 +160,12 @@ public class RadioButton extends VisualItem implements InterfaceHLayout {
     public void initElements() {
         // events
         _indicator.getIndicatorMarker().eventToggle = null;
-        eventMouseClick.add((sender, args) -> {
+        InterfaceMouseMethodState btn_click = (sender, args) -> {
             _indicator.getIndicatorMarker().setToggled(!_indicator.getIndicatorMarker().isToggled());
             if (_indicator.getIndicatorMarker().isToggled())
                 uncheckOthers(sender);
-        });
+        };
+        eventMouseClick.add(btn_click);
 
         // adding
         addItem(_indicator);

@@ -1,11 +1,23 @@
 package com.spvessel.Engine;
 
+// import java.util.*;
+// import java.io.FileReader;
+// import java.io.BufferedReader;
+// import java.util.ArrayList;
+// import java.util.List;
+
+// import com.spvessel.Common.*;
+// import com.spvessel.Cores.*;
 import com.spvessel.Windows.*;
+//import org.lwjgl.glfw.;
 import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.GL;
+// import org.lwjgl.opengl.GL;
+// import org.lwjgl.system.*;
 
 import static org.lwjgl.glfw.GLFW.*;
+// import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.system.MemoryUtil.*;
+// import java.nio.ByteBuffer;
 
 public class GLWHandler {
     // cursors
@@ -37,7 +49,11 @@ public class GLWHandler {
     public Boolean visible;
     public Boolean alwaysOnTop;
     public Boolean maximized;
-    public com.spvessel.Cores.Pointer wPosition = new com.spvessel.Cores.Pointer();
+    private com.spvessel.Cores.Pointer wPosition = new com.spvessel.Cores.Pointer();
+
+    public com.spvessel.Cores.Pointer getPointer() {
+        return wPosition;
+    }
     ///////////////////////////////////////////////
 
     private WindowLayout _w_layout;
@@ -46,7 +62,7 @@ public class GLWHandler {
         return _w_layout;
     }
 
-    long _window;
+    long _window = NULL;
 
     public long getWindowId() {
         return _window;
@@ -56,8 +72,8 @@ public class GLWHandler {
 
     protected GLWHandler(WindowLayout handler) {
         _w_layout = handler;
-        wPosition.X = 0;
-        wPosition.Y = 0;
+        getPointer().setX(0);
+        getPointer().setY(0);
     }
 
     protected void initGlfw() {
@@ -66,6 +82,7 @@ public class GLWHandler {
         if (!glfwInit()) {
             System.out.println("Init GLFW fail - " + getLayout().getWindowTitle());
             System.err.println("GLFW initialization failed!");
+            System.exit(-1);
         }
 
         // cursors
@@ -78,12 +95,12 @@ public class GLWHandler {
     }
 
     protected void createWindow() {
-
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+        // important!!! may be the best combination of WINDOW HINTS!!!
+        glfwDefaultWindowHints();
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
         glfwWindowHint(GLFW_SAMPLES, 8);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 
         if (resizeble)
@@ -112,50 +129,37 @@ public class GLWHandler {
             glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        // if (visible)
-        // glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-        // else
 
         _window = glfwCreateWindow(_w_layout.getWidth(), _w_layout.getHeight(), _w_layout.getWindowTitle(), NULL, NULL);
 
         if (_window == NULL) {
-            // LogService.Log().LogText("Create window fail - " +
-            // getLayout().getWindowTitle());
+            System.out.println("glfwCreateWindow fail");
             glfwTerminate();
+            System.exit(-1);
         }
+        glfwMakeContextCurrent(_window);
+
         long monitor = glfwGetPrimaryMonitor();
         GLFWVidMode vidmode = glfwGetVideoMode(monitor);
         int width = vidmode.width();
         int height = vidmode.height();
 
         if (appearInCenter) {
-            wPosition.X = (width - _w_layout.getWidth()) / 2;
-            wPosition.Y = (height - _w_layout.getHeight()) / 2;
+            getPointer().setX((width - _w_layout.getWidth()) / 2);
+            getPointer().setY((height - _w_layout.getHeight()) / 2);
         } else {
-            wPosition.X = _w_layout.getX();
-            wPosition.Y = _w_layout.getY();
+            getPointer().setX(_w_layout.getX());
+            getPointer().setY(_w_layout.getY());
         }
-        glfwMakeContextCurrent(_window);
-        GL.createCapabilities();
         glfwSetWindowSizeLimits(_window, _w_layout.getMinWidth(), _w_layout.getMinHeight(), _w_layout.getMaxWidth(),
                 _w_layout.getMaxHeight());
-        glfwSetWindowPos(_window, wPosition.X, wPosition.Y);
-        // Console.WriteLine(
-        // _w_layout.getMinWidth() + " " +
-        // _w_layout.getMinHeight() + " " +
-        // _w_layout.getMaxWidth() + " " +
-        // _w_layout.getMaxHeight() + " "
-        // );
-        // LogService.Log().LogWindow(getLayout(), LogProps.AllGeometry);
+        glfwSetWindowPos(_window, getPointer().getX(), getPointer().getY());
         if (visible)
             glfwShowWindow(_window);
     }
 
     protected void switchContext() {
         glfwMakeContextCurrent(0);
-        glfwMakeContextCurrent(_window);
-    }
-    protected void setContext() {
         glfwMakeContextCurrent(_window);
     }
 

@@ -25,7 +25,8 @@ public class Indicator extends VisualItem {
 
         _marker = new CustomToggle();
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Indicator"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Indicator"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.Indicator.class));
     }
 
     @Override

@@ -250,49 +250,48 @@ namespace SpaceVIL
                     else
                     {
                         
-                        // if (prevLet != null)
-                        // {
-                        //     int ly0 = prevLet.minY;
-                        //     int ly1 = ly0 + prevLet.height - 1;
-                        //     int ry0 = currLet.minY;
-                        //     int ry1 = ry0 + currLet.height - 1;
+                        if (prevLet != null)
+                        {
+                            int ly0 = prevLet.minY;
+                            int ly1 = ly0 + prevLet.height - 1;
+                            int ry0 = currLet.minY;
+                            int ry1 = ry0 + currLet.height - 1;
 
-                        //     bool b1 = false, b2 = false;
-                        //     for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
-                        //     {
-                        //         //if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
-                        //         if (prevLet.rightArr[1, i - ly0] > err && currLet.leftArr[0, i - ry0] > err)
-                        //         {
-                        //             b1 = true;
-                        //             break;
-                        //         }
-                        //     }
+                            bool b1 = false, b2 = false;
+                            for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
+                            {
+                                //if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
+                                if (prevLet.rightArr[1, i - ly0] > err && currLet.leftArr[0, i - ry0] > err)
+                                {
+                                    b1 = true;
+                                    break;
+                                }
+                            }
 
-                        //     if (b1) x0++;
-                        //     else
-                        //     {
-                        //         for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
-                        //         {
-                        //             //if (prevLet.alphas[prevLet.width - 2, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
-                        //             if (prevLet.rightArr[0, i - ly0] > err && currLet.leftArr[0, i - ry0] > err)
-                        //             {
-                        //                 b2 = true;
-                        //                 break;
-                        //             }
-                        //             //if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[1, i - ry0] > err)
-                        //             if (prevLet.rightArr[1, i - ly0] > err && currLet.leftArr[1, i - ry0] > err)
-                        //             {
-                        //                 b2 = true;
-                        //                 break;
-                        //             }
-                        //         }
+                            if (b1) x0++;
+                            else
+                            {
+                                for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
+                                {
+                                    //if (prevLet.alphas[prevLet.width - 2, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
+                                    if (prevLet.rightArr[0, i - ly0] > err && currLet.leftArr[0, i - ry0] > err)
+                                    {
+                                        b2 = true;
+                                        break;
+                                    }
+                                    //if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[1, i - ry0] > err)
+                                    if (prevLet.rightArr[1, i - ly0] > err && currLet.leftArr[1, i - ry0] > err)
+                                    {
+                                        b2 = true;
+                                        break;
+                                    }
+                                }
 
-                        //         if (!b2) x0--;
-                        //     }
-                        // }
+                                if (!b2) x0--;
+                            }
+                        }
                          
-                        //  x0++;
-                         x0++;
+                        // x0++;
                     }
 
                     letList.Add(new ModifyLetter(currLet, x0)); //, cof));
@@ -465,7 +464,7 @@ namespace SpaceVIL
                 if (shape != null)
                     MakeLetterArrays(shape);
                 else isSpec = true;
-                //Console.Write(name + " ");
+
                 //LogService.Log().LogArr(new int[] {minY, height}, "Let " + name);
             }
 

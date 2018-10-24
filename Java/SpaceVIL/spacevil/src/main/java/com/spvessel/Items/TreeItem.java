@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.LinkedList;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Cores.InterfaceCommonMethodState;
+import com.spvessel.Cores.InterfaceMouseMethodState;
 import com.spvessel.Decorations.*;
 import com.spvessel.Engine.GraphicsMathService;
 import com.spvessel.Flags.*;
@@ -41,7 +43,7 @@ public class TreeItem extends VisualItem {
     }
 
     static int count = 0;
-    private TextLine _text_object;
+    private Label _text_object;
     private ButtonToggle _indicator;
 
     public ButtonToggle getIndicator() {
@@ -70,22 +72,12 @@ public class TreeItem extends VisualItem {
         _list_inners = new LinkedList<TreeItem>();
         _indicator = new ButtonToggle();
         _indicator.setItemName("Indicator_" + count);
-        _text_object = new TextLine();
+        _text_object = new Label();
+        _icon_shape = new CustomShape();
 
         // setStyle(DefaultsService.getDefaultStyle(typeof(SpaceVIL.TreeBranch)));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.TreeItem.class));
         setPassEvents(false);
-        setBackground(new Color(0, 0, 0, 0));
-        setForeground(new Color(210, 210, 210));
-        setFont(DefaultsService.getDefaultFont());
-        setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        setHeight(25);
-        setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
-        setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
-        setSpacing(5, 0);
-        setPadding(5, 0, 0, 0);
-        ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 60);
-        addItemState(ItemStateType.HOVERED, hovered);
     }
 
     public TreeItem(TreeItemType type, String text) {
@@ -107,7 +99,7 @@ public class TreeItem extends VisualItem {
 
     protected void resetIndents() {
         int level = _nesting_level;
-        if (!_parent._root.isVisible())
+        if (!_parent._root.getVisible())
             level--;
         setPadding(2 + _indent_size * level, 0, 0, 0);
     }
@@ -125,8 +117,10 @@ public class TreeItem extends VisualItem {
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
         remove.addItemState(ItemStateType.HOVERED, hovered);
-        //InterfaceMouseMethodState remove_click = (sender, args) -> getParent().removeItem(this);
-        remove.eventMouseClick.add((sender, args) -> getParent().removeItem(this)); //remove_click);
+        InterfaceMouseMethodState remove_click = (sender, args) -> {
+            getParent().removeItem(this);
+        };
+        remove.eventMouseClick.add(remove_click);
 
         MenuItem rename = new MenuItem("Rename");
         rename.setForeground(new Color(210, 210, 210));
@@ -143,26 +137,24 @@ public class TreeItem extends VisualItem {
         MenuItem new_leaf = new MenuItem("New Leaf");
         new_leaf.setForeground(new Color(210, 210, 210));
         new_leaf.addItemState(ItemStateType.HOVERED, hovered);
-        //InterfaceMouseMethodState leaf_click = (sender, args) -> this.addItem(getTreeLeaf());
-        new_leaf.eventMouseClick.add((sender, args) -> this.addItem(getTreeLeaf())); //leaf_click);
+        InterfaceMouseMethodState leaf_click = (sender, args) -> {
+            this.addItem(getTreeLeaf());
+        };
+        new_leaf.eventMouseClick.add(leaf_click);
 
         MenuItem new_branch = new MenuItem("New Branch");
         new_branch.setForeground(new Color(210, 210, 210));
         new_branch.addItemState(ItemStateType.HOVERED, hovered);
-        //InterfaceMouseMethodState branch_click = (sender, args) -> this.addItem(getTreeBranch());
-        new_branch.eventMouseClick.add((sender, args) -> this.addItem(getTreeBranch())); //branch_click);
+        InterfaceMouseMethodState branch_click = (sender, args) -> {
+            this.addItem(getTreeBranch());
+        };
+        new_branch.eventMouseClick.add(branch_click);
 
-        //InterfaceMouseMethodState menu_click = (sender, args) -> _menu.show(sender, args);
-        eventMouseClick.add(_menu::show); //menu_click);
+        InterfaceMouseMethodState menu_click = (sender, args) -> _menu.show(sender, args);
+        eventMouseClick.add(menu_click);
 
         switch (_item_type) {
         case LEAF:
-            _icon_shape = new CustomShape();
-            _icon_shape.setBackground(129, 187, 133);
-            _icon_shape.setSize(6, 6);
-            _icon_shape.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-            _icon_shape.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
-            _icon_shape.setTriangles(GraphicsMathService.getEllipse(3, 8));
             _icon_shape.setMargin(2, 0, 0, 0);
             super.addItem(_icon_shape);
             super.addItem(_text_object);
@@ -172,24 +164,8 @@ public class TreeItem extends VisualItem {
             break;
 
         case BRANCH:
-            _icon_shape = new CustomShape();
-            _icon_shape.setBackground(106, 185, 255);
-            _icon_shape.setSize(14, 9);
-            _icon_shape.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-            _icon_shape.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
-            _icon_shape.setTriangles(GraphicsMathService.getFolderIconShape(20, 15, 0, 0));
-
-            _indicator.setSize(15, 15);
-            _indicator.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
-            _indicator.isCustom = new CustomFigure(true, GraphicsMathService.getTriangle(10, 8, 0, 3, 90));
-            _indicator.setBackground(32, 32, 32);
-            ItemState toggled = new ItemState();
-            toggled.background = _indicator.getBackground();
-            toggled.shape = new CustomFigure(true, GraphicsMathService.getTriangle(10, 8, 0, 3, 180));
-            _indicator.addItemState(ItemStateType.TOGGLED, toggled);
-            _indicator.border.setRadius(0);
-            //InterfaceMouseMethodState e_toggle = (sender, args) -> onToggleHide(_indicator.isToggled());
-            _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled())); //e_toggle);
+            InterfaceMouseMethodState e_toggle = (sender, args) -> onToggleHide(_indicator.isToggled());
+            _indicator.eventToggle.add(e_toggle);
 
             super.addItem(_indicator);
             super.addItem(_icon_shape);
@@ -265,6 +241,10 @@ public class TreeItem extends VisualItem {
     }
 
     // text init
+    public void setTextAlignment(List<ItemAlignment> alignment) {
+        _text_object.setTextAlignment(alignment);
+    }
+
     public void setTextAlignment(ItemAlignment... alignment) {
         _text_object.setTextAlignment(alignment);
     }
@@ -294,12 +274,12 @@ public class TreeItem extends VisualItem {
     }
 
     public void setText(String text) {
-        _text_object.setItemText(text);
+        _text_object.setText(text);
         updateLayout();
     }
 
     public String getText() {
-        return _text_object.getItemText();
+        return _text_object.getText();
     }
 
     public int getTextWidth() {
@@ -335,6 +315,22 @@ public class TreeItem extends VisualItem {
         if (style == null)
             return;
         super.setStyle(style);
+        setForeground(style.foreground);
+        setFont(style.font);
+        setTextAlignment(style.textAlignment);
+
         // additional
+        Style inner_style = style.getInnerStyle("indicator");
+        if (inner_style != null) {
+            _indicator.setStyle(inner_style);
+        }
+        if (_item_type == TreeItemType.BRANCH)
+            inner_style = style.getInnerStyle("branchicon");
+        else
+            inner_style = style.getInnerStyle("leaficon");
+
+        if (inner_style != null) {
+            _icon_shape.setStyle(inner_style);
+        }
     }
 }

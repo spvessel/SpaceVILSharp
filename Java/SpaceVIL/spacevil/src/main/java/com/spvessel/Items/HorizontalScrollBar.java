@@ -38,7 +38,8 @@ public class HorizontalScrollBar extends HorizontalStack {
         downArrow.eventMouseClick.add(down_click);
         eventScrollDown.add(down_click);
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.HorizontalScrollBar"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.HorizontalScrollBar"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.HorizontalScrollBar.class));
     }
 
     @Override

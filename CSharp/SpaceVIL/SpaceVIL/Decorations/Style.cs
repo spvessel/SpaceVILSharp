@@ -39,7 +39,7 @@ namespace SpaceVIL
         public Indents Margin;// = new Indents();
         public int BorderRadius;
         public int BorderThickness;
-        public Color BorderColor;
+        public Color BorderFill;
         public List<float[]> Shape;// = new List<float[]>();
         public List<BaseItem> InnerShapes;// = new List<float[]>();
         public bool IsFixedShape;
@@ -139,11 +139,24 @@ namespace SpaceVIL
                 return;
         }
 
+        public static void ItemStatesSyncBase(Style style)
+        {
+            ItemState core_state = style.GetState(ItemStateType.Base);
+            foreach (var state in style.GetAllStates())
+            {
+                if (core_state == state.Value)
+                    continue;
+
+                state.Value.Border = core_state.Border;
+            }
+        }
+
         public static Style GetButtonCoreStyle()
         {
             Style style = new Style();
+
             style.Background = Color.FromArgb(255, 13, 176, 255);
-            style.Foreground = Color.FromArgb(255, 32, 32, 32); ;
+            style.Foreground = Color.FromArgb(255, 32, 32, 32);
             style.Font = DefaultsService.GetDefaultFont();
             style.WidthPolicy = SizePolicy.Fixed;
             style.HeightPolicy = SizePolicy.Fixed;
@@ -152,15 +165,11 @@ namespace SpaceVIL
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.BorderRadius = 6;
-            style.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(60, 255, 255, 255)
-            });
-            style.AddItemState(ItemStateType.Pressed, new ItemState()
-            {
-                Background = Color.FromArgb(30, 0, 0, 60)
-            });
-
+            ItemState hovered = new ItemState(Color.FromArgb(60, 255, 255, 255));
+            style.AddItemState(ItemStateType.Hovered, hovered);
+            ItemState pressed = new ItemState(Color.FromArgb(30, 0, 0, 60));
+            style.AddItemState(ItemStateType.Pressed, pressed);
+            
             return style;
         }
 
@@ -774,7 +783,7 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont(12);
+            style.Font = DefaultsService.GetDefaultFont(14);
             // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
@@ -786,10 +795,7 @@ namespace SpaceVIL
             {
                 Background = Color.FromArgb(30, 255, 255, 255)
             });
-            style.AddItemState(ItemStateType.Focused, new ItemState()
-            {
-                Background = Color.FromArgb(30, 255, 255, 255)
-            });
+
             Style marker_style = GetIndicatorStyle().GetInnerStyle("marker");
             marker_style.Background = Color.FromArgb(255, 130, 130, 130);
             marker_style.SetSize(16, 16);
@@ -826,7 +832,7 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont(12);
+            style.Font = DefaultsService.GetDefaultFont(14);
             // style.Font = new Font(style.Font.FontFamily, 14, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
@@ -838,10 +844,7 @@ namespace SpaceVIL
             {
                 Background = Color.FromArgb(30, 255, 255, 255)
             });
-            style.AddItemState(ItemStateType.Focused, new ItemState()
-            {
-                Background = Color.FromArgb(30, 255, 255, 255)
-            });
+
             Style cursor_style = new Style();
             cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
             cursor_style.Width = 2;
@@ -866,7 +869,7 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont(12);
+            style.Font = DefaultsService.GetDefaultFont(14);
             // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.Top;
@@ -874,10 +877,6 @@ namespace SpaceVIL
             style.HeightPolicy = SizePolicy.Expand;
             style.Padding = new Indents(5, 5, 5, 5);
             style.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(30, 255, 255, 255)
-            });
-            style.AddItemState(ItemStateType.Focused, new ItemState()
             {
                 Background = Color.FromArgb(30, 255, 255, 255)
             });
@@ -1081,5 +1080,63 @@ namespace SpaceVIL
 
         //     return style;
         // }
+
+        public static Style GetTreeViewStyle()
+        {
+            Style style = GetListBoxStyle();
+            return style;
+        }
+
+        public static Style GetTreeItemStyle()
+        {
+            Style style = new Style();
+            style.Background = Color.FromArgb(0, 0, 0, 0);
+            style.Foreground = Color.FromArgb(255, 210, 210, 210);
+            style.Font = DefaultsService.GetDefaultFont();
+            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            style.Height = 25;
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            style.Spacing = new Spacing(5, 0);
+            style.Padding = new Indents(5, 0, 0, 0);
+            ItemState hovered = new ItemState();
+            hovered.Background = Color.FromArgb(60, 255, 255, 255);
+            style.AddItemState(ItemStateType.Hovered, hovered);
+
+            Style indicator_style = new Style();//getButtonToggleStyle();
+            indicator_style.Background = Color.FromArgb(255, 32, 32, 32);
+            indicator_style.Foreground = Color.FromArgb(255, 210, 210, 210);
+            indicator_style.Font = DefaultsService.GetDefaultFont();
+            indicator_style.SetSize(15, 15);
+            indicator_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            indicator_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            indicator_style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            indicator_style.Shape = GraphicsMathService.GetTriangle(10, 8, 0, 3, 90);
+            indicator_style.IsFixedShape = true;
+            ItemState toggled = new ItemState();
+            toggled.Background = indicator_style.Background;
+            toggled.Shape = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 0, 3, 180));
+            indicator_style.AddItemState(ItemStateType.Toggled, toggled);
+            style.AddInnerStyle("indicator", indicator_style);
+
+            Style branch_icon_style = new Style();
+            branch_icon_style.Background = Color.FromArgb(255, 106, 185, 255);
+            branch_icon_style.SetSize(14, 9);
+            branch_icon_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            branch_icon_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            branch_icon_style.Shape = GraphicsMathService.GetFolderIconShape(20, 15, 0, 0);
+            style.AddInnerStyle("branchicon", branch_icon_style);
+
+            Style leaf_icon_style = new Style();
+            leaf_icon_style.Background = Color.FromArgb(255, 129, 187, 133);
+            leaf_icon_style.SetSize(6, 6);
+            leaf_icon_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            leaf_icon_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            leaf_icon_style.Shape = GraphicsMathService.GetEllipse(3, 16);
+            leaf_icon_style.Margin = new Indents(2, 0, 0, 0);
+            style.AddInnerStyle("leaficon", leaf_icon_style);
+
+            return style;
+        }
     }
 }

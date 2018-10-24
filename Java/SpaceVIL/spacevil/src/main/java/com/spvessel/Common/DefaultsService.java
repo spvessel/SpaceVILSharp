@@ -21,14 +21,15 @@ public final class DefaultsService {
         _default_theme = theme;
     }
 
-    public static Style getDefaultStyle(String type) {
+    // public static Style getDefaultStyle(String type) {
+    public static Style getDefaultStyle(Class<?> type) {
         if (_default_theme == null)
             _default_theme = new ThemeStyle();
         return _default_theme.getThemeStyle(type);
     }
 
     public static Font getDefaultFont() {
-        return new Font("Verdana", Font.PLAIN, 12);
+        return new Font("Ubuntu", Font.PLAIN, 12);
     }
 
     public static Font getDefaultFont(int size) {

@@ -15,7 +15,7 @@ public final class GraphicsMathService {
     private GraphicsMathService() {
     }
 
-    public static Color MixColors(Color... colors) {
+    public static Color mixColors(Color... colors) {
         List<Color> m_colors = Arrays.stream(colors).collect(Collectors.toList());
         if (m_colors.size() == 0)
             return new Color(255, 255, 255);
@@ -400,7 +400,7 @@ public final class GraphicsMathService {
         return triangles;
     }
 
-    public static List<float[]> getRoundSquareBorder(float width, float height, float radius, int x, int y) {
+    public static List<float[]> getRoundSquareBorder(float width, float height, float radius, float thickness, int x, int y) {
         if (radius < 0)
             radius = 0;
 
@@ -428,7 +428,7 @@ public final class GraphicsMathService {
         //    triangles.add(new float[] { x, radius + y, 0.0f });
 
         if (radius < 1)
-            return makeBorder(border);
+            return makeBorder(border, thickness);
 
         List<float[]> tmpList;
         float x0, y0;
@@ -452,14 +452,14 @@ public final class GraphicsMathService {
             border.add(new BorderSection(tmpList.get(i * 3 + 1)[0], tmpList.get(i * 3 + 1)[1], tmpList.get(i * 3 + 2)[0], tmpList.get(i * 3 + 2)[1], tmpList.get(i * 3)[0], tmpList.get(i * 3)[1]));
         }
 
-        return makeBorder(border);
+        return makeBorder(border, thickness);
     }
 
 
-    private static List<float[]> makeBorder(List<BorderSection> borders) {
+    private static List<float[]> makeBorder(List<BorderSection> borders, float thickness) {
         List<float[]> borderTris = new LinkedList<>();
 
-        float bw = 5; //border width
+        float bw = thickness; //border width
         float x3, y3, x4, y4;
         float x1, y1, x2, y2;
         for (int i = 0; i < borders.size(); i++) {

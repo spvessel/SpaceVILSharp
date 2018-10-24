@@ -79,13 +79,14 @@ public class HorizontalSlider extends VisualItem {
 
     public HorizontalSlider() {
         setItemName("HorizontalSlider_" + count);
-        //InterfaceMouseMethodState t_click = (sender, args) -> onTrackClick(sender, args);
-        eventMouseClick.add(this::onTrackClick); //t_click);
+        InterfaceMouseMethodState t_click = (sender, args) -> onTrackClick(sender, args);
+        eventMouseClick.add(t_click);
         count++;
 
         handler.direction = Orientation.HORIZONTAL;
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.HorizontalSlider"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.HorizontalSlider"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.HorizontalSlider.class));
     }
 
     @Override
@@ -94,10 +95,10 @@ public class HorizontalSlider extends VisualItem {
         addItems(track, handler);
 
         // Event connections
-        //InterfaceMouseMethodState h_drop = (sender, args) -> onDrophandler(sender, args);
-        eventMouseDrop.add(this::onDrophandler); //h_drop);
-        //InterfaceMouseMethodState m_dragg = (sender, args) -> eventMouseDrop.execute(sender, args);
-        handler.eventMouseDrag.add(eventMouseDrop::execute); //m_dragg);
+        InterfaceMouseMethodState h_drop = (sender, args) -> onDrophandler(sender, args);
+        eventMouseDrop.add(h_drop);
+        InterfaceMouseMethodState m_dragg = (sender, args) -> eventMouseDrop.execute(sender, args);
+        handler.eventMouseDrag.add(m_dragg);
     }
 
     public void onDrophandler(InterfaceItem sender, MouseArgs args)// что-то с тобой не так
@@ -114,7 +115,7 @@ public class HorizontalSlider extends VisualItem {
             return;
 
         // Compute CurrentValue
-        setCurrentValue((float) (args.position.X - getX() - handler.getWidth() / 2) * (_max_value - _min_value)
+        setCurrentValue((float) (args.position.getX() - getX() - handler.getWidth() / 2) * (_max_value - _min_value)
                 / ((float) getWidth() - handler.getWidth()));
     }
 

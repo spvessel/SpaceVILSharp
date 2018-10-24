@@ -9,9 +9,14 @@ import com.spvessel.Engine.*;
 import java.util.*;
 import java.util.List;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.stream.Collectors;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class WindowLayout {
+    public Object engine_locker = new Object();
+    private Lock wndLock = new ReentrantLock();
 
     class DrawThread extends Thread {
         DrawEngine engine;
@@ -43,6 +48,12 @@ public class WindowLayout {
     public InterfaceCommonMethod eventMinimize;
     public InterfaceCommonMethod eventHide;
 
+    private boolean isMain = false;
+
+    public void setMainThread() {
+        isMain = true;
+    }
+
     private UUID _id;
 
     public UUID getId() {
@@ -52,8 +63,6 @@ public class WindowLayout {
     public void setId(UUID value) {
         _id = value;
     }
-
-    public Object engine_locker = new Object();
 
     private CoreWindow handler;
 
@@ -89,8 +98,11 @@ public class WindowLayout {
         manager = new ActionManager(this);
         engine = new DrawEngine(this);
 
-        synchronized (CommonService.GlobalLocker) {
+        wndLock.lock();
+        try {
             WindowLayoutBox.initWindow(this);
+        } finally {
+            wndLock.unlock();
         }
         setFocusedItem(_window);
     }
@@ -118,20 +130,23 @@ public class WindowLayout {
         manager = new ActionManager(this);
         engine = new DrawEngine(this);
 
-        synchronized (CommonService.GlobalLocker) {
+        wndLock.lock();
+        try {
             WindowLayoutBox.initWindow(this);
+        } finally {
+            wndLock.unlock();
         }
         setFocusedItem(_window);
     }
 
     public void updatePosition() {
-        if (engine != null)
-            engine.setWindowPos();
+        // if (engine != null)
+        // engine.setWindowPos();
     }
 
     public void updateSize() {
-        if (engine != null)
-            engine.setWindowSize();
+        // if (engine != null)
+        // engine.setWindowSize();
     }
 
     private WContainer _window;
@@ -369,35 +384,46 @@ public class WindowLayout {
         engine._handler.appearInCenter = isCentered;
         engine._handler.focusable = isFocusable;
         engine._handler.alwaysOnTop = isAlwaysOnTop;
-        engine._handler.wPosition.X = getX();
-        engine._handler.wPosition.Y = getY();
+        engine._handler.getPointer().setX(getX());
+        engine._handler.getPointer().setY(getY());
 
         if (thread_engine != null && thread_engine.isAlive())
             return;
 
         thread_manager = new TaskThread(getWindowName() + "_" + "actions", manager);
+        // thread_manager.setPriority(Thread.MAX_PRIORITY);
+        thread_manager.setDaemon(true);
         thread_manager.start();
 
-        thread_engine = new DrawThread(getWindowName() + "_" + "engine", engine);
+        if (!isMain) {
+            thread_engine = new DrawThread(getWindowName() + "_" + "engine", engine);
+            // thread_engine.setPriority(Thread.MAX_PRIORITY);
+        }
 
         if (isDialog) {
-            synchronized (CommonService.GlobalLocker) {
+            wndLock.lock();
+            try {
                 ParentGUID = WindowLayoutBox.lastFocusedWindow.getId();
                 WindowLayoutBox.addToWindowDispatcher(this);
                 WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.focusable = false;
                 // WindowLayoutBox.getWindowInstance(ParentGUID).engine.update();
+            } finally {
+                wndLock.unlock();
             }
+            thread_engine.setDaemon(false);
             thread_engine.start();
             try {
                 thread_engine.join();
             } catch (InterruptedException e) {
                 // e.printStackTrace();
             }
-            // engine.init();
-        }
-        else {
-            thread_engine.start();
-            // engine.init();
+        } else {
+
+            if (!isMain) {
+                thread_engine.setDaemon(false);
+                thread_engine.start();
+            } else
+                engine.init();
         }
     }
 
@@ -405,18 +431,25 @@ public class WindowLayout {
         if (isDialog) {
             engine.close();
             setWindowFocused();
-            synchronized (CommonService.GlobalLocker) {
+            wndLock.lock();
+            try {
                 WindowLayoutBox.removeWindow(this);
                 WindowLayoutBox.removeFromWindowDispatcher(this);
+            } finally {
+                wndLock.unlock();
             }
             if (thread_manager != null && thread_manager.isAlive()) {
                 manager.stopManager();
                 manager.execute.set();
             }
         } else {
-            if (thread_engine != null && thread_engine.isAlive()) {
+            if (!isMain) {
+                if (thread_engine != null && thread_engine.isAlive()) {
+                    engine.close();
+                }
+            } else
                 engine.close();
-            }
+
             if (thread_manager != null && thread_manager.isAlive()) {
                 manager.stopManager();
                 manager.execute.set();
@@ -448,11 +481,12 @@ public class WindowLayout {
     }
 
     void setWindowFocused() {
-        synchronized (CommonService.GlobalLocker) {
-            if(WindowLayoutBox.getWindowInstance(ParentGUID) != null)
-            WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.focusable = true;
-            // WindowLayoutBox.getWindowInstance(ParentGUID).engine
-            //         .focus(WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.getWindowId(), true);
+        wndLock.lock();
+        try {
+            if (WindowLayoutBox.getWindowInstance(ParentGUID) != null)
+                WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.focusable = true;
+        } finally {
+            wndLock.unlock();
         }
     }
 
@@ -475,8 +509,8 @@ public class WindowLayout {
     volatile Boolean set = true;
 
     public void executePollActions() {
-//        manager.execute.release();
-//        manager.notify();
+        // manager.execute.release();
+        // manager.notify();
         manager.execute.set();
     }
 
@@ -488,9 +522,9 @@ public class WindowLayout {
         engine.resetItems();
     }
 
-    public void setIcon(Image icon_big, Image icon_small) {
-        // engine.setBigIcon(icon_big);
-        // engine.setSmallIcon(icon_small);
+    public void setIcon(BufferedImage icon_big, BufferedImage icon_small) {
+        engine.setBigIcon(icon_big);
+        engine.setSmallIcon(icon_small);
     }
 
     public void setHidden(Boolean value) {

@@ -14,19 +14,10 @@ public enum KeyMods {
     }
 
     public static KeyMods getEnum(int mod) {
-        switch (mod) {
-        case 0:
-            return KeyMods.NO;
-        case 1:
-            return KeyMods.SHIFT;
-        case 2:
-            return KeyMods.CONTROL;
-        case 4:
-            return KeyMods.ALT;
-        case 8:
-            return KeyMods.SUPER;
-        default:
-            return KeyMods.NO;
+        for(KeyMods k : KeyMods.values()){
+            if(k.getValue() == mod)
+                return  k;
         }
+        return NO;
     }
 }

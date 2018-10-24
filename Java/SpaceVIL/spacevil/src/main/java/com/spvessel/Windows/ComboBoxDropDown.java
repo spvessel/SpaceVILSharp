@@ -28,12 +28,13 @@ public class ComboBoxDropDown extends DialogWindow {
         
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
-        //InterfaceCommonMethod selection_changed = () -> onSelectionChanged();
-        itemList.getArea().selectionChanged.add(this::onSelectionChanged); //selection_changed);
+        InterfaceCommonMethod selection_changed = () -> onSelectionChanged();
+        itemList.getArea().selectionChanged.add(selection_changed);
         
         Handler.addItem(itemList);
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ComboBoxDropDown"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ComboBoxDropDown"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Windows.ComboBoxDropDown.class));
     }
 
     public void add(BaseItem item) {

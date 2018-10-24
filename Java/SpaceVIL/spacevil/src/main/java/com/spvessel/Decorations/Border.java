@@ -42,7 +42,7 @@ public class Border {
 
     public Border() {
         _border_color = new Color(0, 0, 0, 0);
-        _border_thickness = 0;
-        _border_radius = 0;
+        _border_thickness = -1;
+        _border_radius = -1;
     }
 }

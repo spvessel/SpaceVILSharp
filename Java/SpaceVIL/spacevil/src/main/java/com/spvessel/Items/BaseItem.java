@@ -5,7 +5,6 @@ import com.spvessel.Cores.*;
 import com.spvessel.Windows.*;
 import com.spvessel.Flags.*;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -117,14 +116,14 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
             return null;
 
         // clone triangles
-        // List<float[]> result = new LinkedList<float[]>();
+        List<float[]> result = new LinkedList<float[]>();
 
-        // for (int i = 0; i < getTriangles().size(); i++) {
-        // result.add(new float[] { getTriangles().get(i)[0], getTriangles().get(i)[1],
-        // getTriangles().get(i)[2] });
-        // }
+        for (int i = 0; i < getTriangles().size(); i++) {
+        result.add(new float[] { getTriangles().get(i)[0], getTriangles().get(i)[1],
+        getTriangles().get(i)[2] });
+        }
 
-        List<float[]> result = getTriangles();
+        // List<float[]> result = getTriangles();
         // max and min
         Float maxX = result.stream().map(i -> i[0]).max(Float::compare).get();
         Float maxY = result.stream().map(i -> i[1]).max(Float::compare).get();
@@ -224,7 +223,7 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
 
     private boolean _visible = true;
 
-    public boolean isVisible() {
+    public boolean getVisible() {
         return _visible;
     }
 
@@ -311,7 +310,8 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
     private Behavior _itemBehavior = new Behavior();
 
     public void setAlignment(ItemAlignment... alignment) {
-        setAlignment(Arrays.asList(alignment));
+        _itemBehavior.setAlignment(alignment);
+        updateBehavior();
     }
 
     public void setAlignment(List<ItemAlignment> alignment) {
@@ -523,7 +523,7 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
     public void setStyle(Style style) {
     }
 
-    public void checkDefaults() {
+    public void CheckDefaults() {
         // checking all attributes
         // setStyle(default theme)
         // foreach inners setStyle(from item default style)

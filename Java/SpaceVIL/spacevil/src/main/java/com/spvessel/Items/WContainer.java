@@ -1,5 +1,6 @@
 package com.spvessel.Items;
 
+import com.spvessel.Cores.*;
 import com.spvessel.Flags.*;
 
 import java.util.*;
@@ -23,9 +24,9 @@ public class WContainer extends VisualItem {
 
         if (xpos > 0 && xpos <= getHandler().getWidth() && ypos > 0 && ypos <= getHandler().getHeight()) {
             result = true;
-            _mouse_ptr.setPosition(xpos, ypos);
+            // _mouse_ptr.setPosition(xpos, ypos);
         } else {
-            _mouse_ptr.clear();
+            // _mouse_ptr.clear();
         }
         return result;
     }

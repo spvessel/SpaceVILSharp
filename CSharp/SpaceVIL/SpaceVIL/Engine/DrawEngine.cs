@@ -498,6 +498,8 @@ namespace SpaceVIL
             else
                 m_state = InputEventType.MouseRelease;
 
+            Queue<VisualItem> tmp = new Queue<VisualItem>(HoveredItems);
+
             if (!GetHoverVisualItem(ptrRelease.GetX(), ptrRelease.GetY(), m_state))
             {
                 EngineEvent.SetEvent(InputEventType.MouseRelease);
@@ -508,6 +510,13 @@ namespace SpaceVIL
             switch (state)
             {
                 case InputState.Release:
+                    while (tmp.Count > 0)
+                    {
+                        VisualItem item = tmp.Dequeue();
+                        if (item.IsDisabled)
+                            continue;// пропустить
+                        item.IsMousePressed = false;
+                    }
                     if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize)
                         || EngineEvent.LastEvent().HasFlag(InputEventType.WindowMove))
                     {
@@ -1124,6 +1133,29 @@ namespace SpaceVIL
 
             //clear array
             crd_array.Clear();
+
+            VisualItem vi = shell as VisualItem;
+            if (vi != null)
+            {
+                if (vi.Border.Thickness > 0)
+                {
+                    CustomShape border = new CustomShape();
+                    border.SetBackground(vi.Border.Fill);
+                    border.SetSize(vi.GetWidth(), vi.GetHeight());
+                    border.SetPosition(vi.GetX(), vi.GetY());
+                    border.SetParent(vi);
+                    border.SetHandler(vi.GetHandler());
+                    border.SetTriangles(GraphicsMathService.GetRoundSquareBorder(
+                        vi.GetWidth(),
+                        vi.GetHeight(),
+                        vi.Border.Radius,
+                        vi.Border.Thickness,
+                        0,
+                        0
+                        ));
+                    DrawShell(border);
+                }
+            }
         }
 
         void DrawText(TextLine text)

@@ -4,11 +4,13 @@ import java.awt.*;
 import java.util.List;
 import com.spvessel.Decorations.*;
 import com.spvessel.Common.*;
+import com.spvessel.Cores.*;
 import com.spvessel.Flags.*;
+import com.spvessel.Flags.SizePolicy;
 
 public class ProgressBar extends VisualItem {
     static int count = 0;
-    private TextLine _text_object;
+    private Label _text_object;
     private Rectangle _rect;
     private int _maxValue = 100;
     private int _minValue = 0;
@@ -18,11 +20,12 @@ public class ProgressBar extends VisualItem {
         setItemName("ProgressBar_" + count);
         count++;
 
-        _text_object = new TextLine();
+        _text_object = new Label();
         _text_object.setItemName(getItemName() + "_text_object");
         _rect = new Rectangle();
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ProgressBar"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ProgressBar"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.ProgressBar.class));
     }
 
     @Override
@@ -64,11 +67,15 @@ public class ProgressBar extends VisualItem {
         _currentValue = (_currentValue < _minValue) ? _minValue : _currentValue;
         DonePercent = (_currentValue - _minValue) / AllLength;
         String text = Math.round(DonePercent * 100f) + "%";
-        _text_object.setItemText(text);
-        _rect.setWidth(Math.round(getWidth() * DonePercent));
+        _text_object.setText(text);
+        _rect.setWidth((int) Math.round(getWidth() * DonePercent));
     }
 
     // text init
+    public void setTextAlignment(ItemAlignment... alignment) {
+        _text_object.setTextAlignment(alignment);
+    }
+    
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
@@ -98,11 +105,11 @@ public class ProgressBar extends VisualItem {
     }
 
     public void setText(String text) {
-        _text_object.setItemText(text);
+        _text_object.setText(text);
     }
 
     public String getText() {
-        return _text_object.getItemText();
+        return _text_object.getText();
     }
 
     public void setForeground(Color color) {

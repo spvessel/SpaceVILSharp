@@ -84,9 +84,9 @@ namespace SpaceVIL
             // _text_object.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
         }
 
-        internal void InitTimer(bool flag)
+        internal void InitTimer(bool value)
         {
-            if (flag)
+            if (value)
             {
                 if (_stop != null)
                     return;

@@ -37,12 +37,15 @@ public class VisualContact extends VisualItem {
         border.setWidth(45);
         border.setWidthPolicy(SizePolicy.FIXED);
         border.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
-        border.setTriangles(GraphicsMathService.getEllipse(50, 32));
+        border.Quality = 32;
+        // border.setTriangles(GraphicsMathService.getRoundSquare(50, 50, 25, 0, 0));
+        // border.setTriangles(GraphicsMathService.getEllipse(50, 50, 0, 0, 32));
 
         // contact name
         Label name = new Label(getItemName() + " contact");
         name.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
         name.setBackground(255, 255, 255, 32);
+        name.setForeground(210, 210, 210);
         name.setHeight(30);
         name.setHeightPolicy(SizePolicy.FIXED);
         name.setWidthPolicy(SizePolicy.EXPAND);
@@ -64,8 +67,8 @@ public class VisualContact extends VisualItem {
         ItemState hover = new ItemState();
         hover.background = new Color(255, 255, 255, 125);
         close.addItemState(ItemStateType.HOVERED, hover);
-
-        close.eventMouseClick.add((sender, args) -> disposeSelf());
+        InterfaceMouseMethodState click = (sender, args) -> disposeSelf();
+        close.eventMouseClick.add(click);
 
         // adding
         addItem(border);

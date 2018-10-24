@@ -67,22 +67,10 @@ namespace SpaceVIL
             _indicator = new ButtonToggle();
             _indicator.SetItemName("Indicator_" + count);
             _text_object = new Label();
+            _icon_shape = new CustomShape();
 
-            //SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeBranch)));
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeItem)));
             IsPassEvents = false;
-            SetBackground(Color.Transparent);
-            SetForeground(Color.LightGray);
-            SetFont(DefaultsService.GetDefaultFont());
-            SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-            SetHeight(25);
-            SetAlignment(ItemAlignment.Top | ItemAlignment.Left);
-            SetTextAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
-            SetSpacing(5);
-            SetPadding(5);
-            AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(60, 255, 255, 255)
-            });
         }
         public TreeItem(TreeItemType type, String text = "") : this(type)
         {
@@ -182,13 +170,6 @@ namespace SpaceVIL
             switch (_item_type)
             {
                 case TreeItemType.Leaf:
-                    _icon_shape = new CustomShape();
-                    _icon_shape.SetBackground(129, 187, 133);
-                    _icon_shape.SetSize(6, 6);
-                    _icon_shape.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-                    _icon_shape.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-                    _icon_shape.SetTriangles(GraphicsMathService.GetEllipse(3, 8));
-                    _icon_shape.SetMargin(2, 0, 0, 0);
                     base.AddItem(_icon_shape);
                     base.AddItem(_text_object);
 
@@ -197,23 +178,6 @@ namespace SpaceVIL
                     break;
 
                 case TreeItemType.Branch:
-                    _icon_shape = new CustomShape();
-                    _icon_shape.SetBackground(106, 185, 255);
-                    _icon_shape.SetSize(14, 9);
-                    _icon_shape.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-                    _icon_shape.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-                    _icon_shape.SetTriangles(GraphicsMathService.GetFolderIconShape());
-
-                    _indicator.SetSize(15, 15);
-                    _indicator.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-                    _indicator.IsCustom = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 0, 3, 90));
-                    _indicator.SetBackground(32, 32, 32);
-                    _indicator.AddItemState(ItemStateType.Toggled, new ItemState()
-                    {
-                        Background = _indicator.GetBackground(),
-                        Shape = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 0, 3, 180))
-                    });
-                    _indicator.Border.Radius = 0;
                     _indicator.EventToggle += (sender, args) => OnToggleHide(_indicator.IsToggled);
 
                     base.AddItem(_indicator);
@@ -366,8 +330,25 @@ namespace SpaceVIL
             if (style == null)
                 return;
             base.SetStyle(style);
-            //additional
+            SetForeground(style.Foreground);
+            SetFont(style.Font);
+            SetTextAlignment(style.TextAlignment);
 
+            //additional
+            Style inner_style = style.GetInnerStyle("indicator");
+            if (inner_style != null)
+            {
+                _indicator.SetStyle(inner_style);
+            }
+            if (_item_type == TreeItemType.Branch)
+                inner_style = style.GetInnerStyle("branchicon");
+            else
+                inner_style = style.GetInnerStyle("leaficon");
+
+            if (inner_style != null)
+            {
+                _icon_shape.SetStyle(inner_style);
+            }
         }
     }
 }

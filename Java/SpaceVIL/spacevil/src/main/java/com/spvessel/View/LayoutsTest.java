@@ -68,14 +68,15 @@ public class LayoutsTest extends ActiveWindow {
         left.setText("Left");
         left.setWidth(60);
         left.setHeight(25);
-        left.eventMouseClick.add((sender, args) -> {
+        InterfaceMouseMethodState left_click = (sender, args) -> {
             VisualContact contact_1 = new VisualContact();
             contact_1.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
             VisualContact contact_2 = new VisualContact();
             contact_2.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
             listbox_left_1.addItem(contact_1);
             listbox_left_2.addItem(contact_2);
-        });
+        };
+        left.eventMouseClick.add(left_click);
         frame.addItem(left);
 
         ButtonCore right = new ButtonCore();
@@ -84,14 +85,15 @@ public class LayoutsTest extends ActiveWindow {
         right.setText("Right");
         right.setWidth(60);
         right.setHeight(25);
-
-        right.eventMouseClick.add((sender, args) -> {
-        VisualContact contact_1 = new VisualContact();
-        contact_1.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
-        VisualContact contact_2 = new VisualContact();
-        contact_2.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
-        listbox_right_1.addItem(contact_1);
-        listbox_right_2.addItem(contact_2);});
+        InterfaceMouseMethodState right_click = (sender, args) -> {
+            VisualContact contact_1 = new VisualContact();
+            contact_1.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+            VisualContact contact_2 = new VisualContact();
+            contact_2.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+            listbox_right_1.addItem(contact_1);
+            listbox_right_2.addItem(contact_2);
+        };
+        right.eventMouseClick.add(right_click);
         frame.addItem(right);
 
         ButtonCore all = new ButtonCore();
@@ -100,18 +102,20 @@ public class LayoutsTest extends ActiveWindow {
         all.setText("All");
         all.setWidth(60);
         all.setHeight(25);
-        all.eventMouseClick.add((sender, args) -> {
+        InterfaceMouseMethodState all_click = (sender, args) -> {
             RadioButton radio = new RadioButton();
             // CheckBox radio = new CheckBox();
             radio.setText("Another radio button for testing.");
             radio.setHeight(20);
-            radio.eventMouseClick.add((s, a) -> {
+            InterfaceMouseMethodState r_click = (s, a) -> {
                 int y_p = radio.getParent().getY();
                 int y_c = radio.getY();
                 System.out.println(radio.getItemName() + " " + y_p + " " + y_c);
-            });
+            };
+            radio.eventMouseClick.add(r_click);
             listbox_left_1.addItem(radio);
-        });
+        };
+        all.eventMouseClick.add(all_click);
         frame.addItem(all);
     }
 }

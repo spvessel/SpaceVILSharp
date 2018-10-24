@@ -7,12 +7,30 @@ public class Pointer {
         return _is_set;
     }
 
-    public int X = -1;
-    public int Y = -1;
-    public int PrevX = -1;
-    public int PrevY = -1;
+    private int X = -1;
 
-    public void setPosition(float x, float y) {
+    public  int getX() {
+        return X;
+    }
+
+    public  void setX(int x) {
+        X = x;
+    }
+
+    private int Y = -1;
+
+    public  int getY() {
+        return Y;
+    }
+
+    public  void setY(int y) {
+        Y = y;
+    }
+
+    private int PrevX = -1;
+    private int PrevY = -1;
+
+    public  void setPosition(float x, float y) {
         if (PrevX == -1 || PrevY == -1) {
             PrevX = (int) x;
             PrevY = (int) y;
@@ -25,7 +43,7 @@ public class Pointer {
         _is_set = true;
     }
 
-    public void setPosition(int x, int y) {
+    public  void setPosition(int x, int y) {
         if (PrevX == -1 || PrevY == -1) {
             PrevX = x;
             PrevY = y;

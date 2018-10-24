@@ -2,6 +2,7 @@ package com.spvessel.Items;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.color.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +35,8 @@ public class TabView extends VisualItem {
         _tab_list = new HashMap<ButtonToggle, Frame>();
         _tab_bar = new HorizontalStack();
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.TabView"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.TabView"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.TabView.class));
     }
 
     @Override
@@ -76,8 +78,8 @@ public class TabView extends VisualItem {
             // tab.RemoveItemState(ItemStateType.Pressed);
             tab.setStyle(tab_style);
         }
-        //InterfaceMouseMethodState click = (sender, args) -> hideOthers(sender, args);
-        tab.eventMouseClick.add(this::hideOthers); //click);
+        InterfaceMouseMethodState click = (sender, args) -> hideOthers(sender, args);
+        tab.eventMouseClick.add(click);
         _tab_bar.addItem(tab);
 
         Frame view = new Frame();

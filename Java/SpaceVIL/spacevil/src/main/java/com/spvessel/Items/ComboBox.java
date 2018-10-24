@@ -8,6 +8,7 @@ import com.spvessel.Common.*;
 import com.spvessel.Cores.*;
 import com.spvessel.Decorations.*;
 import com.spvessel.Flags.ItemAlignment;
+import com.spvessel.Flags.KeyCode;
 import com.spvessel.Windows.ComboBoxDropDown;
 
 public class ComboBox extends VisualItem {
@@ -25,21 +26,26 @@ public class ComboBox extends VisualItem {
         setItemName("ComboBox_" + count);
         count++;
 
-        //InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(this::onKeyPress);//key_press);
+        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
+        eventKeyPress.add(key_press);
 
-        //InterfaceMouseMethodState press = (sender, args) -> showDropDownList();
-        eventMousePressed.add((sender, args) -> showDropDownList()); //press);
+        InterfaceMouseMethodState press = (sender, args) -> showDropDownList();
+        eventMousePressed.add(press);
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ComboBox"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ComboBox"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.ComboBox.class));
     }
 
     protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (args.scancode == 0x1C && eventMouseClick != null)
+        if (args.key == KeyCode.ENTER && eventMouseClick != null) {
             eventMouseClick.execute(this, new MouseArgs());
+        }
     }
 
     // text init
+    public void setTextAlignment(ItemAlignment... alignment) {
+        _selected.setTextAlignment(alignment);
+    }
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _selected.setTextAlignment(alignment);
     }
@@ -110,8 +116,8 @@ public class ComboBox extends VisualItem {
 
         // dropdownarea
         _dropdownarea.selection = _selected;
-        //InterfaceCommonMethod selection_changed = () -> onSelectionChanged();
-        _dropdownarea.selectionChanged.add(this::onSelectionChanged); //selection_changed);
+        InterfaceCommonMethod selection_changed = () -> onSelectionChanged();
+        _dropdownarea.selectionChanged.add(selection_changed);
     }
 
     private void showDropDownList() {

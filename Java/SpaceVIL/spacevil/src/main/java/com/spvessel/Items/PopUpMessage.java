@@ -39,11 +39,16 @@ public class PopUpMessage extends VisualItem {
         _text_object = new TextLine();
         _text_object.setItemText(message);
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.PopUpMessage"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.PopUpMessage"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.PopUpMessage.class));
         handler.getWindow().addItem(this);
     }
 
     // text init
+    public void setTextAlignment(ItemAlignment... alignment) {
+        _text_object.setTextAlignment(alignment);
+    }
+    
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
@@ -106,8 +111,8 @@ public class PopUpMessage extends VisualItem {
 
     @Override
     public void initElements() {
-        //InterfaceMouseMethodState click = (sender, args) -> removeSelf();
-        _btn_close.eventMouseClick.add((sender, args) -> removeSelf()); //click);
+        InterfaceMouseMethodState click = (sender, args) -> removeSelf();
+        _btn_close.eventMouseClick.add(click);
         // adding
         addItems(_text_object, _btn_close);
     }

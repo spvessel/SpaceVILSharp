@@ -10,7 +10,7 @@ public class Geometry implements InterfaceSize {
     private int _width = 0;
     private int _maxWidth = 65535;// Integer.MAX_VALUE;// glfw dont like Int32.MaxValue
 
-    public void setWidth(int width) {
+    public  void setWidth(int width) {
         if (width < 0) {
             _width = 0;
             return;
@@ -24,11 +24,11 @@ public class Geometry implements InterfaceSize {
         _width = width;
     }
 
-    public int getWidth() {
+    public  int getWidth() {
         return _width;
     }
 
-    public void setMinWidth(int width) {
+    public  void setMinWidth(int width) {
         if (width < 0) {
             _minWidth = 0;
             return;
@@ -42,11 +42,11 @@ public class Geometry implements InterfaceSize {
         _minWidth = width;
     }
 
-    public int getMinWidth() {
+    public  int getMinWidth() {
         return _minWidth;
     }
 
-    public void setMaxWidth(int width) {
+    public  void setMaxWidth(int width) {
         if (width < 0) {
             _maxWidth = 0;
             return;
@@ -60,7 +60,7 @@ public class Geometry implements InterfaceSize {
         _maxWidth = width;
     }
 
-    public int getMaxWidth() {
+    public  int getMaxWidth() {
         return _maxWidth;
     }
 
@@ -69,7 +69,7 @@ public class Geometry implements InterfaceSize {
     private int _height = 0;
     private int _maxHeight = 65535;// glfw dont like Int32.MaxValue
 
-    public void setHeight(int height) {
+    public  void setHeight(int height) {
         if (height < 0) {
             _height = 0;
             return;
@@ -83,11 +83,11 @@ public class Geometry implements InterfaceSize {
         _height = height;
     }
 
-    public int getHeight() {
+    public  int getHeight() {
         return _height;
     }
 
-    public void setMinHeight(int height) {
+    public  void setMinHeight(int height) {
         if (height < 0) {
             _minHeight = 0;
             return;
@@ -101,11 +101,11 @@ public class Geometry implements InterfaceSize {
         _minHeight = height;
     }
 
-    public int getMinHeight() {
+    public  int getMinHeight() {
         return _minHeight;
     }
 
-    public void setMaxHeight(int height) {
+    public  void setMaxHeight(int height) {
         if (height < 0) {
             _maxHeight = 65535;
             return;
@@ -119,17 +119,17 @@ public class Geometry implements InterfaceSize {
         _maxHeight = height;
     }
 
-    public int getMaxHeight() {
+    public  int getMaxHeight() {
         return _maxHeight;
     }
 
     // size
-    public void setSize(int width, int height) {
+    public  void setSize(int width, int height) {
         setWidth(width);
         setHeight(height);
     }
 
-    public int[] getSize() {
+    public  int[] getSize() {
         return new int[] { _width, _height };
     }
 }

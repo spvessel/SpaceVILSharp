@@ -1,14 +1,44 @@
 package com.spvessel.Items;
 
+import com.spvessel.Cores.*;
 import java.awt.*;
+import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.List;
 import com.spvessel.Decorations.*;
 import com.spvessel.Common.*;
 import com.spvessel.Flags.*;
+import com.spvessel.Flags.SizePolicy;
 
 public class ToolTip extends VisualItem {
+    class TooltipVisibility extends Thread {
+        private int _ms = 500;
+
+        TooltipVisibility() {
+        }
+
+        TooltipVisibility(int ms) {
+            _ms = ms;
+        }
+
+        boolean isCanceled = false;
+
+        @Override
+        public void run() {
+            long startTime = System.currentTimeMillis();
+            while (!isCanceled) {
+                if (System.currentTimeMillis() - startTime >= _ms)
+                    break;
+            }
+            // System.out.println(isCanceled);
+            if (!isCanceled) {
+                visibleSelf();
+            }
+        }
+    }
+
     private static int count = 0;
 
     private TextLine _text_object;
@@ -17,8 +47,8 @@ public class ToolTip extends VisualItem {
         return _text_object;
     }
 
-    protected Timer _stop;
-    private int _timeout = 300;
+    protected TooltipVisibility _stop;
+    private int _timeout = 500;
 
     public void setTimeOut(int milliseconds) {
         _timeout = milliseconds;
@@ -34,7 +64,8 @@ public class ToolTip extends VisualItem {
         setItemName("ToolTip_" + count);
         count++;
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ToolTip"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ToolTip"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.ToolTip.class));
     }
 
     @Override
@@ -46,30 +77,24 @@ public class ToolTip extends VisualItem {
             if (_stop != null)
                 return;
 
-            _stop = new Timer();
-            TimerTask task = new TimerTask() {
+            _stop = new TooltipVisibility(_timeout);
+            _stop.start();
 
-                @Override
-                public void run() {
-                    visibleSelf();
-                }
-            };
-            _stop.schedule(task, _timeout);
         } else {
             setVisible(false);
-
             if (_stop == null)
                 return;
-
-            _stop.cancel();
+            _stop.isCanceled = true;
             _stop = null;
         }
     }
 
     private void visibleSelf() {
+        if (_stop == null)
+            return;
+        // System.out.println("visible");
         setVisible(true);
-
-        _stop.cancel();
+        _stop.isCanceled = true;
         _stop = null;
     }
 

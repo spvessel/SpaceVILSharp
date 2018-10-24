@@ -30,11 +30,11 @@ public class FloatItem extends VisualItem implements InterfaceFloating, Interfac
         setHandler(handler);
         setItemName("FloatItem_" + count);
         setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        //InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
+        InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
         // eventMouseHover.add(press);
-        eventMousePressed.add(this::onMousePress); //press);
-        //InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
-        eventMouseDrag.add(this::onDragging); //dragg);
+        eventMousePressed.add(press);
+        InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
+        eventMouseDrag.add(dragg);
         count++;
 
         synchronized (CommonService.GlobalLocker) {
@@ -64,8 +64,8 @@ public class FloatItem extends VisualItem implements InterfaceFloating, Interfac
     }
 
     protected void onMousePress(InterfaceItem sender, MouseArgs args) {
-        _diff_x = args.position.X - getX();
-        _diff_y = args.position.Y - getY();
+        _diff_x = args.position.getX() - getX();
+        _diff_y = args.position.getY() - getY();
     }
 
     protected void onDragging(InterfaceItem sender, MouseArgs args) {
@@ -75,8 +75,8 @@ public class FloatItem extends VisualItem implements InterfaceFloating, Interfac
         int offset_x;
         int offset_y;
 
-        offset_x = args.position.X - _diff_x;
-        offset_y = args.position.Y - _diff_y;
+        offset_x = args.position.getX() - _diff_x;
+        offset_y = args.position.getY() - _diff_y;
 
         setX(offset_x);
         setY(offset_y);

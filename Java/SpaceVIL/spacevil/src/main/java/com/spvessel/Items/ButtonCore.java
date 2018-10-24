@@ -15,9 +15,10 @@ public class ButtonCore extends VisualItem {
         setItemName("ButtonCore_" + count);
         count++;
         _text_object = new TextLine();
-        //InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add((sender, args) -> onKeyPress(sender, args)); //key_press);
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ButtonCore"));
+        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
+        eventKeyPress.add(key_press);
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ButtonCore"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.ButtonCore.class));
     }
 
     public ButtonCore(String text) {
@@ -26,11 +27,15 @@ public class ButtonCore extends VisualItem {
     }
 
     protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (args.scancode == 0x1C && eventMouseClick != null)
+        if (args.key == KeyCode.ENTER && eventMouseClick != null) {
             eventMouseClick.execute(this, new MouseArgs());
+        }
     }
 
     // text init
+    public void setTextAlignment(ItemAlignment... alignment) {
+        _text_object.setTextAlignment(alignment);
+    }
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }

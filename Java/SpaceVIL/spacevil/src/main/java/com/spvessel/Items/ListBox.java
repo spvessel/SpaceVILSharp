@@ -84,7 +84,8 @@ public class ListBox extends VisualItem {
     public ListBox() {
         setItemName("ListBox_" + count);
         count++;
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ListBox"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ListBox"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.ListBox.class));
 
         // VBar
         vScrollBar.setVisible(true);
@@ -126,7 +127,7 @@ public class ListBox extends VisualItem {
         int total_invisible_size = 0;
         int visible_area = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
         for (BaseItem item : _area.getItems()) {
-            if (item.equals(_area.getSubstrate()) || !item.isVisible())
+            if (item.equals(_area.getSubstrate()) || !item.getVisible())
                 continue;
             total_invisible_size += (item.getHeight() + _area.getSpacing().vertical);
         }
@@ -238,22 +239,22 @@ public class ListBox extends VisualItem {
         _grid.insertItem(hScrollBar, 1, 0);
 
         // Events Connections
-        //InterfaceCommonMethod listChanged = () -> updateElements();
-        _area.itemListChanged.add(this::updateElements); //listChanged);
+        InterfaceCommonMethod listChanged = () -> updateElements();
+        _area.itemListChanged.add(listChanged);
 
-        //InterfaceMouseMethodState scroll_up = (sender, args) -> vScrollBar.eventScrollUp.execute(sender, args);
-        eventScrollUp.add(vScrollBar.eventScrollUp::execute); //scroll_up);
-        //InterfaceMouseMethodState scroll_down = (sender, args) -> vScrollBar.eventScrollDown.execute(sender, args);
-        eventScrollDown.add(vScrollBar.eventScrollDown::execute); //scroll_down);
+        InterfaceMouseMethodState scroll_up = (sender, args) -> vScrollBar.eventScrollUp.execute(sender, args);
+        eventScrollUp.add(scroll_up);
+        InterfaceMouseMethodState scroll_down = (sender, args) -> vScrollBar.eventScrollDown.execute(sender, args);
+        eventScrollDown.add(scroll_down);
 
-        //InterfaceCommonMethodState v_changed = (sender) -> updateVListArea();
-        vScrollBar.slider.eventValueChanged.add((sender) -> updateVListArea()); //v_changed);
-        //InterfaceCommonMethodState h_changed = (sender) -> updateHListArea();
-        hScrollBar.slider.eventValueChanged.add((sender) -> updateHListArea()); //h_changed);
+        InterfaceCommonMethodState v_changed = (sender) -> updateVListArea();
+        vScrollBar.slider.eventValueChanged.add(v_changed);
+        InterfaceCommonMethodState h_changed = (sender) -> updateHListArea();
+        hScrollBar.slider.eventValueChanged.add(h_changed);
     }
 
     public List<BaseItem> getListContent() {
-        List<BaseItem> result = new LinkedList<>();
+        List<BaseItem> result = new LinkedList<BaseItem>();
         for (BaseItem item : _area.getItems()) {
             if (item instanceof CustomShape)
                 continue;
@@ -268,7 +269,7 @@ public class ListBox extends VisualItem {
     }
 
     public BaseItem getSelectionItem() {
-        List<BaseItem> result = new LinkedList<>();
+        List<BaseItem> result = new LinkedList<BaseItem>();
         return _area.getSelectionItem();
     }
 

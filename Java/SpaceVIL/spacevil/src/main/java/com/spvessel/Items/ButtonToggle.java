@@ -16,30 +16,21 @@ public class ButtonToggle extends VisualItem {
         setItemName("ButtonToggle_" + count);
         count++;
         _text_object = new TextLine();
-        //InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(this::onKeyPress); //key_press);
-        /*
+        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
+        eventKeyPress.add(key_press);
         InterfaceMouseMethodState btn_click = (sender, args) -> {
             if (eventToggle != null)
             eventToggle.execute(sender, args); // remember
         };
-        */
-        eventMouseClick.add((sender, args) -> {
-            if (eventToggle != null)
-                eventToggle.execute(sender, args); // remember
-        }); //btn_click);
-
-        /*
+        eventMouseClick.add(btn_click);
+        
         InterfaceMouseMethodState toggle = (sender, args) -> {
             _toggled = !_toggled;
             setToggled(_toggled);
         };
-        */
-        eventToggle.add((sender, args) -> {
-            _toggled = !_toggled;
-            setToggled(_toggled);
-        }); //toggle);
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ButtonToggle"));
+        eventToggle.add(toggle);
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ButtonToggle"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.ButtonToggle.class));
     }
 
     public ButtonToggle(String text) {
@@ -64,11 +55,15 @@ public class ButtonToggle extends VisualItem {
     }
 
     protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (args.scancode == 0x1C && eventMouseClick != null)
+        if (args.key == KeyCode.ENTER && eventMouseClick != null) {
             eventMouseClick.execute(this, new MouseArgs());
+        }
     }
 
     // text init
+    public void setTextAlignment(ItemAlignment... alignment) {
+        _text_object.setTextAlignment(alignment);
+    }
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }

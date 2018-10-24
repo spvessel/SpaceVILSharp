@@ -25,49 +25,155 @@ public class FlowTest extends ActiveWindow {
         TitleBar title = new TitleBar("FlowTest");
         Handler.addItem(title);
 
-        FreeArea layout = new FreeArea();
-        layout.setMargin(0, 30, 0, 0);
+        VerticalStack layout = new VerticalStack();
+        layout.setAlignment(ItemAlignment.TOP, ItemAlignment.HCENTER);
+        layout.setMargin(0, title.getHeight(), 0, 0);
         layout.setPadding(6, 6, 6, 6);
-        layout.setBackground(70, 70, 70);
+        layout.setSpacing(0, 10);
+        layout.setBackground(255, 255, 255, 20);
+
+        // adding toolbar
         Handler.addItem(layout);
+
+        // Frame
+        HorizontalStack toolbar = new HorizontalStack();
+        toolbar.setBackground(51, 51, 51);
+        toolbar.setItemName("toolbar");
+        toolbar.setHeight(40);
+        toolbar.setPadding(10, 0, 0, 0);
+        toolbar.setSpacing(-10, 0);
+        toolbar.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        layout.addItem(toolbar);
+
+        FreeArea flow = new FreeArea();
+        flow.setPadding(6, 6, 6, 6);
+        flow.setBackground(70, 70, 70);
+        layout.addItem(flow);
+
+        // btn add_at_center
+        // FloatItem flow_item = new FloatItem(Handler);
+        // flow_item.setPosition(200, 200);
+        // flow_item.setSize(300, 100);
+
+        // btn add_at_begin
+        ButtonCore btn1 = new ButtonCore();
+        btn1.setBackground(13, 176, 255);
+        btn1.setItemName("nameof(btn1)");
+        btn1.setWidth(30);
+        btn1.setHeight(30);
+        btn1.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        btn1.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        ItemState hovered = new ItemState(new Color(255, 255, 255, 125));
+        btn1.addItemState(ItemStateType.HOVERED, hovered);
+        btn1.eventMouseClick.add((sender, args) -> {
+            PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!", Handler);
+            pop.show();
+        });
+        btn1.isCustom = new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180));
+        btn1.HoverRule = ItemRule.STRICT;
+
+        ButtonCore btn2 = new ButtonCore();
+        btn2.setBackground(121, 223, 152);
+        btn2.setItemName("nameof(btn2)");
+        btn2.setWidth(30);
+        btn2.setHeight(30);
+        btn2.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        btn2.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        btn2.addItemState(ItemStateType.HOVERED, hovered);
+        // btn2.eventMouseClick.add((sender, args) -> flow_item.show(sender, args));
+        btn2.isCustom = new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0));
+        btn2.HoverRule = ItemRule.STRICT;
+
+        // btn add_at_end
+        ButtonCore btn3 = new ButtonCore();
+        btn3.setBackground(238, 174, 128);
+        btn3.setItemName("nameof(btn3)");
+        btn3.setWidth(30);
+        btn3.setHeight(30);
+        btn3.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        btn3.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        btn3.addItemState(ItemStateType.HOVERED, hovered);
+        btn3.eventMouseClick.add((sender, args) -> {
+            ResizableItem frame = new ResizableItem();
+            frame.setPadding(10, 10, 10, 10);
+            frame.setBackground(100, 100, 100);
+            frame.setSize(300, 300);
+            frame.setPosition(200, 200);
+            flow.addItem(frame);
+            PointsContainer graph = getPointsContainer();
+            frame.addItem(graph);
+        });
+        btn3.isCustom = new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180));
+        btn3.HoverRule = ItemRule.STRICT;
+
+        ButtonCore btn4 = new ButtonCore();
+        btn4.setBackground(187, 102, 187);
+        btn4.setItemName("nameof(btn4)");
+        btn4.setWidth(30);
+        btn4.setHeight(30);
+        btn4.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        btn4.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        btn4.addItemState(ItemStateType.HOVERED, hovered);
+        btn4.eventMouseClick.add((sender, args) -> {
+            flow.addItem(getBlockList());
+        });
+        btn4.isCustom = new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0));
+        btn4.HoverRule = ItemRule.STRICT;
+
+        ButtonCore btn5 = new ButtonCore();
+        btn5.setBackground(238, 174, 128);
+        btn5.setItemName("nameof(btn5)");
+        btn5.setWidth(30);
+        btn5.setHeight(30);
+        btn5.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        btn5.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        btn5.addItemState(ItemStateType.HOVERED, hovered);
+        btn5.eventMouseClick.add((sender, args) -> {
+
+        });
+        btn5.isCustom = new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180));
+        btn5.HoverRule = ItemRule.STRICT;
+
+        // adding buttons
+        toolbar.addItems(btn1, btn2, btn3, btn4, btn5);
 
         // context
         _context_menu = new ContextMenu(Handler);
         _context_menu.setWidth(110);
         com.spvessel.Items.MenuItem restore = new com.spvessel.Items.MenuItem("Restore");
-        // restore.EventMouseClick += (sender, args) =>
+        // restore.eventMouseClick += (sender, args) ->
         // {
         // flow.setHScrollOffset(0);
         // flow.setVScrollOffset(0);
         // };
         com.spvessel.Items.MenuItem x_plus = new com.spvessel.Items.MenuItem("X += 100");
-        // x_plus.EventMouseClick += (sender, args) =>
+        // x_plus.eventMouseClick += (sender, args) ->
         // {
         // flow.setHScrollOffset(flow.getHScrollOffset() + 10);
         // };
         com.spvessel.Items.MenuItem y_plus = new com.spvessel.Items.MenuItem("Y += 100");
-        // y_plus.EventMouseClick += (sender, args) =>
+        // y_plus.eventMouseClick += (sender, args) ->
         // {
         // flow.setVScrollOffset(flow.getVScrollOffset() + 10);
         // };
-        com.spvessel.Items.MenuItem addition = new com.spvessel.Items.MenuItem("Addition");
+        com.spvessel.Items.MenuItem addition = new com.spvessel.Items.MenuItem("addition");
 
         _context_menu.addItems(restore, x_plus, y_plus, addition);
 
         ContextMenu addition_menu = new ContextMenu(Handler);
         addition_menu.setSize(110, 94);
         com.spvessel.Items.MenuItem x_minus = new com.spvessel.Items.MenuItem("X -= 100");
-        // x_minus.EventMouseClick += (sender, args) =>
+        // x_minus.eventMouseClick += (sender, args) ->
         // {
         // flow.setHScrollOffset(flow.getHScrollOffset() - 10);
         // };
         com.spvessel.Items.MenuItem y_minus = new com.spvessel.Items.MenuItem("Y -= 100");
-        // y_minus.EventMouseClick += (sender, args) =>
+        // y_minus.eventMouseClick += (sender, args) ->
         // {
         // Console.WriteLine("y minus");
         // flow.setVScrollOffset(flow.getVScrollOffset() - 10);
         // };
-        com.spvessel.Items.MenuItem ex_addition = new com.spvessel.Items.MenuItem("Addition");
+        com.spvessel.Items.MenuItem ex_addition = new com.spvessel.Items.MenuItem("addition");
         addition_menu.addItems(x_minus, y_minus, ex_addition);
 
         addition.assignContexMenu(addition_menu);
@@ -75,61 +181,22 @@ public class FlowTest extends ActiveWindow {
         ContextMenu ex_menu = new ContextMenu(Handler);
         ex_menu.setSize(110, 64);
         ex_addition.assignContexMenu(ex_menu);
-        layout.addContextMenu(_context_menu);
+        flow.addContextMenu(_context_menu);
+    }
 
-        VerticalScrollBar v_slider = new VerticalScrollBar();
-        v_slider.setHeightPolicy(SizePolicy.FIXED);
-        v_slider.setHeight(500);
-        v_slider.setPosition(0, 0);
-        layout.addItem(v_slider);
-
-        FloatItem flow_item = new FloatItem(Handler);
-        flow_item.setBackground(100, 100, 250);
-        flow_item.setPosition(200, 200);
-        flow_item.setSize(300, 100);
-        flow_item.setPassEvents(false);
-        ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 80);
-        flow_item.addItemState(ItemStateType.HOVERED, hovered);
-
-        ButtonCore btn_action = new ButtonCore();
-        btn_action.setBackground(100, 255, 150);
-        btn_action.setText("Columnar");
-        btn_action.setForeground(0, 0, 0);
-        btn_action.setItemName("Action");
-        btn_action.setWidth(256);
-        btn_action.setHeight(128);
-        btn_action.setWidthPolicy(SizePolicy.FIXED);
-        btn_action.setHeightPolicy(SizePolicy.FIXED);
-        btn_action.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        btn_action.border.setRadius(10);
-        btn_action.eventMouseClick.add((sender, args) -> {
-            // flow_item.show(sender, args);
-            // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!", Handler);
-            // pop.show();
+    private ResizableItem getBlockList() {
+        BlockList block = new BlockList();
+        // ResizableItem block = new ResizableItem();
+        block.eventMouseClick.add((sender, args) -> {
+            System.out.println(block.getX() + " " + block.getY());
         });
-
-        ResizableItem frame = new ResizableItem();
-        frame.setPadding(10, 10, 10, 10);
-        frame.setBackground(100, 100, 100);
-        frame.setSize(300, 300);
-        frame.setPosition(200, 200);
-        layout.addItem(frame);
-        //PointsContainer graph = getPointsContainer();
-        //frame.addItem(graph);
-
-        CustomShape cs = new CustomShape(GraphicsMathService.getRoundSquareBorder(250, 250, 0, 10, 10));
-        cs.setBackground(new Color(10, 255, 10));
-        cs.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        //cs.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-
-        frame.addItem(cs);
-        // ResizableItem res = new ResizableItem();
-        // res.setSize(300, 300);
-        // res.setBackground(55, 55, 55);
-        // res.setPassEvents(false);
-        // layout.addItem(res);
-        // res.addItem(btn_action);
+        block.setBackground(45, 45, 45);
+        // block.SetBackground(255, 181, 111);
+        block.setWidth(250);
+        block.setHeight(200);
+        block.setX(100);
+        block.setY(100);
+        return block;
     }
 
     private PointsContainer getPointsContainer() {
@@ -139,9 +206,9 @@ public class FlowTest extends ActiveWindow {
         graph_points.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         graph_points.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         // List<float[]> crd = new List<float[]>();
-        // crd.Add(new float[3] { 100.0f, 0.0f, 0.0f });
-        // crd.Add(new float[3] { 50.0f, 100.0f, 0.0f });
-        // crd.Add(new float[3] { 150.0f, 100.0f, 0.0f });
+        // crd.add(new float[3] { 100.0f, 0.0f, 0.0f });
+        // crd.add(new float[3] { 50.0f, 100.0f, 0.0f });
+        // crd.add(new float[3] { 150.0f, 100.0f, 0.0f });
         // graph_points.setPointsCoord(crd);
         graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50, 0, 0));
         // graph_points.setPointsCoord(GraphicsMathService.getTriangle(100, 100, 0, 0,

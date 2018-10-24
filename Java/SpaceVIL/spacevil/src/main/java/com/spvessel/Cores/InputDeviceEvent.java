@@ -8,29 +8,29 @@ public class InputDeviceEvent {
     protected Boolean isHappen = false;
     private List<InputEventType> eType = new LinkedList<InputEventType>();
 
-    public void setEvent(InputEventType type) {
+    public synchronized void setEvent(InputEventType type) {
         if (!eType.contains(type))
             eType.add(type);
 
         isHappen = true;
     }
 
-    public Boolean isEvent() {
+    public synchronized Boolean isEvent() {
         Boolean tmp = isHappen;
         isHappen = false;
         return tmp;
     }
 
-    public List<InputEventType> lastEvent() {
+    public synchronized List<InputEventType> lastEvent() {
         return eType;
     }
 
-    public void resetEvent(InputEventType type) {
+    public synchronized void resetEvent(InputEventType type) {
         if (eType.contains(type))
             eType.remove(type);
     }
 
-    public void resetAllEvents() {
+    public synchronized void resetAllEvents() {
         eType.clear();
     }
 }

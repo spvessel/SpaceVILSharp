@@ -40,7 +40,8 @@ public class VerticalScrollBar extends VerticalStack {
         downArrow.eventMouseClick.add(down_click);
         eventScrollDown.add(down_click);
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalScrollBar"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalScrollBar"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.VerticalScrollBar.class));
     }
 
     @Override

@@ -3,17 +3,17 @@ package com.spvessel.Windows;
 import com.spvessel.Flags.LayoutType;
 import com.spvessel.Flags.SizePolicy;
 import com.spvessel.Items.WContainer;
-import com.spvessel.Windows.*;
 import com.spvessel.Layouts.ItemsLayoutBox;
 
 import java.util.*;
 import java.util.stream.*;
 
 public class WindowLayoutBox {
-    static public Map<String, WindowLayout> windowsName = new HashMap<>();
-    static public Map<UUID, WindowLayout> windowsUUID = new HashMap<>();
-    static public List<WindowsPair> currentCallingPair = new LinkedList<>();
+    static public Map<String, WindowLayout> windowsName = new HashMap<String, WindowLayout>();
+    static public Map<UUID, WindowLayout> windowsUUID = new HashMap<UUID, WindowLayout>();
+    static public List<WindowsPair> currentCallingPair = new LinkedList<WindowsPair>();
     static public WindowLayout lastFocusedWindow;
+    static Object locker = new Object();
 
     static public void initWindow(WindowLayout _layout) {
         windowsName.put(_layout.getWindowName(), _layout);
@@ -90,7 +90,6 @@ public class WindowLayoutBox {
 
     static public void setCurrentFocusedWindow(WindowLayout wnd) {
         lastFocusedWindow = wnd;
-        // Console.WriteLine(LastFocusedWindow.GetWindowName());
     }
 
     static protected void setFocusedWindow(CoreWindow window) {

@@ -38,8 +38,8 @@ namespace SpaceVIL
         public Border()
         {
             Fill = Color.Transparent;
-            Thickness = 0;
-            Radius = 0;
+            Thickness = -1;
+            Radius = -1;
         }
     }
 }

@@ -2,6 +2,8 @@ package com.spvessel.Windows;
 
 import java.awt.Color;
 
+import com.spvessel.Cores.InterfaceCommonMethodState;
+import com.spvessel.Cores.InterfaceMouseMethodState;
 import com.spvessel.Decorations.ItemState;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.ItemStateType;
@@ -85,10 +87,11 @@ public class MessageBox extends DialogWindow {
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
         ok.addItemState(ItemStateType.HOVERED, hovered);
-        ok.eventMouseClick.add((sender, args) -> {
+        InterfaceMouseMethodState ok_click = (sender, args) -> {
             _result = true;
             Handler.close();
-        });
+        };
+        ok.eventMouseClick.add(ok_click);
         layout.addItems(msg, ok);
     }
 

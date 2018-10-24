@@ -55,7 +55,7 @@ namespace SpaceVIL
         // }
         public Font GetDefaultFont(int size = 10) //объекты не инициализируются почему-то, выяснить
         {
-            Console.WriteLine(size);
+            // Console.WriteLine(size);
             if (size == 0)
             {
                 size = 10;

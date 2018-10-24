@@ -11,15 +11,13 @@ public class ActionManager {
     public ConcurrentLinkedQueue<EventTask> stackEvents = new ConcurrentLinkedQueue<EventTask>();
 
     public ManualResetEvent execute = new ManualResetEvent(false);
-    // public final Semaphore execute = new Semaphore(1);
+    private Lock managerLock = new ReentrantLock();
     WindowLayout _handler;
     boolean _stoped;
 
     public ActionManager(WindowLayout wnd) {
         _handler = wnd;
     }
-
-    private Lock managerLock = new ReentrantLock();
 
     public void startManager() {
         _stoped = false;
@@ -29,9 +27,12 @@ public class ActionManager {
             } catch (InterruptedException e) {
             }
             managerLock.lock();
-            executeActions();
-            execute.reset();
-            managerLock.unlock();
+            try {
+                executeActions();
+            } finally {
+                execute.reset();
+                managerLock.unlock();
+            }
         }
     }
 

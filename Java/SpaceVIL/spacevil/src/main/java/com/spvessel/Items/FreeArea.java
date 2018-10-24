@@ -13,6 +13,10 @@ import com.spvessel.Cores.MouseArgs;
 
 public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDraggable {
     static int count = 0;
+    private int _x_press = 0;
+    private int _y_press = 0;
+    private int _diff_x = 0;
+    private int _diff_y = 0;
     Map<BaseItem, int[]> _stored_crd;
 
     // public ContextMenu _dropdownmenu = new ContextMenu();
@@ -21,23 +25,27 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
         count++;
         _stored_crd = new HashMap<BaseItem, int[]>();
 
-        //InterfaceMouseMethodState click = (sender, args) -> onMouseRelease(sender, args);
-        eventMouseClick.add(this::onMouseRelease); //click);
-        //InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
-        eventMousePressed.add(this::onMousePress); //press);
-        //InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
-        eventMouseDrag.add(this::onDragging); //dragg);
+        InterfaceMouseMethodState click = (sender, args) -> onMouseRelease(sender, args);
+        eventMouseClick.add(click);
+        InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
+        eventMousePressed.add(press);
+        InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
+        eventMouseDrag.add(dragg);
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.FreeArea"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.FreeArea"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.FreeArea.class));
     }
 
     public void addContextMenu(ContextMenu context_menu) {
-        //InterfaceMouseMethodState context_show = (sender, args) -> context_menu.show(sender, args);
-        eventMouseClick.add(context_menu::show); //context_show);
+        InterfaceMouseMethodState context_show = (sender, args) -> context_menu.show(sender, args);
+        eventMouseClick.add(context_show);
     }
 
     protected void onMousePress(InterfaceItem sender, MouseArgs args) {
-
+        _x_press = args.position.getX();
+        _y_press = args.position.getY();
+        _diff_x = (int) _xOffset;
+        _diff_y = (int) _yOffset;
     }
 
     protected void onMouseRelease(InterfaceItem sender, MouseArgs args) {
@@ -47,8 +55,8 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
     }
 
     protected void onDragging(InterfaceItem sender, MouseArgs args) {
-        _xOffset -= _mouse_ptr.PrevX - _mouse_ptr.X;
-        _yOffset -= _mouse_ptr.PrevY - _mouse_ptr.Y;
+        _xOffset = _diff_x - _x_press + args.position.getX();
+        _yOffset = _diff_y + args.position.getY() - _y_press;
         updateLayout();
     }
 
@@ -77,11 +85,13 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
     @Override
     public void addItem(BaseItem item) {
         super.addItem(item);
-        _stored_crd.put(item, new int[] { item.getX(), item.getY() });
+        synchronized (this) {
+            _stored_crd.put(item, new int[] { item.getX(), item.getY() });
+        }
         if (item instanceof ResizableItem) {
             ResizableItem wanted = (ResizableItem) item;
-            //InterfaceCommonMethod changed = () -> correctPosition(wanted);
-            wanted.positionChanged.add(() -> correctPosition(wanted)); //changed);
+            InterfaceCommonMethod changed = () -> correctPosition(wanted);
+            wanted.positionChanged.add(changed);
         }
         updateLayout();
     }
@@ -89,15 +99,21 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
     @Override
     public void removeItem(BaseItem item) {
         super.removeItem(item);
-        _stored_crd.remove(item);
+        synchronized (this) {
+            _stored_crd.remove(item);
+        }
+        updateLayout();
     }
 
     public void updateLayout() {
-        for (BaseItem child : getItems()) {
-            child.setX(
-                    (int) _xOffset + getX() + getPadding().left + _stored_crd.get(child)[0] + child.getMargin().left);
-            child.setY((int) _yOffset + getY() + getPadding().top + _stored_crd.get(child)[1] + child.getMargin().top);
-        }
+        // synchronized (this) {
+            for (BaseItem child : getItems()) {
+                child.setX((int) _xOffset + getX() + getPadding().left + _stored_crd.get(child)[0]
+                        + child.getMargin().left);
+                child.setY(
+                        (int) _yOffset + getY() + getPadding().top + _stored_crd.get(child)[1] + child.getMargin().top);
+            }
+        // }
     }
 
     // ContexMenu
@@ -106,12 +122,11 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
         // int stored_x = _stored_crd.get(item)[0];
         int actual_y = item.getY();
         // int stored_y = _stored_crd.get(item)[1];
-
-        _stored_crd.remove(item);
-        _stored_crd.put(item, new int[] 
-        { 
-            actual_x - (int) _xOffset - getX() - getPadding().left - item.getMargin().left,
-            actual_y - (int) _yOffset - getY() - getPadding().top - item.getMargin().top 
-        });
+        synchronized (this) {
+            _stored_crd.remove(item);
+            _stored_crd.put(item,
+                    new int[] { actual_x - (int) _xOffset - getX() - getPadding().left - item.getMargin().left,
+                            actual_y - (int) _yOffset - getY() - getPadding().top - item.getMargin().top });
+        }
     }
 }

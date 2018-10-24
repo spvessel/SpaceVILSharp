@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import com.spvessel.Decorations.*;
 import com.spvessel.Common.*;
+import com.spvessel.Cores.*;
 import com.spvessel.Flags.*;
 import com.spvessel.Flags.SizePolicy;
 
@@ -14,11 +15,11 @@ public class TitleBar extends WindowAnchor {
     private HorizontalStack _layout;
     public HDirection Direction = HDirection.FROM_LEFT_TO_RIGHT;
     private Label _text_object;
-    private ImageItem _icon;
+    //private ImageItem _icon;
 
-    public ImageItem getIcon() {
-        return _icon;
-    }
+    // public ImageItem getIcon() {
+    //     return _icon;
+    // }
 
     private ButtonCore _close;
 
@@ -47,9 +48,12 @@ public class TitleBar extends WindowAnchor {
         _minimize = new ButtonCore();
         _maximize = new ButtonCore();
         _close = new ButtonCore();
-        _icon = new ImageItem();
+        // _icon = new ImageItem();
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.TitleBar"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.TitleBar"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.TitleBar.class));
+        // ItemState state = new ItemState(new Color(255, 255, 255, 100));
+        // _text_object.addItemState(ItemStateType.HOVERED, state);
     }
 
     public TitleBar(String text) {
@@ -58,18 +62,22 @@ public class TitleBar extends WindowAnchor {
     }
 
     public void setIcon(BufferedImage icon, int width, int height) {
-        _icon.setSize(width, height);
-        _icon.setImage(icon);
-        _icon.setVisible(false);
+        // _icon.setSize(width, height);
+        // _icon.setImage(icon);
+        // _icon.setVisible(false);
     }
 
     public void setIcon(String url, int width, int height) {
-        _icon.setSize(width, height);
-        _icon.setImageUrl(url);
-        _icon.setVisible(false);
+        // _icon.setSize(width, height);
+        // _icon.setImageUrl(url);
+        // _icon.setVisible(false);
     }
 
     // text init
+    public void setTextAlignment(ItemAlignment... alignment) {
+        _text_object.setTextAlignment(alignment);
+    }
+    
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
@@ -138,30 +146,38 @@ public class TitleBar extends WindowAnchor {
         // setFont(new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold));
 
         // _close
-        //InterfaceMouseMethodState close_click = (sender, args) -> getHandler().close();
-        _close.eventMouseClick.add((sender, args) -> getHandler().close()); //close_click);
+        InterfaceMouseMethodState close_click = (sender, args) -> {
+            getHandler().close();
+        };
+        _close.eventMouseClick.add(close_click);
 
         // _minimize
-        //InterfaceMouseMethodState minimize_click = (sender, args) -> getHandler().minimize();
-        _minimize.eventMouseClick.add((sender, args) -> getHandler().minimize()); //minimize_click);
+        InterfaceMouseMethodState minimize_click = (sender, args) -> {
+            getHandler().minimize();
+        };
+        _minimize.eventMouseClick.add(minimize_click);
 
         // _maximize
-        //InterfaceMouseMethodState maximize_click = (sender, args) -> getHandler().maximize();
-        _maximize.eventMouseClick.add((sender, args) -> getHandler().maximize()); //maximize_click);
+        InterfaceMouseMethodState maximize_click = (sender, args) -> {
+            getHandler().maximize();
+        };
+        _maximize.eventMouseClick.add(maximize_click);
 
         // adding
         switch (Direction) {
         case FROM_LEFT_TO_RIGHT:
-            _layout.addItems(_icon, _text_object, _minimize, _maximize, _close);
+            _layout.addItems(/*_icon,*/ _text_object, _minimize, _maximize, _close);
             break;
         case FROM_RIGHT_TO_LEFT:
-            _layout.addItems(_close, _maximize, _minimize, _icon, _text_object);
+            _layout.addItems(_close, _maximize, _minimize, /*_icon,*/ _text_object);
             break;
         default:
-            _layout.addItems(_icon, _text_object, _minimize, _maximize, _close);
+            _layout.addItems(/*_icon,*/ _text_object, _minimize, _maximize, _close);
             break;
         }
-
+        _minimize.setPassEvents(false);
+        _maximize.setPassEvents(false);
+        _close.setPassEvents(false);
         Rectangle center = new Rectangle();
         center.setBackground(getBackground());
         center.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
@@ -200,9 +216,9 @@ public class TitleBar extends WindowAnchor {
         }
 
         // icon
-        _icon.setVisible(false);
-        _icon.setBackground(0, 0, 0, 0);
-        _icon.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        _icon.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        // _icon.setVisible(false);
+        // _icon.setBackground(0, 0, 0, 0);
+        // _icon.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        // _icon.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
     }
 }

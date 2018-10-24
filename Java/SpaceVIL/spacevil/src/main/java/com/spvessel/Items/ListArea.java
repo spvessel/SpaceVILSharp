@@ -1,12 +1,18 @@
 package com.spvessel.Items;
 
+import java.util.List;
+import java.util.LinkedList;
+
 import com.spvessel.Common.DefaultsService;
 import com.spvessel.Cores.EventCommonMethod;
+import com.spvessel.Cores.InterfaceGrid;
 import com.spvessel.Cores.InterfaceItem;
+import com.spvessel.Cores.InterfaceMouseMethodState;
 import com.spvessel.Cores.InterfaceVLayout;
 import com.spvessel.Cores.MouseArgs;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Engine.GraphicsMathService;
+import com.spvessel.Flags.ListPosition;
 
 public class ListArea extends VisualItem implements InterfaceVLayout {
     public EventCommonMethod selectionChanged = new EventCommonMethod();
@@ -73,10 +79,11 @@ public class ListArea extends VisualItem implements InterfaceVLayout {
     public ListArea() {
         setItemName("ListArea_" + count);
         count++;
-        //InterfaceMouseMethodState click = (sender, args) -> onMouseClick(sender, args);
-        eventMouseClick.add(this::onMouseClick); //click);
+        InterfaceMouseMethodState click = (sender, args) -> onMouseClick(sender, args);
+        eventMouseClick.add(click);
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ListArea"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ListArea"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.ListArea.class));
     }
 
     // overrides
@@ -97,7 +104,7 @@ public class ListArea extends VisualItem implements InterfaceVLayout {
 
             int y = getItems().get(i).getY();
             int h = getItems().get(i).getHeight();
-            if (_mouse_ptr.Y > y && _mouse_ptr.Y < (y + h)) {
+            if (args.position.getY() > y && args.position.getY() < (y + h)) {
                 setSelection(i - 1);
                 break;
             }
@@ -161,7 +168,7 @@ public class ListArea extends VisualItem implements InterfaceVLayout {
         int startY = getY() + getPadding().top;
         int index = 0;
         for (BaseItem child : getItems()) {
-            if (child.equals(_substrate) || !child.isVisible())
+            if (child.equals(_substrate) || !child.getVisible())
                 continue;
 
             child.setX((-1) * (int) _xOffset + getX() + getPadding().left + child.getMargin().left);

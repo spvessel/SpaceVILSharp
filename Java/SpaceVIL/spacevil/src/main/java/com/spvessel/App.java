@@ -1,20 +1,35 @@
 package com.spvessel;
 
 import com.spvessel.View.*;
+import com.spvessel.Windows.*;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello World! My dear friend! I'm here!");
         MainWindow mw = new MainWindow();
+        // mw.show();
+
+        SettingsTest st = new SettingsTest();
+        // st.show();
+        
         ImageTest im = new ImageTest();
-        FlowTest ft = new FlowTest();
-        LayoutsTest lt = new LayoutsTest();
-        ComplexTest ct = new ComplexTest();
-        InputTest it = new InputTest();
-        LabelTest lbt = new LabelTest();
-        mw.show();
         // im.show();
+
+        FlowTest ft = new FlowTest();
         // ft.show();
-//        WindowLayoutBox.getWindowInstance("MainWindow").show();
+
+        LayoutsTest lt = new LayoutsTest();
+        // lt.show();
+        
+        ComplexTest ct = new ComplexTest();
+        // ct.show();
+        
+        InputTest it = new InputTest();
+        // it.show();
+
+        TextTest tt = new TextTest();
+        // tt.show();
+
+        WindowLayoutBox.getWindowInstance("MainWindow").show();
     }
 }

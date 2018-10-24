@@ -30,7 +30,7 @@ public class MenuItem extends VisualItem {
 
     public boolean isReadyToClose(MouseArgs args) {
         if (_sub_context_menu != null) {
-            if (!_sub_context_menu.getHoverVerification(args.position.X, args.position.Y)
+            if (!_sub_context_menu.getHoverVerification(args.position.getX(), args.position.getY())
                     && _sub_context_menu.closeDependencies(args))
                 return true;
         }
@@ -48,14 +48,15 @@ public class MenuItem extends VisualItem {
     public MenuItem() {
         setItemName("MenuItem_" + count);
         count++;
-        //InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(this::onKeyPress); //key_press);
+        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
+        eventKeyPress.add(key_press);
 
-        //InterfaceMouseMethodState m_press = (sender, args) -> onMouseAction();
-        eventMousePressed.add((sender, args) -> onMouseAction()); //m_press);
+        InterfaceMouseMethodState m_press = (sender, args) -> onMouseAction();
+        eventMousePressed.add(m_press);
         _text_object = new TextLine();
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.MenuItem"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.MenuItem"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.MenuItem.class));
     }
 
     public MenuItem(String text) {
@@ -167,15 +168,15 @@ public class MenuItem extends VisualItem {
         args.button = MouseButton.BUTTON_RIGHT;
 
         // проверка справа
-        args.position.X = (_context_menu.getX() + _context_menu.getWidth() + 2);
+        args.position.setX((_context_menu.getX() + _context_menu.getWidth() + 2));
 
-        if (args.position.X + _sub_context_menu.getWidth() > getHandler().getWidth()) {
-            args.position.X = (_context_menu.getX() - _sub_context_menu.getWidth() - 2);
+        if (args.position.getX() + _sub_context_menu.getWidth() > getHandler().getWidth()) {
+            args.position.setX((_context_menu.getX() - _sub_context_menu.getWidth() - 2));
         }
         // проверка снизу
-        args.position.Y = getY();
-        if (args.position.Y + _sub_context_menu.getHeight() > getHandler().getHeight()) {
-            args.position.Y = _context_menu.getY() + _context_menu.getHeight() - _sub_context_menu.getHeight();
+        args.position.setY(getY());
+        if (args.position.getY() + _sub_context_menu.getHeight() > getHandler().getHeight()) {
+            args.position.setY(_context_menu.getY() + _context_menu.getHeight() - _sub_context_menu.getHeight());
         }
 
         _sub_context_menu.show(this, args);
@@ -188,7 +189,7 @@ public class MenuItem extends VisualItem {
 
     private void onMouseAction() {
         if (_sub_context_menu != null) {
-            if (_sub_context_menu.isVisible()) {
+            if (_sub_context_menu.getVisible()) {
                 hide();
                 MouseArgs args = new MouseArgs();
                 args.button = MouseButton.BUTTON_RIGHT;

@@ -33,7 +33,7 @@ namespace SpaceVIL
             count++;
             _root = new TreeItem(TreeItemType.Branch, "root");
 
-            //SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeView)));
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeView)));
             EventSortTree += OnSortTree;
         }
         public override void InitElements()

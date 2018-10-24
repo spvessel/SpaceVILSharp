@@ -10,7 +10,8 @@ public class VerticalStack extends VisualItem implements InterfaceVLayout {
     public VerticalStack() {
         setItemName("verticalStack_" + count);
         count++;
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalStack"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalStack"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.VerticalStack.class));
     }
 
     // overrides
@@ -44,7 +45,7 @@ public class VerticalStack extends VisualItem implements InterfaceVLayout {
         int expanded_count = 0;
 
         for (BaseItem child : getItems()) {
-            if (child.isVisible()) {
+            if (child.getVisible()) {
                 if (child.getHeightPolicy() == SizePolicy.FIXED) {
                     fixed_count++;
                     free_space -= (child.getHeight() + child.getMargin().top + child.getMargin().bottom);//
@@ -63,7 +64,7 @@ public class VerticalStack extends VisualItem implements InterfaceVLayout {
         int startY = getY() + getPadding().top;
 
         for (BaseItem child : getItems()) {
-            if (child.isVisible()) {
+            if (child.getVisible()) {
                 child.setY(startY + offset + child.getMargin().top);//
                 if (child.getHeightPolicy() == SizePolicy.EXPAND) {
                     if (height_for_expanded - child.getMargin().top - child.getMargin().bottom < child.getMaxHeight())//

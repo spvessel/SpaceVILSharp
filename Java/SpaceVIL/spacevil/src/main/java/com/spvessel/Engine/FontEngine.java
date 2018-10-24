@@ -5,6 +5,7 @@ import com.spvessel.Common.ContourService;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class FontEngine {
@@ -34,7 +35,7 @@ public class FontEngine {
             fonts.put(font, new Alphabet(font));
         }
         Alphabet a = fonts.get(font);
-        return new int[]{a.lineSpacer, a.minY, a.maxY};
+        return new int[]{a.lineSpacer, a.alphMinY, a.alphHeight};
     }
 
     static boolean savePreloadFont(Font font) {

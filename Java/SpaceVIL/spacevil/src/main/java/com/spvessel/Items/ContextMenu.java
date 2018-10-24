@@ -40,7 +40,8 @@ public class ContextMenu extends VisualItem implements InterfaceFloating {
         setHandler(handler);
         ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
 
-        setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ContextMenu"));
+        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ContextMenu"));
+        setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.ContextMenu.class));
     }
 
     @Override
@@ -49,8 +50,8 @@ public class ContextMenu extends VisualItem implements InterfaceFloating {
         itemList.setSelectionVisibility(false);
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
-        //InterfaceCommonMethod selectionChanged = () -> onSelectionChanged();
-        itemList.getArea().selectionChanged.add(this::onSelectionChanged); //selectionChanged);
+        InterfaceCommonMethod selectionChanged = () -> onSelectionChanged();
+        itemList.getArea().selectionChanged.add(selectionChanged);
 
         super.addItem(itemList);
 
@@ -103,7 +104,7 @@ public class ContextMenu extends VisualItem implements InterfaceFloating {
         BaseItem[] list = _queue.toArray(new BaseItem[_queue.size()]);
         int height = 0;
         for (BaseItem h : list)
-            if (h.isVisible() && h.isDrawable)
+            if (h.getVisible() && h.isDrawable)
                 height += (h.getHeight() + itemList.getArea().getSpacing().vertical);
         setHeight(getPadding().top + getPadding().bottom + height);
     }
@@ -137,16 +138,16 @@ public class ContextMenu extends VisualItem implements InterfaceFloating {
             setVisible(true);
 
             // проверка снизу
-            if (args.position.Y + getHeight() > getHandler().getHeight()) {
-                setY(args.position.Y - getHeight());
+            if (args.position.getY() + getHeight() > getHandler().getHeight()) {
+                setY(args.position.getY() - getHeight());
             } else {
-                setY(args.position.Y);
+                setY(args.position.getY());
             }
             // проверка справа
-            if (args.position.X + getWidth() > getHandler().getWidth()) {
-                setX(args.position.X - getWidth());
+            if (args.position.getX() + getWidth() > getHandler().getWidth()) {
+                setX(args.position.getX() - getWidth());
             } else {
-                setX(args.position.X);
+                setX(args.position.getX());
             }
             setConfines();
         }

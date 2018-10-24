@@ -7,14 +7,14 @@ import com.spvessel.Flags.*;
 import com.spvessel.Items.*;
 import com.spvessel.Items.Frame;
 import com.spvessel.Windows.*;
-
 import java.awt.*;
 import java.util.*;
 
 public class ComplexTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout(this, "ComplexTest", "ComplexTest", 1200, 700, true);
+        WindowLayout Handler =
+                new WindowLayout(this, "ComplexTest", "ComplexTest", 1200, 700, true);
         setHandler(Handler);
 
         Handler.setMinSize(500, 100);
@@ -38,13 +38,15 @@ public class ComplexTest extends ActiveWindow {
         treeview.setMinWidth(100);
 
         ButtonCore b1 = getButton("b1", 26, 30, SizePolicy.FIXED);
-        //InterfaceMouseMethodState b1_click = (sender, args) -> treeview.setRootVisibility(false);
-        b1.eventMouseClick.add((sender, args) -> treeview.setRootVisibility(false)); //b1_click);
+        InterfaceMouseMethodState b1_click = (sender, args) -> treeview.setRootVisibility(false);
+        b1.eventMouseClick.add(b1_click);
         ButtonCore b2 = getButton("b2", 26, 30, SizePolicy.FIXED);
-        //InterfaceMouseMethodState b2_click = (sender, args) -> treeview.setRootVisibility(true);
-        b2.eventMouseClick.add((sender, args) -> treeview.setRootVisibility(true)); //b2_click);
+        InterfaceMouseMethodState b2_click = (sender, args) -> treeview.setRootVisibility(true);
+        b2.eventMouseClick.add(b2_click);
         ButtonCore b3 = getButton("b3", 26, 30, SizePolicy.FIXED);
+        b3.eventMouseClick.add((sender, args) -> treeview.addItem(getTreeBranch()));
         ButtonCore b4 = getButton("b4", 26, 30, SizePolicy.FIXED);
+        b4.eventMouseClick.add((sender, args) -> treeview.addItem(getTreeLeaf()));
         ButtonCore b5 = getButton("b5", 26, 30, SizePolicy.FIXED);
         ButtonCore b6 = getButton("b6", 26, 30, SizePolicy.FIXED);
         toolbar.addItems(b1, b2, b3, b4, b5, b6);
@@ -108,13 +110,19 @@ public class ComplexTest extends ActiveWindow {
         style.minHeight = 30;
         style.maxHeight = 100;
         style.heightPolicy = policy;
-        style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+        style.alignment = new LinkedList<ItemAlignment>(
+                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
         style.textAlignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+                style.margin = new Indents(3, 3, 3, 3);
         ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 60);
+        hovered.background = new Color(255, 255, 255, 30);
         style.addItemState(ItemStateType.HOVERED, hovered);
-        style.margin = new Indents(3, 3, 3, 3);
+        
+        ItemState pressed = new ItemState(new Color(30, 0, 0, 60));
+        pressed.border.setFill(new Color(255, 255, 255));
+        pressed.border.setThickness(1);
+        style.addItemState(ItemStateType.PRESSED, pressed);
 
         ButtonCore btn = new ButtonCore(name);
         btn.setSize(w, h);
