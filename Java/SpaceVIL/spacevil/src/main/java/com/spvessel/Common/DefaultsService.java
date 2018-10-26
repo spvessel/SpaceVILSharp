@@ -7,8 +7,10 @@ import java.awt.Font;
 public final class DefaultsService {
 
     private static ThemeStyle _default_theme; // = ThemeStyle.GetInstance();
+    private static DefaultFont _default_font = DefaultFont.getInstance();;
 
     private DefaultsService() {
+        // _default_font = DefaultFont.getInstance();
     }
 
     public static ThemeStyle getDefaultTheme() {
@@ -29,14 +31,14 @@ public final class DefaultsService {
     }
 
     public static Font getDefaultFont() {
-        return new Font("Ubuntu", Font.PLAIN, 12);
+        return _default_font.getDefaultFont();
     }
 
     public static Font getDefaultFont(int size) {
-        return new Font("Ubuntu", Font.PLAIN, size);
+        return _default_font.getDefaultFont(size);
     }
 
     public static Font getDefaultFont(int style, int size) {
-        return new Font("Ubuntu", style, size);
+        return _default_font.getDefaultFont(style, size);
     }
 }

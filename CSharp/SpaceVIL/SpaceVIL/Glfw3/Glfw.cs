@@ -1,3 +1,4 @@
+
 namespace Glfw3
 {
     using System;
@@ -10,8 +11,13 @@ namespace Glfw3
     /// </summary>
     public static partial class Glfw
     {
-        // const string kLibrary = "libglfw.so"; //lunux
-        const string kLibrary = "glfw3.dll"; //windows
+        #if OS_LINUX
+                const string kLibrary = "libglfw.so"; //lunux
+        #elif OS_WNDOWS
+                const string kLibrary = "glfw3.dll"; //windows
+        #else
+                const string kLibrary = "glfw3.dll"; //windows
+        #endif
 
         /// <summary>
         /// Adds the specified native directory path to the Path environment variable to facilitate

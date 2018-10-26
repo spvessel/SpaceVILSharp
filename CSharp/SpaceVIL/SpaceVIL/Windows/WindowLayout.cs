@@ -95,11 +95,11 @@ namespace SpaceVIL
         }*/
 
         private WContainer _window;
-        internal WContainer GetWindow()
+        public WContainer GetWindow()
         {
             return _window;
         }
-        internal void SetWindow(WContainer window)
+        public void SetWindow(WContainer window)
         {
             _window = window;
         }

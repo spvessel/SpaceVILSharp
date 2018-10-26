@@ -32,6 +32,7 @@ namespace SpaceVIL
         // public static Glfw.Cursor _resize_v;
         // public static Glfw.Cursor _resize_all;
 
+        public static bool IsLinux = false;
         public static String ClipboardTextStorage = String.Empty;
         internal static readonly object GlobalLocker = new object();
 

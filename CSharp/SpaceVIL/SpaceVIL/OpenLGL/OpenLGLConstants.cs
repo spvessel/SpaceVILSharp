@@ -1,6 +1,6 @@
 namespace GL.LGL
 {
-	public partial class OpenLGL
+	public static partial class OpenLGL
 	{
     	#region OpenGL Basic
 		public const uint GL_VERSION_1_1 = 1;
@@ -640,7 +640,7 @@ namespace GL.LGL
 		public const uint GL_PHONG_WIN                      = 0x80EA;
 		public const uint GL_PHONG_HINT_WIN                 = 0x80EB;
 
-		public  uint FOG_SPECULAR_TEXTURE_WIN       = 0x80EC;
+		public const uint FOG_SPECULAR_TEXTURE_WIN       = 0x80EC;
 		#endregion
 
     //OpenGL Extensions Constants

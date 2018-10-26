@@ -2,12 +2,18 @@ using System;
 using System.Text;
 using System.IO;
 using Glfw3;
-//using static GL.WGL.OpenWGL;
-//using Ogl = GL.WGL.OpenWGL;
+
+#if OS_LINUX
+using static GL.LGL.OpenLGL;
+#elif OS_WNDOWS
+using static GL.WGL.OpenWGL;
+#else
+using static GL.WGL.OpenWGL;
+#endif
 
 namespace SpaceVIL
 {
-    internal class Shader : GL.WGL.OpenWGL
+    internal class Shader// : GL.WGL.OpenWGL
     {
         const uint Vertex = 0x8B31;
         const uint Fragment = 0x8B30;

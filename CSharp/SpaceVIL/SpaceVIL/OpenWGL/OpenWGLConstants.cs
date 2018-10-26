@@ -1,6 +1,6 @@
 namespace GL.WGL
 {
-	public partial class OpenWGL
+	public static partial class OpenWGL
 	{
     #region OpenGL Basic
 
@@ -641,7 +641,7 @@ namespace GL.WGL
 		public const uint GL_PHONG_WIN                      = 0x80EA;
 		public const uint GL_PHONG_HINT_WIN                 = 0x80EB;
 
-		public  uint FOG_SPECULAR_TEXTURE_WIN       = 0x80EC;
+		public const uint FOG_SPECULAR_TEXTURE_WIN       = 0x80EC;
 
 		#endregion
 

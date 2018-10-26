@@ -428,7 +428,7 @@ public abstract class VisualItem extends BaseItem {
         updateState();
     }
 
-    public void SetFocus() {
+    public void setFocus() {
         getHandler().setFocusedItem(this);
     }
 

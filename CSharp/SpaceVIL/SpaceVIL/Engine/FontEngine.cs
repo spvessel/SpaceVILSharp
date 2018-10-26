@@ -249,7 +249,7 @@ namespace SpaceVIL
                     }
                     else
                     {
-                        
+
                         if (prevLet != null)
                         {
                             int ly0 = prevLet.minY;
@@ -287,10 +287,10 @@ namespace SpaceVIL
                                     }
                                 }
 
-                                if (!b2) x0--;
+                                // if (!b2) x0--;
                             }
                         }
-                         
+
                         // x0++;
                     }
 
@@ -726,11 +726,11 @@ namespace SpaceVIL
                 for (int yy = y0shift; yy <= y1shift; yy++)
                 {
                     int xx = x0shift;
-                    leftArr[0, yy - y0shift] = (float) (bm.GetPixel(xx, yy).A / 255f);
-                    if (xx + 1 < width) leftArr[1, yy - y0shift] = (float) (bm.GetPixel(xx, yy).A / 255f);
+                    leftArr[0, yy - y0shift] = (float)(bm.GetPixel(xx, yy).A / 255f);
+                    if (xx + 1 < width) leftArr[1, yy - y0shift] = (float)(bm.GetPixel(xx, yy).A / 255f);
                     xx = x1shift;
-                    if (xx - 1 >= 0) rightArr[0, yy - y0shift] = (float) (bm.GetPixel(xx, yy).A / 255f);
-                    rightArr[1, yy - y0shift] = (float) (bm.GetPixel(xx, yy).A / 255f);
+                    if (xx - 1 >= 0) rightArr[0, yy - y0shift] = (float)(bm.GetPixel(xx, yy).A / 255f);
+                    rightArr[1, yy - y0shift] = (float)(bm.GetPixel(xx, yy).A / 255f);
 
                 }
                 //--------------------------------------------------------------------------------------

@@ -25,11 +25,11 @@ namespace SpaceVIL
         {
             _default_font = font;
         }
-        public void SetDefaultFont(String font_path)
-        {
-            Stream fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(font_path);
-            SetDefaultFont(fontStream);
-        }
+        // public void SetDefaultFont(String font_path)
+        // {
+        //     Stream fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(font_path);
+        //     SetDefaultFont(fontStream);
+        // }
         public void SetDefaultFont(Stream font_stream)
         {
             privateFontCollection = new PrivateFontCollection();
@@ -68,19 +68,19 @@ namespace SpaceVIL
             return new Font(_default_font.FontFamily, size, _default_font.Style);
             // return new Font(new FontFamily("Ubuntu"), size, FontStyle.Regular);
         }
-        public Font GetEmbeddedFont(EmbeddedFont font, int size, FontStyle style)
-        {
-            PrivateFontCollection tmp = new PrivateFontCollection();
-            Stream fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(GetPathEmbeddedFont(font));
-            System.IntPtr data = Marshal.AllocCoTaskMem((int)fontStream.Length);
-            byte[] fontdata = new byte[fontStream.Length];
-            fontStream.Read(fontdata, 0, (int)fontStream.Length);
-            Marshal.Copy(fontdata, 0, data, (int)fontStream.Length);
-            tmp.AddMemoryFont(data, (int)fontStream.Length);
-            fontStream.Close();
-            Marshal.FreeCoTaskMem(data);
-            return new Font(tmp.Families[0], size, style);
-        }
+        // public Font GetEmbeddedFont(EmbeddedFont font, int size, FontStyle style)
+        // {
+        //     PrivateFontCollection tmp = new PrivateFontCollection();
+        //     Stream fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(GetPathEmbeddedFont(font));
+        //     System.IntPtr data = Marshal.AllocCoTaskMem((int)fontStream.Length);
+        //     byte[] fontdata = new byte[fontStream.Length];
+        //     fontStream.Read(fontdata, 0, (int)fontStream.Length);
+        //     Marshal.Copy(fontdata, 0, data, (int)fontStream.Length);
+        //     tmp.AddMemoryFont(data, (int)fontStream.Length);
+        //     fontStream.Close();
+        //     Marshal.FreeCoTaskMem(data);
+        //     return new Font(tmp.Families[0], size, style);
+        // }
         private void AddFontFromMemory()
         {
             if (_embedded_font == null || _embedded_font == String.Empty)
@@ -111,21 +111,21 @@ namespace SpaceVIL
                     break;
             }
         }
-        private String GetPathEmbeddedFont(EmbeddedFont font)
-        {
-            String path;
-            switch (font)
-            {
-                case EmbeddedFont.Ubuntu:
-                    path = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
-                    break;
+        // private String GetPathEmbeddedFont(EmbeddedFont font)
+        // {
+        //     String path;
+        //     switch (font)
+        //     {
+        //         case EmbeddedFont.Ubuntu:
+        //             path = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
+        //             break;
 
-                default:
-                    path = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
-                    break;
-            }
-            return path;
-        }
+        //         default:
+        //             path = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
+        //             break;
+        //     }
+        //     return path;
+        // }
     }
 
     public static class DefaultsService
@@ -163,21 +163,25 @@ namespace SpaceVIL
         {
             return _default_font.GetDefaultFont(size);
         }
-        public static void SetDefaultEmbeddedFont(EmbeddedFont font)
+        // public static void SetDefaultEmbeddedFont(EmbeddedFont font)
+        // {
+        //     _default_font.SetDefaultEmbeddedFont(font);
+        // }
+        // public static void SetDefaultFont(String font_path)
+        // {
+        //     _default_font.SetDefaultFont(font_path);
+        // }
+        public static void SetDefaultFont(Font font)
         {
-            _default_font.SetDefaultEmbeddedFont(font);
-        }
-        public static void SetDefaultFont(String font_path)
-        {
-            _default_font.SetDefaultFont(font_path);
+            _default_font.SetDefaultFont(font);
         }
         public static void SetDefaultFont(Stream font_stream)
         {
             _default_font.SetDefaultFont(font_stream);
         }
-        public static Font GetEmbeddedFont(EmbeddedFont font, int size, FontStyle style)
-        {
-            return _default_font.GetEmbeddedFont(font, size, style);
-        }
+        // public static Font GetEmbeddedFont(EmbeddedFont font, int size, FontStyle style)
+        // {
+        //     return _default_font.GetEmbeddedFont(font, size, style);
+        // }
     }
 }

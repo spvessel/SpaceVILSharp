@@ -1,12 +1,17 @@
 package com.spvessel.View;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
+import com.spvessel.Common.DefaultsService;
 import com.spvessel.Cores.InterfaceCommonMethodState;
 import com.spvessel.Cores.InterfaceMouseMethodState;
 import com.spvessel.Decorations.Indents;
@@ -22,6 +27,7 @@ import com.spvessel.Items.MenuItem;
 import com.spvessel.Items.ProgressBar;
 import com.spvessel.Items.Rectangle;
 import com.spvessel.Items.TitleBar;
+import com.spvessel.Items.VerticalStack;
 import com.spvessel.Windows.ActiveWindow;
 import com.spvessel.Windows.MessageBox;
 import com.spvessel.Windows.WindowLayout;
@@ -39,12 +45,13 @@ public class ImageTest extends ActiveWindow {
         Handler.addItem(title);
 
         // Frame
-        Frame frame = new Frame();
+        VerticalStack frame = new VerticalStack();
         frame.setBackground(60, 60, 60);
         frame.setItemName("Container");
-        frame.setMargin(0, 30, 0, 0);
+        frame.setMargin(0, 45, 0, 0);
         frame.setWidthPolicy(SizePolicy.EXPAND);
         frame.setHeightPolicy(SizePolicy.EXPAND);
+        frame.setSpacing(0, 20);
         Handler.addItem(frame);
 
         HorizontalStack h_stack = new HorizontalStack();
@@ -69,11 +76,9 @@ public class ImageTest extends ActiveWindow {
         }
 
         ProgressBar pb = new ProgressBar();
-        pb.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
-        pb.setMargin(25, 25, 25, 25);
-        frame.addItem(pb);
+        pb.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+        pb.setMargin(25, 0, 25, 0);
 
-        
         ButtonCore btn_action = new ButtonCore();
         btn_action.setBackground(100, 255, 150);
         btn_action.setText("Columnar");
@@ -84,22 +89,15 @@ public class ImageTest extends ActiveWindow {
         btn_action.setWidthPolicy(SizePolicy.EXPAND);
         btn_action.setHeightPolicy(SizePolicy.FIXED);
         btn_action.setAlignment(ItemAlignment.HCENTER, ItemAlignment.TOP);
-        btn_action.setMargin(new Indents(30, 45, 30, 45));
+        btn_action.setMargin(new Indents(30, 0, 30, 0));
         btn_action.border.setRadius(10);
-        
         btn_action.setTextMargin(new Indents(0, 45, 0, 0));
-        // btn_action.setTextAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
-        // btn_action.setFontSize(300);
-        // btn_action.setForeground(100, 55, 55);
-
-
         InterfaceMouseMethodState btn_action_click = (sender, args) -> {
             MessageBox ms = new MessageBox("Send result?", "Message:");
             ms.show();
             System.out.println(ms.getResult());
         };
         btn_action.eventMouseClick.add(btn_action_click);
-        frame.addItem(btn_action);
 
         // Image img1 = Image.FromFile("icon.png");
         // Image img1 = Image.FromFile("battery_full.png");
@@ -117,25 +115,39 @@ public class ImageTest extends ActiveWindow {
         img.setBackground(new Color(0, 0, 0, 0));
         img.setSize(256, 134);
         img.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        // img.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         img.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
-        btn_action.addItem(img);
 
         HorizontalSlider h_slider = new HorizontalSlider();
-        h_slider.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
-        h_slider.setMargin(25, 25, 25, 100);
-        InterfaceCommonMethodState valueChanged = (sender) -> pb.setCurrentValue((int) h_slider.getCurrentValue());
+        h_slider.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+        h_slider.setMargin(25, 0, 25, 0);
+        InterfaceCommonMethodState valueChanged =
+                (sender) -> pb.setCurrentValue((int) h_slider.getCurrentValue());
         h_slider.eventValueChanged.add(valueChanged);
-        frame.addItem(h_slider);
 
-        // ComboBox combo = new ComboBox();
-        // combo.setMargin(25, 0, 25, 0);
-        // frame.addItem(combo);
+        frame.addItems(btn_action, h_slider, pb);
+        btn_action.addItem(img);
 
-        // for (int i = 0; i < 5; i++) {
-        //     MenuItem menu_item = new MenuItem("Custom item for selection #" + i);
-        //     combo.addToList(menu_item);
-        // }
-        // combo.setCurrentIndex(0);
+        // java awt graphics test
+        Font font = DefaultsService.getDefaultFont(Font.BOLD, 30);
+        String message = "Make a Chance!";
+
+        BufferedImage bi = new BufferedImage(400, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D ig2 = bi.createGraphics();
+        RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        ig2.setRenderingHints(rh);
+        ig2.setFont(font);
+        FontMetrics metrics = ig2.getFontMetrics();
+        int stringWidth = metrics.stringWidth(message);
+        int stringHeight = metrics.getAscent();
+        ig2.setPaint(Color.white);
+        ig2.drawString(message, 0, stringHeight);
+
+        ImageItem img_gr = new ImageItem(bi);
+        img_gr.setBackground(new Color(0, 0, 0, 0));
+        img_gr.setSize(400, 100);
+        img_gr.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        img_gr.setAlignment(ItemAlignment.TOP, ItemAlignment.HCENTER);
+        frame.addItem(img_gr);
     }
 }

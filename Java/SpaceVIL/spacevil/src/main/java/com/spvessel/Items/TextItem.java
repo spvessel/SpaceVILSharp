@@ -82,7 +82,6 @@ public abstract class TextItem extends Primitive {
 
     void setFontStyle(int style) {
         if (_font.getStyle() != style) {
-
             _font = new Font(_font.getFamily(), style, _font.getSize());
             updateData();
         }

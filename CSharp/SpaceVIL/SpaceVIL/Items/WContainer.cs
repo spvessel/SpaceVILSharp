@@ -2,7 +2,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    internal class WContainer : VisualItem, IWindow
+    public class WContainer : VisualItem, IWindow
     {
         static int count = 0;
         internal ItemAlignment _sides = 0;

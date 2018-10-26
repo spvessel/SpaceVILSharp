@@ -27,7 +27,7 @@ namespace SpaceVIL
         private int _parentAllowWidth = int.MaxValue;
         private int _parentAllowHeight = int.MaxValue;
 
-        private List<FontEngine.ModifyLetter> _letters;
+        private List<FontEngine.ModifyLetter> _letters = new List<FontEngine.ModifyLetter>();
 
         public TextLine()
         {

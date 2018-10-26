@@ -10,9 +10,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Drawing;
 
+#if OS_LINUX
+using static GL.LGL.OpenLGL;
+#elif OS_WNDOWS
+using static GL.WGL.OpenWGL;
+#else
+using static GL.WGL.OpenWGL;
+#endif
+
 namespace SpaceVIL
 {
-    internal class DrawEngine : GL.WGL.OpenWGL
+    internal class DrawEngine
     {
         public void ResetItems()
         {
@@ -310,6 +318,8 @@ namespace SpaceVIL
         private bool flag_move = false;
         protected void MouseMove(Glfw.Window wnd, double xpos, double ypos)
         {
+            EngineEvent.SetEvent(InputEventType.MouseMove);
+            _tooltip.InitTimer(false);
             if (!flag_move)
                 return;
             flag_move = false;
@@ -317,8 +327,6 @@ namespace SpaceVIL
             if (!_handler.Focusable)
                 return;
 
-            EngineEvent.SetEvent(InputEventType.MouseMove);
-            _tooltip.InitTimer(false);
 
             //logic of hovers
             ptrRelease.SetX((int)xpos);
@@ -873,6 +881,8 @@ namespace SpaceVIL
             {
                 DrawShadePillow();
             }
+
+
         }
 
         private void DrawFBO() { }

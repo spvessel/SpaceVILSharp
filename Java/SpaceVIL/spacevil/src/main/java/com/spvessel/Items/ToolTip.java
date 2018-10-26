@@ -1,23 +1,22 @@
 package com.spvessel.Items;
 
-import com.spvessel.Cores.*;
-import java.awt.*;
-import java.sql.Time;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import javax.swing.Timer;
 import com.spvessel.Decorations.*;
 import com.spvessel.Common.*;
 import com.spvessel.Flags.*;
-import com.spvessel.Flags.SizePolicy;
 
 public class ToolTip extends VisualItem {
     class TooltipVisibility extends Thread {
         private int _ms = 500;
 
-        TooltipVisibility() {
-        }
+        TooltipVisibility() {}
 
         TooltipVisibility(int ms) {
             _ms = ms;
@@ -29,12 +28,10 @@ public class ToolTip extends VisualItem {
         public void run() {
             long startTime = System.currentTimeMillis();
             while (!isCanceled) {
-                if (System.currentTimeMillis() - startTime >= _ms)
+                if (System.currentTimeMillis() - startTime >= _ms) {
+                    visibleSelf();
                     break;
-            }
-            // System.out.println(isCanceled);
-            if (!isCanceled) {
-                visibleSelf();
+                }
             }
         }
     }
@@ -47,8 +44,8 @@ public class ToolTip extends VisualItem {
         return _text_object;
     }
 
-    protected TooltipVisibility _stop;
-    private int _timeout = 500;
+    private Timer _stop = null;
+    private int _timeout = 1000;
 
     public void setTimeOut(int milliseconds) {
         _timeout = milliseconds;
@@ -69,33 +66,46 @@ public class ToolTip extends VisualItem {
     }
 
     @Override
-    public void initElements() {
-    }
+    public void initElements() {}
+
+    private Lock locker = new ReentrantLock();
 
     public void initTimer(boolean value) {
-        if (value) {
-            if (_stop != null)
-                return;
-
-            _stop = new TooltipVisibility(_timeout);
-            _stop.start();
-
-        } else {
-            setVisible(false);
-            if (_stop == null)
-                return;
-            _stop.isCanceled = true;
-            _stop = null;
+        locker.lock();
+        try {
+            if (value) {
+                if (_stop != null)
+                    return;
+                ActionListener taskPerformer = new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        visibleSelf();
+                    }
+                };
+                _stop = new Timer(_timeout, taskPerformer);
+                _stop.start();
+            } else {
+                setVisible(value);
+                if (_stop == null)
+                    return;
+                _stop.stop();
+                _stop = null;
+            }
+        } finally {
+            locker.unlock();
         }
     }
 
     private void visibleSelf() {
-        if (_stop == null)
-            return;
-        // System.out.println("visible");
-        setVisible(true);
-        _stop.isCanceled = true;
-        _stop = null;
+        locker.lock();
+        try {
+            if (_stop == null)
+                return;
+            setVisible(true);
+            _stop.stop();
+            _stop = null;
+        } finally {
+            locker.unlock();
+        }
     }
 
     public int getTextWidth() {

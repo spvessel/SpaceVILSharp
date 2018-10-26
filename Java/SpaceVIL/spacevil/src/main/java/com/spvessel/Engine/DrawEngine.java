@@ -366,6 +366,8 @@ public class DrawEngine {
     // boolean flag_resize = false;
 
     private void mouseMove(long wnd, double xpos, double ypos) {
+        engineEvent.setEvent(InputEventType.MOUSE_MOVE);
+        _tooltip.initTimer(false);
         if (!flag_move)
             return;
         flag_move = false;
@@ -373,8 +375,6 @@ public class DrawEngine {
         if (!_handler.focusable)
             return;
 
-        engineEvent.setEvent(InputEventType.MOUSE_MOVE);
-        _tooltip.initTimer(false);
 
         // logic of hovers
         ptrRelease.setX((int) xpos);
@@ -475,7 +475,6 @@ public class DrawEngine {
             ptrPress.setX(ptrRelease.getX());
             ptrPress.setY(ptrRelease.getY());
 
-            // check tooltip
             if (getHoverVisualItem(ptrRelease.getX(), ptrRelease.getY(),
                     InputEventType.MOUSE_MOVE)) {
                 if (hoveredItem.getToolTip() != "") {
@@ -1551,8 +1550,8 @@ public class DrawEngine {
         ByteBuffer bb = BufferUtils.createByteBuffer(bitmap.length);
         bb.put(bitmap);
         bb.rewind();
-        if (checkOutsideBorders((BaseItem) image))
-            _texture.useShader();
+        // if (checkOutsideBorders((BaseItem) image))
+        //     _texture.useShader();
 
         float i_x0 = ((float) image.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
         float i_y0 = ((float) image.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f)

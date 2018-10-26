@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace GL.WGL
 {
-    public partial class OpenWGL
+    public static partial class OpenWGL
     {
         #region OpenGL_Basic_Functions
         public const string LIBRARY_OPENGL = "opengl32.dll";
@@ -418,10 +418,10 @@ namespace GL.WGL
         #endregion
 
         //Extensions
-        private Dictionary<string, Delegate> extensionFunctions = new Dictionary<string, Delegate>();
+        static private Dictionary<string, Delegate> extensionFunctions = new Dictionary<string, Delegate>();
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern IntPtr wglGetProcAddress(string name);
 
-        private Delegate InvokeWGL<T>(string name)
+        static private Delegate InvokeWGL<T>(string name)
         {
             Type delegateType = typeof(T);
             Delegate del = null;
@@ -444,112 +444,112 @@ namespace GL.WGL
 
         //OpenGL Extensions Functions
         private delegate uint createShader(uint shader);
-        public uint glCreateShader(uint shader)
+        static public uint glCreateShader(uint shader)
         {
             Delegate wgl = InvokeWGL<createShader>("glCreateShader");
             return (uint)wgl.DynamicInvoke(shader);
         }
 
         public delegate void shaderSource(uint shader, int count, string[] source, int[] length);
-        public void glShaderSource(uint shader, int count, string[] source, int[] length)
+        static public void glShaderSource(uint shader, int count, string[] source, int[] length)
         {
             Delegate wgl = InvokeWGL<shaderSource>("glShaderSource");
             wgl.DynamicInvoke(shader, count, source, length);
         }
 
         public delegate void compileShader(uint shader);
-        public void glCompileShader(uint shader)
+        static public void glCompileShader(uint shader)
         {
             Delegate wgl = InvokeWGL<compileShader>("glCompileShader");
             wgl.DynamicInvoke(shader);
         }
 
         public delegate uint createProgram();
-        public uint glCreateProgram()
+        static public uint glCreateProgram()
         {
             Delegate wgl = InvokeWGL<createProgram>("glCreateProgram");
             return (uint)wgl.DynamicInvoke();
         }
 
         public delegate void attachShader(uint program, uint shader);
-        public void glAttachShader(uint program, uint shader)
+        static public void glAttachShader(uint program, uint shader)
         {
             Delegate wgl = InvokeWGL<attachShader>("glAttachShader");
             wgl.DynamicInvoke(program, shader);
         }
 
         public delegate void linkProgram(uint program);
-        public void glLinkProgram(uint program)
+        static public void glLinkProgram(uint program)
         {
             Delegate wgl = InvokeWGL<linkProgram>("glLinkProgram");
             wgl.DynamicInvoke(program);
         }
 
         public delegate void genVertexArrays(int n, uint[] arrays);
-        public void glGenVertexArrays(int n, uint[] arrays)
+        static public void glGenVertexArrays(int n, uint[] arrays)
         {
             Delegate wgl = InvokeWGL<genVertexArrays>("glGenVertexArrays");
             wgl.DynamicInvoke(n, arrays);
         }
 
         public delegate void bindVertexArray(uint array);
-        public void glBindVertexArray(uint array)
+        static public void glBindVertexArray(uint array)
         {
             Delegate wgl = InvokeWGL<bindVertexArray>("glBindVertexArray");
             wgl.DynamicInvoke(array);
         }
 
         public delegate void useProgram(uint program);
-        public void glUseProgram(uint program)
+        static public void glUseProgram(uint program)
         {
             Delegate wgl = InvokeWGL<useProgram>("glUseProgram");
             wgl.DynamicInvoke(program);
         }
 
         public delegate void detachShader(uint program, uint shader);
-        public void glDetachShader(uint program, uint shader)
+        static public void glDetachShader(uint program, uint shader)
         {
             Delegate wgl = InvokeWGL<detachShader>("glDetachShader");
             wgl.DynamicInvoke(program, shader);
         }
 
         public delegate void deleteShader(uint shader);
-        public void glDeleteShader(uint shader)
+        static public void glDeleteShader(uint shader)
         {
             Delegate wgl = InvokeWGL<deleteShader>("glDeleteShader");
             wgl.DynamicInvoke(shader);
         }
 
         public delegate void deleteVertexArrays(int n, uint[] arrays);
-        public void glDeleteVertexArrays(int n, uint[] arrays)
+        static public void glDeleteVertexArrays(int n, uint[] arrays)
         {
             Delegate wgl = InvokeWGL<deleteVertexArrays>("glDeleteVertexArrays");
             wgl.DynamicInvoke(n, arrays);
         }
 
         public delegate void deleteProgram(uint program);
-        public void glDeleteProgram(uint program)
+        static public void glDeleteProgram(uint program)
         {
             Delegate wgl = InvokeWGL<deleteProgram>("glDeleteProgram");
             wgl.DynamicInvoke(program);
         }
 
         public delegate void genBuffers(int n, uint[] buffers);
-        public void glGenBuffers(int n, uint[] buffers)
+        static public void glGenBuffers(int n, uint[] buffers)
         {
             Delegate wgl = InvokeWGL<genBuffers>("glGenBuffers");
             wgl.DynamicInvoke(n, buffers);
         }
 
         public delegate void bindBuffer(uint target, uint buffer);
-        public void glBindBuffer(uint target, uint buffer)
+        static public void glBindBuffer(uint target, uint buffer)
         {
             Delegate wgl = InvokeWGL<bindBuffer>("glBindBuffer");
             wgl.DynamicInvoke(target, buffer);
         }
 
         public delegate void bufferData(uint target, int size, IntPtr data, uint usage);
-        public void glBufferData(uint target, float[] data, uint usage)
+        static public void glBufferData(uint target, float[] data, uint usage)
         {
             IntPtr ptr = Marshal.AllocHGlobal(data.Length * sizeof(float));
             Marshal.Copy(data, 0, ptr, data.Length);
@@ -559,7 +559,7 @@ namespace GL.WGL
 
             Marshal.FreeHGlobal(ptr);
         }
-        public void glBufferData(uint target, int[] data, uint usage)
+        static public void glBufferData(uint target, int[] data, uint usage)
         {
             IntPtr ptr = Marshal.AllocHGlobal(data.Length * sizeof(float));
             Marshal.Copy(data, 0, ptr, data.Length);
@@ -571,28 +571,28 @@ namespace GL.WGL
         }
 
         public delegate void vertexAttribPointer(uint index, int size, uint type, bool normalized, int stride, IntPtr pointer);
-        public void glVertexAttribPointer(uint index, int size, uint type, bool normalized, int stride, IntPtr pointer)
+        static public void glVertexAttribPointer(uint index, int size, uint type, bool normalized, int stride, IntPtr pointer)
         {
             Delegate wgl = InvokeWGL<vertexAttribPointer>("glVertexAttribPointer");
             wgl.DynamicInvoke(index, size, type, normalized, stride, pointer);
         }
 
         public delegate void disableVertexAttribArray(uint index);
-        public void glDisableVertexAttribArray(uint index)
+        static public void glDisableVertexAttribArray(uint index)
         {
             Delegate wgl = InvokeWGL<disableVertexAttribArray>("glDisableVertexAttribArray");
             wgl.DynamicInvoke(index);
         }
 
         public delegate void enableVertexAttribArray(uint index);
-        public void glEnableVertexAttribArray(uint index)
+        static public void glEnableVertexAttribArray(uint index)
         {
             Delegate wgl = InvokeWGL<enableVertexAttribArray>("glEnableVertexAttribArray");
             wgl.DynamicInvoke(index);
         }
 
         public delegate void deleteBuffers(int n, uint[] buffers);
-        public void glDeleteBuffers(int n, uint[] buffers)
+        static public void glDeleteBuffers(int n, uint[] buffers)
         {
             Delegate wgl = InvokeWGL<deleteBuffers>("glDeleteBuffers");
             wgl.DynamicInvoke(n, buffers);
@@ -600,140 +600,140 @@ namespace GL.WGL
 
         //Work with Textures
         public delegate void generateMipmap(uint target);
-        public void glGenerateMipmap(uint target)
+        static public void glGenerateMipmap(uint target)
         {
             Delegate wgl = InvokeWGL<generateMipmap>("glGenerateMipmap");
             wgl.DynamicInvoke(target);
         }
 
         public delegate void activeTexture(uint texture);
-        public void glActiveTexture(uint texture)
+        static public void glActiveTexture(uint texture)
         {
             Delegate wgl = InvokeWGL<activeTexture>("glActiveTexture");
             wgl.DynamicInvoke(texture);
         }
 
         public delegate void uniform1f(int location, float v0);
-        public void glUniform1f(int location, float v0)
+        static public void glUniform1f(int location, float v0)
         {
             Delegate wgl = InvokeWGL<uniform1f>("glUniform1f");
             wgl.DynamicInvoke(location, v0);
         }
 
         public delegate void uniform2f(int location, float v0, float v1);
-        public void glUniform2f(int location, float v0, float v1)
+        static public void glUniform2f(int location, float v0, float v1)
         {
             Delegate wgl = InvokeWGL<uniform2f>("glUniform2f");
             wgl.DynamicInvoke(location, v0, v1);
         }
 
         public delegate void uniform3f(int location, float v0, float v1, float v2);
-        public void glUniform3f(int location, float v0, float v1, float v2)
+        static public void glUniform3f(int location, float v0, float v1, float v2)
         {
             Delegate wgl = InvokeWGL<uniform3f>("glUniform3f");
             wgl.DynamicInvoke(location, v0, v1, v2);
         }
 
         public delegate void uniform4f(int location, float v0, float v1, float v2, float v3);
-        public void glUniform4f(int location, float v0, float v1, float v2, float v3)
+        static public void glUniform4f(int location, float v0, float v1, float v2, float v3)
         {
             Delegate wgl = InvokeWGL<uniform4f>("glUniform4f");
             wgl.DynamicInvoke(location, v0, v1, v2, v3);
         }
 
         public delegate void uniform1i(int location, int v0);
-        public void glUniform1i(int location, int v0)
+        static public void glUniform1i(int location, int v0)
         {
             Delegate wgl = InvokeWGL<uniform1i>("glUniform1i");
             wgl.DynamicInvoke(location, v0);
         }
 
         public delegate void uniform2i(int location, int v0, int v1);
-        public void glUniform2i(int location, int v0, int v1)
+        static public void glUniform2i(int location, int v0, int v1)
         {
             Delegate wgl = InvokeWGL<uniform2i>("glUniform2i");
             wgl.DynamicInvoke(location, v0, v1);
         }
 
         public delegate void uniform3i(int location, int v0, int v1, int v2);
-        public void glUniform3i(int location, int v0, int v1, int v2)
+        static public void glUniform3i(int location, int v0, int v1, int v2)
         {
             Delegate wgl = InvokeWGL<uniform3i>("glUniform3i");
             wgl.DynamicInvoke(location, v0, v1, v2);
         }
 
         public delegate void uniform4i(int location, int v0, int v1, int v2, int v3);
-        public void glUniform4i(int location, int v0, int v1, int v2, int v3)
+        static public void glUniform4i(int location, int v0, int v1, int v2, int v3)
         {
             Delegate wgl = InvokeWGL<uniform4i>("glUniform4i");
             wgl.DynamicInvoke(location, v0, v1, v2, v3);
         }
 
         public delegate void uniform1fv(int location, int count, float[] value);
-        public void glUniform1fv(int location, int count, float[] value)
+        static public void glUniform1fv(int location, int count, float[] value)
         {
             Delegate wgl = InvokeWGL<uniform1fv>("glUniform1fv");
             wgl.DynamicInvoke(location, count, value);
         }
 
         public delegate void uniform2fv(int location, int count, float[] value);
-        public void glUniform2fv(int location, int count, float[] value)
+        static public void glUniform2fv(int location, int count, float[] value)
         {
             Delegate wgl = InvokeWGL<uniform2fv>("glUniform2fv");
             wgl.DynamicInvoke(location, count, value);
         }
 
         public delegate void uniform3fv(int location, int count, float[] value);
-        public void glUniform3fv(int location, int count, float[] value)
+        static public void glUniform3fv(int location, int count, float[] value)
         {
             Delegate wgl = InvokeWGL<uniform3fv>("glUniform3fv");
             wgl.DynamicInvoke(location, count, value);
         }
 
         public delegate void uniform4fv(int location, int count, float[] value);
-        public void glUniform4fv(int location, int count, float[] value)
+        static public void glUniform4fv(int location, int count, float[] value)
         {
             Delegate wgl = InvokeWGL<uniform4fv>("glUniform4fv");
             wgl.DynamicInvoke(location, count, value);
         }
 
         public delegate void uniform1iv(int location, int count, int[] value);
-        public void glUniform1iv(int location, int count, int[] value)
+        static public void glUniform1iv(int location, int count, int[] value)
         {
             Delegate wgl = InvokeWGL<uniform1iv>("glUniform1iv");
             wgl.DynamicInvoke(location, count, value);
         }
 
         public delegate void uniform2iv(int location, int count, int[] value);
-        public void glUniform2iv(int location, int count, int[] value)
+        static public void glUniform2iv(int location, int count, int[] value)
         {
             Delegate wgl = InvokeWGL<uniform2iv>("glUniform2iv");
             wgl.DynamicInvoke(location, count, value);
         }
 
         public delegate void uniform3iv(int location, int count, int[] value);
-        public void glUniform3(int location, int count, int[] value)
+        static public void glUniform3(int location, int count, int[] value)
         {
             Delegate wgl = InvokeWGL<uniform3iv>("glUniform3iv");
             wgl.DynamicInvoke(location, count, value);
         }
 
         public delegate void uniform4iv(int location, int count, int[] value);
-        public void glUniform4(int location, int count, int[] value)
+        static public void glUniform4(int location, int count, int[] value)
         {
             Delegate wgl = InvokeWGL<uniform4iv>("glUniform4iv");
             wgl.DynamicInvoke(location, count, value);
         }
 
         public delegate int getuniformlocation(uint shader, string value);
-        public int glGetUniformLocation(uint shader, string value)
+        static public int glGetUniformLocation(uint shader, string value)
         {
             Delegate wgl = InvokeWGL<getuniformlocation>("glGetUniformLocation");
             return (int)wgl.DynamicInvoke(shader, value);
         }
 
         public delegate void texStorage2D(uint target, int level, uint internalformat, int width, int height);
-        public void glTexStorage2D(uint target, int level, uint internalformat, int width, int height)
+        static public void glTexStorage2D(uint target, int level, uint internalformat, int width, int height)
         {
             Delegate wgl = InvokeWGL<texStorage2D>("glTexStorage2D");
             wgl.DynamicInvoke(target, level, internalformat, width, height);

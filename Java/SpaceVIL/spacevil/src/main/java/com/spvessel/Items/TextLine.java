@@ -34,7 +34,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     private int _parentAllowWidth = Integer.MAX_VALUE;
     private int _parentAllowHeight = Integer.MAX_VALUE;
 
-    private List<Alphabet.ModifyLetter> _letters;
+    private List<Alphabet.ModifyLetter> _letters = new LinkedList<>();
     // private List<TextPrinter> _letTexturesList;
 
     // private List<Float> px0;
@@ -463,6 +463,9 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
 
     protected void updateCoords() {
         // addAllShifts();
+        // if (_letters == null)
+        //     return;
+
         if (_letters.size() == 0)
             return;
         int[] fontDims = getFontDims();
