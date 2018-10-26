@@ -350,8 +350,6 @@ namespace SpaceVIL
                 Bitmap bm = new Bitmap((int)(font.Size * 2), (int)(font.Size * 2));
                 Graphics g = Graphics.FromImage(bm);
                 g.SmoothingMode = SmoothingMode.HighQuality;
-                // g.InterpolationMode = InterpolationMode.HighQualityBilinear;
-                // g.PixelOffsetMode = PixelOffsetMode.HighQuality; // or PixelOffsetMode.Half
                 g.TextRenderingHint = TextRenderingHint.AntiAlias;
                 g.DrawString(let, font, Brushes.White, new PointF(0f, 0f));
                 g.Dispose();
@@ -651,7 +649,7 @@ namespace SpaceVIL
                 {
                     for (int d = 0; d < bm.Height; d++)
                     {
-                        if (bm.GetPixel(x0shift, d).A > 0)
+                        if (bm.GetPixel(x0shift, d).A != 0)
                         {
                             isBraked = true;
                             break;
@@ -667,7 +665,7 @@ namespace SpaceVIL
                 {
                     for (int d = 0; d < bm.Height; d++)
                     {
-                        if (bm.GetPixel(x1shift, d).A > 0) isBraked = true;
+                        if (bm.GetPixel(x1shift, d).A != 0) isBraked = true;
                     }
                     if (isBraked) break;
                     x1shift--;
@@ -679,7 +677,7 @@ namespace SpaceVIL
                 {
                     for (int d = 0; d < bm.Width; d++)
                     {
-                        if (bm.GetPixel(d, y0shift).A > 0) isBraked = true;
+                        if (bm.GetPixel(d, y0shift).A != 0) isBraked = true;
                     }
                     if (isBraked) break;
                     y0shift++;
@@ -691,7 +689,7 @@ namespace SpaceVIL
                 {
                     for (int d = 0; d < bm.Width; d++)
                     {
-                        if (bm.GetPixel(d, y1shift).A > 0) isBraked = true;
+                        if (bm.GetPixel(d, y1shift).A != 0) isBraked = true;
                     }
                     if (isBraked) break;
                     y1shift--;

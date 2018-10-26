@@ -9,10 +9,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.sound.sampled.SourceDataLine;
 
 public class Alphabet {
     // Alphabet
@@ -37,14 +40,14 @@ public class Alphabet {
 
     private void fillSpecLetters() {
         char specLet = " ".charAt(0);
-        Letter letter = new Letter(" ", null);
+        Letter letter = new Letter(" ");
         letters.put(specLet, letter);
         letter.width = letters.get("-".charAt(0)).width;
         letter.height = 0;
         lineSpacer = letter.width;
 
         specLet = "\t".charAt(0);
-        Letter letter1 = new Letter("\t", null);
+        Letter letter1 = new Letter("\t");
         letters.put(specLet, letter1);
         letter1.width = letter.width * 4;
         letter1.height = 0;
@@ -87,42 +90,43 @@ public class Alphabet {
                 x0 = updateSpecX0(currLet, x0);
             } else {
                 if (prevLet != null) {
-                    int ly0 = prevLet.minY;
-                    int ly1 = ly0 + prevLet.height - 1;
-                    int ry0 = currLet.minY;
-                    int ry1 = ry0 + currLet.height - 1;
+                    // int ly0 = prevLet.minY;
+                    // int ly1 = ly0 + prevLet.height - 1;
+                    // int ry0 = currLet.minY;
+                    // int ry1 = ry0 + currLet.height - 1;
 
-                    boolean b1 = false, b2 = false;
-                    for (int i = Math.max(ly0, ry0); i < Math.min(ly1, ry1); i++) {
-                        // if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[0, i -
-                        // ry0] > err)
-                        if (prevLet.rightArr[1][i - ly0] > err && currLet.leftArr[0][i - ry0] > err) {
-                            b1 = true;
-                            break;
-                        }
-                    }
+                    // boolean b1 = false, b2 = false;
+                    // for (int i = Math.max(ly0, ry0); i < Math.min(ly1, ry1); i++) {
+                    //     // if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[0, i -
+                    //     // ry0] > err)
+                    //     if (prevLet.rightArr[1][i - ly0] > err && currLet.leftArr[0][i - ry0] > err) {
+                    //         b1 = true;
+                    //         break;
+                    //     }
+                    // }
 
-                    if (b1)
-                        x0++;
-                    else {
-                        for (int i = Math.max(ly0, ry0); i < Math.min(ly1, ry1); i++) {
-                            // if (prevLet.alphas[prevLet.width - 2, i - ly0] > err && currLet.alphas[0, i -
-                            // ry0] > err)
-                            if (prevLet.rightArr[0][i - ly0] > err && currLet.leftArr[0][i - ry0] > err) {
-                                b2 = true;
-                                break;
-                            }
-                            // if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[1, i -
-                            // ry0] > err)
-                            if (prevLet.rightArr[1][i - ly0] > err && currLet.leftArr[1][i - ry0] > err) {
-                                b2 = true;
-                                break;
-                            }
-                        }
+                    // if (b1)
+                    //     x0++;
+                    // else {
+                    //     for (int i = Math.max(ly0, ry0); i < Math.min(ly1, ry1); i++) {
+                    //         // if (prevLet.alphas[prevLet.width - 2, i - ly0] > err && currLet.alphas[0, i -
+                    //         // ry0] > err)
+                    //         if (prevLet.rightArr[0][i - ly0] > err && currLet.leftArr[0][i - ry0] > err) {
+                    //             b2 = true;
+                    //             break;
+                    //         }
+                    //         // if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[1, i -
+                    //         // ry0] > err)
+                    //         if (prevLet.rightArr[1][i - ly0] > err && currLet.leftArr[1][i - ry0] > err) {
+                    //             b2 = true;
+                    //             break;
+                    //         }
+                    //     }
 
-                        if (!b2)
-                            x0--;
-                    }
+                    //     //if (!b2)
+                    //     //    x0--;
+                    // }
+                    x0++;
                 }
             }
 
@@ -166,17 +170,39 @@ public class Alphabet {
          * System.out.println("Bug letter exception"); return bugLetter; }
          */
 
-        FontRenderContext context = new FontRenderContext(null, false, false);
+        // FontRenderContext context = new FontRenderContext(null, false, false);
 
-        GeneralPath shape = new GeneralPath();
-        TextLayout layout = new TextLayout(let, font, context);
+        // GeneralPath shape = new GeneralPath();
+        // TextLayout layout = new TextLayout(let, font, context);
 
-        AffineTransform transform = AffineTransform.getTranslateInstance(0, 0);
+        // AffineTransform transform = AffineTransform.getTranslateInstance(0, 0);
 
-        Shape outline = layout.getOutline(transform);
-        shape.append(outline, true);
+        // Shape outline = layout.getOutline(transform);
+        // shape.append(outline, true);
+        // try {
+        //     return new Letter(let, shape);
+        // } catch (Exception e) {
+        //     System.out.println("Bug letter exception");
+        //     return bugLetter;
+        // }
+
+        //Font font = DefaultsService.getDefaultFont(Font.BOLD, 30);
+        //String message = "Make a Chance!";
+
+        BufferedImage bi = new BufferedImage(font.getSize() * 2, font.getSize()*2, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D ig2 = bi.createGraphics();
+        RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        ig2.setRenderingHints(rh);
+        ig2.setFont(font);
+        FontMetrics metrics = ig2.getFontMetrics();
+        //int stringWidth = metrics.stringWidth(let);
+        int stringHeight = metrics.getAscent();
+        ig2.setPaint(Color.white);
+        ig2.drawString(let, 0, stringHeight);
+        
         try {
-            return new Letter(let, shape);
+            return new Letter(let, bi);
         } catch (Exception e) {
             System.out.println("Bug letter exception");
             return bugLetter;
@@ -184,7 +210,7 @@ public class Alphabet {
     }
 
     private void makeBugLetter() {
-        bugLetter = new Letter("bug", null);
+        bugLetter = new Letter("bug");
         bugLetter.width = (int) (font.getSize() / 3f);// lineSpacer;
         bugLetter.height = (int) (font.getSize() * 2 / 3f);// Math.Abs(maxY - minY + 1);
         bugLetter.minY = (int) (font.getSize() / 3f);// minY;
@@ -255,6 +281,17 @@ public class Alphabet {
                 makeLetterArrays(shape);
             else
                 isSpec = true;
+        }
+
+        public Letter(String name, BufferedImage bi) {
+            this.name = name;
+            bitmapToArray(bi);
+        }
+
+        public Letter(String name) {
+            // for bug letter
+            this.name = name;
+            isSpec = true;
         }
 
         void twoDimToOnedim(float[][] twoDim) {
@@ -494,6 +531,107 @@ public class Alphabet {
          * 
          * } }
          */
+
+         private void bitmapToArray(BufferedImage bi) {
+            int x0shift = 0;
+            boolean isBraked = false;
+            byte[] bytes;
+            while (x0shift < bi.getWidth()) {
+                for (int i = 0; i < bi.getHeight(); i++) {
+                    bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(x0shift, i)).array();                
+                    if (bytes[0] != 0) {
+                        isBraked = true;
+                        break;
+                    }
+                }
+                if (isBraked)
+                    break;
+                x0shift++;
+            }
+
+            int x1shift = bi.getWidth() - 1;
+            isBraked = false;
+            while (x1shift >= 0) {
+                for (int i = 0; i < bi.getHeight(); i++) {
+                    bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(x1shift, i)).array();
+                    if (bytes[0] != 0)
+                        isBraked = true;
+                }
+                if (isBraked)
+                    break;
+                x1shift--;
+            }
+
+            int y0shift = 0;
+            isBraked = false;
+            while (y0shift < bi.getHeight()) {
+                for (int i = 0; i < bi.getWidth(); i++) {
+                    bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(i, y0shift)).array();
+                    if (bytes[0] != 0)
+                        isBraked = true;
+                }
+                if (isBraked)
+                    break;
+                y0shift++;
+            }
+
+            int y1shift = bi.getHeight() - 1;
+            isBraked = false;
+            while (y1shift >= 0) {
+                for (int i = 0; i < bi.getWidth(); i++) {
+                    bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(i, y1shift)).array();
+                    if (bytes[0] != 0)
+                        isBraked = true;
+                }
+                if (isBraked)
+                    break;
+                y1shift--;
+            }
+
+            minX = 0;// x0 + x0shift;
+            minY = y0shift;
+
+            this.height = y1shift - y0shift + 1;
+            this.width = x1shift - x0shift + 1;
+            //System.out.println(name + " height " + y1shift + " " + y0shift);
+            // --------------------------------------------------------------------------------------
+
+            arr = new byte[(this.width * this.height) * 4];
+            int i = 0;
+            for (int xx = x0shift; xx <= x1shift; xx++) {
+                for (int yy = y0shift; yy <= y1shift; yy++) {
+                    bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(xx, yy)).array();
+                    arr[i] = bytes[1]; //(byte) 255;
+                    i++;
+                    arr[i] = bytes[2]; //(byte) 255;
+                    i++;
+                    arr[i] = bytes[3]; //(byte) 255;
+                    i++;
+                    arr[i] = bytes[0]; //(byte) (alph[xx][yy] * 255);
+                    i++;
+                }
+            }
+
+            leftArr = new float[2][this.height];
+            rightArr = new float[2][this.height];
+            for (int yy = y0shift; yy <= y1shift; yy++) {
+                int xx = x0shift;
+                bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(xx, yy)).array();
+                leftArr[0][yy - y0shift] = (float) (bytes[0] * 1f / 255f);
+                if (xx + 1 < this.width) {
+                    bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(xx + 1, yy)).array();
+                    leftArr[1][yy - y0shift] = (float) (bytes[0] * 1f / 255f);
+                }
+                xx = x1shift;
+                if (xx - 1 >= 0) {
+                    bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(xx - 1, yy)).array();
+                    rightArr[0][yy - y0shift] = (float) (bytes[0] * 1f / 255f);
+                }
+                bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(xx, yy)).array();
+                rightArr[1][yy - y0shift] = (float) (bytes[0] * 1f / 255f);
+
+            }
+         }
     }
 
     public class ModifyLetter {

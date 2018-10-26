@@ -1550,8 +1550,8 @@ public class DrawEngine {
         ByteBuffer bb = BufferUtils.createByteBuffer(bitmap.length);
         bb.put(bitmap);
         bb.rewind();
-        // if (checkOutsideBorders((BaseItem) image))
-        //     _texture.useShader();
+        if (checkOutsideBorders((BaseItem) image))
+            _texture.useShader();
 
         float i_x0 = ((float) image.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
         float i_y0 = ((float) image.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f)

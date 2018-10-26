@@ -180,6 +180,12 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
 
                     for (int j = 0; j < modL.height; j++) {
                         for (int i = 0; i < modL.width; i++) {
+                            //System.out.print(cacheBB.get(3 + offset + j * 4 + i * (bb_h * 4)) + " ");
+                            int b1 = bitmap[3 + j * 4 + i * (modL.height * 4)] & 0xFF;
+                            int b2 = cacheBB.get(3 + offset + j * 4 + i * (bb_h * 4)) & 0xFF;
+                            if (b1 < b2)
+                                continue;
+
                             cacheBB.put(0 + offset + j * 4 + i * (bb_h * 4), bitmap[0 + j * 4 + i * (modL.height * 4)]);
                             cacheBB.put(1 + offset + j * 4 + i * (bb_h * 4), bitmap[1 + j * 4 + i * (modL.height * 4)]);
                             cacheBB.put(2 + offset + j * 4 + i * (bb_h * 4), bitmap[2 + j * 4 + i * (modL.height * 4)]);
