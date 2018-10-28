@@ -30,6 +30,9 @@ public final class DefaultsService {
         return _default_theme.getThemeStyle(type);
     }
 
+    public static void setDefaultFont(Font font) {
+        _default_font.setDefaultFont(font);
+    }
     public static Font getDefaultFont() {
         return _default_font.getDefaultFont();
     }

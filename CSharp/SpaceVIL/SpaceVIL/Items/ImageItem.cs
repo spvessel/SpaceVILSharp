@@ -21,6 +21,16 @@ namespace SpaceVIL
         }
         public ImageItem(Image picture) : this()
         {
+            SetImage(picture);
+        }
+
+        //IImage implements
+        public Image GetImage()
+        {
+            return _image;
+        }
+        public void SetImage(Image picture)
+        {
             if (picture == null)
                 return;
             _image = picture;
@@ -38,16 +48,6 @@ namespace SpaceVIL
                     _bitmap.Add(pixel.A);
                 }
             }
-        }
-
-        //IImage implements
-        public Image GetImage()
-        {
-            return _image;
-        }
-        public void SetImage(Image picture)
-        {
-            _image = picture;
         }
         public String GetImageUrl()
         {

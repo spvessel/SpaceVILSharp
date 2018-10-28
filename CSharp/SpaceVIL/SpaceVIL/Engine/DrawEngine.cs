@@ -903,7 +903,7 @@ namespace SpaceVIL
             }
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(0);
 
@@ -918,7 +918,7 @@ namespace SpaceVIL
                 colorData[i * 4 + 3] = argb[3];
             }
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(1);
 
@@ -1108,7 +1108,7 @@ namespace SpaceVIL
             }
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(0);
 
@@ -1128,7 +1128,7 @@ namespace SpaceVIL
                 colorData[i * 4 + 3] = argb[3];
             }
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(1);
 
@@ -1212,10 +1212,10 @@ namespace SpaceVIL
             glGenBuffers(2, buffers);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_DYNAMIC_DRAW);
 
             //Position attribute
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * sizeof(float), IntPtr.Zero);
@@ -1316,12 +1316,12 @@ namespace SpaceVIL
             CheckOutsideBorders(item as BaseItem);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(0);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(1);
 
@@ -1375,12 +1375,12 @@ namespace SpaceVIL
             CheckOutsideBorders(item as BaseItem);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(0);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(1);
 
@@ -1429,10 +1429,10 @@ namespace SpaceVIL
             glGenBuffers(2, buffers);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_DYNAMIC_DRAW);
 
             //Position attribute
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * sizeof(float), IntPtr.Zero);
@@ -1541,7 +1541,7 @@ namespace SpaceVIL
             };
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(0);
 
@@ -1561,7 +1561,7 @@ namespace SpaceVIL
                 colorData[i * 4 + 3] = argb[3];
             }
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(1);
 

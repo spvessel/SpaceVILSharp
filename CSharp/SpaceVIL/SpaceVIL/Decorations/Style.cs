@@ -1028,8 +1028,11 @@ namespace SpaceVIL
                 Background = Color.FromArgb(40, 0, 255, 64)
             });
             maximize_style.Shape = GraphicsMathService.GetRectangle();
-
             style.AddInnerStyle("maximizebutton", maximize_style);
+
+            Style title_style = new Style();
+            title_style.Margin = new Indents(10, 0, 0, 0);
+            style.AddInnerStyle("title", title_style);
 
             return style;
         }

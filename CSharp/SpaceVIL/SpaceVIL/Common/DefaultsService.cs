@@ -30,19 +30,19 @@ namespace SpaceVIL
         //     Stream fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(font_path);
         //     SetDefaultFont(fontStream);
         // }
-        public void SetDefaultFont(Stream font_stream)
-        {
-            privateFontCollection = new PrivateFontCollection();
+        // public void SetDefaultFont(Stream font_stream)
+        // {
+        //     privateFontCollection = new PrivateFontCollection();
 
-            System.IntPtr data = Marshal.AllocCoTaskMem((int)font_stream.Length);
-            byte[] fontdata = new byte[font_stream.Length];
-            font_stream.Read(fontdata, 0, (int)font_stream.Length);
-            Marshal.Copy(fontdata, 0, data, (int)font_stream.Length);
-            privateFontCollection.AddMemoryFont(data, (int)font_stream.Length);
-            font_stream.Close();
-            Marshal.FreeCoTaskMem(data);
-            _default_font = new Font(privateFontCollection.Families[0], 10, FontStyle.Regular);
-        }
+        //     System.IntPtr data = Marshal.AllocCoTaskMem((int)font_stream.Length);
+        //     byte[] fontdata = new byte[font_stream.Length];
+        //     font_stream.Read(fontdata, 0, (int)font_stream.Length);
+        //     Marshal.Copy(fontdata, 0, data, (int)font_stream.Length);
+        //     privateFontCollection.AddMemoryFont(data, (int)font_stream.Length);
+        //     font_stream.Close();
+        //     Marshal.FreeCoTaskMem(data);
+        //     _default_font = new Font(privateFontCollection.Families[0], 10, FontStyle.Regular);
+        // }
         // public Font GetDefaultFont() //объекты не инициализируются почему-то, выяснить
         // {
         //     if (_default_font == null)
@@ -175,10 +175,10 @@ namespace SpaceVIL
         {
             _default_font.SetDefaultFont(font);
         }
-        public static void SetDefaultFont(Stream font_stream)
-        {
-            _default_font.SetDefaultFont(font_stream);
-        }
+        // public static void SetDefaultFont(Stream font_stream)
+        // {
+        //     _default_font.SetDefaultFont(font_stream);
+        // }
         // public static Font GetEmbeddedFont(EmbeddedFont font, int size, FontStyle style)
         // {
         //     return _default_font.GetEmbeddedFont(font, size, style);

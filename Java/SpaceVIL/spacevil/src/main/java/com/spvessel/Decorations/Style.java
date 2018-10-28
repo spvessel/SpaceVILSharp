@@ -1059,10 +1059,11 @@ public class Style {
         ItemState maximize_hovered = new ItemState();
         maximize_hovered.background = new Color(0, 255, 64, 40);
         maximize_style.addItemState(ItemStateType.HOVERED, maximize_hovered);
-
-        // maximize_style.shape = GraphicsMathService.getRectangle(100, 100, 0, 0);
-
         style.addInnerStyle("maximizebutton", maximize_style);
+
+        Style title_style = new Style();
+        title_style.margin = new Indents(10, 0, 0, 0);
+        style.addInnerStyle("title", title_style);
 
         return style;
     }

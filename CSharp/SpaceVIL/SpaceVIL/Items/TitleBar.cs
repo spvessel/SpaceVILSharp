@@ -59,13 +59,13 @@ namespace SpaceVIL
         {
             _icon.SetSize(width, height);
             _icon.SetImage(icon);
-            _icon.IsVisible = false;
+            _icon.IsVisible = true;
         }
         public void SetIcon(String url, int width, int height)
         {
             _icon.SetSize(width, height);
             _icon.SetImageUrl(url);
-            _icon.IsVisible = false;
+            _icon.IsVisible = true;
         }
 
         //text init
@@ -205,6 +205,11 @@ namespace SpaceVIL
             if (inner_style != null)
             {
                 _maximize.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("title");
+            if (inner_style != null)
+            {
+                SetTextMargin(inner_style.Margin);
             }
 
             //icon

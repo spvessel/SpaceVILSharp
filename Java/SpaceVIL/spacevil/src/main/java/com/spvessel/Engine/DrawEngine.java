@@ -978,10 +978,10 @@ public class DrawEngine {
         int elementbuffer = glGenBuffers();
 
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_DYNAMIC_DRAW);
 
         // Position attribute
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0);
@@ -1026,7 +1026,7 @@ public class DrawEngine {
             vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
         }
         vertexData.rewind();
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
 
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(0);
@@ -1046,7 +1046,7 @@ public class DrawEngine {
         }
         colorData.rewind();
 
-        glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(1);
@@ -1254,7 +1254,7 @@ public class DrawEngine {
             vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
         }
         vertexData.rewind();
-        glBufferData(GL15.GL_ARRAY_BUFFER, vertexData, GL15.GL_STATIC_DRAW);
+        glBufferData(GL15.GL_ARRAY_BUFFER, vertexData, GL15.GL_DYNAMIC_DRAW);
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
@@ -1278,7 +1278,7 @@ public class DrawEngine {
         }
         colorData.rewind();
 
-        glBufferData(GL15.GL_ARRAY_BUFFER, colorData, GL15.GL_STATIC_DRAW);
+        glBufferData(GL15.GL_ARRAY_BUFFER, colorData, GL15.GL_DYNAMIC_DRAW);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
 
@@ -1352,11 +1352,11 @@ public class DrawEngine {
 
         int vertexbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, vertex, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertex, GL_DYNAMIC_DRAW);
 
         int elementbuffer = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_DYNAMIC_DRAW);
 
         // Position attribute
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0);
@@ -1442,7 +1442,7 @@ public class DrawEngine {
         // vertexData.put(result);
         // vertexData.rewind();
 
-        glBufferData(GL_ARRAY_BUFFER, result, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, result, GL_DYNAMIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(0);
 
@@ -1464,7 +1464,7 @@ public class DrawEngine {
         }
         colorData.rewind();
 
-        glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
         glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(1);
 
@@ -1503,7 +1503,7 @@ public class DrawEngine {
             vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
         }
         vertexData.rewind();
-        glBufferData(GL15.GL_ARRAY_BUFFER, vertexData, GL15.GL_STATIC_DRAW);
+        glBufferData(GL15.GL_ARRAY_BUFFER, vertexData, GL15.GL_DYNAMIC_DRAW);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
@@ -1524,7 +1524,7 @@ public class DrawEngine {
         }
         colorData.rewind();
 
-        glBufferData(GL15.GL_ARRAY_BUFFER, colorData, GL15.GL_STATIC_DRAW);
+        glBufferData(GL15.GL_ARRAY_BUFFER, colorData, GL15.GL_DYNAMIC_DRAW);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
 
@@ -1582,11 +1582,11 @@ public class DrawEngine {
 
         int vertexbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
 
         int elementbuffer = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboData, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboData, GL_DYNAMIC_DRAW);
 
         // Position attribute
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0);
@@ -1682,7 +1682,7 @@ public class DrawEngine {
         FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
         vertexData.put(vertex);
         vertexData.rewind();
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(0);
 
@@ -1701,7 +1701,7 @@ public class DrawEngine {
         FloatBuffer colorData = BufferUtils.createFloatBuffer(color.length);
         colorData.put(color);
         colorData.rewind();
-        glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
         glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(1);
 

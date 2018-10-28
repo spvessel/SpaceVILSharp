@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.LinkedList;
 import java.nio.ByteBuffer;
-
 import com.spvessel.Cores.InterfaceImageItem;
 
 public class ImageItem extends VisualItem implements InterfaceImageItem {
@@ -74,7 +73,10 @@ public class ImageItem extends VisualItem implements InterfaceImageItem {
     }
 
     public void setImage(BufferedImage image) {
+        if (image == null)
+            return;
         _image = image;
+        _bitmap = createByteImage();
     }
 
     public String getImageUrl() {
