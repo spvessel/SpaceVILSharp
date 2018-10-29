@@ -707,14 +707,16 @@ namespace SpaceVIL
                 for (int xx = x0shift; xx <= x1shift; xx++)
                 {
                     for (int yy = y0shift; yy <= y1shift; yy++)
+                    // for (int yy = y1shift; yy >= y0shift; yy--)
                     {
-                        arr[i] = bm.GetPixel(xx, yy).R;
+                        Color pixel = bm.GetPixel(xx, yy);
+                        arr[i] = pixel.R;
                         i++;
-                        arr[i] = bm.GetPixel(xx, yy).G;
+                        arr[i] = pixel.G;
                         i++;
-                        arr[i] = bm.GetPixel(xx, yy).B;
+                        arr[i] = pixel.B;
                         i++;
-                        arr[i] = bm.GetPixel(xx, yy).A;
+                        arr[i] = pixel.A;
                         i++;
                     }
                 }

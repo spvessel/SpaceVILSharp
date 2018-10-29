@@ -1198,9 +1198,9 @@ namespace SpaceVIL
             {
                 //X    Y      Z         //U     V
                 i_x0,  i_y0,  0.0f,     0.0f, 0.0f, //x0
-                i_x0,  i_y1,  0.0f,     1.0f, 0.0f, //x1
+                i_x0,  i_y1,  0.0f,     0.0f, 1.0f, //x1
                 i_x1,  i_y1,  0.0f,     1.0f, 1.0f, //x2
-                i_x1,  i_y0,  0.0f,     0.0f, 1.0f, //x3
+                i_x1,  i_y0,  0.0f,     1.0f, 0.0f, //x3
             };
             int[] ibo = new int[]
             {
@@ -1232,13 +1232,13 @@ namespace SpaceVIL
 
             glBindTexture(GL_TEXTURE_2D, texture[0]);
 
-            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, h, w);
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, h, w, GL_RGBA, GL_UNSIGNED_BYTE, bb);
+            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_BGRA, GL_UNSIGNED_BYTE, bb);
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             int location = glGetUniformLocation(_char.GetProgramID(), "tex");
             if (location >= 0)
                 glUniform1i(location, 0);
@@ -1414,10 +1414,14 @@ namespace SpaceVIL
             float[] vertexData = new float[]
             {
                 //X    Y      Z         //U     V
-                i_x0,  i_y0,  0.0f,     0.0f, 0.0f, //x0
-                i_x0,  i_y1,  0.0f,     1.0f, 0.0f, //x1
-                i_x1,  i_y1,  0.0f,     1.0f, 1.0f, //x2
-                i_x1,  i_y0,  0.0f,     0.0f, 1.0f, //x3
+                i_x0,  i_y0,  0.0f,     0.0f, 1.0f, //x0
+                i_x0,  i_y1,  0.0f,     0.0f, 0.0f, //x1
+                i_x1,  i_y1,  0.0f,     1.0f, 0.0f, //x2
+                i_x1,  i_y0,  0.0f,     1.0f, 1.0f, //x3
+                // i_x0,  i_y0,  0.0f,     0.0f, 0.0f, //x0
+                // i_x0,  i_y1,  0.0f,     1.0f, 0.0f, //x1
+                // i_x1,  i_y1,  0.0f,     1.0f, 1.0f, //x2
+                // i_x1,  i_y0,  0.0f,     0.0f, 1.0f, //x3
             };
             int[] ibo = new int[]
             {
@@ -1443,22 +1447,17 @@ namespace SpaceVIL
 
             //texture
             int w = image.GetImageWidth(), h = image.GetImageHeight();
-
             uint[] texture = new uint[1];
             glGenTextures(1, texture);
-
             glBindTexture(GL_TEXTURE_2D, texture[0]);
 
-            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, h, w);
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, h, w, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
-            glGenerateMipmap(GL_TEXTURE_2D);
+            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_BGRA, GL_UNSIGNED_BYTE, bitmap);
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 256);
-
 
             int location = glGetUniformLocation(_texture.GetProgramID(), "tex");
             if (location >= 0)

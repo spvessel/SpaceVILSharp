@@ -10,7 +10,7 @@ namespace SpaceVIL
     public class ImageItem : VisualItem, IImageItem
     {
         static int count = 0;
-        private Image _image;
+        public Image _image;
         private List<byte> _bitmap;
         private String _url;
 
@@ -37,9 +37,10 @@ namespace SpaceVIL
 
             _bitmap = new List<byte>();
             Bitmap bmp = new Bitmap(_image);
-            for (int i = 0; i < _image.Width; i++)
+            for (int j = _image.Height - 1; j >= 0; j--)
+            // for (int j = 0; j < _image.Height; j++)
             {
-                for (int j = 0; j < _image.Height; j++)
+                for (int i = 0; i < _image.Width; i++)
                 {
                     Color pixel = bmp.GetPixel(i, j);
                     _bitmap.Add(pixel.R);
@@ -70,25 +71,17 @@ namespace SpaceVIL
             {
                 _bitmap = new List<byte>();
                 Bitmap bmp = new Bitmap(_image);
-                for (int i = 0; i < _image.Width; i++)
+                for (int j = _image.Height - 1; j >= 0; j--)
                 {
-                    for (int j = 0; j < _image.Height; j++)
+                    for (int i = 0; i < _image.Width; i++)
                     {
                         Color pixel = bmp.GetPixel(i, j);
                         _bitmap.Add(pixel.R);
                         _bitmap.Add(pixel.G);
                         _bitmap.Add(pixel.B);
                         _bitmap.Add(pixel.A);
-                        Console.Write(
-                            pixel.R + " " +
-                            pixel.G + " " +
-                            pixel.B + " " +
-                            pixel.A + " "
-                        );
                     }
-                    Console.WriteLine();
                 }
-                //Environment.Exit(-1);
             }
             return _bitmap.ToArray();
         }

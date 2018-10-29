@@ -1341,9 +1341,9 @@ public class DrawEngine {
         float[] vertex = new float[] {
                 // X Y Z //U V
                 i_x0, i_y0, 0.0f, 0.0f, 0.0f, // x0
-                i_x0, i_y1, 0.0f, 1.0f, 0.0f, // x1
+                i_x0, i_y1, 0.0f, 0.0f, 1.0f, // x1
                 i_x1, i_y1, 0.0f, 1.0f, 1.0f, // x2
-                i_x1, i_y0, 0.0f, 0.0f, 1.0f, // x3
+                i_x1, i_y0, 0.0f, 1.0f, 0.0f, // x3
         };
 
         int[] ibo = new int[] {0, 1, 2, // first triangle
@@ -1371,22 +1371,17 @@ public class DrawEngine {
         int texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texture);
 
-        GL42.glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, h, w);
-        GL11.glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, h, w, GL_RGBA, GL_UNSIGNED_BYTE, bb);
-        GL30.glGenerateMipmap(GL_TEXTURE_2D);
+        GL42.glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
+        GL11.glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bb);
 
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 256);
-
-        // glActiveTexture(GL_TEXTURE0);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         int location = glGetUniformLocation((int) _char.getProgramID(), "tex");
         glUniform1i(location, 0);
 
-        // System.out.println(text.getForeground());
         float[] argb = {(float) text.getForeground().getRed() / 255.0f,
                 (float) text.getForeground().getGreen() / 255.0f,
                 (float) text.getForeground().getBlue() / 255.0f,
@@ -1564,10 +1559,10 @@ public class DrawEngine {
         // VBO
         float[] vertex = new float[] {
                 // X Y Z //U V
-                i_x0, i_y0, 0.0f, 0.0f, 0.0f, // x0
-                i_x0, i_y1, 0.0f, 1.0f, 0.0f, // x1
-                i_x1, i_y1, 0.0f, 1.0f, 1.0f, // x2
-                i_x1, i_y0, 0.0f, 0.0f, 1.0f, // x3
+                i_x0, i_y0, 0.0f, 0.0f, 1.0f, // x0
+                i_x0, i_y1, 0.0f, 0.0f, 0.0f, // x1
+                i_x1, i_y1, 0.0f, 1.0f, 0.0f, // x2
+                i_x1, i_y0, 0.0f, 1.0f, 1.0f, // x3
         };
         FloatBuffer vertexData = BufferUtils.createFloatBuffer(vertex.length);
         vertexData.put(vertex);
@@ -1601,8 +1596,8 @@ public class DrawEngine {
         int texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texture);
 
-        GL42.glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, h, w);
-        GL11.glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, h, w, GL_RGBA, GL_UNSIGNED_BYTE, bb);
+        GL42.glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
+        GL11.glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bb);
         GL30.glGenerateMipmap(GL_TEXTURE_2D);
 
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

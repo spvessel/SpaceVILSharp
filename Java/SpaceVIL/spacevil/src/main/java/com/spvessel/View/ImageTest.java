@@ -104,7 +104,8 @@ public class ImageTest extends ActiveWindow {
         // Image img1 = Image.FromFile("battery_full_small.png");
         BufferedImage image = null;
         try {
-            image = ImageIO.read(new File("//home//rsedaikin//Documents//columnar.png"));
+            // image = ImageIO.read(new File("//home//rsedaikin//Documents//columnar.png"));
+            image = ImageIO.read(new File("D:\\columnar.png"));
         } catch (IOException e) {
         }
         // Image img1 = Image.FromFile("spacevil_logo.png");

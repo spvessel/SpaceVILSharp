@@ -110,18 +110,18 @@ namespace SpaceVIL
                             continue;
                         }
 
-                        int offset = (modL.yBeg - fontDims[1]) * 4 + (modL.xBeg + modL.xShift - xFirstBeg) * bb_h * 4;
+                        int offset = (modL.yBeg - fontDims[1]) * bb_w * 4 + (modL.xBeg + modL.xShift - xFirstBeg) * 4;
 
                         for (int j = 0; j < modL.height; j++)
                         {
                             for (int i = 0; i < modL.width; i++)
                             {
-                                if (bitmap[3 + j * 4 + i * (modL.height * 4)] < cacheBB[3 + offset + j * 4 + i * (bb_h * 4)])
+                                if (bitmap[3 + j * 4 + i * (modL.height * 4)] < cacheBB[3 + offset + i * 4 + j * (bb_w * 4)])
                                     continue;
-                                cacheBB[0 + offset + j * 4 + i * (bb_h * 4)] = bitmap[0 + j * 4 + i * (modL.height * 4)];
-                                cacheBB[1 + offset + j * 4 + i * (bb_h * 4)] = bitmap[1 + j * 4 + i * (modL.height * 4)];
-                                cacheBB[2 + offset + j * 4 + i * (bb_h * 4)] = bitmap[2 + j * 4 + i * (modL.height * 4)];
-                                cacheBB[3 + offset + j * 4 + i * (bb_h * 4)] = bitmap[3 + j * 4 + i * (modL.height * 4)];
+                                cacheBB[0 + offset + i * 4 + j * (bb_w * 4)] = bitmap[0 + j * 4 + i * (modL.height * 4)];
+                                cacheBB[1 + offset + i * 4 + j * (bb_w * 4)] = bitmap[1 + j * 4 + i * (modL.height * 4)];
+                                cacheBB[2 + offset + i * 4 + j * (bb_w * 4)] = bitmap[2 + j * 4 + i * (modL.height * 4)];
+                                cacheBB[3 + offset + i * 4 + j * (bb_w * 4)] = bitmap[3 + j * 4 + i * (modL.height * 4)];
                             }
                         }
 
