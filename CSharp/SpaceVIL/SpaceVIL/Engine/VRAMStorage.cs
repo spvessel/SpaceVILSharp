@@ -85,15 +85,6 @@ namespace SpaceVIL
 
         internal void Bind()
         {
-            glBindBuffer(GL_ARRAY_BUFFER, VBO);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-
-            //Position attribute
-            glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * sizeof(float), IntPtr.Zero);
-            glEnableVertexAttribArray(0);
-            //TexCoord attribute
-            glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * sizeof(float), IntPtr.Zero + (3 * sizeof(float)));
-            glEnableVertexAttribArray(1);
             //Texture bind
             glBindTexture(GL_TEXTURE_2D, Texture[0]);
         }
@@ -110,6 +101,8 @@ namespace SpaceVIL
             uint[] buffers = new uint[2] { VBO, IBO };
             glDeleteBuffers(2, buffers);
             glDeleteTextures(1, Texture);
+            _vbo_data = null;
+            _ibo_data= null;
         }
 
         internal void DeleteIBOBuffer()

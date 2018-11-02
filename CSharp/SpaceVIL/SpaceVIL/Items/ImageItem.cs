@@ -29,6 +29,7 @@ namespace SpaceVIL
         {
             return _image;
         }
+        internal bool IsChanged = false;
         public void SetImage(Image picture)
         {
             if (picture == null)

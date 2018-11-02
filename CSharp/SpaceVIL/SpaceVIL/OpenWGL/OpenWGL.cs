@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Threading;
 
 namespace GL.WGL
 {
@@ -421,24 +422,36 @@ namespace GL.WGL
         //Extensions
         static private Dictionary<string, Delegate> extensionFunctions = new Dictionary<string, Delegate>();
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern IntPtr wglGetProcAddress(string name);
-
+        static private Object locker = new Object();
         static private Delegate InvokeWGL<T>(string name)
         {
             Type delegateType = typeof(T);
             Delegate del = null;
-            if (extensionFunctions.ContainsKey(name) == false)
+            Monitor.Enter(locker);
+            try
             {
-                IntPtr proc = wglGetProcAddress(name);
-                if (proc == IntPtr.Zero)
-                    throw new Exception("Extension function " + name + " not supported");
+                if (!extensionFunctions.ContainsKey(name))
+                {
+                    IntPtr proc = wglGetProcAddress(name);
+                    if (proc == IntPtr.Zero)
+                        throw new SpaceVILException("SpaceVILException: Extension function " + name + " not supported");
 
-                del = Marshal.GetDelegateForFunctionPointer(proc, delegateType);
-                if (del == null)
-                    throw new Exception("Extension function " + name + " not supported");
+                    del = Marshal.GetDelegateForFunctionPointer(proc, delegateType);
+                    if (del == null)
+                        throw new SpaceVILException("SpaceVILException: Extension function " + name + " not supported");
 
-                extensionFunctions.Add(name, del);
+                    extensionFunctions.Add(name, del);
+                }
+                del = extensionFunctions[name];
             }
-            del = extensionFunctions[name];
+            catch (Exception ex)
+            {
+                Console.WriteLine("ex: " + ex.ToString());
+            }
+            finally
+            {
+                Monitor.Exit(locker);
+            }
 
             return del;
         }
@@ -772,7 +785,7 @@ namespace GL.WGL
             Delegate wgl = InvokeWGL<texStorage2D>("glTexStorage2D");
             wgl.DynamicInvoke(target, level, internalformat, width, height);
         }
-        
+
         public delegate void framebufferTexture(uint target, uint attachment, uint texture, int level);
         static public void glFramebufferTexture(uint target, uint attachment, uint texture, int level)
         {

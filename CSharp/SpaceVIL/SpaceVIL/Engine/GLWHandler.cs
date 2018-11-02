@@ -79,7 +79,7 @@ namespace SpaceVIL
             // Glfw.ConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
             if (!Glfw.Init())
             {
-                throw new SpaceVILException("Init GLFW fail - " + GetLayout().GetWindowTitle());
+                throw new SpaceVILException("SpaceVILException: Init GLFW fail - " + GetLayout().GetWindowTitle());
             }
 
             //cursors
@@ -117,7 +117,7 @@ namespace SpaceVIL
             {
                 LogService.Log().LogText("Create window fail - " + GetLayout().GetWindowTitle());
                 // Glfw.Terminate();
-                throw new SpaceVILException("Create window fail - " + GetLayout().GetWindowTitle());
+                throw new SpaceVILException("SpaceVILException: Create window fail - " + GetLayout().GetWindowTitle());
             }
 
             if (AppearInCenter)

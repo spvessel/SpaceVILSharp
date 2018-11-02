@@ -861,7 +861,7 @@ public class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
-    public float _interval = 1.0f / 60.0f;// 1000 / 60;
+    public float _interval = 1.0f / 30.0f;// 1000 / 60;
     // internal float _interval = 1.0f / 60.0f;//1000 / 60;
     // internal int _interval = 11;//1000 / 90;
     // internal int _interval = 08;//1000 / 120;
