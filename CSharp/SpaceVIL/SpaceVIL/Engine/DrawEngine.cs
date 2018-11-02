@@ -1286,12 +1286,47 @@ namespace SpaceVIL
             int location = glGetUniformLocation(_blur.GetProgramID(), "tex");
             if (location >= 0)
                 glUniform1i(location, 0);
+            else
+                Console.WriteLine("not find tex");
+
             int location_frame = glGetUniformLocation(_blur.GetProgramID(), "frame");
             if (location_frame >= 0)
                 glUniform2fv(location_frame, 1, new float[2] { _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight() });
-            int location_direction = glGetUniformLocation(_blur.GetProgramID(), "direction");
-            if (location_direction >= 0)
-                glUniform2fv(location_direction, 1, new float[2] { shell.GetShadowRadius(), shell.GetShadowRadius() });
+            else
+                Console.WriteLine("not find frame");
+
+            // int location_direction = glGetUniformLocation(_blur.GetProgramID(), "direction");
+            // if (location_direction >= 0)
+            //     glUniform2fv(location_direction, 1, new float[2] { shell.GetShadowRadius(), shell.GetShadowRadius() });
+
+            int res = (int)shell.GetShadowRadius();
+            float[] weights = new float[res];
+            float sum, sigma2 = 4.0f;
+            weights[0] = Gauss(0, sigma2);
+            sum = weights[0];
+            for (int i = 1; i < res; i++)
+            {
+                weights[i] = Gauss(i, sigma2);
+                sum += 2 * weights[i];
+            }
+            for (int i = 0; i < res; i++)
+                weights[i] /= sum;
+
+            int location_res = glGetUniformLocation(_blur.GetProgramID(), "res");
+            if (location_res >= 0)
+                glUniform1i(location_res, res);
+            else
+            {
+                Console.WriteLine("not find res");
+            }
+
+            int location_weights = glGetUniformLocation(_blur.GetProgramID(), "weights");
+            if (location_weights >= 0)
+                glUniform1fv(location_weights, res, weights);
+            else
+            {
+                Console.WriteLine("not find weights");
+            }
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
 
@@ -1301,7 +1336,12 @@ namespace SpaceVIL
             glDeleteFramebuffers(1, fbo_handle);
             glDeleteTextures(1, fbo_texture);
         }
-
+        float Gauss(float x, float sigma)
+        {
+            double ans;
+            ans = Math.Exp(-(x * x) / (2f * sigma * sigma)) / Math.Sqrt(2 * Math.PI * sigma * sigma);
+            return (float)ans;
+        }
         void DrawText(ITextContainer text)
         {
             TextPrinter textPrt = text.GetLetTextures();
