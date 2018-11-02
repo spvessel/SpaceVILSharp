@@ -53,7 +53,7 @@ public class MainWindow extends ActiveWindow {
         grid.setSpacing(6, 6);
         Handler.addItem(grid);
 
-        Font font = DefaultsService.getDefaultFont(Font.BOLD, 18);
+        Font font = DefaultsService.getDefaultFont(Font.PLAIN, 16);
         // Font font = DefaultsService.getDefaultFont(18);
 
         ButtonCore btn_layout = new ButtonCore("Layout");

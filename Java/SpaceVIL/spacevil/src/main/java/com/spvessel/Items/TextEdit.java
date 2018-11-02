@@ -101,8 +101,9 @@ public class TextEdit extends VisualItem
         int sh = getLineXShift();
         if (sh >= 0)
             return;
-
-        int curCoord = _cursor.getX() - sh;
+        
+        int curPos = _cursor.getX();
+        int curCoord = curPos - sh;
 
         sh += _text_object.getFontDims()[0];
         if (sh > 0)
@@ -110,6 +111,9 @@ public class TextEdit extends VisualItem
 
         _text_object.setLineXShift(sh);
         _cursor.setX(curCoord + sh);
+
+        curPos = _cursor.getX() - curPos;
+        _selectedArea.setX(_selectedArea.getX() + curPos);
     }
 
     protected void onScrollDown(Object sender, MouseArgs args) {
@@ -121,7 +125,8 @@ public class TextEdit extends VisualItem
         if (w + sh <= _cursorXMax)
             return;
 
-        int curCoord = _cursor.getX() - sh;
+        int curPos = _cursor.getX();
+        int curCoord = curPos - sh;
 
         sh -= _text_object.getFontDims()[0];
         if (w + sh < _cursorXMax)
@@ -129,6 +134,9 @@ public class TextEdit extends VisualItem
 
         _text_object.setLineXShift(sh);
         _cursor.setX(curCoord + sh);
+
+        curPos = _cursor.getX() - curPos;
+        _selectedArea.setX(_selectedArea.getX() + curPos);
     }
 
     public void invokeScrollUp(MouseArgs args) {

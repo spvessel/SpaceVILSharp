@@ -186,7 +186,7 @@ namespace SpaceVIL
         {
             return _item.GetItemName();
         }
-        
+
         internal bool IsDrawable = true;
         // private bool _drawable = true;
         // internal virtual bool IsDrawable
@@ -514,6 +514,7 @@ namespace SpaceVIL
         }
 
         public virtual void SetStyle(Style style) { }
+        public abstract Style GetCoreStyle();
         public virtual void CheckDefaults()
         {
             //checking all attributes
@@ -524,5 +525,47 @@ namespace SpaceVIL
         }
         public virtual void SetDefaults() { }
         public ItemRule HoverRule = ItemRule.Lazy;
+
+        //shadow
+        private bool _is_shadow_drop = false;
+        public bool IsShadowDrop()
+        {
+            return _is_shadow_drop;
+        }
+        public void SetShadowDrop(bool value)
+        {
+            _is_shadow_drop = value;
+        }
+        private float _shadow_radius = 1.0f;
+        public void SetShadowRadius(float radius)
+        {
+            _shadow_radius = radius;
+        }
+        public float GetShadowRadius()
+        {
+            return _shadow_radius;
+        }
+        private Color _shadow_color = Color.Black;
+        public Color GetShadowColor()
+        {
+            return _shadow_color;
+        }
+        public void SetShadowColor(Color color)
+        {
+            _shadow_color = color;
+        }
+        private Position _shadow_pos = new Position();
+        public Position GetShadowPos()
+        {
+            return _shadow_pos;
+        } 
+        public void SetShadow(float radius, int x, int y, Color color)
+        {
+            _is_shadow_drop = true;
+            _shadow_radius = radius;
+            _shadow_color = color;
+            _shadow_pos.SetX(x);
+            _shadow_pos.SetY(y);
+        }
     }
 }

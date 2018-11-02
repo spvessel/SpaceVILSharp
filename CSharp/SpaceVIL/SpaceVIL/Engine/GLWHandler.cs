@@ -25,8 +25,8 @@ namespace SpaceVIL
         Glfw.Cursor _resize_h;
         Glfw.Cursor _resize_v;
         Glfw.Cursor _resize_all;
-        ///////////////////////////////////////////////
 
+        ///////////////////////////////////////////////
         internal Glfw.WindowSizeFunc ResizeCallback;
         internal Glfw.CursorPosFunc MouseMoveCallback;
         internal Glfw.MouseButtonFunc MouseClickCallback;
@@ -79,8 +79,7 @@ namespace SpaceVIL
             // Glfw.ConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
             if (!Glfw.Init())
             {
-                Console.WriteLine("Init GLFW fail - " + GetLayout().GetWindowTitle());
-                Environment.Exit(-1);
+                throw new SpaceVILException("Init GLFW fail - " + GetLayout().GetWindowTitle());
             }
 
             //cursors
@@ -97,13 +96,13 @@ namespace SpaceVIL
             Glfw.DefaultWindowHints();
             Glfw.WindowHint(Glfw.Hint.OpenglProfile, Glfw.OpenGLProfile.Compat);
             Glfw.WindowHint(Glfw.Hint.Samples, 8);
-            Glfw.WindowHint(Glfw.Hint.GreenBits, 8);
-            Glfw.WindowHint(Glfw.Hint.BlueBits, 8);
-            Glfw.WindowHint(Glfw.Hint.AlphaBits, 8);
-            Glfw.WindowHint(Glfw.Hint.DepthBits, 0);
-            Glfw.WindowHint(Glfw.Hint.StencilBits, 8);
+            // Glfw.WindowHint(Glfw.Hint.GreenBits, 8);
+            // Glfw.WindowHint(Glfw.Hint.BlueBits, 8);
+            // Glfw.WindowHint(Glfw.Hint.AlphaBits, 8);
+            // Glfw.WindowHint(Glfw.Hint.DepthBits, 0);
+            // Glfw.WindowHint(Glfw.Hint.StencilBits, 8);
 
-            Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 4);
+            Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 3);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
             Glfw.WindowHint(Glfw.Hint.Resizable, Resizeble);
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window
@@ -117,8 +116,8 @@ namespace SpaceVIL
             if (!_window)
             {
                 LogService.Log().LogText("Create window fail - " + GetLayout().GetWindowTitle());
-                Glfw.Terminate();
-                Environment.Exit(-1);
+                // Glfw.Terminate();
+                throw new SpaceVILException("Create window fail - " + GetLayout().GetWindowTitle());
             }
 
             if (AppearInCenter)

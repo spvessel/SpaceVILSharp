@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace SpaceVIL
 {
@@ -92,7 +93,8 @@ namespace SpaceVIL
         }
         public virtual void AddItem(BaseItem item)
         {
-            lock (GetHandler().engine_locker)
+            Monitor.Enter(GetHandler().EngineLocker);
+            try
             {
                 if (item.Equals(this))
                 {
@@ -123,10 +125,19 @@ namespace SpaceVIL
                 if (vi != null)
                     vi.UpdateState();
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(item.GetItemName() + "\n" + ex.ToString());
+            }
+            finally
+            {
+                Monitor.Exit(GetHandler().EngineLocker);
+            }
         }
         internal virtual void InsertItem(BaseItem item, Int32 index)
         {
-            lock (GetHandler().engine_locker)
+            Monitor.Enter(GetHandler().EngineLocker);
+            try
             {
                 if (item.Equals(this))
                 {
@@ -134,31 +145,26 @@ namespace SpaceVIL
                     return;
                 }
                 item.SetHandler(GetHandler());
-
                 AddChildren(item);
-
                 if (index > _content.Count)
                     _content.Add(item);
                 else
                     _content.Insert(index, item);
-
-                try
-                {
-                    ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(item.GetItemName());
-                    throw ex;
-                }
-
+                ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
                 //needs to force update all attributes
                 item.UpdateGeometry();
                 item.InitElements();
-
                 VisualItem vi = item as VisualItem;
                 if (vi != null)
                     vi.UpdateState();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(item.GetItemName() + "\n" + ex.ToString());
+            }
+            finally
+            {
+                Monitor.Exit(GetHandler().EngineLocker);
             }
         }
 
@@ -183,7 +189,8 @@ namespace SpaceVIL
 
         public virtual void RemoveItem(BaseItem item)
         {
-            lock (GetHandler().engine_locker)
+            Monitor.Enter(GetHandler().EngineLocker);
+            try
             {
                 LayoutType type;
                 if (item is IFloating)
@@ -202,6 +209,14 @@ namespace SpaceVIL
 
                 item.RemoveItemFromListeners();
                 ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(item.GetItemName() + "\n" + ex.ToString());
+            }
+            finally
+            {
+                Monitor.Exit(GetHandler().EngineLocker);
             }
         }
         protected override void AddEventListener(GeometryEventType type, BaseItem listener)
@@ -703,6 +718,38 @@ namespace SpaceVIL
                 // GetState(ItemStateType.Base).Shape = IsCustom;
             }
             AddItemState(ItemStateType.Base, core_state);
+        }
+        public override Style GetCoreStyle()
+        {
+            Style style = new Style();
+            style.SetSize(GetWidth(), GetHeight());
+            style.SetSizePolicy(GetWidthPolicy(), GetHeightPolicy());
+            style.Background = GetBackground();
+            style.MinWidth = GetMinWidth();
+            style.MinHeight = GetMinHeight();
+            style.MaxWidth = GetMaxWidth();
+            style.MaxHeight = GetMaxHeight();
+            style.X = GetX();
+            style.Y = GetY();
+            style.Padding = new Indents(GetPadding().Left, GetPadding().Top, GetPadding().Right, GetPadding().Bottom);
+            style.Margin = new Indents(GetMargin().Left, GetMargin().Top, GetMargin().Right, GetMargin().Bottom);
+            style.Spacing = new Spacing(GetSpacing().Horizontal, GetSpacing().Vertical);
+            style.Alignment = GetAlignment();
+            style.BorderFill = Border.Fill;
+            style.BorderRadius = Border.Radius;
+            style.BorderThickness = Border.Thickness;
+            style.IsVisible = IsVisible;
+            if (IsCustom != null)
+            {
+                style.Shape = IsCustom.GetFigure();
+                style.IsFixedShape = IsCustom.IsFixed();
+            }
+            foreach (var state in states)
+            {
+                style.AddItemState(state.Key, state.Value);
+            }
+
+            return style;
         }
     }
 }

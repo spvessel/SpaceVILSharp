@@ -541,14 +541,36 @@ namespace GL.WGL
             Delegate wgl = InvokeWGL<genBuffers>("glGenBuffers");
             wgl.DynamicInvoke(n, buffers);
         }
-
+        public delegate void genFramebuffers(int n, uint[] buffers);
+        static public void glGenFramebuffers(int n, uint[] buffers)
+        {
+            Delegate wgl = InvokeWGL<genFramebuffers>("glGenFramebuffersEXT");
+            wgl.DynamicInvoke(n, buffers);
+        }
+        public delegate void genRenderbuffers(int n, uint[] buffers);
+        static public void glGenRenderbuffers(int n, uint[] buffers)
+        {
+            Delegate wgl = InvokeWGL<genRenderbuffers>("glGenRenderbuffersEXT");
+            wgl.DynamicInvoke(n, buffers);
+        }
         public delegate void bindBuffer(uint target, uint buffer);
         static public void glBindBuffer(uint target, uint buffer)
         {
             Delegate wgl = InvokeWGL<bindBuffer>("glBindBuffer");
             wgl.DynamicInvoke(target, buffer);
         }
-
+        public delegate void bindFramebuffer(uint target, uint buffer);
+        static public void glBindFramebuffer(uint target, uint buffer)
+        {
+            Delegate wgl = InvokeWGL<bindFramebuffer>("glBindFramebufferEXT");
+            wgl.DynamicInvoke(target, buffer);
+        }
+        public delegate void bindRenderbuffer(uint target, uint buffer);
+        static public void glBindRenderbuffer(uint target, uint buffer)
+        {
+            Delegate wgl = InvokeWGL<bindRenderbuffer>("glBindRenderbufferEXT");
+            wgl.DynamicInvoke(target, buffer);
+        }
         public delegate void bufferData(uint target, int size, IntPtr data, uint usage);
         static public void glBufferData(uint target, float[] data, uint usage)
         {
@@ -598,7 +620,18 @@ namespace GL.WGL
             Delegate wgl = InvokeWGL<deleteBuffers>("glDeleteBuffers");
             wgl.DynamicInvoke(n, buffers);
         }
-
+        public delegate void deleteFrameBuffers(int n, uint[] buffers);
+        static public void glDeleteFramebuffers(int n, uint[] buffers)
+        {
+            Delegate wgl = InvokeWGL<deleteFrameBuffers>("glDeleteFramebuffersEXT");
+            wgl.DynamicInvoke(n, buffers);
+        }
+        public delegate void deleteRenderBuffers(int n, uint[] buffers);
+        static public void glDeleteRenderbuffers(int n, uint[] buffers)
+        {
+            Delegate wgl = InvokeWGL<deleteRenderBuffers>("glDeleteRenderbuffersEXT");
+            wgl.DynamicInvoke(n, buffers);
+        }
         //Work with Textures
         public delegate void generateMipmap(uint target);
         static public void glGenerateMipmap(uint target)
@@ -738,6 +771,34 @@ namespace GL.WGL
         {
             Delegate wgl = InvokeWGL<texStorage2D>("glTexStorage2D");
             wgl.DynamicInvoke(target, level, internalformat, width, height);
+        }
+        
+        public delegate void framebufferTexture(uint target, uint attachment, uint texture, int level);
+        static public void glFramebufferTexture(uint target, uint attachment, uint texture, int level)
+        {
+            Delegate wgl = InvokeWGL<framebufferTexture>("glFramebufferTextureEXT");
+            wgl.DynamicInvoke(target, attachment, texture, level);
+        }
+
+        public delegate void framebufferTexture2D(uint target, uint attachment, uint textarget, uint texture, int level);
+        static public void glFramebufferTexture2D(uint target, uint attachment, uint textarget, uint texture, int level)
+        {
+            Delegate wgl = InvokeWGL<framebufferTexture2D>("glFramebufferTexture2DEXT");
+            wgl.DynamicInvoke(target, attachment, textarget, texture, level);
+        }
+
+        public delegate void drawBuffers(int n, uint[] bufs);
+        static public void glDrawBuffers(int n, uint[] bufs)
+        {
+            Delegate wgl = InvokeWGL<drawBuffers>("glDrawBuffers");
+            wgl.DynamicInvoke(n, bufs);
+        }
+
+        public delegate uint checkFramebufferStatus(uint target);
+        static public uint glCheckFramebufferStatus(uint target)
+        {
+            Delegate wgl = InvokeWGL<checkFramebufferStatus>("glCheckFramebufferStatusEXT");
+            return (uint)wgl.DynamicInvoke(target);
         }
     }
 }

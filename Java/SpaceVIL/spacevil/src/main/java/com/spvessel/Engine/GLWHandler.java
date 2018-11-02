@@ -1,5 +1,7 @@
 package com.spvessel.Engine;
 
+import com.spvessel.Cores.SpaceVILException;
+
 // import java.util.*;
 // import java.io.FileReader;
 // import java.io.BufferedReader;
@@ -18,6 +20,8 @@ import static org.lwjgl.glfw.GLFW.*;
 // import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.system.MemoryUtil.*;
 // import java.nio.ByteBuffer;
+
+import java.util.EmptyStackException;
 
 public class GLWHandler {
     // cursors
@@ -76,13 +80,13 @@ public class GLWHandler {
         getPointer().setY(0);
     }
 
-    protected void initGlfw() {
+    protected void initGlfw() throws SpaceVILException {
         // path to c++ glfw3.dll (x32 or x64)
         // glfwConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
         if (!glfwInit()) {
-            System.out.println("Init GLFW fail - " + getLayout().getWindowTitle());
-            System.err.println("GLFW initialization failed!");
-            System.exit(-1);
+            // System.err.println("GLFW initialization failed!");
+            // System.exit(-1);
+            throw new SpaceVILException("Init GLFW fail - " + getLayout().getWindowTitle());
         }
 
         // cursors
@@ -94,14 +98,14 @@ public class GLWHandler {
         _resize_all = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
     }
 
-    protected void createWindow() {
+    protected void createWindow() throws SpaceVILException {
         // important!!! may be the best combination of WINDOW HINTS!!!
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
         glfwWindowHint(GLFW_SAMPLES, 8);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
         if (resizeble)
             glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -134,8 +138,7 @@ public class GLWHandler {
 
         if (_window == NULL) {
             System.out.println("glfwCreateWindow fail");
-            glfwTerminate();
-            System.exit(-1);
+            throw new SpaceVILException("Create window fails - " + getLayout().getWindowTitle());
         }
         glfwMakeContextCurrent(_window);
 

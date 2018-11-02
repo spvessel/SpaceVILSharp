@@ -73,12 +73,121 @@ namespace SpaceVIL
             Width = width;
             Height = height;
         }
-
+        public void SetMinSize(int width, int height)
+        {
+            MinWidth = width;
+            MinHeight = height;
+        }
+        public void SetMaxSize(int width, int height)
+        {
+            MaxWidth = width;
+            MaxHeight = height;
+        }
         public void SetSizePolicy(SizePolicy width_policy, SizePolicy height_policy)
         {
             WidthPolicy = width_policy;
             HeightPolicy = height_policy;
         }
+        public void SetBackground(int r, int g, int b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            Background = Color.FromArgb(255, r, g, b);
+        }
+        public void SetBackground(int r, int g, int b, int a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            Background = Color.FromArgb(a, r, g, b);
+        }
+        public void SetBackground(float r, float g, float b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            Background = Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+        }
+        public void SetBackground(float r, float g, float b, float a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            Background = Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+        }
+        public void SetForeground(int r, int g, int b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            Foreground = Color.FromArgb(255, r, g, b);
+        }
+        public void SetForeground(int r, int g, int b, int a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            Foreground = Color.FromArgb(a, r, g, b);
+        }
+        public void SetForeground(float r, float g, float b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            Foreground = Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+        }
+        public void SetForeground(float r, float g, float b, float a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            Foreground = Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+        }
+        public void SetPadding(Indents padding)
+        {
+            Padding = padding;
+        }
+        public void SetPadding(int left = 0, int top = 0, int right = 0, int bottom = 0)
+        {
+            Padding.Left = left;
+            Padding.Top = top;
+            Padding.Right = right;
+            Padding.Bottom = bottom;
+        }
+        public void SetMargin(Indents margin)
+        {
+            Margin = margin;
+        }
+        public void SetMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
+        {
+            Margin.Left = left;
+            Margin.Top = top;
+            Margin.Right = right;
+            Margin.Bottom = bottom;
+        }
+        public void SetSpacing(Spacing spacing)
+        {
+            Spacing = spacing;
+        }
+        public void SetSpacing(int horizontal = 0, int vertical = 0)
+        {
+            Spacing.Horizontal = horizontal;
+            Spacing.Vertical = vertical;
+        }
+        public void SetBorder(Border border)
+        {
+            BorderFill = border.Fill;
+            BorderRadius = border.Radius;
+            BorderThickness = border.Thickness;
+        }
+        public void SetBorder(Color fill, int radius, int thickness)
+        {
+            BorderFill = fill;
+            BorderRadius = radius;
+            BorderThickness = thickness;
+        }
+        ///////////////////////////////////////////////////////////////////
         public void AddInnerShape(BaseItem shape)
         {
             if (InnerShapes == null)
@@ -157,7 +266,7 @@ namespace SpaceVIL
 
             style.Background = Color.FromArgb(255, 13, 176, 255);
             style.Foreground = Color.FromArgb(255, 32, 32, 32);
-            style.Font = DefaultsService.GetDefaultFont();
+            style.Font = DefaultsService.GetDefaultFont(16);
             style.WidthPolicy = SizePolicy.Fixed;
             style.HeightPolicy = SizePolicy.Fixed;
             style.Width = 10;
@@ -169,7 +278,7 @@ namespace SpaceVIL
             style.AddItemState(ItemStateType.Hovered, hovered);
             ItemState pressed = new ItemState(Color.FromArgb(30, 0, 0, 60));
             style.AddItemState(ItemStateType.Pressed, pressed);
-            
+
             return style;
         }
 
@@ -178,7 +287,7 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 13, 176, 255);
             style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
-            style.Font = DefaultsService.GetDefaultFont();
+            style.Font = DefaultsService.GetDefaultFont(16);
             style.WidthPolicy = SizePolicy.Fixed;
             style.HeightPolicy = SizePolicy.Fixed;
             style.Width = 10;
@@ -808,7 +917,10 @@ namespace SpaceVIL
                 Background = Color.FromArgb(255, 60, 60, 60)
             });
             style.AddInnerStyle("showmarker", marker_style);
-
+            style.AddItemState(ItemStateType.Focused, new ItemState()
+            {
+                Background = Color.FromArgb(30, 255, 255, 255)
+            });
             Style cursor_style = new Style();
             cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
             cursor_style.Width = 2;
@@ -832,7 +944,7 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont(14);
+            style.Font = DefaultsService.GetDefaultFont(12);
             // style.Font = new Font(style.Font.FontFamily, 14, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
@@ -842,7 +954,11 @@ namespace SpaceVIL
             style.Padding = new Indents(5, 0, 5, 0);
             style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(30, 255, 255, 255)
+                Background = Color.FromArgb(255, 220, 220, 220)
+            });
+            style.AddItemState(ItemStateType.Focused, new ItemState()
+            {
+                Background = Color.FromArgb(255, 220, 220, 220)
             });
 
             Style cursor_style = new Style();
@@ -869,7 +985,7 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont(14);
+            style.Font = DefaultsService.GetDefaultFont(12);
             // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.Top;
@@ -878,7 +994,11 @@ namespace SpaceVIL
             style.Padding = new Indents(5, 5, 5, 5);
             style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(30, 255, 255, 255)
+                Background = Color.FromArgb(255, 220, 220, 220)
+            });
+            style.AddItemState(ItemStateType.Focused, new ItemState()
+            {
+                Background = Color.FromArgb(255, 220, 220, 220)
             });
 
             Style cursor_style = new Style();
@@ -977,7 +1097,7 @@ namespace SpaceVIL
         {
             Style style = new Style();
 
-            style.Font = DefaultsService.GetDefaultFont();
+            style.Font = DefaultsService.GetDefaultFont(12);
             // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
             style.Background = Color.FromArgb(255, 45, 45, 45);
             style.Foreground = Color.FromArgb(255, 180, 180, 180);

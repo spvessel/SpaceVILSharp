@@ -183,38 +183,32 @@ public abstract class VisualItem extends BaseItem {
     }
 
     public void addItem(BaseItem item) {
-        // System.out.println(getItemName() + " " + item.getItemName() + " " +
-        // getHandler());
-        synchronized (getHandler().engine_locker) {
+        getHandler().engineLocker.lock();
+        try {
             if (item.equals(this)) {
                 System.out.println("Trying to add current item in himself.");
                 return;
             }
             item.setHandler(getHandler());
-
             addChildren(item);
-
             _content.add(item);
-
-            try {
-                ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
-            } catch (Exception ex) {
-                System.out.println(item.getItemName());
-                throw ex;
-            }
-
+            ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
             // needs to force update all attributes
             item.updateGeometry();
             item.initElements();
-
             if (item instanceof VisualItem) {
                 ((VisualItem) item).updateState();
             }
+        } catch (Exception ex) {
+            System.out.println(item.getItemName() + "\n" + ex.toString());
+        } finally {
+            getHandler().engineLocker.unlock();
         }
     }
 
     public void insertItem(BaseItem item, int index) {
-        synchronized (getHandler().engine_locker) {
+        getHandler().engineLocker.lock();
+        try {
             if (item.equals(this)) {
                 System.out.println("Trying to add current item in himself.");
                 return;
@@ -242,6 +236,10 @@ public abstract class VisualItem extends BaseItem {
             if (item instanceof VisualItem) {
                 ((VisualItem) item).updateState();
             }
+        } catch (Exception ex) {
+            System.out.println(item.getItemName() + "\n" + ex.toString());
+        } finally {
+            getHandler().engineLocker.unlock();
         }
     }
 
@@ -249,13 +247,7 @@ public abstract class VisualItem extends BaseItem {
         if (item instanceof VisualItem)// и если это действительно контейнер
         {
             VisualItem container = (VisualItem) item;// предполагаю что элемент контейнер
-            // то каждому вложенному элементу вызвать команду удалить своих вложенных
-            // 
-            //
-            //
-            //
-            // элементов
-            while (container.getItems().size() > 0) {
+                        while (container.getItems().size() > 0) {
                 BaseItem child = container.getItems().get(0);
                 container.cascadeRemoving(child, type);
 
@@ -268,7 +260,8 @@ public abstract class VisualItem extends BaseItem {
     }
 
     public void removeItem(BaseItem item) {
-        synchronized (getHandler().engine_locker) {
+        getHandler().engineLocker.lock();
+        try {
             LayoutType type;
             if (item instanceof InterfaceFloating) {
                 cascadeRemoving(item, LayoutType.FLOATING);
@@ -283,6 +276,10 @@ public abstract class VisualItem extends BaseItem {
 
             item.removeItemFromListeners();
             ItemsLayoutBox.removeItem(getHandler(), item, type);
+        } catch (Exception ex) {
+            System.out.println(item.getItemName() + "\n" + ex.toString());
+        } finally {
+            getHandler().engineLocker.unlock();
         }
     }
 
@@ -671,5 +668,36 @@ public abstract class VisualItem extends BaseItem {
             core_state.shape = isCustom;
         }
         addItemState(ItemStateType.BASE, core_state);
+    }
+
+    @Override
+    public Style getCoreStyle() {
+        Style style = new Style();
+        style.setSize(getWidth(), getHeight());
+        style.setSizePolicy(getWidthPolicy(), getHeightPolicy());
+        style.background = getBackground();
+        style.minWidth = getMinWidth();
+        style.minHeight = getMinHeight();
+        style.maxWidth = getMaxWidth();
+        style.maxHeight = getMaxHeight();
+        style.x = getX();
+        style.y = getY();
+        style.padding = new Indents(getPadding().left, getPadding().top, getPadding().right, getPadding().bottom);
+        style.margin = new Indents(getMargin().left, getMargin().top, getMargin().right, getMargin().bottom);
+        style.spacing = new Spacing(getSpacing().horizontal, getSpacing().vertical);
+        style.alignment = getAlignment();
+        style.borderFill = border.getFill();
+        style.borderRadius = border.getRadius();
+        style.borderThickness = border.getThickness();
+        style.isVisible = getVisible();
+        if (isCustom != null) {
+            style.shape = isCustom.getFigure();
+            style.isFixedShape = isCustom.isFixed();
+        }
+        for (Map.Entry<ItemStateType, ItemState> state : states.entrySet()) {
+            style.addItemState(state.getKey(), state.getValue());
+        }
+
+        return style;
     }
 }

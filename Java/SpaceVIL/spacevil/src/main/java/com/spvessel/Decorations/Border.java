@@ -30,13 +30,13 @@ public class Border {
         _border_color = color;
     }
 
-    private float _border_thickness;
+    private int _border_thickness;
 
-    public float getThickness() {
+    public int getThickness() {
         return _border_thickness;
     }
 
-    public void setThickness(float value) {
+    public void setThickness(int value) {
         _border_thickness = value;
     }
 

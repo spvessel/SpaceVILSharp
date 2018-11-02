@@ -204,6 +204,8 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
                 cacheBB.rewind();
                 flagBB = false;
                 textPrt = new TextPrinter(cacheBB);
+                textPrt.widthTexture = bb_w;
+                textPrt.heightTexture = bb_h;
 
                 // if (letTexturesList.size() > 0)
                 // createAtlas(letTexturesList);

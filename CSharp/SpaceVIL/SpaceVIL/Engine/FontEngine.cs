@@ -231,7 +231,6 @@ namespace SpaceVIL
                 //Console.WriteLine(text);
                 List<ModifyLetter> letList = new List<ModifyLetter>();
 
-
                 double err = 0.25; //переехало из буквы
                 int x0 = 0;
 
@@ -249,7 +248,6 @@ namespace SpaceVIL
                     }
                     else
                     {
-
                         if (prevLet != null)
                         {
                             int ly0 = prevLet.minY;
@@ -350,8 +348,9 @@ namespace SpaceVIL
                 Bitmap bm = new Bitmap((int)(font.Size * 2), (int)(font.Size * 2));
                 Graphics g = Graphics.FromImage(bm);
                 g.SmoothingMode = SmoothingMode.HighQuality;
-                g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                g.DrawString(let, font, Brushes.White, new PointF(0f, 0f));
+                g.TextRenderingHint = TextRenderingHint.AntiAlias /* | TextRenderingHint.SystemDefault*/;
+                Font tmp = new Font(font.FontFamily, font.Size, font.Style, GraphicsUnit.Pixel);
+                g.DrawString(let, tmp, Brushes.White, new PointF(0f, 0f)/*, StringFormat.GenericDefault*/);
                 g.Dispose();
 
                 try

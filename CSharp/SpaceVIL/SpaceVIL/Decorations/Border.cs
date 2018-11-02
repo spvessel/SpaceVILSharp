@@ -28,8 +28,8 @@ namespace SpaceVIL
 			get { return _border_color; }
 			set { _border_color = value; }
 		}
-        private float border_thickness;
-        public float Thickness
+        private int border_thickness;
+        public int Thickness
 		{
 			get { return border_thickness; }
 			set { border_thickness = value; }

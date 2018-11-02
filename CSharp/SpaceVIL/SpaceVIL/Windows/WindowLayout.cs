@@ -16,7 +16,7 @@ namespace SpaceVIL
         public EventCommonMethod EventMinimize;
         public EventCommonMethod EventHide;
 
-        internal object engine_locker = new object();
+        internal Object EngineLocker = new Object();
         private CoreWindow handler;
         public CoreWindow Handler
         {
@@ -71,6 +71,11 @@ namespace SpaceVIL
             try
             {
                 WindowLayoutBox.InitWindow(this);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return;
             }
             finally
             {

@@ -50,4 +50,23 @@ abstract public class Primitive extends BaseItem {
             setTriangles(style.shape);
         setVisible(style.isVisible);
     }
+    
+    @Override
+    public Style getCoreStyle() {
+        Style style = new Style();
+        style.setSize(getWidth(), getHeight());
+        style.setSizePolicy(getWidthPolicy(), getHeightPolicy());
+        style.background = getBackground();
+        style.minWidth = getMinWidth();
+        style.minHeight = getMinHeight();
+        style.maxWidth = getMaxWidth();
+        style.maxHeight = getMaxHeight();
+        style.x = getX();
+        style.y = getY();
+        style.margin = new Indents(getMargin().left, getMargin().top, getMargin().right, getMargin().bottom);
+        style.alignment = getAlignment();
+        style.isVisible = getVisible();
+
+        return style;
+    }
 }

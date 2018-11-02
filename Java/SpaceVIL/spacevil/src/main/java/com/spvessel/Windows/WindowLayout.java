@@ -1,6 +1,5 @@
 package com.spvessel.Windows;
 
-import com.spvessel.Common.*;
 import com.spvessel.Cores.*;
 import com.spvessel.Decorations.*;
 import com.spvessel.Items.*;
@@ -15,7 +14,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class WindowLayout {
-    public Object engine_locker = new Object();
+    public Lock engineLocker = new ReentrantLock();
     private Lock wndLock = new ReentrantLock();
 
     class DrawThread extends Thread {
@@ -101,6 +100,9 @@ public class WindowLayout {
         wndLock.lock();
         try {
             WindowLayoutBox.initWindow(this);
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+            return;
         } finally {
             wndLock.unlock();
         }

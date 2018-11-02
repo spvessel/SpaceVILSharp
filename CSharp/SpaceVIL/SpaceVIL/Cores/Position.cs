@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    internal class Position : IPosition
+    public class Position : IPosition
     {
         private int _x = 0;
         private int _y = 0;

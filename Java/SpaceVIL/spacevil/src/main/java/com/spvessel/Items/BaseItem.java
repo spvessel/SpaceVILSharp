@@ -3,6 +3,9 @@ package com.spvessel.Items;
 import com.spvessel.Decorations.*;
 import com.spvessel.Cores.*;
 import com.spvessel.Windows.*;
+
+import org.lwjgl.system.CallbackI.B;
+
 import com.spvessel.Flags.*;
 import java.awt.*;
 import java.util.LinkedList;
@@ -119,8 +122,7 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
         List<float[]> result = new LinkedList<float[]>();
 
         for (int i = 0; i < getTriangles().size(); i++) {
-        result.add(new float[] { getTriangles().get(i)[0], getTriangles().get(i)[1],
-        getTriangles().get(i)[2] });
+            result.add(new float[] { getTriangles().get(i)[0], getTriangles().get(i)[1], getTriangles().get(i)[2] });
         }
 
         // List<float[]> result = getTriangles();
@@ -523,6 +525,8 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
     public void setStyle(Style style) {
     }
 
+    public abstract Style getCoreStyle();
+
     public void CheckDefaults() {
         // checking all attributes
         // setStyle(default theme)
@@ -535,4 +539,49 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
     }
 
     public ItemRule HoverRule = ItemRule.LAZY;
+
+    // shadow
+    private boolean _is_shadow_drop = false;
+
+    public boolean isShadowDrop() {
+        return _is_shadow_drop;
+    }
+
+    public void setShadowDrop(boolean value) {
+        _is_shadow_drop = value;
+    }
+
+    private float _shadow_radius = 1.0f;
+
+    public void setShadowRadius(float radius) {
+        _shadow_radius = radius;
+    }
+
+    public float getShadowRadius() {
+        return _shadow_radius;
+    }
+
+    private Color _shadow_color = new Color(0, 0, 0);
+
+    public Color getShadowColor() {
+        return _shadow_color;
+    }
+
+    public void setShadowColor(Color color) {
+        _shadow_color = color;
+    }
+
+    private Position _shadow_pos = new Position();
+
+    public Position getShadowPos() {
+        return _shadow_pos;
+    }
+
+    public void setShadow(float radius, int x, int y, Color color) {
+        _is_shadow_drop = true;
+        _shadow_radius = radius;
+        _shadow_color = color;
+        _shadow_pos.setX(x);
+        _shadow_pos.setY(y);
+    }
 }

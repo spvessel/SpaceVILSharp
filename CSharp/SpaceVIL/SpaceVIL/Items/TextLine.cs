@@ -141,6 +141,7 @@ namespace SpaceVIL
                     // if (letTexturesList.size() > 0)
                     // createAtlas(letTexturesList);
                 }
+
                 UpdateCoords();
                 return textPrt;
             }
@@ -274,10 +275,11 @@ namespace SpaceVIL
                 return;
             int[] fontDims = GetFontDims();
             int height = fontDims[2];
-
+            
             ItemAlignment alignments = GetTextAlignment();
             float alignShiftX = 1;
             float alignShiftY = 0;
+            int xFirstBeg = 0;
 
             // Horizontal
             if (alignments.HasFlag(ItemAlignment.Left))
@@ -304,9 +306,11 @@ namespace SpaceVIL
                 alignShiftY = ((GetParent().GetHeight() - GetParent().GetPadding().Bottom - GetParent().GetPadding().Top)
                         - height) / 2f - GetMargin().Bottom + GetMargin().Top;
 
-            int xFirstBeg = _letters[0].xBeg + _letters[0].xShift;
+            xFirstBeg = _letters[0].xBeg + _letters[0].xShift;
+            
             textPrt.XTextureShift = (int)alignShiftX + _lineXShift + GetParent().GetX() + xFirstBeg;
             textPrt.YTextureShift = (int)alignShiftY + _lineYShift + GetParent().GetY();
+            
         }
 
         public TextItem GetText()
@@ -339,7 +343,7 @@ namespace SpaceVIL
             //UpdateCoords(); //SetCoordsFlag(true);
         }
 
-        internal float GetLineYShift()
+        internal int GetLineYShift()
         {
             return _lineYShift;
         }

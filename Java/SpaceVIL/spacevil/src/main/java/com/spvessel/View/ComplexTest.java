@@ -129,6 +129,7 @@ public class ComplexTest extends ActiveWindow {
         btn.setSizePolicy(policy, policy);
         btn.setItemName(name);
         btn.setStyle(style);
+        btn.setShadow(1.0f, 3, 3, new Color(0, 0, 0, 160));
         return btn;
     }
 

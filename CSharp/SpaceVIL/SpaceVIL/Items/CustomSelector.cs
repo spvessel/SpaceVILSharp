@@ -49,5 +49,16 @@ namespace SpaceVIL
 
             //Console.WriteLine(w1 + " " + h1 + " " + w2 + " " + h2);
         }
+
+        public void ShiftArea(int yShift) {
+            List<float[]> triangles = GetTriangles();
+            if (triangles == null || triangles.Count == 0)
+                return;
+            
+            foreach (float[] xyz in triangles) {
+                xyz[1] += yShift;
+            }
+            SetTriangles(triangles);
+        }
     }
 }

@@ -1,4 +1,4 @@
-#version 420 core
+#version 330
 
 uniform sampler2D tex; 
 uniform vec2 frame;

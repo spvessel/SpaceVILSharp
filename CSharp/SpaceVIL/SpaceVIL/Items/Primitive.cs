@@ -42,9 +42,27 @@ namespace SpaceVIL
             SetAlignment(style.Alignment);
             SetPosition(style.X, style.Y);
             SetMargin(style.Margin);
+            IsVisible = style.IsVisible;
             if (style.Shape != null)
                 SetTriangles(style.Shape);
-            IsVisible = style.IsVisible;
+        }
+        public override Style GetCoreStyle()
+        {
+            Style style = new Style();
+            style.SetSize(GetWidth(), GetHeight());
+            style.SetSizePolicy(GetWidthPolicy(), GetHeightPolicy());
+            style.Background = GetBackground();
+            style.MinWidth = GetMinWidth();
+            style.MinHeight = GetMinHeight();
+            style.MaxWidth = GetMaxWidth();
+            style.MaxHeight = GetMaxHeight();
+            style.X = GetX();
+            style.Y = GetY();
+            style.Margin = new Indents(GetMargin().Left, GetMargin().Top, GetMargin().Right, GetMargin().Bottom);
+            style.Alignment = GetAlignment();
+            style.IsVisible = IsVisible;
+
+            return style;
         }
     }
 }

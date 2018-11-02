@@ -1,9 +1,9 @@
 package com.spvessel.Common;
 
-import java.lang.Object;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.io.*;
-import java.nio.*;
 
 public final class CommonService {
 
@@ -11,7 +11,7 @@ public final class CommonService {
     }
 
     public static String ClipboardTextStorage = "";
-    public final static Object GlobalLocker = new Object();
+    public final static Lock GlobalLocker = new ReentrantLock();
 
     public String getResourceString(String resource) {
 

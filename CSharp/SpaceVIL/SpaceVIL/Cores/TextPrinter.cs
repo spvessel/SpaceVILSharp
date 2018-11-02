@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.IO;
 
 namespace SpaceVIL
@@ -10,6 +11,7 @@ namespace SpaceVIL
         public int YTextureShift = 0;
         public int WidthTexture = 0;
         public int HeightTexture = 0;
+        //public Color foreground = Color.Black;
 
         public TextPrinter()
         {
@@ -20,5 +22,10 @@ namespace SpaceVIL
         {
             Texture = bb;
         }
+        /*
+        public Color GetForeground() {
+            return foreground;
+        }
+        */
     }
 }

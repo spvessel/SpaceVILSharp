@@ -43,4 +43,16 @@ public class CustomSelector extends Primitive {
         setWidth(w2 - w1);
         setHeight(h2 - h1);
     }
+
+    public void shiftArea(int yShift) {
+        List<float[]> triangles = getTriangles();
+        if (triangles == null || triangles.size() == 0)
+            return;
+            
+        for (float[] xyz : triangles) {
+            xyz[1] += yShift;
+        }
+
+        setTriangles(triangles);
+    }
 }

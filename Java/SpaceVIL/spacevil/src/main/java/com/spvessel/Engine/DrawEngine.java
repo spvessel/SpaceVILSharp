@@ -16,6 +16,7 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryStack;
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.system.MemoryUtil.*;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
@@ -38,7 +39,8 @@ public class DrawEngine {
             focusedItem.setFocused(false);
         focusedItem = null;
         if (hoveredItem != null)
-            hoveredItem.setMouseHover(false);;
+            hoveredItem.setMouseHover(false);
+        ;
         hoveredItem = null;
 
         hoveredItems.clear();
@@ -158,7 +160,8 @@ public class DrawEngine {
     }
 
     public void init() {
-        synchronized (CommonService.GlobalLocker) {
+        CommonService.GlobalLocker.lock();
+        try {
             // InitWindow
             _handler.initGlfw();
             _handler.createWindow();
@@ -167,6 +170,14 @@ public class DrawEngine {
                 applyIcon();
             }
             GL.createCapabilities();
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+            _handler.clearEventsCallbacks();
+            if (_handler.getWindowId() == NULL)
+                _handler.destroy();
+            _handler.getLayout().close();
+        } finally {
+            CommonService.GlobalLocker.unlock();
         }
         // устанавливаем параметры отрисовки
         glEnable(GL_TEXTURE_2D);
@@ -181,8 +192,7 @@ public class DrawEngine {
         // glEnable(GL_STENCIL_TEST);
 
         ////////////////////////////////////////////////
-        _primitive = new Shader(getResourceString("/shaders/vs_fill.glsl"),
-                getResourceString("/shaders/fs_fill.glsl"));
+        _primitive = new Shader(getResourceString("/shaders/vs_fill.glsl"), getResourceString("/shaders/fs_fill.glsl"));
         _primitive.compile();
         if (_primitive.getProgramID() == 0)
             System.out.println("Could not create primitive shaders");
@@ -195,21 +205,18 @@ public class DrawEngine {
             System.out.println("Could not create textured shaders");
         ///////////////////////////////////////////////
 
-        _char = new Shader(getResourceString("/shaders/vs_char.glsl"),
-                getResourceString("/shaders/fs_char.glsl"));
+        _char = new Shader(getResourceString("/shaders/vs_char.glsl"), getResourceString("/shaders/fs_char.glsl"));
         _char.compile();
         if (_char.getProgramID() == 0)
             System.out.println("Could not create character shaders");
         ///////////////////////////////////////////////
 
-        _fxaa = new Shader(getResourceString("/shaders/vs_fxaa.glsl"),
-                getResourceString("/shaders/fs_fxaa.glsl"));
+        _fxaa = new Shader(getResourceString("/shaders/vs_fxaa.glsl"), getResourceString("/shaders/fs_fxaa.glsl"));
         _fxaa.compile();
         if (_fxaa.getProgramID() == 0)
             System.out.println("Could not create fxaa shaders");
 
-        _blur = new Shader(getResourceString("/shaders/vs_blur.glsl"),
-                getResourceString("/shaders/fs_blur.glsl"));
+        _blur = new Shader(getResourceString("/shaders/vs_blur.glsl"), getResourceString("/shaders/fs_blur.glsl"));
         _blur.compile();
         if (_blur.getProgramID() == 0)
             System.out.println("Could not create blur shaders");
@@ -375,7 +382,6 @@ public class DrawEngine {
         if (!_handler.focusable)
             return;
 
-
         // logic of hovers
         ptrRelease.setX((int) xpos);
         ptrRelease.setY((int) ypos);
@@ -403,8 +409,8 @@ public class DrawEngine {
                     }
                 }
                 if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.RIGHT)) {
-                    if (!(x_release < _handler.getLayout().getMinWidth() && _handler.getLayout()
-                            .getWidth() == _handler.getLayout().getMinWidth())) {
+                    if (!(x_release < _handler.getLayout().getMinWidth()
+                            && _handler.getLayout().getWidth() == _handler.getLayout().getMinWidth())) {
                         w = x_release;
                     }
                     ptrPress.setX(x_release);
@@ -418,15 +424,14 @@ public class DrawEngine {
                     }
                 }
                 if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.BOTTOM)) {
-                    if (!(y_release < _handler.getLayout().getMinHeight() && _handler.getLayout()
-                            .getHeight() == _handler.getLayout().getMinHeight())) {
+                    if (!(y_release < _handler.getLayout().getMinHeight()
+                            && _handler.getLayout().getHeight() == _handler.getLayout().getMinHeight())) {
                         h = y_release;
                     }
                     ptrPress.setY(y_release);
                 }
 
-                if (_handler.getLayout().getWindow()._sides.size() != 0
-                        && !_handler.getLayout().isMaximized) {
+                if (_handler.getLayout().getWindow()._sides.size() != 0 && !_handler.getLayout().isMaximized) {
                     if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.LEFT)
                             || _handler.getLayout().getWindow()._sides.contains(ItemAlignment.TOP))
                         setWindowPos(x_handler, y_handler);
@@ -475,8 +480,7 @@ public class DrawEngine {
             ptrPress.setX(ptrRelease.getX());
             ptrPress.setY(ptrRelease.getY());
 
-            if (getHoverVisualItem(ptrRelease.getX(), ptrRelease.getY(),
-                    InputEventType.MOUSE_MOVE)) {
+            if (getHoverVisualItem(ptrRelease.getX(), ptrRelease.getY(), InputEventType.MOUSE_MOVE)) {
                 if (hoveredItem.getToolTip() != "") {
                     _tooltip.initTimer(true);
                 }
@@ -486,13 +490,11 @@ public class DrawEngine {
                         && !_handler.getLayout().isMaximized) {
                     // resize
                     if ((xpos < _handler.getLayout().getWindow().getWidth() - 5) && (xpos > 5)
-                            && (ypos < _handler.getLayout().getWindow().getHeight() - 5)
-                            && ypos > 5) {
+                            && (ypos < _handler.getLayout().getWindow().getHeight() - 5) && ypos > 5) {
                         if (hoveredItem instanceof InterfaceTextEditable)
                             _handler.setCursorType(GLFW_IBEAM_CURSOR);
                         if (hoveredItem instanceof SplitHolder) {
-                            if (((SplitHolder) hoveredItem).getOrientation()
-                                    .equals(Orientation.HORIZONTAL))
+                            if (((SplitHolder) hoveredItem).getOrientation().equals(Orientation.HORIZONTAL))
                                 _handler.setCursorType(GLFW_VRESIZE_CURSOR);
                             else
                                 _handler.setCursorType(GLFW_HRESIZE_CURSOR);
@@ -502,8 +504,7 @@ public class DrawEngine {
                         if ((xpos > _handler.getLayout().getWindow().getWidth() - 5 && ypos < 5)
                                 || (xpos > _handler.getLayout().getWindow().getWidth() - 5
                                         && ypos > _handler.getLayout().getWindow().getHeight() - 5)
-                                || (ypos > _handler.getLayout().getWindow().getHeight() - 5
-                                        && xpos < 5)
+                                || (ypos > _handler.getLayout().getWindow().getHeight() - 5 && xpos < 5)
                                 || (ypos > _handler.getLayout().getWindow().getHeight() - 5
                                         && xpos > _handler.getLayout().getWindow().getWidth() - 5)
                                 || (xpos < 5 && ypos < 5)) {
@@ -521,8 +522,7 @@ public class DrawEngine {
                         _handler.setCursorType(GLFW_IBEAM_CURSOR);
                     }
                     if (hoveredItem instanceof SplitHolder) {
-                        if (((SplitHolder) hoveredItem).getOrientation()
-                                .equals(Orientation.HORIZONTAL))
+                        if (((SplitHolder) hoveredItem).getOrientation().equals(Orientation.HORIZONTAL))
                             _handler.setCursorType(GLFW_VRESIZE_CURSOR);
                         else
                             _handler.setCursorType(GLFW_HRESIZE_CURSOR);
@@ -561,89 +561,90 @@ public class DrawEngine {
         Deque<VisualItem> tmp = new ArrayDeque<>(hoveredItems);
 
         if (!getHoverVisualItem(ptrRelease.getX(), ptrRelease.getY(), m_state)) {
+            engineEvent.resetAllEvents();
             engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
             return;
         }
         _handler.getLayout().getWindow().getSides(ptrRelease.getX(), ptrRelease.getY());
 
         switch (action) {
-            case GLFW_RELEASE:
+        case GLFW_RELEASE:
 
-                while (!tmp.isEmpty()) {
-                    VisualItem item = tmp.pollLast();
-                    if (item.isDisabled())
-                        continue;// пропустить
-                    item.setMousePressed(false);
-                }
+            while (!tmp.isEmpty()) {
+                VisualItem item = tmp.pollLast();
+                if (item.isDisabled())
+                    continue;// пропустить
+                item.setMousePressed(false);
+            }
 
-                if (engineEvent.lastEvent().contains(InputEventType.WINDOW_RESIZE)
-                        || engineEvent.lastEvent().contains(InputEventType.WINDOW_MOVE)) {
-                    engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
-                    engineEvent.resetAllEvents();
-                    return;
-                }
-                if (engineEvent.lastEvent().contains(InputEventType.MOUSE_MOVE)) {
-                    float len = (float) Math.sqrt(Math.pow(ptrRelease.getX() - ptrClick.getX(), 2)
-                            + Math.pow(ptrRelease.getY() - ptrClick.getY(), 2));
-                    if (len > 10.0f) {
-                        engineEvent.resetAllEvents();
-                        engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
-                        return;
-                    }
-                }
-
-                if (hoveredItem != null) {
-                    assignActions(InputEventType.MOUSE_RELEASE, _margs, false);
-                    hoveredItem.setMousePressed(false);
-                    // Focus get
-                    if (focusedItem != null)
-                        focusedItem.setFocused(false);
-
-                    focusedItem = hoveredItem;
-                    focusedItem.setFocused(true);
-                }
+            if (engineEvent.lastEvent().contains(InputEventType.WINDOW_RESIZE)
+                    || engineEvent.lastEvent().contains(InputEventType.WINDOW_MOVE)) {
                 engineEvent.resetAllEvents();
                 engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
-                break;
-
-            case GLFW_PRESS:
-
-                try (MemoryStack stack = MemoryStack.stackPush()) {
-                    IntBuffer width = stack.mallocInt(1);
-                    IntBuffer height = stack.mallocInt(1);
-                    glfwGetFramebufferSize(_handler.getWindowId(), width, height);
-                    w_global = width.get(0);
-                    h_global = height.get(0);
-
-                    IntBuffer x = stack.mallocInt(1);
-                    IntBuffer y = stack.mallocInt(1);
-                    glfwGetWindowPos(_handler.getWindowId(), x, y);
-                    x_global = x.get(0);
-                    y_global = y.get(0);
+                return;
+            }
+            if (engineEvent.lastEvent().contains(InputEventType.MOUSE_MOVE)) {
+                float len = (float) Math.sqrt(Math.pow(ptrRelease.getX() - ptrClick.getX(), 2)
+                        + Math.pow(ptrRelease.getY() - ptrClick.getY(), 2));
+                if (len > 10.0f) {
+                    engineEvent.resetAllEvents();
+                    engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
+                    return;
                 }
+            }
 
-                DoubleBuffer xpos = BufferUtils.createDoubleBuffer(1);
-                DoubleBuffer ypos = BufferUtils.createDoubleBuffer(1);
-                glfwGetCursorPos(_handler.getWindowId(), xpos, ypos);
-                ptrClick.setX((int) xpos.get(0));
-                ptrClick.setY((int) ypos.get(0));
-                ptrPress.setX((int) xpos.get(0));
-                ptrPress.setY((int) ypos.get(0));
-                if (hoveredItem != null) {
-                    hoveredItem.setMousePressed(true);
-                    assignActions(InputEventType.MOUSE_PRESS, _margs, false);
-                }
+            if (hoveredItem != null) {
+                assignActions(InputEventType.MOUSE_RELEASE, _margs, false);
+                hoveredItem.setMousePressed(false);
+                // Focus get
+                if (focusedItem != null)
+                    focusedItem.setFocused(false);
 
-                if (hoveredItem instanceof WContainer) {
-                    ((WContainer) hoveredItem)._resizing = true;
-                }
-                engineEvent.resetAllEvents();
-                engineEvent.setEvent(InputEventType.MOUSE_PRESS);
-                break;
-            case GLFW_REPEAT:
-                break;
-            default:
-                break;
+                focusedItem = hoveredItem;
+                focusedItem.setFocused(true);
+            }
+            engineEvent.resetAllEvents();
+            engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
+            break;
+
+        case GLFW_PRESS:
+
+            try (MemoryStack stack = MemoryStack.stackPush()) {
+                IntBuffer width = stack.mallocInt(1);
+                IntBuffer height = stack.mallocInt(1);
+                glfwGetFramebufferSize(_handler.getWindowId(), width, height);
+                w_global = width.get(0);
+                h_global = height.get(0);
+
+                IntBuffer x = stack.mallocInt(1);
+                IntBuffer y = stack.mallocInt(1);
+                glfwGetWindowPos(_handler.getWindowId(), x, y);
+                x_global = x.get(0);
+                y_global = y.get(0);
+            }
+
+            DoubleBuffer xpos = BufferUtils.createDoubleBuffer(1);
+            DoubleBuffer ypos = BufferUtils.createDoubleBuffer(1);
+            glfwGetCursorPos(_handler.getWindowId(), xpos, ypos);
+            ptrClick.setX((int) xpos.get(0));
+            ptrClick.setY((int) ypos.get(0));
+            ptrPress.setX((int) xpos.get(0));
+            ptrPress.setY((int) ypos.get(0));
+            if (hoveredItem != null) {
+                hoveredItem.setMousePressed(true);
+                assignActions(InputEventType.MOUSE_PRESS, _margs, false);
+            }
+
+            if (hoveredItem instanceof WContainer) {
+                ((WContainer) hoveredItem)._resizing = true;
+            }
+            engineEvent.resetAllEvents();
+            engineEvent.setEvent(InputEventType.MOUSE_PRESS);
+            break;
+        case GLFW_REPEAT:
+            break;
+        default:
+            break;
         }
     }
 
@@ -751,8 +752,9 @@ public class DrawEngine {
         _tooltip.initTimer(false);
         if (hoveredItems.size() == 0)
             return;
-        Collections.reverse(hoveredItems);
-        for (VisualItem item : hoveredItems) {
+        List<VisualItem> tmp = new LinkedList<VisualItem>(hoveredItems);
+        Collections.reverse(tmp);
+        for (VisualItem item : tmp) {
             if (!item.getPassEvents())
                 continue;
             if (dy > 0 || dx < 0)
@@ -761,7 +763,6 @@ public class DrawEngine {
                 item.eventScrollDown.execute(item, _margs);
             engineEvent.setEvent(InputEventType.MOUSE_SCROLL);
         }
-        Collections.reverse(hoveredItems);
     }
 
     private void keyPress(long wnd, int key, int scancode, int action, int mods) {
@@ -773,8 +774,7 @@ public class DrawEngine {
         _kargs.state = InputState.getEnum(action);
         _kargs.mods = KeyMods.getEnum(mods);
 
-        if ((focusedItem instanceof InterfaceTextShortcuts)
-                && action == InputState.PRESS.getValue()) {
+        if ((focusedItem instanceof InterfaceTextShortcuts) && action == InputState.PRESS.getValue()) {
             if ((mods == KeyMods.CONTROL.getValue() && key == KeyCode.V.getValue())
                     || (mods == KeyMods.SHIFT.getValue() && key == KeyCode.INSERT.getValue())) {
                 String paste_str = "";
@@ -932,14 +932,28 @@ public class DrawEngine {
     int _textlinecount = 0;
 
     public void update() {
-        if (_handler.focused) {
-            glViewport(0, 0, _handler.getLayout().getWidth(), _handler.getLayout().getHeight());
-            render();
-        }
+        // if (_handler.focused) {
+        glViewport(0, 0, _handler.getLayout().getWidth(), _handler.getLayout().getHeight());
+        render();
+        // }
     }
 
     private void render() {
         // fbo texture
+        // int fbo_handle = glGenFramebuffersEXT();
+        // int fbo_texture = glGenTextures();
+        // int stencil_rb = glGenRenderbuffersEXT();
+        // glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo_handle);
+
+        // glBindTexture(GL_TEXTURE_2D, fbo_texture);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        // glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+        // GL_TEXTURE_2D, fbo_texture, 0);
+        // glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, stencil_rb);
+        // glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
+        // GL_RENDERBUFFER_EXT, stencil_rb);
+        // glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         // draw static
@@ -958,7 +972,7 @@ public class DrawEngine {
     }
 
     void drawFBO(int fbo_texture, Shader shader) {
-        glDisable(org.lwjgl.opengl.EXTFramebufferSRGB.GL_FRAMEBUFFER_SRGB_EXT);
+        // glDisable(org.lwjgl.opengl.EXTFramebufferSRGB.GL_FRAMEBUFFER_SRGB_EXT);
         float i_x0 = -1.0f;
         float i_y0 = 1.0f;
         float i_x1 = 1.0f;
@@ -970,7 +984,7 @@ public class DrawEngine {
                 i_x1, i_y1, 0.0f, 1.0f, 0.0f, // x2
                 i_x1, i_y0, 0.0f, 1.0f, 1.0f, // x3
         };
-        int[] ibo = new int[] {0, 1, 2, // first triangle
+        int[] ibo = new int[] { 0, 1, 2, // first triangle
                 2, 3, 0, // second triangle
         };
 
@@ -1032,7 +1046,7 @@ public class DrawEngine {
         glEnableVertexAttribArray(0);
 
         // Color
-        float[] argb = {0.0f, 0.0f, 0.0f, 0.0f};
+        float[] argb = { 0.0f, 0.0f, 0.0f, 0.0f };
         int colorbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
 
@@ -1094,12 +1108,10 @@ public class DrawEngine {
         // + shell.getParent()._confines_y_0 + " " + shell.getParent()._confines_y_1 + "
         // ");
 
-        shell.getParent()._confines_x_0 =
-                shell.getParent().getX() + shell.getParent().getPadding().left;
+        shell.getParent()._confines_x_0 = shell.getParent().getX() + shell.getParent().getPadding().left;
         shell.getParent()._confines_x_1 = shell.getParent().getX() + shell.getParent().getWidth()
                 - shell.getParent().getPadding().right;
-        shell.getParent()._confines_y_0 =
-                shell.getParent().getY() + shell.getParent().getPadding().top;
+        shell.getParent()._confines_y_0 = shell.getParent().getY() + shell.getParent().getPadding().top;
         shell.getParent()._confines_y_1 = shell.getParent().getY() + shell.getParent().getHeight()
                 - shell.getParent().getPadding().bottom;
         setConfines(shell);
@@ -1128,13 +1140,12 @@ public class DrawEngine {
             // shell.getWidth());
             // bottom
             if (shell.getParent().getY() + shell.getParent().getHeight() > shell.getY()
-                    && shell.getParent().getY() + shell.getParent().getHeight() < shell.getY()
-                            + shell.getHeight()) {
+                    && shell.getParent().getY() + shell.getParent().getHeight() < shell.getY() + shell.getHeight()) {
                 // match
                 int y = shell.getParent().getY() + shell.getParent().getHeight()
                         - shell.getParent().getPadding().bottom;
                 int h = shell.getHeight();
-                outside.put(ItemAlignment.BOTTOM, new int[] {y, h});
+                outside.put(ItemAlignment.BOTTOM, new int[] { y, h });
                 // if (shell instanceof TreeItem)
                 // System.out.println("treeitem _ bottom");
             }
@@ -1142,18 +1153,16 @@ public class DrawEngine {
             if (shell.getParent().getY() + shell.getParent().getPadding().top > shell.getY()) {
                 // match
                 int y = shell.getY();
-                int h = shell.getParent().getY() + shell.getParent().getPadding().top
-                        - shell.getY();
-                outside.put(ItemAlignment.TOP, new int[] {y, h});
+                int h = shell.getParent().getY() + shell.getParent().getPadding().top - shell.getY();
+                outside.put(ItemAlignment.TOP, new int[] { y, h });
             }
             // right
             if (shell.getParent().getX() + shell.getParent().getWidth()
                     - shell.getParent().getPadding().right < shell.getX() + shell.getWidth()) {
                 // match
-                int x = shell.getParent().getX() + shell.getParent().getWidth()
-                        - shell.getParent().getPadding().right;
+                int x = shell.getParent().getX() + shell.getParent().getWidth() - shell.getParent().getPadding().right;
                 int w = shell.getWidth();
-                outside.put(ItemAlignment.RIGHT, new int[] {x, w});
+                outside.put(ItemAlignment.RIGHT, new int[] { x, w });
                 // if (shell instanceof TreeItem)
                 // System.out.println("treeitem _ right");
             }
@@ -1161,9 +1170,8 @@ public class DrawEngine {
             if (shell.getParent().getX() + shell.getParent().getPadding().left > shell.getX()) {
                 // match
                 int x = shell.getX();
-                int w = shell.getParent().getX() + shell.getParent().getPadding().left
-                        - shell.getX();
-                outside.put(ItemAlignment.LEFT, new int[] {x, w});
+                int w = shell.getParent().getX() + shell.getParent().getPadding().left - shell.getX();
+                outside.put(ItemAlignment.LEFT, new int[] { x, w });
             }
 
             // if (shell instanceof VerticalSlider) {
@@ -1196,9 +1204,9 @@ public class DrawEngine {
         if (root instanceof InterfacePoints) {
             drawPoints((InterfacePoints) root);
         }
-        if (root instanceof TextLine) {
+        if (root instanceof InterfaceTextContainer) {
             _char.useShader();
-            drawText((TextLine) root);
+            drawText((InterfaceTextContainer) root);
             _textlinecount++;
             _primitive.useShader();
             if (_isStencilSet == root) {
@@ -1233,7 +1241,12 @@ public class DrawEngine {
     }
 
     private void drawShell(BaseItem shell) {
-        checkOutsideBorders(shell);
+        drawShell(shell, false);
+    }
+
+    private void drawShell(BaseItem shell, boolean ignore_borders) {
+        if (!ignore_borders)
+            checkOutsideBorders(shell);
 
         if (shell.getBackground().getAlpha() == 0)
             return;
@@ -1241,6 +1254,12 @@ public class DrawEngine {
         List<float[]> crd_array = shell.makeShape();
         if (crd_array == null)
             return;
+
+        // shadow draw
+        if (shell.isShadowDrop()) {
+            drawShadow(shell);
+            _primitive.useShader();
+        }
 
         int vertexbuffer = glGenBuffers();
         // System.out.println(shell.getItemName() + " start");
@@ -1260,10 +1279,9 @@ public class DrawEngine {
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
         // Color
-        float[] argb = {(float) shell.getBackground().getRed() / 255.0f,
-                (float) shell.getBackground().getGreen() / 255.0f,
-                (float) shell.getBackground().getBlue() / 255.0f,
-                (float) shell.getBackground().getAlpha() / 255.0f};
+        float[] argb = { (float) shell.getBackground().getRed() / 255.0f,
+                (float) shell.getBackground().getGreen() / 255.0f, (float) shell.getBackground().getBlue() / 255.0f,
+                (float) shell.getBackground().getAlpha() / 255.0f };
 
         int colorbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
@@ -1305,14 +1323,119 @@ public class DrawEngine {
                 border.setPosition(vi.getX(), vi.getY());
                 border.setParent(vi);
                 border.setHandler(vi.getHandler());
-                border.setTriangles(GraphicsMathService.getRoundSquareBorder(vi.getWidth(),
-                        vi.getHeight(), vi.border.getRadius(), vi.border.getThickness(), 0, 0));
+                border.setTriangles(GraphicsMathService.getRoundSquareBorder(vi.getWidth(), vi.getHeight(),
+                        vi.border.getRadius(), vi.border.getThickness(), 0, 0));
                 drawShell(border);
             }
         }
     }
 
-    void drawText(TextLine text) {
+    void drawShadow(BaseItem shell) {
+        int fbo_handle = glGenFramebuffersEXT();
+        int fbo_texture = glGenTextures();
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo_handle);
+
+        // texture
+        glBindTexture(GL_TEXTURE_2D, fbo_texture);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _handler.getLayout().getWidth(), _handler.getLayout().getHeight(), 0,
+                GL_BGRA, GL_UNSIGNED_BYTE, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        // fbo
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo_handle);
+        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, fbo_texture, 0);
+
+        int draw_bufs = GL_COLOR_ATTACHMENT0_EXT;
+        glDrawBuffers(draw_bufs);
+
+        int result = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+        if (result != GL_FRAMEBUFFER_COMPLETE_EXT) {
+            System.out.println("Framebuffer error " + result);
+            glDeleteFramebuffersEXT(fbo_handle);
+            glDeleteTextures(fbo_texture);
+            return;
+        }
+
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo_handle);
+        //////////
+        CustomShape shadow = new CustomShape();
+        shadow.setBackground(shell.getShadowColor());
+        shadow.setSize(shell.getWidth(), shell.getHeight());
+        shadow.setPosition(shell.getX() + shell.getShadowPos().getX(), shell.getY() + shell.getShadowPos().getY());
+        shadow.setParent(shell.getParent());
+        shadow.setHandler(shell.getHandler());
+        shadow.setTriangles(shell.getTriangles());
+        drawShell(shadow, true);
+        //////////
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+
+        _blur.useShader();
+        float i_x0 = -1.0f;
+        float i_y0 = 1.0f;
+        float i_x1 = 1.0f;
+        float i_y1 = -1.0f;
+        // VBO
+        float[] vertex = new float[] {
+                // X Y Z //U V
+                i_x0, i_y0, 0.0f, 0.0f, 1.0f, // x0
+                i_x0, i_y1, 0.0f, 0.0f, 0.0f, // x1
+                i_x1, i_y1, 0.0f, 1.0f, 0.0f, // x2
+                i_x1, i_y0, 0.0f, 1.0f, 1.0f, // x3
+        };
+        FloatBuffer vertexData = BufferUtils.createFloatBuffer(vertex.length);
+        vertexData.put(vertex);
+        vertexData.rewind();
+
+        int[] ibo = new int[] { 0, 1, 2, // first triangle
+                2, 3, 0, // second triangle
+        };
+        IntBuffer iboData = BufferUtils.createIntBuffer(ibo.length);
+        iboData.put(ibo);
+        iboData.rewind();
+
+        int vertexbuffer = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
+
+        int elementbuffer = glGenBuffers();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboData, GL_DYNAMIC_DRAW);
+
+        // Position attribute
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0);
+        glEnableVertexAttribArray(0);
+        // TexCoord attribute
+        glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * 4, (3 * 4));
+        glEnableVertexAttribArray(1);
+
+        glBindTexture(GL_TEXTURE_2D, fbo_texture);
+        // glActiveTexture(GL_TEXTURE0);
+
+        int location = glGetUniformLocation((int) _blur.getProgramID(), "tex");
+        if (location >= 0)
+            glUniform1i(location, 0);
+        int location_frame = glGetUniformLocation((int) _blur.getProgramID(), "frame");
+        if (location_frame >= 0)
+            glUniform2fv(location_frame,
+                    new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
+        int location_direction = glGetUniformLocation((int) _blur.getProgramID(), "direction");
+        if (location_direction >= 0)
+            glUniform2fv(location_direction, new float[] { shell.getShadowRadius(), shell.getShadowRadius() });
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+
+        glDeleteFramebuffersEXT(fbo_handle);
+        glDeleteTextures(fbo_texture);
+    }
+
+    void drawText(InterfaceTextContainer text) {
         TextPrinter textPrt = text.getLetTextures();
         if (textPrt == null)
             return;
@@ -1323,19 +1446,15 @@ public class DrawEngine {
         if (checkOutsideBorders((BaseItem) text))
             _char.useShader();
 
-        int bb_h = text.getHeight();
-        int bb_w = text.getWidth();
+        int bb_h = textPrt.heightTexture;
+        int bb_w = textPrt.widthTexture;
 
-        float i_x0 =
-                ((float) textPrt.xTextureShift / (float) _handler.getLayout().getWidth() * 2.0f)
-                        - 1.0f;
-        float i_y0 =
-                ((float) textPrt.yTextureShift / (float) _handler.getLayout().getHeight() * 2.0f
-                        - 1.0f) * (-1.0f);
-        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w)
-                / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h)
-                / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_x0 = ((float) textPrt.xTextureShift / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
+        float i_y0 = ((float) textPrt.yTextureShift / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w) / (float) _handler.getLayout().getWidth() * 2.0f)
+                - 1.0f;
+        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h) / (float) _handler.getLayout().getHeight() * 2.0f
+                - 1.0f) * (-1.0f);
 
         // VBO
         float[] vertex = new float[] {
@@ -1346,7 +1465,7 @@ public class DrawEngine {
                 i_x1, i_y0, 0.0f, 1.0f, 0.0f, // x3
         };
 
-        int[] ibo = new int[] {0, 1, 2, // first triangle
+        int[] ibo = new int[] { 0, 1, 2, // first triangle
                 2, 3, 0, // second triangle
         };
 
@@ -1382,10 +1501,9 @@ public class DrawEngine {
         int location = glGetUniformLocation((int) _char.getProgramID(), "tex");
         glUniform1i(location, 0);
 
-        float[] argb = {(float) text.getForeground().getRed() / 255.0f,
-                (float) text.getForeground().getGreen() / 255.0f,
-                (float) text.getForeground().getBlue() / 255.0f,
-                (float) text.getForeground().getAlpha() / 255.0f};
+        float[] argb = { (float) text.getForeground().getRed() / 255.0f,
+                (float) text.getForeground().getGreen() / 255.0f, (float) text.getForeground().getBlue() / 255.0f,
+                (float) text.getForeground().getAlpha() / 255.0f };
         int location_rgb = glGetUniformLocation((int) _char.getProgramID(), "rgb");
         glUniform4f(location_rgb, argb[0], argb[1], argb[2], argb[3]);
 
@@ -1412,12 +1530,9 @@ public class DrawEngine {
         int skew = 0;
         for (float[] shape : crd_array) {
 
-            List<float[]> fig =
-                    GraphicsMathService.toGL(
-                            GraphicsMathService.moveShape(item.getShapePointer(),
-                                    shape[0] - item.getPointThickness() / 2.0f,
-                                    shape[1] - item.getPointThickness() / 2.0f),
-                            _handler.getLayout());
+            List<float[]> fig = GraphicsMathService.toGL(GraphicsMathService.moveShape(item.getShapePointer(),
+                    shape[0] - item.getPointThickness() / 2.0f, shape[1] - item.getPointThickness() / 2.0f),
+                    _handler.getLayout());
 
             for (int i = 0; i < fig.size(); i++) {
                 result[skew + i * 3 + 0] = fig.get(i)[0];
@@ -1442,10 +1557,9 @@ public class DrawEngine {
         glEnableVertexAttribArray(0);
 
         // Color
-        float[] argb = {(float) item.getPointColor().getRed() / 255.0f,
-                (float) item.getPointColor().getGreen() / 255.0f,
-                (float) item.getPointColor().getBlue() / 255.0f,
-                (float) item.getPointColor().getAlpha() / 255.0f};
+        float[] argb = { (float) item.getPointColor().getRed() / 255.0f,
+                (float) item.getPointColor().getGreen() / 255.0f, (float) item.getPointColor().getBlue() / 255.0f,
+                (float) item.getPointColor().getAlpha() / 255.0f };
 
         int colorbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
@@ -1503,10 +1617,8 @@ public class DrawEngine {
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
         // Color
-        float[] argb = {(float) item.getLineColor().getRed() / 255.0f,
-                (float) item.getLineColor().getGreen() / 255.0f,
-                (float) item.getLineColor().getBlue() / 255.0f,
-                (float) item.getLineColor().getAlpha() / 255.0f};
+        float[] argb = { (float) item.getLineColor().getRed() / 255.0f, (float) item.getLineColor().getGreen() / 255.0f,
+                (float) item.getLineColor().getBlue() / 255.0f, (float) item.getLineColor().getAlpha() / 255.0f };
         int colorbuffer = glGenBuffers();
         glBindBuffer(GL15.GL_ARRAY_BUFFER, colorbuffer);
         int c_length = crd_array.size() * 4;
@@ -1549,12 +1661,11 @@ public class DrawEngine {
             _texture.useShader();
 
         float i_x0 = ((float) image.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y0 = ((float) image.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f)
-                * (-1.0f);
-        float i_x1 = (((float) image.getX() + (float) image.getWidth())
-                / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y1 = (((float) image.getY() + (float) image.getHeight())
-                / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_y0 = ((float) image.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_x1 = (((float) image.getX() + (float) image.getWidth()) / (float) _handler.getLayout().getWidth()
+                * 2.0f) - 1.0f;
+        float i_y1 = (((float) image.getY() + (float) image.getHeight()) / (float) _handler.getLayout().getHeight()
+                * 2.0f - 1.0f) * (-1.0f);
 
         // VBO
         float[] vertex = new float[] {
@@ -1568,7 +1679,7 @@ public class DrawEngine {
         vertexData.put(vertex);
         vertexData.rewind();
 
-        int[] ibo = new int[] {0, 1, 2, // first triangle
+        int[] ibo = new int[] { 0, 1, 2, // first triangle
                 2, 3, 0, // second triangle
         };
         IntBuffer iboData = BufferUtils.createIntBuffer(ibo.length);
@@ -1613,8 +1724,8 @@ public class DrawEngine {
             try {
                 glUniform1i(location, 0);
             } catch (Exception ex) {
-                System.out.println(ex.getMessage() + " " + image.getItemName() + " "
-                        + _handler.getLayout().getWindowName());
+                System.out.println(
+                        ex.getMessage() + " " + image.getItemName() + " " + _handler.getLayout().getWindowName());
                 return;
             }
         }
@@ -1635,8 +1746,7 @@ public class DrawEngine {
             return;
 
         _tooltip.setText(hoveredItem.getToolTip());
-        _tooltip.setWidth(
-                _tooltip.getPadding().left + _tooltip.getPadding().right + _tooltip.getTextWidth());
+        _tooltip.setWidth(_tooltip.getPadding().left + _tooltip.getPadding().right + _tooltip.getTextWidth());
 
         // проверка сверху
         if (ptrRelease.getY() > _tooltip.getHeight()) {
@@ -1670,7 +1780,7 @@ public class DrawEngine {
                 // X Y Z
                 -1.0f, 1.0f, 0.0f, -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f,
 
-                1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f,};
+                1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, };
         int vertexbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         int length = vertex.length;
@@ -1684,7 +1794,7 @@ public class DrawEngine {
         // Color
         int colorbuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-        float[] argb = {0.0f, 0.0f, 0.0f, (float) 150 / 255.0f};
+        float[] argb = { 0.0f, 0.0f, 0.0f, (float) 150 / 255.0f };
 
         float[] color = new float[6 * 4];
         for (int i = 0; i < color.length / 4; i++) {
