@@ -69,6 +69,7 @@ public class ThemeStyle {
             defaultItemsStyle.put(com.spvessel.Items.ProgressBar.class, Style.getProgressBarStyle());
             defaultItemsStyle.put(com.spvessel.Items.RadioButton.class, Style.getRadioButtonStyle());
             defaultItemsStyle.put(com.spvessel.Items.TabView.class, Style.getTabViewStyle());
+            defaultItemsStyle.put(com.spvessel.Items.TextArea.class, Style.getTextAreaStyle());
             defaultItemsStyle.put(com.spvessel.Items.TextBlock.class, Style.getTextBlockStyle());
             defaultItemsStyle.put(com.spvessel.Items.TextEdit.class, Style.getTextEditStyle());
             defaultItemsStyle.put(com.spvessel.Items.TitleBar.class, Style.getTitleBarStyle());

@@ -4,7 +4,6 @@ import com.spvessel.Common.DefaultsService;
 import com.spvessel.Cores.*;
 import com.spvessel.Decorations.Indents;
 import com.spvessel.Decorations.Style;
-import com.spvessel.Engine.FontEngine;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.KeyCode;
 import com.spvessel.Flags.KeyMods;
@@ -15,16 +14,16 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class TextBlock extends VisualItem
-        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceScrollable {
+        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts {
+
+    public EventCommonMethod textChanged = new EventCommonMethod();
     private static int count = 0;
     private Rectangle _cursor;
     private Point _cursor_position = new Point(0, 0);
     private CustomSelector _selectedArea;
-    
+
     private TextureStorage _textureStorage;
 
     private boolean _isEditable = true;
@@ -39,6 +38,8 @@ public class TextBlock extends VisualItem
     private List<KeyCode> ShiftValCodes;
     private List<KeyCode> InsteadKeyMods;
 
+    private int scrollXStep = 15;
+
     public TextBlock() {
         setItemName("TextBlock_" + count);
         count++;
@@ -47,7 +48,7 @@ public class TextBlock extends VisualItem
 
         _cursor = new Rectangle();
         _selectedArea = new CustomSelector();
-        
+
         setStyle(DefaultsService.getDefaultStyle(com.spvessel.Items.TextBlock.class));
 
         eventMousePressed.add(this::onMousePressed);
@@ -69,7 +70,7 @@ public class TextBlock extends VisualItem
         // //_maxFontY = output[2];
         // _lineHeight = output[2]; //Math.abs(_maxFontY - _minFontY + 1);
         // if (_lineSpacer < _minLineSpacer)
-        //     _lineSpacer = _minLineSpacer;
+        // _lineSpacer = _minLineSpacer;
 
         _cursor.setHeight(_textureStorage.getCursorHeight());
     }
@@ -91,11 +92,43 @@ public class TextBlock extends VisualItem
         }
     }
 
+    protected int getScrollYStep() {
+        return _textureStorage.getScrollStep();
+    }
+
+    protected int getScrollXStep() {
+        return scrollXStep;
+    }
+
+    protected int getScrollYOffset() {
+        return _textureStorage.getScrollYOffset();
+    }
+
+    protected void setScrollYOffset(int offset) {
+        int oldOff = _textureStorage.getScrollYOffset();
+        _textureStorage.setScrollYOffset(offset);
+        int diff = offset - oldOff;
+        _selectedArea.shiftAreaY(diff);
+        _cursor.setY(_cursor.getY() + diff);
+    }
+
+    protected int getScrollXOffset() {
+        return _textureStorage.getScrollXOffset();
+    }
+
+    protected void setScrollXOffset(int offset) {
+        int oldOff = _textureStorage.getScrollXOffset();
+        _textureStorage.setScrollXOffset(offset);
+        int diff = offset - oldOff;
+        _selectedArea.shiftAreaX(diff);
+        _cursor.setX(_cursor.getX() + diff);
+    }
+
     protected void onScrollUp(Object sender, MouseArgs args) {
         int curPos = _cursor.getY();
         _cursor.setY(_textureStorage.scrollBlockUp(_cursor.getY()));
         curPos = _cursor.getY() - curPos;
-        _selectedArea.shiftArea(curPos);
+        _selectedArea.shiftAreaY(curPos);
         // replaceCursor();
     }
 
@@ -103,40 +136,43 @@ public class TextBlock extends VisualItem
         int curPos = _cursor.getY();
         _cursor.setY(_textureStorage.scrollBlockDown(_cursor.getY()));
         curPos = _cursor.getY() - curPos;
-        _selectedArea.shiftArea(curPos);
+        _selectedArea.shiftAreaY(curPos);
         // replaceCursor();
     }
 
-    public void invokeScrollUp(MouseArgs args) {
-        eventScrollUp.execute(this, args);
-    }
+    // public void invokeScrollUp(MouseArgs args) {
+    // eventScrollUp.execute(this, args);
+    // }
 
-    public void invokeScrollDown(MouseArgs args) {
-        eventScrollDown.execute(this, args);
-    }
+    // public void invokeScrollDown(MouseArgs args) {
+    // eventScrollDown.execute(this, args);
+    // }
 
     private void replaceCursorAccordingCoord(Point realPos) {
         // Вроде бы и без этого норм, но пусть пока будет
+        // 
+        //
+        //
         // if (_linesList != null)
         // realPos.y -= (int)_linesList[0].getLineTopCoord(); //???????!!!!!!
 
         // Console.WriteLine(_lineSpacer);
         /*
-        int lineNumb = _textureStorage.findLineNumb(realPos.y);
-
-        realPos.x -= getX() + getPadding().left + _textureStorage.textMargin().left;
-
-        _cursor_position.y = lineNumb;
-        _cursor_position.x = coordXToPos(realPos.x, lineNumb);
-        */
+         * int lineNumb = _textureStorage.findLineNumb(realPos.y);
+         * 
+         * realPos.x -= getX() + getPadding().left + _textureStorage.textMargin().left;
+         * 
+         * _cursor_position.y = lineNumb; _cursor_position.x = coordXToPos(realPos.x,
+         * lineNumb);
+         */
         _cursor_position = _textureStorage.replaceCursorAccordingCoord(realPos);
         replaceCursor();
     }
-/*
-    private int coordXToPos(int coordX, int lineNumb) {
-        return _textureStorage.coordXToPos(coordX, lineNumb);
-    }
-*/
+
+    /*
+     * private int coordXToPos(int coordX, int lineNumb) { return
+     * _textureStorage.coordXToPos(coordX, lineNumb); }
+     */
     protected void onKeyRelease(Object sender, KeyArgs args) {
         // if (args.key == KeyCode.v/* 0x2F*/ && args.mods == KeyMods.CONTROL)
         // pasteText(CommonService.ClipboardTextStorage);
@@ -169,31 +205,34 @@ public class TextBlock extends VisualItem
 
             if (args.mods != KeyMods.NO) {
                 // Выделение не сбрасывается, проверяются сочетания
+                // 
+                //
+                //
                 switch (args.mods) {
-                    case SHIFT:
-                        if (ShiftValCodes.contains(args.key)) {
-                            // System.out.println(args.mods + " " + args.key + " " + _isSelect);
-                            if (!_isSelect) {
-                                _isSelect = true;
-                                _selectFrom = new Point(_cursor_position);
-                            }
-                        }
-
-                        break;
-
-                    case CONTROL:
-                        if (args.key == KeyCode.A || args.key == KeyCode.a) {
-                            _selectFrom.x = 0;
-                            _selectFrom.y = 0;
-                            _cursor_position.y = _textureStorage.getCount() - 1;
-                            _cursor_position.x = getLineLetCount(_cursor_position.y);
-                            replaceCursor();
-
+                case SHIFT:
+                    if (ShiftValCodes.contains(args.key)) {
+                        // System.out.println(args.mods + " " + args.key + " " + _isSelect);
+                        if (!_isSelect) {
                             _isSelect = true;
+                            _selectFrom = new Point(_cursor_position);
                         }
-                        break;
+                    }
 
-                    // alt, super ?
+                    break;
+
+                case CONTROL:
+                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
+                        _selectFrom.x = 0;
+                        _selectFrom.y = 0;
+                        _cursor_position.y = _textureStorage.getCount() - 1;
+                        _cursor_position.x = getLineLetCount(_cursor_position.y);
+                        replaceCursor();
+
+                        _isSelect = true;
+                    }
+                    break;
+
+                // alt, super ?
                 }
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE || args.key == KeyCode.ENTER) {
@@ -296,6 +335,7 @@ public class TextBlock extends VisualItem
                 _cursor_position.x = 0;
 
                 replaceCursor();
+                //textChanged.execute();
             }
 
             if (_isSelect) {
@@ -319,16 +359,19 @@ public class TextBlock extends VisualItem
             byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
             String str = new String(input, Charset.forName("UTF-32")); // StandardCharsets.UTF_8);
 
-            if (_isSelect)
+            if (_isSelect) {
                 unselectText();
-            if (_justSelected)
                 privCutText();
+            }
+            if (_justSelected) _justSelected = false;
+                
             _cursor_position = checkLineFits(_cursor_position);
 
             StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursor_position.y));
             setTextInLine(sb.insert(_cursor_position.x, str).toString());
             _cursor_position.x++;
             replaceCursor();
+            //textChanged.execute();
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -343,7 +386,7 @@ public class TextBlock extends VisualItem
         outPt.x = checkPoint.x;
         if (outPt.x == -1)
             outPt.x = 0;
-        
+
         outPt.x = _textureStorage.checkLineWidth(outPt.x, checkPoint);
 
         return outPt;
@@ -358,6 +401,7 @@ public class TextBlock extends VisualItem
         Point pos = addXYShifts(0, 0, _cursor_position);
         _cursor.setX(pos.x);
         _cursor.setY(pos.y - getLineSpacer() / 2 + 1);// - 3);
+        textChanged.execute();
     }
 
     void setLineSpacer(int lineSpacer) {
@@ -381,38 +425,28 @@ public class TextBlock extends VisualItem
          * (TextLine te in _linesList) te.setTextAlignment(alignment);
          */
     }
-    
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
         // Ignore all changes
     }
-    
-    
+
     public void setTextMargin(Indents margin) {
         _textureStorage.setTextMargin(margin);
     }
 
     public void setFont(Font font) {
         /*
-        if (!font.equals(_elementFont)) {
-            _elementFont = font;
-            if (_elementFont == null)
-                return;
-            int[] output = FontEngine.getSpacerDims(font);
-            _minLineSpacer = output[0];
-            //_minFontY = output[1];
-            //_maxFontY = output[2];
-            _lineHeight = output[2]; //Math.abs(_maxFontY - _minFontY);
-            if (_lineSpacer < _minLineSpacer)
-                _lineSpacer = _minLineSpacer;
-
-            if (_linesList == null)
-                return;
-            for (TextLine te : _linesList)
-                te.setFont(font);
-
-            _cursor.setHeight(_lineHeight + _lineSpacer); // + 6);
-        }
-        */
+         * if (!font.equals(_elementFont)) { _elementFont = font; if (_elementFont ==
+         * null) return; int[] output = FontEngine.getSpacerDims(font); _minLineSpacer =
+         * output[0]; //_minFontY = output[1]; //_maxFontY = output[2]; _lineHeight =
+         * output[2]; //Math.abs(_maxFontY - _minFontY); if (_lineSpacer <
+         * _minLineSpacer) _lineSpacer = _minLineSpacer;
+         * 
+         * if (_linesList == null) return; for (TextLine te : _linesList)
+         * te.setFont(font);
+         * 
+         * _cursor.setHeight(_lineHeight + _lineSpacer); // + 6); }
+         */
         _textureStorage.setFont(font);
         _cursor.setHeight(_textureStorage.getCursorHeight());
     }
@@ -426,27 +460,22 @@ public class TextBlock extends VisualItem
         try {
             _cursor_position = _textureStorage.setText(text, _cursor_position);
             replaceCursor();
+            //textChanged.execute();
         } finally {
             _textureStorage.textInputLock.unlock();
         }
     }
 
     private void setTextInLine(String text) {
-        //_linesList.get(_cursor_position.y).setItemText(text);
+        // _linesList.get(_cursor_position.y).setItemText(text);
         _textureStorage.setTextInLine(text, _cursor_position.y);
     }
 
     public int getTextWidth() {
         /*
-        int w = 0, w0;
-        if (_linesList == null)
-            return w;
-        for (TextLine te : _linesList) {
-            w0 = te.getWidth();
-            w = (w < w0) ? w0 : w;
-        }
-        return w;
-        */
+         * int w = 0, w0; if (_linesList == null) return w; for (TextLine te :
+         * _linesList) { w0 = te.getWidth(); w = (w < w0) ? w0 : w; } return w;
+         */
         return _textureStorage.getWidth();
     }
 
@@ -455,7 +484,7 @@ public class TextBlock extends VisualItem
     }
 
     /*
-     * internal void UpdateData(UpdateType updateType) { //foreach (TextEdit te in
+     * protected void UpdateData(UpdateType updateType) { //foreach (TextEdit te in
      * _linesList) //te.Up }
      */
     public void setForeground(Color color) {
@@ -596,7 +625,7 @@ public class TextBlock extends VisualItem
         }
 
         List<Point> selectionRectangles = new LinkedList<>();
-        
+
         Point fromReal, toReal;
         List<Point> listPt = realFromTo(from, to);
         fromReal = listPt.get(0);
@@ -664,35 +693,21 @@ public class TextBlock extends VisualItem
     private Point addXYShifts(int xShift, int yShift, Point point, boolean isx) {
         Point outPoint = _textureStorage.addXYShifts(xShift, yShift, cursorPosToCoord(point), isx);
         /*
-        int offset = _cursorXMax / 3;
-
-        if (globalXShift + outPoint.x < 0) {
-            globalXShift = -outPoint.x;
-            globalXShift += offset;
-            if (globalXShift > 0)
-                globalXShift = 0;
-            updLinesXShift();
-        }
-        if (globalXShift + outPoint.x > _cursorXMax) {
-            globalXShift = _cursorXMax - outPoint.x;
-            globalXShift -= offset;
-            updLinesXShift();
-        }
-        if (outPoint.y + globalYShift < 0) {
-            globalYShift = -outPoint.y;
-            updLinesYShift();
-
-        }
-        if (outPoint.y + _lineHeight + globalYShift > _cursorYMax) {
-            globalYShift = _cursorYMax - outPoint.y - _lineHeight;
-            updLinesYShift();
-        }
-
-        outPoint.x += globalXShift;
-        outPoint.y += globalYShift;
-        */
-        outPoint.x += /* getX() + getPadding().left + _linesList.get(0).getMargin().left */ + xShift;
-        outPoint.y += /* getY() + getPadding().top + _linesList.get(0).getMargin().top */ + yShift;
+         * int offset = _cursorXMax / 3;
+         * 
+         * if (globalXShift + outPoint.x < 0) { globalXShift = -outPoint.x; globalXShift
+         * += offset; if (globalXShift > 0) globalXShift = 0; updLinesXShift(); } if
+         * (globalXShift + outPoint.x > _cursorXMax) { globalXShift = _cursorXMax -
+         * outPoint.x; globalXShift -= offset; updLinesXShift(); } if (outPoint.y +
+         * globalYShift < 0) { globalYShift = -outPoint.y; updLinesYShift();
+         * 
+         * } if (outPoint.y + _lineHeight + globalYShift > _cursorYMax) { globalYShift =
+         * _cursorYMax - outPoint.y - _lineHeight; updLinesYShift(); }
+         * 
+         * outPoint.x += globalXShift; outPoint.y += globalYShift;
+         */
+        outPoint.x += /* getX() + getPadding().left + _linesList.get(0).getMargin().left */ +xShift;
+        outPoint.y += /* getY() + getPadding().top + _linesList.get(0).getMargin().top */ +yShift;
 
         // Console.WriteLine(outPoint.x + " " + outPoint.y + " " + globalYShift);
         return outPoint;
@@ -826,7 +841,18 @@ public class TextBlock extends VisualItem
 
     @Override
     public List<BaseItem> getItems() {
-        List<BaseItem> list = super.getItems();        
+        List<BaseItem> list = super.getItems();
         return new LinkedList<BaseItem>(Arrays.asList(list.get(0), list.get(1), list.get(2)));
+    }
+
+    @Override
+    public void removeItem(BaseItem item) {
+        if (item.equals(_cursor)) {
+            while (super.getItems().size() > 0) {
+                super.removeItem(super.getItems().get(0));
+            }
+            return;
+        }
+        super.removeItem(item);
     }
 }

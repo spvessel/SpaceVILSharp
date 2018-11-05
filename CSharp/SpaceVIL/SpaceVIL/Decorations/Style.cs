@@ -892,7 +892,7 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont(14);
+            style.Font = DefaultsService.GetDefaultFont(16);
             // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
@@ -944,7 +944,7 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont(12);
+            style.Font = DefaultsService.GetDefaultFont(16);
             // style.Font = new Font(style.Font.FontFamily, 14, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
@@ -952,14 +952,14 @@ namespace SpaceVIL
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
             style.Padding = new Indents(5, 0, 5, 0);
-            style.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(255, 220, 220, 220)
-            });
-            style.AddItemState(ItemStateType.Focused, new ItemState()
-            {
-                Background = Color.FromArgb(255, 220, 220, 220)
-            });
+            // style.AddItemState(ItemStateType.Hovered, new ItemState()
+            // {
+            //     Background = Color.FromArgb(255, 220, 220, 220)
+            // });
+            // style.AddItemState(ItemStateType.Focused, new ItemState()
+            // {
+            //     Background = Color.FromArgb(255, 220, 220, 220)
+            // });
 
             Style cursor_style = new Style();
             cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
@@ -985,21 +985,21 @@ namespace SpaceVIL
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont(12);
+            style.Font = DefaultsService.GetDefaultFont(16);
             // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.Top;
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Expand;
             style.Padding = new Indents(5, 5, 5, 5);
-            style.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(255, 220, 220, 220)
-            });
-            style.AddItemState(ItemStateType.Focused, new ItemState()
-            {
-                Background = Color.FromArgb(255, 220, 220, 220)
-            });
+            // style.AddItemState(ItemStateType.Hovered, new ItemState()
+            // {
+            //     Background = Color.FromArgb(255, 220, 220, 220)
+            // });
+            // style.AddItemState(ItemStateType.Focused, new ItemState()
+            // {
+            //     Background = Color.FromArgb(255, 220, 220, 220)
+            // });
 
             Style cursor_style = new Style();
             cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
@@ -1015,6 +1015,26 @@ namespace SpaceVIL
             selection_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             // selection_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
             style.AddInnerStyle("selection", selection_style);
+
+            return style;
+        }
+
+        public static Style GetTextAreaStyle()
+        {
+            Style style = new Style();
+
+            style.Background = Color.FromArgb(255, 70, 70, 70);
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Expand;
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+
+            Style vsb_style = GetVerticalScrollBarStyle();
+            vsb_style.Alignment = ItemAlignment.Right | ItemAlignment.Top;
+            style.AddInnerStyle("vscrollbar", vsb_style);
+
+            Style hsb_style = GetHorizontalScrollBarStyle();
+            hsb_style.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
+            style.AddInnerStyle("hscrollbar", hsb_style);
 
             return style;
         }

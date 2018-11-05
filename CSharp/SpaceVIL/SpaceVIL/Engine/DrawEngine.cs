@@ -414,11 +414,11 @@ namespace SpaceVIL
                     {
                         draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
 
-                        if (FocusedItem != null)
-                            FocusedItem.IsFocused = false;
+                        // if (FocusedItem != null)
+                        //     FocusedItem.IsFocused = false;
 
-                        FocusedItem = HoveredItem;
-                        FocusedItem.IsFocused = true;
+                        // FocusedItem = HoveredItem;
+                        // FocusedItem.IsFocused = true;
                     }
                     else if (anchor != null && !(HoveredItem is ButtonCore) && !_handler.GetLayout().IsMaximized)
                     {
@@ -584,11 +584,13 @@ namespace SpaceVIL
                         AssignActions(InputEventType.MousePressed, _margs, false);
 
                         //Focus get
-                        if (FocusedItem != null)
-                            FocusedItem.IsFocused = false;
-
-                        FocusedItem = HoveredItem;
-                        FocusedItem.IsFocused = true;
+                        if (HoveredItem.IsFocusable)
+                        {
+                            if (FocusedItem != null)
+                                FocusedItem.IsFocused = false;
+                            FocusedItem = HoveredItem;
+                            FocusedItem.IsFocused = true;
+                        }
                     }
 
                     if (HoveredItem is IWindow)

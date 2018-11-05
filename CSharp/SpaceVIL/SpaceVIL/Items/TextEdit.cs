@@ -48,6 +48,8 @@ namespace SpaceVIL
 
         private Object textInputLock = new Object();
 
+        private int scrollStep = 15;
+
         public TextEdit()
         {
             _text_object = new TextLine();
@@ -103,13 +105,17 @@ namespace SpaceVIL
             int sh = GetLineXShift();
             if (sh >= 0) return;
 
-            int curCoord = _cursor.GetX() - sh;
+            int curPos = _cursor.GetX();
+            int curCoord = curPos - sh;
 
-            sh += _text_object.GetFontDims()[0];
+            sh += scrollStep;
             if (sh > 0) sh = 0;
 
             _text_object.SetLineXShift(sh);
             _cursor.SetX(curCoord + sh);
+
+            curPos = _cursor.GetX() - curPos;
+            _selectedArea.SetX(_selectedArea.GetX() + curPos);
         }
 
         protected virtual void OnScrollDown(object sender, MouseArgs args)
@@ -120,14 +126,18 @@ namespace SpaceVIL
             int sh = GetLineXShift();
             if (w + sh <= _cursorXMax) return;
 
-            int curCoord = _cursor.GetX() - sh;
+            int curPos = _cursor.GetX();
+            int curCoord = curPos - sh;
 
-            sh -= _text_object.GetFontDims()[0];
+            sh -= scrollStep;
             if (w + sh < _cursorXMax)
                 sh = _cursorXMax - w;
             
             _text_object.SetLineXShift(sh);
             _cursor.SetX(curCoord + sh);
+
+            curPos = _cursor.GetX() - curPos;
+            _selectedArea.SetX(_selectedArea.GetX() + curPos);
         }
 
         public void InvokeScrollUp(MouseArgs args)
@@ -340,8 +350,11 @@ namespace SpaceVIL
             try {
             byte[] input = BitConverter.GetBytes(args.Character);
             string str = Encoding.UTF32.GetString(input);
-            if (_isSelect) UnselectText();// CutText();
-            if (_justSelected) CutText();
+            if (_isSelect) {
+                UnselectText();
+                CutText();
+            }
+            if (_justSelected) _justSelected = false;
             SetText(GetText().Insert(_cursor_position, str));
             _cursor_position++;
             ReplaceCursor();
@@ -476,6 +489,9 @@ namespace SpaceVIL
                     - _text_object.GetMargin().Left - _text_object.GetMargin().Right; // _cursorXMin;// ;
             _text_object.SetAllowWidth(_cursorXMax);
             _text_object.SetLineXShift();
+
+            int scctp = _text_object.GetFontDims()[0];
+            if (scctp > scrollStep) scrollStep = scctp;
         }
 
         public int GetTextWidth()

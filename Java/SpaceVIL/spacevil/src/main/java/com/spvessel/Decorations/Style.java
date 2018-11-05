@@ -1005,12 +1005,12 @@ public class Style {
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.FIXED;
         style.padding = new Indents(5, 0, 5, 0);
-        ItemState hovered = new ItemState();
-        hovered.background = new Color(220, 220, 220, 255);
-        style.addItemState(ItemStateType.HOVERED, hovered);
-        ItemState focused = new ItemState();
-        focused.background = new Color(220, 220, 220, 255);
-        style.addItemState(ItemStateType.FOCUSED, focused);
+        // ItemState hovered = new ItemState();
+        // hovered.background = new Color(220, 220, 220, 255);
+        // style.addItemState(ItemStateType.HOVERED, hovered);
+        // ItemState focused = new ItemState();
+        // focused.background = new Color(220, 220, 220, 255);
+        // style.addItemState(ItemStateType.FOCUSED, focused);
 
         Style cursor_style = new Style();
         cursor_style.background = new Color(60, 60, 60);
@@ -1043,12 +1043,12 @@ public class Style {
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.EXPAND;
         style.padding = new Indents(5, 5, 5, 5);
-        ItemState hovered = new ItemState();
-        hovered.background = new Color(220, 220, 220, 255);
-        style.addItemState(ItemStateType.HOVERED, hovered);
-        ItemState focused = new ItemState();
-        focused.background = new Color(220, 220, 220, 255);
-        style.addItemState(ItemStateType.FOCUSED, focused);
+        // ItemState hovered = new ItemState();
+        // hovered.background = new Color(220, 220, 220, 255);
+        // style.addItemState(ItemStateType.HOVERED, hovered);
+        // ItemState focused = new ItemState();
+        // focused.background = new Color(220, 220, 220, 255);
+        // style.addItemState(ItemStateType.FOCUSED, focused);
 
         Style cursor_style = new Style();
         cursor_style.background = new Color(60, 60, 60);
@@ -1068,6 +1068,25 @@ public class Style {
         // LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.VCENTER,
         // ItemAlignment.LEFT));
         style.addInnerStyle("selection", selection_style);
+
+        return style;
+    }
+
+    public static Style getTextAreaStyle() {
+        Style style = new Style();
+
+        style.background = new Color(70, 70, 70);
+        style.widthPolicy = SizePolicy.EXPAND;
+        style.heightPolicy = SizePolicy.EXPAND;
+        style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+
+        Style vsb_style = getVerticalScrollBarStyle();
+        vsb_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        style.addInnerStyle("vscrollbar", vsb_style);
+
+        Style hsb_style = getHorizontalScrollBarStyle();
+        hsb_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
+        style.addInnerStyle("hscrollbar", hsb_style);
 
         return style;
     }

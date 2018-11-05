@@ -51,6 +51,8 @@ public class TextEdit extends VisualItem
 
     private Lock textInputLock = new ReentrantLock();
 
+    private int scrollStep = 15;
+
     public TextEdit() {
         _text_object = new TextLine();
         _cursor = new Rectangle();
@@ -105,7 +107,7 @@ public class TextEdit extends VisualItem
         int curPos = _cursor.getX();
         int curCoord = curPos - sh;
 
-        sh += _text_object.getFontDims()[0];
+        sh += scrollStep;
         if (sh > 0)
             sh = 0;
 
@@ -128,7 +130,7 @@ public class TextEdit extends VisualItem
         int curPos = _cursor.getX();
         int curCoord = curPos - sh;
 
-        sh -= _text_object.getFontDims()[0];
+        sh -= scrollStep;
         if (w + sh < _cursorXMax)
             sh = _cursorXMax - w;
 
@@ -327,10 +329,12 @@ public class TextEdit extends VisualItem
             byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
             String str = new String(input, Charset.forName("UTF-32")); // StandardCharsets.UTF_16);
 
-            if (_isSelect)
+            if (_isSelect) {
                 unselectText();// cutText();
-            if (_justSelected)
                 cutText();
+            }
+            if (_justSelected) _justSelected = false;
+                
 
             StringBuilder sb = new StringBuilder(getText());
             setText(sb.insert(_cursor_position, str).toString());
@@ -465,6 +469,10 @@ public class TextEdit extends VisualItem
                 - _text_object.getMargin().left - _text_object.getMargin().right;
         _text_object.setAllowWidth(_cursorXMax);
         _text_object.setLineXShift();
+
+        int scctp = _text_object.getFontDims()[0];
+        if (scctp > scrollStep)
+            scrollStep = scctp;
     }
 
     public int getTextWidth() {

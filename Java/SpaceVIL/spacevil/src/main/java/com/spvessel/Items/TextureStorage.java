@@ -16,8 +16,8 @@ import org.lwjgl.BufferUtils;
 
 class TextureStorage extends Primitive implements InterfaceTextContainer {
     private List<TextLine> _linesList;
-    private List<ItemAlignment> _blockAlignment =
-            new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+    private List<ItemAlignment> _blockAlignment = new LinkedList<>(
+            Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
     private Font _elementFont;
     private int _lineSpacer;
     private int _minLineSpacer;
@@ -29,7 +29,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
     private int _cursorYMax = Integer.MAX_VALUE;
 
     Lock textInputLock = new ReentrantLock();
-    
+
     TextureStorage() {
         _linesList = new LinkedList<>();
         TextLine te = new TextLine();
@@ -38,7 +38,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
         te.setTextAlignment(_blockAlignment);
         if (_elementFont != null)
             te.setFont(_elementFont);
-        _linesList.add(te);       
+        _linesList.add(te);
 
         getDims();
     }
@@ -46,12 +46,12 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
     int scrollBlockUp(int cursorY) {
         int h = getTextHeight();
         int curCoord = cursorY;
-        
+
         if (h < _cursorYMax && globalYShift >= 0)
             return curCoord;
         // if ()
-        //     return curCoord;
-        
+        // return curCoord;
+
         curCoord -= globalYShift;
 
         globalYShift += getLineY(1);
@@ -63,31 +63,33 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     int scrollBlockDown(int cursorY) {
-            int h = getTextHeight();
-            int curCoord = cursorY;
-            
-            if (h < _cursorYMax && h + globalYShift <= _cursorYMax) return curCoord;
-            //if () return curCoord;
-        
-            curCoord -= globalYShift;
+        int h = getTextHeight();
+        int curCoord = cursorY;
 
-            globalYShift -= getLineY(1);
-            if (h + globalYShift < _cursorYMax)
-                globalYShift = _cursorYMax - h;
+        if (h < _cursorYMax && h + globalYShift <= _cursorYMax)
+            return curCoord;
+        // if () return curCoord;
 
-            updLinesYShift();
-            return (curCoord + globalYShift);
-        }
+        curCoord -= globalYShift;
+
+        globalYShift -= getLineY(1);
+        if (h + globalYShift < _cursorYMax)
+            globalYShift = _cursorYMax - h;
+
+        updLinesYShift();
+        return (curCoord + globalYShift);
+    }
 
     int getCursorHeight() {
         return (_lineHeight + _lineSpacer);
     }
 
     void setBlockWidth(int width, int curWidth) {
-        if (getParent() == null) return;
-        _cursorXMax = getParent().getWidth() - curWidth - getParent().getPadding().left
-                 - getParent().getPadding().right - textMargin().left - textMargin().right;
-        
+        if (getParent() == null)
+            return;
+        _cursorXMax = getParent().getWidth() - curWidth - getParent().getPadding().left - getParent().getPadding().right
+                - textMargin().left - textMargin().right;
+
         setAllowWidth();
         updLinesXShift();
     }
@@ -104,10 +106,10 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
     void initLines(int curWidth) {
         Indents textMargin = textMargin();
 
-        _cursorXMax = getParent().getWidth() - curWidth - getParent().getPadding().left
-                - getParent().getPadding().right - textMargin.left - textMargin.right;
-        _cursorYMax = getParent().getHeight() - getParent().getPadding().top
-                - getParent().getPadding().bottom - textMargin.top - textMargin.bottom;
+        _cursorXMax = getParent().getWidth() - curWidth - getParent().getPadding().left - getParent().getPadding().right
+                - textMargin.left - textMargin.right;
+        _cursorYMax = getParent().getHeight() - getParent().getPadding().top - getParent().getPadding().bottom
+                - textMargin.top - textMargin.bottom;
 
         addAllLines();
         setAllowWidth();
@@ -122,10 +124,10 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     private void addAllLines() {
-        //removeItem(_cursor);
+        // removeItem(_cursor);
         for (TextLine tl : _linesList)
             getParent().addItem(tl);
-        //addItem(_cursor);
+        // addItem(_cursor);
     }
 
     int getLineLetCount(int lineNum) {
@@ -149,7 +151,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     private void addNewLine(String text, int lineNum) {
-        //removeItem(_cursor);
+        // removeItem(_cursor);
         TextLine te = new TextLine();
         te.setForeground(getForeground());
         te.setTextAlignment(_blockAlignment);
@@ -162,7 +164,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
         _linesList.add(lineNum, te);
 
         updLinesYShift(); // Пока обновляются все, но в принципе, нужно только под lineNum
-        //addItem(_cursor);
+        // addItem(_cursor);
     }
 
     void breakLine(Point _cursorPosition) {
@@ -183,8 +185,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
         removeLines(1, _linesList.size() - 1);
     }
 
-    private int coordXToPos(int coordX, int lineNumb)
-    {
+    private int coordXToPos(int coordX, int lineNumb) {
         int pos = 0;
 
         List<Integer> lineLetPos = _linesList.get(lineNumb).getLetPosArray();
@@ -228,7 +229,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
             lineNumb = getCount() - 1;
         if (lineNumb < 0)
             lineNumb = 0;
-        //return lineNumb;
+        // return lineNumb;
 
         realPos.x -= getParent().getX() + getParent().getPadding().left + textMargin().left;
 
@@ -256,14 +257,11 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
 
         updLinesYShift(); // Пока обновляются все, но в принципе, нужно только под fromLine
     }
-/*
-    private int getLineXShift(int n) {
-        if (_linesList.size() > n)
-            return _linesList.get(n).getLineXShift();
-        else
-            return 0;
-    }
-*/
+
+    /*
+     * private int getLineXShift(int n) { if (_linesList.size() > n) return
+     * _linesList.get(n).getLineXShift(); else return 0; }
+     */
     private void updLinesYShift() {
         int inc = 0;
         for (TextLine line : _linesList) {
@@ -294,13 +292,13 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
     private int getLineY(int num) {
         return (_lineHeight + _lineSpacer) * num;
     }
-    
+
     int getCount() {
         return _linesList.size();
     }
 
     void setTextMargin(Indents margin) {
-        //_text_margin = margin;
+        // _text_margin = margin;
         for (TextLine var : _linesList) {
             var.setMargin(margin);
         }
@@ -385,10 +383,10 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
         if (lineSpacer != _lineSpacer) {
             _lineSpacer = lineSpacer;
 
-        if (_linesList == null)
-            return;
+            if (_linesList == null)
+                return;
 
-        updLinesYShift();
+            updLinesYShift();
         }
     }
 
@@ -422,7 +420,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
         if (fromReal.y == toReal.y) {
             StringBuilder sb = new StringBuilder(_linesList.get(toReal.y).getItemText());
             _linesList.get(toReal.y).setItemText(sb.delete(fromReal.x, toReal.x).toString());
-        
+
         } else {
             removeLines(fromReal.y + 1, toReal.y - 1);
             StringBuilder sb = new StringBuilder(_linesList.get(fromReal.y).getItemText());
@@ -434,12 +432,11 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     Point pasteText(String pasteStr, Point _cursor_position) {
-        String textBeg = new StringBuilder(_linesList.get(_cursor_position.y).getItemText())
-                .substring(0, _cursor_position.x);
+        String textBeg = new StringBuilder(_linesList.get(_cursor_position.y).getItemText()).substring(0,
+                _cursor_position.x);
         String textEnd = "";
         if (_cursor_position.x < getLineLetCount(_cursor_position.y))
-            textEnd = new StringBuilder(_linesList.get(_cursor_position.y).getItemText())
-                    .substring(_cursor_position.x);
+            textEnd = new StringBuilder(_linesList.get(_cursor_position.y).getItemText()).substring(_cursor_position.x);
 
         String[] line = pasteStr.split("\n");
         for (int i = 0; i < line.length; i++) {
@@ -466,7 +463,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     Point addXYShifts(int xShift, int yShift, Point outPoint, boolean isx) {
-        //Point outPoint = cursorPosToCoord(point);
+        // Point outPoint = cursorPosToCoord(point);
         int offset = _cursorXMax / 3;
 
         if (isx) {
@@ -482,11 +479,11 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
                 globalXShift -= offset;
                 updLinesXShift();
             }
-        
+
             if (outPoint.y + globalYShift < 0) {
                 globalYShift = -outPoint.y;
                 updLinesYShift();
-            
+
             }
             if (outPoint.y + _lineHeight + globalYShift > _cursorYMax) {
                 globalYShift = _cursorYMax - outPoint.y - _lineHeight;
@@ -496,80 +493,76 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
         outPoint.x += getParent().getX() + getParent().getPadding().left + globalXShift + textMargin().left;
         outPoint.y += getParent().getY() + getParent().getPadding().top + globalYShift + textMargin().top;
 
-        //outPoint.x += getX() + getPadding().left + _linesList.get(0).getMargin().left + xShift;
-        //outPoint.y += getY() + getPadding().top + _linesList.get(0).getMargin().top + yShift;
+        // outPoint.x += getX() + getPadding().left + _linesList.get(0).getMargin().left
+        // + xShift;
+        // outPoint.y += getY() + getPadding().top + _linesList.get(0).getMargin().top +
+        // yShift;
 
         // Console.WriteLine(outPoint.x + " " + outPoint.y + " " + globalYShift);
         return outPoint;
     }
 
-    Color _foreground = Color.BLACK;    
+    Color _foreground = Color.BLACK;
+
     void setForeground(Color foreground) {
-        if (_linesList != null && !foreground.equals(getForeground()))
-        {
+        if (_linesList != null && !foreground.equals(getForeground())) {
             _foreground = foreground;
             for (TextLine te : _linesList)
-                te.setForeground(foreground); //Вроде бы это больше не нужно
+                te.setForeground(foreground); // Вроде бы это больше не нужно
         }
     }
+
     public Color getForeground() {
         return _foreground;
     }
 
-    public TextPrinter getLetTextures()
-    {
+    public TextPrinter getLetTextures() {
         textInputLock.lock();
-        try
-        {
+        try {
             List<TextPrinter> tpLines = new LinkedList<TextPrinter>();
             int w = 0, h = 0;
             int lineHeigh = getLineY(1);
 
-            for (TextLine tl : _linesList)
-            {
+            for (TextLine tl : _linesList) {
                 TextPrinter tmp = tl.getLetTextures();
                 tpLines.add(tmp);
-                h += lineHeigh;//tmp.HeightTexture;
-                if (tmp == null) continue;
+                h += lineHeigh;// tmp.HeightTexture;
+                if (tmp == null)
+                    continue;
                 w = (w > tmp.widthTexture) ? w : tmp.widthTexture;
             }
-
+            w += _cursorXMax / 3;
             setWidth(w);
             setHeight(h);
 
             ByteBuffer bigByte = BufferUtils.createByteBuffer(h * w * 4);
             int bigOff = 0;
-                
-            for (TextPrinter tptmp : tpLines)
-            {
-                if (tptmp == null || tptmp.texture == null)
-                {
+
+            for (TextPrinter tptmp : tpLines) {
+                if (tptmp == null || tptmp.texture == null) {
                     for (int p = 0; p < 4; p++)
                         for (int j = 0; j < lineHeigh; j++)
                             for (int i = 0; i < w; i++)
-                                bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte)0);
-                    
+                                bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte) 0);
+
                     bigOff += lineHeigh * w * 4;
                     continue;
                 }
-                for (int p = 0; p < 4; p++)
-                {
-                    for (int j = 0; j < tptmp.heightTexture; j++)
-                    {
-                        for (int i = 0; i < tptmp.widthTexture; i++)
-                        {
-                            bigByte.put(bigOff + p + i * 4 + j * (w * 4), tptmp.texture.get(p + i * 4 + j * (tptmp.widthTexture * 4)));
+                for (int p = 0; p < 4; p++) {
+                    for (int j = 0; j < tptmp.heightTexture; j++) {
+                        for (int i = 0; i < tptmp.widthTexture; i++) {
+                            bigByte.put(bigOff + p + i * 4 + j * (w * 4),
+                                    tptmp.texture.get(p + i * 4 + j * (tptmp.widthTexture * 4)));
                         }
 
-                        for (int i = tptmp.widthTexture; i < w; i++)
-                        {
-                            bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte)0);
+                        for (int i = tptmp.widthTexture; i < w; i++) {
+                            bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte) 0);
                         }
                     }
 
                     for (int j = tptmp.heightTexture; j < lineHeigh; j++) {
                         for (int i = 0; i < w; i++) {
-                            bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte)0);
+                            bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte) 0);
                         }
                     }
                 }
@@ -578,24 +571,41 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
             TextPrinter tpout = new TextPrinter(bigByte);
             tpout.widthTexture = w;
             tpout.heightTexture = h;
-            if (tpLines.size() == 0 || tpLines.get(0) == null)
-            {
+            if (tpLines.size() == 0 || tpLines.get(0) == null) {
                 tpout.xTextureShift = getParent().getPadding().left + textMargin().left + getParent().getX();
                 tpout.yTextureShift = getParent().getPadding().top + textMargin().top + getParent().getY();
 
                 tpout.xTextureShift += _linesList.get(0).getLineXShift();
                 tpout.yTextureShift += _linesList.get(0).getLineYShift();
-            }
-            else
-            {
+            } else {
                 tpout.xTextureShift = tpLines.get(0).xTextureShift;
                 tpout.yTextureShift = tpLines.get(0).yTextureShift;
             }
             return tpout;
-        }
-        finally
-        {
+        } finally {
             textInputLock.unlock();
         }
+    }
+
+    protected int getScrollStep() {
+        return getLineY(1);
+    }
+
+    protected int getScrollYOffset() {
+        return globalYShift;
+    }
+
+    protected void setScrollYOffset(int offset) {
+        globalYShift = offset;
+        updLinesYShift();
+    }
+
+    protected int getScrollXOffset() {
+        return globalXShift;
+    }
+
+    protected void setScrollXOffset(int offset) {
+        globalXShift = offset;
+        updLinesXShift();
     }
 }

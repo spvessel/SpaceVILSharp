@@ -43,6 +43,10 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
+            UpArrow.IsFocusable = false;
+            DownArrow.IsFocusable = false;
+            Slider.IsFocusable = false;
+            Slider.Handler.IsFocusable = false;
             //Adding
             AddItems(UpArrow, Slider, DownArrow);
 

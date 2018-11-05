@@ -260,10 +260,12 @@ public class PasswordLine extends VisualItem implements InterfaceTextEditable, I
             String str = new String(input, Charset.forName("UTF-32"));// Charset.forName("UTF-32LE"));
                                                                       // //Encoding.UTF32.getString(input);
 
-            if (_isSelect)
+            if (_isSelect) {
                 unselectText();
-            if (_justSelected)
                 cutText();
+            }
+            if (_justSelected) _justSelected = false;
+                
 
             StringBuilder sb = new StringBuilder(getText());
             setText(sb.insert(_cursor_position, str).toString());
