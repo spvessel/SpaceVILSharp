@@ -1426,6 +1426,7 @@ public class DrawEngine {
         if (location_direction >= 0)
             glUniform2fv(location_direction, new float[] { shell.getShadowRadius(), shell.getShadowRadius() });
 
+
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glDisableVertexAttribArray(0);
