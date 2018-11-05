@@ -46,6 +46,10 @@ public class VerticalScrollBar extends VerticalStack {
 
     @Override
     public void initElements() {
+        upArrow.isFocusable = false;
+        downArrow.isFocusable = false;
+        slider.isFocusable = false;
+        slider.handler.isFocusable = false;
         addItems(upArrow, slider, downArrow);
     }
 

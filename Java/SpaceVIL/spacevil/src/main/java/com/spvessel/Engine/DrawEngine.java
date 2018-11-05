@@ -449,11 +449,11 @@ public class DrawEngine {
                     draggable.eventMouseDrag.execute(draggable, _margs);
 
                     // Focus get
-                    if (focusedItem != null)
-                        focusedItem.setFocused(false);
+                    // if (focusedItem != null)
+                    // focusedItem.setFocused(false);
 
-                    focusedItem = hoveredItem;
-                    focusedItem.setFocused(true);
+                    // focusedItem = hoveredItem;
+                    // focusedItem.setFocused(true);
                 } else if (anchor != null && !(hoveredItem instanceof ButtonCore)
                         && !_handler.getLayout().isMaximized) {
 
@@ -596,12 +596,6 @@ public class DrawEngine {
             if (hoveredItem != null) {
                 assignActions(InputEventType.MOUSE_RELEASE, _margs, false);
                 hoveredItem.setMousePressed(false);
-                // Focus get
-                if (focusedItem != null)
-                    focusedItem.setFocused(false);
-
-                focusedItem = hoveredItem;
-                focusedItem.setFocused(true);
             }
             engineEvent.resetAllEvents();
             engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
@@ -633,6 +627,13 @@ public class DrawEngine {
             if (hoveredItem != null) {
                 hoveredItem.setMousePressed(true);
                 assignActions(InputEventType.MOUSE_PRESS, _margs, false);
+                if (hoveredItem.isFocusable) {
+                    // Focus get
+                    if (focusedItem != null)
+                        focusedItem.setFocused(false);
+                    focusedItem = hoveredItem;
+                    focusedItem.setFocused(true);
+                }
             }
 
             if (hoveredItem instanceof WContainer) {
@@ -861,7 +862,7 @@ public class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
-    public float _interval = 1.0f / 60.0f;// 1000 / 60;
+    public float _interval = 1.0f / 30.0f;// 1000 / 60;
     // internal float _interval = 1.0f / 60.0f;//1000 / 60;
     // internal int _interval = 11;//1000 / 90;
     // internal int _interval = 08;//1000 / 120;

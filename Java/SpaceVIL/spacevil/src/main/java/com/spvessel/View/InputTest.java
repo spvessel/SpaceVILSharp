@@ -29,7 +29,7 @@ public class InputTest extends ActiveWindow {
 
         TextEdit te = new TextEdit();
         
-        TextBlock tb = new TextBlock();
+        TextArea tb = new TextArea();
         // tb.setMargin(new Indents(50, 30, 30, 30));
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
 

@@ -264,8 +264,11 @@ namespace SpaceVIL
                 byte[] input = BitConverter.GetBytes(args.Character);
                 string str = Encoding.UTF32.GetString(input);
 
-                if (_isSelect) UnselectText();
-                if (_justSelected) CutText();
+                if (_isSelect) {
+                    UnselectText();
+                    CutText();
+                }
+                if (_justSelected) _justSelected = false;
 
                 SetText(GetText().Insert(_cursor_position, str));
 

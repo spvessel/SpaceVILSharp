@@ -34,7 +34,7 @@ namespace SpaceVIL
             HoveredItems.Clear();
         }
 
-        private Dictionary<BaseItem, VRAMStorage> _images_store = new Dictionary<BaseItem, VRAMStorage>();
+        // private Dictionary<BaseItem, VRAMStorage> _images_store = new Dictionary<BaseItem, VRAMStorage>();
 
         private ToolTip _tooltip = new ToolTip();
         private BaseItem _isStencilSet = null;
@@ -414,11 +414,11 @@ namespace SpaceVIL
                     {
                         draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
 
-                        if (FocusedItem != null)
-                            FocusedItem.IsFocused = false;
+                        // if (FocusedItem != null)
+                        //     FocusedItem.IsFocused = false;
 
-                        FocusedItem = HoveredItem;
-                        FocusedItem.IsFocused = true;
+                        // FocusedItem = HoveredItem;
+                        // FocusedItem.IsFocused = true;
                     }
                     else if (anchor != null && !(HoveredItem is ButtonCore) && !_handler.GetLayout().IsMaximized)
                     {
@@ -584,11 +584,13 @@ namespace SpaceVIL
                         AssignActions(InputEventType.MousePressed, _margs, false);
 
                         //Focus get
-                        if (FocusedItem != null)
-                            FocusedItem.IsFocused = false;
-
-                        FocusedItem = HoveredItem;
-                        FocusedItem.IsFocused = true;
+                        if (HoveredItem.IsFocusable)
+                        {
+                            if (FocusedItem != null)
+                                FocusedItem.IsFocused = false;
+                            FocusedItem = HoveredItem;
+                            FocusedItem.IsFocused = true;
+                        }
                     }
 
                     if (HoveredItem is IWindow)
@@ -837,7 +839,7 @@ namespace SpaceVIL
             _handler.GetLayout().ExecutePollActions();
         }
 
-        internal float _interval = 1.0f / 60.0f;//1000 / 60;
+        internal float _interval = 1.0f / 30.0f;//1000 / 60;
         // internal float _interval = 1.0f / 60.0f;//1000 / 60;
         // internal int _interval = 11;//1000 / 90;
         // internal int _interval = 08;//1000 / 120;
@@ -871,6 +873,10 @@ namespace SpaceVIL
             _blur.DeleteShader();
 
             glDeleteVertexArrays(1, _handler.GVAO);
+
+            // foreach (var store in _images_store)
+            //     store.Value.Clear();
+            // _images_store.Clear();
 
             _handler.ClearEventsCallbacks();
             _handler.Destroy();
@@ -919,7 +925,7 @@ namespace SpaceVIL
             }
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(0);
 
@@ -934,7 +940,7 @@ namespace SpaceVIL
                 colorData[i * 4 + 3] = argb[3];
             }
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(1);
 
@@ -1137,7 +1143,7 @@ namespace SpaceVIL
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(0);
 
@@ -1157,7 +1163,7 @@ namespace SpaceVIL
                 colorData[i * 4 + 3] = argb[3];
             }
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(1);
 
@@ -1282,12 +1288,47 @@ namespace SpaceVIL
             int location = glGetUniformLocation(_blur.GetProgramID(), "tex");
             if (location >= 0)
                 glUniform1i(location, 0);
+            else
+                Console.WriteLine("not find tex");
+
             int location_frame = glGetUniformLocation(_blur.GetProgramID(), "frame");
             if (location_frame >= 0)
                 glUniform2fv(location_frame, 1, new float[2] { _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight() });
-            int location_direction = glGetUniformLocation(_blur.GetProgramID(), "direction");
-            if (location_direction >= 0)
-                glUniform2fv(location_direction, 1, new float[2] { shell.GetShadowRadius(), shell.GetShadowRadius() });
+            else
+                Console.WriteLine("not find frame");
+
+            // int location_direction = glGetUniformLocation(_blur.GetProgramID(), "direction");
+            // if (location_direction >= 0)
+            //     glUniform2fv(location_direction, 1, new float[2] { shell.GetShadowRadius(), shell.GetShadowRadius() });
+
+            int res = (int)shell.GetShadowRadius();
+            float[] weights = new float[res];
+            float sum, sigma2 = 4.0f;
+            weights[0] = Gauss(0, sigma2);
+            sum = weights[0];
+            for (int i = 1; i < res; i++)
+            {
+                weights[i] = Gauss(i, sigma2);
+                sum += 2 * weights[i];
+            }
+            for (int i = 0; i < res; i++)
+                weights[i] /= sum;
+
+            int location_res = glGetUniformLocation(_blur.GetProgramID(), "res");
+            if (location_res >= 0)
+                glUniform1i(location_res, res);
+            else
+            {
+                Console.WriteLine("not find res");
+            }
+
+            int location_weights = glGetUniformLocation(_blur.GetProgramID(), "weights");
+            if (location_weights >= 0)
+                glUniform1fv(location_weights, res, weights);
+            else
+            {
+                Console.WriteLine("not find weights");
+            }
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
 
@@ -1297,7 +1338,12 @@ namespace SpaceVIL
             glDeleteFramebuffers(1, fbo_handle);
             glDeleteTextures(1, fbo_texture);
         }
-
+        float Gauss(float x, float sigma)
+        {
+            double ans;
+            ans = Math.Exp(-(x * x) / (2f * sigma * sigma)) / Math.Sqrt(2 * Math.PI * sigma * sigma);
+            return (float)ans;
+        }
         void DrawText(ITextContainer text)
         {
             TextPrinter textPrt = text.GetLetTextures();
@@ -1355,10 +1401,10 @@ namespace SpaceVIL
             glGenBuffers(2, buffers);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_STATIC_DRAW);
 
             //Position attribute
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * sizeof(float), IntPtr.Zero);
@@ -1460,12 +1506,12 @@ namespace SpaceVIL
             CheckOutsideBorders(item as BaseItem);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(0);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(1);
 
@@ -1519,12 +1565,12 @@ namespace SpaceVIL
             CheckOutsideBorders(item as BaseItem);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(0);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(1);
 
@@ -1538,50 +1584,8 @@ namespace SpaceVIL
             glDeleteBuffers(2, buffers);
         }
 
-        void DrawImage(ImageItem image)
-        {
-            //проверка: полностью ли влезает объект в свой контейнер
-            if (CheckOutsideBorders(image as BaseItem))
-                _texture.UseShader();
-
-            VRAMStorage store = new VRAMStorage(image);
-
-            // if (_images_store.ContainsKey(image))
-            // {
-            //     _images_store[image].Bind();
-            // }
-            // else
-            {
-                byte[] bitmap = image.GetPixMapImage();
-                if (bitmap == null)
-                    return;
-
-                float i_x0 = ((float)image.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-                float i_y0 = ((float)image.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-                float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-                float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-                store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
-                int w = image.GetImageWidth(), h = image.GetImageHeight();
-                store.GenTexture(w, h, bitmap);
-                // _images_store.Add(image, store);
-                // _images_store[image].Bind();
-                // store.Bind();
-            }
-            int location = glGetUniformLocation(_texture.GetProgramID(), "tex");
-            if (location >= 0)
-                glUniform1i(location, 0);
-            store.Draw();
-            store.Clear();
-            // _images_store[image].Draw();
-        }
-
         // void DrawImage(ImageItem image)
         // {
-        //     byte[] bitmap = image.GetPixMapImage();
-
-        //     if (bitmap == null)
-        //         return;
-
         //     //проверка: полностью ли влезает объект в свой контейнер
         //     if (CheckOutsideBorders(image as BaseItem))
         //         _texture.UseShader();
@@ -1591,67 +1595,107 @@ namespace SpaceVIL
         //     float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
         //     float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
 
-        //     //VBO
-        //     float[] vertexData = new float[]
-        //     {
-        //         //X    Y      Z         //U     V
-        //         i_x0,  i_y0,  0.0f,     0.0f, 1.0f, //x0
-        //         i_x0,  i_y1,  0.0f,     0.0f, 0.0f, //x1
-        //         i_x1,  i_y1,  0.0f,     1.0f, 0.0f, //x2
-        //         i_x1,  i_y0,  0.0f,     1.0f, 1.0f, //x3
-        //         // i_x0,  i_y0,  0.0f,     0.0f, 0.0f, //x0
-        //         // i_x0,  i_y1,  0.0f,     1.0f, 0.0f, //x1
-        //         // i_x1,  i_y1,  0.0f,     1.0f, 1.0f, //x2
-        //         // i_x1,  i_y0,  0.0f,     0.0f, 1.0f, //x3
-        //     };
-        //     int[] ibo = new int[]
-        //     {
-        //         0, 1, 2, //first triangle
-        //         2, 3, 0, // second triangle
-        //     };
-
-        //     uint[] buffers = new uint[2];
-        //     glGenBuffers(2, buffers);
-
-        //     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-        //     glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
-
-        //     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
-        //     glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_DYNAMIC_DRAW);
-
-        //     //Position attribute
-        //     glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * sizeof(float), IntPtr.Zero);
-        //     glEnableVertexAttribArray(0);
-        //     //TexCoord attribute
-        //     glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * sizeof(float), IntPtr.Zero + (3 * sizeof(float)));
-        //     glEnableVertexAttribArray(1);
-
-        //     //texture
+        //     byte[] bitmap = image.GetPixMapImage();
+        //     if (bitmap == null)
+        //         return;
         //     int w = image.GetImageWidth(), h = image.GetImageHeight();
-        //     uint[] texture = new uint[1];
-        //     glGenTextures(1, texture);
-        //     glBindTexture(GL_TEXTURE_2D, texture[0]);
 
-        //     glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
-        //     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_BGRA, GL_UNSIGNED_BYTE, bitmap);
-
-        //     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        //     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        //     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        //     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+        //     if (!_images_store.ContainsKey(image))
+        //     {
+        //         VRAMStorage store = new VRAMStorage(image);
+        //         store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
+        //         store.GenTexture(w, h, bitmap);
+        //         _images_store.Add(image, store);
+        //     }
+        //     else
+        //     {
+        //         _images_store[image].GenBuffers(i_x0, i_x1, i_y0, i_y1);
+        //         _images_store[image].GenTexture(w, h, bitmap);
+        //         _images_store[image].Bind();
+        //     }
         //     int location = glGetUniformLocation(_texture.GetProgramID(), "tex");
         //     if (location >= 0)
         //         glUniform1i(location, 0);
-
-        //     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
-
-        //     glDisableVertexAttribArray(0);
-        //     glDisableVertexAttribArray(1);
-
-        //     glDeleteBuffers(2, buffers);
-        //     glDeleteTextures(1, texture);
+        //     _images_store[image].Draw();
+        //     _images_store[image].Clear();
         // }
+
+        void DrawImage(ImageItem image)
+        {
+            byte[] bitmap = image.GetPixMapImage();
+
+            if (bitmap == null)
+                return;
+
+            //проверка: полностью ли влезает объект в свой контейнер
+            if (CheckOutsideBorders(image as BaseItem))
+                _texture.UseShader();
+
+            float i_x0 = ((float)image.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y0 = ((float)image.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+
+            //VBO
+            float[] vertexData = new float[]
+            {
+                //X    Y      Z         //U     V
+                i_x0,  i_y0,  0.0f,     0.0f, 1.0f, //x0
+                i_x0,  i_y1,  0.0f,     0.0f, 0.0f, //x1
+                i_x1,  i_y1,  0.0f,     1.0f, 0.0f, //x2
+                i_x1,  i_y0,  0.0f,     1.0f, 1.0f, //x3
+            };
+            int[] ibo = new int[]
+            {
+                0, 1, 2, //first triangle
+                2, 3, 0, // second triangle
+            };
+
+            uint[] buffers = new uint[2];
+            glGenBuffers(2, buffers);
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_STATIC_DRAW);
+
+            //Position attribute
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * sizeof(float), IntPtr.Zero);
+            glEnableVertexAttribArray(0);
+            //TexCoord attribute
+            glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * sizeof(float), IntPtr.Zero + (3 * sizeof(float)));
+            glEnableVertexAttribArray(1);
+
+            //texture
+            int w = image.GetImageWidth(), h = image.GetImageHeight();
+
+            uint[] texture = new uint[1];
+            glGenTextures(1, texture);
+
+            glBindTexture(GL_TEXTURE_2D, texture[0]);
+
+            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            int location = glGetUniformLocation(_texture.GetProgramID(), "tex");
+            if (location >= 0)
+                glUniform1i(location, 0);
+
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
+
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+
+            glDeleteBuffers(2, buffers);
+            glDeleteTextures(1, texture);
+        }
 
         private void DrawToolTip() //refactor
         {
@@ -1707,7 +1751,7 @@ namespace SpaceVIL
             };
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(0);
 
@@ -1727,7 +1771,7 @@ namespace SpaceVIL
                 colorData[i * 4 + 3] = argb[3];
             }
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
             glEnableVertexAttribArray(1);
 

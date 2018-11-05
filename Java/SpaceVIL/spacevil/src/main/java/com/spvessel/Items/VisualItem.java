@@ -247,14 +247,16 @@ public abstract class VisualItem extends BaseItem {
         if (item instanceof VisualItem)// и если это действительно контейнер
         {
             VisualItem container = (VisualItem) item;// предполагаю что элемент контейнер
-                        while (container.getItems().size() > 0) {
+            List<BaseItem> tmp = container.getItems();
+            while (tmp.size() > 0) {
                 BaseItem child = container.getItems().get(0);
-                container.cascadeRemoving(child, type);
+                // container.cascadeRemoving(child, type);
+                // container.getItems().remove(child);
+                // child.removeItemFromListeners();
+                // ItemsLayoutBox.removeItem(getHandler(), child, type);
 
-                container.getItems().remove(child);
-                child.removeItemFromListeners();
-
-                ItemsLayoutBox.removeItem(getHandler(), child, type);
+                container.removeItem(child);
+                tmp.remove(child);
             }
         }
     }
@@ -413,16 +415,19 @@ public abstract class VisualItem extends BaseItem {
     }
 
     private boolean _focused;
+    public boolean isFocusable = true;
 
     public boolean isFocused() {
         return _focused;
     }
 
     public void setFocused(boolean value) {
-        if (_focused == value)
-            return;
-        _focused = value;
-        updateState();
+        if (isFocusable) {
+            if (_focused == value)
+                return;
+            _focused = value;
+            updateState();
+        }
     }
 
     public void setFocus() {

@@ -107,15 +107,7 @@ namespace SpaceVIL
 
                 _content.Add(item);
 
-                try
-                {
-                    ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(item.GetItemName());
-                    throw ex;
-                }
+                ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
 
                 //needs to force update all attributes
                 item.UpdateGeometry();
@@ -174,15 +166,12 @@ namespace SpaceVIL
             if (container != null)//и если это действительно контейнер
             {
                 //то каждому вложенному элементу вызвать команду удалить своих вложенных элементов
-                while (container.GetItems().Count > 0)
+                List<BaseItem> tmp = container.GetItems();
+                while (tmp.Count > 0)
                 {
-                    BaseItem child = container.GetItems().ElementAt(0);
-                    container.CascadeRemoving(child, type);
-
-                    container.GetItems().Remove(child);
-                    child.RemoveItemFromListeners();
-
-                    ItemsLayoutBox.RemoveItem(GetHandler(), child, type);
+                    BaseItem child = tmp.ElementAt(0);
+                    container.RemoveItem(child);
+                    tmp.Remove(child);
                 }
             }
         }
@@ -389,6 +378,7 @@ namespace SpaceVIL
             }
         }
         private bool _focused;
+        public bool IsFocusable = true;
         public virtual bool IsFocused
         {
             get
@@ -397,15 +387,20 @@ namespace SpaceVIL
             }
             set
             {
-                if (_focused == value)
-                    return;
-                _focused = value;
-                UpdateState();
+                if (IsFocusable)
+                {
+                    if (_focused == value)
+                        return;
+                    _focused = value;
+                    UpdateState();
+                }
             }
         }
+
         public void SetFocus()
         {
-            GetHandler().SetFocusedItem(this);
+            if (IsFocusable)
+                GetHandler().SetFocusedItem(this);
         }
 
         protected override void UpdateInnersDrawable(bool value)

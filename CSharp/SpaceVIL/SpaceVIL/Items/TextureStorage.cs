@@ -22,7 +22,9 @@ namespace SpaceVIL
 
         internal Object textInputLock = new Object();
 
-        internal TextureStorage() {
+        static int count = 0;
+        internal TextureStorage() : base(name: "TextureStorage_" + count)
+        {
             _linesList = new List<TextLine>();
             TextLine te = new TextLine();
             if (GetForeground() != null)
@@ -31,20 +33,15 @@ namespace SpaceVIL
             if (_elementFont != null)
                 te.SetFont(_elementFont);
             _linesList.Add(te);
-
-            //_minLineSpacer = output[0];
-            //_minFontY = output[1];
-            //_maxFontY = output[2];
-            //_lineHeight = output[2]; //Math.Abs(_maxFontY - _minFontY);
             GetDims();
-            
+
         }
 
-        internal int ScrollBlockUp(int cursorY) {
+        internal int ScrollBlockUp(int cursorY)
+        {
             int h = GetTextHeight();
             int curCoord = cursorY;
             if (h < _cursorYMax && globalYShift >= 0) return curCoord;
-            //if () return curCoord;
 
             curCoord -= globalYShift;
 
@@ -55,11 +52,11 @@ namespace SpaceVIL
             return (curCoord + globalYShift);
         }
 
-        internal int ScrollBlockDown(int cursorY) {
+        internal int ScrollBlockDown(int cursorY)
+        {
             int h = GetTextHeight();
             int curCoord = cursorY;
             if (h < _cursorYMax && h + globalYShift <= _cursorYMax) return curCoord;
-            //if () return curCoord;
 
             curCoord -= globalYShift;
 
@@ -71,20 +68,23 @@ namespace SpaceVIL
             return (curCoord + globalYShift);
         }
 
-        internal int GetCursorHeight() {
+        internal int GetCursorHeight()
+        {
             return (_lineHeight + _lineSpacer);
         }
 
-        internal void SetBlockWidth(int width, int curWidth) {
+        internal void SetBlockWidth(int width, int curWidth)
+        {
             if (GetParent() == null) return;
             Indents textMargin = TextMargin();
-            _cursorXMax = GetParent().GetWidth() - curWidth - GetParent().GetPadding().Left - 
+            _cursorXMax = GetParent().GetWidth() - curWidth - GetParent().GetPadding().Left -
                 GetParent().GetPadding().Right - textMargin.Left - textMargin.Right;
             SetAllowWidth();
             UpdLinesXShift();
         }
 
-        internal void SetBlockHeight(int height) {
+        internal void SetBlockHeight(int height)
+        {
             if (GetParent() == null) return;
             Indents textMargin = TextMargin();
             _cursorYMax = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom
@@ -93,7 +93,8 @@ namespace SpaceVIL
             UpdLinesYShift();
         }
 
-        internal void InitLines(int curWidth) {
+        internal void InitLines(int curWidth)
+        {
             Indents textMargin = TextMargin();
 
             _cursorXMax = GetParent().GetWidth() - curWidth - GetParent().GetPadding().Left
@@ -132,7 +133,8 @@ namespace SpaceVIL
             }
         }
 
-        internal int CheckLineWidth(int xpt, Point checkPoint) {
+        internal int CheckLineWidth(int xpt, Point checkPoint)
+        {
             int outPtX = xpt;
             int letCount = GetLineLetCount(checkPoint.Y);
             if (checkPoint.X > letCount)
@@ -140,7 +142,8 @@ namespace SpaceVIL
             return outPtX;
         }
 
-        private int GetLetPosInLine(int cPosY, int cPosX) {
+        private int GetLetPosInLine(int cPosY, int cPosX)
+        {
             return _linesList[cPosY].GetLetPosArray()[cPosX];
         }
 
@@ -179,7 +182,8 @@ namespace SpaceVIL
             AddNewLine(newText, _cursorPosition.Y + 1);
         }
 
-        internal void Clear() {
+        internal void Clear()
+        {
             _linesList[0].SetItemText("");
             RemoveLines(1, _linesList.Count - 1);
         }
@@ -201,7 +205,8 @@ namespace SpaceVIL
             return pos;
         }
 
-        internal Point CupsorPosToCoord(Point cPos) {
+        internal Point CupsorPosToCoord(Point cPos)
+        {
             Point coord = new Point(0, 0);
             coord.Y = GetLineY(cPos.Y);
 
@@ -226,7 +231,8 @@ namespace SpaceVIL
             return coord;
         }
 
-        internal Point ReplaceCursorAccordingCoord(Point realPos) {
+        internal Point ReplaceCursorAccordingCoord(Point realPos)
+        {
             realPos.Y -= GetParent().GetY() + GetParent().GetPadding().Top + globalYShift + TextMargin().Top;
             int lineNumb = realPos.Y / GetLineY(1);
             if (lineNumb >= GetCount())
@@ -263,15 +269,15 @@ namespace SpaceVIL
 
             UpdLinesYShift(); //Пока обновляются все, но в принципе, нужно только под fromLine
         }
-/*
-        private int GetLineXShift(int n)
-        {
-            if (_linesList.Count > n)
-                return _linesList[n].GetLineXShift();
-            else
-                return 0;
-        }
-*/
+        /*
+                private int GetLineXShift(int n)
+                {
+                    if (_linesList.Count > n)
+                        return _linesList[n].GetLineXShift();
+                    else
+                        return 0;
+                }
+        */
         private void UpdLinesYShift()
         {
             int inc = 0;
@@ -312,11 +318,13 @@ namespace SpaceVIL
             return (_lineHeight + _lineSpacer) * num;//_lineSpacer / 2 + 
         }
 
-        internal int GetCount() {
+        internal int GetCount()
+        {
             return _linesList.Count;
         }
 
-        internal void SetTextMargin(Indents margin) {
+        internal void SetTextMargin(Indents margin)
+        {
             //_text_margin = margin;
             foreach (TextLine var in _linesList)
             {
@@ -324,11 +332,13 @@ namespace SpaceVIL
             }
         }
 
-        private Indents TextMargin() {
+        private Indents TextMargin()
+        {
             return _linesList[0].GetMargin();
         }
 
-        private int[] GetDims() {
+        private int[] GetDims()
+        {
             int[] output = _linesList[0].GetFontDims();
             _minLineSpacer = output[0];
             _lineHeight = output[2];
@@ -376,7 +386,8 @@ namespace SpaceVIL
             //_linesList[_cursor_position.Y].UpdateData(UpdateType.Critical); //Doing in TextItem
         }
 
-        internal string GetTextInLine(int lineNum) {
+        internal string GetTextInLine(int lineNum)
+        {
             return _linesList[lineNum].GetItemText();
         }
 
@@ -386,7 +397,7 @@ namespace SpaceVIL
         }
 
         private string _wholeText = "";
-        
+
         internal string GetWholeText()
         {
             StringBuilder sb = new StringBuilder();
@@ -408,7 +419,8 @@ namespace SpaceVIL
             return _wholeText;
         }
 
-        internal Point SetText(string text, Point curPos) {
+        internal Point SetText(string text, Point curPos)
+        {
             if (text.Equals("") || text == null) Clear();
             else if (!text.Equals(GetWholeText()))
             {
@@ -417,7 +429,8 @@ namespace SpaceVIL
             return curPos;
         }
 
-        internal void SetLineSpacer(int lsp) {
+        internal void SetLineSpacer(int lsp)
+        {
             if (lsp < _minLineSpacer)
                 lsp = _minLineSpacer;
 
@@ -431,10 +444,11 @@ namespace SpaceVIL
             }
         }
 
-        internal int GetLineSpacer() {
+        internal int GetLineSpacer()
+        {
             return _lineSpacer;
         }
-    
+
         private Point SplitAndMakeLines(string text, Point curPos)
         {
             Clear();
@@ -459,7 +473,8 @@ namespace SpaceVIL
             return curPos;
         }
 
-        internal void CutText(Point fromReal, Point toReal) {
+        internal void CutText(Point fromReal, Point toReal)
+        {
             if (fromReal.Y == toReal.Y)
                 _linesList[toReal.Y].SetItemText(_linesList[toReal.Y].GetItemText().Remove(fromReal.X, toReal.X - fromReal.X));
             else
@@ -472,7 +487,8 @@ namespace SpaceVIL
             }
         }
 
-        internal Point PasteText(string pasteStr, Point _cursor_position) {
+        internal Point PasteText(string pasteStr, Point _cursor_position)
+        {
             string textBeg = _linesList[_cursor_position.Y].GetItemText().Substring(0, _cursor_position.X);
             string textEnd = "";
             if (_cursor_position.X < GetLineLetCount(_cursor_position.Y))
@@ -504,7 +520,7 @@ namespace SpaceVIL
                 _cursor_position.X = line[line.Length - 1].Length;
                 _cursor_position.Y += line.Length - 1;
             }
-            
+
             return _cursor_position;
         }
 
@@ -512,7 +528,8 @@ namespace SpaceVIL
         {
             //Point outPoint = CursorPosToCoord(point);
             int offset = _cursorXMax / 3;
-            if (isx) {
+            if (isx)
+            {
                 if (globalXShift + outPoint.X < 0)
                 {
                     globalXShift = -outPoint.X;
@@ -526,12 +543,12 @@ namespace SpaceVIL
                     globalXShift -= offset;
                     UpdLinesXShift();
                 }
-            
+
                 if (outPoint.Y + globalYShift < 0)
                 {
                     globalYShift = -outPoint.Y;
                     UpdLinesYShift();
-    
+
                 }
                 if (outPoint.Y + _lineHeight + globalYShift > _cursorYMax)
                 {
@@ -549,7 +566,8 @@ namespace SpaceVIL
         }
 
         Color _foreground = Color.Black;
-        internal void SetForeground(Color foreground) {
+        internal void SetForeground(Color foreground)
+        {
             if (_linesList != null && !foreground.Equals(GetForeground()))
             {
                 _foreground = foreground;
@@ -557,7 +575,8 @@ namespace SpaceVIL
                     te.SetForeground(foreground); //Вроде бы это больше не нужно
             }
         }
-        public Color GetForeground() {
+        public Color GetForeground()
+        {
             return _foreground;
         }
 
@@ -582,13 +601,13 @@ namespace SpaceVIL
                     //Console.Write(h + " ");
                 }
                 //Console.WriteLine();
-
+                w += _cursorXMax / 3;
                 SetWidth(w);
                 SetHeight(h);
 
                 byte[] bigByte = new byte[h * w * 4];
                 int bigOff = 0;
-                
+
                 foreach (TextPrinter tptmp in tpLines)
                 {
                     if (tptmp == null || tptmp.Texture == null)
@@ -597,7 +616,7 @@ namespace SpaceVIL
                             for (int j = 0; j < lineHeigh; j++)
                                 for (int i = 0; i < w; i++)
                                     bigByte[bigOff + p + i * 4 + j * (w * 4)] = 0;
-                        
+
                         bigOff += lineHeigh * w * 4;
                         continue;
                     }
@@ -616,8 +635,10 @@ namespace SpaceVIL
                             }
                         }
 
-                        for (int j = tptmp.HeightTexture; j < lineHeigh; j++) {
-                            for (int i = 0; i < w; i++) {
+                        for (int j = tptmp.HeightTexture; j < lineHeigh; j++)
+                        {
+                            for (int i = 0; i < w; i++)
+                            {
                                 bigByte[bigOff + p + i * 4 + j * (w * 4)] = 0;
                             }
                         }
@@ -650,6 +671,26 @@ namespace SpaceVIL
             {
                 Monitor.Exit(textInputLock);
             }
+        }
+
+        internal int GetScrollStep() {
+            return GetLineY(1);
+        }
+        internal int GetScrollYOffset() {
+            return globalYShift;
+        }
+        internal void SetScrollYOffset(int offset)
+        {
+            globalYShift = offset;
+            UpdLinesYShift();
+        }
+        internal int GetScrollXOffset() {
+            return globalXShift;
+        }
+        internal void SetScrollXOffset(int offset)
+        {
+            globalXShift = offset;
+            UpdLinesXShift();
         }
     }
 }
