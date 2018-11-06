@@ -1,9 +1,5 @@
 package com.spvessel;
 
-import com.spvessel.View.*;
-import com.spvessel.Windows.*;
-import static org.lwjgl.glfw.GLFW.*;
-
 public class App {
     public static void main(String[] args) {
         MainWindow mw = new MainWindow();

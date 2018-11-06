@@ -146,7 +146,7 @@ namespace SpaceVIL
 
             //3
             triangles.AddRange(RectToTri(new PointF(cornerRadius.leftBottom, height / 2f), new PointF(width / 2f, height)));
-            triangles.AddRange(RectToTri(new PointF(0, height / 2f), new PointF(cornerRadius.leftBottom, height - cornerRadius.leftBottom)));
+            triangles.AddRange(RectToTri(new PointF(0.0f, height / 2f), new PointF(cornerRadius.leftBottom, height - cornerRadius.leftBottom)));
 
             //4
             triangles.AddRange(RectToTri(new PointF(width / 2f, height / 2f), new PointF(width - cornerRadius.rightBottom, height)));
@@ -790,6 +790,88 @@ namespace SpaceVIL
             return MakeBorder(border, thickness);
         }
 
+        static internal List<float[]> GetRoundSquareBorder(CornerRadius cornerRadius, float width, float height, 
+            float thickness, int x, int y)
+        {
+
+            if (cornerRadius.leftTop < 0)
+                cornerRadius.leftTop = 0;
+            if (cornerRadius.rightTop < 0)
+                cornerRadius.rightTop = 0;
+            if (cornerRadius.leftBottom < 0)
+                cornerRadius.leftBottom = 0;
+            if (cornerRadius.rightBottom < 0)
+                cornerRadius.rightBottom = 0;
+
+            List<BorderSection> border = new List<BorderSection>();
+            //Начало координат в левом углу
+
+            //1
+            border.Add(new BorderSection(cornerRadius.leftTop, 0.0f, width / 2f, 0.0f, width / 2f, height / 2f));
+            //triangles.AddRange(RectToTri(new PointF(cornerRadius.leftTop, 0.0f), new PointF(width / 2f, height / 2f)));
+            border.Add(new BorderSection(0.0f, cornerRadius.leftTop, 0.0f, height / 2f, cornerRadius.leftTop, height / 2f));
+            //triangles.AddRange(RectToTri(new PointF(0.0f, cornerRadius.leftTop), new PointF(cornerRadius.leftTop, height / 2f)));
+
+            //2
+            //triangles.AddRange(RectToTri(new PointF(width / 2f, 0.0f), new PointF(width - cornerRadius.rightTop, height / 2f)));
+            border.Add(new BorderSection(width / 2f, 0.0f, width - cornerRadius.rightTop, 0.0f, width - cornerRadius.rightTop, height / 2f));
+            //triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightTop, cornerRadius.rightTop), new PointF(width, height / 2f)));
+            border.Add(new BorderSection(width, height / 2f, width, cornerRadius.rightTop, width - cornerRadius.rightTop, cornerRadius.rightTop));
+
+            //3
+            //triangles.AddRange(RectToTri(new PointF(cornerRadius.leftBottom, height / 2f), new PointF(width / 2f, height)));
+            border.Add(new BorderSection(width / 2f, height, cornerRadius.leftBottom, height, cornerRadius.leftBottom, height / 2f));
+            //triangles.AddRange(RectToTri(new PointF(0.0f, height / 2f), new PointF(cornerRadius.leftBottom, height - cornerRadius.leftBottom)));
+            border.Add(new BorderSection(0.0f, height / 2f, 0.0f, height - cornerRadius.leftBottom, cornerRadius.leftBottom, height - cornerRadius.leftBottom));
+
+            //4
+            //triangles.AddRange(RectToTri(new PointF(width / 2f, height / 2f), new PointF(width - cornerRadius.rightBottom, height)));
+            border.Add(new BorderSection(width - cornerRadius.rightBottom, height, width / 2f, height, width / 2f, height / 2f));
+            //triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightBottom, height / 2f), new PointF(width, height - cornerRadius.rightBottom)));
+            border.Add(new BorderSection(width, height - cornerRadius.rightBottom, width, height / 2f, width - cornerRadius.rightBottom, height / 2f));
+
+
+            //if (radius < 1)
+            //    return triangles;
+
+            List<float[]> tmpList = new List<float[]>();
+            float x0, y0;
+
+            if (cornerRadius.rightBottom >= 1)
+            {
+                x0 = width - cornerRadius.rightBottom + x;
+                y0 = height - cornerRadius.rightBottom + y;
+                tmpList.AddRange(CountCircleSector(0, 90, x0, y0, cornerRadius.rightBottom));
+            }
+
+            if (cornerRadius.rightTop >= 1)
+            {
+                x0 = width - cornerRadius.rightTop + x;
+                y0 = cornerRadius.rightTop + y;
+                tmpList.AddRange(CountCircleSector(270, 360, x0, y0, cornerRadius.rightTop));
+            }
+
+            if (cornerRadius.leftTop >= 1)
+            {
+                x0 = cornerRadius.leftTop + x;
+                y0 = cornerRadius.leftTop + y;
+                tmpList.AddRange(CountCircleSector(180, 270, x0, y0, cornerRadius.leftTop));
+            }
+
+            if (cornerRadius.leftBottom >= 1)
+            {
+                x0 = cornerRadius.leftBottom + x;
+                y0 = height - cornerRadius.leftBottom + y;
+                tmpList.AddRange(CountCircleSector(90, 180, x0, y0, cornerRadius.leftBottom));
+            }
+
+            for (int i = 0; i < tmpList.Count / 3; i++)
+            {
+                border.Add(new BorderSection(tmpList.ElementAt(i * 3 + 1)[0], tmpList.ElementAt(i * 3 + 1)[1], tmpList.ElementAt(i * 3 + 2)[0], tmpList.ElementAt(i * 3 + 2)[1], tmpList.ElementAt(i * 3)[0], tmpList.ElementAt(i * 3)[1]));
+            }
+
+            return MakeBorder(border, thickness);
+        }
 
         private static List<float[]> MakeBorder(List<BorderSection> borders, float thickness)
         {
