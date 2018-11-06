@@ -70,12 +70,6 @@ public class TextArea extends VisualItem {
         _area.setSpacing(0, 5);
     }
 
-    private void updateListAreaAttributes(InterfaceItem sender) {
-        updateVListArea();
-        _area.setFocus();
-        updateHListArea();
-    }
-
     private long v_size = 0;
     private long h_size = 0;
 
@@ -193,6 +187,7 @@ public class TextArea extends VisualItem {
 
             vScrollBar.slider.eventValueChanged.add((sender) -> updateVListArea());
             hScrollBar.slider.eventValueChanged.add((sender) -> updateHListArea());
+            updateElements();
         }
 
     public void setText(String text) {

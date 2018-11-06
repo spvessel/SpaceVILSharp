@@ -69,12 +69,6 @@ namespace SpaceVIL
             _area.SetSpacing(0, 5);
         }
 
-        private void UpdateListAreaAttributes(object sender)
-        {
-            UpdateVListArea();
-            _area.SetFocus();
-            UpdateHListArea();
-        }
         private Int64 v_size = 0;
         private Int64 h_size = 0;
         private void UpdateVListArea()
@@ -196,6 +190,7 @@ namespace SpaceVIL
 
             VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); };
             HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };
+            UpdateElements();
         }
 
         public void SetText(String text)
