@@ -10,6 +10,21 @@ namespace SpaceVIL
         static int count = 0;
         private Grid _grid = new Grid(2, 2);
         private TextBlock _area = new TextBlock();
+        public VisualItem GetTextBlock()
+        {
+            return _area;
+        }
+        public bool IsEditable
+        {
+            get
+            {
+                return _area.IsEditable;
+            }
+            set
+            {
+                _area.IsEditable = value;
+            }
+        }
 
         public VerticalScrollBar VScrollBar = new VerticalScrollBar();
         public HorizontalScrollBar HScrollBar = new HorizontalScrollBar();
