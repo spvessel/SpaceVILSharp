@@ -91,10 +91,12 @@ namespace SpaceVIL
             }
         }
 
-        internal int GetScrollYStep() {
+        internal int GetScrollYStep()
+        {
             return _textureStorage.GetScrollStep();
         }
-        internal int GetScrollXStep() {
+        internal int GetScrollXStep()
+        {
             return scrollXStep;
         }
         internal int GetScrollYOffset()
@@ -113,7 +115,8 @@ namespace SpaceVIL
         {
             return _textureStorage.GetScrollXOffset();
         }
-        internal void SetScrollXOffset(int offset) {
+        internal void SetScrollXOffset(int offset)
+        {
             int oldOff = _textureStorage.GetScrollXOffset();
             _textureStorage.SetScrollXOffset(offset);
             int diff = offset - oldOff;
@@ -275,7 +278,7 @@ namespace SpaceVIL
                     }
                     else
                         if (_isSelect && !InsteadKeyMods.Contains(args.Key))
-                            UnselectText();
+                        UnselectText();
                 }
 
                 if (args.Key == KeyCode.Left) //arrow left
@@ -375,7 +378,8 @@ namespace SpaceVIL
             {
                 byte[] input = BitConverter.GetBytes(args.Character);
                 string str = Encoding.UTF32.GetString(input);
-                if (_isSelect) {
+                if (_isSelect)
+                {
                     UnselectText();
                     PrivCutText();
                 }

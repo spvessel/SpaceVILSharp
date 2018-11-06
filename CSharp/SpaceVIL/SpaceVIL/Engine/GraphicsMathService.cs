@@ -207,6 +207,9 @@ namespace SpaceVIL
 
         static internal List<float[]> GetRoundSquare(float width = 100, float height = 100, float radius = 0.0f, int x = 0, int y = 0)
         {
+            if (width <= 0 || height <= 0)
+                return null;
+
             if (radius < 0)
                 radius = 0;
 
@@ -293,6 +296,8 @@ namespace SpaceVIL
         }
         static internal List<float[]> ToGL(BaseItem item, WindowLayout handler) //where TLayout : VisualItem
         {
+            if (item.GetTriangles() == null)
+                return null;
             List<float[]> result = new List<float[]>();
 
             foreach (var vector in item.GetTriangles())
