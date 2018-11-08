@@ -1,8 +1,12 @@
 package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceTextShortcuts;
+import com.spvessel.Decorations.Indents;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.ScrollBarVisibility;
+
+import java.awt.*;
 
 public class TextArea extends VisualItem {
     static int count = 0;
@@ -153,6 +157,7 @@ public class TextArea extends VisualItem {
         super.setWidth(width);
         updateHorizontalSlider();
         hScrollBar.slider.updateHandler();
+        _area.setWidth(width);
     }
 
     @Override
@@ -160,6 +165,7 @@ public class TextArea extends VisualItem {
         super.setHeight(height);
         updateVerticalSlider();
         vScrollBar.slider.updateHandler();
+        _area.setHeight(height);
     }
 
     public void updateElements() {
@@ -210,5 +216,127 @@ public class TextArea extends VisualItem {
         if (inner_style != null) {
             hScrollBar.setStyle(inner_style);
         }
+    }
+
+    public void setLineSpacer(int lineSpacer) {
+        _area.setLineSpacer(lineSpacer);
+    }
+
+    public int getLineSpacer() {
+        return _area.getLineSpacer();
+    }
+
+    public void setTextMargin(Indents margin) {
+        _area.setTextMargin(margin);
+    }
+
+    public Indents getTextMargin() {
+        return _area.getTextMargin();
+    }
+
+    public void setFont(Font font) {
+        _area.setFont(font);
+    }
+
+    public Font getFont() {
+        return _area.getFont();
+    }
+
+    public int getTextWidth() {
+        return _area.getWidth();
+    }
+
+    public int getTextHeight() {
+        return _area.getTextHeight();
+    }
+
+    public void setForeground(Color color) {
+        _area.setForeground(color);
+    }
+
+    public void setForeground(int r, int g, int b) {
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 255)
+            r = 255;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 255)
+            g = 255;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 255)
+            b = 255;
+        setForeground(new Color(r, g, b, 255));
+    }
+
+    public void setForeground(int r, int g, int b, int a) {
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 255)
+            r = 255;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 255)
+            g = 255;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 255)
+            b = 255;
+        setForeground(new Color(r, g, b, a));
+    }
+
+    public void setForeground(float r, float g, float b) {
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 1.0f)
+            r = 1.0f;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 1.0f)
+            g = 1.0f;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 1.0f)
+            b = 1.0f;
+        setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
+    }
+
+    public void setForeground(float r, float g, float b, float a) {
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 1.0f)
+            r = 1.0f;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 1.0f)
+            g = 1.0f;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 1.0f)
+            b = 1.0f;
+        setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
+    }
+
+    public Color getForeground() {
+        return _area.getForeground();
+    }
+
+    public boolean isEditable() {
+        return _area.isEditable();
+    }
+
+    public void setEditable(boolean value) {
+        _area.setEditable(value);
+    }
+
+    @Override
+    public void setFocused(boolean value) {
+        super.setFocused(value);
+        _area.setFocused(value);
+    }
+
+    public void clearArea() {
+        _area.clear();
     }
 }

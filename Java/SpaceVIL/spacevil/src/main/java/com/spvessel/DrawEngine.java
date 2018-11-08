@@ -1315,15 +1315,15 @@ public class DrawEngine {
 
         if (shell instanceof VisualItem) {
             VisualItem vi = (VisualItem) shell;
-            if (vi.border.getThickness() > 0) {
+            if (vi.getBorder().getThickness() > 0) {
                 CustomShape border = new CustomShape();
-                border.setBackground(vi.border.getFill());
+                border.setBackground(vi.getBorder().getFill());
                 border.setSize(vi.getWidth(), vi.getHeight());
                 border.setPosition(vi.getX(), vi.getY());
                 border.setParent(vi);
                 border.setHandler(vi.getHandler());
                 border.setTriangles(GraphicsMathService.getRoundSquareBorder(vi.getWidth(), vi.getHeight(),
-                        vi.border.getRadius(), vi.border.getThickness(), 0, 0));
+                        vi.getBorder().getRadius(), vi.getBorder().getThickness(), 0, 0));
                 drawShell(border);
             }
         }
@@ -1370,8 +1370,30 @@ public class DrawEngine {
         shadow.setTriangles(shell.getTriangles());
         drawShell(shadow, true);
         //////////
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 
+        int res = (int)shell.getShadowRadius();
+        float[] weights = new float[res];
+        float sum, sigma2 = 4.0f;
+        weights[0] = gauss(0, sigma2);
+        sum = weights[0];
+        for (int i = 1; i < res; i++)
+        {
+            weights[i] = gauss(i, sigma2);
+            sum += 2 * weights[i];
+        }
+        for (int i = 0; i < res; i++)
+            weights[i] /= sum;
+
+        drawShadowPart(weights, res, fbo_texture, 1);
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+        drawShadowPart(weights, res, fbo_texture, 0);
+
+
+        glDeleteFramebuffersEXT(fbo_handle);
+        glDeleteTextures(fbo_texture);
+    }
+
+    private void drawShadowPart(float[] weights, int res, int fbo_texture, int isFirst) {
         _blur.useShader();
         float i_x0 = -1.0f;
         float i_y0 = 1.0f;
@@ -1419,20 +1441,35 @@ public class DrawEngine {
             glUniform1i(location, 0);
         int location_frame = glGetUniformLocation((int) _blur.getProgramID(), "frame");
         if (location_frame >= 0)
-            glUniform2fv(location_frame,
-                    new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
-        int location_direction = glGetUniformLocation((int) _blur.getProgramID(), "direction");
-        if (location_direction >= 0)
-            glUniform2fv(location_direction, new float[] { shell.getShadowRadius(), shell.getShadowRadius() });
+            glUniform2fv(location_frame, new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
 
+        //int location_direction = glGetUniformLocation((int) _blur.getProgramID(), "direction");
+        //if (location_direction >= 0)
+        //    glUniform2fv(location_direction, new float[] { shell.getShadowRadius(), shell.getShadowRadius() });
+
+        int location_res = glGetUniformLocation((int) _blur.getProgramID(), "res");
+        if (location_res >= 0)
+            glUniform1i(location_res, res);
+
+        int location_weights = glGetUniformLocation((int) _blur.getProgramID(), "weights");
+        if (location_weights >= 0)
+            glUniform1fv(location_weights, weights);
+
+        int location_isfirst = glGetUniformLocation((int) _blur.getProgramID(), "isFirst");
+        if (location_isfirst >= 0)
+            glUniform1i(location_isfirst, isFirst);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
+    }
 
-        glDeleteFramebuffersEXT(fbo_handle);
-        glDeleteTextures(fbo_texture);
+    float gauss(float x, float sigma)
+    {
+        double ans;
+        ans = Math.exp(-(x * x) / (2f * sigma * sigma)) / Math.sqrt(2 * Math.PI * sigma * sigma);
+        return (float)ans;
     }
 
     void drawText(InterfaceTextContainer text) {

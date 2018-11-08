@@ -1230,14 +1230,7 @@ namespace SpaceVIL
             uint[] draw_bufs = new uint[] { GL_COLOR_ATTACHMENT0_EXT };
             glDrawBuffers(1, draw_bufs);
 
-            uint result = glCheckFramebufferStatus(GL_FRAMEBUFFER_EXT);
-            if (result != GL_FRAMEBUFFER_COMPLETE_EXT)
-            {
-                Console.WriteLine("Framebuffer error " + result);
-                glDeleteFramebuffers(1, fbo_handle);
-                glDeleteTextures(1, fbo_texture);
-                return;
-            }
+           
 
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo_handle[0]);
             //////////
@@ -1248,10 +1241,32 @@ namespace SpaceVIL
             shadow.SetParent(shell.GetParent());
             shadow.SetHandler(shell.GetHandler());
             shadow.SetTriangles(shell.GetTriangles());
+            _primitive.UseShader();
             DrawShell(shadow, true);
             //////////
-            glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
 
+            int res = (int)shell.GetShadowRadius();
+            float[] weights = new float[res];
+            float sum, sigma2 = 4.0f;
+            weights[0] = Gauss(0, sigma2);
+            sum = weights[0];
+            for (int i = 1; i < res; i++)
+            {
+                weights[i] = Gauss(i, sigma2);
+                sum += 2 * weights[i];
+            }
+            for (int i = 0; i < res; i++)
+                weights[i] /= sum;
+
+            DrawShadowPart(weights, res, fbo_texture, 1);
+            glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
+            DrawShadowPart(weights, res, fbo_texture, 1);
+
+            glDeleteFramebuffers(1, fbo_handle);
+            glDeleteTextures(1, fbo_texture);
+        }
+
+        private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture, int isFirst) {
             _blur.UseShader();
             float i_x0 = -1.0f;
             float i_y0 = 1.0f;
@@ -1287,8 +1302,9 @@ namespace SpaceVIL
             glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * sizeof(float), IntPtr.Zero + (3 * sizeof(float)));
             glEnableVertexAttribArray(1);
 
+            
             glBindTexture(GL_TEXTURE_2D, fbo_texture[0]);
-            // glActiveTexture(GL_TEXTURE0);
+            glActiveTexture(GL_TEXTURE0);
 
             int location = glGetUniformLocation(_blur.GetProgramID(), "tex");
             if (location >= 0)
@@ -1306,26 +1322,7 @@ namespace SpaceVIL
             // if (location_direction >= 0)
             //     glUniform2fv(location_direction, 1, new float[2] { shell.GetShadowRadius(), shell.GetShadowRadius() });
 
-            int res = (int)shell.GetShadowRadius();
-            float[] weights = new float[res];
-            float sum, sigma2 = 4.0f;
-            weights[0] = Gauss(0, sigma2);
-            sum = weights[0];
-            for (int i = 1; i < res; i++)
-            {
-                weights[i] = Gauss(i, sigma2);
-                sum += 2 * weights[i];
-            }
-            for (int i = 0; i < res; i++)
-                weights[i] /= sum;
-
-            int location_res = glGetUniformLocation(_blur.GetProgramID(), "res");
-            if (location_res >= 0)
-                glUniform1i(location_res, res);
-            else
-            {
-                Console.WriteLine("not find res");
-            }
+            /////////////////////////////////
 
             int location_weights = glGetUniformLocation(_blur.GetProgramID(), "weights");
             if (location_weights >= 0)
@@ -1335,14 +1332,31 @@ namespace SpaceVIL
                 Console.WriteLine("not find weights");
             }
 
+            int location_res = glGetUniformLocation(_blur.GetProgramID(), "res");
+            if (location_res >= 0)
+                glUniform1i(location_res, res);
+            else
+            {
+                Console.WriteLine("not find res");
+            }
+
+            int location_isfirst = glGetUniformLocation(_blur.GetProgramID(), "isFirst");
+            if (location_isfirst >= 0)
+                glUniform1i(location_isfirst, isFirst);
+            else
+            {
+                Console.WriteLine("not find isfirst");
+            }
+
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
 
             glDisableVertexAttribArray(0);
             glDisableVertexAttribArray(1);
+            //Console.WriteLine("isFirst " + isFirst);
 
-            glDeleteFramebuffers(1, fbo_handle);
-            glDeleteTextures(1, fbo_texture);
+            glDeleteBuffers(2, buffers);
         }
+
         float Gauss(float x, float sigma)
         {
             double ans;
