@@ -1201,8 +1201,8 @@ namespace SpaceVIL
                         vi.GetWidth(),
                         vi.GetHeight(),
                         vi.GetBorder().Thickness,
-                        0,
-                        0
+                        vi.GetX(),
+                        vi.GetY()
                         ));
                     DrawShell(border);
                 }
