@@ -37,7 +37,7 @@ namespace SpaceVIL
         public Indents Padding;// = new Indents();
         public Spacing Spacing;// = new Spacing();
         public Indents Margin;// = new Indents();
-        public int BorderRadius;
+        public CornerRadius BorderRadius;
         public int BorderThickness;
         public Color BorderFill;
         public List<float[]> Shape;// = new List<float[]>();
@@ -181,7 +181,7 @@ namespace SpaceVIL
             BorderRadius = border.Radius;
             BorderThickness = border.Thickness;
         }
-        public void SetBorder(Color fill, int radius, int thickness)
+        public void SetBorder(Color fill, CornerRadius radius, int thickness)
         {
             BorderFill = fill;
             BorderRadius = radius;
@@ -273,7 +273,7 @@ namespace SpaceVIL
             style.Height = 10;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
-            style.BorderRadius = 6;
+            style.BorderRadius = new CornerRadius(6);
             ItemState hovered = new ItemState(Color.FromArgb(60, 255, 255, 255));
             style.AddItemState(ItemStateType.Hovered, hovered);
             ItemState pressed = new ItemState(Color.FromArgb(30, 0, 0, 60));
@@ -293,7 +293,7 @@ namespace SpaceVIL
             style.Width = 10;
             style.Height = 10;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            style.BorderRadius = 6;
+            style.BorderRadius = new CornerRadius(6);
             style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(60, 255, 255, 255)
@@ -866,7 +866,7 @@ namespace SpaceVIL
             style.MinHeight = 20;
             style.MinWidth = 20;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            style.BorderRadius = 10;
+            style.BorderRadius = new CornerRadius(10);
 
             Style textline_style = GetLabelStyle();
             textline_style.WidthPolicy = SizePolicy.Expand;
@@ -911,7 +911,7 @@ namespace SpaceVIL
             marker_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             marker_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Right;
             marker_style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
-            marker_style.BorderRadius = 4;
+            marker_style.BorderRadius = new CornerRadius(4);
             marker_style.AddItemState(ItemStateType.Toggled, new ItemState()
             {
                 Background = Color.FromArgb(255, 60, 60, 60)
@@ -1108,7 +1108,7 @@ namespace SpaceVIL
             style.HeightPolicy = SizePolicy.Fixed;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(5, 0, 5, 0);
-            style.BorderRadius = 4;
+            style.BorderRadius = new CornerRadius(4);
 
             return style;
         }

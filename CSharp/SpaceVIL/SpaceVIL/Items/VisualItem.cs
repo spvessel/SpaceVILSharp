@@ -226,7 +226,19 @@ namespace SpaceVIL
         }
 
         //item
-        public Border Border = new Border();
+        private Border _border = new Border();
+        public Border GetBorder()
+        {
+            return _border;
+        }
+
+        public void SetBorder(Border border)
+        {
+            _border = border;
+            GetState(ItemStateType.Base).Border = _border;
+            UpdateState();
+        }
+
         protected Dictionary<ItemStateType, ItemState> states = new Dictionary<ItemStateType, ItemState>();
         protected ItemStateType _state = ItemStateType.Base;
         internal ItemStateType GetCurrentState()
@@ -480,16 +492,17 @@ namespace SpaceVIL
         internal virtual void UpdateState()
         {
             base.SetBackground(GetState(_state).Background);
-            Border.Fill = GetState(_state).Border.Fill;
+            // GetBorder().Fill = GetState(_state).Border.Fill;
             Border br = GetState(_state).Border;
-            if (br.Thickness > 0)
-            {
-                if (br.Radius < 0)
-                    Border.Radius = GetState(ItemStateType.Base).Border.Radius;
-                else
-                    Border.Radius = GetState(_state).Border.Radius;
-                Border.Thickness = GetState(_state).Border.Thickness;
-            }
+            _border = br;
+            // if (br.Thickness > 0)
+            // {
+            //     if (!br.IsVisible)
+            //         GetBorder().Radius = GetState(ItemStateType.Base).Border.Radius;
+            //     else
+            //         GetBorder().Radius = GetState(_state).Border.Radius;
+            //     GetBorder().Thickness = GetState(_state).Border.Thickness;
+            // }
 
             if (GetState(_state).Shape != null)
                 IsCustom = GetState(_state).Shape;
@@ -499,15 +512,15 @@ namespace SpaceVIL
             {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Disabled).Background));
 
-                Border.Fill = GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Disabled).Border.Fill);
+                GetBorder().Fill = GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Disabled).Border.Fill);
                 br = GetState(ItemStateType.Disabled).Border;
                 if (br.Thickness > 0)
                 {
-                    if (br.Radius < 0)
-                        Border.Radius = GetState(ItemStateType.Base).Border.Radius;
+                    if (!br.IsVisible)
+                        GetBorder().Radius = GetState(ItemStateType.Base).Border.Radius;
                     else
-                        Border.Radius = GetState(ItemStateType.Disabled).Border.Radius;
-                    Border.Thickness = GetState(ItemStateType.Disabled).Border.Thickness;
+                        GetBorder().Radius = GetState(ItemStateType.Disabled).Border.Radius;
+                    GetBorder().Thickness = GetState(ItemStateType.Disabled).Border.Thickness;
                 }
                 return;
             }
@@ -516,15 +529,15 @@ namespace SpaceVIL
             {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Focused).Background));
 
-                Border.Fill = GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Focused).Border.Fill);
+                GetBorder().Fill = GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Focused).Border.Fill);
                 br = GetState(ItemStateType.Focused).Border;
                 if (br.Thickness > 0)
                 {
-                    if (br.Radius < 0)
-                        Border.Radius = GetState(ItemStateType.Base).Border.Radius;
+                    if (!br.IsVisible)
+                        GetBorder().Radius = GetState(ItemStateType.Base).Border.Radius;
                     else
-                        Border.Radius = GetState(ItemStateType.Focused).Border.Radius;
-                    Border.Thickness = GetState(ItemStateType.Focused).Border.Thickness;
+                        GetBorder().Radius = GetState(ItemStateType.Focused).Border.Radius;
+                    GetBorder().Thickness = GetState(ItemStateType.Focused).Border.Thickness;
                 }
             }
 
@@ -532,15 +545,18 @@ namespace SpaceVIL
             {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Hovered).Background));
 
-                Border.Fill = GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Hovered).Border.Fill);
-                br = GetState(ItemStateType.Hovered).Border;
-                if (br.Thickness > 0)
+                Border h_br = new Border();
+                h_br = GetState(ItemStateType.Hovered).Border;
+                h_br.Fill = GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Hovered).Border.Fill);
+
+                if (h_br.Thickness > 0)
                 {
-                    if (br.Radius < 0)
-                        Border.Radius = GetState(ItemStateType.Base).Border.Radius;
-                    else
-                        Border.Radius = GetState(ItemStateType.Hovered).Border.Radius;
-                    Border.Thickness = GetState(ItemStateType.Hovered).Border.Thickness;
+                    // if (!br.IsVisible)
+                    //     GetBorder().Radius = GetState(ItemStateType.Base).Border.Radius;
+                    // else
+                    //     GetBorder().Radius = GetState(ItemStateType.Hovered).Border.Radius;
+                    // GetBorder().Thickness = GetState(ItemStateType.Hovered).Border.Thickness;
+                    _border = h_br;
                 }
             }
 
@@ -548,15 +564,15 @@ namespace SpaceVIL
             {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Pressed).Background));
 
-                Border.Fill = GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Pressed).Border.Fill);
+                GetBorder().Fill = GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Pressed).Border.Fill);
                 br = GetState(ItemStateType.Pressed).Border;
                 if (br.Thickness > 0)
                 {
-                    if (br.Radius < 0)
-                        Border.Radius = GetState(ItemStateType.Base).Border.Radius;
+                    if (!br.IsVisible)
+                        GetBorder().Radius = GetState(ItemStateType.Base).Border.Radius;
                     else
-                        Border.Radius = GetState(ItemStateType.Pressed).Border.Radius;
-                    Border.Thickness = GetState(ItemStateType.Pressed).Border.Thickness;
+                        GetBorder().Radius = GetState(ItemStateType.Pressed).Border.Radius;
+                    GetBorder().Thickness = GetState(ItemStateType.Pressed).Border.Thickness;
                 }
             }
         }
@@ -672,7 +688,8 @@ namespace SpaceVIL
                     return GraphicsMathService.ToGL(UpdateShape(), GetHandler());
             }
 
-            SetTriangles(GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));
+            // SetTriangles(GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));
+            SetTriangles(GraphicsMathService.GetRoundSquare(GetBorder().Radius, GetWidth(), GetHeight(), GetX(), GetY()));
             //GetState(ItemStateType.Base).Shape = new CustomFigure(true, GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));
             return GraphicsMathService.ToGL(this as IBaseItem, GetHandler());
         }
@@ -696,9 +713,9 @@ namespace SpaceVIL
             SetPadding(style.Padding);
             SetSpacing(style.Spacing);
             SetMargin(style.Margin);
-            Border.Radius = style.BorderRadius;
-            Border.Thickness = style.BorderThickness;
-            Border.Fill = style.BorderFill;
+            GetBorder().Radius = style.BorderRadius;
+            GetBorder().Thickness = style.BorderThickness;
+            GetBorder().Fill = style.BorderFill;
             SetVisible(style.IsVisible);
             RemoveAllItemStates();
 
@@ -735,9 +752,9 @@ namespace SpaceVIL
             style.Margin = new Indents(GetMargin().Left, GetMargin().Top, GetMargin().Right, GetMargin().Bottom);
             style.Spacing = new Spacing(GetSpacing().Horizontal, GetSpacing().Vertical);
             style.Alignment = GetAlignment();
-            style.BorderFill = Border.Fill;
-            style.BorderRadius = Border.Radius;
-            style.BorderThickness = Border.Thickness;
+            style.BorderFill = GetBorder().Fill;
+            style.BorderRadius = GetBorder().Radius;
+            style.BorderThickness = GetBorder().Thickness;
             style.IsVisible = IsVisible();
             if (IsCustom != null)
             {

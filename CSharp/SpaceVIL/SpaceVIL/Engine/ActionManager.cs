@@ -5,7 +5,7 @@ using System.Collections.Concurrent;
 
 namespace SpaceVIL
 {
-    internal class ActionManager
+    internal sealed class ActionManager
     {
         internal ConcurrentQueue<EventTask> StackEvents = new ConcurrentQueue<EventTask>();
 

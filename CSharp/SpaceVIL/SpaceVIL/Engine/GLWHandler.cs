@@ -16,7 +16,7 @@ namespace SpaceVIL
         Focus,
         Resize,
     }*/
-    internal class GLWHandler
+    internal sealed class GLWHandler
     {
         //cursors 
         Glfw.Cursor _arrow;

@@ -13,7 +13,7 @@ using static GL.WGL.OpenWGL;
 
 namespace SpaceVIL
 {
-    internal class Shader// : GL.WGL.OpenWGL
+    internal sealed class Shader// : GL.WGL.OpenWGL
     {
         const uint Vertex = 0x8B31;
         const uint Fragment = 0x8B30;

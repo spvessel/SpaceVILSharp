@@ -5,22 +5,6 @@ using System.Linq;
 
 namespace SpaceVIL
 {
-    public struct CornerRadius
-    {
-        public float leftTop;
-        public float rightTop;
-        public float leftBottom;
-        public float rightBottom;
-
-        public CornerRadius(float lt, float rt, float lb, float rb)
-        {
-            leftTop = lt;
-            rightTop = rt;
-            leftBottom = lb;
-            rightBottom = rb;
-        }
-    }
-
     internal class BorderSection
     {
         internal float thickness = 0;
@@ -119,10 +103,8 @@ namespace SpaceVIL
             };
         }
 
-        static internal List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100,
-            int x = 0, int y = 0)
+        static internal List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100, int x = 0, int y = 0)
         {
-
             if (cornerRadius.leftTop < 0)
                 cornerRadius.leftTop = 0;
             if (cornerRadius.rightTop < 0)
@@ -137,20 +119,20 @@ namespace SpaceVIL
             //Начало координат в левом углу
 
             //1
-            triangles.AddRange(RectToTri(new PointF(cornerRadius.leftTop, 0.0f), new PointF(width / 2f, height / 2f)));
-            triangles.AddRange(RectToTri(new PointF(0.0f, cornerRadius.leftTop), new PointF(cornerRadius.leftTop, height / 2f)));
+            triangles.AddRange(RectToTri(new PointF(cornerRadius.leftTop + x, y), new PointF(width / 2f + x, height / 2f + y)));
+            triangles.AddRange(RectToTri(new PointF(x, cornerRadius.leftTop + y), new PointF(cornerRadius.leftTop + x, height / 2f + y)));
 
             //2
-            triangles.AddRange(RectToTri(new PointF(width / 2f, 0.0f), new PointF(width - cornerRadius.rightTop, height / 2f)));
-            triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightTop, cornerRadius.rightTop), new PointF(width, height / 2f)));
+            triangles.AddRange(RectToTri(new PointF(width / 2f + x, y), new PointF(width - cornerRadius.rightTop + x, height / 2f + y)));
+            triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightTop + x, cornerRadius.rightTop + y), new PointF(width + x, height / 2f + y)));
 
             //3
-            triangles.AddRange(RectToTri(new PointF(cornerRadius.leftBottom, height / 2f), new PointF(width / 2f, height)));
-            triangles.AddRange(RectToTri(new PointF(0.0f, height / 2f), new PointF(cornerRadius.leftBottom, height - cornerRadius.leftBottom)));
+            triangles.AddRange(RectToTri(new PointF(cornerRadius.leftBottom + x, height / 2f + y), new PointF(width / 2f + x, height + y)));
+            triangles.AddRange(RectToTri(new PointF(x, height / 2f + y), new PointF(cornerRadius.leftBottom + x, height - cornerRadius.leftBottom + y)));
 
             //4
-            triangles.AddRange(RectToTri(new PointF(width / 2f, height / 2f), new PointF(width - cornerRadius.rightBottom, height)));
-            triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightBottom, height / 2f), new PointF(width, height - cornerRadius.rightBottom)));
+            triangles.AddRange(RectToTri(new PointF(width / 2f + x, height / 2f + y), new PointF(width - cornerRadius.rightBottom + x, height + y)));
+            triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightBottom + x, height / 2f + y), new PointF(width + x, height - cornerRadius.rightBottom + y)));
 
 
             //if (radius < 1)
@@ -795,10 +777,8 @@ namespace SpaceVIL
             return MakeBorder(border, thickness);
         }
 
-        static internal List<float[]> GetRoundSquareBorder(CornerRadius cornerRadius, float width, float height, 
-            float thickness, int x, int y)
+        static internal List<float[]> GetRoundSquareBorder(CornerRadius cornerRadius, float width, float height, float thickness, int x, int y)
         {
-
             if (cornerRadius.leftTop < 0)
                 cornerRadius.leftTop = 0;
             if (cornerRadius.rightTop < 0)

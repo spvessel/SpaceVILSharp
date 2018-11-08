@@ -446,7 +446,7 @@ namespace SpaceVIL
         }
         public Border GetBorder()
         {
-            return _core.Border;
+            return _core.GetBorder();
         }
         public virtual void RemoveItem(IBaseItem item)
         {

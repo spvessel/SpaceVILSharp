@@ -5,7 +5,7 @@ using System.Collections.Concurrent;
 
 namespace SpaceVIL
 {
-    internal class EventTask
+    internal sealed class EventTask
     {
         public InputEventType Action = 0;
         public Prototype Item = null;

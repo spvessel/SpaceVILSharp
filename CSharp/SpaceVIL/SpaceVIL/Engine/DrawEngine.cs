@@ -20,7 +20,7 @@ using static GL.WGL.OpenWGL;
 
 namespace SpaceVIL
 {
-    internal class DrawEngine
+    internal sealed class DrawEngine
     {
         public void ResetItems()
         {
@@ -332,7 +332,7 @@ namespace SpaceVIL
         }
 
         private bool flag_move = false;
-        protected void MouseMove(Glfw.Window wnd, double xpos, double ypos)
+        private void MouseMove(Glfw.Window wnd, double xpos, double ypos)
         {
             EngineEvent.SetEvent(InputEventType.MouseMove);
             _tooltip.InitTimer(false);
@@ -503,7 +503,7 @@ namespace SpaceVIL
             }
         }
 
-        protected void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
+        private void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
             _handler.GetLayout().GetWindow()._sides = 0;
 
@@ -1197,9 +1197,9 @@ namespace SpaceVIL
                     border.SetParent(vi);
                     border.SetHandler(vi.GetHandler());
                     border.SetTriangles(GraphicsMathService.GetRoundSquareBorder(
+                        vi.GetBorder().Radius,
                         vi.GetWidth(),
                         vi.GetHeight(),
-                        vi.GetBorder().Radius,
                         vi.GetBorder().Thickness,
                         0,
                         0

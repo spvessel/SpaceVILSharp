@@ -20,7 +20,7 @@ using static GL.WGL.OpenWGL;
 
 namespace SpaceVIL
 {
-    internal class VRAMStorage
+    internal sealed class VRAMStorage
     {
         public BaseItem Link = null;
         private float[] _vbo_data;

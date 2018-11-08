@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class WindowLayout : ISize, IPosition
+    public sealed class WindowLayout : ISize, IPosition
     //where TLayout : Prototype
     {
         private Object wndLock = new Object();
@@ -193,7 +193,7 @@ namespace SpaceVIL
             _itemGeometry.SetMinWidth(width);
             _window?.SetMinWidth(width);
         }
-        public virtual void SetWidth(int width)
+        public void SetWidth(int width)
         {
             _itemGeometry.SetWidth(width);
             if (_window != null)
@@ -209,7 +209,7 @@ namespace SpaceVIL
             _itemGeometry.SetMinHeight(height);
             _window?.SetMinHeight(height);
         }
-        public virtual void SetHeight(int height)
+        public void SetHeight(int height)
         {
             _itemGeometry.SetHeight(height);
             if (_window != null)
@@ -224,7 +224,7 @@ namespace SpaceVIL
         {
             return _itemGeometry.GetMinWidth();
         }
-        public virtual int GetWidth()
+        public int GetWidth()
         {
             return _itemGeometry.GetWidth();
         }
@@ -236,7 +236,7 @@ namespace SpaceVIL
         {
             return _itemGeometry.GetMinHeight();
         }
-        public virtual int GetHeight()
+        public int GetHeight()
         {
             return _itemGeometry.GetHeight();
         }
@@ -266,19 +266,19 @@ namespace SpaceVIL
 
         //position
         private Position _itemPosition = new Position();
-        public virtual void SetX(int x)
+        public void SetX(int x)
         {
             _itemPosition.SetX(x);
         }
-        public virtual int GetX()
+        public int GetX()
         {
             return _itemPosition.GetX();
         }
-        public virtual void SetY(int y)
+        public void SetY(int y)
         {
             _itemPosition.SetY(y);
         }
-        public virtual int GetY()
+        public int GetY()
         {
             return _itemPosition.GetY();
         }

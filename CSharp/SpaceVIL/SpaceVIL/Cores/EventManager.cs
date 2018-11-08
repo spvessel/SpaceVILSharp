@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    public class EventManager
+    public sealed class EventManager
     {
         internal static bool IsLocked = true;
         Dictionary<GeometryEventType, List<IEventUpdate>> listeners = new Dictionary<GeometryEventType, List<IEventUpdate>>();

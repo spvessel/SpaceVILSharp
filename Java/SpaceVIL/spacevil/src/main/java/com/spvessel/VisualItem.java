@@ -119,7 +119,16 @@ public class VisualItem extends BaseItem {
     }
 
     // item
-    public Border border = new Border();
+    private Border _border = new Border();
+
+    public Border getBorder() {
+        return _border;
+    }
+
+    public void setBorder(Border border) {
+        _border = border;
+    }
+
     protected Map<ItemStateType, ItemState> states = new HashMap<ItemStateType, ItemState>();
     protected ItemStateType _state = ItemStateType.BASE;
 
@@ -446,14 +455,14 @@ public class VisualItem extends BaseItem {
     protected void updateState() {
         super.setBackground(getState(_state).background);
 
-        border.setFill(getState(_state).border.getFill());
+        _border.setFill(getState(_state).border.getFill());
         Border br = getState(_state).border;
         if (br.getThickness() > 0) {
             if (br.getRadius() < 0)
-                border.setRadius(getState(ItemStateType.BASE).border.getRadius());
+                _border.setRadius(getState(ItemStateType.BASE).border.getRadius());
             else
-                border.setRadius(getState(_state).border.getRadius());
-            border.setThickness(getState(_state).border.getThickness());
+                _border.setRadius(getState(_state).border.getRadius());
+            _border.setThickness(getState(_state).border.getThickness());
         }
 
         if (getState(_state).shape != null)
@@ -464,15 +473,15 @@ public class VisualItem extends BaseItem {
             super.setBackground(GraphicsMathService.mixColors(getState(_state).background,
                     getState(ItemStateType.DISABLED).background));
 
-            border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
+            _border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
                     getState(ItemStateType.DISABLED).border.getFill()));
             br = getState(ItemStateType.DISABLED).border;
             if (br.getThickness() > 0) {
                 if (br.getRadius() < 0)
-                    border.setRadius(getState(ItemStateType.BASE).border.getRadius());
+                    _border.setRadius(getState(ItemStateType.BASE).border.getRadius());
                 else
-                    border.setRadius(getState(ItemStateType.DISABLED).border.getRadius());
-                border.setThickness(getState(ItemStateType.DISABLED).border.getThickness());
+                    _border.setRadius(getState(ItemStateType.DISABLED).border.getRadius());
+                _border.setThickness(getState(ItemStateType.DISABLED).border.getThickness());
             }
             return;
         }
@@ -480,45 +489,45 @@ public class VisualItem extends BaseItem {
         if (isFocused() && states.containsKey(ItemStateType.FOCUSED)) {
             super.setBackground(GraphicsMathService.mixColors(getState(_state).background,
                     getState(ItemStateType.FOCUSED).background));
-            border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
+            _border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
                     getState(ItemStateType.FOCUSED).border.getFill()));
             br = getState(ItemStateType.FOCUSED).border;
             if (br.getThickness() > 0) {
                 if (br.getRadius() < 0)
-                    border.setRadius(getState(ItemStateType.BASE).border.getRadius());
+                    _border.setRadius(getState(ItemStateType.BASE).border.getRadius());
                 else
-                    border.setRadius(getState(ItemStateType.FOCUSED).border.getRadius());
-                border.setThickness(getState(ItemStateType.FOCUSED).border.getThickness());
+                    _border.setRadius(getState(ItemStateType.FOCUSED).border.getRadius());
+                _border.setThickness(getState(ItemStateType.FOCUSED).border.getThickness());
             }
         }
 
         if (isMouseHover() && states.containsKey(ItemStateType.HOVERED)) {
             super.setBackground(GraphicsMathService.mixColors(getState(_state).background,
                     getState(ItemStateType.HOVERED).background));
-            border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
+            _border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
                     getState(ItemStateType.HOVERED).border.getFill()));
             br = getState(ItemStateType.HOVERED).border;
             if (br.getThickness() > 0) {
                 if (br.getRadius() < 0)
-                    border.setRadius(getState(ItemStateType.BASE).border.getRadius());
+                    _border.setRadius(getState(ItemStateType.BASE).border.getRadius());
                 else
-                    border.setRadius(getState(ItemStateType.HOVERED).border.getRadius());
-                border.setThickness(getState(ItemStateType.HOVERED).border.getThickness());
+                    _border.setRadius(getState(ItemStateType.HOVERED).border.getRadius());
+                _border.setThickness(getState(ItemStateType.HOVERED).border.getThickness());
             }
         }
 
         if (isMousePressed() && states.containsKey(ItemStateType.PRESSED)) {
             super.setBackground(GraphicsMathService.mixColors(getState(_state).background,
                     getState(ItemStateType.PRESSED).background));
-            border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
+            _border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
                     getState(ItemStateType.PRESSED).border.getFill()));
             br = getState(ItemStateType.PRESSED).border;
             if (br.getThickness() > 0) {
                 if (br.getRadius() < 0)
-                    border.setRadius(getState(ItemStateType.BASE).border.getRadius());
+                    _border.setRadius(getState(ItemStateType.BASE).border.getRadius());
                 else
-                    border.setRadius(getState(ItemStateType.PRESSED).border.getRadius());
-                border.setThickness(getState(ItemStateType.PRESSED).border.getThickness());
+                    _border.setRadius(getState(ItemStateType.PRESSED).border.getRadius());
+                _border.setThickness(getState(ItemStateType.PRESSED).border.getThickness());
             }
         }
     }
@@ -631,7 +640,7 @@ public class VisualItem extends BaseItem {
             else
                 return GraphicsMathService.toGL(updateShape(), getHandler());
         }
-        setTriangles(GraphicsMathService.getRoundSquare(getWidth(), getHeight(), border.getRadius(), getX(), getY()));
+        setTriangles(GraphicsMathService.getRoundSquare(getWidth(), getHeight(), getBorder().getRadius(), getX(), getY()));
         // System.out.println(getItemName() + " " + getTriangles().size());
         return GraphicsMathService.toGL(this, getHandler());
     }
@@ -656,9 +665,9 @@ public class VisualItem extends BaseItem {
         setPadding(style.padding);
         setSpacing(style.spacing);
         setMargin(style.margin);
-        border.setRadius(style.borderRadius);
-        border.setThickness(style.borderThickness);
-        border.setFill(style.borderFill);
+        _border.setRadius(style.borderRadius);
+        _border.setThickness(style.borderThickness);
+        _border.setFill(style.borderFill);
         setVisible(style.isVisible);
         removeAllItemStates();
 
@@ -693,9 +702,9 @@ public class VisualItem extends BaseItem {
         style.margin = new Indents(getMargin().left, getMargin().top, getMargin().right, getMargin().bottom);
         style.spacing = new Spacing(getSpacing().horizontal, getSpacing().vertical);
         style.alignment = getAlignment();
-        style.borderFill = border.getFill();
-        style.borderRadius = border.getRadius();
-        style.borderThickness = border.getThickness();
+        style.borderFill = _border.getFill();
+        style.borderRadius = _border.getRadius();
+        style.borderThickness = _border.getThickness();
         style.isVisible = getVisible();
         if (isCustom != null) {
             style.shape = isCustom.getFigure();
