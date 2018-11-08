@@ -1,5 +1,7 @@
 package com.spvessel;
 
+import com.spvessel.Flags.InputEventType;
+
 import java.util.LinkedList;
 import java.util.List;
 

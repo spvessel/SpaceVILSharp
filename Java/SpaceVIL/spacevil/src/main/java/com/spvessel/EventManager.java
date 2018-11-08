@@ -1,5 +1,8 @@
 package com.spvessel;
 
+import com.spvessel.Core.InterfaceEventUpdate;
+import com.spvessel.Flags.GeometryEventType;
+
 import java.util.List;
 import java.util.Arrays;
 import java.util.LinkedList;

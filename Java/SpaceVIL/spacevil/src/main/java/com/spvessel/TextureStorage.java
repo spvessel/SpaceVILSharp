@@ -8,6 +8,9 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.spvessel.Core.InterfaceTextContainer;
+import com.spvessel.Decorations.Indents;
+import com.spvessel.Flags.ItemAlignment;
 import org.lwjgl.BufferUtils;
 
 class TextureStorage extends Primitive implements InterfaceTextContainer {

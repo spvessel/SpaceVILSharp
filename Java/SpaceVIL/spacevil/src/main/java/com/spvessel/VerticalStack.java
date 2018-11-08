@@ -1,5 +1,9 @@
 package com.spvessel;
 
+import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceVLayout;
+import com.spvessel.Flags.SizePolicy;
+
 public class VerticalStack extends VisualItem implements InterfaceVLayout {
     static int count = 0;
 

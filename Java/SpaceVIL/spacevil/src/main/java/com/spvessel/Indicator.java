@@ -1,5 +1,8 @@
 package com.spvessel;
 
+import com.spvessel.Common.DefaultsService;
+import com.spvessel.Decorations.Style;
+
 public class Indicator extends VisualItem {
     class CustomToggle extends ButtonToggle {
         @Override

@@ -1,5 +1,13 @@
 package com.spvessel;
 
+import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.EventCommonMethodState;
+import com.spvessel.Core.InterfaceItem;
+import com.spvessel.Core.InterfaceMouseMethodState;
+import com.spvessel.Core.MouseArgs;
+import com.spvessel.Decorations.Style;
+import com.spvessel.Flags.Orientation;
+
 public class VerticalSlider extends VisualItem {
     static int count = 0;
 

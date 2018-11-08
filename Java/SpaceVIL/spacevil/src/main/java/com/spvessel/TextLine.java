@@ -1,5 +1,8 @@
 package com.spvessel;
 
+import com.spvessel.Core.InterfaceTextContainer;
+import com.spvessel.Decorations.Style;
+import com.spvessel.Flags.ItemAlignment;
 import org.lwjgl.BufferUtils;
 
 import java.awt.*;

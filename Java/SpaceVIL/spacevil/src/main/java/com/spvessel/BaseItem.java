@@ -1,4 +1,13 @@
 package com.spvessel;
+
+import com.spvessel.Core.*;
+import com.spvessel.Decorations.Indents;
+import com.spvessel.Decorations.Style;
+import com.spvessel.Flags.GeometryEventType;
+import com.spvessel.Flags.ItemAlignment;
+import com.spvessel.Flags.ItemRule;
+import com.spvessel.Flags.SizePolicy;
+
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;

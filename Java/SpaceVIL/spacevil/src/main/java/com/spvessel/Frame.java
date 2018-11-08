@@ -1,5 +1,7 @@
 package com.spvessel;
 
+import com.spvessel.Common.DefaultsService;
+
 public class Frame extends VisualItem {
     private static int count = 0;
 

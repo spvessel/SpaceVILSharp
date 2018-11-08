@@ -1,5 +1,11 @@
 package com.spvessel;
 
+import com.spvessel.Core.InterfaceDraggable;
+import com.spvessel.Core.InterfaceItem;
+import com.spvessel.Core.InterfaceMouseMethodState;
+import com.spvessel.Core.MouseArgs;
+import com.spvessel.Flags.Orientation;
+
 public class ScrollHandler extends VisualItem implements InterfaceDraggable {
     static int count = 0;
     public Orientation direction;

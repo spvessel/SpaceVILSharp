@@ -1,5 +1,12 @@
 package com.spvessel;
 
+import com.spvessel.Core.*;
+import com.spvessel.Decorations.*;
+import com.spvessel.Flags.GeometryEventType;
+import com.spvessel.Flags.ItemStateType;
+import com.spvessel.Flags.LayoutType;
+import com.spvessel.Flags.SizePolicy;
+
 import java.awt.Color;
 import java.util.List;
 import java.util.LinkedList;

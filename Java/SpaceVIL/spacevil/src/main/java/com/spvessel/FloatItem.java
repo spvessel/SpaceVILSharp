@@ -1,5 +1,10 @@
 package com.spvessel;
 
+import com.spvessel.Common.CommonService;
+import com.spvessel.Core.*;
+import com.spvessel.Flags.LayoutType;
+import com.spvessel.Flags.SizePolicy;
+
 public class FloatItem extends VisualItem implements InterfaceFloating, InterfaceDraggable {
     private int _stored_offset = 0;
     private boolean IsFloating = true;

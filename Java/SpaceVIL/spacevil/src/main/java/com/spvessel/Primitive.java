@@ -1,5 +1,9 @@
 package com.spvessel;
 
+import com.spvessel.Decorations.Indents;
+import com.spvessel.Decorations.Style;
+import com.spvessel.Flags.ItemAlignment;
+
 import java.util.List;
 
 abstract public class Primitive extends BaseItem {

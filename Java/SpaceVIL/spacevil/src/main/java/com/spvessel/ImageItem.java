@@ -1,5 +1,7 @@
 package com.spvessel;
 
+import com.spvessel.Core.InterfaceImageItem;
+
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.LinkedList;

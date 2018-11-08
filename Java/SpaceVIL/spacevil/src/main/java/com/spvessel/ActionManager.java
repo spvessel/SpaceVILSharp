@@ -1,5 +1,9 @@
 package com.spvessel;
 
+import com.spvessel.Core.KeyArgs;
+import com.spvessel.Core.MouseArgs;
+import com.spvessel.Core.TextInputArgs;
+
 import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

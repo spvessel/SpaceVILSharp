@@ -1,5 +1,10 @@
 package com.spvessel;
 
+import com.spvessel.Core.Geometry;
+import com.spvessel.Core.InterfaceCommonMethod;
+import com.spvessel.Core.Position;
+import com.spvessel.Decorations.Indents;
+
 import java.util.*;
 import java.util.List;
 import java.awt.*;

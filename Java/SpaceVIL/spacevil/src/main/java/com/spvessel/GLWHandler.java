@@ -9,6 +9,8 @@ package com.spvessel;
 // import Common.*;
 // import Cores.*;
 //import org.lwjgl.glfw.;
+import com.spvessel.Core.Pointer;
+import com.spvessel.Exceptions.SpaceVILException;
 import org.lwjgl.glfw.*;
 // import org.lwjgl.opengl.GL;
 // import org.lwjgl.system.*;

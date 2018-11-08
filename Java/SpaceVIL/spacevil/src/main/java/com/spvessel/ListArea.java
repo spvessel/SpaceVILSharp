@@ -1,5 +1,9 @@
 package com.spvessel;
 
+import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.*;
+import com.spvessel.Decorations.Style;
+
 public class ListArea extends VisualItem implements InterfaceVLayout {
     public EventCommonMethod selectionChanged = new EventCommonMethod();
     public EventCommonMethod itemListChanged = new EventCommonMethod();

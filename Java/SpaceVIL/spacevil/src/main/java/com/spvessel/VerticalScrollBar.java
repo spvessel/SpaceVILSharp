@@ -1,5 +1,10 @@
 package com.spvessel;
 
+import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceMouseMethodState;
+import com.spvessel.Decorations.Style;
+import com.spvessel.Flags.Orientation;
+
 public class VerticalScrollBar extends VerticalStack {
     private static int count = 0;
 

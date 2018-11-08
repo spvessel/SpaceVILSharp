@@ -1,5 +1,8 @@
 package com.spvessel;
 
+import com.spvessel.Core.InterfaceLine;
+import com.spvessel.Core.InterfacePoints;
+
 import java.util.List;
 import java.util.LinkedList;
 import java.awt.Color;

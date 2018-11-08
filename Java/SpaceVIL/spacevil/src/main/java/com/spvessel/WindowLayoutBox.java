@@ -1,5 +1,8 @@
 package com.spvessel;
 
+import com.spvessel.Flags.LayoutType;
+import com.spvessel.Flags.SizePolicy;
+
 import java.util.*;
 import java.util.stream.*;
 

@@ -1,5 +1,9 @@
 package com.spvessel;
 
+import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceHLayout;
+import com.spvessel.Flags.SizePolicy;
+
 public class HorizontalStack extends VisualItem implements InterfaceHLayout {
     static int count = 0;
 

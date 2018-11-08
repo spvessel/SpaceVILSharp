@@ -1,5 +1,9 @@
 package com.spvessel;
 
+import com.spvessel.Core.*;
+import com.spvessel.Flags.ItemAlignment;
+import com.spvessel.Flags.SizePolicy;
+
 import java.util.LinkedList;
 import java.util.List;
 

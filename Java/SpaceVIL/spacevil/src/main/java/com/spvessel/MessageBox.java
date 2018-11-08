@@ -1,5 +1,11 @@
 package com.spvessel;
 
+import com.spvessel.Core.InterfaceMouseMethodState;
+import com.spvessel.Decorations.ItemState;
+import com.spvessel.Flags.ItemAlignment;
+import com.spvessel.Flags.ItemStateType;
+import com.spvessel.Flags.SizePolicy;
+
 import java.awt.Color;
 
 public class MessageBox extends DialogWindow {

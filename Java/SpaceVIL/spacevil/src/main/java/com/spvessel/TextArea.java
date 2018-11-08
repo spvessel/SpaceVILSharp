@@ -1,5 +1,9 @@
 package com.spvessel;
 
+import com.spvessel.Common.DefaultsService;
+import com.spvessel.Decorations.Style;
+import com.spvessel.Flags.ScrollBarVisibility;
+
 public class TextArea extends VisualItem {
     static int count = 0;
     private Grid _grid = new Grid(2, 2);

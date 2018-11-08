@@ -1,5 +1,7 @@
 package com.spvessel;
 
+import com.spvessel.Flags.LayoutType;
+
 import java.util.*;
 
 public class ItemsLayoutBox {

@@ -1,5 +1,7 @@
 package com.spvessel;
 
+import com.spvessel.Flags.ItemAlignment;
+
 import java.util.*;
 
 public class WContainer extends VisualItem {
