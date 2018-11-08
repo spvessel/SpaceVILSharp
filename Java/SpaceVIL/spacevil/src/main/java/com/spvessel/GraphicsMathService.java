@@ -86,20 +86,20 @@ public final class GraphicsMathService {
         //Начало координат в левом углу
 
         //1
-        triangles.addAll(RectToTri(cornerRadius.leftTop, 0.0f, width / 2f, height / 2f));
-        triangles.addAll(RectToTri(0.0f, cornerRadius.leftTop, cornerRadius.leftTop, height / 2f));
+        triangles.addAll(RectToTri(cornerRadius.leftTop + x, 0.0f + y, width / 2f + x, height / 2f + y));
+        triangles.addAll(RectToTri(0.0f + x, cornerRadius.leftTop + y, cornerRadius.leftTop + x, height / 2f + y));
 
         //2
-        triangles.addAll(RectToTri(width / 2f, 0.0f, width - cornerRadius.rightTop, height / 2f));
-        triangles.addAll(RectToTri(width - cornerRadius.rightTop, cornerRadius.rightTop, width, height / 2f));
+        triangles.addAll(RectToTri(width / 2f + x, 0.0f + y, width - cornerRadius.rightTop + x, height / 2f + y));
+        triangles.addAll(RectToTri(width - cornerRadius.rightTop + x, cornerRadius.rightTop + y, width + x, height / 2f + y));
 
         //3
-        triangles.addAll(RectToTri(cornerRadius.leftBottom, height / 2f, width / 2f, height));
-        triangles.addAll(RectToTri(0, height / 2f, cornerRadius.leftBottom, height - cornerRadius.leftBottom));
+        triangles.addAll(RectToTri(cornerRadius.leftBottom + x, height / 2f + y, width / 2f + x, height + y));
+        triangles.addAll(RectToTri(0 + x, height / 2f + y, cornerRadius.leftBottom + x, height - cornerRadius.leftBottom + y));
 
         //4
-        triangles.addAll(RectToTri(width / 2f, height / 2f, width - cornerRadius.rightBottom, height));
-        triangles.addAll(RectToTri(width - cornerRadius.rightBottom, height / 2f, width, height - cornerRadius.rightBottom));
+        triangles.addAll(RectToTri(width / 2f + x, height / 2f + y, width - cornerRadius.rightBottom + x, height + y));
+        triangles.addAll(RectToTri(width - cornerRadius.rightBottom + x, height / 2f + y, width + x, height - cornerRadius.rightBottom + y));
 
 
         //if (radius < 1)
@@ -545,28 +545,28 @@ public final class GraphicsMathService {
         //Начало координат в левом углу
 
         //1
-        border.add(new BorderSection(cornerRadius.leftTop, 0.0f, width / 2f, 0.0f, width / 2f, height / 2f));
+        border.add(new BorderSection(cornerRadius.leftTop + x, 0.0f + y, width / 2f + x, 0.0f + y, width / 2f + x, height / 2f + y));
         //triangles.addAll(RectToTri(cornerRadius.leftTop, 0.0f, width / 2f, height / 2f));
-        border.add(new BorderSection(0.0f, cornerRadius.leftTop, 0.0f, height / 2f, cornerRadius.leftTop, height / 2f));
+        border.add(new BorderSection(0.0f + x, cornerRadius.leftTop + y, 0.0f + x, height / 2f + y, cornerRadius.leftTop + x, height / 2f + y));
         //triangles.addAll(RectToTri(0.0f, cornerRadius.leftTop, cornerRadius.leftTop, height / 2f));
 
         //2
         //triangles.addAll(RectToTri(width / 2f, 0.0f, width - cornerRadius.rightTop, height / 2f));
-        border.add(new BorderSection(width / 2f, 0.0f, width - cornerRadius.rightTop, 0.0f, width - cornerRadius.rightTop, height / 2f));
+        border.add(new BorderSection(width / 2f + x, 0.0f + y, width - cornerRadius.rightTop + x, 0.0f + y, width - cornerRadius.rightTop + x, height / 2f + y));
         //triangles.addAll(RectToTri(width - cornerRadius.rightTop, cornerRadius.rightTop, width, height / 2f));
-        border.add(new BorderSection(width, height / 2f, width, cornerRadius.rightTop, width - cornerRadius.rightTop, cornerRadius.rightTop));
+        border.add(new BorderSection(width + x, height / 2f + y, width + x, cornerRadius.rightTop + y, width - cornerRadius.rightTop + x, cornerRadius.rightTop + y));
 
         //3
         //triangles.addAll(RectToTri(cornerRadius.leftBottom, height / 2f, width / 2f, height));
-        border.add(new BorderSection(width / 2f, height, cornerRadius.leftBottom, height, cornerRadius.leftBottom, height / 2f));
+        border.add(new BorderSection(width / 2f + x, height + y, cornerRadius.leftBottom + x, height + y, cornerRadius.leftBottom + x, height / 2f + y));
         //triangles.addAll(RectToTri(0, height / 2f, cornerRadius.leftBottom, height - cornerRadius.leftBottom));
-        border.add(new BorderSection(0.0f, height / 2f, 0.0f, height - cornerRadius.leftBottom, cornerRadius.leftBottom, height - cornerRadius.leftBottom));
+        border.add(new BorderSection(0.0f + x, height / 2f + y, 0.0f + x, height - cornerRadius.leftBottom + y, cornerRadius.leftBottom + x, height - cornerRadius.leftBottom + y));
 
         //4
         //triangles.addAll(RectToTri(width / 2f, height / 2f, width - cornerRadius.rightBottom, height));
-        border.add(new BorderSection(width - cornerRadius.rightBottom, height, width / 2f, height, width / 2f, height / 2f));
+        border.add(new BorderSection(width - cornerRadius.rightBottom + x, height + y, width / 2f + x, height + y, width / 2f + x, height / 2f + y));
         //triangles.addAll(RectToTri(width - cornerRadius.rightBottom, height / 2f, width, height - cornerRadius.rightBottom));
-        border.add(new BorderSection(width, height - cornerRadius.rightBottom, width, height / 2f, width - cornerRadius.rightBottom, height / 2f));
+        border.add(new BorderSection(width + x, height - cornerRadius.rightBottom + y, width + x, height / 2f + y, width - cornerRadius.rightBottom + x, height / 2f + y));
 
 
         //if (radius < 1)
