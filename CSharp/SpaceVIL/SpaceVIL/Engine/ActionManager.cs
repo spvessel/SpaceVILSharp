@@ -5,13 +5,6 @@ using System.Collections.Concurrent;
 
 namespace SpaceVIL
 {
-    internal class EventTask
-    {
-        public InputEventType Action = 0;
-        public VisualItem Item = null;
-        public InputEventArgs Args = null;
-    }
-
     internal class ActionManager
     {
         internal ConcurrentQueue<EventTask> StackEvents = new ConcurrentQueue<EventTask>();
@@ -110,67 +103,67 @@ namespace SpaceVIL
         }
 
         //common events
-        private void InvokeFocusGetEvent(VisualItem sender)
+        private void InvokeFocusGetEvent(Prototype sender)
         {
             sender.EventFocusGet?.Invoke(sender);
         }
-        private void InvokeFocusLostEvent(VisualItem sender)
+        private void InvokeFocusLostEvent(Prototype sender)
         {
             sender.EventFocusLost?.Invoke(sender);
         }
-        private void InvokeResizedEvent(VisualItem sender)
+        private void InvokeResizedEvent(Prototype sender)
         {
             sender.EventResized?.Invoke(sender);
         }
-        private void InvokeDestroyedEvent(VisualItem sender)
+        private void InvokeDestroyedEvent(Prototype sender)
         {
             sender.EventDestroyed?.Invoke(sender);
         }
 
         //mouse input
-        private void InvokeMouseClickEvent(VisualItem sender, MouseArgs args)
+        private void InvokeMouseClickEvent(Prototype sender, MouseArgs args)
         {
             sender.EventMouseClick?.Invoke(sender, args);
         }
-        private void InvokeMouseHoverEvent(VisualItem sender, MouseArgs args)
+        private void InvokeMouseHoverEvent(Prototype sender, MouseArgs args)
         {
             sender.EventMouseHover?.Invoke(sender, args);
         }
-        private void InvokeMousePressedEvent(VisualItem sender, MouseArgs args)
+        private void InvokeMousePressedEvent(Prototype sender, MouseArgs args)
         {
             sender.EventMousePressed?.Invoke(sender, args);
         }
-        private void InvokeMouseReleaseEvent(VisualItem sender, MouseArgs args)
+        private void InvokeMouseReleaseEvent(Prototype sender, MouseArgs args)
         {
             sender.EventMouseRelease?.Invoke(sender, args);
         }
-        private void InvokeMouseDragEvent(VisualItem sender, MouseArgs args)
+        private void InvokeMouseDragEvent(Prototype sender, MouseArgs args)
         {
             sender.EventMouseDrag?.Invoke(sender, args);
         }
-        private void InvokeMouseDropEvent(VisualItem sender, MouseArgs args)
+        private void InvokeMouseDropEvent(Prototype sender, MouseArgs args)
         {
             sender.EventMouseDrag?.Invoke(sender, args);
         }
-        private void InvokeMouseScrollUpEvent(VisualItem sender, MouseArgs args)
+        private void InvokeMouseScrollUpEvent(Prototype sender, MouseArgs args)
         {
             sender.EventScrollUp?.Invoke(sender, args);
         }
-        private void InvokeMouseScrollDownEvent(VisualItem sender, MouseArgs args)
+        private void InvokeMouseScrollDownEvent(Prototype sender, MouseArgs args)
         {
             sender.EventScrollDown?.Invoke(sender, args);
         }
 
         //keyboard input
-        private void InvokeKeyPressEvent(VisualItem sender, KeyArgs args)
+        private void InvokeKeyPressEvent(Prototype sender, KeyArgs args)
         {
             sender.EventKeyPress?.Invoke(sender, args);
         }
-        private void InvokeKeyReleaseEvent(VisualItem sender, KeyArgs args)
+        private void InvokeKeyReleaseEvent(Prototype sender, KeyArgs args)
         {
             sender.EventKeyRelease?.Invoke(sender, args);
         }
-        private void InvokeTextInputEvent(VisualItem sender, TextInputArgs args)
+        private void InvokeTextInputEvent(Prototype sender, TextInputArgs args)
         {
             sender.EventTextInput?.Invoke(sender, args);
         }

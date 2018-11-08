@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class FloatItem : VisualItem, IFloating, IDraggable //create abstract!!!!
+    public class FloatItem : Prototype, IFloating, IDraggable //create abstract!!!!
     {
         private int _stored_offset = 0;
         private bool IsFloating = true;
@@ -24,7 +24,7 @@ namespace SpaceVIL
 
         public FloatItem(WindowLayout handler)
         {
-            IsVisible = false;
+            SetVisible(false);
             SetHandler(handler);
             SetItemName("FloatItem_" + count);
             SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
@@ -51,13 +51,13 @@ namespace SpaceVIL
                 InitElements();
             if (GetX() == -GetWidth()) //refactor?
                 SetX(_stored_offset);
-            IsVisible = true;
+            SetVisible(true);
         }
         public void Hide()
         {
             _stored_offset = GetX();
             SetX(-GetWidth());
-            IsVisible = false;
+            SetVisible(false);
         }
 
         protected virtual void OnMousePress(object sender, MouseArgs args)
@@ -84,10 +84,12 @@ namespace SpaceVIL
         
         public override void SetConfines()
         {
-            _confines_x_0 = GetX();
-            _confines_x_1 = GetX() + GetWidth();
-            _confines_y_0 = GetY();
-            _confines_y_1 = GetY() + GetHeight();
+            base.SetConfines(
+                GetX(),
+                GetX() + GetWidth(),
+                GetY(),
+                GetY() + GetHeight()
+            );
         }
     }
 }

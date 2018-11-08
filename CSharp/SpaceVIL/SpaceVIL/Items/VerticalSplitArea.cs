@@ -7,11 +7,11 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class VerticalSplitArea : VisualItem, IHLayout
+    class VerticalSplitArea : Prototype, IHLayout
     {
         private static int count = 0;
-        private BaseItem _leftBlock;
-        private BaseItem _rightBlock;
+        private IBaseItem _leftBlock;
+        private IBaseItem _rightBlock;
         private SplitHolder _splitHolder = new SplitHolder(Orientation.Vertical);
         private int _leftWidth = 0;
         private int _diff = 0;
@@ -56,7 +56,7 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
-        public void AssignLeftItem(BaseItem item)
+        public void AssignLeftItem(IBaseItem item)
         {
             AddItem(item);
             _leftBlock = item;
@@ -64,7 +64,7 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
-        public void AssignRightItem(BaseItem item)
+        public void AssignRightItem(IBaseItem item)
         {
             AddItem(item);
             _rightBlock = item;

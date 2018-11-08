@@ -4,9 +4,9 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class ComboBox : VisualItem
+    public class ComboBox : Prototype
     {
-        // Queue<BaseItem> _queue = new Queue<BaseItem>();
+        // Queue<IBaseItem> _queue = new Queue<IBaseItem>();
 
         static int count = 0;
         public ButtonCore _selected = new ButtonCore();
@@ -117,17 +117,17 @@ namespace SpaceVIL
             _dropdownarea.Handler.SetX(GetHandler().GetX() + _selected.GetX());
             _dropdownarea.Handler.SetY(GetHandler().GetY() + _selected.GetY() + _selected.GetHeight());
 
-            Console.WriteLine(_dropdownarea.Handler.GetX() + " " + _dropdownarea.Handler.GetY());
+            // Console.WriteLine(_dropdownarea.Handler.GetX() + " " + _dropdownarea.Handler.GetY());
 
             _dropdownarea.Show();
         }
 
-        public void AddToList(BaseItem item)
+        public void AddToList(IBaseItem item)
         {
             _dropdownarea.Add(item);
             // _queue.Enqueue(item);
         }
-        public void RemoveFromLst(BaseItem item)
+        public void RemoveFromLst(IBaseItem item)
         {
             _dropdownarea.Remove(item);
         }

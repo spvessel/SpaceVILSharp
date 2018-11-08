@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace SpaceVIL
 {
-    public class TextEdit : VisualItem, ITextEditable, ITextShortcuts, IDraggable
+    public class TextEdit : Prototype, ITextEditable, ITextShortcuts, IDraggable
     {
         static int count = 0;
         private TextLine _text_object;
@@ -366,20 +366,13 @@ namespace SpaceVIL
             }
         }
 
-        public override bool IsFocused
+        public override void SetFocused(bool value)
         {
-            get
-            {
-                return base.IsFocused;
-            }
-            set
-            {
-                base.IsFocused = value;
-                if (IsFocused && _isEditable)
-                    _cursor.IsVisible = true;
-                else
-                    _cursor.IsVisible = false;
-            }
+            base.SetFocused(value);
+            if (IsFocused() && _isEditable)
+                _cursor.SetVisible(true);
+            else
+                _cursor.SetVisible(false);
         }
 
         public void SetTextAlignment(ItemAlignment alignment)
@@ -466,9 +459,9 @@ namespace SpaceVIL
                 _isEditable = value;
 
                 if (_isEditable)
-                    _cursor.IsVisible = true;
+                    _cursor.SetVisible(true);
                 else
-                    _cursor.IsVisible = false;
+                    _cursor.SetVisible(false);
             }
         }
 

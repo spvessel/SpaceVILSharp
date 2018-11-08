@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    public class CheckBox : VisualItem, IHLayout
+    public class CheckBox : Prototype, IHLayout
     {
         internal class CustomIndicator : Indicator
         {
-            protected internal override bool GetHoverVerification(float xpos, float ypos)
+            internal override bool GetHoverVerification(float xpos, float ypos)
             {
                 return false;
             }
@@ -48,21 +48,17 @@ namespace SpaceVIL
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 
-        public override bool IsMouseHover
+        public override void SetMouseHover(bool value)
         {
-            get { return base.IsMouseHover; }
-            set
-            {
-                base.IsMouseHover = value;
-                _indicator.GetIndicatorMarker().IsMouseHover = IsMouseHover;
-                UpdateState();
-            }
+            base.SetMouseHover(value);
+            _indicator.GetIndicatorMarker().SetMouseHover(IsMouseHover());
+            UpdateState();
         }
         public override void InitElements()
         {
             //events
             _indicator.GetIndicatorMarker().EventToggle = null;
-            EventMouseClick += (sender, args) => _indicator.GetIndicatorMarker().IsToggled = !_indicator.GetIndicatorMarker().IsToggled;
+            EventMouseClick += (sender, args) => _indicator.GetIndicatorMarker().SetToggled(!_indicator.GetIndicatorMarker().IsToggled());
 
             //adding
             AddItem(_indicator);
@@ -81,7 +77,7 @@ namespace SpaceVIL
         // }
 
         //Layout rules
-        public new void AddItem(BaseItem item)
+        public override void AddItem(IBaseItem item)
         {
             base.AddItem(item);
             UpdateLayout();
@@ -181,7 +177,7 @@ namespace SpaceVIL
             if (style == null)
                 return;
             base.SetStyle(style);
-            
+
             SetForeground(style.Foreground);
             SetFont(style.Font);
 

@@ -26,7 +26,7 @@ namespace SpaceVIL
         {
             SetSize(width, height);
         }
-        internal Cell(Grid grid, int row, int column, int width, int height, BaseItem item) : this(grid, row, column, width, height)
+        internal Cell(Grid grid, int row, int column, int width, int height, IBaseItem item) : this(grid, row, column, width, height)
         {
             _item_link = item;
         }
@@ -71,12 +71,12 @@ namespace SpaceVIL
             return _y;
         }
 
-        private BaseItem _item_link = null;
-        public BaseItem GetItem()
+        private IBaseItem _item_link = null;
+        public IBaseItem GetItem()
         {
             return _item_link;
         }
-        public void SetItem(BaseItem item)
+        public void SetItem(IBaseItem item)
         {
             _item_link = item;
         }

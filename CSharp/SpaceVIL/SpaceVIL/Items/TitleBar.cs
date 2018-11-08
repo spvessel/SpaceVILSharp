@@ -3,17 +3,11 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public enum HDirection
-    {
-        FromLeftToRight,
-        FromRightToLeft,
-    }
-
     public class TitleBar : WindowAnchor
     {
         static int count = 0;
         private HorizontalStack _layout;
-        public HDirection Direction = HDirection.FromLeftToRight;
+        public HorizontalDirection Direction = HorizontalDirection.FromLeftToRight;
         private Label _text_object;
         private ImageItem _icon;
         public ImageItem GetIcon()
@@ -59,13 +53,13 @@ namespace SpaceVIL
         {
             _icon.SetSize(width, height);
             _icon.SetImage(icon);
-            _icon.IsVisible = true;
+            _icon.SetVisible(true);
         }
         public void SetIcon(String url, int width, int height)
         {
             _icon.SetSize(width, height);
             _icon.SetImageUrl(url);
-            _icon.IsVisible = true;
+            _icon.SetVisible(true);
         }
 
         //text init
@@ -158,10 +152,10 @@ namespace SpaceVIL
             //adding
             switch (Direction)
             {
-                case HDirection.FromLeftToRight:
+                case HorizontalDirection.FromLeftToRight:
                     _layout.AddItems(_icon, _text_object, _minimize, _maximize, _close);
                     break;
-                case HDirection.FromRightToLeft:
+                case HorizontalDirection.FromRightToLeft:
                     _layout.AddItems(_close, _maximize, _minimize, _icon, _text_object);
                     break;
                 default:
@@ -213,7 +207,7 @@ namespace SpaceVIL
             }
 
             //icon
-            _icon.IsVisible = false;
+            _icon.SetVisible(false);
             _icon.SetBackground(Color.Transparent);
             _icon.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             _icon.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);

@@ -8,7 +8,7 @@ using System.Drawing;
 namespace SpaceVIL
 {
     public class WindowLayout : ISize, IPosition
-    //where TLayout : VisualItem
+    //where TLayout : Prototype
     {
         private Object wndLock = new Object();
 
@@ -152,11 +152,11 @@ namespace SpaceVIL
         {
             _window.SetPadding(left, top, right, bottom);
         }
-        public void AddItem(BaseItem item)
+        public void AddItem(IBaseItem item)
         {
             _window.AddItem(item);
         }
-        public void AddItems(params BaseItem[] items)
+        public void AddItems(params IBaseItem[] items)
         {
             foreach (var item in items)
             {
@@ -448,7 +448,7 @@ namespace SpaceVIL
                 manager.Execute.Set();
         }
 
-        public void SetFocusedItem(VisualItem item)
+        public void SetFocusedItem(Prototype item)
         {
             engine.SetFocusedItem(item);
         }

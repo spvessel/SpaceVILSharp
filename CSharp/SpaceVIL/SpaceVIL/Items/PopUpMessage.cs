@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Timers;
 namespace SpaceVIL
 {
-    public class PopUpMessage : VisualItem
+    public class PopUpMessage : Prototype
     {
         static int count = 0;
         private TextLine _text_object;

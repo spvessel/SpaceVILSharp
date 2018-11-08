@@ -2,7 +2,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class WContainer : VisualItem, IWindow
+    public class WContainer : Prototype, IWindow
     {
         static int count = 0;
         internal ItemAlignment _sides = 0;
@@ -15,7 +15,7 @@ namespace SpaceVIL
             count++;
         }
 
-        protected internal override bool GetHoverVerification(float xpos, float ypos)
+        internal override bool GetHoverVerification(float xpos, float ypos)
         {
             if (_is_fixed)
                 return false;
@@ -25,13 +25,13 @@ namespace SpaceVIL
                 && ypos > 0
                 && ypos <= GetHandler().GetHeight())
             {
-                IsMouseHover = true;
+                SetMouseHover(true);
             }
             else
             {
-                IsMouseHover = false;
+                SetMouseHover(false);
             }
-            return IsMouseHover;
+            return IsMouseHover();
         }
 
         public ItemAlignment GetSides(float xpos, float ypos) //проблемы с глобальным курсором

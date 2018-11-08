@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SpaceVIL
 {
-    public class ListBox : VisualItem
+    public class ListBox : Prototype
     {
         static int count = 0;
 
@@ -48,9 +48,9 @@ namespace SpaceVIL
             _v_scrollBarPolicy = policy;
 
             if (policy == ScrollBarVisibility.Never)
-                VScrollBar.IsVisible = false;
+                VScrollBar.SetVisible(false);
             else
-                VScrollBar.IsVisible = true;
+                VScrollBar.SetVisible(true);
 
             _grid.UpdateLayout();
             UpdateHorizontalSlider();
@@ -66,9 +66,9 @@ namespace SpaceVIL
             _h_scrollBarPolicy = policy;
 
             if (policy == ScrollBarVisibility.Never)
-                HScrollBar.IsVisible = false;
+                HScrollBar.SetVisible(false);
             else
-                HScrollBar.IsVisible = true;
+                HScrollBar.SetVisible(true);
 
             _grid.UpdateLayout();
             UpdateVerticalSlider();
@@ -82,11 +82,11 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListBox)));
 
             //VBar
-            VScrollBar.IsVisible = true;
+            VScrollBar.SetVisible(true);
             VScrollBar.SetItemName(GetItemName() + "_" + VScrollBar.GetItemName());
 
             //HBar
-            HScrollBar.IsVisible = true;
+            HScrollBar.SetVisible(true);
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
 
             //Area
@@ -122,7 +122,7 @@ namespace SpaceVIL
             int visible_area = _area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom;
             foreach (var item in _area.GetItems())
             {
-                if (item.Equals(_area.GetSubstrate()) || !item.IsVisible)
+                if (item.Equals(_area.GetSubstrate()) || !item.IsVisible())
                     continue;
                 total_invisible_size += (item.GetHeight() + _area.GetSpacing().Vertical);
             }
@@ -202,17 +202,17 @@ namespace SpaceVIL
             UpdateVerticalSlider();
             VScrollBar.Slider.UpdateHandler();
         }
-        public override void AddItem(BaseItem item)
+        public override void AddItem(IBaseItem item)
         {
             _area.AddItem(item);
             UpdateElements();
         }
-        internal override void InsertItem(BaseItem item, Int32 index)
+        public override void InsertItem(IBaseItem item, Int32 index)
         {
             _area.InsertItem(item, index);
             UpdateElements();
         }
-        public override void RemoveItem(BaseItem item)
+        public override void RemoveItem(IBaseItem item)
         {
             _area.RemoveItem(item);
             UpdateElements();
@@ -253,9 +253,9 @@ namespace SpaceVIL
         //     EventScrollDown?.Invoke(this, args);
         // }
 
-        public List<BaseItem> GetListContent()
+        public List<IBaseItem> GetListContent()
         {
-            List<BaseItem> result = new List<BaseItem>();
+            List<IBaseItem> result = new List<IBaseItem>();
             foreach (var item in _area.GetItems())
             {
                 if (item is CustomShape)
@@ -264,14 +264,14 @@ namespace SpaceVIL
             }
             return result;
         }
-        public void SetListContent(List<BaseItem> content)
+        public void SetListContent(List<IBaseItem> content)
         {
             content.Insert(0, _area.GetSubstrate());
             _area.SetContent(content);
         }
-        public BaseItem GetSelectionItem()
+        public IBaseItem GetSelectionItem()
         {
-            List<BaseItem> result = new List<BaseItem>();
+            List<IBaseItem> result = new List<IBaseItem>();
             return _area.GetSelectionItem();
         }
 

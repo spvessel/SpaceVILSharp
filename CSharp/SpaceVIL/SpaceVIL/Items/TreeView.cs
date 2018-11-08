@@ -12,9 +12,9 @@ namespace SpaceVIL
         internal TreeItem _root; //nesting level = 0
         public void SetRootVisibility(bool visible)
         {
-            _root.IsVisible = visible;
+            _root.SetVisible(visible);
             //reset all paddings for content
-            List<BaseItem> list = GetListContent();
+            List<IBaseItem> list = GetListContent();
             if (list != null)
             {
                 foreach (var item in list)
@@ -47,7 +47,7 @@ namespace SpaceVIL
 
             _menu = new ContextMenu(GetHandler());
             _menu.SetBackground(40, 40, 40);
-            _menu.IsPassEvents = false;
+            _menu.SetPassEvents(false);
             MenuItem paste = new MenuItem("Paste");
             paste.SetForeground(Color.LightGray);
             paste.AddItemState(ItemStateType.Hovered, new ItemState()
@@ -109,7 +109,7 @@ namespace SpaceVIL
             outList.Add(_root);
             outList.AddRange(SortHelper(_root));
 
-            SetListContent(outList.Select(_ => _ as BaseItem).ToList());
+            SetListContent(outList.Select(_ => _ as IBaseItem).ToList());
         }
 
         private List<TreeItem> SortHelper(TreeItem item)
@@ -138,7 +138,7 @@ namespace SpaceVIL
             return ti1.GetText().CompareTo(ti2.GetText());
         }
 
-        public override void AddItem(BaseItem item)
+        public override void AddItem(IBaseItem item)
         {
             _root.AddItem(item);
         }

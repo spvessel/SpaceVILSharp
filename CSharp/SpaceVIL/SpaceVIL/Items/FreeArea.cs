@@ -5,25 +5,25 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class FlowArea : VisualItem, IGrid, IDraggable
+    public class FreeArea : Prototype, IGrid, IDraggable
     {
         static int count = 0;
         private int _x_press = 0;
         private int _y_press = 0;
         private int _diff_x = 0;
         private int _diff_y = 0;
-        Dictionary<BaseItem, int[]> _stored_crd;
+        Dictionary<IBaseItem, int[]> _stored_crd;
         // public ContextMenu _dropdownmenu = new ContextMenu();
-        public FlowArea()
+        public FreeArea()
         {
             SetItemName("FlowArea_" + count);
             count++;
             EventMouseClick += OnMouseRelease;
             EventMousePressed += OnMousePress;
             EventMouseDrag += OnDragging;
-            _stored_crd = new Dictionary<BaseItem, int[]>();
+            _stored_crd = new Dictionary<IBaseItem, int[]>();
 
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.FlowArea)));
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.FreeArea)));
         }
 
         public void AddContextMenu(ContextMenu context_menu)
@@ -74,7 +74,7 @@ namespace SpaceVIL
         }
 
         //overrides
-        public override void AddItem(BaseItem item)
+        public override void AddItem(IBaseItem item)
         {
             base.AddItem(item);
             _stored_crd.Add(item, new int[] { item.GetX(), item.GetY() });
@@ -85,7 +85,7 @@ namespace SpaceVIL
             }
             UpdateLayout();
         }
-        public override void RemoveItem(BaseItem item)
+        public override void RemoveItem(IBaseItem item)
         {
             // Console.WriteLine("flow remove");
             base.RemoveItem(item);

@@ -84,7 +84,7 @@ namespace SpaceVIL
             ok.SetSize(100, 30);
             ok.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             ok.SetAlignment(ItemAlignment.HCenter | ItemAlignment.Bottom);
-            ok.Border.Radius = 6;
+            ok.GetBorder().Radius = 6;
             ok.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)

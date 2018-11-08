@@ -5,13 +5,7 @@ using System.Collections.Generic;
 
 namespace SpaceVIL
 {
-    public enum TreeItemType
-    {
-        Leaf,
-        Branch
-    }
-
-    public class TreeItem : VisualItem
+    public class TreeItem : Prototype
     {
         private List<TreeItem> _list_inners;
         public List<TreeItem> GetTreeItems()
@@ -70,7 +64,7 @@ namespace SpaceVIL
             _icon_shape = new CustomShape();
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeItem)));
-            IsPassEvents = false;
+            SetPassEvents(false);
         }
         public TreeItem(TreeItemType type, String text = "") : this(type)
         {
@@ -93,7 +87,7 @@ namespace SpaceVIL
         internal void ResetIndents()
         {
             Int32 level = _nesting_level;
-            if (!_parent._root.IsVisible)
+            if (!_parent._root.IsVisible())
                 level--;
             SetPadding(2 + _indent_size * level, 0, 0, 0);
         }
@@ -103,7 +97,7 @@ namespace SpaceVIL
 
             _menu = new ContextMenu(GetHandler());
             _menu.SetBackground(40, 40, 40);
-            _menu.IsPassEvents = false;
+            _menu.SetPassEvents(false);
             MenuItem remove = new MenuItem("Remove");
             remove.SetForeground(Color.LightGray);
             remove.AddItemState(ItemStateType.Hovered, new ItemState()
@@ -178,7 +172,7 @@ namespace SpaceVIL
                     break;
 
                 case TreeItemType.Branch:
-                    _indicator.EventToggle += (sender, args) => OnToggleHide(_indicator.IsToggled);
+                    _indicator.EventToggle += (sender, args) => OnToggleHide(_indicator.IsToggled());
 
                     base.AddItem(_indicator);
                     base.AddItem(_icon_shape);
@@ -198,15 +192,15 @@ namespace SpaceVIL
             {
                 if (value)
                 {
-                    if (_indicator.IsToggled)
+                    if (_indicator.IsToggled())
                     {
-                        item.IsVisible = true;
+                        item.SetVisible(true);
                         item.OnToggleHide(value);
                     }
                 }
                 else
                 {
-                    item.IsVisible = false;
+                    item.SetVisible(false);
                     item.OnToggleHide(value);
                 }
             }
@@ -215,14 +209,14 @@ namespace SpaceVIL
         }
         private void AddTreeItem(TreeItem item)
         {
-            _indicator.IsToggled = true;
+            _indicator.SetToggled(true);
             _list_inners.Add(item);
             item._branch = this;
             item._parent = _parent;
             item._nesting_level = _nesting_level + 1;
             _parent.RefreshTree(item);
         }
-        public override void AddItem(BaseItem item)
+        public override void AddItem(IBaseItem item)
         {
             TreeItem tmp = item as TreeItem;
             if (tmp != null)

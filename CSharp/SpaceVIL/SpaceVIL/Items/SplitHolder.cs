@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class SplitHolder : VisualItem, IDraggable
+    class SplitHolder : Prototype, IDraggable
     {
         private static int count = 0;
         private Orientation _orientation;

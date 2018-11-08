@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class ProgressBar : VisualItem
+    public class ProgressBar : Prototype
     {
         static int count = 0;
         private TextLine _text_object;
@@ -118,11 +118,11 @@ namespace SpaceVIL
             return _text_object.GetForeground();
         }
 
-        protected internal override bool GetHoverVerification(float xpos, float ypos)
+        internal override bool GetHoverVerification(float xpos, float ypos)
         {
             return false;
         }
-        public override void AddItem(BaseItem item)
+        public override void AddItem(IBaseItem item)
         {
             base.AddItem(item);
             UpdateLayout();

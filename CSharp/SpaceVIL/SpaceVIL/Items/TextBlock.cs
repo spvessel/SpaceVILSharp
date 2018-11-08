@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    internal class TextBlock : VisualItem, ITextEditable, IDraggable, ITextShortcuts//, ITextContainer
+    internal class TextBlock : Prototype, ITextEditable, IDraggable, ITextShortcuts//, ITextContainer
     {
         public EventCommonMethod TextChanged;
 
@@ -577,9 +577,9 @@ namespace SpaceVIL
                 _isEditable = value;
 
                 if (_isEditable)
-                    _cursor.IsVisible = true;
+                    _cursor.SetVisible(true);
                 else
-                    _cursor.IsVisible = false;
+                    _cursor.SetVisible(false);
             }
         }
         public override void SetWidth(int width)
@@ -616,20 +616,13 @@ namespace SpaceVIL
                 RemoveItem(tl);
         }
         */
-        public override bool IsFocused
+        public override void SetFocused(bool value)
         {
-            get
-            {
-                return base.IsFocused;
-            }
-            set
-            {
-                base.IsFocused = value;
-                if (IsFocused && _isEditable)
-                    _cursor.IsVisible = true;
-                else
-                    _cursor.IsVisible = false;
-            }
+            base.SetFocused(value);
+            if (IsFocused() && _isEditable)
+                _cursor.SetVisible(true);
+            else
+                _cursor.SetVisible(false);
         }
 
 
@@ -899,13 +892,13 @@ namespace SpaceVIL
             }
         }
 
-        public override List<BaseItem> GetItems()
+        public override List<IBaseItem> GetItems()
         {
-            List<BaseItem> list = base.GetItems();
-            return new List<BaseItem>() { list[0], list[1], list[2] };
+            List<IBaseItem> list = base.GetItems();
+            return new List<IBaseItem>() { list[0], list[1], list[2] };
         }
 
-        public override void RemoveItem(BaseItem item)
+        public override void RemoveItem(IBaseItem item)
         {
             if (item.Equals(_cursor))
             {

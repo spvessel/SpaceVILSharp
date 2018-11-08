@@ -25,28 +25,28 @@ namespace SpaceVIL
         public void ResetItems()
         {
             if (FocusedItem != null)
-                FocusedItem.IsFocused = false;
+                FocusedItem.SetFocused(false);
             FocusedItem = null;
             if (HoveredItem != null)
-                HoveredItem.IsMouseHover = false;
+                HoveredItem.SetMouseHover(false);
             HoveredItem = null;
 
             HoveredItems.Clear();
         }
 
-        // private Dictionary<BaseItem, VRAMStorage> _images_store = new Dictionary<BaseItem, VRAMStorage>();
+        // private Dictionary<IBaseItem, VRAMStorage> _images_store = new Dictionary<IBaseItem, VRAMStorage>();
 
         private ToolTip _tooltip = new ToolTip();
-        private BaseItem _isStencilSet = null;
+        private IBaseItem _isStencilSet = null;
         public InputDeviceEvent EngineEvent = new InputDeviceEvent();
         private MouseArgs _margs = new MouseArgs();
         private KeyArgs _kargs = new KeyArgs();
         private TextInputArgs _tiargs = new TextInputArgs();
 
-        private List<VisualItem> HoveredItems;
-        private VisualItem HoveredItem = null;
-        private VisualItem FocusedItem = null;
-        public void SetFocusedItem(VisualItem item)
+        private List<Prototype> HoveredItems;
+        private Prototype HoveredItem = null;
+        private Prototype FocusedItem = null;
+        public void SetFocusedItem(Prototype item)
         {
             if (item == null)
             {
@@ -54,9 +54,9 @@ namespace SpaceVIL
                 return;
             }
             if (FocusedItem != null)
-                FocusedItem.IsFocused = false;
+                FocusedItem.SetFocused(false);
             FocusedItem = item;
-            FocusedItem.IsFocused = true;
+            FocusedItem.SetFocused(true);
         }
         private Pointer ptrPress = new Pointer();
         private Pointer ptrRelease = new Pointer();
@@ -71,7 +71,7 @@ namespace SpaceVIL
 
         public DrawEngine(WindowLayout handler)
         {
-            HoveredItems = new List<VisualItem>();
+            HoveredItems = new List<Prototype>();
             _handler = new GLWHandler(handler);
 
             _tooltip.SetHandler(handler);
@@ -408,17 +408,17 @@ namespace SpaceVIL
                 {
                     int x_click = ptrClick.GetX();
                     int y_click = ptrClick.GetY();
-                    VisualItem draggable = IsInListHoveredItems<IDraggable>();
-                    VisualItem anchor = IsInListHoveredItems<WindowAnchor>();
+                    Prototype draggable = IsInListHoveredItems<IDraggable>();
+                    Prototype anchor = IsInListHoveredItems<WindowAnchor>();
                     if (draggable != null)
                     {
                         draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
 
                         // if (FocusedItem != null)
-                        //     FocusedItem.IsFocused = false;
+                        //     FocusedItem.SetFocused(false;
 
                         // FocusedItem = HoveredItem;
-                        // FocusedItem.IsFocused = true;
+                        // FocusedItem.SetFocused(true;
                     }
                     else if (anchor != null && !(HoveredItem is ButtonCore) && !_handler.GetLayout().IsMaximized)
                     {
@@ -438,7 +438,7 @@ namespace SpaceVIL
                 ptrPress.SetY(ptrRelease.GetY());
 
                 //check tooltip
-                if (GetHoverVisualItem(ptrRelease.GetX(), ptrRelease.GetY(), InputEventType.MouseMove))
+                if (GetHoverPrototype(ptrRelease.GetX(), ptrRelease.GetY(), InputEventType.MouseMove))
                 {
                     if (HoveredItem.GetToolTip() != String.Empty)
                     {
@@ -494,7 +494,7 @@ namespace SpaceVIL
                             else _handler.SetCursorType(Glfw.CursorType.ResizeX);
                         }
                     }
-                    VisualItem popup = IsInListHoveredItems<PopUpMessage>();
+                    Prototype popup = IsInListHoveredItems<PopUpMessage>();
                     if (popup != null)
                     {
                         (popup as PopUpMessage).HoldSelf(true);
@@ -521,9 +521,9 @@ namespace SpaceVIL
             else
                 m_state = InputEventType.MouseRelease;
 
-            Queue<VisualItem> tmp = new Queue<VisualItem>(HoveredItems);
+            Queue<Prototype> tmp = new Queue<Prototype>(HoveredItems);
 
-            if (!GetHoverVisualItem(ptrRelease.GetX(), ptrRelease.GetY(), m_state))
+            if (!GetHoverPrototype(ptrRelease.GetX(), ptrRelease.GetY(), m_state))
             {
                 EngineEvent.ResetAllEvents();
                 EngineEvent.SetEvent(InputEventType.MouseRelease);
@@ -537,10 +537,10 @@ namespace SpaceVIL
 
                     while (tmp.Count > 0)
                     {
-                        VisualItem item = tmp.Dequeue();
-                        if (item.IsDisabled)
+                        Prototype item = tmp.Dequeue();
+                        if (item.IsDisabled())
                             continue;// пропустить
-                        item.IsMousePressed = false;
+                        item.SetMousePressed(false);
                     }
                     if (EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize)
                         || EngineEvent.LastEvent().HasFlag(InputEventType.WindowMove))
@@ -563,7 +563,7 @@ namespace SpaceVIL
                     if (HoveredItem != null)
                     {
                         AssignActions(InputEventType.MouseRelease, _margs, false);
-                        HoveredItem.IsMousePressed = false;
+                        HoveredItem.SetMousePressed(false);
                     }
                     EngineEvent.ResetAllEvents();
                     EngineEvent.SetEvent(InputEventType.MouseRelease);
@@ -580,16 +580,16 @@ namespace SpaceVIL
                     ptrClick.SetY((int)ypos);
                     if (HoveredItem != null)
                     {
-                        HoveredItem.IsMousePressed = true;
+                        HoveredItem.SetMousePressed(true);
                         AssignActions(InputEventType.MousePressed, _margs, false);
 
                         //Focus get
                         if (HoveredItem.IsFocusable)
                         {
                             if (FocusedItem != null)
-                                FocusedItem.IsFocused = false;
+                                FocusedItem.SetFocused(false);
                             FocusedItem = HoveredItem;
-                            FocusedItem.IsFocused = true;
+                            FocusedItem.SetFocused(true);
                         }
                     }
 
@@ -612,33 +612,33 @@ namespace SpaceVIL
         private int x_global = 0;
         private int y_global = 0;
 
-        private bool GetHoverVisualItem(float xpos, float ypos, InputEventType action)
+        private bool GetHoverPrototype(float xpos, float ypos, InputEventType action)
         {
-            List<VisualItem> queue = new List<VisualItem>();
+            List<Prototype> queue = new List<Prototype>();
             HoveredItems.Clear();
 
-            List<BaseItem> layout_box_of_items = new List<BaseItem>();
+            List<IBaseItem> layout_box_of_items = new List<IBaseItem>();
             layout_box_of_items.Add(_handler.GetLayout().GetWindow());
             layout_box_of_items.AddRange(GetInnerItems(_handler.GetLayout().GetWindow()));
 
             foreach (var item in ItemsLayoutBox.GetLayoutFloatItems(_handler.GetLayout().Id))
             {
-                if (!item.IsVisible || !item.IsDrawable)
+                if (!item.IsVisible() || !item.IsDrawable())
                     continue;
                 layout_box_of_items.Add(item);
-                VisualItem leaf = item as VisualItem;
+                Prototype leaf = item as Prototype;
                 if (leaf != null)
                     layout_box_of_items.AddRange(GetInnerItems(leaf));
             }
 
             foreach (var item in layout_box_of_items)
             {
-                VisualItem tmp = item as VisualItem;
+                Prototype tmp = item as Prototype;
                 if (tmp != null)
                 {
-                    if (!tmp.IsVisible || !tmp.IsDrawable)
+                    if (!tmp.IsVisible() || !tmp.IsDrawable())
                         continue;
-                    tmp.IsMouseHover = false;
+                    tmp.SetMouseHover(false);
                     if (tmp.GetHoverVerification(xpos, ypos))
                     {
                         queue.Add(tmp);
@@ -663,17 +663,17 @@ namespace SpaceVIL
             if (queue.Count > 0)
             {
                 HoveredItem = queue.Last();
-                HoveredItem.IsMouseHover = true;
+                HoveredItem.SetMouseHover(true);
 
                 HoveredItems = queue;
-                List<VisualItem> tmp = new List<VisualItem>(HoveredItems);
+                List<Prototype> tmp = new List<Prototype>(HoveredItems);
                 while (tmp.Count != 0)
                 {
-                    VisualItem item = tmp.Last();
-                    if (item.Equals(HoveredItem) && HoveredItem.IsDisabled)
+                    Prototype item = tmp.Last();
+                    if (item.Equals(HoveredItem) && HoveredItem.IsDisabled())
                         continue;//пропустить
-                    item.IsMouseHover = true;
-                    if (!item.IsPassEvents)
+                    item.SetMouseHover(true);
+                    if (!item.GetPassEvents())
                         break;//остановить передачу событий последующим элементам
                     tmp.Remove(item);
                 }
@@ -683,25 +683,25 @@ namespace SpaceVIL
                 return false;
         }
 
-        private List<BaseItem> GetInnerItems(VisualItem root)
+        private List<IBaseItem> GetInnerItems(Prototype root)
         {
-            List<BaseItem> list = new List<BaseItem>();
+            List<IBaseItem> list = new List<IBaseItem>();
 
             foreach (var item in root.GetItems())
             {
-                if (!item.IsVisible || !item.IsDrawable)
+                if (!item.IsVisible() || !item.IsDrawable())
                     continue;
                 list.Add(item);
-                VisualItem leaf = item as VisualItem;
+                Prototype leaf = item as Prototype;
                 if (leaf != null)
                     list.AddRange(GetInnerItems(leaf));
             }
             return list;
         }
 
-        private VisualItem IsInListHoveredItems<T>()//idraggable adaptations
+        private Prototype IsInListHoveredItems<T>()//idraggable adaptations
         {
-            VisualItem wanted = null;
+            Prototype wanted = null;
             foreach (var item in HoveredItems)
             {
                 if (item is T)
@@ -718,11 +718,11 @@ namespace SpaceVIL
         {
             _tooltip.InitTimer(false);
 
-            List<VisualItem> tmp = new List<VisualItem>(HoveredItems);
+            List<Prototype> tmp = new List<Prototype>(HoveredItems);
             tmp.Reverse();
             foreach (var item in tmp)
             {
-                if (!item.IsPassEvents)
+                if (!item.GetPassEvents())
                     continue;
                 if (dy > 0 || dx < 0)
                     item.EventScrollUp?.Invoke(item, _margs);
@@ -794,7 +794,7 @@ namespace SpaceVIL
 
         private void AssignActions(InputEventType action, InputEventArgs args, bool only_last)
         {
-            if (only_last && !HoveredItem.IsDisabled)
+            if (only_last && !HoveredItem.IsDisabled())
             {
                 _handler.GetLayout().SetEventTask(new EventTask()
                 {
@@ -805,11 +805,11 @@ namespace SpaceVIL
             }
             else
             {
-                List<VisualItem> tmp = new List<VisualItem>(HoveredItems);
+                List<Prototype> tmp = new List<Prototype>(HoveredItems);
                 while (tmp.Count != 0)
                 {
-                    VisualItem item = tmp.Last();
-                    if (item.Equals(HoveredItem) && HoveredItem.IsDisabled)
+                    Prototype item = tmp.Last();
+                    if (item.Equals(HoveredItem) && HoveredItem.IsDisabled())
                         continue;//пропустить
 
                     _handler.GetLayout().SetEventTask(new EventTask()
@@ -818,16 +818,16 @@ namespace SpaceVIL
                         Action = action,
                         Args = args
                     });
-                    if (!item.IsPassEvents)
+                    if (!item.GetPassEvents())
                         break;//остановить передачу событий последующим элементам
                     tmp.Remove(item);
                 }
             }
             _handler.GetLayout().ExecutePollActions();
         }
-        private void AssignActions(InputEventType action, InputEventArgs args, VisualItem sender)
+        private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender)
         {
-            if (sender.IsDisabled)
+            if (sender.IsDisabled())
                 return;
 
             _handler.GetLayout().SetEventTask(new EventTask()
@@ -898,7 +898,7 @@ namespace SpaceVIL
             DrawItems(_handler.GetLayout().GetWindow());
             //draw float
             foreach (var item in ItemsLayoutBox.GetLayout(_handler.GetLayout().Id).FloatItems)
-                DrawItems(item as BaseItem);
+                DrawItems(item as IBaseItem);
             //draw tooltip if needed
             DrawToolTip();
             if (!_handler.Focusable)
@@ -954,12 +954,12 @@ namespace SpaceVIL
             glDeleteBuffers(2, buffers);
         }
 
-        private bool CheckOutsideBorders(BaseItem shell)
+        private bool CheckOutsideBorders(IBaseItem shell)
         {
             return LazyStencil(shell);
         }
 
-        private void StrictStencil(BaseItem shell)
+        private void StrictStencil(IBaseItem shell)
         {
             glEnable(GL_STENCIL_TEST);
             glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -974,21 +974,26 @@ namespace SpaceVIL
 
             glStencilFunc(GL_EQUAL, 1, 0xFF);
 
-            shell.GetParent()._confines_x_0 = shell.GetParent().GetX() + shell.GetParent().GetPadding().Left;
-            shell.GetParent()._confines_x_1 = shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right;
-            shell.GetParent()._confines_y_0 = shell.GetParent().GetY() + shell.GetParent().GetPadding().Top;
-            shell.GetParent()._confines_y_1 = shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom;
+            shell.GetParent().SetConfines(
+                shell.GetParent().GetX() + shell.GetParent().GetPadding().Left,
+                shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right,
+                shell.GetParent().GetY() + shell.GetParent().GetPadding().Top,
+                shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom
+            );
             SetConfines(shell);
         }
 
-        private void SetConfines(BaseItem shell)
+        private void SetConfines(IBaseItem shell)
         {
-            shell._confines_x_0 = shell.GetParent()._confines_x_0;
-            shell._confines_x_1 = shell.GetParent()._confines_x_1;
-            shell._confines_y_0 = shell.GetParent()._confines_y_0;
-            shell._confines_y_1 = shell.GetParent()._confines_y_1;
+            int[] confines = shell.GetParent().GetConfines();
+            shell.SetConfines(
+                confines[0],
+                confines[1],
+                confines[2],
+                confines[3]
+            );
 
-            VisualItem root = shell as VisualItem;
+            Prototype root = shell as Prototype;
             if (root != null)
             {
                 foreach (var item in root.GetItems())
@@ -996,7 +1001,7 @@ namespace SpaceVIL
             }
         }
 
-        private bool LazyStencil(BaseItem shell)
+        private bool LazyStencil(IBaseItem shell)
         {
             var outside = new Dictionary<ItemAlignment, Int32[]>();
 
@@ -1048,9 +1053,9 @@ namespace SpaceVIL
         }
 
         //Common Draw function
-        private void DrawItems(BaseItem root)
+        private void DrawItems(IBaseItem root)
         {
-            if (!root.IsVisible || !root.IsDrawable)
+            if (!root.IsVisible() || !root.IsDrawable())
                 return;
 
             if (root is ILine)
@@ -1063,7 +1068,7 @@ namespace SpaceVIL
             }
             if (root is ITextContainer)
             {
-                // if (root is VisualItem)
+                // if (root is Prototype)
                 //     DrawShell(root);
                 _char.UseShader();
                 DrawText(root as ITextContainer);
@@ -1092,9 +1097,9 @@ namespace SpaceVIL
                 // if (!(root is ITextContainer))
                 DrawShell(root);
 
-                if (root is VisualItem)
+                if (root is Prototype)
                 {
-                    List<BaseItem> list = new List<BaseItem>(((VisualItem)root).GetItems());
+                    List<IBaseItem> list = new List<IBaseItem>(((Prototype)root).GetItems());
                     foreach (var child in list)
                     {
                         DrawItems(child);
@@ -1108,7 +1113,7 @@ namespace SpaceVIL
             }
         }
 
-        private void DrawShell(BaseItem shell, bool ignore_borders = false)
+        private void DrawShell(IBaseItem shell, bool ignore_borders = false)
         {
             //проверка: полностью ли влезает объект в свой контейнер
             if (!ignore_borders)
@@ -1180,13 +1185,13 @@ namespace SpaceVIL
             crd_array.Clear();
 
             //border draw
-            VisualItem vi = shell as VisualItem;
+            Prototype vi = shell as Prototype;
             if (vi != null)
             {
-                if (vi.Border.Thickness > 0)
+                if (vi.GetBorder().Thickness > 0)
                 {
                     CustomShape border = new CustomShape();
-                    border.SetBackground(vi.Border.Fill);
+                    border.SetBackground(vi.GetBorder().Fill);
                     border.SetSize(vi.GetWidth(), vi.GetHeight());
                     border.SetPosition(vi.GetX(), vi.GetY());
                     border.SetParent(vi);
@@ -1194,8 +1199,8 @@ namespace SpaceVIL
                     border.SetTriangles(GraphicsMathService.GetRoundSquareBorder(
                         vi.GetWidth(),
                         vi.GetHeight(),
-                        vi.Border.Radius,
-                        vi.Border.Thickness,
+                        vi.GetBorder().Radius,
+                        vi.GetBorder().Thickness,
                         0,
                         0
                         ));
@@ -1203,7 +1208,7 @@ namespace SpaceVIL
                 }
             }
         }
-        void DrawShadow(BaseItem shell)
+        void DrawShadow(IBaseItem shell)
         {
             uint[] fbo_handle = new uint[1];
             uint[] fbo_texture = new uint[1];
@@ -1355,7 +1360,7 @@ namespace SpaceVIL
                 return;
 
             //проверка: полностью ли влезает объект в свой контейнер
-            if (CheckOutsideBorders(text as BaseItem))
+            if (CheckOutsideBorders(text as IBaseItem))
                 _char.UseShader();
 
             // int bb_h = text.GetHeight();
@@ -1503,7 +1508,7 @@ namespace SpaceVIL
                 colorData[i * 4 + 3] = argb[3];
             }
 
-            CheckOutsideBorders(item as BaseItem);
+            CheckOutsideBorders(item as IBaseItem);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
             glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
@@ -1562,7 +1567,7 @@ namespace SpaceVIL
                 colorData[i * 4 + 3] = argb[3];
             }
 
-            CheckOutsideBorders(item as BaseItem);
+            CheckOutsideBorders(item as IBaseItem);
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
             glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
@@ -1587,7 +1592,7 @@ namespace SpaceVIL
         // void DrawImage(ImageItem image)
         // {
         //     //проверка: полностью ли влезает объект в свой контейнер
-        //     if (CheckOutsideBorders(image as BaseItem))
+        //     if (CheckOutsideBorders(image as IBaseItem))
         //         _texture.UseShader();
 
         //     float i_x0 = ((float)image.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
@@ -1628,7 +1633,7 @@ namespace SpaceVIL
                 return;
 
             //проверка: полностью ли влезает объект в свой контейнер
-            if (CheckOutsideBorders(image as BaseItem))
+            if (CheckOutsideBorders(image as IBaseItem))
                 _texture.UseShader();
 
             float i_x0 = ((float)image.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
@@ -1699,7 +1704,7 @@ namespace SpaceVIL
 
         private void DrawToolTip() //refactor
         {
-            if (!_tooltip.IsVisible)
+            if (!_tooltip.IsVisible())
                 return;
 
             _tooltip.SetText(HoveredItem.GetToolTip());

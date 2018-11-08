@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class MenuItem : VisualItem //not finished
+    public class MenuItem : Prototype //not finished
     {
         public bool IsActionItem = false;
         static int count = 0;
@@ -187,7 +187,7 @@ namespace SpaceVIL
         {
             if (_sub_context_menu != null)
             {
-                if (_sub_context_menu.IsVisible)
+                if (_sub_context_menu.IsVisible())
                 {
                     Hide();
                     MouseArgs args = new MouseArgs();

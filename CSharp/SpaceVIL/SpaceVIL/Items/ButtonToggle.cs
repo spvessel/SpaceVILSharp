@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class ButtonToggle : VisualItem
+    public class ButtonToggle : Prototype
     {
         private static int count = 0;
         private TextLine _text_object;
@@ -11,10 +11,10 @@ namespace SpaceVIL
         public ButtonToggle()
         {
             SetItemName("ButtonToggle_" + count);
-            IsToggled = false;
+            SetToggled(false);
             EventKeyPress += OnKeyPress;
             EventMouseClick += (sender, args) => EventToggle?.Invoke(sender, args); //remember
-            EventToggle += (sender, args) => IsToggled = !_toggled;
+            EventToggle += (sender, args) => SetToggled(!_toggled);
             count++;
             _text_object = new TextLine();
 
@@ -31,24 +31,21 @@ namespace SpaceVIL
             if (args.Scancode == 0x1C)
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
-        
+
         //private for class
         private bool _toggled;
-        public bool IsToggled
+        public bool IsToggled()
         {
-            get
-            {
-                return _toggled;
-            }
-            set
-            {
-                _toggled = value;
-                if (value == true)
-                    _state = ItemStateType.Toggled;
-                else
-                    _state = ItemStateType.Base;
-                UpdateState();
-            }
+            return _toggled;
+        }
+
+        public void SetToggled(bool value)
+        {
+            _toggled = value;
+            if (value == true)
+                SetCurrentState(ItemStateType.Toggled);
+            else
+                SetCurrentState(ItemStateType.Base);
         }
 
         public EventMouseMethodState EventToggle;

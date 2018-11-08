@@ -6,15 +6,6 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    public enum GeometryEventType
-    {
-        Focused = 0x01,
-        Moved_X = 0x02,
-        Moved_Y = 0x04,
-        ResizeWidth = 0x08,
-        ResizeHeight = 0x10
-    }
-
     public class EventManager
     {
         internal static bool IsLocked = true;

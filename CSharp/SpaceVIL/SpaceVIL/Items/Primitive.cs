@@ -42,7 +42,7 @@ namespace SpaceVIL
             SetAlignment(style.Alignment);
             SetPosition(style.X, style.Y);
             SetMargin(style.Margin);
-            IsVisible = style.IsVisible;
+            SetVisible(style.IsVisible);
             if (style.Shape != null)
                 SetTriangles(style.Shape);
         }
@@ -60,9 +60,11 @@ namespace SpaceVIL
             style.Y = GetY();
             style.Margin = new Indents(GetMargin().Left, GetMargin().Top, GetMargin().Right, GetMargin().Bottom);
             style.Alignment = GetAlignment();
-            style.IsVisible = IsVisible;
+            style.IsVisible = IsVisible();
 
             return style;
         }
+        
+        public override void InitElements() { }
     }
 }

@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class ImageItem : VisualItem, IImageItem
+    public class ImageItem : Prototype, IImageItem
     {
         static int count = 0;
         public Image _image;

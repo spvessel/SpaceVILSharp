@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace SpaceVIL
 {
-    public class ContextMenu : VisualItem, IFloating
+    public class ContextMenu : Prototype, IFloating
     {
         public ListBox ItemList = new ListBox();
-        private Queue<BaseItem> _queue = new Queue<BaseItem>();
+        private Queue<IBaseItem> _queue = new Queue<IBaseItem>();
 
         private static int count = 0;
         public MouseButton ActiveButton = MouseButton.ButtonRight;
@@ -25,8 +25,8 @@ namespace SpaceVIL
 
         public ContextMenu(WindowLayout handler)
         {
-            IsPassEvents = false;
-            IsVisible = false;
+            SetPassEvents(false);
+            SetVisible(false);
             SetHandler(handler);
             SetItemName("ContextMenu_" + count);
             count++;
@@ -79,12 +79,12 @@ namespace SpaceVIL
         {
             return ItemList.GetListContent().Count;
         }
-        public List<BaseItem> GetListContent()
+        public List<IBaseItem> GetListContent()
         {
             return ItemList.GetListContent();
         }
 
-        public override void AddItem(BaseItem item)
+        public override void AddItem(IBaseItem item)
         {
             // (item as MenuItem)._invoked_menu = this;
             MenuItem tmp = (item as MenuItem);
@@ -92,14 +92,14 @@ namespace SpaceVIL
                 tmp._context_menu = this;
             _queue.Enqueue(item);
 
-            BaseItem[] list = _queue.ToArray();
+            IBaseItem[] list = _queue.ToArray();
             int height = 0;
             foreach (var h in list)
-                if (h.IsVisible && h.IsDrawable)
+                if (h.IsVisible() && h.IsDrawable())
                     height += (h.GetHeight() + ItemList.GetArea().GetSpacing().Vertical);
             SetHeight(GetPadding().Top + GetPadding().Bottom + height);
         }
-        public override void RemoveItem(BaseItem item)
+        public override void RemoveItem(IBaseItem item)
         {
             ItemList.RemoveItem(item);
         }
@@ -111,7 +111,7 @@ namespace SpaceVIL
                 if (!_init)
                     InitElements();
 
-                IsVisible = true;
+                SetVisible(true);
 
                 //проверка снизу
                 if (args.Position.GetY() + GetHeight() > GetHandler().GetHeight())
@@ -138,17 +138,18 @@ namespace SpaceVIL
         }
         public void Hide()
         {
-            Console.WriteLine("4");
             SetX(-GetWidth());
-            IsVisible = false;
+            SetVisible(false);
         }
 
         public override void SetConfines()
         {
-            _confines_x_0 = GetX();
-            _confines_x_1 = GetX() + GetWidth();
-            _confines_y_0 = GetY();
-            _confines_y_1 = GetY() + GetHeight();
+            base.SetConfines(
+                GetX(),
+                GetX() + GetWidth(),
+                GetY(),
+                GetY() + GetHeight()
+            );
         }
 
         public bool CloseDependencies(MouseArgs args)

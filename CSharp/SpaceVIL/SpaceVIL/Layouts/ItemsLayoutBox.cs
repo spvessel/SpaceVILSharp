@@ -7,19 +7,14 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    internal enum LayoutType
-    {
-        Static,
-        Floating
-    }
     static class ItemsLayoutBox
     {
-        static public List<BaseItem> GetLayoutItems(Guid id)
+        static public List<IBaseItem> GetLayoutItems(Guid id)
         {
             // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
             return layouts[id].Items;
         }
-        static public List<BaseItem> GetLayoutFloatItems(Guid id)
+        static public List<IBaseItem> GetLayoutFloatItems(Guid id)
         {
             // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
             return layouts[id].FloatItems;
@@ -36,7 +31,7 @@ namespace SpaceVIL
             ItemsLayout l = new ItemsLayout(_layout);
             layouts.Add(l.Id, l);
         }
-        static internal void AddItem(WindowLayout layout, BaseItem item, LayoutType type)
+        static internal void AddItem(WindowLayout layout, IBaseItem item, LayoutType type)
         {
             switch (type)
             {
@@ -51,7 +46,7 @@ namespace SpaceVIL
                     break;
             }
         }
-        static internal void RemoveItem(WindowLayout layout, BaseItem item, LayoutType type)
+        static internal void RemoveItem(WindowLayout layout, IBaseItem item, LayoutType type)
         {
             switch (type)
             {

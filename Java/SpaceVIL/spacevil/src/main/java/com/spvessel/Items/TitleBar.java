@@ -13,7 +13,7 @@ public class TitleBar extends WindowAnchor {
 
     static int count = 0;
     private HorizontalStack _layout;
-    public HDirection Direction = HDirection.FROM_LEFT_TO_RIGHT;
+    public HorizontalDirection Direction = HorizontalDirection.FROM_LEFT_TO_RIGHT;
     private Label _text_object;
     private ImageItem _icon;
 

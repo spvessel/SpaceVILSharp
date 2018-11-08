@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class HorizontalSlider : VisualItem, IScrollable
+    public class HorizontalSlider : Prototype, IScrollable
     {
         static int count = 0;
 
@@ -112,7 +112,7 @@ namespace SpaceVIL
 
         public virtual void OnTrackClick(object sender, MouseArgs args)
         {
-            if (Handler.IsMouseHover)
+            if (Handler.IsMouseHover())
                 return;
 
             //Compute CurrentValue

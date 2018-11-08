@@ -2,7 +2,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class WindowAnchor : VisualItem, IWindowAnchor
+    public class WindowAnchor : Prototype, IWindowAnchor
     {
         static int count = 0;
         public WindowAnchor()

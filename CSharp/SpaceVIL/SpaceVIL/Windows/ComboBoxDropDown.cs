@@ -36,11 +36,11 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBoxDropDown)));
         }
 
-        public void Add(BaseItem item)
+        public void Add(IBaseItem item)
         {
             ItemList.AddItem(item);
         }
-        public void Remove(BaseItem item)
+        public void Remove(IBaseItem item)
         {
             ItemList.RemoveItem(item);
         }

@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace SpaceVIL
 {
-    public class TextArea : VisualItem
+    public class TextArea : Prototype
     {
         static int count = 0;
         private Grid _grid = new Grid(2, 2);
         private TextBlock _area = new TextBlock();
-        public VisualItem GetTextBlock()
+        public Prototype GetTextBlock()
         {
             return _area;
         }
@@ -38,9 +38,9 @@ namespace SpaceVIL
             _v_scrollBarPolicy = policy;
 
             if (policy == ScrollBarVisibility.Never)
-                VScrollBar.IsVisible = false;
+                VScrollBar.SetVisible(false);
             else
-                VScrollBar.IsVisible = true;
+                VScrollBar.SetVisible(true);
 
             _grid.UpdateLayout();
             UpdateHorizontalSlider();
@@ -56,9 +56,9 @@ namespace SpaceVIL
             _h_scrollBarPolicy = policy;
 
             if (policy == ScrollBarVisibility.Never)
-                HScrollBar.IsVisible = false;
+                HScrollBar.SetVisible(false);
             else
-                HScrollBar.IsVisible = true;
+                HScrollBar.SetVisible(true);
 
             _grid.UpdateLayout();
             UpdateVerticalSlider();
@@ -72,11 +72,11 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextArea)));
 
             //VBar
-            VScrollBar.IsVisible = true;
+            VScrollBar.SetVisible(true);
             VScrollBar.SetItemName(GetItemName() + "_" + VScrollBar.GetItemName());
 
             //HBar
-            HScrollBar.IsVisible = true;
+            HScrollBar.SetVisible(true);
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
 
             //Area

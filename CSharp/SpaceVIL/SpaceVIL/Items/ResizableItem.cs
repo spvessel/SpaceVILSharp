@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class ResizableItem : VisualItem, IDraggable
+    public class ResizableItem : Prototype, IDraggable
     {
         internal ItemAlignment _sides = 0;
 

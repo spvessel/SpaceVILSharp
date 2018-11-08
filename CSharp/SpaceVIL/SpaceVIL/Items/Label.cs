@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class Label : VisualItem
+    public class Label : Prototype
     {
         static int count = 0;
 

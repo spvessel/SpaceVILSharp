@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Timers;
 namespace SpaceVIL
 {
-    public class ToolTip : VisualItem, IToolTip
+    public class ToolTip : Prototype, IToolTip
     {
         private TextLine _text_object;
         internal TextLine GetTextLine()
@@ -25,7 +25,7 @@ namespace SpaceVIL
         }
         public ToolTip()
         {
-            IsVisible = false;
+            SetVisible(false);
             _text_object = new TextLine();
             SetItemName("ToolTip");
 
@@ -97,7 +97,7 @@ namespace SpaceVIL
             }
             else
             {
-                IsVisible = false;
+                SetVisible(false);
 
                 if (_stop == null)
                     return;
@@ -110,7 +110,7 @@ namespace SpaceVIL
 
         private void VisibleSelf()
         {
-            IsVisible = true;
+            SetVisible(true);
 
             _stop.Stop();
             _stop.Dispose();

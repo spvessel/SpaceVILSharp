@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    public class ListArea : VisualItem, IVLayout, IHLayout
+    public class ListArea : Prototype, IVLayout, IHLayout
     {
         public EventCommonMethod SelectionChanged;
         public EventCommonMethod ItemListChanged;
@@ -27,7 +27,7 @@ namespace SpaceVIL
         {
             return _selection;
         }
-        public BaseItem GetSelectionItem()
+        public IBaseItem GetSelectionItem()
         {
             return GetItems().ElementAt(_selection + 1);
         }
@@ -40,7 +40,7 @@ namespace SpaceVIL
         public void Unselect()
         {
             _selection = -1;
-            _substrate.IsVisible = false;
+            _substrate.SetVisible(false);
         }
         public void SetSelectionVisibility(bool visibility)
         {
@@ -83,7 +83,7 @@ namespace SpaceVIL
             // _substrate.SetBackground(111, 181, 255);
             // _substrate.SetAlignment(ItemAlignment.Left | ItemAlignment.Top);
             // _substrate.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-            _substrate.IsVisible = false;
+            _substrate.SetVisible(false);
             base.AddItem(_substrate);
         }
 
@@ -108,19 +108,19 @@ namespace SpaceVIL
             //SelectionChanged?.Invoke();
         }
 
-        internal override void InsertItem(BaseItem item, Int32 index)
+        public override void InsertItem(IBaseItem item, Int32 index)
         {
-            item.IsDrawable = false;
+            item.SetDrawable(false);
             base.InsertItem(item, index);
             UpdateLayout();
         }
-        public override void AddItem(BaseItem item)
+        public override void AddItem(IBaseItem item)
         {
-            item.IsDrawable = false;
+            item.SetDrawable(false);
             base.AddItem(item);
             UpdateLayout();
         }
-        public override void RemoveItem(BaseItem item)
+        public override void RemoveItem(IBaseItem item)
         {
             Unselect();
             base.RemoveItem(item);
@@ -164,7 +164,7 @@ namespace SpaceVIL
             int index = 0;
             foreach (var child in GetItems())
             {
-                if (child.Equals(_substrate) || !child.IsVisible)
+                if (child.Equals(_substrate) || !child.IsVisible())
                     continue;
 
                 child.SetX((-1) * (int)_xOffset + GetX() + GetPadding().Left + child.GetMargin().Left);
@@ -178,14 +178,14 @@ namespace SpaceVIL
                     AreaPosition |= ListPosition.Top;
                     if (child_Y + child.GetHeight() <= startY)
                     {
-                        child.IsDrawable = false;
+                        child.SetDrawable(false);
                         if (_selection == index)
-                            _substrate.IsDrawable = false;
+                            _substrate.SetDrawable(false);
                     }
                     else
                     {
                         child.SetY((int)child_Y);
-                        child.IsDrawable = true;
+                        child.SetDrawable(true);
                         FirstVisibleItem = index + 1;
                         if (_selection == index)
                             SetSubstrate(child);
@@ -200,14 +200,14 @@ namespace SpaceVIL
                     AreaPosition |= ListPosition.Bottom;
                     if (child_Y >= GetY() + GetHeight() - GetPadding().Bottom)
                     {
-                        child.IsDrawable = false;
+                        child.SetDrawable(false);
                         if (_selection == index)
-                            _substrate.IsVisible = false;
+                            _substrate.SetDrawable(false);
                     }
                     else
                     {
                         child.SetY((int)child_Y);
-                        child.IsDrawable = true;
+                        child.SetDrawable(true);
                         LastVisibleItem = index + 1;
                         if (_selection == index)
                             SetSubstrate(child);
@@ -217,7 +217,7 @@ namespace SpaceVIL
                 }
 
                 child.SetY((int)child_Y);
-                child.IsDrawable = true;
+                child.SetDrawable(true);
                 LastVisibleItem = index + 1;
                 if (_selection == index)
                     SetSubstrate(child);
@@ -227,15 +227,15 @@ namespace SpaceVIL
                 child.SetConfines();
             }
         }
-        private void SetSubstrate(BaseItem child)
+        private void SetSubstrate(IBaseItem child)
         {
             if (!_show_selection)
             {
-                _substrate.IsVisible = false;
+                _substrate.SetVisible(false);
                 return;
             }
 
-            _substrate.IsVisible = true;
+            _substrate.SetVisible(true);
             _substrate.SetHeight(child.GetHeight() + 2);
             _substrate.SetMargin(
                 -GetParent().GetPadding().Left,

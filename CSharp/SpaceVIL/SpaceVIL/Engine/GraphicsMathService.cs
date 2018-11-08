@@ -294,7 +294,7 @@ namespace SpaceVIL
 
             return circleSect;
         }
-        static internal List<float[]> ToGL(BaseItem item, WindowLayout handler) //where TLayout : VisualItem
+        static internal List<float[]> ToGL(IBaseItem item, WindowLayout handler) //where TLayout : VisualItem
         {
             if (item.GetTriangles() == null)
                 return null;

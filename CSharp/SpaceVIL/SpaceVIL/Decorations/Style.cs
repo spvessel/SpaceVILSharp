@@ -41,7 +41,7 @@ namespace SpaceVIL
         public int BorderThickness;
         public Color BorderFill;
         public List<float[]> Shape;// = new List<float[]>();
-        public List<BaseItem> InnerShapes;// = new List<float[]>();
+        public List<IBaseItem> InnerShapes;// = new List<float[]>();
         public bool IsFixedShape;
         public bool IsVisible;
 
@@ -188,10 +188,10 @@ namespace SpaceVIL
             BorderThickness = thickness;
         }
         ///////////////////////////////////////////////////////////////////
-        public void AddInnerShape(BaseItem shape)
+        public void AddInnerShape(IBaseItem shape)
         {
             if (InnerShapes == null)
-                InnerShapes = new List<BaseItem>();
+                InnerShapes = new List<IBaseItem>();
             InnerShapes.Add(shape);
         }
         public void AddInnerStyle(String item_name, Style style)
@@ -498,7 +498,7 @@ namespace SpaceVIL
             throw new NotImplementedException();
         }
 
-        public static Style GetFlowAreaStyle()
+        public static Style GetFreeAreaStyle()
         {
             Style style = new Style();
 

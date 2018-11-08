@@ -3,15 +3,12 @@ package com.spvessel.Items;
 import com.spvessel.Decorations.*;
 import com.spvessel.Cores.*;
 import com.spvessel.Windows.*;
-
-import org.lwjgl.system.CallbackI.B;
-
 import com.spvessel.Flags.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class BaseItem implements InterfaceItem, InterfaceSize, InterfacePosition, InterfaceEventUpdate {
+public abstract class BaseItem implements InterfaceItem, InterfaceSize, InterfacePosition, InterfaceBehavior, InterfaceEventUpdate {
 
     public int _confines_x_0 = 0;
     public int _confines_x_1 = 0;

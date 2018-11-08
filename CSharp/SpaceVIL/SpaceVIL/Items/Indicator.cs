@@ -7,11 +7,11 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class Indicator : VisualItem
+    public class Indicator : Prototype
     {
         internal class CustomToggle : ButtonToggle
         {
-            protected internal override bool GetHoverVerification(float xpos, float ypos)
+            internal override bool GetHoverVerification(float xpos, float ypos)
             {
                 return false;
             }

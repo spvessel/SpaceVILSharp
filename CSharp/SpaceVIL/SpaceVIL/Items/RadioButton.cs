@@ -7,11 +7,11 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class RadioButton : VisualItem, IHLayout
+    public class RadioButton : Prototype, IHLayout
     {
         internal class CustomIndicator : Indicator
         {
-            protected internal override bool GetHoverVerification(float xpos, float ypos)
+            internal override bool GetHoverVerification(float xpos, float ypos)
             {
                 return false;
             }
@@ -54,15 +54,11 @@ namespace SpaceVIL
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 
-        public override bool IsMouseHover
+        public override void SetMouseHover(bool value)
         {
-            get { return base.IsMouseHover; }
-            set
-            {
-                base.IsMouseHover = value;
-                _indicator.GetIndicatorMarker().IsMouseHover = IsMouseHover;
-                UpdateState();
-            }
+            base.SetMouseHover(value);
+            _indicator.GetIndicatorMarker().SetMouseHover(IsMouseHover());
+            UpdateState();
         }
         public override void InitElements()
         {
@@ -76,8 +72,8 @@ namespace SpaceVIL
             _indicator.GetIndicatorMarker().EventToggle = null;
             EventMouseClick += (sender, args) =>
             {
-                _indicator.GetIndicatorMarker().IsToggled = !_indicator.GetIndicatorMarker().IsToggled;
-                if (_indicator.GetIndicatorMarker().IsToggled)
+                _indicator.GetIndicatorMarker().SetToggled(!_indicator.GetIndicatorMarker().IsToggled());
+                if (_indicator.GetIndicatorMarker().IsToggled())
                     UncheckOthers(sender);
             };
             // _indicator.GetIndicatorMarker().EventToggle += (sender, args) => UncheckOthers(sender);
@@ -89,12 +85,12 @@ namespace SpaceVIL
 
         private void UncheckOthers(object sender)
         {
-            List<BaseItem> items = GetParent().GetItems();
+            List<IBaseItem> items = GetParent().GetItems();
             foreach (var item in items)
             {
                 if (item is RadioButton && !item.Equals(this))
                 {
-                    (item as RadioButton).GetIndicator().GetIndicatorMarker().IsToggled = false;
+                    (item as RadioButton).GetIndicator().GetIndicatorMarker().SetToggled(false);
                 }
             }
         }
@@ -111,7 +107,7 @@ namespace SpaceVIL
         // }
 
         //Layout rules
-        public new void AddItem(BaseItem item)
+        public new void AddItem(IBaseItem item)
         {
             base.AddItem(item);
             UpdateLayout();

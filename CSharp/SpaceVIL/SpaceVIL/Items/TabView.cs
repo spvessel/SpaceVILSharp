@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class TabView : VisualItem
+    public class TabView : Prototype
     {
         static int count = 0;
 
@@ -28,7 +28,7 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TabView)));
         }
 
-        protected internal override bool GetHoverVerification(float xpos, float ypos)
+        internal override bool GetHoverVerification(float xpos, float ypos)
         {
             return false;
         }
@@ -50,12 +50,12 @@ namespace SpaceVIL
             {
                 if (tab.Key.GetItemName() != sender.GetItemName())
                 {
-                    tab.Key.IsToggled = false;
-                    _tab_list[tab.Key].IsVisible = false;
+                    tab.Key.SetToggled(false);
+                    _tab_list[tab.Key].SetVisible(false);
                 }
                 else
                 {
-                    _tab_list[tab.Key].IsVisible = true;
+                    _tab_list[tab.Key].SetVisible(true);
                 }
             }
             _tab_view.UpdateLayout();
@@ -87,8 +87,8 @@ namespace SpaceVIL
 
             if (_tab_bar.GetItems().Count == 1)
             {
-                tab.IsToggled = true;
-                view.IsVisible = true;
+                tab.SetToggled(true);
+                view.SetVisible(true);
             }
         }
         public void AddTab(String tab_name, Style tab_style, Style view_style)
@@ -105,7 +105,7 @@ namespace SpaceVIL
                 }
             }
         }
-        public void AddItemToTab(String tab_name, BaseItem item)
+        public void AddItemToTab(String tab_name, IBaseItem item)
         {
             foreach (var tab in _tab_bar.GetItems())
             {

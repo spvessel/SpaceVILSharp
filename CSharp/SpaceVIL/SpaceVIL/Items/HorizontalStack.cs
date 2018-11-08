@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class HorizontalStack : VisualItem, IHLayout
+    public class HorizontalStack : Prototype, IHLayout
     {
         static int count = 0;
         public HorizontalStack()
@@ -14,11 +14,11 @@ namespace SpaceVIL
         }
 
         //overrides
-        protected internal override bool GetHoverVerification(float xpos, float ypos)
+        internal override bool GetHoverVerification(float xpos, float ypos)
         {
             return false;
         }
-        public override void AddItem(BaseItem item)
+        public override void AddItem(IBaseItem item)
         {
             base.AddItem(item);
             UpdateLayout();
@@ -43,7 +43,7 @@ namespace SpaceVIL
 
             foreach (var child in GetItems())
             {
-                if (child.IsVisible)
+                if (child.IsVisible())
                 {
                     if (child.GetWidthPolicy() == SizePolicy.Fixed)
                     {
@@ -66,7 +66,7 @@ namespace SpaceVIL
             int startX = GetX() + GetPadding().Left;
             foreach (var child in GetItems())
             {
-                if (child.IsVisible)
+                if (child.IsVisible())
                 {
                     child.SetX(startX + offset + child.GetMargin().Left);//
                     if (child.GetWidthPolicy() == SizePolicy.Expand)

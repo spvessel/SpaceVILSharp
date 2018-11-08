@@ -13,26 +13,27 @@ namespace SpaceVIL
     public delegate void EventKeyMethodState(IItem sender, KeyArgs args);
     public delegate void EventInputTextMethodState(IItem sender, TextInputArgs args);
 
-    abstract public class VisualItem : BaseItem
+    public class VisualItem : BaseItem
     {
-        //common events
-        internal EventCommonMethodState EventFocusGet;
-        internal EventCommonMethodState EventFocusLost;
-        public EventCommonMethodState EventResized;
-        public EventCommonMethodState EventDestroyed;
-        //mouse input
-        public EventMouseMethodState EventMouseHover;
-        public EventMouseMethodState EventMouseClick;
-        public EventMouseMethodState EventMousePressed;
-        public EventMouseMethodState EventMouseRelease;
-        public EventMouseMethodState EventMouseDrag;
-        public EventMouseMethodState EventMouseDrop;
-        public EventMouseMethodState EventScrollUp;
-        public EventMouseMethodState EventScrollDown;
-        //keyboard input
-        public EventKeyMethodState EventKeyPress;
-        public EventKeyMethodState EventKeyRelease;
-        public EventInputTextMethodState EventTextInput;
+        internal Prototype _main;
+        // //common events
+        // internal EventCommonMethodState EventFocusGet;
+        // internal EventCommonMethodState EventFocusLost;
+        // public EventCommonMethodState EventResized;
+        // public EventCommonMethodState EventDestroyed;
+        // //mouse input
+        // public EventMouseMethodState EventMouseHover;
+        // public EventMouseMethodState EventMouseClick;
+        // public EventMouseMethodState EventMousePressed;
+        // public EventMouseMethodState EventMouseRelease;
+        // public EventMouseMethodState EventMouseDrag;
+        // public EventMouseMethodState EventMouseDrop;
+        // public EventMouseMethodState EventScrollUp;
+        // public EventMouseMethodState EventScrollDown;
+        // //keyboard input
+        // public EventKeyMethodState EventKeyPress;
+        // public EventKeyMethodState EventKeyRelease;
+        // public EventInputTextMethodState EventTextInput;
 
         private String _tooltip = String.Empty;
         public String GetToolTip()
@@ -75,23 +76,25 @@ namespace SpaceVIL
             _padding.Bottom = bottom;
         }
         public EventManager eventManager = null;
-        private List<BaseItem> _content = new List<BaseItem>();
-        public virtual List<BaseItem> GetItems()
+        private List<IBaseItem> _content = new List<IBaseItem>();
+        public virtual List<IBaseItem> GetItems()
         {
             return _content;
         }
-        internal void SetContent(List<BaseItem> content)
+        public void SetContent(List<IBaseItem> content)
         {
             _content = content;
         }
-        public virtual void AddItems(params BaseItem[] items)
+
+        private void CastAndUpdate(IBaseItem item)
         {
-            foreach (var item in items)
-            {
-                this.AddItem(item);
-            }
+            Prototype prototype = item as Prototype;
+            if (prototype != null)
+                prototype.GetCore().UpdateGeometry();
+            else
+                (item as BaseItem).UpdateGeometry();
         }
-        public virtual void AddItem(BaseItem item)
+        public virtual void AddItem(IBaseItem item)
         {
             Monitor.Enter(GetHandler().EngineLocker);
             try
@@ -110,12 +113,12 @@ namespace SpaceVIL
                 ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
 
                 //needs to force update all attributes
-                item.UpdateGeometry();
+                CastAndUpdate(item);
                 item.InitElements();
 
-                VisualItem vi = item as VisualItem;
-                if (vi != null)
-                    vi.UpdateState();
+                // VisualItem vi = item as VisualItem;
+                // if (vi != null)
+                //     vi.UpdateState();
             }
             catch (Exception ex)
             {
@@ -126,7 +129,7 @@ namespace SpaceVIL
                 Monitor.Exit(GetHandler().EngineLocker);
             }
         }
-        internal virtual void InsertItem(BaseItem item, Int32 index)
+        internal virtual void InsertItem(IBaseItem item, Int32 index)
         {
             Monitor.Enter(GetHandler().EngineLocker);
             try
@@ -144,11 +147,11 @@ namespace SpaceVIL
                     _content.Insert(index, item);
                 ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
                 //needs to force update all attributes
-                item.UpdateGeometry();
+                CastAndUpdate(item);
                 item.InitElements();
-                VisualItem vi = item as VisualItem;
-                if (vi != null)
-                    vi.UpdateState();
+                // VisualItem vi = item as VisualItem;
+                // if (vi != null)
+                //     vi.UpdateState();
             }
             catch (Exception ex)
             {
@@ -160,23 +163,23 @@ namespace SpaceVIL
             }
         }
 
-        internal void CascadeRemoving(BaseItem item, LayoutType type)
+        internal void CascadeRemoving(IBaseItem item, LayoutType type)
         {
             VisualItem container = item as VisualItem;// предполагаю что элемент контейнер
             if (container != null)//и если это действительно контейнер
             {
                 //то каждому вложенному элементу вызвать команду удалить своих вложенных элементов
-                List<BaseItem> tmp = container.GetItems();
+                List<IBaseItem> tmp = container.GetItems();
                 while (tmp.Count > 0)
                 {
-                    BaseItem child = tmp.ElementAt(0);
+                    IBaseItem child = tmp.ElementAt(0);
                     container.RemoveItem(child);
                     tmp.Remove(child);
                 }
             }
         }
 
-        public virtual void RemoveItem(BaseItem item)
+        public virtual void RemoveItem(IBaseItem item)
         {
             Monitor.Enter(GetHandler().EngineLocker);
             try
@@ -196,7 +199,12 @@ namespace SpaceVIL
                 //removing
                 _content.Remove(item);
 
-                item.RemoveItemFromListeners();
+                Prototype prototype = item as Prototype;
+                if (prototype != null)
+                    prototype.GetCore().RemoveItemFromListeners();
+                else
+                    (item as BaseItem).RemoveItemFromListeners();
+
                 ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
             }
             catch (Exception ex)
@@ -208,11 +216,11 @@ namespace SpaceVIL
                 Monitor.Exit(GetHandler().EngineLocker);
             }
         }
-        protected override void AddEventListener(GeometryEventType type, BaseItem listener)
+        internal override void AddEventListener(GeometryEventType type, IBaseItem listener)
         {
             eventManager.Subscribe(type, listener);
         }
-        protected override void RemoveEventListener(GeometryEventType type, BaseItem listener)
+        internal override void RemoveEventListener(GeometryEventType type, IBaseItem listener)
         {
             eventManager.Unsubscribe(type, listener);
         }
@@ -221,7 +229,11 @@ namespace SpaceVIL
         public Border Border = new Border();
         protected Dictionary<ItemStateType, ItemState> states = new Dictionary<ItemStateType, ItemState>();
         protected ItemStateType _state = ItemStateType.Base;
-        protected void SetState(ItemStateType state)
+        internal ItemStateType GetCurrentState()
+        {
+            return _state;
+        }
+        internal void SetState(ItemStateType state)
         {
             _state = state;
             UpdateState();
@@ -247,15 +259,6 @@ namespace SpaceVIL
             //common default prop
             eventManager = new EventManager();
             SetItemName(name);
-
-            //bind events
-            // EventMouseHover += EmptyEvent;
-            // EventMousePressed += (sender, args) => IsMousePressed = !IsMousePressed;
-            // EventFocusGet += EmptyEvent;
-            // EventFocusLost += EmptyEvent;
-            // EventMouseDrop += EmptyEvent;
-            // EventResized += EmptyEvent;
-            // EventDestroyed += EmptyEvent;
         }
 
         //overrides
@@ -291,6 +294,7 @@ namespace SpaceVIL
 
                 if (GetParent() != null && GetHeightPolicy() == SizePolicy.Fixed)
                 {
+                    // Console.WriteLine(GetParent());
                     var layout = GetParent() as IVLayout;
                     var grid = GetParent() as IGrid;
 
@@ -329,85 +333,86 @@ namespace SpaceVIL
             }
         }
 
-        //common properties
+        // common properties
         private bool _pass_events = true;
-        public virtual bool IsPassEvents
+
+        public bool GetPassEvents()
         {
-            get { return _pass_events; }
-            set
-            {
-                if (_pass_events == value)
-                    return;
-                _pass_events = value;
-            }
-        }
-        private bool _disabled;
-        public bool IsDisabled
-        {
-            get { return _disabled; }
-            set
-            {
-                if (_disabled == value)
-                    return;
-                _disabled = value;
-                UpdateState();
-            }
-        }
-        private bool _hover;
-        public virtual bool IsMouseHover
-        {
-            get { return _hover; }
-            set
-            {
-                if (_hover == value)
-                    return;
-                _hover = value;
-                UpdateState();
-            }
-        }
-        private bool _pressed;
-        public virtual bool IsMousePressed
-        {
-            get { return _pressed; }
-            set
-            {
-                if (_pressed == value)
-                    return;
-                _pressed = value;
-                UpdateState();
-            }
-        }
-        private bool _focused;
-        public bool IsFocusable = true;
-        public virtual bool IsFocused
-        {
-            get
-            {
-                return _focused;
-            }
-            set
-            {
-                if (IsFocusable)
-                {
-                    if (_focused == value)
-                        return;
-                    _focused = value;
-                    UpdateState();
-                }
-            }
+            return _pass_events;
         }
 
-        public void SetFocus()
+        public void SetPassEvents(bool value)
         {
-            if (IsFocusable)
-                GetHandler().SetFocusedItem(this);
+            if (_pass_events == value)
+                return;
+            _pass_events = value;
+        }
+
+        private bool _disabled;
+
+        public bool IsDisabled()
+        {
+            return _disabled;
+        }
+
+        public void SetDisabled(bool value)
+        {
+            if (_disabled == value)
+                return;
+            _disabled = value;
+            UpdateState();
+        }
+
+        private bool _hover;
+
+        public bool IsMouseHover()
+        {
+            return _hover;
+        }
+
+        public void SetMouseHover(bool value)
+        {
+            if (_hover == value)
+                return;
+            _hover = value;
+            UpdateState();
+        }
+
+        private bool _pressed;
+
+        public bool IsMousePressed()
+        {
+            return _pressed;
+        }
+
+        public void SetMousePressed(bool value)
+        {
+            if (_pressed == value)
+                return;
+            _pressed = value;
+            UpdateState();
+        }
+
+        private bool _focused;
+
+        public bool IsFocused()
+        {
+            return _focused;
+        }
+
+        public void SetFocused(bool value)
+        {
+            if (_focused == value)
+                return;
+            _focused = value;
+            UpdateState();
         }
 
         protected override void UpdateInnersDrawable(bool value)
         {
             foreach (var item in _content)
             {
-                item.IsVisible = value;
+                item.SetVisible(value);
             }
         }
         //common methods
@@ -472,7 +477,7 @@ namespace SpaceVIL
             UpdateState();
         }
 
-        protected virtual void UpdateState()
+        internal virtual void UpdateState()
         {
             base.SetBackground(GetState(_state).Background);
             Border.Fill = GetState(_state).Border.Fill;
@@ -490,7 +495,7 @@ namespace SpaceVIL
                 IsCustom = GetState(_state).Shape;
 
             //mixing    
-            if (IsDisabled && states.ContainsKey(ItemStateType.Disabled))
+            if (IsDisabled() && states.ContainsKey(ItemStateType.Disabled))
             {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Disabled).Background));
 
@@ -507,7 +512,7 @@ namespace SpaceVIL
                 return;
             }
 
-            if (IsFocused && states.ContainsKey(ItemStateType.Focused))
+            if (IsFocused() && states.ContainsKey(ItemStateType.Focused))
             {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Focused).Background));
 
@@ -523,7 +528,7 @@ namespace SpaceVIL
                 }
             }
 
-            if (IsMouseHover && states.ContainsKey(ItemStateType.Hovered))
+            if (IsMouseHover() && states.ContainsKey(ItemStateType.Hovered))
             {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Hovered).Background));
 
@@ -539,7 +544,7 @@ namespace SpaceVIL
                 }
             }
 
-            if (IsMousePressed && states.ContainsKey(ItemStateType.Pressed))
+            if (IsMousePressed() && states.ContainsKey(ItemStateType.Pressed))
             {
                 base.SetBackground(GraphicsMathService.MixColors(GetState(_state).Background, GetState(ItemStateType.Pressed).Background));
 
@@ -556,7 +561,7 @@ namespace SpaceVIL
             }
         }
 
-        protected internal virtual bool GetHoverVerification(float xpos, float ypos)
+        internal virtual bool GetHoverVerification(float xpos, float ypos)
         {
             switch (HoverRule)
             {
@@ -669,7 +674,7 @@ namespace SpaceVIL
 
             SetTriangles(GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));
             //GetState(ItemStateType.Base).Shape = new CustomFigure(true, GraphicsMathService.GetRoundSquare(GetWidth(), GetHeight(), Border.Radius, GetX(), GetY()));
-            return GraphicsMathService.ToGL(this as BaseItem, GetHandler());
+            return GraphicsMathService.ToGL(this as IBaseItem, GetHandler());
         }
 
         //style
@@ -694,7 +699,7 @@ namespace SpaceVIL
             Border.Radius = style.BorderRadius;
             Border.Thickness = style.BorderThickness;
             Border.Fill = style.BorderFill;
-            IsVisible = style.IsVisible;
+            SetVisible(style.IsVisible);
             RemoveAllItemStates();
 
             ItemState core_state = new ItemState(style.Background);
@@ -733,7 +738,7 @@ namespace SpaceVIL
             style.BorderFill = Border.Fill;
             style.BorderRadius = Border.Radius;
             style.BorderThickness = Border.Thickness;
-            style.IsVisible = IsVisible;
+            style.IsVisible = IsVisible();
             if (IsCustom != null)
             {
                 style.Shape = IsCustom.GetFigure();
@@ -746,5 +751,7 @@ namespace SpaceVIL
 
             return style;
         }
+
+        public override void InitElements() { }
     }
 }

@@ -62,8 +62,8 @@ namespace SpaceVIL
 
         public void SetArrowsVisible(bool value)
         {
-            UpArrow.IsVisible = value;
-            DownArrow.IsVisible = value;
+            UpArrow.SetVisible(value);
+            DownArrow.SetVisible(value);
         }
 
         public void InvokeScrollUp(MouseArgs args)

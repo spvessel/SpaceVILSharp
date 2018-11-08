@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public class Grid : VisualItem, IGrid
+    public class Grid : Prototype, IGrid
     {
         static int count = 0;
 
@@ -81,11 +81,12 @@ namespace SpaceVIL
         }
 
         //overrides
-        protected internal override bool GetHoverVerification(float xpos, float ypos)
+        internal override bool GetHoverVerification(float xpos, float ypos)
         {
             return false;
         }
-        public override void AddItem(BaseItem item)
+
+        public override void AddItem(IBaseItem item)
         {
             //ignore if it is out of space, add in free cell, attach row and collumn numbers
             foreach (Cell cell in _cells)
@@ -99,7 +100,7 @@ namespace SpaceVIL
                 }
             }
         }
-        public void InsertItem(BaseItem item, int row, int column)
+        public void InsertItem(IBaseItem item, int row, int column)
         {
             base.AddItem(item);
             //_cells[row + column * _row_count].SetItem(item);
@@ -142,6 +143,7 @@ namespace SpaceVIL
         //Update Layout
         public void UpdateLayout()
         {
+            // Console.WriteLine("grid update");
             /*
              * Алгоритм:
              * 1. найти максимумы по ширине в столбцах
@@ -191,7 +193,7 @@ namespace SpaceVIL
                     // index = r + c * _row_count;
                     index = c + r * _column_count;
 
-                    BaseItem item = _cells[index].GetItem();
+                    IBaseItem item = _cells[index].GetItem();
                     /*if (item == null)
                         continue;*/
 
@@ -240,9 +242,9 @@ namespace SpaceVIL
             {
                 for (int c = 0; c < _column_count; c++)
                 {
-                    BaseItem item = _cells[c + r * _column_count].GetItem();
+                    IBaseItem item = _cells[c + r * _column_count].GetItem();
 
-                    if (item == null || !item.IsVisible)
+                    if (item == null || !item.IsVisible())
                     {
                         list_height.Add(new int[2] { r, -1 });
                         continue;
@@ -329,8 +331,8 @@ namespace SpaceVIL
                 for (int r = 0; r < _row_count; r++)
                 {
                     //Console.WriteLine(c + r * _column_count);
-                    BaseItem item = _cells[c + r * _column_count].GetItem();
-                    if (item == null || !item.IsVisible)
+                    IBaseItem item = _cells[c + r * _column_count].GetItem();
+                    if (item == null || !item.IsVisible())
                     {
                         list_width.Add(new int[2] { c, -1 });
                         continue;

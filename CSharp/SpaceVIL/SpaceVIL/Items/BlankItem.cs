@@ -1,6 +1,6 @@
 namespace SpaceVIL
 {
-    public class BlankItem : VisualItem
+    public class BlankItem : Prototype
     {
         static int count = 0;
         public BlankItem()

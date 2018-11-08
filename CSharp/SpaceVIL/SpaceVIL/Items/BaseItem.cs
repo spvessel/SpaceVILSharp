@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SpaceVIL
 {
-    public abstract class BaseItem : IGeometry, IBehavior, IAncestor, IEventUpdate, IItem
+    abstract public class BaseItem : IBaseItem
     {
         internal int _confines_x_0 = 0;
         internal int _confines_x_1 = 0;
@@ -23,29 +23,41 @@ namespace SpaceVIL
         }
 
         //parent
-        private VisualItem _parent = null;
-        public VisualItem GetParent()
+        private Prototype _parent = null;
+        public Prototype GetParent()
         {
             return _parent;
         }
-        internal void SetParent(VisualItem parent)
+        public void SetParent(Prototype parent)
         {
             _parent = parent;
         }
-        protected void AddChildren(BaseItem item)
+        private void CastAndUpdate(IBaseItem item)
+        {
+            Prototype prototype = item as Prototype;
+            if (prototype != null)
+                prototype.GetCore().UpdateBehavior();
+            else
+                (item as BaseItem).UpdateBehavior();
+        }
+        internal void AddChildren(IBaseItem item)
         {
             if (item.GetParent() != null)
                 item.GetParent().RemoveItem(item);
 
-            item.SetParent(this as VisualItem);
+            //Console.WriteLine(this.GetItemName() + " " + (this is BaseItem) + " or " + (this is Prototype));
+
+            item.SetParent((this as VisualItem)._main);
 
             //refactor events verification
+            // Console.WriteLine(item.GetParent().GetType());
+
             var v_stack = item.GetParent() as IVLayout;
             if (v_stack != null)
             {
                 AddEventListener(GeometryEventType.ResizeWidth, item);
                 AddEventListener(GeometryEventType.Moved_X, item);
-                item.UpdateBehavior();
+                CastAndUpdate(item);
                 return;
             }
             var h_stack = item.GetParent() as IHLayout;
@@ -53,12 +65,13 @@ namespace SpaceVIL
             {
                 AddEventListener(GeometryEventType.ResizeHeight, item);
                 AddEventListener(GeometryEventType.Moved_Y, item);
-                item.UpdateBehavior();
+                CastAndUpdate(item);
                 return;
             }
             var grid_stack = item.GetParent() as IGrid;
             if (grid_stack != null)
             {
+                // Console.WriteLine(item.GetParent().GetType() + " what?");
                 return;
             }
             var flow_stack = item.GetParent() as IFlow;
@@ -71,10 +84,10 @@ namespace SpaceVIL
             AddEventListener(GeometryEventType.ResizeHeight, item);
             AddEventListener(GeometryEventType.Moved_X, item);
             AddEventListener(GeometryEventType.Moved_Y, item);
-            item.UpdateBehavior();
+            CastAndUpdate(item);
         }
-        protected virtual void AddEventListener(GeometryEventType type, BaseItem listener) { }
-        protected virtual void RemoveEventListener(GeometryEventType type, BaseItem listener) { }
+        internal virtual void AddEventListener(GeometryEventType type, IBaseItem listener) { }
+        internal virtual void RemoveEventListener(GeometryEventType type, IBaseItem listener) { }
         public void RemoveItemFromListeners()
         {
             GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this);
@@ -83,10 +96,9 @@ namespace SpaceVIL
             GetParent().RemoveEventListener(GeometryEventType.Moved_Y, this);
         }
 
-        public virtual void InitElements()
-        {
-            //do nothing
-        }
+        // abstract public void InitElements();
+        public virtual void InitElements() { }
+
         private Item _item = new Item();
         private Indents _margin = new Indents();
         public Indents GetMargin()
@@ -187,30 +199,26 @@ namespace SpaceVIL
             return _item.GetItemName();
         }
 
-        internal bool IsDrawable = true;
-        // private bool _drawable = true;
-        // internal virtual bool IsDrawable
-        // {
-        //     get { return _drawable; }
-        //     set
-        //     {
-        //         if (_drawable == value)
-        //             return;
-        //         _drawable = value;
-        //         // UpdateInnersDrawable(value);
-        //     }
-        // }
-        private bool _visible = true;
-        public virtual bool IsVisible
+        private bool _drawable = true;
+        public virtual bool IsDrawable()
+        { return _drawable; }
+        public virtual void SetDrawable(bool value)
         {
-            get { return _visible; }
-            set
-            {
-                if (_visible == value)
-                    return;
-                _visible = value;
-                //UpdateInnersDrawable(value);
-            }
+            if (_drawable == value)
+                return;
+            _drawable = value;
+            // UpdateInnersDrawable(value);
+        }
+        private bool _visible = true;
+        public virtual bool IsVisible()
+        {
+            return _visible;
+        }
+        public virtual void SetVisible(bool value)
+        {
+            if (_visible == value)
+                return;
+            _visible = value;
         }
 
         protected virtual void UpdateInnersDrawable(bool value)
@@ -301,6 +309,11 @@ namespace SpaceVIL
             if (GetParent() == null)
                 return;
 
+            if ((this as VisualItem) != null) {
+                ProtoUpdateBehavior();
+                return;
+            }
+
             ItemAlignment alignment = GetAlignment();
 
             if (alignment.HasFlag(ItemAlignment.Left))
@@ -328,6 +341,38 @@ namespace SpaceVIL
                 SetY(GetParent().GetY() + (GetParent().GetHeight() - GetHeight()) / 2 + GetMargin().Top - GetMargin().Bottom);//
             }
         }
+
+        private void ProtoUpdateBehavior() {
+            Prototype prt = (this as VisualItem)._main;
+
+            ItemAlignment alignment = prt.GetAlignment();
+
+            if (alignment.HasFlag(ItemAlignment.Left))
+            {
+                prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetPadding().Left + prt.GetMargin().Left);//
+            }
+            if (alignment.HasFlag(ItemAlignment.Right))
+            {
+                prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetWidth() - prt.GetWidth() - prt.GetParent().GetPadding().Right - prt.GetMargin().Right);//
+            }
+            if (alignment.HasFlag(ItemAlignment.Top))
+            {
+                prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetPadding().Top + prt.GetMargin().Top);//
+            }
+            if (alignment.HasFlag(ItemAlignment.Bottom))
+            {
+                prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetHeight() - prt.GetHeight() - prt.GetParent().GetPadding().Bottom - prt.GetMargin().Bottom);//
+            }
+            if (alignment.HasFlag(ItemAlignment.HCenter))
+            {
+                prt.SetX(prt.GetParent().GetX() + (prt.GetParent().GetWidth() - prt.GetWidth()) / 2 + prt.GetMargin().Left - prt.GetMargin().Right);//
+            }
+            if (alignment.HasFlag(ItemAlignment.VCenter))
+            {
+                prt.SetY(prt.GetParent().GetY() + (prt.GetParent().GetHeight() - prt.GetHeight()) / 2 + prt.GetMargin().Top - prt.GetMargin().Bottom);//
+            }
+        }
+
         public ItemAlignment GetAlignment()
         {
             return _itemBehavior.GetAlignment();
@@ -387,6 +432,15 @@ namespace SpaceVIL
             _confines_y_0 = GetParent().GetY() + GetParent().GetPadding().Top;
             _confines_y_1 = GetParent().GetY() + GetParent().GetHeight() - GetParent().GetPadding().Bottom;
         }
+
+        public void SetConfines(int x0, int x1, int y0, int y1)
+        {
+            _confines_x_0 = x0;
+            _confines_x_1 = x1;
+            _confines_y_0 = y0;
+            _confines_y_1 = y1;
+        }
+
         internal bool IsOutConfines()
         {
             if (
@@ -401,6 +455,11 @@ namespace SpaceVIL
 
         public void Update(GeometryEventType type, int value = 0)
         {
+            if ((this as VisualItem) != null) {
+                ProtoUpdate(type, value);
+                return;
+            }
+
             SetConfines();
             switch (type)
             {
@@ -505,6 +564,113 @@ namespace SpaceVIL
             }
         }
 
+        private void ProtoUpdate(GeometryEventType type, int value = 0)
+        {
+            Prototype prt = (this as VisualItem)._main;
+            prt.SetConfines();
+            switch (type)
+            {
+                case GeometryEventType.Moved_X:
+                    prt.SetX(GetX() + value);
+                    break;
+
+                case GeometryEventType.Moved_Y:
+                    prt.SetY(GetY() + value);
+                    break;
+
+                case GeometryEventType.ResizeWidth:
+                    if (prt.GetWidthPolicy() == SizePolicy.Fixed)
+                    {
+                        if (prt.GetAlignment().HasFlag(ItemAlignment.Right))
+                        {
+                            prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetWidth() - prt.GetWidth() - prt.GetParent().GetPadding().Right - prt.GetMargin().Right);//
+                        }
+                        if (prt.GetAlignment().HasFlag(ItemAlignment.HCenter))
+                        {
+                            prt.SetX(prt.GetParent().GetX() + (prt.GetParent().GetWidth() - prt.GetWidth()) / 2 + prt.GetMargin().Left - prt.GetMargin().Right);
+                        }
+                    }
+                    else if (prt.GetWidthPolicy() == SizePolicy.Expand)
+                    {
+                        int prefered = prt.GetParent().GetWidth() - prt.GetParent().GetPadding().Left - prt.GetParent().GetPadding().Right - prt.GetMargin().Right - prt.GetMargin().Left;//
+                        prefered = (prefered > prt.GetMaxWidth()) ? prt.GetMaxWidth() : prefered;
+                        prefered = (prefered < prt.GetMinWidth()) ? prt.GetMinWidth() : prefered;
+                        prt.SetWidth(prefered);
+
+                        if (prefered + prt.GetParent().GetPadding().Left + prt.GetParent().GetPadding().Right + prt.GetMargin().Right + prt.GetMargin().Left == prt.GetParent().GetWidth())//
+                        {
+                            prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetPadding().Left + prt.GetMargin().Left);//
+                        }
+                        else if (prefered + prt.GetParent().GetPadding().Left + prt.GetParent().GetPadding().Right + prt.GetMargin().Right + prt.GetMargin().Left < prt.GetParent().GetWidth())//
+                        {
+                            if (prt.GetAlignment().HasFlag(ItemAlignment.Right))
+                            {
+                                prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetWidth() - prt.GetWidth() - prt.GetParent().GetPadding().Right - prt.GetMargin().Right);//
+                            }
+                            if (prt.GetAlignment().HasFlag(ItemAlignment.HCenter))
+                            {
+                                prt.SetX(prt.GetParent().GetX() + (prt.GetParent().GetWidth() - prt.GetWidth()) / 2 + prt.GetMargin().Left);//
+                            }
+                        }
+                        else if (prefered + prt.GetParent().GetPadding().Left + prt.GetParent().GetPadding().Right + prt.GetMargin().Right + prt.GetMargin().Left > prt.GetParent().GetWidth())//
+                        {
+                            //никогда не должен зайти
+                            prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetPadding().Left + prt.GetMargin().Left);//
+                            prefered = prt.GetParent().GetWidth() - prt.GetParent().GetPadding().Left - prt.GetParent().GetPadding().Right - prt.GetMargin().Left - prt.GetMargin().Right;//
+                            prt.SetWidth(prefered);
+                        }
+                    }
+                    break;
+
+                case GeometryEventType.ResizeHeight:
+                    if (prt.GetHeightPolicy() == SizePolicy.Fixed)
+                    {
+                        if (prt.GetAlignment().HasFlag(ItemAlignment.Bottom))
+                        {
+                            prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetHeight() - prt.GetHeight() - prt.GetParent().GetPadding().Bottom - prt.GetMargin().Bottom);//
+                        }
+                        if (prt.GetAlignment().HasFlag(ItemAlignment.VCenter))
+                        {
+                            prt.SetY(prt.GetParent().GetY() + (prt.GetParent().GetHeight() - prt.GetHeight()) / 2 + prt.GetMargin().Top - prt.GetMargin().Bottom);
+                        }
+                    }
+                    else if (prt.GetHeightPolicy() == SizePolicy.Expand)
+                    {
+                        int prefered = prt.GetParent().GetHeight() - prt.GetParent().GetPadding().Top - prt.GetParent().GetPadding().Bottom - prt.GetMargin().Bottom - prt.GetMargin().Top;//
+                        prefered = (prefered > prt.GetMaxHeight()) ? prt.GetMaxHeight() : prefered;
+                        prefered = (prefered < prt.GetMinHeight()) ? prt.GetMinHeight() : prefered;
+                        prt.SetHeight(prefered);
+
+                        if (prefered + prt.GetParent().GetPadding().Top + prt.GetParent().GetPadding().Bottom + prt.GetMargin().Bottom + prt.GetMargin().Top == prt.GetParent().GetHeight())//
+                        {
+                            prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetPadding().Top + prt.GetMargin().Top);//
+                        }
+                        else if (prefered + prt.GetParent().GetPadding().Top + prt.GetParent().GetPadding().Bottom + prt.GetMargin().Bottom + prt.GetMargin().Top < prt.GetParent().GetHeight())//
+                        {
+                            if (prt.GetAlignment().HasFlag(ItemAlignment.Bottom))
+                            {
+                                prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetHeight() - prt.GetHeight() - prt.GetParent().GetPadding().Bottom - prt.GetMargin().Bottom);//
+                            }
+                            if (prt.GetAlignment().HasFlag(ItemAlignment.VCenter))
+                            {
+                                prt.SetY(prt.GetParent().GetY() + (prt.GetParent().GetHeight() - prt.GetHeight()) / 2 + prt.GetMargin().Top);//
+                            }
+                        }
+                        else if (prefered + prt.GetParent().GetPadding().Top + prt.GetParent().GetPadding().Bottom + prt.GetMargin().Bottom + prt.GetMargin().Top > prt.GetParent().GetHeight())//
+                        {
+                            //никогда не должен зайти
+                            prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetPadding().Top + prt.GetMargin().Top);//
+                            prefered = prt.GetParent().GetHeight() - prt.GetParent().GetPadding().Top - prt.GetParent().GetPadding().Bottom - prt.GetMargin().Top - prt.GetMargin().Bottom;//
+                            prt.SetHeight(prefered);
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         public virtual void UpdateGeometry()
         {
             Update(GeometryEventType.ResizeWidth);
@@ -515,6 +681,7 @@ namespace SpaceVIL
 
         public virtual void SetStyle(Style style) { }
         public abstract Style GetCoreStyle();
+        // public virtual Style GetCoreStyle() { throw new NotImplementedException(); }
         public virtual void CheckDefaults()
         {
             //checking all attributes
@@ -558,7 +725,7 @@ namespace SpaceVIL
         public Position GetShadowPos()
         {
             return _shadow_pos;
-        } 
+        }
         public void SetShadow(float radius, int x, int y, Color color)
         {
             _is_shadow_drop = true;
@@ -566,6 +733,11 @@ namespace SpaceVIL
             _shadow_color = color;
             _shadow_pos.SetX(x);
             _shadow_pos.SetY(y);
+        }
+
+        public int[] GetConfines()
+        {
+            return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
         }
     }
 }

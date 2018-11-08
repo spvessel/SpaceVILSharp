@@ -61,7 +61,7 @@ namespace SpaceVIL
                 DefaultItemsStyle.Add(typeof(SpaceVIL.ComboBox), Style.GetComboBoxStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.ComboBoxDropDown), Style.GetComboBoxDropDownStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.ContextMenu), Style.GetContextMenuStyle());
-                DefaultItemsStyle.Add(typeof(SpaceVIL.FlowArea), Style.GetFlowAreaStyle());
+                DefaultItemsStyle.Add(typeof(SpaceVIL.FreeArea), Style.GetFreeAreaStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.Frame), Style.GetFrameStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.Grid), Style.GetGridStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.HorizontalScrollBar), Style.GetHorizontalScrollBarStyle());
@@ -105,14 +105,14 @@ namespace SpaceVIL
             return null;
         }
 
-        private ConcurrentDictionary<BaseItem, Style> SpecificItemsStyle = new ConcurrentDictionary<BaseItem, Style>();
+        private ConcurrentDictionary<IBaseItem, Style> SpecificItemsStyle = new ConcurrentDictionary<IBaseItem, Style>();
 
         public void SetCurrentAsDefault()
         {
             DefaultsService.SetDefaultTheme(this);
         }
 
-        public void AddSpecificItemStyle(BaseItem current_item, Style style)
+        public void AddSpecificItemStyle(IBaseItem current_item, Style style)
         {
             if (SpecificItemsStyle.ContainsKey(current_item))
                 SpecificItemsStyle[current_item] = style;
@@ -120,7 +120,7 @@ namespace SpaceVIL
                 SpecificItemsStyle.TryAdd(current_item, style);
         }
 
-        public void RemoveSpecificItemStyle(BaseItem current_item, Style style)
+        public void RemoveSpecificItemStyle(IBaseItem current_item, Style style)
         {
             if (SpecificItemsStyle.ContainsKey(current_item))
                 SpecificItemsStyle.TryRemove(current_item, out style);

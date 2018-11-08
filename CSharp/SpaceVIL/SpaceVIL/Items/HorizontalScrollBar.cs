@@ -43,7 +43,7 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            UpArrow.IsFocusable = false;
+            UpArrow.IsFocusable = (false);
             DownArrow.IsFocusable = false;
             Slider.IsFocusable = false;
             Slider.Handler.IsFocusable = false;
@@ -57,8 +57,8 @@ namespace SpaceVIL
 
         public void SetArrowsVisible(bool value)
         {
-            UpArrow.IsVisible = value;
-            DownArrow.IsVisible = value;
+            UpArrow.SetVisible(value);
+            DownArrow.SetVisible(value);
         }
 
         public void InvokeScrollUp(MouseArgs args)

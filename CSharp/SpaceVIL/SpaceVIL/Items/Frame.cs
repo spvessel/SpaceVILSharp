@@ -2,7 +2,7 @@
 
 namespace SpaceVIL
 {
-    public class Frame : VisualItem
+    public class Frame : Prototype
     {
         static int count = 0;
         public Frame()
@@ -13,7 +13,7 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Frame)));
         }
 
-        protected internal override bool GetHoverVerification(float xpos, float ypos)
+        internal override bool GetHoverVerification(float xpos, float ypos)
         {
             return false;
         }

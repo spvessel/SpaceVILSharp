@@ -149,7 +149,7 @@ namespace SpaceVIL
             AddText(outText.ToString());
         }
 
-        public void LogException(Exception ex, BaseItem item)
+        public void LogException(Exception ex, IBaseItem item)
         {
             if (!isLogging) return;
 
@@ -162,7 +162,7 @@ namespace SpaceVIL
             AddText(outText.ToString());
         }
 
-        public void LogBaseItem(BaseItem item, LogProps props)
+        public void LogIBaseItem(IBaseItem item, LogProps props)
         {
             if (!isLogging) return;
 
@@ -260,11 +260,11 @@ namespace SpaceVIL
             AddText(outText.ToString());
         }
 
-        public void LogVisualItem(VisualItem item, LogProps props)
+        public void LogPrototype(Prototype item, LogProps props)
         {
             if (!isLogging) return;
 
-            LogBaseItem(item, props);
+            LogIBaseItem(item, props);
             StringBuilder outText = new StringBuilder();
             if (props.HasFlag(LogProps.Spacing))
             {
@@ -308,8 +308,8 @@ namespace SpaceVIL
             if (props.HasFlag(LogProps.Children))
             {
                 outText.AppendLine("Children:");
-                List<BaseItem> chi = item.GetItems();
-                foreach (BaseItem bi in chi)
+                List<IBaseItem> chi = item.GetItems();
+                foreach (IBaseItem bi in chi)
                 {
                     outText.AppendLine("    " + bi.GetItemName());
                 }
@@ -318,7 +318,7 @@ namespace SpaceVIL
 
             if (props.HasFlag(LogProps.IsFocused))
             {
-                outText.AppendLine("IsFocused: " + item.IsFocused);
+                outText.AppendLine("IsFocused: " + item.IsFocused());
             }
 
 
@@ -446,8 +446,8 @@ namespace SpaceVIL
             if (props.HasFlag(LogProps.Children))
             {
                 outText.AppendLine("Children:");
-                List<BaseItem> chi = window.GetWindow().GetItems();
-                foreach (BaseItem bi in chi)
+                List<IBaseItem> chi = window.GetWindow().GetItems();
+                foreach (IBaseItem bi in chi)
                 {
                     outText.AppendLine("    " + bi.GetItemName());
                 }
