@@ -108,6 +108,36 @@ namespace SpaceVIL
         {
             _core.SetMargin(left, top, right, bottom);
         }
+        public void SetBorder(Border border)
+        {
+            _core.SetBorder(border);
+        }
+
+        public void SetBorderFill(Color fill)
+        {
+            _core.SetBorderFill(fill);
+        }
+        public void SetBorderRadius(CornerRadius radius)
+        {
+            _core.SetBorderRadius(radius);
+        }
+        public void SetBorderThickness(int thickness)
+        {
+            _core.SetBorderThickness(thickness);
+        }
+        public CornerRadius GetBorderRadius()
+        {
+            return _core.GetBorderRadius();
+        }
+        public int GetBorderThickness()
+        {
+            return _core.GetBorderThickness();
+        }
+        public Color GetBorderFill()
+        {
+            return _core.GetBorderFill();
+        }
+
         public virtual void InitElements()
         {
             _core.InitElements();
@@ -444,10 +474,7 @@ namespace SpaceVIL
         {
             return _core.GetItems();
         }
-        public Border GetBorder()
-        {
-            return _core.GetBorder();
-        }
+
         public virtual void RemoveItem(IBaseItem item)
         {
             _core.RemoveItem(item);
@@ -469,7 +496,7 @@ namespace SpaceVIL
         {
             return _core.GetCurrentState();
         }
-        internal void SetCurrentState(ItemStateType state)
+        internal void SetState(ItemStateType state)
         {
             _core.SetState(state);
         }

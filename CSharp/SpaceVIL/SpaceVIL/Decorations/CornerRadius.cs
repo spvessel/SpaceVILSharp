@@ -1,30 +1,30 @@
-public struct CornerRadius
+public class CornerRadius
 {
-    public float leftTop;
-    public float rightTop;
-    public float leftBottom;
-    public float rightBottom;
+    public float LeftTop;
+    public float RightTop;
+    public float LeftBottom;
+    public float RightBottom;
 
     public CornerRadius(CornerRadius radius)
     {
-        leftTop = radius.leftTop;
-        rightTop = radius.rightTop;
-        leftBottom = radius.leftBottom;
-        rightBottom = radius.rightBottom;
+        LeftTop = radius.LeftTop;
+        RightTop = radius.RightTop;
+        LeftBottom = radius.LeftBottom;
+        RightBottom = radius.RightBottom;
     }
-    public CornerRadius(float radius = 0)
+    public CornerRadius(float radius =  0)
     {
-        leftTop = radius;
-        rightTop = radius;
-        leftBottom = radius;
-        rightBottom = radius;
+        LeftTop = radius;
+        RightTop = radius;
+        LeftBottom = radius;
+        RightBottom = radius;
     }
 
     public CornerRadius(float lt, float rt, float lb, float rb)
     {
-        leftTop = lt;
-        rightTop = rt;
-        leftBottom = lb;
-        rightBottom = rb;
+        LeftTop = lt;
+        RightTop = rt;
+        LeftBottom = lb;
+        RightBottom = rb;
     }
 }

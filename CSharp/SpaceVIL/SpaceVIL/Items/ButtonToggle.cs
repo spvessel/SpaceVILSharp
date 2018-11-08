@@ -43,9 +43,9 @@ namespace SpaceVIL
         {
             _toggled = value;
             if (value == true)
-                SetCurrentState(ItemStateType.Toggled);
+                SetState(ItemStateType.Toggled);
             else
-                SetCurrentState(ItemStateType.Base);
+                SetState(ItemStateType.Base);
         }
 
         public EventMouseMethodState EventToggle;
