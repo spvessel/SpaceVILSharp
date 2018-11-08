@@ -246,7 +246,7 @@ namespace SpaceVIL
                 if (args.Key == KeyCode.Backspace || args.Key == KeyCode.Delete)
                 {
                     if (_isSelect)
-                        CutText();
+                        PrivCutText();
                     else
                     {
                         if (args.Key == KeyCode.Backspace && _cursor_position > 0)//backspace
@@ -352,7 +352,7 @@ namespace SpaceVIL
             string str = Encoding.UTF32.GetString(input);
             if (_isSelect) {
                 UnselectText();
-                CutText();
+                PrivCutText();
             }
             if (_justSelected) _justSelected = false;
             SetText(GetText().Insert(_cursor_position, str));
@@ -521,8 +521,7 @@ namespace SpaceVIL
             _selectedArea.SetWidth(width);
         }
 
-        public string GetSelectedText()
-        {
+        private string PrivGetSelectedText() {
             if (_selectFrom == _selectTo) return "";
             string text = GetText();
             int fromReal = Math.Min(_selectFrom, _selectTo);
@@ -533,12 +532,17 @@ namespace SpaceVIL
             return selectedText;
         }
 
-        public void PasteText(string pasteStr)
+        public string GetSelectedText()
         {
+            return GetSelectedText();
+        }
+
+        private void PrivPasteText(string pasteStr) {
             if (!_isEditable) return;
             Monitor.Enter(textInputLock);
-            try {
-                if (_isSelect) CutText();
+            try
+            {
+                if (_isSelect) PrivCutText();
                 string text = GetText();
                 string newText = text.Substring(0, _cursor_position) + pasteStr + text.Substring(_cursor_position);
                 SetText(newText);
@@ -551,12 +555,17 @@ namespace SpaceVIL
             }
         }
 
-        public string CutText()
+        public void PasteText(string pasteStr)
         {
+            PrivPasteText(pasteStr);
+        }
+
+        private string PrivCutText() {
             if (!_isEditable) return "";
             Monitor.Enter(textInputLock);
-            try {
-                string str = GetSelectedText();
+            try
+            {
+                string str = PrivGetSelectedText();
                 if (_selectFrom == _selectTo) return str;
                 int fromReal = Math.Min(_selectFrom, _selectTo);
                 int toReal = Math.Max(_selectFrom, _selectTo);
@@ -572,6 +581,11 @@ namespace SpaceVIL
             {
                 Monitor.Exit(textInputLock);
             }
+        }
+
+        public string CutText()
+        {
+            return PrivCutText();
         }
 
         private void UnselectText()

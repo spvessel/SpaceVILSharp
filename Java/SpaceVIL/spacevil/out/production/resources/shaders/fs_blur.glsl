@@ -1,26 +1,59 @@
-#version 330
+#version 430
 uniform sampler2D tex;
 uniform vec2 frame;
-uniform vec2 direction;
+uniform int res;
+uniform float weights[100];
+unifor int isFirst;
 in vec2 fragTexCoord;
 
-vec4 blur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) 
+vec4 blur0(sampler2D image, vec2 uv, vec2 resolution)
 {
-  vec4 color = vec4(0.0);
-  vec2 off1 = vec2(1.411764705882353) * direction;
-  vec2 off2 = vec2(3.2941176470588234) * direction;
-  vec2 off3 = vec2(5.176470588235294) * direction;
-  color += texture2D(image, uv) * 0.1964825501511404;
-  color += texture2D(image, uv + (off1 / resolution)) * 0.2969069646728344;
-  color += texture2D(image, uv - (off1 / resolution)) * 0.2969069646728344;
-  color += texture2D(image, uv + (off2 / resolution)) * 0.09447039785044732;
-  color += texture2D(image, uv - (off2 / resolution)) * 0.09447039785044732;
-  color += texture2D(image, uv + (off3 / resolution)) * 0.010381362401148057;
-  color += texture2D(image, uv - (off3 / resolution)) * 0.010381362401148057;
-  return color;
+	vec4 color = vec4(0.0);
+	vec4 tmp = vec4(0.0);
+
+	float uvx = uv.x * resolution.x;
+	float uvy = uv.y * resolution.y;
+
+	for (int i = -res; i <= res; i++) {
+		if (uvx + i < 0 || uvx + i >= resolution.x)
+		{
+			tmp = texture2D(image, uv);//vec4(0.0);
+		}
+		else {
+			tmp = texture2D(image, uv + vec2(i * 1f / resolution.x, 0.0));
+		}
+
+		color += tmp * weights[abs(i)];
+	}
+	return color;
+}
+
+vec4 blur1(sampler2D image, vec2 uv, vec2 resolution)
+{
+	vec4 color = vec4(0.0);
+	vec4 tmp = vec4(0.0);
+
+	float uvx = uv.x * resolution.x;
+	float uvy = uv.y * resolution.y;
+
+	for (int j = -res; j <= res; j++) {
+		if (uvy + j < 0 || uvy + j >= resolution.y)
+		{
+			tmp = texture2D(image, uv);//vec4(0.0);
+		}
+		else {
+			tmp = texture2D(image, uv + vec2(0.0, j * 1f/ resolution.y));
+		}
+
+		color += tmp * weights[abs(j)];
+	}
+
+	return color;
 }
 
 void main()
 {
-    gl_FragColor = blur(tex, fragTexCoord, frame.xy, direction);
+	if (isFirst == 1)
+		gl_FragColor = blur0(tex, fragTexCoord, frame.xy);
+	else gl_FragColor = blur1(tex, fragTexCoord, frame.xy);
 }

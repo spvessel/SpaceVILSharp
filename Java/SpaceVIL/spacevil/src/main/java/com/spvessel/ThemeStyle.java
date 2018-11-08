@@ -1,7 +1,7 @@
-package com.spvessel.Decorations;
+package com.spvessel;
 
-import com.spvessel.*;
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Decorations.Style;
 
 import java.util.Map;
 import java.util.HashMap;

@@ -20,7 +20,7 @@ public class VisualContact extends VisualItem {
         setMinSize(250, 60);
         setSize(100, 60);
         setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        border.setRadius(5);
+        getBorder().setRadius(15);
         ItemState hover = new ItemState();
         hover.background = new Color(255, 255, 255, 15);
         addItemState(ItemStateType.HOVERED, hover);
@@ -54,7 +54,7 @@ public class VisualContact extends VisualItem {
         name.setMargin(60, 0, 30, 5);
         name.setPadding(20, 0, 0, 0);
         name.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
-        name.border.setRadius(10);
+        name.getBorder().setRadius(10);
 
         // contact close
         ButtonCore close = new ButtonCore();

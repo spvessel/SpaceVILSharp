@@ -87,7 +87,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
         if (getParent() == null)
             return;
         _cursorXMax = getParent().getWidth() - curWidth - getParent().getPadding().left - getParent().getPadding().right
-                - textMargin().left - textMargin().right;
+                - getTextMargin().left - getTextMargin().right;
 
         setAllowWidth();
         updLinesXShift();
@@ -97,13 +97,13 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
         if (getParent() == null)
             return;
         _cursorYMax = getParent().getHeight() - getParent().getPadding().top - getParent().getPadding().bottom
-                - textMargin().top - textMargin().bottom;
+                - getTextMargin().top - getTextMargin().bottom;
         setAllowHeight();
         updLinesYShift();
     }
 
     void initLines(int curWidth) {
-        Indents textMargin = textMargin();
+        Indents textMargin = getTextMargin();
 
         _cursorXMax = getParent().getWidth() - curWidth - getParent().getPadding().left - getParent().getPadding().right
                 - textMargin.left - textMargin.right;
@@ -154,7 +154,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
         TextLine te = new TextLine();
         te.setForeground(getForeground());
         te.setTextAlignment(_blockAlignment);
-        te.setMargin(textMargin());
+        te.setMargin(getTextMargin());
         if (_elementFont != null)
             te.setFont(_elementFont);
         getParent().addItem(te);
@@ -222,7 +222,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     Point replaceCursorAccordingCoord(Point realPos) {
-        realPos.y -= getParent().getY() + getParent().getPadding().top + globalYShift + textMargin().top;
+        realPos.y -= getParent().getY() + getParent().getPadding().top + globalYShift + getTextMargin().top;
         int lineNumb = realPos.y / getLineY(1);
         if (lineNumb >= getCount())
             lineNumb = getCount() - 1;
@@ -230,7 +230,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
             lineNumb = 0;
         // return lineNumb;
 
-        realPos.x -= getParent().getX() + getParent().getPadding().left + textMargin().left;
+        realPos.x -= getParent().getX() + getParent().getPadding().left + getTextMargin().left;
 
         Point outPt = new Point(0, 0);
         outPt.y = lineNumb;
@@ -303,7 +303,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
         }
     }
 
-    private Indents textMargin() {
+    Indents getTextMargin() {
         return _linesList.get(0).getMargin();
     }
 
@@ -489,8 +489,8 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
                 updLinesYShift();
             }
         }
-        outPoint.x += getParent().getX() + getParent().getPadding().left + globalXShift + textMargin().left;
-        outPoint.y += getParent().getY() + getParent().getPadding().top + globalYShift + textMargin().top;
+        outPoint.x += getParent().getX() + getParent().getPadding().left + globalXShift + getTextMargin().left;
+        outPoint.y += getParent().getY() + getParent().getPadding().top + globalYShift + getTextMargin().top;
 
         // outPoint.x += getX() + getPadding().left + _linesList.get(0).getMargin().left
         // + xShift;
@@ -518,7 +518,7 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
     public TextPrinter getLetTextures() {
         textInputLock.lock();
         try {
-            List<TextPrinter> tpLines = new LinkedList<TextPrinter>();
+            List<TextPrinter> tpLines = new LinkedList<>();
             int w = 0, h = 0;
             int lineHeigh = getLineY(1);
 
@@ -571,8 +571,8 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
             tpout.widthTexture = w;
             tpout.heightTexture = h;
             if (tpLines.size() == 0 || tpLines.get(0) == null) {
-                tpout.xTextureShift = getParent().getPadding().left + textMargin().left + getParent().getX();
-                tpout.yTextureShift = getParent().getPadding().top + textMargin().top + getParent().getY();
+                tpout.xTextureShift = getParent().getPadding().left + getTextMargin().left + getParent().getX();
+                tpout.yTextureShift = getParent().getPadding().top + getTextMargin().top + getParent().getY();
 
                 tpout.xTextureShift += _linesList.get(0).getLineXShift();
                 tpout.yTextureShift += _linesList.get(0).getLineYShift();

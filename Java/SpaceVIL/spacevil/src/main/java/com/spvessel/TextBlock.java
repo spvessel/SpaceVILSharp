@@ -15,10 +15,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TextBlock extends VisualItem
+class TextBlock extends VisualItem
         implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts {
 
-    public EventCommonMethod textChanged = new EventCommonMethod();
+    EventCommonMethod textChanged = new EventCommonMethod();
     private static int count = 0;
     private Rectangle _cursor;
     private Point _cursor_position = new Point(0, 0);
@@ -33,14 +33,14 @@ public class TextBlock extends VisualItem
     private boolean _isSelect = false;
     private boolean _justSelected = false;
 
-    private Color _blockForeground;
+    //private Color _blockForeground;
 
     private List<KeyCode> ShiftValCodes;
     private List<KeyCode> InsteadKeyMods;
 
     private int scrollXStep = 15;
 
-    public TextBlock() {
+    TextBlock() {
         setItemName("TextBlock_" + count);
         count++;
 
@@ -349,7 +349,7 @@ public class TextBlock extends VisualItem
         }
     }
 
-    public void onTextInput(Object sender, TextInputArgs args) {
+    protected void onTextInput(Object sender, TextInputArgs args) {
         if (!_isEditable)
             return;
         _textureStorage.textInputLock.lock();
@@ -409,7 +409,7 @@ public class TextBlock extends VisualItem
         _cursor.setHeight(_textureStorage.getCursorHeight()); // + 6);
     }
 
-    public int getLineSpacer() {
+    int getLineSpacer() {
         return _textureStorage.getLineSpacer();
     }
 
@@ -417,7 +417,7 @@ public class TextBlock extends VisualItem
         return _textureStorage.getWholeText();
     }
 
-    public void setTextAlignment(ItemAlignment... alignment) {
+    void setTextAlignment(ItemAlignment... alignment) {
         setTextAlignment(Arrays.asList(alignment));
         // Ignore all changes
         /*
@@ -426,15 +426,19 @@ public class TextBlock extends VisualItem
          */
     }
 
-    public void setTextAlignment(List<ItemAlignment> alignment) {
+    void setTextAlignment(List<ItemAlignment> alignment) {
         // Ignore all changes
     }
 
-    public void setTextMargin(Indents margin) {
+    void setTextMargin(Indents margin) {
         _textureStorage.setTextMargin(margin);
     }
 
-    public void setFont(Font font) {
+    Indents getTextMargin() {
+        return _textureStorage.getTextMargin();
+    }
+
+    void setFont(Font font) {
         /*
          * if (!font.equals(_elementFont)) { _elementFont = font; if (_elementFont ==
          * null) return; int[] output = FontEngine.getSpacerDims(font); _minLineSpacer =
@@ -451,11 +455,11 @@ public class TextBlock extends VisualItem
         _cursor.setHeight(_textureStorage.getCursorHeight());
     }
 
-    public Font getFont() {
+    Font getFont() {
         return _textureStorage.getFont();
     }
 
-    public void setText(String text) {
+    void setText(String text) {
         _textureStorage.textInputLock.lock();
         try {
             _cursor_position = _textureStorage.setText(text, _cursor_position);
@@ -471,7 +475,7 @@ public class TextBlock extends VisualItem
         _textureStorage.setTextInLine(text, _cursor_position.y);
     }
 
-    public int getTextWidth() {
+    int getTextWidth() {
         /*
          * int w = 0, w0; if (_linesList == null) return w; for (TextLine te :
          * _linesList) { w0 = te.getWidth(); w = (w < w0) ? w0 : w; } return w;
@@ -479,7 +483,7 @@ public class TextBlock extends VisualItem
         return _textureStorage.getWidth();
     }
 
-    public int getTextHeight() {
+    int getTextHeight() {
         return _textureStorage.getTextHeight();
     }
 
@@ -487,85 +491,21 @@ public class TextBlock extends VisualItem
      * protected void UpdateData(UpdateType updateType) { //foreach (TextEdit te in
      * _linesList) //te.Up }
      */
-    public void setForeground(Color color) {
+    void setForeground(Color color) {
         _textureStorage.setForeground(color);
     }
 
-    public void setForeground(int r, int g, int b) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 255)
-            r = 255;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 255)
-            g = 255;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 255)
-            b = 255;
-        setForeground(new Color(r, g, b, 255));
-    }
-
-    public void setForeground(int r, int g, int b, int a) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 255)
-            r = 255;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 255)
-            g = 255;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 255)
-            b = 255;
-        setForeground(new Color(r, g, b, a));
-    }
-
-    public void setForeground(float r, float g, float b) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 1.0f)
-            r = 1.0f;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 1.0f)
-            g = 1.0f;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 1.0f)
-            b = 1.0f;
-        setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
-    }
-
-    public void setForeground(float r, float g, float b, float a) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 1.0f)
-            r = 1.0f;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 1.0f)
-            g = 1.0f;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 1.0f)
-            b = 1.0f;
-        setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
-    }
-
-    public Color getForeground() {
+    Color getForeground() {
         // if (_linesList == null) return Color.White; //?????
         // return _linesList[0].getForeground();
-        return _blockForeground;
+        return _textureStorage.getForeground();//_blockForeground;
     }
 
-    public boolean isEditable() {
+    boolean isEditable() {
         return _isEditable;
     }
 
-    public void setEditable(boolean value) {
+    void setEditable(boolean value) {
         if (_isEditable == value)
             return;
         _isEditable = value;
@@ -811,7 +751,7 @@ public class TextBlock extends VisualItem
         makeSelectedArea(new Point(0, 0), new Point(0, 0));
     }
 
-    public void clear() {
+    void clear() {
         _textureStorage.clear();
         _cursor_position.x = 0;
         _cursor_position.y = 0;
@@ -842,7 +782,7 @@ public class TextBlock extends VisualItem
     @Override
     public List<BaseItem> getItems() {
         List<BaseItem> list = super.getItems();
-        return new LinkedList<BaseItem>(Arrays.asList(list.get(0), list.get(1), list.get(2)));
+        return new LinkedList<>(Arrays.asList(list.get(0), list.get(1), list.get(2)));
     }
 
     @Override

@@ -71,7 +71,7 @@ public class ImageTest extends ActiveWindow {
         btn_action.setHeightPolicy(SizePolicy.FIXED);
         btn_action.setAlignment(ItemAlignment.HCENTER, ItemAlignment.TOP);
         btn_action.setMargin(new Indents(30, 0, 30, 0));
-        btn_action.border.setRadius(10);
+        btn_action.getBorder().setRadius(10);
         btn_action.setTextMargin(new Indents(0, 45, 0, 0));
         InterfaceMouseMethodState btn_action_click = (sender, args) -> {
             MessageBox ms = new MessageBox("Send result?", "Message:");

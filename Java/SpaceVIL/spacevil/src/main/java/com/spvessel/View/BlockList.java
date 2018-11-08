@@ -15,7 +15,7 @@ public class BlockList extends ResizableItem {
 
     private ButtonCore _palette;
     private ButtonToggle _lock;
-    private TextBlock _text;
+    private TextArea _text;
     private Label _note;
     private ButtonCore _btn_close;
     private ContextMenu _palette_menu;
@@ -29,7 +29,7 @@ public class BlockList extends ResizableItem {
 
         _palette = new ButtonCore();
         _lock = new ButtonToggle();
-        _text = new TextBlock();
+        _text = new TextArea();
         _note = new Label();
     }
 
@@ -39,7 +39,7 @@ public class BlockList extends ResizableItem {
         _palette.setMargin(0, 40, 0, 0);
         _palette.setSize(20, 15);
         _palette.setBackground(255, 128, 128);
-        _palette.border.setRadius(0);
+        _palette.getBorder().setRadius(0);
         CustomShape arrow = new CustomShape();
         arrow.setTriangles(GraphicsMathService.getTriangle(30, 30, 0, 0, 180));
         arrow.setBackground(50, 50, 50);
@@ -49,7 +49,7 @@ public class BlockList extends ResizableItem {
 
         _lock.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
         _lock.setSize(15, 15);
-        _lock.border.setRadius(0);
+        _lock.getBorder().setRadius(0);
         _lock.eventToggle.add((sender, args) -> {
             isLocked = !isLocked;
             _text.setEditable(!_text.isEditable());
