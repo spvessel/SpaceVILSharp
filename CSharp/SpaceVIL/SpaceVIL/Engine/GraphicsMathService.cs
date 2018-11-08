@@ -119,16 +119,17 @@ namespace SpaceVIL
             //Начало координат в левом углу
 
             //1
-            triangles.AddRange(RectToTri(new PointF(cornerRadius.leftTop + x, y), new PointF(width / 2f + x, height / 2f + y)));
-            triangles.AddRange(RectToTri(new PointF(x, cornerRadius.leftTop + y), new PointF(cornerRadius.leftTop + x, height / 2f + y)));
+
+            triangles.AddRange(RectToTri(new PointF(cornerRadius.leftTop + x, 0.0f + y), new PointF(width / 2f + x, height / 2f + y)));
+            triangles.AddRange(RectToTri(new PointF(0.0f + x, cornerRadius.leftTop + y), new PointF(cornerRadius.leftTop + x, height / 2f + y)));
 
             //2
-            triangles.AddRange(RectToTri(new PointF(width / 2f + x, y), new PointF(width - cornerRadius.rightTop + x, height / 2f + y)));
+            triangles.AddRange(RectToTri(new PointF(width / 2f + x, 0.0f + y), new PointF(width - cornerRadius.rightTop + x, height / 2f + y)));
             triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightTop + x, cornerRadius.rightTop + y), new PointF(width + x, height / 2f + y)));
-
+            
             //3
             triangles.AddRange(RectToTri(new PointF(cornerRadius.leftBottom + x, height / 2f + y), new PointF(width / 2f + x, height + y)));
-            triangles.AddRange(RectToTri(new PointF(x, height / 2f + y), new PointF(cornerRadius.leftBottom + x, height - cornerRadius.leftBottom + y)));
+            triangles.AddRange(RectToTri(new PointF(0.0f + x, height / 2f + y), new PointF(cornerRadius.leftBottom + x, height - cornerRadius.leftBottom + y)));
 
             //4
             triangles.AddRange(RectToTri(new PointF(width / 2f + x, height / 2f + y), new PointF(width - cornerRadius.rightBottom + x, height + y)));
@@ -792,28 +793,28 @@ namespace SpaceVIL
             //Начало координат в левом углу
 
             //1
-            border.Add(new BorderSection(cornerRadius.leftTop, 0.0f, width / 2f, 0.0f, width / 2f, height / 2f));
+            border.Add(new BorderSection(cornerRadius.leftTop + x, 0.0f + y, width / 2f + x, 0.0f + y, width / 2f + x, height / 2f + y));
             //triangles.AddRange(RectToTri(new PointF(cornerRadius.leftTop, 0.0f), new PointF(width / 2f, height / 2f)));
-            border.Add(new BorderSection(0.0f, cornerRadius.leftTop, 0.0f, height / 2f, cornerRadius.leftTop, height / 2f));
+            border.Add(new BorderSection(0.0f + x, cornerRadius.leftTop + y, 0.0f + x, height / 2f + y, cornerRadius.leftTop + x, height / 2f + y));
             //triangles.AddRange(RectToTri(new PointF(0.0f, cornerRadius.leftTop), new PointF(cornerRadius.leftTop, height / 2f)));
 
             //2
             //triangles.AddRange(RectToTri(new PointF(width / 2f, 0.0f), new PointF(width - cornerRadius.rightTop, height / 2f)));
-            border.Add(new BorderSection(width / 2f, 0.0f, width - cornerRadius.rightTop, 0.0f, width - cornerRadius.rightTop, height / 2f));
+            border.Add(new BorderSection(width / 2f + x, 0.0f + y, width - cornerRadius.rightTop + x, 0.0f + y, width - cornerRadius.rightTop + x, height / 2f + y));
             //triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightTop, cornerRadius.rightTop), new PointF(width, height / 2f)));
-            border.Add(new BorderSection(width, height / 2f, width, cornerRadius.rightTop, width - cornerRadius.rightTop, cornerRadius.rightTop));
+            border.Add(new BorderSection(width + x, height / 2f + y, width + x, cornerRadius.rightTop + y, width - cornerRadius.rightTop + x, cornerRadius.rightTop + y));
 
             //3
             //triangles.AddRange(RectToTri(new PointF(cornerRadius.leftBottom, height / 2f), new PointF(width / 2f, height)));
-            border.Add(new BorderSection(width / 2f, height, cornerRadius.leftBottom, height, cornerRadius.leftBottom, height / 2f));
+            border.Add(new BorderSection(width / 2f + x, height + y, cornerRadius.leftBottom + x, height + y, cornerRadius.leftBottom + x, height / 2f + y));
             //triangles.AddRange(RectToTri(new PointF(0.0f, height / 2f), new PointF(cornerRadius.leftBottom, height - cornerRadius.leftBottom)));
-            border.Add(new BorderSection(0.0f, height / 2f, 0.0f, height - cornerRadius.leftBottom, cornerRadius.leftBottom, height - cornerRadius.leftBottom));
+            border.Add(new BorderSection(0.0f + x, height / 2f + y, 0.0f + x, height - cornerRadius.leftBottom + y, cornerRadius.leftBottom + x, height - cornerRadius.leftBottom + y));
 
             //4
             //triangles.AddRange(RectToTri(new PointF(width / 2f, height / 2f), new PointF(width - cornerRadius.rightBottom, height)));
-            border.Add(new BorderSection(width - cornerRadius.rightBottom, height, width / 2f, height, width / 2f, height / 2f));
+            border.Add(new BorderSection(width - cornerRadius.rightBottom + x, height + y, width / 2f + x, height + y, width / 2f + x, height / 2f + y));
             //triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightBottom, height / 2f), new PointF(width, height - cornerRadius.rightBottom)));
-            border.Add(new BorderSection(width, height - cornerRadius.rightBottom, width, height / 2f, width - cornerRadius.rightBottom, height / 2f));
+            border.Add(new BorderSection(width + x, height - cornerRadius.rightBottom + y, width + x, height / 2f + y, width - cornerRadius.rightBottom + x, height / 2f + y));
 
 
             //if (radius < 1)
