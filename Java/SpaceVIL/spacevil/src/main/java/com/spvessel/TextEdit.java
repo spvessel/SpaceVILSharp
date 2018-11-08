@@ -223,7 +223,7 @@ public class TextEdit extends VisualItem
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE) {
                     if (_isSelect)
-                        cutText();
+                        privCutText();
                     else {
                         if (args.key == KeyCode.BACKSPACE && _cursor_position > 0) // backspace
                         {
@@ -322,8 +322,8 @@ public class TextEdit extends VisualItem
             String str = new String(input, Charset.forName("UTF-32")); // StandardCharsets.UTF_16);
 
             if (_isSelect) {
-                unselectText();// cutText();
-                cutText();
+                unselectText();// privCutText();
+                privCutText();
             }
             if (_justSelected) _justSelected = false;
                 
@@ -497,7 +497,7 @@ public class TextEdit extends VisualItem
         _selectedArea.setWidth(width);
     }
 
-    public String getSelectedText() {
+    private String privGetSelectedText() {
         if (_selectFrom == _selectTo)
             return "";
         String text = getText();
@@ -509,13 +509,17 @@ public class TextEdit extends VisualItem
         return selectedText;
     }
 
-    public void pasteText(String pasteStr) {
+    public String getSelectedText() {
+        return privGetSelectedText();
+    }
+
+    private void privPasteText(String pasteStr) {
         if (!_isEditable)
             return;
         textInputLock.lock();
         try {
             if (_isSelect)
-                cutText();
+                privCutText();
             String text = getText();
             String newText = text.substring(0, _cursor_position) + pasteStr + text.substring(_cursor_position);
             setText(newText);
@@ -526,12 +530,16 @@ public class TextEdit extends VisualItem
         }
     }
 
-    public String cutText() {
+    public void pasteText(String pasteStr) {
+        privPasteText(pasteStr);
+    }
+
+    private String privCutText() {
         if (!_isEditable)
             return "";
         textInputLock.lock();
         try {
-            String str = getSelectedText();
+            String str = privGetSelectedText();
             if (_selectFrom == _selectTo)
                 return str;
             int fromReal = Math.min(_selectFrom, _selectTo);
@@ -547,6 +555,10 @@ public class TextEdit extends VisualItem
         } finally {
             textInputLock.unlock();
         }
+    }
+
+    public String cutText() {
+        return privCutText();
     }
 
     private void unselectText() {
