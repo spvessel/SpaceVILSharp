@@ -20,7 +20,7 @@ namespace SpaceVIL
 
         }
 
-        internal static List<ModifyLetter> GetPixMap(string text, Font font)
+        internal static List<ModifyLetter> GetModifyLetters(string text, Font font)
         {
             //return FontReview.getTextArrays(text, font);
 

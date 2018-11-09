@@ -55,7 +55,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
 
     private Lock textLock = new ReentrantLock();
 
-    public void createText() {
+    private void createText() {
         // List<Float> cl0 = new LinkedList<>();
         textLock.lock();
         try {
@@ -63,7 +63,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             String text = getItemText();
             Font font = getFont();
 
-            _letters = FontEngine.getPixMap(text, font);
+            _letters = FontEngine.getModifyLetters(text, font);
 
             // _letTexturesList = new LinkedList<>();
             // long time0 = System.nanoTime();
@@ -464,7 +464,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         }
     }
 
-    protected void updateCoords() {
+    private void updateCoords() {
         // addAllShifts();
         // if (_letters == null)
         //     return;
@@ -504,16 +504,10 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         textPrt.yTextureShift = (int) alignShiftY + _lineYShift + getParent().getY();
     }
 
-    public TextItem getText() {
-        return this;
+    String getText() {
+        return getItemText();
     }
 
-    @Override
-    public float[] shape() {
-        // if (needCoordUpd())
-        // addAllShifts();
-        return super.shape();
-    }
     /*
     private boolean needCoordUpd() {
         if (_needCheckWidth != getParent().getWidth())
@@ -531,11 +525,11 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         return (_needCheckPaddingBottom != getParent().getPadding().bottom);
     }
     */
-    public List<Integer> getLetPosArray() {
+    List<Integer> getLetPosArray() {
         return _letEndPos;
     }
 
-    public int getLetWidth(int count) {
+    int getLetWidth(int count) {
         if (_letters == null)
             return 0;
         if ((count < 0) || (count >= _letters.size()))
@@ -544,26 +538,26 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         return _letters.get(count).width;
     }
 
-    public void setLineYShift(int sp) {
+    void setLineYShift(int sp) {
         _lineYShift = sp;
         // updateCoords();
     }
 
-    public int getLineYShift() {
+    int getLineYShift() {
         return _lineYShift;
     }
 
-    public void setLineXShift(int sp) {
+    void setLineXShift(int sp) {
         // if (_lineXShift == sp) return;
         _lineXShift = sp;
         // updateCoords();
     }
 
-    public int getLineXShift() {
+    int getLineXShift() {
         return _lineXShift;
     }
 
-    public float getLineTopCoord() {
+    float getLineTopCoord() {
         float lineTopCoord = 0;
         List<ItemAlignment> alignments = getTextAlignment();
         int[] fontDims = getFontDims();
@@ -579,7 +573,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         return lineTopCoord;
     }
 
-    public int[] getFontDims() {
+    int[] getFontDims() {
         int[] output = FontEngine.getSpacerDims(getFont());
         // _minLineSpacer = output[0];
         // _minFontY = output[1];
@@ -595,11 +589,11 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         setSizePolicy(style.widthPolicy, style.heightPolicy);
     }
 
-    public void setLineXShift() {
+    void setLineXShift() {
         setLineXShift(_lineXShift);
     }
 
-    public void checkXShift(int _cursorXMax) {
+    void checkXShift(int _cursorXMax) {
         if (getLetPosArray() == null || getLetPosArray().size() == 0)
             return;
         int s = getLetPosArray().get(getLetPosArray().size() - 1) - _cursorXMax;
@@ -610,15 +604,15 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         }
     }
 
-    public void setLineYShift() {
+    void setLineYShift() {
         setLineYShift(_lineYShift);
     }
 
-    public void setAllowWidth(int allowWidth) {
+    void setAllowWidth(int allowWidth) {
         _parentAllowWidth = allowWidth;
     }
 
-    public void setAllowHeight(int allowHeight) {
+    void setAllowHeight(int allowHeight) {
         _parentAllowHeight = allowHeight;
     }
 
