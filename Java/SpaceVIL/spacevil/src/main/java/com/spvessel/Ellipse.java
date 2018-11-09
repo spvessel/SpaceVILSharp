@@ -17,6 +17,6 @@ public class Ellipse extends Primitive {
     @Override
     public List<float[]> makeShape() {
         setTriangles(GraphicsMathService.getEllipse(getWidth(), getHeight(), getX(), getY(), Quality));
-        return GraphicsMathService.toGL((BaseItem) this, getHandler());
+        return GraphicsMathService.toGL(this, getHandler());
     }
 }

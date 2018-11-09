@@ -7,7 +7,7 @@ import com.spvessel.Flags.SizePolicy;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ResizableItem extends VisualItem implements InterfaceDraggable {
+public class ResizableItem extends Prototype implements InterfaceDraggable {
     enum Moving {
         TRUE, FALSE
     }

@@ -132,6 +132,10 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setBorderRadius(CornerRadius radius) {
         _core.setBorderRadius(radius);
     }
+    
+    public void setBorderRadius(int radius) {
+        _core.setBorderRadius(new CornerRadius(radius));
+    }
 
     public void setBorderThickness(int thickness) {
         _core.setBorderThickness(thickness);

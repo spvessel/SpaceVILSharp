@@ -29,7 +29,6 @@ import static org.lwjgl.opengl.GL20.*;
 // import static org.lwjgl.opengl.GL13.*;
 // import static org.lwjgl.system.MemoryUtil.*;
 
-
 public class DrawEngine {
 
     public void resetItems() {
@@ -661,7 +660,7 @@ public class DrawEngine {
         layout_box_of_items.addAll(getInnerItems(_handler.getLayout().getWindow()));
 
         for (InterfaceBaseItem item : ItemsLayoutBox.getLayoutFloatItems(_handler.getLayout().getId())) {
-            if (!item.getVisible() || !item.isDrawable)
+            if (!item.isVisible() || !item.isDrawable())
                 continue;
             layout_box_of_items.add(item);
 
@@ -674,7 +673,7 @@ public class DrawEngine {
         for (InterfaceBaseItem item : layout_box_of_items) {
             if (item instanceof Prototype) {
                 Prototype tmp = (Prototype) item;
-                if (!tmp.getVisible() || !tmp.isDrawable)
+                if (!tmp.isVisible() || !tmp.isDrawable())
                     continue;
                 tmp.setMouseHover(false);
                 if (tmp.getHoverVerification(xpos, ypos)) {
@@ -720,7 +719,7 @@ public class DrawEngine {
         List<InterfaceBaseItem> list = new LinkedList<InterfaceBaseItem>();
 
         for (InterfaceBaseItem item : root.getItems()) {
-            if (!item.getVisible() || !item.isDrawable)
+            if (!item.isVisible() || !item.isDrawable())
                 continue;
             list.add(item);
             if (item instanceof Prototype)
@@ -1107,20 +1106,16 @@ public class DrawEngine {
         // + shell.getParent()._confines_y_0 + " " + shell.getParent()._confines_y_1 + "
         // ");
 
-        shell.getParent()._confines_x_0 = shell.getParent().getX() + shell.getParent().getPadding().left;
-        shell.getParent()._confines_x_1 = shell.getParent().getX() + shell.getParent().getWidth()
-                - shell.getParent().getPadding().right;
-        shell.getParent()._confines_y_0 = shell.getParent().getY() + shell.getParent().getPadding().top;
-        shell.getParent()._confines_y_1 = shell.getParent().getY() + shell.getParent().getHeight()
-                - shell.getParent().getPadding().bottom;
+        shell.getParent().setConfines(shell.getParent().getX() + shell.getParent().getPadding().left,
+                shell.getParent().getX() + shell.getParent().getWidth() - shell.getParent().getPadding().right,
+                shell.getParent().getY() + shell.getParent().getPadding().top,
+                shell.getParent().getY() + shell.getParent().getHeight() - shell.getParent().getPadding().bottom);
         setConfines(shell);
     }
 
     private void setConfines(InterfaceBaseItem shell) {
-        shell._confines_x_0 = shell.getParent()._confines_x_0;
-        shell._confines_x_1 = shell.getParent()._confines_x_1;
-        shell._confines_y_0 = shell.getParent()._confines_y_0;
-        shell._confines_y_1 = shell.getParent()._confines_y_1;
+        int[] confines = shell.getParent().getConfines();
+        shell.setConfines(confines[0], confines[1], confines[2], confines[3]);
 
         if (shell instanceof Prototype) {
             Prototype root = (Prototype) shell;
@@ -1194,7 +1189,7 @@ public class DrawEngine {
     }
 
     private void drawItems(InterfaceBaseItem root) {
-        if (!root.getVisible() || !root.isDrawable)
+        if (!root.isVisible() || !root.isDrawable())
             return;
 
         if (root instanceof InterfaceLine) {
@@ -1322,8 +1317,13 @@ public class DrawEngine {
                 border.setPosition(vi.getX(), vi.getY());
                 border.setParent(vi);
                 border.setHandler(vi.getHandler());
-                border.setTriangles(GraphicsMathService.getRoundSquareBorder(vi.getWidth(), vi.getHeight(),
-                        vi.getBorderRadius(), vi.getBorderThickness(), 0, 0));
+
+                border.setTriangles(GraphicsMathService.getRoundSquareBorder(
+                    vi.getBorderRadius(), 
+                    vi.getWidth(), 
+                    vi.getHeight(),
+                    vi.getBorderThickness(), 0, 0));
+
                 drawShell(border);
             }
         }
@@ -1371,13 +1371,12 @@ public class DrawEngine {
         drawShell(shadow, true);
         //////////
 
-        int res = (int)shell.getShadowRadius();
+        int res = (int) shell.getShadowRadius();
         float[] weights = new float[res];
         float sum, sigma2 = 4.0f;
         weights[0] = gauss(0, sigma2);
         sum = weights[0];
-        for (int i = 1; i < res; i++)
-        {
+        for (int i = 1; i < res; i++) {
             weights[i] = gauss(i, sigma2);
             sum += 2 * weights[i];
         }
@@ -1387,7 +1386,6 @@ public class DrawEngine {
         //drawShadowPart(weights, res, fbo_texture, 1);
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
         drawShadowPart(weights, res, fbo_texture);
-
 
         glDeleteFramebuffersEXT(fbo_handle);
         glDeleteTextures(fbo_texture);
@@ -1441,11 +1439,14 @@ public class DrawEngine {
             glUniform1i(location, 0);
         int location_frame = glGetUniformLocation((int) _blur.getProgramID(), "frame");
         if (location_frame >= 0)
-            glUniform2fv(location_frame, new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
+            glUniform2fv(location_frame,
+                    new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
 
-        //int location_direction = glGetUniformLocation((int) _blur.getProgramID(), "direction");
-        //if (location_direction >= 0)
-        //    glUniform2fv(location_direction, new float[] { shell.getShadowRadius(), shell.getShadowRadius() });
+        // int location_direction = glGetUniformLocation((int) _blur.getProgramID(),
+        // "direction");
+        // if (location_direction >= 0)
+        // glUniform2fv(location_direction, new float[] { shell.getShadowRadius(),
+        // shell.getShadowRadius() });
 
         int location_res = glGetUniformLocation((int) _blur.getProgramID(), "res");
         if (location_res >= 0)
@@ -1465,11 +1466,10 @@ public class DrawEngine {
         glDisableVertexAttribArray(1);
     }
 
-    float gauss(float x, float sigma)
-    {
+    float gauss(float x, float sigma) {
         double ans;
         ans = Math.exp(-(x * x) / (2f * sigma * sigma)) / Math.sqrt(2 * Math.PI * sigma * sigma);
-        return (float)ans;
+        return (float) ans;
     }
 
     void drawText(InterfaceTextContainer text) {
@@ -1779,7 +1779,7 @@ public class DrawEngine {
     }
 
     private void drawToolTip() {
-        if (!_tooltip.getVisible())
+        if (!_tooltip.isVisible())
             return;
 
         _tooltip.setText(hoveredItem.getToolTip());

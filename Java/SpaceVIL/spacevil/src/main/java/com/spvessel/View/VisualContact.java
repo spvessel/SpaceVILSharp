@@ -10,7 +10,7 @@ import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.ItemStateType;
 import com.spvessel.Flags.SizePolicy;
 
-public class VisualContact extends VisualItem {
+public class VisualContact extends Prototype {
     public static int _count = 0;
 
     public VisualContact() {
@@ -20,7 +20,7 @@ public class VisualContact extends VisualItem {
         setMinSize(250, 60);
         setSize(100, 60);
         setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        getBorder().setRadius(15);
+        setBorderRadius(15);
         ItemState hover = new ItemState();
         hover.background = new Color(255, 255, 255, 15);
         addItemState(ItemStateType.HOVERED, hover);
@@ -54,7 +54,7 @@ public class VisualContact extends VisualItem {
         name.setMargin(60, 0, 30, 5);
         name.setPadding(20, 0, 0, 0);
         name.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
-        name.getBorder().setRadius(10);
+        name.setBorderRadius(10);
 
         // contact close
         ButtonCore close = new ButtonCore();
@@ -65,7 +65,7 @@ public class VisualContact extends VisualItem {
         close.setHeightPolicy(SizePolicy.FIXED);
         close.setAlignment(ItemAlignment.TOP, ItemAlignment.RIGHT);
         close.setMargin(0, 5, 0, 0);
-        close.isCustom = new CustomFigure(false, GraphicsMathService.getCross(14, 14, 5, 45));
+        close.setCustomFigure(new CustomFigure(false, GraphicsMathService.getCross(14, 14, 5, 45)));
         ItemState hover = new ItemState();
         hover.background = new Color(255, 255, 255, 125);
         close.addItemState(ItemStateType.HOVERED, hover);

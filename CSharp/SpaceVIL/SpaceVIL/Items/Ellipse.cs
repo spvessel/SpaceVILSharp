@@ -15,7 +15,7 @@ namespace SpaceVIL
         public override List<float[]> MakeShape()
         {
             SetTriangles(GraphicsMathService.GetEllipse(GetWidth(), GetHeight(), GetX(), GetY()));
-            return GraphicsMathService.ToGL(this as BaseItem, GetHandler());
+            return GraphicsMathService.ToGL(this, GetHandler());
         }
     }
 }

@@ -71,8 +71,8 @@ public class FlowTest extends ActiveWindow {
             PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!", Handler);
             pop.show();
         });
-        btn1.isCustom = new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180));
-        btn1.HoverRule = ItemRule.STRICT;
+        btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
+        btn1.setHoverRule(ItemRule.STRICT);
 
         ButtonCore btn2 = new ButtonCore();
         btn2.setBackground(121, 223, 152);
@@ -83,8 +83,8 @@ public class FlowTest extends ActiveWindow {
         btn2.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn2.addItemState(ItemStateType.HOVERED, hovered);
         // btn2.eventMouseClick.add((sender, args) -> flow_item.show(sender, args));
-        btn2.isCustom = new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0));
-        btn2.HoverRule = ItemRule.STRICT;
+        btn2.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
+        btn2.setHoverRule(ItemRule.STRICT);
 
         // btn add_at_end
         ButtonCore btn3 = new ButtonCore();
@@ -105,8 +105,8 @@ public class FlowTest extends ActiveWindow {
             PointsContainer graph = getPointsContainer();
             frame.addItem(graph);
         });
-        btn3.isCustom = new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180));
-        btn3.HoverRule = ItemRule.STRICT;
+        btn3.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
+        btn3.setHoverRule(ItemRule.STRICT);
 
         ButtonCore btn4 = new ButtonCore();
         btn4.setBackground(187, 102, 187);
@@ -119,8 +119,8 @@ public class FlowTest extends ActiveWindow {
         btn4.eventMouseClick.add((sender, args) -> {
             flow.addItem(getBlockList());
         });
-        btn4.isCustom = new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0));
-        btn4.HoverRule = ItemRule.STRICT;
+        btn4.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
+        btn4.setHoverRule(ItemRule.STRICT);
 
         ButtonCore btn5 = new ButtonCore();
         btn5.setBackground(238, 174, 128);
@@ -133,8 +133,8 @@ public class FlowTest extends ActiveWindow {
         btn5.eventMouseClick.add((sender, args) -> {
 
         });
-        btn5.isCustom = new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180));
-        btn5.HoverRule = ItemRule.STRICT;
+        btn5.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
+        btn5.setHoverRule(ItemRule.STRICT);
 
         // adding buttons
         toolbar.addItems(btn1, btn2, btn3, btn4, btn5);

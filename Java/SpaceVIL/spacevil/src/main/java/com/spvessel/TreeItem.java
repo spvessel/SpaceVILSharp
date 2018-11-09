@@ -1,6 +1,7 @@
 package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Core.InterfaceMouseMethodState;
 import com.spvessel.Decorations.Indents;
 import com.spvessel.Decorations.ItemState;
@@ -16,7 +17,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.LinkedList;
 
-public class TreeItem extends VisualItem {
+public class TreeItem extends Prototype {
     private List<TreeItem> _list_inners;
 
     public List<TreeItem> getTreeItems() {
@@ -102,7 +103,7 @@ public class TreeItem extends VisualItem {
 
     protected void resetIndents() {
         int level = _nesting_level;
-        if (!_parent._root.getVisible())
+        if (!_parent._root.isVisible())
             level--;
         setPadding(2 + _indent_size * level, 0, 0, 0);
     }
@@ -210,7 +211,7 @@ public class TreeItem extends VisualItem {
     }
 
     @Override
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         if (item instanceof TreeItem) {
             TreeItem tmp = (TreeItem) item;
             addTreeItem(tmp);
@@ -234,7 +235,7 @@ public class TreeItem extends VisualItem {
         int offset = 0;
         int startX = getX() + getPadding().left;
 
-        for (BaseItem child : getItems()) {
+        for (InterfaceBaseItem child : getItems()) {
             child.setX(startX + offset + child.getMargin().left);
             if (child.getWidthPolicy() == SizePolicy.EXPAND) {
                 child.setWidth(getWidth() - offset);

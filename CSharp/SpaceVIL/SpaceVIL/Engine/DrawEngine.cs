@@ -1260,6 +1260,7 @@ namespace SpaceVIL
                 weights[i] /= sum;
 
 
+            _blur.UseShader();
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
             DrawShadowPart(weights, res, fbo_texture);
             //DrawShadowPart(weights, res, fbo_texture, 0);
@@ -1270,7 +1271,6 @@ namespace SpaceVIL
 
         private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture)
         {
-            _blur.UseShader();
 
             float i_x0 = -1.0f;
             float i_y0 = 1.0f;

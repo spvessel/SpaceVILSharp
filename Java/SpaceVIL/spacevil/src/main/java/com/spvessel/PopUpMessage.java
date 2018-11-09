@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PopUpMessage extends VisualItem {
+public class PopUpMessage extends Prototype {
     private static int count = 0;
     private TextLine _text_object;
     private ButtonCore _btn_close;

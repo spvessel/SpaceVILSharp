@@ -1,8 +1,6 @@
 package com.spvessel;
 
 import java.nio.ByteBuffer;
-import java.util.LinkedList;
-import java.util.List;
 
 public class TextPrinter {
     public ByteBuffer texture = null;

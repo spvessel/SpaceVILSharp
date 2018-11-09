@@ -67,7 +67,7 @@ abstract public class Primitive extends BaseItem {
         style.y = getY();
         style.margin = new Indents(getMargin().left, getMargin().top, getMargin().right, getMargin().bottom);
         style.alignment = getAlignment();
-        style.isVisible = getVisible();
+        style.isVisible = isVisible();
 
         return style;
     }

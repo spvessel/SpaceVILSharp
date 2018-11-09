@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class PasswordLine extends VisualItem implements InterfaceTextEditable, InterfaceDraggable {
+public class PasswordLine extends Prototype implements InterfaceTextEditable, InterfaceDraggable {
     static int count = 0;
 
     private ButtonToggle _show_pwd_btn;

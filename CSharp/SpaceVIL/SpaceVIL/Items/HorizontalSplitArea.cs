@@ -10,8 +10,8 @@ namespace SpaceVIL
     public class HorizontalSplitArea : Prototype, IVLayout
     {
         private static int count = 0;
-        private BaseItem _topBlock;
-        private BaseItem _bottomBlock;
+        private IBaseItem _topBlock;
+        private IBaseItem _bottomBlock;
         private SplitHolder _splitHolder = new SplitHolder(Orientation.Horizontal);
         private int _topHeight = 0;
         private int _diff = 0;
@@ -56,7 +56,7 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
-        public void AssignTopItem(BaseItem item)
+        public void AssignTopItem(IBaseItem item)
         {
             AddItem(item);
             _topBlock = item;
@@ -64,7 +64,7 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
-        public void AssignBottomItem(BaseItem item)
+        public void AssignBottomItem(IBaseItem item)
         {
             AddItem(item);
             _bottomBlock = item;
