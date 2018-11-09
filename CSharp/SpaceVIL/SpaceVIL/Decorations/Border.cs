@@ -12,49 +12,50 @@ namespace SpaceVIL
         // private CornerRadius _border_radius;
         // public CornerRadius Radius
         // {
-        //     get { return _border_radius; }
-        //     set { _border_radius = value; }
+        //     Get { return _border_radius; }
+        //     Set { _border_radius = value; }
         // }
 
         private CornerRadius _border_radius;
-        public CornerRadius Radius
+        public CornerRadius GetRadius()
         {
-            get { return _border_radius; }
-            set
-            {
-                _border_radius = value;
-            }
+            return _border_radius;
         }
-        private Color _border_color;
-        public Color Fill
+        public void SetRadius(CornerRadius value)
         {
-            get { return _border_color; }
-            set
-            {
-                _border_color = value;
-            }
+            _border_radius = value;
+        }
+
+        private Color _border_color;
+        public Color GetFill()
+        {
+            return _border_color;
+        }
+        public void SetFill(Color fill)
+        {
+            _border_color = fill;
         }
         private int border_thickness;
-        public int Thickness
+        public int GetThickness()
         {
-            get { return border_thickness; }
-            set
-            {
-                border_thickness = value;
-            }
+            return border_thickness;
+        }
+        public void SetThickness(int thickness)
+        {
+            border_thickness = thickness;
         }
 
         public bool IsVisible = false;
         public Border()
         {
-            Fill = Color.Transparent;
-            Thickness = -1;
+            SetFill(Color.Transparent);
+            SetThickness(-1);
         }
         public Border(Color fill, CornerRadius radius, int thickness)
         {
-            Fill = fill;
-            Radius = radius;
-            Thickness = thickness;
+            SetFill(Color.Transparent);
+            SetRadius(radius);
+            SetThickness(thickness);
         }
     }
 }

@@ -50,6 +50,7 @@ public class TitleBar extends WindowAnchor {
         _text_object = new Label();
         _minimize = new ButtonCore();
         _maximize = new ButtonCore();
+        _maximize.setItemName("MAXIMIZE");
         _close = new ButtonCore();
         _icon = new ImageItem();
 
@@ -162,29 +163,34 @@ public class TitleBar extends WindowAnchor {
 
         // _maximize
         InterfaceMouseMethodState maximize_click = (sender, args) -> {
-            getHandler().maximize();
+            // getHandler().maximize();
+            System.out.println(_maximize.getBorderThickness() + " " + _maximize.getBorderFill());
         };
         _maximize.eventMouseClick.add(maximize_click);
 
         // adding
         switch (Direction) {
-            case FROM_LEFT_TO_RIGHT:
-                _layout.addItems(_icon, _text_object, _minimize, _maximize, _close);
-                break;
-            case FROM_RIGHT_TO_LEFT:
-                _layout.addItems(_close, _maximize, _minimize, _icon, _text_object);
-                break;
-            default:
-                _layout.addItems(_icon, _text_object, _minimize, _maximize, _close);
-                break;
+        case FROM_LEFT_TO_RIGHT:
+            _layout.addItems(_icon, _text_object, _minimize, _maximize, _close);
+            break;
+        case FROM_RIGHT_TO_LEFT:
+            _layout.addItems(_close, _maximize, _minimize, _icon, _text_object);
+            break;
+        default:
+            _layout.addItems(_icon, _text_object, _minimize, _maximize, _close);
+            break;
         }
         _minimize.setPassEvents(false);
         _maximize.setPassEvents(false);
         _close.setPassEvents(false);
-        Rectangle center = new Rectangle();
-        center.setBackground(getBackground());
-        center.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        _maximize.addItem(center);
+
+        // _maximize.setBorderFill(new Color(255, 255, 255));
+        // _maximize.setBorderThickness(2);
+
+        // Rectangle center = new Rectangle();
+        // center.setBackground(getBackground());
+        // center.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        // _maximize.addItem(center);
 
         // update text data
         // _text_object.UpdateData(UpdateType.Critical);
@@ -216,6 +222,7 @@ public class TitleBar extends WindowAnchor {
         inner_style = style.getInnerStyle("maximizebutton");
         if (inner_style != null) {
             _maximize.setStyle(inner_style);
+            // System.out.println(_maximize.getBorderThickness() + " " +_maximize.getBorderFill());
         }
         inner_style = style.getInnerStyle("title");
         if (inner_style != null) {

@@ -29,9 +29,9 @@ import static org.lwjgl.opengl.GL20.*;
 // import static org.lwjgl.opengl.GL13.*;
 // import static org.lwjgl.system.MemoryUtil.*;
 
-public class DrawEngine {
+public final class DrawEngine {
 
-    public void resetItems() {
+    protected void resetItems() {
         if (focusedItem != null)
             focusedItem.setFocused(false);
         focusedItem = null;
@@ -45,7 +45,7 @@ public class DrawEngine {
 
     private ToolTip _tooltip = new ToolTip();
     private InterfaceBaseItem _isStencilSet = null;
-    public InputDeviceEvent engineEvent = new InputDeviceEvent();
+    private InputDeviceEvent engineEvent = new InputDeviceEvent();
     private MouseArgs _margs = new MouseArgs();
     private KeyArgs _kargs = new KeyArgs();
     private TextInputArgs _tiargs = new TextInputArgs();
@@ -54,7 +54,7 @@ public class DrawEngine {
     private Prototype hoveredItem = null;
     private Prototype focusedItem = null;
 
-    public void setFocusedItem(Prototype item) {
+    protected void setFocusedItem(Prototype item) {
         if (item == null) {
             focusedItem = null;
             return;
@@ -69,14 +69,14 @@ public class DrawEngine {
     private Pointer ptrRelease = new Pointer();
     private Pointer ptrClick = new Pointer();
 
-    public GLWHandler _handler;
+    protected GLWHandler _handler;
     private Shader _primitive;
     private Shader _texture;
     private Shader _char;
     private Shader _fxaa;
     private Shader _blur;
 
-    public DrawEngine(WindowLayout handler) {
+    protected DrawEngine(WindowLayout handler) {
         hoveredItems = new LinkedList<Prototype>();
         _handler = new GLWHandler(handler);
 
@@ -86,25 +86,25 @@ public class DrawEngine {
         _tooltip.initElements();
     }
 
-    public void dispose() {
+    protected void dispose() {
         glfwTerminate();
     }
 
-    public void close() {
+    protected void close() {
         _handler.setToClose();
     }
 
     private GLFWImage _iconSmall;
     private GLFWImage _iconBig;
 
-    public void setBigIcon(BufferedImage icon) {
+    protected void setBigIcon(BufferedImage icon) {
         _iconBig = GLFWImage.create();
         _iconBig.width(icon.getWidth());
         _iconBig.height(icon.getHeight());
         _iconBig.pixels(createByteImage(icon));
     }
 
-    public void setSmallIcon(BufferedImage icon) {
+    protected void setSmallIcon(BufferedImage icon) {
         _iconSmall = GLFWImage.create();
         _iconSmall.width(icon.getWidth());
         _iconSmall.height(icon.getHeight());
@@ -132,7 +132,7 @@ public class DrawEngine {
         return result;
     }
 
-    public void applyIcon() {
+    protected void applyIcon() {
         // Display.setIcon(_icon);
         GLFWImage.Buffer gb = GLFWImage.create(2);
         gb.put(0, _iconSmall);
@@ -156,7 +156,7 @@ public class DrawEngine {
         return result.toString();
     }
 
-    public void init() {
+    protected void init() {
         CommonService.GlobalLocker.lock();
         try {
             // InitWindow
@@ -278,12 +278,12 @@ public class DrawEngine {
         });
     }
 
-    public void minimizeWindow() {
+    protected void minimizeWindow() {
         engineEvent.setEvent(InputEventType.WINDOW_MINIMIZE);
         glfwIconifyWindow(_handler.getWindowId());
     }
 
-    public void maximizeWindow() {
+    protected void maximizeWindow() {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             if (_handler.getLayout().isMaximized) {
                 glfwRestoreWindow(_handler.getWindowId());
@@ -309,7 +309,7 @@ public class DrawEngine {
         _handler.getLayout().close();
     }
 
-    public void focus(long wnd, boolean value) {
+    protected void focus(long wnd, boolean value) {
         engineEvent.resetAllEvents();
         _tooltip.initTimer(false);
         _handler.getLayout().isFocused = value;
@@ -341,7 +341,7 @@ public class DrawEngine {
         _handler.getLayout().setHeight(height);
     }
 
-    public void setWindowSize(int w, int h) {
+    protected void setWindowSize(int w, int h) {
         glfwSetWindowSize(_handler.getWindowId(), w, h);
         engineEvent.setEvent(InputEventType.WINDOW_RESIZE);
     }
@@ -355,7 +355,7 @@ public class DrawEngine {
         _handler.getPointer().setY(ypos);
     }
 
-    public void setWindowPos(int x, int y) {
+    protected void setWindowPos(int x, int y) {
         glfwSetWindowPos(_handler.getWindowId(), x, y);
 
         engineEvent.setEvent(InputEventType.WINDOW_MOVE);
@@ -707,7 +707,7 @@ public class DrawEngine {
                 if (item.equals(hoveredItem) && hoveredItem.isDisabled())
                     continue;// пропустить
                 item.setMouseHover(true);
-                if (!item.getPassEvents())
+                if (!item.isPassEvents())
                     break;
             }
             return true;
@@ -753,7 +753,7 @@ public class DrawEngine {
         List<Prototype> tmp = new LinkedList<Prototype>(hoveredItems);
         Collections.reverse(tmp);
         for (Prototype item : tmp) {
-            if (!item.getPassEvents())
+            if (!item.isPassEvents())
                 continue;
             if (dy > 0 || dx < 0)
                 item.eventScrollUp.execute(item, _margs);
@@ -839,7 +839,7 @@ public class DrawEngine {
                 task.action = action;
                 task.args = args;
                 _handler.getLayout().setEventTask(task);
-                if (!item.getPassEvents())
+                if (!item.isPassEvents())
                     break;
             }
         }
@@ -859,14 +859,14 @@ public class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
-    public float _interval = 1.0f / 30.0f;// 1000 / 60;
+    protected float _interval = 1.0f / 30.0f;// 1000 / 60;
     // internal float _interval = 1.0f / 60.0f;//1000 / 60;
     // internal int _interval = 11;//1000 / 90;
     // internal int _interval = 08;//1000 / 120;
 
     // private int gVAO = 0;
 
-    public void run() {
+    protected void run() {
         _handler.gVAO = glGenVertexArrays();
         glBindVertexArray(_handler.gVAO);
         focus(_handler.getWindowId(), true);
@@ -929,7 +929,7 @@ public class DrawEngine {
 
     int _textlinecount = 0;
 
-    public void update() {
+    protected void update() {
         // if (_handler.focused) {
         glViewport(0, 0, _handler.getLayout().getWidth(), _handler.getLayout().getHeight());
         render();
@@ -1242,8 +1242,11 @@ public class DrawEngine {
         if (!ignore_borders)
             checkOutsideBorders(shell);
 
-        if (shell.getBackground().getAlpha() == 0)
+        if (shell.getBackground().getAlpha() == 0) {
+            if (shell instanceof Prototype)
+                drawBorder((Prototype) shell);
             return;
+        }
         // Vertex
         List<float[]> crd_array = shell.makeShape();
         if (crd_array == null)
@@ -1308,24 +1311,22 @@ public class DrawEngine {
         // clear array
         crd_array.clear();
 
-        if (shell instanceof Prototype) {
-            Prototype vi = (Prototype) shell;
-            if (vi.getBorderThickness() > 0) {
-                CustomShape border = new CustomShape();
-                border.setBackground(vi.getBorderFill());
-                border.setSize(vi.getWidth(), vi.getHeight());
-                border.setPosition(vi.getX(), vi.getY());
-                border.setParent(vi);
-                border.setHandler(vi.getHandler());
+        if (shell instanceof Prototype)
+            drawBorder((Prototype) shell);
+    }
 
-                border.setTriangles(GraphicsMathService.getRoundSquareBorder(
-                    vi.getBorderRadius(), 
-                    vi.getWidth(), 
-                    vi.getHeight(),
-                    vi.getBorderThickness(), 0, 0));
+    void drawBorder(Prototype vi) {
+        if (vi.getBorderThickness() > 0) {
+            CustomShape border = new CustomShape();
+            border.setBackground(vi.getBorderFill());
+            border.setSize(vi.getWidth(), vi.getHeight());
+            border.setPosition(vi.getX(), vi.getY());
+            border.setParent(vi);
+            border.setHandler(vi.getHandler());
 
-                drawShell(border);
-            }
+            border.setTriangles(GraphicsMathService.getRoundSquareBorder(vi.getBorderRadius(), vi.getWidth(),
+                    vi.getHeight(), vi.getBorderThickness(), 0, 0));
+            drawShell(border, true);
         }
     }
 
@@ -1383,7 +1384,7 @@ public class DrawEngine {
         for (int i = 0; i < res; i++)
             weights[i] /= sum;
 
-        //drawShadowPart(weights, res, fbo_texture, 1);
+        // drawShadowPart(weights, res, fbo_texture, 1);
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
         drawShadowPart(weights, res, fbo_texture);
 
@@ -1456,9 +1457,10 @@ public class DrawEngine {
         if (location_weights >= 0)
             glUniform1fv(location_weights, weights);
 
-//        int location_isfirst = glGetUniformLocation((int) _blur.getProgramID(), "isFirst");
-//        if (location_isfirst >= 0)
-//            glUniform1i(location_isfirst, isFirst);
+        // int location_isfirst = glGetUniformLocation((int) _blur.getProgramID(),
+        // "isFirst");
+        // if (location_isfirst >= 0)
+        // glUniform1i(location_isfirst, isFirst);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

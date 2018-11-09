@@ -428,8 +428,8 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.setVisible(value);
     }
 
-    public boolean getPassEvents() {
-        return _core.getPassEvents();
+    public boolean isPassEvents() {
+        return _core.isPassEvents();
     }
 
     public void setPassEvents(boolean value) {

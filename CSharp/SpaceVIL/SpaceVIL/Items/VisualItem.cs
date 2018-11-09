@@ -236,33 +236,33 @@ namespace SpaceVIL
 
         public void SetBorderFill(Color fill)
         {
-            _border.Fill = fill;
-            GetState(ItemStateType.Base).Border.Fill = fill;
+            _border.SetFill(fill);
+            GetState(ItemStateType.Base).Border.SetFill(fill);
             UpdateState();
         }
         public void SetBorderRadius(CornerRadius radius)
         {
-            _border.Radius = radius;
-            GetState(ItemStateType.Base).Border.Radius = radius;
+            _border.SetRadius(radius);
+            GetState(ItemStateType.Base).Border.SetRadius(radius);
             UpdateState();
         }
         public void SetBorderThickness(int thickness)
         {
-            _border.Thickness = thickness;
-            GetState(ItemStateType.Base).Border.Thickness = thickness;
+            _border.SetThickness(thickness);
+            GetState(ItemStateType.Base).Border.SetThickness(thickness);
             UpdateState();
         }
         public CornerRadius GetBorderRadius()
         {
-            return _border.Radius;
+            return _border.GetRadius();
         }
         public int GetBorderThickness()
         {
-            return _border.Thickness;
+            return _border.GetThickness();
         }
         public Color GetBorderFill()
         {
-            return _border.Fill;
+            return _border.GetFill();
         }
 
 
@@ -531,12 +531,12 @@ namespace SpaceVIL
             base.SetBackground(current.Background);
             _border = CloneBorder(current.Border);
 
-            if (_border.Radius == null)
-                _border.Radius = s_base.Border.Radius;
-            if (_border.Thickness < 0)
-                _border.Thickness = s_base.Border.Thickness;
-            if (_border.Fill.A == 0)
-                _border.Fill = s_base.Border.Fill;
+            if (_border.GetRadius() == null)
+                _border.SetRadius(s_base.Border.GetRadius());
+            if (_border.GetThickness() < 0)
+                _border.SetThickness(s_base.Border.GetThickness());
+            if (_border.GetFill().A == 0)
+                _border.SetFill(s_base.Border.GetFill());
 
             if (current.Shape != null)
                 IsCustom = current.Shape;
@@ -573,20 +573,20 @@ namespace SpaceVIL
             base.SetBackground(GraphicsMathService.MixColors(current.Background, state.Background));
             _border = CloneBorder(state.Border);
 
-            if (_border.Radius == null)
-                _border.Radius = prev_state.Border.Radius;
-            if (_border.Radius == null)
-                _border.Radius = GetState(ItemStateType.Base).Border.Radius;
+            if (_border.GetRadius() == null)
+                _border.SetRadius(prev_state.Border.GetRadius());
+            if (_border.GetRadius() == null)
+                _border.SetRadius(GetState(ItemStateType.Base).Border.GetRadius());
 
-            if (_border.Thickness < 0)
-                _border.Thickness = prev_state.Border.Thickness;
-            if (_border.Thickness < 0)
-                _border.Thickness = GetState(ItemStateType.Base).Border.Thickness;
+            if (_border.GetThickness() < 0)
+                _border.SetThickness(prev_state.Border.GetThickness());
+            if (_border.GetThickness() < 0)
+                _border.SetThickness(GetState(ItemStateType.Base).Border.GetThickness());
 
-            if (_border.Fill.A == 0)
-                _border.Fill = prev_state.Border.Fill;
-            if (_border.Fill.A == 0)
-                _border.Fill = GetState(ItemStateType.Base).Border.Fill;
+            if (_border.GetFill().A == 0)
+                _border.SetFill(prev_state.Border.GetFill());
+            if (_border.GetFill().A == 0)
+                _border.SetFill(GetState(ItemStateType.Base).Border.GetFill());
 
             if (state.Shape != null)
                 IsCustom = state.Shape;
@@ -595,9 +595,9 @@ namespace SpaceVIL
         private Border CloneBorder(Border border)
         {
             Border clone = new Border();
-            clone.Fill = border.Fill;
-            clone.Radius = border.Radius;
-            clone.Thickness = border.Thickness;
+            clone.SetFill(border.GetFill());
+            clone.SetRadius(border.GetRadius());
+            clone.SetThickness(border.GetThickness());
             return clone;
         }
         internal virtual bool GetHoverVerification(float xpos, float ypos)
@@ -704,13 +704,13 @@ namespace SpaceVIL
         }
 
         //style
-        internal bool _is_style_set = false;
+        internal bool _is_style_Set = false;
         public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
 
-            _is_style_set = true;
+            _is_style_Set = true;
 
             SetBackground(style.Background);
             SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
@@ -729,9 +729,9 @@ namespace SpaceVIL
             RemoveAllItemStates();
 
             ItemState core_state = new ItemState(style.Background);
-            core_state.Border.Radius = style.BorderRadius;
-            core_state.Border.Thickness = style.BorderThickness;
-            core_state.Border.Fill = style.BorderFill;
+            core_state.Border.SetRadius(style.BorderRadius);
+            core_state.Border.SetThickness(style.BorderThickness);
+            core_state.Border.SetFill(style.BorderFill);
 
             foreach (var state in style.GetAllStates())
             {

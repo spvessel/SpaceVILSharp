@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class WindowLayout {
-    public Lock engineLocker = new ReentrantLock();
+public final class WindowLayout {
+    protected Lock engineLocker = new ReentrantLock();
     private Lock wndLock = new ReentrantLock();
 
     class DrawThread extends Thread {
@@ -142,12 +142,12 @@ public class WindowLayout {
         setFocusedItem(_window);
     }
 
-    public void updatePosition() {
+    protected void updatePosition() {
         // if (engine != null)
         // engine.setWindowPos();
     }
 
-    public void updateSize() {
+    protected void updateSize() {
         // if (engine != null)
         // engine.setWindowSize();
     }
@@ -483,7 +483,7 @@ public class WindowLayout {
             setWindowFocused();
     }
 
-    void setWindowFocused() {
+    public void setWindowFocused() {
         wndLock.lock();
         try {
             if (WindowLayoutBox.getWindowInstance(ParentGUID) != null)
@@ -501,17 +501,17 @@ public class WindowLayout {
         engine.maximizeWindow();
     }
 
-    public void IsFixed(Boolean flag) {
+    protected void isFixed(Boolean flag) {
     }
 
-    public void setEventTask(EventTask task) {
+    protected void setEventTask(EventTask task) {
         // manager.stackEvents.add(task);
         manager.addTask(task);
     }
 
-    volatile Boolean set = true;
+    // private volatile Boolean set = true;
 
-    public void executePollActions() {
+    protected void executePollActions() {
         // manager.execute.release();
         // manager.notify();
         manager.execute.set();

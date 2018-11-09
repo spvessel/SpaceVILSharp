@@ -6,14 +6,14 @@ import com.spvessel.Flags.SizePolicy;
 import java.util.*;
 import java.util.stream.*;
 
-public class WindowLayoutBox {
-    static public Map<String, WindowLayout> windowsName = new HashMap<String, WindowLayout>();
-    static public Map<UUID, WindowLayout> windowsUUID = new HashMap<UUID, WindowLayout>();
-    static public List<WindowsPair> currentCallingPair = new LinkedList<WindowsPair>();
-    static public WindowLayout lastFocusedWindow;
-    static Object locker = new Object();
+public final class WindowLayoutBox {
+    static protected Map<String, WindowLayout> windowsName = new HashMap<String, WindowLayout>();
+    static protected Map<UUID, WindowLayout> windowsUUID = new HashMap<UUID, WindowLayout>();
+    static protected List<WindowsPair> currentCallingPair = new LinkedList<WindowsPair>();
+    static protected WindowLayout lastFocusedWindow;
+    static protected Object locker = new Object();
 
-    static public void initWindow(WindowLayout _layout) {
+    static protected void initWindow(WindowLayout _layout) {
         windowsName.put(_layout.getWindowName(), _layout);
         windowsUUID.put(_layout.getId(), _layout);
 

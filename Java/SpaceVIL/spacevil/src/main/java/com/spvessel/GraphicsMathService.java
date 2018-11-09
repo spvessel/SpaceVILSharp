@@ -15,25 +15,30 @@ public final class GraphicsMathService {
     }
 
     public static Color mixColors(Color... colors) {
-        List<Color> m_colors = Arrays.stream(colors).collect(Collectors.toList());
-        if (m_colors.size() == 0)
+        
+        //List<Color> m_colors = Arrays.stream(colors).collect(Collectors.toList());
+        if (colors.length == 0)
             return new Color(255, 255, 255);
-        if (m_colors.size() == 1)
-            return m_colors.get(0);
+        if (colors.length == 1)
+            return colors[0];
 
-        float r = 0, g = 0, b = 0, a = 255.0f;
+        float r = 0, g = 0, b = 0, a = 0; //255.0f;
 
-        for (Color item : m_colors) {
+        for (Color item : colors) {
+            if (item == null) continue;
             if (item.getAlpha() == 255) // exchange
             {
                 r = item.getRed();
                 g = item.getGreen();
                 b = item.getBlue();
+                a = 255.0f;
             } else // mixing
             {
                 r = r * (1.0f - item.getAlpha() / 255.0f) + item.getRed() * (item.getAlpha() / 255.0f);
                 g = g * (1.0f - item.getAlpha() / 255.0f) + item.getGreen() * (item.getAlpha() / 255.0f);
                 b = b * (1.0f - item.getAlpha() / 255.0f) + item.getBlue() * (item.getAlpha() / 255.0f);
+                if (a < 255)
+                    a = a * (1.0f - item.getAlpha() / 255.0f) + item.getAlpha() * (item.getAlpha() / 255.0f);
             }
         }
         return new Color((int) r, (int) g, (int) b, (int) a);
@@ -228,6 +233,7 @@ public final class GraphicsMathService {
         y1 = radius * (float) Math.sin(alph1 * Math.PI / 180.0f) + y0;
 
         for (int alf = alph1 + 1; alf <= alph2; alf += 5) { // Шаг можно сделать больше 1 градуса, нужны тести
+                                                            // 
                                                             // ования
             x2 = radius * (float) Math.cos(alf * Math.PI / 180.0f) + x0;
             y2 = radius * (float) Math.sin(alf * Math.PI / 180.0f) + y0;
@@ -439,6 +445,7 @@ public final class GraphicsMathService {
         for (int i = 1; i < n * 2 + 2; i++) {
             if ((i % 2) != 0) // При выполнении условия четности следующие формулы
                               // 
+                              //
             //
             //
             {
@@ -451,6 +458,7 @@ public final class GraphicsMathService {
                 }
             } else // При невыполнении условия четности следующие формулы
                    // 
+                   //
             //
             //
             {

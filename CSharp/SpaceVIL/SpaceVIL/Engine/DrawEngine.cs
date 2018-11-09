@@ -1120,7 +1120,12 @@ namespace SpaceVIL
                 CheckOutsideBorders(shell);
 
             if (shell.GetBackground().A == 0)
+            {
+                Prototype pr = shell as Prototype;
+                if (pr != null)
+                    DrawBorder(pr);
                 return;
+            }
 
 
             //Vertex
@@ -1187,25 +1192,27 @@ namespace SpaceVIL
             //border draw
             Prototype vi = shell as Prototype;
             if (vi != null)
+                DrawBorder(vi);
+        }
+        void DrawBorder(Prototype vi)
+        {
+            if (vi.GetBorderThickness() > 0)
             {
-                if (vi.GetBorderThickness() > 0)
-                {
-                    CustomShape border = new CustomShape();
-                    border.SetBackground(vi.GetBorderFill());
-                    border.SetSize(vi.GetWidth(), vi.GetHeight());
-                    border.SetPosition(vi.GetX(), vi.GetY());
-                    border.SetParent(vi);
-                    border.SetHandler(vi.GetHandler());
-                    border.SetTriangles(GraphicsMathService.GetRoundSquareBorder(
-                        vi.GetBorderRadius(),
-                        vi.GetWidth(),
-                        vi.GetHeight(),
-                        vi.GetBorderThickness(),
-                        vi.GetX(),
-                        vi.GetY()
-                        ));
-                    DrawShell(border);
-                }
+                CustomShape border = new CustomShape();
+                border.SetBackground(vi.GetBorderFill());
+                border.SetSize(vi.GetWidth(), vi.GetHeight());
+                border.SetPosition(vi.GetX(), vi.GetY());
+                border.SetParent(vi);
+                border.SetHandler(vi.GetHandler());
+                border.SetTriangles(GraphicsMathService.GetRoundSquareBorder(
+                    vi.GetBorderRadius(),
+                    vi.GetWidth(),
+                    vi.GetHeight(),
+                    vi.GetBorderThickness(),
+                    vi.GetX(),
+                    vi.GetY()
+                    ));
+                DrawShell(border, true);
             }
         }
         void DrawShadow(IBaseItem shell)

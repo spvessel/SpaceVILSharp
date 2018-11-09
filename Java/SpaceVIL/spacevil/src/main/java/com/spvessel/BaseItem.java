@@ -450,12 +450,12 @@ public abstract class BaseItem implements InterfaceBaseItem {
         return _itemPosition.getY();
     }
 
-    protected boolean IsOutConfines() {
-        if (getX() >= _confines_x_1 || getX() + getWidth() <= _confines_x_0 || getY() >= _confines_y_1
-                || getY() + getHeight() <= _confines_y_0)
-            return true;
-        return false;
-    }
+    // protected boolean IsOutConfines() {
+    //     if (getX() >= _confines_x_1 || getX() + getWidth() <= _confines_x_0 || getY() >= _confines_y_1
+    //             || getY() + getHeight() <= _confines_y_0)
+    //         return true;
+    //     return false;
+    // }
 
     public void update(GeometryEventType type, int value) {
         if (this instanceof VisualItem) {
@@ -669,7 +669,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
         }
     }
 
-    public void updateGeometry() {
+    protected void updateGeometry() {
         update(GeometryEventType.RESIZE_WIDTH, 0);
         update(GeometryEventType.RESIZE_HEIGHT, 0);
         update(GeometryEventType.MOVED_X, 0);

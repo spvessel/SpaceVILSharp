@@ -163,10 +163,12 @@ namespace SpaceVIL
                     break;
             }
 
-            Rectangle center = new Rectangle();
-            center.SetBackground(GetBackground());
-            center.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            _maximize.AddItem(center);
+            // Rectangle center = new Rectangle();
+            // center.SetBackground(GetBackground());
+            // center.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            // _maximize.AddItem(center);
+            // _maximize.SetBorderThickness(2);
+            // _maximize.SetBorderFill(Color.White);
             
             //update text data
             //_text_object.UpdateData(UpdateType.Critical);

@@ -5,33 +5,33 @@ import com.spvessel.Flags.InputEventType;
 import java.util.LinkedList;
 import java.util.List;
 
-public class InputDeviceEvent {
+final class InputDeviceEvent {
     protected Boolean isHappen = false;
     private List<InputEventType> eType = new LinkedList<InputEventType>();
 
-    public synchronized void setEvent(InputEventType type) {
+    protected synchronized void setEvent(InputEventType type) {
         if (!eType.contains(type))
             eType.add(type);
 
         isHappen = true;
     }
 
-    public synchronized Boolean isEvent() {
+    protected synchronized Boolean isEvent() {
         Boolean tmp = isHappen;
         isHappen = false;
         return tmp;
     }
 
-    public synchronized List<InputEventType> lastEvent() {
+    protected synchronized List<InputEventType> lastEvent() {
         return eType;
     }
 
-    public synchronized void resetEvent(InputEventType type) {
+    protected synchronized void resetEvent(InputEventType type) {
         if (eType.contains(type))
             eType.remove(type);
     }
 
-    public synchronized void resetAllEvents() {
+    protected synchronized void resetAllEvents() {
         eType.clear();
     }
 }

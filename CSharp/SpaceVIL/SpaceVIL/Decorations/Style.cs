@@ -177,9 +177,9 @@ namespace SpaceVIL
         }
         public void SetBorder(Border border)
         {
-            BorderFill = border.Fill;
-            BorderRadius = border.Radius;
-            BorderThickness = border.Thickness;
+            BorderFill = border.GetFill();
+            BorderRadius = border.GetRadius();
+            BorderThickness = border.GetThickness();
         }
         public void SetBorder(Color fill, CornerRadius radius, int thickness)
         {
@@ -1157,16 +1157,20 @@ namespace SpaceVIL
             style.AddInnerStyle("minimizebutton", minimize_style);
 
             Style maximize_style = new Style();
-            maximize_style.Background = Color.FromArgb(255, 100, 100, 100);
+            maximize_style.Background = Color.FromArgb(0, 100, 100, 100);
+
+            maximize_style.BorderThickness = 2;
+            maximize_style.BorderFill = Color.FromArgb(255, 100, 100, 100);
+
             maximize_style.SetSize(12, 12);
             maximize_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             maximize_style.Alignment = ItemAlignment.Bottom | ItemAlignment.Right;
             maximize_style.Margin = new Indents(0, 0, 0, 9);
             maximize_style.Padding = new Indents(2, 2, 2, 2);
-            maximize_style.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(40, 0, 255, 64)
-            });
+            ItemState hovered = new ItemState();
+            // hovered.Background = Color.FromArgb(0, 0, 0, 0);
+            hovered.Border.SetFill(Color.FromArgb(255, 84, 124, 94));
+            maximize_style.AddItemState(ItemStateType.Hovered, hovered);
             maximize_style.Shape = GraphicsMathService.GetRectangle();
             style.AddInnerStyle("maximizebutton", maximize_style);
 

@@ -21,7 +21,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 // import java.nio.ByteBuffer;
 
 
-public class GLWHandler {
+public final class GLWHandler {
     // cursors
 
     long _arrow;
@@ -43,17 +43,17 @@ public class GLWHandler {
     GLFWWindowFocusCallback windowFocusCallback;
     ///////////////////////////////////////////////
 
-    public Boolean borderHidden;
-    public Boolean appearInCenter;
-    public Boolean focusable;
-    public Boolean focused = true;
-    public Boolean resizeble;
-    public Boolean visible;
-    public Boolean alwaysOnTop;
-    public Boolean maximized;
+    protected Boolean borderHidden;
+    protected Boolean appearInCenter;
+    protected Boolean focusable;
+    protected Boolean focused = true;
+    protected Boolean resizeble;
+    protected Boolean visible;
+    protected Boolean alwaysOnTop;
+    protected Boolean maximized;
     private Pointer wPosition = new Pointer();
 
-    public Pointer getPointer() {
+    protected Pointer getPointer() {
         return wPosition;
     }
     ///////////////////////////////////////////////
@@ -66,7 +66,7 @@ public class GLWHandler {
 
     long _window = NULL;
 
-    public long getWindowId() {
+    protected long getWindowId() {
         return _window;
     }
 
@@ -272,7 +272,7 @@ public class GLWHandler {
         glfwSetWindowSizeCallback(_window, resizeCallback);
     }
 
-    public void setHidden(Boolean value) {
+    protected void setHidden(Boolean value) {
         if (value)
             glfwHideWindow(_window);
         else

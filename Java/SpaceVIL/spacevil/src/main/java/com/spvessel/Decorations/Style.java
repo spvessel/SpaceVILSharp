@@ -329,6 +329,9 @@ public class Style {
                 Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         style.borderRadius =  new CornerRadius(6);
 
+        // style.borderThickness = 2;
+        // style.borderFill = new Color(255, 255, 255);
+
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 60);
         style.addItemState(ItemStateType.HOVERED, hovered);
@@ -1222,7 +1225,11 @@ public class Style {
 
         Style maximize_style = new Style();
         maximize_style.font = DefaultsService.getDefaultFont();
-        maximize_style.background = new Color(100, 100, 100);
+        maximize_style.background = new Color(0, 0, 0, 0);
+
+        maximize_style.borderThickness = 2;
+        maximize_style.borderFill = new Color(100, 100, 100);
+
         maximize_style.foreground = new Color(0, 0, 0, 0);
         maximize_style.setSize(12, 12);
         maximize_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
@@ -1231,10 +1238,12 @@ public class Style {
         maximize_style.textAlignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         maximize_style.margin = new Indents(0, 0, 0, 9);
-        maximize_style.padding = new Indents(2, 2, 2, 2);
+        maximize_style.padding = new Indents(0, 0, 0, 0);
 
         ItemState maximize_hovered = new ItemState();
-        maximize_hovered.background = new Color(0, 255, 64, 40);
+        maximize_hovered.background = new Color(0, 0, 0, 0);
+        maximize_hovered.border.setFill(new Color(84, 124, 94));
+
         maximize_style.addItemState(ItemStateType.HOVERED, maximize_hovered);
         style.addInnerStyle("maximizebutton", maximize_style);
 
