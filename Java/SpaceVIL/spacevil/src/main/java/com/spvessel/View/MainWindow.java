@@ -53,8 +53,8 @@ public class MainWindow extends ActiveWindow {
         btn_layout.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         btn_layout.setBorderRadius(new CornerRadius(6));
         ItemState state = new ItemState(new Color(255, 255, 255, 80));
-        state.border.setThickness(2);
-        state.border.setFill(new Color(255, 255, 255));
+        state.border.setThickness(10);
+        state.border.setFill(new Color(255, 255, 255, 200));
         state.border.setRadius(new CornerRadius(12, 12, 6, 6));
         btn_layout.addItemState(ItemStateType.HOVERED, state);
         InterfaceMouseMethodState layout_click = (sender, args) -> WindowLayoutBox.tryShow("LayoutsTest");

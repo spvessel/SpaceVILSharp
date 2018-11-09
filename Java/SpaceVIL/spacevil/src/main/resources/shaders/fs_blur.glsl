@@ -22,7 +22,6 @@ vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
 	return color;
 }
 
-
 void main()
 {
 	gl_FragColor = blur(tex, fragTexCoord, frame.xy);

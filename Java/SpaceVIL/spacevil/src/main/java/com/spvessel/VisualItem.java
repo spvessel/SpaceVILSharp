@@ -14,36 +14,15 @@ import java.util.Map;
 import java.util.stream.*;
 import java.util.HashMap;
 
-public class VisualItem extends BaseItem {
+public final class VisualItem extends BaseItem {
 
     protected Prototype _main;
 
-    // // common events
-    // public EventCommonMethodState eventFocusGet = new EventCommonMethodState();
-    // public EventCommonMethodState eventFocusLost = new EventCommonMethodState();
-    // public EventCommonMethodState eventResized = new EventCommonMethodState();
-    // public EventCommonMethodState eventDestroyed = new EventCommonMethodState();
-    // // mouse input
-    // public EventMouseMethodState eventMouseHover = new EventMouseMethodState();
-    // public EventMouseMethodState eventMouseClick = new EventMouseMethodState();
-    // public EventMouseMethodState eventMousePressed = new EventMouseMethodState();
-    // public EventMouseMethodState eventMouseRelease = new EventMouseMethodState();
-    // public EventMouseMethodState eventMouseDrag = new EventMouseMethodState();
-    // public EventMouseMethodState eventMouseDrop = new EventMouseMethodState();
-    // public EventMouseMethodState eventScrollUp = new EventMouseMethodState();
-    // public EventMouseMethodState eventScrollDown = new EventMouseMethodState();
-    // // keyboard input
-    // public EventKeyMethodState eventKeyPress = new EventKeyMethodState();
-    // public EventKeyMethodState eventKeyRelease = new EventKeyMethodState();
-    // // text input
-    // public EventInputTextMethodState eventTextInput = new
-    // EventInputTextMethodState();
-
-    public VisualItem() {
+    protected VisualItem() {
         this("VisualItem_");
     }
 
-    public VisualItem(String name) {
+    protected VisualItem(String name) {
         ItemState base = new ItemState();
         base.background = getBackground();
         states.put(ItemStateType.BASE, base);
@@ -98,7 +77,7 @@ public class VisualItem extends BaseItem {
         }
     }
 
-    public void setPosition(int _x, int _y) {
+    protected void setPosition(int _x, int _y) {
         this.setX(_x);
         this.setY(_y);
     }
@@ -124,39 +103,39 @@ public class VisualItem extends BaseItem {
     // item
     private Border _border = new Border();
 
-    public void setBorder(Border border) {
+    protected void setBorder(Border border) {
         _border = border;
         getState(ItemStateType.BASE).border = _border;
         updateState();
     }
 
-    public void setBorderFill(Color fill) {
+    protected void setBorderFill(Color fill) {
         _border.setFill(fill);
         getState(ItemStateType.BASE).border.setFill(fill);
         updateState();
     }
 
-    public void setBorderRadius(CornerRadius radius) {
+    protected void setBorderRadius(CornerRadius radius) {
         _border.setRadius(radius);
         getState(ItemStateType.BASE).border.setRadius(radius);
         updateState();
     }
 
-    public void setBorderThickness(int thickness) {
+    protected void setBorderThickness(int thickness) {
         _border.setThickness(thickness);
         getState(ItemStateType.BASE).border.setThickness(thickness);
         updateState();
     }
 
-    public CornerRadius getBorderRadius() {
+    protected CornerRadius getBorderRadius() {
         return _border.getRadius();
     }
 
-    public int getBorderThickness() {
+    protected int getBorderThickness() {
         return _border.getThickness();
     }
 
-    public Color getBorderFill() {
+    protected Color getBorderFill() {
         return _border.getFill();
     }
 
@@ -174,47 +153,47 @@ public class VisualItem extends BaseItem {
 
     private String _tooltip = "";
 
-    public String getToolTip() {
+    protected String getToolTip() {
         return _tooltip;
     }
 
-    public void setToolTip(String text) {
+    protected void setToolTip(String text) {
         _tooltip = text;
     }
 
     // container
     private Spacing _spacing = new Spacing();
 
-    public Spacing getSpacing() {
+    protected Spacing getSpacing() {
         return _spacing;
     }
 
-    public void setSpacing(Spacing spacing) {
+    protected void setSpacing(Spacing spacing) {
         _spacing = spacing;
     }
 
-    public void setSpacing(int horizontal, int vertical) {
+    protected void setSpacing(int horizontal, int vertical) {
         _spacing = new Spacing(horizontal, vertical);
     }
 
     private Indents _padding = new Indents();
 
-    public Indents getPadding() {
+    protected Indents getPadding() {
         return _padding;
     }
 
-    public void setPadding(Indents padding) {
+    protected void setPadding(Indents padding) {
         _padding = padding;
     }
 
-    public void setPadding(int left, int top, int right, int bottom) {
+    protected void setPadding(int left, int top, int right, int bottom) {
         _padding = new Indents(left, top, right, bottom);
     }
 
-    public EventManager eventManager = null;
+    protected EventManager eventManager = null;
     private List<InterfaceBaseItem> _content = new LinkedList<InterfaceBaseItem>();
 
-    public List<InterfaceBaseItem> getItems() {
+    protected List<InterfaceBaseItem> getItems() {
         return _content;
     }
 
@@ -229,7 +208,7 @@ public class VisualItem extends BaseItem {
             ((BaseItem) item).updateGeometry();
     }
 
-    public void addItem(InterfaceBaseItem item) {
+    protected void addItem(InterfaceBaseItem item) {
         getHandler().engineLocker.lock();
         try {
             if (item.equals(this)) {
@@ -253,7 +232,7 @@ public class VisualItem extends BaseItem {
         }
     }
 
-    public void insertItem(InterfaceBaseItem item, int index) {
+    protected void insertItem(InterfaceBaseItem item, int index) {
         getHandler().engineLocker.lock();
         try {
             if (item.equals(this)) {
@@ -308,7 +287,7 @@ public class VisualItem extends BaseItem {
         }
     }
 
-    public void removeItem(InterfaceBaseItem item) {
+    protected void removeItem(InterfaceBaseItem item) {
         getHandler().engineLocker.lock();
         try {
             LayoutType type;
@@ -342,7 +321,7 @@ public class VisualItem extends BaseItem {
         eventManager.unsubscribe(type, listener);
     }
 
-    public void addItemState(ItemStateType type, ItemState state) {
+    protected void addItemState(ItemStateType type, ItemState state) {
         if (states.containsKey(type)) {
             state.value = true;
             states.replace(type, state);
@@ -351,24 +330,24 @@ public class VisualItem extends BaseItem {
         }
     }
 
-    public ItemState getState(ItemStateType type) {
+    protected ItemState getState(ItemStateType type) {
         if (states.containsKey(type))
             return states.get(type);
         return null;
     }
 
-    public Map<ItemStateType, ItemState> getAllStates() {
+    protected Map<ItemStateType, ItemState> getAllStates() {
         return states;
     }
 
-    public void removeItemState(ItemStateType type) {
+    protected void removeItemState(ItemStateType type) {
         if (type == ItemStateType.BASE)
             return;
         if (states.containsKey(type))
             states.remove(type);
     }
 
-    public void removeAllItemStates() {
+    protected void removeAllItemStates() {
         List<ItemStateType> itemsToRemove = states.entrySet().stream().filter(i -> i.getKey() != ItemStateType.BASE)
                 .map(Map.Entry::getKey).collect(Collectors.toList());
         for (ItemStateType item : itemsToRemove)
@@ -412,11 +391,11 @@ public class VisualItem extends BaseItem {
     // common properties
     private boolean _pass_events = true;
 
-    public boolean getPassEvents() {
+    protected boolean isPassEvents() {
         return _pass_events;
     }
 
-    public void setPassEvents(boolean value) {
+    protected void setPassEvents(boolean value) {
         if (_pass_events == value)
             return;
         _pass_events = value;
@@ -424,11 +403,11 @@ public class VisualItem extends BaseItem {
 
     private boolean _disabled;
 
-    public boolean isDisabled() {
+    protected boolean isDisabled() {
         return _disabled;
     }
 
-    public void setDisabled(boolean value) {
+    protected void setDisabled(boolean value) {
         if (_disabled == value)
             return;
         _disabled = value;
@@ -437,11 +416,11 @@ public class VisualItem extends BaseItem {
 
     private boolean _hover;
 
-    public boolean isMouseHover() {
+    protected boolean isMouseHover() {
         return _hover;
     }
 
-    public void setMouseHover(boolean value) {
+    protected void setMouseHover(boolean value) {
         if (_hover == value)
             return;
         _hover = value;
@@ -450,11 +429,11 @@ public class VisualItem extends BaseItem {
 
     private boolean _pressed;
 
-    public boolean isMousePressed() {
+    protected boolean isMousePressed() {
         return _pressed;
     }
 
-    public void setMousePressed(boolean value) {
+    protected void setMousePressed(boolean value) {
         if (_pressed == value)
             return;
         _pressed = value;
@@ -462,13 +441,13 @@ public class VisualItem extends BaseItem {
     }
 
     private boolean _focused;
-    public boolean isFocusable = true;
+    protected boolean isFocusable = true;
 
-    public boolean isFocused() {
+    protected boolean isFocused() {
         return _focused;
     }
 
-    public void setFocused(boolean value) {
+    protected void setFocused(boolean value) {
         if (_focused == value)
             return;
         _focused = value;
@@ -646,11 +625,11 @@ public class VisualItem extends BaseItem {
 
     private CustomFigure _is_custom = null;
 
-    public CustomFigure isCustomFigure() {
+    protected CustomFigure isCustomFigure() {
         return _is_custom;
     }
 
-    public void setCustomFigure(CustomFigure figure) {
+    protected void setCustomFigure(CustomFigure figure) {
         _is_custom = figure;
     }
 
@@ -690,17 +669,14 @@ public class VisualItem extends BaseItem {
         setPadding(style.padding);
         setSpacing(style.spacing);
         setMargin(style.margin);
-        _border.setRadius(style.borderRadius);
-        _border.setThickness(style.borderThickness);
-        _border.setFill(style.borderFill);
         setVisible(style.isVisible);
         removeAllItemStates();
-
+        
         ItemState core_state = new ItemState(style.background);
         core_state.border.setRadius(style.borderRadius);
         core_state.border.setThickness(style.borderThickness);
         core_state.border.setFill(style.borderFill);
-
+        
         for (Map.Entry<ItemStateType, ItemState> state : style.getAllStates().entrySet()) {
             addItemState(state.getKey(), state.getValue());
         }
@@ -709,6 +685,10 @@ public class VisualItem extends BaseItem {
             core_state.shape = isCustomFigure();
         }
         addItemState(ItemStateType.BASE, core_state);
+
+        setBorderRadius(style.borderRadius);
+        setBorderThickness(style.borderThickness);
+        setBorderFill(style.borderFill);
     }
 
     @Override

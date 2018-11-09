@@ -14,7 +14,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.Timer;
 
-public class ToolTip extends Prototype {
+final class ToolTip extends Prototype {
     class TooltipVisibility extends Thread {
         private int _ms = 500;
 
