@@ -268,7 +268,7 @@ namespace SpaceVIL
             }
         }
 
-        protected void UpdateCoords()
+        private void UpdateCoords()
         {
             //AddAllShifts();
             if (_letters.Count() == 0)
