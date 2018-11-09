@@ -1259,20 +1259,19 @@ namespace SpaceVIL
             for (int i = 0; i < 5; i++)
                 weights[i] /= sum;
 
-            _blur.UseShader();
-            DrawShadowPart(weights, res, fbo_texture, 0);
-            //glClear(GL_COLOR_BUFFER);
-            DrawShadowPart(weights, res, fbo_texture, 1);
-            glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
 
-            DrawTEXTURE(fbo_texture);
+            DrawShadowPart(weights, res, fbo_texture);
+            glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
+            //DrawShadowPart(weights, res, fbo_texture, 0);
 
             glDeleteFramebuffers(1, fbo_handle);
             glDeleteTextures(1, fbo_texture);
         }
 
-        private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture, int isFirst)
+        private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture)
         {
+            _blur.UseShader();
+
             float i_x0 = -1.0f;
             float i_y0 = 1.0f;
             float i_x1 = 1.0f;
@@ -1340,20 +1339,21 @@ namespace SpaceVIL
 
             int location_res = glGetUniformLocation(_blur.GetProgramID(), "res");
             if (location_res >= 0)
-                glUniform1f(location_res, res * 1f / 5);
+                glUniform1f(location_res, res * 1f / 5f);
+
             else
             {
                 Console.WriteLine("not find res");
             }
-
+            /*
             int location_isfirst = glGetUniformLocation(_blur.GetProgramID(), "isFirst");
             if (location_isfirst >= 0)
-                glUniform1i(location_isfirst, isFirst);
+                glUniform1i(location_isfirst, 0);// isFirst);
             else
             {
                 Console.WriteLine("not find isfirst");
             }
-
+            */
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
 
             glDisableVertexAttribArray(0);
