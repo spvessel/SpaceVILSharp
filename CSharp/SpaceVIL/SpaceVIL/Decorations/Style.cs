@@ -1192,7 +1192,7 @@ namespace SpaceVIL
             style.AddInnerStyle("tabview", view_style);
 
             Style tab_style = new Style();
-            tab_style.Font = DefaultsService.GetDefaultFont();
+            tab_style.Font = DefaultsService.GetDefaultFont(14);
             tab_style.Background = Color.FromArgb(255, 45, 45, 45);
             tab_style.Foreground = Color.FromArgb(255, 210, 210, 210);
             tab_style.Width = 100;

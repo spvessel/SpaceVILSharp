@@ -20,19 +20,28 @@ namespace SpaceVIL
         public CornerRadius Radius
         {
             get { return _border_radius; }
-            set { _border_radius = value; }
+            set
+            {
+                _border_radius = value;
+            }
         }
         private Color _border_color;
         public Color Fill
         {
             get { return _border_color; }
-            set { _border_color = value; }
+            set
+            {
+                _border_color = value;
+            }
         }
         private int border_thickness;
         public int Thickness
         {
             get { return border_thickness; }
-            set { border_thickness = value; }
+            set
+            {
+                border_thickness = value;
+            }
         }
 
         public bool IsVisible = false;
@@ -40,7 +49,12 @@ namespace SpaceVIL
         {
             Fill = Color.Transparent;
             Thickness = -1;
-            Radius = new CornerRadius();
+        }
+        public Border(Color fill, CornerRadius radius, int thickness)
+        {
+            Fill = fill;
+            Radius = radius;
+            Thickness = thickness;
         }
     }
 }

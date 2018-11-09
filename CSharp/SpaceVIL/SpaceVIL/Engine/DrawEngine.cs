@@ -839,7 +839,7 @@ namespace SpaceVIL
             _handler.GetLayout().ExecutePollActions();
         }
 
-        internal float _interval = 1.0f / 30.0f;//1000 / 60;
+        internal float _interval = 1.0f / 60.0f;//1000 / 60;
         // internal float _interval = 1.0f / 60.0f;//1000 / 60;
         // internal int _interval = 11;//1000 / 90;
         // internal int _interval = 08;//1000 / 120;
@@ -1188,19 +1188,19 @@ namespace SpaceVIL
             Prototype vi = shell as Prototype;
             if (vi != null)
             {
-                if (vi.GetBorder().Thickness > 0)
+                if (vi.GetBorderThickness() > 0)
                 {
                     CustomShape border = new CustomShape();
-                    border.SetBackground(vi.GetBorder().Fill);
+                    border.SetBackground(vi.GetBorderFill());
                     border.SetSize(vi.GetWidth(), vi.GetHeight());
                     border.SetPosition(vi.GetX(), vi.GetY());
                     border.SetParent(vi);
                     border.SetHandler(vi.GetHandler());
                     border.SetTriangles(GraphicsMathService.GetRoundSquareBorder(
-                        vi.GetBorder().Radius,
+                        vi.GetBorderRadius(),
                         vi.GetWidth(),
                         vi.GetHeight(),
-                        vi.GetBorder().Thickness,
+                        vi.GetBorderThickness(),
                         vi.GetX(),
                         vi.GetY()
                         ));
