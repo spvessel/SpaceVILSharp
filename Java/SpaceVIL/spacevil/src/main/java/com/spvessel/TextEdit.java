@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class TextEdit extends VisualItem
+public class TextEdit extends Prototype
         implements InterfaceTextEditable, InterfaceTextShortcuts, InterfaceDraggable, InterfaceScrollable {
     static int count = 0;
     private TextLine _text_object;

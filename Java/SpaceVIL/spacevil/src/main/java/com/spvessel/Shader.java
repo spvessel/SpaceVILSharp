@@ -1,10 +1,6 @@
 package com.spvessel;
 
 import com.spvessel.Flags.ShaderType;
-
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.opengl.GL20.*;
 
 import java.io.FileReader;

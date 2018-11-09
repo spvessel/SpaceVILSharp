@@ -8,7 +8,7 @@ import com.spvessel.Core.MouseArgs;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.Orientation;
 
-public class VerticalSlider extends VisualItem {
+public class VerticalSlider extends Prototype {
     static int count = 0;
 
     public Rectangle track = new Rectangle();

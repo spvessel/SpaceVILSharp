@@ -8,7 +8,7 @@ import com.spvessel.Flags.ScrollBarVisibility;
 
 import java.awt.*;
 
-public class TextArea extends VisualItem {
+public class TextArea extends Prototype {
     static int count = 0;
     private Grid _grid = new Grid(2, 2);
     private TextBlock _area = new TextBlock();

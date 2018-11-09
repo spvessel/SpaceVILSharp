@@ -1,7 +1,7 @@
 package com.spvessel.Decorations;
 
-import com.spvessel.BaseItem;
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.ItemStateType;
 import com.spvessel.Flags.SizePolicy;
@@ -46,7 +46,7 @@ public class Style {
     public int borderThickness = 0;
     public Color borderFill = new Color(0, 0, 0, 0);
     public List<float[]> shape;// = new List<float[]>();
-    public List<BaseItem> innerShapes;// = new List<float[]>();
+    public List<InterfaceBaseItem> innerShapes;// = new List<float[]>();
     public boolean isFixedShape = false;
     public boolean isVisible;
 
@@ -260,9 +260,9 @@ public class Style {
     }
 
     ////////////////////////////////////////////////////////////////
-    public void addInnerShape(BaseItem shape) {
+    public void addInnerShape(InterfaceBaseItem shape) {
         if (innerShapes == null)
-            innerShapes = new LinkedList<BaseItem>();
+            innerShapes = new LinkedList<InterfaceBaseItem>();
         innerShapes.add(shape);
     }
 
@@ -641,7 +641,7 @@ public class Style {
         downarrow_style.width = 16;
         downarrow_style.height = 16;
         downarrow_style.alignment = new LinkedList<ItemAlignment>(
-                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+                Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
         downarrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 90);
         downarrow_style.isFixedShape = true;
         downarrow_style.addItemState(ItemStateType.HOVERED, hovered);
@@ -1264,7 +1264,7 @@ public class Style {
         style.addInnerStyle("tabview", view_style);
 
         Style tab_style = new Style();
-        tab_style.font = DefaultsService.getDefaultFont();
+        tab_style.font = DefaultsService.getDefaultFont(14);
         tab_style.background = new Color(45, 45, 45);
         tab_style.foreground = new Color(210, 210, 210);
         tab_style.width = 100;

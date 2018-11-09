@@ -1,10 +1,11 @@
 package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Core.InterfaceVLayout;
 import com.spvessel.Flags.SizePolicy;
 
-public class VerticalStack extends VisualItem implements InterfaceVLayout {
+public class VerticalStack extends Prototype implements InterfaceVLayout {
     static int count = 0;
 
     public VerticalStack() {
@@ -21,7 +22,7 @@ public class VerticalStack extends VisualItem implements InterfaceVLayout {
     }
 
     @Override
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         super.addItem(item);
         updateLayout();
     }
@@ -44,8 +45,8 @@ public class VerticalStack extends VisualItem implements InterfaceVLayout {
         int fixed_count = 0;
         int expanded_count = 0;
 
-        for (BaseItem child : getItems()) {
-            if (child.getVisible()) {
+        for (InterfaceBaseItem child : getItems()) {
+            if (child.isVisible()) {
                 if (child.getHeightPolicy() == SizePolicy.FIXED) {
                     fixed_count++;
                     free_space -= (child.getHeight() + child.getMargin().top + child.getMargin().bottom);//
@@ -63,8 +64,8 @@ public class VerticalStack extends VisualItem implements InterfaceVLayout {
         int offset = 0;
         int startY = getY() + getPadding().top;
 
-        for (BaseItem child : getItems()) {
-            if (child.getVisible()) {
+        for (InterfaceBaseItem child : getItems()) {
+            if (child.isVisible()) {
                 child.setY(startY + offset + child.getMargin().top);//
                 if (child.getHeightPolicy() == SizePolicy.EXPAND) {
                     if (height_for_expanded - child.getMargin().top - child.getMargin().bottom < child.getMaxHeight())//

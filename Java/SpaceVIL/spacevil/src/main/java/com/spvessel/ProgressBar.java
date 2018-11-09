@@ -1,6 +1,7 @@
 package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Decorations.Indents;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.ItemAlignment;
@@ -8,7 +9,7 @@ import com.spvessel.Flags.ItemAlignment;
 import java.awt.*;
 import java.util.List;
 
-public class ProgressBar extends VisualItem {
+public class ProgressBar extends Prototype {
     static int count = 0;
     private Label _text_object;
     private Rectangle _rect;
@@ -143,7 +144,7 @@ public class ProgressBar extends VisualItem {
 
     // Layout rules
     @Override
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         super.addItem(item);
         updateLayout();
     }

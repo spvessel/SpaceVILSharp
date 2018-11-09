@@ -343,6 +343,11 @@ public abstract class BaseItem implements InterfaceBaseItem {
         if (getParent() == null)
             return;
 
+        if (this instanceof VisualItem) {
+            protoUpdateBehavior();
+            return;
+        }
+
         List<ItemAlignment> alignment = getAlignment();
 
         if (alignment.contains(ItemAlignment.LEFT)) {
@@ -365,6 +370,35 @@ public abstract class BaseItem implements InterfaceBaseItem {
         if (alignment.contains(ItemAlignment.VCENTER)) {
             setY(getParent().getY() + (getParent().getHeight() - getHeight()) / 2 + getMargin().top
                     - getMargin().bottom);//
+        }
+    }
+
+    private void protoUpdateBehavior() {
+        Prototype prt = ((VisualItem) this)._main;
+
+        List<ItemAlignment> alignment = prt.getAlignment();
+
+        if (alignment.contains(ItemAlignment.LEFT)) {
+            prt.setX(prt.getParent().getX() + prt.getParent().getPadding().left + prt.getMargin().left);//
+        }
+        if (alignment.contains(ItemAlignment.RIGHT)) {
+            prt.setX(prt.getParent().getX() + prt.getParent().getWidth() - prt.getWidth()
+                    - prt.getParent().getPadding().right - prt.getMargin().right);//
+        }
+        if (alignment.contains(ItemAlignment.TOP)) {
+            prt.setY(prt.getParent().getY() + prt.getParent().getPadding().top + prt.getMargin().top);//
+        }
+        if (alignment.contains(ItemAlignment.BOTTOM)) {
+            prt.setY(prt.getParent().getY() + prt.getParent().getHeight() - prt.getHeight()
+                    - prt.getParent().getPadding().bottom - prt.getMargin().bottom);//
+        }
+        if (alignment.contains(ItemAlignment.HCENTER)) {
+            prt.setX(prt.getParent().getX() + (prt.getParent().getWidth() - prt.getWidth()) / 2 + prt.getMargin().left
+                    - prt.getMargin().right);//
+        }
+        if (alignment.contains(ItemAlignment.VCENTER)) {
+            prt.setY(prt.getParent().getY() + (prt.getParent().getHeight() - prt.getHeight()) / 2 + prt.getMargin().top
+                    - prt.getMargin().bottom);//
         }
     }
 
@@ -424,6 +458,11 @@ public abstract class BaseItem implements InterfaceBaseItem {
     }
 
     public void update(GeometryEventType type, int value) {
+        if (this instanceof VisualItem) {
+            protoUpdate(type, value);
+            return;
+        }
+
         setConfines();
         switch (type) {
         case MOVED_X:
@@ -516,6 +555,111 @@ public abstract class BaseItem implements InterfaceBaseItem {
                     prefered = getParent().getHeight() - getParent().getPadding().top - getParent().getPadding().bottom
                             - getMargin().top - getMargin().bottom;//
                     setHeight(prefered);
+                }
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    private void protoUpdate(GeometryEventType type, int value) {
+        Prototype prt = ((VisualItem) this)._main;
+        prt.setConfines();
+        switch (type) {
+        case MOVED_X:
+            prt.setX(getX() + value);
+            break;
+
+        case MOVED_Y:
+            prt.setY(getY() + value);
+            break;
+
+        case RESIZE_WIDTH:
+            if (prt.getWidthPolicy() == SizePolicy.FIXED) {
+                if (prt.getAlignment().contains(ItemAlignment.RIGHT)) {
+                    prt.setX(prt.getParent().getX() + prt.getParent().getWidth() - prt.getWidth()
+                            - prt.getParent().getPadding().right - prt.getMargin().right);//
+                }
+                if (prt.getAlignment().contains(ItemAlignment.HCENTER)) {
+                    prt.setX(prt.getParent().getX() + (prt.getParent().getWidth() - prt.getWidth()) / 2
+                            + prt.getMargin().left - prt.getMargin().right);
+                }
+            } else if (prt.getWidthPolicy() == SizePolicy.EXPAND) {
+                int prefered = prt.getParent().getWidth() - prt.getParent().getPadding().left
+                        - prt.getParent().getPadding().right - prt.getMargin().right - prt.getMargin().left;//
+                prefered = (prefered > prt.getMaxWidth()) ? prt.getMaxWidth() : prefered;
+                prefered = (prefered < prt.getMinWidth()) ? prt.getMinWidth() : prefered;
+                prt.setWidth(prefered);
+
+                if (prefered + prt.getParent().getPadding().left + prt.getParent().getPadding().right
+                        + prt.getMargin().right + prt.getMargin().left == prt.getParent().getWidth())//
+                {
+                    prt.setX(prt.getParent().getX() + prt.getParent().getPadding().left + prt.getMargin().left);//
+                } else if (prefered + prt.getParent().getPadding().left + prt.getParent().getPadding().right
+                        + prt.getMargin().right + prt.getMargin().left < prt.getParent().getWidth())//
+                {
+                    if (prt.getAlignment().contains(ItemAlignment.RIGHT)) {
+                        prt.setX(prt.getParent().getX() + prt.getParent().getWidth() - prt.getWidth()
+                                - prt.getParent().getPadding().right - prt.getMargin().right);//
+                    }
+                    if (prt.getAlignment().contains(ItemAlignment.HCENTER)) {
+                        prt.setX(prt.getParent().getX() + (prt.getParent().getWidth() - prt.getWidth()) / 2
+                                + prt.getMargin().left);//
+                    }
+                } else if (prefered + prt.getParent().getPadding().left + prt.getParent().getPadding().right
+                        + prt.getMargin().right + prt.getMargin().left > prt.getParent().getWidth())//
+                {
+                    // никогда не должен зайти
+                    prt.setX(prt.getParent().getX() + prt.getParent().getPadding().left + prt.getMargin().left);//
+                    prefered = prt.getParent().getWidth() - prt.getParent().getPadding().left
+                            - prt.getParent().getPadding().right - prt.getMargin().left - prt.getMargin().right;//
+                    prt.setWidth(prefered);
+                }
+            }
+            break;
+
+        case RESIZE_HEIGHT:
+            if (prt.getHeightPolicy() == SizePolicy.FIXED) {
+                if (prt.getAlignment().contains(ItemAlignment.BOTTOM)) {
+                    prt.setY(prt.getParent().getY() + prt.getParent().getHeight() - prt.getHeight()
+                            - prt.getParent().getPadding().bottom - prt.getMargin().bottom);//
+                }
+                if (prt.getAlignment().contains(ItemAlignment.VCENTER)) {
+                    prt.setY(prt.getParent().getY() + (prt.getParent().getHeight() - prt.getHeight()) / 2
+                            + prt.getMargin().top - prt.getMargin().bottom);
+                }
+            } else if (prt.getHeightPolicy() == SizePolicy.EXPAND) {
+                int prefered = prt.getParent().getHeight() - prt.getParent().getPadding().top
+                        - prt.getParent().getPadding().bottom - prt.getMargin().bottom - prt.getMargin().top;//
+                prefered = (prefered > prt.getMaxHeight()) ? prt.getMaxHeight() : prefered;
+                prefered = (prefered < prt.getMinHeight()) ? prt.getMinHeight() : prefered;
+                prt.setHeight(prefered);
+
+                if (prefered + prt.getParent().getPadding().top + prt.getParent().getPadding().bottom
+                        + prt.getMargin().bottom + prt.getMargin().top == prt.getParent().getHeight())//
+                {
+                    prt.setY(prt.getParent().getY() + prt.getParent().getPadding().top + prt.getMargin().top);//
+                } else if (prefered + prt.getParent().getPadding().top + prt.getParent().getPadding().bottom
+                        + prt.getMargin().bottom + prt.getMargin().top < prt.getParent().getHeight())//
+                {
+                    if (prt.getAlignment().contains(ItemAlignment.BOTTOM)) {
+                        prt.setY(prt.getParent().getY() + prt.getParent().getHeight() - prt.getHeight()
+                                - prt.getParent().getPadding().bottom - prt.getMargin().bottom);//
+                    }
+                    if (prt.getAlignment().contains(ItemAlignment.VCENTER)) {
+                        prt.setY(prt.getParent().getY() + (prt.getParent().getHeight() - prt.getHeight()) / 2
+                                + prt.getMargin().top);//
+                    }
+                } else if (prefered + prt.getParent().getPadding().top + prt.getParent().getPadding().bottom
+                        + prt.getMargin().bottom + prt.getMargin().top > prt.getParent().getHeight())//
+                {
+                    // никогда не должен зайти
+                    prt.setY(prt.getParent().getY() + prt.getParent().getPadding().top + prt.getMargin().top);//
+                    prefered = prt.getParent().getHeight() - prt.getParent().getPadding().top
+                            - prt.getParent().getPadding().bottom - prt.getMargin().top - prt.getMargin().bottom;//
+                    prt.setHeight(prefered);
                 }
             }
             break;

@@ -1260,8 +1260,9 @@ namespace SpaceVIL
                 weights[i] /= sum;
 
 
-            DrawShadowPart(weights, res, fbo_texture);
+            _blur.UseShader();
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
+            DrawShadowPart(weights, res, fbo_texture);
             //DrawShadowPart(weights, res, fbo_texture, 0);
 
             glDeleteFramebuffers(1, fbo_handle);
@@ -1270,7 +1271,6 @@ namespace SpaceVIL
 
         private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture)
         {
-            _blur.UseShader();
 
             float i_x0 = -1.0f;
             float i_y0 = 1.0f;
@@ -1339,7 +1339,7 @@ namespace SpaceVIL
 
             int location_res = glGetUniformLocation(_blur.GetProgramID(), "res");
             if (location_res >= 0)
-                glUniform1f(location_res, res * 1f / 5f);
+                glUniform1f(location_res, res * 1f / 4f);
 
             else
             {

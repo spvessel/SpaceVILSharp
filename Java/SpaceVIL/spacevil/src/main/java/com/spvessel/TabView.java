@@ -1,6 +1,7 @@
 package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Core.InterfaceItem;
 import com.spvessel.Core.InterfaceMouseMethodState;
 import com.spvessel.Core.MouseArgs;
@@ -18,7 +19,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TabView extends VisualItem {
+public class TabView extends Prototype {
     static int count = 0;
 
     // private Grid _tab_view;
@@ -104,15 +105,15 @@ public class TabView extends VisualItem {
     }
 
     public void removeTab(String tab_name) {
-        for (BaseItem tab : _tab_bar.getItems()) {
+        for (InterfaceBaseItem tab : _tab_bar.getItems()) {
             if (tab_name == tab.getItemName()) {
                 _tab_list.remove(tab);
             }
         }
     }
 
-    public void addItemToTab(String tab_name, BaseItem item) {
-        for (BaseItem tab : _tab_bar.getItems()) {
+    public void addItemToTab(String tab_name, InterfaceBaseItem item) {
+        for (InterfaceBaseItem tab : _tab_bar.getItems()) {
             if (tab_name == tab.getItemName()) {
                 _tab_list.get(tab).addItem(item);
             }

@@ -2,6 +2,7 @@ package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
 import com.spvessel.Core.EventCommonMethod;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Core.InterfaceCommonMethod;
 import com.spvessel.Core.InterfaceMouseMethodState;
 import com.spvessel.Decorations.ItemState;
@@ -23,9 +24,9 @@ public class TreeView extends ListBox {
     public void setRootVisibility(boolean visible) {
         _root.setVisible(visible);
         // reset all paddings for content
-        List<BaseItem> list = getListContent();
+        List<InterfaceBaseItem> list = getListContent();
         if (list != null) {
-            for (BaseItem item : list) {
+            for (InterfaceBaseItem item : list) {
                 if (item instanceof TreeItem) {
                     TreeItem tmp = (TreeItem) item;
                     tmp.resetIndents();
@@ -115,7 +116,7 @@ public class TreeView extends ListBox {
         outList.add(_root);
         outList.addAll(sortHelper(_root));
 
-        List<BaseItem> list = new LinkedList<>();
+        List<InterfaceBaseItem> list = new LinkedList<>();
         for (TreeItem var : outList) {
             list.add(var);
         }
@@ -149,7 +150,7 @@ public class TreeView extends ListBox {
     }
 
     @Override
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         _root.addItem(item);
     }
 

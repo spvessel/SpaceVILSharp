@@ -1,6 +1,7 @@
 package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Decorations.Style;
 
 import java.util.Map;
@@ -90,20 +91,20 @@ public class ThemeStyle {
         return null;
     }
 
-    private Map<BaseItem, Style> specificItemsStyle = new HashMap<BaseItem, Style>();
+    private Map<InterfaceBaseItem, Style> specificItemsStyle = new HashMap<InterfaceBaseItem, Style>();
 
     public void setCurrentAsDefault() {
         DefaultsService.setDefaultTheme(this);
     }
 
-    public void addSpecificItemStyle(BaseItem current_item, Style style) {
+    public void addSpecificItemStyle(InterfaceBaseItem current_item, Style style) {
         if (specificItemsStyle.containsKey(current_item))
             specificItemsStyle.replace(current_item, style);
         else
             specificItemsStyle.put(current_item, style);
     }
 
-    public void RemoveSpecificItemStyle(BaseItem current_item, Style style)
+    public void RemoveSpecificItemStyle(InterfaceBaseItem current_item, Style style)
         {
             if (specificItemsStyle.containsKey(current_item))
                 specificItemsStyle.remove(current_item);

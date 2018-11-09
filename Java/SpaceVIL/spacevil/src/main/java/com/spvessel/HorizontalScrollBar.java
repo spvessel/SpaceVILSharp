@@ -5,7 +5,7 @@ import com.spvessel.Core.InterfaceMouseMethodState;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.Orientation;
 
-public class HorizontalScrollBar extends Prototype {
+public class HorizontalScrollBar extends HorizontalStack {
     private static int count = 0;
 
     public ButtonCore upArrow = new ButtonCore();

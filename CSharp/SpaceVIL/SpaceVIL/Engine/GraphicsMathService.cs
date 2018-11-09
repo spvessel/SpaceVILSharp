@@ -289,6 +289,7 @@ namespace SpaceVIL
         {
             if (item.GetTriangles() == null)
                 return null;
+                
             List<float[]> result = new List<float[]>();
 
             foreach (var vector in item.GetTriangles())

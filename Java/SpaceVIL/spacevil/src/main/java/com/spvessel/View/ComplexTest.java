@@ -2,6 +2,7 @@ package com.spvessel.View;
 
 import com.spvessel.*;
 import com.spvessel.Core.InterfaceMouseMethodState;
+import com.spvessel.Decorations.CornerRadius;
 import com.spvessel.Decorations.Indents;
 import com.spvessel.Decorations.ItemState;
 import com.spvessel.Decorations.Style;
@@ -104,7 +105,7 @@ public class ComplexTest extends ActiveWindow {
         Style style = new Style();
         style.background = new Color(255, 181, 111);
         style.foreground = new Color(0, 0, 0);
-        style.borderRadius = 6;
+        style.borderRadius = new CornerRadius(6);
         style.font = new Font("Courier New", Font.PLAIN, 16);
         style.width = w;
         style.minWidth = 30;

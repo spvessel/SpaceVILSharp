@@ -39,7 +39,7 @@ public class BlockList extends ResizableItem {
         _palette.setMargin(0, 40, 0, 0);
         _palette.setSize(20, 15);
         _palette.setBackground(255, 128, 128);
-        _palette.getBorder().setRadius(0);
+        _palette.setBorderRadius(0);
         CustomShape arrow = new CustomShape();
         arrow.setTriangles(GraphicsMathService.getTriangle(30, 30, 0, 0, 180));
         arrow.setBackground(50, 50, 50);
@@ -49,7 +49,7 @@ public class BlockList extends ResizableItem {
 
         _lock.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
         _lock.setSize(15, 15);
-        _lock.getBorder().setRadius(0);
+        _lock.setBorderRadius(0);
         _lock.eventToggle.add((sender, args) -> {
             isLocked = !isLocked;
             _text.setEditable(!_text.isEditable());
@@ -77,7 +77,7 @@ public class BlockList extends ResizableItem {
         _btn_close.setAlignment(ItemAlignment.TOP, ItemAlignment.RIGHT);
         ItemState hovered = new ItemState(new Color(255, 255, 255, 80));
         _btn_close.addItemState(ItemStateType.HOVERED, hovered);
-        _btn_close.isCustom = new CustomFigure(false, GraphicsMathService.getCross(10, 10, 3, 45));
+        _btn_close.setCustomFigure(new CustomFigure(false, GraphicsMathService.getCross(10, 10, 3, 45)));
         _btn_close.eventMouseClick.add((sender, args) -> Dispose());
 
         addItems(_lock, _note, _text, _palette, _btn_close);

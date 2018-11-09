@@ -22,13 +22,13 @@ namespace SpaceVIL
 {
     internal sealed class VRAMStorage
     {
-        public BaseItem Link = null;
+        public IBaseItem Link = null;
         private float[] _vbo_data;
         public uint VBO;
         private int[] _ibo_data;
         public uint IBO;
         public uint[] Texture;
-        internal VRAMStorage(BaseItem link = null)
+        internal VRAMStorage(IBaseItem link = null)
         {
             Texture = new uint[1];
             Link = link;
