@@ -1315,15 +1315,15 @@ public class DrawEngine {
 
         if (shell instanceof Prototype) {
             Prototype vi = (Prototype) shell;
-            if (vi.getBorder().getThickness() > 0) {
+            if (vi.getBorderThickness() > 0) {
                 CustomShape border = new CustomShape();
-                border.setBackground(vi.getBorder().getFill());
+                border.setBackground(vi.getBorderFill());
                 border.setSize(vi.getWidth(), vi.getHeight());
                 border.setPosition(vi.getX(), vi.getY());
                 border.setParent(vi);
                 border.setHandler(vi.getHandler());
                 border.setTriangles(GraphicsMathService.getRoundSquareBorder(vi.getWidth(), vi.getHeight(),
-                        vi.getBorder().getRadius(), vi.getBorder().getThickness(), 0, 0));
+                        vi.getBorderRadius(), vi.getBorderThickness(), 0, 0));
                 drawShell(border);
             }
         }
@@ -1384,16 +1384,16 @@ public class DrawEngine {
         for (int i = 0; i < res; i++)
             weights[i] /= sum;
 
-        drawShadowPart(weights, res, fbo_texture, 1);
+        //drawShadowPart(weights, res, fbo_texture, 1);
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-        drawShadowPart(weights, res, fbo_texture, 0);
+        drawShadowPart(weights, res, fbo_texture);
 
 
         glDeleteFramebuffersEXT(fbo_handle);
         glDeleteTextures(fbo_texture);
     }
 
-    private void drawShadowPart(float[] weights, int res, int fbo_texture, int isFirst) {
+    private void drawShadowPart(float[] weights, int res, int fbo_texture) {
         _blur.useShader();
         float i_x0 = -1.0f;
         float i_y0 = 1.0f;
@@ -1455,9 +1455,9 @@ public class DrawEngine {
         if (location_weights >= 0)
             glUniform1fv(location_weights, weights);
 
-        int location_isfirst = glGetUniformLocation((int) _blur.getProgramID(), "isFirst");
-        if (location_isfirst >= 0)
-            glUniform1i(location_isfirst, isFirst);
+//        int location_isfirst = glGetUniformLocation((int) _blur.getProgramID(), "isFirst");
+//        if (location_isfirst >= 0)
+//            glUniform1i(location_isfirst, isFirst);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

@@ -76,7 +76,7 @@ namespace SpaceVIL
         internal void SetBlockWidth(int width, int curWidth)
         {
             if (GetParent() == null) return;
-            Indents textMargin = TextMargin();
+            Indents textMargin = GetTextMargin();
             _cursorXMax = GetParent().GetWidth() - curWidth - GetParent().GetPadding().Left -
                 GetParent().GetPadding().Right - textMargin.Left - textMargin.Right;
             SetAllowWidth();
@@ -86,7 +86,7 @@ namespace SpaceVIL
         internal void SetBlockHeight(int height)
         {
             if (GetParent() == null) return;
-            Indents textMargin = TextMargin();
+            Indents textMargin = GetTextMargin();
             _cursorYMax = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom
                  - textMargin.Top - textMargin.Bottom;
             SetAllowHeight();
@@ -95,7 +95,7 @@ namespace SpaceVIL
 
         internal void InitLines(int curWidth)
         {
-            Indents textMargin = TextMargin();
+            Indents textMargin = GetTextMargin();
 
             _cursorXMax = GetParent().GetWidth() - curWidth - GetParent().GetPadding().Left
                  - GetParent().GetPadding().Right - textMargin.Left - textMargin.Right;
@@ -153,7 +153,7 @@ namespace SpaceVIL
             TextLine te = new TextLine();
             te.SetForeground(GetForeground());
             te.SetTextAlignment(_blockAlignment);
-            te.SetMargin(TextMargin());
+            te.SetMargin(GetTextMargin());
             if (_elementFont != null)
                 te.SetFont(_elementFont);
 
@@ -233,14 +233,14 @@ namespace SpaceVIL
 
         internal Point ReplaceCursorAccordingCoord(Point realPos)
         {
-            realPos.Y -= GetParent().GetY() + GetParent().GetPadding().Top + globalYShift + TextMargin().Top;
+            realPos.Y -= GetParent().GetY() + GetParent().GetPadding().Top + globalYShift + GetTextMargin().Top;
             int lineNumb = realPos.Y / GetLineY(1);
             if (lineNumb >= GetCount())
                 lineNumb = GetCount() - 1;
             if (lineNumb < 0) lineNumb = 0;
             //return lineNumb;
 
-            realPos.X -= GetParent().GetX() + GetParent().GetPadding().Left + TextMargin().Left;
+            realPos.X -= GetParent().GetX() + GetParent().GetPadding().Left + GetTextMargin().Left;
 
             Point outPt = new Point(0, 0);
             outPt.Y = lineNumb;
@@ -332,7 +332,7 @@ namespace SpaceVIL
             }
         }
 
-        private Indents TextMargin()
+        internal Indents GetTextMargin()
         {
             return _linesList[0].GetMargin();
         }
@@ -556,8 +556,8 @@ namespace SpaceVIL
                     UpdLinesYShift();
                 }
             }
-            outPoint.X += GetParent().GetX() + GetParent().GetPadding().Left + globalXShift + TextMargin().Left;
-            outPoint.Y += GetParent().GetY() + GetParent().GetPadding().Top + globalYShift + TextMargin().Top;
+            outPoint.X += GetParent().GetX() + GetParent().GetPadding().Left + globalXShift + GetTextMargin().Left;
+            outPoint.Y += GetParent().GetY() + GetParent().GetPadding().Top + globalYShift + GetTextMargin().Top;
 
             //outPoint.X += GetX() + GetPadding().Left + _linesList[0].GetMargin().Left + xShift;
             //outPoint.Y += GetY() + GetPadding().Top + _linesList[0].GetMargin().Top + yShift;
@@ -650,8 +650,8 @@ namespace SpaceVIL
                 tpout.HeightTexture = h;
                 if (tpLines.Count == 0 || tpLines[0] == null)
                 {
-                    tpout.XTextureShift = GetParent().GetPadding().Left + TextMargin().Left + GetParent().GetX();
-                    tpout.YTextureShift = GetParent().GetPadding().Top + TextMargin().Top + GetParent().GetY();
+                    tpout.XTextureShift = GetParent().GetPadding().Left + GetTextMargin().Left + GetParent().GetX();
+                    tpout.YTextureShift = GetParent().GetPadding().Top + GetTextMargin().Top + GetParent().GetY();
 
                     tpout.XTextureShift += _linesList[0].GetLineXShift();
                     tpout.YTextureShift += _linesList[0].GetLineYShift();

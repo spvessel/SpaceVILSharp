@@ -174,12 +174,14 @@ namespace SpaceVIL
             base.SetWidth(width);
             UpdateHorizontalSlider();
             HScrollBar.Slider.UpdateHandler();
+            _area.SetWidth(width);
         }
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
             UpdateVerticalSlider();
             VScrollBar.Slider.UpdateHandler();
+            _area.SetHeight(height);
         }
 
         public void UpdateElements()
@@ -235,6 +237,91 @@ namespace SpaceVIL
             {
                 HScrollBar.SetStyle(inner_style);
             }
+        }
+
+        public void SetForeground(Color color)
+        {
+            _area.SetForeground(color);
+        }
+        public void SetForeground(int r, int g, int b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            SetForeground(Color.FromArgb(255, r, g, b));
+        }
+        public void SetForeground(int r, int g, int b, int a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            SetForeground(Color.FromArgb(a, r, g, b));
+        }
+        public void SetForeground(float r, float g, float b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            SetForeground(Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+        }
+        public void SetForeground(float r, float g, float b, float a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            SetForeground(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+        }
+
+        public Color GetForeground() {
+            return _area.GetForeground();
+        }
+
+        public void SetLineSpacer(int lineSpacer)
+        {
+            _area.SetLineSpacer(lineSpacer);
+        }
+
+        public int GetLineSpacer()
+        {
+            return _area.GetLineSpacer();
+        }
+
+        public void SetTextMargin(Indents margin)
+        {
+            _area.SetTextMargin(margin);
+        }
+
+        public Indents GetTextMargin() {
+            return _area.GetTextMargin();
+        }
+
+        public void SetFont(Font font)
+        {
+            _area.SetFont(font);
+        }
+        public Font GetFont()
+        {
+            return _area.GetFont();
+        }
+
+        public int GetTextWidth()
+        {
+            return _area.GetWidth();
+        }
+
+        public int GetTextHeight()
+        {
+            return _area.GetTextHeight();
+        }
+
+        public override void SetFocused(bool value)
+        {
+            base.SetFocused(value);
+            _area.SetFocused(value);
+        }
+
+        public void cLearArea() {
+            _area.Clear();
         }
     }
 }

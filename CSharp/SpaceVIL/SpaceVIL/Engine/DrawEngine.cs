@@ -1247,21 +1247,21 @@ namespace SpaceVIL
 
 
             int res = (int)shell.GetShadowRadius();
-            float[] weights = new float[5];
+            float[] weights = new float[11];
             float sum, sigma2 = 4.0f;
             weights[0] = Gauss(0, sigma2);
             sum = weights[0];
-            for (int i = 1; i < 5; i++)
+            for (int i = 1; i < 11; i++)
             {
                 weights[i] = Gauss(i, sigma2);
                 sum += 2 * weights[i];
             }
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 11; i++)
                 weights[i] /= sum;
 
 
-            DrawShadowPart(weights, res, fbo_texture);
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
+            DrawShadowPart(weights, res, fbo_texture);
             //DrawShadowPart(weights, res, fbo_texture, 0);
 
             glDeleteFramebuffers(1, fbo_handle);
@@ -1339,7 +1339,7 @@ namespace SpaceVIL
 
             int location_res = glGetUniformLocation(_blur.GetProgramID(), "res");
             if (location_res >= 0)
-                glUniform1f(location_res, res * 1f / 5f);
+                glUniform1f(location_res, (res * 1f / 10));
 
             else
             {

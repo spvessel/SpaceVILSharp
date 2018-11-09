@@ -26,7 +26,7 @@ namespace SpaceVIL
         private bool _isSelect = false;
         private bool _justSelected = false;
 
-        private Color _blockForeground;
+        //private Color _blockForeground;
 
         private List<KeyCode> ShiftValCodes;
         private List<KeyCode> InsteadKeyMods;
@@ -370,7 +370,7 @@ namespace SpaceVIL
             }
         }
 
-        public virtual void OnTextInput(object sender, TextInputArgs args)
+        protected void OnTextInput(object sender, TextInputArgs args)
         {
             if (!_isEditable) return;
             Monitor.Enter(_textureStorage.textInputLock);
@@ -424,13 +424,13 @@ namespace SpaceVIL
             TextChanged?.Invoke();
         }
 
-        void SetLineSpacer(int lineSpacer)
+        internal void SetLineSpacer(int lineSpacer)
         {
             _textureStorage.SetLineSpacer(lineSpacer);
             _cursor.SetHeight(_textureStorage.GetCursorHeight());
         }
 
-        public int GetLineSpacer()
+        internal int GetLineSpacer()
         {
             return _textureStorage.GetLineSpacer();
         }
@@ -442,7 +442,7 @@ namespace SpaceVIL
 
 
 
-        public void SetTextAlignment(ItemAlignment alignment)
+        internal void SetTextAlignment(ItemAlignment alignment)
         {
             //Ignore all changes
             /*
@@ -454,12 +454,16 @@ namespace SpaceVIL
         }
 
         //private Indents _text_margin = new Indents();
-        public void SetTextMargin(Indents margin)
+        internal void SetTextMargin(Indents margin)
         {
             _textureStorage.SetTextMargin(margin);
         }
 
-        public void SetFont(Font font)
+        internal Indents GetTextMargin() {
+            return _textureStorage.GetTextMargin();
+        }
+
+        internal void SetFont(Font font)
         {
             /*
             if (!font.Equals(_elementFont))
@@ -485,11 +489,11 @@ namespace SpaceVIL
             _textureStorage.SetFont(font);
             _cursor.SetHeight(_textureStorage.GetCursorHeight());
         }
-        public Font GetFont()
+        internal Font GetFont()
         {
             return _textureStorage.GetFont();
         }
-        public void SetText(String text)
+        internal void SetText(String text)
         {
             Monitor.Enter(_textureStorage.textInputLock);
             try
@@ -510,7 +514,7 @@ namespace SpaceVIL
             _textureStorage.SetTextInLine(text, _cursor_position.Y);
         }
 
-        public int GetTextWidth()
+        internal int GetTextWidth()
         {
             /*
             int w = 0, w0;
@@ -525,49 +529,22 @@ namespace SpaceVIL
             return _textureStorage.GetWidth();
         }
 
-        public int GetTextHeight()
+        internal int GetTextHeight()
         {
             return _textureStorage.GetTextHeight();
         }
-        public void SetForeground(Color color)
+        internal void SetForeground(Color color)
         {
             _textureStorage.SetForeground(color);
         }
-        public void SetForeground(int r, int g, int b)
-        {
-            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            SetForeground(Color.FromArgb(255, r, g, b));
-        }
-        public void SetForeground(int r, int g, int b, int a)
-        {
-            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            SetForeground(Color.FromArgb(a, r, g, b));
-        }
-        public void SetForeground(float r, float g, float b)
-        {
-            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            SetForeground(Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
-        }
-        public void SetForeground(float r, float g, float b, float a)
-        {
-            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            SetForeground(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
-        }
-        public Color GetForeground()
+        
+        internal Color GetForeground()
         {
             //if (_linesList == null) return Color.White; //?????
             //return _linesList[0].GetForeground();
-            return _blockForeground;
+            return _textureStorage.GetForeground();
         }
-        public virtual bool IsEditable
+        internal bool IsEditable
         {
             get { return _isEditable; }
             set
@@ -861,7 +838,7 @@ namespace SpaceVIL
             return _textureStorage.GetLineLetCount(lineNum);
         }
 
-        public void Clear()
+        internal void Clear()
         {
             //SetText("");
             _textureStorage.Clear();

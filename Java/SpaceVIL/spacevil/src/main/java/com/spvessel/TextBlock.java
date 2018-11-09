@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-class TextBlock extends VisualItem
+class TextBlock extends Prototype
         implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts {
 
     EventCommonMethod textChanged = new EventCommonMethod();
@@ -780,13 +780,13 @@ class TextBlock extends VisualItem
     }
 
     @Override
-    public List<BaseItem> getItems() {
-        List<BaseItem> list = super.getItems();
+    public List<InterfaceBaseItem> getItems() {
+        List<InterfaceBaseItem> list = super.getItems();
         return new LinkedList<>(Arrays.asList(list.get(0), list.get(1), list.get(2)));
     }
 
     @Override
-    public void removeItem(BaseItem item) {
+    public void removeItem(InterfaceBaseItem item) {
         if (item.equals(_cursor)) {
             while (super.getItems().size() > 0) {
                 super.removeItem(super.getItems().get(0));
