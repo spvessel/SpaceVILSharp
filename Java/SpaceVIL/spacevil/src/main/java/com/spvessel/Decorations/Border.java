@@ -3,20 +3,14 @@ package com.spvessel.Decorations;
 import java.awt.*;
 
 public class Border {
-    // private CornerRadius _border_radius;
-    // public CornerRadius Radius
-    // {
-    // get { return _border_radius; }
-    // set { _border_radius = value; }
-    // }
 
-    private int _border_radius;
+    private CornerRadius _border_radius = null;
 
-    public int getRadius() {
+    public CornerRadius getRadius() {
         return _border_radius;
     }
 
-    public void setRadius(int value) {
+    public void setRadius(CornerRadius value) {
         _border_radius = value;
     }
 
@@ -43,6 +37,5 @@ public class Border {
     public Border() {
         _border_color = new Color(0, 0, 0, 0);
         _border_thickness = -1;
-        _border_radius = -1;
     }
 }

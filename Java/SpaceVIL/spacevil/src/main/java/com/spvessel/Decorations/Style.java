@@ -42,7 +42,7 @@ public class Style {
     public Indents padding = new Indents();
     public Spacing spacing = new Spacing();
     public Indents margin = new Indents();
-    public int borderRadius = 0;
+    public CornerRadius borderRadius = null;
     public int borderThickness = 0;
     public Color borderFill = new Color(0, 0, 0, 0);
     public List<float[]> shape;// = new List<float[]>();
@@ -243,7 +243,7 @@ public class Style {
         borderThickness = border.getThickness();
     }
 
-    public void setBorder(Color fill, int radius, int thickness) {
+    public void setBorder(Color fill, CornerRadius radius, int thickness) {
         borderFill = fill;
         borderRadius = radius;
         borderThickness = thickness;
@@ -327,7 +327,7 @@ public class Style {
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        style.borderRadius = 6;
+        style.borderRadius =  new CornerRadius(6);
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 60);
@@ -356,7 +356,7 @@ public class Style {
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        style.borderRadius = 6;
+        style.borderRadius = new CornerRadius(6);
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 60);
@@ -477,7 +477,7 @@ public class Style {
         style.addInnerStyle("selection", selection_style);
 
         Style dropdownbutton_style = getButtonCoreStyle();
-        dropdownbutton_style.borderRadius = 0;
+        dropdownbutton_style.borderRadius = new CornerRadius();
         dropdownbutton_style.width = 20;
         dropdownbutton_style.widthPolicy = SizePolicy.FIXED;
         dropdownbutton_style.heightPolicy = SizePolicy.EXPAND;
@@ -932,7 +932,7 @@ public class Style {
         style.minHeight = 20;
         style.minWidth = 20;
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.borderRadius = 10;
+        style.borderRadius = new CornerRadius(10);
 
         Style textline_style = getLabelStyle();
         textline_style.foreground = new Color(210, 210, 210);
@@ -971,7 +971,7 @@ public class Style {
                 Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
         marker_style.textAlignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
-        marker_style.borderRadius = 4;
+        marker_style.borderRadius = new CornerRadius(4);
         ItemState toggled = new ItemState();
         toggled.background = new Color(60, 60, 60, 255);
         marker_style.addItemState(ItemStateType.TOGGLED, toggled);
@@ -1163,7 +1163,7 @@ public class Style {
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.padding = new Indents(5, 0, 5, 0);
-        style.borderRadius = 4;
+        style.borderRadius = new CornerRadius(4);
 
         return style;
     }

@@ -5,7 +5,7 @@ import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.Orientation;
 import com.spvessel.Flags.SizePolicy;
 
-public class SplitHolder extends VisualItem implements InterfaceDraggable {
+public class SplitHolder extends Prototype implements InterfaceDraggable {
     private static int count = 0;
     private Orientation _orientation;
 

@@ -1,10 +1,11 @@
 package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Core.InterfaceHLayout;
 import com.spvessel.Flags.SizePolicy;
 
-public class HorizontalStack extends VisualItem implements InterfaceHLayout {
+public class HorizontalStack extends Prototype implements InterfaceHLayout {
     static int count = 0;
 
     public HorizontalStack() {
@@ -21,7 +22,7 @@ public class HorizontalStack extends VisualItem implements InterfaceHLayout {
     }
 
     @Override
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         super.addItem(item);
         updateLayout();
     }
@@ -44,8 +45,8 @@ public class HorizontalStack extends VisualItem implements InterfaceHLayout {
         int fixed_count = 0;
         int expanded_count = 0;
 
-        for (BaseItem child : getItems()) {
-            if (child.getVisible()) {
+        for (InterfaceBaseItem child : getItems()) {
+            if (child.isVisible()) {
                 if (child.getWidthPolicy() == SizePolicy.FIXED) {
                     fixed_count++;
                     free_space -= (child.getWidth() + child.getMargin().left + child.getMargin().right);//
@@ -63,8 +64,8 @@ public class HorizontalStack extends VisualItem implements InterfaceHLayout {
         int offset = 0;
         int startX = getX() + getPadding().left;
         
-        for (BaseItem child : getItems()) {
-            if (child.getVisible()) {
+        for (InterfaceBaseItem child : getItems()) {
+            if (child.isVisible()) {
                 child.setX(startX + offset + child.getMargin().left);//
                 if (child.getWidthPolicy() == SizePolicy.EXPAND) {
                     if (width_for_expanded - child.getMargin().left - child.getMargin().right < child.getMaxWidth())
@@ -83,7 +84,7 @@ public class HorizontalStack extends VisualItem implements InterfaceHLayout {
             child.setConfines();
         }
         
-        // for (BaseItem child : getItems()) {
+        // for (InterfaceBaseItem child : getItems()) {
         //     System.out.println(child.getItemName() + " " + child.getWidth() + " " + child.getHeight() + " "  + child.getVisible());
         // }
     }

@@ -1,5 +1,6 @@
 package com.spvessel;
 
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Decorations.CornerRadius;
 
 import java.awt.*;
@@ -38,7 +39,7 @@ public final class GraphicsMathService {
         return new Color((int) r, (int) g, (int) b, (int) a);
     }
 
-    static public List<float[]> toGL(BaseItem item, WindowLayout handler) // where TLayout : VisualItem
+    static public List<float[]> toGL(InterfaceBaseItem item, WindowLayout handler) // where TLayout : VisualItem
     {
         List<float[]> result = new LinkedList<>();
 

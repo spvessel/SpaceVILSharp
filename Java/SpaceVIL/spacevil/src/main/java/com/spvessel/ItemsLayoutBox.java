@@ -1,5 +1,6 @@
 package com.spvessel;
 
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Flags.LayoutType;
 
 import java.util.*;
@@ -9,12 +10,12 @@ public class ItemsLayoutBox {
 
     }
 
-    static public List<BaseItem> getLayoutItems(UUID id) {
+    static public List<InterfaceBaseItem> getLayoutItems(UUID id) {
         // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
         return layouts.get(id).getItems();
     }
 
-    static public List<BaseItem> getLayoutFloatItems(UUID id) {
+    static public List<InterfaceBaseItem> getLayoutFloatItems(UUID id) {
         // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
         return layouts.get(id).getFloatItems();
     }
@@ -30,7 +31,7 @@ public class ItemsLayoutBox {
         layouts.put(l.getId(), l);
     }
 
-    static public void addItem(WindowLayout layout, BaseItem item, LayoutType type) {
+    static public void addItem(WindowLayout layout, InterfaceBaseItem item, LayoutType type) {
         switch (type) {
         case STATIC:
             layouts.get(layout.getId()).getItems().add(item);
@@ -44,7 +45,7 @@ public class ItemsLayoutBox {
         }
     }
 
-    static public void removeItem(WindowLayout layout, BaseItem item, LayoutType type) {
+    static public void removeItem(WindowLayout layout, InterfaceBaseItem item, LayoutType type) {
         switch (type) {
         case STATIC:
             layouts.get(layout.getId()).getItems().remove(item);

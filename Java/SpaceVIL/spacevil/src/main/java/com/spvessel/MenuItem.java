@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MenuItem extends VisualItem {
+public class MenuItem extends Prototype {
     public boolean isActionItem = false;
     static int count = 0;
     private TextLine _text_object;
@@ -185,7 +185,7 @@ public class MenuItem extends VisualItem {
 
     private void onMouseAction() {
         if (_sub_context_menu != null) {
-            if (_sub_context_menu.getVisible()) {
+            if (_sub_context_menu.isVisible()) {
                 hide();
                 MouseArgs args = new MouseArgs();
                 args.button = MouseButton.BUTTON_RIGHT;

@@ -1,6 +1,7 @@
 package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Core.InterfaceCommonMethod;
 import com.spvessel.Core.InterfaceFloating;
 import com.spvessel.Core.InterfaceItem;
@@ -13,9 +14,9 @@ import com.spvessel.Flags.ScrollBarVisibility;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ContextMenu extends VisualItem implements InterfaceFloating {
+public class ContextMenu extends Prototype implements InterfaceFloating {
     public ListBox itemList = new ListBox();
-    private List<BaseItem> _queue = new LinkedList<>();
+    private List<InterfaceBaseItem> _queue = new LinkedList<>();
 
     private static int count = 0;
     public MouseButton activeButton = MouseButton.BUTTON_RIGHT;
@@ -57,7 +58,7 @@ public class ContextMenu extends VisualItem implements InterfaceFloating {
         itemList.eventScrollUp.clear();
         itemList.eventScrollDown.clear();
 
-        for (BaseItem item : _queue)
+        for (InterfaceBaseItem item : _queue)
             itemList.addItem(item);
         _queue = null;
 
@@ -75,7 +76,7 @@ public class ContextMenu extends VisualItem implements InterfaceFloating {
         hide();
         MouseArgs args = new MouseArgs();
         args.position.setPosition(-100, -100);
-        for (BaseItem context_menu : ItemsLayoutBox.getLayoutFloatItems(getHandler().getId())) {
+        for (InterfaceBaseItem context_menu : ItemsLayoutBox.getLayoutFloatItems(getHandler().getId())) {
             if (context_menu instanceof ContextMenu) {
                 ContextMenu menu = (ContextMenu) context_menu;
                 menu.hide();
@@ -87,12 +88,12 @@ public class ContextMenu extends VisualItem implements InterfaceFloating {
         return itemList.getListContent().size();
     }
 
-    public List<BaseItem> getListContent() {
+    public List<InterfaceBaseItem> getListContent() {
         return itemList.getListContent();
     }
 
     @Override
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         // (item as MenuItem)._invoked_menu = this;
         if (item instanceof MenuItem) {
             MenuItem tmp = (MenuItem) item;
@@ -100,21 +101,21 @@ public class ContextMenu extends VisualItem implements InterfaceFloating {
         }
         _queue.add(item);
 
-        BaseItem[] list = _queue.toArray(new BaseItem[_queue.size()]);
+        InterfaceBaseItem[] list = _queue.toArray(new InterfaceBaseItem[_queue.size()]);
         int height = 0;
-        for (BaseItem h : list)
-            if (h.getVisible() && h.isDrawable)
+        for (InterfaceBaseItem h : list)
+            if (h.isVisible() && h.isDrawable())
                 height += (h.getHeight() + itemList.getArea().getSpacing().vertical);
         setHeight(getPadding().top + getPadding().bottom + height);
     }
 
     @Override
-    public void removeItem(BaseItem item) {
+    public void removeItem(InterfaceBaseItem item) {
         itemList.removeItem(item);
     }
 
     public boolean closeDependencies(MouseArgs args) {
-        for (BaseItem item : getListContent()) {
+        for (InterfaceBaseItem item : getListContent()) {
             if (item instanceof MenuItem) {
                 MenuItem menu_item = (MenuItem) item;
                 if (menu_item.isActionItem) {
@@ -160,10 +161,7 @@ public class ContextMenu extends VisualItem implements InterfaceFloating {
 
     @Override
     public void setConfines() {
-        _confines_x_0 = getX();
-        _confines_x_1 = getX() + getWidth();
-        _confines_y_0 = getY();
-        _confines_y_1 = getY() + getHeight();
+        setConfines(getX(), getX() + getWidth(), getY(), getY() + getHeight());
     }
 
     @Override

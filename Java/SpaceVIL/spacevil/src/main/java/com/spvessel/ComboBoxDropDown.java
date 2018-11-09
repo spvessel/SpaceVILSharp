@@ -2,6 +2,7 @@ package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
 import com.spvessel.Core.EventCommonMethod;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Core.InterfaceCommonMethod;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.ScrollBarVisibility;
@@ -36,11 +37,11 @@ public class ComboBoxDropDown extends DialogWindow {
         setStyle(DefaultsService.getDefaultStyle(ComboBoxDropDown.class));
     }
 
-    public void add(BaseItem item) {
+    public void add(InterfaceBaseItem item) {
         itemList.addItem(item);
     }
 
-    public void remove(BaseItem item) {
+    public void remove(InterfaceBaseItem item) {
         itemList.removeItem(item);
     }
 

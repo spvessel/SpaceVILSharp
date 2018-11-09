@@ -1,6 +1,7 @@
 package com.spvessel;
 
 import com.spvessel.Core.Geometry;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Core.InterfaceCommonMethod;
 import com.spvessel.Core.Position;
 import com.spvessel.Decorations.Indents;
@@ -242,13 +243,13 @@ public class WindowLayout {
         _window.setPadding(left, top, right, bottom);
     }
 
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         _window.addItem(item);
     }
 
-    public void addItems(BaseItem... items) {
-        List<BaseItem> list = Arrays.stream(items).collect(Collectors.toList());
-        for (BaseItem item : list) {
+    public void addItems(InterfaceBaseItem... items) {
+        List<InterfaceBaseItem> list = Arrays.stream(items).collect(Collectors.toList());
+        for (InterfaceBaseItem item : list) {
             _window.addItem(item);
         }
     }
@@ -516,7 +517,7 @@ public class WindowLayout {
         manager.execute.set();
     }
 
-    public void setFocusedItem(VisualItem item) {
+    public void setFocusedItem(Prototype item) {
         engine.setFocusedItem(item);
     }
 

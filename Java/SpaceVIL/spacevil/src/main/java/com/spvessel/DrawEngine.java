@@ -45,17 +45,17 @@ public class DrawEngine {
     }
 
     private ToolTip _tooltip = new ToolTip();
-    private BaseItem _isStencilSet = null;
+    private InterfaceBaseItem _isStencilSet = null;
     public InputDeviceEvent engineEvent = new InputDeviceEvent();
     private MouseArgs _margs = new MouseArgs();
     private KeyArgs _kargs = new KeyArgs();
     private TextInputArgs _tiargs = new TextInputArgs();
 
-    private List<VisualItem> hoveredItems;
-    private VisualItem hoveredItem = null;
-    private VisualItem focusedItem = null;
+    private List<Prototype> hoveredItems;
+    private Prototype hoveredItem = null;
+    private Prototype focusedItem = null;
 
-    public void setFocusedItem(VisualItem item) {
+    public void setFocusedItem(Prototype item) {
         if (item == null) {
             focusedItem = null;
             return;
@@ -78,7 +78,7 @@ public class DrawEngine {
     private Shader _blur;
 
     public DrawEngine(WindowLayout handler) {
-        hoveredItems = new LinkedList<VisualItem>();
+        hoveredItems = new LinkedList<Prototype>();
         _handler = new GLWHandler(handler);
 
         _tooltip.setHandler(handler);
@@ -440,8 +440,8 @@ public class DrawEngine {
             if (_handler.getLayout().getWindow()._sides.size() == 0) {
                 int x_click = ptrClick.getX();
                 int y_click = ptrClick.getY();
-                VisualItem draggable = isInListHoveredItems(InterfaceDraggable.class);
-                VisualItem anchor = isInListHoveredItems(InterfaceWindowAnchor.class);
+                Prototype draggable = isInListHoveredItems(InterfaceDraggable.class);
+                Prototype anchor = isInListHoveredItems(InterfaceWindowAnchor.class);
 
                 if (draggable != null) {
                     draggable.eventMouseDrag.execute(draggable, _margs);
@@ -478,7 +478,7 @@ public class DrawEngine {
             ptrPress.setX(ptrRelease.getX());
             ptrPress.setY(ptrRelease.getY());
 
-            if (getHoverVisualItem(ptrRelease.getX(), ptrRelease.getY(), InputEventType.MOUSE_MOVE)) {
+            if (getHoverPrototype(ptrRelease.getX(), ptrRelease.getY(), InputEventType.MOUSE_MOVE)) {
                 if (hoveredItem.getToolTip() != "") {
                     _tooltip.initTimer(true);
                 }
@@ -526,7 +526,7 @@ public class DrawEngine {
                             _handler.setCursorType(GLFW_HRESIZE_CURSOR);
                     }
                 }
-                VisualItem popup = isInListHoveredItems(PopUpMessage.class);
+                Prototype popup = isInListHoveredItems(PopUpMessage.class);
                 if (popup != null) {
                     ((PopUpMessage) popup).holdSelf(true);
                 }
@@ -556,9 +556,9 @@ public class DrawEngine {
         else
             m_state = InputEventType.MOUSE_RELEASE;
 
-        Deque<VisualItem> tmp = new ArrayDeque<>(hoveredItems);
+        Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
 
-        if (!getHoverVisualItem(ptrRelease.getX(), ptrRelease.getY(), m_state)) {
+        if (!getHoverPrototype(ptrRelease.getX(), ptrRelease.getY(), m_state)) {
             engineEvent.resetAllEvents();
             engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
             return;
@@ -569,7 +569,7 @@ public class DrawEngine {
         case GLFW_RELEASE:
 
             while (!tmp.isEmpty()) {
-                VisualItem item = tmp.pollLast();
+                Prototype item = tmp.pollLast();
                 if (item.isDisabled())
                     continue;// пропустить
                 item.setMousePressed(false);
@@ -652,28 +652,28 @@ public class DrawEngine {
     private int x_global = 0;
     private int y_global = 0;
 
-    private boolean getHoverVisualItem(float xpos, float ypos, InputEventType action) {
-        List<VisualItem> queue = new LinkedList<VisualItem>();
+    private boolean getHoverPrototype(float xpos, float ypos, InputEventType action) {
+        List<Prototype> queue = new LinkedList<Prototype>();
         hoveredItems.clear();
 
-        List<BaseItem> layout_box_of_items = new LinkedList<BaseItem>();
+        List<InterfaceBaseItem> layout_box_of_items = new LinkedList<InterfaceBaseItem>();
         layout_box_of_items.add(_handler.getLayout().getWindow());
         layout_box_of_items.addAll(getInnerItems(_handler.getLayout().getWindow()));
 
-        for (BaseItem item : ItemsLayoutBox.getLayoutFloatItems(_handler.getLayout().getId())) {
+        for (InterfaceBaseItem item : ItemsLayoutBox.getLayoutFloatItems(_handler.getLayout().getId())) {
             if (!item.getVisible() || !item.isDrawable)
                 continue;
             layout_box_of_items.add(item);
 
             // System.out.println(item.getItemName() + " " +
             // layout_box_of_items.contains(item));
-            if (item instanceof VisualItem)
-                layout_box_of_items.addAll(getInnerItems((VisualItem) item));
+            if (item instanceof Prototype)
+                layout_box_of_items.addAll(getInnerItems((Prototype) item));
         }
 
-        for (BaseItem item : layout_box_of_items) {
-            if (item instanceof VisualItem) {
-                VisualItem tmp = (VisualItem) item;
+        for (InterfaceBaseItem item : layout_box_of_items) {
+            if (item instanceof Prototype) {
+                Prototype tmp = (Prototype) item;
                 if (!tmp.getVisible() || !tmp.isDrawable)
                     continue;
                 tmp.setMouseHover(false);
@@ -700,11 +700,11 @@ public class DrawEngine {
             hoveredItem = queue.get(queue.size() - 1);
             hoveredItem.setMouseHover(true);
 
-            Deque<VisualItem> tmp;
+            Deque<Prototype> tmp;
             hoveredItems = queue;
             tmp = new ArrayDeque<>(hoveredItems);
             while (!tmp.isEmpty()) {
-                VisualItem item = tmp.pollLast();
+                Prototype item = tmp.pollLast();
                 if (item.equals(hoveredItem) && hoveredItem.isDisabled())
                     continue;// пропустить
                 item.setMouseHover(true);
@@ -716,23 +716,23 @@ public class DrawEngine {
             return false;
     }
 
-    private List<BaseItem> getInnerItems(VisualItem root) {
-        List<BaseItem> list = new LinkedList<BaseItem>();
+    private List<InterfaceBaseItem> getInnerItems(Prototype root) {
+        List<InterfaceBaseItem> list = new LinkedList<InterfaceBaseItem>();
 
-        for (BaseItem item : root.getItems()) {
+        for (InterfaceBaseItem item : root.getItems()) {
             if (!item.getVisible() || !item.isDrawable)
                 continue;
             list.add(item);
-            if (item instanceof VisualItem)
-                list.addAll(getInnerItems((VisualItem) item));
+            if (item instanceof Prototype)
+                list.addAll(getInnerItems((Prototype) item));
         }
         return list;
     }
 
-    private <T> VisualItem isInListHoveredItems(Class<T> type) {
-        VisualItem wanted = null;
-        List<VisualItem> list = new LinkedList<VisualItem>(hoveredItems);
-        for (VisualItem item : list) {
+    private <T> Prototype isInListHoveredItems(Class<T> type) {
+        Prototype wanted = null;
+        List<Prototype> list = new LinkedList<Prototype>(hoveredItems);
+        for (Prototype item : list) {
             try {
                 boolean found = type.isInstance(item);
                 if (found) {
@@ -751,9 +751,9 @@ public class DrawEngine {
         _tooltip.initTimer(false);
         if (hoveredItems.size() == 0)
             return;
-        List<VisualItem> tmp = new LinkedList<VisualItem>(hoveredItems);
+        List<Prototype> tmp = new LinkedList<Prototype>(hoveredItems);
         Collections.reverse(tmp);
-        for (VisualItem item : tmp) {
+        for (Prototype item : tmp) {
             if (!item.getPassEvents())
                 continue;
             if (dy > 0 || dx < 0)
@@ -828,10 +828,10 @@ public class DrawEngine {
             task.args = args;
             _handler.getLayout().setEventTask(task);
         } else {
-            Deque<VisualItem> tmp;
+            Deque<Prototype> tmp;
             tmp = new ArrayDeque<>(hoveredItems);
             while (!tmp.isEmpty()) {
-                VisualItem item = tmp.pollLast();
+                Prototype item = tmp.pollLast();
                 if (item.equals(hoveredItem) && hoveredItem.isDisabled())
                     continue;// пропустить
 
@@ -847,7 +847,7 @@ public class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
-    private void assignActions(InputEventType action, InputEventArgs args, VisualItem sender) {
+    private void assignActions(InputEventType action, InputEventArgs args, Prototype sender) {
         if (sender.isDisabled())
             return;
 
@@ -958,8 +958,8 @@ public class DrawEngine {
         // draw static
         drawItems(_handler.getLayout().getWindow());
         // draw float
-        for (BaseItem item : ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems())
-            drawItems((BaseItem) item);
+        for (InterfaceBaseItem item : ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems())
+            drawItems((InterfaceBaseItem) item);
         // draw tooltip if needed
         drawToolTip();
         if (!_handler.focusable) {
@@ -1076,7 +1076,7 @@ public class DrawEngine {
         glDeleteBuffers(colorbuffer);
     }
 
-    private boolean checkOutsideBorders(BaseItem shell) {
+    private boolean checkOutsideBorders(InterfaceBaseItem shell) {
         // if (shell.CutBehaviour == StencilBehaviour.Strict)
         // if(shell.getParent() != null)
         // _isStencilSet = shell;
@@ -1086,7 +1086,7 @@ public class DrawEngine {
         return lazyStencil(shell);
     }
 
-    private void strictStencil(BaseItem shell) {
+    private void strictStencil(InterfaceBaseItem shell) {
         glEnable(GL_STENCIL_TEST);
 
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -1116,21 +1116,21 @@ public class DrawEngine {
         setConfines(shell);
     }
 
-    private void setConfines(BaseItem shell) {
+    private void setConfines(InterfaceBaseItem shell) {
         shell._confines_x_0 = shell.getParent()._confines_x_0;
         shell._confines_x_1 = shell.getParent()._confines_x_1;
         shell._confines_y_0 = shell.getParent()._confines_y_0;
         shell._confines_y_1 = shell.getParent()._confines_y_1;
 
-        if (shell instanceof VisualItem) {
-            VisualItem root = (VisualItem) shell;
-            for (BaseItem item : root.getItems()) {
+        if (shell instanceof Prototype) {
+            Prototype root = (Prototype) shell;
+            for (InterfaceBaseItem item : root.getItems()) {
                 setConfines(item);
             }
         }
     }
 
-    private Boolean lazyStencil(BaseItem shell) {
+    private Boolean lazyStencil(InterfaceBaseItem shell) {
         Map<ItemAlignment, int[]> outside = new HashMap<ItemAlignment, int[]>();
 
         if (shell.getParent() != null && _isStencilSet == null) {
@@ -1193,7 +1193,7 @@ public class DrawEngine {
         return false;
     }
 
-    private void drawItems(BaseItem root) {
+    private void drawItems(InterfaceBaseItem root) {
         if (!root.getVisible() || !root.isDrawable)
             return;
 
@@ -1226,9 +1226,9 @@ public class DrawEngine {
         } else {
             drawShell(root);
 
-            if (root instanceof VisualItem) {
-                List<BaseItem> list = new LinkedList<>(((VisualItem) root).getItems());
-                for (BaseItem child : list) {
+            if (root instanceof Prototype) {
+                List<InterfaceBaseItem> list = new LinkedList<>(((Prototype) root).getItems());
+                for (InterfaceBaseItem child : list) {
                     drawItems(child);
                 }
             }
@@ -1239,11 +1239,11 @@ public class DrawEngine {
         }
     }
 
-    private void drawShell(BaseItem shell) {
+    private void drawShell(InterfaceBaseItem shell) {
         drawShell(shell, false);
     }
 
-    private void drawShell(BaseItem shell, boolean ignore_borders) {
+    private void drawShell(InterfaceBaseItem shell, boolean ignore_borders) {
         if (!ignore_borders)
             checkOutsideBorders(shell);
 
@@ -1313,8 +1313,8 @@ public class DrawEngine {
         // clear array
         crd_array.clear();
 
-        if (shell instanceof VisualItem) {
-            VisualItem vi = (VisualItem) shell;
+        if (shell instanceof Prototype) {
+            Prototype vi = (Prototype) shell;
             if (vi.getBorder().getThickness() > 0) {
                 CustomShape border = new CustomShape();
                 border.setBackground(vi.getBorder().getFill());
@@ -1329,7 +1329,7 @@ public class DrawEngine {
         }
     }
 
-    void drawShadow(BaseItem shell) {
+    void drawShadow(InterfaceBaseItem shell) {
         int fbo_handle = glGenFramebuffersEXT();
         int fbo_texture = glGenTextures();
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo_handle);
@@ -1480,7 +1480,7 @@ public class DrawEngine {
         if (bb == null || bb.limit() == 0)
             return;
 
-        if (checkOutsideBorders((BaseItem) text))
+        if (checkOutsideBorders((InterfaceBaseItem) text))
             _char.useShader();
 
         int bb_h = textPrt.heightTexture;
@@ -1614,7 +1614,7 @@ public class DrawEngine {
         glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(1);
 
-        checkOutsideBorders((BaseItem) item);
+        checkOutsideBorders((InterfaceBaseItem) item);
 
         // draw
         glDrawArrays(GL_TRIANGLES, 0, result.length / 3);
@@ -1636,7 +1636,7 @@ public class DrawEngine {
 
         if (crd_array == null)
             return;
-        checkOutsideBorders((BaseItem) item);
+        checkOutsideBorders((InterfaceBaseItem) item);
 
         int vertexbuffer = glGenBuffers();
         glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexbuffer);
@@ -1694,7 +1694,7 @@ public class DrawEngine {
         ByteBuffer bb = BufferUtils.createByteBuffer(bitmap.length);
         bb.put(bitmap);
         bb.rewind();
-        if (checkOutsideBorders((BaseItem) image))
+        if (checkOutsideBorders((InterfaceBaseItem) image))
             _texture.useShader();
 
         float i_x0 = ((float) image.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.nio.ByteBuffer;
 
-public class ImageItem extends VisualItem implements InterfaceImageItem {
+public class ImageItem extends Prototype implements InterfaceImageItem {
 
     static int count = 0;
     private BufferedImage _image;

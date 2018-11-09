@@ -4,7 +4,7 @@ import com.spvessel.Common.DefaultsService;
 import com.spvessel.Core.*;
 import com.spvessel.Decorations.Style;
 
-public class ListArea extends VisualItem implements InterfaceVLayout {
+public class ListArea extends Prototype implements InterfaceVLayout {
     public EventCommonMethod selectionChanged = new EventCommonMethod();
     public EventCommonMethod itemListChanged = new EventCommonMethod();
 
@@ -25,7 +25,7 @@ public class ListArea extends VisualItem implements InterfaceVLayout {
         return _selection;
     }
 
-    public BaseItem getSelectionItem() {
+    public InterfaceBaseItem getSelectionItem() {
         return getItems().get(_selection + 1);
     }
 
@@ -102,21 +102,21 @@ public class ListArea extends VisualItem implements InterfaceVLayout {
     }
 
     @Override
-    public void insertItem(BaseItem item, int index) {
-        item.isDrawable = false;
+    public void insertItem(InterfaceBaseItem item, int index) {
+        item.setDrawable(false);
         super.insertItem(item, index);
         updateLayout();
     }
 
     @Override
-    public void addItem(BaseItem item) {
-        item.isDrawable = false;
+    public void addItem(InterfaceBaseItem item) {
+        item.setDrawable(false);
         super.addItem(item);
         updateLayout();
     }
 
     @Override
-    public void removeItem(BaseItem item) {
+    public void removeItem(InterfaceBaseItem item) {
         unselect();
         super.removeItem(item);
         updateLayout();
@@ -157,8 +157,8 @@ public class ListArea extends VisualItem implements InterfaceVLayout {
         long offset = (-1) * getVScrollOffset();
         int startY = getY() + getPadding().top;
         int index = 0;
-        for (BaseItem child : getItems()) {
-            if (child.equals(_substrate) || !child.getVisible())
+        for (InterfaceBaseItem child : getItems()) {
+            if (child.equals(_substrate) || !child.isVisible())
                 continue;
 
             child.setX((-1) * (int) _xOffset + getX() + getPadding().left + child.getMargin().left);
@@ -170,12 +170,12 @@ public class ListArea extends VisualItem implements InterfaceVLayout {
             if (child_Y < startY) {
                 // areaPosition.add(ListPosition.TOP);
                 if (child_Y + child.getHeight() <= startY) {
-                    child.isDrawable = false;
+                    child.setDrawable(false);
                     if (_selection == index)
-                        _substrate.isDrawable = false;
+                        _substrate.setDrawable(false);;
                 } else {
                     child.setY((int) child_Y);
-                    child.isDrawable = true;
+                    child.setDrawable(true);
                     firstVisibleItem = index + 1;
                     if (_selection == index)
                         setSubstrate(child);
@@ -188,12 +188,12 @@ public class ListArea extends VisualItem implements InterfaceVLayout {
             if (child_Y + child.getHeight() + child.getMargin().bottom > getY() + getHeight() - getPadding().bottom) {
                 // areaPosition.add(ListPosition.BOTTOM);
                 if (child_Y >= getY() + getHeight() - getPadding().bottom) {
-                    child.isDrawable = false;
+                    child.setDrawable(false);
                     if (_selection == index)
-                        _substrate.setVisible(false);
+                        _substrate.setDrawable(false);
                 } else {
                     child.setY((int) child_Y);
-                    child.isDrawable = true;
+                    child.setDrawable(true);
                     lastVisibleItem = index + 1;
                     if (_selection == index)
                         setSubstrate(child);
@@ -203,7 +203,7 @@ public class ListArea extends VisualItem implements InterfaceVLayout {
             }
 
             child.setY((int) child_Y);
-            child.isDrawable = true;
+            child.setDrawable(true);
             lastVisibleItem = index + 1;
             if (_selection == index)
                 setSubstrate(child);
@@ -214,7 +214,7 @@ public class ListArea extends VisualItem implements InterfaceVLayout {
         }
     }
 
-    private void setSubstrate(BaseItem child) {
+    private void setSubstrate(InterfaceBaseItem child) {
         if (!_show_selection) {
             _substrate.setVisible(false);
             return;

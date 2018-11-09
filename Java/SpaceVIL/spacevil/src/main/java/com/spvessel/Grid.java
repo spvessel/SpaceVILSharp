@@ -2,13 +2,14 @@ package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
 import com.spvessel.Core.Cell;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Core.InterfaceGrid;
 import com.spvessel.Flags.SizePolicy;
 
 import java.util.List;
 import java.util.LinkedList;
 
-public class Grid extends VisualItem implements InterfaceGrid {
+public class Grid extends Prototype implements InterfaceGrid {
     static int count = 0;
 
     public Grid() {
@@ -83,7 +84,7 @@ public class Grid extends VisualItem implements InterfaceGrid {
     }
 
     @Override
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         // ignore if it is out of space, add in free cell, attach row and collumn
         // numbers
         for (Cell cell : _cells) {
@@ -96,7 +97,7 @@ public class Grid extends VisualItem implements InterfaceGrid {
         }
     }
 
-    public void insertItem(BaseItem item, int row, int column) {
+    public void insertItem(InterfaceBaseItem item, int row, int column) {
         super.addItem(item);
         // _cells[row + column * _row_count].setItem(item);
         // Console.WriteLine(column + row * _column_count);
@@ -159,7 +160,7 @@ public class Grid extends VisualItem implements InterfaceGrid {
             for (int c = 0; c < _column_count; c++) {
                 index = c + r * _column_count;
 
-                BaseItem item = _cells.get(index).getItem();
+                InterfaceBaseItem item = _cells.get(index).getItem();
 
                 _cells.get(index).setRow(r);
                 _cells.get(index).setColumn(c);
@@ -200,9 +201,9 @@ public class Grid extends VisualItem implements InterfaceGrid {
 
         for (int r = 0; r < _row_count; r++) {
             for (int c = 0; c < _column_count; c++) {
-                BaseItem item = _cells.get(c + r * _column_count).getItem();
+                InterfaceBaseItem item = _cells.get(c + r * _column_count).getItem();
 
-                if (item == null || !item.getVisible()) {
+                if (item == null || !item.isVisible()) {
                     list_height.add(new int[] { r, -1 });
                     continue;
                 }
@@ -266,8 +267,8 @@ public class Grid extends VisualItem implements InterfaceGrid {
 
         for (int c = 0; c < _column_count; c++) {
             for (int r = 0; r < _row_count; r++) {
-                BaseItem item = _cells.get(c + r * _column_count).getItem();
-                if (item == null || !item.getVisible()) {
+                InterfaceBaseItem item = _cells.get(c + r * _column_count).getItem();
+                if (item == null || !item.isVisible()) {
                     list_width.add(new int[] { c, -1 });
                     continue;
                 }

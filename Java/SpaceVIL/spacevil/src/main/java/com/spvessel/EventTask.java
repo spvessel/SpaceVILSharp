@@ -5,6 +5,6 @@ import com.spvessel.Flags.InputEventType;
 
 public class EventTask {
     public InputEventType action = InputEventType.EMPTY;
-    public VisualItem item = null;
+    public Prototype item = null;
     public InputEventArgs args = null;
 }

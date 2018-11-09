@@ -1210,15 +1210,23 @@ namespace SpaceVIL
         }
         void DrawShadow(IBaseItem shell)
         {
+            CustomShape shadow = new CustomShape();
+            shadow.SetBackground(shell.GetShadowColor());
+            shadow.SetSize(shell.GetWidth(), shell.GetHeight());
+            shadow.SetPosition(shell.GetX() + shell.GetShadowPos().GetX(), shell.GetY() + shell.GetShadowPos().GetY());
+            shadow.SetParent(shell.GetParent());
+            shadow.SetHandler(shell.GetHandler());
+            shadow.SetTriangles(shell.GetTriangles());
+
             uint[] fbo_handle = new uint[1];
-            uint[] fbo_texture = new uint[1];
+            uint[] fbo_texture = new uint[2];
 
             //texture
             glGenTextures(1, fbo_texture);
             glBindTexture(GL_TEXTURE_2D, fbo_texture[0]);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, IntPtr.Zero);
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, IntPtr.Zero);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glBindTexture(GL_TEXTURE_2D, 0);
@@ -1230,44 +1238,41 @@ namespace SpaceVIL
             uint[] draw_bufs = new uint[] { GL_COLOR_ATTACHMENT0_EXT };
             glDrawBuffers(1, draw_bufs);
 
-           
-
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo_handle[0]);
+
+
             //////////
-            CustomShape shadow = new CustomShape();
-            shadow.SetBackground(shell.GetShadowColor());
-            shadow.SetSize(shell.GetWidth(), shell.GetHeight());
-            shadow.SetPosition(shell.GetX() + shell.GetShadowPos().GetX(), shell.GetY() + shell.GetShadowPos().GetY());
-            shadow.SetParent(shell.GetParent());
-            shadow.SetHandler(shell.GetHandler());
-            shadow.SetTriangles(shell.GetTriangles());
-            _primitive.UseShader();
             DrawShell(shadow, true);
             //////////
 
+
             int res = (int)shell.GetShadowRadius();
-            float[] weights = new float[res];
+            float[] weights = new float[5];
             float sum, sigma2 = 4.0f;
             weights[0] = Gauss(0, sigma2);
             sum = weights[0];
-            for (int i = 1; i < res; i++)
+            for (int i = 1; i < 5; i++)
             {
                 weights[i] = Gauss(i, sigma2);
                 sum += 2 * weights[i];
             }
-            for (int i = 0; i < res; i++)
+            for (int i = 0; i < 5; i++)
                 weights[i] /= sum;
 
+            _blur.UseShader();
+            DrawShadowPart(weights, res, fbo_texture, 0);
+            //glClear(GL_COLOR_BUFFER);
             DrawShadowPart(weights, res, fbo_texture, 1);
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
-            DrawShadowPart(weights, res, fbo_texture, 1);
+
+            DrawTEXTURE(fbo_texture);
 
             glDeleteFramebuffers(1, fbo_handle);
             glDeleteTextures(1, fbo_texture);
         }
 
-        private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture, int isFirst) {
-            _blur.UseShader();
+        private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture, int isFirst)
+        {
             float i_x0 = -1.0f;
             float i_y0 = 1.0f;
             float i_x1 = 1.0f;
@@ -1279,6 +1284,7 @@ namespace SpaceVIL
                 i_x0,  i_y1,  0.0f,     0.0f, 0.0f, //x1
                 i_x1,  i_y1,  0.0f,     1.0f, 0.0f, //x2
                 i_x1,  i_y0,  0.0f,     1.0f, 1.0f, //x3
+
              };
             int[] ibo = new int[]
             {
@@ -1302,9 +1308,9 @@ namespace SpaceVIL
             glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * sizeof(float), IntPtr.Zero + (3 * sizeof(float)));
             glEnableVertexAttribArray(1);
 
-            
+
             glBindTexture(GL_TEXTURE_2D, fbo_texture[0]);
-            glActiveTexture(GL_TEXTURE0);
+            // glActiveTexture(GL_TEXTURE0);
 
             int location = glGetUniformLocation(_blur.GetProgramID(), "tex");
             if (location >= 0)
@@ -1326,7 +1332,7 @@ namespace SpaceVIL
 
             int location_weights = glGetUniformLocation(_blur.GetProgramID(), "weights");
             if (location_weights >= 0)
-                glUniform1fv(location_weights, res, weights);
+                glUniform1fv(location_weights, 5, weights);
             else
             {
                 Console.WriteLine("not find weights");
@@ -1334,7 +1340,7 @@ namespace SpaceVIL
 
             int location_res = glGetUniformLocation(_blur.GetProgramID(), "res");
             if (location_res >= 0)
-                glUniform1i(location_res, res);
+                glUniform1f(location_res, res * 1f / 5);
             else
             {
                 Console.WriteLine("not find res");
@@ -1353,6 +1359,60 @@ namespace SpaceVIL
             glDisableVertexAttribArray(0);
             glDisableVertexAttribArray(1);
             //Console.WriteLine("isFirst " + isFirst);
+
+            glDeleteBuffers(2, buffers);
+        }
+        private void DrawTEXTURE(uint[] fbo_texture)
+        {
+            _texture.UseShader();
+            float i_x0 = -1.0f;
+            float i_y0 = 1.0f;
+            float i_x1 = 1.0f;
+            float i_y1 = -1.0f;
+            float[] vertexData = new float[]
+             {
+                //X    Y      Z         //U     V
+                i_x0,  i_y0,  0.0f,     0.0f, 1.0f, //x0
+                i_x0,  i_y1,  0.0f,     0.0f, 0.0f, //x1
+                i_x1,  i_y1,  0.0f,     1.0f, 0.0f, //x2
+                i_x1,  i_y0,  0.0f,     1.0f, 1.0f, //x3
+
+             };
+            int[] ibo = new int[]
+            {
+                0, 1, 2, //first triangle
+                2, 3, 0, // second triangle
+            };
+
+            uint[] buffers = new uint[2];
+            glGenBuffers(2, buffers);
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_STATIC_DRAW);
+
+            //Position attribute
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * sizeof(float), IntPtr.Zero);
+            glEnableVertexAttribArray(0);
+            //TexCoord attribute
+            glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * sizeof(float), IntPtr.Zero + (3 * sizeof(float)));
+            glEnableVertexAttribArray(1);
+
+
+            glBindTexture(GL_TEXTURE_2D, fbo_texture[0]);
+
+            int location = glGetUniformLocation(_texture.GetProgramID(), "tex");
+            if (location >= 0)
+                glUniform1i(location, 0);
+            else
+                Console.WriteLine("not find tex");
+
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
+
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
 
             glDeleteBuffers(2, buffers);
         }

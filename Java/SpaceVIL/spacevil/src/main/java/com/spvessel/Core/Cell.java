@@ -1,6 +1,5 @@
 package com.spvessel.Core;
 
-import com.spvessel.BaseItem;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Grid;
 
@@ -60,13 +59,13 @@ public final class Cell extends Geometry implements InterfacePosition {
         return _y;
     }
 
-    private BaseItem _item_link = null;
+    private InterfaceBaseItem _item_link = null;
 
-    public BaseItem getItem() {
+    public InterfaceBaseItem getItem() {
         return _item_link;
     }
 
-    public void setItem(BaseItem item) {
+    public void setItem(InterfaceBaseItem item) {
         _item_link = item;
     }
 

@@ -94,79 +94,79 @@ public class ActionManager {
     }
 
     // common events
-    private void invokeFocusGetEvent(VisualItem sender) {
+    private void invokeFocusGetEvent(Prototype sender) {
         if (sender.eventFocusGet != null)
             sender.eventFocusGet.execute(sender);
     }
 
-    private void invokeFocusLostEvent(VisualItem sender) {
+    private void invokeFocusLostEvent(Prototype sender) {
         if (sender.eventFocusLost != null)
             sender.eventFocusLost.execute(sender);
     }
 
-    private void invokeResizedEvent(VisualItem sender) {
+    private void invokeResizedEvent(Prototype sender) {
         if (sender.eventResized != null)
             sender.eventResized.execute(sender);
     }
 
-    private void invokeDestroyedEvent(VisualItem sender) {
+    private void invokeDestroyedEvent(Prototype sender) {
         if (sender.eventDestroyed != null)
             sender.eventDestroyed.execute(sender);
     }
 
     // mouse input
-    private void invokeMouseClickEvent(VisualItem sender, MouseArgs args) {
+    private void invokeMouseClickEvent(Prototype sender, MouseArgs args) {
         if (sender.eventMouseClick != null)
             sender.eventMouseClick.execute(sender, args);
     }
 
-    private void invokeMouseHoverEvent(VisualItem sender, MouseArgs args) {
+    private void invokeMouseHoverEvent(Prototype sender, MouseArgs args) {
         if (sender.eventMouseHover != null)
             sender.eventMouseHover.execute(sender, args);
     }
 
-    private void invokeMousePressedEvent(VisualItem sender, MouseArgs args) {
+    private void invokeMousePressedEvent(Prototype sender, MouseArgs args) {
         if (sender.eventMousePressed != null)
             sender.eventMousePressed.execute(sender, args);
     }
 
-    private void invokeMouseReleaseEvent(VisualItem sender, MouseArgs args) {
+    private void invokeMouseReleaseEvent(Prototype sender, MouseArgs args) {
         if (sender.eventMouseRelease != null)
             sender.eventMouseRelease.execute(sender, args);
     }
 
-    private void invokeMouseDragEvent(VisualItem sender, MouseArgs args) {
+    private void invokeMouseDragEvent(Prototype sender, MouseArgs args) {
         if (sender.eventMouseDrag != null)
             sender.eventMouseDrag.execute(sender, args);
     }
 
-    private void invokeMouseDropEvent(VisualItem sender, MouseArgs args) {
+    private void invokeMouseDropEvent(Prototype sender, MouseArgs args) {
         if (sender.eventMouseDrag != null)
             sender.eventMouseDrag.execute(sender, args);
     }
 
-    private void invokeMouseScrollUpEvent(VisualItem sender, MouseArgs args) {
+    private void invokeMouseScrollUpEvent(Prototype sender, MouseArgs args) {
         if (sender.eventScrollUp != null)
             sender.eventScrollUp.execute(sender, args);
     }
 
-    private void invokeMouseScrollDownEvent(VisualItem sender, MouseArgs args) {
+    private void invokeMouseScrollDownEvent(Prototype sender, MouseArgs args) {
         if (sender.eventScrollDown != null)
             sender.eventScrollDown.execute(sender, args);
     }
 
     // keyboard input
-    private void invokeKeyPressEvent(VisualItem sender, KeyArgs args) {
+    private void invokeKeyPressEvent(Prototype sender, KeyArgs args) {
         if (sender.eventKeyPress != null)
             sender.eventKeyPress.execute(sender, args);
     }
 
-    private void invokeKeyReleaseEvent(VisualItem sender, KeyArgs args) {
+    private void invokeKeyReleaseEvent(Prototype sender, KeyArgs args) {
         if (sender.eventKeyRelease != null)
             sender.eventKeyRelease.execute(sender, args);
     }
 
-    private void invokeTextInputEvent(VisualItem sender, TextInputArgs args) {
+    private void invokeTextInputEvent(Prototype sender, TextInputArgs args) {
         if (sender.eventTextInput != null)
             sender.eventTextInput.execute(sender, args);
     }

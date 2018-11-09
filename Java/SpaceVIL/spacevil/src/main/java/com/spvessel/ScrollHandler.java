@@ -6,7 +6,7 @@ import com.spvessel.Core.InterfaceMouseMethodState;
 import com.spvessel.Core.MouseArgs;
 import com.spvessel.Flags.Orientation;
 
-public class ScrollHandler extends VisualItem implements InterfaceDraggable {
+public class ScrollHandler extends Prototype implements InterfaceDraggable {
     static int count = 0;
     public Orientation direction;
     private int _offset = 0;

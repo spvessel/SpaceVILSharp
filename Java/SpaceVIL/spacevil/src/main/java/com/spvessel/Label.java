@@ -8,7 +8,7 @@ import com.spvessel.Flags.ItemAlignment;
 import java.awt.*;
 import java.util.List;
 
-public class Label extends VisualItem {
+public class Label extends Prototype {
     private static int count = 0;
     private TextLine _text_object;
 

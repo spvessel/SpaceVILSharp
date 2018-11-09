@@ -13,7 +13,7 @@ import com.spvessel.Flags.KeyCode;
 import java.awt.*;
 import java.util.List;
 
-public class ButtonCore extends VisualItem {
+public class ButtonCore extends Prototype {
     private static int count = 0;
     private TextLine _text_object;
 

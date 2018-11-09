@@ -12,12 +12,12 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class BaseItem implements InterfaceItem, InterfaceSize, InterfacePosition, InterfaceBehavior, InterfaceEventUpdate {
+public abstract class BaseItem implements InterfaceBaseItem {
 
-    public int _confines_x_0 = 0;
-    public int _confines_x_1 = 0;
-    public int _confines_y_0 = 0;
-    public int _confines_y_1 = 0;
+    protected int _confines_x_0 = 0;
+    protected int _confines_x_1 = 0;
+    protected int _confines_y_0 = 0;
+    protected int _confines_y_1 = 0;
 
     private WindowLayout _handler;
 
@@ -30,33 +30,40 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
     }
 
     // parent
-    private VisualItem _parent = null;
+    private Prototype _parent = null;
 
-    public VisualItem getParent() {
+    public Prototype getParent() {
         return _parent;
     }
 
-    public void setParent(VisualItem parent) {
+    public void setParent(Prototype parent) {
         _parent = parent;
     }
 
-    protected void addChildren(BaseItem item) {
+    private void castAndUpdate(InterfaceBaseItem item) {
+        if (item instanceof Prototype)
+            ((Prototype) item).getCore().updateBehavior();
+        else
+            ((BaseItem) item).updateBehavior();
+    }
+
+    protected void addChildren(InterfaceBaseItem item) {
         if (item.getParent() != null)
             item.getParent().removeItem(item);
 
-        item.setParent((VisualItem) this);
+        item.setParent(((VisualItem) this)._main);
 
         // refactor events verification
         if (item.getParent() instanceof InterfaceVLayout) {
             addEventListener(GeometryEventType.RESIZE_WIDTH, item);
             addEventListener(GeometryEventType.MOVED_X, item);
-            item.updateBehavior();
+            castAndUpdate(item);
             return;
         }
         if (item.getParent() instanceof InterfaceHLayout) {
             addEventListener(GeometryEventType.RESIZE_HEIGHT, item);
             addEventListener(GeometryEventType.MOVED_Y, item);
-            item.updateBehavior();
+            castAndUpdate(item);
             return;
         }
         if (item.getParent() instanceof InterfaceGrid) {
@@ -67,13 +74,13 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
         addEventListener(GeometryEventType.RESIZE_HEIGHT, item);
         addEventListener(GeometryEventType.MOVED_X, item);
         addEventListener(GeometryEventType.MOVED_Y, item);
-        item.updateBehavior();
+        castAndUpdate(item);
     }
 
-    protected void addEventListener(GeometryEventType type, BaseItem listener) {
+    protected void addEventListener(GeometryEventType type, InterfaceBaseItem listener) {
     }
 
-    protected void removeEventListener(GeometryEventType type, BaseItem listener) {
+    protected void removeEventListener(GeometryEventType type, InterfaceBaseItem listener) {
     }
 
     public void removeItemFromListeners() {
@@ -222,11 +229,21 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
         return _item.getItemName();
     }
 
-    public boolean isDrawable = true;
+    private boolean _drawable = true;
+
+    public boolean isDrawable() {
+        return _drawable;
+    }
+
+    public void setDrawable(boolean value) {
+        if (_drawable == value)
+            return;
+        _drawable = value;
+    }
 
     private boolean _visible = true;
 
-    public boolean getVisible() {
+    public boolean isVisible() {
         return _visible;
     }
 
@@ -397,14 +414,6 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
 
     public int getY() {
         return _itemPosition.getY();
-    }
-
-    // update
-    public void setConfines() {
-        _confines_x_0 = getParent().getX() + getParent().getPadding().left;
-        _confines_x_1 = getParent().getX() + getParent().getWidth() - getParent().getPadding().right;
-        _confines_y_0 = getParent().getY() + getParent().getPadding().top;
-        _confines_y_1 = getParent().getY() + getParent().getHeight() - getParent().getPadding().bottom;
     }
 
     protected boolean IsOutConfines() {
@@ -584,5 +593,24 @@ public abstract class BaseItem implements InterfaceItem, InterfaceSize, Interfac
         _shadow_color = color;
         _shadow_pos.setX(x);
         _shadow_pos.setY(y);
+    }
+
+    // update
+    public void setConfines() {
+        _confines_x_0 = getParent().getX() + getParent().getPadding().left;
+        _confines_x_1 = getParent().getX() + getParent().getWidth() - getParent().getPadding().right;
+        _confines_y_0 = getParent().getY() + getParent().getPadding().top;
+        _confines_y_1 = getParent().getY() + getParent().getHeight() - getParent().getPadding().bottom;
+    }
+
+    public void setConfines(int x0, int x1, int y0, int y1) {
+        _confines_x_0 = x0;
+        _confines_x_1 = x1;
+        _confines_y_0 = y0;
+        _confines_y_1 = y1;
+    }
+
+    public int[] getConfines() {
+        return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
     }
 }

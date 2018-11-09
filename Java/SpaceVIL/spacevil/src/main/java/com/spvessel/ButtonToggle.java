@@ -11,7 +11,7 @@ import com.spvessel.Flags.KeyCode;
 import java.awt.*;
 import java.util.List;
 
-public class ButtonToggle extends VisualItem {
+public class ButtonToggle extends Prototype {
     private static int count = 0;
     private TextLine _text_object;
     public EventMouseMethodState eventToggle = new EventMouseMethodState();
@@ -24,10 +24,10 @@ public class ButtonToggle extends VisualItem {
         eventKeyPress.add(key_press);
         InterfaceMouseMethodState btn_click = (sender, args) -> {
             if (eventToggle != null)
-            eventToggle.execute(sender, args); // remember
+                eventToggle.execute(sender, args); // remember
         };
         eventMouseClick.add(btn_click);
-        
+
         InterfaceMouseMethodState toggle = (sender, args) -> {
             _toggled = !_toggled;
             setToggled(_toggled);
@@ -52,10 +52,9 @@ public class ButtonToggle extends VisualItem {
     public void setToggled(boolean value) {
         _toggled = value;
         if (value == true)
-            _state = ItemStateType.TOGGLED;
+            setState(ItemStateType.TOGGLED);
         else
-            _state = ItemStateType.BASE;
-        updateState();
+            setState(ItemStateType.BASE);
     }
 
     protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
@@ -68,6 +67,7 @@ public class ButtonToggle extends VisualItem {
     public void setTextAlignment(ItemAlignment... alignment) {
         _text_object.setTextAlignment(alignment);
     }
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }

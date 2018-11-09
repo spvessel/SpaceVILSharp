@@ -16,25 +16,28 @@ import java.util.HashMap;
 
 public class VisualItem extends BaseItem {
 
-    // common events
-    public EventCommonMethodState eventFocusGet = new EventCommonMethodState();
-    public EventCommonMethodState eventFocusLost = new EventCommonMethodState();
-    public EventCommonMethodState eventResized = new EventCommonMethodState();
-    public EventCommonMethodState eventDestroyed = new EventCommonMethodState();
-    // mouse input
-    public EventMouseMethodState eventMouseHover = new EventMouseMethodState();
-    public EventMouseMethodState eventMouseClick = new EventMouseMethodState();
-    public EventMouseMethodState eventMousePressed = new EventMouseMethodState();
-    public EventMouseMethodState eventMouseRelease = new EventMouseMethodState();
-    public EventMouseMethodState eventMouseDrag = new EventMouseMethodState();
-    public EventMouseMethodState eventMouseDrop = new EventMouseMethodState();
-    public EventMouseMethodState eventScrollUp = new EventMouseMethodState();
-    public EventMouseMethodState eventScrollDown = new EventMouseMethodState();
-    // keyboard input
-    public EventKeyMethodState eventKeyPress = new EventKeyMethodState();
-    public EventKeyMethodState eventKeyRelease = new EventKeyMethodState();
-    // text input
-    public EventInputTextMethodState eventTextInput = new EventInputTextMethodState();
+    protected Prototype _main;
+
+    // // common events
+    // public EventCommonMethodState eventFocusGet = new EventCommonMethodState();
+    // public EventCommonMethodState eventFocusLost = new EventCommonMethodState();
+    // public EventCommonMethodState eventResized = new EventCommonMethodState();
+    // public EventCommonMethodState eventDestroyed = new EventCommonMethodState();
+    // // mouse input
+    // public EventMouseMethodState eventMouseHover = new EventMouseMethodState();
+    // public EventMouseMethodState eventMouseClick = new EventMouseMethodState();
+    // public EventMouseMethodState eventMousePressed = new EventMouseMethodState();
+    // public EventMouseMethodState eventMouseRelease = new EventMouseMethodState();
+    // public EventMouseMethodState eventMouseDrag = new EventMouseMethodState();
+    // public EventMouseMethodState eventMouseDrop = new EventMouseMethodState();
+    // public EventMouseMethodState eventScrollUp = new EventMouseMethodState();
+    // public EventMouseMethodState eventScrollDown = new EventMouseMethodState();
+    // // keyboard input
+    // public EventKeyMethodState eventKeyPress = new EventKeyMethodState();
+    // public EventKeyMethodState eventKeyRelease = new EventKeyMethodState();
+    // // text input
+    // public EventInputTextMethodState eventTextInput = new
+    // EventInputTextMethodState();
 
     public VisualItem() {
         this("VisualItem_");
@@ -121,12 +124,40 @@ public class VisualItem extends BaseItem {
     // item
     private Border _border = new Border();
 
-    public Border getBorder() {
-        return _border;
-    }
-
     public void setBorder(Border border) {
         _border = border;
+        getState(ItemStateType.BASE).border = _border;
+        updateState();
+    }
+
+    public void setBorderFill(Color fill) {
+        _border.setFill(fill);
+        getState(ItemStateType.BASE).border.setFill(fill);
+        updateState();
+    }
+
+    public void setBorderRadius(CornerRadius radius) {
+        _border.setRadius(radius);
+        getState(ItemStateType.BASE).border.setRadius(radius);
+        updateState();
+    }
+
+    public void setBorderThickness(int thickness) {
+        _border.setThickness(thickness);
+        getState(ItemStateType.BASE).border.setThickness(thickness);
+        updateState();
+    }
+
+    public CornerRadius getBorderRadius() {
+        return _border.getRadius();
+    }
+
+    public int getBorderThickness() {
+        return _border.getThickness();
+    }
+
+    public Color getBorderFill() {
+        return _border.getFill();
     }
 
     protected Map<ItemStateType, ItemState> states = new HashMap<ItemStateType, ItemState>();
@@ -135,6 +166,10 @@ public class VisualItem extends BaseItem {
     protected void setState(ItemStateType state) {
         _state = state;
         updateState();
+    }
+
+    protected ItemStateType getCurrentState() {
+        return _state;
     }
 
     private String _tooltip = "";
@@ -177,23 +212,24 @@ public class VisualItem extends BaseItem {
     }
 
     public EventManager eventManager = null;
-    private List<BaseItem> _content = new LinkedList<BaseItem>();
+    private List<InterfaceBaseItem> _content = new LinkedList<InterfaceBaseItem>();
 
-    public List<BaseItem> getItems() {
+    public List<InterfaceBaseItem> getItems() {
         return _content;
     }
 
-    protected void setContent(List<BaseItem> content) {
+    protected void setContent(List<InterfaceBaseItem> content) {
         _content = content;
     }
 
-    public void addItems(BaseItem... items) {
-        for (BaseItem item : items) {
-            this.addItem(item);
-        }
+    private void castAndUpdate(InterfaceBaseItem item) {
+        if (item instanceof Prototype)
+            ((Prototype) item).getCore().updateGeometry();
+        else
+            ((BaseItem) item).updateGeometry();
     }
 
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         getHandler().engineLocker.lock();
         try {
             if (item.equals(this)) {
@@ -205,11 +241,11 @@ public class VisualItem extends BaseItem {
             _content.add(item);
             ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
             // needs to force update all attributes
-            item.updateGeometry();
+            castAndUpdate(item);
             item.initElements();
-            if (item instanceof VisualItem) {
-                ((VisualItem) item).updateState();
-            }
+            // if (item instanceof VisualItem) {
+            // ((VisualItem) item).updateState();
+            // }
         } catch (Exception ex) {
             System.out.println(item.getItemName() + "\n" + ex.toString());
         } finally {
@@ -217,7 +253,7 @@ public class VisualItem extends BaseItem {
         }
     }
 
-    public void insertItem(BaseItem item, int index) {
+    public void insertItem(InterfaceBaseItem item, int index) {
         getHandler().engineLocker.lock();
         try {
             if (item.equals(this)) {
@@ -241,12 +277,12 @@ public class VisualItem extends BaseItem {
             }
 
             // needs to force update all attributes
-            item.updateGeometry();
+            castAndUpdate(item);
             item.initElements();
 
-            if (item instanceof VisualItem) {
-                ((VisualItem) item).updateState();
-            }
+            // if (item instanceof VisualItem) {
+            // ((VisualItem) item).updateState();
+            // }
         } catch (Exception ex) {
             System.out.println(item.getItemName() + "\n" + ex.toString());
         } finally {
@@ -254,13 +290,13 @@ public class VisualItem extends BaseItem {
         }
     }
 
-    private void cascadeRemoving(BaseItem item, LayoutType type) {
+    private void cascadeRemoving(InterfaceBaseItem item, LayoutType type) {
         if (item instanceof VisualItem)// и если это действительно контейнер
         {
             VisualItem container = (VisualItem) item;// предполагаю что элемент контейнер
-            List<BaseItem> tmp = container.getItems();
+            List<InterfaceBaseItem> tmp = container.getItems();
             while (tmp.size() > 0) {
-                BaseItem child = container.getItems().get(0);
+                InterfaceBaseItem child = container.getItems().get(0);
                 // container.cascadeRemoving(child, type);
                 // container.getItems().remove(child);
                 // child.removeItemFromListeners();
@@ -272,7 +308,7 @@ public class VisualItem extends BaseItem {
         }
     }
 
-    public void removeItem(BaseItem item) {
+    public void removeItem(InterfaceBaseItem item) {
         getHandler().engineLocker.lock();
         try {
             LayoutType type;
@@ -287,7 +323,7 @@ public class VisualItem extends BaseItem {
             // removing
             _content.remove(item);
 
-            item.removeItemFromListeners();
+            ((BaseItem) item).removeItemFromListeners();
             ItemsLayoutBox.removeItem(getHandler(), item, type);
         } catch (Exception ex) {
             System.out.println(item.getItemName() + "\n" + ex.toString());
@@ -297,12 +333,12 @@ public class VisualItem extends BaseItem {
     }
 
     @Override
-    protected void addEventListener(GeometryEventType type, BaseItem listener) {
+    protected void addEventListener(GeometryEventType type, InterfaceBaseItem listener) {
         eventManager.subscribe(type, listener);
     }
 
     @Override
-    protected void removeEventListener(GeometryEventType type, BaseItem listener) {
+    protected void removeEventListener(GeometryEventType type, InterfaceBaseItem listener) {
         eventManager.unsubscribe(type, listener);
     }
 
@@ -433,108 +469,90 @@ public class VisualItem extends BaseItem {
     }
 
     public void setFocused(boolean value) {
-        if (isFocusable) {
-            if (_focused == value)
-                return;
-            _focused = value;
-            updateState();
-        }
-    }
-
-    public void setFocus() {
-        getHandler().setFocusedItem(this);
+        if (_focused == value)
+            return;
+        _focused = value;
+        updateState();
     }
 
     @Override
     protected void updateInnersDrawable(boolean value) {
-        for (BaseItem item : _content) {
+        for (InterfaceBaseItem item : _content) {
             item.setVisible(value);
         }
     }
 
     protected void updateState() {
-        super.setBackground(getState(_state).background);
+        ItemState s_base = getState(ItemStateType.BASE);
+        ItemState current = getState(_state);
+        super.setBackground(current.background);
+        _border = cloneBorder(current.border);
 
-        _border.setFill(getState(_state).border.getFill());
-        Border br = getState(_state).border;
-        if (br.getThickness() > 0) {
-            if (br.getRadius() < 0)
-                _border.setRadius(getState(ItemStateType.BASE).border.getRadius());
-            else
-                _border.setRadius(getState(_state).border.getRadius());
-            _border.setThickness(getState(_state).border.getThickness());
-        }
+        if (_border.getRadius() == null)
+            _border.setRadius(s_base.border.getRadius());
+        if (_border.getThickness() < 0)
+            _border.setThickness(s_base.border.getThickness());
+        if (_border.getFill().getAlpha() == 0)
+            _border.setFill(s_base.border.getFill());
 
-        if (getState(_state).shape != null)
-            isCustom = getState(_state).shape;
+        if (current.shape != null)
+            setCustomFigure(current.shape);
 
-        // mixing
-        if (isDisabled() && states.containsKey(ItemStateType.DISABLED)) {
-            super.setBackground(GraphicsMathService.mixColors(getState(_state).background,
-                    getState(ItemStateType.DISABLED).background));
-
-            _border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
-                    getState(ItemStateType.DISABLED).border.getFill()));
-            br = getState(ItemStateType.DISABLED).border;
-            if (br.getThickness() > 0) {
-                if (br.getRadius() < 0)
-                    _border.setRadius(getState(ItemStateType.BASE).border.getRadius());
-                else
-                    _border.setRadius(getState(ItemStateType.DISABLED).border.getRadius());
-                _border.setThickness(getState(ItemStateType.DISABLED).border.getThickness());
-            }
+        ItemState s_disabled = getState(ItemStateType.DISABLED);
+        if (isDisabled() && s_disabled != null) {
+            updateVisualProperties(s_disabled, s_base);
             return;
         }
-
-        if (isFocused() && states.containsKey(ItemStateType.FOCUSED)) {
-            super.setBackground(GraphicsMathService.mixColors(getState(_state).background,
-                    getState(ItemStateType.FOCUSED).background));
-            _border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
-                    getState(ItemStateType.FOCUSED).border.getFill()));
-            br = getState(ItemStateType.FOCUSED).border;
-            if (br.getThickness() > 0) {
-                if (br.getRadius() < 0)
-                    _border.setRadius(getState(ItemStateType.BASE).border.getRadius());
-                else
-                    _border.setRadius(getState(ItemStateType.FOCUSED).border.getRadius());
-                _border.setThickness(getState(ItemStateType.FOCUSED).border.getThickness());
-            }
+        ItemState s_focused = getState(ItemStateType.FOCUSED);
+        if (isFocused() && s_focused != null) {
+            updateVisualProperties(s_focused, s_base);
+            s_base = s_focused;
         }
-
-        if (isMouseHover() && states.containsKey(ItemStateType.HOVERED)) {
-            super.setBackground(GraphicsMathService.mixColors(getState(_state).background,
-                    getState(ItemStateType.HOVERED).background));
-            _border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
-                    getState(ItemStateType.HOVERED).border.getFill()));
-            br = getState(ItemStateType.HOVERED).border;
-            if (br.getThickness() > 0) {
-                if (br.getRadius() < 0)
-                    _border.setRadius(getState(ItemStateType.BASE).border.getRadius());
-                else
-                    _border.setRadius(getState(ItemStateType.HOVERED).border.getRadius());
-                _border.setThickness(getState(ItemStateType.HOVERED).border.getThickness());
-            }
+        ItemState s_hover = getState(ItemStateType.HOVERED);
+        if (isMouseHover() && s_hover != null) {
+            updateVisualProperties(s_hover, s_base);
+            s_base = s_hover;
         }
-
-        if (isMousePressed() && states.containsKey(ItemStateType.PRESSED)) {
-            super.setBackground(GraphicsMathService.mixColors(getState(_state).background,
-                    getState(ItemStateType.PRESSED).background));
-            _border.setFill(GraphicsMathService.mixColors(getState(_state).border.getFill(),
-                    getState(ItemStateType.PRESSED).border.getFill()));
-            br = getState(ItemStateType.PRESSED).border;
-            if (br.getThickness() > 0) {
-                if (br.getRadius() < 0)
-                    _border.setRadius(getState(ItemStateType.BASE).border.getRadius());
-                else
-                    _border.setRadius(getState(ItemStateType.PRESSED).border.getRadius());
-                _border.setThickness(getState(ItemStateType.PRESSED).border.getThickness());
-            }
+        ItemState s_pressed = getState(ItemStateType.PRESSED);
+        if (isMousePressed() && s_pressed != null) {
+            updateVisualProperties(s_pressed, s_base);
+            s_base = s_pressed;
         }
     }
 
-    // public Pointer _mouse_ptr = new Pointer();
+    private void updateVisualProperties(ItemState state, ItemState prev_state) {
+        ItemState current = getState(_state);
+        super.setBackground(GraphicsMathService.mixColors(current.background, state.background));
+        _border = cloneBorder(state.border);
 
-    public boolean getHoverVerification(float xpos, float ypos) {
+        if (_border.getRadius() == null)
+            _border.setRadius(prev_state.border.getRadius());
+        if (_border.getRadius() == null)
+            _border.setRadius(getState(ItemStateType.BASE).border.getRadius());
+
+        if (_border.getThickness() < 0)
+            _border.setThickness(prev_state.border.getThickness());
+        if (_border.getThickness() < 0)
+            _border.setThickness(getState(ItemStateType.BASE).border.getThickness());
+
+        if (_border.getFill().getAlpha() == 0)
+            _border.setFill(prev_state.border.getFill());
+        if (_border.getFill().getAlpha() == 0)
+            _border.setFill(getState(ItemStateType.BASE).border.getFill());
+
+        if (state.shape != null)
+            setCustomFigure(state.shape);
+    }
+
+    private Border cloneBorder(Border border) {
+        Border clone = new Border();
+        clone.setFill(border.getFill());
+        clone.setRadius(border.getRadius());
+        clone.setThickness(border.getThickness());
+        return clone;
+    }
+
+    protected boolean getHoverVerification(float xpos, float ypos) {
         switch (HoverRule) {
         case LAZY:
             return lazyHoverVerification(xpos, ypos);
@@ -626,22 +644,29 @@ public class VisualItem extends BaseItem {
         return result;
     }
 
-    public CustomFigure isCustom = null;
+    private CustomFigure _is_custom = null;
+
+    public CustomFigure isCustomFigure() {
+        return _is_custom;
+    }
+
+    public void setCustomFigure(CustomFigure figure) {
+        _is_custom = figure;
+    }
 
     @Override
     public List<float[]> makeShape() {
-        if (isCustom != null) {
-            setTriangles(isCustom.getFigure());
+        if (isCustomFigure() != null) {
+            setTriangles(isCustomFigure().getFigure());
             if (getState(ItemStateType.BASE).shape == null)
-                getState(ItemStateType.BASE).shape = isCustom;
+                getState(ItemStateType.BASE).shape = isCustomFigure();
 
-            if (isCustom.isFixed())
-                return GraphicsMathService.toGL(isCustom.updatePosition(getX(), getY()), getHandler());
+            if (isCustomFigure().isFixed())
+                return GraphicsMathService.toGL(isCustomFigure().updatePosition(getX(), getY()), getHandler());
             else
                 return GraphicsMathService.toGL(updateShape(), getHandler());
         }
-        setTriangles(GraphicsMathService.getRoundSquare(getWidth(), getHeight(), getBorder().getRadius(), getX(), getY()));
-        // System.out.println(getItemName() + " " + getTriangles().size());
+        setTriangles(GraphicsMathService.getRoundSquare(getBorderRadius(), getWidth(), getHeight(), getX(), getY()));
         return GraphicsMathService.toGL(this, getHandler());
     }
 
@@ -680,8 +705,8 @@ public class VisualItem extends BaseItem {
             addItemState(state.getKey(), state.getValue());
         }
         if (style.shape != null) {
-            isCustom = new CustomFigure(style.isFixedShape, style.shape);
-            core_state.shape = isCustom;
+            setCustomFigure(new CustomFigure(style.isFixedShape, style.shape));
+            core_state.shape = isCustomFigure();
         }
         addItemState(ItemStateType.BASE, core_state);
     }
@@ -705,10 +730,10 @@ public class VisualItem extends BaseItem {
         style.borderFill = _border.getFill();
         style.borderRadius = _border.getRadius();
         style.borderThickness = _border.getThickness();
-        style.isVisible = getVisible();
-        if (isCustom != null) {
-            style.shape = isCustom.getFigure();
-            style.isFixedShape = isCustom.isFixed();
+        style.isVisible = isVisible();
+        if (isCustomFigure() != null) {
+            style.shape = isCustomFigure().getFigure();
+            style.isFixedShape = isCustomFigure().isFixed();
         }
         for (Map.Entry<ItemStateType, ItemState> state : states.entrySet()) {
             style.addItemState(state.getKey(), state.getValue());

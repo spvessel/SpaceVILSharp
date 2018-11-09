@@ -1,8 +1,10 @@
 package com.spvessel;
 
-//import BaseItem;
+//import InterfaceBaseItem;
 
 import java.util.*;
+
+import com.spvessel.Core.InterfaceBaseItem;
 
 public final class ItemsLayout {
     protected ItemsLayout(UUID layoutId) {
@@ -19,23 +21,23 @@ public final class ItemsLayout {
         _id = value;
     }
 
-    List<BaseItem> _items = new LinkedList<BaseItem>();
+    List<InterfaceBaseItem> _items = new LinkedList<InterfaceBaseItem>();
 
-    public List<BaseItem> getItems() {
+    public List<InterfaceBaseItem> getItems() {
         return _items;
     }
 
-    protected void setItems(List<BaseItem> value) {
+    protected void setItems(List<InterfaceBaseItem> value) {
         _items = value;
     }
 
-    List<BaseItem> _float_items = new LinkedList<BaseItem>();
+    List<InterfaceBaseItem> _float_items = new LinkedList<InterfaceBaseItem>();
 
-    public List<BaseItem> getFloatItems() {
+    public List<InterfaceBaseItem> getFloatItems() {
         return _float_items;
     }
 
-    protected void setFloatItems(List<BaseItem> value) {
+    protected void setFloatItems(List<InterfaceBaseItem> value) {
         _float_items = value;
     }
 }

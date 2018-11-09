@@ -4,7 +4,7 @@ import com.spvessel.Flags.ItemAlignment;
 
 import java.util.*;
 
-public class WContainer extends VisualItem {
+public class WContainer extends Prototype {
     private static int count = 0;
     public List<ItemAlignment> _sides = new LinkedList<>();
     public boolean _is_fixed = false;

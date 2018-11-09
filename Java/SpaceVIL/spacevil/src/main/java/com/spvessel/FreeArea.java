@@ -6,19 +6,19 @@ import com.spvessel.Core.*;
 import java.util.Map;
 import java.util.HashMap;
 
-public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDraggable {
+public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDraggable {
     static int count = 0;
     private int _x_press = 0;
     private int _y_press = 0;
     private int _diff_x = 0;
     private int _diff_y = 0;
-    Map<BaseItem, int[]> _stored_crd;
+    Map<InterfaceBaseItem, int[]> _stored_crd;
 
     // public ContextMenu _dropdownmenu = new ContextMenu();
     public FreeArea() {
         setItemName("FreeArea_" + count);
         count++;
-        _stored_crd = new HashMap<BaseItem, int[]>();
+        _stored_crd = new HashMap<InterfaceBaseItem, int[]>();
 
         InterfaceMouseMethodState click = (sender, args) -> onMouseRelease(sender, args);
         eventMouseClick.add(click);
@@ -78,7 +78,7 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
 
     // overrides
     @Override
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         super.addItem(item);
         synchronized (this) {
             _stored_crd.put(item, new int[] { item.getX(), item.getY() });
@@ -92,7 +92,7 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
     }
 
     @Override
-    public void removeItem(BaseItem item) {
+    public void removeItem(InterfaceBaseItem item) {
         super.removeItem(item);
         synchronized (this) {
             _stored_crd.remove(item);
@@ -102,7 +102,7 @@ public class FreeArea extends VisualItem implements InterfaceGrid, InterfaceDrag
 
     public void updateLayout() {
         // synchronized (this) {
-            for (BaseItem child : getItems()) {
+            for (InterfaceBaseItem child : getItems()) {
                 child.setX((int) _xOffset + getX() + getPadding().left + _stored_crd.get(child)[0]
                         + child.getMargin().left);
                 child.setY(

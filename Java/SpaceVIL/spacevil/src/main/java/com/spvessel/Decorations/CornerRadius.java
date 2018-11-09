@@ -12,4 +12,23 @@ public class CornerRadius {
         leftBottom = lb;
         rightBottom = rb;
     }
+
+    public CornerRadius(CornerRadius radius) {
+        leftTop = radius.leftTop;
+        rightTop = radius.rightTop;
+        leftBottom = radius.leftBottom;
+        rightBottom = radius.rightBottom;
+    }
+
+    public CornerRadius() {
+        this(0);
+    }
+
+    public CornerRadius(float radius) {
+        leftTop = radius;
+        rightTop = radius;
+        leftBottom = radius;
+        rightBottom = radius;
+    }
+
 }

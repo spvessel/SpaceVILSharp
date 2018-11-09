@@ -1,6 +1,7 @@
 package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Core.InterfaceCommonMethod;
 import com.spvessel.Core.InterfaceCommonMethodState;
 import com.spvessel.Core.InterfaceItem;
@@ -11,7 +12,7 @@ import com.spvessel.Flags.ScrollBarVisibility;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ListBox extends VisualItem {
+public class ListBox extends Prototype {
     static int count = 0;
 
     public int getSelection() {
@@ -126,8 +127,8 @@ public class ListBox extends VisualItem {
     {
         int total_invisible_size = 0;
         int visible_area = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
-        for (BaseItem item : _area.getItems()) {
-            if (item.equals(_area.getSubstrate()) || !item.getVisible())
+        for (InterfaceBaseItem item : _area.getItems()) {
+            if (item.equals(_area.getSubstrate()) || !item.isVisible())
                 continue;
             total_invisible_size += (item.getHeight() + _area.getSpacing().vertical);
         }
@@ -158,7 +159,7 @@ public class ListBox extends VisualItem {
     {
         int max_size = 0;
         int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right;
-        for (BaseItem item : _area.getItems()) {
+        for (InterfaceBaseItem item : _area.getItems()) {
             if (item.equals(_area.getSubstrate()))
                 continue;
             if (max_size < item.getWidth() + item.getMargin().left + item.getMargin().right)
@@ -206,19 +207,19 @@ public class ListBox extends VisualItem {
     }
 
     @Override
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         _area.addItem(item);
         updateElements();
     }
 
     @Override
-    public void insertItem(BaseItem item, int index) {
+    public void insertItem(InterfaceBaseItem item, int index) {
         _area.insertItem(item, index);
         updateElements();
     }
 
     @Override
-    public void removeItem(BaseItem item) {
+    public void removeItem(InterfaceBaseItem item) {
         _area.removeItem(item);
         updateElements();
     }
@@ -253,9 +254,9 @@ public class ListBox extends VisualItem {
         hScrollBar.slider.eventValueChanged.add(h_changed);
     }
 
-    public List<BaseItem> getListContent() {
-        List<BaseItem> result = new LinkedList<BaseItem>();
-        for (BaseItem item : _area.getItems()) {
+    public List<InterfaceBaseItem> getListContent() {
+        List<InterfaceBaseItem> result = new LinkedList<InterfaceBaseItem>();
+        for (InterfaceBaseItem item : _area.getItems()) {
             if (item instanceof CustomShape)
                 continue;
             result.add(item);
@@ -263,13 +264,13 @@ public class ListBox extends VisualItem {
         return result;
     }
 
-    public void setListContent(List<BaseItem> content) {
+    public void setListContent(List<InterfaceBaseItem> content) {
         content.add(0, _area.getSubstrate());
         _area.setContent(content);
     }
 
-    public BaseItem getSelectionItem() {
-        List<BaseItem> result = new LinkedList<BaseItem>();
+    public InterfaceBaseItem getSelectionItem() {
+        List<InterfaceBaseItem> result = new LinkedList<InterfaceBaseItem>();
         return _area.getSelectionItem();
     }
 

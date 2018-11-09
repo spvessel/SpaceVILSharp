@@ -81,7 +81,7 @@ public class MessageBox extends DialogWindow {
         ok.setSize(100, 30);
         ok.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         ok.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
-        ok.getBorder().setRadius(6);
+        ok.setBorderRadius(6);
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 80);
         ok.addItemState(ItemStateType.HOVERED, hovered);

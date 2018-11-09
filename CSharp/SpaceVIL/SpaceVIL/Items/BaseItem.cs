@@ -201,7 +201,9 @@ namespace SpaceVIL
 
         private bool _drawable = true;
         public virtual bool IsDrawable()
-        { return _drawable; }
+        {
+            return _drawable;
+        }
         public virtual void SetDrawable(bool value)
         {
             if (_drawable == value)
@@ -309,7 +311,8 @@ namespace SpaceVIL
             if (GetParent() == null)
                 return;
 
-            if ((this as VisualItem) != null) {
+            if ((this as VisualItem) != null)
+            {
                 ProtoUpdateBehavior();
                 return;
             }
@@ -342,7 +345,8 @@ namespace SpaceVIL
             }
         }
 
-        private void ProtoUpdateBehavior() {
+        private void ProtoUpdateBehavior()
+        {
             Prototype prt = (this as VisualItem)._main;
 
             ItemAlignment alignment = prt.GetAlignment();
@@ -455,7 +459,8 @@ namespace SpaceVIL
 
         public void Update(GeometryEventType type, int value = 0)
         {
-            if ((this as VisualItem) != null) {
+            if ((this as VisualItem) != null)
+            {
                 ProtoUpdate(type, value);
                 return;
             }

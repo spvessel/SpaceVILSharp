@@ -5,7 +5,7 @@ import com.spvessel.Core.*;
 import com.spvessel.Flags.LayoutType;
 import com.spvessel.Flags.SizePolicy;
 
-public class FloatItem extends VisualItem implements InterfaceFloating, InterfaceDraggable {
+public class FloatItem extends Prototype implements InterfaceFloating, InterfaceDraggable {
     private int _stored_offset = 0;
     private boolean IsFloating = true;
     private boolean _init = false;
@@ -83,9 +83,6 @@ public class FloatItem extends VisualItem implements InterfaceFloating, Interfac
 
     @Override
     public void setConfines() {
-        _confines_x_0 = getX();
-        _confines_x_1 = getX() + getWidth();
-        _confines_y_0 = getY();
-        _confines_y_1 = getY() + getHeight();
+        setConfines(getX(), getX() + getWidth(), getY(), getY() + getHeight());
     }
 }

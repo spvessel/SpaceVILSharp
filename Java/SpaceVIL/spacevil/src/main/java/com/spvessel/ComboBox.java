@@ -11,7 +11,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.List;
 
-public class ComboBox extends VisualItem {
+public class ComboBox extends Prototype {
     // Queue<BaseItem> _queue = new Queue<BaseItem>();
 
     static int count = 0;
@@ -131,12 +131,12 @@ public class ComboBox extends VisualItem {
         _dropdownarea.show();
     }
 
-    public void addToList(BaseItem item) {
+    public void addToList(InterfaceBaseItem item) {
         _dropdownarea.add(item);
         // _queue.Enqueue(item);
     }
 
-    public void removeFromLst(BaseItem item) {
+    public void removeFromLst(InterfaceBaseItem item) {
         _dropdownarea.remove(item);
     }
 

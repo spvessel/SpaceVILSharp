@@ -1,6 +1,7 @@
 package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceBaseItem;
 import com.spvessel.Core.InterfaceItem;
 import com.spvessel.Core.InterfaceMouseMethodState;
 import com.spvessel.Core.InterfaceVLayout;
@@ -8,10 +9,10 @@ import com.spvessel.Core.MouseArgs;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.Orientation;
 
-public class HorizontalSplitArea extends VisualItem implements InterfaceVLayout {
+public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     private static int count = 0;
-    private BaseItem _topBlock;
-    private BaseItem _bottomBlock;
+    private InterfaceBaseItem _topBlock;
+    private InterfaceBaseItem _bottomBlock;
     private SplitHolder _splitHolder = new SplitHolder(Orientation.HORIZONTAL);
     private int _topHeight = 0;
     private int _diff = 0;
@@ -56,14 +57,14 @@ public class HorizontalSplitArea extends VisualItem implements InterfaceVLayout 
         updateLayout();
     }
 
-    public void assignTopItem(BaseItem item) {
+    public void assignTopItem(InterfaceBaseItem item) {
         addItem(item);
         _topBlock = item;
         _tMin = _topBlock.getMinHeight();
         updateLayout();
     }
 
-    public void assignBottomItem(BaseItem item) {
+    public void assignBottomItem(InterfaceBaseItem item) {
         addItem(item);
         _bottomBlock = item;
         _bMin = _bottomBlock.getMinHeight();
@@ -120,7 +121,7 @@ public class HorizontalSplitArea extends VisualItem implements InterfaceVLayout 
                 _bottomBlock.setHeight(0);
         }
 
-        for (BaseItem item : getItems())
+        for (InterfaceBaseItem item : getItems())
             item.setConfines();
     }
 

@@ -11,7 +11,7 @@ import com.spvessel.Flags.SizePolicy;
 import java.awt.*;
 import java.util.List;
 
-public class CheckBox extends VisualItem implements InterfaceHLayout {
+public class CheckBox extends Prototype implements InterfaceHLayout {
     class CustomIndicator extends Indicator {
         @Override
         public boolean getHoverVerification(float xpos, float ypos) {
@@ -64,7 +64,7 @@ public class CheckBox extends VisualItem implements InterfaceHLayout {
 
     // Layout rules
     @Override
-    public void addItem(BaseItem item) {
+    public void addItem(InterfaceBaseItem item) {
         super.addItem(item);
         updateLayout();
     }
@@ -85,7 +85,7 @@ public class CheckBox extends VisualItem implements InterfaceHLayout {
         int offset = 0;
         int startX = getX() + getPadding().left;
 
-        for (BaseItem child : getItems()) {
+        for (InterfaceBaseItem child : getItems()) {
             child.setX(startX + offset + child.getMargin().left);
             if (child.getWidthPolicy() == SizePolicy.EXPAND) {
                 child.setWidth(getWidth() - offset /*- child.getMargin().left - child.getMargin().right*/);

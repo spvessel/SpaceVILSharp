@@ -3,7 +3,7 @@ package com.spvessel;
 import com.spvessel.Common.DefaultsService;
 import com.spvessel.Decorations.Style;
 
-public class Indicator extends VisualItem {
+public class Indicator extends Prototype {
     class CustomToggle extends ButtonToggle {
         @Override
         public boolean getHoverVerification(float xpos, float ypos) {
