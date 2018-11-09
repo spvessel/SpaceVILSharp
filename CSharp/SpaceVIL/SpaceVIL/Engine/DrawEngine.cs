@@ -1246,27 +1246,27 @@ namespace SpaceVIL
             //////////
 
             int res = (int)shell.GetShadowRadius();
-            float[] weights = new float[res];
+            float[] weights = new float[5];
             float sum, sigma2 = 4.0f;
             weights[0] = Gauss(0, sigma2);
             sum = weights[0];
-            for (int i = 1; i < res; i++)
+            for (int i = 1; i < 5; i++)
             {
                 weights[i] = Gauss(i, sigma2);
                 sum += 2 * weights[i];
             }
-            for (int i = 0; i < res; i++)
+            for (int i = 0; i < 5; i++)
                 weights[i] /= sum;
 
-            DrawShadowPart(weights, res, fbo_texture, 1);
+            DrawShadowPart(weights, res, fbo_texture);
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
-            DrawShadowPart(weights, res, fbo_texture, 1);
+            //DrawShadowPart(weights, res, fbo_texture, 0);
 
             glDeleteFramebuffers(1, fbo_handle);
             glDeleteTextures(1, fbo_texture);
         }
 
-        private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture, int isFirst) {
+        private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture) {
             _blur.UseShader();
             float i_x0 = -1.0f;
             float i_y0 = 1.0f;
@@ -1326,28 +1326,28 @@ namespace SpaceVIL
 
             int location_weights = glGetUniformLocation(_blur.GetProgramID(), "weights");
             if (location_weights >= 0)
-                glUniform1fv(location_weights, res, weights);
+                glUniform1fv(location_weights, 5, weights);
             else
             {
                 Console.WriteLine("not find weights");
             }
-
+            
             int location_res = glGetUniformLocation(_blur.GetProgramID(), "res");
             if (location_res >= 0)
-                glUniform1i(location_res, res);
+                glUniform1f(location_res, res * 1f / 5f);
             else
             {
                 Console.WriteLine("not find res");
             }
-
+            /*
             int location_isfirst = glGetUniformLocation(_blur.GetProgramID(), "isFirst");
             if (location_isfirst >= 0)
-                glUniform1i(location_isfirst, isFirst);
+                glUniform1i(location_isfirst, 0);// isFirst);
             else
             {
                 Console.WriteLine("not find isfirst");
             }
-
+            */
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
 
             glDisableVertexAttribArray(0);
