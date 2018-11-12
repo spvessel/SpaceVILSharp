@@ -514,6 +514,8 @@ namespace SpaceVIL
                         i++;
                     }
                 }
+                leftArr = new float[2, height];
+                rightArr = new float[2, height];
             }
 
             private void MakeLetterArrays(GraphicsPath shape)
