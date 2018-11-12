@@ -29,6 +29,7 @@ class Alphabet {
         makeBugLetter();
         fillABC();
         fillSpecLetters();
+        makeBigPoint();
     }
 
     private void fillSpecLetters() {
@@ -202,6 +203,27 @@ class Alphabet {
         }
     }
 
+    private void makeBigPoint() {
+        String let = "\u25CF";
+        Letter hideSign = new Letter(let);
+        hideSign.height = alphHeight;
+        hideSign.width = (int) (alphHeight * 2 / 3f);
+        hideSign.minY = alphMinY;
+        hideSign.isSpec = false;
+        float[][] arr = new float[hideSign.width][hideSign.height];
+        int rad = hideSign.height / 3 - 1, tmp;
+        for (int i = 0; i < hideSign.width; i++) {
+            for (int j = 0; j < hideSign.height; j++) {
+                tmp = (int) Math.sqrt(Math.pow(i - rad, 2) + Math.pow(j - rad - 2, 2));
+                if (tmp <= rad)
+                    arr[i][j] = 1;
+            }
+        }
+        hideSign.twoDimToOne(arr);
+
+        letters.put(let.charAt(0), hideSign);
+    }
+
     private void makeBugLetter() {
         bugLetter = new Letter("bug");
         bugLetter.width = (int) (font.getSize() / 3f);// lineSpacer;
@@ -247,7 +269,7 @@ class Alphabet {
         //     bugLetter.pix.add(var);
         // }
 
-        bugLetter.twoDimToOnedim(arr);
+        bugLetter.twoDimToOne(arr);
     }
     // }
 
@@ -264,7 +286,7 @@ class Alphabet {
         //List<Float> pix;
         byte[] arr;
 
-        public Letter(String name, java.awt.Shape shape) {// GraphicsPath shape) {
+        public Letter(String name, Shape shape) {// GraphicsPath shape) {
             // System.out.println("make letter " + name);
             //col = new LinkedList<>();
             //pix = new LinkedList<>();
@@ -287,7 +309,7 @@ class Alphabet {
             isSpec = true;
         }
 
-        void twoDimToOnedim(float[][] twoDim) {
+        void twoDimToOne(float[][] twoDim) {
             arr = new byte[(this.width * this.height) * 4];
             // System.out.println(name + " width " + this.width + " " + this.height);
             int i = 0;

@@ -15,7 +15,7 @@ public class FontEngine {
 
     static Map<Font, Alphabet> fonts = new HashMap<>();
 
-    public static List<Alphabet.ModifyLetter> getModifyLetters(String text, Font font) // PixMapData
+    static List<Alphabet.ModifyLetter> getModifyLetters(String text, Font font) // PixMapData
     {
         //return FontReview.getTextArrays(text, font);
         if (!fonts.containsKey(font)) {
@@ -25,7 +25,7 @@ public class FontEngine {
         return fonts.get(font).makeTextNew(text);// MakeText(text);
     }
 
-    public static int[] getSpacerDims(Font font) {
+    static int[] getSpacerDims(Font font) {
         //return FontReview.getDims();
 
         if (!fonts.containsKey(font)) {

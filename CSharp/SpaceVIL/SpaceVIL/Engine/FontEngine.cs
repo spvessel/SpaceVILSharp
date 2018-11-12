@@ -87,10 +87,11 @@ namespace SpaceVIL
             {
                 this.font = font;
                 letters = new Dictionary<char, Letter>();
-                //Console.WriteLine("Make " + font.FontFamily + " " + font.Size);
+                
                 MakeBugLetter();
                 FillABC();
                 FillSpecLetters();
+                MakeBigPoint();
             }
 
             private void FillSpecLetters()
@@ -384,6 +385,29 @@ namespace SpaceVIL
                 return outCoord;
             }
             */
+
+            private void MakeBigPoint() {
+                string let = Encoding.UTF32.GetString(BitConverter.GetBytes(0x25CF)); //big point
+                Letter hideSign = new Letter(let);
+                hideSign.height = alphHeight;
+                hideSign.width = (int)(alphHeight * 2 / 3f);
+                hideSign.minY = alphMinY;
+                hideSign.isSpec = false;
+                float[,] arr = new float[hideSign.width, hideSign.height];
+                int rad = hideSign.height / 3 - 1, tmp;
+                for (int i = 0; i < hideSign.width; i++)
+                {
+                    for (int j = 0; j < hideSign.height; j++)
+                    {
+                        tmp = (int)Math.Sqrt(Math.Pow(i - rad, 2) + Math.Pow(j - rad - 2, 2));
+                        if (tmp <= rad)
+                            arr[i, j] = 1;
+                    }
+                }
+                hideSign.TwoDimToOne(arr);
+
+                letters.Add(let[0], hideSign);
+            }
 
             private void MakeBugLetter()
             {

@@ -291,10 +291,6 @@ public class TextEdit extends Prototype
         int coord = 0;
         if (_text_object.getLetPosArray() == null)
             return coord;
-        //int letCount = _text_object.getLetPosArray().size();
-        // _cursor_position = (_cursor_position < 0) ? 0 : _cursor_position;
-        // _cursor_position = (_cursor_position > letCount) ? letCount :
-        // _cursor_position;
 
         if (cPos > 0)
             coord = _text_object.getLetPosArray().get(cPos - 1);
@@ -311,7 +307,6 @@ public class TextEdit extends Prototype
     private void replaceCursor() {
 
         int pos = cursorPosToCoord(_cursor_position);
-        // Console.WriteLine(pos);
 
         int w = getTextWidth();
         if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
@@ -327,7 +322,7 @@ public class TextEdit extends Prototype
         textInputLock.lock();
         try {
             byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
-            String str = new String(input, Charset.forName("UTF-32")); // StandardCharsets.UTF_16);
+            String str = new String(input, Charset.forName("UTF-32"));
 
             if (_isSelect) {
                 unselectText();// privCutText();
@@ -340,8 +335,6 @@ public class TextEdit extends Prototype
             setText(sb.insert(_cursor_position, str).toString());
             _cursor_position++;
             replaceCursor();
-            // System.out.println("input in TextEdit " + _cursor_position + " " +
-            // _cursor.getX());
         } finally {
             textInputLock.unlock();
         }
