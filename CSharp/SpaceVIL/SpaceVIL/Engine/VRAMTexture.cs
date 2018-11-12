@@ -20,18 +20,19 @@ using static GL.WGL.OpenWGL;
 
 namespace SpaceVIL
 {
-    internal sealed class VRAMStorage
+    internal sealed class VRAMTexture
     {
-        public IBaseItem Link = null;
+        // public IBaseItem Link = null;
         private float[] _vbo_data;
         public uint VBO;
         private int[] _ibo_data;
         public uint IBO;
         public uint[] Texture;
-        internal VRAMStorage(IBaseItem link = null)
+
+        internal VRAMTexture(/*IBaseItem link = null*/)
         {
             Texture = new uint[1];
-            Link = link;
+            // Link = link;
         }
 
         internal void GenTexture(int w, int h, byte[] bitmap)
@@ -48,16 +49,27 @@ namespace SpaceVIL
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         }
 
-        internal void GenBuffers(float x0, float x1, float y0, float y1)
+        internal void GenBuffers(float x0, float x1, float y0, float y1, bool flip = false)
         {
-            _vbo_data = new float[]
-            {
+            if (!flip)
+                _vbo_data = new float[]
+                {
                 //X    Y      Z         //U     V
                 x0,  y0,  0.0f,     0.0f, 1.0f, //x0
                 x0,  y1,  0.0f,     0.0f, 0.0f, //x1
                 x1,  y1,  0.0f,     1.0f, 0.0f, //x2
                 x1,  y0,  0.0f,     1.0f, 1.0f, //x3
-            };
+                };
+            else
+                _vbo_data = new float[]
+                {
+                //X    Y      Z         //U     V
+                x0,  y0,  0.0f,     0.0f, 0.0f, //x0
+                x0,  y1,  0.0f,     0.0f, 1.0f, //x1
+                x1,  y1,  0.0f,     1.0f, 1.0f, //x2
+                x1,  y0,  0.0f,     1.0f, 0.0f, //x3
+                };
+
             _ibo_data = new int[]
             {
                 0, 1, 2, //first triangle
@@ -83,10 +95,82 @@ namespace SpaceVIL
             glEnableVertexAttribArray(1);
         }
 
+        internal void Unbind()
+        {
+            //Texture bind
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
         internal void Bind()
         {
             //Texture bind
             glBindTexture(GL_TEXTURE_2D, Texture[0]);
+        }
+        internal void Bind(uint[] texture)
+        {
+            //Texture bind
+            glBindTexture(GL_TEXTURE_2D, texture[0]);
+        }
+
+        internal bool SendUniformSample2D(Shader shader)
+        {
+            int location = glGetUniformLocation(shader.GetProgramID(), "tex");
+            if (location >= 0)
+            {
+                glUniform1i(location, 0);
+                return true;
+            }
+            else
+                Console.WriteLine("Uniform not found: <tex>");
+            return false;
+        }
+
+        internal bool SendUniform4f(Shader shader, string name, float[] array)
+        {
+            int location = glGetUniformLocation(shader.GetProgramID(), name);
+            if (location >= 0)
+            {
+                glUniform4f(location, array[0], array[1], array[2], array[3]);
+                return true;
+            }
+            else
+                Console.WriteLine("Uniform not found: <" + name + ">");
+            return false;
+        }
+        internal bool SendUniform1fv(Shader shader, string name, int count, float[] array)
+        {
+            int location = glGetUniformLocation(shader.GetProgramID(), name);
+            if (location >= 0)
+            {
+                glUniform1fv(location, count, array);
+                return true;
+            }
+            else
+                Console.WriteLine("Uniform not found: <" + name + ">");
+            return false;
+        }
+        internal bool SendUniform2fv(Shader shader, string name, float[] array)
+        {
+            int location = glGetUniformLocation(shader.GetProgramID(), name);
+            if (location >= 0)
+            {
+                glUniform2fv(location, 1, array);
+                return true;
+            }
+            else
+                Console.WriteLine("Uniform not found: <" + name + ">");
+            return false;
+        }
+        internal bool SendUniform1f(Shader shader, string name, float array)
+        {
+            int location = glGetUniformLocation(shader.GetProgramID(), name);
+            if (location >= 0)
+            {
+                glUniform1f(location, array);
+                return true;
+            }
+            else
+                Console.WriteLine("Uniform not found: <" + name + ">");
+            return false;
         }
 
         internal void Draw()
@@ -102,7 +186,7 @@ namespace SpaceVIL
             glDeleteBuffers(2, buffers);
             glDeleteTextures(1, Texture);
             _vbo_data = null;
-            _ibo_data= null;
+            _ibo_data = null;
         }
 
         internal void DeleteIBOBuffer()
