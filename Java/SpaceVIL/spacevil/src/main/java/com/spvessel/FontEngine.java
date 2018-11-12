@@ -15,7 +15,7 @@ public class FontEngine {
 
     static Map<Font, Alphabet> fonts = new HashMap<>();
 
-    public static List<Alphabet.ModifyLetter> getPixMap(String text, Font font) // PixMapData
+    public static List<Alphabet.ModifyLetter> getModifyLetters(String text, Font font) // PixMapData
     {
         //return FontReview.getTextArrays(text, font);
         if (!fonts.containsKey(font)) {

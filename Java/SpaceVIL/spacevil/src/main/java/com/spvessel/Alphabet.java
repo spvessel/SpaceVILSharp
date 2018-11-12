@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Alphabet {
+class Alphabet {
     // Alphabet
     // class Alphabet {
     Font font;
@@ -65,7 +65,7 @@ public class Alphabet {
         //if (font.getSize() == 18 && (alphMaxY == (letter.minY + letter.height - 1))) System.out.println(letter.name + " " + alphMaxY);
     }
 
-    public List<ModifyLetter> makeTextNew(String text) {
+    List<ModifyLetter> makeTextNew(String text) {
         List<ModifyLetter> letList = new LinkedList<>();
 
         double err = 0.15; // переехало из буквы
@@ -627,13 +627,13 @@ public class Alphabet {
          }
     }
 
-    public class ModifyLetter {
+    class ModifyLetter {
         String name;
-        public int xBeg = 0;
-        public int yBeg = 0;
-        public int width = 0;
-        public int height = 0;
-        public int xShift = 0;
+        int xBeg = 0;
+        int yBeg = 0;
+        int width = 0;
+        int height = 0;
+        int xShift = 0;
         private Letter _letter;
         boolean isSpec;
 
@@ -656,7 +656,7 @@ public class Alphabet {
             return _letter.pix;
         }
         */
-        public byte[] getArr() {
+        byte[] getArr() {
             return _letter.arr;
         }
     }

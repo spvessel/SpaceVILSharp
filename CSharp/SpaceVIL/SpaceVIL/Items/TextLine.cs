@@ -42,7 +42,7 @@ namespace SpaceVIL
             UpdateData();
         }
 
-        public void CreateText()
+        private void CreateText()
         {
             Monitor.Enter(textLock);
             try
@@ -50,7 +50,7 @@ namespace SpaceVIL
                 String text = GetItemText();
                 Font font = GetFont();
 
-                _letters = FontEngine.GetPixMap(text, font);
+                _letters = FontEngine.GetModifyLetters(text, font);
                 _letEndPos = new List<int>();
 
                 if (_letters.Count > 0)
@@ -268,7 +268,7 @@ namespace SpaceVIL
             }
         }
 
-        protected void UpdateCoords()
+        private void UpdateCoords()
         {
             //AddAllShifts();
             if (_letters.Count() == 0)
@@ -313,9 +313,9 @@ namespace SpaceVIL
             
         }
 
-        public TextItem GetText()
+        internal string GetText()
         {
-            return this;
+            return GetItemText();
         }
 
         public override float[] Shape()
