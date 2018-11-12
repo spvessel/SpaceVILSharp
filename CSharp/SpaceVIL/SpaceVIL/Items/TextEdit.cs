@@ -74,14 +74,14 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextEdit)));
         }
 
-        protected virtual void OnMousePressed(object sender, MouseArgs args)
+        private void OnMousePressed(object sender, MouseArgs args)
         {
             ReplaceCursorAccordingCoord(args.Position.GetX());
             if (_isSelect)
                 UnselectText();
         }
 
-        protected virtual void OnDragging(object sender, MouseArgs args)
+        private void OnDragging(object sender, MouseArgs args)
         {
             ReplaceCursorAccordingCoord(args.Position.GetX());
 
@@ -97,7 +97,7 @@ namespace SpaceVIL
             }
         }
 
-        protected virtual void OnScrollUp(object sender, MouseArgs args)
+        private void OnScrollUp(object sender, MouseArgs args)
         {
             int w = GetTextWidth();
             
@@ -118,7 +118,7 @@ namespace SpaceVIL
             _selectedArea.SetX(_selectedArea.GetX() + curPos);
         }
 
-        protected virtual void OnScrollDown(object sender, MouseArgs args)
+        private void OnScrollDown(object sender, MouseArgs args)
         {
             int w = GetTextWidth();
             
@@ -180,11 +180,11 @@ namespace SpaceVIL
             return pos;
         }
 
-        protected virtual void OnKeyRelease(object sender, KeyArgs args)
+        private void OnKeyRelease(object sender, KeyArgs args)
         {
 
         }
-        protected virtual void OnKeyPress(object sender, KeyArgs args)
+        private void OnKeyPress(object sender, KeyArgs args)
         {
             Monitor.Enter(textInputLock);
             try {
@@ -343,7 +343,7 @@ namespace SpaceVIL
                 _cursor.SetX(GetX() + GetPadding().Left + pos + _text_object.GetMargin().Left);
         }
 
-        protected virtual void OnTextInput(object sender, TextInputArgs args)
+        private void OnTextInput(object sender, TextInputArgs args)
         {
             if (!_isEditable) return;
             Monitor.Enter(textInputLock);
@@ -499,7 +499,10 @@ namespace SpaceVIL
 
         private void MakeSelectedArea(int fromPt, int toPt)
         {
-            //Console.WriteLine("from " + fromPt + " to " + toPt);
+            if (fromPt == -1)
+                fromPt = 0;
+            if (toPt == -1)
+                toPt = 0;
             fromPt = CursorPosToCoord(fromPt);
             toPt = CursorPosToCoord(toPt);
 
@@ -522,6 +525,10 @@ namespace SpaceVIL
         }
 
         private string PrivGetSelectedText() {
+            if (_selectFrom == -1)
+                _selectFrom = 0;
+            if (_selectTo == -1)
+                _selectTo = 0;
             if (_selectFrom == _selectTo) return "";
             string text = GetText();
             int fromReal = Math.Min(_selectFrom, _selectTo);
@@ -565,6 +572,11 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
+                if (_selectFrom == -1)
+                    _selectFrom = 0;
+                if (_selectTo == -1)
+                    _selectTo = 0;
+
                 string str = PrivGetSelectedText();
                 if (_selectFrom == _selectTo) return str;
                 int fromReal = Math.Min(_selectFrom, _selectTo);

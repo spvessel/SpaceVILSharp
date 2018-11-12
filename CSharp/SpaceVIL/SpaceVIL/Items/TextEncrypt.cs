@@ -415,6 +415,10 @@ namespace SpaceVIL
 
         private void MakeSelectedArea(int fromPt, int toPt)
         {
+            if (fromPt == -1)
+                fromPt = 0;
+            if (toPt == -1)
+                toPt = 0;
             fromPt = CursorPosToCoord(fromPt);
             toPt = CursorPosToCoord(toPt);
 
@@ -437,12 +441,12 @@ namespace SpaceVIL
             MakeSelectedArea(0, 0);
         }
 
-        private int NearestPosToCursor(double xPos)
-        {
-            List<int> endPos = _text_object.GetLetPosArray();
-            int pos = endPos.OrderBy(x => Math.Abs(x - xPos)).First();
-            return pos;
-        }
+//        private int NearestPosToCursor(double xPos)
+//        {
+//            List<int> endPos = _text_object.GetLetPosArray();
+//            int pos = endPos.OrderBy(x => Math.Abs(x - xPos)).First();
+//            return pos;
+//        }
 
         //internal void SetCursorPosition(double newPos)
         //{
@@ -452,21 +456,38 @@ namespace SpaceVIL
         private string CutText() //������ �� ����������, ������, �����������, ��� �����
         {
             if (!_isEditable) return "";
-            string str = GetSelectedText();
-            if (_selectFrom == _selectTo) return str;
-            int fromReal = Math.Min(_selectFrom, _selectTo);
-            int toReal = Math.Max(_selectFrom, _selectTo);
-            SetText(GetText().Remove(fromReal, toReal - fromReal));
-            _cursor_position = fromReal;
-            ReplaceCursor();
-            if (_isSelect)
-                UnselectText();
-            _justSelected = false;
-            return str;
+
+            Monitor.Enter(textInputLock);
+            try
+            {
+                if (_selectFrom == -1)
+                    _selectFrom = 0;
+                if (_selectTo == -1)
+                    _selectTo = 0;
+                string str = GetSelectedText();
+                if (_selectFrom == _selectTo) return str;
+                int fromReal = Math.Min(_selectFrom, _selectTo);
+                int toReal = Math.Max(_selectFrom, _selectTo);
+                SetText(GetText().Remove(fromReal, toReal - fromReal));
+                _cursor_position = fromReal;
+                ReplaceCursor();
+                if (_isSelect)
+                    UnselectText();
+                _justSelected = false;
+                return str;
+            }
+            finally
+            {
+                Monitor.Exit(textInputLock);
+            }
         }
 
         private string GetSelectedText() //������ �� ����������, ������, �����������, ��� �����
         {
+            if (_selectFrom == -1)
+                _selectFrom = 0;
+            if (_selectTo == -1)
+                _selectTo = 0;
             if (_selectFrom == _selectTo) return "";
             string text = GetText();
             int fromReal = Math.Min(_selectFrom, _selectTo);

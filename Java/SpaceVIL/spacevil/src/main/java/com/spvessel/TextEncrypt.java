@@ -289,7 +289,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         getHandler().setFocusedItem(this);
     }
 
-    private synchronized void setText(String text) {
+    private void setText(String text) {
         textInputLock.lock();
         try {
             _pwd = text;
@@ -389,6 +389,10 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     }
 
     private void makeSelectedArea(int fromPt, int toPt) {
+        if (fromPt == -1)
+            fromPt = 0;
+        if (toPt == -1)
+            toPt = 0;
         fromPt = cursorPosToCoord(fromPt);
         toPt = cursorPosToCoord(toPt);
 
@@ -409,11 +413,11 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         makeSelectedArea(0, 0);
     }
 
-    private int nearestPosToCursor(double xPos) {
-        List<Integer> endPos = _text_object.getLetPosArray();
-        int pos = (int) endPos.stream().map(x -> Math.abs(x - xPos)).sorted().toArray()[0];
-        return pos;
-    }
+//    private int nearestPosToCursor(double xPos) {
+//        List<Integer> endPos = _text_object.getLetPosArray();
+//        int pos = (int) endPos.stream().map(x -> Math.abs(x - xPos)).sorted().toArray()[0];
+//        return pos;
+//    }
 
     //void setCursorPosition(double newPos) {
     //    _cursor_position = nearestPosToCursor(newPos);
@@ -423,23 +427,36 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     {
         if (!_isEditable)
             return "";
-        String str = getSelectedText();
-        if (_selectFrom == _selectTo)
-            return str;
-        int fromReal = Math.min(_selectFrom, _selectTo);
-        int toReal = Math.max(_selectFrom, _selectTo);
-        StringBuilder sb = new StringBuilder(getText());
-        setText(sb.delete(fromReal, toReal).toString()); // - fromReal
-        _cursor_position = fromReal;
-        replaceCursor();
-        if (_isSelect)
-            unselectText();
-        _justSelected = false;
+		textInputLock.lock();
+        try {
+			if (_selectFrom == -1)
+			    _selectFrom = 0;
+			if (_selectTo == -1)
+			    _selectTo = 0;
+			String str = getSelectedText();
+			if (_selectFrom == _selectTo)
+			    return str;
+			int fromReal = Math.min(_selectFrom, _selectTo);
+			int toReal = Math.max(_selectFrom, _selectTo);
+			StringBuilder sb = new StringBuilder(getText());
+			setText(sb.delete(fromReal, toReal).toString()); // - fromReal
+			_cursor_position = fromReal;
+			replaceCursor();
+			if (_isSelect)
+			    unselectText();
+			_justSelected = false;
         return str;
+		} finally {
+            textInputLock.unlock();
+        }
     }
 
     private String getSelectedText() // ������ �� ����������, ������, �����������, ��� �����
     {
+        if (_selectFrom == -1)
+            _selectFrom = 0;
+        if (_selectTo == -1)
+            _selectTo = 0;
         if (_selectFrom == _selectTo)
             return "";
         String text = getText();

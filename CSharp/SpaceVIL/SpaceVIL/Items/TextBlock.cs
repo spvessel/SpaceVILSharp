@@ -69,14 +69,14 @@ namespace SpaceVIL
             _cursor.SetHeight(_textureStorage.GetCursorHeight());
         }
 
-        protected virtual void OnMousePressed(object sender, MouseArgs args)
+        private void OnMousePressed(object sender, MouseArgs args)
         {
             ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
             if (_isSelect)
                 UnselectText();
         }
 
-        protected virtual void OnDragging(object sender, MouseArgs args)
+        private void OnDragging(object sender, MouseArgs args)
         {
             ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
             if (!_isSelect)
@@ -124,7 +124,7 @@ namespace SpaceVIL
             _cursor.SetX(_cursor.GetX() + diff);
         }
 
-        protected virtual void OnScrollUp(object sender, MouseArgs args)
+        private void OnScrollUp(object sender, MouseArgs args)
         {
             int curPos = _cursor.GetY();
             _cursor.SetY(_textureStorage.ScrollBlockUp(curPos));
@@ -133,7 +133,7 @@ namespace SpaceVIL
             //ReplaceCursor();
         }
 
-        protected virtual void OnScrollDown(object sender, MouseArgs args)
+        private void OnScrollDown(object sender, MouseArgs args)
         {
             int curPos = _cursor.GetY();
             _cursor.SetY(_textureStorage.ScrollBlockDown(_cursor.GetY()));
@@ -170,12 +170,12 @@ namespace SpaceVIL
             ReplaceCursor();
         }
 
-        protected virtual void OnKeyRelease(object sender, KeyArgs args)
+        private void OnKeyRelease(object sender, KeyArgs args)
         {
             //if (args.Scancode == 0x2F && args.Mods == KeyMods.Control)
             //    PasteText(CommonService.ClipboardTextStorage);
         }
-        protected virtual void OnKeyPress(object sender, KeyArgs args)
+        private void OnKeyPress(object sender, KeyArgs args)
         {
             //Console.WriteLine(scancode);
             Monitor.Enter(_textureStorage.textInputLock);
@@ -370,7 +370,7 @@ namespace SpaceVIL
             }
         }
 
-        protected void OnTextInput(object sender, TextInputArgs args)
+        private void OnTextInput(object sender, TextInputArgs args)
         {
             if (!_isEditable) return;
             Monitor.Enter(_textureStorage.textInputLock);
