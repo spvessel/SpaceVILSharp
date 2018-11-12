@@ -22,17 +22,14 @@ namespace SpaceVIL
 {
     internal sealed class VRAMTexture
     {
-        // public IBaseItem Link = null;
         private float[] _vbo_data;
         public uint VBO;
         private int[] _ibo_data;
         public uint IBO;
         public uint[] Texture;
 
-        internal VRAMTexture(/*IBaseItem link = null*/)
-        {
+        internal VRAMTexture() { 
             Texture = new uint[1];
-            // Link = link;
         }
 
         internal void GenTexture(int w, int h, byte[] bitmap)

@@ -34,8 +34,6 @@ namespace SpaceVIL
             HoveredItems.Clear();
         }
 
-        // private Dictionary<IBaseItem, VRAMStorage> _images_store = new Dictionary<IBaseItem, VRAMStorage>();
-
         private ToolTip _tooltip = new ToolTip();
         private IBaseItem _isStencilSet = null;
         public InputDeviceEvent EngineEvent = new InputDeviceEvent();
@@ -325,10 +323,7 @@ namespace SpaceVIL
         internal void SetWindowPos(int x, int y)
         {
             Glfw.SetWindowPos(_handler.GetWindowId(), x, y);
-
             EngineEvent.SetEvent(InputEventType.WindowMove);
-            // _handler.GetLayout().SetX(x);
-            // _handler.GetLayout().SetY(y);
         }
 
         private bool flag_move = false;
@@ -413,12 +408,6 @@ namespace SpaceVIL
                     if (draggable != null)
                     {
                         draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
-
-                        // if (FocusedItem != null)
-                        //     FocusedItem.SetFocused(false;
-
-                        // FocusedItem = HoveredItem;
-                        // FocusedItem.SetFocused(true;
                     }
                     else if (anchor != null && !(HoveredItem is ButtonCore) && !_handler.GetLayout().IsMaximized)
                     {
@@ -874,21 +863,14 @@ namespace SpaceVIL
 
             glDeleteVertexArrays(1, _handler.GVAO);
 
-            // foreach (var store in _images_store)
-            //     store.Value.Clear();
-            // _images_store.Clear();
-
             _handler.ClearEventsCallbacks();
             _handler.Destroy();
         }
 
         internal void Update()
         {
-            // if (_handler.Focused)
-            // {
             glViewport(0, 0, _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
             Render();
-            // }
         }
 
         internal void Render()
@@ -1068,8 +1050,6 @@ namespace SpaceVIL
             }
             if (root is ITextContainer)
             {
-                // if (root is Prototype)
-                //     DrawShell(root);
                 _char.UseShader();
                 DrawText(root as ITextContainer);
                 _primitive.UseShader();
@@ -1094,7 +1074,6 @@ namespace SpaceVIL
             }
             else
             {
-                // if (!(root is ITextContainer))
                 DrawShell(root);
 
                 if (root is Prototype)
@@ -1206,7 +1185,6 @@ namespace SpaceVIL
             store.UnbindFBO();
             store.ClearFBO();
             DrawShadowPart(weights, res, store.Texture);
-            //clear texture from store unnesserary
         }
 
         private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture)
@@ -1259,7 +1237,7 @@ namespace SpaceVIL
                 (float) text.GetForeground().G / 255.0f,
                 (float) text.GetForeground().B / 255.0f,
                 (float) text.GetForeground().A / 255.0f };
-                
+
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1, true);
             store.GenTexture(bb_w, bb_h, bb);
