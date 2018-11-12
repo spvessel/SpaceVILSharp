@@ -77,13 +77,13 @@ public class TextEdit extends Prototype
         setStyle(DefaultsService.getDefaultStyle(TextEdit.class));
     }
 
-    protected void onMousePressed(Object sender, MouseArgs args) {
+    private void onMousePressed(Object sender, MouseArgs args) {
         replaceCursorAccordingCoord(args.position.getX());
         if (_isSelect)
             unselectText();
     }
 
-    protected void onDragging(Object sender, MouseArgs args) {
+    private void onDragging(Object sender, MouseArgs args) {
         replaceCursorAccordingCoord(args.position.getX());
 
         if (!_isSelect) {
@@ -95,7 +95,7 @@ public class TextEdit extends Prototype
         }
     }
 
-    protected void onScrollUp(Object sender, MouseArgs args) {
+    private void onScrollUp(Object sender, MouseArgs args) {
         int w = getTextWidth();
 
         if (w < _cursorXMax)
@@ -118,7 +118,7 @@ public class TextEdit extends Prototype
         _selectedArea.setX(_selectedArea.getX() + curPos);
     }
 
-    protected void onScrollDown(Object sender, MouseArgs args) {
+    private void onScrollDown(Object sender, MouseArgs args) {
         int w = getTextWidth();
 
         if (w < _cursorXMax)
@@ -177,11 +177,11 @@ public class TextEdit extends Prototype
         return pos;
     }
 
-    protected void onKeyRelease(InterfaceItem sender, KeyArgs args) {
+    private void onKeyRelease(InterfaceItem sender, KeyArgs args) {
 
     }
 
-    protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         textInputLock.lock();
         try {
             // Console.WriteLine(args.key);
@@ -316,7 +316,7 @@ public class TextEdit extends Prototype
             _cursor.setX(getX() + getPadding().left + pos + _text_object.getMargin().left);
     }
 
-    protected void onTextInput(Object sender, TextInputArgs args) {
+    private void onTextInput(Object sender, TextInputArgs args) {
         if (!_isEditable)
             return;
         textInputLock.lock();
@@ -477,7 +477,10 @@ public class TextEdit extends Prototype
     }
 
     private void makeSelectedArea(int fromPt, int toPt) {
-        // Console.WriteLine("from " + fromPt + " to " + toPt);
+        if (fromPt == -1)
+            fromPt = 0;
+        if (toPt == -1)
+            toPt = 0;
         fromPt = cursorPosToCoord(fromPt);
         toPt = cursorPosToCoord(toPt);
 
@@ -499,6 +502,10 @@ public class TextEdit extends Prototype
     }
 
     private String privGetSelectedText() {
+        if (_selectFrom == -1)
+            _selectFrom = 0;
+        if (_selectTo == -1)
+            _selectTo = 0;
         if (_selectFrom == _selectTo)
             return "";
         String text = getText();
@@ -540,6 +547,11 @@ public class TextEdit extends Prototype
             return "";
         textInputLock.lock();
         try {
+            if (_selectFrom == -1)
+                _selectFrom = 0;
+            if (_selectTo == -1)
+                _selectTo = 0;
+
             String str = privGetSelectedText();
             if (_selectFrom == _selectTo)
                 return str;

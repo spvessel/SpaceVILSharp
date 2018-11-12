@@ -75,13 +75,13 @@ class TextBlock extends Prototype
         _cursor.setHeight(_textureStorage.getCursorHeight());
     }
 
-    protected void onMousePressed(Object sender, MouseArgs args) {
+    private void onMousePressed(Object sender, MouseArgs args) {
         replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
         if (_isSelect)
             unselectText();
     }
 
-    protected void onDragging(Object sender, MouseArgs args) {
+    private void onDragging(Object sender, MouseArgs args) {
         replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
         if (!_isSelect) {
             _isSelect = true;
@@ -92,19 +92,19 @@ class TextBlock extends Prototype
         }
     }
 
-    protected int getScrollYStep() {
+    int getScrollYStep() {
         return _textureStorage.getScrollStep();
     }
 
-    protected int getScrollXStep() {
+    int getScrollXStep() {
         return scrollXStep;
     }
 
-    protected int getScrollYOffset() {
+    int getScrollYOffset() {
         return _textureStorage.getScrollYOffset();
     }
 
-    protected void setScrollYOffset(int offset) {
+    void setScrollYOffset(int offset) {
         int oldOff = _textureStorage.getScrollYOffset();
         _textureStorage.setScrollYOffset(offset);
         int diff = offset - oldOff;
@@ -112,11 +112,11 @@ class TextBlock extends Prototype
         _cursor.setY(_cursor.getY() + diff);
     }
 
-    protected int getScrollXOffset() {
+    int getScrollXOffset() {
         return _textureStorage.getScrollXOffset();
     }
 
-    protected void setScrollXOffset(int offset) {
+    void setScrollXOffset(int offset) {
         int oldOff = _textureStorage.getScrollXOffset();
         _textureStorage.setScrollXOffset(offset);
         int diff = offset - oldOff;
@@ -124,7 +124,7 @@ class TextBlock extends Prototype
         _cursor.setX(_cursor.getX() + diff);
     }
 
-    protected void onScrollUp(Object sender, MouseArgs args) {
+    private void onScrollUp(Object sender, MouseArgs args) {
         int curPos = _cursor.getY();
         _cursor.setY(_textureStorage.scrollBlockUp(_cursor.getY()));
         curPos = _cursor.getY() - curPos;
@@ -132,7 +132,7 @@ class TextBlock extends Prototype
         // replaceCursor();
     }
 
-    protected void onScrollDown(Object sender, MouseArgs args) {
+    private void onScrollDown(Object sender, MouseArgs args) {
         int curPos = _cursor.getY();
         _cursor.setY(_textureStorage.scrollBlockDown(_cursor.getY()));
         curPos = _cursor.getY() - curPos;
@@ -173,12 +173,12 @@ class TextBlock extends Prototype
      * private int coordXToPos(int coordX, int lineNumb) { return
      * _textureStorage.coordXToPos(coordX, lineNumb); }
      */
-    protected void onKeyRelease(Object sender, KeyArgs args) {
+    private void onKeyRelease(Object sender, KeyArgs args) {
         // if (args.key == KeyCode.v/* 0x2F*/ && args.mods == KeyMods.CONTROL)
         // pasteText(CommonService.ClipboardTextStorage);
     }
 
-    protected void onKeyPress(Object sender, KeyArgs args) {
+    private void onKeyPress(Object sender, KeyArgs args) {
         _textureStorage.textInputLock.lock();
         try {
             if (!_isEditable) {
@@ -349,7 +349,7 @@ class TextBlock extends Prototype
         }
     }
 
-    protected void onTextInput(Object sender, TextInputArgs args) {
+    private void onTextInput(Object sender, TextInputArgs args) {
         if (!_isEditable)
             return;
         _textureStorage.textInputLock.lock();
