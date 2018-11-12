@@ -96,7 +96,7 @@ public class ImageTest extends ActiveWindow {
 
         ImageItem img = new ImageItem(image);
 
-        img.setBackground(new Color(0, 0, 0, 0));
+        img.setBackground(new Color(100, 0, 0, 50));
         img.setSize(256, 134);
         img.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         img.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
@@ -112,13 +112,13 @@ public class ImageTest extends ActiveWindow {
         //btn_action.addItem(img);
         frame.addItem(img);
 
-        BufferedImage bi1 = MakeShade(image, 4);
-        ImageItem img1 = new ImageItem(bi1);
-        img1.setBackground(new Color(0, 0, 0, 0));
-        img1.setSize(256, 134);
-        img1.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        img1.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
-        frame.addItem(img1);
+        // BufferedImage bi1 = MakeShade(image, 4);
+        // ImageItem img1 = new ImageItem(bi1);
+        // img1.setBackground(new Color(0, 0, 0, 0));
+        // img1.setSize(256, 134);
+        // img1.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        // img1.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        // frame.addItem(img1);
 
         // java awt graphics test
 //        Font font = DefaultsService.getDefaultFont(Font.BOLD, 30);

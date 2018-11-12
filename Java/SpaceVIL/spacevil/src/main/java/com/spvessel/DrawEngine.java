@@ -1,12 +1,11 @@
 package com.spvessel;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.List;
-// import java.util.concurrent.SynchronousQueue;
 import java.util.*;
 import java.io.*;
-// import java.lang.ref.SoftReference;
 import java.nio.*;
 
 import com.spvessel.Common.CommonService;
@@ -16,7 +15,6 @@ import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryStack;
-import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
@@ -26,8 +24,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-// import static org.lwjgl.opengl.GL13.*;
-// import static org.lwjgl.system.MemoryUtil.*;
+
 
 public final class DrawEngine {
 
@@ -335,7 +332,7 @@ public final class DrawEngine {
         // if (!flag_resize)
         // return;
         // flag_resize = false;
-        // System.out.println("resize " + count + " " + width + " " + height);
+
         _tooltip.initTimer(false);
         _handler.getLayout().setWidth(width);
         _handler.getLayout().setHeight(height);
@@ -350,7 +347,7 @@ public final class DrawEngine {
         // if (!flag_pos)
         // return;
         // flag_pos = false;
-        // System.out.println("pos " + count + " " + xpos + " " + ypos);
+
         _handler.getPointer().setX(xpos);
         _handler.getPointer().setY(ypos);
     }
@@ -444,13 +441,6 @@ public final class DrawEngine {
 
                 if (draggable != null) {
                     draggable.eventMouseDrag.execute(draggable, _margs);
-
-                    // Focus get
-                    // if (focusedItem != null)
-                    // focusedItem.setFocused(false);
-
-                    // focusedItem = hoveredItem;
-                    // focusedItem.setFocused(true);
                 } else if (anchor != null && !(hoveredItem instanceof ButtonCore)
                         && !_handler.getLayout().isMaximized) {
 
@@ -463,14 +453,6 @@ public final class DrawEngine {
                     IntBuffer y = BufferUtils.createIntBuffer(1);
                     glfwGetWindowPos(_handler.getWindowId(), x, y);
                     setWindowPos(x.get(0) + delta_x, y.get() + delta_y);
-
-                    // Point mpos = MouseInfo.getPointerInfo().getLocation();
-                    // int x5, y5;
-                    // x5 = (mpos.x - x_click); // x_global - (x_click - (int)xpos);
-                    // y5 = (mpos.y - y_click); // y_global - (y_click - (int)ypos);
-                    // x_handler = x5;
-                    // y_handler = y5;
-                    // setWindowPos(x_handler, y_handler);
                 }
             }
         } else {
@@ -534,9 +516,6 @@ public final class DrawEngine {
     }
 
     private void mouseClick(long wnd, int button, int action, int mods) {
-
-        // System.out.println("click " + count + " " + button + " " + action);
-
         _handler.getLayout().getWindow()._sides.clear();
         if (!_handler.focusable)
             return;
@@ -664,8 +643,6 @@ public final class DrawEngine {
                 continue;
             layout_box_of_items.add(item);
 
-            // System.out.println(item.getItemName() + " " +
-            // layout_box_of_items.contains(item));
             if (item instanceof Prototype)
                 layout_box_of_items.addAll(getInnerItems((Prototype) item));
         }
@@ -871,20 +848,6 @@ public final class DrawEngine {
         glBindVertexArray(_handler.gVAO);
         focus(_handler.getWindowId(), true);
 
-        // int fbo_handle = glGenFramebuffersEXT();
-        // int fbo_texture = glGenTextures();
-        // int stencil_rb = glGenRenderbuffersEXT();
-        // glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo_handle);
-
-        // glBindTexture(GL_TEXTURE_2D, fbo_texture);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        // glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-        // GL_TEXTURE_2D, fbo_texture, 0);
-        // glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, stencil_rb);
-        // glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
-        // GL_RENDERBUFFER_EXT, stencil_rb);
-        // glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-
         while (!_handler.isClosing()) {
             glfwWaitEventsTimeout(_interval);
             // glfwWaitEvents();
@@ -893,22 +856,8 @@ public final class DrawEngine {
             glClearColor((float) _handler.getLayout().getBackground().getRed() / 255.0f,
                     (float) _handler.getLayout().getBackground().getGreen() / 255.0f,
                     (float) _handler.getLayout().getBackground().getBlue() / 255.0f, 1.0f);
-            // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _handler.getLayout().getWidth(),
-            // _handler.getLayout().getHeight(),
-            // 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-            // glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_STENCIL_INDEX,
-            // _handler.getLayout().getWidth(),
-            // _handler.getLayout().getHeight());
-
-            // glBindTexture(GL_TEXTURE_2D, 0);
-            // glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo_handle);
             _primitive.useShader();
             update();
-            // glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-            // glActiveTexture(GL_TEXTURE0);
-            // glBindTexture(GL_TEXTURE_2D, fbo_texture);
-            // _fxaa.useShader();
-            // drawFBO(fbo_texture, _fxaa);
             _handler.swap();
 
             flag_move = true;
@@ -919,8 +868,6 @@ public final class DrawEngine {
         _fxaa.deleteShader();
         _blur.deleteShader();
 
-        // glDeleteFramebuffersEXT(fbo_handle);
-        // glDeleteTextures(fbo_texture);
         glDeleteVertexArrays(_handler.gVAO);
 
         _handler.clearEventsCallbacks();
@@ -930,28 +877,11 @@ public final class DrawEngine {
     int _textlinecount = 0;
 
     protected void update() {
-        // if (_handler.focused) {
         glViewport(0, 0, _handler.getLayout().getWidth(), _handler.getLayout().getHeight());
         render();
-        // }
     }
 
     private void render() {
-        // fbo texture
-        // int fbo_handle = glGenFramebuffersEXT();
-        // int fbo_texture = glGenTextures();
-        // int stencil_rb = glGenRenderbuffersEXT();
-        // glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo_handle);
-
-        // glBindTexture(GL_TEXTURE_2D, fbo_texture);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        // glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-        // GL_TEXTURE_2D, fbo_texture, 0);
-        // glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, stencil_rb);
-        // glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
-        // GL_RENDERBUFFER_EXT, stencil_rb);
-        // glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         // draw static
@@ -963,14 +893,10 @@ public final class DrawEngine {
         drawToolTip();
         if (!_handler.focusable) {
             drawShadePillow();
-            // glBindTexture(GL_TEXTURE_2D, fbo_texture);
-            // _blur.useShader();
-            // drawFBO(fbo_texture, _blur);
         }
     }
 
     void drawFBO(int fbo_texture, Shader shader) {
-        // glDisable(org.lwjgl.opengl.EXTFramebufferSRGB.GL_FRAMEBUFFER_SRGB_EXT);
         float i_x0 = -1.0f;
         float i_y0 = 1.0f;
         float i_x1 = 1.0f;
@@ -1064,7 +990,6 @@ public final class DrawEngine {
         glEnableVertexAttribArray(1);
 
         // draw
-        // glEnable(GL_STENCIL_TEST);
         glDrawArrays(GL_TRIANGLES, 0, crd_array.size());
 
         glDisableVertexAttribArray(0);
@@ -1095,16 +1020,10 @@ public final class DrawEngine {
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
         glStencilMask(0xFF);
 
-        // System.out.println(shell.getParent().getItemName());
         _primitive.useShader();
         setStencilMask(shell.getParent().makeShape());
 
         glStencilFunc(GL_EQUAL, 1, 0xFF);
-
-        // System.out.println(shell.getParent()._confines_x_0 + " " +
-        // shell.getParent()._confines_x_1 + " "
-        // + shell.getParent()._confines_y_0 + " " + shell.getParent()._confines_y_1 + "
-        // ");
 
         shell.getParent().setConfines(shell.getParent().getX() + shell.getParent().getPadding().left,
                 shell.getParent().getX() + shell.getParent().getWidth() - shell.getParent().getPadding().right,
@@ -1129,9 +1048,6 @@ public final class DrawEngine {
         Map<ItemAlignment, int[]> outside = new HashMap<ItemAlignment, int[]>();
 
         if (shell.getParent() != null && _isStencilSet == null) {
-            // System.out.println(shell.getParent().getItemName() + " " +
-            // shell.getParent().getWidth() + " " + shell.getItemName() + " " +
-            // shell.getWidth());
             // bottom
             if (shell.getParent().getY() + shell.getParent().getHeight() > shell.getY()
                     && shell.getParent().getY() + shell.getParent().getHeight() < shell.getY() + shell.getHeight()) {
@@ -1140,8 +1056,6 @@ public final class DrawEngine {
                         - shell.getParent().getPadding().bottom;
                 int h = shell.getHeight();
                 outside.put(ItemAlignment.BOTTOM, new int[] { y, h });
-                // if (shell instanceof TreeItem)
-                // System.out.println("treeitem _ bottom");
             }
             // top
             if (shell.getParent().getY() + shell.getParent().getPadding().top > shell.getY()) {
@@ -1157,8 +1071,6 @@ public final class DrawEngine {
                 int x = shell.getParent().getX() + shell.getParent().getWidth() - shell.getParent().getPadding().right;
                 int w = shell.getWidth();
                 outside.put(ItemAlignment.RIGHT, new int[] { x, w });
-                // if (shell instanceof TreeItem)
-                // System.out.println("treeitem _ right");
             }
             // left
             if (shell.getParent().getX() + shell.getParent().getPadding().left > shell.getX()) {
@@ -1168,18 +1080,7 @@ public final class DrawEngine {
                 outside.put(ItemAlignment.LEFT, new int[] { x, w });
             }
 
-            // if (shell instanceof VerticalSlider) {
-            // System.out.println(
-            // shell.getX() + " " +
-            // shell.getParent().getX() + " " +
-            // shell.getY() + " " +
-            // shell.getParent().getY() + " " +
-            // outside.toString()
-            // );
-            // }
-
             if (outside.size() > 0 || shell.getParent() instanceof TextBlock) {
-                // System.out.println(shell.getItemName() + " stenciltest");
                 _isStencilSet = shell;
                 strictStencil(shell);
                 return true;
@@ -1258,55 +1159,10 @@ public final class DrawEngine {
             _primitive.useShader();
         }
 
-        int vertexbuffer = glGenBuffers();
-        // System.out.println(shell.getItemName() + " start");
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-
-        int length = crd_array.size() * 3;
-        FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 3; i++) {
-            vertexData.put(i * 3 + 0, crd_array.get(i)[0]);
-            vertexData.put(i * 3 + 1, crd_array.get(i)[1]);
-            vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
-        }
-        vertexData.rewind();
-        glBufferData(GL15.GL_ARRAY_BUFFER, vertexData, GL15.GL_DYNAMIC_DRAW);
-
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-
-        // Color
-        float[] argb = { (float) shell.getBackground().getRed() / 255.0f,
-                (float) shell.getBackground().getGreen() / 255.0f, (float) shell.getBackground().getBlue() / 255.0f,
-                (float) shell.getBackground().getAlpha() / 255.0f };
-
-        int colorbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-
-        length = crd_array.size() * 4;
-        FloatBuffer colorData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 4; i++) {
-            colorData.put(i * 4 + 0, argb[0]);
-            colorData.put(i * 4 + 1, argb[1]);
-            colorData.put(i * 4 + 2, argb[2]);
-            colorData.put(i * 4 + 3, argb[3]);
-        }
-        colorData.rewind();
-
-        glBufferData(GL15.GL_ARRAY_BUFFER, colorData, GL15.GL_DYNAMIC_DRAW);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
-
-        // draw
-        glDrawArrays(GL_TRIANGLES, 0, crd_array.size());
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        // Clear VBO and shader
-        glDeleteBuffers(vertexbuffer);
-        glDeleteBuffers(colorbuffer);
-        // System.out.println(shell.getItemName() + " end");
+        VRAMVertex store = new VRAMVertex();
+        store.genBuffers(crd_array, shell.getBackground());
+        store.draw(GL_TRIANGLES);
+        store.clear();
 
         // clear array
         crd_array.clear();
@@ -1331,37 +1187,6 @@ public final class DrawEngine {
     }
 
     void drawShadow(InterfaceBaseItem shell) {
-        int fbo_handle = glGenFramebuffersEXT();
-        int fbo_texture = glGenTextures();
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo_handle);
-
-        // texture
-        glBindTexture(GL_TEXTURE_2D, fbo_texture);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _handler.getLayout().getWidth(), _handler.getLayout().getHeight(), 0,
-                GL_BGRA, GL_UNSIGNED_BYTE, 0);
-        glBindTexture(GL_TEXTURE_2D, 0);
-
-        // fbo
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo_handle);
-        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, fbo_texture, 0);
-
-        int draw_bufs = GL_COLOR_ATTACHMENT0_EXT;
-        glDrawBuffers(draw_bufs);
-
-        int result = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-        if (result != GL_FRAMEBUFFER_COMPLETE_EXT) {
-            System.out.println("Framebuffer error " + result);
-            glDeleteFramebuffersEXT(fbo_handle);
-            glDeleteTextures(fbo_texture);
-            return;
-        }
-
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo_handle);
-        //////////
         CustomShape shadow = new CustomShape();
         shadow.setBackground(shell.getShadowColor());
         shadow.setSize(shell.getWidth(), shell.getHeight());
@@ -1369,8 +1194,11 @@ public final class DrawEngine {
         shadow.setParent(shell.getParent());
         shadow.setHandler(shell.getHandler());
         shadow.setTriangles(shell.getTriangles());
+
+        VRAMFramebuffer store = new VRAMFramebuffer();
+        store.genFBOTexture(_handler.getLayout().getWidth(), _handler.getLayout().getHeight());
+        store.genFBO();
         drawShell(shadow, true);
-        //////////
 
         int res = (int) shell.getShadowRadius();
         float[] weights = new float[res];
@@ -1384,12 +1212,9 @@ public final class DrawEngine {
         for (int i = 0; i < res; i++)
             weights[i] /= sum;
 
-        // drawShadowPart(weights, res, fbo_texture, 1);
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-        drawShadowPart(weights, res, fbo_texture);
-
-        glDeleteFramebuffersEXT(fbo_handle);
-        glDeleteTextures(fbo_texture);
+        store.unbindFBO();
+        store.clearFBO();
+        drawShadowPart(weights, res, store.texture);
     }
 
     private void drawShadowPart(float[] weights, int res, int fbo_texture) {
@@ -1398,74 +1223,16 @@ public final class DrawEngine {
         float i_y0 = 1.0f;
         float i_x1 = 1.0f;
         float i_y1 = -1.0f;
-        // VBO
-        float[] vertex = new float[] {
-                // X Y Z //U V
-                i_x0, i_y0, 0.0f, 0.0f, 1.0f, // x0
-                i_x0, i_y1, 0.0f, 0.0f, 0.0f, // x1
-                i_x1, i_y1, 0.0f, 1.0f, 0.0f, // x2
-                i_x1, i_y0, 0.0f, 1.0f, 1.0f, // x3
-        };
-        FloatBuffer vertexData = BufferUtils.createFloatBuffer(vertex.length);
-        vertexData.put(vertex);
-        vertexData.rewind();
-
-        int[] ibo = new int[] { 0, 1, 2, // first triangle
-                2, 3, 0, // second triangle
-        };
-        IntBuffer iboData = BufferUtils.createIntBuffer(ibo.length);
-        iboData.put(ibo);
-        iboData.rewind();
-
-        int vertexbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
-
-        int elementbuffer = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboData, GL_DYNAMIC_DRAW);
-
-        // Position attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0);
-        glEnableVertexAttribArray(0);
-        // TexCoord attribute
-        glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * 4, (3 * 4));
-        glEnableVertexAttribArray(1);
-
-        glBindTexture(GL_TEXTURE_2D, fbo_texture);
-        // glActiveTexture(GL_TEXTURE0);
-
-        int location = glGetUniformLocation((int) _blur.getProgramID(), "tex");
-        if (location >= 0)
-            glUniform1i(location, 0);
-        int location_frame = glGetUniformLocation((int) _blur.getProgramID(), "frame");
-        if (location_frame >= 0)
-            glUniform2fv(location_frame,
-                    new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
-
-        // int location_direction = glGetUniformLocation((int) _blur.getProgramID(),
-        // "direction");
-        // if (location_direction >= 0)
-        // glUniform2fv(location_direction, new float[] { shell.getShadowRadius(),
-        // shell.getShadowRadius() });
-
-        int location_res = glGetUniformLocation((int) _blur.getProgramID(), "res");
-        if (location_res >= 0)
-            glUniform1i(location_res, res);
-
-        int location_weights = glGetUniformLocation((int) _blur.getProgramID(), "weights");
-        if (location_weights >= 0)
-            glUniform1fv(location_weights, weights);
-
-        // int location_isfirst = glGetUniformLocation((int) _blur.getProgramID(),
-        // "isFirst");
-        // if (location_isfirst >= 0)
-        // glUniform1i(location_isfirst, isFirst);
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
+        VRAMTexture store = new VRAMTexture();
+        store.genBuffers(i_x0, i_x1, i_y0, i_y1);
+        store.bind(fbo_texture);
+        store.sendUniformSample2D(_blur);
+        store.sendUniform1fv(_blur, "weights", 5, weights);
+        store.sendUniform2fv(_blur, "frame",
+                new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
+        store.sendUniform1f(_blur, "res", (res * 1f / 10));
+        store.draw();
+        store.clear();
     }
 
     float gauss(float x, float sigma) {
@@ -1485,76 +1252,24 @@ public final class DrawEngine {
         if (checkOutsideBorders((InterfaceBaseItem) text))
             _char.useShader();
 
-        int bb_h = textPrt.heightTexture;
-        int bb_w = textPrt.widthTexture;
-
+        int bb_h = textPrt.heightTexture, bb_w = textPrt.widthTexture;
         float i_x0 = ((float) textPrt.xTextureShift / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
         float i_y0 = ((float) textPrt.yTextureShift / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
         float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w) / (float) _handler.getLayout().getWidth() * 2.0f)
                 - 1.0f;
         float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h) / (float) _handler.getLayout().getHeight() * 2.0f
                 - 1.0f) * (-1.0f);
-
-        // VBO
-        float[] vertex = new float[] {
-                // X Y Z //U V
-                i_x0, i_y0, 0.0f, 0.0f, 0.0f, // x0
-                i_x0, i_y1, 0.0f, 0.0f, 1.0f, // x1
-                i_x1, i_y1, 0.0f, 1.0f, 1.0f, // x2
-                i_x1, i_y0, 0.0f, 1.0f, 0.0f, // x3
-        };
-
-        int[] ibo = new int[] { 0, 1, 2, // first triangle
-                2, 3, 0, // second triangle
-        };
-
-        int vertexbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, vertex, GL_DYNAMIC_DRAW);
-
-        int elementbuffer = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_DYNAMIC_DRAW);
-
-        // Position attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0);
-        glEnableVertexAttribArray(0);
-        // TexCoord attribute
-        glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * 4, (3 * 4));
-        glEnableVertexAttribArray(1);
-
-        // texture
-        int w = bb_w, h = bb_h;
-
-        int texture = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, texture);
-
-        GL42.glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
-        GL11.glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bb);
-
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        int location = glGetUniformLocation((int) _char.getProgramID(), "tex");
-        glUniform1i(location, 0);
-
         float[] argb = { (float) text.getForeground().getRed() / 255.0f,
                 (float) text.getForeground().getGreen() / 255.0f, (float) text.getForeground().getBlue() / 255.0f,
                 (float) text.getForeground().getAlpha() / 255.0f };
-        int location_rgb = glGetUniformLocation((int) _char.getProgramID(), "rgb");
-        glUniform4f(location_rgb, argb[0], argb[1], argb[2], argb[3]);
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        // Clear VBO and shader
-        glDeleteBuffers(vertexbuffer);
-        glDeleteBuffers(elementbuffer);
-        glDeleteTextures(texture);
+        VRAMTexture store = new VRAMTexture();
+        store.genBuffers(i_x0, i_x1, i_y0, i_y1, true);
+        store.genTexture(bb_w, bb_h, bb);
+        store.sendUniformSample2D(_char);
+        store.sendUniform4f(_char, "rgb", argb);
+        store.draw();
+        store.clear();
     }
 
     private void drawPoints(InterfacePoints item) {
@@ -1580,54 +1295,11 @@ public final class DrawEngine {
             }
             skew += fig.size() * 3;
         }
-        // long estimatedTime = (System.nanoTime() - startTime) / 1000000;
-        // System.out.println(estimatedTime);
 
-        int vertexbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        int length = result.length;
-
-        // FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
-        // vertexData.put(result);
-        // vertexData.rewind();
-
-        glBufferData(GL_ARRAY_BUFFER, result, GL_DYNAMIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
-
-        // Color
-        float[] argb = { (float) item.getPointColor().getRed() / 255.0f,
-                (float) item.getPointColor().getGreen() / 255.0f, (float) item.getPointColor().getBlue() / 255.0f,
-                (float) item.getPointColor().getAlpha() / 255.0f };
-
-        int colorbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-        length = result.length / 3 * 4;
-        FloatBuffer colorData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 4; i++) {
-            colorData.put(i * 4 + 0, argb[0]);
-            colorData.put(i * 4 + 1, argb[1]);
-            colorData.put(i * 4 + 2, argb[2]);
-            colorData.put(i * 4 + 3, argb[3]);
-        }
-        colorData.rewind();
-
-        glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(1);
-
-        checkOutsideBorders((InterfaceBaseItem) item);
-
-        // draw
-        glDrawArrays(GL_TRIANGLES, 0, result.length / 3);
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        // Clear VBO and shader
-        glDeleteBuffers(vertexbuffer);
-        glDeleteBuffers(colorbuffer);
-
+        VRAMVertex store = new VRAMVertex();
+        store.genBuffers(result, item.getPointColor());
+        store.draw(GL_TRIANGLES);
+        store.clear();
     }
 
     private void drawLines(InterfaceLine item) {
@@ -1635,70 +1307,25 @@ public final class DrawEngine {
             return;
 
         List<float[]> crd_array = GraphicsMathService.toGL(item.makeShape(), _handler.getLayout());
-
         if (crd_array == null)
             return;
         checkOutsideBorders((InterfaceBaseItem) item);
 
-        int vertexbuffer = glGenBuffers();
-        glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexbuffer);
-
-        int length = crd_array.size() * 3;
-        FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 3; i++) {
-            vertexData.put(i * 3 + 0, crd_array.get(i)[0]);
-            vertexData.put(i * 3 + 1, crd_array.get(i)[1]);
-            vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
-        }
-        vertexData.rewind();
-        glBufferData(GL15.GL_ARRAY_BUFFER, vertexData, GL15.GL_DYNAMIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-
-        // Color
-        float[] argb = { (float) item.getLineColor().getRed() / 255.0f, (float) item.getLineColor().getGreen() / 255.0f,
-                (float) item.getLineColor().getBlue() / 255.0f, (float) item.getLineColor().getAlpha() / 255.0f };
-        int colorbuffer = glGenBuffers();
-        glBindBuffer(GL15.GL_ARRAY_BUFFER, colorbuffer);
-        int c_length = crd_array.size() * 4;
-        FloatBuffer colorData = BufferUtils.createFloatBuffer(c_length);
-        for (int i = 0; i < c_length / 4; i++) {
-            colorData.put(i * 4 + 0, argb[0]);
-            colorData.put(i * 4 + 1, argb[1]);
-            colorData.put(i * 4 + 2, argb[2]);
-            colorData.put(i * 4 + 3, argb[3]);
-        }
-        colorData.rewind();
-
-        glBufferData(GL15.GL_ARRAY_BUFFER, colorData, GL15.GL_DYNAMIC_DRAW);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
-
-        // draw
-        GL15.glDrawArrays(GL15.GL_LINE_STRIP, 0, length / 3);
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        // Clear VBO and shader
-        glDeleteBuffers(vertexbuffer);
-        glDeleteBuffers(colorbuffer);
-
-        crd_array.clear();
+        VRAMVertex store = new VRAMVertex();
+        store.genBuffers(crd_array, item.getLineColor());
+        store.draw(GL_LINE_STRIP);
+        store.clear();
     }
 
     private void drawImage(ImageItem image) {
-        byte[] bitmap = image.getPixMapImage();
-
-        if (bitmap == null)
-            return;
-
-        ByteBuffer bb = BufferUtils.createByteBuffer(bitmap.length);
-        bb.put(bitmap);
-        bb.rewind();
         if (checkOutsideBorders((InterfaceBaseItem) image))
             _texture.useShader();
 
+        byte[] bitmap = image.getPixMapImage();
+        if (bitmap == null)
+            return;
+
+        int w = image.getImageWidth(), h = image.getImageHeight();
         float i_x0 = ((float) image.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
         float i_y0 = ((float) image.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
         float i_x1 = (((float) image.getX() + (float) image.getWidth()) / (float) _handler.getLayout().getWidth()
@@ -1706,78 +1333,12 @@ public final class DrawEngine {
         float i_y1 = (((float) image.getY() + (float) image.getHeight()) / (float) _handler.getLayout().getHeight()
                 * 2.0f - 1.0f) * (-1.0f);
 
-        // VBO
-        float[] vertex = new float[] {
-                // X Y Z //U V
-                i_x0, i_y0, 0.0f, 0.0f, 1.0f, // x0
-                i_x0, i_y1, 0.0f, 0.0f, 0.0f, // x1
-                i_x1, i_y1, 0.0f, 1.0f, 0.0f, // x2
-                i_x1, i_y0, 0.0f, 1.0f, 1.0f, // x3
-        };
-        FloatBuffer vertexData = BufferUtils.createFloatBuffer(vertex.length);
-        vertexData.put(vertex);
-        vertexData.rewind();
-
-        int[] ibo = new int[] { 0, 1, 2, // first triangle
-                2, 3, 0, // second triangle
-        };
-        IntBuffer iboData = BufferUtils.createIntBuffer(ibo.length);
-        iboData.put(ibo);
-        iboData.rewind();
-
-        int vertexbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
-
-        int elementbuffer = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboData, GL_DYNAMIC_DRAW);
-
-        // Position attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0);
-        glEnableVertexAttribArray(0);
-        // TexCoord attribute
-        glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * 4, (3 * 4));
-        glEnableVertexAttribArray(1);
-
-        // texture
-        int w = image.getImageWidth(), h = image.getImageHeight();
-
-        int texture = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, texture);
-
-        GL42.glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
-        GL11.glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bb);
-        GL30.glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 256);
-
-        // glActiveTexture(GL_TEXTURE0);
-
-        int location = glGetUniformLocation((int) _texture.getProgramID(), "tex");
-        if (location >= 0) {
-            try {
-                glUniform1i(location, 0);
-            } catch (Exception ex) {
-                System.out.println(
-                        ex.getMessage() + " " + image.getItemName() + " " + _handler.getLayout().getWindowName());
-                return;
-            }
-        }
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        // Clear VBO and shader
-        glDeleteBuffers(vertexbuffer);
-        glDeleteBuffers(elementbuffer);
-        glDeleteTextures(texture);
+        VRAMTexture store = new VRAMTexture();
+        store.genBuffers(i_x0, i_x1, i_y0, i_y1);
+        store.genTexture(w, h, bitmap);
+        store.sendUniformSample2D(_texture);
+        store.draw();
+        store.clear();
     }
 
     private void drawToolTip() {
@@ -1813,50 +1374,17 @@ public final class DrawEngine {
     }
 
     private void drawShadePillow() {
-
-        // Vertex
-        float[] vertex = new float[] {
-                // X Y Z
-                -1.0f, 1.0f, 0.0f, -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f,
-
-                1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, };
-        int vertexbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        int length = vertex.length;
-        FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
-        vertexData.put(vertex);
-        vertexData.rewind();
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
-
-        // Color
-        int colorbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-        float[] argb = { 0.0f, 0.0f, 0.0f, (float) 150 / 255.0f };
-
-        float[] color = new float[6 * 4];
-        for (int i = 0; i < color.length / 4; i++) {
-            color[i * 4 + 0] = argb[0];
-            color[i * 4 + 1] = argb[1];
-            color[i * 4 + 2] = argb[2];
-            color[i * 4 + 3] = argb[3];
-        }
-        FloatBuffer colorData = BufferUtils.createFloatBuffer(color.length);
-        colorData.put(color);
-        colorData.rewind();
-        glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(1);
-
-        // draw
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        // Clear VBO and shader
-        glDeleteBuffers(vertexbuffer);
-        glDeleteBuffers(colorbuffer);
+        // //Vertex
+        List<float[]> vertex = new LinkedList<float[]>();
+        vertex.add(new float[] { -1.0f, 1.0f, 0.0f });
+        vertex.add(new float[] { -1.0f, -1.0f, 0.0f });
+        vertex.add(new float[] { 1.0f, -1.0f, 0.0f });
+        vertex.add(new float[] { 1.0f, -1.0f, 0.0f });
+        vertex.add(new float[] { 1.0f, 1.0f, 0.0f });
+        vertex.add(new float[] { -1.0f, 1.0f, 0.0f });
+        VRAMVertex store = new VRAMVertex();
+        store.genBuffers(vertex, new Color(0, 0, 0, 150));
+        store.draw(GL_TRIANGLES);
+        store.clear();
     }
 }
