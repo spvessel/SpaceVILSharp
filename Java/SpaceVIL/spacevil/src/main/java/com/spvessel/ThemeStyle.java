@@ -71,6 +71,7 @@ public class ThemeStyle {
             defaultItemsStyle.put(TabView.class, Style.getTabViewStyle());
             defaultItemsStyle.put(TextArea.class, Style.getTextAreaStyle());
             defaultItemsStyle.put(TextBlock.class, Style.getTextBlockStyle());
+            // defaultItemsStyle.put(TextEncrypt.class, Style.getTextEncryptStyle());
             defaultItemsStyle.put(TextEdit.class, Style.getTextEditStyle());
             defaultItemsStyle.put(TitleBar.class, Style.getTitleBarStyle());
             defaultItemsStyle.put(ToolTip.class, Style.getToolTipStyle());

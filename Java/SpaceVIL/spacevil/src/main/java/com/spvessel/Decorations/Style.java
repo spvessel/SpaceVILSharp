@@ -327,7 +327,7 @@ public class Style {
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        style.borderRadius =  new CornerRadius(6);
+        style.borderRadius = new CornerRadius(6);
 
         // style.borderThickness = 2;
         // style.borderFill = new Color(255, 255, 255);
@@ -960,11 +960,18 @@ public class Style {
     }
 
     public static Style getPasswordLineStyle() {
-        Style style = getTextEditStyle();
+        Style style = new Style();
+        style.background = new Color(210, 210, 210);
+        style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.height = 30;
+        style.widthPolicy = SizePolicy.EXPAND;
+        style.heightPolicy = SizePolicy.FIXED;
+        style.padding = new Indents(5, 0, 5, 0);
+        style.spacing = new Spacing(5, 0);
 
-        ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 30);
-        style.addItemState(ItemStateType.HOVERED, hovered);
+        // ItemState hovered = new ItemState();
+        // hovered.background = new Color(255, 255, 255, 30);
+        // style.addItemState(ItemStateType.HOVERED, hovered);
 
         Style marker_style = getIndicatorStyle().getInnerStyle("marker");
         marker_style.background = new Color(130, 130, 130);
@@ -979,6 +986,20 @@ public class Style {
         toggled.background = new Color(60, 60, 60, 255);
         marker_style.addItemState(ItemStateType.TOGGLED, toggled);
         style.addInnerStyle("showmarker", marker_style);
+        style.addInnerStyle("textedit", getTextEncryptStyle());
+
+        return style;
+    }
+
+    private static Style getTextEncryptStyle() {
+        Style style = new Style();
+        style.background = new Color(0, 0, 0, 0);
+        style.foreground = new Color(25, 25, 25);
+        style.font = DefaultsService.getDefaultFont(16);
+        style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.textAlignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.widthPolicy = SizePolicy.EXPAND;
+        style.heightPolicy = SizePolicy.EXPAND;
 
         Style cursor_style = new Style();
         cursor_style.background = new Color(60, 60, 60);

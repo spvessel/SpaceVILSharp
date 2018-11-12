@@ -76,6 +76,7 @@ namespace SpaceVIL
                 DefaultItemsStyle.Add(typeof(SpaceVIL.RadioButton), Style.GetRadioButtonStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.PasswordLine), Style.GetPasswordLineStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TextEdit), Style.GetTextEditStyle());
+                // DefaultItemsStyle.Add(typeof(SpaceVIL.TextEncrypt), Style.GetTextEncryptStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TextBlock), Style.GetTextBlockStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TextArea), Style.GetTextAreaStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.PopUpMessage), Style.GetPopUpMessageStyle());

@@ -128,6 +128,9 @@ public class PasswordLine extends HorizontalStack {
         if (inner_style != null) {
             _show_pwd_btn.setStyle(inner_style);
         }
-        setSpacing(5, 0);
+        inner_style = style.getInnerStyle("textedit");
+        if (inner_style != null) {
+            _textEncrypt.setStyle(inner_style);
+        }
     }
 }

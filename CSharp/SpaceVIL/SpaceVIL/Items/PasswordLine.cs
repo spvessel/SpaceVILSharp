@@ -30,7 +30,7 @@ namespace SpaceVIL
         {
             _textEncrypt.ShowPassword(_show_pwd_btn.IsToggled());
         }
-        
+
         public override void SetFocused(bool value)
         {
             base.SetFocused(value);
@@ -53,7 +53,7 @@ namespace SpaceVIL
         {
             return _textEncrypt.GetFont();
         }
-        
+
         public String GetPassword()
         {
             return _textEncrypt.GetPassword();
@@ -125,8 +125,11 @@ namespace SpaceVIL
             {
                 _show_pwd_btn.SetStyle(inner_style);
             }
-
-            SetSpacing(5, 0);
+            inner_style = style.GetInnerStyle("textedit");
+            if (inner_style != null)
+            {
+                _textEncrypt.SetStyle(inner_style);
+            }
         }
     }
 }

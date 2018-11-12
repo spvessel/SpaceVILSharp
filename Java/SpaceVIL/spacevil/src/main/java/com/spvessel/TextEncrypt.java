@@ -60,8 +60,8 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         InsteadKeyMods = new LinkedList<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
                 KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
 
-        setStyle(DefaultsService.getDefaultStyle(PasswordLine.class));
-        _text_object.setTextAlignment(new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER)));
+        // setStyle(DefaultsService.getDefaultStyle(TextEncrypt.class));
+       // _text_object.setTextAlignment(new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER)));
     }
 
     private void onMousePressed(InterfaceItem sender, MouseArgs args) {
@@ -265,7 +265,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
     void setTextAlignment(List<ItemAlignment> alignment) {
         // Ignore all changes
-        // _text_object.setTextAlignment(alignment);
+        _text_object.setTextAlignment(alignment);
     }
 
     void setTextMargin(Indents margin) {
@@ -461,7 +461,6 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         super.setStyle(style);
         setForeground(style.foreground);
         setFont(style.font);
-
         setTextAlignment(style.textAlignment);
 
         Style inner_style = style.getInnerStyle("selection");

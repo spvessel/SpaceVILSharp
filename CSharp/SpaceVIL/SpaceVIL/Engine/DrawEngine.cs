@@ -30,7 +30,6 @@ namespace SpaceVIL
             if (HoveredItem != null)
                 HoveredItem.SetMouseHover(false);
             HoveredItem = null;
-
             HoveredItems.Clear();
         }
 
