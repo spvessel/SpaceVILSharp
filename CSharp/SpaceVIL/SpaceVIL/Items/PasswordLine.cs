@@ -119,9 +119,6 @@ namespace SpaceVIL
             if (style == null)
                 return;
             base.SetStyle(style);
-            SetForeground(style.Foreground);
-            SetFont(style.Font);
-            SetTextAlignment(style.TextAlignment);
 
             Style inner_style = style.GetInnerStyle("showmarker");
             if (inner_style != null)
