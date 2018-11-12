@@ -325,6 +325,8 @@ class Alphabet {
                     i++;
                 }
             }
+            leftArr = new float[2][height];
+            rightArr = new float[2][height];
         }
 
         private void makeLetterArrays(Shape shape) {
