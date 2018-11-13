@@ -9,7 +9,7 @@ in vec2 fragTexCoord;
 
 vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
 {
-	int rad = 10;
+	int rad = 5;
 	float uvx = uv.x * resolution.x;
 	float uvy = resolution.y - uv.y * resolution.y;
 	vec4 color = vec4(0.0);
