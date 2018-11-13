@@ -71,7 +71,7 @@ namespace SpaceVIL
             if (m_colors.Length == 1)
                 return m_colors[0];
 
-            float r = 0, g = 0, b = 0, a = 0.0f;
+            float r = 0, g = 0, b = 0, a = 255.0f;
             foreach (Color item in m_colors)
             {
                 if (item == null) continue;
@@ -87,8 +87,8 @@ namespace SpaceVIL
                     r = r * (1.0f - item.A / 255.0f) + item.R * (item.A / 255.0f);
                     g = g * (1.0f - item.A / 255.0f) + item.G * (item.A / 255.0f);
                     b = b * (1.0f - item.A / 255.0f) + item.B * (item.A / 255.0f);
-                    if (a < 255)
-                        a = a * (1.0f - item.A / 255.0f) + item.A * (item.A / 255.0f);
+                    // if (a < 255)
+                    //     a = a * (1.0f - item.A / 255.0f) + item.A * (item.A / 255.0f);
                 }
             }
             return Color.FromArgb((int)a, (int)r, (int)g, (int)b);

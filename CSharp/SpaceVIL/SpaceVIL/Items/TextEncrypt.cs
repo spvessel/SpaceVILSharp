@@ -53,8 +53,7 @@ namespace SpaceVIL
             InsteadKeyMods = new List<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl,
                 KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
 
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.PasswordLine)));
-            _text_object.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            //SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextEncrypt)));
         }
 
         private void OnMousePressed(object sender, MouseArgs args)
@@ -280,7 +279,7 @@ namespace SpaceVIL
         internal void SetTextAlignment(ItemAlignment alignment)
         {
             //Ignore all changes
-            //_text_object.SetTextAlignment(alignment);
+            _text_object.SetTextAlignment(alignment);
         }
         internal void SetTextMargin(Indents margin)
         {
@@ -453,7 +452,7 @@ namespace SpaceVIL
         //    _cursor_position = NearestPosToCursor(newPos);
         //}
 
-        private string CutText() //������ �� ����������, ������, �����������, ��� �����
+        private string CutText()
         {
             if (!_isEditable) return "";
 
@@ -482,7 +481,7 @@ namespace SpaceVIL
             }
         }
 
-        private string GetSelectedText() //������ �� ����������, ������, �����������, ��� �����
+        private string GetSelectedText() 
         {
             if (_selectFrom == -1)
                 _selectFrom = 0;

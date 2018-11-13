@@ -891,19 +891,20 @@ namespace SpaceVIL
         {
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
-            style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            style.Font = DefaultsService.GetDefaultFont(16);
-            // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
-            style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Height = 30;
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
+            style.Spacing = new Spacing(5, 0);
             style.Padding = new Indents(5, 0, 5, 0);
-            style.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(30, 255, 255, 255)
-            });
+            // style.AddItemState(ItemStateType.Hovered, new ItemState()
+            // {
+            //     Background = Color.FromArgb(30, 255, 255, 255)
+            // });
+            // style.AddItemState(ItemStateType.Focused, new ItemState()
+            // {
+            //     Background = Color.FromArgb(30, 255, 255, 255)
+            // });
 
             Style marker_style = GetIndicatorStyle().GetInnerStyle("marker");
             marker_style.Background = Color.FromArgb(255, 130, 130, 130);
@@ -917,10 +918,22 @@ namespace SpaceVIL
                 Background = Color.FromArgb(255, 60, 60, 60)
             });
             style.AddInnerStyle("showmarker", marker_style);
-            style.AddItemState(ItemStateType.Focused, new ItemState()
-            {
-                Background = Color.FromArgb(30, 255, 255, 255)
-            });
+            style.AddInnerStyle("textedit", GetTextEncryptStyle());
+            
+            return style;
+        }
+
+        private static Style GetTextEncryptStyle()
+        {
+            Style style = new Style();
+            style.Background = Color.FromArgb(0, 0, 0, 0);
+            style.Foreground = Color.FromArgb(255, 70, 70, 70);
+            style.Font = DefaultsService.GetDefaultFont(16);
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Expand;
+
             Style cursor_style = new Style();
             cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
             cursor_style.Width = 2;
