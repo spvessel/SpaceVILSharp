@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using SpaceVIL.Common;
 
 namespace SpaceVIL
 {
@@ -256,7 +257,8 @@ namespace SpaceVIL
                             int ry0 = currLet.minY;
                             int ry1 = ry0 + currLet.height - 1;
 
-                            bool b1 = false, b2 = false;
+                            bool b1 = false;
+                            // bool b2 = false;
                             for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
                             {
                                 //if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
@@ -268,26 +270,26 @@ namespace SpaceVIL
                             }
 
                             if (b1) x0++;
-                            else
-                            {
-                                for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
-                                {
-                                    //if (prevLet.alphas[prevLet.width - 2, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
-                                    if (prevLet.rightArr[0, i - ly0] > err && currLet.leftArr[0, i - ry0] > err)
-                                    {
-                                        b2 = true;
-                                        break;
-                                    }
-                                    //if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[1, i - ry0] > err)
-                                    if (prevLet.rightArr[1, i - ly0] > err && currLet.leftArr[1, i - ry0] > err)
-                                    {
-                                        b2 = true;
-                                        break;
-                                    }
-                                }
+                            // else
+                            // {
+                            //     for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
+                            //     {
+                            //         //if (prevLet.alphas[prevLet.width - 2, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
+                            //         if (prevLet.rightArr[0, i - ly0] > err && currLet.leftArr[0, i - ry0] > err)
+                            //         {
+                            //             b2 = true;
+                            //             break;
+                            //         }
+                            //         //if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[1, i - ry0] > err)
+                            //         if (prevLet.rightArr[1, i - ly0] > err && currLet.leftArr[1, i - ry0] > err)
+                            //         {
+                            //             b2 = true;
+                            //             break;
+                            //         }
+                            //     }
 
                                 // if (!b2) x0--;
-                            }
+                            // }
                         }
 
                         // x0++;

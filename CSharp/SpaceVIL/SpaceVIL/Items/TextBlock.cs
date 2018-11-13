@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SpaceVIL.Common;
+using SpaceVIL.Core;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
@@ -43,7 +46,7 @@ namespace SpaceVIL
             _cursor = new Rectangle();
             _selectedArea = new CustomSelector();
 
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextBlock)));
+            // SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextBlock)));
 
             EventMousePressed += OnMousePressed;
             EventMouseDrag += OnDragging;

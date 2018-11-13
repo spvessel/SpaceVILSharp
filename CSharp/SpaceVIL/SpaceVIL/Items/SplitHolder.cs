@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using SpaceVIL.Core;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {

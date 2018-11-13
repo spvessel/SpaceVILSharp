@@ -21,7 +21,7 @@ public class TextArea extends Prototype {
         return _v_scrollBarPolicy;
     }
 
-    public void setvScrollBarVisible(ScrollBarVisibility policy) {
+    public void setVScrollBarVisible(ScrollBarVisibility policy) {
         _v_scrollBarPolicy = policy;
 
         if (policy == ScrollBarVisibility.NEVER)
@@ -40,7 +40,7 @@ public class TextArea extends Prototype {
         return _h_scrollBarPolicy;
     }
 
-    public void sethScrollBarVisible(ScrollBarVisibility policy) {
+    public void setHScrollBarVisible(ScrollBarVisibility policy) {
         _h_scrollBarPolicy = policy;
 
         if (policy == ScrollBarVisibility.NEVER)
@@ -215,6 +215,10 @@ public class TextArea extends Prototype {
         inner_style = style.getInnerStyle("hscrollbar");
         if (inner_style != null) {
             hScrollBar.setStyle(inner_style);
+        }
+        inner_style = style.getInnerStyle("textedit");
+        if (inner_style != null) {
+            _area.setStyle(inner_style);
         }
     }
 

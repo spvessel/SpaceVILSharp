@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using SpaceVIL.Core;
+using SpaceVIL.Common;
 
-namespace SpaceVIL
+namespace SpaceVIL.Decorations
 {
     public class Style
     {
@@ -551,7 +553,7 @@ namespace SpaceVIL
             Style uparrow_style = new Style();
             uparrow_style.WidthPolicy = SizePolicy.Fixed;
             uparrow_style.HeightPolicy = SizePolicy.Fixed;
-            uparrow_style.Background = Color.FromArgb(50, 255, 255, 255);
+            uparrow_style.Background = Color.FromArgb(255, 100, 100, 100);
             uparrow_style.Width = 16;
             uparrow_style.Height = 16;
             uparrow_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
@@ -566,7 +568,7 @@ namespace SpaceVIL
             Style downarrow_style = new Style();
             downarrow_style.WidthPolicy = SizePolicy.Fixed;
             downarrow_style.HeightPolicy = SizePolicy.Fixed;
-            downarrow_style.Background = Color.FromArgb(50, 255, 255, 255);
+            downarrow_style.Background = Color.FromArgb(255, 100, 100, 100);
             downarrow_style.Width = 16;
             downarrow_style.Height = 16;
             downarrow_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
@@ -617,7 +619,7 @@ namespace SpaceVIL
             Style uparrow_style = new Style();
             uparrow_style.WidthPolicy = SizePolicy.Fixed;
             uparrow_style.HeightPolicy = SizePolicy.Fixed;
-            uparrow_style.Background = Color.FromArgb(50, 255, 255, 255);
+            uparrow_style.Background = Color.FromArgb(255, 100, 100, 100);
             uparrow_style.Width = 16;
             uparrow_style.Height = 16;
             uparrow_style.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
@@ -632,7 +634,7 @@ namespace SpaceVIL
             Style downarrow_style = new Style();
             downarrow_style.WidthPolicy = SizePolicy.Fixed;
             downarrow_style.HeightPolicy = SizePolicy.Fixed;
-            downarrow_style.Background = Color.FromArgb(50, 255, 255, 255);
+            downarrow_style.Background = Color.FromArgb(255, 100, 100, 100);
             downarrow_style.Width = 16;
             downarrow_style.Height = 16;
             downarrow_style.Alignment = ItemAlignment.Bottom | ItemAlignment.HCenter;
@@ -919,7 +921,7 @@ namespace SpaceVIL
             });
             style.AddInnerStyle("showmarker", marker_style);
             style.AddInnerStyle("textedit", GetTextEncryptStyle());
-            
+
             return style;
         }
 
@@ -996,7 +998,7 @@ namespace SpaceVIL
         public static Style GetTextBlockStyle()
         {
             Style style = new Style();
-            style.Background = Color.FromArgb(255, 210, 210, 210);
+            style.Background = Color.Transparent;
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
             style.Font = DefaultsService.GetDefaultFont(16);
             // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
@@ -1035,11 +1037,13 @@ namespace SpaceVIL
         public static Style GetTextAreaStyle()
         {
             Style style = new Style();
-
-            style.Background = Color.FromArgb(255, 70, 70, 70);
+            style.Background = Color.FromArgb(255, 210, 210, 210);
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Expand;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+
+            Style text_style = GetTextBlockStyle();
+            style.AddInnerStyle("textedit", text_style);
 
             Style vsb_style = GetVerticalScrollBarStyle();
             vsb_style.Alignment = ItemAlignment.Right | ItemAlignment.Top;
@@ -1170,7 +1174,7 @@ namespace SpaceVIL
             style.AddInnerStyle("minimizebutton", minimize_style);
 
             Style maximize_style = new Style();
-            maximize_style.Background = Color.FromArgb(0, 100, 100, 100);
+            // maximize_style.Background = Color.Transparent;
 
             maximize_style.BorderThickness = 2;
             maximize_style.BorderFill = Color.FromArgb(255, 100, 100, 100);
@@ -1180,8 +1184,9 @@ namespace SpaceVIL
             maximize_style.Alignment = ItemAlignment.Bottom | ItemAlignment.Right;
             maximize_style.Margin = new Indents(0, 0, 0, 9);
             maximize_style.Padding = new Indents(2, 2, 2, 2);
+
             ItemState hovered = new ItemState();
-            // hovered.Background = Color.FromArgb(0, 0, 0, 0);
+            // hovered.Background = Color.Transparent;
             hovered.Border.SetFill(Color.FromArgb(255, 84, 124, 94));
             maximize_style.AddItemState(ItemStateType.Hovered, hovered);
             maximize_style.Shape = GraphicsMathService.GetRectangle();

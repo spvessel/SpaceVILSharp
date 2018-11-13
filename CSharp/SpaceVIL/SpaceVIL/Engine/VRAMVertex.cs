@@ -1,3 +1,5 @@
+// #define LINUX 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +12,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Drawing;
 
-#if OS_LINUX
+#if LINUX
 using static GL.LGL.OpenLGL;
-#elif OS_WNDOWS
+#elif WINDOWS
 using static GL.WGL.OpenWGL;
 #else
 using static GL.WGL.OpenWGL;

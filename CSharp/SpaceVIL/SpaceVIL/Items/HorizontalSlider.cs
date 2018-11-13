@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using SpaceVIL.Core;
+using SpaceVIL.Common;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class HorizontalSlider : Prototype, IScrollable
+    public class HorizontalSlider : Prototype
     {
         static int count = 0;
 

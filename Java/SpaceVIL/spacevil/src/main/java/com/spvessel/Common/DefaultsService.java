@@ -1,7 +1,7 @@
 package com.spvessel.Common;
 
 import com.spvessel.Decorations.Style;
-import com.spvessel.ThemeStyle;
+import com.spvessel.Decorations.ThemeStyle;
 
 import java.awt.Font;
 

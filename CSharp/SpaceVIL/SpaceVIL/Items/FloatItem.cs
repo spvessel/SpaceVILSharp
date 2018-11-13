@@ -1,5 +1,7 @@
 using System;
 using System.Drawing;
+using SpaceVIL.Common;
+using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
@@ -37,7 +39,6 @@ namespace SpaceVIL
                 ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
         }
 
-        private ButtonCore _btn_close;
         public override void InitElements()
         {
             //fake tests

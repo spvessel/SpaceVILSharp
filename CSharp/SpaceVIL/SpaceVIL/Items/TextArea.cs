@@ -2,6 +2,9 @@ using System;
 using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
+using SpaceVIL.Core;
+using SpaceVIL.Common;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
@@ -10,10 +13,7 @@ namespace SpaceVIL
         static int count = 0;
         private Grid _grid = new Grid(2, 2);
         private TextBlock _area = new TextBlock();
-        public Prototype GetTextBlock()
-        {
-            return _area;
-        }
+
         public bool IsEditable
         {
             get
@@ -237,8 +237,17 @@ namespace SpaceVIL
             {
                 HScrollBar.SetStyle(inner_style);
             }
+            inner_style = style.GetInnerStyle("textedit");
+            if (inner_style != null)
+            {
+                _area.SetStyle(inner_style);
+            }
         }
+        // public override void SetInnerStyle(string element, Style style)
+        // {
+        //     Style inner_style = style.GetInnerStyle(element);
 
+        // }
         public void SetForeground(Color color)
         {
             _area.SetForeground(color);
@@ -272,7 +281,8 @@ namespace SpaceVIL
             SetForeground(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
         }
 
-        public Color GetForeground() {
+        public Color GetForeground()
+        {
             return _area.GetForeground();
         }
 
@@ -291,7 +301,8 @@ namespace SpaceVIL
             _area.SetTextMargin(margin);
         }
 
-        public Indents GetTextMargin() {
+        public Indents GetTextMargin()
+        {
             return _area.GetTextMargin();
         }
 
@@ -320,7 +331,8 @@ namespace SpaceVIL
             _area.SetFocused(value);
         }
 
-        public void cLearArea() {
+        public void cLearArea()
+        {
             _area.Clear();
         }
     }

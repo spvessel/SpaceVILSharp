@@ -49,7 +49,7 @@ class TextBlock extends Prototype
         _cursor = new Rectangle();
         _selectedArea = new CustomSelector();
 
-        setStyle(DefaultsService.getDefaultStyle(TextBlock.class));
+        // setStyle(DefaultsService.getDefaultStyle(TextBlock.class));
 
         eventMousePressed.add(this::onMousePressed);
         eventMouseDrag.add(this::onDragging);

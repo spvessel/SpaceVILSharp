@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Drawing;
+using SpaceVIL.Decorations;
+using SpaceVIL.Core;
 
-namespace SpaceVIL
+namespace SpaceVIL.Common
 {
     class LogService
     {

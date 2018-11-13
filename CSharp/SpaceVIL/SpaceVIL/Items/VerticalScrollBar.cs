@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using SpaceVIL.Common;
+using SpaceVIL.Core;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class VerticalScrollBar : VerticalStack, IScrollable
+    public class VerticalScrollBar : VerticalStack
     {
         private static int count = 0;
 
@@ -43,7 +46,6 @@ namespace SpaceVIL
             };
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.VerticalScrollBar)));
-
         }
 
         public override void InitElements()

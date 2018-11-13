@@ -208,6 +208,12 @@ public final class VisualItem extends BaseItem {
             ((BaseItem) item).updateGeometry();
     }
 
+    private void castAndRemove(InterfaceBaseItem item) {
+        if (item instanceof Prototype)
+            ((Prototype) item).getCore().removeItemFromListeners();
+        else
+            ((BaseItem) item).removeItemFromListeners();
+    }
     protected void addItem(InterfaceBaseItem item) {
         getHandler().engineLocker.lock();
         try {
@@ -301,9 +307,9 @@ public final class VisualItem extends BaseItem {
 
             // removing
             _content.remove(item);
-
-            ((BaseItem) item).removeItemFromListeners();
             ItemsLayoutBox.removeItem(getHandler(), item, type);
+
+            castAndRemove(item);
         } catch (Exception ex) {
             System.out.println(item.getItemName() + "\n" + ex.toString());
         } finally {

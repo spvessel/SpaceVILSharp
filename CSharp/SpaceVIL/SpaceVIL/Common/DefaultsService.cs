@@ -5,8 +5,10 @@ using System.Drawing.Text;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.IO;
+using SpaceVIL.Core;
+using SpaceVIL.Decorations;
 
-namespace SpaceVIL
+namespace SpaceVIL.Common
 {
     internal class DefaultFont
     {

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using SpaceVIL.Core;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
@@ -120,6 +122,10 @@ namespace SpaceVIL
         public void SetBorderRadius(CornerRadius radius)
         {
             _core.SetBorderRadius(radius);
+        }
+        public void SetBorderRadius(int radius)
+        {
+            _core.SetBorderRadius(new CornerRadius(radius));
         }
         public void SetBorderThickness(int thickness)
         {
@@ -314,6 +320,10 @@ namespace SpaceVIL
         {
             _core.SetStyle(style);
         }
+        // public virtual void SetInnerStyle(String element, Style style)
+        // {
+        //     _core.SetInnerStyle(element, style);
+        // }
         public virtual Style GetCoreStyle()
         {
             return _core.GetCoreStyle();

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
-    public class ScrollHandler : Prototype, IDraggable, IScrollable
+    public class ScrollHandler : Prototype, IDraggable
     {
         static int count = 0;
         public Orientation Orientation;
@@ -54,14 +55,14 @@ namespace SpaceVIL
                 SetY(_offset + GetParent().GetY());
         }
 
-        public void InvokeScrollUp(MouseArgs args)
-        {
-            (GetParent() as IScrollable)?.InvokeScrollUp(args);
-        }
+        // public void InvokeScrollUp(MouseArgs args)
+        // {
+        //     (GetParent() as IScrollable)?.InvokeScrollUp(args);
+        // }
 
-        public void InvokeScrollDown(MouseArgs args)
-        {
-            (GetParent() as IScrollable)?.InvokeScrollDown(args);
-        }
+        // public void InvokeScrollDown(MouseArgs args)
+        // {
+        //     (GetParent() as IScrollable)?.InvokeScrollDown(args);
+        // }
     }
 }

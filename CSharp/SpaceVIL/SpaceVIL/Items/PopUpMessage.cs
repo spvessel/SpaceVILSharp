@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Timers;
+using SpaceVIL.Common;
+using SpaceVIL.Core;
+using SpaceVIL.Decorations;
+
 namespace SpaceVIL
 {
     public class PopUpMessage : Prototype

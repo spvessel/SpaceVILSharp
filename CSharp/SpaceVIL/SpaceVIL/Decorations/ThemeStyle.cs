@@ -5,8 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using SpaceVIL.Decorations;
+using SpaceVIL.Core;
+using SpaceVIL.Common;
 
-namespace SpaceVIL
+namespace SpaceVIL.Decorations
 {
     public class ThemeStyle
     {
@@ -77,11 +80,11 @@ namespace SpaceVIL
                 DefaultItemsStyle.Add(typeof(SpaceVIL.PasswordLine), Style.GetPasswordLineStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TextEdit), Style.GetTextEditStyle());
                 // DefaultItemsStyle.Add(typeof(SpaceVIL.TextEncrypt), Style.GetTextEncryptStyle());
-                DefaultItemsStyle.Add(typeof(SpaceVIL.TextBlock), Style.GetTextBlockStyle());
+                // DefaultItemsStyle.Add(typeof(SpaceVIL.TextBlock), Style.GetTextBlockStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TextArea), Style.GetTextAreaStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.PopUpMessage), Style.GetPopUpMessageStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.ProgressBar), Style.GetProgressBarStyle());
-                DefaultItemsStyle.Add(typeof(SpaceVIL.ToolTip), Style.GetToolTipStyle());
+                // DefaultItemsStyle.Add(typeof(SpaceVIL.ToolTip), Style.GetToolTipStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TitleBar), Style.GetTitleBarStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.VerticalScrollBar), Style.GetVerticalScrollBarStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.VerticalSlider), Style.GetVerticalSliderStyle());

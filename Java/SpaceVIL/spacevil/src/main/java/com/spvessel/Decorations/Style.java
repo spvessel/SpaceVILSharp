@@ -621,7 +621,7 @@ public class Style {
         Style uparrow_style = getButtonCoreStyle();
         uparrow_style.widthPolicy = SizePolicy.FIXED;
         uparrow_style.heightPolicy = SizePolicy.FIXED;
-        uparrow_style.background = new Color(255, 255, 255, 50);
+        uparrow_style.background = new Color(100, 100, 100, 255);
         uparrow_style.width = 16;
         uparrow_style.height = 16;
         uparrow_style.alignment = new LinkedList<ItemAlignment>(
@@ -640,7 +640,7 @@ public class Style {
         Style downarrow_style = getButtonCoreStyle();
         downarrow_style.widthPolicy = SizePolicy.FIXED;
         downarrow_style.heightPolicy = SizePolicy.FIXED;
-        downarrow_style.background = new Color(255, 255, 255, 50);
+        downarrow_style.background = new Color(100, 100, 100, 255);
         downarrow_style.width = 16;
         downarrow_style.height = 16;
         downarrow_style.alignment = new LinkedList<ItemAlignment>(
@@ -691,7 +691,7 @@ public class Style {
         Style uparrow_style = getButtonCoreStyle();
         uparrow_style.widthPolicy = SizePolicy.FIXED;
         uparrow_style.heightPolicy = SizePolicy.FIXED;
-        uparrow_style.background = new Color(255, 255, 255, 50);
+        uparrow_style.background = new Color(100, 100, 100, 255);
         uparrow_style.width = 16;
         uparrow_style.height = 16;
         uparrow_style.alignment = new LinkedList<ItemAlignment>(
@@ -708,7 +708,7 @@ public class Style {
         Style downarrow_style = getButtonCoreStyle();
         downarrow_style.widthPolicy = SizePolicy.FIXED;
         downarrow_style.heightPolicy = SizePolicy.FIXED;
-        downarrow_style.background = new Color(255, 255, 255, 50);
+        downarrow_style.background = new Color(100, 100, 100, 255);;
         downarrow_style.width = 16;
         downarrow_style.height = 16;
         downarrow_style.alignment = new LinkedList<ItemAlignment>(
@@ -1062,7 +1062,7 @@ public class Style {
 
     public static Style getTextBlockStyle() {
         Style style = new Style();
-        style.background = new Color(210, 210, 210);
+        style.background = new Color(210, 210, 210, 0);
         style.foreground = new Color(25, 25, 25);
         style.font = DefaultsService.getDefaultFont(16);
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
@@ -1101,12 +1101,14 @@ public class Style {
 
     public static Style getTextAreaStyle() {
         Style style = new Style();
-
-        style.background = new Color(70, 70, 70);
+        style.background = new Color(210, 210, 210);
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
+        Style text_style = getTextBlockStyle();
+        style.addInnerStyle("textedit", text_style);
+        
         Style vsb_style = getVerticalScrollBarStyle();
         vsb_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
         style.addInnerStyle("vscrollbar", vsb_style);

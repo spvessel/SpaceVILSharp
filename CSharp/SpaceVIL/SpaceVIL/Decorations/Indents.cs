@@ -1,4 +1,4 @@
-namespace SpaceVIL
+namespace SpaceVIL.Decorations
 {
     public struct Indents
     {

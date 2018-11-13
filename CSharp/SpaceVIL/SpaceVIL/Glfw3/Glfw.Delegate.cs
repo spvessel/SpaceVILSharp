@@ -2,6 +2,7 @@ using SpaceVIL;
 namespace Glfw3
 {
     using System.Runtime.InteropServices;
+    using SpaceVIL.Core;
 
     public static partial class Glfw
     {
@@ -12,7 +13,7 @@ namespace Glfw3
         /// <param name="codepoint">The Unicode code point of the character.</param>
         /// <seealso cref="SetCharCallback(Window, CharFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void CharFunc([MarshalAs(UnmanagedType.Struct)] Window window, uint codepoint);
+        public delegate void CharFunc( Window window, uint codepoint);
 
         /// <summary>
         /// The function signature for Unicode character with modifiers callbacks. It is called for
@@ -24,7 +25,7 @@ namespace Glfw3
         /// down.</param>
         /// <seealso cref="SetCharModsCallback(Window, CharModsFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void CharModsFunc([MarshalAs(UnmanagedType.Struct)] Window window, uint codepoint, KeyMods mods);
+        public delegate void CharModsFunc( Window window, uint codepoint, KeyMods mods);
 
         /// <summary>
         /// The function signature for cursor enter/leave callbacks.
@@ -34,7 +35,7 @@ namespace Glfw3
         /// <c>false</c> if it left it.</param>
         /// <seealso cref="SetCursorEnterCallback(Window, CursorEnterFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void CursorEnterFunc([MarshalAs(UnmanagedType.Struct)] Window window, [MarshalAs(UnmanagedType.Bool)] bool entered);
+        public delegate void CursorEnterFunc( Window window, [MarshalAs(UnmanagedType.Bool)] bool entered);
 
         /// <summary>
         /// The function signature for cursor position callbacks.
@@ -46,7 +47,7 @@ namespace Glfw3
         /// area.</param>
         /// <seealso cref="SetCursorPosCallback(Window, CursorPosFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void CursorPosFunc([MarshalAs(UnmanagedType.Struct)] Window window, double xpos, double ypos);
+        public delegate void CursorPosFunc( Window window, double xpos, double ypos);
 
         /// <summary>
         /// 
@@ -56,7 +57,7 @@ namespace Glfw3
         /// <param name="paths"></param>
         /// <seealso cref="SetDropCallback(Window, DropFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void DropFunc([MarshalAs(UnmanagedType.Struct)] Window window, int count, [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr, SizeParamIndex = 1)] string[] paths);
+        public delegate void DropFunc( Window window, int count, [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr, SizeParamIndex = 1)] string[] paths);
 
         /// <summary>
         /// The function signature for error callbacks.
@@ -75,7 +76,7 @@ namespace Glfw3
         /// <param name="height">The new height, in pixels, of the framebuffer.</param>
         /// <seealso cref="SetFramebufferSizeCallback(Window, FramebufferSizeFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void FramebufferSizeFunc([MarshalAs(UnmanagedType.Struct)] Window window, int width, int height);
+        public delegate void FramebufferSizeFunc( Window window, int width, int height);
 
         /// <summary>
         /// The function signature for keyboard key callbacks.
@@ -88,7 +89,7 @@ namespace Glfw3
         /// down.</param>
         /// <seealso cref="SetKeyCallback(Window, KeyFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void KeyFunc([MarshalAs(UnmanagedType.Struct)] Window window, KeyCode key, int scancode, InputState state, KeyMods mods);
+        public delegate void KeyFunc( Window window, KeyCode key, int scancode, InputState state, KeyMods mods);
 
         /// <summary>
         /// The function signature for joystick configuration callbacks.
@@ -106,7 +107,7 @@ namespace Glfw3
         /// <param name="evt">One of <see cref="ConnectionEvent"/>.</param>
         /// <seealso cref="SetMonitorCallback(MonitorFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void MonitorFunc([MarshalAs(UnmanagedType.Struct)] Monitor monitor, ConnectionEvent evt);
+        public delegate void MonitorFunc( Monitor monitor, ConnectionEvent evt);
 
         /// <summary>
         /// The function signature for mouse button callbacks.
@@ -119,7 +120,7 @@ namespace Glfw3
         /// down.</param>
         /// <seealso cref="SetMouseButtonCallback(Window, MouseButtonFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void MouseButtonFunc([MarshalAs(UnmanagedType.Struct)] Window window, MouseButton button, InputState state, KeyMods mods);
+        public delegate void MouseButtonFunc( Window window, MouseButton button, InputState state, KeyMods mods);
 
         /// <summary>
         /// The function signature for scroll callbacks.
@@ -129,7 +130,7 @@ namespace Glfw3
         /// <param name="yoffset">The scroll offset along the y-axis.</param>
         /// <seealso cref="SetScrollCallback(Window, CursorPosFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void ScrollFunc([MarshalAs(UnmanagedType.Struct)] Window window, double xoffset, double yoffset);
+        public delegate void ScrollFunc( Window window, double xoffset, double yoffset);
 
         /// <summary>
         /// The function signature for window close callbacks.
@@ -137,7 +138,7 @@ namespace Glfw3
         /// <param name="window">The window that the user attempted to close.</param>
         /// <seealso cref="SetWindowCloseCallback(Window, WindowCloseFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void WindowCloseFunc([MarshalAs(UnmanagedType.Struct)] Window window);
+        public delegate void WindowCloseFunc( Window window);
 
         /// <summary>
         /// The function signature for window focus/defocus callbacks.
@@ -147,7 +148,7 @@ namespace Glfw3
         /// if it lost it.</param>
         /// <seealso cref="SetWindowFocusCallback(Window, WindowFocusFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void WindowFocusFunc([MarshalAs(UnmanagedType.Struct)] Window window, [MarshalAs(UnmanagedType.Bool)] bool focused);
+        public delegate void WindowFocusFunc( Window window, [MarshalAs(UnmanagedType.Bool)] bool focused);
 
         /// <summary>
         /// The function signature for window iconify/restore callbacks.
@@ -157,7 +158,7 @@ namespace Glfw3
         /// restored.</param>
         /// <seealso cref="SetWindowIconifyCallback(Window, WindowIconifyFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void WindowIconifyFunc([MarshalAs(UnmanagedType.Struct)] Window window, [MarshalAs(UnmanagedType.Bool)] bool focused);
+        public delegate void WindowIconifyFunc( Window window, [MarshalAs(UnmanagedType.Bool)] bool focused);
 
         /// <summary>
         /// The function signature for window position callbacks.
@@ -169,7 +170,7 @@ namespace Glfw3
         /// of the client area of the window.</param>
         /// <seealso cref="SetWindowPosCallback(Window, WindowPosFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void WindowPosFunc([MarshalAs(UnmanagedType.Struct)] Window window, int xpos, int ypos);
+        public delegate void WindowPosFunc( Window window, int xpos, int ypos);
 
         /// <summary>
         /// The function signature for window content refresh callbacks.
@@ -177,7 +178,7 @@ namespace Glfw3
         /// <param name="window">The window whose content needs to be refreshed.</param>
         /// <seealso cref="SetWindowRefreshCallback(Window, WindowRefreshFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void WindowRefreshFunc([MarshalAs(UnmanagedType.Struct)] Window window);
+        public delegate void WindowRefreshFunc( Window window);
 
         /// <summary>
         /// The function signature for window resize callbacks.
@@ -187,6 +188,6 @@ namespace Glfw3
         /// <param name="height">The new height, in screen coordinates, of the window.</param>
         /// <seealso cref="SetWindowSizeCallback(Window, WindowSizeFunc)"/>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void WindowSizeFunc([MarshalAs(UnmanagedType.Struct)] Window window, int width, int height);
+        public delegate void WindowSizeFunc( Window window, int width, int height);
     }
 }
