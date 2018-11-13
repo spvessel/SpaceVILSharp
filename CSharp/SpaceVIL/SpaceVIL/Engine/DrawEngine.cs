@@ -1184,10 +1184,11 @@ namespace SpaceVIL
 
             store.UnbindFBO();
             store.ClearFBO();
-            DrawShadowPart(weights, res, store.Texture);
+            DrawShadowPart(weights, res, store.Texture, new float[2] { shell.GetX() + shell.GetShadowPos().GetX(), shell.GetY() + shell.GetShadowPos().GetY() },
+                new float[2] { shell.GetWidth(), shell.GetHeight() });
         }
 
-        private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture)
+        private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture, float[] xy, float[] wh)
         {
             _blur.UseShader();
             float i_x0 = -1.0f;
@@ -1199,11 +1200,16 @@ namespace SpaceVIL
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
             store.Bind(fbo_texture);
             store.SendUniformSample2D(_blur);
-            store.SendUniform1fv(_blur, "weights", 5, weights);
+            store.SendUniform1fv(_blur, "weights", 11, weights);
             store.SendUniform2fv(_blur, "frame", new float[2] { _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight() });
             store.SendUniform1f(_blur, "res", (res * 1f / 10));
+            store.SendUniform2fv(_blur, "xy", xy);
+            store.SendUniform2fv(_blur, "wh", wh);
             store.Draw();
             store.Clear();
+
+            //Console.WriteLine(xy[0] + " xy " + xy[1]);
+            //Console.WriteLine(wh[0] + " wh " + wh[1]);
         }
 
         float Gauss(float x, float sigma)

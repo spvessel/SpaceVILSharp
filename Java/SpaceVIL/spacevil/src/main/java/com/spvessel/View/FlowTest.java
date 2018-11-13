@@ -198,6 +198,7 @@ public class FlowTest extends ActiveWindow {
         block.setHeight(200);
         block.setX(100);
         block.setY(100);
+        block.setShadow(10, 5, 5, Color.BLACK);
         return block;
     }
 

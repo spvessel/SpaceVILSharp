@@ -1201,23 +1201,23 @@ public final class DrawEngine {
         drawShell(shadow, true);
 
         int res = (int) shell.getShadowRadius();
-        float[] weights = new float[res];
+        float[] weights = new float[11];
         float sum, sigma2 = 4.0f;
         weights[0] = gauss(0, sigma2);
         sum = weights[0];
-        for (int i = 1; i < res; i++) {
+        for (int i = 1; i < 11; i++) {
             weights[i] = gauss(i, sigma2);
             sum += 2 * weights[i];
         }
-        for (int i = 0; i < res; i++)
+        for (int i = 0; i < 11; i++)
             weights[i] /= sum;
 
         store.unbindFBO();
         store.clearFBO();
-        drawShadowPart(weights, res, store.texture);
+        drawShadowPart(weights, res, store.texture, new float[]{shell.getX() + shell.getShadowPos().getX(), shell.getY() + shell.getShadowPos().getY()}, new float[] {shell.getWidth(), shell.getHeight()});
     }
 
-    private void drawShadowPart(float[] weights, int res, int fbo_texture) {
+    private void drawShadowPart(float[] weights, int res, int fbo_texture, float[] xy, float[] wh) {
         _blur.useShader();
         float i_x0 = -1.0f;
         float i_y0 = 1.0f;
@@ -1227,10 +1227,12 @@ public final class DrawEngine {
         store.genBuffers(i_x0, i_x1, i_y0, i_y1);
         store.bind(fbo_texture);
         store.sendUniformSample2D(_blur);
-        store.sendUniform1fv(_blur, "weights", 5, weights);
+        store.sendUniform1fv(_blur, "weights", 11, weights);
         store.sendUniform2fv(_blur, "frame",
                 new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
         store.sendUniform1f(_blur, "res", (res * 1f / 10));
+        store.sendUniform2fv(_blur, "xy", xy);
+        store.sendUniform2fv(_blur, "wh", wh);
         store.draw();
         store.clear();
     }
