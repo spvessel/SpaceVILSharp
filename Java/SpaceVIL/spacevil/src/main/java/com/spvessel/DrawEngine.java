@@ -1214,7 +1214,64 @@ public final class DrawEngine {
 
         store.unbindFBO();
         store.clearFBO();
+        //res = 10;
+        //drawShadowPartTmp(weights, res, new int[]{shell.getX() + shell.getShadowPos().getX(), shell.getY() + shell.getShadowPos().getY()}, new int[] {shell.getWidth(), shell.getHeight()});
         drawShadowPart(weights, res, store.texture, new float[]{shell.getX() + shell.getShadowPos().getX(), shell.getY() + shell.getShadowPos().getY()}, new float[] {shell.getWidth(), shell.getHeight()});
+    }
+
+    private void drawShadowPartTmp(float[] weights, int res, int[] xy, int[] wh) {
+        float x0 = xy[0];
+        float x1 = xy[0] + wh[0];
+        float y0 = xy[1];
+        float y1 = xy[1] + wh[1];
+        float[][] image = new float[wh[0] + 2 * res][wh[1] + 2 * res];
+        for (int i = res; i < wh[0] + res; i++) {
+            for (int j = res; j < wh[1] + res; j++) {
+                image[i][j] = 1f;
+            }
+        }
+
+        int h = image.length;
+        int w = image[0].length;
+        float[][] outarr = new float[h][w];
+        double tmp, ctmp;
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                tmp = image[i][j] * weights[0];
+                for (int k = -res; k <= res; k++) {
+                    if (i + k < 0 || i + k >= h)
+                        ctmp = image[i][j];
+                    else ctmp = image[i + k][j];
+
+                    tmp += (weights[Math.abs(k)]) * ctmp;
+
+                }
+                outarr[i][j] = (float)tmp;
+            }
+        }
+        shapePart(outarr, res, weights);
+    }
+
+    private float[][] shapePart(float[][] image, int res, float[] weights) {
+        int h = image.length;
+        int w = image[0].length;
+        float [][] outarr = new float[h][w];
+        double tmp, ctmp;
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                tmp = 0;
+                for (int l = -res; l <= res; l++) {
+                    if (j + l < 0 || j + l >= w)
+                        ctmp = image[i][j];
+                    else ctmp = image[i][j + l];
+
+                    tmp += (weights[Math.abs(l)]) * ctmp;
+                }
+
+                outarr[i][j] = (float)tmp;
+            }
+        }
+        return outarr;
     }
 
     private void drawShadowPart(float[] weights, int res, int fbo_texture, float[] xy, float[] wh) {
