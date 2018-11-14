@@ -46,9 +46,9 @@ public interface InterfaceBaseItem
 
     void setShadowDrop(boolean value);
 
-    void setShadowRadius(float radius);
+    void setShadowRadius(int radius);
 
-    float getShadowRadius();
+    int getShadowRadius();
 
     Color getShadowColor();
 
@@ -56,7 +56,7 @@ public interface InterfaceBaseItem
 
     Position getShadowPos();
 
-    void setShadow(float radius, int x, int y, Color color);
+    void setShadow(int radius, int x, int y, Color color);
 
     int[] getConfines();
 }

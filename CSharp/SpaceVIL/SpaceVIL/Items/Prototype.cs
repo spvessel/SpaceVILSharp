@@ -336,11 +336,11 @@ namespace SpaceVIL
         {
             _core.SetShadowDrop(value);
         }
-        public void SetShadowRadius(float radius)
+        public void SetShadowRadius(int radius)
         {
             _core.SetShadowRadius(radius);
         }
-        public float GetShadowRadius()
+        public int GetShadowRadius()
         {
             return _core.GetShadowRadius();
         }
@@ -356,7 +356,7 @@ namespace SpaceVIL
         {
             return _core.GetShadowPos();
         }
-        public void SetShadow(float radius, int x, int y, Color color)
+        public void SetShadow(int radius, int x, int y, Color color)
         {
             _core.SetShadow(radius, x, y, color);
         }

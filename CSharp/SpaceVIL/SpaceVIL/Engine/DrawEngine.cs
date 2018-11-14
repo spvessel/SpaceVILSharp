@@ -307,6 +307,10 @@ namespace SpaceVIL
             _tooltip.InitTimer(false);
             _handler.GetLayout().SetWidth(width);
             _handler.GetLayout().SetHeight(height);
+            _fbo.BindFBO();
+            _fbo.ClearTexture();
+            _fbo.GenFBOTexture(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
+            _fbo.UnbindFBO();
         }
 
         public void SetWindowSize(int w, int h)
@@ -836,6 +840,8 @@ namespace SpaceVIL
         // internal float _interval = 1.0f / 60.0f;//1000 / 60;
         // internal int _interval = 11;//1000 / 90;
         // internal int _interval = 08;//1000 / 120;
+        
+        VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
         public void Run()
         {
@@ -843,17 +849,21 @@ namespace SpaceVIL
             glBindVertexArray(_handler.GVAO[0]);
             Focus(_handler.GetWindowId(), true);
 
+            _fbo.GenFBO();
+            _fbo.GenFBOTexture(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
+            _fbo.UnbindFBO();
+
             while (!_handler.IsClosing())
             {
+                Glfw.WaitEventsTimeout(_interval);
                 // Glfw.PollEvents();
                 // Glfw.WaitEvents();
-                glClearColor(
-                    (float)_handler.GetLayout().GetBackground().R / 255.0f,
-                    (float)_handler.GetLayout().GetBackground().G / 255.0f,
-                    (float)_handler.GetLayout().GetBackground().B / 255.0f, 1.0f);
+                // glClearColor(
+                //     (float)_handler.GetLayout().GetBackground().R / 255.0f,
+                //     (float)_handler.GetLayout().GetBackground().G / 255.0f,
+                //     (float)_handler.GetLayout().GetBackground().B / 255.0f, 1.0f);
 
-                Glfw.WaitEventsTimeout(_interval);
-
+                glClearColor(0, 0, 0, 0);
                 _primitive.UseShader();
                 Update();
                 _handler.Swap();
@@ -864,6 +874,8 @@ namespace SpaceVIL
             _char.DeleteShader();
             _fxaa.DeleteShader();
             _blur.DeleteShader();
+
+            _fbo.ClearFBO();
 
             glDeleteVertexArrays(1, _handler.GVAO);
 
@@ -1170,13 +1182,11 @@ namespace SpaceVIL
             shadow.SetHandler(shell.GetHandler());
             shadow.SetTriangles(shell.GetTriangles());
 
-            VRAMFramebuffer store = new VRAMFramebuffer();
-            store.GenFBOTexture(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
-            store.GenFBO();
-
+            _fbo.BindFBO();
+            glClear(GL_COLOR_BUFFER_BIT);
             DrawShell(shadow, true);
 
-            int res = (int)shell.GetShadowRadius();
+            int res = shell.GetShadowRadius();
             float[] weights = new float[11];
             float sum, sigma2 = 4.0f;
             weights[0] = Gauss(0, sigma2);
@@ -1189,12 +1199,13 @@ namespace SpaceVIL
             for (int i = 0; i < 11; i++)
                 weights[i] /= sum;
 
-            store.UnbindFBO();
-            store.ClearFBO();
-            DrawShadowPart(weights, res, store.Texture);
+            _fbo.UnbindFBO();
+            DrawShadowPart(weights, res, _fbo.Texture,
+            new float[] { shell.GetX() + shell.GetShadowPos().GetX(), shell.GetY() + shell.GetShadowPos().GetY() },
+                new float[] { shell.GetWidth(), shell.GetHeight() });
         }
 
-        private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture)
+        private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture, float[] xy, float[] wh)
         {
             _blur.UseShader();
             float i_x0 = -1.0f;
@@ -1209,6 +1220,8 @@ namespace SpaceVIL
             store.SendUniform1fv(_blur, "weights", 5, weights);
             store.SendUniform2fv(_blur, "frame", new float[2] { _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight() });
             store.SendUniform1f(_blur, "res", (res * 1f / 10));
+            store.SendUniform2fv(_blur, "xy", xy);
+            store.SendUniform2fv(_blur, "wh", wh);
             store.Draw();
             store.Clear();
         }

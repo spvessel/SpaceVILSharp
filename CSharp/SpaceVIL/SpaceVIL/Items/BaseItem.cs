@@ -710,12 +710,12 @@ namespace SpaceVIL
         {
             _is_shadow_drop = value;
         }
-        private float _shadow_radius = 1.0f;
-        public void SetShadowRadius(float radius)
+        private int _shadow_radius = 1;
+        public void SetShadowRadius(int radius)
         {
             _shadow_radius = radius;
         }
-        public float GetShadowRadius()
+        public int GetShadowRadius()
         {
             return _shadow_radius;
         }
@@ -733,7 +733,7 @@ namespace SpaceVIL
         {
             return _shadow_pos;
         }
-        public void SetShadow(float radius, int x, int y, Color color)
+        public void SetShadow(int radius, int x, int y, Color color)
         {
             _is_shadow_drop = true;
             _shadow_radius = radius;

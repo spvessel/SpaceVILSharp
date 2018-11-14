@@ -345,11 +345,11 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.setShadowDrop(value);
     }
 
-    public void setShadowRadius(float radius) {
+    public void setShadowRadius(int radius) {
         _core.setShadowRadius(radius);
     }
 
-    public float getShadowRadius() {
+    public int getShadowRadius() {
         return _core.getShadowRadius();
     }
 
@@ -365,7 +365,7 @@ abstract public class Prototype implements InterfaceBaseItem {
         return _core.getShadowPos();
     }
 
-    public void setShadow(float radius, int x, int y, Color color) {
+    public void setShadow(int radius, int x, int y, Color color) {
         _core.setShadow(radius, x, y, color);
     }
 

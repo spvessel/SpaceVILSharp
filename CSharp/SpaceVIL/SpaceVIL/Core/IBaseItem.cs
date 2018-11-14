@@ -25,12 +25,12 @@ namespace SpaceVIL.Core
         void SetVisible(bool value);
         bool IsShadowDrop();
         void SetShadowDrop(bool value);
-        void SetShadowRadius(float radius);
-        float GetShadowRadius();
+        void SetShadowRadius(int radius);
+        int GetShadowRadius();
         Color GetShadowColor();
         void SetShadowColor(Color color);
         Position GetShadowPos();
-        void SetShadow(float radius, int x, int y, Color color);
+        void SetShadow(int radius, int x, int y, Color color);
         int[] GetConfines();
     }
 }

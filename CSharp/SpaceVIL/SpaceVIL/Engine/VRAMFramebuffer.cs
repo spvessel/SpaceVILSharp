@@ -37,9 +37,6 @@ namespace SpaceVIL
         {
             glGenFramebuffers(1, FBO);
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, FBO[0]);
-            glFramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, Texture[0], 0);
-            uint[] draw_bufs = new uint[] { GL_COLOR_ATTACHMENT0_EXT };
-            glDrawBuffers(1, draw_bufs);
         }
         internal void GenFBOTexture(int w, int h)
         {
@@ -51,6 +48,10 @@ namespace SpaceVIL
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glBindTexture(GL_TEXTURE_2D, 0);
+
+            glFramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, Texture[0], 0);
+            // uint[] draw_bufs = new uint[] { GL_COLOR_ATTACHMENT0_EXT };
+            // glDrawBuffers(1, draw_bufs);
         }
         internal void BindFBO()
         {

@@ -25,7 +25,6 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
-
 public final class DrawEngine {
 
     protected void resetItems() {
@@ -336,6 +335,11 @@ public final class DrawEngine {
         _tooltip.initTimer(false);
         _handler.getLayout().setWidth(width);
         _handler.getLayout().setHeight(height);
+
+        _fbo.bindFBO();
+        _fbo.clearTexture();
+        _fbo.genFBOTexture(_handler.getLayout().getWidth(), _handler.getLayout().getHeight());
+        _fbo.unbindFBO();
     }
 
     protected void setWindowSize(int w, int h) {
@@ -843,19 +847,26 @@ public final class DrawEngine {
 
     // private int gVAO = 0;
 
+    VRAMFramebuffer _fbo = new VRAMFramebuffer();
+
     protected void run() {
         _handler.gVAO = glGenVertexArrays();
         glBindVertexArray(_handler.gVAO);
         focus(_handler.getWindowId(), true);
 
+        _fbo.genFBO();
+        _fbo.genFBOTexture(_handler.getLayout().getWidth(), _handler.getLayout().getHeight());
+        _fbo.unbindFBO();
+        
         while (!_handler.isClosing()) {
             glfwWaitEventsTimeout(_interval);
             // glfwWaitEvents();
             // glfwPollEvents();
 
-            glClearColor((float) _handler.getLayout().getBackground().getRed() / 255.0f,
-                    (float) _handler.getLayout().getBackground().getGreen() / 255.0f,
-                    (float) _handler.getLayout().getBackground().getBlue() / 255.0f, 1.0f);
+            // glClearColor((float) _handler.getLayout().getBackground().getRed() / 255.0f,
+            // (float) _handler.getLayout().getBackground().getGreen() / 255.0f,
+            // (float) _handler.getLayout().getBackground().getBlue() / 255.0f, 1.0f);
+            glClearColor(0, 0, 0, 0);
             _primitive.useShader();
             update();
             _handler.swap();
@@ -867,6 +878,8 @@ public final class DrawEngine {
         _char.deleteShader();
         _fxaa.deleteShader();
         _blur.deleteShader();
+
+        _fbo.clearFBO();
 
         glDeleteVertexArrays(_handler.gVAO);
 
@@ -1195,12 +1208,11 @@ public final class DrawEngine {
         shadow.setHandler(shell.getHandler());
         shadow.setTriangles(shell.getTriangles());
 
-        VRAMFramebuffer store = new VRAMFramebuffer();
-        store.genFBOTexture(_handler.getLayout().getWidth(), _handler.getLayout().getHeight());
-        store.genFBO();
+        _fbo.bindFBO();
+        glClear(GL_COLOR_BUFFER_BIT);
         drawShell(shadow, true);
 
-        int res = (int) shell.getShadowRadius();
+        int res = shell.getShadowRadius();
         float[] weights = new float[11];
         float sum, sigma2 = 4.0f;
         weights[0] = gauss(0, sigma2);
@@ -1212,9 +1224,10 @@ public final class DrawEngine {
         for (int i = 0; i < 11; i++)
             weights[i] /= sum;
 
-        store.unbindFBO();
-        store.clearFBO();
-        drawShadowPart(weights, res, store.texture, new float[]{shell.getX() + shell.getShadowPos().getX(), shell.getY() + shell.getShadowPos().getY()}, new float[] {shell.getWidth(), shell.getHeight()});
+        _fbo.unbindFBO();
+        drawShadowPart(weights, res, _fbo.texture,
+                new float[] { shell.getX() + shell.getShadowPos().getX(), shell.getY() + shell.getShadowPos().getY() },
+                new float[] { shell.getWidth(), shell.getHeight() });
     }
 
     private void drawShadowPart(float[] weights, int res, int fbo_texture, float[] xy, float[] wh) {

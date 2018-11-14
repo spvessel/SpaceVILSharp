@@ -16,9 +16,9 @@ vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
 	vec4 tmp = vec4(0.0);
 
 	if ((uvx >= xy.x - rad && uvx <= xy.x + wh.x + rad &&
-		uvy >= xy.y - rad && uvy <= xy.y + wh.y + rad) &&
-		(uvx < xy.x + rad || uvx > xy.x + wh.x - rad ||
-		uvy < xy.y + rad || uvy > xy.y + wh.y - rad))
+		uvy >= xy.y - rad && uvy <= xy.y + wh.y + rad))// &&
+		//(uvx < xy.x + rad || uvx > xy.x + wh.x - rad ||
+		//uvy < xy.y + rad || uvy > xy.y + wh.y - rad))
 	{
 
 		for (int i = -rad; i <= rad; i++) {
