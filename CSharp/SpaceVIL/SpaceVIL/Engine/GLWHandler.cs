@@ -1,6 +1,10 @@
+#define OS_LINUX 
+
 using System;
 using System.Text;
 using Glfw3;
+using SpaceVIL.Common;
+using SpaceVIL.Core;
 
 namespace SpaceVIL
 {

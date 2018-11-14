@@ -64,7 +64,7 @@ final class ToolTip extends Prototype {
         count++;
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ToolTip"));
-        setStyle(DefaultsService.getDefaultStyle(ToolTip.class));
+        setStyle(Style.getToolTipStyle());
     }
 
     @Override

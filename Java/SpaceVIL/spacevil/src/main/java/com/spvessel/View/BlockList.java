@@ -1,11 +1,15 @@
 package com.spvessel.View;
 
 import com.spvessel.*;
+import com.spvessel.Core.InterfaceBaseItem;
+import com.spvessel.Decorations.CornerRadius;
 import com.spvessel.Decorations.CustomFigure;
+import com.spvessel.Decorations.Indents;
 import com.spvessel.Decorations.ItemState;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.ItemStateType;
 import com.spvessel.Flags.MouseButton;
+import com.spvessel.Flags.ScrollBarVisibility;
 import com.spvessel.Flags.SizePolicy;
 
 import java.awt.Color;
@@ -24,7 +28,8 @@ public class BlockList extends ResizableItem {
         setPassEvents(false);
         setMinSize(200, 100);
         setItemName("BlockList_" + count);
-        setPadding(6, 6, 6, 6);
+        setPadding(4, 4, 4, 4);
+        setBorderRadius(4);
         count++;
 
         _palette = new ButtonCore();
@@ -40,6 +45,7 @@ public class BlockList extends ResizableItem {
         _palette.setSize(20, 15);
         _palette.setBackground(255, 128, 128);
         _palette.setBorderRadius(0);
+        _palette.setBorderRadius(3);
         CustomShape arrow = new CustomShape();
         arrow.setTriangles(GraphicsMathService.getTriangle(30, 30, 0, 0, 180));
         arrow.setBackground(50, 50, 50);
@@ -49,12 +55,25 @@ public class BlockList extends ResizableItem {
 
         _lock.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
         _lock.setSize(15, 15);
-        _lock.setBorderRadius(0);
+        _lock.setBorderRadius(8);
         _lock.eventToggle.add((sender, args) -> {
             isLocked = !isLocked;
             _text.setEditable(!_text.isEditable());
         });
 
+        VerticalScrollBar vs = _text.vScrollBar;
+        vs.slider.handler.removeAllItemStates();
+        vs.setArrowsVisible(false);
+        vs.setBackground(151, 203, 255);
+        vs.setPadding(0, 2, 0, 2);
+        vs.slider.track.setBackground(new Color(0, 0, 0, 0));
+        vs.slider.handler.setBorderRadius(3);
+        vs.slider.handler.setBackground(80, 80, 80, 255);
+        vs.slider.handler.setMargin(new Indents(5, 0, 5, 0));
+
+        _text.setPadding(-1, -1, -1, -1);
+        _text.setBorderRadius(new CornerRadius(3));
+        _text.setHScrollBarVisible(ScrollBarVisibility.NEVER);
         _text.setHeight(25);
         _text.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
         _text.setBackground(151, 203, 255);
@@ -90,25 +109,37 @@ public class BlockList extends ResizableItem {
         MenuItem red = new MenuItem("Red");
         red.setForeground(210, 210, 210);
         red.addItemState(ItemStateType.HOVERED, hovered);
-        red.eventMouseClick.add((sender, args) -> _text.setBackground(255, 196, 196));
+        red.eventMouseClick.add((sender, args) -> {
+            _text.setBackground(255, 196, 196);
+            _text.vScrollBar.setBackground(_text.getBackground());
+        });
         MenuItem green = new MenuItem("Green");
         green.setForeground(210, 210, 210);
         green.addItemState(ItemStateType.HOVERED, hovered);
-        green.eventMouseClick.add((sender, args) -> _text.setBackground(138, 255, 180));
+        green.eventMouseClick.add((sender, args) -> {
+            _text.setBackground(138, 255, 180);
+            _text.vScrollBar.setBackground(_text.getBackground());
+        });
         MenuItem blue = new MenuItem("Blue");
         blue.setForeground(210, 210, 210);
         blue.addItemState(ItemStateType.HOVERED, hovered);
-        blue.eventMouseClick.add((sender, args) -> _text.setBackground(151, 203, 255));
+        blue.eventMouseClick.add((sender, args) -> {
+            _text.setBackground(151, 203, 255);
+            _text.vScrollBar.setBackground(_text.getBackground());
+        });
         MenuItem yellow = new MenuItem("Yellow");
         yellow.setForeground(210, 210, 210);
         yellow.addItemState(ItemStateType.HOVERED, hovered);
-        yellow.eventMouseClick.add((sender, args) -> _text.setBackground(234, 232, 162));
+        yellow.eventMouseClick.add((sender, args) -> {
+            _text.setBackground(234, 232, 162);
+            _text.vScrollBar.setBackground(_text.getBackground());
+        });
         _palette_menu.addItems(red, green, blue, yellow);
         _palette.eventMouseClick.add((sender, args) -> _palette_menu.show(sender, args));
         _palette_menu.activeButton = MouseButton.BUTTON_LEFT;
     }
 
     public void Dispose() {
-        getParent().removeItem(this);
+        getParent().removeItem((InterfaceBaseItem) this);
     }
 }

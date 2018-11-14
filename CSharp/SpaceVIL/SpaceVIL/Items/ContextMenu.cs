@@ -1,6 +1,9 @@
 using System;
 using System.Drawing;
 using System.Collections.Generic;
+using SpaceVIL.Core;
+using SpaceVIL.Common;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {

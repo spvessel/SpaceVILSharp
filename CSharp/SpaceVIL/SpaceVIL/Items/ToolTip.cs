@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Timers;
+using SpaceVIL.Core;
+using SpaceVIL.Common;
+using SpaceVIL.Decorations;
+
 namespace SpaceVIL
 {
     public class ToolTip : Prototype, IToolTip
@@ -29,8 +33,8 @@ namespace SpaceVIL
             _text_object = new TextLine();
             SetItemName("ToolTip");
 
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ToolTip)));
-            // SetStyle(Style.GetToolTipStyle());
+            // SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ToolTip)));
+            SetStyle(Style.GetToolTipStyle());
         }
         public void SetTextAlignment(ItemAlignment alignment)
         {

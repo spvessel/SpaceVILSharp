@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using SpaceVIL.Core;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
@@ -93,6 +95,14 @@ namespace SpaceVIL
                 prototype.GetCore().UpdateGeometry();
             else
                 (item as BaseItem).UpdateGeometry();
+        }
+        private void CastAndRemove(IBaseItem item)
+        {
+            Prototype prototype = item as Prototype;
+                if (prototype != null)
+                    prototype.GetCore().RemoveItemFromListeners();
+                else
+                    (item as BaseItem).RemoveItemFromListeners();
         }
         public virtual void AddItem(IBaseItem item)
         {
@@ -198,14 +208,10 @@ namespace SpaceVIL
 
                 //removing
                 _content.Remove(item);
-
-                Prototype prototype = item as Prototype;
-                if (prototype != null)
-                    prototype.GetCore().RemoveItemFromListeners();
-                else
-                    (item as BaseItem).RemoveItemFromListeners();
-
                 ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
+
+                CastAndRemove(item);
+
             }
             catch (Exception ex)
             {
@@ -705,6 +711,10 @@ namespace SpaceVIL
 
         //style
         internal bool _is_style_Set = false;
+        public virtual void SetInnerStyle(String element, Style style)
+        {
+
+        }
         public override void SetStyle(Style style)
         {
             if (style == null)

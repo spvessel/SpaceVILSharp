@@ -22,7 +22,7 @@ public final class GraphicsMathService {
         if (colors.length == 1)
             return colors[0];
 
-        float r = 0, g = 0, b = 0, a = 255; //255.0f;
+        float r = 0, g = 0, b = 0, a = 0.0f; //255.0f;
 
         for (Color item : colors) {
             if (item == null) continue;
@@ -37,8 +37,8 @@ public final class GraphicsMathService {
                 r = r * (1.0f - item.getAlpha() / 255.0f) + item.getRed() * (item.getAlpha() / 255.0f);
                 g = g * (1.0f - item.getAlpha() / 255.0f) + item.getGreen() * (item.getAlpha() / 255.0f);
                 b = b * (1.0f - item.getAlpha() / 255.0f) + item.getBlue() * (item.getAlpha() / 255.0f);
-                // if (a < 255)
-                //     a = a * (1.0f - item.getAlpha() / 255.0f) + item.getAlpha() * (item.getAlpha() / 255.0f);
+                if (a < 255)
+                    a = a * (1.0f - item.getAlpha() / 255.0f) + item.getAlpha() * (item.getAlpha() / 255.0f);
             }
         }
         return new Color((int) r, (int) g, (int) b, (int) a);

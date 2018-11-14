@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SpaceVIL
+namespace SpaceVIL.Decorations
 {
     public class CustomFigure
     {

@@ -1,5 +1,7 @@
 using System;
 using System.Drawing;
+using SpaceVIL.Common;
+using SpaceVIL.Core;
 
 namespace SpaceVIL
 {

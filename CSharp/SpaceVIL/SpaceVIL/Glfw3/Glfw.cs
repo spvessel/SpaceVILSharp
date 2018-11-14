@@ -1,3 +1,4 @@
+// #define LINUX 
 
 namespace Glfw3
 {
@@ -11,9 +12,9 @@ namespace Glfw3
     /// </summary>
     public static partial class Glfw
     {
-        #if OS_LINUX
+        #if LINUX
                 const string kLibrary = "libglfw.so"; //lunux
-        #elif OS_WNDOWS
+        #elif WINDOWS
                 const string kLibrary = "glfw3.dll"; //windows
         #else
                 const string kLibrary = "glfw3.dll"; //windows

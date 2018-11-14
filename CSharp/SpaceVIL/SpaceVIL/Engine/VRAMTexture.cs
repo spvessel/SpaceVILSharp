@@ -1,3 +1,5 @@
+// #define LINUX 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +12,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Drawing;
 
-#if OS_LINUX
+#if LINUX
 using static GL.LGL.OpenLGL;
-#elif OS_WNDOWS
+#elif WINDOWS
 using static GL.WGL.OpenWGL;
 #else
 using static GL.WGL.OpenWGL;
@@ -117,7 +119,7 @@ namespace SpaceVIL
                 return true;
             }
             else
-                Console.WriteLine("Uniform not found: <tex>");
+                Console.WriteLine("Uniform not found: <tex> " + shader.GetShaderName());
             return false;
         }
 
@@ -130,7 +132,7 @@ namespace SpaceVIL
                 return true;
             }
             else
-                Console.WriteLine("Uniform not found: <" + name + ">");
+                Console.WriteLine("Uniform not found: <" + name + "> " + shader.GetShaderName());
             return false;
         }
         internal bool SendUniform1fv(Shader shader, string name, int count, float[] array)
@@ -142,7 +144,7 @@ namespace SpaceVIL
                 return true;
             }
             else
-                Console.WriteLine("Uniform not found: <" + name + ">");
+                Console.WriteLine("Uniform not found: <" + name + "> " + shader.GetShaderName());
             return false;
         }
         internal bool SendUniform2fv(Shader shader, string name, float[] array)
@@ -154,7 +156,7 @@ namespace SpaceVIL
                 return true;
             }
             else
-                Console.WriteLine("Uniform not found: <" + name + ">");
+                Console.WriteLine("Uniform not found: <" + name + "> " + shader.GetShaderName());
             return false;
         }
         internal bool SendUniform1f(Shader shader, string name, float array)
@@ -166,7 +168,7 @@ namespace SpaceVIL
                 return true;
             }
             else
-                Console.WriteLine("Uniform not found: <" + name + ">");
+                Console.WriteLine("Uniform not found: <" + name + "> " + shader.GetShaderName());
             return false;
         }
 

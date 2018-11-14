@@ -26,6 +26,7 @@ public class VisualContact extends Prototype {
         addItemState(ItemStateType.HOVERED, hover);
         setPadding(10, 0, 5, 0);
         setMargin(1, 1, 1, 1);
+        setShadow(10, 3, 3, new Color(0, 0, 0, 160));
         _count++;
     }
 

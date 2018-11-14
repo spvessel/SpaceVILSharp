@@ -1,11 +1,13 @@
+// #define LINUX 
+
 using System;
 using System.Text;
 using System.IO;
 using Glfw3;
 
-#if OS_LINUX
+#if LINUX
 using static GL.LGL.OpenLGL;
-#elif OS_WNDOWS
+#elif WINDOWS
 using static GL.WGL.OpenWGL;
 #else
 using static GL.WGL.OpenWGL;
@@ -87,11 +89,17 @@ namespace SpaceVIL
             }
         }
 
-        internal Shader()
+        private String _name;
+        internal String GetShaderName()
         {
+            return _name;
+        }
+        internal Shader(String name)
+        {
+            _name = name;
             InitDefaults();
         }
-        internal Shader(String vertex_code, String fragmend_code)
+        internal Shader(String name, String vertex_code, String fragmend_code)
         {
             _code_vertex = vertex_code;
             _code_fragment = fragmend_code;
@@ -100,7 +108,7 @@ namespace SpaceVIL
             _code_geometry = String.Empty;
             _code_compute = String.Empty;
         }
-        internal Shader(Stream vertex_code, Stream fragmend_code)
+        internal Shader(String name, Stream vertex_code, Stream fragmend_code)
         {
             _code_vertex = ReadSource(vertex_code);
             _code_fragment = ReadSource(fragmend_code);

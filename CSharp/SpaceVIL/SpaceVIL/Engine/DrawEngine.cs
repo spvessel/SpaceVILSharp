@@ -1,3 +1,5 @@
+// #define LINUX 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +11,13 @@ using Glfw3;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Drawing;
+using SpaceVIL.Core;
+using Pointer = SpaceVIL.Core.Pointer;
+using SpaceVIL.Common;
 
-#if OS_LINUX
+#if LINUX
 using static GL.LGL.OpenLGL;
-#elif OS_WNDOWS
+#elif WINDOWS
 using static GL.WGL.OpenWGL;
 #else
 using static GL.WGL.OpenWGL;
@@ -185,35 +190,35 @@ namespace SpaceVIL
             //glEnable(GL_DEPTH_TEST);
             //glEnable(GL_STENCIL_TEST);
             ////////////////////////////////////////////////
-            _primitive = new Shader(
+            _primitive = new Shader("_primitive",
                 Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fill.glsl"),
                 Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fill.glsl"));
             _primitive.Compile();
             if (_primitive.GetProgramID() == 0)
                 Console.WriteLine("Could not create primitive shaders");
             ///////////////////////////////////////////////
-            _texture = new Shader(
+            _texture = new Shader("_texture",
                 Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_texture.glsl"),
                 Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_texture.glsl"));
             _texture.Compile();
             if (_texture.GetProgramID() == 0)
                 Console.WriteLine("Could not create textured shaders");
             ///////////////////////////////////////////////
-            _char = new Shader(
+            _char = new Shader("_char",
             Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_char.glsl"),
             Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_char.glsl"));
             _char.Compile();
             if (_char.GetProgramID() == 0)
                 Console.WriteLine("Could not create char shaders");
             ///////////////////////////////////////////////
-            _fxaa = new Shader(
+            _fxaa = new Shader("_fxaa",
             Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fxaa.glsl"),
             Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fxaa.glsl"));
             _fxaa.Compile();
             if (_fxaa.GetProgramID() == 0)
                 Console.WriteLine("Could not create fxaa shaders");
             ///////////////////////////////////////////////
-            _blur = new Shader(
+            _blur = new Shader("_blur",
             Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_blur.glsl"),
             Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_blur.glsl"));
             _blur.Compile();
@@ -302,6 +307,10 @@ namespace SpaceVIL
             _tooltip.InitTimer(false);
             _handler.GetLayout().SetWidth(width);
             _handler.GetLayout().SetHeight(height);
+            _fbo.BindFBO();
+            _fbo.ClearTexture();
+            _fbo.GenFBOTexture(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
+            _fbo.UnbindFBO();
         }
 
         public void SetWindowSize(int w, int h)
@@ -831,6 +840,8 @@ namespace SpaceVIL
         // internal float _interval = 1.0f / 60.0f;//1000 / 60;
         // internal int _interval = 11;//1000 / 90;
         // internal int _interval = 08;//1000 / 120;
+        
+        VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
         public void Run()
         {
@@ -838,17 +849,21 @@ namespace SpaceVIL
             glBindVertexArray(_handler.GVAO[0]);
             Focus(_handler.GetWindowId(), true);
 
+            _fbo.GenFBO();
+            _fbo.GenFBOTexture(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
+            _fbo.UnbindFBO();
+
             while (!_handler.IsClosing())
             {
+                Glfw.WaitEventsTimeout(_interval);
                 // Glfw.PollEvents();
                 // Glfw.WaitEvents();
-                glClearColor(
-                    (float)_handler.GetLayout().GetBackground().R / 255.0f,
-                    (float)_handler.GetLayout().GetBackground().G / 255.0f,
-                    (float)_handler.GetLayout().GetBackground().B / 255.0f, 1.0f);
+                // glClearColor(
+                //     (float)_handler.GetLayout().GetBackground().R / 255.0f,
+                //     (float)_handler.GetLayout().GetBackground().G / 255.0f,
+                //     (float)_handler.GetLayout().GetBackground().B / 255.0f, 1.0f);
 
-                Glfw.WaitEventsTimeout(_interval);
-
+                glClearColor(0, 0, 0, 0);
                 _primitive.UseShader();
                 Update();
                 _handler.Swap();
@@ -859,6 +874,8 @@ namespace SpaceVIL
             _char.DeleteShader();
             _fxaa.DeleteShader();
             _blur.DeleteShader();
+
+            _fbo.ClearFBO();
 
             glDeleteVertexArrays(1, _handler.GVAO);
 
@@ -892,6 +909,9 @@ namespace SpaceVIL
 
         private void SetStencilMask(List<float[]> crd_array)
         {
+            if (crd_array == null)
+                return;
+                
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
 
@@ -1162,13 +1182,11 @@ namespace SpaceVIL
             shadow.SetHandler(shell.GetHandler());
             shadow.SetTriangles(shell.GetTriangles());
 
-            VRAMFramebuffer store = new VRAMFramebuffer();
-            store.GenFBOTexture(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
-            store.GenFBO();
-
+            _fbo.BindFBO();
+            glClear(GL_COLOR_BUFFER_BIT);
             DrawShell(shadow, true);
 
-            int res = (int)shell.GetShadowRadius();
+            int res = shell.GetShadowRadius();
             float[] weights = new float[11];
             float sum, sigma2 = 4.0f;
             weights[0] = Gauss(0, sigma2);
@@ -1181,10 +1199,10 @@ namespace SpaceVIL
             for (int i = 0; i < 11; i++)
                 weights[i] /= sum;
 
-            store.UnbindFBO();
-            store.ClearFBO();
-            DrawShadowPart(weights, res, store.Texture, new float[2] { shell.GetX() + shell.GetShadowPos().GetX(), shell.GetY() + shell.GetShadowPos().GetY() },
-                new float[2] { shell.GetWidth(), shell.GetHeight() });
+            _fbo.UnbindFBO();
+            DrawShadowPart(weights, res, _fbo.Texture,
+            new float[] { shell.GetX() + shell.GetShadowPos().GetX(), shell.GetY() + shell.GetShadowPos().GetY() },
+                new float[] { shell.GetWidth(), shell.GetHeight() });
         }
 
         private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture, float[] xy, float[] wh)
@@ -1199,16 +1217,13 @@ namespace SpaceVIL
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
             store.Bind(fbo_texture);
             store.SendUniformSample2D(_blur);
-            store.SendUniform1fv(_blur, "weights", 11, weights);
+            store.SendUniform1fv(_blur, "weights", 5, weights);
             store.SendUniform2fv(_blur, "frame", new float[2] { _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight() });
             store.SendUniform1f(_blur, "res", (res * 1f / 10));
             store.SendUniform2fv(_blur, "xy", xy);
             store.SendUniform2fv(_blur, "wh", wh);
             store.Draw();
             store.Clear();
-
-            //Console.WriteLine(xy[0] + " xy " + xy[1]);
-            //Console.WriteLine(wh[0] + " wh " + wh[1]);
         }
 
         float Gauss(float x, float sigma)

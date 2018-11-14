@@ -1,4 +1,4 @@
-﻿#version 330
+#version 330
 uniform sampler2D tex;
 uniform vec2 frame;
 uniform float res;
@@ -9,16 +9,16 @@ in vec2 fragTexCoord;
 
 vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
 {
-	int rad = 10;
+	int rad = 5;
 	float uvx = uv.x * resolution.x;
 	float uvy = resolution.y - uv.y * resolution.y;
 	vec4 color = vec4(0.0);
 	vec4 tmp = vec4(0.0);
 
 	if ((uvx >= xy.x - rad && uvx <= xy.x + wh.x + rad &&
-		uvy >= xy.y - rad && uvy <= xy.y + wh.y + rad) &&
-		(uvx < xy.x + rad || uvx > xy.x + wh.x - rad ||
-		uvy < xy.y + rad || uvy > xy.y + wh.y - rad))
+		uvy >= xy.y - rad && uvy <= xy.y + wh.y + rad))// &&
+		//(uvx < xy.x + rad || uvx > xy.x + wh.x - rad ||
+		//uvy < xy.y + rad || uvy > xy.y + wh.y - rad))
 	{
 
 		for (int i = -rad; i <= rad; i++) {

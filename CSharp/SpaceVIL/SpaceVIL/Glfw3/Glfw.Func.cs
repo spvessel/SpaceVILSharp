@@ -4,6 +4,8 @@ namespace Glfw3
     using System.Runtime.InteropServices;
     using System.Security;
     using SpaceVIL;
+    using SpaceVIL.Core;
+
     public static partial class Glfw
     {
         /// <summary>
@@ -140,7 +142,6 @@ namespace Glfw3
         /// </remarks>
         /// <seealso cref="GetMonitors"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwGetPrimaryMonitor"), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.Struct)]
         public static extern Monitor GetPrimaryMonitor();
 
         /// <summary>
@@ -465,7 +466,6 @@ namespace Glfw3
                );
 
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.Struct)]
         static extern Window glfwCreateWindow(int width, int height, IntPtr title, IntPtr monitor, IntPtr share);
 
         /// <summary>
@@ -478,7 +478,7 @@ namespace Glfw3
         /// <seealso cref="CreateWindow(int, int, string)"/>
         /// <seealso cref="CreateWindow(int, int, string, Monitor, Window)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwDestroyWindow"), SuppressUnmanagedCodeSecurity]
-        public static extern void DestroyWindow([MarshalAs(UnmanagedType.Struct)] Window window);
+        public static extern void DestroyWindow(Window window);
 
         /// <summary>
         /// This function returns the value of the close flag of the specified window.
@@ -487,7 +487,7 @@ namespace Glfw3
         /// <returns>The value of the close flag.</returns>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwWindowShouldClose"), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool WindowShouldClose([MarshalAs(UnmanagedType.Struct)] Window window);
+        public static extern bool WindowShouldClose(Window window);
 
         /// <summary>
         /// This function sets the value of the close flag of the specified window. This can be used
@@ -497,7 +497,7 @@ namespace Glfw3
         /// <param name="window">The window whose flag to change.</param>
         /// <param name="value">The new value.</param>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetWindowShouldClose"), SuppressUnmanagedCodeSecurity]
-        public static extern void SetWindowShouldClose([MarshalAs(UnmanagedType.Struct)] Window window, [MarshalAs(UnmanagedType.Bool)] bool value);
+        public static extern void SetWindowShouldClose(Window window, [MarshalAs(UnmanagedType.Bool)] bool value);
 
         /// <summary>
         /// This function sets the window title, encoded as UTF-8, of the specified window.
@@ -618,10 +618,10 @@ namespace Glfw3
         /// <param name="ypos">The y-coordinate of the upper-left corner of the client area.</param>
         /// <seealso cref="GetWindowPos(Window, out int, out int)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetWindowPos"), SuppressUnmanagedCodeSecurity]
-        public static extern void SetWindowPos([MarshalAs(UnmanagedType.Struct)] Window window, int xpos, int ypos);
-        
+        public static extern void SetWindowPos(Window window, int xpos, int ypos);
+
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetWindowOpacity"), SuppressUnmanagedCodeSecurity]
-        public static extern void SetWindowOpacity([MarshalAs(UnmanagedType.Struct)] Window window, float opacity);
+        public static extern void SetWindowOpacity(Window window, float opacity);
 
         /// <summary>
         /// This function retrieves the size, in screen coordinates, of the client area of the
@@ -667,7 +667,7 @@ namespace Glfw3
         /// </remarks>
         /// <seealso cref="SetWindowAspectRatio(Window, int, int)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetWindowSizeLimits"), SuppressUnmanagedCodeSecurity]
-        public static extern void SetWindowSizeLimits([MarshalAs(UnmanagedType.Struct)] Window window, int minwidth, int minheight, int maxwidth, int maxheight);
+        public static extern void SetWindowSizeLimits(Window window, int minwidth, int minheight, int maxwidth, int maxheight);
 
         /// <summary>
         /// <para>This function sets the required aspect ratio of the client area of the specified
@@ -691,7 +691,7 @@ namespace Glfw3
         /// </remarks>
         /// <seealso cref="SetWindowSizeLimits(Window, int, int, int, int)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetWindowAspectRatio"), SuppressUnmanagedCodeSecurity]
-        public static extern void SetWindowAspectRatio([MarshalAs(UnmanagedType.Struct)] Window window, int numer, int denom);
+        public static extern void SetWindowAspectRatio(Window window, int numer, int denom);
 
         /// <summary>
         /// <para>This function sets the size, in screen coordinates, of the client area of the
@@ -713,7 +713,7 @@ namespace Glfw3
         /// <seealso cref="GetWindowSize(Window, out int, out int)"/>
         /// <seealso cref="SetWindowMonitor(Window, Monitor, int, int, int, int, int)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetWindowSize"), SuppressUnmanagedCodeSecurity]
-        public static extern void SetWindowSize([MarshalAs(UnmanagedType.Struct)] Window window, int width, int height);
+        public static extern void SetWindowSize(Window window, int width, int height);
 
         /// <summary>
         /// This function retrieves the size, in pixels, of the framebuffer of the specified window.
@@ -772,7 +772,7 @@ namespace Glfw3
         /// <seealso cref="RestoreWindow(Window)"/>
         /// <seealso cref="MaximizeWindow(Window)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwIconifyWindow"), SuppressUnmanagedCodeSecurity]
-        public static extern void IconifyWindow([MarshalAs(UnmanagedType.Struct)] Window window);
+        public static extern void IconifyWindow(Window window);
 
         /// <summary>
         /// <para>This function restores the specified window if it was previously iconified
@@ -785,7 +785,7 @@ namespace Glfw3
         /// <seealso cref="IconifyWindow(Window)"/>
         /// <seealso cref="MaximizeWindow(Window)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwRestoreWindow"), SuppressUnmanagedCodeSecurity]
-        public static extern void RestoreWindow([MarshalAs(UnmanagedType.Struct)] Window window);
+        public static extern void RestoreWindow(Window window);
 
         /// <summary>
         /// <para>This function maximizes the specified window if it was previously not maximized.
@@ -797,7 +797,7 @@ namespace Glfw3
         /// <seealso cref="IconifyWindow(Window)"/>
         /// <seealso cref="RestoreWindow(Window)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwMaximizeWindow"), SuppressUnmanagedCodeSecurity]
-        public static extern void MaximizeWindow([MarshalAs(UnmanagedType.Struct)] Window window);
+        public static extern void MaximizeWindow(Window window);
 
         /// <summary>
         /// This function makes the specified window visible if it was previously hidden. If the
@@ -806,7 +806,7 @@ namespace Glfw3
         /// <param name="window">The window to make visible.</param>
         /// <seealso cref="HideWindow(Window)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwShowWindow"), SuppressUnmanagedCodeSecurity]
-        public static extern void ShowWindow([MarshalAs(UnmanagedType.Struct)] Window window);
+        public static extern void ShowWindow(Window window);
 
         /// <summary>
         /// This function hides the specified window if it was previously visible. If the window is
@@ -815,7 +815,7 @@ namespace Glfw3
         /// <param name="window">The window to hide.</param>
         /// <seealso cref="ShowWindow(Window)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwHideWindow"), SuppressUnmanagedCodeSecurity]
-        public static extern void HideWindow([MarshalAs(UnmanagedType.Struct)] Window window);
+        public static extern void HideWindow(Window window);
 
         /// <summary>
         /// <para>This function brings the specified window to front and sets input focus. The
@@ -828,7 +828,7 @@ namespace Glfw3
         /// </summary>
         /// <param name="window">The window to give input focus.</param>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwFocusWindow"), SuppressUnmanagedCodeSecurity]
-        public static extern void FocusWindow([MarshalAs(UnmanagedType.Struct)] Window window);
+        public static extern void FocusWindow(Window window);
 
         /// <summary>
         /// This function returns the handle of the monitor that the specified window is in full
@@ -878,7 +878,7 @@ namespace Glfw3
         /// <seealso cref="GetWindowMonitor(Window)"/>
         /// <seealso cref="SetWindowSize(Window, int, int)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetWindowMonitor"), SuppressUnmanagedCodeSecurity]
-        public static extern void SetWindowMonitor([MarshalAs(UnmanagedType.Struct)] Window window, [MarshalAs(UnmanagedType.Struct)] Monitor monitor, int xpos, int ypos, int width, int height, int refreshRate);
+        public static extern void SetWindowMonitor(Window window, Monitor monitor, int xpos, int ypos, int width, int height, int refreshRate);
 
         /// <summary>
         /// This function returns the value of an attribute of the specified window or its OpenGL or
@@ -903,7 +903,7 @@ namespace Glfw3
         /// <param name="ptr">The new value.</param>
         /// <seealso cref="GetWindowUserPointer(Window)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetWindowUserPointer"), SuppressUnmanagedCodeSecurity]
-        public static extern void SetWindowUserPointer([MarshalAs(UnmanagedType.Struct)] Window window, IntPtr ptr);
+        public static extern void SetWindowUserPointer(Window window, IntPtr ptr);
 
         /// <summary>
         /// This function sets the user-defined pointer of the specified window. The initial value
@@ -913,7 +913,7 @@ namespace Glfw3
         /// <returns>The user-defined pointer of the specified window.</returns>
         /// <seealso cref="SetWindowUserPointer(Window, IntPtr)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwGetWindowUserPointer"), SuppressUnmanagedCodeSecurity]
-        public static extern IntPtr GetWindowUserPointer([MarshalAs(UnmanagedType.Struct)] Window window);
+        public static extern IntPtr GetWindowUserPointer(Window window);
 
         /// <summary>
         /// This function sets the position callback of the specified window, which is called when
@@ -1239,7 +1239,7 @@ namespace Glfw3
         /// <see cref="InputState.Release"/>.</returns>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwGetKey"), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetKey([MarshalAs(UnmanagedType.Struct)] Window window, int key);
+        public static extern bool GetKey(Window window, int key);
 
         /// <summary>
         /// <para>This function returns the last state reported for the specified mouse button to
@@ -1254,7 +1254,7 @@ namespace Glfw3
         /// <returns><c>true</c> if the button was pressed, <c>false</c> otherwise.</returns>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwGetMouseButton"), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetMouseButton([MarshalAs(UnmanagedType.Struct)] Window window, MouseButton button);
+        public static extern bool GetMouseButton(Window window, MouseButton button);
 
         /// <summary>
         /// <para>This function returns the position of the cursor, in screen coordinates, relative
@@ -1303,7 +1303,7 @@ namespace Glfw3
         /// area.</param>
         /// <seealso cref="GetCursorPos(Window, out double, out double)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetCursorPos"), SuppressUnmanagedCodeSecurity]
-        public static extern void SetCursorPos([MarshalAs(UnmanagedType.Struct)] Window window, double xpos, double ypos);
+        public static extern void SetCursorPos(Window window, double xpos, double ypos);
 
         /// <summary>
         /// <para>Creates a new custom cursor image that can be set for a window with
@@ -1354,7 +1354,7 @@ namespace Glfw3
         /// <param name="cursor">One of the standard shapes.</param>
         /// <returns>A new cursor ready to use.</returns>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwCreateStandardCursor"), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.Struct)]
+        // [return: MarshalAs(UnmanagedType.Struct)]
         public static extern Cursor CreateStandardCursor(CursorType cursor);
 
         /// <summary>
@@ -1365,7 +1365,7 @@ namespace Glfw3
         /// <param name="cursor">The cursor object to destroy.</param>
         /// <seealso cref="CreateCursor(Image, int, int)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwDestroyCursor"), SuppressUnmanagedCodeSecurity]
-        public static extern void DestroyCursor([MarshalAs(UnmanagedType.Struct)] Cursor cursor);
+        public static extern void DestroyCursor(Cursor cursor);
 
         /// <summary>
         /// <para>This function sets the cursor image to be used when the cursor is over the client
@@ -1377,7 +1377,7 @@ namespace Glfw3
         /// <param name="window">The window to set the cursor for.</param>
         /// <param name="cursor">The cursor to set.</param>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSetCursor"), SuppressUnmanagedCodeSecurity]
-        public static extern void SetCursor([MarshalAs(UnmanagedType.Struct)] Window window, [MarshalAs(UnmanagedType.Struct)] Cursor cursor);
+        public static extern void SetCursor(Window window, Cursor cursor);
 
         /// <summary>
         /// <para>This function sets the key callback of the specified window, which is called when
@@ -1693,7 +1693,7 @@ namespace Glfw3
         /// <see cref="Window.None"/> to detach the current context.</param>
         /// <seealso cref="GetCurrentContext"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwMakeContextCurrent"), SuppressUnmanagedCodeSecurity]
-        public static extern void MakeContextCurrent([MarshalAs(UnmanagedType.Struct)] Window window);
+        public static extern void MakeContextCurrent(Window window);
 
         /// <summary>
         /// This function returns the window whose OpenGL or OpenGL ES context is current on the
@@ -1703,7 +1703,7 @@ namespace Glfw3
         /// window's context is current.</returns>
         /// <seealso cref="MakeContextCurrent(Window)"/>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwGetCurrentContext"), SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.Struct)]
+        // [return: MarshalAs(UnmanagedType.Struct)]
         public static extern Window GetCurrentContext();
 
         /// <summary>
@@ -1719,7 +1719,7 @@ namespace Glfw3
         /// calling thread.
         /// </remarks>
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwSwapBuffers"), SuppressUnmanagedCodeSecurity]
-        public static extern void SwapBuffers([MarshalAs(UnmanagedType.Struct)] Window window);
+        public static extern void SwapBuffers(Window window);
 
         /// <summary>
         /// <para>This function sets the swap interval for the current OpenGL or OpenGL ES context,

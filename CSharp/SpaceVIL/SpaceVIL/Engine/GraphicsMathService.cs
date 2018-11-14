@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using SpaceVIL.Core;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
@@ -71,10 +73,10 @@ namespace SpaceVIL
             if (m_colors.Length == 1)
                 return m_colors[0];
 
-            float r = 0, g = 0, b = 0, a = 255.0f;
+            float r = 0, g = 0, b = 0, a = 0.0f;
             foreach (Color item in m_colors)
             {
-                if (item == null) continue;
+                if (item == null) { continue; }
                 if (item.A == 255) //exchange
                 {
                     r = item.R;
@@ -87,8 +89,8 @@ namespace SpaceVIL
                     r = r * (1.0f - item.A / 255.0f) + item.R * (item.A / 255.0f);
                     g = g * (1.0f - item.A / 255.0f) + item.G * (item.A / 255.0f);
                     b = b * (1.0f - item.A / 255.0f) + item.B * (item.A / 255.0f);
-                    // if (a < 255)
-                    //     a = a * (1.0f - item.A / 255.0f) + item.A * (item.A / 255.0f);
+                    if (a < 255)
+                        a = a * (1.0f - item.A / 255.0f) + item.A * (item.A / 255.0f);
                 }
             }
             return Color.FromArgb((int)a, (int)r, (int)g, (int)b);
@@ -293,7 +295,7 @@ namespace SpaceVIL
         {
             if (item.GetTriangles() == null)
                 return null;
-                
+
             List<float[]> result = new List<float[]>();
 
             foreach (var vector in item.GetTriangles())
@@ -795,7 +797,7 @@ namespace SpaceVIL
         {
             if (width <= 0 || height <= 0)
                 return null;
-                
+
             if (cornerRadius == null)
                 cornerRadius = new CornerRadius();
             else

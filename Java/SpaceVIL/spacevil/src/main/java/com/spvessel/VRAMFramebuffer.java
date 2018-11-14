@@ -15,11 +15,8 @@ final class VRAMFramebuffer {
     protected void genFBO() {
         FBO = glGenFramebuffersEXT();
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, FBO);
-        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture, 0);
-        int[] draw_bufs = new int[] { GL_COLOR_ATTACHMENT0_EXT };
-        glDrawBuffers(draw_bufs);
     }
-
+    
     protected void genFBOTexture(int w, int h) {
         texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -29,6 +26,10 @@ final class VRAMFramebuffer {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glBindTexture(GL_TEXTURE_2D, 0);
+
+        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture, 0);
+        // int[] draw_bufs = new int[] { GL_COLOR_ATTACHMENT0_EXT };
+        // glDrawBuffers(draw_bufs);
     }
 
     protected void bindFBO() {

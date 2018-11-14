@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Glfw3;
 
-namespace SpaceVIL
+namespace SpaceVIL.Common
 {
     public static class CommonService
     {
