@@ -74,13 +74,10 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             if (_letters.size() > 0)
                 _lineWidth = _letters.get(_letters.size() - 1).xShift + _letters.get(_letters.size() - 1).width
                         + _letters.get(_letters.size() - 1).xBeg; // xBeg не обязательно, т.к. везде 0, но вдруг
-                                                                  // 
-                                                                  //
 
             int[] fontDims = getFontDims();
             super.setWidth(_lineWidth);
             super.setHeight(fontDims[2]);
-
             // px0 = new LinkedList<>();
 
             // List<Float> tmpPx;

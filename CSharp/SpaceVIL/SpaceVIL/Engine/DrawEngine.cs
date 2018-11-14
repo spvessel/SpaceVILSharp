@@ -909,9 +909,6 @@ namespace SpaceVIL
 
         private void SetStencilMask(List<float[]> crd_array)
         {
-            if (crd_array == null)
-                return;
-                
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
 

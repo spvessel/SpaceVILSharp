@@ -118,9 +118,6 @@ public class TreeItem extends Prototype {
 
         MenuItem remove = new MenuItem("Remove");
         remove.setForeground(new Color(210, 210, 210));
-        ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 80);
-        remove.addItemState(ItemStateType.HOVERED, hovered);
         InterfaceMouseMethodState remove_click = (sender, args) -> {
             getParent().removeItem(this);
         };
@@ -128,19 +125,15 @@ public class TreeItem extends Prototype {
 
         MenuItem rename = new MenuItem("Rename");
         rename.setForeground(new Color(210, 210, 210));
-        rename.addItemState(ItemStateType.HOVERED, hovered);
 
         MenuItem copy = new MenuItem("Copy");
         copy.setForeground(new Color(210, 210, 210));
-        copy.addItemState(ItemStateType.HOVERED, hovered);
 
         MenuItem paste = new MenuItem("Paste");
         paste.setForeground(new Color(210, 210, 210));
-        paste.addItemState(ItemStateType.HOVERED, hovered);
 
         MenuItem new_leaf = new MenuItem("New Leaf");
         new_leaf.setForeground(new Color(210, 210, 210));
-        new_leaf.addItemState(ItemStateType.HOVERED, hovered);
         InterfaceMouseMethodState leaf_click = (sender, args) -> {
             this.addItem(getTreeLeaf());
         };
@@ -148,7 +141,6 @@ public class TreeItem extends Prototype {
 
         MenuItem new_branch = new MenuItem("New Branch");
         new_branch.setForeground(new Color(210, 210, 210));
-        new_branch.addItemState(ItemStateType.HOVERED, hovered);
         InterfaceMouseMethodState branch_click = (sender, args) -> {
             this.addItem(getTreeBranch());
         };

@@ -395,7 +395,7 @@ public final class WindowLayout {
 
         thread_manager = new TaskThread(getWindowName() + "_" + "actions", manager);
         // thread_manager.setPriority(Thread.MAX_PRIORITY);
-        thread_manager.setDaemon(false);
+        thread_manager.setDaemon(true);
         thread_manager.start();
 
         if (!isMain) {

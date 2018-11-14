@@ -857,7 +857,7 @@ public final class DrawEngine {
         _fbo.genFBO();
         _fbo.genFBOTexture(_handler.getLayout().getWidth(), _handler.getLayout().getHeight());
         _fbo.unbindFBO();
-        
+
         while (!_handler.isClosing()) {
             glfwWaitEventsTimeout(_interval);
             // glfwWaitEvents();

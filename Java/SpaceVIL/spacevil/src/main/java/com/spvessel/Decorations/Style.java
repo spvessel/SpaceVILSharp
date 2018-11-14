@@ -535,10 +535,10 @@ public class Style {
         style.minHeight = 10;
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.textAlignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.padding = new Indents(10, 0, 0, 0);
+        style.padding = new Indents(10, 0, 10, 0);
 
         ItemState hovered = new ItemState();
-        hovered.background = new Color(180, 180, 180, 255);
+        hovered.background = new Color(255, 255, 255, 150);
         style.addItemState(ItemStateType.HOVERED, hovered);
 
         Style arrow_style = new Style();
@@ -632,7 +632,7 @@ public class Style {
         uparrow_style.isFixedShape = true;
 
         ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 80);
+        hovered.background = new Color(255, 255, 255, 40);
         uparrow_style.addItemState(ItemStateType.HOVERED, hovered);
 
         style.addInnerStyle("uparrow", uparrow_style);
@@ -668,7 +668,7 @@ public class Style {
         Style handler_style = new Style();
         handler_style.widthPolicy = SizePolicy.EXPAND;
         handler_style.heightPolicy = SizePolicy.EXPAND;
-        handler_style.background = new Color(255, 255, 255, 50);
+        handler_style.background = new Color(100, 100, 100, 255);
         handler_style.margin = new Indents(0, 3, 0, 3);
         handler_style.alignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
@@ -700,7 +700,7 @@ public class Style {
         uparrow_style.isFixedShape = true;
 
         ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 80);
+        hovered.background = new Color(255, 255, 255, 40);
         uparrow_style.addItemState(ItemStateType.HOVERED, hovered);
 
         style.addInnerStyle("uparrow", uparrow_style);
@@ -708,7 +708,8 @@ public class Style {
         Style downarrow_style = getButtonCoreStyle();
         downarrow_style.widthPolicy = SizePolicy.FIXED;
         downarrow_style.heightPolicy = SizePolicy.FIXED;
-        downarrow_style.background = new Color(100, 100, 100, 255);;
+        downarrow_style.background = new Color(100, 100, 100, 255);
+        ;
         downarrow_style.width = 16;
         downarrow_style.height = 16;
         downarrow_style.alignment = new LinkedList<ItemAlignment>(
@@ -735,7 +736,7 @@ public class Style {
         Style handler_style = new Style();
         handler_style.widthPolicy = SizePolicy.EXPAND;
         handler_style.heightPolicy = SizePolicy.EXPAND;
-        handler_style.background = new Color(255, 255, 255, 50);
+        handler_style.background = new Color(100, 100, 100, 255);
         handler_style.margin = new Indents(3, 0, 3, 0);
         handler_style.alignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
@@ -887,6 +888,7 @@ public class Style {
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.padding = new Indents(2, 2, 2, 2);
+        style.spacing = new Spacing(0, 5);
 
         Style substrate_style = new Style();
         substrate_style.background = new Color(39, 150, 216, 100);
@@ -913,6 +915,12 @@ public class Style {
         Style hsb_style = getHorizontalScrollBarStyle();
         hsb_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
         style.addInnerStyle("hscrollbar", hsb_style);
+
+        Style menu_style = new Style();
+        menu_style.background = new Color(50, 50, 50);
+        menu_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        menu_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+        style.addInnerStyle("menu", menu_style);
 
         return style;
     }
@@ -1102,13 +1110,15 @@ public class Style {
     public static Style getTextAreaStyle() {
         Style style = new Style();
         style.background = new Color(210, 210, 210);
+        style.foreground = new Color(25, 25, 25);
+        style.font = DefaultsService.getDefaultFont(16);
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
         Style text_style = getTextBlockStyle();
         style.addInnerStyle("textedit", text_style);
-        
+
         Style vsb_style = getVerticalScrollBarStyle();
         vsb_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
         style.addInnerStyle("vscrollbar", vsb_style);
@@ -1116,6 +1126,12 @@ public class Style {
         Style hsb_style = getHorizontalScrollBarStyle();
         hsb_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
         style.addInnerStyle("hscrollbar", hsb_style);
+
+        Style menu_style = new Style();
+        menu_style.background = new Color(50, 50, 50);
+        menu_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        menu_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+        style.addInnerStyle("menu", menu_style);
 
         return style;
     }
@@ -1335,7 +1351,7 @@ public class Style {
         style.spacing = new Spacing(5, 0);
         style.padding = new Indents(5, 0, 0, 0);
         ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 60);
+        hovered.background = new Color(255, 255, 255, 130);
         style.addItemState(ItemStateType.HOVERED, hovered);
 
         Style indicator_style = new Style();// getButtonToggleStyle();
@@ -1351,7 +1367,7 @@ public class Style {
         indicator_style.shape = GraphicsMathService.getTriangle(10, 8, 0, 3, 90);
         indicator_style.isFixedShape = true;
         ItemState toggled = new ItemState();
-        toggled.background = indicator_style.background;
+        toggled.background = new Color(160, 160, 160);
         toggled.shape = new CustomFigure(true, GraphicsMathService.getTriangle(10, 8, 0, 3, 180));
         indicator_style.addItemState(ItemStateType.TOGGLED, toggled);
         style.addInnerStyle("indicator", indicator_style);

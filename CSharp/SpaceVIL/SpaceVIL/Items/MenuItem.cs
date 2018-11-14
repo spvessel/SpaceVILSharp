@@ -66,6 +66,14 @@ namespace SpaceVIL
         }
 
         //text init
+        public int GetTextWidth()
+        {
+            return _text_object.GetWidth();
+        }
+        public int GetTextHeight()
+        {
+            return _text_object.GetHeight();
+        }
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _text_object.SetTextAlignment(alignment);

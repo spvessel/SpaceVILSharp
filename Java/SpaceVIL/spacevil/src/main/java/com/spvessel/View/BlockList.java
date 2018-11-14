@@ -33,6 +33,7 @@ public class BlockList extends ResizableItem {
         count++;
 
         _palette = new ButtonCore();
+        _palette.setPassEvents(false);
         _lock = new ButtonToggle();
         _text = new TextArea();
         _note = new Label();
@@ -105,31 +106,27 @@ public class BlockList extends ResizableItem {
 
         _palette_menu = new ContextMenu(getHandler());
         _palette_menu.setBackground(60, 60, 60);
-        _palette_menu.setSize(100, 123);
+        _palette_menu.setSize(80, 123);
         MenuItem red = new MenuItem("Red");
         red.setForeground(210, 210, 210);
-        red.addItemState(ItemStateType.HOVERED, hovered);
         red.eventMouseClick.add((sender, args) -> {
             _text.setBackground(255, 196, 196);
             _text.vScrollBar.setBackground(_text.getBackground());
         });
         MenuItem green = new MenuItem("Green");
         green.setForeground(210, 210, 210);
-        green.addItemState(ItemStateType.HOVERED, hovered);
         green.eventMouseClick.add((sender, args) -> {
             _text.setBackground(138, 255, 180);
             _text.vScrollBar.setBackground(_text.getBackground());
         });
         MenuItem blue = new MenuItem("Blue");
         blue.setForeground(210, 210, 210);
-        blue.addItemState(ItemStateType.HOVERED, hovered);
         blue.eventMouseClick.add((sender, args) -> {
             _text.setBackground(151, 203, 255);
             _text.vScrollBar.setBackground(_text.getBackground());
         });
         MenuItem yellow = new MenuItem("Yellow");
         yellow.setForeground(210, 210, 210);
-        yellow.addItemState(ItemStateType.HOVERED, hovered);
         yellow.eventMouseClick.add((sender, args) -> {
             _text.setBackground(234, 232, 162);
             _text.vScrollBar.setBackground(_text.getBackground());
