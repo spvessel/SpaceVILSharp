@@ -125,23 +125,23 @@ public class ImageTest extends ActiveWindow {
 //        String message = "Make a Chance!";
 //
 //        BufferedImage bi = new BufferedImage(400, 100, BufferedImage.TYPE_INT_ARGB);
-//        Graphics2D ig2 = bi.createGraphics();
-//        RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
-//                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-//        ig2.setRenderingHints(rh);
-//        ig2.setFont(font);
-//        FontMetrics metrics = ig2.getFontMetrics();
-//        int stringWidth = metrics.stringWidth(message);
-//        int stringHeight = metrics.getAscent();
-//        ig2.setPaint(Color.white);
-//        ig2.drawString(message, 0, stringHeight);
-//
-//        ImageItem img_gr = new ImageItem(bi);
-//        img_gr.setBackground(new Color(0, 0, 0, 0));
-//        img_gr.setSize(400, 100);
-//        img_gr.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-//        img_gr.setAlignment(ItemAlignment.TOP, ItemAlignment.HCENTER);
-//        frame.addItem(img_gr);
+////        Graphics2D ig2 = bi.createGraphics();
+////        RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
+////                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+////        ig2.setRenderingHints(rh);
+////        ig2.setFont(font);
+////        FontMetrics metrics = ig2.getFontMetrics();
+////        int stringWidth = metrics.stringWidth(message);
+////        int stringHeight = metrics.getAscent();
+////        ig2.setPaint(Color.white);
+////        ig2.drawString(message, 0, stringHeight);
+////
+////        ImageItem img_gr = new ImageItem(bi);
+////        img_gr.setBackground(new Color(0, 0, 0, 0));
+////        img_gr.setSize(400, 100);
+////        img_gr.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+////        img_gr.setAlignment(ItemAlignment.TOP, ItemAlignment.HCENTER);
+////        frame.addItem(img_gr);
     }
 
     private static BufferedImage MakeShade(BufferedImage image, int dep) {
