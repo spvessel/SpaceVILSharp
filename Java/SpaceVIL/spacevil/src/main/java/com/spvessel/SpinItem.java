@@ -18,9 +18,6 @@ public class SpinItem extends Prototype {
         count++;
         _horzStack.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         textInput.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        //textInput.setInputRestriction(InputRestriction.DOUBLENUMBERS);
-        upButton.setText("Up");
-        downButton.setText("Down");
 
         setStyle(DefaultsService.getDefaultStyle(SpinItem.class));
         upButton.eventMouseClick.add(this::onUpClick);
@@ -56,7 +53,7 @@ public class SpinItem extends Prototype {
             return;
         super.setStyle(style);
 
-        Style inner_style = style.getInnerStyle("btnsarea");
+        Style inner_style = style.getInnerStyle("buttonsarea");
         if (inner_style != null) {
             _vertStack.setStyle(inner_style);
         }
@@ -68,7 +65,7 @@ public class SpinItem extends Prototype {
         if (inner_style != null) {
             downButton.setStyle(inner_style);
         }
-        inner_style = style.getInnerStyle("textinput");
+        inner_style = style.getInnerStyle("textedit");
         if (inner_style != null) {
             textInput.setStyle(inner_style);
         }

@@ -2,6 +2,7 @@ package com.spvessel.View;
 
 import com.spvessel.*;
 import com.spvessel.Flags.ScrollBarVisibility;
+import com.spvessel.Flags.SizePolicy;
 
 public class InputTest extends ActiveWindow {
     @Override
@@ -35,7 +36,6 @@ public class InputTest extends ActiveWindow {
 
         SpinItem sp = new SpinItem();
         sp.setParameters(1, -5.5, 7, 0.51);
-        sp.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
 
         layout.addItem(password);
         layout.addItem(te);
