@@ -662,7 +662,7 @@ public final class DrawEngine {
                 } else {
                     if (item instanceof InterfaceFloating && action == InputEventType.MOUSE_PRESS) {
                         InterfaceFloating float_item = (InterfaceFloating) item;
-                        if (float_item.getOutsideClickClosable()) {
+                        if (float_item.isOutsideClickClosable()) {
                             if (item instanceof ContextMenu) {
                                 ContextMenu to_close = (ContextMenu) item;
                                 if (to_close.closeDependencies(_margs)) {

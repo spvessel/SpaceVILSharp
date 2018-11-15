@@ -24,13 +24,23 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     private boolean _init = false;
     private boolean _ouside = true;
 
-    public boolean getOutsideClickClosable() {
+    public boolean isOutsideClickClosable() {
         return _ouside;
     }
 
     public void setOutsideClickClosable(boolean value) {
         _ouside = value;
     }
+
+    // private boolean _lock_ouside = true;
+
+    // public boolean isLockOutside() {
+    //     return _lock_ouside;
+    // }
+
+    // public void setLockOutside(boolean value) {
+    //     _lock_ouside = true;
+    // }
 
     public ContextMenu(WindowLayout handler) {
         setItemName("ContextMenu_" + count);
@@ -128,13 +138,14 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         for (InterfaceBaseItem item : list) {
             height += (item.getHeight() + itemList.getArea().getSpacing().vertical);
 
-            int tmp =  getPadding().left + getPadding().right + item.getMargin().left + item.getMargin().right;
+            int tmp = getPadding().left + getPadding().right + item.getMargin().left + item.getMargin().right;
             if (item instanceof MenuItem) {
                 MenuItem m = (MenuItem) item;
-                tmp += m.getTextWidth() + m.getMargin().left + m.getMargin().right + m.getPadding().left + m.getPadding().right;
+                tmp += m.getTextWidth() + m.getMargin().left + m.getMargin().right + m.getPadding().left
+                        + m.getPadding().right;
             } else
                 tmp = tmp + item.getWidth() + item.getMargin().left + item.getMargin().right;
-            
+
             if (width < tmp)
                 width = tmp;
         }
@@ -143,8 +154,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
 
     public void show(InterfaceItem sender, MouseArgs args) {
         if (args.button.getValue() == activeButton.getValue()) {
-            if (!_init)
-            {
+            if (!_init) {
                 initElements();
                 updateSize();
             }

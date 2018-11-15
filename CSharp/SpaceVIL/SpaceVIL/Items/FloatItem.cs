@@ -23,6 +23,15 @@ namespace SpaceVIL
         {
             _ouside = value;
         }
+        // private bool _lock_ouside = false;
+        // public bool IsLockOutside()
+        // {
+        //     return _lock_ouside;
+        // }
+        // public void SetLockOutside(bool value)
+        // {
+        //     _lock_ouside = value;
+        // }
 
         public FloatItem(WindowLayout handler)
         {
@@ -82,7 +91,7 @@ namespace SpaceVIL
             SetY(offset_y);
             SetConfines();
         }
-        
+
         public override void SetConfines()
         {
             base.SetConfines(

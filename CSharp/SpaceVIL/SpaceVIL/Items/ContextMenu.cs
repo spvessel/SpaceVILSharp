@@ -25,6 +25,15 @@ namespace SpaceVIL
         {
             _ouside = value;
         }
+        // private bool _lock_ouside = true;
+        // public bool IsLockOutside()
+        // {
+        //     return _lock_ouside;
+        // }
+        // public void SetLockOutside(bool value)
+        // {
+        //     _lock_ouside = value;
+        // }
 
         public ContextMenu(WindowLayout handler)
         {
