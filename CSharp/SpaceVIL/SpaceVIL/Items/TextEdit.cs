@@ -49,7 +49,7 @@ namespace SpaceVIL
         private List<KeyCode> ShiftValCodes;
         private List<KeyCode> InsteadKeyMods;
 
-        private Object textInputLock = new Object();
+        private readonly Object textInputLock = new Object();
 
         private int scrollStep = 15;
 
@@ -79,24 +79,38 @@ namespace SpaceVIL
 
         private void OnMousePressed(object sender, MouseArgs args)
         {
-            ReplaceCursorAccordingCoord(args.Position.GetX());
-            if (_isSelect)
-                UnselectText();
+            Monitor.Enter(textInputLock);
+            try {
+                ReplaceCursorAccordingCoord(args.Position.GetX());
+                if (_isSelect)
+                    UnselectText();
+            }
+            finally
+            {
+                Monitor.Exit(textInputLock);
+            }
         }
 
         private void OnDragging(object sender, MouseArgs args)
         {
-            ReplaceCursorAccordingCoord(args.Position.GetX());
+            Monitor.Enter(textInputLock);
+            try {
+                ReplaceCursorAccordingCoord(args.Position.GetX());
 
-            if (!_isSelect)
-            {
-                _isSelect = true;
-                _selectFrom = _cursor_position;
+                if (!_isSelect)
+                {
+                    _isSelect = true;
+                    _selectFrom = _cursor_position;
+                }
+                else
+                {
+                    _selectTo = _cursor_position;
+                    MakeSelectedArea(_selectFrom, _selectTo);
+                }
             }
-            else
+            finally
             {
-                _selectTo = _cursor_position;
-                MakeSelectedArea(_selectFrom, _selectTo);
+                Monitor.Exit(textInputLock);
             }
         }
 
@@ -197,7 +211,7 @@ namespace SpaceVIL
                 if (args.Mods.Equals(KeyMods.Control) && (args.Key == KeyCode.A || args.Key == KeyCode.a))
                 {
                     _selectFrom = 0;
-                    _cursor_position = GetText().Length;
+                    _cursor_position = PrivGetText().Length;
                     _selectTo = _cursor_position;
                     ReplaceCursor();
                     _isSelect = true;
@@ -234,7 +248,7 @@ namespace SpaceVIL
                         if (args.Key == KeyCode.A || args.Key == KeyCode.a)
                         {
                             _selectFrom = 0;
-                            _cursor_position = GetText().Length;
+                            _cursor_position = PrivGetText().Length;
                             ReplaceCursor();
 
                             _isSelect = true;
@@ -254,14 +268,14 @@ namespace SpaceVIL
                     {
                         if (args.Key == KeyCode.Backspace && _cursor_position > 0)//backspace
                         {
-                            SetText(GetText().Remove(_cursor_position - 1, 1));
                             _cursor_position--;
-                            ReplaceCursor();
+                            PrivSetText(PrivGetText().Remove(_cursor_position, 1));
+                            //ReplaceCursor();
                         }
-                        if (args.Key == KeyCode.Delete && _cursor_position < GetText().Length)//delete
+                        if (args.Key == KeyCode.Delete && _cursor_position < PrivGetText().Length)//delete
                         {
-                            SetText(GetText().Remove(_cursor_position, 1));
-                            ReplaceCursor();
+                            PrivSetText(PrivGetText().Remove(_cursor_position, 1));
+                            //ReplaceCursor();
                         }
                     }
                 }
@@ -277,7 +291,7 @@ namespace SpaceVIL
                     ReplaceCursor();
                 }
             }
-            if (args.Key == KeyCode.Right && _cursor_position < GetText().Length)//arrow right
+            if (args.Key == KeyCode.Right && _cursor_position < PrivGetText().Length)//arrow right
             {
                 if (!_justSelected) {
                     _cursor_position++;
@@ -286,7 +300,7 @@ namespace SpaceVIL
             }
             if (args.Key == KeyCode.End)//end
             {
-                _cursor_position = GetText().Length;
+                _cursor_position = PrivGetText().Length;
                 ReplaceCursor();
             }
             if (args.Key == KeyCode.Home)//home
@@ -333,8 +347,13 @@ namespace SpaceVIL
 
         private void ReplaceCursor()
         {
+            int len = PrivGetText().Length;
+
+            if (_cursor_position > len) {
+                _cursor_position = len;
+                ReplaceCursor();
+            }
             int pos = CursorPosToCoord(_cursor_position);
-            //Console.WriteLine(pos);
 
             int w = GetTextWidth();
             if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
@@ -351,17 +370,18 @@ namespace SpaceVIL
             if (!_isEditable) return;
             Monitor.Enter(textInputLock);
             try {
-            byte[] input = BitConverter.GetBytes(args.Character);
-            string str = Encoding.UTF32.GetString(input);
-            if (_isSelect) {
-                UnselectText();
-                PrivCutText();
-            }
-            if (_justSelected) _justSelected = false;
-            SetText(GetText().Insert(_cursor_position, str));
-            _cursor_position++;
-            ReplaceCursor();
-            //Console.WriteLine("input in TextEdit " + _cursor_position);
+                byte[] input = BitConverter.GetBytes(args.Character);
+                string str = Encoding.UTF32.GetString(input);
+                if (_isSelect) {
+                    UnselectText();
+                    PrivCutText();
+                }
+                if (_justSelected) _justSelected = false;
+                
+                _cursor_position++;
+                PrivSetText(PrivGetText().Insert(_cursor_position - 1, str));
+                //ReplaceCursor();
+                //Console.WriteLine("input in TextEdit " + _cursor_position);
             }
             finally
             {
@@ -411,22 +431,32 @@ namespace SpaceVIL
         {
             return _text_object.GetFont();
         }
-        public void SetText(String text)
-        {
+
+        private void PrivSetText(String text) {
             Monitor.Enter(textInputLock);
             try {
-            _text_object.SetItemText(text);
-            _text_object.CheckXShift(_cursorXMax);
-            //_text_object.UpdateData(UpdateType.Critical); //Doing in _text_object
+                _text_object.SetItemText(text);
+                _text_object.CheckXShift(_cursorXMax);
+                //_text_object.UpdateData(UpdateType.Critical); //Doing in _text_object
+                ReplaceCursor();
             }
             finally
             {
                 Monitor.Exit(textInputLock);
             }
         }
+
+        public void SetText(String text)
+        {
+            PrivSetText(text);
+        }
+
+        private String PrivGetText() {
+            return _text_object.GetItemText();
+        }
         public String GetText()
         {
-            return _text_object.GetItemText();
+            return PrivGetText();
         }
         public void SetForeground(Color color)
         {
@@ -528,18 +558,26 @@ namespace SpaceVIL
         }
 
         private string PrivGetSelectedText() {
-            if (_selectFrom == -1)
-                _selectFrom = 0;
-            if (_selectTo == -1)
-                _selectTo = 0;
-            if (_selectFrom == _selectTo) return "";
-            string text = GetText();
-            int fromReal = Math.Min(_selectFrom, _selectTo);
-            int toReal = Math.Max(_selectFrom, _selectTo);
-            if (fromReal < 0)
-                return "";
-            string selectedText = text.Substring(fromReal, toReal - fromReal);
-            return selectedText;
+            Monitor.Enter(textInputLock);
+            try
+            {
+                if (_selectFrom == -1)
+                    _selectFrom = 0;
+                if (_selectTo == -1)
+                    _selectTo = 0;
+                if (_selectFrom == _selectTo) return "";
+                string text = PrivGetText();
+                int fromReal = Math.Min(_selectFrom, _selectTo);
+                int toReal = Math.Max(_selectFrom, _selectTo);
+                if (fromReal < 0)
+                    return "";
+                string selectedText = text.Substring(fromReal, toReal - fromReal);
+                return selectedText;
+            }
+            finally
+            {
+                Monitor.Exit(textInputLock);
+            }
         }
 
         public string GetSelectedText()
@@ -553,11 +591,11 @@ namespace SpaceVIL
             try
             {
                 if (_isSelect) PrivCutText();
-                string text = GetText();
+                string text = PrivGetText();
                 string newText = text.Substring(0, _cursor_position) + pasteStr + text.Substring(_cursor_position);
-                SetText(newText);
                 _cursor_position += pasteStr.Length;
-                ReplaceCursor();
+                PrivSetText(newText);
+                //ReplaceCursor();
             }
             finally
             {
@@ -584,9 +622,9 @@ namespace SpaceVIL
                 if (_selectFrom == _selectTo) return str;
                 int fromReal = Math.Min(_selectFrom, _selectTo);
                 int toReal = Math.Max(_selectFrom, _selectTo);
-                SetText(GetText().Remove(fromReal, toReal - fromReal));
                 _cursor_position = fromReal;
-                ReplaceCursor();
+                PrivSetText(PrivGetText().Remove(fromReal, toReal - fromReal));
+                //ReplaceCursor();
                 if (_isSelect)
                     UnselectText();
                 _justSelected = false;
@@ -617,18 +655,18 @@ namespace SpaceVIL
                 _cursor.SetWidth(0);
         }
         */
-        private int NearestPosToCursor(double xPos)
-        {
-            List<int> endPos = _text_object.GetLetPosArray();
-            int pos = endPos.OrderBy(x => Math.Abs(x - xPos)).First();
-            return pos;
-        }
-
+        // private int NearestPosToCursor(double xPos)
+        // {
+        //     List<int> endPos = _text_object.GetLetPosArray();
+        //     int pos = endPos.OrderBy(x => Math.Abs(x - xPos)).First();
+        //     return pos;
+        // }
+/*
         internal void SetCursorPosition(double newPos)
         {
             _cursor_position = NearestPosToCursor(newPos);
         }
-
+*/
         public void Clear()
         {
             SetText("");
@@ -659,5 +697,10 @@ namespace SpaceVIL
         private int GetLineXShift() {
             return _text_object.GetLineXShift();
         }
+
+        internal bool IsBegining() {
+            return (_cursor_position == 0);
+        }
+
     }
 }

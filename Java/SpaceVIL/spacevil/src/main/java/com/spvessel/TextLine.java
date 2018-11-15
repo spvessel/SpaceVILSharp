@@ -65,17 +65,11 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
 
             _letters = FontEngine.getModifyLetters(text, font);
 
-            // _letTexturesList = new LinkedList<>();
-            // long time0 = System.nanoTime();
-            // System.out.println("get pix map " + (time0 - time) / 100000f);
-
             _letEndPos = new LinkedList<>();
 
             if (_letters.size() > 0)
                 _lineWidth = _letters.get(_letters.size() - 1).xShift + _letters.get(_letters.size() - 1).width
                         + _letters.get(_letters.size() - 1).xBeg; // xBeg не обязательно, т.к. везде 0, но вдруг
-                                                                  // 
-                                                                  //
 
             int[] fontDims = getFontDims();
             super.setWidth(_lineWidth);
@@ -104,18 +98,6 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
         } finally {
             textLock.unlock();
         }
-
-        // long time1 = System.nanoTime();
-        // System.out.println("new arrays " + (time1 - time0) / 100000f);
-
-        // addAllShifts();
-
-        // long time2 = System.nanoTime();
-        // System.out.println("Add all shifts " + (time2 - time1) / 100000f);
-        // System.out.println();
-
-        // setAlphas(cl0);
-
     }
 
     public TextPrinter getLetTextures() {
@@ -135,8 +117,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
 
                 int bb_h = getHeight();
                 int bb_w = getWidth();
-                //if (bb_h != height)
-                //    System.out.println("true " + bb_h + " " + height);
+
                 ByteBuffer cacheBB = BufferUtils.createByteBuffer(bb_h * bb_w * 4);
 
                 int xFirstBeg = _letters.get(0).xBeg + _letters.get(0).xShift;

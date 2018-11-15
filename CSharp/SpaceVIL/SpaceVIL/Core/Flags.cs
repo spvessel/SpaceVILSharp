@@ -343,4 +343,9 @@ namespace SpaceVIL.Core
         Leaf,
         Branch
     }
+
+    public enum InputRestriction
+    {
+        IntNumbers, DoubleNumbers, Letters, All
+    }
 }

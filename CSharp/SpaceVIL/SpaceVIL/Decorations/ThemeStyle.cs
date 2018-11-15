@@ -94,6 +94,7 @@ namespace SpaceVIL.Decorations
 
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TreeView), Style.GetTreeViewStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TreeItem), Style.GetTreeItemStyle());
+                DefaultItemsStyle.Add(typeof(SpaceVIL.SpinItem), Style.GetSpinItemStyle());
             }
         }
         // public static ThemeStyle GetInstance()

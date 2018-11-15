@@ -60,24 +60,40 @@ namespace SpaceVIL
 
         private void OnMousePressed(object sender, MouseArgs args)
         {
-            ReplaceCursorAccordingCoord(args.Position.GetX());
-            if (_isSelect)
-                UnselectText();
+            Monitor.Enter(textInputLock);
+            try
+            {
+                ReplaceCursorAccordingCoord(args.Position.GetX());
+                if (_isSelect)
+                    UnselectText();
+            }
+            finally
+            {
+                Monitor.Exit(textInputLock);
+            }
         }
 
         private void OnDragging(object sender, MouseArgs args)
         {
-            ReplaceCursorAccordingCoord(args.Position.GetX());
+            Monitor.Enter(textInputLock);
+            try
+            {
+                ReplaceCursorAccordingCoord(args.Position.GetX());
 
-            if (!_isSelect)
-            {
-                _isSelect = true;
-                _selectFrom = _cursor_position;
+                if (!_isSelect)
+                {
+                    _isSelect = true;
+                    _selectFrom = _cursor_position;
+                }
+                else
+                {
+                    _selectTo = _cursor_position;
+                    MakeSelectedArea(_selectFrom, _selectTo);
+                }
             }
-            else
+            finally
             {
-                _selectTo = _cursor_position;
-                MakeSelectedArea(_selectFrom, _selectTo);
+                Monitor.Exit(textInputLock);
             }
         }
 
@@ -485,16 +501,24 @@ namespace SpaceVIL
 
         private string GetSelectedText() 
         {
-            if (_selectFrom == -1)
-                _selectFrom = 0;
-            if (_selectTo == -1)
-                _selectTo = 0;
-            if (_selectFrom == _selectTo) return "";
-            string text = GetText();
-            int fromReal = Math.Min(_selectFrom, _selectTo);
-            int toReal = Math.Max(_selectFrom, _selectTo);
-            string selectedText = text.Substring(fromReal, toReal - fromReal);
-            return selectedText;
+            Monitor.Enter(textInputLock);
+            try
+            {
+                if (_selectFrom == -1)
+                    _selectFrom = 0;
+                if (_selectTo == -1)
+                    _selectTo = 0;
+                if (_selectFrom == _selectTo) return "";
+                string text = GetText();
+                int fromReal = Math.Min(_selectFrom, _selectTo);
+                int toReal = Math.Max(_selectFrom, _selectTo);
+                string selectedText = text.Substring(fromReal, toReal - fromReal);
+                return selectedText;
+            }
+            finally
+            {
+                Monitor.Exit(textInputLock);
+            }
         }
 
         public void Clear()

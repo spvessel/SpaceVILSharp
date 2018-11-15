@@ -83,6 +83,7 @@ public class ThemeStyle {
 
             defaultItemsStyle.put(TreeView.class, Style.getTreeViewStyle());
             defaultItemsStyle.put(TreeItem.class, Style.getTreeItemStyle());
+            defaultItemsStyle.put(SpinItem.class, Style.getSpinItemStyle());
         }
     }
 

@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 class Alphabet {
     // Alphabet
@@ -21,6 +23,8 @@ class Alphabet {
     int alphHeight = 0;
     int lineSpacer;
     Letter bugLetter;
+
+    private Lock alphabetLock = new ReentrantLock();
 
     Alphabet(Font font) {
         this.font = font;
@@ -75,8 +79,15 @@ class Alphabet {
         Letter currLet;
         Letter prevLet = null;
         for (char c : text.toCharArray()) {
-            if (!letters.containsKey(c))
-                addLetter(c);
+            if (!letters.containsKey(c)) {
+                alphabetLock.lock();
+                try {
+                    if (!letters.containsKey(c))
+                        addLetter(c);
+                } finally {
+                    alphabetLock.unlock();
+                }
+            }
 
             currLet = letters.get(c);
 
@@ -286,7 +297,7 @@ class Alphabet {
         //List<Float> pix;
         byte[] arr;
 
-        public Letter(String name, Shape shape) {// GraphicsPath shape) {
+        Letter(String name, Shape shape) {// GraphicsPath shape) {
             // System.out.println("make letter " + name);
             //col = new LinkedList<>();
             //pix = new LinkedList<>();
@@ -298,12 +309,12 @@ class Alphabet {
                 isSpec = true;
         }
 
-        public Letter(String name, BufferedImage bi) {
+        Letter(String name, BufferedImage bi) {
             this.name = name;
             bitmapToArray(bi);
         }
 
-        public Letter(String name) {
+        Letter(String name) {
             // for bug letter
             this.name = name;
             isSpec = true;

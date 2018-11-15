@@ -65,20 +65,30 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     }
 
     private void onMousePressed(InterfaceItem sender, MouseArgs args) {
-        replaceCursorAccordingCoord(args.position.getX());
-        if (_isSelect)
-            unselectText();
+        textInputLock.lock();
+        try {
+            replaceCursorAccordingCoord(args.position.getX());
+            if (_isSelect)
+                unselectText();
+        } finally {
+            textInputLock.unlock();
+        }
     }
 
     private void onDragging(InterfaceItem sender, MouseArgs args) {
-        replaceCursorAccordingCoord(args.position.getX());
+        textInputLock.lock();
+        try {
+            replaceCursorAccordingCoord(args.position.getX());
 
-        if (!_isSelect) {
-            _isSelect = true;
-            _selectFrom = _cursor_position;
-        } else {
-            _selectTo = _cursor_position;
-            makeSelectedArea(_selectFrom, _selectTo);
+            if (!_isSelect) {
+                _isSelect = true;
+                _selectFrom = _cursor_position;
+            } else {
+                _selectTo = _cursor_position;
+                makeSelectedArea(_selectFrom, _selectTo);
+            }
+        } finally {
+            textInputLock.unlock();
         }
     }
 
@@ -453,17 +463,22 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
     private String getSelectedText() // ������ �� ����������, ������, �����������, ��� �����
     {
-        if (_selectFrom == -1)
-            _selectFrom = 0;
-        if (_selectTo == -1)
-            _selectTo = 0;
-        if (_selectFrom == _selectTo)
-            return "";
-        String text = getText();
-        int fromReal = Math.min(_selectFrom, _selectTo);
-        int toReal = Math.max(_selectFrom, _selectTo);
-        String selectedText = text.substring(fromReal, toReal); // - fromReal
-        return selectedText;
+        textInputLock.lock();
+        try {
+            if (_selectFrom == -1)
+                _selectFrom = 0;
+            if (_selectTo == -1)
+                _selectTo = 0;
+            if (_selectFrom == _selectTo)
+                return "";
+            String text = getText();
+            int fromReal = Math.min(_selectFrom, _selectTo);
+            int toReal = Math.max(_selectFrom, _selectTo);
+            String selectedText = text.substring(fromReal, toReal); // - fromReal
+            return selectedText;
+        } finally {
+            textInputLock.unlock();
+        }
     }
 
     void clear() {

@@ -1377,4 +1377,57 @@ public class Style {
 
         return style;
     }
+
+    public static Style getSpinItemStyle() {
+        Style style = new Style();
+
+        style.background = new Color(50, 50, 50);
+        style.widthPolicy = SizePolicy.EXPAND;
+        style.heightPolicy = SizePolicy.EXPAND;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+
+        Style uparrow_style = getButtonCoreStyle();
+        uparrow_style.widthPolicy = SizePolicy.EXPAND;
+        uparrow_style.heightPolicy = SizePolicy.EXPAND;
+        uparrow_style.background = new Color(100, 100, 100, 255);
+        uparrow_style.alignment = new LinkedList<>(
+                Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        //uparrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 0);
+        //uparrow_style.isFixedShape = true;
+
+        ItemState hovered = new ItemState();
+        hovered.background = new Color(255, 255, 255, 80);
+        uparrow_style.addItemState(ItemStateType.HOVERED, hovered);
+
+        style.addInnerStyle("uparrow", uparrow_style);
+
+        Style downarrow_style = getButtonCoreStyle();
+        downarrow_style.widthPolicy = SizePolicy.EXPAND;
+        downarrow_style.heightPolicy = SizePolicy.EXPAND;
+        downarrow_style.background = new Color(100, 100, 100, 255);
+        //downarrow_style.height = 16;
+        downarrow_style.alignment = new LinkedList<>(
+                Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
+        //downarrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 180);
+        //downarrow_style.isFixedShape = true;
+        downarrow_style.addItemState(ItemStateType.HOVERED, hovered);
+        style.addInnerStyle("downarrow", downarrow_style);
+
+        Style btns_area = getButtonCoreStyle();
+        btns_area.widthPolicy = SizePolicy.FIXED;
+        btns_area.heightPolicy = SizePolicy.EXPAND;
+        btns_area.width = 50;
+        btns_area.background = new Color(50, 50, 50);
+        btns_area.alignment = new LinkedList<>(
+                Arrays.asList(ItemAlignment.TOP, ItemAlignment.LEFT));
+        style.addInnerStyle("btnsarea", btns_area);
+
+        Style text_input = getTextEditStyle();
+        text_input.heightPolicy = SizePolicy.EXPAND;
+        text_input.textAlignment = new LinkedList<>(
+                Arrays.asList(ItemAlignment.RIGHT));
+        style.addInnerStyle("textinput", text_input);
+
+        return style;
+    }
 }

@@ -110,7 +110,7 @@ public class MainWindow extends ActiveWindow {
         btn_input.setBackground(121, 223, 152);
         btn_input.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         btn_input.eventMouseClick.add((sender, args) -> {
-            System.out.println(WindowLayoutBox.getListOfWindows().length);
+            //System.out.println(WindowLayoutBox.getListOfWindows().length);
             WindowLayoutBox.tryShow("InputTest");
         });
 

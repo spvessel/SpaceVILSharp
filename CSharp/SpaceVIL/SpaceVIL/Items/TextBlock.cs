@@ -74,23 +74,39 @@ namespace SpaceVIL
 
         private void OnMousePressed(object sender, MouseArgs args)
         {
-            ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
-            if (_isSelect)
-                UnselectText();
+            Monitor.Enter(_textureStorage.textInputLock);
+            try
+            {
+                ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
+                if (_isSelect)
+                    UnselectText();
+            }
+            finally
+            {
+                Monitor.Exit(_textureStorage.textInputLock);
+            }
         }
 
         private void OnDragging(object sender, MouseArgs args)
         {
-            ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
-            if (!_isSelect)
+            Monitor.Enter(_textureStorage.textInputLock);
+            try
             {
-                _isSelect = true;
-                _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
+                ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
+                if (!_isSelect)
+                {
+                    _isSelect = true;
+                    _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
+                }
+                else
+                {
+                    _selectTo = new Point(_cursor_position.X, _cursor_position.Y);
+                    MakeSelectedArea(_selectFrom, _selectTo);
+                }
             }
-            else
+            finally
             {
-                _selectTo = new Point(_cursor_position.X, _cursor_position.Y);
-                MakeSelectedArea(_selectFrom, _selectTo);
+                Monitor.Exit(_textureStorage.textInputLock);
             }
         }
 
@@ -730,39 +746,47 @@ namespace SpaceVIL
 
         private string PrivGetSelectedText()
         {
-            _selectFrom = CheckLineFits(_selectFrom);
-            _selectTo = CheckLineFits(_selectTo);
-            if (_selectFrom.X == _selectTo.X && _selectFrom.Y == _selectTo.Y) return "";
-            StringBuilder sb = new StringBuilder();
-            List<Point> listPt = RealFromTo(_selectFrom, _selectTo);
-            Point fromReal = listPt[0];
-            Point toReal = listPt[1];
-
-            string stmp;
-            if (fromReal.Y == toReal.Y)
+            Monitor.Enter(_textureStorage.textInputLock);
+            try
             {
-                stmp = _textureStorage.GetTextInLine(fromReal.Y);
-                sb.Append(stmp.Substring(fromReal.X, toReal.X - fromReal.X));
+                _selectFrom = CheckLineFits(_selectFrom);
+                _selectTo = CheckLineFits(_selectTo);
+                if (_selectFrom.X == _selectTo.X && _selectFrom.Y == _selectTo.Y) return "";
+                StringBuilder sb = new StringBuilder();
+                List<Point> listPt = RealFromTo(_selectFrom, _selectTo);
+                Point fromReal = listPt[0];
+                Point toReal = listPt[1];
+
+                string stmp;
+                if (fromReal.Y == toReal.Y)
+                {
+                    stmp = _textureStorage.GetTextInLine(fromReal.Y);
+                    sb.Append(stmp.Substring(fromReal.X, toReal.X - fromReal.X));
+                    return sb.ToString();
+                }
+
+                if (fromReal.X >= GetLineLetCount(fromReal.Y))
+                    sb.Append("\n");
+                else
+                {
+                    stmp = _textureStorage.GetTextInLine(fromReal.Y);
+                    sb.Append(stmp.Substring(fromReal.X) + "\n");
+                }
+                for (int i = fromReal.Y + 1; i < toReal.Y; i++)
+                {
+                    stmp = _textureStorage.GetTextInLine(i);
+                    sb.Append(stmp + "\n");
+                }
+
+                stmp = _textureStorage.GetTextInLine(toReal.Y);
+                sb.Append(stmp.Substring(0, toReal.X));
+
                 return sb.ToString();
             }
-
-            if (fromReal.X >= GetLineLetCount(fromReal.Y))
-                sb.Append("\n");
-            else
+            finally
             {
-                stmp = _textureStorage.GetTextInLine(fromReal.Y);
-                sb.Append(stmp.Substring(fromReal.X) + "\n");
+                Monitor.Exit(_textureStorage.textInputLock);
             }
-            for (int i = fromReal.Y + 1; i < toReal.Y; i++)
-            {
-                stmp = _textureStorage.GetTextInLine(i);
-                sb.Append(stmp + "\n");
-            }
-
-            stmp = _textureStorage.GetTextInLine(toReal.Y);
-            sb.Append(stmp.Substring(0, toReal.X));
-
-            return sb.ToString();
         }
 
         public string GetSelectedText()

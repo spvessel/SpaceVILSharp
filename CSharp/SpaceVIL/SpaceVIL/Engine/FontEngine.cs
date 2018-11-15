@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using SpaceVIL.Common;
+using System.Threading;
 
 namespace SpaceVIL
 {
@@ -14,7 +15,9 @@ namespace SpaceVIL
     {
         static String _preloadDefFile = "./somefile.dat";
 
-        static Dictionary<Font, Alphabet> fonts = new Dictionary<Font, Alphabet>();
+        private static Dictionary<Font, Alphabet> fonts = new Dictionary<Font, Alphabet>();
+
+        private static readonly Object fontLock = new Object();
 
         static FontEngine()
         {
@@ -35,7 +38,15 @@ namespace SpaceVIL
 
             if (!fonts.ContainsKey(font))
             {
-                fonts.Add(font, new Alphabet(font));
+                Monitor.Enter(fontLock);
+                try {
+                    if (!fonts.ContainsKey(font))
+                        fonts.Add(font, new Alphabet(font));
+                }
+                finally
+                {
+                    Monitor.Exit(fontLock);
+                }
             }
             return fonts[font].MakeTextNew(text); //, cof);
         }
@@ -55,7 +66,16 @@ namespace SpaceVIL
 
             if (!fonts.ContainsKey(font))
             {
-                fonts.Add(font, new Alphabet(font));
+                Monitor.Enter(fontLock);
+                try
+                {
+                    if (!fonts.ContainsKey(font))
+                        fonts.Add(font, new Alphabet(font));
+                }
+                finally
+                {
+                    Monitor.Exit(fontLock);
+                }
             }
             Alphabet a = fonts[font];
             return new int[] { a.lineSpacer, a.alphMinY, a.alphHeight }; //(int)(a.lineSpacer * cof), (int)(a.alphMinY * cof), (int)(a.alphHeight * cof), a.alphHeight, a.alphMinY };
@@ -65,7 +85,16 @@ namespace SpaceVIL
         {
             if (!fonts.ContainsKey(font))
             {
-                fonts.Add(font, new Alphabet(font));
+                Monitor.Enter(fontLock);
+                try
+                {
+                    if (!fonts.ContainsKey(font))
+                        fonts.Add(font, new Alphabet(font));
+                }
+                finally
+                {
+                    Monitor.Exit(fontLock);
+                }
             }
 
             fonts[font].AddMoarLetters(); //Заполнить весь алфавит
@@ -83,6 +112,8 @@ namespace SpaceVIL
             internal int alphHeight = 0;
             internal int lineSpacer;
             internal Letter bugLetter;
+
+            private readonly Object alphabetLock = new Object();
 
             public Alphabet(Font font)
             {
@@ -240,7 +271,18 @@ namespace SpaceVIL
                 Letter prevLet = null;
                 foreach (char c in text.ToCharArray())
                 {
-                    if (!letters.ContainsKey(c)) AddLetter(c);
+                    if (!letters.ContainsKey(c)) {
+                        Monitor.Enter(alphabetLock);
+                        try
+                        {
+                            if (!letters.ContainsKey(c))
+                                AddLetter(c);
+                        }
+                        finally
+                        {
+                            Monitor.Exit(alphabetLock);
+                        }
+                    }
 
                     currLet = letters[c];
 

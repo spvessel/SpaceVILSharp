@@ -190,7 +190,7 @@ public class FlowTest extends ActiveWindow {
         BlockList block = new BlockList();
         // ResizableItem block = new ResizableItem();
         block.eventMouseClick.add((sender, args) -> {
-            System.out.println(block.getX() + " " + block.getY());
+            //System.out.println(block.getX() + " " + block.getY());
         });
         block.setBackground(45, 45, 45);
         // block.SetBackground(255, 181, 111);

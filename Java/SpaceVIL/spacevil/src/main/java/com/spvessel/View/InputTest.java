@@ -1,6 +1,7 @@
 package com.spvessel.View;
 
 import com.spvessel.*;
+import com.spvessel.Flags.SizePolicy;
 
 public class InputTest extends ActiveWindow {
     @Override
@@ -25,13 +26,18 @@ public class InputTest extends ActiveWindow {
         PasswordLine password = new PasswordLine();
 
         TextEdit te = new TextEdit();
-        
+
         TextArea tb = new TextArea();
         // tb.setMargin(new Indents(50, 30, 30, 30));
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
 
+        SpinItem sp = new SpinItem();
+        sp.setParameters(1, -5.5, 7, 0.51);
+        sp.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+
         layout.addItem(password);
         layout.addItem(te);
         layout.addItem(tb);
+        layout.addItem(sp);
     }
 }

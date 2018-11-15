@@ -76,19 +76,29 @@ class TextBlock extends Prototype
     }
 
     private void onMousePressed(Object sender, MouseArgs args) {
-        replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
-        if (_isSelect)
-            unselectText();
+        _textureStorage.textInputLock.lock();
+        try {
+            replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
+            if (_isSelect)
+                unselectText();
+        } finally {
+            _textureStorage.textInputLock.unlock();
+        }
     }
 
     private void onDragging(Object sender, MouseArgs args) {
-        replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
-        if (!_isSelect) {
-            _isSelect = true;
-            _selectFrom = new Point(_cursor_position);
-        } else {
-            _selectTo = new Point(_cursor_position);
-            makeSelectedArea(_selectFrom, _selectTo);
+        _textureStorage.textInputLock.lock();
+        try {
+            replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
+            if (!_isSelect) {
+                _isSelect = true;
+                _selectFrom = new Point(_cursor_position);
+            } else {
+                _selectTo = new Point(_cursor_position);
+                makeSelectedArea(_selectFrom, _selectTo);
+            }
+        } finally {
+            _textureStorage.textInputLock.unlock();
         }
     }
 
@@ -159,9 +169,9 @@ class TextBlock extends Prototype
         // Console.WriteLine(_lineSpacer);
         /*
          * int lineNumb = _textureStorage.findLineNumb(realPos.y);
-         * 
+         *
          * realPos.x -= getX() + getPadding().left + _textureStorage.textMargin().left;
-         * 
+         *
          * _cursor_position.y = lineNumb; _cursor_position.x = coordXToPos(realPos.x,
          * lineNumb);
          */
@@ -209,30 +219,29 @@ class TextBlock extends Prototype
                 //
                 //
                 switch (args.mods) {
-                case SHIFT:
-                    if (ShiftValCodes.contains(args.key)) {
-                        // System.out.println(args.mods + " " + args.key + " " + _isSelect);
-                        if (!_isSelect) {
-                            _isSelect = true;
-                            _selectFrom = new Point(_cursor_position);
+                    case SHIFT:
+                        if (ShiftValCodes.contains(args.key)) {
+                            if (!_isSelect) {
+                                _isSelect = true;
+                                _selectFrom = new Point(_cursor_position);
+                            }
                         }
-                    }
 
-                    break;
+                        break;
 
-                case CONTROL:
-                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
-                        _selectFrom.x = 0;
-                        _selectFrom.y = 0;
-                        _cursor_position.y = _textureStorage.getCount() - 1;
-                        _cursor_position.x = getLineLetCount(_cursor_position.y);
-                        replaceCursor();
+                    case CONTROL:
+                        if (args.key == KeyCode.A || args.key == KeyCode.a) {
+                            _selectFrom.x = 0;
+                            _selectFrom.y = 0;
+                            _cursor_position.y = _textureStorage.getCount() - 1;
+                            _cursor_position.x = getLineLetCount(_cursor_position.y);
+                            replaceCursor();
 
-                        _isSelect = true;
-                    }
-                    break;
+                            _isSelect = true;
+                        }
+                        break;
 
-                // alt, super ?
+                    // alt, super ?
                 }
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE || args.key == KeyCode.ENTER) {
@@ -364,7 +373,7 @@ class TextBlock extends Prototype
                 privCutText();
             }
             if (_justSelected) _justSelected = false;
-                
+
             _cursor_position = checkLineFits(_cursor_position);
 
             StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursor_position.y));
@@ -445,10 +454,10 @@ class TextBlock extends Prototype
          * output[0]; //_minFontY = output[1]; //_maxFontY = output[2]; _lineHeight =
          * output[2]; //Math.abs(_maxFontY - _minFontY); if (_lineSpacer <
          * _minLineSpacer) _lineSpacer = _minLineSpacer;
-         * 
+         *
          * if (_linesList == null) return; for (TextLine te : _linesList)
          * te.setFont(font);
-         * 
+         *
          * _cursor.setHeight(_lineHeight + _lineSpacer); // + 6); }
          */
         _textureStorage.setFont(font);
@@ -634,57 +643,61 @@ class TextBlock extends Prototype
         Point outPoint = _textureStorage.addXYShifts(xShift, yShift, cursorPosToCoord(point), isx);
         /*
          * int offset = _cursorXMax / 3;
-         * 
+         *
          * if (globalXShift + outPoint.x < 0) { globalXShift = -outPoint.x; globalXShift
          * += offset; if (globalXShift > 0) globalXShift = 0; updLinesXShift(); } if
          * (globalXShift + outPoint.x > _cursorXMax) { globalXShift = _cursorXMax -
          * outPoint.x; globalXShift -= offset; updLinesXShift(); } if (outPoint.y +
          * globalYShift < 0) { globalYShift = -outPoint.y; updLinesYShift();
-         * 
+         *
          * } if (outPoint.y + _lineHeight + globalYShift > _cursorYMax) { globalYShift =
          * _cursorYMax - outPoint.y - _lineHeight; updLinesYShift(); }
-         * 
+         *
          * outPoint.x += globalXShift; outPoint.y += globalYShift;
          */
         outPoint.x += /* getX() + getPadding().left + _linesList.get(0).getMargin().left */ +xShift;
         outPoint.y += /* getY() + getPadding().top + _linesList.get(0).getMargin().top */ +yShift;
 
-        // Console.WriteLine(outPoint.x + " " + outPoint.y + " " + globalYShift);
         return outPoint;
     }
 
     private String privGetSelectedText() {
-        _selectFrom = checkLineFits(_selectFrom);
-        _selectTo = checkLineFits(_selectTo);
-        if (_selectFrom.x == _selectTo.x && _selectFrom.y == _selectTo.y)
-            return "";
-        StringBuilder sb = new StringBuilder();
-        List<Point> listPt = realFromTo(_selectFrom, _selectTo);
-        Point fromReal = listPt.get(0);
-        Point toReal = listPt.get(1);
+        _textureStorage.textInputLock.lock();
+        try {
+            _selectFrom = checkLineFits(_selectFrom);
+            _selectTo = checkLineFits(_selectTo);
+            if (_selectFrom.x == _selectTo.x && _selectFrom.y == _selectTo.y)
+                return "";
+            StringBuilder sb = new StringBuilder();
+            List<Point> listPt = realFromTo(_selectFrom, _selectTo);
+            Point fromReal = listPt.get(0);
+            Point toReal = listPt.get(1);
 
-        StringBuilder stmp;
-        if (fromReal.y == toReal.y) {
-            stmp = new StringBuilder(_textureStorage.getTextInLine(fromReal.y));
-            sb.append(stmp.substring(fromReal.x, toReal.x)); // - fromReal.x
+            StringBuilder stmp;
+            if (fromReal.y == toReal.y) {
+                stmp = new StringBuilder(_textureStorage.getTextInLine(fromReal.y));
+                sb.append(stmp.substring(fromReal.x, toReal.x)); // - fromReal.x
+                return sb.toString();
+            }
+
+            if (fromReal.x >= getLineLetCount(fromReal.y))
+                sb.append("\n");
+            else {
+                stmp = new StringBuilder(_textureStorage.getTextInLine(fromReal.y));
+                sb.append(stmp.substring(fromReal.x) + "\n");
+            }
+            for (int i = fromReal.y + 1; i < toReal.y; i++) {
+                stmp = new StringBuilder(_textureStorage.getTextInLine(i));
+                sb.append(stmp + "\n");
+            }
+
+            stmp = new StringBuilder(_textureStorage.getTextInLine(toReal.y));
+            sb.append(stmp.substring(0, toReal.x));
+
             return sb.toString();
+        } finally {
+            _textureStorage.textInputLock.unlock();
         }
-
-        if (fromReal.x >= getLineLetCount(fromReal.y))
-            sb.append("\n");
-        else {
-            stmp = new StringBuilder(_textureStorage.getTextInLine(fromReal.y));
-            sb.append(stmp.substring(fromReal.x) + "\n");
-        }
-        for (int i = fromReal.y + 1; i < toReal.y; i++) {
-            stmp = new StringBuilder(_textureStorage.getTextInLine(i));
-            sb.append(stmp + "\n");
-        }
-
-        stmp = new StringBuilder(_textureStorage.getTextInLine(toReal.y));
-        sb.append(stmp.substring(0, toReal.x));
-
-        return sb.toString();
     }
 
     public String getSelectedText() {

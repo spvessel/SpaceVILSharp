@@ -164,7 +164,7 @@ public class TitleBar extends WindowAnchor {
         // _maximize
         InterfaceMouseMethodState maximize_click = (sender, args) -> {
             // getHandler().maximize();
-            System.out.println(_maximize.getBorderThickness() + " " + _maximize.getBorderFill());
+            //System.out.println(_maximize.getBorderThickness() + " " + _maximize.getBorderFill());
         };
         _maximize.eventMouseClick.add(maximize_click);
 

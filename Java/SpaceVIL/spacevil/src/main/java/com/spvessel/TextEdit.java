@@ -78,20 +78,30 @@ public class TextEdit extends Prototype
     }
 
     private void onMousePressed(Object sender, MouseArgs args) {
-        replaceCursorAccordingCoord(args.position.getX());
-        if (_isSelect)
-            unselectText();
+        textInputLock.lock();
+        try {
+            replaceCursorAccordingCoord(args.position.getX());
+            if (_isSelect)
+                unselectText();
+        } finally {
+            textInputLock.unlock();
+        }
     }
 
     private void onDragging(Object sender, MouseArgs args) {
-        replaceCursorAccordingCoord(args.position.getX());
+        textInputLock.lock();
+        try {
+            replaceCursorAccordingCoord(args.position.getX());
 
-        if (!_isSelect) {
-            _isSelect = true;
-            _selectFrom = _cursor_position;
-        } else {
-            _selectTo = _cursor_position;
-            makeSelectedArea(_selectFrom, _selectTo);
+            if (!_isSelect) {
+                _isSelect = true;
+                _selectFrom = _cursor_position;
+            } else {
+                _selectTo = _cursor_position;
+                makeSelectedArea(_selectFrom, _selectTo);
+            }
+        } finally {
+            textInputLock.unlock();
         }
     }
 
@@ -188,7 +198,7 @@ public class TextEdit extends Prototype
             if (!_isEditable) {
                 if (args.mods.equals(KeyMods.CONTROL) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
                     _selectFrom = 0;
-                    _cursor_position = getText().length();
+                    _cursor_position = privGetText().length();
                     _selectTo = _cursor_position;
                     replaceCursor();
                     _isSelect = true;
@@ -219,7 +229,7 @@ public class TextEdit extends Prototype
                 case CONTROL:
                     if (args.key == KeyCode.A || args.key == KeyCode.a) {
                         _selectFrom = 0;
-                        _cursor_position = getText().length();
+                        _cursor_position = privGetText().length();
                         replaceCursor();
 
                         _isSelect = true;
@@ -235,16 +245,16 @@ public class TextEdit extends Prototype
                     else {
                         if (args.key == KeyCode.BACKSPACE && _cursor_position > 0) // backspace
                         {
-                            StringBuilder sb = new StringBuilder(getText());
-                            setText(sb.deleteCharAt(_cursor_position - 1).toString());
+                            StringBuilder sb = new StringBuilder(privGetText());
                             _cursor_position--;
-                            replaceCursor();
+                            privSetText(sb.deleteCharAt(_cursor_position).toString());
+                            //replaceCursor();
                         }
-                        if (args.key == KeyCode.DELETE && _cursor_position < getText().length()) // delete
+                        if (args.key == KeyCode.DELETE && _cursor_position < privGetText().length()) // delete
                         {
-                            StringBuilder sb = new StringBuilder(getText());
-                            setText(sb.deleteCharAt(_cursor_position).toString());
-                            replaceCursor();
+                            StringBuilder sb = new StringBuilder(privGetText());
+                            privSetText(sb.deleteCharAt(_cursor_position).toString());
+                            //replaceCursor();
                         }
                     }
                 } else if (_isSelect && !InsteadKeyMods.contains(args.key))
@@ -258,7 +268,7 @@ public class TextEdit extends Prototype
                     replaceCursor();
                 }
             }
-            if (args.key == KeyCode.RIGHT && _cursor_position < getText().length()) // arrow right
+            if (args.key == KeyCode.RIGHT && _cursor_position < privGetText().length()) // arrow right
             {
                 if (!_justSelected) {
                     _cursor_position++;
@@ -267,7 +277,7 @@ public class TextEdit extends Prototype
             }
             if (args.key == KeyCode.END) // end
             {
-                _cursor_position = getText().length();
+                _cursor_position = privGetText().length();
                 replaceCursor();
             }
             if (args.key == KeyCode.HOME) // home
@@ -305,7 +315,12 @@ public class TextEdit extends Prototype
     }
 
     private void replaceCursor() {
+        int len = privGetText().length();
 
+        if (_cursor_position > len) {
+            _cursor_position = len;
+            replaceCursor();
+        }
         int pos = cursorPosToCoord(_cursor_position);
 
         int w = getTextWidth();
@@ -331,10 +346,10 @@ public class TextEdit extends Prototype
             if (_justSelected) _justSelected = false;
                 
 
-            StringBuilder sb = new StringBuilder(getText());
-            setText(sb.insert(_cursor_position, str).toString());
+            StringBuilder sb = new StringBuilder(privGetText());
             _cursor_position++;
-            replaceCursor();
+            privSetText(sb.insert(_cursor_position - 1, str).toString());
+            //replaceCursor();
         } finally {
             textInputLock.unlock();
         }
@@ -389,20 +404,30 @@ public class TextEdit extends Prototype
         return _text_object.getFont();
     }
 
-    public void setText(String text) {
+    private void privSetText(String text) {
         textInputLock.lock();
         try {
             // _text_object.setLineXShift(_lineXShift, getWidth());
             _text_object.setItemText(text);
             _text_object.checkXShift(_cursorXMax);
             // _text_object.UpdateData(UpdateType.Critical); //Doing in the _text_object
+
+            replaceCursor();
         } finally {
             textInputLock.unlock();
         }
     }
 
-    public String getText() {
+    public void setText(String text) {
+        privSetText(text);
+    }
+
+    private String privGetText() {
         return _text_object.getItemText();
+    }
+
+    public String getText() {
+        return privGetText();
     }
 
     public void setForeground(Color color) {
@@ -502,19 +527,24 @@ public class TextEdit extends Prototype
     }
 
     private String privGetSelectedText() {
-        if (_selectFrom == -1)
-            _selectFrom = 0;
-        if (_selectTo == -1)
-            _selectTo = 0;
-        if (_selectFrom == _selectTo)
-            return "";
-        String text = getText();
-        int fromReal = Math.min(_selectFrom, _selectTo);
-        int toReal = Math.max(_selectFrom, _selectTo);
-        if (fromReal < 0)
-            return "";
-        String selectedText = text.substring(fromReal, toReal); // - fromReal
-        return selectedText;
+        textInputLock.lock();
+        try {
+            if (_selectFrom == -1)
+                _selectFrom = 0;
+            if (_selectTo == -1)
+                _selectTo = 0;
+            if (_selectFrom == _selectTo)
+                return "";
+            String text = privGetText();
+            int fromReal = Math.min(_selectFrom, _selectTo);
+            int toReal = Math.max(_selectFrom, _selectTo);
+            if (fromReal < 0)
+                return "";
+            String selectedText = text.substring(fromReal, toReal); // - fromReal
+            return selectedText;
+        } finally {
+            textInputLock.unlock();
+        }
     }
 
     public String getSelectedText() {
@@ -528,11 +558,11 @@ public class TextEdit extends Prototype
         try {
             if (_isSelect)
                 privCutText();
-            String text = getText();
+            String text = privGetText();
             String newText = text.substring(0, _cursor_position) + pasteStr + text.substring(_cursor_position);
-            setText(newText);
             _cursor_position += pasteStr.length();
-            replaceCursor();
+            privSetText(newText);
+            //replaceCursor();
         } finally {
             textInputLock.unlock();
         }
@@ -557,10 +587,10 @@ public class TextEdit extends Prototype
                 return str;
             int fromReal = Math.min(_selectFrom, _selectTo);
             int toReal = Math.max(_selectFrom, _selectTo);
-            StringBuilder sb = new StringBuilder(getText());
-            setText(sb.delete(fromReal, toReal).toString()); // - fromReal
+            StringBuilder sb = new StringBuilder(privGetText());
             _cursor_position = fromReal;
-            replaceCursor();
+            privSetText(sb.delete(fromReal, toReal).toString()); // - fromReal
+            //replaceCursor();
             if (_isSelect)
                 unselectText();
             _justSelected = false;
@@ -584,15 +614,15 @@ public class TextEdit extends Prototype
      * internal void ShowCursor(bool isShow) { if (isShow) _cursor.setWidth(2); else
      * _cursor.setWidth(0); }
      */
-    private int nearestPosToCursor(double xPos) {
-        List<Integer> endPos = _text_object.getLetPosArray();
-        int pos = (int) endPos.stream().map(x -> Math.abs(x - xPos)).sorted().toArray()[0];
-        return pos;
-    }
+//    private int nearestPosToCursor(double xPos) {
+//        List<Integer> endPos = _text_object.getLetPosArray();
+//        int pos = (int) endPos.stream().map(x -> Math.abs(x - xPos)).sorted().toArray()[0];
+//        return pos;
+//    }
 
-    void setCursorPosition(double newPos) {
-        _cursor_position = nearestPosToCursor(newPos);
-    }
+//    void setCursorPosition(double newPos) {
+//        _cursor_position = nearestPosToCursor(newPos);
+//    }
 
     public void clear() {
         setText("");
@@ -620,6 +650,10 @@ public class TextEdit extends Prototype
 
     private int getLineXShift() {
         return _text_object.getLineXShift();
+    }
+
+    boolean isBegining() {
+        return (_cursor_position == 0);
     }
 
 }
