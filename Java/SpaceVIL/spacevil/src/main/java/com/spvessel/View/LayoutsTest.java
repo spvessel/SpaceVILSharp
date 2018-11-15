@@ -49,7 +49,7 @@ public class LayoutsTest extends ActiveWindow {
 
         ListBox listbox_left_1 = new ListBox();
         listbox_left_1.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        listbox_left_1.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+        // listbox_left_1.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         listbox_left_1.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         grid.insertItem(listbox_left_1, 0, 0);
         ListBox listbox_left_2 = new ListBox();

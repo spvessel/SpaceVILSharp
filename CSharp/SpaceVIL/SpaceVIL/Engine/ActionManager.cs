@@ -77,7 +77,7 @@ namespace SpaceVIL
                 case InputEventType.MouseRelease:
                     InvokeMouseClickEvent(task.Item, task.Args as MouseArgs);
                     break;
-                case InputEventType.MousePressed:
+                case InputEventType.MousePress:
                     InvokeMousePressedEvent(task.Item, task.Args as MouseArgs);
                     break;
                 case InputEventType.MouseHover:

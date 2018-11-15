@@ -99,10 +99,10 @@ namespace SpaceVIL
         private void CastAndRemove(IBaseItem item)
         {
             Prototype prototype = item as Prototype;
-                if (prototype != null)
-                    prototype.GetCore().RemoveItemFromListeners();
-                else
-                    (item as BaseItem).RemoveItemFromListeners();
+            if (prototype != null)
+                prototype.GetCore().RemoveItemFromListeners();
+            else
+                (item as BaseItem).RemoveItemFromListeners();
         }
         public virtual void AddItem(IBaseItem item)
         {
@@ -387,18 +387,47 @@ namespace SpaceVIL
         }
 
         // common properties
-        private bool _pass_events = true;
+        private InputEventType _pass_events = 0x00;
 
-        public bool GetPassEvents()
+        internal bool IsPassEvents()
+        {
+            if (_pass_events == 0x00)
+                return true;
+            return false;
+        }
+
+        internal InputEventType GetPassEvents()
         {
             return _pass_events;
         }
 
-        public void SetPassEvents(bool value)
+        internal void SetPassEvents(bool value)
         {
-            if (_pass_events == value)
-                return;
-            _pass_events = value;
+            if (!value)
+            {
+                List<InputEventType> list = Enum.GetValues(typeof(InputEventType)).Cast<InputEventType>().ToList();
+                foreach (InputEventType e in list)
+                {
+                    _pass_events |= e;
+                }
+            }
+            else
+            {
+                _pass_events = 0x00;
+            }
+        }
+
+        internal void SetPassEvents(bool value, InputEventType e)
+        {
+            if (!value)
+            {
+                    _pass_events |= e;
+            }
+            else
+            {
+                if (_pass_events.HasFlag(e))
+                    _pass_events &= ~e;
+            }
         }
 
         private bool _disabled;

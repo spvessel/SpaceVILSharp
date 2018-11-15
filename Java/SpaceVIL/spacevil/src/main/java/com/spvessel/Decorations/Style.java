@@ -666,7 +666,7 @@ public class Style {
         slider_style.addInnerStyle("track", track_style);
 
         Style handler_style = new Style();
-        handler_style.widthPolicy = SizePolicy.EXPAND;
+        handler_style.widthPolicy = SizePolicy.FIXED;
         handler_style.heightPolicy = SizePolicy.EXPAND;
         handler_style.background = new Color(100, 100, 100, 255);
         handler_style.margin = new Indents(0, 3, 0, 3);
@@ -735,7 +735,7 @@ public class Style {
 
         Style handler_style = new Style();
         handler_style.widthPolicy = SizePolicy.EXPAND;
-        handler_style.heightPolicy = SizePolicy.EXPAND;
+        handler_style.heightPolicy = SizePolicy.FIXED;
         handler_style.background = new Color(100, 100, 100, 255);
         handler_style.margin = new Indents(3, 0, 3, 0);
         handler_style.alignment = new LinkedList<ItemAlignment>(
@@ -1350,9 +1350,9 @@ public class Style {
         style.textAlignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         style.spacing = new Spacing(5, 0);
         style.padding = new Indents(5, 0, 0, 0);
-        ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 130);
-        style.addItemState(ItemStateType.HOVERED, hovered);
+        // ItemState hovered = new ItemState();
+        // hovered.background = new Color(255, 255, 255, 130);
+        // style.addItemState(ItemStateType.HOVERED, hovered);
 
         Style indicator_style = new Style();// getButtonToggleStyle();
         indicator_style.background = new Color(32, 32, 32);

@@ -6,6 +6,7 @@ import com.spvessel.Core.InterfaceMouseMethodState;
 import com.spvessel.Decorations.Indents;
 import com.spvessel.Decorations.ItemState;
 import com.spvessel.Decorations.Style;
+import com.spvessel.Flags.InputEventType;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.ItemStateType;
 import com.spvessel.Flags.SizePolicy;
@@ -77,11 +78,11 @@ public class TreeItem extends Prototype {
         _indicator = new ButtonToggle();
         _indicator.setItemName("Indicator_" + count);
         _text_object = new Label();
+        _text_object.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
         _icon_shape = new CustomShape();
 
-        // setStyle(DefaultsService.getDefaultStyle(typeof(SpaceVIL.TreeBranch)));
         setStyle(DefaultsService.getDefaultStyle(TreeItem.class));
-        setPassEvents(false);
+        setPassEvents(false, InputEventType.MOUSE_PRESS, InputEventType.MOUSE_RELEASE);
     }
 
     public TreeItem(TreeItemType type, String text) {
@@ -106,12 +107,15 @@ public class TreeItem extends Prototype {
         if (!_parent._root.isVisible())
             level--;
         setPadding(2 + _indent_size * level, 0, 0, 0);
+        int width = getPadding().left + 10;
+        for (InterfaceBaseItem item : getItems()) {
+            width += item.getWidth() + item.getMargin().left + item.getMargin().right + getSpacing().horizontal;
+        }
+        setMinWidth(width - getSpacing().horizontal);
     }
 
     @Override
     public void initElements() {
-        resetIndents();
-
         _menu = new ContextMenu(getHandler());
         _menu.setBackground(40, 40, 40);
         _menu.setPassEvents(false);
@@ -154,8 +158,6 @@ public class TreeItem extends Prototype {
             _icon_shape.setMargin(2, 0, 0, 0);
             super.addItem(_icon_shape);
             super.addItem(_text_object);
-
-            _menu.setSize(100, 4 + 30 * 2 - 5);
             _menu.addItems(rename, remove, copy);
             break;
 
@@ -166,14 +168,13 @@ public class TreeItem extends Prototype {
             super.addItem(_indicator);
             super.addItem(_icon_shape);
             super.addItem(_text_object);
-
-            _menu.setSize(100, 4 + 30 * 3 - 5);
             _menu.addItems(new_branch, new_leaf, rename, paste);
             break;
         default:
             super.addItem(_text_object);
             break;
         }
+        resetIndents();
     }
 
     protected void onToggleHide(boolean value) // refactor
@@ -271,6 +272,7 @@ public class TreeItem extends Prototype {
 
     public void setText(String text) {
         _text_object.setText(text);
+        _text_object.setWidth(_text_object.getTextWidth());
         updateLayout();
     }
 

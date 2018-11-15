@@ -64,10 +64,13 @@ namespace SpaceVIL
             _indicator = new ButtonToggle();
             _indicator.SetItemName("Indicator_" + count);
             _text_object = new Label();
+            _text_object.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             _icon_shape = new CustomShape();
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeItem)));
-            SetPassEvents(false);
+            SetPassEvents(false,
+                InputEventType.MousePress |
+                InputEventType.MouseRelease);
         }
         public TreeItem(TreeItemType type, String text = "") : this(type)
         {
@@ -93,10 +96,16 @@ namespace SpaceVIL
             if (!_parent._root.IsVisible())
                 level--;
             SetPadding(2 + _indent_size * level, 0, 0, 0);
+            int width = GetPadding().Left + 10;
+            foreach (IBaseItem item in GetItems())
+            {
+                width += item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right + GetSpacing().Horizontal;
+            }
+            SetMinWidth(width - GetSpacing().Horizontal);
+            // System.out.println(getItemName() + " " + (width - getSpacing().horizontal));
         }
         public override void InitElements()
         {
-            ResetIndents();
 
             _menu = new ContextMenu(GetHandler());
             _menu.SetBackground(40, 40, 40);
@@ -164,6 +173,7 @@ namespace SpaceVIL
                     base.AddItem(_text_object);
                     break;
             }
+            ResetIndents();
         }
         internal void OnToggleHide(bool value) // refactor
         {
@@ -263,6 +273,7 @@ namespace SpaceVIL
         public void SetText(String text)
         {
             _text_object.SetText(text);
+            _text_object.SetWidth(_text_object.GetTextWidth());
             UpdateLayout();
         }
         public String GetText()

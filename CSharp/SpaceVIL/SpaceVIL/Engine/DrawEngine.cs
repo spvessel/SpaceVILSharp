@@ -352,7 +352,7 @@ namespace SpaceVIL
 
             _margs.Position.SetPosition((float)xpos, (float)ypos);
 
-            if (EngineEvent.LastEvent().HasFlag(InputEventType.MousePressed)) // жость какая-то ХЕРОТАААА!!!
+            if (EngineEvent.LastEvent().HasFlag(InputEventType.MousePress)) // жость какая-то ХЕРОТАААА!!!
             {
                 if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble)
                 {
@@ -514,7 +514,7 @@ namespace SpaceVIL
 
             InputEventType m_state;
             if (state == InputState.Press)
-                m_state = InputEventType.MousePressed;
+                m_state = InputEventType.MousePress;
             else
                 m_state = InputEventType.MouseRelease;
 
@@ -578,7 +578,7 @@ namespace SpaceVIL
                     if (HoveredItem != null)
                     {
                         HoveredItem.SetMousePressed(true);
-                        AssignActions(InputEventType.MousePressed, _margs, false);
+                        AssignActions(InputEventType.MousePress, _margs, false);
 
                         //Focus get
                         if (HoveredItem.IsFocusable)
@@ -595,7 +595,7 @@ namespace SpaceVIL
                         (HoveredItem as WContainer)._resizing = true;
                     }
                     EngineEvent.ResetAllEvents();
-                    EngineEvent.SetEvent(InputEventType.MousePressed);
+                    EngineEvent.SetEvent(InputEventType.MousePress);
                     break;
                 case InputState.Repeat:
                     break;
@@ -643,7 +643,7 @@ namespace SpaceVIL
                     else
                     {
                         IFloating float_item = item as IFloating;
-                        if (float_item != null && action == InputEventType.MousePressed)
+                        if (float_item != null && action == InputEventType.MousePress)
                         {
                             if (float_item.IsOutsideClickClosable())
                             {
@@ -653,7 +653,6 @@ namespace SpaceVIL
                             }
                         }
                     }
-                    AssignActions(InputEventType.MouseMove, _margs, false);
                 }
             }
 
@@ -670,10 +669,11 @@ namespace SpaceVIL
                     if (item.Equals(HoveredItem) && HoveredItem.IsDisabled())
                         continue;//пропустить
                     item.SetMouseHover(true);
-                    if (!item.GetPassEvents())
+                    if (!item.IsPassEvents(InputEventType.MouseHover))
                         break;//остановить передачу событий последующим элементам
                     tmp.Remove(item);
                 }
+                AssignActions(InputEventType.MouseHover, _margs, false);
                 return true;
             }
             else
@@ -719,15 +719,15 @@ namespace SpaceVIL
             tmp.Reverse();
             foreach (var item in tmp)
             {
-                if (!item.GetPassEvents())
-                    continue;
                 if (dy > 0 || dx < 0)
                     item.EventScrollUp?.Invoke(item, _margs);
                 if (dy < 0 || dx > 0)
                     item.EventScrollDown?.Invoke(item, _margs);
 
-                EngineEvent.SetEvent(InputEventType.MouseScroll);
+                if (!item.IsPassEvents(InputEventType.MouseScroll))
+                    break;
             }
+            EngineEvent.SetEvent(InputEventType.MouseScroll);
         }
 
         private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
@@ -815,7 +815,7 @@ namespace SpaceVIL
                         Action = action,
                         Args = args
                     });
-                    if (!item.GetPassEvents())
+                    if (!item.IsPassEvents(action))
                         break;//остановить передачу событий последующим элементам
                     tmp.Remove(item);
                 }
@@ -836,11 +836,11 @@ namespace SpaceVIL
             _handler.GetLayout().ExecutePollActions();
         }
 
-        internal float _interval = 1.0f / 60.0f;//1000 / 60;
+        internal float _interval = 1.0f / 30.0f;//1000 / 60;
         // internal float _interval = 1.0f / 60.0f;//1000 / 60;
         // internal int _interval = 11;//1000 / 90;
         // internal int _interval = 08;//1000 / 120;
-        
+
         VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
         public void Run()
@@ -905,10 +905,10 @@ namespace SpaceVIL
             }
         }
 
-        private void DrawFBO() { }
-
         private void SetStencilMask(List<float[]> crd_array)
         {
+            if (crd_array == null)
+                return;
             uint[] buffers = new uint[2];
             glGenBuffers(2, buffers);
 

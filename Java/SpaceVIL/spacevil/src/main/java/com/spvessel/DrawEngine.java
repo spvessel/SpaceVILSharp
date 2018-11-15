@@ -672,7 +672,6 @@ public final class DrawEngine {
                         }
                     }
                 }
-                assignActions(InputEventType.MOUSE_MOVE, _margs, false);
             }
         }
 
@@ -688,9 +687,10 @@ public final class DrawEngine {
                 if (item.equals(hoveredItem) && hoveredItem.isDisabled())
                     continue;// пропустить
                 item.setMouseHover(true);
-                if (!item.isPassEvents())
+                if (!item.isPassEvents(InputEventType.MOUSE_HOVER))
                     break;
             }
+            assignActions(InputEventType.MOUSE_HOVER, _margs, false);
             return true;
         } else
             return false;
@@ -734,14 +734,14 @@ public final class DrawEngine {
         List<Prototype> tmp = new LinkedList<Prototype>(hoveredItems);
         Collections.reverse(tmp);
         for (Prototype item : tmp) {
-            if (!item.isPassEvents())
-                continue;
             if (dy > 0 || dx < 0)
                 item.eventScrollUp.execute(item, _margs);
             if (dy < 0 || dx > 0)
                 item.eventScrollDown.execute(item, _margs);
-            engineEvent.setEvent(InputEventType.MOUSE_SCROLL);
+            if (!item.isPassEvents(InputEventType.MOUSE_SCROLL))
+                break;
         }
+        engineEvent.setEvent(InputEventType.MOUSE_SCROLL);
     }
 
     private void keyPress(long wnd, int key, int scancode, int action, int mods) {
@@ -820,7 +820,7 @@ public final class DrawEngine {
                 task.action = action;
                 task.args = args;
                 _handler.getLayout().setEventTask(task);
-                if (!item.isPassEvents())
+                if (!item.isPassEvents(action))
                     break;
             }
         }
@@ -1253,12 +1253,13 @@ public final class DrawEngine {
                 for (int k = -res; k <= res; k++) {
                     if (i + k < 0 || i + k >= h)
                         ctmp = image[i][j];
-                    else ctmp = image[i + k][j];
+                    else
+                        ctmp = image[i + k][j];
 
                     tmp += (weights[Math.abs(k)]) * ctmp;
 
                 }
-                outarr[i][j] = (float)tmp;
+                outarr[i][j] = (float) tmp;
             }
         }
         shapePart(outarr, res, weights);
@@ -1267,7 +1268,7 @@ public final class DrawEngine {
     private float[][] shapePart(float[][] image, int res, float[] weights) {
         int h = image.length;
         int w = image[0].length;
-        float [][] outarr = new float[h][w];
+        float[][] outarr = new float[h][w];
         double tmp, ctmp;
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
@@ -1275,12 +1276,13 @@ public final class DrawEngine {
                 for (int l = -res; l <= res; l++) {
                     if (j + l < 0 || j + l >= w)
                         ctmp = image[i][j];
-                    else ctmp = image[i][j + l];
+                    else
+                        ctmp = image[i][j + l];
 
                     tmp += (weights[Math.abs(l)]) * ctmp;
                 }
 
-                outarr[i][j] = (float)tmp;
+                outarr[i][j] = (float) tmp;
             }
         }
         return outarr;

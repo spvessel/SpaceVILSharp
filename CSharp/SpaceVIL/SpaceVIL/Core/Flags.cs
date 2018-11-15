@@ -124,7 +124,7 @@ namespace SpaceVIL.Core
         MouseMove = 0x80,
         MouseHover = 0x400000,
         MouseDrag = 0x800000,
-        MousePressed = 0x100,
+        MousePress = 0x100,
         MouseRelease = 0x200,
         MouseScroll = 0x400,
 

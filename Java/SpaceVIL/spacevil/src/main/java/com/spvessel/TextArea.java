@@ -288,8 +288,6 @@ public class TextArea extends Prototype {
         _menu.setShadow(10, 0, 0, Color.black);
 
         updateElements();
-        // setHScrollBarVisible(ScrollBarVisibility.NEVER);
-        // System.out.println("textinput: " + getHeight() + " " + _area.getHeight() + " " + hScrollBar.getHeight());
     }
 
     public void setText(String text) {

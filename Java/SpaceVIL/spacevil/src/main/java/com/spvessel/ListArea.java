@@ -3,6 +3,7 @@ package com.spvessel;
 import com.spvessel.Common.DefaultsService;
 import com.spvessel.Core.*;
 import com.spvessel.Decorations.Style;
+import com.spvessel.Flags.SizePolicy;
 
 public class ListArea extends Prototype implements InterfaceVLayout {
     public EventCommonMethod selectionChanged = new EventCommonMethod();
@@ -55,9 +56,21 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         return _substrate;
     }
 
-    public void setSubstrate(CustomShape shape) {
-        _substrate = shape;
+    private boolean _show_hover = true;
+
+    public void setHoverVisibility(boolean visibility) {
+        _show_hover = visibility;
         updateLayout();
+    }
+
+    public boolean getHoverVisibility() {
+        return _show_hover;
+    }
+
+    private Rectangle _hover_substrate = new Rectangle();
+
+    public Rectangle getHoverSubstrate() {
+        return _hover_substrate;
     }
 
     // public List<ListPosition> areaPosition = new LinkedList<>();
@@ -69,19 +82,21 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     public ListArea() {
         setItemName("ListArea_" + count);
         count++;
-        InterfaceMouseMethodState click = (sender, args) -> onMouseClick(sender, args);
-        eventMouseClick.add(click);
+        eventMouseClick.add((sender, args) -> onMouseClick(sender, args));
+        eventMouseHover.add((sender, args) -> onMouseHover(sender, args));
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ListArea"));
         setStyle(DefaultsService.getDefaultStyle(ListArea.class));
+
+        _hover_substrate.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        _hover_substrate.setBackground(255, 255, 255, 30);
     }
 
     // overrides
     @Override
     public void initElements() {
         _substrate.setVisible(false);
-        ;
-        super.addItem(_substrate);
+        super.addItems(_substrate, _hover_substrate);
     }
 
     public void onMouseClick(InterfaceItem sender, MouseArgs args) {
@@ -99,6 +114,29 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 break;
             }
         }
+    }
+
+    public void onMouseHover(InterfaceItem sender, MouseArgs args) {
+        if (!getHoverVisibility())
+            return;
+
+        for (InterfaceBaseItem item : getItems()) {
+            if (item.equals(_substrate) || item.equals(_hover_substrate) || !item.isVisible() || !item.isDrawable())
+                continue;
+            if (args.position.getY() > item.getY() && args.position.getY() < item.getY() + item.getHeight()) {
+                _hover_substrate.setHeight(item.getHeight());
+                _hover_substrate.setPosition(getX() + getPadding().left, item.getY());
+                _hover_substrate.setDrawable(true);
+                break;
+            } 
+        }
+    }
+
+    @Override
+    public void setMouseHover(boolean value) {
+        super.setMouseHover(value);
+        if (!value)
+            _hover_substrate.setDrawable(false);
     }
 
     @Override
@@ -158,7 +196,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         int startY = getY() + getPadding().top;
         int index = 0;
         for (InterfaceBaseItem child : getItems()) {
-            if (child.equals(_substrate) || !child.isVisible())
+            if (child.equals(_substrate) || child.equals(_hover_substrate) || !child.isVisible())
                 continue;
 
             child.setX((-1) * (int) _xOffset + getX() + getPadding().left + child.getMargin().left);
@@ -172,7 +210,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 if (child_Y + child.getHeight() <= startY) {
                     child.setDrawable(false);
                     if (_selection == index)
-                        _substrate.setDrawable(false);;
+                        _substrate.setDrawable(false);
                 } else {
                     child.setY((int) child_Y);
                     child.setDrawable(true);

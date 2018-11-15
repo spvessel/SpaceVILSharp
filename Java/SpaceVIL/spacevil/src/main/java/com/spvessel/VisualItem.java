@@ -3,6 +3,7 @@ package com.spvessel;
 import com.spvessel.Core.*;
 import com.spvessel.Decorations.*;
 import com.spvessel.Flags.GeometryEventType;
+import com.spvessel.Flags.InputEventType;
 import com.spvessel.Flags.ItemStateType;
 import com.spvessel.Flags.LayoutType;
 import com.spvessel.Flags.SizePolicy;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.stream.*;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public final class VisualItem extends BaseItem {
@@ -214,6 +216,7 @@ public final class VisualItem extends BaseItem {
         else
             ((BaseItem) item).removeItemFromListeners();
     }
+
     protected void addItem(InterfaceBaseItem item) {
         getHandler().engineLocker.lock();
         try {
@@ -395,16 +398,52 @@ public final class VisualItem extends BaseItem {
     }
 
     // common properties
-    private boolean _pass_events = true;
+    private List<InputEventType> _pass_events = new LinkedList<>();
 
     protected boolean isPassEvents() {
+        if (_pass_events.size() == 0)
+            return true;
+        return false;
+    }
+
+    protected List<InputEventType> getPassEvents() {
+        List<InputEventType> result = Arrays.asList(InputEventType.values());
+        return result.stream().filter(e -> !_pass_events.contains(e)).collect(Collectors.toList());
+    }
+
+    protected List<InputEventType> getNonPassEvents() {
         return _pass_events;
     }
 
     protected void setPassEvents(boolean value) {
-        if (_pass_events == value)
-            return;
-        _pass_events = value;
+        if (!value) {
+            for (InputEventType e : Arrays.asList(InputEventType.values())) {
+                _pass_events.add(e);
+            }
+        } else {
+            _pass_events.clear();
+        }
+    }
+
+    protected void setPassEvents(boolean value, InputEventType e) {
+        if (!value) {
+            if (!_pass_events.contains(e))
+                _pass_events.add(e);
+        } else {
+            if (_pass_events.contains(e))
+                _pass_events.remove(e);
+        }
+    }
+
+    protected void setPassEvents(boolean value, List<InputEventType> event_set) {
+        if (!value) {
+            _pass_events = event_set;
+        } else {
+            for (InputEventType e : event_set) {
+                if (_pass_events.contains(e))
+                    _pass_events.remove(e);
+            }
+        }
     }
 
     private boolean _disabled;
@@ -677,12 +716,12 @@ public final class VisualItem extends BaseItem {
         setMargin(style.margin);
         setVisible(style.isVisible);
         removeAllItemStates();
-        
+
         ItemState core_state = new ItemState(style.background);
         core_state.border.setRadius(style.borderRadius);
         core_state.border.setThickness(style.borderThickness);
         core_state.border.setFill(style.borderFill);
-        
+
         for (Map.Entry<ItemStateType, ItemState> state : style.getAllStates().entrySet()) {
             addItemState(state.getKey(), state.getValue());
         }

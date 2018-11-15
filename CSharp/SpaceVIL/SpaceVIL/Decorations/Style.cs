@@ -597,7 +597,7 @@ namespace SpaceVIL.Decorations
             slider_style.AddInnerStyle("track", track_style);
 
             Style handler_style = new Style();
-            handler_style.WidthPolicy = SizePolicy.Expand;
+            handler_style.WidthPolicy = SizePolicy.Fixed;
             handler_style.HeightPolicy = SizePolicy.Expand;
             handler_style.Background = Color.FromArgb(255, 100, 100, 100);
             handler_style.Margin = new Indents(0, 3, 0, 3);
@@ -664,7 +664,7 @@ namespace SpaceVIL.Decorations
 
             Style handler_style = new Style();
             handler_style.WidthPolicy = SizePolicy.Expand;
-            handler_style.HeightPolicy = SizePolicy.Expand;
+            handler_style.HeightPolicy = SizePolicy.Fixed;
             handler_style.Background = Color.FromArgb(255, 100, 100, 100);
             handler_style.Margin = new Indents(3, 0, 3, 0);
             handler_style.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
@@ -1283,9 +1283,9 @@ namespace SpaceVIL.Decorations
             style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
             style.Spacing = new Spacing(5, 0);
             style.Padding = new Indents(5, 0, 0, 0);
-            ItemState hovered = new ItemState();
-            hovered.Background = Color.FromArgb(130, 255, 255, 255);
-            style.AddItemState(ItemStateType.Hovered, hovered);
+            // ItemState hovered = new ItemState();
+            // hovered.Background = Color.FromArgb(130, 255, 255, 255);
+            // style.AddItemState(ItemStateType.Hovered, hovered);
 
             Style indicator_style = new Style();//getButtonToggleStyle();
             indicator_style.Background = Color.FromArgb(255, 32, 32, 32);

@@ -66,10 +66,10 @@ public class ListBox extends Prototype {
         if (policy == ScrollBarVisibility.NEVER) {
             vScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if(policy == ScrollBarVisibility.AS_NEEDED){
+        } else if (policy == ScrollBarVisibility.AS_NEEDED) {
             vScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if(policy == ScrollBarVisibility.ALWAYS){
+        } else if (policy == ScrollBarVisibility.ALWAYS) {
             vScrollBar.setDrawable(true);
             if (!hScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -94,10 +94,10 @@ public class ListBox extends Prototype {
         if (policy == ScrollBarVisibility.NEVER) {
             hScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if(policy == ScrollBarVisibility.AS_NEEDED){
+        } else if (policy == ScrollBarVisibility.AS_NEEDED) {
             hScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if(policy == ScrollBarVisibility.ALWAYS){
+        } else if (policy == ScrollBarVisibility.ALWAYS) {
             hScrollBar.setDrawable(true);
             if (!vScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -152,18 +152,18 @@ public class ListBox extends Prototype {
         _area.setHScrollOffset(h_offset);
     }
 
-    private void updateVerticalSlider()// vertical slider
-    {
+    // vertical slider
+    private void updateVerticalSlider() {
         int total_invisible_size = 0;
         int visible_area = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
         for (InterfaceBaseItem item : _area.getItems()) {
-            if (item.equals(_area.getSubstrate()) || !item.isVisible())
+            if (item.equals(_area.getSubstrate()) || item.equals(_area.getHoverSubstrate()) || !item.isVisible())
                 continue;
             total_invisible_size += (item.getHeight() + _area.getSpacing().vertical);
         }
         int total = total_invisible_size - _area.getSpacing().vertical;
         if (total_invisible_size <= visible_area) {
-            vScrollBar.slider.handler.setHeight(/* vScrollBar.slider.getHeight() */0);
+            vScrollBar.slider.handler.setDrawable(false);
             vScrollBar.slider.setStep(vScrollBar.slider.getMaxValue());
             v_size = 0;
             vScrollBar.slider.setCurrentValue(0);
@@ -182,6 +182,7 @@ public class ListBox extends Prototype {
                 menu.setVisible(true);
             _grid.updateLayout();
         }
+        vScrollBar.slider.handler.setDrawable(true);
         total_invisible_size -= visible_area;
         v_size = total_invisible_size;
 
@@ -197,18 +198,19 @@ public class ListBox extends Prototype {
         vScrollBar.slider.setCurrentValue((100.0f / total_invisible_size) * _area.getVScrollOffset());
     }
 
-    private void updateHorizontalSlider()// horizontal slider
-    {
+    // horizontal slider
+    private void updateHorizontalSlider() {
         int max_size = 0;
         int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right;
         for (InterfaceBaseItem item : _area.getItems()) {
-            if (item.equals(_area.getSubstrate()))
+            if (item.equals(_area.getSubstrate()) || item.equals(_area.getHoverSubstrate()) || !item.isVisible())
                 continue;
             if (max_size < item.getWidth() + item.getMargin().left + item.getMargin().right)
                 max_size = item.getWidth() + item.getMargin().left + item.getMargin().right;
         }
         if (max_size <= visible_area) {
-            hScrollBar.slider.handler.setWidth(/* hScrollBar.slider.getWidth() */0);
+            // hScrollBar.slider.handler.setWidth(/* hScrollBar.slider.getWidth() */0);
+            hScrollBar.slider.handler.setDrawable(false);
             hScrollBar.slider.setStep(hScrollBar.slider.getMaxValue());
             h_size = 0;
             hScrollBar.slider.setCurrentValue(0);
@@ -227,6 +229,7 @@ public class ListBox extends Prototype {
                 menu.setVisible(true);
             _grid.updateLayout();
         }
+        hScrollBar.slider.handler.setDrawable(true);
         int total_invisible_size = max_size - visible_area;
         h_size = total_invisible_size;
 
@@ -348,7 +351,7 @@ public class ListBox extends Prototype {
     public List<InterfaceBaseItem> getListContent() {
         List<InterfaceBaseItem> result = new LinkedList<InterfaceBaseItem>();
         for (InterfaceBaseItem item : _area.getItems()) {
-            if (item instanceof CustomShape)
+            if (item.equals(_area.getSubstrate()) || item.equals(_area.getHoverSubstrate()))
                 continue;
             result.add(item);
         }
@@ -357,6 +360,7 @@ public class ListBox extends Prototype {
 
     public void setListContent(List<InterfaceBaseItem> content) {
         content.add(0, _area.getSubstrate());
+        content.add(1, _area.getHoverSubstrate());
         _area.setContent(content);
     }
 

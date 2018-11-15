@@ -9,7 +9,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class ListArea : Prototype, IVLayout, IHLayout
+    public class ListArea : Prototype, IVLayout
     {
         public EventCommonMethod SelectionChanged;
         public EventCommonMethod ItemListChanged;
@@ -65,6 +65,27 @@ namespace SpaceVIL
             _substrate = shape;
             UpdateLayout();
         }
+
+        private bool _show_hover = true;
+
+        public void SetHoverVisibility(bool visibility)
+        {
+            _show_hover = visibility;
+            UpdateLayout();
+        }
+
+        public bool GetHoverVisibility()
+        {
+            return _show_hover;
+        }
+
+        private Rectangle _hover_substrate = new Rectangle();
+
+        public Rectangle GetHoverSubstrate()
+        {
+            return _hover_substrate;
+        }
+
         public ListPosition AreaPosition = ListPosition.No;
         public int FirstVisibleItem = 0;
         public int LastVisibleItem = 0;
@@ -75,8 +96,12 @@ namespace SpaceVIL
             SetItemName("ListArea_" + count);
             count++;
             EventMouseClick += OnMouseClick;
+            EventMouseHover += OnMouseHover;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListArea)));
+
+            _hover_substrate.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            _hover_substrate.SetBackground(255, 255, 255, 30);
         }
 
         //overrides
@@ -87,7 +112,7 @@ namespace SpaceVIL
             // _substrate.SetAlignment(ItemAlignment.Left | ItemAlignment.Top);
             // _substrate.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             _substrate.SetVisible(false);
-            base.AddItem(_substrate);
+            base.AddItems(_substrate, _hover_substrate);
         }
 
         public void OnMouseClick(IItem sender, MouseArgs args)
@@ -109,6 +134,38 @@ namespace SpaceVIL
                 }
             }
             //SelectionChanged?.Invoke();
+        }
+        public void OnMouseHover(IItem sender, MouseArgs args)
+        {
+            if (!GetHoverVisibility())
+                return;
+            foreach (IBaseItem item in GetItems())
+            {
+                if (item.Equals(_substrate) || item.Equals(_hover_substrate) || !item.IsVisible() || !item.IsDrawable())
+                    continue;
+                if (args.Position.GetY() > item.GetY() && args.Position.GetY() < item.GetY() + item.GetHeight())
+                {
+                    _hover_substrate.SetHeight(item.GetHeight());
+                    _hover_substrate.SetPosition(GetX() + GetPadding().Left, item.GetY());
+                    _hover_substrate.SetDrawable(true);
+                    _hover_substrate.SetVisible(true);
+                    break;
+                }
+            }
+            // Console.WriteLine(
+            //     _hover_substrate.GetHeight() + " " +
+            //     _hover_substrate.GetWidth() + " " +
+            //     _hover_substrate.GetX() + " " +
+            //     _hover_substrate.GetY() + " " +
+            //     _hover_substrate.IsDrawable() + " " +
+            //     _hover_substrate.IsVisible()
+            // );
+        }
+        public override void SetMouseHover(bool value)
+        {
+            base.SetMouseHover(value);
+            if (!value)
+                _hover_substrate.SetDrawable(false);
         }
 
         public override void InsertItem(IBaseItem item, Int32 index)
@@ -167,7 +224,7 @@ namespace SpaceVIL
             int index = 0;
             foreach (var child in GetItems())
             {
-                if (child.Equals(_substrate) || !child.IsVisible())
+                if (child.Equals(_substrate) || child.Equals(_hover_substrate) || !child.IsVisible())
                     continue;
 
                 child.SetX((-1) * (int)_xOffset + GetX() + GetPadding().Left + child.GetMargin().Left);

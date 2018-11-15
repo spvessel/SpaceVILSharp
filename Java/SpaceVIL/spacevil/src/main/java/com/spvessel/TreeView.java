@@ -8,6 +8,7 @@ import com.spvessel.Core.InterfaceMouseMethodState;
 import com.spvessel.Decorations.ItemState;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.ItemStateType;
+import com.spvessel.Flags.ScrollBarVisibility;
 import com.spvessel.Flags.TreeItemType;
 
 import java.awt.Color;
@@ -47,6 +48,8 @@ public class TreeView extends ListBox {
         setStyle(DefaultsService.getDefaultStyle(TreeView.class));
         InterfaceCommonMethod onSort = () -> onSortTree();
         eventSortTree.add(onSort);
+
+        setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
     }
 
     @Override

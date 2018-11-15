@@ -24,6 +24,7 @@ namespace SpaceVIL
             count++;
 
             Slider.Handler.Orientation = Orientation.Horizontal;
+
             UpArrow.EventMouseClick += (sender, args) =>
             {
                 float value = Slider.GetCurrentValue();
@@ -32,6 +33,7 @@ namespace SpaceVIL
                     value = Slider.GetMinValue();
                 Slider.SetCurrentValue(value);
             };
+
             DownArrow.EventMouseClick += (sender, args) =>
             {
                 float value = Slider.GetCurrentValue();
@@ -46,7 +48,7 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            UpArrow.IsFocusable = (false);
+            UpArrow.IsFocusable = false;
             DownArrow.IsFocusable = false;
             Slider.IsFocusable = false;
             Slider.Handler.IsFocusable = false;
@@ -62,16 +64,6 @@ namespace SpaceVIL
         {
             UpArrow.SetVisible(value);
             DownArrow.SetVisible(value);
-        }
-
-        public void InvokeScrollUp(MouseArgs args)
-        {
-            if (EventScrollUp != null) EventScrollUp.Invoke(this, args);
-        }
-
-        public void InvokeScrollDown(MouseArgs args)
-        {
-            if (EventScrollDown != null) EventScrollDown.Invoke(this, args);
         }
 
         public override void SetStyle(Style style)

@@ -68,16 +68,6 @@ namespace SpaceVIL
             DownArrow.SetVisible(value);
         }
 
-        public void InvokeScrollUp(MouseArgs args)
-        {
-            if (EventScrollUp != null) EventScrollUp.Invoke(this, args);
-        }
-
-        public void InvokeScrollDown(MouseArgs args)
-        {
-            if (EventScrollDown != null) EventScrollDown.Invoke(this, args);
-        }
-
         public override void SetStyle(Style style)
         {
             if (style == null)
