@@ -282,18 +282,18 @@ namespace SpaceVIL
         }
         public void SetSize(int width, int height)
         {
-            _itemGeometry.SetWidth(width);
-            _itemGeometry.SetHeight(height);
+            SetWidth(width);
+            SetHeight(height);
         }
         public void SetMinSize(int width, int height)
         {
-            _itemGeometry.SetMinWidth(width);
-            _itemGeometry.SetMinHeight(height);
+            SetMinWidth(width);
+            SetMinHeight(height);
         }
         public void SetMaxSize(int width, int height)
         {
-            _itemGeometry.SetMaxWidth(width);
-            _itemGeometry.SetMaxHeight(height);
+            SetMaxWidth(width);
+            SetMaxHeight(height);
         }
         public int[] GetSize()
         {

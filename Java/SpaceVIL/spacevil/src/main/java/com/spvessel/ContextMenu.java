@@ -24,13 +24,23 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     private boolean _init = false;
     private boolean _ouside = true;
 
-    public boolean getOutsideClickClosable() {
+    public boolean isOutsideClickClosable() {
         return _ouside;
     }
 
     public void setOutsideClickClosable(boolean value) {
         _ouside = value;
     }
+
+    // private boolean _lock_ouside = true;
+
+    // public boolean isLockOutside() {
+    //     return _lock_ouside;
+    // }
+
+    // public void setLockOutside(boolean value) {
+    //     _lock_ouside = true;
+    // }
 
     public ContextMenu(WindowLayout handler) {
         setItemName("ContextMenu_" + count);
@@ -39,8 +49,6 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setVisible(false);
         setHandler(handler);
         ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
-
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ContextMenu"));
         setStyle(DefaultsService.getDefaultStyle(ContextMenu.class));
     }
 
@@ -50,6 +58,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         itemList.setSelectionVisibility(false);
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
+        itemList.getArea().setHoverVisibility(false);
         InterfaceCommonMethod selectionChanged = () -> onSelectionChanged();
         itemList.getArea().selectionChanged.add(selectionChanged);
 
@@ -58,15 +67,15 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         itemList.eventScrollUp.clear();
         itemList.eventScrollDown.clear();
 
-        for (InterfaceBaseItem item : _queue)
+        for (InterfaceBaseItem item : _queue) {
             itemList.addItem(item);
+        }
         _queue = null;
-
         _init = true;
+
     }
 
     protected void onSelectionChanged() {
-        System.out.println(itemList.getSelectionItem().getItemName());
         if (itemList.getSelectionItem() instanceof MenuItem) {
             MenuItem item = (MenuItem) itemList.getSelectionItem();
             if (item.isActionItem) {
@@ -100,13 +109,6 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
             tmp._context_menu = this;
         }
         _queue.add(item);
-
-        InterfaceBaseItem[] list = _queue.toArray(new InterfaceBaseItem[_queue.size()]);
-        int height = 0;
-        for (InterfaceBaseItem h : list)
-            if (h.isVisible() && h.isDrawable())
-                height += (h.getHeight() + itemList.getArea().getSpacing().vertical);
-        setHeight(getPadding().top + getPadding().bottom + height);
     }
 
     @Override
@@ -129,11 +131,33 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         return true;
     }
 
+    void updateSize() {
+        int height = 0;
+        int width = getWidth();
+        List<InterfaceBaseItem> list = itemList.getListContent();
+        for (InterfaceBaseItem item : list) {
+            height += (item.getHeight() + itemList.getArea().getSpacing().vertical);
+
+            int tmp = getPadding().left + getPadding().right + item.getMargin().left + item.getMargin().right;
+            if (item instanceof MenuItem) {
+                MenuItem m = (MenuItem) item;
+                tmp += m.getTextWidth() + m.getMargin().left + m.getMargin().right + m.getPadding().left
+                        + m.getPadding().right;
+            } else
+                tmp = tmp + item.getWidth() + item.getMargin().left + item.getMargin().right;
+
+            if (width < tmp)
+                width = tmp;
+        }
+        setSize(width, height);
+    }
+
     public void show(InterfaceItem sender, MouseArgs args) {
-        // System.out.println("Show? " + args.button + " " + activeButton);
         if (args.button.getValue() == activeButton.getValue()) {
-            if (!_init)
+            if (!_init) {
                 initElements();
+                updateSize();
+            }
 
             setVisible(true);
 
@@ -154,7 +178,6 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     public void hide() {
-        // System.out.println("4");
         setX(-getWidth());
         setVisible(false);
     }

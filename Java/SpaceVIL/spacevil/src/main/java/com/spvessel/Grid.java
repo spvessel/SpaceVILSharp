@@ -203,7 +203,7 @@ public class Grid extends Prototype implements InterfaceGrid {
             for (int c = 0; c < _column_count; c++) {
                 InterfaceBaseItem item = _cells.get(c + r * _column_count).getItem();
 
-                if (item == null || !item.isVisible()) {
+                if (item == null || !item.isVisible() || !item.isDrawable()) {
                     list_height.add(new int[] { r, -1 });
                     continue;
                 }
@@ -268,7 +268,7 @@ public class Grid extends Prototype implements InterfaceGrid {
         for (int c = 0; c < _column_count; c++) {
             for (int r = 0; r < _row_count; r++) {
                 InterfaceBaseItem item = _cells.get(c + r * _column_count).getItem();
-                if (item == null || !item.isVisible()) {
+                if (item == null || !item.isVisible() || !item.isDrawable()) {
                     list_width.add(new int[] { c, -1 });
                     continue;
                 }

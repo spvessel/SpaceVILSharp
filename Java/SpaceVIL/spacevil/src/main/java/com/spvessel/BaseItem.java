@@ -308,18 +308,18 @@ public abstract class BaseItem implements InterfaceBaseItem {
     }
 
     public void setSize(int width, int height) {
-        _itemGeometry.setWidth(width);
-        _itemGeometry.setHeight(height);
+        setWidth(width);
+        setHeight(height);
     }
 
     public void setMinSize(int width, int height) {
-        _itemGeometry.setMinWidth(width);
-        _itemGeometry.setMinHeight(height);
+        setMinWidth(width);
+        setMinHeight(height);
     }
 
     public void setMaxSize(int width, int height) {
-        _itemGeometry.setMaxWidth(width);
-        _itemGeometry.setMaxHeight(height);
+        setMaxWidth(width);
+        setMaxHeight(height);
     }
 
     public int[] getSize() {

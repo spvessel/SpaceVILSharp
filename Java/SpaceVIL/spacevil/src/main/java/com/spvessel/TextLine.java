@@ -74,7 +74,6 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             int[] fontDims = getFontDims();
             super.setWidth(_lineWidth);
             super.setHeight(fontDims[2]);
-
             // px0 = new LinkedList<>();
 
             // List<Float> tmpPx;

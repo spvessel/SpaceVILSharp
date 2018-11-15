@@ -189,6 +189,10 @@ namespace SpaceVIL.Decorations
             BorderRadius = radius;
             BorderThickness = thickness;
         }
+        public void SetAlignment(ItemAlignment alignment)
+        {
+            Alignment = alignment;
+        }
         ///////////////////////////////////////////////////////////////////
         public void AddInnerShape(IBaseItem shape)
         {
@@ -316,7 +320,7 @@ namespace SpaceVIL.Decorations
         {
             Style style = new Style();
 
-            style.Background = Color.FromArgb(20, 255, 255, 255);
+            style.Background = Color.FromArgb(255, 80, 80, 80);
             style.Foreground = Color.LightGray;
             style.Font = DefaultsService.GetDefaultFont();
             style.WidthPolicy = SizePolicy.Expand;
@@ -459,10 +463,10 @@ namespace SpaceVIL.Decorations
             style.Height = 25;
             style.MinHeight = 10;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            style.Padding = new Indents(10);
+            style.Padding = new Indents(10, 0, 10, 0);
             style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(255, 180, 180, 180)
+                Background = Color.FromArgb(150, 255, 255, 255)
             });
 
             Style arrow_style = new Style();
@@ -561,7 +565,7 @@ namespace SpaceVIL.Decorations
             uparrow_style.IsFixedShape = true;
             uparrow_style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(80, 255, 255, 255)
+                Background = Color.FromArgb(40, 255, 255, 255)
             });
             style.AddInnerStyle("uparrow", uparrow_style);
 
@@ -576,7 +580,7 @@ namespace SpaceVIL.Decorations
             downarrow_style.IsFixedShape = true;
             downarrow_style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(80, 255, 255, 255)
+                Background = Color.FromArgb(40, 255, 255, 255)
             });
             style.AddInnerStyle("downarrow", downarrow_style);
 
@@ -593,14 +597,14 @@ namespace SpaceVIL.Decorations
             slider_style.AddInnerStyle("track", track_style);
 
             Style handler_style = new Style();
-            handler_style.WidthPolicy = SizePolicy.Expand;
+            handler_style.WidthPolicy = SizePolicy.Fixed;
             handler_style.HeightPolicy = SizePolicy.Expand;
-            handler_style.Background = Color.FromArgb(50, 255, 255, 255);
+            handler_style.Background = Color.FromArgb(255, 100, 100, 100);
             handler_style.Margin = new Indents(0, 3, 0, 3);
             handler_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             handler_style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(80, 255, 255, 255)
+                Background = Color.FromArgb(40, 255, 255, 255)
             });
             slider_style.AddInnerStyle("handler", handler_style);
 
@@ -627,7 +631,7 @@ namespace SpaceVIL.Decorations
             uparrow_style.IsFixedShape = true;
             uparrow_style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(80, 255, 255, 255)
+                Background = Color.FromArgb(40, 255, 255, 255)
             });
             style.AddInnerStyle("uparrow", uparrow_style);
 
@@ -642,7 +646,7 @@ namespace SpaceVIL.Decorations
             downarrow_style.IsFixedShape = true;
             downarrow_style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(80, 255, 255, 255)
+                Background = Color.FromArgb(40, 255, 255, 255)
             });
             style.AddInnerStyle("downarrow", downarrow_style);
 
@@ -660,13 +664,13 @@ namespace SpaceVIL.Decorations
 
             Style handler_style = new Style();
             handler_style.WidthPolicy = SizePolicy.Expand;
-            handler_style.HeightPolicy = SizePolicy.Expand;
-            handler_style.Background = Color.FromArgb(50, 255, 255, 255);
+            handler_style.HeightPolicy = SizePolicy.Fixed;
+            handler_style.Background = Color.FromArgb(255, 100, 100, 100);
             handler_style.Margin = new Indents(3, 0, 3, 0);
             handler_style.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
             handler_style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(80, 255, 255, 255)
+                Background = Color.FromArgb(40, 255, 255, 255)
             });
             slider_style.AddInnerStyle("handler", handler_style);
 
@@ -818,13 +822,21 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Expand;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.Padding = new Indents(2, 2, 2, 2);
+            style.Spacing = new Spacing(0, 5);
 
             Style substrate_style = new Style();
-            substrate_style.Background = Color.FromArgb(100, 39, 150, 216);
+            substrate_style.Background = Color.FromArgb(255, 39, 150, 216);
             substrate_style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             substrate_style.WidthPolicy = SizePolicy.Expand;
             substrate_style.HeightPolicy = SizePolicy.Fixed;
             style.AddInnerStyle("substrate", substrate_style);
+
+            Style hover_style = new Style();
+            hover_style.Background = Color.FromArgb(30, 255, 255, 255);
+            hover_style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            hover_style.WidthPolicy = SizePolicy.Expand;
+            hover_style.HeightPolicy = SizePolicy.Fixed;
+            style.AddInnerStyle("hovercover", hover_style);
 
             return style;
         }
@@ -845,6 +857,12 @@ namespace SpaceVIL.Decorations
             Style hsb_style = GetHorizontalScrollBarStyle();
             hsb_style.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
             style.AddInnerStyle("hscrollbar", hsb_style);
+
+            Style menu_style = new Style();
+            menu_style.Background = Color.FromArgb(50, 50, 50);
+            menu_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            menu_style.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
+            style.AddInnerStyle("menu", menu_style);
 
             return style;
         }
@@ -1038,6 +1056,8 @@ namespace SpaceVIL.Decorations
         {
             Style style = new Style();
             style.Background = Color.FromArgb(255, 210, 210, 210);
+            style.Foreground = Color.FromArgb(25, 25, 25);
+            style.Font = DefaultsService.GetDefaultFont(16);
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Expand;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
@@ -1052,6 +1072,12 @@ namespace SpaceVIL.Decorations
             Style hsb_style = GetHorizontalScrollBarStyle();
             hsb_style.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
             style.AddInnerStyle("hscrollbar", hsb_style);
+
+            Style menu_style = new Style();
+            menu_style.Background = Color.FromArgb(50, 50, 50);
+            menu_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            menu_style.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
+            style.AddInnerStyle("menu", menu_style);
 
             return style;
         }
@@ -1264,9 +1290,9 @@ namespace SpaceVIL.Decorations
             style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
             style.Spacing = new Spacing(5, 0);
             style.Padding = new Indents(5, 0, 0, 0);
-            ItemState hovered = new ItemState();
-            hovered.Background = Color.FromArgb(60, 255, 255, 255);
-            style.AddItemState(ItemStateType.Hovered, hovered);
+            // ItemState hovered = new ItemState();
+            // hovered.Background = Color.FromArgb(130, 255, 255, 255);
+            // style.AddItemState(ItemStateType.Hovered, hovered);
 
             Style indicator_style = new Style();//getButtonToggleStyle();
             indicator_style.Background = Color.FromArgb(255, 32, 32, 32);
@@ -1279,7 +1305,7 @@ namespace SpaceVIL.Decorations
             indicator_style.Shape = GraphicsMathService.GetTriangle(10, 8, 0, 3, 90);
             indicator_style.IsFixedShape = true;
             ItemState toggled = new ItemState();
-            toggled.Background = indicator_style.Background;
+            toggled.Background = Color.FromArgb(255, 160, 160, 160);
             toggled.Shape = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 0, 3, 180));
             indicator_style.AddItemState(ItemStateType.Toggled, toggled);
             style.AddInnerStyle("indicator", indicator_style);

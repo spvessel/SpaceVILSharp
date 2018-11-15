@@ -211,15 +211,15 @@ namespace SpaceVIL.Common
                 outText.Append("WidthPolicy: ");
                 if (sp.HasFlag(SizePolicy.Expand)) outText.AppendLine("Expand ");
                 if (sp.HasFlag(SizePolicy.Fixed)) outText.AppendLine("Fixed ");
-                if (sp.HasFlag(SizePolicy.Ignored)) outText.AppendLine("Ignored ");
-                if (sp.HasFlag(SizePolicy.Stretch)) outText.AppendLine("Stretch ");
+                // if (sp.HasFlag(SizePolicy.Ignored)) outText.AppendLine("Ignored ");
+                // if (sp.HasFlag(SizePolicy.Stretch)) outText.AppendLine("Stretch ");
 
                 sp = item.GetHeightPolicy();
                 outText.Append("HeightPolicy: ");
                 if (sp.HasFlag(SizePolicy.Expand)) outText.AppendLine("Expand ");
                 if (sp.HasFlag(SizePolicy.Fixed)) outText.AppendLine("Fixed ");
-                if (sp.HasFlag(SizePolicy.Ignored)) outText.AppendLine("Ignored ");
-                if (sp.HasFlag(SizePolicy.Stretch)) outText.AppendLine("Stretch ");
+                // if (sp.HasFlag(SizePolicy.Ignored)) outText.AppendLine("Ignored ");
+                // if (sp.HasFlag(SizePolicy.Stretch)) outText.AppendLine("Stretch ");
 
                 outText.AppendLine();
             }

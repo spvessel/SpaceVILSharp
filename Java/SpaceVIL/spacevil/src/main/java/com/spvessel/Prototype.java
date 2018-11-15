@@ -17,6 +17,7 @@ import com.spvessel.Decorations.ItemState;
 import com.spvessel.Decorations.Spacing;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.GeometryEventType;
+import com.spvessel.Flags.InputEventType;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.ItemRule;
 import com.spvessel.Flags.ItemStateType;
@@ -132,7 +133,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setBorderRadius(CornerRadius radius) {
         _core.setBorderRadius(radius);
     }
-    
+
     public void setBorderRadius(int radius) {
         _core.setBorderRadius(new CornerRadius(radius));
     }
@@ -432,8 +433,36 @@ abstract public class Prototype implements InterfaceBaseItem {
         return _core.isPassEvents();
     }
 
+    public boolean isPassEvents(InputEventType e) {
+        if (_core.getNonPassEvents().contains(e))
+            return false;
+        return true;
+    }
+
+    public List<InputEventType> getPassEvents() {
+        return _core.getPassEvents();
+    }
+
+    public List<InputEventType> getNonPassEvents() {
+        return _core.getNonPassEvents();
+    }
+
     public void setPassEvents(boolean value) {
         _core.setPassEvents(value);
+    }
+
+    public void setPassEvents(boolean value, InputEventType e) {
+        _core.setPassEvents(value, e);
+    }
+
+    public void setPassEvents(boolean value, List<InputEventType>  events_set) {
+        _core.setPassEvents(value, events_set);
+    }
+
+    public void setPassEvents(boolean value, InputEventType...  events_set) {
+        for (InputEventType e : events_set) {
+            _core.setPassEvents(value, e);
+        }
     }
 
     public boolean isDisabled() {

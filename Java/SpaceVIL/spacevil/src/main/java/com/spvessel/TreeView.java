@@ -8,6 +8,7 @@ import com.spvessel.Core.InterfaceMouseMethodState;
 import com.spvessel.Decorations.ItemState;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.ItemStateType;
+import com.spvessel.Flags.ScrollBarVisibility;
 import com.spvessel.Flags.TreeItemType;
 
 import java.awt.Color;
@@ -47,6 +48,8 @@ public class TreeView extends ListBox {
         setStyle(DefaultsService.getDefaultStyle(TreeView.class));
         InterfaceCommonMethod onSort = () -> onSortTree();
         eventSortTree.add(onSort);
+
+        setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
     }
 
     @Override
@@ -62,16 +65,11 @@ public class TreeView extends ListBox {
         _menu.setBackground(40, 40, 40);
         _menu.setPassEvents(false);
 
-        ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 80);
-
         MenuItem paste = new MenuItem("Paste");
         paste.setForeground(new Color(210, 210, 210));
-        paste.addItemState(ItemStateType.HOVERED, hovered);
 
         MenuItem new_leaf = new MenuItem("New Leaf");
         new_leaf.setForeground(new Color(210, 210, 210));
-        new_leaf.addItemState(ItemStateType.HOVERED, hovered);
         InterfaceMouseMethodState leaf_click = (sender, args) -> {
             this.addItem(getTreeLeaf());
         };
@@ -79,7 +77,6 @@ public class TreeView extends ListBox {
 
         MenuItem new_branch = new MenuItem("New Branch");
         new_branch.setForeground(new Color(210, 210, 210));
-        new_branch.addItemState(ItemStateType.HOVERED, hovered);
         InterfaceMouseMethodState branch_click = (sender, args) -> {
             this.addItem(getTreeBranch());
         };
@@ -88,7 +85,7 @@ public class TreeView extends ListBox {
         InterfaceMouseMethodState menu_click = (sender, args) -> _menu.show(sender, args);
         eventMouseClick.add(menu_click);
 
-        _menu.setSize(100, 4 + 30 * 3 - 5);
+        // _menu.setSize(100, 4 + 30 * 3 - 5);
         _menu.addItems(new_branch, new_leaf, paste);
     }
 

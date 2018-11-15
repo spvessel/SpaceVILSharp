@@ -53,30 +53,18 @@ namespace SpaceVIL
             _menu.SetPassEvents(false);
             MenuItem paste = new MenuItem("Paste");
             paste.SetForeground(Color.LightGray);
-            paste.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(80, 255, 255, 255)
-            });
             paste.EventMouseClick += (sender, args) =>
             {
                 //paste
             };
             MenuItem new_leaf = new MenuItem("New Leaf");
             new_leaf.SetForeground(Color.LightGray);
-            new_leaf.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(80, 255, 255, 255)
-            });
             new_leaf.EventMouseClick += (sender, args) =>
             {
                 AddItem(GetTreeLeaf());
             };
             MenuItem new_branch = new MenuItem("New Branch");
             new_branch.SetForeground(Color.LightGray);
-            new_branch.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(80, 255, 255, 255)
-            });
             new_branch.EventMouseClick += (sender, args) =>
             {
                 AddItem(GetTreeBranch());

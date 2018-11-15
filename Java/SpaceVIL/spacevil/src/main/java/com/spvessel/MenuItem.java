@@ -125,6 +125,15 @@ public class MenuItem extends Prototype {
         return _text_object.getForeground();
     }
 
+    public int getTextWidth()
+    {
+        return _text_object.getWidth();
+    }
+    public int getTextHeight()
+    {
+        return _text_object.getHeight();
+    }
+
     @Override
     public void initElements() {
         // adding

@@ -15,13 +15,23 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
 
     private boolean _ouside = false;
 
-    public boolean getOutsideClickClosable() {
+    public boolean isOutsideClickClosable() {
         return _ouside;
     }
 
     public void setOutsideClickClosable(boolean value) {
         _ouside = value;
     }
+
+    // private boolean _lock_ouside = false;
+
+    // public boolean isLockOutside() {
+    //     return _lock_ouside;
+    // }
+
+    // public void setLockOutside(boolean value) {
+    //     _lock_ouside = true;
+    // }
 
     public FloatItem(WindowLayout handler) {
         setVisible(false);
@@ -34,10 +44,8 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
         InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
         eventMouseDrag.add(dragg);
         count++;
-
-        synchronized (CommonService.GlobalLocker) {
-            ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
-        }
+        
+        ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
     }
 
     @Override

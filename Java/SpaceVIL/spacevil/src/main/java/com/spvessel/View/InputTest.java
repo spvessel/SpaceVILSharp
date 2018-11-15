@@ -1,7 +1,7 @@
 package com.spvessel.View;
 
 import com.spvessel.*;
-import com.spvessel.Flags.SizePolicy;
+import com.spvessel.Flags.ScrollBarVisibility;
 
 public class InputTest extends ActiveWindow {
     @Override
@@ -28,6 +28,8 @@ public class InputTest extends ActiveWindow {
         TextEdit te = new TextEdit();
 
         TextArea tb = new TextArea();
+        tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+        tb.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         // tb.setMargin(new Indents(50, 30, 30, 30));
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
 

@@ -25,6 +25,15 @@ namespace SpaceVIL
         {
             _ouside = value;
         }
+        // private bool _lock_ouside = true;
+        // public bool IsLockOutside()
+        // {
+        //     return _lock_ouside;
+        // }
+        // public void SetLockOutside(bool value)
+        // {
+        //     _lock_ouside = value;
+        // }
 
         public ContextMenu(WindowLayout handler)
         {
@@ -54,7 +63,6 @@ namespace SpaceVIL
             foreach (var item in _queue)
                 ItemList.AddItem(item);
             _queue = null;
-
             _init = true;
         }
 
@@ -94,17 +102,37 @@ namespace SpaceVIL
             if (tmp != null)
                 tmp._context_menu = this;
             _queue.Enqueue(item);
-
-            IBaseItem[] list = _queue.ToArray();
-            int height = 0;
-            foreach (var h in list)
-                if (h.IsVisible() && h.IsDrawable())
-                    height += (h.GetHeight() + ItemList.GetArea().GetSpacing().Vertical);
-            SetHeight(GetPadding().Top + GetPadding().Bottom + height);
         }
         public override void RemoveItem(IBaseItem item)
         {
             ItemList.RemoveItem(item);
+        }
+
+        void UpdateSize()
+        {
+            int height = 0;
+            int width = GetWidth();
+            List<IBaseItem> list = ItemList.GetListContent();
+            foreach (var item in list)
+            {
+                height += (item.GetHeight() + ItemList.GetArea().GetSpacing().Vertical);
+
+                int tmp = GetPadding().Left + GetPadding().Right + item.GetMargin().Left + item.GetMargin().Right;
+
+                MenuItem m = item as MenuItem;
+                if (item != null)
+                {
+                    tmp += m.GetTextWidth() + m.GetMargin().Left + m.GetMargin().Right + m.GetPadding().Left + m.GetPadding().Right;
+                }
+                else
+                    tmp = tmp + item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right;
+
+                if (width < tmp)
+                    width = tmp;
+            }
+            // SetSize(width, height);
+            SetWidth(width);
+            SetHeight(height);
         }
 
         public void Show(IItem sender, MouseArgs args)
@@ -112,7 +140,10 @@ namespace SpaceVIL
             if (args.Button == ActiveButton)
             {
                 if (!_init)
+                {
                     InitElements();
+                    UpdateSize();
+                }
 
                 SetVisible(true);
 

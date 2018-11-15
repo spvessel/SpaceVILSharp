@@ -33,6 +33,16 @@ namespace SpaceVIL
             return _area.GetSelectionVisibility();
         }
 
+        public BlankItem Menu = new BlankItem();
+        private bool _is_menu_disabled = false;
+
+        public void DisableMenu(bool value)
+        {
+            _is_menu_disabled = value;
+        }
+
+        private ContextMenu _menu;
+
         private Grid _grid = new Grid(2, 2);
         private ListArea _area = new ListArea();
         public ListArea GetArea()
@@ -51,9 +61,23 @@ namespace SpaceVIL
             _v_scrollBarPolicy = policy;
 
             if (policy == ScrollBarVisibility.Never)
-                VScrollBar.SetVisible(false);
-            else
-                VScrollBar.SetVisible(true);
+            {
+                VScrollBar.SetDrawable(false);
+                Menu.SetVisible(false);
+            }
+            else if (policy == ScrollBarVisibility.AsNeeded)
+            {
+                VScrollBar.SetDrawable(false);
+                Menu.SetVisible(false);
+            }
+            else if (policy == ScrollBarVisibility.Always)
+            {
+                VScrollBar.SetDrawable(true);
+                if (!HScrollBar.IsDrawable())
+                    Menu.SetVisible(false);
+                else
+                    Menu.SetVisible(true);
+            }
 
             _grid.UpdateLayout();
             UpdateHorizontalSlider();
@@ -69,9 +93,23 @@ namespace SpaceVIL
             _h_scrollBarPolicy = policy;
 
             if (policy == ScrollBarVisibility.Never)
-                HScrollBar.SetVisible(false);
-            else
-                HScrollBar.SetVisible(true);
+            {
+                HScrollBar.SetDrawable(false);
+                Menu.SetVisible(false);
+            }
+            else if (policy == ScrollBarVisibility.AsNeeded)
+            {
+                HScrollBar.SetDrawable(false);
+                Menu.SetVisible(false);
+            }
+            else if (policy == ScrollBarVisibility.Always)
+            {
+                HScrollBar.SetDrawable(true);
+                if (!VScrollBar.IsDrawable())
+                    Menu.SetVisible(false);
+                else
+                    Menu.SetVisible(true);
+            }
 
             _grid.UpdateLayout();
             UpdateVerticalSlider();
@@ -85,16 +123,15 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListBox)));
 
             //VBar
-            VScrollBar.SetVisible(true);
+            VScrollBar.SetDrawable(true);
             VScrollBar.SetItemName(GetItemName() + "_" + VScrollBar.GetItemName());
 
             //HBar
-            HScrollBar.SetVisible(true);
+            HScrollBar.SetDrawable(true);
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
 
             //Area
             _area.SetItemName(GetItemName() + "_" + _area.GetItemName());
-            _area.SetSpacing(0, 5);
         }
 
         private void UpdateListAreaAttributes(object sender)
@@ -125,19 +162,35 @@ namespace SpaceVIL
             int visible_area = _area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom;
             foreach (var item in _area.GetItems())
             {
-                if (item.Equals(_area.GetSubstrate()) || !item.IsVisible())
+                if (item.Equals(_area.GetSubstrate()) || item.Equals(_area.GetHoverSubstrate()) || !item.IsVisible())
                     continue;
                 total_invisible_size += (item.GetHeight() + _area.GetSpacing().Vertical);
             }
             int total = total_invisible_size - _area.GetSpacing().Vertical;
             if (total_invisible_size <= visible_area)
             {
-                VScrollBar.Slider.Handler.SetHeight(/*VScrollBar.Slider.GetHeight()*/0);
+                VScrollBar.Slider.Handler.SetDrawable(false);
                 VScrollBar.Slider.SetStep(VScrollBar.Slider.GetMaxValue());
                 v_size = 0;
                 VScrollBar.Slider.SetCurrentValue(0);
+                if (GetVScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+                {
+                    VScrollBar.SetDrawable(false);
+                    Menu.SetVisible(false);
+                    _grid.UpdateLayout();
+                }
                 return;
             }
+            if (GetVScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+            {
+                VScrollBar.SetDrawable(true);
+                if (!HScrollBar.IsDrawable())
+                    Menu.SetVisible(false);
+                else
+                    Menu.SetVisible(true);
+                _grid.UpdateLayout();
+            }
+            VScrollBar.Slider.Handler.SetDrawable(true);
             total_invisible_size -= visible_area;
             v_size = total_invisible_size;
 
@@ -160,19 +213,35 @@ namespace SpaceVIL
             int visible_area = _area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right;
             foreach (var item in _area.GetItems())
             {
-                if (item.Equals(_area.GetSubstrate()))
+                if (item.Equals(_area.GetSubstrate()) || item.Equals(_area.GetHoverSubstrate()) || !item.IsVisible())
                     continue;
                 if (max_size < item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right)
                     max_size = item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right;
             }
             if (max_size <= visible_area)
             {
-                HScrollBar.Slider.Handler.SetWidth(/*HScrollBar.Slider.GetWidth()*/0);
+                HScrollBar.Slider.Handler.SetDrawable(false);
                 HScrollBar.Slider.SetStep(HScrollBar.Slider.GetMaxValue());
                 h_size = 0;
                 HScrollBar.Slider.SetCurrentValue(0);
+                if (GetHScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+                {
+                    HScrollBar.SetDrawable(false);
+                    Menu.SetVisible(false);
+                    _grid.UpdateLayout();
+                }
                 return;
             }
+            if (GetHScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+            {
+                HScrollBar.SetDrawable(true);
+                if (!VScrollBar.IsDrawable())
+                    Menu.SetVisible(false);
+                else
+                    Menu.SetVisible(true);
+                _grid.UpdateLayout();
+            }
+            HScrollBar.Slider.Handler.SetDrawable(true);
             int total_invisible_size = max_size - visible_area;
             h_size = total_invisible_size;
 
@@ -235,33 +304,62 @@ namespace SpaceVIL
             _grid.InsertItem(_area, 0, 0);
             _grid.InsertItem(VScrollBar, 0, 1);
             _grid.InsertItem(HScrollBar, 1, 0);
-            //Console.WriteLine(_grid.GetParent().GetItemName() + " " + _grid.GetParent().GetX());
+            _grid.InsertItem(Menu, 1, 1);
 
             //Events Connections
             EventScrollUp += VScrollBar.EventScrollUp.Invoke;
             EventScrollDown += VScrollBar.EventScrollDown.Invoke;
-            _area.ItemListChanged += UpdateElements;
+            _area.ItemListChanged += () => { UpdateElements(); };
 
             VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); };
             HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };
+
+            // create menu
+            _menu = new ContextMenu(GetHandler());
+            _menu.SetBackground(60, 60, 60);
+            _menu.SetPassEvents(false);
+
+            MenuItem go_up = new MenuItem("Go up");
+            go_up.SetForeground(Color.FromArgb(210, 210, 210));
+            go_up.EventMouseClick += ((sender, args) =>
+            {
+                VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMinValue());
+            });
+
+            MenuItem go_down = new MenuItem("Go down");
+            go_down.SetForeground(Color.FromArgb(210, 210, 210));
+            go_down.EventMouseClick += ((sender, args) =>
+            {
+                VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMaxValue());
+            });
+
+            MenuItem go_up_left = new MenuItem("Go up and left");
+            go_up_left.SetForeground(Color.FromArgb(210, 210, 210));
+            go_up_left.EventMouseClick += ((sender, args) =>
+            {
+                VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMinValue());
+                HScrollBar.Slider.SetCurrentValue(HScrollBar.Slider.GetMinValue());
+            });
+
+            MenuItem go_down_right = new MenuItem("Go down and right");
+            go_down_right.SetForeground(Color.FromArgb(210, 210, 210));
+            go_down_right.EventMouseClick += ((sender, args) =>
+            {
+                VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMaxValue());
+                HScrollBar.Slider.SetCurrentValue(HScrollBar.Slider.GetMaxValue());
+            });
+            _menu.AddItems(go_up_left, go_down_right, go_up, go_down);
+            Menu.EventMouseClick += ((sender, args) => _menu.Show(sender, args));
+            _menu.ActiveButton = MouseButton.ButtonLeft;
+            _menu.SetShadow(10, 0, 0, Color.Black);
         }
-
-        // public void InvokeScrollUp(MouseArgs args)
-        // {
-        //     EventScrollUp?.Invoke(this, args);
-        // }
-
-        // public void InvokeScrollDown(MouseArgs args)
-        // {
-        //     EventScrollDown?.Invoke(this, args);
-        // }
 
         public List<IBaseItem> GetListContent()
         {
             List<IBaseItem> result = new List<IBaseItem>();
             foreach (var item in _area.GetItems())
             {
-                if (item is CustomShape)
+                if (item.Equals(_area.GetSubstrate()) || item.Equals(_area.GetHoverSubstrate()))
                     continue;
                 result.Add(item);
             }
@@ -270,6 +368,7 @@ namespace SpaceVIL
         public void SetListContent(List<IBaseItem> content)
         {
             content.Insert(0, _area.GetSubstrate());
+            content.Insert(1, _area.GetHoverSubstrate());
             _area.SetContent(content);
         }
         public IBaseItem GetSelectionItem()
@@ -294,6 +393,11 @@ namespace SpaceVIL
             if (inner_style != null)
             {
                 HScrollBar.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("menu");
+            if (inner_style != null)
+            {
+                Menu.SetStyle(inner_style);
             }
         }
     }

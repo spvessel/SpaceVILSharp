@@ -424,14 +424,26 @@ namespace SpaceVIL
         {
             _core.SetVisible(value);
         }
-        public virtual bool GetPassEvents()
+        public virtual bool IsPassEvents()
         {
-            return _core.GetPassEvents();
+            return _core.IsPassEvents();
         }
 
-        public virtual void SetPassEvents(bool value)
+        public bool IsPassEvents(InputEventType e)
+        {
+            if (_core.GetPassEvents().HasFlag(e))
+                return false;
+            return true;
+        }
+
+        public void SetPassEvents(bool value)
         {
             _core.SetPassEvents(value);
+        }
+
+        public void SetPassEvents(bool value, InputEventType e)
+        {
+            _core.SetPassEvents(value, e);
         }
 
         public virtual bool IsDisabled()

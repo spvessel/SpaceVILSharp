@@ -7,5 +7,7 @@ namespace SpaceVIL.Core
         void Hide();
         bool IsOutsideClickClosable();
         void SetOutsideClickClosable(bool value);
+        // bool IsLockOutside();
+        // void SetLockOutside(bool value);
     }
 }

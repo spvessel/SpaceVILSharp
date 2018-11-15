@@ -1,8 +1,13 @@
 package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
+import com.spvessel.Core.InterfaceMouseMethodState;
+import com.spvessel.Core.InterfaceTextShortcuts;
 import com.spvessel.Decorations.Indents;
+import com.spvessel.Decorations.ItemState;
 import com.spvessel.Decorations.Style;
+import com.spvessel.Flags.ItemStateType;
+import com.spvessel.Flags.MouseButton;
 import com.spvessel.Flags.ScrollBarVisibility;
 
 import java.awt.*;
@@ -12,21 +17,38 @@ public class TextArea extends Prototype {
     private Grid _grid = new Grid(2, 2);
     private TextBlock _area = new TextBlock();
 
+    public BlankItem menu = new BlankItem();
+    private boolean _is_menu_disabled = false;
+
+    public void disableMenu(boolean value) {
+        _is_menu_disabled = value;
+    }
+
+    private ContextMenu _menu;
     public VerticalScrollBar vScrollBar = new VerticalScrollBar();
     public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
     private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
 
-    public ScrollBarVisibility getvScrollBarVisible() {
+    public ScrollBarVisibility getVScrollBarVisible() {
         return _v_scrollBarPolicy;
     }
 
     public void setVScrollBarVisible(ScrollBarVisibility policy) {
         _v_scrollBarPolicy = policy;
 
-        if (policy == ScrollBarVisibility.NEVER)
-            vScrollBar.setVisible(false);
-        else
-            vScrollBar.setVisible(true);
+        if (policy == ScrollBarVisibility.NEVER) {
+            vScrollBar.setDrawable(false);
+            menu.setVisible(false);
+        } else if (policy == ScrollBarVisibility.AS_NEEDED) {
+            vScrollBar.setDrawable(false);
+            menu.setVisible(false);
+        } else if (policy == ScrollBarVisibility.ALWAYS) {
+            vScrollBar.setDrawable(true);
+            if (!hScrollBar.isDrawable())
+                menu.setVisible(false);
+            else
+                menu.setVisible(true);
+        }
 
         _grid.updateLayout();
         updateHorizontalSlider();
@@ -35,17 +57,26 @@ public class TextArea extends Prototype {
 
     private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
 
-    public ScrollBarVisibility gethScrollBarVisible() {
+    public ScrollBarVisibility getHScrollBarVisible() {
         return _h_scrollBarPolicy;
     }
 
     public void setHScrollBarVisible(ScrollBarVisibility policy) {
         _h_scrollBarPolicy = policy;
 
-        if (policy == ScrollBarVisibility.NEVER)
-            hScrollBar.setVisible(false);
-        else
-            hScrollBar.setVisible(true);
+        if (policy == ScrollBarVisibility.NEVER) {
+            hScrollBar.setDrawable(false);
+            menu.setVisible(false);
+        } else if (policy == ScrollBarVisibility.AS_NEEDED) {
+            hScrollBar.setDrawable(false);
+            menu.setVisible(false);
+        } else if (policy == ScrollBarVisibility.ALWAYS) {
+            hScrollBar.setDrawable(true);
+            if (!vScrollBar.isDrawable())
+                menu.setVisible(false);
+            else
+                menu.setVisible(true);
+        }
 
         _grid.updateLayout();
         updateVerticalSlider();
@@ -67,7 +98,7 @@ public class TextArea extends Prototype {
 
         // Area
         _area.setItemName(getItemName() + "_" + _area.getItemName());
-        _area.setSpacing(0, 5);
+        // _area.setSpacing(0, 5);
     }
 
     private long v_size = 0;
@@ -103,7 +134,20 @@ public class TextArea extends Prototype {
             vScrollBar.slider.setStep(vScrollBar.slider.getMaxValue());
             v_size = 0;
             vScrollBar.slider.setCurrentValue(0);
+            if (getVScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+                vScrollBar.setDrawable(false);
+                menu.setVisible(false);
+                _grid.updateLayout();
+            }
             return;
+        }
+        if (getVScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+            vScrollBar.setDrawable(true);
+            if (!hScrollBar.isDrawable())
+                menu.setVisible(false);
+            else
+                menu.setVisible(true);
+            _grid.updateLayout();
         }
         v_size = total_invisible_size;
 
@@ -135,7 +179,20 @@ public class TextArea extends Prototype {
             hScrollBar.slider.setStep(hScrollBar.slider.getMaxValue());
             h_size = 0;
             hScrollBar.slider.setCurrentValue(0);
+            if (getHScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+                hScrollBar.setDrawable(false);
+                menu.setVisible(false);
+                _grid.updateLayout();
+            }
             return;
+        }
+        if (getHScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+            hScrollBar.setDrawable(true);
+            if (!vScrollBar.isDrawable())
+                menu.setVisible(false);
+            else
+                menu.setVisible(true);
+            _grid.updateLayout();
         }
         h_size = total_invisible_size;
 
@@ -156,7 +213,7 @@ public class TextArea extends Prototype {
         super.setWidth(width);
         updateHorizontalSlider();
         hScrollBar.slider.updateHandler();
-        _area.setWidth(width);
+        // _area.setWidth(width);
     }
 
     @Override
@@ -164,7 +221,7 @@ public class TextArea extends Prototype {
         super.setHeight(height);
         updateVerticalSlider();
         vScrollBar.slider.updateHandler();
-        _area.setHeight(height);
+        // _area.setHeight(height);
     }
 
     public void updateElements() {
@@ -176,21 +233,62 @@ public class TextArea extends Prototype {
 
     @Override
     public void initElements() {
-            //Adding
-            super.addItem(_grid);
-            _grid.insertItem(_area, 0, 0);
-            _grid.insertItem(vScrollBar, 0, 1);
-            _grid.insertItem(hScrollBar, 1, 0);
+        // Adding
+        super.addItem(_grid);
+        _grid.insertItem(_area, 0, 0);
+        _grid.insertItem(vScrollBar, 0, 1);
+        _grid.insertItem(hScrollBar, 1, 0);
+        _grid.insertItem(menu, 1, 1);
 
-            //Events Connections
-            eventScrollUp.add((sender, args) -> vScrollBar.eventScrollUp.execute(sender, args));
-            eventScrollDown.add((sender, args) -> vScrollBar.eventScrollDown.execute(sender, args));
-            _area.textChanged.add(() -> updateElements());
+        // Events Connections
+        eventScrollUp.add((sender, args) -> vScrollBar.eventScrollUp.execute(sender, args));
+        eventScrollDown.add((sender, args) -> vScrollBar.eventScrollDown.execute(sender, args));
+        _area.textChanged.add(() -> updateElements());
 
-            vScrollBar.slider.eventValueChanged.add((sender) -> updateVListArea());
-            hScrollBar.slider.eventValueChanged.add((sender) -> updateHListArea());
+        vScrollBar.slider.eventValueChanged.add((sender) -> updateVListArea());
+        hScrollBar.slider.eventValueChanged.add((sender) -> updateHListArea());
+
+        // create menu
+        _menu = new ContextMenu(getHandler());
+        _menu.setBackground(60, 60, 60);
+        _menu.setPassEvents(false);
+
+        MenuItem go_up = new MenuItem("Go up");
+        go_up.setForeground(new Color(210, 210, 210));
+        go_up.eventMouseClick.add((sender, args) -> {
+            _area.setScrollYOffset(0);
             updateElements();
-        }
+        });
+
+        MenuItem go_down = new MenuItem("Go down");
+        go_down.setForeground(new Color(210, 210, 210));
+        go_down.eventMouseClick.add((sender, args) -> {
+            _area.setScrollYOffset(-_area.getTextHeight());
+            updateElements();
+        });
+
+        MenuItem go_up_left = new MenuItem("Go up and left");
+        go_up_left.setForeground(new Color(210, 210, 210));
+        go_up_left.eventMouseClick.add((sender, args) -> {
+            _area.setScrollYOffset(0);
+            _area.setScrollXOffset(0);
+            updateElements();
+        });
+
+        MenuItem go_down_right = new MenuItem("Go down and right");
+        go_down_right.setForeground(new Color(210, 210, 210));
+        go_down_right.eventMouseClick.add((sender, args) -> {
+            _area.setScrollYOffset(-_area.getTextHeight());
+            _area.setScrollXOffset(-_area.getTextWidth());
+            updateElements();
+        });
+        _menu.addItems(go_up_left, go_down_right, go_up, go_down);
+        menu.eventMouseClick.add((sender, args) -> _menu.show(sender, args));
+        _menu.activeButton = MouseButton.BUTTON_LEFT;
+        _menu.setShadow(10, 0, 0, Color.black);
+
+        updateElements();
+    }
 
     public void setText(String text) {
         _area.setText(text);
@@ -206,6 +304,8 @@ public class TextArea extends Prototype {
         if (style == null)
             return;
         super.setStyle(style);
+        setForeground(style.foreground);
+        setFont(style.font);
 
         Style inner_style = style.getInnerStyle("vscrollbar");
         if (inner_style != null) {
@@ -218,6 +318,10 @@ public class TextArea extends Prototype {
         inner_style = style.getInnerStyle("textedit");
         if (inner_style != null) {
             _area.setStyle(inner_style);
+        }
+        inner_style = style.getInnerStyle("menu");
+        if (inner_style != null) {
+            menu.setStyle(inner_style);
         }
     }
 
@@ -270,7 +374,7 @@ public class TextArea extends Prototype {
             b = Math.abs(b);
         if (b > 255)
             b = 255;
-        setForeground(new Color(r, g, b, 255));
+        _area.setForeground(new Color(r, g, b, 255));
     }
 
     public void setForeground(int r, int g, int b, int a) {
@@ -286,7 +390,7 @@ public class TextArea extends Prototype {
             b = Math.abs(b);
         if (b > 255)
             b = 255;
-        setForeground(new Color(r, g, b, a));
+        _area.setForeground(new Color(r, g, b, a));
     }
 
     public void setForeground(float r, float g, float b) {
@@ -302,7 +406,7 @@ public class TextArea extends Prototype {
             b = Math.abs(b);
         if (b > 1.0f)
             b = 1.0f;
-        setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
+        _area.setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
     }
 
     public void setForeground(float r, float g, float b, float a) {
@@ -318,7 +422,7 @@ public class TextArea extends Prototype {
             b = Math.abs(b);
         if (b > 1.0f)
             b = 1.0f;
-        setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
+        _area.setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
     }
 
     public Color getForeground() {
