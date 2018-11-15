@@ -246,7 +246,7 @@ namespace SpaceVIL
                 {
                     IBaseItem item = _cells[c + r * _column_count].GetItem();
 
-                    if (item == null || !item.IsVisible())
+                    if (item == null || !item.IsVisible() || !item.IsDrawable())
                     {
                         list_height.Add(new int[2] { r, -1 });
                         continue;
@@ -334,7 +334,7 @@ namespace SpaceVIL
                 {
                     //Console.WriteLine(c + r * _column_count);
                     IBaseItem item = _cells[c + r * _column_count].GetItem();
-                    if (item == null || !item.IsVisible())
+                    if (item == null || !item.IsVisible() || !item.IsDrawable())
                     {
                         list_width.Add(new int[2] { c, -1 });
                         continue;
