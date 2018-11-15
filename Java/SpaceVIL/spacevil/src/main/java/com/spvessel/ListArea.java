@@ -50,9 +50,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         return _show_selection;
     }
 
-    private CustomShape _substrate = new CustomShape();
+    private Rectangle _substrate = new Rectangle();
 
-    public CustomShape getSubstrate() {
+    public Rectangle getSubstrate() {
         return _substrate;
     }
 
@@ -101,18 +101,27 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     public void onMouseClick(InterfaceItem sender, MouseArgs args) {
         for (int i = firstVisibleItem; i <= lastVisibleItem; i++) {
-            if (i == getItems().size())
-                break;
+            InterfaceBaseItem item = getItems().get(i);
 
-            if (getItems().get(i).equals(_substrate))
+            if (item.equals(_substrate) || item.equals(_hover_substrate))
                 continue;
 
-            int y = getItems().get(i).getY();
-            int h = getItems().get(i).getHeight();
+            int y = item.getY();
+            int h = item.getHeight();
             if (args.position.getY() > y && args.position.getY() < (y + h)) {
-                setSelection(i - 1);
+                setSelection(i - 2);
+                updateSubstrate();
                 break;
             }
+        }
+    }
+
+    private void updateSubstrate() {
+        if (_show_selection && getSelection() >= 0) {
+            InterfaceBaseItem item = getItems().get(getSelection() + 2);
+            _substrate.setHeight(item.getHeight() + 4);
+            _substrate.setPosition(getX() + getPadding().left, item.getY() - 2);
+            _substrate.setVisible(true);
         }
     }
 
@@ -190,8 +199,6 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     }
 
     public void updateLayout() {
-        // areaPosition.clear();
-
         long offset = (-1) * getVScrollOffset();
         int startY = getY() + getPadding().top;
         int index = 0;
@@ -206,7 +213,6 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
             // top checking
             if (child_Y < startY) {
-                // areaPosition.add(ListPosition.TOP);
                 if (child_Y + child.getHeight() <= startY) {
                     child.setDrawable(false);
                     if (_selection == index)
@@ -214,9 +220,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 } else {
                     child.setY((int) child_Y);
                     child.setDrawable(true);
-                    firstVisibleItem = index + 1;
+                    firstVisibleItem = index + 2;
                     if (_selection == index)
-                        setSubstrate(child);
+                        _substrate.setDrawable(true);
                 }
                 index++;
                 continue;
@@ -224,7 +230,6 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
             // bottom checking
             if (child_Y + child.getHeight() + child.getMargin().bottom > getY() + getHeight() - getPadding().bottom) {
-                // areaPosition.add(ListPosition.BOTTOM);
                 if (child_Y >= getY() + getHeight() - getPadding().bottom) {
                     child.setDrawable(false);
                     if (_selection == index)
@@ -232,9 +237,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 } else {
                     child.setY((int) child_Y);
                     child.setDrawable(true);
-                    lastVisibleItem = index + 1;
+                    lastVisibleItem = index + 2;
                     if (_selection == index)
-                        setSubstrate(child);
+                        _substrate.setDrawable(true);
                 }
                 index++;
                 continue;
@@ -242,29 +247,15 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
             child.setY((int) child_Y);
             child.setDrawable(true);
-            lastVisibleItem = index + 1;
+            lastVisibleItem = index + 2;
             if (_selection == index)
-                setSubstrate(child);
+                _substrate.setDrawable(true);
             index++;
 
             // refactor
             child.setConfines();
         }
-    }
-
-    private void setSubstrate(InterfaceBaseItem child) {
-        if (!_show_selection) {
-            _substrate.setVisible(false);
-            return;
-        }
-
-        _substrate.setVisible(true);
-        _substrate.setHeight(child.getHeight() + 2);
-        _substrate.setMargin(-getParent().getPadding().left, -getParent().getPadding().top,
-                -getParent().getPadding().right, -getParent().getPadding().bottom);
-        _substrate.setTriangles(GraphicsMathService.getRoundSquare(child.getWidth(), _substrate.getHeight(), 0,
-                _substrate.getX(), _substrate.getY()));
-        _substrate.setY(child.getY() - 1);
+        updateSubstrate();
     }
 
     // style
@@ -277,6 +268,10 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         Style inner_style = style.getInnerStyle("substrate");
         if (inner_style != null) {
             _substrate.setStyle(inner_style);
+        }
+        inner_style = style.getInnerStyle("hovercover");
+        if (inner_style != null) {
+            _hover_substrate.setStyle(inner_style);
         }
     }
 }

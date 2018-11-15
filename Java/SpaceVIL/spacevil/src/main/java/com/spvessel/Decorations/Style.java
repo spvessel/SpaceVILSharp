@@ -379,7 +379,7 @@ public class Style {
     public static Style getCheckBoxStyle() {
         Style style = new Style();
 
-        style.background = new Color(255, 255, 255, 20);
+        style.background = new Color(80, 80, 80, 255);
         style.foreground = new Color(210, 210, 210);
         style.font = DefaultsService.getDefaultFont(12);
         style.widthPolicy = SizePolicy.EXPAND;
@@ -891,11 +891,18 @@ public class Style {
         style.spacing = new Spacing(0, 5);
 
         Style substrate_style = new Style();
-        substrate_style.background = new Color(39, 150, 216, 100);
+        substrate_style.background = new Color(39, 150, 216, 255);
         substrate_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         substrate_style.widthPolicy = SizePolicy.EXPAND;
         substrate_style.heightPolicy = SizePolicy.FIXED;
         style.addInnerStyle("substrate", substrate_style);
+
+        Style hover_style = new Style();
+        hover_style.background = new Color(255, 255, 255, 30);
+        hover_style.setAlignment(ItemAlignment.LEFT , ItemAlignment.TOP);
+        hover_style.widthPolicy = SizePolicy.EXPAND;
+        hover_style.heightPolicy = SizePolicy.FIXED;
+        style.addInnerStyle("hovercover", hover_style);
 
         return style;
     }
@@ -934,7 +941,7 @@ public class Style {
     public static Style getRadioButtonStyle() {
         Style style = new Style();
 
-        style.background = new Color(255, 255, 255, 20);
+        style.background = new Color(80, 80, 80, 255);
         style.foreground = new Color(210, 210, 210);
         style.font = DefaultsService.getDefaultFont();
         style.widthPolicy = SizePolicy.EXPAND;

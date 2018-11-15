@@ -55,12 +55,12 @@ namespace SpaceVIL
             return _show_selection;
         }
 
-        private CustomShape _substrate = new CustomShape();
-        public CustomShape GetSubstrate()
+        private Rectangle _substrate = new Rectangle();
+        public Rectangle GetSubstrate()
         {
             return _substrate;
         }
-        public void SetSubstrate(CustomShape shape)
+        public void SetSubstrate(Rectangle shape)
         {
             _substrate = shape;
             UpdateLayout();
@@ -86,7 +86,6 @@ namespace SpaceVIL
             return _hover_substrate;
         }
 
-        public ListPosition AreaPosition = ListPosition.No;
         public int FirstVisibleItem = 0;
         public int LastVisibleItem = 0;
 
@@ -99,43 +98,46 @@ namespace SpaceVIL
             EventMouseHover += OnMouseHover;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListArea)));
-
-            _hover_substrate.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-            _hover_substrate.SetBackground(255, 255, 255, 30);
         }
 
         //overrides
         public override void InitElements()
         {
-            //substrate
-            // _substrate.SetBackground(111, 181, 255);
-            // _substrate.SetAlignment(ItemAlignment.Left | ItemAlignment.Top);
-            // _substrate.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             _substrate.SetVisible(false);
             base.AddItems(_substrate, _hover_substrate);
         }
 
         public void OnMouseClick(IItem sender, MouseArgs args)
         {
-            for (int i = FirstVisibleItem; i <= LastVisibleItem; i++)//?????? fuck!!!
+            for (int i = FirstVisibleItem; i <= LastVisibleItem; i++)
             {
-                if (i == GetItems().Count)
-                    break;
+                IBaseItem item = GetItems().ElementAt(i);
 
-                if (GetItems().ElementAt(i).Equals(_substrate))
+                if (item.Equals(_substrate) || item.Equals(_hover_substrate))
                     continue;
 
-                int y = GetItems().ElementAt(i).GetY();
-                int h = GetItems().ElementAt(i).GetHeight();
+                int y = item.GetY();
+                int h = item.GetHeight();
                 if (args.Position.GetY() > y && args.Position.GetY() < (y + h))
                 {
-                    SetSelection(i - 1);
+                    SetSelection(i - 2);
+                    UpdateSubstrate();
                     break;
                 }
             }
-            //SelectionChanged?.Invoke();
         }
-        public void OnMouseHover(IItem sender, MouseArgs args)
+        private void UpdateSubstrate()
+        {
+            if (_show_selection && GetSelection() >= 0)
+            {
+                IBaseItem item = GetItems().ElementAt(GetSelection() + 2);
+                _substrate.SetHeight(item.GetHeight() + 4);
+                _substrate.SetPosition(GetX() + GetPadding().Left, item.GetY() - 2);
+                _substrate.SetVisible(true);
+            }
+        }
+
+        protected void OnMouseHover(IItem sender, MouseArgs args)
         {
             if (!GetHoverVisibility())
                 return;
@@ -152,14 +154,6 @@ namespace SpaceVIL
                     break;
                 }
             }
-            // Console.WriteLine(
-            //     _hover_substrate.GetHeight() + " " +
-            //     _hover_substrate.GetWidth() + " " +
-            //     _hover_substrate.GetX() + " " +
-            //     _hover_substrate.GetY() + " " +
-            //     _hover_substrate.IsDrawable() + " " +
-            //     _hover_substrate.IsVisible()
-            // );
         }
         public override void SetMouseHover(bool value)
         {
@@ -176,7 +170,7 @@ namespace SpaceVIL
         }
         public override void AddItem(IBaseItem item)
         {
-            item.SetDrawable(false);
+            // item.SetDrawable(false);
             base.AddItem(item);
             UpdateLayout();
         }
@@ -217,17 +211,16 @@ namespace SpaceVIL
 
         public void UpdateLayout()
         {
-            AreaPosition = ListPosition.No;
-
             Int64 offset = (-1) * GetVScrollOffset();
             int startY = GetY() + GetPadding().Top;
             int index = 0;
+            int child_X = (-1) * (int)_xOffset + GetX() + GetPadding().Left;
             foreach (var child in GetItems())
             {
                 if (child.Equals(_substrate) || child.Equals(_hover_substrate) || !child.IsVisible())
                     continue;
 
-                child.SetX((-1) * (int)_xOffset + GetX() + GetPadding().Left + child.GetMargin().Left);
+                child.SetX(child_X + child.GetMargin().Left);
 
                 Int64 child_Y = startY + offset + child.GetMargin().Top;
                 offset += child.GetHeight() + GetSpacing().Vertical;
@@ -235,7 +228,6 @@ namespace SpaceVIL
                 //top checking
                 if (child_Y < startY)
                 {
-                    AreaPosition |= ListPosition.Top;
                     if (child_Y + child.GetHeight() <= startY)
                     {
                         child.SetDrawable(false);
@@ -246,18 +238,18 @@ namespace SpaceVIL
                     {
                         child.SetY((int)child_Y);
                         child.SetDrawable(true);
-                        FirstVisibleItem = index + 1;
+                        FirstVisibleItem = index + 2;
                         if (_selection == index)
-                            SetSubstrate(child);
+                            _substrate.SetDrawable(true);
                     }
                     index++;
+                    child.SetConfines();
                     continue;
                 }
 
                 //bottom checking
                 if (child_Y + child.GetHeight() + child.GetMargin().Bottom > GetY() + GetHeight() - GetPadding().Bottom)
                 {
-                    AreaPosition |= ListPosition.Bottom;
                     if (child_Y >= GetY() + GetHeight() - GetPadding().Bottom)
                     {
                         child.SetDrawable(false);
@@ -268,43 +260,25 @@ namespace SpaceVIL
                     {
                         child.SetY((int)child_Y);
                         child.SetDrawable(true);
-                        LastVisibleItem = index + 1;
+                        LastVisibleItem = index + 2;
                         if (_selection == index)
-                            SetSubstrate(child);
+                            _substrate.SetDrawable(true);
                     }
                     index++;
+                    child.SetConfines();
                     continue;
                 }
-
                 child.SetY((int)child_Y);
                 child.SetDrawable(true);
-                LastVisibleItem = index + 1;
+                LastVisibleItem = index + 2;
                 if (_selection == index)
-                    SetSubstrate(child);
+                    _substrate.SetDrawable(true);
                 index++;
 
                 //refactor
                 child.SetConfines();
             }
-        }
-        private void SetSubstrate(IBaseItem child)
-        {
-            if (!_show_selection)
-            {
-                _substrate.SetVisible(false);
-                return;
-            }
-
-            _substrate.SetVisible(true);
-            _substrate.SetHeight(child.GetHeight() + 2);
-            _substrate.SetMargin(
-                -GetParent().GetPadding().Left,
-                -GetParent().GetPadding().Top,
-                -GetParent().GetPadding().Right,
-                -GetParent().GetPadding().Bottom
-                );
-            _substrate.SetTriangles(GraphicsMathService.GetRoundSquare(child.GetWidth(), _substrate.GetHeight(), 0, _substrate.GetX(), _substrate.GetY()));
-            _substrate.SetY(child.GetY() - 1);
+            UpdateSubstrate();
         }
 
         //style
@@ -318,6 +292,11 @@ namespace SpaceVIL
             if (inner_style != null)
             {
                 _substrate.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("hovercover");
+            if (inner_style != null)
+            {
+                _hover_substrate.SetStyle(inner_style);
             }
         }
     }

@@ -320,7 +320,7 @@ namespace SpaceVIL.Decorations
         {
             Style style = new Style();
 
-            style.Background = Color.FromArgb(20, 255, 255, 255);
+            style.Background = Color.FromArgb(255, 80, 80, 80);
             style.Foreground = Color.LightGray;
             style.Font = DefaultsService.GetDefaultFont();
             style.WidthPolicy = SizePolicy.Expand;
@@ -825,11 +825,18 @@ namespace SpaceVIL.Decorations
             style.Spacing = new Spacing(0, 5);
 
             Style substrate_style = new Style();
-            substrate_style.Background = Color.FromArgb(100, 39, 150, 216);
+            substrate_style.Background = Color.FromArgb(255, 39, 150, 216);
             substrate_style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             substrate_style.WidthPolicy = SizePolicy.Expand;
             substrate_style.HeightPolicy = SizePolicy.Fixed;
             style.AddInnerStyle("substrate", substrate_style);
+
+            Style hover_style = new Style();
+            hover_style.Background = Color.FromArgb(30, 255, 255, 255);
+            hover_style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            hover_style.WidthPolicy = SizePolicy.Expand;
+            hover_style.HeightPolicy = SizePolicy.Fixed;
+            style.AddInnerStyle("hovercover", hover_style);
 
             return style;
         }
