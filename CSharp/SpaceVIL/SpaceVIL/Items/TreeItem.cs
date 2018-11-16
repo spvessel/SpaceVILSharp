@@ -68,10 +68,7 @@ namespace SpaceVIL
             _icon_shape = new CustomShape();
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeItem)));
-            SetPassEvents(false,
-                InputEventType.MousePress |
-                InputEventType.MouseRelease);
-
+            SetPassEvents(false, InputEventType.MousePress | InputEventType.MouseRelease | InputEventType.MouseDoubleClick);
             EventKeyPress += OnKeyPress;
         }
 
@@ -179,7 +176,7 @@ namespace SpaceVIL
 
                 case TreeItemType.Branch:
                     _indicator.EventToggle += (sender, args) => OnToggleHide(_indicator.IsToggled());
-                    _indicator.SetPassEvents(false, InputEventType.MousePress | InputEventType.MouseRelease);
+                    _indicator.SetPassEvents(false, InputEventType.MousePress | InputEventType.MouseRelease | InputEventType.MouseDoubleClick);
                     _indicator.IsFocusable = false;
                     EventMouseDoubleClick += (sender, args) =>
                     {
@@ -199,6 +196,7 @@ namespace SpaceVIL
             _text_object.IsFocusable = false;
             ResetIndents();
         }
+        int ccc = 0;
         internal void OnToggleHide(bool value) // refactor
         {
             foreach (var item in _list_inners)

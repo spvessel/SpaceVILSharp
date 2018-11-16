@@ -80,6 +80,9 @@ namespace SpaceVIL
                 case InputEventType.MousePress:
                     InvokeMousePressEvent(task.Item, task.Args as MouseArgs);
                     break;
+                case InputEventType.MouseDoubleClick:
+                    InvokeMouseDoubleClickEvent(task.Item, task.Args as MouseArgs);
+                    break;
                 case InputEventType.MouseHover:
                     InvokeMouseHoverEvent(task.Item, task.Args as MouseArgs);
                     break;

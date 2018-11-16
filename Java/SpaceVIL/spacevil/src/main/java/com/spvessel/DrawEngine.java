@@ -522,6 +522,26 @@ public final class DrawEngine {
         }
     }
 
+    long _start_time = 0; // System.nanoTime();
+    long _estimated_ime = 0; // System.nanoTime() - startTime;
+    boolean _first_click = false;
+    boolean _second_click = false;
+
+    private boolean isDoubleClick() {
+        if (_first_click) {
+            _first_click = false;
+            if ((System.nanoTime() - _start_time) / 1000000 < 500)
+            {
+                _start_time = 0;
+                return true;
+            }
+        } else {
+            _first_click = true;
+            _start_time = System.nanoTime();
+        }
+        return false;
+    }
+
     private void mouseClick(long wnd, int button, int action, int mods) {
         _handler.getLayout().getWindow()._sides.clear();
         if (!_handler.focusable)
@@ -585,6 +605,7 @@ public final class DrawEngine {
             break;
 
         case GLFW_PRESS:
+            boolean is_double_click = isDoubleClick();
 
             try (MemoryStack stack = MemoryStack.stackPush()) {
                 IntBuffer width = stack.mallocInt(1);
@@ -625,10 +646,14 @@ public final class DrawEngine {
                         if (f.isFocusable) {
                             focusedItem = f;
                             focusedItem.setFocused(true);
-                            break;// остановить передачу событий последующим элементам
-                                  // 
+                            break;
                         }
                     }
+                }
+                // System.out.println(focusedItem.getItemName());
+                if (is_double_click) {
+                    if (focusedItem != null)
+                        focusedItem.eventMouseDoubleClick.execute(focusedItem, _margs);
                 }
             }
 

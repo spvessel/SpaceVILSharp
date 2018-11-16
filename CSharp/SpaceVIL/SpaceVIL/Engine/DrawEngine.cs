@@ -14,6 +14,7 @@ using System.Drawing;
 using SpaceVIL.Core;
 using Pointer = SpaceVIL.Core.Pointer;
 using SpaceVIL.Common;
+using System.Diagnostics;
 
 #if LINUX
 using static GL.LGL.OpenLGL;
@@ -504,6 +505,22 @@ namespace SpaceVIL
             }
         }
 
+        internal Stopwatch _double_click_timer = new Stopwatch();
+        internal bool _double_click_happen = false;
+        private bool IsDoubleClick()
+        {
+            if (_double_click_timer.IsRunning)
+            {
+                _double_click_timer.Stop();
+                if (_double_click_timer.ElapsedMilliseconds < 500)
+                    return true;
+            }
+            else
+            {
+                _double_click_timer.Restart();
+            }
+            return false;
+        }
         private void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
             _handler.GetLayout().GetWindow()._sides = 0;
@@ -570,6 +587,8 @@ namespace SpaceVIL
                     break;
 
                 case InputState.Press:
+                    bool is_double_click = IsDoubleClick();
+
                     Glfw.GetFramebufferSize(_handler.GetWindowId(), out w_global, out h_global);
                     x_global = _handler.GetPointer().GetX();
                     y_global = _handler.GetPointer().GetY();
@@ -610,6 +629,9 @@ namespace SpaceVIL
                             }
                         }
                         // Console.WriteLine(FocusedItem.GetItemName());
+                        if (is_double_click)
+                            // AssignActions(InputEventType.MouseDoubleClick, _margs, false);
+                            FocusedItem?.EventMouseDoubleClick?.Invoke(FocusedItem, _margs);
                     }
 
                     if (HoveredItem is IWindow)
@@ -875,6 +897,7 @@ namespace SpaceVIL
             _fbo.GenFBOTexture(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
             _fbo.UnbindFBO();
 
+            _double_click_timer.Start();
             while (!_handler.IsClosing())
             {
                 Glfw.WaitEventsTimeout(_interval);

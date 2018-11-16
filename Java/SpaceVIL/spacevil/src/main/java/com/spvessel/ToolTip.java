@@ -15,28 +15,28 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.Timer;
 
 final class ToolTip extends Prototype {
-    class TooltipVisibility extends Thread {
-        private int _ms = 500;
+    // class TooltipVisibility extends Thread {
+    //     private int _ms = 500;
 
-        TooltipVisibility() {}
+    //     TooltipVisibility() {}
 
-        TooltipVisibility(int ms) {
-            _ms = ms;
-        }
+    //     TooltipVisibility(int ms) {
+    //         _ms = ms;
+    //     }
 
-        boolean isCanceled = false;
+    //     boolean isCanceled = false;
 
-        @Override
-        public void run() {
-            long startTime = System.currentTimeMillis();
-            while (!isCanceled) {
-                if (System.currentTimeMillis() - startTime >= _ms) {
-                    visibleSelf();
-                    break;
-                }
-            }
-        }
-    }
+    //     @Override
+    //     public void run() {
+    //         long startTime = System.currentTimeMillis();
+    //         while (!isCanceled) {
+    //             if (System.currentTimeMillis() - startTime >= _ms) {
+    //                 visibleSelf();
+    //                 break;
+    //             }
+    //         }
+    //     }
+    // }
 
     private static int count = 0;
 
