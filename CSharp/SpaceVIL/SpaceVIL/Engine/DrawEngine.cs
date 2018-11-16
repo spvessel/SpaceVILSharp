@@ -48,6 +48,10 @@ namespace SpaceVIL
         private List<Prototype> HoveredItems;
         private Prototype HoveredItem = null;
         private Prototype FocusedItem = null;
+        public Prototype GetFocusedItem()
+        {
+            return FocusedItem;
+        }
         public void SetFocusedItem(Prototype item)
         {
             if (item == null)
@@ -413,7 +417,7 @@ namespace SpaceVIL
                     int y_click = ptrClick.GetY();
                     Prototype draggable = IsInListHoveredItems<IDraggable>();
                     Prototype anchor = IsInListHoveredItems<WindowAnchor>();
-                    if (draggable != null)
+                    if (draggable != null && HoveredItem == draggable)
                     {
                         draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
                     }
@@ -531,7 +535,6 @@ namespace SpaceVIL
             switch (state)
             {
                 case InputState.Release:
-
                     while (tmp.Count > 0)
                     {
                         Prototype item = tmp.Dequeue();
@@ -585,9 +588,28 @@ namespace SpaceVIL
                         {
                             if (FocusedItem != null)
                                 FocusedItem.SetFocused(false);
+
                             FocusedItem = HoveredItem;
                             FocusedItem.SetFocused(true);
                         }
+                        else
+                        {
+                            List<Prototype> focused_list = new List<Prototype>(HoveredItems);
+                            while (focused_list.Count != 0)
+                            {
+                                Prototype f = focused_list.Last();
+                                if (f.Equals(HoveredItem) && HoveredItem.IsDisabled())
+                                    continue;//пропустить
+                                if (f.IsFocusable)
+                                {
+                                    FocusedItem = f;
+                                    FocusedItem.SetFocused(true);
+                                    break;//остановить передачу событий последующим элементам
+                                }
+                                focused_list.Remove(f);
+                            }
+                        }
+                        // Console.WriteLine(FocusedItem.GetItemName());
                     }
 
                     if (HoveredItem is IWindow)
@@ -895,8 +917,12 @@ namespace SpaceVIL
             //draw static
             DrawItems(_handler.GetLayout().GetWindow());
             //draw float
-            foreach (var item in ItemsLayoutBox.GetLayout(_handler.GetLayout().Id).FloatItems)
-                DrawItems(item as IBaseItem);
+            List<IBaseItem> float_items = new List<IBaseItem>(ItemsLayoutBox.GetLayout(_handler.GetLayout().Id).FloatItems);
+            if (float_items != null)
+            {
+                foreach (var item in float_items)
+                    DrawItems(item);
+            }
             //draw tooltip if needed
             DrawToolTip();
             if (!_handler.Focusable)

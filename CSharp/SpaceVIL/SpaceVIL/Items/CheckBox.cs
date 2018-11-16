@@ -37,17 +37,19 @@ namespace SpaceVIL
 
             //text
             _text_object = new Label();
+            _text_object.IsFocusable = false;
             _text_object.SetItemName(GetItemName() + "_text_object");
 
             //indicator
             _indicator = new CustomIndicator();
+            _indicator.IsFocusable = false;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.CheckBox)));
         }
 
         protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
-            if (args.Scancode == 0x1C)
+            if (args.Key == KeyCode.Enter || args.Key == KeyCode.Space)
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 

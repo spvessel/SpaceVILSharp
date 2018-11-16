@@ -48,7 +48,7 @@ namespace SpaceVIL
 
             EventKeyPress += OnKeyPress;
             EventTextInput += OnTextInput;
-            EventMousePressed += OnMousePressed;
+            EventMousePress += OnMousePressed;
             EventMouseDrag += OnDragging;
 
             ShiftValCodes = new List<KeyCode>() { KeyCode.Left, KeyCode.Right, KeyCode.End, KeyCode.Home };

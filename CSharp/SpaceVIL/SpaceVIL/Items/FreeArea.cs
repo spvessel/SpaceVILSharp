@@ -20,8 +20,7 @@ namespace SpaceVIL
         {
             SetItemName("FlowArea_" + count);
             count++;
-            EventMouseClick += OnMouseRelease;
-            EventMousePressed += OnMousePress;
+            EventMousePress += OnMousePress;
             EventMouseDrag += OnDragging;
             _stored_crd = new Dictionary<IBaseItem, int[]>();
 
@@ -34,24 +33,23 @@ namespace SpaceVIL
         }
         protected virtual void OnMousePress(IItem sender, MouseArgs args)
         {
-            _x_press = args.Position.GetX();
-            _y_press = args.Position.GetY();
-            _diff_x = (int)_xOffset;
-            _diff_y = (int)_yOffset;
-        }
-
-        protected virtual void OnMouseRelease(IItem sender, MouseArgs args)
-        {
-            //PrintArgs.MouseArgs(args);
-            // if (args.Button == MouseButton.ButtonRight)
-            //     ShowDropDownList(args);
+            if (args.Button == MouseButton.ButtonLeft)
+            {
+                _x_press = args.Position.GetX();
+                _y_press = args.Position.GetY();
+                _diff_x = (int)_xOffset;
+                _diff_y = (int)_yOffset;
+            }
         }
 
         protected virtual void OnDragging(IItem sender, MouseArgs args)
         {
-            _xOffset = _diff_x - _x_press + args.Position.GetX();
-            _yOffset = _diff_y + args.Position.GetY() - _y_press;
-            UpdateLayout();
+            if (args.Button == MouseButton.ButtonLeft)
+            {
+                _xOffset = _diff_x - _x_press + args.Position.GetX();
+                _yOffset = _diff_y + args.Position.GetY() - _y_press;
+                UpdateLayout();
+            }
         }
 
         private Int64 _yOffset = 0;

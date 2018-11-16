@@ -18,24 +18,6 @@ namespace SpaceVIL
     public class VisualItem : BaseItem
     {
         internal Prototype _main;
-        // //common events
-        // internal EventCommonMethodState EventFocusGet;
-        // internal EventCommonMethodState EventFocusLost;
-        // public EventCommonMethodState EventResized;
-        // public EventCommonMethodState EventDestroyed;
-        // //mouse input
-        // public EventMouseMethodState EventMouseHover;
-        // public EventMouseMethodState EventMouseClick;
-        // public EventMouseMethodState EventMousePressed;
-        // public EventMouseMethodState EventMouseRelease;
-        // public EventMouseMethodState EventMouseDrag;
-        // public EventMouseMethodState EventMouseDrop;
-        // public EventMouseMethodState EventScrollUp;
-        // public EventMouseMethodState EventScrollDown;
-        // //keyboard input
-        // public EventKeyMethodState EventKeyPress;
-        // public EventKeyMethodState EventKeyRelease;
-        // public EventInputTextMethodState EventTextInput;
 
         private String _tooltip = String.Empty;
         public String GetToolTip()
@@ -421,7 +403,7 @@ namespace SpaceVIL
         {
             if (!value)
             {
-                    _pass_events |= e;
+                _pass_events |= e;
             }
             else
             {
@@ -461,7 +443,6 @@ namespace SpaceVIL
         }
 
         private bool _pressed;
-
         public bool IsMousePressed()
         {
             return _pressed;
@@ -476,7 +457,6 @@ namespace SpaceVIL
         }
 
         private bool _focused;
-
         public bool IsFocused()
         {
             return _focused;
@@ -488,6 +468,16 @@ namespace SpaceVIL
                 return;
             _focused = value;
             UpdateState();
+        }
+
+        private bool _focusable = true;
+        public bool IsFocusable()
+        {
+            return _focusable;
+        }
+        public void SetFocusable()
+        {
+            //foreach inner item focusable value set?
         }
 
         protected override void UpdateInnersDrawable(bool value)

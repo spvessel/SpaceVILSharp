@@ -35,7 +35,6 @@ public final class DrawEngine {
             hoveredItem.setMouseHover(false);
         ;
         hoveredItem = null;
-
         hoveredItems.clear();
     }
 
@@ -49,6 +48,10 @@ public final class DrawEngine {
     private List<Prototype> hoveredItems;
     private Prototype hoveredItem = null;
     private Prototype focusedItem = null;
+
+    public Prototype getFocusedItem() {
+        return focusedItem;
+    }
 
     protected void setFocusedItem(Prototype item) {
         if (item == null) {
@@ -443,7 +446,7 @@ public final class DrawEngine {
                 Prototype draggable = isInListHoveredItems(InterfaceDraggable.class);
                 Prototype anchor = isInListHoveredItems(InterfaceWindowAnchor.class);
 
-                if (draggable != null) {
+                if (draggable != null && hoveredItem == draggable) {
                     draggable.eventMouseDrag.execute(draggable, _margs);
                 } else if (anchor != null && !(hoveredItem instanceof ButtonCore)
                         && !_handler.getLayout().isMaximized) {
@@ -613,6 +616,19 @@ public final class DrawEngine {
                         focusedItem.setFocused(false);
                     focusedItem = hoveredItem;
                     focusedItem.setFocused(true);
+                } else {
+                    Deque<Prototype> focused_list = new ArrayDeque<Prototype>(hoveredItems);
+                    while (!focused_list.isEmpty()) {
+                        Prototype f = focused_list.pollLast();
+                        if (f.equals(hoveredItem) && hoveredItem.isDisabled())
+                            continue;// пропустить
+                        if (f.isFocusable) {
+                            focusedItem = f;
+                            focusedItem.setFocused(true);
+                            break;// остановить передачу событий последующим элементам
+                                  // 
+                        }
+                    }
                 }
             }
 
@@ -900,8 +916,19 @@ public final class DrawEngine {
         // draw static
         drawItems(_handler.getLayout().getWindow());
         // draw float
-        for (InterfaceBaseItem item : ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems())
-            drawItems((InterfaceBaseItem) item);
+        List<InterfaceBaseItem> float_items = new LinkedList<>(
+                ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems());
+        // _handler.getLayout().engineLocker.lock();
+        // try {
+        // float_items = new
+        // LinkedList<>(ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems());
+        // } finally {
+        // _handler.getLayout().engineLocker.unlock();
+        // }
+        if (float_items != null) {
+            for (InterfaceBaseItem item : float_items)
+                drawItems(item);
+        }
         // draw tooltip if needed
         drawToolTip();
         if (!_handler.focusable) {

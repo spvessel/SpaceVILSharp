@@ -40,7 +40,7 @@ namespace SpaceVIL
             SetItemName("FloatItem_" + count);
             SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             EventMouseHover += OnMousePress;
-            EventMousePressed += OnMousePress;
+            EventMousePress += OnMousePress;
             EventMouseDrag += OnDragging;
             count++;
 

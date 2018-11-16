@@ -569,6 +569,11 @@ public class Style {
                 Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         style.addInnerStyle("itemlist", itemlist_style);
 
+        Style area_style = getListAreaStyle();
+        Style substrate_style = area_style.getInnerStyle("substrate");
+        substrate_style.background = new Color(150, 150, 150, 255);
+        style.addInnerStyle("listarea", area_style);
+
         return style;
     }
 
@@ -891,7 +896,8 @@ public class Style {
         style.spacing = new Spacing(0, 5);
 
         Style substrate_style = new Style();
-        substrate_style.background = new Color(39, 150, 216, 255);
+        // substrate_style.background = new Color(39, 150, 216, 255);
+        substrate_style.background = new Color(100, 100, 100, 255);
         substrate_style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         substrate_style.widthPolicy = SizePolicy.EXPAND;
         substrate_style.heightPolicy = SizePolicy.FIXED;
@@ -1433,7 +1439,7 @@ public class Style {
         downarrow_style.setMargin(4, 5, 4, 4);
         downarrow_style.background = new Color(50, 50, 50, 255);
         downarrow_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.VCENTER));
+                Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
         downarrow_style.shape = GraphicsMathService.getTriangle(12, 6, 0, 0, 180);
         downarrow_style.isFixedShape = true;
         downarrow_style.addItemState(ItemStateType.HOVERED, hovered);

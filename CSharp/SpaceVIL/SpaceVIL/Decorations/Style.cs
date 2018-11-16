@@ -495,6 +495,11 @@ namespace SpaceVIL.Decorations
             itemlist_style.Background = Color.Transparent;
             itemlist_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.AddInnerStyle("itemlist", itemlist_style);
+            
+            Style area_style = GetListAreaStyle();
+            Style substrate_style = area_style.GetInnerStyle("substrate");
+            substrate_style.Background = Color.FromArgb(255, 150, 150, 150);
+            style.AddInnerStyle("listarea", area_style);
 
             return style;
         }
@@ -825,7 +830,8 @@ namespace SpaceVIL.Decorations
             style.Spacing = new Spacing(0, 5);
 
             Style substrate_style = new Style();
-            substrate_style.Background = Color.FromArgb(255, 39, 150, 216);
+            // substrate_style.Background = Color.FromArgb(255, 39, 150, 216);
+            substrate_style.Background = Color.FromArgb(255, 100, 100, 100);
             substrate_style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             substrate_style.WidthPolicy = SizePolicy.Expand;
             substrate_style.HeightPolicy = SizePolicy.Fixed;

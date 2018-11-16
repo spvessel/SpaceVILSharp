@@ -30,7 +30,7 @@ public class ComboBox extends Prototype {
         eventKeyPress.add(key_press);
 
         InterfaceMouseMethodState press = (sender, args) -> showDropDownList();
-        eventMousePressed.add(press);
+        eventMousePress.add(press);
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ComboBox"));
         setStyle(DefaultsService.getDefaultStyle(ComboBox.class));

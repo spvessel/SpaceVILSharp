@@ -50,7 +50,7 @@ class TextBlock extends Prototype
 
         // setStyle(DefaultsService.getDefaultStyle(TextBlock.class));
 
-        eventMousePressed.add(this::onMousePressed);
+        eventMousePress.add(this::onMousePressed);
         eventMouseDrag.add(this::onDragging);
         eventKeyPress.add(this::onKeyPress);
         eventKeyRelease.add(this::onKeyRelease);

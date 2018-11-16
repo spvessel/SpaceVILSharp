@@ -37,7 +37,7 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.VerticalSplitArea)));
 
             _splitHolder.EventMouseDrag += OnDragging;
-            _splitHolder.EventMousePressed += OnMousePress;
+            _splitHolder.EventMousePress += OnMousePress;
         }
 
         protected virtual void OnMousePress(object sender, MouseArgs args)

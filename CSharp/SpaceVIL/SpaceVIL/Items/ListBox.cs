@@ -349,7 +349,11 @@ namespace SpaceVIL
                 HScrollBar.Slider.SetCurrentValue(HScrollBar.Slider.GetMaxValue());
             });
             _menu.AddItems(go_up_left, go_down_right, go_up, go_down);
-            Menu.EventMouseClick += ((sender, args) => _menu.Show(sender, args));
+            Menu.EventMouseClick += (sender, args) =>
+            {
+                if (!_is_menu_disabled)
+                    _menu.Show(sender, args);
+            };
             _menu.ActiveButton = MouseButton.ButtonLeft;
             _menu.SetShadow(10, 0, 0, Color.Black);
         }

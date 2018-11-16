@@ -343,7 +343,10 @@ public class ListBox extends Prototype {
             vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMaxValue());
         });
         _menu.addItems(go_up_left, go_down_right, go_up, go_down);
-        menu.eventMouseClick.add((sender, args) -> _menu.show(sender, args));
+        menu.eventMouseClick.add((sender, args) -> {
+            if (!_is_menu_disabled)
+                _menu.show(sender, args);
+        });
         _menu.activeButton = MouseButton.BUTTON_LEFT;
         _menu.setShadow(10, 0, 0, Color.black);
     }

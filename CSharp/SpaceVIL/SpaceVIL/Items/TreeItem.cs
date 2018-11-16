@@ -71,10 +71,26 @@ namespace SpaceVIL
             SetPassEvents(false,
                 InputEventType.MousePress |
                 InputEventType.MouseRelease);
+
+            EventKeyPress += OnKeyPress;
         }
+
         public TreeItem(TreeItemType type, String text = "") : this(type)
         {
             SetText(text);
+        }
+
+        protected virtual void OnKeyPress(IItem sender, KeyArgs args)
+        {
+            if (args.Key == KeyCode.Enter)
+                _indicator.EventToggle.Invoke(sender, new MouseArgs());
+            if (args.Key == KeyCode.Menu)
+            {
+                MouseArgs margs = new MouseArgs();
+                margs.Button = MouseButton.ButtonRight;
+                margs.Position.SetPosition(GetX() + _parent.GetWidth() / 2, GetY() + GetHeight());
+                _menu?.Show(this, margs);
+            }
         }
 
         private TreeItem GetTreeBranch()
@@ -146,33 +162,41 @@ namespace SpaceVIL
             {
                 this.AddItem(GetTreeBranch());
             };
-
-            EventMouseClick += (_, x) => _menu.Show(_, x);
+            _menu.ReturnFocus = _parent.GetArea();
+            EventMouseClick += (sender, args) =>
+            {
+                _menu.Show(sender, args);
+                _parent.GetArea().EventMouseClick?.Invoke(_parent, args);
+            };
 
             switch (_item_type)
             {
                 case TreeItemType.Leaf:
                     base.AddItem(_icon_shape);
                     base.AddItem(_text_object);
-
-                    _menu.SetSize(100, 4 + 30 * 2 - 5);
                     _menu.AddItems(rename, remove, copy);
                     break;
 
                 case TreeItemType.Branch:
                     _indicator.EventToggle += (sender, args) => OnToggleHide(_indicator.IsToggled());
+                    _indicator.SetPassEvents(false, InputEventType.MousePress | InputEventType.MouseRelease);
+                    _indicator.IsFocusable = false;
+                    EventMouseDoubleClick += (sender, args) =>
+                    {
+                        if (args.Button == MouseButton.ButtonLeft)
+                            _indicator.EventToggle.Invoke(sender, args);
+                    };
 
                     base.AddItem(_indicator);
                     base.AddItem(_icon_shape);
                     base.AddItem(_text_object);
-
-                    _menu.SetSize(100, 4 + 30 * 3 - 5);
                     _menu.AddItems(new_branch, new_leaf, rename, paste);
                     break;
                 default:
                     base.AddItem(_text_object);
                     break;
             }
+            _text_object.IsFocusable = false;
             ResetIndents();
         }
         internal void OnToggleHide(bool value) // refactor

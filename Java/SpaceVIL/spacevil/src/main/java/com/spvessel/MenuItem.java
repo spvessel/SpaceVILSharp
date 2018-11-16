@@ -48,7 +48,7 @@ public class MenuItem extends Prototype {
         eventKeyPress.add(key_press);
 
         InterfaceMouseMethodState m_press = (sender, args) -> onMouseAction();
-        eventMousePressed.add(m_press);
+        eventMousePress.add(m_press);
         _text_object = new TextLine();
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.MenuItem"));

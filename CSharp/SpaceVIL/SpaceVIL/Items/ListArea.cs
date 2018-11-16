@@ -32,18 +32,22 @@ namespace SpaceVIL
         }
         public IBaseItem GetSelectionItem()
         {
-            return GetItems().ElementAt(_selection + 1);
+            return GetItems().ElementAt(_selection + 2);
         }
         public void SetSelection(int index)
         {
             _selection = index;
-            SelectionChanged?.Invoke();
+            if (index < 0)
+                _selection = 0;
+            if (index >= GetItems().Count - 2)
+                _selection = GetItems().Count - 3;
             UpdateLayout();
         }
         public void Unselect()
         {
             _selection = -1;
             _substrate.SetVisible(false);
+            _hover_substrate.SetVisible(false);
         }
         public void SetSelectionVisibility(bool visibility)
         {
@@ -98,6 +102,9 @@ namespace SpaceVIL
             EventMouseHover += OnMouseHover;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListArea)));
+
+            //events
+            EventKeyPress += OnKeyPress;
         }
 
         //overrides
@@ -122,6 +129,7 @@ namespace SpaceVIL
                 {
                     SetSelection(i - 2);
                     UpdateSubstrate();
+                    SelectionChanged?.Invoke();
                     break;
                 }
             }
@@ -150,11 +158,61 @@ namespace SpaceVIL
                     _hover_substrate.SetHeight(item.GetHeight());
                     _hover_substrate.SetPosition(GetX() + GetPadding().Left, item.GetY());
                     _hover_substrate.SetDrawable(true);
-                    _hover_substrate.SetVisible(true);
                     break;
                 }
             }
         }
+
+        protected virtual void OnKeyPress(IItem sender, KeyArgs args)
+        {
+            Prototype tmp = GetSelectionItem() as Prototype;
+            int index = GetSelection();
+            switch (args.Key)
+            {
+                // case KeyCode.Backspace:
+                // foreach (var _ in GetItems())
+                // {
+                //     Console.WriteLine(_.GetItemName() + " " + _.IsVisible() + " " + _.IsDrawable() + " " + GetItems().IndexOf(_));
+                // }
+                // break;
+
+                case KeyCode.Up:
+                    index--;
+                    if (index < 0)
+                        break;
+                    if (!GetItems().ElementAt(index + 2).IsVisible())
+                        while (index >= 0 && !GetItems().ElementAt(index + 2).IsVisible())
+                            index--;
+                    if (index >= 0)
+                        SetSelection(index);
+                    break;
+
+                case KeyCode.Down:
+                    index++;
+                    if (index >= GetItems().Count - 2)
+                        break;
+                    if (!GetItems().ElementAt(index + 2).IsVisible())
+                        while (index < (GetItems().Count - 2) && !GetItems().ElementAt(index + 2).IsVisible())
+                            index++;
+                    if (index < GetItems().Count - 2)
+                        SetSelection(index);
+                    break;
+
+                case KeyCode.Escape:
+                    Unselect();
+                    break;
+                case KeyCode.Enter:
+                    if (tmp != null)
+                        tmp.EventKeyPress?.Invoke(sender, args);
+                    SelectionChanged?.Invoke();
+                    break;
+                default:
+                    if (tmp != null)
+                        tmp.EventKeyPress?.Invoke(sender, args);
+                    break;
+            }
+        }
+
         public override void SetMouseHover(bool value)
         {
             base.SetMouseHover(value);
@@ -164,13 +222,21 @@ namespace SpaceVIL
 
         public override void InsertItem(IBaseItem item, Int32 index)
         {
+            Prototype tmp = item as Prototype;
+            if (tmp != null)
+                tmp.IsFocusable = false;
+
             item.SetDrawable(false);
             base.InsertItem(item, index);
             UpdateLayout();
         }
         public override void AddItem(IBaseItem item)
         {
-            // item.SetDrawable(false);
+            Prototype tmp = item as Prototype;
+            if (tmp != null)
+                tmp.IsFocusable = false;
+
+            item.SetDrawable(false);
             base.AddItem(item);
             UpdateLayout();
         }

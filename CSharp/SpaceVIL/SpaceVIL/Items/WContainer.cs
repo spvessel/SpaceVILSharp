@@ -41,16 +41,16 @@ namespace SpaceVIL
             {
                 _sides |= ItemAlignment.Left;
             }
-            if (xpos > GetWidth() - 5)
+            if (xpos >= GetWidth() - 10)
             {
                 _sides |= ItemAlignment.Right;
             }
 
-            if (ypos <= 5)
+            if (ypos <= 10)
             {
                 _sides |= ItemAlignment.Top;
             }
-            if (ypos > GetHeight() - 5)
+            if (ypos >= GetHeight() - 10)
             {
                 _sides |= ItemAlignment.Bottom;
             }

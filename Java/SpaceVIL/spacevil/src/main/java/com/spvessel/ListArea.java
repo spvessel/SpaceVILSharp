@@ -4,6 +4,7 @@ import com.spvessel.Common.DefaultsService;
 import com.spvessel.Core.*;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.SizePolicy;
+import com.spvessel.Flags.KeyCode;;
 
 public class ListArea extends Prototype implements InterfaceVLayout {
     public EventCommonMethod selectionChanged = new EventCommonMethod();
@@ -27,18 +28,22 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     }
 
     public InterfaceBaseItem getSelectionItem() {
-        return getItems().get(_selection + 1);
+        return getItems().get(_selection + 2);
     }
 
     public void setSelection(int index) {
         _selection = index;
-        selectionChanged.execute();
+        if (index < 0)
+            _selection = 0;
+        if (index >= getItems().size() - 2)
+            _selection = getItems().size() - 3;
         updateLayout();
     }
 
     public void unselect() {
         _selection = -1;
         _substrate.setVisible(false);
+        _hover_substrate.setVisible(false);
     }
 
     public void setSelectionVisibility(boolean visibility) {
@@ -88,8 +93,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ListArea"));
         setStyle(DefaultsService.getDefaultStyle(ListArea.class));
 
-        _hover_substrate.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        _hover_substrate.setBackground(255, 255, 255, 30);
+        eventKeyPress.add((sender, args) -> onKeyPress(sender, args));
     }
 
     // overrides
@@ -99,7 +103,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         super.addItems(_substrate, _hover_substrate);
     }
 
-    public void onMouseClick(InterfaceItem sender, MouseArgs args) {
+    protected void onMouseClick(InterfaceItem sender, MouseArgs args) {
         for (int i = firstVisibleItem; i <= lastVisibleItem; i++) {
             InterfaceBaseItem item = getItems().get(i);
 
@@ -111,6 +115,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
             if (args.position.getY() > y && args.position.getY() < (y + h)) {
                 setSelection(i - 2);
                 updateSubstrate();
+                selectionChanged.execute();
                 break;
             }
         }
@@ -125,7 +130,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         }
     }
 
-    public void onMouseHover(InterfaceItem sender, MouseArgs args) {
+    protected void onMouseHover(InterfaceItem sender, MouseArgs args) {
         if (!getHoverVisibility())
             return;
 
@@ -137,7 +142,47 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 _hover_substrate.setPosition(getX() + getPadding().left, item.getY());
                 _hover_substrate.setDrawable(true);
                 break;
-            } 
+            }
+        }
+    }
+
+    protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
+        InterfaceBaseItem tmp = getSelectionItem();
+        int index = getSelection();
+        switch (args.key) {
+        case UP:
+            index--;
+            if (index < 0)
+                break;
+            if (!getItems().get(index + 2).isVisible())
+                while (index >= 0 && !getItems().get(index + 2).isVisible())
+                    index--;
+            if (index >= 0)
+                setSelection(index);
+            break;
+        case DOWN:
+            index++;
+            if (index >= getItems().size() - 2)
+                break;
+            if (!getItems().get(index + 2).isVisible())
+                while (index < (getItems().size() - 2) && !getItems().get(index + 2).isVisible())
+                    index++;
+            if (index < getItems().size() - 2)
+                setSelection(index);
+            break;
+        case ESCAPE:
+            unselect();
+            break;
+        case ENTER:
+            if (tmp instanceof Prototype) {
+                ((Prototype) tmp).eventKeyPress.execute(sender, args);
+                selectionChanged.execute();
+            }
+            break;
+        default:
+            if (tmp instanceof Prototype)
+                ((Prototype) tmp).eventKeyPress.execute(sender, args);
+            break;
         }
     }
 
@@ -150,6 +195,8 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     @Override
     public void insertItem(InterfaceBaseItem item, int index) {
+        if (item instanceof Prototype)
+            ((Prototype) item).isFocusable = false;
         item.setDrawable(false);
         super.insertItem(item, index);
         updateLayout();
@@ -157,6 +204,8 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     @Override
     public void addItem(InterfaceBaseItem item) {
+        if (item instanceof Prototype)
+            ((Prototype) item).isFocusable = false;
         item.setDrawable(false);
         super.addItem(item);
         updateLayout();

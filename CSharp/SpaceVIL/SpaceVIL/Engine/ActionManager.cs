@@ -78,7 +78,7 @@ namespace SpaceVIL
                     InvokeMouseClickEvent(task.Item, task.Args as MouseArgs);
                     break;
                 case InputEventType.MousePress:
-                    InvokeMousePressedEvent(task.Item, task.Args as MouseArgs);
+                    InvokeMousePressEvent(task.Item, task.Args as MouseArgs);
                     break;
                 case InputEventType.MouseHover:
                     InvokeMouseHoverEvent(task.Item, task.Args as MouseArgs);
@@ -114,11 +114,11 @@ namespace SpaceVIL
         }
         private void InvokeResizedEvent(Prototype sender)
         {
-            sender.EventResized?.Invoke(sender);
+            sender.EventResize?.Invoke(sender);
         }
         private void InvokeDestroyedEvent(Prototype sender)
         {
-            sender.EventDestroyed?.Invoke(sender);
+            sender.EventDestroy?.Invoke(sender);
         }
 
         //mouse input
@@ -130,13 +130,13 @@ namespace SpaceVIL
         {
             sender.EventMouseHover?.Invoke(sender, args);
         }
-        private void InvokeMousePressedEvent(Prototype sender, MouseArgs args)
+        private void InvokeMousePressEvent(Prototype sender, MouseArgs args)
         {
-            sender.EventMousePressed?.Invoke(sender, args);
+            sender.EventMousePress?.Invoke(sender, args);
         }
-        private void InvokeMouseReleaseEvent(Prototype sender, MouseArgs args)
+        private void InvokeMouseDoubleClickEvent(Prototype sender, MouseArgs args)
         {
-            sender.EventMouseRelease?.Invoke(sender, args);
+            sender.EventMouseDoubleClick?.Invoke(sender, args);
         }
         private void InvokeMouseDragEvent(Prototype sender, MouseArgs args)
         {

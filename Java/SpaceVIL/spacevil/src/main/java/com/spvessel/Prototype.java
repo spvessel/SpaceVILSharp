@@ -45,13 +45,14 @@ abstract public class Prototype implements InterfaceBaseItem {
     // common events
     public EventCommonMethodState eventFocusGet = new EventCommonMethodState();
     public EventCommonMethodState eventFocusLost = new EventCommonMethodState();
-    public EventCommonMethodState eventResized = new EventCommonMethodState();
-    public EventCommonMethodState eventDestroyed = new EventCommonMethodState();
+    public EventCommonMethodState eventResize = new EventCommonMethodState();
+    public EventCommonMethodState eventDestroy = new EventCommonMethodState();
     // mouse input
     public EventMouseMethodState eventMouseHover = new EventMouseMethodState();
     public EventMouseMethodState eventMouseClick = new EventMouseMethodState();
-    public EventMouseMethodState eventMousePressed = new EventMouseMethodState();
-    public EventMouseMethodState eventMouseRelease = new EventMouseMethodState();
+    public EventMouseMethodState eventMouseDoubleClick = new EventMouseMethodState();
+    public EventMouseMethodState eventMousePress = new EventMouseMethodState();
+    // public EventMouseMethodState eventMouseRelease = new EventMouseMethodState();
     public EventMouseMethodState eventMouseDrag = new EventMouseMethodState();
     public EventMouseMethodState eventMouseDrop = new EventMouseMethodState();
     public EventMouseMethodState eventScrollUp = new EventMouseMethodState();

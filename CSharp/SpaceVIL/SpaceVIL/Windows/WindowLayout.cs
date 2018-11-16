@@ -454,6 +454,10 @@ namespace SpaceVIL
         {
             engine.SetFocusedItem(item);
         }
+        public Prototype GetFocusedItem()
+        {
+            return engine.GetFocusedItem();
+        }
         public void SetFocus(bool value)
         {
             engine.Focus(engine._handler.GetWindowId(), value);

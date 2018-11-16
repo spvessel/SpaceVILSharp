@@ -48,7 +48,7 @@ namespace SpaceVIL
 
             // SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextBlock)));
 
-            EventMousePressed += OnMousePressed;
+            EventMousePress += OnMousePressed;
             EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;

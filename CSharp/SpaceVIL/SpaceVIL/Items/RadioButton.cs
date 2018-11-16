@@ -38,22 +38,19 @@ namespace SpaceVIL
 
             //text
             _text_object = new Label();
+            _text_object.IsFocusable = false;
             _text_object.SetItemName(GetItemName() + "_text_object");
-            _text_object.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            _text_object.SetAlignment(ItemAlignment.VCenter);
-            _text_object.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            _text_object.SetMargin(10);
 
             //indicator
             _indicator = new CustomIndicator();
-            // _indicator.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
+            _indicator.IsFocusable = false;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.RadioButton)));
         }
 
         protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
-            if (args.Scancode == 0x1C)
+            if (args.Key == KeyCode.Enter || args.Key == KeyCode.Space)
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 
@@ -65,12 +62,6 @@ namespace SpaceVIL
         }
         public override void InitElements()
         {
-
-            //border radius
-            // _indicator.Border.Radius = _indicator.GetWidth() / 2;
-            // _indicator.GetIndicatorMarker().Border.Radius = _indicator.GetIndicatorMarker().GetWidth() / 2;
-            // _text_object.Border.Radius = _indicator.Border.Radius;
-
             //connect events
             _indicator.GetIndicatorMarker().EventToggle = null;
             EventMouseClick += (sender, args) =>
@@ -79,7 +70,6 @@ namespace SpaceVIL
                 if (_indicator.GetIndicatorMarker().IsToggled())
                     UncheckOthers(sender);
             };
-            // _indicator.GetIndicatorMarker().EventToggle += (sender, args) => UncheckOthers(sender);
 
             //adding
             AddItem(_indicator);

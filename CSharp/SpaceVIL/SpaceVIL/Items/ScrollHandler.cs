@@ -17,7 +17,7 @@ namespace SpaceVIL
         public ScrollHandler()
         {
             SetItemName("ScrollHandler_" + count);
-            EventMousePressed += OnMousePress;
+            EventMousePress += OnMousePress;
             EventMouseDrag += OnDragging;
             count++;
         }

@@ -53,7 +53,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
         eventKeyPress.add(this::onKeyPress);
         eventTextInput.add(this::onTextInput);
-        eventMousePressed.add(this::onMousePressed);
+        eventMousePress.add(this::onMousePressed);
         eventMouseDrag.add(this::onDragging);
 
         ShiftValCodes = new LinkedList<>(Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME));
