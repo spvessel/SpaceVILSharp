@@ -13,15 +13,21 @@ import static org.lwjgl.opengl.GL20.*;
 final class VRAMVertex {
     private FloatBuffer _vbo_data;
     public int VBO;
-    private FloatBuffer _cbo_data;
-    public int CBO;
-
     private int length;
+    // private FloatBuffer _cbo_data;
+    // public int CBO;
 
     protected VRAMVertex() {
     }
 
-    protected void genBuffers(float[] vertices, Color fill) {
+    protected void sendColor(Shader shader, Color fill) {
+        float[] argb = { (float) fill.getRed() / 255.0f, (float) fill.getGreen() / 255.0f,
+                (float) fill.getBlue() / 255.0f, (float) fill.getAlpha() / 255.0f };
+        sendUniform4f(shader, "background", argb);
+    }
+
+    protected void genBuffers(float[] vertices) {
+        length = vertices.length / 3;
         // Vertices
         VBO = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -30,25 +36,26 @@ final class VRAMVertex {
         glEnableVertexAttribArray(0);
 
         // Color
-        length = vertices.length / 3;
-        float[] argb = { (float) fill.getRed() / 255.0f, (float) fill.getGreen() / 255.0f,
-                (float) fill.getBlue() / 255.0f, (float) fill.getAlpha() / 255.0f };
-        _cbo_data = BufferUtils.createFloatBuffer(length * 4);
-        for (int i = 0; i < length; i++) {
-            _cbo_data.put(i * 4 + 0, argb[0]);
-            _cbo_data.put(i * 4 + 1, argb[1]);
-            _cbo_data.put(i * 4 + 2, argb[2]);
-            _cbo_data.put(i * 4 + 3, argb[3]);
-        }
-        _cbo_data.rewind();
-        CBO = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, CBO);
-        glBufferData(GL_ARRAY_BUFFER, _cbo_data, GL_STATIC_DRAW);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(1);
+        // length = vertices.length / 3;
+        // float[] argb = { (float) fill.getRed() / 255.0f, (float) fill.getGreen() /
+        // 255.0f,
+        // (float) fill.getBlue() / 255.0f, (float) fill.getAlpha() / 255.0f };
+        // _cbo_data = BufferUtils.createFloatBuffer(length * 4);
+        // for (int i = 0; i < length; i++) {
+        // _cbo_data.put(i * 4 + 0, argb[0]);
+        // _cbo_data.put(i * 4 + 1, argb[1]);
+        // _cbo_data.put(i * 4 + 2, argb[2]);
+        // _cbo_data.put(i * 4 + 3, argb[3]);
+        // }
+        // _cbo_data.rewind();
+        // CBO = glGenBuffers();
+        // glBindBuffer(GL_ARRAY_BUFFER, CBO);
+        // glBufferData(GL_ARRAY_BUFFER, _cbo_data, GL_STATIC_DRAW);
+        // glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
+        // glEnableVertexAttribArray(1);
     }
 
-    protected void genBuffers(List<float[]> vertices, Color fill) {
+    protected void genBuffers(List<float[]> vertices) {
         length = vertices.size();
         // Vertices
         _vbo_data = BufferUtils.createFloatBuffer(vertices.size() * 3);
@@ -66,41 +73,52 @@ final class VRAMVertex {
         glEnableVertexAttribArray(0);
 
         // Color
-        float[] argb = { (float) fill.getRed() / 255.0f, (float) fill.getGreen() / 255.0f,
-                (float) fill.getBlue() / 255.0f, (float) fill.getAlpha() / 255.0f };
-        _cbo_data = BufferUtils.createFloatBuffer(vertices.size() * 4);
-        for (int i = 0; i < vertices.size(); i++) {
-            _cbo_data.put(i * 4 + 0, argb[0]);
-            _cbo_data.put(i * 4 + 1, argb[1]);
-            _cbo_data.put(i * 4 + 2, argb[2]);
-            _cbo_data.put(i * 4 + 3, argb[3]);
-        }
-        _cbo_data.rewind();
-        CBO = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, CBO);
-        glBufferData(GL_ARRAY_BUFFER, _cbo_data, GL_STATIC_DRAW);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(1);
+        // float[] argb = { (float) fill.getRed() / 255.0f, (float) fill.getGreen() /
+        // 255.0f,
+        // (float) fill.getBlue() / 255.0f, (float) fill.getAlpha() / 255.0f };
+        // _cbo_data = BufferUtils.createFloatBuffer(vertices.size() * 4);
+        // for (int i = 0; i < vertices.size(); i++) {
+        // _cbo_data.put(i * 4 + 0, argb[0]);
+        // _cbo_data.put(i * 4 + 1, argb[1]);
+        // _cbo_data.put(i * 4 + 2, argb[2]);
+        // _cbo_data.put(i * 4 + 3, argb[3]);
+        // }
+        // _cbo_data.rewind();
+        // CBO = glGenBuffers();
+        // glBindBuffer(GL_ARRAY_BUFFER, CBO);
+        // glBufferData(GL_ARRAY_BUFFER, _cbo_data, GL_STATIC_DRAW);
+        // glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
+        // glEnableVertexAttribArray(1);
     }
 
     protected void draw(int type) {
         glDrawArrays(type, 0, length);
         glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
+        // glDisableVertexAttribArray(1);
+    }
+
+    protected boolean sendUniform4f(Shader shader, String name, float[] array) {
+        int location = glGetUniformLocation((int) shader.getProgramID(), name);
+        if (location >= 0) {
+            glUniform4f(location, array[0], array[1], array[2], array[3]);
+            return true;
+        } else
+            System.out.println("Uniform not found: <" + name + ">");
+        return false;
     }
 
     protected void clear() {
         glDeleteBuffers(VBO);
-        glDeleteBuffers(CBO);
+        // glDeleteBuffers(CBO);
         _vbo_data = null;
-        _cbo_data = null;
-    }
-
-    protected void deleteIBOBuffer() {
-        glDeleteBuffers(VBO);
+        // _cbo_data = null;
     }
 
     protected void deleteVBOBuffer() {
-        glDeleteBuffers(CBO);
+        glDeleteBuffers(VBO);
     }
+
+    // protected void deleteVBOBuffer() {
+    // glDeleteBuffers(CBO);
+    // }
 }

@@ -47,7 +47,7 @@ public class PointsContainer extends Primitive implements InterfacePoints, Inter
 
     public List<float[]> getShapePointer() {
         if (_shape_pointer == null)
-            return GraphicsMathService.getEllipse(getPointThickness() / 2.0f, 32);
+            _shape_pointer = GraphicsMathService.getEllipse(getPointThickness() / 2.0f, 16);
         return _shape_pointer;
     }
 

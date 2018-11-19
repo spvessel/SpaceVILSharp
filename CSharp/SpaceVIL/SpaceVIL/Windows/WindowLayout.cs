@@ -45,7 +45,7 @@ namespace SpaceVIL
             string title,
             int width = 300,
             int height = 300,
-            bool border_hidden = true
+            bool border_hidden = false
             )
         {
             handler = window;
@@ -56,6 +56,7 @@ namespace SpaceVIL
             SetWidth(width);
             SetHeight(height);
 
+            IsDialog = false;
             IsBorderHidden = border_hidden;
             IsClosed = true;
             IsHidden = false;
@@ -74,7 +75,7 @@ namespace SpaceVIL
             {
                 WindowLayoutBox.InitWindow(this);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return;

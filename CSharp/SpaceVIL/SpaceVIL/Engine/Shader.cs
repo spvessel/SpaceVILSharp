@@ -117,6 +117,15 @@ namespace SpaceVIL
             _code_geometry = String.Empty;
             _code_compute = String.Empty;
         }
+        internal Shader(String name, Stream vertex_code, Stream geometry_code, Stream fragmend_code)
+        {
+            _code_vertex = ReadSource(vertex_code);
+            _code_geometry = ReadSource(geometry_code);
+            _code_fragment = ReadSource(fragmend_code);
+
+            //defaults
+            _code_compute = String.Empty;
+        }
         private void InitDefaults()
         {
             _code_vertex = String.Empty;

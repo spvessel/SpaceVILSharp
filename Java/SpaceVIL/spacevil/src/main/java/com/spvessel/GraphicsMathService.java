@@ -15,17 +15,18 @@ public final class GraphicsMathService {
     }
 
     public static Color mixColors(Color... colors) {
-        
-        //List<Color> m_colors = Arrays.stream(colors).collect(Collectors.toList());
+
+        // List<Color> m_colors = Arrays.stream(colors).collect(Collectors.toList());
         if (colors.length == 0)
             return new Color(255, 255, 255);
         if (colors.length == 1)
             return colors[0];
 
-        float r = 0, g = 0, b = 0, a = 0.0f; //255.0f;
+        float r = 0, g = 0, b = 0, a = 0.0f; // 255.0f;
 
         for (Color item : colors) {
-            if (item == null) continue;
+            if (item == null)
+                continue;
             if (item.getAlpha() == 255) // exchange
             {
                 r = item.getRed();
@@ -44,7 +45,7 @@ public final class GraphicsMathService {
         return new Color((int) r, (int) g, (int) b, (int) a);
     }
 
-    static public List<float[]> toGL(InterfaceBaseItem item, WindowLayout handler) // where TLayout : VisualItem
+    static protected List<float[]> toGL(InterfaceBaseItem item, WindowLayout handler) // where TLayout : VisualItem
     {
         if (item.getTriangles() == null)
             return null;
@@ -59,7 +60,7 @@ public final class GraphicsMathService {
         return result;
     }
 
-    static public List<float[]> toGL(List<float[]> triangles, WindowLayout handler) // where TLayout : VisualItem
+    static protected List<float[]> toGL(List<float[]> triangles, WindowLayout handler) // where TLayout : VisualItem
     {
         List<float[]> result = new LinkedList<>();
 
@@ -71,7 +72,7 @@ public final class GraphicsMathService {
         return result;
     }
 
-    static public float[] toGL(float[] triangles, WindowLayout handler) // where TLayout : VisualItem
+    static protected float[] toGL(float[] triangles, WindowLayout handler) // where TLayout : VisualItem
     {
         for (int i = 0; i < triangles.length / 2; i++) {
             triangles[i * 2 + 0] /= (((float) handler.getWidth()) * 2.0f - 1.0f);
@@ -232,9 +233,7 @@ public final class GraphicsMathService {
         x1 = radius * (float) Math.cos(alph1 * Math.PI / 180.0f) + x0;
         y1 = radius * (float) Math.sin(alph1 * Math.PI / 180.0f) + y0;
 
-        for (int alf = alph1 + 1; alf <= alph2; alf += 5) { // Шаг можно сделать больше 1 градуса, нужны тести
-                                                            // 
-                                                            // ования
+        for (int alf = alph1 + 1; alf <= alph2; alf += 5) {
             x2 = radius * (float) Math.cos(alf * Math.PI / 180.0f) + x0;
             y2 = radius * (float) Math.sin(alf * Math.PI / 180.0f) + y0;
             circleSect.add(new float[] { x0, y0, 0.0f });
@@ -443,12 +442,7 @@ public final class GraphicsMathService {
         alpha = 0.0f;
         int count = 1;
         for (int i = 1; i < n * 2 + 2; i++) {
-            if ((i % 2) != 0) // При выполнении условия четности следующие формулы
-                              // 
-                              //
-            //
-            //
-            {
+            if ((i % 2) != 0) {
                 triangles.add(new float[] { (float) (x_center + r / 2 * Math.cos(alpha * Math.PI / 180.0f)),
                         (float) (y_center - r / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
                 if (count % 3 == 0) {
@@ -456,12 +450,7 @@ public final class GraphicsMathService {
                             (float) (y_center - r / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
                     count = 1;
                 }
-            } else // При невыполнении условия четности следующие формулы
-                   // 
-                   //
-            //
-            //
-            {
+            } else {
                 triangles.add(new float[] { (float) (x_center + R / 2 * Math.cos(alpha * Math.PI / 180.0f)),
                         (float) (y_center - R / 2 * Math.sin(alpha * Math.PI / 180.0f)), 0.0f });
                 if (count % 3 == 0) {
@@ -507,45 +496,10 @@ public final class GraphicsMathService {
         List<BorderSection> border = new LinkedList<>();
         // Начало координат в углу
 
-        border.add(new BorderSection(width - radius + x, y, radius + x, y, width / 2f + x, height + 1 + y)); // radius +
-                                                                                                             // x,
-                                                                                                             // height +
-                                                                                                             // y));
-        // triangles.add(new float[] { radius + x, height + y, 0.0f });
-        // triangles.add(new float[] { width - radius + x, y, 0.0f });
-        // triangles.add(new float[] { radius + x, y, 0.0f });
-
-        border.add(new BorderSection(width - radius + x, height + y, radius + x, height + y, width / 2f + x, y - 1)); // width
-                                                                                                                      // -
-                                                                                                                      // radius
-                                                                                                                      // +
-                                                                                                                      // x,
-                                                                                                                      // y));
-        // triangles.add(new float[] { radius + x, height + y, 0.0f });
-        // triangles.add(new float[] { width - radius + x, height + y, 0.0f });
-        // triangles.add(new float[] { width - radius + x, y, 0.0f });
-
-        border.add(new BorderSection(width + x, height - radius + y, width + x, radius + y, x - 1, height / 2f + y)); // width
-                                                                                                                      // -
-                                                                                                                      // radius
-                                                                                                                      // +
-                                                                                                                      // x,
-                                                                                                                      // height
-                                                                                                                      // -
-                                                                                                                      // radius
-                                                                                                                      // +
-                                                                                                                      // y));
-        // triangles.add(new float[] { width - radius + x, height - radius + y, 0.0f });
-        // triangles.add(new float[] { width + x, height - radius + y, 0.0f });
-        // triangles.add(new float[] { width + x, radius + y, 0.0f });
-
-        border.add(new BorderSection(x, height - radius + y, x, radius + y, width + 1 + x, height / 2f + y)); // radius
-                                                                                                              // + x,
-                                                                                                              // radius
-                                                                                                              // + y));
-        // triangles.add(new float[] { x, height - radius + y, 0.0f });
-        // triangles.add(new float[] { radius + x, radius + y, 0.0f });
-        // triangles.add(new float[] { x, radius + y, 0.0f });
+        border.add(new BorderSection(width - radius + x, y, radius + x, y, width / 2f + x, height + 1 + y));
+        border.add(new BorderSection(width - radius + x, height + y, radius + x, height + y, width / 2f + x, y - 1));
+        border.add(new BorderSection(width + x, height - radius + y, width + x, radius + y, x - 1, height / 2f + y));
+        border.add(new BorderSection(x, height - radius + y, x, radius + y, width + 1 + x, height / 2f + y));
 
         if (radius < 1)
             return makeBorder(border, thickness);

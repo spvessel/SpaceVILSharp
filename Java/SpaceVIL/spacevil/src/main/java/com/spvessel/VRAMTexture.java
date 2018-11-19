@@ -160,10 +160,10 @@ final class VRAMTexture {
     }
 
     protected void deleteIBOBuffer() {
-        glDeleteBuffers(VBO);
+        glDeleteBuffers(IBO);
     }
 
     protected void deleteVBOBuffer() {
-        glDeleteBuffers(IBO);
+        glDeleteBuffers(VBO);
     }
 }

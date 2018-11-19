@@ -95,7 +95,7 @@ namespace SpaceVIL
             }
             return Color.FromArgb((int)a, (int)r, (int)g, (int)b);
         }
-        static internal List<float[]> GetRectangle(float w = 100, float h = 100, float x = 0, float y = 0)
+        static public List<float[]> GetRectangle(float w = 100, float h = 100, float x = 0, float y = 0)
         {
             return new List<float[]>
             {
@@ -109,7 +109,7 @@ namespace SpaceVIL
             };
         }
 
-        static internal List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100, int x = 0, int y = 0)
+        static public List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100, int x = 0, int y = 0)
         {
             if (width <= 0 || height <= 0)
                 return null;
@@ -202,7 +202,7 @@ namespace SpaceVIL
             return tri;
         }
 
-        static internal List<float[]> GetRoundSquare(float width = 100, float height = 100, float radius = 0.0f, int x = 0, int y = 0)
+        static public List<float[]> GetRoundSquare(float width = 100, float height = 100, float radius = 0.0f, int x = 0, int y = 0)
         {
             if (width <= 0 || height <= 0)
                 return null;
@@ -793,7 +793,7 @@ namespace SpaceVIL
             return MakeBorder(border, thickness);
         }
 
-        static internal List<float[]> GetRoundSquareBorder(CornerRadius cornerRadius, float width, float height, float thickness, int x, int y)
+        static public List<float[]> GetRoundSquareBorder(CornerRadius cornerRadius, float width, float height, float thickness, int x, int y)
         {
             if (width <= 0 || height <= 0)
                 return null;

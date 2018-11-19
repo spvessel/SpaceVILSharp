@@ -72,7 +72,7 @@ public final class DrawEngine {
     private Shader _primitive;
     private Shader _texture;
     private Shader _char;
-    private Shader _fxaa;
+    // private Shader _fxaa;
     private Shader _blur;
 
     protected DrawEngine(WindowLayout handler) {
@@ -188,7 +188,7 @@ public final class DrawEngine {
         // glEnable(GL_STENCIL_TEST);
 
         ////////////////////////////////////////////////
-        _primitive = new Shader(getResourceString("/shaders/vs_fill.glsl"), getResourceString("/shaders/fs_fill.glsl"));
+        _primitive = new Shader(getResourceString("/shaders/vs_primitive.glsl"), getResourceString("/shaders/fs_primitive.glsl"));
         _primitive.compile();
         if (_primitive.getProgramID() == 0)
             System.out.println("Could not create primitive shaders");
@@ -207,10 +207,10 @@ public final class DrawEngine {
             System.out.println("Could not create character shaders");
         ///////////////////////////////////////////////
 
-        _fxaa = new Shader(getResourceString("/shaders/vs_fxaa.glsl"), getResourceString("/shaders/fs_fxaa.glsl"));
-        _fxaa.compile();
-        if (_fxaa.getProgramID() == 0)
-            System.out.println("Could not create fxaa shaders");
+        // _fxaa = new Shader(getResourceString("/shaders/vs_fxaa.glsl"), getResourceString("/shaders/fs_fxaa.glsl"));
+        // _fxaa.compile();
+        // if (_fxaa.getProgramID() == 0)
+        //     System.out.println("Could not create fxaa shaders");
 
         _blur = new Shader(getResourceString("/shaders/vs_blur.glsl"), getResourceString("/shaders/fs_blur.glsl"));
         _blur.compile();
@@ -475,8 +475,8 @@ public final class DrawEngine {
                 if (_handler.getLayout().isBorderHidden && _handler.getLayout().isResizable
                         && !_handler.getLayout().isMaximized) {
                     // resize
-                    if ((xpos < _handler.getLayout().getWindow().getWidth() - 5) && (xpos > 5)
-                            && (ypos < _handler.getLayout().getWindow().getHeight() - 5) && ypos > 5) {
+                    if ((xpos < _handler.getLayout().getWindow().getWidth() - 10) && (xpos > 10)
+                            && (ypos < _handler.getLayout().getWindow().getHeight() - 10) && ypos > 10) {
                         if (hoveredItem instanceof InterfaceTextEditable)
                             _handler.setCursorType(GLFW_IBEAM_CURSOR);
                         if (hoveredItem instanceof SplitHolder) {
@@ -487,19 +487,19 @@ public final class DrawEngine {
                         }
                     } else // refactor!!
                     {
-                        if ((xpos > _handler.getLayout().getWindow().getWidth() - 5 && ypos < 5)
-                                || (xpos > _handler.getLayout().getWindow().getWidth() - 5
-                                        && ypos > _handler.getLayout().getWindow().getHeight() - 5)
-                                || (ypos > _handler.getLayout().getWindow().getHeight() - 5 && xpos < 5)
-                                || (ypos > _handler.getLayout().getWindow().getHeight() - 5
-                                        && xpos > _handler.getLayout().getWindow().getWidth() - 5)
-                                || (xpos < 5 && ypos < 5)) {
+                        if ((xpos >= _handler.getLayout().getWindow().getWidth() - 10 && ypos <= 10)
+                                || (xpos >= _handler.getLayout().getWindow().getWidth() - 10
+                                        && ypos >= _handler.getLayout().getWindow().getHeight() - 105)
+                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 10 && xpos <= 10)
+                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 10
+                                        && xpos >= _handler.getLayout().getWindow().getWidth() - 10)
+                                || (xpos <= 10 && ypos <= 10)) {
                             _handler.setCursorType(GLFW_CROSSHAIR_CURSOR);
                         } else {
-                            if (xpos > _handler.getLayout().getWindow().getWidth() - 5 || xpos < 5)
+                            if (xpos > _handler.getLayout().getWindow().getWidth() - 10 || xpos <= 10)
                                 _handler.setCursorType(GLFW_HRESIZE_CURSOR);
 
-                            if (ypos > _handler.getLayout().getWindow().getHeight() - 5 || ypos < 5)
+                            if (ypos > _handler.getLayout().getWindow().getHeight() - 10 || ypos <= 10)
                                 _handler.setCursorType(GLFW_VRESIZE_CURSOR);
                         }
                     }
@@ -530,8 +530,7 @@ public final class DrawEngine {
     private boolean isDoubleClick() {
         if (_first_click) {
             _first_click = false;
-            if ((System.nanoTime() - _start_time) / 1000000 < 500)
-            {
+            if ((System.nanoTime() - _start_time) / 1000000 < 500) {
                 _start_time = 0;
                 return true;
             }
@@ -900,9 +899,9 @@ public final class DrawEngine {
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {
-            glfwWaitEventsTimeout(_interval);
+            // glfwWaitEventsTimeout(_interval);
             // glfwWaitEvents();
-            // glfwPollEvents();
+            glfwPollEvents();
 
             // glClearColor((float) _handler.getLayout().getBackground().getRed() / 255.0f,
             // (float) _handler.getLayout().getBackground().getGreen() / 255.0f,
@@ -917,7 +916,7 @@ public final class DrawEngine {
         _primitive.deleteShader();
         _texture.deleteShader();
         _char.deleteShader();
-        _fxaa.deleteShader();
+        // _fxaa.deleteShader();
         _blur.deleteShader();
 
         _fbo.clearFBO();
@@ -961,108 +960,14 @@ public final class DrawEngine {
         }
     }
 
-    void drawFBO(int fbo_texture, Shader shader) {
-        float i_x0 = -1.0f;
-        float i_y0 = 1.0f;
-        float i_x1 = 1.0f;
-        float i_y1 = -1.0f;
-        float[] vertexData = new float[] {
-                // X Y Z //U V
-                i_x0, i_y0, 0.0f, 0.0f, 1.0f, // x0
-                i_x0, i_y1, 0.0f, 0.0f, 0.0f, // x1
-                i_x1, i_y1, 0.0f, 1.0f, 0.0f, // x2
-                i_x1, i_y0, 0.0f, 1.0f, 1.0f, // x3
-        };
-        int[] ibo = new int[] { 0, 1, 2, // first triangle
-                2, 3, 0, // second triangle
-        };
-
-        int vertexbuffer = glGenBuffers();
-        int elementbuffer = glGenBuffers();
-
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo, GL_DYNAMIC_DRAW);
-
-        // Position attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0);
-        glEnableVertexAttribArray(0);
-        // TexCoord attribute
-        glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * 4, 0 + (3 * 4));
-        glEnableVertexAttribArray(1);
-
-        int location = glGetUniformLocation((int) shader.getProgramID(), "tex");
-        if (location >= 0) {
-            glUniform1i(location, 0);
-        }
-
-        int location_size = glGetUniformLocation((int) shader.getProgramID(), "frame");
-        if (location_size >= 0) {
-            glUniform2f(location_size, (float) _handler.getLayout().getWidth(),
-                    (float) _handler.getLayout().getHeight());
-        }
-
-        int location_enable = glGetUniformLocation((int) shader.getProgramID(), "is_enable");
-        if (location_enable >= 0) {
-            glUniform1i(location_enable, 0);
-        }
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        glDeleteBuffers(vertexbuffer);
-        glDeleteBuffers(elementbuffer);
-    }
-
     private void setStencilMask(List<float[]> crd_array) {
-        int vertexbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        int length = crd_array.size() * 3;
-        FloatBuffer vertexData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 3; i++) {
-            vertexData.put(i * 3 + 0, crd_array.get(i)[0]);
-            vertexData.put(i * 3 + 1, crd_array.get(i)[1]);
-            vertexData.put(i * 3 + 2, crd_array.get(i)[2]);
-        }
-        vertexData.rewind();
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_DYNAMIC_DRAW);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(0);
-
-        // Color
-        float[] argb = { 0.0f, 0.0f, 0.0f, 0.0f };
-        int colorbuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-
-        length = crd_array.size() * 4;
-        FloatBuffer colorData = BufferUtils.createFloatBuffer(length);
-        for (int i = 0; i < length / 4; i++) {
-            colorData.put(i * 4 + 0, argb[0]);
-            colorData.put(i * 4 + 1, argb[1]);
-            colorData.put(i * 4 + 2, argb[2]);
-            colorData.put(i * 4 + 3, argb[3]);
-        }
-        colorData.rewind();
-
-        glBufferData(GL_ARRAY_BUFFER, colorData, GL_DYNAMIC_DRAW);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(1);
-
-        // draw
-        glDrawArrays(GL_TRIANGLES, 0, crd_array.size());
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        // Clear VBO and shader
-        glDeleteBuffers(vertexbuffer);
-        glDeleteBuffers(colorbuffer);
+        if (crd_array == null)
+            return;
+        VRAMVertex stencil = new VRAMVertex();
+        stencil.genBuffers(crd_array);
+        stencil.sendColor(_primitive, new Color(0, 0, 0, 0));
+        stencil.draw(GL_TRIANGLES);
+        stencil.clear();
     }
 
     private boolean checkOutsideBorders(InterfaceBaseItem shell) {
@@ -1225,7 +1130,8 @@ public final class DrawEngine {
         }
 
         VRAMVertex store = new VRAMVertex();
-        store.genBuffers(crd_array, shell.getBackground());
+        store.genBuffers(crd_array);
+        store.sendColor(_primitive, shell.getBackground());
         store.draw(GL_TRIANGLES);
         store.clear();
 
@@ -1283,62 +1189,63 @@ public final class DrawEngine {
 
     }
 
-    private void drawShadowPartTmp(float[] weights, int res, int[] xy, int[] wh) {
-        float x0 = xy[0];
-        float x1 = xy[0] + wh[0];
-        float y0 = xy[1];
-        float y1 = xy[1] + wh[1];
-        float[][] image = new float[wh[0] + 2 * res][wh[1] + 2 * res];
-        for (int i = res; i < wh[0] + res; i++) {
-            for (int j = res; j < wh[1] + res; j++) {
-                image[i][j] = 1f;
-            }
-        }
+    // private void drawShadowPartTmp(float[] weights, int res, int[] xy, int[] wh)
+    // {
+    // float x0 = xy[0];
+    // float x1 = xy[0] + wh[0];
+    // float y0 = xy[1];
+    // float y1 = xy[1] + wh[1];
+    // float[][] image = new float[wh[0] + 2 * res][wh[1] + 2 * res];
+    // for (int i = res; i < wh[0] + res; i++) {
+    // for (int j = res; j < wh[1] + res; j++) {
+    // image[i][j] = 1f;
+    // }
+    // }
 
-        int h = image.length;
-        int w = image[0].length;
-        float[][] outarr = new float[h][w];
-        double tmp, ctmp;
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < w; j++) {
-                tmp = image[i][j] * weights[0];
-                for (int k = -res; k <= res; k++) {
-                    if (i + k < 0 || i + k >= h)
-                        ctmp = image[i][j];
-                    else
-                        ctmp = image[i + k][j];
+    // int h = image.length;
+    // int w = image[0].length;
+    // float[][] outarr = new float[h][w];
+    // double tmp, ctmp;
+    // for (int i = 0; i < h; i++) {
+    // for (int j = 0; j < w; j++) {
+    // tmp = image[i][j] * weights[0];
+    // for (int k = -res; k <= res; k++) {
+    // if (i + k < 0 || i + k >= h)
+    // ctmp = image[i][j];
+    // else
+    // ctmp = image[i + k][j];
 
-                    tmp += (weights[Math.abs(k)]) * ctmp;
+    // tmp += (weights[Math.abs(k)]) * ctmp;
 
-                }
-                outarr[i][j] = (float) tmp;
-            }
-        }
-        shapePart(outarr, res, weights);
-    }
+    // }
+    // outarr[i][j] = (float) tmp;
+    // }
+    // }
+    // shapePart(outarr, res, weights);
+    // }
 
-    private float[][] shapePart(float[][] image, int res, float[] weights) {
-        int h = image.length;
-        int w = image[0].length;
-        float[][] outarr = new float[h][w];
-        double tmp, ctmp;
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < w; j++) {
-                tmp = 0;
-                for (int l = -res; l <= res; l++) {
-                    if (j + l < 0 || j + l >= w)
-                        ctmp = image[i][j];
-                    else
-                        ctmp = image[i][j + l];
+    // private float[][] shapePart(float[][] image, int res, float[] weights) {
+    // int h = image.length;
+    // int w = image[0].length;
+    // float[][] outarr = new float[h][w];
+    // double tmp, ctmp;
+    // for (int i = 0; i < h; i++) {
+    // for (int j = 0; j < w; j++) {
+    // tmp = 0;
+    // for (int l = -res; l <= res; l++) {
+    // if (j + l < 0 || j + l >= w)
+    // ctmp = image[i][j];
+    // else
+    // ctmp = image[i][j + l];
 
-                    tmp += (weights[Math.abs(l)]) * ctmp;
-                }
+    // tmp += (weights[Math.abs(l)]) * ctmp;
+    // }
 
-                outarr[i][j] = (float) tmp;
-            }
-        }
-        return outarr;
-    }
+    // outarr[i][j] = (float) tmp;
+    // }
+    // }
+    // return outarr;
+    // }
 
     private void drawShadowPart(float[] weights, int res, int fbo_texture, float[] xy, float[] wh) {
         _blur.useShader();
@@ -1404,13 +1311,14 @@ public final class DrawEngine {
         List<float[]> crd_array = item.makeShape();
         if (crd_array == null)
             return;
-        // long startTime = System.nanoTime();
-        float[] result = new float[item.getShapePointer().size() * crd_array.size() * 3];
+        checkOutsideBorders((InterfaceBaseItem) item);
+        List<float[]> point = item.getShapePointer();
+        float center_offset = item.getPointThickness() / 2.0f;
+        float[] result = new float[point.size() * crd_array.size() * 3];
         int skew = 0;
         for (float[] shape : crd_array) {
-
-            List<float[]> fig = GraphicsMathService.toGL(GraphicsMathService.moveShape(item.getShapePointer(),
-                    shape[0] - item.getPointThickness() / 2.0f, shape[1] - item.getPointThickness() / 2.0f),
+            List<float[]> fig = GraphicsMathService.toGL(
+                    GraphicsMathService.moveShape(point, shape[0] - center_offset, shape[1] - center_offset),
                     _handler.getLayout());
 
             for (int i = 0; i < fig.size(); i++) {
@@ -1420,9 +1328,9 @@ public final class DrawEngine {
             }
             skew += fig.size() * 3;
         }
-
         VRAMVertex store = new VRAMVertex();
-        store.genBuffers(result, item.getPointColor());
+        store.genBuffers(result);
+        store.sendColor(_primitive, item.getPointColor());
         store.draw(GL_TRIANGLES);
         store.clear();
     }
@@ -1437,7 +1345,8 @@ public final class DrawEngine {
         checkOutsideBorders((InterfaceBaseItem) item);
 
         VRAMVertex store = new VRAMVertex();
-        store.genBuffers(crd_array, item.getLineColor());
+        store.genBuffers(crd_array);
+        store.sendColor(_primitive, item.getLineColor());
         store.draw(GL_LINE_STRIP);
         store.clear();
     }
@@ -1508,7 +1417,8 @@ public final class DrawEngine {
         vertex.add(new float[] { 1.0f, 1.0f, 0.0f });
         vertex.add(new float[] { -1.0f, 1.0f, 0.0f });
         VRAMVertex store = new VRAMVertex();
-        store.genBuffers(vertex, new Color(0, 0, 0, 150));
+        store.genBuffers(vertex);
+        store.sendColor(_primitive, new Color(0, 0, 0, 150));
         store.draw(GL_TRIANGLES);
         store.clear();
     }

@@ -110,16 +110,16 @@ namespace SpaceVIL
             glBindTexture(GL_TEXTURE_2D, texture[0]);
         }
 
-        internal bool SendUniformSample2D(Shader shader)
+        internal bool SendUniformSample2D(Shader shader, string name)
         {
-            int location = glGetUniformLocation(shader.GetProgramID(), "tex");
+            int location = glGetUniformLocation(shader.GetProgramID(), name);
             if (location >= 0)
             {
                 glUniform1i(location, 0);
                 return true;
             }
             else
-                Console.WriteLine("Uniform not found: <tex> " + shader.GetShaderName());
+                Console.WriteLine("Uniform not found: <" + name + "> " + shader.GetShaderName());
             return false;
         }
 
