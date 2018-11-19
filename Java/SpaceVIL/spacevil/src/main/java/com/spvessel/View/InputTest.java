@@ -1,6 +1,7 @@
 package com.spvessel.View;
 
 import com.spvessel.*;
+import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.ScrollBarVisibility;
 import com.spvessel.Flags.SizePolicy;
 
@@ -27,6 +28,7 @@ public class InputTest extends ActiveWindow {
         PasswordLine password = new PasswordLine();
 
         TextEdit te = new TextEdit();
+        te.setTextAlignment(ItemAlignment.RIGHT);
 
         TextArea tb = new TextArea();
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);

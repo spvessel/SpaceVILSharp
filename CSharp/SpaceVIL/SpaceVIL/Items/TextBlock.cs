@@ -218,11 +218,12 @@ namespace SpaceVIL
 
                 if (!_isSelect && _justSelected)
                 {
-                    _selectFrom.X = -1;// 0;
-                    _selectFrom.Y = 0;
-                    _selectTo.X = -1;// 0;
-                    _selectTo.Y = 0;
-                    _justSelected = false;
+                    //_selectFrom.X = -1;// 0;
+                    //_selectFrom.Y = 0;
+                    //_selectTo.X = -1;// 0;
+                    //_selectTo.Y = 0;
+                    //_justSelected = false;
+                    CancelJustSelected();
                 }
 
                 if (args.Mods != 0)
@@ -397,12 +398,12 @@ namespace SpaceVIL
             {
                 byte[] input = BitConverter.GetBytes(args.Character);
                 string str = Encoding.UTF32.GetString(input);
-                if (_isSelect)
+                if (_isSelect || _justSelected)
                 {
                     UnselectText();
                     PrivCutText();
                 }
-                if (_justSelected) _justSelected = false;
+                if (_justSelected) CancelJustSelected(); //_justSelected = false;
                 _cursor_position = CheckLineFits(_cursor_position);
                 SetTextInLine(_textureStorage.GetTextInLine(_cursor_position.Y).Insert(_cursor_position.X, str));
                 _cursor_position.X++;
@@ -816,7 +817,8 @@ namespace SpaceVIL
 
         public void PasteText(string text)
         {
-            PrivPasteText(text);
+            if (text != null)
+                PrivPasteText(text);
         }
 
         private string PrivCutText()
@@ -839,7 +841,7 @@ namespace SpaceVIL
                 ReplaceCursor();
                 if (_isSelect)
                     UnselectText();
-                _justSelected = false;
+                CancelJustSelected(); //_justSelected = false;
                 return str;
             }
             finally
@@ -858,6 +860,15 @@ namespace SpaceVIL
             _isSelect = false;
             _justSelected = true;
             MakeSelectedArea(new Point(0, 0), new Point(0, 0));
+        }
+
+        private void CancelJustSelected()
+        {
+            _selectFrom.X = -1;// 0;
+            _selectFrom.Y = 0;
+            _selectTo.X = -1;// 0;
+            _selectTo.Y = 0;
+            _justSelected = false;
         }
 
         private int GetLineLetCount(int lineNum)

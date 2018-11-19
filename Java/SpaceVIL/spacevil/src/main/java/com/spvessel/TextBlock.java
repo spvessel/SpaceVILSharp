@@ -205,11 +205,12 @@ class TextBlock extends Prototype
             }
 
             if (!_isSelect && _justSelected) {
-                _selectFrom.x = -1;// 0;
-                _selectFrom.y = 0;
-                _selectTo.x = -1;// 0;
-                _selectTo.y = 0;
-                _justSelected = false;
+//                _selectFrom.x = -1;// 0;
+//                _selectFrom.y = 0;
+//                _selectTo.x = -1;// 0;
+//                _selectTo.y = 0;
+//                _justSelected = false;
+                cancelJustSelected();
             }
 
             if (args.mods != KeyMods.NO) {
@@ -367,11 +368,11 @@ class TextBlock extends Prototype
             byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
             String str = new String(input, Charset.forName("UTF-32")); // StandardCharsets.UTF_8);
 
-            if (_isSelect) {
+            if (_isSelect || _justSelected) {
                 unselectText();
                 privCutText();
             }
-            if (_justSelected) _justSelected = false;
+            if (_justSelected) cancelJustSelected(); //_justSelected = false;
 
             _cursor_position = checkLineFits(_cursor_position);
 
@@ -723,7 +724,8 @@ class TextBlock extends Prototype
     }
 
     public void pasteText(String pasteStr) {
-        privPasteText(pasteStr);
+        if (pasteStr != null)
+            privPasteText(pasteStr);
     }
 
     private String privCutText() {
@@ -746,7 +748,7 @@ class TextBlock extends Prototype
             replaceCursor();
             if (_isSelect)
                 unselectText();
-            _justSelected = false;
+            cancelJustSelected(); //_justSelected = false;
             return str;
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -761,6 +763,14 @@ class TextBlock extends Prototype
         _isSelect = false;
         _justSelected = true;
         makeSelectedArea(new Point(0, 0), new Point(0, 0));
+    }
+
+    private void cancelJustSelected() {
+        _selectFrom.x = -1;// 0;
+        _selectFrom.y = 0;
+        _selectTo.x = -1;// 0;
+        _selectTo.y = 0;
+        _justSelected = false;
     }
 
     void clear() {

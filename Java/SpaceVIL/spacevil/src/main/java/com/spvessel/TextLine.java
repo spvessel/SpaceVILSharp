@@ -66,7 +66,7 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             _letters = FontEngine.getModifyLetters(text, font);
 
             _letEndPos = new LinkedList<>();
-
+            _lineWidth = 0;
             if (_letters.size() > 0)
                 _lineWidth = _letters.get(_letters.size() - 1).xShift + _letters.get(_letters.size() - 1).width
                         + _letters.get(_letters.size() - 1).xBeg; // xBeg не обязательно, т.к. везде 0, но вдруг

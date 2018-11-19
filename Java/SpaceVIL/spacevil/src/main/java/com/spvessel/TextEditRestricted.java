@@ -1,8 +1,8 @@
 package com.spvessel;
 
-import com.spvessel.Core.EventInputTextMethodState;
-import com.spvessel.Core.TextInputArgs;
+import com.spvessel.Core.*;
 import com.spvessel.Flags.InputRestriction;
+import com.spvessel.Flags.KeyCode;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -17,18 +17,60 @@ class TextEditRestricted extends TextEdit {
         eventTextInput.clear();
         eventTextInput.add(this::onTextInput);
 
+        //EventKeyMethodState tmp = eventKeyPress;
+        //eventKeyPress.clear();
+        eventKeyPress.add(this::onKeyPress);
+        //eventKeyPress.add(tmp);
+
+        eventMouseDoubleClick.clear();
+        eventMouseDoubleClick.add(this::onMouseDoubleClick);
+
         numbers = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "0"));
 
         updateCurrentValue();
+        setEditable(false);
     }
 
     private List<String> numbers;
     private InputRestriction inres = InputRestriction.DOUBLENUMBERS;
-    private EventInputTextMethodState parentEv;
+
+    private void onMouseDoubleClick(Object sender, MouseArgs args) {
+        selectAll();
+        setEditable(true);
+    }
+
+    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
+        if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) {
+            double znc;
+            int i1, sgc;
+            String t0 = getText();
+            if (!t0.equals("-") && t0.length() > 0) {
+                String[] txt = t0.split(",|\\.");
+
+                try {
+                    znc = Integer.parseInt(txt[0]);
+                    if (txt.length > 1 && txt[1].length() > 0) {
+                        i1 = Integer.parseInt(txt[1]);
+                        sgc = txt[1].length();
+                        znc += i1 / Math.pow(10.0, sgc);
+//                    if (sgc > signsCount && sgc <= 5) {
+//                        signsCount = sgc;
+//                        rou = "%." + String.valueOf(signsCount) + "f";
+//                    }
+                    }
+                    currentValue = znc;
+                } catch (Exception e) {
+
+                }
+            }
+            updateCurrentValue();
+            setEditable(false);
+        }
+    }
 
     private void onTextInput(Object sender, TextInputArgs args) {
         String tmptxt = getText();
-        boolean isFirst = (isBegining() && !tmptxt.contains("-"));
+        boolean isFirst = (isBeginning() && !tmptxt.contains("-"));
         boolean hasDot = (tmptxt.contains(".") || tmptxt.contains(","));
         byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
         String str = new String(input, Charset.forName("UTF-32"));
@@ -56,33 +98,13 @@ class TextEditRestricted extends TextEdit {
         }
 
         if (isValid) {
+            super.cutText();
             super.pasteText(str);
         } else {
             super.pasteText("");
         }
 
-        double znc;
-        int i1;
-        String[] txt = getText().split(",|\\.");
-        if (!txt.equals("-")) {
-            znc = Integer.parseInt(txt[0]);
-            if (txt.length > 1 && txt[1].length() > 0) {
-                i1 = Integer.parseInt(txt[1]);
-                znc += i1 / Math.pow(10.0, txt[1].length());
-            }
 
-//            switch (inres) {
-//                case INTNUMBERS:
-//                    znc = Integer.parseInt(txt);
-//                    break;
-//                case DOUBLENUMBERS:
-//                default:
-//                    znc = Double.parseDouble(txt);
-//                    break;
-//            }
-            currentValue = znc;
-            updateCurrentValue();
-        }
     }
 
     void setInputRestriction(InputRestriction ir) {
@@ -94,6 +116,7 @@ class TextEditRestricted extends TextEdit {
     private double currentValue = 0;
     private double step = 1;
     private String rou = "%.2f";
+    private int signsCount = 2;
 
     void setParameters(double currentValue, double minValue, double maxValue, double step) {
         this.currentValue = currentValue;
@@ -119,7 +142,8 @@ class TextEditRestricted extends TextEdit {
         if (i < 2)
             i = 2;
         else if (i > 5) i = 5;
-        rou = "%." + String.valueOf(i) + "f";
+        signsCount = i;
+        rou = "%." + String.valueOf(signsCount) + "f";
     }
 
     void setParameters(int currentValue, int minValue, int maxValue, int step) {
@@ -142,6 +166,11 @@ class TextEditRestricted extends TextEdit {
         updateCurrentValue();
     }
 
+    public void setAccuracy(int accuracy) {
+        signsCount = accuracy;
+        rou = "%." + String.valueOf(signsCount) + "f";
+    }
+
     private void updateCurrentValue() {
         if (currentValue < minValue)
             currentValue = minValue;
@@ -159,11 +188,13 @@ class TextEditRestricted extends TextEdit {
     }
 
     void increaseValue() {
+        setEditable(false);
         currentValue += step;
         updateCurrentValue();
     }
 
     void decreaseValue() {
+        setEditable(false);
         currentValue -= step;
         updateCurrentValue();
     }
