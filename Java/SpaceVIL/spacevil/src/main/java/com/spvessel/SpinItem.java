@@ -22,6 +22,9 @@ public class SpinItem extends Prototype {
         setStyle(DefaultsService.getDefaultStyle(SpinItem.class));
         upButton.eventMouseClick.add(this::onUpClick);
         downButton.eventMouseClick.add(this::onDownClick);
+
+        eventScrollUp.add(this::onUpClick);
+        eventScrollDown.add(this::onDownClick);
     }
 
     void onUpClick(Object sender, MouseArgs args) {
@@ -38,6 +41,10 @@ public class SpinItem extends Prototype {
 
     public void setParameters(double currentValue, double minValue, double maxValue, double step) {
         textInput.setParameters(currentValue, minValue, maxValue, step);
+    }
+
+    public void setAccuracy(int accuracy) {
+        textInput.setAccuracy(accuracy);
     }
 
     @Override

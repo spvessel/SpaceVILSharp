@@ -216,7 +216,7 @@ namespace SpaceVIL
                     return;
                 }
 
-                if (_justSelected) //!_isSelect && 
+                if (!_isSelect && _justSelected)
                 {
                     //_selectFrom.X = -1;// 0;
                     //_selectFrom.Y = 0;

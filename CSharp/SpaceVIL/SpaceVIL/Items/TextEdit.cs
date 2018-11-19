@@ -210,17 +210,12 @@ namespace SpaceVIL
             {
                 if (args.Mods.Equals(KeyMods.Control) && (args.Key == KeyCode.A || args.Key == KeyCode.a))
                 {
-                    _selectFrom = 0;
-                    _cursor_position = PrivGetText().Length;
-                    _selectTo = _cursor_position;
-                    ReplaceCursor();
-                    _isSelect = true;
-                    MakeSelectedArea(_selectFrom, _selectTo);
+                    SelectAll();
                 }
                 return;
             }
 
-            if (_justSelected) //!_isSelect && 
+            if (!_isSelect && _justSelected)
             {
                 //_selectFrom = -1;// 0;
                 //_selectTo = -1;// 0;
@@ -359,7 +354,7 @@ namespace SpaceVIL
             int w = GetTextWidth();
             if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
             {
-                _cursor.SetX(GetX() + GetWidth() - w + pos - _cursor.GetWidth() - GetPadding().Right
+                _cursor.SetX(GetX() + GetWidth() - w + pos - GetPadding().Right // - _cursor.GetWidth()
                     - _text_object.GetMargin().Right); // - GetPadding().Right);
             }
             else
@@ -449,6 +444,11 @@ namespace SpaceVIL
 
         public void SetText(String text)
         {
+            if (_isSelect || _justSelected)
+            {
+                UnselectText();
+                CancelJustSelected();
+            }
             PrivSetText(text);
         }
 
@@ -707,8 +707,25 @@ namespace SpaceVIL
             return _text_object.GetLineXShift();
         }
 
-        internal bool IsBegining() {
+        internal bool IsBeginning() {
             return (_cursor_position == 0);
+        }
+
+        internal void SelectAll() {
+            Monitor.Enter(textInputLock);
+            try
+            {
+                _selectFrom = 0;
+                _cursor_position = PrivGetText().Length;
+                _selectTo = _cursor_position;
+                ReplaceCursor();
+                _isSelect = true;
+                MakeSelectedArea(_selectFrom, _selectTo);
+            }
+            finally
+            {
+                Monitor.Exit(textInputLock);
+            }
         }
 
     }

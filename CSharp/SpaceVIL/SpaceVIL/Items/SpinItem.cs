@@ -28,6 +28,9 @@ namespace SpaceVIL
             
             upButton.EventMouseClick += OnUpClick;
             downButton.EventMouseClick += OnDownClick;
+
+            EventScrollUp = OnUpClick;
+            EventScrollDown = OnDownClick;
         }
 
         void OnUpClick(Object sender, MouseArgs args)
@@ -48,6 +51,11 @@ namespace SpaceVIL
         public void SetParameters(double currentValue, double minValue, double maxValue, double step)
         {
             textInput.SetParameters(currentValue, minValue, maxValue, step);
+        }
+
+        public void SetAccuracy(int accuracy)
+        {
+            textInput.SetAccuracy(accuracy);
         }
 
         public override void InitElements()

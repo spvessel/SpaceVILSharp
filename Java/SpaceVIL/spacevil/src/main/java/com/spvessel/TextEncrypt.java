@@ -122,7 +122,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         textInputLock.lock();
         try {
 
-            if (_justSelected) { //!_isSelect &&
+            if (!_isSelect && _justSelected) {
 //                _selectFrom = -1; // 0;
 //                _selectTo = -1; // 0;
 //                _justSelected = false;

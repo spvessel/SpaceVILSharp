@@ -514,6 +514,7 @@ namespace SpaceVIL
                 _double_click_timer.Stop();
                 if (_double_click_timer.ElapsedMilliseconds < 500)
                     return true;
+                else _double_click_timer.Restart();
             }
             else
             {
@@ -630,8 +631,8 @@ namespace SpaceVIL
                         }
                         // Console.WriteLine(FocusedItem.GetItemName());
                         if (is_double_click)
-                            // AssignActions(InputEventType.MouseDoubleClick, _margs, false);
-                            FocusedItem?.EventMouseDoubleClick?.Invoke(FocusedItem, _margs);
+                            AssignActions(InputEventType.MouseDoubleClick, _margs, FocusedItem);
+                            //FocusedItem?.EventMouseDoubleClick?.Invoke(FocusedItem, _margs);
                     }
 
                     if (HoveredItem is IWindow)

@@ -113,7 +113,7 @@ public class TextEdit extends Prototype
         int sh = getLineXShift();
         if (sh >= 0)
             return;
-        
+
         int curPos = _cursor.getX();
         int curCoord = curPos - sh;
 
@@ -196,17 +196,12 @@ public class TextEdit extends Prototype
         try {
             if (!_isEditable) {
                 if (args.mods.equals(KeyMods.CONTROL) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
-                    _selectFrom = 0;
-                    _cursor_position = privGetText().length();
-                    _selectTo = _cursor_position;
-                    replaceCursor();
-                    _isSelect = true;
-                    makeSelectedArea(_selectFrom, _selectTo);
+                    selectAll();
                 }
                 return;
             }
 
-            if (_justSelected) { //!_isSelect &&
+            if (!_isSelect && _justSelected) {
                 //_selectFrom = -1;// 0;
                 //_selectTo = -1;// 0;
                 //_justSelected = false;
@@ -216,33 +211,33 @@ public class TextEdit extends Prototype
                 // Выделение не сбрасывается, проверяются сочетания
                 // 
                 switch (args.mods) {
-                case SHIFT:
-                    if (ShiftValCodes.contains(args.key)) {
-                        if (!_isSelect) {
-                            _isSelect = true;
-                            _selectFrom = _cursor_position;
+                    case SHIFT:
+                        if (ShiftValCodes.contains(args.key)) {
+                            if (!_isSelect) {
+                                _isSelect = true;
+                                _selectFrom = _cursor_position;
+                            }
                         }
-                    }
 
-                    break;
+                        break;
 
-                case CONTROL:
-                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
-                        _selectFrom = 0;
-                        _cursor_position = privGetText().length();
-                        replaceCursor();
+                    case CONTROL:
+                        if (args.key == KeyCode.A || args.key == KeyCode.a) {
+                            _selectFrom = 0;
+                            _cursor_position = privGetText().length();
+                            replaceCursor();
 
-                        _isSelect = true;
-                    }
-                    break;
+                            _isSelect = true;
+                        }
+                        break;
 
-                // alt, super ?
+                    // alt, super ?
                 }
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE) {
-                    if (_isSelect)
+                    if (_isSelect) {
                         privCutText();
-                    else {
+                    } else {
                         if (args.key == KeyCode.BACKSPACE && _cursor_position > 0) // backspace
                         {
                             StringBuilder sb = new StringBuilder(privGetText());
@@ -326,7 +321,7 @@ public class TextEdit extends Prototype
         int w = getTextWidth();
 
         if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
-            _cursor.setX(getX() + getWidth() - w + pos - _cursor.getWidth() - getPadding().right
+            _cursor.setX(getX() + getWidth() - w + pos - getPadding().right // - _cursor.getWidth()
                     - _text_object.getMargin().right);
         } else
             _cursor.setX(getX() + getPadding().left + pos + _text_object.getMargin().left);
@@ -337,7 +332,6 @@ public class TextEdit extends Prototype
             return;
         textInputLock.lock();
         try {
-        //System.out.println("text input " + _isSelect + " (" + _selectFrom + ", " + _selectTo + ")");
             byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
             String str = new String(input, Charset.forName("UTF-32"));
 
@@ -346,7 +340,7 @@ public class TextEdit extends Prototype
                 privCutText();
             }
             if (_justSelected) cancelJustSelected(); //_justSelected = false;
-                
+
 
             StringBuilder sb = new StringBuilder(privGetText());
             _cursor_position++;
@@ -421,6 +415,10 @@ public class TextEdit extends Prototype
     }
 
     public void setText(String text) {
+        if (_isSelect || _justSelected) {
+            unselectText();
+            cancelJustSelected();
+        }
         privSetText(text);
     }
 
@@ -583,7 +581,6 @@ public class TextEdit extends Prototype
                 _selectFrom = 0;
             if (_selectTo == -1)
                 _selectTo = 0;
-
             String str = privGetSelectedText();
             if (_selectFrom == _selectTo)
                 return str;
@@ -660,8 +657,21 @@ public class TextEdit extends Prototype
         return _text_object.getLineXShift();
     }
 
-    boolean isBegining() {
+    boolean isBeginning() {
         return (_cursor_position == 0);
     }
 
+    void selectAll() {
+        textInputLock.lock();
+        try {
+            _selectFrom = 0;
+            _cursor_position = privGetText().length();
+            _selectTo = _cursor_position;
+            replaceCursor();
+            _isSelect = true;
+            makeSelectedArea(_selectFrom, _selectTo);
+        } finally {
+            textInputLock.unlock();
+        }
+    }
 }

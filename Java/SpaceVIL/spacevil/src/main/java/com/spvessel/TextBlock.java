@@ -204,7 +204,7 @@ class TextBlock extends Prototype
                 return;
             }
 
-            if (_justSelected) { //!_isSelect && 
+            if (!_isSelect && _justSelected) {
 //                _selectFrom.x = -1;// 0;
 //                _selectFrom.y = 0;
 //                _selectTo.x = -1;// 0;

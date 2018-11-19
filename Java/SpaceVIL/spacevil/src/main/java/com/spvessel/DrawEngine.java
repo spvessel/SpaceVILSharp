@@ -529,11 +529,13 @@ public final class DrawEngine {
 
     private boolean isDoubleClick() {
         if (_first_click) {
-            _first_click = false;
             if ((System.nanoTime() - _start_time) / 1000000 < 500)
             {
+                _first_click = false;
                 _start_time = 0;
                 return true;
+            } else {
+                _start_time = System.nanoTime();
             }
         } else {
             _first_click = true;
@@ -653,7 +655,8 @@ public final class DrawEngine {
                 // System.out.println(focusedItem.getItemName());
                 if (is_double_click) {
                     if (focusedItem != null)
-                        focusedItem.eventMouseDoubleClick.execute(focusedItem, _margs);
+                        assignActions(InputEventType.MOUSE_DOUBLE_CLICK, _margs, focusedItem);
+                        //focusedItem.eventMouseDoubleClick.execute(focusedItem, _margs);
                 }
             }
 

@@ -14,20 +14,59 @@ namespace SpaceVIL
             //super();
             
             EventTextInput = OnTextInput;
+            EventKeyPress += OnKeyPress;
+            EventMouseDoubleClick = OnMouseDoubleClick;
 
             numbers = new List<String>() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
 
             UpdateCurrentValue();
+            IsEditable = false;
         }
 
         private List<String> numbers;
         private InputRestriction inres = InputRestriction.DoubleNumbers;
-        private EventInputTextMethodState parentEv;
+
+        private void OnMouseDoubleClick(Object sender, MouseArgs args) {
+            SelectAll();
+            IsEditable = true;
+        }
+
+        private void OnKeyPress(IItem sender, KeyArgs args) {
+            if (args.Key == KeyCode.Enter || args.Key == KeyCode.NumpadEnter)
+            {
+                double znc;
+                int i1, sgc;
+                String t0 = GetText();
+                char[] delim = { ',', '.' };
+                if (!t0.Equals("-") && t0.Length > 0)
+                {
+                    String[] txt = t0.Split(delim);
+
+                    try
+                    {
+                        znc = Int32.Parse(txt[0]);
+                        if (txt.Length > 1 && txt[1].Length > 0)
+                        {
+                            i1 = Int32.Parse(txt[1]);
+                            sgc = txt[1].Length;
+                            znc += i1 / Math.Pow(10.0, sgc);
+                        }
+                        currentValue = znc;
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+                UpdateCurrentValue();
+                IsEditable = false;
+            }
+        }
 
         private void OnTextInput(Object sender, TextInputArgs args)
         {
             String tmptxt = GetText();
-            bool isFirst = (IsBegining() && !tmptxt.Contains("-"));
+            bool isFirst = (IsBeginning() && !tmptxt.Contains("-"));
             bool hasDot = (tmptxt.Contains(".") || tmptxt.Contains(","));
 
             byte[] input = BitConverter.GetBytes(args.Character);
@@ -59,6 +98,7 @@ namespace SpaceVIL
 
             if (isValid)
             {
+                base.CutText();
                 base.PasteText(str);
             }
             else
@@ -66,31 +106,6 @@ namespace SpaceVIL
                 base.PasteText("");
             }
 
-            double znc;
-            int i1;
-            char[] delim = { ',', '.' };
-            String[] txt = GetText().Split(delim);
-            if (!txt.Equals("-"))
-            {
-                znc = Int32.Parse(txt[0]);
-                if (txt.Length > 1 && txt[1].Length > 0)
-                {
-                    i1 = Int32.Parse(txt[1]);
-                    znc += i1 / Math.Pow(10.0, txt[1].Length);
-                }
-
-//            switch (inres) {
-//                case INTNUMBERS:
-//                    znc = Integer.parseInt(txt);
-//                    break;
-//                case DOUBLENUMBERS:
-//                default:
-//                    znc = Double.parseDouble(txt);
-//                    break;
-//            }
-                currentValue = znc;
-                UpdateCurrentValue();
-            }
         }
 
         internal void SetInputRestriction(InputRestriction ir)
@@ -103,6 +118,7 @@ namespace SpaceVIL
         private double currentValue = 0;
         private double step = 1;
         private String rou = "F2";
+        private int signsCount = 2;
 
         internal void SetParameters(double currentValue, double minValue, double maxValue, double step)
         {
@@ -128,7 +144,8 @@ namespace SpaceVIL
             if (i < 2)
                 i = 2;
             else if (i > 5) i = 5;
-            rou = "F" + (i.ToString());
+            signsCount = i;
+            rou = "F" + (signsCount.ToString());
         }
 
         internal void SetParameters(int currentValue, int minValue, int maxValue, int step)
@@ -154,6 +171,11 @@ namespace SpaceVIL
             UpdateCurrentValue();
         }
 
+        public void SetAccuracy(int accuracy) {
+            signsCount = accuracy;
+            rou = "F" + (signsCount.ToString());
+        }
+
         private void UpdateCurrentValue()
         {
             if (currentValue < minValue)
@@ -174,12 +196,14 @@ namespace SpaceVIL
 
         internal void IncreaseValue()
         {
+            IsEditable = false;
             currentValue += step;
             UpdateCurrentValue();
         }
 
         internal void DecreaseValue()
         {
+            IsEditable = false;
             currentValue -= step;
             UpdateCurrentValue();
         }
