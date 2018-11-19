@@ -220,11 +220,12 @@ namespace SpaceVIL
                 return;
             }
 
-            if (!_isSelect && _justSelected)
+            if (_justSelected) //!_isSelect && 
             {
-                _selectFrom = -1;// 0;
-                _selectTo = -1;// 0;
-                _justSelected = false;
+                //_selectFrom = -1;// 0;
+                //_selectTo = -1;// 0;
+                //_justSelected = false;
+                CancelJustSelected();
             }
 
             if (args.Mods != 0)
@@ -351,7 +352,7 @@ namespace SpaceVIL
 
             if (_cursor_position > len) {
                 _cursor_position = len;
-                ReplaceCursor();
+                //ReplaceCursor();
             }
             int pos = CursorPosToCoord(_cursor_position);
 
@@ -372,11 +373,11 @@ namespace SpaceVIL
             try {
                 byte[] input = BitConverter.GetBytes(args.Character);
                 string str = Encoding.UTF32.GetString(input);
-                if (_isSelect) {
+                if (_isSelect || _justSelected) {
                     UnselectText();
                     PrivCutText();
                 }
-                if (_justSelected) _justSelected = false;
+                if (_justSelected) CancelJustSelected(); //_justSelected = false;
                 
                 _cursor_position++;
                 PrivSetText(PrivGetText().Insert(_cursor_position - 1, str));
@@ -624,10 +625,10 @@ namespace SpaceVIL
                 int toReal = Math.Max(_selectFrom, _selectTo);
                 _cursor_position = fromReal;
                 PrivSetText(PrivGetText().Remove(fromReal, toReal - fromReal));
-                //ReplaceCursor();
+                ReplaceCursor();
                 if (_isSelect)
                     UnselectText();
-                _justSelected = false;
+                CancelJustSelected(); //_justSelected = false;
                 return str;
             }
             finally
@@ -647,6 +648,14 @@ namespace SpaceVIL
             _justSelected = true;
             MakeSelectedArea(_cursor_position, _cursor_position);
         }
+
+        private void CancelJustSelected()
+        {
+            _selectFrom = -1;// 0;
+            _selectTo = -1;// 0;
+            _justSelected = false;
+        }
+
         /*
         internal void ShowCursor(bool isShow) {
             if (isShow)
@@ -661,12 +670,12 @@ namespace SpaceVIL
         //     int pos = endPos.OrderBy(x => Math.Abs(x - xPos)).First();
         //     return pos;
         // }
-/*
-        internal void SetCursorPosition(double newPos)
-        {
-            _cursor_position = NearestPosToCursor(newPos);
-        }
-*/
+        /*
+                internal void SetCursorPosition(double newPos)
+                {
+                    _cursor_position = NearestPosToCursor(newPos);
+                }
+        */
         public void Clear()
         {
             SetText("");

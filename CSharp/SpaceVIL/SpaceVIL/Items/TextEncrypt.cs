@@ -130,11 +130,12 @@ namespace SpaceVIL
             try
             {
 
-                if (!_isSelect && _justSelected)
+                if (_justSelected) //!_isSelect && 
                 {
-                    _selectFrom = -1;// 0;
-                    _selectTo = -1;// 0;
-                    _justSelected = false;
+                    //_selectFrom = -1;// 0;
+                    //_selectTo = -1;// 0;
+                    //_justSelected = false;
+                    CancelJustSelected();
                 }
 
                 if (args.Mods != 0)
@@ -254,6 +255,13 @@ namespace SpaceVIL
 
         private void ReplaceCursor()
         {
+            int len = GetText().Length;
+
+            if (_cursor_position > len)
+            {
+                _cursor_position = len;
+                //replaceCursor();
+            }
             int pos = CursorPosToCoord(_cursor_position);
             _cursor.SetX(GetX() + GetPadding().Left + pos + _text_object.GetMargin().Left);
         }
@@ -267,12 +275,12 @@ namespace SpaceVIL
                 byte[] input = BitConverter.GetBytes(args.Character);
                 string str = Encoding.UTF32.GetString(input);
 
-                if (_isSelect)
+                if (_isSelect || _justSelected)
                 {
                     UnselectText();
                     CutText();
                 }
-                if (_justSelected) _justSelected = false;
+                if (_justSelected) CancelJustSelected(); //_justSelected = false;
 
                 SetText(GetText().Insert(_cursor_position, str));
 
@@ -458,12 +466,19 @@ namespace SpaceVIL
             MakeSelectedArea(0, 0);
         }
 
-//        private int NearestPosToCursor(double xPos)
-//        {
-//            List<int> endPos = _text_object.GetLetPosArray();
-//            int pos = endPos.OrderBy(x => Math.Abs(x - xPos)).First();
-//            return pos;
-//        }
+        private void CancelJustSelected()
+        {
+            _selectFrom = -1;// 0;
+            _selectTo = -1;// 0;
+            _justSelected = false;
+        }
+
+        //        private int NearestPosToCursor(double xPos)
+        //        {
+        //            List<int> endPos = _text_object.GetLetPosArray();
+        //            int pos = endPos.OrderBy(x => Math.Abs(x - xPos)).First();
+        //            return pos;
+        //        }
 
         //internal void SetCursorPosition(double newPos)
         //{
@@ -490,7 +505,7 @@ namespace SpaceVIL
                 ReplaceCursor();
                 if (_isSelect)
                     UnselectText();
-                _justSelected = false;
+                CancelJustSelected(); // _justSelected = false;
                 return str;
             }
             finally

@@ -761,11 +761,11 @@ namespace SpaceVIL
                 else
                 {
                     if (action == InputState.Press)
-                        AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
+                        FocusedItem?.EventKeyPress(FocusedItem, _kargs); //AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
                     if (action == InputState.Repeat)
-                        AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
+                        FocusedItem?.EventKeyPress(FocusedItem, _kargs); //AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
                     if (action == InputState.Release)
-                        AssignActions(InputEventType.KeyRelease, _kargs, FocusedItem);
+                        FocusedItem?.EventKeyRelease(FocusedItem, _kargs); //AssignActions(InputEventType.KeyRelease, _kargs, FocusedItem);
                 }
             } //Нехорошо это все
             else

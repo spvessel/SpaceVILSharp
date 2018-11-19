@@ -1,8 +1,8 @@
 package com.spvessel;
 
-import com.spvessel.Core.EventInputTextMethodState;
-import com.spvessel.Core.TextInputArgs;
+import com.spvessel.Core.*;
 import com.spvessel.Flags.InputRestriction;
+import com.spvessel.Flags.KeyCode;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -17,6 +17,11 @@ class TextEditRestricted extends TextEdit {
         eventTextInput.clear();
         eventTextInput.add(this::onTextInput);
 
+        //EventKeyMethodState tmp = eventKeyPress;
+        //eventKeyPress.clear();
+        eventKeyPress.add(this::onKeyPress);
+        //eventKeyPress.add(tmp);
+
         numbers = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "0"));
 
         updateCurrentValue();
@@ -26,7 +31,36 @@ class TextEditRestricted extends TextEdit {
     private InputRestriction inres = InputRestriction.DOUBLENUMBERS;
     private EventInputTextMethodState parentEv;
 
+    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
+        if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) {
+            double znc;
+            int i1;
+            String t0 = getText();
+            if (!t0.equals("-") && t0.length() > 0) {
+                String[] txt = t0.split(",|\\.");
+                znc = Integer.parseInt(txt[0]);
+                if (txt.length > 1 && txt[1].length() > 0) {
+                    i1 = Integer.parseInt(txt[1]);
+                    znc += i1 / Math.pow(10.0, txt[1].length());
+                }
+
+//            switch (inres) {
+//                case INTNUMBERS:
+//                    znc = Integer.parseInt(txt);
+//                    break;
+//                case DOUBLENUMBERS:
+//                default:
+//                    znc = Double.parseDouble(txt);
+//                    break;
+//            }
+                currentValue = znc;
+            }
+            updateCurrentValue();
+        }
+    }
+
     private void onTextInput(Object sender, TextInputArgs args) {
+        //System.out.println(args);
         String tmptxt = getText();
         boolean isFirst = (isBegining() && !tmptxt.contains("-"));
         boolean hasDot = (tmptxt.contains(".") || tmptxt.contains(","));
@@ -61,28 +95,7 @@ class TextEditRestricted extends TextEdit {
             super.pasteText("");
         }
 
-        double znc;
-        int i1;
-        String[] txt = getText().split(",|\\.");
-        if (!txt.equals("-")) {
-            znc = Integer.parseInt(txt[0]);
-            if (txt.length > 1 && txt[1].length() > 0) {
-                i1 = Integer.parseInt(txt[1]);
-                znc += i1 / Math.pow(10.0, txt[1].length());
-            }
 
-//            switch (inres) {
-//                case INTNUMBERS:
-//                    znc = Integer.parseInt(txt);
-//                    break;
-//                case DOUBLENUMBERS:
-//                default:
-//                    znc = Double.parseDouble(txt);
-//                    break;
-//            }
-            currentValue = znc;
-            updateCurrentValue();
-        }
     }
 
     void setInputRestriction(InputRestriction ir) {

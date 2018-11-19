@@ -194,7 +194,6 @@ public class TextEdit extends Prototype
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         textInputLock.lock();
         try {
-            // Console.WriteLine(args.key);
             if (!_isEditable) {
                 if (args.mods.equals(KeyMods.CONTROL) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
                     _selectFrom = 0;
@@ -207,10 +206,11 @@ public class TextEdit extends Prototype
                 return;
             }
 
-            if (!_isSelect && _justSelected) {
-                _selectFrom = -1;// 0;
-                _selectTo = -1;// 0;
-                _justSelected = false;
+            if (_justSelected) { //!_isSelect &&
+                //_selectFrom = -1;// 0;
+                //_selectTo = -1;// 0;
+                //_justSelected = false;
+                cancelJustSelected();
             }
             if (args.mods != KeyMods.NO) {
                 // Выделение не сбрасывается, проверяются сочетания
@@ -319,11 +319,12 @@ public class TextEdit extends Prototype
 
         if (_cursor_position > len) {
             _cursor_position = len;
-            replaceCursor();
+            //replaceCursor();
         }
         int pos = cursorPosToCoord(_cursor_position);
 
         int w = getTextWidth();
+
         if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
             _cursor.setX(getX() + getWidth() - w + pos - _cursor.getWidth() - getPadding().right
                     - _text_object.getMargin().right);
@@ -336,14 +337,15 @@ public class TextEdit extends Prototype
             return;
         textInputLock.lock();
         try {
+        //System.out.println("text input " + _isSelect + " (" + _selectFrom + ", " + _selectTo + ")");
             byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
             String str = new String(input, Charset.forName("UTF-32"));
 
-            if (_isSelect) {
+            if (_isSelect || _justSelected) {
                 unselectText();// privCutText();
                 privCutText();
             }
-            if (_justSelected) _justSelected = false;
+            if (_justSelected) cancelJustSelected(); //_justSelected = false;
                 
 
             StringBuilder sb = new StringBuilder(privGetText());
@@ -590,10 +592,10 @@ public class TextEdit extends Prototype
             StringBuilder sb = new StringBuilder(privGetText());
             _cursor_position = fromReal;
             privSetText(sb.delete(fromReal, toReal).toString()); // - fromReal
-            //replaceCursor();
+            replaceCursor();
             if (_isSelect)
                 unselectText();
-            _justSelected = false;
+            cancelJustSelected(); //_justSelected = false;
             return str;
         } finally {
             textInputLock.unlock();
@@ -608,6 +610,12 @@ public class TextEdit extends Prototype
         _isSelect = false;
         _justSelected = true;
         makeSelectedArea(_cursor_position, _cursor_position);
+    }
+
+    private void cancelJustSelected() {
+        _selectFrom = -1;// 0;
+        _selectTo = -1;// 0;
+        _justSelected = false;
     }
 
     /*

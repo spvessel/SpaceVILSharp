@@ -122,10 +122,11 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         textInputLock.lock();
         try {
 
-            if (!_isSelect && _justSelected) {
-                _selectFrom = -1; // 0;
-                _selectTo = -1; // 0;
-                _justSelected = false;
+            if (_justSelected) { //!_isSelect &&
+//                _selectFrom = -1; // 0;
+//                _selectTo = -1; // 0;
+//                _justSelected = false;
+                cancelJustSelected();
             }
 
             if (args.mods != KeyMods.NO) {
@@ -230,6 +231,12 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     }
 
     private void replaceCursor() {
+        int len = getText().length();
+
+        if (_cursor_position > len) {
+            _cursor_position = len;
+            //replaceCursor();
+        }
         int pos = cursorPosToCoord(_cursor_position);
         _cursor.setX(getX() + getPadding().left + pos + _text_object.getMargin().left);
     }
@@ -243,11 +250,11 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
             String str = new String(input, Charset.forName("UTF-32"));// Charset.forName("UTF-32LE"));
             // //Encoding.UTF32.getString(input);
 
-            if (_isSelect) {
+            if (_isSelect || _justSelected) {
                 unselectText();
                 cutText();
             }
-            if (_justSelected) _justSelected = false;
+            if (_justSelected) cancelJustSelected(); //_justSelected = false;
 
 
             StringBuilder sb = new StringBuilder(getText());
@@ -423,6 +430,12 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         makeSelectedArea(0, 0);
     }
 
+    private void cancelJustSelected() {
+        _selectFrom = -1;// 0;
+        _selectTo = -1;// 0;
+        _justSelected = false;
+    }
+
 //    private int nearestPosToCursor(double xPos) {
 //        List<Integer> endPos = _text_object.getLetPosArray();
 //        int pos = (int) endPos.stream().map(x -> Math.abs(x - xPos)).sorted().toArray()[0];
@@ -454,7 +467,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 			replaceCursor();
 			if (_isSelect)
 			    unselectText();
-			_justSelected = false;
+            cancelJustSelected(); //_justSelected = false;
         return str;
 		} finally {
             textInputLock.unlock();

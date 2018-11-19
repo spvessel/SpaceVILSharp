@@ -745,6 +745,18 @@ public final class DrawEngine {
     }
 
     private void keyPress(long wnd, int key, int scancode, int action, int mods) {
+        //System.out.println("keypress");
+//        switch (action) {
+//            case 1 :
+//                System.out.println("key press");
+//                break;
+//            case 0 :
+//                System.out.println("key release");
+//                break;
+//            case 2 :
+//                System.out.println("key repeat");
+//                break;
+//        }
         if (!_handler.focusable)
             return;
         _tooltip.initTimer(false);
@@ -767,11 +779,11 @@ public final class DrawEngine {
                 glfwSetClipboardString(_handler.getWindowId(), cut_str);
             } else {
                 if (action == InputState.PRESS.getValue())
-                    assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
+                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); //assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
                 if (action == InputState.REPEAT.getValue())
-                    assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
+                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); //assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
                 if (action == InputState.RELEASE.getValue())
-                    assignActions(InputEventType.KEY_RELEASE, _kargs, focusedItem);
+                    focusedItem.eventKeyRelease.execute(focusedItem, _kargs); //assignActions(InputEventType.KEY_RELEASE, _kargs, focusedItem);
             }
         } else {
             if (action == InputState.PRESS.getValue())
@@ -784,6 +796,7 @@ public final class DrawEngine {
     }
 
     private void textInput(long wnd, int character, int mods) {
+//        System.out.println("textinput");
         if (!_handler.focusable)
             return;
 

@@ -54,7 +54,7 @@ namespace SpaceVIL
 
                 _letters = FontEngine.GetModifyLetters(text, font);
                 _letEndPos = new List<int>();
-
+                _lineWidth = 0;
                 if (_letters.Count > 0)
                     _lineWidth = _letters[_letters.Count - 1].xShift + _letters[_letters.Count - 1].width +
                         _letters[_letters.Count - 1].xBeg; //xBeg не обязательно, т.к. везде 0, но вдруг

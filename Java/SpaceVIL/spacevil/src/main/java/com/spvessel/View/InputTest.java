@@ -1,7 +1,9 @@
 package com.spvessel.View;
 
 import com.spvessel.*;
+import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.ScrollBarVisibility;
+import com.spvessel.Flags.SizePolicy;
 
 public class InputTest extends ActiveWindow {
     @Override
@@ -26,6 +28,7 @@ public class InputTest extends ActiveWindow {
         PasswordLine password = new PasswordLine();
 
         TextEdit te = new TextEdit();
+        te.setTextAlignment(ItemAlignment.RIGHT);
 
         TextArea tb = new TextArea();
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
@@ -34,7 +37,7 @@ public class InputTest extends ActiveWindow {
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
 
         SpinItem sp = new SpinItem();
-        sp.setParameters(1, -5.5, 7, 0.51);
+        sp.setParameters(1, -5.5, 7.3, 0.1);
         sp.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
 
         layout.addItem(password);
