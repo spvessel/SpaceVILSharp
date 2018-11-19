@@ -28,13 +28,13 @@ namespace SpaceVIL
         //common events
         internal EventCommonMethodState EventFocusGet;
         internal EventCommonMethodState EventFocusLost;
-        public EventCommonMethodState EventResized;
-        public EventCommonMethodState EventDestroyed;
+        public EventCommonMethodState EventResize;
+        public EventCommonMethodState EventDestroy;
         //mouse input
         public EventMouseMethodState EventMouseHover;
         public EventMouseMethodState EventMouseClick;
-        public EventMouseMethodState EventMousePressed;
-        public EventMouseMethodState EventMouseRelease;
+        public EventMouseMethodState EventMouseDoubleClick;
+        public EventMouseMethodState EventMousePress;
         public EventMouseMethodState EventMouseDrag;
         public EventMouseMethodState EventMouseDrop;
         public EventMouseMethodState EventScrollUp;

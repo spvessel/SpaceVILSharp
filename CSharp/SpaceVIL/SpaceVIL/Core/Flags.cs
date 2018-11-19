@@ -126,6 +126,7 @@ namespace SpaceVIL.Core
         MouseDrag = 0x800000,
         MousePress = 0x100,
         MouseRelease = 0x200,
+        MouseDoubleClick = 0x1000000,
         MouseScroll = 0x400,
 
         KeyPress = 0x800,
@@ -318,18 +319,14 @@ namespace SpaceVIL.Core
     public enum MouseButton
     {
         Unknown = -1,
-        Button1 = 0,
-        Button2 = 1,
-        Button3 = 2,
+        ButtonLeft = 0,
+        ButtonRight = 1,
+        ButtonMiddle = 2,
         Button4 = 3,
         Button5 = 4,
         Button6 = 5,
         Button7 = 6,
         Button8 = 7,
-        ButtonLast = Button8,
-        ButtonLeft = Button1,
-        ButtonRight = Button2,
-        ButtonMiddle = Button3
     }
 
     internal enum LayoutType

@@ -7,6 +7,7 @@ import com.spvessel.Core.InterfaceFloating;
 import com.spvessel.Core.InterfaceItem;
 import com.spvessel.Core.MouseArgs;
 import com.spvessel.Decorations.Style;
+import com.spvessel.Flags.KeyCode;
 import com.spvessel.Flags.LayoutType;
 import com.spvessel.Flags.MouseButton;
 import com.spvessel.Flags.ScrollBarVisibility;
@@ -15,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ContextMenu extends Prototype implements InterfaceFloating {
+    public Prototype returnFocus = null;
     public ListBox itemList = new ListBox();
     private List<InterfaceBaseItem> _queue = new LinkedList<>();
 
@@ -35,11 +37,11 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     // private boolean _lock_ouside = true;
 
     // public boolean isLockOutside() {
-    //     return _lock_ouside;
+    // return _lock_ouside;
     // }
 
     // public void setLockOutside(boolean value) {
-    //     _lock_ouside = true;
+    // _lock_ouside = true;
     // }
 
     public ContextMenu(WindowLayout handler) {
@@ -55,7 +57,6 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     @Override
     public void initElements() {
         setConfines();
-        itemList.setSelectionVisibility(false);
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.getArea().setHoverVisibility(false);
@@ -73,6 +74,22 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         _queue = null;
         _init = true;
 
+        itemList.getArea().eventKeyPress.add((sender, args) -> {
+            if (args.key == KeyCode.ESCAPE) {
+                hide();
+                hideDependentMenus();
+            }
+        });
+    }
+
+    private void hideDependentMenus() {
+        for (InterfaceBaseItem context_menu : ItemsLayoutBox.getLayoutFloatItems(getHandler().getId())) {
+            if (context_menu instanceof ContextMenu) {
+                ContextMenu menu = (ContextMenu) context_menu;
+                menu.hide();
+                menu.itemList.unselect();
+            }
+        }
     }
 
     protected void onSelectionChanged() {
@@ -83,14 +100,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
             }
         }
         hide();
-        MouseArgs args = new MouseArgs();
-        args.position.setPosition(-100, -100);
-        for (InterfaceBaseItem context_menu : ItemsLayoutBox.getLayoutFloatItems(getHandler().getId())) {
-            if (context_menu instanceof ContextMenu) {
-                ContextMenu menu = (ContextMenu) context_menu;
-                menu.hide();
-            }
-        }
+        hideDependentMenus();
     }
 
     public int getListCount() {
@@ -174,12 +184,16 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
                 setX(args.position.getX());
             }
             setConfines();
+            itemList.getArea().setFocus();
         }
     }
 
     public void hide() {
         setX(-getWidth());
         setVisible(false);
+        itemList.unselect();
+        if (returnFocus != null)
+            returnFocus.setFocus();
     }
 
     @Override
@@ -195,11 +209,15 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setSizePolicy(style.widthPolicy, style.heightPolicy);
         setBackground(style.background);
 
-        Style itemlist_style = style.getInnerStyle("itemlist");
-        if (itemlist_style != null) {
-            itemList.setBackground(itemlist_style.background);
-            itemList.setAlignment(itemlist_style.alignment);
-            itemList.setPadding(itemlist_style.padding);
+        Style inner_style = style.getInnerStyle("itemlist");
+        if (inner_style != null) {
+            itemList.setBackground(inner_style.background);
+            itemList.setAlignment(inner_style.alignment);
+            itemList.setPadding(inner_style.padding);
+        }
+        inner_style = style.getInnerStyle("listarea");
+        if (inner_style != null) {
+            itemList.getArea().setStyle(inner_style);
         }
     }
 }

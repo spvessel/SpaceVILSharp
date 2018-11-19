@@ -89,10 +89,12 @@ public class TextArea extends Prototype {
         setStyle(DefaultsService.getDefaultStyle(TextArea.class));
 
         // VBar
+        vScrollBar.isFocusable = false;
         vScrollBar.setVisible(true);
         vScrollBar.setItemName(getItemName() + "_" + vScrollBar.getItemName());
-
+        
         // HBar
+        hScrollBar.isFocusable = false;
         hScrollBar.setVisible(true);
         hScrollBar.setItemName(getItemName() + "_" + hScrollBar.getItemName());
 
@@ -245,45 +247,58 @@ public class TextArea extends Prototype {
         eventScrollDown.add((sender, args) -> vScrollBar.eventScrollDown.execute(sender, args));
         _area.textChanged.add(() -> updateElements());
 
-        vScrollBar.slider.eventValueChanged.add((sender) -> updateVListArea());
-        hScrollBar.slider.eventValueChanged.add((sender) -> updateHListArea());
-
+        vScrollBar.slider.eventValueChanged.add((sender) -> {
+            updateVListArea();
+            _area.setFocus();
+        });
+        hScrollBar.slider.eventValueChanged.add((sender) -> {
+            updateHListArea();
+            _area.setFocus();
+        });
+        
         // create menu
         _menu = new ContextMenu(getHandler());
         _menu.setBackground(60, 60, 60);
         _menu.setPassEvents(false);
-
+        
         MenuItem go_up = new MenuItem("Go up");
         go_up.setForeground(new Color(210, 210, 210));
         go_up.eventMouseClick.add((sender, args) -> {
             _area.setScrollYOffset(0);
             updateElements();
+            _area.setFocus();
         });
-
+        
         MenuItem go_down = new MenuItem("Go down");
         go_down.setForeground(new Color(210, 210, 210));
         go_down.eventMouseClick.add((sender, args) -> {
             _area.setScrollYOffset(-_area.getTextHeight());
             updateElements();
+            _area.setFocus();
         });
-
+        
         MenuItem go_up_left = new MenuItem("Go up and left");
         go_up_left.setForeground(new Color(210, 210, 210));
         go_up_left.eventMouseClick.add((sender, args) -> {
             _area.setScrollYOffset(0);
             _area.setScrollXOffset(0);
             updateElements();
+            _area.setFocus();
         });
-
+        
         MenuItem go_down_right = new MenuItem("Go down and right");
         go_down_right.setForeground(new Color(210, 210, 210));
         go_down_right.eventMouseClick.add((sender, args) -> {
             _area.setScrollYOffset(-_area.getTextHeight());
             _area.setScrollXOffset(-_area.getTextWidth());
             updateElements();
+            _area.setFocus();
         });
         _menu.addItems(go_up_left, go_down_right, go_up, go_down);
-        menu.eventMouseClick.add((sender, args) -> _menu.show(sender, args));
+        menu.eventMouseClick.add((sender, args) -> {
+            if (!_is_menu_disabled)
+            _menu.show(sender, args);
+        });
         _menu.activeButton = MouseButton.BUTTON_LEFT;
         _menu.setShadow(10, 0, 0, Color.black);
 

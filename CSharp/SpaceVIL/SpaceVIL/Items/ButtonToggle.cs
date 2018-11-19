@@ -31,7 +31,7 @@ namespace SpaceVIL
 
         protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
-            if (args.Scancode == 0x1C)
+            if (args.Key == KeyCode.Enter)
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 

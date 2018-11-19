@@ -499,6 +499,15 @@ public final class VisualItem extends BaseItem {
         updateState();
     }
 
+    private boolean _focusable = true;
+    public boolean isFocusable() {
+        return _focusable;
+    }
+
+    public void setFocusable() {
+        // foreach inner item focusable value set?
+    }
+
     @Override
     protected void updateInnersDrawable(boolean value) {
         for (InterfaceBaseItem item : _content) {

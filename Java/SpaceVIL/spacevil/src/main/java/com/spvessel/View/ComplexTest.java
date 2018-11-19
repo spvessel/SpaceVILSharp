@@ -53,6 +53,7 @@ public class ComplexTest extends ActiveWindow {
         ButtonCore b4 = getButton("b4", 26, 30, SizePolicy.FIXED);
         b4.eventMouseClick.add((sender, args) -> treeview.addItem(getTreeLeaf()));
         ButtonCore b5 = getButton("b5", 26, 30, SizePolicy.FIXED);
+        b5.eventMouseDoubleClick.add((sender, args) -> System.out.println("double click "));
         ButtonCore b6 = getButton("b6", 26, 30, SizePolicy.FIXED);
         toolbar.addItems(b1, b2, b3, b4, b5, b6);
 

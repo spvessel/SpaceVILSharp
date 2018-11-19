@@ -35,7 +35,6 @@ public final class DrawEngine {
             hoveredItem.setMouseHover(false);
         ;
         hoveredItem = null;
-
         hoveredItems.clear();
     }
 
@@ -49,6 +48,10 @@ public final class DrawEngine {
     private List<Prototype> hoveredItems;
     private Prototype hoveredItem = null;
     private Prototype focusedItem = null;
+
+    public Prototype getFocusedItem() {
+        return focusedItem;
+    }
 
     protected void setFocusedItem(Prototype item) {
         if (item == null) {
@@ -443,7 +446,7 @@ public final class DrawEngine {
                 Prototype draggable = isInListHoveredItems(InterfaceDraggable.class);
                 Prototype anchor = isInListHoveredItems(InterfaceWindowAnchor.class);
 
-                if (draggable != null) {
+                if (draggable != null && hoveredItem == draggable) {
                     draggable.eventMouseDrag.execute(draggable, _margs);
                 } else if (anchor != null && !(hoveredItem instanceof ButtonCore)
                         && !_handler.getLayout().isMaximized) {
@@ -519,6 +522,26 @@ public final class DrawEngine {
         }
     }
 
+    long _start_time = 0; // System.nanoTime();
+    long _estimated_ime = 0; // System.nanoTime() - startTime;
+    boolean _first_click = false;
+    boolean _second_click = false;
+
+    private boolean isDoubleClick() {
+        if (_first_click) {
+            _first_click = false;
+            if ((System.nanoTime() - _start_time) / 1000000 < 500)
+            {
+                _start_time = 0;
+                return true;
+            }
+        } else {
+            _first_click = true;
+            _start_time = System.nanoTime();
+        }
+        return false;
+    }
+
     private void mouseClick(long wnd, int button, int action, int mods) {
         _handler.getLayout().getWindow()._sides.clear();
         if (!_handler.focusable)
@@ -582,6 +605,7 @@ public final class DrawEngine {
             break;
 
         case GLFW_PRESS:
+            boolean is_double_click = isDoubleClick();
 
             try (MemoryStack stack = MemoryStack.stackPush()) {
                 IntBuffer width = stack.mallocInt(1);
@@ -613,6 +637,23 @@ public final class DrawEngine {
                         focusedItem.setFocused(false);
                     focusedItem = hoveredItem;
                     focusedItem.setFocused(true);
+                } else {
+                    Deque<Prototype> focused_list = new ArrayDeque<Prototype>(hoveredItems);
+                    while (!focused_list.isEmpty()) {
+                        Prototype f = focused_list.pollLast();
+                        if (f.equals(hoveredItem) && hoveredItem.isDisabled())
+                            continue;// пропустить
+                        if (f.isFocusable) {
+                            focusedItem = f;
+                            focusedItem.setFocused(true);
+                            break;
+                        }
+                    }
+                }
+                // System.out.println(focusedItem.getItemName());
+                if (is_double_click) {
+                    if (focusedItem != null)
+                        focusedItem.eventMouseDoubleClick.execute(focusedItem, _margs);
                 }
             }
 
@@ -913,8 +954,19 @@ public final class DrawEngine {
         // draw static
         drawItems(_handler.getLayout().getWindow());
         // draw float
-        for (InterfaceBaseItem item : ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems())
-            drawItems((InterfaceBaseItem) item);
+        List<InterfaceBaseItem> float_items = new LinkedList<>(
+                ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems());
+        // _handler.getLayout().engineLocker.lock();
+        // try {
+        // float_items = new
+        // LinkedList<>(ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems());
+        // } finally {
+        // _handler.getLayout().engineLocker.unlock();
+        // }
+        if (float_items != null) {
+            for (InterfaceBaseItem item : float_items)
+                drawItems(item);
+        }
         // draw tooltip if needed
         drawToolTip();
         if (!_handler.focusable) {

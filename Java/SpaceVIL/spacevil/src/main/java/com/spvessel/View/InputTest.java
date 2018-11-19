@@ -37,8 +37,7 @@ public class InputTest extends ActiveWindow {
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
 
         SpinItem sp = new SpinItem();
-        sp.setParameters(1, -5.5, 7.3, 0.1);
-        sp.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        sp.setParameters(1, -5.5, 7, 0.51);
 
         layout.addItem(password);
         layout.addItem(te);

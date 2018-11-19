@@ -39,7 +39,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
 
         InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
-        eventMousePressed.add(press);
+        eventMousePress.add(press);
         InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
         eventMouseDrag.add(dragg);
         count++;
@@ -154,17 +154,17 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
 
     public void getSides(float xpos, float ypos) {
         _sides.clear();
-        if (xpos <= 5) {
+        if (xpos <= 10) {
             _sides.add(ItemAlignment.LEFT);
         }
-        if (xpos > getWidth() - 5) {
+        if (xpos >= getWidth() - 10) {
             _sides.add(ItemAlignment.RIGHT);
         }
 
-        if (ypos <= 5) {
+        if (ypos <= 10) {
             _sides.add(ItemAlignment.TOP);
         }
-        if (ypos > getHeight() - 5) {
+        if (ypos >= getHeight() - 10) {
             _sides.add(ItemAlignment.BOTTOM);
         }
     }

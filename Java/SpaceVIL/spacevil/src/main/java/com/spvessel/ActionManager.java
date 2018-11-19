@@ -67,6 +67,9 @@ public class ActionManager {
         case MOUSE_RELEASE:
             invokeMouseClickEvent(task.item, (MouseArgs) task.args);
             break;
+        case MOUSE_DOUBLE_CLICK:
+            invokeMouseDoubleClickEvent(task.item, (MouseArgs) task.args);
+            break;
         case MOUSE_PRESS:
             invokeMousePressedEvent(task.item, (MouseArgs) task.args);
             break;
@@ -105,19 +108,23 @@ public class ActionManager {
     }
 
     private void invokeResizedEvent(Prototype sender) {
-        if (sender.eventResized != null)
-            sender.eventResized.execute(sender);
+        if (sender.eventResize != null)
+            sender.eventResize.execute(sender);
     }
 
     private void invokeDestroyedEvent(Prototype sender) {
-        if (sender.eventDestroyed != null)
-            sender.eventDestroyed.execute(sender);
+        if (sender.eventDestroy != null)
+            sender.eventDestroy.execute(sender);
     }
 
     // mouse input
     private void invokeMouseClickEvent(Prototype sender, MouseArgs args) {
         if (sender.eventMouseClick != null)
             sender.eventMouseClick.execute(sender, args);
+    }
+    private void invokeMouseDoubleClickEvent(Prototype sender, MouseArgs args) {
+        if (sender.eventMouseDoubleClick != null)
+            sender.eventMouseDoubleClick.execute(sender, args);
     }
 
     private void invokeMouseHoverEvent(Prototype sender, MouseArgs args) {
@@ -126,13 +133,8 @@ public class ActionManager {
     }
 
     private void invokeMousePressedEvent(Prototype sender, MouseArgs args) {
-        if (sender.eventMousePressed != null)
-            sender.eventMousePressed.execute(sender, args);
-    }
-
-    private void invokeMouseReleaseEvent(Prototype sender, MouseArgs args) {
-        if (sender.eventMouseRelease != null)
-            sender.eventMouseRelease.execute(sender, args);
+        if (sender.eventMousePress != null)
+            sender.eventMousePress.execute(sender, args);
     }
 
     private void invokeMouseDragEvent(Prototype sender, MouseArgs args) {

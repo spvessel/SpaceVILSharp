@@ -62,7 +62,7 @@ namespace SpaceVIL
             SetItemName("TextEdit_" + count);
             count++;
 
-            EventMousePressed += OnMousePressed;
+            EventMousePress += OnMousePressed;
             EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;

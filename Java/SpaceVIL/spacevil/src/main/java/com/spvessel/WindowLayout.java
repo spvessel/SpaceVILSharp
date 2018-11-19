@@ -15,7 +15,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public final class WindowLayout {
-    protected Lock engineLocker = new ReentrantLock();
+    public Lock engineLocker = new ReentrantLock();
     private Lock wndLock = new ReentrantLock();
 
     class DrawThread extends Thread {
@@ -73,7 +73,7 @@ public final class WindowLayout {
     private UUID ParentGUID;
 
     private DrawThread thread_engine;
-    public DrawEngine engine;
+    protected DrawEngine engine;
 
     private TaskThread thread_manager;
     private ActionManager manager;
@@ -517,6 +517,9 @@ public final class WindowLayout {
         manager.execute.set();
     }
 
+    public Prototype getFocusedItem() {
+        return engine.getFocusedItem();
+    }
     public void setFocusedItem(Prototype item) {
         engine.setFocusedItem(item);
     }

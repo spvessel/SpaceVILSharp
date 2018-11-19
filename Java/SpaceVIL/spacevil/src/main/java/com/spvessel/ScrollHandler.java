@@ -15,7 +15,7 @@ public class ScrollHandler extends Prototype implements InterfaceDraggable {
     public ScrollHandler() {
         setItemName("ScrollHandler_" + count);
         InterfaceMouseMethodState h_press = (sender, args) -> onMousePress(sender, args);
-        eventMousePressed.add(h_press);
+        eventMousePress.add(h_press);
         InterfaceMouseMethodState h_dragg = (sender, args) -> onDragging(sender, args);
         eventMouseDrag.add(h_dragg);
         count++;

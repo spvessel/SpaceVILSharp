@@ -14,6 +14,7 @@ using System.Drawing;
 using SpaceVIL.Core;
 using Pointer = SpaceVIL.Core.Pointer;
 using SpaceVIL.Common;
+using System.Diagnostics;
 
 #if LINUX
 using static GL.LGL.OpenLGL;
@@ -48,6 +49,10 @@ namespace SpaceVIL
         private List<Prototype> HoveredItems;
         private Prototype HoveredItem = null;
         private Prototype FocusedItem = null;
+        public Prototype GetFocusedItem()
+        {
+            return FocusedItem;
+        }
         public void SetFocusedItem(Prototype item)
         {
             if (item == null)
@@ -413,7 +418,7 @@ namespace SpaceVIL
                     int y_click = ptrClick.GetY();
                     Prototype draggable = IsInListHoveredItems<IDraggable>();
                     Prototype anchor = IsInListHoveredItems<WindowAnchor>();
-                    if (draggable != null)
+                    if (draggable != null && HoveredItem == draggable)
                     {
                         draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
                     }
@@ -500,6 +505,22 @@ namespace SpaceVIL
             }
         }
 
+        internal Stopwatch _double_click_timer = new Stopwatch();
+        internal bool _double_click_happen = false;
+        private bool IsDoubleClick()
+        {
+            if (_double_click_timer.IsRunning)
+            {
+                _double_click_timer.Stop();
+                if (_double_click_timer.ElapsedMilliseconds < 500)
+                    return true;
+            }
+            else
+            {
+                _double_click_timer.Restart();
+            }
+            return false;
+        }
         private void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
             _handler.GetLayout().GetWindow()._sides = 0;
@@ -531,7 +552,6 @@ namespace SpaceVIL
             switch (state)
             {
                 case InputState.Release:
-
                     while (tmp.Count > 0)
                     {
                         Prototype item = tmp.Dequeue();
@@ -567,6 +587,8 @@ namespace SpaceVIL
                     break;
 
                 case InputState.Press:
+                    bool is_double_click = IsDoubleClick();
+
                     Glfw.GetFramebufferSize(_handler.GetWindowId(), out w_global, out h_global);
                     x_global = _handler.GetPointer().GetX();
                     y_global = _handler.GetPointer().GetY();
@@ -585,9 +607,31 @@ namespace SpaceVIL
                         {
                             if (FocusedItem != null)
                                 FocusedItem.SetFocused(false);
+
                             FocusedItem = HoveredItem;
                             FocusedItem.SetFocused(true);
                         }
+                        else
+                        {
+                            List<Prototype> focused_list = new List<Prototype>(HoveredItems);
+                            while (focused_list.Count != 0)
+                            {
+                                Prototype f = focused_list.Last();
+                                if (f.Equals(HoveredItem) && HoveredItem.IsDisabled())
+                                    continue;//пропустить
+                                if (f.IsFocusable)
+                                {
+                                    FocusedItem = f;
+                                    FocusedItem.SetFocused(true);
+                                    break;//остановить передачу событий последующим элементам
+                                }
+                                focused_list.Remove(f);
+                            }
+                        }
+                        // Console.WriteLine(FocusedItem.GetItemName());
+                        if (is_double_click)
+                            // AssignActions(InputEventType.MouseDoubleClick, _margs, false);
+                            FocusedItem?.EventMouseDoubleClick?.Invoke(FocusedItem, _margs);
                     }
 
                     if (HoveredItem is IWindow)
@@ -853,6 +897,7 @@ namespace SpaceVIL
             _fbo.GenFBOTexture(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
             _fbo.UnbindFBO();
 
+            _double_click_timer.Start();
             while (!_handler.IsClosing())
             {
                 Glfw.WaitEventsTimeout(_interval);
@@ -895,8 +940,12 @@ namespace SpaceVIL
             //draw static
             DrawItems(_handler.GetLayout().GetWindow());
             //draw float
-            foreach (var item in ItemsLayoutBox.GetLayout(_handler.GetLayout().Id).FloatItems)
-                DrawItems(item as IBaseItem);
+            List<IBaseItem> float_items = new List<IBaseItem>(ItemsLayoutBox.GetLayout(_handler.GetLayout().Id).FloatItems);
+            if (float_items != null)
+            {
+                foreach (var item in float_items)
+                    DrawItems(item);
+            }
             //draw tooltip if needed
             DrawToolTip();
             if (!_handler.Focusable)

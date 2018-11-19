@@ -9,6 +9,7 @@ namespace SpaceVIL
 {
     public class ContextMenu : Prototype, IFloating
     {
+        public Prototype ReturnFocus = null;
         public ListBox ItemList = new ListBox();
         private Queue<IBaseItem> _queue = new Queue<IBaseItem>();
 
@@ -43,14 +44,12 @@ namespace SpaceVIL
             SetItemName("ContextMenu_" + count);
             count++;
             ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
-
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ContextMenu)));
         }
 
         public override void InitElements()
         {
             SetConfines();
-            ItemList.SetSelectionVisibility(false);
             ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.GetArea().SelectionChanged += OnSelectionChanged;
@@ -64,6 +63,28 @@ namespace SpaceVIL
                 ItemList.AddItem(item);
             _queue = null;
             _init = true;
+
+            ItemList.GetArea().EventKeyPress += (sender, args) =>
+            {
+                if (args.Key == KeyCode.Escape)
+                {
+                    Hide();
+                    HideDependentMenus();
+                }
+            };
+        }
+        
+        private void HideDependentMenus()
+        {
+            foreach (var context_menu in ItemsLayoutBox.GetLayoutFloatItems(GetHandler().Id))
+            {
+                ContextMenu menu = context_menu as ContextMenu;
+                if (menu != null)
+                {
+                    menu.Hide();
+                    menu.ItemList.Unselect();
+                }
+            }
         }
 
         protected virtual void OnSelectionChanged()
@@ -77,14 +98,7 @@ namespace SpaceVIL
                 }
             }
             Hide();
-            MouseArgs args = new MouseArgs();
-            args.Position.SetPosition(-100, -100);
-            foreach (var context_menu in ItemsLayoutBox.GetLayoutFloatItems(GetHandler().Id))
-            {
-                ContextMenu menu = context_menu as ContextMenu;
-                if (menu != null)
-                    menu.Hide();
-            }
+            HideDependentMenus();
         }
         public int GetListCount()
         {
@@ -168,12 +182,15 @@ namespace SpaceVIL
                 // SetX(args.Position.X);
                 // SetY(args.Position.Y);
                 SetConfines();
+                ItemList.GetArea().SetFocus();
             }
         }
         public void Hide()
         {
             SetX(-GetWidth());
             SetVisible(false);
+            ItemList.Unselect();
+            ReturnFocus?.SetFocus();
         }
 
         public override void SetConfines()
@@ -217,12 +234,17 @@ namespace SpaceVIL
             SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
             SetBackground(style.Background);
 
-            Style itemlist_style = style.GetInnerStyle("itemlist");
-            if (itemlist_style != null)
+            Style inner_style = style.GetInnerStyle("itemlist");
+            if (inner_style != null)
             {
-                ItemList.SetBackground(itemlist_style.Background);
-                ItemList.SetAlignment(itemlist_style.Alignment);
-                ItemList.SetPadding(itemlist_style.Padding);
+                ItemList.SetBackground(inner_style.Background);
+                ItemList.SetAlignment(inner_style.Alignment);
+                ItemList.SetPadding(inner_style.Padding);
+            }
+            inner_style = style.GetInnerStyle("listarea");
+            if (inner_style != null)
+            {
+                ItemList.GetArea().SetStyle(inner_style);
             }
         }
     }

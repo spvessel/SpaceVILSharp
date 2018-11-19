@@ -110,10 +110,12 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextArea)));
 
             //VBar
+            VScrollBar.IsFocusable = false;
             VScrollBar.SetDrawable(true);
             VScrollBar.SetItemName(GetItemName() + "_" + VScrollBar.GetItemName());
 
             //HBar
+            HScrollBar.IsFocusable = false;
             HScrollBar.SetDrawable(true);
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
 
@@ -273,8 +275,8 @@ namespace SpaceVIL
             EventScrollDown += VScrollBar.EventScrollDown.Invoke;
             _area.TextChanged += UpdateElements;
 
-            VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); };
-            HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };
+            VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); _area.SetFocus();};
+            HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); _area.SetFocus();};
 
             // create menu
             _menu = new ContextMenu(GetHandler());
@@ -287,6 +289,7 @@ namespace SpaceVIL
             {
                 _area.SetScrollYOffset(0);
                 UpdateElements();
+                _area.SetFocus();
             });
 
             MenuItem go_down = new MenuItem("Go down");
@@ -295,6 +298,7 @@ namespace SpaceVIL
             {
                 _area.SetScrollYOffset(-_area.GetTextHeight());
                 UpdateElements();
+                _area.SetFocus();
             });
 
             MenuItem go_up_left = new MenuItem("Go up and left");
@@ -304,6 +308,7 @@ namespace SpaceVIL
                 _area.SetScrollYOffset(0);
                 _area.SetScrollXOffset(0);
                 UpdateElements();
+                _area.SetFocus();
             });
 
             MenuItem go_down_right = new MenuItem("Go down and right");
@@ -313,9 +318,14 @@ namespace SpaceVIL
                 _area.SetScrollYOffset(-_area.GetTextHeight());
                 _area.SetScrollXOffset(-_area.GetTextWidth());
                 UpdateElements();
+                _area.SetFocus();
             });
             _menu.AddItems(go_up_left, go_down_right, go_up, go_down);
-            Menu.EventMouseClick += ((sender, args) => _menu.Show(sender, args));
+            Menu.EventMouseClick += (sender, args) =>
+            {
+                if (!_is_menu_disabled)
+                    _menu.Show(sender, args);
+            };
             _menu.ActiveButton = MouseButton.ButtonLeft;
             _menu.SetShadow(10, 0, 0, Color.Black);
 
@@ -444,13 +454,7 @@ namespace SpaceVIL
             return _area.GetTextHeight();
         }
 
-        public override void SetFocused(bool value)
-        {
-            base.SetFocused(value);
-            _area.SetFocused(value);
-        }
-
-        public void cLearArea()
+        public void ClearArea()
         {
             _area.Clear();
         }

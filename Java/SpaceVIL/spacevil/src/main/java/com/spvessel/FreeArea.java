@@ -2,6 +2,7 @@ package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
 import com.spvessel.Core.*;
+import com.spvessel.Flags.MouseButton;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -20,10 +21,8 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
         count++;
         _stored_crd = new HashMap<InterfaceBaseItem, int[]>();
 
-        InterfaceMouseMethodState click = (sender, args) -> onMouseRelease(sender, args);
-        eventMouseClick.add(click);
         InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
-        eventMousePressed.add(press);
+        eventMousePress.add(press);
         InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
         eventMouseDrag.add(dragg);
 
@@ -37,22 +36,20 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
     }
 
     protected void onMousePress(InterfaceItem sender, MouseArgs args) {
-        _x_press = args.position.getX();
-        _y_press = args.position.getY();
-        _diff_x = (int) _xOffset;
-        _diff_y = (int) _yOffset;
-    }
-
-    protected void onMouseRelease(InterfaceItem sender, MouseArgs args) {
-        // PrintArgs.MouseArgs(args);
-        // if (args.Button == MouseButton.ButtonRight)
-        // ShowDropDownList(args);
+        if (args.button == MouseButton.BUTTON_LEFT) {
+            _x_press = args.position.getX();
+            _y_press = args.position.getY();
+            _diff_x = (int) _xOffset;
+            _diff_y = (int) _yOffset;
+        }
     }
 
     protected void onDragging(InterfaceItem sender, MouseArgs args) {
-        _xOffset = _diff_x - _x_press + args.position.getX();
-        _yOffset = _diff_y + args.position.getY() - _y_press;
-        updateLayout();
+        if (args.button == MouseButton.BUTTON_LEFT) {
+            _xOffset = _diff_x - _x_press + args.position.getX();
+            _yOffset = _diff_y + args.position.getY() - _y_press;
+            updateLayout();
+        }
     }
 
     private long _yOffset = 0;
@@ -102,12 +99,11 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
 
     public void updateLayout() {
         // synchronized (this) {
-            for (InterfaceBaseItem child : getItems()) {
-                child.setX((int) _xOffset + getX() + getPadding().left + _stored_crd.get(child)[0]
-                        + child.getMargin().left);
-                child.setY(
-                        (int) _yOffset + getY() + getPadding().top + _stored_crd.get(child)[1] + child.getMargin().top);
-            }
+        for (InterfaceBaseItem child : getItems()) {
+            child.setX(
+                    (int) _xOffset + getX() + getPadding().left + _stored_crd.get(child)[0] + child.getMargin().left);
+            child.setY((int) _yOffset + getY() + getPadding().top + _stored_crd.get(child)[1] + child.getMargin().top);
+        }
         // }
     }
 

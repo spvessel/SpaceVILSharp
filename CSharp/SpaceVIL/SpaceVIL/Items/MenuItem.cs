@@ -43,7 +43,7 @@ namespace SpaceVIL
             SetItemName("MenuItem_" + count);
             count++;
             EventKeyPress += OnKeyPress;
-            EventMousePressed += (sender, args) => OnMouseAction();
+            EventMousePress += (sender, args) => OnMouseAction();
 
             _text_object = new TextLine();
 
@@ -61,7 +61,7 @@ namespace SpaceVIL
 
         protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
-            if (args.Scancode == 0x1C)
+            if (args.Key == KeyCode.Enter)
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 

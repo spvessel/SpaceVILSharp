@@ -2,13 +2,18 @@ package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
 import com.spvessel.Core.InterfaceBaseItem;
+import com.spvessel.Core.InterfaceItem;
 import com.spvessel.Core.InterfaceMouseMethodState;
+import com.spvessel.Core.KeyArgs;
+import com.spvessel.Core.MouseArgs;
 import com.spvessel.Decorations.Indents;
 import com.spvessel.Decorations.ItemState;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.InputEventType;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.ItemStateType;
+import com.spvessel.Flags.KeyCode;
+import com.spvessel.Flags.MouseButton;
 import com.spvessel.Flags.SizePolicy;
 import com.spvessel.Flags.TreeItemType;
 
@@ -83,11 +88,25 @@ public class TreeItem extends Prototype {
 
         setStyle(DefaultsService.getDefaultStyle(TreeItem.class));
         setPassEvents(false, InputEventType.MOUSE_PRESS, InputEventType.MOUSE_RELEASE);
+
+        eventKeyPress.add((sender, args) -> onKeyPress(sender, args));
     }
 
     public TreeItem(TreeItemType type, String text) {
         this(type);
         setText(text);
+    }
+
+    protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
+        if (args.key == KeyCode.ENTER)
+            _indicator.eventToggle.execute(sender, new MouseArgs());
+        if (args.key == KeyCode.MENU) {
+            MouseArgs margs = new MouseArgs();
+            margs.button = MouseButton.BUTTON_RIGHT;
+            margs.position.setPosition(getX() + _parent.getWidth() / 2, getY() + getHeight());
+            if (_menu != null)
+                _menu.show(this, margs);
+        }
     }
 
     private TreeItem getTreeBranch() {
@@ -122,10 +141,9 @@ public class TreeItem extends Prototype {
 
         MenuItem remove = new MenuItem("Remove");
         remove.setForeground(new Color(210, 210, 210));
-        InterfaceMouseMethodState remove_click = (sender, args) -> {
+        remove.eventMouseClick.add((sender, args) -> {
             getParent().removeItem(this);
-        };
-        remove.eventMouseClick.add(remove_click);
+        });
 
         MenuItem rename = new MenuItem("Rename");
         rename.setForeground(new Color(210, 210, 210));
@@ -138,20 +156,20 @@ public class TreeItem extends Prototype {
 
         MenuItem new_leaf = new MenuItem("New Leaf");
         new_leaf.setForeground(new Color(210, 210, 210));
-        InterfaceMouseMethodState leaf_click = (sender, args) -> {
+        new_leaf.eventMouseClick.add((sender, args) -> {
             this.addItem(getTreeLeaf());
-        };
-        new_leaf.eventMouseClick.add(leaf_click);
+        });
 
         MenuItem new_branch = new MenuItem("New Branch");
         new_branch.setForeground(new Color(210, 210, 210));
-        InterfaceMouseMethodState branch_click = (sender, args) -> {
+        new_branch.eventMouseClick.add((sender, args) -> {
             this.addItem(getTreeBranch());
-        };
-        new_branch.eventMouseClick.add(branch_click);
-
-        InterfaceMouseMethodState menu_click = (sender, args) -> _menu.show(sender, args);
-        eventMouseClick.add(menu_click);
+        });
+        _menu.returnFocus = _parent.getArea();
+        eventMouseClick.add((sender, args) -> {
+            _menu.show(sender, args);
+            _parent.getArea().eventMouseClick.execute(_parent, args);
+        });
 
         switch (_item_type) {
         case LEAF:
@@ -162,8 +180,13 @@ public class TreeItem extends Prototype {
             break;
 
         case BRANCH:
-            InterfaceMouseMethodState e_toggle = (sender, args) -> onToggleHide(_indicator.isToggled());
-            _indicator.eventToggle.add(e_toggle);
+            _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled()));
+            _indicator.setPassEvents(false, InputEventType.MOUSE_PRESS, InputEventType.MOUSE_RELEASE);
+            _indicator.isFocusable = false;
+            eventMouseDoubleClick.add((sender, args) -> {
+                if (args.button == MouseButton.BUTTON_LEFT)
+                    _indicator.eventToggle.execute(sender, args);
+            });
 
             super.addItem(_indicator);
             super.addItem(_icon_shape);
@@ -174,6 +197,7 @@ public class TreeItem extends Prototype {
             super.addItem(_text_object);
             break;
         }
+        _text_object.isFocusable = false;
         resetIndents();
     }
 

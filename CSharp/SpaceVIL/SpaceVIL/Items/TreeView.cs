@@ -42,7 +42,7 @@ namespace SpaceVIL
         public override void InitElements()
         {
             base.InitElements();
-            SetSelectionVisibility(true);
+            // SetSelectionVisibility(true);
             _root._parent = this;
             _root.IsRoot = true;
             base.AddItem(_root);

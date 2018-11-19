@@ -55,7 +55,7 @@ public class TreeView extends ListBox {
     @Override
     public void initElements() {
         super.initElements();
-        setSelectionVisibility(true);
+        // setSelectionVisibility(true);
         _root._parent = this;
         _root.isRoot = true;
         super.addItem(_root);

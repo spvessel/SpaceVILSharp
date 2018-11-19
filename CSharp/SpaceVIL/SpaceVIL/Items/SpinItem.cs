@@ -23,9 +23,6 @@ namespace SpaceVIL
             count++;
             _horzStack.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             textInput.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            //textInput.SetInputRestriction(InputRestriction.DOUBLENUMBERS);
-            upButton.SetText("Up");
-            downButton.SetText("Down");
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SpinItem)));
             
@@ -66,7 +63,7 @@ namespace SpaceVIL
                 return;
             base.SetStyle(style);
 
-            Style inner_style = style.GetInnerStyle("btnsarea");
+            Style inner_style = style.GetInnerStyle("buttonsarea");
             if (inner_style != null)
             {
                 _vertStack.SetStyle(inner_style);
@@ -81,7 +78,7 @@ namespace SpaceVIL
             {
                 downButton.SetStyle(inner_style);
             }
-            inner_style = style.GetInnerStyle("textinput");
+            inner_style = style.GetInnerStyle("textedit");
             if (inner_style != null)
             {
                 textInput.SetStyle(inner_style);

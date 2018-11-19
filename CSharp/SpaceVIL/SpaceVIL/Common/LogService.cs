@@ -290,12 +290,12 @@ namespace SpaceVIL.Common
 
                 if (item.EventFocusGet != null) outText.AppendLine("   EventFocusGet");
                 if (item.EventFocusLost != null) outText.AppendLine("   EventFocusLost");
-                if (item.EventResized != null) outText.AppendLine("   EventResized");
-                if (item.EventDestroyed != null) outText.AppendLine("   EventDestroyed");
+                if (item.EventResize != null) outText.AppendLine("   EventResized");
+                if (item.EventDestroy != null) outText.AppendLine("   EventDestroyed");
                 if (item.EventMouseHover != null) outText.AppendLine("   EventMouseHover");
                 if (item.EventMouseClick != null) outText.AppendLine("   EventMouseClick");
-                if (item.EventMousePressed != null) outText.AppendLine("   EventMousePressed");
-                if (item.EventMouseRelease != null) outText.AppendLine("   EventMouseRelease");
+                if (item.EventMousePress != null) outText.AppendLine("   EventMousePressed");
+                if (item.EventMouseDoubleClick != null) outText.AppendLine("   EventMouseDoubleClick");
                 if (item.EventMouseDrag != null) outText.AppendLine("   EventMouseDrag");
                 if (item.EventMouseDrop != null) outText.AppendLine("   EventMouseDrop");
                 if (item.EventScrollUp != null) outText.AppendLine("   EventScrollUp");
@@ -428,12 +428,12 @@ namespace SpaceVIL.Common
 
                 if (window.GetWindow().EventFocusGet != null) outText.AppendLine("   EventFocusGet");
                 if (window.GetWindow().EventFocusLost != null) outText.AppendLine("   EventFocusLost");
-                if (window.GetWindow().EventResized != null) outText.AppendLine("   EventResized");
-                if (window.GetWindow().EventDestroyed != null) outText.AppendLine("   EventDestroyed");
+                if (window.GetWindow().EventResize != null) outText.AppendLine("   EventResized");
+                if (window.GetWindow().EventDestroy != null) outText.AppendLine("   EventDestroyed");
                 if (window.GetWindow().EventMouseHover != null) outText.AppendLine("   EventMouseHover");
                 if (window.GetWindow().EventMouseClick != null) outText.AppendLine("   EventMouseClick");
-                if (window.GetWindow().EventMousePressed != null) outText.AppendLine("   EventMousePressed");
-                if (window.GetWindow().EventMouseRelease != null) outText.AppendLine("   EventMouseRelease");
+                if (window.GetWindow().EventMousePress != null) outText.AppendLine("   EventMousePressed");
+                if (window.GetWindow().EventMouseDoubleClick != null) outText.AppendLine("   EventMouseDoubleClick");
                 if (window.GetWindow().EventMouseDrag != null) outText.AppendLine("   EventMouseDrag");
                 if (window.GetWindow().EventMouseDrop != null) outText.AppendLine("   EventMouseDrop");
                 if (window.GetWindow().EventScrollUp != null) outText.AppendLine("   EventScrollUp");

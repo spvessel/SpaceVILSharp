@@ -495,6 +495,11 @@ namespace SpaceVIL.Decorations
             itemlist_style.Background = Color.Transparent;
             itemlist_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.AddInnerStyle("itemlist", itemlist_style);
+            
+            Style area_style = GetListAreaStyle();
+            Style substrate_style = area_style.GetInnerStyle("substrate");
+            substrate_style.Background = Color.FromArgb(255, 150, 150, 150);
+            style.AddInnerStyle("listarea", area_style);
 
             return style;
         }
@@ -825,7 +830,8 @@ namespace SpaceVIL.Decorations
             style.Spacing = new Spacing(0, 5);
 
             Style substrate_style = new Style();
-            substrate_style.Background = Color.FromArgb(255, 39, 150, 216);
+            // substrate_style.Background = Color.FromArgb(255, 39, 150, 216);
+            substrate_style.Background = Color.FromArgb(255, 100, 100, 100);
             substrate_style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             substrate_style.WidthPolicy = SizePolicy.Expand;
             substrate_style.HeightPolicy = SizePolicy.Fixed;
@@ -1336,19 +1342,22 @@ namespace SpaceVIL.Decorations
 
             style.Background = Color.FromArgb(50, 50, 50);
             style.WidthPolicy = SizePolicy.Expand;
-            style.HeightPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Fixed;
+            style.Height = 30;
+            style.MinHeight = 10;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
 
             Style uparrow_style = GetButtonCoreStyle();
             uparrow_style.WidthPolicy = SizePolicy.Expand;
             uparrow_style.HeightPolicy = SizePolicy.Expand;
-            uparrow_style.Background = Color.FromArgb(255, 100, 100, 100);
-            uparrow_style.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
-            //uparrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 0);
-            //uparrow_style.IsFixedShape = true;
+            uparrow_style.SetMargin(4, 4, 4, 5);
+            uparrow_style.Background = Color.FromArgb(255, 50, 50, 50);
+            uparrow_style.Alignment = ItemAlignment.Top | ItemAlignment.VCenter;
+            uparrow_style.Shape = GraphicsMathService.GetTriangle(12, 6, 0, 0, 0);
+            uparrow_style.IsFixedShape = true;
 
             ItemState hovered = new ItemState();
-            hovered.Background = Color.FromArgb(80, 255, 255, 255);
+            hovered.Background = Color.FromArgb(30, 255, 255, 255);
             uparrow_style.AddItemState(ItemStateType.Hovered, hovered);
 
             style.AddInnerStyle("uparrow", uparrow_style);
@@ -1356,26 +1365,26 @@ namespace SpaceVIL.Decorations
             Style downarrow_style = GetButtonCoreStyle();
             downarrow_style.WidthPolicy = SizePolicy.Expand;
             downarrow_style.HeightPolicy = SizePolicy.Expand;
-            downarrow_style.Background = Color.FromArgb(255, 100, 100, 100);
-            //downarrow_style.height = 16;
-            downarrow_style.Alignment = ItemAlignment.Bottom | ItemAlignment.HCenter;
-            //downarrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 180);
-            //downarrow_style.IsFixedShape = true;
+            downarrow_style.SetMargin(4, 5, 4, 4);
+            downarrow_style.Background = Color.FromArgb(255, 50, 50, 50);
+            downarrow_style.Alignment = ItemAlignment.Bottom | ItemAlignment.VCenter;
+            downarrow_style.Shape = GraphicsMathService.GetTriangle(12, 6, 0, 0, 180);
+            downarrow_style.IsFixedShape = true;
             downarrow_style.AddItemState(ItemStateType.Hovered, hovered);
             style.AddInnerStyle("downarrow", downarrow_style);
 
-            Style btns_area = GetButtonCoreStyle();
+            Style btns_area = GetVerticalStackStyle();
             btns_area.WidthPolicy = SizePolicy.Fixed;
             btns_area.HeightPolicy = SizePolicy.Expand;
-            btns_area.Width = 50;
-            btns_area.Background = Color.FromArgb(50, 50, 50);
-            btns_area.Alignment = ItemAlignment.Top | ItemAlignment.Left;
-            style.AddInnerStyle("btnsarea", btns_area);
+            btns_area.Width = 20;
+            btns_area.Background = Color.FromArgb(255, 255, 181, 111);
+            btns_area.Alignment = ItemAlignment.Right | ItemAlignment.VCenter;
+            style.AddInnerStyle("buttonsarea", btns_area);
 
             Style text_input = GetTextEditStyle();
             text_input.HeightPolicy = SizePolicy.Expand;
             text_input.TextAlignment = ItemAlignment.Right;
-            style.AddInnerStyle("textinput", text_input);
+            style.AddInnerStyle("textedit", text_input);
 
             return style;
         }

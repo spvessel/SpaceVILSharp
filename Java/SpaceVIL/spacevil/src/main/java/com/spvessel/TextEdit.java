@@ -61,7 +61,7 @@ public class TextEdit extends Prototype
         setItemName("TextEdit_" + count);
         count++;
 
-        eventMousePressed.add(this::onMousePressed);
+        eventMousePress.add(this::onMousePressed);
         eventMouseDrag.add(this::onDragging);
         eventKeyPress.add(this::onKeyPress);
         eventKeyRelease.add(this::onKeyRelease);

@@ -40,7 +40,7 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
         setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
         // eventMouseHover.add(press);
-        eventMousePressed.add(press);
+        eventMousePress.add(press);
         InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
         eventMouseDrag.add(dragg);
         count++;

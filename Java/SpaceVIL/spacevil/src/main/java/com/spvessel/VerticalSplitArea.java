@@ -34,7 +34,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
         setStyle(DefaultsService.getDefaultStyle(VerticalSplitArea.class));
 
         InterfaceMouseMethodState h_press = (sender, args) -> onMousePress(sender, args);
-        _splitHolder.eventMousePressed.add(h_press);
+        _splitHolder.eventMousePress.add(h_press);
         InterfaceMouseMethodState h_dragg = (sender, args) -> onDragging(sender, args);
         _splitHolder.eventMouseDrag.add(h_dragg);
     }

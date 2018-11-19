@@ -35,10 +35,12 @@ public class RadioButton extends Prototype implements InterfaceHLayout {
 
         // text
         _text_object = new Label();
+        _text_object.isFocusable = false;
         _text_object.setItemName(getItemName() + "_text_object");
 
         // indicator
         _indicator = new CustomIndicator();
+        _indicator.isFocusable = false;
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.RadioButton"));
         setStyle(DefaultsService.getDefaultStyle(RadioButton.class));
@@ -50,7 +52,7 @@ public class RadioButton extends Prototype implements InterfaceHLayout {
     }
 
     protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        if (args.key == KeyCode.ENTER && eventMouseClick != null) {
+        if (eventMouseClick != null && (args.key == KeyCode.ENTER || args.key == KeyCode.SPACE)) {
             eventMouseClick.execute(this, new MouseArgs());
         }
     }

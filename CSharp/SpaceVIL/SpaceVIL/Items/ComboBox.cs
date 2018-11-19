@@ -25,14 +25,14 @@ namespace SpaceVIL
             count++;
 
             EventKeyPress += OnKeyPress;
-            EventMousePressed += (sender, args) => ShowDropDownList();
+            EventMousePress += (sender, args) => ShowDropDownList();
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBox)));
         }
 
         protected virtual void OnKeyPress(object sender, KeyArgs args)
         {
-            if (args.Scancode == 0x1C)
+            if (args.Key == KeyCode.Enter)
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 
