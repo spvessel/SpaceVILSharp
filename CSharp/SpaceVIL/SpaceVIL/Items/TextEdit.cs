@@ -606,7 +606,8 @@ namespace SpaceVIL
 
         public void PasteText(string pasteStr)
         {
-            PrivPasteText(pasteStr);
+            if (pasteStr != null)
+                PrivPasteText(pasteStr);
         }
 
         private string PrivCutText() {

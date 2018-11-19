@@ -817,7 +817,8 @@ namespace SpaceVIL
 
         public void PasteText(string text)
         {
-            PrivPasteText(text);
+            if (text != null)
+                PrivPasteText(text);
         }
 
         private string PrivCutText()

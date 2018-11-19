@@ -569,7 +569,8 @@ public class TextEdit extends Prototype
     }
 
     public void pasteText(String pasteStr) {
-        privPasteText(pasteStr);
+        if (pasteStr != null)
+            privPasteText(pasteStr);
     }
 
     private String privCutText() {
