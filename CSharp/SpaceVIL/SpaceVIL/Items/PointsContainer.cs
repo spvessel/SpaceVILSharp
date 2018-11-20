@@ -44,7 +44,7 @@ namespace SpaceVIL
         public List<float[]> GetShapePointer()
         {
             if (_shape_pointer == null)
-                return GraphicsMathService.GetEllipse(GetPointThickness() / 2.0f);
+                _shape_pointer = GraphicsMathService.GetEllipse(GetPointThickness() / 2.0f, 16);
             return _shape_pointer;
         }
 

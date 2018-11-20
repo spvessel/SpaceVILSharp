@@ -73,8 +73,9 @@ namespace SpaceVIL
         private Shader _primitive;
         private Shader _texture;
         private Shader _char;
-        private Shader _fxaa;
+        // private Shader _fxaa;
         private Shader _blur;
+        private Shader _clone;
 
         public DrawEngine(WindowLayout handler)
         {
@@ -192,12 +193,13 @@ namespace SpaceVIL
             glEnable(GL_ALPHA_TEST);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_MULTISAMPLE);
+            glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
             //glEnable(GL_DEPTH_TEST);
             //glEnable(GL_STENCIL_TEST);
             ////////////////////////////////////////////////
             _primitive = new Shader("_primitive",
-                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fill.glsl"),
-                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fill.glsl"));
+                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_primitive.glsl"),
+                Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_primitive.glsl"));
             _primitive.Compile();
             if (_primitive.GetProgramID() == 0)
                 Console.WriteLine("Could not create primitive shaders");
@@ -216,18 +218,26 @@ namespace SpaceVIL
             if (_char.GetProgramID() == 0)
                 Console.WriteLine("Could not create char shaders");
             ///////////////////////////////////////////////
-            _fxaa = new Shader("_fxaa",
-            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fxaa.glsl"),
-            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fxaa.glsl"));
-            _fxaa.Compile();
-            if (_fxaa.GetProgramID() == 0)
-                Console.WriteLine("Could not create fxaa shaders");
+            // _fxaa = new Shader("_fxaa",
+            // Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fxaa.glsl"),
+            // Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fxaa.glsl"));
+            // _fxaa.Compile();
+            // if (_fxaa.GetProgramID() == 0)
+            //     Console.WriteLine("Could not create fxaa shaders");
             ///////////////////////////////////////////////
             _blur = new Shader("_blur",
             Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_blur.glsl"),
             Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_blur.glsl"));
             _blur.Compile();
             if (_blur.GetProgramID() == 0)
+                Console.WriteLine("Could not create blur shaders");
+            ///////////////////////////////////////////////
+            _clone = new Shader("_clone",
+            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_points.glsl"),
+            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.gs_points.glsl"),
+            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_primitive.glsl"));
+            _clone.Compile();
+            if (_clone.GetProgramID() == 0)
                 Console.WriteLine("Could not create blur shaders");
 
             Run();
@@ -451,8 +461,8 @@ namespace SpaceVIL
                     if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble && !_handler.GetLayout().IsMaximized)
                     {
                         //resize
-                        if ((xpos < _handler.GetLayout().GetWindow().GetWidth() - 5) && (xpos > 5)
-                            && (ypos < _handler.GetLayout().GetWindow().GetHeight() - 5) && ypos > 5)
+                        if ((xpos < _handler.GetLayout().GetWindow().GetWidth() - 10) && (xpos > 10)
+                            && (ypos < _handler.GetLayout().GetWindow().GetHeight() - 10) && ypos > 10)
                         {
                             if (HoveredItem is ITextEditable)
                                 _handler.SetCursorType(Glfw.CursorType.Beam);
@@ -465,20 +475,20 @@ namespace SpaceVIL
                         }
                         else //refactor!!
                         {
-                            if ((xpos > _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos < 5)
-                             || (xpos > _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos > _handler.GetLayout().GetWindow().GetHeight() - 5)
-                             || (ypos > _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos < 5)
-                             || (ypos > _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos > _handler.GetLayout().GetWindow().GetWidth() - 5)
-                             || (xpos < 5 && ypos < 5))
+                            if ((xpos >= _handler.GetLayout().GetWindow().GetWidth() - 10 && ypos <= 10)
+                             || (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 10 && ypos >= _handler.GetLayout().GetWindow().GetHeight() - 10)
+                             || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 10 && xpos <= 10)
+                             || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 10 && xpos >= _handler.GetLayout().GetWindow().GetWidth() - 10)
+                             || (xpos <= 10 && ypos < 10))
                             {
                                 _handler.SetCursorType(Glfw.CursorType.Crosshair);
                             }
                             else
                             {
-                                if (xpos > _handler.GetLayout().GetWindow().GetWidth() - 5 || xpos < 5)
+                                if (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 10 || xpos < 10)
                                     _handler.SetCursorType(Glfw.CursorType.ResizeX);
 
-                                if (ypos > _handler.GetLayout().GetWindow().GetHeight() - 5 || ypos < 5)
+                                if (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 10 || ypos < 10)
                                     _handler.SetCursorType(Glfw.CursorType.ResizeY);
                             }
                         }
@@ -910,8 +920,8 @@ namespace SpaceVIL
             _double_click_timer.Start();
             while (!_handler.IsClosing())
             {
-                Glfw.WaitEventsTimeout(_interval);
-                // Glfw.PollEvents();
+                // Glfw.WaitEventsTimeout(_interval);
+                Glfw.PollEvents();
                 // Glfw.WaitEvents();
                 // glClearColor(
                 //     (float)_handler.GetLayout().GetBackground().R / 255.0f,
@@ -927,8 +937,9 @@ namespace SpaceVIL
             _primitive.DeleteShader();
             _texture.DeleteShader();
             _char.DeleteShader();
-            _fxaa.DeleteShader();
+            // _fxaa.DeleteShader();
             _blur.DeleteShader();
+            _clone.DeleteShader();
 
             _fbo.ClearFBO();
 
@@ -968,47 +979,52 @@ namespace SpaceVIL
         {
             if (crd_array == null)
                 return;
-            uint[] buffers = new uint[2];
-            glGenBuffers(2, buffers);
+            VRAMVertex stencil = new VRAMVertex();
+            stencil.GenBuffers(crd_array);
+            stencil.SendColor(_primitive, Color.FromArgb(0, 0, 0, 0));
+            stencil.Draw(GL_TRIANGLES);
+            stencil.Clear();
+            // uint[] buffers = new uint[2];
+            // glGenBuffers(2, buffers);
 
-            //Vertex
-            float[] vertexData = new float[crd_array.Count * 3];
+            // //Vertex
+            // float[] vertexData = new float[crd_array.Count * 3];
 
-            for (int i = 0; i < vertexData.Length / 3; i++)
-            {
-                vertexData[i * 3 + 0] = crd_array.ElementAt(i)[0];
-                vertexData[i * 3 + 1] = crd_array.ElementAt(i)[1];
-                vertexData[i * 3 + 2] = crd_array.ElementAt(i)[2];
-            }
+            // for (int i = 0; i < vertexData.Length / 3; i++)
+            // {
+            //     vertexData[i * 3 + 0] = crd_array.ElementAt(i)[0];
+            //     vertexData[i * 3 + 1] = crd_array.ElementAt(i)[1];
+            //     vertexData[i * 3 + 2] = crd_array.ElementAt(i)[2];
+            // }
 
-            glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
-            glEnableVertexAttribArray(0);
+            // glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            // glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+            // glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
+            // glEnableVertexAttribArray(0);
 
-            //Color
-            float[] argb = { 0.0f, 0.0f, 0.0f, 0.0f };
-            float[] colorData = new float[crd_array.Count * 4];
-            for (int i = 0; i < colorData.Length / 4; i++)
-            {
-                colorData[i * 4 + 0] = argb[0];
-                colorData[i * 4 + 1] = argb[1];
-                colorData[i * 4 + 2] = argb[2];
-                colorData[i * 4 + 3] = argb[3];
-            }
-            glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
-            glEnableVertexAttribArray(1);
+            // //Color
+            // float[] argb = { 0.0f, 0.0f, 0.0f, 0.0f };
+            // float[] colorData = new float[crd_array.Count * 4];
+            // for (int i = 0; i < colorData.Length / 4; i++)
+            // {
+            //     colorData[i * 4 + 0] = argb[0];
+            //     colorData[i * 4 + 1] = argb[1];
+            //     colorData[i * 4 + 2] = argb[2];
+            //     colorData[i * 4 + 3] = argb[3];
+            // }
+            // glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+            // glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
+            // glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
+            // glEnableVertexAttribArray(1);
 
-            // draw
-            glDrawArrays(GL_TRIANGLES, 0, crd_array.Count);
+            // // draw
+            // glDrawArrays(GL_TRIANGLES, 0, crd_array.Count);
 
-            glDisableVertexAttribArray(0);
-            glDisableVertexAttribArray(1);
+            // glDisableVertexAttribArray(0);
+            // glDisableVertexAttribArray(1);
 
-            // Clear VBO and shader
-            glDeleteBuffers(2, buffers);
+            // // Clear VBO and shader
+            // glDeleteBuffers(2, buffers);
         }
 
         private bool CheckOutsideBorders(IBaseItem shell)
@@ -1182,8 +1198,7 @@ namespace SpaceVIL
             }
 
             //Vertex
-            List<float[]> crd_array;
-            crd_array = shell.MakeShape();
+            List<float[]> crd_array = shell.MakeShape();
             if (crd_array == null)
                 return;
 
@@ -1195,7 +1210,8 @@ namespace SpaceVIL
             }
 
             VRAMVertex store = new VRAMVertex();
-            store.GenBuffers(crd_array, shell.GetBackground());
+            store.GenBuffers(crd_array);
+            store.SendColor(_primitive, shell.GetBackground());
             store.Draw(GL_TRIANGLES);
             store.Clear();
 
@@ -1272,7 +1288,7 @@ namespace SpaceVIL
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
             store.Bind(fbo_texture);
-            store.SendUniformSample2D(_blur);
+            store.SendUniformSample2D(_blur, "tex");
             store.SendUniform1fv(_blur, "weights", 5, weights);
             store.SendUniform2fv(_blur, "frame", new float[2] { _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight() });
             store.SendUniform1f(_blur, "res", (res * 1f / 10));
@@ -1317,7 +1333,7 @@ namespace SpaceVIL
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1, true);
             store.GenTexture(bb_w, bb_h, bb);
-            store.SendUniformSample2D(_char);
+            store.SendUniformSample2D(_char, "tex");
             store.SendUniform4f(_char, "rgb", argb);
             store.Draw();
             store.Clear();
@@ -1328,29 +1344,54 @@ namespace SpaceVIL
             if (item.GetPointColor().A == 0)
                 return;
 
-            uint[] buffers = new uint[2];
-            glGenBuffers(2, buffers);
-
             List<float[]> crd_array = item.MakeShape();
             if (crd_array == null)
                 return;
             CheckOutsideBorders(item as IBaseItem);
 
-            List<float[]> result = new List<float[]>();
-            foreach (var shape in crd_array)
+            List<float[]> point = item.GetShapePointer();
+            float center_offset = item.GetPointThickness() / 2.0f;
+            float[] result = new float[point.Count * crd_array.Count * 3];
+            int skew = 0;
+            foreach (float[] shape in crd_array)
             {
-                result.AddRange(GraphicsMathService.MoveShape(
-                    item.GetShapePointer(),
-                    shape[0] - item.GetPointThickness() / 2.0f,
-                    shape[1] - item.GetPointThickness() / 2.0f
-                    ));
+                List<float[]> fig = GraphicsMathService.ToGL(GraphicsMathService.MoveShape(point, shape[0] - center_offset, shape[1] - center_offset),
+                    _handler.GetLayout());
+                for (int i = 0; i < fig.Count; i++)
+                {
+                    result[skew + i * 3 + 0] = fig[i][0];
+                    result[skew + i * 3 + 1] = fig[i][1];
+                    result[skew + i * 3 + 2] = fig[i][2];
+                }
+                skew += fig.Count * 3;
             }
-            result = GraphicsMathService.ToGL(result, _handler.GetLayout());
-
             VRAMVertex store = new VRAMVertex();
-            store.GenBuffers(result, item.GetPointColor());
+            store.GenBuffers(result);
+            store.SendColor(_primitive, item.GetPointColor());
             store.Draw(GL_TRIANGLES);
             store.Clear();
+            
+            ////////////////////////////////////////
+            // _clone.UseShader();
+            // List<float[]> point = GraphicsMathService.ToGL(item.GetShapePointer().Distinct().ToList(), _handler.GetLayout());//item.GetShapePointer().Distinct().ToList(); //
+            // float[] result = new float[point.Count * 2];
+            // for (int i = 0; i < result.Length / 2; i++)
+            // {
+            //     result[i * 2 + 0] = point.ElementAt(i)[0];
+            //     result[i * 2 + 1] = point.ElementAt(i)[1];
+            //     // Console.WriteLine(result[i * 2 + 0] + " " + result[i * 2 + 1]);
+            // }
+
+            // VRAMVertex store = new VRAMVertex();
+            // store.SendColor(_clone, item.GetPointColor());
+            // store.GenBuffers(GraphicsMathService.ToGL(crd_array, _handler.GetLayout()));
+            // store.SendUniform1i(_clone, "size", point.Count);
+            // store.SendUniform2fv(_clone, "shape", result);
+            // store.Draw(GL_POINTS);
+            // store.Clear();
+            // crd_array.Clear();
+            // _primitive.UseShader();
+            ////////////////////////////////////////
         }
 
         void DrawLines(ILine item)
@@ -1364,9 +1405,11 @@ namespace SpaceVIL
             CheckOutsideBorders(item as IBaseItem);
 
             VRAMVertex store = new VRAMVertex();
-            store.GenBuffers(crd_array, item.GetLineColor());
+            store.GenBuffers(crd_array);
+            store.SendColor(_primitive, item.GetLineColor());
             store.Draw(GL_LINE_STRIP);
             store.Clear();
+            crd_array.Clear();
         }
 
         void DrawImage(ImageItem image)
@@ -1387,7 +1430,7 @@ namespace SpaceVIL
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
             store.GenTexture(w, h, bitmap);
-            store.SendUniformSample2D(_texture);
+            store.SendUniformSample2D(_texture, "tex");
             store.Draw();
             store.Clear();
         }
@@ -1442,7 +1485,8 @@ namespace SpaceVIL
                 new float[] {-1.0f,  1.0f,   0.0f}
             };
             VRAMVertex store = new VRAMVertex();
-            store.GenBuffers(vertex, Color.FromArgb(150, 0, 0, 0));
+            store.GenBuffers(vertex);
+            store.SendColor(_primitive, Color.FromArgb(150, 0, 0, 0));
             store.Draw(GL_TRIANGLES);
             store.Clear();
         }
