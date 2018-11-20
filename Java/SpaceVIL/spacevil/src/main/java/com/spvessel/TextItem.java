@@ -5,37 +5,40 @@ import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.SizePolicy;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
-public abstract class TextItem extends Primitive {
+abstract class TextItem extends Primitive {
     private List<Float> _alphas;
     private List<Float> _interCoords;
     private float[] _coordinates;
     private float[] _colors;
     private String _itemText = "";
-    // private bool _needToGl = false;
 
     private Font _font = DefaultsService.getDefaultFont();
 
-    // private bool _criticalFlag = true;
-    // private bool _coordsFlag = true;
-    // private bool _colorFlag = true;
     static int count = 0;
+    private int queueCapacity = 512;
 
-    public TextItem() {
+    TextItem() {
         setItemName("TextItem_" + count);
         setBackground(new Color(0, 0, 0, 0));
         setWidthPolicy(SizePolicy.EXPAND);
         setHeightPolicy(SizePolicy.EXPAND);
         count++;
+        undoQueue = new ArrayDeque<>();
+        redoQueue = new ArrayDeque<>();
     }
 
-    public TextItem(String text, Font font, String name) {
+    TextItem(String text, Font font) {
         this();
         _itemText = text;
         _font = font;
+    }
+
+    TextItem(String text, Font font, String name) {
+        this(text, font);
+        setItemName(name);
     }
 
     protected void setRealCoords(List<Float> realCoords) {
@@ -51,11 +54,41 @@ public abstract class TextItem extends Primitive {
         return _itemText;
     }
 
-    public void setItemText(String itemText) {
+    void setItemText(String itemText) {
         if (!_itemText.equals(itemText)) {
+            if (isUndo) {
+                if (redoQueue.size() > queueCapacity)
+                    redoQueue.pollLast();
+
+                redoQueue.addFirst(_itemText);
+                isUndo = false;
+            }
+            else {
+                if (undoQueue.size() > queueCapacity)
+                    undoQueue.pollLast();
+
+                undoQueue.addFirst(_itemText);
+            }
             _itemText = itemText;
             updateData();
         }
+    }
+
+    private boolean isUndo = false;
+    private ArrayDeque<String> undoQueue;
+    void undo() {
+        String tmpText = undoQueue.pollFirst();
+        if (tmpText != null) {
+            isUndo = true;
+            setItemText(tmpText);
+        }
+    }
+
+    private ArrayDeque<String> redoQueue;
+    void redo() {
+        String tmpText = redoQueue.pollFirst();
+        if (tmpText != null)
+            setItemText(tmpText);
     }
 
     Font getFont() {

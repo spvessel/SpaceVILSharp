@@ -631,7 +631,8 @@ namespace SpaceVIL
                         }
                         // Console.WriteLine(FocusedItem.GetItemName());
                         if (is_double_click)
-                            AssignActions(InputEventType.MouseDoubleClick, _margs, FocusedItem);
+                            if (FocusedItem != null)
+                                AssignActions(InputEventType.MouseDoubleClick, _margs, FocusedItem);
                             //FocusedItem?.EventMouseDoubleClick?.Invoke(FocusedItem, _margs);
                     }
 
@@ -802,6 +803,14 @@ namespace SpaceVIL
                 {
                     string cut_str = (FocusedItem as ITextShortcuts).CutText();
                     Glfw.SetClipboardString(_handler.GetWindowId(), cut_str);
+                }
+                else if (mods == KeyMods.Control && key == KeyCode.Z)
+                {
+                    (FocusedItem as ITextShortcuts).Undo();
+                }
+                else if (mods == KeyMods.Control && key == KeyCode.Y)
+                {
+                    (FocusedItem as ITextShortcuts).Redo();
                 }
                 else
                 {

@@ -595,5 +595,4 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     void setAllowHeight(int allowHeight) {
         _parentAllowHeight = allowHeight;
     }
-
 }

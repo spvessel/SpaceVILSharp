@@ -6,4 +6,8 @@ public interface InterfaceTextShortcuts {
     String getSelectedText();
 
     String cutText();
+
+    void undo();
+
+    void redo();
 }

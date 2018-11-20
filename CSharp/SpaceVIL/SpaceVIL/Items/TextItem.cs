@@ -6,52 +6,44 @@ using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
-    abstract public class TextItem : Primitive
+    abstract internal class TextItem : Primitive
     {
         private List<float> _alphas;
         private List<float> _interCoords;
         private float[] _coordinates;
         private float[] _colors;
         private String _itemText = "";
-        //private bool _needToGl = false;
 
         private Font _font = DefaultsService.GetDefaultFont();
 
-        //private bool _criticalFlag = true;
-        //private bool _coordsFlag = true;
-        //private bool _colorFlag = true;
         static int count = 0;
-        public TextItem()
-        {
-            // SetFont(DefaultsService.GetDefaultFont());
+        private int queueCapacity = 512;
 
+        internal TextItem()
+        {
             SetItemName("TextItem_" + count);
             SetBackground(Color.Transparent);
             SetWidthPolicy(SizePolicy.Expand);
             SetHeightPolicy(SizePolicy.Expand);
             count++;
+            undoQueue = new LinkedList<string>();
+            redoQueue = new LinkedList<string>();
         }
 
-        public TextItem(String text, Font font, String name) : this()
+        internal TextItem(String text, Font font) : this()
         {
             _itemText = text;
             _font = font;
         }
 
+        internal TextItem(String text, Font font, String name) : this(text, font)
+        {
+            SetItemName(name);
+        }
+
         protected void SetRealCoords(List<float> realCoords)
         {
-            /*
-            if (GetHandler() == null)
-            {
-                _interCoords = realCoords;
-                _needToGl = true;
-            }
-            else
-            {*/
             _coordinates = ToGL(realCoords);
-            //    _needToGl = false;
-            //}
-            // _coordinates = realCoords.ToArray();//ToGL(realCoords);
         }
 
         protected void SetAlphas(List<float> alphas)
@@ -64,19 +56,56 @@ namespace SpaceVIL
         {
             return _itemText;
         }
+
         internal void SetItemText(String itemText)
         {
             if (!_itemText.Equals(itemText))
             {
+                if (isUndo)
+                {
+                    if (redoQueue.Count > queueCapacity)
+                        redoQueue.RemoveLast();
+
+                    redoQueue.AddFirst(_itemText);
+                    isUndo = false;
+                }
+                else
+                {
+                    if (undoQueue.Count > queueCapacity)
+                        undoQueue.RemoveLast();
+
+                    undoQueue.AddFirst(_itemText);
+                }
                 _itemText = itemText;
-                UpdateData(); //_criticalFlag = true;
+                UpdateData();
+            }
+        }
+
+        private bool isUndo = false;
+        private LinkedList<string> undoQueue;
+        internal void Undo() {
+            if (undoQueue.Count > 0)
+            {
+                string tmpText = undoQueue.First.Value;
+                undoQueue.RemoveFirst();
+                isUndo = true;
+                SetItemText(tmpText);
+            }
+        }
+
+        private LinkedList<string> redoQueue;
+        internal void Redo() {
+            if (redoQueue.Count > 0) {
+                string tmpText = redoQueue.First.Value;            
+                redoQueue.RemoveFirst();
+                SetItemText(tmpText);
             }
         }
 
         internal Font GetFont()
         {
             // if(_font == null)
-            //     _font = DefaultsService.GetDefaultFont();
+            // _font = DefaultsService.GetDefaultFont();
             return _font;
         }
         internal void SetFont(Font font)
@@ -85,7 +114,7 @@ namespace SpaceVIL
             if (_font != font)
             {
                 _font = font;
-                UpdateData(); //_criticalFlag = true;
+                UpdateData();
             }
         }
         internal void SetFontSize(int size)
@@ -93,7 +122,7 @@ namespace SpaceVIL
             if (_font.Size != size)
             {
                 _font = new Font(_font.FontFamily, size, _font.Style);
-                UpdateData(); //_criticalFlag = true;
+                UpdateData();
             }
         }
         internal void SetFontStyle(FontStyle style)
@@ -101,7 +130,7 @@ namespace SpaceVIL
             if (_font.Style != style)
             {
                 _font = new Font(_font.FontFamily, _font.Size, style);
-                UpdateData(); //_criticalFlag = true;
+                UpdateData();
             }
         }
         internal void SetFontFamily(FontFamily font_family)
@@ -109,31 +138,15 @@ namespace SpaceVIL
             if (_font.FontFamily != font_family)
             {
                 _font = new Font(font_family, _font.Size, _font.Style);
-                UpdateData(); //_criticalFlag = true;
+                UpdateData();
             }
         }
 
-        public abstract void UpdateData(); //UpdateType updateType);
+        public abstract void UpdateData();
         //protected abstract void UpdateCoords();
 
         internal float[] GetCoordinates()
         {
-            /*
-            if (_criticalFlag)
-            {
-                UpdateData(UpdateType.Critical);
-                _criticalFlag = false;
-                _coordsFlag = false;
-            }
-            else if (_coordsFlag)
-            {
-                UpdateData(UpdateType.CoordsOnly);
-                _coordsFlag = false;
-            }
-            */
-
-            //if (_needToGl) SetRealCoords(_interCoords);
-
             return _coordinates;
         }
 

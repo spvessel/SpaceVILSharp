@@ -68,6 +68,7 @@ public class TextEdit extends Prototype
         eventTextInput.add(this::onTextInput);
         eventScrollUp.add(this::onScrollUp);
         eventScrollDown.add(this::onScrollDown);
+        eventMouseDoubleClick.add(this::onMouseDoubleClick);
 
         ShiftValCodes = new LinkedList<>(Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME));
         InsteadKeyMods = new LinkedList<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
@@ -75,6 +76,10 @@ public class TextEdit extends Prototype
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.TextEdit"));
         setStyle(DefaultsService.getDefaultStyle(TextEdit.class));
+    }
+
+    private void onMouseDoubleClick(Object sender, MouseArgs args) {
+        selectAll();
     }
 
     private void onMousePressed(Object sender, MouseArgs args) {
@@ -674,5 +679,15 @@ public class TextEdit extends Prototype
         } finally {
             textInputLock.unlock();
         }
+    }
+
+    public void undo() {
+        _text_object.undo();
+        replaceCursor();
+    }
+
+    public void redo() {
+        _text_object.redo();
+        replaceCursor();
     }
 }

@@ -55,6 +55,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         eventTextInput.add(this::onTextInput);
         eventMousePress.add(this::onMousePressed);
         eventMouseDrag.add(this::onDragging);
+        eventMouseDoubleClick.add(this::onMouseDoubleClick);
 
         ShiftValCodes = new LinkedList<>(Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME));
         InsteadKeyMods = new LinkedList<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
@@ -62,6 +63,21 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
         // setStyle(DefaultsService.getDefaultStyle(TextEncrypt.class));
        // _text_object.setTextAlignment(new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER)));
+    }
+
+    private void onMouseDoubleClick(InterfaceItem sender, MouseArgs args) {
+        textInputLock.lock();
+        try {
+            _selectFrom = 0;
+            _cursor_position = getText().length();
+            _selectTo = _cursor_position;
+            replaceCursor();
+
+            _isSelect = true;
+            makeSelectedArea(_selectFrom, _selectTo);
+        } finally {
+            textInputLock.unlock();
+        }
     }
 
     private void onMousePressed(InterfaceItem sender, MouseArgs args) {
