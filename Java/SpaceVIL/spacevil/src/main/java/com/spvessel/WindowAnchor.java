@@ -8,5 +8,6 @@ public class WindowAnchor extends Prototype implements InterfaceWindowAnchor {
     public WindowAnchor() {
         setItemName("WindowAnchor_" + count);
         count++;
+        isFocusable = false;
     }
 }

@@ -21,6 +21,7 @@ namespace SpaceVIL
             SetItemName("Label_" + count);
             count++;
             _text_object = new TextLine();
+            IsFocusable = false;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Label)));
         }

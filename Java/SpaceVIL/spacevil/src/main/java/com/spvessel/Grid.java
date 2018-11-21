@@ -18,6 +18,7 @@ public class Grid extends Prototype implements InterfaceGrid {
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Grid"));
         setStyle(DefaultsService.getDefaultStyle(Grid.class));
+        isFocusable = false;
     }
 
     public Grid(int rows, int columns) {

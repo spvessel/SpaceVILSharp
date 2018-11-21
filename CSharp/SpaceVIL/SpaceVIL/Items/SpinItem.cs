@@ -14,8 +14,8 @@ namespace SpaceVIL
         static int count = 0;
         private HorizontalStack _horzStack = new HorizontalStack();
         private VerticalStack _vertStack = new VerticalStack();
-        public ButtonCore upButton = new ButtonCore();
-        public ButtonCore downButton = new ButtonCore();
+        public ButtonCore UpButton = new ButtonCore();
+        public ButtonCore DownButton = new ButtonCore();
         internal TextEditRestricted textInput = new TextEditRestricted();
         public SpinItem()
         {
@@ -25,9 +25,11 @@ namespace SpaceVIL
             textInput.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SpinItem)));
-            
-            upButton.EventMouseClick += OnUpClick;
-            downButton.EventMouseClick += OnDownClick;
+            UpButton.IsFocusable = false;
+            DownButton.IsFocusable = false;
+
+            UpButton.EventMouseClick += OnUpClick;
+            DownButton.EventMouseClick += OnDownClick;
 
             EventScrollUp = OnUpClick;
             EventScrollDown = OnDownClick;
@@ -62,7 +64,7 @@ namespace SpaceVIL
         {
             AddItem(_horzStack);
             _horzStack.AddItems(textInput, _vertStack);
-            _vertStack.AddItems(upButton, downButton);
+            _vertStack.AddItems(UpButton, DownButton);
         }
 
         public override void SetStyle(Style style)
@@ -79,12 +81,12 @@ namespace SpaceVIL
             inner_style = style.GetInnerStyle("uparrow");
             if (inner_style != null)
             {
-                upButton.SetStyle(inner_style);
+                UpButton.SetStyle(inner_style);
             }
             inner_style = style.GetInnerStyle("downarrow");
             if (inner_style != null)
             {
-                downButton.SetStyle(inner_style);
+                DownButton.SetStyle(inner_style);
             }
             inner_style = style.GetInnerStyle("textedit");
             if (inner_style != null)

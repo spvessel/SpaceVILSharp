@@ -20,6 +20,7 @@ namespace SpaceVIL
             EventMousePress += OnMousePress;
             EventMouseDrag += OnDragging;
             count++;
+            IsFocusable = false;
         }
 
         protected virtual void OnMousePress(object sender, MouseArgs args)

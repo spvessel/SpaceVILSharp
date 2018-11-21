@@ -29,6 +29,7 @@ namespace SpaceVIL
             _rect = new Rectangle();
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ProgressBar)));
+            IsFocusable = false;
         }
 
         public override void InitElements()

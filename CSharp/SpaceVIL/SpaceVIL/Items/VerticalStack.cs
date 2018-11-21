@@ -13,6 +13,8 @@ namespace SpaceVIL
             SetItemName("VerticalStack_" + count);
             count++;
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.VerticalStack)));
+            IsFocusable = false;
+
         }
 
         //overrides

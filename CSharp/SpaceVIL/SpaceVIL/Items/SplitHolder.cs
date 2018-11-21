@@ -20,6 +20,7 @@ namespace SpaceVIL
             _orientation = orientation;
             SetItemName("SplitHolder_" + count);
             count++;
+            IsFocusable = false;
             MakeHolderShape();
         }
 

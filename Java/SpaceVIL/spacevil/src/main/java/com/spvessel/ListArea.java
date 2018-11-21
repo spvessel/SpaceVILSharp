@@ -203,8 +203,10 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     @Override
     public void insertItem(InterfaceBaseItem item, int index) {
-        if (item instanceof Prototype)
-            ((Prototype) item).isFocusable = false;
+        if (item instanceof Prototype) {
+            if (!(item instanceof InterfaceTextEditable))
+                ((Prototype) item).isFocusable = false;
+        }
         item.setDrawable(false);
         super.insertItem(item, index);
         updateLayout();

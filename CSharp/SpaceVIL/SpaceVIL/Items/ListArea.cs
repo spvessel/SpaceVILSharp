@@ -176,12 +176,12 @@ namespace SpaceVIL
             int index = GetSelection();
             switch (args.Key)
             {
-                case KeyCode.Backspace:
-                foreach (var _ in GetItems())
-                {
-                    Console.WriteLine(_.GetItemName() + " " + _.IsVisible() + " " + _.IsDrawable() + " " + GetItems().IndexOf(_));
-                }
-                break;
+                // case KeyCode.Backspace:
+                //     foreach (var _ in GetItems())
+                //     {
+                //         Console.WriteLine(_.GetItemName() + " " + _.IsVisible() + " " + _.IsDrawable() + " " + GetItems().IndexOf(_));
+                //     }
+                //     break;
 
                 case KeyCode.Up:
                     index--;
@@ -241,7 +241,10 @@ namespace SpaceVIL
         {
             Prototype tmp = item as Prototype;
             if (tmp != null)
-                tmp.IsFocusable = false;
+            {
+                if (!(tmp is ITextEditable))
+                    tmp.IsFocusable = false;
+            }
 
             item.SetDrawable(false);
             base.AddItem(item);

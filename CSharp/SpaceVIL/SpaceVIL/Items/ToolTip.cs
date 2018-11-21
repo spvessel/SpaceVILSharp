@@ -35,6 +35,7 @@ namespace SpaceVIL
 
             // SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ToolTip)));
             SetStyle(Style.GetToolTipStyle());
+            IsFocusable = false;
         }
         public void SetTextAlignment(ItemAlignment alignment)
         {

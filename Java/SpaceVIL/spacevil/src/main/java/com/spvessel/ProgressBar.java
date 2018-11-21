@@ -27,6 +27,7 @@ public class ProgressBar extends Prototype {
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ProgressBar"));
         setStyle(DefaultsService.getDefaultStyle(ProgressBar.class));
+        isFocusable = false;
     }
 
     @Override

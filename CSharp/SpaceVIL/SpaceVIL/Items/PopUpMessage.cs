@@ -36,9 +36,9 @@ namespace SpaceVIL
             _text_object.SetItemText(message);
             count++;
 
-
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.PopUpMessage)));
             handler.GetWindow().AddItem(this);
+            SetPassEvents(false);
         }
         public void SetTextAlignment(ItemAlignment alignment)
         {

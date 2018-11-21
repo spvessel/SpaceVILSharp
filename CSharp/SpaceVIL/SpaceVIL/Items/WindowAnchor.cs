@@ -10,6 +10,7 @@ namespace SpaceVIL
         {
             SetItemName("WindowAnchor_" + count);
             count++;
+            IsFocusable = false;
         }
     }
 }

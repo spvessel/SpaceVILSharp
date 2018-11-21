@@ -18,6 +18,7 @@ public class Label extends Prototype {
         _text_object = new TextLine();
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Label"));
         setStyle(DefaultsService.getDefaultStyle(Label.class));
+        isFocusable = false;
     }
 
     public Label(String text) {

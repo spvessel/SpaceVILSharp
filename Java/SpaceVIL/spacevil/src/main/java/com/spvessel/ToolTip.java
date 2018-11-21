@@ -65,6 +65,7 @@ final class ToolTip extends Prototype {
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ToolTip"));
         setStyle(Style.getToolTipStyle());
+        isFocusable = false;
     }
 
     @Override

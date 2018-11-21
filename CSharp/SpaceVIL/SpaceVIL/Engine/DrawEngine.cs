@@ -37,6 +37,7 @@ namespace SpaceVIL
                 HoveredItem.SetMouseHover(false);
             HoveredItem = null;
             HoveredItems.Clear();
+            UnderFocusedItem.Clear();
         }
 
         private ToolTip _tooltip = new ToolTip();
@@ -47,6 +48,7 @@ namespace SpaceVIL
         private TextInputArgs _tiargs = new TextInputArgs();
 
         private List<Prototype> HoveredItems;
+        private List<Prototype> UnderFocusedItem;
         private Prototype HoveredItem = null;
         private Prototype FocusedItem = null;
         public Prototype GetFocusedItem()
@@ -639,10 +641,11 @@ namespace SpaceVIL
                                 focused_list.Remove(f);
                             }
                         }
+                        UnderFocusedItem = new List<Prototype>(HoveredItems);
                         // Console.WriteLine(FocusedItem.GetItemName());
                         if (is_double_click)
                             AssignActions(InputEventType.MouseDoubleClick, _margs, FocusedItem);
-                            //FocusedItem?.EventMouseDoubleClick?.Invoke(FocusedItem, _margs);
+                        //FocusedItem?.EventMouseDoubleClick?.Invoke(FocusedItem, _margs);
                     }
 
                     if (HoveredItem is IWindow)
@@ -770,10 +773,10 @@ namespace SpaceVIL
         {
             _tooltip.InitTimer(false);
 
-            List<Prototype> tmp = new List<Prototype>(HoveredItems);
-            tmp.Reverse();
-            foreach (var item in tmp)
+            Stack<Prototype> tmp = new Stack<Prototype>(HoveredItems);
+            while (tmp.Count > 0)
             {
+                Prototype item = tmp.Pop();
                 if (dy > 0 || dx < 0)
                     item.EventScrollUp?.Invoke(item, _margs);
                 if (dy < 0 || dx > 0)
@@ -831,6 +834,13 @@ namespace SpaceVIL
                     AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
                 if (action == InputState.Release)
                     AssignActions(InputEventType.KeyRelease, _kargs, FocusedItem);
+
+                // if (action == InputState.Press)
+                //     AssignActions(InputEventType.KeyPress, _kargs, false);
+                // if (action == InputState.Repeat)
+                //     AssignActions(InputEventType.KeyPress, _kargs, false);
+                // if (action == InputState.Release)
+                //     AssignActions(InputEventType.KeyRelease, _kargs, false);
             }
         }
 
@@ -877,17 +887,39 @@ namespace SpaceVIL
             }
             _handler.GetLayout().ExecutePollActions();
         }
-        private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender)
+        private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender, bool is_pass_under = false)
         {
             if (sender.IsDisabled())
                 return;
 
-            _handler.GetLayout().SetEventTask(new EventTask()
+            if (!is_pass_under)
             {
-                Item = sender,
-                Action = action,
-                Args = args
-            });
+                _handler.GetLayout().SetEventTask(new EventTask()
+                {
+                    Item = sender,
+                    Action = action,
+                    Args = args
+                });
+            }
+            else
+            {
+                Stack<Prototype> tmp = new Stack<Prototype>(UnderFocusedItem);
+                while (tmp.Count != 0)
+                {
+                    Prototype item = tmp.Pop();
+                    if (item.Equals(FocusedItem) && FocusedItem.IsDisabled())
+                        continue;//пропустить
+
+                    _handler.GetLayout().SetEventTask(new EventTask()
+                    {
+                        Item = item,
+                        Action = action,
+                        Args = args
+                    });
+                    if (!item.IsPassEvents(action))
+                        break;//остановить передачу событий последующим элементам
+                }
+            }
             _handler.GetLayout().ExecutePollActions();
         }
 
@@ -1361,7 +1393,7 @@ namespace SpaceVIL
             store.SendColor(_primitive, item.GetPointColor());
             store.Draw(GL_TRIANGLES);
             store.Clear();
-            
+
             ////////////////////////////////////////
             // _clone.UseShader();
             // List<float[]> point = GraphicsMathService.ToGL(item.GetShapePointer().Distinct().ToList(), _handler.GetLayout());//item.GetShapePointer().Distinct().ToList(); //

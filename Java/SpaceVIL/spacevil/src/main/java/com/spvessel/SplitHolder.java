@@ -17,6 +17,7 @@ public class SplitHolder extends Prototype implements InterfaceDraggable {
         _orientation = orientation;
         setItemName("SplitHolder_" + count);
         count++;
+        isFocusable = false;
         makeHolderShape();
     }
 

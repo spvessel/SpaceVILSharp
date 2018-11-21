@@ -12,6 +12,7 @@ namespace SpaceVIL
             count++;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Frame)));
+            IsFocusable = false;
         }
 
         internal override bool GetHoverVerification(float xpos, float ypos)

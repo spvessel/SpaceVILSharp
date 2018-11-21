@@ -40,6 +40,7 @@ public class PopUpMessage extends Prototype {
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.PopUpMessage"));
         setStyle(DefaultsService.getDefaultStyle(PopUpMessage.class));
         handler.getWindow().addItem(this);
+        setPassEvents(false);
     }
 
     // text init

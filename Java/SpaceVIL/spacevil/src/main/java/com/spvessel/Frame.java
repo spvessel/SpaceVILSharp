@@ -10,6 +10,7 @@ public class Frame extends Prototype {
         count++;
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Frame"));
         setStyle(DefaultsService.getDefaultStyle(Frame.class));
+        isFocusable = false;
     }
 
     @Override

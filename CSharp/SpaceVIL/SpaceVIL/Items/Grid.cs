@@ -19,6 +19,7 @@ namespace SpaceVIL
             count++;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Grid)));
+            IsFocusable = false;
         }
 
         public Grid(int rows, int columns) : this()

@@ -49,10 +49,14 @@ public class TitleBar extends WindowAnchor {
         _layout = new HorizontalStack();
         _text_object = new Label();
         _minimize = new ButtonCore();
+        _minimize.isFocusable = false;
         _maximize = new ButtonCore();
+        _maximize.isFocusable = false;
         _maximize.setItemName("MAXIMIZE");
         _close = new ButtonCore();
+        _close.isFocusable = false;
         _icon = new ImageItem();
+        _icon.isFocusable = false;
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.TitleBar"));
         setStyle(DefaultsService.getDefaultStyle(TitleBar.class));

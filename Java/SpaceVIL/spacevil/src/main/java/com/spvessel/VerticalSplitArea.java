@@ -32,7 +32,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
         count++;
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalSplitArea"));
         setStyle(DefaultsService.getDefaultStyle(VerticalSplitArea.class));
-
+        isFocusable = false;
         InterfaceMouseMethodState h_press = (sender, args) -> onMousePress(sender, args);
         _splitHolder.eventMousePress.add(h_press);
         InterfaceMouseMethodState h_dragg = (sender, args) -> onDragging(sender, args);

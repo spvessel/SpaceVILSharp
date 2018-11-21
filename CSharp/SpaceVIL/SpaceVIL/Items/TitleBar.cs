@@ -41,9 +41,13 @@ namespace SpaceVIL
             _layout = new HorizontalStack();
             _text_object = new Label();
             _minimize = new ButtonCore();
+            _minimize.IsFocusable = false;
             _maximize = new ButtonCore();
+            _maximize.IsFocusable = false;
             _close = new ButtonCore();
+            _close.IsFocusable = false;
             _icon = new ImageItem();
+            _icon.IsFocusable = false;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TitleBar)));
         }

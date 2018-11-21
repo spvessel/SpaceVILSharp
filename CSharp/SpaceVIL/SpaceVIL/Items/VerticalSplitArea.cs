@@ -35,7 +35,7 @@ namespace SpaceVIL
             SetItemName("VSplitArea_" + count);
             count++;
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.VerticalSplitArea)));
-
+            IsFocusable = false;
             _splitHolder.EventMouseDrag += OnDragging;
             _splitHolder.EventMousePress += OnMousePress;
         }

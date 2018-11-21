@@ -13,6 +13,7 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
         count++;
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalStack"));
         setStyle(DefaultsService.getDefaultStyle(VerticalStack.class));
+        isFocusable = false;
     }
 
     // overrides

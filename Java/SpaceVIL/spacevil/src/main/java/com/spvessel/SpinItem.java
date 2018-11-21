@@ -20,7 +20,11 @@ public class SpinItem extends Prototype {
         textInput.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
 
         setStyle(DefaultsService.getDefaultStyle(SpinItem.class));
+
+        upButton.isFocusable = false;
         upButton.eventMouseClick.add(this::onUpClick);
+
+        downButton.isFocusable = false;
         downButton.eventMouseClick.add(this::onDownClick);
 
         eventScrollUp.add(this::onUpClick);

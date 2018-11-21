@@ -13,6 +13,7 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
         count++;
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.HorizontalStack"));
         setStyle(DefaultsService.getDefaultStyle(HorizontalStack.class));
+        isFocusable = false;
     }
 
     // overrides
