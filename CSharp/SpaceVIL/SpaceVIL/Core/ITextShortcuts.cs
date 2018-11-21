@@ -11,5 +11,7 @@ namespace SpaceVIL.Core
         void PasteText(string pasteStr);
         string GetSelectedText();
         string CutText();
+        void Undo();
+        void Redo();
     }
 }

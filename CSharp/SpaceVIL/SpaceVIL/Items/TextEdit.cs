@@ -69,12 +69,17 @@ namespace SpaceVIL
             EventTextInput += OnTextInput;
             EventScrollUp += OnScrollUp;
             EventScrollDown += OnScrollDown;
+            EventMouseDoubleClick += OnMouseDoubleClick;
 
             ShiftValCodes = new List<KeyCode>() { KeyCode.Left, KeyCode.Right, KeyCode.End, KeyCode.Home };
             InsteadKeyMods = new List<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl, 
                 KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
             
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextEdit)));
+        }
+
+        private void OnMouseDoubleClick(object sender, MouseArgs args) {
+            SelectAll();
         }
 
         private void OnMousePressed(object sender, MouseArgs args)
@@ -729,5 +734,16 @@ namespace SpaceVIL
             }
         }
 
+        public void Undo()
+        {
+            _text_object.Undo();
+            ReplaceCursor();
+        }
+
+        public void Redo()
+        {
+            _text_object.Redo();
+            ReplaceCursor();
+        }
     }
 }

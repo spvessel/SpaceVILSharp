@@ -821,6 +821,10 @@ public final class DrawEngine {
             } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.X.getValue()) {
                 String cut_str = ((InterfaceTextShortcuts) focusedItem).cutText();
                 glfwSetClipboardString(_handler.getWindowId(), cut_str);
+            } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.Z.getValue()) {
+                ((InterfaceTextShortcuts) focusedItem).undo();
+            } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.Y.getValue()) {
+                ((InterfaceTextShortcuts) focusedItem).redo();
             } else {
                 if (action == InputState.PRESS.getValue())
                     focusedItem.eventKeyPress.execute(focusedItem, _kargs); //assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);

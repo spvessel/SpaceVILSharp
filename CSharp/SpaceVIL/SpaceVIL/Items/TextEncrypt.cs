@@ -50,12 +50,31 @@ namespace SpaceVIL
             EventTextInput += OnTextInput;
             EventMousePress += OnMousePressed;
             EventMouseDrag += OnDragging;
+            EventMouseDoubleClick += OnMouseDoubleClick;
 
             ShiftValCodes = new List<KeyCode>() { KeyCode.Left, KeyCode.Right, KeyCode.End, KeyCode.Home };
             InsteadKeyMods = new List<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl,
                 KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
 
             //SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextEncrypt)));
+        }
+
+        private void OnMouseDoubleClick(object sender, MouseArgs args) {
+            Monitor.Enter(textInputLock);
+            try
+            {
+                _selectFrom = 0;
+                _cursor_position = GetText().Length;
+                _selectTo = _cursor_position;
+                ReplaceCursor();
+
+                _isSelect = true;
+                MakeSelectedArea(_selectFrom, _selectTo);
+            }
+            finally
+            {
+                Monitor.Exit(textInputLock);
+            }
         }
 
         private void OnMousePressed(object sender, MouseArgs args)

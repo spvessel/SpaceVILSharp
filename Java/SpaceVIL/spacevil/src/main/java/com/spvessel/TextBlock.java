@@ -817,4 +817,12 @@ class TextBlock extends Prototype
         }
         super.removeItem(item);
     }
+
+    public void redo() {
+        //_textureStorage.redo();
+    }
+
+    public void undo() {
+        //_textureStorage.undo();
+    }
 }

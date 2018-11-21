@@ -138,7 +138,7 @@ namespace SpaceVIL
             Prototype tmp = GetSelectionItem() as Prototype;
             if (tmp != null)
             {
-                tmp.EventMouseDoubleClick(tmp, args);
+                tmp.EventMouseDoubleClick?.Invoke(tmp, args);
             }
         }
         private void UpdateSubstrate()

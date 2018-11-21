@@ -925,5 +925,15 @@ namespace SpaceVIL
             }
             base.RemoveItem(item);
         }
+
+        public void Undo()
+        {
+            //_textureStorage.Undo();
+        }
+
+        public void Redo()
+        {
+            //_textureStorage.Redo();
+        }
     }
 }
