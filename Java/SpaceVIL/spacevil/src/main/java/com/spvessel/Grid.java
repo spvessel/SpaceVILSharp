@@ -12,7 +12,7 @@ import java.util.LinkedList;
 public class Grid extends Prototype implements InterfaceGrid {
     static int count = 0;
 
-    public Grid() {
+    private Grid() {
         setItemName("Grid_" + count);
         count++;
 
@@ -40,11 +40,41 @@ public class Grid extends Prototype implements InterfaceGrid {
         }
     }
 
+    public void setFormat(int rows, int columns) {
+        if (rows == _row_count && columns == _column_count)
+            return;
+
+        _row_count = rows;
+        _column_count = columns;
+        rearrangeCells();
+    }
+
+    private void rearrangeCells() {
+        if (_cells == null) {
+            initCells();
+            return;
+        }
+
+        List<InterfaceBaseItem> items = new LinkedList<>();
+        for (Cell cell : _cells)
+            items.add(cell.getItem());
+        initCells();
+        int index = 0;
+        for (InterfaceBaseItem item : items) {
+            _cells.get(index).setItem(item);
+            index++;
+            if (_cells.size() == index)
+                break;
+        }
+        updateLayout();
+    }
+
     private int _row_count = 1;
 
     public void setRowCount(int capacity) {
         if (capacity != _row_count)
             _row_count = capacity;
+        rearrangeCells();
     }
 
     public int getRowCount() {
@@ -57,6 +87,7 @@ public class Grid extends Prototype implements InterfaceGrid {
         if (capacity != _column_count)
             _column_count = capacity;
         // Need to initCells REFACTOR!
+        rearrangeCells();
     }
 
     public int getColumnCount() {
@@ -82,6 +113,16 @@ public class Grid extends Prototype implements InterfaceGrid {
     @Override
     public boolean getHoverVerification(float xpos, float ypos) {
         return false;
+    }
+
+    @Override
+    public void removeItem(InterfaceBaseItem item) {
+        super.removeItem(item);
+        for (Cell link : _cells) {
+            if (link.getItem() == item)
+                link.setItem(null);
+        }
+        // UpdateLayout();
     }
 
     @Override

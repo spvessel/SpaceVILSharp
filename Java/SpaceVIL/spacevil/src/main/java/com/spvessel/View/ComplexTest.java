@@ -16,10 +16,12 @@ import java.awt.*;
 import java.util.*;
 
 public class ComplexTest extends ActiveWindow {
+
+    Grid block;
+
     @Override
     public void initWindow() {
-        WindowLayout Handler =
-                new WindowLayout(this, "ComplexTest", "ComplexTest", 1200, 700, true);
+        WindowLayout Handler = new WindowLayout(this, "ComplexTest", "ComplexTest", 1200, 700, true);
         setHandler(Handler);
 
         Handler.setMinSize(500, 100);
@@ -38,7 +40,7 @@ public class ComplexTest extends ActiveWindow {
         toolbar.setPadding(10, 0, 0, 0);
         toolbar.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
         Handler.addItem(toolbar);
-
+        block = new Grid(2, 2);
         TreeView treeview = new TreeView();
         treeview.setMinWidth(100);
 
@@ -53,8 +55,9 @@ public class ComplexTest extends ActiveWindow {
         ButtonCore b4 = getButton("b4", 26, 30, SizePolicy.FIXED);
         b4.eventMouseClick.add((sender, args) -> treeview.addItem(getTreeLeaf()));
         ButtonCore b5 = getButton("b5", 26, 30, SizePolicy.FIXED);
-        b5.eventMouseDoubleClick.add((sender, args) -> System.out.println("double click "));
+        b5.eventMouseClick.add((sender, args) -> block.setFormat(block.getRowCount() + 1, block.getColumnCount() + 1));
         ButtonCore b6 = getButton("b6", 26, 30, SizePolicy.FIXED);
+        b6.eventMouseClick.add((sender, args) -> fillBlocks());
         toolbar.addItems(b1, b2, b3, b4, b5, b6);
 
         // HorizontalSplitArea split_area = new HorizontalSplitArea();
@@ -68,6 +71,7 @@ public class ComplexTest extends ActiveWindow {
         TabView tabs = new TabView();
         tabs.setMinWidth(300);
         split_area.assignRightItem(tabs);
+        tabs.addTab("Blocks");
         tabs.addTab("Keyboard");
         tabs.addTab("Mouse");
         tabs.addTab("Joystick");
@@ -85,6 +89,7 @@ public class ComplexTest extends ActiveWindow {
         Grid grid = new Grid(3, 7);
         grid.setBackground(new Color(71, 71, 71));
 
+        tabs.addItemToTab("Blocks", block);
         tabs.addItemToTab("Keyboard", grid);
         tabs.addItemToTab("Mouse", getButton("Mouse Tab", 200, 300, SizePolicy.FIXED));
         tabs.addItemToTab("Joystick", getButton("Joystick Tab", 500, 100, SizePolicy.FIXED));
@@ -99,6 +104,19 @@ public class ComplexTest extends ActiveWindow {
         grid.insertItem(getButton("Button6", 100, 100, SizePolicy.EXPAND), 0, 5);
         grid.insertItem(getButton("Button7", 100, 100, SizePolicy.EXPAND), 0, 6);
 
+        for (int i = 0; i < 4; i++) {
+            ButtonCore btn = getButton("Block", 100, 100, SizePolicy.EXPAND);
+            btn.eventMouseClick.add((sender, args) -> btn.getParent().removeItem(btn));
+            block.addItem(btn);
+        }
+    }
+
+    private void fillBlocks() {
+        for (int i = 0; i < 4; i++) {
+            ButtonCore btn = getButton("Block", 100, 100, SizePolicy.EXPAND);
+            btn.eventMouseClick.add((sender, args) -> btn.getParent().removeItem(btn));
+            block.addItem(btn);
+        }
     }
 
     private ButtonCore getButton(String name, int w, int h, SizePolicy policy) {
@@ -116,15 +134,14 @@ public class ComplexTest extends ActiveWindow {
         style.minHeight = 30;
         style.maxHeight = 100;
         style.heightPolicy = policy;
-        style.alignment = new LinkedList<ItemAlignment>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+        style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
         style.textAlignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
-                style.margin = new Indents(3, 3, 3, 3);
+        style.margin = new Indents(3, 3, 3, 3);
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 30);
         style.addItemState(ItemStateType.HOVERED, hovered);
-        
+
         ItemState pressed = new ItemState(new Color(30, 0, 0, 60));
         pressed.border.setFill(new Color(255, 255, 255));
         pressed.border.setThickness(1);

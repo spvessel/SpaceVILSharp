@@ -32,6 +32,14 @@ namespace SpaceVIL
         {
             return _area.GetSelectionVisibility();
         }
+        public void SetHoverVisibility(bool visibility)
+        {
+            _area.SetHoverVisibility(visibility);
+        }
+        public bool GetHoverVisibility()
+        {
+            return _area.GetHoverVisibility();
+        }
 
         public BlankItem Menu = new BlankItem();
         private bool _is_menu_disabled = false;

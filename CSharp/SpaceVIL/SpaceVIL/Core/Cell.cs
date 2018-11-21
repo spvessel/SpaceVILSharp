@@ -22,11 +22,7 @@ namespace SpaceVIL.Core
             _row_index = row;
             _column_index = column;
         }
-        internal Cell(Grid grid, int row, int column, int width, int height) : this(grid, row, column)
-        {
-            SetSize(width, height);
-        }
-        internal Cell(Grid grid, int row, int column, int width, int height, IBaseItem item) : this(grid, row, column, width, height)
+        internal Cell(Grid grid, int row, int column, IBaseItem item) : this(grid, row, column)
         {
             _item_link = item;
         }
