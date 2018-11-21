@@ -8,7 +8,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ActionManager {
+class ActionManager {
     public ConcurrentLinkedQueue<EventTask> stackEvents = new ConcurrentLinkedQueue<EventTask>();
 
     public ManualResetEvent execute = new ManualResetEvent(false);

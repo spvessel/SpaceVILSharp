@@ -7,7 +7,6 @@ import com.spvessel.Flags.ItemAlignment;
 import java.util.List;
 
 abstract public class Primitive extends BaseItem {
-
     public Primitive() {
         this("Primitive_");
     }

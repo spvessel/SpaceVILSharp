@@ -5,7 +5,7 @@ import com.spvessel.Flags.EmbeddedFont;
 import java.awt.Font;
 import java.io.InputStream;
 
-public final class DefaultFont {
+final class DefaultFont {
     private static DefaultFont _instance;
 
     private DefaultFont() {}

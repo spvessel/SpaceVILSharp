@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-public class EventManager {
+class EventManager {
     protected static Boolean isLocked = true;
     Map<GeometryEventType, List<InterfaceEventUpdate>> listeners = new HashMap<GeometryEventType, List<InterfaceEventUpdate>>();
 

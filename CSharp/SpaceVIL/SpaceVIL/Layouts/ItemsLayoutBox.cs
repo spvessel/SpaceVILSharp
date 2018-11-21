@@ -8,7 +8,7 @@ using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
-    static class ItemsLayoutBox
+    public static class ItemsLayoutBox
     {
         static public List<IBaseItem> GetLayoutItems(Guid id)
         {
@@ -20,7 +20,7 @@ namespace SpaceVIL
             // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
             return layouts[id].FloatItems;
         }
-        static public ItemsLayout GetLayout(Guid id)
+        static internal ItemsLayout GetLayout(Guid id)
         {
             return layouts[id];
         }

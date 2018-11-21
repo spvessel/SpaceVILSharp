@@ -53,9 +53,9 @@ namespace SpaceVIL
                         }
                         currentValue = znc;
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-
+                        Console.WriteLine(ex.ToString());
                     }
                 }
                 UpdateCurrentValue();

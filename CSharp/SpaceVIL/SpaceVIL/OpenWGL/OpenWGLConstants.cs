@@ -1,6 +1,6 @@
 namespace GL.WGL
 {
-	public static partial class OpenWGL
+    internal static partial class OpenWGL
 	{
     #region OpenGL Basic
 

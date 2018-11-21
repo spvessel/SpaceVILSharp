@@ -16,7 +16,7 @@ import java.util.stream.*;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public final class VisualItem extends BaseItem {
+final class VisualItem extends BaseItem {
 
     protected Prototype _main;
 

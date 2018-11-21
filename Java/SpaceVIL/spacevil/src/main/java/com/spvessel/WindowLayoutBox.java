@@ -86,7 +86,7 @@ public final class WindowLayoutBox {
         currentCallingPair.add(pair);
     }
 
-    static public void setCurrentFocusedWindow(WindowLayout wnd) {
+    static protected void setCurrentFocusedWindow(WindowLayout wnd) {
         lastFocusedWindow = wnd;
     }
 

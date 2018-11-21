@@ -10,7 +10,7 @@ using System.IO;
 
 namespace GL.LGL
 {
-    static public partial class OpenLGL
+    static internal partial class OpenLGL
     {
         #region OpenGL_Basic_Functions
         public const string LIBRARY_OPENGL = "libGL.so.1";

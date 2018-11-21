@@ -25,8 +25,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
-public final class DrawEngine {
-
+final class DrawEngine {
     protected void resetItems() {
         if (focusedItem != null)
             focusedItem.setFocused(false);
@@ -49,7 +48,7 @@ public final class DrawEngine {
     private Prototype hoveredItem = null;
     private Prototype focusedItem = null;
 
-    public Prototype getFocusedItem() {
+    protected Prototype getFocusedItem() {
         return focusedItem;
     }
 

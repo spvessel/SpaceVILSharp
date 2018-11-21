@@ -1,6 +1,6 @@
 package com.spvessel;
 
-public class ManualResetEvent {
+final class ManualResetEvent {
 
     private final Object monitor = new Object();
     private volatile boolean open = false;

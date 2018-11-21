@@ -10,7 +10,7 @@ using SpaceVIL.Core;
 
 namespace GL.WGL
 {
-    public static partial class OpenWGL
+    internal static partial class OpenWGL
     {
         #region OpenGL_Basic_Functions
         public const string LIBRARY_OPENGL = "opengl32.dll";

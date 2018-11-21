@@ -14,15 +14,15 @@ namespace SpaceVIL
         public WindowLayout WINDOW;
     }
 
-    static class WindowLayoutBox
+    public static class WindowLayoutBox
     {
-        static public Dictionary<string, WindowLayout> windows_name = new Dictionary<string, WindowLayout>();
-        static public Dictionary<Guid, WindowLayout> windows_guid = new Dictionary<Guid, WindowLayout>();
+        static internal Dictionary<string, WindowLayout> windows_name = new Dictionary<string, WindowLayout>();
+        static internal Dictionary<Guid, WindowLayout> windows_guid = new Dictionary<Guid, WindowLayout>();
         static internal List<WindowPair> current_calling_pair = new List<WindowPair>();
-        static public WindowLayout LastFocusedWindow;
+        static internal WindowLayout LastFocusedWindow;
         static Object locker = new Object();
 
-        static public void InitWindow(WindowLayout _layout)
+        static internal void InitWindow(WindowLayout _layout)
         {
             windows_name.Add(_layout.GetWindowName(), _layout);
             windows_guid.Add(_layout.Id, _layout);
@@ -45,7 +45,7 @@ namespace SpaceVIL
 
             ItemsLayoutBox.AddItem(_layout, _layout.GetWindow(), LayoutType.Static);
         }
-        static public void RemoveWindow(WindowLayout _layout)
+        static internal void RemoveWindow(WindowLayout _layout)
         {
             windows_name.Remove(_layout.GetWindowName());
             windows_guid.Remove(_layout.Id);

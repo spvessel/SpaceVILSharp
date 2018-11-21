@@ -21,7 +21,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 // import java.nio.ByteBuffer;
 
 
-public final class GLWHandler {
+final class GLWHandler {
     // cursors
 
     long _arrow;

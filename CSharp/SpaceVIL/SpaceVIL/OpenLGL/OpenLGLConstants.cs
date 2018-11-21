@@ -1,6 +1,6 @@
 namespace GL.LGL
 {
-	public static partial class OpenLGL
+    internal static partial class OpenLGL
 	{
     	#region OpenGL Basic
 		public const uint GL_VERSION_1_1 = 1;

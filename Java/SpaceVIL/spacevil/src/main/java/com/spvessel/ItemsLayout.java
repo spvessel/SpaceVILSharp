@@ -6,7 +6,7 @@ import java.util.*;
 
 import com.spvessel.Core.InterfaceBaseItem;
 
-public final class ItemsLayout {
+final class ItemsLayout {
     protected ItemsLayout(UUID layoutId) {
         _id = layoutId;
     }

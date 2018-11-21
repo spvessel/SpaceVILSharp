@@ -15,7 +15,7 @@ namespace SpaceVIL
     public delegate void EventKeyMethodState(IItem sender, KeyArgs args);
     public delegate void EventInputTextMethodState(IItem sender, TextInputArgs args);
 
-    public class VisualItem : BaseItem
+    internal class VisualItem : BaseItem
     {
         internal Prototype _main;
 
