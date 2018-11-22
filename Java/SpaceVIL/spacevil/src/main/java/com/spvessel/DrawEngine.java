@@ -187,7 +187,8 @@ final class DrawEngine {
         // glEnable(GL_STENCIL_TEST);
 
         ////////////////////////////////////////////////
-        _primitive = new Shader(getResourceString("/shaders/vs_primitive.glsl"), getResourceString("/shaders/fs_primitive.glsl"));
+        _primitive = new Shader(getResourceString("/shaders/vs_primitive.glsl"),
+                getResourceString("/shaders/fs_primitive.glsl"));
         _primitive.compile();
         if (_primitive.getProgramID() == 0)
             System.out.println("Could not create primitive shaders");
@@ -206,10 +207,11 @@ final class DrawEngine {
             System.out.println("Could not create character shaders");
         ///////////////////////////////////////////////
 
-        // _fxaa = new Shader(getResourceString("/shaders/vs_fxaa.glsl"), getResourceString("/shaders/fs_fxaa.glsl"));
+        // _fxaa = new Shader(getResourceString("/shaders/vs_fxaa.glsl"),
+        // getResourceString("/shaders/fs_fxaa.glsl"));
         // _fxaa.compile();
         // if (_fxaa.getProgramID() == 0)
-        //     System.out.println("Could not create fxaa shaders");
+        // System.out.println("Could not create fxaa shaders");
 
         _blur = new Shader(getResourceString("/shaders/vs_blur.glsl"), getResourceString("/shaders/fs_blur.glsl"));
         _blur.compile();
@@ -474,8 +476,8 @@ final class DrawEngine {
                 if (_handler.getLayout().isBorderHidden && _handler.getLayout().isResizable
                         && !_handler.getLayout().isMaximized) {
                     // resize
-                    if ((xpos < _handler.getLayout().getWindow().getWidth() - 10) && (xpos > 10)
-                            && (ypos < _handler.getLayout().getWindow().getHeight() - 10) && ypos > 10) {
+                    if ((xpos < _handler.getLayout().getWindow().getWidth() - 5) && (xpos > 5)
+                            && (ypos < _handler.getLayout().getWindow().getHeight() - 5) && ypos > 5) {
                         if (hoveredItem instanceof InterfaceTextEditable)
                             _handler.setCursorType(GLFW_IBEAM_CURSOR);
                         if (hoveredItem instanceof SplitHolder) {
@@ -486,19 +488,19 @@ final class DrawEngine {
                         }
                     } else // refactor!!
                     {
-                        if ((xpos >= _handler.getLayout().getWindow().getWidth() - 10 && ypos <= 10)
-                                || (xpos >= _handler.getLayout().getWindow().getWidth() - 10
+                        if ((xpos >= _handler.getLayout().getWindow().getWidth() - 5 && ypos <= 5)
+                                || (xpos >= _handler.getLayout().getWindow().getWidth() - 5
                                         && ypos >= _handler.getLayout().getWindow().getHeight() - 105)
-                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 10 && xpos <= 10)
-                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 10
-                                        && xpos >= _handler.getLayout().getWindow().getWidth() - 10)
+                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 5 && xpos <= 5)
+                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 5
+                                        && xpos >= _handler.getLayout().getWindow().getWidth() - 5)
                                 || (xpos <= 10 && ypos <= 10)) {
                             _handler.setCursorType(GLFW_CROSSHAIR_CURSOR);
                         } else {
-                            if (xpos > _handler.getLayout().getWindow().getWidth() - 10 || xpos <= 10)
+                            if (xpos > _handler.getLayout().getWindow().getWidth() - 5 || xpos <= 5)
                                 _handler.setCursorType(GLFW_HRESIZE_CURSOR);
 
-                            if (ypos > _handler.getLayout().getWindow().getHeight() - 10 || ypos <= 10)
+                            if (ypos > _handler.getLayout().getWindow().getHeight() - 5 || ypos <= 5)
                                 _handler.setCursorType(GLFW_VRESIZE_CURSOR);
                         }
                     }
@@ -528,8 +530,7 @@ final class DrawEngine {
 
     private boolean isDoubleClick() {
         if (_first_click) {
-            if ((System.nanoTime() - _start_time) / 1000000 < 500)
-            {
+            if ((System.nanoTime() - _start_time) / 1000000 < 500) {
                 _first_click = false;
                 _start_time = 0;
                 return true;
@@ -655,7 +656,7 @@ final class DrawEngine {
                 if (is_double_click) {
                     if (focusedItem != null)
                         assignActions(InputEventType.MOUSE_DOUBLE_CLICK, _margs, focusedItem);
-                        //focusedItem.eventMouseDoubleClick.execute(focusedItem, _margs);
+                    // focusedItem.eventMouseDoubleClick.execute(focusedItem, _margs);
                 }
             }
 
@@ -699,10 +700,10 @@ final class DrawEngine {
                 Prototype tmp = (Prototype) item;
                 if (!tmp.isVisible() || !tmp.isDrawable())
                     continue;
-                tmp.setMouseHover(false);
                 if (tmp.getHoverVerification(xpos, ypos)) {
                     queue.add(tmp);
                 } else {
+                    tmp.setMouseHover(false);
                     if (item instanceof InterfaceFloating && action == InputEventType.MOUSE_PRESS) {
                         InterfaceFloating float_item = (InterfaceFloating) item;
                         if (float_item.isOutsideClickClosable()) {
@@ -788,18 +789,18 @@ final class DrawEngine {
     }
 
     private void keyPress(long wnd, int key, int scancode, int action, int mods) {
-        //System.out.println("keypress");
-//        switch (action) {
-//            case 1 :
-//                System.out.println("key press");
-//                break;
-//            case 0 :
-//                System.out.println("key release");
-//                break;
-//            case 2 :
-//                System.out.println("key repeat");
-//                break;
-//        }
+        // System.out.println("keypress");
+        // switch (action) {
+        // case 1 :
+        // System.out.println("key press");
+        // break;
+        // case 0 :
+        // System.out.println("key release");
+        // break;
+        // case 2 :
+        // System.out.println("key repeat");
+        // break;
+        // }
         if (!_handler.focusable)
             return;
         _tooltip.initTimer(false);
@@ -826,11 +827,14 @@ final class DrawEngine {
                 ((InterfaceTextShortcuts) focusedItem).redo();
             } else {
                 if (action == InputState.PRESS.getValue())
-                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); //assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
+                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); // assignActions(InputEventType.KEY_PRESS,
+                                                                            // _kargs, focusedItem);
                 if (action == InputState.REPEAT.getValue())
-                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); //assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
+                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); // assignActions(InputEventType.KEY_PRESS,
+                                                                            // _kargs, focusedItem);
                 if (action == InputState.RELEASE.getValue())
-                    focusedItem.eventKeyRelease.execute(focusedItem, _kargs); //assignActions(InputEventType.KEY_RELEASE, _kargs, focusedItem);
+                    focusedItem.eventKeyRelease.execute(focusedItem, _kargs); // assignActions(InputEventType.KEY_RELEASE,
+                                                                              // _kargs, focusedItem);
             }
         } else {
             if (action == InputState.PRESS.getValue())
@@ -843,7 +847,7 @@ final class DrawEngine {
     }
 
     private void textInput(long wnd, int character, int mods) {
-//        System.out.println("textinput");
+        // System.out.println("textinput");
         if (!_handler.focusable)
             return;
 

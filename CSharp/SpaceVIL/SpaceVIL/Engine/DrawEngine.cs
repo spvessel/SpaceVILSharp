@@ -463,8 +463,8 @@ namespace SpaceVIL
                     if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble && !_handler.GetLayout().IsMaximized)
                     {
                         //resize
-                        if ((xpos < _handler.GetLayout().GetWindow().GetWidth() - 10) && (xpos > 10)
-                            && (ypos < _handler.GetLayout().GetWindow().GetHeight() - 10) && ypos > 10)
+                        if ((xpos < _handler.GetLayout().GetWindow().GetWidth() - 5) && (xpos > 5)
+                            && (ypos < _handler.GetLayout().GetWindow().GetHeight() - 5) && ypos > 5)
                         {
                             if (HoveredItem is ITextEditable)
                                 _handler.SetCursorType(Glfw.CursorType.Beam);
@@ -477,20 +477,20 @@ namespace SpaceVIL
                         }
                         else //refactor!!
                         {
-                            if ((xpos >= _handler.GetLayout().GetWindow().GetWidth() - 10 && ypos <= 10)
-                             || (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 10 && ypos >= _handler.GetLayout().GetWindow().GetHeight() - 10)
-                             || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 10 && xpos <= 10)
-                             || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 10 && xpos >= _handler.GetLayout().GetWindow().GetWidth() - 10)
-                             || (xpos <= 10 && ypos < 10))
+                            if ((xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos <= 5)
+                             || (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5)
+                             || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos <= 5)
+                             || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5)
+                             || (xpos <= 5 && ypos < 5))
                             {
                                 _handler.SetCursorType(Glfw.CursorType.Crosshair);
                             }
                             else
                             {
-                                if (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 10 || xpos < 10)
+                                if (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 || xpos < 5)
                                     _handler.SetCursorType(Glfw.CursorType.ResizeX);
 
-                                if (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 10 || ypos < 10)
+                                if (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 || ypos < 5)
                                     _handler.SetCursorType(Glfw.CursorType.ResizeY);
                             }
                         }
@@ -694,13 +694,13 @@ namespace SpaceVIL
                 {
                     if (!tmp.IsVisible() || !tmp.IsDrawable())
                         continue;
-                    tmp.SetMouseHover(false);
                     if (tmp.GetHoverVerification(xpos, ypos))
                     {
                         queue.Add(tmp);
                     }
                     else
                     {
+                        tmp.SetMouseHover(false);
                         IFloating float_item = item as IFloating;
                         if (float_item != null && action == InputEventType.MousePress)
                         {
