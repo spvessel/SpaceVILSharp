@@ -626,19 +626,18 @@ namespace SpaceVIL
                         }
                         else
                         {
-                            List<Prototype> focused_list = new List<Prototype>(HoveredItems);
-                            while (focused_list.Count != 0)
+                            Stack<Prototype> focused_list = new Stack<Prototype>(HoveredItems);
+                            while (tmp.Count > 0)
                             {
-                                Prototype f = focused_list.Last();
+                                Prototype f = focused_list.Pop();
                                 if (f.Equals(HoveredItem) && HoveredItem.IsDisabled())
-                                    continue;//пропустить
+                                    continue;
                                 if (f.IsFocusable)
                                 {
                                     FocusedItem = f;
                                     FocusedItem.SetFocused(true);
                                     break;//остановить передачу событий последующим элементам
                                 }
-                                focused_list.Remove(f);
                             }
                         }
                         UnderFocusedItem = new List<Prototype>(HoveredItems);
@@ -721,17 +720,17 @@ namespace SpaceVIL
                 HoveredItem.SetMouseHover(true);
 
                 HoveredItems = queue;
-                List<Prototype> tmp = new List<Prototype>(HoveredItems);
-                while (tmp.Count != 0)
+                Stack<Prototype> tmp = new Stack<Prototype>(HoveredItems);
+                while (tmp.Count > 0)
                 {
-                    Prototype item = tmp.Last();
+                    Prototype item = tmp.Pop();
                     if (item.Equals(HoveredItem) && HoveredItem.IsDisabled())
-                        continue;//пропустить
+                        continue;
                     item.SetMouseHover(true);
                     if (!item.IsPassEvents(InputEventType.MouseHover))
                         break;//остановить передачу событий последующим элементам
-                    tmp.Remove(item);
                 }
+
                 AssignActions(InputEventType.MouseHover, _margs, false);
                 return true;
             }
@@ -742,8 +741,8 @@ namespace SpaceVIL
         private List<IBaseItem> GetInnerItems(Prototype root)
         {
             List<IBaseItem> list = new List<IBaseItem>();
-
-            foreach (var item in root.GetItems())
+            List<IBaseItem> root_items = root.GetItems();
+            foreach (var item in root_items)
             {
                 if (!item.IsVisible() || !item.IsDrawable())
                     continue;
@@ -876,13 +875,12 @@ namespace SpaceVIL
             }
             else
             {
-                List<Prototype> tmp = new List<Prototype>(HoveredItems);
-                while (tmp.Count != 0)
+                Stack<Prototype> tmp = new Stack<Prototype>(HoveredItems);
+                while (tmp.Count > 0)
                 {
-                    Prototype item = tmp.Last();
+                    Prototype item = tmp.Pop();
                     if (item.Equals(HoveredItem) && HoveredItem.IsDisabled())
-                        continue;//пропустить
-
+                        continue;
                     _handler.GetLayout().SetEventTask(new EventTask()
                     {
                         Item = item,
@@ -891,7 +889,6 @@ namespace SpaceVIL
                     });
                     if (!item.IsPassEvents(action))
                         break;//остановить передачу событий последующим элементам
-                    tmp.Remove(item);
                 }
             }
             _handler.GetLayout().ExecutePollActions();
@@ -952,8 +949,8 @@ namespace SpaceVIL
             _double_click_timer.Start();
             while (!_handler.IsClosing())
             {
-                // Glfw.WaitEventsTimeout(_interval);
-                Glfw.PollEvents();
+                Glfw.WaitEventsTimeout(_interval);
+                // Glfw.PollEvents();
                 // Glfw.WaitEvents();
                 // glClearColor(
                 //     (float)_handler.GetLayout().GetBackground().R / 255.0f,
@@ -1101,7 +1098,8 @@ namespace SpaceVIL
             Prototype root = shell as Prototype;
             if (root != null)
             {
-                foreach (var item in root.GetItems())
+                List<IBaseItem> root_items = root.GetItems();
+                foreach (var item in root_items)
                     SetConfines(item);
             }
         }

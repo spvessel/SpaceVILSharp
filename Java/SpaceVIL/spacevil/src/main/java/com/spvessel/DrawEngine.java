@@ -723,9 +723,8 @@ final class DrawEngine {
             hoveredItem = queue.get(queue.size() - 1);
             hoveredItem.setMouseHover(true);
 
-            Deque<Prototype> tmp;
             hoveredItems = queue;
-            tmp = new ArrayDeque<>(hoveredItems);
+            Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
             while (!tmp.isEmpty()) {
                 Prototype item = tmp.pollLast();
                 if (item.equals(hoveredItem) && hoveredItem.isDisabled())
@@ -775,9 +774,9 @@ final class DrawEngine {
         _tooltip.initTimer(false);
         if (hoveredItems.size() == 0)
             return;
-        List<Prototype> tmp = new LinkedList<Prototype>(hoveredItems);
-        Collections.reverse(tmp);
-        for (Prototype item : tmp) {
+        Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
+        while (!tmp.isEmpty()) {
+            Prototype item = tmp.pollLast();
             if (dy > 0 || dx < 0)
                 item.eventScrollUp.execute(item, _margs);
             if (dy < 0 || dx > 0)
@@ -923,9 +922,9 @@ final class DrawEngine {
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {
-            // glfwWaitEventsTimeout(_interval);
+            glfwWaitEventsTimeout(_interval);
             // glfwWaitEvents();
-            glfwPollEvents();
+            // glfwPollEvents();
 
             // glClearColor((float) _handler.getLayout().getBackground().getRed() / 255.0f,
             // (float) _handler.getLayout().getBackground().getGreen() / 255.0f,

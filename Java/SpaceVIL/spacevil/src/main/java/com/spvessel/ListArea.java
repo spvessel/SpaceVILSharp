@@ -145,12 +145,14 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 _hover_substrate.setHeight(item.getHeight());
                 _hover_substrate.setPosition(getX() + getPadding().left, item.getY());
                 _hover_substrate.setDrawable(true);
+                _hover_substrate.setVisible(true);
                 found = true;
                 break;
             }
         }
         if (!found) {
             _hover_substrate.setDrawable(false);
+            _hover_substrate.setVisible(false);
         }
     }
 

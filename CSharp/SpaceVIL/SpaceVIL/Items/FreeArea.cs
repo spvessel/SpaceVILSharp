@@ -15,7 +15,7 @@ namespace SpaceVIL
         private int _diff_x = 0;
         private int _diff_y = 0;
         Dictionary<IBaseItem, int[]> _stored_crd;
-        // public ContextMenu _dropdownmenu = new ContextMenu();
+
         public FreeArea()
         {
             SetItemName("FlowArea_" + count);
@@ -94,13 +94,10 @@ namespace SpaceVIL
         }
         public void UpdateLayout()
         {
-            lock (this)
+            foreach (var child in GetItems())
             {
-                foreach (var child in GetItems())
-                {
-                    child.SetX((int)_xOffset + GetX() + GetPadding().Left + _stored_crd[child][0] + child.GetMargin().Left);
-                    child.SetY((int)_yOffset + GetY() + GetPadding().Top + _stored_crd[child][1] + child.GetMargin().Top);
-                }
+                child.SetX((int)_xOffset + GetX() + GetPadding().Left + _stored_crd[child][0] + child.GetMargin().Left);
+                child.SetY((int)_yOffset + GetY() + GetPadding().Top + _stored_crd[child][1] + child.GetMargin().Top);
             }
         }
 
@@ -108,15 +105,16 @@ namespace SpaceVIL
         private void CorrectPosition(ResizableItem item)
         {
             int actual_x = item.GetX();
-            int stored_x = _stored_crd[item][0];
+            // int stored_x = _stored_crd[item][0];
             int actual_y = item.GetY();
-            int stored_y = _stored_crd[item][1];
-
-            _stored_crd[item] = new int[]
+            // int stored_y = _stored_crd[item][1];
+            int[] crd = new int[] 
             {
                 actual_x - (int)_xOffset - GetX() - GetPadding().Left - item.GetMargin().Left,
                 actual_y - (int)_yOffset - GetY() - GetPadding().Top - item.GetMargin().Top
             };
+            _stored_crd.Remove(item);
+            _stored_crd.Add(item, crd);
         }
     }
 }

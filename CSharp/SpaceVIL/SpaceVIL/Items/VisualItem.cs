@@ -17,6 +17,7 @@ namespace SpaceVIL
 
     internal class VisualItem : BaseItem
     {
+        private Object Locker = new Object();
         internal Prototype _main;
 
         private String _tooltip = String.Empty;
@@ -63,7 +64,15 @@ namespace SpaceVIL
         private List<IBaseItem> _content = new List<IBaseItem>();
         public virtual List<IBaseItem> GetItems()
         {
-            return _content;
+            Monitor.Enter(Locker);
+            try
+            {
+                return _content;
+            }
+            finally
+            {
+                Monitor.Exit(Locker);
+            }
         }
         public void SetContent(List<IBaseItem> content)
         {
@@ -88,7 +97,7 @@ namespace SpaceVIL
         }
         public virtual void AddItem(IBaseItem item)
         {
-            Monitor.Enter(GetHandler().EngineLocker);
+            Monitor.Enter(Locker);
             try
             {
                 if (item.Equals(this))
@@ -118,12 +127,12 @@ namespace SpaceVIL
             }
             finally
             {
-                Monitor.Exit(GetHandler().EngineLocker);
+                Monitor.Exit(Locker);
             }
         }
         internal virtual void InsertItem(IBaseItem item, Int32 index)
         {
-            Monitor.Enter(GetHandler().EngineLocker);
+            Monitor.Enter(Locker);
             try
             {
                 if (item.Equals(this))
@@ -151,7 +160,7 @@ namespace SpaceVIL
             }
             finally
             {
-                Monitor.Exit(GetHandler().EngineLocker);
+                Monitor.Exit(Locker);
             }
         }
 
@@ -173,7 +182,7 @@ namespace SpaceVIL
 
         public virtual void RemoveItem(IBaseItem item)
         {
-            Monitor.Enter(GetHandler().EngineLocker);
+            Monitor.Enter(Locker);
             try
             {
                 LayoutType type;
@@ -201,7 +210,7 @@ namespace SpaceVIL
             }
             finally
             {
-                Monitor.Exit(GetHandler().EngineLocker);
+                Monitor.Exit(Locker);
             }
         }
         internal override void AddEventListener(GeometryEventType type, IBaseItem listener)
@@ -256,7 +265,7 @@ namespace SpaceVIL
             if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
             SetBorderFill(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
         }
-        
+
         public void SetBorderRadius(CornerRadius radius)
         {
             _border.SetRadius(radius);
@@ -596,9 +605,10 @@ namespace SpaceVIL
                 IsCustom = current.Shape;
 
             ItemState s_disabled = GetState(ItemStateType.Disabled);
-            if (IsDisabled() && s_disabled != null)
+            if (IsDisabled())
             {
-                UpdateVisualProperties(s_disabled, s_base);
+                if (s_disabled != null)
+                    UpdateVisualProperties(s_disabled, s_base);
                 return;
             }
             ItemState s_focused = GetState(ItemStateType.Focused);

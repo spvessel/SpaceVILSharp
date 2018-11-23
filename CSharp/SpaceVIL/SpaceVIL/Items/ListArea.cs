@@ -163,6 +163,7 @@ namespace SpaceVIL
                 {
                     _hover_substrate.SetHeight(item.GetHeight());
                     _hover_substrate.SetPosition(GetX() + GetPadding().Left, item.GetY());
+                    _hover_substrate.SetVisible(true);
                     _hover_substrate.SetDrawable(true);
                     found = true;
                     break;
@@ -170,6 +171,7 @@ namespace SpaceVIL
             }
             if (!found)
             {
+                _hover_substrate.SetVisible(false);
                 _hover_substrate.SetDrawable(false);
             }
         }

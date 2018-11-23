@@ -12,11 +12,15 @@ import java.awt.Color;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.*;
 import java.util.Arrays;
 import java.util.HashMap;
 
 final class VisualItem extends BaseItem {
+
+    private Lock locker = new ReentrantLock();
 
     protected Prototype _main;
 
@@ -282,7 +286,7 @@ final class VisualItem extends BaseItem {
     }
 
     protected void addItem(InterfaceBaseItem item) {
-        getHandler().engineLocker.lock();
+        locker.lock();
         try {
             if (item.equals(this)) {
                 System.out.println("Trying to add current item in himself.");
@@ -301,12 +305,12 @@ final class VisualItem extends BaseItem {
         } catch (Exception ex) {
             System.out.println(item.getItemName() + "\n" + ex.toString());
         } finally {
-            getHandler().engineLocker.unlock();
+            locker.unlock();
         }
     }
 
     protected void insertItem(InterfaceBaseItem item, int index) {
-        getHandler().engineLocker.lock();
+        locker.lock();
         try {
             if (item.equals(this)) {
                 System.out.println("Trying to add current item in himself.");
@@ -338,7 +342,7 @@ final class VisualItem extends BaseItem {
         } catch (Exception ex) {
             System.out.println(item.getItemName() + "\n" + ex.toString());
         } finally {
-            getHandler().engineLocker.unlock();
+            locker.unlock();
         }
     }
 
@@ -361,7 +365,7 @@ final class VisualItem extends BaseItem {
     }
 
     protected void removeItem(InterfaceBaseItem item) {
-        getHandler().engineLocker.lock();
+        locker.lock();
         try {
             LayoutType type;
             if (item instanceof InterfaceFloating) {
@@ -380,7 +384,7 @@ final class VisualItem extends BaseItem {
         } catch (Exception ex) {
             System.out.println(item.getItemName() + "\n" + ex.toString());
         } finally {
-            getHandler().engineLocker.unlock();
+            locker.unlock();
         }
     }
 
