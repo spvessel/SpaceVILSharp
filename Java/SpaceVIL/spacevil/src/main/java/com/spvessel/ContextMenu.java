@@ -59,7 +59,6 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setConfines();
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
-        itemList.getArea().setHoverVisibility(false);
         InterfaceCommonMethod selectionChanged = () -> onSelectionChanged();
         itemList.getArea().selectionChanged.add(selectionChanged);
 

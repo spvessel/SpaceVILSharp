@@ -94,10 +94,6 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         eventMouseClick.add((sender, args) -> onMouseClick(sender, args));
         eventMouseDoubleClick.add((sender, args) -> onMouseDoubleClick(sender, args));
         eventMouseHover.add((sender, args) -> onMouseHover(sender, args));
-
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ListArea"));
-        setStyle(DefaultsService.getDefaultStyle(ListArea.class));
-
         eventKeyPress.add((sender, args) -> onKeyPress(sender, args));
     }
 

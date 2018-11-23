@@ -717,7 +717,7 @@ namespace SpaceVIL
             return (_cursor_position == 0);
         }
 
-        internal void SelectAll() {
+        public void SelectAll() {
             Monitor.Enter(textInputLock);
             try
             {

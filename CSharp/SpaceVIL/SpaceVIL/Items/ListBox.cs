@@ -393,7 +393,7 @@ namespace SpaceVIL
         }
         public IBaseItem GetSelectionItem()
         {
-            List<IBaseItem> result = new List<IBaseItem>();
+            // List<IBaseItem> result = new List<IBaseItem>();
             return _area.GetSelectionItem();
         }
 
@@ -419,6 +419,7 @@ namespace SpaceVIL
             {
                 Menu.SetStyle(inner_style);
             }
+            _area.SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListArea)));
         }
     }
 }

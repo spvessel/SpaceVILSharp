@@ -376,7 +376,7 @@ public class ListBox extends Prototype {
     }
 
     public InterfaceBaseItem getSelectionItem() {
-        List<InterfaceBaseItem> result = new LinkedList<InterfaceBaseItem>();
+        // List<InterfaceBaseItem> result = new LinkedList<InterfaceBaseItem>();
         return _area.getSelectionItem();
     }
 
@@ -399,5 +399,6 @@ public class ListBox extends Prototype {
         if (inner_style != null) {
             menu.setStyle(inner_style);
         }
+        _area.setStyle(DefaultsService.getDefaultStyle(ListArea.class));
     }
 }

@@ -103,9 +103,6 @@ namespace SpaceVIL
             EventMouseClick += OnMouseClick;
             EventMouseDoubleClick += OnMouseDoubleClick;
             EventMouseHover += OnMouseHover;
-
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListArea)));
-
             //events
             EventKeyPress += OnKeyPress;
         }

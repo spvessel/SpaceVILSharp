@@ -465,8 +465,9 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             alignShiftX = getParent().getWidth() - _lineWidth - getParent().getPadding().right - getMargin().right;
 
         else if (alignments.contains(ItemAlignment.HCENTER) && (_lineWidth < _parentAllowWidth))
-            alignShiftX = ((getParent().getWidth() - getParent().getPadding().left - getParent().getPadding().right
-                    + getMargin().left - getMargin().right) - _lineWidth) / 2f;
+            // alignShiftX = ((getParent().getWidth() - getParent().getPadding().left - getParent().getPadding().right
+            //         + getMargin().left - getMargin().right) - _lineWidth) / 2f;
+            alignShiftX = (getParent().getWidth() - _lineWidth) / 2f + getParent().getPadding().left;
 
         // Vertical
         if (alignments.contains(ItemAlignment.TOP)) {
@@ -476,8 +477,9 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
             alignShiftY = getParent().getHeight() - height - getParent().getPadding().bottom - getMargin().bottom;
 
         else if (alignments.contains(ItemAlignment.VCENTER))
-            alignShiftY = ((getParent().getHeight() - getParent().getPadding().bottom - getParent().getPadding().top)
-                    - height) / 2f - getMargin().bottom + getMargin().top;
+            // alignShiftY = ((getParent().getHeight() - getParent().getPadding().bottom - getParent().getPadding().top)
+            //         - height) / 2f - getMargin().bottom + getMargin().top;
+            alignShiftY = (getParent().getHeight() - height) / 2f + getParent().getPadding().top;
 
         int xFirstBeg = _letters.get(0).xBeg + _letters.get(0).xShift;
         textPrt.xTextureShift = (int) alignShiftX + _lineXShift + getParent().getX() + xFirstBeg;

@@ -464,10 +464,6 @@ namespace SpaceVIL.Decorations
             style.MinHeight = 10;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(10, 0, 10, 0);
-            style.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(150, 255, 255, 255)
-            });
 
             Style arrow_style = new Style();
             arrow_style.Width = 6;
@@ -497,8 +493,13 @@ namespace SpaceVIL.Decorations
             style.AddInnerStyle("itemlist", itemlist_style);
             
             Style area_style = GetListAreaStyle();
+
             Style substrate_style = area_style.GetInnerStyle("substrate");
             substrate_style.Background = Color.FromArgb(255, 150, 150, 150);
+            
+            Style hovercover_style = area_style.GetInnerStyle("hovercover");
+            hovercover_style.Background = Color.FromArgb(255, 150, 150, 150);
+            
             style.AddInnerStyle("listarea", area_style);
 
             return style;

@@ -667,7 +667,7 @@ public class TextEdit extends Prototype
         return (_cursor_position == 0);
     }
 
-    void selectAll() {
+    public final void selectAll() {
         textInputLock.lock();
         try {
             _selectFrom = 0;

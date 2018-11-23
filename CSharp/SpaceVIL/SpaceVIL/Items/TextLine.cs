@@ -292,8 +292,9 @@ namespace SpaceVIL
                 alignShiftX = GetParent().GetWidth() - _lineWidth - GetParent().GetPadding().Right - GetMargin().Right;
 
             else if (alignments.HasFlag(ItemAlignment.HCenter) && (_lineWidth < _parentAllowWidth))
-                alignShiftX = ((GetParent().GetWidth() - GetParent().GetPadding().Left - GetParent().GetPadding().Right
-                        + GetMargin().Left - GetMargin().Right) - _lineWidth) / 2f;
+                // alignShiftX = ((GetParent().GetWidth() - GetParent().GetPadding().Left - GetParent().GetPadding().Right
+                //         + GetMargin().Left - GetMargin().Right) - _lineWidth) / 2f;
+                alignShiftX = (GetParent().GetWidth() - _lineWidth) / 2f + GetParent().GetPadding().Left;
 
             // Vertical
             if (alignments.HasFlag(ItemAlignment.Top))
@@ -305,8 +306,9 @@ namespace SpaceVIL
                 alignShiftY = GetParent().GetHeight() - height - GetParent().GetPadding().Bottom - GetMargin().Bottom;
 
             else if (alignments.HasFlag(ItemAlignment.VCenter))
-                alignShiftY = ((GetParent().GetHeight() - GetParent().GetPadding().Bottom - GetParent().GetPadding().Top)
-                        - height) / 2f - GetMargin().Bottom + GetMargin().Top;
+                // alignShiftY = ((GetParent().GetHeight() - GetParent().GetPadding().Bottom - GetParent().GetPadding().Top)
+                //         - height) / 2f - GetMargin().Bottom + GetMargin().Top;
+                alignShiftY = (GetParent().GetHeight() - height) / 2f + GetParent().GetPadding().Top;
 
             xFirstBeg = _letters[0].xBeg + _letters[0].xShift;
             
