@@ -228,6 +228,35 @@ namespace SpaceVIL
             GetState(ItemStateType.Base).Border.SetFill(fill);
             UpdateState();
         }
+        public virtual void SetBorderFill(int r, int g, int b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            SetBorderFill(Color.FromArgb(255, r, g, b));
+        }
+        public virtual void SetBorderFill(int r, int g, int b, int a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            SetBorderFill(Color.FromArgb(a, r, g, b));
+        }
+        public virtual void SetBorderFill(float r, float g, float b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            SetBorderFill(Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+        }
+        public virtual void SetBorderFill(float r, float g, float b, float a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            SetBorderFill(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+        }
+        
         public void SetBorderRadius(CornerRadius radius)
         {
             _border.SetRadius(radius);

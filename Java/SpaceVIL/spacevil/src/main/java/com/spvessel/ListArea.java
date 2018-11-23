@@ -141,7 +141,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     protected void onMouseHover(InterfaceItem sender, MouseArgs args) {
         if (!getHoverVisibility())
             return;
-
+        boolean found = false;
         for (InterfaceBaseItem item : getItems()) {
             if (item.equals(_substrate) || item.equals(_hover_substrate) || !item.isVisible() || !item.isDrawable())
                 continue;
@@ -149,8 +149,12 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 _hover_substrate.setHeight(item.getHeight());
                 _hover_substrate.setPosition(getX() + getPadding().left, item.getY());
                 _hover_substrate.setDrawable(true);
+                found = true;
                 break;
             }
+        }
+        if (!found) {
+            _hover_substrate.setDrawable(false);
         }
     }
 
@@ -245,6 +249,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     public void setVScrollOffset(long value) {
         _yOffset = value;
+        _hover_substrate.setDrawable(false);
         updateLayout();
     }
 

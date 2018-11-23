@@ -12,6 +12,14 @@ namespace SpaceVIL
     {
         static int count = 0;
 
+        public Rectangle GetSelectionShape()
+        {
+            return _area.GetSubstrate();
+        }
+        public Rectangle GetHoverShape()
+        {
+            return _area.GetHoverSubstrate();
+        }
         public int GetSelection()
         {
             return _area.GetSelection();

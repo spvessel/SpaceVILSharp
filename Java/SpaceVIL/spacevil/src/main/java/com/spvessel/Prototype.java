@@ -131,6 +131,22 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.setBorderFill(fill);
     }
 
+    public void setBorderFill(int r, int g, int b) {
+        _core.setBorderFill(r, g, b);
+    }
+
+    public void setBorderFill(int r, int g, int b, int a) {
+        _core.setBorderFill(r, g, b, a);
+    }
+
+    public void setBorderFill(float r, float g, float b) {
+        _core.setBorderFill(r, g, b);
+    }
+
+    public void setBorderFill(float r, float g, float b, float a) {
+        _core.setBorderFill(r, g, b, a);
+    }
+
     public void setBorderRadius(CornerRadius radius) {
         _core.setBorderRadius(radius);
     }
@@ -456,11 +472,11 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.setPassEvents(value, e);
     }
 
-    public void setPassEvents(boolean value, List<InputEventType>  events_set) {
+    public void setPassEvents(boolean value, List<InputEventType> events_set) {
         _core.setPassEvents(value, events_set);
     }
 
-    public void setPassEvents(boolean value, InputEventType...  events_set) {
+    public void setPassEvents(boolean value, InputEventType... events_set) {
         for (InputEventType e : events_set) {
             _core.setPassEvents(value, e);
         }

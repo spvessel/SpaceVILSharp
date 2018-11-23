@@ -17,6 +17,14 @@ import java.util.List;
 public class ListBox extends Prototype {
     static int count = 0;
 
+    public Rectangle getSelectionShape() {
+        return _area.getSubstrate();
+    }
+
+    public Rectangle getHoverShape() {
+        return _area.getHoverSubstrate();
+    }
+
     public int getSelection() {
         return _area.getSelection();
     }

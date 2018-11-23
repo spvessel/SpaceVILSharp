@@ -156,17 +156,24 @@ namespace SpaceVIL
         {
             if (!GetHoverVisibility())
                 return;
+            bool found = false;
             foreach (IBaseItem item in GetItems())
             {
                 if (item.Equals(_substrate) || item.Equals(_hover_substrate) || !item.IsVisible() || !item.IsDrawable())
                     continue;
+
                 if (args.Position.GetY() > item.GetY() && args.Position.GetY() < item.GetY() + item.GetHeight())
                 {
                     _hover_substrate.SetHeight(item.GetHeight());
                     _hover_substrate.SetPosition(GetX() + GetPadding().Left, item.GetY());
                     _hover_substrate.SetDrawable(true);
+                    found = true;
                     break;
                 }
+            }
+            if (!found)
+            {
+                _hover_substrate.SetDrawable(false);
             }
         }
 
@@ -176,13 +183,6 @@ namespace SpaceVIL
             int index = GetSelection();
             switch (args.Key)
             {
-                // case KeyCode.Backspace:
-                //     foreach (var _ in GetItems())
-                //     {
-                //         Console.WriteLine(_.GetItemName() + " " + _.IsVisible() + " " + _.IsDrawable() + " " + GetItems().IndexOf(_));
-                //     }
-                //     break;
-
                 case KeyCode.Up:
                     index--;
                     if (index < 0)
@@ -273,6 +273,7 @@ namespace SpaceVIL
         public void SetVScrollOffset(Int64 value)
         {
             _yOffset = value;
+            _hover_substrate.SetDrawable(false);
             UpdateLayout();
         }
         public Int64 GetHScrollOffset()

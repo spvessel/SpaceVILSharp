@@ -1,12 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
     public class Rectangle : Primitive
     {
         static int count = 0;
+        private CornerRadius _border_radius = new CornerRadius();
+        public void SetBorderRadius(int radius)
+        {
+            _border_radius.LeftTop = radius;
+            _border_radius.RightTop = radius;
+            _border_radius.LeftBottom = radius;
+            _border_radius.RightBottom = radius;
+        }
+
+        public void SetBorderRadius(CornerRadius radius)
+        {
+            _border_radius = radius;
+        }
+        
         public Rectangle()
             : base(name: "Rectangle_" + count)
         {
@@ -15,7 +30,7 @@ namespace SpaceVIL
 
         public override List<float[]> MakeShape()
         {
-            SetTriangles(GraphicsMathService.GetRectangle(GetWidth(), GetHeight(), GetX(), GetY()));
+            SetTriangles(GraphicsMathService.GetRoundSquare(_border_radius, GetWidth(), GetHeight(), GetX(), GetY()));
             return GraphicsMathService.ToGL(this, GetHandler());
         }
     }

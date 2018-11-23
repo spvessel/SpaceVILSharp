@@ -119,6 +119,15 @@ namespace SpaceVIL
         {
             _core.SetBorderFill(fill);
         }
+        public void SetBorderFill(int r, int g, int b, int a = 255)
+        {
+            _core.SetBorderFill(r, g, b, a);
+        }
+        public void SetBorderFill(float r, float g, float b, float a = 1.0f)
+        {
+            _core.SetBorderFill(r, g, b, a);
+        }
+        
         public void SetBorderRadius(CornerRadius radius)
         {
             _core.SetBorderRadius(radius);
