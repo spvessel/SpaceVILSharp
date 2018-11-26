@@ -532,6 +532,7 @@ namespace SpaceVIL
 
         internal Point AddXYShifts(int xShift, int yShift, Point outPoint, bool isx)
         {
+            if (GetParent() == null) return new Point(0, 0);
             //Point outPoint = CursorPosToCoord(point);
             int offset = _cursorXMax / 3;
             if (isx)
@@ -562,6 +563,7 @@ namespace SpaceVIL
                     UpdLinesYShift();
                 }
             }
+            
             outPoint.X += GetParent().GetX() + GetParent().GetPadding().Left + globalXShift + GetTextMargin().Left;
             outPoint.Y += GetParent().GetY() + GetParent().GetPadding().Top + globalYShift + GetTextMargin().Top;
 

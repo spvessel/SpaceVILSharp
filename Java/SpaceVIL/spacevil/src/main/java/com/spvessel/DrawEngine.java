@@ -17,25 +17,14 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryStack;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
 
 final class DrawEngine {
-    protected void resetItems() {
-        if (focusedItem != null)
-            focusedItem.setFocused(false);
-        focusedItem = null;
-        if (hoveredItem != null)
-            hoveredItem.setMouseHover(false);
-        ;
-        hoveredItem = null;
-        hoveredItems.clear();
-    }
+    private Map<InterfaceBaseItem, int[]> _bounds = new HashMap<>();
 
     private ToolTip _tooltip = new ToolTip();
     private InterfaceBaseItem _isStencilSet = null;
@@ -61,6 +50,17 @@ final class DrawEngine {
             focusedItem.setFocused(false);
         focusedItem = item;
         focusedItem.setFocused(true);
+    }
+
+    protected void resetItems() {
+        if (focusedItem != null)
+            focusedItem.setFocused(false);
+        focusedItem = null;
+        if (hoveredItem != null)
+            hoveredItem.setMouseHover(false);
+        ;
+        hoveredItem = null;
+        hoveredItems.clear();
     }
 
     private Pointer ptrPress = new Pointer();
@@ -935,6 +935,7 @@ final class DrawEngine {
             _handler.swap();
 
             flag_move = true;
+            _bounds.clear();
         }
         _primitive.deleteShader();
         _texture.deleteShader();
@@ -994,12 +995,36 @@ final class DrawEngine {
     }
 
     private boolean checkOutsideBorders(InterfaceBaseItem shell) {
-        // if (shell.CutBehaviour == StencilBehaviour.Strict)
-        // if(shell.getParent() != null)
-        // _isStencilSet = shell;
-        // StrictStencil(shell);
-        // else
-        // System.out.println(shell.getItemName());
+        if (shell.getParent() == null)
+            return false;
+
+        if (_bounds.containsKey(shell.getParent())) {
+            int[] shape = _bounds.get(shell.getParent());
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(shape[0], shape[1], shape[2], shape[3]);
+
+            if (!_bounds.containsKey(shell)) {
+                int x = shell.getX();
+                int y = _handler.getLayout().getHeight() - (shell.getY() + shell.getHeight());
+                int w = shell.getWidth();
+                int h = shell.getHeight();
+
+                if (x < shape[0])
+                    x = shape[0];
+                if (y < shape[1])
+                    y = shape[1];
+
+                if (x + w > shape[0] + shape[2]) {
+                    w = shape[0] + shape[2] - x;
+                }
+
+                if (y + h > shape[1] + shape[3])
+                    h = shape[1] + shape[3] - y;
+
+                _bounds.put(shell, new int[] { x, y, w, h });
+            }
+            return true;
+        }
         return lazyStencil(shell);
     }
 
@@ -1039,9 +1064,14 @@ final class DrawEngine {
 
     private void setScissorRectangle(InterfaceBaseItem rect) {
         glEnable(GL_SCISSOR_TEST);
-        glScissor(rect.getParent().getX(),
-                _handler.getLayout().getHeight() - (rect.getParent().getY() + rect.getParent().getHeight()),
-                rect.getParent().getWidth(), rect.getParent().getHeight());
+        int x = rect.getParent().getX();
+        int y = _handler.getLayout().getHeight() - (rect.getParent().getY() + rect.getParent().getHeight());
+        int w = rect.getParent().getWidth();
+        int h = rect.getParent().getHeight();
+        glScissor(x, y, w, h);
+
+        if (!_bounds.containsKey(rect))
+            _bounds.put(rect, new int[] { x, y, w, h });
 
         rect.getParent().setConfines(rect.getParent().getX() + rect.getParent().getPadding().left,
                 rect.getParent().getX() + rect.getParent().getWidth() - rect.getParent().getPadding().right,
@@ -1053,10 +1083,9 @@ final class DrawEngine {
     private Boolean lazyStencil(InterfaceBaseItem shell) {
         Map<ItemAlignment, int[]> outside = new HashMap<ItemAlignment, int[]>();
 
-        if (shell.getParent() != null && _isStencilSet == null) {
+        if (shell.getParent() != null) {
             // bottom
-            if (shell.getParent().getY() + shell.getParent().getHeight() > shell.getY()
-                    && shell.getParent().getY() + shell.getParent().getHeight() < shell.getY() + shell.getHeight()) {
+            if (shell.getParent().getY() + shell.getParent().getHeight() < shell.getY() + shell.getHeight()) {
                 // match
                 int y = shell.getParent().getY() + shell.getParent().getHeight()
                         - shell.getParent().getPadding().bottom;
@@ -1086,7 +1115,7 @@ final class DrawEngine {
                 outside.put(ItemAlignment.LEFT, new int[] { x, w });
             }
 
-            if (outside.size() > 0 || shell.getParent() instanceof TextBlock) {
+            if (outside.size() > 0) {
                 _isStencilSet = shell;
                 // strictStencil(shell);
                 setScissorRectangle(shell);
@@ -1109,39 +1138,42 @@ final class DrawEngine {
         if (root instanceof InterfaceTextContainer) {
             _char.useShader();
             drawText((InterfaceTextContainer) root);
-            _textlinecount++;
-            _primitive.useShader();
-            if (_isStencilSet == root) {
-                glDisable(GL_STENCIL_TEST);
-                glDisable(GL_SCISSOR_TEST);
-                _isStencilSet = null;
-            }
+            glDisable(GL_SCISSOR_TEST);
+            // _primitive.useShader();
+            // if (_isStencilSet == root) {
+            // glDisable(GL_STENCIL_TEST);
+            // glDisable(GL_SCISSOR_TEST);
+            // _isStencilSet = null;
+            // }
         }
         if (root instanceof ImageItem) {
             _primitive.useShader();
             drawShell(root);
+            glDisable(GL_SCISSOR_TEST);
             _texture.useShader();
             drawImage((ImageItem) root);
-            _primitive.useShader();
-            if (_isStencilSet == root) {
-                glDisable(GL_STENCIL_TEST);
-                glDisable(GL_SCISSOR_TEST);
-                _isStencilSet = null;
-            }
+            glDisable(GL_SCISSOR_TEST);
+            // _primitive.useShader();
+            // if (_isStencilSet == root) {
+            // glDisable(GL_STENCIL_TEST);
+            // glDisable(GL_SCISSOR_TEST);
+            // _isStencilSet = null;
+            // }
         } else {
+            _primitive.useShader();
             drawShell(root);
-            
+            glDisable(GL_SCISSOR_TEST);
             if (root instanceof Prototype) {
                 List<InterfaceBaseItem> list = new LinkedList<>(((Prototype) root).getItems());
                 for (InterfaceBaseItem child : list) {
                     drawItems(child);
                 }
             }
-            if (_isStencilSet == root) {
-                glDisable(GL_STENCIL_TEST);
-                glDisable(GL_SCISSOR_TEST);
-                _isStencilSet = null;
-            }
+            // if (_isStencilSet == root) {
+            // glDisable(GL_STENCIL_TEST);
+            // glDisable(GL_SCISSOR_TEST);
+            // _isStencilSet = null;
+            // }
         }
     }
 
@@ -1301,8 +1333,8 @@ final class DrawEngine {
         store.sendUniform2fv(_blur, "frame",
                 new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
         store.sendUniform1f(_blur, "res", (res * 1f / 10));
-        store.sendUniform2fv(_blur, "xy", xy);
-        store.sendUniform2fv(_blur, "wh", wh);
+        store.sendUniform2fv(_blur, "point", xy);
+        store.sendUniform2fv(_blur, "size", wh);
         store.draw();
         store.clear();
     }
@@ -1435,16 +1467,17 @@ final class DrawEngine {
             _tooltip.setX(ptrRelease.getX() - 10);
         }
 
+        _primitive.useShader();
         drawShell(_tooltip);
-
+        glDisable(GL_SCISSOR_TEST);
         _tooltip.getTextLine().updateGeometry();
         _char.useShader();
         drawText(_tooltip.getTextLine());
-        _primitive.useShader();
-        if (_isStencilSet == _tooltip.getTextLine()) {
-            glDisable(GL_STENCIL_TEST);
-            _isStencilSet = null;
-        }
+        glDisable(GL_SCISSOR_TEST);
+        // if (_isStencilSet == _tooltip.getTextLine()) {
+        //     glDisable(GL_STENCIL_TEST);
+        //     _isStencilSet = null;
+        // }
     }
 
     private void drawShadePillow() {

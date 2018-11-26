@@ -463,6 +463,8 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
 
     Point addXYShifts(int xShift, int yShift, Point outPoint, boolean isx) {
         // Point outPoint = cursorPosToCoord(point);
+        if (getParent() == null)
+            return new Point(0, 0);
         int offset = _cursorXMax / 3;
 
         if (isx) {
@@ -539,10 +541,10 @@ class TextureStorage extends Primitive implements InterfaceTextContainer {
 
             for (TextPrinter tptmp : tpLines) {
                 if (tptmp == null || tptmp.texture == null) {
-                    for (int p = 0; p < 4; p++)
-                        for (int j = 0; j < lineHeigh; j++)
-                            for (int i = 0; i < w; i++)
-                                bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte) 0);
+                    // for (int p = 0; p < 4; p++)
+                    //     for (int j = 0; j < lineHeigh; j++)
+                    //         for (int i = 0; i < w; i++)
+                    //             bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte) 0);
 
                     bigOff += lineHeigh * w * 4;
                     continue;

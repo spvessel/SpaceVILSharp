@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 class TextBlock extends Prototype
-        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts {
+        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceGrid {
 
     EventCommonMethod textChanged = new EventCommonMethod();
     private static int count = 0;
@@ -526,18 +526,6 @@ class TextBlock extends Prototype
     }
 
     @Override
-    public void setWidth(int width) {
-        super.setWidth(width);
-        _textureStorage.setBlockWidth(width, _cursor.getWidth());
-    }
-
-    @Override
-    public void setHeight(int height) {
-        super.setHeight(height);
-        _textureStorage.setBlockHeight(height);
-    }
-
-    @Override
     public void initElements() {
         _cursor.setHeight(_textureStorage.getCursorHeight());
         addItems(_selectedArea, _textureStorage, _cursor);
@@ -825,4 +813,65 @@ class TextBlock extends Prototype
     public void undo() {
         //_textureStorage.undo();
     }
+
+
+    @Override
+    public void setWidth(int width) {
+        super.setWidth(width);
+        _textureStorage.setBlockWidth(width, _cursor.getWidth());
+    }
+
+    @Override
+    public void setHeight(int height) {
+        super.setHeight(height);
+        _textureStorage.setBlockHeight(height);
+    }
+    
+    @Override
+    public void setX(int _x)
+        {
+            super.setX(_x);
+            updateLayout();
+        }
+
+    
+    @Override
+    public void setY(int _y)
+        {
+            super.setY(_y);
+            updateLayout();
+        }
+
+    public void updateLayout() {
+        // Console.Write(_selectedArea.GetX() + " " + _selectedArea.GetY());
+        // int xSh = _selectedArea.GetX();
+        // int ySh = _selectedArea.GetY();
+        // if (xSh > 0)
+        // xSh = GetX() + GetPadding().Left - xSh;
+        // if (ySh > 0)
+        // ySh = GetY() + GetPadding().Top - ySh;
+        // _selectedArea.ShiftAreaX(GetX() + GetPadding().Left - xSh);
+        // _selectedArea.ShiftAreaY(GetY() + GetPadding().Top - ySh);
+        // _cursor.SetX(_cursor.GetX() + GetX() + GetPadding().Left);
+        // _cursor.SetY(_cursor.GetY() + GetY() + GetPadding().Top);
+        // Console.WriteLine(" " + _selectedArea.GetX() + " " + _selectedArea.GetY());
+        if (_textureStorage.getParent() == null)
+            return;
+        // ReplaceCursor();
+        Point pos = addXYShifts(0, 0, _cursor_position);
+        _cursor.setX(pos.x);
+        _cursor.setY(pos.y - getLineSpacer() / 2 + 1);// - 3);
+        makeSelectedArea(_selectFrom, _selectTo);
+        
+    }
+
+    // private class TextCursor : Rectangle {
+    // Point _cursor_position = new Point(0, 0);
+    // TextCursor(int height) {
+    // SetItemName("TextCursor_" + count);
+    // SetHeight(height);
+    // }
+
+    // }
+
 }

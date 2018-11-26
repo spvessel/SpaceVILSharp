@@ -28,17 +28,7 @@ namespace SpaceVIL
 {
     internal sealed class DrawEngine
     {
-        public void ResetItems()
-        {
-            if (FocusedItem != null)
-                FocusedItem.SetFocused(false);
-            FocusedItem = null;
-            if (HoveredItem != null)
-                HoveredItem.SetMouseHover(false);
-            HoveredItem = null;
-            HoveredItems.Clear();
-            UnderFocusedItem.Clear();
-        }
+        private Dictionary<IBaseItem, int[]> _bounds = new Dictionary<IBaseItem, int[]>();
 
         private ToolTip _tooltip = new ToolTip();
         private IBaseItem _isStencilSet = null;
@@ -66,6 +56,17 @@ namespace SpaceVIL
                 FocusedItem.SetFocused(false);
             FocusedItem = item;
             FocusedItem.SetFocused(true);
+        }
+        public void ResetItems()
+        {
+            if (FocusedItem != null)
+                FocusedItem.SetFocused(false);
+            FocusedItem = null;
+            if (HoveredItem != null)
+                HoveredItem.SetMouseHover(false);
+            HoveredItem = null;
+            HoveredItems.Clear();
+            UnderFocusedItem.Clear();
         }
         private Pointer ptrPress = new Pointer();
         private Pointer ptrRelease = new Pointer();
@@ -949,9 +950,9 @@ namespace SpaceVIL
             _double_click_timer.Start();
             while (!_handler.IsClosing())
             {
-                // Glfw.WaitEventsTimeout(_interval);
+                Glfw.WaitEventsTimeout(_interval);
                 // Glfw.PollEvents();
-                Glfw.WaitEvents();
+                // Glfw.WaitEvents();
                 // glClearColor(
                 //     (float)_handler.GetLayout().GetBackground().R / 255.0f,
                 //     (float)_handler.GetLayout().GetBackground().G / 255.0f,
@@ -962,6 +963,7 @@ namespace SpaceVIL
                 Update();
                 _handler.Swap();
                 flag_move = true;
+                _bounds.Clear();
             }
             _primitive.DeleteShader();
             _texture.DeleteShader();
@@ -1017,6 +1019,46 @@ namespace SpaceVIL
 
         private bool CheckOutsideBorders(IBaseItem shell)
         {
+            // if(shell.GetItemName() == "_cursor")
+            // {
+            //     Console.WriteLine(
+            //         shell.GetItemName() + " " +
+            //         shell.GetX() + " " +
+            //         shell.GetY() + " " 
+            //     );
+            // }
+            if (shell.GetParent() == null)
+                return false;
+
+            if (_bounds.ContainsKey(shell.GetParent()))
+            {
+                int[] shape = _bounds[shell.GetParent()];
+                glEnable(GL_SCISSOR_TEST);
+                glScissor(shape[0], shape[1], shape[2], shape[3]);
+
+                if (!_bounds.ContainsKey(shell))
+                {
+                    int x = shell.GetX();
+                    int y = _handler.GetLayout().GetHeight() - (shell.GetY() + shell.GetHeight());
+                    int w = shell.GetWidth();
+                    int h = shell.GetHeight();
+
+                    if (x < shape[0]) x = shape[0];
+                    if (y < shape[1]) y = shape[1];
+                    
+                    
+                    if (x + w > shape[0] + shape[2]) 
+                    {
+                        w = shape[0] + shape[2] - x;
+                    }
+
+                    if (y + h > shape[1] + shape[3]) 
+                        h = shape[1] + shape[3] - y;
+
+                    _bounds.Add(shell, new int[] {x, y, w, h});
+                }
+                return true;
+            }
             return LazyStencil(shell);
         }
 
@@ -1071,12 +1113,14 @@ namespace SpaceVIL
         private void SetScissorRectangle(IBaseItem rect)
         {
             glEnable(GL_SCISSOR_TEST);
-            glScissor(
-                rect.GetParent().GetX(),
-                _handler.GetLayout().GetHeight() - (rect.GetParent().GetY() + rect.GetParent().GetHeight()),
-                rect.GetParent().GetWidth(),
-                rect.GetParent().GetHeight()
-                );
+            int x = rect.GetParent().GetX();
+            int y = _handler.GetLayout().GetHeight() - (rect.GetParent().GetY() + rect.GetParent().GetHeight());
+            int w = rect.GetParent().GetWidth();
+            int h = rect.GetParent().GetHeight();
+            glScissor(x, y, w, h);
+
+            if (!_bounds.ContainsKey(rect))
+                _bounds.Add(rect, new int[] { x, y, w, h });
 
             rect.GetParent().SetConfines(
                 rect.GetParent().GetX() + rect.GetParent().GetPadding().Left,
@@ -1091,11 +1135,12 @@ namespace SpaceVIL
         {
             var outside = new Dictionary<ItemAlignment, Int32[]>();
 
-            if (shell.GetParent() != null && _isStencilSet == null)
+            if (shell.GetParent() != null
+                // && _isStencilSet == null
+                )
             {
                 //bottom
-                if (shell.GetParent().GetY() + shell.GetParent().GetHeight() > shell.GetY()
-                    && shell.GetParent().GetY() + shell.GetParent().GetHeight() < shell.GetY() + shell.GetHeight())
+                if ( shell.GetParent().GetY() + shell.GetParent().GetHeight() < shell.GetY() + shell.GetHeight())
                 {
                     //match
                     int y = shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom;
@@ -1128,8 +1173,8 @@ namespace SpaceVIL
                     outside.Add(ItemAlignment.Left, new int[] { x, w });
                 }
 
-                if (outside.Count > 0 
-                || shell.GetParent() is TextBlock
+                if (outside.Count > 0
+                // || shell.GetParent() is TextBlock
                 )
                 {
                     _isStencilSet = shell;
@@ -1159,32 +1204,38 @@ namespace SpaceVIL
             {
                 _char.UseShader();
                 DrawText(root as ITextContainer);
-                _primitive.UseShader();
-                if (_isStencilSet == root)
-                {
-                    glDisable(GL_SCISSOR_TEST);
-                    glDisable(GL_STENCIL_TEST);
-                    _isStencilSet = null;
-                }
+                glDisable(GL_SCISSOR_TEST);
+                // _primitive.UseShader();
+
+                // if (_isStencilSet == root)
+                // {
+                //     glDisable(GL_SCISSOR_TEST);
+                //     // glDisable(GL_STENCIL_TEST);
+                //     _isStencilSet = null;
+                // }
             }
             if (root is IImageItem)
             {
                 _primitive.UseShader();
                 DrawShell(root);
+                glDisable(GL_SCISSOR_TEST);
                 _texture.UseShader();
                 DrawImage(root as ImageItem);
-                _primitive.UseShader();
-                if (_isStencilSet == root)
-                {
-                    glDisable(GL_SCISSOR_TEST);
-                    glDisable(GL_STENCIL_TEST);
-                    _isStencilSet = null;
-                }
+                glDisable(GL_SCISSOR_TEST);
+                // _primitive.UseShader();
+
+                // if (_isStencilSet == root)
+                // {
+                //     glDisable(GL_SCISSOR_TEST);
+                //     // glDisable(GL_STENCIL_TEST);
+                //     _isStencilSet = null;
+                // }
             }
             else
             {
+                _primitive.UseShader();
                 DrawShell(root);
-
+                glDisable(GL_SCISSOR_TEST);
                 if (root is Prototype)
                 {
                     List<IBaseItem> list = new List<IBaseItem>(((Prototype)root).GetItems());
@@ -1193,12 +1244,12 @@ namespace SpaceVIL
                         DrawItems(child);
                     }
                 }
-                if (_isStencilSet == root)
-                {
-                    glDisable(GL_SCISSOR_TEST);
-                    glDisable(GL_STENCIL_TEST);
-                    _isStencilSet = null;
-                }
+                // if (_isStencilSet == root)
+                // {
+                //     glDisable(GL_SCISSOR_TEST);
+                //     // glDisable(GL_STENCIL_TEST);
+                //     _isStencilSet = null;
+                // }
             }
         }
 
@@ -1477,16 +1528,18 @@ namespace SpaceVIL
             else
                 _tooltip.SetX(ptrRelease.GetX() - 10);
 
+            _primitive.UseShader();
             DrawShell(_tooltip);
+            glDisable(GL_SCISSOR_TEST);
             _tooltip.GetTextLine().UpdateGeometry();
             _char.UseShader();
             DrawText(_tooltip.GetTextLine());
-            _primitive.UseShader();
-            if (_isStencilSet == _tooltip.GetTextLine())
-            {
-                glDisable(GL_STENCIL_TEST);
-                _isStencilSet = null;
-            }
+            glDisable(GL_SCISSOR_TEST);
+            // if (_isStencilSet == _tooltip.GetTextLine())
+            // {
+            //     glDisable(GL_STENCIL_TEST);
+            //     _isStencilSet = null;
+            // }
         }
 
         private void DrawShadePillow()
