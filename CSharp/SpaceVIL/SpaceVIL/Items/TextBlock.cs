@@ -479,7 +479,8 @@ namespace SpaceVIL
             _textureStorage.SetTextMargin(margin);
         }
 
-        internal Indents GetTextMargin() {
+        internal Indents GetTextMargin()
+        {
             return _textureStorage.GetTextMargin();
         }
 
@@ -557,7 +558,7 @@ namespace SpaceVIL
         {
             _textureStorage.SetForeground(color);
         }
-        
+
         internal Color GetForeground()
         {
             //if (_linesList == null) return Color.White; //?????
@@ -931,27 +932,34 @@ namespace SpaceVIL
         {
             base.SetWidth(width);
             _textureStorage.SetBlockWidth(width, _cursor.GetWidth());
-            //UpdateLayout();
+            // UpdateLayout();
         }
         public override void SetX(int _x)
         {
-            base.SetX(_x);
-            UpdateLayout();
+            if (GetX() != _x)
+            {
+                base.SetX(_x);
+                UpdateLayout();
+            }
         }
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
             _textureStorage.SetBlockHeight(height);
-            //UpdateLayout();
+            // UpdateLayout();
         }
         public override void SetY(int _y)
         {
-            base.SetY(_y);
-            UpdateLayout();
+            if (GetY() != _y)
+            {
+                base.SetY(_y);
+                UpdateLayout();
+            }
         }
 
-        public void UpdateLayout() {
-            // Console.Write(_selectedArea.GetX() + " " + _selectedArea.GetY());
+        public void UpdateLayout()
+        {
+            // Console.Write("upd");
             // int xSh = _selectedArea.GetX();
             // int ySh = _selectedArea.GetY();
             // if (xSh > 0)
