@@ -949,9 +949,9 @@ namespace SpaceVIL
             _double_click_timer.Start();
             while (!_handler.IsClosing())
             {
-                Glfw.WaitEventsTimeout(_interval);
+                // Glfw.WaitEventsTimeout(_interval);
                 // Glfw.PollEvents();
-                // Glfw.WaitEvents();
+                Glfw.WaitEvents();
                 // glClearColor(
                 //     (float)_handler.GetLayout().GetBackground().R / 255.0f,
                 //     (float)_handler.GetLayout().GetBackground().G / 255.0f,
@@ -1311,8 +1311,8 @@ namespace SpaceVIL
             store.SendUniform1fv(_blur, "weights", 5, weights);
             store.SendUniform2fv(_blur, "frame", new float[2] { _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight() });
             store.SendUniform1f(_blur, "res", (res * 1f / 10));
-            store.SendUniform2fv(_blur, "xy", xy);
-            store.SendUniform2fv(_blur, "wh", wh);
+            store.SendUniform2fv(_blur, "point", xy);
+            store.SendUniform2fv(_blur, "size", wh);
             store.Draw();
             store.Clear();
         }
