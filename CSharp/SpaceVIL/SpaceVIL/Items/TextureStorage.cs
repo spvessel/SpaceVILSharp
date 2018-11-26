@@ -87,10 +87,14 @@ namespace SpaceVIL
 
         internal void SetBlockHeight(int height)
         {
-            if (GetParent() == null) return;
+            if (GetParent() == null) {
+                _cursorYMax = 0;
+            }//return;
+            else {
             Indents textMargin = GetTextMargin();
             _cursorYMax = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom
                  - textMargin.Top - textMargin.Bottom;
+            }
             SetAllowHeight();
             UpdLinesYShift();
         }
@@ -600,28 +604,30 @@ namespace SpaceVIL
                     h += lineHeigh;//tmp.HeightTexture;
                     if (tmp == null) continue;
                     w = (w > tmp.WidthTexture) ? w : tmp.WidthTexture;
-                    //Console.Write(h + " ");
+                    //Console.WriteLine(tl.GetText() + " " + tl.GetLineYShift());
                 }
-                //Console.WriteLine();
                 w += _cursorXMax / 3;
                 SetWidth(w);
                 SetHeight(h);
+                
 
                 byte[] bigByte = new byte[h * w * 4];
                 int bigOff = 0;
-
                 foreach (TextPrinter tptmp in tpLines)
                 {
                     if (tptmp == null || tptmp.Texture == null)
                     {
-                        for (int p = 0; p < 4; p++)
-                            for (int j = 0; j < lineHeigh; j++)
-                                for (int i = 0; i < w; i++)
-                                    bigByte[bigOff + p + i * 4 + j * (w * 4)] = 0;
+                        //Console.WriteLine("null " + count);
+                        // for (int p = 0; p < 4; p++)
+                        //     for (int j = 0; j < lineHeigh; j++)
+                        //         for (int i = 0; i < w; i++)
+                        //             bigByte[bigOff + p + i * 4 + j * (w * 4)] = 0;
 
                         bigOff += lineHeigh * w * 4;
                         continue;
                     }
+                    //Console.WriteLine("normal " + count);
+                    //count++;
                     for (int p = 0; p < 4; p++)
                     {
                         for (int j = 0; j < tptmp.HeightTexture; j++)

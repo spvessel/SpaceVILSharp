@@ -81,8 +81,6 @@ namespace SpaceVIL
             Monitor.Enter(textLock);
             try
             {
-                if (flagBB)
-                {
                     int[] fontDims = GetFontDims();
                     int height = fontDims[2];
                     if (GetHeight() != height)
@@ -92,6 +90,8 @@ namespace SpaceVIL
                         return null;
                     if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
                         return null;
+                if (flagBB)
+                {
 
                     //textPrt.WidthTexture = ;
                     //textPrt.HeightTexture = fontDims[3];

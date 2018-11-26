@@ -1013,47 +1013,6 @@ namespace SpaceVIL
             stencil.SendColor(_primitive, Color.FromArgb(0, 0, 0, 0));
             stencil.Draw(GL_TRIANGLES);
             stencil.Clear();
-            // uint[] buffers = new uint[2];
-            // glGenBuffers(2, buffers);
-
-            // //Vertex
-            // float[] vertexData = new float[crd_array.Count * 3];
-
-            // for (int i = 0; i < vertexData.Length / 3; i++)
-            // {
-            //     vertexData[i * 3 + 0] = crd_array.ElementAt(i)[0];
-            //     vertexData[i * 3 + 1] = crd_array.ElementAt(i)[1];
-            //     vertexData[i * 3 + 2] = crd_array.ElementAt(i)[2];
-            // }
-
-            // glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            // glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
-            // glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);
-            // glEnableVertexAttribArray(0);
-
-            // //Color
-            // float[] argb = { 0.0f, 0.0f, 0.0f, 0.0f };
-            // float[] colorData = new float[crd_array.Count * 4];
-            // for (int i = 0; i < colorData.Length / 4; i++)
-            // {
-            //     colorData[i * 4 + 0] = argb[0];
-            //     colorData[i * 4 + 1] = argb[1];
-            //     colorData[i * 4 + 2] = argb[2];
-            //     colorData[i * 4 + 3] = argb[3];
-            // }
-            // glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            // glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
-            // glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, IntPtr.Zero);
-            // glEnableVertexAttribArray(1);
-
-            // // draw
-            // glDrawArrays(GL_TRIANGLES, 0, crd_array.Count);
-
-            // glDisableVertexAttribArray(0);
-            // glDisableVertexAttribArray(1);
-
-            // // Clear VBO and shader
-            // glDeleteBuffers(2, buffers);
         }
 
         private bool CheckOutsideBorders(IBaseItem shell)
@@ -1061,27 +1020,32 @@ namespace SpaceVIL
             return LazyStencil(shell);
         }
 
-        private void StrictStencil(IBaseItem shell)
+        private void StrictStencil(IBaseItem shell, bool current = false)
         {
             glEnable(GL_STENCIL_TEST);
             glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-            glClear(GL_STENCIL_BUFFER_BIT);
+            // glClear(GL_STENCIL_BUFFER_BIT);
             glStencilMask(0x00);
 
             glStencilFunc(GL_ALWAYS, 1, 0xFF);
             glStencilMask(0xFF);
 
             _primitive.UseShader();
-            SetStencilMask(shell.GetParent().MakeShape());
-
+            if (current)
+            {
+                SetStencilMask(shell.MakeShape());
+            }
+            else
+            {
+                SetStencilMask(shell.GetParent().MakeShape());
+                shell.GetParent().SetConfines(
+                    shell.GetParent().GetX() + shell.GetParent().GetPadding().Left,
+                    shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right,
+                    shell.GetParent().GetY() + shell.GetParent().GetPadding().Top,
+                    shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom
+                );
+            }
             glStencilFunc(GL_EQUAL, 1, 0xFF);
-
-            shell.GetParent().SetConfines(
-                shell.GetParent().GetX() + shell.GetParent().GetPadding().Left,
-                shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right,
-                shell.GetParent().GetY() + shell.GetParent().GetPadding().Top,
-                shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom
-            );
             SetConfines(shell);
         }
 
@@ -1102,6 +1066,25 @@ namespace SpaceVIL
                 foreach (var item in root_items)
                     SetConfines(item);
             }
+        }
+
+        private void SetScissorRectangle(IBaseItem rect)
+        {
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(
+                rect.GetParent().GetX(),
+                _handler.GetLayout().GetHeight() - (rect.GetParent().GetY() + rect.GetParent().GetHeight()),
+                rect.GetParent().GetWidth(),
+                rect.GetParent().GetHeight()
+                );
+
+            rect.GetParent().SetConfines(
+                rect.GetParent().GetX() + rect.GetParent().GetPadding().Left,
+                rect.GetParent().GetX() + rect.GetParent().GetWidth() - rect.GetParent().GetPadding().Right,
+                rect.GetParent().GetY() + rect.GetParent().GetPadding().Top,
+                rect.GetParent().GetY() + rect.GetParent().GetHeight() - rect.GetParent().GetPadding().Bottom
+            );
+            SetConfines(rect);
         }
 
         private bool LazyStencil(IBaseItem shell)
@@ -1145,10 +1128,13 @@ namespace SpaceVIL
                     outside.Add(ItemAlignment.Left, new int[] { x, w });
                 }
 
-                if (outside.Count > 0 || shell.GetParent() is TextBlock)
+                if (outside.Count > 0 
+                || shell.GetParent() is TextBlock
+                )
                 {
                     _isStencilSet = shell;
-                    StrictStencil(shell);
+                    // StrictStencil(shell);
+                    SetScissorRectangle(shell);
                     return true;
                 }
             }
@@ -1176,6 +1162,7 @@ namespace SpaceVIL
                 _primitive.UseShader();
                 if (_isStencilSet == root)
                 {
+                    glDisable(GL_SCISSOR_TEST);
                     glDisable(GL_STENCIL_TEST);
                     _isStencilSet = null;
                 }
@@ -1189,6 +1176,7 @@ namespace SpaceVIL
                 _primitive.UseShader();
                 if (_isStencilSet == root)
                 {
+                    glDisable(GL_SCISSOR_TEST);
                     glDisable(GL_STENCIL_TEST);
                     _isStencilSet = null;
                 }
@@ -1207,6 +1195,7 @@ namespace SpaceVIL
                 }
                 if (_isStencilSet == root)
                 {
+                    glDisable(GL_SCISSOR_TEST);
                     glDisable(GL_STENCIL_TEST);
                     _isStencilSet = null;
                 }

@@ -1037,6 +1037,19 @@ final class DrawEngine {
         }
     }
 
+    private void setScissorRectangle(InterfaceBaseItem rect) {
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(rect.getParent().getX(),
+                _handler.getLayout().getHeight() - (rect.getParent().getY() + rect.getParent().getHeight()),
+                rect.getParent().getWidth(), rect.getParent().getHeight());
+
+        rect.getParent().setConfines(rect.getParent().getX() + rect.getParent().getPadding().left,
+                rect.getParent().getX() + rect.getParent().getWidth() - rect.getParent().getPadding().right,
+                rect.getParent().getY() + rect.getParent().getPadding().top,
+                rect.getParent().getY() + rect.getParent().getHeight() - rect.getParent().getPadding().bottom);
+        setConfines(rect);
+    }
+
     private Boolean lazyStencil(InterfaceBaseItem shell) {
         Map<ItemAlignment, int[]> outside = new HashMap<ItemAlignment, int[]>();
 
@@ -1075,7 +1088,8 @@ final class DrawEngine {
 
             if (outside.size() > 0 || shell.getParent() instanceof TextBlock) {
                 _isStencilSet = shell;
-                strictStencil(shell);
+                // strictStencil(shell);
+                setScissorRectangle(shell);
                 return true;
             }
         }
@@ -1099,6 +1113,7 @@ final class DrawEngine {
             _primitive.useShader();
             if (_isStencilSet == root) {
                 glDisable(GL_STENCIL_TEST);
+                glDisable(GL_SCISSOR_TEST);
                 _isStencilSet = null;
             }
         }
@@ -1110,11 +1125,12 @@ final class DrawEngine {
             _primitive.useShader();
             if (_isStencilSet == root) {
                 glDisable(GL_STENCIL_TEST);
+                glDisable(GL_SCISSOR_TEST);
                 _isStencilSet = null;
             }
         } else {
             drawShell(root);
-
+            
             if (root instanceof Prototype) {
                 List<InterfaceBaseItem> list = new LinkedList<>(((Prototype) root).getItems());
                 for (InterfaceBaseItem child : list) {
@@ -1123,6 +1139,7 @@ final class DrawEngine {
             }
             if (_isStencilSet == root) {
                 glDisable(GL_STENCIL_TEST);
+                glDisable(GL_SCISSOR_TEST);
                 _isStencilSet = null;
             }
         }

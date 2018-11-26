@@ -102,17 +102,17 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     public TextPrinter getLetTextures() {
         textLock.lock();
         try {
-            if (flagBB) {
-                int[] fontDims = getFontDims();
-                int height = fontDims[2];
-                if (getHeight() != height)
-                    super.setHeight(height);
+            int[] fontDims = getFontDims();
+            int height = fontDims[2];
+            if (getHeight() != height)
+                super.setHeight(height);
 
-                // List<TextPrinter> letTexturesList = new LinkedList<>();
-                if (_letters.size() == 0)
-                    return null;
-                if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
-                    return null;
+            // List<TextPrinter> letTexturesList = new LinkedList<>();
+            if (_letters.size() == 0)
+                return null;
+            if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
+                return null;
+            if (flagBB) {
 
                 int bb_h = getHeight();
                 int bb_w = getWidth();
