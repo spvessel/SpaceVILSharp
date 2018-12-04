@@ -11,7 +11,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    internal class TextBlock : Prototype, ITextEditable, IDraggable, ITextShortcuts//, ITextContainer
+    internal class TextBlock : Prototype, ITextEditable, IDraggable, ITextShortcuts, IGrid//, ITextContainer
     {
         public EventCommonMethod TextChanged;
 
@@ -42,7 +42,6 @@ namespace SpaceVIL
             count++;
 
             _textureStorage = new TextureStorage();
-
             _cursor = new Rectangle();
             _selectedArea = new CustomSelector();
 
@@ -441,7 +440,8 @@ namespace SpaceVIL
             Point pos = AddXYShifts(0, 0, _cursor_position);
             _cursor.SetX(pos.X);
             _cursor.SetY(pos.Y - GetLineSpacer() / 2 + 1);// - 3);
-            TextChanged?.Invoke();
+            TextChanged?.Invoke(); //???????
+            //UpdateLayout();
         }
 
         internal void SetLineSpacer(int lineSpacer)
@@ -479,7 +479,8 @@ namespace SpaceVIL
             _textureStorage.SetTextMargin(margin);
         }
 
-        internal Indents GetTextMargin() {
+        internal Indents GetTextMargin()
+        {
             return _textureStorage.GetTextMargin();
         }
 
@@ -557,7 +558,7 @@ namespace SpaceVIL
         {
             _textureStorage.SetForeground(color);
         }
-        
+
         internal Color GetForeground()
         {
             //if (_linesList == null) return Color.White; //?????
@@ -578,16 +579,6 @@ namespace SpaceVIL
                 else
                     _cursor.SetVisible(false);
             }
-        }
-        public override void SetWidth(int width)
-        {
-            base.SetWidth(width);
-            _textureStorage.SetBlockWidth(width, _cursor.GetWidth());
-        }
-        public override void SetHeight(int height)
-        {
-            base.SetHeight(height);
-            _textureStorage.SetBlockHeight(height);
         }
 
         public override void InitElements()
@@ -667,6 +658,7 @@ namespace SpaceVIL
             }
 
             _selectedArea.SetRectangles(selectionRectangles);
+            //UpdateLayout();
         }
 
         private List<Point> RealFromTo(Point from, Point to)
@@ -935,5 +927,65 @@ namespace SpaceVIL
         {
             //_textureStorage.Redo();
         }
+
+        public override void SetWidth(int width)
+        {
+            base.SetWidth(width);
+            _textureStorage.SetBlockWidth(width, _cursor.GetWidth());
+            // UpdateLayout();
+        }
+        public override void SetX(int _x)
+        {
+            if (GetX() != _x)
+            {
+                base.SetX(_x);
+                UpdateLayout();
+            }
+        }
+        public override void SetHeight(int height)
+        {
+            base.SetHeight(height);
+            _textureStorage.SetBlockHeight(height);
+            // UpdateLayout();
+        }
+        public override void SetY(int _y)
+        {
+            if (GetY() != _y)
+            {
+                base.SetY(_y);
+                UpdateLayout();
+            }
+        }
+
+        public void UpdateLayout()
+        {
+            // Console.Write("upd");
+            // int xSh = _selectedArea.GetX();
+            // int ySh = _selectedArea.GetY();
+            // if (xSh > 0)
+            //     xSh = GetX() + GetPadding().Left - xSh;
+            // if (ySh > 0)
+            //     ySh = GetY() + GetPadding().Top - ySh;
+            // _selectedArea.ShiftAreaX(GetX() + GetPadding().Left - xSh);
+            // _selectedArea.ShiftAreaY(GetY() + GetPadding().Top - ySh);
+            // _cursor.SetX(_cursor.GetX() + GetX() + GetPadding().Left);
+            // _cursor.SetY(_cursor.GetY() + GetY() + GetPadding().Top);
+            // Console.WriteLine(" " + _selectedArea.GetX() + " " + _selectedArea.GetY());
+            if (_textureStorage.GetParent() == null) return;
+            //ReplaceCursor();
+            Point pos = AddXYShifts(0, 0, _cursor_position);
+            _cursor.SetX(pos.X);
+            _cursor.SetY(pos.Y - GetLineSpacer() / 2 + 1);// - 3);
+            MakeSelectedArea(_selectFrom, _selectTo);
+        }
+
+        // private class TextCursor : Rectangle {
+        //     Point _cursor_position = new Point(0, 0);
+        //     TextCursor(int height) {
+        //         SetItemName("TextCursor_" + count);
+        //         SetHeight(height);
+        //     }
+
+        // }
     }
 }

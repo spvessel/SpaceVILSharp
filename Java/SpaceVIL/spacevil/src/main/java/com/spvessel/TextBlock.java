@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 class TextBlock extends Prototype
-        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts {
+        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceGrid {
 
     EventCommonMethod textChanged = new EventCommonMethod();
     private static int count = 0;
@@ -32,7 +32,7 @@ class TextBlock extends Prototype
     private boolean _isSelect = false;
     private boolean _justSelected = false;
 
-    //private Color _blockForeground;
+    // private Color _blockForeground;
 
     private List<KeyCode> ShiftValCodes;
     private List<KeyCode> InsteadKeyMods;
@@ -162,6 +162,7 @@ class TextBlock extends Prototype
         // 
         //
         //
+        //
         // if (_linesList != null)
         // realPos.y -= (int)_linesList[0].getLineTopCoord(); //???????!!!!!!
 
@@ -205,11 +206,11 @@ class TextBlock extends Prototype
             }
 
             if (!_isSelect && _justSelected) {
-//                _selectFrom.x = -1;// 0;
-//                _selectFrom.y = 0;
-//                _selectTo.x = -1;// 0;
-//                _selectTo.y = 0;
-//                _justSelected = false;
+                // _selectFrom.x = -1;// 0;
+                // _selectFrom.y = 0;
+                // _selectTo.x = -1;// 0;
+                // _selectTo.y = 0;
+                // _justSelected = false;
                 cancelJustSelected();
             }
 
@@ -218,30 +219,31 @@ class TextBlock extends Prototype
                 // 
                 //
                 //
+                //
                 switch (args.mods) {
-                    case SHIFT:
-                        if (ShiftValCodes.contains(args.key)) {
-                            if (!_isSelect) {
-                                _isSelect = true;
-                                _selectFrom = new Point(_cursor_position);
-                            }
-                        }
-
-                        break;
-
-                    case CONTROL:
-                        if (args.key == KeyCode.A || args.key == KeyCode.a) {
-                            _selectFrom.x = 0;
-                            _selectFrom.y = 0;
-                            _cursor_position.y = _textureStorage.getCount() - 1;
-                            _cursor_position.x = getLineLetCount(_cursor_position.y);
-                            replaceCursor();
-
+                case SHIFT:
+                    if (ShiftValCodes.contains(args.key)) {
+                        if (!_isSelect) {
                             _isSelect = true;
+                            _selectFrom = new Point(_cursor_position);
                         }
-                        break;
+                    }
 
-                    // alt, super ?
+                    break;
+
+                case CONTROL:
+                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
+                        _selectFrom.x = 0;
+                        _selectFrom.y = 0;
+                        _cursor_position.y = _textureStorage.getCount() - 1;
+                        _cursor_position.x = getLineLetCount(_cursor_position.y);
+                        replaceCursor();
+
+                        _isSelect = true;
+                    }
+                    break;
+
+                // alt, super ?
                 }
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE || args.key == KeyCode.ENTER) {
@@ -344,7 +346,7 @@ class TextBlock extends Prototype
                 _cursor_position.x = 0;
 
                 replaceCursor();
-                //textChanged.execute();
+                // textChanged.execute();
             }
 
             if (_isSelect) {
@@ -372,7 +374,8 @@ class TextBlock extends Prototype
                 unselectText();
                 privCutText();
             }
-            if (_justSelected) cancelJustSelected(); //_justSelected = false;
+            if (_justSelected)
+                cancelJustSelected(); // _justSelected = false;
 
             _cursor_position = checkLineFits(_cursor_position);
 
@@ -380,7 +383,7 @@ class TextBlock extends Prototype
             setTextInLine(sb.insert(_cursor_position.x, str).toString());
             _cursor_position.x++;
             replaceCursor();
-            //textChanged.execute();
+            // textChanged.execute();
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -473,7 +476,7 @@ class TextBlock extends Prototype
         try {
             _cursor_position = _textureStorage.setText(text, _cursor_position);
             replaceCursor();
-            //textChanged.execute();
+            // textChanged.execute();
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -567,7 +570,7 @@ class TextBlock extends Prototype
     Color getForeground() {
         // if (_linesList == null) return Color.White; //?????
         // return _linesList[0].getForeground();
-        return _textureStorage.getForeground();//_blockForeground;
+        return _textureStorage.getForeground();// _blockForeground;
     }
 
     boolean isEditable() {
@@ -583,18 +586,6 @@ class TextBlock extends Prototype
             _cursor.setVisible(true);
         else
             _cursor.setVisible(false);
-    }
-
-    @Override
-    public void setWidth(int width) {
-        super.setWidth(width);
-        _textureStorage.setBlockWidth(width, _cursor.getWidth());
-    }
-
-    @Override
-    public void setHeight(int height) {
-        super.setHeight(height);
-        _textureStorage.setBlockHeight(height);
     }
 
     @Override
@@ -808,7 +799,7 @@ class TextBlock extends Prototype
             replaceCursor();
             if (_isSelect)
                 unselectText();
-            cancelJustSelected(); //_justSelected = false;
+            cancelJustSelected(); // _justSelected = false;
             return str;
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -879,10 +870,71 @@ class TextBlock extends Prototype
     }
 
     public void redo() {
-        //_textureStorage.redo();
+        // _textureStorage.redo();
     }
 
     public void undo() {
-        //_textureStorage.undo();
+        // _textureStorage.undo();
     }
+
+    @Override
+    public void setWidth(int width) {
+        super.setWidth(width);
+        _textureStorage.setBlockWidth(width, _cursor.getWidth());
+    }
+
+    @Override
+    public void setHeight(int height) {
+        super.setHeight(height);
+        _textureStorage.setBlockHeight(height);
+    }
+
+    @Override
+    public void setX(int _x) {
+        if (getX() != _x) {
+            super.setX(_x);
+            updateLayout();
+        }
+    }
+
+    @Override
+    public void setY(int _y) {
+        if (getY() != _y) {
+            super.setY(_y);
+            updateLayout();
+        }
+    }
+
+    public void updateLayout() {
+        // Console.Write(_selectedArea.GetX() + " " + _selectedArea.GetY());
+        // int xSh = _selectedArea.GetX();
+        // int ySh = _selectedArea.GetY();
+        // if (xSh > 0)
+        // xSh = GetX() + GetPadding().Left - xSh;
+        // if (ySh > 0)
+        // ySh = GetY() + GetPadding().Top - ySh;
+        // _selectedArea.ShiftAreaX(GetX() + GetPadding().Left - xSh);
+        // _selectedArea.ShiftAreaY(GetY() + GetPadding().Top - ySh);
+        // _cursor.SetX(_cursor.GetX() + GetX() + GetPadding().Left);
+        // _cursor.SetY(_cursor.GetY() + GetY() + GetPadding().Top);
+        // Console.WriteLine(" " + _selectedArea.GetX() + " " + _selectedArea.GetY());
+        if (_textureStorage.getParent() == null)
+            return;
+        // ReplaceCursor();
+        Point pos = addXYShifts(0, 0, _cursor_position);
+        _cursor.setX(pos.x);
+        _cursor.setY(pos.y - getLineSpacer() / 2 + 1);// - 3);
+        makeSelectedArea(_selectFrom, _selectTo);
+
+    }
+
+    // private class TextCursor : Rectangle {
+    // Point _cursor_position = new Point(0, 0);
+    // TextCursor(int height) {
+    // SetItemName("TextCursor_" + count);
+    // SetHeight(height);
+    // }
+
+    // }
+
 }

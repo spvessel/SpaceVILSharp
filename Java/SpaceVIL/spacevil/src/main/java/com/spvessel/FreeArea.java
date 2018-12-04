@@ -83,13 +83,10 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
     @Override
     public void addItem(InterfaceBaseItem item) {
         super.addItem(item);
-        synchronized (this) {
-            _stored_crd.put(item, new int[] { item.getX(), item.getY() });
-        }
+        _stored_crd.put(item, new int[] { item.getX(), item.getY() });
         if (item instanceof ResizableItem) {
             ResizableItem wanted = (ResizableItem) item;
-            InterfaceCommonMethod changed = () -> correctPosition(wanted);
-            wanted.positionChanged.add(changed);
+            wanted.positionChanged.add(() -> correctPosition(wanted));
         }
         updateLayout();
     }
@@ -125,11 +122,11 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
         // int stored_x = _stored_crd.get(item)[0];
         int actual_y = item.getY();
         // int stored_y = _stored_crd.get(item)[1];
-        synchronized (this) {
+        // synchronized (this) {
             _stored_crd.remove(item);
             _stored_crd.put(item,
                     new int[] { actual_x - (int) _xOffset - getX() - getPadding().left - item.getMargin().left,
                             actual_y - (int) _yOffset - getY() - getPadding().top - item.getMargin().top });
-        }
+        // }
     }
 }

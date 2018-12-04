@@ -159,7 +159,19 @@ abstract public class Prototype implements InterfaceBaseItem {
     public Color getBorderFill() {
         return _core.getBorderFill();
     }
-
+    public void setBorderFill(int r, int g, int b) {
+        _core.setBorderFill(r, g, b);
+    }    
+    public void setBorderFill(int r, int g, int b, int a) {
+        _core.setBorderFill(r, g, b, a);
+    }    
+    public void setBorderFill(float r, float g, float b) {
+        _core.setBorderFill(r, g, b);
+    }    
+    public void setBorderFill(float r, float g, float b, float a) {
+        _core.setBorderFill(r, g, b, a);
+    }    
+    
     /**
      * Radius of the border's corners
      */

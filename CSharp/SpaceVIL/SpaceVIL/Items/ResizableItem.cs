@@ -181,20 +181,20 @@ namespace SpaceVIL
         internal void GetSides(float xpos, float ypos)
         {
             _sides = 0;
-            if (xpos <= 10)
+            if (xpos <= 5)
             {
                 _sides |= ItemAlignment.Left;
             }
-            if (xpos >= GetWidth() - 10)
+            if (xpos >= GetWidth() - 5)
             {
                 _sides |= ItemAlignment.Right;
             }
 
-            if (ypos <= 10)
+            if (ypos <= 5)
             {
                 _sides |= ItemAlignment.Top;
             }
-            if (ypos >= GetHeight() - 10)
+            if (ypos >= GetHeight() - 5)
             {
                 _sides |= ItemAlignment.Bottom;
             }

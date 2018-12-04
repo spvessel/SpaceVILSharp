@@ -625,11 +625,7 @@ public class Style {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.padding = new Indents(10, 0, 10, 0);
-
-        ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 150);
-        style.addItemState(ItemStateType.HOVERED, hovered);
-
+        
         Style arrow_style = new Style();
         arrow_style.width = 6;
         arrow_style.height = 10;
@@ -662,8 +658,13 @@ public class Style {
         style.addInnerStyle("itemlist", itemlist_style);
 
         Style area_style = getListAreaStyle();
+        
         Style substrate_style = area_style.getInnerStyle("substrate");
         substrate_style.background = new Color(150, 150, 150, 255);
+
+        Style hovercover_style = area_style.getInnerStyle("hovercover");
+        hovercover_style.background = new Color(150, 150, 150, 255);
+
         style.addInnerStyle("listarea", area_style);
 
         return style;

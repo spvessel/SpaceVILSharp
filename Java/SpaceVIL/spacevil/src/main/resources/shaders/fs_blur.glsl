@@ -3,8 +3,8 @@ uniform sampler2D tex;
 uniform vec2 frame;
 uniform float res;
 uniform float weights[100];
-uniform vec2 xy;
-uniform vec2 wh;
+uniform vec2 point;
+uniform vec2 size;
 in vec2 fragTexCoord;
 
 vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
@@ -15,23 +15,20 @@ vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
 	vec4 color = vec4(0.0);
 	vec4 tmp = vec4(0.0);
 
-	if ((uvx >= xy.x - rad && uvx <= xy.x + wh.x + rad &&
-		uvy >= xy.y - rad && uvy <= xy.y + wh.y + rad))// &&
-		//(uvx < xy.x + rad || uvx > xy.x + wh.x - rad ||
-		//uvy < xy.y + rad || uvy > xy.y + wh.y - rad))
+	if (uvx >= point.x - rad && uvx <= point.x + size.x + rad && uvy >= point.y - rad && uvy <= point.y + size.y + rad)
 	{
-
 		for (int i = -rad; i <= rad; i++) {
-			for (int j = -rad; j <= rad; j++) {
-				tmp = texture2D(image, uv + vec2(i * res * 1f / resolution.x, j * res * 1f/ resolution.y));
-				color += tmp * weights[abs(j)] * weights[abs(i)];
+				for (int j = -rad; j <= rad; j++) {
+					tmp = texture2D(image, uv + vec2(i * res * 1.0 / resolution.x, j * res * 1.0/ resolution.y));
+					int i_ind = abs(i);
+					int j_ind = abs(j);
+					color += tmp * weights[j_ind] * weights[i_ind];
+				}
 			}
-		}
-		//color = vec4(1.0);
-	} else {
+	}
+	else {
 		color = texture2D(image, uv);
 	}
-
 	return color;
 }
 

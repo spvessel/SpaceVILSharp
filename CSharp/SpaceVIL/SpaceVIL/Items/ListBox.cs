@@ -15,6 +15,14 @@ namespace SpaceVIL
         /// <summary>
         /// Selection area of the ListBox
         /// </summary>
+        public Rectangle GetSelectionShape()
+        {
+            return _area.GetSubstrate();
+        }
+        public Rectangle GetHoverShape()
+        {
+            return _area.GetHoverSubstrate();
+        }
         public int GetSelection()
         {
             return _area.GetSelection();
@@ -46,6 +54,14 @@ namespace SpaceVIL
         public bool GetSelectionVisibility()
         {
             return _area.GetSelectionVisibility();
+        }
+        public void SetHoverVisibility(bool visibility)
+        {
+            _area.SetHoverVisibility(visibility);
+        }
+        public bool GetHoverVisibility()
+        {
+            return _area.GetHoverVisibility();
         }
 
         public BlankItem Menu = new BlankItem();
@@ -474,6 +490,7 @@ namespace SpaceVIL
             {
                 Menu.SetStyle(inner_style);
             }
+            _area.SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListArea)));
         }
     }
 }

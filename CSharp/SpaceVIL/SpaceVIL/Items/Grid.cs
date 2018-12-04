@@ -16,11 +16,10 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs a Grid
         /// </summary>
-        public Grid()
+        private Grid()
         {
             SetItemName("Grid_" + count);
             count++;
-
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Grid)));
             IsFocusable = false;
         }
@@ -48,6 +47,37 @@ namespace SpaceVIL
                 }
             }
         }
+        public void SetFormat(int rows, int columns)
+        {
+            if (rows == _row_count && columns == _column_count)
+                return;
+
+            _row_count = rows;
+            _column_count = columns;
+            RearrangeCells();
+        }
+        private void RearrangeCells()
+        {
+            if (_cells == null)
+            {
+                InitCells();
+                return;
+            }
+
+            List<IBaseItem> items = new List<IBaseItem>();
+            foreach (var cell in _cells)
+                items.Add(cell.GetItem());
+            InitCells();
+            int index = 0;
+            foreach (var item in items)
+            {
+                _cells.ElementAt(index).SetItem(item);
+                index++;
+                if (_cells.Count == index)
+                    break;
+            }
+            UpdateLayout();
+        }
         private int _row_count = 1;
 
         /// <summary>
@@ -57,6 +87,7 @@ namespace SpaceVIL
         {
             if (!capacity.Equals(_row_count))
                 _row_count = capacity;
+            RearrangeCells();
         }
         public int GetRowCount()
         {
@@ -72,6 +103,7 @@ namespace SpaceVIL
             if (!capacity.Equals(_column_count))
                 _column_count = capacity;
             //Need to InitCells REFACTOR!
+            RearrangeCells();
         }
         public int GetColumnCount()
         {
@@ -100,6 +132,17 @@ namespace SpaceVIL
         public List<Cell> GetAllCells()
         {
             return _cells;
+        }
+
+        public override void RemoveItem(IBaseItem item)
+        {
+            base.RemoveItem(item);
+            foreach (var link in _cells)
+            {
+                if (link.GetItem() == item)
+                    link.SetItem(null);
+            }
+            // UpdateLayout();
         }
 
         //overrides

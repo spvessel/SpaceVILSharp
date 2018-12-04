@@ -12,11 +12,15 @@ import java.awt.Color;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.*;
 import java.util.Arrays;
 import java.util.HashMap;
 
 final class VisualItem extends BaseItem {
+
+    private Lock locker = new ReentrantLock();
 
     Prototype _main;
 
@@ -115,6 +119,70 @@ final class VisualItem extends BaseItem {
         _border.setFill(fill);
         getState(ItemStateType.BASE).border.setFill(fill);
         updateState();
+    }
+
+    public void setBorderFill(int r, int g, int b) {
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 255)
+            r = 255;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 255)
+            g = 255;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 255)
+            b = 255;
+        setBorderFill(new Color(r, g, b));
+    }
+
+    public void setBorderFill(int r, int g, int b, int a) {
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 255)
+            r = 255;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 255)
+            g = 255;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 255)
+            b = 255;
+        setBorderFill(new Color(r, g, b, a));
+    }
+
+    public void setBorderFill(float r, float g, float b) {
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 1.0f)
+            r = 1.0f;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 1.0f)
+            g = 1.0f;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 1.0f)
+            b = 1.0f;
+        setBorderFill(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f)));
+    }
+
+    public void setBorderFill(float r, float g, float b, float a) {
+        if (r < 0)
+            r = Math.abs(r);
+        if (r > 1.0f)
+            r = 1.0f;
+        if (g < 0)
+            g = Math.abs(g);
+        if (g > 1.0f)
+            g = 1.0f;
+        if (b < 0)
+            b = Math.abs(b);
+        if (b > 1.0f)
+            b = 1.0f;
+        setBorderFill(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
     }
 
     void setBorderRadius(CornerRadius radius) {
@@ -217,8 +285,8 @@ final class VisualItem extends BaseItem {
             ((BaseItem) item).removeItemFromListeners();
     }
 
-    void addItem(InterfaceBaseItem item) {
-        getHandler().engineLocker.lock();
+    protected void addItem(InterfaceBaseItem item) {
+        locker.lock();
         try {
             if (item.equals(this)) {
                 System.out.println("Trying to add current item in himself.");
@@ -237,12 +305,12 @@ final class VisualItem extends BaseItem {
         } catch (Exception ex) {
             System.out.println(item.getItemName() + "\n" + ex.toString());
         } finally {
-            getHandler().engineLocker.unlock();
+            locker.unlock();
         }
     }
 
     void insertItem(InterfaceBaseItem item, int index) {
-        getHandler().engineLocker.lock();
+        locker.lock();
         try {
             if (item.equals(this)) {
                 System.out.println("Trying to add current item in himself.");
@@ -274,7 +342,7 @@ final class VisualItem extends BaseItem {
         } catch (Exception ex) {
             System.out.println(item.getItemName() + "\n" + ex.toString());
         } finally {
-            getHandler().engineLocker.unlock();
+            locker.unlock();
         }
     }
 
@@ -296,8 +364,8 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    void removeItem(InterfaceBaseItem item) {
-        getHandler().engineLocker.lock();
+    protected void removeItem(InterfaceBaseItem item) {
+        locker.lock();
         try {
             LayoutType type;
             if (item instanceof InterfaceFloating) {
@@ -316,7 +384,7 @@ final class VisualItem extends BaseItem {
         } catch (Exception ex) {
             System.out.println(item.getItemName() + "\n" + ex.toString());
         } finally {
-            getHandler().engineLocker.unlock();
+            locker.unlock();
         }
     }
 
@@ -502,6 +570,7 @@ final class VisualItem extends BaseItem {
     }
 
     private boolean _focusable = true;
+
     public boolean isFocusable() {
         return _focusable;
     }

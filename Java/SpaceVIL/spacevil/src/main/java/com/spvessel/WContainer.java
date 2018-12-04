@@ -31,17 +31,17 @@ public class WContainer extends Prototype {
     }
 
     List<ItemAlignment> getSides(float xpos, float ypos) {
-        if (xpos <= 10) {
+        if (xpos <= 5) {
             _sides.add(ItemAlignment.LEFT);
         }
-        if (xpos >= getWidth() - 10) {
+        if (xpos >= getWidth() - 5) {
             _sides.add(ItemAlignment.RIGHT);
         }
 
-        if (ypos <= 10) {
+        if (ypos <= 5) {
             _sides.add(ItemAlignment.TOP);
         }
-        if (ypos >= getHeight() - 10) {
+        if (ypos >= getHeight() - 5) {
             _sides.add(ItemAlignment.BOTTOM);
         }
 

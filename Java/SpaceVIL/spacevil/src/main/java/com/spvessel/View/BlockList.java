@@ -72,7 +72,7 @@ public class BlockList extends ResizableItem {
         vs.slider.handler.setBackground(80, 80, 80, 255);
         vs.slider.handler.setMargin(new Indents(5, 0, 5, 0));
 
-        _text.setPadding(-1, -1, -1, -1);
+        // _text.setPadding(-1, -1, -1, -1);
         _text.setBorderRadius(new CornerRadius(3));
         _text.setHScrollBarVisible(ScrollBarVisibility.NEVER);
         _text.setHeight(25);

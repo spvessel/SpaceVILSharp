@@ -17,6 +17,14 @@ import java.util.List;
 public class ListBox extends Prototype {
     private static int count = 0;
 
+    public Rectangle getSelectionShape() {
+        return _area.getSubstrate();
+    }
+    
+    public Rectangle getHoverShape() {
+        return _area.getHoverSubstrate();
+    }
+    
     /**
      * Selection area of the ListBox
      */
@@ -447,5 +455,6 @@ public class ListBox extends Prototype {
         if (inner_style != null) {
             menu.setStyle(inner_style);
         }
+        _area.setStyle(DefaultsService.getDefaultStyle(ListArea.class));
     }
 }

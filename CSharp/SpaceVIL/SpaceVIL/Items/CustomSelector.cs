@@ -23,6 +23,7 @@ namespace SpaceVIL
         public override List<float[]> MakeShape()
         {
             //SetTriangles(GraphicsMathService.GetRectangle(GetWidth(), GetHeight(), GetX(), GetY()));
+
             return GraphicsMathService.ToGL(this, GetHandler());
         }
 
@@ -31,6 +32,7 @@ namespace SpaceVIL
         /// </summary>
         public void SetRectangles(List<Point> points)
         {
+            SetX(0); SetY(0);
             List<float[]> triangles = new List<float[]>();
             int w1 = 0, w2 = 0;
             int h1 = 0, h2 = 0;
@@ -60,6 +62,7 @@ namespace SpaceVIL
         /// Shift selector on Y direction
         /// </summary>
         public void ShiftAreaY(int yShift) {
+            SetY(yShift);
             List<float[]> triangles = GetTriangles();
             if (triangles == null || triangles.Count == 0)
                 return;
@@ -75,6 +78,7 @@ namespace SpaceVIL
         /// </summary>
         public void ShiftAreaX(int xShift)
         {
+            SetX(xShift);
             List<float[]> triangles = GetTriangles();
             if (triangles == null || triangles.Count == 0)
                 return;

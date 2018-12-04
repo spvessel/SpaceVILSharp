@@ -17,25 +17,14 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryStack;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
 
 final class DrawEngine {
-    void resetItems() {
-        if (focusedItem != null)
-            focusedItem.setFocused(false);
-        focusedItem = null;
-        if (hoveredItem != null)
-            hoveredItem.setMouseHover(false);
-        ;
-        hoveredItem = null;
-        hoveredItems.clear();
-    }
+    private Map<InterfaceBaseItem, int[]> _bounds = new HashMap<>();
 
     private ToolTip _tooltip = new ToolTip();
     private InterfaceBaseItem _isStencilSet = null;
@@ -61,6 +50,17 @@ final class DrawEngine {
             focusedItem.setFocused(false);
         focusedItem = item;
         focusedItem.setFocused(true);
+    }
+
+    protected void resetItems() {
+        if (focusedItem != null)
+            focusedItem.setFocused(false);
+        focusedItem = null;
+        if (hoveredItem != null)
+            hoveredItem.setMouseHover(false);
+        ;
+        hoveredItem = null;
+        hoveredItems.clear();
     }
 
     private Pointer ptrPress = new Pointer();
@@ -187,7 +187,8 @@ final class DrawEngine {
         // glEnable(GL_STENCIL_TEST);
 
         ////////////////////////////////////////////////
-        _primitive = new Shader(getResourceString("/shaders/vs_primitive.glsl"), getResourceString("/shaders/fs_primitive.glsl"));
+        _primitive = new Shader(getResourceString("/shaders/vs_primitive.glsl"),
+                getResourceString("/shaders/fs_primitive.glsl"));
         _primitive.compile();
         if (_primitive.getProgramID() == 0)
             System.out.println("Could not create primitive shaders");
@@ -206,10 +207,11 @@ final class DrawEngine {
             System.out.println("Could not create character shaders");
         ///////////////////////////////////////////////
 
-        // _fxaa = new Shader(getResourceString("/shaders/vs_fxaa.glsl"), getResourceString("/shaders/fs_fxaa.glsl"));
+        // _fxaa = new Shader(getResourceString("/shaders/vs_fxaa.glsl"),
+        // getResourceString("/shaders/fs_fxaa.glsl"));
         // _fxaa.compile();
         // if (_fxaa.getProgramID() == 0)
-        //     System.out.println("Could not create fxaa shaders");
+        // System.out.println("Could not create fxaa shaders");
 
         _blur = new Shader(getResourceString("/shaders/vs_blur.glsl"), getResourceString("/shaders/fs_blur.glsl"));
         _blur.compile();
@@ -474,8 +476,8 @@ final class DrawEngine {
                 if (_handler.getLayout().isBorderHidden && _handler.getLayout().isResizable
                         && !_handler.getLayout().isMaximized) {
                     // resize
-                    if ((xpos < _handler.getLayout().getWindow().getWidth() - 10) && (xpos > 10)
-                            && (ypos < _handler.getLayout().getWindow().getHeight() - 10) && ypos > 10) {
+                    if ((xpos < _handler.getLayout().getWindow().getWidth() - 5) && (xpos > 5)
+                            && (ypos < _handler.getLayout().getWindow().getHeight() - 5) && ypos > 5) {
                         if (hoveredItem instanceof InterfaceTextEditable)
                             _handler.setCursorType(GLFW_IBEAM_CURSOR);
                         if (hoveredItem instanceof SplitHolder) {
@@ -486,19 +488,19 @@ final class DrawEngine {
                         }
                     } else // refactor!!
                     {
-                        if ((xpos >= _handler.getLayout().getWindow().getWidth() - 10 && ypos <= 10)
-                                || (xpos >= _handler.getLayout().getWindow().getWidth() - 10
+                        if ((xpos >= _handler.getLayout().getWindow().getWidth() - 5 && ypos <= 5)
+                                || (xpos >= _handler.getLayout().getWindow().getWidth() - 5
                                         && ypos >= _handler.getLayout().getWindow().getHeight() - 105)
-                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 10 && xpos <= 10)
-                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 10
-                                        && xpos >= _handler.getLayout().getWindow().getWidth() - 10)
+                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 5 && xpos <= 5)
+                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 5
+                                        && xpos >= _handler.getLayout().getWindow().getWidth() - 5)
                                 || (xpos <= 10 && ypos <= 10)) {
                             _handler.setCursorType(GLFW_CROSSHAIR_CURSOR);
                         } else {
-                            if (xpos > _handler.getLayout().getWindow().getWidth() - 10 || xpos <= 10)
+                            if (xpos > _handler.getLayout().getWindow().getWidth() - 5 || xpos <= 5)
                                 _handler.setCursorType(GLFW_HRESIZE_CURSOR);
 
-                            if (ypos > _handler.getLayout().getWindow().getHeight() - 10 || ypos <= 10)
+                            if (ypos > _handler.getLayout().getWindow().getHeight() - 5 || ypos <= 5)
                                 _handler.setCursorType(GLFW_VRESIZE_CURSOR);
                         }
                     }
@@ -528,8 +530,7 @@ final class DrawEngine {
 
     private boolean isDoubleClick() {
         if (_first_click) {
-            if ((System.nanoTime() - _start_time) / 1000000 < 500)
-            {
+            if ((System.nanoTime() - _start_time) / 1000000 < 500) {
                 _first_click = false;
                 _start_time = 0;
                 return true;
@@ -655,7 +656,7 @@ final class DrawEngine {
                 if (is_double_click) {
                     if (focusedItem != null)
                         assignActions(InputEventType.MOUSE_DOUBLE_CLICK, _margs, focusedItem);
-                        //focusedItem.eventMouseDoubleClick.execute(focusedItem, _margs);
+                    // focusedItem.eventMouseDoubleClick.execute(focusedItem, _margs);
                 }
             }
 
@@ -699,10 +700,10 @@ final class DrawEngine {
                 Prototype tmp = (Prototype) item;
                 if (!tmp.isVisible() || !tmp.isDrawable())
                     continue;
-                tmp.setMouseHover(false);
                 if (tmp.getHoverVerification(xpos, ypos)) {
                     queue.add(tmp);
                 } else {
+                    tmp.setMouseHover(false);
                     if (item instanceof InterfaceFloating && action == InputEventType.MOUSE_PRESS) {
                         InterfaceFloating float_item = (InterfaceFloating) item;
                         if (float_item.isOutsideClickClosable()) {
@@ -722,9 +723,8 @@ final class DrawEngine {
             hoveredItem = queue.get(queue.size() - 1);
             hoveredItem.setMouseHover(true);
 
-            Deque<Prototype> tmp;
             hoveredItems = queue;
-            tmp = new ArrayDeque<>(hoveredItems);
+            Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
             while (!tmp.isEmpty()) {
                 Prototype item = tmp.pollLast();
                 if (item.equals(hoveredItem) && hoveredItem.isDisabled())
@@ -774,9 +774,9 @@ final class DrawEngine {
         _tooltip.initTimer(false);
         if (hoveredItems.size() == 0)
             return;
-        List<Prototype> tmp = new LinkedList<Prototype>(hoveredItems);
-        Collections.reverse(tmp);
-        for (Prototype item : tmp) {
+        Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
+        while (!tmp.isEmpty()) {
+            Prototype item = tmp.pollLast();
             if (dy > 0 || dx < 0)
                 item.eventScrollUp.execute(item, _margs);
             if (dy < 0 || dx > 0)
@@ -788,18 +788,18 @@ final class DrawEngine {
     }
 
     private void keyPress(long wnd, int key, int scancode, int action, int mods) {
-        //System.out.println("keypress");
-//        switch (action) {
-//            case 1 :
-//                System.out.println("key press");
-//                break;
-//            case 0 :
-//                System.out.println("key release");
-//                break;
-//            case 2 :
-//                System.out.println("key repeat");
-//                break;
-//        }
+        // System.out.println("keypress");
+        // switch (action) {
+        // case 1 :
+        // System.out.println("key press");
+        // break;
+        // case 0 :
+        // System.out.println("key release");
+        // break;
+        // case 2 :
+        // System.out.println("key repeat");
+        // break;
+        // }
         if (!_handler.focusable)
             return;
         _tooltip.initTimer(false);
@@ -826,11 +826,14 @@ final class DrawEngine {
                 ((InterfaceTextShortcuts) focusedItem).redo();
             } else {
                 if (action == InputState.PRESS.getValue())
-                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); //assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
+                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); // assignActions(InputEventType.KEY_PRESS,
+                                                                            // _kargs, focusedItem);
                 if (action == InputState.REPEAT.getValue())
-                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); //assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
+                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); // assignActions(InputEventType.KEY_PRESS,
+                                                                            // _kargs, focusedItem);
                 if (action == InputState.RELEASE.getValue())
-                    focusedItem.eventKeyRelease.execute(focusedItem, _kargs); //assignActions(InputEventType.KEY_RELEASE, _kargs, focusedItem);
+                    focusedItem.eventKeyRelease.execute(focusedItem, _kargs); // assignActions(InputEventType.KEY_RELEASE,
+                                                                              // _kargs, focusedItem);
             }
         } else {
             if (action == InputState.PRESS.getValue())
@@ -843,7 +846,7 @@ final class DrawEngine {
     }
 
     private void textInput(long wnd, int character, int mods) {
-//        System.out.println("textinput");
+        // System.out.println("textinput");
         if (!_handler.focusable)
             return;
 
@@ -919,9 +922,9 @@ final class DrawEngine {
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {
-            // glfwWaitEventsTimeout(_interval);
+            glfwWaitEventsTimeout(_interval);
             // glfwWaitEvents();
-            glfwPollEvents();
+            // glfwPollEvents();
 
             // glClearColor((float) _handler.getLayout().getBackground().getRed() / 255.0f,
             // (float) _handler.getLayout().getBackground().getGreen() / 255.0f,
@@ -932,6 +935,7 @@ final class DrawEngine {
             _handler.swap();
 
             flag_move = true;
+            _bounds.clear();
         }
         _primitive.deleteShader();
         _texture.deleteShader();
@@ -991,12 +995,36 @@ final class DrawEngine {
     }
 
     private boolean checkOutsideBorders(InterfaceBaseItem shell) {
-        // if (shell.CutBehaviour == StencilBehaviour.Strict)
-        // if(shell.getParent() != null)
-        // _isStencilSet = shell;
-        // StrictStencil(shell);
-        // else
-        // System.out.println(shell.getItemName());
+        if (shell.getParent() == null)
+            return false;
+
+        if (_bounds.containsKey(shell.getParent())) {
+            int[] shape = _bounds.get(shell.getParent());
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(shape[0], shape[1], shape[2], shape[3]);
+
+            if (!_bounds.containsKey(shell)) {
+                int x = shell.getX();
+                int y = _handler.getLayout().getHeight() - (shell.getY() + shell.getHeight());
+                int w = shell.getWidth();
+                int h = shell.getHeight();
+
+                if (x < shape[0])
+                    x = shape[0];
+                if (y < shape[1])
+                    y = shape[1];
+
+                if (x + w > shape[0] + shape[2]) {
+                    w = shape[0] + shape[2] - x;
+                }
+
+                if (y + h > shape[1] + shape[3])
+                    h = shape[1] + shape[3] - y;
+
+                _bounds.put(shell, new int[] { x, y, w, h });
+            }
+            return true;
+        }
         return lazyStencil(shell);
     }
 
@@ -1034,13 +1062,30 @@ final class DrawEngine {
         }
     }
 
+    private void setScissorRectangle(InterfaceBaseItem rect) {
+        glEnable(GL_SCISSOR_TEST);
+        int x = rect.getParent().getX();
+        int y = _handler.getLayout().getHeight() - (rect.getParent().getY() + rect.getParent().getHeight());
+        int w = rect.getParent().getWidth();
+        int h = rect.getParent().getHeight();
+        glScissor(x, y, w, h);
+
+        if (!_bounds.containsKey(rect))
+            _bounds.put(rect, new int[] { x, y, w, h });
+
+        rect.getParent().setConfines(rect.getParent().getX() + rect.getParent().getPadding().left,
+                rect.getParent().getX() + rect.getParent().getWidth() - rect.getParent().getPadding().right,
+                rect.getParent().getY() + rect.getParent().getPadding().top,
+                rect.getParent().getY() + rect.getParent().getHeight() - rect.getParent().getPadding().bottom);
+        setConfines(rect);
+    }
+
     private Boolean lazyStencil(InterfaceBaseItem shell) {
         Map<ItemAlignment, int[]> outside = new HashMap<ItemAlignment, int[]>();
 
-        if (shell.getParent() != null && _isStencilSet == null) {
+        if (shell.getParent() != null) {
             // bottom
-            if (shell.getParent().getY() + shell.getParent().getHeight() > shell.getY()
-                    && shell.getParent().getY() + shell.getParent().getHeight() < shell.getY() + shell.getHeight()) {
+            if (shell.getParent().getY() + shell.getParent().getHeight() < shell.getY() + shell.getHeight()) {
                 // match
                 int y = shell.getParent().getY() + shell.getParent().getHeight()
                         - shell.getParent().getPadding().bottom;
@@ -1070,9 +1115,10 @@ final class DrawEngine {
                 outside.put(ItemAlignment.LEFT, new int[] { x, w });
             }
 
-            if (outside.size() > 0 || shell.getParent() instanceof TextBlock) {
+            if (outside.size() > 0) {
                 _isStencilSet = shell;
-                strictStencil(shell);
+                // strictStencil(shell);
+                setScissorRectangle(shell);
                 return true;
             }
         }
@@ -1092,36 +1138,42 @@ final class DrawEngine {
         if (root instanceof InterfaceTextContainer) {
             _char.useShader();
             drawText((InterfaceTextContainer) root);
-            _textlinecount++;
-            _primitive.useShader();
-            if (_isStencilSet == root) {
-                glDisable(GL_STENCIL_TEST);
-                _isStencilSet = null;
-            }
+            glDisable(GL_SCISSOR_TEST);
+            // _primitive.useShader();
+            // if (_isStencilSet == root) {
+            // glDisable(GL_STENCIL_TEST);
+            // glDisable(GL_SCISSOR_TEST);
+            // _isStencilSet = null;
+            // }
         }
         if (root instanceof ImageItem) {
             _primitive.useShader();
             drawShell(root);
+            glDisable(GL_SCISSOR_TEST);
             _texture.useShader();
             drawImage((ImageItem) root);
-            _primitive.useShader();
-            if (_isStencilSet == root) {
-                glDisable(GL_STENCIL_TEST);
-                _isStencilSet = null;
-            }
+            glDisable(GL_SCISSOR_TEST);
+            // _primitive.useShader();
+            // if (_isStencilSet == root) {
+            // glDisable(GL_STENCIL_TEST);
+            // glDisable(GL_SCISSOR_TEST);
+            // _isStencilSet = null;
+            // }
         } else {
+            _primitive.useShader();
             drawShell(root);
-
+            glDisable(GL_SCISSOR_TEST);
             if (root instanceof Prototype) {
                 List<InterfaceBaseItem> list = new LinkedList<>(((Prototype) root).getItems());
                 for (InterfaceBaseItem child : list) {
                     drawItems(child);
                 }
             }
-            if (_isStencilSet == root) {
-                glDisable(GL_STENCIL_TEST);
-                _isStencilSet = null;
-            }
+            // if (_isStencilSet == root) {
+            // glDisable(GL_STENCIL_TEST);
+            // glDisable(GL_SCISSOR_TEST);
+            // _isStencilSet = null;
+            // }
         }
     }
 
@@ -1281,8 +1333,8 @@ final class DrawEngine {
         store.sendUniform2fv(_blur, "frame",
                 new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
         store.sendUniform1f(_blur, "res", (res * 1f / 10));
-        store.sendUniform2fv(_blur, "xy", xy);
-        store.sendUniform2fv(_blur, "wh", wh);
+        store.sendUniform2fv(_blur, "point", xy);
+        store.sendUniform2fv(_blur, "size", wh);
         store.draw();
         store.clear();
     }
@@ -1415,16 +1467,17 @@ final class DrawEngine {
             _tooltip.setX(ptrRelease.getX() - 10);
         }
 
+        _primitive.useShader();
         drawShell(_tooltip);
-
+        glDisable(GL_SCISSOR_TEST);
         _tooltip.getTextLine().updateGeometry();
         _char.useShader();
         drawText(_tooltip.getTextLine());
-        _primitive.useShader();
-        if (_isStencilSet == _tooltip.getTextLine()) {
-            glDisable(GL_STENCIL_TEST);
-            _isStencilSet = null;
-        }
+        glDisable(GL_SCISSOR_TEST);
+        // if (_isStencilSet == _tooltip.getTextLine()) {
+        //     glDisable(GL_STENCIL_TEST);
+        //     _isStencilSet = null;
+        // }
     }
 
     private void drawShadePillow() {

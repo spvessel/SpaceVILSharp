@@ -115,6 +115,7 @@ namespace SpaceVIL
 
         private void VisibleSelf()
         {
+            
             SetVisible(true);
 
             _stop.Stop();
