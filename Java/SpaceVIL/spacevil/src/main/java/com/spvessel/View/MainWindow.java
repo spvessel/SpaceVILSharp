@@ -35,8 +35,8 @@ public class MainWindow extends ActiveWindow {
          } catch (IOException e) {
              System.out.println("icon exception " + e.toString());
          }
-//         if (iBig != null && iSmall != null)
-//            Handler.setIcon(iBig, iSmall);
+         if (iBig != null && iSmall != null)
+            Handler.setIcon(iBig, iSmall);
 
         TitleBar title = new TitleBar("Main King Window - JAVA");
         Handler.addItem(title);
