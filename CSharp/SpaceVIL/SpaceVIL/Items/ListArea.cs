@@ -116,6 +116,7 @@ namespace SpaceVIL
 
         public void OnMouseClick(IItem sender, MouseArgs args)
         {
+            Unselect();
             foreach (var index in _list_of_visible_items)
             {
                 IBaseItem item = GetItems().ElementAt(index);

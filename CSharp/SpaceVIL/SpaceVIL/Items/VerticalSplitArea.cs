@@ -52,11 +52,11 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            SetSplitHolderPosition((GetWidth() - _splitHolder.GetHolderSize()) / 2);
-
             //Adding
             AddItem(_splitHolder);
-            UpdateLayout();
+            SetSplitHolderPosition((GetWidth() - _splitHolder.GetHolderSize()) / 2);
+            // Console.WriteLine(_splitHolder.GetX() + " " + _splitHolder.GetWidth());
+            // UpdateLayout();
         }
 
         public void AssignLeftItem(IBaseItem item)
@@ -109,7 +109,7 @@ namespace SpaceVIL
 
         public void UpdateLayout()
         {
-            _splitHolder.SetHeight(GetHeight());
+            // _splitHolder.SetHeight(GetHeight());
 
             int tmpWidth = _leftWidth - GetPadding().Left;
 
@@ -137,9 +137,9 @@ namespace SpaceVIL
                 item.SetConfines();
         }
 
-        public void SetSpacerWidth(int spWidth)
+        public void SetSplitThickness(int thickness)
         {
-            _splitHolder.SetSpacerSize(spWidth);
+            _splitHolder.SetSpacerSize(thickness);
         }
 
         public override void SetStyle(Style style)
