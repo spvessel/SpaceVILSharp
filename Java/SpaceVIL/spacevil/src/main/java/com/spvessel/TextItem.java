@@ -17,7 +17,7 @@ abstract class TextItem extends Primitive {
 
     private Font _font = DefaultsService.getDefaultFont();
 
-    static int count = 0;
+    private static int count = 0;
     private int queueCapacity = 512;
 
     TextItem() {

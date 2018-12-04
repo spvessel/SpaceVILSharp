@@ -5,18 +5,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CustomSelector extends Primitive {
-    static int count = 0;
+    private static int count = 0;
 
+    /**
+     * Constructs a CustomSelector
+     */
     public CustomSelector() {
         super("CustomSelector_" + count);
         count++;
     }
 
+    /**
+     * @return CustomSelector's shape in GL coordinates
+     */
     @Override
     public List<float[]> makeShape() {
         return GraphicsMathService.toGL(this, getHandler());
     }
 
+    /**
+     * Make CustomSelector's rectangles with left top and right bottom points
+     */
     public void setRectangles(List<Point> points) {
         List<float[]> triangles = new LinkedList<>();
         int w1 = 0, w2 = 0;
@@ -29,7 +38,7 @@ public class CustomSelector extends Primitive {
             for (int i = 0; i < points.size() / 2; i++) {
                 Point p1 = points.get(i * 2 + 0);
                 Point p2 = points.get(i * 2 + 1);
-                //System.out.println((p2.x - p1.x) + " " + (p2.y - p1.y) + " " + p1.x + " " + p2.y);
+
                 triangles.addAll(GraphicsMathService.getRectangle((p2.x - p1.x), (p2.y - p1.y), p1.x, p2.y));
                 w1 = (p1.x < w1) ? p1.x : w1;
                 w2 = (p2.x > w2) ? p2.x : w2;
@@ -42,6 +51,9 @@ public class CustomSelector extends Primitive {
         setHeight(h2 - h1);
     }
 
+    /**
+     * Shift selector on Y direction
+     */
     public void shiftAreaY(int yShift) {
         List<float[]> triangles = getTriangles();
         if (triangles == null || triangles.size() == 0)
@@ -54,6 +66,9 @@ public class CustomSelector extends Primitive {
         setTriangles(triangles);
     }
 
+    /**
+     * Shift selector on X direction
+     */
     public void shiftAreaX(int xShift) {
         List<float[]> triangles = getTriangles();
         if (triangles == null || triangles.size() == 0)

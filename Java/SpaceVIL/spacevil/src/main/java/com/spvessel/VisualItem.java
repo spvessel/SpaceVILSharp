@@ -18,13 +18,13 @@ import java.util.HashMap;
 
 final class VisualItem extends BaseItem {
 
-    protected Prototype _main;
+    Prototype _main;
 
-    protected VisualItem() {
+    VisualItem() {
         this("VisualItem_");
     }
 
-    protected VisualItem(String name) {
+    VisualItem(String name) {
         ItemState base = new ItemState();
         base.background = getBackground();
         states.put(ItemStateType.BASE, base);
@@ -105,101 +105,101 @@ final class VisualItem extends BaseItem {
     // item
     private Border _border = new Border();
 
-    protected void setBorder(Border border) {
+    void setBorder(Border border) {
         _border = border;
         getState(ItemStateType.BASE).border = _border;
         updateState();
     }
 
-    protected void setBorderFill(Color fill) {
+    void setBorderFill(Color fill) {
         _border.setFill(fill);
         getState(ItemStateType.BASE).border.setFill(fill);
         updateState();
     }
 
-    protected void setBorderRadius(CornerRadius radius) {
+    void setBorderRadius(CornerRadius radius) {
         _border.setRadius(radius);
         getState(ItemStateType.BASE).border.setRadius(radius);
         updateState();
     }
 
-    protected void setBorderThickness(int thickness) {
+    void setBorderThickness(int thickness) {
         _border.setThickness(thickness);
         getState(ItemStateType.BASE).border.setThickness(thickness);
         updateState();
     }
 
-    protected CornerRadius getBorderRadius() {
+    CornerRadius getBorderRadius() {
         return _border.getRadius();
     }
 
-    protected int getBorderThickness() {
+    int getBorderThickness() {
         return _border.getThickness();
     }
 
-    protected Color getBorderFill() {
+    Color getBorderFill() {
         return _border.getFill();
     }
 
-    protected Map<ItemStateType, ItemState> states = new HashMap<ItemStateType, ItemState>();
-    protected ItemStateType _state = ItemStateType.BASE;
+    Map<ItemStateType, ItemState> states = new HashMap<>();
+    ItemStateType _state = ItemStateType.BASE;
 
-    protected void setState(ItemStateType state) {
+    void setState(ItemStateType state) {
         _state = state;
         updateState();
     }
 
-    protected ItemStateType getCurrentState() {
+    ItemStateType getCurrentState() {
         return _state;
     }
 
     private String _tooltip = "";
 
-    protected String getToolTip() {
+    String getToolTip() {
         return _tooltip;
     }
 
-    protected void setToolTip(String text) {
+    void setToolTip(String text) {
         _tooltip = text;
     }
 
     // container
     private Spacing _spacing = new Spacing();
 
-    protected Spacing getSpacing() {
+    Spacing getSpacing() {
         return _spacing;
     }
 
-    protected void setSpacing(Spacing spacing) {
+    void setSpacing(Spacing spacing) {
         _spacing = spacing;
     }
 
-    protected void setSpacing(int horizontal, int vertical) {
+    void setSpacing(int horizontal, int vertical) {
         _spacing = new Spacing(horizontal, vertical);
     }
 
     private Indents _padding = new Indents();
 
-    protected Indents getPadding() {
+    Indents getPadding() {
         return _padding;
     }
 
-    protected void setPadding(Indents padding) {
+    void setPadding(Indents padding) {
         _padding = padding;
     }
 
-    protected void setPadding(int left, int top, int right, int bottom) {
+    void setPadding(int left, int top, int right, int bottom) {
         _padding = new Indents(left, top, right, bottom);
     }
 
-    protected EventManager eventManager = null;
-    private List<InterfaceBaseItem> _content = new LinkedList<InterfaceBaseItem>();
+    EventManager eventManager = null;
+    private List<InterfaceBaseItem> _content = new LinkedList<>();
 
-    protected List<InterfaceBaseItem> getItems() {
+    List<InterfaceBaseItem> getItems() {
         return _content;
     }
 
-    protected void setContent(List<InterfaceBaseItem> content) {
+    void setContent(List<InterfaceBaseItem> content) {
         _content = content;
     }
 
@@ -217,7 +217,7 @@ final class VisualItem extends BaseItem {
             ((BaseItem) item).removeItemFromListeners();
     }
 
-    protected void addItem(InterfaceBaseItem item) {
+    void addItem(InterfaceBaseItem item) {
         getHandler().engineLocker.lock();
         try {
             if (item.equals(this)) {
@@ -241,7 +241,7 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    protected void insertItem(InterfaceBaseItem item, int index) {
+    void insertItem(InterfaceBaseItem item, int index) {
         getHandler().engineLocker.lock();
         try {
             if (item.equals(this)) {
@@ -278,7 +278,7 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    private void cascadeRemoving(InterfaceBaseItem item, LayoutType type) {
+    void cascadeRemoving(InterfaceBaseItem item, LayoutType type) {
         if (item instanceof VisualItem)// и если это действительно контейнер
         {
             VisualItem container = (VisualItem) item;// предполагаю что элемент контейнер
@@ -296,7 +296,7 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    protected void removeItem(InterfaceBaseItem item) {
+    void removeItem(InterfaceBaseItem item) {
         getHandler().engineLocker.lock();
         try {
             LayoutType type;
@@ -321,16 +321,16 @@ final class VisualItem extends BaseItem {
     }
 
     @Override
-    protected void addEventListener(GeometryEventType type, InterfaceBaseItem listener) {
+    void addEventListener(GeometryEventType type, InterfaceBaseItem listener) {
         eventManager.subscribe(type, listener);
     }
 
     @Override
-    protected void removeEventListener(GeometryEventType type, InterfaceBaseItem listener) {
+    void removeEventListener(GeometryEventType type, InterfaceBaseItem listener) {
         eventManager.unsubscribe(type, listener);
     }
 
-    protected void addItemState(ItemStateType type, ItemState state) {
+    void addItemState(ItemStateType type, ItemState state) {
         if (states.containsKey(type)) {
             state.value = true;
             states.replace(type, state);
@@ -339,24 +339,24 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    protected ItemState getState(ItemStateType type) {
+    ItemState getState(ItemStateType type) {
         if (states.containsKey(type))
             return states.get(type);
         return null;
     }
 
-    protected Map<ItemStateType, ItemState> getAllStates() {
+    Map<ItemStateType, ItemState> getAllStates() {
         return states;
     }
 
-    protected void removeItemState(ItemStateType type) {
+    void removeItemState(ItemStateType type) {
         if (type == ItemStateType.BASE)
             return;
         if (states.containsKey(type))
             states.remove(type);
     }
 
-    protected void removeAllItemStates() {
+    void removeAllItemStates() {
         List<ItemStateType> itemsToRemove = states.entrySet().stream().filter(i -> i.getKey() != ItemStateType.BASE)
                 .map(Map.Entry::getKey).collect(Collectors.toList());
         for (ItemStateType item : itemsToRemove)
@@ -400,22 +400,24 @@ final class VisualItem extends BaseItem {
     // common properties
     private List<InputEventType> _pass_events = new LinkedList<>();
 
-    protected boolean isPassEvents() {
-        if (_pass_events.size() == 0)
-            return true;
-        return false;
+    boolean isPassEvents() {
+//        if (_pass_events.size() == 0)
+//            return true;
+//        return false;
+
+        return (_pass_events.size() == 0);
     }
 
-    protected List<InputEventType> getPassEvents() {
+    List<InputEventType> getPassEvents() {
         List<InputEventType> result = Arrays.asList(InputEventType.values());
         return result.stream().filter(e -> !_pass_events.contains(e)).collect(Collectors.toList());
     }
 
-    protected List<InputEventType> getNonPassEvents() {
+    List<InputEventType> getNonPassEvents() {
         return _pass_events;
     }
 
-    protected void setPassEvents(boolean value) {
+    void setPassEvents(boolean value) {
         if (!value) {
             for (InputEventType e : Arrays.asList(InputEventType.values())) {
                 _pass_events.add(e);
@@ -425,7 +427,7 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    protected void setPassEvents(boolean value, InputEventType e) {
+    void setPassEvents(boolean value, InputEventType e) {
         if (!value) {
             if (!_pass_events.contains(e))
                 _pass_events.add(e);
@@ -435,7 +437,7 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    protected void setPassEvents(boolean value, List<InputEventType> event_set) {
+    void setPassEvents(boolean value, List<InputEventType> event_set) {
         if (!value) {
             _pass_events = event_set;
         } else {
@@ -448,11 +450,11 @@ final class VisualItem extends BaseItem {
 
     private boolean _disabled;
 
-    protected boolean isDisabled() {
+    boolean isDisabled() {
         return _disabled;
     }
 
-    protected void setDisabled(boolean value) {
+    void setDisabled(boolean value) {
         if (_disabled == value)
             return;
         _disabled = value;
@@ -461,11 +463,11 @@ final class VisualItem extends BaseItem {
 
     private boolean _hover;
 
-    protected boolean isMouseHover() {
+    boolean isMouseHover() {
         return _hover;
     }
 
-    protected void setMouseHover(boolean value) {
+    void setMouseHover(boolean value) {
         if (_hover == value)
             return;
         _hover = value;
@@ -474,11 +476,11 @@ final class VisualItem extends BaseItem {
 
     private boolean _pressed;
 
-    protected boolean isMousePressed() {
+    boolean isMousePressed() {
         return _pressed;
     }
 
-    protected void setMousePressed(boolean value) {
+    void setMousePressed(boolean value) {
         if (_pressed == value)
             return;
         _pressed = value;
@@ -486,13 +488,13 @@ final class VisualItem extends BaseItem {
     }
 
     private boolean _focused;
-    protected boolean isFocusable = true;
+    boolean isFocusable = true;
 
-    protected boolean isFocused() {
+    boolean isFocused() {
         return _focused;
     }
 
-    protected void setFocused(boolean value) {
+    void setFocused(boolean value) {
         if (_focused == value)
             return;
         _focused = value;
@@ -509,13 +511,13 @@ final class VisualItem extends BaseItem {
     }
 
     @Override
-    protected void updateInnersDrawable(boolean value) {
+    void updateInnersDrawable(boolean value) {
         for (InterfaceBaseItem item : _content) {
             item.setVisible(value);
         }
     }
 
-    protected void updateState() {
+    void updateState() {
         ItemState s_base = getState(ItemStateType.BASE);
         ItemState current = getState(_state);
         super.setBackground(current.background);
@@ -585,7 +587,7 @@ final class VisualItem extends BaseItem {
         return clone;
     }
 
-    protected boolean getHoverVerification(float xpos, float ypos) {
+    boolean getHoverVerification(float xpos, float ypos) {
         switch (HoverRule) {
         case LAZY:
             return lazyHoverVerification(xpos, ypos);
@@ -679,11 +681,11 @@ final class VisualItem extends BaseItem {
 
     private CustomFigure _is_custom = null;
 
-    protected CustomFigure isCustomFigure() {
+    CustomFigure isCustomFigure() {
         return _is_custom;
     }
 
-    protected void setCustomFigure(CustomFigure figure) {
+    void setCustomFigure(CustomFigure figure) {
         _is_custom = figure;
     }
 

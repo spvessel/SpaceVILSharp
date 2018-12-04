@@ -12,6 +12,9 @@ public class ComboBoxDropDown extends DialogWindow {
     public ButtonCore selection;
     public EventCommonMethod selectionChanged = new EventCommonMethod();
 
+    /**
+     * Constructs a ComboBoxDropDown
+     */
     public ComboBoxDropDown() {
     }
 
@@ -28,8 +31,7 @@ public class ComboBoxDropDown extends DialogWindow {
         
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
-        InterfaceCommonMethod selection_changed = () -> onSelectionChanged();
-        itemList.getArea().selectionChanged.add(selection_changed);
+        itemList.getArea().selectionChanged.add(this::onSelectionChanged);
         
         Handler.addItem(itemList);
 
@@ -37,10 +39,16 @@ public class ComboBoxDropDown extends DialogWindow {
         setStyle(DefaultsService.getDefaultStyle(ComboBoxDropDown.class));
     }
 
+    /**
+     * Add item to the ComboBoxDropDown list
+     */
     public void add(InterfaceBaseItem item) {
         itemList.addItem(item);
     }
 
+    /**
+     * Remove item from the ComboBoxDropDown
+     */
     public void remove(InterfaceBaseItem item) {
         itemList.removeItem(item);
     }
@@ -55,6 +63,9 @@ public class ComboBoxDropDown extends DialogWindow {
         }
     }
 
+    /**
+     * Current element in the ComboBoxDropDown by index
+     */
     public void setCurrentIndex(int index) {
         itemList.setSelection(index);
     }
@@ -63,16 +74,25 @@ public class ComboBoxDropDown extends DialogWindow {
         return itemList.getSelection();
     }
 
+    /**
+     * Show the ComboBoxDropDown
+     */
     @Override
     public void show() {
         super.show();
         WindowLayoutBox.setFocusedWindow(this);
     }
 
+    /**
+     * Dispose the ComboBoxDropDown
+     */
     public void Dispose() {
         getHandler().close();
     }
 
+    /**
+     * Set style of the ComboBoxDropDown
+     */
     public void setStyle(Style style) {
         if (style == null)
             return;

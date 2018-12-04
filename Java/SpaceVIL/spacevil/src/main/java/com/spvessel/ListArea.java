@@ -6,8 +6,6 @@ import java.util.List;
 import com.spvessel.Common.DefaultsService;
 import com.spvessel.Core.*;
 import com.spvessel.Decorations.Style;
-import com.spvessel.Flags.SizePolicy;
-import com.spvessel.Flags.KeyCode;;
 
 public class ListArea extends Prototype implements InterfaceVLayout {
     public EventCommonMethod selectionChanged = new EventCommonMethod();
@@ -15,10 +13,12 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     private int _step = 15;
 
+    /**
+     * ScrollBar moving step
+     */
     public void setStep(int value) {
         _step = value;
     }
-
     public int getStep() {
         return _step;
     }
@@ -26,14 +26,23 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     private boolean _show_selection = true;
     private int _selection = -1;
 
+    /**
+     * @return Number of the selected item
+     */
     public int getSelection() {
         return _selection;
     }
 
+    /**
+     * @return selected item
+     */
     public InterfaceBaseItem getSelectionItem() {
         return getItems().get(_selection + 2);
     }
 
+    /**
+     * Set selected item by index
+     */
     public void setSelection(int index) {
         _selection = index;
         if (index < 0)
@@ -43,40 +52,53 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         updateLayout();
     }
 
+    /**
+     * Unselect all items
+     */
     public void unselect() {
         _selection = -1;
         _substrate.setVisible(false);
         _hover_substrate.setVisible(false);
     }
 
+    /**
+     * Is selection changes view of the item or not
+     */
     public void setSelectionVisibility(boolean visibility) {
         _show_selection = visibility;
         updateLayout();
     }
-
     public boolean getSelectionVisibility() {
         return _show_selection;
     }
 
     private Rectangle _substrate = new Rectangle();
 
+    /**
+     * Substrate under the selected item
+     */
     public Rectangle getSubstrate() {
         return _substrate;
     }
 
     private boolean _show_hover = true;
 
+    /**
+     * Is hovering changes view of the item or not
+     */
     public void setHoverVisibility(boolean visibility) {
         _show_hover = visibility;
         updateLayout();
     }
-
     public boolean getHoverVisibility() {
         return _show_hover;
     }
 
     private Rectangle _hover_substrate = new Rectangle();
 
+    /**
+     * Substrate under the hovered item
+     */
     public Rectangle getHoverSubstrate() {
         return _hover_substrate;
     }
@@ -86,29 +108,25 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     // public int lastVisibleItem = 0;
     List<Integer> _list_of_visible_items = new LinkedList<>();
 
-    static int count = 0;
+    private static int count = 0;
 
+    /**
+     * Constructs a ListArea
+     */
     public ListArea() {
         setItemName("ListArea_" + count);
         count++;
-        eventMouseClick.add((sender, args) -> onMouseClick(sender, args));
-        eventMouseDoubleClick.add((sender, args) -> onMouseDoubleClick(sender, args));
-        eventMouseHover.add((sender, args) -> onMouseHover(sender, args));
+        eventMouseClick.add(this::onMouseClick);
+        eventMouseDoubleClick.add(this::onMouseDoubleClick);
+        eventMouseHover.add(this::onMouseHover);
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ListArea"));
         setStyle(DefaultsService.getDefaultStyle(ListArea.class));
 
-        eventKeyPress.add((sender, args) -> onKeyPress(sender, args));
+        eventKeyPress.add(this::onKeyPress);
     }
 
-    // overrides
-    @Override
-    public void initElements() {
-        _substrate.setVisible(false);
-        super.addItems(_substrate, _hover_substrate);
-    }
-
-    protected void onMouseClick(InterfaceItem sender, MouseArgs args) {
+    private void onMouseClick(InterfaceItem sender, MouseArgs args) {
         for (int index : _list_of_visible_items) {
             InterfaceBaseItem item = getItems().get(index);
             int y = item.getY();
@@ -122,7 +140,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         }
     }
 
-    public void onMouseDoubleClick(InterfaceItem sender, MouseArgs args) {
+    private void onMouseDoubleClick(InterfaceItem sender, MouseArgs args) {
         if (getSelectionItem() instanceof Prototype) {
             // System.out.println(getSelectionItem().getItemName());
             ((Prototype) getSelectionItem()).eventMouseDoubleClick.execute(getSelectionItem(), args);
@@ -138,7 +156,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         }
     }
 
-    protected void onMouseHover(InterfaceItem sender, MouseArgs args) {
+    private void onMouseHover(InterfaceItem sender, MouseArgs args) {
         if (!getHoverVisibility())
             return;
 
@@ -154,7 +172,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         }
     }
 
-    protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         InterfaceBaseItem tmp = getSelectionItem();
         int index = getSelection();
         switch (args.key) {
@@ -194,6 +212,19 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         }
     }
 
+    // overrides
+    /**
+     * Initialization and adding of all elements in the ListArea
+     */
+    @Override
+    public void initElements() {
+        _substrate.setVisible(false);
+        super.addItems(_substrate, _hover_substrate);
+    }
+
+    /**
+     * If something changes when mouse hovered
+     */
     @Override
     public void setMouseHover(boolean value) {
         super.setMouseHover(value);
@@ -201,6 +232,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
             _hover_substrate.setDrawable(false);
     }
 
+    /**
+     * Insert item into the ListArea by index
+     */
     @Override
     public void insertItem(InterfaceBaseItem item, int index) {
         if (item instanceof Prototype) {
@@ -212,6 +246,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         updateLayout();
     }
 
+    /**
+     * Add item to the ListArea
+     */
     @Override
     public void addItem(InterfaceBaseItem item) {
         if (item instanceof Prototype)
@@ -221,6 +258,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         updateLayout();
     }
 
+    /**
+     * Remove item from the ListArea
+     */
     @Override
     public void removeItem(InterfaceBaseItem item) {
         unselect();
@@ -229,6 +269,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         itemListChanged.execute();
     }
 
+    /**
+     * Set Y position of the ListArea
+     */
     @Override
     public void setY(int _y) {
         super.setY(_y);
@@ -239,24 +282,32 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     private long _yOffset = 0;
     private long _xOffset = 0;
 
+    /**
+     * Vertical scroll offset in the ListArea
+     */
     public long getVScrollOffset() {
         return _yOffset;
     }
-
     public void setVScrollOffset(long value) {
         _yOffset = value;
         updateLayout();
     }
 
+    /**
+     * Horizontal scroll offset in the ListArea
+     */
     public long getHScrollOffset() {
         return _xOffset;
     }
-
     public void setHScrollOffset(long value) {
         _xOffset = value;
         updateLayout();
     }
 
+    /**
+     * Update all children and ListArea sizes and positions
+     * according to confines
+     */
     public void updateLayout() {
         _list_of_visible_items.clear();
 
@@ -317,6 +368,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         updateSubstrate();
     }
 
+    /**
+     * Set style of the ListArea
+     */
     // style
     @Override
     public void setStyle(Style style) {

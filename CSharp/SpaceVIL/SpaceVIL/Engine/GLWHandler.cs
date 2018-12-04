@@ -31,15 +31,15 @@ namespace SpaceVIL
         Glfw.Cursor _resize_all;
 
         ///////////////////////////////////////////////
-        internal Glfw.WindowSizeFunc ResizeCallback;
-        internal Glfw.CursorPosFunc MouseMoveCallback;
-        internal Glfw.MouseButtonFunc MouseClickCallback;
-        internal Glfw.ScrollFunc MouseScrollCallback;
-        internal Glfw.WindowCloseFunc WindowCloseCallback;
-        internal Glfw.WindowPosFunc WindowPosCallback;
-        internal Glfw.KeyFunc KeyPressCallback;
-        internal Glfw.CharModsFunc KeyInputText;
-        internal Glfw.WindowFocusFunc WindowFocusCallback;
+        Glfw.WindowSizeFunc ResizeCallback;
+        Glfw.CursorPosFunc MouseMoveCallback;
+        Glfw.MouseButtonFunc MouseClickCallback;
+        Glfw.ScrollFunc MouseScrollCallback;
+        Glfw.WindowCloseFunc WindowCloseCallback;
+        Glfw.WindowPosFunc WindowPosCallback;
+        Glfw.KeyFunc KeyPressCallback;
+        Glfw.CharModsFunc KeyInputText;
+        Glfw.WindowFocusFunc WindowFocusCallback;
         ///////////////////////////////////////////////
 
         internal bool BorderHidden;
@@ -51,7 +51,7 @@ namespace SpaceVIL
         internal bool AlwaysOnTop;
         internal bool Maximized;
         private Pointer WPosition = new Pointer();
-        public Pointer GetPointer()
+        internal Pointer GetPointer()
         {
             return WPosition;
         }

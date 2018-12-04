@@ -1,11 +1,17 @@
 package com.spvessel.Decorations;
 
 public class Indents {
+    /**
+     * A class that store indents of the object
+     */
     public int left;
     public int top;
     public int right;
     public int bottom;
 
+    /**
+     * Constructs a Indents with default values (zero for each side)
+     */
     public Indents() {
         left = 0;
         top = 0;
@@ -13,6 +19,9 @@ public class Indents {
         bottom = 0;
     }
 
+    /**
+     * Constructs a Indents with strict values for each side
+     */
     public Indents(int left, int top, int right, int bottom) {
         this.left = left;
         this.top = top;

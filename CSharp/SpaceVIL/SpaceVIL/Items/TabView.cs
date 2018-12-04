@@ -17,6 +17,9 @@ namespace SpaceVIL
         private Dictionary<ButtonToggle, Frame> _tab_list;
         private Style _stored_style;
 
+        /// <summary>
+        /// Constructs a TabView
+        /// </summary>
         public TabView()
         {
             // SetBackground(Color.Transparent);
@@ -36,6 +39,9 @@ namespace SpaceVIL
             return false;
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the TabView
+        /// </summary>
         public override void InitElements()
         {
             //tab view
@@ -51,7 +57,7 @@ namespace SpaceVIL
         {
             foreach (var tab in _tab_list)
             {
-                if (tab.Key.GetItemName() != sender.GetItemName())
+                if (!tab.Key.GetItemName().Equals(sender.GetItemName()))
                 {
                     tab.Key.SetToggled(false);
                     _tab_list[tab.Key].SetVisible(false);
@@ -64,6 +70,10 @@ namespace SpaceVIL
             _tab_view.UpdateLayout();
         }
 
+        /// <summary>
+        /// Add new tab to the TabView
+        /// </summary>
+        /// <param name="tab_name"> name of the new tab </param>
         public void AddTab(String tab_name)
         {
             Style tab_style = _stored_style.GetInnerStyle("tab");
@@ -94,20 +104,34 @@ namespace SpaceVIL
                 view.SetVisible(true);
             }
         }
+
+        /// <summary>
+        /// Add new tab to the TabView
+        /// </summary>
+        /// <param name="tab_name"> name of the new tab </param>
+        /// <param name="tab_style"> style of the new tab </param>
         public void AddTab(String tab_name, Style tab_style, Style view_style)
         {
             //refactor
         }
+
+        /// <summary>
+        /// Remove tab by name
+        /// </summary>
         public void RemoveTab(String tab_name)
         {
             foreach (var tab in _tab_bar.GetItems())
             {
-                if (tab_name == tab.GetItemName())
+                if (tab_name.Equals(tab.GetItemName()))
                 {
                     _tab_list.Remove(tab as ButtonToggle);
                 }
             }
         }
+
+        /// <summary>
+        /// Add InterfaceBaseItem item to the tab with name tab_name
+        /// </summary>
         public void AddItemToTab(String tab_name, IBaseItem item)
         {
             foreach (var tab in _tab_bar.GetItems())
@@ -121,31 +145,45 @@ namespace SpaceVIL
 
         //text init
         private ItemAlignment _textAlignment;
+
+        /// <summary>
+        /// Text alignment in the TabView
+        /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _textAlignment = alignment;
         }
+
         private Indents _textMargin = new Indents();
+
+        /// <summary>
+        /// Text margin in the TabView
+        /// </summary>
         public void SetTextMargin(Indents margin)
         {
             _textMargin = margin;
         }
+
         private Font _font = new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold);
+        private int _font_size = 16;
+        private FontStyle _font_style = FontStyle.Bold;
+        private FontFamily _font_family = new FontFamily("Open Sans Light");
+
+        /// <summary>
+        /// Text font parameters in the TabView
+        /// </summary>
         public void SetFont(Font font)
         {
             _font = font;
         }
-        private int _font_size = 16;
         public void SetFontSize(int size)
         {
             _font_size = size;
         }
-        private FontStyle _font_style = FontStyle.Bold;
         public void SetFontStyle(FontStyle style)
         {
             _font_style = style;
         }
-        private FontFamily _font_family = new FontFamily("Open Sans Light");
         public void SetFontFamily(FontFamily font_family)
         {
             _font_family = font_family;
@@ -154,7 +192,12 @@ namespace SpaceVIL
         {
             return _font;
         }
+
         private Color _foreground = Color.White;
+
+        /// <summary>
+        /// Text color in the TabView
+        /// </summary>
         public void SetForeground(Color color)
         {
             _foreground = color;
@@ -188,6 +231,9 @@ namespace SpaceVIL
             SetForeground(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
         }
 
+        /// <summary>
+        /// Set style of the TabView
+        /// </summary>
         //style
         public override void SetStyle(Style style)
         {

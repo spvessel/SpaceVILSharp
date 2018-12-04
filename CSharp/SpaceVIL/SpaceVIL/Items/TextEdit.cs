@@ -161,7 +161,7 @@ namespace SpaceVIL
             curPos = _cursor.GetX() - curPos;
             _selectedArea.SetX(_selectedArea.GetX() + curPos);
         }
-
+        /*
         public void InvokeScrollUp(MouseArgs args)
         {
             EventScrollUp?.Invoke(this, args);
@@ -171,7 +171,7 @@ namespace SpaceVIL
         {
             EventScrollDown?.Invoke(this, args);
         }
-
+        */
 
         private void ReplaceCursorAccordingCoord(int realPos)
         {

@@ -8,8 +8,13 @@ import com.spvessel.Decorations.ItemState;
 import com.spvessel.Flags.ItemStateType;
 import com.spvessel.Flags.SizePolicy;
 
+
+import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class MainWindow extends ActiveWindow {
 
@@ -22,15 +27,16 @@ public class MainWindow extends ActiveWindow {
         Handler.setBackground(45, 45, 45);
         Handler.setPadding(2, 2, 2, 2);
 
-        // BufferedImage iBig = null;
-        // BufferedImage iSmall = null;
-        // try {
-        // iBig = ImageIO.read(new File("D:\\icon_big.png"));
-        // iSmall = ImageIO.read(new File("D:\\icon_small.png"));
-        // } catch (IOException e) {
-        // }
-        // if (iBig != null && iSmall != null)
-        // Handler.setIcon(iBig, iSmall);
+         BufferedImage iBig = null;
+         BufferedImage iSmall = null;
+         try {
+         iBig = ImageIO.read(new File("D:\\icon.png"));
+         iSmall = ImageIO.read(new File("D:\\icon.png"));
+         } catch (IOException e) {
+             System.out.println("icon exception " + e.toString());
+         }
+//         if (iBig != null && iSmall != null)
+//            Handler.setIcon(iBig, iSmall);
 
         TitleBar title = new TitleBar("Main King Window - JAVA");
         Handler.addItem(title);

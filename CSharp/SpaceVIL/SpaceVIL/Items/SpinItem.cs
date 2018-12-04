@@ -17,6 +17,10 @@ namespace SpaceVIL
         public ButtonCore UpButton = new ButtonCore();
         public ButtonCore DownButton = new ButtonCore();
         internal TextEditRestricted textInput = new TextEditRestricted();
+
+        /// <summary>
+        /// Constructs a SpinItem
+        /// </summary>
         public SpinItem()
         {
             SetItemName("SpinItem_" + count);
@@ -45,21 +49,33 @@ namespace SpaceVIL
             textInput.DecreaseValue();
         }
 
+        /// <summary>
+        /// Set SpinItem's parameters
+        /// </summary>
+        /// <param name="currentValue"> SpinItem current value </param>
+        /// <param name="minValue"> minimum available value </param>
+        /// <param name="maxValue"> maximum available value </param>
+        /// <param name="step"> SpinItem step </param>
         public void SetParameters(int currentValue, int minValue, int maxValue, int step)
         {
             textInput.SetParameters(currentValue, minValue, maxValue, step);
         }
-
         public void SetParameters(double currentValue, double minValue, double maxValue, double step)
         {
             textInput.SetParameters(currentValue, minValue, maxValue, step);
         }
 
+        /// <summary>
+        /// Values accuracy (decimal places)
+        /// </summary>
         public void SetAccuracy(int accuracy)
         {
             textInput.SetAccuracy(accuracy);
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the SpinItem
+        /// </summary>
         public override void InitElements()
         {
             AddItem(_horzStack);
@@ -67,6 +83,9 @@ namespace SpaceVIL
             _vertStack.AddItems(UpButton, DownButton);
         }
 
+        /// <summary>
+        /// Set style of the SpinItem
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)

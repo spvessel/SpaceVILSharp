@@ -6,8 +6,11 @@ import com.spvessel.Core.InterfaceHLayout;
 import com.spvessel.Flags.SizePolicy;
 
 public class HorizontalStack extends Prototype implements InterfaceHLayout {
-    static int count = 0;
+    private static int count = 0;
 
+    /**
+     * Constructs a HorizontalStack
+     */
     public HorizontalStack() {
         setItemName("HorizontalStack_" + count);
         count++;
@@ -22,24 +25,37 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
         return false;
     }
 
+    /**
+     * Add item to the HorizontalStack
+     */
     @Override
     public void addItem(InterfaceBaseItem item) {
         super.addItem(item);
         updateLayout();
     }
 
+    /**
+     * Set width of the HorizontalStack
+     */
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
         updateLayout();
     }
 
+    /**
+     * Set X position of the HorizontalStack
+     */
     @Override
     public void setX(int _x) {
         super.setX(_x);
         updateLayout();
     }
 
+    /**
+     * Update all children and HorizontalStack sizes and positions
+     * according to confines
+     */
     public void updateLayout() {
         int total_space = getWidth() - getPadding().left - getPadding().right;
         int free_space = total_space;

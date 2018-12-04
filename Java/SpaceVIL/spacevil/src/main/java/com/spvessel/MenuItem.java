@@ -15,15 +15,21 @@ import java.util.stream.Collectors;
 
 public class MenuItem extends Prototype {
     public boolean isActionItem = false;
-    static int count = 0;
+    private static int count = 0;
     private TextLine _text_object;
     protected ContextMenu _context_menu;
     private ContextMenu _sub_context_menu;
 
-    public ContextMenu getSubCintextMenu() {
+    /**
+     * @return sub context menu
+     */
+    public ContextMenu getSubContextMenu() {
         return _sub_context_menu;
     }
 
+    /**
+     * Is MenuItem ready to close
+     */
     public boolean isReadyToClose(MouseArgs args) {
         if (_sub_context_menu != null) {
             if (!_sub_context_menu.getHoverVerification(args.position.getX(), args.position.getY())
@@ -33,19 +39,24 @@ public class MenuItem extends Prototype {
         return false;
     }
 
-    CustomShape _arrow;
+    private CustomShape _arrow;
 
-    public void assignContexMenu(ContextMenu context_menu) {
+    /**
+     * Assign the context menu
+     */
+    public void assignContextMenu(ContextMenu context_menu) {
         _sub_context_menu = context_menu;
         _sub_context_menu.setOutsideClickClosable(false);
         isActionItem = true;
     }
 
+    /**
+     * Constructs a MenuItem
+     */
     public MenuItem() {
         setItemName("MenuItem_" + count);
         count++;
-        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(key_press);
+        eventKeyPress.add(this::onKeyPress);
 
         InterfaceMouseMethodState m_press = (sender, args) -> onMouseAction();
         eventMousePress.add(m_press);
@@ -55,85 +66,108 @@ public class MenuItem extends Prototype {
         setStyle(DefaultsService.getDefaultStyle(MenuItem.class));
     }
 
+    /**
+     * Constructs a MenuItem with text
+     */
     public MenuItem(String text) {
         this();
         setText(text);
     }
 
+    /**
+     * Constructs a MenuItem with assigned context menu and text
+     */
     public MenuItem(ContextMenu context_menu, String text) {
         this();
-        assignContexMenu(context_menu);
+        assignContextMenu(context_menu);
         setText(text);
     }
 
-    protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    void onKeyPress(InterfaceItem sender, KeyArgs args) {
         if (args.scancode == 0x1C && eventMouseClick != null)
             eventMouseClick.execute(this, new MouseArgs());
     }
 
     // text init
+    /**
+     * Text alignment in the MenuItem
+     */
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
-
     public void setTextAlignment(ItemAlignment... alignment) {
         List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
         _text_object.setTextAlignment(list);
     }
 
+    /**
+     * Text margin in the MenuItem
+     */
     public void setTextMargin(Indents margin) {
         _text_object.setMargin(margin);
     }
 
+    /**
+     * Text font in the MenuItem
+     */
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
-
     public Font getFont() {
         return _text_object.getFont();
     }
 
+    /**
+     * MenuItem text
+     */
     public void setText(String text) {
         _text_object.setItemText(text);
     }
-
     public String getText() {
         return _text_object.getItemText();
     }
 
+    /**
+     * Text color in the MenuItem
+     */
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
-
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
-
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
-
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
-
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
-
     public Color getForeground() {
         return _text_object.getForeground();
     }
 
+    /**
+     * @return text width in the MenuItem
+     */
     public int getTextWidth()
     {
         return _text_object.getWidth();
     }
+
+    /**
+     * @return text height in the MenuItem
+     */
     public int getTextHeight()
     {
         return _text_object.getHeight();
     }
 
+    /**
+     * Initialization and adding of all elements in the MenuItem
+     */
     @Override
     public void initElements() {
         // adding
@@ -142,6 +176,9 @@ public class MenuItem extends Prototype {
             addItem(_arrow);
     }
 
+    /**
+     * Set style of the MenuItem
+     */
     // style
     @Override
     public void setStyle(Style style) {
@@ -161,10 +198,16 @@ public class MenuItem extends Prototype {
         }
     }
 
+    /**
+     * Customize shape of the MenuItem's arrow
+     */
     public void addArrow(CustomShape arrow) {
         _arrow = arrow;
     }
 
+    /**
+     * Show the MenuItem
+     */
     public void show() {
         if (_sub_context_menu == null)
             return;
@@ -187,6 +230,9 @@ public class MenuItem extends Prototype {
         _sub_context_menu.show(this, args);
     }
 
+    /**
+     * Hide the MenuItem
+     */
     public void hide() {
         if (_sub_context_menu != null)
             _sub_context_menu.hide();

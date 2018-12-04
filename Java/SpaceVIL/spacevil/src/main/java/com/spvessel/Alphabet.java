@@ -16,13 +16,13 @@ class Alphabet {
     // Alphabet
     // class Alphabet {
     Font font;
-    Map<Character, Letter> letters;
+    private Map<Character, Letter> letters;
     // internal Dictionary<char, ModifyLetter> newLetters;
     int alphMinY = Integer.MAX_VALUE;
     int alphMaxY = Integer.MIN_VALUE;
     int alphHeight = 0;
     int lineSpacer;
-    Letter bugLetter;
+    private Letter bugLetter;
 
     private Lock alphabetLock = new ReentrantLock();
 

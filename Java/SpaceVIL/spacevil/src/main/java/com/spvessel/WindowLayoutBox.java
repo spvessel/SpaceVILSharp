@@ -7,13 +7,13 @@ import java.util.*;
 import java.util.stream.*;
 
 public final class WindowLayoutBox {
-    static protected Map<String, WindowLayout> windowsName = new HashMap<String, WindowLayout>();
-    static protected Map<UUID, WindowLayout> windowsUUID = new HashMap<UUID, WindowLayout>();
-    static protected List<WindowsPair> currentCallingPair = new LinkedList<WindowsPair>();
-    static protected WindowLayout lastFocusedWindow;
-    static protected Object locker = new Object();
+    static Map<String, WindowLayout> windowsName = new HashMap<>();
+    static Map<UUID, WindowLayout> windowsUUID = new HashMap<>();
+    static List<WindowsPair> currentCallingPair = new LinkedList<>();
+    static WindowLayout lastFocusedWindow;
+    //static private Object locker = new Object();
 
-    static protected void initWindow(WindowLayout _layout) {
+    static void initWindow(WindowLayout _layout) {
         windowsName.put(_layout.getWindowName(), _layout);
         windowsUUID.put(_layout.getId(), _layout);
 
@@ -38,11 +38,15 @@ public final class WindowLayoutBox {
         ItemsLayoutBox.addItem(_layout, container, LayoutType.STATIC);
     }
 
-    static public void removeWindow(WindowLayout _layout) {
+    static void removeWindow(WindowLayout _layout) {
         windowsName.remove(_layout.getWindowName());
         windowsUUID.remove(_layout.getId());
     }
 
+    /**
+     * Try to show WindowLayout object using its UUID
+     * @return if showing successful
+     */
     static public boolean tryShow(UUID guid) {
         WindowLayout wnd = WindowLayoutBox.getWindowInstance(guid);
         if (wnd != null) {
@@ -52,6 +56,10 @@ public final class WindowLayoutBox {
         return false;
     }
 
+    /**
+     * Try to show WindowLayout object using its name
+     * @return if showing successful
+     */
     static public boolean tryShow(String name) {
         WindowLayout wnd = WindowLayoutBox.getWindowInstance(name);
         if (wnd != null) {
@@ -61,6 +69,9 @@ public final class WindowLayoutBox {
         return false;
     }
 
+    /**
+     * @return WidowLayout object by its name
+     */
     static public WindowLayout getWindowInstance(String name) {
         if (windowsName.containsKey(name))
             return windowsName.get(name);
@@ -68,6 +79,9 @@ public final class WindowLayoutBox {
             return null;
     }
 
+    /**
+     * @return WidowLayout object by its UUID
+     */
     static public WindowLayout getWindowInstance(UUID guid) {
         if (windowsUUID.containsKey(guid))
             return windowsUUID.get(guid);
@@ -75,7 +89,7 @@ public final class WindowLayoutBox {
             return null;
     }
 
-    static protected void addToWindowDispatcher(WindowLayout sender_wnd) {
+    static void addToWindowDispatcher(WindowLayout sender_wnd) {
         WindowsPair pair = new WindowsPair();
         pair.WINDOW = sender_wnd;
         if (lastFocusedWindow == null) {
@@ -86,15 +100,15 @@ public final class WindowLayoutBox {
         currentCallingPair.add(pair);
     }
 
-    static protected void setCurrentFocusedWindow(WindowLayout wnd) {
+    static void setCurrentFocusedWindow(WindowLayout wnd) {
         lastFocusedWindow = wnd;
     }
 
-    static protected void setFocusedWindow(CoreWindow window) {
+    static void setFocusedWindow(CoreWindow window) {
         window.getHandler().setFocus(true);
     }
 
-    static protected void removeFromWindowDispatcher(WindowLayout sender_wnd) {
+    static void removeFromWindowDispatcher(WindowLayout sender_wnd) {
         List<WindowsPair> pairs_to_delete = new LinkedList<WindowsPair>();
         for (WindowsPair windows_pair : currentCallingPair) {
             if (windows_pair.WINDOW.equals(sender_wnd)) {
@@ -109,12 +123,18 @@ public final class WindowLayoutBox {
         pairs_to_delete = null;
     }
 
+    /**
+     * @return list of all windows names
+     */
     static public String[] getListOfWindows() {
         String[] result = new String[windowsName.size()];
         windowsName.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList()).toArray(result);
         return result;
     }
 
+    /**
+     * Print all windows names
+     */
     static public void printStoredWindows() {
         for (String item : getListOfWindows()) {
             System.out.println(item);

@@ -28,6 +28,9 @@ namespace SpaceVIL
         private int _diff_x = 0;
         private int _diff_y = 0;
 
+        /// <summary>
+        /// Constructs a ResizableItem
+        /// </summary>
         public ResizableItem()
         {
             SetItemName("ResizableItem_" + count);
@@ -146,11 +149,18 @@ namespace SpaceVIL
             }
         }
 
+        /// <summary>
+        /// Set width of the ResizableItem
+        /// </summary>
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
             SizeChanged?.Invoke();
         }
+
+        /// <summary>
+        /// Set height of the ResizableItem
+        /// </summary>
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
@@ -168,7 +178,7 @@ namespace SpaceVIL
         //     PositionChanged?.Invoke();
         // }
 
-        public void GetSides(float xpos, float ypos)
+        internal void GetSides(float xpos, float ypos)
         {
             _sides = 0;
             if (xpos <= 10)

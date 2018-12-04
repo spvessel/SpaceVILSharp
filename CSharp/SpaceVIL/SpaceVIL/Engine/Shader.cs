@@ -41,7 +41,7 @@ namespace SpaceVIL
         private uint _shader_compute;
         private String _code_compute;
 
-        public String GetCode(uint shader_type)
+        internal String GetCode(uint shader_type)
         {
             switch (shader_type)
             {
@@ -62,7 +62,7 @@ namespace SpaceVIL
             }
             return String.Empty;
         }
-        public void SetShaderPath(uint shader_type, String path)
+        internal void SetShaderPath(uint shader_type, String path)
         {
             String code = ReadSource(path);
 
@@ -174,25 +174,25 @@ namespace SpaceVIL
         {
             _program_id = glCreateProgram();
             //compiling
-            if (_code_vertex != String.Empty)
+            if (!_code_vertex.Equals(String.Empty))
             {
                 _shader_vertex = CompileShader(Vertex, _code_vertex);
                 glAttachShader(_program_id, _shader_vertex);
             }
 
-            if (_code_fragment != String.Empty)
+            if (!_code_fragment.Equals(String.Empty))
             {
                 _shader_fragment = CompileShader(Fragment, _code_fragment);
                 glAttachShader(_program_id, _shader_fragment);
             }
 
-            if (_code_geometry != String.Empty)
+            if (!_code_geometry.Equals(String.Empty))
             {
                 _shader_geometry = CompileShader(Geometry, _code_geometry);
                 glAttachShader(_program_id, _shader_geometry);
             }
 
-            if (_code_compute != String.Empty)
+            if (!_code_compute.Equals(String.Empty))
             {
                 _shader_compute = CompileShader(Compute, _code_compute);
                 glAttachShader(_program_id, _shader_compute);

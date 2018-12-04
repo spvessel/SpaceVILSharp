@@ -6,21 +6,27 @@ namespace SpaceVIL
 {
     abstract public class Primitive : BaseItem
     {
+        /// <summary>
+        /// Constructs a Primitive
+        /// </summary>
+        /// <param name="name"> item name </param>
         public Primitive(
-            int xpos = 0,
-            int ypos = 0,
-            int width = 0,
-            int height = 0,
             string name = "Primitive_")
         {
             SetItemName(name);
         }
 
+        /// <returns> item shape made with triangles </returns>
         public override List<float[]> MakeShape()
         {
             return GetTriangles();
         }
 
+        /// <summary>
+        /// Set item position
+        /// </summary>
+        /// <param name="_x"> X position of the item left top corner </param>
+        /// <param name="_y"> Y position of the item left top corner </param>
         public void SetPosition(int _x, int _y)
         {
             this.SetX(_x);
@@ -29,6 +35,10 @@ namespace SpaceVIL
 
         //style
         internal bool _is_style_set = false;
+
+        /// <summary>
+        /// Set style of the Primitive
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)
@@ -47,6 +57,8 @@ namespace SpaceVIL
             if (style.Shape != null)
                 SetTriangles(style.Shape);
         }
+
+        /// <returns> style of the Primitive </returns>
         public override Style GetCoreStyle()
         {
             Style style = new Style();
@@ -65,7 +77,5 @@ namespace SpaceVIL
 
             return style;
         }
-        
-        public override void InitElements() { }
     }
 }

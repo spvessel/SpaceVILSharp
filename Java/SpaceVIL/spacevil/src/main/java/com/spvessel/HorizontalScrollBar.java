@@ -12,6 +12,9 @@ public class HorizontalScrollBar extends HorizontalStack {
     public ButtonCore downArrow = new ButtonCore();
     public HorizontalSlider slider = new HorizontalSlider();
 
+    /**
+     * Constructs a HorizontalScrollBar
+     */
     public HorizontalScrollBar() {
         setItemName("HorizontalScrollBar_" + count);
         count++;
@@ -42,6 +45,9 @@ public class HorizontalScrollBar extends HorizontalStack {
         setStyle(DefaultsService.getDefaultStyle(HorizontalScrollBar.class));
     }
 
+    /**
+     * Initialization and adding of all elements in the HorizontalScrollBar
+     */
     @Override
     public void initElements() {
         upArrow.isFocusable = false;
@@ -51,11 +57,17 @@ public class HorizontalScrollBar extends HorizontalStack {
         addItems(upArrow, slider, downArrow);
     }
 
+    /**
+     * Set Left and right arrows of the HorizontalScrollBar visible
+     */
     public void setArrowsVisible(boolean value) {
         upArrow.setVisible(value);
         downArrow.setVisible(value);
     }
 
+    /**
+     * Set style of the HorizontalScrollBar
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)

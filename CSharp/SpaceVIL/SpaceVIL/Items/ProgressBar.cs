@@ -19,6 +19,9 @@ namespace SpaceVIL
         private int _minValue = 0;
         private int _currentValue = 0;
 
+        /// <summary>
+        /// Constructs a ProgressBar
+        /// </summary>
         public ProgressBar()
         {
             SetItemName("ProgressBar_" + count);
@@ -32,6 +35,9 @@ namespace SpaceVIL
             IsFocusable = false;
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the ProgressBar
+        /// </summary>
         public override void InitElements()
         {
             //text
@@ -39,12 +45,15 @@ namespace SpaceVIL
             AddItems(_rect, _text_object);
         }
 
+        /// <param name="value"> maximum value of the ProgressBar </param>
         public void SetMaxValue(int value) { _maxValue = value; }
         public int GetMaxValue() { return _maxValue; }
 
+        /// <param name="value"> minimum value of the ProgressBar </param>
         public void SetMinValue(int value) { _minValue = value; }
         public int GetMinValue() { return _minValue; }
 
+        /// <param name="currentValue"> current value of the ProgressBar </param>
         public void SetCurrentValue(int currentValue)
         {
             _currentValue = currentValue;
@@ -65,18 +74,33 @@ namespace SpaceVIL
         }
 
         //text init
+        /// <summary>
+        /// Text in the ProgressBar
+        /// </summary>
         public void SetText(String text)
         {
             _text_object.SetItemText(text);
         }
+
+        /// <summary>
+        /// Text alignment in the ProgressBar
+        /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _text_object.SetTextAlignment(alignment);
         }
+
+        /// <summary>
+        /// Text margin in the ProgressBar
+        /// </summary>
         public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
         }
+
+        /// <summary>
+        /// Text font parameters in the ProgressBar
+        /// </summary>
         public void SetFont(Font font)
         {
             _text_object.SetFont(font);
@@ -97,6 +121,10 @@ namespace SpaceVIL
         {
             return _text_object.GetFont();
         }
+
+        /// <summary>
+        /// Text color in the ProgressBar
+        /// </summary>
         public void SetForeground(Color color)
         {
             _text_object.SetForeground(color);
@@ -126,28 +154,46 @@ namespace SpaceVIL
         {
             return false;
         }
+
+        /// <summary>
+        /// Add item to the ProgressBar
+        /// </summary>
         public override void AddItem(IBaseItem item)
         {
             base.AddItem(item);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Set width of the ProgressBar
+        /// </summary>
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Set X position of the ProgressBar left top corner
+        /// </summary>
         public override void SetX(int _x)
         {
             base.SetX(_x);
             UpdateLayout();
         }
 
+        /// <summary>
+        /// Update ProgressBar states
+        /// </summary>
         public void UpdateLayout()
         {
             UpdateProgressBar();
         }
 
         //style
+        /// <summary>
+        /// Set style of the ProgressBar
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)

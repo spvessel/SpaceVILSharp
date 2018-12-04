@@ -9,18 +9,26 @@ namespace SpaceVIL
 {
     class CustomSelector : Primitive
     {
-        static int count = 0;
+        private static int count = 0;
+
+        /// <summary>
+        /// Constructs a CustomSelector
+        /// </summary>
         public CustomSelector() : base(name: "CustomSelector_" + count)
         {
             count++;
         }
 
+        /// <returns> CustomSelector's shape in GL coordinates </returns>
         public override List<float[]> MakeShape()
         {
             //SetTriangles(GraphicsMathService.GetRectangle(GetWidth(), GetHeight(), GetX(), GetY()));
             return GraphicsMathService.ToGL(this, GetHandler());
         }
 
+        /// <summary>
+        /// Make CustomSelector's rectangles with left top and right bottom points
+        /// </summary>
         public void SetRectangles(List<Point> points)
         {
             List<float[]> triangles = new List<float[]>();
@@ -46,10 +54,11 @@ namespace SpaceVIL
             SetTriangles(triangles);
             SetWidth(w2 - w1);
             SetHeight(h2 - h1);
-
-            //Console.WriteLine(w1 + " " + h1 + " " + w2 + " " + h2);
         }
 
+        /// <summary>
+        /// Shift selector on Y direction
+        /// </summary>
         public void ShiftAreaY(int yShift) {
             List<float[]> triangles = GetTriangles();
             if (triangles == null || triangles.Count == 0)
@@ -61,6 +70,9 @@ namespace SpaceVIL
             SetTriangles(triangles);
         }
 
+        /// <summary>
+        /// Shift selector on X direction
+        /// </summary>
         public void ShiftAreaX(int xShift)
         {
             List<float[]> triangles = GetTriangles();

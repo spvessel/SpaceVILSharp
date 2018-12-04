@@ -1,6 +1,5 @@
 package com.spvessel;
 
-import com.spvessel.Common.CommonService;
 import com.spvessel.Core.*;
 import com.spvessel.Flags.LayoutType;
 import com.spvessel.Flags.SizePolicy;
@@ -9,12 +8,15 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
     private int _stored_offset = 0;
     private boolean IsFloating = true;
     private boolean _init = false;
-    static int count = 0;
+    private static int count = 0;
     private int _diff_x = 0;
     private int _diff_y = 0;
 
     private boolean _ouside = false;
 
+    /**
+     * Close the FloatItem it mouse click is outside (true or false)
+     */
     public boolean isOutsideClickClosable() {
         return _ouside;
     }
@@ -33,21 +35,25 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
     //     _lock_ouside = true;
     // }
 
+    /**
+     * Constructs a FloatItem
+     * @param handler parent window for the FloatItem
+     */
     public FloatItem(WindowLayout handler) {
         setVisible(false);
         setHandler(handler);
         setItemName("FloatItem_" + count);
         setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
-        // eventMouseHover.add(press);
-        eventMousePress.add(press);
-        InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
-        eventMouseDrag.add(dragg);
+        eventMousePress.add(this::onMousePress);
+        eventMouseDrag.add(this::onDragging);
         count++;
         
         ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
     }
 
+    /**
+     * Initialization and adding of all elements in the FloatItem
+     */
     @Override
     public void initElements() {
         // fake tests
@@ -55,6 +61,12 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
         _init = true;
     }
 
+    /**
+     * Show the FloatItem
+     * @param sender the item from which the show request is sent
+     * @param args mouse click arguments (cursor position, mouse button,
+     *             mouse button press/release, etc.)
+     */
     public void show(InterfaceItem sender, MouseArgs args) {
         if (!_init)
             initElements();
@@ -63,18 +75,21 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
         setVisible(true);
     }
 
+    /**
+     * Hide the FloatItem
+     */
     public void hide() {
         _stored_offset = getX();
         setX(-getWidth());
         setVisible(false);
     }
 
-    protected void onMousePress(InterfaceItem sender, MouseArgs args) {
+    private void onMousePress(InterfaceItem sender, MouseArgs args) {
         _diff_x = args.position.getX() - getX();
         _diff_y = args.position.getY() - getY();
     }
 
-    protected void onDragging(InterfaceItem sender, MouseArgs args) {
+    private void onDragging(InterfaceItem sender, MouseArgs args) {
         if (!IsFloating)
             return;
 
@@ -89,6 +104,9 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
         setConfines();
     }
 
+    /**
+     * Set confines according to position and size of the FloatItem
+     */
     @Override
     public void setConfines() {
         setConfines(getX(), getX() + getWidth(), getY(), getY() + getHeight());

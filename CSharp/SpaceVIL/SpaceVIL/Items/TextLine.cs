@@ -11,7 +11,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    class TextLine : TextItem, ITextContainer
+    internal class TextLine : TextItem, ITextContainer
     {
         private static int count = 0;
         private TextPrinter textPrt = new TextPrinter();
@@ -31,12 +31,12 @@ namespace SpaceVIL
 
         private List<FontEngine.ModifyLetter> _letters = new List<FontEngine.ModifyLetter>();
 
-        public TextLine()
+        internal TextLine()
         {
             count++;
         }
 
-        public TextLine(string text, Font font)
+        internal TextLine(string text, Font font)
             : base(text, font, "TextLine_" + count)
         {
             count++;

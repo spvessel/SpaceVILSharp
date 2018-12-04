@@ -246,7 +246,7 @@ namespace SpaceVIL.Decorations
                 _item_states.Remove(type);
         }
 
-        public void RemoveInnerStyle(String item_name, Style style)
+        public void RemoveInnerStyle(String item_name)
         {
             if (_inner_styles.ContainsKey(item_name))
                 _inner_styles.Remove(item_name);

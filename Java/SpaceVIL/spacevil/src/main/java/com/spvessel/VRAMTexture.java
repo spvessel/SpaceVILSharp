@@ -11,15 +11,15 @@ import static org.lwjgl.opengl.GL20.*;
 
 final class VRAMTexture {
     private float[] _vbo_data;
-    public int VBO;
+    int VBO;
     private int[] _ibo_data;
-    public int IBO;
-    public int texture;
+    int IBO;
+    int texture;
 
-    protected VRAMTexture() {
+    VRAMTexture() {
     }
 
-    protected void genTexture(int w, int h, ByteBuffer bitmap) {
+    void genTexture(int w, int h, ByteBuffer bitmap) {
         texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -31,18 +31,18 @@ final class VRAMTexture {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
-    protected void genTexture(int w, int h, byte[] bitmap) {
+    void genTexture(int w, int h, byte[] bitmap) {
         ByteBuffer bb = BufferUtils.createByteBuffer(bitmap.length);
         bb.put(bitmap);
         bb.rewind();
         genTexture(w, h, bb);
     }
 
-    protected void genBuffers(float x0, float x1, float y0, float y1) {
+    void genBuffers(float x0, float x1, float y0, float y1) {
         genBuffers(x0, x1, y0, y1, false);
     }
 
-    protected void genBuffers(float x0, float x1, float y0, float y1, boolean flip) {
+    void genBuffers(float x0, float x1, float y0, float y1, boolean flip) {
         // Vertices
         if (!flip) {
             _vbo_data = new float[] {
@@ -81,27 +81,27 @@ final class VRAMTexture {
         glEnableVertexAttribArray(1);
     }
 
-    protected void unbind() {
+    void unbind() {
         // Texture bind
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    protected void bind(int tex) {
+    void bind(int tex) {
         // Texture bind
         glBindTexture(GL_TEXTURE_2D, tex);
     }
-    protected void bind() {
+    void bind() {
         // Texture bind
         glBindTexture(GL_TEXTURE_2D, texture);
     }
 
-    protected void draw() {
+    void draw() {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
     }
 
-    protected boolean sendUniformSample2D(Shader shader) {
+    boolean sendUniformSample2D(Shader shader) {
         int location = glGetUniformLocation((int) shader.getProgramID(), "tex");
         if (location >= 0) {
             glUniform1i(location, 0);
@@ -111,7 +111,7 @@ final class VRAMTexture {
         return false;
     }
 
-    protected boolean sendUniform4f(Shader shader, String name, float[] array) {
+    boolean sendUniform4f(Shader shader, String name, float[] array) {
         int location = glGetUniformLocation((int) shader.getProgramID(), name);
         if (location >= 0) {
             glUniform4f(location, array[0], array[1], array[2], array[3]);
@@ -121,7 +121,7 @@ final class VRAMTexture {
         return false;
     }
 
-    protected boolean sendUniform1fv(Shader shader, String name, int count, float[] array) {
+    boolean sendUniform1fv(Shader shader, String name, int count, float[] array) {
         int location = glGetUniformLocation((int) shader.getProgramID(), name);
         if (location >= 0) {
             glUniform1fv(location, array);
@@ -131,7 +131,7 @@ final class VRAMTexture {
         return false;
     }
 
-    protected boolean sendUniform2fv(Shader shader, String name, float[] array) {
+    boolean sendUniform2fv(Shader shader, String name, float[] array) {
         int location = glGetUniformLocation((int) shader.getProgramID(), name);
         if (location >= 0) {
             glUniform2fv(location, array);
@@ -141,7 +141,7 @@ final class VRAMTexture {
         return false;
     }
 
-    protected boolean sendUniform1f(Shader shader, String name, float array) {
+    boolean sendUniform1f(Shader shader, String name, float array) {
         int location = glGetUniformLocation((int) shader.getProgramID(), name);
         if (location >= 0) {
             glUniform1f(location, array);
@@ -151,7 +151,7 @@ final class VRAMTexture {
         return false;
     }
 
-    protected void clear() {
+    void clear() {
         glDeleteBuffers(VBO);
         glDeleteBuffers(IBO);
         glDeleteTextures(texture);
@@ -159,11 +159,11 @@ final class VRAMTexture {
         _ibo_data = null;
     }
 
-    protected void deleteIBOBuffer() {
+    void deleteIBOBuffer() {
         glDeleteBuffers(IBO);
     }
 
-    protected void deleteVBOBuffer() {
+    void deleteVBOBuffer() {
         glDeleteBuffers(VBO);
     }
 }

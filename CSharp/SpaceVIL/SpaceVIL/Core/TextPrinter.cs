@@ -6,14 +6,13 @@ namespace SpaceVIL.Core
 {
     internal class TextPrinter
     {
-        public byte[] Texture = null;
-        public int XTextureShift = 0;
-        public int YTextureShift = 0;
-        public int WidthTexture = 0;
-        public int HeightTexture = 0;
-        //public Color foreground = Color.Black;
+        internal byte[] Texture = null;
+        internal int XTextureShift = 0;
+        internal int YTextureShift = 0;
+        internal int WidthTexture = 0;
+        internal int HeightTexture = 0;
 
-        public TextPrinter()
+        internal TextPrinter()
         {
             Texture = null;
         }
@@ -22,10 +21,5 @@ namespace SpaceVIL.Core
         {
             Texture = bb;
         }
-        /*
-        public Color GetForeground() {
-            return foreground;
-        }
-        */
     }
 }

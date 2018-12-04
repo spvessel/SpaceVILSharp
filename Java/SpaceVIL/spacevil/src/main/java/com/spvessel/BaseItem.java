@@ -14,17 +14,19 @@ import java.util.List;
 
 public abstract class BaseItem implements InterfaceBaseItem {
 
-    protected int _confines_x_0 = 0;
-    protected int _confines_x_1 = 0;
-    protected int _confines_y_0 = 0;
-    protected int _confines_y_1 = 0;
+    int _confines_x_0 = 0;
+    int _confines_x_1 = 0;
+    int _confines_y_0 = 0;
+    int _confines_y_1 = 0;
 
     private WindowLayout _handler;
 
+    /**
+     * WindowLayout handler - window that contains the BaseItem
+     */
     public void setHandler(WindowLayout handler) {
         _handler = handler;
     }
-
     public WindowLayout getHandler() {
         return _handler;
     }
@@ -32,10 +34,12 @@ public abstract class BaseItem implements InterfaceBaseItem {
     // parent
     private Prototype _parent = null;
 
+    /**
+     * BaseItem's parent item
+     */
     public Prototype getParent() {
         return _parent;
     }
-
     public void setParent(Prototype parent) {
         _parent = parent;
     }
@@ -47,7 +51,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
             ((BaseItem) item).updateBehavior();
     }
 
-    protected void addChildren(InterfaceBaseItem item) {
+    void addChildren(InterfaceBaseItem item) {
         if (item.getParent() != null)
             item.getParent().removeItem(item);
 
@@ -77,12 +81,15 @@ public abstract class BaseItem implements InterfaceBaseItem {
         castAndUpdate(item);
     }
 
-    protected void addEventListener(GeometryEventType type, InterfaceBaseItem listener) {
+    void addEventListener(GeometryEventType type, InterfaceBaseItem listener) {
     }
 
-    protected void removeEventListener(GeometryEventType type, InterfaceBaseItem listener) {
+    void removeEventListener(GeometryEventType type, InterfaceBaseItem listener) {
     }
 
+    /**
+     * Item will not react on parent's changes
+     */
     public void removeItemFromListeners() {
         getParent().removeEventListener(GeometryEventType.RESIZE_WIDTH, this);
         getParent().removeEventListener(GeometryEventType.RESIZE_HEIGHT, this);
@@ -90,6 +97,9 @@ public abstract class BaseItem implements InterfaceBaseItem {
         getParent().removeEventListener(GeometryEventType.MOVED_Y, this);
     }
 
+    /**
+     * Initialization and adding of all elements in the BaseItem
+     */
     public void initElements() {
         // do nothing
     }
@@ -98,36 +108,45 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
     private Indents _margin = new Indents();
 
+    /**
+     * BaseItem margin
+     */
     public Indents getMargin() {
         return _margin;
     }
-
     public void setMargin(Indents margin) {
         _margin = margin;
     }
-
     public void setMargin(int left, int top, int right, int bottom) {
         _margin = new Indents(left, top, right, bottom);
     }
 
+    /**
+     * @return triangles list of the BaseItem's shape
+     */
     public List<float[]> getTriangles() {
         return _item.getTriangles();
     }
-
+    /**
+     * Sets BaseItem's shape as triangles list
+     */
     public void setTriangles(List<float[]> triangles) {
         _item.setTriangles(triangles);
     }
 
+    /**
+     * @return shape points list in GL coordinates, using triangles from getTriangles()
+     */
     public List<float[]> makeShape() {
         return _item.makeShape();
     }
 
-    protected List<float[]> updateShape() {
+    List<float[]> updateShape() {
         if (getTriangles().size() == 0)
             return null;
 
         // clone triangles
-        List<float[]> result = new LinkedList<float[]>();
+        List<float[]> result = new LinkedList<>();
 
         for (int i = 0; i < getTriangles().size(); i++) {
             result.add(new float[] { getTriangles().get(i)[0], getTriangles().get(i)[1], getTriangles().get(i)[2] });
@@ -149,10 +168,12 @@ public abstract class BaseItem implements InterfaceBaseItem {
         return result;
     }
 
+    /**
+     * Background color of the BaseItem
+     */
     public void setBackground(Color color) {
         _item.setBackground(color);
     }
-
     public void setBackground(int r, int g, int b) {
         if (r < 0)
             r = Math.abs(r);
@@ -168,7 +189,6 @@ public abstract class BaseItem implements InterfaceBaseItem {
             b = 255;
         _item.setBackground(new Color(r, g, b, 255));
     }
-
     public void setBackground(int r, int g, int b, int a) {
         if (r < 0)
             r = Math.abs(r);
@@ -184,7 +204,6 @@ public abstract class BaseItem implements InterfaceBaseItem {
             b = 255;
         _item.setBackground(new Color(r, g, b, a));
     }
-
     public void setBackground(float r, float g, float b) {
         if (r < 0)
             r = Math.abs(r);
@@ -200,7 +219,6 @@ public abstract class BaseItem implements InterfaceBaseItem {
             b = 1.0f;
         _item.setBackground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
     }
-
     public void setBackground(float r, float g, float b, float a) {
         if (r < 0)
             r = Math.abs(r);
@@ -216,25 +234,28 @@ public abstract class BaseItem implements InterfaceBaseItem {
             b = 1.0f;
         _item.setBackground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
     }
-
     public Color getBackground() {
         return _item.getBackground();
     }
 
+    /**
+     * BaseItem's name
+     */
     public void setItemName(String name) {
         _item.setItemName(name);
     }
-
     public String getItemName() {
         return _item.getItemName();
     }
 
     private boolean _drawable = true;
 
+    /**
+     * If BaseItem will drawn by engine
+     */
     public boolean isDrawable() {
         return _drawable;
     }
-
     public void setDrawable(boolean value) {
         if (_drawable == value)
             return;
@@ -243,103 +264,112 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
     private boolean _visible = true;
 
+    /**
+     * If BaseItem is visible
+     */
     public boolean isVisible() {
         return _visible;
     }
-
     public void setVisible(boolean value) {
         if (_visible == value)
             return;
         _visible = value;
     }
 
-    protected void updateInnersDrawable(boolean value) {
+    void updateInnersDrawable(boolean value) {
     }
 
     // geometry
     private Geometry _itemGeometry = new Geometry();
 
+    /**
+     * Width of the BaseItem
+     */
     public void setMinWidth(int width) {
         _itemGeometry.setMinWidth(width);
     }
-
     public void setWidth(int width) {
         _itemGeometry.setWidth(width);
     }
-
     public void setMaxWidth(int width) {
         _itemGeometry.setMaxWidth(width);
     }
-
-    public void setMinHeight(int height) {
-        _itemGeometry.setMinHeight(height);
-    }
-
-    public void setHeight(int height) {
-        _itemGeometry.setHeight(height);
-    }
-
-    public void setMaxHeight(int height) {
-        _itemGeometry.setMaxHeight(height);
-    }
-
     public int getMinWidth() {
         return _itemGeometry.getMinWidth();
     }
-
     public int getWidth() {
         return _itemGeometry.getWidth();
     }
-
     public int getMaxWidth() {
         return _itemGeometry.getMaxWidth();
     }
 
+    /**
+     * Height of the BaseItem
+     */
+    public void setMinHeight(int height) {
+        _itemGeometry.setMinHeight(height);
+    }
+    public void setHeight(int height) {
+        _itemGeometry.setHeight(height);
+    }
+    public void setMaxHeight(int height) {
+        _itemGeometry.setMaxHeight(height);
+    }
     public int getMinHeight() {
         return _itemGeometry.getMinHeight();
     }
-
     public int getHeight() {
         return _itemGeometry.getHeight();
     }
-
     public int getMaxHeight() {
         return _itemGeometry.getMaxHeight();
     }
 
+    /**
+     * Size (width and height) of the BaseItem
+     */
     public void setSize(int width, int height) {
         setWidth(width);
         setHeight(height);
     }
-
     public void setMinSize(int width, int height) {
         setMinWidth(width);
         setMinHeight(height);
     }
-
     public void setMaxSize(int width, int height) {
         setMaxWidth(width);
         setMaxHeight(height);
     }
-
     public int[] getSize() {
         return _itemGeometry.getSize();
+    }
+    public int[] getMinSize() {
+        return new int[] {_itemGeometry.getMinWidth(), _itemGeometry.getMinHeight()};
+    }
+    public int[] getMaxSize() {
+        return new int[] {_itemGeometry.getMaxWidth(), _itemGeometry.getMaxHeight()};
     }
 
     // behavior
     private Behavior _itemBehavior = new Behavior();
 
+    /**
+     * BaseItem alignment
+     */
     public void setAlignment(ItemAlignment... alignment) {
         _itemBehavior.setAlignment(alignment);
         updateBehavior();
     }
-
     public void setAlignment(List<ItemAlignment> alignment) {
         _itemBehavior.setAlignment(alignment);
         updateBehavior();
     }
+    public List<ItemAlignment> getAlignment() {
+        return _itemBehavior.getAlignment();
+    }
 
-    protected void updateBehavior() {
+    void updateBehavior() {
         if (getParent() == null)
             return;
 
@@ -402,31 +432,26 @@ public abstract class BaseItem implements InterfaceBaseItem {
         }
     }
 
-    public List<ItemAlignment> getAlignment() {
-        return _itemBehavior.getAlignment();
-    }
-
+    /**
+     * BaseItem size (width and height) policy - FIXED or EXPAND
+     */
     public void setSizePolicy(SizePolicy width, SizePolicy height) {
         setWidthPolicy(width);
         setHeightPolicy(height);
     }
-
     public void setWidthPolicy(SizePolicy policy) {
         if (_itemBehavior.getWidthPolicy() != policy) {
             _itemBehavior.setWidthPolicy(policy);
         }
     }
-
     public SizePolicy getWidthPolicy() {
         return _itemBehavior.getWidthPolicy();
     }
-
     public void setHeightPolicy(SizePolicy policy) {
         if (_itemBehavior.getHeightPolicy() != policy) {
             _itemBehavior.setHeightPolicy(policy);
         }
     }
-
     public SizePolicy getHeightPolicy() {
         return _itemBehavior.getHeightPolicy();
     }
@@ -434,18 +459,18 @@ public abstract class BaseItem implements InterfaceBaseItem {
     // position
     private Position _itemPosition = new Position();
 
+    /**
+     * BaseItem (x, y) position
+     */
     public void setX(int x) {
         _itemPosition.setX(x);
     }
-
     public int getX() {
         return _itemPosition.getX();
     }
-
     public void setY(int y) {
         _itemPosition.setY(y);
     }
-
     public int getY() {
         return _itemPosition.getY();
     }
@@ -456,7 +481,10 @@ public abstract class BaseItem implements InterfaceBaseItem {
     //         return true;
     //     return false;
     // }
-
+    
+    /**
+     * Update BaseItem's state
+     */
     public void update(GeometryEventType type, int value) {
         if (this instanceof VisualItem) {
             protoUpdate(type, value);
@@ -669,18 +697,23 @@ public abstract class BaseItem implements InterfaceBaseItem {
         }
     }
 
-    protected void updateGeometry() {
+    void updateGeometry() {
         update(GeometryEventType.RESIZE_WIDTH, 0);
         update(GeometryEventType.RESIZE_HEIGHT, 0);
         update(GeometryEventType.MOVED_X, 0);
         update(GeometryEventType.MOVED_Y, 0);
     }
 
+    /**
+     * Style of the BaseItem
+     */
     public void setStyle(Style style) {
     }
-
     public abstract Style getCoreStyle();
 
+    /**
+     * Check and set BaseItem default style
+     */
     public void CheckDefaults() {
         // checking all attributes
         // setStyle(default theme)
@@ -688,7 +721,6 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
         setDefaults();
     }
-
     public void setDefaults() {
     }
 
@@ -696,41 +728,54 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
     // shadow
     private boolean _is_shadow_drop = false;
+    private int _shadow_radius = 1;
+    private Color _shadow_color = new Color(0, 0, 0);
+    private Position _shadow_pos = new Position();
 
+    /**
+     * BaseItem's shadow parameters. Is item has shadow
+     */
     public boolean isShadowDrop() {
         return _is_shadow_drop;
     }
-
     public void setShadowDrop(boolean value) {
         _is_shadow_drop = value;
     }
 
-    private int _shadow_radius = 1;
-
+    /**
+     * BaseItem's shadow parameters. Shadow corners radius
+     */
     public void setShadowRadius(int radius) {
         _shadow_radius = radius;
     }
-
     public int getShadowRadius() {
         return _shadow_radius;
     }
 
-    private Color _shadow_color = new Color(0, 0, 0);
-
+    /**
+     * BaseItem's shadow parameters. Shadow color
+     */
     public Color getShadowColor() {
         return _shadow_color;
     }
-
     public void setShadowColor(Color color) {
         _shadow_color = color;
     }
 
-    private Position _shadow_pos = new Position();
-
+    /**
+     * BaseItem's shadow parameters. Shadow position
+     */    
     public Position getShadowPos() {
         return _shadow_pos;
     }
 
+    /**
+     * Set BaseItem's shadow with parameters
+     * @param radius Shadow corners radius (same for all corners)
+     * @param x Shadow X position
+     * @param y Shadow Y position
+     * @param color Shadow color
+     */
     public void setShadow(int radius, int x, int y, Color color) {
         _is_shadow_drop = true;
         _shadow_radius = radius;
@@ -740,6 +785,10 @@ public abstract class BaseItem implements InterfaceBaseItem {
     }
 
     // update
+
+    /**
+     * BaseItem confines
+     */
     public void setConfines() {
         _confines_x_0 = getParent().getX() + getParent().getPadding().left;
         _confines_x_1 = getParent().getX() + getParent().getWidth() - getParent().getPadding().right;

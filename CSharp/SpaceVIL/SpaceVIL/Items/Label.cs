@@ -16,6 +16,9 @@ namespace SpaceVIL
 
         private TextLine _text_object;
 
+        /// <summary>
+        /// Constructs a Label
+        /// </summary>
         public Label()
         {
             SetItemName("Label_" + count);
@@ -25,15 +28,34 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Label)));
         }
+
+        /// <summary>
+        /// Constructs a Label with text
+        /// </summary>
         public Label(String text = "") : this()
         {
             SetText(text);
         }
 
+        /// <summary>
+        /// Text alignment in the Label
+        /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _text_object.SetTextAlignment(alignment);
         }
+
+        /// <summary>
+        /// Text margin in the Label
+        /// </summary>
+        public void SetTextMargin(Indents margin)
+        {
+            _text_object.SetMargin(margin);
+        }
+
+        /// <summary>
+        /// Text font parameters in the Label
+        /// </summary>
         public void SetFont(Font font)
         {
             _text_object.SetFont(font);
@@ -54,6 +76,10 @@ namespace SpaceVIL
         {
             return _text_object.GetFont();
         }
+
+        /// <summary>
+        /// Set text in the Label
+        /// </summary>
         public void SetText(String text)
         {
             _text_object.SetItemText(text);
@@ -62,6 +88,10 @@ namespace SpaceVIL
         {
             return _text_object.GetItemText();
         }
+
+        /// <summary>
+        /// Text color in the Label
+        /// </summary>
         public void SetForeground(Color color)
         {
             _text_object.SetForeground(color);
@@ -87,6 +117,9 @@ namespace SpaceVIL
             return _text_object.GetForeground();
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the Label
+        /// </summary>
         public override void InitElements()
         {
             //text
@@ -102,18 +135,26 @@ namespace SpaceVIL
             //_text_object.UpdateData(UpdateType.Critical);
         }
 
-        
+        /// <summary>
+        /// Text width in the Label
+        /// </summary>
         public int GetTextWidth()
         {
             return _text_object.GetWidth();
         }
 
+        /// <summary>
+        /// Text height in the Label
+        /// </summary>
         public int GetTextHeight()
         {
             return _text_object.GetHeight();
         }
-        
+
         //style
+        /// <summary>
+        /// Set style of the Label
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)

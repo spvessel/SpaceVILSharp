@@ -15,6 +15,10 @@ namespace SpaceVIL
         private int _diff_y = 0;
 
         private bool _ouside = false;
+
+        /// <summary>
+        /// Close the FloatItem it mouse click is outside (true or false)
+        /// </summary>
         public bool IsOutsideClickClosable()
         {
             return _ouside;
@@ -23,6 +27,7 @@ namespace SpaceVIL
         {
             _ouside = value;
         }
+
         // private bool _lock_ouside = false;
         // public bool IsLockOutside()
         // {
@@ -33,6 +38,10 @@ namespace SpaceVIL
         //     _lock_ouside = value;
         // }
 
+        /// <summary>
+        /// Constructs a FloatItem
+        /// </summary>
+        /// <param name="handler"> parent window for the FloatItem </param>
         public FloatItem(WindowLayout handler)
         {
             SetVisible(false);
@@ -48,12 +57,22 @@ namespace SpaceVIL
                 ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the FloatItem
+        /// </summary>
         public override void InitElements()
         {
             //fake tests
             SetConfines();
             _init = true;
         }
+
+        /// <summary>
+        /// Show the FloatItem
+        /// </summary>
+        /// <param name="sender"> the item from which the show request is sent </param>
+        /// <param name="args"> mouse click arguments (cursor position, mouse button,
+        /// mouse button press/release, etc.) </param>
         public void Show(IItem sender, MouseArgs args)
         {
             //LogService.Log().LogBaseItem(this, LogProps.AllGeometry);
@@ -63,6 +82,10 @@ namespace SpaceVIL
                 SetX(_stored_offset);
             SetVisible(true);
         }
+
+        /// <summary>
+        /// Hide the FloatItem
+        /// </summary>
         public void Hide()
         {
             _stored_offset = GetX();
@@ -70,13 +93,13 @@ namespace SpaceVIL
             SetVisible(false);
         }
 
-        protected virtual void OnMousePress(object sender, MouseArgs args)
+        void OnMousePress(object sender, MouseArgs args)
         {
             _diff_x = args.Position.GetX() - GetX();
             _diff_y = args.Position.GetY() - GetY();
         }
 
-        protected virtual void OnDragging(object sender, MouseArgs args)
+        void OnDragging(object sender, MouseArgs args)
         {
             if (!IsFloating)
                 return;
@@ -92,6 +115,9 @@ namespace SpaceVIL
             SetConfines();
         }
 
+        /// <summary>
+        /// Set confines according to position and size of the FloatItem
+        /// </summary>
         public override void SetConfines()
         {
             base.SetConfines(

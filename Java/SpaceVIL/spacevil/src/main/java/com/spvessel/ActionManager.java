@@ -9,18 +9,18 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 class ActionManager {
-    public ConcurrentLinkedQueue<EventTask> stackEvents = new ConcurrentLinkedQueue<EventTask>();
+    private ConcurrentLinkedQueue<EventTask> stackEvents = new ConcurrentLinkedQueue<>();
 
-    public ManualResetEvent execute = new ManualResetEvent(false);
+    ManualResetEvent execute = new ManualResetEvent(false);
     private Lock managerLock = new ReentrantLock();
-    WindowLayout _handler;
-    boolean _stoped;
+    private WindowLayout _handler;
+    private boolean _stoped;
 
-    public ActionManager(WindowLayout wnd) {
+    ActionManager(WindowLayout wnd) {
         _handler = wnd;
     }
 
-    public void startManager() {
+    void startManager() {
         _stoped = false;
         while (!_stoped) {
             try {
@@ -37,7 +37,7 @@ class ActionManager {
         }
     }
 
-    public void addTask(EventTask task) {
+    void addTask(EventTask task) {
         managerLock.lock();
         try {
             stackEvents.add(task);
@@ -46,11 +46,11 @@ class ActionManager {
         }
     }
 
-    public void stopManager() {
+    void stopManager() {
         _stoped = true;
     }
 
-    protected void executeActions() {
+    private void executeActions() {
         if (stackEvents.size() == 0)
             return;
 

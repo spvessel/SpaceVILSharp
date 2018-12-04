@@ -77,7 +77,7 @@ namespace SpaceVIL
             SetText(text);
         }
 
-        protected virtual void OnKeyPress(IItem sender, KeyArgs args)
+        void OnKeyPress(IItem sender, KeyArgs args)
         {
             if (args.Key == KeyCode.Enter)
                 _indicator.EventToggle.Invoke(sender, new MouseArgs());

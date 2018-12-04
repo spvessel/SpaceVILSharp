@@ -20,7 +20,7 @@ namespace SpaceVIL
         static internal Dictionary<Guid, WindowLayout> windows_guid = new Dictionary<Guid, WindowLayout>();
         static internal List<WindowPair> current_calling_pair = new List<WindowPair>();
         static internal WindowLayout LastFocusedWindow;
-        static Object locker = new Object();
+        //static Object locker = new Object();
 
         static internal void InitWindow(WindowLayout _layout)
         {

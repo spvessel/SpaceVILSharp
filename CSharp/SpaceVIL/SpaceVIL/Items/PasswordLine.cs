@@ -18,6 +18,9 @@ namespace SpaceVIL
         private ButtonToggle _show_pwd_btn;
         private TextEncrypt _textEncrypt;
 
+        /// <summary>
+        /// Constructs a PasswordLine
+        /// </summary>
         public PasswordLine()
         {
             SetItemName("PasswordLine_" + count);
@@ -34,20 +37,34 @@ namespace SpaceVIL
             _textEncrypt.ShowPassword(_show_pwd_btn.IsToggled());
         }
 
+        /// <summary>
+        /// Set PasswordLine focused/unfocused
+        /// </summary>
         public override void SetFocused(bool value)
         {
             base.SetFocused(value);
             _textEncrypt.SetFocused(value);
         }
 
+        /// <summary>
+        /// Text alignment in the PasswordLine
+        /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _textEncrypt.SetAlignment(alignment);
         }
+
+        /// <summary>
+        /// Text margin in the PasswordLine
+        /// </summary>
         public void SetTextMargin(Indents margin)
         {
             _textEncrypt.SetMargin(margin);
         }
+
+        /// <summary>
+        /// Text font in the PasswordLine
+        /// </summary>
         public void SetFont(Font font)
         {
             _textEncrypt.SetFont(font);
@@ -57,10 +74,15 @@ namespace SpaceVIL
             return _textEncrypt.GetFont();
         }
 
+        /// <returns> password string </returns>
         public String GetPassword()
         {
             return _textEncrypt.GetPassword();
         }
+
+        /// <summary>
+        /// Text color in the PasswordLine
+        /// </summary>
         public void SetForeground(Color color)
         {
             _textEncrypt.SetForeground(color);
@@ -85,15 +107,26 @@ namespace SpaceVIL
         {
             return _textEncrypt.GetForeground();
         }
-        public virtual bool IsEditable
+
+        /// <summary>
+        /// Returns if PasswordLine editable or not
+        /// </summary>
+        public bool IsEditable()
         {
-            get { return _textEncrypt.IsEditable; }
-            set
-            {
-                _textEncrypt.IsEditable = value;
-            }
+            return _textEncrypt.IsEditable();
         }
 
+        /// <summary>
+        /// Set PasswordLine editable true or false
+        /// </summary>
+        public void SetEditable(bool value)
+        {
+            _textEncrypt.SetEditable(value);            
+        }
+
+        /// <summary>
+        /// Initialization and adding of all elements in the PasswordLine
+        /// </summary>
         public override void InitElements()
         {
             _show_pwd_btn.SetPassEvents(false);
@@ -101,22 +134,36 @@ namespace SpaceVIL
             AddItems(_textEncrypt, _show_pwd_btn);
         }
 
+        /// <summary>
+        /// Returns width of the whole text in the PasswordLine
+        /// (includes visible and invisible parts of the text)
+        /// </summary>
         public int GetTextWidth()
         {
             return _textEncrypt.GetWidth();
         }
 
+        /// <summary>
+        /// Returns height of the whole text in the PasswordLine
+        /// (includes visible and invisible parts of the text)
+        /// </summary>
         public int GetTextHeight()
         {
             return _textEncrypt.GetHeight();
         }
 
+        /// <summary>
+        /// Remove all text from the PasswordLine
+        /// </summary>
         public void Clear()
         {
             _textEncrypt.Clear();
         }
 
         //style
+        /// <summary>
+        /// Set style of the PasswordLine
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)

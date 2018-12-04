@@ -24,7 +24,7 @@ public class CustomFigure {
     }
 
     public List<float[]> updatePosition(int _x, int _y) {
-        List<float[]> result = new LinkedList<float[]>();
+        List<float[]> result = new LinkedList<>();
         for (float[] item : _figure) {
             result.add(new float[] { item[0] + _x, item[1] + _y, 0.0f });
         }

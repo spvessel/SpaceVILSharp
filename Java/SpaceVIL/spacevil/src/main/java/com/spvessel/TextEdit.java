@@ -18,7 +18,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TextEdit extends Prototype
-        implements InterfaceTextEditable, InterfaceTextShortcuts, InterfaceDraggable, InterfaceScrollable {
+        implements InterfaceTextEditable, InterfaceTextShortcuts, InterfaceDraggable {
     static int count = 0;
     private TextLine _text_object;
     private Rectangle _cursor;
@@ -30,6 +30,9 @@ public class TextEdit extends Prototype
     private int _cursorXMax = Integer.MAX_VALUE;
     // private int _lineXShift = 0;
 
+    /**
+     * @return selection area Rectangle for styling
+     */
     public Rectangle getSelectionArea() {
         return _selectedArea;
     }
@@ -53,6 +56,9 @@ public class TextEdit extends Prototype
 
     private int scrollStep = 15;
 
+    /**
+     * Constructs a TextEdit
+     */
     public TextEdit() {
         _text_object = new TextLine();
         _cursor = new Rectangle();
@@ -154,14 +160,6 @@ public class TextEdit extends Prototype
 
         curPos = _cursor.getX() - curPos;
         _selectedArea.setX(_selectedArea.getX() + curPos);
-    }
-
-    public void invokeScrollUp(MouseArgs args) {
-        eventScrollUp.execute(this, args);
-    }
-
-    public void invokeScrollDown(MouseArgs args) {
-        eventScrollDown.execute(this, args);
     }
 
     private void replaceCursorAccordingCoord(int realPos) {
@@ -356,6 +354,9 @@ public class TextEdit extends Prototype
         }
     }
 
+    /**
+     * Set TextEdit focused/unfocused
+     */
     @Override
     public void setFocused(boolean value) {
         super.setFocused(value);
@@ -365,10 +366,12 @@ public class TextEdit extends Prototype
             _cursor.setVisible(false);
     }
 
+    /**
+     * Text alignment in the TextEdit
+     */
     public void setTextAlignment(ItemAlignment... alignment) {
         setTextAlignment(Arrays.asList(alignment));
     }
-
     public void setTextAlignment(List<ItemAlignment> alignment) {
         List<ItemAlignment> ial = new LinkedList<>();
         if (alignment.contains(ItemAlignment.RIGHT)) {
@@ -381,26 +384,31 @@ public class TextEdit extends Prototype
         _text_object.setTextAlignment(ial);
     }
 
+    /**
+     * Text margin in the TextEdit
+     */
     public void setTextMargin(Indents margin) {
         _text_object.setMargin(margin);
     }
+    public Indents getTextMargin() {
+        return _text_object.getMargin();
+    }
 
+    /**
+     * Text font in the TextEdit
+     */
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
-
     public void setFontSize(int size) {
         _text_object.setFontSize(size);
     }
-
     public void setFontStyle(int style) {
         _text_object.setFontStyle(style);
     }
-
     public void setFontFamily(String font_family) {
         _text_object.setFontFamily(font_family);
     }
-
     public Font getFont() {
         return _text_object.getFont();
     }
@@ -419,6 +427,9 @@ public class TextEdit extends Prototype
         }
     }
 
+    /**
+     * Text in the TextEdit
+     */
     public void setText(String text) {
         if (_isSelect || _justSelected) {
             unselectText();
@@ -426,43 +437,46 @@ public class TextEdit extends Prototype
         }
         privSetText(text);
     }
+    public String getText() {
+        return privGetText();
+    }
 
     private String privGetText() {
         return _text_object.getItemText();
     }
 
-    public String getText() {
-        return privGetText();
-    }
-
+    /**
+     * Text color in the TextEdit
+     */
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
-
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
-
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
-
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
-
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
-
     public Color getForeground() {
         return _text_object.getForeground();
     }
 
+    /**
+     * Returns if TextEdit editable or not
+     */
     public boolean isEditable() {
         return _isEditable;
     }
 
+    /**
+     * Set TextEdit editable true or false
+     */
     public void setEditable(boolean value) {
         if (_isEditable == value)
             return;
@@ -474,6 +488,9 @@ public class TextEdit extends Prototype
             _cursor.setVisible(false);
     }
 
+    /**
+     * Set width of the TextEdit
+     */
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
@@ -484,6 +501,9 @@ public class TextEdit extends Prototype
         replaceCursor();
     }
 
+    /**
+     * Initialization and adding of all elements in the TextEdit
+     */
     @Override
     public void initElements() {
         addItems(_selectedArea, _text_object, _cursor);
@@ -498,10 +518,18 @@ public class TextEdit extends Prototype
             scrollStep = scctp;
     }
 
+    /**
+     * Returns width of the whole text in the TextEdit
+     * (includes visible and invisible parts of the text)
+     */
     public int getTextWidth() {
         return _text_object.getWidth();
     }
 
+    /**
+     * Returns height of the whole text in the TextEdit
+     * (includes visible and invisible parts of the text)
+     */
     public int getTextHeight() {
         return _text_object.getHeight();
     }
@@ -552,6 +580,9 @@ public class TextEdit extends Prototype
         }
     }
 
+    /**
+     * @return selected part of the text
+     */
     public String getSelectedText() {
         return privGetSelectedText();
     }
@@ -573,6 +604,9 @@ public class TextEdit extends Prototype
         }
     }
 
+    /**
+     * Paste text
+     */
     public void pasteText(String pasteStr) {
         if (pasteStr != null)
             privPasteText(pasteStr);
@@ -605,6 +639,10 @@ public class TextEdit extends Prototype
         }
     }
 
+    /**
+     * Cuts selected part of the text and returns it.
+     * Is nothing is selected returns empry string
+     */
     public String cutText() {
         return privCutText();
     }
@@ -621,25 +659,16 @@ public class TextEdit extends Prototype
         _justSelected = false;
     }
 
-    /*
-     * internal void ShowCursor(bool isShow) { if (isShow) _cursor.setWidth(2); else
-     * _cursor.setWidth(0); }
+    /**
+     * Remove all text from the TextEdit
      */
-//    private int nearestPosToCursor(double xPos) {
-//        List<Integer> endPos = _text_object.getLetPosArray();
-//        int pos = (int) endPos.stream().map(x -> Math.abs(x - xPos)).sorted().toArray()[0];
-//        return pos;
-//    }
-
-//    void setCursorPosition(double newPos) {
-//        _cursor_position = nearestPosToCursor(newPos);
-//    }
-
     public void clear() {
         setText("");
     }
 
-    // style
+    /**
+     * Set style of the TextEdit
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)
@@ -681,11 +710,17 @@ public class TextEdit extends Prototype
         }
     }
 
+    /**
+     * Undo last action
+     */
     public void undo() {
         _text_object.undo();
         replaceCursor();
     }
 
+    /**
+     * Redo last undo action
+     */
     public void redo() {
         _text_object.redo();
         replaceCursor();

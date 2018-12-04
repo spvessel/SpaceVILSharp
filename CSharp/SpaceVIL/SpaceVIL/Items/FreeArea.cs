@@ -16,6 +16,9 @@ namespace SpaceVIL
         private int _diff_y = 0;
         Dictionary<IBaseItem, int[]> _stored_crd;
         // public ContextMenu _dropdownmenu = new ContextMenu();
+        /// <summary>
+        /// Constructs a FreeArea
+        /// </summary>
         public FreeArea()
         {
             SetItemName("FlowArea_" + count);
@@ -27,11 +30,15 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.FreeArea)));
         }
 
+        /// <summary>
+        /// Add ContextMenu to the FreeArea
+        /// </summary>
         public void AddContextMenu(ContextMenu context_menu)
         {
             EventMouseClick += (sender, args) => context_menu.Show(sender, args);
         }
-        protected virtual void OnMousePress(IItem sender, MouseArgs args)
+
+        void OnMousePress(IItem sender, MouseArgs args)
         {
             if (args.Button == MouseButton.ButtonLeft)
             {
@@ -42,7 +49,7 @@ namespace SpaceVIL
             }
         }
 
-        protected virtual void OnDragging(IItem sender, MouseArgs args)
+        void OnDragging(IItem sender, MouseArgs args)
         {
             if (args.Button == MouseButton.ButtonLeft)
             {
@@ -74,6 +81,9 @@ namespace SpaceVIL
         }
 
         //overrides
+        /// <summary>
+        /// Add item to the FreeArea
+        /// </summary>
         public override void AddItem(IBaseItem item)
         {
             base.AddItem(item);
@@ -85,6 +95,10 @@ namespace SpaceVIL
             }
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Remove item from the FreeArea
+        /// </summary>
         public override void RemoveItem(IBaseItem item)
         {
             // Console.WriteLine("flow remove");
@@ -92,6 +106,10 @@ namespace SpaceVIL
             _stored_crd.Remove(item);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Update all children elements positions
+        /// </summary>
         public void UpdateLayout()
         {
             lock (this)

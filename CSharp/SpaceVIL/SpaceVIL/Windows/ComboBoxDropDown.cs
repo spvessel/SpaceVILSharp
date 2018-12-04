@@ -16,10 +16,13 @@ namespace SpaceVIL
         public ButtonCore Selection;
         public EventCommonMethod SelectionChanged;
 
+        /// <summary>
+        /// Constructs a ComboBoxDropDown
+        /// </summary>
         public ComboBoxDropDown()
         {
         }
-
+        
         public override void InitWindow()
         {
             ItemList = new ListBox();
@@ -39,10 +42,17 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBoxDropDown)));
         }
 
+        /// <summary>
+        /// Add item to the ComboBoxDropDown list
+        /// </summary>
         public void Add(IBaseItem item)
         {
             ItemList.AddItem(item);
         }
+
+        /// <summary>
+        /// Remove item from the ComboBoxDropDown
+        /// </summary>
         public void Remove(IBaseItem item)
         {
             ItemList.RemoveItem(item);
@@ -59,6 +69,10 @@ namespace SpaceVIL
                 SelectionChanged?.Invoke();
             }
         }
+
+        /// <summary>
+        /// Current element in the ComboBoxDropDown by index
+        /// </summary>
         public void SetCurrentIndex(int index)
         {
             ItemList.SetSelection(index);
@@ -68,6 +82,9 @@ namespace SpaceVIL
             return ItemList.GetSelection();
         }
 
+        /// <summary>
+        /// Show the ComboBoxDropDown
+        /// </summary>
         public override void Show()
         {
             base.Show();
@@ -84,11 +101,17 @@ namespace SpaceVIL
         //     Handler.SetHidden(false);
         // }
 
+        /// <summary>
+        /// Dispose the ComboBoxDropDown
+        /// </summary>
         public void Dispose()
         {
             Handler.Close();
         }
 
+        /// <summary>
+        /// Set style of the ComboBoxDropDown
+        /// </summary>
         public void SetStyle(Style style)
         {
             if (style == null)

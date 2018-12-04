@@ -8,6 +8,10 @@ namespace SpaceVIL
     public class HorizontalStack : Prototype, IHLayout
     {
         static int count = 0;
+
+        /// <summary>
+        /// Constructs a HorizontalStack
+        /// </summary>
         public HorizontalStack()
         {
             SetItemName("HorizontalStack_" + count);
@@ -21,22 +25,38 @@ namespace SpaceVIL
         {
             return false;
         }
+
+        /// <summary>
+        /// Add item to the HorizontalStack
+        /// </summary>
         public override void AddItem(IBaseItem item)
         {
             base.AddItem(item);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Set width of the HorizontalStack
+        /// </summary>
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Set X position of the HorizontalStack
+        /// </summary>
         public override void SetX(int _x)
         {
             base.SetX(_x);
             UpdateLayout();
         }
 
+        /// <summary>
+        /// Update all children and HorizontalStack sizes and positions
+        /// according to confines
+        /// </summary>
         public void UpdateLayout()
         {
             int total_space = GetWidth() - GetPadding().Left - GetPadding().Right;

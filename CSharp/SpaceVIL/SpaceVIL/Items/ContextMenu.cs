@@ -18,6 +18,10 @@ namespace SpaceVIL
 
         private bool _init = false;
         private bool _ouside = true;
+
+        /// <summary>
+        /// Close the ContextMenu it mouse click is outside (true or false)
+        /// </summary>
         public bool IsOutsideClickClosable()
         {
             return _ouside;
@@ -36,6 +40,10 @@ namespace SpaceVIL
         //     _lock_ouside = value;
         // }
 
+        /// <summary>
+        /// Constructs a ContextMenu
+        /// </summary>
+        /// <param name="handler"> parent window for the ContextMenu </param>
         public ContextMenu(WindowLayout handler)
         {
             SetPassEvents(false);
@@ -47,6 +55,9 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ContextMenu)));
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the ContextMenu
+        /// </summary>
         public override void InitElements()
         {
             SetConfines();
@@ -87,7 +98,7 @@ namespace SpaceVIL
             }
         }
 
-        protected virtual void OnSelectionChanged()
+        void OnSelectionChanged()
         {
             MenuItem item = ItemList.GetSelectionItem() as MenuItem;
             if (item != null)
@@ -100,15 +111,26 @@ namespace SpaceVIL
             Hide();
             HideDependentMenus();
         }
+
+        /// <summary>
+        /// Returns count of the ContextMenu lines
+        /// </summary>
         public int GetListCount()
         {
             return ItemList.GetListContent().Count;
         }
+
+        /// <summary>
+        /// Returns ContextMenu items list
+        /// </summary>
         public List<IBaseItem> GetListContent()
         {
             return ItemList.GetListContent();
         }
 
+        /// <summary>
+        /// Add item to the ContextMenu
+        /// </summary>
         public override void AddItem(IBaseItem item)
         {
             // (item as MenuItem)._invoked_menu = this;
@@ -117,6 +139,10 @@ namespace SpaceVIL
                 tmp._context_menu = this;
             _queue.Enqueue(item);
         }
+
+        /// <summary>
+        /// Remove item from the ContextMenu
+        /// </summary>
         public override void RemoveItem(IBaseItem item)
         {
             ItemList.RemoveItem(item);
@@ -149,6 +175,12 @@ namespace SpaceVIL
             SetHeight(height);
         }
 
+        /// <summary>
+        /// Show the ContextMenu
+        /// </summary>
+        /// <param name="sender"> the item from which the show request is sent </param>
+        /// <param name="args"> mouse click arguments (cursor position, mouse button,
+        /// mouse button press/release, etc.) </param>
         public void Show(IItem sender, MouseArgs args)
         {
             if (args.Button == ActiveButton)
@@ -185,6 +217,10 @@ namespace SpaceVIL
                 ItemList.GetArea().SetFocus();
             }
         }
+
+        /// <summary>
+        /// Hide the ContextMenu without destroying
+        /// </summary>
         public void Hide()
         {
             SetX(-GetWidth());
@@ -193,6 +229,9 @@ namespace SpaceVIL
             ReturnFocus?.SetFocus();
         }
 
+        /// <summary>
+        /// Set confines according to position and size of the ContextMenu
+        /// </summary>
         public override void SetConfines()
         {
             base.SetConfines(
@@ -203,7 +242,7 @@ namespace SpaceVIL
             );
         }
 
-        public bool CloseDependencies(MouseArgs args)
+        internal bool CloseDependencies(MouseArgs args)
         {
             // Console.WriteLine(GetItemName() + " " + args.Position.X);
             foreach (var item in GetListContent())
@@ -226,6 +265,9 @@ namespace SpaceVIL
         }
 
         //style
+        /// <summary>
+        /// Set style of the ContextMenu
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)
@@ -249,3 +291,4 @@ namespace SpaceVIL
         }
     }
 }
+ 

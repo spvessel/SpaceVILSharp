@@ -22,11 +22,16 @@ namespace SpaceVIL
         private static int count = 0;
 
         private CustomToggle _marker;
+
+        /// <returns> IndicationMarker ButtonToggle type for styling </returns>
         public ButtonToggle GetIndicatorMarker()
         {
             return _marker;
         }
 
+        /// <summary>
+        /// Constructs an Indicator
+        /// </summary>
         public Indicator()
         {
             SetItemName("Indicator_" + count);
@@ -37,6 +42,9 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Indicator)));
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the Indicator
+        /// </summary>
         public override void InitElements()
         {
             //marker
@@ -44,6 +52,9 @@ namespace SpaceVIL
             AddItem(_marker);
         }
 
+        /// <summary>
+        /// Set style of the Indicator
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)

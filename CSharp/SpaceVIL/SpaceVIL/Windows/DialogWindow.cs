@@ -8,13 +8,19 @@ namespace SpaceVIL
 {
     public abstract class DialogWindow : CoreWindow
     {
-        
+        /// <summary>
+        /// Constructs a DialogWindow
+        /// </summary>
         public DialogWindow()
         {
             InitWindow();
         }
 
         String _title = String.Empty;
+
+        /// <summary>
+        /// DialogWindow title text
+        /// </summary>
         public String DialogTitle
         {
             get

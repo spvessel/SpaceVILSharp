@@ -1,6 +1,5 @@
 package com.spvessel.Core;
 
-import com.spvessel.Core.InterfaceBehavior;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.SizePolicy;
 
@@ -9,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Behavior implements InterfaceBehavior {
+class Behavior implements InterfaceBehavior {
 
     private List<ItemAlignment> _alignment = new LinkedList<>();
 

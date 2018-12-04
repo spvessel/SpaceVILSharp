@@ -23,11 +23,16 @@ namespace SpaceVIL
         static int count = 0;
         private Label _text_object;
         private CustomIndicator _indicator;
+
+        /// <returns> RadioButton's indicator </returns>
         public Indicator GetIndicator()
         {
             return _indicator;
         }
 
+        /// <summary>
+        /// Constructs a RadioButton
+        /// </summary>
         public RadioButton()
         {
             SetItemName("RadioButton_" + count);
@@ -48,18 +53,25 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.RadioButton)));
         }
 
-        protected virtual void OnKeyPress(object sender, KeyArgs args)
+        void OnKeyPress(object sender, KeyArgs args)
         {
             if (args.Key == KeyCode.Enter || args.Key == KeyCode.Space)
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 
+        /// <summary>
+        /// Set is mouse hover on the RadioButton
+        /// </summary>
         public override void SetMouseHover(bool value)
         {
             base.SetMouseHover(value);
             _indicator.GetIndicatorMarker().SetMouseHover(IsMouseHover());
             UpdateState();
         }
+
+        /// <summary>
+        /// Initialization and adding of all elements in the RadioButton
+        /// </summary>
         public override void InitElements()
         {
             //connect events
@@ -100,22 +112,36 @@ namespace SpaceVIL
         // }
 
         //Layout rules
+        /// <summary>
+        /// Add item to the RadioButton
+        /// </summary>
         public new void AddItem(IBaseItem item)
         {
             base.AddItem(item);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Set width of the RadioButton
+        /// </summary>
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Set X position of the RadioButton
+        /// </summary>
         public override void SetX(int _x)
         {
             base.SetX(_x);
             UpdateLayout();
         }
 
+        /// <summary>
+        /// Update RadioButton's states (size and position)
+        /// </summary>
         public virtual void UpdateLayout()
         {
             int offset = 0;
@@ -133,14 +159,25 @@ namespace SpaceVIL
         }
 
         //text init
+        /// <summary>
+        /// Text alignment in the RadioButton
+        /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _text_object.SetTextAlignment(alignment);
         }
+
+        /// <summary>
+        /// Text margin in the RadioButton
+        /// </summary>
         public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
         }
+
+        /// <summary>
+        /// Text font parameters in the RadioButton
+        /// </summary>
         public void SetFont(Font font)
         {
             _text_object.SetFont(font);
@@ -161,6 +198,10 @@ namespace SpaceVIL
         {
             return _text_object.GetFont();
         }
+
+        /// <summary>
+        /// Text in the RadioButton
+        /// </summary>
         public void SetText(String text)
         {
             _text_object.SetText(text);
@@ -169,6 +210,10 @@ namespace SpaceVIL
         {
             return _text_object.GetText();
         }
+
+        /// <summary>
+        /// Text color in the RadioButton
+        /// </summary>
         public void SetForeground(Color color)
         {
             _text_object.SetForeground(color);
@@ -194,6 +239,9 @@ namespace SpaceVIL
             return _text_object.GetForeground();
         }
 
+        /// <summary>
+        /// Set style of the RadioButton
+        /// </summary>
         //style
         public override void SetStyle(Style style)
         {

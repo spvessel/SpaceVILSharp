@@ -10,6 +10,10 @@ namespace SpaceVIL
     {
         // PrimitiveType _shape
         static int count = 0;
+
+        /// <summary>
+        /// Constructs a PointsContainer
+        /// </summary>
         public PointsContainer() : base(name: "PointsContainer_" + count)
         {
             SetBackground(Color.Transparent);
@@ -17,6 +21,10 @@ namespace SpaceVIL
         }
 
         float _thickness = 1.0f;
+
+        /// <summary>
+        /// Points thickness
+        /// </summary>
         public void SetPointThickness(float thickness)
         {
             _thickness = thickness;
@@ -25,7 +33,12 @@ namespace SpaceVIL
         {
             return _thickness;
         }
+
         Color _color = Color.White;
+
+        /// <summary>
+        /// Points color
+        /// </summary>
         public void SetPointColor(Color color)
         {
             _color = color;
@@ -34,7 +47,12 @@ namespace SpaceVIL
         {
             return _color;
         }
+
         List<float[]> _shape_pointer;
+
+        /// <summary>
+        /// Shape of the points
+        /// </summary>
         public void SetShapePointer(List<float[]> shape)
         {
             if (shape == null)
@@ -48,6 +66,9 @@ namespace SpaceVIL
             return _shape_pointer;
         }
 
+        /// <summary>
+        /// List of the points coordinates
+        /// </summary>
         public void SetPointsCoord(List<float[]> coord)
         {
             List<float[]> tmp = new List<float[]>();
@@ -75,6 +96,9 @@ namespace SpaceVIL
             return result;
         }
 
+        /// <summary>
+        /// Make shape according to triangles list assigned with setTriangles
+        /// </summary>
         public override List<float[]> MakeShape()
         {
             if (GetTriangles() == null || GetTriangles().Count < 2)
@@ -91,6 +115,10 @@ namespace SpaceVIL
         }
 
         float _line_thickness = 1.0f;
+
+        /// <summary>
+        /// Thickness of the line between the points
+        /// </summary>
         public void SetLineThickness(float thickness)
         {
             _line_thickness = thickness;
@@ -99,7 +127,12 @@ namespace SpaceVIL
         {
             return _line_thickness;
         }
+
         Color _line_color = Color.Blue;
+
+        /// <summary>
+        /// The line color
+        /// </summary>
         public void SetLineColor(Color color)
         {
             _line_color = color;

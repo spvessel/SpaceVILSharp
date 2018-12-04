@@ -3,20 +3,32 @@ package com.spvessel;
 import java.util.List;
 
 public class Ellipse extends Primitive {
-    static int count = 0;
-    public int Quality = 16;
+    private static int count = 0;
+    public int quality = 16;
+
+    /**
+     * Constructs an Ellipse
+     */
     public Ellipse() {
         setItemName("Ellipse_" + count);
         count++;
     }
-    public Ellipse(int n) {
+
+    /**
+     * Constructs an Ellipse
+     * @param quality Ellipse quality (points count)
+     */
+    public Ellipse(int quality) {
         this();
-        Quality = n;
+        this.quality = quality;
     }
 
+    /**
+     * Make shape with triangles and convert to GL coordinates
+     */
     @Override
     public List<float[]> makeShape() {
-        setTriangles(GraphicsMathService.getEllipse(getWidth(), getHeight(), getX(), getY(), Quality));
+        setTriangles(GraphicsMathService.getEllipse(getWidth(), getHeight(), getX(), getY(), quality));
         return GraphicsMathService.toGL(this, getHandler());
     }
 }

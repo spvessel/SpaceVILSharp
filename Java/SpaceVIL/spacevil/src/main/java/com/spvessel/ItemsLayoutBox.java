@@ -20,18 +20,18 @@ public class ItemsLayoutBox {
         return layouts.get(id).getFloatItems();
     }
 
-    static protected ItemsLayout getLayout(UUID id) {
+    static ItemsLayout getLayout(UUID id) {
         return layouts.get(id);
     }
 
     static private Map<UUID, ItemsLayout> layouts = new HashMap<UUID, ItemsLayout>();
 
-    static protected void initLayout(UUID _layout) {
+    static void initLayout(UUID _layout) {
         ItemsLayout l = new ItemsLayout(_layout);
         layouts.put(l.getId(), l);
     }
 
-    static public void addItem(WindowLayout layout, InterfaceBaseItem item, LayoutType type) {
+    static void addItem(WindowLayout layout, InterfaceBaseItem item, LayoutType type) {
         switch (type) {
         case STATIC:
             layouts.get(layout.getId()).getItems().add(item);
@@ -45,7 +45,7 @@ public class ItemsLayoutBox {
         }
     }
 
-    static protected void removeItem(WindowLayout layout, InterfaceBaseItem item, LayoutType type) {
+    static void removeItem(WindowLayout layout, InterfaceBaseItem item, LayoutType type) {
         switch (type) {
         case STATIC:
             layouts.get(layout.getId()).getItems().remove(item);

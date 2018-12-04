@@ -10,8 +10,11 @@ import java.util.List;
 import java.util.LinkedList;
 
 public class Grid extends Prototype implements InterfaceGrid {
-    static int count = 0;
+    private static int count = 0;
 
+    /**
+     * Constructs a Grid
+     */
     public Grid() {
         setItemName("Grid_" + count);
         count++;
@@ -21,6 +24,9 @@ public class Grid extends Prototype implements InterfaceGrid {
         isFocusable = false;
     }
 
+    /**
+     * Constructs a Grid with the given rows and columns
+     */
     public Grid(int rows, int columns) {
         this();
         _row_count = rows;
@@ -32,7 +38,7 @@ public class Grid extends Prototype implements InterfaceGrid {
     private List<Cell> _cells;
 
     void initCells() {
-        _cells = new LinkedList<Cell>();
+        _cells = new LinkedList<>();
         for (int i = 0; i < _row_count; i++) {
             for (int j = 0; j < _column_count; j++) {
                 _cells.add(new Cell(this, i, j));
@@ -42,6 +48,9 @@ public class Grid extends Prototype implements InterfaceGrid {
 
     private int _row_count = 1;
 
+    /**
+     * Set count of the rows
+     */
     public void setRowCount(int capacity) {
         if (capacity != _row_count)
             _row_count = capacity;
@@ -53,6 +62,9 @@ public class Grid extends Prototype implements InterfaceGrid {
 
     private int _column_count = 1;
 
+    /**
+     * Set count of the columns
+     */
     public void setColumnCount(int capacity) {
         if (capacity != _column_count)
             _column_count = capacity;
@@ -63,17 +75,23 @@ public class Grid extends Prototype implements InterfaceGrid {
         return _column_count;
     }
 
+    /**
+     * Returns the cell by row and column number
+     */
     public Cell getCell(int row, int column) {
         Cell cell = null;
         try {
             cell = _cells.get(column + row * _column_count);
         } catch (Exception ex) {
-            System.out.println("Cells row and colums out of range.\n" + ex.toString());
+            System.out.println("Cells row and column out of range.\n" + ex.toString());
             return cell;
         }
         return cell;
     }
 
+    /**
+     * Returns all cells list
+     */
     public List<Cell> getAllCells() {
         return _cells;
     }
@@ -84,6 +102,9 @@ public class Grid extends Prototype implements InterfaceGrid {
         return false;
     }
 
+    /**
+     * Add item to the Grid
+     */
     @Override
     public void addItem(InterfaceBaseItem item) {
         // ignore if it is out of space, add in free cell, attach row and collumn
@@ -98,6 +119,9 @@ public class Grid extends Prototype implements InterfaceGrid {
         }
     }
 
+    /**
+     * Insert item to the Grid by row and column number
+     */
     public void insertItem(InterfaceBaseItem item, int row, int column) {
         super.addItem(item);
         // _cells[row + column * _row_count].setItem(item);
@@ -106,24 +130,36 @@ public class Grid extends Prototype implements InterfaceGrid {
         updateLayout();
     }
 
+    /**
+     * Set width of the Grid
+     */
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
         updateLayout();
     }
 
+    /**
+     * Set X position of the Grid
+     */
     @Override
     public void setX(int _x) {
         super.setX(_x);
         updateLayout();
     }
 
+    /**
+     * Set height of the Grid
+     */
     @Override
     public void setHeight(int height) {
         super.setHeight(height);
         updateLayout();
     }
 
+    /**
+     * Set Y position of the Grid
+     */
     @Override
     public void setY(int _y) {
         super.setY(_y);
@@ -134,14 +170,18 @@ public class Grid extends Prototype implements InterfaceGrid {
     private int[] colWidth;
     private int[] rowHeight;
 
-    protected int[] getColWidth() {
+    int[] getColWidth() {
         return colWidth;
     }
 
-    protected int[] getRowHeight() {
+    int[] getRowHeight() {
         return rowHeight;
     }
 
+    /**
+     * Update all children and grid sizes and positions
+     * according to confines
+     */
     // update Layout
     public void updateLayout() {
 
@@ -193,7 +233,7 @@ public class Grid extends Prototype implements InterfaceGrid {
 
     private int[] getRowsHeight() {
         int[] rows_height = new int[_row_count];
-        List<int[]> list_height = new LinkedList<int[]>();
+        List<int[]> list_height = new LinkedList<>();
 
         int total_space = getHeight() - getPadding().top - getPadding().bottom;
         int free_space = total_space;
@@ -217,7 +257,7 @@ public class Grid extends Prototype implements InterfaceGrid {
             }
         }
         ///////////
-        List<Integer[]> m_height = new LinkedList<Integer[]>();
+        List<Integer[]> m_height = new LinkedList<>();
         for (int r = 0; r < _row_count; r++) {
             int max = -10;
             for (int c = 0; c < _column_count; c++) {
@@ -259,7 +299,7 @@ public class Grid extends Prototype implements InterfaceGrid {
 
     private int[] getColumnsWidth() {
         int[] columns_width = new int[_column_count];
-        List<int[]> list_width = new LinkedList<int[]>();
+        List<int[]> list_width = new LinkedList<>();
 
         int total_space = getWidth() - getPadding().left - getPadding().right;
         int free_space = total_space;
@@ -282,7 +322,7 @@ public class Grid extends Prototype implements InterfaceGrid {
             }
         }
         //////////
-        List<Integer[]> m_width = new LinkedList<Integer[]>();
+        List<Integer[]> m_width = new LinkedList<>();
         for (int c = 0; c < _column_count; c++) {
             int max = -10;
             for (int r = 0; r < _row_count; r++) {

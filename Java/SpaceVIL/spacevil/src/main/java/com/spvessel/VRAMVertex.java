@@ -12,21 +12,21 @@ import static org.lwjgl.opengl.GL20.*;
 
 final class VRAMVertex {
     private FloatBuffer _vbo_data;
-    public int VBO;
+    int VBO;
     private int length;
     // private FloatBuffer _cbo_data;
     // public int CBO;
 
-    protected VRAMVertex() {
+    VRAMVertex() {
     }
 
-    protected void sendColor(Shader shader, Color fill) {
+    void sendColor(Shader shader, Color fill) {
         float[] argb = { (float) fill.getRed() / 255.0f, (float) fill.getGreen() / 255.0f,
                 (float) fill.getBlue() / 255.0f, (float) fill.getAlpha() / 255.0f };
         sendUniform4f(shader, "background", argb);
     }
 
-    protected void genBuffers(float[] vertices) {
+    void genBuffers(float[] vertices) {
         length = vertices.length / 3;
         // Vertices
         VBO = glGenBuffers();
@@ -55,7 +55,7 @@ final class VRAMVertex {
         // glEnableVertexAttribArray(1);
     }
 
-    protected void genBuffers(List<float[]> vertices) {
+    void genBuffers(List<float[]> vertices) {
         length = vertices.size();
         // Vertices
         _vbo_data = BufferUtils.createFloatBuffer(vertices.size() * 3);
@@ -91,13 +91,13 @@ final class VRAMVertex {
         // glEnableVertexAttribArray(1);
     }
 
-    protected void draw(int type) {
+    void draw(int type) {
         glDrawArrays(type, 0, length);
         glDisableVertexAttribArray(0);
         // glDisableVertexAttribArray(1);
     }
 
-    protected boolean sendUniform4f(Shader shader, String name, float[] array) {
+    boolean sendUniform4f(Shader shader, String name, float[] array) {
         int location = glGetUniformLocation((int) shader.getProgramID(), name);
         if (location >= 0) {
             glUniform4f(location, array[0], array[1], array[2], array[3]);
@@ -107,14 +107,14 @@ final class VRAMVertex {
         return false;
     }
 
-    protected void clear() {
+    void clear() {
         glDeleteBuffers(VBO);
         // glDeleteBuffers(CBO);
         _vbo_data = null;
         // _cbo_data = null;
     }
 
-    protected void deleteVBOBuffer() {
+    void deleteVBOBuffer() {
         glDeleteBuffers(VBO);
     }
 

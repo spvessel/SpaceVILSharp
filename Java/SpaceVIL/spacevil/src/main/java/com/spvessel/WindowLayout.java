@@ -15,7 +15,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public final class WindowLayout {
-    public Lock engineLocker = new ReentrantLock();
+    Lock engineLocker = new ReentrantLock();
     private Lock wndLock = new ReentrantLock();
 
     class DrawThread extends Thread {

@@ -15,10 +15,16 @@ namespace SpaceVIL
         //internal ContextMenu _invoked_menu;
         internal ContextMenu _context_menu;
         private ContextMenu _sub_context_menu;
-        public ContextMenu GetSubCintextMenu()
+
+        /// <returns> sub context menu </returns>
+        public ContextMenu GetSubContextMenu()
         {
             return _sub_context_menu;
         }
+
+        /// <summary>
+        /// Is MenuItem ready to close
+        /// </summary>
         public bool IsReadyToClose(MouseArgs args)
         {
             if (_sub_context_menu != null)
@@ -31,13 +37,19 @@ namespace SpaceVIL
         }
         CustomShape _arrow;
 
-        public void AssignContexMenu(ContextMenu context_menu)
+        /// <summary>
+        /// Assign the context menu
+        /// </summary>
+        public void AssignContextMenu(ContextMenu context_menu)
         {
             _sub_context_menu = context_menu;
             _sub_context_menu.SetOutsideClickClosable(false);
             IsActionItem = true;
         }
 
+        /// <summary>
+        /// Constructs a MenuItem
+        /// </summary>
         public MenuItem()
         {
             SetItemName("MenuItem_" + count);
@@ -49,13 +61,21 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MenuItem)));
         }
+
+        /// <summary>
+        /// Constructs a MenuItem with text
+        /// </summary>
         public MenuItem(String text = "") : this()
         {
             SetText(text);
         }
+
+        /// <summary>
+        /// Constructs a MenuItem with assigned context menu and text
+        /// </summary>
         public MenuItem(ContextMenu context_menu, String text = "") : this()
         {
-            AssignContexMenu(context_menu);
+            AssignContextMenu(context_menu);
             SetText(text);
         }
 
@@ -66,22 +86,37 @@ namespace SpaceVIL
         }
 
         //text init
+        /// <returns> text width in the MenuItem </returns>
         public int GetTextWidth()
         {
             return _text_object.GetWidth();
         }
+
+        /// <returns> text height in the MenuItem </returns>
         public int GetTextHeight()
         {
             return _text_object.GetHeight();
         }
+
+        /// <summary>
+        /// Text alignment in the MenuItem
+        /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _text_object.SetTextAlignment(alignment);
         }
+
+        /// <summary>
+        /// Text margin in the MenuItem
+        /// </summary>
         public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
         }
+
+        /// <summary>
+        /// Text font in the MenuItem
+        /// </summary>
         public void SetFont(Font font)
         {
             _text_object.SetFont(font);
@@ -90,6 +125,10 @@ namespace SpaceVIL
         {
             return _text_object.GetFont();
         }
+
+        /// <summary>
+        /// MenuItem text
+        /// </summary>
         public void SetText(String text)
         {
             _text_object.SetItemText(text);
@@ -98,6 +137,10 @@ namespace SpaceVIL
         {
             return _text_object.GetItemText();
         }
+
+        /// <summary>
+        /// Text color in the MenuItem
+        /// </summary>
         public void SetForeground(Color color)
         {
             _text_object.SetForeground(color);
@@ -123,6 +166,9 @@ namespace SpaceVIL
             return _text_object.GetForeground();
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the MenuItem
+        /// </summary>
         public override void InitElements()
         {
             //text
@@ -141,6 +187,9 @@ namespace SpaceVIL
             //_text_object.UpdateData(UpdateType.Critical);
         }
 
+        /// <summary>
+        /// Set style of the MenuItem
+        /// </summary>
         //style
         public override void SetStyle(Style style)
         {
@@ -161,11 +210,17 @@ namespace SpaceVIL
             }
         }
 
+        /// <summary>
+        /// Customize shape of the MenuItem's arrow
+        /// </summary>
         public void AddArrow(CustomShape arrow)
         {
             _arrow = arrow;
         }
 
+        /// <summary>
+        /// Show the MenuItem
+        /// </summary>
         public void Show()
         {
             if (_sub_context_menu == null)
@@ -189,6 +244,10 @@ namespace SpaceVIL
 
             _sub_context_menu.Show(this, args);
         }
+
+        /// <summary>
+        /// Hide the MenuItem
+        /// </summary>
         public void Hide()
         {
             _sub_context_menu?.Hide();

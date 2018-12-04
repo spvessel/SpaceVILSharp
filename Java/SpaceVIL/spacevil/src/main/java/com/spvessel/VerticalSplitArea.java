@@ -19,6 +19,9 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     private int _lMin = 0;
     private int _rMin = 0;
 
+    /**
+     * Sets position of the SplitHolder
+     */
     public void setSplitHolderPosition(int position) {
         if (position < _lMin || position > getWidth() - _splitHolder.getHolderSize() - _rMin)
             return;
@@ -27,27 +30,31 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
         updateLayout();
     }
 
+    /**
+     * Constructs a VerticalSplitArea
+     */
     public VerticalSplitArea() {
         setItemName("VSplitArea_" + count);
         count++;
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalSplitArea"));
         setStyle(DefaultsService.getDefaultStyle(VerticalSplitArea.class));
         isFocusable = false;
-        InterfaceMouseMethodState h_press = (sender, args) -> onMousePress(sender, args);
-        _splitHolder.eventMousePress.add(h_press);
-        InterfaceMouseMethodState h_dragg = (sender, args) -> onDragging(sender, args);
-        _splitHolder.eventMouseDrag.add(h_dragg);
+        _splitHolder.eventMousePress.add(this::onMousePress);
+        _splitHolder.eventMouseDrag.add(this::onDragging);
     }
 
-    protected void onMousePress(InterfaceItem sender, MouseArgs args) {
+    private void onMousePress(InterfaceItem sender, MouseArgs args) {
         _diff = args.position.getX() - _splitHolder.getX();
     }
 
-    public void onDragging(InterfaceItem sender, MouseArgs args) {
+    private void onDragging(InterfaceItem sender, MouseArgs args) {
         int offset = args.position.getX() - getX() - _diff;
         setSplitHolderPosition(offset);
     }
 
+    /**
+     * Initialization and adding of all elements in the VerticalSplitArea
+     */
     @Override
     public void initElements() {
         setSplitHolderPosition((getWidth() - _splitHolder.getHolderSize()) / 2);
@@ -57,6 +64,9 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
         updateLayout();
     }
 
+    /**
+     * Assign item on the left of the VerticalSplitArea
+     */
     public void assignLeftItem(InterfaceBaseItem item) {
         addItem(item);
         _leftBlock = item;
@@ -64,6 +74,9 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
         updateLayout();
     }
 
+    /**
+     * Assign item on the right of the VerticalSplitArea
+     */
     public void assignRightItem(InterfaceBaseItem item) {
         addItem(item);
         _rightBlock = item;
@@ -71,6 +84,9 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
         updateLayout();
     }
 
+    /**
+     * Set width of the VerticalSplitArea
+     */
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
@@ -91,6 +107,9 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
         }
     }
 
+    /**
+     * Set X position of the VerticalSplitArea
+     */
     @Override
     public void setX(int _x) {
         super.setX(_x);
@@ -98,6 +117,10 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
         updateLayout();
     }
 
+    /**
+     * Update all children and VSplitArea sizes and positions
+     * according to confines
+     */
     public void updateLayout() {
         _splitHolder.setHeight(getHeight());
 
@@ -125,10 +148,16 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
             item.setConfines();
     }
 
+    /**
+     * Set width of the SplitHolder
+     */
     public void setSpacerWidth(int spWidth) {
         _splitHolder.setSpacerSize(spWidth);
     }
 
+    /**
+     * Set style of the VerticalSplitArea
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)

@@ -26,7 +26,7 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
 final class DrawEngine {
-    protected void resetItems() {
+    void resetItems() {
         if (focusedItem != null)
             focusedItem.setFocused(false);
         focusedItem = null;
@@ -48,11 +48,11 @@ final class DrawEngine {
     private Prototype hoveredItem = null;
     private Prototype focusedItem = null;
 
-    protected Prototype getFocusedItem() {
+    Prototype getFocusedItem() {
         return focusedItem;
     }
 
-    protected void setFocusedItem(Prototype item) {
+    void setFocusedItem(Prototype item) {
         if (item == null) {
             focusedItem = null;
             return;
@@ -67,14 +67,14 @@ final class DrawEngine {
     private Pointer ptrRelease = new Pointer();
     private Pointer ptrClick = new Pointer();
 
-    protected GLWHandler _handler;
+    GLWHandler _handler;
     private Shader _primitive;
     private Shader _texture;
     private Shader _char;
     // private Shader _fxaa;
     private Shader _blur;
 
-    protected DrawEngine(WindowLayout handler) {
+    DrawEngine(WindowLayout handler) {
         hoveredItems = new LinkedList<Prototype>();
         _handler = new GLWHandler(handler);
 
@@ -84,25 +84,25 @@ final class DrawEngine {
         _tooltip.initElements();
     }
 
-    protected void dispose() {
+    void dispose() {
         glfwTerminate();
     }
 
-    protected void close() {
+    void close() {
         _handler.setToClose();
     }
 
     private GLFWImage _iconSmall;
     private GLFWImage _iconBig;
 
-    protected void setBigIcon(BufferedImage icon) {
+    void setBigIcon(BufferedImage icon) {
         _iconBig = GLFWImage.create();
         _iconBig.width(icon.getWidth());
         _iconBig.height(icon.getHeight());
         _iconBig.pixels(createByteImage(icon));
     }
 
-    protected void setSmallIcon(BufferedImage icon) {
+    void setSmallIcon(BufferedImage icon) {
         _iconSmall = GLFWImage.create();
         _iconSmall.width(icon.getWidth());
         _iconSmall.height(icon.getHeight());
@@ -130,7 +130,7 @@ final class DrawEngine {
         return result;
     }
 
-    protected void applyIcon() {
+    void applyIcon() {
         // Display.setIcon(_icon);
         GLFWImage.Buffer gb = GLFWImage.create(2);
         gb.put(0, _iconSmall);
@@ -276,12 +276,12 @@ final class DrawEngine {
         });
     }
 
-    protected void minimizeWindow() {
+    void minimizeWindow() {
         engineEvent.setEvent(InputEventType.WINDOW_MINIMIZE);
         glfwIconifyWindow(_handler.getWindowId());
     }
 
-    protected void maximizeWindow() {
+    void maximizeWindow() {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             if (_handler.getLayout().isMaximized) {
                 glfwRestoreWindow(_handler.getWindowId());
@@ -307,7 +307,7 @@ final class DrawEngine {
         _handler.getLayout().close();
     }
 
-    protected void focus(long wnd, boolean value) {
+    void focus(long wnd, boolean value) {
         engineEvent.resetAllEvents();
         _tooltip.initTimer(false);
         _handler.getLayout().isFocused = value;
@@ -344,7 +344,7 @@ final class DrawEngine {
         _fbo.unbindFBO();
     }
 
-    protected void setWindowSize(int w, int h) {
+    void setWindowSize(int w, int h) {
         glfwSetWindowSize(_handler.getWindowId(), w, h);
         engineEvent.setEvent(InputEventType.WINDOW_RESIZE);
     }
@@ -358,7 +358,7 @@ final class DrawEngine {
         _handler.getPointer().setY(ypos);
     }
 
-    protected void setWindowPos(int x, int y) {
+    void setWindowPos(int x, int y) {
         glfwSetWindowPos(_handler.getWindowId(), x, y);
 
         engineEvent.setEvent(InputEventType.WINDOW_MOVE);
@@ -521,10 +521,10 @@ final class DrawEngine {
         }
     }
 
-    long _start_time = 0; // System.nanoTime();
-    long _estimated_ime = 0; // System.nanoTime() - startTime;
-    boolean _first_click = false;
-    boolean _second_click = false;
+    private long _start_time = 0; // System.nanoTime();
+    //long _estimated_ime = 0; // System.nanoTime() - startTime;
+    private boolean _first_click = false;
+    //boolean _second_click = false;
 
     private boolean isDoubleClick() {
         if (_first_click) {
@@ -678,7 +678,7 @@ final class DrawEngine {
     private int y_global = 0;
 
     private boolean getHoverPrototype(float xpos, float ypos, InputEventType action) {
-        List<Prototype> queue = new LinkedList<Prototype>();
+        List<Prototype> queue = new LinkedList<>();
         hoveredItems.clear();
 
         List<InterfaceBaseItem> layout_box_of_items = new LinkedList<InterfaceBaseItem>();
@@ -907,9 +907,9 @@ final class DrawEngine {
 
     // private int gVAO = 0;
 
-    VRAMFramebuffer _fbo = new VRAMFramebuffer();
+    private VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
-    protected void run() {
+    void run() {
         _handler.gVAO = glGenVertexArrays();
         glBindVertexArray(_handler.gVAO);
         focus(_handler.getWindowId(), true);
@@ -947,7 +947,7 @@ final class DrawEngine {
         _handler.destroy();
     }
 
-    int _textlinecount = 0;
+    private int _textlinecount = 0;
 
     protected void update() {
         glViewport(0, 0, _handler.getLayout().getWidth(), _handler.getLayout().getHeight());
@@ -1162,7 +1162,7 @@ final class DrawEngine {
             drawBorder((Prototype) shell);
     }
 
-    void drawBorder(Prototype vi) {
+    private void drawBorder(Prototype vi) {
         if (vi.getBorderThickness() > 0) {
             CustomShape border = new CustomShape();
             border.setBackground(vi.getBorderFill());
@@ -1177,7 +1177,7 @@ final class DrawEngine {
         }
     }
 
-    void drawShadow(InterfaceBaseItem shell) {
+    private void drawShadow(InterfaceBaseItem shell) {
         CustomShape shadow = new CustomShape();
         shadow.setBackground(shell.getShadowColor());
         shadow.setSize(shell.getWidth(), shell.getHeight());
@@ -1287,13 +1287,13 @@ final class DrawEngine {
         store.clear();
     }
 
-    float gauss(float x, float sigma) {
+    private float gauss(float x, float sigma) {
         double ans;
         ans = Math.exp(-(x * x) / (2f * sigma * sigma)) / Math.sqrt(2 * Math.PI * sigma * sigma);
         return (float) ans;
     }
 
-    void drawText(InterfaceTextContainer text) {
+    private void drawText(InterfaceTextContainer text) {
         TextPrinter textPrt = text.getLetTextures();
         if (textPrt == null)
             return;
@@ -1429,7 +1429,7 @@ final class DrawEngine {
 
     private void drawShadePillow() {
         // //Vertex
-        List<float[]> vertex = new LinkedList<float[]>();
+        List<float[]> vertex = new LinkedList<>();
         vertex.add(new float[] { -1.0f, 1.0f, 0.0f });
         vertex.add(new float[] { -1.0f, -1.0f, 0.0f });
         vertex.add(new float[] { 1.0f, -1.0f, 0.0f });

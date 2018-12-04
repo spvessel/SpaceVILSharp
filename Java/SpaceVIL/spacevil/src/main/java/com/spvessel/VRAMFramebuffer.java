@@ -6,18 +6,18 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
 final class VRAMFramebuffer {
-    public int FBO;
-    public int texture;
+    int FBO;
+    int texture;
 
-    protected VRAMFramebuffer() {
+    VRAMFramebuffer() {
     }
 
-    protected void genFBO() {
+    void genFBO() {
         FBO = glGenFramebuffersEXT();
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, FBO);
     }
     
-    protected void genFBOTexture(int w, int h) {
+    void genFBOTexture(int w, int h) {
         texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
@@ -32,19 +32,19 @@ final class VRAMFramebuffer {
         // glDrawBuffers(draw_bufs);
     }
 
-    protected void bindFBO() {
+    void bindFBO() {
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, FBO);
     }
 
-    protected void unbindFBO() {
+    void unbindFBO() {
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
     }
 
-    protected void clearFBO() {
+    void clearFBO() {
         glDeleteFramebuffersEXT(FBO);
     }
 
-    protected void clearTexture() {
+    void clearTexture() {
         glDeleteTextures(texture);
     }
 }

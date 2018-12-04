@@ -9,25 +9,33 @@ import com.spvessel.Flags.SizePolicy;
 import java.awt.Color;
 
 public class MessageBox extends DialogWindow {
-    boolean _result = false;
+    private boolean _result = false;
 
+    /**
+     * Get MessageBox boolean result
+     */
     public boolean getResult() {
         return _result;
     }
 
-    String _message = "";
+    private String _message = "";
 
+    /**
+     * MessageBox text
+     */
     public void setMessageBoxText(String text) {
         _message = text;
     }
-
     public String getMessageBoxText() {
         return _message;
     }
 
-    TitleBar titleBar;
-    Label msg;
+    private TitleBar titleBar;
+    private Label msg;
 
+    /**
+     * Constructs a MessageBox with message and title
+     */
     public MessageBox(String message, String title) {
         _message = message;
         setDialogTitle(title);
@@ -38,6 +46,9 @@ public class MessageBox extends DialogWindow {
         msg.setText(getMessageBoxText());
     }
 
+    /**
+     * Initialize MessageBox window
+     */
     @Override
     public void initWindow() {
         titleBar = new TitleBar();
@@ -93,6 +104,9 @@ public class MessageBox extends DialogWindow {
         layout.addItems(msg, ok);
     }
 
+    /**
+     * Show MessageBox
+     */
     @Override
     public void show() {
         _result = false;

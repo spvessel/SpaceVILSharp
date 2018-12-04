@@ -23,15 +23,20 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
     private Label _text_object;
     private CustomIndicator _indicator;
 
+    /**
+     * Returns indicator from the CheckBox for styling
+     */
     public Indicator getIndicator() {
         return _indicator;
     }
 
+    /**
+     * Constructs a CheckBox
+     */
     public CheckBox() {
         setItemName("CheckBox_" + count);
         count++;
-        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(key_press);
+        eventKeyPress.add(this::onKeyPress);
 
         // text
         _text_object = new Label();
@@ -46,17 +51,23 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
         setStyle(DefaultsService.getDefaultStyle(CheckBox.class));
     }
 
+    /**
+     * Constructs a CheckBox with text
+     */
     public CheckBox(String text) {
         this();
         setText(text);
     }
 
-    protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    void onKeyPress(InterfaceItem sender, KeyArgs args) {
         if (eventMouseClick != null && (args.key == KeyCode.ENTER || args.key == KeyCode.SPACE)) {
             eventMouseClick.execute(this, new MouseArgs());
         }
     }
 
+    /**
+     * Is mouse hovered on the CheckBox
+     */
     @Override
     public void setMouseHover(boolean value) {
         super.setMouseHover(value);
@@ -65,24 +76,36 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
     }
 
     // Layout rules
+    /**
+     * Add item to the CheckBox
+     */
     @Override
     public void addItem(InterfaceBaseItem item) {
         super.addItem(item);
         updateLayout();
     }
 
+    /**
+     * Width of the CheckBox
+     */
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
         updateLayout();
     }
 
+    /**
+     * X position of the CheckBox
+     */
     @Override
     public void setX(int _x) {
         super.setX(_x);
         updateLayout();
     }
 
+    /**
+     * Update items position and size in the CheckBox
+     */
     public void updateLayout() {
         int offset = 0;
         int startX = getX() + getPadding().left;
@@ -97,38 +120,45 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
     }
 
     // text init
+    /**
+     * Text alignment in the CheckBox
+     */
     public void setTextAlignment(ItemAlignment... alignment) {
         _text_object.setTextAlignment(alignment);
     }
-
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
 
+    /**
+     * Text margin in the CheckBox
+     */
     public void setTextMargin(Indents margin) {
         _text_object.setMargin(margin);
     }
 
+    /**
+     * Text font parameters in the CheckBox
+     */
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
-
     public void setFontSize(int size) {
         _text_object.setFontSize(size);
     }
-
     public void setFontStyle(int style) {
         _text_object.setFontStyle(style);
     }
-
     public void setFontFamily(String font_family) {
         _text_object.setFontFamily(font_family);
     }
-
     public Font getFont() {
         return _text_object.getFont();
     }
 
+    /**
+     * Set text in the CheckBox
+     */
     public void setText(String text) {
         _text_object.setText(text);
     }
@@ -137,30 +167,31 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
         return _text_object.getText();
     }
 
+    /**
+     * Text color in the CheckBox
+     */
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
-
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
-
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
-
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
-
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
-
     public Color getForeground() {
         return _text_object.getForeground();
     }
 
+    /**
+     * Initialization and adding of all elements in the CheckBox
+     */
     @Override
     public void initElements() {
         // events
@@ -175,6 +206,9 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
     }
 
     // style
+    /**
+     * Set style of the CheckBox
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)
