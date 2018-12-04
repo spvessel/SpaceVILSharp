@@ -7,8 +7,8 @@ import java.util.*;
 public class WContainer extends Prototype {
     private static int count = 0;
     public List<ItemAlignment> _sides = new LinkedList<>();
-    protected boolean _is_fixed = false;
-    protected boolean _resizing = false;
+    boolean _is_fixed = false;
+    boolean _resizing = false;
 
     public WContainer() {
         setItemName("WContainer_" + count);
@@ -16,7 +16,7 @@ public class WContainer extends Prototype {
     }
 
     @Override
-    protected boolean getHoverVerification(float xpos, float ypos) {
+    boolean getHoverVerification(float xpos, float ypos) {
         boolean result = false;
         if (_is_fixed)
             return false;
@@ -30,7 +30,7 @@ public class WContainer extends Prototype {
         return result;
     }
 
-    protected List<ItemAlignment> getSides(float xpos, float ypos) {
+    List<ItemAlignment> getSides(float xpos, float ypos) {
         if (xpos <= 5) {
             _sides.add(ItemAlignment.LEFT);
         }

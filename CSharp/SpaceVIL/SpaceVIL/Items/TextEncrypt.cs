@@ -408,20 +408,20 @@ namespace SpaceVIL
         {
             return _text_object.GetForeground();
         }
-        internal bool IsEditable
+        internal bool IsEditable()
         {
-            get { return _isEditable; }
-            set
-            {
-                if (_isEditable == value)
-                    return;
-                _isEditable = value;
+            return _isEditable;
+        }
+        internal void SetEditable(bool value)
+        { 
+            if (_isEditable == value)
+                return;
+            _isEditable = value;
 
-                if (_isEditable)
-                    _cursor.SetVisible(true);
-                else
-                    _cursor.SetVisible(false);
-            }
+            if (_isEditable)
+                _cursor.SetVisible(true);
+            else
+                _cursor.SetVisible(false);
         }
 
         public override void SetWidth(int width)

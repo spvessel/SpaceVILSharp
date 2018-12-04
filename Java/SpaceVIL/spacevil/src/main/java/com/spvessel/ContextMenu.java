@@ -26,6 +26,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     private boolean _init = false;
     private boolean _ouside = true;
 
+    /**
+     * Close the ContextMenu it mouse click is outside (true or false)
+     */
     public boolean isOutsideClickClosable() {
         return _ouside;
     }
@@ -43,7 +46,10 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     // public void setLockOutside(boolean value) {
     // _lock_ouside = true;
     // }
-
+    /**
+     * Constructs a ContextMenu
+     * @param handler parent window for the ContextMenu
+     */
     public ContextMenu(WindowLayout handler) {
         setItemName("ContextMenu_" + count);
         count++;
@@ -54,13 +60,16 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setStyle(DefaultsService.getDefaultStyle(ContextMenu.class));
     }
 
+    /**
+     * Initialization and adding of all elements in the ContextMenu
+     */
     @Override
     public void initElements() {
         setConfines();
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
-        InterfaceCommonMethod selectionChanged = () -> onSelectionChanged();
-        itemList.getArea().selectionChanged.add(selectionChanged);
+        itemList.getArea().setHoverVisibility(false);
+        itemList.getArea().selectionChanged.add(this::onSelectionChanged);
 
         super.addItem(itemList);
 
@@ -91,7 +100,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         }
     }
 
-    protected void onSelectionChanged() {
+    private void onSelectionChanged() {
         if (itemList.getSelectionItem() instanceof MenuItem) {
             MenuItem item = (MenuItem) itemList.getSelectionItem();
             if (item.isActionItem) {
@@ -102,14 +111,23 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         hideDependentMenus();
     }
 
+    /**
+     * Returns count of the ContextMenu lines
+     */
     public int getListCount() {
         return itemList.getListContent().size();
     }
 
+    /**
+     * Returns ContextMenu items list
+     */
     public List<InterfaceBaseItem> getListContent() {
         return itemList.getListContent();
     }
 
+    /**
+     * Add item to the ContextMenu
+     */
     @Override
     public void addItem(InterfaceBaseItem item) {
         // (item as MenuItem)._invoked_menu = this;
@@ -120,12 +138,15 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         _queue.add(item);
     }
 
+    /**
+     * Remove item from the ContextMenu
+     */
     @Override
     public void removeItem(InterfaceBaseItem item) {
         itemList.removeItem(item);
     }
 
-    public boolean closeDependencies(MouseArgs args) {
+    boolean closeDependencies(MouseArgs args) {
         for (InterfaceBaseItem item : getListContent()) {
             if (item instanceof MenuItem) {
                 MenuItem menu_item = (MenuItem) item;
@@ -140,7 +161,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         return true;
     }
 
-    void updateSize() {
+    private void updateSize() {
         int height = 0;
         int width = getWidth();
         List<InterfaceBaseItem> list = itemList.getListContent();
@@ -161,6 +182,12 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setSize(width, height);
     }
 
+    /**
+     * Show the ContextMenu
+     * @param sender the item from which the show request is sent
+     * @param args mouse click arguments (cursor position, mouse button,
+     *             mouse button press/release, etc.)
+     */
     public void show(InterfaceItem sender, MouseArgs args) {
         if (args.button.getValue() == activeButton.getValue()) {
             if (!_init) {
@@ -187,6 +214,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         }
     }
 
+    /**
+     * Hide the ContextMenu without destroying
+     */
     public void hide() {
         setX(-getWidth());
         setVisible(false);
@@ -195,11 +225,17 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
             returnFocus.setFocus();
     }
 
+    /**
+     * Set confines according to position and size of the ContextMenu
+     */
     @Override
     public void setConfines() {
         setConfines(getX(), getX() + getWidth(), getY(), getY() + getHeight());
     }
 
+    /**
+     * Set style of the ContextMenu
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)

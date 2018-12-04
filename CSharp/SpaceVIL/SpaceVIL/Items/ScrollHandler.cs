@@ -14,6 +14,9 @@ namespace SpaceVIL
         private int _offset = 0;
         private int _diff = 0;
 
+        /// <summary>
+        /// Constructs a ScrollHandler
+        /// </summary>
         public ScrollHandler()
         {
             SetItemName("ScrollHandler_" + count);
@@ -23,7 +26,7 @@ namespace SpaceVIL
             IsFocusable = false;
         }
 
-        protected virtual void OnMousePress(object sender, MouseArgs args)
+        void OnMousePress(object sender, MouseArgs args)
         {
             if (Orientation == Orientation.Horizontal)
                 _diff = args.Position.GetX() - GetX();
@@ -31,7 +34,7 @@ namespace SpaceVIL
                 _diff = args.Position.GetY() - GetY();
         }
 
-        protected virtual void OnDragging(object sender, MouseArgs args)
+        void OnDragging(object sender, MouseArgs args)
         {
             int offset;
 
@@ -43,6 +46,9 @@ namespace SpaceVIL
             SetOffset(offset);
         }
 
+        /// <summary>
+        /// Set offset of the ScrollHandler
+        /// </summary>
         public void SetOffset(int offset)
         {
             if (GetParent() == null)

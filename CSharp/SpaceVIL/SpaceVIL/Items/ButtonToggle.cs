@@ -11,6 +11,9 @@ namespace SpaceVIL
         private static int count = 0;
         private TextLine _text_object;
 
+        /// <summary>
+        /// Constructs a ButtonToggle
+        /// </summary>
         public ButtonToggle()
         {
             SetItemName("ButtonToggle_" + count);
@@ -24,12 +27,15 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ButtonToggle)));
         }
 
+        /// <summary>
+        /// Constructs a ButtonToggle with text
+        /// </summary>
         public ButtonToggle(String text = "") : this()
         {
             SetText(text);
         }
-
-        protected virtual void OnKeyPress(object sender, KeyArgs args)
+        
+        void OnKeyPress(object sender, KeyArgs args)
         {
             if (args.Key == KeyCode.Enter)
                 EventMouseClick?.Invoke(this, new MouseArgs());
@@ -37,11 +43,14 @@ namespace SpaceVIL
 
         //private for class
         private bool _toggled;
+
+        /// <summary>
+        /// Is ButtonToggle toggled (boolean)
+        /// </summary>
         public bool IsToggled()
         {
             return _toggled;
         }
-
         public void SetToggled(bool value)
         {
             _toggled = value;
@@ -54,14 +63,25 @@ namespace SpaceVIL
         public EventMouseMethodState EventToggle;
 
         //text init
+        /// <summary>
+        /// Text alignment in the ButtonToggle
+        /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _text_object.SetTextAlignment(alignment);
         }
+
+        /// <summary>
+        /// Text margin in the ButtonToggle
+        /// </summary>
         public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
         }
+
+        /// <summary>
+        /// Text font parameters in the ButtonToggle
+        /// </summary>
         public void SetFont(Font font)
         {
             _text_object.SetFont(font);
@@ -82,6 +102,10 @@ namespace SpaceVIL
         {
             return _text_object.GetFont();
         }
+
+        /// <summary>
+        /// Set text in the ButtonToggle
+        /// </summary>
         public void SetText(String text)
         {
             _text_object.SetItemText(text);
@@ -90,6 +114,10 @@ namespace SpaceVIL
         {
             return _text_object.GetItemText();
         }
+
+        /// <summary>
+        /// Text color in the ButtonToggle
+        /// </summary>
         public void SetForeground(Color color)
         {
             _text_object.SetForeground(color);
@@ -115,6 +143,9 @@ namespace SpaceVIL
             return _text_object.GetForeground();
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the ButtonToggle
+        /// </summary>
         public override void InitElements()
         {
             //text
@@ -131,6 +162,9 @@ namespace SpaceVIL
         }
 
         //style
+        /// <summary>
+        /// Set style of the ButtonToggle
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)

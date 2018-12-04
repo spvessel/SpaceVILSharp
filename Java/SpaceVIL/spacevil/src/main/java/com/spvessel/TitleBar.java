@@ -14,34 +14,49 @@ import java.util.List;
 
 public class TitleBar extends WindowAnchor {
 
-    static int count = 0;
+    private static int count = 0;
     private HorizontalStack _layout;
     public HorizontalDirection Direction = HorizontalDirection.FROM_LEFT_TO_RIGHT;
     private Label _text_object;
     private ImageItem _icon;
 
+    /**
+     * @return TitleBar icon ImageItem type
+     */
     public ImageItem getIcon() {
         return _icon;
     }
 
     private ButtonCore _close;
 
+    /**
+     * @return close button ButtonCore type
+     */
     public ButtonCore getCloseButton() {
         return _close;
     }
 
     private ButtonCore _minimize;
 
+    /**
+     * @return minimize button ButtonCore type
+     */
     public ButtonCore getMinimizeButton() {
         return _minimize;
     }
 
     private ButtonCore _maximize;
 
+    /**
+     * @return maximize button ButtonCore type
+     */
     public ButtonCore getMaximizeButton() {
         return _maximize;
     }
 
+    /**
+     * Constructs a TitleBar
+     */
     public TitleBar() {
         setItemName("TitleBar_" + count);
         count++;
@@ -64,88 +79,111 @@ public class TitleBar extends WindowAnchor {
         // _text_object.addItemState(ItemStateType.HOVERED, state);
     }
 
+    /**
+     * Constructs a TitleBar with text
+     */
     public TitleBar(String text) {
         this();
         setText(text);
     }
 
+    /**
+     * Set TitleBar icon
+     * @param icon BufferedImage icon image
+     * @param width icon image width
+     * @param height icon image height
+     */
     public void setIcon(BufferedImage icon, int width, int height) {
         _icon.setSize(width, height);
         _icon.setImage(icon);
         _icon.setVisible(true);
     }
 
+    /**
+     * Set TitleBar icon
+     * @param url the path to the icon file
+     * @param width icon width
+     * @param height icon height
+     */
     public void setIcon(String url, int width, int height) {
         _icon.setSize(width, height);
         _icon.setImageUrl(url);
         _icon.setVisible(true);
     }
 
+
     // text init
+    /**
+     * Text alignment in the TitleBar
+     */
     public void setTextAlignment(ItemAlignment... alignment) {
         _text_object.setTextAlignment(alignment);
     }
-
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
 
+    /**
+     * Text margin in the TitleBar
+     */
     public void setTextMargin(Indents margin) {
         _text_object.setMargin(margin);
     }
 
+    /**
+     * Text font parameters in the TitleBar
+     */
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
-
     public void setFontSize(int size) {
         _text_object.setFontSize(size);
     }
-
     public void setFontStyle(int style) {
         _text_object.setFontStyle(style);
     }
-
     public void setFontFamily(String font_family) {
         _text_object.setFontFamily(font_family);
     }
-
     public Font getFont() {
         return _text_object.getFont();
     }
 
+    /**
+     * TitleBar text
+     */
     public void setText(String text) {
         _text_object.setText(text);
     }
-
     public String getText() {
         return _text_object.getText();
     }
 
+    /**
+     * Text color in the TitleBar
+     */
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
-
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
-
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
-
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
-
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
-
     public Color getForeground() {
         return _text_object.getForeground();
     }
 
+    /**
+     * Initialization and adding of all elements in the TitleBar
+     */
     @Override
     public void initElements() {
         addItem(_layout);
@@ -202,6 +240,9 @@ public class TitleBar extends WindowAnchor {
         // LogProps.AllGeometry);
     }
 
+    /**
+     * Set style of the TitleBar
+     */
     // style
     @Override
     public void setStyle(Style style) {

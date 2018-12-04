@@ -8,34 +8,37 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDraggable {
-    static int count = 0;
+    private static int count = 0;
     private int _x_press = 0;
     private int _y_press = 0;
     private int _diff_x = 0;
     private int _diff_y = 0;
-    Map<InterfaceBaseItem, int[]> _stored_crd;
+    private Map<InterfaceBaseItem, int[]> _stored_crd;
 
     // public ContextMenu _dropdownmenu = new ContextMenu();
+    /**
+     * Constructs a FreeArea
+     */
     public FreeArea() {
         setItemName("FreeArea_" + count);
         count++;
-        _stored_crd = new HashMap<InterfaceBaseItem, int[]>();
+        _stored_crd = new HashMap<>();
 
-        InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
-        eventMousePress.add(press);
-        InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
-        eventMouseDrag.add(dragg);
+        eventMousePress.add(this::onMousePress);
+        eventMouseDrag.add(this::onDragging);
 
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.FreeArea"));
         setStyle(DefaultsService.getDefaultStyle(FreeArea.class));
     }
 
+    /**
+     * Add ContextMenu to the FreeArea
+     */
     public void addContextMenu(ContextMenu context_menu) {
-        InterfaceMouseMethodState context_show = (sender, args) -> context_menu.show(sender, args);
-        eventMouseClick.add(context_show);
+        //InterfaceMouseMethodState context_show = (sender, args) -> context_menu.show(sender, args);
+        eventMouseClick.add(context_menu::show);
     }
 
-    protected void onMousePress(InterfaceItem sender, MouseArgs args) {
+    private void onMousePress(InterfaceItem sender, MouseArgs args) {
         if (args.button == MouseButton.BUTTON_LEFT) {
             _x_press = args.position.getX();
             _y_press = args.position.getY();
@@ -44,7 +47,7 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
         }
     }
 
-    protected void onDragging(InterfaceItem sender, MouseArgs args) {
+    private void onDragging(InterfaceItem sender, MouseArgs args) {
         if (args.button == MouseButton.BUTTON_LEFT) {
             _xOffset = _diff_x - _x_press + args.position.getX();
             _yOffset = _diff_y + args.position.getY() - _y_press;
@@ -74,6 +77,9 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
     }
 
     // overrides
+    /**
+     * Add item to the FreeArea
+     */
     @Override
     public void addItem(InterfaceBaseItem item) {
         super.addItem(item);
@@ -85,6 +91,9 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
         updateLayout();
     }
 
+    /**
+     * Remove item from the FreeArea
+     */
     @Override
     public void removeItem(InterfaceBaseItem item) {
         super.removeItem(item);
@@ -94,6 +103,9 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
         updateLayout();
     }
 
+    /**
+     * Update all children elements positions
+     */
     public void updateLayout() {
         // synchronized (this) {
         for (InterfaceBaseItem child : getItems()) {

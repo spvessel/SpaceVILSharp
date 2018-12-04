@@ -21,6 +21,9 @@ namespace SpaceVIL
         private int _tMin = 0;
         private int _bMin = 0;
 
+        /// <summary>
+        /// Sets position of the SplitHolder
+        /// </summary>
         public void SetSplitHolderPosition(int position)
         {
             if (position < _tMin || position > GetHeight() - _splitHolder.GetHolderSize() - _bMin)
@@ -30,6 +33,9 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
+        /// <summary>
+        /// Constructs a HorizontalSplitArea
+        /// </summary>
         public HorizontalSplitArea()
         {
             SetItemName("HSplitArea_" + count);
@@ -40,16 +46,19 @@ namespace SpaceVIL
             _splitHolder.EventMousePress += OnMousePress;
         }
 
-        protected virtual void OnMousePress(object sender, MouseArgs args)
+        void OnMousePress(object sender, MouseArgs args)
         {
             _diff = args.Position.GetY() - _splitHolder.GetY();
         }
-        protected virtual void OnDragging(object sender, MouseArgs args)
+        void OnDragging(object sender, MouseArgs args)
         {
             int offset = args.Position.GetY() - GetY() - _diff;
             SetSplitHolderPosition(offset);
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the HorizontalSplitArea
+        /// </summary>
         public override void InitElements()
         {
             //Adding
@@ -57,6 +66,9 @@ namespace SpaceVIL
             SetSplitHolderPosition((GetHeight() - _splitHolder.GetHolderSize()) / 2);
         }
 
+        /// <summary>
+        /// Assign item on the top of the HorizontalSplitArea
+        /// </summary>
         public void AssignTopItem(IBaseItem item)
         {
             AddItem(item);
@@ -65,6 +77,9 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
+        /// <summary>
+        /// Assign item on the bottom of the HorizontalSplitArea
+        /// </summary>
         public void AssignBottomItem(IBaseItem item)
         {
             AddItem(item);
@@ -73,6 +88,9 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
+        /// <summary>
+        /// Set height of the HorizontalSplitArea
+        /// </summary>
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
@@ -98,6 +116,10 @@ namespace SpaceVIL
                 }
             }
         }
+
+        /// <summary>
+        /// Set Y position of the HorizontalSplitArea
+        /// </summary>
         public override void SetY(int _y)
         {
             base.SetY(_y);
@@ -105,6 +127,10 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
+        /// <summary>
+        /// Update all children and HSplitArea sizes and positions
+        /// according to confines
+        /// </summary>
         public void UpdateLayout()
         {
             // _splitHolder.SetWidth(GetWidth());
@@ -135,11 +161,17 @@ namespace SpaceVIL
                 item.SetConfines();
         }
 
+        /// <summary>
+        /// Set height of the SplitHolder
+        /// </summary>
         public void SetSplitThickness(int thickness)
         {
             _splitHolder.SetSpacerSize(thickness);
         }
 
+        /// <summary>
+        /// Set style of the HorizontalSplitArea
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)

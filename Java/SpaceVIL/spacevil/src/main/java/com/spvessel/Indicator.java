@@ -15,10 +15,16 @@ public class Indicator extends Prototype {
 
     private CustomToggle _marker;
 
+    /**
+     * @return IndicationMarker ButtonToggle type for styling
+     */
     public ButtonToggle getIndicatorMarker() {
         return _marker;
     }
 
+    /**
+     * Constructs an Indicator
+     */
     public Indicator() {
         setItemName("Indicator_" + count);
         count++;
@@ -29,6 +35,9 @@ public class Indicator extends Prototype {
         setStyle(DefaultsService.getDefaultStyle(Indicator.class));
     }
 
+    /**
+     * Initialization and adding of all elements in the Indicator
+     */
     @Override
     public void initElements() {
         // marker
@@ -36,6 +45,9 @@ public class Indicator extends Prototype {
         addItem(_marker);
     }
 
+    /**
+     * Set style of the Indicator
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)

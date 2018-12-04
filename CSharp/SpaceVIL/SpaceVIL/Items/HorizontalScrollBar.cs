@@ -18,6 +18,9 @@ namespace SpaceVIL
         public ButtonCore DownArrow = new ButtonCore();
         public HorizontalSlider Slider = new HorizontalSlider();
 
+        /// <summary>
+        /// Constructs a HorizontalScrollBar
+        /// </summary>
         public HorizontalScrollBar()
         {
             SetItemName("HorizontalScrollBar_" + count);
@@ -46,6 +49,9 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.HorizontalScrollBar)));
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the HorizontalScrollBar
+        /// </summary>
         public override void InitElements()
         {
             UpArrow.IsFocusable = false;
@@ -60,12 +66,18 @@ namespace SpaceVIL
             EventScrollDown += DownArrow.EventMouseClick.Invoke;
         }
 
+        /// <summary>
+        /// Set Left and right arrows of the HorizontalScrollBar visible
+        /// </summary>
         public void SetArrowsVisible(bool value)
         {
             UpArrow.SetVisible(value);
             DownArrow.SetVisible(value);
         }
 
+        /// <summary>
+        /// Set style of the HorizontalScrollBar
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)

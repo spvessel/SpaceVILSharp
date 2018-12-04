@@ -21,13 +21,15 @@ public class ComboBox extends Prototype {
     public ComboBoxDropDown _dropdownarea = new ComboBoxDropDown();
     public EventCommonMethod selectionChanged = new EventCommonMethod();
 
+    /**
+     * Constructs a ComboBox
+     */
     public ComboBox() {
         setBackground(0, 0, 0, 0);
         setItemName("ComboBox_" + count);
         count++;
 
-        InterfaceKeyMethodState key_press = (sender, args) -> onKeyPress(sender, args);
-        eventKeyPress.add(key_press);
+        eventKeyPress.add(this::onKeyPress);
 
         InterfaceMouseMethodState press = (sender, args) -> showDropDownList();
         eventMousePress.add(press);
@@ -36,13 +38,16 @@ public class ComboBox extends Prototype {
         setStyle(DefaultsService.getDefaultStyle(ComboBox.class));
     }
 
-    protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    void onKeyPress(InterfaceItem sender, KeyArgs args) {
         if (args.key == KeyCode.ENTER && eventMouseClick != null) {
             eventMouseClick.execute(this, new MouseArgs());
         }
     }
 
     // text init
+    /**
+     * Text alignment in the ComboBox
+     */
     public void setTextAlignment(ItemAlignment... alignment) {
         _selected.setTextAlignment(alignment);
     }
@@ -50,30 +55,35 @@ public class ComboBox extends Prototype {
         _selected.setTextAlignment(alignment);
     }
 
+    /**
+     * Text margin in the ComboBox
+     */
     public void setTextMargin(Indents margin) {
         _selected.setMargin(margin);
     }
 
+    /**
+     * Text font parameters in the ComboBox
+     */
     public void setFont(Font font) {
         _selected.setFont(font);
     }
-
     public void setFontSize(int size) {
         _selected.setFontSize(size);
     }
-
     public void setFontStyle(int style) {
         _selected.setFontStyle(style);
     }
-
     public void setFontFamily(String font_family) {
         _selected.setFontFamily(font_family);
     }
-
     public Font getFont() {
         return _selected.getFont();
     }
 
+    /**
+     * Set text in the ComboBox
+     */
     public void setText(String text) {
         _selected.setText(text);
     }
@@ -82,30 +92,31 @@ public class ComboBox extends Prototype {
         return _selected.getText();
     }
 
+    /**
+     * Text color in the ComboBox
+     */
     public void setForeground(Color color) {
         _selected.setForeground(color);
     }
-
     public void setForeground(int r, int g, int b) {
         _selected.setForeground(r, g, b);
     }
-
     public void setForeground(int r, int g, int b, int a) {
         _selected.setForeground(r, g, b, a);
     }
-
     public void setForeground(float r, float g, float b) {
         _selected.setForeground(r, g, b);
     }
-
     public void setForeground(float r, float g, float b, float a) {
         _selected.setForeground(r, g, b, a);
     }
-
     public Color getForeground() {
         return _selected.getForeground();
     }
 
+    /**
+     * Initialization and adding of all elements in the ComboBox
+     */
     @Override
     public void initElements() {
         // adding
@@ -116,8 +127,7 @@ public class ComboBox extends Prototype {
 
         // dropdownarea
         _dropdownarea.selection = _selected;
-        InterfaceCommonMethod selection_changed = () -> onSelectionChanged();
-        _dropdownarea.selectionChanged.add(selection_changed);
+        _dropdownarea.selectionChanged.add(this::onSelectionChanged);
     }
 
     private void showDropDownList() {
@@ -131,15 +141,24 @@ public class ComboBox extends Prototype {
         _dropdownarea.show();
     }
 
+    /**
+     * Add item to ComboBox list
+     */
     public void addToList(InterfaceBaseItem item) {
         _dropdownarea.add(item);
         // _queue.Enqueue(item);
     }
 
+    /**
+     * Remove item from the ComboBox list
+     */
     public void removeFromLst(InterfaceBaseItem item) {
         _dropdownarea.remove(item);
     }
 
+    /**
+     * Current element in the ComboBox by index
+     */
     public void setCurrentIndex(int index) {
         _dropdownarea.setCurrentIndex(index);
     }
@@ -152,6 +171,9 @@ public class ComboBox extends Prototype {
         selectionChanged.execute();
     }
 
+    /**
+     * Set style of the ComboBox
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)

@@ -9,6 +9,9 @@ import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.Orientation;
 
 public class HorizontalSlider extends Prototype {
+    /**
+     * Part of HorizontalScrollBar
+     */
     static int count = 0;
 
     public Rectangle track = new Rectangle();
@@ -17,10 +20,12 @@ public class HorizontalSlider extends Prototype {
     // Values
     private float _step = 1.0f;
 
+    /**
+     * HorizontalSlider moving step when HorizontalScrollBar arrows pressed
+     */
     public void setStep(float value) {
         _step = value;
     }
-
     public float getStep() {
         return _step;
     }
@@ -29,6 +34,9 @@ public class HorizontalSlider extends Prototype {
     private float _current_value = 0;
     public int direction = 0;
 
+    /**
+     * Position value of the HorizontalSlider
+     */
     public void setCurrentValue(float value) {
         if (_current_value > value)
             direction = -1; // up
@@ -47,40 +55,46 @@ public class HorizontalSlider extends Prototype {
         if (eventValueChanged != null)
             eventValueChanged.execute(this);
     }
+    public float getCurrentValue() {
+        return _current_value;
+    }
 
     void updateHandler() {
         float offset = ((float) getWidth() - handler.getWidth()) / (_max_value - _min_value) * _current_value;
         handler.setOffset((int) offset);
     }
 
-    public float getCurrentValue() {
-        return _current_value;
-    }
 
     private float _min_value = 0;
 
+    /**
+     * Minimum value of the HorizontalSlider
+     */
     public void setMinValue(float value) {
         _min_value = value;
     }
-
     public float getMinValue() {
         return _min_value;
     }
 
     private float _max_value = 100;
 
+    /**
+     * Maximum value of the HorizontalSlider
+     */
     public void setMaxValue(float value) {
         _max_value = value;
     }
-
     public float getMaxValue() {
         return _max_value;
     }
 
+    /**
+     * Constructs a HorizontalSlider
+     */
     public HorizontalSlider() {
         setItemName("HorizontalSlider_" + count);
-        InterfaceMouseMethodState t_click = (sender, args) -> onTrackClick(sender, args);
-        eventMouseClick.add(t_click);
+        eventMouseClick.add(this::onTrackClick);
         count++;
 
         handler.direction = Orientation.HORIZONTAL;
@@ -89,19 +103,20 @@ public class HorizontalSlider extends Prototype {
         setStyle(DefaultsService.getDefaultStyle(HorizontalSlider.class));
     }
 
+    /**
+     * Initialization and adding of all elements in the HorizontalSlider
+     */
     @Override
     public void initElements() {
         // Adding
         addItems(track, handler);
 
         // Event connections
-        InterfaceMouseMethodState h_drop = (sender, args) -> onDrophandler(sender, args);
-        eventMouseDrop.add(h_drop);
-        InterfaceMouseMethodState m_dragg = (sender, args) -> eventMouseDrop.execute(sender, args);
-        handler.eventMouseDrag.add(m_dragg);
+        eventMouseDrop.add(this::onDropHandler);
+        handler.eventMouseDrag.add(eventMouseDrop::execute);
     }
 
-    public void onDrophandler(InterfaceItem sender, MouseArgs args)// что-то с тобой не так
+    private void onDropHandler(InterfaceItem sender, MouseArgs args)// что-то с тобой не так
     {
         // иногда число NAN
         float result = (float) (handler.getX() - getX()) * (_max_value - _min_value)
@@ -110,7 +125,7 @@ public class HorizontalSlider extends Prototype {
             setCurrentValue(result);
     }
 
-    public void onTrackClick(InterfaceItem sender, MouseArgs args) {
+    private void onTrackClick(InterfaceItem sender, MouseArgs args) {
         if (handler.isMouseHover())
             return;
 
@@ -119,12 +134,18 @@ public class HorizontalSlider extends Prototype {
                 / ((float) getWidth() - handler.getWidth()));
     }
 
+    /**
+     * Set X position of the HorizontalSlider
+     */
     @Override
     public void setX(int _x) {
         super.setX(_x);
         updateHandler();
     }
 
+    /**
+     * Set style of the HorizontalSlider
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)

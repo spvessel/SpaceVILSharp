@@ -20,8 +20,11 @@ import java.util.Comparator;
 public class TreeView extends ListBox {
     public EventCommonMethod eventSortTree = new EventCommonMethod();
     private ContextMenu _menu;
-    protected TreeItem _root; // nesting level = 0
+    TreeItem _root; // nesting level = 0
 
+    /**
+     * Is root item visible
+     */
     public void setRootVisibility(boolean visible) {
         _root.setVisible(visible);
         // reset all paddings for content
@@ -37,8 +40,11 @@ public class TreeView extends ListBox {
         updateElements();
     }
 
-    static int count = 0;
+    private static int count = 0;
 
+    /**
+     * Constructs a TreeView
+     */
     public TreeView() {
         setItemName("TreeView_" + count);
         count++;
@@ -46,12 +52,14 @@ public class TreeView extends ListBox {
 
         // setStyle(DefaultsService.getDefaultStyle(typeof(SpaceVIL.TreeView)));
         setStyle(DefaultsService.getDefaultStyle(TreeView.class));
-        InterfaceCommonMethod onSort = () -> onSortTree();
-        eventSortTree.add(onSort);
+        eventSortTree.add(this::onSortTree);
 
         setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
     }
 
+    /**
+     * Initialization and adding of all elements in the TreeView
+     */
     @Override
     public void initElements() {
         super.initElements();
@@ -101,15 +109,15 @@ public class TreeView extends ListBox {
         return item;
     }
 
-    protected void refreshTree(TreeItem item) {
+    void refreshTree(TreeItem item) {
         super.addItem(item);
         onSortTree();
         updateElements();
     }
 
-    protected void onSortTree() {
+    private void onSortTree() {
         // sorting
-        List<TreeItem> outList = new LinkedList<TreeItem>();
+        List<TreeItem> outList = new LinkedList<>();
         outList.add(_root);
         outList.addAll(sortHelper(_root));
 
@@ -123,7 +131,7 @@ public class TreeView extends ListBox {
     private List<TreeItem> sortHelper(TreeItem item) {
         List<TreeItem> tmpList = item.getTreeItems();
         Collections.sort(tmpList, new CompareInAlphabet());
-        List<TreeItem> outList = new LinkedList<TreeItem>();
+        List<TreeItem> outList = new LinkedList<>();
         for (TreeItem ti : tmpList) {
             outList.add(ti);
             if (ti.getItemType() == TreeItemType.BRANCH)
@@ -146,11 +154,17 @@ public class TreeView extends ListBox {
         }
     }
 
+    /**
+     * Add item to the TreeView
+     */
     @Override
     public void addItem(InterfaceBaseItem item) {
         _root.addItem(item);
     }
 
+    /**
+     * Set style of the TreeView
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)

@@ -13,7 +13,7 @@ import com.spvessel.Decorations.Indents;
 import com.spvessel.Flags.ItemAlignment;
 import org.lwjgl.BufferUtils;
 
-class TextureStorage extends Primitive implements InterfaceTextContainer {
+final class TextureStorage extends Primitive implements InterfaceTextContainer {
     private List<TextLine> _linesList;
     private List<ItemAlignment> _blockAlignment = new LinkedList<>(
             Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));

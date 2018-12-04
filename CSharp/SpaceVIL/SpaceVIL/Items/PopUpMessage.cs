@@ -18,6 +18,10 @@ namespace SpaceVIL
         internal Timer _stop;
         private int _timeout = 2000;
         internal bool _holded = false;
+
+        /// <summary>
+        /// PopUpMessage timeout in milliseconds
+        /// </summary>
         public void SetTimeOut(int milliseconds)
         {
             _timeout = milliseconds;
@@ -26,6 +30,10 @@ namespace SpaceVIL
         {
             return _timeout;
         }
+
+        /// <summary>
+        /// Constructs a PopUpMessage with message and parent window (handler)
+        /// </summary>
         public PopUpMessage(String message, WindowLayout handler)
         {
             SetItemName("PopUpMessage_" + count);
@@ -40,10 +48,26 @@ namespace SpaceVIL
             handler.GetWindow().AddItem(this);
             SetPassEvents(false);
         }
+
+        /// <summary>
+        /// Text alignment in the PopUpMessage
+        /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _text_object.SetTextAlignment(alignment);
         }
+
+        /// <summary>
+        /// Text margin in the PopUpMessage
+        /// </summary>
+        public void SetTextMargin(Indents margin)
+        {
+            _text_object.SetMargin(margin);
+        }
+
+        /// <summary>
+        /// Text font parameters in the PopUpMessage
+        /// </summary>
         public void SetFont(Font font)
         {
             _text_object.SetFont(font);
@@ -64,14 +88,26 @@ namespace SpaceVIL
         {
             return _text_object.GetFont();
         }
+
+        /// <summary>
+        /// Set text in the PopUpMessage
+        /// </summary>
         public void SetText(String text)
         {
             _text_object.SetItemText(text);
         }
+
+        /// <summary>
+        /// Get the PopUpMessage text
+        /// </summary>
         public String GetText()
         {
             return _text_object.GetItemText();
         }
+
+        /// <summary>
+        /// Text color in the PopUpMessage
+        /// </summary>
         public void SetForeground(Color color)
         {
             _text_object.SetForeground(color);
@@ -97,6 +133,9 @@ namespace SpaceVIL
             return _text_object.GetForeground();
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the PopUpMessage
+        /// </summary>
         public override void InitElements()
         {
             _btn_close.EventMouseClick += (sender, args) => RemoveSelf();
@@ -104,6 +143,9 @@ namespace SpaceVIL
             AddItems(_text_object, _btn_close);
         }
 
+        /// <summary>
+        /// Show the PopUpMessage
+        /// </summary>
         public void Show()
         {
             InitTimer();
@@ -144,6 +186,9 @@ namespace SpaceVIL
             }
         }
 
+        /// <summary>
+        /// Set style of the PopUpMessage
+        /// </summary>
         //style
         public override void SetStyle(Style style)
         {

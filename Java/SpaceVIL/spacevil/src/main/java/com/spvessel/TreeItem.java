@@ -23,28 +23,39 @@ import java.util.LinkedList;
 public class TreeItem extends Prototype {
     private List<TreeItem> _list_inners;
 
+    /**
+     * @return list of the TreeItem items
+     */
     public List<TreeItem> getTreeItems() {
         return _list_inners;
     }
 
     private TreeItem _branch;
-    protected TreeView _parent;
-    protected int _nesting_level = 0;
+    TreeView _parent;
+    int _nesting_level = 0;
     private int _indent_size = 20;
 
+    /**
+     * Indent size of the TreeItem
+     */
     public int getIndentSize() {
         return _indent_size;
     }
-
     public void setIndentSize(int size) {
         _indent_size = size;
         resetIndents();
     }
 
+    /**
+     * Is the TreeItem root
+     */
     public boolean isRoot = false;
-    protected long index = 0;
+    long index = 0;
     private TreeItemType _item_type;
 
+    /**
+     * @return TreeItem type (LEAF, BRANCH)
+     */
     public TreeItemType getItemType() {
         return _item_type;
     }
@@ -53,6 +64,9 @@ public class TreeItem extends Prototype {
     private Label _text_object;
     private ButtonToggle _indicator;
 
+    /**
+     * @return TreeItem indicator ButtonToggle type for styling
+     */
     public ButtonToggle getIndicator() {
         return _indicator;
     }
@@ -71,6 +85,9 @@ public class TreeItem extends Prototype {
 
     private ContextMenu _menu;
 
+    /**
+     * Constructs a TreeItem type of TreeItemType (LEAF or BRANCH)
+     */
     public TreeItem(TreeItemType type) {
         _item_type = type;
         setItemName(type.toString().toLowerCase() + "_v" + count);
@@ -86,15 +103,20 @@ public class TreeItem extends Prototype {
         setStyle(DefaultsService.getDefaultStyle(TreeItem.class));
         setPassEvents(false, InputEventType.MOUSE_PRESS, InputEventType.MOUSE_RELEASE);
 
-        eventKeyPress.add((sender, args) -> onKeyPress(sender, args));
+        eventKeyPress.add(this::onKeyPress);
     }
 
+    /**
+     * Constructs a TreeItem
+     * @param type item type (LEAF or BRUNCH)
+     * @param text item text
+     */
     public TreeItem(TreeItemType type, String text) {
         this(type);
         setText(text);
     }
 
-    protected void onKeyPress(InterfaceItem sender, KeyArgs args) {
+    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         if (args.key == KeyCode.ENTER)
             _indicator.eventToggle.execute(sender, new MouseArgs());
         if (args.key == KeyCode.MENU) {
@@ -118,7 +140,7 @@ public class TreeItem extends Prototype {
         return item;
     }
 
-    protected void resetIndents() {
+    void resetIndents() {
         int level = _nesting_level;
         if (!_parent._root.isVisible())
             level--;
@@ -130,6 +152,9 @@ public class TreeItem extends Prototype {
         setMinWidth(width - getSpacing().horizontal);
     }
 
+    /**
+     * Initialization and adding of all elements in the TreItem
+     */
     @Override
     public void initElements() {
         _menu = new ContextMenu(getHandler());
@@ -198,7 +223,7 @@ public class TreeItem extends Prototype {
         resetIndents();
     }
 
-    protected void onToggleHide(boolean value) // refactor
+    void onToggleHide(boolean value) // refactor
     {
         for (TreeItem item : _list_inners) {
             if (value) {
@@ -224,6 +249,9 @@ public class TreeItem extends Prototype {
         _parent.refreshTree(item);
     }
 
+    /**
+     * Add item to the TreeItem
+     */
     @Override
     public void addItem(InterfaceBaseItem item) {
         if (item instanceof TreeItem) {
@@ -232,18 +260,27 @@ public class TreeItem extends Prototype {
         }
     }
 
+    /**
+     * Set TreeItem width
+     */
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
         updateLayout();
     }
 
+    /**
+     * Set TreeItem X position
+     */
     @Override
     public void setX(int _x) {
         super.setX(_x);
         updateLayout();
     }
 
+    /**
+     * Update TreeItem states
+     */
     public void updateLayout() {
         // update self width
         int offset = 0;
@@ -259,76 +296,86 @@ public class TreeItem extends Prototype {
     }
 
     // text init
+    /**
+     * Text alignment in the TreeItem
+     */
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
-
     public void setTextAlignment(ItemAlignment... alignment) {
         _text_object.setTextAlignment(alignment);
     }
 
+    /**
+     * Text margin in the TreeItem
+     */
     public void setTextMargin(Indents margin) {
         _text_object.setMargin(margin);
     }
 
+    /**
+     * Text font parameters in the TreeItem
+     */
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
-
     public void setFontSize(int size) {
         _text_object.setFontSize(size);
     }
-
     public void setFontStyle(int style) {
         _text_object.setFontStyle(style);
     }
-
     public void setFontFamily(String font_family) {
         _text_object.setFontFamily(font_family);
     }
-
     public Font getFont() {
         return _text_object.getFont();
     }
 
+    /**
+     * TreeItem text
+     */
     public void setText(String text) {
         _text_object.setText(text);
         _text_object.setWidth(_text_object.getTextWidth());
         updateLayout();
     }
-
     public String getText() {
         return _text_object.getText();
     }
 
+    /**
+     * @return TreeItem's text width
+     */
     public int getTextWidth() {
         return _text_object.getWidth();
     }
 
+    /**
+     * Text color in the TreeItem
+     */
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
-
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
-
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
-
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
-
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
-
     public Color getForeground() {
         return _text_object.getForeground();
     }
 
+    /**
+     * Set style of the TreeItem
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)

@@ -440,7 +440,8 @@ namespace SpaceVIL
         }
         internal void SetEventTask(EventTask task)
         {
-            manager.StackEvents.Enqueue(task);
+            //manager.StackEvents.Enqueue(task);
+            manager.AddTask(task);
         }
         volatile bool set = true;
 

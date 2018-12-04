@@ -11,17 +11,17 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 class EventManager {
-    protected static Boolean isLocked = true;
-    Map<GeometryEventType, List<InterfaceEventUpdate>> listeners = new HashMap<GeometryEventType, List<InterfaceEventUpdate>>();
+    //protected static Boolean isLocked = true;
+    private Map<GeometryEventType, List<InterfaceEventUpdate>> listeners = new HashMap<>();
 
-    public void setListeners(GeometryEventType... events) {
+    void setListeners(GeometryEventType... events) {
         List<GeometryEventType> list = Arrays.stream(events).collect(Collectors.toList());
         for (GeometryEventType s : list) {
             listeners.put(s, new LinkedList<InterfaceEventUpdate>());
         }
     }
 
-    public void subscribe(GeometryEventType type, InterfaceEventUpdate listener) {
+    void subscribe(GeometryEventType type, InterfaceEventUpdate listener) {
         if (!listeners.containsKey(type))
             listeners.put(type, new LinkedList<InterfaceEventUpdate>());
 
@@ -29,7 +29,7 @@ class EventManager {
             listeners.get(type).add(listener);
     }
 
-    public void unsubscribe(GeometryEventType type, InterfaceEventUpdate listener) {
+    void unsubscribe(GeometryEventType type, InterfaceEventUpdate listener) {
         if (listeners.containsKey(type)) {
             if (listeners.get(type).contains(listener)) {
                 listeners.get(type).remove(listener);
@@ -37,7 +37,7 @@ class EventManager {
         }
     }
 
-    public void notifyListeners(GeometryEventType type, int value) {
+    void notifyListeners(GeometryEventType type, int value) {
         if (listeners.containsKey(type)) {
             for (InterfaceEventUpdate item : listeners.get(type)) {
                 item.update(type, value);

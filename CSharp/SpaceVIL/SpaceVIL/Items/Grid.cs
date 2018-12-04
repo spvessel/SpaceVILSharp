@@ -13,6 +13,9 @@ namespace SpaceVIL
     {
         static int count = 0;
 
+        /// <summary>
+        /// Constructs a Grid
+        /// </summary>
         private Grid()
         {
             SetItemName("Grid_" + count);
@@ -21,6 +24,9 @@ namespace SpaceVIL
             IsFocusable = false;
         }
 
+        /// <summary>
+        /// Constructs a Grid with the given rows and columns
+        /// </summary>
         public Grid(int rows, int columns) : this()
         {
             _row_count = rows;
@@ -73,6 +79,10 @@ namespace SpaceVIL
             UpdateLayout();
         }
         private int _row_count = 1;
+
+        /// <summary>
+        /// Set count of the rows
+        /// </summary>
         public void SetRowCount(int capacity)
         {
             if (!capacity.Equals(_row_count))
@@ -84,6 +94,10 @@ namespace SpaceVIL
             return _row_count;
         }
         private int _column_count = 1;
+
+        /// <summary>
+        /// Set count of the columns
+        /// </summary>
         public void SetColumnCount(int capacity)
         {
             if (!capacity.Equals(_column_count))
@@ -96,6 +110,9 @@ namespace SpaceVIL
             return _column_count;
         }
 
+        /// <summary>
+        /// Returns the cell by row and column number
+        /// </summary>
         public Cell GetCell(int row, int column)
         {
             Cell cell = null;
@@ -110,6 +127,8 @@ namespace SpaceVIL
             }
             return cell;
         }
+
+        /// <returns> all cells list </returns>
         public List<Cell> GetAllCells()
         {
             return _cells;
@@ -132,6 +151,9 @@ namespace SpaceVIL
             return false;
         }
 
+        /// <summary>
+        /// Add item to the Grid
+        /// </summary>
         public override void AddItem(IBaseItem item)
         {
             //ignore if it is out of space, add in free cell, attach row and collumn numbers
@@ -146,6 +168,10 @@ namespace SpaceVIL
                 }
             }
         }
+
+        /// <summary>
+        /// Insert item to the Grid by row and column number
+        /// </summary>
         public void InsertItem(IBaseItem item, int row, int column)
         {
             base.AddItem(item);
@@ -154,21 +180,37 @@ namespace SpaceVIL
             _cells[column + row * _column_count].SetItem(item);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Set width of the Grid
+        /// </summary>
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Set height of the Grid
+        /// </summary>
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Set X position of the Grid
+        /// </summary>
         public override void SetX(int _x)
         {
             base.SetX(_x);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Set Y position of the Grid
+        /// </summary>
         public override void SetY(int _y)
         {
             base.SetY(_y);
@@ -186,6 +228,11 @@ namespace SpaceVIL
         {
             return rowHeight;
         }
+
+        /// <summary>
+        /// Update all children and grid sizes and positions
+        /// according to confines
+        /// </summary>
         //Update Layout
         public void UpdateLayout()
         {

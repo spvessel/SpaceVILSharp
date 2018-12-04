@@ -6,8 +6,11 @@ import com.spvessel.Core.InterfaceVLayout;
 import com.spvessel.Flags.SizePolicy;
 
 public class VerticalStack extends Prototype implements InterfaceVLayout {
-    static int count = 0;
+    private static int count = 0;
 
+    /**
+     * Constructs a VerticalStack
+     */
     public VerticalStack() {
         setItemName("verticalStack_" + count);
         count++;
@@ -22,24 +25,37 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
         return false;
     }
 
+    /**
+     * Add item to the VerticalStack
+     */
     @Override
     public void addItem(InterfaceBaseItem item) {
         super.addItem(item);
         updateLayout();
     }
 
+    /**
+     * Set height of the VerticalStack
+     */
     @Override
     public void setHeight(int height) {
         super.setHeight(height);
         updateLayout();
     }
 
+    /**
+     * Set Y position of the VerticalStack
+     */
     @Override
     public void setY(int _y) {
         super.setY(_y);
         updateLayout();
     }
 
+    /**
+     * Update all children and VerticalStack sizes and positions
+     * according to confines
+     */
     public void updateLayout() {
         int total_space = getHeight() - getPadding().top - getPadding().bottom;
         int free_space = total_space;

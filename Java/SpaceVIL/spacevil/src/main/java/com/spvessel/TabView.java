@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TabView extends Prototype {
-    static int count = 0;
+    private static int count = 0;
 
     // private Grid _tab_view;
     private VerticalStack _tab_view;
@@ -28,25 +28,28 @@ public class TabView extends Prototype {
     private Map<ButtonToggle, Frame> _tab_list;
     private Style _stored_style;
 
+    /**
+     * Constructs a TabView
+     */
     public TabView() {
-        // setBackground(Color.Transparent);
-        // setSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
         setItemName("TabView_" + count);
         count++;
 
         _tab_view = new VerticalStack();
-        _tab_list = new HashMap<ButtonToggle, Frame>();
+        _tab_list = new HashMap<>();
         _tab_bar = new HorizontalStack();
 
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.TabView"));
         setStyle(DefaultsService.getDefaultStyle(TabView.class));
     }
 
     @Override
-    public boolean getHoverVerification(float xpos, float ypos) {
+    boolean getHoverVerification(float xpos, float ypos) {
         return false;
     }
 
+    /**
+     * Initialization and adding of all elements in the TabView
+     */
     @Override
     public void initElements() {
         // tab view
@@ -60,7 +63,7 @@ public class TabView extends Prototype {
 
     private void hideOthers(InterfaceItem sender, MouseArgs args) {
         for (Map.Entry<ButtonToggle, Frame> tab : _tab_list.entrySet()) {
-            if (tab.getKey().getItemName() != sender.getItemName()) {
+            if (!tab.getKey().getItemName().equals(sender.getItemName())) {
                 tab.getKey().setToggled(false);
                 tab.getValue().setVisible(false);
             } else {
@@ -71,6 +74,10 @@ public class TabView extends Prototype {
         _tab_view.updateLayout();
     }
 
+    /**
+     * Add new tab to the TabView
+     * @param tab_name name of the new tab
+     */
     public void addTab(String tab_name) {
         Style tab_style = _stored_style.getInnerStyle("tab");
         Style view_style = _stored_style.getInnerStyle("tabview");
@@ -81,8 +88,7 @@ public class TabView extends Prototype {
             // tab.RemoveItemState(ItemStateType.Pressed);
             tab.setStyle(tab_style);
         }
-        InterfaceMouseMethodState click = (sender, args) -> hideOthers(sender, args);
-        tab.eventMouseClick.add(click);
+        tab.eventMouseClick.add(this::hideOthers);
         _tab_bar.addItem(tab);
 
         Frame view = new Frame();
@@ -100,18 +106,29 @@ public class TabView extends Prototype {
         }
     }
 
+    /**
+     * Add new tab to the TabView
+     * @param tab_name name of the new tab
+     * @param tab_style style of the new tab
+     */
     public void addTab(String tab_name, Style tab_style, Style view_style) {
         // refactor
     }
 
+    /**
+     * Remove tab by name
+     */
     public void removeTab(String tab_name) {
         for (InterfaceBaseItem tab : _tab_bar.getItems()) {
-            if (tab_name == tab.getItemName()) {
+            if (tab_name.equals(tab.getItemName())) {
                 _tab_list.remove(tab);
             }
         }
     }
 
+    /**
+     * Add InterfaceBaseItem item to the tab with name tab_name
+     */
     public void addItemToTab(String tab_name, InterfaceBaseItem item) {
         for (InterfaceBaseItem tab : _tab_bar.getItems()) {
             if (tab_name == tab.getItemName()) {
@@ -123,6 +140,9 @@ public class TabView extends Prototype {
     // text init
     private List<ItemAlignment> _textAlignment = new LinkedList<>();
 
+    /**
+     * Text alignment in the TabView
+     */
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _textAlignment = alignment;
     }
@@ -133,44 +153,45 @@ public class TabView extends Prototype {
 
     private Indents _textMargin = new Indents();
 
+    /**
+     * Text margin in the TabView
+     */
     public void setTextMargin(Indents margin) {
         _textMargin = margin;
     }
 
     private Font _font = DefaultsService.getDefaultFont(16);
+    private int _font_size = 16;
+    private int _font_style = Font.BOLD;
+    private String _font_family = "Ubuntu";
 
+    /**
+     * Text font parameters in the TabView
+     */
     public void setFont(Font font) {
         _font = font;
     }
-
-    private int _font_size = 16;
-
     public void setFontSize(int size) {
         _font_size = size;
     }
-
-    private int _font_style = Font.BOLD;
-
     public void setFontStyle(int style) {
         _font_style = style;
     }
-
-    private String _font_family = "Ubuntu";
-
     public void setFontFamily(String font_family) {
         _font_family = font_family;
     }
-
     public Font getFont() {
         return _font;
     }
 
     private Color _foreground = new Color(255, 255, 255);
 
+    /**
+     * Text color in the TabView
+     */
     public void setForeground(Color color) {
         _foreground = color;
     }
-
     public void setForeground(int r, int g, int b) {
         if (r < 0)
             r = Math.abs(r);
@@ -186,7 +207,6 @@ public class TabView extends Prototype {
             b = 255;
         setForeground(new Color(r, g, b));
     }
-
     public void setForeground(int r, int g, int b, int a) {
         if (r < 0)
             r = Math.abs(r);
@@ -202,7 +222,6 @@ public class TabView extends Prototype {
             b = 255;
         setForeground(new Color(r, g, b, a));
     }
-
     public void setForeground(float r, float g, float b) {
         if (r < 0)
             r = Math.abs(r);
@@ -218,7 +237,6 @@ public class TabView extends Prototype {
             b = 1.0f;
         setForeground(new Color(r, g, b));
     }
-
     public void setForeground(float r, float g, float b, float a) {
         if (r < 0)
             r = Math.abs(r);
@@ -235,6 +253,9 @@ public class TabView extends Prototype {
         setForeground(new Color(r, g, b, a));
     }
 
+    /**
+     * Set style of the TabView
+     */
     // style
     @Override
     public void setStyle(Style style) {

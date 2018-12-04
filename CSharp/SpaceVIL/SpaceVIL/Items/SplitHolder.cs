@@ -9,12 +9,15 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    class SplitHolder : Prototype, IDraggable
+    public class SplitHolder : Prototype, IDraggable
     {
         private static int count = 0;
         private Orientation _orientation;
         private int _spacerSize = 6;
 
+        /// <summary>
+        /// Constructs a SplitHolder with orientation (HORIZONTAL or VERTICAL)
+        /// </summary>
         public SplitHolder(Orientation orientation)
         {
             _orientation = orientation;
@@ -24,6 +27,10 @@ namespace SpaceVIL
             MakeHolderShape();
         }
 
+        /// <summary>
+        /// SplitHolder size (height for the HORIZONTAL orientation,
+        /// width for the VERTICAL orientation)
+        /// </summary>
         public void SetSpacerSize(int spSize)
         {
             if (_spacerSize != spSize)
@@ -32,7 +39,6 @@ namespace SpaceVIL
                 MakeHolderShape();
             }
         }
-
         public int GetHolderSize()
         {
             return _spacerSize;
@@ -56,11 +62,15 @@ namespace SpaceVIL
             }
         }
 
+        /// <returns> Orientation of the SplitHolder (Horizontal or Vertical) </returns>
         public Orientation GetOrientation()
         {
             return _orientation;
         }
 
+        /// <summary>
+        /// Set style of the SplitHolder
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)

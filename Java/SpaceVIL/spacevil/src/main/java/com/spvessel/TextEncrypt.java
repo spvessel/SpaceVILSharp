@@ -1,6 +1,5 @@
 package com.spvessel;
 
-import com.spvessel.Common.DefaultsService;
 import com.spvessel.Core.*;
 import com.spvessel.Decorations.Indents;
 import com.spvessel.Decorations.Style;
@@ -18,7 +17,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceDraggable {
-    static int count = 0;
+    private static int count = 0;
 
     private String _pwd = "";
     private String _hide_sign;

@@ -17,6 +17,9 @@ namespace SpaceVIL
         public BlankItem Menu = new BlankItem();
         private bool _is_menu_disabled = false;
 
+        /// <summary>
+        /// Set context menu disable true or false
+        /// </summary>
         public void DisableMenu(bool value)
         {
             _is_menu_disabled = value;
@@ -24,21 +27,27 @@ namespace SpaceVIL
 
         private ContextMenu _menu;
 
-        public bool IsEditable
+        /// <returns> if TextArea editable or not </returns>
+        public bool IsEditable()
         {
-            get
-            {
-                return _area.IsEditable;
-            }
-            set
-            {
-                _area.IsEditable = value;
-            }
+            return _area.IsEditable;
+        }
+
+        /// <summary>
+        /// Set TextArea editable true or false
+        /// </summary>
+        public void SetEditable(bool value)
+        {
+            _area.IsEditable = value;
         }
 
         public VerticalScrollBar VScrollBar = new VerticalScrollBar();
         public HorizontalScrollBar HScrollBar = new HorizontalScrollBar();
         private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.Always;
+
+        /// <summary>
+        /// Vertical scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the TextArea
+        /// </summary>
         public ScrollBarVisibility GetVScrollBarVisible()
         {
             return _v_scrollBarPolicy;
@@ -70,7 +79,12 @@ namespace SpaceVIL
             UpdateHorizontalSlider();
             HScrollBar.Slider.UpdateHandler();
         }
+
         private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.Always;
+
+        /// <summary>
+        /// Horizontal scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the TextArea
+        /// </summary>
         public ScrollBarVisibility GetHScrollBarVisible()
         {
             return _h_scrollBarPolicy;
@@ -103,6 +117,9 @@ namespace SpaceVIL
             VScrollBar.Slider.UpdateHandler();
         }
 
+        /// <summary>
+        /// Constructs a TextArea
+        /// </summary>
         public TextArea()
         {
             SetItemName("TextArea_" + count);
@@ -125,6 +142,7 @@ namespace SpaceVIL
 
         private Int64 v_size = 0;
         private Int64 h_size = 0;
+
         private void UpdateVListArea()
         {
             //vertical slider
@@ -132,6 +150,7 @@ namespace SpaceVIL
             int v_offSet = (int)((float)(v_size * v_value) / 100.0f);
             _area.SetScrollYOffset(-v_offSet);
         }
+
         private void UpdateHListArea()
         {
             //horizontal slider
@@ -142,11 +161,6 @@ namespace SpaceVIL
 
         private void UpdateVerticalSlider()//vertical slider
         {
-            //1. собрать всю высоту всех элементов
-            //2. собрать видимую высоту
-            //3. связать видимую и всю высоту с скроллом
-            //4. выставить размеры и позицию в %
-
             int visible_area = _area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom;
             int total = _area.GetTextHeight();
 
@@ -191,11 +205,6 @@ namespace SpaceVIL
         }
         private void UpdateHorizontalSlider()//horizontal slider
         {
-            //1. найти самый широкий из всех элементов
-            //2. определить видимую ширину
-            //3. связать видимую и всю ширину с скроллом
-            //4. выставить размеры и позицию в %
-
             int visible_area = _area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right;
             int total = _area.GetTextWidth();
 
@@ -238,6 +247,10 @@ namespace SpaceVIL
             HScrollBar.Slider.SetStep((HScrollBar.Slider.GetMaxValue() - HScrollBar.Slider.GetMinValue()) / step_count);
             HScrollBar.Slider.SetCurrentValue((100.0f / total_invisible_size) * Math.Abs(_area.GetScrollXOffset()));
         }
+
+        /// <summary>
+        /// Set width of the TextArea
+        /// </summary>
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
@@ -245,6 +258,10 @@ namespace SpaceVIL
             HScrollBar.Slider.UpdateHandler();
             // _area.SetWidth(width);
         }
+
+        /// <summary>
+        /// Set height of the TextArea
+        /// </summary>
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
@@ -253,7 +270,7 @@ namespace SpaceVIL
             // _area.SetHeight(height);
         }
 
-        public void UpdateElements()
+        private void UpdateElements()
         {
             UpdateVerticalSlider();
             VScrollBar.Slider.UpdateHandler();
@@ -261,6 +278,9 @@ namespace SpaceVIL
             HScrollBar.Slider.UpdateHandler();
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the TextArea
+        /// </summary>
         public override void InitElements()
         {
             //Adding
@@ -332,16 +352,23 @@ namespace SpaceVIL
             UpdateElements();
         }
 
+        /// <summary>
+        /// Set text in the TextArea
+        /// </summary>
         public void SetText(String text)
         {
             _area.SetText(text);
         }
 
+        /// <returns> text from the TextArea </returns>
         public String GetText()
         {
             return _area.GetText();
         }
 
+        /// <summary>
+        /// Set style of the TextArea
+        /// </summary>
         //style
         public override void SetStyle(Style style)
         {
@@ -372,11 +399,16 @@ namespace SpaceVIL
                 Menu.SetStyle(inner_style);
             }
         }
+
         // public override void SetInnerStyle(string element, Style style)
         // {
         //     Style inner_style = style.GetInnerStyle(element);
 
         // }
+
+        /// <summary>
+        /// Text color in the TextArea
+        /// </summary>
         public void SetForeground(Color color)
         {
             _area.SetForeground(color);
@@ -409,32 +441,38 @@ namespace SpaceVIL
             if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
             _area.SetForeground(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
         }
-
         public Color GetForeground()
         {
             return _area.GetForeground();
         }
 
+        /// <summary>
+        /// Space between lines in the TextArea
+        /// </summary>
         public void SetLineSpacer(int lineSpacer)
         {
             _area.SetLineSpacer(lineSpacer);
         }
-
         public int GetLineSpacer()
         {
             return _area.GetLineSpacer();
         }
 
+        /// <summary>
+        /// Text margin in the TextArea
+        /// </summary>
         public void SetTextMargin(Indents margin)
         {
             _area.SetTextMargin(margin);
         }
-
         public Indents GetTextMargin()
         {
             return _area.GetTextMargin();
         }
 
+        /// <summary>
+        /// Text font in the TextArea
+        /// </summary>
         public void SetFont(Font font)
         {
             _area.SetFont(font);
@@ -444,16 +482,32 @@ namespace SpaceVIL
             return _area.GetFont();
         }
 
+        /// <returns> Returns width of the whole text in the TextArea
+        /// (includes visible and invisible parts of the text) </returns>
         public int GetTextWidth()
         {
             return _area.GetWidth();
         }
 
+        /// <returns> Returns height of the whole text in the TextArea
+        /// (includes visible and invisible parts of the text) </returns>
         public int GetTextHeight()
         {
             return _area.GetTextHeight();
         }
 
+        /// <summary>
+        /// Set TextArea focused/unfocused
+        /// </summary>
+        public override void SetFocused(bool value)
+        {
+            base.SetFocused(value);
+            _area.SetFocused(value);
+        }
+
+        /// <summary>
+        /// Remove all text from the TextArea
+        /// </summary>
         public void ClearArea()
         {
             _area.Clear();

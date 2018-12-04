@@ -9,10 +9,16 @@ public class SplitHolder extends Prototype implements InterfaceDraggable {
     private static int count = 0;
     private Orientation _orientation;
 
+    /**
+     * @return Orientation of the SplitHolder (HORIZONTAL or VERTICAL)
+     */
     public Orientation getOrientation() {
         return _orientation;
     }
 
+    /**
+     * Constructs a SplitHolder with orientation (HORIZONTAL or VERTICAL)
+     */
     public SplitHolder(Orientation orientation) {
         _orientation = orientation;
         setItemName("SplitHolder_" + count);
@@ -23,13 +29,16 @@ public class SplitHolder extends Prototype implements InterfaceDraggable {
 
     private int _spacerSize = 6;
 
+    /**
+     * SplitHolder size (height for the HORIZONTAL orientation,
+     * width for the VERTICAL orientation)
+     */
     public void setSpacerSize(int spSize) {
         if (_spacerSize != spSize) {
             _spacerSize = spSize;
             makeHolderShape();
         }
     }
-
     public int getHolderSize() {
         return _spacerSize;
     }
@@ -50,6 +59,9 @@ public class SplitHolder extends Prototype implements InterfaceDraggable {
         }
     }
 
+    /**
+     * Set style of the SplitHolder
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)

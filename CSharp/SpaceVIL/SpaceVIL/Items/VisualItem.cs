@@ -749,7 +749,15 @@ namespace SpaceVIL
             return result;
         }
 
-        public CustomFigure IsCustom = null;
+        CustomFigure IsCustom = null;
+        internal CustomFigure IsCustomFigure()
+        {
+            return IsCustom;
+        }
+        internal void SetCustomFigure(CustomFigure figure)
+        {
+            IsCustom = figure;
+        }
 
         public override List<float[]> MakeShape()
         {

@@ -18,6 +18,9 @@ namespace SpaceVIL
         public ComboBoxDropDown _dropdownarea = new ComboBoxDropDown();
         public EventCommonMethod SelectionChanged;
 
+        /// <summary>
+        /// Constructs a ComboBox
+        /// </summary>
         public ComboBox()
         {
             SetBackground(Color.Transparent);
@@ -29,22 +32,33 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBox)));
         }
-
-        protected virtual void OnKeyPress(object sender, KeyArgs args)
+        
+        void OnKeyPress(object sender, KeyArgs args)
         {
             if (args.Key == KeyCode.Enter)
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 
         //text init
+        /// <summary>
+        /// Text alignment in the ComboBox
+        /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _selected.SetTextAlignment(alignment);
         }
+
+        /// <summary>
+        /// Text margin in the ComboBox
+        /// </summary>
         public void SetTextMargin(Indents margin)
         {
             _selected.SetMargin(margin);
         }
+
+        /// <summary>
+        /// Text font parameters in the ComboBox
+        /// </summary>
         public void SetFont(Font font)
         {
             _selected.SetFont(font);
@@ -65,6 +79,10 @@ namespace SpaceVIL
         {
             return _selected.GetFont();
         }
+
+        /// <summary>
+        /// Set text in the ComboBox
+        /// </summary>
         public void SetText(String text)
         {
             _selected.SetText(text);
@@ -73,6 +91,10 @@ namespace SpaceVIL
         {
             return _selected.GetText();
         }
+
+        /// <summary>
+        /// Text color in the ComboBox
+        /// </summary>
         public void SetForeground(Color color)
         {
             _selected.SetForeground(color);
@@ -98,6 +120,9 @@ namespace SpaceVIL
             return _selected.GetForeground();
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the ComboBox
+        /// </summary>
         public override void InitElements()
         {
             //adding
@@ -125,15 +150,26 @@ namespace SpaceVIL
             _dropdownarea.Show();
         }
 
+        /// <summary>
+        /// Add item to ComboBox list
+        /// </summary>
         public void AddToList(IBaseItem item)
         {
             _dropdownarea.Add(item);
             // _queue.Enqueue(item);
         }
+
+        /// <summary>
+        /// Remove item from the ComboBox list
+        /// </summary>
         public void RemoveFromLst(IBaseItem item)
         {
             _dropdownarea.Remove(item);
         }
+
+        /// <summary>
+        /// Current element in the ComboBox by index
+        /// </summary>
         public void SetCurrentIndex(int index)
         {
             _dropdownarea.SetCurrentIndex(index);
@@ -147,6 +183,9 @@ namespace SpaceVIL
             SelectionChanged?.Invoke();
         }
 
+        /// <summary>
+        /// Set style of the ComboBox
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)
@@ -174,3 +213,4 @@ namespace SpaceVIL
         }
     }
 }
+ 

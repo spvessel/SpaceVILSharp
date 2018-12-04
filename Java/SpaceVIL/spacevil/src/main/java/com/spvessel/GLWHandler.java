@@ -24,36 +24,36 @@ import static org.lwjgl.system.MemoryUtil.*;
 final class GLWHandler {
     // cursors
 
-    long _arrow;
-    long _input;
-    long _hand;
-    long _resize_h;
-    long _resize_v;
-    long _resize_all;
+    private long _arrow;
+    private long _input;
+    private long _hand;
+    private long _resize_h;
+    private long _resize_v;
+    private long _resize_all;
     ///////////////////////////////////////////////
 
-    GLFWWindowSizeCallback resizeCallback;
-    GLFWCursorPosCallback mouseMoveCallback;
-    GLFWMouseButtonCallback mouseClickCallback;
-    GLFWScrollCallback mouseScrollCallback;
-    GLFWWindowCloseCallback windowCloseCallback;
-    GLFWWindowPosCallback windowPosCallback;
-    GLFWKeyCallback keyPressCallback;
-    GLFWCharModsCallback keyInputTextCallback;
-    GLFWWindowFocusCallback windowFocusCallback;
+    private GLFWWindowSizeCallback resizeCallback;
+    private GLFWCursorPosCallback mouseMoveCallback;
+    private GLFWMouseButtonCallback mouseClickCallback;
+    private GLFWScrollCallback mouseScrollCallback;
+    private GLFWWindowCloseCallback windowCloseCallback;
+    private GLFWWindowPosCallback windowPosCallback;
+    private GLFWKeyCallback keyPressCallback;
+    private GLFWCharModsCallback keyInputTextCallback;
+    private GLFWWindowFocusCallback windowFocusCallback;
     ///////////////////////////////////////////////
 
-    protected Boolean borderHidden;
-    protected Boolean appearInCenter;
-    protected Boolean focusable;
-    protected Boolean focused = true;
-    protected Boolean resizeble;
-    protected Boolean visible;
-    protected Boolean alwaysOnTop;
-    protected Boolean maximized;
+    Boolean borderHidden;
+    Boolean appearInCenter;
+    Boolean focusable;
+    Boolean focused = true;
+    Boolean resizeble;
+    Boolean visible;
+    Boolean alwaysOnTop;
+    Boolean maximized;
     private Pointer wPosition = new Pointer();
 
-    protected Pointer getPointer() {
+    Pointer getPointer() {
         return wPosition;
     }
     ///////////////////////////////////////////////
@@ -64,21 +64,21 @@ final class GLWHandler {
         return _w_layout;
     }
 
-    long _window = NULL;
+    private long _window = NULL;
 
-    protected long getWindowId() {
+    long getWindowId() {
         return _window;
     }
 
-    protected int gVAO = 0;
+    int gVAO = 0;
 
-    protected GLWHandler(WindowLayout handler) {
+    GLWHandler(WindowLayout handler) {
         _w_layout = handler;
         getPointer().setX(0);
         getPointer().setY(0);
     }
 
-    protected void initGlfw() throws SpaceVILException {
+    void initGlfw() throws SpaceVILException {
         // path to c++ glfw3.dll (x32 or x64)
         // glfwConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
         if (!glfwInit()) {
@@ -96,7 +96,7 @@ final class GLWHandler {
         _resize_all = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
     }
 
-    protected void createWindow() throws SpaceVILException {
+    void createWindow() throws SpaceVILException {
         // important!!! may be the best combination of WINDOW HINTS!!!
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
@@ -159,12 +159,12 @@ final class GLWHandler {
             glfwShowWindow(_window);
     }
 
-    protected void switchContext() {
+    void switchContext() {
         glfwMakeContextCurrent(0);
         glfwMakeContextCurrent(_window);
     }
 
-    protected void clearEventsCallbacks() {
+    void clearEventsCallbacks() {
         mouseMoveCallback = null;
         mouseClickCallback = null;
         mouseScrollCallback = null;
@@ -176,7 +176,7 @@ final class GLWHandler {
         resizeCallback = null;
     }
 
-    protected void setCursorType(int type) {
+    void setCursorType(int type) {
         switch (type) {
         case GLFW_ARROW_CURSOR:
             glfwSetCursor(_window, _arrow);
@@ -202,19 +202,19 @@ final class GLWHandler {
         }
     }
 
-    protected Boolean isClosing() {
+    Boolean isClosing() {
         return glfwWindowShouldClose(_window);
     }
 
-    protected void destroy() {
+    void destroy() {
         glfwDestroyWindow(_window);
     }
 
-    protected void swap() {
+    void swap() {
         glfwSwapBuffers(_window);
     }
 
-    protected void setToClose() {
+    void setToClose() {
         if (_window != 0)
             glfwSetWindowShouldClose(_window, true);
         // try
@@ -227,52 +227,52 @@ final class GLWHandler {
         // }
     }
 
-    protected void setCallbackMouseMove(GLFWCursorPosCallback function) {
+    void setCallbackMouseMove(GLFWCursorPosCallback function) {
         mouseMoveCallback = function;
         glfwSetCursorPosCallback(_window, mouseMoveCallback);
     }
 
-    protected void setCallbackMouseClick(GLFWMouseButtonCallback function) {
+    void setCallbackMouseClick(GLFWMouseButtonCallback function) {
         mouseClickCallback = function;
         glfwSetMouseButtonCallback(_window, mouseClickCallback);
     }
 
-    protected void setCallbackMouseScroll(GLFWScrollCallback function) {
+    void setCallbackMouseScroll(GLFWScrollCallback function) {
         mouseScrollCallback = function;
         glfwSetScrollCallback(_window, mouseScrollCallback);
     }
 
-    protected void setCallbackKeyPress(GLFWKeyCallback function) {
+    void setCallbackKeyPress(GLFWKeyCallback function) {
         keyPressCallback = function;
         glfwSetKeyCallback(_window, keyPressCallback);
     }
 
-    protected void setCallbackTextInput(GLFWCharModsCallback function) {
+    void setCallbackTextInput(GLFWCharModsCallback function) {
         keyInputTextCallback = function;
         glfwSetCharModsCallback(_window, keyInputTextCallback);
     }
 
-    protected void setCallbackClose(GLFWWindowCloseCallback function) {
+    void setCallbackClose(GLFWWindowCloseCallback function) {
         windowCloseCallback = function;
         glfwSetWindowCloseCallback(_window, windowCloseCallback);
     }
 
-    protected void setCallbackPosition(GLFWWindowPosCallback function) {
+    void setCallbackPosition(GLFWWindowPosCallback function) {
         windowPosCallback = function;
         glfwSetWindowPosCallback(_window, windowPosCallback);
     }
 
-    protected void setCallbackFocus(GLFWWindowFocusCallback function) {
+    void setCallbackFocus(GLFWWindowFocusCallback function) {
         windowFocusCallback = function;
         glfwSetWindowFocusCallback(_window, windowFocusCallback);
     }
 
-    protected void setCallbackResize(GLFWWindowSizeCallback function) {
+    void setCallbackResize(GLFWWindowSizeCallback function) {
         resizeCallback = function;
         glfwSetWindowSizeCallback(_window, resizeCallback);
     }
 
-    protected void setHidden(Boolean value) {
+    void setHidden(Boolean value) {
         if (value)
             glfwHideWindow(_window);
         else

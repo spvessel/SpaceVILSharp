@@ -8,10 +8,22 @@ import com.spvessel.Flags.Orientation;
 public class VerticalScrollBar extends VerticalStack {
     private static int count = 0;
 
+    /**
+     * VerticalScrollBar's upArrow
+     */
     public ButtonCore upArrow = new ButtonCore();
+    /**
+     * VerticalScrollBar's downArrow
+     */
     public ButtonCore downArrow = new ButtonCore();
+    /**
+     * VerticalScrollBar's slider
+     */
     public VerticalSlider slider = new VerticalSlider();
 
+    /**
+     * Constructs a VerticalScrollBar
+     */
     public VerticalScrollBar() {
         setItemName("VerticalScrollBar_" + count);
         count++;
@@ -44,6 +56,9 @@ public class VerticalScrollBar extends VerticalStack {
         setStyle(DefaultsService.getDefaultStyle(VerticalScrollBar.class));
     }
 
+    /**
+     * Initialization and adding of all elements in the VerticalScrollBar
+     */
     @Override
     public void initElements() {
         upArrow.isFocusable = false;
@@ -53,11 +68,17 @@ public class VerticalScrollBar extends VerticalStack {
         addItems(upArrow, slider, downArrow);
     }
 
+    /**
+     * Is up and down arrows of the VerticalScrollBar visible
+     */
     public void setArrowsVisible(boolean value) {
         upArrow.setVisible(value);
         downArrow.setVisible(value);
     }
 
+    /**
+     * Set style of the VerticalScrollBar
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)

@@ -5,7 +5,7 @@ import java.util.List;
 import com.spvessel.Decorations.CornerRadius;
 
 public class Rectangle extends Primitive {
-    static int count = 0;
+    private static int count = 0;
     private CornerRadius _border_radius = new CornerRadius();
 
     public void SetBorderRadius(int radius) {
@@ -19,11 +19,17 @@ public class Rectangle extends Primitive {
         _border_radius = radius;
     }
 
+    /**
+     * Constructs a Rectangle
+     */
     public Rectangle() {
         setItemName("Rectangle_" + count);
         count++;
     }
 
+    /**
+     * Make rectangle with width, height, X, Y
+     */
     @Override
     public List<float[]> makeShape() {
         setTriangles(GraphicsMathService.getRoundSquare(_border_radius, getWidth(), getHeight(), getX(), getY()));

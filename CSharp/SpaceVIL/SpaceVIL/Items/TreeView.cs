@@ -92,7 +92,7 @@ namespace SpaceVIL
             OnSortTree();
             UpdateElements();
         }
-        protected virtual void OnSortTree()
+        void OnSortTree()
         {
             //sorting
             List<TreeItem> outList = new List<TreeItem>();

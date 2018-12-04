@@ -7,12 +7,16 @@ import com.spvessel.Flags.InputRestriction;
 import com.spvessel.Flags.SizePolicy;
 
 public class SpinItem extends Prototype {
-    static int count = 0;
+    private static int count = 0;
     private HorizontalStack _horzStack = new HorizontalStack();
     private VerticalStack _vertStack = new VerticalStack();
     public ButtonCore upButton = new ButtonCore();
     public ButtonCore downButton = new ButtonCore();
     public TextEditRestricted textInput = new TextEditRestricted();
+
+    /**
+     * Constructs a SpinItem
+     */
     public SpinItem() {
         setItemName("SpinItem_" + count);
         count++;
@@ -31,26 +35,38 @@ public class SpinItem extends Prototype {
         eventScrollDown.add(this::onDownClick);
     }
 
-    void onUpClick(Object sender, MouseArgs args) {
+    private void onUpClick(Object sender, MouseArgs args) {
         textInput.increaseValue();
     }
 
-    void onDownClick(Object sender, MouseArgs args) {
+    private void onDownClick(Object sender, MouseArgs args) {
         textInput.decreaseValue();
     }
 
+    /**
+     * Set SpinItem's parameters
+     * @param currentValue SpinItem current value
+     * @param minValue minimum available value
+     * @param maxValue maximum available value
+     * @param step SpinItem step
+     */
     public void setParameters(int currentValue, int minValue, int maxValue, int step) {
         textInput.setParameters(currentValue, minValue, maxValue, step);
     }
-
     public void setParameters(double currentValue, double minValue, double maxValue, double step) {
         textInput.setParameters(currentValue, minValue, maxValue, step);
     }
 
+    /**
+     * Values accuracy (decimal places)
+     */
     public void setAccuracy(int accuracy) {
         textInput.setAccuracy(accuracy);
     }
 
+    /**
+     * Initialization and adding of all elements in the SpinItem
+     */
     @Override
     public void initElements() {
         addItem(_horzStack);
@@ -58,6 +74,9 @@ public class SpinItem extends Prototype {
         _vertStack.addItems(upButton, downButton);
     }
 
+    /**
+     * Set style of the SpinItem
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)

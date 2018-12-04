@@ -40,7 +40,7 @@ public class VisualContact extends Prototype {
         border.setWidth(45);
         border.setWidthPolicy(SizePolicy.FIXED);
         border.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
-        border.Quality = 32;
+        border.quality = 32;
         // border.setTriangles(GraphicsMathService.getRoundSquare(50, 50, 25, 0, 0));
         // border.setTriangles(GraphicsMathService.getEllipse(50, 50, 0, 0, 32));
 

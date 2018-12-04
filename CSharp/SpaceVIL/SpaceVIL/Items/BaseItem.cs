@@ -15,6 +15,9 @@ namespace SpaceVIL
         internal int _confines_y_1 = 0;
 
         private WindowLayout _handler;
+        
+        /// <param name="handler"> WindowLayout handler - window that 
+        /// contains the BaseItem </param>
         public void SetHandler(WindowLayout handler)
         {
             _handler = handler;
@@ -26,6 +29,10 @@ namespace SpaceVIL
 
         //parent
         private Prototype _parent = null;
+
+        /// <summary>
+        /// BaseItem's parent item
+        /// </summary>
         public Prototype GetParent()
         {
             return _parent;
@@ -34,6 +41,7 @@ namespace SpaceVIL
         {
             _parent = parent;
         }
+
         private void CastAndUpdate(IBaseItem item)
         {
             Prototype prototype = item as Prototype;
@@ -42,6 +50,7 @@ namespace SpaceVIL
             else
                 (item as BaseItem).UpdateBehavior();
         }
+
         internal void AddChildren(IBaseItem item)
         {
             if (item.GetParent() != null)
@@ -88,8 +97,14 @@ namespace SpaceVIL
             AddEventListener(GeometryEventType.Moved_Y, item);
             CastAndUpdate(item);
         }
+
         internal virtual void AddEventListener(GeometryEventType type, IBaseItem listener) { }
+
         internal virtual void RemoveEventListener(GeometryEventType type, IBaseItem listener) { }
+
+        /// <summary>
+        /// Item will not react on parent's changes
+        /// </summary>
         public void RemoveItemFromListeners()
         {
             GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this);
@@ -98,11 +113,18 @@ namespace SpaceVIL
             GetParent().RemoveEventListener(GeometryEventType.Moved_Y, this);
         }
 
-        // abstract public void InitElements();
+        /// <summary>
+        /// Initialization and adding of all elements in the BaseItem
+        /// </summary>
         public virtual void InitElements() { }
 
         private Item _item = new Item();
+
         private Indents _margin = new Indents();
+
+        /// <summary>
+        /// BaseItem margin
+        /// </summary>
         public Indents GetMargin()
         {
             return _margin;
@@ -118,18 +140,28 @@ namespace SpaceVIL
             _margin.Right = right;
             _margin.Bottom = bottom;
         }
+
+        /// <returns>triangles list of the BaseItem's shape</returns>
         public List<float[]> GetTriangles()
         {
             return _item.GetTriangles();
         }
+
+        /// <summary>
+        /// Sets BaseItem's shape as triangles list
+        /// </summary>
         public virtual void SetTriangles(List<float[]> triangles)
         {
             _item.SetTriangles(triangles);
         }
+
+        /// <returns>shape points list in GL coordinates, using triangles 
+        /// from getTriangles()</returns>
         public virtual List<float[]> MakeShape()
         {
             return _item.MakeShape();
         }
+
         internal List<float[]> UpdateShape()
         {
             if (GetTriangles().Count == 0)
@@ -156,6 +188,10 @@ namespace SpaceVIL
 
             return result;
         }
+
+        /// <summary>
+        /// Background color of the BaseItem
+        /// </summary>
         public virtual void SetBackground(Color color)
         {
             _item.SetBackground(color);
@@ -192,6 +228,10 @@ namespace SpaceVIL
         {
             return _item.GetBackground();
         }
+
+        /// <summary>
+        /// BaseItem's name
+        /// </summary>
         public void SetItemName(string name)
         {
             _item.SetItemName(name);
@@ -202,6 +242,10 @@ namespace SpaceVIL
         }
 
         private bool _drawable = true;
+
+        /// <summary>
+        /// If BaseItem will drawn by engine
+        /// </summary>
         public virtual bool IsDrawable()
         {
             return _drawable;
@@ -213,7 +257,12 @@ namespace SpaceVIL
             _drawable = value;
             // UpdateInnersDrawable(value);
         }
+        
         private bool _visible = true;
+
+        /// <summary>
+        /// If BaseItem is visible
+        /// </summary>
         public virtual bool IsVisible()
         {
             return _visible;
@@ -232,6 +281,10 @@ namespace SpaceVIL
 
         //geometry
         private Geometry _itemGeometry = new Geometry();
+
+        /// <summary>
+        /// Width of the BaseItem
+        /// </summary>
         public void SetMinWidth(int width)
         {
             _itemGeometry.SetMinWidth(width);
@@ -243,18 +296,6 @@ namespace SpaceVIL
         public void SetMaxWidth(int width)
         {
             _itemGeometry.SetMaxWidth(width);
-        }
-        public void SetMinHeight(int height)
-        {
-            _itemGeometry.SetMinHeight(height);
-        }
-        public virtual void SetHeight(int height)
-        {
-            _itemGeometry.SetHeight(height);
-        }
-        public void SetMaxHeight(int height)
-        {
-            _itemGeometry.SetMaxHeight(height);
         }
         public int GetMinWidth()
         {
@@ -268,6 +309,22 @@ namespace SpaceVIL
         {
             return _itemGeometry.GetMaxWidth();
         }
+
+        /// <summary>
+        /// Height of the BaseItem
+        /// </summary>
+        public void SetMinHeight(int height)
+        {
+            _itemGeometry.SetMinHeight(height);
+        }
+        public virtual void SetHeight(int height)
+        {
+            _itemGeometry.SetHeight(height);
+        }
+        public void SetMaxHeight(int height)
+        {
+            _itemGeometry.SetMaxHeight(height);
+        }
         public int GetMinHeight()
         {
             return _itemGeometry.GetMinHeight();
@@ -280,6 +337,10 @@ namespace SpaceVIL
         {
             return _itemGeometry.GetMaxHeight();
         }
+
+        /// <summary>
+        /// Size (width and height) of the BaseItem
+        /// </summary>
         public void SetSize(int width, int height)
         {
             SetWidth(width);
@@ -299,13 +360,29 @@ namespace SpaceVIL
         {
             return _itemGeometry.GetSize();
         }
+        public int[] GetMinSize()
+        {
+            return new int[] { _itemGeometry.GetMinWidth(), _itemGeometry.GetMinHeight() };
+        }
+        public int[] GetMaxSize()
+        {
+            return new int[] { _itemGeometry.GetMaxWidth(), _itemGeometry.GetMaxHeight() };
+        }
 
         //behavior
         private Behavior _itemBehavior = new Behavior();
+
+        /// <summary>
+        /// BaseItem alignment
+        /// </summary>
         public void SetAlignment(ItemAlignment alignment)
         {
             _itemBehavior.SetAlignment(alignment);
             UpdateBehavior();
+        }
+        public ItemAlignment GetAlignment()
+        {
+            return _itemBehavior.GetAlignment();
         }
 
         internal void UpdateBehavior()
@@ -379,10 +456,9 @@ namespace SpaceVIL
             }
         }
 
-        public ItemAlignment GetAlignment()
-        {
-            return _itemBehavior.GetAlignment();
-        }
+        /// <summary>
+        /// BaseItem size (width and height) policy - FIXED or EXPAND
+        /// </summary>
         public void SetSizePolicy(SizePolicy width, SizePolicy height)
         {
             SetWidthPolicy(width);
@@ -413,6 +489,10 @@ namespace SpaceVIL
 
         //position
         private Position _itemPosition = new Position();
+
+        /// <summary>
+        /// BaseItem (x, y) position
+        /// </summary>
         public virtual void SetX(int x)
         {
             _itemPosition.SetX(x);
@@ -430,35 +510,21 @@ namespace SpaceVIL
             return _itemPosition.GetY();
         }
 
-        //update
-        public virtual void SetConfines()
-        {
-            _confines_x_0 = GetParent().GetX() + GetParent().GetPadding().Left;
-            _confines_x_1 = GetParent().GetX() + GetParent().GetWidth() - GetParent().GetPadding().Right;
-            _confines_y_0 = GetParent().GetY() + GetParent().GetPadding().Top;
-            _confines_y_1 = GetParent().GetY() + GetParent().GetHeight() - GetParent().GetPadding().Bottom;
-        }
+        // internal bool IsOutConfines()
+        // {
+        //     if (
+        //         GetX() >= _confines_x_1 ||
+        //         GetX() + GetWidth() <= _confines_x_0 ||
+        //         GetY() >= _confines_y_1 ||
+        //         GetY() + GetHeight() <= _confines_y_0
+        //        )
+        //         return true;
+        //     return false;
+        // }
 
-        public void SetConfines(int x0, int x1, int y0, int y1)
-        {
-            _confines_x_0 = x0;
-            _confines_x_1 = x1;
-            _confines_y_0 = y0;
-            _confines_y_1 = y1;
-        }
-
-        internal bool IsOutConfines()
-        {
-            if (
-                GetX() >= _confines_x_1 ||
-                GetX() + GetWidth() <= _confines_x_0 ||
-                GetY() >= _confines_y_1 ||
-                GetY() + GetHeight() <= _confines_y_0
-               )
-                return true;
-            return false;
-        }
-
+        /// <summary>
+        /// Update BaseItem's state
+        /// </summary>
         public void Update(GeometryEventType type, int value = 0)
         {
             if ((this as VisualItem) != null)
@@ -678,7 +744,7 @@ namespace SpaceVIL
             }
         }
 
-        public virtual void UpdateGeometry()
+        internal virtual void UpdateGeometry()
         {
             Update(GeometryEventType.ResizeWidth);
             Update(GeometryEventType.ResizeHeight);
@@ -686,9 +752,17 @@ namespace SpaceVIL
             Update(GeometryEventType.Moved_Y);
         }
 
+        /// <summary>
+        /// Style of the BaseItem
+        /// </summary>
         public virtual void SetStyle(Style style) { }
         public abstract Style GetCoreStyle();
+
         // public virtual Style GetCoreStyle() { throw new NotImplementedException(); }
+
+        /// <summary>
+        /// Check and set BaseItem default style
+        /// </summary>
         public virtual void CheckDefaults()
         {
             //checking all attributes
@@ -702,6 +776,13 @@ namespace SpaceVIL
 
         //shadow
         private bool _is_shadow_drop = false;
+        private int _shadow_radius = 1;
+        private Color _shadow_color = Color.Black;
+        private Position _shadow_pos = new Position();
+
+        /// <summary>
+        /// BaseItem's shadow parameters. Is item has shadow
+        /// </summary>
         public bool IsShadowDrop()
         {
             return _is_shadow_drop;
@@ -710,7 +791,10 @@ namespace SpaceVIL
         {
             _is_shadow_drop = value;
         }
-        private int _shadow_radius = 1;
+
+        /// <summary>
+        /// BaseItem's shadow parameters. Shadow corners radius
+        /// </summary>
         public void SetShadowRadius(int radius)
         {
             _shadow_radius = radius;
@@ -719,7 +803,10 @@ namespace SpaceVIL
         {
             return _shadow_radius;
         }
-        private Color _shadow_color = Color.Black;
+
+        /// <summary>
+        /// BaseItem's shadow parameters. Shadow color
+        /// </summary>
         public Color GetShadowColor()
         {
             return _shadow_color;
@@ -728,11 +815,21 @@ namespace SpaceVIL
         {
             _shadow_color = color;
         }
-        private Position _shadow_pos = new Position();
+
+        /// <summary>
+        /// BaseItem's shadow parameters. Shadow position
+        /// </summary>
         public Position GetShadowPos()
         {
             return _shadow_pos;
         }
+        /// <summary>
+        /// Set BaseItem's shadow with parameters
+        /// </summary>
+        /// <param name="radius">Shadow corners radius (same for all corners)</param>
+        /// <param name="x">Shadow X position</param>
+        /// <param name="y">Shadow Y position</param>
+        /// <param name="color">Shadow color</param>
         public void SetShadow(int radius, int x, int y, Color color)
         {
             _is_shadow_drop = true;
@@ -742,6 +839,24 @@ namespace SpaceVIL
             _shadow_pos.SetY(y);
         }
 
+        //update
+        /// <summary>
+        /// BaseItem confines
+        /// </summary>
+        public virtual void SetConfines()
+        {
+            _confines_x_0 = GetParent().GetX() + GetParent().GetPadding().Left;
+            _confines_x_1 = GetParent().GetX() + GetParent().GetWidth() - GetParent().GetPadding().Right;
+            _confines_y_0 = GetParent().GetY() + GetParent().GetPadding().Top;
+            _confines_y_1 = GetParent().GetY() + GetParent().GetHeight() - GetParent().GetPadding().Bottom;
+        }
+        public void SetConfines(int x0, int x1, int y0, int y1)
+        {
+            _confines_x_0 = x0;
+            _confines_x_1 = x1;
+            _confines_y_0 = y0;
+            _confines_y_1 = y1;
+        }
         public int[] GetConfines()
         {
             return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };

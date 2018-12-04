@@ -8,10 +8,10 @@ namespace SpaceVIL.Core
 {
     internal sealed class EventManager
     {
-        internal static bool IsLocked = true;
+        //internal static bool IsLocked = true;
         Dictionary<GeometryEventType, List<IEventUpdate>> listeners = new Dictionary<GeometryEventType, List<IEventUpdate>>();
 
-        public void SetListeners(params GeometryEventType[] events)
+        internal void SetListeners(params GeometryEventType[] events)
         {
             foreach (var s in events)
             {
@@ -19,7 +19,7 @@ namespace SpaceVIL.Core
             }
         }
 
-        public void Subscribe(GeometryEventType type, IEventUpdate listener)
+        internal void Subscribe(GeometryEventType type, IEventUpdate listener)
         {
             if (!listeners.ContainsKey(type))
                 listeners.Add(type, new List<IEventUpdate>());
@@ -28,7 +28,7 @@ namespace SpaceVIL.Core
                 listeners[type].Add(listener);
         }
 
-        public void Unsubscribe(GeometryEventType type, IEventUpdate listener)
+        internal void Unsubscribe(GeometryEventType type, IEventUpdate listener)
         {
             if (listeners.ContainsKey(type))
             {
@@ -39,7 +39,7 @@ namespace SpaceVIL.Core
             }
         }
 
-        public void NotifyListeners(GeometryEventType type, int value)
+        internal void NotifyListeners(GeometryEventType type, int value)
         {
             if (listeners.ContainsKey(type))
             {

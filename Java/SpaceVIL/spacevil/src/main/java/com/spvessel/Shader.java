@@ -6,11 +6,11 @@ import static org.lwjgl.opengl.GL20.*;
 import java.io.FileReader;
 import java.io.BufferedReader;
 
-public class Shader {
+final class Shader {
 
     private int _program_id;
 
-    protected long getProgramID() {
+    long getProgramID() {
         return _program_id;
     }
 
@@ -26,7 +26,7 @@ public class Shader {
     private int _shader_compute;
     private String _code_compute;
 
-    public String getCode(ShaderType shader_type) {
+    String getCode(ShaderType shader_type) {
         switch (shader_type) {
         case VERTEX:
             return _code_vertex;
@@ -46,7 +46,7 @@ public class Shader {
         return "";
     }
 
-    public void setShaderPath(ShaderType shader_type, String path) {
+    void setShaderPath(ShaderType shader_type, String path) {
         String code = readSource(path);
 
         switch (shader_type) {
@@ -71,11 +71,11 @@ public class Shader {
         }
     }
 
-    protected Shader() {
+    Shader() {
         initDefaults();
     }
 
-    protected Shader(String vertex_code, String fragmend_code) {
+    Shader(String vertex_code, String fragmend_code) {
         _code_vertex = vertex_code;
         _code_fragment = fragmend_code;
 
@@ -84,7 +84,7 @@ public class Shader {
         _code_compute = "";
     }
 
-    protected Shader(BufferedReader vertex_code, BufferedReader fragmend_code) {
+    Shader(BufferedReader vertex_code, BufferedReader fragmend_code) {
         _code_vertex = readSource(vertex_code);
         _code_fragment = readSource(fragmend_code);
 
@@ -134,25 +134,25 @@ public class Shader {
         return code.toString();
     }
 
-    protected void compile() {
+    void compile() {
         _program_id = glCreateProgram();
         // compiling
-        if (_code_vertex != "") {
+        if (!_code_vertex.equals("")) {
             _shader_vertex = compileShader(ShaderType.VERTEX, _code_vertex);
             glAttachShader(_program_id, _shader_vertex);
         }
 
-        if (_code_fragment != "") {
+        if (!_code_fragment.equals("")) {
             _shader_fragment = compileShader(ShaderType.FRAGMENT, _code_fragment);
             glAttachShader(_program_id, _shader_fragment);
         }
 
-        if (_code_geometry != "") {
+        if (!_code_geometry.equals("")) {
             _shader_geometry = compileShader(ShaderType.GEOMETRY, _code_geometry);
             glAttachShader(_program_id, _shader_geometry);
         }
 
-        if (_code_compute != "") {
+        if (!_code_compute.equals("")) {
             _shader_compute = compileShader(ShaderType.COMPUTE, _code_compute);
             glAttachShader(_program_id, _shader_compute);
         }
@@ -168,11 +168,11 @@ public class Shader {
         return shader_id;
     }
 
-    protected void useShader() {
+    void useShader() {
         glUseProgram(_program_id);
     }
 
-    protected void deleteShader() {
+    void deleteShader() {
         detachShadersCode();
         deleteShadersID();
         glDeleteProgram(_program_id);

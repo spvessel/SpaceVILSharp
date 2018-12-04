@@ -15,6 +15,10 @@ namespace SpaceVIL
         public EventCommonMethod ItemListChanged;
 
         private int _step = 15;
+
+        /// <summary>
+        /// ScrollBar moving step
+        /// </summary>
         public void SetStep(int value)
         {
             _step = value;
@@ -26,14 +30,22 @@ namespace SpaceVIL
 
         private bool _show_selection = true;
         private int _selection = -1;
+
+        /// <returns> Number of the selected item </returns>
         public int GetSelection()
         {
             return _selection;
         }
+
+        /// <returns> selected item </returns>
         public IBaseItem GetSelectionItem()
         {
             return GetItems().ElementAt(_selection + 2);
         }
+
+        /// <summary>
+        /// Set selected item by index
+        /// </summary>
         public void SetSelection(int index)
         {
             _selection = index;
@@ -43,12 +55,20 @@ namespace SpaceVIL
                 _selection = GetItems().Count - 3;
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Unselect all items
+        /// </summary>
         public void Unselect()
         {
             _selection = -1;
             _substrate.SetVisible(false);
             _hover_substrate.SetVisible(false);
         }
+
+        /// <summary>
+        /// Is selection changes view of the item or not
+        /// </summary>
         public void SetSelectionVisibility(bool visibility)
         {
             _show_selection = visibility;
@@ -60,24 +80,30 @@ namespace SpaceVIL
         }
 
         private Rectangle _substrate = new Rectangle();
+
+        /// <summary>
+        /// Substrate under the selected item
+        /// </summary>
         public Rectangle GetSubstrate()
         {
             return _substrate;
         }
-        public void SetSubstrate(Rectangle shape)
-        {
-            _substrate = shape;
-            UpdateLayout();
-        }
+//        public void SetSubstrate(Rectangle shape)
+//        {
+//            _substrate = shape;
+//            UpdateLayout();
+//        }
 
         private bool _show_hover = true;
 
+        /// <summary>
+        /// Is hovering changes view of the item or not
+        /// </summary>
         public void SetHoverVisibility(bool visibility)
         {
             _show_hover = visibility;
             UpdateLayout();
         }
-
         public bool GetHoverVisibility()
         {
             return _show_hover;
@@ -85,6 +111,9 @@ namespace SpaceVIL
 
         private Rectangle _hover_substrate = new Rectangle();
 
+        /// <summary>
+        /// Substrate under the hovered item
+        /// </summary>
         public Rectangle GetHoverSubstrate()
         {
             return _hover_substrate;
@@ -96,6 +125,10 @@ namespace SpaceVIL
         List<int> _list_of_visible_items = new List<int>();
 
         static int count = 0;
+
+        /// <summary>
+        /// Constructs a ListArea
+        /// </summary>
         public ListArea()
         {
             SetItemName("ListArea_" + count);
@@ -107,14 +140,7 @@ namespace SpaceVIL
             EventKeyPress += OnKeyPress;
         }
 
-        //overrides
-        public override void InitElements()
-        {
-            _substrate.SetVisible(false);
-            base.AddItems(_substrate, _hover_substrate);
-        }
-
-        public void OnMouseClick(IItem sender, MouseArgs args)
+        void OnMouseClick(IItem sender, MouseArgs args)
         {
             Unselect();
             foreach (var index in _list_of_visible_items)
@@ -131,7 +157,7 @@ namespace SpaceVIL
                 }
             }
         }
-        public void OnMouseDoubleClick(IItem sender, MouseArgs args)
+        void OnMouseDoubleClick(IItem sender, MouseArgs args)
         {
             Prototype tmp = GetSelectionItem() as Prototype;
             if (tmp != null)
@@ -150,7 +176,7 @@ namespace SpaceVIL
             }
         }
 
-        protected void OnMouseHover(IItem sender, MouseArgs args)
+        void OnMouseHover(IItem sender, MouseArgs args)
         {
             if (!GetHoverVisibility())
                 return;
@@ -177,7 +203,7 @@ namespace SpaceVIL
             }
         }
 
-        protected virtual void OnKeyPress(IItem sender, KeyArgs args)
+        void OnKeyPress(IItem sender, KeyArgs args)
         {
             Prototype tmp = GetSelectionItem() as Prototype;
             int index = GetSelection();
@@ -220,6 +246,19 @@ namespace SpaceVIL
             }
         }
 
+        //overrides
+        /// <summary>
+        /// Initialization and adding of all elements in the ListArea
+        /// </summary>
+        public override void InitElements()
+        {
+            _substrate.SetVisible(false);
+            base.AddItems(_substrate, _hover_substrate);
+        }
+
+        /// <summary>
+        /// If something changes when mouse hovered
+        /// </summary>
         public override void SetMouseHover(bool value)
         {
             base.SetMouseHover(value);
@@ -227,6 +266,9 @@ namespace SpaceVIL
                 _hover_substrate.SetDrawable(false);
         }
 
+        /// <summary>
+        /// Insert item into the ListArea by index
+        /// </summary>
         public override void InsertItem(IBaseItem item, Int32 index)
         {
             Prototype tmp = item as Prototype;
@@ -237,6 +279,10 @@ namespace SpaceVIL
             base.InsertItem(item, index);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Add item to the ListArea
+        /// </summary>
         public override void AddItem(IBaseItem item)
         {
             Prototype tmp = item as Prototype;
@@ -250,6 +296,10 @@ namespace SpaceVIL
             base.AddItem(item);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Remove item from the ListArea
+        /// </summary>
         public override void RemoveItem(IBaseItem item)
         {
             Unselect();
@@ -257,6 +307,10 @@ namespace SpaceVIL
             UpdateLayout();
             ItemListChanged?.Invoke();
         }
+
+        /// <summary>
+        /// Set Y position of the ListArea
+        /// </summary>
         public override void SetY(int _y)
         {
             base.SetY(_y);
@@ -266,6 +320,10 @@ namespace SpaceVIL
         //update content position
         private Int64 _yOffset = 0;
         private Int64 _xOffset = 0;
+
+        /// <summary>
+        /// Vertical scroll offset in the ListArea
+        /// </summary>
         public Int64 GetVScrollOffset()
         {
             return _yOffset;
@@ -276,6 +334,10 @@ namespace SpaceVIL
             _hover_substrate.SetDrawable(false);
             UpdateLayout();
         }
+
+        /// <summary>
+        /// Horizontal scroll offset in the ListArea
+        /// </summary>
         public Int64 GetHScrollOffset()
         {
             return _xOffset;
@@ -286,6 +348,10 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
+        /// <summary>
+        /// Update all children and ListArea sizes and positions
+        /// according to confines
+        /// </summary>
         public void UpdateLayout()
         {
             _list_of_visible_items.Clear();
@@ -358,6 +424,9 @@ namespace SpaceVIL
             UpdateSubstrate();
         }
 
+        /// <summary>
+        /// Set style of the ListArea
+        /// </summary>
         //style
         public override void SetStyle(Style style)
         {

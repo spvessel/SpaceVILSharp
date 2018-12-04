@@ -11,13 +11,20 @@ namespace SpaceVIL
         private static int count = 0;
         private Guid windowGuid;
 
+        /// <summary>
+        /// Constructs a CoreWindow
+        /// </summary>
         public CoreWindow()
         {
             windowGuid = Guid.NewGuid();
             count++;
         }
 
-        WindowLayout wnd_handler;
+        private WindowLayout wnd_handler;
+
+        /// <summary>
+        /// Parent item for the CoreWindow
+        /// </summary>
         public WindowLayout Handler
         {
             get
@@ -30,19 +37,31 @@ namespace SpaceVIL
             }
         }
 
+        /// <summary>
+        /// Show the CoreWindow
+        /// </summary>
         public virtual void Show()
         {
             wnd_handler.Show();
         }
+
+        /// <summary>
+        /// Close the CoreWindow
+        /// </summary>
         public virtual void Close()
         {
             wnd_handler.Close();
         }
 
+        /// <summary>
+        /// Initialize the window
+        /// </summary>
         abstract public void InitWindow();
 
+        /// <returns> count of all CoreWindows </returns>
         public int GetCount() { return count; }
 
+        /// <returns> CoreWindow unique ID </returns>
         public Guid GetWindowGuid() { return windowGuid; }
     }
 }

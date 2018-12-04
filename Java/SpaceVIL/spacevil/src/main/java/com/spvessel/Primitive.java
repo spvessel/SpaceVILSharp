@@ -7,24 +7,34 @@ import com.spvessel.Flags.ItemAlignment;
 import java.util.List;
 
 abstract public class Primitive extends BaseItem {
+    /**
+     * Constructs a Primitive
+     */
     public Primitive() {
         this("Primitive_");
     }
 
-    public Primitive(int xpos, int ypos, int width, int height, String name) {
+    /**
+     * Constructs a Primitive with name
+     */
+    public Primitive(String name) {
         setItemName(name);
         setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
     }
 
-    public Primitive(String name) {
-        this(0, 0, 0, 0, name);
-    }
-
+    /**
+     * @return item shape made with triangles
+     */
     @Override
     public List<float[]> makeShape() {
         return getTriangles();
     }
 
+    /**
+     * Set item position
+     * @param _x X position of the item left top corner
+     * @param _y Y position of the item left top corner
+     */
     public void setPosition(int _x, int _y) {
         this.setX(_x);
         this.setY(_y);
@@ -33,6 +43,9 @@ abstract public class Primitive extends BaseItem {
     // style
     Boolean _is_style_set = false;
 
+    /**
+     * Set style of the Primitive
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)
@@ -51,7 +64,10 @@ abstract public class Primitive extends BaseItem {
             setTriangles(style.shape);
         setVisible(style.isVisible);
     }
-    
+
+    /**
+     * @return style of the Primitive
+     */
     @Override
     public Style getCoreStyle() {
         Style style = new Style();

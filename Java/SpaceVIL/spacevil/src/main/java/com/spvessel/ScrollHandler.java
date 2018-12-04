@@ -7,29 +7,30 @@ import com.spvessel.Core.MouseArgs;
 import com.spvessel.Flags.Orientation;
 
 public class ScrollHandler extends Prototype implements InterfaceDraggable {
-    static int count = 0;
+    private static int count = 0;
     public Orientation direction;
     private int _offset = 0;
     private int _diff = 0;
 
+    /**
+     * Constructs a ScrollHandler
+     */
     public ScrollHandler() {
         setItemName("ScrollHandler_" + count);
-        InterfaceMouseMethodState h_press = (sender, args) -> onMousePress(sender, args);
-        eventMousePress.add(h_press);
-        InterfaceMouseMethodState h_dragg = (sender, args) -> onDragging(sender, args);
-        eventMouseDrag.add(h_dragg);
+        eventMousePress.add(this::onMousePress);
+        eventMouseDrag.add(this::onDragging);
         count++;
         isFocusable = false;
     }
 
-    protected void onMousePress(InterfaceItem sender, MouseArgs args) {
+    private void onMousePress(InterfaceItem sender, MouseArgs args) {
         if (direction == Orientation.HORIZONTAL)
             _diff = args.position.getX() - getX();
         else
             _diff = args.position.getY() - getY();
     }
 
-    protected void onDragging(InterfaceItem sender, MouseArgs args) {
+    private void onDragging(InterfaceItem sender, MouseArgs args) {
         int offset;
 
         if (direction == Orientation.HORIZONTAL)
@@ -40,6 +41,9 @@ public class ScrollHandler extends Prototype implements InterfaceDraggable {
         setOffset(offset);
     }
 
+    /**
+     * Set offset of the ScrollHandler
+     */
     public void setOffset(int offset) {
         if (getParent() == null)
             return;

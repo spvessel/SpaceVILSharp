@@ -10,7 +10,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class ToolTip : Prototype, IToolTip
+    internal class ToolTip : Prototype, IToolTip
     {
         private TextLine _text_object;
         internal TextLine GetTextLine()

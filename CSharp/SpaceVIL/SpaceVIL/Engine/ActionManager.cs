@@ -8,18 +8,18 @@ namespace SpaceVIL
 {
     internal sealed class ActionManager
     {
-        internal ConcurrentQueue<EventTask> StackEvents = new ConcurrentQueue<EventTask>();
+        ConcurrentQueue<EventTask> StackEvents = new ConcurrentQueue<EventTask>();
 
         internal ManualResetEventSlim Execute = new ManualResetEventSlim(false);
         WindowLayout _handler;
         bool _stoped;
         private Object managerLock = new Object();
 
-        public ActionManager(WindowLayout wnd)
+        internal ActionManager(WindowLayout wnd)
         {
             _handler = wnd;
         }
-        public void StartManager()
+        internal void StartManager()
         {
             _stoped = false;
             while (!_stoped)
@@ -38,7 +38,7 @@ namespace SpaceVIL
             }
         }
 
-        public void AddTask(EventTask task)
+        internal void AddTask(EventTask task)
         {
             Monitor.Enter(managerLock);
             try
@@ -51,7 +51,7 @@ namespace SpaceVIL
             }
         }
 
-        public void StopManager()
+        internal void StopManager()
         {
             _stoped = true;
         }

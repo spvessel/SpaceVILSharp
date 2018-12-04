@@ -12,12 +12,20 @@ namespace SpaceVIL
     public class MessageBox : DialogWindow
     {
         bool _result = false;
+
+        /// <summary>
+        /// Get MessageBox boolean result
+        /// </summary>
         public bool Result()
         {
             return _result;
         }
 
         String _message = String.Empty;
+
+        /// <summary>
+        /// MessageBox text
+        /// </summary>
         public String MessageBoxText
         {
             get
@@ -33,6 +41,9 @@ namespace SpaceVIL
         TitleBar titleBar = new TitleBar();
         Label msg = new Label();
 
+        /// <summary>
+        /// Constructs a MessageBox with message and title
+        /// </summary>
         public MessageBox(String m = "", String t = "")
         {
 
@@ -46,6 +57,9 @@ namespace SpaceVIL
             msg.SetText(MessageBoxText);
         }
 
+        /// <summary>
+        /// Initialize MessageBox window
+        /// </summary>
         public override void InitWindow()
         {
             Handler = new WindowLayout(this, "MessageBox_" + GetCount(), "MessageBox_" + GetCount());
@@ -99,6 +113,9 @@ namespace SpaceVIL
             layout.AddItems(msg, ok);
         }
 
+        /// <summary>
+        /// Show MessageBox
+        /// </summary>
         public override void Show()
         {
             _result = false;

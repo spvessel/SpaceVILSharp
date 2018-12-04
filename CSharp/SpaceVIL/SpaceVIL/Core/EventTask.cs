@@ -7,8 +7,8 @@ namespace SpaceVIL.Core
 {
     internal sealed class EventTask
     {
-        public InputEventType Action = 0;
-        public Prototype Item = null;
-        public InputEventArgs Args = null;
+        internal InputEventType Action = 0;
+        internal Prototype Item = null;
+        internal InputEventArgs Args = null;
     }
 }

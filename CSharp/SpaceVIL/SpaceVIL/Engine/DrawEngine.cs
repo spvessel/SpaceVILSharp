@@ -32,7 +32,7 @@ namespace SpaceVIL
 
         private ToolTip _tooltip = new ToolTip();
         private IBaseItem _isStencilSet = null;
-        public InputDeviceEvent EngineEvent = new InputDeviceEvent();
+        private InputDeviceEvent EngineEvent = new InputDeviceEvent();
         private MouseArgs _margs = new MouseArgs();
         private KeyArgs _kargs = new KeyArgs();
         private TextInputArgs _tiargs = new TextInputArgs();
@@ -41,11 +41,12 @@ namespace SpaceVIL
         private List<Prototype> UnderFocusedItem;
         private Prototype HoveredItem = null;
         private Prototype FocusedItem = null;
-        public Prototype GetFocusedItem()
+
+        internal Prototype GetFocusedItem()
         {
             return FocusedItem;
         }
-        public void SetFocusedItem(Prototype item)
+        internal void SetFocusedItem(Prototype item)
         {
             if (item == null)
             {
@@ -80,7 +81,7 @@ namespace SpaceVIL
         private Shader _blur;
         private Shader _clone;
 
-        public DrawEngine(WindowLayout handler)
+        internal DrawEngine(WindowLayout handler)
         {
             HoveredItems = new List<Prototype>();
             _handler = new GLWHandler(handler);
@@ -91,7 +92,7 @@ namespace SpaceVIL
             _tooltip.InitElements();
         }
 
-        public void Dispose()
+        internal void Dispose()
         {
             //полностью аннигилирует библиотеку GLFW, что приводит к закрытию всех окон и уничтожает все что использует библиотеку GLFW
             //должно вызываться только при закрытии приложения или если необходимо - уничтожении всех окон
@@ -99,7 +100,7 @@ namespace SpaceVIL
             //LogService.Log().EndLogging();
             Glfw.Terminate();
         }
-        public void Close()
+        internal void Close()
         {
             _handler.SetToClose();
         }
@@ -107,7 +108,7 @@ namespace SpaceVIL
         private Glfw.Image _icon_big;
         private Glfw.Image _icon_small;
 
-        public void SetBigIcon(Image icon)
+        internal void SetBigIcon(Image icon)
         {
             if (_icon_big.Pixels == null)
             {
@@ -132,7 +133,7 @@ namespace SpaceVIL
                 _icon_big.Pixels = _map.ToArray();
             }
         }
-        public void SetSmallIcon(Image icon)
+        internal void SetSmallIcon(Image icon)
         {
             if (_icon_small.Pixels == null)
             {
@@ -158,7 +159,7 @@ namespace SpaceVIL
             }
         }
 
-        public void Init()
+        internal void Init()
         {
             Monitor.Enter(CommonService.GlobalLocker);
             try
@@ -259,13 +260,13 @@ namespace SpaceVIL
             _handler.SetCallbackResize(Resize);
         }
 
-        public void MinimizeWindow()
+        internal void MinimizeWindow()
         {
             EngineEvent.SetEvent(InputEventType.WindowMinimize);
             Glfw.IconifyWindow(_handler.GetWindowId());
         }
 
-        public void MaximizeWindow()
+        internal void MaximizeWindow()
         {
             if (_handler.GetLayout().IsMaximized)
             {
@@ -331,7 +332,7 @@ namespace SpaceVIL
             _fbo.UnbindFBO();
         }
 
-        public void SetWindowSize(int w, int h)
+        internal void SetWindowSize(int w, int h)
         {
             Glfw.SetWindowSize(_handler.GetWindowId(), w, h);
             EngineEvent.SetEvent(InputEventType.WindowResize);
@@ -937,7 +938,7 @@ namespace SpaceVIL
 
         VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
-        public void Run()
+        internal void Run()
         {
             glGenVertexArrays(1, _handler.GVAO);
             glBindVertexArray(_handler.GVAO[0]);

@@ -11,6 +11,9 @@ namespace SpaceVIL
         private static int count = 0;
         private TextLine _text_object;
 
+        /// <summary>
+        /// Constructs a ButtonCore
+        /// </summary>
         public ButtonCore()
         {
             SetItemName("ButtonCore_" + count);
@@ -21,25 +24,41 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ButtonCore)));
         }
+
+        /// <summary>
+        /// Constructs a ButtonCore with text
+        /// </summary>
         public ButtonCore(String text = "") : this()
         {
             SetText(text);
         }
-        protected virtual void OnKeyPress(object sender, KeyArgs args)
+        
+        void OnKeyPress(object sender, KeyArgs args)
         {
             if (args.Key == KeyCode.Enter)
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 
         //text init
+        /// <summary>
+        /// Text alignment in the ButtonCore
+        /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _text_object.SetTextAlignment(alignment);
         }
+
+        /// <summary>
+        /// Text margin in the ButtonCore
+        /// </summary>
         public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
         }
+
+        /// <summary>
+        /// Text font parameters in the ButtonCore
+        /// </summary>
         public void SetFont(Font font)
         {
             _text_object.SetFont(font);
@@ -60,6 +79,10 @@ namespace SpaceVIL
         {
             return _text_object.GetFont();
         }
+
+        /// <summary>
+        /// Set text in the ButtonCore
+        /// </summary>
         public void SetText(String text)
         {
             _text_object.SetItemText(text);
@@ -68,6 +91,10 @@ namespace SpaceVIL
         {
             return _text_object.GetItemText();
         }
+
+        /// <summary>
+        /// Text color in the ButtonCore
+        /// </summary>
         public void SetForeground(Color color)
         {
             _text_object.SetForeground(color);
@@ -93,6 +120,9 @@ namespace SpaceVIL
             return _text_object.GetForeground();
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the ButtonCore
+        /// </summary>
         public override void InitElements()
         {
             //text
@@ -109,6 +139,9 @@ namespace SpaceVIL
         }
 
         //style
+        /// <summary>
+        /// Set style of the ButtonCore
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)

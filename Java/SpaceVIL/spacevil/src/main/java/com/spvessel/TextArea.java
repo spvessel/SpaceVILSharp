@@ -13,13 +13,16 @@ import com.spvessel.Flags.ScrollBarVisibility;
 import java.awt.*;
 
 public class TextArea extends Prototype {
-    static int count = 0;
+    private static int count = 0;
     private Grid _grid = new Grid(2, 2);
     private TextBlock _area = new TextBlock();
 
     public BlankItem menu = new BlankItem();
     private boolean _is_menu_disabled = false;
 
+    /**
+     * Set context menu disable true or false
+     */
     public void disableMenu(boolean value) {
         _is_menu_disabled = value;
     }
@@ -27,12 +30,16 @@ public class TextArea extends Prototype {
     private ContextMenu _menu;
     public VerticalScrollBar vScrollBar = new VerticalScrollBar();
     public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
-    private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
 
+    private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
+    private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
+
+    /**
+     * Vertical scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the TextArea
+     */
     public ScrollBarVisibility getVScrollBarVisible() {
         return _v_scrollBarPolicy;
     }
-
     public void setVScrollBarVisible(ScrollBarVisibility policy) {
         _v_scrollBarPolicy = policy;
 
@@ -55,12 +62,12 @@ public class TextArea extends Prototype {
         hScrollBar.slider.updateHandler();
     }
 
-    private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
-
+    /**
+     * Horizontal scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the TextArea
+     */
     public ScrollBarVisibility getHScrollBarVisible() {
         return _h_scrollBarPolicy;
     }
-
     public void setHScrollBarVisible(ScrollBarVisibility policy) {
         _h_scrollBarPolicy = policy;
 
@@ -83,6 +90,9 @@ public class TextArea extends Prototype {
         vScrollBar.slider.updateHandler();
     }
 
+    /**
+     * Constructs a TextArea
+     */
     public TextArea() {
         setItemName("TextArea_" + count);
         count++;
@@ -122,11 +132,6 @@ public class TextArea extends Prototype {
 
     private void updateVerticalSlider()// vertical slider
     {
-        // 1. собрать всю высоту всех элементов
-        // 2. собрать видимую высоту
-        // 3. связать видимую и всю высоту с скроллом
-        // 4. выставить размеры и позицию в %
-
         int visible_area = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
         int total = _area.getTextHeight();
 
@@ -167,11 +172,6 @@ public class TextArea extends Prototype {
 
     private void updateHorizontalSlider()// horizontal slider
     {
-        // 1. найти самый широкий из всех элементов
-        // 2. определить видимую ширину
-        // 3. связать видимую и всю ширину с скроллом
-        // 4. выставить размеры и позицию в %
-
         int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right;
         int total = _area.getTextWidth();
 
@@ -210,6 +210,9 @@ public class TextArea extends Prototype {
         hScrollBar.slider.setCurrentValue((100.0f / total_invisible_size) * Math.abs(_area.getScrollXOffset()));
     }
 
+    /**
+     * Set width of the TextArea
+     */
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
@@ -218,6 +221,9 @@ public class TextArea extends Prototype {
         // _area.setWidth(width);
     }
 
+    /**
+     * Set height of the TextArea
+     */
     @Override
     public void setHeight(int height) {
         super.setHeight(height);
@@ -226,13 +232,16 @@ public class TextArea extends Prototype {
         // _area.setHeight(height);
     }
 
-    public void updateElements() {
+    private void updateElements() {
         updateVerticalSlider();
         vScrollBar.slider.updateHandler();
         updateHorizontalSlider();
         hScrollBar.slider.updateHandler();
     }
 
+    /**
+     * Initialization and adding of all elements in the TextArea
+     */
     @Override
     public void initElements() {
         // Adding
@@ -305,15 +314,23 @@ public class TextArea extends Prototype {
         updateElements();
     }
 
+    /**
+     * Set text in the TextArea
+     */
     public void setText(String text) {
         _area.setText(text);
     }
 
+    /**
+     * @return text from the TextArea
+     */
     public String getText() {
         return _area.getText();
     }
 
-    // style
+    /**
+     * Set style of the TextArea
+     */
     @Override
     public void setStyle(Style style) {
         if (style == null)
@@ -340,124 +357,100 @@ public class TextArea extends Prototype {
         }
     }
 
+    /**
+     * Space between lines in the TextArea
+     */
     public void setLineSpacer(int lineSpacer) {
         _area.setLineSpacer(lineSpacer);
     }
-
     public int getLineSpacer() {
         return _area.getLineSpacer();
     }
 
+    /**
+     * Text margin in the TextArea
+     */
     public void setTextMargin(Indents margin) {
         _area.setTextMargin(margin);
     }
-
     public Indents getTextMargin() {
         return _area.getTextMargin();
     }
 
+    /**
+     * Text font in the TextArea
+     */
     public void setFont(Font font) {
         _area.setFont(font);
     }
-
     public Font getFont() {
         return _area.getFont();
     }
 
+    /**
+     * Returns width of the whole text in the TextArea
+     * (includes visible and invisible parts of the text)
+     */
     public int getTextWidth() {
         return _area.getWidth();
     }
 
+    /**
+     * Returns height of the whole text in the TextArea
+     * (includes visible and invisible parts of the text)
+     */
     public int getTextHeight() {
         return _area.getTextHeight();
     }
 
+    /**
+     * Text color in the TextArea
+     */
     public void setForeground(Color color) {
         _area.setForeground(color);
     }
-
     public void setForeground(int r, int g, int b) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 255)
-            r = 255;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 255)
-            g = 255;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 255)
-            b = 255;
-        _area.setForeground(new Color(r, g, b, 255));
+        _area.setForeground(r, g, b);
     }
-
     public void setForeground(int r, int g, int b, int a) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 255)
-            r = 255;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 255)
-            g = 255;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 255)
-            b = 255;
-        _area.setForeground(new Color(r, g, b, a));
+        _area.setForeground(r, g, b, a);
     }
-
     public void setForeground(float r, float g, float b) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 1.0f)
-            r = 1.0f;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 1.0f)
-            g = 1.0f;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 1.0f)
-            b = 1.0f;
-        _area.setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
+        _area.setForeground(r, g, b);
     }
-
     public void setForeground(float r, float g, float b, float a) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 1.0f)
-            r = 1.0f;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 1.0f)
-            g = 1.0f;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 1.0f)
-            b = 1.0f;
-        _area.setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
+        _area.setForeground(r, g, b, a);
     }
-
     public Color getForeground() {
         return _area.getForeground();
     }
 
+    /**
+     * Returns if TextArea editable or not
+     */
     public boolean isEditable() {
         return _area.isEditable();
     }
 
+    /**
+     * Set TextArea editable true or false
+     */
     public void setEditable(boolean value) {
         _area.setEditable(value);
     }
 
+    /**
+     * Set TextArea focused/unfocused
+     */
     @Override
     public void setFocused(boolean value) {
         super.setFocused(value);
         _area.setFocused(value);
     }
 
+    /**
+     * Remove all text from the TextArea
+     */
     public void clearArea() {
         _area.clear();
     }

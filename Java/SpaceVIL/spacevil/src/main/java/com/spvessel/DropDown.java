@@ -2,6 +2,9 @@ package com.spvessel;
 
 abstract public class DropDown extends DialogWindow {
 
+    /**
+     * Constructs a DropDown
+     */
     public DropDown() {
     }
 

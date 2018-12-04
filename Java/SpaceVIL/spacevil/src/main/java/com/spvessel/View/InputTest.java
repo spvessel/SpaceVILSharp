@@ -4,6 +4,9 @@ import com.spvessel.*;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.ScrollBarVisibility;
 import com.spvessel.Flags.SizePolicy;
+import com.spvessel.TextArea;
+
+import java.awt.*;
 
 public class InputTest extends ActiveWindow {
     @Override
@@ -29,10 +32,12 @@ public class InputTest extends ActiveWindow {
 
         TextEdit te = new TextEdit();
         te.setTextAlignment(ItemAlignment.RIGHT);
+        //te.getSelectionArea().setBackground(Color.green);
 
         TextArea tb = new TextArea();
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         tb.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+
         // tb.setMargin(new Indents(50, 30, 30, 30));
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
 

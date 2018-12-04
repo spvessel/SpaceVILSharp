@@ -106,16 +106,16 @@ namespace SpaceVIL
         private class Alphabet
         {
             internal Font font;
-            internal Dictionary<char, Letter> letters;
+            Dictionary<char, Letter> letters;
             internal int alphMinY = Int32.MaxValue;
             internal int alphMaxY = Int32.MinValue;
             internal int alphHeight = 0;
             internal int lineSpacer;
-            internal Letter bugLetter;
+            Letter bugLetter;
 
             private readonly Object alphabetLock = new Object();
 
-            public Alphabet(Font font)
+            internal Alphabet(Font font)
             {
                 this.font = font;
                 letters = new Dictionary<char, Letter>();

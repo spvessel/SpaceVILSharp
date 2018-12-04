@@ -9,6 +9,9 @@ namespace SpaceVIL
 {
     abstract public class DropDown : DialogWindow
     {
+        /// <summary>
+        /// Constructs a DropDown
+        /// </summary>
         public DropDown() { }
 
         public override void InitWindow()

@@ -6,6 +6,10 @@ namespace SpaceVIL
     public class Frame : Prototype
     {
         static int count = 0;
+
+        /// <summary>
+        /// Constructs a Frame
+        /// </summary>
         public Frame()
         {
             SetItemName("Frame_" + count);

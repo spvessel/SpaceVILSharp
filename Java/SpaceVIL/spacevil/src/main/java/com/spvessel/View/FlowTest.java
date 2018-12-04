@@ -178,11 +178,11 @@ public class FlowTest extends ActiveWindow {
         com.spvessel.MenuItem ex_addition = new MenuItem("addition");
         addition_menu.addItems(x_minus, y_minus, ex_addition);
 
-        addition.assignContexMenu(addition_menu);
+        addition.assignContextMenu(addition_menu);
 
         ContextMenu ex_menu = new ContextMenu(Handler);
         ex_menu.setSize(110, 64);
-        ex_addition.assignContexMenu(ex_menu);
+        ex_addition.assignContextMenu(ex_menu);
         flow.addContextMenu(_context_menu);
     }
 

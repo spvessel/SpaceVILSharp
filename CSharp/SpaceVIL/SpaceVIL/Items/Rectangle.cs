@@ -22,12 +22,18 @@ namespace SpaceVIL
             _border_radius = radius;
         }
         
+        /// <summary>
+        /// Constructs a Rectangle
+        /// </summary>
         public Rectangle()
             : base(name: "Rectangle_" + count)
         {
             count++;
         }
 
+        /// <summary>
+        /// Make rectangle with width, height, X, Y
+        /// </summary>
         public override List<float[]> MakeShape()
         {
             SetTriangles(GraphicsMathService.GetRoundSquare(_border_radius, GetWidth(), GetHeight(), GetX(), GetY()));

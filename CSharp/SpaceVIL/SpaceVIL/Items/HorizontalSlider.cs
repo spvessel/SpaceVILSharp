@@ -10,6 +10,9 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// Part of HorizontalScrollBar
+    /// </summary>
     public class HorizontalSlider : Prototype
     {
         static int count = 0;
@@ -20,6 +23,10 @@ namespace SpaceVIL
         #region Values definition
         //Values
         private float _step = 1.0f;
+
+        /// <summary>
+        /// HorizontalSlider moving step when HorizontalScrollBar arrows pressed
+        /// </summary>
         public void SetStep(float value)
         {
             _step = value;
@@ -28,9 +35,14 @@ namespace SpaceVIL
         {
             return _step;
         }
+
         public EventCommonMethodState EventValueChanged;
         private float _current_value = 0;
         public int Direction = 0;
+
+        /// <summary>
+        /// Position value of the HorizontalSlider
+        /// </summary>
         public void SetCurrentValue(float value)
         {
             //if (value == _current_value)
@@ -52,18 +64,22 @@ namespace SpaceVIL
 
             if (EventValueChanged != null) EventValueChanged.Invoke(this);
         }
+        public float GetCurrentValue()
+        {
+            return _current_value;
+        }
 
         internal void UpdateHandler()
         {
             float offset = ((float)GetWidth() - Handler.GetWidth()) / (_max_value - _min_value) * _current_value;
             Handler.SetOffset((int)offset);
         }
-        public float GetCurrentValue()
-        {
-            return _current_value;
-        }
 
         private float _min_value = 0;
+
+        /// <summary>
+        /// Minimum value of the HorizontalSlider
+        /// </summary>
         public void SetMinValue(float value)
         {
             _min_value = value;
@@ -74,6 +90,10 @@ namespace SpaceVIL
         }
 
         private float _max_value = 100;
+
+        /// <summary>
+        /// Maximum value of the HorizontalSlider
+        /// </summary>
         public void SetMaxValue(float value)
         {
             _max_value = value;
@@ -84,6 +104,9 @@ namespace SpaceVIL
         }
         #endregion///////////
 
+        /// <summary>
+        /// Constructs a HorizontalSlider
+        /// </summary>
         public HorizontalSlider()
         {
             SetItemName("HorizontalSlider_" + count);
@@ -95,6 +118,9 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.HorizontalSlider)));
         }
 
+        /// <summary>
+        /// Initialization and adding of all elements in the HorizontalSlider
+        /// </summary>
         public override void InitElements()
         {
             //Adding
@@ -105,7 +131,7 @@ namespace SpaceVIL
             Handler.EventMouseDrag += EventMouseDrop.Invoke;
         }
 
-        public void OnDropHandler(object sender, MouseArgs args)//что-то с тобой не так
+        void OnDropHandler(object sender, MouseArgs args)//что-то с тобой не так
         {
             //иногда число NAN 
             float result = (float)(Handler.GetX() - GetX()) * (_max_value - _min_value) / ((float)GetWidth() - Handler.GetWidth());
@@ -113,7 +139,7 @@ namespace SpaceVIL
                 SetCurrentValue(result);
         }
 
-        public virtual void OnTrackClick(object sender, MouseArgs args)
+        void OnTrackClick(object sender, MouseArgs args)
         {
             if (Handler.IsMouseHover())
                 return;
@@ -125,22 +151,28 @@ namespace SpaceVIL
                 / ((float)GetWidth() - Handler.GetWidth()));
         }
 
+        /// <summary>
+        /// Set X position of the HorizontalSlider
+        /// </summary>
         public override void SetX(int _x)
         {
             base.SetX(_x);
             UpdateHandler();
         }
 
-        public void InvokeScrollUp(MouseArgs args)
-        {
-            (GetParent() as IScrollable)?.InvokeScrollUp(args);
-        }
+//        public void InvokeScrollUp(MouseArgs args)
+//        {
+//            (GetParent() as IScrollable)?.InvokeScrollUp(args);
+//        }
+//
+//        public void InvokeScrollDown(MouseArgs args)
+//        {
+//            (GetParent() as IScrollable)?.InvokeScrollDown(args);
+//        }
 
-        public void InvokeScrollDown(MouseArgs args)
-        {
-            (GetParent() as IScrollable)?.InvokeScrollDown(args);
-        }
-
+        /// <summary>
+        /// Set style of the HorizontalSlider
+        /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)

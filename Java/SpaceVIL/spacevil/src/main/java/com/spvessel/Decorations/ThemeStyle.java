@@ -12,6 +12,9 @@ public class ThemeStyle {
     private Map<Class<?>, Style> defaultItemsStyle = new HashMap<>();
     public static Boolean applyEmbedded = true;
 
+    /**
+     * Constructs a default ThemeStyle
+     */
     public ThemeStyle() {
         // if (ThemeStyle.applyEmbedded) {
         //     defaultItemsStyle.put("SpaceVIL.ButtonCore", Style.getButtonCoreStyle());
@@ -88,18 +91,28 @@ public class ThemeStyle {
     }
 
     // public Style getThemeStyle(String type) {
+
+    /**
+     * Returns style of the theme for the object by its class name
+     */
     public Style getThemeStyle(Class<?> type) {
         if (defaultItemsStyle.containsKey(type))
             return defaultItemsStyle.get(type);
         return null;
     }
 
-    private Map<InterfaceBaseItem, Style> specificItemsStyle = new HashMap<InterfaceBaseItem, Style>();
+    private Map<InterfaceBaseItem, Style> specificItemsStyle = new HashMap<>();
 
+    /**
+     * Set this theme as default
+     */
     public void setCurrentAsDefault() {
         DefaultsService.setDefaultTheme(this);
     }
 
+    /**
+     * Add unique style for the item
+     */
     public void addSpecificItemStyle(InterfaceBaseItem current_item, Style style) {
         if (specificItemsStyle.containsKey(current_item))
             specificItemsStyle.replace(current_item, style);
@@ -107,6 +120,9 @@ public class ThemeStyle {
             specificItemsStyle.put(current_item, style);
     }
 
+    /**
+     * Remove unique style for the item
+     */
     public void RemoveSpecificItemStyle(InterfaceBaseItem current_item, Style style)
         {
             if (specificItemsStyle.containsKey(current_item))
@@ -114,6 +130,10 @@ public class ThemeStyle {
         }
 
     // public Boolean ReplaceDefaultItemStyle(String class_type, Style style) {
+
+    /**
+     * Replace default style for the items with class name class_type
+     */
     public Boolean ReplaceDefaultItemStyle(Class<?> class_type, Style style) {
         if (defaultItemsStyle.containsKey(class_type)) {
             defaultItemsStyle.replace(class_type, style);
@@ -123,6 +143,10 @@ public class ThemeStyle {
     }
 
     // public void addDefaultCustomItemStyle(String class_type, Style style) {
+
+    /**
+     * Add custom style to default theme for the items with class name class_type
+     */
     public void addDefaultCustomItemStyle(Class<?> class_type, Style style) {
         if (defaultItemsStyle.containsKey(class_type))
             defaultItemsStyle.replace(class_type, style);

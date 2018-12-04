@@ -15,32 +15,43 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ListBox extends Prototype {
-    static int count = 0;
+    private static int count = 0;
 
     public Rectangle getSelectionShape() {
         return _area.getSubstrate();
     }
-
+    
     public Rectangle getHoverShape() {
         return _area.getHoverSubstrate();
     }
-
+    
+    /**
+     * Selection area of the ListBox
+     */
     public int getSelection() {
         return _area.getSelection();
     }
 
+    /**
+     * Set selected item of the ListBox by index
+     */
     public void setSelection(int index) {
         _area.setSelection(index);
     }
 
+    /**
+     * Unselect all items
+     */
     public void unselect() {
         _area.unselect();
     }
 
+    /**
+     * Is selection changes view of the item or not
+     */
     public void setSelectionVisibility(boolean visibility) {
         _area.setSelectionVisibility(visibility);
     }
-
     public boolean getSelectionVisibility() {
         return _area.getSelectionVisibility();
     }
@@ -48,6 +59,9 @@ public class ListBox extends Prototype {
     private Grid _grid = new Grid(2, 2);
     private ListArea _area = new ListArea();
 
+    /**
+     * @return ListArea
+     */
     public ListArea getArea() {
         return _area;
     }
@@ -55,6 +69,9 @@ public class ListBox extends Prototype {
     public BlankItem menu = new BlankItem();
     private boolean _is_menu_disabled = false;
 
+    /**
+     * Is ListBox menu disabled
+     */
     public void disableMenu(boolean value) {
         _is_menu_disabled = value;
     }
@@ -64,10 +81,12 @@ public class ListBox extends Prototype {
     public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
     private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
 
+    /**
+     * Is vertical scroll bar visible
+     */
     public ScrollBarVisibility getVScrollBarVisible() {
         return _v_scrollBarPolicy;
     }
-
     public void setVScrollBarVisible(ScrollBarVisibility policy) {
         _v_scrollBarPolicy = policy;
 
@@ -92,10 +111,12 @@ public class ListBox extends Prototype {
 
     private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
 
+    /**
+     * Is horizontal scroll bar visible
+     */
     public ScrollBarVisibility getHScrollBarVisible() {
         return _h_scrollBarPolicy;
     }
-
     public void setHScrollBarVisible(ScrollBarVisibility policy) {
         _h_scrollBarPolicy = policy;
 
@@ -118,6 +139,9 @@ public class ListBox extends Prototype {
         hScrollBar.slider.updateHandler();
     }
 
+    /**
+     * Constructs a ListBox
+     */
     public ListBox() {
         setItemName("ListBox_" + count);
         count++;
@@ -258,6 +282,9 @@ public class ListBox extends Prototype {
         hScrollBar.slider.setCurrentValue(f);
     }
 
+    /**
+     * Set width of the ListBox
+     */
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
@@ -265,6 +292,9 @@ public class ListBox extends Prototype {
         hScrollBar.slider.updateHandler();
     }
 
+    /**
+     * Set height of the ListBox
+     */
     @Override
     public void setHeight(int height) {
         super.setHeight(height);
@@ -272,24 +302,36 @@ public class ListBox extends Prototype {
         vScrollBar.slider.updateHandler();
     }
 
+    /**
+     * Add item to the ListBox
+     */
     @Override
     public void addItem(InterfaceBaseItem item) {
         _area.addItem(item);
         updateElements();
     }
 
+    /**
+     * Insert item to the ListBox by index
+     */
     @Override
     public void insertItem(InterfaceBaseItem item, int index) {
         _area.insertItem(item, index);
         updateElements();
     }
 
+    /**
+     * Remove item from the ListBox
+     */
     @Override
     public void removeItem(InterfaceBaseItem item) {
         _area.removeItem(item);
         updateElements();
     }
 
+    /**
+     * Update states of the all ListBox inner items
+     */
     public void updateElements() {
         updateVerticalSlider();
         vScrollBar.slider.updateHandler();
@@ -297,6 +339,9 @@ public class ListBox extends Prototype {
         hScrollBar.slider.updateHandler();
     }
 
+    /**
+     * Initialization and adding of all elements in the ListBox
+     */
     @Override
     public void initElements() {
         // Adding
@@ -307,13 +352,12 @@ public class ListBox extends Prototype {
         _grid.insertItem(menu, 1, 1);
 
         // Events Connections
-        InterfaceCommonMethod listChanged = () -> updateElements();
-        _area.itemListChanged.add(listChanged);
+        _area.itemListChanged.add(this::updateElements);
 
-        InterfaceMouseMethodState scroll_up = (sender, args) -> vScrollBar.eventScrollUp.execute(sender, args);
-        eventScrollUp.add(scroll_up);
-        InterfaceMouseMethodState scroll_down = (sender, args) -> vScrollBar.eventScrollDown.execute(sender, args);
-        eventScrollDown.add(scroll_down);
+        //InterfaceMouseMethodState scroll_up = (sender, args) -> vScrollBar.eventScrollUp.execute(sender, args);
+        eventScrollUp.add(vScrollBar.eventScrollUp::execute);
+        //InterfaceMouseMethodState scroll_down = (sender, args) -> vScrollBar.eventScrollDown.execute(sender, args);
+        eventScrollDown.add(vScrollBar.eventScrollDown::execute);
 
         InterfaceCommonMethodState v_changed = (sender) -> updateVListArea();
         vScrollBar.slider.eventValueChanged.add(v_changed);
@@ -359,8 +403,11 @@ public class ListBox extends Prototype {
         _menu.setShadow(10, 0, 0, Color.black);
     }
 
+    /**
+     * @return list of all ListBox items
+     */
     public List<InterfaceBaseItem> getListContent() {
-        List<InterfaceBaseItem> result = new LinkedList<InterfaceBaseItem>();
+        List<InterfaceBaseItem> result = new LinkedList<>();
         for (InterfaceBaseItem item : _area.getItems()) {
             if (item.equals(_area.getSubstrate()) || item.equals(_area.getHoverSubstrate()))
                 continue;
@@ -369,17 +416,26 @@ public class ListBox extends Prototype {
         return result;
     }
 
+    /**
+     * Set list of items
+     */
     public void setListContent(List<InterfaceBaseItem> content) {
         content.add(0, _area.getSubstrate());
         content.add(1, _area.getHoverSubstrate());
         _area.setContent(content);
     }
 
+    /**
+     * @return selection item
+     */
     public InterfaceBaseItem getSelectionItem() {
-        // List<InterfaceBaseItem> result = new LinkedList<InterfaceBaseItem>();
+        //List<InterfaceBaseItem> result = new LinkedList<>();
         return _area.getSelectionItem();
     }
 
+    /**
+     * Set style of the ListBox
+     */
     // style
     @Override
     public void setStyle(Style style) {

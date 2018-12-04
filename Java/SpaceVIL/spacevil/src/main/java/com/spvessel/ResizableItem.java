@@ -12,7 +12,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         TRUE, FALSE
     }
 
-    protected List<ItemAlignment> _sides = new LinkedList<>();
+    List<ItemAlignment> _sides = new LinkedList<>();
 
     public EventCommonMethod positionChanged = new EventCommonMethod();
     public EventCommonMethod sizeChanged = new EventCommonMethod();
@@ -24,7 +24,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
 
     private Moving _is_moved;
 
-    static int count = 0;
+    private static int count = 0;
     private int _pressed_x = 0;
     private int _pressed_y = 0;
     private int _width = 0;
@@ -34,18 +34,19 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
     private int _diff_x = 0;
     private int _diff_y = 0;
 
+    /**
+     * Constructs a ResizableItem
+     */
     public ResizableItem() {
         setItemName("ResizableItem_" + count);
         setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
 
-        InterfaceMouseMethodState press = (sender, args) -> onMousePress(sender, args);
-        eventMousePress.add(press);
-        InterfaceMouseMethodState dragg = (sender, args) -> onDragging(sender, args);
-        eventMouseDrag.add(dragg);
+        eventMousePress.add(this::onMousePress);
+        eventMouseDrag.add(this::onDragging);
         count++;
     }
 
-    protected void onMousePress(InterfaceItem sender, MouseArgs args) {
+    private void onMousePress(InterfaceItem sender, MouseArgs args) {
         if (isLocked)
             return;
 
@@ -67,7 +68,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         }
     }
 
-    protected void onDragging(InterfaceItem sender, MouseArgs args) {
+    private void onDragging(InterfaceItem sender, MouseArgs args) {
         if (isLocked)
             return;
 
@@ -140,19 +141,25 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         }
     }
 
+    /**
+     * Set width of the ResizableItem
+     */
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
         sizeChanged.execute();
     }
 
+    /**
+     * Set height of the ResizableItem
+     */
     @Override
     public void setHeight(int height) {
         super.setHeight(height);
         sizeChanged.execute();
     }
 
-    public void getSides(float xpos, float ypos) {
+    void getSides(float xpos, float ypos) {
         _sides.clear();
         if (xpos <= 10) {
             _sides.add(ItemAlignment.LEFT);

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class TextLine extends TextItem implements InterfaceTextContainer {
+class TextLine extends TextItem implements InterfaceTextContainer {
     private static int count = 0;
 
     private TextPrinter textPrt = new TextPrinter();
@@ -42,11 +42,11 @@ public class TextLine extends TextItem implements InterfaceTextContainer {
     private int _needCheckX;
     private int _needCheckY;
     */
-    public TextLine() {
+    TextLine() {
         count++;
     }
 
-    public TextLine(String text, Font font) {
+    TextLine(String text, Font font) {
         super(text, font, "TextLine_" + count);
         count++;
         // getFontDims();
