@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.*;
+import java.io.BufferedReader;
 import java.io.*;
 import java.nio.*;
 
@@ -92,21 +93,15 @@ final class DrawEngine {
         _handler.setToClose();
     }
 
-    private GLFWImage _iconSmall;
-    private GLFWImage _iconBig;
+    private BufferedImage _iconSmall;
+    private BufferedImage _iconBig;
 
-    void setBigIcon(BufferedImage icon) {
-        _iconBig = GLFWImage.create();
-        _iconBig.width(icon.getWidth());
-        _iconBig.height(icon.getHeight());
-        _iconBig.pixels(createByteImage(icon));
+    protected void setBigIcon(BufferedImage icon) {
+        _iconBig = icon;
     }
 
-    void setSmallIcon(BufferedImage icon) {
-        _iconSmall = GLFWImage.create();
-        _iconSmall.width(icon.getWidth());
-        _iconSmall.height(icon.getHeight());
-        _iconSmall.pixels(createByteImage(icon));
+    protected void setSmallIcon(BufferedImage icon) {
+        _iconSmall = icon;
     }
 
     private ByteBuffer createByteImage(BufferedImage image) {
@@ -130,12 +125,19 @@ final class DrawEngine {
         return result;
     }
 
-    void applyIcon() {
-        // Display.setIcon(_icon);
-        GLFWImage.Buffer gb = GLFWImage.create(2);
-        gb.put(0, _iconSmall);
-        gb.put(1, _iconBig);
+    protected void applyIcon() {
+        GLFWImage.Buffer gb = GLFWImage.malloc(2);
+        GLFWImage s = GLFWImage.malloc();
+        s.set(_iconSmall.getWidth(), _iconSmall.getHeight(), createByteImage(_iconSmall));
+        GLFWImage b = GLFWImage.malloc();
+        b.set(_iconBig.getWidth(), _iconBig.getHeight(), createByteImage(_iconBig));
+        gb.put(0, s);
+        gb.put(1, b);
+
         glfwSetWindowIcon(_handler.getWindowId(), gb);
+        gb.free();
+        s.free();
+        b.free();
     }
 
     private String getResourceString(String resource) {

@@ -61,11 +61,9 @@ namespace SpaceVIL
         /// </summary>
         public override void InitElements()
         {
-            SetSplitHolderPosition((GetHeight() - _splitHolder.GetHolderSize()) / 2);
-
             //Adding
             AddItem(_splitHolder);
-            UpdateLayout();
+            SetSplitHolderPosition((GetHeight() - _splitHolder.GetHolderSize()) / 2);
         }
 
         /// <summary>
@@ -135,7 +133,7 @@ namespace SpaceVIL
         /// </summary>
         public void UpdateLayout()
         {
-            _splitHolder.SetWidth(GetWidth());
+            // _splitHolder.SetWidth(GetWidth());
 
             int tmpHeight = _topHeight;
 
@@ -166,9 +164,9 @@ namespace SpaceVIL
         /// <summary>
         /// Set height of the SplitHolder
         /// </summary>
-        public void SetSpacerHeight(int spHeight)
+        public void SetSplitThickness(int thickness)
         {
-            _splitHolder.SetSpacerSize(spHeight);
+            _splitHolder.SetSpacerSize(thickness);
         }
 
         /// <summary>

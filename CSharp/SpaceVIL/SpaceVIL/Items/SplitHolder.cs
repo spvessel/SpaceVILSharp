@@ -50,14 +50,14 @@ namespace SpaceVIL
             {
                 case Orientation.Vertical:
                     SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+                    // SetMinWidth(_spacerSize);
                     SetWidth(_spacerSize);
-                    SetMinWidth(_spacerSize);
                     break;
 
                 case Orientation.Horizontal:
                     SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+                    // SetMinHeight(_spacerSize);
                     SetHeight(_spacerSize);
-                    SetMinHeight(_spacerSize);
                     break;
             }
         }

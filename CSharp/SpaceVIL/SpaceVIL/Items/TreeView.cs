@@ -72,7 +72,6 @@ namespace SpaceVIL
 
             EventMouseClick += (_, x) => _menu.Show(_, x);
 
-            _menu.SetSize(100, 4 + 30 * 3 - 5);
             _menu.AddItems(new_branch, new_leaf, paste);
         }
         private TreeItem GetTreeBranch()

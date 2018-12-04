@@ -86,13 +86,17 @@ namespace SpaceVIL
         /// </summary>
         public override void AddItem(IBaseItem item)
         {
-            base.AddItem(item);
-            _stored_crd.Add(item, new int[] { item.GetX(), item.GetY() });
+            _stored_crd.Add(item, new int[]
+            {
+                item.GetX() ,
+                item.GetY()
+            });
             ResizableItem wanted = item as ResizableItem;
             if (wanted != null)
             {
                 wanted.PositionChanged += () => CorrectPosition(wanted);
             }
+            base.AddItem(item);
             UpdateLayout();
         }
 
@@ -112,6 +116,7 @@ namespace SpaceVIL
         /// </summary>
         public void UpdateLayout()
         {
+            // Console.WriteLine(GetX() + " " + GetY());
             foreach (var child in GetItems())
             {
                 child.SetX((int)_xOffset + GetX() + GetPadding().Left + _stored_crd[child][0] + child.GetMargin().Left);
@@ -126,7 +131,7 @@ namespace SpaceVIL
             // int stored_x = _stored_crd[item][0];
             int actual_y = item.GetY();
             // int stored_y = _stored_crd[item][1];
-            int[] crd = new int[] 
+            int[] crd = new int[]
             {
                 actual_x - (int)_xOffset - GetX() - GetPadding().Left - item.GetMargin().Left,
                 actual_y - (int)_yOffset - GetY() - GetPadding().Top - item.GetMargin().Top

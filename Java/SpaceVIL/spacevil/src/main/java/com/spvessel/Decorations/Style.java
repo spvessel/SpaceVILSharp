@@ -1478,7 +1478,7 @@ public class Style {
     public static Style getTabViewStyle() {
         Style style = new Style();
 
-        style.background = new Color(0, 0, 0, 0);
+        style.background = new Color(50, 50, 50);
         style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         style.spacing = new Spacing(0, 0);
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
@@ -1495,7 +1495,7 @@ public class Style {
 
         Style tab_style = new Style();
         tab_style.font = DefaultsService.getDefaultFont(14);
-        tab_style.background = new Color(45, 45, 45);
+        tab_style.background = new Color(0, 0, 0, 0);
         tab_style.foreground = new Color(210, 210, 210);
         tab_style.width = 100;
         tab_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);

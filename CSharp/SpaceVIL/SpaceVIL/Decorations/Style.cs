@@ -491,15 +491,15 @@ namespace SpaceVIL.Decorations
             itemlist_style.Background = Color.Transparent;
             itemlist_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.AddInnerStyle("itemlist", itemlist_style);
-            
+
             Style area_style = GetListAreaStyle();
 
             Style substrate_style = area_style.GetInnerStyle("substrate");
             substrate_style.Background = Color.FromArgb(255, 150, 150, 150);
-            
+
             Style hovercover_style = area_style.GetInnerStyle("hovercover");
             hovercover_style.Background = Color.FromArgb(255, 150, 150, 150);
-            
+
             style.AddInnerStyle("listarea", area_style);
 
             return style;
@@ -1236,7 +1236,7 @@ namespace SpaceVIL.Decorations
         {
             Style style = new Style();
 
-            style.Background = Color.Transparent;
+            style.Background = Color.FromArgb(255, 50, 50, 50);
             style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
 
             Style view_style = new Style();
@@ -1247,8 +1247,9 @@ namespace SpaceVIL.Decorations
             style.AddInnerStyle("tabview", view_style);
 
             Style tab_style = new Style();
+            tab_style.BorderRadius = new CornerRadius(3, 3, 0, 0);
             tab_style.Font = DefaultsService.GetDefaultFont(14);
-            tab_style.Background = Color.FromArgb(255, 45, 45, 45);
+            tab_style.Background = Color.Transparent;
             tab_style.Foreground = Color.FromArgb(255, 210, 210, 210);
             tab_style.Width = 100;
             tab_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
@@ -1263,6 +1264,25 @@ namespace SpaceVIL.Decorations
                 Background = Color.FromArgb(71, 71, 71)
             });
             style.AddInnerStyle("tab", tab_style);
+
+            // Style inactive_style = new Style();
+            // inactive_style.BorderRadius = new CornerRadius(3, 3, 0, 0);
+            // inactive_style.Font = DefaultsService.GetDefaultFont(14);
+            // inactive_style.Background = Color.Transparent;
+            // inactive_style.Foreground = Color.FromArgb(255, 210, 210, 210);
+            // inactive_style.Width = 100;
+            // inactive_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            // inactive_style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+            // inactive_style.Padding = new Indents(2, 2, 2, 2);
+            // inactive_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            // {
+            //     Background = Color.FromArgb(100, 255, 255, 255)
+            // });
+            // inactive_style.AddItemState(ItemStateType.Toggled, new ItemState()
+            // {
+            //     Background = Color.FromArgb(71, 71, 71)
+            // });
+            // style.AddInnerStyle("inactive", inactive_style);
 
             return style;
         }

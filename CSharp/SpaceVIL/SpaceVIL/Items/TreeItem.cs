@@ -176,7 +176,7 @@ namespace SpaceVIL
 
                 case TreeItemType.Branch:
                     _indicator.EventToggle += (sender, args) => OnToggleHide(_indicator.IsToggled());
-                    _indicator.SetPassEvents(false, InputEventType.MousePress | InputEventType.MouseRelease | InputEventType.MouseDoubleClick);
+                    _indicator.SetPassEvents(false, InputEventType.MousePress | InputEventType.MouseDoubleClick);
                     _indicator.IsFocusable = false;
                     EventMouseDoubleClick += (sender, args) =>
                     {
@@ -196,7 +196,7 @@ namespace SpaceVIL
             _text_object.IsFocusable = false;
             ResetIndents();
         }
-        int ccc = 0;
+
         internal void OnToggleHide(bool value) // refactor
         {
             foreach (var item in _list_inners)
@@ -220,12 +220,13 @@ namespace SpaceVIL
         }
         private void AddTreeItem(TreeItem item)
         {
-            _indicator.SetToggled(true);
             _list_inners.Add(item);
             item._branch = this;
             item._parent = _parent;
             item._nesting_level = _nesting_level + 1;
             _parent.RefreshTree(item);
+            _indicator.SetToggled(true);
+            OnToggleHide(_indicator.IsToggled());
         }
         public override void AddItem(IBaseItem item)
         {
