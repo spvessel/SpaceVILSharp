@@ -708,8 +708,15 @@ namespace SpaceVIL
                             if (float_item.IsOutsideClickClosable())
                             {
                                 ContextMenu to_close = (item as ContextMenu);
-                                if (to_close != null && to_close.CloseDependencies(_margs))
+                                if (to_close != null)
+                                {
+                                    if (to_close.CloseDependencies(_margs))
+                                        float_item.Hide();
+                                }
+                                else
+                                {
                                     float_item.Hide();
+                                }
                             }
                         }
                     }
@@ -1046,17 +1053,17 @@ namespace SpaceVIL
 
                     if (x < shape[0]) x = shape[0];
                     if (y < shape[1]) y = shape[1];
-                    
-                    
-                    if (x + w > shape[0] + shape[2]) 
+
+
+                    if (x + w > shape[0] + shape[2])
                     {
                         w = shape[0] + shape[2] - x;
                     }
 
-                    if (y + h > shape[1] + shape[3]) 
+                    if (y + h > shape[1] + shape[3])
                         h = shape[1] + shape[3] - y;
 
-                    _bounds.Add(shell, new int[] {x, y, w, h});
+                    _bounds.Add(shell, new int[] { x, y, w, h });
                 }
                 return true;
             }
@@ -1141,7 +1148,7 @@ namespace SpaceVIL
                 )
             {
                 //bottom
-                if ( shell.GetParent().GetY() + shell.GetParent().GetHeight() < shell.GetY() + shell.GetHeight())
+                if (shell.GetParent().GetY() + shell.GetParent().GetHeight() < shell.GetY() + shell.GetHeight())
                 {
                     //match
                     int y = shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom;

@@ -715,6 +715,10 @@ final class DrawEngine {
                                     float_item.hide();
                                 }
                             }
+                            else
+                            {
+                                float_item.hide();
+                            }
                         }
                     }
                 }

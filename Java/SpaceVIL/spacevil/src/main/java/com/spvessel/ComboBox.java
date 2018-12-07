@@ -6,6 +6,8 @@ import com.spvessel.Decorations.Indents;
 import com.spvessel.Decorations.Style;
 import com.spvessel.Flags.ItemAlignment;
 import com.spvessel.Flags.KeyCode;
+import com.spvessel.Flags.MouseButton;
+import com.spvessel.Flags.SizePolicy;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -18,7 +20,7 @@ public class ComboBox extends Prototype {
     public ButtonCore _selected = new ButtonCore();
     public ButtonCore _dropdown = new ButtonCore();
     public CustomShape _arrow = new CustomShape();
-    public ComboBoxDropDown _dropdownarea = new ComboBoxDropDown();
+    public ComboBoxDropDown _dropdownarea;
     public EventCommonMethod selectionChanged = new EventCommonMethod();
 
     /**
@@ -30,11 +32,8 @@ public class ComboBox extends Prototype {
         count++;
 
         eventKeyPress.add(this::onKeyPress);
+        eventMousePress.add((sender, args) -> showDropDownList());
 
-        InterfaceMouseMethodState press = (sender, args) -> showDropDownList();
-        eventMousePress.add(press);
-
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ComboBox"));
         setStyle(DefaultsService.getDefaultStyle(ComboBox.class));
     }
 
@@ -51,6 +50,7 @@ public class ComboBox extends Prototype {
     public void setTextAlignment(ItemAlignment... alignment) {
         _selected.setTextAlignment(alignment);
     }
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _selected.setTextAlignment(alignment);
     }
@@ -68,15 +68,19 @@ public class ComboBox extends Prototype {
     public void setFont(Font font) {
         _selected.setFont(font);
     }
+
     public void setFontSize(int size) {
         _selected.setFontSize(size);
     }
+
     public void setFontStyle(int style) {
         _selected.setFontStyle(style);
     }
+
     public void setFontFamily(String font_family) {
         _selected.setFontFamily(font_family);
     }
+
     public Font getFont() {
         return _selected.getFont();
     }
@@ -98,18 +102,23 @@ public class ComboBox extends Prototype {
     public void setForeground(Color color) {
         _selected.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
         _selected.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         _selected.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         _selected.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         _selected.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
         return _selected.getForeground();
     }
@@ -120,40 +129,43 @@ public class ComboBox extends Prototype {
     @Override
     public void initElements() {
         // adding
-        addItems(_selected, _dropdown);
-
+        super.addItem(_selected);
+        super.addItem(_dropdown);
         _dropdown.addItem(_arrow);
-        // _selected.setTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
         // dropdownarea
-        _dropdownarea.selection = _selected;
-        _dropdownarea.selectionChanged.add(this::onSelectionChanged);
+        _dropdownarea = new ComboBoxDropDown(getHandler());
+        _dropdownarea.activeButton = MouseButton.BUTTON_LEFT;
+        _dropdownarea.setOutsideClickClosable(true);
+        _dropdownarea.selectionChanged.add(() -> onSelectionChanged());
     }
 
     private void showDropDownList() {
+        
         // dropdownarea
-        _dropdownarea.getHandler().setWidth(_selected.getWidth());
-        _dropdownarea.getHandler().setHeight(100);
-
-        _dropdownarea.getHandler().setX(getHandler().getX() + _selected.getX());
-        _dropdownarea.getHandler().setY(getHandler().getY() + _selected.getY() + _selected.getHeight());
-
-        _dropdownarea.show();
+        _dropdownarea.setPosition(getX(), getY() + getHeight());
+        _dropdownarea.setSize(_selected.getWidth(), 100);
+        _dropdownarea.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        MouseArgs args = new MouseArgs();
+        args.button = MouseButton.BUTTON_LEFT;
+        _dropdownarea.show(this, args);
     }
 
     /**
      * Add item to ComboBox list
      */
-    public void addToList(InterfaceBaseItem item) {
-        _dropdownarea.add(item);
+    @Override
+    public void addItem(InterfaceBaseItem item) {
+        _dropdownarea.addItem(item);
         // _queue.Enqueue(item);
     }
 
     /**
      * Remove item from the ComboBox list
      */
-    public void removeFromLst(InterfaceBaseItem item) {
-        _dropdownarea.remove(item);
+    @Override
+    public void removeItem(InterfaceBaseItem item) {
+        _dropdownarea.removeItem(item);
     }
 
     /**
@@ -161,6 +173,8 @@ public class ComboBox extends Prototype {
      */
     public void setCurrentIndex(int index) {
         _dropdownarea.setCurrentIndex(index);
+        _selected.setText(_dropdownarea.getText());
+        selectionChanged.execute();
     }
 
     public int getCurrentIndex() {
@@ -168,6 +182,7 @@ public class ComboBox extends Prototype {
     }
 
     private void onSelectionChanged() {
+        _selected.setText(_dropdownarea.getText());
         selectionChanged.execute();
     }
 

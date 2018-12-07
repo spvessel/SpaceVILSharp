@@ -6,7 +6,7 @@ namespace SpaceVIL
     public class Ellipse : Primitive
     {
         static int count = 0;
-        public int quality = 16;
+        public int Quality = 16;
 
         /// <summary>
         /// Constructs an Ellipse
@@ -22,7 +22,7 @@ namespace SpaceVIL
         /// </summary>
         /// <param name="quality"> Ellipse quality (points count) </param>
         public Ellipse(int quality) : this() {
-            this.quality = quality;
+            this.Quality = quality;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace SpaceVIL
         /// </summary>
         public override List<float[]> MakeShape()
         {
-            SetTriangles(GraphicsMathService.GetEllipse(GetWidth(), GetHeight(), GetX(), GetY(), quality));
+            SetTriangles(GraphicsMathService.GetEllipse(GetWidth(), GetHeight(), GetX(), GetY(), Quality));
             return GraphicsMathService.ToGL(this, GetHandler());
         }
     }

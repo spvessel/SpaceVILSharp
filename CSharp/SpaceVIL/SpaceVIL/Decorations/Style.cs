@@ -392,7 +392,6 @@ namespace SpaceVIL.Decorations
             Style style = new Style();
             style.Background = Color.Transparent;
             style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
-            style.Font = DefaultsService.GetDefaultFont();
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
             style.Width = 10;
@@ -403,7 +402,7 @@ namespace SpaceVIL.Decorations
             Style selection_style = new Style();
             selection_style.Background = Color.FromArgb(255, 220, 220, 220);
             selection_style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
-            selection_style.Font = DefaultsService.GetDefaultFont();
+            selection_style.Font = DefaultsService.GetDefaultFont(14);
             selection_style.WidthPolicy = SizePolicy.Expand;
             selection_style.HeightPolicy = SizePolicy.Expand;
             selection_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
@@ -440,15 +439,41 @@ namespace SpaceVIL.Decorations
         public static Style GetComboBoxDropDownStyle()
         {
             Style style = new Style();
-            style.Padding = new Indents(2, 2, 2, 2);
             style.Background = Color.White;
-            style.MaxWidth = Int16.MaxValue;
-            style.MaxHeight = Int16.MaxValue;
+            style.WidthPolicy = SizePolicy.Fixed;
+            style.HeightPolicy = SizePolicy.Fixed;
+            style.Padding = new Indents(0, 0, 0, 0);
 
-            Style itemlist_style = new Style();
+            Style itemlist_style = GetListBoxStyle();
             itemlist_style.Background = Color.Transparent;
             itemlist_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+
+            Style vsb_style = GetSimpleVerticalScrollBarStyle();
+            vsb_style.Alignment = ItemAlignment.Right | ItemAlignment.Top;
+            itemlist_style.AddInnerStyle("vscrollbar", vsb_style);
+
+            Style hsb_style = GetHorizontalScrollBarStyle();
+            hsb_style.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
+            itemlist_style.AddInnerStyle("hscrollbar", hsb_style);
+
+            Style menu_style = new Style();
+            menu_style.Background = Color.FromArgb(50, 50, 50);
+            menu_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            menu_style.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
+            itemlist_style.AddInnerStyle("menu", menu_style);
+
             style.AddInnerStyle("itemlist", itemlist_style);
+
+
+            Style area_style = GetListAreaStyle();
+
+            Style substrate_style = area_style.GetInnerStyle("substrate");
+            substrate_style.Background = Color.FromArgb(255, 150, 150, 150);
+
+            Style hovercover_style = area_style.GetInnerStyle("hovercover");
+            hovercover_style.Background = Color.FromArgb(255, 150, 150, 150);
+
+            style.AddInnerStyle("listarea", area_style);
 
             return style;
         }
@@ -616,6 +641,47 @@ namespace SpaceVIL.Decorations
 
             return style;
         }
+        public static Style GetSimpleHorizontalScrollBarStyle()
+        {
+            Style style = new Style();
+
+            style.Background = Color.Transparent;
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Fixed;
+            style.Padding = new Indents(2, 0, 2, 0);
+            style.Height = 16;
+
+            Style uparrow_style = new Style();
+            uparrow_style.IsVisible = false;
+            style.AddInnerStyle("uparrow", uparrow_style);
+
+            Style downarrow_style = new Style();
+            downarrow_style.IsVisible = false;
+            style.AddInnerStyle("downarrow", downarrow_style);
+
+            Style slider_style = new Style();
+            slider_style.WidthPolicy = SizePolicy.Expand;
+            slider_style.HeightPolicy = SizePolicy.Expand;
+            slider_style.Background = Color.Transparent;
+            style.AddInnerStyle("slider", slider_style);
+
+            Style track_style = new Style();
+            track_style.WidthPolicy = SizePolicy.Expand;
+            track_style.HeightPolicy = SizePolicy.Expand;
+            track_style.Background = Color.Transparent;
+            slider_style.AddInnerStyle("track", track_style);
+
+            Style handler_style = new Style();
+            handler_style.WidthPolicy = SizePolicy.Fixed;
+            handler_style.HeightPolicy = SizePolicy.Expand;
+            handler_style.Background = Color.FromArgb(255, 120, 120, 120);
+            handler_style.Margin = new Indents(0, 5, 0, 5);
+            handler_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            handler_style.BorderRadius = new CornerRadius(3);
+            slider_style.AddInnerStyle("handler", handler_style);
+
+            return style;
+        }
 
         public static Style GetVerticalScrollBarStyle()
         {
@@ -678,6 +744,48 @@ namespace SpaceVIL.Decorations
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
             });
+            slider_style.AddInnerStyle("handler", handler_style);
+
+            return style;
+        }
+
+        public static Style GetSimpleVerticalScrollBarStyle()
+        {
+            Style style = new Style();
+
+            style.Background = Color.Transparent;
+            style.Padding = new Indents(0, 2, 0, 2);
+            style.WidthPolicy = SizePolicy.Fixed;
+            style.HeightPolicy = SizePolicy.Expand;
+            style.Width = 16;
+
+            Style uparrow_style = new Style();
+            uparrow_style.IsVisible = false;
+            style.AddInnerStyle("uparrow", uparrow_style);
+
+            Style downarrow_style = new Style();
+            downarrow_style.IsVisible = false;
+            style.AddInnerStyle("downarrow", downarrow_style);
+
+            Style slider_style = new Style();
+            slider_style.WidthPolicy = SizePolicy.Expand;
+            slider_style.HeightPolicy = SizePolicy.Expand;
+            slider_style.Background = Color.Transparent;
+            style.AddInnerStyle("slider", slider_style);
+
+            Style track_style = new Style();
+            track_style.WidthPolicy = SizePolicy.Expand;
+            track_style.HeightPolicy = SizePolicy.Expand;
+            track_style.Background = Color.Transparent;
+            slider_style.AddInnerStyle("track", track_style);
+
+            Style handler_style = new Style();
+            handler_style.WidthPolicy = SizePolicy.Expand;
+            handler_style.HeightPolicy = SizePolicy.Fixed;
+            handler_style.Background = Color.FromArgb(255, 120, 120, 120);
+            handler_style.Margin = new Indents(5, 0, 5, 0);
+            handler_style.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
+            handler_style.BorderRadius = new CornerRadius(3);
             slider_style.AddInnerStyle("handler", handler_style);
 
             return style;
@@ -1092,7 +1200,7 @@ namespace SpaceVIL.Decorations
         public static Style GetPopUpMessageStyle()
         {
             Style style = new Style();
-            style.Background = Color.FromArgb(240, 45, 45, 45);
+            style.Background = Color.FromArgb(255, 45, 45, 45);
             style.Foreground = Color.LightGray;
             style.Font = DefaultsService.GetDefaultFont(14);
             // style.Font = new Font(style.Font.FontFamily, 14, style.Font.Style);

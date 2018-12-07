@@ -171,6 +171,7 @@ namespace SpaceVIL
         public void SetTextMargin(Indents margin)
         {
             _textMargin = margin;
+
         }
 
         private Font _font;

@@ -58,14 +58,14 @@ namespace View
             //Stack
             HorizontalStack h = new HorizontalStack();
             h.SetBackground(255, 255, 255, 20);
-            h.SetMargin(0, 20, 0, 0);
+            h.SetMargin(20, 20, 20, 20);
             h.SetHeight(60);
             h.SetHeightPolicy(SizePolicy.Fixed);
             tabs.AddItemToTab("Stack", h);
             VerticalStack v = new VerticalStack();
             v.SetBackground(255, 255, 255, 20);
-            v.SetMargin(0, 100, 0, 0);
-            v.SetWidth(160);
+            v.SetMargin(20, 100, 20, 20);
+            v.SetWidth(190);
             v.SetWidthPolicy(SizePolicy.Fixed);
             tabs.AddItemToTab("Stack", v);
 
@@ -198,7 +198,7 @@ namespace View
                 tr.SetSize(100, 100);
                 tr.SetBackground(121, 223, 152);
                 tr.SetPosition(100, 100);
-                tr.IsCustom = new CustomFigure(false, GraphicsMathService.GetTriangle(100, 100, 0));
+                tr.SetCustomFigure(new CustomFigure(false, GraphicsMathService.GetTriangle(100, 100, 0)));
                 tr.SetBorderFill(Color.FromArgb(30, 255, 255, 255));
                 tr.SetBorderThickness(1);
                 tr.SetShadow(5, 2, 2, Color.FromArgb(150, 0, 0, 0));
@@ -210,7 +210,7 @@ namespace View
                 tr.SetSize(100, 100);
                 tr.SetBackground(238, 174, 128);
                 tr.SetPosition(100, 100);
-                tr.IsCustom = new CustomFigure(false, GraphicsMathService.GetRectangle(100, 100));
+                tr.SetCustomFigure(new CustomFigure(false, GraphicsMathService.GetRectangle(100, 100)));
                 tr.SetBorderFill(Color.FromArgb(30, 255, 255, 255));
                 tr.SetBorderThickness(1);
                 tr.SetShadow(5, 2, 2, Color.FromArgb(150, 0, 0, 0));
@@ -222,7 +222,7 @@ namespace View
                 tr.SetSize(100, 100);
                 tr.SetBackground(193, 142, 221);
                 tr.SetPosition(100, 100);
-                tr.IsCustom = new CustomFigure(false, GraphicsMathService.GetEllipse(100, 100));
+                tr.SetCustomFigure(new CustomFigure(false, GraphicsMathService.GetEllipse(100, 100)));
                 tr.SetBorderFill(Color.FromArgb(30, 255, 255, 255));
                 tr.SetBorderThickness(1);
                 tr.SetShadow(5, 2, 2, Color.FromArgb(150, 0, 0, 0));
@@ -234,7 +234,7 @@ namespace View
                 tr.SetSize(100, 75);
                 tr.SetBackground(114, 153, 211);
                 tr.SetPosition(100, 100);
-                tr.IsCustom = new CustomFigure(false, GraphicsMathService.GetStar(100, 75, 13));
+                tr.SetCustomFigure(new CustomFigure(false, GraphicsMathService.GetStar(100, 75, 13)));
                 tr.SetBorderFill(Color.FromArgb(30, 255, 255, 255));
                 tr.SetBorderThickness(1);
                 tr.SetShadow(5, 2, 2, Color.FromArgb(150, 0, 0, 0));

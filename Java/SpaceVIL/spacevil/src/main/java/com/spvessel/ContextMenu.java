@@ -2,7 +2,6 @@ package com.spvessel;
 
 import com.spvessel.Common.DefaultsService;
 import com.spvessel.Core.InterfaceBaseItem;
-import com.spvessel.Core.InterfaceCommonMethod;
 import com.spvessel.Core.InterfaceFloating;
 import com.spvessel.Core.InterfaceItem;
 import com.spvessel.Core.MouseArgs;
@@ -68,7 +67,6 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setConfines();
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
-        itemList.getArea().setHoverVisibility(false);
         itemList.getArea().selectionChanged.add(this::onSelectionChanged);
 
         super.addItem(itemList);
