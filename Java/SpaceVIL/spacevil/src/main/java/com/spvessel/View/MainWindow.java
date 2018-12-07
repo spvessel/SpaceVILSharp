@@ -27,6 +27,7 @@ public class MainWindow extends ActiveWindow {
         Handler.setBackground(45, 45, 45);
         Handler.setPadding(2, 2, 2, 2);
 
+
         BufferedImage iBig = null;
         BufferedImage iSmall = null;
         try {

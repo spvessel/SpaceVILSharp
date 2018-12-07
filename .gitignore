@@ -193,3 +193,4 @@ Java/SpaceVIL/spacevil/bin/main/shaders/fs_fxaa.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_blur.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_char.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_fxaa.glsl
+Java/SpaceVIL/spacevil/out/production/resources/shaders/fs_blur.glsl
