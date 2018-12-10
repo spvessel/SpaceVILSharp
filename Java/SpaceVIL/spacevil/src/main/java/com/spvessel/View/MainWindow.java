@@ -37,8 +37,8 @@ public class MainWindow extends ActiveWindow {
         BufferedImage iBig = null;
         BufferedImage iSmall = null;
         try {
-            iBig = ImageIO.read(new File("D:\\icon_big.png"));
-            iSmall = ImageIO.read(new File("D:\\icon_small.png"));
+            iBig = ImageIO.read(new File("D:\\icon.png"));
+            iSmall = ImageIO.read(new File("D:\\icon.jpg"));
         } catch (IOException e) {
         }
         if (iBig != null && iSmall != null)

@@ -409,6 +409,7 @@ namespace SpaceVIL
         /// <summary>
         /// Text color in the TextArea
         /// </summary>
+        /// <overloads> Text color in the TextArea </overloads>
         public void SetForeground(Color color)
         {
             _area.SetForeground(color);
