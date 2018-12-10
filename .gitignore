@@ -194,10 +194,8 @@ Java/SpaceVIL/spacevil/bin/main/shaders/vs_blur.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_char.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_fxaa.glsl
 Java/SpaceVIL/spacevil/out/production/resources/shaders/fs_blur.glsl
-*.html
-Java/SpaceVIL/spacevil/src/main/java/Doc/package-list
-Java/SpaceVIL/spacevil/src/main/java/Doc/script.js
-Java/SpaceVIL/spacevil/src/main/java/Doc/stylesheet.css
+
 Java/SpaceVIL/spacevil/.idea/spacevil.iml
 Java/SpaceVIL/spacevil/.idea/modules/spacevil_test.iml
+
 Java/SpaceVIL/spacevil/.idea/modules/spacevil_main.iml
