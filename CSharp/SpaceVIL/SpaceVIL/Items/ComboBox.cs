@@ -9,13 +9,11 @@ namespace SpaceVIL
 {
     public class ComboBox : Prototype
     {
-        // Queue<IBaseItem> _queue = new Queue<IBaseItem>();
-
         static int count = 0;
         public ButtonCore _selected = new ButtonCore();
         public ButtonCore _dropdown = new ButtonCore();
-        public CustomShape _arrow = new CustomShape();
-        public ComboBoxDropDown _dropdownarea = new ComboBoxDropDown();
+        public CustomShape _arrow;
+        public ComboBoxDropDown _dropdownarea;
         public EventCommonMethod SelectionChanged;
 
         /// <summary>
@@ -30,9 +28,10 @@ namespace SpaceVIL
             EventKeyPress += OnKeyPress;
             EventMousePress += (sender, args) => ShowDropDownList();
 
+            _arrow = new CustomShape();
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBox)));
         }
-        
+
         void OnKeyPress(object sender, KeyArgs args)
         {
             if (args.Key == KeyCode.Enter)
@@ -126,45 +125,40 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //adding
-            AddItems(_selected, _dropdown);
-
+            base.AddItem(_selected);
+            base.AddItem(_dropdown);
             _dropdown.AddItem(_arrow);
-            // _selected.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
 
             //dropdownarea
-            _dropdownarea.Selection = _selected;
+            _dropdownarea = new ComboBoxDropDown(GetHandler());
+            _dropdownarea.SetOutsideClickClosable(true);
             _dropdownarea.SelectionChanged += OnSelectionChanged;
         }
 
         private void ShowDropDownList()
         {
             //dropdownarea
-            _dropdownarea.Handler.SetWidth(_selected.GetWidth());
-            _dropdownarea.Handler.SetHeight(100);
-
-            _dropdownarea.Handler.SetX(GetHandler().GetX() + _selected.GetX());
-            _dropdownarea.Handler.SetY(GetHandler().GetY() + _selected.GetY() + _selected.GetHeight());
-
-            // Console.WriteLine(_dropdownarea.Handler.GetX() + " " + _dropdownarea.Handler.GetY());
-
-            _dropdownarea.Show();
+            _dropdownarea.SetPosition(GetX(), GetY() + GetHeight());
+            _dropdownarea.SetSize(_selected.GetWidth(), 100);
+            MouseArgs args = new MouseArgs();
+            args.Button = MouseButton.ButtonLeft;
+            _dropdownarea.Show(this, args);
         }
 
         /// <summary>
         /// Add item to ComboBox list
         /// </summary>
-        public void AddToList(IBaseItem item)
+        public override void AddItem(IBaseItem item)
         {
-            _dropdownarea.Add(item);
-            // _queue.Enqueue(item);
+            _dropdownarea.AddItem(item);
         }
 
         /// <summary>
         /// Remove item from the ComboBox list
         /// </summary>
-        public void RemoveFromLst(IBaseItem item)
+        public override void RemoveItem(IBaseItem item)
         {
-            _dropdownarea.Remove(item);
+            _dropdownarea.RemoveItem(item);
         }
 
         /// <summary>
@@ -173,6 +167,8 @@ namespace SpaceVIL
         public void SetCurrentIndex(int index)
         {
             _dropdownarea.SetCurrentIndex(index);
+            _selected.SetText(_dropdownarea.GetText());
+            SelectionChanged?.Invoke();
         }
         public int GetCurrentIndex()
         {
@@ -180,6 +176,7 @@ namespace SpaceVIL
         }
         private void OnSelectionChanged()
         {
+            _selected.SetText(_dropdownarea.GetText());
             SelectionChanged?.Invoke();
         }
 
@@ -213,4 +210,3 @@ namespace SpaceVIL
         }
     }
 }
- 

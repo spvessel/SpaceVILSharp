@@ -241,12 +241,13 @@ public class TreeItem extends Prototype {
     }
 
     private void addTreeItem(TreeItem item) {
-        _indicator.setToggled(true);
         _list_inners.add(item);
         item._branch = this;
         item._parent = _parent;
         item._nesting_level = _nesting_level + 1;
         _parent.refreshTree(item);
+        _indicator.setToggled(true);
+        onToggleHide(_indicator.isToggled());
     }
 
     /**

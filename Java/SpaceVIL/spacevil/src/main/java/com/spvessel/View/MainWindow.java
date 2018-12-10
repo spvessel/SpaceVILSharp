@@ -16,17 +16,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import javax.imageio.ImageIO;
-
 public class MainWindow extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout(this, "MainWindow", "MainWindow", 800, 200, true);
+        WindowLayout Handler = new WindowLayout(this, "MainWindow", "MainWindow", 800, 200, false);
         setHandler(Handler);
 
         Handler.setMinSize(500, 100);

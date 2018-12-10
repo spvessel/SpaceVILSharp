@@ -158,7 +158,7 @@ public class FlowTest extends ActiveWindow {
         // {
         // flow.setVScrollOffset(flow.getVScrollOffset() + 10);
         // };
-        com.spvessel.MenuItem addition = new com.spvessel.MenuItem("addition");
+        com.spvessel.MenuItem addition = new com.spvessel.MenuItem("Addition");
 
         _context_menu.addItems(restore, x_plus, y_plus, addition);
 

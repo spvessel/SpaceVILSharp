@@ -112,6 +112,7 @@ public class Style {
             b = 255;
         background = new Color(r, g, b, 255);
     }
+
     public void setBackground(int r, int g, int b, int a) {
         if (r < 0)
             r = Math.abs(r);
@@ -127,6 +128,7 @@ public class Style {
             b = 255;
         background = new Color(r, g, b, a);
     }
+
     public void setBackground(float r, float g, float b) {
         if (r < 0)
             r = Math.abs(r);
@@ -142,6 +144,7 @@ public class Style {
             b = 1.0f;
         background = new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
     }
+
     public void setBackground(float r, float g, float b, float a) {
         if (r < 0)
             r = Math.abs(r);
@@ -177,6 +180,7 @@ public class Style {
 
         foreground = new Color(r, g, b, 255);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         if (r < 0)
             r = Math.abs(r);
@@ -192,6 +196,7 @@ public class Style {
             b = 255;
         foreground = new Color(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         if (r < 0)
             r = Math.abs(r);
@@ -207,6 +212,7 @@ public class Style {
             b = 1.0f;
         foreground = new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         if (r < 0)
             r = Math.abs(r);
@@ -229,6 +235,7 @@ public class Style {
     public void setPadding(Indents padding) {
         this.padding = padding;
     }
+
     public void setPadding(int left, int top, int right, int bottom) {
         padding.left = left;
         padding.top = top;
@@ -238,11 +245,13 @@ public class Style {
 
     /**
      * Margin of the object
+     * 
      * @param margin
      */
     public void setMargin(Indents margin) {
         this.margin = margin;
     }
+
     public void setMargin(int left, int top, int right, int bottom) {
         margin.left = left;
         margin.top = top;
@@ -256,6 +265,7 @@ public class Style {
     public void setSpacing(Spacing spacing) {
         this.spacing = spacing;
     }
+
     public void setSpacing(int horizontal, int vertical) {
         spacing.horizontal = horizontal;
         spacing.vertical = vertical;
@@ -272,8 +282,9 @@ public class Style {
 
     /**
      * Set border of the object
-     * @param fill border color
-     * @param radius radius of the border corners
+     * 
+     * @param fill      border color
+     * @param radius    radius of the border corners
      * @param thickness border thickness
      */
     public void setBorder(Color fill, CornerRadius radius, int thickness) {
@@ -301,8 +312,8 @@ public class Style {
     ////////////////////////////////////////////////////////////////
 
     /**
-     * Add inner primitives to the object (as decorations only)
-     * note: not supported in current version
+     * Add inner primitives to the object (as decorations only) note: not supported
+     * in current version
      */
     public void addInnerShape(InterfaceBaseItem shape) {
         if (innerShapes == null)
@@ -331,7 +342,8 @@ public class Style {
     }
 
     /**
-     * Object changes its state according to the ItemState when ItemStateType happens
+     * Object changes its state according to the ItemState when ItemStateType
+     * happens
      */
     public void addItemState(ItemStateType type, ItemState state) {
         if (_item_states.containsKey(type)) {
@@ -393,8 +405,7 @@ public class Style {
         style.width = 10;
         style.height = 10;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         style.borderRadius = new CornerRadius(6);
 
         // style.borderThickness = 2;
@@ -428,8 +439,7 @@ public class Style {
         style.width = 10;
         style.height = 10;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         style.borderRadius = new CornerRadius(6);
 
         ItemState hovered = new ItemState();
@@ -469,8 +479,7 @@ public class Style {
         textline_style.widthPolicy = SizePolicy.EXPAND;
         textline_style.heightPolicy = SizePolicy.EXPAND;
         textline_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
-        textline_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        textline_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         textline_style.margin = new Indents(10, 0, 0, 0);
         style.addInnerStyle("textline", textline_style);
 
@@ -499,10 +508,8 @@ public class Style {
         marker_style.font = DefaultsService.getDefaultFont();
         marker_style.widthPolicy = SizePolicy.EXPAND;
         marker_style.heightPolicy = SizePolicy.EXPAND;
-        marker_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        marker_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        marker_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        marker_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 60);
@@ -551,13 +558,11 @@ public class Style {
         selection_style.background = new Color(220, 220, 220);
         selection_style.foreground = new Color(70, 70, 70);
 
-        selection_style.font = DefaultsService.getDefaultFont();
+        selection_style.font = DefaultsService.getDefaultFont(14);
         selection_style.widthPolicy = SizePolicy.EXPAND;
         selection_style.heightPolicy = SizePolicy.EXPAND;
-        selection_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        selection_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        selection_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        selection_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         selection_style.padding = new Indents(10, 0, 0, 0);
         selection_style.margin = new Indents(0, 0, 20, 0);
         style.addInnerStyle("selection", selection_style);
@@ -567,8 +572,7 @@ public class Style {
         dropdownbutton_style.width = 20;
         dropdownbutton_style.widthPolicy = SizePolicy.FIXED;
         dropdownbutton_style.heightPolicy = SizePolicy.EXPAND;
-        dropdownbutton_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
+        dropdownbutton_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
         dropdownbutton_style.background = new Color(255, 181, 111);
 
         ItemState hovered = new ItemState();
@@ -582,8 +586,7 @@ public class Style {
         arrow_style.height = 6;
         arrow_style.widthPolicy = SizePolicy.FIXED;
         arrow_style.heightPolicy = SizePolicy.FIXED;
-        arrow_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        arrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         arrow_style.background = new Color(50, 50, 50);
         arrow_style.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 180);
         style.addInnerStyle("arrow", arrow_style);
@@ -596,16 +599,40 @@ public class Style {
      */
     public static Style getComboBoxDropDownStyle() {
         Style style = new Style();
-        style.padding = new Indents(2, 2, 2, 2);
-        style.background = new Color(255, 255, 255);
-        style.maxWidth = 65535;
-        style.maxHeight = 65535;
+        style.background = Color.white;
+        style.widthPolicy = SizePolicy.FIXED;
+        style.heightPolicy = SizePolicy.FIXED;
+        style.padding = new Indents(0, 0, 0, 0);
 
-        Style itemlist_style = new Style();
-        itemlist_style.background = new Color(0, 0, 0, 0);
-        itemlist_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        Style itemlist_style = getListBoxStyle();
+        itemlist_style.background = new Color(0,0,0,0);
+        itemlist_style.setAlignment(ItemAlignment.HCENTER , ItemAlignment.VCENTER);
+
+        Style vsb_style = getSimpleVerticalScrollBarStyle();
+        vsb_style.setAlignment(ItemAlignment.RIGHT , ItemAlignment.TOP);
+        itemlist_style.addInnerStyle("vscrollbar", vsb_style);
+
+        Style hsb_style = getHorizontalScrollBarStyle();
+        hsb_style.setAlignment(ItemAlignment.LEFT , ItemAlignment.BOTTOM);
+        itemlist_style.addInnerStyle("hscrollbar", hsb_style);
+
+        Style menu_style = new Style();
+        menu_style.background = new Color(50, 50, 50);
+        menu_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        menu_style.setAlignment(ItemAlignment.RIGHT , ItemAlignment.BOTTOM);
+        itemlist_style.addInnerStyle("menu", menu_style);
+
         style.addInnerStyle("itemlist", itemlist_style);
+
+        Style area_style = getListAreaStyle();
+
+        Style substrate_style = area_style.getInnerStyle("substrate");
+        substrate_style.background = new Color(150, 150, 150);
+
+        Style hovercover_style = area_style.getInnerStyle("hovercover");
+        hovercover_style.background = new Color(150, 150, 150);
+
+        style.addInnerStyle("listarea", area_style);
 
         return style;
     }
@@ -625,14 +652,13 @@ public class Style {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.padding = new Indents(10, 0, 10, 0);
-        
+
         Style arrow_style = new Style();
         arrow_style.width = 6;
         arrow_style.height = 10;
         arrow_style.widthPolicy = SizePolicy.FIXED;
         arrow_style.heightPolicy = SizePolicy.FIXED;
-        arrow_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
+        arrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
         arrow_style.background = new Color(80, 80, 80);
         arrow_style.margin = new Indents(0, 0, 5, 0);
         arrow_style.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 90);
@@ -653,12 +679,11 @@ public class Style {
 
         Style itemlist_style = new Style();
         itemlist_style.background = new Color(0, 0, 0, 0);
-        itemlist_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        itemlist_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         style.addInnerStyle("itemlist", itemlist_style);
 
         Style area_style = getListAreaStyle();
-        
+
         Style substrate_style = area_style.getInnerStyle("substrate");
         substrate_style.background = new Color(150, 150, 150, 255);
 
@@ -734,10 +759,8 @@ public class Style {
         uparrow_style.background = new Color(100, 100, 100, 255);
         uparrow_style.width = 16;
         uparrow_style.height = 16;
-        uparrow_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        uparrow_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        uparrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        uparrow_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         uparrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, -90);
         uparrow_style.isFixedShape = true;
 
@@ -753,8 +776,7 @@ public class Style {
         downarrow_style.background = new Color(100, 100, 100, 255);
         downarrow_style.width = 16;
         downarrow_style.height = 16;
-        downarrow_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
+        downarrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
         downarrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 90);
         downarrow_style.isFixedShape = true;
         downarrow_style.addItemState(ItemStateType.HOVERED, hovered);
@@ -780,10 +802,52 @@ public class Style {
         handler_style.heightPolicy = SizePolicy.EXPAND;
         handler_style.background = new Color(100, 100, 100, 255);
         handler_style.margin = new Indents(0, 3, 0, 3);
-        handler_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         handler_style.addItemState(ItemStateType.HOVERED, hovered);
 
+        slider_style.addInnerStyle("handler", handler_style);
+
+        return style;
+    }
+    public static Style getSimpleHorizontalScrollBarStyle() {
+        Style style = new Style();
+
+        style.background = new Color(0, 0, 0, 0);
+        style.padding = new Indents(2, 0, 2, 0);
+        style.widthPolicy = SizePolicy.EXPAND;
+        style.heightPolicy = SizePolicy.FIXED;
+        style.height = 16;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+
+        Style uparrow_style = getButtonCoreStyle();
+        uparrow_style.isVisible = false;
+        style.addInnerStyle("uparrow", uparrow_style);
+
+        Style downarrow_style = getButtonCoreStyle();
+        downarrow_style.isVisible = false;
+        style.addInnerStyle("downarrow", downarrow_style);
+
+        Style slider_style = new Style();
+        slider_style.widthPolicy = SizePolicy.EXPAND;
+        slider_style.heightPolicy = SizePolicy.EXPAND;
+        slider_style.background = new Color(0, 0, 0, 0);
+        slider_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        style.addInnerStyle("slider", slider_style);
+
+        Style track_style = new Style();
+        track_style.widthPolicy = SizePolicy.EXPAND;
+        track_style.heightPolicy = SizePolicy.EXPAND;
+        track_style.background = new Color(0, 0, 0, 0);
+        track_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        slider_style.addInnerStyle("track", track_style);
+
+        Style handler_style = new Style();
+        handler_style.widthPolicy = SizePolicy.FIXED;
+        handler_style.heightPolicy = SizePolicy.EXPAND;
+        handler_style.background = new Color(120, 120, 120, 255);
+        handler_style.margin = new Indents(0, 5, 0, 5);
+        handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        handler_style.borderRadius = new CornerRadius(3);
         slider_style.addInnerStyle("handler", handler_style);
 
         return style;
@@ -807,8 +871,7 @@ public class Style {
         uparrow_style.background = new Color(100, 100, 100, 255);
         uparrow_style.width = 16;
         uparrow_style.height = 16;
-        uparrow_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        uparrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
         uparrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 0);
         uparrow_style.isFixedShape = true;
 
@@ -822,11 +885,9 @@ public class Style {
         downarrow_style.widthPolicy = SizePolicy.FIXED;
         downarrow_style.heightPolicy = SizePolicy.FIXED;
         downarrow_style.background = new Color(100, 100, 100, 255);
-        ;
         downarrow_style.width = 16;
         downarrow_style.height = 16;
-        downarrow_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
+        downarrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
         downarrow_style.shape = GraphicsMathService.getTriangle(10, 8, 3, 4, 180);
         downarrow_style.isFixedShape = true;
         downarrow_style.addItemState(ItemStateType.HOVERED, hovered);
@@ -851,9 +912,51 @@ public class Style {
         handler_style.heightPolicy = SizePolicy.FIXED;
         handler_style.background = new Color(100, 100, 100, 255);
         handler_style.margin = new Indents(3, 0, 3, 0);
-        handler_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
         handler_style.addItemState(ItemStateType.HOVERED, hovered);
+        slider_style.addInnerStyle("handler", handler_style);
+
+        return style;
+    }
+    public static Style getSimpleVerticalScrollBarStyle() {
+        Style style = new Style();
+
+        style.background = new Color(0, 0, 0, 0);
+        style.padding = new Indents(0, 2, 0, 2);
+        style.widthPolicy = SizePolicy.FIXED;
+        style.heightPolicy = SizePolicy.EXPAND;
+        style.width = 16;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+
+        Style uparrow_style = getButtonCoreStyle();
+        uparrow_style.isVisible = false;
+        style.addInnerStyle("uparrow", uparrow_style);
+
+        Style downarrow_style = getButtonCoreStyle();
+        downarrow_style.isVisible = false;
+        style.addInnerStyle("downarrow", downarrow_style);
+
+        Style slider_style = new Style();
+        slider_style.widthPolicy = SizePolicy.EXPAND;
+        slider_style.heightPolicy = SizePolicy.EXPAND;
+        slider_style.background = new Color(0, 0, 0, 0);
+        slider_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        style.addInnerStyle("slider", slider_style);
+
+        Style track_style = new Style();
+        track_style.widthPolicy = SizePolicy.EXPAND;
+        track_style.heightPolicy = SizePolicy.EXPAND;
+        track_style.background = new Color(0, 0, 0, 0);
+        track_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        slider_style.addInnerStyle("track", track_style);
+
+        Style handler_style = new Style();
+        handler_style.widthPolicy = SizePolicy.EXPAND;
+        handler_style.heightPolicy = SizePolicy.FIXED;
+        handler_style.background = new Color(120, 120, 120, 255);
+        handler_style.margin = new Indents(5, 0, 5, 0);
+        handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        handler_style.borderRadius = new CornerRadius(3);
         slider_style.addInnerStyle("handler", handler_style);
 
         return style;
@@ -1037,7 +1140,7 @@ public class Style {
 
         Style hover_style = new Style();
         hover_style.background = new Color(255, 255, 255, 30);
-        hover_style.setAlignment(ItemAlignment.LEFT , ItemAlignment.TOP);
+        hover_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
         hover_style.widthPolicy = SizePolicy.EXPAND;
         hover_style.heightPolicy = SizePolicy.FIXED;
         style.addInnerStyle("hovercover", hover_style);
@@ -1074,8 +1177,8 @@ public class Style {
     }
 
     /**
-     * @return default style for WContainer objects
-     * note: not supported in current version
+     * @return default style for WContainer objects note: not supported in current
+     *         version
      */
     public static Style getWContainerStyle()// нужен ли?
     {
@@ -1105,8 +1208,7 @@ public class Style {
         textline_style.widthPolicy = SizePolicy.EXPAND;
         textline_style.heightPolicy = SizePolicy.EXPAND;
         textline_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
-        textline_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        textline_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         textline_style.margin = new Indents(10, 0, 0, 0);
         style.addInnerStyle("textline", textline_style);
 
@@ -1143,10 +1245,8 @@ public class Style {
         marker_style.background = new Color(130, 130, 130);
         marker_style.setSize(16, 16);
         marker_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        marker_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
-        marker_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        marker_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
+        marker_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         marker_style.borderRadius = new CornerRadius(4);
         ItemState toggled = new ItemState();
         toggled.background = new Color(60, 60, 60, 255);
@@ -1171,8 +1271,7 @@ public class Style {
         cursor_style.background = new Color(60, 60, 60);
         cursor_style.width = 2;
         cursor_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        cursor_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        cursor_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         cursor_style.margin = new Indents(0, 5, 0, 5);
         cursor_style.isVisible = false;
         style.addInnerStyle("cursor", cursor_style);
@@ -1180,8 +1279,7 @@ public class Style {
         Style selection_style = new Style();
         selection_style.background = new Color(111, 181, 255);
         selection_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        selection_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        selection_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         style.addInnerStyle("selection", selection_style);
 
         return style;
@@ -1212,8 +1310,7 @@ public class Style {
         cursor_style.background = new Color(60, 60, 60);
         cursor_style.width = 2;
         cursor_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        cursor_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        cursor_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         cursor_style.margin = new Indents(0, 5, 0, 5);
         cursor_style.isVisible = false;
         style.addInnerStyle("cursor", cursor_style);
@@ -1221,8 +1318,7 @@ public class Style {
         Style selection_style = new Style();
         selection_style.background = new Color(111, 181, 255);
         selection_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        selection_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        selection_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         selection_style.margin = new Indents(0, 5, 0, 5);
         style.addInnerStyle("selection", selection_style);
 
@@ -1308,12 +1404,11 @@ public class Style {
      */
     public static Style getPopUpMessageStyle() {
         Style style = new Style();
-        style.background = new Color(45, 45, 45, 240);
+        style.background = new Color(45, 45, 45, 255);
         style.foreground = new Color(210, 210, 210);
         style.font = DefaultsService.getDefaultFont(16);
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
-        style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         style.setSize(300, 70);
         style.widthPolicy = SizePolicy.FIXED;
         style.heightPolicy = SizePolicy.FIXED;
@@ -1353,8 +1448,7 @@ public class Style {
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.FIXED;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
 
         Style pgbar_style = new Style();
         pgbar_style.background = new Color(0, 191, 255);
@@ -1409,10 +1503,8 @@ public class Style {
         close_style.foreground = new Color(0, 0, 0, 0);
         close_style.setSize(15, 15);
         close_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        close_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
-        close_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        close_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
+        close_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         ItemState close_hovered = new ItemState();
         close_hovered.background = new Color(186, 95, 97, 255);
         close_style.addItemState(ItemStateType.HOVERED, close_hovered);
@@ -1427,10 +1519,8 @@ public class Style {
         minimize_style.foreground = new Color(0, 0, 0, 0);
         minimize_style.setSize(12, 15);
         minimize_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        minimize_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
-        minimize_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        minimize_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
+        minimize_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         minimize_style.margin = new Indents(0, 0, 5, 9);
 
         ItemState minimize_hovered = new ItemState();
@@ -1451,10 +1541,8 @@ public class Style {
         maximize_style.foreground = new Color(0, 0, 0, 0);
         maximize_style.setSize(12, 12);
         maximize_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        maximize_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
-        maximize_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        maximize_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
+        maximize_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         maximize_style.margin = new Indents(0, 0, 0, 9);
         maximize_style.padding = new Indents(0, 0, 0, 0);
 
@@ -1489,8 +1577,7 @@ public class Style {
         view_style.isVisible = false;
         view_style.padding = new Indents(2, 2, 2, 2);
         view_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        view_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+        view_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
         style.addInnerStyle("tabview", view_style);
 
         Style tab_style = new Style();
@@ -1500,8 +1587,7 @@ public class Style {
         tab_style.width = 100;
         tab_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
         tab_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        tab_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
+        tab_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         tab_style.padding = new Indents(2, 2, 2, 2);
 
         ItemState hovered = new ItemState();
@@ -1548,10 +1634,8 @@ public class Style {
         indicator_style.font = DefaultsService.getDefaultFont();
         indicator_style.setSize(15, 15);
         indicator_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        indicator_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        indicator_style.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        indicator_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        indicator_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         indicator_style.shape = GraphicsMathService.getTriangle(10, 8, 0, 3, 90);
         indicator_style.isFixedShape = true;
         ItemState toggled = new ItemState();
@@ -1564,8 +1648,7 @@ public class Style {
         branch_icon_style.background = new Color(106, 185, 255);
         branch_icon_style.setSize(14, 9);
         branch_icon_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        branch_icon_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        branch_icon_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         branch_icon_style.shape = GraphicsMathService.getFolderIconShape(20, 15, 0, 0);
         style.addInnerStyle("branchicon", branch_icon_style);
 
@@ -1573,8 +1656,7 @@ public class Style {
         leaf_icon_style.background = new Color(129, 187, 133);
         leaf_icon_style.setSize(6, 6);
         leaf_icon_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        leaf_icon_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
+        leaf_icon_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         leaf_icon_style.shape = GraphicsMathService.getEllipse(3, 16);
         leaf_icon_style.margin = new Indents(2, 0, 0, 0);
         style.addInnerStyle("leaficon", leaf_icon_style);
@@ -1600,8 +1682,7 @@ public class Style {
         uparrow_style.heightPolicy = SizePolicy.EXPAND;
         uparrow_style.setMargin(4, 4, 4, 5);
         uparrow_style.background = new Color(50, 50, 50, 255);
-        uparrow_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        uparrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
         uparrow_style.shape = GraphicsMathService.getTriangle(12, 6, 0, 0, 0);
         uparrow_style.isFixedShape = true;
 
@@ -1616,8 +1697,7 @@ public class Style {
         downarrow_style.heightPolicy = SizePolicy.EXPAND;
         downarrow_style.setMargin(4, 5, 4, 4);
         downarrow_style.background = new Color(50, 50, 50, 255);
-        downarrow_style.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
+        downarrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.HCENTER));
         downarrow_style.shape = GraphicsMathService.getTriangle(12, 6, 0, 0, 180);
         downarrow_style.isFixedShape = true;
         downarrow_style.addItemState(ItemStateType.HOVERED, hovered);
@@ -1628,14 +1708,12 @@ public class Style {
         btns_area.heightPolicy = SizePolicy.EXPAND;
         btns_area.width = 20;
         btns_area.background = new Color(255, 181, 111);
-        btns_area.alignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
+        btns_area.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
         style.addInnerStyle("buttonsarea", btns_area);
 
         Style text_input = getTextEditStyle();
         text_input.heightPolicy = SizePolicy.EXPAND;
-        text_input.textAlignment = new LinkedList<>(
-                Arrays.asList(ItemAlignment.RIGHT));
+        text_input.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT));
         style.addInnerStyle("textedit", text_input);
 
         return style;

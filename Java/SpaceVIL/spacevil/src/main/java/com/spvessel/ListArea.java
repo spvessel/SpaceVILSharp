@@ -127,6 +127,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     }
 
     private void onMouseClick(InterfaceItem sender, MouseArgs args) {
+        unselect();
         for (int index : _list_of_visible_items) {
             InterfaceBaseItem item = getItems().get(index);
             int y = item.getY();
@@ -335,7 +336,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
             if (child_Y < startY) {
                 if (child_Y + child.getHeight() <= startY) {
                     child.setDrawable(false);
-                    if (_selection == index)
+                    if (_selection == index - 2)
                         _substrate.setDrawable(false);
                 } else {
                     child.setY((int) child_Y);
@@ -351,7 +352,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
             if (child_Y + child.getHeight() + child.getMargin().bottom > getY() + getHeight() - getPadding().bottom) {
                 if (child_Y >= getY() + getHeight() - getPadding().bottom) {
                     child.setDrawable(false);
-                    if (_selection == index)
+                    if (_selection == index - 2)
                         _substrate.setDrawable(false);
                 } else {
                     child.setY((int) child_Y);
