@@ -346,6 +346,14 @@ final class DrawEngine {
         _fbo.clearTexture();
         _fbo.genFBOTexture(_handler.getLayout().getWidth(), _handler.getLayout().getHeight());
         _fbo.unbindFBO();
+
+        if(!_handler.getLayout().isBorderHidden)
+        {
+            glClearColor(0, 0, 0, 0);
+            _primitive.useShader();
+            update();
+            _handler.swap();
+        }
     }
 
     void setWindowSize(int w, int h) {

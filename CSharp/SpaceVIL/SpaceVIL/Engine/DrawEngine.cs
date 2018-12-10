@@ -330,6 +330,14 @@ namespace SpaceVIL
             _fbo.ClearTexture();
             _fbo.GenFBOTexture(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
             _fbo.UnbindFBO();
+
+            if (!_handler.GetLayout().IsBorderHidden)
+            {
+                glClearColor(0, 0, 0, 0);
+                _primitive.UseShader();
+                Update();
+                _handler.Swap();
+            }
         }
 
         internal void SetWindowSize(int w, int h)
