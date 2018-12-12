@@ -50,7 +50,7 @@ namespace SpaceVIL.Core
         }
     }
 
-    public static class PrintArgs
+    internal static class PrintArgs
     {
         public static void MouseArgs(MouseArgs args)
         {

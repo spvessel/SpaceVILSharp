@@ -1,7 +1,6 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.Cell;
 import com.spvessel.spacevil.Core.InterfaceGrid;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.SizePolicy;

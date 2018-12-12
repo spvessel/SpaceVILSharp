@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL.Core
 {
-    interface IPixelDrawable
+    internal interface IPixelDrawable
     {
         float[] GetCoords();
         float[] GetColors();

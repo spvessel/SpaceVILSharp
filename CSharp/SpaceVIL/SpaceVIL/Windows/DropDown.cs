@@ -16,7 +16,8 @@ namespace SpaceVIL
 
         public override void InitWindow()
         {
-            Handler = new WindowLayout(this, "DropDown_" + GetCount(), "DropDown_" + GetCount());
+            WindowLayout Handler = new WindowLayout(this, "DropDown_" + GetCount(), "DropDown_" + GetCount());
+            SetHandler(Handler);
             Handler.SetWindowTitle(DialogTitle);
             Handler.IsBorderHidden = true;
             Handler.IsAlwaysOnTop = true;

@@ -54,6 +54,10 @@ namespace SpaceVIL.Decorations
 
         public static bool ApplyEmbedded = true;
         // private static ThemeStyle _instance;
+
+        /// <summary>
+        /// Constructs a default ThemeStyle
+        /// </summary>
         public ThemeStyle()
         {
             if (ThemeStyle.ApplyEmbedded)
@@ -97,12 +101,17 @@ namespace SpaceVIL.Decorations
                 DefaultItemsStyle.Add(typeof(SpaceVIL.SpinItem), Style.GetSpinItemStyle());
             }
         }
+
         // public static ThemeStyle GetInstance()
         // {
         //     if (_instance == null)
         //         _instance = new ThemeStyle();
         //     return _instance;
         // }
+
+        /// <summary>
+        /// Returns style of the theme for the object by its class name
+        /// </summary>
         public Style GetThemeStyle(Type type)
         {
             if (DefaultItemsStyle.ContainsKey(type))
@@ -112,11 +121,17 @@ namespace SpaceVIL.Decorations
 
         private ConcurrentDictionary<IBaseItem, Style> SpecificItemsStyle = new ConcurrentDictionary<IBaseItem, Style>();
 
+        /// <summary>
+        /// Set this theme as default
+        /// </summary>
         public void SetCurrentAsDefault()
         {
             DefaultsService.SetDefaultTheme(this);
         }
 
+        /// <summary>
+        /// Add unique style for the item
+        /// </summary>
         public void AddSpecificItemStyle(IBaseItem current_item, Style style)
         {
             if (SpecificItemsStyle.ContainsKey(current_item))
@@ -125,12 +140,18 @@ namespace SpaceVIL.Decorations
                 SpecificItemsStyle.TryAdd(current_item, style);
         }
 
+        /// <summary>
+        /// Remove unique style for the item
+        /// </summary>
         public void RemoveSpecificItemStyle(IBaseItem current_item, Style style)
         {
             if (SpecificItemsStyle.ContainsKey(current_item))
                 SpecificItemsStyle.TryRemove(current_item, out style);
         }
 
+        /// <summary>
+        /// Replace default style for the items with class name class_type
+        /// </summary>
         public bool ReplaceDefaultItemStyle(Type class_type, Style style)
         {
             if (DefaultItemsStyle.ContainsKey(class_type))
@@ -140,6 +161,10 @@ namespace SpaceVIL.Decorations
             }
             return false;
         }
+
+        /// <summary>
+        /// Add custom style to default theme for the items with class name class_type
+        /// </summary>
         public void AddDefaultCustomItemStyle(Type class_type, Style style)
         {
             if (DefaultItemsStyle.ContainsKey(class_type))

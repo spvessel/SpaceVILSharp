@@ -8,7 +8,7 @@ using System.Drawing.Drawing2D;
 
 namespace SpaceVIL.Common
 {
-    static class ContourService
+    internal static class ContourService
     {
         public static CrossOut CrossContours(List<List<PointF>> innerList)
         {

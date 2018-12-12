@@ -10,7 +10,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    class VerticalSplitArea : Prototype, IHLayout
+    public class VerticalSplitArea : Prototype, IHLayout
     {
         private static int count = 0;
         private IBaseItem _leftBlock;

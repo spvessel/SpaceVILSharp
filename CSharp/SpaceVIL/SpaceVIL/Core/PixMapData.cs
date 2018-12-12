@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL.Core
 {
-    class PixMapData
+    internal class PixMapData
     {
         private List<float> pixels;
         private List<float> colors;

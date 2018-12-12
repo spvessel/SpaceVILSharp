@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL.Core
 {
-    interface ITextContainer
+    internal interface ITextContainer
     {
         //TextItem GetText();
 

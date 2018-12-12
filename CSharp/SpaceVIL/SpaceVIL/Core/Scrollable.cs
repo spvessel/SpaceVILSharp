@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL.Core
 {
-    abstract class Scrollable : IScrollable
+    internal abstract class Scrollable : IScrollable
     {
         public EventMouseMethodState EventScrollUp = null;
         public EventMouseMethodState EventScrollDown = null;

@@ -10,7 +10,7 @@ using SpaceVIL.Core;
 
 namespace SpaceVIL.Common
 {
-    class LogService
+    internal class LogService
     {
         private static LogService _instance;
         private static object logLocker = new object();

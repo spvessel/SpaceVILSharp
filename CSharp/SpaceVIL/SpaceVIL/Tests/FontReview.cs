@@ -10,7 +10,7 @@ using SpaceVIL.Common;
 
 namespace SpaceVIL
 {
-    static class FontReview
+    internal static class FontReview
     {
         internal static PixMapData getTextArrays(string text, Font font) {
             GraphicsPath shape = new GraphicsPath();

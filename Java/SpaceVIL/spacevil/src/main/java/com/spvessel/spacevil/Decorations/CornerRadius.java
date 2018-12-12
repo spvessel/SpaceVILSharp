@@ -4,6 +4,7 @@ public class CornerRadius {
     /**
      * A class that store radius values for each corner of the rectangle object
      */
+
     public float leftTop;
     public float rightTop;
     public float leftBottom;

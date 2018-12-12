@@ -1,14 +1,18 @@
-﻿using System;
+﻿using SpaceVIL.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpaceVIL.Core
+
+namespace SpaceVIL
 {
     public sealed class Cell : Geometry, IPosition
     {
         private Grid _parent = null;
+
+        /// <returns> parent grid of the cell </returns>
         public Grid GetParentGrid()
         {
             return _parent;
@@ -29,19 +33,28 @@ namespace SpaceVIL.Core
 
         //Indecies
         private int _row_index = 0;
+
+        /// <returns> cell row number </returns>
         public int GetRow()
         {
             return _row_index;
         }
+
+        /// <param name="index"> cell row number </param>
         public void SetRow(int index)
         {
             _row_index = index;
         }
+
         private int _column_index = 0;
+
+        /// <returns> cell column number </returns>
         public int GetColumn()
         {
             return _column_index;
         }
+
+        /// <param name="index"> cell column number </param>
         public void SetColumn(int index)
         {
             _column_index = index;
@@ -50,6 +63,10 @@ namespace SpaceVIL.Core
         //Position
         private int _x = 0;
         private int _y = 0;
+
+        /// <summary>
+        /// X position of the cell
+        /// </summary>
         public void SetX(int x)
         {
             _x = x;
@@ -58,6 +75,10 @@ namespace SpaceVIL.Core
         {
             return _x;
         }
+
+        /// <summary>
+        /// Y position of the cell
+        /// </summary>
         public void SetY(int y)
         {
             _y = y;
@@ -68,10 +89,14 @@ namespace SpaceVIL.Core
         }
 
         private IBaseItem _item_link = null;
+
+        /// <returns> cell item </returns>
         public IBaseItem GetItem()
         {
             return _item_link;
         }
+
+        /// <param name="item"> Set item into cell </param>
         public void SetItem(IBaseItem item)
         {
             _item_link = item;
@@ -110,7 +135,7 @@ namespace SpaceVIL.Core
             }
         }
 
-        public void PrintCellInfo()
+        internal void PrintCellInfo()
         {
             Console.WriteLine(
                 "X: " + _item_link.GetX() + "\n" +

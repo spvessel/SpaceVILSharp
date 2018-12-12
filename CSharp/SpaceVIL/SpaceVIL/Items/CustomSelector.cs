@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    class CustomSelector : Primitive
+    internal class CustomSelector : Primitive
     {
         private static int count = 0;
 

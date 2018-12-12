@@ -56,7 +56,7 @@ public class ThemeStyle {
             defaultItemsStyle.put(ComboBoxDropDown.class, Style.getComboBoxDropDownStyle());
             defaultItemsStyle.put(ContextMenu.class, Style.getContextMenuStyle());
             defaultItemsStyle.put(Frame.class, Style.getFrameStyle());
-            defaultItemsStyle.put(FreeArea.class, Style.getFlowAreaStyle());
+            defaultItemsStyle.put(FreeArea.class, Style.getFreeAreaStyle());
             defaultItemsStyle.put(Grid.class, Style.getGridStyle());
             defaultItemsStyle.put(HorizontalScrollBar.class, Style.getHorizontalScrollBarStyle());
             defaultItemsStyle.put(HorizontalSlider.class, Style.getHorizontalSliderStyle());

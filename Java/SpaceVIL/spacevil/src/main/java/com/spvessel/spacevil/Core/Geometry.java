@@ -1,6 +1,10 @@
 package com.spvessel.spacevil.Core;
 
 public class Geometry implements InterfaceSize {
+    /**
+     * Class Geometry describes all geometry properties of the item
+     */
+
     public Geometry() {
 
     }
@@ -10,7 +14,10 @@ public class Geometry implements InterfaceSize {
     private int _width = 0;
     private int _maxWidth = 65535;// Integer.MAX_VALUE;// glfw dont like Int32.MaxValue
 
-    public  void setWidth(int width) {
+    /**
+     * @param width width of the item
+     */
+    public void setWidth(int width) {
         if (width < 0) {
             _width = 0;
             return;
@@ -24,11 +31,17 @@ public class Geometry implements InterfaceSize {
         _width = width;
     }
 
-    public  int getWidth() {
+    /**
+     * @return width of the item
+     */
+    public int getWidth() {
         return _width;
     }
 
-    public  void setMinWidth(int width) {
+    /**
+     * @param width minimum width of the item
+     */
+    public void setMinWidth(int width) {
         if (width < 0) {
             _minWidth = 0;
             return;
@@ -42,11 +55,17 @@ public class Geometry implements InterfaceSize {
         _minWidth = width;
     }
 
-    public  int getMinWidth() {
+    /**
+     * @return minimum width of the item
+     */
+    public int getMinWidth() {
         return _minWidth;
     }
 
-    public  void setMaxWidth(int width) {
+    /**
+     * @param width maximum width of the item
+     */
+    public void setMaxWidth(int width) {
         if (width < 0) {
             _maxWidth = 0;
             return;
@@ -60,7 +79,10 @@ public class Geometry implements InterfaceSize {
         _maxWidth = width;
     }
 
-    public  int getMaxWidth() {
+    /**
+     * @return maximum width of the item
+     */
+    public int getMaxWidth() {
         return _maxWidth;
     }
 
@@ -69,7 +91,10 @@ public class Geometry implements InterfaceSize {
     private int _height = 0;
     private int _maxHeight = 65535;// glfw dont like Int32.MaxValue
 
-    public  void setHeight(int height) {
+    /**
+     * @param height height of the item
+     */
+    public void setHeight(int height) {
         if (height < 0) {
             _height = 0;
             return;
@@ -83,11 +108,17 @@ public class Geometry implements InterfaceSize {
         _height = height;
     }
 
-    public  int getHeight() {
+    /**
+     * @return height of the item
+     */
+    public int getHeight() {
         return _height;
     }
 
-    public  void setMinHeight(int height) {
+    /**
+     * @param height minimum height of the item
+     */
+    public void setMinHeight(int height) {
         if (height < 0) {
             _minHeight = 0;
             return;
@@ -101,11 +132,17 @@ public class Geometry implements InterfaceSize {
         _minHeight = height;
     }
 
-    public  int getMinHeight() {
+    /**
+     * @return minimum height of the item
+     */
+    public int getMinHeight() {
         return _minHeight;
     }
 
-    public  void setMaxHeight(int height) {
+    /**
+     * @param height maximum height of the item
+     */
+    public void setMaxHeight(int height) {
         if (height < 0) {
             _maxHeight = 65535;
             return;
@@ -119,17 +156,28 @@ public class Geometry implements InterfaceSize {
         _maxHeight = height;
     }
 
-    public  int getMaxHeight() {
+    /**
+     * @return maximum height of the item
+     */
+    public int getMaxHeight() {
         return _maxHeight;
     }
 
     // size
-    public  void setSize(int width, int height) {
+    /**
+     * Set size (width and height) of the item
+     * @param width width of the item
+     * @param height height of the item
+     */
+    public void setSize(int width, int height) {
         setWidth(width);
         setHeight(height);
     }
 
-    public  int[] getSize() {
+    /**
+     * @return width amd height of the item
+     */
+    public int[] getSize() {
         return new int[] { _width, _height };
     }
 }

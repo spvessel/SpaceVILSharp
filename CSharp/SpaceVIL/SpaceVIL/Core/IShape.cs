@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL.Core
 {
-    interface IShape
+    internal interface IShape
     {
         void SetItemName(string name);
         string GetItemName();

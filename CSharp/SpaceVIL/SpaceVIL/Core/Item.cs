@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL.Core
 {
-    class Item : IItem
+    internal class Item : IItem
     {
         private string _name;
         public void SetItemName(string name)

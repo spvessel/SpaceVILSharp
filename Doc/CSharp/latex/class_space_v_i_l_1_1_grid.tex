@@ -1,0 +1,210 @@
+\hypertarget{class_space_v_i_l_1_1_grid}{}\section{Space\+V\+I\+L.\+Grid Class Reference}
+\label{class_space_v_i_l_1_1_grid}\index{Space\+V\+I\+L.\+Grid@{Space\+V\+I\+L.\+Grid}}
+Inheritance diagram for Space\+V\+I\+L.\+Grid\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.421622cm]{class_space_v_i_l_1_1_grid}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_space_v_i_l_1_1_grid_a43f2e279b402d3f37abaf7407cb10359}{Grid}} (int rows, int columns)
+\begin{DoxyCompactList}\small\item\em Constructs a \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} with the given rows and columns \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_aec0c6b809ef355c95f2fbbd7608a8f2e}\label{class_space_v_i_l_1_1_grid_aec0c6b809ef355c95f2fbbd7608a8f2e}} 
+void {\bfseries Set\+Format} (int rows, int columns)
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_grid_a62b1f61a50a5cceefcee8c881f92e641}{Set\+Row\+Count}} (int capacity)
+\begin{DoxyCompactList}\small\item\em Set count of the rows \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a0306b68151d5d100ac90d298fcd67b6f}\label{class_space_v_i_l_1_1_grid_a0306b68151d5d100ac90d298fcd67b6f}} 
+int {\bfseries Get\+Row\+Count} ()
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_grid_a601c091730701ac3e117396686c9904d}{Set\+Column\+Count}} (int capacity)
+\begin{DoxyCompactList}\small\item\em Set count of the columns \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a60c46214dcaaaf36ea21ebf29dcba72a}\label{class_space_v_i_l_1_1_grid_a60c46214dcaaaf36ea21ebf29dcba72a}} 
+int {\bfseries Get\+Column\+Count} ()
+\item 
+\mbox{\hyperlink{class_space_v_i_l_1_1_cell}{Cell}} \mbox{\hyperlink{class_space_v_i_l_1_1_grid_ad6866d757055ed488fac7ccceb62031c}{Get\+Cell}} (int row, int column)
+\begin{DoxyCompactList}\small\item\em Returns the cell by row and column number \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_ada36a5ab920b909fdb5d776deb5525b1}\label{class_space_v_i_l_1_1_grid_ada36a5ab920b909fdb5d776deb5525b1}} 
+List$<$ \mbox{\hyperlink{class_space_v_i_l_1_1_cell}{Cell}} $>$ \mbox{\hyperlink{class_space_v_i_l_1_1_grid_ada36a5ab920b909fdb5d776deb5525b1}{Get\+All\+Cells}} ()
+\begin{DoxyCompactList}\small\item\em \begin{DoxyReturn}{Returns}
+all cells list 
+\end{DoxyReturn}
+\end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_grid_a75bf61cabb387baea7461141dce079fb}{Remove\+Item}} (\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}} item)
+\begin{DoxyCompactList}\small\item\em Remove item from the \mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Prototype}} \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_grid_a5b339dbf56352afd9546f66ef4c02416}{Add\+Item}} (\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}} item)
+\begin{DoxyCompactList}\small\item\em Add item to the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_grid_a2292fca3813854b6077716e00ad54df4}{Insert\+Item}} (\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}} item, int row, int column)
+\begin{DoxyCompactList}\small\item\em Insert item to the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} by row and column number \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_grid_a2d3ce59b92ad9ca3bba2fb69feb549cb}{Set\+Width}} (int width)
+\begin{DoxyCompactList}\small\item\em Set width of the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_grid_a64c7b1987fb8823330dbeaea7420369c}{Set\+Height}} (int height)
+\begin{DoxyCompactList}\small\item\em Set height of the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_grid_a28b973b0fddabf73166c9a24946e2e59}{SetX}} (int \+\_\+x)
+\begin{DoxyCompactList}\small\item\em Set X position of the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_grid_a37ea23fcafda8c5fd8cc8fc41101a20d}{SetY}} (int \+\_\+y)
+\begin{DoxyCompactList}\small\item\em Set Y position of the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_grid_a3cc929016738df7ef25e984338255a55}{Update\+Layout}} ()
+\begin{DoxyCompactList}\small\item\em Update all children and grid sizes and positions according to confines \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a43f2e279b402d3f37abaf7407cb10359}\label{class_space_v_i_l_1_1_grid_a43f2e279b402d3f37abaf7407cb10359}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!Grid@{Grid}}
+\index{Grid@{Grid}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Grid()}{Grid()}}
+{\footnotesize\ttfamily Space\+V\+I\+L.\+Grid.\+Grid (\begin{DoxyParamCaption}\item[{int}]{rows,  }\item[{int}]{columns }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructs a \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} with the given rows and columns 
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a5b339dbf56352afd9546f66ef4c02416}\label{class_space_v_i_l_1_1_grid_a5b339dbf56352afd9546f66ef4c02416}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!Add\+Item@{Add\+Item}}
+\index{Add\+Item@{Add\+Item}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Add\+Item()}{AddItem()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+Grid.\+Add\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}}}]{item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Add item to the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_ad6866d757055ed488fac7ccceb62031c}\label{class_space_v_i_l_1_1_grid_ad6866d757055ed488fac7ccceb62031c}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!Get\+Cell@{Get\+Cell}}
+\index{Get\+Cell@{Get\+Cell}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Get\+Cell()}{GetCell()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_space_v_i_l_1_1_cell}{Cell}} Space\+V\+I\+L.\+Grid.\+Get\+Cell (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{int}]{column }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns the cell by row and column number 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a2292fca3813854b6077716e00ad54df4}\label{class_space_v_i_l_1_1_grid_a2292fca3813854b6077716e00ad54df4}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!Insert\+Item@{Insert\+Item}}
+\index{Insert\+Item@{Insert\+Item}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Insert\+Item()}{InsertItem()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Grid.\+Insert\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}}}]{item,  }\item[{int}]{row,  }\item[{int}]{column }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Insert item to the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} by row and column number 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a75bf61cabb387baea7461141dce079fb}\label{class_space_v_i_l_1_1_grid_a75bf61cabb387baea7461141dce079fb}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!Remove\+Item@{Remove\+Item}}
+\index{Remove\+Item@{Remove\+Item}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Remove\+Item()}{RemoveItem()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+Grid.\+Remove\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}}}]{item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Remove item from the \mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Prototype}} 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype_a7a2aabccfe6389f71d0265fa73f0ae87}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a601c091730701ac3e117396686c9904d}\label{class_space_v_i_l_1_1_grid_a601c091730701ac3e117396686c9904d}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!Set\+Column\+Count@{Set\+Column\+Count}}
+\index{Set\+Column\+Count@{Set\+Column\+Count}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Set\+Column\+Count()}{SetColumnCount()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Grid.\+Set\+Column\+Count (\begin{DoxyParamCaption}\item[{int}]{capacity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set count of the columns 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a64c7b1987fb8823330dbeaea7420369c}\label{class_space_v_i_l_1_1_grid_a64c7b1987fb8823330dbeaea7420369c}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!Set\+Height@{Set\+Height}}
+\index{Set\+Height@{Set\+Height}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Set\+Height()}{SetHeight()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+Grid.\+Set\+Height (\begin{DoxyParamCaption}\item[{int}]{height }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Set height of the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype_adc0adcbd1c3800d9525798ba7be5832a}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a62b1f61a50a5cceefcee8c881f92e641}\label{class_space_v_i_l_1_1_grid_a62b1f61a50a5cceefcee8c881f92e641}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!Set\+Row\+Count@{Set\+Row\+Count}}
+\index{Set\+Row\+Count@{Set\+Row\+Count}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Set\+Row\+Count()}{SetRowCount()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Grid.\+Set\+Row\+Count (\begin{DoxyParamCaption}\item[{int}]{capacity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set count of the rows 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a2d3ce59b92ad9ca3bba2fb69feb549cb}\label{class_space_v_i_l_1_1_grid_a2d3ce59b92ad9ca3bba2fb69feb549cb}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!Set\+Width@{Set\+Width}}
+\index{Set\+Width@{Set\+Width}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Set\+Width()}{SetWidth()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+Grid.\+Set\+Width (\begin{DoxyParamCaption}\item[{int}]{width }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Set width of the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype_a6a4f1b9581f4d18f1c3a3e287d4b2a2b}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a28b973b0fddabf73166c9a24946e2e59}\label{class_space_v_i_l_1_1_grid_a28b973b0fddabf73166c9a24946e2e59}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!SetX@{SetX}}
+\index{SetX@{SetX}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Set\+X()}{SetX()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+Grid.\+SetX (\begin{DoxyParamCaption}\item[{int}]{\+\_\+x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Set X position of the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a37ea23fcafda8c5fd8cc8fc41101a20d}\label{class_space_v_i_l_1_1_grid_a37ea23fcafda8c5fd8cc8fc41101a20d}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!SetY@{SetY}}
+\index{SetY@{SetY}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Set\+Y()}{SetY()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+Grid.\+SetY (\begin{DoxyParamCaption}\item[{int}]{\+\_\+y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Set Y position of the \mbox{\hyperlink{class_space_v_i_l_1_1_grid}{Grid}} 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_grid_a3cc929016738df7ef25e984338255a55}\label{class_space_v_i_l_1_1_grid_a3cc929016738df7ef25e984338255a55}} 
+\index{Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}!Update\+Layout@{Update\+Layout}}
+\index{Update\+Layout@{Update\+Layout}!Space\+V\+I\+L\+::\+Grid@{Space\+V\+I\+L\+::\+Grid}}
+\subsubsection{\texorpdfstring{Update\+Layout()}{UpdateLayout()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Grid.\+Update\+Layout (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Update all children and grid sizes and positions according to confines 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_grid}{Space\+V\+I\+L.\+Core.\+I\+Grid}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+F\+:/spacevil/\+C\+Sharp/\+Space\+V\+I\+L/\+Space\+V\+I\+L/\+Items/Grid.\+cs\end{DoxyCompactItemize}

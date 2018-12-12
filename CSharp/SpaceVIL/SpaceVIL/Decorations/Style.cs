@@ -10,6 +10,9 @@ using SpaceVIL.Common;
 
 namespace SpaceVIL.Decorations
 {
+    /// <summary>
+    /// A class that describes style settings of the object
+    /// </summary>
     public class Style
     {
         // private Lazy<ConcurrentDictionary<String, Style>> _inner_styles = new Lazy<ConcurrentDictionary<String, Style>>(() => new ConcurrentDictionary<String, Style>());
@@ -47,6 +50,9 @@ namespace SpaceVIL.Decorations
         public bool IsFixedShape;
         public bool IsVisible;
 
+        /// <summary>
+        /// Constructs a default Style
+        /// </summary>
         public Style()//default
         {
             IsVisible = true;
@@ -70,26 +76,46 @@ namespace SpaceVIL.Decorations
             // BorderThickness = 0;
         }
 
+        /// <summary>
+        /// Sets object size (width and height)
+        /// </summary>
         public void SetSize(int width, int height)
         {
             Width = width;
             Height = height;
         }
+
+        /// <summary>
+        /// Sets object minimum size (width and height)
+        /// </summary>
         public void SetMinSize(int width, int height)
         {
             MinWidth = width;
             MinHeight = height;
         }
+
+        /// <summary>
+        /// Sets object maximum size (width and height)
+        /// </summary>
         public void SetMaxSize(int width, int height)
         {
             MaxWidth = width;
             MaxHeight = height;
         }
+
+        /// <summary>
+        /// Sets object size policy (fixed or expand) for width and height
+        /// </summary>
         public void SetSizePolicy(SizePolicy width_policy, SizePolicy height_policy)
         {
             WidthPolicy = width_policy;
             HeightPolicy = height_policy;
         }
+
+        /// <summary>
+        /// Sets background color of the object
+        /// </summary>
+        /// <overloads> Sets background color of the object </overloads>
         public void SetBackground(int r, int g, int b)
         {
             if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
@@ -118,6 +144,11 @@ namespace SpaceVIL.Decorations
             if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
             Background = Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
         }
+
+        /// <summary>
+        /// Sets text color of the object
+        /// </summary>
+        /// <overloads> Sets text color of the object </overloads>
         public void SetForeground(int r, int g, int b)
         {
             if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
@@ -146,10 +177,18 @@ namespace SpaceVIL.Decorations
             if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
             Foreground = Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
         }
+
+        /// <summary>
+        /// Padding of the object
+        /// </summary>
         public void SetPadding(Indents padding)
         {
             Padding = padding;
         }
+
+        /// <summary>
+        /// Padding of the object
+        /// </summary>
         public void SetPadding(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
             Padding.Left = left;
@@ -157,10 +196,18 @@ namespace SpaceVIL.Decorations
             Padding.Right = right;
             Padding.Bottom = bottom;
         }
+
+        /// <summary>
+        /// Margin of the object
+        /// </summary>
         public void SetMargin(Indents margin)
         {
             Margin = margin;
         }
+
+        /// <summary>
+        /// Margin of the object
+        /// </summary>
         public void SetMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
             Margin.Left = left;
@@ -168,38 +215,71 @@ namespace SpaceVIL.Decorations
             Margin.Right = right;
             Margin.Bottom = bottom;
         }
+
+        /// <summary>
+        /// Spacing of the object
+        /// </summary>
         public void SetSpacing(Spacing spacing)
         {
             Spacing = spacing;
         }
+
+        /// <summary>
+        /// Spacing of the object
+        /// </summary>
         public void SetSpacing(int horizontal = 0, int vertical = 0)
         {
             Spacing.Horizontal = horizontal;
             Spacing.Vertical = vertical;
         }
+
+        /// <summary>
+        /// Set border of the object
+        /// </summary>
         public void SetBorder(Border border)
         {
             BorderFill = border.GetFill();
             BorderRadius = border.GetRadius();
             BorderThickness = border.GetThickness();
         }
+
+        /// <summary>
+        /// Set border of the object
+        /// </summary>
+        /// <param name="fill"> border color </param>
+        /// <param name="radius"> radius of the border corners </param>
+        /// <param name="thickness"> border thickness </param>
         public void SetBorder(Color fill, CornerRadius radius, int thickness)
         {
             BorderFill = fill;
             BorderRadius = radius;
             BorderThickness = thickness;
         }
+
+        /// <summary>
+        /// Set object alignment
+        /// </summary>
         public void SetAlignment(ItemAlignment alignment)
         {
             Alignment = alignment;
         }
+
         ///////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Add inner primitives to the object (as decorations only) 
+        /// note: not supported in the current version
+        /// </summary>
         public void AddInnerShape(IBaseItem shape)
         {
             if (InnerShapes == null)
                 InnerShapes = new List<IBaseItem>();
             InnerShapes.Add(shape);
         }
+
+        /// <summary>
+        /// Set style for the child of the object
+        /// </summary>
         public void AddInnerStyle(String item_name, Style style)
         {
             if (_inner_styles.ContainsKey(item_name))
@@ -207,6 +287,10 @@ namespace SpaceVIL.Decorations
             else
                 _inner_styles.Add(item_name, style);
         }
+
+        /// <summary>
+        /// Returns style of the object's child by name
+        /// </summary>
         public Style GetInnerStyle(String item_name)
         {
             if (_inner_styles.ContainsKey(item_name))
@@ -214,6 +298,11 @@ namespace SpaceVIL.Decorations
 
             return null;
         }
+
+        /// <summary>
+        /// Object changes its state according to the ItemState when ItemStateType 
+        /// happens
+        /// </summary>
         public void AddItemState(ItemStateType type, ItemState state)
         {
             if (_item_states.ContainsKey(type))
@@ -226,6 +315,10 @@ namespace SpaceVIL.Decorations
                 _item_states.Add(type, state);
             }
         }
+
+        /// <summary>
+        /// Returns ItemState of the object by ItemStateType name
+        /// </summary>
         public ItemState GetState(ItemStateType type)
         {
             if (_item_states.ContainsKey(type))
@@ -233,11 +326,15 @@ namespace SpaceVIL.Decorations
             return null;
         }
 
+        /// <returns> Dictionary of the ItemStateTypes and its ItemStates </returns>
         public Dictionary<ItemStateType, ItemState> GetAllStates()
         {
             return _item_states;
         }
 
+        /// <summary>
+        /// Remove ItemState by the ItemStateType
+        /// </summary>
         public void RemoveItemState(ItemStateType type)
         {
             if (type == ItemStateType.Base)
@@ -246,6 +343,9 @@ namespace SpaceVIL.Decorations
                 _item_states.Remove(type);
         }
 
+        /// <summary>
+        /// Remove the object's child style by name of the child
+        /// </summary>
         public void RemoveInnerStyle(String item_name)
         {
             if (_inner_styles.ContainsKey(item_name))
@@ -254,7 +354,7 @@ namespace SpaceVIL.Decorations
                 return;
         }
 
-        public static void ItemStatesSyncBase(Style style)
+        internal static void ItemStatesSyncBase(Style style)
         {
             ItemState core_state = style.GetState(ItemStateType.Base);
             foreach (var state in style.GetAllStates())
@@ -266,6 +366,7 @@ namespace SpaceVIL.Decorations
             }
         }
 
+        /// <returns> default style for ButtonCore objects </returns>
         public static Style GetButtonCoreStyle()
         {
             Style style = new Style();
@@ -288,6 +389,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for ButtonToggle objects </returns>
         public static Style GetButtonToggleStyle()
         {
             Style style = new Style();
@@ -316,6 +418,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for CheckBox objects </returns>
         public static Style GetCheckBoxStyle()
         {
             Style style = new Style();
@@ -342,6 +445,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for Indicator objects </returns>
         public static Style GetIndicatorStyle()
         {
             Style style = new Style();
@@ -375,6 +479,8 @@ namespace SpaceVIL.Decorations
 
             return style;
         }
+
+        /// <returns> default style for TextLine objects </returns>
         public static Style GetTextLineStyle()
         {
             Style style = new Style();
@@ -387,6 +493,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for ComboBox objects </returns>
         public static Style GetComboBoxStyle()
         {
             Style style = new Style();
@@ -436,6 +543,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for ComboBoxDropDown objects </returns>
         public static Style GetComboBoxDropDownStyle()
         {
             Style style = new Style();
@@ -477,6 +585,8 @@ namespace SpaceVIL.Decorations
 
             return style;
         }
+
+        /// <returns> default style for MenuItem objects </returns>
         public static Style GetMenuItemStyle()
         {
             Style style = new Style();
@@ -504,6 +614,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for ContextMenu objects </returns>
         public static Style GetContextMenuStyle()
         {
             Style style = new Style();
@@ -530,11 +641,12 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        public static Style GetCustomSelectorStyle()
+        internal static Style GetCustomSelectorStyle()
         {
             throw new NotImplementedException();
         }
 
+        /// <returns> default style for FreeArea objects </returns>
         public static Style GetFreeAreaStyle()
         {
             Style style = new Style();
@@ -550,6 +662,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for Frame objects </returns>
         public static Style GetFrameStyle()
         {
             Style style = new Style();
@@ -563,6 +676,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for Grid objects </returns>
         public static Style GetGridStyle()
         {
             Style style = new Style();
@@ -576,6 +690,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for HorizontalScrollBar objects </returns>
         public static Style GetHorizontalScrollBarStyle()
         {
             Style style = new Style();
@@ -641,6 +756,8 @@ namespace SpaceVIL.Decorations
 
             return style;
         }
+
+        /// <returns> default simple style for HorizontalScrollBar objects </returns>
         public static Style GetSimpleHorizontalScrollBarStyle()
         {
             Style style = new Style();
@@ -683,6 +800,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for VerticalScrollBar objects </returns>
         public static Style GetVerticalScrollBarStyle()
         {
             Style style = new Style();
@@ -749,6 +867,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default simple style for VerticalScrollBar objects </returns>
         public static Style GetSimpleVerticalScrollBarStyle()
         {
             Style style = new Style();
@@ -791,6 +910,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for HorizontalSlider objects </returns>
         public static Style GetHorizontalSliderStyle()
         {
             Style style = new Style();
@@ -823,6 +943,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for VerticalSlider objects </returns>
         public static Style GetVerticalSliderStyle()
         {
             Style style = new Style();
@@ -855,6 +976,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for HorizontalStack objects </returns>
         public static Style GetHorizontalStackStyle()
         {
             Style style = new Style();
@@ -867,6 +989,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for VerticalStack objects </returns>
         public static Style GetVerticalStackStyle()
         {
             Style style = new Style();
@@ -879,6 +1002,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for HorizontalSplitArea objects </returns>
         public static Style GetHorizontalSplitAreaStyle()
         {
             Style style = new Style();
@@ -896,6 +1020,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for VerticalSplitArea objects </returns>
         public static Style GetVerticalSplitAreaStyle()
         {
             Style style = new Style();
@@ -913,6 +1038,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for Label objects </returns>
         public static Style GetLabelStyle()
         {
             Style style = new Style();
@@ -927,6 +1053,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for ListArea objects </returns>
         public static Style GetListAreaStyle()
         {
             Style style = new Style();
@@ -956,6 +1083,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for ListBox objects </returns>
         public static Style GetListBoxStyle()
         {
             Style style = new Style();
@@ -982,12 +1110,17 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <summary>
+        /// note: not supported in current version
+        /// </summary>
+        /// <returns> default style for WContainer objects  </returns>
         public static Style GetWContainerStyle()//нужен ли?
         {
             Style style = new Style();
             return style;
         }
 
+        /// <returns> default style for RadioButton objects </returns>
         public static Style GetRadioButtonStyle()//нужен ли?
         {
             Style style = new Style();
@@ -1022,6 +1155,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for PasswordLine objects </returns>
         public static Style GetPasswordLineStyle()
         {
             Style style = new Style();
@@ -1087,6 +1221,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for TextEdit objects </returns>
         public static Style GetTextEditStyle()
         {
             Style style = new Style();
@@ -1128,6 +1263,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for TextBlock objects </returns>
         public static Style GetTextBlockStyle()
         {
             Style style = new Style();
@@ -1167,6 +1303,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for TextArea objects </returns>
         public static Style GetTextAreaStyle()
         {
             Style style = new Style();
@@ -1197,6 +1334,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for PopUpMessage objects </returns>
         public static Style GetPopUpMessageStyle()
         {
             Style style = new Style();
@@ -1233,6 +1371,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for ProgressBar objects </returns>
         public static Style GetProgressBarStyle()
         {
             Style style = new Style();
@@ -1254,6 +1393,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for ToolTip objects </returns>
         public static Style GetToolTipStyle()
         {
             Style style = new Style();
@@ -1271,6 +1411,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for TitleBar objects </returns>
         public static Style GetTitleBarStyle()
         {
             Style style = new Style();
@@ -1340,6 +1481,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for TabView objects </returns>
         public static Style GetTabViewStyle()
         {
             Style style = new Style();
@@ -1406,13 +1548,15 @@ namespace SpaceVIL.Decorations
 
         //     return style;
         // }
-
+        
+        /// <returns> default style for TreeView objects </returns>
         public static Style GetTreeViewStyle()
         {
             Style style = GetListBoxStyle();
             return style;
         }
 
+        /// <returns> default style for TreeItem objects </returns>
         public static Style GetTreeItemStyle()
         {
             Style style = new Style();
@@ -1465,6 +1609,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <returns> default style for SpinItem objects </returns>
         public static Style GetSpinItemStyle()
         {
             Style style = new Style();

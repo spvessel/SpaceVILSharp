@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL.Core
 {
-    interface IScrollable
+    internal interface IScrollable
     {
         void InvokeScrollUp(MouseArgs args);
         void InvokeScrollDown(MouseArgs args);

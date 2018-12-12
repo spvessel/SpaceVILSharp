@@ -7,6 +7,10 @@ using System.Drawing;
 
 namespace SpaceVIL.Decorations
 {
+    /// <summary>
+    /// A class that describes state of the item and its changes according 
+    /// to state value
+    /// </summary>
     public class ItemState
     {
         public bool Value = true;
@@ -19,11 +23,17 @@ namespace SpaceVIL.Decorations
 
         public CustomFigure Shape = null;
 
+        /// <summary>
+        /// Constructs an empty ItemState
+        /// </summary>
         public ItemState()
         {
 
         }
 
+        /// <summary>
+        /// Constructs an ItemState with background color
+        /// </summary>
         public ItemState(Color background)
         {
             this.Background = background;

@@ -113,6 +113,9 @@ public class Style {
         background = new Color(r, g, b, 255);
     }
 
+	/**
+     * Sets background color of the object
+     */
     public void setBackground(int r, int g, int b, int a) {
         if (r < 0)
             r = Math.abs(r);
@@ -129,6 +132,9 @@ public class Style {
         background = new Color(r, g, b, a);
     }
 
+	/**
+     * Sets background color of the object
+     */
     public void setBackground(float r, float g, float b) {
         if (r < 0)
             r = Math.abs(r);
@@ -145,6 +151,9 @@ public class Style {
         background = new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
     }
 
+	/**
+     * Sets background color of the object
+     */
     public void setBackground(float r, float g, float b, float a) {
         if (r < 0)
             r = Math.abs(r);
@@ -181,6 +190,9 @@ public class Style {
         foreground = new Color(r, g, b, 255);
     }
 
+	/**
+     * Sets text color of the object
+     */
     public void setForeground(int r, int g, int b, int a) {
         if (r < 0)
             r = Math.abs(r);
@@ -197,6 +209,9 @@ public class Style {
         foreground = new Color(r, g, b, a);
     }
 
+	/**
+     * Sets text color of the object
+     */
     public void setForeground(float r, float g, float b) {
         if (r < 0)
             r = Math.abs(r);
@@ -213,6 +228,9 @@ public class Style {
         foreground = new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
     }
 
+	/**
+     * Sets text color of the object
+     */
     public void setForeground(float r, float g, float b, float a) {
         if (r < 0)
             r = Math.abs(r);
@@ -236,6 +254,9 @@ public class Style {
         this.padding = padding;
     }
 
+	/**
+     * Padding of the object
+     */
     public void setPadding(int left, int top, int right, int bottom) {
         padding.left = left;
         padding.top = top;
@@ -245,13 +266,14 @@ public class Style {
 
     /**
      * Margin of the object
-     * 
-     * @param margin
      */
     public void setMargin(Indents margin) {
         this.margin = margin;
     }
 
+	/**
+     * Margin of the object
+     */
     public void setMargin(int left, int top, int right, int bottom) {
         margin.left = left;
         margin.top = top;
@@ -266,6 +288,9 @@ public class Style {
         this.spacing = spacing;
     }
 
+	/**
+     * Spacing of the object
+     */
     public void setSpacing(int horizontal, int vertical) {
         spacing.horizontal = horizontal;
         spacing.vertical = vertical;
@@ -312,8 +337,8 @@ public class Style {
     ////////////////////////////////////////////////////////////////
 
     /**
-     * Add inner primitives to the object (as decorations only) note: not supported
-     * in current version
+     * Add inner primitives to the object (as decorations only) 
+     * note: not supported in the current version
      */
     public void addInnerShape(InterfaceBaseItem shape) {
         if (innerShapes == null)
@@ -696,9 +721,9 @@ public class Style {
     }
 
     /**
-     * @return default style for FlowArea objects
+     * @return default style for FreeArea objects
      */
-    public static Style getFlowAreaStyle() {
+    public static Style getFreeAreaStyle() {
         Style style = new Style();
 
         // style.background = new Color(0,0,0,0);
@@ -809,6 +834,10 @@ public class Style {
 
         return style;
     }
+
+	/**
+     * @return default simple style for HorizontalScrollBar objects
+     */
     public static Style getSimpleHorizontalScrollBarStyle() {
         Style style = new Style();
 
@@ -918,6 +947,10 @@ public class Style {
 
         return style;
     }
+
+	/**
+     * @return default simple style for VerticalScrollBar objects
+     */
     public static Style getSimpleVerticalScrollBarStyle() {
         Style style = new Style();
 
@@ -1177,8 +1210,8 @@ public class Style {
     }
 
     /**
-     * @return default style for WContainer objects note: not supported in current
-     *         version
+     * @return default style for WContainer objects 
+     * note: not supported in current version
      */
     public static Style getWContainerStyle()// нужен ли?
     {

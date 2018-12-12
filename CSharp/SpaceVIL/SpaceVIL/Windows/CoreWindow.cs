@@ -25,16 +25,17 @@ namespace SpaceVIL
         /// <summary>
         /// Parent item for the CoreWindow
         /// </summary>
-        public WindowLayout Handler
+        public WindowLayout GetHandler()
         {
-            get
-            {
-                return wnd_handler;
-            }
-            set
-            {
-                wnd_handler = value;
-            }
+            return wnd_handler;
+        }
+
+        /// <summary>
+        /// Parent item for the CoreWindow
+        /// </summary>
+        public void SetHandler(WindowLayout value)
+        {
+            wnd_handler = value;
         }
 
         /// <summary>

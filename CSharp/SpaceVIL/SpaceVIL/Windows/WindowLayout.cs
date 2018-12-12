@@ -20,17 +20,11 @@ namespace SpaceVIL
 
         internal Object EngineLocker = new Object();
         private CoreWindow handler;
-        public CoreWindow Handler
+        public CoreWindow GetCoreWindow()
         {
-            get
-            {
-                return handler;
-            }
-            set
-            {
-                handler = value;
-            }
+            return handler;
         }
+         
         private Guid ParentGUID;
 
         private Thread thread_engine;

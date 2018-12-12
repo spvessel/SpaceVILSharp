@@ -104,7 +104,7 @@ namespace SpaceVIL
         }
         static internal void SetFocusedWindow(CoreWindow window)
         {
-            window.Handler.SetFocus(true);
+            window.GetHandler().SetFocus(true);
         }
         static internal void RemoveFromWindowDispatcher(WindowLayout sender_wnd)
         {
