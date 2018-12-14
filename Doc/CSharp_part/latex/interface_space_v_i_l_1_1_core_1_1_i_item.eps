@@ -1,0 +1,376 @@
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: ClassName
+%%Creator: Doxygen
+%%CreationDate: Time
+%%For: 
+%Magnification: 1.00
+%%Orientation: Portrait
+%%BoundingBox: 0 0 500 1373.534338
+%%Pages: 0
+%%BeginSetup
+%%EndSetup
+%%EndComments
+
+% ----- variables -----
+
+/boxwidth 0 def
+/boxheight 40 def
+/fontheight 24 def
+/marginwidth 10 def
+/distx 20 def
+/disty 40 def
+/boundaspect 0.364024 def  % aspect ratio of the BoundingBox (width/height)
+/boundx 500 def
+/boundy boundx boundaspect div def
+/xspacing 0 def
+/yspacing 0 def
+/rows 41 def
+/cols 3 def
+/scalefactor 0 def
+/boxfont /Times-Roman findfont fontheight scalefont def
+
+% ----- procedures -----
+
+/dotted { [1 4] 0 setdash } def
+/dashed { [5] 0 setdash } def
+/solid  { [] 0 setdash } def
+
+/max % result = MAX(arg1,arg2)
+{
+  /a exch def
+  /b exch def
+  a b gt {a} {b} ifelse
+} def
+
+/xoffset % result = MAX(0,(scalefactor-(boxwidth*cols+distx*(cols-1)))/2)
+{
+  0 scalefactor boxwidth cols mul distx cols 1 sub mul add sub 2 div max
+} def
+
+/cw % boxwidth = MAX(boxwidth, stringwidth(arg1))
+{
+  /str exch def
+  /boxwidth boxwidth str stringwidth pop max def
+} def
+
+/box % draws a box with text `arg1' at grid pos (arg2,arg3)
+{ gsave
+  2 setlinewidth
+  newpath
+  exch xspacing mul xoffset add
+  exch yspacing mul
+  moveto
+  boxwidth 0 rlineto 
+  0 boxheight rlineto 
+  boxwidth neg 0 rlineto 
+  0 boxheight neg rlineto 
+  closepath
+  dup stringwidth pop neg boxwidth add 2 div
+  boxheight fontheight 2 div sub 2 div
+  rmoveto show stroke
+  grestore
+} def  
+
+/mark
+{ newpath
+  exch xspacing mul xoffset add boxwidth add
+  exch yspacing mul
+  moveto
+  0 boxheight 4 div rlineto
+  boxheight neg 4 div boxheight neg 4 div rlineto
+  closepath
+  eofill
+  stroke
+} def
+
+/arrow
+{ newpath
+  moveto
+  3 -8 rlineto
+  -6 0 rlineto
+  3 8 rlineto
+  closepath
+  eofill
+  stroke
+} def
+
+/out % draws an output connector for the block at (arg1,arg2)
+{
+  newpath
+  exch xspacing mul xoffset add boxwidth 2 div add
+  exch yspacing mul boxheight add
+  /y exch def
+  /x exch def
+  x y moveto
+  0 disty 2 div rlineto 
+  stroke
+  1 eq { x y disty 2 div add arrow } if
+} def
+
+/in % draws an input connector for the block at (arg1,arg2)
+{
+  newpath
+  exch xspacing mul xoffset add boxwidth 2 div add
+  exch yspacing mul disty 2 div sub
+  /y exch def
+  /x exch def
+  x y moveto
+  0 disty 2 div rlineto
+  stroke
+  1 eq { x y disty 2 div add arrow } if
+} def
+
+/hedge
+{
+  exch xspacing mul xoffset add boxwidth 2 div add
+  exch yspacing mul boxheight 2 div sub
+  /y exch def
+  /x exch def
+  newpath
+  x y moveto
+  boxwidth 2 div distx add 0 rlineto
+  stroke
+  1 eq
+  { newpath x boxwidth 2 div distx add add y moveto
+    -8 3 rlineto
+    0 -6 rlineto
+    8 3 rlineto
+    closepath
+    eofill
+    stroke
+  } if
+} def
+
+/vedge
+{
+  /ye exch def
+  /ys exch def
+  /xs exch def
+  newpath
+  xs xspacing mul xoffset add boxwidth 2 div add dup
+  ys yspacing mul boxheight 2 div sub
+  moveto
+  ye yspacing mul boxheight 2 div sub
+  lineto
+  stroke
+} def
+
+/conn % connections the blocks from col `arg1' to `arg2' of row `arg3'
+{
+  /ys exch def
+  /xe exch def
+  /xs exch def
+  newpath
+  xs xspacing mul xoffset add boxwidth 2 div add
+  ys yspacing mul disty 2 div sub
+  moveto
+  xspacing xe xs sub mul 0
+  rlineto
+  stroke
+} def
+
+% ----- main ------
+
+boxfont setfont
+1 boundaspect scale
+(SpaceVIL.Core.IItem) cw
+(SpaceVIL.Core.IBaseItem) cw
+(SpaceVIL.BaseItem) cw
+(SpaceVIL.Prototype) cw
+(SpaceVIL.Primitive) cw
+(SpaceVIL.Binder) cw
+(SpaceVIL.BlankItem) cw
+(SpaceVIL.ButtonCore) cw
+(SpaceVIL.ButtonToggle) cw
+(SpaceVIL.CheckBox) cw
+(SpaceVIL.ComboBox) cw
+(SpaceVIL.ComboBoxDropDown) cw
+(SpaceVIL.ContextMenu) cw
+(SpaceVIL.FloatItem) cw
+(SpaceVIL.Frame) cw
+(SpaceVIL.FreeArea) cw
+(SpaceVIL.Grid) cw
+(SpaceVIL.HorizontalSlider) cw
+(SpaceVIL.HorizontalSplitArea) cw
+(SpaceVIL.HorizontalStack) cw
+(SpaceVIL.ImageItem) cw
+(SpaceVIL.Indicator) cw
+(SpaceVIL.Label) cw
+(SpaceVIL.ListArea) cw
+(SpaceVIL.ListBox) cw
+(SpaceVIL.MenuBar) cw
+(SpaceVIL.MenuItem) cw
+(SpaceVIL.PopUpMessage) cw
+(SpaceVIL.ProgressBar) cw
+(SpaceVIL.RadioButton) cw
+(SpaceVIL.ResizableItem) cw
+(SpaceVIL.ScrollHandler) cw
+(SpaceVIL.SpinItem) cw
+(SpaceVIL.SplitHolder) cw
+(SpaceVIL.TabView) cw
+(SpaceVIL.TextArea) cw
+(SpaceVIL.TextEdit) cw
+(SpaceVIL.TreeItem) cw
+(SpaceVIL.VerticalSlider) cw
+(SpaceVIL.VerticalSplitArea) cw
+(SpaceVIL.VerticalStack) cw
+(SpaceVIL.WContainer) cw
+(SpaceVIL.WindowAnchor) cw
+/boxwidth boxwidth marginwidth 2 mul add def
+/xspacing boxwidth distx add def
+/yspacing boxheight disty add def
+/scalefactor 
+  boxwidth cols mul distx cols 1 sub mul add
+  boxheight rows mul disty rows 1 sub mul add boundaspect mul 
+  max def
+boundx scalefactor div boundy scalefactor div scale
+
+% ----- classes -----
+
+ (SpaceVIL.Core.IItem) 0.500000 40.000000 box
+ (SpaceVIL.Core.IBaseItem) 0.500000 39.000000 box
+ (SpaceVIL.BaseItem) 0.000000 38.000000 box
+ (SpaceVIL.Prototype) 1.000000 38.000000 box
+ (SpaceVIL.Primitive) 0.000000 37.000000 box
+0.000000 37.000000 mark
+ (SpaceVIL.Binder) 2.000000 37.000000 box
+ (SpaceVIL.BlankItem) 2.000000 36.000000 box
+ (SpaceVIL.ButtonCore) 2.000000 35.000000 box
+ (SpaceVIL.ButtonToggle) 2.000000 34.000000 box
+ (SpaceVIL.CheckBox) 2.000000 33.000000 box
+ (SpaceVIL.ComboBox) 2.000000 32.000000 box
+ (SpaceVIL.ComboBoxDropDown) 2.000000 31.000000 box
+ (SpaceVIL.ContextMenu) 2.000000 30.000000 box
+ (SpaceVIL.FloatItem) 2.000000 29.000000 box
+ (SpaceVIL.Frame) 2.000000 28.000000 box
+ (SpaceVIL.FreeArea) 2.000000 27.000000 box
+ (SpaceVIL.Grid) 2.000000 26.000000 box
+ (SpaceVIL.HorizontalSlider) 2.000000 25.000000 box
+ (SpaceVIL.HorizontalSplitArea) 2.000000 24.000000 box
+ (SpaceVIL.HorizontalStack) 2.000000 23.000000 box
+2.000000 23.000000 mark
+ (SpaceVIL.ImageItem) 2.000000 22.000000 box
+ (SpaceVIL.Indicator) 2.000000 21.000000 box
+ (SpaceVIL.Label) 2.000000 20.000000 box
+ (SpaceVIL.ListArea) 2.000000 19.000000 box
+ (SpaceVIL.ListBox) 2.000000 18.000000 box
+2.000000 18.000000 mark
+ (SpaceVIL.MenuBar) 2.000000 17.000000 box
+ (SpaceVIL.MenuItem) 2.000000 16.000000 box
+ (SpaceVIL.PopUpMessage) 2.000000 15.000000 box
+ (SpaceVIL.ProgressBar) 2.000000 14.000000 box
+ (SpaceVIL.RadioButton) 2.000000 13.000000 box
+ (SpaceVIL.ResizableItem) 2.000000 12.000000 box
+ (SpaceVIL.ScrollHandler) 2.000000 11.000000 box
+ (SpaceVIL.SpinItem) 2.000000 10.000000 box
+ (SpaceVIL.SplitHolder) 2.000000 9.000000 box
+ (SpaceVIL.TabView) 2.000000 8.000000 box
+ (SpaceVIL.TextArea) 2.000000 7.000000 box
+ (SpaceVIL.TextEdit) 2.000000 6.000000 box
+ (SpaceVIL.TreeItem) 2.000000 5.000000 box
+ (SpaceVIL.VerticalSlider) 2.000000 4.000000 box
+ (SpaceVIL.VerticalSplitArea) 2.000000 3.000000 box
+ (SpaceVIL.VerticalStack) 2.000000 2.000000 box
+2.000000 2.000000 mark
+ (SpaceVIL.WContainer) 2.000000 1.000000 box
+ (SpaceVIL.WindowAnchor) 2.000000 0.000000 box
+2.000000 0.000000 mark
+
+% ----- relations -----
+
+solid
+1 0.500000 39.250000 out
+solid
+0 0.500000 39.750000 in
+solid
+1 0.500000 38.250000 out
+solid
+0.000000 1.000000 39.000000 conn
+solid
+0 0.000000 38.750000 in
+solid
+1 0.000000 37.250000 out
+solid
+0 1.000000 38.750000 in
+solid
+1 1.000000 37.250000 out
+solid
+0 0.000000 37.750000 in
+solid
+0 1.000000 37.500000 hedge
+solid
+0 1.000000 36.500000 hedge
+solid
+0 1.000000 35.500000 hedge
+solid
+0 1.000000 34.500000 hedge
+solid
+0 1.000000 33.500000 hedge
+solid
+0 1.000000 32.500000 hedge
+solid
+0 1.000000 31.500000 hedge
+solid
+0 1.000000 30.500000 hedge
+solid
+0 1.000000 29.500000 hedge
+solid
+0 1.000000 28.500000 hedge
+solid
+0 1.000000 27.500000 hedge
+solid
+0 1.000000 26.500000 hedge
+solid
+0 1.000000 25.500000 hedge
+solid
+0 1.000000 24.500000 hedge
+solid
+0 1.000000 23.500000 hedge
+solid
+0 1.000000 22.500000 hedge
+solid
+0 1.000000 21.500000 hedge
+solid
+0 1.000000 20.500000 hedge
+solid
+0 1.000000 19.500000 hedge
+solid
+0 1.000000 18.500000 hedge
+solid
+0 1.000000 17.500000 hedge
+solid
+0 1.000000 16.500000 hedge
+solid
+0 1.000000 15.500000 hedge
+solid
+0 1.000000 14.500000 hedge
+solid
+0 1.000000 13.500000 hedge
+solid
+0 1.000000 12.500000 hedge
+solid
+0 1.000000 11.500000 hedge
+solid
+0 1.000000 10.500000 hedge
+solid
+0 1.000000 9.500000 hedge
+solid
+0 1.000000 8.500000 hedge
+solid
+0 1.000000 7.500000 hedge
+solid
+0 1.000000 6.500000 hedge
+solid
+0 1.000000 5.500000 hedge
+solid
+0 1.000000 4.500000 hedge
+solid
+0 1.000000 3.500000 hedge
+solid
+0 1.000000 2.500000 hedge
+solid
+0 1.000000 1.500000 hedge
+solid
+0 1.000000 0.500000 hedge
+solid
+1.000000 38.000000 0.500000 vedge

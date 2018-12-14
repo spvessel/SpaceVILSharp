@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SpaceVIL
 {
-    public static class FontService
+    internal static class FontService
     {
         public static void AddPreloadFont(Font font) {
             FontEngine.SavePreloadFont(font);

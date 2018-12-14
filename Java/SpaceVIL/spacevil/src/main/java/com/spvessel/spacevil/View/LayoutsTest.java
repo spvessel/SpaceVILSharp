@@ -9,7 +9,7 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 public class LayoutsTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout(this, "LayoutsTest", "LayoutsTest", 1000, 1000, true);
+        WindowLayout Handler = new WindowLayout("LayoutsTest", "LayoutsTest", 1000, 1000, true);
         setHandler(Handler);
         Handler.setMinSize(250, 200);
         Handler.setPadding(2, 2, 2, 2);

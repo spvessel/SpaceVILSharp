@@ -1,0 +1,122 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Drawing;
+using SpaceVIL.Core;
+
+namespace SpaceVIL
+{
+    public class ImageItem : Prototype, IImageItem
+    {
+        static int count = 0;
+        public Image _image;
+        private List<byte> _bitmap;
+        private String _url;
+
+        /// <summary>
+        /// Constructs an ImageItem
+        /// </summary>
+        public ImageItem()
+        {
+            SetItemName("Image_" + count);
+            count++;
+        }
+
+        /// <summary>
+        /// Constructs an ImageItem with an image
+        /// </summary>
+        public ImageItem(Image picture) : this()
+        {
+            SetImage(picture);
+        }
+
+        /// <summary>
+        /// Returns the image as byte array
+        /// </summary>
+        public byte[] GetPixMapImage()
+        {
+            /*if (_image == null)
+                return new byte[] { 0 };*/
+
+            if (_image == null)
+                return null;
+
+            if (_bitmap == null)
+            {
+                _bitmap = new List<byte>();
+                Bitmap bmp = new Bitmap(_image);
+                for (int j = _image.Height - 1; j >= 0; j--)
+                {
+                    for (int i = 0; i < _image.Width; i++)
+                    {
+                        Color pixel = bmp.GetPixel(i, j);
+                        _bitmap.Add(pixel.R);
+                        _bitmap.Add(pixel.G);
+                        _bitmap.Add(pixel.B);
+                        _bitmap.Add(pixel.A);
+                    }
+                }
+            }
+            return _bitmap.ToArray();
+        }
+
+        /// <returns> width of the image in the ImageItem </returns>
+        public int GetImageWidth()
+        {
+            return _image.Width;
+        }
+
+        /// <returns> height of the image in the ImageItem </returns>
+        public int GetImageHeight()
+        {
+            return _image.Height;
+        }
+
+        //IImage implements
+        /// <returns> BufferedImage of the ImageItem </returns>
+        public Image GetImage()
+        {
+            return _image;
+        }
+        //internal bool IsChanged = false;
+
+        /// <summary>
+        /// Set an image into the ImageItem
+        /// </summary>
+        public void SetImage(Image picture)
+        {
+            if (picture == null)
+                return;
+            _image = picture;
+
+            _bitmap = new List<byte>();
+            Bitmap bmp = new Bitmap(_image);
+            for (int j = _image.Height - 1; j >= 0; j--)
+            // for (int j = 0; j < _image.Height; j++)
+            {
+                for (int i = 0; i < _image.Width; i++)
+                {
+                    Color pixel = bmp.GetPixel(i, j);
+                    _bitmap.Add(pixel.R);
+                    _bitmap.Add(pixel.G);
+                    _bitmap.Add(pixel.B);
+                    _bitmap.Add(pixel.A);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Image location
+        /// </summary>
+        public String GetImageUrl()
+        {
+            return _url;
+        }
+        public void SetImageUrl(String url)
+        {
+            _url = url;
+        }
+    }
+}

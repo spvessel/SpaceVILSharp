@@ -6,7 +6,7 @@ using Glfw3;
 
 namespace SpaceVIL.Common
 {
-    public static class CommonService
+    internal static class CommonService
     {
         static CommonService()
         {

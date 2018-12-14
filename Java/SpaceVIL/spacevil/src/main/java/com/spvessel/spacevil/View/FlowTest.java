@@ -17,7 +17,7 @@ public class FlowTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout(this, "FlowTest", "FlowTest", 1200, 800, true);
+        WindowLayout Handler = new WindowLayout("FlowTest", "FlowTest", 1200, 800, true);
         setHandler(Handler);
 
         Handler.setMinSize(500, 100);

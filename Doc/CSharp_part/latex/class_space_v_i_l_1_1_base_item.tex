@@ -1,0 +1,588 @@
+\hypertarget{class_space_v_i_l_1_1_base_item}{}\section{Space\+V\+I\+L.\+Base\+Item Class Reference}
+\label{class_space_v_i_l_1_1_base_item}\index{Space\+V\+I\+L.\+Base\+Item@{Space\+V\+I\+L.\+Base\+Item}}
+
+
+Inherits \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+
+
+Inherited by \mbox{\hyperlink{class_space_v_i_l_1_1_primitive}{Space\+V\+I\+L.\+Primitive}}.
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_af62e189b018fffc486961909ab4671cb}{Set\+Handler}} (\mbox{\hyperlink{class_space_v_i_l_1_1_window_layout}{Window\+Layout}} handler)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a75711759b9a916390f30a994e41f653b}\label{class_space_v_i_l_1_1_base_item_a75711759b9a916390f30a994e41f653b}} 
+\mbox{\hyperlink{class_space_v_i_l_1_1_window_layout}{Window\+Layout}} {\bfseries Get\+Handler} ()
+\item 
+\mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Prototype}} \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_af249ff93f366ebc0020d171276576426}{Get\+Parent}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s parent item \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a93ab7f178605794c1016e566031a791f}\label{class_space_v_i_l_1_1_base_item_a93ab7f178605794c1016e566031a791f}} 
+void {\bfseries Set\+Parent} (\mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Prototype}} parent)
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a07e16796013b2e7d71b303c006ea2bc7}{Remove\+Item\+From\+Listeners}} ()
+\begin{DoxyCompactList}\small\item\em Item will not react on parent\textquotesingle{}s changes \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a8dd530484abb5ad9ba9abd92117e735b}{Init\+Elements}} ()
+\begin{DoxyCompactList}\small\item\em Initialization and adding of all elements in the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_space_v_i_l_1_1_decorations_1_1_indents}{Indents}} \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_ab470c6d47d0c5c9e218424a9054c4b53}{Get\+Margin}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} margin \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a3fe9a70fe60c50802c6cc6f9593d9409}\label{class_space_v_i_l_1_1_base_item_a3fe9a70fe60c50802c6cc6f9593d9409}} 
+void {\bfseries Set\+Margin} (\mbox{\hyperlink{struct_space_v_i_l_1_1_decorations_1_1_indents}{Indents}} margin)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a63ee32be1841607604464a2cc247e5be}\label{class_space_v_i_l_1_1_base_item_a63ee32be1841607604464a2cc247e5be}} 
+void {\bfseries Set\+Margin} (int left=0, int top=0, int right=0, int bottom=0)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a196eedcb995f3d4fd3f0c231c47b2b9e}\label{class_space_v_i_l_1_1_base_item_a196eedcb995f3d4fd3f0c231c47b2b9e}} 
+List$<$ float\mbox{[}$\,$\mbox{]}$>$ \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a196eedcb995f3d4fd3f0c231c47b2b9e}{Get\+Triangles}} ()
+\begin{DoxyCompactList}\small\item\em \begin{DoxyReturn}{Returns}
+triangles list of the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shape
+\end{DoxyReturn}
+\end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_abce4d28de70cae71fde1612342e519a4}{Set\+Triangles}} (List$<$ float\mbox{[}$\,$\mbox{]}$>$ triangles)
+\begin{DoxyCompactList}\small\item\em Sets \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shape as triangles list \end{DoxyCompactList}\item 
+virtual List$<$ float\mbox{[}$\,$\mbox{]}$>$ \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_ac111d3d8cef36f406aa11862cefab9e2}{Make\+Shape}} ()
+\item 
+virtual void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a9ac74dbeeaedbc9dc13edbad28ee1d8c}{Set\+Background}} (Color color)
+\begin{DoxyCompactList}\small\item\em Background color of the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a9f76dd4ad8d980111b39a84329348706}\label{class_space_v_i_l_1_1_base_item_a9f76dd4ad8d980111b39a84329348706}} 
+virtual void {\bfseries Set\+Background} (int r, int g, int b)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a9d750bcf2254f44623cf1697ebbd9ca8}\label{class_space_v_i_l_1_1_base_item_a9d750bcf2254f44623cf1697ebbd9ca8}} 
+virtual void {\bfseries Set\+Background} (int r, int g, int b, int a)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a6134cdb21d533ac5186e4acd30fe465c}\label{class_space_v_i_l_1_1_base_item_a6134cdb21d533ac5186e4acd30fe465c}} 
+virtual void {\bfseries Set\+Background} (float r, float g, float b)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a2b47d3fe8c356d1756bbff999d476e07}\label{class_space_v_i_l_1_1_base_item_a2b47d3fe8c356d1756bbff999d476e07}} 
+virtual void {\bfseries Set\+Background} (float r, float g, float b, float a)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_ab6a7649082ecc3da16b450dad6360c1d}\label{class_space_v_i_l_1_1_base_item_ab6a7649082ecc3da16b450dad6360c1d}} 
+virtual Color {\bfseries Get\+Background} ()
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a10bc09b650b0e0ed08536b402beb6813}{Set\+Item\+Name}} (string name)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s name \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a70fc344d02591cf519cd36e278e6f95f}\label{class_space_v_i_l_1_1_base_item_a70fc344d02591cf519cd36e278e6f95f}} 
+string {\bfseries Get\+Item\+Name} ()
+\item 
+virtual bool \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a002a247f3745be1e1e57c504589d7036}{Is\+Drawable}} ()
+\begin{DoxyCompactList}\small\item\em If \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} will drawn by engine \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a7dfcfb7cb25bf50d10941e59e919d3f8}\label{class_space_v_i_l_1_1_base_item_a7dfcfb7cb25bf50d10941e59e919d3f8}} 
+virtual void {\bfseries Set\+Drawable} (bool value)
+\item 
+virtual bool \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a29b915d6e655b48a8b7505118441e961}{Is\+Visible}} ()
+\begin{DoxyCompactList}\small\item\em If \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} is visible \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_adaae3ba9b57ac31dca372950e77b02ea}\label{class_space_v_i_l_1_1_base_item_adaae3ba9b57ac31dca372950e77b02ea}} 
+virtual void {\bfseries Set\+Visible} (bool value)
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a139384f2e49b221864f8a580973a21c1}{Set\+Min\+Width}} (int width)
+\begin{DoxyCompactList}\small\item\em Width of the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a64c0166488ae312314e20359f6188ee8}\label{class_space_v_i_l_1_1_base_item_a64c0166488ae312314e20359f6188ee8}} 
+virtual void {\bfseries Set\+Width} (int width)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a156d8c92de44c966e01dc0af21908571}\label{class_space_v_i_l_1_1_base_item_a156d8c92de44c966e01dc0af21908571}} 
+void {\bfseries Set\+Max\+Width} (int width)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_ab79fa09387e428483e8834b78f5aa2e8}\label{class_space_v_i_l_1_1_base_item_ab79fa09387e428483e8834b78f5aa2e8}} 
+int {\bfseries Get\+Min\+Width} ()
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a8da6083ef49330bb47c7924a889e18a7}\label{class_space_v_i_l_1_1_base_item_a8da6083ef49330bb47c7924a889e18a7}} 
+virtual int {\bfseries Get\+Width} ()
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_ad9990a214bf0c72bbf62c0ef766eb024}\label{class_space_v_i_l_1_1_base_item_ad9990a214bf0c72bbf62c0ef766eb024}} 
+int {\bfseries Get\+Max\+Width} ()
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a5dbc5edca77a56b7998c8cee6b0e9a3a}{Set\+Min\+Height}} (int height)
+\begin{DoxyCompactList}\small\item\em Height of the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_af18211cd2654fbe4e37843f12b51ad8e}\label{class_space_v_i_l_1_1_base_item_af18211cd2654fbe4e37843f12b51ad8e}} 
+virtual void {\bfseries Set\+Height} (int height)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a464426fa794d6e3a7e597d90d68d127c}\label{class_space_v_i_l_1_1_base_item_a464426fa794d6e3a7e597d90d68d127c}} 
+void {\bfseries Set\+Max\+Height} (int height)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_af306b6a8c5c05fb212bed23d187133d8}\label{class_space_v_i_l_1_1_base_item_af306b6a8c5c05fb212bed23d187133d8}} 
+int {\bfseries Get\+Min\+Height} ()
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_aec3155c279f774f7d088088273462725}\label{class_space_v_i_l_1_1_base_item_aec3155c279f774f7d088088273462725}} 
+virtual int {\bfseries Get\+Height} ()
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a03ff7df7c1f72758c04d8255686295ef}\label{class_space_v_i_l_1_1_base_item_a03ff7df7c1f72758c04d8255686295ef}} 
+int {\bfseries Get\+Max\+Height} ()
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a4ac00a12fcbf63a467fcb4fc11652513}{Set\+Size}} (int width, int height)
+\begin{DoxyCompactList}\small\item\em Size (width and height) of the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_ab15a0875b2d42d6ddaeb179eeaa5ac5c}\label{class_space_v_i_l_1_1_base_item_ab15a0875b2d42d6ddaeb179eeaa5ac5c}} 
+void {\bfseries Set\+Min\+Size} (int width, int height)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_acef25dd1bb395b938a226a0a4ec80049}\label{class_space_v_i_l_1_1_base_item_acef25dd1bb395b938a226a0a4ec80049}} 
+void {\bfseries Set\+Max\+Size} (int width, int height)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a3b77093b1afed165f535847e8a5d4e6e}\label{class_space_v_i_l_1_1_base_item_a3b77093b1afed165f535847e8a5d4e6e}} 
+int \mbox{[}$\,$\mbox{]} {\bfseries Get\+Size} ()
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_ae475ec4c65c255ae141db2280f389eb6}\label{class_space_v_i_l_1_1_base_item_ae475ec4c65c255ae141db2280f389eb6}} 
+int \mbox{[}$\,$\mbox{]} {\bfseries Get\+Min\+Size} ()
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_ac53fdc9c5d53b6d295d5fcd77ae26c2e}\label{class_space_v_i_l_1_1_base_item_ac53fdc9c5d53b6d295d5fcd77ae26c2e}} 
+int \mbox{[}$\,$\mbox{]} {\bfseries Get\+Max\+Size} ()
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a2e307fb7749ddd02e3cf7489849be9f0}{Set\+Alignment}} (Item\+Alignment alignment)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} alignment \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a699c58e54f41d2c2c688cf336563ee48}\label{class_space_v_i_l_1_1_base_item_a699c58e54f41d2c2c688cf336563ee48}} 
+Item\+Alignment {\bfseries Get\+Alignment} ()
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_ae07c14607caf666e80c40f9f0df2882a}{Set\+Size\+Policy}} (Size\+Policy width, Size\+Policy height)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} size (width and height) policy -\/ F\+I\+X\+ED or E\+X\+P\+A\+ND \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a54c4128d60fd9f13d1239132841a74fc}\label{class_space_v_i_l_1_1_base_item_a54c4128d60fd9f13d1239132841a74fc}} 
+void {\bfseries Set\+Width\+Policy} (Size\+Policy policy)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_acabce4137c0a1b99eb75022b4a58cc20}\label{class_space_v_i_l_1_1_base_item_acabce4137c0a1b99eb75022b4a58cc20}} 
+Size\+Policy {\bfseries Get\+Width\+Policy} ()
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a64a2ecc1459e4dc5721b5919592da1a5}\label{class_space_v_i_l_1_1_base_item_a64a2ecc1459e4dc5721b5919592da1a5}} 
+void {\bfseries Set\+Height\+Policy} (Size\+Policy policy)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a127b9adf116215833028bfc41f0e9967}\label{class_space_v_i_l_1_1_base_item_a127b9adf116215833028bfc41f0e9967}} 
+Size\+Policy {\bfseries Get\+Height\+Policy} ()
+\item 
+virtual void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a6ad3ba5bf9637b193d78b22ee2867434}{SetX}} (int x)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} (x, y) position \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a378aa87e287eba0cc17b79274dfda93c}\label{class_space_v_i_l_1_1_base_item_a378aa87e287eba0cc17b79274dfda93c}} 
+virtual int {\bfseries GetX} ()
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_afa40218ded67e9cc7dff5153a3f48c30}\label{class_space_v_i_l_1_1_base_item_afa40218ded67e9cc7dff5153a3f48c30}} 
+virtual void {\bfseries SetY} (int y)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_adf2a77b3346736f7622203b0ae6ae312}\label{class_space_v_i_l_1_1_base_item_adf2a77b3346736f7622203b0ae6ae312}} 
+virtual int {\bfseries GetY} ()
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_aec3ac6bb0e7d814b478d89b93f8e3d18}{Update}} (Geometry\+Event\+Type type, int value=0)
+\begin{DoxyCompactList}\small\item\em Update \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s state \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a74dec9854f0a7553ad3b50f140bfe07d}{Set\+Style}} (\mbox{\hyperlink{class_space_v_i_l_1_1_decorations_1_1_style}{Style}} style)
+\begin{DoxyCompactList}\small\item\em Style of the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a89861094e3f3ebf91cdadce421f21e79}\label{class_space_v_i_l_1_1_base_item_a89861094e3f3ebf91cdadce421f21e79}} 
+abstract \mbox{\hyperlink{class_space_v_i_l_1_1_decorations_1_1_style}{Style}} {\bfseries Get\+Core\+Style} ()
+\item 
+virtual void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a66974390b46c82f1a4c4d54c141559d5}{Check\+Defaults}} ()
+\begin{DoxyCompactList}\small\item\em Check and set \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} default style \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_af0ba7a8556c3691b41cf16b8d30e1f9e}\label{class_space_v_i_l_1_1_base_item_af0ba7a8556c3691b41cf16b8d30e1f9e}} 
+virtual void {\bfseries Set\+Defaults} ()
+\item 
+bool \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_aaed84b5d9c5b4b05ca46d72dcf370ef3}{Is\+Shadow\+Drop}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shadow parameters. Is item has shadow \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a63877e1232da619ddf87269551af1486}\label{class_space_v_i_l_1_1_base_item_a63877e1232da619ddf87269551af1486}} 
+void {\bfseries Set\+Shadow\+Drop} (bool value)
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a1238f2ea9b5a7cffdf53f5ce63222fc3}{Set\+Shadow\+Radius}} (int radius)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shadow parameters. Shadow corners radius \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a2f2ae9ba26364d4f24014cf58790ef17}\label{class_space_v_i_l_1_1_base_item_a2f2ae9ba26364d4f24014cf58790ef17}} 
+int {\bfseries Get\+Shadow\+Radius} ()
+\item 
+Color \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_a9130d928ceb471b497f3a73e0c5574b1}{Get\+Shadow\+Color}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shadow parameters. Shadow color \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a1d398edb539ba6c4d36d2cbf18499a4b}\label{class_space_v_i_l_1_1_base_item_a1d398edb539ba6c4d36d2cbf18499a4b}} 
+void {\bfseries Set\+Shadow\+Color} (Color color)
+\item 
+\mbox{\hyperlink{class_space_v_i_l_1_1_core_1_1_position}{Position}} \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_ab51a153da9449f9d8f24e84f31148830}{Get\+Shadow\+Pos}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shadow parameters. Shadow position \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_adaa4c47dddc52af32bf6bfba6bd85f9f}{Set\+Shadow}} (int radius, int x, int y, Color color)
+\begin{DoxyCompactList}\small\item\em Set \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shadow with parameters \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_space_v_i_l_1_1_base_item_abb2566ee1b68d0e415d003fcb252ca70}{Set\+Confines}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} confines \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a8b0345fd4a7b73f7bf3310bd80861620}\label{class_space_v_i_l_1_1_base_item_a8b0345fd4a7b73f7bf3310bd80861620}} 
+void {\bfseries Set\+Confines} (int x0, int x1, int y0, int y1)
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_aa49650ca1911b9fa60e6a2ea9e8a3f34}\label{class_space_v_i_l_1_1_base_item_aa49650ca1911b9fa60e6a2ea9e8a3f34}} 
+int \mbox{[}$\,$\mbox{]} {\bfseries Get\+Confines} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_accc863c17c2b80aa9170686b5a0d9f66}\label{class_space_v_i_l_1_1_base_item_accc863c17c2b80aa9170686b5a0d9f66}} 
+Item\+Rule {\bfseries Hover\+Rule} = Item\+Rule.\+Lazy
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a6283f17a4100c1c334469b81f6b3c6d4}\label{class_space_v_i_l_1_1_base_item_a6283f17a4100c1c334469b81f6b3c6d4}} 
+virtual void {\bfseries Update\+Inners\+Drawable} (bool value)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a66974390b46c82f1a4c4d54c141559d5}\label{class_space_v_i_l_1_1_base_item_a66974390b46c82f1a4c4d54c141559d5}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Check\+Defaults@{Check\+Defaults}}
+\index{Check\+Defaults@{Check\+Defaults}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Check\+Defaults()}{CheckDefaults()}}
+{\footnotesize\ttfamily virtual void Space\+V\+I\+L.\+Base\+Item.\+Check\+Defaults (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Check and set \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} default style 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_ab470c6d47d0c5c9e218424a9054c4b53}\label{class_space_v_i_l_1_1_base_item_ab470c6d47d0c5c9e218424a9054c4b53}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Get\+Margin@{Get\+Margin}}
+\index{Get\+Margin@{Get\+Margin}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Get\+Margin()}{GetMargin()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_space_v_i_l_1_1_decorations_1_1_indents}{Indents}} Space\+V\+I\+L.\+Base\+Item.\+Get\+Margin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} margin 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_af249ff93f366ebc0020d171276576426}\label{class_space_v_i_l_1_1_base_item_af249ff93f366ebc0020d171276576426}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Get\+Parent@{Get\+Parent}}
+\index{Get\+Parent@{Get\+Parent}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Get\+Parent()}{GetParent()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Prototype}} Space\+V\+I\+L.\+Base\+Item.\+Get\+Parent (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s parent item 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a9130d928ceb471b497f3a73e0c5574b1}\label{class_space_v_i_l_1_1_base_item_a9130d928ceb471b497f3a73e0c5574b1}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Get\+Shadow\+Color@{Get\+Shadow\+Color}}
+\index{Get\+Shadow\+Color@{Get\+Shadow\+Color}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Get\+Shadow\+Color()}{GetShadowColor()}}
+{\footnotesize\ttfamily Color Space\+V\+I\+L.\+Base\+Item.\+Get\+Shadow\+Color (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shadow parameters. Shadow color 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_ab51a153da9449f9d8f24e84f31148830}\label{class_space_v_i_l_1_1_base_item_ab51a153da9449f9d8f24e84f31148830}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Get\+Shadow\+Pos@{Get\+Shadow\+Pos}}
+\index{Get\+Shadow\+Pos@{Get\+Shadow\+Pos}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Get\+Shadow\+Pos()}{GetShadowPos()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_space_v_i_l_1_1_core_1_1_position}{Position}} Space\+V\+I\+L.\+Base\+Item.\+Get\+Shadow\+Pos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shadow parameters. Shadow position 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a8dd530484abb5ad9ba9abd92117e735b}\label{class_space_v_i_l_1_1_base_item_a8dd530484abb5ad9ba9abd92117e735b}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Init\+Elements@{Init\+Elements}}
+\index{Init\+Elements@{Init\+Elements}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Init\+Elements()}{InitElements()}}
+{\footnotesize\ttfamily virtual void Space\+V\+I\+L.\+Base\+Item.\+Init\+Elements (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Initialization and adding of all elements in the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a002a247f3745be1e1e57c504589d7036}\label{class_space_v_i_l_1_1_base_item_a002a247f3745be1e1e57c504589d7036}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Is\+Drawable@{Is\+Drawable}}
+\index{Is\+Drawable@{Is\+Drawable}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Is\+Drawable()}{IsDrawable()}}
+{\footnotesize\ttfamily virtual bool Space\+V\+I\+L.\+Base\+Item.\+Is\+Drawable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+If \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} will drawn by engine 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_aaed84b5d9c5b4b05ca46d72dcf370ef3}\label{class_space_v_i_l_1_1_base_item_aaed84b5d9c5b4b05ca46d72dcf370ef3}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Is\+Shadow\+Drop@{Is\+Shadow\+Drop}}
+\index{Is\+Shadow\+Drop@{Is\+Shadow\+Drop}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Is\+Shadow\+Drop()}{IsShadowDrop()}}
+{\footnotesize\ttfamily bool Space\+V\+I\+L.\+Base\+Item.\+Is\+Shadow\+Drop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shadow parameters. Is item has shadow 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a29b915d6e655b48a8b7505118441e961}\label{class_space_v_i_l_1_1_base_item_a29b915d6e655b48a8b7505118441e961}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Is\+Visible@{Is\+Visible}}
+\index{Is\+Visible@{Is\+Visible}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Is\+Visible()}{IsVisible()}}
+{\footnotesize\ttfamily virtual bool Space\+V\+I\+L.\+Base\+Item.\+Is\+Visible (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+If \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} is visible 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_ac111d3d8cef36f406aa11862cefab9e2}\label{class_space_v_i_l_1_1_base_item_ac111d3d8cef36f406aa11862cefab9e2}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Make\+Shape@{Make\+Shape}}
+\index{Make\+Shape@{Make\+Shape}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Make\+Shape()}{MakeShape()}}
+{\footnotesize\ttfamily virtual List$<$float\mbox{[}$\,$\mbox{]}$>$ Space\+V\+I\+L.\+Base\+Item.\+Make\+Shape (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+shape points list in GL coordinates, using triangles from get\+Triangles()
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_item}{Space\+V\+I\+L.\+Core.\+I\+Item}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{class_space_v_i_l_1_1_points_container_a7fd8cf39e463780c871d538b884a3fdb}{Space\+V\+I\+L.\+Points\+Container}}, \mbox{\hyperlink{class_space_v_i_l_1_1_rectangle_acc0a5018e266efaa750459bb875eb805}{Space\+V\+I\+L.\+Rectangle}}, \mbox{\hyperlink{class_space_v_i_l_1_1_custom_shape_aa8a1eb76ab361eea35540787f79fac6f}{Space\+V\+I\+L.\+Custom\+Shape}}, \mbox{\hyperlink{class_space_v_i_l_1_1_ellipse_aa2311fd87e9a988eca0d754ad6e9093d}{Space\+V\+I\+L.\+Ellipse}}, \mbox{\hyperlink{class_space_v_i_l_1_1_primitive_a4e7ed3f8d9e28e0063c36f4f2bf470cd}{Space\+V\+I\+L.\+Primitive}}, and \mbox{\hyperlink{class_space_v_i_l_1_1_triangle_a454090bb2cb1e8635643fce5ecfd7e7c}{Space\+V\+I\+L.\+Triangle}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a07e16796013b2e7d71b303c006ea2bc7}\label{class_space_v_i_l_1_1_base_item_a07e16796013b2e7d71b303c006ea2bc7}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Remove\+Item\+From\+Listeners@{Remove\+Item\+From\+Listeners}}
+\index{Remove\+Item\+From\+Listeners@{Remove\+Item\+From\+Listeners}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Remove\+Item\+From\+Listeners()}{RemoveItemFromListeners()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Base\+Item.\+Remove\+Item\+From\+Listeners (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Item will not react on parent\textquotesingle{}s changes 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a2e307fb7749ddd02e3cf7489849be9f0}\label{class_space_v_i_l_1_1_base_item_a2e307fb7749ddd02e3cf7489849be9f0}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Alignment@{Set\+Alignment}}
+\index{Set\+Alignment@{Set\+Alignment}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Alignment()}{SetAlignment()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Base\+Item.\+Set\+Alignment (\begin{DoxyParamCaption}\item[{Item\+Alignment}]{alignment }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} alignment 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_behavior}{Space\+V\+I\+L.\+Core.\+I\+Behavior}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a9ac74dbeeaedbc9dc13edbad28ee1d8c}\label{class_space_v_i_l_1_1_base_item_a9ac74dbeeaedbc9dc13edbad28ee1d8c}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Background@{Set\+Background}}
+\index{Set\+Background@{Set\+Background}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Background()}{SetBackground()}}
+{\footnotesize\ttfamily virtual void Space\+V\+I\+L.\+Base\+Item.\+Set\+Background (\begin{DoxyParamCaption}\item[{Color}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Background color of the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_item}{Space\+V\+I\+L.\+Core.\+I\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_abb2566ee1b68d0e415d003fcb252ca70}\label{class_space_v_i_l_1_1_base_item_abb2566ee1b68d0e415d003fcb252ca70}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Confines@{Set\+Confines}}
+\index{Set\+Confines@{Set\+Confines}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Confines()}{SetConfines()}}
+{\footnotesize\ttfamily virtual void Space\+V\+I\+L.\+Base\+Item.\+Set\+Confines (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} confines 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_af62e189b018fffc486961909ab4671cb}\label{class_space_v_i_l_1_1_base_item_af62e189b018fffc486961909ab4671cb}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Handler@{Set\+Handler}}
+\index{Set\+Handler@{Set\+Handler}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Handler()}{SetHandler()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Base\+Item.\+Set\+Handler (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_space_v_i_l_1_1_window_layout}{Window\+Layout}}}]{handler }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em handler} & \mbox{\hyperlink{class_space_v_i_l_1_1_window_layout}{Window\+Layout}} handler -\/ window that contains the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a10bc09b650b0e0ed08536b402beb6813}\label{class_space_v_i_l_1_1_base_item_a10bc09b650b0e0ed08536b402beb6813}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Item\+Name@{Set\+Item\+Name}}
+\index{Set\+Item\+Name@{Set\+Item\+Name}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Item\+Name()}{SetItemName()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Base\+Item.\+Set\+Item\+Name (\begin{DoxyParamCaption}\item[{string}]{name }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s name 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_item}{Space\+V\+I\+L.\+Core.\+I\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a5dbc5edca77a56b7998c8cee6b0e9a3a}\label{class_space_v_i_l_1_1_base_item_a5dbc5edca77a56b7998c8cee6b0e9a3a}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Min\+Height@{Set\+Min\+Height}}
+\index{Set\+Min\+Height@{Set\+Min\+Height}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Min\+Height()}{SetMinHeight()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Base\+Item.\+Set\+Min\+Height (\begin{DoxyParamCaption}\item[{int}]{height }\end{DoxyParamCaption})}
+
+
+
+Height of the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_size}{Space\+V\+I\+L.\+Core.\+I\+Size}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a139384f2e49b221864f8a580973a21c1}\label{class_space_v_i_l_1_1_base_item_a139384f2e49b221864f8a580973a21c1}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Min\+Width@{Set\+Min\+Width}}
+\index{Set\+Min\+Width@{Set\+Min\+Width}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Min\+Width()}{SetMinWidth()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Base\+Item.\+Set\+Min\+Width (\begin{DoxyParamCaption}\item[{int}]{width }\end{DoxyParamCaption})}
+
+
+
+Width of the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_size}{Space\+V\+I\+L.\+Core.\+I\+Size}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_adaa4c47dddc52af32bf6bfba6bd85f9f}\label{class_space_v_i_l_1_1_base_item_adaa4c47dddc52af32bf6bfba6bd85f9f}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Shadow@{Set\+Shadow}}
+\index{Set\+Shadow@{Set\+Shadow}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Shadow()}{SetShadow()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Base\+Item.\+Set\+Shadow (\begin{DoxyParamCaption}\item[{int}]{radius,  }\item[{int}]{x,  }\item[{int}]{y,  }\item[{Color}]{color }\end{DoxyParamCaption})}
+
+
+
+Set \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shadow with parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em radius} & Shadow corners radius (same for all corners)\\
+\hline
+{\em x} & Shadow X position\\
+\hline
+{\em y} & Shadow Y position\\
+\hline
+{\em color} & Shadow color\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a1238f2ea9b5a7cffdf53f5ce63222fc3}\label{class_space_v_i_l_1_1_base_item_a1238f2ea9b5a7cffdf53f5ce63222fc3}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Shadow\+Radius@{Set\+Shadow\+Radius}}
+\index{Set\+Shadow\+Radius@{Set\+Shadow\+Radius}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Shadow\+Radius()}{SetShadowRadius()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Base\+Item.\+Set\+Shadow\+Radius (\begin{DoxyParamCaption}\item[{int}]{radius }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shadow parameters. Shadow corners radius 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a4ac00a12fcbf63a467fcb4fc11652513}\label{class_space_v_i_l_1_1_base_item_a4ac00a12fcbf63a467fcb4fc11652513}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Size@{Set\+Size}}
+\index{Set\+Size@{Set\+Size}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Size()}{SetSize()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Base\+Item.\+Set\+Size (\begin{DoxyParamCaption}\item[{int}]{width,  }\item[{int}]{height }\end{DoxyParamCaption})}
+
+
+
+Size (width and height) of the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_size}{Space\+V\+I\+L.\+Core.\+I\+Size}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_ae07c14607caf666e80c40f9f0df2882a}\label{class_space_v_i_l_1_1_base_item_ae07c14607caf666e80c40f9f0df2882a}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Size\+Policy@{Set\+Size\+Policy}}
+\index{Set\+Size\+Policy@{Set\+Size\+Policy}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Size\+Policy()}{SetSizePolicy()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Base\+Item.\+Set\+Size\+Policy (\begin{DoxyParamCaption}\item[{Size\+Policy}]{width,  }\item[{Size\+Policy}]{height }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} size (width and height) policy -\/ F\+I\+X\+ED or E\+X\+P\+A\+ND 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a74dec9854f0a7553ad3b50f140bfe07d}\label{class_space_v_i_l_1_1_base_item_a74dec9854f0a7553ad3b50f140bfe07d}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Style@{Set\+Style}}
+\index{Set\+Style@{Set\+Style}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Style()}{SetStyle()}}
+{\footnotesize\ttfamily virtual void Space\+V\+I\+L.\+Base\+Item.\+Set\+Style (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_space_v_i_l_1_1_decorations_1_1_style}{Style}}}]{style }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Style of the \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{Space\+V\+I\+L.\+Core.\+I\+Base\+Item}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{class_space_v_i_l_1_1_primitive_ad2a9fbb75eddf7f36af72385a5453fb2}{Space\+V\+I\+L.\+Primitive}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_abce4d28de70cae71fde1612342e519a4}\label{class_space_v_i_l_1_1_base_item_abce4d28de70cae71fde1612342e519a4}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Set\+Triangles@{Set\+Triangles}}
+\index{Set\+Triangles@{Set\+Triangles}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+Triangles()}{SetTriangles()}}
+{\footnotesize\ttfamily virtual void Space\+V\+I\+L.\+Base\+Item.\+Set\+Triangles (\begin{DoxyParamCaption}\item[{List$<$ float\mbox{[}$\,$\mbox{]}$>$}]{triangles }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Sets \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s shape as triangles list 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_item}{Space\+V\+I\+L.\+Core.\+I\+Item}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_a6ad3ba5bf9637b193d78b22ee2867434}\label{class_space_v_i_l_1_1_base_item_a6ad3ba5bf9637b193d78b22ee2867434}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!SetX@{SetX}}
+\index{SetX@{SetX}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Set\+X()}{SetX()}}
+{\footnotesize\ttfamily virtual void Space\+V\+I\+L.\+Base\+Item.\+SetX (\begin{DoxyParamCaption}\item[{int}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}} (x, y) position 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_position}{Space\+V\+I\+L.\+Core.\+I\+Position}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_base_item_aec3ac6bb0e7d814b478d89b93f8e3d18}\label{class_space_v_i_l_1_1_base_item_aec3ac6bb0e7d814b478d89b93f8e3d18}} 
+\index{Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}!Update@{Update}}
+\index{Update@{Update}!Space\+V\+I\+L\+::\+Base\+Item@{Space\+V\+I\+L\+::\+Base\+Item}}
+\subsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Base\+Item.\+Update (\begin{DoxyParamCaption}\item[{Geometry\+Event\+Type}]{type,  }\item[{int}]{value = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Update \mbox{\hyperlink{class_space_v_i_l_1_1_base_item}{Base\+Item}}\textquotesingle{}s state 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_event_update}{Space\+V\+I\+L.\+Core.\+I\+Event\+Update}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+F\+:/spacevil/\+C\+Sharp\+\_\+doc\+Only/\+Items/Base\+Item.\+cs\end{DoxyCompactItemize}

@@ -66,8 +66,23 @@ public final class WindowLayout {
 
     private CoreWindow handler;
 
-    public CoreWindow getHandler() {
+    public CoreWindow getCoreWindow() {
         return handler;
+    }
+    void setCoreWindow(CoreWindow window) {
+        if (handler != null && handler.equals(window)) return;
+        handler = window;
+        _id = handler.getWindowGuid();
+
+        wndLock.lock();
+        try {
+            WindowLayoutBox.initWindow(this);
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+            return;
+        } finally {
+            wndLock.unlock();
+        }
     }
 
     private UUID ParentGUID;
@@ -78,9 +93,8 @@ public final class WindowLayout {
     private TaskThread thread_manager;
     private ActionManager manager;
 
-    public WindowLayout(CoreWindow window, String name, String title) {
-        handler = window;
-        _id = handler.getWindowGuid();
+    public WindowLayout(String name, String title) {
+
         setWindowName(name);
         setWindowTitle(title);
 
@@ -98,48 +112,16 @@ public final class WindowLayout {
         manager = new ActionManager(this);
         engine = new DrawEngine(this);
 
-        wndLock.lock();
-        try {
-            WindowLayoutBox.initWindow(this);
-        } catch (Exception ex) {
-            System.out.println(ex.toString());
-            return;
-        } finally {
-            wndLock.unlock();
-        }
         setFocusedItem(_window);
     }
 
-    public WindowLayout(CoreWindow window, String name, String title, int width, int height, Boolean border_hidden) {
-        handler = window;
-        _id = handler.getWindowGuid();
-        setWindowName(name);
-        setWindowTitle(title);
+    public WindowLayout(String name, String title, int width, int height, Boolean border_hidden) {
+        this(name, title);
 
         setWidth(width);
         setHeight(height);
 
-        isDialog = false;
         isBorderHidden = border_hidden;
-        isClosed = true;
-        isHidden = false;
-        isResizable = true;
-        isCentered = true;
-        isFocusable = true;
-        isAlwaysOnTop = false;
-        isOutsideClickClosable = false;
-        isMaximized = false;
-
-        manager = new ActionManager(this);
-        engine = new DrawEngine(this);
-
-        wndLock.lock();
-        try {
-            WindowLayoutBox.initWindow(this);
-        } finally {
-            wndLock.unlock();
-        }
-        setFocusedItem(_window);
     }
 
     protected void updatePosition() {

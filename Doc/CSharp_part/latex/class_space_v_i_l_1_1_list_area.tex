@@ -1,0 +1,301 @@
+\hypertarget{class_space_v_i_l_1_1_list_area}{}\section{Space\+V\+I\+L.\+List\+Area Class Reference}
+\label{class_space_v_i_l_1_1_list_area}\index{Space\+V\+I\+L.\+List\+Area@{Space\+V\+I\+L.\+List\+Area}}
+
+
+Inherits \mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Space\+V\+I\+L.\+Prototype}}, and I\+V\+Layout.
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a4092a62f4f548a9289632a91cd8d452a}{Set\+Step}} (int value)
+\begin{DoxyCompactList}\small\item\em Scroll\+Bar moving step \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_ad4b98361d3921da08ec168b2638c5031}\label{class_space_v_i_l_1_1_list_area_ad4b98361d3921da08ec168b2638c5031}} 
+int {\bfseries Get\+Step} ()
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a07991a67811d7341bde2968f4703f139}\label{class_space_v_i_l_1_1_list_area_a07991a67811d7341bde2968f4703f139}} 
+int \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a07991a67811d7341bde2968f4703f139}{Get\+Selection}} ()
+\begin{DoxyCompactList}\small\item\em \begin{DoxyReturn}{Returns}
+Number of the selected item 
+\end{DoxyReturn}
+\end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a365f9d965afdee8da578de16dc6f7e83}\label{class_space_v_i_l_1_1_list_area_a365f9d965afdee8da578de16dc6f7e83}} 
+\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}} \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a365f9d965afdee8da578de16dc6f7e83}{Get\+Selection\+Item}} ()
+\begin{DoxyCompactList}\small\item\em \begin{DoxyReturn}{Returns}
+selected item 
+\end{DoxyReturn}
+\end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a4a0e42a96f357bf2f0c58731ade71ffd}{Set\+Selection}} (int index)
+\begin{DoxyCompactList}\small\item\em Set selected item by index \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_ac7ed057dd6d34a265aaacca971c61b2b}{Unselect}} ()
+\begin{DoxyCompactList}\small\item\em Unselect all items \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_afb9baa1b6b71d8223b3b2b86ed95dce1}{Set\+Selection\+Visibility}} (bool visibility)
+\begin{DoxyCompactList}\small\item\em Is selection changes view of the item or not \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_ae8372a3bdb6cfd42b0ecd3f5deb3bbf6}\label{class_space_v_i_l_1_1_list_area_ae8372a3bdb6cfd42b0ecd3f5deb3bbf6}} 
+bool {\bfseries Get\+Selection\+Visibility} ()
+\item 
+\mbox{\hyperlink{class_space_v_i_l_1_1_rectangle}{Rectangle}} \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a204ed17573d7651514702422b51f1389}{Get\+Substrate}} ()
+\begin{DoxyCompactList}\small\item\em Substrate under the selected item \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_ab4a8ef41e41ece5524e49a0244f5fd21}{Set\+Hover\+Visibility}} (bool visibility)
+\begin{DoxyCompactList}\small\item\em Is hovering changes view of the item or not \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a968022f6d0c8ec10b48fe4aa2e5561fd}\label{class_space_v_i_l_1_1_list_area_a968022f6d0c8ec10b48fe4aa2e5561fd}} 
+bool {\bfseries Get\+Hover\+Visibility} ()
+\item 
+\mbox{\hyperlink{class_space_v_i_l_1_1_rectangle}{Rectangle}} \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_af2b6ef18d4cbaea198704bf1d0dac97a}{Get\+Hover\+Substrate}} ()
+\begin{DoxyCompactList}\small\item\em Substrate under the hovered item \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a9ff09f668b7bbb22943905402aaa5938}{List\+Area}} ()
+\begin{DoxyCompactList}\small\item\em Constructs a \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_ac60446e61da68f5a73ef6981ac26c9a3}{Init\+Elements}} ()
+\begin{DoxyCompactList}\small\item\em Initialization and adding of all elements in the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a14f2764a6ad13641bf4761f37a5ec2ae}{Set\+Mouse\+Hover}} (bool value)
+\begin{DoxyCompactList}\small\item\em If something changes when mouse hovered \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a44efda800a4a280b7a452bd09c90f484}{Insert\+Item}} (\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}} item, Int32 index)
+\begin{DoxyCompactList}\small\item\em Insert item into the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} by index \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a31bfa40ca257cb8d2709f1b0b15fea71}{Add\+Item}} (\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}} item)
+\begin{DoxyCompactList}\small\item\em Add item to the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a0020756686088a62a43388973fa2d7bf}{Remove\+Item}} (\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}} item)
+\begin{DoxyCompactList}\small\item\em Remove item from the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a0c0974eca2621188c88ba752a5f62a1a}{SetY}} (int \+\_\+y)
+\begin{DoxyCompactList}\small\item\em Set Y position of the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} \end{DoxyCompactList}\item 
+Int64 \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_aa7af82dde87cb38962fcf14378ebe39f}{Get\+V\+Scroll\+Offset}} ()
+\begin{DoxyCompactList}\small\item\em Vertical scroll offset in the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_aefc3de6f9419d56cdd7c00c3da7c135c}\label{class_space_v_i_l_1_1_list_area_aefc3de6f9419d56cdd7c00c3da7c135c}} 
+void {\bfseries Set\+V\+Scroll\+Offset} (Int64 value)
+\item 
+Int64 \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_afa9d172433e60b22c5220c06acff38fd}{Get\+H\+Scroll\+Offset}} ()
+\begin{DoxyCompactList}\small\item\em Horizontal scroll offset in the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a6af19a0f18ea5a2d28f2ad17605d155a}\label{class_space_v_i_l_1_1_list_area_a6af19a0f18ea5a2d28f2ad17605d155a}} 
+void {\bfseries Set\+H\+Scroll\+Offset} (Int64 value)
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_af0fb95222910f6e85274a38dfa506174}{Update\+Layout}} ()
+\begin{DoxyCompactList}\small\item\em Update all children and \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} sizes and positions according to confines \end{DoxyCompactList}\item 
+override void \mbox{\hyperlink{class_space_v_i_l_1_1_list_area_a04902026e7956980b7dce5bff22d082c}{Set\+Style}} (\mbox{\hyperlink{class_space_v_i_l_1_1_decorations_1_1_style}{Style}} style)
+\begin{DoxyCompactList}\small\item\em Set style of the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_abc77028057292a1e4bd149a4ab5e78ff}\label{class_space_v_i_l_1_1_list_area_abc77028057292a1e4bd149a4ab5e78ff}} 
+Event\+Common\+Method {\bfseries Selection\+Changed}
+\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a30e7266ebd685af3f12f386250b07689}\label{class_space_v_i_l_1_1_list_area_a30e7266ebd685af3f12f386250b07689}} 
+Event\+Common\+Method {\bfseries Item\+List\+Changed}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a9ff09f668b7bbb22943905402aaa5938}\label{class_space_v_i_l_1_1_list_area_a9ff09f668b7bbb22943905402aaa5938}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!List\+Area@{List\+Area}}
+\index{List\+Area@{List\+Area}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{List\+Area()}{ListArea()}}
+{\footnotesize\ttfamily Space\+V\+I\+L.\+List\+Area.\+List\+Area (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Constructs a \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} 
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a31bfa40ca257cb8d2709f1b0b15fea71}\label{class_space_v_i_l_1_1_list_area_a31bfa40ca257cb8d2709f1b0b15fea71}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Add\+Item@{Add\+Item}}
+\index{Add\+Item@{Add\+Item}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Add\+Item()}{AddItem()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+List\+Area.\+Add\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}}}]{item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Add item to the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_af2b6ef18d4cbaea198704bf1d0dac97a}\label{class_space_v_i_l_1_1_list_area_af2b6ef18d4cbaea198704bf1d0dac97a}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Get\+Hover\+Substrate@{Get\+Hover\+Substrate}}
+\index{Get\+Hover\+Substrate@{Get\+Hover\+Substrate}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Get\+Hover\+Substrate()}{GetHoverSubstrate()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_space_v_i_l_1_1_rectangle}{Rectangle}} Space\+V\+I\+L.\+List\+Area.\+Get\+Hover\+Substrate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Substrate under the hovered item 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_afa9d172433e60b22c5220c06acff38fd}\label{class_space_v_i_l_1_1_list_area_afa9d172433e60b22c5220c06acff38fd}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Get\+H\+Scroll\+Offset@{Get\+H\+Scroll\+Offset}}
+\index{Get\+H\+Scroll\+Offset@{Get\+H\+Scroll\+Offset}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Get\+H\+Scroll\+Offset()}{GetHScrollOffset()}}
+{\footnotesize\ttfamily Int64 Space\+V\+I\+L.\+List\+Area.\+Get\+H\+Scroll\+Offset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Horizontal scroll offset in the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a204ed17573d7651514702422b51f1389}\label{class_space_v_i_l_1_1_list_area_a204ed17573d7651514702422b51f1389}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Get\+Substrate@{Get\+Substrate}}
+\index{Get\+Substrate@{Get\+Substrate}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Get\+Substrate()}{GetSubstrate()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_space_v_i_l_1_1_rectangle}{Rectangle}} Space\+V\+I\+L.\+List\+Area.\+Get\+Substrate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Substrate under the selected item 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_aa7af82dde87cb38962fcf14378ebe39f}\label{class_space_v_i_l_1_1_list_area_aa7af82dde87cb38962fcf14378ebe39f}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Get\+V\+Scroll\+Offset@{Get\+V\+Scroll\+Offset}}
+\index{Get\+V\+Scroll\+Offset@{Get\+V\+Scroll\+Offset}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Get\+V\+Scroll\+Offset()}{GetVScrollOffset()}}
+{\footnotesize\ttfamily Int64 Space\+V\+I\+L.\+List\+Area.\+Get\+V\+Scroll\+Offset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Vertical scroll offset in the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_ac60446e61da68f5a73ef6981ac26c9a3}\label{class_space_v_i_l_1_1_list_area_ac60446e61da68f5a73ef6981ac26c9a3}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Init\+Elements@{Init\+Elements}}
+\index{Init\+Elements@{Init\+Elements}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Init\+Elements()}{InitElements()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+List\+Area.\+Init\+Elements (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Initialization and adding of all elements in the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype_ac3379fe02923ee155b5b0084abf27420}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a44efda800a4a280b7a452bd09c90f484}\label{class_space_v_i_l_1_1_list_area_a44efda800a4a280b7a452bd09c90f484}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Insert\+Item@{Insert\+Item}}
+\index{Insert\+Item@{Insert\+Item}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Insert\+Item()}{InsertItem()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+List\+Area.\+Insert\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}}}]{item,  }\item[{Int32}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Insert item into the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} by index 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype_a9dd004dfa4ca2ea37c21770a24434270}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a0020756686088a62a43388973fa2d7bf}\label{class_space_v_i_l_1_1_list_area_a0020756686088a62a43388973fa2d7bf}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Remove\+Item@{Remove\+Item}}
+\index{Remove\+Item@{Remove\+Item}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Remove\+Item()}{RemoveItem()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+List\+Area.\+Remove\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}}}]{item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Remove item from the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype_a7a2aabccfe6389f71d0265fa73f0ae87}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_ab4a8ef41e41ece5524e49a0244f5fd21}\label{class_space_v_i_l_1_1_list_area_ab4a8ef41e41ece5524e49a0244f5fd21}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Set\+Hover\+Visibility@{Set\+Hover\+Visibility}}
+\index{Set\+Hover\+Visibility@{Set\+Hover\+Visibility}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Set\+Hover\+Visibility()}{SetHoverVisibility()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+List\+Area.\+Set\+Hover\+Visibility (\begin{DoxyParamCaption}\item[{bool}]{visibility }\end{DoxyParamCaption})}
+
+
+
+Is hovering changes view of the item or not 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a14f2764a6ad13641bf4761f37a5ec2ae}\label{class_space_v_i_l_1_1_list_area_a14f2764a6ad13641bf4761f37a5ec2ae}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Set\+Mouse\+Hover@{Set\+Mouse\+Hover}}
+\index{Set\+Mouse\+Hover@{Set\+Mouse\+Hover}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Set\+Mouse\+Hover()}{SetMouseHover()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+List\+Area.\+Set\+Mouse\+Hover (\begin{DoxyParamCaption}\item[{bool}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+If something changes when mouse hovered 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a4a0e42a96f357bf2f0c58731ade71ffd}\label{class_space_v_i_l_1_1_list_area_a4a0e42a96f357bf2f0c58731ade71ffd}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Set\+Selection@{Set\+Selection}}
+\index{Set\+Selection@{Set\+Selection}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Set\+Selection()}{SetSelection()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+List\+Area.\+Set\+Selection (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Set selected item by index 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_afb9baa1b6b71d8223b3b2b86ed95dce1}\label{class_space_v_i_l_1_1_list_area_afb9baa1b6b71d8223b3b2b86ed95dce1}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Set\+Selection\+Visibility@{Set\+Selection\+Visibility}}
+\index{Set\+Selection\+Visibility@{Set\+Selection\+Visibility}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Set\+Selection\+Visibility()}{SetSelectionVisibility()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+List\+Area.\+Set\+Selection\+Visibility (\begin{DoxyParamCaption}\item[{bool}]{visibility }\end{DoxyParamCaption})}
+
+
+
+Is selection changes view of the item or not 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a4092a62f4f548a9289632a91cd8d452a}\label{class_space_v_i_l_1_1_list_area_a4092a62f4f548a9289632a91cd8d452a}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Set\+Step@{Set\+Step}}
+\index{Set\+Step@{Set\+Step}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Set\+Step()}{SetStep()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+List\+Area.\+Set\+Step (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+
+
+
+Scroll\+Bar moving step 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a04902026e7956980b7dce5bff22d082c}\label{class_space_v_i_l_1_1_list_area_a04902026e7956980b7dce5bff22d082c}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Set\+Style@{Set\+Style}}
+\index{Set\+Style@{Set\+Style}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Set\+Style()}{SetStyle()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+List\+Area.\+Set\+Style (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_space_v_i_l_1_1_decorations_1_1_style}{Style}}}]{style }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Set style of the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype_ae96644a6ace490afb376fb542161e541}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_a0c0974eca2621188c88ba752a5f62a1a}\label{class_space_v_i_l_1_1_list_area_a0c0974eca2621188c88ba752a5f62a1a}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!SetY@{SetY}}
+\index{SetY@{SetY}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Set\+Y()}{SetY()}}
+{\footnotesize\ttfamily override void Space\+V\+I\+L.\+List\+Area.\+SetY (\begin{DoxyParamCaption}\item[{int}]{\+\_\+y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Set Y position of the \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} 
+
+
+
+Reimplemented from \mbox{\hyperlink{class_space_v_i_l_1_1_prototype}{Space\+V\+I\+L.\+Prototype}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_ac7ed057dd6d34a265aaacca971c61b2b}\label{class_space_v_i_l_1_1_list_area_ac7ed057dd6d34a265aaacca971c61b2b}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Unselect@{Unselect}}
+\index{Unselect@{Unselect}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Unselect()}{Unselect()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+List\+Area.\+Unselect (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Unselect all items 
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_list_area_af0fb95222910f6e85274a38dfa506174}\label{class_space_v_i_l_1_1_list_area_af0fb95222910f6e85274a38dfa506174}} 
+\index{Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}!Update\+Layout@{Update\+Layout}}
+\index{Update\+Layout@{Update\+Layout}!Space\+V\+I\+L\+::\+List\+Area@{Space\+V\+I\+L\+::\+List\+Area}}
+\subsubsection{\texorpdfstring{Update\+Layout()}{UpdateLayout()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+List\+Area.\+Update\+Layout (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Update all children and \mbox{\hyperlink{class_space_v_i_l_1_1_list_area}{List\+Area}} sizes and positions according to confines 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+F\+:/spacevil/\+C\+Sharp\+\_\+doc\+Only/\+Items/List\+Area.\+cs\end{DoxyCompactItemize}

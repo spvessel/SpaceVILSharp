@@ -1,0 +1,160 @@
+\hypertarget{class_space_v_i_l_1_1_points_container}{}\section{Space\+V\+I\+L.\+Points\+Container Class Reference}
+\label{class_space_v_i_l_1_1_points_container}\index{Space\+V\+I\+L.\+Points\+Container@{Space\+V\+I\+L.\+Points\+Container}}
+
+
+Inherits \mbox{\hyperlink{class_space_v_i_l_1_1_primitive}{Space\+V\+I\+L.\+Primitive}}, \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_points}{Space\+V\+I\+L.\+Core.\+I\+Points}}, and \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_line}{Space\+V\+I\+L.\+Core.\+I\+Line}}.
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_space_v_i_l_1_1_points_container_ac769a83ca0591540c776169c376446a3}{Points\+Container}} ()
+\begin{DoxyCompactList}\small\item\em Constructs a \mbox{\hyperlink{class_space_v_i_l_1_1_points_container}{Points\+Container}} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_points_container_a0926aa9cf438fe742d4b7ad6c5cdcd7d}{Set\+Point\+Thickness}} (float thickness)
+\begin{DoxyCompactList}\small\item\em Points thickness \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_a289a6eb2df75c9a2c02dc69b3cbcfaf0}\label{class_space_v_i_l_1_1_points_container_a289a6eb2df75c9a2c02dc69b3cbcfaf0}} 
+float {\bfseries Get\+Point\+Thickness} ()
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_points_container_a35182a540471d4cd742ad2b484cd8769}{Set\+Point\+Color}} (Color color)
+\begin{DoxyCompactList}\small\item\em Points color \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_aa0a2d535d8044c729aff9622b2457be4}\label{class_space_v_i_l_1_1_points_container_aa0a2d535d8044c729aff9622b2457be4}} 
+Color {\bfseries Get\+Point\+Color} ()
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_points_container_a0694fefae0c13a4006608adc71c9f706}{Set\+Shape\+Pointer}} (List$<$ float\mbox{[}$\,$\mbox{]}$>$ shape)
+\begin{DoxyCompactList}\small\item\em Shape of the points \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_a34976d6b46131e939358bcbffbce7d96}\label{class_space_v_i_l_1_1_points_container_a34976d6b46131e939358bcbffbce7d96}} 
+List$<$ float\mbox{[}$\,$\mbox{]}$>$ {\bfseries Get\+Shape\+Pointer} ()
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_points_container_abcf47862e61ce7aea7992ced4258da2c}{Set\+Points\+Coord}} (List$<$ float\mbox{[}$\,$\mbox{]}$>$ coord)
+\begin{DoxyCompactList}\small\item\em List of the points coordinates \end{DoxyCompactList}\item 
+override List$<$ float\mbox{[}$\,$\mbox{]}$>$ \mbox{\hyperlink{class_space_v_i_l_1_1_points_container_a7fd8cf39e463780c871d538b884a3fdb}{Make\+Shape}} ()
+\begin{DoxyCompactList}\small\item\em Make shape according to triangles list assigned with set\+Triangles \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_points_container_a451c8c1e3a88e205d777e7a4cfe46f97}{Set\+Line\+Thickness}} (float thickness)
+\begin{DoxyCompactList}\small\item\em Thickness of the line between the points \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_ac0de00bb61b2f72b9c5c45499cfc7ff8}\label{class_space_v_i_l_1_1_points_container_ac0de00bb61b2f72b9c5c45499cfc7ff8}} 
+float {\bfseries Get\+Line\+Thickness} ()
+\item 
+void \mbox{\hyperlink{class_space_v_i_l_1_1_points_container_a8e72d762905dd7f4a8d27863a36be99c}{Set\+Line\+Color}} (Color color)
+\begin{DoxyCompactList}\small\item\em The line color \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_a588fa56f99bee63af3b0262787577ac1}\label{class_space_v_i_l_1_1_points_container_a588fa56f99bee63af3b0262787577ac1}} 
+Color {\bfseries Get\+Line\+Color} ()
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_ac769a83ca0591540c776169c376446a3}\label{class_space_v_i_l_1_1_points_container_ac769a83ca0591540c776169c376446a3}} 
+\index{Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}!Points\+Container@{Points\+Container}}
+\index{Points\+Container@{Points\+Container}!Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}}
+\subsubsection{\texorpdfstring{Points\+Container()}{PointsContainer()}}
+{\footnotesize\ttfamily Space\+V\+I\+L.\+Points\+Container.\+Points\+Container (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Constructs a \mbox{\hyperlink{class_space_v_i_l_1_1_points_container}{Points\+Container}} 
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_a7fd8cf39e463780c871d538b884a3fdb}\label{class_space_v_i_l_1_1_points_container_a7fd8cf39e463780c871d538b884a3fdb}} 
+\index{Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}!Make\+Shape@{Make\+Shape}}
+\index{Make\+Shape@{Make\+Shape}!Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}}
+\subsubsection{\texorpdfstring{Make\+Shape()}{MakeShape()}}
+{\footnotesize\ttfamily override List$<$float\mbox{[}$\,$\mbox{]}$>$ Space\+V\+I\+L.\+Points\+Container.\+Make\+Shape (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Make shape according to triangles list assigned with set\+Triangles 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_line}{Space\+V\+I\+L.\+Core.\+I\+Line}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_a8e72d762905dd7f4a8d27863a36be99c}\label{class_space_v_i_l_1_1_points_container_a8e72d762905dd7f4a8d27863a36be99c}} 
+\index{Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}!Set\+Line\+Color@{Set\+Line\+Color}}
+\index{Set\+Line\+Color@{Set\+Line\+Color}!Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}}
+\subsubsection{\texorpdfstring{Set\+Line\+Color()}{SetLineColor()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Points\+Container.\+Set\+Line\+Color (\begin{DoxyParamCaption}\item[{Color}]{color }\end{DoxyParamCaption})}
+
+
+
+The line color 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_line}{Space\+V\+I\+L.\+Core.\+I\+Line}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_a451c8c1e3a88e205d777e7a4cfe46f97}\label{class_space_v_i_l_1_1_points_container_a451c8c1e3a88e205d777e7a4cfe46f97}} 
+\index{Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}!Set\+Line\+Thickness@{Set\+Line\+Thickness}}
+\index{Set\+Line\+Thickness@{Set\+Line\+Thickness}!Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}}
+\subsubsection{\texorpdfstring{Set\+Line\+Thickness()}{SetLineThickness()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Points\+Container.\+Set\+Line\+Thickness (\begin{DoxyParamCaption}\item[{float}]{thickness }\end{DoxyParamCaption})}
+
+
+
+Thickness of the line between the points 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_line}{Space\+V\+I\+L.\+Core.\+I\+Line}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_a35182a540471d4cd742ad2b484cd8769}\label{class_space_v_i_l_1_1_points_container_a35182a540471d4cd742ad2b484cd8769}} 
+\index{Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}!Set\+Point\+Color@{Set\+Point\+Color}}
+\index{Set\+Point\+Color@{Set\+Point\+Color}!Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}}
+\subsubsection{\texorpdfstring{Set\+Point\+Color()}{SetPointColor()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Points\+Container.\+Set\+Point\+Color (\begin{DoxyParamCaption}\item[{Color}]{color }\end{DoxyParamCaption})}
+
+
+
+Points color 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_points}{Space\+V\+I\+L.\+Core.\+I\+Points}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_abcf47862e61ce7aea7992ced4258da2c}\label{class_space_v_i_l_1_1_points_container_abcf47862e61ce7aea7992ced4258da2c}} 
+\index{Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}!Set\+Points\+Coord@{Set\+Points\+Coord}}
+\index{Set\+Points\+Coord@{Set\+Points\+Coord}!Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}}
+\subsubsection{\texorpdfstring{Set\+Points\+Coord()}{SetPointsCoord()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Points\+Container.\+Set\+Points\+Coord (\begin{DoxyParamCaption}\item[{List$<$ float\mbox{[}$\,$\mbox{]}$>$}]{coord }\end{DoxyParamCaption})}
+
+
+
+List of the points coordinates 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_line}{Space\+V\+I\+L.\+Core.\+I\+Line}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_a0926aa9cf438fe742d4b7ad6c5cdcd7d}\label{class_space_v_i_l_1_1_points_container_a0926aa9cf438fe742d4b7ad6c5cdcd7d}} 
+\index{Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}!Set\+Point\+Thickness@{Set\+Point\+Thickness}}
+\index{Set\+Point\+Thickness@{Set\+Point\+Thickness}!Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}}
+\subsubsection{\texorpdfstring{Set\+Point\+Thickness()}{SetPointThickness()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Points\+Container.\+Set\+Point\+Thickness (\begin{DoxyParamCaption}\item[{float}]{thickness }\end{DoxyParamCaption})}
+
+
+
+Points thickness 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_points}{Space\+V\+I\+L.\+Core.\+I\+Points}}.
+
+\mbox{\Hypertarget{class_space_v_i_l_1_1_points_container_a0694fefae0c13a4006608adc71c9f706}\label{class_space_v_i_l_1_1_points_container_a0694fefae0c13a4006608adc71c9f706}} 
+\index{Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}!Set\+Shape\+Pointer@{Set\+Shape\+Pointer}}
+\index{Set\+Shape\+Pointer@{Set\+Shape\+Pointer}!Space\+V\+I\+L\+::\+Points\+Container@{Space\+V\+I\+L\+::\+Points\+Container}}
+\subsubsection{\texorpdfstring{Set\+Shape\+Pointer()}{SetShapePointer()}}
+{\footnotesize\ttfamily void Space\+V\+I\+L.\+Points\+Container.\+Set\+Shape\+Pointer (\begin{DoxyParamCaption}\item[{List$<$ float\mbox{[}$\,$\mbox{]}$>$}]{shape }\end{DoxyParamCaption})}
+
+
+
+Shape of the points 
+
+
+
+Implements \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_points}{Space\+V\+I\+L.\+Core.\+I\+Points}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+F\+:/spacevil/\+C\+Sharp\+\_\+doc\+Only/\+Items/Points\+Container.\+cs\end{DoxyCompactItemize}

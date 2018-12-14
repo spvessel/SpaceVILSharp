@@ -8,13 +8,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public final class GraphicsMathService {
+    /**
+     * Class with some functions for constructing custom figures
+     */
 
     private GraphicsMathService() {
     }
 
+    /**
+     * Mix two or more colors
+     */
     public static Color mixColors(Color... colors) {
-
-        // List<Color> m_colors = Arrays.stream(colors).collect(Collectors.toList());
         if (colors.length == 0)
             return new Color(255, 255, 255);
         if (colors.length == 1)
@@ -43,7 +47,7 @@ public final class GraphicsMathService {
         return new Color((int) r, (int) g, (int) b, (int) a);
     }
 
-    static protected List<float[]> toGL(InterfaceBaseItem item, WindowLayout handler) // where TLayout : VisualItem
+    static List<float[]> toGL(InterfaceBaseItem item, WindowLayout handler) // where TLayout : VisualItem
     {
         if (item.getTriangles() == null)
             return null;
@@ -58,7 +62,7 @@ public final class GraphicsMathService {
         return result;
     }
 
-    static protected List<float[]> toGL(List<float[]> triangles, WindowLayout handler) // where TLayout : VisualItem
+    static List<float[]> toGL(List<float[]> triangles, WindowLayout handler) // where TLayout : VisualItem
     {
         List<float[]> result = new LinkedList<>();
 
@@ -70,7 +74,7 @@ public final class GraphicsMathService {
         return result;
     }
 
-    static protected float[] toGL(float[] triangles, WindowLayout handler) // where TLayout : VisualItem
+    static float[] toGL(float[] triangles, WindowLayout handler) // where TLayout : VisualItem
     {
         for (int i = 0; i < triangles.length / 2; i++) {
             triangles[i * 2 + 0] /= (((float) handler.getWidth()) * 2.0f - 1.0f);
@@ -79,6 +83,15 @@ public final class GraphicsMathService {
         return triangles;
     }
 
+    /**
+     * Make a rectangle with roundness corners
+     * @param cornerRadius radius values for all corners
+     * @param width rectangle width
+     * @param height rectangle height
+     * @param x X position (left top corner) of the result object
+     * @param y Y position (left top corner) of the result object
+     * @return Points list of the rectangle with roundness corners
+     */
     public static List<float[]> getRoundSquare(CornerRadius cornerRadius, float width, float height, int x, int y) {
         if (width <= 0 || height <= 0)
             return null;
@@ -165,6 +178,15 @@ public final class GraphicsMathService {
         return tri;
     }
 
+    /**
+     * Make a rectangle with roundness corners
+     * @param width rectangle width
+     * @param height rectangle height
+     * @param radius same radius value for each corner
+     * @param x X position (left top corner) of the result object
+     * @param y Y position (left top corner) of the result object
+     * @return Points list of the rectangle with roundness corners
+     */
     public static List<float[]> getRoundSquare(float width, float height, float radius, int x, int y) {
         if (radius < 0)
             radius = 0;
@@ -249,6 +271,10 @@ public final class GraphicsMathService {
         return circleSect;
     }
 
+    /**
+     * Make a triangle with corners in (x + w/2, y), (x, y + h), (x + w, y + h), rotated on a degrees
+     * @param a rotation angle for the triangle in degrees
+     */
     public static List<float[]> getTriangle(float w, float h, int x, int y, int a) {
         float x0 = x + w / 2;
         float y0 = y + h / 2;
@@ -270,6 +296,10 @@ public final class GraphicsMathService {
         return figure;
     }
 
+    /**
+     * Make an ellipse with two equal radii (i. e. circle)
+     * @param n points count on the ellipse border
+     */
     static public List<float[]> getEllipse(float r, int n) {
         float x_center = r;
         float y_center = r;
@@ -292,6 +322,14 @@ public final class GraphicsMathService {
         return triangles;
     }
 
+    /**
+     * Make an ellipse
+     * @param w ellipse width
+     * @param h ellipse height
+     * @param x X position of the left top corner (ellipse center in x + w/2)
+     * @param y Y position of the left top corner (ellipse center in y + h/2)
+     * @param n points count on the ellipse border
+     */
     static public List<float[]> getEllipse(float w, float h, int x, int y, int n) {
         float rX = w / 2;
         float rY = h / 2;
@@ -315,6 +353,13 @@ public final class GraphicsMathService {
         return triangles;
     }
 
+    /**
+     * Make cross figure
+     * @param w cross width
+     * @param h cross height
+     * @param thickness cross parts thickness
+     * @param alpha cross rotation angle in degrees
+     */
     static public List<float[]> getCross(float w, float h, float thickness, int alpha) {
         List<float[]> figure = new LinkedList<>();
 
@@ -380,6 +425,9 @@ public final class GraphicsMathService {
         return figure;
     }
 
+    /**
+     * Make rectangle as two triangles by its width, height and top left corner position (x, y)
+     */
     public static List<float[]> getRectangle(float w, float h, float x, float y) {
         List<float[]> figure = new LinkedList<>();
         figure.add(new float[] { x, y, 0.0f });
@@ -392,6 +440,9 @@ public final class GraphicsMathService {
         return figure;
     }
 
+    /**
+     * Move shape by X or/and Y direction
+     */
     public static List<float[]> moveShape(List<float[]> shape, float x, float y) {
         if (shape.size() == 0)
             return null;
@@ -410,6 +461,9 @@ public final class GraphicsMathService {
         return result;
     }
 
+    /**
+     * Make folder icon shape as three rectangles
+     */
     public static List<float[]> getFolderIconShape(float w, float h, float x, float y) {
         List<float[]> triangles = new LinkedList<>();
         triangles.addAll(getRectangle(w / 3, h, 0, 0));
@@ -418,6 +472,12 @@ public final class GraphicsMathService {
         return triangles;
     }
 
+    /**
+     * Make a star figure
+     * @param R Circumscribed circle radius
+     * @param r Incircle radius
+     * @param n vertices count
+     */
     static public List<float[]> getStar(float R, float r, int n) {
         float x_center = r;
         float y_center = r;
@@ -464,6 +524,9 @@ public final class GraphicsMathService {
         return triangles;
     }
 
+    /**
+     * Make a regular polygon
+     */
     static public List<float[]> getRegularPolygon(float r, int n) {
         float x_center = r;
         float y_center = r;
@@ -486,6 +549,16 @@ public final class GraphicsMathService {
         return triangles;
     }
 
+    /**
+     * Make a rectangle border with roundness corners
+     * @param width rectangle border width
+     * @param height rectangle border height
+     * @param radius same radius value for each corner
+     * @param thickness border thickness
+     * @param x X position (left top corner) of the result object
+     * @param y Y position (left top corner) of the result object
+     * @return Points list of the rectangle border with roundness corners
+     */
     public static List<float[]> getRoundSquareBorder(float width, float height, float radius, float thickness, int x,
             int y) {
         if (radius < 0)
@@ -529,6 +602,16 @@ public final class GraphicsMathService {
         return makeBorder(border, thickness);
     }
 
+    /**
+     * Make a rectangle border with roundness corners
+     * @param cornerRadius radius values for all corners
+     * @param width rectangle border width
+     * @param height rectangle border height
+     * @param thickness border thickness
+     * @param x X position (left top corner) of the result object
+     * @param y Y position (left top corner) of the result object
+     * @return Points list of the rectangle border with roundness corners
+     */
     public static List<float[]> getRoundSquareBorder(CornerRadius cornerRadius, float width, float height,
             float thickness, int x, int y) {
 
@@ -680,7 +763,7 @@ class BorderSection {
     float nx;
     float ny;
 
-    public BorderSection(float x1, float y1, float x2, float y2, float x3, float y3) {
+    BorderSection(float x1, float y1, float x2, float y2, float x3, float y3) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;

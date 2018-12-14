@@ -53,7 +53,7 @@ public class MessageBox extends DialogWindow {
     public void initWindow() {
         titleBar = new TitleBar();
         msg = new Label();
-        WindowLayout Handler = new WindowLayout(this, "MessageBox_" + getCount(), "MessageBox_" + getCount());
+        WindowLayout Handler = new WindowLayout("MessageBox_" + getCount(), "MessageBox_" + getCount());
         setHandler(Handler);
         // window's attr
         Handler.setWidth(300);

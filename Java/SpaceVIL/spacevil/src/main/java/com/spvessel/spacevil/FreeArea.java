@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDraggable {
+    /**
+     * Unbounded area with free location of inner items
+     */
     private static int count = 0;
     private int _x_press = 0;
     private int _y_press = 0;

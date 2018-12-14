@@ -12,7 +12,7 @@ import java.awt.Color;
 public class TextTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout(this, "TextTest", "TextTest", 800, 400, true);
+        WindowLayout Handler = new WindowLayout("TextTest", "TextTest", 800, 400, true);
         setHandler(Handler);
 
         Handler.setMinSize(500, 100);

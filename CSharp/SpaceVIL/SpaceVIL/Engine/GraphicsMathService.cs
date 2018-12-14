@@ -17,7 +17,7 @@ namespace SpaceVIL
         internal float nx;
         internal float ny;
 
-        public BorderSection(float x1, float y1, float x2, float y2, float x3, float y3)
+        internal BorderSection(float x1, float y1, float x2, float y2, float x3, float y3)
         {
             this.x1 = x1;
             this.y1 = y1;
@@ -64,8 +64,14 @@ namespace SpaceVIL
         }
     }
 
+    /// <summary>
+    /// Class with some functions for constructing custom figures
+    /// </summary>
     public static class GraphicsMathService
     {
+        /// <summary>
+        /// Mix two or more colors
+        /// </summary>
         public static Color MixColors(params Color[] m_colors)
         {
             if (m_colors.Length == 0)
@@ -95,6 +101,10 @@ namespace SpaceVIL
             }
             return Color.FromArgb((int)a, (int)r, (int)g, (int)b);
         }
+
+        /// <summary>
+        /// Make rectangle as two triangles by its width, height and top left corner position (x, y)
+        /// </summary>
         static public List<float[]> GetRectangle(float w = 100, float h = 100, float x = 0, float y = 0)
         {
             return new List<float[]>
@@ -109,6 +119,15 @@ namespace SpaceVIL
             };
         }
 
+        /// <summary>
+        /// Make a rectangle with roundness corners
+        /// </summary>
+        /// <param name="cornerRadius"> radius values for all corners </param>
+        /// <param name="width"> rectangle width (default = 100) </param>
+        /// <param name="height"> rectangle height (default = 100) </param>
+        /// <param name="x"> X position (left top corner) of the result object (default = 0) </param>
+        /// <param name="y"> Y position (left top corner) of the result object (default = 0) </param>
+        /// <returns> Points list of the rectangle with roundness corners </returns>
         static public List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100, int x = 0, int y = 0)
         {
             if (width <= 0 || height <= 0)
@@ -186,7 +205,7 @@ namespace SpaceVIL
             return triangles;
         }
 
-        static internal List<float[]> RectToTri(PointF leftTop, PointF rightBottom)
+        private static List<float[]> RectToTri(PointF leftTop, PointF rightBottom)
         {
             //Начало координат в левом верхнем углу
             List<float[]> tri = new List<float[]>();
@@ -202,6 +221,15 @@ namespace SpaceVIL
             return tri;
         }
 
+        /// <summary>
+        /// Make a rectangle with roundness corners
+        /// </summary>
+        /// <param name="width"> rectangle width (default = 100) </param>
+        /// <param name="height"> rectangle height (default = 100) </param>
+        /// <param name="radius"> same radius value for each corner (default = 0) </param>
+        /// <param name="x"> X position (left top corner) of the result object (default = 0) </param>
+        /// <param name="y"> Y position (left top corner) of the result object (default = 0) </param>
+        /// <returns> Points list of the rectangle with roundness corners </returns>
         static public List<float[]> GetRoundSquare(float width = 100, float height = 100, float radius = 0.0f, int x = 0, int y = 0)
         {
             if (width <= 0 || height <= 0)
@@ -319,6 +347,12 @@ namespace SpaceVIL
             return result;
         }
 
+        /// <summary>
+        /// Make a star figure
+        /// </summary>
+        /// <param name="R"> Circumscribed circle radius </param>
+        /// <param name="r"> Incircle radius </param>
+        /// <param name="n"> vertices count </param>
         static public List<float[]> GetStar(float R = 100, float r = 50, int n = 5)
         {
             float x_center = r;
@@ -401,6 +435,10 @@ namespace SpaceVIL
             triangles.RemoveAt(triangles.Count - 1);
             return triangles;
         }
+
+        /// <summary>
+        /// Make a regular polygon
+        /// </summary>
         static public List<float[]> GetRegularPolygon(float r = 100, int n = 6)
         {
             float x_center = r;
@@ -437,6 +475,11 @@ namespace SpaceVIL
 
             return triangles;
         }
+
+        /// <summary>
+        /// Make an ellipse with two equal radii (i. e. circle)
+        /// </summary>
+        /// <param name="n"> points count on the ellipse border (default = 32) </param>
         static public List<float[]> GetEllipse(float r = 100, int n = 32)
         {
             float x_center = r;
@@ -473,6 +516,15 @@ namespace SpaceVIL
 
             return triangles;
         }
+
+        /// <summary>
+        /// Make an ellipse
+        /// </summary>
+        /// <param name="w"> ellipse width </param>
+        /// <param name="h"> ellipse height </param>
+        /// <param name="x"> X position of the left top corner (ellipse center in x + w/2) (default = 0) </param>
+        /// <param name="y"> Y position of the left top corner (ellipse center in y + h/2) (default = 0) </param>
+        /// <param name="n"> points count on the ellipse border (default = 32) </param>
         static public List<float[]> GetEllipse(float w, float h, int x = 0, int y = 0, int n = 32)
         {
             float rX = w / 2;
@@ -510,6 +562,11 @@ namespace SpaceVIL
 
             return triangles;
         }
+
+        /// <summary>
+        /// Make a triangle with corners in (x + w/2, y), (x, y + h), (x + w, y + h), rotated on a degrees
+        /// </summary>
+        /// <param name="a"> rotation angle for the triangle in degrees (default = 0) </param>
         static public List<float[]> GetTriangle(float w = 100, float h = 100, int x = 0, int y = 0, int a = 0)
         {
             float x0 = x + w / 2;
@@ -530,7 +587,8 @@ namespace SpaceVIL
             }
             return figure;
         }
-        static public List<float[]> GetLine(float lenght, float thichness, int alpha)
+
+        internal static List<float[]> GetLine(float lenght, float thichness, int alpha)
         {
             List<float[]> figure = new List<float[]>();
             figure.Add(new float[] { 0, 0, 0.0f });
@@ -554,6 +612,14 @@ namespace SpaceVIL
 
             return figure;
         }
+
+        /// <summary>
+        /// Make cross figure
+        /// </summary>
+        /// <param name="w"> cross width </param>
+        /// <param name="h"> cross height </param>
+        /// <param name="thickness"> cross parts thickness </param>
+        /// <param name="alpha"> cross rotation angle in degrees </param>
         static public List<float[]> GetCross(float w, float h, float thickness, int alpha)
         {
             List<float[]> figure = new List<float[]>();
@@ -619,12 +685,12 @@ namespace SpaceVIL
             return figure;
         }
 
-        public static List<float> GetRectBorder(int w, int h)
+        internal static List<float> GetRectBorder(int w, int h)
         {
             return GetRectBorderIgnoreTop(w, h, 0, 0);
         }
 
-        public static List<float> GetRectBorderIgnoreTop(int w, int h, int ignoreFrom, int ignoreWidth)
+        internal static List<float> GetRectBorderIgnoreTop(int w, int h, int ignoreFrom, int ignoreWidth)
         {
             List<float> borderCoords = new List<float>();
 
@@ -706,6 +772,9 @@ namespace SpaceVIL
         //     return _bitmap;
         // }
 
+        /// <summary>
+        /// Move shape by X or/and Y direction
+        /// </summary>
         public static List<float[]> MoveShape(List<float[]> shape, float x, float y)
         {
             if (shape.Count == 0)
@@ -727,6 +796,9 @@ namespace SpaceVIL
             return result;
         }
 
+        /// <summary>
+        /// Make folder icon shape as three rectangles
+        /// </summary>
         public static List<float[]> GetFolderIconShape(float w = 20.0f, float h = 15.0f, float x = 0, float y = 0)
         {
             List<float[]> triangles = new List<float[]>();
@@ -736,6 +808,16 @@ namespace SpaceVIL
             return triangles;
         }
 
+        /// <summary>
+        /// Make a rectangle border with roundness corners
+        /// </summary>
+        /// <param name="width"> rectangle border width </param>
+        /// <param name="height"> rectangle border height </param>
+        /// <param name="radius"> same radius value for each corner </param>
+        /// <param name="thickness"> border thickness </param>
+        /// <param name="x"> X position (left top corner) of the result object </param>
+        /// <param name="y"> Y position (left top corner) of the result object </param>
+        /// <returns> Points list of the rectangle border with roundness corners </returns>
         public static List<float[]> GetRoundSquareBorder(float width, float height, float radius, float thickness, int x, int y)
         {
             if (radius < 0)
@@ -793,6 +875,16 @@ namespace SpaceVIL
             return MakeBorder(border, thickness);
         }
 
+        /// <summary>
+        /// Make a rectangle border with roundness corners
+        /// </summary>
+        /// <param name="cornerRadius"> radius values for all corners </param>
+        /// <param name="width"> rectangle border width </param>
+        /// <param name="height"> rectangle border height </param>
+        /// <param name="thickness"> border thickness </param>
+        /// <param name="x"> X position (left top corner) of the result object </param>
+        /// <param name="y"> Y position (left top corner) of the result object </param>
+        /// <returns> Points list of the rectangle border with roundness corners </returns>
         static public List<float[]> GetRoundSquareBorder(CornerRadius cornerRadius, float width, float height, float thickness, int x, int y)
         {
             if (width <= 0 || height <= 0)

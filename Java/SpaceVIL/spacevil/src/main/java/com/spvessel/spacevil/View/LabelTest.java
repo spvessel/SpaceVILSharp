@@ -9,7 +9,7 @@ import java.awt.*;
 public class LabelTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout(this, "LabelTest", "LabelTest");
+        WindowLayout Handler = new WindowLayout("LabelTest", "LabelTest");
         Handler.setWidth(500);
         Handler.setMinWidth(200);
         Handler.setHeight(500);

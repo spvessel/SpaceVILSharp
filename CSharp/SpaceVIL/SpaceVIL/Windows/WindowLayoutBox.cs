@@ -14,6 +14,9 @@ namespace SpaceVIL
         public WindowLayout WINDOW;
     }
 
+    /// <summary>
+    /// A storage-class that provides an access to existing window layouts by name and Guid
+    /// </summary>
     public static class WindowLayoutBox
     {
         static internal Dictionary<string, WindowLayout> windows_name = new Dictionary<string, WindowLayout>();

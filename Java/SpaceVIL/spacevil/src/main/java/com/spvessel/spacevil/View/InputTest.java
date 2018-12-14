@@ -8,7 +8,7 @@ import com.spvessel.spacevil.*;
 public class InputTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout(this, "InputTest", "InputTest", 800, 400, true);
+        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 800, 400, true);
         setHandler(Handler);
 
         Handler.setMinSize(500, 100);

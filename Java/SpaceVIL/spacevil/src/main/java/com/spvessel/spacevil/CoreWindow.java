@@ -28,6 +28,7 @@ public abstract class CoreWindow {
      */
     public void setHandler(WindowLayout value) {
         wnd_handler = value;
+        value.setCoreWindow(this);
     }
 
     /**

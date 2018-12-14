@@ -1,6 +1,6 @@
 package com.spvessel.spacevil.Common;
 
-public final class DisplayService {
+final class DisplayService {
 
     private DisplayService() {
     }

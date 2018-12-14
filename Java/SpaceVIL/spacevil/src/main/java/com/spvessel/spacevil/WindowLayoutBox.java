@@ -7,6 +7,9 @@ import java.util.*;
 import java.util.stream.*;
 
 public final class WindowLayoutBox {
+    /**
+     * A storage-class that provides an access to existing window layouts by name and UUID
+     */
     static Map<String, WindowLayout> windowsName = new HashMap<>();
     static Map<UUID, WindowLayout> windowsUUID = new HashMap<>();
     static List<WindowsPair> currentCallingPair = new LinkedList<>();

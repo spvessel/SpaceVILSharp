@@ -6,6 +6,9 @@ import com.spvessel.spacevil.Flags.LayoutType;
 import java.util.*;
 
 public class ItemsLayoutBox {
+    /**
+     * A storage-class that provides an access to existing ItemLayouts by UUID
+     */
     private ItemsLayoutBox() {
 
     }
@@ -24,7 +27,7 @@ public class ItemsLayoutBox {
         return layouts.get(id);
     }
 
-    static private Map<UUID, ItemsLayout> layouts = new HashMap<UUID, ItemsLayout>();
+    static private Map<UUID, ItemsLayout> layouts = new HashMap<>();
 
     static void initLayout(UUID _layout) {
         ItemsLayout l = new ItemsLayout(_layout);

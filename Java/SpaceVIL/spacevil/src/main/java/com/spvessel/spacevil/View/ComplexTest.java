@@ -19,7 +19,7 @@ public class ComplexTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout(this, "ComplexTest", "ComplexTest", 1200, 700, true);
+        WindowLayout Handler = new WindowLayout("ComplexTest", "ComplexTest", 1200, 700, true);
         setHandler(Handler);
 
         Handler.setMinSize(500, 100);

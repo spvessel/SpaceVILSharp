@@ -1,0 +1,429 @@
+\hypertarget{namespace_space_v_i_l_1_1_core}{}\section{Space\+V\+I\+L.\+Core Namespace Reference}
+\label{namespace_space_v_i_l_1_1_core}\index{Space\+V\+I\+L.\+Core@{Space\+V\+I\+L.\+Core}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_space_v_i_l_1_1_core_1_1_geometry}{Geometry}}
+\begin{DoxyCompactList}\small\item\em Class \mbox{\hyperlink{class_space_v_i_l_1_1_core_1_1_geometry}{Geometry}} describes all geometry properties of the item \end{DoxyCompactList}\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_base_item}{I\+Base\+Item}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_behavior}{I\+Behavior}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_draggable}{I\+Draggable}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_event_update}{I\+Event\+Update}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_floating}{I\+Floating}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_image_item}{I\+Image\+Item}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_item}{I\+Item}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_line}{I\+Line}}
+\item 
+class \mbox{\hyperlink{class_space_v_i_l_1_1_core_1_1_input_event_args}{Input\+Event\+Args}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_points}{I\+Points}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_position}{I\+Position}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_size}{I\+Size}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_text_editable}{I\+Text\+Editable}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_tool_tip}{I\+Tool\+Tip}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_window_anchor}{I\+Window\+Anchor}}
+\item 
+interface \mbox{\hyperlink{interface_space_v_i_l_1_1_core_1_1_i_zoomable}{I\+Zoomable}}
+\item 
+class \mbox{\hyperlink{class_space_v_i_l_1_1_core_1_1_key_args}{Key\+Args}}
+\item 
+class \mbox{\hyperlink{class_space_v_i_l_1_1_core_1_1_mouse_args}{Mouse\+Args}}
+\item 
+class \mbox{\hyperlink{class_space_v_i_l_1_1_core_1_1_pointer}{Pointer}}
+\item 
+class \mbox{\hyperlink{class_space_v_i_l_1_1_core_1_1_position}{Position}}
+\begin{DoxyCompactList}\small\item\em Class describes position of the item \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_space_v_i_l_1_1_core_1_1_space_v_i_l_exception}{Space\+V\+I\+L\+Exception}}
+\item 
+class \mbox{\hyperlink{class_space_v_i_l_1_1_core_1_1_text_input_args}{Text\+Input\+Args}}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a85087f29b01b9e8031ed98cc9d75b7e2}\label{namespace_space_v_i_l_1_1_core_a85087f29b01b9e8031ed98cc9d75b7e2}} 
+enum {\bfseries Item\+Alignment} \{ \newline
+{\bfseries Left} = 0x01, 
+{\bfseries Top} = 0x02, 
+{\bfseries Right} = 0x04, 
+{\bfseries Bottom} = 0x08, 
+\newline
+{\bfseries H\+Center} = 0x10, 
+{\bfseries V\+Center} = 0x20
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a0a2f860873db7d5aadc3ae6d2b9d6382}\label{namespace_space_v_i_l_1_1_core_a0a2f860873db7d5aadc3ae6d2b9d6382}} 
+enum {\bfseries Size\+Policy} \{ {\bfseries Fixed} = 0x01, 
+{\bfseries Expand} = 0x04
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a60809f73d282df8d06753a79682b0938}\label{namespace_space_v_i_l_1_1_core_a60809f73d282df8d06753a79682b0938}} 
+enum {\bfseries Size\+Type} \{ {\bfseries Width}, 
+{\bfseries Height}
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a722f169bf6cd8eff2c3c2824cbbc1c68}\label{namespace_space_v_i_l_1_1_core_a722f169bf6cd8eff2c3c2824cbbc1c68}} 
+enum {\bfseries Item\+State\+Type} \{ \newline
+{\bfseries Base} = 0x01, 
+{\bfseries Hovered} = 0x02, 
+{\bfseries Pressed} = 0x04, 
+{\bfseries Toggled} = 0x08, 
+\newline
+{\bfseries Focused} = 0x10, 
+{\bfseries Disabled} = 0x20
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_ad3468acb64e95a644ea62bab2cf7e1c2}\label{namespace_space_v_i_l_1_1_core_ad3468acb64e95a644ea62bab2cf7e1c2}} 
+enum {\bfseries Update\+Type} \{ {\bfseries Critical}, 
+{\bfseries Coords\+Only}
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a37ea63bb1ed79991e5674a87584fe7a8}\label{namespace_space_v_i_l_1_1_core_a37ea63bb1ed79991e5674a87584fe7a8}} 
+enum {\bfseries Orientation} \{ {\bfseries Vertical}, 
+{\bfseries Horizontal}
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a7264660a3c29ff0d57f675b3e94e3f12}\label{namespace_space_v_i_l_1_1_core_a7264660a3c29ff0d57f675b3e94e3f12}} 
+enum {\bfseries Scroll\+Bar\+Visibility} \{ {\bfseries Always}, 
+{\bfseries As\+Needed}, 
+{\bfseries Never}
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_ab78d4879986462f91f6ff498033e2b9a}\label{namespace_space_v_i_l_1_1_core_ab78d4879986462f91f6ff498033e2b9a}} 
+enum {\bfseries List\+Position} \{ \newline
+{\bfseries No} = 0x00, 
+{\bfseries Top} = 0x01, 
+{\bfseries Bottom} = 0x02, 
+{\bfseries Left} = 0x04, 
+\newline
+{\bfseries Right} = 0x08
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_afb1402761ff2ee219f93257a0be8d399}\label{namespace_space_v_i_l_1_1_core_afb1402761ff2ee219f93257a0be8d399}} 
+enum {\bfseries Item\+Rule} \{ {\bfseries Lazy}, 
+{\bfseries Strict}
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a59f0f5c7742adda7fdc0e51c361ae1ac}\label{namespace_space_v_i_l_1_1_core_a59f0f5c7742adda7fdc0e51c361ae1ac}} 
+enum {\bfseries Embedded\+Font} \{ {\bfseries Ubuntu}
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a0af1884788ee8e7521bb374f26672006}\label{namespace_space_v_i_l_1_1_core_a0af1884788ee8e7521bb374f26672006}} 
+enum {\bfseries Geometry\+Event\+Type} \{ \newline
+{\bfseries Focused} = 0x01, 
+{\bfseries Moved\+\_\+X} = 0x02, 
+{\bfseries Moved\+\_\+Y} = 0x04, 
+{\bfseries Resize\+Width} = 0x08, 
+\newline
+{\bfseries Resize\+Height} = 0x10
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a9dfbdc58a7d0d007884288b9b463cce2}\label{namespace_space_v_i_l_1_1_core_a9dfbdc58a7d0d007884288b9b463cce2}} 
+enum {\bfseries Horizontal\+Direction} \{ {\bfseries From\+Left\+To\+Right}, 
+{\bfseries From\+Right\+To\+Left}
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a10acc8289f9b7afa1e40cdae56d993b6}\label{namespace_space_v_i_l_1_1_core_a10acc8289f9b7afa1e40cdae56d993b6}} 
+enum {\bfseries Input\+Event\+Type} \{ \newline
+{\bfseries Focus\+Get} = 0x01, 
+{\bfseries Focus\+Lost} = 0x02, 
+{\bfseries Resized} = 0x04, 
+{\bfseries Destroy} = 0x08, 
+\newline
+{\bfseries Value\+Changed} = 0x10, 
+{\bfseries Selection\+Changed} = 0x20, 
+{\bfseries Index\+Changed} = 0x40, 
+{\bfseries Mouse\+Move} = 0x80, 
+\newline
+{\bfseries Mouse\+Hover} = 0x400000, 
+{\bfseries Mouse\+Drag} = 0x800000, 
+{\bfseries Mouse\+Press} = 0x100, 
+{\bfseries Mouse\+Release} = 0x200, 
+\newline
+{\bfseries Mouse\+Double\+Click} = 0x1000000, 
+{\bfseries Mouse\+Scroll} = 0x400, 
+{\bfseries Key\+Press} = 0x800, 
+{\bfseries Key\+Repeat} = 0x1000, 
+\newline
+{\bfseries Key\+Release} = 0x2000, 
+{\bfseries Text\+Input} = 0x200000, 
+{\bfseries Window\+Resize} = 0x4000, 
+{\bfseries Window\+Move} = 0x8000, 
+\newline
+{\bfseries Window\+Minimize} = 0x10000, 
+{\bfseries Window\+Restore} = 0x20000, 
+{\bfseries Window\+Close} = 0x40000, 
+{\bfseries Window\+Get\+Focus} = 0x80000, 
+\newline
+{\bfseries Window\+Lost\+Focus} = 0x100000
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_aaddd333f7539829655cfa6886e4c586b}\label{namespace_space_v_i_l_1_1_core_aaddd333f7539829655cfa6886e4c586b}} 
+enum {\bfseries Input\+State} \{ {\bfseries Release} = 0, 
+{\bfseries Press} = 1, 
+{\bfseries Repeat} = 2
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a8c5337229bf7d8d51d9bb6a4db901f15}\label{namespace_space_v_i_l_1_1_core_a8c5337229bf7d8d51d9bb6a4db901f15}} 
+enum {\bfseries Key\+Code} \{ \newline
+{\bfseries Unknown} = -\/1, 
+{\bfseries Space} = 32, 
+{\bfseries Apostrophe} = 39, 
+{\bfseries Comma} = 44, 
+\newline
+{\bfseries Minus} = 45, 
+{\bfseries Period} = 46, 
+{\bfseries Slash} = 47, 
+{\bfseries Alpha0} = 48, 
+\newline
+{\bfseries Alpha1} = 49, 
+{\bfseries Alpha2} = 50, 
+{\bfseries Alpha3} = 51, 
+{\bfseries Alpha4} = 52, 
+\newline
+{\bfseries Alpha5} = 53, 
+{\bfseries Alpha6} = 54, 
+{\bfseries Alpha7} = 55, 
+{\bfseries Alpha8} = 56, 
+\newline
+{\bfseries Alpha9} = 57, 
+{\bfseries Semi\+Colon} = 59, 
+{\bfseries Equal} = 61, 
+{\bfseries A} = 65, 
+\newline
+{\bfseries B} = 66, 
+{\bfseries C} = 67, 
+{\bfseries D} = 68, 
+{\bfseries E} = 69, 
+\newline
+{\bfseries F} = 70, 
+{\bfseries G} = 71, 
+{\bfseries H} = 72, 
+{\bfseries I} = 73, 
+\newline
+{\bfseries J} = 74, 
+{\bfseries K} = 75, 
+{\bfseries L} = 76, 
+{\bfseries M} = 77, 
+\newline
+{\bfseries N} = 78, 
+{\bfseries O} = 79, 
+{\bfseries P} = 80, 
+{\bfseries Q} = 81, 
+\newline
+{\bfseries R} = 82, 
+{\bfseries S} = 83, 
+{\bfseries T} = 84, 
+{\bfseries U} = 85, 
+\newline
+{\bfseries V} = 86, 
+{\bfseries W} = 87, 
+{\bfseries X} = 88, 
+{\bfseries Y} = 89, 
+\newline
+{\bfseries Z} = 90, 
+{\bfseries a} = 97, 
+{\bfseries b} = 98, 
+{\bfseries c} = 99, 
+\newline
+{\bfseries d} = 100, 
+{\bfseries e} = 101, 
+{\bfseries f} = 102, 
+{\bfseries g} = 103, 
+\newline
+{\bfseries h} = 104, 
+{\bfseries i} = 105, 
+{\bfseries j} = 106, 
+{\bfseries k} = 107, 
+\newline
+{\bfseries l} = 108, 
+{\bfseries m} = 109, 
+{\bfseries n} = 110, 
+{\bfseries o} = 111, 
+\newline
+{\bfseries p} = 112, 
+{\bfseries q} = 113, 
+{\bfseries r} = 114, 
+{\bfseries s} = 115, 
+\newline
+{\bfseries t} = 116, 
+{\bfseries u} = 117, 
+{\bfseries v} = 118, 
+{\bfseries w} = 119, 
+\newline
+{\bfseries x} = 120, 
+{\bfseries y} = 121, 
+{\bfseries z} = 122, 
+{\bfseries Left\+Bracket} = 91, 
+\newline
+{\bfseries Backslash} = 92, 
+{\bfseries Right\+Bracket} = 93, 
+{\bfseries Grave\+Accent} = 96, 
+{\bfseries World1} = 161, 
+\newline
+{\bfseries World2} = 162, 
+{\bfseries Escape} = 256, 
+{\bfseries Enter} = 257, 
+{\bfseries Tab} = 258, 
+\newline
+{\bfseries Backspace} = 259, 
+{\bfseries Insert} = 260, 
+{\bfseries Delete} = 261, 
+{\bfseries Right} = 262, 
+\newline
+{\bfseries Left} = 263, 
+{\bfseries Down} = 264, 
+{\bfseries Up} = 265, 
+{\bfseries Page\+Up} = 266, 
+\newline
+{\bfseries Page\+Down} = 267, 
+{\bfseries Home} = 268, 
+{\bfseries End} = 269, 
+{\bfseries Caps\+Lock} = 280, 
+\newline
+{\bfseries Scroll\+Lock} = 281, 
+{\bfseries Num\+Lock} = 282, 
+{\bfseries Print\+Screen} = 283, 
+{\bfseries Pause} = 284, 
+\newline
+{\bfseries F1} = 290, 
+{\bfseries F2} = 291, 
+{\bfseries F3} = 292, 
+{\bfseries F4} = 293, 
+\newline
+{\bfseries F5} = 294, 
+{\bfseries F6} = 295, 
+{\bfseries F7} = 296, 
+{\bfseries F8} = 297, 
+\newline
+{\bfseries F9} = 298, 
+{\bfseries F10} = 299, 
+{\bfseries F11} = 300, 
+{\bfseries F12} = 301, 
+\newline
+{\bfseries F13} = 302, 
+{\bfseries F14} = 303, 
+{\bfseries F15} = 304, 
+{\bfseries F16} = 305, 
+\newline
+{\bfseries F17} = 306, 
+{\bfseries F18} = 307, 
+{\bfseries F19} = 308, 
+{\bfseries F20} = 309, 
+\newline
+{\bfseries F21} = 310, 
+{\bfseries F22} = 311, 
+{\bfseries F23} = 312, 
+{\bfseries F24} = 313, 
+\newline
+{\bfseries F25} = 314, 
+{\bfseries Numpad0} = 320, 
+{\bfseries Numpad1} = 321, 
+{\bfseries Numpad2} = 322, 
+\newline
+{\bfseries Numpad3} = 323, 
+{\bfseries Numpad4} = 324, 
+{\bfseries Numpad5} = 325, 
+{\bfseries Numpad6} = 326, 
+\newline
+{\bfseries Numpad7} = 327, 
+{\bfseries Numpad8} = 328, 
+{\bfseries Numpad9} = 329, 
+{\bfseries Numpad\+Decimal} = 330, 
+\newline
+{\bfseries Numpad\+Divide} = 331, 
+{\bfseries Numpad\+Multiply} = 332, 
+{\bfseries Numpad\+Subtract} = 333, 
+{\bfseries Numpad\+Add} = 334, 
+\newline
+{\bfseries Numpad\+Enter} = 335, 
+{\bfseries Numpad\+Equal} = 336, 
+{\bfseries Left\+Shift} = 340, 
+{\bfseries Left\+Control} = 341, 
+\newline
+{\bfseries Left\+Alt} = 342, 
+{\bfseries Left\+Super} = 343, 
+{\bfseries Right\+Shift} = 344, 
+{\bfseries Right\+Control} = 345, 
+\newline
+{\bfseries Right\+Alt} = 346, 
+{\bfseries Right\+Super} = 347, 
+{\bfseries Menu} = 348
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a28aa8993b057f34e570a8077e6da573f}\label{namespace_space_v_i_l_1_1_core_a28aa8993b057f34e570a8077e6da573f}} 
+enum {\bfseries Key\+Mods} \{ {\bfseries Shift} = 0x0001, 
+{\bfseries Control} = 0x0002, 
+{\bfseries Alt} = 0x0004, 
+{\bfseries Super} = 0x0008
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a6bb294e102daf6d39abb93bad758851d}\label{namespace_space_v_i_l_1_1_core_a6bb294e102daf6d39abb93bad758851d}} 
+enum {\bfseries Mouse\+Button} \{ \newline
+{\bfseries Unknown} = -\/1, 
+{\bfseries Button\+Left} = 0, 
+{\bfseries Button\+Right} = 1, 
+{\bfseries Button\+Middle} = 2, 
+\newline
+{\bfseries Button4} = 3, 
+{\bfseries Button5} = 4, 
+{\bfseries Button6} = 5, 
+{\bfseries Button7} = 6, 
+\newline
+{\bfseries Button8} = 7
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a9c1c7992b81d7757eeeb5a06f38a9cd8}\label{namespace_space_v_i_l_1_1_core_a9c1c7992b81d7757eeeb5a06f38a9cd8}} 
+enum {\bfseries Tree\+Item\+Type} \{ {\bfseries Leaf}, 
+{\bfseries Branch}
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a5ff993525e2c3b4af77288fa58f6ac9c}\label{namespace_space_v_i_l_1_1_core_a5ff993525e2c3b4af77288fa58f6ac9c}} 
+enum {\bfseries Input\+Restriction} \{ {\bfseries Int\+Numbers}, 
+{\bfseries Double\+Numbers}, 
+{\bfseries Letters}, 
+{\bfseries All}
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_a3e33a8b7a8b18bfc4a11d787eb5be264}\label{namespace_space_v_i_l_1_1_core_a3e33a8b7a8b18bfc4a11d787eb5be264}} 
+enum {\bfseries Input\+Mode} \{ {\bfseries Cursor} = 0x00033001, 
+{\bfseries Sticky\+Keys} = 0x00033002, 
+{\bfseries Sticky\+Mouse\+Button} = 0x00033003
+ \}
+\item 
+\mbox{\Hypertarget{namespace_space_v_i_l_1_1_core_acc8ea0fd87ec89b4cc0f546c6f4887d9}\label{namespace_space_v_i_l_1_1_core_acc8ea0fd87ec89b4cc0f546c6f4887d9}} 
+enum {\bfseries Joystick} \{ \newline
+{\bfseries Joystick1} = 0, 
+{\bfseries Joystick2} = 1, 
+{\bfseries Joystick3} = 2, 
+{\bfseries Joystick4} = 3, 
+\newline
+{\bfseries Joystick5} = 4, 
+{\bfseries Joystick6} = 5, 
+{\bfseries Joystick7} = 6, 
+{\bfseries Joystick8} = 7, 
+\newline
+{\bfseries Joystick9} = 8, 
+{\bfseries Joystick10} = 9, 
+{\bfseries Joystick11} = 10, 
+{\bfseries Joystick12} = 11, 
+\newline
+{\bfseries Joystick13} = 12, 
+{\bfseries Joystick14} = 13, 
+{\bfseries Joystick15} = 14, 
+{\bfseries Joystick16} = 15, 
+\newline
+{\bfseries Joystick\+Last} = Joystick16
+ \}
+\end{DoxyCompactItemize}

@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
 public class ImageTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout(this, "ImageTest", "ImageTest", 500, 500, true);
+        WindowLayout Handler = new WindowLayout("ImageTest", "ImageTest", 500, 500, true);
         setHandler(Handler);
         Handler.setBackground(45, 45, 45);
         Handler.setPadding(2, 2, 2, 2);

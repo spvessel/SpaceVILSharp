@@ -1,11 +1,11 @@
-package com.spvessel.spacevil.Common;
+package com.spvessel.spacevil;
 
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.io.*;
 
-public final class CommonService {
+final class CommonService {
 
     private CommonService() {
     }

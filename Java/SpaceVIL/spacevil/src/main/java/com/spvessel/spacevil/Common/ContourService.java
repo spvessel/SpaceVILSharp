@@ -3,7 +3,7 @@ package com.spvessel.spacevil.Common;
 import java.awt.geom.Point2D;
 import java.util.*;
 
-public final class ContourService {
+final class ContourService {
       /*
     public static CrossOut crossContours(List<List<Point2D>> innerList) {
         List<Contour> contoursList = new LinkedList<>();

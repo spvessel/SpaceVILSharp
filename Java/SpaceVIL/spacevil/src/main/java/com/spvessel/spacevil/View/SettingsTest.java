@@ -18,7 +18,7 @@ public class SettingsTest extends ActiveWindow
     @Override
     public void initWindow()
         {
-            WindowLayout Handler = new WindowLayout(this, "SettingsTest", "SettingsTest", 600, 550, true);
+            WindowLayout Handler = new WindowLayout("SettingsTest", "SettingsTest", 600, 550, true);
             setHandler(Handler);
             Handler.setMinSize(600, 550);
             Handler.setBackground(45, 45, 45);

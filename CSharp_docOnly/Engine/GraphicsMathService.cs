@@ -1,0 +1,965 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using SpaceVIL.Core;
+using SpaceVIL.Decorations;
+
+namespace SpaceVIL
+{
+    /// <summary>
+    /// Class with some functions for constructing custom figures
+    /// </summary>
+    public static class GraphicsMathService
+    {
+        /// <summary>
+        /// Mix two or more colors
+        /// </summary>
+        public static Color MixColors(params Color[] m_colors)
+        {
+            if (m_colors.Length == 0)
+                return Color.White;
+            if (m_colors.Length == 1)
+                return m_colors[0];
+
+            float r = 0, g = 0, b = 0, a = 0.0f;
+            foreach (Color item in m_colors)
+            {
+                if (item == null) { continue; }
+                if (item.A == 255) //exchange
+                {
+                    r = item.R;
+                    g = item.G;
+                    b = item.B;
+                    a = 255.0f;
+                }
+                else //mixing
+                {
+                    r = r * (1.0f - item.A / 255.0f) + item.R * (item.A / 255.0f);
+                    g = g * (1.0f - item.A / 255.0f) + item.G * (item.A / 255.0f);
+                    b = b * (1.0f - item.A / 255.0f) + item.B * (item.A / 255.0f);
+                    if (a < 255)
+                        a = a * (1.0f - item.A / 255.0f) + item.A * (item.A / 255.0f);
+                }
+            }
+            return Color.FromArgb((int)a, (int)r, (int)g, (int)b);
+        }
+
+        /// <summary>
+        /// Make rectangle as two triangles by its width, height and top left corner position (x, y)
+        /// </summary>
+        static public List<float[]> GetRectangle(float w = 100, float h = 100, float x = 0, float y = 0)
+        {
+            return new List<float[]>
+            {
+                new float[] { x, y, 0.0f },
+                new float[] { x, y + h, 0.0f },
+                new float[] { x + w, y + h, 0.0f },
+
+                new float[] { x + w, y + h, 0.0f },
+                new float[] { x + w, y, 0.0f },
+                new float[] { x, y, 0.0f }
+            };
+        }
+
+        /// <summary>
+        /// Make a rectangle with roundness corners
+        /// </summary>
+        /// <param name="cornerRadius"> radius values for all corners </param>
+        /// <param name="width"> rectangle width (default = 100) </param>
+        /// <param name="height"> rectangle height (default = 100) </param>
+        /// <param name="x"> X position (left top corner) of the result object (default = 0) </param>
+        /// <param name="y"> Y position (left top corner) of the result object (default = 0) </param>
+        /// <returns> Points list of the rectangle with roundness corners </returns>
+        static public List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100, int x = 0, int y = 0)
+        {
+            if (width <= 0 || height <= 0)
+                return null;
+
+            if (cornerRadius == null)
+                cornerRadius = new CornerRadius();
+            else
+            {
+                if (cornerRadius.LeftTop < 0)
+                    cornerRadius.LeftTop = 0;
+                if (cornerRadius.RightTop < 0)
+                    cornerRadius.RightTop = 0;
+                if (cornerRadius.LeftBottom < 0)
+                    cornerRadius.LeftBottom = 0;
+                if (cornerRadius.RightBottom < 0)
+                    cornerRadius.RightBottom = 0;
+            }
+
+
+            List<float[]> triangles = new List<float[]>();
+            //Начало координат в левом углу
+
+            //1
+
+            triangles.AddRange(RectToTri(new PointF(cornerRadius.LeftTop + x, 0.0f + y), new PointF(width / 2f + x, height / 2f + y)));
+            triangles.AddRange(RectToTri(new PointF(0.0f + x, cornerRadius.LeftTop + y), new PointF(cornerRadius.LeftTop + x, height / 2f + y)));
+
+            //2
+            triangles.AddRange(RectToTri(new PointF(width / 2f + x, 0.0f + y), new PointF(width - cornerRadius.RightTop + x, height / 2f + y)));
+            triangles.AddRange(RectToTri(new PointF(width - cornerRadius.RightTop + x, cornerRadius.RightTop + y), new PointF(width + x, height / 2f + y)));
+
+            //3
+            triangles.AddRange(RectToTri(new PointF(cornerRadius.LeftBottom + x, height / 2f + y), new PointF(width / 2f + x, height + y)));
+            triangles.AddRange(RectToTri(new PointF(0.0f + x, height / 2f + y), new PointF(cornerRadius.LeftBottom + x, height - cornerRadius.LeftBottom + y)));
+
+            //4
+            triangles.AddRange(RectToTri(new PointF(width / 2f + x, height / 2f + y), new PointF(width - cornerRadius.RightBottom + x, height + y)));
+            triangles.AddRange(RectToTri(new PointF(width - cornerRadius.RightBottom + x, height / 2f + y), new PointF(width + x, height - cornerRadius.RightBottom + y)));
+
+
+            //if (radius < 1)
+            //    return triangles;
+
+            float x0, y0;
+
+            if (cornerRadius.RightBottom >= 1)
+            {
+                x0 = width - cornerRadius.RightBottom + x;
+                y0 = height - cornerRadius.RightBottom + y;
+                triangles.AddRange(CountCircleSector(0, 90, x0, y0, cornerRadius.RightBottom));
+            }
+
+            if (cornerRadius.RightTop >= 1)
+            {
+                x0 = width - cornerRadius.RightTop + x;
+                y0 = cornerRadius.RightTop + y;
+                triangles.AddRange(CountCircleSector(270, 360, x0, y0, cornerRadius.RightTop));
+            }
+
+            if (cornerRadius.LeftTop >= 1)
+            {
+                x0 = cornerRadius.LeftTop + x;
+                y0 = cornerRadius.LeftTop + y;
+                triangles.AddRange(CountCircleSector(180, 270, x0, y0, cornerRadius.LeftTop));
+            }
+
+            if (cornerRadius.LeftBottom >= 1)
+            {
+                x0 = cornerRadius.LeftBottom + x;
+                y0 = height - cornerRadius.LeftBottom + y;
+                triangles.AddRange(CountCircleSector(90, 180, x0, y0, cornerRadius.LeftBottom));
+            }
+
+            return triangles;
+        }
+
+        private static List<float[]> RectToTri(PointF leftTop, PointF rightBottom)
+        {
+            //Начало координат в левом верхнем углу
+            List<float[]> tri = new List<float[]>();
+
+            tri.Add(new float[] { leftTop.X, leftTop.Y, 0.0f });
+            tri.Add(new float[] { leftTop.X, rightBottom.Y, 0.0f });
+            tri.Add(new float[] { rightBottom.X, rightBottom.Y, 0.0f });
+
+            tri.Add(new float[] { rightBottom.X, rightBottom.Y, 0.0f });
+            tri.Add(new float[] { rightBottom.X, leftTop.Y, 0.0f });
+            tri.Add(new float[] { leftTop.X, leftTop.Y, 0.0f });
+
+            return tri;
+        }
+
+        /// <summary>
+        /// Make a rectangle with roundness corners
+        /// </summary>
+        /// <param name="width"> rectangle width (default = 100) </param>
+        /// <param name="height"> rectangle height (default = 100) </param>
+        /// <param name="radius"> same radius value for each corner (default = 0) </param>
+        /// <param name="x"> X position (left top corner) of the result object (default = 0) </param>
+        /// <param name="y"> Y position (left top corner) of the result object (default = 0) </param>
+        /// <returns> Points list of the rectangle with roundness corners </returns>
+        static public List<float[]> GetRoundSquare(float width = 100, float height = 100, float radius = 0.0f, int x = 0, int y = 0)
+        {
+            if (width <= 0 || height <= 0)
+                return null;
+
+            if (radius < 0)
+                radius = 0;
+
+            List<float[]> triangles = new List<float[]>();
+            //Начало координат в углу
+
+            triangles.Add(new float[] { radius + x, height + y, 0.0f });
+            triangles.Add(new float[] { width - radius + x, y, 0.0f });
+            triangles.Add(new float[] { radius + x, y, 0.0f });
+            //1
+
+            triangles.Add(new float[] { radius + x, height + y, 0.0f });
+            triangles.Add(new float[] { width - radius + x, height + y, 0.0f });
+            triangles.Add(new float[] { width - radius + x, y, 0.0f });
+            //2
+
+            triangles.Add(new float[] { width - radius + x, height - radius + y, 0.0f });
+            triangles.Add(new float[] { width + x, radius + y, 0.0f });
+            triangles.Add(new float[] { width - radius + x, radius + y, 0.0f });
+            //3
+
+            triangles.Add(new float[] { width - radius + x, height - radius + y, 0.0f });
+            triangles.Add(new float[] { width + x, height - radius + y, 0.0f });
+            triangles.Add(new float[] { width + x, radius + y, 0.0f });
+            //4
+
+            triangles.Add(new float[] { x, height - radius + y, 0.0f });
+            triangles.Add(new float[] { radius + x, radius + y, 0.0f });
+            triangles.Add(new float[] { x, radius + y, 0.0f });
+            //5
+
+            triangles.Add(new float[] { x, height - radius + y, 0.0f });
+            triangles.Add(new float[] { radius + x, height - radius + y, 0.0f });
+            triangles.Add(new float[] { radius + x, radius + y, 0.0f });
+            //6
+
+            if (radius < 1)
+                return triangles;
+
+            float x0, y0;
+            x0 = width - radius + x;
+            y0 = height - radius + y;
+            triangles.AddRange(CountCircleSector(0, 90, x0, y0, radius)); //7
+
+            x0 = width - radius + x;
+            y0 = radius + y;
+            triangles.AddRange(CountCircleSector(270, 360, x0, y0, radius)); //8
+
+            x0 = radius + x;
+            y0 = radius + y;
+            triangles.AddRange(CountCircleSector(180, 270, x0, y0, radius)); //9
+
+            x0 = radius + x;
+            y0 = height - radius + y;
+            triangles.AddRange(CountCircleSector(90, 180, x0, y0, radius)); //10
+
+            return triangles;
+        }
+
+        static private List<float[]> CountCircleSector(int alph1, int alph2, float x0, float y0, float radius)
+        {
+            List<float[]> circleSect = new List<float[]>();
+            float x1, y1, x2, y2;
+            x1 = radius * (float)Math.Cos(alph1 * Math.PI / 180.0f) + x0;
+            y1 = radius * (float)Math.Sin(alph1 * Math.PI / 180.0f) + y0;
+
+            for (int alf = alph1 + 1; alf <= alph2; alf += 5)
+            { //Шаг можно сделать больше 1 градуса, нужны тестирования
+                x2 = radius * (float)Math.Cos(alf * Math.PI / 180.0f) + x0;
+                y2 = radius * (float)Math.Sin(alf * Math.PI / 180.0f) + y0;
+                circleSect.Add(new float[] { x0, y0, 0.0f });
+                circleSect.Add(new float[] { x2, y2, 0.0f });
+                circleSect.Add(new float[] { x1, y1, 0.0f }); //против часовой стрелки
+                x1 = x2;
+                y1 = y2;
+            }
+            x2 = radius * (float)Math.Cos(alph2 * Math.PI / 180.0f) + x0;
+            y2 = radius * (float)Math.Sin(alph2 * Math.PI / 180.0f) + y0;
+            circleSect.Add(new float[] { x0, y0, 0.0f });
+            circleSect.Add(new float[] { x2, y2, 0.0f });
+            circleSect.Add(new float[] { x1, y1, 0.0f });
+
+            return circleSect;
+        }
+        static internal List<float[]> ToGL(IBaseItem item, WindowLayout handler) //where TLayout : VisualItem
+        {
+            if (item.GetTriangles() == null)
+                return null;
+
+            List<float[]> result = new List<float[]>();
+
+            foreach (var vector in item.GetTriangles())
+            {
+                float x = (vector[0] / (float)handler.GetWidth()) * 2.0f - 1.0f;
+                float y = (vector[1] / (float)handler.GetHeight() * 2.0f - 1.0f) * (-1.0f);
+                result.Add(new float[] { x, y, vector[2] });
+            }
+            return result;
+        }
+        static internal List<float[]> ToGL(List<float[]> triangles, WindowLayout handler) //where TLayout : VisualItem
+        {
+            List<float[]> result = new List<float[]>();
+
+            foreach (var vector in triangles)
+            {
+                float x = (vector[0] / (float)handler.GetWidth()) * 2.0f - 1.0f;
+                float y = (vector[1] / (float)handler.GetHeight() * 2.0f - 1.0f) * (-1.0f);
+                result.Add(new float[] { x, y, vector[2] });
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Make a star figure
+        /// </summary>
+        /// <param name="R"> Circumscribed circle radius </param>
+        /// <param name="r"> Incircle radius </param>
+        /// <param name="n"> vertices count </param>
+        static public List<float[]> GetStar(float R = 100, float r = 50, int n = 5)
+        {
+            float x_center = r;
+            float y_center = r;
+
+            List<float[]> triangles = new List<float[]>();
+
+            float alpha = 0.0f;
+            for (int i = 0; i < n; i++)
+            {
+                triangles.Add(new float[]
+                {
+                    x_center,
+                    y_center,
+                    0.0f
+                });
+
+                triangles.Add(new float[]
+                {
+                    (float)(x_center + r / 2 * Math.Cos(alpha * Math.PI / 180.0f)),
+                    (float)(y_center - r / 2 * Math.Sin(alpha * Math.PI / 180.0f)),
+                    0.0f
+                });
+
+                alpha = alpha + 360.0f / n;
+
+                triangles.Add(new float[]
+                {
+                    (float)(x_center + r / 2 * Math.Cos(alpha * Math.PI / 180.0f)),
+                    (float)(y_center - r / 2 * Math.Sin(alpha * Math.PI / 180.0f)),
+                    0.0f
+                });
+            }
+
+            alpha = 0.0f;
+            int count = 1;
+            for (int i = 1; i < n * 2 + 2; i++)
+            {
+                if ((i % 2) != 0) //При выполнении условия четности следующие формулы
+                {
+                    triangles.Add(new float[]
+                    {
+                        (float)(x_center + r / 2 * Math.Cos(alpha * Math.PI / 180.0f)),
+                        (float)(y_center - r / 2 * Math.Sin(alpha * Math.PI / 180.0f)),
+                        0.0f
+                    });
+                    if (count % 3 == 0)
+                    {
+                        triangles.Add(new float[]
+                        {
+                            (float)(x_center + r / 2 * Math.Cos(alpha * Math.PI / 180.0f)),
+                            (float)(y_center - r / 2 * Math.Sin(alpha * Math.PI / 180.0f)),
+                            0.0f
+                        });
+                        count = 1;
+                    }
+                }
+                else //При невыполнении условия четности следующие формулы
+                {
+                    triangles.Add(new float[]
+                    {
+                        (float)(x_center + R / 2 * Math.Cos(alpha * Math.PI / 180.0f)),
+                        (float)(y_center - R / 2 * Math.Sin(alpha * Math.PI / 180.0f)),
+                        0.0f
+                    });
+                    if (count % 3 == 0)
+                    {
+                        triangles.Add(new float[]
+                        {
+                            (float)(x_center + R / 2 * Math.Cos(alpha * Math.PI / 180.0f)),
+                            (float)(y_center - R / 2 * Math.Sin(alpha * Math.PI / 180.0f)),
+                            0.0f
+                        });
+                        count = 1;
+                    }
+                }
+                alpha = alpha + 180.0f / n;
+                count++;
+            }
+            triangles.RemoveAt(triangles.Count - 1);
+            return triangles;
+        }
+
+        /// <summary>
+        /// Make a regular polygon
+        /// </summary>
+        static public List<float[]> GetRegularPolygon(float r = 100, int n = 6)
+        {
+            float x_center = r;
+            float y_center = r;
+
+            List<float[]> triangles = new List<float[]>();
+
+            float alpha = 0;
+            for (int i = 0; i < n; i++)
+            {
+                triangles.Add(new float[]
+                {
+                    x_center,
+                    y_center,
+                    0.0f
+                });
+
+                triangles.Add(new float[]
+                {
+                    (float)(x_center + r / 2 * Math.Cos(alpha * Math.PI / 180.0f)),
+                    (float)(y_center - r / 2 * Math.Sin(alpha * Math.PI / 180.0f)),
+                    0.0f
+                });
+
+                alpha = alpha + 360.0f / n;
+
+                triangles.Add(new float[]
+                {
+                    (float)(x_center + r / 2 * Math.Cos(alpha * Math.PI / 180.0f)),
+                    (float)(y_center - r / 2 * Math.Sin(alpha * Math.PI / 180.0f)),
+                    0.0f
+                });
+            }
+
+            return triangles;
+        }
+
+        /// <summary>
+        /// Make an ellipse with two equal radii (i. e. circle)
+        /// </summary>
+        /// <param name="n"> points count on the ellipse border (default = 32) </param>
+        static public List<float[]> GetEllipse(float r = 100, int n = 32)
+        {
+            float x_center = r;
+            float y_center = r;
+
+            List<float[]> triangles = new List<float[]>();
+
+            float alpha = 0;
+            for (int i = 0; i < n; i++)
+            {
+                triangles.Add(new float[]
+                {
+                    x_center,
+                    y_center,
+                    0.0f
+                });
+
+                triangles.Add(new float[]
+                {
+                    (float)(x_center + r * Math.Cos(alpha * Math.PI / 180.0f)),
+                    (float)(y_center - r * Math.Sin(alpha * Math.PI / 180.0f)),
+                    0.0f
+                });
+
+                alpha = alpha + 360.0f / n;
+
+                triangles.Add(new float[]
+                {
+                    (float)(x_center + r * Math.Cos(alpha * Math.PI / 180.0f)),
+                    (float)(y_center - r * Math.Sin(alpha * Math.PI / 180.0f)),
+                    0.0f
+                });
+            }
+
+            return triangles;
+        }
+
+        /// <summary>
+        /// Make an ellipse
+        /// </summary>
+        /// <param name="w"> ellipse width </param>
+        /// <param name="h"> ellipse height </param>
+        /// <param name="x"> X position of the left top corner (ellipse center in x + w/2) (default = 0) </param>
+        /// <param name="y"> Y position of the left top corner (ellipse center in y + h/2) (default = 0) </param>
+        /// <param name="n"> points count on the ellipse border (default = 32) </param>
+        static public List<float[]> GetEllipse(float w, float h, int x = 0, int y = 0, int n = 32)
+        {
+            float rX = w / 2;
+            float rY = h / 2;
+            float x_center = x + rX;
+            float y_center = y + rY;
+            List<float[]> triangles = new List<float[]>();
+
+            float alpha = 0;
+            for (int i = 0; i < n; i++)
+            {
+                triangles.Add(new float[]
+                {
+                    x_center,
+                    y_center,
+                    0.0f
+                });
+
+                triangles.Add(new float[]
+                {
+                    (float)(x_center + rX * Math.Cos(alpha * Math.PI / 180.0f)),
+                    (float)(y_center - rY * Math.Sin(alpha * Math.PI / 180.0f)),
+                    0.0f
+                });
+
+                alpha = alpha + 360.0f / n;
+
+                triangles.Add(new float[]
+                {
+                    (float)(x_center + rX * Math.Cos(alpha * Math.PI / 180.0f)),
+                    (float)(y_center - rY * Math.Sin(alpha * Math.PI / 180.0f)),
+                    0.0f
+                });
+            }
+
+            return triangles;
+        }
+
+        /// <summary>
+        /// Make a triangle with corners in (x + w/2, y), (x, y + h), (x + w, y + h), rotated on a degrees
+        /// </summary>
+        /// <param name="a"> rotation angle for the triangle in degrees (default = 0) </param>
+        static public List<float[]> GetTriangle(float w = 100, float h = 100, int x = 0, int y = 0, int a = 0)
+        {
+            float x0 = x + w / 2;
+            float y0 = y + h / 2;
+
+            List<float[]> figure = new List<float[]>();
+
+            figure.Add(new float[] { x + w / 2, y, 0.0f });
+            figure.Add(new float[] { x, y + h, 0.0f });
+            figure.Add(new float[] { x + w, y + h, 0.0f });
+
+            foreach (var crd in figure)
+            {
+                float x_crd = crd[0];
+                float y_crd = crd[1];
+                crd[0] = x0 + (x_crd - x0) * (float)Math.Cos(a * Math.PI / 180.0f) - (y_crd - y0) * (float)Math.Sin(a * Math.PI / 180.0f);
+                crd[1] = y0 + (y_crd - y0) * (float)Math.Cos(a * Math.PI / 180.0f) + (x_crd - x0) * (float)Math.Sin(a * Math.PI / 180.0f);
+            }
+            return figure;
+        }
+
+        internal static List<float[]> GetLine(float lenght, float thichness, int alpha)
+        {
+            List<float[]> figure = new List<float[]>();
+            figure.Add(new float[] { 0, 0, 0.0f });
+            figure.Add(new float[] { 0, thichness, 0.0f });
+            figure.Add(new float[] { 0 + lenght, thichness, 0.0f });
+
+            figure.Add(new float[] { lenght, thichness, 0.0f });
+            figure.Add(new float[] { lenght, 0, 0.0f });
+            figure.Add(new float[] { 0, 0, 0.0f });
+
+            //rotate
+            float x0 = lenght / 2;
+            float y0 = thichness / 2;
+            foreach (var crd in figure)
+            {
+                float x_crd = crd[0];
+                float y_crd = crd[1];
+                crd[0] = x0 + (x_crd - x0) * (float)Math.Cos(alpha * Math.PI / 180.0f) - (y_crd - y0) * (float)Math.Sin(alpha * Math.PI / 180.0f);
+                crd[1] = y0 + (y_crd - y0) * (float)Math.Cos(alpha * Math.PI / 180.0f) + (x_crd - x0) * (float)Math.Sin(alpha * Math.PI / 180.0f);
+            }
+
+            return figure;
+        }
+
+        /// <summary>
+        /// Make cross figure
+        /// </summary>
+        /// <param name="w"> cross width </param>
+        /// <param name="h"> cross height </param>
+        /// <param name="thickness"> cross parts thickness </param>
+        /// <param name="alpha"> cross rotation angle in degrees </param>
+        static public List<float[]> GetCross(float w, float h, float thickness, int alpha)
+        {
+            List<float[]> figure = new List<float[]>();
+
+            float x0 = (w - thickness) / 2;
+            float y0 = (h - thickness) / 2;
+
+            //center
+            figure.Add(new float[] { x0, y0, 0.0f });
+            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+
+            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
+            figure.Add(new float[] { x0, y0, 0.0f });
+
+            //top
+            figure.Add(new float[] { x0, 0, 0.0f });
+            figure.Add(new float[] { x0, y0, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
+
+            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
+            figure.Add(new float[] { x0 + thickness, 0, 0.0f });
+            figure.Add(new float[] { x0, 0, 0.0f });
+
+            //bottom
+            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0, h, 0.0f });
+            figure.Add(new float[] { x0 + thickness, h, 0.0f });
+
+            figure.Add(new float[] { x0 + thickness, h, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
+
+            //left
+            figure.Add(new float[] { 0, y0, 0.0f });
+            figure.Add(new float[] { 0, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
+
+            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0, y0, 0.0f });
+            figure.Add(new float[] { 0, y0, 0.0f });
+
+            //right
+            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+            figure.Add(new float[] { h, y0 + thickness, 0.0f });
+
+            figure.Add(new float[] { h, y0 + thickness, 0.0f });
+            figure.Add(new float[] { h, y0, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
+
+            //rotate
+            x0 = w / 2;
+            y0 = h / 2;
+            foreach (var crd in figure)
+            {
+                float x_crd = crd[0];
+                float y_crd = crd[1];
+                crd[0] = x0 + (x_crd - x0) * (float)Math.Cos(alpha * Math.PI / 180.0f) - (y_crd - y0) * (float)Math.Sin(alpha * Math.PI / 180.0f);
+                crd[1] = y0 + (y_crd - y0) * (float)Math.Cos(alpha * Math.PI / 180.0f) + (x_crd - x0) * (float)Math.Sin(alpha * Math.PI / 180.0f);
+            }
+            return figure;
+        }
+
+        internal static List<float> GetRectBorder(int w, int h)
+        {
+            return GetRectBorderIgnoreTop(w, h, 0, 0);
+        }
+
+        internal static List<float> GetRectBorderIgnoreTop(int w, int h, int ignoreFrom, int ignoreWidth)
+        {
+            List<float> borderCoords = new List<float>();
+
+            ignoreFrom = (ignoreFrom > w - 1) ? w - 1 : ignoreFrom;
+            borderCoords.AddRange(ParallLineToArray(0, ignoreFrom, 0, LineDir.Horiz));
+            borderCoords.AddRange(ParallLineToArray(ignoreFrom + ignoreWidth, w - 1, 0, LineDir.Horiz));
+            borderCoords.AddRange(ParallLineToArray(0, w - 1, h - 1, LineDir.Horiz));
+            borderCoords.AddRange(ParallLineToArray(1, h - 2, 0, LineDir.Vert));
+            borderCoords.AddRange(ParallLineToArray(1, h - 2, w - 1, LineDir.Vert));
+
+            return borderCoords;
+        }
+
+        private static List<float> ParallLineToArray(int min, int max, int permanent, LineDir dir)
+        {
+            List<float> arr = new List<float>();
+
+            for (int i = min; i <= max; i++)
+            {
+                if (dir.Equals(LineDir.Horiz))
+                {
+                    arr.Add(i);
+                    arr.Add(permanent);
+                }
+                else
+                { //Vert
+                    arr.Add(permanent);
+                    arr.Add(i);
+                }
+
+                arr.Add(0);
+            }
+
+            return arr;
+        }
+
+        enum LineDir
+        {
+            Horiz,
+            Vert
+        }
+
+        // internal static byte[] PointsToTexture(TextItem text)
+        // {
+        //     float[] _points = text.Shape();
+        //     float[] _colors = text.GetColors();
+
+        //     if (_colors == null || _points == null)
+        //         return null;
+
+        //     int _w = text.GetWidth();
+        //     int _h = text.GetHeight();
+
+        //     byte[] _bitmap = new byte[_w * _h * 4];
+        //     for (int i = 0; i < _bitmap.Length; i++)
+        //     {
+        //         _bitmap[i] = 0;
+        //     }
+
+        //     int color_index = 0;
+
+        //     for (int i = 0; i < _points.Length; i += 3)
+        //     {
+        //         int r = (int)_points[i + 1];
+        //         int c = (int)_points[i];
+        //         int pos = (r + c * _h) * 4;
+        //         if (pos + 3 > _bitmap.Length)
+        //             break;
+
+        //         _bitmap[pos + 0] = (byte)(_colors[color_index + 0] * 255);
+        //         _bitmap[pos + 1] = (byte)(_colors[color_index + 1] * 255);
+        //         _bitmap[pos + 2] = (byte)(_colors[color_index + 2] * 255);
+        //         _bitmap[pos + 3] = (byte)(_colors[color_index + 3] * 255);
+
+        //         color_index += 4;
+        //     }
+
+        //     color_index = 0;
+        //     return _bitmap;
+        // }
+
+        /// <summary>
+        /// Move shape by X or/and Y direction
+        /// </summary>
+        public static List<float[]> MoveShape(List<float[]> shape, float x, float y)
+        {
+            if (shape.Count == 0)
+                return null;
+
+            //clone triangles
+            List<float[]> result = new List<float[]>();
+            for (int i = 0; i < shape.Count; i++)
+            {
+                result.Add(new float[] { shape.ElementAt(i)[0], shape.ElementAt(i)[1], shape.ElementAt(i)[2] });
+            }
+            //to the left top corner
+            foreach (var point in result)
+            {
+                point[0] += x;
+                point[1] += y;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Make folder icon shape as three rectangles
+        /// </summary>
+        public static List<float[]> GetFolderIconShape(float w = 20.0f, float h = 15.0f, float x = 0, float y = 0)
+        {
+            List<float[]> triangles = new List<float[]>();
+            triangles.AddRange(GraphicsMathService.GetRectangle(w / 3, h));
+            triangles.AddRange(GraphicsMathService.GetRectangle(2 * w / 3, h - h / 4, w / 3, h / 4));
+            triangles.AddRange(GraphicsMathService.GetRectangle(w / 4, h / 8, w / 3 + 2));
+            return triangles;
+        }
+
+        /// <summary>
+        /// Make a rectangle border with roundness corners
+        /// </summary>
+        /// <param name="width"> rectangle border width </param>
+        /// <param name="height"> rectangle border height </param>
+        /// <param name="radius"> same radius value for each corner </param>
+        /// <param name="thickness"> border thickness </param>
+        /// <param name="x"> X position (left top corner) of the result object </param>
+        /// <param name="y"> Y position (left top corner) of the result object </param>
+        /// <returns> Points list of the rectangle border with roundness corners </returns>
+        public static List<float[]> GetRoundSquareBorder(float width, float height, float radius, float thickness, int x, int y)
+        {
+            if (radius < 0)
+                radius = 0;
+
+            List<BorderSection> border = new List<BorderSection>();
+            // Начало координат в углу
+
+            border.Add(new BorderSection(width - radius + x, y, radius + x, y, width / 2f + x, height + 1 + y)); //radius + x, height + y));
+            //triangles.add(new float[] { radius + x, height + y, 0.0f });
+            //    triangles.add(new float[] { width - radius + x, y, 0.0f });
+            //    triangles.add(new float[] { radius + x, y, 0.0f });
+
+            border.Add(new BorderSection(width - radius + x, height + y, radius + x, height + y, width / 2f + x, y - 1)); //width - radius + x, y));
+            //    triangles.add(new float[] { radius + x, height + y, 0.0f });
+            //    triangles.add(new float[] { width - radius + x, height + y, 0.0f });
+            //triangles.add(new float[] { width - radius + x, y, 0.0f });
+
+            border.Add(new BorderSection(width + x, height - radius + y, width + x, radius + y, x - 1, height / 2f + y)); //width - radius + x, height - radius + y));
+            //triangles.add(new float[] { width - radius + x, height - radius + y, 0.0f });
+            //    triangles.add(new float[] { width + x, height - radius + y, 0.0f });
+            //    triangles.add(new float[] { width + x, radius + y, 0.0f });
+
+            border.Add(new BorderSection(x, height - radius + y, x, radius + y, width + 1 + x, height / 2f + y)); //radius + x, radius + y));
+            //    triangles.add(new float[] { x, height - radius + y, 0.0f });
+            //triangles.add(new float[] { radius + x, radius + y, 0.0f });
+            //    triangles.add(new float[] { x, radius + y, 0.0f });
+
+            if (radius < 1)
+                return MakeBorder(border, thickness);
+
+            List<float[]> tmpList;
+            float x0, y0;
+            x0 = width - radius + x;
+            y0 = height - radius + y;
+            tmpList = CountCircleSector(0, 90, x0, y0, radius);
+
+            x0 = width - radius + x;
+            y0 = radius + y;
+            tmpList.AddRange(CountCircleSector(270, 360, x0, y0, radius));
+
+            x0 = radius + x;
+            y0 = radius + y;
+            tmpList.AddRange(CountCircleSector(180, 270, x0, y0, radius));
+
+            x0 = radius + x;
+            y0 = height - radius + y;
+            tmpList.AddRange(CountCircleSector(90, 180, x0, y0, radius));
+
+            for (int i = 0; i < tmpList.Count / 3; i++)
+            {
+                border.Add(new BorderSection(tmpList.ElementAt(i * 3 + 1)[0], tmpList.ElementAt(i * 3 + 1)[1], tmpList.ElementAt(i * 3 + 2)[0], tmpList.ElementAt(i * 3 + 2)[1], tmpList.ElementAt(i * 3)[0], tmpList.ElementAt(i * 3)[1]));
+            }
+
+            return MakeBorder(border, thickness);
+        }
+
+        /// <summary>
+        /// Make a rectangle border with roundness corners
+        /// </summary>
+        /// <param name="cornerRadius"> radius values for all corners </param>
+        /// <param name="width"> rectangle border width </param>
+        /// <param name="height"> rectangle border height </param>
+        /// <param name="thickness"> border thickness </param>
+        /// <param name="x"> X position (left top corner) of the result object </param>
+        /// <param name="y"> Y position (left top corner) of the result object </param>
+        /// <returns> Points list of the rectangle border with roundness corners </returns>
+        static public List<float[]> GetRoundSquareBorder(CornerRadius cornerRadius, float width, float height, float thickness, int x, int y)
+        {
+            if (width <= 0 || height <= 0)
+                return null;
+
+            if (cornerRadius == null)
+                cornerRadius = new CornerRadius();
+            else
+            {
+                if (cornerRadius.LeftTop < 0)
+                    cornerRadius.LeftTop = 0;
+                if (cornerRadius.RightTop < 0)
+                    cornerRadius.RightTop = 0;
+                if (cornerRadius.LeftBottom < 0)
+                    cornerRadius.LeftBottom = 0;
+                if (cornerRadius.RightBottom < 0)
+                    cornerRadius.RightBottom = 0;
+            }
+
+            List<BorderSection> border = new List<BorderSection>();
+            //Начало координат в левом углу
+
+            //1
+            border.Add(new BorderSection(cornerRadius.LeftTop + x, 0.0f + y, width / 2f + x, 0.0f + y, width / 2f + x, height + y + 1)); //width / 2f + x, height / 2f + y));
+            //triangles.AddRange(RectToTri(new PointF(cornerRadius.leftTop, 0.0f), new PointF(width / 2f, height / 2f)));
+            border.Add(new BorderSection(0.0f + x, cornerRadius.LeftTop + y, 0.0f + x, height / 2f + y, width + 1 + x, height / 2f + y)); //cornerRadius.leftTop + x, height / 2f + y));
+            //triangles.AddRange(RectToTri(new PointF(0.0f, cornerRadius.leftTop), new PointF(cornerRadius.leftTop, height / 2f)));
+
+            //2
+            //triangles.AddRange(RectToTri(new PointF(width / 2f, 0.0f), new PointF(width - cornerRadius.rightTop, height / 2f)));
+            border.Add(new BorderSection(width / 2f + x, 0.0f + y, width - cornerRadius.RightTop + x, 0.0f + y, width / 2f + x, height + y + 1)); //width - cornerRadius.rightTop + x, height / 2f + y));
+            //triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightTop, cornerRadius.rightTop), new PointF(width, height / 2f)));
+            border.Add(new BorderSection(width + x, height / 2f + y, width + x, cornerRadius.RightTop + y, x - 1, height / 2f + y)); //width - cornerRadius.rightTop + x, cornerRadius.rightTop + y));
+
+            //3
+            //triangles.AddRange(RectToTri(new PointF(cornerRadius.leftBottom, height / 2f), new PointF(width / 2f, height)));
+            border.Add(new BorderSection(width / 2f + x, height + y, cornerRadius.LeftBottom + x, height + y, width / 2f, y - 1)); //cornerRadius.leftBottom + x, height / 2f + y));
+            //triangles.AddRange(RectToTri(new PointF(0.0f, height / 2f), new PointF(cornerRadius.leftBottom, height - cornerRadius.leftBottom)));
+            border.Add(new BorderSection(0.0f + x, height / 2f + y, 0.0f + x, height - cornerRadius.LeftBottom + y, width + 1 + x, height / 2f + y)); //cornerRadius.leftBottom + x, height - cornerRadius.leftBottom + y));
+
+            //4
+            //triangles.AddRange(RectToTri(new PointF(width / 2f, height / 2f), new PointF(width - cornerRadius.rightBottom, height)));
+            border.Add(new BorderSection(width - cornerRadius.RightBottom + x, height + y, width / 2f + x, height + y, width / 2f, y - 1)); //width / 2f + x, height / 2f + y));
+            //triangles.AddRange(RectToTri(new PointF(width - cornerRadius.rightBottom, height / 2f), new PointF(width, height - cornerRadius.rightBottom)));
+            border.Add(new BorderSection(width + x, height - cornerRadius.RightBottom + y, width + x, height / 2f + y, x - 1, height / 2f + y)); //width - cornerRadius.rightBottom + x, height / 2f + y));
+
+
+            //if (radius < 1)
+            //    return triangles;
+
+            List<float[]> tmpList = new List<float[]>();
+            float x0, y0;
+
+            if (cornerRadius.RightBottom >= 1)
+            {
+                x0 = width - cornerRadius.RightBottom + x;
+                y0 = height - cornerRadius.RightBottom + y;
+                tmpList.AddRange(CountCircleSector(0, 90, x0, y0, cornerRadius.RightBottom));
+            }
+
+            if (cornerRadius.RightTop >= 1)
+            {
+                x0 = width - cornerRadius.RightTop + x;
+                y0 = cornerRadius.RightTop + y;
+                tmpList.AddRange(CountCircleSector(270, 360, x0, y0, cornerRadius.RightTop));
+            }
+
+            if (cornerRadius.LeftTop >= 1)
+            {
+                x0 = cornerRadius.LeftTop + x;
+                y0 = cornerRadius.LeftTop + y;
+                tmpList.AddRange(CountCircleSector(180, 270, x0, y0, cornerRadius.LeftTop));
+            }
+
+            if (cornerRadius.LeftBottom >= 1)
+            {
+                x0 = cornerRadius.LeftBottom + x;
+                y0 = height - cornerRadius.LeftBottom + y;
+                tmpList.AddRange(CountCircleSector(90, 180, x0, y0, cornerRadius.LeftBottom));
+            }
+
+            for (int i = 0; i < tmpList.Count / 3; i++)
+            {
+                border.Add(new BorderSection(tmpList.ElementAt(i * 3 + 1)[0], tmpList.ElementAt(i * 3 + 1)[1], tmpList.ElementAt(i * 3 + 2)[0], tmpList.ElementAt(i * 3 + 2)[1], tmpList.ElementAt(i * 3)[0], tmpList.ElementAt(i * 3)[1]));
+            }
+
+            return MakeBorder(border, thickness);
+        }
+
+        private static List<float[]> MakeBorder(List<BorderSection> borders, float thickness)
+        {
+            List<float[]> borderTris = new List<float[]>();
+
+            float bw = thickness; //border width
+            float x3, y3, x4, y4;
+            float x1, y1, x2, y2;
+            for (int i = 0; i < borders.Count; i++)
+            {
+                x1 = borders.ElementAt(i).x1;
+                x2 = borders.ElementAt(i).x2;
+                y1 = borders.ElementAt(i).y1;
+                y2 = borders.ElementAt(i).y2;
+
+                x3 = x1 + borders.ElementAt(i).nx * bw;
+                y3 = y1 + borders.ElementAt(i).ny * bw;
+                x4 = x2 + borders.ElementAt(i).nx * bw;
+                y4 = y2 + borders.ElementAt(i).ny * bw;
+
+                borderTris.AddRange(WherePoint(x1, y1, x2, y2, x4, y4));
+                borderTris.AddRange(WherePoint(x1, y1, x4, y4, x3, y3));
+            }
+
+            return borderTris;
+        }
+
+        private static List<float[]> WherePoint(float x1, float y1, float x2, float y2, float x3, float y3)
+        {
+            List<float[]> clockwise = new List<float[]>();
+            float f = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
+            if (f < 0)
+            {
+                clockwise.Add(new float[] { x1, y1, 0 });
+                clockwise.Add(new float[] { x2, y2, 0 });
+                clockwise.Add(new float[] { x3, y3, 0 });
+            }
+            else
+            {
+                clockwise.Add(new float[] { x2, y2, 0 });
+                clockwise.Add(new float[] { x1, y1, 0 });
+                clockwise.Add(new float[] { x3, y3, 0 });
+            }
+            return clockwise;
+        }
+    }
+}

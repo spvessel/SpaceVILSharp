@@ -10,7 +10,7 @@ abstract public class DropDown extends DialogWindow {
 
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout(this, "DropDown_" + getCount(), "DropDown_" + getCount());
+        WindowLayout Handler = new WindowLayout("DropDown_" + getCount(), "DropDown_" + getCount());
         Handler.setWindowTitle(getDialogTitle());
         Handler.isBorderHidden = true;
         Handler.isAlwaysOnTop = true;

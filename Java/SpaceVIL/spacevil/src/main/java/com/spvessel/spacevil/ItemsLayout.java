@@ -21,7 +21,7 @@ final class ItemsLayout {
         _id = value;
     }
 
-    List<InterfaceBaseItem> _items = new LinkedList<InterfaceBaseItem>();
+    List<InterfaceBaseItem> _items = new LinkedList<>();
 
     List<InterfaceBaseItem> getItems() {
         return _items;
@@ -31,7 +31,7 @@ final class ItemsLayout {
         _items = value;
     }
 
-    List<InterfaceBaseItem> _float_items = new LinkedList<InterfaceBaseItem>();
+    List<InterfaceBaseItem> _float_items = new LinkedList<>();
 
     List<InterfaceBaseItem> getFloatItems() {
         return _float_items;
