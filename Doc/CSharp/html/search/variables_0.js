@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['blue',['Blue',['../struct_glfw3_1_1_glfw_1_1_gamma_ramp.html#acbb91c14d7bd41aeb5488a2608bee7dd',1,'Glfw3::Glfw::GammaRamp']]],
-  ['bluebits',['BlueBits',['../struct_glfw3_1_1_glfw_1_1_video_mode.html#a70df9c85fd74b2e9e225ec478aaa44d5',1,'Glfw3::Glfw::VideoMode']]]
+  ['eventkeypress',['EventKeyPress',['../class_space_v_i_l_1_1_prototype.html#af974f404a58d925f4db7b6c31bf8bbfc',1,'SpaceVIL::Prototype']]],
+  ['eventmousehover',['EventMouseHover',['../class_space_v_i_l_1_1_prototype.html#aede77dddfe637d7c5395ad1cce5a7604',1,'SpaceVIL::Prototype']]],
+  ['eventtextinput',['EventTextInput',['../class_space_v_i_l_1_1_prototype.html#a582dbed570a2eea18c616d0994549a08',1,'SpaceVIL::Prototype']]]
 ];

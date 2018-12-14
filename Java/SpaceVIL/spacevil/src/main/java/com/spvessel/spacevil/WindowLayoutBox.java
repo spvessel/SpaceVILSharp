@@ -8,15 +8,19 @@ import java.util.stream.*;
 
 public final class WindowLayoutBox {
     /**
-     * A storage-class that provides an access to existing window layouts by name and UUID
+     * A storage-class that provides an access to existing window layouts by name
+     * and UUID
      */
     static Map<String, WindowLayout> windowsName = new HashMap<>();
     static Map<UUID, WindowLayout> windowsUUID = new HashMap<>();
     static List<WindowsPair> currentCallingPair = new LinkedList<>();
     static WindowLayout lastFocusedWindow;
-    //static private Object locker = new Object();
+    // static private Object locker = new Object();
 
     static void initWindow(WindowLayout _layout) {
+        if (windowsName.containsKey(_layout.getWindowName()) || windowsUUID.containsKey(_layout.getId()))
+            return;
+            
         windowsName.put(_layout.getWindowName(), _layout);
         windowsUUID.put(_layout.getId(), _layout);
 
@@ -48,6 +52,7 @@ public final class WindowLayoutBox {
 
     /**
      * Try to show WindowLayout object using its UUID
+     * 
      * @return if showing successful
      */
     static public boolean tryShow(UUID guid) {
@@ -61,6 +66,7 @@ public final class WindowLayoutBox {
 
     /**
      * Try to show WindowLayout object using its name
+     * 
      * @return if showing successful
      */
     static public boolean tryShow(String name) {

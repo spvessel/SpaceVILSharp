@@ -5,7 +5,7 @@
 %%For: 
 %Magnification: 1.00
 %%Orientation: Portrait
-%%BoundingBox: 0 0 500 314.465409
+%%BoundingBox: 0 0 500 125.786164
 %%Pages: 0
 %%BeginSetup
 %%EndSetup
@@ -19,13 +19,13 @@
 /marginwidth 10 def
 /distx 20 def
 /disty 40 def
-/boundaspect 1.590000 def  % aspect ratio of the BoundingBox (width/height)
+/boundaspect 3.975000 def  % aspect ratio of the BoundingBox (width/height)
 /boundx 500 def
 /boundy boundx boundaspect div def
 /xspacing 0 def
 /yspacing 0 def
-/rows 10 def
-/cols 4 def
+/rows 3 def
+/cols 3 def
 /scalefactor 0 def
 /boxfont /Times-Roman findfont fontheight scalefont def
 
@@ -176,14 +176,6 @@ boxfont setfont
 (SpaceVIL.CoreWindow) cw
 (SpaceVIL.ActiveWindow) cw
 (SpaceVIL.DialogWindow) cw
-(View.Containers) cw
-(View.FlowTest) cw
-(View.ImageTest) cw
-(View.InputTest) cw
-(View.LabelTest) cw
-(View.LayoutsTest) cw
-(View.MainWindow) cw
-(View.Settings) cw
 (SpaceVIL.DropDown) cw
 (SpaceVIL.MessageBox) cw
 /boxwidth boxwidth marginwidth 2 mul add def
@@ -197,55 +189,27 @@ boundx scalefactor div boundy scalefactor div scale
 
 % ----- classes -----
 
- (SpaceVIL.CoreWindow) 1.000000 9.000000 box
- (SpaceVIL.ActiveWindow) 0.000000 8.000000 box
- (SpaceVIL.DialogWindow) 2.000000 8.000000 box
- (View.Containers) 1.000000 7.000000 box
- (View.FlowTest) 1.000000 6.000000 box
- (View.ImageTest) 1.000000 5.000000 box
- (View.InputTest) 1.000000 4.000000 box
- (View.LabelTest) 1.000000 3.000000 box
- (View.LayoutsTest) 1.000000 2.000000 box
- (View.MainWindow) 1.000000 1.000000 box
- (View.Settings) 1.000000 0.000000 box
- (SpaceVIL.DropDown) 3.000000 7.000000 box
- (SpaceVIL.MessageBox) 3.000000 6.000000 box
+ (SpaceVIL.CoreWindow) 0.500000 2.000000 box
+ (SpaceVIL.ActiveWindow) 0.000000 1.000000 box
+ (SpaceVIL.DialogWindow) 1.000000 1.000000 box
+ (SpaceVIL.DropDown) 0.500000 0.000000 box
+ (SpaceVIL.MessageBox) 1.500000 0.000000 box
 
 % ----- relations -----
 
 solid
-1 1.000000 8.250000 out
+1 0.500000 1.250000 out
 solid
-0.000000 2.000000 9.000000 conn
+0.000000 1.000000 2.000000 conn
 solid
-0 0.000000 8.750000 in
+0 0.000000 1.750000 in
 solid
-1 0.000000 7.250000 out
+0 1.000000 1.750000 in
 solid
-0 2.000000 8.750000 in
+1 1.000000 0.250000 out
 solid
-1 2.000000 7.250000 out
+0.500000 1.500000 1.000000 conn
 solid
-0 0.000000 7.500000 hedge
+0 0.500000 0.750000 in
 solid
-0 0.000000 6.500000 hedge
-solid
-0 0.000000 5.500000 hedge
-solid
-0 0.000000 4.500000 hedge
-solid
-0 0.000000 3.500000 hedge
-solid
-0 0.000000 2.500000 hedge
-solid
-0 0.000000 1.500000 hedge
-solid
-0 0.000000 0.500000 hedge
-solid
-0.000000 8.000000 0.500000 vedge
-solid
-0 2.000000 7.500000 hedge
-solid
-0 2.000000 6.500000 hedge
-solid
-2.000000 8.000000 6.500000 vedge
+0 1.500000 0.750000 in

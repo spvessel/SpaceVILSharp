@@ -27,6 +27,11 @@ namespace SpaceVIL
 
         static internal void InitWindow(WindowLayout _layout)
         {
+            if (windows_name.ContainsKey(_layout.GetWindowName())
+                || windows_guid.ContainsKey(_layout.Id)
+            )
+                return;
+                
             windows_name.Add(_layout.GetWindowName(), _layout);
             windows_guid.Add(_layout.Id, _layout);
 

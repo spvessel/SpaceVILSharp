@@ -176,6 +176,7 @@ boxfont setfont
 (SpaceVIL.VerticalScrollBar) cw
 (SpaceVIL.VerticalStack) cw
 (SpaceVIL.Prototype) cw
+(IVLayout) cw
 (SpaceVIL.Core.IBaseItem) cw
 (SpaceVIL.Core.IItem) cw
 (SpaceVIL.Core.ISize) cw
@@ -193,9 +194,10 @@ boundx scalefactor div boundy scalefactor div scale
 
 % ----- classes -----
 
- (SpaceVIL.VerticalScrollBar) 2.000000 0.000000 box
- (SpaceVIL.VerticalStack) 2.000000 1.000000 box
+ (SpaceVIL.VerticalScrollBar) 2.500000 0.000000 box
+ (SpaceVIL.VerticalStack) 2.500000 1.000000 box
  (SpaceVIL.Prototype) 2.000000 2.000000 box
+ (IVLayout) 3.000000 2.000000 box
  (SpaceVIL.Core.IBaseItem) 2.000000 3.000000 box
  (SpaceVIL.Core.IItem) 0.000000 4.000000 box
  (SpaceVIL.Core.ISize) 1.000000 4.000000 box
@@ -206,15 +208,19 @@ boundx scalefactor div boundy scalefactor div scale
 % ----- relations -----
 
 solid
-0 2.000000 0.000000 out
+0 2.500000 0.000000 out
 solid
-1 2.000000 1.000000 in
+1 2.500000 1.000000 in
 solid
-0 2.000000 1.000000 out
+0 2.500000 1.000000 out
+solid
+2.000000 3.000000 2.000000 conn
 solid
 1 2.000000 2.000000 in
 solid
 0 2.000000 2.000000 out
+solid
+1 3.000000 2.000000 in
 solid
 1 2.000000 3.000000 in
 solid

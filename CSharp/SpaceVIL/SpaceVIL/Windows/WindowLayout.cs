@@ -24,7 +24,8 @@ namespace SpaceVIL
         {
             return handler;
         }
-        internal void SetCoreWindow(CoreWindow window) {
+        internal void SetCoreWindow(CoreWindow window)
+        {
             if (handler != null && handler.Equals(window)) return;
             handler = window;
             Id = handler.GetWindowGuid();
@@ -43,7 +44,7 @@ namespace SpaceVIL
                 Monitor.Exit(wndLock);
             }
         }
-         
+
         private Guid ParentGUID;
 
         private Thread thread_engine;
@@ -59,7 +60,7 @@ namespace SpaceVIL
             int height = 300,
             bool border_hidden = false
             )
-        {            
+        {
             SetWindowName(name);
             SetWindowTitle(title);
 
@@ -80,7 +81,7 @@ namespace SpaceVIL
             manager = new ActionManager(this);
             engine = new DrawEngine(this);
 
-            
+
             SetFocusedItem(_window);
         }
 
@@ -167,7 +168,7 @@ namespace SpaceVIL
         internal Guid Id { get; set; }
 
         private string _name;
-        public void SetWindowName(string name)
+        internal void SetWindowName(string name)
         {
             _name = name;
         }

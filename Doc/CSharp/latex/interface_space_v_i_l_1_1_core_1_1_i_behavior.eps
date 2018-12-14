@@ -5,7 +5,7 @@
 %%For: 
 %Magnification: 1.00
 %%Orientation: Portrait
-%%BoundingBox: 0 0 500 1407.035176
+%%BoundingBox: 0 0 500 1373.534338
 %%Pages: 0
 %%BeginSetup
 %%EndSetup
@@ -19,12 +19,12 @@
 /marginwidth 10 def
 /distx 20 def
 /disty 40 def
-/boundaspect 0.355357 def  % aspect ratio of the BoundingBox (width/height)
+/boundaspect 0.364024 def  % aspect ratio of the BoundingBox (width/height)
 /boundx 500 def
 /boundy boundx boundaspect div def
 /xspacing 0 def
 /yspacing 0 def
-/rows 42 def
+/rows 41 def
 /cols 3 def
 /scalefactor 0 def
 /boxfont /Times-Roman findfont fontheight scalefont def
@@ -178,7 +178,6 @@ boxfont setfont
 (SpaceVIL.BaseItem) cw
 (SpaceVIL.Prototype) cw
 (SpaceVIL.Primitive) cw
-(Contact.VisualContact) cw
 (SpaceVIL.Binder) cw
 (SpaceVIL.BlankItem) cw
 (SpaceVIL.ButtonCore) cw
@@ -228,13 +227,12 @@ boundx scalefactor div boundy scalefactor div scale
 
 % ----- classes -----
 
- (SpaceVIL.Core.IBehavior) 0.500000 41.000000 box
- (SpaceVIL.Core.IBaseItem) 0.500000 40.000000 box
- (SpaceVIL.BaseItem) 0.000000 39.000000 box
- (SpaceVIL.Prototype) 1.000000 39.000000 box
- (SpaceVIL.Primitive) 0.000000 38.000000 box
-0.000000 38.000000 mark
- (Contact.VisualContact) 2.000000 38.000000 box
+ (SpaceVIL.Core.IBehavior) 0.500000 40.000000 box
+ (SpaceVIL.Core.IBaseItem) 0.500000 39.000000 box
+ (SpaceVIL.BaseItem) 0.000000 38.000000 box
+ (SpaceVIL.Prototype) 1.000000 38.000000 box
+ (SpaceVIL.Primitive) 0.000000 37.000000 box
+0.000000 37.000000 mark
  (SpaceVIL.Binder) 2.000000 37.000000 box
  (SpaceVIL.BlankItem) 2.000000 36.000000 box
  (SpaceVIL.ButtonCore) 2.000000 35.000000 box
@@ -281,25 +279,23 @@ boundx scalefactor div boundy scalefactor div scale
 % ----- relations -----
 
 solid
-1 0.500000 40.250000 out
-solid
-0 0.500000 40.750000 in
-solid
 1 0.500000 39.250000 out
 solid
-0.000000 1.000000 40.000000 conn
+0 0.500000 39.750000 in
 solid
-0 0.000000 39.750000 in
+1 0.500000 38.250000 out
 solid
-1 0.000000 38.250000 out
-solid
-0 1.000000 39.750000 in
-solid
-1 1.000000 38.250000 out
+0.000000 1.000000 39.000000 conn
 solid
 0 0.000000 38.750000 in
 solid
-0 1.000000 38.500000 hedge
+1 0.000000 37.250000 out
+solid
+0 1.000000 38.750000 in
+solid
+1 1.000000 37.250000 out
+solid
+0 0.000000 37.750000 in
 solid
 0 1.000000 37.500000 hedge
 solid
@@ -377,4 +373,4 @@ solid
 solid
 0 1.000000 0.500000 hedge
 solid
-1.000000 39.000000 0.500000 vedge
+1.000000 38.000000 0.500000 vedge

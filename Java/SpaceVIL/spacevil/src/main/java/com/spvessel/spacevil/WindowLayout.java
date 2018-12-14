@@ -238,7 +238,7 @@ public final class WindowLayout {
 
     private String _name;
 
-    public void setWindowName(String value) {
+    void setWindowName(String value) {
         _name = value;
     }
 

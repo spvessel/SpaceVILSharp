@@ -15,7 +15,8 @@ namespace View
 
         public override void InitWindow()
         {
-            Handler = new WindowLayout(this, nameof(Containers), nameof(Containers), 1400, 900, true);
+            WindowLayout Handler = new WindowLayout(nameof(Containers), nameof(Containers), 1400, 900, true);
+            SetHandler(Handler);
             Handler.SetMinSize(700, 400);
             Handler.SetBackground(Color.FromArgb(255, 45, 45, 45));
             Handler.SetPadding(2, 2, 2, 2);
