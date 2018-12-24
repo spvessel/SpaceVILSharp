@@ -147,7 +147,7 @@ public class ImageTest extends ActiveWindow {
         combo.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
         combo.setMargin(25, 0, 25, 0);
         combo.selectionChanged.add(() -> {
-            System.out.println(combo.getCurrentIndex());
+            //System.out.println(combo.getCurrentIndex());
         });
 
         frame.addItem(combo);
