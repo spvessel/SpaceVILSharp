@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL.Core
 {
-    internal interface IHLayout
+    public interface IHLayout
     {
         void UpdateLayout();
     }
-    internal interface IVLayout
+    public interface IVLayout
     {
         void UpdateLayout();
     }
-    interface IGrid
+    public interface IGrid
     {
         void UpdateLayout();
     }
-    interface IFlow
+    public interface IFlow
     {
         void UpdateLayout();
     }

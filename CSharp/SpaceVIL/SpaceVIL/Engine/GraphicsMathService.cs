@@ -685,6 +685,53 @@ namespace SpaceVIL
             return figure;
         }
 
+        static public List<float[]> GetArrow(float w, float h, float thickness, int alpha)
+        {
+            List<float[]> figure = new List<float[]>();
+
+            float x0 = (w - thickness) / 2;
+            float y0 = (h - thickness) / 2;
+
+            //center
+            figure.Add(new float[] { x0, y0, 0.0f });
+            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+
+            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
+            figure.Add(new float[] { x0, y0, 0.0f });
+
+            //top
+            figure.Add(new float[] { x0, 0, 0.0f });
+            figure.Add(new float[] { x0, y0, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
+
+            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
+            figure.Add(new float[] { x0 + thickness, 0, 0.0f });
+            figure.Add(new float[] { x0, 0, 0.0f });
+
+            //left
+            figure.Add(new float[] { 0, y0, 0.0f });
+            figure.Add(new float[] { 0, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
+
+            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0, y0, 0.0f });
+            figure.Add(new float[] { 0, y0, 0.0f });
+
+            //rotate
+            x0 = w / 2;
+            y0 = h / 2;
+            foreach (var crd in figure)
+            {
+                float x_crd = crd[0];
+                float y_crd = crd[1];
+                crd[0] = x0 + (x_crd - x0) * (float)Math.Cos(alpha * Math.PI / 180.0f) - (y_crd - y0) * (float)Math.Sin(alpha * Math.PI / 180.0f);
+                crd[1] = y0 + (y_crd - y0) * (float)Math.Cos(alpha * Math.PI / 180.0f) + (x_crd - x0) * (float)Math.Sin(alpha * Math.PI / 180.0f);
+            }
+            return figure;
+        }
+        
         internal static List<float> GetRectBorder(int w, int h)
         {
             return GetRectBorderIgnoreTop(w, h, 0, 0);

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace SpaceVIL.Core
 {
-    internal class TextPrinter
+    public class TextPrinter
     {
         internal byte[] Texture = null;
         internal int XTextureShift = 0;

@@ -18,31 +18,31 @@ public final class WindowLayout {
     Lock engineLocker = new ReentrantLock();
     private Lock wndLock = new ReentrantLock();
 
-    class DrawThread extends Thread {
-        DrawEngine engine;
+    // class DrawThread extends Thread {
+    //     DrawEngine engine;
 
-        DrawThread(String name, DrawEngine engine) {
-            super(name);
-            this.engine = engine;
-        }
+    //     DrawThread(String name, DrawEngine engine) {
+    //         super(name);
+    //         this.engine = engine;
+    //     }
 
-        public void run() {
-            engine.init();
-        }
-    }
+    //     public void run() {
+    //         engine.init();
+    //     }
+    // }
 
-    class TaskThread extends Thread {
-        ActionManager manager;
+    // class TaskThread extends Thread {
+    //     ActionManager manager;
 
-        TaskThread(String name, ActionManager manager) {
-            super(name);
-            this.manager = manager;
-        }
+    //     TaskThread(String name, ActionManager manager) {
+    //         super(name);
+    //         this.manager = manager;
+    //     }
 
-        public void run() {
-            manager.startManager();
-        }
-    }
+    //     public void run() {
+    //         manager.startManager();
+    //     }
+    // }
 
     public InterfaceCommonMethod eventClose;
     public InterfaceCommonMethod eventMinimize;
@@ -77,6 +77,7 @@ public final class WindowLayout {
         wndLock.lock();
         try {
             WindowLayoutBox.initWindow(this);
+            setFocusedItem(_window);
         } catch (Exception ex) {
             System.out.println(ex.toString());
             return;
@@ -87,10 +88,10 @@ public final class WindowLayout {
 
     private UUID ParentGUID;
 
-    private DrawThread thread_engine;
+    private Thread thread_engine;
     protected DrawEngine engine;
 
-    private TaskThread thread_manager;
+    private Thread thread_manager;
     private ActionManager manager;
 
     public WindowLayout(String name, String title) {
@@ -111,8 +112,6 @@ public final class WindowLayout {
 
         manager = new ActionManager(this);
         engine = new DrawEngine(this);
-
-        setFocusedItem(_window);
     }
 
     public WindowLayout(String name, String title, int width, int height, Boolean border_hidden) {
@@ -375,13 +374,19 @@ public final class WindowLayout {
         if (thread_engine != null && thread_engine.isAlive())
             return;
 
-        thread_manager = new TaskThread(getWindowName() + "_" + "actions", manager);
+            thread_manager = new Thread(()-> {
+                manager.startManager();
+            });
+        // thread_manager = new TaskThread(getWindowName() + "_" + "actions", manager);
         // thread_manager.setPriority(Thread.MAX_PRIORITY);
         thread_manager.setDaemon(true);
         thread_manager.start();
 
         if (!isMain) {
-            thread_engine = new DrawThread(getWindowName() + "_" + "engine", engine);
+            thread_engine = new Thread(() -> {
+                engine.init();
+            });
+            // thread_engine = new DrawThread(getWindowName() + "_" + "engine", engine);
             // thread_engine.setPriority(Thread.MAX_PRIORITY);
         }
 

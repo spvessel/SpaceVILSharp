@@ -926,7 +926,7 @@ final class DrawEngine {
 
     private VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
-    void run() {
+    private void run() {
         _handler.gVAO = glGenVertexArrays();
         glBindVertexArray(_handler.gVAO);
         focus(_handler.getWindowId(), true);

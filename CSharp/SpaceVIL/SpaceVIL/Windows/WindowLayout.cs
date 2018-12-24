@@ -33,6 +33,7 @@ namespace SpaceVIL
             try
             {
                 WindowLayoutBox.InitWindow(this);
+                SetFocusedItem(_window);
             }
             catch (Exception ex)
             {
@@ -82,7 +83,6 @@ namespace SpaceVIL
             engine = new DrawEngine(this);
 
 
-            SetFocusedItem(_window);
         }
 
         public void UpdatePosition()
