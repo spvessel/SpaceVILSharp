@@ -1,6 +1,6 @@
 namespace SpaceVIL.Core
 {
-    internal interface IWindow
+    public interface IWindow
     {
         ItemAlignment GetSides(float xpos, float ypos);
     }

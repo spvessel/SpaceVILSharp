@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL.Core
 {
-    internal interface ITextShortcuts
+    public interface ITextShortcuts
     {
         void PasteText(string pasteStr);
         string GetSelectedText();
