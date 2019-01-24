@@ -20,7 +20,7 @@ public final class WindowLayoutBox {
     static void initWindow(WindowLayout _layout) {
         if (windowsName.containsKey(_layout.getWindowName()) || windowsUUID.containsKey(_layout.getId()))
             return;
-            
+
         windowsName.put(_layout.getWindowName(), _layout);
         windowsUUID.put(_layout.getId(), _layout);
 
@@ -48,6 +48,20 @@ public final class WindowLayoutBox {
     static void removeWindow(WindowLayout _layout) {
         windowsName.remove(_layout.getWindowName());
         windowsUUID.remove(_layout.getId());
+        if (_is_main_running == _layout)
+            _is_main_running = null;
+    }
+
+    private static WindowLayout _is_main_running = null;
+
+    static boolean isAnyWindowRunning() {
+        if (_is_main_running != null)
+            return true;
+        return false;
+    }
+
+    static void setWindowRunning(WindowLayout window) {
+        _is_main_running = window;
     }
 
     /**

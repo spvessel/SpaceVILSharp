@@ -8,38 +8,52 @@ namespace SpaceVIL.Common
 {
     internal static class CommonService
     {
-        static CommonService()
-        {
-            //Glfw.ConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
-            // if (!Glfw.Init())
-            // {
-            //     LogService.Log().LogText("Glfw initialization failed.");
-            //     Environment.Exit(-1);
-            // }
-
-            // _arrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
-            // _input = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
-            // _hand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
-            // _resize_h = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
-            // _resize_v = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
-            // _resize_all = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
-        }
-
-        // public static Glfw.Cursor _arrow;
-        // public static Glfw.Cursor _input;
-        // public static Glfw.Cursor _hand;
-        // public static Glfw.Cursor _resize_h;
-        // public static Glfw.Cursor _resize_v;
-        // public static Glfw.Cursor _resize_all;
-
-        public static bool IsLinux = false;
         public static String ClipboardTextStorage = String.Empty;
         internal static readonly object GlobalLocker = new object();
 
-        public static void LinkColors(ref Color t1, ref Color t2)
+        //os type
+#if LINUX
+                private const SpaceVIL.Core.OSType _os_type = SpaceVIL.Core.OSType.Linux;
+#elif WINDOWS
+                private const SpaceVIL.Core.OSType _os_type = SpaceVIL.Core.OSType.Windows;
+#elif MAC
+                private const SpaceVIL.Core.OSType _os_type = SpaceVIL.Core.OSType.Mac;
+#else
+                private const SpaceVIL.Core.OSType _os_type = SpaceVIL.Core.OSType.Windows;
+#endif
+
+        public static SpaceVIL.Core.OSType GetOSType()
         {
-            t1 = t2;
+            return _os_type;
         }
+
+        //cursors 
+        public static Glfw.Cursor CursorArrow;
+        public static Glfw.Cursor CursorInput;
+        public static Glfw.Cursor CursorHand;
+        public static Glfw.Cursor CursorResizeH;
+        public static Glfw.Cursor CursorResizeV;
+        public static Glfw.Cursor CursorResizeAll;
+
+        public static bool InitSpaceVILComponents()
+        {
+            if (!Glfw.Init())
+            {
+                Console.WriteLine("Init SpaceVIL Framework fail. Abort.");
+                return false;
+            }
+            //cursors
+            CursorArrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
+            CursorInput = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
+            CursorHand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
+            CursorResizeH = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
+            CursorResizeV = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
+            CursorResizeAll = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
+
+            return true;
+        }
+
+
         // internal static String ScanCodeToASCII(int scancode, KeyMods mods, int layout)
         // {
         //     String str = String.Empty;

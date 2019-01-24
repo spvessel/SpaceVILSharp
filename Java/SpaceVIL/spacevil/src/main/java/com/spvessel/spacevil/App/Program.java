@@ -6,6 +6,9 @@ import com.spvessel.spacevil.View.*;
 
 public class Program {
     public static void main(String[] args) {
+
+        com.spvessel.spacevil.Common.CommonService.initSpaceVILComponents();
+
         MainWindow mw = new MainWindow();
         // mw.show();
 

@@ -1,37 +1,16 @@
 package com.spvessel.spacevil;
 
-// import java.util.*;
-// import java.io.FileReader;
-// import java.io.BufferedReader;
-// import java.util.ArrayList;
-// import java.util.List;
-
-// import Common.*;
-// import Cores.*;
-//import org.lwjgl.glfw.;
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.Pointer;
 import com.spvessel.spacevil.Exceptions.SpaceVILException;
+
 import org.lwjgl.glfw.*;
-// import org.lwjgl.opengl.GL;
-// import org.lwjgl.system.*;
-
 import static org.lwjgl.glfw.GLFW.*;
-// import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.system.MemoryUtil.*;
-// import java.nio.ByteBuffer;
-
 
 final class GLWHandler {
-    // cursors
 
-    private long _arrow;
-    private long _input;
-    private long _hand;
-    private long _resize_h;
-    private long _resize_v;
-    private long _resize_all;
     ///////////////////////////////////////////////
-
     private GLFWWindowSizeCallback resizeCallback;
     private GLFWCursorPosCallback mouseMoveCallback;
     private GLFWMouseButtonCallback mouseClickCallback;
@@ -78,32 +57,15 @@ final class GLWHandler {
         getPointer().setY(0);
     }
 
-    void initGlfw() throws SpaceVILException {
-        // path to c++ glfw3.dll (x32 or x64)
-        // glfwConfigureNativesDirectory(AppDomain.CurrentDomain.BaseDirectory);
-        if (!glfwInit()) {
-            // System.err.println("GLFW initialization failed!");
-            // System.exit(-1);
-            throw new SpaceVILException("Init GLFW fail - " + getLayout().getWindowTitle());
-        }
-
-        // cursors
-        _arrow = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        _input = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
-        _hand = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
-        _resize_h = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
-        _resize_v = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
-        _resize_all = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
-    }
-
     void createWindow() throws SpaceVILException {
         // important!!! may be the best combination of WINDOW HINTS!!!
-        glfwDefaultWindowHints();
+
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_SAMPLES, 8);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
         if (resizeble)
             glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -155,6 +117,7 @@ final class GLWHandler {
         glfwSetWindowSizeLimits(_window, _w_layout.getMinWidth(), _w_layout.getMinHeight(), _w_layout.getMaxWidth(),
                 _w_layout.getMaxHeight());
         glfwSetWindowPos(_window, getPointer().getX(), getPointer().getY());
+
         if (visible)
             glfwShowWindow(_window);
     }
@@ -179,25 +142,25 @@ final class GLWHandler {
     void setCursorType(int type) {
         switch (type) {
         case GLFW_ARROW_CURSOR:
-            glfwSetCursor(_window, _arrow);
+            glfwSetCursor(_window, CommonService.cursorArrow);
             break;
         case GLFW_IBEAM_CURSOR:
-            glfwSetCursor(_window, _input);
+            glfwSetCursor(_window, CommonService.cursorInput);
             break;
         case GLFW_CROSSHAIR_CURSOR:
-            glfwSetCursor(_window, _resize_all);
+            glfwSetCursor(_window, CommonService.cursorResizeAll);
             break;
         case GLFW_HAND_CURSOR:
-            glfwSetCursor(_window, _hand);
+            glfwSetCursor(_window, CommonService.cursorHand);
             break;
         case GLFW_HRESIZE_CURSOR:
-            glfwSetCursor(_window, _resize_h);
+            glfwSetCursor(_window, CommonService.cursorResizeH);
             break;
         case GLFW_VRESIZE_CURSOR:
-            glfwSetCursor(_window, _resize_v);
+            glfwSetCursor(_window, CommonService.cursorResizeV);
             break;
         default:
-            glfwSetCursor(_window, _arrow);
+            glfwSetCursor(_window, CommonService.cursorArrow);
             break;
         }
     }
@@ -217,14 +180,6 @@ final class GLWHandler {
     void setToClose() {
         if (_window != 0)
             glfwSetWindowShouldClose(_window, true);
-        // try
-        // {
-        // glfwSetWindowShouldClose(_window, true);
-        // }
-        // catch(Exception ex)
-        // {
-        // System.out.println(ex.toString());
-        // }
     }
 
     void setCallbackMouseMove(GLFWCursorPosCallback function) {

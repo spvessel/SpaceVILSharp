@@ -9,9 +9,9 @@ import java.io.BufferedReader;
 import java.io.*;
 import java.nio.*;
 
+import com.spvessel.spacevil.Common.*;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Flags.*;
-//import com.spvessel.spacevil.Common.CommonService;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -22,7 +22,6 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
 
 final class DrawEngine {
     private Map<InterfaceBaseItem, int[]> _bounds = new HashMap<>();
@@ -126,6 +125,7 @@ final class DrawEngine {
     }
 
     protected void applyIcon() {
+        System.out.println("apply icons");
         GLFWImage.Buffer gb = GLFWImage.malloc(2);
         GLFWImage s = GLFWImage.malloc();
         s.set(_iconSmall.getWidth(), _iconSmall.getHeight(), createByteImage(_iconSmall));
@@ -135,6 +135,7 @@ final class DrawEngine {
         gb.put(1, b);
 
         glfwSetWindowIcon(_handler.getWindowId(), gb);
+
         gb.free();
         s.free();
         b.free();
@@ -160,7 +161,6 @@ final class DrawEngine {
         CommonService.GlobalLocker.lock();
         try {
             // InitWindow
-            _handler.initGlfw();
             _handler.createWindow();
             setEventsCallbacks();
             if (_iconSmall != null && _iconBig != null) {
@@ -173,6 +173,7 @@ final class DrawEngine {
             if (_handler.getWindowId() == NULL)
                 _handler.destroy();
             _handler.getLayout().close();
+            return;
         } finally {
             CommonService.GlobalLocker.unlock();
         }
@@ -183,10 +184,6 @@ final class DrawEngine {
         glCullFace(GL_BACK);
         glEnable(GL_ALPHA_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        // glDisable(GL_MULTISAMPLE);
-        glEnable(GL_MULTISAMPLE);
-        // glEnable(GL_DEPTH_TEST);
-        // glEnable(GL_STENCIL_TEST);
 
         ////////////////////////////////////////////////
         _primitive = new Shader(getResourceString("/shaders/vs_primitive.glsl"),
@@ -219,7 +216,6 @@ final class DrawEngine {
         _blur.compile();
         if (_blur.getProgramID() == 0)
             System.out.println("Could not create blur shaders");
-
         run();
     }
 
@@ -286,6 +282,7 @@ final class DrawEngine {
     }
 
     void maximizeWindow() {
+        engineEvent.setEvent(InputEventType.WINDOW_RESTORE);
         try (MemoryStack stack = MemoryStack.stackPush()) {
             if (_handler.getLayout().isMaximized) {
                 glfwRestoreWindow(_handler.getWindowId());
@@ -342,15 +339,16 @@ final class DrawEngine {
         _handler.getLayout().setWidth(width);
         _handler.getLayout().setHeight(height);
 
+        if (engineEvent.lastEvent().contains(InputEventType.WINDOW_RESTORE))
+            return;
+
         _fbo.bindFBO();
         _fbo.clearTexture();
         _fbo.genFBOTexture(_handler.getLayout().getWidth(), _handler.getLayout().getHeight());
         _fbo.unbindFBO();
 
-        if(!_handler.getLayout().isBorderHidden)
-        {
+        if (!_handler.getLayout().isBorderHidden) {
             glClearColor(0, 0, 0, 0);
-            _primitive.useShader();
             update();
             _handler.swap();
         }
@@ -368,14 +366,14 @@ final class DrawEngine {
 
         _handler.getPointer().setX(xpos);
         _handler.getPointer().setY(ypos);
+
+        _handler.getLayout().setX(xpos);
+        _handler.getLayout().setY(ypos);
     }
 
     void setWindowPos(int x, int y) {
         glfwSetWindowPos(_handler.getWindowId(), x, y);
-
         engineEvent.setEvent(InputEventType.WINDOW_MOVE);
-        _handler.getLayout().setX(x);
-        _handler.getLayout().setY(y);
     }
 
     boolean flag_move = false;
@@ -385,6 +383,7 @@ final class DrawEngine {
     // boolean flag_resize = false;
 
     private void mouseMove(long wnd, double xpos, double ypos) {
+
         engineEvent.setEvent(InputEventType.MOUSE_MOVE);
         _tooltip.initTimer(false);
         if (!flag_move)
@@ -430,24 +429,47 @@ final class DrawEngine {
                 if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.TOP)) {
                     if (!(_handler.getLayout().getMinHeight() == _handler.getLayout().getHeight()
                             && (y_release - y_press) >= 0)) {
-                        int y5 = y_handler - y_global + (int) ypos - 5;
-                        y_handler = y_global + y5;
-                        h = h_global - y5;
+
+                        if (CommonService.getOSType() == OSType.MAC) {
+                            h -= y_release - y_press;
+                            y_handler = (h_global - h) + y_global;
+                        } else {
+                            int y5 = y_handler - y_global + (int) ypos - 5;
+                            y_handler = y_global + y5;
+                            h = h_global - y5;
+                        }
                     }
                 }
                 if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.BOTTOM)) {
                     if (!(y_release < _handler.getLayout().getMinHeight()
                             && _handler.getLayout().getHeight() == _handler.getLayout().getMinHeight())) {
+
+                        if (CommonService.getOSType() == OSType.MAC)
+                            y_handler = y_global;
                         h = y_release;
+                        ptrPress.setY(y_release);
                     }
-                    ptrPress.setY(y_release);
                 }
 
                 if (_handler.getLayout().getWindow()._sides.size() != 0 && !_handler.getLayout().isMaximized) {
-                    if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.LEFT)
-                            || _handler.getLayout().getWindow()._sides.contains(ItemAlignment.TOP))
-                        setWindowPos(x_handler, y_handler);
-                    setWindowSize(w, h);
+
+                    if (CommonService.getOSType() == OSType.MAC) {
+                        setWindowSize(w, h);
+                        if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.LEFT)
+                                && _handler.getLayout().getWindow()._sides.contains(ItemAlignment.TOP)) {
+                            setWindowPos(x_handler, (h_global - h) + y_global);
+                        } else if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.LEFT)
+                                || _handler.getLayout().getWindow()._sides.contains(ItemAlignment.BOTTOM)
+                                || _handler.getLayout().getWindow()._sides.contains(ItemAlignment.TOP)) {
+                            setWindowPos(x_handler, y_handler);
+                            _handler.getPointer().setY(y_handler);
+                        }
+                    } else {
+                        if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.LEFT)
+                                || _handler.getLayout().getWindow()._sides.contains(ItemAlignment.TOP))
+                            setWindowPos(x_handler, y_handler);
+                        setWindowSize(w, h);
+                    }
                 }
             }
 
@@ -534,9 +556,9 @@ final class DrawEngine {
     }
 
     private long _start_time = 0; // System.nanoTime();
-    //long _estimated_ime = 0; // System.nanoTime() - startTime;
+    // long _estimated_ime = 0; // System.nanoTime() - startTime;
     private boolean _first_click = false;
-    //boolean _second_click = false;
+    // boolean _second_click = false;
 
     private boolean isDoubleClick() {
         if (_first_click) {
@@ -722,9 +744,7 @@ final class DrawEngine {
                                 if (to_close.closeDependencies(_margs)) {
                                     float_item.hide();
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 float_item.hide();
                             }
                         }
@@ -930,6 +950,7 @@ final class DrawEngine {
         _handler.gVAO = glGenVertexArrays();
         glBindVertexArray(_handler.gVAO);
         focus(_handler.getWindowId(), true);
+        // glfwFocusWindow(_handler.getWindowId());
 
         _fbo.genFBO();
         _fbo.genFBOTexture(_handler.getLayout().getWidth(), _handler.getLayout().getHeight());
@@ -938,13 +959,9 @@ final class DrawEngine {
         while (!_handler.isClosing()) {
             glfwWaitEventsTimeout(_interval);
             // glfwWaitEvents();
-            // glfwPollEvents();
+            // // glfwPollEvents();
 
-            // glClearColor((float) _handler.getLayout().getBackground().getRed() / 255.0f,
-            // (float) _handler.getLayout().getBackground().getGreen() / 255.0f,
-            // (float) _handler.getLayout().getBackground().getBlue() / 255.0f, 1.0f);
             glClearColor(0, 0, 0, 0);
-            _primitive.useShader();
             update();
             _handler.swap();
 
@@ -965,8 +982,6 @@ final class DrawEngine {
         _handler.destroy();
     }
 
-    private int _textlinecount = 0;
-
     protected void update() {
         glViewport(0, 0, _handler.getLayout().getWidth(), _handler.getLayout().getHeight());
         render();
@@ -980,13 +995,6 @@ final class DrawEngine {
         // draw float
         List<InterfaceBaseItem> float_items = new LinkedList<>(
                 ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems());
-        // _handler.getLayout().engineLocker.lock();
-        // try {
-        // float_items = new
-        // LinkedList<>(ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems());
-        // } finally {
-        // _handler.getLayout().engineLocker.unlock();
-        // }
         if (float_items != null) {
             for (InterfaceBaseItem item : float_items)
                 drawItems(item);
@@ -1001,6 +1009,7 @@ final class DrawEngine {
     private void setStencilMask(List<float[]> crd_array) {
         if (crd_array == null)
             return;
+        _primitive.useShader();
         VRAMVertex stencil = new VRAMVertex();
         stencil.genBuffers(crd_array);
         stencil.sendColor(_primitive, new Color(0, 0, 0, 0));
@@ -1052,7 +1061,6 @@ final class DrawEngine {
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
         glStencilMask(0xFF);
 
-        _primitive.useShader();
         setStencilMask(shell.getParent().makeShape());
 
         glStencilFunc(GL_EQUAL, 1, 0xFF);
@@ -1150,31 +1158,15 @@ final class DrawEngine {
             drawPoints((InterfacePoints) root);
         }
         if (root instanceof InterfaceTextContainer) {
-            _char.useShader();
             drawText((InterfaceTextContainer) root);
             glDisable(GL_SCISSOR_TEST);
-            // _primitive.useShader();
-            // if (_isStencilSet == root) {
-            // glDisable(GL_STENCIL_TEST);
-            // glDisable(GL_SCISSOR_TEST);
-            // _isStencilSet = null;
-            // }
         }
         if (root instanceof ImageItem) {
-            _primitive.useShader();
             drawShell(root);
             glDisable(GL_SCISSOR_TEST);
-            _texture.useShader();
             drawImage((ImageItem) root);
             glDisable(GL_SCISSOR_TEST);
-            // _primitive.useShader();
-            // if (_isStencilSet == root) {
-            // glDisable(GL_STENCIL_TEST);
-            // glDisable(GL_SCISSOR_TEST);
-            // _isStencilSet = null;
-            // }
         } else {
-            _primitive.useShader();
             drawShell(root);
             glDisable(GL_SCISSOR_TEST);
             if (root instanceof Prototype) {
@@ -1183,11 +1175,6 @@ final class DrawEngine {
                     drawItems(child);
                 }
             }
-            // if (_isStencilSet == root) {
-            // glDisable(GL_STENCIL_TEST);
-            // glDisable(GL_SCISSOR_TEST);
-            // _isStencilSet = null;
-            // }
         }
     }
 
@@ -1212,9 +1199,9 @@ final class DrawEngine {
         // shadow draw
         if (shell.isShadowDrop()) {
             drawShadow(shell);
-            _primitive.useShader();
         }
 
+        _primitive.useShader();
         VRAMVertex store = new VRAMVertex();
         store.genBuffers(crd_array);
         store.sendColor(_primitive, shell.getBackground());
@@ -1334,11 +1321,11 @@ final class DrawEngine {
     // }
 
     private void drawShadowPart(float[] weights, int res, int fbo_texture, float[] xy, float[] wh) {
-        _blur.useShader();
         float i_x0 = -1.0f;
         float i_y0 = 1.0f;
         float i_x1 = 1.0f;
         float i_y1 = -1.0f;
+        _blur.useShader();
         VRAMTexture store = new VRAMTexture();
         store.genBuffers(i_x0, i_x1, i_y0, i_y1);
         store.bind(fbo_texture);
@@ -1367,8 +1354,7 @@ final class DrawEngine {
         if (bb == null || bb.limit() == 0)
             return;
 
-        if (checkOutsideBorders((InterfaceBaseItem) text))
-            _char.useShader();
+        checkOutsideBorders((InterfaceBaseItem) text);
 
         int bb_h = textPrt.heightTexture, bb_w = textPrt.widthTexture;
         float i_x0 = ((float) textPrt.xTextureShift / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
@@ -1381,6 +1367,7 @@ final class DrawEngine {
                 (float) text.getForeground().getGreen() / 255.0f, (float) text.getForeground().getBlue() / 255.0f,
                 (float) text.getForeground().getAlpha() / 255.0f };
 
+        _char.useShader();
         VRAMTexture store = new VRAMTexture();
         store.genBuffers(i_x0, i_x1, i_y0, i_y1, true);
         store.genTexture(bb_w, bb_h, bb);
@@ -1414,6 +1401,7 @@ final class DrawEngine {
             }
             skew += fig.size() * 3;
         }
+        _primitive.useShader();
         VRAMVertex store = new VRAMVertex();
         store.genBuffers(result);
         store.sendColor(_primitive, item.getPointColor());
@@ -1429,7 +1417,7 @@ final class DrawEngine {
         if (crd_array == null)
             return;
         checkOutsideBorders((InterfaceBaseItem) item);
-
+        _primitive.useShader();
         VRAMVertex store = new VRAMVertex();
         store.genBuffers(crd_array);
         store.sendColor(_primitive, item.getLineColor());
@@ -1438,8 +1426,7 @@ final class DrawEngine {
     }
 
     private void drawImage(ImageItem image) {
-        if (checkOutsideBorders((InterfaceBaseItem) image))
-            _texture.useShader();
+        checkOutsideBorders((InterfaceBaseItem) image);
 
         byte[] bitmap = image.getPixMapImage();
         if (bitmap == null)
@@ -1453,6 +1440,7 @@ final class DrawEngine {
         float i_y1 = (((float) image.getY() + (float) image.getHeight()) / (float) _handler.getLayout().getHeight()
                 * 2.0f - 1.0f) * (-1.0f);
 
+        _texture.useShader();
         VRAMTexture store = new VRAMTexture();
         store.genBuffers(i_x0, i_x1, i_y0, i_y1);
         store.genTexture(w, h, bitmap);
@@ -1481,17 +1469,11 @@ final class DrawEngine {
             _tooltip.setX(ptrRelease.getX() - 10);
         }
 
-        _primitive.useShader();
         drawShell(_tooltip);
         glDisable(GL_SCISSOR_TEST);
         _tooltip.getTextLine().updateGeometry();
-        _char.useShader();
         drawText(_tooltip.getTextLine());
         glDisable(GL_SCISSOR_TEST);
-        // if (_isStencilSet == _tooltip.getTextLine()) {
-        //     glDisable(GL_STENCIL_TEST);
-        //     _isStencilSet = null;
-        // }
     }
 
     private void drawShadePillow() {
@@ -1503,6 +1485,7 @@ final class DrawEngine {
         vertex.add(new float[] { 1.0f, -1.0f, 0.0f });
         vertex.add(new float[] { 1.0f, 1.0f, 0.0f });
         vertex.add(new float[] { -1.0f, 1.0f, 0.0f });
+        _primitive.useShader();
         VRAMVertex store = new VRAMVertex();
         store.genBuffers(vertex);
         store.sendColor(_primitive, new Color(0, 0, 0, 150));

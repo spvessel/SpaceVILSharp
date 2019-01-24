@@ -31,9 +31,10 @@ public class MainWindow extends ActiveWindow {
         BufferedImage iBig = null;
         BufferedImage iSmall = null;
         try {
-            iBig = ImageIO.read(new File("D:\\icon.png"));
-            iSmall = ImageIO.read(new File("D:\\icon.jpg"));
+            iBig = ImageIO.read(new File("D:\\icon_big.png"));
+            iSmall = ImageIO.read(new File("D:\\icon_small.png"));
         } catch (IOException e) {
+            System.out.println("load icons fail");
         }
         if (iBig != null && iSmall != null)
             Handler.setIcon(iBig, iSmall);

@@ -16,10 +16,12 @@ using Pointer = SpaceVIL.Core.Pointer;
 using SpaceVIL.Common;
 using System.Diagnostics;
 
-#if LINUX
+#if MAC
 using static GL.LGL.OpenLGL;
 #elif WINDOWS
 using static GL.WGL.OpenWGL;
+#elif LINUX
+using static GL.WGL.OpenLGL;
 #else
 using static GL.WGL.OpenWGL;
 #endif
@@ -165,7 +167,6 @@ namespace SpaceVIL
             try
             {
                 //InitWindow
-                _handler.InitGlfw();
                 _handler.CreateWindow();
                 SetEventsCallbacks();
                 if (_icon_big.Pixels != null && _icon_small.Pixels != null)
@@ -183,6 +184,7 @@ namespace SpaceVIL
                 if (_handler.GetWindowId())
                     _handler.Destroy();
                 _handler.GetLayout().Close();
+                return;
             }
             finally
             {
@@ -197,9 +199,8 @@ namespace SpaceVIL
             glEnable(GL_ALPHA_TEST);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_MULTISAMPLE);
-            glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
-            //glEnable(GL_DEPTH_TEST);
-            //glEnable(GL_STENCIL_TEST);
+            // glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+
             ////////////////////////////////////////////////
             _primitive = new Shader("_primitive",
                 Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_primitive.glsl"),
@@ -221,13 +222,6 @@ namespace SpaceVIL
             _char.Compile();
             if (_char.GetProgramID() == 0)
                 Console.WriteLine("Could not create char shaders");
-            ///////////////////////////////////////////////
-            // _fxaa = new Shader("_fxaa",
-            // Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_fxaa.glsl"),
-            // Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_fxaa.glsl"));
-            // _fxaa.Compile();
-            // if (_fxaa.GetProgramID() == 0)
-            //     Console.WriteLine("Could not create fxaa shaders");
             ///////////////////////////////////////////////
             _blur = new Shader("_blur",
             Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_blur.glsl"),
@@ -326,6 +320,7 @@ namespace SpaceVIL
             _tooltip.InitTimer(false);
             _handler.GetLayout().SetWidth(width);
             _handler.GetLayout().SetHeight(height);
+
             _fbo.BindFBO();
             _fbo.ClearTexture();
             _fbo.GenFBOTexture(_handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight());
@@ -334,7 +329,6 @@ namespace SpaceVIL
             if (!_handler.GetLayout().IsBorderHidden)
             {
                 glClearColor(0, 0, 0, 0);
-                _primitive.UseShader();
                 Update();
                 _handler.Swap();
             }
@@ -353,6 +347,7 @@ namespace SpaceVIL
 
             _handler.GetLayout().SetX(xpos);
             _handler.GetLayout().SetY(ypos);
+            //  Console.WriteLine("x: " + xpos + " y: " + ypos);
         }
 
         internal void SetWindowPos(int x, int y)
@@ -392,6 +387,7 @@ namespace SpaceVIL
                     int x_press = ptrPress.GetX();
                     int y_press = ptrPress.GetY();
 
+
                     if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left))
                     {
                         if (!(_handler.GetLayout().GetMinWidth() == _handler.GetLayout().GetWidth() && (ptrRelease.GetX() - ptrPress.GetX()) >= 0))
@@ -413,25 +409,57 @@ namespace SpaceVIL
                     {
                         if (!(_handler.GetLayout().GetMinHeight() == _handler.GetLayout().GetHeight() && (ptrRelease.GetY() - ptrPress.GetY()) >= 0))
                         {
-                            int y5 = y_handler - y_global + (int)ypos - 5;
-                            y_handler = y_global + y5;
-                            h = h_global - y5;
+                            if (CommonService.GetOSType() == OSType.Mac)
+                            {
+                                h -= y_release - y_press;
+                                y_handler = (h_global - h) + y_global;
+                            }
+                            else
+                            {
+                                int y5 = y_handler - y_global + (int)ypos - 5;
+                                y_handler = y_global + y5;
+                                h = h_global - y5;
+                            }
                         }
                     }
                     if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Bottom))
                     {
                         if (!(ptrRelease.GetY() < _handler.GetLayout().GetMinHeight() && _handler.GetLayout().GetHeight() == _handler.GetLayout().GetMinHeight()))
                         {
+                            if (CommonService.GetOSType() == OSType.Mac)
+                                y_handler = y_global;
                             h = y_release;
+                            ptrPress.SetY(y_release);
                         }
-                        ptrPress.SetY(y_release); ;
                     }
 
                     if (_handler.GetLayout().GetWindow()._sides != 0 && !_handler.GetLayout().IsMaximized)
                     {
-                        if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left) || _handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Top))
-                            SetWindowPos(x_handler, y_handler);
-                        SetWindowSize(w, h);
+                        if (CommonService.GetOSType() == OSType.Mac)
+                        {
+                            SetWindowSize(w, h);
+                            if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left)
+                            && _handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Top))
+                            {
+                                SetWindowPos(x_handler, (h_global - h) + y_global);
+                                // Console.WriteLine("left + top " + _handler.GetPointer().GetY());
+                            }
+                            else if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left)
+                            || _handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Bottom)
+                            || _handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Top)
+                            )
+                            {
+                                SetWindowPos(x_handler, y_handler);
+                                _handler.GetPointer().SetY(y_handler);//???
+                            }
+                        }
+                        else
+                        {
+                            if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left)
+                                || _handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Top))
+                                SetWindowPos(x_handler, y_handler);
+                            SetWindowSize(w, h);
+                        }
                     }
                 }
                 if (_handler.GetLayout().GetWindow()._sides == 0)
@@ -620,6 +648,8 @@ namespace SpaceVIL
                     Glfw.GetCursorPos(_handler.GetWindowId(), out xpos, out ypos);
                     ptrClick.SetX((int)xpos);
                     ptrClick.SetY((int)ypos);
+                    ptrPress.SetX((int)xpos);
+                    ptrPress.SetY((int)ypos);
                     if (HoveredItem != null)
                     {
                         HoveredItem.SetMousePressed(true);
@@ -969,13 +999,7 @@ namespace SpaceVIL
                 Glfw.WaitEventsTimeout(_interval);
                 // Glfw.PollEvents();
                 // Glfw.WaitEvents();
-                // glClearColor(
-                //     (float)_handler.GetLayout().GetBackground().R / 255.0f,
-                //     (float)_handler.GetLayout().GetBackground().G / 255.0f,
-                //     (float)_handler.GetLayout().GetBackground().B / 255.0f, 1.0f);
-
                 glClearColor(0, 0, 0, 0);
-                _primitive.UseShader();
                 Update();
                 _handler.Swap();
                 flag_move = true;
@@ -1026,6 +1050,7 @@ namespace SpaceVIL
         {
             if (crd_array == null)
                 return;
+            _primitive.UseShader();
             VRAMVertex stencil = new VRAMVertex();
             stencil.GenBuffers(crd_array);
             stencil.SendColor(_primitive, Color.FromArgb(0, 0, 0, 0));
@@ -1088,7 +1113,6 @@ namespace SpaceVIL
             glStencilFunc(GL_ALWAYS, 1, 0xFF);
             glStencilMask(0xFF);
 
-            _primitive.UseShader();
             if (current)
             {
                 SetStencilMask(shell.MakeShape());
@@ -1218,38 +1242,18 @@ namespace SpaceVIL
             }
             if (root is ITextContainer)
             {
-                _char.UseShader();
                 DrawText(root as ITextContainer);
                 glDisable(GL_SCISSOR_TEST);
-                // _primitive.UseShader();
-
-                // if (_isStencilSet == root)
-                // {
-                //     glDisable(GL_SCISSOR_TEST);
-                //     // glDisable(GL_STENCIL_TEST);
-                //     _isStencilSet = null;
-                // }
             }
             if (root is IImageItem)
             {
-                _primitive.UseShader();
                 DrawShell(root);
                 glDisable(GL_SCISSOR_TEST);
-                _texture.UseShader();
                 DrawImage(root as ImageItem);
                 glDisable(GL_SCISSOR_TEST);
-                // _primitive.UseShader();
-
-                // if (_isStencilSet == root)
-                // {
-                //     glDisable(GL_SCISSOR_TEST);
-                //     // glDisable(GL_STENCIL_TEST);
-                //     _isStencilSet = null;
-                // }
             }
             else
             {
-                _primitive.UseShader();
                 DrawShell(root);
                 glDisable(GL_SCISSOR_TEST);
                 if (root is Prototype)
@@ -1260,12 +1264,6 @@ namespace SpaceVIL
                         DrawItems(child);
                     }
                 }
-                // if (_isStencilSet == root)
-                // {
-                //     glDisable(GL_SCISSOR_TEST);
-                //     // glDisable(GL_STENCIL_TEST);
-                //     _isStencilSet = null;
-                // }
             }
         }
 
@@ -1290,11 +1288,9 @@ namespace SpaceVIL
 
             //shadow draw
             if (shell.IsShadowDrop())
-            {
                 DrawShadow(shell);
-                _primitive.UseShader();
-            }
 
+            _primitive.UseShader();
             VRAMVertex store = new VRAMVertex();
             store.GenBuffers(crd_array);
             store.SendColor(_primitive, shell.GetBackground());
@@ -1343,6 +1339,7 @@ namespace SpaceVIL
             _fbo.BindFBO();
             glClear(GL_COLOR_BUFFER_BIT);
             DrawShell(shadow, true);
+            _fbo.UnbindFBO();
 
             int res = shell.GetShadowRadius();
             float[] weights = new float[11];
@@ -1357,7 +1354,6 @@ namespace SpaceVIL
             for (int i = 0; i < 11; i++)
                 weights[i] /= sum;
 
-            _fbo.UnbindFBO();
             DrawShadowPart(weights, res, _fbo.Texture,
             new float[] { shell.GetX() + shell.GetShadowPos().GetX(), shell.GetY() + shell.GetShadowPos().GetY() },
                 new float[] { shell.GetWidth(), shell.GetHeight() });
@@ -1365,12 +1361,12 @@ namespace SpaceVIL
 
         private void DrawShadowPart(float[] weights, int res, uint[] fbo_texture, float[] xy, float[] wh)
         {
-            _blur.UseShader();
             float i_x0 = -1.0f;
             float i_y0 = 1.0f;
             float i_x1 = 1.0f;
             float i_y1 = -1.0f;
 
+            _blur.UseShader();
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
             store.Bind(fbo_texture);
@@ -1402,8 +1398,7 @@ namespace SpaceVIL
                 return;
 
             //проверка: полностью ли влезает объект в свой контейнер
-            if (CheckOutsideBorders(text as IBaseItem))
-                _char.UseShader();
+            CheckOutsideBorders(text as IBaseItem);
 
             int bb_h = textPrt.HeightTexture, bb_w = textPrt.WidthTexture;
             float i_x0 = ((float)textPrt.XTextureShift / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
@@ -1416,6 +1411,7 @@ namespace SpaceVIL
                 (float) text.GetForeground().B / 255.0f,
                 (float) text.GetForeground().A / 255.0f };
 
+            _char.UseShader();
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1, true);
             store.GenTexture(bb_w, bb_h, bb);
@@ -1451,6 +1447,7 @@ namespace SpaceVIL
                 }
                 skew += fig.Count * 3;
             }
+            _primitive.UseShader();
             VRAMVertex store = new VRAMVertex();
             store.GenBuffers(result);
             store.SendColor(_primitive, item.GetPointColor());
@@ -1489,7 +1486,7 @@ namespace SpaceVIL
             if (crd_array == null)
                 return;
             CheckOutsideBorders(item as IBaseItem);
-
+            _primitive.UseShader();
             VRAMVertex store = new VRAMVertex();
             store.GenBuffers(crd_array);
             store.SendColor(_primitive, item.GetLineColor());
@@ -1501,8 +1498,7 @@ namespace SpaceVIL
         void DrawImage(ImageItem image)
         {
             //проверка: полностью ли влезает объект в свой контейнер
-            if (CheckOutsideBorders(image as IBaseItem))
-                _texture.UseShader();
+            CheckOutsideBorders(image as IBaseItem);
 
             byte[] bitmap = image.GetPixMapImage();
             if (bitmap == null)
@@ -1513,6 +1509,7 @@ namespace SpaceVIL
             float i_y0 = ((float)image.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
             float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
             float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            _texture.UseShader();
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
             store.GenTexture(w, h, bitmap);
@@ -1544,18 +1541,11 @@ namespace SpaceVIL
             else
                 _tooltip.SetX(ptrRelease.GetX() - 10);
 
-            _primitive.UseShader();
             DrawShell(_tooltip);
             glDisable(GL_SCISSOR_TEST);
             _tooltip.GetTextLine().UpdateGeometry();
-            _char.UseShader();
             DrawText(_tooltip.GetTextLine());
             glDisable(GL_SCISSOR_TEST);
-            // if (_isStencilSet == _tooltip.GetTextLine())
-            // {
-            //     glDisable(GL_STENCIL_TEST);
-            //     _isStencilSet = null;
-            // }
         }
 
         private void DrawShadePillow()
@@ -1572,6 +1562,7 @@ namespace SpaceVIL
                 new float[] {1.0f,   1.0f,   0.0f},
                 new float[] {-1.0f,  1.0f,   0.0f}
             };
+            _primitive.UseShader();
             VRAMVertex store = new VRAMVertex();
             store.GenBuffers(vertex);
             store.SendColor(_primitive, Color.FromArgb(150, 0, 0, 0));

@@ -6,7 +6,7 @@ uniform float weights[100];
 uniform vec2 point;
 uniform vec2 size;
 in vec2 fragTexCoord;
-
+out vec4 fragColor;
 vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
 {
 	int rad = 5;
@@ -19,7 +19,7 @@ vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
 	{
 		for (int i = -rad; i <= rad; i++) {
 				for (int j = -rad; j <= rad; j++) {
-					tmp = texture2D(image, uv + vec2(i * res * 1.0 / resolution.x, j * res * 1.0/ resolution.y));
+					tmp = texture(image, uv + vec2(i * res * 1.0 / resolution.x, j * res * 1.0/ resolution.y));
 					int i_ind = abs(i);
 					int j_ind = abs(j);
 					color += tmp * weights[j_ind] * weights[i_ind];
@@ -27,7 +27,7 @@ vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
 			}
 	}
 	else {
-		color = texture2D(image, uv);
+		color = texture(image, uv);
 	}
 	return color;
 }
@@ -35,5 +35,5 @@ vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
 
 void main()
 {
-	gl_FragColor = blur(tex, fragTexCoord, frame.xy);
+	fragColor = blur(tex, fragTexCoord, frame.xy);
 }
