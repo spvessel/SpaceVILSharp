@@ -6,8 +6,11 @@ import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemRule;
 import com.spvessel.spacevil.Flags.ItemStateType;
+import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.MenuItem;
+import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.MouseArgs;
 
 import java.awt.*;
 
@@ -132,13 +135,24 @@ public class FlowTest extends ActiveWindow {
         btn5.addItemState(ItemStateType.HOVERED, hovered);
         btn5.eventMouseClick.add((sender, args) -> {
             MessageItem msg = new MessageItem("Do you want get TRUE?", "Message:");
-            msg.OnCloseDialog.add(() -> {
-                System.out.println(msg.getResult());
+            msg.onCloseDialog.add(() -> {
+                int count = 0;
+                for (InterfaceBaseItem var : Handler.getWindow().getItems()) {
+                    if (var instanceof MessageBox)
+                        count++;
+                }
+                System.out.println(msg.getResult() + " " + count);
             });
             msg.show(Handler);
         });
         btn5.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn5.setHoverRule(ItemRule.STRICT);
+
+        Handler.getWindow().eventKeyRelease.add((sender, args) -> {
+            if (args.key == KeyCode.SPACE) {
+                btn5.eventMouseClick.execute(btn5, new MouseArgs());
+            }
+        });
 
         // adding buttons
         toolbar.addItems(btn1, btn2, btn3, btn4, btn5);
@@ -194,7 +208,7 @@ public class FlowTest extends ActiveWindow {
         BlockList block = new BlockList();
         // ResizableItem block = new ResizableItem();
         block.eventMouseClick.add((sender, args) -> {
-            //System.out.println(block.getX() + " " + block.getY());
+            // System.out.println(block.getX() + " " + block.getY());
         });
         block.setBackground(45, 45, 45);
         // block.SetBackground(255, 181, 111);

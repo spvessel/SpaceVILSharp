@@ -51,13 +51,16 @@ public class DialogItem extends Prototype {
     public void show(WindowLayout handler) {
         _handler = handler;
         _handler.addItem(this);
+        _handler.setFocusedItem(this);
     }
 
     public void close() {
+        _handler.resetItems();
+        _handler.setFocusedItem(_handler.getWindow());
         _handler.getWindow().removeItem(this);
     }
 
-    public EventCommonMethod OnCloseDialog = new EventCommonMethod();
+    public EventCommonMethod onCloseDialog = new EventCommonMethod();
 
     @Override
     public void setStyle(Style style) {

@@ -6,7 +6,7 @@ using Glfw3;
 
 namespace SpaceVIL.Common
 {
-    internal static class CommonService
+    public static class CommonService
     {
         public static String ClipboardTextStorage = String.Empty;
         internal static readonly object GlobalLocker = new object();

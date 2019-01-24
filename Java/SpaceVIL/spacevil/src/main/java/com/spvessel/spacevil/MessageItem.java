@@ -60,7 +60,6 @@ public class MessageItem extends DialogItem {
         titleBar.getMaximizeButton().setVisible(false);
         window.addItems(titleBar, layout);
 
-
         // message
         msg.setForeground(new Color(210, 210, 210));
         msg.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
@@ -84,13 +83,10 @@ public class MessageItem extends DialogItem {
         layout.addItems(msg, ok);
 
         titleBar.getCloseButton().eventMouseClick.clear();
-        ;
         titleBar.getCloseButton().eventMouseClick.add((sender, args) -> {
             close();
         });
     }
-
-    WindowLayout _handler = null;
 
     /// <summary>
     /// Show MessageBox
@@ -103,8 +99,8 @@ public class MessageItem extends DialogItem {
 
     @Override
     public void close() {
-        if (OnCloseDialog != null)
-            OnCloseDialog.execute();
+        if (onCloseDialog != null)
+            onCloseDialog.execute();
 
         super.close();
     }
