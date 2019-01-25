@@ -159,6 +159,7 @@ class ActionManager {
 
     // keyboard input
     private void invokeKeyPressEvent(Prototype sender, KeyArgs args) {
+        // System.out.println("key sender " + sender.getItemName());
         if (sender.eventKeyPress != null)
             sender.eventKeyPress.execute(sender, args);
     }

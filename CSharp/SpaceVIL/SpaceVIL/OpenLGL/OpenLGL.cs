@@ -13,7 +13,11 @@ namespace GL.LGL
     static internal partial class OpenLGL
     {
         #region OpenGL_Basic_Functions
+#if MAC
+        public const string LIBRARY_OPENGL = "//System//Library//Frameworks//OpenGL.framework//Libraries//libGL.dylib";
+#else
         public const string LIBRARY_OPENGL = "libGL.so.1";
+#endif
 
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glAccum(uint op, float value);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glAlphaFunc(uint func, float ref_notkeword);

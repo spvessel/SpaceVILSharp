@@ -12,10 +12,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Drawing;
 
-#if LINUX
+#if MAC
 using static GL.LGL.OpenLGL;
 #elif WINDOWS
 using static GL.WGL.OpenWGL;
+#elif LINUX
+using static GL.WGL.OpenLGL;
 #else
 using static GL.WGL.OpenWGL;
 #endif

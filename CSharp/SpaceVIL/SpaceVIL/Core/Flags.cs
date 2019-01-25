@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL.Core
 {
+    public enum OSType
+    {
+        Windows,
+        Linux,
+        Mac
+    }
+    
     [Flags]
     public enum ItemAlignment
     {

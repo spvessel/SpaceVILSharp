@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
+using SpaceVIL.Common;
 
 namespace SpaceVIL
 {
@@ -51,7 +52,7 @@ namespace SpaceVIL
         private Thread thread_engine;
         private DrawEngine engine;
 
-        private Thread thread_manager;
+        private Task thread_manager;
         private ActionManager manager;
 
         public WindowLayout(
@@ -84,21 +85,6 @@ namespace SpaceVIL
 
 
         }
-
-        public void UpdatePosition()
-        {
-            // if (engine != null)
-            //     engine.SetWindowPos();
-        }
-        public void UpdateSize()
-        {
-            // if (engine != null)
-            //     engine.SetWindowSize();
-        }
-        /*public void UpdateScene()
-        {
-            engine.Update();
-        }*/
 
         private WContainer _window;
         public WContainer GetWindow()
@@ -307,15 +293,29 @@ namespace SpaceVIL
             engine._handler.GetPointer().SetX(GetX());
             engine._handler.GetPointer().SetY(GetY());
 
+            thread_manager = new Task(() => manager.StartManager());
+            thread_manager.Start();
+
+            if (CommonService.GetOSType() == OSType.Mac)
+            {
+                if (!WindowLayoutBox.IsAnyWindowRunning())
+                {
+                    WindowLayoutBox.SetWindowRunning(this);
+                    engine.Init();
+                }
+            }
+            else
+            {
+                ShowInsideNewThread();
+            }
+        }
+
+        private void ShowInsideNewThread()
+        {
             if (thread_engine != null && thread_engine.IsAlive)
                 return;
 
-            thread_manager = new Thread(() => manager.StartManager());
-            thread_manager.IsBackground = true;
-            thread_manager.Start();
-
-            if (!_is_main)
-                thread_engine = new Thread(() => engine.Init());
+            thread_engine = new Thread(() => engine.Init());
 
             if (IsDialog)
             {
@@ -325,6 +325,10 @@ namespace SpaceVIL
                     ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
                     WindowLayoutBox.AddToWindowDispatcher(this);
                     WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
                 }
                 finally
                 {
@@ -336,13 +340,33 @@ namespace SpaceVIL
             }
             else
             {
-                if (!_is_main)
-                    thread_engine.Start();
-                else
-                    engine.Init();
+                thread_engine.Start();
             }
         }
+
         public void Close()
+        {
+            if (CommonService.GetOSType() == OSType.Mac)
+            {
+                engine.Close();
+                WindowLayoutBox.SetWindowRunning(null);
+            }
+            else
+            {
+                closeInsideNewThread();
+            }
+
+            if (thread_manager != null && thread_manager.Status == TaskStatus.Running)
+            {
+                manager.StopManager();
+                manager.Execute.Set();
+            }
+            IsClosed = true;
+
+            EventClose?.Invoke();
+        }
+
+        private void closeInsideNewThread()
         {
             if (IsDialog)
             {
@@ -358,32 +382,12 @@ namespace SpaceVIL
                 {
                     Monitor.Exit(wndLock);
                 }
-                if (thread_manager != null && thread_manager.IsAlive)
-                {
-                    manager.StopManager();
-                    manager.Execute.Set();
-                }
             }
             else
             {
-                if (!_is_main)
-                {
-                    if (thread_engine != null && thread_engine.IsAlive)
-                    {
-                        engine.Close();
-                    }
-                }
-                else
+                if (thread_engine != null && thread_engine.IsAlive)
                     engine.Close();
-
-                if (thread_manager != null && thread_manager.IsAlive)
-                {
-                    manager.StopManager();
-                    manager.Execute.Set();
-                }
-                IsClosed = true;
             }
-            EventClose?.Invoke();
         }
 
         public bool IsDialog { get; set; }

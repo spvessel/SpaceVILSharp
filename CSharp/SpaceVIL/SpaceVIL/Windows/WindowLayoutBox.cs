@@ -23,7 +23,6 @@ namespace SpaceVIL
         static internal Dictionary<Guid, WindowLayout> windows_guid = new Dictionary<Guid, WindowLayout>();
         static internal List<WindowPair> current_calling_pair = new List<WindowPair>();
         static internal WindowLayout LastFocusedWindow;
-        //static Object locker = new Object();
 
         static internal void InitWindow(WindowLayout _layout)
         {
@@ -57,7 +56,24 @@ namespace SpaceVIL
         {
             windows_name.Remove(_layout.GetWindowName());
             windows_guid.Remove(_layout.Id);
+            if (_is_main_running == _layout)
+                _is_main_running = null;
         }
+
+        private static WindowLayout _is_main_running = null;
+
+        internal static bool IsAnyWindowRunning()
+        {
+            if (_is_main_running != null)
+                return true;
+            return false;
+        }
+
+        internal static void SetWindowRunning(WindowLayout window)
+        {
+            _is_main_running = window;
+        }
+
         static public bool TryShow(Guid guid)
         {
             WindowLayout wnd = WindowLayoutBox.GetWindowInstance(guid);
