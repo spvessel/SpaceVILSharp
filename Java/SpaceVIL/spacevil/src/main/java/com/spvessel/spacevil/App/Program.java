@@ -9,30 +9,30 @@ public class Program {
 
         com.spvessel.spacevil.Common.CommonService.initSpaceVILComponents();
 
-        MainWindow mw = new MainWindow();
+        // MainWindow mw = new MainWindow();
         // mw.show();
 
-        SettingsTest st = new SettingsTest();
+        // SettingsTest st = new SettingsTest();
         // st.show();
         
-        ImageTest im = new ImageTest();
+        // ImageTest im = new ImageTest();
         // im.show();
 
-        FlowTest ft = new FlowTest();
+        // FlowTest ft = new FlowTest();
         // ft.show();
 
-        LayoutsTest lt = new LayoutsTest();
+        // LayoutsTest lt = new LayoutsTest();
         // lt.show();
         
         ComplexTest ct = new ComplexTest();
         // ct.show();
         
-        InputTest it = new InputTest();
+        // InputTest it = new InputTest();
         // it.show();
 
-        TextTest tt = new TextTest();
+        // TextTest tt = new TextTest();
         // tt.show();
 
-        WindowLayoutBox.getWindowInstance("MainWindow").show();
+        WindowLayoutBox.getWindowInstance("ComplexTest").show();
     }
 }

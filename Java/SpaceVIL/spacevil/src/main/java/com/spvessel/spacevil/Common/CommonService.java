@@ -48,6 +48,7 @@ public final class CommonService {
         }
 
         System.setProperty("java.awt.headless", "true");
+        System.setProperty("org.lwjgl.opengl.Display.enableHighDPI", "false");
 
         // cursors
         cursorArrow = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
