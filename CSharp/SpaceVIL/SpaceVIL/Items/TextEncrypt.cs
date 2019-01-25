@@ -259,10 +259,10 @@ namespace SpaceVIL
         {
             int coord = 0;
             if (_text_object.GetLetPosArray() == null) return coord;
-            int letCount = _text_object.GetLetPosArray().Count;
+            //int letCount = _text_object.GetLetPosArray().Count;
 
             if (cPos > 0)
-                coord = _text_object.GetLetPosArray()[cPos - 1];
+                coord = _text_object.GetLetPosArray()[cPos - 1] + _cursor.GetWidth();
 
             if (GetLineXShift() + coord < 0)
                 _text_object.SetLineXShift(-coord);
@@ -445,6 +445,8 @@ namespace SpaceVIL
                 _text_object.GetMargin().Left - _text_object.GetMargin().Right; //_cursorXMin;// ;
             _text_object.SetAllowWidth(_cursorXMax);
             _text_object.SetLineXShift();
+
+            _text_object.SetCursorWidth(_cursor.GetWidth());
         }
 
         internal int GetTextWidth()

@@ -77,9 +77,10 @@ namespace SpaceVIL
 
         internal void SetBlockWidth(int width, int curWidth)
         {
+            cursorWidth = curWidth;
             if (GetParent() == null) return;
             Indents textMargin = GetTextMargin();
-            _cursorXMax = GetParent().GetWidth() - curWidth - GetParent().GetPadding().Left -
+            _cursorXMax = GetParent().GetWidth() - cursorWidth - GetParent().GetPadding().Left -
                 GetParent().GetPadding().Right - textMargin.Left - textMargin.Right;
             SetAllowWidth();
             UpdLinesXShift();
@@ -99,12 +100,15 @@ namespace SpaceVIL
             UpdLinesYShift();
         }
 
+        private int cursorWidth = 0;
         internal void InitLines(int curWidth)
         {
+            cursorWidth = curWidth;
             Indents textMargin = GetTextMargin();
 
-            _cursorXMax = GetParent().GetWidth() - curWidth - GetParent().GetPadding().Left
+            _cursorXMax = GetParent().GetWidth() - cursorWidth - GetParent().GetPadding().Left
                  - GetParent().GetPadding().Right - textMargin.Left - textMargin.Right;
+
             _cursorYMax = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom
                  - textMargin.Top - textMargin.Bottom;
 
@@ -169,8 +173,9 @@ namespace SpaceVIL
             _linesList.Insert(lineNum, te);
 
             UpdLinesYShift(); //Пока обновляются все, но в принципе, нужно только под lineNum
-
             //GetParent().AddItem(_cursor);
+
+            CheckWidth();
         }
 
         internal void BreakLine(Point _cursorPosition)
@@ -186,12 +191,16 @@ namespace SpaceVIL
                 newText = text.Substring(_cursorPosition.X);
             }
             AddNewLine(newText, _cursorPosition.Y + 1);
+
+            //CheckWidth(); //Есть в addNewLine
         }
 
         internal void Clear()
         {
             _linesList[0].SetItemText("");
             RemoveLines(1, _linesList.Count - 1);
+
+            CheckWidth();
         }
 
         private int CoordXToPos(int coordX, int lineNumb)
@@ -229,10 +238,10 @@ namespace SpaceVIL
             }
             else
             {
-                if (!(cPos.X == 0 && cPos.Y == 0))
-                {
-                    coord.X = GetLetPosInLine(cPos.Y, cPos.X - 1);
-                }
+                //if (!(cPos.X == 0 && cPos.Y == 0))
+                //{
+                    coord.X = GetLetPosInLine(cPos.Y, cPos.X - 1) + cursorWidth;
+                //}
             }
             return coord;
         }
@@ -261,6 +270,8 @@ namespace SpaceVIL
             _linesList[topLineY].SetItemText(text);
 
             RemoveLines(topLineY + 1, topLineY + 1);
+
+            CheckWidth();
         }
 
         private void RemoveLines(int fromLine, int toLine)
@@ -390,6 +401,8 @@ namespace SpaceVIL
         {
             _linesList[lineY].SetItemText(text);
             //_linesList[_cursor_position.Y].UpdateData(UpdateType.Critical); //Doing in TextItem
+
+            CheckWidth();
         }
 
         internal string GetTextInLine(int lineNum)
@@ -476,6 +489,8 @@ namespace SpaceVIL
 
             curPos.Y = line.Length - 1;
             curPos.X = GetLineLetCount(curPos.Y);
+
+            CheckWidth();
             return curPos;
         }
 
@@ -491,6 +506,8 @@ namespace SpaceVIL
                 _linesList[fromReal.Y + 1].SetItemText(_linesList[fromReal.Y + 1].GetItemText().Substring(toReal.X));
                 CombineLines(fromReal.Y);
             }
+
+            CheckWidth();
         }
 
         internal Point PasteText(string pasteStr, Point _cursor_position)
@@ -527,6 +544,7 @@ namespace SpaceVIL
                 _cursor_position.Y += line.Length - 1;
             }
 
+            CheckWidth();
             return _cursor_position;
         }
 
@@ -547,7 +565,10 @@ namespace SpaceVIL
                 if (globalXShift + outPoint.X > _cursorXMax)
                 {
                     globalXShift = _cursorXMax - outPoint.X;
-                    globalXShift -= offset;
+
+                    if (outPoint.X < GetWidth())
+                        globalXShift -= offset;
+
                     UpdLinesXShift();
                 }
 
@@ -593,43 +614,40 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
-
                 List<TextPrinter> tpLines = new List<TextPrinter>();
                 int w = 0, h = 0;
                 int lineHeigh = GetLineY(1);
-
-                //Console.Write(_linesList.Count + ": ");
+                int visibleHeight = 0;
+                int startNumb = -1;
+                int inc = -1;
                 foreach (TextLine tl in _linesList)
                 {
+                    inc++;
                     TextPrinter tmp = tl.GetLetTextures();
                     tpLines.Add(tmp);
                     h += lineHeigh;//tmp.HeightTexture;
+                    w = (w > tl.GetWidth()) ? w : tl.GetWidth();
                     if (tmp == null) continue;
-                    w = (w > tmp.WidthTexture) ? w : tmp.WidthTexture;
-                    //Console.WriteLine(tl.GetText() + " " + tl.GetLineYShift());
+                    //w = (w > tmp.WidthTexture) ? w : tmp.WidthTexture;
+                    visibleHeight += lineHeigh;
+                    if (startNumb == -1)
+                        startNumb = inc;
                 }
-                w += _cursorXMax / 3;
+                //w += _cursorXMax / 3;
                 SetWidth(w);
                 SetHeight(h);
                 
-
-                byte[] bigByte = new byte[h * w * 4];
+                byte[] bigByte = new byte[visibleHeight * w * 4]; //h
                 int bigOff = 0;
+
                 foreach (TextPrinter tptmp in tpLines)
                 {
                     if (tptmp == null || tptmp.Texture == null)
                     {
-                        //Console.WriteLine("null " + count);
-                        // for (int p = 0; p < 4; p++)
-                        //     for (int j = 0; j < lineHeigh; j++)
-                        //         for (int i = 0; i < w; i++)
-                        //             bigByte[bigOff + p + i * 4 + j * (w * 4)] = 0;
-
-                        bigOff += lineHeigh * w * 4;
+                        //bigOff += lineHeigh * w * 4;
                         continue;
                     }
-                    //Console.WriteLine("normal " + count);
-                    //count++;
+                    
                     for (int p = 0; p < 4; p++)
                     {
                         for (int j = 0; j < tptmp.HeightTexture; j++)
@@ -657,24 +675,28 @@ namespace SpaceVIL
                 }
                 TextPrinter tpout = new TextPrinter(bigByte);
                 tpout.WidthTexture = w;
-                tpout.HeightTexture = h;
-                if (tpLines.Count == 0 || tpLines[0] == null)
-                {
-                    tpout.XTextureShift = GetParent().GetPadding().Left + GetTextMargin().Left + GetParent().GetX();
-                    tpout.YTextureShift = GetParent().GetPadding().Top + GetTextMargin().Top + GetParent().GetY();
+                tpout.HeightTexture = visibleHeight; // h;
 
-                    tpout.XTextureShift += _linesList[0].GetLineXShift();
-                    tpout.YTextureShift += _linesList[0].GetLineYShift();
-                }
-                else
-                {
-                    tpout.XTextureShift = tpLines[0].XTextureShift;
-                    tpout.YTextureShift = tpLines[0].YTextureShift;
+                tpout.XTextureShift = GetParent().GetPadding().Left + GetTextMargin().Left + GetParent().GetX() + cursorWidth;
+                tpout.YTextureShift = GetParent().GetPadding().Top + GetTextMargin().Top + GetParent().GetY();
 
+//                if (tpLines.Count == 0 || tpLines[0] == null)
+//                {
+//                    tpout.XTextureShift = GetParent().GetPadding().Left + GetTextMargin().Left + GetParent().GetX();
+//                    tpout.YTextureShift = GetParent().GetPadding().Top + GetTextMargin().Top + GetParent().GetY();
+//
+//                    tpout.XTextureShift += 0; // _linesList[0].GetLineXShift();
+//                    tpout.YTextureShift += 0; // _linesList[0].GetLineYShift();
+//                }
+//                else
+//                {
+//                    tpout.XTextureShift = GetParent().GetPadding().Left + GetTextMargin().Left + GetParent().GetX(); //tpLines[0].XTextureShift;
+//                    tpout.YTextureShift = GetParent().GetPadding().Top + GetTextMargin().Top + GetParent().GetY(); //tpLines[0].YTextureShift;
+ //               }
 
+                if (startNumb > -1)
+                    tpout.YTextureShift += _linesList[startNumb].GetLineYShift();
 
-                }
-                //Console.WriteLine("BigByte length " + w + " " + h);
                 return tpout;
             }
             finally
@@ -701,6 +723,21 @@ namespace SpaceVIL
         {
             globalXShift = offset;
             UpdLinesXShift();
+        }
+
+        private void CheckWidth()
+        {
+            int w = 0, h = 0;
+            int lineHeigh = GetLineY(1);
+
+            foreach (TextLine tl in _linesList)
+            {
+                h += lineHeigh;
+                w = (w > tl.GetWidth()) ? w : tl.GetWidth();
+            }
+            
+            SetWidth(w);
+            SetHeight(h);
         }
     }
 }

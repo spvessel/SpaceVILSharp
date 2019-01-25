@@ -795,7 +795,7 @@ class TextBlock extends Prototype
 
             _textureStorage.cutText(fromReal, toReal);
 
-            _cursor_position = fromReal;
+            _cursor_position = new Point(fromReal);
             replaceCursor();
             if (_isSelect)
                 unselectText();
@@ -937,4 +937,7 @@ class TextBlock extends Prototype
 
     // }
 
+    int getCursorWidth() {
+        return _cursor.getWidth();
+    }
 }

@@ -933,6 +933,7 @@ final class DrawEngine {
 
         _fbo.genFBO();
         _fbo.genFBOTexture(_handler.getLayout().getWidth(), _handler.getLayout().getHeight());
+//        System.out.println(_fbo.texture);
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {

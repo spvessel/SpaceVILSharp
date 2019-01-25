@@ -234,7 +234,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         //int letCount = _text_object.getLetPosArray().size();
 
         if (cPos > 0)
-            coord = _text_object.getLetPosArray().get(cPos - 1);
+            coord = _text_object.getLetPosArray().get(cPos - 1) + _cursor.getWidth();
 
         if (getLineXShift() + coord < 0) // _cursorXMin)
             _text_object.setLineXShift(-coord); // _lineXShift + _text_object.getLetWidth(_cursor_position));
@@ -410,6 +410,8 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                  - _text_object.getMargin().left - _text_object.getMargin().right; // _cursorXMin;// ;
         _text_object.setAllowWidth(_cursorXMax);
         _text_object.setLineXShift();
+
+        _text_object.setCursorWidth(_cursor.getWidth());
     }
 
     int getTextWidth() {

@@ -442,6 +442,7 @@ namespace SpaceVIL
             _cursor.SetY(pos.Y - GetLineSpacer() / 2 + 1);// - 3);
             TextChanged?.Invoke(); //???????
             //UpdateLayout();
+            //Console.WriteLine(pos.X + " cursor pos " + _cursor.GetX());
         }
 
         internal void SetLineSpacer(int lineSpacer)
@@ -829,7 +830,7 @@ namespace SpaceVIL
 
                 _textureStorage.CutText(fromReal, toReal);
 
-                _cursor_position = fromReal;
+                _cursor_position = new Point(fromReal.X, fromReal.Y);
                 ReplaceCursor();
                 if (_isSelect)
                     UnselectText();
@@ -987,5 +988,10 @@ namespace SpaceVIL
         //     }
 
         // }
+
+        internal int GetCursorWidth()
+        {
+            return _cursor.GetWidth();
+        }
     }
 }

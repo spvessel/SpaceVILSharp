@@ -177,7 +177,7 @@ namespace SpaceVIL
         {
             int w = GetTextWidth();
             if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
-                realPos -= GetX() + (GetWidth() - w) - GetPadding().Right - _text_object.GetMargin().Right;
+                realPos -= GetX() + (GetWidth() - w) - GetPadding().Right - _text_object.GetMargin().Right - _cursor.GetWidth();
             else
                 realPos -= GetX() + GetPadding().Left + _text_object.GetMargin().Left;
 
@@ -334,7 +334,13 @@ namespace SpaceVIL
             //_cursor_position = (_cursor_position > letCount) ? letCount : _cursor_position;
             //Console.WriteLine(cPos + " " + letCount);
             if (cPos > 0)
+            {
                 coord = _text_object.GetLetPosArray()[cPos - 1];
+                if ((GetTextWidth() >= _cursorXMax) || !_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
+                {
+                    coord += _cursor.GetWidth();
+                }
+            }
 
             if (GetLineXShift() + coord < 0)
             {
@@ -357,13 +363,20 @@ namespace SpaceVIL
             int pos = CursorPosToCoord(_cursor_position);
 
             int w = GetTextWidth();
+
             if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
             {
-                _cursor.SetX(GetX() + GetWidth() - w + pos - GetPadding().Right // - _cursor.GetWidth()
-                    - _text_object.GetMargin().Right); // - GetPadding().Right);
+                int xcp = GetX() + GetWidth() - w + pos - GetPadding().Right // - _cursor.GetWidth()
+                    - _text_object.GetMargin().Right - _cursor.GetWidth();
+                if (_cursor_position == 0)
+                    xcp -= _cursor.GetWidth();
+                _cursor.SetX(xcp);
             }
             else
-                _cursor.SetX(GetX() + GetPadding().Left + pos + _text_object.GetMargin().Left);
+            {
+                int cnt = GetX() + GetPadding().Left + pos + _text_object.GetMargin().Left;
+                _cursor.SetX(cnt);
+            }
         }
 
         private void OnTextInput(object sender, TextInputArgs args)
@@ -524,6 +537,8 @@ namespace SpaceVIL
 
             int scctp = _text_object.GetFontDims()[0];
             if (scctp > scrollStep) scrollStep = scctp;
+
+            _text_object.SetCursorWidth(_cursor.GetWidth());
         }
 
         public int GetTextWidth()
@@ -557,7 +572,7 @@ namespace SpaceVIL
             int w = GetTextWidth();
             if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
                 _selectedArea.SetX(GetX() + GetWidth() - w + fromReal - GetPadding().Right - 
-                    _text_object.GetMargin().Right);
+                    _text_object.GetMargin().Right - _cursor.GetWidth());
             else
                 _selectedArea.SetX(GetX() + GetPadding().Left + fromReal + _text_object.GetMargin().Left);
             _selectedArea.SetWidth(width);

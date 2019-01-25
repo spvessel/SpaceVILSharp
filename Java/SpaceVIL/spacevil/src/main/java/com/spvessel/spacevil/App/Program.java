@@ -30,6 +30,7 @@ public class Program {
         TextTest tt = new TextTest();
         // tt.show();
 
-        WindowLayoutBox.getWindowInstance("MainWindow").show();
+//        WindowLayoutBox.getWindowInstance("MainWindow").show();
+        WindowLayoutBox.tryShow("InputTest");
     }
 }
