@@ -8,7 +8,6 @@ import java.util.*;
 import java.io.BufferedReader;
 import java.io.*;
 import java.nio.*;
-
 import com.spvessel.spacevil.Common.*;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Flags.*;
@@ -125,7 +124,6 @@ final class DrawEngine {
     }
 
     protected void applyIcon() {
-        System.out.println("apply icons");
         GLFWImage.Buffer gb = GLFWImage.malloc(2);
         GLFWImage s = GLFWImage.malloc();
         s.set(_iconSmall.getWidth(), _iconSmall.getHeight(), createByteImage(_iconSmall));
@@ -342,9 +340,13 @@ final class DrawEngine {
         if (engineEvent.lastEvent().contains(InputEventType.WINDOW_RESTORE))
             return;
 
+        IntBuffer w = BufferUtils.createIntBuffer(1);
+        IntBuffer h = BufferUtils.createIntBuffer(1);
+        glfwGetFramebufferSize(_handler.getWindowId(), w, h);
+
         _fbo.bindFBO();
         _fbo.clearTexture();
-        _fbo.genFBOTexture(_handler.getLayout().getWidth(), _handler.getLayout().getHeight());
+        _fbo.genFBOTexture(w.get(0), h.get(0));
         _fbo.unbindFBO();
 
         if (!_handler.getLayout().isBorderHidden) {
@@ -952,9 +954,13 @@ final class DrawEngine {
         focus(_handler.getWindowId(), true);
         // glfwFocusWindow(_handler.getWindowId());
 
+        IntBuffer w = BufferUtils.createIntBuffer(1);
+        IntBuffer h = BufferUtils.createIntBuffer(1);
+        glfwGetFramebufferSize(_handler.getWindowId(), w, h);
+
         _fbo.genFBO();
-        _fbo.genFBOTexture(_handler.getLayout().getWidth(), _handler.getLayout().getHeight());
-//        System.out.println(_fbo.texture);
+        _fbo.genFBOTexture(w.get(0), h.get(0));
+
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {
@@ -984,7 +990,10 @@ final class DrawEngine {
     }
 
     protected void update() {
-        glViewport(0, 0, _handler.getLayout().getWidth(), _handler.getLayout().getHeight());
+        IntBuffer w = BufferUtils.createIntBuffer(1);
+        IntBuffer h = BufferUtils.createIntBuffer(1);
+        glfwGetFramebufferSize(_handler.getWindowId(), w, h);
+        glViewport(0, 0, w.get(0), h.get(0));
         render();
     }
 
