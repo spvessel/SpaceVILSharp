@@ -22,6 +22,8 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     private String _pwd = "";
     private String _hide_sign;
     private TextLine _text_object;
+    private TextLine _substrate_text;
+
     private Rectangle _cursor;
     private int _cursor_position = 0;
 
@@ -46,6 +48,8 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         _hide_sign = "\u25CF";
 
         _text_object = new TextLine();
+        _substrate_text = new TextLine();
+
         _cursor = new Rectangle();
         _selectedArea = new Rectangle();
         count++;
@@ -298,14 +302,31 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     void setTextAlignment(List<ItemAlignment> alignment) {
         // Ignore all changes
         _text_object.setTextAlignment(alignment);
+        _substrate_text.setTextAlignment(alignment);
     }
 
     void setTextMargin(Indents margin) {
         _text_object.setMargin(margin);
+        _substrate_text.setMargin(margin);
     }
 
     void setFont(Font font) {
         _text_object.setFont(font);
+        _substrate_text.setFont(
+                new Font(font.getFamily(), _substrate_text.getFont().getStyle(), _substrate_text.getFont().getSize()));
+    }
+
+    void setFontSize(int size) {
+        _text_object.setFontSize(size);
+    }
+
+    void setFontStyle(int style) {
+        _text_object.setFontStyle(style);
+    }
+
+    void setFontFamily(String font_family) {
+        _text_object.setFontFamily(font_family);
+        _substrate_text.setFontFamily(font_family);
     }
 
     Font getFont() {
@@ -324,6 +345,11 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     private void setText(String text) {
         textInputLock.lock();
         try {
+            if (_substrate_text.isVisible())
+                _substrate_text.setVisible(false);
+            if (text.equals(""))
+                _substrate_text.setVisible(true);
+
             _pwd = text;
             if (_needShow) {
                 _text_object.setItemText(text);
@@ -396,22 +422,29 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                  - _text_object.getMargin().left - _text_object.getMargin().right; // _cursorXMin;// ;
         _text_object.setAllowWidth(_cursorXMax);
         _text_object.checkXShift(_cursorXMax); // _text_object.setLineXShift();
+
+        _substrate_text.setAllowWidth(_cursorXMax);
+        _substrate_text.checkXShift(_cursorXMax);
     }
 
     public void initElements() {
         // _cursor.IsVisible = false;
         // adding
 
-        addItems(_selectedArea, _text_object, _cursor);
+        addItems(_substrate_text, _selectedArea, _text_object, _cursor);
         // getHandler().setFocusedItem(this);
 
         // _cursorXMin = getPadding().Left;
-        _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right
-                 - _text_object.getMargin().left - _text_object.getMargin().right; // _cursorXMin;// ;
-        _text_object.setAllowWidth(_cursorXMax);
-        _text_object.setLineXShift();
+        // _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right
+        //          - _text_object.getMargin().left - _text_object.getMargin().right; // _cursorXMin;// ;
+        // _text_object.setAllowWidth(_cursorXMax);
+        // _text_object.setLineXShift();
+
+        // _substrate_text.setAllowWidth(_cursorXMax);
+        // _substrate_text.setLineXShift();
 
         _text_object.setCursorWidth(_cursor.getWidth());
+        _substrate_text.setCursorWidth(_cursor.getWidth());
     }
 
     int getTextWidth() {
@@ -533,10 +566,54 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         if (inner_style != null) {
             _cursor.setStyle(inner_style);
         }
+        inner_style = style.getInnerStyle("substrate");
+        if (inner_style != null) {
+            _substrate_text.setFont(inner_style.font);
+            _substrate_text.setForeground(inner_style.foreground);
+        }
     }
 
     private int getLineXShift() {
         return _text_object.getLineXShift();
     }
 
+    void setSubstrateText(String substrateText) {
+        _substrate_text.setItemText(substrateText);
+    }
+
+    void setSubstrateFontSize(int size) {
+        _substrate_text.setFontSize(size);
+    }
+
+    void setSubstrateFontStyle(int style) {
+        _substrate_text.setFontStyle(style);
+    }
+
+    void setSubstrateForeground(Color foreground) {
+        _substrate_text.setForeground(foreground);
+    }
+
+    void setSubstrateForeground(int r, int g, int b) {
+        _substrate_text.setForeground(r, g, b);
+    }
+
+    void seSubstratetForeground(int r, int g, int b, int a) {
+        _substrate_text.setForeground(r, g, b, a);
+    }
+
+    void setSubstrateForeground(float r, float g, float b) {
+        _substrate_text.setForeground(r, g, b);
+    }
+
+    void setSubstrateForeground(float r, float g, float b, float a) {
+        _substrate_text.setForeground(r, g, b, a);
+    }
+
+    Color getSubstrateForeground() {
+        return _substrate_text.getForeground();
+    }
+
+    String getSubstrateText() {
+        return _substrate_text.getItemText();
+    }
 }

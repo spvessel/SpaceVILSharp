@@ -65,9 +65,23 @@ public class PasswordLine extends HorizontalStack {
     public void setFont(Font font) {
         _textEncrypt.setFont(font);
     }
+
+    public void setFontSize(int size) {
+        _textEncrypt.setFontSize(size);
+    }
+
+    public void setFontStyle(int style) {
+        _textEncrypt.setFontStyle(style);
+    }
+
+    public void setFontFamily(String font_family) {
+        _textEncrypt.setFontFamily(font_family);
+    }
+
     public Font getFont() {
         return _textEncrypt.getFont();
     }
+
 
     /**
      * @return password string
@@ -161,5 +175,45 @@ public class PasswordLine extends HorizontalStack {
         if (inner_style != null) {
             _textEncrypt.setStyle(inner_style);
         }
+    }
+
+    public void setSubstrateText(String substrateText) {
+        _textEncrypt.setSubstrateText(substrateText);
+    }
+
+    public void setSubstrateFontSize(int size) {
+        _textEncrypt.setSubstrateFontSize(size);
+    }
+
+    public void setSubstrateFontStyle(int style) {
+        _textEncrypt.setSubstrateFontStyle(style);
+    }
+
+    public void setSubstrateForeground(Color foreground) {
+        _textEncrypt.setSubstrateForeground(foreground);
+    }
+
+    public void setSubstrateForeground(int r, int g, int b) {
+        _textEncrypt.setSubstrateForeground(r, g, b);
+    }
+
+    public void seSubstratetForeground(int r, int g, int b, int a) {
+        _textEncrypt.setSubstrateForeground(r, g, b, a);
+    }
+
+    public void setSubstrateForeground(float r, float g, float b) {
+        _textEncrypt.setSubstrateForeground(r, g, b);
+    }
+
+    public void setSubstrateForeground(float r, float g, float b, float a) {
+        _textEncrypt.setSubstrateForeground(r, g, b, a);
+    }
+
+    public Color getSubstrateForeground() {
+        return _textEncrypt.getSubstrateForeground();
+    }
+
+    public String getSubstrateText() {
+        return _textEncrypt.getSubstrateText();
     }
 }

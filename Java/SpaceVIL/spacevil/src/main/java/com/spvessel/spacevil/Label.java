@@ -115,6 +115,15 @@ public class Label extends Prototype {
         return _text_object.getHeight();
     }
 
+    @Override
+    public void setWidth(int width) {
+        super.setWidth(width);
+        int _cursorXMax = getWidth() - getPadding().left - getPadding().right - _text_object.getMargin().left
+                - _text_object.getMargin().right;
+        _text_object.setAllowWidth(_cursorXMax);
+        _text_object.checkXShift(_cursorXMax); // _text_object.setLineXShift();
+    }
+    
     /**
      * Initialization and adding of all elements in the Label
      */

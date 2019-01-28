@@ -8,7 +8,7 @@ import com.spvessel.spacevil.*;
 public class InputTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 100, 400, true);
+        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 200, 400, true);
         setHandler(Handler);
 
         Handler.setMinSize(50, 100);
@@ -26,10 +26,13 @@ public class InputTest extends ActiveWindow {
         Handler.addItem(layout);
 
         PasswordLine password = new PasswordLine();
+        password.setSubstrateText("Enter a password...");
 
         TextEdit te = new TextEdit();
+        // te.setText("TextZaranee");
         te.setTextAlignment(ItemAlignment.RIGHT);
         //te.getSelectionArea().setBackground(Color.green);
+        te.setSubstrateText("Write some text");
 
         TextArea tb = new TextArea();
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);

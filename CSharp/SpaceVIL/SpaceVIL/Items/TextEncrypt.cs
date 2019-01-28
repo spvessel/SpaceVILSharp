@@ -17,6 +17,8 @@ namespace SpaceVIL
         private string _pwd = String.Empty;
         private string _hide_sign;
         private TextLine _text_object;
+        private TextLine _substrate_text;
+
         private Rectangle _cursor;
         private int _cursor_position = 0;
         
@@ -42,6 +44,8 @@ namespace SpaceVIL
             // _hide_sign = Encoding.UTF32.GetString(BitConverter.GetBytes(0x23fa)); //big point
             _hide_sign = Encoding.UTF32.GetString(BitConverter.GetBytes(0x25CF)); //big point
             _text_object = new TextLine();
+            _substrate_text = new TextLine();
+
             _cursor = new Rectangle();
             _selectedArea = new Rectangle();
             count++;
@@ -325,15 +329,35 @@ namespace SpaceVIL
         {
             //Ignore all changes
             _text_object.SetTextAlignment(alignment);
+            _substrate_text.SetTextAlignment(alignment);
         }
         internal void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
+            _substrate_text.SetMargin(margin);
         }
         internal void SetFont(Font font)
         {
             _text_object.SetFont(font);
+            _substrate_text.SetFont(new Font(font.FontFamily, _substrate_text.GetFont().Size, _substrate_text.GetFont().Style));
         }
+
+        internal void SetFontSize(int size)
+        {
+            _text_object.SetFontSize(size);
+        }
+
+        internal void SetFontStyle(FontStyle style)
+        {
+            _text_object.SetFontStyle(style);
+        }
+
+        internal void SetFontFamily(FontFamily font_family)
+        {
+            _text_object.SetFontFamily(font_family);
+            _substrate_text.SetFontFamily(font_family);
+        }
+
         internal Font GetFont()
         {
             return _text_object.GetFont();
@@ -354,6 +378,11 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
+                if (_substrate_text.IsVisible())
+                    _substrate_text.SetVisible(false);
+                if (text == String.Empty)
+                    _substrate_text.SetVisible(true);
+
                 _pwd = text;
                 if (_needShow)
                 {
@@ -431,6 +460,9 @@ namespace SpaceVIL
                 _text_object.GetMargin().Left - _text_object.GetMargin().Right;
             _text_object.SetAllowWidth(_cursorXMax);
             _text_object.CheckXShift(_cursorXMax); //_text_object.SetLineXShift();
+
+            _substrate_text.SetAllowWidth(_cursorXMax);
+            _substrate_text.CheckXShift(_cursorXMax);
         }
 
         public override void InitElements()
@@ -438,15 +470,16 @@ namespace SpaceVIL
             // _cursor.IsVisible = false;
             //adding
 
-            AddItems(_selectedArea, _text_object, _cursor);
+            AddItems(_substrate_text, _selectedArea, _text_object, _cursor);
             // GetHandler().SetFocusedItem(this);
 
-            _cursorXMax = GetWidth() - _cursor.GetWidth() - GetPadding().Left - GetPadding().Right -
-                _text_object.GetMargin().Left - _text_object.GetMargin().Right; //_cursorXMin;// ;
-            _text_object.SetAllowWidth(_cursorXMax);
-            _text_object.SetLineXShift();
+            // _cursorXMax = GetWidth() - _cursor.GetWidth() - GetPadding().Left - GetPadding().Right -
+            //     _text_object.GetMargin().Left - _text_object.GetMargin().Right; //_cursorXMin;// ;
+            // _text_object.SetAllowWidth(_cursorXMax);
+            // _text_object.SetLineXShift();
 
             _text_object.SetCursorWidth(_cursor.GetWidth());
+            _substrate_text.SetCursorWidth(_cursor.GetWidth());
         }
 
         internal int GetTextWidth()
@@ -582,11 +615,67 @@ namespace SpaceVIL
             {
                 _cursor.SetStyle(inner_style);
             }
+            inner_style = style.GetInnerStyle("substrate");
+            if (inner_style != null)
+            {
+                _substrate_text.SetFont(inner_style.Font);
+                _substrate_text.SetForeground(inner_style.Foreground);
+            }
         }
 
         private int GetLineXShift()
         {
             return _text_object.GetLineXShift();
+        }
+
+        internal void setSubstrateText(String substrateText)
+        {
+            _substrate_text.SetItemText(substrateText);
+        }
+
+        internal void SetSubstrateFontSize(int size)
+        {
+            _substrate_text.SetFontSize(size);
+        }
+
+        internal void SetSubstrateFontStyle(FontStyle style)
+        {
+            _substrate_text.SetFontStyle(style);
+        }
+
+        internal void SetSubstrateForeground(Color foreground)
+        {
+            _substrate_text.SetForeground(foreground);
+        }
+
+        internal void SetSubstrateForeground(int r, int g, int b)
+        {
+            _substrate_text.SetForeground(r, g, b);
+        }
+
+        internal void SeSubstratetForeground(int r, int g, int b, int a)
+        {
+            _substrate_text.SetForeground(r, g, b, a);
+        }
+
+        internal void SetSubstrateForeground(float r, float g, float b)
+        {
+            _substrate_text.SetForeground(r, g, b);
+        }
+
+        internal void SetSubstrateForeground(float r, float g, float b, float a)
+        {
+            _substrate_text.SetForeground(r, g, b, a);
+        }
+
+        internal Color GetSubstrateForeground()
+        {
+            return _substrate_text.GetForeground();
+        }
+
+        internal String GetSubstrateText()
+        {
+            return _substrate_text.GetItemText();
         }
     }
 }

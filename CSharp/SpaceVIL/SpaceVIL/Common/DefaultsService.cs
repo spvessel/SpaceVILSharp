@@ -70,6 +70,20 @@ namespace SpaceVIL.Common
             return new Font(_default_font.FontFamily, size, _default_font.Style);
             // return new Font(new FontFamily("Ubuntu"), size, FontStyle.Regular);
         }
+        public Font GetDefaultFont(FontStyle style, int size)
+        {
+            // Console.WriteLine(size);
+            if (size == 0)
+            {
+                size = 10;
+            }
+            if (_default_font == null)
+            {
+                AddFontFromMemory();
+                _default_font = new Font(privateFontCollection.Families[0], size, style);
+            }
+            return new Font(_default_font.FontFamily, size, style);
+        }
         // public Font GetEmbeddedFont(EmbeddedFont font, int size, FontStyle style)
         // {
         //     PrivateFontCollection tmp = new PrivateFontCollection();
@@ -164,6 +178,10 @@ namespace SpaceVIL.Common
         public static Font GetDefaultFont(int size)
         {
             return _default_font.GetDefaultFont(size);
+        }
+        public static Font GetDefaultFont(FontStyle style, int size)
+        {
+            return _default_font.GetDefaultFont(style, size);
         }
         // public static void SetDefaultEmbeddedFont(EmbeddedFont font)
         // {

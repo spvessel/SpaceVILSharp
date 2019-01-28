@@ -1218,6 +1218,11 @@ namespace SpaceVIL.Decorations
             selection_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
             style.AddInnerStyle("selection", selection_style);
 
+            Style substrate_style = new Style();
+            substrate_style.Font = DefaultsService.GetDefaultFont(FontStyle.Italic, 14);
+            substrate_style.Foreground = Color.FromArgb(255, 150, 150, 150);
+            style.AddInnerStyle("substrate", substrate_style);
+
             return style;
         }
 
@@ -1259,6 +1264,11 @@ namespace SpaceVIL.Decorations
             selection_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
             selection_style.Margin = new Indents(0, 5, 0, 5);
             style.AddInnerStyle("selection", selection_style);
+
+            Style substrate_style = new Style();
+            substrate_style.Font = DefaultsService.GetDefaultFont(FontStyle.Italic, 14);
+            substrate_style.Foreground = Color.FromArgb(255, 150, 150, 150);
+            style.AddInnerStyle("substrate", substrate_style);
 
             return style;
         }
