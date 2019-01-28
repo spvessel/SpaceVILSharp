@@ -92,12 +92,14 @@ namespace SpaceVIL
                         return null;
                 if (flagBB)
                 {
-
                     //textPrt.WidthTexture = ;
                     //textPrt.HeightTexture = fontDims[3];
                     int bb_h = GetHeight(); //fontDims[3];
                     int bb_w = GetWidth(); //_letters[_letters.Count - 1].xShift + _letters[_letters.Count - 1].width +
                                            //_letters[_letters.Count - 1].xBeg;
+
+                    if (_parentAllowWidth > 0)
+                        bb_w = bb_w > _parentAllowWidth ? _parentAllowWidth : bb_w;
 
                     byte[] cacheBB = new byte[bb_h * bb_w * 4];
 
@@ -112,18 +114,43 @@ namespace SpaceVIL
                             continue;
                         }
 
-                        int offset = (modL.yBeg - fontDims[1]) * bb_w * 4 + (modL.xBeg + modL.xShift - xFirstBeg) * 4;
+                        int widthFrom = 0;
+                        int widthTo = modL.width;
+
+                        if (modL.xBeg + modL.xShift + modL.width + _lineXShift < 0)
+                        { //До разрешенной области
+                            continue;
+                        }
+                        if (modL.xBeg + modL.xShift + _lineXShift <= 0)
+                        {
+                            widthFrom = Math.Abs(modL.xBeg + modL.xShift + _lineXShift);
+                            xFirstBeg = modL.xBeg + modL.xShift + widthFrom; //modL.xBeg + modL.xShift;
+                        }
+
+                        if (modL.xBeg + modL.xShift - xFirstBeg > _parentAllowWidth)
+                        { //После разрешенной области + _lineXShift
+                            break;
+                        }
+                        if (modL.xBeg + modL.xShift + modL.width - xFirstBeg >= _parentAllowWidth)
+                        { // + _lineXShift
+                            widthTo = _parentAllowWidth - (modL.xBeg + modL.xShift + widthFrom - xFirstBeg); // + _lineXShift
+                        }
+
+                        int offset = (modL.yBeg - fontDims[1]) * bb_w * 4 + (modL.xBeg + modL.xShift + widthFrom - xFirstBeg) * 4;
 
                         for (int j = 0; j < modL.height; j++)
                         {
-                            for (int i = 0; i < modL.width; i++)
+                            for (int i = widthFrom; i < widthTo; i++)
                             {
-                                if (bitmap[3 + j * 4 + i * (modL.height * 4)] < cacheBB[3 + offset + i * 4 + j * (bb_w * 4)])
+                                int b1 = bitmap[3 + j * 4 + i * (modL.height * 4)];
+                                int b2 = cacheBB[3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)];
+                                if (b1 < b2)
                                     continue;
-                                cacheBB[0 + offset + i * 4 + j * (bb_w * 4)] = bitmap[0 + j * 4 + i * (modL.height * 4)];
-                                cacheBB[1 + offset + i * 4 + j * (bb_w * 4)] = bitmap[1 + j * 4 + i * (modL.height * 4)];
-                                cacheBB[2 + offset + i * 4 + j * (bb_w * 4)] = bitmap[2 + j * 4 + i * (modL.height * 4)];
-                                cacheBB[3 + offset + i * 4 + j * (bb_w * 4)] = bitmap[3 + j * 4 + i * (modL.height * 4)];
+
+                                cacheBB[0 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[0 + j * 4 + i * (modL.height * 4)];
+                                cacheBB[1 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[1 + j * 4 + i * (modL.height * 4)];
+                                cacheBB[2 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[2 + j * 4 + i * (modL.height * 4)];
+                                cacheBB[3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[3 + j * 4 + i * (modL.height * 4)];
                             }
                         }
 
@@ -284,17 +311,17 @@ namespace SpaceVIL
             int xFirstBeg = 0;
 
             // Horizontal
-            if (alignments.HasFlag(ItemAlignment.Left))
+            if (alignments.HasFlag(ItemAlignment.Left) || (_lineWidth >= _parentAllowWidth))
             {
-                alignShiftX = GetParent().GetPadding().Left + GetMargin().Left;
+                alignShiftX = GetParent().GetPadding().Left + GetMargin().Left + cursorWidth;
             }
             else if (alignments.HasFlag(ItemAlignment.Right) && (_lineWidth < _parentAllowWidth))
-                alignShiftX = GetParent().GetWidth() - _lineWidth - GetParent().GetPadding().Right - GetMargin().Right;
+                alignShiftX = GetParent().GetWidth() - _lineWidth - GetParent().GetPadding().Right - GetMargin().Right - cursorWidth;
 
             else if (alignments.HasFlag(ItemAlignment.HCenter) && (_lineWidth < _parentAllowWidth))
                 // alignShiftX = ((GetParent().GetWidth() - GetParent().GetPadding().Left - GetParent().GetPadding().Right
                 //         + GetMargin().Left - GetMargin().Right) - _lineWidth) / 2f;
-                alignShiftX = (GetParent().GetWidth() - _lineWidth) / 2f + GetParent().GetPadding().Left;
+                alignShiftX = (_parentAllowWidth - _lineWidth) / 2f + GetParent().GetPadding().Left + GetMargin().Left + cursorWidth; //(GetParent().GetWidth() - _lineWidth) / 2f + GetParent().GetPadding().Left;
 
             // Vertical
             if (alignments.HasFlag(ItemAlignment.Top))
@@ -312,7 +339,7 @@ namespace SpaceVIL
 
             xFirstBeg = _letters[0].xBeg + _letters[0].xShift;
             
-            textPrt.XTextureShift = (int)alignShiftX + _lineXShift + GetParent().GetX() + xFirstBeg;
+            textPrt.XTextureShift = (int)alignShiftX + GetParent().GetX() + xFirstBeg; // + _lineXShift
             textPrt.YTextureShift = (int)alignShiftY + _lineYShift + GetParent().GetY();
             
         }
@@ -357,6 +384,7 @@ namespace SpaceVIL
             //if (_lineXShift == sp) return;
             _lineXShift = sp;
             //UpdateCoords();
+            flagBB = true;
         }
 
         internal int GetLineXShift()
@@ -428,6 +456,12 @@ namespace SpaceVIL
         internal void SetAllowHeight(int allowHeight)
         {
             _parentAllowHeight = allowHeight;
+        }
+
+        private int cursorWidth = 0;
+        internal void SetCursorWidth(int cwidth)
+        {
+            cursorWidth = cwidth;
         }
     }
 

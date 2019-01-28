@@ -8,10 +8,10 @@ import com.spvessel.spacevil.*;
 public class InputTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 800, 400, true);
+        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 100, 400, true);
         setHandler(Handler);
 
-        Handler.setMinSize(500, 100);
+        Handler.setMinSize(50, 100);
         Handler.setBackground(45, 45, 45);
         Handler.setPadding(2, 2, 2, 2);
 
@@ -33,8 +33,8 @@ public class InputTest extends ActiveWindow {
 
         TextArea tb = new TextArea();
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        tb.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-
+        tb.setHScrollBarVisible(ScrollBarVisibility.ALWAYS);
+//        tb.setPadding(15, 0, 15, 0);
         // tb.setMargin(new Indents(50, 30, 30, 30));
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
 

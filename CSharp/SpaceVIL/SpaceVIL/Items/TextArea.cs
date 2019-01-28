@@ -43,7 +43,7 @@ namespace SpaceVIL
 
         public VerticalScrollBar VScrollBar = new VerticalScrollBar();
         public HorizontalScrollBar HScrollBar = new HorizontalScrollBar();
-        private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.Always;
+        private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.AsNeeded;// Always;
 
         /// <summary>
         /// Vertical scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the TextArea
@@ -80,7 +80,7 @@ namespace SpaceVIL
             HScrollBar.Slider.UpdateHandler();
         }
 
-        private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.Always;
+        private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.AsNeeded; // Always;
 
         /// <summary>
         /// Horizontal scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the TextArea
@@ -205,7 +205,7 @@ namespace SpaceVIL
         }
         private void UpdateHorizontalSlider()//horizontal slider
         {
-            int visible_area = _area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right;
+            int visible_area = _area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right - 2 * _area.GetCursorWidth();
             int total = _area.GetTextWidth();
 
             int total_invisible_size = total - visible_area;

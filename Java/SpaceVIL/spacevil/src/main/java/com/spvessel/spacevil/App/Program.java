@@ -33,6 +33,6 @@ public class Program {
         // TextTest tt = new TextTest();
         // tt.show();
 
-        WindowLayoutBox.getWindowInstance("ComplexTest").show();
+        WindowLayoutBox.tryShow("ComplexTest");
     }
 }

@@ -168,7 +168,7 @@ public class TextArea extends Prototype {
 
     private void updateHorizontalSlider()// horizontal slider
     {
-        int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right;
+        int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right - 2 * _area.getCursorWidth();
         int total = _area.getTextWidth();
 
         int total_invisible_size = total - visible_area;

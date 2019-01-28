@@ -960,6 +960,7 @@ final class DrawEngine {
 
         _fbo.genFBO();
         _fbo.genFBOTexture(w.get(0), h.get(0));
+
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {

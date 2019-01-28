@@ -165,7 +165,7 @@ public class TextEdit extends Prototype
     private void replaceCursorAccordingCoord(int realPos) {
         int w = getTextWidth();
         if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
-            realPos -= getX() + (getWidth() - w) - getPadding().right - _text_object.getMargin().right;
+            realPos -= getX() + (getWidth() - w) - getPadding().right - _text_object.getMargin().right - _cursor.getWidth();
         else
             realPos -= getX() + getPadding().left + _text_object.getMargin().left;
 
@@ -300,8 +300,12 @@ public class TextEdit extends Prototype
         if (_text_object.getLetPosArray() == null)
             return coord;
 
-        if (cPos > 0)
+        if (cPos > 0) {
             coord = _text_object.getLetPosArray().get(cPos - 1);
+            if ((getTextWidth() >= _cursorXMax) || !_text_object.getTextAlignment().contains(ItemAlignment.RIGHT)) {
+                coord += _cursor.getWidth();
+            }
+        }
 
         if (getLineXShift() + coord < 0) {
             _text_object.setLineXShift(-coord);
@@ -324,10 +328,17 @@ public class TextEdit extends Prototype
         int w = getTextWidth();
 
         if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
-            _cursor.setX(getX() + getWidth() - w + pos - getPadding().right // - _cursor.getWidth()
-                    - _text_object.getMargin().right);
-        } else
-            _cursor.setX(getX() + getPadding().left + pos + _text_object.getMargin().left);
+            int xcp = getX() + getWidth() - w + pos - getPadding().right // - _cursor.getWidth()
+                    - _text_object.getMargin().right - _cursor.getWidth();
+            if (_cursor_position == 0)
+                xcp -= _cursor.getWidth();
+            _cursor.setX(xcp);
+        } else {
+            int cnt = getX() + getPadding().left + pos + _text_object.getMargin().left;
+//            if (_cursor_position > 0)
+//                cnt += _cursor.getWidth();
+            _cursor.setX(cnt);
+        }
     }
 
     private void onTextInput(Object sender, TextInputArgs args) {
@@ -516,6 +527,8 @@ public class TextEdit extends Prototype
         int scctp = _text_object.getFontDims()[0];
         if (scctp > scrollStep)
             scrollStep = scctp;
+
+        _text_object.setCursorWidth(_cursor.getWidth());
     }
 
     /**
@@ -553,7 +566,7 @@ public class TextEdit extends Prototype
         int w = getTextWidth();
         if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
             _selectedArea
-                    .setX(getX() + getWidth() - w + fromReal - getPadding().right - _text_object.getMargin().right);
+                    .setX(getX() + getWidth() - w + fromReal - getPadding().right - _text_object.getMargin().right - _cursor.getWidth());
         else
             _selectedArea.setX(getX() + getPadding().left + fromReal + _text_object.getMargin().left);
         _selectedArea.setWidth(width);
