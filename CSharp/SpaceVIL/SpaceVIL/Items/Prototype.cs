@@ -135,9 +135,9 @@ namespace SpaceVIL
         {
             return _core.GetMargin();
         }
-        public void SetMargin(Indents padding)
+        public void SetMargin(Indents margin)
         {
-            _core.SetMargin(padding);
+            _core.SetMargin(margin);
         }
         public void SetMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
