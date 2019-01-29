@@ -136,8 +136,8 @@ abstract public class Prototype implements InterfaceBaseItem {
     public Indents getMargin() {
         return _core.getMargin();
     }
-    public void setMargin(Indents padding) {
-        _core.setMargin(padding);
+    public void setMargin(Indents margin) {
+        _core.setMargin(margin);
     }
     public void setMargin(int left, int top, int right, int bottom) {
         _core.setMargin(left, top, right, bottom);

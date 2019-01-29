@@ -83,7 +83,7 @@ public class TreeItem extends Prototype {
         // set image
     }
 
-    private ContextMenu _menu;
+    // private ContextMenu _menu;
 
     /**
      * Constructs a TreeItem type of TreeItemType (LEAF or BRANCH)
@@ -119,26 +119,26 @@ public class TreeItem extends Prototype {
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         if (args.key == KeyCode.ENTER)
             _indicator.eventToggle.execute(sender, new MouseArgs());
-        if (args.key == KeyCode.MENU) {
-            MouseArgs margs = new MouseArgs();
-            margs.button = MouseButton.BUTTON_RIGHT;
-            margs.position.setPosition(getX() + _parent.getWidth() / 2, getY() + getHeight());
-            if (_menu != null)
-                _menu.show(this, margs);
-        }
+        // if (args.key == KeyCode.MENU) {
+        //     MouseArgs margs = new MouseArgs();
+        //     margs.button = MouseButton.BUTTON_RIGHT;
+        //     margs.position.setPosition(getX() + _parent.getWidth() / 2, getY() + getHeight());
+        //     if (_menu != null)
+        //         _menu.show(this, margs);
+        // }
     }
 
-    private TreeItem getTreeBranch() {
-        TreeItem item = new TreeItem(TreeItemType.BRANCH);
-        item.setText(item.getItemName());
-        return item;
-    }
+    // private TreeItem getTreeBranch() {
+    //     TreeItem item = new TreeItem(TreeItemType.BRANCH);
+    //     item.setText(item.getItemName());
+    //     return item;
+    // }
 
-    private TreeItem getTreeLeaf() {
-        TreeItem item = new TreeItem(TreeItemType.LEAF);
-        item.setText(item.getItemName());
-        return item;
-    }
+    // private TreeItem getTreeLeaf() {
+    //     TreeItem item = new TreeItem(TreeItemType.LEAF);
+    //     item.setText(item.getItemName());
+    //     return item;
+    // }
 
     void resetIndents() {
         int level = _nesting_level;
@@ -157,39 +157,39 @@ public class TreeItem extends Prototype {
      */
     @Override
     public void initElements() {
-        _menu = new ContextMenu(getHandler());
-        _menu.setBackground(40, 40, 40);
-        _menu.setPassEvents(false);
+        // _menu = new ContextMenu(getHandler());
+        // _menu.setBackground(40, 40, 40);
+        // _menu.setPassEvents(false);
 
-        MenuItem remove = new MenuItem("Remove");
-        remove.setForeground(new Color(210, 210, 210));
-        remove.eventMouseClick.add((sender, args) -> {
-            getParent().removeItem(this);
-        });
+        // MenuItem remove = new MenuItem("Remove");
+        // remove.setForeground(new Color(210, 210, 210));
+        // remove.eventMouseClick.add((sender, args) -> {
+        //     getParent().removeItem(this);
+        // });
 
-        MenuItem rename = new MenuItem("Rename");
-        rename.setForeground(new Color(210, 210, 210));
+        // MenuItem rename = new MenuItem("Rename");
+        // rename.setForeground(new Color(210, 210, 210));
 
-        MenuItem copy = new MenuItem("Copy");
-        copy.setForeground(new Color(210, 210, 210));
+        // MenuItem copy = new MenuItem("Copy");
+        // copy.setForeground(new Color(210, 210, 210));
 
-        MenuItem paste = new MenuItem("Paste");
-        paste.setForeground(new Color(210, 210, 210));
+        // MenuItem paste = new MenuItem("Paste");
+        // paste.setForeground(new Color(210, 210, 210));
 
-        MenuItem new_leaf = new MenuItem("New Leaf");
-        new_leaf.setForeground(new Color(210, 210, 210));
-        new_leaf.eventMouseClick.add((sender, args) -> {
-            this.addItem(getTreeLeaf());
-        });
+        // MenuItem new_leaf = new MenuItem("New Leaf");
+        // new_leaf.setForeground(new Color(210, 210, 210));
+        // new_leaf.eventMouseClick.add((sender, args) -> {
+        //     this.addItem(getTreeLeaf());
+        // });
 
-        MenuItem new_branch = new MenuItem("New Branch");
-        new_branch.setForeground(new Color(210, 210, 210));
-        new_branch.eventMouseClick.add((sender, args) -> {
-            this.addItem(getTreeBranch());
-        });
-        _menu.returnFocus = _parent.getArea();
+        // MenuItem new_branch = new MenuItem("New Branch");
+        // new_branch.setForeground(new Color(210, 210, 210));
+        // new_branch.eventMouseClick.add((sender, args) -> {
+        //     this.addItem(getTreeBranch());
+        // });
+        // _menu.returnFocus = _parent.getArea();
         eventMouseClick.add((sender, args) -> {
-            _menu.show(sender, args);
+            // _menu.show(sender, args);
             _parent.getArea().eventMouseClick.execute(_parent, args);
         });
 
@@ -198,7 +198,7 @@ public class TreeItem extends Prototype {
             _icon_shape.setMargin(2, 0, 0, 0);
             super.addItem(_icon_shape);
             super.addItem(_text_object);
-            _menu.addItems(rename, remove, copy);
+            // _menu.addItems(rename, remove, copy);
             break;
 
         case BRANCH:
@@ -213,7 +213,7 @@ public class TreeItem extends Prototype {
             super.addItem(_indicator);
             super.addItem(_icon_shape);
             super.addItem(_text_object);
-            _menu.addItems(new_branch, new_leaf, rename, paste);
+            // _menu.addItems(new_branch, new_leaf, rename, paste);
             break;
         default:
             super.addItem(_text_object);

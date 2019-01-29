@@ -4,11 +4,27 @@ import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.Pointer;
 import com.spvessel.spacevil.Exceptions.SpaceVILException;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+import java.nio.IntBuffer;
+
 final class GLWHandler {
+
+    private float _scaleWidth = 1.0f;
+    private float _scaleHeight = 1.0f;
+
+    float[] getDpiScale() {
+        return new float[] { _scaleWidth, _scaleHeight };
+    }
+
+    private void setDpiScale(float w, float h) {
+        _scaleWidth = w;
+        _scaleHeight = h;
+        System.out.println(w + " " + h);
+    }
 
     ///////////////////////////////////////////////
     private GLFWWindowSizeCallback resizeCallback;
@@ -20,6 +36,7 @@ final class GLWHandler {
     private GLFWKeyCallback keyPressCallback;
     private GLFWCharModsCallback keyInputTextCallback;
     private GLFWWindowFocusCallback windowFocusCallback;
+    private GLFWFramebufferSizeCallback framebufferCallback;
     ///////////////////////////////////////////////
 
     Boolean borderHidden;
@@ -106,13 +123,24 @@ final class GLWHandler {
         GLFWVidMode vidmode = glfwGetVideoMode(monitor);
         int width = vidmode.width();
         int height = vidmode.height();
+        System.out.println("VIDSIZE: " + width + " " + height);
+
+        IntBuffer w = BufferUtils.createIntBuffer(1);
+        IntBuffer h = BufferUtils.createIntBuffer(1);
+        glfwGetFramebufferSize(_window, w, h);
+        System.out.println("FBSIZE: " + w.get(0) + " " + h.get(0));
+
+        setDpiScale((float) w.get(0) / (float) _w_layout.getWidth(), (float) h.get(0) / (float) _w_layout.getHeight());
 
         if (appearInCenter) {
             getPointer().setX((width - _w_layout.getWidth()) / 2);
             getPointer().setY((height - _w_layout.getHeight()) / 2);
+
         } else {
-            getPointer().setX(_w_layout.getX());
-            getPointer().setY(_w_layout.getY());
+            _w_layout.setX(100);
+            _w_layout.setY(100);
+            getPointer().setX(100);
+            getPointer().setY(100);
         }
         glfwSetWindowSizeLimits(_window, _w_layout.getMinWidth(), _w_layout.getMinHeight(), _w_layout.getMaxWidth(),
                 _w_layout.getMaxHeight());
@@ -137,6 +165,7 @@ final class GLWHandler {
         windowPosCallback = null;
         windowFocusCallback = null;
         resizeCallback = null;
+        framebufferCallback = null;
     }
 
     void setCursorType(int type) {
@@ -225,6 +254,11 @@ final class GLWHandler {
     void setCallbackResize(GLFWWindowSizeCallback function) {
         resizeCallback = function;
         glfwSetWindowSizeCallback(_window, resizeCallback);
+    }
+
+    void setCallbackFramebuffer(GLFWFramebufferSizeCallback function) {
+        framebufferCallback = function;
+        glfwSetFramebufferSizeCallback(_window, framebufferCallback);
     }
 
     void setHidden(Boolean value) {

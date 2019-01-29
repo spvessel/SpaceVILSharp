@@ -11,7 +11,7 @@ namespace SpaceVIL
     public class TreeView : ListBox
     {
         public EventCommonMethod EventSortTree;
-        private ContextMenu _menu;
+        // private ContextMenu _menu;
         internal TreeItem _root; //nesting level = 0
         public void SetRootVisibility(bool visible)
         {
@@ -48,44 +48,44 @@ namespace SpaceVIL
             base.AddItem(_root);
             SetRootVisibility(false);
 
-            _menu = new ContextMenu(GetHandler());
-            _menu.SetBackground(40, 40, 40);
-            _menu.SetPassEvents(false);
-            MenuItem paste = new MenuItem("Paste");
-            paste.SetForeground(Color.LightGray);
-            paste.EventMouseClick += (sender, args) =>
-            {
-                //paste
-            };
-            MenuItem new_leaf = new MenuItem("New Leaf");
-            new_leaf.SetForeground(Color.LightGray);
-            new_leaf.EventMouseClick += (sender, args) =>
-            {
-                AddItem(GetTreeLeaf());
-            };
-            MenuItem new_branch = new MenuItem("New Branch");
-            new_branch.SetForeground(Color.LightGray);
-            new_branch.EventMouseClick += (sender, args) =>
-            {
-                AddItem(GetTreeBranch());
-            };
+            // _menu = new ContextMenu(GetHandler());
+            // _menu.SetBackground(40, 40, 40);
+            // _menu.SetPassEvents(false);
+            // MenuItem paste = new MenuItem("Paste");
+            // paste.SetForeground(Color.LightGray);
+            // paste.EventMouseClick += (sender, args) =>
+            // {
+            //     //paste
+            // };
+            // MenuItem new_leaf = new MenuItem("New Leaf");
+            // new_leaf.SetForeground(Color.LightGray);
+            // new_leaf.EventMouseClick += (sender, args) =>
+            // {
+            //     AddItem(GetTreeLeaf());
+            // };
+            // MenuItem new_branch = new MenuItem("New Branch");
+            // new_branch.SetForeground(Color.LightGray);
+            // new_branch.EventMouseClick += (sender, args) =>
+            // {
+            //     AddItem(GetTreeBranch());
+            // };
 
-            EventMouseClick += (_, x) => _menu.Show(_, x);
+            // EventMouseClick += (_, x) => _menu.Show(_, x);
 
-            _menu.AddItems(new_branch, new_leaf, paste);
+            // _menu.AddItems(new_branch, new_leaf, paste);
         }
-        private TreeItem GetTreeBranch()
-        {
-            TreeItem item = new TreeItem(TreeItemType.Branch);
-            item.SetText(item.GetItemName());
-            return item;
-        }
-        private TreeItem GetTreeLeaf()
-        {
-            TreeItem item = new TreeItem(TreeItemType.Leaf);
-            item.SetText(item.GetItemName());
-            return item;
-        }
+        // private TreeItem GetTreeBranch()
+        // {
+        //     TreeItem item = new TreeItem(TreeItemType.Branch);
+        //     item.SetText(item.GetItemName());
+        //     return item;
+        // }
+        // private TreeItem GetTreeLeaf()
+        // {
+        //     TreeItem item = new TreeItem(TreeItemType.Leaf);
+        //     item.SetText(item.GetItemName());
+        //     return item;
+        // }
         internal void RefreshTree(TreeItem item)
         {
             base.AddItem(item);

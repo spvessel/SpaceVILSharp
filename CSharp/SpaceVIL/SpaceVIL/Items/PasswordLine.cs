@@ -69,6 +69,20 @@ namespace SpaceVIL
         {
             _textEncrypt.SetFont(font);
         }
+        public void SetFontSize(int size)
+        {
+            _textEncrypt.SetFontSize(size);
+        }
+
+        public void SetFontStyle(FontStyle style)
+        {
+            _textEncrypt.SetFontStyle(style);
+        }
+
+        public void SetFontFamily(FontFamily font_family)
+        {
+            _textEncrypt.SetFontFamily(font_family);
+        }
         public Font GetFont()
         {
             return _textEncrypt.GetFont();
@@ -180,6 +194,56 @@ namespace SpaceVIL
             {
                 _textEncrypt.SetStyle(inner_style);
             }
+        }
+
+        public void SetSubstrateText(String substrateText)
+        {
+            _textEncrypt.setSubstrateText(substrateText);
+        }
+
+        public void SetSubstrateFontSize(int size)
+        {
+            _textEncrypt.SetSubstrateFontSize(size);
+        }
+
+        public void SetSubstrateFontStyle(FontStyle style)
+        {
+            _textEncrypt.SetSubstrateFontStyle(style);
+        }
+
+        public void SetSubstrateForeground(Color foreground)
+        {
+            _textEncrypt.SetSubstrateForeground(foreground);
+        }
+
+        public void SetSubstrateForeground(int r, int g, int b)
+        {
+            _textEncrypt.SetSubstrateForeground(r, g, b);
+        }
+
+        public void SeSubstratetForeground(int r, int g, int b, int a)
+        {
+            _textEncrypt.SetSubstrateForeground(r, g, b, a);
+        }
+
+        public void SetSubstrateForeground(float r, float g, float b)
+        {
+            _textEncrypt.SetSubstrateForeground(r, g, b);
+        }
+
+        public void SetSubstrateForeground(float r, float g, float b, float a)
+        {
+            _textEncrypt.SetSubstrateForeground(r, g, b, a);
+        }
+
+        public Color getSubstrateForeground()
+        {
+            return _textEncrypt.GetSubstrateForeground();
+        }
+
+        public String getSubstrateText()
+        {
+            return _textEncrypt.GetSubstrateText();
         }
     }
 }

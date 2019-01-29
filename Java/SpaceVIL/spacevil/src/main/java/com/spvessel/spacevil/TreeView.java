@@ -16,7 +16,7 @@ import java.util.Comparator;
 
 public class TreeView extends ListBox {
     public EventCommonMethod eventSortTree = new EventCommonMethod();
-    private ContextMenu _menu;
+    // private ContextMenu _menu;
     TreeItem _root; // nesting level = 0
 
     /**
@@ -66,45 +66,44 @@ public class TreeView extends ListBox {
         super.addItem(_root);
         setRootVisibility(false);
 
-        _menu = new ContextMenu(getHandler());
-        _menu.setBackground(40, 40, 40);
-        _menu.setPassEvents(false);
+        // _menu = new ContextMenu(getHandler());
+        // _menu.setBackground(40, 40, 40);
+        // _menu.setPassEvents(false);
 
-        MenuItem paste = new MenuItem("Paste");
-        paste.setForeground(new Color(210, 210, 210));
+        // MenuItem paste = new MenuItem("Paste");
+        // paste.setForeground(new Color(210, 210, 210));
 
-        MenuItem new_leaf = new MenuItem("New Leaf");
-        new_leaf.setForeground(new Color(210, 210, 210));
-        InterfaceMouseMethodState leaf_click = (sender, args) -> {
-            this.addItem(getTreeLeaf());
-        };
-        new_leaf.eventMouseClick.add(leaf_click);
+        // MenuItem new_leaf = new MenuItem("New Leaf");
+        // new_leaf.setForeground(new Color(210, 210, 210));
+        // InterfaceMouseMethodState leaf_click = (sender, args) -> {
+        //     this.addItem(getTreeLeaf());
+        // };
+        // new_leaf.eventMouseClick.add(leaf_click);
 
-        MenuItem new_branch = new MenuItem("New Branch");
-        new_branch.setForeground(new Color(210, 210, 210));
-        InterfaceMouseMethodState branch_click = (sender, args) -> {
-            this.addItem(getTreeBranch());
-        };
-        new_branch.eventMouseClick.add(branch_click);
+        // MenuItem new_branch = new MenuItem("New Branch");
+        // new_branch.setForeground(new Color(210, 210, 210));
+        // InterfaceMouseMethodState branch_click = (sender, args) -> {
+        //     this.addItem(getTreeBranch());
+        // };
+        // new_branch.eventMouseClick.add(branch_click);
 
-        InterfaceMouseMethodState menu_click = (sender, args) -> _menu.show(sender, args);
-        eventMouseClick.add(menu_click);
+        // InterfaceMouseMethodState menu_click = (sender, args) -> _menu.show(sender, args);
+        // eventMouseClick.add(menu_click);
 
-        // _menu.setSize(100, 4 + 30 * 3 - 5);
-        _menu.addItems(new_branch, new_leaf, paste);
+        // _menu.addItems(new_branch, new_leaf, paste);
     }
 
-    private TreeItem getTreeBranch() {
-        TreeItem item = new TreeItem(TreeItemType.BRANCH);
-        item.setText(item.getItemName());
-        return item;
-    }
+    // public TreeItem getTreeBranch(String name) {
+    //     TreeItem item = new TreeItem(TreeItemType.BRANCH);
+    //     item.setText(item.getItemName());
+    //     return item;
+    // }
 
-    private TreeItem getTreeLeaf() {
-        TreeItem item = new TreeItem(TreeItemType.LEAF);
-        item.setText(item.getItemName());
-        return item;
-    }
+    // public TreeItem getTreeLeaf(String name) {
+    //     TreeItem item = new TreeItem(TreeItemType.LEAF);
+    //     item.setText(item.getItemName());
+    //     return item;
+    // }
 
     void refreshTree(TreeItem item) {
         super.addItem(item);

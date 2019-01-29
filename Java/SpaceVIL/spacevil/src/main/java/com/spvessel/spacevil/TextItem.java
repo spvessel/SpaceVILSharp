@@ -171,7 +171,7 @@ abstract class TextItem extends Primitive {
     }
 
     public void setForeground(Color foreground) {
-        if (!_foreground.equals(foreground)) {
+        if (foreground != null && !_foreground.equals(foreground)) {
             _foreground = foreground;
             //setColor(_alphas); // _colorFlag = true;
         }
@@ -283,7 +283,7 @@ abstract class TextItem extends Primitive {
     }
 
     public void setTextAlignment(List<ItemAlignment> list) {
-        if (!_textAlignment.equals(list)) {
+        if (list != null && !_textAlignment.equals(list)) {
             _textAlignment = list;
             //updateCoords(); // _coordsFlag = true;
         }

@@ -10,6 +10,19 @@ namespace SpaceVIL
 {
     internal sealed class GLWHandler
     {
+        private float _scaleWidth = 1.0f;
+        private float _scaleHeight = 1.0f;
+        float[] GetDpiScale()
+        {
+            return new float[] { _scaleWidth, _scaleHeight };
+        }
+        private void SetDpiScale(float w, float h)
+        {
+            _scaleWidth = w;
+            _scaleHeight = h;
+            Console.WriteLine(w + " " + h);
+        }
+
         ///////////////////////////////////////////////
         Glfw.WindowSizeFunc ResizeCallback;
         Glfw.CursorPosFunc MouseMoveCallback;
@@ -20,6 +33,7 @@ namespace SpaceVIL
         Glfw.KeyFunc KeyPressCallback;
         Glfw.CharModsFunc KeyInputText;
         Glfw.WindowFocusFunc WindowFocusCallback;
+        Glfw.FramebufferSizeFunc FramebufferCallback;
         ///////////////////////////////////////////////
 
         internal bool BorderHidden;
@@ -81,6 +95,16 @@ namespace SpaceVIL
                 LogService.Log().LogText("Create window fail - " + GetLayout().GetWindowTitle());
                 throw new SpaceVILException("SpaceVILException: Create window fail - " + GetLayout().GetWindowTitle());
             }
+            Glfw.MakeContextCurrent(_window);
+
+            Console.WriteLine("VIDSIZE: " + Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width
+                        + " " + Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height);
+
+            int w, h;
+            Glfw.GetFramebufferSize(_window, out w, out h);
+            Console.WriteLine("FBSIZE: " + w + " " + h);
+
+            SetDpiScale((float)w / (float)_w_layout.GetWidth(), (float)h / (float)_w_layout.GetHeight());
 
             if (AppearInCenter)
             {
@@ -94,7 +118,6 @@ namespace SpaceVIL
                 WPosition.SetX(_w_layout.GetX());
                 WPosition.SetY(_w_layout.GetY());
             }
-            Glfw.MakeContextCurrent(_window);
             Glfw.SetWindowSizeLimits(_window, _w_layout.GetMinWidth(), _w_layout.GetMinHeight(), _w_layout.GetMaxWidth(), _w_layout.GetMaxHeight());
             Glfw.SetWindowPos(_window, WPosition.GetX(), WPosition.GetY());
 
@@ -119,6 +142,7 @@ namespace SpaceVIL
             WindowPosCallback = null;
             WindowFocusCallback = null;
             ResizeCallback = null;
+            FramebufferCallback = null;
         }
 
         internal void SetCursorType(Glfw.CursorType type)
@@ -209,6 +233,11 @@ namespace SpaceVIL
         {
             ResizeCallback = function;
             Glfw.SetWindowSizeCallback(_window, ResizeCallback);
+        }
+        internal void SetCallbackFramebuffer(Glfw.FramebufferSizeFunc function)
+        {
+            FramebufferCallback = function;
+            Glfw.SetFramebufferSizeCallback(_window, FramebufferCallback);
         }
 
         internal void SetOpacity(float level)

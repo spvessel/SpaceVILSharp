@@ -113,7 +113,7 @@ public class Style {
         background = new Color(r, g, b, 255);
     }
 
-	/**
+    /**
      * Sets background color of the object
      */
     public void setBackground(int r, int g, int b, int a) {
@@ -132,7 +132,7 @@ public class Style {
         background = new Color(r, g, b, a);
     }
 
-	/**
+    /**
      * Sets background color of the object
      */
     public void setBackground(float r, float g, float b) {
@@ -151,7 +151,7 @@ public class Style {
         background = new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
     }
 
-	/**
+    /**
      * Sets background color of the object
      */
     public void setBackground(float r, float g, float b, float a) {
@@ -190,7 +190,7 @@ public class Style {
         foreground = new Color(r, g, b, 255);
     }
 
-	/**
+    /**
      * Sets text color of the object
      */
     public void setForeground(int r, int g, int b, int a) {
@@ -209,7 +209,7 @@ public class Style {
         foreground = new Color(r, g, b, a);
     }
 
-	/**
+    /**
      * Sets text color of the object
      */
     public void setForeground(float r, float g, float b) {
@@ -228,7 +228,7 @@ public class Style {
         foreground = new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
     }
 
-	/**
+    /**
      * Sets text color of the object
      */
     public void setForeground(float r, float g, float b, float a) {
@@ -254,7 +254,7 @@ public class Style {
         this.padding = padding;
     }
 
-	/**
+    /**
      * Padding of the object
      */
     public void setPadding(int left, int top, int right, int bottom) {
@@ -271,7 +271,7 @@ public class Style {
         this.margin = margin;
     }
 
-	/**
+    /**
      * Margin of the object
      */
     public void setMargin(int left, int top, int right, int bottom) {
@@ -288,7 +288,7 @@ public class Style {
         this.spacing = spacing;
     }
 
-	/**
+    /**
      * Spacing of the object
      */
     public void setSpacing(int horizontal, int vertical) {
@@ -337,8 +337,8 @@ public class Style {
     ////////////////////////////////////////////////////////////////
 
     /**
-     * Add inner primitives to the object (as decorations only) 
-     * note: not supported in the current version
+     * Add inner primitives to the object (as decorations only) note: not supported
+     * in the current version
      */
     public void addInnerShape(InterfaceBaseItem shape) {
         if (innerShapes == null)
@@ -630,21 +630,21 @@ public class Style {
         style.padding = new Indents(0, 0, 0, 0);
 
         Style itemlist_style = getListBoxStyle();
-        itemlist_style.background = new Color(0,0,0,0);
-        itemlist_style.setAlignment(ItemAlignment.HCENTER , ItemAlignment.VCENTER);
+        itemlist_style.background = new Color(0, 0, 0, 0);
+        itemlist_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
 
         Style vsb_style = getSimpleVerticalScrollBarStyle();
-        vsb_style.setAlignment(ItemAlignment.RIGHT , ItemAlignment.TOP);
+        vsb_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.TOP);
         itemlist_style.addInnerStyle("vscrollbar", vsb_style);
 
         Style hsb_style = getHorizontalScrollBarStyle();
-        hsb_style.setAlignment(ItemAlignment.LEFT , ItemAlignment.BOTTOM);
+        hsb_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
         itemlist_style.addInnerStyle("hscrollbar", hsb_style);
 
         Style menu_style = new Style();
         menu_style.background = new Color(50, 50, 50);
         menu_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        menu_style.setAlignment(ItemAlignment.RIGHT , ItemAlignment.BOTTOM);
+        menu_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
         itemlist_style.addInnerStyle("menu", menu_style);
 
         style.addInnerStyle("itemlist", itemlist_style);
@@ -835,7 +835,7 @@ public class Style {
         return style;
     }
 
-	/**
+    /**
      * @return default simple style for HorizontalScrollBar objects
      */
     public static Style getSimpleHorizontalScrollBarStyle() {
@@ -948,7 +948,7 @@ public class Style {
         return style;
     }
 
-	/**
+    /**
      * @return default simple style for VerticalScrollBar objects
      */
     public static Style getSimpleVerticalScrollBarStyle() {
@@ -1210,8 +1210,8 @@ public class Style {
     }
 
     /**
-     * @return default style for WContainer objects 
-     * note: not supported in current version
+     * @return default style for WContainer objects note: not supported in current
+     *         version
      */
     public static Style getWContainerStyle()// нужен ли?
     {
@@ -1315,6 +1315,12 @@ public class Style {
         selection_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         style.addInnerStyle("selection", selection_style);
 
+        Style substrate_style = new Style();
+        substrate_style.font = DefaultsService.getDefaultFont(Font.ITALIC, 14);
+        substrate_style.foreground = new Color(150, 150, 150);
+        style.addInnerStyle("substrate", substrate_style);
+
+
         return style;
     }
 
@@ -1354,6 +1360,11 @@ public class Style {
         selection_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         selection_style.margin = new Indents(0, 5, 0, 5);
         style.addInnerStyle("selection", selection_style);
+
+        Style substrate_style = new Style();
+        substrate_style.font = DefaultsService.getDefaultFont(Font.ITALIC, 14);
+        substrate_style.foreground = new Color(150, 150, 150);
+        style.addInnerStyle("substrate", substrate_style);
 
         return style;
     }

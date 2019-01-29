@@ -52,7 +52,7 @@ namespace SpaceVIL
         {
             //set image
         }
-        private ContextMenu _menu;
+        // private ContextMenu _menu;
 
         public TreeItem(TreeItemType type)
         {
@@ -81,27 +81,27 @@ namespace SpaceVIL
         {
             if (args.Key == KeyCode.Enter)
                 _indicator.EventToggle.Invoke(sender, new MouseArgs());
-            if (args.Key == KeyCode.Menu)
-            {
-                MouseArgs margs = new MouseArgs();
-                margs.Button = MouseButton.ButtonRight;
-                margs.Position.SetPosition(GetX() + _parent.GetWidth() / 2, GetY() + GetHeight());
-                _menu?.Show(this, margs);
-            }
+            // if (args.Key == KeyCode.Menu)
+            // {
+            //     MouseArgs margs = new MouseArgs();
+            //     margs.Button = MouseButton.ButtonRight;
+            //     margs.Position.SetPosition(GetX() + _parent.GetWidth() / 2, GetY() + GetHeight());
+            //     // _menu?.Show(this, margs);
+            // }
         }
 
-        private TreeItem GetTreeBranch()
-        {
-            TreeItem item = new TreeItem(TreeItemType.Branch);
-            item.SetText(item.GetItemName());
-            return item;
-        }
-        private TreeItem GetTreeLeaf()
-        {
-            TreeItem item = new TreeItem(TreeItemType.Leaf);
-            item.SetText(item.GetItemName());
-            return item;
-        }
+        // private TreeItem GetTreeBranch()
+        // {
+        //     TreeItem item = new TreeItem(TreeItemType.Branch);
+        //     item.SetText(item.GetItemName());
+        //     return item;
+        // }
+        // private TreeItem GetTreeLeaf()
+        // {
+        //     TreeItem item = new TreeItem(TreeItemType.Leaf);
+        //     item.SetText(item.GetItemName());
+        //     return item;
+        // }
 
         internal void ResetIndents()
         {
@@ -120,49 +120,49 @@ namespace SpaceVIL
         public override void InitElements()
         {
 
-            _menu = new ContextMenu(GetHandler());
-            _menu.SetBackground(40, 40, 40);
-            _menu.SetPassEvents(false);
-            MenuItem remove = new MenuItem("Remove");
-            remove.SetForeground(Color.LightGray);
-            remove.EventMouseClick += (sender, args) =>
-            {
-                GetParent().RemoveItem(this);
-            };
-            MenuItem rename = new MenuItem("Rename");
-            rename.SetForeground(Color.LightGray);
-            rename.EventMouseClick += (sender, args) =>
-            {
-                //rename
-            };
-            MenuItem copy = new MenuItem("Copy");
-            copy.SetForeground(Color.LightGray);
-            copy.EventMouseClick += (sender, args) =>
-            {
-                //copy
-            };
-            MenuItem paste = new MenuItem("Paste");
-            paste.SetForeground(Color.LightGray);
-            paste.EventMouseClick += (sender, args) =>
-            {
-                //paste
-            };
-            MenuItem new_leaf = new MenuItem("New Leaf");
-            new_leaf.SetForeground(Color.LightGray);
-            new_leaf.EventMouseClick += (sender, args) =>
-            {
-                this.AddItem(GetTreeLeaf());
-            };
-            MenuItem new_branch = new MenuItem("New Branch");
-            new_branch.SetForeground(Color.LightGray);
-            new_branch.EventMouseClick += (sender, args) =>
-            {
-                this.AddItem(GetTreeBranch());
-            };
-            _menu.ReturnFocus = _parent.GetArea();
+            // _menu = new ContextMenu(GetHandler());
+            // _menu.SetBackground(40, 40, 40);
+            // _menu.SetPassEvents(false);
+            // MenuItem remove = new MenuItem("Remove");
+            // remove.SetForeground(Color.LightGray);
+            // remove.EventMouseClick += (sender, args) =>
+            // {
+            //     GetParent().RemoveItem(this);
+            // };
+            // MenuItem rename = new MenuItem("Rename");
+            // rename.SetForeground(Color.LightGray);
+            // rename.EventMouseClick += (sender, args) =>
+            // {
+            //     //rename
+            // };
+            // MenuItem copy = new MenuItem("Copy");
+            // copy.SetForeground(Color.LightGray);
+            // copy.EventMouseClick += (sender, args) =>
+            // {
+            //     //copy
+            // };
+            // MenuItem paste = new MenuItem("Paste");
+            // paste.SetForeground(Color.LightGray);
+            // paste.EventMouseClick += (sender, args) =>
+            // {
+            //     //paste
+            // };
+            // MenuItem new_leaf = new MenuItem("New Leaf");
+            // new_leaf.SetForeground(Color.LightGray);
+            // new_leaf.EventMouseClick += (sender, args) =>
+            // {
+            //     this.AddItem(GetTreeLeaf());
+            // };
+            // MenuItem new_branch = new MenuItem("New Branch");
+            // new_branch.SetForeground(Color.LightGray);
+            // new_branch.EventMouseClick += (sender, args) =>
+            // {
+            //     this.AddItem(GetTreeBranch());
+            // };
+            // _menu.ReturnFocus = _parent.GetArea();
             EventMouseClick += (sender, args) =>
             {
-                _menu.Show(sender, args);
+                // _menu.Show(sender, args);
                 _parent.GetArea().EventMouseClick?.Invoke(_parent, args);
             };
 
@@ -171,7 +171,7 @@ namespace SpaceVIL
                 case TreeItemType.Leaf:
                     base.AddItem(_icon_shape);
                     base.AddItem(_text_object);
-                    _menu.AddItems(rename, remove, copy);
+                    // _menu.AddItems(rename, remove, copy);
                     break;
 
                 case TreeItemType.Branch:
@@ -187,7 +187,7 @@ namespace SpaceVIL
                     base.AddItem(_indicator);
                     base.AddItem(_icon_shape);
                     base.AddItem(_text_object);
-                    _menu.AddItems(new_branch, new_leaf, rename, paste);
+                    // _menu.AddItems(new_branch, new_leaf, rename, paste);
                     break;
                 default:
                     base.AddItem(_text_object);

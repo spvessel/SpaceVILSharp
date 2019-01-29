@@ -200,3 +200,5 @@ Java/SpaceVIL/spacevil/.idea/modules/spacevil_test.iml
 
 Java/SpaceVIL/spacevil/.idea/modules/spacevil_main.iml
 Java/SpaceVIL/spacevil/src/main/java/com/spvessel/spacevil/View/ImageTest.java
+Java/SpaceVIL/spacevil/src/main/java/com/spvessel/spacevil/View/StopMenu.java
+Java/SpaceVIL/spacevil/src/main/java/com/spvessel/spacevil/View/InputDialog.java

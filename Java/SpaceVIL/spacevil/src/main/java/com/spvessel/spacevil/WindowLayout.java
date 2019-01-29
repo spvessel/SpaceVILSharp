@@ -76,7 +76,7 @@ public final class WindowLayout {
         isClosed = true;
         isHidden = false;
         isResizable = true;
-        isCentered = true;
+        isCentered = false;
         isFocusable = true;
         isAlwaysOnTop = false;
         isOutsideClickClosable = false;

@@ -134,14 +134,9 @@ public class FlowTest extends ActiveWindow {
         btn5.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn5.addItemState(ItemStateType.HOVERED, hovered);
         btn5.eventMouseClick.add((sender, args) -> {
-            MessageItem msg = new MessageItem("Do you want get TRUE?", "Message:");
+            MessageItem msg = new MessageItem("Set TRUE?", "Message:");
             msg.onCloseDialog.add(() -> {
-                int count = 0;
-                for (InterfaceBaseItem var : Handler.getWindow().getItems()) {
-                    if (var instanceof MessageBox)
-                        count++;
-                }
-                System.out.println(msg.getResult() + " " + count);
+                System.out.println(msg.getResult());
             });
             msg.show(Handler);
         });
@@ -202,6 +197,8 @@ public class FlowTest extends ActiveWindow {
         ex_menu.setSize(110, 64);
         ex_addition.assignContextMenu(ex_menu);
         flow.addContextMenu(_context_menu);
+
+        // Handler.addItem(new StopMenu());
     }
 
     private ResizableItem getBlockList() {

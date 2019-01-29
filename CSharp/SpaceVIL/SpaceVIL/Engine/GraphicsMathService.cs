@@ -685,6 +685,22 @@ namespace SpaceVIL
             return figure;
         }
 
+        static public List<float[]> RotateShape(float w, float h, float angle, List<float[]> triangles)
+        {
+            if (triangles == null)
+                return null;
+            //rotate
+            float x0 = w / 2.0f;
+            float y0 = h / 2.0f;
+            foreach (var crd in triangles)
+            {
+                float x_crd = crd[0];
+                float y_crd = crd[1];
+                crd[0] = x0 + (x_crd - x0) * (float)Math.Cos(angle * Math.PI / 180.0f) - (y_crd - y0) * (float)Math.Sin(angle * Math.PI / 180.0f);
+                crd[1] = y0 + (y_crd - y0) * (float)Math.Cos(angle * Math.PI / 180.0f) + (x_crd - x0) * (float)Math.Sin(angle * Math.PI / 180.0f);
+            }
+            return triangles;
+        }
         static public List<float[]> GetArrow(float w, float h, float thickness, int alpha)
         {
             List<float[]> figure = new List<float[]>();
@@ -731,7 +747,7 @@ namespace SpaceVIL
             }
             return figure;
         }
-        
+
         internal static List<float> GetRectBorder(int w, int h)
         {
             return GetRectBorderIgnoreTop(w, h, 0, 0);

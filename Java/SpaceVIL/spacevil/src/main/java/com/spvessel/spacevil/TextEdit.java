@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class TextEdit extends Prototype
-        implements InterfaceTextEditable, InterfaceTextShortcuts, InterfaceDraggable {
+public class TextEdit extends Prototype implements InterfaceTextEditable, InterfaceTextShortcuts, InterfaceDraggable {
     static int count = 0;
     private TextLine _text_object;
+    private TextLine _substrate_text;
     private Rectangle _cursor;
     private int _cursor_position = 0;
     private Rectangle _selectedArea;
@@ -64,6 +64,8 @@ public class TextEdit extends Prototype
         _cursor = new Rectangle();
         _selectedArea = new Rectangle();
 
+        _substrate_text = new TextLine();
+
         setItemName("TextEdit_" + count);
         count++;
 
@@ -82,6 +84,8 @@ public class TextEdit extends Prototype
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.TextEdit"));
         setStyle(DefaultsService.getDefaultStyle(TextEdit.class));
+        // _substrate_text.setFontStyle(Font.ITALIC);
+        // System.out.println("constructor " + _substrate_text.getFont().getStyle());
     }
 
     private void onMouseDoubleClick(Object sender, MouseArgs args) {
@@ -165,7 +169,8 @@ public class TextEdit extends Prototype
     private void replaceCursorAccordingCoord(int realPos) {
         int w = getTextWidth();
         if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
-            realPos -= getX() + (getWidth() - w) - getPadding().right - _text_object.getMargin().right - _cursor.getWidth();
+            realPos -= getX() + (getWidth() - w) - getPadding().right - _text_object.getMargin().right
+                    - _cursor.getWidth();
         else
             realPos -= getX() + getPadding().left + _text_object.getMargin().left;
 
@@ -205,36 +210,37 @@ public class TextEdit extends Prototype
             }
 
             if (!_isSelect && _justSelected) {
-                //_selectFrom = -1;// 0;
-                //_selectTo = -1;// 0;
-                //_justSelected = false;
+                // _selectFrom = -1;// 0;
+                // _selectTo = -1;// 0;
+                // _justSelected = false;
                 cancelJustSelected();
             }
             if (args.mods != KeyMods.NO) {
                 // Выделение не сбрасывается, проверяются сочетания
                 // 
+                //
                 switch (args.mods) {
-                    case SHIFT:
-                        if (ShiftValCodes.contains(args.key)) {
-                            if (!_isSelect) {
-                                _isSelect = true;
-                                _selectFrom = _cursor_position;
-                            }
-                        }
-
-                        break;
-
-                    case CONTROL:
-                        if (args.key == KeyCode.A || args.key == KeyCode.a) {
-                            _selectFrom = 0;
-                            _cursor_position = privGetText().length();
-                            replaceCursor();
-
+                case SHIFT:
+                    if (ShiftValCodes.contains(args.key)) {
+                        if (!_isSelect) {
                             _isSelect = true;
+                            _selectFrom = _cursor_position;
                         }
-                        break;
+                    }
 
-                    // alt, super ?
+                    break;
+
+                case CONTROL:
+                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
+                        _selectFrom = 0;
+                        _cursor_position = privGetText().length();
+                        replaceCursor();
+
+                        _isSelect = true;
+                    }
+                    break;
+
+                // alt, super ?
                 }
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE) {
@@ -246,13 +252,13 @@ public class TextEdit extends Prototype
                             StringBuilder sb = new StringBuilder(privGetText());
                             _cursor_position--;
                             privSetText(sb.deleteCharAt(_cursor_position).toString());
-                            //replaceCursor();
+                            // replaceCursor();
                         }
                         if (args.key == KeyCode.DELETE && _cursor_position < privGetText().length()) // delete
                         {
                             StringBuilder sb = new StringBuilder(privGetText());
                             privSetText(sb.deleteCharAt(_cursor_position).toString());
-                            //replaceCursor();
+                            // replaceCursor();
                         }
                     }
                 } else if (_isSelect && !InsteadKeyMods.contains(args.key))
@@ -321,7 +327,7 @@ public class TextEdit extends Prototype
 
         if (_cursor_position > len) {
             _cursor_position = len;
-            //replaceCursor();
+            // replaceCursor();
         }
         int pos = cursorPosToCoord(_cursor_position);
 
@@ -335,8 +341,8 @@ public class TextEdit extends Prototype
             _cursor.setX(xcp);
         } else {
             int cnt = getX() + getPadding().left + pos + _text_object.getMargin().left;
-//            if (_cursor_position > 0)
-//                cnt += _cursor.getWidth();
+            // if (_cursor_position > 0)
+            // cnt += _cursor.getWidth();
             _cursor.setX(cnt);
         }
     }
@@ -353,13 +359,13 @@ public class TextEdit extends Prototype
                 unselectText();// privCutText();
                 privCutText();
             }
-            if (_justSelected) cancelJustSelected(); //_justSelected = false;
-
+            if (_justSelected)
+                cancelJustSelected(); // _justSelected = false;
 
             StringBuilder sb = new StringBuilder(privGetText());
             _cursor_position++;
             privSetText(sb.insert(_cursor_position - 1, str).toString());
-            //replaceCursor();
+            // replaceCursor();
         } finally {
             textInputLock.unlock();
         }
@@ -383,6 +389,7 @@ public class TextEdit extends Prototype
     public void setTextAlignment(ItemAlignment... alignment) {
         setTextAlignment(Arrays.asList(alignment));
     }
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
         List<ItemAlignment> ial = new LinkedList<>();
         if (alignment.contains(ItemAlignment.RIGHT)) {
@@ -393,6 +400,7 @@ public class TextEdit extends Prototype
             ial.add(ItemAlignment.VCENTER);
         }
         _text_object.setTextAlignment(ial);
+        _substrate_text.setTextAlignment(ial);
     }
 
     /**
@@ -400,7 +408,9 @@ public class TextEdit extends Prototype
      */
     public void setTextMargin(Indents margin) {
         _text_object.setMargin(margin);
+        _substrate_text.setMargin(margin);
     }
+
     public Indents getTextMargin() {
         return _text_object.getMargin();
     }
@@ -410,16 +420,27 @@ public class TextEdit extends Prototype
      */
     public void setFont(Font font) {
         _text_object.setFont(font);
+        // int style = _substrate_text.getFont().getStyle();
+        // _substrate_text.setFontSize(font.getSize());
+        // _substrate_text.setFontFamily(font.getFamily());
+        // System.out.println("set font " + _substrate_text.getFont().getStyle());
+        _substrate_text.setFont(
+                new Font(font.getFamily(), _substrate_text.getFont().getStyle(), _substrate_text.getFont().getSize()));
     }
+
     public void setFontSize(int size) {
         _text_object.setFontSize(size);
     }
+
     public void setFontStyle(int style) {
         _text_object.setFontStyle(style);
     }
+
     public void setFontFamily(String font_family) {
         _text_object.setFontFamily(font_family);
+        _substrate_text.setFontFamily(font_family);
     }
+
     public Font getFont() {
         return _text_object.getFont();
     }
@@ -427,6 +448,10 @@ public class TextEdit extends Prototype
     private void privSetText(String text) {
         textInputLock.lock();
         try {
+            if (_substrate_text.isVisible())
+                _substrate_text.setVisible(false);
+            if (text.equals("")) 
+                _substrate_text.setVisible(true);
             // _text_object.setLineXShift(_lineXShift, getWidth());
             _text_object.setItemText(text);
             _text_object.checkXShift(_cursorXMax);
@@ -448,6 +473,7 @@ public class TextEdit extends Prototype
         }
         privSetText(text);
     }
+
     public String getText() {
         return privGetText();
     }
@@ -462,18 +488,23 @@ public class TextEdit extends Prototype
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
         return _text_object.getForeground();
     }
@@ -509,6 +540,10 @@ public class TextEdit extends Prototype
                 - _text_object.getMargin().left - _text_object.getMargin().right;
         _text_object.setAllowWidth(_cursorXMax);
         _text_object.checkXShift(_cursorXMax);
+
+        _substrate_text.setAllowWidth(_cursorXMax);
+        _substrate_text.checkXShift(_cursorXMax);
+
         replaceCursor();
     }
 
@@ -517,31 +552,35 @@ public class TextEdit extends Prototype
      */
     @Override
     public void initElements() {
-        addItems(_selectedArea, _text_object, _cursor);
+        addItems(_substrate_text, _selectedArea, _text_object, _cursor);
 
-        _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right
-                - _text_object.getMargin().left - _text_object.getMargin().right;
-        _text_object.setAllowWidth(_cursorXMax);
-        _text_object.setLineXShift();
+        // _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right
+        //         - _text_object.getMargin().left - _text_object.getMargin().right;
+        // _text_object.setAllowWidth(_cursorXMax);
+        // _text_object.setLineXShift();
+
+        // _substrate_text.setAllowWidth(_cursorXMax);
+        // _substrate_text.setLineXShift();
 
         int scctp = _text_object.getFontDims()[0];
         if (scctp > scrollStep)
             scrollStep = scctp;
 
         _text_object.setCursorWidth(_cursor.getWidth());
+        _substrate_text.setCursorWidth(_cursor.getWidth());
     }
 
     /**
-     * Returns width of the whole text in the TextEdit
-     * (includes visible and invisible parts of the text)
+     * Returns width of the whole text in the TextEdit (includes visible and
+     * invisible parts of the text)
      */
     public int getTextWidth() {
         return _text_object.getWidth();
     }
 
     /**
-     * Returns height of the whole text in the TextEdit
-     * (includes visible and invisible parts of the text)
+     * Returns height of the whole text in the TextEdit (includes visible and
+     * invisible parts of the text)
      */
     public int getTextHeight() {
         return _text_object.getHeight();
@@ -565,8 +604,8 @@ public class TextEdit extends Prototype
 
         int w = getTextWidth();
         if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
-            _selectedArea
-                    .setX(getX() + getWidth() - w + fromReal - getPadding().right - _text_object.getMargin().right - _cursor.getWidth());
+            _selectedArea.setX(getX() + getWidth() - w + fromReal - getPadding().right - _text_object.getMargin().right
+                    - _cursor.getWidth());
         else
             _selectedArea.setX(getX() + getPadding().left + fromReal + _text_object.getMargin().left);
         _selectedArea.setWidth(width);
@@ -611,7 +650,7 @@ public class TextEdit extends Prototype
             String newText = text.substring(0, _cursor_position) + pasteStr + text.substring(_cursor_position);
             _cursor_position += pasteStr.length();
             privSetText(newText);
-            //replaceCursor();
+            // replaceCursor();
         } finally {
             textInputLock.unlock();
         }
@@ -645,7 +684,7 @@ public class TextEdit extends Prototype
             replaceCursor();
             if (_isSelect)
                 unselectText();
-            cancelJustSelected(); //_justSelected = false;
+            cancelJustSelected(); // _justSelected = false;
             return str;
         } finally {
             textInputLock.unlock();
@@ -653,8 +692,8 @@ public class TextEdit extends Prototype
     }
 
     /**
-     * Cuts selected part of the text and returns it.
-     * Is nothing is selected returns empry string
+     * Cuts selected part of the text and returns it. Is nothing is selected returns
+     * empry string
      */
     public String cutText() {
         return privCutText();
@@ -699,6 +738,11 @@ public class TextEdit extends Prototype
         if (inner_style != null) {
             _cursor.setStyle(inner_style);
         }
+        inner_style = style.getInnerStyle("substrate");
+        if (inner_style != null) {
+            _substrate_text.setFont(inner_style.font);
+            _substrate_text.setForeground(inner_style.foreground);
+        }
     }
 
     private int getLineXShift() {
@@ -737,5 +781,46 @@ public class TextEdit extends Prototype
     public void redo() {
         _text_object.redo();
         replaceCursor();
+    }
+
+    public void setSubstrateText(String substrateText) {
+        _substrate_text.setItemText(substrateText);
+        // _substrate_text.checkXShift(_cursorXMax);
+    }
+
+    public void setSubstrateFontSize(int size) {
+        _substrate_text.setFontSize(size);
+    }
+
+    public void setSubstrateFontStyle(int style) {
+        _substrate_text.setFontStyle(style);
+    }
+
+    public void setSubstrateForeground(Color foreground) {
+        _substrate_text.setForeground(foreground);
+    }
+
+    public void setSubstrateForeground(int r, int g, int b) {
+        _substrate_text.setForeground(r, g, b);
+    }
+
+    public void seSubstratetForeground(int r, int g, int b, int a) {
+        _substrate_text.setForeground(r, g, b, a);
+    }
+
+    public void setSubstrateForeground(float r, float g, float b) {
+        _substrate_text.setForeground(r, g, b);
+    }
+
+    public void setSubstrateForeground(float r, float g, float b, float a) {
+        _substrate_text.setForeground(r, g, b, a);
+    }
+
+    public Color getSubstrateForeground() {
+        return _substrate_text.getForeground();
+    }
+
+    public String getSubstrateText() {
+        return _substrate_text.getItemText();
     }
 }
