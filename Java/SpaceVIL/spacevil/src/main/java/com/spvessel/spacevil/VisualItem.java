@@ -282,8 +282,9 @@ final class VisualItem extends BaseItem {
     }
 
     protected void addItem(InterfaceBaseItem item) {
-        locker.lock();
-        try {
+        int count = 0;
+        // locker.lock();
+        // try {
             if (item.equals(this)) {
                 System.out.println("Trying to add current item in himself.");
                 return;
@@ -294,15 +295,14 @@ final class VisualItem extends BaseItem {
             ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
             // needs to force update all attributes
             castAndUpdate(item);
+            count++;
             item.initElements();
-            // if (item instanceof VisualItem) {
-            // ((VisualItem) item).updateState();
-            // }
-        } catch (Exception ex) {
-            System.out.println(item.getItemName() + "\n" + ex.toString());
-        } finally {
-            locker.unlock();
-        }
+            count++;
+        // } catch (Exception ex) {
+        //     System.out.println(item.getItemName() + " " + count + "\n" + ex.toString());
+        // } finally {
+        //     locker.unlock();
+        // }
     }
 
     void insertItem(InterfaceBaseItem item, int index) {
@@ -790,6 +790,9 @@ final class VisualItem extends BaseItem {
         setPadding(style.padding);
         setSpacing(style.spacing);
         setMargin(style.margin);
+        setBorderRadius(style.borderRadius);
+        setBorderThickness(style.borderThickness);
+        setBorderFill(style.borderFill);
         setVisible(style.isVisible);
         removeAllItemStates();
 
@@ -802,14 +805,10 @@ final class VisualItem extends BaseItem {
             addItemState(state.getKey(), state.getValue());
         }
         if (style.shape != null) {
-            setCustomFigure(new CustomFigure(style.isFixedShape, style.shape));
-            core_state.shape = isCustomFigure();
+            _is_custom = new CustomFigure(style.isFixedShape, style.shape);
+            core_state.shape = _is_custom;
         }
         addItemState(ItemStateType.BASE, core_state);
-
-        setBorderRadius(style.borderRadius);
-        setBorderThickness(style.borderThickness);
-        setBorderFill(style.borderFill);
     }
 
     @Override
@@ -827,14 +826,14 @@ final class VisualItem extends BaseItem {
         style.padding = new Indents(getPadding().left, getPadding().top, getPadding().right, getPadding().bottom);
         style.margin = new Indents(getMargin().left, getMargin().top, getMargin().right, getMargin().bottom);
         style.spacing = new Spacing(getSpacing().horizontal, getSpacing().vertical);
-        style.alignment = getAlignment();
-        style.borderFill = _border.getFill();
-        style.borderRadius = _border.getRadius();
-        style.borderThickness = _border.getThickness();
+        style.alignment = new LinkedList<>(getAlignment());
+        style.borderFill = getBorderFill();// _border.getFill();
+        style.borderRadius = getBorderRadius();// _border.getRadius();
+        style.borderThickness = getBorderThickness();// _border.getThickness();
         style.isVisible = isVisible();
-        if (isCustomFigure() != null) {
-            style.shape = isCustomFigure().getFigure();
-            style.isFixedShape = isCustomFigure().isFixed();
+        if (_is_custom != null) {
+            style.shape = _is_custom.getFigure();
+            style.isFixedShape = _is_custom.isFixed();
         }
         for (Map.Entry<ItemStateType, ItemState> state : states.entrySet()) {
             style.addItemState(state.getKey(), state.getValue());

@@ -85,11 +85,12 @@ public final class GraphicsMathService {
 
     /**
      * Make a rectangle with roundness corners
+     * 
      * @param cornerRadius radius values for all corners
-     * @param width rectangle width
-     * @param height rectangle height
-     * @param x X position (left top corner) of the result object
-     * @param y Y position (left top corner) of the result object
+     * @param width        rectangle width
+     * @param height       rectangle height
+     * @param x            X position (left top corner) of the result object
+     * @param y            Y position (left top corner) of the result object
      * @return Points list of the rectangle with roundness corners
      */
     public static List<float[]> getRoundSquare(CornerRadius cornerRadius, float width, float height, int x, int y) {
@@ -180,11 +181,12 @@ public final class GraphicsMathService {
 
     /**
      * Make a rectangle with roundness corners
-     * @param width rectangle width
+     * 
+     * @param width  rectangle width
      * @param height rectangle height
      * @param radius same radius value for each corner
-     * @param x X position (left top corner) of the result object
-     * @param y Y position (left top corner) of the result object
+     * @param x      X position (left top corner) of the result object
+     * @param y      Y position (left top corner) of the result object
      * @return Points list of the rectangle with roundness corners
      */
     public static List<float[]> getRoundSquare(float width, float height, float radius, int x, int y) {
@@ -272,7 +274,9 @@ public final class GraphicsMathService {
     }
 
     /**
-     * Make a triangle with corners in (x + w/2, y), (x, y + h), (x + w, y + h), rotated on a degrees
+     * Make a triangle with corners in (x + w/2, y), (x, y + h), (x + w, y + h),
+     * rotated on a degrees
+     * 
      * @param a rotation angle for the triangle in degrees
      */
     public static List<float[]> getTriangle(float w, float h, int x, int y, int a) {
@@ -298,6 +302,7 @@ public final class GraphicsMathService {
 
     /**
      * Make an ellipse with two equal radii (i. e. circle)
+     * 
      * @param n points count on the ellipse border
      */
     static public List<float[]> getEllipse(float r, int n) {
@@ -324,6 +329,7 @@ public final class GraphicsMathService {
 
     /**
      * Make an ellipse
+     * 
      * @param w ellipse width
      * @param h ellipse height
      * @param x X position of the left top corner (ellipse center in x + w/2)
@@ -355,10 +361,11 @@ public final class GraphicsMathService {
 
     /**
      * Make cross figure
-     * @param w cross width
-     * @param h cross height
+     * 
+     * @param w         cross width
+     * @param h         cross height
      * @param thickness cross parts thickness
-     * @param alpha cross rotation angle in degrees
+     * @param alpha     cross rotation angle in degrees
      */
     static public List<float[]> getCross(float w, float h, float thickness, int alpha) {
         List<float[]> figure = new LinkedList<>();
@@ -425,8 +432,71 @@ public final class GraphicsMathService {
         return figure;
     }
 
+    public static List<float[]> rotateShape(float w, float h, float angle, List<float[]> triangles) {
+        // rotate
+        float x0 = w / 2.0f;
+        float y0 = h / 2.0f;
+        for (float[] crd : triangles) {
+            float x_crd = crd[0];
+            float y_crd = crd[1];
+            crd[0] = x0 + (x_crd - x0) * (float) Math.cos(angle * Math.PI / 180.0f)
+                    - (y_crd - y0) * (float) Math.sin(angle * Math.PI / 180.0f);
+            crd[1] = y0 + (y_crd - y0) * (float) Math.cos(angle * Math.PI / 180.0f)
+                    + (x_crd - x0) * (float) Math.sin(angle * Math.PI / 180.0f);
+        }
+        return triangles;
+    }
+
+    public static List<float[]> getArrow(float w, float h, float thickness, int alpha) {
+        List<float[]> figure = new LinkedList<float[]>();
+
+        float x0 = (w - thickness) / 2;
+        float y0 = (h - thickness) / 2;
+
+        // center
+        figure.add(new float[] { x0, y0, 0.0f });
+        figure.add(new float[] { x0, y0 + thickness, 0.0f });
+        figure.add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+
+        figure.add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+        figure.add(new float[] { x0 + thickness, y0, 0.0f });
+        figure.add(new float[] { x0, y0, 0.0f });
+
+        // top
+        figure.add(new float[] { x0, 0, 0.0f });
+        figure.add(new float[] { x0, y0, 0.0f });
+        figure.add(new float[] { x0 + thickness, y0, 0.0f });
+
+        figure.add(new float[] { x0 + thickness, y0, 0.0f });
+        figure.add(new float[] { x0 + thickness, 0, 0.0f });
+        figure.add(new float[] { x0, 0, 0.0f });
+
+        // left
+        figure.add(new float[] { 0, y0, 0.0f });
+        figure.add(new float[] { 0, y0 + thickness, 0.0f });
+        figure.add(new float[] { x0, y0 + thickness, 0.0f });
+
+        figure.add(new float[] { x0, y0 + thickness, 0.0f });
+        figure.add(new float[] { x0, y0, 0.0f });
+        figure.add(new float[] { 0, y0, 0.0f });
+
+        // rotate
+        x0 = w / 2;
+        y0 = h / 2;
+        for (float[] crd : figure) {
+            float x_crd = crd[0];
+            float y_crd = crd[1];
+            crd[0] = x0 + (x_crd - x0) * (float) Math.cos(alpha * Math.PI / 180.0f)
+                    - (y_crd - y0) * (float) Math.sin(alpha * Math.PI / 180.0f);
+            crd[1] = y0 + (y_crd - y0) * (float) Math.cos(alpha * Math.PI / 180.0f)
+                    + (x_crd - x0) * (float) Math.sin(alpha * Math.PI / 180.0f);
+        }
+        return figure;
+    }
+
     /**
-     * Make rectangle as two triangles by its width, height and top left corner position (x, y)
+     * Make rectangle as two triangles by its width, height and top left corner
+     * position (x, y)
      */
     public static List<float[]> getRectangle(float w, float h, float x, float y) {
         List<float[]> figure = new LinkedList<>();
@@ -474,6 +544,7 @@ public final class GraphicsMathService {
 
     /**
      * Make a star figure
+     * 
      * @param R Circumscribed circle radius
      * @param r Incircle radius
      * @param n vertices count
@@ -551,12 +622,13 @@ public final class GraphicsMathService {
 
     /**
      * Make a rectangle border with roundness corners
-     * @param width rectangle border width
-     * @param height rectangle border height
-     * @param radius same radius value for each corner
+     * 
+     * @param width     rectangle border width
+     * @param height    rectangle border height
+     * @param radius    same radius value for each corner
      * @param thickness border thickness
-     * @param x X position (left top corner) of the result object
-     * @param y Y position (left top corner) of the result object
+     * @param x         X position (left top corner) of the result object
+     * @param y         Y position (left top corner) of the result object
      * @return Points list of the rectangle border with roundness corners
      */
     public static List<float[]> getRoundSquareBorder(float width, float height, float radius, float thickness, int x,
@@ -604,12 +676,13 @@ public final class GraphicsMathService {
 
     /**
      * Make a rectangle border with roundness corners
+     * 
      * @param cornerRadius radius values for all corners
-     * @param width rectangle border width
-     * @param height rectangle border height
-     * @param thickness border thickness
-     * @param x X position (left top corner) of the result object
-     * @param y Y position (left top corner) of the result object
+     * @param width        rectangle border width
+     * @param height       rectangle border height
+     * @param thickness    border thickness
+     * @param x            X position (left top corner) of the result object
+     * @param y            Y position (left top corner) of the result object
      * @return Points list of the rectangle border with roundness corners
      */
     public static List<float[]> getRoundSquareBorder(CornerRadius cornerRadius, float width, float height,

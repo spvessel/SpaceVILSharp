@@ -733,7 +733,6 @@ namespace SpaceVIL
             inner_style = style.GetInnerStyle("substrate");
             if (inner_style != null)
             {
-                Console.WriteLine("substrate");
                 _substrate_text.SetFont(inner_style.Font);
                 _substrate_text.SetForeground(inner_style.Foreground);
             }

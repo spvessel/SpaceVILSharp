@@ -202,6 +202,8 @@ public class FlowTest extends ActiveWindow {
         ex_menu.setSize(110, 64);
         ex_addition.assignContextMenu(ex_menu);
         flow.addContextMenu(_context_menu);
+
+        // Handler.addItem(new StopMenu());
     }
 
     private ResizableItem getBlockList() {

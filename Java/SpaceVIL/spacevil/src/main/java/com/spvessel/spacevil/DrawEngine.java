@@ -36,6 +36,9 @@ final class DrawEngine {
     private Prototype hoveredItem = null;
     private Prototype focusedItem = null;
 
+    private int _framebufferWidth = 0;
+    private int _framebufferHeight = 0;
+
     Prototype getFocusedItem() {
         return focusedItem;
     }
@@ -272,8 +275,26 @@ final class DrawEngine {
                 position(window, xpos, ypos);
             }
         });
+        _handler.setCallbackFramebuffer(new GLFWFramebufferSizeCallback(){
+            @Override
+            public void invoke(long window, int w, int h) {
+                framebuffer(window, w, h);
+            }
+        });
     }
 
+    void framebuffer(long window, int w, int h)
+    {
+        _framebufferWidth = w;
+        _framebufferHeight = h;
+
+        glViewport(0, 0, w, h);
+
+        _fbo.bindFBO();
+        _fbo.clearTexture();
+        _fbo.genFBOTexture(w, h);
+        _fbo.unbindFBO();
+    }
     void minimizeWindow() {
         engineEvent.setEvent(InputEventType.WINDOW_MINIMIZE);
         glfwIconifyWindow(_handler.getWindowId());
@@ -339,15 +360,6 @@ final class DrawEngine {
 
         if (engineEvent.lastEvent().contains(InputEventType.WINDOW_RESTORE))
             return;
-
-        IntBuffer w = BufferUtils.createIntBuffer(1);
-        IntBuffer h = BufferUtils.createIntBuffer(1);
-        glfwGetFramebufferSize(_handler.getWindowId(), w, h);
-
-        _fbo.bindFBO();
-        _fbo.clearTexture();
-        _fbo.genFBOTexture(w.get(0), h.get(0));
-        _fbo.unbindFBO();
 
         if (!_handler.getLayout().isBorderHidden) {
             glClearColor(0, 0, 0, 0);
@@ -952,15 +964,18 @@ final class DrawEngine {
         _handler.gVAO = glGenVertexArrays();
         glBindVertexArray(_handler.gVAO);
         focus(_handler.getWindowId(), true);
-        // glfwFocusWindow(_handler.getWindowId());
+        
 
         IntBuffer w = BufferUtils.createIntBuffer(1);
         IntBuffer h = BufferUtils.createIntBuffer(1);
         glfwGetFramebufferSize(_handler.getWindowId(), w, h);
+        glViewport(0, 0, w.get(0), h.get(0));
+
+        _framebufferWidth = w.get(0);
+        _framebufferHeight = h.get(0);
 
         _fbo.genFBO();
         _fbo.genFBOTexture(w.get(0), h.get(0));
-
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {
@@ -990,10 +1005,6 @@ final class DrawEngine {
     }
 
     protected void update() {
-        IntBuffer w = BufferUtils.createIntBuffer(1);
-        IntBuffer h = BufferUtils.createIntBuffer(1);
-        glfwGetFramebufferSize(_handler.getWindowId(), w, h);
-        glViewport(0, 0, w.get(0), h.get(0));
         render();
     }
 
@@ -1342,7 +1353,7 @@ final class DrawEngine {
         store.sendUniformSample2D(_blur);
         store.sendUniform1fv(_blur, "weights", 11, weights);
         store.sendUniform2fv(_blur, "frame",
-                new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
+                new float[] { _framebufferWidth, _framebufferHeight });
         store.sendUniform1f(_blur, "res", (res * 1f / 10));
         store.sendUniform2fv(_blur, "point", xy);
         store.sendUniform2fv(_blur, "size", wh);
@@ -1367,11 +1378,11 @@ final class DrawEngine {
         checkOutsideBorders((InterfaceBaseItem) text);
 
         int bb_h = textPrt.heightTexture, bb_w = textPrt.widthTexture;
-        float i_x0 = ((float) textPrt.xTextureShift / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y0 = ((float) textPrt.yTextureShift / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w) / (float) _handler.getLayout().getWidth() * 2.0f)
+        float i_x0 = ((float) textPrt.xTextureShift / (float) _framebufferWidth * 2.0f) - 1.0f;
+        float i_y0 = ((float) textPrt.yTextureShift / (float) _framebufferHeight * 2.0f - 1.0f) * (-1.0f);
+        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w) / (float) _framebufferWidth * 2.0f)
                 - 1.0f;
-        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h) / (float) _handler.getLayout().getHeight() * 2.0f
+        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h) / (float) _framebufferHeight * 2.0f
                 - 1.0f) * (-1.0f);
         float[] argb = { (float) text.getForeground().getRed() / 255.0f,
                 (float) text.getForeground().getGreen() / 255.0f, (float) text.getForeground().getBlue() / 255.0f,
@@ -1443,11 +1454,11 @@ final class DrawEngine {
             return;
 
         int w = image.getImageWidth(), h = image.getImageHeight();
-        float i_x0 = ((float) image.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y0 = ((float) image.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) image.getX() + (float) image.getWidth()) / (float) _handler.getLayout().getWidth()
+        float i_x0 = ((float) image.getX() / (float) _framebufferWidth * 2.0f) - 1.0f;
+        float i_y0 = ((float) image.getY() / (float) _framebufferHeight * 2.0f - 1.0f) * (-1.0f);
+        float i_x1 = (((float) image.getX() + (float) image.getWidth()) / (float) _framebufferWidth
                 * 2.0f) - 1.0f;
-        float i_y1 = (((float) image.getY() + (float) image.getHeight()) / (float) _handler.getLayout().getHeight()
+        float i_y1 = (((float) image.getY() + (float) image.getHeight()) / (float) _framebufferHeight
                 * 2.0f - 1.0f) * (-1.0f);
 
         _texture.useShader();
