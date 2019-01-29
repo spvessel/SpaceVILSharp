@@ -427,12 +427,20 @@ namespace SpaceVIL
             }
             else
             {
+                /*
                 foreach (TextLine te in _linesList)
                 {
                     sb.Append(te.GetText());
                     sb.Append("\n");
                 }
                 sb.Remove(sb.Length - 3, 2);
+                */
+                for (int i = 0; i < _linesList.Count - 1; i++)
+                {
+                    sb.Append(_linesList[i].GetText());
+                    sb.Append("\n");
+                }
+                sb.Append(_linesList[_linesList.Count - 1].GetText());
             }
             _wholeText = sb.ToString();
             return _wholeText;
@@ -482,9 +490,9 @@ namespace SpaceVIL
 
             for (int i = 1; i < line.Length; i++)
             {
+                inc++;
                 s = line[i].TrimEnd('\r');
                 AddNewLine(s, inc);
-                inc++;
             }
 
             curPos.Y = line.Length - 1;

@@ -8,7 +8,7 @@ import com.spvessel.spacevil.*;
 public class InputTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 100, 400, true);
+        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 250, 400, true);
         setHandler(Handler);
 
         Handler.setMinSize(50, 100);
@@ -34,6 +34,7 @@ public class InputTest extends ActiveWindow {
         TextArea tb = new TextArea();
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         tb.setHScrollBarVisible(ScrollBarVisibility.ALWAYS);
+        tb.setText("123qwe");
 //        tb.setPadding(15, 0, 15, 0);
         // tb.setMargin(new Indents(50, 30, 30, 30));
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
@@ -44,6 +45,16 @@ public class InputTest extends ActiveWindow {
         layout.addItem(password);
         layout.addItem(te);
         layout.addItem(tb);
+
+        ButtonCore bc = new ButtonCore("pizdec");
+        bc.setSize(150,30);
+        bc.eventMouseClick.add((sender, args) -> {
+            String text = tb.getText();
+            tb.setText(text + "\n456\n123");
+        });
+
+        layout.addItem(bc);
+
         layout.addItem(sp);
     }
 }

@@ -370,11 +370,16 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         if (_linesList.size() == 1) {
             sb.append(_linesList.get(0).getText());
         } else {
-            for (TextLine te : _linesList) {
-                sb.append(te.getText());
+//            for (TextLine te : _linesList) {
+//                sb.append(te.getText());
+//                sb.append("\n");
+//            }
+//            sb.delete(sb.length() - 3, sb.length() - 1); // Remove(sb.Length - 3, 2);
+            for (int i = 0; i < _linesList.size() - 1; i++) {
+                sb.append(_linesList.get(i).getText());
                 sb.append("\n");
             }
-            sb.delete(sb.length() - 3, sb.length() - 1); // Remove(sb.Length - 3, 2);
+            sb.append(_linesList.get(_linesList.size() - 1).getText());
         }
         _wholeText = sb.toString();
         return _wholeText;
@@ -419,9 +424,9 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         _linesList.get(0).setItemText(line[0]);
 
         for (int i = 1; i < line.length; i++) {
+            inc++;
             s = line[i].replaceAll("\r", "");
             addNewLine(s, inc);
-            inc++;
         }
 
         curPos.y = line.length - 1;
