@@ -82,6 +82,18 @@ namespace SpaceVIL
             AddItem(_text_object);
         }
 
+        /// <summary>
+        /// Is CheckBox checked (boolean)
+        /// </summary>
+        public bool IsChecked()
+        {
+            return _indicator.GetIndicatorMarker().IsToggled();
+        }
+        public void SetChecked(bool value)
+        {
+            _indicator.GetIndicatorMarker().SetToggled(value);
+        }
+
         // public override bool IsVisible
         // {
         //     get => base.IsVisible;
