@@ -2,10 +2,12 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Flags.HorizontalDirection;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.OSType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.awt.*;
@@ -89,8 +91,9 @@ public class TitleBar extends WindowAnchor {
 
     /**
      * Set TitleBar icon
-     * @param icon BufferedImage icon image
-     * @param width icon image width
+     * 
+     * @param icon   BufferedImage icon image
+     * @param width  icon image width
      * @param height icon image height
      */
     public void setIcon(BufferedImage icon, int width, int height) {
@@ -101,8 +104,9 @@ public class TitleBar extends WindowAnchor {
 
     /**
      * Set TitleBar icon
-     * @param url the path to the icon file
-     * @param width icon width
+     * 
+     * @param url    the path to the icon file
+     * @param width  icon width
      * @param height icon height
      */
     public void setIcon(String url, int width, int height) {
@@ -111,7 +115,6 @@ public class TitleBar extends WindowAnchor {
         _icon.setVisible(true);
     }
 
-
     // text init
     /**
      * Text alignment in the TitleBar
@@ -119,6 +122,7 @@ public class TitleBar extends WindowAnchor {
     public void setTextAlignment(ItemAlignment... alignment) {
         _text_object.setTextAlignment(alignment);
     }
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
@@ -136,15 +140,19 @@ public class TitleBar extends WindowAnchor {
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
+
     public void setFontSize(int size) {
         _text_object.setFontSize(size);
     }
+
     public void setFontStyle(int style) {
         _text_object.setFontStyle(style);
     }
+
     public void setFontFamily(String font_family) {
         _text_object.setFontFamily(font_family);
     }
+
     public Font getFont() {
         return _text_object.getFont();
     }
@@ -155,6 +163,7 @@ public class TitleBar extends WindowAnchor {
     public void setText(String text) {
         _text_object.setText(text);
     }
+
     public String getText() {
         return _text_object.getText();
     }
@@ -165,18 +174,23 @@ public class TitleBar extends WindowAnchor {
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
         return _text_object.getForeground();
     }
@@ -204,11 +218,16 @@ public class TitleBar extends WindowAnchor {
         _minimize.eventMouseClick.add(minimize_click);
 
         // _maximize
-        InterfaceMouseMethodState maximize_click = (sender, args) -> {
-            getHandler().maximize();
-            //System.out.println(_maximize.getBorderThickness() + " " + _maximize.getBorderFill());
-        };
-        _maximize.eventMouseClick.add(maximize_click);
+        if (CommonService.getOSType() != OSType.MAC) {
+
+            InterfaceMouseMethodState maximize_click = (sender, args) -> {
+                getHandler().maximize();
+            };
+            _maximize.eventMouseClick.add(maximize_click);
+        } else {
+            _maximize.setVisible(false);
+            _maximize.setDrawable(false);
+        }
 
         // adding
         switch (Direction) {
@@ -216,7 +235,8 @@ public class TitleBar extends WindowAnchor {
             _layout.addItems(_icon, _text_object, _minimize, _maximize, _close);
             break;
         case FROM_RIGHT_TO_LEFT:
-            _layout.addItems(_close, _maximize, _minimize, _icon, _text_object);
+            _text_object.setTextAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+            _layout.addItems(_close, _minimize, _maximize, _icon, _text_object);
             break;
         default:
             _layout.addItems(_icon, _text_object, _minimize, _maximize, _close);
@@ -225,19 +245,6 @@ public class TitleBar extends WindowAnchor {
         _minimize.setPassEvents(false);
         _maximize.setPassEvents(false);
         _close.setPassEvents(false);
-
-        // _maximize.setBorderFill(new Color(255, 255, 255));
-        // _maximize.setBorderThickness(2);
-
-        // Rectangle center = new Rectangle();
-        // center.setBackground(getBackground());
-        // center.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        // _maximize.addItem(center);
-
-        // update text data
-        // _text_object.UpdateData(UpdateType.Critical);
-        // LogService.Log().LogBaseItem(_close, LogProps.Behavior |
-        // LogProps.AllGeometry);
     }
 
     /**
@@ -267,7 +274,8 @@ public class TitleBar extends WindowAnchor {
         inner_style = style.getInnerStyle("maximizebutton");
         if (inner_style != null) {
             _maximize.setStyle(inner_style);
-            // System.out.println(_maximize.getBorderThickness() + " " +_maximize.getBorderFill());
+            // System.out.println(_maximize.getBorderThickness() + " "
+            // +_maximize.getBorderFill());
         }
         inner_style = style.getInnerStyle("title");
         if (inner_style != null) {

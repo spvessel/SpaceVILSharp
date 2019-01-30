@@ -10,7 +10,7 @@ using static GL.LGL.OpenLGL;
 #elif WINDOWS
 using static GL.WGL.OpenWGL;
 #elif LINUX
-using static GL.WGL.OpenLGL;
+using static GL.LGL.OpenLGL;
 #else
 using static GL.WGL.OpenWGL;
 #endif

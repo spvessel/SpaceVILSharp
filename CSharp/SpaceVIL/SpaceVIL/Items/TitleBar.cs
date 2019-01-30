@@ -151,10 +151,18 @@ namespace SpaceVIL
             };
 
             //_maximize
-            _maximize.EventMouseClick += (sender, args) =>
+            if (Common.CommonService.GetOSType() != OSType.Mac)
             {
-                GetHandler().Maximize();
-            };
+                _maximize.EventMouseClick += (sender, args) =>
+                {
+                    GetHandler().Maximize();
+                };
+            }
+            else
+            {
+                _maximize.SetVisible(false);
+                _maximize.SetDrawable(false);
+            }
 
             //adding
             switch (Direction)
@@ -163,23 +171,13 @@ namespace SpaceVIL
                     _layout.AddItems(_icon, _text_object, _minimize, _maximize, _close);
                     break;
                 case HorizontalDirection.FromRightToLeft:
-                    _layout.AddItems(_close, _maximize, _minimize, _icon, _text_object);
+                    _text_object.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+                    _layout.AddItems(_close, _minimize, _maximize, _icon, _text_object);
                     break;
                 default:
                     _layout.AddItems(_icon, _text_object, _minimize, _maximize, _close);
                     break;
             }
-
-            // Rectangle center = new Rectangle();
-            // center.SetBackground(GetBackground());
-            // center.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            // _maximize.AddItem(center);
-            // _maximize.SetBorderThickness(2);
-            // _maximize.SetBorderFill(Color.White);
-            
-            //update text data
-            //_text_object.UpdateData(UpdateType.Critical);
-            //LogService.Log().LogBaseItem(_close, LogProps.Behavior | LogProps.AllGeometry);
         }
 
         //style
@@ -187,7 +185,7 @@ namespace SpaceVIL
         {
             if (style == null)
                 return;
-                
+
             base.SetStyle(style);
             SetForeground(style.Foreground);
             SetFont(style.Font);
