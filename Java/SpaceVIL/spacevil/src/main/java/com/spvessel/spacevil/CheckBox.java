@@ -5,6 +5,7 @@ import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -203,6 +204,16 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
         // adding
         addItem(_indicator);
         addItem(_text_object);
+    }
+
+    /**
+     * Is CheckButton checked (boolean)
+     */
+    public boolean isChecked() {
+        return _indicator.getIndicatorMarker().isToggled();
+    }
+    public void setChecked(boolean value) {
+        _indicator.getIndicatorMarker().setToggled(value);
     }
 
     // style
