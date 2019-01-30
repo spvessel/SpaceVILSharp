@@ -587,7 +587,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             int bigOff = 0;
 
             for (TextPrinter tptmp : tpLines) {
-                if (tptmp == null || tptmp.texture == null) {
+                if (tptmp == null) {
                     // for (int p = 0; p < 4; p++)
                     //     for (int j = 0; j < lineHeigh; j++)
                     //         for (int i = 0; i < w; i++)
@@ -596,6 +596,12 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 //                    bigOff += lineHeigh * w * 4;
                     continue;
                 }
+
+                if (tptmp.texture == null) {
+                    bigOff += lineHeigh * w * 4;
+                    continue;
+                }
+
                 for (int p = 0; p < 4; p++) {
                     for (int j = 0; j < tptmp.heightTexture; j++) {
                         for (int i = 0; i < tptmp.widthTexture; i++) {

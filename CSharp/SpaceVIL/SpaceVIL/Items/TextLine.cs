@@ -86,10 +86,10 @@ namespace SpaceVIL
                     if (GetHeight() != height)
                         base.SetHeight(height);
 
-                    if (_letters.Count() == 0)
-                        return null;
                     if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
                         return null;
+                if (_letters.Count() == 0)
+                    return new TextPrinter(); //null;
                 if (flagBB)
                 {
                     //textPrt.WidthTexture = ;

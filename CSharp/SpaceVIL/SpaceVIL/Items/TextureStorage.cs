@@ -650,9 +650,14 @@ namespace SpaceVIL
 
                 foreach (TextPrinter tptmp in tpLines)
                 {
-                    if (tptmp == null || tptmp.Texture == null)
+                    if (tptmp == null)
                     {
                         //bigOff += lineHeigh * w * 4;
+                        continue;
+                    }
+                    if (tptmp.Texture == null)
+                    {
+                        bigOff += lineHeigh * w * 4;
                         continue;
                     }
                     

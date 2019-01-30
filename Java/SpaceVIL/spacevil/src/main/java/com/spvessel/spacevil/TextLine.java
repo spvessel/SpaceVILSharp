@@ -109,10 +109,11 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 super.setHeight(height);
 
             // List<TextPrinter> letTexturesList = new LinkedList<>();
-            if (_letters.size() == 0)
-                return null;
             if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
                 return null;
+            if (_letters.size() == 0) {
+                return new TextPrinter(); //null;
+            }
             if (flagBB)
             {
                 int bb_h = getHeight();

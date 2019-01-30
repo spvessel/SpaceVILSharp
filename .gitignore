@@ -202,3 +202,5 @@ Java/SpaceVIL/spacevil/.idea/modules/spacevil_main.iml
 Java/SpaceVIL/spacevil/src/main/java/com/spvessel/spacevil/View/ImageTest.java
 Java/SpaceVIL/spacevil/src/main/java/com/spvessel/spacevil/View/StopMenu.java
 Java/SpaceVIL/spacevil/src/main/java/com/spvessel/spacevil/View/InputDialog.java
+Java/SpaceVIL/spacevil/out/production/resources/shaders/fs_blur.glsl
+Java/SpaceVIL/spacevil/out/production/resources/shaders/fs_primitive.glsl
