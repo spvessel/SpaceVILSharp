@@ -53,8 +53,15 @@ public class InputTest extends ActiveWindow {
         ButtonCore bc = new ButtonCore("pizdec");
         bc.setSize(150,30);
         bc.eventMouseClick.add((sender, args) -> {
-            String text = tb.getText();
-            tb.setText(text + "\n456\n123");
+            String s = "    qwerty\n// tb.setTextMargin(new Indents(50, 30, 30, 30));// tb.setTextMargin(new Indents(50, 30, 30, 30));";
+            String text = ""; //tb.getText();
+//            s = tb.getText();
+            tb.setText(text + s);
+            System.out.println((s.toCharArray()[0] == " ".charAt(0)) + " " + s.toCharArray()[0]);
+            System.out.println((s.toCharArray()[1] == " ".charAt(0)) + " " + s.toCharArray()[1]);
+            System.out.println((s.toCharArray()[2] == " ".charAt(0)) + " " + s.toCharArray()[2]);
+            System.out.println((s.toCharArray()[3] == " ".charAt(0)) + " " + s.toCharArray()[3]);
+            System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " + s.toCharArray()[4]);
         });
 
         layout.addItem(bc);

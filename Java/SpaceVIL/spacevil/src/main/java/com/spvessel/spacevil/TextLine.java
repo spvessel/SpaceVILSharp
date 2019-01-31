@@ -125,11 +125,15 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 //                System.out.println(_parentAllowWidth + " " + bb_w);
                 ByteBuffer cacheBB = BufferUtils.createByteBuffer(bb_h * bb_w * 4);
 
-                int xFirstBeg = _letters.get(0).xBeg + _letters.get(0).xShift;
                 // _xpos = (int) alignShiftX + _lineXShift + getParent().getX() + xFirstBeg;
                 // _ypos = (int) alignShiftY + _lineYShift + getParent().getY();
-
+                int xFirstBeg; // = _letters.get(0).xBeg + _letters.get(0).xShift;
+//                System.out.println("first in line " + _letters.get(0).xShift + " " + _lineXShift + " " + xFirstBeg);
+//                System.out.println(_letters.get(0).xBeg + " " + _letters.get(0).name);
+//                int inc = 0;
                 for (Alphabet.ModifyLetter modL : _letters) {
+//                for (int ii = 0; ii < _letters.size(); ii++) {
+//                    Alphabet.ModifyLetter modL = _letters.get(ii);
 //                    inc++;
                     // int x = modL.xBeg + (int) alignShiftX + _lineXShift + modL.xShift;
                     // int y = (modL.yBeg - _minFontY) + (int) alignShiftY + _lineYShift;
@@ -140,12 +144,6 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                     // continue;
                     // if (x > _parentAllowWidth)
                     // break;
-
-                    byte[] bitmap = modL.getArr();
-                    if (bitmap == null) {
-                        continue;
-                    }
-
 
                     int widthFrom = 0;
                     int widthTo = modL.width;
@@ -158,8 +156,17 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                     {
 //                        firstVisLet = inc;
                         widthFrom = Math.abs(modL.xBeg + modL.xShift + _lineXShift);
-                        xFirstBeg = modL.xBeg + modL.xShift + widthFrom; //modL.xBeg + modL.xShift;
                     }
+
+                    xFirstBeg = -_lineXShift;
+
+//                    if (inc == 0) {
+//                        xFirstBeg = modL.xBeg + modL.xShift + widthFrom; //modL.xBeg + modL.xShift;
+//                        inc++;
+//                        if (modL.xBeg + modL.xShift + _lineXShift > 0)
+//                            xFirstBeg += modL.xBeg + modL.xShift + _lineXShift;
+//                        System.out.println((modL.xBeg + modL.xShift) + " " + _lineXShift + " " + xFirstBeg + " " + modL.name);
+//                    }
 
                     if (modL.xBeg + modL.xShift - xFirstBeg > _parentAllowWidth) { //После разрешенной области + _lineXShift
 //                        if (_letters.get(0).name.equals("7")) System.out.println();
@@ -169,6 +176,17 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                         widthTo = _parentAllowWidth - (modL.xBeg + modL.xShift + widthFrom - xFirstBeg); // + _lineXShift
                     }
 //                    if (_letters.get(0).name.equals("7")) System.out.println("is visible");
+
+                    byte[] bitmap = modL.getArr();
+                    if (bitmap == null) { //?spec let
+//                        if (modL.isSpec) {
+//                            modL.height = 1;
+//                            modL.yBeg = fontDims[1];
+//                            bitmap = new byte[4 * modL.width * 1];
+//                        } else {
+                            continue;
+//                        }
+                    }
 
                     // int w = letTx.letWidth;
                     // int h = letTx.letHeight;
@@ -184,10 +202,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                     // System.err.println(bb_w + " " + bb_h + " " + (modL.width + modL.xBeg +
                     // modL.xShift - xFirstBeg) + " "
                     // + (modL.height + modL.yBeg - _minFontY) + " " + offset);
-
                     for (int j = 0; j < modL.height; j++) {
                         for (int i = widthFrom; i < widthTo; i++) {
-                            //System.out.print(cacheBB.get(3 + offset + j * 4 + i * (bb_h * 4)) + " ");
                             int b1 = bitmap[3 + j * 4 + i * (modL.height * 4)] & 0xFF;
                             int b2 = cacheBB.get(3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)) & 0xFF;
                             if (b1 < b2)

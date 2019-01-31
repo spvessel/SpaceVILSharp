@@ -288,7 +288,7 @@ namespace SpaceVIL
 
                     if (currLet.isSpec)
                     {
-                        x0 = UpdateSpecX0(currLet, x0);
+                        if (prevLet != null) x0 = UpdateSpecX0(currLet, x0);
                     }
                     else
                     {

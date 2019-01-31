@@ -91,8 +91,9 @@ public class SettingsTest extends ActiveWindow
             btn1.setWidthPolicy(SizePolicy.FIXED);
             btn1.eventMouseClick.add( (sender, args) ->
             {
-                System.out.println(btn1.getItemName());
-                WindowLayoutBox.tryShow("FlowTest");
+//                System.out.println(btn1.getItemName());
+//                WindowLayoutBox.tryShow("FlowTest");
+                chb.setChecked(!chb.isChecked());
             });
 
             ButtonCore btn2 = new ButtonCore();

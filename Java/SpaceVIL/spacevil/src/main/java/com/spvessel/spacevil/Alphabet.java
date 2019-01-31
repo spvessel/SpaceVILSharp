@@ -92,7 +92,7 @@ class Alphabet {
             currLet = letters.get(c);
 
             if (currLet.isSpec) {
-                x0 = updateSpecX0(currLet, x0);
+                if (prevLet != null) x0 = updateSpecX0(currLet, x0);
             } else {
                 if (prevLet != null) {
                     // int ly0 = prevLet.minY;
