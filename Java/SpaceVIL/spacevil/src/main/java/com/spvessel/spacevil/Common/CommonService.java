@@ -11,6 +11,17 @@ public final class CommonService {
     private CommonService() {
     }
 
+    private static String _version = "0.3.1-ALPHA - January 2019";
+
+    public static String getSpaceVILInfo() {
+
+        String info = "SpaceVIL version: " + _version + "\n" + "Platform: JVM \n" + "OS type: "
+                + ((getOSType() == OSType.WINDOWS) ? "Windows" : (getOSType() == OSType.MAC) ? "Mac OS X" : "Linux")
+                + "\n";
+
+        return info;
+    }
+
     public static String ClipboardTextStorage = "";
     public final static Lock GlobalLocker = new ReentrantLock();
 
