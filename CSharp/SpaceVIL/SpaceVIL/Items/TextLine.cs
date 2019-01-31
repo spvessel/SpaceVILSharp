@@ -103,16 +103,10 @@ namespace SpaceVIL
 
                     byte[] cacheBB = new byte[bb_h * bb_w * 4];
 
-                    int xFirstBeg = _letters[0].xBeg + _letters[0].xShift;
+                    int xFirstBeg; // = _letters[0].xBeg + _letters[0].xShift;
 
                     foreach (FontEngine.ModifyLetter modL in _letters)
                     {
-
-                        byte[] bitmap = modL.getArr();
-                        if (bitmap == null)
-                        {
-                            continue;
-                        }
 
                         int widthFrom = 0;
                         int widthTo = modL.width;
@@ -124,8 +118,9 @@ namespace SpaceVIL
                         if (modL.xBeg + modL.xShift + _lineXShift <= 0)
                         {
                             widthFrom = Math.Abs(modL.xBeg + modL.xShift + _lineXShift);
-                            xFirstBeg = modL.xBeg + modL.xShift + widthFrom; //modL.xBeg + modL.xShift;
                         }
+
+                        xFirstBeg = -_lineXShift; // modL.xBeg + modL.xShift + widthFrom; //modL.xBeg + modL.xShift;
 
                         if (modL.xBeg + modL.xShift - xFirstBeg > _parentAllowWidth)
                         { //После разрешенной области + _lineXShift
@@ -134,6 +129,12 @@ namespace SpaceVIL
                         if (modL.xBeg + modL.xShift + modL.width - xFirstBeg >= _parentAllowWidth)
                         { // + _lineXShift
                             widthTo = _parentAllowWidth - (modL.xBeg + modL.xShift + widthFrom - xFirstBeg); // + _lineXShift
+                        }
+
+                        byte[] bitmap = modL.getArr();
+                        if (bitmap == null)
+                        {
+                            continue;
                         }
 
                         int offset = (modL.yBeg - fontDims[1]) * bb_w * 4 + (modL.xBeg + modL.xShift + widthFrom - xFirstBeg) * 4;
