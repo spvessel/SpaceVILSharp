@@ -9,7 +9,7 @@ import com.spvessel.spacevil.*;
 public class InputTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 250, 400, false);
+        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 250, 400, true);
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
         setHandler(Handler);
 

@@ -1025,11 +1025,17 @@ namespace SpaceVIL
                 Glfw.WaitEventsTimeout(_interval);
                 // Glfw.PollEvents();
                 // Glfw.WaitEvents();
-                glClearColor(0, 0, 0, 0);
-                Update();
-                _handler.Swap();
+                // glClearColor(0, 0, 0, 0);
+
+                if (!EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize) 
+                // && _handler.GetLayout().IsBorderHidden
+                )
+                {
+                    Update();
+                    _handler.Swap();
+                    _bounds.Clear();
+                }
                 flag_move = true;
-                _bounds.Clear();
             }
             _primitive.DeleteShader();
             _texture.DeleteShader();

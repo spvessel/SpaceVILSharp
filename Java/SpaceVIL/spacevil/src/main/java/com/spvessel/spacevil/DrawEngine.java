@@ -275,7 +275,7 @@ final class DrawEngine {
                 position(window, xpos, ypos);
             }
         });
-        _handler.setCallbackFramebuffer(new GLFWFramebufferSizeCallback(){
+        _handler.setCallbackFramebuffer(new GLFWFramebufferSizeCallback() {
             @Override
             public void invoke(long window, int w, int h) {
                 framebuffer(window, w, h);
@@ -288,13 +288,13 @@ final class DrawEngine {
             }
         });
     }
-    private void refresh(long window)
-    {
+
+    private void refresh(long window) {
         update();
         _handler.swap();
     }
-    private void framebuffer(long window, int w, int h)
-    {
+
+    private void framebuffer(long window, int w, int h) {
         _framebufferWidth = w;
         _framebufferHeight = h;
 
@@ -305,6 +305,7 @@ final class DrawEngine {
         _fbo.genFBOTexture(w, h);
         _fbo.unbindFBO();
     }
+
     void minimizeWindow() {
         engineEvent.setEvent(InputEventType.WINDOW_MINIMIZE);
         glfwIconifyWindow(_handler.getWindowId());
@@ -369,12 +370,12 @@ final class DrawEngine {
         _handler.getLayout().setHeight(height);
 
         // if (engineEvent.lastEvent().contains(InputEventType.WINDOW_RESTORE))
-        //     return;
+        // return;
 
         // if (!_handler.getLayout().isBorderHidden) {
-        //     // glClearColor(0, 0, 0, 0);
-        //     update();
-        //     _handler.swap();
+        // // glClearColor(0, 0, 0, 0);
+        // update();
+        // _handler.swap();
         // }
     }
 
@@ -974,7 +975,6 @@ final class DrawEngine {
         _handler.gVAO = glGenVertexArrays();
         glBindVertexArray(_handler.gVAO);
         focus(_handler.getWindowId(), true);
-        
 
         IntBuffer w = BufferUtils.createIntBuffer(1);
         IntBuffer h = BufferUtils.createIntBuffer(1);
@@ -994,11 +994,13 @@ final class DrawEngine {
             // // glfwPollEvents();
 
             // glClearColor(0, 0, 0, 0);
-            update();
-            _handler.swap();
+            if (!engineEvent.lastEvent().contains(InputEventType.WINDOW_RESIZE)) {
 
+                update();
+                _handler.swap();
+                _bounds.clear();
+            }
             flag_move = true;
-            _bounds.clear();
         }
         _primitive.deleteShader();
         _texture.deleteShader();
@@ -1362,8 +1364,7 @@ final class DrawEngine {
         store.bind(fbo_texture);
         store.sendUniformSample2D(_blur);
         store.sendUniform1fv(_blur, "weights", 11, weights);
-        store.sendUniform2fv(_blur, "frame",
-                new float[] { _framebufferWidth, _framebufferHeight });
+        store.sendUniform2fv(_blur, "frame", new float[] { _framebufferWidth, _framebufferHeight });
         store.sendUniform1f(_blur, "res", (res * 1f / 10));
         store.sendUniform2fv(_blur, "point", xy);
         store.sendUniform2fv(_blur, "size", wh);
