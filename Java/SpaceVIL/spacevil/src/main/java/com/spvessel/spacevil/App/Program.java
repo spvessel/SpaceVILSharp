@@ -1,8 +1,7 @@
 package com.spvessel.spacevil.App;
 
-import com.spvessel.spacevil.View.FlowTest;
-import com.spvessel.spacevil.WindowLayoutBox;
 import com.spvessel.spacevil.View.*;
+import com.spvessel.spacevil.*;
 
 public class Program {
     public static void main(String[] args) {

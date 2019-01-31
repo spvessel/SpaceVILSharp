@@ -21,7 +21,7 @@ using static GL.LGL.OpenLGL;
 #elif WINDOWS
 using static GL.WGL.OpenWGL;
 #elif LINUX
-using static GL.WGL.OpenLGL;
+using static GL.LGL.OpenLGL;
 #else
 using static GL.WGL.OpenWGL;
 #endif
@@ -256,6 +256,13 @@ namespace SpaceVIL
             _handler.SetCallbackFocus(Focus);
             _handler.SetCallbackResize(Resize);
             _handler.SetCallbackFramebuffer(Framebuffer);
+            _handler.SetCallbackRefresh(Refresh);
+        }
+
+        private void Refresh(Glfw.Window glfwwnd)
+        {
+            Update();
+            _handler.Swap();
         }
 
         void Framebuffer(Glfw.Window window, int w, int h)
@@ -338,12 +345,12 @@ namespace SpaceVIL
             _handler.GetLayout().SetWidth(width);
             _handler.GetLayout().SetHeight(height);
 
-            if (!_handler.GetLayout().IsBorderHidden)
-            {
-                glClearColor(0, 0, 0, 0);
-                Update();
-                _handler.Swap();
-            }
+            // if (!_handler.GetLayout().IsBorderHidden)
+            // {
+            //     glClearColor(0, 0, 0, 0);
+            //     Update();
+            //     _handler.Swap();
+            // }
         }
 
         internal void SetWindowSize(int w, int h)
@@ -1419,10 +1426,14 @@ namespace SpaceVIL
             CheckOutsideBorders(text as IBaseItem);
 
             int bb_h = textPrt.HeightTexture, bb_w = textPrt.WidthTexture;
-            float i_x0 = ((float)textPrt.XTextureShift / (float)_framebufferWidth * 2.0f) - 1.0f;
-            float i_y0 = ((float)textPrt.YTextureShift / (float)_framebufferHeight * 2.0f - 1.0f) * (-1.0f);
-            float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w/* * 0.9f*/) / (float)_framebufferWidth * 2.0f) - 1.0f;
-            float i_y1 = (((float)textPrt.YTextureShift + (float)bb_h) / (float)_framebufferHeight * 2.0f - 1.0f) * (-1.0f);
+            float i_x0 = ((float)textPrt.XTextureShift / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y0 = ((float)textPrt.YTextureShift / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w/* * 0.9f*/) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)textPrt.YTextureShift + (float)bb_h) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            // float i_x0 = ((float)textPrt.XTextureShift / (float)_framebufferWidth * 2.0f) - 1.0f;
+            // float i_y0 = ((float)textPrt.YTextureShift / (float)_framebufferHeight * 2.0f - 1.0f) * (-1.0f);
+            // float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w/* * 0.9f*/) / (float)_framebufferWidth * 2.0f) - 1.0f;
+            // float i_y1 = (((float)textPrt.YTextureShift + (float)bb_h) / (float)_framebufferHeight * 2.0f - 1.0f) * (-1.0f);
             float[] argb = {
                 (float) text.GetForeground().R / 255.0f,
                 (float) text.GetForeground().G / 255.0f,
@@ -1523,10 +1534,10 @@ namespace SpaceVIL
                 return;
 
             int w = image.GetImageWidth(), h = image.GetImageHeight();
-            float i_x0 = ((float)image.GetX() / (float)_framebufferWidth * 2.0f) - 1.0f;
-            float i_y0 = ((float)image.GetY() / (float)_framebufferHeight * 2.0f - 1.0f) * (-1.0f);
-            float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)_framebufferWidth * 2.0f) - 1.0f;
-            float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)_framebufferHeight * 2.0f - 1.0f) * (-1.0f);
+            float i_x0 = ((float)image.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y0 = ((float)image.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
             _texture.UseShader();
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);

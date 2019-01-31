@@ -34,6 +34,7 @@ namespace SpaceVIL
         Glfw.CharModsFunc KeyInputText;
         Glfw.WindowFocusFunc WindowFocusCallback;
         Glfw.FramebufferSizeFunc FramebufferCallback;
+        Glfw.WindowRefreshFunc WindowRefreshCallback;
         ///////////////////////////////////////////////
 
         internal bool BorderHidden;
@@ -77,7 +78,7 @@ namespace SpaceVIL
 
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.OpenglProfile, Glfw.OpenGLProfile.Core);
-            Glfw.WindowHint(Glfw.Hint.Samples, 8);
+            Glfw.WindowHint(Glfw.Hint.Samples, _w_layout._msaa);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 3);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
 
@@ -143,6 +144,7 @@ namespace SpaceVIL
             WindowFocusCallback = null;
             ResizeCallback = null;
             FramebufferCallback = null;
+            WindowRefreshCallback = null;
         }
 
         internal void SetCursorType(Glfw.CursorType type)
@@ -238,6 +240,11 @@ namespace SpaceVIL
         {
             FramebufferCallback = function;
             Glfw.SetFramebufferSizeCallback(_window, FramebufferCallback);
+        }
+        internal void SetCallbackRefresh(Glfw.WindowRefreshFunc function)
+        {
+            WindowRefreshCallback = function;
+            Glfw.SetWindowRefreshCallback(_window, WindowRefreshCallback);
         }
 
         internal void SetOpacity(float level)
