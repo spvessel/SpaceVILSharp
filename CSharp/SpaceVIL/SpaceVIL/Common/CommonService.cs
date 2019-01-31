@@ -8,6 +8,35 @@ namespace SpaceVIL.Common
 {
     public static class CommonService
     {
+        private static String _version = "0.3.1-ALPHA - January 2019";
+
+#if STANDARD
+    private static String _platform = "Standard";
+#else
+    private static String _platform = "Core";
+#endif
+
+        public static String GetSpaceVILInfo()
+        {
+#if LINUX
+                return "SpaceVIL version: " + _version + "\n"
+                + "Platform: .Net " + _platform + "\n"
+                + "OS type: Linux\n";
+#elif WINDOWS
+                return "SpaceVIL version: " + _version + "\n"
+                + "Platform: .Net " + _platform + "\n"
+                + "OS type: Windows\n";
+#elif MAC
+                return "SpaceVIL version: " + _version + "\n"
+                + "Platform: .Net " + _platform + "\n"
+                + "OS type: Mac OS X\n";
+#else
+            return "SpaceVIL version: " + _version + "\n"
+                + "Platform: .Net " + _platform + "\n"
+                + "OS type: Windows\n";
+#endif
+        }
+
         public static String ClipboardTextStorage = String.Empty;
         internal static readonly object GlobalLocker = new object();
 
@@ -19,7 +48,7 @@ namespace SpaceVIL.Common
 #elif MAC
                 private const SpaceVIL.Core.OSType _os_type = SpaceVIL.Core.OSType.Mac;
 #else
-                private const SpaceVIL.Core.OSType _os_type = SpaceVIL.Core.OSType.Windows;
+        private const SpaceVIL.Core.OSType _os_type = SpaceVIL.Core.OSType.Windows;
 #endif
 
         public static SpaceVIL.Core.OSType GetOSType()
