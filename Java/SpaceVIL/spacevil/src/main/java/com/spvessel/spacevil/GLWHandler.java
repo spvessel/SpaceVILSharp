@@ -37,6 +37,7 @@ final class GLWHandler {
     private GLFWCharModsCallback keyInputTextCallback;
     private GLFWWindowFocusCallback windowFocusCallback;
     private GLFWFramebufferSizeCallback framebufferCallback;
+    private GLFWWindowRefreshCallback windowRefreshCallback;
     ///////////////////////////////////////////////
 
     Boolean borderHidden;
@@ -79,7 +80,7 @@ final class GLWHandler {
 
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_SAMPLES, 8);
+        glfwWindowHint(GLFW_SAMPLES, _w_layout._msaa.getValue());
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -166,6 +167,7 @@ final class GLWHandler {
         windowFocusCallback = null;
         resizeCallback = null;
         framebufferCallback = null;
+        windowRefreshCallback = null;
     }
 
     void setCursorType(int type) {
@@ -259,6 +261,11 @@ final class GLWHandler {
     void setCallbackFramebuffer(GLFWFramebufferSizeCallback function) {
         framebufferCallback = function;
         glfwSetFramebufferSizeCallback(_window, framebufferCallback);
+    }
+    
+    void setCallbackRefresh(GLFWWindowRefreshCallback function) {
+        windowRefreshCallback = function;
+        glfwSetWindowRefreshCallback(_window, windowRefreshCallback);
     }
 
     void setHidden(Boolean value) {

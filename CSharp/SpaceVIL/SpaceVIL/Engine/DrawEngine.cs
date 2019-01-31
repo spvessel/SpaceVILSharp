@@ -256,6 +256,13 @@ namespace SpaceVIL
             _handler.SetCallbackFocus(Focus);
             _handler.SetCallbackResize(Resize);
             _handler.SetCallbackFramebuffer(Framebuffer);
+            _handler.SetCallbackRefresh(Refresh);
+        }
+
+        private void Refresh(Glfw.Window glfwwnd)
+        {
+            Update();
+            _handler.Swap();
         }
 
         void Framebuffer(Glfw.Window window, int w, int h)
@@ -338,12 +345,12 @@ namespace SpaceVIL
             _handler.GetLayout().SetWidth(width);
             _handler.GetLayout().SetHeight(height);
 
-            if (!_handler.GetLayout().IsBorderHidden)
-            {
-                glClearColor(0, 0, 0, 0);
-                Update();
-                _handler.Swap();
-            }
+            // if (!_handler.GetLayout().IsBorderHidden)
+            // {
+            //     glClearColor(0, 0, 0, 0);
+            //     Update();
+            //     _handler.Swap();
+            // }
         }
 
         internal void SetWindowSize(int w, int h)

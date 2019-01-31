@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL.Core
 {
+    public enum MSAA
+    {
+        No = 0,
+        MSAA2x = 2,
+        MSAA4x = 4,
+        MSAA8x = 8
+    }
+
     public enum OSType
     {
         Windows,

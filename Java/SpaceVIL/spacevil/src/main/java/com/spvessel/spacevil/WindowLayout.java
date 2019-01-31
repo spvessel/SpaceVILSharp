@@ -6,6 +6,7 @@ import com.spvessel.spacevil.Core.Geometry;
 import com.spvessel.spacevil.Core.InterfaceCommonMethod;
 import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Decorations.Indents;
+import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.OSType;
 
 import java.util.*;
@@ -424,6 +425,13 @@ public final class WindowLayout {
     public boolean isOutsideClickClosable;
     public boolean isFocused;
     public boolean isMaximized = false;
+
+    MSAA _msaa = MSAA.MSAA_4X;
+
+    public void setAntiAliasingQuality(MSAA msaa)
+    {
+        _msaa = msaa;
+    }
 
     public void setFocus(Boolean value) {
         if (isFocused == value)

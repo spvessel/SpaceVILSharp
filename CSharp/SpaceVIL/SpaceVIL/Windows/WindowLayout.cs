@@ -390,6 +390,13 @@ namespace SpaceVIL
             }
         }
 
+        internal MSAA _msaa = MSAA.MSAA4x;
+        
+        public void SetAntiAliasingQuality(MSAA msaa)
+        {
+            _msaa = msaa;
+        }
+
         public bool IsDialog { get; set; }
         public bool IsClosed { get; set; }
         public bool IsHidden { get; set; }

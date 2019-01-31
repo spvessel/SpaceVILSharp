@@ -281,9 +281,19 @@ final class DrawEngine {
                 framebuffer(window, w, h);
             }
         });
+        _handler.setCallbackRefresh(new GLFWWindowRefreshCallback() {
+            @Override
+            public void invoke(long window) {
+                refresh(window);
+            }
+        });
     }
-
-    void framebuffer(long window, int w, int h)
+    private void refresh(long window)
+    {
+        update();
+        _handler.swap();
+    }
+    private void framebuffer(long window, int w, int h)
     {
         _framebufferWidth = w;
         _framebufferHeight = h;
@@ -358,14 +368,14 @@ final class DrawEngine {
         _handler.getLayout().setWidth(width);
         _handler.getLayout().setHeight(height);
 
-        if (engineEvent.lastEvent().contains(InputEventType.WINDOW_RESTORE))
-            return;
+        // if (engineEvent.lastEvent().contains(InputEventType.WINDOW_RESTORE))
+        //     return;
 
-        if (!_handler.getLayout().isBorderHidden) {
-            glClearColor(0, 0, 0, 0);
-            update();
-            _handler.swap();
-        }
+        // if (!_handler.getLayout().isBorderHidden) {
+        //     // glClearColor(0, 0, 0, 0);
+        //     update();
+        //     _handler.swap();
+        // }
     }
 
     void setWindowSize(int w, int h) {
@@ -983,7 +993,7 @@ final class DrawEngine {
             // glfwWaitEvents();
             // // glfwPollEvents();
 
-            glClearColor(0, 0, 0, 0);
+            // glClearColor(0, 0, 0, 0);
             update();
             _handler.swap();
 

@@ -1,6 +1,7 @@
 package com.spvessel.spacevil.View;
 
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 import com.spvessel.spacevil.TextArea;
 import com.spvessel.spacevil.*;
@@ -8,8 +9,8 @@ import com.spvessel.spacevil.*;
 public class InputTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 250, 400, true);
-
+        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 250, 400, false);
+        // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
         setHandler(Handler);
 
         Handler.setMinSize(50, 100);
