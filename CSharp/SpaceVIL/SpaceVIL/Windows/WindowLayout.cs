@@ -74,7 +74,7 @@ namespace SpaceVIL
             IsClosed = true;
             IsHidden = false;
             IsResizeble = true;
-            IsCentered = true;
+            IsCentered = false;
             IsFocusable = true;
             IsAlwaysOnTop = false;
             IsOutsideClickClosable = false;

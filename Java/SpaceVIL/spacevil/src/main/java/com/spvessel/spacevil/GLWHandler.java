@@ -119,12 +119,13 @@ final class GLWHandler {
             throw new SpaceVILException("Create window fails - " + getLayout().getWindowTitle());
         }
         glfwMakeContextCurrent(_window);
-
+        
         long monitor = glfwGetPrimaryMonitor();
         GLFWVidMode vidmode = glfwGetVideoMode(monitor);
         int width = vidmode.width();
         int height = vidmode.height();
         System.out.println("VIDSIZE: " + width + " " + height);
+        System.out.println("WSIZE: " + _w_layout.getWidth() + " " + _w_layout.getHeight());
 
         IntBuffer w = BufferUtils.createIntBuffer(1);
         IntBuffer h = BufferUtils.createIntBuffer(1);
