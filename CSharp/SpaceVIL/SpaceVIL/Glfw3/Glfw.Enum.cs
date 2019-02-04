@@ -447,7 +447,8 @@ namespace Glfw3
             /// hint will have no effect.</para>
             /// </remarks>
             ContextCreationApi = 0x0002200b,
-            TranspatentFramebuffer = 0x0002000A
+            TranspatentFramebuffer = 131082,
+            CocoaRetinaFramebuffer = 143361
         }
 
         /// <seealso cref="Hint.OpenglProfile"/>
