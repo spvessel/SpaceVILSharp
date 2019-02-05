@@ -480,8 +480,7 @@ namespace SpaceVIL
 
         public void SetIcon(Image icon_big, Image icon_small)
         {
-            engine.SetBigIcon(icon_big);
-            engine.SetSmallIcon(icon_small);
+            engine.SetIcons(icon_big, icon_small);
         }
 
         public void SetHidden(bool value)

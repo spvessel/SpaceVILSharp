@@ -107,8 +107,8 @@ final class DrawEngine {
 
     private ByteBuffer createByteImage(BufferedImage image) {
         List<Byte> bmp = new LinkedList<Byte>();
-        for (int i = 0; i < image.getWidth(); i++) {
-            for (int j = 0; j < image.getHeight(); j++) {
+        for (int j = 0; j < image.getHeight(); j++) {
+            for (int i = 0; i < image.getWidth(); i++) {
                 byte[] bytes = ByteBuffer.allocate(4).putInt(image.getRGB(i, j)).array();
                 bmp.add(bytes[1]);
                 bmp.add(bytes[2]);

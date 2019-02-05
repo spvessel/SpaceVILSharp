@@ -113,54 +113,40 @@ namespace SpaceVIL
         private Glfw.Image _icon_big;
         private Glfw.Image _icon_small;
 
-        internal void SetBigIcon(Image icon)
+        private byte[] GetImagePixels(Image icon)
+        {
+            if (icon == null)
+                return null;
+
+            List<byte> _map = new List<byte>();
+            Bitmap bmp = new Bitmap(icon);
+            for (int j = 0; j < icon.Height; j++)
+            {
+                for (int i = 0; i < icon.Width; i++)
+                {
+                    Color pixel = bmp.GetPixel(i, j);
+                    _map.Add(pixel.R);
+                    _map.Add(pixel.G);
+                    _map.Add(pixel.B);
+                    _map.Add(pixel.A);
+                }
+            }
+            return _map.ToArray();
+        }
+
+        internal void SetIcons(Image ibig, Image ismall)
         {
             if (_icon_big.Pixels == null)
             {
-                if (icon == null)
-                    return;
-
-                List<byte> _map = new List<byte>();
-                Bitmap bmp = new Bitmap(icon);
-                _icon_big.Width = icon.Width;
-                _icon_big.Height = icon.Height;
-                for (int i = 0; i < icon.Width; i++)
-                {
-                    for (int j = 0; j < icon.Height; j++)
-                    {
-                        Color pixel = bmp.GetPixel(i, j);
-                        _map.Add(pixel.R);
-                        _map.Add(pixel.G);
-                        _map.Add(pixel.B);
-                        _map.Add(pixel.A);
-                    }
-                }
-                _icon_big.Pixels = _map.ToArray();
+                _icon_big.Width = ibig.Width;
+                _icon_big.Height = ibig.Height;
+                _icon_big.Pixels = GetImagePixels(ibig);
             }
-        }
-        internal void SetSmallIcon(Image icon)
-        {
             if (_icon_small.Pixels == null)
             {
-                if (icon == null)
-                    return;
-
-                List<byte> _map = new List<byte>();
-                Bitmap bmp = new Bitmap(icon);
-                _icon_small.Width = icon.Width;
-                _icon_small.Height = icon.Height;
-                for (int i = 0; i < icon.Width; i++)
-                {
-                    for (int j = 0; j < icon.Height; j++)
-                    {
-                        Color pixel = bmp.GetPixel(i, j);
-                        _map.Add(pixel.R);
-                        _map.Add(pixel.G);
-                        _map.Add(pixel.B);
-                        _map.Add(pixel.A);
-                    }
-                }
-                _icon_small.Pixels = _map.ToArray();
+                _icon_small.Width = ismall.Width;
+                _icon_small.Height = ismall.Height;
+                _icon_small.Pixels = GetImagePixels(ismall);
             }
         }
 
@@ -1027,7 +1013,7 @@ namespace SpaceVIL
                 // Glfw.WaitEvents();
                 // glClearColor(0, 0, 0, 0);
 
-                if (!EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize) 
+                if (!EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize)
                 // && _handler.GetLayout().IsBorderHidden
                 )
                 {

@@ -31,8 +31,8 @@ public class MainWindow extends ActiveWindow {
         BufferedImage iBig = null;
         BufferedImage iSmall = null;
         try {
-            iBig = ImageIO.read(new File("D:\\icon_big.png"));
-            iSmall = ImageIO.read(new File("D:\\icon_small.png"));
+            iBig = ImageIO.read(new File("D:\\Source\\GitHub\\Game2048\\src\\main\\resources\\Game2048.png"));
+            iSmall = ImageIO.read(new File("D:\\Source\\GitHub\\Game2048\\src\\main\\resources\\Game2048.png"));
         } catch (IOException e) {
             System.out.println("load icons fail");
         }
@@ -40,6 +40,7 @@ public class MainWindow extends ActiveWindow {
             Handler.setIcon(iBig, iSmall);
 
         TitleBar title = new TitleBar("Main King Window - JAVA");
+        // title.setIcon(iBig, 20, 20);
         Handler.addItem(title);
 
         Grid grid = new Grid(1, 7);
