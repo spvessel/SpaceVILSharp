@@ -115,15 +115,14 @@ public class TextArea extends Prototype {
     private void updateVListArea() {
         // vertical slider
         float v_value = vScrollBar.slider.getCurrentValue();
-        int v_offset = (int) ((float) (v_size * v_value) / 100.0f);
+        int v_offset = (int) Math.round((float) (v_size * v_value) / 100.0f);
         _area.setScrollYOffset(-v_offset);
     }
 
     private void updateHListArea() {
         // horizontal slider
         float h_value = hScrollBar.slider.getCurrentValue();
-// System.out.println(h_value);
-        int h_offset = (int) ((float) (h_size * h_value) / 100.0f);
+        int h_offset = (int) Math.round((float) (h_size * h_value) / 100.0f);
         _area.setScrollXOffset(-h_offset);
     }
 
@@ -207,7 +206,6 @@ public class TextArea extends Prototype {
         float step_count = (float) total_invisible_size / (float) _area.getScrollXStep();
         hScrollBar.slider.setStep((hScrollBar.slider.getMaxValue() - hScrollBar.slider.getMinValue()) / step_count);
         hScrollBar.slider.setCurrentValue((100.0f / total_invisible_size) * Math.abs(_area.getScrollXOffset()));
-        System.out.println((100.0f / total_invisible_size) * Math.abs(_area.getScrollXOffset()) + " " + _area.getScrollXOffset() + " " + total_invisible_size);
     }
 
     /**

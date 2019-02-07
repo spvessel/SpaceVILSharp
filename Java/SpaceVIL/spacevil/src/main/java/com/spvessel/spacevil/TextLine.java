@@ -119,7 +119,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         }
     }
 
-    boolean isBigExist = false;
+    private boolean isBigExist = false;
 
     private void makeBigArr() { 
         Font fontBig = new Font(getFont().getName(), getFont().getStyle(), (int) (getFont().getSize() * _screenScale));
@@ -222,35 +222,35 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 
                     cacheBB = makeSomeBig(bb_h, bb_w, bigMinY, 0, _letters.size() - 1); //, fli[0], fli[1]);
                 }
-                else 
-                for (Alphabet.ModifyLetter modL : _letters) {
+                else {
+                    for (Alphabet.ModifyLetter modL : _letters) {
 //                for (int ii = 0; ii < _letters.size(); ii++) {
 //                    Alphabet.ModifyLetter modL = _letters.get(ii);
 //                    inc++;
-                    // int x = modL.xBeg + (int) alignShiftX + _lineXShift + modL.xShift;
-                    // int y = (modL.yBeg - _minFontY) + (int) alignShiftY + _lineYShift;
+                        // int x = modL.xBeg + (int) alignShiftX + _lineXShift + modL.xShift;
+                        // int y = (modL.yBeg - _minFontY) + (int) alignShiftY + _lineYShift;
 
-                    // x += getParent().getX();
-                    // y += getParent().getY();
-                    // if (x < 0)
-                    // continue;
-                    // if (x > _parentAllowWidth)
-                    // break;
+                        // x += getParent().getX();
+                        // y += getParent().getY();
+                        // if (x < 0)
+                        // continue;
+                        // if (x > _parentAllowWidth)
+                        // break;
 
-                    int widthFrom = 0;
-                    int widthTo = modL.width;
+                        int widthFrom = 0;
+                        int widthTo = modL.width;
 //                    if (_letters.get(0).name.equals("7")) System.out.print(modL.name + " ");
-                    if (modL.xBeg + modL.xShift + modL.width + _lineXShift < 0) { //До разрешенной области
+                        if (modL.xBeg + modL.xShift + modL.width + _lineXShift < 0) { //До разрешенной области
 //                        if (_letters.get(0).name.equals("7")) System.out.println();
-                        continue;
-                    }
-                    if (modL.xBeg + modL.xShift + _lineXShift <= 0) //(firstVisLet == -1)
-                    {
+                            continue;
+                        }
+                        if (modL.xBeg + modL.xShift + _lineXShift <= 0) //(firstVisLet == -1)
+                        {
 //                        firstVisLet = inc;
-                        widthFrom = Math.abs(modL.xBeg + modL.xShift + _lineXShift);
-                    }
+                            widthFrom = Math.abs(modL.xBeg + modL.xShift + _lineXShift);
+                        }
 
-                    xFirstBeg = -_lineXShift;
+                        xFirstBeg = -_lineXShift;
 
 //                    if (inc == 0) {
 //                        xFirstBeg = modL.xBeg + modL.xShift + widthFrom; //modL.xBeg + modL.xShift;
@@ -260,17 +260,17 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 //                        System.out.println((modL.xBeg + modL.xShift) + " " + _lineXShift + " " + xFirstBeg + " " + modL.name);
 //                    }
 
-                    if (modL.xBeg + modL.xShift - xFirstBeg > _parentAllowWidth) { //После разрешенной области + _lineXShift
+                        if (modL.xBeg + modL.xShift - xFirstBeg > _parentAllowWidth) { //После разрешенной области + _lineXShift
 //                        if (_letters.get(0).name.equals("7")) System.out.println();
-                        break;
-                    }
-                    if (modL.xBeg + modL.xShift + modL.width - xFirstBeg >= _parentAllowWidth) { // + _lineXShift
-                        widthTo = _parentAllowWidth - (modL.xBeg + modL.xShift + widthFrom - xFirstBeg); // + _lineXShift
-                    }
+                            break;
+                        }
+                        if (modL.xBeg + modL.xShift + modL.width - xFirstBeg >= _parentAllowWidth) { // + _lineXShift
+                            widthTo = _parentAllowWidth - (modL.xBeg + modL.xShift + widthFrom - xFirstBeg); // + _lineXShift
+                        }
 //                    if (_letters.get(0).name.equals("7")) System.out.println("is visible");
 
-                    byte[] bitmap = modL.getArr();
-                    if (bitmap == null) { //?spec let
+                        byte[] bitmap = modL.getArr();
+                        if (bitmap == null) { //?spec let
 //                        if (modL.isSpec) {
 //                            modL.height = 1;
 //                            modL.yBeg = fontDims[1];
@@ -278,43 +278,44 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 //                        } else {
                             continue;
 //                        }
-                    }
-
-                    // int w = letTx.letWidth;
-                    // int h = letTx.letHeight;
-
-                    // x -= xpos;
-                    // y -= _ypos;
-
-                    int offset = (modL.yBeg - fontDims[1]) * 4 * bb_w + (modL.xBeg + modL.xShift + widthFrom - xFirstBeg) * 4;
-//                    System.out.println("offset " + offset);
-                    // if((modL.yBeg - fontDims[1]) > fontDims[2]) {
-                    // System.out.println("modL." + fontDims[1] + " " + modL.yBeg);
-                    // }
-                    // System.err.println(bb_w + " " + bb_h + " " + (modL.width + modL.xBeg +
-                    // modL.xShift - xFirstBeg) + " "
-                    // + (modL.height + modL.yBeg - _minFontY) + " " + offset);
-                    for (int j = 0; j < modL.height; j++) {
-                        for (int i = widthFrom; i < widthTo; i++) {
-                            int b1 = bitmap[3 + j * 4 + i * (modL.height * 4)] & 0xFF;
-                            int b2 = cacheBB.get(3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)) & 0xFF;
-                            if (b1 < b2)
-                                continue;
-
-                            cacheBB.put(0 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[0 + j * 4 + i * (modL.height * 4)]);
-                            cacheBB.put(1 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[1 + j * 4 + i * (modL.height * 4)]);
-                            cacheBB.put(2 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[2 + j * 4 + i * (modL.height * 4)]);
-                            cacheBB.put(3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[3 + j * 4 + i * (modL.height * 4)]);
                         }
-                    }
 
-                    // TextPrinter tp = new TextPrinter(modL.getArr());
-                    // tp.xshift = x;
-                    // tp.yshift = y;
-                    // tp.letWidth = modL.width;
-                    // tp.letHeight = modL.height;
-                    // tp.yWinShift = y - (modL.yBeg - _minFontY);
-                    // letTexturesList.add(tp);
+                        // int w = letTx.letWidth;
+                        // int h = letTx.letHeight;
+
+                        // x -= xpos;
+                        // y -= _ypos;
+
+                        int offset = (modL.yBeg - fontDims[1]) * 4 * bb_w + (modL.xBeg + modL.xShift + widthFrom - xFirstBeg) * 4;
+//                    System.out.println("offset " + offset);
+                        // if((modL.yBeg - fontDims[1]) > fontDims[2]) {
+                        // System.out.println("modL." + fontDims[1] + " " + modL.yBeg);
+                        // }
+                        // System.err.println(bb_w + " " + bb_h + " " + (modL.width + modL.xBeg +
+                        // modL.xShift - xFirstBeg) + " "
+                        // + (modL.height + modL.yBeg - _minFontY) + " " + offset);
+                        for (int j = 0; j < modL.height; j++) {
+                            for (int i = widthFrom; i < widthTo; i++) {
+                                int b1 = bitmap[3 + j * 4 + i * (modL.height * 4)] & 0xFF;
+                                int b2 = cacheBB.get(3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)) & 0xFF;
+                                if (b1 < b2)
+                                    continue;
+
+                                cacheBB.put(0 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[0 + j * 4 + i * (modL.height * 4)]);
+                                cacheBB.put(1 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[1 + j * 4 + i * (modL.height * 4)]);
+                                cacheBB.put(2 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[2 + j * 4 + i * (modL.height * 4)]);
+                                cacheBB.put(3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[3 + j * 4 + i * (modL.height * 4)]);
+                            }
+                        }
+
+                        // TextPrinter tp = new TextPrinter(modL.getArr());
+                        // tp.xshift = x;
+                        // tp.yshift = y;
+                        // tp.letWidth = modL.width;
+                        // tp.letHeight = modL.height;
+                        // tp.yWinShift = y - (modL.yBeg - _minFontY);
+                        // letTexturesList.add(tp);
+                    }
                 }
                 cacheBB.rewind();
                 flagBB = false;

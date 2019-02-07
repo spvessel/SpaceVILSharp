@@ -147,7 +147,7 @@ namespace SpaceVIL
         {
             //vertical slider
             float v_value = VScrollBar.Slider.GetCurrentValue();
-            int v_offSet = (int)((float)(v_size * v_value) / 100.0f);
+            int v_offSet = (int)Math.Round((float)(v_size * v_value) / 100.0f);
             _area.SetScrollYOffset(-v_offSet);
         }
 
@@ -155,7 +155,7 @@ namespace SpaceVIL
         {
             //horizontal slider
             float h_value = HScrollBar.Slider.GetCurrentValue();
-            int h_offSet = (int)((float)(h_size * h_value) / 100.0f);
+            int h_offSet = (int)Math.Round((float)(h_size * h_value) / 100.0f);
             _area.SetScrollXOffset(-h_offSet);
         }
 

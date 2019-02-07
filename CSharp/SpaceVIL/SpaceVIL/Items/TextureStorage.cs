@@ -622,9 +622,20 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
+                float _screenScale = 1;
+                WindowLayout wLayout = GetHandler();
+                if (wLayout == null || wLayout.GetDpiScale() == null)
+                    _screenScale = 1;
+                else
+                {
+                    _screenScale = wLayout.GetDpiScale()[0];
+                    if (_screenScale == 0)
+                        _screenScale = 1;
+                }
+
                 List<TextPrinter> tpLines = new List<TextPrinter>();
-                int w = 0, h = 0;
-                int lineHeigh = GetLineY(1);
+                int w = 0, h = 0, bigWidth = 0;
+                int lineHeigh = (int)(GetLineY(1) * _screenScale);
                 int visibleHeight = 0;
                 int startNumb = -1;
                 int inc = -1;
@@ -635,6 +646,13 @@ namespace SpaceVIL
                     tpLines.Add(tmp);
                     h += lineHeigh;//tmp.HeightTexture;
                     w = (w > tl.GetWidth()) ? w : tl.GetWidth();
+                    if (_screenScale != 1)
+                    {
+                        int bw = 0;
+                        if (tmp != null)
+                            bw = tmp.WidthTexture;
+                        bigWidth = (bigWidth > bw) ? bigWidth : bw;
+                    }
                     if (tmp == null) continue;
                     //w = (w > tmp.WidthTexture) ? w : tmp.WidthTexture;
                     visibleHeight += lineHeigh;
@@ -643,8 +661,12 @@ namespace SpaceVIL
                 }
                 //w += _cursorXMax / 3;
                 SetWidth(w);
-                SetHeight(h);
-                
+                SetHeight((int)((float)h / _screenScale));
+                if (_screenScale != 1)
+                {
+                    w = bigWidth;
+                }
+
                 byte[] bigByte = new byte[visibleHeight * w * 4]; //h
                 int bigOff = 0;
 

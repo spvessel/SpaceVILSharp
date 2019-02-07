@@ -1420,8 +1420,8 @@ namespace SpaceVIL
             int bb_h = textPrt.HeightTexture, bb_w = textPrt.WidthTexture;
             float i_x0 = ((float)textPrt.XTextureShift / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
             float i_y0 = ((float)textPrt.YTextureShift / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w/* * 0.9f*/) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y1 = (((float)textPrt.YTextureShift + (float)bb_h) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w / 2f) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)textPrt.YTextureShift + (float)bb_h / 2f) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
             // float i_x0 = ((float)textPrt.XTextureShift / (float)_framebufferWidth * 2.0f) - 1.0f;
             // float i_y0 = ((float)textPrt.YTextureShift / (float)_framebufferHeight * 2.0f - 1.0f) * (-1.0f);
             // float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w/* * 0.9f*/) / (float)_framebufferWidth * 2.0f) - 1.0f;

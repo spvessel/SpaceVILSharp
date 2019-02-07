@@ -32,8 +32,6 @@ class TextBlock extends Prototype
     private boolean _isSelect = false;
     private boolean _justSelected = false;
 
-    // private Color _blockForeground;
-
     private List<KeyCode> ShiftValCodes;
     private List<KeyCode> InsteadKeyMods;
 
@@ -62,14 +60,6 @@ class TextBlock extends Prototype
                 Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME, KeyCode.UP, KeyCode.DOWN));
         InsteadKeyMods = new LinkedList<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
                 KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
-
-        // int[] output = te.getFontDims();
-        // _minLineSpacer = output[0];
-        // //_minFontY = output[1];
-        // //_maxFontY = output[2];
-        // _lineHeight = output[2]; //Math.abs(_maxFontY - _minFontY + 1);
-        // if (_lineSpacer < _minLineSpacer)
-        // _lineSpacer = _minLineSpacer;
 
         _cursor.setHeight(_textureStorage.getCursorHeight());
     }
@@ -158,31 +148,10 @@ class TextBlock extends Prototype
     // }
 
     private void replaceCursorAccordingCoord(Point realPos) {
-        // Вроде бы и без этого норм, но пусть пока будет
-        // 
-        //
-        //
-        //
-        // if (_linesList != null)
-        // realPos.y -= (int)_linesList[0].getLineTopCoord(); //???????!!!!!!
-
-        // Console.WriteLine(_lineSpacer);
-        /*
-         * int lineNumb = _textureStorage.findLineNumb(realPos.y);
-         *
-         * realPos.x -= getX() + getPadding().left + _textureStorage.textMargin().left;
-         *
-         * _cursor_position.y = lineNumb; _cursor_position.x = coordXToPos(realPos.x,
-         * lineNumb);
-         */
         _cursor_position = _textureStorage.replaceCursorAccordingCoord(realPos);
         replaceCursor();
     }
 
-    /*
-     * private int coordXToPos(int coordX, int lineNumb) { return
-     * _textureStorage.coordXToPos(coordX, lineNumb); }
-     */
     private void onKeyRelease(Object sender, KeyArgs args) {
         // if (args.key == KeyCode.v/* 0x2F*/ && args.mods == KeyMods.CONTROL)
         // pasteText(CommonService.ClipboardTextStorage);
@@ -206,20 +175,11 @@ class TextBlock extends Prototype
             }
 
             if (!_isSelect && _justSelected) {
-                // _selectFrom.x = -1;// 0;
-                // _selectFrom.y = 0;
-                // _selectTo.x = -1;// 0;
-                // _selectTo.y = 0;
-                // _justSelected = false;
                 cancelJustSelected();
             }
 
             if (args.mods != KeyMods.NO) {
                 // Выделение не сбрасывается, проверяются сочетания
-                // 
-                //
-                //
-                //
                 switch (args.mods) {
                 case SHIFT:
                     if (ShiftValCodes.contains(args.key)) {
@@ -383,7 +343,7 @@ class TextBlock extends Prototype
             setTextInLine(sb.insert(_cursor_position.x, str).toString());
             _cursor_position.x++;
             replaceCursor();
-            // textChanged.execute();
+
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -431,15 +391,10 @@ class TextBlock extends Prototype
 
     void setTextAlignment(ItemAlignment... alignment) {
         setTextAlignment(Arrays.asList(alignment));
-        // Ignore all changes
-        /*
-         * _blockAlignment = alignment; if (_linesList == null) return; foreach
-         * (TextLine te in _linesList) te.setTextAlignment(alignment);
-         */
     }
 
     void setTextAlignment(List<ItemAlignment> alignment) {
-        // Ignore all changes
+        // Ignore all changes for yet
     }
 
     void setTextMargin(Indents margin) {
@@ -476,7 +431,6 @@ class TextBlock extends Prototype
         try {
             _cursor_position = _textureStorage.setText(text, _cursor_position);
             replaceCursor();
-            // textChanged.execute();
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -488,10 +442,6 @@ class TextBlock extends Prototype
     }
 
     int getTextWidth() {
-        /*
-         * int w = 0, w0; if (_linesList == null) return w; for (TextLine te :
-         * _linesList) { w0 = te.getWidth(); w = (w < w0) ? w0 : w; } return w;
-         */
         return _textureStorage.getWidth();
     }
 
@@ -499,10 +449,6 @@ class TextBlock extends Prototype
         return _textureStorage.getTextHeight();
     }
 
-    /*
-     * protected void UpdateData(UpdateType updateType) { //foreach (TextEdit te in
-     * _linesList) //te.Up }
-     */
     void setForeground(Color color) {
         _textureStorage.setForeground(color);
     }
@@ -568,9 +514,7 @@ class TextBlock extends Prototype
     }
 
     Color getForeground() {
-        // if (_linesList == null) return Color.White; //?????
-        // return _linesList[0].getForeground();
-        return _textureStorage.getForeground();// _blockForeground;
+        return _textureStorage.getForeground();
     }
 
     boolean isEditable() {
@@ -594,16 +538,6 @@ class TextBlock extends Prototype
         addItems(_selectedArea, _textureStorage, _cursor);
         _textureStorage.initLines(_cursor.getWidth());
     }
-
-    /*
-     * private void UpdateLinesData(UpdateType updateType) { foreach (TextLine tl in
-     * _linesList) tl.UpdateData(updateType); }
-     */
-
-    /*
-     * private void RemoveAllLines() { foreach (TextLine tl in _linesList)
-     * RemoveItem(tl); }
-     */
 
     @Override
     public void setFocused(boolean value) {
@@ -799,7 +733,7 @@ class TextBlock extends Prototype
             replaceCursor();
             if (_isSelect)
                 unselectText();
-            cancelJustSelected(); // _justSelected = false;
+            cancelJustSelected();
             return str;
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -869,10 +803,12 @@ class TextBlock extends Prototype
         super.removeItem(item);
     }
 
+    //Don't working yet
     public void redo() {
         // _textureStorage.redo();
     }
 
+    //Don't working yet
     public void undo() {
         // _textureStorage.undo();
     }
@@ -906,18 +842,6 @@ class TextBlock extends Prototype
     }
 
     public void updateLayout() {
-        // Console.Write(_selectedArea.GetX() + " " + _selectedArea.GetY());
-        // int xSh = _selectedArea.GetX();
-        // int ySh = _selectedArea.GetY();
-        // if (xSh > 0)
-        // xSh = GetX() + GetPadding().Left - xSh;
-        // if (ySh > 0)
-        // ySh = GetY() + GetPadding().Top - ySh;
-        // _selectedArea.ShiftAreaX(GetX() + GetPadding().Left - xSh);
-        // _selectedArea.ShiftAreaY(GetY() + GetPadding().Top - ySh);
-        // _cursor.SetX(_cursor.GetX() + GetX() + GetPadding().Left);
-        // _cursor.SetY(_cursor.GetY() + GetY() + GetPadding().Top);
-        // Console.WriteLine(" " + _selectedArea.GetX() + " " + _selectedArea.GetY());
         if (_textureStorage.getParent() == null)
             return;
         // ReplaceCursor();
