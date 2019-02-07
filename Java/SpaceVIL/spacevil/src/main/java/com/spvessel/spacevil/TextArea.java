@@ -122,6 +122,7 @@ public class TextArea extends Prototype {
     private void updateHListArea() {
         // horizontal slider
         float h_value = hScrollBar.slider.getCurrentValue();
+// System.out.println(h_value);
         int h_offset = (int) ((float) (h_size * h_value) / 100.0f);
         _area.setScrollXOffset(-h_offset);
     }
@@ -170,6 +171,8 @@ public class TextArea extends Prototype {
     {
         int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right - 2 * _area.getCursorWidth();
         int total = _area.getTextWidth();
+        // int total = _area.get;
+        // System.out.println("wt: " + total);
 
         int total_invisible_size = total - visible_area;
         if (total <= visible_area) {
@@ -204,6 +207,7 @@ public class TextArea extends Prototype {
         float step_count = (float) total_invisible_size / (float) _area.getScrollXStep();
         hScrollBar.slider.setStep((hScrollBar.slider.getMaxValue() - hScrollBar.slider.getMinValue()) / step_count);
         hScrollBar.slider.setCurrentValue((100.0f / total_invisible_size) * Math.abs(_area.getScrollXOffset()));
+        System.out.println((100.0f / total_invisible_size) * Math.abs(_area.getScrollXOffset()) + " " + _area.getScrollXOffset() + " " + total_invisible_size);
     }
 
     /**

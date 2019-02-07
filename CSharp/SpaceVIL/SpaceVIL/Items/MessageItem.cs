@@ -16,9 +16,28 @@ namespace SpaceVIL
             return _result;
         }
         private String _message = String.Empty;
-        private String _title = String.Empty;
+        // private String _title = String.Empty;
         private TitleBar titleBar = new TitleBar();
         private Label msg = new Label();
+
+        public void SetMessageText(String text)
+        {
+            _message = text;
+        }
+
+        public String GetMessageText()
+        {
+            return _message;
+        }
+
+        public void SetTitle(String title)
+        {
+            titleBar.SetText(title);
+        }
+        public String GetTitle()
+        {
+            return titleBar.GetText();
+        }
 
         /// <summary>
         /// Constructs a MessageItem
@@ -35,9 +54,9 @@ namespace SpaceVIL
         public MessageItem(String m = "", String t = "") : this()
         {
             _message = m;
-            _title = t;
+            // _title = t;
 
-            titleBar.SetText(_title);
+            titleBar.SetText(t);
             msg.SetText(_message);
         }
 

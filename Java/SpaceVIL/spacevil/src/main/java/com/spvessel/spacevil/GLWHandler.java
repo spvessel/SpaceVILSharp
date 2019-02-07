@@ -13,17 +13,18 @@ import java.nio.IntBuffer;
 
 final class GLWHandler {
 
-    private float _scaleWidth = 1.0f;
-    private float _scaleHeight = 1.0f;
+    // private float _scaleWidth = 1.0f;
+    // private float _scaleHeight = 1.0f;
 
-    float[] getDpiScale() {
-        return new float[] { _scaleWidth, _scaleHeight };
-    }
+    // float[] getDpiScale() {
+    //     return new float[] { _scaleWidth, _scaleHeight };
+    // }
 
     private void setDpiScale(float w, float h) {
-        _scaleWidth = w;
-        _scaleHeight = h;
-        System.out.println(w + " " + h);
+        // _scaleWidth = w * 2;
+        // _scaleHeight = h * 2;
+        // System.out.println(w + " " + h);
+        _w_layout.setDpiScale(w, h);
     }
 
     ///////////////////////////////////////////////

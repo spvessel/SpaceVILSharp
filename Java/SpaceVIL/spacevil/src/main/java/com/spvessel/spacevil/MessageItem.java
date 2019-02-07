@@ -14,34 +14,55 @@ public class MessageItem extends DialogItem {
 
     private boolean _result = false;
 
+    /**
+     * Get MessageItem boolean result
+     */
     public boolean getResult() {
         return _result;
     }
 
     private String _message = "";
-    private String _title = "";
+    // private String _title = "";
     private TitleBar titleBar = new TitleBar();
     private Label msg = new Label();
 
-    /// <summary>
-    /// Constructs a MessageItem
-    /// </summary>
+    /**
+     * Constructs a MessageItem
+     */
     public MessageItem() {
         super();
         setItemName("MessageItem_" + count);
         count++;
     }
 
-    /// <summary>
-    /// Constructs a MessageBox with message and title
-    /// </summary>
+    /**
+     * Constructs a MessageItem with message and title
+     */
     public MessageItem(String m, String t) {
         this();
         _message = m;
-        _title = t;
+        // _title = t;
 
-        titleBar.setText(_title);
+        titleBar.setText(t);
         msg.setText(_message);
+    }
+
+    /**
+     * MessageItem text
+     */
+    public void setMessageText(String text) {
+        _message = text;
+    }
+
+    public String getMessageText() {
+        return _message;
+    }
+
+    public void setTitle(String title) {
+        titleBar.setText(title);
+    }
+    public String getTitle() {
+        return titleBar.getText();
     }
 
     @Override

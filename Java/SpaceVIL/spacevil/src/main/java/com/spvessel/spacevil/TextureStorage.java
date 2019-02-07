@@ -555,19 +555,38 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     public TextPrinter getLetTextures() {
         textInputLock.lock();
         try {
+            float _screenScale = 1;
+            WindowLayout wLayout = getHandler();
+            if (wLayout == null || wLayout.getDpiScale() == null)
+                _screenScale = 1;
+            else {
+                _screenScale = wLayout.getDpiScale()[0];
+                if (_screenScale == 0) //!= 1)
+                    _screenScale = 1;
+                    // makeBigArr();
+            }
+
             List<TextPrinter> tpLines = new LinkedList<>();
-            int w = 0, h = 0;
-            int lineHeigh = getLineY(1);
+            int w = 0, h = 0, bigWidth = 0;
+            int lineHeigh = (int)(getLineY(1) * _screenScale);
             int visibleHeight = 0;
             int startNumb = -1;
 //            int endNumb = -1;
             int inc = -1;
             for (TextLine tl : _linesList) {
                 inc++;
+                // if (inc == 0) System.out.println("shift " + tl.getLineXShift());
+
                 TextPrinter tmp = tl.getLetTextures();
                 tpLines.add(tmp);
                 h += lineHeigh;// tmp.HeightTexture;
                 w = (w > tl.getWidth()) ? w : tl.getWidth();
+                if (_screenScale != 1) {
+                    int bw = 0;
+                    if (tmp != null)
+                        bw = tmp.widthTexture;
+                    bigWidth = (bigWidth > bw) ? bigWidth : bw;
+                }
                 if (tmp == null) {
 //                    if (startNumb > -1 && endNumb == -1)
 //                        endNumb = inc;
@@ -581,7 +600,12 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             //w += _cursorXMax / 3;
 //            System.out.println(w);
             setWidth(w);
-            setHeight(h);
+            setHeight((int)((float)h / _screenScale));
+            if (_screenScale != 1) {
+                // setWidth((int)(bigWidth * 1f / _screenScale));
+                w = bigWidth;
+            }
+
 //            System.out.println(startNumb + " " + endNumb);
             ByteBuffer bigByte = BufferUtils.createByteBuffer(visibleHeight * w * 4); //h
             int bigOff = 0;
@@ -625,6 +649,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             TextPrinter tpout = new TextPrinter(bigByte);
             tpout.widthTexture = w;
             tpout.heightTexture = visibleHeight; //h;
+            // System.out.println(w + " " + getWidth() + " " + bigByte.capacity());
 
             tpout.xTextureShift = getParent().getPadding().left + getTextMargin().left + getParent().getX() + cursorWidth;
             tpout.yTextureShift = getParent().getPadding().top + getTextMargin().top + getParent().getY();

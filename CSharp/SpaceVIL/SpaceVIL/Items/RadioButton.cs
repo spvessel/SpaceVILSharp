@@ -88,6 +88,18 @@ namespace SpaceVIL
             AddItem(_text_object);
         }
 
+        /// <summary>
+        /// Is RadioButton checked (boolean)
+        /// </summary>
+        public bool IsChecked()
+        {
+            return _indicator.GetIndicatorMarker().IsToggled();
+        }
+        public void SetChecked(bool value)
+        {
+            _indicator.GetIndicatorMarker().SetToggled(value);
+        }
+
         private void UncheckOthers(object sender)
         {
             List<IBaseItem> items = GetParent().GetItems();

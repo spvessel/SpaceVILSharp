@@ -18,7 +18,7 @@ public class TitleBar extends WindowAnchor {
 
     private static int count = 0;
     private HorizontalStack _layout;
-    public HorizontalDirection Direction = HorizontalDirection.FROM_LEFT_TO_RIGHT;
+    public HorizontalDirection direction = HorizontalDirection.FROM_LEFT_TO_RIGHT;
     private Label _text_object;
     private ImageItem _icon;
 
@@ -230,7 +230,7 @@ public class TitleBar extends WindowAnchor {
         }
 
         // adding
-        switch (Direction) {
+        switch (direction) {
         case FROM_LEFT_TO_RIGHT:
             _layout.addItems(_icon, _text_object, _minimize, _maximize, _close);
             break;

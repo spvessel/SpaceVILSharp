@@ -207,6 +207,17 @@ public class RadioButton extends Prototype implements InterfaceHLayout {
         addItem(_text_object);
     }
 
+    /**
+     * Is RadioButton checked (boolean)
+     */
+    public boolean isChecked() {
+        return _indicator.getIndicatorMarker().isToggled();
+    }
+
+    public void setChecked(boolean value) {
+        _indicator.getIndicatorMarker().setToggled(value);
+    }
+
     private void uncheckOthers(InterfaceItem sender) {
         List<InterfaceBaseItem> items = getParent().getItems();
         for (InterfaceBaseItem item : items) {

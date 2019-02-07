@@ -26,16 +26,13 @@ namespace SpaceVIL
         /// <summary>
         /// MessageBox text
         /// </summary>
-        public String MessageBoxText
+        public String GetMessageText()
         {
-            get
-            {
-                return _message;
-            }
-            set
-            {
-                _message = value;
-            }
+            return _message;
+        }
+        public void SetMessageText(String text)
+        {
+            _message = text;
         }
 
         TitleBar titleBar = new TitleBar();
@@ -54,7 +51,7 @@ namespace SpaceVIL
             //DragAnchor
             titleBar.SetText(DialogTitle);
             titleBar.SetPadding(0, 0, 10, 0);
-            msg.SetText(MessageBoxText);
+            msg.SetText(GetMessageText());
         }
 
         /// <summary>

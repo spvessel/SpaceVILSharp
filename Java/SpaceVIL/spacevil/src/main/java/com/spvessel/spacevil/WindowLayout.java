@@ -496,4 +496,17 @@ public final class WindowLayout {
         engine._handler.setHidden(value);
         isHidden = value;
     }
+
+    private float _scaleWidth = 2.0f;
+    private float _scaleHeight = 2.0f;
+
+    float[] getDpiScale() {
+        return new float[] { _scaleWidth, _scaleHeight };
+    }
+
+    void setDpiScale(float w, float h) {
+        _scaleWidth = w * 2;
+        _scaleHeight = h * 2;
+        // System.out.println(w + " " + h);
+    }
 }

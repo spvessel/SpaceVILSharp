@@ -29,8 +29,13 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     private int _lineXShift = 0;
     private int _parentAllowWidth = Integer.MAX_VALUE;
     private int _parentAllowHeight = Integer.MAX_VALUE;
+    private int _bigWidth = 0;
+    // private int _bigHeight = 0;
+    private float _screenScale = 1;
+    // private int _bigMinY = 0;
 
     private List<Alphabet.ModifyLetter> _letters = new LinkedList<>();
+    private List<Alphabet.ModifyLetter> _bigLetters = new LinkedList<>();
     // private List<TextPrinter> _letTexturesList;
 
     // private List<Float> px0;
@@ -95,18 +100,72 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 
                 // _letTexturesList.add(new TextPrinter(modL.getArr()));
             }
+
+            WindowLayout wLayout = getHandler();
+            if (wLayout == null || wLayout.getDpiScale() == null)
+                _screenScale = 0;
+            else {
+                _screenScale = wLayout.getDpiScale()[0];
+                if (_screenScale != 1)
+                    makeBigArr();
+            }
+
+            // System.out.println("scale: " + _screenScale);
+
+            
+
         } finally {
             textLock.unlock();
         }
     }
 
+    boolean isBigExist = false;
+
+    private void makeBigArr() { 
+        Font fontBig = new Font(getFont().getName(), getFont().getStyle(), (int) (getFont().getSize() * _screenScale));
+
+        _bigLetters = FontEngine.getModifyLetters(getItemText(), fontBig);
+        // int[] output = FontEngine.getSpacerDims(fontBig);
+        // _bigHeight = output[2];
+        _bigWidth = 0;
+        if (_bigLetters.size() > 0) {
+            _bigWidth = _bigLetters.get(_bigLetters.size() - 1).xShift + _bigLetters.get(_bigLetters.size() - 1).width
+                    + _bigLetters.get(_bigLetters.size() - 1).xBeg; // xBeg не обязательно, т.к. везде 0, но вдруг
+            super.setWidth((int)((float)_bigWidth / _screenScale));
+        }
+
+        // _bigMinY = output[1];
+
+        if (_screenScale != 0) {
+            _letEndPos = new LinkedList<>();
+            for (Alphabet.ModifyLetter modL : _bigLetters) {
+                _letEndPos.add((int)((float)(modL.xBeg + modL.xShift + modL.width) / _screenScale));
+            }
+        }
+
+        isBigExist = true;
+    }
+
+    // private int smokerShift = 0;
+
     public TextPrinter getLetTextures() {
         textLock.lock();
         try {
+            WindowLayout wLayout = getHandler();
+            if (wLayout != null && wLayout.getDpiScale() != null) {
+                float scl = wLayout.getDpiScale()[0];
+                if (scl != _screenScale && !isBigExist) { //Это при допущении, что скейл меняется только один раз!
+                    _screenScale = scl;
+                    makeBigArr();
+                }
+            }
+
+
             int[] fontDims = getFontDims();
             int height = fontDims[2];
-            if (getHeight() != height)
+            if (getHeight() != height) {
                 super.setHeight(height);
+            }
 
             // List<TextPrinter> letTexturesList = new LinkedList<>();
             if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
@@ -118,8 +177,17 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             {
                 int bb_h = getHeight();
                 int bb_w = getWidth();
+                // System.out.println("small " + bb_h + " " + bb_w);
+                // if (_screenScale != 0 || _screenScale != 1) {
+                //     bb_h = _bigHeight;
+                //     bb_w = _bigWidth;
+                // }
+
 //                int firstVisLet = -1, inc = -1;
 //                System.out.print(bb_w + " ");
+
+                // float shiftPercent = Math.abs(_lineXShift) * 1f / (bb_w * 1f);
+
                 if (_parentAllowWidth > 0)
                     bb_w = bb_w > _parentAllowWidth ? _parentAllowWidth : bb_w;
 //                System.out.println(_parentAllowWidth + " " + bb_w);
@@ -131,6 +199,30 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 //                System.out.println("first in line " + _letters.get(0).xShift + " " + _lineXShift + " " + xFirstBeg);
 //                System.out.println(_letters.get(0).xBeg + " " + _letters.get(0).name);
 //                int inc = 0;
+                // smokerShift = 0;
+                if (_screenScale != 0 && _screenScale != 1) {
+                    Font fontBig = new Font(getFont().getName(), getFont().getStyle(),
+                            (int) (getFont().getSize() * _screenScale));
+                    int[] output = FontEngine.getSpacerDims(fontBig);
+                    bb_h = output[2];
+                    bb_w = _bigWidth > (int)(_parentAllowWidth * _screenScale) ? (int)(_parentAllowWidth * _screenScale) : _bigWidth;
+
+                    // float badShift =  - bb_w * 1f * shiftPercent;
+                    // int[] fli = new int[]{0, _letters.size() - 1, bb_w};
+                    // if (_parentAllowWidth > 0 && bb_w > (int) (_parentAllowWidth * _screenScale)) {
+                    //     fli = findFirstLast(_bigLetters, (int) (_parentAllowWidth * _screenScale)); //, badShift);
+                    //     // bb_w = bb_w > (int) (_parentAllowWidth * _screenScale) ? (int) (_parentAllowWidth * _screenScale) : bb_w;
+                    //     bb_w = fli[2];//_bigLetters.get(fli[1]).xShift + _bigLetters.get(fli[1]).width + _bigLetters.get(fli[1]).xBeg - _bigLetters.get(fli[0]).xBeg - _bigLetters.get(fli[0]).xShift;
+                    //     // smokerShift = 0;//fli[3]; //_lineXShift + (int)((_bigLetters.get(fli[0]).xBeg + _bigLetters.get(fli[0]).xShift) * 1.0 / _screenScale);
+                    // }
+                    int bigMinY = output[1];
+                    
+                    // System.out.println("big " + fli[0] + " " + fli[1]);
+                    // System.out.println("width " + bb_w + " shift " + smokerShift + " firstInd " + fli[0]);
+
+                    cacheBB = makeSomeBig(bb_h, bb_w, bigMinY, 0, _letters.size() - 1); //, fli[0], fli[1]);
+                }
+                else 
                 for (Alphabet.ModifyLetter modL : _letters) {
 //                for (int ii = 0; ii < _letters.size(); ii++) {
 //                    Alphabet.ModifyLetter modL = _letters.get(ii);
@@ -239,6 +331,114 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             textLock.unlock();
         }
     }
+
+    private int[] findFirstLast(List<Alphabet.ModifyLetter> letList, int winWidth) { //, float someShift) {
+        int firstInd = 0, lastInd = 0;
+        int someShift = (int) (_lineXShift * _screenScale);
+        boolean isFirstFound = false;
+        
+        for (int ii = 0; ii < letList.size(); ii++) {
+            Alphabet.ModifyLetter modL = letList.get(ii);
+            // System.out.print(ii + " ");
+            if (modL.xBeg + modL.xShift + modL.width + someShift < 0) { // До разрешенной области
+                // System.out.println("Continue");
+                continue;
+            }
+            // if (modL.xBeg + modL.xShift + someShift <= 0)
+            // {
+            //     firstInd = ii;
+            // }
+            if (!isFirstFound) {
+                firstInd = ii;
+                isFirstFound = true;
+            }
+
+            // if (modL.xBeg + modL.xShift + _lineXShift > _parentAllowWidth) { // После разрешенной области + _lineXShift
+            // }
+            if (modL.xBeg + modL.xShift + modL.width + someShift >= winWidth) {
+                lastInd = ii;
+                // System.out.println("last ind " + ii);
+                break;
+            }
+        }
+
+        if (lastInd == 0) lastInd = letList.size() - 1;
+
+        Alphabet.ModifyLetter letFirst = letList.get(firstInd);
+        Alphabet.ModifyLetter letLast = letList.get(lastInd);
+
+        int visWidth = letLast.xShift + letLast.width + letLast.xBeg - letFirst.xBeg - letFirst.xShift;
+        // int outShift = (int) ((someShift + (letFirst.xBeg + letFirst.xShift) * 1.0) / _screenScale);
+
+        return new int[] {firstInd, lastInd, visWidth}; //, outShift};
+    }
+
+    private ByteBuffer makeSomeBig(int hgt, int wdt, int bigMinY, int firstInd, int lastInd) {
+        ByteBuffer outCache = BufferUtils.createByteBuffer(hgt * wdt * 4);
+        int someShift = (int ) (_lineXShift * _screenScale);
+        int parWidth = (int)(_parentAllowWidth * _screenScale);
+
+        int xFirstBeg = _bigLetters.get(firstInd).xBeg + _bigLetters.get(firstInd).xShift;
+        //for (Alphabet.ModifyLetter modL : _letters) {
+        for (int ii = firstInd; ii <= lastInd; ii++) { // for (int ii = 0; ii < _letters.size(); ii++) {
+            // Alphabet.ModifyLetter smallLet = _letters.get(ii);
+            Alphabet.ModifyLetter bigLet = _bigLetters.get(ii);
+
+            //ignore at first
+            int widthFrom = 0;
+            int widthTo = bigLet.width;
+            
+            if (bigLet.xBeg + bigLet.xShift + bigLet.width + someShift < 0) { // До разрешенной области
+                
+                continue;
+            }
+            if (bigLet.xBeg + bigLet.xShift + someShift <= 0)
+            {
+                // continue;
+                widthFrom = Math.abs(bigLet.xBeg + bigLet.xShift + someShift);
+            }
+
+            xFirstBeg = -someShift;
+
+            if (bigLet.xBeg + bigLet.xShift - xFirstBeg > parWidth) { // После разрешенной области + _lineXShift
+                break;
+            }
+            if (bigLet.xBeg + bigLet.xShift + bigLet.width - xFirstBeg >= parWidth) {
+                // break;
+                widthTo = parWidth - (bigLet.xBeg + bigLet.xShift + widthFrom - xFirstBeg);
+            }
+            
+
+            byte[] bitmap = bigLet.getArr();
+            if (bitmap == null) {
+                continue;
+            }
+
+            int offset = (bigLet.yBeg - bigMinY) * 4 * wdt + (bigLet.xBeg + bigLet.xShift + widthFrom - xFirstBeg) * 4;
+            // System.out.println(outCache.capacity() + " " + offset);
+            for (int j = 0; j < bigLet.height; j++) {
+                for (int i = widthFrom; i < widthTo; i++) {
+                    int b1 = bitmap[3 + j * 4 + i * (bigLet.height * 4)] & 0xFF;
+                    int b2 = outCache.get(3 + offset + (i - widthFrom) * 4 + j * (wdt * 4)) & 0xFF;
+                    if (b1 < b2)
+                        continue;
+
+                    outCache.put(0 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
+                            bitmap[0 + j * 4 + i * (bigLet.height * 4)]);
+                    outCache.put(1 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
+                            bitmap[1 + j * 4 + i * (bigLet.height * 4)]);
+                    outCache.put(2 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
+                            bitmap[2 + j * 4 + i * (bigLet.height * 4)]);
+                    outCache.put(3 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
+                            bitmap[3 + j * 4 + i * (bigLet.height * 4)]);
+                }
+            }
+
+        }
+
+        return outCache;
+    }
+
     /*
      * int _xpos = 0; int _ypos = 0;
      * 

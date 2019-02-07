@@ -5,6 +5,8 @@ import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.ItemState;
+import com.spvessel.spacevil.Flags.HorizontalDirection;
+import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -40,11 +42,13 @@ public class MainWindow extends ActiveWindow {
             Handler.setIcon(iBig, iSmall);
 
         TitleBar title = new TitleBar("Main King Window - JAVA");
+        title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
+        title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
         // title.setIcon(iBig, 20, 20);
         Handler.addItem(title);
 
         Grid grid = new Grid(1, 7);
-        grid.setMargin(0, 30, 0, 0);
+        grid.setMargin(0, 0, 0, 30);
         grid.setPadding(6, 6, 6, 6);
         grid.setBackground(70, 70, 70);
         grid.setSpacing(6, 6);
@@ -54,6 +58,7 @@ public class MainWindow extends ActiveWindow {
         // Font font = DefaultsService.getDefaultFont(18);
 
         ButtonCore btn_layout = new ButtonCore("Layout");
+        btn_layout.setTextAlignment(ItemAlignment.BOTTOM, ItemAlignment.HCENTER);
         btn_layout.setShadow(5, 3, 3, new Color(0, 0, 0, 140));
         btn_layout.setFont(font);
         btn_layout.setToolTip("Show Layout window.");

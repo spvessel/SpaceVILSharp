@@ -23,10 +23,10 @@ public class MessageBox extends DialogWindow {
     /**
      * MessageBox text
      */
-    public void setMessageBoxText(String text) {
+    public void setMessageText(String text) {
         _message = text;
     }
-    public String getMessageBoxText() {
+    public String getMessageText() {
         return _message;
     }
 
@@ -43,7 +43,7 @@ public class MessageBox extends DialogWindow {
         // Title
         titleBar.setText(getDialogTitle());
         titleBar.setPadding(0, 0, 10, 0);
-        msg.setText(getMessageBoxText());
+        msg.setText(getMessageText());
     }
 
     /**

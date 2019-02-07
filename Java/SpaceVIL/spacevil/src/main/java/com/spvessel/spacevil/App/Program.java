@@ -18,6 +18,7 @@ public class Program {
         InputTest it = new InputTest();
         TextTest tt = new TextTest();
 
-        WindowLayoutBox.tryShow("MainWindow");
+        // WindowLayoutBox.tryShow("MainWindow");
+        it.show();
     }
 }

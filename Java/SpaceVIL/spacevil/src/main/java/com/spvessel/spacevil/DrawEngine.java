@@ -295,14 +295,14 @@ final class DrawEngine {
     }
 
     private void framebuffer(long window, int w, int h) {
-        _framebufferWidth = w;
-        _framebufferHeight = h;
+        _framebufferWidth = w * 2;
+        _framebufferHeight = h * 2;
 
-        glViewport(0, 0, w, h);
+        glViewport(0, 0, w * 2, h * 2);
 
         _fbo.bindFBO();
         _fbo.clearTexture();
-        _fbo.genFBOTexture(w, h);
+        _fbo.genFBOTexture(w * 2, h * 2);
         _fbo.unbindFBO();
     }
 
@@ -979,18 +979,18 @@ final class DrawEngine {
         IntBuffer w = BufferUtils.createIntBuffer(1);
         IntBuffer h = BufferUtils.createIntBuffer(1);
         glfwGetFramebufferSize(_handler.getWindowId(), w, h);
-        glViewport(0, 0, w.get(0), h.get(0));
+        glViewport(0, 0, w.get(0) * 2, h.get(0) * 2);
 
-        _framebufferWidth = w.get(0);
-        _framebufferHeight = h.get(0);
+        _framebufferWidth = w.get(0) * 2;
+        _framebufferHeight = h.get(0) * 2;
 
         _fbo.genFBO();
-        _fbo.genFBOTexture(w.get(0), h.get(0));
+        _fbo.genFBOTexture(w.get(0) * 2, h.get(0) * 2);
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {
-            glfwWaitEventsTimeout(_interval);
-            // glfwWaitEvents();
+            // glfwWaitEventsTimeout(_interval);
+            glfwWaitEvents();
             // // glfwPollEvents();
 
             // glClearColor(0, 0, 0, 0);
@@ -1119,10 +1119,15 @@ final class DrawEngine {
 
     private void setScissorRectangle(InterfaceBaseItem rect) {
         glEnable(GL_SCISSOR_TEST);
-        int x = rect.getParent().getX();
+        int x = rect.getParent().getX();// + rect.getParent().getPadding().left;
         int y = _handler.getLayout().getHeight() - (rect.getParent().getY() + rect.getParent().getHeight());
-        int w = rect.getParent().getWidth();
+        int w = rect.getParent().getWidth();// - rect.getParent().getPadding().right - rect.getParent().getPadding().left;
         int h = rect.getParent().getHeight();
+        float scale = _handler.getLayout().getDpiScale()[0];
+        x *= scale;
+        y *= scale;
+        w *= scale;
+        h *= scale;
         glScissor(x, y, w, h);
 
         if (!_bounds.containsKey(rect))
@@ -1364,7 +1369,10 @@ final class DrawEngine {
         store.bind(fbo_texture);
         store.sendUniformSample2D(_blur);
         store.sendUniform1fv(_blur, "weights", 11, weights);
-        store.sendUniform2fv(_blur, "frame", new float[] { _framebufferWidth, _framebufferHeight });
+        // store.sendUniform2fv(_blur, "frame", new float[] { _framebufferWidth,
+        // _framebufferHeight });
+        store.sendUniform2fv(_blur, "frame",
+                new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
         store.sendUniform1f(_blur, "res", (res * 1f / 10));
         store.sendUniform2fv(_blur, "point", xy);
         store.sendUniform2fv(_blur, "size", wh);
@@ -1391,10 +1399,10 @@ final class DrawEngine {
         int bb_h = textPrt.heightTexture, bb_w = textPrt.widthTexture;
         float i_x0 = ((float) textPrt.xTextureShift / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
         float i_y0 = ((float) textPrt.yTextureShift / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w) / (float) _handler.getLayout().getWidth() * 2.0f)
-                - 1.0f;
-        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h) / (float) _handler.getLayout().getHeight() * 2.0f
-                - 1.0f) * (-1.0f);
+        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w / 2f) / (float) _handler.getLayout().getWidth()
+                * 2.0f) - 1.0f;
+        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h / 2f) / (float) _handler.getLayout().getHeight()
+                * 2.0f - 1.0f) * (-1.0f);
         float[] argb = { (float) text.getForeground().getRed() / 255.0f,
                 (float) text.getForeground().getGreen() / 255.0f, (float) text.getForeground().getBlue() / 255.0f,
                 (float) text.getForeground().getAlpha() / 255.0f };
