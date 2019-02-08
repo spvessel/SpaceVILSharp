@@ -126,13 +126,13 @@ final class GLWHandler {
         GLFWVidMode vidmode = glfwGetVideoMode(monitor);
         int width = vidmode.width();
         int height = vidmode.height();
-        System.out.println("VIDSIZE: " + width + " " + height);
-        System.out.println("WSIZE: " + _w_layout.getWidth() + " " + _w_layout.getHeight());
+        // System.out.println("VIDSIZE: " + width + " " + height);
+        // System.out.println("WSIZE: " + _w_layout.getWidth() + " " + _w_layout.getHeight());
 
         IntBuffer w = BufferUtils.createIntBuffer(1);
         IntBuffer h = BufferUtils.createIntBuffer(1);
         glfwGetFramebufferSize(_window, w, h);
-        System.out.println("FBSIZE: " + w.get(0) + " " + h.get(0));
+        // System.out.println("FBSIZE: " + w.get(0) + " " + h.get(0));
 
         setDpiScale((float) w.get(0) / (float) _w_layout.getWidth(), (float) h.get(0) / (float) _w_layout.getHeight());
 
@@ -141,10 +141,10 @@ final class GLWHandler {
             getPointer().setY((height - _w_layout.getHeight()) / 2);
 
         } else {
-            _w_layout.setX(100);
-            _w_layout.setY(100);
-            getPointer().setX(100);
-            getPointer().setY(100);
+            _w_layout.setX(200);
+            _w_layout.setY(200);
+            getPointer().setX(200);
+            getPointer().setY(200);
         }
         glfwSetWindowSizeLimits(_window, _w_layout.getMinWidth(), _w_layout.getMinHeight(), _w_layout.getMaxWidth(),
                 _w_layout.getMaxHeight());

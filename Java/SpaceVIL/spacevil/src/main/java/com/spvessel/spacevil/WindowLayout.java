@@ -497,16 +497,17 @@ public final class WindowLayout {
         isHidden = value;
     }
 
-    private float _scaleWidth = 2.0f;
-    private float _scaleHeight = 2.0f;
+    private float _scaleWidth = 1.0f;
+    private float _scaleHeight = 1.0f;
 
     float[] getDpiScale() {
         return new float[] { _scaleWidth, _scaleHeight };
     }
 
     void setDpiScale(float w, float h) {
-        _scaleWidth = w * 2;
-        _scaleHeight = h * 2;
-        // System.out.println(w + " " + h);
+        _scaleWidth = w;
+        _scaleHeight = h;
+        // _scaleWidth = w * 2;
+        // _scaleHeight = h * 2;
     }
 }

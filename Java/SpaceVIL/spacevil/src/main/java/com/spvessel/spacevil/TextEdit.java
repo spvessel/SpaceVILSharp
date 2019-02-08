@@ -301,7 +301,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         }
     }
 
-    private int cursorPosToCoord(int cPos) {
+    private int cursorPosToCoord(int cPos, boolean isx) {
         int coord = 0;
         if (_text_object.getLetPosArray() == null)
             return coord;
@@ -313,11 +313,13 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
             }
         }
 
-        if (getLineXShift() + coord < 0) {
-            _text_object.setLineXShift(-coord);
-        }
-        if (getLineXShift() + coord > _cursorXMax)
-            _text_object.setLineXShift(_cursorXMax - coord);
+        if (isx) {
+            if (getLineXShift() + coord < 0) {
+                _text_object.setLineXShift(-coord);
+            }
+            if (getLineXShift() + coord > _cursorXMax)
+                _text_object.setLineXShift(_cursorXMax - coord);
+            }
 
         return getLineXShift() + coord;
     }
@@ -329,7 +331,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
             _cursor_position = len;
             // replaceCursor();
         }
-        int pos = cursorPosToCoord(_cursor_position);
+        int pos = cursorPosToCoord(_cursor_position, true);
 
         int w = getTextWidth();
 
@@ -591,9 +593,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
             fromPt = 0;
         if (toPt == -1)
             toPt = 0;
-        fromPt = cursorPosToCoord(fromPt);
-        toPt = cursorPosToCoord(toPt);
-
+        fromPt = cursorPosToCoord(fromPt, false);
+        toPt = cursorPosToCoord(toPt, false);
+        
         if (fromPt == toPt) {
             _selectedArea.setWidth(0);
             return;

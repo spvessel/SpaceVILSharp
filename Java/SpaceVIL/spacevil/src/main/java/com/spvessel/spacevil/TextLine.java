@@ -23,7 +23,6 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     // private int _minFontY;
     // private int _maxFontY;
     // private List<float> _coordArray; //private List<List<float>> _coordArray;
-    private int _lineWidth = 0; // private float[] _lineWidth;
     private List<Integer> _letEndPos;
     private int _lineYShift = 0;
     private int _lineXShift = 0;
@@ -33,11 +32,11 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     // private int _bigHeight = 0;
     private float _screenScale = 1;
     // private int _bigMinY = 0;
-
+    
     private List<Alphabet.ModifyLetter> _letters = new LinkedList<>();
     private List<Alphabet.ModifyLetter> _bigLetters = new LinkedList<>();
     // private List<TextPrinter> _letTexturesList;
-
+    
     // private List<Float> px0;
     /*
     private List<ItemAlignment> _needCheckAlignment = new LinkedList<>();
@@ -51,20 +50,21 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     TextLine() {
         count++;
     }
-
+    
     TextLine(String text, Font font) {
         super(text, font, "TextLine_" + count);
         count++;
         // getFontDims();
         updateData();
     }
-
+    
     private Lock textLock = new ReentrantLock();
-
+    
     private void createText() {
         // List<Float> cl0 = new LinkedList<>();
         textLock.lock();
         try {
+            int _lineWidth = 0; // private float[] _lineWidth;
             // long time = System.nanoTime();
             String text = getItemText();
             Font font = getFont();
@@ -707,6 +707,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         float alignShiftX = 1;
         float alignShiftY = 0;
 
+        int _lineWidth = getWidth();
         // Horizontal
         if (alignments.contains(ItemAlignment.LEFT) || (_lineWidth >= _parentAllowWidth)) {
             alignShiftX = getParent().getPadding().left + getMargin().left + cursorWidth;

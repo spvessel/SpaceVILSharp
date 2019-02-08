@@ -295,14 +295,16 @@ final class DrawEngine {
     }
 
     private void framebuffer(long window, int w, int h) {
-        _framebufferWidth = w * 2;
-        _framebufferHeight = h * 2;
+        _framebufferWidth = w;
+        _framebufferHeight = h;
+        // _framebufferWidth = w * 2;
+        // _framebufferHeight = h * 2;
 
-        glViewport(0, 0, w * 2, h * 2);
+        glViewport(0, 0, _framebufferWidth, _framebufferHeight);
 
         _fbo.bindFBO();
         _fbo.clearTexture();
-        _fbo.genFBOTexture(w * 2, h * 2);
+        _fbo.genFBOTexture(_framebufferWidth, _framebufferHeight);
         _fbo.unbindFBO();
     }
 
@@ -979,13 +981,16 @@ final class DrawEngine {
         IntBuffer w = BufferUtils.createIntBuffer(1);
         IntBuffer h = BufferUtils.createIntBuffer(1);
         glfwGetFramebufferSize(_handler.getWindowId(), w, h);
-        glViewport(0, 0, w.get(0) * 2, h.get(0) * 2);
 
-        _framebufferWidth = w.get(0) * 2;
-        _framebufferHeight = h.get(0) * 2;
+        _framebufferWidth = w.get(0);
+        _framebufferHeight = h.get(0);
+        // _framebufferWidth = w.get(0) * 2;
+        // _framebufferHeight = h.get(0) * 2;
 
+        glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+        
         _fbo.genFBO();
-        _fbo.genFBOTexture(w.get(0) * 2, h.get(0) * 2);
+        _fbo.genFBOTexture(_framebufferWidth, _framebufferHeight);
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {
@@ -1399,9 +1404,9 @@ final class DrawEngine {
         int bb_h = textPrt.heightTexture, bb_w = textPrt.widthTexture;
         float i_x0 = ((float) textPrt.xTextureShift / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
         float i_y0 = ((float) textPrt.yTextureShift / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w / 2f) / (float) _handler.getLayout().getWidth()
+        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w / _handler.getLayout().getDpiScale()[0]) / (float) _handler.getLayout().getWidth()
                 * 2.0f) - 1.0f;
-        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h / 2f) / (float) _handler.getLayout().getHeight()
+        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h / _handler.getLayout().getDpiScale()[0]) / (float) _handler.getLayout().getHeight()
                 * 2.0f - 1.0f) * (-1.0f);
         float[] argb = { (float) text.getForeground().getRed() / 255.0f,
                 (float) text.getForeground().getGreen() / 255.0f, (float) text.getForeground().getBlue() / 255.0f,

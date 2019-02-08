@@ -22,7 +22,6 @@ namespace SpaceVIL
         //private int _minFontY;
         //private int _maxFontY;
 
-        private int _lineWidth = 0; //private float[] _lineWidth;
         private List<int> _letEndPos;
         private int _lineYShift = 0;
         private int _lineXShift = 0;
@@ -52,6 +51,7 @@ namespace SpaceVIL
             Monitor.Enter(textLock);
             try
             {
+                int _lineWidth = 0; //private float[] _lineWidth;
                 String text = GetItemText();
                 Font font = GetFont();
 
@@ -491,6 +491,7 @@ namespace SpaceVIL
             float alignShiftY = 0;
             int xFirstBeg = 0;
 
+            int _lineWidth = GetWidth();
             // Horizontal
             if (alignments.HasFlag(ItemAlignment.Left) || (_lineWidth >= _parentAllowWidth))
             {

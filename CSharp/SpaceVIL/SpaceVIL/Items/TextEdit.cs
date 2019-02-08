@@ -310,7 +310,7 @@ namespace SpaceVIL
             }
         }
 
-        private int CursorPosToCoord(int cPos)
+        private int CursorPosToCoord(int cPos, bool isx)
         {
             int coord = 0;
             if (_text_object.GetLetPosArray() == null) return coord;
@@ -327,12 +327,15 @@ namespace SpaceVIL
                 }
             }
 
-            if (GetLineXShift() + coord < 0)
+            if (isx)
             {
-                _text_object.SetLineXShift(-coord);
+                if (GetLineXShift() + coord < 0)
+                {
+                    _text_object.SetLineXShift(-coord);
+                }
+                if (GetLineXShift() + coord > _cursorXMax)
+                    _text_object.SetLineXShift(_cursorXMax - coord);
             }
-            if (GetLineXShift() + coord > _cursorXMax)
-                _text_object.SetLineXShift(_cursorXMax - coord);
 
             return GetLineXShift() + coord;
         }
@@ -346,7 +349,7 @@ namespace SpaceVIL
                 _cursor_position = len;
                 //ReplaceCursor();
             }
-            int pos = CursorPosToCoord(_cursor_position);
+            int pos = CursorPosToCoord(_cursor_position, true);
 
             int w = GetTextWidth();
 
@@ -562,8 +565,8 @@ namespace SpaceVIL
                 fromPt = 0;
             if (toPt == -1)
                 toPt = 0;
-            fromPt = CursorPosToCoord(fromPt);
-            toPt = CursorPosToCoord(toPt);
+            fromPt = CursorPosToCoord(fromPt, false);
+            toPt = CursorPosToCoord(toPt, false);
 
             if (fromPt == toPt)
             {

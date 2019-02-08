@@ -10,17 +10,18 @@ namespace SpaceVIL
 {
     internal sealed class GLWHandler
     {
-        private float _scaleWidth = 1.0f;
-        private float _scaleHeight = 1.0f;
-        float[] GetDpiScale()
-        {
-            return new float[] { _scaleWidth, _scaleHeight };
-        }
+        // private float _scaleWidth = 1.0f;
+        // private float _scaleHeight = 1.0f;
+        // float[] GetDpiScale()
+        // {
+        //     return new float[] { _scaleWidth, _scaleHeight };
+        // }
         private void SetDpiScale(float w, float h)
         {
-            _scaleWidth = w;
-            _scaleHeight = h;
-            Console.WriteLine(String.Format("{0:0.0} {1:0.0}", w, h));
+            // _scaleWidth = w;
+            // _scaleHeight = h;
+            // Console.WriteLine(String.Format("{0:0.0} {1:0.0}", w, h));
+            _w_layout.SetDpiScale(w, h);
         }
 
         ///////////////////////////////////////////////
@@ -98,13 +99,13 @@ namespace SpaceVIL
             }
             Glfw.MakeContextCurrent(_window);
 
-            Console.WriteLine("VIDSIZE: " + Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width
-                        + " " + Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height);
+            // Console.WriteLine("VIDSIZE: " + Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width
+            //             + " " + Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height);
 
-            Console.WriteLine("WSIZE: " + _w_layout.GetWidth() + " " + _w_layout.GetHeight());
+            // Console.WriteLine("WSIZE: " + _w_layout.GetWidth() + " " + _w_layout.GetHeight());
             int w, h;
             Glfw.GetFramebufferSize(_window, out w, out h);
-            Console.WriteLine("FBSIZE: " + w + " " + h);
+            // Console.WriteLine("FBSIZE: " + w + " " + h);
 
             SetDpiScale((float)w / (float)_w_layout.GetWidth(), (float)h / (float)_w_layout.GetHeight());
 
@@ -119,10 +120,10 @@ namespace SpaceVIL
             {
                 // WPosition.SetX(_w_layout.GetX());
                 // WPosition.SetY(_w_layout.GetY());
-                _w_layout.SetX(150);
-                _w_layout.SetY(150);
-                GetPointer().SetX(150);
-                GetPointer().SetY(150);
+                _w_layout.SetX(200);
+                _w_layout.SetY(200);
+                GetPointer().SetX(200);
+                GetPointer().SetY(200);
             }
             Glfw.SetWindowSizeLimits(_window, _w_layout.GetMinWidth(), _w_layout.GetMinHeight(), _w_layout.GetMaxWidth(), _w_layout.GetMaxHeight());
             Glfw.SetWindowPos(_window, WPosition.GetX(), WPosition.GetY());

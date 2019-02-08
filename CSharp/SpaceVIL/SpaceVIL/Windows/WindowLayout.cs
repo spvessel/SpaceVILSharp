@@ -489,8 +489,8 @@ namespace SpaceVIL
             IsHidden = value;
         }
 
-        private float _scaleWidth = 2.0f;
-        private float _scaleHeight = 2.0f;
+        private float _scaleWidth = 1.0f;
+        private float _scaleHeight = 1.0f;
 
         internal float[] GetDpiScale()
         {
@@ -499,8 +499,10 @@ namespace SpaceVIL
 
         internal void SetDpiScale(float w, float h)
         {
-            _scaleWidth = w * 2;
-            _scaleHeight = h * 2;
+            // _scaleWidth = w * 2;
+            // _scaleHeight = h * 2;
+            _scaleWidth = w;
+            _scaleHeight = h;
         }
     }
 }

@@ -255,12 +255,14 @@ namespace SpaceVIL
         {
             _framebufferWidth = w;
             _framebufferHeight = h;
+            // _framebufferWidth = w * 2;
+            // _framebufferHeight = h * 2;
 
-            glViewport(0, 0, w, h);
+            glViewport(0, 0, _framebufferWidth, _framebufferHeight);
 
             _fbo.BindFBO();
             _fbo.ClearTexture();
-            _fbo.GenFBOTexture(w, h);
+            _fbo.GenFBOTexture(_framebufferWidth, _framebufferHeight);
             _fbo.UnbindFBO();
         }
 
@@ -996,13 +998,15 @@ namespace SpaceVIL
 
             int w, h;
             Glfw.GetFramebufferSize(_handler.GetWindowId(), out w, out h);
-            glViewport(0, 0, w, h);
 
+            // _framebufferWidth = w * 2;
+            // _framebufferHeight = h * 2;
             _framebufferWidth = w;
             _framebufferHeight = h;
+            glViewport(0, 0, _framebufferWidth, _framebufferHeight);
 
             _fbo.GenFBO();
-            _fbo.GenFBOTexture(w, h);
+            _fbo.GenFBOTexture(_framebufferWidth, _framebufferHeight);
             _fbo.UnbindFBO();
 
             _double_click_timer.Start();
@@ -1174,6 +1178,12 @@ namespace SpaceVIL
             int y = _handler.GetLayout().GetHeight() - (rect.GetParent().GetY() + rect.GetParent().GetHeight());
             int w = rect.GetParent().GetWidth();
             int h = rect.GetParent().GetHeight();
+            float scale = _handler.GetLayout().GetDpiScale()[0];
+            x = (int)((float)x * scale);
+            y = (int)((float)y * scale);
+            w = (int)((float)w * scale);
+            h = (int)((float)h * scale);
+
             glScissor(x, y, w, h);
 
             if (!_bounds.ContainsKey(rect))
@@ -1389,7 +1399,7 @@ namespace SpaceVIL
             store.Bind(fbo_texture);
             store.SendUniformSample2D(_blur, "tex");
             store.SendUniform1fv(_blur, "weights", 5, weights);
-            store.SendUniform2fv(_blur, "frame", new float[2] { _framebufferWidth, _framebufferHeight });
+            store.SendUniform2fv(_blur, "frame", new float[2] { _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight() });
             store.SendUniform1f(_blur, "res", (res * 1f / 10));
             store.SendUniform2fv(_blur, "point", xy);
             store.SendUniform2fv(_blur, "size", wh);
@@ -1420,8 +1430,8 @@ namespace SpaceVIL
             int bb_h = textPrt.HeightTexture, bb_w = textPrt.WidthTexture;
             float i_x0 = ((float)textPrt.XTextureShift / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
             float i_y0 = ((float)textPrt.YTextureShift / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w / 2f) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y1 = (((float)textPrt.YTextureShift + (float)bb_h / 2f) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w / _handler.GetLayout().GetDpiScale()[0]) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)textPrt.YTextureShift + (float)bb_h / _handler.GetLayout().GetDpiScale()[0]) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
             // float i_x0 = ((float)textPrt.XTextureShift / (float)_framebufferWidth * 2.0f) - 1.0f;
             // float i_y0 = ((float)textPrt.YTextureShift / (float)_framebufferHeight * 2.0f - 1.0f) * (-1.0f);
             // float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w/* * 0.9f*/) / (float)_framebufferWidth * 2.0f) - 1.0f;

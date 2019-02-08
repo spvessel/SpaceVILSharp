@@ -42,7 +42,7 @@ public class InputTest extends ActiveWindow {
 
         TextEdit te = new TextEdit();
         // te.setText("TextZaranee");
-        // te.setTextAlignment(ItemAlignment.RIGHT);
+        te.setTextAlignment(ItemAlignment.RIGHT);
         // te.getSelectionArea().setBackground(Color.green);
         te.setSubstrateText("Write some text");
         // te.setMargin(0,0,150,0);
@@ -64,8 +64,8 @@ public class InputTest extends ActiveWindow {
         sp.setParameters(1, -5.5, 7, 0.51);
 
         // layout.addItem(password);
-        // layout.addItem(te);
-        layout.addItem(tb);
+        layout.addItem(te);
+        // layout.addItem(tb);
 
         ButtonCore bc = new ButtonCore("pizdec");
         bc.setSize(150, 30);
