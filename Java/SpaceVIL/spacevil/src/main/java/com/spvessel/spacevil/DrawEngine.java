@@ -994,8 +994,8 @@ final class DrawEngine {
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {
-            // glfwWaitEventsTimeout(_interval);
-            glfwWaitEvents();
+            glfwWaitEventsTimeout(_interval);
+            // glfwWaitEvents();
             // // glfwPollEvents();
 
             // glClearColor(0, 0, 0, 0);

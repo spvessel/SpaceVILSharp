@@ -30,7 +30,7 @@ public class MessageItem extends DialogItem {
      * Constructs a MessageItem
      */
     public MessageItem() {
-        super();
+        // super();
         setItemName("MessageItem_" + count);
         count++;
     }
