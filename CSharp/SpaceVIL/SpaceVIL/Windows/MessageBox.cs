@@ -71,6 +71,7 @@ namespace SpaceVIL
             Handler.IsBorderHidden = true;
             Handler.IsDialog = true;
             Handler.IsAlwaysOnTop = true;
+            Handler.IsCentered = true;
             Handler.AddItem(titleBar);
 
             VerticalStack layout = new VerticalStack();

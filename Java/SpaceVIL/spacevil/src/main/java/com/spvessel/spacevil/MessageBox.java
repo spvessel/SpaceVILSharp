@@ -65,6 +65,7 @@ public class MessageBox extends DialogWindow {
         Handler.isBorderHidden = true;
         Handler.isDialog = true;
         Handler.isAlwaysOnTop = true;
+        Handler.isCentered = true;
         Handler.addItem(titleBar);
 
         VerticalStack layout = new VerticalStack();
