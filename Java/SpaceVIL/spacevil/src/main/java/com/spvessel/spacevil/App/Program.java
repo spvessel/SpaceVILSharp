@@ -18,7 +18,10 @@ public class Program {
         InputTest it = new InputTest();
         TextTest tt = new TextTest();
 
-        WindowLayoutBox.tryShow("MainWindow");
+        ScissorsTest sc = new ScissorsTest();
+        sc.show();
+
+        // WindowLayoutBox.tryShow("MainWindow");
         // it.show();
     }
 }

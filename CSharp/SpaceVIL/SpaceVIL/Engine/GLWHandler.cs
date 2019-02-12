@@ -121,9 +121,9 @@ namespace SpaceVIL
                 // WPosition.SetX(_w_layout.GetX());
                 // WPosition.SetY(_w_layout.GetY());
                 _w_layout.SetX(200);
-                _w_layout.SetY(200);
+                _w_layout.SetY(50);
                 GetPointer().SetX(200);
-                GetPointer().SetY(200);
+                GetPointer().SetY(50);
             }
             Glfw.SetWindowSizeLimits(_window, _w_layout.GetMinWidth(), _w_layout.GetMinHeight(), _w_layout.GetMaxWidth(), _w_layout.GetMaxHeight());
             Glfw.SetWindowPos(_window, WPosition.GetX(), WPosition.GetY());

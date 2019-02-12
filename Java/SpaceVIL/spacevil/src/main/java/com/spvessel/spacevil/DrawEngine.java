@@ -1000,10 +1000,8 @@ final class DrawEngine {
 
             // glClearColor(0, 0, 0, 0);
             if (!engineEvent.lastEvent().contains(InputEventType.WINDOW_RESIZE)) {
-
                 update();
                 _handler.swap();
-                _bounds.clear();
             }
             flag_move = true;
         }
@@ -1023,6 +1021,7 @@ final class DrawEngine {
 
     protected void update() {
         render();
+        _bounds.clear();
     }
 
     private void render() {

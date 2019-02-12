@@ -8,7 +8,7 @@ namespace SpaceVIL.Common
 {
     public static class CommonService
     {
-        private static String _version = "0.3.1-ALPHA - January 2019";
+        private static String _version = "0.3.1.4-ALPHA - February 2019";
 
 #if STANDARD
     private static String _platform = "Standard";

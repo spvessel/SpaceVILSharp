@@ -142,9 +142,9 @@ final class GLWHandler {
 
         } else {
             _w_layout.setX(200);
-            _w_layout.setY(200);
+            _w_layout.setY(50);
             getPointer().setX(200);
-            getPointer().setY(200);
+            getPointer().setY(50);
         }
         glfwSetWindowSizeLimits(_window, _w_layout.getMinWidth(), _w_layout.getMinHeight(), _w_layout.getMaxWidth(),
                 _w_layout.getMaxHeight());

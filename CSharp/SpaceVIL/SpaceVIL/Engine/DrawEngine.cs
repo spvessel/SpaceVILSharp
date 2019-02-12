@@ -1023,7 +1023,6 @@ namespace SpaceVIL
                 {
                     Update();
                     _handler.Swap();
-                    _bounds.Clear();
                 }
                 flag_move = true;
             }
@@ -1045,6 +1044,7 @@ namespace SpaceVIL
         internal void Update()
         {
             Render();
+            _bounds.Clear();
         }
 
         internal void Render()
