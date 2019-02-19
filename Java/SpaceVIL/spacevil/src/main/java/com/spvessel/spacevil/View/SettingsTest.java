@@ -77,9 +77,9 @@ public class SettingsTest extends ActiveWindow
             });
             stack.addItem(chb);
 
-            ButtonCore btn1 = new ButtonCore();
+            ButtonToggle btn1 = new ButtonToggle();
             stack.addItem(btn1);
-            btn1.setBackground(new Color(46, 204, 112));
+            // btn1.setBackground(new Color(46, 204, 112));
             btn1.setItemName("PrintWindows");
             btn1.setText("Print all windows.");
             btn1.setForeground(new Color(0,0,0));
@@ -91,9 +91,9 @@ public class SettingsTest extends ActiveWindow
             btn1.setWidthPolicy(SizePolicy.FIXED);
             btn1.eventMouseClick.add( (sender, args) ->
             {
-//                System.out.println(btn1.getItemName());
+               System.out.println(btn1.getItemName());
 //                WindowLayoutBox.tryShow("FlowTest");
-                chb.setChecked(!chb.isChecked());
+                // chb.setChecked(!chb.isChecked());
             });
 
             ButtonCore btn2 = new ButtonCore();
@@ -110,8 +110,9 @@ public class SettingsTest extends ActiveWindow
             btn2.setHeightPolicy(SizePolicy.EXPAND);
             btn2.eventMouseClick.add( (sender, args) ->
             {
-                ms.show();
-                btn2.setText(String.valueOf(ms.getResult()));
+                // ms.show();
+                // btn2.setText(String.valueOf(ms.getResult()));
+                System.out.println(btn1.isToggled());
             });
             stack.addItem(btn2);
         }

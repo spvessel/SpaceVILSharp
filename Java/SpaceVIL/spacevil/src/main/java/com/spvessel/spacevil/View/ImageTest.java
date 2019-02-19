@@ -100,16 +100,12 @@ public class ImageTest extends ActiveWindow {
         img.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         img.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
 
-        // HorizontalSlider h_slider = new HorizontalSlider();
-        // h_slider.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
-        // h_slider.setMargin(25, 0, 25, 0);
-        // InterfaceCommonMethodState valueChanged =
-        // (sender) -> pb.setCurrentValue((int) h_slider.getCurrentValue());
-        // h_slider.eventValueChanged.add(valueChanged);
+        HorizontalSlider h_slider = new HorizontalSlider();
+        h_slider.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+        h_slider.setMargin(25, 0, 25, 0);
+        h_slider.eventValueChanged.add((sender) -> pb.setCurrentValue((int) h_slider.getCurrentValue()));
 
-        // frame.addItems(btn_action, h_slider, pb);
-        // btn_action.addItem(img);
-        frame.addItem(img);
+        // frame.addItem(img);
 
         // BufferedImage bi1 = MakeShade(image, 4);
         // ImageItem img1 = new ImageItem(bi1);
@@ -147,10 +143,21 @@ public class ImageTest extends ActiveWindow {
         combo.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
         combo.setMargin(25, 0, 25, 0);
         combo.selectionChanged.add(() -> {
-            //System.out.println(combo.getCurrentIndex());
+            Thread task = new Thread(() -> {
+                for (int i = 0; i <= 10 * combo.getCurrentIndex(); i++) {
+                    pb.setCurrentValue(i);
+                    try {
+                        Thread.sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            task.start();
         });
 
-        frame.addItem(combo);
+        frame.addItems(btn_action, combo, h_slider, pb);
+        btn_action.addItem(img);
 
         for (int i = 0; i < 5; i++) {
             MenuItem menu_item = new MenuItem("Custom item for selection #" + i);

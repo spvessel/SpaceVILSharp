@@ -10,10 +10,10 @@ namespace SpaceVIL
     public class ComboBox : Prototype
     {
         static int count = 0;
-        public ButtonCore _selected = new ButtonCore();
-        public ButtonCore _dropdown = new ButtonCore();
-        public CustomShape _arrow;
-        public ComboBoxDropDown _dropdownarea;
+        public ButtonCore Selection = new ButtonCore();
+        public ButtonCore DropDown = new ButtonCore();
+        public CustomShape Arrow;
+        public ComboBoxDropDown DropDownArea;
         public EventCommonMethod SelectionChanged;
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace SpaceVIL
             EventKeyPress += OnKeyPress;
             EventMousePress += (sender, args) => ShowDropDownList();
 
-            _arrow = new CustomShape();
+            Arrow = new CustomShape();
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBox)));
         }
 
@@ -44,7 +44,7 @@ namespace SpaceVIL
         /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
-            _selected.SetTextAlignment(alignment);
+            Selection.SetTextAlignment(alignment);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace SpaceVIL
         /// </summary>
         public void SetTextMargin(Indents margin)
         {
-            _selected.SetMargin(margin);
+            Selection.SetMargin(margin);
         }
 
         /// <summary>
@@ -60,23 +60,23 @@ namespace SpaceVIL
         /// </summary>
         public void SetFont(Font font)
         {
-            _selected.SetFont(font);
+            Selection.SetFont(font);
         }
         public void SetFontSize(int size)
         {
-            _selected.SetFontSize(size);
+            Selection.SetFontSize(size);
         }
         public void SetFontStyle(FontStyle style)
         {
-            _selected.SetFontStyle(style);
+            Selection.SetFontStyle(style);
         }
         public void SetFontFamily(FontFamily font_family)
         {
-            _selected.SetFontFamily(font_family);
+            Selection.SetFontFamily(font_family);
         }
         public Font GetFont()
         {
-            return _selected.GetFont();
+            return Selection.GetFont();
         }
 
         /// <summary>
@@ -84,11 +84,11 @@ namespace SpaceVIL
         /// </summary>
         public void SetText(String text)
         {
-            _selected.SetText(text);
+            Selection.SetText(text);
         }
         public String GetText()
         {
-            return _selected.GetText();
+            return Selection.GetText();
         }
 
         /// <summary>
@@ -96,27 +96,27 @@ namespace SpaceVIL
         /// </summary>
         public void SetForeground(Color color)
         {
-            _selected.SetForeground(color);
+            Selection.SetForeground(color);
         }
         public void SetForeground(int r, int g, int b)
         {
-            _selected.SetForeground(r, g, b);
+            Selection.SetForeground(r, g, b);
         }
         public void SetForeground(int r, int g, int b, int a)
         {
-            _selected.SetForeground(r, g, b, a);
+            Selection.SetForeground(r, g, b, a);
         }
         public void SetForeground(float r, float g, float b)
         {
-            _selected.SetForeground(r, g, b);
+            Selection.SetForeground(r, g, b);
         }
         public void SetForeground(float r, float g, float b, float a)
         {
-            _selected.SetForeground(r, g, b, a);
+            Selection.SetForeground(r, g, b, a);
         }
         public Color GetForeground()
         {
-            return _selected.GetForeground();
+            return Selection.GetForeground();
         }
 
         /// <summary>
@@ -125,24 +125,26 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //adding
-            base.AddItem(_selected);
-            base.AddItem(_dropdown);
-            _dropdown.AddItem(_arrow);
+            base.AddItem(Selection);
+            base.AddItem(DropDown);
+            DropDown.AddItem(Arrow);
 
-            //dropdownarea
-            _dropdownarea = new ComboBoxDropDown(GetHandler());
-            _dropdownarea.SetOutsideClickClosable(true);
-            _dropdownarea.SelectionChanged += OnSelectionChanged;
+            //DropDownArea
+            DropDownArea = new ComboBoxDropDown(GetHandler());
+            DropDownArea.SetOutsideClickClosable(true);
+            DropDownArea.SelectionChanged += OnSelectionChanged;
         }
 
         private void ShowDropDownList()
         {
-            //dropdownarea
-            _dropdownarea.SetPosition(GetX(), GetY() + GetHeight());
-            _dropdownarea.SetSize(_selected.GetWidth(), 100);
+            //DropDownArea
+            DropDownArea.SetPosition(GetX(), GetY() + GetHeight());
+
+            DropDownArea.SetWidth(Selection.GetWidth());
+            // DropDownArea.SetHeight(100);
             MouseArgs args = new MouseArgs();
             args.Button = MouseButton.ButtonLeft;
-            _dropdownarea.Show(this, args);
+            DropDownArea.Show(this, args);
         }
 
         /// <summary>
@@ -150,7 +152,7 @@ namespace SpaceVIL
         /// </summary>
         public override void AddItem(IBaseItem item)
         {
-            _dropdownarea.AddItem(item);
+            DropDownArea.AddItem(item);
         }
 
         /// <summary>
@@ -158,7 +160,7 @@ namespace SpaceVIL
         /// </summary>
         public override void RemoveItem(IBaseItem item)
         {
-            _dropdownarea.RemoveItem(item);
+            DropDownArea.RemoveItem(item);
         }
 
         /// <summary>
@@ -166,17 +168,17 @@ namespace SpaceVIL
         /// </summary>
         public void SetCurrentIndex(int index)
         {
-            _dropdownarea.SetCurrentIndex(index);
-            _selected.SetText(_dropdownarea.GetText());
+            DropDownArea.SetCurrentIndex(index);
+            Selection.SetText(DropDownArea.GetText());
             SelectionChanged?.Invoke();
         }
         public int GetCurrentIndex()
         {
-            return _dropdownarea.GetCurrentIndex();
+            return DropDownArea.GetCurrentIndex();
         }
         private void OnSelectionChanged()
         {
-            _selected.SetText(_dropdownarea.GetText());
+            Selection.SetText(DropDownArea.GetText());
             SelectionChanged?.Invoke();
         }
 
@@ -195,17 +197,17 @@ namespace SpaceVIL
             Style inner_style = style.GetInnerStyle("selection");
             if (inner_style != null)
             {
-                _selected.SetStyle(inner_style);
+                Selection.SetStyle(inner_style);
             }
             inner_style = style.GetInnerStyle("dropdownbutton");
             if (inner_style != null)
             {
-                _dropdown.SetStyle(inner_style);
+                DropDown.SetStyle(inner_style);
             }
             inner_style = style.GetInnerStyle("arrow");
             if (inner_style != null)
             {
-                _arrow.SetStyle(inner_style);
+                Arrow.SetStyle(inner_style);
             }
         }
     }

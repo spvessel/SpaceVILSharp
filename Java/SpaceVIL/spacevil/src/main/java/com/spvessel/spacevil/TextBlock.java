@@ -35,7 +35,7 @@ class TextBlock extends Prototype
     private List<KeyCode> ShiftValCodes;
     private List<KeyCode> InsteadKeyMods;
 
-    private int scrollXStep = 15;
+    private int scrollXStep = 30;
 
     TextBlock() {
         setItemName("TextBlock_" + count);

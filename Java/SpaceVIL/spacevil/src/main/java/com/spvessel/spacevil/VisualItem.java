@@ -89,6 +89,19 @@ final class VisualItem extends BaseItem {
         int value = _x - getX();
         if (value != 0) {
             super.setX(_x);
+            if (getParent() != null && getWidthPolicy() == SizePolicy.FIXED) {
+                boolean layout = getParent() instanceof InterfaceHLayout;
+                boolean grid = getParent() instanceof InterfaceGrid;
+
+                if (!layout && !grid)
+                    updateGeometry();
+
+                if (layout)
+                    ((InterfaceHLayout) getParent()).updateLayout();
+                if (grid)
+                    if (!(getParent() instanceof InterfaceFree))
+                        ((InterfaceGrid) getParent()).updateLayout();
+            }
             eventManager.notifyListeners(GeometryEventType.MOVED_X, value);
         }
     }
@@ -98,6 +111,19 @@ final class VisualItem extends BaseItem {
         int value = _y - getY();
         if (value != 0) {
             super.setY(_y);
+            if (getParent() != null && getHeightPolicy() == SizePolicy.FIXED) {
+                boolean layout = getParent() instanceof InterfaceVLayout;
+                boolean grid = getParent() instanceof InterfaceGrid;
+
+                if (!layout && !grid)
+                    updateGeometry();
+
+                if (layout)
+                    ((InterfaceVLayout) getParent()).updateLayout();
+                if (grid)
+                    if (!(getParent() instanceof InterfaceFree))
+                        ((InterfaceGrid) getParent()).updateLayout();
+            }
             eventManager.notifyListeners(GeometryEventType.MOVED_Y, value);
         }
     }
@@ -250,10 +276,42 @@ final class VisualItem extends BaseItem {
 
     void setPadding(Indents padding) {
         _padding = padding;
+        updateGeometry();
+        if (getParent() != null) {
+            boolean hLayout = getParent() instanceof InterfaceHLayout;
+            boolean vLayout = getParent() instanceof InterfaceVLayout;
+            boolean grid = getParent() instanceof InterfaceGrid;
+
+            if (!hLayout && !vLayout && !grid)
+                updateBehavior();
+
+            if (hLayout)
+                ((InterfaceHLayout) getParent()).updateLayout();
+            if (vLayout)
+                ((InterfaceVLayout) getParent()).updateLayout();
+            if (grid)
+                ((InterfaceGrid) getParent()).updateLayout();
+        }
     }
 
     void setPadding(int left, int top, int right, int bottom) {
         _padding = new Indents(left, top, right, bottom);
+        updateGeometry();
+        if (getParent() != null) {
+            boolean hLayout = getParent() instanceof InterfaceHLayout;
+            boolean vLayout = getParent() instanceof InterfaceVLayout;
+            boolean grid = getParent() instanceof InterfaceGrid;
+
+            if (!hLayout && !vLayout && !grid)
+                updateBehavior();
+
+            if (hLayout)
+                ((InterfaceHLayout) getParent()).updateLayout();
+            if (vLayout)
+                ((InterfaceVLayout) getParent()).updateLayout();
+            if (grid)
+                ((InterfaceGrid) getParent()).updateLayout();
+        }
     }
 
     EventManager eventManager = null;
@@ -282,26 +340,26 @@ final class VisualItem extends BaseItem {
     }
 
     protected void addItem(InterfaceBaseItem item) {
-        int count = 0;
+        // int count = 0;
         // locker.lock();
         // try {
-            if (item.equals(this)) {
-                System.out.println("Trying to add current item in himself.");
-                return;
-            }
-            item.setHandler(getHandler());
-            addChildren(item);
-            _content.add(item);
-            ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
-            // needs to force update all attributes
-            castAndUpdate(item);
-            count++;
-            item.initElements();
-            count++;
+        if (item.equals(this)) {
+            System.out.println("Trying to add current item in himself.");
+            return;
+        }
+        item.setHandler(getHandler());
+        addChildren(item);
+        _content.add(item);
+        ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
+        // needs to force update all attributes
+        castAndUpdate(item);
+        // count++;
+        item.initElements();
+        // count++;
         // } catch (Exception ex) {
-        //     System.out.println(item.getItemName() + " " + count + "\n" + ex.toString());
+        // System.out.println(item.getItemName() + " " + count + "\n" + ex.toString());
         // } finally {
-        //     locker.unlock();
+        // locker.unlock();
         // }
     }
 
@@ -363,6 +421,7 @@ final class VisualItem extends BaseItem {
     protected void removeItem(InterfaceBaseItem item) {
         locker.lock();
         try {
+            getHandler().resetItems();
             LayoutType type;
             if (item instanceof InterfaceFloating) {
                 cascadeRemoving(item, LayoutType.FLOATING);
@@ -465,9 +524,9 @@ final class VisualItem extends BaseItem {
     private List<InputEventType> _pass_events = new LinkedList<>();
 
     boolean isPassEvents() {
-//        if (_pass_events.size() == 0)
-//            return true;
-//        return false;
+        // if (_pass_events.size() == 0)
+        // return true;
+        // return false;
 
         return (_pass_events.size() == 0);
     }
@@ -780,16 +839,17 @@ final class VisualItem extends BaseItem {
 
         _is_style_set = true;
 
-        setBackground(style.background);
         setSizePolicy(style.widthPolicy, style.heightPolicy);
         setSize(style.width, style.height);
         setMinSize(style.minWidth, style.minHeight);
         setMaxSize(style.maxWidth, style.maxHeight);
-        setAlignment(style.alignment);
         setPosition(style.x, style.y);
+        setMargin(style.margin);
         setPadding(style.padding);
         setSpacing(style.spacing);
-        setMargin(style.margin);
+        setAlignment(style.alignment);
+
+        setBackground(style.background);
         setBorderRadius(style.borderRadius);
         setBorderThickness(style.borderThickness);
         setBorderFill(style.borderFill);

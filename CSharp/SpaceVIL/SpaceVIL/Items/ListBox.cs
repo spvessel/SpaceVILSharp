@@ -13,6 +13,18 @@ namespace SpaceVIL
         static int count = 0;
 
         /// <summary>
+        /// ScrollBar moving step
+        /// </summary>
+        public void SetScrollStep(int step)
+        {
+            _area.SetStep(step);
+        }
+        public int GetScrollStep()
+        {
+            return _area.GetStep();
+        }
+
+        /// <summary>
         /// Selection area of the ListBox
         /// </summary>
         public Rectangle GetSelectionShape()

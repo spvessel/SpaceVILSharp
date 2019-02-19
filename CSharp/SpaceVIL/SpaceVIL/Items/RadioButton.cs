@@ -10,7 +10,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class RadioButton : Prototype, IHLayout
+    public class RadioButton : Prototype
     {
         internal class CustomIndicator : Indicator
         {
@@ -21,7 +21,7 @@ namespace SpaceVIL
         }
 
         static int count = 0;
-        private Label _text_object;
+        private TextLine _text_object;
         private CustomIndicator _indicator;
 
         /// <returns> RadioButton's indicator </returns>
@@ -42,8 +42,8 @@ namespace SpaceVIL
             count++;
 
             //text
-            _text_object = new Label();
-            _text_object.IsFocusable = false;
+            _text_object = new TextLine();
+            // _text_object.IsFocusable = false;
             _text_object.SetItemName(GetItemName() + "_text_object");
 
             //indicator
@@ -84,8 +84,7 @@ namespace SpaceVIL
             };
 
             //adding
-            AddItem(_indicator);
-            AddItem(_text_object);
+            AddItems(_indicator, _text_object);
         }
 
         /// <summary>
@@ -109,64 +108,6 @@ namespace SpaceVIL
                 {
                     (item as RadioButton).GetIndicator().GetIndicatorMarker().SetToggled(false);
                 }
-            }
-        }
-
-        // public override bool IsVisible
-        // {
-        //     get => base.IsVisible;
-        //     set
-        //     {
-        //         base.IsVisible = value;
-        //         foreach (var child in GetItems())
-        //             child.IsVisible = value;
-        //     }
-        // }
-
-        //Layout rules
-        /// <summary>
-        /// Add item to the RadioButton
-        /// </summary>
-        public new void AddItem(IBaseItem item)
-        {
-            base.AddItem(item);
-            UpdateLayout();
-        }
-
-        /// <summary>
-        /// Set width of the RadioButton
-        /// </summary>
-        public override void SetWidth(int width)
-        {
-            base.SetWidth(width);
-            UpdateLayout();
-        }
-
-        /// <summary>
-        /// Set X position of the RadioButton
-        /// </summary>
-        public override void SetX(int _x)
-        {
-            base.SetX(_x);
-            UpdateLayout();
-        }
-
-        /// <summary>
-        /// Update RadioButton's states (size and position)
-        /// </summary>
-        public virtual void UpdateLayout()
-        {
-            int offset = 0;
-            int startX = GetX() + GetPadding().Left;
-
-            foreach (var child in GetItems())
-            {
-                child.SetX(startX + offset + child.GetMargin().Left);
-                if (child.GetWidthPolicy() == SizePolicy.Expand)
-                {
-                    child.SetWidth(GetWidth() - offset);
-                }
-                offset += child.GetWidth() + GetSpacing().Horizontal;
             }
         }
 
@@ -216,7 +157,7 @@ namespace SpaceVIL
         /// </summary>
         public void SetText(String text)
         {
-            _text_object.SetText(text);
+            _text_object.SetItemText(text);
         }
         public String GetText()
         {

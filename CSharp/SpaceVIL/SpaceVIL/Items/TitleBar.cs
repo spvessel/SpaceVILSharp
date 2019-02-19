@@ -171,7 +171,7 @@ namespace SpaceVIL
                     _layout.AddItems(_icon, _text_object, _minimize, _maximize, _close);
                     break;
                 case HorizontalDirection.FromRightToLeft:
-                    _text_object.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+                    _text_object.SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
                     _layout.AddItems(_close, _minimize, _maximize, _icon, _text_object);
                     break;
                 default:

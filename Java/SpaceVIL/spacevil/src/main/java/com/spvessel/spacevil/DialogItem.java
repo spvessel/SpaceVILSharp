@@ -55,8 +55,8 @@ public class DialogItem extends Prototype {
     }
 
     public void close() {
-        _handler.resetItems();
-        _handler.setFocusedItem(_handler.getWindow());
+        // _handler.resetItems();
+        // _handler.setFocusedItem(_handler.getWindow());
         _handler.getWindow().removeItem(this);
     }
 

@@ -10,7 +10,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class CheckBox : Prototype, IHLayout
+    public class CheckBox : Prototype
     {
         internal class CustomIndicator : Indicator
         {
@@ -21,7 +21,7 @@ namespace SpaceVIL
         }
 
         static int count = 0;
-        private Label _text_object;
+        private TextLine _text_object;
         //private bool _toggled = false;
         private CustomIndicator _indicator;
 
@@ -41,8 +41,7 @@ namespace SpaceVIL
             EventKeyPress += OnKeyPress;
 
             //text
-            _text_object = new Label();
-            _text_object.IsFocusable = false;
+            _text_object = new TextLine();
             _text_object.SetItemName(GetItemName() + "_text_object");
 
             //indicator
@@ -78,8 +77,7 @@ namespace SpaceVIL
             EventMouseClick += (sender, args) => _indicator.GetIndicatorMarker().SetToggled(!_indicator.GetIndicatorMarker().IsToggled());
 
             //adding
-            AddItem(_indicator);
-            AddItem(_text_object);
+            AddItems(_indicator, _text_object);
         }
 
         /// <summary>
@@ -92,64 +90,6 @@ namespace SpaceVIL
         public void SetChecked(bool value)
         {
             _indicator.GetIndicatorMarker().SetToggled(value);
-        }
-
-        // public override bool IsVisible
-        // {
-        //     get => base.IsVisible;
-        //     set
-        //     {
-        //         base.IsVisible = value;
-        //         foreach (var child in GetItems())
-        //             child.IsVisible = value;
-        //     }
-        // }
-
-        //Layout rules
-        /// <summary>
-        /// Add item to the CheckBox
-        /// </summary>
-        public override void AddItem(IBaseItem item)
-        {
-            base.AddItem(item);
-            UpdateLayout();
-        }
-
-        /// <summary>
-        /// Width of the CheckBox
-        /// </summary>
-        public override void SetWidth(int width)
-        {
-            base.SetWidth(width);
-            UpdateLayout();
-        }
-
-        /// <summary>
-        /// X position of the CheckBox
-        /// </summary>
-        public override void SetX(int _x)
-        {
-            base.SetX(_x);
-            UpdateLayout();
-        }
-
-        /// <summary>
-        /// Update items position and size in the CheckBox
-        /// </summary>
-        public virtual void UpdateLayout()
-        {
-            int offset = 0;
-            int startX = GetX() + GetPadding().Left;
-
-            foreach (var child in GetItems())
-            {
-                child.SetX(startX + offset + child.GetMargin().Left);
-                if (child.GetWidthPolicy() == SizePolicy.Expand)
-                {
-                    child.SetWidth(GetWidth() - offset);
-                }
-                offset += child.GetWidth() + GetSpacing().Horizontal;
-            }
         }
 
         //text init
@@ -198,7 +138,7 @@ namespace SpaceVIL
         /// </summary>
         public void SetText(String text)
         {
-            _text_object.SetText(text);
+            _text_object.SetItemText(text);
         }
         public String GetText()
         {

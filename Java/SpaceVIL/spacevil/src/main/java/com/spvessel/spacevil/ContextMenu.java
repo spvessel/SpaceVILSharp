@@ -47,6 +47,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     // }
     /**
      * Constructs a ContextMenu
+     * 
      * @param handler parent window for the ContextMenu
      */
     public ContextMenu(WindowLayout handler) {
@@ -169,8 +170,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
             int tmp = getPadding().left + getPadding().right + item.getMargin().left + item.getMargin().right;
             if (item instanceof MenuItem) {
                 MenuItem m = (MenuItem) item;
-                tmp += m.getTextWidth() + m.getMargin().left + m.getMargin().right + m.getPadding().left
-                        + m.getPadding().right;
+                tmp += m.getTextWidth() + m.getPadding().left + m.getPadding().right;
             } else
                 tmp = tmp + item.getWidth() + item.getMargin().left + item.getMargin().right;
 
@@ -182,9 +182,10 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
 
     /**
      * Show the ContextMenu
+     * 
      * @param sender the item from which the show request is sent
-     * @param args mouse click arguments (cursor position, mouse button,
-     *             mouse button press/release, etc.)
+     * @param args   mouse click arguments (cursor position, mouse button, mouse
+     *               button press/release, etc.)
      */
     public void show(InterfaceItem sender, MouseArgs args) {
         if (args.button.getValue() == activeButton.getValue()) {

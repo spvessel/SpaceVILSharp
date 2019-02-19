@@ -52,6 +52,24 @@ namespace SpaceVIL
         public void SetPadding(Indents padding)
         {
             _padding = padding;
+            UpdateGeometry();
+
+            if (GetParent() != null)
+            {
+                var hLayout = GetParent() as IHLayout;
+                var vLayout = GetParent() as IVLayout;
+                var grid = GetParent() as IGrid;
+
+                if (hLayout == null && vLayout == null && grid == null)
+                    UpdateBehavior();
+
+                if (hLayout != null)
+                    hLayout.UpdateLayout();
+                if (vLayout != null)
+                    vLayout.UpdateLayout();
+                if (grid != null)
+                    grid.UpdateLayout();
+            }
         }
         public void SetPadding(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
@@ -59,6 +77,25 @@ namespace SpaceVIL
             _padding.Top = top;
             _padding.Right = right;
             _padding.Bottom = bottom;
+            UpdateGeometry();
+
+            if (GetParent() != null)
+            {
+                var hLayout = GetParent() as IHLayout;
+                var vLayout = GetParent() as IVLayout;
+                var grid = GetParent() as IGrid;
+
+                if (hLayout == null && vLayout == null && grid == null)
+                    UpdateBehavior();
+
+                if (hLayout != null)
+                    hLayout.UpdateLayout();
+                if (vLayout != null)
+                    vLayout.UpdateLayout();
+                if (grid != null)
+                    grid.UpdateLayout();
+            }
+            UpdateGeometry();
         }
         public EventManager eventManager = null;
         private List<IBaseItem> _content = new List<IBaseItem>();
@@ -185,6 +222,8 @@ namespace SpaceVIL
             Monitor.Enter(Locker);
             try
             {
+                //reset focus
+                GetHandler().ResetItems();
                 LayoutType type;
                 if (item is IFloating)
                 {
@@ -393,6 +432,21 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetX(_x);
+
+                if (GetParent() != null && GetWidthPolicy() == SizePolicy.Fixed)
+                {
+                    var layout = GetParent() as IHLayout;
+                    var grid = GetParent() as IGrid;
+
+                    if (layout == null && grid == null)
+                        UpdateGeometry();
+
+                    if (layout != null)
+                        layout.UpdateLayout();
+                    if (grid != null)
+                        if ((GetParent() as IFree) == null)
+                            grid.UpdateLayout();
+                }
                 eventManager.NotifyListeners(GeometryEventType.Moved_X, value);
             }
         }
@@ -403,6 +457,23 @@ namespace SpaceVIL
             {
                 base.SetY(_y);
                 eventManager.NotifyListeners(GeometryEventType.Moved_Y, value);
+
+                if (GetParent() != null && GetHeightPolicy() == SizePolicy.Fixed)
+                {
+                    var layout = GetParent() as IVLayout;
+                    var grid = GetParent() as IGrid;
+
+                    if (layout == null && grid == null)
+                        UpdateGeometry();
+
+                    if (layout != null)
+                        layout.UpdateLayout();
+
+                    if (grid != null)
+                        if ((GetParent() as IFree) == null)
+                            grid.UpdateLayout();
+                }
+
             }
         }
 
@@ -777,27 +848,29 @@ namespace SpaceVIL
 
         //style
         internal bool _is_style_Set = false;
-        public virtual void SetInnerStyle(String element, Style style)
-        {
+        // public virtual void SetInnerStyle(String element, Style style)
+        // {
 
-        }
+        // }
         public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
 
             _is_style_Set = true;
-
-            SetBackground(style.Background);
-            SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
             SetSize(style.Width, style.Height);
-            SetMinSize(style.MinWidth, style.MinHeight);
-            SetMaxSize(style.MaxWidth, style.MaxHeight);
+            SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
+            SetPadding(style.Padding);
+            SetMargin(style.Margin);
             SetAlignment(style.Alignment);
             SetPosition(style.X, style.Y);
-            SetPadding(style.Padding);
+
             SetSpacing(style.Spacing);
-            SetMargin(style.Margin);
+
+            SetMinSize(style.MinWidth, style.MinHeight);
+            SetMaxSize(style.MaxWidth, style.MaxHeight);
+
+            SetBackground(style.Background);
             SetBorderRadius(style.BorderRadius);
             SetBorderThickness(style.BorderThickness);
             SetBorderFill(style.BorderFill);

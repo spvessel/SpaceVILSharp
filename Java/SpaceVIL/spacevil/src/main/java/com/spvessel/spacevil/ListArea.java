@@ -11,7 +11,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     public EventCommonMethod selectionChanged = new EventCommonMethod();
     public EventCommonMethod itemListChanged = new EventCommonMethod();
 
-    private int _step = 15;
+    private int _step = 30;
 
     /**
      * ScrollBar moving step

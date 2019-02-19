@@ -18,8 +18,7 @@ namespace SpaceVIL.Core
     {
         void UpdateLayout();
     }
-    public interface IFlow
+    public interface IFree
     {
-        void UpdateLayout();
     }
 }

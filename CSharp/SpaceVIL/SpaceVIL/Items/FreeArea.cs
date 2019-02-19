@@ -10,7 +10,7 @@ namespace SpaceVIL
     /// <summary>
     /// Unbounded area with free location of inner items
     /// </summary>
-    public class FreeArea : Prototype, IGrid, IDraggable
+    public class FreeArea : Prototype, IGrid, IDraggable, IFree
     {
         static int count = 0;
         private int _x_press = 0;

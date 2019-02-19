@@ -3,6 +3,7 @@ package com.spvessel.spacevil.Decorations;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.GraphicsMathService;
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
@@ -60,6 +61,15 @@ public class Style {
         isVisible = true;
         maxWidth = 65535;
         maxHeight = 65535;
+        foreground = Color.white;
+    }
+
+    /**
+     * Sets objects style
+     */
+    public void setStyle(InterfaceBaseItem... items) {
+        for (InterfaceBaseItem item : items)
+            item.setStyle(this);
     }
 
     /**
@@ -427,8 +437,8 @@ public class Style {
         style.font = DefaultsService.getDefaultFont(16);
         style.widthPolicy = SizePolicy.FIXED;
         style.heightPolicy = SizePolicy.FIXED;
-        style.width = 10;
-        style.height = 10;
+        style.width = 30;
+        style.height = 30;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         style.borderRadius = new CornerRadius(6);
@@ -499,13 +509,16 @@ public class Style {
         style.minWidth = 20;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
 
+        Style indicator_style = getIndicatorStyle();
+        style.addInnerStyle("indicator", indicator_style);
+
         Style textline_style = getLabelStyle();
         textline_style.foreground = new Color(210, 210, 210);
         textline_style.widthPolicy = SizePolicy.EXPAND;
         textline_style.heightPolicy = SizePolicy.EXPAND;
         textline_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
         textline_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        textline_style.margin = new Indents(10, 0, 0, 0);
+        textline_style.margin = new Indents(10 + indicator_style.width, 0, 0, 0);
         style.addInnerStyle("textline", textline_style);
 
         return style;
@@ -708,6 +721,7 @@ public class Style {
         style.addInnerStyle("itemlist", itemlist_style);
 
         Style area_style = getListAreaStyle();
+        area_style.setPadding(0, 0, 0, 0);
 
         Style substrate_style = area_style.getInnerStyle("substrate");
         substrate_style.background = new Color(150, 150, 150, 255);
@@ -1236,15 +1250,6 @@ public class Style {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.borderRadius = new CornerRadius(10);
 
-        Style textline_style = getLabelStyle();
-        textline_style.foreground = new Color(210, 210, 210);
-        textline_style.widthPolicy = SizePolicy.EXPAND;
-        textline_style.heightPolicy = SizePolicy.EXPAND;
-        textline_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
-        textline_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        textline_style.margin = new Indents(10, 0, 0, 0);
-        style.addInnerStyle("textline", textline_style);
-
         Style indicator_style = getIndicatorStyle();
         indicator_style.shape = GraphicsMathService.getRoundSquare(20, 20, 10, 0, 0);
         indicator_style.isFixedShape = true;
@@ -1253,6 +1258,15 @@ public class Style {
         Style marker_style = indicator_style.getInnerStyle("marker");
         marker_style.shape = GraphicsMathService.getEllipse(100, 16);
         indicator_style.addInnerStyle("marker", marker_style);
+
+        Style textline_style = getLabelStyle();
+        textline_style.foreground = new Color(210, 210, 210);
+        textline_style.widthPolicy = SizePolicy.EXPAND;
+        textline_style.heightPolicy = SizePolicy.EXPAND;
+        textline_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
+        textline_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        textline_style.margin = new Indents(10 + indicator_style.width, 0, 0, 0);
+        style.addInnerStyle("textline", textline_style);
 
         return style;
     }
@@ -1319,7 +1333,6 @@ public class Style {
         substrate_style.font = DefaultsService.getDefaultFont(Font.ITALIC, 14);
         substrate_style.foreground = new Color(150, 150, 150);
         style.addInnerStyle("substrate", substrate_style);
-
 
         return style;
     }

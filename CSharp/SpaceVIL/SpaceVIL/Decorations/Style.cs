@@ -79,6 +79,18 @@ namespace SpaceVIL.Decorations
         /// <summary>
         /// Sets object size (width and height)
         /// </summary>
+        public void SetStyle(params IBaseItem[] items)
+        {
+            foreach(IBaseItem item in items)
+            {
+                // Console.WriteLine("Set style for " + item.GetItemName());
+                item.SetStyle(this);
+            }
+        }
+
+        /// <summary>
+        /// Sets object size (width and height)
+        /// </summary>
         public void SetSize(int width, int height)
         {
             Width = width;
@@ -434,12 +446,15 @@ namespace SpaceVIL.Decorations
             style.MinWidth = 20;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
 
+            Style indicator_style = GetIndicatorStyle();
+            style.AddInnerStyle("indicator", indicator_style);
+
             Style textline_style = GetLabelStyle();
             textline_style.WidthPolicy = SizePolicy.Expand;
             textline_style.HeightPolicy = SizePolicy.Expand;
             textline_style.Alignment = ItemAlignment.VCenter;
             textline_style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            textline_style.Margin = new Indents(10, 0, 0, 0);
+            textline_style.Margin = new Indents(10 + indicator_style.Width, 0, 0, 0);
             style.AddInnerStyle("textline", textline_style);
 
             return style;
@@ -629,6 +644,7 @@ namespace SpaceVIL.Decorations
             style.AddInnerStyle("itemlist", itemlist_style);
 
             Style area_style = GetListAreaStyle();
+            area_style.SetPadding(0, 0, 0, 0);
 
             Style substrate_style = area_style.GetInnerStyle("substrate");
             substrate_style.Background = Color.FromArgb(255, 150, 150, 150);
@@ -1136,14 +1152,6 @@ namespace SpaceVIL.Decorations
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.BorderRadius = new CornerRadius(10);
 
-            Style textline_style = GetLabelStyle();
-            textline_style.WidthPolicy = SizePolicy.Expand;
-            textline_style.HeightPolicy = SizePolicy.Expand;
-            textline_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            textline_style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            textline_style.Margin = new Indents(10, 0, 0, 0);
-            style.AddInnerStyle("textline", textline_style);
-
             Style indicator_style = GetIndicatorStyle();
             indicator_style.Shape = GraphicsMathService.GetEllipse();
             style.AddInnerStyle("indicator", indicator_style);
@@ -1151,6 +1159,14 @@ namespace SpaceVIL.Decorations
             Style marker_style = indicator_style.GetInnerStyle("marker");
             marker_style.Shape = GraphicsMathService.GetEllipse();
             indicator_style.AddInnerStyle("marker", marker_style);
+
+            Style textline_style = GetLabelStyle();
+            textline_style.WidthPolicy = SizePolicy.Expand;
+            textline_style.HeightPolicy = SizePolicy.Expand;
+            textline_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            textline_style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            textline_style.Margin = new Indents(10 + indicator_style.Width, 0, 0, 0);
+            style.AddInnerStyle("textline", textline_style);
 
             return style;
         }
@@ -1558,7 +1574,7 @@ namespace SpaceVIL.Decorations
 
         //     return style;
         // }
-        
+
         /// <returns> default style for TreeView objects </returns>
         public static Style GetTreeViewStyle()
         {

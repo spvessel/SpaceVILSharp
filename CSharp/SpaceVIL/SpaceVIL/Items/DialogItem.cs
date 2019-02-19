@@ -55,8 +55,8 @@ namespace SpaceVIL
 
         public virtual void Close()
         {
-            _handler.ResetItems();
-            _handler.SetFocusedItem(_handler.GetWindow());
+            // _handler.ResetItems();
+            // _handler.SetFocusedItem(_handler.GetWindow());
             _handler.GetWindow().RemoveItem(this);
         }
 

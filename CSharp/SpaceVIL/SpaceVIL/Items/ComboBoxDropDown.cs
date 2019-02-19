@@ -98,6 +98,7 @@ namespace SpaceVIL
                 if (args.Key == KeyCode.Escape)
                     Hide();
             };
+            UpdateSize();
         }
 
         void OnSelectionChanged()
@@ -165,7 +166,7 @@ namespace SpaceVIL
             }
             // SetSize(width, height);
             SetWidth(width);
-            SetHeight(height);
+            SetHeight(height + 5);
         }
 
         /// <summary>

@@ -17,10 +17,10 @@ public class ComboBox extends Prototype {
     // Queue<BaseItem> _queue = new Queue<BaseItem>();
 
     static int count = 0;
-    public ButtonCore _selected = new ButtonCore();
-    public ButtonCore _dropdown = new ButtonCore();
-    public CustomShape _arrow = new CustomShape();
-    public ComboBoxDropDown _dropdownarea;
+    public ButtonCore selection = new ButtonCore();
+    public ButtonCore dropDown = new ButtonCore();
+    public CustomShape arrow = new CustomShape();
+    public ComboBoxDropDown dropDownArea;
     public EventCommonMethod selectionChanged = new EventCommonMethod();
 
     /**
@@ -48,79 +48,79 @@ public class ComboBox extends Prototype {
      * Text alignment in the ComboBox
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        _selected.setTextAlignment(alignment);
+        selection.setTextAlignment(alignment);
     }
 
     public void setTextAlignment(List<ItemAlignment> alignment) {
-        _selected.setTextAlignment(alignment);
+        selection.setTextAlignment(alignment);
     }
 
     /**
      * Text margin in the ComboBox
      */
     public void setTextMargin(Indents margin) {
-        _selected.setMargin(margin);
+        selection.setMargin(margin);
     }
 
     /**
      * Text font parameters in the ComboBox
      */
     public void setFont(Font font) {
-        _selected.setFont(font);
+        selection.setFont(font);
     }
 
     public void setFontSize(int size) {
-        _selected.setFontSize(size);
+        selection.setFontSize(size);
     }
 
     public void setFontStyle(int style) {
-        _selected.setFontStyle(style);
+        selection.setFontStyle(style);
     }
 
     public void setFontFamily(String font_family) {
-        _selected.setFontFamily(font_family);
+        selection.setFontFamily(font_family);
     }
 
     public Font getFont() {
-        return _selected.getFont();
+        return selection.getFont();
     }
 
     /**
      * Set text in the ComboBox
      */
     public void setText(String text) {
-        _selected.setText(text);
+        selection.setText(text);
     }
 
     public String getText() {
-        return _selected.getText();
+        return selection.getText();
     }
 
     /**
      * Text color in the ComboBox
      */
     public void setForeground(Color color) {
-        _selected.setForeground(color);
+        selection.setForeground(color);
     }
 
     public void setForeground(int r, int g, int b) {
-        _selected.setForeground(r, g, b);
+        selection.setForeground(r, g, b);
     }
 
     public void setForeground(int r, int g, int b, int a) {
-        _selected.setForeground(r, g, b, a);
+        selection.setForeground(r, g, b, a);
     }
 
     public void setForeground(float r, float g, float b) {
-        _selected.setForeground(r, g, b);
+        selection.setForeground(r, g, b);
     }
 
     public void setForeground(float r, float g, float b, float a) {
-        _selected.setForeground(r, g, b, a);
+        selection.setForeground(r, g, b, a);
     }
 
     public Color getForeground() {
-        return _selected.getForeground();
+        return selection.getForeground();
     }
 
     /**
@@ -129,26 +129,26 @@ public class ComboBox extends Prototype {
     @Override
     public void initElements() {
         // adding
-        super.addItem(_selected);
-        super.addItem(_dropdown);
-        _dropdown.addItem(_arrow);
+        super.addItem(selection);
+        super.addItem(dropDown);
+        dropDown.addItem(arrow);
 
-        // dropdownarea
-        _dropdownarea = new ComboBoxDropDown(getHandler());
-        _dropdownarea.activeButton = MouseButton.BUTTON_LEFT;
-        _dropdownarea.setOutsideClickClosable(true);
-        _dropdownarea.selectionChanged.add(() -> onSelectionChanged());
+        // dropDownArea
+        dropDownArea = new ComboBoxDropDown(getHandler());
+        dropDownArea.activeButton = MouseButton.BUTTON_LEFT;
+        dropDownArea.setOutsideClickClosable(true);
+        dropDownArea.selectionChanged.add(() -> onSelectionChanged());
     }
 
     private void showDropDownList() {
         
-        // dropdownarea
-        _dropdownarea.setPosition(getX(), getY() + getHeight());
-        _dropdownarea.setSize(_selected.getWidth(), 100);
-        _dropdownarea.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        // dropDownArea
+        dropDownArea.setPosition(getX(), getY() + getHeight());
+        dropDownArea.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        dropDownArea.setWidth(selection.getWidth());
         MouseArgs args = new MouseArgs();
         args.button = MouseButton.BUTTON_LEFT;
-        _dropdownarea.show(this, args);
+        dropDownArea.show(this, args);
     }
 
     /**
@@ -156,7 +156,7 @@ public class ComboBox extends Prototype {
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
-        _dropdownarea.addItem(item);
+        dropDownArea.addItem(item);
         // _queue.Enqueue(item);
     }
 
@@ -165,24 +165,24 @@ public class ComboBox extends Prototype {
      */
     @Override
     public void removeItem(InterfaceBaseItem item) {
-        _dropdownarea.removeItem(item);
+        dropDownArea.removeItem(item);
     }
 
     /**
      * Current element in the ComboBox by index
      */
     public void setCurrentIndex(int index) {
-        _dropdownarea.setCurrentIndex(index);
-        _selected.setText(_dropdownarea.getText());
+        dropDownArea.setCurrentIndex(index);
+        selection.setText(dropDownArea.getText());
         selectionChanged.execute();
     }
 
     public int getCurrentIndex() {
-        return _dropdownarea.getCurrentIndex();
+        return dropDownArea.getCurrentIndex();
     }
 
     private void onSelectionChanged() {
-        _selected.setText(_dropdownarea.getText());
+        selection.setText(dropDownArea.getText());
         selectionChanged.execute();
     }
 
@@ -200,15 +200,15 @@ public class ComboBox extends Prototype {
 
         Style inner_style = style.getInnerStyle("selection");
         if (inner_style != null) {
-            _selected.setStyle(inner_style);
+            selection.setStyle(inner_style);
         }
         inner_style = style.getInnerStyle("dropdownbutton");
         if (inner_style != null) {
-            _dropdown.setStyle(inner_style);
+            dropDown.setStyle(inner_style);
         }
         inner_style = style.getInnerStyle("arrow");
         if (inner_style != null) {
-            _arrow.setStyle(inner_style);
+            arrow.setStyle(inner_style);
         }
     }
 }

@@ -33,6 +33,7 @@ final class DrawEngine {
     private TextInputArgs _tiargs = new TextInputArgs();
 
     private List<Prototype> hoveredItems;
+    private List<Prototype> underFocusedItem;
     private Prototype hoveredItem = null;
     private Prototype focusedItem = null;
 
@@ -54,13 +55,21 @@ final class DrawEngine {
         focusedItem.setFocused(true);
     }
 
-    protected void resetItems() {
+    protected void resetFocus() {
         if (focusedItem != null)
             focusedItem.setFocused(false);
-        focusedItem = null;
+        // set focus to WContainer
+        focusedItem = _handler.getLayout().getWindow();
+        focusedItem.setFocused(true);
+        if (underFocusedItem != null)
+            underFocusedItem.clear();
+    }
+
+    protected void resetItems() {
+        resetFocus();
+
         if (hoveredItem != null)
             hoveredItem.setMouseHover(false);
-        ;
         hoveredItem = null;
         hoveredItems.clear();
     }
@@ -612,6 +621,7 @@ final class DrawEngine {
         // flag_click = false;
 
         _tooltip.initTimer(false);
+
         _margs.button = MouseButton.getEnum(button);
         _margs.state = InputState.getEnum(action);
         _margs.mods = KeyMods.getEnum(mods);
@@ -629,11 +639,15 @@ final class DrawEngine {
             engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
             return;
         }
-        _handler.getLayout().getWindow().getSides(ptrRelease.getX(), ptrRelease.getY());
+
+        if (action == InputState.PRESS.getValue()
+                && _handler.getLayout().getWindow().getSides(ptrRelease.getX(), ptrRelease.getY()).size() != 0) {
+            _handler.getLayout().getWindow().saveLastFocus(focusedItem);
+        }
 
         switch (action) {
         case GLFW_RELEASE:
-
+            _handler.getLayout().getWindow().restoreFocus();
             while (!tmp.isEmpty()) {
                 Prototype item = tmp.pollLast();
                 if (item.isDisabled())
@@ -711,16 +725,15 @@ final class DrawEngine {
                         }
                     }
                 }
+                underFocusedItem = new LinkedList<Prototype>(hoveredItems);
+                underFocusedItem.remove(focusedItem);
+
                 // System.out.println(focusedItem.getItemName());
                 if (is_double_click) {
                     if (focusedItem != null)
-                        assignActions(InputEventType.MOUSE_DOUBLE_CLICK, _margs, focusedItem);
+                        assignActions(InputEventType.MOUSE_DOUBLE_CLICK, _margs, focusedItem, false);
                     // focusedItem.eventMouseDoubleClick.execute(focusedItem, _margs);
                 }
-            }
-
-            if (hoveredItem instanceof WContainer) {
-                ((WContainer) hoveredItem)._resizing = true;
             }
             engineEvent.resetAllEvents();
             engineEvent.setEvent(InputEventType.MOUSE_PRESS);
@@ -898,11 +911,11 @@ final class DrawEngine {
             }
         } else {
             if (action == InputState.PRESS.getValue())
-                assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
-            if (action == InputState.REPEAT.getValue())
-                assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
-            if (action == InputState.RELEASE.getValue())
-                assignActions(InputEventType.KEY_RELEASE, _kargs, focusedItem);
+                assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem, true);
+            else if (action == InputState.REPEAT.getValue())
+                assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem, true);
+            else if (action == InputState.RELEASE.getValue())
+                assignActions(InputEventType.KEY_RELEASE, _kargs, focusedItem, true);
         }
     }
 
@@ -951,7 +964,7 @@ final class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
-    private void assignActions(InputEventType action, InputEventArgs args, Prototype sender) {
+    private void assignActions(InputEventType action, InputEventArgs args, Prototype sender, boolean is_pass_under) {
         if (sender.isDisabled())
             return;
 
@@ -959,8 +972,27 @@ final class DrawEngine {
         task.item = sender;
         task.action = action;
         task.args = args;
-
         _handler.getLayout().setEventTask(task);
+
+        if (is_pass_under) {
+            if (underFocusedItem != null) {
+                Deque<Prototype> tmp = new ArrayDeque<Prototype>(underFocusedItem);
+                while (tmp.size() != 0) {
+                    Prototype item = tmp.pollLast();
+                    if (item.equals(focusedItem) && focusedItem.isDisabled())
+                        continue;// пропустить
+
+                    EventTask t = new EventTask();
+                    t.item = item;
+                    t.action = action;
+                    t.args = args;
+                    _handler.getLayout().setEventTask(t);
+                    if (!item.isPassEvents(action))
+                        break;// остановить передачу событий последующим элементам
+                              // 
+                }
+            }
+        }
         _handler.getLayout().executePollActions();
     }
 
@@ -988,7 +1020,7 @@ final class DrawEngine {
         // _framebufferHeight = h.get(0) * 2;
 
         glViewport(0, 0, _framebufferWidth, _framebufferHeight);
-        
+
         _fbo.genFBO();
         _fbo.genFBOTexture(_framebufferWidth, _framebufferHeight);
         _fbo.unbindFBO();
@@ -1125,7 +1157,8 @@ final class DrawEngine {
         glEnable(GL_SCISSOR_TEST);
         int x = rect.getParent().getX();// + rect.getParent().getPadding().left;
         int y = _handler.getLayout().getHeight() - (rect.getParent().getY() + rect.getParent().getHeight());
-        int w = rect.getParent().getWidth();// - rect.getParent().getPadding().right - rect.getParent().getPadding().left;
+        int w = rect.getParent().getWidth();// - rect.getParent().getPadding().right -
+                                            // rect.getParent().getPadding().left;
         int h = rect.getParent().getHeight();
         float scale = _handler.getLayout().getDpiScale()[0];
         x *= scale;
@@ -1403,10 +1436,10 @@ final class DrawEngine {
         int bb_h = textPrt.heightTexture, bb_w = textPrt.widthTexture;
         float i_x0 = ((float) textPrt.xTextureShift / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
         float i_y0 = ((float) textPrt.yTextureShift / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w / _handler.getLayout().getDpiScale()[0]) / (float) _handler.getLayout().getWidth()
-                * 2.0f) - 1.0f;
-        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h / _handler.getLayout().getDpiScale()[0]) / (float) _handler.getLayout().getHeight()
-                * 2.0f - 1.0f) * (-1.0f);
+        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w / _handler.getLayout().getDpiScale()[0])
+                / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
+        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h / _handler.getLayout().getDpiScale()[0])
+                / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
         float[] argb = { (float) text.getForeground().getRed() / 255.0f,
                 (float) text.getForeground().getGreen() / 255.0f, (float) text.getForeground().getBlue() / 255.0f,
                 (float) text.getForeground().getAlpha() / 255.0f };

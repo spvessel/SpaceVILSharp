@@ -15,6 +15,18 @@ import java.util.List;
 public class ListBox extends Prototype {
     private static int count = 0;
 
+    /**
+     * ScrollBar moving step
+     */
+    public void setScrollStep(int step)
+    {
+        _area.setStep(step);
+    }
+    public int getScrollStep()
+    {
+        return _area.getStep();
+    }
+    
     public Rectangle getSelectionShape() {
         return _area.getSubstrate();
     }

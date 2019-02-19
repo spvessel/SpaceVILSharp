@@ -103,7 +103,7 @@ public class BlockList extends ResizableItem {
 
         _palette_menu = new ContextMenu(getHandler());
         _palette_menu.setBackground(60, 60, 60);
-        _palette_menu.setSize(80, 123);
+        // _palette_menu.setSize(80, 123);
         MenuItem red = new MenuItem("Red");
         red.setForeground(210, 210, 210);
         red.eventMouseClick.add((sender, args) -> {

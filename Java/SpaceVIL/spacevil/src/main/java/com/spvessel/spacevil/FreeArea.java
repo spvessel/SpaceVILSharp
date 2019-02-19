@@ -7,7 +7,7 @@ import com.spvessel.spacevil.Flags.MouseButton;
 import java.util.Map;
 import java.util.HashMap;
 
-public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDraggable {
+public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDraggable, InterfaceFree {
     /**
      * Unbounded area with free location of inner items
      */

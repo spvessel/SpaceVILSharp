@@ -1,19 +1,31 @@
+using System;
 using System.Drawing;
 using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
-    public class WContainer : Prototype, IWindow
+    public class WContainer : Prototype//, IWindow
     {
         static int count = 0;
         internal ItemAlignment _sides = 0;
         internal bool _is_fixed = false;
-        internal bool _resizing = false;
+        private Prototype _focus = null;
 
         public WContainer()
         {
             SetItemName("WContainer_" + count);
             count++;
+        }
+
+        internal void SaveLastFocus(Prototype focused)
+        {
+            _focus = focused;
+        }
+        internal void RestoreFocus()
+        {
+            if (_focus != null)
+                _focus.SetFocus();
+            _focus = null;
         }
 
         internal override bool GetHoverVerification(float xpos, float ypos)
@@ -35,7 +47,7 @@ namespace SpaceVIL
             return IsMouseHover();
         }
 
-        public ItemAlignment GetSides(float xpos, float ypos) //проблемы с глобальным курсором
+        internal ItemAlignment GetSides(float xpos, float ypos) //проблемы с глобальным курсором
         {
             if (xpos <= 5)
             {

@@ -99,6 +99,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
                 hide();
             }
         });
+        updateSize();
     }
 
     private void onSelectionChanged() {
@@ -138,6 +139,30 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     @Override
     public void removeItem(InterfaceBaseItem item) {
         itemList.removeItem(item);
+    }
+
+    private void updateSize() {
+        int height = 0;
+        int width = getWidth();
+        List<InterfaceBaseItem> list = itemList.getListContent();
+        for (InterfaceBaseItem item : list) {
+            height += (item.getHeight() + itemList.getArea().getSpacing().vertical);
+
+            int tmp = getPadding().left + getPadding().right + item.getMargin().left + item.getMargin().right;
+
+            if (item instanceof MenuItem) {
+                MenuItem m = (MenuItem) item;
+                tmp += m.getTextWidth() + m.getMargin().left + m.getMargin().right + m.getPadding().left
+                        + m.getPadding().right;
+            } else
+                tmp = tmp + item.getWidth() + item.getMargin().left + item.getMargin().right;
+
+            if (width < tmp)
+                width = tmp;
+        }
+        // SetSize(width, height);
+        setWidth(width);
+        setHeight(height + 5);
     }
 
     /**

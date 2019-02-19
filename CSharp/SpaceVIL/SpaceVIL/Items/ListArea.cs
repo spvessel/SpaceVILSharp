@@ -14,7 +14,7 @@ namespace SpaceVIL
         public EventCommonMethod SelectionChanged;
         public EventCommonMethod ItemListChanged;
 
-        private int _step = 15;
+        private int _step = 30;
 
         /// <summary>
         /// ScrollBar moving step

@@ -6,12 +6,11 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.awt.*;
 import java.util.List;
 
-public class RadioButton extends Prototype implements InterfaceHLayout {
+public class RadioButton extends Prototype {
     class CustomIndicator extends Indicator {
         @Override
         boolean getHoverVerification(float xpos, float ypos) {
@@ -20,7 +19,7 @@ public class RadioButton extends Prototype implements InterfaceHLayout {
     }
 
     private static int count = 0;
-    private Label _text_object;
+    private TextLine _text_object;
     private CustomIndicator _indicator;
 
     /**
@@ -39,8 +38,7 @@ public class RadioButton extends Prototype implements InterfaceHLayout {
         eventKeyPress.add(this::onKeyPress);
 
         // text
-        _text_object = new Label();
-        _text_object.isFocusable = false;
+        _text_object = new TextLine();
         _text_object.setItemName(getItemName() + "_text_object");
 
         // indicator
@@ -73,50 +71,6 @@ public class RadioButton extends Prototype implements InterfaceHLayout {
         super.setMouseHover(value);
         _indicator.getIndicatorMarker().setMouseHover(value);
         updateState();
-    }
-
-    // Layout rules
-    /**
-     * Add item to the RadioButton
-     */
-    @Override
-    public void addItem(InterfaceBaseItem item) {
-        super.addItem(item);
-        updateLayout();
-    }
-
-    /**
-     * Set width of the RadioButton
-     */
-    @Override
-    public void setWidth(int width) {
-        super.setWidth(width);
-        updateLayout();
-    }
-
-    /**
-     * Set X position of the RadioButton
-     */
-    @Override
-    public void setX(int _x) {
-        super.setX(_x);
-        updateLayout();
-    }
-
-    /**
-     * Update RadioButton's states (size and position)
-     */
-    public void updateLayout() {
-        int offset = 0;
-        int startX = getX() + getPadding().left;
-
-        for (InterfaceBaseItem child : getItems()) {
-            child.setX(startX + offset + child.getMargin().left);
-            if (child.getWidthPolicy() == SizePolicy.EXPAND) {
-                child.setWidth(getWidth() - offset /*- child.getMargin().left - child.getMargin().right*/);
-            }
-            offset += child.getWidth() + getSpacing().horizontal;
-        }
     }
 
     // text init
@@ -160,7 +114,7 @@ public class RadioButton extends Prototype implements InterfaceHLayout {
      * Text in the RadioButton
      */
     public void setText(String text) {
-        _text_object.setText(text);
+        _text_object.setItemText(text);
     }
     public String getText() {
         return _text_object.getText();
@@ -203,8 +157,7 @@ public class RadioButton extends Prototype implements InterfaceHLayout {
         eventMouseClick.add(btn_click);
 
         // adding
-        addItem(_indicator);
-        addItem(_text_object);
+        addItems(_indicator, _text_object);
     }
 
     /**

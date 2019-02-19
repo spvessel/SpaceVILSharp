@@ -477,6 +477,10 @@ namespace SpaceVIL
         {
             engine.ResetItems();
         }
+        public void ResetFocus()
+        {
+            engine.ResetFocus();
+        }
 
         public void SetIcon(Image icon_big, Image icon_small)
         {

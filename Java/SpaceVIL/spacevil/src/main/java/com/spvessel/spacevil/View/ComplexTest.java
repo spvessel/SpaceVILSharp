@@ -58,6 +58,10 @@ public class ComplexTest extends ActiveWindow {
         b6.eventMouseClick.add((sender, args) -> fillBlocks());
         toolbar.addItems(b1, b2, b3, b4, b5, b6);
 
+        Style btn_style = Style.getButtonCoreStyle();
+        btn_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        btn_style.setStyle(b1, b2, b5, b6);
+
         // HorizontalSplitArea split_area = new HorizontalSplitArea();
         VerticalSplitArea split_area = new VerticalSplitArea();
         split_area.setMargin(0, 72, 0, 0);

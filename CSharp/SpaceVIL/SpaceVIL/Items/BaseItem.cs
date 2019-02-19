@@ -15,7 +15,7 @@ namespace SpaceVIL
         internal int _confines_y_1 = 0;
 
         private WindowLayout _handler;
-        
+
         /// <param name="handler"> WindowLayout handler - window that 
         /// contains the BaseItem </param>
         public void SetHandler(WindowLayout handler)
@@ -82,11 +82,10 @@ namespace SpaceVIL
             var grid_stack = item.GetParent() as IGrid;
             if (grid_stack != null)
             {
-                // Console.WriteLine(item.GetParent().GetType() + " what?");
                 return;
             }
-            var flow_stack = item.GetParent() as IFlow;
-            if (flow_stack != null)
+            var free_stack = item.GetParent() as IFree;
+            if (free_stack != null)
             {
                 return;
             }
@@ -107,6 +106,8 @@ namespace SpaceVIL
         /// </summary>
         public void RemoveItemFromListeners()
         {
+            if (GetParent() == null)
+                return;
             GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this);
             GetParent().RemoveEventListener(GeometryEventType.ResizeHeight, this);
             GetParent().RemoveEventListener(GeometryEventType.Moved_X, this);
@@ -132,6 +133,24 @@ namespace SpaceVIL
         public void SetMargin(Indents margin)
         {
             _margin = margin;
+            UpdateGeometry();
+
+            if (GetParent() != null)
+            {
+                var hLayout = GetParent() as IHLayout;
+                var vLayout = GetParent() as IVLayout;
+                var grid = GetParent() as IGrid;
+
+                if (hLayout == null && vLayout == null && grid == null)
+                    UpdateBehavior();
+
+                if (hLayout != null)
+                    hLayout.UpdateLayout();
+                if (vLayout != null)
+                    vLayout.UpdateLayout();
+                if (grid != null)
+                    grid.UpdateLayout();
+            }
         }
         public void SetMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
@@ -139,6 +158,24 @@ namespace SpaceVIL
             _margin.Top = top;
             _margin.Right = right;
             _margin.Bottom = bottom;
+            UpdateGeometry();
+
+            if (GetParent() != null)
+            {
+                var hLayout = GetParent() as IHLayout;
+                var vLayout = GetParent() as IVLayout;
+                var grid = GetParent() as IGrid;
+
+                if (hLayout == null && vLayout == null && grid == null)
+                    UpdateBehavior();
+
+                if (hLayout != null)
+                    hLayout.UpdateLayout();
+                if (vLayout != null)
+                    vLayout.UpdateLayout();
+                if (grid != null)
+                    grid.UpdateLayout();
+            }
         }
 
         /// <returns>triangles list of the BaseItem's shape</returns>
@@ -257,7 +294,7 @@ namespace SpaceVIL
             _drawable = value;
             // UpdateInnersDrawable(value);
         }
-        
+
         private bool _visible = true;
 
         /// <summary>
@@ -378,7 +415,26 @@ namespace SpaceVIL
         public void SetAlignment(ItemAlignment alignment)
         {
             _itemBehavior.SetAlignment(alignment);
-            UpdateBehavior();
+            UpdateGeometry();
+
+            if (GetParent() != null)
+            {
+                var hLayout = GetParent() as IHLayout;
+                var vLayout = GetParent() as IVLayout;
+                var grid = GetParent() as IGrid;
+
+                if (hLayout == null
+                && vLayout == null 
+                && grid == null)
+                    UpdateBehavior();
+
+                if (hLayout != null)
+                    hLayout.UpdateLayout();
+                if (vLayout != null)
+                    vLayout.UpdateLayout();
+                if (grid != null)
+                    grid.UpdateLayout();
+            }
         }
         public ItemAlignment GetAlignment()
         {
@@ -527,6 +583,12 @@ namespace SpaceVIL
         /// </summary>
         public void Update(GeometryEventType type, int value = 0)
         {
+            if (GetParent() == null)
+                return;
+
+            // if (GetItemName() == "toolbar")
+            //     Console.WriteLine("toolbar update behaviour");
+
             if ((this as VisualItem) != null)
             {
                 ProtoUpdate(type, value);

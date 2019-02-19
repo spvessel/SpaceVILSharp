@@ -128,6 +128,7 @@ namespace View
             Frame h2 = new Frame();
             VerticalSplitArea vsplit = new VerticalSplitArea();
             vsplit.SetSplitThickness(3);
+            vsplit.SetSplitHolderPosition(100);
             tabs.AddItemToTab("Split", vsplit);
 
             HorizontalSplitArea hsplit = new HorizontalSplitArea();

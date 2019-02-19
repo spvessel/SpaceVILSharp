@@ -5,14 +5,12 @@ import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.awt.*;
 import java.util.List;
 
-public class CheckBox extends Prototype implements InterfaceHLayout {
+public class CheckBox extends Prototype {
     class CustomIndicator extends Indicator {
         @Override
         public boolean getHoverVerification(float xpos, float ypos) {
@@ -21,7 +19,7 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
     }
 
     static int count = 0;
-    private Label _text_object;
+    private TextLine _text_object;
     private CustomIndicator _indicator;
 
     /**
@@ -40,15 +38,13 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
         eventKeyPress.add(this::onKeyPress);
 
         // text
-        _text_object = new Label();
-        _text_object.isFocusable = false;
+        _text_object = new TextLine();
         _text_object.setItemName(getItemName() + "_text_object");
-        
+
         // indicator
         _indicator = new CustomIndicator();
         _indicator.isFocusable = false;
 
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.CheckBox"));
         setStyle(DefaultsService.getDefaultStyle(CheckBox.class));
     }
 
@@ -76,50 +72,6 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
         updateState();
     }
 
-    // Layout rules
-    /**
-     * Add item to the CheckBox
-     */
-    @Override
-    public void addItem(InterfaceBaseItem item) {
-        super.addItem(item);
-        updateLayout();
-    }
-
-    /**
-     * Width of the CheckBox
-     */
-    @Override
-    public void setWidth(int width) {
-        super.setWidth(width);
-        updateLayout();
-    }
-
-    /**
-     * X position of the CheckBox
-     */
-    @Override
-    public void setX(int _x) {
-        super.setX(_x);
-        updateLayout();
-    }
-
-    /**
-     * Update items position and size in the CheckBox
-     */
-    public void updateLayout() {
-        int offset = 0;
-        int startX = getX() + getPadding().left;
-
-        for (InterfaceBaseItem child : getItems()) {
-            child.setX(startX + offset + child.getMargin().left);
-            if (child.getWidthPolicy() == SizePolicy.EXPAND) {
-                child.setWidth(getWidth() - offset /*- child.getMargin().left - child.getMargin().right*/);
-            }
-            offset += child.getWidth() + getSpacing().horizontal;
-        }
-    }
-
     // text init
     /**
      * Text alignment in the CheckBox
@@ -127,6 +79,7 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
     public void setTextAlignment(ItemAlignment... alignment) {
         _text_object.setTextAlignment(alignment);
     }
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
@@ -144,15 +97,19 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
+
     public void setFontSize(int size) {
         _text_object.setFontSize(size);
     }
+
     public void setFontStyle(int style) {
         _text_object.setFontStyle(style);
     }
+
     public void setFontFamily(String font_family) {
         _text_object.setFontFamily(font_family);
     }
+
     public Font getFont() {
         return _text_object.getFont();
     }
@@ -161,7 +118,7 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
      * Set text in the CheckBox
      */
     public void setText(String text) {
-        _text_object.setText(text);
+        _text_object.setItemText(text);
     }
 
     public String getText() {
@@ -174,18 +131,23 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
         return _text_object.getForeground();
     }
@@ -202,8 +164,7 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
         eventMouseClick.add(btn_click);
 
         // adding
-        addItem(_indicator);
-        addItem(_text_object);
+        addItems(_indicator, _text_object);
     }
 
     /**
@@ -212,6 +173,7 @@ public class CheckBox extends Prototype implements InterfaceHLayout {
     public boolean isChecked() {
         return _indicator.getIndicatorMarker().isToggled();
     }
+
     public void setChecked(boolean value) {
         _indicator.getIndicatorMarker().setToggled(value);
     }

@@ -486,6 +486,10 @@ public final class WindowLayout {
     public void resetItems() {
         engine.resetItems();
     }
+    
+    public void resetFocus() {
+        engine.resetFocus();
+    }
 
     public void setIcon(BufferedImage icon_big, BufferedImage icon_small) {
         engine.setBigIcon(icon_big);
