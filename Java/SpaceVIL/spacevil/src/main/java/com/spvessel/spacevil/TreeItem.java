@@ -283,6 +283,7 @@ public class TreeItem extends Prototype {
      * Update TreeItem states
      */
     public void updateLayout() {
+        _text_object.setWidth(_text_object.getTextWidth());
         // update self width
         int offset = 0;
         int startX = getX() + getPadding().left;
@@ -338,7 +339,7 @@ public class TreeItem extends Prototype {
      */
     public void setText(String text) {
         _text_object.setText(text);
-        _text_object.setWidth(_text_object.getTextWidth());
+//        _text_object.setWidth(_text_object.getTextWidth());
         updateLayout();
     }
     public String getText() {

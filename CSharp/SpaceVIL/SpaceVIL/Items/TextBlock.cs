@@ -520,6 +520,10 @@ namespace SpaceVIL
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
+                if (_isSelect)
+                    UnselectText();
+                if (_justSelected)
+                    CancelJustSelected();
                 _cursor_position = _textureStorage.SetText(text, _cursor_position);
                 ReplaceCursor();
                 //TextChanged?.Invoke();
@@ -875,6 +879,10 @@ namespace SpaceVIL
             _textureStorage.Clear();
             _cursor_position.X = 0;
             _cursor_position.Y = 0;
+            if (_isSelect)
+                UnselectText();
+            if (_justSelected)
+                CancelJustSelected();
         }
 
         //style

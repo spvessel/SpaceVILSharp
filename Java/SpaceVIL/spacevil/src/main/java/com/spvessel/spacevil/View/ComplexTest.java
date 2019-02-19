@@ -159,14 +159,16 @@ public class ComplexTest extends ActiveWindow {
     }
 
     private TreeItem getTreeBranch() {
-        TreeItem item = new TreeItem(TreeItemType.BRANCH);
-        item.setText(item.getItemName());
+        TreeItem item = new TreeItem(TreeItemType.BRANCH, "name2");
+        item.setFontSize(15);
+//        item.setText(item.getItemName());
         return item;
     }
 
     private TreeItem getTreeLeaf() {
-        TreeItem item = new TreeItem(TreeItemType.LEAF);
-        item.setText(item.getItemName());
+        TreeItem item = new TreeItem(TreeItemType.LEAF, "name1");
+        item.setFontSize(15);
+//        item.setText(item.getItemName());
         return item;
     }
 }
