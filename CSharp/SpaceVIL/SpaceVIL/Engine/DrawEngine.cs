@@ -506,7 +506,7 @@ namespace SpaceVIL
                 //check tooltip
                 if (GetHoverPrototype(ptrRelease.GetX(), ptrRelease.GetY(), InputEventType.MouseMove))
                 {
-                    if (HoveredItem.GetToolTip() != String.Empty)
+                    if (HoveredItem != null && HoveredItem.GetToolTip() != String.Empty)
                     {
                         _tooltip.InitTimer(true);
                     }

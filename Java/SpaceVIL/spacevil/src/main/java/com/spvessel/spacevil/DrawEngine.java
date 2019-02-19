@@ -536,7 +536,7 @@ final class DrawEngine {
             ptrPress.setY(ptrRelease.getY());
 
             if (getHoverPrototype(ptrRelease.getX(), ptrRelease.getY(), InputEventType.MOUSE_MOVE)) {
-                if (hoveredItem.getToolTip() != "") {
+                if (hoveredItem != null && hoveredItem.getToolTip() != "") {
                     _tooltip.initTimer(true);
                 }
 
