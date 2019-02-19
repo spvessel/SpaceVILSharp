@@ -247,6 +247,7 @@ namespace SpaceVIL
 
         public virtual void UpdateLayout()
         {
+            _text_object.SetWidth(_text_object.GetTextWidth());
             //update self width
             int offset = 0;
             int startX = GetX() + GetPadding().Left;
@@ -296,7 +297,7 @@ namespace SpaceVIL
         public void SetText(String text)
         {
             _text_object.SetText(text);
-            _text_object.SetWidth(_text_object.GetTextWidth());
+            // _text_object.SetWidth(_text_object.GetTextWidth());
             UpdateLayout();
         }
         public String GetText()

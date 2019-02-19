@@ -406,18 +406,6 @@ class TextBlock extends Prototype
     }
 
     void setFont(Font font) {
-        /*
-         * if (!font.equals(_elementFont)) { _elementFont = font; if (_elementFont ==
-         * null) return; int[] output = FontEngine.getSpacerDims(font); _minLineSpacer =
-         * output[0]; //_minFontY = output[1]; //_maxFontY = output[2]; _lineHeight =
-         * output[2]; //Math.abs(_maxFontY - _minFontY); if (_lineSpacer <
-         * _minLineSpacer) _lineSpacer = _minLineSpacer;
-         *
-         * if (_linesList == null) return; for (TextLine te : _linesList)
-         * te.setFont(font);
-         *
-         * _cursor.setHeight(_lineHeight + _lineSpacer); // + 6); }
-         */
         _textureStorage.setFont(font);
         _cursor.setHeight(_textureStorage.getCursorHeight());
     }
@@ -429,6 +417,10 @@ class TextBlock extends Prototype
     void setText(String text) {
         _textureStorage.textInputLock.lock();
         try {
+            if (_isSelect)
+                unselectText();
+            if (_justSelected)
+                cancelJustSelected();
             _cursor_position = _textureStorage.setText(text, _cursor_position);
             replaceCursor();
         } finally {
@@ -762,6 +754,10 @@ class TextBlock extends Prototype
         _textureStorage.clear();
         _cursor_position.x = 0;
         _cursor_position.y = 0;
+        if (_isSelect)
+            unselectText();
+        if (_justSelected)
+            cancelJustSelected();
     }
 
     // style

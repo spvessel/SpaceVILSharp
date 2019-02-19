@@ -554,6 +554,7 @@ namespace SpaceVIL
         {
             _lineYShift = sp;
             //UpdateCoords(); //SetCoordsFlag(true);
+            flagBB = true;
         }
 
         internal int GetLineYShift()
@@ -632,17 +633,23 @@ namespace SpaceVIL
 
         internal void SetAllowWidth(int allowWidth)
         {
+            if (_parentAllowWidth != allowWidth)
+                flagBB = true;
             _parentAllowWidth = allowWidth;
         }
 
         internal void SetAllowHeight(int allowHeight)
         {
+            if (_parentAllowHeight != allowHeight)
+                flagBB = true;
             _parentAllowHeight = allowHeight;
         }
 
         private int cursorWidth = 0;
         internal void SetCursorWidth(int cwidth)
         {
+            if (cursorWidth != cwidth)
+                flagBB = true;
             cursorWidth = cwidth;
         }
     }

@@ -242,36 +242,6 @@ abstract class TextItem extends Primitive {
         setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
     }
 
-    // private void setColor(List<Float> alphas) {
-    //     if (alphas == null)
-    //         return;
-    //     _colors = new float[alphas.size() * 4];
-
-    //     Color col = getForeground();
-    //     float r = col.getRed() * 1f / 255f;
-    //     float g = col.getGreen() * 1f / 255f;
-    //     float b = col.getBlue() * 1f / 255f;
-    //     // Console.WriteLine(r + " " + g + " " + b);
-    //     int inc = 0;
-    //     for (float f : alphas) {
-    //         float tmp = f;
-    //         float one = r;
-    //         float two = g;
-    //         float three = b;
-
-    //         if (tmp > 1)
-    //             tmp = 1;
-    //         _colors[inc] = one;
-    //         inc++;
-    //         _colors[inc] = two;
-    //         inc++;
-    //         _colors[inc] = three;
-    //         inc++;
-    //         _colors[inc] = tmp;
-    //         inc++;
-    //     }
-    // }
-
     private List<ItemAlignment> _textAlignment = new LinkedList<>();
 
     public List<ItemAlignment> getTextAlignment() {

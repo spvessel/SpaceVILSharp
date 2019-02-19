@@ -773,6 +773,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     void setLineYShift(int sp) {
         _lineYShift = sp;
         // updateCoords();
+        flagBB = true;
     }
 
     int getLineYShift() {
@@ -842,15 +843,21 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     }
 
     void setAllowWidth(int allowWidth) {
+        if (_parentAllowWidth != allowWidth)
+            flagBB = true;
         _parentAllowWidth = allowWidth;
     }
 
     void setAllowHeight(int allowHeight) {
+        if (_parentAllowHeight != allowHeight)
+            flagBB = true;
         _parentAllowHeight = allowHeight;
     }
 
     private int cursorWidth = 0;
     void setCursorWidth(int cwidth) {
+        if (cursorWidth != cwidth)
+            flagBB = true;
         cursorWidth = cwidth;
     }
 }
