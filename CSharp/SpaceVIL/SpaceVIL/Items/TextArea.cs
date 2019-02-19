@@ -139,6 +139,10 @@ namespace SpaceVIL
             //Area
             _area.SetItemName(GetItemName() + "_" + _area.GetItemName());
         }
+        public TextArea(String text) : this()
+        {
+            SetText(text);
+        }
 
         private Int64 v_size = 0;
         private Int64 h_size = 0;

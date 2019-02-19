@@ -67,6 +67,10 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextEdit)));
         }
+        public TextEdit(String text) : this()
+        {            
+            SetText(text);
+        }
 
         private void OnMouseDoubleClick(object sender, MouseArgs args)
         {

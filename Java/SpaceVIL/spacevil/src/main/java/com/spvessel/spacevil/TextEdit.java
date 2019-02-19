@@ -87,6 +87,10 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         // _substrate_text.setFontStyle(Font.ITALIC);
         // System.out.println("constructor " + _substrate_text.getFont().getStyle());
     }
+    public TextEdit(String text) {
+        this();
+        setText(text);
+    }
 
     private void onMouseDoubleClick(Object sender, MouseArgs args) {
         selectAll();

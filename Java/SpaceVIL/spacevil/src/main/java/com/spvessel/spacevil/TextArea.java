@@ -108,6 +108,10 @@ public class TextArea extends Prototype {
         _area.setItemName(getItemName() + "_" + _area.getItemName());
         // _area.setSpacing(0, 5);
     }
+    public TextArea(String text) {
+        this();
+        setText(text);
+    }
 
     private long v_size = 0;
     private long h_size = 0;
