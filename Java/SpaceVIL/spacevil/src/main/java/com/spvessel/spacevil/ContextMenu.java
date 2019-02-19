@@ -60,6 +60,12 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setStyle(DefaultsService.getDefaultStyle(ContextMenu.class));
     }
 
+    public ContextMenu(WindowLayout handler, MenuItem... items) {
+        this(handler);
+        for (MenuItem item : items)
+            addItem(item);
+    }
+
     /**
      * Initialization and adding of all elements in the ContextMenu
      */

@@ -11,7 +11,11 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.stream.Collectors;
 
 public class ComboBox extends Prototype {
     // Queue<BaseItem> _queue = new Queue<BaseItem>();
@@ -23,11 +27,12 @@ public class ComboBox extends Prototype {
     public ComboBoxDropDown dropDownArea;
     public EventCommonMethod selectionChanged = new EventCommonMethod();
 
+    private List<MenuItem> preItemList;
+
     /**
      * Constructs a ComboBox
      */
     public ComboBox() {
-        setBackground(0, 0, 0, 0);
         setItemName("ComboBox_" + count);
         count++;
 
@@ -35,6 +40,11 @@ public class ComboBox extends Prototype {
         eventMousePress.add((sender, args) -> showDropDownList());
 
         setStyle(DefaultsService.getDefaultStyle(ComboBox.class));
+    }
+
+    public ComboBox(MenuItem... items) {
+        this();
+        preItemList = Arrays.stream(items).collect(Collectors.toList());
     }
 
     void onKeyPress(InterfaceItem sender, KeyArgs args) {
@@ -138,10 +148,16 @@ public class ComboBox extends Prototype {
         dropDownArea.activeButton = MouseButton.BUTTON_LEFT;
         dropDownArea.setOutsideClickClosable(true);
         dropDownArea.selectionChanged.add(() -> onSelectionChanged());
+
+        if (preItemList != null) {
+            for (MenuItem item : preItemList)
+                dropDownArea.addItem(item);
+            preItemList = null;
+        }
     }
 
     private void showDropDownList() {
-        
+
         // dropDownArea
         dropDownArea.setPosition(getX(), getY() + getHeight());
         dropDownArea.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);

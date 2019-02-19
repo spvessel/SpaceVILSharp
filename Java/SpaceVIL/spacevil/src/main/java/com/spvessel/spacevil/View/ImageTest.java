@@ -139,7 +139,8 @@ public class ImageTest extends ActiveWindow {
         //// img_gr.setAlignment(ItemAlignment.TOP, ItemAlignment.HCENTER);
         //// frame.addItem(img_gr);
 
-        ComboBox combo = new ComboBox();
+        ComboBox combo = new ComboBox(new MenuItem("Custom item for selection #0"),
+                new MenuItem("Custom item for selection #1"));
         combo.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
         combo.setMargin(25, 0, 25, 0);
         combo.selectionChanged.add(() -> {
@@ -159,7 +160,7 @@ public class ImageTest extends ActiveWindow {
         frame.addItems(btn_action, combo, h_slider, pb);
         btn_action.addItem(img);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 2; i < 5; i++) {
             MenuItem menu_item = new MenuItem("Custom item for selection #" + i);
             combo.addItem(menu_item);
         }

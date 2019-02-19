@@ -16,12 +16,13 @@ namespace SpaceVIL
         public ComboBoxDropDown DropDownArea;
         public EventCommonMethod SelectionChanged;
 
+        private Queue<MenuItem> preItemList;
+
         /// <summary>
         /// Constructs a ComboBox
         /// </summary>
         public ComboBox()
         {
-            SetBackground(Color.Transparent);
             SetItemName("ComboBox_" + count);
             count++;
 
@@ -30,6 +31,11 @@ namespace SpaceVIL
 
             Arrow = new CustomShape();
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBox)));
+        }
+
+        public ComboBox(params MenuItem[] items) : this()
+        {
+            preItemList = new Queue<MenuItem>(items);
         }
 
         void OnKeyPress(object sender, KeyArgs args)
@@ -133,6 +139,12 @@ namespace SpaceVIL
             DropDownArea = new ComboBoxDropDown(GetHandler());
             DropDownArea.SetOutsideClickClosable(true);
             DropDownArea.SelectionChanged += OnSelectionChanged;
+            if (preItemList != null)
+            {
+                foreach (MenuItem item in preItemList)
+                    DropDownArea.AddItem(item);
+                preItemList = null;
+            }
         }
 
         private void ShowDropDownList()

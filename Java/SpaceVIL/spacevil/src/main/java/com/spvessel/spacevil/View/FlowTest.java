@@ -152,9 +152,8 @@ public class FlowTest extends ActiveWindow {
         // adding buttons
         toolbar.addItems(btn1, btn2, btn3, btn4, btn5);
 
-        // context
-        _context_menu = new ContextMenu(Handler);
-        _context_menu.setWidth(110);
+        
+        // _context_menu.setWidth(110);
         MenuItem restore = new MenuItem("Restore");
         // restore.eventMouseClick += (sender, args) ->
         // {
@@ -173,7 +172,9 @@ public class FlowTest extends ActiveWindow {
         // };
         MenuItem addition = new MenuItem("Addition");
 
-        _context_menu.addItems(restore, x_plus, y_plus, addition);
+        // context
+        _context_menu = new ContextMenu(Handler, restore, x_plus, y_plus, addition);
+        // _context_menu.addItems(restore, x_plus, y_plus, addition);
 
         ContextMenu addition_menu = new ContextMenu(Handler);
         addition_menu.setSize(110, 94);

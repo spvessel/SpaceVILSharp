@@ -55,6 +55,12 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ContextMenu)));
         }
 
+        public ContextMenu(WindowLayout handler, params MenuItem[] items) : this(handler)
+        {
+            foreach (MenuItem item in items)
+                AddItem(item);
+        }
+
         /// <summary>
         /// Initialization and adding of all elements in the ContextMenu
         /// </summary>
