@@ -61,7 +61,6 @@ public class Style {
         isVisible = true;
         maxWidth = 65535;
         maxHeight = 65535;
-        foreground = Color.white;
     }
 
     /**
