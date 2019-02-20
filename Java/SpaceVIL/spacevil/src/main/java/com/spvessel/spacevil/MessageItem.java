@@ -109,9 +109,6 @@ public class MessageItem extends DialogItem {
         });
     }
 
-    /// <summary>
-    /// Show MessageBox
-    /// </summary>
     @Override
     public void show(WindowLayout handler) {
         _result = false;

@@ -134,11 +134,14 @@ public class FlowTest extends ActiveWindow {
         btn5.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn5.addItemState(ItemStateType.HOVERED, hovered);
         btn5.eventMouseClick.add((sender, args) -> {
-            MessageItem msg = new MessageItem("Set TRUE?", "Message:");
-            msg.onCloseDialog.add(() -> {
-                System.out.println(msg.getResult());
-            });
-            msg.show(Handler);
+            // MessageItem msg = new MessageItem("Set TRUE?", "Message:");
+            // msg.onCloseDialog.add(() -> {
+            //     System.out.println(msg.getResult());
+            // });
+            // msg.show(Handler);
+
+            OpenFileDialog opd = new OpenFileDialog();
+            opd.show(Handler);
         });
         btn5.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn5.setHoverRule(ItemRule.STRICT);

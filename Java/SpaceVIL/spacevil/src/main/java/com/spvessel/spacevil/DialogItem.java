@@ -9,7 +9,7 @@ import java.awt.Color;
 
 import com.spvessel.spacevil.Prototype;
 
-public class DialogItem extends Prototype {
+public abstract class DialogItem extends Prototype {
     static int count = 0;
     public Frame window = new Frame();
 
