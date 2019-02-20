@@ -74,12 +74,12 @@ namespace SpaceVIL
             cancelBtn.EventMouseClick += (sender, args) =>
             {
                 Close();
+            };
 
             Window.AddItems(layout);
             layout.AddItems(toolbar, addressLine, fileList, controlPanel);
             toolbar.AddItems(btnBackward, btnCreate, btnRename, btnRefresh, btnView);
             controlPanel.AddItems(openBtn, cancelBtn);
-            };
             
             fileList.SetHScrollBarVisible(ScrollBarVisibility.AsNeeded);
             fileList.SetVScrollBarVisible(ScrollBarVisibility.AsNeeded);

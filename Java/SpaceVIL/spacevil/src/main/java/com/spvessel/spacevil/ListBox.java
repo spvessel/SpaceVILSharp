@@ -430,6 +430,7 @@ public class ListBox extends Prototype {
      * Set list of items
      */
     public void setListContent(List<InterfaceBaseItem> content) {
+        unselect();
         content.add(0, _area.getSubstrate());
         content.add(1, _area.getHoverSubstrate());
         _area.setContent(content);

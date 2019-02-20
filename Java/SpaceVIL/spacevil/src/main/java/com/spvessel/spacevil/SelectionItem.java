@@ -6,9 +6,13 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class SelectionItem extends Prototype {
     private static int count = 0;
@@ -23,7 +27,24 @@ public class SelectionItem extends Prototype {
         _image_icon = new ImageItem();
         _text_object = new TextLine();
 
+        setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        setHeight(20);
+        setFont(DefaultsService.getDefaultFont(14));
+        setForeground(210, 210, 210);
+        setBackground(0, 0, 0, 0);
+        setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        setPadding(6, 0, 0, 0);
+
         setStyle(DefaultsService.getDefaultStyle(SelectionItem.class));
+        // eventKeyRelease.add((sender, args) -> {
+        //     if (args.key == KeyCode.ENTER) {
+        //         System.out.println("key");
+        //         eventMouseClick.execute(this, new MouseArgs());
+        //     }
+        // });
+        // isFocusable = false;
+        // setPassEvents(false, InputEventType.MOUSE_PRESS);
+        // setPassEvents(false, InputEventType.MOUSE_RELEASE);
     }
 
     public SelectionItem(BufferedImage icon, String text) {
@@ -32,8 +53,7 @@ public class SelectionItem extends Prototype {
         _image_icon.setImage(icon);
     }
 
-    public void setIcon(BufferedImage icon)
-    {
+    public void setIcon(BufferedImage icon) {
         _image_icon.setImage(icon);
     }
 
@@ -106,7 +126,7 @@ public class SelectionItem extends Prototype {
     public Color getForeground() {
         return _text_object.getForeground();
     }
-    
+
     @Override
     public void initElements() {
         addItems(_image_icon, _text_object);
