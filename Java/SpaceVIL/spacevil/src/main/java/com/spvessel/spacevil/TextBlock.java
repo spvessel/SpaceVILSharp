@@ -860,4 +860,12 @@ class TextBlock extends Prototype
     int getCursorWidth() {
         return _cursor.getWidth();
     }
+
+    void appendText(String text) {
+        unselectText();
+        cancelJustSelected();
+        int lineNum = _textureStorage.getCount() - 1;
+        _cursor_position = new Point(getLineLetCount(lineNum), lineNum);
+        pasteText(text);
+    }
 }

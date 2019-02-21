@@ -22,8 +22,8 @@ public class Program {
 //        ScissorsTest sc = new ScissorsTest();
 //        sc.show();
 
-        //  WindowLayoutBox.tryShow("MainWindow");
-        ft.show();
+          WindowLayoutBox.tryShow("MainWindow");
+//        ft.show();
 
     }
 }

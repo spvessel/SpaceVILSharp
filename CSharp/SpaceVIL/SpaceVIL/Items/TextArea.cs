@@ -517,5 +517,10 @@ namespace SpaceVIL
         {
             _area.Clear();
         }
+
+        public void AppendText(String text)
+        {
+            _area.AppendText(text);
+        }
     }
 }

@@ -834,5 +834,13 @@ namespace SpaceVIL
         {
             return _substrate_text.GetItemText();
         }
+
+        public void AppendText(String text)
+        {
+            UnselectText();
+            CancelJustSelected();
+            _cursor_position = PrivGetText().Length;
+            PasteText(text);
+        }
     }
 }

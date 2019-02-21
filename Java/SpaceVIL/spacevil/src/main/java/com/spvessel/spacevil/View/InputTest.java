@@ -11,7 +11,7 @@ import com.spvessel.spacevil.*;
 public class InputTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 700, 400, true);
+        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 700, 500, true);
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
         setHandler(Handler);
 
@@ -20,18 +20,18 @@ public class InputTest extends ActiveWindow {
         Handler.setPadding(2, 2, 2, 2);
 
         TitleBar title = new TitleBar("Input Test");
-        title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
-        title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
+//        title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
+//        title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
         Handler.addItem(title);
 
         VerticalStack layout = new VerticalStack();
         ///////////////////////////////////////////////////////////////////////
         layout.setHeight(100);
-        layout.setHeightPolicy(SizePolicy.FIXED);
-        layout.setAlignment(ItemAlignment.BOTTOM);
+//        layout.setHeightPolicy(SizePolicy.FIXED);
+//        layout.setAlignment(ItemAlignment.BOTTOM);
         ///////////////////////////////////////////////////////////////////////
 
-        layout.setMargin(0, 330, 0, 30);
+        layout.setMargin(0, 30, 0, 30);
         layout.setBackground(70, 70, 70);
         layout.setSpacing(6, 30);
         layout.setPadding(2, 2, 2, 2);
@@ -55,7 +55,8 @@ public class InputTest extends ActiveWindow {
         tb.setHScrollBarVisible(ScrollBarVisibility.ALWAYS);
         tb.setText("123qwe");
         tb.setWidth(300);
-        tb.setWidthPolicy(SizePolicy.FIXED);
+        tb.setHeight(300);
+        tb.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         // tb.setPadding(15, 0, 15, 0);
         // tb.setMargin(new Indents(50, 30, 30, 30));
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
@@ -65,23 +66,24 @@ public class InputTest extends ActiveWindow {
 
         // layout.addItem(password);
         layout.addItem(te);
-        // layout.addItem(tb);
+        layout.addItem(tb);
 
         ButtonCore bc = new ButtonCore("pizdec");
         bc.setSize(150, 30);
         bc.eventMouseClick.add((sender, args) -> {
-            String s = "    qwerty\n// tb.setTextMargin(new Indents(50, 30, 30, 30));// tb.setTextMargin(new Indents(50, 30, 30, 30));";
-            String text = ""; // tb.getText();
-            // s = tb.getText();
-            tb.setText(text + s);
-            System.out.println((s.toCharArray()[0] == " ".charAt(0)) + " " + s.toCharArray()[0]);
-            System.out.println((s.toCharArray()[1] == " ".charAt(0)) + " " + s.toCharArray()[1]);
-            System.out.println((s.toCharArray()[2] == " ".charAt(0)) + " " + s.toCharArray()[2]);
-            System.out.println((s.toCharArray()[3] == " ".charAt(0)) + " " + s.toCharArray()[3]);
-            System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " + s.toCharArray()[4]);
+//            String s = "    qwerty\n// tb.setTextMargin(new Indents(50, 30, 30, 30));// tb.setTextMargin(new Indents(50, 30, 30, 30));";
+//            String text = ""; // tb.getText();
+//            // s = tb.getText();
+//            tb.setText(text + s);
+//            System.out.println((s.toCharArray()[0] == " ".charAt(0)) + " " + s.toCharArray()[0]);
+//            System.out.println((s.toCharArray()[1] == " ".charAt(0)) + " " + s.toCharArray()[1]);
+//            System.out.println((s.toCharArray()[2] == " ".charAt(0)) + " " + s.toCharArray()[2]);
+//            System.out.println((s.toCharArray()[3] == " ".charAt(0)) + " " + s.toCharArray()[3]);
+//            System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " + s.toCharArray()[4]);
+            tb.appendText("12345678");
         });
 
-        // layout.addItem(bc);
+        layout.addItem(bc);
 
         // layout.addItem(sp);
     }

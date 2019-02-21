@@ -1001,5 +1001,14 @@ namespace SpaceVIL
         {
             return _cursor.GetWidth();
         }
+
+        internal void AppendText(String text)
+        {
+            UnselectText();
+            CancelJustSelected();
+            int lineNum = _textureStorage.GetCount() - 1;
+            _cursor_position = new Point(GetLineLetCount(lineNum), lineNum);
+            PasteText(text);
+        }
     }
 }

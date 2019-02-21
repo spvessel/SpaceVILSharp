@@ -456,4 +456,8 @@ public class TextArea extends Prototype {
     public void clearArea() {
         _area.clear();
     }
+
+    public void appendText(String text) {
+        _area.appendText(text);
+    }
 }

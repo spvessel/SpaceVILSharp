@@ -829,4 +829,11 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     public String getSubstrateText() {
         return _substrate_text.getItemText();
     }
+
+    public void appendText(String text) {
+        unselectText();
+        cancelJustSelected();
+        _cursor_position = privGetText().length();
+        pasteText(text);
+    }
 }
