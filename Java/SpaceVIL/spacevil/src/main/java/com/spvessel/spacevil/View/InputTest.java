@@ -5,8 +5,11 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 import com.spvessel.spacevil.Flags.SizePolicy;
+import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.TextArea;
 import com.spvessel.spacevil.*;
+
+import java.awt.*;
 
 public class InputTest extends ActiveWindow {
     @Override
@@ -48,7 +51,7 @@ public class InputTest extends ActiveWindow {
         // te.setMargin(0,0,150,0);
         // te.setFontSize(10);
         te.setWidth(300);
-        te.setWidthPolicy(SizePolicy.FIXED);
+        te.setWidthPolicy(SizePolicy.EXPAND);
 
         TextArea tb = new TextArea();
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
@@ -56,7 +59,7 @@ public class InputTest extends ActiveWindow {
         tb.setText("123qwe");
         tb.setWidth(300);
         tb.setHeight(300);
-        tb.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        tb.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
         // tb.setPadding(15, 0, 15, 0);
         // tb.setMargin(new Indents(50, 30, 30, 30));
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
@@ -86,5 +89,12 @@ public class InputTest extends ActiveWindow {
         layout.addItem(bc);
 
         // layout.addItem(sp);
+
+        Label tl = new Label();
+        layout.addItem(tl);
+        tl.setText("qwertyuiopasdfghjklzxcvbnm1234567890");
+        tl.setFontSize(17);
+        tl.setForeground(Color.WHITE);
+        tl.setTextAlignment(ItemAlignment.RIGHT);
     }
 }

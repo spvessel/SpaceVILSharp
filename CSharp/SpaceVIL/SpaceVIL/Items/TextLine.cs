@@ -18,10 +18,6 @@ namespace SpaceVIL
         private Object textLock = new Object();
         private bool flagBB = false;
 
-        //private int _minLineSpacer;
-        //private int _minFontY;
-        //private int _maxFontY;
-
         private List<int> _letEndPos;
         private int _lineYShift = 0;
         private int _lineXShift = 0;
@@ -33,6 +29,8 @@ namespace SpaceVIL
         private List<FontEngine.ModifyLetter> _letters = new List<FontEngine.ModifyLetter>();
         private List<FontEngine.ModifyLetter> _bigLetters = new List<FontEngine.ModifyLetter>();
 
+        private bool _isRecountable = false;
+
         internal TextLine()
         {
             count++;
@@ -42,22 +40,24 @@ namespace SpaceVIL
             : base(text, font, "TextLine_" + count)
         {
             count++;
-            //GetFontDims();
             UpdateData();
         }
+
+        private bool afterCreate = false;
 
         private void CreateText()
         {
             Monitor.Enter(textLock);
             try
             {
-                int _lineWidth = 0; //private float[] _lineWidth;
+                afterCreate = true;
+                int _lineWidth = 0;
                 String text = GetItemText();
                 Font font = GetFont();
 
                 _letters = FontEngine.GetModifyLetters(text, font);
                 _letEndPos = new List<int>();
-                _lineWidth = 0;
+                
                 if (_letters.Count > 0)
                     _lineWidth = _letters[_letters.Count - 1].xShift + _letters[_letters.Count - 1].width +
                         _letters[_letters.Count - 1].xBeg; //xBeg не обязательно, т.к. везде 0, но вдруг
@@ -144,31 +144,36 @@ namespace SpaceVIL
                     base.SetHeight(height);
                 }
 
-                if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
+                if (_isRecountable)
+                {
+                    if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
                         return null;
+                }
                 if (_letters.Count() == 0)
                     return new TextPrinter(); //null;
-                if (flagBB)
+                if (flagBB && (_isRecountable || afterCreate))
                 {
+                    afterCreate = false;
                     int bb_h = GetHeight();
                     int bb_w = GetWidth();
 
-                    if (_parentAllowWidth > 0)
+                    if (_parentAllowWidth > 0 && _isRecountable)
                         bb_w = bb_w > _parentAllowWidth ? _parentAllowWidth : bb_w;
 
                     byte[] cacheBB = new byte[bb_h * bb_w * 4];
 
-                    int xFirstBeg; // = _letters[0].xBeg + _letters[0].xShift;
+                    int xFirstBeg = _letters[0].xBeg + _letters[0].xShift;
 
                     if (_screenScale != 0 && _screenScale != 1)
                     {
                         Font fontBig = new Font(GetFont().FontFamily, (int)(GetFont().Size * _screenScale), GetFont().Style);
                         int[] output = FontEngine.GetSpacerDims(fontBig);
                         bb_h = output[2];
-                        bb_w = _bigWidth > (int)(_parentAllowWidth * _screenScale) ? (int)(_parentAllowWidth * _screenScale) : _bigWidth;
+                        bb_w = _bigWidth;
+                        if (_isRecountable)
+                            bb_w = _bigWidth > (int)(_parentAllowWidth * _screenScale) ? (int)(_parentAllowWidth * _screenScale) : _bigWidth;
 
                         int bigMinY = output[1];
-
                         cacheBB = MakeSomeBig(bb_h, bb_w, bigMinY, 0, _letters.Count - 1);
                     }
                     else
@@ -179,27 +184,29 @@ namespace SpaceVIL
                         int widthFrom = 0;
                         int widthTo = modL.width;
 
-                        if (modL.xBeg + modL.xShift + modL.width + _lineXShift < 0)
-                        { //До разрешенной области
-                            continue;
-                        }
-                        if (modL.xBeg + modL.xShift + _lineXShift <= 0)
-                        {
-                            widthFrom = Math.Abs(modL.xBeg + modL.xShift + _lineXShift);
-                        }
+                            if (_isRecountable)
+                            { 
+                                if (modL.xBeg + modL.xShift + modL.width + _lineXShift < 0)
+                                { //До разрешенной области
+                                    continue;
+                                }
+                                if (modL.xBeg + modL.xShift + _lineXShift <= 0)
+                                {
+                                    widthFrom = Math.Abs(modL.xBeg + modL.xShift + _lineXShift);
+                                }
 
-                        xFirstBeg = -_lineXShift; // modL.xBeg + modL.xShift + widthFrom; //modL.xBeg + modL.xShift;
+                                xFirstBeg = -_lineXShift; // modL.xBeg + modL.xShift + widthFrom; //modL.xBeg + modL.xShift;
 
-                        if (modL.xBeg + modL.xShift - xFirstBeg > _parentAllowWidth)
-                        { //После разрешенной области + _lineXShift
-                            break;
-                        }
-                        if (modL.xBeg + modL.xShift + modL.width - xFirstBeg >= _parentAllowWidth)
-                        { // + _lineXShift
-                            widthTo = _parentAllowWidth - (modL.xBeg + modL.xShift + widthFrom - xFirstBeg); // + _lineXShift
-                        }
-
-                        byte[] bitmap = modL.getArr();
+                                if (modL.xBeg + modL.xShift - xFirstBeg > _parentAllowWidth)
+                                { //После разрешенной области + _lineXShift
+                                    break;
+                                }
+                                if (modL.xBeg + modL.xShift + modL.width - xFirstBeg >= _parentAllowWidth)
+                                { // + _lineXShift
+                                    widthTo = _parentAllowWidth - (modL.xBeg + modL.xShift + widthFrom - xFirstBeg); // + _lineXShift
+                                }
+                            }
+                            byte[] bitmap = modL.getArr();
                         if (bitmap == null)
                         {
                             continue;
@@ -222,23 +229,12 @@ namespace SpaceVIL
                                 cacheBB[3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[3 + j * 4 + i * (modL.height * 4)];
                             }
                         }
-
-                        // TextPrinter tp = new TextPrinter(modL.getArr());
-                        // tp.xshift = x;
-                        // tp.yshift = y;
-                        // tp.letWidth = modL.width;
-                        // tp.letHeight = modL.height;
-                        // tp.yWinShift = y - (modL.yBeg - _minFontY);
-                        // letTexturesList.add(tp);
                         }
                     }
                     flagBB = false;
                     textPrt = new TextPrinter(cacheBB);
                     textPrt.WidthTexture = bb_w;
                     textPrt.HeightTexture = bb_h;
-
-                    // if (letTexturesList.size() > 0)
-                    // createAtlas(letTexturesList);
                 }
 
                 UpdateCoords();
@@ -304,29 +300,28 @@ namespace SpaceVIL
                 int widthFrom = 0;
                 int widthTo = bigLet.width;
 
-                if (bigLet.xBeg + bigLet.xShift + bigLet.width + someShift < 0)
-                { // До разрешенной области
-
-                    continue;
-                }
-                if (bigLet.xBeg + bigLet.xShift + someShift <= 0)
+                if (_isRecountable)
                 {
-                    // continue;
-                    widthFrom = Math.Abs(bigLet.xBeg + bigLet.xShift + someShift);
-                }
+                    if (bigLet.xBeg + bigLet.xShift + bigLet.width + someShift < 0)
+                    { // До разрешенной области
+                        continue;
+                    }
+                    if (bigLet.xBeg + bigLet.xShift + someShift <= 0)
+                    {
+                        widthFrom = Math.Abs(bigLet.xBeg + bigLet.xShift + someShift);
+                    }
 
-                xFirstBeg = -someShift;
+                    xFirstBeg = -someShift;
 
-                if (bigLet.xBeg + bigLet.xShift - xFirstBeg > parWidth)
-                { // После разрешенной области + _lineXShift
-                    break;
+                    if (bigLet.xBeg + bigLet.xShift - xFirstBeg > parWidth)
+                    { // После разрешенной области + _lineXShift
+                        break;
+                    }
+                    if (bigLet.xBeg + bigLet.xShift + bigLet.width - xFirstBeg >= parWidth)
+                    {
+                        widthTo = parWidth - (bigLet.xBeg + bigLet.xShift + widthFrom - xFirstBeg);
+                    }
                 }
-                if (bigLet.xBeg + bigLet.xShift + bigLet.width - xFirstBeg >= parWidth)
-                {
-                    // break;
-                    widthTo = parWidth - (bigLet.xBeg + bigLet.xShift + widthFrom - xFirstBeg);
-                }
-
 
                 byte[] bitmap = bigLet.getArr();
                 if (bitmap == null)
@@ -335,7 +330,7 @@ namespace SpaceVIL
                 }
 
                 int offset = (bigLet.yBeg - bigMinY) * 4 * wdt + (bigLet.xBeg + bigLet.xShift + widthFrom - xFirstBeg) * 4;
-                // System.out.println(outCache.capacity() + " " + offset);
+                
                 for (int j = 0; j < bigLet.height; j++)
                 {
                     for (int i = widthFrom; i < widthTo; i++)
@@ -355,7 +350,6 @@ namespace SpaceVIL
                                 bitmap[3 + j * 4 + i * (bigLet.height * 4)];
                     }
                 }
-
             }
 
             return outCache;
@@ -363,112 +357,21 @@ namespace SpaceVIL
 
         public override void SetWidth(int width)
         {
-            //base.SetWidth(width);
             SetAllowWidth(width);
         }
 
         public override void SetHeight(int height)
         {
-            //base.SetWidth(width);
             SetAllowHeight(height);
         }
 
-        /*
-        private void AddAllShifts()
+        public override void UpdateData()
         {
-            if (GetParent() == null)
-                return;
-
-            if (_coordArray == null)
-                return;
-
-            List<float> outRealCoords = new List<float>();
-            List<float> alphas = new List<float>();
-
-            ItemAlignment alignments = GetTextAlignment();
-            float alignShiftX = 1;
-            float alignShiftY = 0;
-
-            float height = Math.Abs(_maxFontY - _minFontY);
-            
-            if (_lineYShift - _minFontY + height < 0 || _lineYShift - _minFontY > _parentAllowHeight)
-            {
-                SetAlphas(alphas);
-                SetRealCoords(outRealCoords);
-                return;
-            }
-
-            //Horizontal
-            if (alignments.HasFlag(ItemAlignment.Right) && (_lineWidth < _parentAllowWidth))
-                alignShiftX = GetParent().GetWidth() - _lineWidth - GetParent().GetPadding().Right; //[i];
-
-            else if (alignments.HasFlag(ItemAlignment.HCenter) && (_lineWidth < _parentAllowWidth))
-                alignShiftX = (GetParent().GetWidth() - _lineWidth) / 2f; //[i]) / 2f;
-
-            //Vertical
-            if (alignments.HasFlag(ItemAlignment.Bottom))
-                alignShiftY = GetParent().GetHeight() - height - GetParent().GetPadding().Bottom;
-
-            else if (alignments.HasFlag(ItemAlignment.VCenter))
-                alignShiftY = (GetParent().GetHeight() - height) / 2f;
-
-            List<float> tmpList;
-            float xCoord, yCoord;
-
-            foreach (FontEngine.ModifyLetter modL in _letters) {
-                tmpList = modL.GetPix();
-                xCoord = alignShiftX + modL.xBeg + modL.xShift + _lineXShift;
-                yCoord = alignShiftY + _lineYShift - _minFontY + modL.yBeg;
-
-                if (xCoord + modL.width < 0) continue;
-                if (xCoord > _parentAllowWidth) break;
-
-
-                alphas.AddRange(modL.GetCol());
-                //_letEndPos.Add(modL.xBeg + modL.xShift + modL.width);
-
-                for (int j = 0; j < tmpList.Count / 3; j++)
-                {
-                    outRealCoords.Add(tmpList[j * 3] + xCoord);
-                    outRealCoords.Add(tmpList[j * 3 + 1] + yCoord);
-                    outRealCoords.Add(tmpList[j * 3 + 2]);
-                }
-            }
-            
-            SetAlphas(alphas);
-            SetRealCoords(outRealCoords);
-        }
-        */
-
-        //private int _lineSpacer;
-        //void SetLineSpacer(int lineSpacer)
-        //{
-        //    if ((lineSpacer != this._lineSpacer) && (lineSpacer >= _minLineSpacer))
-        //    {
-        //        SetCoordsFlag(true);
-        //        this._lineSpacer = lineSpacer;
-        //    }
-        //}
-
-        //public int GetLineSpacer()
-        //{
-        //    return _lineSpacer;
-        //}
-
-        public override void UpdateData() //UpdateType updateType)
-        {
-            //switch (updateType)
-            //{
-            //    case UpdateType.Critical:
             Monitor.Enter(textLock);
             try
             {
                 if (GetFont() == null)
                     return;
-                //int[] output = FontEngine.GetSpacerDims(GetFont());
-                //_minLineSpacer = output[0];
-                //_minFontY = output[1];
-                //_maxFontY = output[2];
                 CreateText();
                 flagBB = true;
             }
@@ -508,7 +411,6 @@ namespace SpaceVIL
             // Vertical
             if (alignments.HasFlag(ItemAlignment.Top))
             {
-                // System.out.println(getMargin().top);
                 alignShiftY = GetParent().GetPadding().Top + GetMargin().Top;
             }
             else if (alignments.HasFlag(ItemAlignment.Bottom))
@@ -523,18 +425,14 @@ namespace SpaceVIL
             
             textPrt.XTextureShift = (int)alignShiftX + GetParent().GetX() + xFirstBeg; // + _lineXShift
             textPrt.YTextureShift = (int)alignShiftY + _lineYShift + GetParent().GetY();
-            
+
+            if (!_isRecountable)
+                textPrt.XTextureShift += _lineXShift;
         }
 
         internal string GetText()
         {
             return GetItemText();
-        }
-
-        public override float[] Shape()
-        {
-            //AddAllShifts();
-            return base.Shape();
         }
 
         internal List<int> GetLetPosArray()
@@ -594,11 +492,7 @@ namespace SpaceVIL
 
         internal int[] GetFontDims()
         {
-            int[] output = FontEngine.GetSpacerDims(GetFont());
-            //_minLineSpacer = output[0];
-            //_minFontY = output[1];
-            //_maxFontY = output[2];
-            return output;
+            return FontEngine.GetSpacerDims(GetFont());
         }
 
         public override void SetStyle(Style style)
@@ -620,7 +514,7 @@ namespace SpaceVIL
                 return;
             int s = GetLetPosArray().Last() - _cursorXMax;
             if (s <= 0) SetLineXShift(0);
-            else if ((s > 0) && (s + _lineXShift < 0))
+            else if (s + _lineXShift < 0) //(s > 0) && 
             {
                 SetLineXShift(-s);
             }
@@ -651,6 +545,11 @@ namespace SpaceVIL
             if (cursorWidth != cwidth)
                 flagBB = true;
             cursorWidth = cwidth;
+        }
+
+        internal void SetRecountable(bool isRecountable)
+        {
+            _isRecountable = isRecountable;
         }
     }
 

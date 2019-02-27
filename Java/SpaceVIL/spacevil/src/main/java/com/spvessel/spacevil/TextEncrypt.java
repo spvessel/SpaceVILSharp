@@ -48,6 +48,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         _hide_sign = "\u25CF";
 
         _text_object = new TextLine();
+        _text_object.setRecountable(true);
         _substrate_text = new TextLine();
 
         _cursor = new Rectangle();
