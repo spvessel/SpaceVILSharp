@@ -22,14 +22,14 @@ final class VRAMTexture {
     void genTexture(int w, int h, ByteBuffer bitmap) {
         texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texture);
-
+        
         GL42.glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
         GL11.glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     }
     void genTexture(int w, int h, byte[] bitmap) {
         ByteBuffer bb = BufferUtils.createByteBuffer(bitmap.length);
@@ -145,6 +145,16 @@ final class VRAMTexture {
         int location = glGetUniformLocation((int) shader.getProgramID(), name);
         if (location >= 0) {
             glUniform1f(location, array);
+            return true;
+        } else
+            System.out.println("Uniform not found: <" + name + ">");
+        return false;
+    }
+
+    boolean sendUniform1i(Shader shader, String name, int value) {
+        int location = glGetUniformLocation((int) shader.getProgramID(), name);
+        if (location >= 0) {
+            glUniform1i(location, value);
             return true;
         } else
             System.out.println("Uniform not found: <" + name + ">");

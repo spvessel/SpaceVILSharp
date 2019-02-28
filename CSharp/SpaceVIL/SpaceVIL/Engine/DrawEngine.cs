@@ -62,7 +62,28 @@ namespace SpaceVIL
                 FocusedItem.SetFocused(false);
             FocusedItem = item;
             FocusedItem.SetFocused(true);
+            FindUnderFocusedItems(item);
         }
+        private void FindUnderFocusedItems(Prototype item)
+        {
+            List<Prototype> queue = new List<Prototype>();
+
+            if (item == _handler.GetLayout().GetWindow())
+            {
+                return;
+            }
+
+            Prototype parent = item.GetParent();
+
+            while (parent != null)
+            {
+                queue.Add(parent);
+                parent = parent.GetParent();
+            }
+            UnderFocusedItem = new List<Prototype>(queue);
+            UnderFocusedItem.Remove(FocusedItem);
+        }
+
         internal void ResetFocus()
         {
             if (FocusedItem != null)
@@ -649,8 +670,8 @@ namespace SpaceVIL
 
                     if (HoveredItem != null)
                     {
-                        AssignActions(InputEventType.MouseRelease, _margs, false);
                         HoveredItem.SetMousePressed(false);
+                        AssignActions(InputEventType.MouseRelease, _margs, false);
                     }
                     EngineEvent.ResetAllEvents();
                     EngineEvent.SetEvent(InputEventType.MouseRelease);
@@ -902,13 +923,6 @@ namespace SpaceVIL
                     AssignActions(InputEventType.KeyPress, _kargs, FocusedItem, true);
                 else if (action == InputState.Release)
                     AssignActions(InputEventType.KeyRelease, _kargs, FocusedItem, true);
-
-                // if (action == InputState.Press)
-                //     AssignActions(InputEventType.KeyPress, _kargs, false);
-                // if (action == InputState.Repeat)
-                //     AssignActions(InputEventType.KeyPress, _kargs, false);
-                // if (action == InputState.Release)
-                //     AssignActions(InputEventType.KeyRelease, _kargs, false);
             }
         }
 
@@ -969,10 +983,10 @@ namespace SpaceVIL
             {
                 if (UnderFocusedItem != null)
                 {
-                    Stack<Prototype> tmp = new Stack<Prototype>(UnderFocusedItem);
+                    Queue<Prototype> tmp = new Queue<Prototype>(UnderFocusedItem);
                     while (tmp.Count != 0)
                     {
-                        Prototype item = tmp.Pop();
+                        Prototype item = tmp.Dequeue();
                         if (item.Equals(FocusedItem) && FocusedItem.IsDisabled())
                             continue;//пропустить
 
@@ -1102,6 +1116,8 @@ namespace SpaceVIL
             if (_bounds.ContainsKey(shell.GetParent()))
             {
                 int[] shape = _bounds[shell.GetParent()];
+                if (shape == null)/////////////////////////////////////
+                    return false;
                 glEnable(GL_SCISSOR_TEST);
                 glScissor(shape[0], shape[1], shape[2], shape[3]);
 
@@ -1552,6 +1568,20 @@ namespace SpaceVIL
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
             store.GenTexture(w, h, bitmap);
             store.SendUniformSample2D(_texture, "tex");
+            if (image.IsColorOverLay())
+            {
+                Console.WriteLine("is overlay");
+                float[] argb = {
+                        (float) image.GetColorOverlay().R / 255.0f,
+                        (float) image.GetColorOverlay().G / 255.0f,
+                        (float) image.GetColorOverlay().B / 255.0f,
+                        (float) image.GetColorOverlay().A / 255.0f };
+                store.SendUniform1i(_texture, "overlay", 1);
+                store.SendUniform4f(_texture, "rgb", argb);
+            }
+            // else
+            //     store.SendUniform1i(_texture, "overlay", 0);// VEEEEEEEERY interesting!!!
+
             store.Draw();
             store.Clear();
         }

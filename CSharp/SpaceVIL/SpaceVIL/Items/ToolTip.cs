@@ -41,6 +41,10 @@ namespace SpaceVIL
         {
             _text_object.SetTextAlignment(alignment);
         }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
+        {
+            _text_object.SetTextAlignment(alignment);
+        }
         public void SetFont(Font font)
         {
             _text_object.SetFont(font);

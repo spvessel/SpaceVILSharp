@@ -86,6 +86,14 @@ public class ThemeStyle {
             defaultItemsStyle.put(TreeView.class, Style.getTreeViewStyle());
             defaultItemsStyle.put(TreeItem.class, Style.getTreeItemStyle());
             defaultItemsStyle.put(SpinItem.class, Style.getSpinItemStyle());
+
+            //new
+            defaultItemsStyle.put(DialogItem.class, Style.getDialogItemStyle());
+            defaultItemsStyle.put(MessageItem.class, Style.getMessageItemStyle());
+            defaultItemsStyle.put(InputDialog.class, Style.getInputDialogStyle());
+            defaultItemsStyle.put(WContainer.class, Style.getWindowContainerStyle());
+            defaultItemsStyle.put(OpenEntryDialog.class, Style.getOpenEntryDialogStyle());
+            defaultItemsStyle.put(FileSystemEntry.class, Style.getFileSystemEntryStyle());
         }
     }
 

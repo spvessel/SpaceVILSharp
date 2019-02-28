@@ -5,15 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using SpaceVIL.Core;
+using System.Threading;
 
 namespace SpaceVIL
 {
     public class ImageItem : Prototype, IImageItem
     {
         static int count = 0;
-        public Image _image;
-        private List<byte> _bitmap;
+        public Bitmap _image;
+        private byte[] _bitmap;
         private String _url;
+
+        public bool isHover = true;
+
+        internal override bool GetHoverVerification(float xpos, float ypos)
+        {
+            if (isHover)
+                return base.GetHoverVerification(xpos, ypos);
+            return false;
+        }
 
         /// <summary>
         /// Constructs an ImageItem
@@ -27,9 +37,17 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs an ImageItem with an image
         /// </summary>
-        public ImageItem(Image picture) : this()
+        public ImageItem(Bitmap picture) : this()
         {
-            SetImage(picture);
+            if (picture == null)
+                return;
+            _image = picture;
+            _bitmap = CreateByteImage();
+        }
+
+        public ImageItem(Bitmap picture, bool hover) : this(picture)
+        {
+            isHover = hover;
         }
 
         /// <summary>
@@ -37,46 +55,76 @@ namespace SpaceVIL
         /// </summary>
         public byte[] GetPixMapImage()
         {
-            /*if (_image == null)
-                return new byte[] { 0 };*/
-
             if (_image == null)
                 return null;
 
             if (_bitmap == null)
+                _bitmap = CreateByteImage();
+
+            return _bitmap;
+        }
+
+        private byte[] CreateByteImage()
+        {
+            try
             {
-                _bitmap = new List<byte>();
+                List<byte> result = new List<byte>();
                 Bitmap bmp = new Bitmap(_image);
                 for (int j = _image.Height - 1; j >= 0; j--)
                 {
                     for (int i = 0; i < _image.Width; i++)
                     {
                         Color pixel = bmp.GetPixel(i, j);
-                        _bitmap.Add(pixel.R);
-                        _bitmap.Add(pixel.G);
-                        _bitmap.Add(pixel.B);
-                        _bitmap.Add(pixel.A);
+                        result.Add(pixel.R);
+                        result.Add(pixel.G);
+                        result.Add(pixel.B);
+                        result.Add(pixel.A);
                     }
                 }
+                return result.ToArray();
             }
-            return _bitmap.ToArray();
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("Create byte image" + ex.StackTrace);
+                return null;
+            }
         }
 
         /// <returns> width of the image in the ImageItem </returns>
         public int GetImageWidth()
         {
-            return _image.Width;
+            try
+            {
+                if (_image == null)
+                    return -1;
+                return _image.Width;
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("Getting width " + ex.StackTrace);
+                return -1;
+            }
         }
 
         /// <returns> height of the image in the ImageItem </returns>
         public int GetImageHeight()
         {
-            return _image.Height;
+            try
+            {
+                if (_image == null)
+                    return -1;
+                return _image.Height;
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("Getting heigh " + ex.StackTrace);
+                return -1;
+            }
         }
 
         //IImage implements
         /// <returns> BufferedImage of the ImageItem </returns>
-        public Image GetImage()
+        public Bitmap GetImage()
         {
             return _image;
         }
@@ -85,26 +133,12 @@ namespace SpaceVIL
         /// <summary>
         /// Set an image into the ImageItem
         /// </summary>
-        public void SetImage(Image picture)
+        public void SetImage(Bitmap image)
         {
-            if (picture == null)
+            if (image == null)
                 return;
-            _image = picture;
-
-            _bitmap = new List<byte>();
-            Bitmap bmp = new Bitmap(_image);
-            for (int j = _image.Height - 1; j >= 0; j--)
-            // for (int j = 0; j < _image.Height; j++)
-            {
-                for (int i = 0; i < _image.Width; i++)
-                {
-                    Color pixel = bmp.GetPixel(i, j);
-                    _bitmap.Add(pixel.R);
-                    _bitmap.Add(pixel.G);
-                    _bitmap.Add(pixel.B);
-                    _bitmap.Add(pixel.A);
-                }
-            }
+            _image = image;
+            _bitmap = CreateByteImage();
         }
 
         /// <summary>
@@ -117,6 +151,29 @@ namespace SpaceVIL
         public void SetImageUrl(String url)
         {
             _url = url;
+        }
+
+        private bool _isOverlay = false;
+        private Color _colorOverlay;
+
+        public Color GetColorOverlay()
+        {
+            return _colorOverlay;
+        }
+
+        public void SetColorOverlay(Color color)
+        {
+            _colorOverlay = color;
+            _isOverlay = true;
+        }
+        public void SetColorOverlay(bool overlay)
+        {
+            _isOverlay = overlay;
+        }
+
+        public bool IsColorOverLay()
+        {
+            return _isOverlay;
         }
     }
 }

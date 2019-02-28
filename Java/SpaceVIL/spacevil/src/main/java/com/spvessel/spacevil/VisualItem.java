@@ -318,12 +318,20 @@ final class VisualItem extends BaseItem {
     private List<InterfaceBaseItem> _content = new LinkedList<>();
 
     List<InterfaceBaseItem> getItems() {
-        return _content;
+        locker.lock();
+        try {
+            return _content;
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+            return null;
+        } finally {
+            locker.unlock();
+        }
     }
 
-    void setContent(List<InterfaceBaseItem> content) {
-        _content = content;
-    }
+    // void setContent(List<InterfaceBaseItem> content) {
+    // _content = content;
+    // }
 
     private void castAndUpdate(InterfaceBaseItem item) {
         if (item instanceof Prototype)
@@ -340,27 +348,24 @@ final class VisualItem extends BaseItem {
     }
 
     protected void addItem(InterfaceBaseItem item) {
-        // int count = 0;
-        // locker.lock();
-        // try {
-        if (item.equals(this)) {
-            System.out.println("Trying to add current item in himself.");
-            return;
+        locker.lock();
+        try {
+            if (item.equals(this)) {
+                System.out.println("Trying to add current item in himself.");
+                return;
+            }
+            item.setHandler(getHandler());
+            addChildren(item);
+            _content.add(item);
+            ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
+            // needs to force update all attributes
+            castAndUpdate(item);
+            item.initElements();
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        } finally {
+            locker.unlock();
         }
-        item.setHandler(getHandler());
-        addChildren(item);
-        _content.add(item);
-        ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
-        // needs to force update all attributes
-        castAndUpdate(item);
-        // count++;
-        item.initElements();
-        // count++;
-        // } catch (Exception ex) {
-        // System.out.println(item.getItemName() + " " + count + "\n" + ex.toString());
-        // } finally {
-        // locker.unlock();
-        // }
     }
 
     void insertItem(InterfaceBaseItem item, int index) {
@@ -434,10 +439,9 @@ final class VisualItem extends BaseItem {
             // removing
             _content.remove(item);
             ItemsLayoutBox.removeItem(getHandler(), item, type);
-
             castAndRemove(item);
         } catch (Exception ex) {
-            System.out.println(item.getItemName() + "\n" + ex.toString());
+            System.out.println((item == null) ? "item is null" : item.getItemName() + "\n" + ex.toString());
         } finally {
             locker.unlock();
         }

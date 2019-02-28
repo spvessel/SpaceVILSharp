@@ -69,6 +69,8 @@ public final class CommonService {
         cursorResizeV = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
         cursorResizeAll = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
 
+        DefaultsService.initImages();
+
         return true;
     }
 

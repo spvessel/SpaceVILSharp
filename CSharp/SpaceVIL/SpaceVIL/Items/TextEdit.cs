@@ -417,6 +417,18 @@ namespace SpaceVIL
             _text_object.SetTextAlignment(ial);
             _substrate_text.SetTextAlignment(ial);
         }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
+        {
+            ItemAlignment common = alignment.ElementAt(0);
+            if (alignment.Length > 1)
+            {
+                for (int i = 1; i < alignment.Length; i++)
+                {
+                    common |= alignment.ElementAt(i);
+                }
+            }
+            SetTextAlignment(common);
+        }
         public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);

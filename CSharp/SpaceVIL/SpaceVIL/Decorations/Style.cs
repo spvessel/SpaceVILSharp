@@ -11,7 +11,7 @@ using SpaceVIL.Common;
 namespace SpaceVIL.Decorations
 {
     /// <summary>
-    /// A class that describes style settings of the object
+    /// A class that describes style Settings of the object
     /// </summary>
     public class Style
     {
@@ -81,7 +81,7 @@ namespace SpaceVIL.Decorations
         /// </summary>
         public void SetStyle(params IBaseItem[] items)
         {
-            foreach(IBaseItem item in items)
+            foreach (IBaseItem item in items)
             {
                 // Console.WriteLine("Set style for " + item.GetItemName());
                 item.SetStyle(this);
@@ -275,6 +275,33 @@ namespace SpaceVIL.Decorations
         {
             Alignment = alignment;
         }
+        public void SetAlignment(params ItemAlignment[] alignment)
+        {
+            Alignment = alignment.ElementAt(0);
+            if (alignment.Length > 1)
+            {
+                for (int i = 1; i < alignment.Length; i++)
+                {
+                    Alignment |= alignment.ElementAt(i);
+                }
+            }
+        }
+
+        public void SetTextAlignment(ItemAlignment alignment)
+        {
+            TextAlignment = alignment;
+        }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
+        {
+            TextAlignment = alignment.ElementAt(0);
+            if (alignment.Length > 1)
+            {
+                for (int i = 1; i < alignment.Length; i++)
+                {
+                    TextAlignment |= alignment.ElementAt(i);
+                }
+            }
+        }
 
         ///////////////////////////////////////////////////////////////////
 
@@ -392,10 +419,10 @@ namespace SpaceVIL.Decorations
             style.Height = 10;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
-            style.BorderRadius = new CornerRadius(6);
+            style.BorderRadius = new CornerRadius();
             ItemState hovered = new ItemState(Color.FromArgb(60, 255, 255, 255));
             style.AddItemState(ItemStateType.Hovered, hovered);
-            ItemState pressed = new ItemState(Color.FromArgb(30, 0, 0, 60));
+            ItemState pressed = new ItemState(Color.FromArgb(60, 0, 0, 0));
             style.AddItemState(ItemStateType.Pressed, pressed);
 
             return style;
@@ -413,7 +440,7 @@ namespace SpaceVIL.Decorations
             style.Width = 10;
             style.Height = 10;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            style.BorderRadius = new CornerRadius(6);
+            style.BorderRadius = new CornerRadius();
             style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(60, 255, 255, 255)
@@ -614,6 +641,8 @@ namespace SpaceVIL.Decorations
             style.MinHeight = 10;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(10, 0, 10, 0);
+
+            style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(255, 150, 150, 150)));
 
             Style arrow_style = new Style();
             arrow_style.Width = 6;
@@ -1060,6 +1089,7 @@ namespace SpaceVIL.Decorations
             Style style = new Style();
 
             style.Font = DefaultsService.GetDefaultFont();
+            style.SetForeground(210, 210, 210);
             style.Background = Color.Transparent;
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Expand;
@@ -1095,6 +1125,9 @@ namespace SpaceVIL.Decorations
             hover_style.WidthPolicy = SizePolicy.Expand;
             hover_style.HeightPolicy = SizePolicy.Fixed;
             style.AddInnerStyle("hovercover", hover_style);
+
+            Style selected_style = GetSelectedItemStyle();
+            style.AddInnerStyle("selecteditem", selected_style);
 
             return style;
         }
@@ -1595,11 +1628,11 @@ namespace SpaceVIL.Decorations
             style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
             style.Spacing = new Spacing(5, 0);
             style.Padding = new Indents(5, 0, 0, 0);
-            // ItemState hovered = new ItemState();
-            // hovered.Background = Color.FromArgb(130, 255, 255, 255);
-            // style.AddItemState(ItemStateType.Hovered, hovered);
+            ItemState hovered = new ItemState();
+            hovered.Background = Color.FromArgb(130, 255, 255, 255);
+            style.AddItemState(ItemStateType.Hovered, hovered);
 
-            Style indicator_style = new Style();//getButtonToggleStyle();
+            Style indicator_style = new Style();//GetButtonToggleStyle();
             indicator_style.Background = Color.FromArgb(255, 32, 32, 32);
             indicator_style.Foreground = Color.FromArgb(255, 210, 210, 210);
             indicator_style.Font = DefaultsService.GetDefaultFont();
@@ -1686,6 +1719,297 @@ namespace SpaceVIL.Decorations
             text_input.TextAlignment = ItemAlignment.Right;
             style.AddInnerStyle("textedit", text_input);
 
+            return style;
+        }
+
+        public static Style GetDialogItemStyle()
+        {
+            Style style = new Style();
+            style.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            style.SetBackground(0, 0, 0, 150);
+            style.BorderRadius = new CornerRadius(0);
+            style.Padding = new Indents();
+            style.Margin = new Indents();
+            style.Spacing = new Spacing();
+
+            Style window_style = GetFrameStyle();
+            window_style.SetSize(300, 150);
+            window_style.SetMinSize(300, 150);
+            window_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            window_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            window_style.SetPadding(2, 2, 2, 2);
+            window_style.SetBackground(45, 45, 45);
+
+            style.AddInnerStyle("window", window_style);
+
+            return style;
+        }
+
+        public static Style GetMessageItemStyle()
+        {
+            Style style = new Style();
+            style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            style.SetBackground(0, 0, 0, 150);
+            style.BorderRadius = new CornerRadius();
+            style.Padding = new Indents();
+            style.Margin = new Indents();
+            style.Spacing = new Spacing();
+
+            Style window_style = GetFrameStyle();
+            window_style.SetSize(300, 150);
+            window_style.SetMinSize(300, 150);
+            window_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            window_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            window_style.SetPadding(2, 2, 2, 2);
+            window_style.SetBackground(45, 45, 45);
+
+            style.AddInnerStyle("window", window_style);
+
+            Style ok_style = GetButtonCoreStyle();
+            ok_style.SetBackground(100, 255, 150);
+            ok_style.Foreground = Color.Black;
+            ok_style.SetSize(100, 30);
+            ok_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            ok_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
+            ok_style.BorderRadius = new CornerRadius();
+            ok_style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(80, 255, 255, 255)));
+
+            style.AddInnerStyle("okbutton", ok_style);
+
+            Style msg_style = GetLabelStyle();
+            msg_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            msg_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
+            msg_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+
+            style.AddInnerStyle("message", msg_style);
+
+            Style layout_style = GetVerticalStackStyle();
+            layout_style.SetMargin(0, 30, 0, 0);
+            layout_style.SetPadding(6, 6, 6, 6);
+            layout_style.SetSpacing(0, 10);
+            layout_style.SetBackground(255, 255, 255, 20);
+
+            style.AddInnerStyle("layout", layout_style);
+
+            return style;
+        }
+
+        public static Style GetWindowContainerStyle()
+        {
+            Style style = new Style();
+
+            style.SetBackground(45, 45, 45);
+            style.SetMinSize(200, 200);
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Expand;
+            style.SetPadding(2, 2, 2, 2);
+            style.SetAlignment(ItemAlignment.Left, ItemAlignment.Top);
+
+            return style;
+        }
+
+        public static Style GetFileSystemEntryStyle()
+        {
+            Style style = new Style();
+            style.Height = 25;
+            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            style.SetBackground(0, 0, 0, 0);
+            style.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
+            style.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
+            style.Font = DefaultsService.GetDefaultFont();
+            style.SetForeground(210, 210, 210);
+            style.SetPadding(10, 0, 0, 0);
+            style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(130, 255, 255, 255)));
+
+            Style icon_style = GetFrameStyle();
+            icon_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            icon_style.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
+
+            style.AddInnerStyle("icon", icon_style);
+
+            Style text_style = new Style();
+            text_style.SetMargin(24, 0, 0, 0);
+
+            style.AddInnerStyle("text", text_style);
+
+            return style;
+        }
+
+        public static Style GetOpenEntryDialogStyle()
+        {
+            // common
+            Style style = new Style();
+            style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            style.SetBackground(0, 0, 0, 150);
+            style.BorderRadius = new CornerRadius();
+            style.Padding = new Indents();
+            style.Margin = new Indents();
+            style.Spacing = new Spacing();
+
+            // window
+            Style window_style = GetDialogItemStyle().GetInnerStyle("window");
+            window_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            window_style.SetMargin(150, 20, 150, 20);
+            style.AddInnerStyle("window", window_style);
+            // layout
+            Style layout_style = GetVerticalStackStyle();
+            layout_style.SetMargin(0, 30, 0, 0);
+            layout_style.SetPadding(6, 6, 6, 6);
+            layout_style.SetSpacing(0, 2);
+            layout_style.SetBackground(255, 255, 255, 20);
+            style.AddInnerStyle("layout", layout_style);
+            // toolbar
+            Style toolbar_style = GetHorizontalStackStyle();
+            toolbar_style.HeightPolicy = SizePolicy.Fixed;
+            toolbar_style.Height = 30;
+            toolbar_style.SetBackground(40, 40, 40);
+            toolbar_style.SetSpacing(3, 0);
+            toolbar_style.SetPadding(6, 0, 0, 0);
+            style.AddInnerStyle("toolbar", toolbar_style);
+            // toolbarbutton
+            Style toolbarbutton_style = Style.GetButtonCoreStyle();
+            toolbarbutton_style.SetSize(24, 30);
+            toolbarbutton_style.Background = toolbar_style.Background;
+            toolbarbutton_style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(60, 255, 255, 255)));
+            toolbarbutton_style.AddItemState(ItemStateType.Pressed, new ItemState(Color.FromArgb(30, 255, 255, 255)));
+            toolbarbutton_style.BorderRadius = new CornerRadius();
+            toolbarbutton_style.SetPadding(3, 6, 3, 6);
+            style.AddInnerStyle("toolbarbutton", toolbarbutton_style);
+            // buttonhidden
+            Style buttonhidden_style = GetButtonToggleStyle();
+            buttonhidden_style.SetSize(24, 30);
+            buttonhidden_style.BorderRadius = new CornerRadius();
+            buttonhidden_style.Background = toolbar_style.Background;
+            buttonhidden_style.SetPadding(4, 6, 4, 6);
+            buttonhidden_style.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(30, 153, 91)));
+            style.AddInnerStyle("buttonhidden", buttonhidden_style);
+            // addressline
+            Style addressline_style = GetTextEditStyle();
+            addressline_style.Font = DefaultsService.GetDefaultFont(12);
+            addressline_style.SetForeground(210, 210, 210);
+            addressline_style.SetBackground(50, 50, 50);
+            addressline_style.Height = 24;
+            addressline_style.SetMargin(0, 5, 0, 0);
+            style.AddInnerStyle("addressline", addressline_style);
+            // filenameline
+            Style filenameline_style = GetTextEditStyle();
+            filenameline_style.Font = DefaultsService.GetDefaultFont(12);
+            filenameline_style.SetForeground(210, 210, 210);
+            filenameline_style.SetBackground(50, 50, 50);
+            filenameline_style.Height = 24;
+            filenameline_style.SetMargin(0, 2, 0, 0);
+            style.AddInnerStyle("filenameline", filenameline_style);
+            // list
+            Style list_style = GetListBoxStyle();
+            style.AddInnerStyle("list", list_style);
+            // controlpanel
+            Style controlpanel_style = GetFrameStyle();
+            controlpanel_style.HeightPolicy = SizePolicy.Fixed;
+            controlpanel_style.Height = 40;
+            controlpanel_style.SetBackground(45, 45, 45);
+            controlpanel_style.SetPadding(6, 6, 6, 6);
+            style.AddInnerStyle("controlpanel", controlpanel_style);
+            // button
+            Style okbutton_style = GetButtonCoreStyle();
+            okbutton_style.SetSize(100, 30);
+            okbutton_style.SetAlignment(ItemAlignment.VCenter, ItemAlignment.Right);
+            okbutton_style.SetMargin(0, 0, 105, 0);
+            okbutton_style.BorderRadius = new CornerRadius();
+            style.AddInnerStyle("okbutton", okbutton_style);
+
+            Style cancelbutton_style = GetButtonCoreStyle();
+            cancelbutton_style.SetSize(100, 30);
+            cancelbutton_style.SetAlignment(ItemAlignment.VCenter, ItemAlignment.Right);
+            cancelbutton_style.BorderRadius = new CornerRadius();
+            style.AddInnerStyle("cancelbutton", cancelbutton_style);
+
+            Style filter_style = GetButtonToggleStyle();
+            filter_style.SetSize(24, 30);
+            filter_style.BorderRadius = new CornerRadius();
+            filter_style.SetBackground(35, 35, 35);
+            filter_style.SetPadding(4, 6, 4, 6);
+            filter_style.SetMargin(5, 0, 0, 0);
+            filter_style.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(30, 153, 91)));
+            style.AddInnerStyle("filter", filter_style);
+
+            Style filtertext_style = GetLabelStyle();
+            filtertext_style.WidthPolicy = SizePolicy.Fixed;
+            filtertext_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
+            filtertext_style.SetPadding(10, 2, 10, 0);
+            filtertext_style.SetMargin(-3, 0, 0, 0);
+            filtertext_style.SetBackground(55, 55, 55);
+            filtertext_style.Font = DefaultsService.GetDefaultFont();
+            style.AddInnerStyle("filtertext", filtertext_style);
+
+            Style divider_style = GetFrameStyle();
+            divider_style.WidthPolicy = SizePolicy.Fixed;
+            divider_style.Width = 1;
+            divider_style.SetBackground(55, 55, 55);
+            divider_style.SetMargin(0, 3, 0, 3);
+            style.AddInnerStyle("divider", divider_style);
+
+            return style;
+        }
+
+        public static Style GetInputDialogStyle()
+        {
+            Style style = new Style();
+            style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            style.SetBackground(0, 0, 0, 150);
+            style.BorderRadius = new CornerRadius();
+            style.Padding = new Indents();
+            style.Margin = new Indents();
+            style.Spacing = new Spacing();
+
+            Style window_style = GetFrameStyle();
+            window_style.SetSize(300, 150);
+            window_style.SetMinSize(300, 150);
+            window_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            window_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            window_style.SetPadding(2, 2, 2, 2);
+            window_style.SetBackground(45, 45, 45);
+
+            style.AddInnerStyle("window", window_style);
+
+            Style ok_style = GetButtonCoreStyle();
+            ok_style.SetBackground(100, 255, 150);
+            ok_style.Foreground = Color.Black;
+            ok_style.SetSize(150, 30);
+            ok_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            ok_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
+            ok_style.SetMargin(0, 0, 0, 15);
+            ok_style.BorderRadius = new CornerRadius();
+            ok_style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(80, 255, 255, 255)));
+
+            style.AddInnerStyle("button", ok_style);
+
+            Style text_style = GetTextEditStyle();
+            text_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Top);
+            text_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
+            text_style.SetMargin(0, 15, 0, 0);
+
+            style.AddInnerStyle("textedit", text_style);
+
+            Style layout_style = GetFrameStyle();
+            layout_style.SetMargin(0, 30, 0, 0);
+            layout_style.SetPadding(6, 6, 6, 6);
+            layout_style.SetBackground(255, 255, 255, 20);
+
+            style.AddInnerStyle("layout", layout_style);
+
+            return style;
+        }
+
+        public static Style GetSelectedItemStyle()
+        {
+            Style style = GetFrameStyle();
+            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            style.SetBackground(0, 0, 0, 0);
+            style.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(255, 255, 255, 50)));
             return style;
         }
     }

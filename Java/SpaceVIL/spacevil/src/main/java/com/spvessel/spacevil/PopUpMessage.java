@@ -33,7 +33,7 @@ public class PopUpMessage extends Prototype {
     /**
      * Constructs a PopUpMessage with message and parent window (handler)
      */
-    public PopUpMessage(String message, WindowLayout handler) {
+    public PopUpMessage(String message) {
         setItemName("PopUpMessage_" + count);
         count++;
 
@@ -44,7 +44,7 @@ public class PopUpMessage extends Prototype {
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.PopUpMessage"));
         setStyle(DefaultsService.getDefaultStyle(PopUpMessage.class));
-        handler.getWindow().addItem(this);
+        // handler.getWindow().addItem(this);
         setPassEvents(false);
     }
 
@@ -132,10 +132,13 @@ public class PopUpMessage extends Prototype {
         addItems(_text_object, _btn_close);
     }
 
+    private WindowLayout _handler = null;
     /**
      * Show the PopUpMessage
      */
-    public void show() {
+    public void show(WindowLayout handler) {
+        _handler = handler;
+        _handler.addItem(this);
         initTimer();
     }
 
@@ -159,7 +162,7 @@ public class PopUpMessage extends Prototype {
             _stop.cancel();
             _stop = null;
         }
-        getParent().removeItem(this);
+        _handler.getWindow().removeItem(this);
     }
 
     void holdSelf(boolean value) {

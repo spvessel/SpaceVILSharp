@@ -93,8 +93,8 @@ public abstract class BaseItem implements InterfaceBaseItem {
      * Item will not react on parent's changes
      */
     public void removeItemFromListeners() {
-        if (getParent() == null)
-            return;
+        // if (getParent() == null)
+        //     return;
         getParent().removeEventListener(GeometryEventType.RESIZE_WIDTH, this);
         getParent().removeEventListener(GeometryEventType.RESIZE_HEIGHT, this);
         getParent().removeEventListener(GeometryEventType.MOVED_X, this);
@@ -904,6 +904,8 @@ public abstract class BaseItem implements InterfaceBaseItem {
      * BaseItem confines
      */
     public void setConfines() {
+        if (getParent() == null)
+            return;
         _confines_x_0 = getParent().getX() + getParent().getPadding().left;
         _confines_x_1 = getParent().getX() + getParent().getWidth() - getParent().getPadding().right;
         _confines_y_0 = getParent().getY() + getParent().getPadding().top;

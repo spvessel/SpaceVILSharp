@@ -25,16 +25,8 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Selection area of the ListBox
+        /// Selection item
         /// </summary>
-        public Rectangle GetSelectionShape()
-        {
-            return _area.GetSubstrate();
-        }
-        public Rectangle GetHoverShape()
-        {
-            return _area.GetHoverSubstrate();
-        }
         public int GetSelection()
         {
             return _area.GetSelection();
@@ -67,14 +59,6 @@ namespace SpaceVIL
         {
             return _area.GetSelectionVisibility();
         }
-        public void SetHoverVisibility(bool visibility)
-        {
-            _area.SetHoverVisibility(visibility);
-        }
-        public bool GetHoverVisibility()
-        {
-            return _area.GetHoverVisibility();
-        }
 
         public BlankItem Menu = new BlankItem();
         private bool _is_menu_disabled = false;
@@ -87,8 +71,6 @@ namespace SpaceVIL
             _is_menu_disabled = value;
         }
 
-        private ContextMenu _menu;
-
         private Grid _grid = new Grid(2, 2);
         private ListArea _area = new ListArea();
 
@@ -98,6 +80,7 @@ namespace SpaceVIL
             return _area;
         }
 
+        private ContextMenu _menu;
         public VerticalScrollBar VScrollBar = new VerticalScrollBar();
         public HorizontalScrollBar HScrollBar = new HorizontalScrollBar();
         private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.Always;
@@ -193,6 +176,66 @@ namespace SpaceVIL
 
             //Area
             _area.SetItemName(GetItemName() + "_" + _area.GetItemName());
+
+            //events
+            EventMouseClick += (sender, args) =>
+            {
+                if (_area.GetSelection() >= 0)
+                    _area.SetSelection(_area.GetSelection());
+                else
+                    _area.SetFocus();
+            };
+            EventKeyPress += OnKeyPress;
+        }
+
+        private bool IsOutsideArea(long y, int h, Indents margin)
+        {
+            int startY = _area.GetY() + GetPadding().Top;
+            int endY = _area.GetY() + GetHeight() - GetPadding().Bottom;
+            if (y + h < startY || y - margin.Top > endY)
+                return true;
+            return false;
+        }
+
+        private void OnKeyPress(IItem sender, KeyArgs args)
+        {
+            SelectionItem selection = _area.GetTrueSelection();
+            long offset = _area.GetVScrollOffset();
+            int startY = _area.GetY() + GetPadding().Top;
+            long selection_Y = selection.GetY() + selection.GetMargin().Top;
+
+            switch (args.Key)
+            {
+                case KeyCode.Up:
+                    if (IsOutsideArea(selection_Y, selection.GetHeight(), selection.GetMargin()))
+                    {
+                        _area.SetVScrollOffset(offset - (startY - selection_Y));
+                        UpdateVerticalSlider();
+                        break;
+                    }
+                    if (selection_Y < startY)
+                    {
+                        _area.SetVScrollOffset(offset - (startY - selection_Y));
+                        UpdateVerticalSlider();
+                    }
+                    break;
+                case KeyCode.Down:
+                    if (IsOutsideArea(selection_Y, selection.GetHeight(), selection.GetMargin()))
+                    {
+                        _area.SetVScrollOffset(offset - (startY - selection_Y));
+                        UpdateVerticalSlider();
+                        break;
+                    }
+                    if (selection_Y + selection.GetHeight() + selection.GetMargin().Bottom > GetY() + GetHeight() - GetPadding().Bottom)
+                    {
+                        _area.SetVScrollOffset(offset + ((selection_Y + selection.GetHeight() + selection.GetMargin().Bottom
+                                + _area.GetSpacing().Vertical) - (GetY() + GetHeight() - GetPadding().Bottom)));
+                        UpdateVerticalSlider();
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void UpdateListAreaAttributes(object sender)
@@ -208,14 +251,14 @@ namespace SpaceVIL
         {
             //vertical slider
             float v_value = VScrollBar.Slider.GetCurrentValue();
-            int v_offset = (int)((float)(v_size * v_value) / 100.0f);
+            int v_offset = (int)Math.Round((float)(v_size * v_value) / 100.0f);
             _area.SetVScrollOffset(v_offset);
         }
         private void UpdateHListArea()
         {
             //horizontal slider
             float h_value = HScrollBar.Slider.GetCurrentValue();
-            int h_offset = (int)((float)(h_size * h_value) / 100.0f);
+            int h_offset = (int)Math.Round((float)(h_size * h_value) / 100.0f);
             _area.SetHScrollOffset(h_offset);
         }
 
@@ -225,7 +268,7 @@ namespace SpaceVIL
             int visible_area = _area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom;
             foreach (var item in _area.GetItems())
             {
-                if (item.Equals(_area.GetSubstrate()) || item.Equals(_area.GetHoverSubstrate()) || !item.IsVisible())
+                if (!item.IsVisible())
                     continue;
                 total_invisible_size += (item.GetHeight() + _area.GetSpacing().Vertical);
             }
@@ -276,7 +319,7 @@ namespace SpaceVIL
             int visible_area = _area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right;
             foreach (var item in _area.GetItems())
             {
-                if (item.Equals(_area.GetSubstrate()) || item.Equals(_area.GetHoverSubstrate()) || !item.IsVisible())
+                if (!item.IsVisible())
                     continue;
                 if (max_size < item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right)
                     max_size = item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right;
@@ -371,6 +414,10 @@ namespace SpaceVIL
             _area.RemoveItem(item);
             UpdateElements();
         }
+        public void Clear()
+        {
+            _area.RemoveAllItems();
+        }
 
         /// <summary>
         /// Update states of the all ListBox inner items
@@ -390,6 +437,7 @@ namespace SpaceVIL
         {
             //Adding
             base.AddItem(_grid);
+
             _grid.InsertItem(_area, 0, 0);
             _grid.InsertItem(VScrollBar, 0, 1);
             _grid.InsertItem(HScrollBar, 1, 0);
@@ -451,11 +499,14 @@ namespace SpaceVIL
         public List<IBaseItem> GetListContent()
         {
             List<IBaseItem> result = new List<IBaseItem>();
-            foreach (var item in _area.GetItems())
+            List<IBaseItem> list = new List<IBaseItem>(_area.GetItems());
+
+            foreach (IBaseItem item in list)
             {
-                if (item.Equals(_area.GetSubstrate()) || item.Equals(_area.GetHoverSubstrate()))
-                    continue;
-                result.Add(item);
+                SelectionItem tmp = item as SelectionItem;
+                // if (tmp != null)
+                result.Add(tmp.GetContent());
+                // Console.WriteLine(item.GetItemName() + " " + GetParent().GetItemName() + " " + GetHandler().GetWindowName());
             }
             return result;
         }
@@ -463,17 +514,16 @@ namespace SpaceVIL
         /// <summary>
         /// Set list of items
         /// </summary>
-        public void SetListContent(List<IBaseItem> content)
+        public virtual void SetListContent(List<IBaseItem> content)
         {
-            content.Insert(0, _area.GetSubstrate());
-            content.Insert(1, _area.GetHoverSubstrate());
-            _area.SetContent(content);
+            _area.RemoveAllItems();
+            foreach (IBaseItem item in content)
+                AddItem(item);
         }
 
         /// <returns> selection item </returns>
         public IBaseItem GetSelectionItem()
         {
-            //List<IBaseItem> result = new List<IBaseItem>();
             return _area.GetSelectionItem();
         }
 

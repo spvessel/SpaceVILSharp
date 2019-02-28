@@ -1,13 +1,7 @@
 package com.spvessel.spacevil;
 
-import java.awt.Color;
-
-import com.spvessel.spacevil.Decorations.CornerRadius;
-import com.spvessel.spacevil.Decorations.ItemState;
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.ItemStateType;
-import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class MessageItem extends DialogItem {
     static int count = 0;
@@ -22,29 +16,35 @@ public class MessageItem extends DialogItem {
     }
 
     private String _message = "";
-    // private String _title = "";
-    private TitleBar titleBar = new TitleBar();
-    private Label msg = new Label();
+    private TitleBar _titleBar;
+    private VerticalStack _layout;
+    private Label _msg;
+    private ButtonCore _ok;
 
     /**
      * Constructs a MessageItem
      */
     public MessageItem() {
-        // super();
         setItemName("MessageItem_" + count);
         count++;
+
+        _titleBar = new TitleBar();
+        _layout = new VerticalStack();
+        _msg = new Label();
+        _ok = new ButtonCore("OK");
+
+        setStyle(DefaultsService.getDefaultStyle(MessageItem.class));
     }
 
     /**
      * Constructs a MessageItem with message and title
      */
-    public MessageItem(String m, String t) {
+    public MessageItem(String message, String title) {
         this();
-        _message = m;
-        // _title = t;
+        _message = message;
 
-        titleBar.setText(t);
-        msg.setText(_message);
+        _titleBar.setText(title);
+        _msg.setText(_message);
     }
 
     /**
@@ -59,10 +59,11 @@ public class MessageItem extends DialogItem {
     }
 
     public void setTitle(String title) {
-        titleBar.setText(title);
+        _titleBar.setText(title);
     }
+
     public String getTitle() {
-        return titleBar.getText();
+        return _titleBar.getText();
     }
 
     @Override
@@ -70,41 +71,20 @@ public class MessageItem extends DialogItem {
         // important!
         super.initElements();
 
-        VerticalStack layout = new VerticalStack();
-        layout.setAlignment(ItemAlignment.TOP, ItemAlignment.HCENTER);
-        layout.setMargin(0, 30, 0, 0);
-        layout.setPadding(6, 6, 6, 6);
-        layout.setSpacing(0, 10);
-        layout.setBackground(255, 255, 255, 20);
-
         // adding toolbar
-        titleBar.getMaximizeButton().setVisible(false);
-        window.addItems(titleBar, layout);
-
-        // message
-        msg.setForeground(new Color(210, 210, 210));
-        msg.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
-        msg.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
-        msg.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        _titleBar.getMaximizeButton().setVisible(false);
+        window.addItems(_titleBar, _layout);
 
         // ok
-        ButtonCore ok = new ButtonCore("OK");
-        ok.setBackground(100, 255, 150);
-        ok.setForeground(Color.black);
-        ok.setItemName("OK");
-        ok.setSize(100, 30);
-        ok.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        ok.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
-        ok.setBorderRadius(new CornerRadius(6));
-        ok.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
-        ok.eventMouseClick.add((sender, args) -> {
+        _ok.setItemName("OK");
+        _ok.eventMouseClick.add((sender, args) -> {
             _result = true;
             close();
         });
-        layout.addItems(msg, ok);
+        _layout.addItems(_msg, _ok);
 
-        titleBar.getCloseButton().eventMouseClick.clear();
-        titleBar.getCloseButton().eventMouseClick.add((sender, args) -> {
+        _titleBar.getCloseButton().eventMouseClick.clear();
+        _titleBar.getCloseButton().eventMouseClick.add((sender, args) -> {
             close();
         });
     }
@@ -125,6 +105,21 @@ public class MessageItem extends DialogItem {
 
     @Override
     public void setStyle(Style style) {
+        if (style == null)
+            return;
+        super.setStyle(style);
 
+        Style inner_style = style.getInnerStyle("okbutton");
+        if (inner_style != null) {
+            _ok.setStyle(inner_style);
+        }
+        inner_style = style.getInnerStyle("message");
+        if (inner_style != null) {
+            _msg.setStyle(inner_style);
+        }
+        inner_style = style.getInnerStyle("layout");
+        if (inner_style != null) {
+            _layout.setStyle(inner_style);
+        }
     }
 }

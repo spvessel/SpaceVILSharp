@@ -4,6 +4,8 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceCommonMethodState;
 import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.KeyArgs;
+import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
@@ -18,25 +20,16 @@ public class ListBox extends Prototype {
     /**
      * ScrollBar moving step
      */
-    public void setScrollStep(int step)
-    {
+    public void setScrollStep(int step) {
         _area.setStep(step);
     }
-    public int getScrollStep()
-    {
+
+    public int getScrollStep() {
         return _area.getStep();
     }
-    
-    public Rectangle getSelectionShape() {
-        return _area.getSubstrate();
-    }
-    
-    public Rectangle getHoverShape() {
-        return _area.getHoverSubstrate();
-    }
-    
+
     /**
-     * Selection area of the ListBox
+     * Selection index
      */
     public int getSelection() {
         return _area.getSelection();
@@ -62,8 +55,16 @@ public class ListBox extends Prototype {
     public void setSelectionVisibility(boolean visibility) {
         _area.setSelectionVisibility(visibility);
     }
+
     public boolean getSelectionVisibility() {
         return _area.getSelectionVisibility();
+    }
+
+    /**
+     * Is ListBox menu disabled
+     */
+    public void disableMenu(boolean value) {
+        _is_menu_disabled = value;
     }
 
     private Grid _grid = new Grid(2, 2);
@@ -79,13 +80,6 @@ public class ListBox extends Prototype {
     public BlankItem menu = new BlankItem();
     private boolean _is_menu_disabled = false;
 
-    /**
-     * Is ListBox menu disabled
-     */
-    public void disableMenu(boolean value) {
-        _is_menu_disabled = value;
-    }
-
     private ContextMenu _menu;
     public VerticalScrollBar vScrollBar = new VerticalScrollBar();
     public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
@@ -97,6 +91,7 @@ public class ListBox extends Prototype {
     public ScrollBarVisibility getVScrollBarVisible() {
         return _v_scrollBarPolicy;
     }
+
     public void setVScrollBarVisible(ScrollBarVisibility policy) {
         _v_scrollBarPolicy = policy;
 
@@ -127,6 +122,7 @@ public class ListBox extends Prototype {
     public ScrollBarVisibility getHScrollBarVisible() {
         return _h_scrollBarPolicy;
     }
+
     public void setHScrollBarVisible(ScrollBarVisibility policy) {
         _h_scrollBarPolicy = policy;
 
@@ -155,26 +151,70 @@ public class ListBox extends Prototype {
     public ListBox() {
         setItemName("ListBox_" + count);
         count++;
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ListBox"));
         setStyle(DefaultsService.getDefaultStyle(ListBox.class));
 
         // VBar
         vScrollBar.setDrawable(true);
         vScrollBar.setItemName(getItemName() + "_vScrollBar");
-
         // HBar
         hScrollBar.setDrawable(true);
         hScrollBar.setItemName(getItemName() + "_hScrollBar");
-
         // Area
         _area.setItemName(getItemName() + "_area");
-
+        // Menu
         menu.setItemName(getItemName() + "_menu");
+
+        eventMouseClick.add((sender, args) -> {
+            if (_area.getSelection() >= 0)
+                _area.setSelection(_area.getSelection());
+            else
+            _area.setFocus();
+        });
+        eventKeyPress.add(this::onKeyPress);
     }
 
-    private void updateListAreaAttributes(InterfaceItem sender) {
-        updateVListArea();
-        updateHListArea();
+    private boolean isOutsideArea(long y, int h, Indents margin) {
+        int startY = _area.getY() + getPadding().top;
+        int endY = _area.getY() + getHeight() - getPadding().bottom;
+        if (y + h < startY || y - margin.top > endY)
+            return true;
+        return false;
+    }
+
+    private void onKeyPress(InterfaceItem sender, KeyArgs args) {
+        SelectionItem selection = _area.getTrueSelection();
+        long offset = _area.getVScrollOffset();
+        int startY = _area.getY() + getPadding().top;
+        long selection_Y = selection.getY() + selection.getMargin().top;
+
+        switch (args.key) {
+        case UP:
+            if (isOutsideArea(selection_Y, selection.getHeight(), selection.getMargin())) {
+                _area.setVScrollOffset(offset - (startY - selection_Y));
+                updateVerticalSlider();
+                break;
+            }
+            if (selection_Y < startY) {
+                _area.setVScrollOffset(offset - (startY - selection_Y));
+                updateVerticalSlider();
+            }
+            break;
+        case DOWN:
+            if (isOutsideArea(selection_Y, selection.getHeight(), selection.getMargin())) {
+                _area.setVScrollOffset(offset - (startY - selection_Y));
+                updateVerticalSlider();
+                break;
+            }
+            if (selection_Y + selection.getHeight() + selection.getMargin().bottom > getY() + getHeight()
+                    - getPadding().bottom) {
+                _area.setVScrollOffset(offset + ((selection_Y + selection.getHeight() + selection.getMargin().bottom
+                        + _area.getSpacing().vertical) - (getY() + getHeight() - getPadding().bottom)));
+                updateVerticalSlider();
+            }
+            break;
+        default:
+            break;
+        }
     }
 
     private long v_size = 0;
@@ -183,14 +223,14 @@ public class ListBox extends Prototype {
     private void updateVListArea() {
         // vertical slider
         float v_value = vScrollBar.slider.getCurrentValue();
-        int v_offset = (int) ((float) (v_size * v_value) / 100.0f);
+        int v_offset = (int) Math.round((float) (v_size * v_value) / 100.0f);
         _area.setVScrollOffset(v_offset);
     }
 
     private void updateHListArea() {
         // horizontal slider
         float h_value = hScrollBar.slider.getCurrentValue();
-        int h_offset = (int) ((float) (h_size * h_value) / 100.0f);
+        int h_offset = (int) Math.round((float) (h_size * h_value) / 100.0f);
         _area.setHScrollOffset(h_offset);
     }
 
@@ -199,7 +239,7 @@ public class ListBox extends Prototype {
         int total_invisible_size = 0;
         int visible_area = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
         for (InterfaceBaseItem item : _area.getItems()) {
-            if (item.equals(_area.getSubstrate()) || item.equals(_area.getHoverSubstrate()) || !item.isVisible())
+            if (!item.isVisible())
                 continue;
             total_invisible_size += (item.getHeight() + _area.getSpacing().vertical);
         }
@@ -245,13 +285,12 @@ public class ListBox extends Prototype {
         int max_size = 0;
         int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right;
         for (InterfaceBaseItem item : _area.getItems()) {
-            if (item.equals(_area.getSubstrate()) || item.equals(_area.getHoverSubstrate()) || !item.isVisible())
+            if (!item.isVisible())
                 continue;
             if (max_size < item.getWidth() + item.getMargin().left + item.getMargin().right)
                 max_size = item.getWidth() + item.getMargin().left + item.getMargin().right;
         }
         if (max_size <= visible_area) {
-            // hScrollBar.slider.handler.setWidth(/* hScrollBar.slider.getWidth() */0);
             hScrollBar.slider.handler.setDrawable(false);
             hScrollBar.slider.setStep(hScrollBar.slider.getMaxValue());
             h_size = 0;
@@ -339,6 +378,10 @@ public class ListBox extends Prototype {
         updateElements();
     }
 
+    public void clear() {
+        _area.removeAllItems();
+    }
+
     /**
      * Update states of the all ListBox inner items
      */
@@ -356,6 +399,7 @@ public class ListBox extends Prototype {
     public void initElements() {
         // Adding
         super.addItem(_grid);
+
         _grid.insertItem(_area, 0, 0);
         _grid.insertItem(vScrollBar, 0, 1);
         _grid.insertItem(hScrollBar, 1, 0);
@@ -364,9 +408,7 @@ public class ListBox extends Prototype {
         // Events Connections
         _area.itemListChanged.add(this::updateElements);
 
-        //InterfaceMouseMethodState scroll_up = (sender, args) -> vScrollBar.eventScrollUp.execute(sender, args);
         eventScrollUp.add(vScrollBar.eventScrollUp::execute);
-        //InterfaceMouseMethodState scroll_down = (sender, args) -> vScrollBar.eventScrollDown.execute(sender, args);
         eventScrollDown.add(vScrollBar.eventScrollDown::execute);
 
         InterfaceCommonMethodState v_changed = (sender) -> updateVListArea();
@@ -419,9 +461,10 @@ public class ListBox extends Prototype {
     public List<InterfaceBaseItem> getListContent() {
         List<InterfaceBaseItem> result = new LinkedList<>();
         for (InterfaceBaseItem item : _area.getItems()) {
-            if (item.equals(_area.getSubstrate()) || item.equals(_area.getHoverSubstrate()))
-                continue;
-            result.add(item);
+            result.add(((SelectionItem) item).getContent());
+            // System.out.println(
+            // item.getItemName() + " " + getParent().getItemName() + " " +
+            // getHandler().getWindowName());
         }
         return result;
     }
@@ -430,17 +473,16 @@ public class ListBox extends Prototype {
      * Set list of items
      */
     public void setListContent(List<InterfaceBaseItem> content) {
-        unselect();
-        content.add(0, _area.getSubstrate());
-        content.add(1, _area.getHoverSubstrate());
-        _area.setContent(content);
+        _area.removeAllItems();
+        for (InterfaceBaseItem item : content) {
+            addItem(item);
+        }
     }
 
     /**
      * @return selection item
      */
     public InterfaceBaseItem getSelectionItem() {
-        //List<InterfaceBaseItem> result = new LinkedList<>();
         return _area.getSelectionItem();
     }
 

@@ -32,7 +32,8 @@ namespace SpaceVIL
         public uint IBO;
         public uint[] Texture;
 
-        internal VRAMTexture() { 
+        internal VRAMTexture()
+        {
             Texture = new uint[1];
         }
 
@@ -171,6 +172,19 @@ namespace SpaceVIL
             }
             else
                 Console.WriteLine("Uniform not found: <" + name + "> " + shader.GetShaderName());
+            return false;
+        }
+
+        internal bool SendUniform1i(Shader shader, String name, int value)
+        {
+            int location = glGetUniformLocation(shader.GetProgramID(), name);
+            if (location >= 0)
+            {
+                glUniform1i(location, value);
+                return true;
+            }
+            else
+                Console.WriteLine("Uniform not found: <" + name + ">");
             return false;
         }
 

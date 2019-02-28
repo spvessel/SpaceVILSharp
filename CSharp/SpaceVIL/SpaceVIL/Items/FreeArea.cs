@@ -131,9 +131,7 @@ namespace SpaceVIL
         private void CorrectPosition(ResizableItem item)
         {
             int actual_x = item.GetX();
-            // int stored_x = _stored_crd[item][0];
             int actual_y = item.GetY();
-            // int stored_y = _stored_crd[item][1];
             int[] crd = new int[]
             {
                 actual_x - (int)_xOffset - GetX() - GetPadding().Left - item.GetMargin().Left,

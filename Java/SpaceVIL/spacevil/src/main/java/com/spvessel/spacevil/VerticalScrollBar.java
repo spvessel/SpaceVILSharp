@@ -25,6 +25,7 @@ public class VerticalScrollBar extends VerticalStack {
      * Constructs a VerticalScrollBar
      */
     public VerticalScrollBar() {
+        isFocusable = false;
         setItemName("VerticalScrollBar_" + count);
         count++;
 

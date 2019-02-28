@@ -29,6 +29,9 @@ public class ComplexTest extends ActiveWindow {
         TitleBar title = new TitleBar("ComplexTest");
         Handler.addItem(title);
 
+        Handler.getWindow().eventKeyPress.add((sender, args) -> {
+            System.out.println("FocusedItem: " + getHandler().getFocusedItem().getItemName());
+        });
         HorizontalStack toolbar = new HorizontalStack();
         toolbar.setBackground(51, 51, 51);
         toolbar.setItemName("toolbar");
@@ -40,6 +43,7 @@ public class ComplexTest extends ActiveWindow {
         Handler.addItem(toolbar);
         block = new Grid(2, 2);
         TreeView treeview = new TreeView();
+        treeview.setItemName("TreeView Fucker!");
         treeview.setMinWidth(100);
 
         ButtonCore b1 = getButton("b1", 26, 30, SizePolicy.FIXED);
@@ -161,14 +165,14 @@ public class ComplexTest extends ActiveWindow {
     private TreeItem getTreeBranch() {
         TreeItem item = new TreeItem(TreeItemType.BRANCH, "name2");
         item.setFontSize(15);
-//        item.setText(item.getItemName());
+        // item.setText(item.getItemName());
         return item;
     }
 
     private TreeItem getTreeLeaf() {
         TreeItem item = new TreeItem(TreeItemType.LEAF, "name1");
         item.setFontSize(15);
-//        item.setText(item.getItemName());
+        // item.setText(item.getItemName());
         return item;
     }
 }

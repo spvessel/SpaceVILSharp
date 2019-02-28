@@ -2,8 +2,6 @@ package com.spvessel.spacevil;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.*;
@@ -53,6 +51,24 @@ final class DrawEngine {
             focusedItem.setFocused(false);
         focusedItem = item;
         focusedItem.setFocused(true);
+        findUnderFocusedItems(item);
+    }
+
+    private void findUnderFocusedItems(Prototype item) {
+        Deque<Prototype> queue = new ArrayDeque<>();
+
+        if (item == _handler.getLayout().getWindow()) {
+            return;
+        }
+
+        Prototype parent = item.getParent();
+
+        while (parent != null) {
+            queue.addFirst(parent);
+            parent = parent.getParent();
+        }
+        underFocusedItem = new LinkedList<Prototype>(queue);
+        underFocusedItem.remove(focusedItem);
     }
 
     protected void resetFocus() {
@@ -672,8 +688,8 @@ final class DrawEngine {
             }
 
             if (hoveredItem != null) {
-                assignActions(InputEventType.MOUSE_RELEASE, _margs, false);
                 hoveredItem.setMousePressed(false);
+                assignActions(InputEventType.MOUSE_RELEASE, _margs, false);
             }
             engineEvent.resetAllEvents();
             engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
@@ -989,7 +1005,6 @@ final class DrawEngine {
                     _handler.getLayout().setEventTask(t);
                     if (!item.isPassEvents(action))
                         break;// остановить передачу событий последующим элементам
-                              // 
                 }
             }
         }
@@ -1092,6 +1107,8 @@ final class DrawEngine {
 
         if (_bounds.containsKey(shell.getParent())) {
             int[] shape = _bounds.get(shell.getParent());
+            if (shape == null)/////////////////////////////////////
+                return false;
             glEnable(GL_SCISSOR_TEST);
             glScissor(shape[0], shape[1], shape[2], shape[3]);
 
@@ -1522,6 +1539,16 @@ final class DrawEngine {
         store.genBuffers(i_x0, i_x1, i_y0, i_y1);
         store.genTexture(w, h, bitmap);
         store.sendUniformSample2D(_texture);
+        if (image.isColorOverLay()) {
+            float[] argb = { (float) image.getColorOverlay().getRed() / 255.0f,
+                    (float) image.getColorOverlay().getGreen() / 255.0f,
+                    (float) image.getColorOverlay().getBlue() / 255.0f,
+                    (float) image.getColorOverlay().getAlpha() / 255.0f };
+            store.sendUniform1i(_texture, "overlay", 1);
+            store.sendUniform4f(_texture, "rgb", argb);
+        } else
+            store.sendUniform1i(_texture, "overlay", 0);// VEEEEEEEERY interesting!!!
+
         store.draw();
         store.clear();
     }

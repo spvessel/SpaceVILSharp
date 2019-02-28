@@ -11,11 +11,15 @@ namespace SpaceVIL
     public class TreeView : ListBox
     {
         public EventCommonMethod EventSortTree;
-        // private ContextMenu _menu;
+
+        internal int _maxWrapperWidth = 0;
+
         internal TreeItem _root; //nesting level = 0
+
         public void SetRootVisibility(bool visible)
         {
             _root.SetVisible(visible);
+            GetWrapper(_root).SetVisible(visible);
             //reset all paddings for content
             List<IBaseItem> list = GetListContent();
             if (list != null)
@@ -29,7 +33,13 @@ namespace SpaceVIL
             }
             UpdateElements();
         }
-        static int count = 0;
+        public void SetRootText(String text)
+        {
+            _root.SetText(text);
+        }
+
+        private static int count = 0;
+
         public TreeView()
         {
             SetItemName("TreeView_" + count);
@@ -38,60 +48,47 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeView)));
             EventSortTree += OnSortTree;
+
+            SetHScrollBarVisible(ScrollBarVisibility.AsNeeded);
         }
         public override void InitElements()
         {
             base.InitElements();
-            // SetSelectionVisibility(true);
-            _root._parent = this;
+            _root._treeViewContainer = this;
             _root.IsRoot = true;
             base.AddItem(_root);
             SetRootVisibility(false);
-
-            // _menu = new ContextMenu(GetHandler());
-            // _menu.SetBackground(40, 40, 40);
-            // _menu.SetPassEvents(false);
-            // MenuItem paste = new MenuItem("Paste");
-            // paste.SetForeground(Color.LightGray);
-            // paste.EventMouseClick += (sender, args) =>
-            // {
-            //     //paste
-            // };
-            // MenuItem new_leaf = new MenuItem("New Leaf");
-            // new_leaf.SetForeground(Color.LightGray);
-            // new_leaf.EventMouseClick += (sender, args) =>
-            // {
-            //     AddItem(GetTreeLeaf());
-            // };
-            // MenuItem new_branch = new MenuItem("New Branch");
-            // new_branch.SetForeground(Color.LightGray);
-            // new_branch.EventMouseClick += (sender, args) =>
-            // {
-            //     AddItem(GetTreeBranch());
-            // };
-
-            // EventMouseClick += (_, x) => _menu.Show(_, x);
-
-            // _menu.AddItems(new_branch, new_leaf, paste);
+            _root.ResetIndents();
+            _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
         }
-        // private TreeItem GetTreeBranch()
-        // {
-        //     TreeItem item = new TreeItem(TreeItemType.Branch);
-        //     item.SetText(item.GetItemName());
-        //     return item;
-        // }
-        // private TreeItem GetTreeLeaf()
-        // {
-        //     TreeItem item = new TreeItem(TreeItemType.Leaf);
-        //     item.SetText(item.GetItemName());
-        //     return item;
-        // }
-        internal void RefreshTree(TreeItem item)
+
+        internal void RefreshWrapperWidth()
         {
-            base.AddItem(item);
-            OnSortTree();
+            foreach (SelectionItem wrp in GetArea()._mapContent.Values)
+            {
+                wrp.SetMinWidth(_maxWrapperWidth);
+                wrp.GetContent().SetMinWidth(_maxWrapperWidth);
+            }
+        }
+
+        internal void RefreshTree(TreeItem prev, TreeItem item)
+        {
+            int index = GetListContent().IndexOf(prev);
+            InsertItem(item, index + 1);
+            item.ResetIndents();
+            item.OnToggleHide(true);
             UpdateElements();
         }
+
+        public override void SetListContent(List<IBaseItem> content)
+        {
+            GetArea().RemoveAllItems();
+            foreach (IBaseItem item in content)
+            {
+                AddItem(item);
+            }
+        }
+
         void OnSortTree()
         {
             //sorting
@@ -102,9 +99,14 @@ namespace SpaceVIL
             SetListContent(outList.Select(_ => _ as IBaseItem).ToList());
         }
 
+        internal SelectionItem GetWrapper(TreeItem item)
+        {
+            return GetArea()._mapContent[item];
+        }
+
         private List<TreeItem> SortHelper(TreeItem item)
         {
-            List<TreeItem> tmpList = item.GetTreeItems();
+            List<TreeItem> tmpList = item.GetChildren();
             tmpList.Sort(CompareInAlphabet);
             List<TreeItem> outList = new List<TreeItem>();
             foreach (TreeItem ti in tmpList)
@@ -117,7 +119,7 @@ namespace SpaceVIL
             return outList;
         }
 
-        private int CompareInAlphabet(TreeItem ti1, TreeItem ti2)
+        internal int CompareInAlphabet(TreeItem ti1, TreeItem ti2)
         {
             if (ti1.GetItemType() != ti2.GetItemType())
             {

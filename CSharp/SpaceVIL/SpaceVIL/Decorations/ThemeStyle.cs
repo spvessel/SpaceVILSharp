@@ -99,6 +99,14 @@ namespace SpaceVIL.Decorations
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TreeView), Style.GetTreeViewStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TreeItem), Style.GetTreeItemStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.SpinItem), Style.GetSpinItemStyle());
+
+                //new
+                DefaultItemsStyle.Add(typeof(SpaceVIL.DialogItem), Style.GetDialogItemStyle());
+                DefaultItemsStyle.Add(typeof(SpaceVIL.MessageItem), Style.GetMessageItemStyle());
+                DefaultItemsStyle.Add(typeof(SpaceVIL.InputDialog), Style.GetInputDialogStyle());
+                DefaultItemsStyle.Add(typeof(SpaceVIL.WContainer), Style.GetWindowContainerStyle());
+                DefaultItemsStyle.Add(typeof(SpaceVIL.OpenEntryDialog), Style.GetOpenEntryDialogStyle());
+                DefaultItemsStyle.Add(typeof(SpaceVIL.FileSystemEntry), Style.GetFileSystemEntryStyle());
             }
         }
 

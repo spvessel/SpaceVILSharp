@@ -53,6 +53,10 @@ namespace SpaceVIL
         {
             _textEncrypt.SetAlignment(alignment);
         }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
+        {
+            _textEncrypt.SetTextAlignment(alignment);
+        }
 
         /// <summary>
         /// Text margin in the PasswordLine

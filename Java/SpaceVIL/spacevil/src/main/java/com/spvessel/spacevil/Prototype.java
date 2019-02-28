@@ -706,12 +706,12 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.setState(state);
     }
 
-    /**
-     * Set list of the Prototype's inner items. Old items will be removed
-     */
-    public void setContent(List<InterfaceBaseItem> content) {
-        _core.setContent(content);
-    }
+    // /**
+    //  * Set list of the Prototype's inner items. Old items will be removed
+    //  */
+    // public void setContent(List<InterfaceBaseItem> content) {
+    //     _core.setContent(content);
+    // }
 
     /**
      * Is Prototype has CustomFigure shape, return it

@@ -20,6 +20,7 @@ public class VisualContact extends Prototype {
         setMinSize(250, 60);
         setSize(100, 60);
         setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
         setBorderRadius(15);
         ItemState hover = new ItemState();
         hover.background = new Color(255, 255, 255, 15);

@@ -30,15 +30,6 @@ namespace SpaceVIL
         {
             _ouside = value;
         }
-        // private bool _lock_ouside = true;
-        // public bool IsLockOutside()
-        // {
-        //     return _lock_ouside;
-        // }
-        // public void SetLockOutside(bool value)
-        // {
-        //     _lock_ouside = value;
-        // }
 
         /// <summary>
         /// Constructs a ContextMenu
@@ -70,17 +61,9 @@ namespace SpaceVIL
             ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.GetArea().SelectionChanged += OnSelectionChanged;
-
             base.AddItem(ItemList);
-
             ItemList.EventScrollUp = null;
             ItemList.EventScrollDown = null;
-
-            foreach (var item in _queue)
-                ItemList.AddItem(item);
-            _queue = null;
-            _init = true;
-
             ItemList.GetArea().EventKeyPress += (sender, args) =>
             {
                 if (args.Key == KeyCode.Escape)
@@ -89,17 +72,17 @@ namespace SpaceVIL
                     HideDependentMenus();
                 }
             };
+            _init = true;
         }
-        
+
         private void HideDependentMenus()
         {
             foreach (var context_menu in ItemsLayoutBox.GetLayoutFloatItems(GetHandler().Id))
             {
                 ContextMenu menu = context_menu as ContextMenu;
-                if (menu != null)
+                if (menu != null && !menu.Equals(this))
                 {
                     menu.Hide();
-                    menu.ItemList.Unselect();
                 }
             }
         }
@@ -176,8 +159,7 @@ namespace SpaceVIL
                 if (width < tmp)
                     width = tmp;
             }
-            SetWidth(width);
-            SetHeight(height);
+            SetSize(width, height - ItemList.GetArea().GetSpacing().Vertical);
         }
 
         /// <summary>
@@ -191,12 +173,16 @@ namespace SpaceVIL
             if (args.Button == ActiveButton)
             {
                 if (!_init)
-                {
                     InitElements();
+                if (!_added)
+                {
+                    foreach (IBaseItem item in _queue)
+                    {
+                        ItemList.AddItem(item);
+                    }
                     UpdateSize();
+                    _added = true;
                 }
-
-                SetVisible(true);
 
                 //проверка снизу
                 if (args.Position.GetY() + GetHeight() > GetHandler().GetHeight())
@@ -216,11 +202,18 @@ namespace SpaceVIL
                 {
                     SetX(args.Position.GetX());
                 }
-                // SetX(args.Position.X);
-                // SetY(args.Position.Y);
                 SetConfines();
+                SetVisible(true);
                 ItemList.GetArea().SetFocus();
             }
+        }
+        private bool _added = false;
+
+        public void Clear()
+        {
+            ItemList.Clear();
+            _queue.Clear();
+            _added = false;
         }
 
         /// <summary>
@@ -228,9 +221,9 @@ namespace SpaceVIL
         /// </summary>
         public void Hide()
         {
-            SetX(-GetWidth());
-            SetVisible(false);
             ItemList.Unselect();
+            SetVisible(false);
+            SetX(-GetWidth());
             ReturnFocus?.SetFocus();
         }
 
@@ -296,4 +289,3 @@ namespace SpaceVIL
         }
     }
 }
- 

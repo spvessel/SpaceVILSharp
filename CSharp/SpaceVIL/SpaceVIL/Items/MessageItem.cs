@@ -16,9 +16,36 @@ namespace SpaceVIL
             return _result;
         }
         private String _message = String.Empty;
-        // private String _title = String.Empty;
-        private TitleBar titleBar = new TitleBar();
-        private Label msg = new Label();
+        private TitleBar _titleBar;
+        private VerticalStack _layout;
+        private Label _msg;
+        private ButtonCore _ok;
+
+        /// <summary>
+        /// Constructs a MessageItem
+        /// </summary>
+        public MessageItem()
+        {
+            SetItemName("MessageItem_" + count);
+            count++;
+
+            _titleBar = new TitleBar();
+            _layout = new VerticalStack();
+            _msg = new Label();
+            _ok = new ButtonCore("OK");
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MessageItem)));
+        }
+
+        /// <summary>
+        /// Constructs a MessageBox with message and title
+        /// </summary>
+        public MessageItem(String message, String title) : this()
+        {
+            _message = message;
+            _titleBar.SetText(title);
+            _msg.SetText(_message);
+        }
 
         public void SetMessageText(String text)
         {
@@ -32,79 +59,32 @@ namespace SpaceVIL
 
         public void SetTitle(String title)
         {
-            titleBar.SetText(title);
+            _titleBar.SetText(title);
         }
         public String GetTitle()
         {
-            return titleBar.GetText();
-        }
-
-        /// <summary>
-        /// Constructs a MessageItem
-        /// </summary>
-        public MessageItem() : base()
-        {
-            SetItemName("MessageItem_" + count);
-            count++;
-        }
-
-        /// <summary>
-        /// Constructs a MessageBox with message and title
-        /// </summary>
-        public MessageItem(String m = "", String t = "") : this()
-        {
-            _message = m;
-            // _title = t;
-
-            titleBar.SetText(t);
-            msg.SetText(_message);
+            return _titleBar.GetText();
         }
 
         public override void InitElements()
         {
             //important!
             base.InitElements();
-
-            VerticalStack layout = new VerticalStack();
-            layout.SetAlignment(ItemAlignment.Top | ItemAlignment.HCenter);
-            layout.SetMargin(0, 30, 0, 0);
-            layout.SetPadding(6, 6, 6, 6);
-            layout.SetSpacing(vertical: 10);
-            layout.SetBackground(255, 255, 255, 20);
-
             //adding toolbar
-            titleBar.GetMaximizeButton().SetVisible(false);
-            Window.AddItems(titleBar, layout);
-
-
-            //message
-            msg.SetForeground(Color.FromArgb(255, 210, 210, 210));
-            msg.SetAlignment(ItemAlignment.VCenter | ItemAlignment.HCenter);
-            msg.SetTextAlignment(ItemAlignment.VCenter | ItemAlignment.HCenter);
-            msg.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            _titleBar.GetMaximizeButton().SetVisible(false);
+            Window.AddItems(_titleBar, _layout);
 
             //ok
-            ButtonCore ok = new ButtonCore("OK");
-            ok.SetBackground(100, 255, 150);
-            ok.SetForeground(Color.Black);
-            ok.SetItemName("OK");
-            ok.SetSize(100, 30);
-            ok.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            ok.SetAlignment(ItemAlignment.HCenter | ItemAlignment.Bottom);
-            ok.SetBorderRadius(new CornerRadius(6));
-            ok.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(80, 255, 255, 255)
-            });
-            ok.EventMouseClick += (sender, args) =>
+            _ok.SetItemName("OK");
+            _ok.EventMouseClick += (sender, args) =>
             {
                 _result = true;
                 Close();
             };
-            layout.AddItems(msg, ok);
+            _layout.AddItems(_msg, _ok);
 
-            titleBar.GetCloseButton().EventMouseClick = null;
-            titleBar.GetCloseButton().EventMouseClick += (sender, args) =>
+            _titleBar.GetCloseButton().EventMouseClick = null;
+            _titleBar.GetCloseButton().EventMouseClick += (sender, args) =>
             {
                 Close();
             };
@@ -130,7 +110,25 @@ namespace SpaceVIL
 
         public override void SetStyle(Style style)
         {
+            if (style == null)
+                return;
+            base.SetStyle(style);
 
+            Style inner_style = style.GetInnerStyle("okbutton");
+            if (inner_style != null)
+            {
+                _ok.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("message");
+            if (inner_style != null)
+            {
+                _msg.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("layout");
+            if (inner_style != null)
+            {
+                _layout.SetStyle(inner_style);
+            }
         }
     }
 }

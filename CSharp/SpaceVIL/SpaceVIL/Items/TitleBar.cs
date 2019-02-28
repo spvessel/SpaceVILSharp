@@ -56,7 +56,7 @@ namespace SpaceVIL
             SetText(text);
         }
 
-        public void SetIcon(Image icon, int width, int height)
+        public void SetIcon(Bitmap icon, int width, int height)
         {
             _icon.SetSize(width, height);
             _icon.SetImage(icon);
@@ -71,6 +71,10 @@ namespace SpaceVIL
 
         //text init
         public void SetTextAlignment(ItemAlignment alignment)
+        {
+            _text_object.SetTextAlignment(alignment);
+        }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
         {
             _text_object.SetTextAlignment(alignment);
         }

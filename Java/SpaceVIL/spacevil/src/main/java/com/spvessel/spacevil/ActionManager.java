@@ -57,7 +57,12 @@ class ActionManager {
         while (stackEvents.size() > 0) {
             EventTask tmp = stackEvents.poll();
             if (tmp != null) {
-                executeAction(tmp);
+                try {
+                    executeAction(tmp);
+                } catch (Exception e) {
+                    System.out.println(tmp.item.getItemName() + " " + tmp.action + " " + e.toString());
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -122,6 +127,7 @@ class ActionManager {
         if (sender.eventMouseClick != null)
             sender.eventMouseClick.execute(sender, args);
     }
+
     private void invokeMouseDoubleClickEvent(Prototype sender, MouseArgs args) {
         if (sender.eventMouseDoubleClick != null)
             sender.eventMouseDoubleClick.execute(sender, args);

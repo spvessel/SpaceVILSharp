@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
@@ -6,141 +7,83 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class SelectionItem : Prototype
+    class SelectionItem : Prototype
     {
         private static int count = 0;
+        IBaseItem _item;
 
-        ImageItem _image_icon;
-        TextLine _text_object;
-
-        /// <summary>
-        /// Constructs a SelectionItem
-        /// </summary>
-        public SelectionItem()
+        public SelectionItem(IBaseItem content)
         {
+            _item = content;
+            IsFocusable = false;
             SetItemName("SelectionItem_" + count);
             count++;
 
-            _image_icon = new ImageItem();
-            _text_object = new TextLine();
+            SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            SetBackground(0, 0, 0, 0);
+            AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(50, 255, 255, 255)));
 
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SelectionItem)));
-        }
-
-        /// <summary>
-        /// Constructs a SelectionItem with text
-        /// </summary>
-        public SelectionItem(Image icon, String text) : this()
-        {
-            SetText(text);
-            _image_icon.SetImage(icon);
+            EventMouseClick += (sender, args) =>
+            {
+                if (IsToggled())
+                    return;
+                SetToggled(true);
+                UncheckOthers(sender);
+            };
         }
 
-        public void SetIcon(Image icon)
+        internal IBaseItem GetContent()
         {
-            _image_icon.SetImage(icon);
-        }
-        //text init
-        /// <summary>
-        /// Text alignment in the SelectionItem
-        /// </summary>
-        public void SetTextAlignment(ItemAlignment alignment)
-        {
-            _text_object.SetTextAlignment(alignment);
+            return _item;
         }
 
-        /// <summary>
-        /// Text margin in the SelectionItem
-        /// </summary>
-        public void SetTextMargin(Indents margin)
-        {
-            _text_object.SetMargin(margin);
-        }
-
-        /// <summary>
-        /// Text font parameters in the SelectionItem
-        /// </summary>
-        public void SetFont(Font font)
-        {
-            _text_object.SetFont(font);
-        }
-        public void SetFontSize(int size)
-        {
-            _text_object.SetFontSize(size);
-        }
-        public void SetFontStyle(FontStyle style)
-        {
-            _text_object.SetFontStyle(style);
-        }
-        public void SetFontFamily(FontFamily font_family)
-        {
-            _text_object.SetFontFamily(font_family);
-        }
-        public Font GetFont()
-        {
-            return _text_object.GetFont();
-        }
-
-        /// <summary>
-        /// Set text in the SelectionItem
-        /// </summary>
-        public void SetText(String text)
-        {
-            _text_object.SetItemText(text);
-        }
-        public String GetText()
-        {
-            return _text_object.GetItemText();
-        }
-
-        /// <summary>
-        /// Text color in the SelectionItem
-        /// </summary>
-        public void SetForeground(Color color)
-        {
-            _text_object.SetForeground(color);
-        }
-        public void SetForeground(int r, int g, int b)
-        {
-            _text_object.SetForeground(r, g, b);
-        }
-        public void SetForeground(int r, int g, int b, int a)
-        {
-            _text_object.SetForeground(r, g, b, a);
-        }
-        public void SetForeground(float r, float g, float b)
-        {
-            _text_object.SetForeground(r, g, b);
-        }
-        public void SetForeground(float r, float g, float b, float a)
-        {
-            _text_object.SetForeground(r, g, b, a);
-        }
-        public Color GetForeground()
-        {
-            return _text_object.GetForeground();
-        }
-
-        /// <summary>
-        /// Initialization and adding of all elements in the SelectionItem
-        /// </summary>
         public override void InitElements()
         {
-            AddItems(_image_icon, _text_object);
+            AddItem(_item);
+            SetSize(_item.GetWidth() + _item.GetMargin().Left + _item.GetMargin().Right,
+                    _item.GetHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top);
+            SetMinSize(_item.GetMinWidth() + _item.GetMargin().Left + _item.GetMargin().Right,
+                    _item.GetMinHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top);
+            _item.SetParent(GetParent());
         }
 
-        //style
-        /// <summary>
-        /// Set style of the SelectionItem
-        /// </summary>
+        // private for class
+        private bool _toggled = false;
+
+        /**
+         * Is ButtonToggle toggled (boolean)
+         */
+        public bool IsToggled()
+        {
+            return _toggled;
+        }
+
+        public void SetToggled(bool value)
+        {
+            _toggled = value;
+            if (value == true)
+                SetState(ItemStateType.Toggled);
+            else
+                SetState(ItemStateType.Base);
+        }
+
+        private void UncheckOthers(IItem sender)
+        {
+            List<IBaseItem> items = GetParent().GetItems();
+            foreach (IBaseItem item in items)
+            {
+                SelectionItem tmp = item as SelectionItem;
+                if (tmp != null && !tmp.Equals(this)) {
+                    tmp.SetToggled(false);
+                }
+            }
+        }
+
         public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
             base.SetStyle(style);
-            SetForeground(style.Foreground);
-            SetFont(style.Font);
-            SetTextAlignment(style.TextAlignment);
         }
     }
 }

@@ -33,9 +33,6 @@ namespace SpaceVIL
         public int Direction = 0;
         public void SetCurrentValue(float value)
         {
-            //if (value == _current_value)
-            //    return;
-
             if (_current_value > value)
                 Direction = -1; //up
             else

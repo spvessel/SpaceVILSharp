@@ -34,7 +34,7 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs a PopUpMessage with message and parent window (handler)
         /// </summary>
-        public PopUpMessage(String message, WindowLayout handler)
+        public PopUpMessage(String message)
         {
             SetItemName("PopUpMessage_" + count);
 
@@ -45,7 +45,7 @@ namespace SpaceVIL
             count++;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.PopUpMessage)));
-            handler.GetWindow().AddItem(this);
+            // handler.GetWindow().AddItem(this);
             SetPassEvents(false);
         }
 
@@ -53,6 +53,10 @@ namespace SpaceVIL
         /// Text alignment in the PopUpMessage
         /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
+        {
+            _text_object.SetTextAlignment(alignment);
+        }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
         {
             _text_object.SetTextAlignment(alignment);
         }
@@ -143,11 +147,14 @@ namespace SpaceVIL
             AddItems(_text_object, _btn_close);
         }
 
+        private WindowLayout _handler = null;
         /// <summary>
         /// Show the PopUpMessage
         /// </summary>
-        public void Show()
+        public void Show(WindowLayout handler)
         {
+            _handler = handler;
+            _handler.AddItem(this);
             InitTimer();
         }
         
@@ -172,7 +179,7 @@ namespace SpaceVIL
                 _stop.Dispose();
                 _stop = null;
             }
-            GetParent().RemoveItem(this);
+            _handler.GetWindow().RemoveItem(this);
         }
 
         internal void HoldSelf(bool ok)

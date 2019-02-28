@@ -80,6 +80,7 @@ public class RadioButton extends Prototype {
     public void setTextAlignment(ItemAlignment... alignment) {
         _text_object.setTextAlignment(alignment);
     }
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
@@ -97,15 +98,19 @@ public class RadioButton extends Prototype {
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
+
     public void setFontSize(int size) {
         _text_object.setFontSize(size);
     }
+
     public void setFontStyle(int style) {
         _text_object.setFontStyle(style);
     }
+
     public void setFontFamily(String font_family) {
         _text_object.setFontFamily(font_family);
     }
+
     public Font getFont() {
         return _text_object.getFont();
     }
@@ -116,6 +121,7 @@ public class RadioButton extends Prototype {
     public void setText(String text) {
         _text_object.setItemText(text);
     }
+
     public String getText() {
         return _text_object.getText();
     }
@@ -126,18 +132,23 @@ public class RadioButton extends Prototype {
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
         return _text_object.getForeground();
     }
@@ -150,6 +161,8 @@ public class RadioButton extends Prototype {
         // events
         _indicator.getIndicatorMarker().eventToggle = null;
         InterfaceMouseMethodState btn_click = (sender, args) -> {
+            if (_indicator.getIndicatorMarker().isToggled())
+                return;
             _indicator.getIndicatorMarker().setToggled(!_indicator.getIndicatorMarker().isToggled());
             if (_indicator.getIndicatorMarker().isToggled())
                 uncheckOthers(sender);

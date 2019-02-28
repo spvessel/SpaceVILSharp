@@ -78,6 +78,8 @@ namespace SpaceVIL
             _indicator.GetIndicatorMarker().EventToggle = null;
             EventMouseClick += (sender, args) =>
             {
+                if (_indicator.GetIndicatorMarker().IsToggled())
+                    return;
                 _indicator.GetIndicatorMarker().SetToggled(!_indicator.GetIndicatorMarker().IsToggled());
                 if (_indicator.GetIndicatorMarker().IsToggled())
                     UncheckOthers(sender);
@@ -116,6 +118,10 @@ namespace SpaceVIL
         /// Text alignment in the RadioButton
         /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
+        {
+            _text_object.SetTextAlignment(alignment);
+        }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
         {
             _text_object.SetTextAlignment(alignment);
         }

@@ -1,44 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 using System.Drawing;
-using SpaceVIL.Core;
 using SpaceVIL.Common;
+using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class Label : Prototype
+    public class FileSystemEntry : Prototype
     {
-        static int count = 0;
+        private static int count = 0;
 
-        private TextLine _text_object;
+        TextLine _text_object;
+        ImageItem _icon;
+        private FileSystemEntryType _type;
+
+        public FileSystemEntryType GetEntryType()
+        {
+            return _type;
+        }
+
+        public ImageItem GetIcon()
+        {
+            return _icon;
+        }
+        public void SetIcon(Bitmap icon, int width, int height)
+        {
+            _icon.SetSize(width, height);
+            _icon.SetImage(icon);
+            _icon.SetVisible(true);
+        }
+        public void SetIcon(String url, int width, int height)
+        {
+            _icon.SetSize(width, height);
+            _icon.SetImageUrl(url);
+            _icon.SetVisible(true);
+        }
 
         /// <summary>
-        /// Constructs a Label
+        /// Constructs a FileSystemEntry
         /// </summary>
-        public Label()
+        public FileSystemEntry(FileSystemEntryType type, String text)
         {
-            SetItemName("Label_" + count);
+            SetItemName("FileSystemEntry_" + count);
             count++;
+            _type = type;
+            _icon = new ImageItem();
+            _icon.SetVisible(false);
             _text_object = new TextLine();
-
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Label)));
-            IsFocusable = false;
-        }
-
-        /// <summary>
-        /// Constructs a Label with text
-        /// </summary>
-        public Label(String text = "") : this()
-        {
             SetText(text);
+            
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.FileSystemEntry)));
         }
 
+        //text init
         /// <summary>
-        /// Text alignment in the Label
+        /// Text alignment in the FileSystemEntry
         /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
@@ -50,7 +66,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Text margin in the Label
+        /// Text margin in the FileSystemEntry
         /// </summary>
         public void SetTextMargin(Indents margin)
         {
@@ -58,7 +74,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Text font parameters in the Label
+        /// Text font parameters in the FileSystemEntry
         /// </summary>
         public void SetFont(Font font)
         {
@@ -82,7 +98,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set text in the Label
+        /// Set text in the FileSystemEntry
         /// </summary>
         public void SetText(String text)
         {
@@ -94,7 +110,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Text color in the Label
+        /// Text color in the FileSystemEntry
         /// </summary>
         public void SetForeground(Color color)
         {
@@ -122,52 +138,32 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Initialization and adding of all elements in the Label
+        /// Initialization and adding of all elements in the FileSystemEntry
         /// </summary>
         public override void InitElements()
         {
-            //text
-            //_text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-
-            //aligment
-            ////SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-
-            //adding
-            AddItem(_text_object);
-
-            //update text data
-            //_text_object.UpdateData(UpdateType.Critical);
-        }
-
-        /// <summary>
-        /// Text width in the Label
-        /// </summary>
-        public int GetTextWidth()
-        {
-            return _text_object.GetWidth();
-        }
-
-        /// <summary>
-        /// Text height in the Label
-        /// </summary>
-        public int GetTextHeight()
-        {
-            return _text_object.GetHeight();
+            AddItems(_icon, _text_object);
         }
 
         //style
         /// <summary>
-        /// Set style of the Label
+        /// Set style of the FileSystemEntry
         /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
             base.SetStyle(style);
-            
-            SetFont(style.Font);
             SetForeground(style.Foreground);
+            SetFont(style.Font);
             SetTextAlignment(style.TextAlignment);
+
+            Style innerStyle = style.GetInnerStyle("icon");
+            if (innerStyle != null)
+                _icon.SetStyle(innerStyle);
+            innerStyle = style.GetInnerStyle("text");
+            if (innerStyle != null)
+                _text_object.SetMargin(innerStyle.Margin);
         }
     }
 }

@@ -16,6 +16,7 @@ public class HorizontalScrollBar extends HorizontalStack {
      * Constructs a HorizontalScrollBar
      */
     public HorizontalScrollBar() {
+        isFocusable = false;
         setItemName("HorizontalScrollBar_" + count);
         count++;
 

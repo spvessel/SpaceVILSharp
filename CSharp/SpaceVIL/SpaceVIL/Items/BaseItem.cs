@@ -106,8 +106,8 @@ namespace SpaceVIL
         /// </summary>
         public void RemoveItemFromListeners()
         {
-            if (GetParent() == null)
-                return;
+            // if (GetParent() == null)
+            //     return;
             GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this);
             GetParent().RemoveEventListener(GeometryEventType.ResizeHeight, this);
             GetParent().RemoveEventListener(GeometryEventType.Moved_X, this);
@@ -424,7 +424,7 @@ namespace SpaceVIL
                 var grid = GetParent() as IGrid;
 
                 if (hLayout == null
-                && vLayout == null 
+                && vLayout == null
                 && grid == null)
                     UpdateBehavior();
 
@@ -436,6 +436,19 @@ namespace SpaceVIL
                     grid.UpdateLayout();
             }
         }
+        public void SetAlignment(params ItemAlignment[] alignment)
+        {
+            ItemAlignment common = alignment.ElementAt(0);
+            if (alignment.Length > 1)
+            {
+                for (int i = 1; i < alignment.Length; i++)
+                {
+                    common |= alignment.ElementAt(i);
+                }
+            }
+            SetAlignment(common);
+        }
+        
         public ItemAlignment GetAlignment()
         {
             return _itemBehavior.GetAlignment();
@@ -907,6 +920,8 @@ namespace SpaceVIL
         /// </summary>
         public virtual void SetConfines()
         {
+            if (GetParent() == null)
+                return;
             _confines_x_0 = GetParent().GetX() + GetParent().GetPadding().Left;
             _confines_x_1 = GetParent().GetX() + GetParent().GetWidth() - GetParent().GetPadding().Right;
             _confines_y_0 = GetParent().GetY() + GetParent().GetPadding().Top;

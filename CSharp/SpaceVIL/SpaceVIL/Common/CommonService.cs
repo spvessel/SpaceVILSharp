@@ -79,6 +79,8 @@ namespace SpaceVIL.Common
             CursorResizeV = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
             CursorResizeAll = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
 
+            DefaultsService.InitImages();
+
             return true;
         }
 

@@ -23,7 +23,7 @@ public class Program {
 //        sc.show();
 
           WindowLayoutBox.tryShow("MainWindow");
-//        ft.show();
+    //    ft.show();
 
     }
 }

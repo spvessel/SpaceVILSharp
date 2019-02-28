@@ -20,6 +20,7 @@ namespace SpaceVIL
 
         public VerticalScrollBar()
         {
+            IsFocusable = false;
             SetItemName("VerticalScrollBar_" + count);
             count++;
 

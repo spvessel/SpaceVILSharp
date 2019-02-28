@@ -1,12 +1,18 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.SizePolicy;
 
 public abstract class OpenDialog extends DialogItem {
 
     private TitleBar titleBar;
+
+    public void setTitle(String title) {
+        titleBar.setText(title);
+    }
+
+    public String getTitle() {
+        return titleBar.getText();
+    }
 
     public OpenDialog() {
         setItemName("OpenDialog_" + count);
@@ -18,9 +24,6 @@ public abstract class OpenDialog extends DialogItem {
     public void initElements() {
         // important!
         super.initElements();
-
-        window.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        window.setMargin(50, 20, 50, 20);
 
         titleBar.getMaximizeButton().setVisible(false);
 
@@ -46,8 +49,10 @@ public abstract class OpenDialog extends DialogItem {
         super.close();
     }
 
-    @Override
-    public void setStyle(Style style) {
-
-    }
+    // @Override
+    // public void setStyle(Style style) {
+    //     if (style == null)
+    //         return;
+    //     window.setStyle(style);
+    // }
 }

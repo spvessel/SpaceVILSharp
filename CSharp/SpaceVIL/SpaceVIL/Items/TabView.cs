@@ -162,6 +162,10 @@ namespace SpaceVIL
         {
             _textAlignment = alignment;
         }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
+        {
+            //SetTextAlignment(alignment);
+        }
 
         private Indents _textMargin = new Indents();
 

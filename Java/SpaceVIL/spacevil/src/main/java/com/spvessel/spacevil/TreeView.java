@@ -3,27 +3,29 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 import com.spvessel.spacevil.Flags.TreeItemType;
 
-import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Collections;
 import java.util.Comparator;
 
 public class TreeView extends ListBox {
     public EventCommonMethod eventSortTree = new EventCommonMethod();
-    // private ContextMenu _menu;
+
     TreeItem _root; // nesting level = 0
+
+    int _maxWrapperWidth = 0;
 
     /**
      * Is root item visible
      */
     public void setRootVisibility(boolean visible) {
         _root.setVisible(visible);
+        getWrapper(_root).setVisible(visible);
         // reset all paddings for content
         List<InterfaceBaseItem> list = getListContent();
         if (list != null) {
@@ -37,6 +39,10 @@ public class TreeView extends ListBox {
         updateElements();
     }
 
+    public void setRootText(String text) {
+        _root.setText(text);
+    }
+
     private static int count = 0;
 
     /**
@@ -47,7 +53,6 @@ public class TreeView extends ListBox {
         count++;
         _root = new TreeItem(TreeItemType.BRANCH, "root");
 
-        // setStyle(DefaultsService.getDefaultStyle(typeof(SpaceVIL.TreeView)));
         setStyle(DefaultsService.getDefaultStyle(TreeView.class));
         eventSortTree.add(this::onSortTree);
 
@@ -60,55 +65,36 @@ public class TreeView extends ListBox {
     @Override
     public void initElements() {
         super.initElements();
-        // setSelectionVisibility(true);
-        _root._parent = this;
+        _root._treeViewContainer = this;
         _root.isRoot = true;
         super.addItem(_root);
         setRootVisibility(false);
 
-        // _menu = new ContextMenu(getHandler());
-        // _menu.setBackground(40, 40, 40);
-        // _menu.setPassEvents(false);
-
-        // MenuItem paste = new MenuItem("Paste");
-        // paste.setForeground(new Color(210, 210, 210));
-
-        // MenuItem new_leaf = new MenuItem("New Leaf");
-        // new_leaf.setForeground(new Color(210, 210, 210));
-        // InterfaceMouseMethodState leaf_click = (sender, args) -> {
-        //     this.addItem(getTreeLeaf());
-        // };
-        // new_leaf.eventMouseClick.add(leaf_click);
-
-        // MenuItem new_branch = new MenuItem("New Branch");
-        // new_branch.setForeground(new Color(210, 210, 210));
-        // InterfaceMouseMethodState branch_click = (sender, args) -> {
-        //     this.addItem(getTreeBranch());
-        // };
-        // new_branch.eventMouseClick.add(branch_click);
-
-        // InterfaceMouseMethodState menu_click = (sender, args) -> _menu.show(sender, args);
-        // eventMouseClick.add(menu_click);
-
-        // _menu.addItems(new_branch, new_leaf, paste);
+        _root.resetIndents();
+        _maxWrapperWidth = getWrapper(_root).getMinWidth();
     }
 
-    // public TreeItem getTreeBranch(String name) {
-    //     TreeItem item = new TreeItem(TreeItemType.BRANCH);
-    //     item.setText(item.getItemName());
-    //     return item;
-    // }
+    void refreshWrapperWidth() {
+        for (SelectionItem wrp : getArea()._mapContent.values()) {
+            wrp.setMinWidth(_maxWrapperWidth);
+            wrp.getContent().setMinWidth(_maxWrapperWidth);
+        }
+    }
 
-    // public TreeItem getTreeLeaf(String name) {
-    //     TreeItem item = new TreeItem(TreeItemType.LEAF);
-    //     item.setText(item.getItemName());
-    //     return item;
-    // }
-
-    void refreshTree(TreeItem item) {
-        super.addItem(item);
-        onSortTree();
+    void refreshTree(TreeItem prev, TreeItem item) {
+        insertItem(item, getListContent().indexOf(prev) + 1);
+        item.resetIndents();
+        item.onToggleHide(true);
         updateElements();
+    }
+
+    @Override
+    public void setListContent(List<InterfaceBaseItem> content) {
+        getArea().removeAllItems();
+
+        for (InterfaceBaseItem item : content) {
+            addItem(item);
+        }
     }
 
     private void onSortTree() {
@@ -124,9 +110,15 @@ public class TreeView extends ListBox {
         setListContent(list);
     }
 
+    SelectionItem getWrapper(TreeItem item) {
+        return getArea()._mapContent.get(item);
+    }
+
     private List<TreeItem> sortHelper(TreeItem item) {
-        List<TreeItem> tmpList = item.getTreeItems();
+        List<TreeItem> tmpList = item.getChildren();
+
         Collections.sort(tmpList, new CompareInAlphabet());
+
         List<TreeItem> outList = new LinkedList<>();
         for (TreeItem ti : tmpList) {
             outList.add(ti);
@@ -148,6 +140,10 @@ public class TreeView extends ListBox {
             }
             return ti1.getText().compareTo(ti2.getText());
         }
+    }
+
+    Comparator<TreeItem> getComparator() {
+        return new CompareInAlphabet();
     }
 
     /**

@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using SpaceVIL.Common;
 using SpaceVIL.Core;
 
 namespace SpaceVIL
@@ -15,6 +16,7 @@ namespace SpaceVIL
         {
             SetItemName("WContainer_" + count);
             count++;
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.WContainer)));
         }
 
         internal void SaveLastFocus(Prototype focused)

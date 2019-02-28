@@ -70,6 +70,10 @@ namespace SpaceVIL
         {
             _text_object.SetTextAlignment(alignment);
         }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
+        {
+            _text_object.SetTextAlignment(alignment);
+        }
 
         /// <summary>
         /// Text margin in the ButtonToggle
@@ -149,10 +153,10 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //text
-            _text_object.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            // _text_object.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
 
             //aligment
-            SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
+            // SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
 
             //adding
             AddItem(_text_object);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
 
@@ -83,7 +84,8 @@ namespace SpaceVIL
 
         private bool isUndo = false;
         private LinkedList<string> undoQueue;
-        internal void Undo() {
+        internal void Undo()
+        {
             if (undoQueue.Count > 0)
             {
                 string tmpText = undoQueue.First.Value;
@@ -94,9 +96,11 @@ namespace SpaceVIL
         }
 
         private LinkedList<string> redoQueue;
-        internal void Redo() {
-            if (redoQueue.Count > 0) {
-                string tmpText = redoQueue.First.Value;            
+        internal void Redo()
+        {
+            if (redoQueue.Count > 0)
+            {
+                string tmpText = redoQueue.First.Value;
                 redoQueue.RemoveFirst();
                 SetItemText(tmpText);
             }
@@ -239,6 +243,18 @@ namespace SpaceVIL
                 _textAlignment = value;
                 //UpdateCoords(); //_coordsFlag = true;
             }
+        }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
+        {
+            ItemAlignment common = alignment.ElementAt(0);
+            if (alignment.Length > 1)
+            {
+                for (int i = 1; i < alignment.Length; i++)
+                {
+                    common |= alignment.ElementAt(i);
+                }
+            }
+            SetTextAlignment(common);
         }
 
         public virtual float[] Shape()

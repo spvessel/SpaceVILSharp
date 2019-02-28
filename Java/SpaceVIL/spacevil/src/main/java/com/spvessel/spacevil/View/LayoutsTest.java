@@ -3,6 +3,9 @@ package com.spvessel.spacevil.View;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
+
+import java.util.Arrays;
+
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -49,6 +52,11 @@ public class LayoutsTest extends ActiveWindow {
 
         ListBox listbox_left_1 = new ListBox();
         listbox_left_1.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        listbox_left_1.eventMouseClick.add(
+            (sender, args) ->{
+                // System.out.println(listbox_left_1.getSelection() + " " + listbox_left_1.getSelectionItem().getItemName());
+            }
+        );
         // listbox_left_1.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         listbox_left_1.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         grid.insertItem(listbox_left_1, 0, 0);
@@ -88,12 +96,16 @@ public class LayoutsTest extends ActiveWindow {
         right.setWidth(60);
         right.setHeight(25);
         InterfaceMouseMethodState right_click = (sender, args) -> {
-            VisualContact contact_1 = new VisualContact();
-            contact_1.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
-            VisualContact contact_2 = new VisualContact();
-            contact_2.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
-            listbox_right_1.addItem(contact_1);
-            listbox_right_2.addItem(contact_2);
+            VisualContact c_1 = new VisualContact();
+            VisualContact c_2 = new VisualContact();
+            VisualContact c_3 = new VisualContact();
+            VisualContact c_4 = new VisualContact();
+            VisualContact r_1 = new VisualContact();
+            VisualContact r_2 = new VisualContact();
+            VisualContact r_3 = new VisualContact();
+            VisualContact r_4 = new VisualContact();
+            listbox_right_1.setListContent(Arrays.asList(c_1, c_2, c_3, c_4));
+            listbox_right_2.setListContent(Arrays.asList(r_4, r_3, r_2, r_1));
         };
         right.eventMouseClick.add(right_click);
         frame.addItem(right);

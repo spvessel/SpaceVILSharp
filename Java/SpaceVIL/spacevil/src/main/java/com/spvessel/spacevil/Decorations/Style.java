@@ -440,7 +440,7 @@ public class Style {
         style.height = 30;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        style.borderRadius = new CornerRadius(6);
+        style.borderRadius = new CornerRadius();
 
         // style.borderThickness = 2;
         // style.borderFill = new Color(255, 255, 255);
@@ -450,7 +450,7 @@ public class Style {
         style.addItemState(ItemStateType.HOVERED, hovered);
 
         ItemState pressed = new ItemState();
-        pressed.background = new Color(30, 0, 0, 60);
+        pressed.background = new Color(0, 0, 0, 60);
         style.addItemState(ItemStateType.PRESSED, pressed);
 
         style.padding = new Indents();
@@ -474,7 +474,7 @@ public class Style {
         style.height = 10;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        style.borderRadius = new CornerRadius(6);
+        style.borderRadius = new CornerRadius();
 
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 60);
@@ -689,6 +689,8 @@ public class Style {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.padding = new Indents(10, 0, 10, 0);
+
+        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(150, 150, 150)));
 
         Style arrow_style = new Style();
         arrow_style.width = 6;
@@ -1154,7 +1156,7 @@ public class Style {
 
         style.font = DefaultsService.getDefaultFont();
         style.background = new Color(0, 0, 0, 0);
-        style.foreground = new Color(0, 0, 0);
+        style.foreground = new Color(210, 210, 210);
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
@@ -1190,6 +1192,9 @@ public class Style {
         hover_style.widthPolicy = SizePolicy.EXPAND;
         hover_style.heightPolicy = SizePolicy.FIXED;
         style.addInnerStyle("hovercover", hover_style);
+
+        Style selected_style = getSelectedItemStyle();
+        style.addInnerStyle("selecteditem", selected_style);
 
         return style;
     }
@@ -1680,11 +1685,12 @@ public class Style {
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         style.spacing = new Spacing(5, 0);
         style.padding = new Indents(5, 0, 0, 0);
-        // ItemState hovered = new ItemState();
-        // hovered.background = new Color(255, 255, 255, 130);
-        // style.addItemState(ItemStateType.HOVERED, hovered);
+        style.margin = new Indents(0, 0, 0, 0);
+        ItemState hovered = new ItemState();
+        hovered.background = new Color(255, 255, 255, 130);
+        style.addItemState(ItemStateType.HOVERED, hovered);
 
-        Style indicator_style = new Style();// getButtonToggleStyle();
+        Style indicator_style = new Style();
         indicator_style.background = new Color(32, 32, 32);
         indicator_style.foreground = new Color(210, 210, 210);
         indicator_style.font = DefaultsService.getDefaultFont();
@@ -1772,6 +1778,290 @@ public class Style {
         text_input.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT));
         style.addInnerStyle("textedit", text_input);
 
+        return style;
+    }
+
+    public static Style getDialogItemStyle() {
+        Style style = new Style();
+        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setBackground(0, 0, 0, 150);
+        style.borderRadius = new CornerRadius(0);
+        style.padding = new Indents();
+        style.margin = new Indents();
+        style.spacing = new Spacing();
+
+        Style window_style = getFrameStyle();
+        window_style.setSize(300, 150);
+        window_style.setMinSize(300, 150);
+        window_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        window_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        window_style.setPadding(2, 2, 2, 2);
+        window_style.setBackground(45, 45, 45);
+
+        style.addInnerStyle("window", window_style);
+
+        return style;
+    }
+
+    public static Style getMessageItemStyle() {
+        Style style = new Style();
+        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setBackground(0, 0, 0, 150);
+        style.borderRadius = new CornerRadius();
+        style.padding = new Indents();
+        style.margin = new Indents();
+        style.spacing = new Spacing();
+
+        Style window_style = getFrameStyle();
+        window_style.setSize(300, 150);
+        window_style.setMinSize(300, 150);
+        window_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        window_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        window_style.setPadding(2, 2, 2, 2);
+        window_style.setBackground(45, 45, 45);
+
+        style.addInnerStyle("window", window_style);
+
+        Style ok_style = getButtonCoreStyle();
+        ok_style.setBackground(100, 255, 150);
+        ok_style.foreground = Color.black;
+        ok_style.setSize(100, 30);
+        ok_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        ok_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
+        ok_style.borderRadius = new CornerRadius();
+        ok_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
+
+        style.addInnerStyle("okbutton", ok_style);
+
+        Style msg_style = getLabelStyle();
+        msg_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        msg_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        msg_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+
+        style.addInnerStyle("message", msg_style);
+
+        Style layout_style = getVerticalStackStyle();
+        layout_style.setMargin(0, 30, 0, 0);
+        layout_style.setPadding(6, 6, 6, 6);
+        layout_style.setSpacing(0, 10);
+        layout_style.setBackground(255, 255, 255, 20);
+
+        style.addInnerStyle("layout", layout_style);
+
+        return style;
+    }
+
+    public static Style getWindowContainerStyle() {
+        Style style = new Style();
+
+        style.setBackground(45, 45, 45);
+        style.setMinSize(200, 200);
+        style.widthPolicy = SizePolicy.EXPAND;
+        style.heightPolicy = SizePolicy.EXPAND;
+        style.setPadding(2, 2, 2, 2);
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+
+        return style;
+    }
+
+    public static Style getFileSystemEntryStyle() {
+        Style style = new Style();
+        style.height = 25;
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        style.setBackground(0, 0, 0, 0);
+        style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        style.font = DefaultsService.getDefaultFont();
+        style.setForeground(210, 210, 210);
+        style.setPadding(10, 0, 0, 0);
+        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 130)));
+
+        Style icon_style = getFrameStyle();
+        icon_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        icon_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+
+        style.addInnerStyle("icon", icon_style);
+
+        Style text_style = new Style();
+        text_style.setMargin(24, 0, 0, 0);
+
+        style.addInnerStyle("text", text_style);
+
+        return style;
+    }
+
+    public static Style getOpenEntryDialogStyle() {
+        // common
+        Style style = new Style();
+        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setBackground(0, 0, 0, 150);
+        style.borderRadius = new CornerRadius(0);
+        style.padding = new Indents();
+        style.margin = new Indents();
+        style.spacing = new Spacing();
+
+        // window
+        Style window_style = getDialogItemStyle().getInnerStyle("window");
+        window_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        window_style.setMargin(150, 20, 150, 20);
+        style.addInnerStyle("window", window_style);
+        // layout
+        Style layout_style = getVerticalStackStyle();
+        layout_style.setMargin(0, 30, 0, 0);
+        layout_style.setPadding(6, 6, 6, 6);
+        layout_style.setSpacing(0, 2);
+        layout_style.setBackground(255, 255, 255, 20);
+        style.addInnerStyle("layout", layout_style);
+        // toolbar
+        Style toolbar_style = getHorizontalStackStyle();
+        toolbar_style.heightPolicy = SizePolicy.FIXED;
+        toolbar_style.height = 30;
+        toolbar_style.setBackground(40, 40, 40);
+        toolbar_style.setSpacing(3, 0);
+        toolbar_style.setPadding(6, 0, 0, 0);
+        style.addInnerStyle("toolbar", toolbar_style);
+        // toolbarbutton
+        Style toolbarbutton_style = Style.getButtonCoreStyle();
+        toolbarbutton_style.setSize(24, 30);
+        toolbarbutton_style.background = toolbar_style.background;
+        toolbarbutton_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 60)));
+        toolbarbutton_style.addItemState(ItemStateType.PRESSED, new ItemState(new Color(255, 255, 255, 30)));
+        toolbarbutton_style.borderRadius = new CornerRadius();
+        toolbarbutton_style.setPadding(3, 6, 3, 6);
+        style.addInnerStyle("toolbarbutton", toolbarbutton_style);
+        // buttonhidden
+        Style buttonhidden_style = getButtonToggleStyle();
+        buttonhidden_style.setSize(24, 30);
+        buttonhidden_style.borderRadius = new CornerRadius();
+        buttonhidden_style.background = toolbar_style.background;
+        buttonhidden_style.setPadding(4, 6, 4, 6);
+        buttonhidden_style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(30, 153, 91)));
+        style.addInnerStyle("buttonhidden", buttonhidden_style);
+        // addressline
+        Style addressline_style = getTextEditStyle();
+        addressline_style.font = DefaultsService.getDefaultFont(12);
+        addressline_style.setForeground(210, 210, 210);
+        addressline_style.setBackground(50, 50, 50);
+        addressline_style.height = 24;
+        addressline_style.setMargin(0, 5, 0, 0);
+        style.addInnerStyle("addressline", addressline_style);
+        // filenameline
+        Style filenameline_style = getTextEditStyle();
+        filenameline_style.font = DefaultsService.getDefaultFont(12);
+        filenameline_style.setForeground(210, 210, 210);
+        filenameline_style.setBackground(50, 50, 50);
+        filenameline_style.height = 24;
+        filenameline_style.setMargin(0, 2, 0, 0);
+        style.addInnerStyle("filenameline", filenameline_style);
+        // list
+        Style list_style = getListBoxStyle();
+        style.addInnerStyle("list", list_style);
+        // controlpanel
+        Style controlpanel_style = getFrameStyle();
+        controlpanel_style.heightPolicy = SizePolicy.FIXED;
+        controlpanel_style.height = 40;
+        controlpanel_style.setBackground(45, 45, 45);
+        controlpanel_style.setPadding(6, 6, 6, 6);
+        style.addInnerStyle("controlpanel", controlpanel_style);
+        // button
+        Style okbutton_style = getButtonCoreStyle();
+        okbutton_style.setSize(100, 30);
+        okbutton_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
+        okbutton_style.setMargin(0, 0, 105, 0);
+        okbutton_style.borderRadius = new CornerRadius();
+        style.addInnerStyle("okbutton", okbutton_style);
+
+        Style cancelbutton_style = getButtonCoreStyle();
+        cancelbutton_style.setSize(100, 30);
+        cancelbutton_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
+        cancelbutton_style.borderRadius = new CornerRadius();
+        style.addInnerStyle("cancelbutton", cancelbutton_style);
+
+        Style filter_style = getButtonToggleStyle();
+        filter_style.setSize(24, 30);
+        filter_style.borderRadius = new CornerRadius();
+        filter_style.setBackground(35, 35, 35);
+        filter_style.setPadding(4, 6, 4, 6);
+        filter_style.setMargin(5, 0, 0, 0);
+        filter_style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(30, 153, 91)));
+        style.addInnerStyle("filter", filter_style);
+
+        Style filtertext_style = getLabelStyle();
+        filtertext_style.widthPolicy = SizePolicy.FIXED;
+        filtertext_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        filtertext_style.setPadding(10, 2, 10, 0);
+        filtertext_style.setMargin(-3, 0, 0, 0);
+        filtertext_style.setBackground(55, 55, 55);
+        filtertext_style.font = DefaultsService.getDefaultFont();
+        style.addInnerStyle("filtertext", filtertext_style);
+
+        Style divider_style = getFrameStyle();
+        divider_style.widthPolicy = SizePolicy.FIXED;
+        divider_style.width = 1;
+        divider_style.setBackground(55, 55, 55);
+        divider_style.setMargin(0, 3, 0, 3);
+        style.addInnerStyle("divider", divider_style);
+
+        return style;
+    }
+
+    public static Style getInputDialogStyle() {
+        Style style = new Style();
+        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setBackground(0, 0, 0, 150);
+        style.borderRadius = new CornerRadius();
+        style.padding = new Indents();
+        style.margin = new Indents();
+        style.spacing = new Spacing();
+
+        Style window_style = getFrameStyle();
+        window_style.setSize(300, 150);
+        window_style.setMinSize(300, 150);
+        window_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        window_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        window_style.setPadding(2, 2, 2, 2);
+        window_style.setBackground(45, 45, 45);
+
+        style.addInnerStyle("window", window_style);
+
+        Style ok_style = getButtonCoreStyle();
+        ok_style.setBackground(100, 255, 150);
+        ok_style.foreground = Color.black;
+        ok_style.setSize(150, 30);
+        ok_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        ok_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
+        ok_style.setMargin(0, 0, 0, 15);
+        ok_style.borderRadius = new CornerRadius();
+        ok_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
+
+        style.addInnerStyle("button", ok_style);
+
+        Style text_style = getTextEditStyle();
+        text_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.TOP);
+        text_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        text_style.setMargin(0, 15, 0, 0);
+
+        style.addInnerStyle("textedit", text_style);
+
+        Style layout_style = getFrameStyle();
+        layout_style.setMargin(0, 30, 0, 0);
+        layout_style.setPadding(6, 6, 6, 6);
+        layout_style.setBackground(255, 255, 255, 20);
+
+        style.addInnerStyle("layout", layout_style);
+
+        return style;
+    }
+
+    public static Style getSelectedItemStyle()
+    {
+        Style style = getFrameStyle();
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        style.setBackground(0, 0, 0, 0);
+        style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 50)));
         return style;
     }
 }

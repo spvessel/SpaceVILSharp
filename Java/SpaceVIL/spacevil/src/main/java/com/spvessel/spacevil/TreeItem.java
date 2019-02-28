@@ -7,7 +7,6 @@ import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.MouseButton;
@@ -18,6 +17,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 public class TreeItem extends Prototype {
@@ -26,12 +26,17 @@ public class TreeItem extends Prototype {
     /**
      * @return list of the TreeItem items
      */
-    public List<TreeItem> getTreeItems() {
+    public List<TreeItem> getChildren() {
         return _list_inners;
     }
 
-    private TreeItem _branch;
-    TreeView _parent;
+    private TreeItem _parentBranch;
+
+    public TreeItem getParentBranch() {
+        return _parentBranch;
+    }
+
+    TreeView _treeViewContainer;
     int _nesting_level = 0;
     private int _indent_size = 20;
 
@@ -41,6 +46,7 @@ public class TreeItem extends Prototype {
     public int getIndentSize() {
         return _indent_size;
     }
+
     public void setIndentSize(int size) {
         _indent_size = size;
         resetIndents();
@@ -73,17 +79,6 @@ public class TreeItem extends Prototype {
 
     private CustomShape _icon_shape;
 
-    private void setCustomIconShape(CustomShape icon_shape) {
-        // set shape
-    }
-
-    private ImageItem _icon_image;
-
-    private void setCustomIconImage(BufferedImage icon_image) {
-        // set image
-    }
-
-    // private ContextMenu _menu;
 
     /**
      * Constructs a TreeItem type of TreeItemType (LEAF or BRANCH)
@@ -101,13 +96,12 @@ public class TreeItem extends Prototype {
         _icon_shape = new CustomShape();
 
         setStyle(DefaultsService.getDefaultStyle(TreeItem.class));
-        setPassEvents(false, InputEventType.MOUSE_PRESS, InputEventType.MOUSE_RELEASE);
-
         eventKeyPress.add(this::onKeyPress);
     }
 
     /**
      * Constructs a TreeItem
+     * 
      * @param type item type (LEAF or BRUNCH)
      * @param text item text
      */
@@ -119,37 +113,32 @@ public class TreeItem extends Prototype {
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         if (args.key == KeyCode.ENTER)
             _indicator.eventToggle.execute(sender, new MouseArgs());
-        // if (args.key == KeyCode.MENU) {
-        //     MouseArgs margs = new MouseArgs();
-        //     margs.button = MouseButton.BUTTON_RIGHT;
-        //     margs.position.setPosition(getX() + _parent.getWidth() / 2, getY() + getHeight());
-        //     if (_menu != null)
-        //         _menu.show(this, margs);
-        // }
+        else if (args.key == KeyCode.SPACE)
+            addItem(new TreeItem(TreeItemType.BRANCH, "new brach " + count));
+        else if (args.key == KeyCode.NUMPADADD)
+            addItem(new TreeItem(TreeItemType.LEAF, "new leaf " + count));
     }
-
-    // private TreeItem getTreeBranch() {
-    //     TreeItem item = new TreeItem(TreeItemType.BRANCH);
-    //     item.setText(item.getItemName());
-    //     return item;
-    // }
-
-    // private TreeItem getTreeLeaf() {
-    //     TreeItem item = new TreeItem(TreeItemType.LEAF);
-    //     item.setText(item.getItemName());
-    //     return item;
-    // }
 
     void resetIndents() {
         int level = _nesting_level;
-        if (!_parent._root.isVisible())
+        if (!_treeViewContainer._root.isVisible())
             level--;
         setPadding(2 + _indent_size * level, 0, 0, 0);
         int width = getPadding().left + 10;
         for (InterfaceBaseItem item : getItems()) {
             width += item.getWidth() + item.getMargin().left + item.getMargin().right + getSpacing().horizontal;
         }
-        setMinWidth(width - getSpacing().horizontal);
+
+        int newMinWidth = width - getSpacing().horizontal;
+        if (newMinWidth > _treeViewContainer._maxWrapperWidth) {
+            _treeViewContainer._maxWrapperWidth = newMinWidth;
+            _treeViewContainer.refreshWrapperWidth();
+        } else {
+            newMinWidth = _treeViewContainer._maxWrapperWidth;
+        }
+
+        setMinWidth(newMinWidth);
+        _treeViewContainer.getWrapper(this).setMinWidth(newMinWidth);
     }
 
     /**
@@ -157,70 +146,30 @@ public class TreeItem extends Prototype {
      */
     @Override
     public void initElements() {
-        // _menu = new ContextMenu(getHandler());
-        // _menu.setBackground(40, 40, 40);
-        // _menu.setPassEvents(false);
-
-        // MenuItem remove = new MenuItem("Remove");
-        // remove.setForeground(new Color(210, 210, 210));
-        // remove.eventMouseClick.add((sender, args) -> {
-        //     getParent().removeItem(this);
-        // });
-
-        // MenuItem rename = new MenuItem("Rename");
-        // rename.setForeground(new Color(210, 210, 210));
-
-        // MenuItem copy = new MenuItem("Copy");
-        // copy.setForeground(new Color(210, 210, 210));
-
-        // MenuItem paste = new MenuItem("Paste");
-        // paste.setForeground(new Color(210, 210, 210));
-
-        // MenuItem new_leaf = new MenuItem("New Leaf");
-        // new_leaf.setForeground(new Color(210, 210, 210));
-        // new_leaf.eventMouseClick.add((sender, args) -> {
-        //     this.addItem(getTreeLeaf());
-        // });
-
-        // MenuItem new_branch = new MenuItem("New Branch");
-        // new_branch.setForeground(new Color(210, 210, 210));
-        // new_branch.eventMouseClick.add((sender, args) -> {
-        //     this.addItem(getTreeBranch());
-        // });
-        // _menu.returnFocus = _parent.getArea();
-        eventMouseClick.add((sender, args) -> {
-            // _menu.show(sender, args);
-            _parent.getArea().eventMouseClick.execute(_parent, args);
-        });
-
         switch (_item_type) {
         case LEAF:
             _icon_shape.setMargin(2, 0, 0, 0);
             super.addItem(_icon_shape);
             super.addItem(_text_object);
-            // _menu.addItems(rename, remove, copy);
             break;
 
         case BRANCH:
             _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled()));
-            _indicator.setPassEvents(false, InputEventType.MOUSE_PRESS, InputEventType.MOUSE_RELEASE);
             _indicator.isFocusable = false;
             eventMouseDoubleClick.add((sender, args) -> {
                 if (args.button == MouseButton.BUTTON_LEFT)
                     _indicator.eventToggle.execute(sender, args);
             });
-
             super.addItem(_indicator);
             super.addItem(_icon_shape);
             super.addItem(_text_object);
-            // _menu.addItems(new_branch, new_leaf, rename, paste);
             break;
+
         default:
             super.addItem(_text_object);
             break;
         }
         _text_object.isFocusable = false;
-        resetIndents();
     }
 
     void onToggleHide(boolean value) // refactor
@@ -228,26 +177,43 @@ public class TreeItem extends Prototype {
         for (TreeItem item : _list_inners) {
             if (value) {
                 if (_indicator.isToggled()) {
+                    _treeViewContainer.getWrapper(item).setVisible(true);
                     item.setVisible(true);
-                    item.onToggleHide(value);
                 }
             } else {
+                _treeViewContainer.getWrapper(item).setVisible(false);
                 item.setVisible(false);
-                item.onToggleHide(value);
             }
+            item.onToggleHide(value);
         }
         // update layout
-        _parent.updateElements();
+        _treeViewContainer.updateElements();
     }
 
-    private void addTreeItem(TreeItem item) {
-        _list_inners.add(item);
-        item._branch = this;
-        item._parent = _parent;
+    void addTreeItem(TreeItem item) {
+        item._parentBranch = this;
+        item._treeViewContainer = _treeViewContainer;
         item._nesting_level = _nesting_level + 1;
-        _parent.refreshTree(item);
         _indicator.setToggled(true);
-        onToggleHide(_indicator.isToggled());
+
+        Comparator<TreeItem> comp = _treeViewContainer.getComparator();
+
+        List<TreeItem> neighbors = getChildren();
+        int ind = -1;
+
+        for (int i = 0; i < neighbors.size(); i++) {
+            int out = comp.compare(neighbors.get(i), item);
+            if (out == 1)
+                break;
+            ind = i;
+        }
+
+        _list_inners.add(ind + 1, item);
+
+        if (ind == -1) 
+            _treeViewContainer.refreshTree(this, item);
+        else
+            _treeViewContainer.refreshTree(_list_inners.get(ind), item);
     }
 
     /**
@@ -255,10 +221,10 @@ public class TreeItem extends Prototype {
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
-        if (item instanceof TreeItem) {
-            TreeItem tmp = (TreeItem) item;
-            addTreeItem(tmp);
-        }
+        if (item instanceof TreeItem)
+            addTreeItem((TreeItem) item);
+        else
+            super.addItem(item);
     }
 
     /**
@@ -304,6 +270,7 @@ public class TreeItem extends Prototype {
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
+
     public void setTextAlignment(ItemAlignment... alignment) {
         _text_object.setTextAlignment(alignment);
     }
@@ -321,15 +288,19 @@ public class TreeItem extends Prototype {
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
+
     public void setFontSize(int size) {
         _text_object.setFontSize(size);
     }
+
     public void setFontStyle(int style) {
         _text_object.setFontStyle(style);
     }
+
     public void setFontFamily(String font_family) {
         _text_object.setFontFamily(font_family);
     }
+
     public Font getFont() {
         return _text_object.getFont();
     }
@@ -339,9 +310,10 @@ public class TreeItem extends Prototype {
      */
     public void setText(String text) {
         _text_object.setText(text);
-//        _text_object.setWidth(_text_object.getTextWidth());
+        // _text_object.setWidth(_text_object.getTextWidth());
         updateLayout();
     }
+
     public String getText() {
         return _text_object.getText();
     }
@@ -359,18 +331,23 @@ public class TreeItem extends Prototype {
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
         return _text_object.getForeground();
     }

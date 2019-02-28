@@ -3,13 +3,14 @@ package com.spvessel.spacevil.View;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.CustomFigure;
 import com.spvessel.spacevil.Decorations.ItemState;
+import com.spvessel.spacevil.Flags.FileSystemEntryType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemRule;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.SizePolicy;
+import com.spvessel.spacevil.OpenEntryDialog.OpenDialogType;
 import com.spvessel.spacevil.MenuItem;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 
 import java.awt.*;
@@ -20,15 +21,18 @@ public class FlowTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("FlowTest", "FlowTest", 1200, 800, true);
+        WindowLayout Handler = new WindowLayout("FlowTest", "FlowTest", 1000, 800, true);
         setHandler(Handler);
 
         Handler.setMinSize(500, 100);
-        Handler.setBackground(45, 45, 45);
-        Handler.setPadding(2, 2, 2, 2);
+        // Handler.setBackground(45, 45, 45);
+        // Handler.setPadding(2, 2, 2, 2);
 
         TitleBar title = new TitleBar("FlowTest");
         Handler.addItem(title);
+        Handler.getWindow().eventKeyPress.add((sender, args) -> {
+            System.out.println(getHandler().getFocusedItem());
+        });
 
         VerticalStack layout = new VerticalStack();
         layout.setAlignment(ItemAlignment.TOP, ItemAlignment.HCENTER);
@@ -56,9 +60,9 @@ public class FlowTest extends ActiveWindow {
         layout.addItem(flow);
 
         // btn add_at_center
-        // FloatItem flow_item = new FloatItem(Handler);
-        // flow_item.setPosition(200, 200);
-        // flow_item.setSize(300, 100);
+        FloatItem flow_item = new FloatItem(Handler);
+        flow_item.setPosition(200, 200);
+        flow_item.setSize(300, 100);
 
         // btn add_at_begin
         ButtonCore btn1 = new ButtonCore();
@@ -71,8 +75,14 @@ public class FlowTest extends ActiveWindow {
         ItemState hovered = new ItemState(new Color(255, 255, 255, 125));
         btn1.addItemState(ItemStateType.HOVERED, hovered);
         btn1.eventMouseClick.add((sender, args) -> {
-            PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!", Handler);
-            pop.show();
+            // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!");
+            // pop.show(Handler);
+
+            MessageItem msg = new MessageItem("Set TRUE?", "Message:");
+            msg.onCloseDialog.add(() -> {
+                System.out.println(msg.getResult());
+            });
+            msg.show(Handler);
         });
         btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn1.setHoverRule(ItemRule.STRICT);
@@ -99,14 +109,14 @@ public class FlowTest extends ActiveWindow {
         btn3.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn3.addItemState(ItemStateType.HOVERED, hovered);
         btn3.eventMouseClick.add((sender, args) -> {
-            ResizableItem frame = new ResizableItem();
-            frame.setPadding(10, 10, 10, 10);
-            frame.setBackground(100, 100, 100);
-            frame.setSize(300, 300);
-            frame.setPosition(200, 200);
-            flow.addItem(frame);
-            PointsContainer graph = getPointsContainer();
-            frame.addItem(graph);
+            // ResizableItem frame = new ResizableItem();
+            // frame.setPadding(10, 10, 10, 10);
+            // frame.setBackground(100, 100, 100);
+            // frame.setSize(300, 300);
+            // frame.setPosition(200, 200);
+            // flow.addItem(frame);
+            // PointsContainer graph = getPointsContainer();
+            // frame.addItem(graph);
         });
         btn3.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn3.setHoverRule(ItemRule.STRICT);
@@ -120,7 +130,7 @@ public class FlowTest extends ActiveWindow {
         btn4.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn4.addItemState(ItemStateType.HOVERED, hovered);
         btn4.eventMouseClick.add((sender, args) -> {
-            flow.addItem(getBlockList());
+            // flow.addItem(getBlockList());
         });
         btn4.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
         btn4.setHoverRule(ItemRule.STRICT);
@@ -136,11 +146,15 @@ public class FlowTest extends ActiveWindow {
         btn5.eventMouseClick.add((sender, args) -> {
             // MessageItem msg = new MessageItem("Set TRUE?", "Message:");
             // msg.onCloseDialog.add(() -> {
-            //     System.out.println(msg.getResult());
+            // System.out.println(msg.getResult());
             // });
             // msg.show(Handler);
 
-            OpenFileDialog opd = new OpenFileDialog();
+            OpenEntryDialog opd = new OpenEntryDialog("Save File:", FileSystemEntryType.FILE, OpenDialogType.SAVE);
+            // opd.addFilterExtensions("Text files (*.txt);*.txt");
+            opd.onCloseDialog.add(() -> {
+                System.out.println(opd.getResult());
+            });
             opd.show(Handler);
         });
         btn5.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
@@ -155,7 +169,6 @@ public class FlowTest extends ActiveWindow {
         // adding buttons
         toolbar.addItems(btn1, btn2, btn3, btn4, btn5);
 
-        
         // _context_menu.setWidth(110);
         MenuItem restore = new MenuItem("Restore");
         // restore.eventMouseClick += (sender, args) ->
@@ -176,10 +189,12 @@ public class FlowTest extends ActiveWindow {
         MenuItem addition = new MenuItem("Addition");
 
         // context
-        _context_menu = new ContextMenu(Handler, restore, x_plus, y_plus, addition);
-        // _context_menu.addItems(restore, x_plus, y_plus, addition);
+        _context_menu = new ContextMenu(Handler);// new ContextMenu(Handler, restore, x_plus, y_plus, addition);
+        _context_menu.setItemName("Base");
+        _context_menu.addItems(restore, x_plus, y_plus, addition);
 
         ContextMenu addition_menu = new ContextMenu(Handler);
+        addition_menu.setItemName("Addition");
         addition_menu.setSize(110, 94);
         MenuItem x_minus = new MenuItem("X -= 100");
         // x_minus.eventMouseClick += (sender, args) ->
@@ -205,45 +220,50 @@ public class FlowTest extends ActiveWindow {
         // Handler.addItem(new StopMenu());
     }
 
-    private ResizableItem getBlockList() {
-        BlockList block = new BlockList();
-        // ResizableItem block = new ResizableItem();
-        block.eventMouseClick.add((sender, args) -> {
-            // System.out.println(block.getX() + " " + block.getY());
-        });
-        block.setBackground(45, 45, 45);
-        // block.SetBackground(255, 181, 111);
-        block.setWidth(250);
-        block.setHeight(200);
-        block.setX(100);
-        block.setY(100);
-        return block;
-    }
+    // private ResizableItem getBlockList() {
+    // BlockList block = new BlockList();
+    // // ResizableItem block = new ResizableItem();
+    // block.eventMouseClick.add((sender, args) -> {
+    // // System.out.println(block.getX() + " " + block.getY());
+    // });
+    // block.setBackground(45, 45, 45);
+    // // block.SetBackground(255, 181, 111);
+    // block.setWidth(250);
+    // block.setHeight(200);
+    // block.setX(100);
+    // block.setY(100);
+    // return block;
+    // }
 
-    private PointsContainer getPointsContainer() {
-        PointsContainer graph_points = new PointsContainer();
-        graph_points.setPointColor(new Color(10, 255, 10));
-        graph_points.setPointThickness(10.0f);
-        graph_points.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        graph_points.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        // List<float[]> crd = new List<float[]>();
-        // crd.add(new float[3] { 100.0f, 0.0f, 0.0f });
-        // crd.add(new float[3] { 50.0f, 100.0f, 0.0f });
-        // crd.add(new float[3] { 150.0f, 100.0f, 0.0f });
-        // graph_points.setPointsCoord(crd);
-        graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50, 0, 0));
-        // graph_points.setPointsCoord(GraphicsMathService.getTriangle(100, 100, 0, 0,
-        // 0));
-        // graph_points.setWidth(300);
-        // graph_points.setHeight(300);
-        // graph_points.setX(200);
-        // graph_points.setY(200);
-        // graph_points.setShapePointer(GraphicsMathService.getTriangle(graph_points.getPointThickness(),
-        // graph_points.getPointThickness()));
-        // graph_points.setShapePointer(GraphicsMathService.getCross(graph_points.getPointThickness(),
-        // graph_points.getPointThickness(), 2, 45));
-        // graph_points.setShapePointer(GraphicsMathService.getStar(graph_points.getPointThickness(),
-        // graph_points.getPointThickness() / 2.0f));
-        return graph_points;
-    }
+    // private PointsContainer getPointsContainer() {
+    // PointsContainer graph_points = new PointsContainer();
+    // graph_points.setPointColor(new Color(10, 255, 10));
+    // graph_points.setPointThickness(10.0f);
+    // graph_points.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+    // graph_points.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+    // // List<float[]> crd = new List<float[]>();
+    // // crd.add(new float[3] { 100.0f, 0.0f, 0.0f });
+    // // crd.add(new float[3] { 50.0f, 100.0f, 0.0f });
+    // // crd.add(new float[3] { 150.0f, 100.0f, 0.0f });
+    // // graph_points.setPointsCoord(crd);
+    // graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50,
+    // 0, 0));
+    // // graph_points.setPointsCoord(GraphicsMathService.getTriangle(100, 100, 0,
+    // 0,
+    // // 0));
+    // // graph_points.setWidth(300);
+    // // graph_points.setHeight(300);
+    // // graph_points.setX(200);
+    // // graph_points.setY(200);
+    // //
+    // graph_points.setShapePointer(GraphicsMathService.getTriangle(graph_points.getPointThickness(),
+    // // graph_points.getPointThickness()));
+    // //
+    // graph_points.setShapePointer(GraphicsMathService.getCross(graph_points.getPointThickness(),
+    // // graph_points.getPointThickness(), 2, 45));
+    // //
+    // graph_points.setShapePointer(GraphicsMathService.getStar(graph_points.getPointThickness(),
+    // // graph_points.getPointThickness() / 2.0f));
+    // return graph_points;
+    // }
 }

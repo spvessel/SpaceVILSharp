@@ -11,12 +11,18 @@ namespace SpaceVIL
     public class TreeItem : Prototype
     {
         private List<TreeItem> _list_inners;
-        public List<TreeItem> GetTreeItems()
+        public List<TreeItem> GetChildren()
         {
             return _list_inners;
         }
-        private TreeItem _branch;
-        internal TreeView _parent;
+        private TreeItem _parentBranch;
+
+        public TreeItem GetParentBranch()
+        {
+            return _parentBranch;
+        }
+
+        internal TreeView _treeViewContainer;
         internal int _nesting_level = 0;
         private int _indent_size = 20;
         public int GetIndentSize()
@@ -43,16 +49,6 @@ namespace SpaceVIL
             return _indicator;
         }
         private CustomShape _icon_shape;
-        private void SetCustomIconShape(CustomShape icon_shape)
-        {
-            //set shape
-        }
-        private ImageItem _icon_image;
-        private void SetCustomIconImage(Image icon_image)
-        {
-            //set image
-        }
-        // private ContextMenu _menu;
 
         public TreeItem(TreeItemType type)
         {
@@ -68,7 +64,6 @@ namespace SpaceVIL
             _icon_shape = new CustomShape();
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeItem)));
-            SetPassEvents(false, InputEventType.MousePress | InputEventType.MouseRelease | InputEventType.MouseDoubleClick);
             EventKeyPress += OnKeyPress;
         }
 
@@ -81,32 +76,16 @@ namespace SpaceVIL
         {
             if (args.Key == KeyCode.Enter)
                 _indicator.EventToggle.Invoke(sender, new MouseArgs());
-            // if (args.Key == KeyCode.Menu)
-            // {
-            //     MouseArgs margs = new MouseArgs();
-            //     margs.Button = MouseButton.ButtonRight;
-            //     margs.Position.SetPosition(GetX() + _parent.GetWidth() / 2, GetY() + GetHeight());
-            //     // _menu?.Show(this, margs);
-            // }
+            else if (args.Key == KeyCode.Space)
+                AddItem(new TreeItem(TreeItemType.Branch, "new brach " + count));
+            else if (args.Key == KeyCode.NumpadAdd)
+                AddItem(new TreeItem(TreeItemType.Leaf, "new leaf " + count));
         }
-
-        // private TreeItem GetTreeBranch()
-        // {
-        //     TreeItem item = new TreeItem(TreeItemType.Branch);
-        //     item.SetText(item.GetItemName());
-        //     return item;
-        // }
-        // private TreeItem GetTreeLeaf()
-        // {
-        //     TreeItem item = new TreeItem(TreeItemType.Leaf);
-        //     item.SetText(item.GetItemName());
-        //     return item;
-        // }
 
         internal void ResetIndents()
         {
             Int32 level = _nesting_level;
-            if (!_parent._root.IsVisible())
+            if (!_treeViewContainer._root.IsVisible())
                 level--;
             SetPadding(2 + _indent_size * level, 0, 0, 0);
             int width = GetPadding().Left + 10;
@@ -114,87 +93,49 @@ namespace SpaceVIL
             {
                 width += item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right + GetSpacing().Horizontal;
             }
-            SetMinWidth(width - GetSpacing().Horizontal);
-            // System.out.println(getItemName() + " " + (width - getSpacing().horizontal));
+
+            int newMinWidth = width - GetSpacing().Horizontal;
+            if (newMinWidth > _treeViewContainer._maxWrapperWidth)
+            {
+                _treeViewContainer._maxWrapperWidth = newMinWidth;
+                _treeViewContainer.RefreshWrapperWidth();
+            }
+            else
+            {
+                newMinWidth = _treeViewContainer._maxWrapperWidth;
+            }
+
+            SetMinWidth(newMinWidth);
+            _treeViewContainer.GetWrapper(this).SetMinWidth(newMinWidth);
         }
         public override void InitElements()
         {
-
-            // _menu = new ContextMenu(GetHandler());
-            // _menu.SetBackground(40, 40, 40);
-            // _menu.SetPassEvents(false);
-            // MenuItem remove = new MenuItem("Remove");
-            // remove.SetForeground(Color.LightGray);
-            // remove.EventMouseClick += (sender, args) =>
-            // {
-            //     GetParent().RemoveItem(this);
-            // };
-            // MenuItem rename = new MenuItem("Rename");
-            // rename.SetForeground(Color.LightGray);
-            // rename.EventMouseClick += (sender, args) =>
-            // {
-            //     //rename
-            // };
-            // MenuItem copy = new MenuItem("Copy");
-            // copy.SetForeground(Color.LightGray);
-            // copy.EventMouseClick += (sender, args) =>
-            // {
-            //     //copy
-            // };
-            // MenuItem paste = new MenuItem("Paste");
-            // paste.SetForeground(Color.LightGray);
-            // paste.EventMouseClick += (sender, args) =>
-            // {
-            //     //paste
-            // };
-            // MenuItem new_leaf = new MenuItem("New Leaf");
-            // new_leaf.SetForeground(Color.LightGray);
-            // new_leaf.EventMouseClick += (sender, args) =>
-            // {
-            //     this.AddItem(GetTreeLeaf());
-            // };
-            // MenuItem new_branch = new MenuItem("New Branch");
-            // new_branch.SetForeground(Color.LightGray);
-            // new_branch.EventMouseClick += (sender, args) =>
-            // {
-            //     this.AddItem(GetTreeBranch());
-            // };
-            // _menu.ReturnFocus = _parent.GetArea();
-            EventMouseClick += (sender, args) =>
-            {
-                // _menu.Show(sender, args);
-                _parent.GetArea().EventMouseClick?.Invoke(_parent, args);
-            };
-
             switch (_item_type)
             {
                 case TreeItemType.Leaf:
+                    _icon_shape.SetMargin(2, 0, 0, 0);
                     base.AddItem(_icon_shape);
                     base.AddItem(_text_object);
-                    // _menu.AddItems(rename, remove, copy);
                     break;
 
                 case TreeItemType.Branch:
                     _indicator.EventToggle += (sender, args) => OnToggleHide(_indicator.IsToggled());
-                    _indicator.SetPassEvents(false, InputEventType.MousePress | InputEventType.MouseDoubleClick);
                     _indicator.IsFocusable = false;
                     EventMouseDoubleClick += (sender, args) =>
                     {
                         if (args.Button == MouseButton.ButtonLeft)
                             _indicator.EventToggle.Invoke(sender, args);
                     };
-
-                    base.AddItem(_indicator);
+                    base.AddItems(_indicator);
                     base.AddItem(_icon_shape);
                     base.AddItem(_text_object);
-                    // _menu.AddItems(new_branch, new_leaf, rename, paste);
                     break;
+
                 default:
                     base.AddItem(_text_object);
                     break;
             }
             _text_object.IsFocusable = false;
-            ResetIndents();
         }
 
         internal void OnToggleHide(bool value) // refactor
@@ -205,40 +146,63 @@ namespace SpaceVIL
                 {
                     if (_indicator.IsToggled())
                     {
+                        _treeViewContainer.GetWrapper(item).SetVisible(true);
                         item.SetVisible(true);
-                        item.OnToggleHide(value);
                     }
                 }
                 else
                 {
+                    _treeViewContainer.GetWrapper(item).SetVisible(false);
                     item.SetVisible(false);
-                    item.OnToggleHide(value);
                 }
+                item.OnToggleHide(value);
             }
             //update layout
-            _parent.UpdateElements();
+            _treeViewContainer.UpdateElements();
         }
+
         private void AddTreeItem(TreeItem item)
         {
-            _list_inners.Add(item);
-            item._branch = this;
-            item._parent = _parent;
+            item._parentBranch = this;
+            item._treeViewContainer = _treeViewContainer;
             item._nesting_level = _nesting_level + 1;
-            _parent.RefreshTree(item);
             _indicator.SetToggled(true);
-            OnToggleHide(_indicator.IsToggled());
+
+            List<TreeItem> neighbors = GetChildren();
+            int ind = -1;
+
+            for (int i = 0; i < neighbors.Count; i++)
+            {
+                int compareResult = _treeViewContainer.CompareInAlphabet(neighbors[i], item);
+                if (compareResult == 1)
+                    break;
+                ind = i;
+            }
+
+            _list_inners.Insert(ind + 1, item);
+
+            if (ind == -1)
+                _treeViewContainer.RefreshTree(this, item);
+            else
+                _treeViewContainer.RefreshTree(_list_inners[ind], item);
         }
+
         public override void AddItem(IBaseItem item)
         {
             TreeItem tmp = item as TreeItem;
             if (tmp != null)
                 AddTreeItem(tmp);
+            else
+                base.AddItem(item);
+
         }
+
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
             UpdateLayout();
         }
+
         public override void SetX(int _x)
         {
             base.SetX(_x);
@@ -261,12 +225,14 @@ namespace SpaceVIL
                 }
                 offset += child.GetWidth() + GetSpacing().Horizontal;
             }
-
-            //SetMinWidth(width);
         }
 
         //text init
         public void SetTextAlignment(ItemAlignment alignment)
+        {
+            _text_object.SetTextAlignment(alignment);
+        }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
         {
             _text_object.SetTextAlignment(alignment);
         }
@@ -297,7 +263,6 @@ namespace SpaceVIL
         public void SetText(String text)
         {
             _text_object.SetText(text);
-            // _text_object.SetWidth(_text_object.GetTextWidth());
             UpdateLayout();
         }
         public String GetText()

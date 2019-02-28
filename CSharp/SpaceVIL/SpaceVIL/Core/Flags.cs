@@ -360,4 +360,23 @@ namespace SpaceVIL.Core
     {
         IntNumbers, DoubleNumbers, Letters, All
     }
+
+    public enum EmbeddedImage
+    {
+        Add, ArrowLeft, Eye, File, Folder, FolderPlus, Gear, Import, Lines, Loupe, RecycleBin, Refresh, Pencil, Diskette,
+        Eraser, Home, User, Drive, Filter
+    }
+    public enum EmbeddedImageSize
+    {
+        Size32x32, Size64x64
+    }
+    public enum FileSystemEntryType
+    {
+        File, Directory//, Network, Drive
+    }
+
+    public enum OpenDialogType
+    {
+        Open, Save
+    }
 }

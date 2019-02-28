@@ -10,13 +10,23 @@ namespace SpaceVIL
     public abstract class OpenDialog : DialogItem
     {
         static int count = 0;
-        private TitleBar titleBar;
+        private TitleBar _titleBar;
+
+        public void SetTitle(String title)
+        {
+            _titleBar.SetText(title);
+        }
+
+        public String GetTitle()
+        {
+            return _titleBar.GetText();
+        }
 
         public OpenDialog()
         {
             SetItemName("OpenDialog_" + count);
             count++;
-            titleBar = new TitleBar();
+            _titleBar = new TitleBar();
         }
 
         public override void InitElements()
@@ -24,16 +34,13 @@ namespace SpaceVIL
             // important!
             base.InitElements();
 
-            Window.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            Window.SetMargin(50, 20, 50, 20);
-
-            titleBar.GetMaximizeButton().SetVisible(false);
+            _titleBar.GetMaximizeButton().SetVisible(false);
 
             // adding toolbar
-            Window.AddItems(titleBar);
+            Window.AddItems(_titleBar);
 
-            titleBar.GetCloseButton().EventMouseClick = null;
-            titleBar.GetCloseButton().EventMouseClick += (sender, args) =>
+            _titleBar.GetCloseButton().EventMouseClick = null;
+            _titleBar.GetCloseButton().EventMouseClick += (sender, args) =>
             {
                 Close();
             };
@@ -52,9 +59,11 @@ namespace SpaceVIL
             base.Close();
         }
 
-        public override void SetStyle(Style style)
-        {
-
-        }
+        // public override void SetStyle(Style style)
+        // {
+        //     if (style == null)
+        //         return;
+        //     Window.SetStyle(style);
+        // }
     }
 }

@@ -111,10 +111,10 @@ namespace SpaceVIL
                 Monitor.Exit(Locker);
             }
         }
-        public void SetContent(List<IBaseItem> content)
-        {
-            _content = content;
-        }
+        // public void SetContent(List<IBaseItem> content)
+        // {
+        //     _content = content;
+        // }
 
         private void CastAndUpdate(IBaseItem item)
         {
@@ -143,20 +143,13 @@ namespace SpaceVIL
                     return;
                 }
                 item.SetHandler(GetHandler());
-
                 AddChildren(item);
-
                 _content.Add(item);
-
                 ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
 
                 //needs to force update all attributes
                 CastAndUpdate(item);
                 item.InitElements();
-
-                // VisualItem vi = item as VisualItem;
-                // if (vi != null)
-                //     vi.UpdateState();
             }
             catch (Exception ex)
             {
@@ -187,9 +180,6 @@ namespace SpaceVIL
                 //needs to force update all attributes
                 CastAndUpdate(item);
                 item.InitElements();
-                // VisualItem vi = item as VisualItem;
-                // if (vi != null)
-                //     vi.UpdateState();
             }
             catch (Exception ex)
             {
@@ -239,13 +229,12 @@ namespace SpaceVIL
                 //removing
                 _content.Remove(item);
                 ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
-
                 CastAndRemove(item);
-
             }
             catch (Exception ex)
             {
-                Console.WriteLine(item.GetItemName() + "\n" + ex.ToString());
+                Console.WriteLine((item == null) ? "item is null" : item.GetItemName() + "\n" + ex.ToString());
+                Console.WriteLine(ex.StackTrace);
             }
             finally
             {

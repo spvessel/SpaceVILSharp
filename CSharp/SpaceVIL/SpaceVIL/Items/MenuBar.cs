@@ -36,6 +36,10 @@ namespace SpaceVIL
         {
             _text_object.SetTextAlignment(alignment);
         }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
+        {
+            _text_object.SetTextAlignment(alignment);
+        }
         public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);

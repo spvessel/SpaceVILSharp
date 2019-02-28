@@ -75,32 +75,23 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.getArea().selectionChanged.add(this::onSelectionChanged);
-
         super.addItem(itemList);
-
         itemList.eventScrollUp.clear();
         itemList.eventScrollDown.clear();
-
-        for (InterfaceBaseItem item : _queue) {
-            itemList.addItem(item);
-        }
-        _queue = null;
-        _init = true;
-
         itemList.getArea().eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.ESCAPE) {
                 hide();
                 hideDependentMenus();
             }
         });
+        _init = true;
     }
 
     private void hideDependentMenus() {
         for (InterfaceBaseItem context_menu : ItemsLayoutBox.getLayoutFloatItems(getHandler().getId())) {
-            if (context_menu instanceof ContextMenu) {
+            if (context_menu instanceof ContextMenu && !context_menu.equals(this)) {
                 ContextMenu menu = (ContextMenu) context_menu;
                 menu.hide();
-                menu.itemList.unselect();
             }
         }
     }
@@ -183,7 +174,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
             if (width < tmp)
                 width = tmp;
         }
-        setSize(width, height);
+        setSize(width, height - itemList.getArea().getSpacing().vertical);
     }
 
     /**
@@ -195,12 +186,16 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      */
     public void show(InterfaceItem sender, MouseArgs args) {
         if (args.button.getValue() == activeButton.getValue()) {
-            if (!_init) {
+            if (!_init) 
                 initElements();
+            if(!_added)
+            {
+                for (InterfaceBaseItem item : _queue) {
+                    itemList.addItem(item);
+                }
                 updateSize();
+                _added = true;
             }
-
-            setVisible(true);
 
             // проверка снизу
             if (args.position.getY() + getHeight() > getHandler().getHeight()) {
@@ -215,17 +210,26 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
                 setX(args.position.getX());
             }
             setConfines();
+            setVisible(true);
             itemList.getArea().setFocus();
         }
+    }
+
+    private boolean _added = false;
+
+    public void clear() {
+        itemList.clear();
+        _queue.clear();
+        _added = false;
     }
 
     /**
      * Hide the ContextMenu without destroying
      */
     public void hide() {
-        setX(-getWidth());
-        setVisible(false);
         itemList.unselect();
+        setVisible(false);
+        setX(-getWidth());
         if (returnFocus != null)
             returnFocus.setFocus();
     }

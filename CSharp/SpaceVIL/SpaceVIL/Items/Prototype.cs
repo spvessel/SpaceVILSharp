@@ -377,6 +377,10 @@ namespace SpaceVIL
         {
             _core.SetAlignment(alignment);
         }
+        public void SetAlignment(params ItemAlignment[] alignment)
+        {
+            _core.SetAlignment(alignment);
+        }
         public ItemAlignment GetAlignment()
         {
             return _core.GetAlignment();
@@ -768,13 +772,13 @@ namespace SpaceVIL
             _core.SetState(state);
         }
 
-        /// <summary>
-        /// Set list of the Prototype's inner items. Old items will be removed
-        /// </summary>
-        public void SetContent(List<IBaseItem> content)
-        {
-            _core.SetContent(content);
-        }
+        // /// <summary>
+        // /// Set list of the Prototype's inner items. Old items will be removed
+        // /// </summary>
+        // public void SetContent(List<IBaseItem> content)
+        // {
+        //     _core.SetContent(content);
+        // }
 
         /// <summary>
         /// Is Prototype has CustomFigure shape, return it        

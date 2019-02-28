@@ -66,7 +66,15 @@ namespace SpaceVIL
                 EventTask tmp = null;
                 if (StackEvents.TryDequeue(out tmp))
                 {
-                    ExecuteAction(tmp);
+                    try
+                    {
+                        ExecuteAction(tmp);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Console.WriteLine(tmp.Item.GetItemName() + " " + tmp.Action + " " + ex.ToString());
+                        Console.WriteLine(ex.StackTrace);
+                    }
                 }
             }
         }

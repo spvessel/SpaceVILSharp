@@ -2,6 +2,7 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.InterfaceImageItem;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.LinkedList;
@@ -13,6 +14,15 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     private BufferedImage _image;
     private byte[] _bitmap;
     private String _url;
+
+    public boolean isHover = true;
+
+    @Override
+    public boolean getHoverVerification(float xpos, float ypos) {
+        if (isHover)
+            return super.getHoverVerification(xpos, ypos);
+        return false;
+    }
 
     /**
      * Constructs an ImageItem
@@ -31,6 +41,13 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
             return;
         _image = picture;
         _bitmap = createByteImage();
+    }
+    /**
+     * Constructs an ImageItem with an image and hover attribute
+     */
+    public ImageItem(BufferedImage picture, boolean hover) {
+        this(picture);
+        isHover = hover;
     }
 
     /**
@@ -107,7 +124,24 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     public String getImageUrl() {
         return _url;
     }
+
     public void setImageUrl(String url) {
         _url = url;
+    }
+
+    private Color _colorOverlay;
+
+    public Color getColorOverlay() {
+        return _colorOverlay;
+    }
+
+    public void setColorOverlay(Color color) {
+        _colorOverlay = color;
+    }
+
+    public boolean isColorOverLay() {
+        if (_colorOverlay != null)
+            return true;
+        return false;
     }
 }

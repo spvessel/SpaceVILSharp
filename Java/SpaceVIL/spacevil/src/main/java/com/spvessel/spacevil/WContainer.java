@@ -1,5 +1,6 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.util.*;
@@ -13,6 +14,7 @@ public class WContainer extends Prototype {
     public WContainer() {
         setItemName("WContainer_" + count);
         count++;
+        setStyle(DefaultsService.getDefaultStyle(WContainer.class));
     }
 
     protected void saveLastFocus(Prototype focused) {

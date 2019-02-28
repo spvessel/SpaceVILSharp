@@ -37,8 +37,8 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
      * Add ContextMenu to the FreeArea
      */
     public void addContextMenu(ContextMenu context_menu) {
-        //InterfaceMouseMethodState context_show = (sender, args) -> context_menu.show(sender, args);
-        eventMouseClick.add(context_menu::show);
+        eventMouseClick.add((sender, args) -> context_menu.show(sender, args));
+        // eventMouseClick.add(context_menu::show);
     }
 
     private void onMousePress(InterfaceItem sender, MouseArgs args) {
@@ -122,14 +122,10 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
     // ContexMenu
     private void correctPosition(ResizableItem item) {
         int actual_x = item.getX();
-        // int stored_x = _stored_crd.get(item)[0];
         int actual_y = item.getY();
-        // int stored_y = _stored_crd.get(item)[1];
-        // synchronized (this) {
-            _stored_crd.remove(item);
-            _stored_crd.put(item,
-                    new int[] { actual_x - (int) _xOffset - getX() - getPadding().left - item.getMargin().left,
-                            actual_y - (int) _yOffset - getY() - getPadding().top - item.getMargin().top });
-        // }
+        _stored_crd.remove(item);
+        _stored_crd.put(item,
+                new int[] { actual_x - (int) _xOffset - getX() - getPadding().left - item.getMargin().left,
+                        actual_y - (int) _yOffset - getY() - getPadding().top - item.getMargin().top });
     }
 }

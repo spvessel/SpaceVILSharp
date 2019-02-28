@@ -100,6 +100,10 @@ namespace SpaceVIL
         {
             _text_object.SetTextAlignment(alignment);
         }
+        public void SetTextAlignment(params ItemAlignment[] alignment)
+        {
+            _text_object.SetTextAlignment(alignment);
+        }
 
         /// <summary>
         /// Text margin in the CheckBox

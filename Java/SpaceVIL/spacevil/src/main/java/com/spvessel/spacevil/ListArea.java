@@ -1,13 +1,18 @@
 package com.spvessel.spacevil;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Style;
 
 public class ListArea extends Prototype implements InterfaceVLayout {
+    private Lock _lock = new ReentrantLock();
+
     public EventCommonMethod selectionChanged = new EventCommonMethod();
     public EventCommonMethod itemListChanged = new EventCommonMethod();
 
@@ -19,11 +24,11 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     public void setStep(int value) {
         _step = value;
     }
+
     public int getStep() {
         return _step;
     }
 
-    private boolean _show_selection = true;
     private int _selection = -1;
 
     /**
@@ -33,11 +38,19 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         return _selection;
     }
 
+    private SelectionItem _selectionItem;
+
     /**
      * @return selected item
      */
     public InterfaceBaseItem getSelectionItem() {
-        return getItems().get(_selection + 2);
+        if (_selectionItem != null)
+            return _selectionItem.getContent();
+        return null;
+    }
+
+    SelectionItem getTrueSelection() {
+        return _selectionItem;
     }
 
     /**
@@ -45,11 +58,22 @@ public class ListArea extends Prototype implements InterfaceVLayout {
      */
     public void setSelection(int index) {
         _selection = index;
-        if (index < 0)
-            _selection = 0;
-        if (index >= getItems().size() - 2)
-            _selection = getItems().size() - 3;
-        updateLayout();
+        _selectionItem = ((SelectionItem) getItems().get(index));
+        _selectionItem.setToggled(true);
+        unselectOthers(_selectionItem);
+        if (_selectionItem.getContent() instanceof Prototype) {
+            ((Prototype) _selectionItem.getContent()).setFocus();
+        }
+        selectionChanged.execute();
+    }
+
+    private void unselectOthers(SelectionItem sender) {
+        List<InterfaceBaseItem> items = getItems();
+        for (InterfaceBaseItem item : items) {
+            if (!item.equals(sender)) {
+                ((SelectionItem) item).setToggled(false);
+            }
+        }
     }
 
     /**
@@ -57,55 +81,26 @@ public class ListArea extends Prototype implements InterfaceVLayout {
      */
     public void unselect() {
         _selection = -1;
-        _substrate.setVisible(false);
-        _hover_substrate.setVisible(false);
+        if (_selectionItem != null) {
+            _selectionItem.setToggled(false);
+            _selectionItem = null;
+        }
     }
+
+    private boolean _isSelectionVisible = true;
 
     /**
      * Is selection changes view of the item or not
      */
     public void setSelectionVisibility(boolean visibility) {
-        _show_selection = visibility;
+        _isSelectionVisible = visibility;
         updateLayout();
     }
+
     public boolean getSelectionVisibility() {
-        return _show_selection;
+        return _isSelectionVisible;
     }
 
-    private Rectangle _substrate = new Rectangle();
-
-    /**
-     * Substrate under the selected item
-     */
-    public Rectangle getSubstrate() {
-        return _substrate;
-    }
-
-    private boolean _show_hover = true;
-
-    /**
-     * Is hovering changes view of the item or not
-     */
-    public void setHoverVisibility(boolean visibility) {
-        _show_hover = visibility;
-        updateLayout();
-    }
-    public boolean getHoverVisibility() {
-        return _show_hover;
-    }
-
-    private Rectangle _hover_substrate = new Rectangle();
-
-    /**
-     * Substrate under the hovered item
-     */
-    public Rectangle getHoverSubstrate() {
-        return _hover_substrate;
-    }
-
-    // public List<ListPosition> areaPosition = new LinkedList<>();
-    // public int firstVisibleItem = 0;
-    // public int lastVisibleItem = 0;
     List<Integer> _list_of_visible_items = new LinkedList<>();
 
     private static int count = 0;
@@ -119,114 +114,43 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         eventMouseClick.add(this::onMouseClick);
         eventMouseDoubleClick.add(this::onMouseDoubleClick);
         eventMouseHover.add(this::onMouseHover);
-
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ListArea"));
-        setStyle(DefaultsService.getDefaultStyle(ListArea.class));
-
         eventKeyPress.add(this::onKeyPress);
+        // setStyle(DefaultsService.getDefaultStyle(ListArea.class));
     }
 
     private void onMouseClick(InterfaceItem sender, MouseArgs args) {
-        unselect();
-        for (int index : _list_of_visible_items) {
-            InterfaceBaseItem item = getItems().get(index);
-            int y = item.getY();
-            int h = item.getHeight();
-            if (args.position.getY() > y && args.position.getY() < (y + h)) {
-                setSelection(index - 2);
-                updateSubstrate();
-                selectionChanged.execute();
-                break;
-            }
-        }
+
     }
 
     private void onMouseDoubleClick(InterfaceItem sender, MouseArgs args) {
-        if (getSelectionItem() instanceof Prototype) {
-            // System.out.println(getSelectionItem().getItemName());
-            ((Prototype) getSelectionItem()).eventMouseDoubleClick.execute(getSelectionItem(), args);
-        }
-    }
 
-    private void updateSubstrate() {
-        if (_show_selection && getSelection() >= 0) {
-            InterfaceBaseItem item = getItems().get(getSelection() + 2);
-            _substrate.setHeight(item.getHeight() + 4);
-            _substrate.setPosition(getX() + getPadding().left, item.getY() - 2);
-            _substrate.setVisible(true);
-        }
     }
 
     private void onMouseHover(InterfaceItem sender, MouseArgs args) {
-        if (!getHoverVisibility())
-            return;
-        boolean found = false;
-        for (InterfaceBaseItem item : getItems()) {
-            if (item.equals(_substrate) || item.equals(_hover_substrate) || !item.isVisible() || !item.isDrawable())
-                continue;
-            if (args.position.getY() > item.getY() && args.position.getY() < item.getY() + item.getHeight()) {
-                _hover_substrate.setHeight(item.getHeight());
-                _hover_substrate.setPosition(getX() + getPadding().left, item.getY());
-                _hover_substrate.setDrawable(true);
-                _hover_substrate.setVisible(true);
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            _hover_substrate.setDrawable(false);
-            _hover_substrate.setVisible(false);
-        }
+
     }
 
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {
-        InterfaceBaseItem tmp = getSelectionItem();
-        int index = getSelection();
+        int index = _selection;
         switch (args.key) {
         case UP:
             index--;
             if (index < 0)
                 break;
-            if (!getItems().get(index + 2).isVisible())
-                while (index >= 0 && !getItems().get(index + 2).isVisible())
-                    index--;
-            if (index >= 0)
-                setSelection(index);
+            setSelection(index);
             break;
         case DOWN:
             index++;
-            if (index >= getItems().size() - 2)
+            if (index >= super.getItems().size())
                 break;
-            if (!getItems().get(index + 2).isVisible())
-                while (index < (getItems().size() - 2) && !getItems().get(index + 2).isVisible())
-                    index++;
-            if (index < getItems().size() - 2)
-                setSelection(index);
+            setSelection(index);
             break;
         case ESCAPE:
             unselect();
             break;
-        case ENTER:
-            if (tmp instanceof Prototype) {
-                ((Prototype) tmp).eventKeyPress.execute(sender, args);
-                selectionChanged.execute();
-            }
-            break;
         default:
-            if (tmp instanceof Prototype)
-                ((Prototype) tmp).eventKeyPress.execute(sender, args);
             break;
         }
-    }
-
-    // overrides
-    /**
-     * Initialization and adding of all elements in the ListArea
-     */
-    @Override
-    public void initElements() {
-        _substrate.setVisible(false);
-        super.addItems(_substrate, _hover_substrate);
     }
 
     /**
@@ -235,8 +159,26 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     @Override
     public void setMouseHover(boolean value) {
         super.setMouseHover(value);
-        if (!value)
-            _hover_substrate.setDrawable(false);
+    }
+
+    Map<InterfaceBaseItem, SelectionItem> _mapContent = new HashMap<>();
+
+    private SelectionItem getWrapper(InterfaceBaseItem item) {
+        SelectionItem wrapper = new SelectionItem(item);
+        // wrapper.setStyle(_selectedStyle);
+        wrapper.eventMouseClick.add((sender, args) -> {
+            int index = 0;
+            _selectionItem = _mapContent.get(item);
+            for (InterfaceBaseItem var : super.getItems()) {
+                if (var.equals(_selectionItem)) {
+                    _selection = index;
+                    selectionChanged.execute();
+                    return;
+                }
+                index++;
+            }
+        });
+        return wrapper;
     }
 
     /**
@@ -244,24 +186,22 @@ public class ListArea extends Prototype implements InterfaceVLayout {
      */
     @Override
     public void insertItem(InterfaceBaseItem item, int index) {
-        if (item instanceof Prototype) {
-            if (!(item instanceof InterfaceTextEditable))
-                ((Prototype) item).isFocusable = false;
-        }
-        item.setDrawable(false);
-        super.insertItem(item, index);
+        SelectionItem wrapper = getWrapper(item);
+        super.insertItem(wrapper, index);
+        _mapContent.put(item, wrapper);
         updateLayout();
     }
+
+    private Style _selectedStyle;
 
     /**
      * Add item to the ListArea
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
-        if (item instanceof Prototype)
-            ((Prototype) item).isFocusable = false;
-        item.setDrawable(false);
-        super.addItem(item);
+        SelectionItem wrapper = getWrapper(item);
+        super.addItem(wrapper);
+        _mapContent.put(item, wrapper);
         updateLayout();
     }
 
@@ -270,10 +210,31 @@ public class ListArea extends Prototype implements InterfaceVLayout {
      */
     @Override
     public void removeItem(InterfaceBaseItem item) {
-        unselect();
-        super.removeItem(item);
+        super.removeItem(_mapContent.get(item));
+        _mapContent.remove(item);
         updateLayout();
         itemListChanged.execute();
+    }
+
+    void removeAllItems() {
+        _lock.lock();
+        try {
+            unselect();
+            List<InterfaceBaseItem> list = new LinkedList<>(getItems());
+
+            if (list == null || list.size() == 0)
+                return;
+
+            while (!list.isEmpty()) {
+                super.removeItem(list.get(0));
+                list.remove(0);
+            }
+            _mapContent.clear();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            _lock.unlock();
+        }
     }
 
     /**
@@ -295,9 +256,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     public long getVScrollOffset() {
         return _yOffset;
     }
+
     public void setVScrollOffset(long value) {
         _yOffset = value;
-        _hover_substrate.setDrawable(false);
         updateLayout();
     }
 
@@ -307,14 +268,14 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     public long getHScrollOffset() {
         return _xOffset;
     }
+
     public void setHScrollOffset(long value) {
         _xOffset = value;
         updateLayout();
     }
 
     /**
-     * Update all children and ListArea sizes and positions
-     * according to confines
+     * Update all children and ListArea sizes and positions according to confines
      */
     public void updateLayout() {
         _list_of_visible_items.clear();
@@ -322,44 +283,34 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         long offset = (-1) * getVScrollOffset();
         int startY = getY() + getPadding().top;
         int index = -1;
-        for (InterfaceBaseItem child : getItems()) {
+        for (InterfaceBaseItem child : super.getItems()) {
             index++;
-            if (child.equals(_substrate) || child.equals(_hover_substrate) || !child.isVisible())
+            if (!child.isVisible())
                 continue;
 
             child.setX((-1) * (int) _xOffset + getX() + getPadding().left + child.getMargin().left);
 
             long child_Y = startY + offset + child.getMargin().top;
             offset += child.getHeight() + getSpacing().vertical;
-
             // top checking
             if (child_Y < startY) {
+                child.setY((int) child_Y);
                 if (child_Y + child.getHeight() <= startY) {
                     child.setDrawable(false);
-                    if (_selection == index - 2)
-                        _substrate.setDrawable(false);
                 } else {
-                    child.setY((int) child_Y);
                     child.setDrawable(true);
                     _list_of_visible_items.add(index);
-                    if (_selection == index - 2)
-                        _substrate.setDrawable(true);
                 }
                 continue;
             }
-
             // bottom checking
             if (child_Y + child.getHeight() + child.getMargin().bottom > getY() + getHeight() - getPadding().bottom) {
+                child.setY((int) child_Y);
                 if (child_Y >= getY() + getHeight() - getPadding().bottom) {
                     child.setDrawable(false);
-                    if (_selection == index - 2)
-                        _substrate.setDrawable(false);
                 } else {
-                    child.setY((int) child_Y);
                     child.setDrawable(true);
                     _list_of_visible_items.add(index);
-                    if (_selection == index - 2)
-                        _substrate.setDrawable(true);
                 }
                 continue;
             }
@@ -367,13 +318,10 @@ public class ListArea extends Prototype implements InterfaceVLayout {
             child.setY((int) child_Y);
             child.setDrawable(true);
             _list_of_visible_items.add(index);
-            if (_selection == index - 2)
-                _substrate.setDrawable(true);
 
             // refactor
             child.setConfines();
         }
-        updateSubstrate();
     }
 
     /**
@@ -385,14 +333,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         if (style == null)
             return;
         super.setStyle(style);
-
-        Style inner_style = style.getInnerStyle("substrate");
+        Style inner_style = style.getInnerStyle("selecteditem");
         if (inner_style != null) {
-            _substrate.setStyle(inner_style);
-        }
-        inner_style = style.getInnerStyle("hovercover");
-        if (inner_style != null) {
-            _hover_substrate.setStyle(inner_style);
+            _selectedStyle = inner_style;
         }
     }
 }
