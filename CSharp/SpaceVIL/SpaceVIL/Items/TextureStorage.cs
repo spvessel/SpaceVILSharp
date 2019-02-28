@@ -29,6 +29,7 @@ namespace SpaceVIL
         {
             _linesList = new List<TextLine>();
             TextLine te = new TextLine();
+            te.SetRecountable(true);
             if (GetForeground() != null)
                 te.SetForeground(GetForeground());
             te.SetTextAlignment(_blockAlignment);
@@ -170,6 +171,7 @@ namespace SpaceVIL
             GetParent().AddItem(te);
             //text.TrimEnd('\r');
             te.SetItemText(text);
+            te.SetRecountable(true);
             _linesList.Insert(lineNum, te);
 
             UpdLinesYShift(); //Пока обновляются все, но в принципе, нужно только под lineNum

@@ -61,6 +61,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
      */
     public TextEdit() {
         _text_object = new TextLine();
+        _text_object.setRecountable(true);
         _cursor = new Rectangle();
         _selectedArea = new Rectangle();
 

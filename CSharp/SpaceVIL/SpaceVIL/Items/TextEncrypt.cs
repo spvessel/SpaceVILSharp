@@ -44,6 +44,7 @@ namespace SpaceVIL
             // _hide_sign = Encoding.UTF32.GetString(BitConverter.GetBytes(0x23fa)); //big point
             _hide_sign = Encoding.UTF32.GetString(BitConverter.GetBytes(0x25CF)); //big point
             _text_object = new TextLine();
+            _text_object.SetRecountable(true);
             _substrate_text = new TextLine();
 
             _cursor = new Rectangle();

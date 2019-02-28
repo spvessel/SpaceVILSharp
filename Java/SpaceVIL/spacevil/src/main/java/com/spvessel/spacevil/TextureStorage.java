@@ -32,6 +32,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     TextureStorage() {
         _linesList = new LinkedList<>();
         TextLine te = new TextLine();
+        te.setRecountable(true);
         if (getForeground() != null)
             te.setForeground(getForeground());
         te.setTextAlignment(_blockAlignment);
@@ -164,6 +165,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         getParent().addItem(te);
         // text.TrimEnd('\r');
         te.setItemText(text);
+        te.setRecountable(true);
         _linesList.add(lineNum, te);
 
         updLinesYShift(); // Пока обновляются все, но в принципе, нужно только под lineNum
