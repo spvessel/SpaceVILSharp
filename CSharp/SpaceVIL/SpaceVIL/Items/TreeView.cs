@@ -73,8 +73,16 @@ namespace SpaceVIL
 
         internal void RefreshTree(TreeItem prev, TreeItem item)
         {
-            int index = GetListContent().IndexOf(prev);
-            InsertItem(item, index + 1);
+            List<IBaseItem> list = GetListContent();
+            int index = GetListContent().IndexOf(prev) + 1;
+            int nestLev = item._nesting_level;
+            while (index < list.Count)
+            {
+                if (((TreeItem)list[index])._nesting_level <= nestLev)
+                    break;
+                index++;
+            }
+            InsertItem(item, index);            
             item.ResetIndents();
             // item.OnToggleHide(true);
             UpdateElements();
@@ -141,6 +149,16 @@ namespace SpaceVIL
                 return;
             base.SetStyle(style);
             //additional
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            _root.RemoveAllChildren();
+            base.AddItem(_root);
+            _root.ResetIndents();
+            _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
+
         }
     }
 }

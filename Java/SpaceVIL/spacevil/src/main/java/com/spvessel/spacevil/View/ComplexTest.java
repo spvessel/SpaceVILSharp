@@ -29,9 +29,9 @@ public class ComplexTest extends ActiveWindow {
         TitleBar title = new TitleBar("ComplexTest");
         Handler.addItem(title);
 
-        Handler.getWindow().eventKeyPress.add((sender, args) -> {
-            System.out.println("FocusedItem: " + getHandler().getFocusedItem().getItemName());
-        });
+//        Handler.getWindow().eventKeyPress.add((sender, args) -> {
+//            System.out.println("FocusedItem: " + getHandler().getFocusedItem().getItemName());
+//        });
         HorizontalStack toolbar = new HorizontalStack();
         toolbar.setBackground(51, 51, 51);
         toolbar.setItemName("toolbar");
@@ -55,7 +55,7 @@ public class ComplexTest extends ActiveWindow {
         ButtonCore b3 = getButton("b3", 26, 30, SizePolicy.FIXED);
         b3.eventMouseClick.add((sender, args) -> treeview.addItem(getTreeBranch()));
         ButtonCore b4 = getButton("b4", 26, 30, SizePolicy.FIXED);
-        b4.eventMouseClick.add((sender, args) -> treeview.addItem(getTreeLeaf()));
+        b4.eventMouseClick.add((sender, args) -> treeview.clear()); //addItem(getTreeLeaf()));
         ButtonCore b5 = getButton("b5", 26, 30, SizePolicy.FIXED);
         b5.eventMouseClick.add((sender, args) -> block.setFormat(block.getRowCount() + 1, block.getColumnCount() + 1));
         ButtonCore b6 = getButton("b6", 26, 30, SizePolicy.FIXED);
@@ -140,8 +140,8 @@ public class ComplexTest extends ActiveWindow {
         style.minHeight = 30;
         style.maxHeight = 100;
         style.heightPolicy = policy;
-        style.alignment = new LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
-        style.textAlignment = new LinkedList<ItemAlignment>(
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+        style.textAlignment = new LinkedList<>(
                 Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
         style.margin = new Indents(3, 3, 3, 3);
         ItemState hovered = new ItemState();

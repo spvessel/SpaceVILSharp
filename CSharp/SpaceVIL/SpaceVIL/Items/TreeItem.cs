@@ -15,6 +15,12 @@ namespace SpaceVIL
         {
             return _list_inners;
         }
+
+        internal void RemoveAllChildren()
+        {
+            _list_inners.Clear();
+        }
+
         private TreeItem _parentBranch;
 
         public TreeItem GetParentBranch()
@@ -77,7 +83,7 @@ namespace SpaceVIL
             if (args.Key == KeyCode.Enter)
                 _indicator.EventToggle.Invoke(sender, new MouseArgs());
             else if (args.Key == KeyCode.Space)
-                AddItem(new TreeItem(TreeItemType.Branch, "new brach " + count));
+                AddItem(new TreeItem(TreeItemType.Branch, "new branch " + count));
             else if (args.Key == KeyCode.NumpadAdd)
                 AddItem(new TreeItem(TreeItemType.Leaf, "new leaf " + count));
         }

@@ -82,7 +82,15 @@ public class TreeView extends ListBox {
     }
 
     void refreshTree(TreeItem prev, TreeItem item) {
-        insertItem(item, getListContent().indexOf(prev) + 1);
+        List<InterfaceBaseItem> list = getListContent();
+        int index = getListContent().indexOf(prev) + 1;
+        int nestLev = item._nesting_level;
+        while (index < list.size()) {
+            if (((TreeItem)list.get(index))._nesting_level <= nestLev)
+                break;
+            index++;
+        }
+        insertItem(item, index);
         item.resetIndents();
         // item.onToggleHide(true);
         updateElements();
@@ -164,5 +172,14 @@ public class TreeView extends ListBox {
         super.setStyle(style);
         // additional
 
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+        _root.removeAllChildren();
+        super.addItem(_root);
+        _root.resetIndents();
+        _maxWrapperWidth = getWrapper(_root).getMinWidth();
     }
 }
