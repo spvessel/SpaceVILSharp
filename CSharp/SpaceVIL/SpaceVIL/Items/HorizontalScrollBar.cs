@@ -23,6 +23,7 @@ namespace SpaceVIL
         /// </summary>
         public HorizontalScrollBar()
         {
+            IsFocusable = false;
             SetItemName("HorizontalScrollBar_" + count);
             count++;
 
