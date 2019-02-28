@@ -84,7 +84,7 @@ public class TreeView extends ListBox {
     void refreshTree(TreeItem prev, TreeItem item) {
         insertItem(item, getListContent().indexOf(prev) + 1);
         item.resetIndents();
-        item.onToggleHide(true);
+        // item.onToggleHide(true);
         updateElements();
     }
 

@@ -19,6 +19,7 @@ namespace SpaceVIL
             SetItemName("SelectionItem_" + count);
             count++;
 
+            SetPadding(0, 1, 0, 1);
             SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
             SetBackground(0, 0, 0, 0);
             AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(50, 255, 255, 255)));
@@ -41,7 +42,7 @@ namespace SpaceVIL
         {
             AddItem(_item);
             SetSize(_item.GetWidth() + _item.GetMargin().Left + _item.GetMargin().Right,
-                    _item.GetHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top);
+                    _item.GetHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top + 2);
             SetMinSize(_item.GetMinWidth() + _item.GetMargin().Left + _item.GetMargin().Right,
                     _item.GetMinHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top);
             _item.SetParent(GetParent());

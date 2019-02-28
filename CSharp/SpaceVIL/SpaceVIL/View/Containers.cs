@@ -95,7 +95,6 @@ namespace View
 
             //List
             TreeView treeview = new TreeView();
-            // treeview.SetBackground(255, 255, 255, 20);
             treeview.SetWidth(300);
             treeview.SetWidthPolicy(SizePolicy.Fixed);
             treeview.SetHScrollBarVisible(ScrollBarVisibility.AsNeeded);
@@ -110,14 +109,15 @@ namespace View
             }
 
             ListBox listbox = new ListBox();
-            listbox.GetArea().SetSpacing(0, 10);
+            // listbox.GetArea().SetSpacing(0, 10);
             listbox.SetMargin(305, 0, 0, 0);
             tabs.AddItemToTab("List", listbox);
             for (int i = 0; i < 100; i++)
             {
                 CheckBox chb = new CheckBox();
+                // chb.SetBackground(Color.Transparent);
                 chb.SetText("Item CheckBox" + i);
-                chb.SetMinWidth(500);
+                // chb.SetMinWidth(500);
                 chb.SetForeground(Color.FromArgb(255, 210, 210, 210));
                 listbox.AddItem(chb);
             }

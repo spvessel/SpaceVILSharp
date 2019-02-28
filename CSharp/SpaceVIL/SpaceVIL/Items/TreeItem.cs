@@ -180,11 +180,11 @@ namespace SpaceVIL
             }
 
             _list_inners.Insert(ind + 1, item);
-
             if (ind == -1)
                 _treeViewContainer.RefreshTree(this, item);
             else
                 _treeViewContainer.RefreshTree(_list_inners[ind], item);
+            OnToggleHide(true);
         }
 
         public override void AddItem(IBaseItem item)

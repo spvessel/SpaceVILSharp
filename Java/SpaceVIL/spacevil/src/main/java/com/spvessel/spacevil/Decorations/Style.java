@@ -1871,6 +1871,7 @@ public class Style {
         style.height = 25;
         style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
         style.setBackground(0, 0, 0, 0);
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         style.font = DefaultsService.getDefaultFont();
         style.setForeground(210, 210, 210);

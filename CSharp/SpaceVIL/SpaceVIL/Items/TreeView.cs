@@ -76,7 +76,7 @@ namespace SpaceVIL
             int index = GetListContent().IndexOf(prev);
             InsertItem(item, index + 1);
             item.ResetIndents();
-            item.OnToggleHide(true);
+            // item.OnToggleHide(true);
             UpdateElements();
         }
 

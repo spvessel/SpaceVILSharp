@@ -132,18 +132,32 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         int index = _selection;
+        boolean changed = false;
+
         switch (args.key) {
         case UP:
-            index--;
-            if (index < 0)
-                break;
-            setSelection(index);
+            while (index > 0) {
+                index--;
+                _selectionItem = ((SelectionItem) getItems().get(index));
+                if (_selectionItem.isVisible()) {
+                    changed = true;
+                    break;
+                }
+            }
+            if (changed)
+                setSelection(index);
             break;
         case DOWN:
-            index++;
-            if (index >= super.getItems().size())
-                break;
-            setSelection(index);
+            while (index < super.getItems().size() - 1) {
+                index++;
+                _selectionItem = ((SelectionItem) getItems().get(index));
+                if (_selectionItem.isVisible()) {
+                    changed = true;
+                    break;
+                }
+            }
+            if (changed)
+                setSelection(index);
             break;
         case ESCAPE:
             unselect();

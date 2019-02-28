@@ -79,7 +79,6 @@ public class TreeItem extends Prototype {
 
     private CustomShape _icon_shape;
 
-
     /**
      * Constructs a TreeItem type of TreeItemType (LEAF or BRANCH)
      */
@@ -210,10 +209,11 @@ public class TreeItem extends Prototype {
 
         _list_inners.add(ind + 1, item);
 
-        if (ind == -1) 
+        if (ind == -1)
             _treeViewContainer.refreshTree(this, item);
         else
             _treeViewContainer.refreshTree(_list_inners.get(ind), item);
+        onToggleHide(true);
     }
 
     /**

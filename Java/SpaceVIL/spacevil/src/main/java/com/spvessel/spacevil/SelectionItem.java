@@ -20,11 +20,12 @@ class SelectionItem extends Prototype {
         setItemName("SelectionItem_" + count);
         count++;
 
+        setPadding(0, 1, 0, 1);
         setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
         setBackground(0, 0, 0, 0);
         addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 50)));
 
-        eventMouseClick.add((sender, args) -> { 
+        eventMouseClick.add((sender, args) -> {
             if (getContent() instanceof Prototype) {
                 ((Prototype) getContent()).setFocus();
             }
@@ -44,7 +45,7 @@ class SelectionItem extends Prototype {
     public void initElements() {
         addItem(_item);
         setSize(_item.getWidth() + _item.getMargin().left + _item.getMargin().right,
-                _item.getHeight() + _item.getMargin().bottom + _item.getMargin().top);
+                _item.getHeight() + _item.getMargin().bottom + _item.getMargin().top + 2);
         setMinSize(_item.getMinWidth() + _item.getMargin().left + _item.getMargin().right,
                 _item.getMinHeight() + _item.getMargin().bottom + _item.getMargin().top);
         _item.setParent(getParent());

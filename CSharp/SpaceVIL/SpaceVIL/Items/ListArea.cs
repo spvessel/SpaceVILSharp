@@ -133,19 +133,37 @@ namespace SpaceVIL
         void OnKeyPress(IItem sender, KeyArgs args)
         {
             int index = _selection;
+            bool changed = false;
+
             switch (args.Key)
             {
                 case KeyCode.Up:
-                    index--;
-                    if (index < 0)
-                        break;
-                    SetSelection(index);
+                    while (index > 0)
+                    {
+                        index--;
+                        _selectionItem = GetItems().ElementAt(index) as SelectionItem;
+                        if (_selectionItem.IsVisible())
+                        {
+                            changed = true;
+                            break;
+                        }
+                    }
+                    if (changed)
+                        SetSelection(index);
                     break;
                 case KeyCode.Down:
-                    index++;
-                    if (index >= base.GetItems().Count)
-                        break;
-                    SetSelection(index);
+                    while (index < base.GetItems().Count - 1)
+                    {
+                        index++;
+                        _selectionItem = GetItems().ElementAt(index) as SelectionItem;
+                        if (_selectionItem.IsVisible())
+                        {
+                            changed = true;
+                            break;
+                        }
+                    }
+                    if (changed)
+                        SetSelection(index);
                     break;
                 case KeyCode.Escape:
                     Unselect();
