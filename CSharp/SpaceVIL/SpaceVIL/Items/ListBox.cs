@@ -416,7 +416,7 @@ namespace SpaceVIL
             _area.RemoveItem(item);
             UpdateElements();
         }
-        public void Clear()
+        public virtual void Clear()
         {
             _area.RemoveAllItems();
         }

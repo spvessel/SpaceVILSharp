@@ -30,6 +30,10 @@ public class TreeItem extends Prototype {
         return _list_inners;
     }
 
+    void removeAllChildren() {
+        _list_inners.clear();
+    }
+
     private TreeItem _parentBranch;
 
     public TreeItem getParentBranch() {
@@ -87,7 +91,7 @@ public class TreeItem extends Prototype {
         setItemName(type.toString().toLowerCase() + "_v" + count);
         count++;
 
-        _list_inners = new LinkedList<TreeItem>();
+        _list_inners = new LinkedList<>();
         _indicator = new ButtonToggle();
         _indicator.setItemName("Indicator_" + count);
         _text_object = new Label();
@@ -113,8 +117,8 @@ public class TreeItem extends Prototype {
         if (args.key == KeyCode.ENTER)
             _indicator.eventToggle.execute(sender, new MouseArgs());
         else if (args.key == KeyCode.SPACE)
-            addItem(new TreeItem(TreeItemType.BRANCH, "new brach " + count));
-        else if (args.key == KeyCode.NUMPADADD)
+            addItem(new TreeItem(TreeItemType.BRANCH, "new branch " + count));
+        else if (args.key == KeyCode.EQUAL)
             addItem(new TreeItem(TreeItemType.LEAF, "new leaf " + count));
     }
 
