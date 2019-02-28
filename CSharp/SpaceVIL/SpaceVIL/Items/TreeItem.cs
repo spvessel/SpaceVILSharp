@@ -154,14 +154,15 @@ namespace SpaceVIL
                     {
                         _treeViewContainer.GetWrapper(item).SetVisible(true);
                         item.SetVisible(true);
+                        item.OnToggleHide(value);
                     }
                 }
                 else
                 {
                     _treeViewContainer.GetWrapper(item).SetVisible(false);
                     item.SetVisible(false);
+                    item.OnToggleHide(value);
                 }
-                item.OnToggleHide(value);
             }
             //update layout
             _treeViewContainer.UpdateElements();

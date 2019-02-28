@@ -182,12 +182,13 @@ public class TreeItem extends Prototype {
                 if (_indicator.isToggled()) {
                     _treeViewContainer.getWrapper(item).setVisible(true);
                     item.setVisible(true);
+                    item.onToggleHide(value);
                 }
             } else {
                 _treeViewContainer.getWrapper(item).setVisible(false);
                 item.setVisible(false);
+                item.onToggleHide(value);
             }
-            item.onToggleHide(value);
         }
         // update layout
         _treeViewContainer.updateElements();
