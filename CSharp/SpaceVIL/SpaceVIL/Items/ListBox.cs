@@ -200,6 +200,8 @@ namespace SpaceVIL
         private void OnKeyPress(IItem sender, KeyArgs args)
         {
             SelectionItem selection = _area.GetTrueSelection();
+            if (selection == null)
+                return;
             long offset = _area.GetVScrollOffset();
             int startY = _area.GetY() + GetPadding().Top;
             long selection_Y = selection.GetY() + selection.GetMargin().Top;
@@ -519,6 +521,11 @@ namespace SpaceVIL
             _area.RemoveAllItems();
             foreach (IBaseItem item in content)
                 AddItem(item);
+        }
+
+        public IBaseItem GetWrapper(IBaseItem item)
+        {
+            return GetArea()._mapContent[item];
         }
 
         /// <returns> selection item </returns>

@@ -597,6 +597,7 @@ namespace SpaceVIL.Decorations
             Style itemlist_style = GetListBoxStyle();
             itemlist_style.Background = Color.Transparent;
             itemlist_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+            style.AddInnerStyle("itemlist", itemlist_style);
 
             Style vsb_style = GetSimpleVerticalScrollBarStyle();
             vsb_style.Alignment = ItemAlignment.Right | ItemAlignment.Top;
@@ -612,17 +613,7 @@ namespace SpaceVIL.Decorations
             menu_style.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
             itemlist_style.AddInnerStyle("menu", menu_style);
 
-            style.AddInnerStyle("itemlist", itemlist_style);
-
-
             Style area_style = GetListAreaStyle();
-
-            Style substrate_style = area_style.GetInnerStyle("substrate");
-            substrate_style.Background = Color.FromArgb(255, 150, 150, 150);
-
-            Style hovercover_style = area_style.GetInnerStyle("hovercover");
-            hovercover_style.Background = Color.FromArgb(255, 150, 150, 150);
-
             style.AddInnerStyle("listarea", area_style);
 
             return style;
@@ -633,12 +624,13 @@ namespace SpaceVIL.Decorations
         {
             Style style = new Style();
             style.Background = Color.Transparent;
-            style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
+            style.Foreground = Color.FromArgb(70, 70, 70); ;
             style.Font = DefaultsService.GetDefaultFont();
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
             style.Height = 25;
             style.MinHeight = 10;
+            style.SetAlignment(ItemAlignment.Left | ItemAlignment.Top);
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(10, 0, 10, 0);
 
@@ -2006,10 +1998,13 @@ namespace SpaceVIL.Decorations
 
         public static Style GetSelectedItemStyle()
         {
-            Style style = GetFrameStyle();
+            Style style = new Style();
             style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            style.SetPadding(0, 1, 0, 1);
+            style.SetAlignment(ItemAlignment.Left, ItemAlignment.Top);
             style.SetBackground(0, 0, 0, 0);
-            style.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(255, 255, 255, 50)));
+            style.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(50, 255, 255, 255)));
+
             return style;
         }
     }

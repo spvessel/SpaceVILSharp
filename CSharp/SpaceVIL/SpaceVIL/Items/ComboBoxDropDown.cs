@@ -31,7 +31,7 @@ namespace SpaceVIL
             if (selection != null)
                 _text_selection = selection.GetText();
         }
-        private Queue<IBaseItem> _queue = new Queue<IBaseItem>();
+        private List<IBaseItem> _queue = new List<IBaseItem>();
 
         private static int count = 0;
         public MouseButton ActiveButton = MouseButton.ButtonLeft;
@@ -50,15 +50,6 @@ namespace SpaceVIL
         {
             _ouside = value;
         }
-        // private bool _lock_ouside = true;
-        // public bool IsLockOutside()
-        // {
-        //     return _lock_ouside;
-        // }
-        // public void SetLockOutside(bool value)
-        // {
-        //     _lock_ouside = value;
-        // }
 
         /// <summary>
         /// Constructs a ComboBoxDropDown
@@ -131,7 +122,7 @@ namespace SpaceVIL
         /// </summary>
         public override void AddItem(IBaseItem item)
         {
-            _queue.Enqueue(item);
+            _queue.Add(item);
         }
 
         /// <summary>
@@ -149,12 +140,13 @@ namespace SpaceVIL
             List<IBaseItem> list = ItemList.GetListContent();
             foreach (var item in list)
             {
-                height += (item.GetHeight() + ItemList.GetArea().GetSpacing().Vertical);
+                IBaseItem wrapper = ItemList.GetWrapper(item);
+                height += (wrapper.GetHeight() + ItemList.GetArea().GetSpacing().Vertical);
 
                 int tmp = GetPadding().Left + GetPadding().Right + item.GetMargin().Left + item.GetMargin().Right;
 
                 MenuItem m = item as MenuItem;
-                if (item != null)
+                if (m != null)
                 {
                     tmp += m.GetTextWidth() + m.GetMargin().Left + m.GetMargin().Right + m.GetPadding().Left + m.GetPadding().Right;
                 }
@@ -164,9 +156,8 @@ namespace SpaceVIL
                 if (width < tmp)
                     width = tmp;
             }
-            // SetSize(width, height);
             SetWidth(width);
-            SetHeight(height + 5);
+            SetHeight(height);
         }
 
         /// <summary>

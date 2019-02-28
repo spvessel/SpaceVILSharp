@@ -30,9 +30,14 @@ public class FlowTest extends ActiveWindow {
 
         TitleBar title = new TitleBar("FlowTest");
         Handler.addItem(title);
-        Handler.getWindow().eventKeyPress.add((sender, args) -> {
-            System.out.println(getHandler().getFocusedItem());
-        });
+        // Handler.getWindow().eventKeyPress.add((sender, args) -> {
+        //     // System.out.println(getHandler().getFocusedItem());
+        // });
+        // Handler.getWindow().eventKeyRelease.add((sender, args) -> {
+        //     if (args.key == KeyCode.SPACE) {
+        //         btn5.eventMouseClick.execute(btn5, new MouseArgs());
+        //     }
+        // });
 
         VerticalStack layout = new VerticalStack();
         layout.setAlignment(ItemAlignment.TOP, ItemAlignment.HCENTER);
@@ -159,12 +164,6 @@ public class FlowTest extends ActiveWindow {
         });
         btn5.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn5.setHoverRule(ItemRule.STRICT);
-
-        Handler.getWindow().eventKeyRelease.add((sender, args) -> {
-            if (args.key == KeyCode.SPACE) {
-                btn5.eventMouseClick.execute(btn5, new MouseArgs());
-            }
-        });
 
         // adding buttons
         toolbar.addItems(btn1, btn2, btn3, btn4, btn5);

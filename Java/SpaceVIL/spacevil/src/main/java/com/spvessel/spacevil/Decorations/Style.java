@@ -644,6 +644,7 @@ public class Style {
         Style itemlist_style = getListBoxStyle();
         itemlist_style.background = new Color(0, 0, 0, 0);
         itemlist_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.addInnerStyle("itemlist", itemlist_style);
 
         Style vsb_style = getSimpleVerticalScrollBarStyle();
         vsb_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.TOP);
@@ -659,16 +660,7 @@ public class Style {
         menu_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
         itemlist_style.addInnerStyle("menu", menu_style);
 
-        style.addInnerStyle("itemlist", itemlist_style);
-
         Style area_style = getListAreaStyle();
-
-        Style substrate_style = area_style.getInnerStyle("substrate");
-        substrate_style.background = new Color(150, 150, 150);
-
-        Style hovercover_style = area_style.getInnerStyle("hovercover");
-        hovercover_style.background = new Color(150, 150, 150);
-
         style.addInnerStyle("listarea", area_style);
 
         return style;
@@ -1193,7 +1185,7 @@ public class Style {
         hover_style.heightPolicy = SizePolicy.FIXED;
         style.addInnerStyle("hovercover", hover_style);
 
-        Style selected_style = getSelectedItemStyle();
+        Style selected_style = getSelectionItemStyle();
         style.addInnerStyle("selecteditem", selected_style);
 
         return style;
@@ -2057,11 +2049,13 @@ public class Style {
         return style;
     }
 
-    public static Style getSelectedItemStyle()
+    public static Style getSelectionItemStyle()
     {
-        Style style = getFrameStyle();
+        Style style = new Style();
         style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
         style.setBackground(0, 0, 0, 0);
+        style.setPadding(0, 1, 0, 1);
+        style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
         style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 50)));
         return style;
     }

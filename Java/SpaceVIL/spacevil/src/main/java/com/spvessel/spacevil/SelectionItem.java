@@ -1,36 +1,34 @@
 package com.spvessel.spacevil;
 
-import java.awt.Color;
 import java.util.List;
 
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceItem;
-import com.spvessel.spacevil.Decorations.ItemState;
-import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemStateType;
-import com.spvessel.spacevil.Flags.SizePolicy;
 
-class SelectionItem extends Prototype {
+public class SelectionItem extends Prototype {
     private static int count = 0;
     InterfaceBaseItem _item;
+    private boolean _visibility = true;
 
-    public SelectionItem(InterfaceBaseItem content) {
-        _item = content;
+    void setToggleVisibility(boolean visibility) {
+        _visibility = visibility;
+    }
+
+    private SelectionItem() {
         isFocusable = false;
         setItemName("SelectionItem_" + count);
         count++;
+        setStyle(DefaultsService.getDefaultStyle(SelectionItem.class));
+    }
 
-        setPadding(0, 1, 0, 1);
-        setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        setBackground(0, 0, 0, 0);
-        addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 50)));
+    public SelectionItem(InterfaceBaseItem content) {
+        this();
+        _item = content;
 
         eventMouseClick.add((sender, args) -> {
-            if (getContent() instanceof Prototype) {
-                ((Prototype) getContent()).setFocus();
-            }
-
-            if (isToggled())
+            if (isToggled() || !_visibility)
                 return;
             setToggled(true);
             uncheckOthers(sender);
@@ -48,7 +46,7 @@ class SelectionItem extends Prototype {
                 _item.getHeight() + _item.getMargin().bottom + _item.getMargin().top + 2);
         setMinSize(_item.getMinWidth() + _item.getMargin().left + _item.getMargin().right,
                 _item.getMinHeight() + _item.getMargin().bottom + _item.getMargin().top);
-        _item.setParent(getParent());
+        // _item.setParent(getParent());
     }
 
     // private for class
@@ -76,12 +74,5 @@ class SelectionItem extends Prototype {
                 ((SelectionItem) item).setToggled(false);
             }
         }
-    }
-
-    @Override
-    public void setStyle(Style style) {
-        if (style == null)
-            return;
-        super.setStyle(style);
     }
 }

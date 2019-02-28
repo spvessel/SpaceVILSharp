@@ -844,7 +844,7 @@ namespace SpaceVIL
         }
 
         //style
-        internal bool _is_style_Set = false;
+        // internal bool _is_style_Set = false;
         // public virtual void SetInnerStyle(String element, Style style)
         // {
 
@@ -854,7 +854,8 @@ namespace SpaceVIL
             if (style == null)
                 return;
 
-            _is_style_Set = true;
+            // _is_style_Set = true;
+            SetBackground(style.Background);
             SetSize(style.Width, style.Height);
             SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
             SetPadding(style.Padding);
@@ -867,7 +868,6 @@ namespace SpaceVIL
             SetMinSize(style.MinWidth, style.MinHeight);
             SetMaxSize(style.MaxWidth, style.MaxHeight);
 
-            SetBackground(style.Background);
             SetBorderRadius(style.BorderRadius);
             SetBorderThickness(style.BorderThickness);
             SetBorderFill(style.BorderFill);

@@ -144,12 +144,13 @@ namespace SpaceVIL
             List<IBaseItem> list = ItemList.GetListContent();
             foreach (var item in list)
             {
-                height += (item.GetHeight() + ItemList.GetArea().GetSpacing().Vertical);
+                IBaseItem wrapper = ItemList.GetWrapper(item);
+                height += (wrapper.GetHeight() + ItemList.GetArea().GetSpacing().Vertical);
 
                 int tmp = GetPadding().Left + GetPadding().Right + item.GetMargin().Left + item.GetMargin().Right;
 
                 MenuItem m = item as MenuItem;
-                if (item != null)
+                if (m != null)
                 {
                     tmp += m.GetTextWidth() + m.GetPadding().Left + m.GetPadding().Right;
                 }
