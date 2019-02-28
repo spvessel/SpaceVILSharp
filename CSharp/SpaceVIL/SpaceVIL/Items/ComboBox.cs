@@ -16,7 +16,7 @@ namespace SpaceVIL
         public ComboBoxDropDown DropDownArea;
         public EventCommonMethod SelectionChanged;
 
-        private Queue<MenuItem> preItemList;
+        private List<MenuItem> preItemList;
 
         /// <summary>
         /// Constructs a ComboBox
@@ -35,7 +35,7 @@ namespace SpaceVIL
 
         public ComboBox(params MenuItem[] items) : this()
         {
-            preItemList = new Queue<MenuItem>(items);
+            preItemList = new List<MenuItem>(items);
         }
 
         void OnKeyPress(object sender, KeyArgs args)
@@ -151,9 +151,7 @@ namespace SpaceVIL
         {
             //DropDownArea
             DropDownArea.SetPosition(GetX(), GetY() + GetHeight());
-
             DropDownArea.SetWidth(Selection.GetWidth());
-            // DropDownArea.SetHeight(100);
             MouseArgs args = new MouseArgs();
             args.Button = MouseButton.ButtonLeft;
             DropDownArea.Show(this, args);

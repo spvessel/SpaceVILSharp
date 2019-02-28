@@ -162,10 +162,10 @@ public class ImageTest extends ActiveWindow {
         frame.addItems(btn_action, combo, h_slider, pb);
         btn_action.addItem(img);
 
-        for (int i = 2; i < 5; i++) {
-            MenuItem menu_item = new MenuItem("Custom item for selection #" + i);
-            combo.addItem(menu_item);
-        }
+        // for (int i = 2; i < 5; i++) {
+        //     MenuItem menu_item = new MenuItem("Custom item for selection #" + i);
+        //     combo.addItem(menu_item);
+        // }
         // combo.setCurrentIndex(0);
     }
 

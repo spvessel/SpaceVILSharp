@@ -44,7 +44,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     private List<InterfaceBaseItem> _queue = new LinkedList<>();
 
     private static int count = 0;
-    public MouseButton activeButton = MouseButton.BUTTON_RIGHT;
+    public MouseButton activeButton = MouseButton.BUTTON_LEFT;
 
     private boolean _init = false;
     private boolean _ouside = true;
@@ -146,7 +146,8 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
         int width = getWidth();
         List<InterfaceBaseItem> list = itemList.getListContent();
         for (InterfaceBaseItem item : list) {
-            height += (item.getHeight() + itemList.getArea().getSpacing().vertical);
+            InterfaceBaseItem wrapper = itemList.getWrapper(item);
+            height += (wrapper.getHeight() + itemList.getArea().getSpacing().vertical);
 
             int tmp = getPadding().left + getPadding().right + item.getMargin().left + item.getMargin().right;
 
@@ -162,7 +163,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
         }
         // SetSize(width, height);
         setWidth(width);
-        setHeight(height + 5);
+        setHeight(height);
     }
 
     /**

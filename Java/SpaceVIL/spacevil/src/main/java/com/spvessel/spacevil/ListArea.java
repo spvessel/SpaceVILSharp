@@ -57,6 +57,8 @@ public class ListArea extends Prototype implements InterfaceVLayout {
      * Set selected item by index
      */
     public void setSelection(int index) {
+        if (!_isSelectionVisible)
+            return;
         _selection = index;
         _selectionItem = ((SelectionItem) getItems().get(index));
         _selectionItem.setToggled(true);
@@ -94,7 +96,11 @@ public class ListArea extends Prototype implements InterfaceVLayout {
      */
     public void setSelectionVisibility(boolean visibility) {
         _isSelectionVisible = visibility;
-        updateLayout();
+        if (!_isSelectionVisible)
+            unselect();
+        for (SelectionItem item : _mapContent.values()) {
+            item.setToggleVisibility(_isSelectionVisible);
+        }
     }
 
     public boolean getSelectionVisibility() {
@@ -115,7 +121,6 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         eventMouseDoubleClick.add(this::onMouseDoubleClick);
         eventMouseHover.add(this::onMouseHover);
         eventKeyPress.add(this::onKeyPress);
-        // setStyle(DefaultsService.getDefaultStyle(ListArea.class));
     }
 
     private void onMouseClick(InterfaceItem sender, MouseArgs args) {
@@ -179,6 +184,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     private SelectionItem getWrapper(InterfaceBaseItem item) {
         SelectionItem wrapper = new SelectionItem(item);
+        wrapper.setToggleVisibility(_isSelectionVisible);
         // wrapper.setStyle(_selectedStyle);
         wrapper.eventMouseClick.add((sender, args) -> {
             int index = 0;

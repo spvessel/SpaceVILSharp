@@ -168,7 +168,7 @@ public class ListBox extends Prototype {
             if (_area.getSelection() >= 0)
                 _area.setSelection(_area.getSelection());
             else
-            _area.setFocus();
+                _area.setFocus();
         });
         eventKeyPress.add(this::onKeyPress);
     }
@@ -183,6 +183,8 @@ public class ListBox extends Prototype {
 
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         SelectionItem selection = _area.getTrueSelection();
+        if (selection == null)
+            return;
         long offset = _area.getVScrollOffset();
         int startY = _area.getY() + getPadding().top;
         long selection_Y = selection.getY() + selection.getMargin().top;
@@ -484,6 +486,10 @@ public class ListBox extends Prototype {
      */
     public InterfaceBaseItem getSelectionItem() {
         return _area.getSelectionItem();
+    }
+
+    public InterfaceBaseItem getWrapper(InterfaceBaseItem item) {
+        return getArea()._mapContent.get(item);
     }
 
     /**

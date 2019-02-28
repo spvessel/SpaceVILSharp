@@ -36,15 +36,6 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         _ouside = value;
     }
 
-    // private boolean _lock_ouside = true;
-
-    // public boolean isLockOutside() {
-    // return _lock_ouside;
-    // }
-
-    // public void setLockOutside(boolean value) {
-    // _lock_ouside = true;
-    // }
     /**
      * Constructs a ContextMenu
      * 
@@ -162,7 +153,8 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         int width = getWidth();
         List<InterfaceBaseItem> list = itemList.getListContent();
         for (InterfaceBaseItem item : list) {
-            height += (item.getHeight() + itemList.getArea().getSpacing().vertical);
+            InterfaceBaseItem wrapper = itemList.getWrapper(item);
+            height += (wrapper.getHeight() + itemList.getArea().getSpacing().vertical);
 
             int tmp = getPadding().left + getPadding().right + item.getMargin().left + item.getMargin().right;
             if (item instanceof MenuItem) {

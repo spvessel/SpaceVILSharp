@@ -57,6 +57,7 @@ public class LayoutsTest extends ActiveWindow {
                 // System.out.println(listbox_left_1.getSelection() + " " + listbox_left_1.getSelectionItem().getItemName());
             }
         );
+        listbox_left_1.setSelectionVisibility(false);
         // listbox_left_1.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         listbox_left_1.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         grid.insertItem(listbox_left_1, 0, 0);
@@ -117,17 +118,18 @@ public class LayoutsTest extends ActiveWindow {
         all.setWidth(60);
         all.setHeight(25);
         InterfaceMouseMethodState all_click = (sender, args) -> {
-            RadioButton radio = new RadioButton();
-            // CheckBox radio = new CheckBox();
-            radio.setText("Another radio button for testing.");
-            radio.setHeight(20);
-            InterfaceMouseMethodState r_click = (s, a) -> {
-                int y_p = radio.getParent().getY();
-                int y_c = radio.getY();
-                System.out.println(radio.getItemName() + " " + y_p + " " + y_c);
-            };
-            radio.eventMouseClick.add(r_click);
-            listbox_left_1.addItem(radio);
+            listbox_left_1.setSelectionVisibility(!listbox_left_1.getSelectionVisibility());
+            // RadioButton radio = new RadioButton();
+            // // CheckBox radio = new CheckBox();
+            // radio.setText("Another radio button for testing.");
+            // radio.setHeight(20);
+            // InterfaceMouseMethodState r_click = (s, a) -> {
+            //     int y_p = radio.getParent().getY();
+            //     int y_c = radio.getY();
+            //     System.out.println(radio.getItemName() + " " + y_p + " " + y_c);
+            // };
+            // radio.eventMouseClick.add(r_click);
+            // listbox_left_1.addItem(radio);
         };
         all.eventMouseClick.add(all_click);
         frame.addItem(all);

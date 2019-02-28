@@ -57,6 +57,8 @@ namespace SpaceVIL
         /// </summary>
         public void SetSelection(int index)
         {
+            if (!_isSelectionVisible)
+                return;
             _selection = index;
             _selectionItem = GetItems().ElementAt(index) as SelectionItem;
             _selectionItem.SetToggled(true);
@@ -101,7 +103,12 @@ namespace SpaceVIL
         public void SetSelectionVisibility(bool visibility)
         {
             _isSelectionVisible = visibility;
-            UpdateLayout();
+            if (!_isSelectionVisible)
+                Unselect();
+            foreach (SelectionItem item in _mapContent.Values)
+            {
+                item.SetToggleVisibility(_isSelectionVisible);
+            }
         }
         public bool GetSelectionVisibility()
         {
@@ -186,6 +193,7 @@ namespace SpaceVIL
         private SelectionItem GetWrapper(IBaseItem item)
         {
             SelectionItem wrapper = new SelectionItem(item);
+            wrapper.SetToggleVisibility(_isSelectionVisible);
             // wrapper.setStyle(_selectedStyle);
             wrapper.EventMouseClick += (sender, args) =>
             {

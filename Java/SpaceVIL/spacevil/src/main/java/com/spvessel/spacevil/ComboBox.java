@@ -12,9 +12,7 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class ComboBox extends Prototype {
@@ -145,7 +143,6 @@ public class ComboBox extends Prototype {
 
         // dropDownArea
         dropDownArea = new ComboBoxDropDown(getHandler());
-        dropDownArea.activeButton = MouseButton.BUTTON_LEFT;
         dropDownArea.setOutsideClickClosable(true);
         dropDownArea.selectionChanged.add(() -> onSelectionChanged());
 
@@ -160,7 +157,6 @@ public class ComboBox extends Prototype {
 
         // dropDownArea
         dropDownArea.setPosition(getX(), getY() + getHeight());
-        dropDownArea.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         dropDownArea.setWidth(selection.getWidth());
         MouseArgs args = new MouseArgs();
         args.button = MouseButton.BUTTON_LEFT;

@@ -7,26 +7,31 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    class SelectionItem : Prototype
+    public class SelectionItem : Prototype
     {
         private static int count = 0;
         IBaseItem _item;
+        private bool _visibility = true;
 
-        public SelectionItem(IBaseItem content)
+        internal void SetToggleVisibility(bool visibility)
         {
-            _item = content;
+            _visibility = visibility;
+        }
+
+        private SelectionItem()
+        {
             IsFocusable = false;
             SetItemName("SelectionItem_" + count);
             count++;
-
-            SetPadding(0, 1, 0, 1);
-            SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-            SetBackground(0, 0, 0, 0);
-            AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(50, 255, 255, 255)));
-
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SelectionItem)));
+        }
+        public SelectionItem(IBaseItem content) : this()
+        {
+            _item = content;
             EventMouseClick += (sender, args) =>
             {
-                if (IsToggled())
+                Console.WriteLine("Visibility: "+_visibility);
+                if (IsToggled() || !_visibility)
                     return;
                 SetToggled(true);
                 UncheckOthers(sender);
@@ -45,7 +50,7 @@ namespace SpaceVIL
                     _item.GetHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top + 2);
             SetMinSize(_item.GetMinWidth() + _item.GetMargin().Left + _item.GetMargin().Right,
                     _item.GetMinHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top);
-            _item.SetParent(GetParent());
+            // _item.SetParent(GetParent());
         }
 
         // private for class
@@ -74,17 +79,11 @@ namespace SpaceVIL
             foreach (IBaseItem item in items)
             {
                 SelectionItem tmp = item as SelectionItem;
-                if (tmp != null && !tmp.Equals(this)) {
+                if (tmp != null && !tmp.Equals(this))
+                {
                     tmp.SetToggled(false);
                 }
             }
-        }
-
-        public override void SetStyle(Style style)
-        {
-            if (style == null)
-                return;
-            base.SetStyle(style);
         }
     }
 }
