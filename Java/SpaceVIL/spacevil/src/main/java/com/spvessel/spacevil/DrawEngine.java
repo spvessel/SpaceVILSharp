@@ -953,6 +953,7 @@ final class DrawEngine {
         }
     }
 
+    //hovered
     private void assignActions(InputEventType action, InputEventArgs args, Boolean only_last) {
         if (only_last && !hoveredItem.isDisabled()) {
             EventTask task = new EventTask();
@@ -961,8 +962,7 @@ final class DrawEngine {
             task.args = args;
             _handler.getLayout().setEventTask(task);
         } else {
-            Deque<Prototype> tmp;
-            tmp = new ArrayDeque<>(hoveredItems);
+            Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
             while (!tmp.isEmpty()) {
                 Prototype item = tmp.pollLast();
                 if (item.equals(hoveredItem) && hoveredItem.isDisabled())
@@ -980,6 +980,7 @@ final class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
+    //focused
     private void assignActions(InputEventType action, InputEventArgs args, Prototype sender, boolean is_pass_under) {
         if (sender.isDisabled())
             return;
@@ -990,7 +991,7 @@ final class DrawEngine {
         task.args = args;
         _handler.getLayout().setEventTask(task);
 
-        if (is_pass_under) {
+        if (is_pass_under && sender.isPassEvents(action)) {
             if (underFocusedItem != null) {
                 Deque<Prototype> tmp = new ArrayDeque<Prototype>(underFocusedItem);
                 while (tmp.size() != 0) {

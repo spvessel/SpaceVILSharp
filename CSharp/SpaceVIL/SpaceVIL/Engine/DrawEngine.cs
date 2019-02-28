@@ -66,7 +66,7 @@ namespace SpaceVIL
         }
         private void FindUnderFocusedItems(Prototype item)
         {
-            List<Prototype> queue = new List<Prototype>();
+            Stack<Prototype> queue = new Stack<Prototype>();
 
             if (item == _handler.GetLayout().GetWindow())
             {
@@ -77,7 +77,7 @@ namespace SpaceVIL
 
             while (parent != null)
             {
-                queue.Add(parent);
+                queue.Push(parent);
                 parent = parent.GetParent();
             }
             UnderFocusedItem = new List<Prototype>(queue);
@@ -721,6 +721,7 @@ namespace SpaceVIL
                             }
                         }
                         UnderFocusedItem = new List<Prototype>(HoveredItems);
+                        // UnderFocusedItem.Reverse();
                         UnderFocusedItem.Remove(FocusedItem);
                         if (is_double_click)
                             if (FocusedItem != null)
@@ -979,14 +980,14 @@ namespace SpaceVIL
                 Args = args
             });
 
-            if (is_pass_under)
+            if (is_pass_under && sender.IsPassEvents(action))
             {
                 if (UnderFocusedItem != null)
                 {
-                    Queue<Prototype> tmp = new Queue<Prototype>(UnderFocusedItem);
+                    Stack<Prototype> tmp = new Stack<Prototype>(UnderFocusedItem);
                     while (tmp.Count != 0)
                     {
-                        Prototype item = tmp.Dequeue();
+                        Prototype item = tmp.Pop();
                         if (item.Equals(FocusedItem) && FocusedItem.IsDisabled())
                             continue;//пропустить
 

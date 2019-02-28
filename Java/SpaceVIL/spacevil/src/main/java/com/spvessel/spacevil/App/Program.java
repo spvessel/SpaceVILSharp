@@ -14,16 +14,15 @@ public class Program {
         FlowTest ft = new FlowTest();
         LayoutsTest lt = new LayoutsTest();
         ComplexTest ct = new ComplexTest();
-
         InputTest it = new InputTest();
         TextTest tt = new TextTest();
 
+        EventTest et = new EventTest();
+        et.show();
 
-//        ScissorsTest sc = new ScissorsTest();
-//        sc.show();
+        // ScissorsTest sc = new ScissorsTest();
+        // sc.show();
 
-          WindowLayoutBox.tryShow("MainWindow");
-    //    ft.show();
-
+        // mw.show();
     }
 }

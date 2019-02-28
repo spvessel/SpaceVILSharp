@@ -667,6 +667,12 @@ namespace SpaceVIL
         {
             _core.SetPassEvents(value, e);
         }
+        /// <param name="value"> passed or non passed </param>
+        /// <param name="e"> InputEventType </param>
+        public void SetPassEvents(bool value, params InputEventType[] e)
+        {
+            _core.SetPassEvents(value, e);
+        }
 
         /// <summary>
         /// Is Prototype disabled

@@ -510,6 +510,14 @@ namespace SpaceVIL
             }
         }
 
+        internal void SetPassEvents(bool value,params InputEventType[] e)
+        {
+            foreach (var item in e)
+            {
+                SetPassEvents(value, item);
+            }
+        }
+
         private bool _disabled;
 
         public bool IsDisabled()
