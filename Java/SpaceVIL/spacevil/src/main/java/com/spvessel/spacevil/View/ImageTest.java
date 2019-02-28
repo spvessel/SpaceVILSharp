@@ -59,6 +59,8 @@ public class ImageTest extends ActiveWindow {
         ProgressBar pb = new ProgressBar();
         pb.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
         pb.setMargin(25, 0, 25, 0);
+        pb.setCurrentValue(50);
+        // pb.setValueVisibility(false);
 
         ButtonCore btn_action = new ButtonCore();
         btn_action.setBackground(100, 255, 150);
@@ -164,7 +166,7 @@ public class ImageTest extends ActiveWindow {
             MenuItem menu_item = new MenuItem("Custom item for selection #" + i);
             combo.addItem(menu_item);
         }
-        combo.setCurrentIndex(0);
+        // combo.setCurrentIndex(0);
     }
 
     private static BufferedImage MakeShade(BufferedImage image, int dep) {

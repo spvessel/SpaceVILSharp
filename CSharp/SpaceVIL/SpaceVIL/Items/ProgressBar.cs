@@ -14,6 +14,15 @@ namespace SpaceVIL
     {
         static int count = 0;
         private TextLine _text_object;
+        public void SetValueVisibility(bool visibility)
+        {
+            _text_object.SetVisible(visibility);
+        }
+        public bool IsValueVisible()
+        {
+            return _text_object.IsVisible();
+        }
+
         private Rectangle _rect;
         private int _maxValue = 100;
         private int _minValue = 0;
