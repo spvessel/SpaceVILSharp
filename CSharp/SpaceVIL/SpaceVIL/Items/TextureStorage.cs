@@ -24,7 +24,7 @@ namespace SpaceVIL
 
         internal Object textInputLock = new Object();
 
-        static int count = 0;
+        private static int count = 0;
         internal TextureStorage() : base(name: "TextureStorage_" + count)
         {
             _linesList = new List<TextLine>();
@@ -648,14 +648,14 @@ namespace SpaceVIL
                     tpLines.Add(tmp);
                     h += lineHeigh;//tmp.HeightTexture;
                     w = (w > tl.GetWidth()) ? w : tl.GetWidth();
-                    if (_screenScale != 1)
-                    {
-                        int bw = 0;
-                        if (tmp != null)
-                            bw = tmp.WidthTexture;
-                        bigWidth = (bigWidth > bw) ? bigWidth : bw;
-                    }
                     if (tmp == null) continue;
+                    //if (_screenScale != 1)
+                    //{
+                    //    int bw = 0;
+                    //    if (tmp != null)
+                        int bw = tmp.WidthTexture;
+                        bigWidth = (bigWidth > bw) ? bigWidth : bw;
+                    //}
                     //w = (w > tmp.WidthTexture) ? w : tmp.WidthTexture;
                     visibleHeight += lineHeigh;
                     if (startNumb == -1)
@@ -664,10 +664,10 @@ namespace SpaceVIL
                 //w += _cursorXMax / 3;
                 SetWidth(w);
                 SetHeight((int)((float)h / _screenScale));
-                if (_screenScale != 1)
-                {
+                //if (_screenScale != 1)
+                //{
                     w = bigWidth;
-                }
+                //}
 
                 byte[] bigByte = new byte[visibleHeight * w * 4]; //h
                 int bigOff = 0;

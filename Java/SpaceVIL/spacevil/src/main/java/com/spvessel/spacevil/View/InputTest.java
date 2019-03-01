@@ -1,8 +1,6 @@
 package com.spvessel.spacevil.View;
 
-import com.spvessel.spacevil.Flags.HorizontalDirection;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.Label;
@@ -14,7 +12,7 @@ import java.awt.*;
 public class InputTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 700, 500, true);
+        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 700, 550, true);
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
         setHandler(Handler);
 
@@ -92,7 +90,7 @@ public class InputTest extends ActiveWindow {
 
         Label tl = new Label();
         layout.addItem(tl);
-        tl.setText("qwertyuiopasdfghjklzxcvbnm1234567890");
+        tl.setText("1qwertyuiopasdfghjklzxcvbnm1234567890");
         tl.setFontSize(17);
         tl.setForeground(Color.WHITE);
         tl.setTextAlignment(ItemAlignment.RIGHT);

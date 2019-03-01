@@ -14,6 +14,7 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import org.lwjgl.BufferUtils;
 
 final class TextureStorage extends Primitive implements InterfaceTextContainer {
+    private static int count = 0;
     private List<TextLine> _linesList;
     private List<ItemAlignment> _blockAlignment = new LinkedList<>(
             Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
@@ -30,6 +31,8 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     Lock textInputLock = new ReentrantLock();
 
     TextureStorage() {
+        super("TextureStorage_" + count);
+
         _linesList = new LinkedList<>();
         TextLine te = new TextLine();
         te.setRecountable(true);
@@ -583,32 +586,32 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
                 tpLines.add(tmp);
                 h += lineHeigh;// tmp.HeightTexture;
                 w = (w > tl.getWidth()) ? w : tl.getWidth();
-                if (_screenScale != 1) {
-                    int bw = 0;
-                    if (tmp != null)
-                        bw = tmp.widthTexture;
-                    bigWidth = (bigWidth > bw) ? bigWidth : bw;
-                }
                 if (tmp == null) {
 //                    if (startNumb > -1 && endNumb == -1)
 //                        endNumb = inc;
                     continue;
                 }
+//                if (_screenScale != 1) {
+//                    int bw = 0;
+//                    if (tmp != null)
+                    int bw = tmp.widthTexture;
+                    bigWidth = (bigWidth > bw) ? bigWidth : bw;
+//                }
+
                 //w = (w > tmp.widthTexture) ? w : tmp.widthTexture;
                 visibleHeight += lineHeigh;
                 if (startNumb == -1)
                     startNumb = inc;
             }
             //w += _cursorXMax / 3;
-//            System.out.println(w);
             setWidth(w);
             setHeight((int)((float)h / _screenScale));
-            if (_screenScale != 1) {
+
+//            if (_screenScale != 1) {
                 // setWidth((int)(bigWidth * 1f / _screenScale));
                 w = bigWidth;
-            }
+//            }
 
-//            System.out.println(startNumb + " " + endNumb);
             ByteBuffer bigByte = BufferUtils.createByteBuffer(visibleHeight * w * 4); //h
             int bigOff = 0;
 
@@ -651,7 +654,6 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             TextPrinter tpout = new TextPrinter(bigByte);
             tpout.widthTexture = w;
             tpout.heightTexture = visibleHeight; //h;
-            // System.out.println(w + " " + getWidth() + " " + bigByte.capacity());
 
             tpout.xTextureShift = getParent().getPadding().left + getTextMargin().left + getParent().getX() + cursorWidth;
             tpout.yTextureShift = getParent().getPadding().top + getTextMargin().top + getParent().getY();
@@ -666,11 +668,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 //                tpout.xTextureShift = getParent().getPadding().left + getTextMargin().left + getParent().getX();//tpLines.get(0).xTextureShift;
 //                tpout.yTextureShift = getParent().getPadding().top + getTextMargin().top + getParent().getY(); //tpLines.get(0).yTextureShift;
 //            }
-//            System.out.println("LineXShift " + _linesList.get(0).getLineXShift());
 
             if (startNumb > -1)
                 tpout.yTextureShift += _linesList.get(startNumb).getLineYShift();
-
+            
             return tpout;
         } finally {
             textInputLock.unlock();
