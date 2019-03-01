@@ -27,6 +27,7 @@ namespace SpaceVIL
         private ButtonCore _btnRename;
         private ButtonCore _btnRefresh;
         private ButtonCore _btnFilter;
+        private ButtonCore _btnUpward;
         private Label _filterText;
         private ButtonToggle _btnShowHidden;
         private TextEdit _addressLine;
@@ -67,6 +68,7 @@ namespace SpaceVIL
             _btnRename = new ButtonCore();
             _btnRefresh = new ButtonCore();
             _btnFilter = new ButtonCore();
+            _btnUpward = new ButtonCore();
             _filterText = new Label();
             _btnShowHidden = new ButtonToggle();
             _addressLine = new TextEdit(userHomePath);
@@ -126,7 +128,7 @@ namespace SpaceVIL
             Window.AddItems(_layout);
             _layout.AddItems(_toolbar, _addressLine, _fileList, _fileName, _controlPanel);
             _toolbar.AddItems(_btnBackward, GetDivider(), _btnHome, _btnUser, GetDivider(), _btnCreate, _btnRename,
-                    GetDivider(), _btnRefresh, GetDivider(), _btnShowHidden, GetDivider(), _btnFilter, _filterText);
+                    GetDivider(), _btnRefresh, GetDivider(), _btnShowHidden, GetDivider(), _btnFilter, _filterText, _btnUpward);
             _btnBackward.AddItem(backward);
             _btnHome.AddItem(home);
             _btnUser.AddItem(user);
@@ -136,10 +138,12 @@ namespace SpaceVIL
             _btnShowHidden.AddItem(hidden);
             _btnFilter.AddItem(filter);
             _controlPanel.AddItems(_btnOpen, _btnCancel);
+            _btnUpward.SetText("|");
 
             _fileList.SetHScrollBarVisible(ScrollBarVisibility.AsNeeded);
             _fileList.SetVScrollBarVisible(ScrollBarVisibility.AsNeeded);
             _btnBackward.EventMouseClick += (sender, args) => { PathBackward(); };
+            _btnUpward.EventMouseClick += (sender, args) => { PathUpward(); };
             _btnHome.EventMouseClick += (sender, args) =>
             {
                 _addressLine.SetText(AppDomain.CurrentDomain.BaseDirectory);
@@ -290,6 +294,44 @@ namespace SpaceVIL
                 _addressLine.SetText(_filesTrack.First());
                 RefreshFolder();
             }
+        }
+
+        private void PathUpward()
+        {
+            String name = _addressLine.GetText();
+            int ind = name.LastIndexOf("\\");
+            int firstInd = name.IndexOf("\\");
+            if (name.EndsWith("\\"))
+            {
+                if (ind <= 1 || name.Substring(ind - 1, 1).Equals(":"))
+                    return;
+                name = name.Substring(0, name.Length - 1);
+                ind = name.LastIndexOf("\\");
+            }
+
+            if (ind == firstInd)
+            {
+                if (ind == -1)
+                { //No such index
+                    if (name.Contains("./"))
+                    {
+                        ind = name.IndexOf("/") + 1;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else if (name.Substring(ind - 1, 1).Equals(":"))
+                {
+                    ind = ind + 1;
+                }
+            }
+
+            name = name.Substring(0, ind);
+            _addressLine.SetText(name);
+            _filesTrack.Push(name);
+            RefreshFolder();
         }
 
         private void SetAddressLine(FileSystemEntry fse)

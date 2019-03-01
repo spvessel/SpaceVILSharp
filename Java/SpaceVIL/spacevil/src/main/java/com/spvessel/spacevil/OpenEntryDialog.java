@@ -285,18 +285,32 @@ public class OpenEntryDialog extends OpenDialog {
 
     private void pathUpward() {
         String name = _addressLine.getText();
-        if (name.endsWith("\\")) {
-            name = name.substring(name.length() - 2);
-        }
-        
         int ind = name.lastIndexOf("\\");
         int firstInd = name.indexOf("\\");
-        if (ind != firstInd) {
-            name = name.substring(0, ind);
-            _addressLine.setText(name);
-            _filesTrack.push(name);
-            refreshFolder();
+        if (name.endsWith("\\")) {
+            if (ind <= 1 || name.substring(ind - 1, ind).equals(":"))
+                return;
+            name = name.substring(0, name.length() - 1);
+            System.out.println(name);
+            ind = name.lastIndexOf("\\");
         }
+
+        if (ind == firstInd) {
+            if (ind == -1) { //No such index
+                if (name.contains("./")) {
+                    ind = name.indexOf("/") + 1;
+                } else {
+                    return;
+                }
+            } else if (name.substring(ind - 1, ind).equals(":")) {
+                ind = ind + 1;
+            }
+        }
+
+        name = name.substring(0, ind);
+        _addressLine.setText(name);
+        _filesTrack.push(name);
+        refreshFolder();
     }
 
     private void setAddressLine(FileSystemEntry fse) {

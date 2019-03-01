@@ -671,7 +671,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
             if (startNumb > -1)
                 tpout.yTextureShift += _linesList.get(startNumb).getLineYShift();
-            
+
             return tpout;
         } finally {
             textInputLock.unlock();
