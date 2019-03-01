@@ -97,6 +97,8 @@ public final class DefaultsService {
         addImage(stream, images_32, EmbeddedImage.DRIVE);
         stream = DefaultFont.class.getResourceAsStream("/images/filter32.png");
         addImage(stream, images_32, EmbeddedImage.FILTER);
+        stream = DefaultFont.class.getResourceAsStream("/images/arrowup32.png");
+        addImage(stream, images_32, EmbeddedImage.ARROW_UP);
 
         //////////////////64
         stream = DefaultFont.class.getResourceAsStream("/images/add64.png");
@@ -137,6 +139,8 @@ public final class DefaultsService {
         addImage(stream, images_64, EmbeddedImage.DRIVE);
         stream = DefaultFont.class.getResourceAsStream("/images/filter64.png");
         addImage(stream, images_64, EmbeddedImage.FILTER);
+        stream = DefaultFont.class.getResourceAsStream("/images/arrowup64.png");
+        addImage(stream, images_64, EmbeddedImage.ARROW_UP);
     }
 
     static void addImage(InputStream stream, Map<EmbeddedImage, BufferedImage> map, EmbeddedImage key) {

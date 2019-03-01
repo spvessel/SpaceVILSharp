@@ -214,6 +214,8 @@ namespace SpaceVIL.Common
             AddImage(stream, images_32, EmbeddedImage.Add);
             stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.arrowleft32.png"));
             AddImage(stream, images_32, EmbeddedImage.ArrowLeft);
+            stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.arrowup32.png"));
+            AddImage(stream, images_32, EmbeddedImage.ArrowUp);
             stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.eye32.png"));
             AddImage(stream, images_32, EmbeddedImage.Eye);
             stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.file32.png"));
@@ -254,6 +256,8 @@ namespace SpaceVIL.Common
             AddImage(stream, images_64, EmbeddedImage.Add);
             stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.arrowleft64.png"));
             AddImage(stream, images_64, EmbeddedImage.ArrowLeft);
+            stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.arrowup64.png"));
+            AddImage(stream, images_64, EmbeddedImage.ArrowUp);
             stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.eye64.png"));
             AddImage(stream, images_64, EmbeddedImage.Eye);
             stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.file64.png"));

@@ -363,7 +363,7 @@ namespace SpaceVIL.Core
 
     public enum EmbeddedImage
     {
-        Add, ArrowLeft, Eye, File, Folder, FolderPlus, Gear, Import, Lines, Loupe, RecycleBin, Refresh, Pencil, Diskette,
+        Add, ArrowLeft, ArrowUp, Eye, File, Folder, FolderPlus, Gear, Import, Lines, Loupe, RecycleBin, Refresh, Pencil, Diskette,
         Eraser, Home, User, Drive, Filter
     }
     public enum EmbeddedImageSize
