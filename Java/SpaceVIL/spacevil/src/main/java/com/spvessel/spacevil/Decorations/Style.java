@@ -1972,13 +1972,11 @@ public class Style {
         cancelbutton_style.borderRadius = new CornerRadius();
         style.addInnerStyle("cancelbutton", cancelbutton_style);
 
-        Style filter_style = getButtonToggleStyle();
+        Style filter_style = getButtonCoreStyle();
         filter_style.setSize(24, 30);
-        filter_style.borderRadius = new CornerRadius();
         filter_style.setBackground(35, 35, 35);
         filter_style.setPadding(4, 6, 4, 6);
         filter_style.setMargin(5, 0, 0, 0);
-        filter_style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(30, 153, 91)));
         style.addInnerStyle("filter", filter_style);
 
         Style filtertext_style = getLabelStyle();

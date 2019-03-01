@@ -33,6 +33,7 @@ public class OpenEntryDialog extends OpenDialog {
     private ButtonCore _btnRename;
     private ButtonCore _btnRefresh;
     private ButtonCore _btnFilter;
+    private ButtonCore _btnUpward;
     private Label _filterText;
     private ButtonToggle _btnShowHidden;
     private TextEdit _addressLine;
@@ -74,6 +75,7 @@ public class OpenEntryDialog extends OpenDialog {
         _btnRename = new ButtonCore();
         _btnRefresh = new ButtonCore();
         _btnFilter = new ButtonCore();
+        _btnUpward = new ButtonCore();
         _filterText = new Label();
         _btnShowHidden = new ButtonToggle();
         _addressLine = new TextEdit(System.getProperty("user.home"));
@@ -135,7 +137,7 @@ public class OpenEntryDialog extends OpenDialog {
         window.addItems(_layout);
         _layout.addItems(_toolbar, _addressLine, _fileList, _fileName, _controlPanel);
         _toolbar.addItems(_btnBackward, getDivider(), _btnHome, _btnUser, getDivider(), _btnCreate, _btnRename,
-                getDivider(), _btnRefresh, getDivider(), _btnShowHidden, getDivider(), _btnFilter, _filterText);
+                getDivider(), _btnRefresh, getDivider(), _btnShowHidden, getDivider(), _btnFilter, _filterText, _btnUpward);
         _btnBackward.addItem(backward);
         _btnHome.addItem(home);
         _btnUser.addItem(user);
@@ -145,10 +147,12 @@ public class OpenEntryDialog extends OpenDialog {
         _btnShowHidden.addItem(hidden);
         _btnFilter.addItem(filter);
         _controlPanel.addItems(_btnOpen, _btnCancel);
+        _btnUpward.setText("|");
 
         _fileList.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         _fileList.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         _btnBackward.eventMouseClick.add((sender, args) -> pathBackward());
+        _btnUpward.eventMouseClick.add((sender, args) -> pathUpward());
         _btnHome.eventMouseClick.add((sender, args) -> {
             _addressLine.setText(System.getProperty("user.dir"));
             refreshFolder();
@@ -275,6 +279,22 @@ public class OpenEntryDialog extends OpenDialog {
         if (_filesTrack.size() > 1) {
             _filesTrack.pop();
             _addressLine.setText(_filesTrack.getFirst());
+            refreshFolder();
+        }
+    }
+
+    private void pathUpward() {
+        String name = _addressLine.getText();
+        if (name.endsWith("\\")) {
+            name = name.substring(name.length() - 2);
+        }
+        
+        int ind = name.lastIndexOf("\\");
+        int firstInd = name.indexOf("\\");
+        if (ind != firstInd) {
+            name = name.substring(0, ind);
+            _addressLine.setText(name);
+            _filesTrack.push(name);
             refreshFolder();
         }
     }

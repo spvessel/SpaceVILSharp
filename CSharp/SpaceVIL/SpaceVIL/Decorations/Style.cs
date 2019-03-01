@@ -1918,13 +1918,12 @@ namespace SpaceVIL.Decorations
             cancelbutton_style.BorderRadius = new CornerRadius();
             style.AddInnerStyle("cancelbutton", cancelbutton_style);
 
-            Style filter_style = GetButtonToggleStyle();
+            Style filter_style = GetButtonCoreStyle();
             filter_style.SetSize(24, 30);
             filter_style.BorderRadius = new CornerRadius();
             filter_style.SetBackground(35, 35, 35);
             filter_style.SetPadding(4, 6, 4, 6);
             filter_style.SetMargin(5, 0, 0, 0);
-            filter_style.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(30, 153, 91)));
             style.AddInnerStyle("filter", filter_style);
 
             Style filtertext_style = GetLabelStyle();
