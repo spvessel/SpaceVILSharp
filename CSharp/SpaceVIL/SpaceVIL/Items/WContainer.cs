@@ -5,8 +5,12 @@ using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
+    public delegate void EventWindowDropMethod(IItem sender, DropArgs args);
+
     public class WContainer : Prototype//, IWindow
     {
+        public EventWindowDropMethod EventDrop;
+
         static int count = 0;
         internal ItemAlignment _sides = 0;
         internal bool _is_fixed = false;
@@ -17,6 +21,14 @@ namespace SpaceVIL
             SetItemName("WContainer_" + count);
             count++;
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.WContainer)));
+
+            EventDrop += (sender, args) =>
+            {
+                foreach (String path in args.Paths)
+                {
+                    Console.WriteLine(path);
+                }
+            };
         }
 
         internal void SaveLastFocus(Prototype focused)

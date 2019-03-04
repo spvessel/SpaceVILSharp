@@ -37,6 +37,7 @@ namespace SpaceVIL
         Glfw.WindowFocusFunc WindowFocusCallback;
         Glfw.FramebufferSizeFunc FramebufferCallback;
         Glfw.WindowRefreshFunc WindowRefreshCallback;
+        Glfw.DropFunc DropCallback;
         ///////////////////////////////////////////////
 
         internal bool BorderHidden;
@@ -152,6 +153,7 @@ namespace SpaceVIL
             ResizeCallback = null;
             FramebufferCallback = null;
             WindowRefreshCallback = null;
+            DropCallback = null;
         }
 
         internal void SetCursorType(Glfw.CursorType type)
@@ -252,6 +254,11 @@ namespace SpaceVIL
         {
             WindowRefreshCallback = function;
             Glfw.SetWindowRefreshCallback(_window, WindowRefreshCallback);
+        }
+        internal void SetCallbackDrop(Glfw.DropFunc function)
+        {
+            DropCallback = function;
+            Glfw.SetDropCallback(_window, DropCallback);
         }
 
         internal void SetOpacity(float level)

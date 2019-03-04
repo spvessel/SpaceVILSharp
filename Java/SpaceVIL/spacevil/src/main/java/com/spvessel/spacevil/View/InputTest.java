@@ -8,6 +8,8 @@ import com.spvessel.spacevil.TextArea;
 import com.spvessel.spacevil.*;
 
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class InputTest extends ActiveWindow {
     @Override
@@ -21,15 +23,15 @@ public class InputTest extends ActiveWindow {
         Handler.setPadding(2, 2, 2, 2);
 
         TitleBar title = new TitleBar("Input Test");
-//        title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
-//        title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
+        // title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
+        // title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
         Handler.addItem(title);
 
         VerticalStack layout = new VerticalStack();
         ///////////////////////////////////////////////////////////////////////
         layout.setHeight(100);
-//        layout.setHeightPolicy(SizePolicy.FIXED);
-//        layout.setAlignment(ItemAlignment.BOTTOM);
+        // layout.setHeightPolicy(SizePolicy.FIXED);
+        // layout.setAlignment(ItemAlignment.BOTTOM);
         ///////////////////////////////////////////////////////////////////////
 
         layout.setMargin(0, 30, 0, 30);
@@ -72,15 +74,21 @@ public class InputTest extends ActiveWindow {
         ButtonCore bc = new ButtonCore("pizdec");
         bc.setSize(150, 30);
         bc.eventMouseClick.add((sender, args) -> {
-//            String s = "    qwerty\n// tb.setTextMargin(new Indents(50, 30, 30, 30));// tb.setTextMargin(new Indents(50, 30, 30, 30));";
-//            String text = ""; // tb.getText();
-//            // s = tb.getText();
-//            tb.setText(text + s);
-//            System.out.println((s.toCharArray()[0] == " ".charAt(0)) + " " + s.toCharArray()[0]);
-//            System.out.println((s.toCharArray()[1] == " ".charAt(0)) + " " + s.toCharArray()[1]);
-//            System.out.println((s.toCharArray()[2] == " ".charAt(0)) + " " + s.toCharArray()[2]);
-//            System.out.println((s.toCharArray()[3] == " ".charAt(0)) + " " + s.toCharArray()[3]);
-//            System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " + s.toCharArray()[4]);
+            // String s = " qwerty\n// tb.setTextMargin(new Indents(50, 30, 30, 30));//
+            // tb.setTextMargin(new Indents(50, 30, 30, 30));";
+            // String text = ""; // tb.getText();
+            // // s = tb.getText();
+            // tb.setText(text + s);
+            // System.out.println((s.toCharArray()[0] == " ".charAt(0)) + " " +
+            // s.toCharArray()[0]);
+            // System.out.println((s.toCharArray()[1] == " ".charAt(0)) + " " +
+            // s.toCharArray()[1]);
+            // System.out.println((s.toCharArray()[2] == " ".charAt(0)) + " " +
+            // s.toCharArray()[2]);
+            // System.out.println((s.toCharArray()[3] == " ".charAt(0)) + " " +
+            // s.toCharArray()[3]);
+            // System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " +
+            // s.toCharArray()[4]);
             tb.appendText("12345678");
         });
 
@@ -94,5 +102,25 @@ public class InputTest extends ActiveWindow {
         tl.setFontSize(17);
         tl.setForeground(Color.WHITE);
         tl.setTextAlignment(ItemAlignment.RIGHT);
+
+        Handler.getWindow().eventDrop.add((sender, args) -> {
+            if (args.count > 0) {
+                System.out.println(args.item.getItemName());
+                String line = null;
+                String FilePath = args.paths.get(0);
+                StringBuilder sb = new StringBuilder();
+                try {
+                    FileReader fileReader = new FileReader(FilePath);
+                    BufferedReader bufferedReader = new BufferedReader(fileReader);
+                    while ((line = bufferedReader.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    bufferedReader.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                tb.setText(sb.toString());
+            }
+        });
     }
 }

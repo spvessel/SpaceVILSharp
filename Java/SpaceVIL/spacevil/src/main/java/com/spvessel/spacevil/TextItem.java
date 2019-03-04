@@ -41,11 +41,11 @@ abstract class TextItem extends Primitive {
         setItemName(name);
     }
 
-    protected void setRealCoords(List<Float> realCoords) {
+    void setRealCoords(List<Float> realCoords) {
         _coordinates = toGL(realCoords);
     }
 
-    protected void setAlphas(List<Float> alphas) {
+    void setAlphas(List<Float> alphas) {
         _alphas = alphas;
         //setColor(alphas);
     }

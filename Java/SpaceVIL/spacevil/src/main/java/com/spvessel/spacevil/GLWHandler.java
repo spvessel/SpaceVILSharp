@@ -41,6 +41,7 @@ final class GLWHandler {
     private GLFWWindowFocusCallback windowFocusCallback;
     private GLFWFramebufferSizeCallback framebufferCallback;
     private GLFWWindowRefreshCallback windowRefreshCallback;
+    private GLFWDropCallback dropCallback;
     ///////////////////////////////////////////////
 
     Boolean borderHidden;
@@ -60,7 +61,7 @@ final class GLWHandler {
 
     private WindowLayout _w_layout;
 
-    protected WindowLayout getLayout() {
+    WindowLayout getLayout() {
         return _w_layout;
     }
 
@@ -173,6 +174,7 @@ final class GLWHandler {
         resizeCallback = null;
         framebufferCallback = null;
         windowRefreshCallback = null;
+        dropCallback = null;
     }
 
     void setCursorType(int type) {
@@ -271,6 +273,11 @@ final class GLWHandler {
     void setCallbackRefresh(GLFWWindowRefreshCallback function) {
         windowRefreshCallback = function;
         glfwSetWindowRefreshCallback(_window, windowRefreshCallback);
+    }
+
+    void setCallbackDrop(GLFWDropCallback function) {
+        dropCallback = function;
+        glfwSetDropCallback(_window, dropCallback);
     }
 
     void setHidden(Boolean value) {

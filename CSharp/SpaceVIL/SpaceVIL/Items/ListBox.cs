@@ -174,9 +174,6 @@ namespace SpaceVIL
             HScrollBar.SetDrawable(true);
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
 
-            //Area
-            _area.SetItemName(GetItemName() + "_" + _area.GetItemName());
-
             //events
             EventMouseClick += (sender, args) =>
             {

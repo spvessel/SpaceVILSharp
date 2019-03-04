@@ -678,24 +678,24 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         }
     }
 
-    protected int getScrollStep() {
+    int getScrollStep() {
         return getLineY(1);
     }
 
-    protected int getScrollYOffset() {
+    int getScrollYOffset() {
         return globalYShift;
     }
 
-    protected void setScrollYOffset(int offset) {
+    void setScrollYOffset(int offset) {
         globalYShift = offset;
         updLinesYShift();
     }
 
-    protected int getScrollXOffset() {
+    int getScrollXOffset() {
         return globalXShift;
     }
 
-    protected void setScrollXOffset(int offset) {
+     void setScrollXOffset(int offset) {
         globalXShift = offset;
         updLinesXShift();
     }

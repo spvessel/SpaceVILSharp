@@ -6,6 +6,9 @@ import java.util.*;
 import java.io.BufferedReader;
 import java.io.*;
 import java.nio.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 import com.spvessel.spacevil.Common.*;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Flags.*;
@@ -13,6 +16,8 @@ import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
+
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -71,7 +76,7 @@ final class DrawEngine {
         underFocusedItem.remove(focusedItem);
     }
 
-    protected void resetFocus() {
+     void resetFocus() {
         if (focusedItem != null)
             focusedItem.setFocused(false);
         // set focus to WContainer
@@ -81,7 +86,7 @@ final class DrawEngine {
             underFocusedItem.clear();
     }
 
-    protected void resetItems() {
+     void resetItems() {
         resetFocus();
 
         if (hoveredItem != null)
@@ -122,11 +127,11 @@ final class DrawEngine {
     private BufferedImage _iconSmall;
     private BufferedImage _iconBig;
 
-    protected void setBigIcon(BufferedImage icon) {
+     void setBigIcon(BufferedImage icon) {
         _iconBig = icon;
     }
 
-    protected void setSmallIcon(BufferedImage icon) {
+     void setSmallIcon(BufferedImage icon) {
         _iconSmall = icon;
     }
 
@@ -151,7 +156,7 @@ final class DrawEngine {
         return result;
     }
 
-    protected void applyIcon() {
+     void applyIcon() {
         GLFWImage.Buffer gb = GLFWImage.malloc(2);
         GLFWImage s = GLFWImage.malloc();
         s.set(_iconSmall.getWidth(), _iconSmall.getHeight(), createByteImage(_iconSmall));
@@ -183,7 +188,7 @@ final class DrawEngine {
         return result.toString();
     }
 
-    protected void init() {
+     void init() {
         CommonService.GlobalLocker.lock();
         try {
             // InitWindow
@@ -312,7 +317,39 @@ final class DrawEngine {
                 refresh(window);
             }
         });
+        _handler.setCallbackDrop(new GLFWDropCallback() {
+            @Override
+            public void invoke(long window, int count, long paths) {
+                drop(window, count, paths);
+            }
+        });
     }
+
+    private void drop(long window, int count, long paths) {
+        DropArgs dargs = new DropArgs();
+        dargs.count = count;
+        dargs.paths = new LinkedList<>();
+        dargs.item = hoveredItem;
+        
+        for (int i = 0; i < count; i++) {
+            String str = GLFWDropCallback.getName(paths, i);
+            dargs.paths.add(str);
+        }
+        assignActions(InputEventType.WINDOW_DROP, dargs, _handler.getLayout().getWindow(), false);
+    }
+
+    // public static void printBytes(byte[] array, String name) {
+    //     for (int k = 0; k < array.length; k++) {
+    //         System.out.println(name + "[" + k + "] = " + "0x" + byteToHex(array[k]));
+    //     }
+    // }
+    
+    // static public String byteToHex(byte b) {
+    //     // Returns hex String representation of byte b
+    //     char hexDigit[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    //     char[] array = { hexDigit[(b >> 4) & 0x0f], hexDigit[b & 0x0f] };
+    //     return new String(array);
+    // }
 
     private void refresh(long window) {
         update();
@@ -1016,7 +1053,7 @@ final class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
-    protected float _interval = 1.0f / 30.0f;// 1000 / 60;
+     float _interval = 1.0f / 30.0f;// 1000 / 60;
     // internal float _interval = 1.0f / 60.0f;//1000 / 60;
     // internal int _interval = 11;//1000 / 90;
     // internal int _interval = 08;//1000 / 120;
@@ -1071,7 +1108,7 @@ final class DrawEngine {
         _handler.destroy();
     }
 
-    protected void update() {
+     void update() {
         render();
         _bounds.clear();
     }

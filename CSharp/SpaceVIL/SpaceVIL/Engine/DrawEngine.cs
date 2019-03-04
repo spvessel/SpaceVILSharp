@@ -271,6 +271,16 @@ namespace SpaceVIL
             _handler.SetCallbackResize(Resize);
             _handler.SetCallbackFramebuffer(Framebuffer);
             _handler.SetCallbackRefresh(Refresh);
+            _handler.SetCallbackDrop(Drop);
+        }
+
+        private void Drop(Glfw.Window glfwwnd, int count, string[] paths)
+        {
+            DropArgs dargs = new DropArgs();
+            dargs.Count = count;
+            dargs.Paths = new List<String>(paths);
+            dargs.Item = HoveredItem;
+            AssignActions(InputEventType.WindowDrop, dargs, _handler.GetLayout().GetWindow(), false);
         }
 
         private void Refresh(Glfw.Window glfwwnd)

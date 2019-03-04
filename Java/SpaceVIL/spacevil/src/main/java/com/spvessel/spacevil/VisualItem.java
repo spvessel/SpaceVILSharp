@@ -79,7 +79,7 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    protected void setPosition(int _x, int _y) {
+    void setPosition(int _x, int _y) {
         this.setX(_x);
         this.setY(_y);
     }
@@ -347,7 +347,7 @@ final class VisualItem extends BaseItem {
             ((BaseItem) item).removeItemFromListeners();
     }
 
-    protected void addItem(InterfaceBaseItem item) {
+    void addItem(InterfaceBaseItem item) {
         locker.lock();
         try {
             if (item.equals(this)) {
@@ -423,7 +423,7 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    protected void removeItem(InterfaceBaseItem item) {
+    void removeItem(InterfaceBaseItem item) {
         locker.lock();
         try {
             getHandler().resetItems();
