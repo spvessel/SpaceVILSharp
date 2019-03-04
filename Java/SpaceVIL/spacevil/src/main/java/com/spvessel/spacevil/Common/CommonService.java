@@ -6,6 +6,8 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import com.spvessel.spacevil.Flags.OSType;
 
+import org.lwjgl.glfw.GLFWVidMode;
+
 public final class CommonService {
 
     private CommonService() {
@@ -68,6 +70,9 @@ public final class CommonService {
         cursorResizeH = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
         cursorResizeV = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
         cursorResizeAll = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
+
+        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        DisplayService.SetDisplaySize(vidmode.width(), vidmode.height());
 
         DefaultsService.initImages();
 

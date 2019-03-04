@@ -33,9 +33,9 @@ public class EventTest extends ActiveWindow {
         blank.eventKeyRelease.add((sender, args) -> {
             System.out.println(blank.getItemName() + " EventKeyRelease");
         });
-        blank.eventMouseHover.add((sender, args) -> {
-            System.out.println(blank.getItemName() + " EventMouseHover");
-        });
+        // blank.eventMouseHover.add((sender, args) -> {
+        //     System.out.println(blank.getItemName() + " EventMouseHover");
+        // });
         return blank;
     }
 
@@ -65,7 +65,8 @@ public class EventTest extends ActiveWindow {
 
         b3.setFocus();
 
-        // b2.setPassEvents(false);
+        b3.setPassEvents(false);
+        b2.setPassEvents(false);
         // b2.setPassEvents(true, InputEventType.KEY_PRESS, InputEventType.KEY_RELEASE);
 
         Handler.getWindow().eventMouseClick.add((sender, args) -> {
@@ -80,8 +81,8 @@ public class EventTest extends ActiveWindow {
         Handler.getWindow().eventKeyRelease.add((sender, args) -> {
             System.out.println(Handler.getWindow().getItemName() + " EventKeyRelease");
         });
-        Handler.getWindow().eventMouseHover.add((sender, args) -> {
-            System.out.println(Handler.getWindow().getItemName() + " EventMouseHover");
-        });
+        // Handler.getWindow().eventMouseHover.add((sender, args) -> {
+        //     System.out.println(Handler.getWindow().getItemName() + " EventMouseHover");
+        // });
     }
 }

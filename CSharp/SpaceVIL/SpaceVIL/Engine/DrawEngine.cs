@@ -590,19 +590,30 @@ namespace SpaceVIL
             }
         }
 
-        internal Stopwatch _double_click_timer = new Stopwatch();
-        internal bool _double_click_happen = false;
-        private bool IsDoubleClick()
+        private Stopwatch _double_click_timer = new Stopwatch();
+        private bool _double_click_happen = false;
+        private Prototype _dcItem = null;
+        private bool IsDoubleClick(Prototype item)
         {
             if (_double_click_timer.IsRunning)
             {
                 _double_click_timer.Stop();
-                if (_double_click_timer.ElapsedMilliseconds < 500)
+                if (_double_click_timer.ElapsedMilliseconds < 500 && _dcItem.Equals(item))
+                {
+                    _double_click_happen = true;
                     return true;
-                else _double_click_timer.Restart();
+                }
+                else
+                {
+                    _dcItem = item;
+                    _double_click_happen = false;
+                    _double_click_timer.Restart();
+                }
             }
             else
             {
+                _dcItem = item;
+                _double_click_happen = false;
                 _double_click_timer.Restart();
             }
             return false;
@@ -671,14 +682,15 @@ namespace SpaceVIL
                     if (HoveredItem != null)
                     {
                         HoveredItem.SetMousePressed(false);
-                        AssignActions(InputEventType.MouseRelease, _margs, false);
+                        if (!_double_click_happen)
+                            AssignActions(InputEventType.MouseRelease, _margs, false);
                     }
                     EngineEvent.ResetAllEvents();
                     EngineEvent.SetEvent(InputEventType.MouseRelease);
                     break;
 
                 case InputState.Press:
-                    bool is_double_click = IsDoubleClick();
+                    bool is_double_click = IsDoubleClick(HoveredItem);
 
                     Glfw.GetFramebufferSize(_handler.GetWindowId(), out w_global, out h_global);
                     x_global = _handler.GetPointer().GetX();

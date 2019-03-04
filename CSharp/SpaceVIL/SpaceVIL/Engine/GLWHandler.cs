@@ -21,6 +21,7 @@ namespace SpaceVIL
             // _scaleWidth = w;
             // _scaleHeight = h;
             // Console.WriteLine(String.Format("{0:0.0} {1:0.0}", w, h));
+            DisplayService.SetDisplayDpiScale(w);
             _w_layout.SetDpiScale(w, h);
         }
 

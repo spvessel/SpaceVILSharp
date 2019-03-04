@@ -610,18 +610,21 @@ final class DrawEngine {
     private long _start_time = 0; // System.nanoTime();
     // long _estimated_ime = 0; // System.nanoTime() - startTime;
     private boolean _first_click = false;
+    private Prototype _dcItem = null;
     // boolean _second_click = false;
 
-    private boolean isDoubleClick() {
+    private boolean isDoubleClick(Prototype item) {
         if (_first_click) {
-            if ((System.nanoTime() - _start_time) / 1000000 < 500) {
+            if ((System.nanoTime() - _start_time) / 1000000 < 500 && _dcItem.equals(item)) {
                 _first_click = false;
                 _start_time = 0;
                 return true;
             } else {
+                _dcItem = item;
                 _start_time = System.nanoTime();
             }
         } else {
+            _dcItem = item;
             _first_click = true;
             _start_time = System.nanoTime();
         }
@@ -689,14 +692,15 @@ final class DrawEngine {
 
             if (hoveredItem != null) {
                 hoveredItem.setMousePressed(false);
-                assignActions(InputEventType.MOUSE_RELEASE, _margs, false);
+                if (_first_click)
+                    assignActions(InputEventType.MOUSE_RELEASE, _margs, false);
             }
             engineEvent.resetAllEvents();
             engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
             break;
 
         case GLFW_PRESS:
-            boolean is_double_click = isDoubleClick();
+            boolean is_double_click = isDoubleClick(hoveredItem);
 
             try (MemoryStack stack = MemoryStack.stackPush()) {
                 IntBuffer width = stack.mallocInt(1);
@@ -953,7 +957,7 @@ final class DrawEngine {
         }
     }
 
-    //hovered
+    // hovered
     private void assignActions(InputEventType action, InputEventArgs args, Boolean only_last) {
         if (only_last && !hoveredItem.isDisabled()) {
             EventTask task = new EventTask();
@@ -980,7 +984,7 @@ final class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
-    //focused
+    // focused
     private void assignActions(InputEventType action, InputEventArgs args, Prototype sender, boolean is_pass_under) {
         if (sender.isDisabled())
             return;

@@ -69,7 +69,8 @@ namespace View
 
             b3.SetFocus();
             
-            // b2.SetPassEvents(false);
+            b3.SetPassEvents(false);
+            b2.SetPassEvents(false);
             // b2.SetPassEvents(true, InputEventType.KeyPress, InputEventType.KeyRelease);
 
             Handler.GetWindow().EventMouseClick += (sender, args) =>

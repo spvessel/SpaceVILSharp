@@ -1,6 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.CommonService;
+import com.spvessel.spacevil.Common.DisplayService;
 import com.spvessel.spacevil.Core.Pointer;
 import com.spvessel.spacevil.Exceptions.SpaceVILException;
 
@@ -24,6 +25,7 @@ final class GLWHandler {
         // _scaleWidth = w * 2;
         // _scaleHeight = h * 2;
         // System.out.println(w + " " + h);
+        DisplayService.SetDisplayDpiScale(w);
         _w_layout.setDpiScale(w, h);
     }
 
