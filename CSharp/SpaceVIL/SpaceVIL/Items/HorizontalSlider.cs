@@ -160,16 +160,6 @@ namespace SpaceVIL
             UpdateHandler();
         }
 
-//        public void InvokeScrollUp(MouseArgs args)
-//        {
-//            (GetParent() as IScrollable)?.InvokeScrollUp(args);
-//        }
-//
-//        public void InvokeScrollDown(MouseArgs args)
-//        {
-//            (GetParent() as IScrollable)?.InvokeScrollDown(args);
-//        }
-
         /// <summary>
         /// Set style of the HorizontalSlider
         /// </summary>

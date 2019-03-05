@@ -50,6 +50,10 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.CheckBox)));
         }
+        public CheckBox(String text) : this()
+        {
+            SetText(text);
+        }
 
         void OnKeyPress(object sender, KeyArgs args)
         {

@@ -52,6 +52,10 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.RadioButton)));
         }
+        public RadioButton(String text) : this()
+        {
+            SetText(text);
+        }
 
         void OnKeyPress(object sender, KeyArgs args)
         {

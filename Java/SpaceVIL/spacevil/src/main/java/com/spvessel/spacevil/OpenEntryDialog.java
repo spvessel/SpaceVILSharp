@@ -346,7 +346,7 @@ public class OpenEntryDialog extends OpenDialog {
         _fileList.getArea().removeAllItems();
     }
 
-    private Map<String, String> _extensionFilter = new LinkedHashMap<>();
+    private Map<String, String[]> _extensionFilter = new LinkedHashMap<>();
 
     // "All files (*.*);*.*"
     public void addFilterExtensions(String... exts) {
@@ -355,9 +355,9 @@ public class OpenEntryDialog extends OpenDialog {
             String key = line[0];
             String regex = line[1].toLowerCase().replaceAll("[!*]", "");
             if (_extensionFilter.containsKey(key))
-                _extensionFilter.replace(key, regex);
+                _extensionFilter.replace(key, regex.split(","));
             else
-                _extensionFilter.put(key, regex);
+                _extensionFilter.put(key, regex.split(","));
         }
     }
 
@@ -365,10 +365,10 @@ public class OpenEntryDialog extends OpenDialog {
         if (_extensionFilter.size() == 0)
             return false;
         String name = f.getName().toLowerCase();
-        if (name.endsWith(_extensionFilter.get(_filterText.getText()))
-                || _extensionFilter.get(_filterText.getText()).equals("."))
-            return false;
-
+        for (String item : _extensionFilter.get(_filterText.getText())) {
+            if (name.endsWith(item) || item.equals("."))
+                return false;
+        }
         return true;
     }
 
@@ -379,7 +379,7 @@ public class OpenEntryDialog extends OpenDialog {
 
     private void fillFilterList() {
         _filterList.clear();
-        for (Map.Entry<String, String> entry : _extensionFilter.entrySet()) {
+        for (Map.Entry<String, String[]> entry : _extensionFilter.entrySet()) {
             _filterList.addItem(getFilterMenuItem(entry.getKey()));
         }
         _filterText.setText(_extensionFilter.entrySet().iterator().next().getKey());

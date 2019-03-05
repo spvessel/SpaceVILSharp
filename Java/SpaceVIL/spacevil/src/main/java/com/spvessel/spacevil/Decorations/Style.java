@@ -61,6 +61,7 @@ public class Style {
         isVisible = true;
         maxWidth = 65535;
         maxHeight = 65535;
+        setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
     }
 
     /**

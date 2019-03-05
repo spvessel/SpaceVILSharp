@@ -54,6 +54,7 @@ namespace SpaceVIL.Decorations
             IsVisible = true;
             MaxWidth = Int16.MaxValue;
             MaxHeight = Int16.MaxValue;
+            Alignment = ItemAlignment.Top | ItemAlignment.Left;
         }
 
         /// <summary>
@@ -945,6 +946,7 @@ namespace SpaceVIL.Decorations
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
             style.Height = 25;
+            style.SetAlignment(ItemAlignment.Top, ItemAlignment.Left);
 
             Style track_style = new Style();
             track_style.WidthPolicy = SizePolicy.Expand;

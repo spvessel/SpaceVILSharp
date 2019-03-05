@@ -156,7 +156,7 @@ public class FlowTest extends ActiveWindow {
             // msg.show(Handler);
 
             OpenEntryDialog opd = new OpenEntryDialog("Save File:", FileSystemEntryType.FILE, OpenDialogType.OPEN);
-            // opd.addFilterExtensions("Text files (*.txt);*.txt");
+            opd.addFilterExtensions("Text files (*.txt);*.txt", "Images (*.png, *.bmp, *.jpg);*.png,*.bmp,*.jpg");
             opd.onCloseDialog.add(() -> {
                 System.out.println(opd.getResult());
             });
