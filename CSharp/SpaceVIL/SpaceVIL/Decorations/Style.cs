@@ -34,11 +34,7 @@ namespace SpaceVIL.Decorations
         public ItemAlignment TextAlignment;
         public int X;
         public int Y;
-        //private Lazy<Dictionary<ItemStateType, ItemState>> _item_states = new Lazy<Dictionary<ItemStateType, ItemState>>(() => new Dictionary<ItemStateType, ItemState>());
         private Dictionary<ItemStateType, ItemState> _item_states = new Dictionary<ItemStateType, ItemState>();
-        // public Lazy<Padding> Padding = new Lazy<Padding>(() => new Padding());
-        // public Lazy<Spacing> Spacing = new Lazy<Spacing>(() => new Spacing());
-        // public Lazy<Margin> Margin = new Lazy<Margin>(() => new Margin());
         public Indents Padding;// = new Indents();
         public Spacing Spacing;// = new Spacing();
         public Indents Margin;// = new Indents();
@@ -58,22 +54,6 @@ namespace SpaceVIL.Decorations
             IsVisible = true;
             MaxWidth = Int16.MaxValue;
             MaxHeight = Int16.MaxValue;
-            // Background = Color.White;
-            // Foreground = Color.FromArgb(255, 70, 70, 70);;
-            //Font = new Font(new FontFamily("Courier New"), 14, FontStyle.Regular);
-            // WidthPolicy = SizePolicy.Fixed;
-            // HeightPolicy = SizePolicy.Fixed;
-            // Width = 30;
-            // Height = 30;
-            // MinHeight = 0;
-            // MinWidth = 0;
-            // MaxWidth = 7680;
-            // MaxHeight = 4320;
-            // Alignment = ItemAlignment.Left | ItemAlignment.Top;
-            // X = 0;
-            // Y = 0;
-            // BorderRadius = 0;
-            // BorderThickness = 0;
         }
 
         /// <summary>
@@ -82,10 +62,7 @@ namespace SpaceVIL.Decorations
         public void SetStyle(params IBaseItem[] items)
         {
             foreach (IBaseItem item in items)
-            {
-                // Console.WriteLine("Set style for " + item.GetItemName());
                 item.SetStyle(this);
-            }
         }
 
         /// <summary>
@@ -405,6 +382,25 @@ namespace SpaceVIL.Decorations
             }
         }
 
+        public Style GetDefaultCommonStyle()
+        {
+            Style style = new Style();
+
+            style.Background = Color.White;
+            style.Foreground = Color.Black;
+            style.Font = DefaultsService.GetDefaultFont();
+            style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            style.SetSize(30, 30);
+            style.SetAlignment(ItemAlignment.Left, ItemAlignment.Top);
+            style.SetTextAlignment(ItemAlignment.Left, ItemAlignment.Top);
+            style.SetPadding(0,0,0,0);
+            style.SetMargin(0,0,0,0);
+            style.SetSpacing(0,0);
+            style.SetBorder(new Border(Color.Transparent, new CornerRadius(), 0));
+
+            return style;
+        }
+
         /// <returns> default style for ButtonCore objects </returns>
         public static Style GetButtonCoreStyle()
         {
@@ -666,13 +662,6 @@ namespace SpaceVIL.Decorations
 
             Style area_style = GetListAreaStyle();
             area_style.SetPadding(0, 0, 0, 0);
-
-            Style substrate_style = area_style.GetInnerStyle("substrate");
-            substrate_style.Background = Color.FromArgb(255, 150, 150, 150);
-
-            Style hovercover_style = area_style.GetInnerStyle("hovercover");
-            hovercover_style.Background = Color.FromArgb(255, 150, 150, 150);
-
             style.AddInnerStyle("listarea", area_style);
 
             return style;
@@ -1103,24 +1092,6 @@ namespace SpaceVIL.Decorations
             style.Padding = new Indents(2, 2, 2, 2);
             style.Spacing = new Spacing(0, 5);
 
-            Style substrate_style = new Style();
-            // substrate_style.Background = Color.FromArgb(255, 39, 150, 216);
-            substrate_style.Background = Color.FromArgb(255, 100, 100, 100);
-            substrate_style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
-            substrate_style.WidthPolicy = SizePolicy.Expand;
-            substrate_style.HeightPolicy = SizePolicy.Fixed;
-            style.AddInnerStyle("substrate", substrate_style);
-
-            Style hover_style = new Style();
-            hover_style.Background = Color.FromArgb(30, 255, 255, 255);
-            hover_style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
-            hover_style.WidthPolicy = SizePolicy.Expand;
-            hover_style.HeightPolicy = SizePolicy.Fixed;
-            style.AddInnerStyle("hovercover", hover_style);
-
-            Style selected_style = GetSelectedItemStyle();
-            style.AddInnerStyle("selecteditem", selected_style);
-
             return style;
         }
 
@@ -1147,6 +1118,9 @@ namespace SpaceVIL.Decorations
             menu_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             menu_style.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
             style.AddInnerStyle("menu", menu_style);
+
+            Style area_style = GetListAreaStyle();
+            style.AddInnerStyle("area", area_style);
 
             return style;
         }
@@ -2003,6 +1977,40 @@ namespace SpaceVIL.Decorations
             style.SetAlignment(ItemAlignment.Left, ItemAlignment.Top);
             style.SetBackground(0, 0, 0, 0);
             style.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(50, 255, 255, 255)));
+            return style;
+        }
+        public static Style GetWrapAreaStyle()
+        {
+            Style style = new Style();
+
+            style.Background = Color.Transparent;
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Expand;
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            style.Padding = new Indents(2, 2, 2, 2);
+            style.Spacing = new Spacing(0, 5);
+
+            return style;
+        }
+        public static Style GetWrapGridStyle()
+        {
+            Style style = new Style();
+
+            style.Background = Color.FromArgb(255, 70, 70, 70);
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Expand;
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+
+            Style vsb_style = GetVerticalScrollBarStyle();
+            vsb_style.Alignment = ItemAlignment.Right | ItemAlignment.Top;
+            style.AddInnerStyle("vscrollbar", vsb_style);
+
+            Style hsb_style = GetHorizontalScrollBarStyle();
+            hsb_style.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
+            style.AddInnerStyle("hscrollbar", hsb_style);
+
+            Style area_style = GetWrapAreaStyle();
+            style.AddInnerStyle("area", area_style);
 
             return style;
         }

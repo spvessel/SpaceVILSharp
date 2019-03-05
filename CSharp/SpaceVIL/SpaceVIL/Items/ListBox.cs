@@ -265,6 +265,8 @@ namespace SpaceVIL
         {
             int total_invisible_size = 0;
             int visible_area = _area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom;
+            if (visible_area < 0)
+                visible_area = 0;
             foreach (var item in _area.GetItems())
             {
                 if (!item.IsVisible())
@@ -316,6 +318,8 @@ namespace SpaceVIL
         {
             int max_size = 0;
             int visible_area = _area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right;
+            if (visible_area < 0)
+                visible_area = 0;
             foreach (var item in _area.GetItems())
             {
                 if (!item.IsVisible())
@@ -556,7 +560,11 @@ namespace SpaceVIL
             {
                 Menu.SetStyle(inner_style);
             }
-            _area.SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListArea)));
+            inner_style = style.GetInnerStyle("area");
+            if (inner_style != null)
+            {
+                _area.SetStyle(inner_style);
+            }
         }
     }
 }

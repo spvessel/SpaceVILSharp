@@ -395,7 +395,6 @@ namespace SpaceVIL
 
                 if (GetParent() != null && GetHeightPolicy() == SizePolicy.Fixed)
                 {
-                    // Console.WriteLine(GetParent());
                     var layout = GetParent() as IVLayout;
                     var grid = GetParent() as IGrid;
 

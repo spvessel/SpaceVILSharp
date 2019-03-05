@@ -150,7 +150,11 @@ namespace SpaceVIL
         }
         private void InvokeMouseDoubleClickEvent(Prototype sender, MouseArgs args)
         {
-            sender.EventMouseDoubleClick?.Invoke(sender, args);
+            if (sender.EventMouseDoubleClick == null
+                || sender.EventMouseDoubleClick.GetInvocationList().Length == 0)
+                InvokeMouseClickEvent(sender, args);
+            else
+                sender.EventMouseDoubleClick?.Invoke(sender, args);
         }
         private void InvokeMouseDragEvent(Prototype sender, MouseArgs args)
         {

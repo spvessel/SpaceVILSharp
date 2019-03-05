@@ -116,8 +116,6 @@ namespace SpaceVIL
             return _isSelectionVisible;
         }
 
-        List<int> _list_of_visible_items = new List<int>();
-
         static int count = 0;
 
         /// <summary>
@@ -131,7 +129,6 @@ namespace SpaceVIL
             EventMouseDoubleClick += OnMouseDoubleClick;
             EventMouseHover += OnMouseHover;
             EventKeyPress += OnKeyPress;
-            // SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListArea)));
         }
 
         void OnMouseClick(IItem sender, MouseArgs args) { }
@@ -219,6 +216,7 @@ namespace SpaceVIL
         {
             SelectionItem wrapper = GetWrapper(item);
             base.InsertItem(wrapper, index);
+            wrapper.UpdateSizes();
             _mapContent.Add(item, wrapper);
             UpdateLayout();
         }
@@ -232,6 +230,7 @@ namespace SpaceVIL
         {
             SelectionItem wrapper = GetWrapper(item);
             base.AddItem(wrapper);
+            wrapper.UpdateSizes();
             _mapContent.Add(item, wrapper);
             UpdateLayout();
         }
@@ -313,21 +312,22 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
+        private bool _isUpdating = false;
         /// <summary>
         /// Update all children and ListArea sizes and positions
         /// according to confines
         /// </summary>
         public void UpdateLayout()
         {
-            _list_of_visible_items.Clear();
+            if (GetItems().Count == 0 || _isUpdating)
+                return;
+            _isUpdating = true;
 
             Int64 offset = (-1) * GetVScrollOffset();
             int startY = GetY() + GetPadding().Top;
-            int index = -1;
             int child_X = (-1) * (int)_xOffset + GetX() + GetPadding().Left;
             foreach (var child in base.GetItems())
             {
-                index++;
                 if (!child.IsVisible())
                     continue;
 
@@ -335,64 +335,31 @@ namespace SpaceVIL
 
                 Int64 child_Y = startY + offset + child.GetMargin().Top;
                 offset += child.GetHeight() + GetSpacing().Vertical;
+                child.SetY((int)child_Y);
+                child.SetConfines();
 
                 //top checking
                 if (child_Y < startY)
                 {
-                    child.SetY((int)child_Y);
                     if (child_Y + child.GetHeight() <= startY)
-                    {
                         child.SetDrawable(false);
-                    }
                     else
-                    {
                         child.SetDrawable(true);
-                        _list_of_visible_items.Add(index);
-                    }
-                    child.SetConfines();
                     continue;
                 }
 
                 //bottom checking
                 if (child_Y + child.GetHeight() + child.GetMargin().Bottom > GetY() + GetHeight() - GetPadding().Bottom)
                 {
-                    child.SetY((int)child_Y);
                     if (child_Y >= GetY() + GetHeight() - GetPadding().Bottom)
-                    {
                         child.SetDrawable(false);
-                    }
                     else
-                    {
                         child.SetDrawable(true);
-                        _list_of_visible_items.Add(index);
-                    }
-                    child.SetConfines();
                     continue;
                 }
-                child.SetY((int)child_Y);
                 child.SetDrawable(true);
-                _list_of_visible_items.Add(index);
-
-                //refactor
-                child.SetConfines();
             }
-        }
-
-        /// <summary>
-        /// Set style of the ListArea
-        /// </summary>
-        //style
-        public override void SetStyle(Style style)
-        {
-            if (style == null)
-                return;
-            base.SetStyle(style);
-
-            Style inner_style = style.GetInnerStyle("selecteditem");
-            if (inner_style != null)
-            {
-                _selectedStyle = inner_style;
-            }
+            _isUpdating = false;
         }
     }
 }

@@ -163,9 +163,11 @@ public class Grid extends Prototype implements InterfaceGrid {
      * Insert item to the Grid by row and column number
      */
     public void insertItem(InterfaceBaseItem item, int row, int column) {
+        if (row == _row_count || column == _column_count)
+            return;
         super.addItem(item);
         // _cells[row + column * _row_count].setItem(item);
-        // Console.WriteLine(column + row * _column_count);
+        // System.out.println((column + row * _column_count) + " " + _cells.size());
         _cells.get(column + row * _column_count).setItem(item);
         updateLayout();
     }
@@ -219,8 +221,7 @@ public class Grid extends Prototype implements InterfaceGrid {
     }
 
     /**
-     * Update all children and grid sizes and positions
-     * according to confines
+     * Update all children and grid sizes and positions according to confines
      */
     // update Layout
     public void updateLayout() {

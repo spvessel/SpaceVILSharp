@@ -76,7 +76,7 @@ final class DrawEngine {
         underFocusedItem.remove(focusedItem);
     }
 
-     void resetFocus() {
+    void resetFocus() {
         if (focusedItem != null)
             focusedItem.setFocused(false);
         // set focus to WContainer
@@ -86,7 +86,7 @@ final class DrawEngine {
             underFocusedItem.clear();
     }
 
-     void resetItems() {
+    void resetItems() {
         resetFocus();
 
         if (hoveredItem != null)
@@ -127,11 +127,11 @@ final class DrawEngine {
     private BufferedImage _iconSmall;
     private BufferedImage _iconBig;
 
-     void setBigIcon(BufferedImage icon) {
+    void setBigIcon(BufferedImage icon) {
         _iconBig = icon;
     }
 
-     void setSmallIcon(BufferedImage icon) {
+    void setSmallIcon(BufferedImage icon) {
         _iconSmall = icon;
     }
 
@@ -156,7 +156,7 @@ final class DrawEngine {
         return result;
     }
 
-     void applyIcon() {
+    void applyIcon() {
         GLFWImage.Buffer gb = GLFWImage.malloc(2);
         GLFWImage s = GLFWImage.malloc();
         s.set(_iconSmall.getWidth(), _iconSmall.getHeight(), createByteImage(_iconSmall));
@@ -188,7 +188,7 @@ final class DrawEngine {
         return result.toString();
     }
 
-     void init() {
+    void init() {
         CommonService.GlobalLocker.lock();
         try {
             // InitWindow
@@ -330,7 +330,7 @@ final class DrawEngine {
         dargs.count = count;
         dargs.paths = new LinkedList<>();
         dargs.item = hoveredItem;
-        
+
         for (int i = 0; i < count; i++) {
             String str = GLFWDropCallback.getName(paths, i);
             dargs.paths.add(str);
@@ -339,16 +339,17 @@ final class DrawEngine {
     }
 
     // public static void printBytes(byte[] array, String name) {
-    //     for (int k = 0; k < array.length; k++) {
-    //         System.out.println(name + "[" + k + "] = " + "0x" + byteToHex(array[k]));
-    //     }
+    // for (int k = 0; k < array.length; k++) {
+    // System.out.println(name + "[" + k + "] = " + "0x" + byteToHex(array[k]));
     // }
-    
+    // }
+
     // static public String byteToHex(byte b) {
-    //     // Returns hex String representation of byte b
-    //     char hexDigit[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-    //     char[] array = { hexDigit[(b >> 4) & 0x0f], hexDigit[b & 0x0f] };
-    //     return new String(array);
+    // // Returns hex String representation of byte b
+    // char hexDigit[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a',
+    // 'b', 'c', 'd', 'e', 'f' };
+    // char[] array = { hexDigit[(b >> 4) & 0x0f], hexDigit[b & 0x0f] };
+    // return new String(array);
     // }
 
     private void refresh(long window) {
@@ -652,7 +653,7 @@ final class DrawEngine {
 
     private boolean isDoubleClick(Prototype item) {
         if (_first_click) {
-            if ((System.nanoTime() - _start_time) / 1000000 < 500 && _dcItem.equals(item)) {
+            if (_dcItem != null && _dcItem.equals(item) && (System.nanoTime() - _start_time) / 1000000 < 500) {
                 _first_click = false;
                 _start_time = 0;
                 return true;
@@ -704,6 +705,8 @@ final class DrawEngine {
         switch (action) {
         case GLFW_RELEASE:
             _handler.getLayout().getWindow().restoreFocus();
+            boolean is_double_click = isDoubleClick(hoveredItem);
+
             while (!tmp.isEmpty()) {
                 Prototype item = tmp.pollLast();
                 if (item.isDisabled())
@@ -729,7 +732,10 @@ final class DrawEngine {
 
             if (hoveredItem != null) {
                 hoveredItem.setMousePressed(false);
-                if (_first_click)
+
+                if (is_double_click && hoveredItem != null)
+                    assignActions(InputEventType.MOUSE_DOUBLE_CLICK, _margs, hoveredItem, false);
+                else
                     assignActions(InputEventType.MOUSE_RELEASE, _margs, false);
             }
             engineEvent.resetAllEvents();
@@ -737,8 +743,6 @@ final class DrawEngine {
             break;
 
         case GLFW_PRESS:
-            boolean is_double_click = isDoubleClick(hoveredItem);
-
             try (MemoryStack stack = MemoryStack.stackPush()) {
                 IntBuffer width = stack.mallocInt(1);
                 IntBuffer height = stack.mallocInt(1);
@@ -784,13 +788,6 @@ final class DrawEngine {
                 }
                 underFocusedItem = new LinkedList<Prototype>(hoveredItems);
                 underFocusedItem.remove(focusedItem);
-
-                // System.out.println(focusedItem.getItemName());
-                if (is_double_click) {
-                    if (focusedItem != null)
-                        assignActions(InputEventType.MOUSE_DOUBLE_CLICK, _margs, focusedItem, false);
-                    // focusedItem.eventMouseDoubleClick.execute(focusedItem, _margs);
-                }
             }
             engineEvent.resetAllEvents();
             engineEvent.setEvent(InputEventType.MOUSE_PRESS);
@@ -1053,7 +1050,7 @@ final class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
-     float _interval = 1.0f / 30.0f;// 1000 / 60;
+    float _interval = 1.0f / 30.0f;// 1000 / 60;
     // internal float _interval = 1.0f / 60.0f;//1000 / 60;
     // internal int _interval = 11;//1000 / 90;
     // internal int _interval = 08;//1000 / 120;
@@ -1108,7 +1105,7 @@ final class DrawEngine {
         _handler.destroy();
     }
 
-     void update() {
+    void update() {
         render();
         _bounds.clear();
     }

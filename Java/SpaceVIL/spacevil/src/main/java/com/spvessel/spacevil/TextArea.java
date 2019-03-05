@@ -133,6 +133,8 @@ public class TextArea extends Prototype {
     private void updateVerticalSlider()// vertical slider
     {
         int visible_area = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
+        if (visible_area < 0)
+            visible_area = 0;
         int total = _area.getTextHeight();
 
         int total_invisible_size = total - visible_area;
@@ -173,9 +175,9 @@ public class TextArea extends Prototype {
     private void updateHorizontalSlider()// horizontal slider
     {
         int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right - 2 * _area.getCursorWidth();
+        if (visible_area < 0)
+            visible_area = 0;
         int total = _area.getTextWidth();
-        // int total = _area.get;
-        // System.out.println("wt: " + total);
 
         int total_invisible_size = total - visible_area;
         if (total <= visible_area) {

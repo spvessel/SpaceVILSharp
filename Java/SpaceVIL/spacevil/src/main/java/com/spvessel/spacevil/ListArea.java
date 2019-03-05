@@ -107,8 +107,6 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         return _isSelectionVisible;
     }
 
-    List<Integer> _list_of_visible_items = new LinkedList<>();
-
     private static int count = 0;
 
     /**
@@ -208,6 +206,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     public void insertItem(InterfaceBaseItem item, int index) {
         SelectionItem wrapper = getWrapper(item);
         super.insertItem(wrapper, index);
+        wrapper.updateSize();
         _mapContent.put(item, wrapper);
         updateLayout();
     }
@@ -221,6 +220,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     public void addItem(InterfaceBaseItem item) {
         SelectionItem wrapper = getWrapper(item);
         super.addItem(wrapper);
+        wrapper.updateSize();
         _mapContent.put(item, wrapper);
         updateLayout();
     }
@@ -294,17 +294,19 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         updateLayout();
     }
 
+    private boolean _isUpdating = false;
+
     /**
      * Update all children and ListArea sizes and positions according to confines
      */
     public void updateLayout() {
-        _list_of_visible_items.clear();
+        if (getItems().size() == 0 || _isUpdating)
+            return;
+        _isUpdating = true;
 
         long offset = (-1) * getVScrollOffset();
         int startY = getY() + getPadding().top;
-        int index = -1;
         for (InterfaceBaseItem child : super.getItems()) {
-            index++;
             if (!child.isVisible())
                 continue;
 
@@ -312,50 +314,27 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
             long child_Y = startY + offset + child.getMargin().top;
             offset += child.getHeight() + getSpacing().vertical;
+            child.setY((int) child_Y);
+            child.setConfines();
+
             // top checking
             if (child_Y < startY) {
-                child.setY((int) child_Y);
-                if (child_Y + child.getHeight() <= startY) {
+                if (child_Y + child.getHeight() <= startY)
                     child.setDrawable(false);
-                } else {
+                else
                     child.setDrawable(true);
-                    _list_of_visible_items.add(index);
-                }
                 continue;
             }
             // bottom checking
             if (child_Y + child.getHeight() + child.getMargin().bottom > getY() + getHeight() - getPadding().bottom) {
-                child.setY((int) child_Y);
-                if (child_Y >= getY() + getHeight() - getPadding().bottom) {
+                if (child_Y >= getY() + getHeight() - getPadding().bottom)
                     child.setDrawable(false);
-                } else {
+                else
                     child.setDrawable(true);
-                    _list_of_visible_items.add(index);
-                }
                 continue;
             }
-
-            child.setY((int) child_Y);
             child.setDrawable(true);
-            _list_of_visible_items.add(index);
-
-            // refactor
-            child.setConfines();
         }
-    }
-
-    /**
-     * Set style of the ListArea
-     */
-    // style
-    @Override
-    public void setStyle(Style style) {
-        if (style == null)
-            return;
-        super.setStyle(style);
-        Style inner_style = style.getInnerStyle("selecteditem");
-        if (inner_style != null) {
-            _selectedStyle = inner_style;
-        }
+        _isUpdating = false;
     }
 }
