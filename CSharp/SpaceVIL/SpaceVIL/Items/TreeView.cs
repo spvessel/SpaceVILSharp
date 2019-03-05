@@ -33,9 +33,17 @@ namespace SpaceVIL
             }
             UpdateElements();
         }
+        public bool GetRootVisibility()
+        {
+            return _root.IsVisible();
+        }
         public void SetRootText(String text)
         {
             _root.SetText(text);
+        }
+        public String GetRootText()
+        {
+            return _root.GetText();
         }
 
         private static int count = 0;
@@ -82,7 +90,7 @@ namespace SpaceVIL
                     break;
                 index++;
             }
-            InsertItem(item, index);            
+            InsertItem(item, index);
             item.ResetIndents();
             // item.OnToggleHide(true);
             UpdateElements();

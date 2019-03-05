@@ -163,6 +163,8 @@ namespace SpaceVIL
         private void UpdateVerticalSlider()//vertical slider
         {
             int visible_area = _area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom;
+            if (visible_area < 0)
+                visible_area = 0;
             int total = _area.GetTextHeight();
 
             int total_invisible_size = total - visible_area;
@@ -207,6 +209,8 @@ namespace SpaceVIL
         private void UpdateHorizontalSlider()//horizontal slider
         {
             int visible_area = _area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right - 2 * _area.GetCursorWidth();
+            if (visible_area < 0)
+                visible_area = 0;
             int total = _area.GetTextWidth();
 
             int total_invisible_size = total - visible_area;

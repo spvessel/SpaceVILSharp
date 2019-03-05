@@ -30,7 +30,6 @@ namespace SpaceVIL
             _item = content;
             EventMouseClick += (sender, args) =>
             {
-                Console.WriteLine("Visibility: "+_visibility);
                 if (IsToggled() || !_visibility)
                     return;
                 SetToggled(true);
@@ -46,6 +45,10 @@ namespace SpaceVIL
         public override void InitElements()
         {
             AddItem(_item);
+
+        }
+        internal void UpdateSizes()
+        {
             SetSize(_item.GetWidth() + _item.GetMargin().Left + _item.GetMargin().Right,
                     _item.GetHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top + 2);
             SetMinSize(_item.GetMinWidth() + _item.GetMargin().Left + _item.GetMargin().Right,

@@ -83,31 +83,13 @@ namespace SpaceVIL
 
         public VerticalSlider()
         {
-            // SetHeightPolicy(SizePolicy.Expand);
-            // SetWidth(25);
-            // SetBackground(Color.Transparent);
             SetItemName("VerticalSlider_" + count);
             EventMouseClick += OnTrackClick;
             count++;
 
-            //Track
-            // Track.SetBackground(Color.FromArgb(255, 100, 100, 100));
-            // Track.SetAlignment(ItemAlignment.HCenter);
-            // Track.SetHeightPolicy(SizePolicy.Expand);
-            // Track.SetWidthPolicy(SizePolicy.Fixed);
-            // Track.SetWidth(5);
-
             //Handler
             Handler.Orientation = Orientation.Vertical;
-            // Handler.SetBackground(Color.FromArgb(255, 255, 181, 111));
-            // Handler.SetHeight(10);
-            // Handler.SetWidthPolicy(SizePolicy.Expand);
-            // Handler.SetHeightPolicy(SizePolicy.Fixed);
-            // Handler.SetAlignment(ItemAlignment.Top);
-            // Handler.AddItemState(ItemStateType.Hovered, new ItemState()
-            // {
-            //     Background = Color.FromArgb(80, 255, 255, 255)
-            // });
+
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.VerticalSlider)));
         }
 

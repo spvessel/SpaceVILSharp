@@ -39,8 +39,16 @@ public class TreeView extends ListBox {
         updateElements();
     }
 
+    public boolean GetRootVisibility() {
+        return _root.isVisible();
+    }
+
     public void setRootText(String text) {
         _root.setText(text);
+    }
+
+    public String getRootText() {
+        return _root.getText();
     }
 
     private static int count = 0;

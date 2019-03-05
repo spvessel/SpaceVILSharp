@@ -240,6 +240,8 @@ public class ListBox extends Prototype {
     private void updateVerticalSlider() {
         int total_invisible_size = 0;
         int visible_area = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
+        if (visible_area < 0)
+            visible_area = 0;
         for (InterfaceBaseItem item : _area.getItems()) {
             if (!item.isVisible())
                 continue;
@@ -286,6 +288,8 @@ public class ListBox extends Prototype {
     private void updateHorizontalSlider() {
         int max_size = 0;
         int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right;
+        if (visible_area < 0)
+            visible_area = 0;
         for (InterfaceBaseItem item : _area.getItems()) {
             if (!item.isVisible())
                 continue;
@@ -495,7 +499,6 @@ public class ListBox extends Prototype {
     /**
      * Set style of the ListBox
      */
-    // style
     @Override
     public void setStyle(Style style) {
         if (style == null)
@@ -514,6 +517,9 @@ public class ListBox extends Prototype {
         if (inner_style != null) {
             menu.setStyle(inner_style);
         }
-        _area.setStyle(DefaultsService.getDefaultStyle(ListArea.class));
+        inner_style = style.getInnerStyle("area");
+        if (inner_style != null) {
+            _area.setStyle(inner_style);
+        }
     }
 }

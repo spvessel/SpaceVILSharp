@@ -362,7 +362,7 @@ namespace SpaceVIL
             _fileList.GetArea().RemoveAllItems();
         }
 
-        private Dictionary<String, String> _extensionFilter = new Dictionary<String, String>();
+        private Dictionary<String, String[]> _extensionFilter = new Dictionary<String, String[]>();
 
         // "All files (*.*);*.*"
         public void AddFilterExtensions(params String[] exts)
@@ -373,9 +373,9 @@ namespace SpaceVIL
                 String key = line[0];
                 String regex = line[1].ToLower().Replace("*", "");
                 if (_extensionFilter.ContainsKey(key))
-                    _extensionFilter[key] = regex;
+                    _extensionFilter[key] = regex.Split(',');
                 else
-                    _extensionFilter.Add(key, regex);
+                    _extensionFilter.Add(key, regex.Split(','));
             }
         }
 
@@ -383,11 +383,13 @@ namespace SpaceVIL
         {
             if (_extensionFilter.Count == 0)
                 return false;
-            String name = f.Name.ToLower();
-            if (name.EndsWith(_extensionFilter[_filterText.GetText()])
-                    || _extensionFilter[_filterText.GetText()].Equals("."))
-                return false;
 
+            String name = f.Name.ToLower();
+            foreach (String item in _extensionFilter[_filterText.GetText()])
+            {
+                if (name.EndsWith(item) || item.Equals("."))
+                    return false;
+            }
             return true;
         }
 
@@ -398,7 +400,6 @@ namespace SpaceVIL
 
         private void FillFilterList()
         {
-            Console.WriteLine(_filterList == null);
             _filterList.Clear();
 
             foreach (String entry in _extensionFilter.Keys)

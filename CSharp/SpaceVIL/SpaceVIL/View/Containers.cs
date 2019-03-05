@@ -59,49 +59,49 @@ namespace View
             cc.SetBackground(50, 50, 50);
             Handler.AddItem(cc);
 
-            BlankItem b1 = GetBlankItem("Blank1");
-            BlankItem b2 = GetBlankItem("Blank2");
-            BlankItem b3 = GetBlankItem("Blank3");
+            // BlankItem b1 = GetBlankItem("Blank1");
+            // BlankItem b2 = GetBlankItem("Blank2");
+            // BlankItem b3 = GetBlankItem("Blank3");
 
-            cc.AddItem(b1);
-            b1.AddItem(b2);
-            b2.AddItem(b3);
+            // cc.AddItem(b1);
+            // b1.AddItem(b2);
+            // b2.AddItem(b3);
 
-            b3.SetFocus();
-            
-            b3.SetPassEvents(false);
-            b2.SetPassEvents(false);
-            // b2.SetPassEvents(true, InputEventType.KeyPress, InputEventType.KeyRelease);
+            // b3.SetFocus();
 
-            Handler.GetWindow().EventMouseClick += (sender, args) =>
-            {
-                Console.WriteLine(Handler.GetWindow().GetItemName() + " EventMouseClick");
-            };
-            Handler.GetWindow().EventMouseDoubleClick += (sender, args) =>
-            {
-                Console.WriteLine(Handler.GetWindow().GetItemName() + " EventMouseDoubleClick");
-            };
-            Handler.GetWindow().EventKeyPress += (sender, args) =>
-            {
-                Console.WriteLine(Handler.GetWindow().GetItemName() + " EventKeyPress");
-            };
-            Handler.GetWindow().EventKeyRelease += (sender, args) =>
-            {
-                Console.WriteLine(Handler.GetWindow().GetItemName() + " EventKeyRelease");
-            };
+            // b3.SetPassEvents(false);
+            // b2.SetPassEvents(false);
+            // // b2.SetPassEvents(true, InputEventType.KeyPress, InputEventType.KeyRelease);
+
+            // Handler.GetWindow().EventMouseClick += (sender, args) =>
+            // {
+            //     Console.WriteLine(Handler.GetWindow().GetItemName() + " EventMouseClick");
+            // };
+            // Handler.GetWindow().EventMouseDoubleClick += (sender, args) =>
+            // {
+            //     Console.WriteLine(Handler.GetWindow().GetItemName() + " EventMouseDoubleClick");
+            // };
+            // Handler.GetWindow().EventKeyPress += (sender, args) =>
+            // {
+            //     Console.WriteLine(Handler.GetWindow().GetItemName() + " EventKeyPress");
+            // };
+            // Handler.GetWindow().EventKeyRelease += (sender, args) =>
+            // {
+            //     Console.WriteLine(Handler.GetWindow().GetItemName() + " EventKeyRelease");
+            // };
             // Handler.GetWindow().EventMouseHover += (sender, args) =>
             // {
             //     Console.WriteLine(Handler.GetWindow().GetItemName() + " EventMouseHover");
             // };
 
-            // TabView tabs = new TabView();
-            // cc.AddItem(tabs);
+            TabView tabs = new TabView();
+            cc.AddItem(tabs);
             // tabs.AddTab("Common");
             // tabs.AddTab("Stack");
-            // tabs.AddTab("Grid");
-            // tabs.AddTab("List");
+            tabs.AddTab("Grid");
+            tabs.AddTab("List");
             // tabs.AddTab("Split");
-            // tabs.AddTab("Free");//переделать, вертикальный стек не есть хорошо, переписать на кастомный стек
+            // tabs.AddTab("Free");
             // tabs.AddTab("Items");
 
             // //Common
@@ -143,19 +143,24 @@ namespace View
             //     v.AddItem(v_btn);
             // }
 
-            // //Grid
-            // Grid grid = new Grid(3, 4);
-            // grid.SetBackground(255, 255, 255, 20);
-            // grid.SetMargin(20, 20, 20, 20);
-            // tabs.AddItemToTab("Grid", grid);
-
-            // for (int i = 0; i < 12; i++)
-            // {
-            //     ButtonCore h_btn = GetButton("Item Cell" + i, 150, 50, SizePolicy.Expand);
-            //     h_btn.SetMaxSize(200, 100);
-            //     h_btn.SetBackground(121, 223, 152);
-            //     grid.AddItem(h_btn);
-            // }
+            //Grid
+            Grid grid = new Grid(3, 4);
+            grid.SetBackground(255, 255, 255, 20);
+            grid.SetSpacing(2, 2);
+            grid.SetMargin(20, 30, 20, 30);
+            tabs.AddItemToTab("Grid", grid);
+            Grid subgrid = new Grid(1, 2);
+            grid.InsertItem(subgrid, 1, 1);
+            HorizontalSlider slider = new HorizontalSlider();
+            slider.SetBackground(0, 0, 0, 255);
+            subgrid.AddItems(new VerticalScrollBar(), new VerticalScrollBar());
+            for (int i = 0; i < 11; i++)
+            {
+                ButtonCore h_btn = GetButton("Cell" + i, 150, 50, SizePolicy.Expand);
+                h_btn.SetMaxSize(200, 100);
+                h_btn.SetBackground(121, 223, 152);
+                grid.AddItem(h_btn);
+            }
 
             // //List
             // TreeView treeview = new TreeView();
@@ -406,7 +411,7 @@ namespace View
             style.Background = Color.FromArgb(255, 111, 181, 255);
             style.Foreground = Color.Black;
             style.BorderRadius = new CornerRadius(3);
-            style.Font = DefaultsService.GetDefaultFont(16);
+            style.Font = DefaultsService.GetDefaultFont();
             style.Width = w;
             style.MinWidth = 30;
             style.MinHeight = 30;
@@ -421,7 +426,7 @@ namespace View
             pressed.Border.SetFill(Color.FromArgb(255, 255, 255, 255));
             pressed.Border.SetThickness(1);
             style.AddItemState(ItemStateType.Pressed, pressed);
-            style.SetMargin(20, 20, 20, 20);
+            // style.SetMargin(20, 20, 20, 20);
 
             ButtonCore btn = new ButtonCore(name);
             btn.SetStyle(style);

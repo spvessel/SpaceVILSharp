@@ -133,8 +133,15 @@ class ActionManager {
     }
 
     private void invokeMouseDoubleClickEvent(Prototype sender, MouseArgs args) {
-        if (sender.eventMouseDoubleClick != null)
-            sender.eventMouseDoubleClick.execute(sender, args);
+        if (sender.eventMouseDoubleClick != null) {
+            if (sender.eventMouseDoubleClick.size() == 0)
+                invokeMouseClickEvent(sender, args);
+            else
+                sender.eventMouseDoubleClick.execute(sender, args);
+            return;
+        } else {
+            invokeMouseClickEvent(sender, args);
+        }
     }
 
     private void invokeMouseHoverEvent(Prototype sender, MouseArgs args) {
@@ -184,10 +191,9 @@ class ActionManager {
             sender.eventTextInput.execute(sender, args);
     }
 
-    //window events
+    // window events
     private void invokeDropEvent(Prototype sender, DropArgs args) {
-        if(sender instanceof WContainer)
-        {
+        if (sender instanceof WContainer) {
             WContainer window = (WContainer) sender;
             if (window.eventDrop != null)
                 window.eventDrop.execute(sender, args);

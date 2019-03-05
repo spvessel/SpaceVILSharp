@@ -174,6 +174,8 @@ namespace SpaceVIL
         /// </summary>
         public void InsertItem(IBaseItem item, int row, int column)
         {
+            if (row == _row_count || column == _column_count)
+                return;
             base.AddItem(item);
             //_cells[row + column * _row_count].SetItem(item);
             //Console.WriteLine(column + row * _column_count);

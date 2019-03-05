@@ -95,6 +95,8 @@ public class ThemeStyle {
             defaultItemsStyle.put(OpenEntryDialog.class, Style.getOpenEntryDialogStyle());
             defaultItemsStyle.put(FileSystemEntry.class, Style.getFileSystemEntryStyle());
             defaultItemsStyle.put(SelectionItem.class, Style.getSelectionItemStyle());
+            defaultItemsStyle.put(WrapArea.class, Style.getWrapAreaStyle());
+            defaultItemsStyle.put(WrapGrid.class, Style.getWrapGridStyle());
         }
     }
 

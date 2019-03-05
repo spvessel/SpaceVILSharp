@@ -61,6 +61,7 @@ public class Style {
         isVisible = true;
         maxWidth = 65535;
         maxHeight = 65535;
+        setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
     }
 
     /**
@@ -424,6 +425,24 @@ public class Style {
             return;
     }
 
+    public Style getDefaultCommonStyle() {
+        Style style = new Style();
+
+        style.background = Color.white;
+        style.foreground = Color.black;
+        style.font = DefaultsService.getDefaultFont();
+        style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        style.setSize(30, 30);
+        style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
+        style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
+        style.setPadding(0, 0, 0, 0);
+        style.setMargin(0, 0, 0, 0);
+        style.setSpacing(0, 0);
+        style.setBorder(new Border(new Color(0, 0, 0, 0), new CornerRadius(), 0));
+
+        return style;
+    }
+
     // get default styles
     /**
      * @return default style for ButtonCore objects
@@ -715,13 +734,6 @@ public class Style {
 
         Style area_style = getListAreaStyle();
         area_style.setPadding(0, 0, 0, 0);
-
-        Style substrate_style = area_style.getInnerStyle("substrate");
-        substrate_style.background = new Color(150, 150, 150, 255);
-
-        Style hovercover_style = area_style.getInnerStyle("hovercover");
-        hovercover_style.background = new Color(150, 150, 150, 255);
-
         style.addInnerStyle("listarea", area_style);
 
         return style;
@@ -1170,24 +1182,6 @@ public class Style {
         style.padding = new Indents(2, 2, 2, 2);
         style.spacing = new Spacing(0, 5);
 
-        Style substrate_style = new Style();
-        // substrate_style.background = new Color(39, 150, 216, 255);
-        substrate_style.background = new Color(100, 100, 100, 255);
-        substrate_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        substrate_style.widthPolicy = SizePolicy.EXPAND;
-        substrate_style.heightPolicy = SizePolicy.FIXED;
-        style.addInnerStyle("substrate", substrate_style);
-
-        Style hover_style = new Style();
-        hover_style.background = new Color(255, 255, 255, 30);
-        hover_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
-        hover_style.widthPolicy = SizePolicy.EXPAND;
-        hover_style.heightPolicy = SizePolicy.FIXED;
-        style.addInnerStyle("hovercover", hover_style);
-
-        Style selected_style = getSelectionItemStyle();
-        style.addInnerStyle("selecteditem", selected_style);
-
         return style;
     }
 
@@ -1215,6 +1209,9 @@ public class Style {
         menu_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         menu_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
         style.addInnerStyle("menu", menu_style);
+
+        Style area_style = getListAreaStyle();
+        style.addInnerStyle("area", area_style);
 
         return style;
     }
@@ -2047,14 +2044,49 @@ public class Style {
         return style;
     }
 
-    public static Style getSelectionItemStyle()
-    {
+    public static Style getSelectionItemStyle() {
         Style style = new Style();
         style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
         style.setBackground(0, 0, 0, 0);
         style.setPadding(0, 1, 0, 1);
         style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
         style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 50)));
+        return style;
+    }
+
+    public static Style getWrapAreaStyle() {
+        Style style = new Style();
+
+        style.background = new Color(0, 0, 0, 0);
+        style.widthPolicy = SizePolicy.EXPAND;
+        style.heightPolicy = SizePolicy.EXPAND;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+        style.padding = new Indents(2, 2, 2, 2);
+        style.spacing = new Spacing(0, 5);
+
+        return style;
+    }
+
+    public static Style getWrapGridStyle()
+    {
+        Style style = new Style();
+
+        style.background = new Color(70, 70, 70);
+        style.widthPolicy = SizePolicy.EXPAND;
+        style.heightPolicy = SizePolicy.EXPAND;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+
+        Style vsb_style = getVerticalScrollBarStyle();
+        vsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        style.addInnerStyle("vscrollbar", vsb_style);
+
+        Style hsb_style = getHorizontalScrollBarStyle();
+        hsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
+        style.addInnerStyle("hscrollbar", hsb_style);
+
+        Style area_style = getWrapAreaStyle();
+        style.addInnerStyle("area", area_style);
+
         return style;
     }
 }

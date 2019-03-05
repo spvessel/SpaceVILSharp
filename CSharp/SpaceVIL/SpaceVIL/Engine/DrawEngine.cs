@@ -608,7 +608,7 @@ namespace SpaceVIL
             if (_double_click_timer.IsRunning)
             {
                 _double_click_timer.Stop();
-                if (_double_click_timer.ElapsedMilliseconds < 500 && _dcItem.Equals(item))
+                if (_dcItem != null && _dcItem.Equals(item) && _double_click_timer.ElapsedMilliseconds < 500)
                 {
                     _double_click_happen = true;
                     return true;
@@ -664,6 +664,7 @@ namespace SpaceVIL
             {
                 case InputState.Release:
                     _handler.GetLayout().GetWindow().RestoreFocus();
+                    bool is_double_click = IsDoubleClick(HoveredItem);
                     while (tmp.Count > 0)
                     {
                         Prototype item = tmp.Dequeue();
@@ -692,7 +693,9 @@ namespace SpaceVIL
                     if (HoveredItem != null)
                     {
                         HoveredItem.SetMousePressed(false);
-                        if (!_double_click_happen)
+                        if (is_double_click && HoveredItem != null)
+                            AssignActions(InputEventType.MouseDoubleClick, _margs, HoveredItem);
+                        else
                             AssignActions(InputEventType.MouseRelease, _margs, false);
                     }
                     EngineEvent.ResetAllEvents();
@@ -700,7 +703,6 @@ namespace SpaceVIL
                     break;
 
                 case InputState.Press:
-                    bool is_double_click = IsDoubleClick(HoveredItem);
 
                     Glfw.GetFramebufferSize(_handler.GetWindowId(), out w_global, out h_global);
                     x_global = _handler.GetPointer().GetX();
@@ -745,9 +747,6 @@ namespace SpaceVIL
                         UnderFocusedItem = new List<Prototype>(HoveredItems);
                         // UnderFocusedItem.Reverse();
                         UnderFocusedItem.Remove(FocusedItem);
-                        if (is_double_click)
-                            if (FocusedItem != null)
-                                AssignActions(InputEventType.MouseDoubleClick, _margs, FocusedItem);
                     }
                     EngineEvent.ResetAllEvents();
                     EngineEvent.SetEvent(InputEventType.MousePress);
