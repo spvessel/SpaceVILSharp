@@ -13,7 +13,7 @@ namespace SpaceVIL.Common
 #if STANDARD
     private static String _platform = "Standard";
 #else
-    private static String _platform = "Core";
+        private static String _platform = "Core";
 #endif
 
         public static String GetSpaceVILInfo()
@@ -78,6 +78,9 @@ namespace SpaceVIL.Common
             CursorResizeH = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
             CursorResizeV = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
             CursorResizeAll = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
+
+            DisplayService.SetDisplaySize(Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width, 
+                        Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height);
 
             DefaultsService.InitImages();
 

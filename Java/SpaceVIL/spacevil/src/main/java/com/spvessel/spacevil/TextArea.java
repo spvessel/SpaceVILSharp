@@ -105,7 +105,7 @@ public class TextArea extends Prototype {
         hScrollBar.setItemName(getItemName() + "_" + hScrollBar.getItemName());
 
         // Area
-        _area.setItemName(getItemName() + "_" + _area.getItemName());
+        // _area.setItemName(getItemName() + "_" + _area.getItemName());
         // _area.setSpacing(0, 5);
     }
     public TextArea(String text) {

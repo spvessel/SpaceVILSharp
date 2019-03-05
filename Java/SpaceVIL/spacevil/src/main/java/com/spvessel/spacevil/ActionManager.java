@@ -1,5 +1,6 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Core.DropArgs;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Core.TextInputArgs;
@@ -96,6 +97,9 @@ class ActionManager {
         case TEXT_INPUT:
             invokeTextInputEvent(task.item, (TextInputArgs) task.args);
             break;
+        case WINDOW_DROP:
+            invokeDropEvent(task.item, (DropArgs) task.args);
+            break;
         default:
             break;
         }
@@ -178,5 +182,15 @@ class ActionManager {
     private void invokeTextInputEvent(Prototype sender, TextInputArgs args) {
         if (sender.eventTextInput != null)
             sender.eventTextInput.execute(sender, args);
+    }
+
+    //window events
+    private void invokeDropEvent(Prototype sender, DropArgs args) {
+        if(sender instanceof WContainer)
+        {
+            WContainer window = (WContainer) sender;
+            if (window.eventDrop != null)
+                window.eventDrop.execute(sender, args);
+        }
     }
 }

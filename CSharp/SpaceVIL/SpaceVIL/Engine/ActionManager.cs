@@ -109,6 +109,9 @@ namespace SpaceVIL
                 case InputEventType.TextInput:
                     InvokeTextInputEvent(task.Item, task.Args as TextInputArgs);
                     break;
+                case InputEventType.WindowDrop:
+                    InvokeDropEvent(task.Item, task.Args as DropArgs);
+                    break;
                 default:
                     break;
             }
@@ -178,6 +181,13 @@ namespace SpaceVIL
         private void InvokeTextInputEvent(Prototype sender, TextInputArgs args)
         {
             sender.EventTextInput?.Invoke(sender, args);
+        }
+
+        //window events
+        private void InvokeDropEvent(Prototype sender, DropArgs args)
+        {
+            WContainer window = sender as WContainer;
+            window?.EventDrop?.Invoke(sender, args);
         }
     }
 }

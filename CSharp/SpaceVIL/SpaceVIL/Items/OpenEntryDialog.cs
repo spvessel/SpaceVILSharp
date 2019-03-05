@@ -107,29 +107,23 @@ namespace SpaceVIL
 
             _folder = DefaultsService.GetDefaultImage(EmbeddedImage.Folder, EmbeddedImageSize.Size32x32);
             _file = DefaultsService.GetDefaultImage(EmbeddedImage.File, EmbeddedImageSize.Size32x32);
-            ImageItem backward = new ImageItem(
-                    DefaultsService.GetDefaultImage(EmbeddedImage.ArrowLeft, EmbeddedImageSize.Size32x32), false);
-            ImageItem home = new ImageItem(
-                    DefaultsService.GetDefaultImage(EmbeddedImage.Home, EmbeddedImageSize.Size32x32), false);
-            ImageItem user = new ImageItem(
-                    DefaultsService.GetDefaultImage(EmbeddedImage.User, EmbeddedImageSize.Size32x32), false);
-            ImageItem create = new ImageItem(
-                    DefaultsService.GetDefaultImage(EmbeddedImage.FolderPlus, EmbeddedImageSize.Size32x32), false);
-            ImageItem rename = new ImageItem(
-                    DefaultsService.GetDefaultImage(EmbeddedImage.Pencil, EmbeddedImageSize.Size32x32), false);
-            ImageItem refresh = new ImageItem(
-                    DefaultsService.GetDefaultImage(EmbeddedImage.Refresh, EmbeddedImageSize.Size32x32), false);
-            ImageItem hidden = new ImageItem(
-                    DefaultsService.GetDefaultImage(EmbeddedImage.Eye, EmbeddedImageSize.Size32x32), false);
-            ImageItem filter = new ImageItem(
-                    DefaultsService.GetDefaultImage(EmbeddedImage.Filter, EmbeddedImageSize.Size32x32), false);
-            Style.GetFrameStyle().SetStyle(backward, create, rename, refresh, hidden, user, home, filter);
+            ImageItem backward = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.ArrowLeft, EmbeddedImageSize.Size32x32), false);
+            ImageItem upward = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.ArrowUp, EmbeddedImageSize.Size32x32), false);
+            ImageItem home = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Home, EmbeddedImageSize.Size32x32), false);
+            ImageItem user = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.User, EmbeddedImageSize.Size32x32), false);
+            ImageItem create = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.FolderPlus, EmbeddedImageSize.Size32x32), false);
+            ImageItem rename = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Pencil, EmbeddedImageSize.Size32x32), false);
+            ImageItem refresh = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Refresh, EmbeddedImageSize.Size32x32), false);
+            ImageItem hidden = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Eye, EmbeddedImageSize.Size32x32), false);
+            ImageItem filter = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Filter, EmbeddedImageSize.Size32x32), false);
+            Style.GetFrameStyle().SetStyle(backward, upward, create, rename, refresh, hidden, user, home, filter);
 
             Window.AddItems(_layout);
             _layout.AddItems(_toolbar, _addressLine, _fileList, _fileName, _controlPanel);
-            _toolbar.AddItems(_btnBackward, GetDivider(), _btnHome, _btnUser, GetDivider(), _btnCreate, _btnRename,
-                    GetDivider(), _btnRefresh, GetDivider(), _btnShowHidden, GetDivider(), _btnFilter, _filterText, _btnUpward);
+            _toolbar.AddItems(_btnBackward, _btnUpward, GetDivider(), _btnHome, _btnUser, GetDivider(), _btnCreate, _btnRename,
+                    GetDivider(), _btnRefresh, GetDivider(), _btnShowHidden, GetDivider(), _btnFilter, _filterText);
             _btnBackward.AddItem(backward);
+            _btnUpward.AddItem(upward);
             _btnHome.AddItem(home);
             _btnUser.AddItem(user);
             _btnCreate.AddItem(create);
@@ -138,7 +132,6 @@ namespace SpaceVIL
             _btnShowHidden.AddItem(hidden);
             _btnFilter.AddItem(filter);
             _controlPanel.AddItems(_btnOpen, _btnCancel);
-            _btnUpward.SetText("|");
 
             _fileList.SetHScrollBarVisible(ScrollBarVisibility.AsNeeded);
             _fileList.SetVScrollBarVisible(ScrollBarVisibility.AsNeeded);
@@ -183,7 +176,11 @@ namespace SpaceVIL
                 input.Show(GetHandler());
             };
             _btnRefresh.EventMouseClick += (sender, args) => { RefreshFolder(); };
-            _btnFilter.EventMouseClick += (sender, args) => _filterList.Show(sender, args);
+            _btnFilter.EventMouseClick += (sender, args) =>
+            {
+                args.Position.SetPosition(_filterText.GetX(), _filterText.GetY() + _filterText.GetHeight());
+                _filterList.Show(sender, args);
+            };
             _btnShowHidden.EventToggle += (sender, args) => { RefreshFolder(); };
             _btnCancel.EventMouseClick += (sender, args) =>
             {
@@ -494,13 +491,24 @@ namespace SpaceVIL
 
         private void Open()
         {
+            FileSystemEntry selection = ((FileSystemEntry)_fileList.GetSelectionItem());
             if (_dialogType == OpenDialogType.Open)
             {
                 if (_entryType == FileSystemEntryType.File)
-                    _result = _addressLine.GetText() + "\\" + ((FileSystemEntry)_fileList.GetSelectionItem()).GetText();
+                {
+                    if (selection == null || selection.GetEntryType() == FileSystemEntryType.Directory)
+                    {
+                        PopUpMessage popError = new PopUpMessage("Choose file first.");
+                        popError.Show(GetHandler());
+                        return;
+                    }
+                    _result = _addressLine.GetText() + "\\" + selection.GetText();
+                }
                 else if (_entryType == FileSystemEntryType.Directory)
                 {
                     _result = _addressLine.GetText();
+                    if (selection != null)
+                        _result += "\\" + selection.GetText();
                 }
             }
             else if (_dialogType == OpenDialogType.Save)
@@ -535,6 +543,7 @@ namespace SpaceVIL
                 _btnCreate.SetStyle(inner_style);
                 _btnRename.SetStyle(inner_style);
                 _btnRefresh.SetStyle(inner_style);
+                _btnUpward.SetStyle(inner_style);
             }
             // buttontogle
             inner_style = style.GetInnerStyle("buttonhidden");

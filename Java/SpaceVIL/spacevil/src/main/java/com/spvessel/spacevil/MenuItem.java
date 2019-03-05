@@ -20,7 +20,7 @@ public class MenuItem extends Prototype {
     public boolean isActionItem = false;
     private static int count = 0;
     private TextLine _text_object;
-    protected ContextMenu _context_menu;
+    ContextMenu _context_menu;
     private ContextMenu _sub_context_menu;
 
     /**

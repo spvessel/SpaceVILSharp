@@ -118,6 +118,8 @@ public class OpenEntryDialog extends OpenDialog {
         _file = DefaultsService.getDefaultImage(EmbeddedImage.FILE, EmbeddedImageSize.SIZE_32X32);
         ImageItem backward = new ImageItem(
                 DefaultsService.getDefaultImage(EmbeddedImage.ARROW_LEFT, EmbeddedImageSize.SIZE_32X32), false);
+        ImageItem upward = new ImageItem(
+                DefaultsService.getDefaultImage(EmbeddedImage.ARROW_UP, EmbeddedImageSize.SIZE_32X32), false);
         ImageItem home = new ImageItem(
                 DefaultsService.getDefaultImage(EmbeddedImage.HOME, EmbeddedImageSize.SIZE_32X32), false);
         ImageItem user = new ImageItem(
@@ -132,13 +134,15 @@ public class OpenEntryDialog extends OpenDialog {
                 DefaultsService.getDefaultImage(EmbeddedImage.EYE, EmbeddedImageSize.SIZE_32X32), false);
         ImageItem filter = new ImageItem(
                 DefaultsService.getDefaultImage(EmbeddedImage.FILTER, EmbeddedImageSize.SIZE_32X32), false);
-        Style.getFrameStyle().setStyle(backward, create, rename, refresh, hidden, user, home, filter);
+        Style.getFrameStyle().setStyle(backward, upward, create, rename, refresh, hidden, user, home, filter);
 
         window.addItems(_layout);
         _layout.addItems(_toolbar, _addressLine, _fileList, _fileName, _controlPanel);
-        _toolbar.addItems(_btnBackward, getDivider(), _btnHome, _btnUser, getDivider(), _btnCreate, _btnRename,
-                getDivider(), _btnRefresh, getDivider(), _btnShowHidden, getDivider(), _btnFilter, _filterText, _btnUpward);
+        _toolbar.addItems(_btnBackward, _btnUpward, getDivider(), _btnHome, _btnUser, getDivider(), _btnCreate,
+                _btnRename, getDivider(), _btnRefresh, getDivider(), _btnShowHidden, getDivider(), _btnFilter,
+                _filterText);
         _btnBackward.addItem(backward);
+        _btnUpward.addItem(upward);
         _btnHome.addItem(home);
         _btnUser.addItem(user);
         _btnCreate.addItem(create);
@@ -147,7 +151,6 @@ public class OpenEntryDialog extends OpenDialog {
         _btnShowHidden.addItem(hidden);
         _btnFilter.addItem(filter);
         _controlPanel.addItems(_btnOpen, _btnCancel);
-        _btnUpward.setText("|");
 
         _fileList.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         _fileList.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
@@ -187,7 +190,10 @@ public class OpenEntryDialog extends OpenDialog {
             input.show(getHandler());
         });
         _btnRefresh.eventMouseClick.add((sender, args) -> refreshFolder());
-        _btnFilter.eventMouseClick.add((sender, args) -> _filterList.show(sender, args));
+        _btnFilter.eventMouseClick.add((sender, args) -> {
+            args.position.setPosition(_filterText.getX(), _filterText.getY() + _filterText.getHeight());
+            _filterList.show(sender, args);
+        });
         _btnShowHidden.eventToggle.add((sender, args) -> refreshFolder());
         _btnCancel.eventMouseClick.add((sender, args) -> {
             _result = null;
@@ -296,7 +302,7 @@ public class OpenEntryDialog extends OpenDialog {
         }
 
         if (ind == firstInd) {
-            if (ind == -1) { //No such index
+            if (ind == -1) { // No such index
                 if (name.contains("./")) {
                     ind = name.indexOf("/") + 1;
                 } else {
@@ -441,11 +447,19 @@ public class OpenEntryDialog extends OpenDialog {
     }
 
     private void open() {
+        FileSystemEntry selection = ((FileSystemEntry) _fileList.getSelectionItem());
         if (_dialogType == OpenDialogType.OPEN) {
-            if (_entryType == FileSystemEntryType.FILE)
-                _result = _addressLine.getText() + "\\" + ((FileSystemEntry) _fileList.getSelectionItem()).getText();
-            else if (_entryType == FileSystemEntryType.DIRECTORY) {
+            if (_entryType == FileSystemEntryType.FILE) {
+                if (selection == null || selection.getEntryType() == FileSystemEntryType.DIRECTORY) {
+                    PopUpMessage popError = new PopUpMessage("Choose file first.");
+                    popError.show(getHandler());
+                    return;
+                }
+                _result = _addressLine.getText() + "\\" + selection.getText();
+            } else if (_entryType == FileSystemEntryType.DIRECTORY) {
                 _result = _addressLine.getText();
+                if (selection != null)
+                    _result += "\\" + selection.getText();
             }
         } else if (_dialogType == OpenDialogType.SAVE)
             _result = _addressLine.getText() + "\\" + _fileName.getText();
@@ -473,6 +487,7 @@ public class OpenEntryDialog extends OpenDialog {
         inner_style = style.getInnerStyle("toolbarbutton");
         if (inner_style != null) {
             _btnBackward.setStyle(inner_style);
+            _btnUpward.setStyle(inner_style);
             _btnHome.setStyle(inner_style);
             _btnUser.setStyle(inner_style);
             _btnCreate.setStyle(inner_style);

@@ -21,6 +21,7 @@ namespace SpaceVIL
             // _scaleWidth = w;
             // _scaleHeight = h;
             // Console.WriteLine(String.Format("{0:0.0} {1:0.0}", w, h));
+            DisplayService.SetDisplayDpiScale(w);
             _w_layout.SetDpiScale(w, h);
         }
 
@@ -36,6 +37,7 @@ namespace SpaceVIL
         Glfw.WindowFocusFunc WindowFocusCallback;
         Glfw.FramebufferSizeFunc FramebufferCallback;
         Glfw.WindowRefreshFunc WindowRefreshCallback;
+        Glfw.DropFunc DropCallback;
         ///////////////////////////////////////////////
 
         internal bool BorderHidden;
@@ -151,6 +153,7 @@ namespace SpaceVIL
             ResizeCallback = null;
             FramebufferCallback = null;
             WindowRefreshCallback = null;
+            DropCallback = null;
         }
 
         internal void SetCursorType(Glfw.CursorType type)
@@ -251,6 +254,11 @@ namespace SpaceVIL
         {
             WindowRefreshCallback = function;
             Glfw.SetWindowRefreshCallback(_window, WindowRefreshCallback);
+        }
+        internal void SetCallbackDrop(Glfw.DropFunc function)
+        {
+            DropCallback = function;
+            Glfw.SetDropCallback(_window, DropCallback);
         }
 
         internal void SetOpacity(float level)

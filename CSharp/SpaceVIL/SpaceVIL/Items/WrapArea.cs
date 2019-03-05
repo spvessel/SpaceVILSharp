@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Drawing;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
-using SpaceVIL.Decorations;
+using System.Threading;
 
 namespace SpaceVIL
 {
-    public class ListArea : Prototype, IVLayout
+    public class WrapArea : Prototype, IGrid
     {
         internal Dictionary<IBaseItem, SelectionItem> _mapContent = new Dictionary<IBaseItem, SelectionItem>();
         private Object _lock = new Object();
@@ -52,10 +52,6 @@ namespace SpaceVIL
         {
             return _selectionItem;
         }
-
-        /// <summary>
-        /// Set selected item by index
-        /// </summary>
         public void SetSelection(int index)
         {
             if (!_isSelectionVisible)
@@ -84,9 +80,6 @@ namespace SpaceVIL
             }
         }
 
-        /// <summary>
-        /// Unselect all items
-        /// </summary>
         public void Unselect()
         {
             _selection = -1;
@@ -121,17 +114,17 @@ namespace SpaceVIL
         static int count = 0;
 
         /// <summary>
-        /// Constructs a ListArea
+        /// Constructs a WrapArea
         /// </summary>
-        public ListArea()
+        private WrapArea()
         {
-            SetItemName("ListArea_" + count);
+            SetItemName("WrapArea_" + count);
             count++;
+            // SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.WrapArea)));
             EventMouseClick += OnMouseClick;
             EventMouseDoubleClick += OnMouseDoubleClick;
             EventMouseHover += OnMouseHover;
             EventKeyPress += OnKeyPress;
-            // SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ListArea)));
         }
 
         void OnMouseClick(IItem sender, MouseArgs args) { }
@@ -140,60 +133,13 @@ namespace SpaceVIL
 
         void OnKeyPress(IItem sender, KeyArgs args)
         {
-            int index = _selection;
-            bool changed = false;
 
-            switch (args.Key)
-            {
-                case KeyCode.Up:
-                    while (index > 0)
-                    {
-                        index--;
-                        _selectionItem = GetItems().ElementAt(index) as SelectionItem;
-                        if (_selectionItem.IsVisible())
-                        {
-                            changed = true;
-                            break;
-                        }
-                    }
-                    if (changed)
-                        SetSelection(index);
-                    break;
-                case KeyCode.Down:
-                    while (index < base.GetItems().Count - 1)
-                    {
-                        index++;
-                        _selectionItem = GetItems().ElementAt(index) as SelectionItem;
-                        if (_selectionItem.IsVisible())
-                        {
-                            changed = true;
-                            break;
-                        }
-                    }
-                    if (changed)
-                        SetSelection(index);
-                    break;
-                case KeyCode.Escape:
-                    Unselect();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// If something changes when mouse hovered
-        /// </summary>
-        public override void SetMouseHover(bool value)
-        {
-            base.SetMouseHover(value);
         }
 
         private SelectionItem GetWrapper(IBaseItem item)
         {
             SelectionItem wrapper = new SelectionItem(item);
             wrapper.SetToggleVisibility(_isSelectionVisible);
-            // wrapper.setStyle(_selectedStyle);
             wrapper.EventMouseClick += (sender, args) =>
             {
                 int index = 0;
@@ -213,9 +159,9 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Insert item into the ListArea by index
+        /// Insert item to the WrapArea by row and column number
         /// </summary>
-        public override void InsertItem(IBaseItem item, Int32 index)
+        public override void InsertItem(IBaseItem item, int index)
         {
             SelectionItem wrapper = GetWrapper(item);
             base.InsertItem(wrapper, index);
@@ -223,10 +169,8 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
-        private Style _selectedStyle;
-
         /// <summary>
-        /// Add item to the ListArea
+        /// Add item to the WrapArea
         /// </summary>
         public override void AddItem(IBaseItem item)
         {
@@ -237,7 +181,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Remove item from the ListArea
+        /// Remove item from the WrapArea
         /// </summary>
         public override void RemoveItem(IBaseItem item)
         {
@@ -275,7 +219,34 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set Y position of the ListArea
+        /// Set width of the WrapArea
+        /// </summary>
+        public override void SetWidth(int width)
+        {
+            base.SetWidth(width);
+            UpdateLayout();
+        }
+
+        /// <summary>
+        /// Set height of the WrapArea
+        /// </summary>
+        public override void SetHeight(int height)
+        {
+            base.SetHeight(height);
+            UpdateLayout();
+        }
+
+        /// <summary>
+        /// Set X position of the WrapArea
+        /// </summary>
+        public override void SetX(int _x)
+        {
+            base.SetX(_x);
+            UpdateLayout();
+        }
+
+        /// <summary>
+        /// Set Y position of the WrapArea
         /// </summary>
         public override void SetY(int _y)
         {
@@ -284,114 +255,43 @@ namespace SpaceVIL
         }
 
         //update content position
+        internal Orientation WrapOrientation = Orientation.Horizontal;
         private Int64 _yOffset = 0;
         private Int64 _xOffset = 0;
 
         /// <summary>
-        /// Vertical scroll offset in the ListArea
+        /// Vertical scroll offset in the WrapArea
         /// </summary>
-        public Int64 GetVScrollOffset()
+        public Int64 GetScrollOffset()
         {
-            return _yOffset;
+            if (WrapOrientation == Orientation.Horizontal)
+                return _yOffset;
+            else
+                return _xOffset;
         }
-        public void SetVScrollOffset(Int64 value)
+        public void SetScrollOffset(Int64 value)
         {
-            _yOffset = value;
+            if (WrapOrientation == Orientation.Horizontal)
+                _yOffset = value;
+            else
+                _xOffset = value;
             UpdateLayout();
         }
 
         /// <summary>
-        /// Horizontal scroll offset in the ListArea
-        /// </summary>
-        public Int64 GetHScrollOffset()
-        {
-            return _xOffset;
-        }
-        public void SetHScrollOffset(Int64 value)
-        {
-            _xOffset = value;
-            UpdateLayout();
-        }
-
-        /// <summary>
-        /// Update all children and ListArea sizes and positions
+        /// Update all children and WrapArea sizes and positions
         /// according to confines
         /// </summary>
+        //Update Layout
         public void UpdateLayout()
         {
-            _list_of_visible_items.Clear();
-
-            Int64 offset = (-1) * GetVScrollOffset();
-            int startY = GetY() + GetPadding().Top;
-            int index = -1;
-            int child_X = (-1) * (int)_xOffset + GetX() + GetPadding().Left;
-            foreach (var child in base.GetItems())
+            if (WrapOrientation == Orientation.Horizontal)
             {
-                index++;
-                if (!child.IsVisible())
-                    continue;
 
-                child.SetX(child_X + child.GetMargin().Left);
-
-                Int64 child_Y = startY + offset + child.GetMargin().Top;
-                offset += child.GetHeight() + GetSpacing().Vertical;
-
-                //top checking
-                if (child_Y < startY)
-                {
-                    child.SetY((int)child_Y);
-                    if (child_Y + child.GetHeight() <= startY)
-                    {
-                        child.SetDrawable(false);
-                    }
-                    else
-                    {
-                        child.SetDrawable(true);
-                        _list_of_visible_items.Add(index);
-                    }
-                    child.SetConfines();
-                    continue;
-                }
-
-                //bottom checking
-                if (child_Y + child.GetHeight() + child.GetMargin().Bottom > GetY() + GetHeight() - GetPadding().Bottom)
-                {
-                    child.SetY((int)child_Y);
-                    if (child_Y >= GetY() + GetHeight() - GetPadding().Bottom)
-                    {
-                        child.SetDrawable(false);
-                    }
-                    else
-                    {
-                        child.SetDrawable(true);
-                        _list_of_visible_items.Add(index);
-                    }
-                    child.SetConfines();
-                    continue;
-                }
-                child.SetY((int)child_Y);
-                child.SetDrawable(true);
-                _list_of_visible_items.Add(index);
-
-                //refactor
-                child.SetConfines();
             }
-        }
-
-        /// <summary>
-        /// Set style of the ListArea
-        /// </summary>
-        //style
-        public override void SetStyle(Style style)
-        {
-            if (style == null)
-                return;
-            base.SetStyle(style);
-
-            Style inner_style = style.GetInnerStyle("selecteditem");
-            if (inner_style != null)
+            else if(WrapOrientation == Orientation.Vertical)
             {
-                _selectedStyle = inner_style;
+
             }
         }
     }

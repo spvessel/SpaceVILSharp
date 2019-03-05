@@ -9,6 +9,7 @@ namespace SpaceVIL.Core
     { 
         public abstract void Clear();
     }
+
     public sealed class MouseArgs : InputEventArgs
     {
         public MouseButton Button;
@@ -47,6 +48,19 @@ namespace SpaceVIL.Core
         {
             Character = 0;
             Mods = 0;
+        }
+    }
+
+    public sealed class DropArgs : InputEventArgs
+    {
+        public Prototype Item = null;
+        public int Count = -1;
+        public List<String> Paths = null;
+        public override void Clear()
+        {
+            Count = -1;
+            Paths = null;
+            Item = null;
         }
     }
 

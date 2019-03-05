@@ -156,6 +156,7 @@ namespace SpaceVIL.Core
         WindowClose = 0x40000,
         WindowGetFocus = 0x80000,
         WindowLostFocus = 0x100000,
+        WindowDrop = 0x2000000,
     }
 
     public enum InputState
@@ -363,7 +364,7 @@ namespace SpaceVIL.Core
 
     public enum EmbeddedImage
     {
-        Add, ArrowLeft, Eye, File, Folder, FolderPlus, Gear, Import, Lines, Loupe, RecycleBin, Refresh, Pencil, Diskette,
+        Add, ArrowLeft, ArrowUp, Eye, File, Folder, FolderPlus, Gear, Import, Lines, Loupe, RecycleBin, Refresh, Pencil, Diskette,
         Eraser, Home, User, Drive, Filter
     }
     public enum EmbeddedImageSize

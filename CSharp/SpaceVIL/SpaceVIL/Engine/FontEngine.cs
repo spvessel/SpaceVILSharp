@@ -140,14 +140,14 @@ namespace SpaceVIL
                 letters.Add(specLet, letter1);
                 letter1.width = letter.width * 4;
                 letter1.height = 0;
-                /*
+                
                 //!Может стоит вернуть это, если новые модификации текста будут работать нормально
                 specLet = "\r"[0];
-                Letter letter2 = new Letter("\t", null);
+                Letter letter2 = new Letter("\r");
                 letters.Add(specLet, letter2);
                 letter2.width = 0;
                 letter2.height = 0;
-                */
+                
             }
 
             private int UpdateSpecX0(Letter letter, int x0)

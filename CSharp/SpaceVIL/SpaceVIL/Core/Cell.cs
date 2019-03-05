@@ -10,23 +10,23 @@ namespace SpaceVIL
 {
     public sealed class Cell : Geometry, IPosition
     {
-        private Grid _parent = null;
+        private IGrid _parent = null;
 
         /// <returns> parent grid of the cell </returns>
-        public Grid GetParentGrid()
+        public IGrid GetParentGrid()
         {
             return _parent;
         }
-        internal Cell(Grid grid)
+        internal Cell(IGrid grid)
         {
             _parent = grid;
         }
-        internal Cell(Grid grid, int row, int column) : this(grid)
+        internal Cell(IGrid grid, int row, int column) : this(grid)
         {
             _row_index = row;
             _column_index = column;
         }
-        internal Cell(Grid grid, int row, int column, IBaseItem item) : this(grid, row, column)
+        internal Cell(IGrid grid, int row, int column, IBaseItem item) : this(grid, row, column)
         {
             _item_link = item;
         }

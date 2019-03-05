@@ -25,6 +25,8 @@
 -res:Images\add64.png,SpaceVIL.Images.add64.png ^
 -res:Images\arrowleft32.png,SpaceVIL.Images.arrowleft32.png ^
 -res:Images\arrowleft64.png,SpaceVIL.Images.arrowleft64.png ^
+-res:Images\arrowup32.png,SpaceVIL.Images.arrowup32.png ^
+-res:Images\arrowup64.png,SpaceVIL.Images.arrowup64.png ^
 -res:Images\diskette32.png,SpaceVIL.Images.diskette32.png ^
 -res:Images\diskette64.png,SpaceVIL.Images.diskette64.png ^
 -res:Images\drive32.png,SpaceVIL.Images.drive32.png ^

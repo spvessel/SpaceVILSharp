@@ -1,11 +1,14 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Core.EventDropMethodState;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.util.*;
 
 public class WContainer extends Prototype {
+    public EventDropMethodState eventDrop = new EventDropMethodState();
+
     private static int count = 0;
     public List<ItemAlignment> _sides = new LinkedList<>();
     boolean _is_fixed = false;
@@ -15,13 +18,18 @@ public class WContainer extends Prototype {
         setItemName("WContainer_" + count);
         count++;
         setStyle(DefaultsService.getDefaultStyle(WContainer.class));
+        // eventDrop.add((sender, args) -> {
+        //     for (String item : args.paths) {
+        //         System.out.println(item);
+        //     }
+        // });
     }
 
-    protected void saveLastFocus(Prototype focused) {
+    void saveLastFocus(Prototype focused) {
         _focus = focused;
     }
 
-    protected void restoreFocus() {
+    void restoreFocus() {
         if (_focus != null)
             _focus.setFocus();
         _focus = null;

@@ -62,7 +62,7 @@ public final class WindowLayout {
     private UUID ParentGUID;
 
     private Thread thread_engine;
-    protected DrawEngine engine;
+    private DrawEngine engine;
 
     private Thread thread_manager;
     private ActionManager manager;
@@ -459,17 +459,17 @@ public final class WindowLayout {
         engine.maximizeWindow();
     }
 
-    protected void isFixed(Boolean flag) {
+    void isFixed(Boolean flag) {
     }
 
-    protected void setEventTask(EventTask task) {
+    void setEventTask(EventTask task) {
         // manager.stackEvents.add(task);
         manager.addTask(task);
     }
 
     // private volatile Boolean set = true;
 
-    protected void executePollActions() {
+    void executePollActions() {
         // manager.execute.release();
         // manager.notify();
         manager.execute.set();
