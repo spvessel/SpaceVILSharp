@@ -67,6 +67,10 @@ namespace SpaceVIL
                 KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextEdit)));
+
+            undoQueue = new LinkedList<TextEditState>();
+            redoQueue = new LinkedList<TextEditState>();
+            undoQueue.AddFirst(new TextEditState(GetText(), _cursor_position));
         }
         public TextEdit(String text) : this()
         {            
@@ -471,6 +475,18 @@ namespace SpaceVIL
                 _text_object.SetItemText(text);
                 _text_object.CheckXShift(_cursorXMax);
                 ReplaceCursor();
+
+                if (!nothingFlag)
+                {
+                    redoQueue = new LinkedList<TextEditState>();
+                }
+                else
+                {
+                    nothingFlag = false;
+                }
+                if (undoQueue.Count > queueCapacity)
+                    undoQueue.RemoveLast();
+                undoQueue.AddFirst(new TextEditState(GetText(), _cursor_position));
             }
             finally
             {
@@ -786,16 +802,65 @@ namespace SpaceVIL
             }
         }
 
+        private int queueCapacity = 100;
+        private bool nothingFlag = false;
         public void Undo()
         {
-            _text_object.Undo();
-            ReplaceCursor();
+            // _text_object.Undo();
+            UndoAction();
+            // ReplaceCursor();
+        }
+        private LinkedList<TextEditState> undoQueue;
+        private void UndoAction()
+        {
+            if (undoQueue.Count == 1)
+                return;
+
+            TextEditState tmpText = undoQueue.First.Value;
+            if (tmpText != null)
+            {
+                undoQueue.RemoveFirst();
+                if (redoQueue.Count > queueCapacity)
+                    redoQueue.RemoveLast();
+                redoQueue.AddFirst(new TextEditState(tmpText.textState, tmpText.cursorState));
+
+                tmpText = undoQueue.First.Value;
+                if (tmpText != null)
+                {
+                    undoQueue.RemoveFirst();
+                    nothingFlag = true;
+
+                    PrivSetText(tmpText.textState);
+                    _cursor_position = tmpText.cursorState;
+                    undoQueue.First.Value.cursorState = _cursor_position;
+                    ReplaceCursor();
+                }
+            }
         }
 
         public void Redo()
         {
-            _text_object.Redo();
-            ReplaceCursor();
+            // _text_object.Redo();
+            RedoAction();
+            // ReplaceCursor();
+        }
+        private LinkedList<TextEditState> redoQueue;
+        private void RedoAction()
+        {
+            if (redoQueue.Count == 0)
+                return;
+
+            TextEditState tmpText = redoQueue.First.Value;
+            if (tmpText != null)
+            {
+                redoQueue.RemoveFirst();
+                nothingFlag = true;
+
+                PrivSetText(tmpText.textState);
+                _cursor_position = tmpText.cursorState;
+                undoQueue.First.Value.cursorState = _cursor_position;
+                ReplaceCursor();
+            }
         }
 
         public void SetSubstrateText(String substrateText)
@@ -854,6 +919,20 @@ namespace SpaceVIL
             CancelJustSelected();
             _cursor_position = PrivGetText().Length;
             PasteText(text);
+        }
+
+        internal class TextEditState
+        {
+            internal String textState;
+            internal int cursorState;
+            internal TextEditState()
+            {
+            }
+            internal TextEditState(String textState, int cursorState)
+            {
+                this.textState = textState;
+                this.cursorState = cursorState;
+            }
         }
     }
 }

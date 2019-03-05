@@ -10,6 +10,7 @@ import com.spvessel.spacevil.Flags.KeyMods;
 import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,6 +63,10 @@ class TextBlock extends Prototype
                 KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
 
         _cursor.setHeight(_textureStorage.getCursorHeight());
+
+        undoQueue = new ArrayDeque<>();
+        redoQueue = new ArrayDeque<>();
+        undoQueue.addFirst(new TextBlockState(getText(), new Point(_cursor_position)));
     }
 
     private void onMousePressed(Object sender, MouseArgs args) {
@@ -181,34 +186,34 @@ class TextBlock extends Prototype
             if (args.mods != KeyMods.NO) {
                 // Выделение не сбрасывается, проверяются сочетания
                 switch (args.mods) {
-                case SHIFT:
-                    if (ShiftValCodes.contains(args.key)) {
-                        if (!_isSelect) {
-                            _isSelect = true;
-                            _selectFrom = new Point(_cursor_position);
+                    case SHIFT:
+                        if (ShiftValCodes.contains(args.key)) {
+                            if (!_isSelect) {
+                                _isSelect = true;
+                                _selectFrom = new Point(_cursor_position);
+                            }
                         }
-                    }
 
-                    break;
+                        break;
 
-                case CONTROL:
-                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
-                        _selectFrom.x = 0;
-                        _selectFrom.y = 0;
-                        _cursor_position.y = _textureStorage.getCount() - 1;
-                        _cursor_position.x = getLineLetCount(_cursor_position.y);
-                        replaceCursor();
+                    case CONTROL:
+                        if (args.key == KeyCode.A || args.key == KeyCode.a) {
+                            _selectFrom.x = 0;
+                            _selectFrom.y = 0;
+                            _cursor_position.y = _textureStorage.getCount() - 1;
+                            _cursor_position.x = getLineLetCount(_cursor_position.y);
+                            replaceCursor();
 
-                        _isSelect = true;
-                    }
-                    break;
+                            _isSelect = true;
+                        }
+                        break;
 
-                // alt, super ?
+                    // alt, super ?
                 }
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE || args.key == KeyCode.ENTER) {
                     if (_isSelect)
-                        privCutText();
+                        cutText();
                     else {
                         _cursor_position = checkLineFits(_cursor_position);
                         if (args.key == KeyCode.BACKSPACE) // backspace
@@ -221,6 +226,7 @@ class TextBlock extends Prototype
                                 _cursor_position.y--;
                                 _cursor_position.x = getLineLetCount(_cursor_position.y);
                                 _textureStorage.combineLines(_cursor_position.y);
+                                undoStuff();
                             }
                             replaceCursor();
                         }
@@ -231,6 +237,7 @@ class TextBlock extends Prototype
                                 setTextInLine(sb.deleteCharAt(_cursor_position.x).toString());
                             } else if (_cursor_position.y < _textureStorage.getCount() - 1) {
                                 _textureStorage.combineLines(_cursor_position.y);
+                                undoStuff();
                             }
                         }
                     }
@@ -307,6 +314,7 @@ class TextBlock extends Prototype
 
                 replaceCursor();
                 // textChanged.execute();
+                undoStuff();
             }
 
             if (_isSelect) {
@@ -325,6 +333,8 @@ class TextBlock extends Prototype
             return;
         _textureStorage.textInputLock.lock();
         try {
+            ignoreSetInLine = true;
+
             // byte[] input = BitConverter.getBytes(args.Character);
             // String str = Encoding.UTF32.getString(input);
             byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
@@ -343,6 +353,8 @@ class TextBlock extends Prototype
             setTextInLine(sb.insert(_cursor_position.x, str).toString());
             _cursor_position.x++;
             replaceCursor();
+
+            undoStuff();
 
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -421,16 +433,22 @@ class TextBlock extends Prototype
                 unselectText();
             if (_justSelected)
                 cancelJustSelected();
+
             _cursor_position = _textureStorage.setText(text, _cursor_position);
             replaceCursor();
+
+            undoStuff();
         } finally {
             _textureStorage.textInputLock.unlock();
         }
     }
 
     private void setTextInLine(String text) {
-        // _linesList.get(_cursor_position.y).setItemText(text);
         _textureStorage.setTextInLine(text, _cursor_position.y);
+
+        if (!ignoreSetInLine)
+            undoStuff();
+        else ignoreSetInLine = false;
     }
 
     int getTextWidth() {
@@ -618,20 +636,7 @@ class TextBlock extends Prototype
 
     private Point addXYShifts(int xShift, int yShift, Point point, boolean isx) {
         Point outPoint = _textureStorage.addXYShifts(xShift, yShift, cursorPosToCoord(point), isx);
-        /*
-         * int offset = _cursorXMax / 3;
-         *
-         * if (globalXShift + outPoint.x < 0) { globalXShift = -outPoint.x; globalXShift
-         * += offset; if (globalXShift > 0) globalXShift = 0; updLinesXShift(); } if
-         * (globalXShift + outPoint.x > _cursorXMax) { globalXShift = _cursorXMax -
-         * outPoint.x; globalXShift -= offset; updLinesXShift(); } if (outPoint.y +
-         * globalYShift < 0) { globalYShift = -outPoint.y; updLinesYShift();
-         *
-         * } if (outPoint.y + _lineHeight + globalYShift > _cursorYMax) { globalYShift =
-         * _cursorYMax - outPoint.y - _lineHeight; updLinesYShift(); }
-         *
-         * outPoint.x += globalXShift; outPoint.y += globalYShift;
-         */
+
         outPoint.x += /* getX() + getPadding().left + _linesList.get(0).getMargin().left */ +xShift;
         outPoint.y += /* getY() + getPadding().top + _linesList.get(0).getMargin().top */ +yShift;
 
@@ -695,6 +700,8 @@ class TextBlock extends Prototype
             _cursor_position = _textureStorage.pasteText(pasteStr, _cursor_position);
 
             replaceCursor();
+
+            undoStuff();
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -733,7 +740,9 @@ class TextBlock extends Prototype
     }
 
     public String cutText() {
-        return privCutText();
+        String ans = privCutText();
+        undoStuff();
+        return ans;
     }
 
     private void unselectText() {
@@ -758,6 +767,8 @@ class TextBlock extends Prototype
             unselectText();
         if (_justSelected)
             cancelJustSelected();
+
+        undoStuff();
     }
 
     // style
@@ -772,7 +783,6 @@ class TextBlock extends Prototype
         _textureStorage.setLineContainerAlignment(style.textAlignment);
 
         Style inner_style = style.getInnerStyle("selection");
-        // System.out.println(inner_style.alignment);
         if (inner_style != null) {
             _selectedArea.setStyle(inner_style);
         }
@@ -799,14 +809,80 @@ class TextBlock extends Prototype
         super.removeItem(item);
     }
 
-    //Don't working yet
+    private ArrayDeque<TextBlockState> undoQueue;
+    private ArrayDeque<TextBlockState> redoQueue;
+    private boolean nothingFlag = false;
+    private int queueCapacity = 100;
+    private boolean ignoreSetInLine = false;
+
     public void redo() {
-        // _textureStorage.redo();
+        if (redoQueue.size() == 0)
+            return;
+
+        TextBlockState tmpText = redoQueue.pollFirst();
+        if (tmpText != null) {
+            nothingFlag = true;
+
+            setText(tmpText.textState);
+            _cursor_position = new Point(tmpText.cursorStateX, tmpText.cursorStateY);
+            undoQueue.peekFirst().cursorStateX = _cursor_position.x;
+            undoQueue.peekFirst().cursorStateY = _cursor_position.y;
+            replaceCursor();
+
+//            _selectFrom = new Point(tmpText.fromSelectState);
+//            _selectTo = new Point(tmpText.toSelectState);
+//            makeSelectedArea(_selectFrom, _selectTo);
+            // _textureStorage.redo();
+        }
     }
 
-    //Don't working yet
     public void undo() {
-        // _textureStorage.undo();
+        if (undoQueue.size() == 1)
+            return;
+
+//        undoStuff();
+
+        TextBlockState tmpText = undoQueue.pollFirst();
+        if (tmpText != null) {
+            if (redoQueue.size() > queueCapacity)
+                redoQueue.pollLast();
+            redoQueue.addFirst(new TextBlockState(tmpText.textState, new Point(tmpText.cursorStateX, tmpText.cursorStateY)));
+//            tmpText = null;
+            tmpText = undoQueue.pollFirst();
+            if (tmpText != null) {
+                nothingFlag = true;
+
+                setText(tmpText.textState);
+                _cursor_position = new Point(tmpText.cursorStateX, tmpText.cursorStateY);
+                undoQueue.peekFirst().cursorStateX = _cursor_position.x;
+                undoQueue.peekFirst().cursorStateY = _cursor_position.y;
+                replaceCursor();
+
+//                _selectFrom = new Point(tmpText.fromSelectState);
+//                _selectTo = new Point(tmpText.toSelectState);
+//                makeSelectedArea(_selectFrom, _selectTo);
+                // _textureStorage.undo();
+            }
+        }
+    }
+
+    private void undoStuff() {
+        if (!nothingFlag) {
+//                TextBlockState tbs = new TextBlockState(getText(), _cursor_position);
+//                redoQueue.addFirst(tbs);
+            redoQueue = new ArrayDeque<>();
+        } else {
+            nothingFlag = false;
+        }
+
+        if (undoQueue.size() > queueCapacity)
+            undoQueue.pollLast();
+        TextBlockState tbs = new TextBlockState(getText(), new Point(_cursor_position));
+//        if (_isSelect) {
+//            tbs.fromSelectState = new Point(_selectFrom);
+//            tbs.toSelectState = new Point(_selectTo);
+//        }
+        undoQueue.addFirst(tbs);
     }
 
     @Override
@@ -867,5 +943,22 @@ class TextBlock extends Prototype
         int lineNum = _textureStorage.getCount() - 1;
         _cursor_position = new Point(getLineLetCount(lineNum), lineNum);
         pasteText(text);
+    }
+
+    private class TextBlockState {
+        String textState;
+        int cursorStateX;
+        int cursorStateY;
+//        Point fromSelectState;
+//        Point toSelectState;
+        TextBlockState() {
+        }
+        TextBlockState(String textState, Point cursorState) {
+            this.textState = textState;
+            this.cursorStateX = cursorState.x;
+            this.cursorStateY = cursorState.y;
+//            fromSelectState = new Point(0, 0);
+//            toSelectState = new Point(0, 0);
+        }
     }
 }

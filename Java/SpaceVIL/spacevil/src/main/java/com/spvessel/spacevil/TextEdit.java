@@ -11,6 +11,7 @@ import com.spvessel.spacevil.Flags.KeyMods;
 import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,9 +27,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     private Rectangle _selectedArea;
     private boolean _isEditable = true;
 
-    // private int _cursorXMin = 0;
     private int _cursorXMax = Integer.MAX_VALUE;
-    // private int _lineXShift = 0;
 
     /**
      * @return selection area Rectangle for styling
@@ -41,14 +40,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     private int _selectTo = -1;
     private boolean _isSelect = false;
     private boolean _justSelected = false;
-    /*
-     * private final KeyCode BackspaceCode = KeyCode.BACKSPACE;// 14; private final
-     * KeyCode DeleteCode = KeyCode.DELETE;// 339; private final KeyCode
-     * LeftArrowCode = KeyCode.LEFT;// 331; private final KeyCode RightArrowCode =
-     * KeyCode.RIGHT;// 333; private final KeyCode EndCode = KeyCode.END;// 335;
-     * private final KeyCode HomeCode = KeyCode.HOME;// 327; private final KeyCode
-     * ACode = KeyCode.A;// 30;
-     */
+
     private List<KeyCode> ShiftValCodes;
     private List<KeyCode> InsteadKeyMods;
 
@@ -86,7 +78,10 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.TextEdit"));
         setStyle(DefaultsService.getDefaultStyle(TextEdit.class));
         // _substrate_text.setFontStyle(Font.ITALIC);
-        // System.out.println("constructor " + _substrate_text.getFont().getStyle());
+
+        undoQueue = new ArrayDeque<>();
+        redoQueue = new ArrayDeque<>();
+        undoQueue.addFirst(new TextEditState(getText(), _cursor_position));
     }
     public TextEdit(String text) {
         this();
@@ -465,6 +460,16 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
             // _text_object.UpdateData(UpdateType.Critical); //Doing in the _text_object
 
             replaceCursor();
+
+
+            if (!nothingFlag) {
+                redoQueue = new ArrayDeque<>();
+            } else {
+                nothingFlag = false;
+            }
+            if (undoQueue.size() > queueCapacity)
+                undoQueue.pollLast();
+            undoQueue.addFirst(new TextEditState(getText(), _cursor_position));
         } finally {
             textInputLock.unlock();
         }
@@ -774,20 +779,61 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         }
     }
 
+    private int queueCapacity = 100;
+    private boolean nothingFlag = false;
     /**
      * Undo last action
      */
     public void undo() {
-        _text_object.undo();
-        replaceCursor();
+//        _text_object.undo();
+        undoAction();
+//        replaceCursor();
+    }
+    private ArrayDeque<TextEditState> undoQueue;
+    private void undoAction() {
+        if (undoQueue.size() == 1)
+            return;
+
+        TextEditState tmpText = undoQueue.pollFirst();
+        if (tmpText != null) {
+            if (redoQueue.size() > queueCapacity)
+                redoQueue.pollLast();
+            redoQueue.addFirst(new TextEditState(tmpText.textState, tmpText.cursorState));
+
+            tmpText = undoQueue.pollFirst();
+            if (tmpText != null) {
+                nothingFlag = true;
+
+                privSetText(tmpText.textState);
+                _cursor_position = tmpText.cursorState;
+                undoQueue.peekFirst().cursorState = _cursor_position;
+                replaceCursor();
+            }
+        }
     }
 
     /**
      * Redo last undo action
      */
     public void redo() {
-        _text_object.redo();
-        replaceCursor();
+//        _text_object.redo();
+        redoAction();
+//        replaceCursor();
+    }
+    private ArrayDeque<TextEditState> redoQueue;
+    private void redoAction() {
+        if (redoQueue.size() == 0)
+            return;
+
+        TextEditState tmpText = redoQueue.pollFirst();
+        if (tmpText != null) {
+            nothingFlag = true;
+
+            privSetText(tmpText.textState);
+            _cursor_position = tmpText.cursorState;
+            undoQueue.peekFirst().cursorState = _cursor_position;
+            replaceCursor();
+        }
     }
 
     public void setSubstrateText(String substrateText) {
@@ -836,5 +882,16 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         cancelJustSelected();
         _cursor_position = privGetText().length();
         pasteText(text);
+    }
+
+    private class TextEditState {
+        String textState;
+        int cursorState;
+        TextEditState() {
+        }
+        TextEditState(String textState, int cursorState) {
+            this.textState = textState;
+            this.cursorState = cursorState;
+        }
     }
 }

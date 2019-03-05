@@ -450,7 +450,7 @@ namespace SpaceVIL
 
         internal Point SetText(string text, Point curPos)
         {
-            if (text.Equals("") || text == null) Clear();
+            if (text == null || text.Equals("")) Clear();
             else if (!text.Equals(GetWholeText()))
             {
                 curPos = SplitAndMakeLines(text, curPos);
@@ -488,7 +488,8 @@ namespace SpaceVIL
             int inc = 0;
             string s;
 
-            _linesList[0].SetItemText(line[0]);
+            s = line[0].TrimEnd('\r');
+            _linesList[0].SetItemText(s);
 
             for (int i = 1; i < line.Length; i++)
             {
@@ -676,7 +677,6 @@ namespace SpaceVIL
                 {
                     if (tptmp == null)
                     {
-                        //bigOff += lineHeigh * w * 4;
                         continue;
                     }
                     if (tptmp.Texture == null)

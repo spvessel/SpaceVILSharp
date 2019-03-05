@@ -9,16 +9,15 @@ namespace SpaceVIL
 {
     abstract internal class TextItem : Primitive
     {
-        private List<float> _alphas;
-        private List<float> _interCoords;
-        private float[] _coordinates;
-        private float[] _colors;
+        // private List<float> _alphas;
+        // private List<float> _interCoords;
+        // private float[] _coordinates;
+        // private float[] _colors;
         private String _itemText = "";
 
         private Font _font = DefaultsService.GetDefaultFont();
 
         static int count = 0;
-        private int queueCapacity = 512;
 
         internal TextItem()
         {
@@ -27,8 +26,6 @@ namespace SpaceVIL
             SetWidthPolicy(SizePolicy.Expand);
             SetHeightPolicy(SizePolicy.Expand);
             count++;
-            undoQueue = new LinkedList<string>();
-            redoQueue = new LinkedList<string>();
         }
 
         internal TextItem(String text, Font font) : this()
@@ -42,16 +39,16 @@ namespace SpaceVIL
             SetItemName(name);
         }
 
-        protected void SetRealCoords(List<float> realCoords)
-        {
-            _coordinates = ToGL(realCoords);
-        }
-
-        protected void SetAlphas(List<float> alphas)
-        {
-            _alphas = alphas;
-            //SetColor(alphas);
-        }
+        // protected void SetRealCoords(List<float> realCoords)
+        // {
+        //     _coordinates = ToGL(realCoords);
+        // }
+        // 
+        // protected void SetAlphas(List<float> alphas)
+        // {
+        //     _alphas = alphas;
+        //     //SetColor(alphas);
+        // }
 
         internal String GetItemText()
         {
@@ -62,47 +59,8 @@ namespace SpaceVIL
         {
             if (!_itemText.Equals(itemText))
             {
-                if (isUndo)
-                {
-                    if (redoQueue.Count > queueCapacity)
-                        redoQueue.RemoveLast();
-
-                    redoQueue.AddFirst(_itemText);
-                    isUndo = false;
-                }
-                else
-                {
-                    if (undoQueue.Count > queueCapacity)
-                        undoQueue.RemoveLast();
-
-                    undoQueue.AddFirst(_itemText);
-                }
                 _itemText = itemText;
                 UpdateData();
-            }
-        }
-
-        private bool isUndo = false;
-        private LinkedList<string> undoQueue;
-        internal void Undo()
-        {
-            if (undoQueue.Count > 0)
-            {
-                string tmpText = undoQueue.First.Value;
-                undoQueue.RemoveFirst();
-                isUndo = true;
-                SetItemText(tmpText);
-            }
-        }
-
-        private LinkedList<string> redoQueue;
-        internal void Redo()
-        {
-            if (redoQueue.Count > 0)
-            {
-                string tmpText = redoQueue.First.Value;
-                redoQueue.RemoveFirst();
-                SetItemText(tmpText);
             }
         }
 
@@ -149,10 +107,10 @@ namespace SpaceVIL
         public abstract void UpdateData();
         //protected abstract void UpdateCoords();
 
-        internal float[] GetCoordinates()
-        {
-            return _coordinates;
-        }
+        // internal float[] GetCoordinates()
+        // {
+        //     return _coordinates;
+        // }
 
         /*
         internal float[] GetColors()
@@ -161,33 +119,33 @@ namespace SpaceVIL
         }
         */
 
-        private float[] ToGL(List<float> coord)
-        {
-            float[] outCoord = new float[coord.Count];
-            float f;
-            float x0 = GetX();
-            float y0 = GetY();
-            float windowH = GetHandler().GetHeight() / 2f;
-            float windowW = GetHandler().GetWidth() / 2f;
-
-            for (int i = 0; i < coord.Count; i += 3)
-            {
-                f = coord[i];
-                f += x0;
-                f = f / windowW - 1.0f;
-                outCoord[i] = f;
-
-                f = coord[i + 1];
-                f += y0;
-                f = -(f / windowH - 1.0f);
-                outCoord[i + 1] = f;
-
-                f = coord[i + 2];
-                outCoord[i + 2] = f;
-            }
-
-            return outCoord;
-        }
+        // private float[] ToGL(List<float> coord)
+        // {
+        //     float[] outCoord = new float[coord.Count];
+        //     float f;
+        //     float x0 = GetX();
+        //     float y0 = GetY();
+        //     float windowH = GetHandler().GetHeight() / 2f;
+        //     float windowW = GetHandler().GetWidth() / 2f;
+        // 
+        //     for (int i = 0; i < coord.Count; i += 3)
+        //     {
+        //         f = coord[i];
+        //         f += x0;
+        //         f = f / windowW - 1.0f;
+        //         outCoord[i] = f;
+        // 
+        //         f = coord[i + 1];
+        //         f += y0;
+        //         f = -(f / windowH - 1.0f);
+        //         outCoord[i + 1] = f;
+        // 
+        //         f = coord[i + 2];
+        //         outCoord[i + 2] = f;
+        //     }
+        // 
+        //     return outCoord;
+        // }
 
         private Color _foreground = Color.Black; //default
         public Color GetForeground()
@@ -257,10 +215,10 @@ namespace SpaceVIL
             SetTextAlignment(common);
         }
 
-        public virtual float[] Shape()
-        {
-            return GetCoordinates();
-        }
+        // public virtual float[] Shape()
+        // {
+        //     return GetCoordinates();
+        // }
 
     }
 }
