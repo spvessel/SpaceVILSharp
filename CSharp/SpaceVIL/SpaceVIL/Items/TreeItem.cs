@@ -173,7 +173,7 @@ namespace SpaceVIL
             item._parentBranch = this;
             item._treeViewContainer = _treeViewContainer;
             item._nesting_level = _nesting_level + 1;
-            _indicator.SetToggled(true);
+            // _indicator.SetToggled(true);
 
             List<TreeItem> neighbors = GetChildren();
             int ind = -1;
@@ -329,6 +329,12 @@ namespace SpaceVIL
             {
                 _icon_shape.SetStyle(inner_style);
             }
+        }
+
+        public void SetExpanded(bool value)
+        {
+            if (_item_type.Equals(TreeItemType.Branch))
+                _indicator.SetToggled(value);
         }
     }
 }

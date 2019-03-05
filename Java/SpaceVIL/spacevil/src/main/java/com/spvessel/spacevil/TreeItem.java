@@ -198,7 +198,7 @@ public class TreeItem extends Prototype {
         item._parentBranch = this;
         item._treeViewContainer = _treeViewContainer;
         item._nesting_level = _nesting_level + 1;
-        _indicator.setToggled(true);
+//        _indicator.setToggled(true);
 
         Comparator<TreeItem> comp = _treeViewContainer.getComparator();
 
@@ -382,5 +382,10 @@ public class TreeItem extends Prototype {
         if (inner_style != null) {
             _icon_shape.setStyle(inner_style);
         }
+    }
+
+    public void setExpanded(boolean value) {
+        if (_item_type.equals(TreeItemType.BRANCH))
+            _indicator.setToggled(value);
     }
 }
