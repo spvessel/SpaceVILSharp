@@ -138,7 +138,7 @@ public class FlowTest extends ActiveWindow {
         btn4.eventMouseClick.add((sender, args) -> {
             // flow.addItem(getBlockList());
             SideArea side = new SideArea(Side.LEFT);
-            side.setAttachSide(Side.TOP);
+            // side.setAttachSide(Side.TOP);
             side.show(getHandler());
         });
         btn4.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));

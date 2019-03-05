@@ -130,6 +130,20 @@ public class SideArea extends Prototype {
         window.removeItem(item);
     }
 
+    @Override
+    public void setWidth(int width) {
+        super.setWidth(width);
+        if (width < window.getWidth())
+            window.setWidth(width);
+    }
+
+    @Override
+    public void setHeight(int height) {
+        super.setHeight(height);
+        if (height < window.getHeight())
+            window.setHeight(height);
+    }
+
     WindowLayout _handler = null;
 
     public void show(WindowLayout handler) {

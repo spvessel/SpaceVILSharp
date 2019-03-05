@@ -12,7 +12,7 @@ namespace SpaceVIL
     {
         static int count = 0;
         private ButtonCore _close;
-        public ResizableItem window;
+        public ResizableItem Window;
 
         private Side _attachSide = Side.Left;
 
@@ -32,54 +32,54 @@ namespace SpaceVIL
 
         private void ApplyAttach()
         {
-            window.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            window.SetAlignment(ItemAlignment.Top, ItemAlignment.Left);
-            window.IsWResizable = false;
-            window.IsHResizable = false;
-            window.ClearExcludedSides();
+            Window.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            Window.SetAlignment(ItemAlignment.Top, ItemAlignment.Left);
+            Window.IsWResizable = false;
+            Window.IsHResizable = false;
+            Window.ClearExcludedSides();
 
             switch (_attachSide)
             {
                 case Side.Left:
-                    window.IsWResizable = true;
-                    window.SetWidthPolicy(SizePolicy.Fixed);
-                    window.SetWidth(_size);
-                    window.ExcludeSides(Side.Left, Side.Bottom, Side.Top);
-                    window.SetAlignment(ItemAlignment.Left);
-                    window.SetShadow(5, 3, 0, Color.FromArgb(150, 0, 0, 0));
+                    Window.IsWResizable = true;
+                    Window.SetWidthPolicy(SizePolicy.Fixed);
+                    Window.SetWidth(_size);
+                    Window.ExcludeSides(Side.Left, Side.Bottom, Side.Top);
+                    Window.SetAlignment(ItemAlignment.Left);
+                    Window.SetShadow(5, 3, 0, Color.FromArgb(150, 0, 0, 0));
                     break;
 
                 case Side.Top:
-                    window.IsHResizable = true;
-                    window.SetHeightPolicy(SizePolicy.Fixed);
-                    window.SetHeight(_size);
-                    window.ExcludeSides(Side.Left, Side.Right, Side.Top);
-                    window.SetAlignment(ItemAlignment.Top);
-                    window.SetShadow(5, 0, 3, Color.FromArgb(150, 0, 0, 0));
+                    Window.IsHResizable = true;
+                    Window.SetHeightPolicy(SizePolicy.Fixed);
+                    Window.SetHeight(_size);
+                    Window.ExcludeSides(Side.Left, Side.Right, Side.Top);
+                    Window.SetAlignment(ItemAlignment.Top);
+                    Window.SetShadow(5, 0, 3, Color.FromArgb(150, 0, 0, 0));
                     break;
 
                 case Side.Right:
-                    window.IsWResizable = true;
-                    window.SetWidthPolicy(SizePolicy.Fixed);
-                    window.SetWidth(_size);
-                    window.ExcludeSides(Side.Right, Side.Bottom, Side.Top);
-                    window.SetShadow(5, -3, 0, Color.FromArgb(150, 0, 0, 0));
-                    window.SetAlignment(ItemAlignment.Right);
+                    Window.IsWResizable = true;
+                    Window.SetWidthPolicy(SizePolicy.Fixed);
+                    Window.SetWidth(_size);
+                    Window.ExcludeSides(Side.Right, Side.Bottom, Side.Top);
+                    Window.SetShadow(5, -3, 0, Color.FromArgb(150, 0, 0, 0));
+                    Window.SetAlignment(ItemAlignment.Right);
                     break;
 
                 case Side.Bottom:
-                    window.IsHResizable = true;
-                    window.SetHeightPolicy(SizePolicy.Fixed);
-                    window.SetHeight(_size);
-                    window.ExcludeSides(Side.Left, Side.Right, Side.Bottom);
-                    window.SetShadow(5, 0, -3, Color.FromArgb(150, 0, 0, 0));
-                    window.SetAlignment(ItemAlignment.Bottom);
+                    Window.IsHResizable = true;
+                    Window.SetHeightPolicy(SizePolicy.Fixed);
+                    Window.SetHeight(_size);
+                    Window.ExcludeSides(Side.Left, Side.Right, Side.Bottom);
+                    Window.SetShadow(5, 0, -3, Color.FromArgb(150, 0, 0, 0));
+                    Window.SetAlignment(ItemAlignment.Bottom);
                     break;
 
                 default:
-                    window.SetWidth(_size);
-                    window.SetAlignment(ItemAlignment.Left);
-                    window.SetShadow(5, 3, 0, Color.FromArgb(150, 0, 0, 0));
+                    Window.SetWidth(_size);
+                    Window.SetAlignment(ItemAlignment.Left);
+                    Window.SetShadow(5, 3, 0, Color.FromArgb(150, 0, 0, 0));
                     break;
             }
         }
@@ -101,7 +101,7 @@ namespace SpaceVIL
             SetItemName("SideArea_" + count++);
             SetPassEvents(false);
             _close = new ButtonCore();
-            window = new ResizableItem();
+            Window = new ResizableItem();
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SideArea)));
             _attachSide = attachSide;
             ApplyAttach();
@@ -113,11 +113,11 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            base.AddItem(window);
-            window.AddItem(_close);
-            window.SetPassEvents(false);
-            window.IsXFloating = false;
-            window.IsYFloating = false;
+            base.AddItem(Window);
+            Window.AddItem(_close);
+            Window.SetPassEvents(false);
+            Window.IsXFloating = false;
+            Window.IsYFloating = false;
             _close.EventMouseClick += (sender, args) =>
             {
                 close();
@@ -126,17 +126,31 @@ namespace SpaceVIL
 
         public override void AddItem(IBaseItem item)
         {
-            window.AddItem(item);
+            Window.AddItem(item);
         }
 
         public override void InsertItem(IBaseItem item, int index)
         {
-            window.InsertItem(item, index);
+            Window.InsertItem(item, index);
         }
 
         public override void RemoveItem(IBaseItem item)
         {
-            window.RemoveItem(item);
+            Window.RemoveItem(item);
+        }
+
+        public override void SetWidth(int width)
+        {
+            base.SetWidth(width);
+            if (width < Window.GetWidth())
+                Window.SetWidth(width);
+        }
+
+        public override void SetHeight(int height)
+        {
+            base.SetHeight(height);
+            if (height < Window.GetHeight())
+                Window.SetHeight(height);
         }
 
         WindowLayout _handler = null;
@@ -161,7 +175,7 @@ namespace SpaceVIL
             Style inner_style = style.GetInnerStyle("window");
             if (inner_style != null)
             {
-                window.SetStyle(inner_style);
+                Window.SetStyle(inner_style);
             }
             inner_style = style.GetInnerStyle("closebutton");
             if (inner_style != null)
