@@ -382,6 +382,7 @@ public class ListBox extends Prototype {
     public void removeItem(InterfaceBaseItem item) {
         _area.removeItem(item);
         updateElements();
+        _area.setFocus();
     }
 
     public void clear() {

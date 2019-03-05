@@ -1082,7 +1082,7 @@ final class DrawEngine {
         while (!_handler.isClosing()) {
             glfwWaitEventsTimeout(_interval);
             // glfwWaitEvents();
-            // // glfwPollEvents();
+            // glfwPollEvents();
 
             // glClearColor(0, 0, 0, 0);
             if (!engineEvent.lastEvent().contains(InputEventType.WINDOW_RESIZE)) {
@@ -1090,6 +1090,11 @@ final class DrawEngine {
                 _handler.swap();
             }
             flag_move = true;
+            // try {
+            //     Thread.sleep(1000 / 60);
+            // } catch (InterruptedException e) {
+            //     e.printStackTrace();
+            // }
         }
         _primitive.deleteShader();
         _texture.deleteShader();

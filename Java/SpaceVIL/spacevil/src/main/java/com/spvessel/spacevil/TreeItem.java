@@ -15,7 +15,6 @@ import com.spvessel.spacevil.Flags.TreeItemType;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -30,7 +29,19 @@ public class TreeItem extends Prototype {
         return _list_inners;
     }
 
+    public void removeChild(TreeItem child) {
+        if (_list_inners.contains(child)) {
+            _list_inners.remove(child);
+            child.removeAllChildren();
+            _treeViewContainer.removeItem(child);
+        }
+    }
+
     void removeAllChildren() {
+        for (TreeItem item : _list_inners) {
+            item.removeAllChildren();
+            _treeViewContainer.removeItem(item);
+        }
         _list_inners.clear();
     }
 
@@ -116,10 +127,12 @@ public class TreeItem extends Prototype {
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         if (args.key == KeyCode.ENTER)
             _indicator.eventToggle.execute(sender, new MouseArgs());
-        else if (args.key == KeyCode.SPACE)
-            addItem(new TreeItem(TreeItemType.BRANCH, "new branch " + count));
-        else if (args.key == KeyCode.EQUAL)
-            addItem(new TreeItem(TreeItemType.LEAF, "new leaf " + count));
+        // else if (args.key == KeyCode.SPACE)
+        //     addItem(new TreeItem(TreeItemType.BRANCH, "new branch " + count));
+        // else if (args.key == KeyCode.EQUAL)
+        //     addItem(new TreeItem(TreeItemType.LEAF, "new leaf " + count));
+        // else if (args.key == KeyCode.DELETE)
+        //     getParentBranch().removeChild(this);
     }
 
     void resetIndents() {

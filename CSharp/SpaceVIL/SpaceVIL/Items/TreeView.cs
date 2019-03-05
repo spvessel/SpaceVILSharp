@@ -168,5 +168,11 @@ namespace SpaceVIL
             _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
 
         }
+        public override void RemoveItem(IBaseItem item)
+        {
+            if (item.Equals(_root))
+                return;
+            base.RemoveItem(item);
+        }
     }
 }

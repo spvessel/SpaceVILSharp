@@ -2067,8 +2067,7 @@ public class Style {
         return style;
     }
 
-    public static Style getWrapGridStyle()
-    {
+    public static Style getWrapGridStyle() {
         Style style = new Style();
 
         style.background = new Color(70, 70, 70);
@@ -2086,6 +2085,42 @@ public class Style {
 
         Style area_style = getWrapAreaStyle();
         style.addInnerStyle("area", area_style);
+
+        return style;
+    }
+
+    public static Style getSideAreaStyle() {
+        Style style = new Style();
+        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setBackground(0, 0, 0, 130);
+        style.borderRadius = new CornerRadius(0);
+        style.padding = new Indents();
+        style.margin = new Indents();
+        style.spacing = new Spacing();
+
+        Style window_style = getFrameStyle();
+        window_style.setPadding(2, 2, 2, 2);
+        window_style.setBackground(40, 40, 40);
+        window_style.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+        style.addInnerStyle("window", window_style);
+
+        Style close_style = new Style();
+        close_style.setMargin(0, 5, 0, 0);
+        close_style.font = DefaultsService.getDefaultFont();
+        close_style.background = new Color(100, 100, 100);
+        close_style.foreground = new Color(0, 0, 0, 0);
+        close_style.setSize(15, 15);
+        close_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        close_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.RIGHT));
+        close_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        ItemState close_hovered = new ItemState();
+        close_hovered.background = new Color(186, 95, 97, 255);
+        close_style.addItemState(ItemStateType.HOVERED, close_hovered);
+
+        close_style.shape = GraphicsMathService.getCross(15, 15, 2, 45);
+        close_style.isFixedShape = true;
+        style.addInnerStyle("closebutton", close_style);
 
         return style;
     }

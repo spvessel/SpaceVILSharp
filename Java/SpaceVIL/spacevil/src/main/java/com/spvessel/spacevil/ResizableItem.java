@@ -5,6 +5,7 @@ import com.spvessel.spacevil.Core.InterfaceDraggable;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.util.LinkedList;
@@ -15,15 +16,32 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         TRUE, FALSE
     }
 
+    public List<Side> _sidesExclude = new LinkedList<>();
+
+    public void excludeSides(Side... sides) {
+        for (Side side : sides) {
+            if (!_sidesExclude.contains(side))
+                _sidesExclude.add(side);
+        }
+    }
+
+    public List<Side> getExcludedSides() {
+        return _sidesExclude;
+    }
+    public void clearExcludedSides() {
+        _sidesExclude.clear();
+    }
+
     List<ItemAlignment> _sides = new LinkedList<>();
 
     public EventCommonMethod positionChanged = new EventCommonMethod();
     public EventCommonMethod sizeChanged = new EventCommonMethod();
 
     public boolean isLocked = false;
-    public boolean isResizable = true;
-    public boolean isHFloating = true;
-    public boolean isVFloating = true;
+    public boolean isWResizable = true;
+    public boolean isHResizable = true;
+    public boolean isXFloating = true;
+    public boolean isYFloating = true;
 
     private Moving _is_moved;
 
@@ -80,11 +98,11 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
 
         switch (_is_moved) {
         case TRUE:
-            if (isHFloating) {
+            if (isXFloating) {
                 offset_x = args.position.getX() - _diff_x;
                 setX(offset_x);
             }
-            if (isVFloating) {
+            if (isYFloating) {
                 offset_y = args.position.getY() - _diff_y;
                 setY(offset_y);
             }
@@ -93,7 +111,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
             break;
 
         case FALSE:
-            if (!isResizable)
+            if (!isWResizable && !isHResizable)
                 break;
 
             int x_handler = getX();
@@ -135,9 +153,16 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
                     setY(y_handler);
                     positionChanged.execute();
                 }
-                setWidth(w);
-                setHeight(h);
-                sizeChanged.execute();
+
+                boolean flag = false;
+                if (isWResizable && w != getWidth()) {
+                    setWidth(w);
+                    flag = true;
+                }
+                if (isHResizable && h != getHeight())
+                    setHeight(h);
+                if (flag)
+                    sizeChanged.execute();
             }
             setConfines();
             break;
@@ -164,17 +189,17 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
 
     void getSides(float xpos, float ypos) {
         _sides.clear();
-        if (xpos <= 10) {
+        if (xpos <= 10 && !_sidesExclude.contains(Side.LEFT)) {
             _sides.add(ItemAlignment.LEFT);
         }
-        if (xpos >= getWidth() - 10) {
+        if (xpos >= getWidth() - 10 && !_sidesExclude.contains(Side.RIGHT)) {
             _sides.add(ItemAlignment.RIGHT);
         }
 
-        if (ypos <= 10) {
+        if (ypos <= 10 && !_sidesExclude.contains(Side.TOP)) {
             _sides.add(ItemAlignment.TOP);
         }
-        if (ypos >= getHeight() - 10) {
+        if (ypos >= getHeight() - 10 && !_sidesExclude.contains(Side.BOTTOM)) {
             _sides.add(ItemAlignment.BOTTOM);
         }
     }

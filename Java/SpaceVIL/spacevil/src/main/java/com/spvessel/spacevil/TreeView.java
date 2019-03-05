@@ -94,7 +94,7 @@ public class TreeView extends ListBox {
         int index = getListContent().indexOf(prev) + 1;
         int nestLev = item._nesting_level;
         while (index < list.size()) {
-            if (((TreeItem)list.get(index))._nesting_level <= nestLev)
+            if (((TreeItem) list.get(index))._nesting_level <= nestLev)
                 break;
             index++;
         }
@@ -189,5 +189,12 @@ public class TreeView extends ListBox {
         super.addItem(_root);
         _root.resetIndents();
         _maxWrapperWidth = getWrapper(_root).getMinWidth();
+    }
+
+    @Override
+    public void removeItem(InterfaceBaseItem item) {
+        if (item.equals(_root))
+            return;
+        super.removeItem(item);
     }
 }

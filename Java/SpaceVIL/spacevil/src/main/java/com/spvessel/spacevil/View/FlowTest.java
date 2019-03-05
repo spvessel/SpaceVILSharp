@@ -8,6 +8,7 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemRule;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.OpenEntryDialog.OpenDialogType;
 import com.spvessel.spacevil.MenuItem;
@@ -31,12 +32,12 @@ public class FlowTest extends ActiveWindow {
         TitleBar title = new TitleBar("FlowTest");
         Handler.addItem(title);
         // Handler.getWindow().eventKeyPress.add((sender, args) -> {
-        //     // System.out.println(getHandler().getFocusedItem());
+        // // System.out.println(getHandler().getFocusedItem());
         // });
         // Handler.getWindow().eventKeyRelease.add((sender, args) -> {
-        //     if (args.key == KeyCode.SPACE) {
-        //         btn5.eventMouseClick.execute(btn5, new MouseArgs());
-        //     }
+        // if (args.key == KeyCode.SPACE) {
+        // btn5.eventMouseClick.execute(btn5, new MouseArgs());
+        // }
         // });
 
         VerticalStack layout = new VerticalStack();
@@ -136,6 +137,9 @@ public class FlowTest extends ActiveWindow {
         btn4.addItemState(ItemStateType.HOVERED, hovered);
         btn4.eventMouseClick.add((sender, args) -> {
             // flow.addItem(getBlockList());
+            SideArea side = new SideArea(Side.LEFT);
+            side.setAttachSide(Side.TOP);
+            side.show(getHandler());
         });
         btn4.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
         btn4.setHoverRule(ItemRule.STRICT);

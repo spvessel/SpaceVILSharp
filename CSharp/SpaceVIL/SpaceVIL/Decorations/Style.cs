@@ -2016,5 +2016,39 @@ namespace SpaceVIL.Decorations
 
             return style;
         }
+
+        public static Style GetSideAreaStyle()
+        {
+            Style style = new Style();
+            style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            style.SetBackground(0, 0, 0, 130);
+            style.BorderRadius = new CornerRadius(0);
+
+            Style window_style = GetFrameStyle();
+            window_style.SetPadding(2, 2, 2, 2);
+            window_style.SetBackground(40, 40, 40);
+            window_style.SetAlignment(ItemAlignment.Top, ItemAlignment.Left);
+            style.AddInnerStyle("window", window_style);
+
+            Style close_style = new Style();
+            close_style.SetMargin(0, 5, 0, 0);
+            close_style.Font = DefaultsService.GetDefaultFont();
+            close_style.Background = Color.FromArgb(100, 100, 100);
+            close_style.Foreground = Color.Transparent;
+            close_style.SetSize(15, 15);
+            close_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            close_style.Alignment = ItemAlignment.Top | ItemAlignment.Right;
+            close_style.TextAlignment = ItemAlignment.Right | ItemAlignment.Top;
+            ItemState close_hovered = new ItemState();
+            close_hovered.Background = Color.FromArgb(186, 95, 97);
+            close_style.AddItemState(ItemStateType.Hovered, close_hovered);
+
+            close_style.Shape = GraphicsMathService.GetCross(15, 15, 2, 45);
+            close_style.IsFixedShape = true;
+            style.AddInnerStyle("closebutton", close_style);
+
+            return style;
+        }
     }
 }
