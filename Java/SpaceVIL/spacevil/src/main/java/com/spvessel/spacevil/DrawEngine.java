@@ -1091,9 +1091,9 @@ final class DrawEngine {
             }
             flag_move = true;
             // try {
-            //     Thread.sleep(1000 / 60);
+            // Thread.sleep(1000 / 60);
             // } catch (InterruptedException e) {
-            //     e.printStackTrace();
+            // e.printStackTrace();
             // }
         }
         _primitive.deleteShader();
@@ -1564,7 +1564,7 @@ final class DrawEngine {
     }
 
     private void drawImage(ImageItem image) {
-        checkOutsideBorders((InterfaceBaseItem) image);
+        // checkOutsideBorders((InterfaceBaseItem) image);
 
         byte[] bitmap = image.getPixMapImage();
         if (bitmap == null)
@@ -1592,6 +1592,8 @@ final class DrawEngine {
             store.sendUniform4f(_texture, "rgb", argb);
         } else
             store.sendUniform1i(_texture, "overlay", 0);// VEEEEEEEERY interesting!!!
+
+        store.sendUniform1f(_texture, "alpha", image.getRotationAngle());
 
         store.draw();
         store.clear();

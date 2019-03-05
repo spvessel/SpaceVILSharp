@@ -15,6 +15,16 @@ namespace SpaceVIL
         public Bitmap _image;
         private byte[] _bitmap;
         private String _url;
+        private float _angleRotation = 0.0f;
+        public void SetRotationAngle(float angle)
+        {
+            _angleRotation = angle * (float)Math.PI / 180.0f;
+        }
+
+        public float GetRotationAngle()
+        {
+            return _angleRotation;
+        }
 
         public bool isHover = true;
 

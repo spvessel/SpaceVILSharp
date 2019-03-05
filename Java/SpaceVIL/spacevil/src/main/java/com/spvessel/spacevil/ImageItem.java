@@ -15,6 +15,16 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     private byte[] _bitmap;
     private String _url;
 
+    private float _angleRotation = 0.0f;
+
+    public void setRotationAngle(float angle) {
+        _angleRotation = angle * (float) Math.PI / 180.0f;
+    }
+
+    public float getRotationAngle() {
+        return _angleRotation;
+    }
+
     public boolean isHover = true;
 
     @Override
@@ -42,6 +52,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         _image = picture;
         _bitmap = createByteImage();
     }
+
     /**
      * Constructs an ImageItem with an image and hover attribute
      */

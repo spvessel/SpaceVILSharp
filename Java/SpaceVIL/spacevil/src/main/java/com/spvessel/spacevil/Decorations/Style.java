@@ -1970,9 +1970,11 @@ public class Style {
         style.addInnerStyle("cancelbutton", cancelbutton_style);
 
         Style filter_style = getButtonCoreStyle();
-        filter_style.setSize(24, 30);
+        // filter_style.setSize(24, 30);
+        filter_style.setSize(30, 30);
         filter_style.setBackground(35, 35, 35);
-        filter_style.setPadding(4, 6, 4, 6);
+        // filter_style.setPadding(4, 6, 4, 6);
+        filter_style.setPadding(4, 4, 4, 4);
         filter_style.setMargin(5, 0, 0, 0);
         style.addInnerStyle("filter", filter_style);
 

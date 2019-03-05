@@ -1601,8 +1601,9 @@ namespace SpaceVIL
                 store.SendUniform1i(_texture, "overlay", 1);
                 store.SendUniform4f(_texture, "rgb", argb);
             }
-            // else
-            //     store.SendUniform1i(_texture, "overlay", 0);// VEEEEEEEERY interesting!!!
+            else
+                store.SendUniform1i(_texture, "overlay", 0);// VEEEEEEEERY interesting!!!
+            store.SendUniform1f(_texture, "alpha", image.GetRotationAngle());
 
             store.Draw();
             store.Clear();

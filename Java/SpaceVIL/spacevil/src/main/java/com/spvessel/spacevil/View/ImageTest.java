@@ -2,7 +2,10 @@ package com.spvessel.spacevil.View;
 
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.*;
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Indents;
+import com.spvessel.spacevil.Flags.EmbeddedImage;
+import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -60,16 +63,17 @@ public class ImageTest extends ActiveWindow {
         pb.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
         pb.setMargin(25, 0, 25, 0);
         pb.setCurrentValue(50);
+        pb.setMaxValue(360);
         // pb.setValueVisibility(false);
 
         ButtonCore btn_action = new ButtonCore();
         btn_action.setBackground(100, 255, 150);
-        btn_action.setText("Columnar");
+        // btn_action.setText("Columnar");
         btn_action.setForeground(0, 0, 0);
         btn_action.setItemName("Action");
-        btn_action.setWidth(256);
+        btn_action.setWidth(128);
         btn_action.setHeight(128);
-        btn_action.setWidthPolicy(SizePolicy.EXPAND);
+        btn_action.setWidthPolicy(SizePolicy.FIXED);
         btn_action.setHeightPolicy(SizePolicy.FIXED);
         btn_action.setAlignment(ItemAlignment.HCENTER, ItemAlignment.TOP);
         btn_action.setMargin(new Indents(30, 0, 30, 0));
@@ -85,27 +89,34 @@ public class ImageTest extends ActiveWindow {
         // Image img1 = Image.FromFile("icon.png");
         // Image img1 = Image.FromFile("battery_full.png");
         // Image img1 = Image.FromFile("battery_full_small.png");
-        BufferedImage image = null;
-        try {
-            // image = ImageIO.read(new File("//home//rsedaikin//Documents//columnar.png"));
-            image = ImageIO.read(new File("D:\\columnar.png"));
-        } catch (IOException e) {
-        }
+        // BufferedImage image = null;
+        // try {
+        // // image = ImageIO.read(new
+        // File("//home//rsedaikin//Documents//columnar.png"));
+        // image = ImageIO.read(new File("D:\\columnar.png"));
+        // } catch (IOException e) {
+        // }
         // Image img1 = Image.FromFile("spacevil_logo.png");
         // Image img1 = Image.FromFile("sample.png");
         // Image img1 = Image.FromFile("icon.jpg");
 
-        ImageItem img = new ImageItem(image);
+        ImageItem img = new ImageItem(
+                DefaultsService.getDefaultImage(EmbeddedImage.FILTER, EmbeddedImageSize.SIZE_64X64), false);
 
         img.setBackground(new Color(100, 0, 0, 50));
-        img.setSize(256, 134);
+        img.setSize(64, 64);
+        img.setPadding(32, 32, 32, 32);
         img.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         img.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
 
         HorizontalSlider h_slider = new HorizontalSlider();
         h_slider.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
         h_slider.setMargin(25, 0, 25, 0);
-        h_slider.eventValueChanged.add((sender) -> pb.setCurrentValue((int) h_slider.getCurrentValue()));
+        h_slider.setMaxValue(360);
+        h_slider.eventValueChanged.add((sender) -> {
+            img.setRotationAngle(h_slider.getCurrentValue());
+            pb.setCurrentValue((int) h_slider.getCurrentValue());
+        });
 
         // frame.addItem(img);
 
@@ -163,8 +174,8 @@ public class ImageTest extends ActiveWindow {
         btn_action.addItem(img);
 
         // for (int i = 2; i < 5; i++) {
-        //     MenuItem menu_item = new MenuItem("Custom item for selection #" + i);
-        //     combo.addItem(menu_item);
+        // MenuItem menu_item = new MenuItem("Custom item for selection #" + i);
+        // combo.addItem(menu_item);
         // }
         // combo.setCurrentIndex(0);
     }
