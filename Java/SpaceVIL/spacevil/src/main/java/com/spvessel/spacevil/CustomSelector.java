@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CustomSelector extends Primitive {
+class CustomSelector extends Primitive {
     private static int count = 0;
 
     /**

@@ -523,5 +523,10 @@ namespace SpaceVIL
         {
             _area.AppendText(text);
         }
+
+        public void PasteText(String text)
+        {
+            _area.PasteText(text);
+        }
     }
 }

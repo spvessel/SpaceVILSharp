@@ -391,7 +391,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     Point setText(String text, Point curPos) {
-        if (text.equals("") || text == null)
+        if (text == null || text.equals(""))
             clear();
         else if (!text.equals(getWholeText())) {
             curPos = splitAndMakeLines(text, curPos);
@@ -426,7 +426,8 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         int inc = 0;
         String s;
 
-        _linesList.get(0).setItemText(line[0]);
+        s = line[0].replaceAll("\r", "");
+        _linesList.get(0).setItemText(s);
 
         for (int i = 1; i < line.length; i++) {
             inc++;
@@ -534,12 +535,9 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         outPoint.x += getParent().getX() + getParent().getPadding().left + globalXShift + getTextMargin().left;
         outPoint.y += getParent().getY() + getParent().getPadding().top + globalYShift + getTextMargin().top;
 
-        // outPoint.x += getX() + getPadding().left + _linesList.get(0).getMargin().left
-        // + xShift;
-        // outPoint.y += getY() + getPadding().top + _linesList.get(0).getMargin().top +
-        // yShift;
+        // outPoint.x += getX() + getPadding().left + _linesList.get(0).getMargin().left + xShift;
+        // outPoint.y += getY() + getPadding().top + _linesList.get(0).getMargin().top + yShift;
 
-        // Console.WriteLine(outPoint.x + " " + outPoint.y + " " + globalYShift);
         return outPoint;
     }
 
@@ -580,7 +578,6 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             int inc = -1;
             for (TextLine tl : _linesList) {
                 inc++;
-                // if (inc == 0) System.out.println("shift " + tl.getLineXShift());
 
                 TextPrinter tmp = tl.getLetTextures();
                 tpLines.add(tmp);
@@ -617,12 +614,6 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
             for (TextPrinter tptmp : tpLines) {
                 if (tptmp == null) {
-                    // for (int p = 0; p < 4; p++)
-                    //     for (int j = 0; j < lineHeigh; j++)
-                    //         for (int i = 0; i < w; i++)
-                    //             bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte) 0);
-
-//                    bigOff += lineHeigh * w * 4;
                     continue;
                 }
 
@@ -695,7 +686,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         return globalXShift;
     }
 
-     void setScrollXOffset(int offset) {
+    void setScrollXOffset(int offset) {
         globalXShift = offset;
         updLinesXShift();
     }

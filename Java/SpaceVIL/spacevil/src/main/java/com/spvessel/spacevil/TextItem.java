@@ -9,16 +9,15 @@ import java.util.*;
 import java.util.List;
 
 abstract class TextItem extends Primitive {
-    private List<Float> _alphas;
-    private List<Float> _interCoords;
-    private float[] _coordinates;
-    private float[] _colors;
+//    private List<Float> _alphas;
+//    private List<Float> _interCoords;
+//    private float[] _coordinates;
+//    private float[] _colors;
     private String _itemText = "";
 
     private Font _font = DefaultsService.getDefaultFont();
 
     private static int count = 0;
-    private int queueCapacity = 512;
 
     TextItem() {
         setItemName("TextItem_" + count);
@@ -26,8 +25,6 @@ abstract class TextItem extends Primitive {
         setWidthPolicy(SizePolicy.EXPAND);
         setHeightPolicy(SizePolicy.EXPAND);
         count++;
-        undoQueue = new ArrayDeque<>();
-        redoQueue = new ArrayDeque<>();
     }
 
     TextItem(String text, Font font) {
@@ -41,14 +38,14 @@ abstract class TextItem extends Primitive {
         setItemName(name);
     }
 
-    void setRealCoords(List<Float> realCoords) {
-        _coordinates = toGL(realCoords);
-    }
-
-    void setAlphas(List<Float> alphas) {
-        _alphas = alphas;
-        //setColor(alphas);
-    }
+//    void setRealCoords(List<Float> realCoords) {
+//        _coordinates = toGL(realCoords);
+//    }
+//
+//    void setAlphas(List<Float> alphas) {
+//        _alphas = alphas;
+//        //setColor(alphas);
+//    }
 
     String getItemText() {
         return _itemText;
@@ -56,39 +53,9 @@ abstract class TextItem extends Primitive {
 
     void setItemText(String itemText) {
         if (!_itemText.equals(itemText)) {
-            if (isUndo) {
-                if (redoQueue.size() > queueCapacity)
-                    redoQueue.pollLast();
-
-                redoQueue.addFirst(_itemText);
-                isUndo = false;
-            }
-            else {
-                if (undoQueue.size() > queueCapacity)
-                    undoQueue.pollLast();
-
-                undoQueue.addFirst(_itemText);
-            }
             _itemText = itemText;
             updateData();
         }
-    }
-
-    private boolean isUndo = false;
-    private ArrayDeque<String> undoQueue;
-    void undo() {
-        String tmpText = undoQueue.pollFirst();
-        if (tmpText != null) {
-            isUndo = true;
-            setItemText(tmpText);
-        }
-    }
-
-    private ArrayDeque<String> redoQueue;
-    void redo() {
-        String tmpText = redoQueue.pollFirst();
-        if (tmpText != null)
-            setItemText(tmpText);
     }
 
     Font getFont() {
@@ -120,9 +87,9 @@ abstract class TextItem extends Primitive {
     }
 
     void setFontFamily(String font_family) {
-        if (_font.getFamily() != font_family) {
+        if (!_font.getFamily().equals(font_family)) {
             _font = new Font(font_family, _font.getStyle(), _font.getSize());
-            updateData(); // _criticalFlag = true;
+            updateData();
         }
     }
 
@@ -130,39 +97,39 @@ abstract class TextItem extends Primitive {
 
     //protected abstract void updateCoords();
 
-    float[] getCoordinates() {
-        return _coordinates;
-    }
+//    float[] getCoordinates() {
+//        return _coordinates;
+//    }
 
     // public float[] getColors() {
     //     return _colors;
     // }
 
-    private float[] toGL(List<Float> coord) {
-        float[] outCoord = new float[coord.size()];
-        float f;
-        float x0 = getX();
-        float y0 = getY();
-        float windowH = getHandler().getHeight() / 2f;
-        float windowW = getHandler().getWidth() / 2f;
-
-        for (int i = 0; i < coord.size(); i += 3) {
-            f = coord.get(i);
-            f += x0;
-            f = f / windowW - 1.0f;
-            outCoord[i] = f;
-
-            f = coord.get(i + 1);
-            f += y0;
-            f = -(f / windowH - 1.0f);
-            outCoord[i + 1] = f;
-
-            f = coord.get(i + 2);
-            outCoord[i + 2] = f;
-        }
-
-        return outCoord;
-    }
+//    private float[] toGL(List<Float> coord) {
+//        float[] outCoord = new float[coord.size()];
+//        float f;
+//        float x0 = getX();
+//        float y0 = getY();
+//        float windowH = getHandler().getHeight() / 2f;
+//        float windowW = getHandler().getWidth() / 2f;
+//
+//        for (int i = 0; i < coord.size(); i += 3) {
+//            f = coord.get(i);
+//            f += x0;
+//            f = f / windowW - 1.0f;
+//            outCoord[i] = f;
+//
+//            f = coord.get(i + 1);
+//            f += y0;
+//            f = -(f / windowH - 1.0f);
+//            outCoord[i + 1] = f;
+//
+//            f = coord.get(i + 2);
+//            outCoord[i + 2] = f;
+//        }
+//
+//        return outCoord;
+//    }
 
     private Color _foreground = Color.BLACK; // default
 
@@ -259,7 +226,7 @@ abstract class TextItem extends Primitive {
         }
     }
 
-    public float[] shape() {
-        return getCoordinates();
-    }
+//    public float[] shape() {
+//        return getCoordinates();
+//    }
 }

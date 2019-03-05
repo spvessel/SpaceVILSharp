@@ -462,4 +462,8 @@ public class TextArea extends Prototype {
     public void appendText(String text) {
         _area.appendText(text);
     }
+
+    public void pasteText(String text) {
+        _area.pasteText(text);
+    }
 }
