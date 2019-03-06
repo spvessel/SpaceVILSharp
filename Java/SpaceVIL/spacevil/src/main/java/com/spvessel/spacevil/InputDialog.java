@@ -5,12 +5,12 @@ import java.awt.Color;
 import com.spvessel.spacevil.ButtonCore;
 import com.spvessel.spacevil.TextEdit;
 import com.spvessel.spacevil.TitleBar;
-import com.spvessel.spacevil.VerticalStack;
 import com.spvessel.spacevil.WindowLayout;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.DialogItem;
 
 public class InputDialog extends DialogItem {
@@ -21,9 +21,16 @@ public class InputDialog extends DialogItem {
     }
 
     private ButtonCore _add;
+    private ButtonCore _cancel;
+
+    public void setCancelVisible(boolean value) {
+        _cancel.setVisible(value);
+    }
+
     private TextEdit _input;
     private TitleBar _title;
     private Frame _layout;
+    private HorizontalStack _stack;
 
     public InputDialog(String title, String actionName) {
         this(title, actionName, "");
@@ -32,8 +39,10 @@ public class InputDialog extends DialogItem {
     public InputDialog(String title, String actionName, String defaultText) {
         setItemName("InputDialog_");
         _layout = new Frame();
+        _stack = new HorizontalStack();
         _title = new TitleBar(title);
         _add = new ButtonCore(actionName);
+        _cancel = new ButtonCore("Cancel");
         _input = new TextEdit();
         _input.setText(defaultText);
 
@@ -50,10 +59,19 @@ public class InputDialog extends DialogItem {
 
         // add
         _add.setShadow(5, 0, 4, new Color(0, 0, 0, 120));
+        _cancel.setShadow(5, 0, 4, new Color(0, 0, 0, 120));
 
         // adding
         window.addItems(_title, _layout);
-        _layout.addItems(_input, _add);
+
+        //stack size
+        int w = (_add.getWidth() + _add.getMargin().left + _add.getMargin().right);
+        if (_cancel.isVisible())
+            w = w * 2 + 10;
+        _stack.setSize(w, _add.getHeight() + _add.getMargin().top + _add.getMargin().bottom);
+
+        _layout.addItems(_input, _stack);
+        _stack.addItems(_add, _cancel);
 
         _title.getCloseButton().eventMouseClick.clear();
         _title.getCloseButton().eventMouseClick.add((sender, args) -> {
@@ -62,6 +80,9 @@ public class InputDialog extends DialogItem {
 
         _add.eventMouseClick.add((sender, args) -> {
             _inputResult = _input.getText();
+            close();
+        });
+        _cancel.eventMouseClick.add((sender, args) -> {
             close();
         });
         _input.eventKeyPress.add((sender, args) -> {
@@ -101,6 +122,7 @@ public class InputDialog extends DialogItem {
         Style inner_style = style.getInnerStyle("button");
         if (inner_style != null) {
             _add.setStyle(inner_style);
+            _cancel.setStyle(inner_style);
         }
         inner_style = style.getInnerStyle("textedit");
         if (inner_style != null) {
@@ -109,6 +131,10 @@ public class InputDialog extends DialogItem {
         inner_style = style.getInnerStyle("layout");
         if (inner_style != null) {
             _layout.setStyle(inner_style);
+        }
+        inner_style = style.getInnerStyle("toolbar");
+        if (inner_style != null) {
+            _stack.setStyle(inner_style);
         }
     }
 }

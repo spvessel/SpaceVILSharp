@@ -6,7 +6,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class DialogItem : Prototype
+    abstract public class DialogItem : Prototype
     {
         static int count = 0;
         public Frame Window = new Frame();

@@ -8,9 +8,9 @@ import java.awt.Color;
 import com.spvessel.spacevil.Prototype;
 import com.spvessel.spacevil.Common.DefaultsService;
 
-public class DialogItem extends Prototype {
+abstract public class DialogItem extends Prototype {
     static int count = 0;
-    public Frame window = new Frame();
+    public ResizableItem window = new ResizableItem();
 
     public DialogItem() {
         setItemName("DialogItem_" + count);

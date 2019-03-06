@@ -16,7 +16,7 @@ namespace SpaceVIL
 
         private Side _attachSide = Side.Left;
 
-        public Side getAttachSide()
+        public Side GetAttachSide()
         {
             return _attachSide;
         }
@@ -86,7 +86,7 @@ namespace SpaceVIL
 
         private int _size = 300;
 
-        public int getAreaSize()
+        public int GetAreaSize()
         {
             return _size;
         }
@@ -107,7 +107,7 @@ namespace SpaceVIL
             ApplyAttach();
             EventMouseClick += (sender, args) =>
             {
-                close();
+                Close();
             };
         }
 
@@ -120,7 +120,7 @@ namespace SpaceVIL
             Window.IsYFloating = false;
             _close.EventMouseClick += (sender, args) =>
             {
-                close();
+                Close();
             };
         }
 
@@ -162,7 +162,7 @@ namespace SpaceVIL
             _handler.SetFocusedItem(this);
         }
 
-        public void close()
+        public void Close()
         {
             _handler.GetWindow().RemoveItem(this);
         }

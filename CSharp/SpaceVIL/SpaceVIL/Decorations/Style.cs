@@ -1942,34 +1942,36 @@ namespace SpaceVIL.Decorations
             window_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
             window_style.SetPadding(2, 2, 2, 2);
             window_style.SetBackground(45, 45, 45);
-
             style.AddInnerStyle("window", window_style);
 
             Style ok_style = GetButtonCoreStyle();
             ok_style.SetBackground(100, 255, 150);
             ok_style.Foreground = Color.Black;
-            ok_style.SetSize(150, 30);
+            ok_style.SetSize(100, 30);
             ok_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            ok_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
-            ok_style.SetMargin(0, 0, 0, 15);
+            ok_style.SetAlignment(ItemAlignment.Left, ItemAlignment.Bottom);
+            ok_style.SetMargin(0, 0, 0, 0);
             ok_style.BorderRadius = new CornerRadius();
             ok_style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(80, 255, 255, 255)));
-
             style.AddInnerStyle("button", ok_style);
 
             Style text_style = GetTextEditStyle();
             text_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Top);
             text_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
             text_style.SetMargin(0, 15, 0, 0);
-
             style.AddInnerStyle("textedit", text_style);
 
             Style layout_style = GetFrameStyle();
             layout_style.SetMargin(0, 30, 0, 0);
             layout_style.SetPadding(6, 6, 6, 6);
             layout_style.SetBackground(255, 255, 255, 20);
-
             style.AddInnerStyle("layout", layout_style);
+
+            Style toolbar_style = GetHorizontalStackStyle();
+            toolbar_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
+            toolbar_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            toolbar_style.SetSpacing(10, 0);
+            style.AddInnerStyle("toolbar", toolbar_style);
 
             return style;
         }

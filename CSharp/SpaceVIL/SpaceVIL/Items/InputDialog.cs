@@ -20,16 +20,25 @@ namespace SpaceVIL
         }
 
         private ButtonCore _add;
+        private ButtonCore _cancel;
+        public void SetCancelVisible(bool value)
+        {
+            _cancel.SetVisible(value);
+        }
+
         private TextEdit _input;
         private TitleBar _title;
         private Frame _layout;
+        private HorizontalStack _stack;
 
         public InputDialog(String title, String actionName, String defaultText)
         {
             SetItemName("InputDialog_");
             _layout = new Frame();
+            _stack = new HorizontalStack();
             _title = new TitleBar(title);
             _add = new ButtonCore(actionName);
+            _cancel = new ButtonCore("Cancel");
             _input = new TextEdit();
             _input.SetText(defaultText);
 
@@ -48,10 +57,19 @@ namespace SpaceVIL
 
             // add
             _add.SetShadow(5, 0, 4, Color.FromArgb(120, 0, 0, 0));
+            _cancel.SetShadow(5, 0, 4, Color.FromArgb(120, 0, 0, 0));
 
             // adding
             Window.AddItems(_title, _layout);
-            _layout.AddItems(_input, _add);
+
+            //stack size
+            int w = (_add.GetWidth() + _add.GetMargin().Left + _add.GetMargin().Right);
+            if (_cancel.IsVisible())
+                w = w * 2 + 10;
+            _stack.SetSize(w, _add.GetHeight() + _add.GetMargin().Top + _add.GetMargin().Bottom);
+
+            _layout.AddItems(_input, _stack);
+            _stack.AddItems(_add, _cancel);
 
             _title.GetCloseButton().EventMouseClick = null;
             _title.GetCloseButton().EventMouseClick += (sender, args) =>
@@ -62,6 +80,10 @@ namespace SpaceVIL
             _add.EventMouseClick += (sender, args) =>
             {
                 _inputResult = _input.GetText();
+                Close();
+            };
+            _cancel.EventMouseClick += (sender, args) =>
+            {
                 Close();
             };
             _input.EventKeyPress += (sender, args) =>
@@ -108,6 +130,7 @@ namespace SpaceVIL
             if (inner_style != null)
             {
                 _add.SetStyle(inner_style);
+                _cancel.SetStyle(inner_style);
             }
             inner_style = style.GetInnerStyle("textedit");
             if (inner_style != null)
@@ -118,6 +141,11 @@ namespace SpaceVIL
             if (inner_style != null)
             {
                 _layout.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("toolbar");
+            if (inner_style != null)
+            {
+                _stack.SetStyle(inner_style);
             }
         }
     }

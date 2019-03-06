@@ -27,11 +27,11 @@ namespace SpaceVIL
             return _angleRotation;
         }
 
-        public bool isHover = true;
+        public bool IsHover = true;
 
         internal override bool GetHoverVerification(float xpos, float ypos)
         {
-            if (isHover)
+            if (IsHover)
                 return base.GetHoverVerification(xpos, ypos);
             return false;
         }
@@ -59,7 +59,7 @@ namespace SpaceVIL
 
         public ImageItem(Bitmap picture, bool hover) : this(picture)
         {
-            isHover = hover;
+            IsHover = hover;
         }
 
         /// <summary>
