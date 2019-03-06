@@ -3,6 +3,8 @@ package com.spvessel.spacevil.View;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.CustomFigure;
 import com.spvessel.spacevil.Decorations.ItemState;
+import com.spvessel.spacevil.Flags.EmbeddedImage;
+import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.FileSystemEntryType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemRule;
@@ -12,6 +14,7 @@ import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.OpenEntryDialog.OpenDialogType;
 import com.spvessel.spacevil.MenuItem;
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.MouseArgs;
 
 import java.awt.*;
@@ -174,6 +177,14 @@ public class FlowTest extends ActiveWindow {
 
         // _context_menu.setWidth(110);
         MenuItem restore = new MenuItem("Restore");
+        // ImageItem res = new ImageItem(
+        //         DefaultsService.getDefaultImage(EmbeddedImage.RECYCLE_BIN, EmbeddedImageSize.SIZE_32X32));
+        // // res.setSize(16, 16);
+        // // res.setBackground(0, 0, 0, 0);
+        // // res.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        // // res.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        // // restore.addItem(res);
+
         // restore.eventMouseClick += (sender, args) ->
         // {
         // flow.setHScrollOffset(0);

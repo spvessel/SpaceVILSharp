@@ -1,6 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.Core.KeyArgs;
@@ -13,6 +14,7 @@ import com.spvessel.spacevil.Flags.MouseButton;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +35,7 @@ public class MenuItem extends Prototype {
     /**
      * Is MenuItem ready to close
      */
-    public boolean isReadyToClose(MouseArgs args) {
+    boolean isReadyToClose(MouseArgs args) {
         if (_sub_context_menu != null) {
             if (!_sub_context_menu.getHoverVerification(args.position.getX(), args.position.getY())
                     && _sub_context_menu.closeDependencies(args))
@@ -43,6 +45,10 @@ public class MenuItem extends Prototype {
     }
 
     private CustomShape _arrow;
+
+    public CustomShape getArrow() {
+        return _arrow;
+    }
 
     /**
      * Assign the context menu
@@ -98,6 +104,7 @@ public class MenuItem extends Prototype {
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
+
     public void setTextAlignment(ItemAlignment... alignment) {
         List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
         _text_object.setTextAlignment(list);
@@ -106,6 +113,10 @@ public class MenuItem extends Prototype {
     /**
      * Text margin in the MenuItem
      */
+    public Indents getTextMargin() {
+        return _text_object.getMargin();
+    }
+
     public void setTextMargin(Indents margin) {
         _text_object.setMargin(margin);
     }
@@ -116,6 +127,7 @@ public class MenuItem extends Prototype {
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
+
     public Font getFont() {
         return _text_object.getFont();
     }
@@ -126,6 +138,7 @@ public class MenuItem extends Prototype {
     public void setText(String text) {
         _text_object.setItemText(text);
     }
+
     public String getText() {
         return _text_object.getItemText();
     }
@@ -136,18 +149,23 @@ public class MenuItem extends Prototype {
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
         return _text_object.getForeground();
     }
@@ -155,16 +173,14 @@ public class MenuItem extends Prototype {
     /**
      * @return text width in the MenuItem
      */
-    public int getTextWidth()
-    {
+    public int getTextWidth() {
         return _text_object.getWidth();
     }
 
     /**
      * @return text height in the MenuItem
      */
-    public int getTextHeight()
-    {
+    public int getTextHeight() {
         return _text_object.getHeight();
     }
 
@@ -177,6 +193,16 @@ public class MenuItem extends Prototype {
         addItem(_text_object);
         if (isActionItem)
             addItem(_arrow);
+        for (InterfaceBaseItem item : _queue) {
+            super.addItem(item);
+        }
+    }
+
+    private List<InterfaceBaseItem> _queue = new LinkedList<>();
+
+    @Override
+    public void addItem(InterfaceBaseItem item) {
+        _queue.add(item);
     }
 
     /**
@@ -198,6 +224,10 @@ public class MenuItem extends Prototype {
             if (_arrow == null)
                 _arrow = new CustomShape();
             _arrow.setStyle(inner_style);
+        }
+        inner_style = style.getInnerStyle("text");
+        if (inner_style != null) {
+            _text_object.setMargin(inner_style.margin);
         }
     }
 

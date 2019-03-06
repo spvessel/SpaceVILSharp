@@ -394,9 +394,9 @@ namespace SpaceVIL.Decorations
             style.SetSize(30, 30);
             style.SetAlignment(ItemAlignment.Left, ItemAlignment.Top);
             style.SetTextAlignment(ItemAlignment.Left, ItemAlignment.Top);
-            style.SetPadding(0,0,0,0);
-            style.SetMargin(0,0,0,0);
-            style.SetSpacing(0,0);
+            style.SetPadding(0, 0, 0, 0);
+            style.SetMargin(0, 0, 0, 0);
+            style.SetSpacing(0, 0);
             style.SetBorder(new Border(Color.Transparent, new CornerRadius(), 0));
 
             return style;
@@ -630,8 +630,11 @@ namespace SpaceVIL.Decorations
             style.SetAlignment(ItemAlignment.Left | ItemAlignment.Top);
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(10, 0, 10, 0);
-
             style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(255, 150, 150, 150)));
+
+            Style text_style = new Style();
+            text_style.SetMargin(0, 0, 0, 0);
+            style.AddInnerStyle("text", text_style);
 
             Style arrow_style = new Style();
             arrow_style.Width = 6;
@@ -640,7 +643,7 @@ namespace SpaceVIL.Decorations
             arrow_style.HeightPolicy = SizePolicy.Fixed;
             arrow_style.Alignment = ItemAlignment.Right | ItemAlignment.VCenter;
             arrow_style.Background = Color.FromArgb(255, 80, 80, 80);
-            arrow_style.Margin = new Indents(0, 0, 5, 0);
+            arrow_style.Margin = new Indents(10, 0, 0, 0);
             arrow_style.Shape = GraphicsMathService.GetTriangle(a: 90);
             style.AddInnerStyle("arrow", arrow_style);
 
@@ -2047,6 +2050,15 @@ namespace SpaceVIL.Decorations
             close_style.Shape = GraphicsMathService.GetCross(15, 15, 2, 45);
             close_style.IsFixedShape = true;
             style.AddInnerStyle("closebutton", close_style);
+
+            return style;
+        }
+        public static Style GetImageItemStyle()
+        {
+            Style style = new Style();
+            style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            style.SetBackground(0, 0, 0, 0);
 
             return style;
         }

@@ -703,6 +703,10 @@ public class Style {
 
         style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(150, 150, 150)));
 
+        Style text_style = new Style();
+        text_style.setMargin(0, 0, 0, 0);
+        style.addInnerStyle("text", text_style);
+
         Style arrow_style = new Style();
         arrow_style.width = 6;
         arrow_style.height = 10;
@@ -710,7 +714,7 @@ public class Style {
         arrow_style.heightPolicy = SizePolicy.FIXED;
         arrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
         arrow_style.background = new Color(80, 80, 80);
-        arrow_style.margin = new Indents(0, 0, 5, 0);
+        arrow_style.margin = new Indents(10, 0, 0, 0);
         arrow_style.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 90);
         style.addInnerStyle("arrow", arrow_style);
 
@@ -2124,6 +2128,14 @@ public class Style {
         close_style.isFixedShape = true;
         style.addInnerStyle("closebutton", close_style);
 
+        return style;
+    }
+
+    public static Style getImageItemStyle() {
+        Style style = new Style();
+        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setBackground(0, 0, 0, 0);
         return style;
     }
 }

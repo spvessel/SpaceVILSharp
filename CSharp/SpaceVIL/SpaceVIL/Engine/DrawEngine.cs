@@ -306,12 +306,16 @@ namespace SpaceVIL
 
         internal void MinimizeWindow()
         {
+            _inputLocker = true;
             EngineEvent.SetEvent(InputEventType.WindowMinimize);
             Glfw.IconifyWindow(_handler.GetWindowId());
+            _inputLocker = false;
         }
 
+        private bool _inputLocker = false;
         internal void MaximizeWindow()
         {
+            _inputLocker = true;
             if (_handler.GetLayout().IsMaximized)
             {
                 Glfw.RestoreWindow(_handler.GetWindowId());
@@ -330,6 +334,7 @@ namespace SpaceVIL
                 _handler.GetLayout().SetWidth(w);
                 _handler.GetLayout().SetHeight(h);
             }
+            _inputLocker = false;
         }
 
         private void CloseWindow(Glfw.Window glfwwnd)
@@ -404,6 +409,8 @@ namespace SpaceVIL
         private bool flag_move = false;
         private void MouseMove(Glfw.Window wnd, double xpos, double ypos)
         {
+            if (_inputLocker)
+                return;
             EngineEvent.SetEvent(InputEventType.MouseMove);
             _tooltip.InitTimer(false);
             if (!flag_move)
@@ -630,6 +637,8 @@ namespace SpaceVIL
         }
         private void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
+            if (_inputLocker)
+                return;
             _handler.GetLayout().GetWindow()._sides = 0;
 
             if (!_handler.Focusable)
@@ -874,6 +883,8 @@ namespace SpaceVIL
 
         private void MouseScroll(Glfw.Window glfwwnd, double dx, double dy)
         {
+            if (_inputLocker)
+                return;
             _tooltip.InitTimer(false);
 
             Stack<Prototype> tmp = new Stack<Prototype>(HoveredItems);
@@ -893,6 +904,8 @@ namespace SpaceVIL
 
         private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
+            if (_inputLocker)
+                return;
             if (!_handler.Focusable)
                 return;
 
@@ -950,6 +963,8 @@ namespace SpaceVIL
 
         private void TextInput(Glfw.Window glfwwnd, uint codepoint, KeyMods mods)
         {
+            if (_inputLocker)
+                return;
             if (!_handler.Focusable)
                 return;
             _tooltip.InitTimer(false);
@@ -1026,7 +1041,8 @@ namespace SpaceVIL
             _handler.GetLayout().ExecutePollActions();
         }
 
-        internal float _interval = 1.0f / 30.0f;//1000 / 60;
+        // internal float _sleep = 1000.0f / 60.0f;//1000 / 60;
+        internal float _interval = 1.0f / 15.0f;//1000 / 60;
         // internal float _interval = 1.0f / 60.0f;//1000 / 60;
         // internal int _interval = 11;//1000 / 90;
         // internal int _interval = 08;//1000 / 120;
@@ -1053,9 +1069,11 @@ namespace SpaceVIL
             _fbo.UnbindFBO();
 
             _double_click_timer.Start();
+            // Glfw.SwapInterval(1);
             while (!_handler.IsClosing())
             {
                 Glfw.WaitEventsTimeout(_interval);
+                // Thread.Sleep(15);
                 // Glfw.PollEvents();
                 // Glfw.WaitEvents();
                 // glClearColor(0, 0, 0, 0);
@@ -1067,6 +1085,7 @@ namespace SpaceVIL
                     Update();
                     _handler.Swap();
                 }
+                // Thread.Sleep((int)_sleep);
                 flag_move = true;
             }
             _primitive.DeleteShader();

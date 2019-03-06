@@ -1,5 +1,6 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceImageItem;
 
 import java.awt.Color;
@@ -40,6 +41,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     public ImageItem() {
         setItemName("Image_" + count);
         count++;
+        setStyle(DefaultsService.getDefaultStyle(ImageItem.class));
     }
 
     /**

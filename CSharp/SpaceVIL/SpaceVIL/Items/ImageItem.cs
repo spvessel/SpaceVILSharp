@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-using SpaceVIL.Core;
 using System.Threading;
+using SpaceVIL.Common;
+using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
@@ -42,6 +43,7 @@ namespace SpaceVIL
         {
             SetItemName("Image_" + count);
             count++;
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ImageItem)));
         }
 
         /// <summary>

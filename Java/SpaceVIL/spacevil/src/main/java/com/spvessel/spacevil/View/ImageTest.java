@@ -173,6 +173,18 @@ public class ImageTest extends ActiveWindow {
         frame.addItems(btn_action, combo, h_slider, pb);
         btn_action.addItem(img);
 
+        ImageItem res = new ImageItem(
+                DefaultsService.getDefaultImage(EmbeddedImage.RECYCLE_BIN, EmbeddedImageSize.SIZE_32X32));
+        res.setSize(16, 16);
+        res.setBackground(0, 0, 0, 0);
+        res.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        res.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        MenuItem restore = new MenuItem("Custom item for selection #RESTORE");
+        restore.addItem(res);
+        combo.addItem(restore);
+
+
+
         // for (int i = 2; i < 5; i++) {
         // MenuItem menu_item = new MenuItem("Custom item for selection #" + i);
         // combo.addItem(menu_item);

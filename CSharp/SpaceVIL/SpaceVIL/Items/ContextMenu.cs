@@ -152,7 +152,10 @@ namespace SpaceVIL
                 MenuItem m = item as MenuItem;
                 if (m != null)
                 {
-                    tmp += m.GetTextWidth() + m.GetPadding().Left + m.GetPadding().Right;
+                    tmp += m.GetTextWidth() + m.GetPadding().Left + m.GetPadding().Right + m.GetTextMargin().Left
+                        + m.GetTextMargin().Right;
+                    if (m.IsActionItem)
+                        tmp += m.GetArrow().GetWidth() + m.GetArrow().GetMargin().Left + m.GetArrow().GetMargin().Right;
                 }
                 else
                     tmp = tmp + item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right;

@@ -159,7 +159,10 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
             int tmp = getPadding().left + getPadding().right + item.getMargin().left + item.getMargin().right;
             if (item instanceof MenuItem) {
                 MenuItem m = (MenuItem) item;
-                tmp += m.getTextWidth() + m.getPadding().left + m.getPadding().right;
+                tmp += m.getTextWidth() + m.getPadding().left + m.getPadding().right + m.getTextMargin().left
+                        + m.getTextMargin().right;
+                if (m.isActionItem)
+                    tmp += m.getArrow().getWidth() + m.getArrow().getMargin().left + m.getArrow().getMargin().right;
             } else
                 tmp = tmp + item.getWidth() + item.getMargin().left + item.getMargin().right;
 
@@ -178,10 +181,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      */
     public void show(InterfaceItem sender, MouseArgs args) {
         if (args.button.getValue() == activeButton.getValue()) {
-            if (!_init) 
+            if (!_init)
                 initElements();
-            if(!_added)
-            {
+            if (!_added) {
                 for (InterfaceBaseItem item : _queue) {
                     itemList.addItem(item);
                 }
