@@ -742,8 +742,8 @@ final class DrawEngine {
             if (hoveredItem != null) {
                 hoveredItem.setMousePressed(false);
 
-                if (is_double_click && hoveredItem != null)
-                    assignActions(InputEventType.MOUSE_DOUBLE_CLICK, _margs, hoveredItem, false);
+                if (is_double_click)
+                    assignActions(InputEventType.MOUSE_DOUBLE_CLICK, _margs, false);
                 else
                     assignActions(InputEventType.MOUSE_RELEASE, _margs, false);
             }

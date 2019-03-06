@@ -97,11 +97,18 @@ namespace SpaceVIL
         {
             if (args.Key == KeyCode.Enter)
                 _indicator.EventToggle.Invoke(sender, new MouseArgs());
-                
+
             // else if (args.Key == KeyCode.Space)
             //     AddItem(new TreeItem(TreeItemType.Branch, "new branch " + count));
             // else if (args.Key == KeyCode.Equal)
-            //     AddItem(new TreeItem(TreeItemType.Leaf, "new leaf " + count));
+            // {
+            //     TreeItem tr = new TreeItem(TreeItemType.Leaf, "new leaf " + count);
+            //     tr.EventMouseDoubleClick += (s, a)=>{
+            //         Console.WriteLine(tr.GetItemName() + " click");
+            //     };
+            //     AddItem(tr);
+            // }
+
             // else if (args.Key == KeyCode.Delete)
             //     GetParentBranch().RemoveChild(this);
         }
@@ -134,6 +141,7 @@ namespace SpaceVIL
         }
         public override void InitElements()
         {
+            _text_object.IsFocusable = false;
             switch (_item_type)
             {
                 case TreeItemType.Leaf:
@@ -159,7 +167,6 @@ namespace SpaceVIL
                     base.AddItem(_text_object);
                     break;
             }
-            _text_object.IsFocusable = false;
         }
 
         internal void OnToggleHide(bool value) // refactor

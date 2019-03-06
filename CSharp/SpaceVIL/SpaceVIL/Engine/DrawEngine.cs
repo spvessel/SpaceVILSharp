@@ -702,8 +702,11 @@ namespace SpaceVIL
                     if (HoveredItem != null)
                     {
                         HoveredItem.SetMousePressed(false);
-                        if (is_double_click && HoveredItem != null)
-                            AssignActions(InputEventType.MouseDoubleClick, _margs, HoveredItem);
+                        if (is_double_click)
+                        {
+                            // Console.WriteLine("H: " + HoveredItem.GetItemName() + " " + FocusedItem.GetItemName());
+                            AssignActions(InputEventType.MouseDoubleClick, _margs, false);
+                        }
                         else
                             AssignActions(InputEventType.MouseRelease, _margs, false);
                     }

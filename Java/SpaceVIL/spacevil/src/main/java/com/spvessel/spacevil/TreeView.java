@@ -39,7 +39,7 @@ public class TreeView extends ListBox {
         updateElements();
     }
 
-    public boolean GetRootVisibility() {
+    public boolean getRootVisibility() {
         return _root.isVisible();
     }
 
@@ -78,7 +78,7 @@ public class TreeView extends ListBox {
         super.addItem(_root);
         setRootVisibility(false);
 
-        _root.resetIndents();
+        // _root.resetIndents();
         _maxWrapperWidth = getWrapper(_root).getMinWidth();
     }
 
@@ -184,10 +184,11 @@ public class TreeView extends ListBox {
 
     @Override
     public void clear() {
-        super.clear();
         _root.removeAllChildren();
+        super.clear();
         super.addItem(_root);
-        _root.resetIndents();
+        setRootVisibility(getRootVisibility());
+        // _root.resetIndents();
         _maxWrapperWidth = getWrapper(_root).getMinWidth();
     }
 
