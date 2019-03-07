@@ -45,7 +45,7 @@ public class SelectionItem extends Prototype {
         
     }
 
-    void updateSize()
+    public void updateSize()
     {
         setSize(_item.getWidth() + _item.getMargin().left + _item.getMargin().right,
                 _item.getHeight() + _item.getMargin().bottom + _item.getMargin().top + 2);

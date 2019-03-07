@@ -8,6 +8,7 @@ import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.OSType;
+import com.spvessel.spacevil.Flags.RedrawFrequency;
 
 import java.util.*;
 import java.util.List;
@@ -513,5 +514,13 @@ public final class WindowLayout {
         _scaleHeight = h;
         // _scaleWidth = w * 2;
         // _scaleHeight = h * 2;
+    }
+
+    public void setRenderFrequency(RedrawFrequency value) {
+        engine.setFrequency(value);
+    }
+
+    public RedrawFrequency getRenderFrequency() {
+        return engine.getRedrawFrequency();
     }
 }

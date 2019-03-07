@@ -3,6 +3,8 @@ package com.spvessel.spacevil;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.io.BufferedReader;
 import java.io.*;
 import java.nio.*;
@@ -1065,12 +1067,62 @@ final class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
-    float _interval = 1.0f / 15.0f;// 1000 / 60;
-    // internal float _interval = 1.0f / 60.0f;//1000 / 60;
-    // internal int _interval = 11;//1000 / 90;
-    // internal int _interval = 08;//1000 / 120;
+    private float _intervalLow = 1.0f / 10.0f;
+    private float _intervalMedium = 1.0f / 30.0f;
+    private float _intervalHigh = 1.0f / 60.0f;
+    private float _intervalUltra = 1.0f / 120.0f;
+    private float _intervalAssigned = 1.0f / 15.0f;
 
-    // private int gVAO = 0;
+    private RedrawFrequency _frequency = RedrawFrequency.LOW;
+
+    private Lock _locker = new ReentrantLock();
+
+    void setFrequency(RedrawFrequency value) {
+        _locker.lock();
+        try {
+            if (value == RedrawFrequency.LOW) {
+                _intervalAssigned = _intervalLow;
+            } else if (value == RedrawFrequency.MEDIUM) {
+                _intervalAssigned = _intervalMedium;
+            } else if (value == RedrawFrequency.HIGH) {
+                _intervalAssigned = _intervalHigh;
+            } else if (value == RedrawFrequency.ULTRA) {
+                _intervalAssigned = _intervalUltra;
+            }
+        } catch (Exception ex) {
+            System.out.println("Method - SetFrequency");
+            ex.printStackTrace();
+        } finally {
+            _locker.unlock();
+        }
+    }
+
+    private float getFrequency() {
+        _locker.lock();
+        try {
+            return _intervalAssigned;
+        } catch (Exception ex) {
+            System.out.println("Method - SetFrequency");
+            ex.printStackTrace();
+            return _intervalLow;
+        } finally {
+            _locker.unlock();
+        }
+    }
+
+    RedrawFrequency getRedrawFrequency() {
+        _locker.lock();
+        try {
+            return _frequency;
+        } catch (Exception ex) {
+            System.out.println("Method - SetFrequency");
+            ex.printStackTrace();
+            _frequency = RedrawFrequency.LOW;
+            return _frequency;
+        } finally {
+            _locker.unlock();
+        }
+    }
 
     private VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
@@ -1095,16 +1147,16 @@ final class DrawEngine {
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {
-            glfwWaitEventsTimeout(_interval);
+            glfwWaitEventsTimeout(getFrequency());
             // glfwWaitEvents();
             // glfwPollEvents();
             // synchronized(this)
             // {
-            //     try {
-            //         this.wait(30);
-            //     } catch (Exception e) {
-            //         //TODO: handle exception
-            //     }
+            // try {
+            // this.wait(30);
+            // } catch (Exception e) {
+            // //TODO: handle exception
+            // }
             // }
 
             // glClearColor(0, 0, 0, 0);

@@ -2064,5 +2064,28 @@ namespace SpaceVIL.Decorations
 
             return style;
         }
+
+        public static Style GetLoadingScreenStyle()
+        {
+            Style style = new Style();
+            style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            style.SetBackground(0, 0, 0, 150);
+
+            Style text_style = GetLabelStyle();
+            text_style.SetAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
+            // text_style.WidthPolicy = SizePolicy.Fixed;
+            // text_style.Width = 64;
+            // text_style.SetMargin(0, 0, 15, 0);
+            text_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
+            text_style.Font = DefaultsService.GetDefaultFont(FontStyle.Bold, 14);
+            style.AddInnerStyle("text", text_style);
+
+            Style image_style = GetImageItemStyle();
+            image_style.SetMaxSize(64, 64);
+            style.AddInnerStyle("image", image_style);
+
+            return style;
+        }
     }
 }

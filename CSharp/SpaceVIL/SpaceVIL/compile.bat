@@ -61,6 +61,8 @@
 -res:Images\refresh64.png,SpaceVIL.Images.refresh64.png ^
 -res:Images\user32.png,SpaceVIL.Images.user32.png ^
 -res:Images\user64.png,SpaceVIL.Images.user64.png ^
+-res:Images\loadcircle32.png,SpaceVIL.Images.loadcircle32.png ^
+-res:Images\loadcircle64.png,SpaceVIL.Images.loadcircle64.png ^
 -nowarn:CS0414 ^
 -nowarn:CS0169 ^
 -nowarn:CS0649 ^

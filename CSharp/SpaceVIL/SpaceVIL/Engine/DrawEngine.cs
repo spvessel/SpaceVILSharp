@@ -1044,11 +1044,87 @@ namespace SpaceVIL
             _handler.GetLayout().ExecutePollActions();
         }
 
-        // internal float _sleep = 1000.0f / 60.0f;//1000 / 60;
-        internal float _interval = 1.0f / 15.0f;//1000 / 60;
-        // internal float _interval = 1.0f / 60.0f;//1000 / 60;
-        // internal int _interval = 11;//1000 / 90;
-        // internal int _interval = 08;//1000 / 120;
+        // internal float _sleep = 1000.0f / 60.0f;
+        private float _intervalLow = 1.0f / 10.0f;
+        private float _intervalMedium = 1.0f / 30.0f;
+        private float _intervalHigh = 1.0f / 60.0f;
+        private float _intervalUltra = 1.0f / 120.0f;
+        private float _intervalAssigned = 1.0f / 15.0f;
+
+        private RedrawFrequency _frequency = RedrawFrequency.Low;
+
+        private Object _locker = new Object();
+        internal void SetFrequency(RedrawFrequency value)
+        {
+            Monitor.Enter(_locker);
+            try
+            {
+                if (value == RedrawFrequency.Low)
+                {
+                    _intervalAssigned = _intervalLow;
+                }
+                else if (value == RedrawFrequency.Medium)
+                {
+                    _intervalAssigned = _intervalMedium;
+                }
+                else if (value == RedrawFrequency.High)
+                {
+                    _intervalAssigned = _intervalHigh;
+                }
+                else if (value == RedrawFrequency.Ultra)
+                {
+                    _intervalAssigned = _intervalUltra;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Method - SetFrequency");
+                Console.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+                Monitor.Exit(_locker);
+            }
+        }
+
+        private float GetFrequency()
+        {
+            Monitor.Enter(_locker);
+            try
+            {
+                return _intervalAssigned;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Method - SetFrequency");
+                Console.WriteLine(ex.StackTrace);
+                return _intervalLow;
+            }
+            finally
+            {
+                Monitor.Exit(_locker);
+            }
+        }
+
+        internal RedrawFrequency GetRedrawFrequency()
+        {
+            Monitor.Enter(_locker);
+            try
+            {
+                return _frequency;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Method - SetFrequency");
+                Console.WriteLine(ex.StackTrace);
+                _frequency = RedrawFrequency.Low;
+                return _frequency;
+            }
+            finally
+            {
+                Monitor.Exit(_locker);
+            }
+        }
 
         VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
@@ -1075,7 +1151,7 @@ namespace SpaceVIL
             // Glfw.SwapInterval(1);
             while (!_handler.IsClosing())
             {
-                Glfw.WaitEventsTimeout(_interval);
+                Glfw.WaitEventsTimeout(GetFrequency());
                 // Thread.Sleep(15);
                 // Glfw.PollEvents();
                 // Glfw.WaitEvents();

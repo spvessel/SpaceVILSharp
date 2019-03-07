@@ -2183,4 +2183,23 @@ public class Style implements Cloneable {
         style.setBackground(0, 0, 0, 0);
         return style;
     }
+
+    public static Style getLoadingScreenStyle() {
+        Style style = new Style();
+        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setBackground(0, 0, 0, 150);
+
+        Style text_style = getLabelStyle();
+        text_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        text_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        text_style.font = DefaultsService.getDefaultFont(Font.BOLD, 14);
+        style.addInnerStyle("text", text_style);
+
+        Style image_style = getImageItemStyle();
+        image_style.setMaxSize(64, 64);
+        style.addInnerStyle("image", image_style);
+
+        return style;
+    }
 }

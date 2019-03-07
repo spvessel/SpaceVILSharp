@@ -365,7 +365,7 @@ namespace SpaceVIL.Core
     public enum EmbeddedImage
     {
         Add, ArrowLeft, ArrowUp, Eye, File, Folder, FolderPlus, Gear, Import, Lines, Loupe, RecycleBin, Refresh, Pencil, Diskette,
-        Eraser, Home, User, Drive, Filter
+        Eraser, Home, User, Drive, Filter, LoadCircle
     }
     public enum EmbeddedImageSize
     {
@@ -384,5 +384,10 @@ namespace SpaceVIL.Core
     public enum Side
     {
         Left, Top, Right, Bottom
+    }
+
+    public enum RedrawFrequency
+    {
+        Low, Medium, High, Ultra
     }
 }

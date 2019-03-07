@@ -87,23 +87,26 @@ public class FlowTest extends ActiveWindow {
             // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!");
             // pop.show(Handler);
 
-            MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
-            ButtonCore btnnn = new ButtonCore("one");
-            btnnn.eventMouseClick.add((s, a) -> {
-                System.out.println("btnnn");
-            });
+            // MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
+            // ButtonCore btnnn = new ButtonCore("one");
+            // btnnn.eventMouseClick.add((s, a) -> {
+            //     System.out.println("btnnn");
+            // });
             
-            msg.addUserButton(btnnn, 1);
-            msg.addUserButton(new ButtonCore("two"), 2);
-            msg.addUserButton(new ButtonCore("three"), 3);
+            // msg.addUserButton(btnnn, 1);
+            // msg.addUserButton(new ButtonCore("two"), 2);
+            // msg.addUserButton(new ButtonCore("three"), 3);
 
-            msg.onCloseDialog.add(() -> {
-                System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
-            });
-            msg.show(Handler);
+            // msg.onCloseDialog.add(() -> {
+            //     System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
+            // });
+            // msg.show(Handler);
 
             // InputDialog id = new InputDialog("Input text", "Apply");
             // id.show(Handler);
+
+            LoadingScreen ls = new LoadingScreen();
+            ls.Show(Handler);
         });
         btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn1.setHoverRule(ItemRule.STRICT);
