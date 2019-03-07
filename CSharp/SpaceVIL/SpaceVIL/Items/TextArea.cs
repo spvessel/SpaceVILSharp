@@ -514,9 +514,9 @@ namespace SpaceVIL
         /// <summary>
         /// Remove all text from the TextArea
         /// </summary>
-        public void ClearArea()
+        public override void Clear()
         {
-            _area.Clear();
+            _area.ClearText();
         }
 
         public void AppendText(String text)

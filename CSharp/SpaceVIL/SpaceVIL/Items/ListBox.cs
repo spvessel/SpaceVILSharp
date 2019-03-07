@@ -419,9 +419,10 @@ namespace SpaceVIL
             UpdateElements();
             _area.SetFocus();
         }
-        public virtual void Clear()
+        public override void Clear()
         {
             _area.RemoveAllItems();
+            // UpdateElements();
         }
 
         /// <summary>

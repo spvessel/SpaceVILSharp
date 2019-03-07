@@ -211,6 +211,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
 
     private boolean _added = false;
 
+    @Override
     public void clear() {
         itemList.clear();
         _queue.clear();

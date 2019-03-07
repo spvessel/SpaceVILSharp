@@ -683,6 +683,11 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.removeItem(item);
     }
 
+    public void clear()
+    {
+        _core.clear();
+    }
+
     void addEventListener(GeometryEventType type, InterfaceBaseItem listener) {
         _core.addEventListener(type, listener);
     }

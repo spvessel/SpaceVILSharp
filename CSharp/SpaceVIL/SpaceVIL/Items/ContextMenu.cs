@@ -213,7 +213,7 @@ namespace SpaceVIL
         }
         private bool _added = false;
 
-        public void Clear()
+        public override void Clear()
         {
             ItemList.Clear();
             _queue.Clear();

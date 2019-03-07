@@ -741,7 +741,7 @@ namespace SpaceVIL
                     _cursor_position = NearestPosToCursor(newPos);
                 }
         */
-        public void Clear()
+        public override void Clear()
         {
             SetText("");
         }

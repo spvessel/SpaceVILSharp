@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
+using System.Threading;
 
 namespace SpaceVIL
 {
@@ -143,6 +144,27 @@ namespace SpaceVIL
                     link.SetItem(null);
             }
             // UpdateLayout();
+        }
+
+        private Object Locker = new Object();
+        public override void Clear()
+        {
+            Monitor.Enter(Locker);
+            try
+            {
+                List<IBaseItem> list = GetItems();
+                while (list.Count > 0)
+                    RemoveItem(list.First());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Method - Clear");
+                Console.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+                Monitor.Exit(Locker);
+            }
         }
 
         //overrides

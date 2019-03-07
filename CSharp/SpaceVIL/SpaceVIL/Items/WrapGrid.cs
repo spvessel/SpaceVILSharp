@@ -422,10 +422,10 @@ namespace SpaceVIL
             _area.RemoveItem(item);
             UpdateSlider();
         }
-        public virtual void Clear()
+        public override void Clear()
         {
             _area.RemoveAllItems();
-            UpdateSlider();
+            // UpdateSlider();
         }
 
         /// <summary>

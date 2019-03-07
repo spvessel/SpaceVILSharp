@@ -362,7 +362,8 @@ final class VisualItem extends BaseItem {
             castAndUpdate(item);
             item.initElements();
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            System.out.println("Method - AddItem: " + ((item == null) ? "item is null" : item.getItemName()));
+            ex.printStackTrace();
         } finally {
             locker.unlock();
         }
@@ -399,7 +400,8 @@ final class VisualItem extends BaseItem {
             // ((VisualItem) item).updateState();
             // }
         } catch (Exception ex) {
-            System.out.println(item.getItemName() + "\n" + ex.toString());
+            System.out.println("Method - InsertItem: " + ((item == null) ? "item is null" : item.getItemName()));
+            ex.printStackTrace();
         } finally {
             locker.unlock();
         }
@@ -441,7 +443,21 @@ final class VisualItem extends BaseItem {
             ItemsLayoutBox.removeItem(getHandler(), item, type);
             castAndRemove(item);
         } catch (Exception ex) {
-            System.out.println((item == null) ? "item is null" : item.getItemName() + "\n" + ex.toString());
+            System.out.println("Method - RemoveItem: " + ((item == null) ? "item is null" : item.getItemName()));
+            ex.printStackTrace();
+        } finally {
+            locker.unlock();
+        }
+    }
+
+    void clear() {
+        locker.lock();
+        try {
+            while (!_content.isEmpty())
+                removeItem(_content.get(0));
+        } catch (Exception ex) {
+            System.out.println("Method - Clear");
+            ex.printStackTrace();
         } finally {
             locker.unlock();
         }

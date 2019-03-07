@@ -272,6 +272,12 @@ namespace SpaceVIL
             UpdateLayout();
             ItemListChanged?.Invoke();
         }
+
+        public override void Clear()
+        {
+            RemoveAllItems();
+        }
+
         internal void RemoveAllItems()
         {
             Monitor.Enter(_lock);
@@ -289,6 +295,8 @@ namespace SpaceVIL
                     list.RemoveAt(0);
                 }
                 _mapContent.Clear();
+                UpdateLayout();
+                ItemListChanged?.Invoke();
             }
             catch (Exception ex)
             {

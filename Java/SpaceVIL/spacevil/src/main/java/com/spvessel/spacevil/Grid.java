@@ -6,6 +6,8 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.LinkedList;
 
 public class Grid extends Prototype implements InterfaceGrid {
@@ -143,6 +145,23 @@ public class Grid extends Prototype implements InterfaceGrid {
                 link.setItem(null);
         }
         // UpdateLayout();
+    }
+
+    private Lock locker = new ReentrantLock();
+
+    @Override
+    public void clear() {
+        locker.lock();
+        try {
+            List<InterfaceBaseItem> list = getItems();
+            while (!list.isEmpty())
+                removeItem(list.get(0));
+        } catch (Exception ex) {
+            System.out.println("Method - Clear");
+            ex.printStackTrace();
+        } finally {
+            locker.unlock();
+        }
     }
 
     @Override

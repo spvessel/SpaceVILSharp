@@ -66,7 +66,8 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                 KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
 
         // setStyle(DefaultsService.getDefaultStyle(TextEncrypt.class));
-       // _text_object.setTextAlignment(new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER)));
+        // _text_object.setTextAlignment(new
+        // LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER)));
     }
 
     private void onMouseDoubleClick(InterfaceItem sender, MouseArgs args) {
@@ -143,35 +144,35 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         try {
 
             if (!_isSelect && _justSelected) {
-//                _selectFrom = -1; // 0;
-//                _selectTo = -1; // 0;
-//                _justSelected = false;
+                // _selectFrom = -1; // 0;
+                // _selectTo = -1; // 0;
+                // _justSelected = false;
                 cancelJustSelected();
             }
 
             if (args.mods != KeyMods.NO) {
                 switch (args.mods) {
-                    case SHIFT:
-                        if (ShiftValCodes.contains(args.key)) {
-                            if (!_isSelect) {
-                                _isSelect = true;
-                                _selectFrom = _cursor_position;
-                            }
-                        }
-
-                        break;
-
-                    case CONTROL:
-                        if (args.key == KeyCode.A || args.key == KeyCode.a) {
-                            _selectFrom = 0;
-                            _cursor_position = getText().length();
-                            replaceCursor();
-
+                case SHIFT:
+                    if (ShiftValCodes.contains(args.key)) {
+                        if (!_isSelect) {
                             _isSelect = true;
+                            _selectFrom = _cursor_position;
                         }
-                        break;
+                    }
 
-                    // alt, super ?
+                    break;
+
+                case CONTROL:
+                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
+                        _selectFrom = 0;
+                        _cursor_position = getText().length();
+                        replaceCursor();
+
+                        _isSelect = true;
+                    }
+                    break;
+
+                // alt, super ?
                 }
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE) {
@@ -236,7 +237,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         int coord = 0;
         if (_text_object.getLetPosArray() == null)
             return coord;
-        //int letCount = _text_object.getLetPosArray().size();
+        // int letCount = _text_object.getLetPosArray().size();
 
         if (cPos > 0)
             coord = _text_object.getLetPosArray().get(cPos - 1) + _cursor.getWidth();
@@ -255,7 +256,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
         if (_cursor_position > len) {
             _cursor_position = len;
-            //replaceCursor();
+            // replaceCursor();
         }
         int pos = cursorPosToCoord(_cursor_position);
         _cursor.setX(getX() + getPadding().left + pos + _text_object.getMargin().left);
@@ -274,8 +275,8 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                 unselectText();
                 cutText();
             }
-            if (_justSelected) cancelJustSelected(); //_justSelected = false;
-
+            if (_justSelected)
+                cancelJustSelected(); // _justSelected = false;
 
             StringBuilder sb = new StringBuilder(getText());
             setText(sb.insert(_cursor_position, str).toString());
@@ -420,7 +421,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     public void setWidth(int width) {
         super.setWidth(width);
         _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right
-                 - _text_object.getMargin().left - _text_object.getMargin().right; // _cursorXMin;// ;
+                - _text_object.getMargin().left - _text_object.getMargin().right; // _cursorXMin;// ;
         _text_object.setAllowWidth(_cursorXMax);
         _text_object.checkXShift(_cursorXMax); // _text_object.setLineXShift();
 
@@ -436,8 +437,10 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         // getHandler().setFocusedItem(this);
 
         // _cursorXMin = getPadding().Left;
-        // _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right
-        //          - _text_object.getMargin().left - _text_object.getMargin().right; // _cursorXMin;// ;
+        // _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left -
+        // getPadding().right
+        // - _text_object.getMargin().left - _text_object.getMargin().right; //
+        // _cursorXMin;// ;
         // _text_object.setAllowWidth(_cursorXMax);
         // _text_object.setLineXShift();
 
@@ -487,40 +490,41 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         _justSelected = false;
     }
 
-//    private int nearestPosToCursor(double xPos) {
-//        List<Integer> endPos = _text_object.getLetPosArray();
-//        int pos = (int) endPos.stream().map(x -> Math.abs(x - xPos)).sorted().toArray()[0];
-//        return pos;
-//    }
+    // private int nearestPosToCursor(double xPos) {
+    // List<Integer> endPos = _text_object.getLetPosArray();
+    // int pos = (int) endPos.stream().map(x -> Math.abs(x -
+    // xPos)).sorted().toArray()[0];
+    // return pos;
+    // }
 
-    //void setCursorPosition(double newPos) {
-    //    _cursor_position = nearestPosToCursor(newPos);
-    //}
+    // void setCursorPosition(double newPos) {
+    // _cursor_position = nearestPosToCursor(newPos);
+    // }
 
     private String cutText() // ������ �� ����������, ������, �����������, ��� �����
     {
         if (!_isEditable)
             return "";
-		textInputLock.lock();
+        textInputLock.lock();
         try {
-			if (_selectFrom == -1)
-			    _selectFrom = 0;
-			if (_selectTo == -1)
-			    _selectTo = 0;
-			String str = getSelectedText();
-			if (_selectFrom == _selectTo)
-			    return str;
-			int fromReal = Math.min(_selectFrom, _selectTo);
-			int toReal = Math.max(_selectFrom, _selectTo);
-			StringBuilder sb = new StringBuilder(getText());
-			setText(sb.delete(fromReal, toReal).toString()); // - fromReal
-			_cursor_position = fromReal;
-			replaceCursor();
-			if (_isSelect)
-			    unselectText();
-            cancelJustSelected(); //_justSelected = false;
-        return str;
-		} finally {
+            if (_selectFrom == -1)
+                _selectFrom = 0;
+            if (_selectTo == -1)
+                _selectTo = 0;
+            String str = getSelectedText();
+            if (_selectFrom == _selectTo)
+                return str;
+            int fromReal = Math.min(_selectFrom, _selectTo);
+            int toReal = Math.max(_selectFrom, _selectTo);
+            StringBuilder sb = new StringBuilder(getText());
+            setText(sb.delete(fromReal, toReal).toString()); // - fromReal
+            _cursor_position = fromReal;
+            replaceCursor();
+            if (_isSelect)
+                unselectText();
+            cancelJustSelected(); // _justSelected = false;
+            return str;
+        } finally {
             textInputLock.unlock();
         }
     }
@@ -545,7 +549,8 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         }
     }
 
-    void clear() {
+    @Override
+    public void clear() {
         setText("");
     }
 

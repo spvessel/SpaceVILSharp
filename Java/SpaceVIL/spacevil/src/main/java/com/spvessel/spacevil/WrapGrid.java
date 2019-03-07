@@ -383,9 +383,10 @@ public class WrapGrid extends Prototype {
         updateSlider();
     }
 
+    @Override
     public void clear() {
         _area.removeAllItems();
-        updateSlider();
+        // updateSlider();
     }
 
     /**

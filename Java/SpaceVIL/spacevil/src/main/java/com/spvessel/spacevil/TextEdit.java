@@ -726,6 +726,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     /**
      * Remove all text from the TextEdit
      */
+    @Override
     public void clear() {
         setText("");
     }

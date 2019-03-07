@@ -385,6 +385,7 @@ public class ListBox extends Prototype {
         _area.setFocus();
     }
 
+    @Override
     public void clear() {
         _area.removeAllItems();
     }
