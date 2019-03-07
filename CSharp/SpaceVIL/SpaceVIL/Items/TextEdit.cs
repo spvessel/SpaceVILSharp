@@ -474,6 +474,8 @@ namespace SpaceVIL
 
                 _text_object.SetItemText(text);
                 _text_object.CheckXShift(_cursorXMax);
+
+                _cursor_position = PrivGetText().Length;
                 ReplaceCursor();
 
                 if (!nothingFlag)

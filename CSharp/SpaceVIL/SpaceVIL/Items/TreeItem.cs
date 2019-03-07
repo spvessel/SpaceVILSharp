@@ -375,7 +375,10 @@ namespace SpaceVIL
         public void SetExpanded(bool value)
         {
             if (_item_type.Equals(TreeItemType.Branch))
+            {
                 _indicator.SetToggled(value);
+                OnToggleHide(value);
+            }
         }
     }
 }

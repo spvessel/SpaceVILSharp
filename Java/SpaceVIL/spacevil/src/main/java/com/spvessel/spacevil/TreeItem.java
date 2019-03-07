@@ -410,7 +410,9 @@ public class TreeItem extends Prototype {
     }
 
     public void setExpanded(boolean value) {
-        if (_item_type.equals(TreeItemType.BRANCH))
+        if (_item_type.equals(TreeItemType.BRANCH)) {
             _indicator.setToggled(value);
+            onToggleHide(value);
+        }
     }
 }

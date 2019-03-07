@@ -459,6 +459,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
             _text_object.checkXShift(_cursorXMax);
             // _text_object.UpdateData(UpdateType.Critical); //Doing in the _text_object
 
+            _cursor_position = privGetText().length();
             replaceCursor();
 
 
