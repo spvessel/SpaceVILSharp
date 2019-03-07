@@ -1,5 +1,6 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceImageItem;
 
 import java.awt.Color;
@@ -14,6 +15,16 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     private BufferedImage _image;
     private byte[] _bitmap;
     private String _url;
+
+    private float _angleRotation = 0.0f;
+
+    public void setRotationAngle(float angle) {
+        _angleRotation = angle * (float) Math.PI / 180.0f;
+    }
+
+    public float getRotationAngle() {
+        return _angleRotation;
+    }
 
     public boolean isHover = true;
 
@@ -30,6 +41,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     public ImageItem() {
         setItemName("Image_" + count);
         count++;
+        setStyle(DefaultsService.getDefaultStyle(ImageItem.class));
     }
 
     /**
@@ -42,6 +54,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         _image = picture;
         _bitmap = createByteImage();
     }
+
     /**
      * Constructs an ImageItem with an image and hover attribute
      */

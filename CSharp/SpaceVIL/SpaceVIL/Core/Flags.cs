@@ -380,4 +380,9 @@ namespace SpaceVIL.Core
     {
         Open, Save
     }
+
+    public enum Side
+    {
+        Left, Top, Right, Bottom
+    }
 }

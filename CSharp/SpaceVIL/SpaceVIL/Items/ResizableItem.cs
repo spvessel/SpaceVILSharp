@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using SpaceVIL.Core;
 
@@ -6,15 +7,36 @@ namespace SpaceVIL
 {
     public class ResizableItem : Prototype, IDraggable
     {
+        public List<Side> _sidesExclude = new List<Side>();
+
+        public void ExcludeSides(params Side[] sides)
+        {
+            foreach (Side side in sides)
+            {
+                if (!_sidesExclude.Contains(side))
+                    _sidesExclude.Add(side);
+            }
+        }
+
+        public List<Side> GetExcludedSides()
+        {
+            return _sidesExclude;
+        }
+        public void ClearExcludedSides()
+        {
+            _sidesExclude.Clear();
+        }
+
         internal ItemAlignment _sides = 0;
 
         public EventCommonMethod PositionChanged;
         public EventCommonMethod SizeChanged;
 
         public bool IsLocked = false;
-        public bool IsResizable = true;
-        public bool IsHFloating = true;
-        public bool IsVFloating = true;
+        public bool IsWResizable = true;
+        public bool IsHResizable = true;
+        public bool IsXFloating = true;
+        public bool IsYFloating = true;
 
         private bool _is_moved;
 
@@ -78,12 +100,12 @@ namespace SpaceVIL
             switch (_is_moved)
             {
                 case true:
-                    if (IsHFloating)
+                    if (IsXFloating)
                     {
                         offset_x = args.Position.GetX() - _diff_x;
                         SetX(offset_x);
                     }
-                    if (IsVFloating)
+                    if (IsYFloating)
                     {
                         offset_y = args.Position.GetY() - _diff_y;
                         SetY(offset_y);
@@ -93,7 +115,7 @@ namespace SpaceVIL
                     break;
 
                 case false:
-                    if (!IsResizable)
+                    if (!IsWResizable && !IsHResizable)
                         break;
 
                     int x_handler = GetX();
@@ -140,9 +162,16 @@ namespace SpaceVIL
                             SetY(y_handler);
                             PositionChanged?.Invoke();
                         }
-                        SetWidth(w);
-                        SetHeight(h);
-                        SizeChanged?.Invoke();
+                        bool flag = false;
+                        if (IsWResizable && w != GetWidth())
+                        {
+                            SetWidth(w);
+                            flag = true;
+                        }
+                        if (IsHResizable && h != GetHeight())
+                            SetHeight(h);
+                        if (flag)
+                            SizeChanged?.Invoke();
                     }
                     SetConfines();
                     break;
@@ -167,34 +196,23 @@ namespace SpaceVIL
             SizeChanged?.Invoke();
         }
 
-        // public override void SetX(int _x)
-        // {
-        //     base.SetX(_x);
-        //     PositionChanged?.Invoke();
-        // }
-        // public override void SetY(int _y)
-        // {
-        //     base.SetY(_y);
-        //     PositionChanged?.Invoke();
-        // }
-
         internal void GetSides(float xpos, float ypos)
         {
             _sides = 0;
-            if (xpos <= 5)
+            if (xpos <= 10 && !_sidesExclude.Contains(Side.Left))
             {
                 _sides |= ItemAlignment.Left;
             }
-            if (xpos >= GetWidth() - 5)
+            if (xpos >= GetWidth() - 10 && !_sidesExclude.Contains(Side.Right))
             {
                 _sides |= ItemAlignment.Right;
             }
 
-            if (ypos <= 5)
+            if (ypos <= 10 && !_sidesExclude.Contains(Side.Top))
             {
                 _sides |= ItemAlignment.Top;
             }
-            if (ypos >= GetHeight() - 5)
+            if (ypos >= GetHeight() - 10 && !_sidesExclude.Contains(Side.Bottom))
             {
                 _sides |= ItemAlignment.Bottom;
             }

@@ -50,7 +50,7 @@ public class ComplexTest extends ActiveWindow {
 
         ButtonCore b1 = getButton("b1", 26, 30, SizePolicy.FIXED);
         b1.eventMouseClick.add((sender, args) -> {
-            treeview.setRootVisibility(!treeview.GetRootVisibility());
+            treeview.setRootVisibility(!treeview.getRootVisibility());
         });
         ButtonCore b2 = getButton("b2", 26, 30, SizePolicy.FIXED);
         b2.eventMouseClick.add((sender, args) -> {

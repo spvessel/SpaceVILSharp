@@ -3,14 +3,18 @@ package com.spvessel.spacevil.View;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.CustomFigure;
 import com.spvessel.spacevil.Decorations.ItemState;
+import com.spvessel.spacevil.Flags.EmbeddedImage;
+import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.FileSystemEntryType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemRule;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.OpenEntryDialog.OpenDialogType;
 import com.spvessel.spacevil.MenuItem;
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.MouseArgs;
 
 import java.awt.*;
@@ -31,12 +35,12 @@ public class FlowTest extends ActiveWindow {
         TitleBar title = new TitleBar("FlowTest");
         Handler.addItem(title);
         // Handler.getWindow().eventKeyPress.add((sender, args) -> {
-        //     // System.out.println(getHandler().getFocusedItem());
+        // // System.out.println(getHandler().getFocusedItem());
         // });
         // Handler.getWindow().eventKeyRelease.add((sender, args) -> {
-        //     if (args.key == KeyCode.SPACE) {
-        //         btn5.eventMouseClick.execute(btn5, new MouseArgs());
-        //     }
+        // if (args.key == KeyCode.SPACE) {
+        // btn5.eventMouseClick.execute(btn5, new MouseArgs());
+        // }
         // });
 
         VerticalStack layout = new VerticalStack();
@@ -83,11 +87,23 @@ public class FlowTest extends ActiveWindow {
             // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!");
             // pop.show(Handler);
 
-            MessageItem msg = new MessageItem("Set TRUE?", "Message:");
+            MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
+            ButtonCore btnnn = new ButtonCore("one");
+            btnnn.eventMouseClick.add((s, a) -> {
+                System.out.println("btnnn");
+            });
+            
+            msg.addUserButton(btnnn, 1);
+            msg.addUserButton(new ButtonCore("two"), 2);
+            msg.addUserButton(new ButtonCore("three"), 3);
+
             msg.onCloseDialog.add(() -> {
-                System.out.println(msg.getResult());
+                System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
             });
             msg.show(Handler);
+
+            // InputDialog id = new InputDialog("Input text", "Apply");
+            // id.show(Handler);
         });
         btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn1.setHoverRule(ItemRule.STRICT);
@@ -136,6 +152,9 @@ public class FlowTest extends ActiveWindow {
         btn4.addItemState(ItemStateType.HOVERED, hovered);
         btn4.eventMouseClick.add((sender, args) -> {
             // flow.addItem(getBlockList());
+            SideArea side = new SideArea(Side.LEFT);
+            // side.setAttachSide(Side.TOP);
+            side.show(getHandler());
         });
         btn4.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
         btn4.setHoverRule(ItemRule.STRICT);
@@ -170,6 +189,15 @@ public class FlowTest extends ActiveWindow {
 
         // _context_menu.setWidth(110);
         MenuItem restore = new MenuItem("Restore");
+        // ImageItem res = new ImageItem(
+        // DefaultsService.getDefaultImage(EmbeddedImage.RECYCLE_BIN,
+        // EmbeddedImageSize.SIZE_32X32));
+        // // res.setSize(16, 16);
+        // // res.setBackground(0, 0, 0, 0);
+        // // res.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        // // res.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        // // restore.addItem(res);
+
         // restore.eventMouseClick += (sender, args) ->
         // {
         // flow.setHScrollOffset(0);
@@ -265,4 +293,12 @@ public class FlowTest extends ActiveWindow {
     // // graph_points.getPointThickness() / 2.0f));
     // return graph_points;
     // }
+
+    public ButtonCore getButton(String name) {
+        ButtonCore btn = new ButtonCore(name);
+        btn.setMaxHeight(30);
+        btn.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        btn.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        return btn;
+    }
 }

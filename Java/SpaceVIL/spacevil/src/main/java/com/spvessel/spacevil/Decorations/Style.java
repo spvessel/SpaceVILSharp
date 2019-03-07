@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.HashMap;
 
-public class Style {
+public class Style implements Cloneable {
     /**
      * A class that describes style settings of the object
      */
@@ -425,7 +425,42 @@ public class Style {
             return;
     }
 
-    public Style getDefaultCommonStyle() {
+    public Style clone() {
+        Style style = new Style();
+
+        style.background = new Color(background.getRGB());
+        style.foreground = new Color(background.getRGB());
+        style.font = DefaultsService.getDefaultFont();
+        style.setSizePolicy(widthPolicy, heightPolicy);
+        style.setSize(width, height);
+        style.setMaxSize(maxWidth, maxHeight);
+        style.setMinSize(minWidth, minHeight);
+        ItemAlignment[] list = new ItemAlignment[alignment.size()];
+        alignment.toArray(list);
+        style.setAlignment(list);
+        ItemAlignment[] textlist = new ItemAlignment[textAlignment.size()];
+        textAlignment.toArray(textlist);
+        style.setTextAlignment(textlist);
+        style.setPadding(padding.left, padding.top, padding.right, padding.bottom);
+        style.setMargin(margin.left, margin.top, margin.right, margin.bottom);
+        style.setSpacing(spacing.horizontal, spacing.vertical);
+
+        style.borderFill = new Color(borderFill.getRGB());
+        style.borderThickness = borderThickness;
+        style.borderRadius = new CornerRadius(borderRadius.leftTop, borderRadius.rightTop, borderRadius.leftBottom,
+                borderRadius.rightBottom);
+        if (shape != null)
+            style.shape = new LinkedList<>(shape);
+        if (innerShapes != null)
+            style.innerShapes = new LinkedList<>(innerShapes);
+        style.isFixedShape = isFixedShape;
+        style.isVisible = isVisible;
+        style._item_states = new HashMap<>(_item_states);
+
+        return style;
+    }
+
+    public static Style getDefaultCommonStyle() {
         Style style = new Style();
 
         style.background = Color.white;
@@ -703,6 +738,10 @@ public class Style {
 
         style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(150, 150, 150)));
 
+        Style text_style = new Style();
+        text_style.setMargin(0, 0, 0, 0);
+        style.addInnerStyle("text", text_style);
+
         Style arrow_style = new Style();
         arrow_style.width = 6;
         arrow_style.height = 10;
@@ -710,7 +749,7 @@ public class Style {
         arrow_style.heightPolicy = SizePolicy.FIXED;
         arrow_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.VCENTER));
         arrow_style.background = new Color(80, 80, 80);
-        arrow_style.margin = new Indents(0, 0, 5, 0);
+        arrow_style.margin = new Indents(10, 0, 0, 0);
         arrow_style.shape = GraphicsMathService.getTriangle(100, 100, 0, 0, 90);
         style.addInnerStyle("arrow", arrow_style);
 
@@ -1810,33 +1849,41 @@ public class Style {
         window_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         window_style.setPadding(2, 2, 2, 2);
         window_style.setBackground(45, 45, 45);
-
         style.addInnerStyle("window", window_style);
 
         Style ok_style = getButtonCoreStyle();
         ok_style.setBackground(100, 255, 150);
-        ok_style.foreground = Color.black;
         ok_style.setSize(100, 30);
-        ok_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        ok_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
-        ok_style.borderRadius = new CornerRadius();
-        ok_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
+        ok_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        style.addInnerStyle("button", ok_style);
 
-        style.addInnerStyle("okbutton", ok_style);
+        Style toolbar_style = getHorizontalStackStyle();
+        toolbar_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
+        toolbar_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        toolbar_style.setSpacing(10, 0);
+        toolbar_style.setPadding(0, 0, 0, 0);
+        toolbar_style.setMargin(0, 0, 0, 0);
+        style.addInnerStyle("toolbar", toolbar_style);
+
+        Style userbar_style = getHorizontalStackStyle();
+        userbar_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
+        userbar_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        userbar_style.setSpacing(10, 0);
+        userbar_style.setPadding(0, 0, 0, 0);
+        userbar_style.setMargin(0, 0, 0, 0);
+        style.addInnerStyle("userbar", userbar_style);
 
         Style msg_style = getLabelStyle();
         msg_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        msg_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        msg_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
         msg_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-
+        msg_style.setMargin(10, 0, 10, 40);
         style.addInnerStyle("message", msg_style);
 
-        Style layout_style = getVerticalStackStyle();
+        Style layout_style = getFrameStyle();
         layout_style.setMargin(0, 30, 0, 0);
         layout_style.setPadding(6, 6, 6, 6);
-        layout_style.setSpacing(0, 10);
         layout_style.setBackground(255, 255, 255, 20);
-
         style.addInnerStyle("layout", layout_style);
 
         return style;
@@ -1970,9 +2017,11 @@ public class Style {
         style.addInnerStyle("cancelbutton", cancelbutton_style);
 
         Style filter_style = getButtonCoreStyle();
-        filter_style.setSize(24, 30);
+        // filter_style.setSize(24, 30);
+        filter_style.setSize(30, 30);
         filter_style.setBackground(35, 35, 35);
-        filter_style.setPadding(4, 6, 4, 6);
+        // filter_style.setPadding(4, 6, 4, 6);
+        filter_style.setPadding(4, 4, 4, 4);
         filter_style.setMargin(5, 0, 0, 0);
         style.addInnerStyle("filter", filter_style);
 
@@ -2012,34 +2061,36 @@ public class Style {
         window_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         window_style.setPadding(2, 2, 2, 2);
         window_style.setBackground(45, 45, 45);
-
         style.addInnerStyle("window", window_style);
 
         Style ok_style = getButtonCoreStyle();
         ok_style.setBackground(100, 255, 150);
         ok_style.foreground = Color.black;
-        ok_style.setSize(150, 30);
+        ok_style.setSize(100, 30);
         ok_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        ok_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
-        ok_style.setMargin(0, 0, 0, 15);
+        ok_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
+        ok_style.setMargin(0, 0, 0, 0);
         ok_style.borderRadius = new CornerRadius();
         ok_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
-
         style.addInnerStyle("button", ok_style);
 
         Style text_style = getTextEditStyle();
         text_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.TOP);
         text_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
         text_style.setMargin(0, 15, 0, 0);
-
         style.addInnerStyle("textedit", text_style);
 
         Style layout_style = getFrameStyle();
         layout_style.setMargin(0, 30, 0, 0);
         layout_style.setPadding(6, 6, 6, 6);
         layout_style.setBackground(255, 255, 255, 20);
-
         style.addInnerStyle("layout", layout_style);
+
+        Style toolbar_style = getHorizontalStackStyle();
+        toolbar_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
+        toolbar_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        toolbar_style.setSpacing(10, 0);
+        style.addInnerStyle("toolbar", toolbar_style);
 
         return style;
     }
@@ -2067,8 +2118,7 @@ public class Style {
         return style;
     }
 
-    public static Style getWrapGridStyle()
-    {
+    public static Style getWrapGridStyle() {
         Style style = new Style();
 
         style.background = new Color(70, 70, 70);
@@ -2087,6 +2137,50 @@ public class Style {
         Style area_style = getWrapAreaStyle();
         style.addInnerStyle("area", area_style);
 
+        return style;
+    }
+
+    public static Style getSideAreaStyle() {
+        Style style = new Style();
+        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setBackground(0, 0, 0, 130);
+        style.borderRadius = new CornerRadius(0);
+        style.padding = new Indents();
+        style.margin = new Indents();
+        style.spacing = new Spacing();
+
+        Style window_style = getFrameStyle();
+        window_style.setPadding(2, 2, 2, 2);
+        window_style.setBackground(40, 40, 40);
+        window_style.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+        style.addInnerStyle("window", window_style);
+
+        Style close_style = new Style();
+        close_style.setMargin(0, 5, 0, 0);
+        close_style.font = DefaultsService.getDefaultFont();
+        close_style.background = new Color(100, 100, 100);
+        close_style.foreground = new Color(0, 0, 0, 0);
+        close_style.setSize(15, 15);
+        close_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        close_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.RIGHT));
+        close_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        ItemState close_hovered = new ItemState();
+        close_hovered.background = new Color(186, 95, 97, 255);
+        close_style.addItemState(ItemStateType.HOVERED, close_hovered);
+
+        close_style.shape = GraphicsMathService.getCross(15, 15, 2, 45);
+        close_style.isFixedShape = true;
+        style.addInnerStyle("closebutton", close_style);
+
+        return style;
+    }
+
+    public static Style getImageItemStyle() {
+        Style style = new Style();
+        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setBackground(0, 0, 0, 0);
         return style;
     }
 }

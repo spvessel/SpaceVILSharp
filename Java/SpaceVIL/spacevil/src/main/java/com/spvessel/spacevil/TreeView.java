@@ -39,7 +39,7 @@ public class TreeView extends ListBox {
         updateElements();
     }
 
-    public boolean GetRootVisibility() {
+    public boolean getRootVisibility() {
         return _root.isVisible();
     }
 
@@ -78,7 +78,7 @@ public class TreeView extends ListBox {
         super.addItem(_root);
         setRootVisibility(false);
 
-        _root.resetIndents();
+        // _root.resetIndents();
         _maxWrapperWidth = getWrapper(_root).getMinWidth();
     }
 
@@ -94,7 +94,7 @@ public class TreeView extends ListBox {
         int index = getListContent().indexOf(prev) + 1;
         int nestLev = item._nesting_level;
         while (index < list.size()) {
-            if (((TreeItem)list.get(index))._nesting_level <= nestLev)
+            if (((TreeItem) list.get(index))._nesting_level <= nestLev)
                 break;
             index++;
         }
@@ -184,10 +184,18 @@ public class TreeView extends ListBox {
 
     @Override
     public void clear() {
-        super.clear();
         _root.removeAllChildren();
+        super.clear();
         super.addItem(_root);
-        _root.resetIndents();
+        setRootVisibility(getRootVisibility());
+        // _root.resetIndents();
         _maxWrapperWidth = getWrapper(_root).getMinWidth();
+    }
+
+    @Override
+    public void removeItem(InterfaceBaseItem item) {
+        if (item.equals(_root))
+            return;
+        super.removeItem(item);
     }
 }

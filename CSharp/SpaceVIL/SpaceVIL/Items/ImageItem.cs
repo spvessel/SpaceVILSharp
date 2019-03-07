@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-using SpaceVIL.Core;
 using System.Threading;
+using SpaceVIL.Common;
+using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
@@ -15,12 +16,22 @@ namespace SpaceVIL
         public Bitmap _image;
         private byte[] _bitmap;
         private String _url;
+        private float _angleRotation = 0.0f;
+        public void SetRotationAngle(float angle)
+        {
+            _angleRotation = angle * (float)Math.PI / 180.0f;
+        }
 
-        public bool isHover = true;
+        public float GetRotationAngle()
+        {
+            return _angleRotation;
+        }
+
+        public bool IsHover = true;
 
         internal override bool GetHoverVerification(float xpos, float ypos)
         {
-            if (isHover)
+            if (IsHover)
                 return base.GetHoverVerification(xpos, ypos);
             return false;
         }
@@ -32,6 +43,7 @@ namespace SpaceVIL
         {
             SetItemName("Image_" + count);
             count++;
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ImageItem)));
         }
 
         /// <summary>
@@ -47,7 +59,7 @@ namespace SpaceVIL
 
         public ImageItem(Bitmap picture, bool hover) : this(picture)
         {
-            isHover = hover;
+            IsHover = hover;
         }
 
         /// <summary>

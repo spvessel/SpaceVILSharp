@@ -66,7 +66,7 @@ namespace SpaceVIL
             _root.IsRoot = true;
             base.AddItem(_root);
             SetRootVisibility(false);
-            _root.ResetIndents();
+            // _root.ResetIndents();
             _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
         }
 
@@ -161,12 +161,19 @@ namespace SpaceVIL
 
         public override void Clear()
         {
-            base.Clear();
             _root.RemoveAllChildren();
+            base.Clear();
             base.AddItem(_root);
-            _root.ResetIndents();
+            SetRootVisibility(GetRootVisibility());
+            // _root.ResetIndents();
             _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
 
+        }
+        public override void RemoveItem(IBaseItem item)
+        {
+            if (item.Equals(_root))
+                return;
+            base.RemoveItem(item);
         }
     }
 }

@@ -371,12 +371,17 @@ final class DrawEngine {
         _fbo.unbindFBO();
     }
 
+    private boolean _inputLocker = false;
+
     void minimizeWindow() {
+        _inputLocker = true;
         engineEvent.setEvent(InputEventType.WINDOW_MINIMIZE);
         glfwIconifyWindow(_handler.getWindowId());
+        _inputLocker = false;
     }
 
     void maximizeWindow() {
+        _inputLocker = true;
         engineEvent.setEvent(InputEventType.WINDOW_RESTORE);
         try (MemoryStack stack = MemoryStack.stackPush()) {
             if (_handler.getLayout().isMaximized) {
@@ -397,6 +402,7 @@ final class DrawEngine {
                 _handler.getLayout().setHeight(h.get(0));
             }
         }
+        _inputLocker = false;
     }
 
     private void closeWindow(long wnd) {
@@ -473,7 +479,8 @@ final class DrawEngine {
     // boolean flag_resize = false;
 
     private void mouseMove(long wnd, double xpos, double ypos) {
-
+        if (_inputLocker)
+            return;
         engineEvent.setEvent(InputEventType.MOUSE_MOVE);
         _tooltip.initTimer(false);
         if (!flag_move)
@@ -670,6 +677,8 @@ final class DrawEngine {
     }
 
     private void mouseClick(long wnd, int button, int action, int mods) {
+        if (_inputLocker)
+            return;
         _handler.getLayout().getWindow()._sides.clear();
         if (!_handler.focusable)
             return;
@@ -733,8 +742,8 @@ final class DrawEngine {
             if (hoveredItem != null) {
                 hoveredItem.setMousePressed(false);
 
-                if (is_double_click && hoveredItem != null)
-                    assignActions(InputEventType.MOUSE_DOUBLE_CLICK, _margs, hoveredItem, false);
+                if (is_double_click)
+                    assignActions(InputEventType.MOUSE_DOUBLE_CLICK, _margs, false);
                 else
                     assignActions(InputEventType.MOUSE_RELEASE, _margs, false);
             }
@@ -899,6 +908,8 @@ final class DrawEngine {
     }
 
     private void mouseScroll(long wnd, double dx, double dy) {
+        if (_inputLocker)
+            return;
         _tooltip.initTimer(false);
         if (hoveredItems.size() == 0)
             return;
@@ -916,6 +927,8 @@ final class DrawEngine {
     }
 
     private void keyPress(long wnd, int key, int scancode, int action, int mods) {
+        if (_inputLocker)
+            return;
         // System.out.println("keypress");
         // switch (action) {
         // case 1 :
@@ -974,6 +987,8 @@ final class DrawEngine {
     }
 
     private void textInput(long wnd, int character, int mods) {
+        if (_inputLocker)
+            return;
         // System.out.println("textinput");
         if (!_handler.focusable)
             return;
@@ -1050,7 +1065,7 @@ final class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
-    float _interval = 1.0f / 30.0f;// 1000 / 60;
+    float _interval = 1.0f / 15.0f;// 1000 / 60;
     // internal float _interval = 1.0f / 60.0f;//1000 / 60;
     // internal int _interval = 11;//1000 / 90;
     // internal int _interval = 08;//1000 / 120;
@@ -1082,7 +1097,15 @@ final class DrawEngine {
         while (!_handler.isClosing()) {
             glfwWaitEventsTimeout(_interval);
             // glfwWaitEvents();
-            // // glfwPollEvents();
+            // glfwPollEvents();
+            // synchronized(this)
+            // {
+            //     try {
+            //         this.wait(30);
+            //     } catch (Exception e) {
+            //         //TODO: handle exception
+            //     }
+            // }
 
             // glClearColor(0, 0, 0, 0);
             if (!engineEvent.lastEvent().contains(InputEventType.WINDOW_RESIZE)) {
@@ -1090,6 +1113,11 @@ final class DrawEngine {
                 _handler.swap();
             }
             flag_move = true;
+            // try {
+            // Thread.sleep(1000 / 60);
+            // } catch (InterruptedException e) {
+            // e.printStackTrace();
+            // }
         }
         _primitive.deleteShader();
         _texture.deleteShader();
@@ -1559,7 +1587,7 @@ final class DrawEngine {
     }
 
     private void drawImage(ImageItem image) {
-        checkOutsideBorders((InterfaceBaseItem) image);
+        // checkOutsideBorders((InterfaceBaseItem) image);
 
         byte[] bitmap = image.getPixMapImage();
         if (bitmap == null)
@@ -1587,6 +1615,8 @@ final class DrawEngine {
             store.sendUniform4f(_texture, "rgb", argb);
         } else
             store.sendUniform1i(_texture, "overlay", 0);// VEEEEEEEERY interesting!!!
+
+        store.sendUniform1f(_texture, "alpha", image.getRotationAngle());
 
         store.draw();
         store.clear();

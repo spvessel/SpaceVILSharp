@@ -16,8 +16,23 @@ namespace SpaceVIL
             return _list_inners;
         }
 
+        public void RemoveChild(TreeItem child)
+        {
+            if (_list_inners.Contains(child))
+            {
+                _list_inners.Remove(child);
+                child.RemoveAllChildren();
+                _treeViewContainer.RemoveItem(child);
+            }
+        }
+
         internal void RemoveAllChildren()
         {
+            foreach (var item in _list_inners)
+            {
+                item.RemoveAllChildren();
+                _treeViewContainer.RemoveItem(item);
+            }
             _list_inners.Clear();
         }
 
@@ -82,10 +97,20 @@ namespace SpaceVIL
         {
             if (args.Key == KeyCode.Enter)
                 _indicator.EventToggle.Invoke(sender, new MouseArgs());
-            else if (args.Key == KeyCode.Space)
-                AddItem(new TreeItem(TreeItemType.Branch, "new branch " + count));
-            else if (args.Key == KeyCode.NumpadAdd)
-                AddItem(new TreeItem(TreeItemType.Leaf, "new leaf " + count));
+
+            // else if (args.Key == KeyCode.Space)
+            //     AddItem(new TreeItem(TreeItemType.Branch, "new branch " + count));
+            // else if (args.Key == KeyCode.Equal)
+            // {
+            //     TreeItem tr = new TreeItem(TreeItemType.Leaf, "new leaf " + count);
+            //     tr.EventMouseDoubleClick += (s, a)=>{
+            //         Console.WriteLine(tr.GetItemName() + " click");
+            //     };
+            //     AddItem(tr);
+            // }
+
+            // else if (args.Key == KeyCode.Delete)
+            //     GetParentBranch().RemoveChild(this);
         }
 
         internal void ResetIndents()
@@ -116,6 +141,7 @@ namespace SpaceVIL
         }
         public override void InitElements()
         {
+            _text_object.IsFocusable = false;
             switch (_item_type)
             {
                 case TreeItemType.Leaf:
@@ -141,7 +167,6 @@ namespace SpaceVIL
                     base.AddItem(_text_object);
                     break;
             }
-            _text_object.IsFocusable = false;
         }
 
         internal void OnToggleHide(bool value) // refactor

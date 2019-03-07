@@ -25,7 +25,7 @@ namespace SpaceVIL
         /// <summary>
         /// Is MenuItem ready to close
         /// </summary>
-        public bool IsReadyToClose(MouseArgs args)
+        internal bool IsReadyToClose(MouseArgs args)
         {
             if (_sub_context_menu != null)
             {
@@ -35,7 +35,13 @@ namespace SpaceVIL
             }
             return false;
         }
+
         CustomShape _arrow;
+
+        public CustomShape GetArrow()
+        {
+            return _arrow;
+        }
 
         /// <summary>
         /// Assign the context menu
@@ -113,6 +119,11 @@ namespace SpaceVIL
         /// <summary>
         /// Text margin in the MenuItem
         /// </summary>
+        public Indents GetTextMargin()
+        {
+            return _text_object.GetMargin();
+        }
+
         public void SetTextMargin(Indents margin)
         {
             _text_object.SetMargin(margin);
@@ -175,20 +186,21 @@ namespace SpaceVIL
         /// </summary>
         public override void InitElements()
         {
-            //text
-            // SetForeground(Color.Black);
-            //_text_object.SetAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-
-            //aligment
-            // SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-
             //adding
             AddItem(_text_object);
             if (IsActionItem)
                 AddItem(_arrow);
+            foreach (IBaseItem item in _queue)
+            {
+                base.AddItem(item);
+            }
+        }
 
-            //update text data
-            //_text_object.UpdateData(UpdateType.Critical);
+        private List<IBaseItem> _queue = new List<IBaseItem>();
+
+        public override void AddItem(IBaseItem item)
+        {
+            _queue.Add(item);
         }
 
         /// <summary>
@@ -211,6 +223,11 @@ namespace SpaceVIL
                 if (_arrow == null)
                     _arrow = new CustomShape();
                 _arrow.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("text");
+            if (inner_style != null)
+            {
+                _text_object.SetMargin(inner_style.Margin);
             }
         }
 

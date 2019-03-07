@@ -23,6 +23,6 @@ public class Program {
         // ScissorsTest sc = new ScissorsTest();
         // sc.show();
 
-        ct.show();
+        mw.show();
     }
 }

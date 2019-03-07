@@ -97,6 +97,8 @@ public class ThemeStyle {
             defaultItemsStyle.put(SelectionItem.class, Style.getSelectionItemStyle());
             defaultItemsStyle.put(WrapArea.class, Style.getWrapAreaStyle());
             defaultItemsStyle.put(WrapGrid.class, Style.getWrapGridStyle());
+            defaultItemsStyle.put(SideArea.class, Style.getSideAreaStyle());
+            defaultItemsStyle.put(ImageItem.class, Style.getImageItemStyle());
         }
     }
 

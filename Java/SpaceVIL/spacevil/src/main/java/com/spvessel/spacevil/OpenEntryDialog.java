@@ -134,8 +134,8 @@ public class OpenEntryDialog extends OpenDialog {
                 DefaultsService.getDefaultImage(EmbeddedImage.EYE, EmbeddedImageSize.SIZE_32X32), false);
         ImageItem filter = new ImageItem(
                 DefaultsService.getDefaultImage(EmbeddedImage.FILTER, EmbeddedImageSize.SIZE_32X32), false);
-        Style.getFrameStyle().setStyle(backward, upward, create, rename, refresh, hidden, user, home, filter);
 
+        Style.getFrameStyle().setStyle(backward, upward, create, rename, refresh, hidden, user, home, filter);
         window.addItems(_layout);
         _layout.addItems(_toolbar, _addressLine, _fileList, _fileName, _controlPanel);
         _toolbar.addItems(_btnBackward, _btnUpward, getDivider(), _btnHome, _btnUser, getDivider(), _btnCreate,
