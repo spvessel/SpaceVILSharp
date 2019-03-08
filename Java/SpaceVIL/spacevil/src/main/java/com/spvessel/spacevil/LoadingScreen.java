@@ -22,6 +22,15 @@ public class LoadingScreen extends Prototype {
     }
 
     private Label _text_object;
+    
+    public void setValueVisibility(boolean visibility) {
+        _text_object.setVisible(visibility);
+    }
+
+    public boolean isValueVisible() {
+        return _text_object.isVisible();
+    }
+    
     private WindowLayout _handler = null;
 
     public LoadingScreen() {

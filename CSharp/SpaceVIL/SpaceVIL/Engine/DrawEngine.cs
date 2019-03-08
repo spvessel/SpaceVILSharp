@@ -605,6 +605,8 @@ namespace SpaceVIL
                     }
                 }
             }
+
+            Thread.Sleep(10);
         }
 
         private Stopwatch _double_click_timer = new Stopwatch();

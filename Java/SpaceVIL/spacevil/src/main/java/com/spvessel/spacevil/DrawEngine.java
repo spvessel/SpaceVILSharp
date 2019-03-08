@@ -652,6 +652,12 @@ final class DrawEngine {
                 }
             }
         }
+
+        try {
+            Thread.sleep(10);
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
     }
 
     private long _start_time = 0; // System.nanoTime();

@@ -18,6 +18,15 @@ namespace SpaceVIL
             _loadIcon = new ImageItem(image);
         }
         private Label _text_object;
+        public void SetValueVisibility(bool visibility)
+        {
+            _text_object.SetVisible(visibility);
+        }
+        public bool IsValueVisible()
+        {
+            return _text_object.IsVisible();
+        }
+        
         private WindowLayout _handler = null;
 
         public LoadingScreen()
