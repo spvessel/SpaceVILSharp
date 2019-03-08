@@ -43,14 +43,14 @@ public class LoadingScreen extends Prototype {
         _text_object = new Label("0%");
         setStyle(DefaultsService.getDefaultStyle(LoadingScreen.class));
 
-        eventKeyPress.add((s, a) -> {
-            if (a.key == KeyCode.NUMPADADD)
-                setValue(getValue() + 1);
-            else if (a.key == KeyCode.NUMPADSUBTRACT)
-                setValue(getValue() - 1);
-            else if (a.key == KeyCode.ESCAPE)
-                setToClose();
-        });
+        // eventKeyPress.add((s, a) -> {
+        //     if (a.key == KeyCode.NUMPADADD)
+        //         setValue(getValue() + 1);
+        //     else if (a.key == KeyCode.NUMPADSUBTRACT)
+        //         setValue(getValue() - 1);
+        //     else if (a.key == KeyCode.ESCAPE)
+        //         setToClose();
+        // });
     }
 
     @Override
