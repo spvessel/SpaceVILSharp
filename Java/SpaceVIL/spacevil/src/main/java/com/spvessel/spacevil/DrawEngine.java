@@ -1652,11 +1652,11 @@ final class DrawEngine {
             return;
 
         int w = image.getImageWidth(), h = image.getImageHeight();
-        float i_x0 = ((float) image.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y0 = ((float) image.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) image.getX() + (float) image.getWidth()) / (float) _handler.getLayout().getWidth()
+        float i_x0 = ((float) image.area.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
+        float i_y0 = ((float) image.area.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_x1 = (((float) image.area.getX() + (float) image.area.getWidth()) / (float) _handler.getLayout().getWidth()
                 * 2.0f) - 1.0f;
-        float i_y1 = (((float) image.getY() + (float) image.getHeight()) / (float) _handler.getLayout().getHeight()
+        float i_y1 = (((float) image.area.getY() + (float) image.area.getHeight()) / (float) _handler.getLayout().getHeight()
                 * 2.0f - 1.0f) * (-1.0f);
 
         _texture.useShader();

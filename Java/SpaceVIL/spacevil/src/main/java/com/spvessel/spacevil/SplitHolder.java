@@ -48,13 +48,13 @@ public class SplitHolder extends Prototype implements InterfaceDraggable {
         case VERTICAL:
             setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
             setWidth(_spacerSize);
-            setMinWidth(_spacerSize);
+            // setMinWidth(_spacerSize);
             break;
 
         case HORIZONTAL:
             setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
             setHeight(_spacerSize);
-            setMinHeight(_spacerSize);
+            // setMinHeight(_spacerSize);
             break;
         }
     }

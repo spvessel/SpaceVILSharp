@@ -13,6 +13,7 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.EmbeddedImage;
 import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.FileSystemEntryType;
+import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
@@ -229,6 +230,7 @@ public class OpenEntryDialog extends OpenDialog {
             if (f.isDirectory()) {
                 fi = new FileSystemEntry(FileSystemEntryType.DIRECTORY, f.getName());
                 fi.setIcon(_folder, 16, 16);
+                // fi.setPassEvents(false, InputEventType.MOUSE_DOUBLE_CLICK);
                 _fileList.addItem(fi);
                 fi.eventMouseDoubleClick.add((sender, args) -> {
                     setAddressLine(fi);

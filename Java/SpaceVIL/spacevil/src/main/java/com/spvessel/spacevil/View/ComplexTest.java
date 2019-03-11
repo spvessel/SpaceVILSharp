@@ -83,27 +83,33 @@ public class ComplexTest extends ActiveWindow {
         VerticalSplitArea split_area = new VerticalSplitArea();
         split_area.setMargin(0, 72, 0, 0);
         Handler.addItem(split_area);
-        split_area.setSplitHolderPosition(300);
+        split_area.setSplitPosition(300);
 
         split_area.assignLeftItem(treeview);
 
-        TabView tabs = new TabView();
-        tabs.setMinWidth(300);
-        split_area.assignRightItem(tabs);
-        tabs.addTab("WrapArea");
-        tabs.addTab("Grid");
+        ImageItem img = new ImageItem(
+                DefaultsService.getDefaultImage(EmbeddedImage.IMPORT, EmbeddedImageSize.SIZE_32X32), false);
+        img.keepAspectRatio(true);
+        img.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        split_area.assignRightItem(img);
 
-        tabs.addItemToTab("WrapArea", wrap);
-        tabs.addItemToTab("Grid", block);
+        // TabView tabs = new TabView();
+        // tabs.setMinWidth(300);
+        // split_area.assignRightItem(tabs);
+        // tabs.addTab("WrapArea");
+        // tabs.addTab("Grid");
 
-        block.insertItem(getButton("Button1", 100, 100, SizePolicy.EXPAND), 0, 0);
-        block.insertItem(getButton("Button2", 100, 100, SizePolicy.EXPAND), 0, 1);
-        block.insertItem(getButton("Button3", 100, 100, SizePolicy.EXPAND), 0, 2);
-        block.insertItem(getButton("Button4", 100, 100, SizePolicy.EXPAND), 0, 3);
-        block.insertItem(getButton("Button5", 100, 100, SizePolicy.EXPAND), 0, 4);
-        block.insertItem(getButton("Button6", 100, 100, SizePolicy.EXPAND), 0, 5);
-        block.insertItem(getButton("Button7", 100, 100, SizePolicy.EXPAND), 0, 6);
-        block.insertItem(getButton("Button8", 100, 100, SizePolicy.EXPAND), 0, 7);
+        // tabs.addItemToTab("WrapArea", wrap);
+        // tabs.addItemToTab("Grid", block);
+
+        // block.insertItem(getButton("Button1", 100, 100, SizePolicy.EXPAND), 0, 0);
+        // block.insertItem(getButton("Button2", 100, 100, SizePolicy.EXPAND), 0, 1);
+        // block.insertItem(getButton("Button3", 100, 100, SizePolicy.EXPAND), 0, 2);
+        // block.insertItem(getButton("Button4", 100, 100, SizePolicy.EXPAND), 0, 3);
+        // block.insertItem(getButton("Button5", 100, 100, SizePolicy.EXPAND), 0, 4);
+        // block.insertItem(getButton("Button6", 100, 100, SizePolicy.EXPAND), 0, 5);
+        // block.insertItem(getButton("Button7", 100, 100, SizePolicy.EXPAND), 0, 6);
+        // block.insertItem(getButton("Button8", 100, 100, SizePolicy.EXPAND), 0, 7);
 
         // Handler.getWindow().eventKeyPress.add((sender, args) -> {
         // System.out.println("FocusedItem: " +
@@ -125,7 +131,7 @@ public class ComplexTest extends ActiveWindow {
         style.background = new Color(255, 181, 111);
         style.foreground = new Color(0, 0, 0);
         style.borderRadius = new CornerRadius(6);
-        style.font = DefaultsService.getDefaultFont();//new Font("Courier New", Font.PLAIN, 16);
+        style.font = DefaultsService.getDefaultFont();// new Font("Courier New", Font.PLAIN, 16);
         style.width = w;
         style.minWidth = 30;
         style.maxWidth = 100;

@@ -21,7 +21,7 @@ namespace SpaceVIL
         private int _lMin = 0;
         private int _rMin = 0;
 
-        public void SetSplitHolderPosition(int position)
+        public void SetSplitPosition(int position)
         {
             if (position < _lMin || position > GetWidth() - _splitHolder.GetHolderSize() - _rMin)
                 return;
@@ -47,14 +47,14 @@ namespace SpaceVIL
         void OnDragging(IItem sender, MouseArgs args)
         {
             int offset = args.Position.GetX() - GetX() - _diff;
-            SetSplitHolderPosition(offset);
+            SetSplitPosition(offset);
         }
 
         public override void InitElements()
         {
             //Adding
             AddItem(_splitHolder);
-            SetSplitHolderPosition((GetWidth() - _splitHolder.GetHolderSize()) / 2);
+            SetSplitPosition((GetWidth() - _splitHolder.GetHolderSize()) / 2);
             // Console.WriteLine(_splitHolder.GetX() + " " + _splitHolder.GetWidth());
             // UpdateLayout();
         }
@@ -86,24 +86,24 @@ namespace SpaceVIL
             int totalSize = GetWidth() - _splitHolder.GetHolderSize();
             if (totalSize < _lMin)
             {
-                SetSplitHolderPosition(totalSize);
+                SetSplitPosition(totalSize);
             }
             else if (totalSize <= _lMin + _rMin)
             {
-                SetSplitHolderPosition(_lMin);
+                SetSplitPosition(_lMin);
             }
             else
             {
                 if (totalSize - _leftWidth < _rMin)
                 {
-                    SetSplitHolderPosition(totalSize - _rMin);
+                    SetSplitPosition(totalSize - _rMin);
                 }
             }
         }
         public override void SetX(int _x)
         {
             base.SetX(_x);
-            SetSplitHolderPosition(_leftWidth);
+            SetSplitPosition(_leftWidth);
             UpdateLayout();
         }
 
@@ -128,7 +128,9 @@ namespace SpaceVIL
             {
                 _rightBlock.SetX(_leftWidth + GetX() + _splitHolder.GetHolderSize());
                 if (tmpWidth > 0)
+                {
                     _rightBlock.SetWidth(tmpWidth);
+                }
                 else
                     _rightBlock.SetWidth(0);
             }

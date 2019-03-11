@@ -12,6 +12,29 @@ namespace SpaceVIL
 {
     public class ImageItem : Prototype, IImageItem
     {
+        internal class ImageBounds : Geometry, IPosition
+        {
+            private int _x, _y;
+            public void SetX(int x)
+            {
+                _x = x;
+            }
+            public void SetY(int y)
+            {
+                _y = y;
+            }
+            public int GetX()
+            {
+                return _x;
+            }
+            public int GetY()
+            {
+                return _y;
+            }
+        }
+
+        internal ImageBounds Area = new ImageBounds();
+
         static int count = 0;
         public Bitmap _image;
         private byte[] _bitmap;
@@ -186,6 +209,114 @@ namespace SpaceVIL
         public bool IsColorOverLay()
         {
             return _isOverlay;
+        }
+
+        private bool _isKeepAspectRatio = false;
+        public void KeepAspectRatio(bool value)
+        {
+            _isKeepAspectRatio = value;
+        }
+        public bool IsAspectRatio()
+        {
+            return _isKeepAspectRatio;
+        }
+
+        public override void SetSize(int width, int height)
+        {
+            this.SetWidth(width);
+            this.SetHeight(height);
+        }
+        public override void SetHeight(int height)
+        {
+            base.SetHeight(height);
+            Area.SetHeight(height);
+            if (_isKeepAspectRatio && _image != null)
+                ApplyAspectRatio();
+            UpdateLayout();
+        }
+
+        public override void SetWidth(int width)
+        {
+            base.SetWidth(width);
+            Area.SetWidth(width);
+            if (_isKeepAspectRatio && _image != null)
+                ApplyAspectRatio();
+            UpdateLayout();
+        }
+
+        public override void SetX(int _x)
+        {
+            base.SetX(_x);
+            UpdateLayout();
+        }
+
+        public override void SetY(int _y)
+        {
+            base.SetY(_y);
+            UpdateLayout();
+        }
+
+        private void ApplyAspectRatio()
+        {
+            int w, h;
+            float ratioW = (float)_image.Width / (float)_image.Height;
+            float ratioH = (float)_image.Height / (float)_image.Width;
+            if (GetWidth() > GetHeight())
+            {
+                h = GetHeight();
+                w = (int)((float)h * ratioW);
+                Area.SetWidth(w);
+                Area.SetHeight(h);
+            }
+            else
+            {
+                w = GetWidth();
+                h = (int)((float)w * ratioH);
+                Area.SetWidth(w);
+                Area.SetHeight(h);
+            }
+        }
+
+        //self update
+        public void UpdateLayout()
+        {
+            UpdateVerticalPosition();
+            UpdateHorizontalPosition();
+        }
+
+        private void UpdateHorizontalPosition()
+        {
+            if (GetAlignment().HasFlag(ItemAlignment.Left))
+            {
+                Area.SetX(GetX());
+            }
+            else if (GetAlignment().HasFlag(ItemAlignment.Right))
+            {
+                Area.SetX(GetX() + GetWidth() - Area.GetWidth());
+            }
+            else if (GetAlignment().HasFlag(ItemAlignment.HCenter))
+            {
+                int x = GetX();
+                int w = Area.GetWidth();
+                Area.SetX((GetWidth() - w) / 2 + x);
+            }
+        }
+        private void UpdateVerticalPosition()
+        {
+            if (GetAlignment().HasFlag(ItemAlignment.Top))
+            {
+                Area.SetY(GetY());
+            }
+            else if (GetAlignment().HasFlag(ItemAlignment.Bottom))
+            {
+                Area.SetY(GetY() + GetHeight() - Area.GetHeight());
+            }
+            else if (GetAlignment().HasFlag(ItemAlignment.VCenter))
+            {
+                int y = GetY();
+                int h = Area.GetHeight();
+                Area.SetY((GetHeight() - h) / 2 + y);
+            }
         }
     }
 }

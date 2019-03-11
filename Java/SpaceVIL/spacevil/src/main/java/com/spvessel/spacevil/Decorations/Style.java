@@ -1388,6 +1388,7 @@ public class Style implements Cloneable {
         // style.addItemState(ItemStateType.HOVERED, hovered);
         // ItemState focused = new ItemState();
         // focused.background = new Color(220, 220, 220, 255);
+        // focused.border = new Border(new Color(58,156,209), new CornerRadius(), 2);
         // style.addItemState(ItemStateType.FOCUSED, focused);
 
         Style cursor_style = new Style();

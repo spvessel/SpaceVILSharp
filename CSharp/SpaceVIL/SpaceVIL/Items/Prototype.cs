@@ -337,7 +337,7 @@ namespace SpaceVIL
         /// <summary>
         /// Prototype size (width, height)
         /// </summary>
-        public void SetSize(int width, int height)
+        public virtual void SetSize(int width, int height)
         {
             _core.SetSize(width, height);
         }

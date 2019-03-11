@@ -705,10 +705,7 @@ namespace SpaceVIL
                     {
                         HoveredItem.SetMousePressed(false);
                         if (is_double_click)
-                        {
-                            // Console.WriteLine("H: " + HoveredItem.GetItemName() + " " + FocusedItem.GetItemName());
                             AssignActions(InputEventType.MouseDoubleClick, _margs, false);
-                        }
                         else
                             AssignActions(InputEventType.MouseRelease, _margs, false);
                     }
@@ -1681,10 +1678,16 @@ namespace SpaceVIL
                 return;
 
             int w = image.GetImageWidth(), h = image.GetImageHeight();
-            float i_x0 = ((float)image.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y0 = ((float)image.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x0 = ((float)image.Area.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y0 = ((float)image.Area.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)image.Area.GetX() + (float)image.Area.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)image.Area.GetY() + (float)image.Area.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            // Console.WriteLine(image.GetItemName() + " " 
+            // + image._area.GetX() + " " 
+            // + image._area.GetWidth() + " "
+            // + image._area.GetY() + " " 
+            // + image._area.GetHeight()
+            // );
             _texture.UseShader();
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
@@ -1692,7 +1695,7 @@ namespace SpaceVIL
             store.SendUniformSample2D(_texture, "tex");
             if (image.IsColorOverLay())
             {
-                Console.WriteLine("is overlay");
+                // Console.WriteLine("is overlay");
                 float[] argb = {
                         (float) image.GetColorOverlay().R / 255.0f,
                         (float) image.GetColorOverlay().G / 255.0f,

@@ -448,7 +448,7 @@ namespace SpaceVIL
             }
             SetAlignment(common);
         }
-        
+
         public ItemAlignment GetAlignment()
         {
             return _itemBehavior.GetAlignment();
