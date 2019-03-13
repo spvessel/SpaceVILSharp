@@ -656,7 +656,7 @@ final class DrawEngine {
         try {
             Thread.sleep(10);
         } catch (Exception e) {
-            //TODO: handle exception
+            // TODO: handle exception
         }
     }
 
@@ -1205,8 +1205,21 @@ final class DrawEngine {
         List<InterfaceBaseItem> float_items = new LinkedList<>(
                 ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems());
         if (float_items != null) {
-            for (InterfaceBaseItem item : float_items)
+            for (InterfaceBaseItem item : float_items) {
+                if (item.getHeightPolicy() == SizePolicy.EXPAND) {
+                    int[] confines = item.getConfines();
+                    item.setConfines(confines[0], confines[1], 0, _handler.getLayout().getWindow().getHeight());
+                    item.setY(0);
+                    item.setHeight(_handler.getLayout().getWindow().getHeight());
+                }
+                if (item.getWidthPolicy() == SizePolicy.EXPAND) {
+                    int[] confines = item.getConfines();
+                    item.setConfines(0, _handler.getLayout().getWindow().getWidth(), confines[2], confines[3]);
+                    item.setX(0);
+                    item.setWidth(_handler.getLayout().getWindow().getWidth());
+                }
                 drawItems(item);
+            }
         }
         // draw tooltip if needed
         drawToolTip();
@@ -1378,10 +1391,10 @@ final class DrawEngine {
             drawText((InterfaceTextContainer) root);
             glDisable(GL_SCISSOR_TEST);
         }
-        if (root instanceof ImageItem) {
+        if (root instanceof InterfaceImageItem) {
             drawShell(root);
             glDisable(GL_SCISSOR_TEST);
-            drawImage((ImageItem) root);
+            drawImage((InterfaceImageItem) root);
             glDisable(GL_SCISSOR_TEST);
         } else {
             drawShell(root);
@@ -1644,27 +1657,30 @@ final class DrawEngine {
         store.clear();
     }
 
-    private void drawImage(ImageItem image) {
-        // checkOutsideBorders((InterfaceBaseItem) image);
+    private void drawImage(InterfaceImageItem image) {
+        // проверка: полностью ли влезает объект в свой контейнер
+        checkOutsideBorders((InterfaceBaseItem) image);
 
         byte[] bitmap = image.getPixMapImage();
         if (bitmap == null)
             return;
 
         int w = image.getImageWidth(), h = image.getImageHeight();
-        float i_x0 = ((float) image.area.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y0 = ((float) image.area.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) image.area.getX() + (float) image.area.getWidth()) / (float) _handler.getLayout().getWidth()
-                * 2.0f) - 1.0f;
-        float i_y1 = (((float) image.area.getY() + (float) image.area.getHeight()) / (float) _handler.getLayout().getHeight()
-                * 2.0f - 1.0f) * (-1.0f);
+        RectangleBounds area = image.getRectangleBounds();
+
+        float i_x0 = ((float) area.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
+        float i_y0 = ((float) area.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_x1 = (((float) area.getX() + (float) area.getWidth())
+                / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
+        float i_y1 = (((float) area.getY() + (float) area.getHeight())
+                / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
 
         _texture.useShader();
         VRAMTexture store = new VRAMTexture();
         store.genBuffers(i_x0, i_x1, i_y0, i_y1);
         store.genTexture(w, h, bitmap);
         store.sendUniformSample2D(_texture);
-        if (image.isColorOverLay()) {
+        if (image.isColorOverlay()) {
             float[] argb = { (float) image.getColorOverlay().getRed() / 255.0f,
                     (float) image.getColorOverlay().getGreen() / 255.0f,
                     (float) image.getColorOverlay().getBlue() / 255.0f,

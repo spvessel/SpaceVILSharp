@@ -52,6 +52,7 @@ public class LayoutsTest extends ActiveWindow {
 
         ListBox listbox_left_1 = new ListBox();
         listbox_left_1.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        listbox_left_1.setVisible(false);
         listbox_left_1.eventMouseClick.add(
             (sender, args) ->{
                 // System.out.println(listbox_left_1.getSelection() + " " + listbox_left_1.getSelectionItem().getItemName());
@@ -118,7 +119,7 @@ public class LayoutsTest extends ActiveWindow {
         all.setWidth(60);
         all.setHeight(25);
         InterfaceMouseMethodState all_click = (sender, args) -> {
-            listbox_left_1.setSelectionVisibility(!listbox_left_1.getSelectionVisibility());
+            // listbox_left_1.setSelectionVisibility(!listbox_left_1.getSelectionVisibility());
             // RadioButton radio = new RadioButton();
             // // CheckBox radio = new CheckBox();
             // radio.setText("Another radio button for testing.");
@@ -130,6 +131,7 @@ public class LayoutsTest extends ActiveWindow {
             // };
             // radio.eventMouseClick.add(r_click);
             // listbox_left_1.addItem(radio);
+            listbox_left_1.setVisible(!listbox_left_1.isVisible());
         };
         all.eventMouseClick.add(all_click);
         frame.addItem(all);

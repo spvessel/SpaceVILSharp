@@ -23,7 +23,7 @@ public class LoadingScreen extends Prototype {
 
     private Label _text_object;
     
-    public void setValueVisibility(boolean visibility) {
+    public void setValueVisible(boolean visibility) {
         _text_object.setVisible(visibility);
     }
 
@@ -37,7 +37,7 @@ public class LoadingScreen extends Prototype {
         setItemName("LoadingScreen_" + count++);
         setPassEvents(false);
         _loadIcon = new ImageItem();
-        if (_loadIcon.getImage() == null)
+        if (_loadIcon.getPixMapImage() == null)
             _loadIcon
                     .setImage(DefaultsService.getDefaultImage(EmbeddedImage.LOAD_CIRCLE, EmbeddedImageSize.SIZE_64X64));
         _text_object = new Label("0%");
@@ -92,7 +92,7 @@ public class LoadingScreen extends Prototype {
         }
     }
 
-    private boolean IsOnClose() {
+    private boolean isOnClose() {
         _locker.lock();
         try {
             return _isShouldClose;
@@ -105,7 +105,7 @@ public class LoadingScreen extends Prototype {
         }
     }
 
-    public void Show(WindowLayout handler) {
+    public void show(WindowLayout handler) {
         _handler = handler;
         _handler.addItem(this);
         _handler.setFocusedItem(this);
@@ -114,7 +114,7 @@ public class LoadingScreen extends Prototype {
             _handler.setRenderFrequency(RedrawFrequency.HIGH);
         Thread thread = new Thread(() -> {
             int alpha = 360;
-            while (!IsOnClose()) {
+            while (!isOnClose()) {
                 _loadIcon.setRotationAngle(alpha);
                 alpha--;
                 if (alpha == 0)

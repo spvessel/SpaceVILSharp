@@ -178,6 +178,12 @@ namespace SpaceVIL
                 ItemList.GetArea().SetFocus();
             }
         }
+        public void Show()
+        {
+            MouseArgs args = new MouseArgs();
+            args.Button = ActiveButton;
+            Show(this, args);
+        }
 
         /// <summary>
         /// Hide the ComboBoxDropDown without destroying

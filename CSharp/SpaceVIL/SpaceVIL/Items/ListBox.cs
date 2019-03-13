@@ -527,7 +527,7 @@ namespace SpaceVIL
                 AddItem(item);
         }
 
-        public IBaseItem GetWrapper(IBaseItem item)
+        public SelectionItem GetWrapper(IBaseItem item)
         {
             return GetArea()._mapContent[item];
         }

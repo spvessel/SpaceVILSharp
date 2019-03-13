@@ -3,6 +3,7 @@ namespace SpaceVIL.Core
 {
     public interface IFloating
     {
+        void Show();
         void Show(IItem sender, MouseArgs args);
         void Hide();
         bool IsOutsideClickClosable();

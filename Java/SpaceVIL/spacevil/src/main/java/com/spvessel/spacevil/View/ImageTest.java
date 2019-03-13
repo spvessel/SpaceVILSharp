@@ -44,6 +44,7 @@ public class ImageTest extends ActiveWindow {
         h_stack.setHeight(30);
         h_stack.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
         h_stack.setSpacing(5, 0);
+        h_stack.setVisible(false);
 
         frame.addItem(h_stack);
 
@@ -80,9 +81,10 @@ public class ImageTest extends ActiveWindow {
         btn_action.setBorderRadius(10);
         btn_action.setTextMargin(new Indents(0, 45, 0, 0));
         InterfaceMouseMethodState btn_action_click = (sender, args) -> {
-            MessageBox ms = new MessageBox("Send result?", "Message:");
-            ms.show();
-            System.out.println(ms.getResult());
+            // MessageBox ms = new MessageBox("Send result?", "Message:");
+            // ms.show();
+            // System.out.println(ms.getResult());
+            h_stack.setVisible(!h_stack.isVisible());
         };
         btn_action.eventMouseClick.add(btn_action_click);
 

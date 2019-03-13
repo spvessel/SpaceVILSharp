@@ -106,7 +106,7 @@ public class FlowTest extends ActiveWindow {
             // id.show(Handler);
 
             LoadingScreen ls = new LoadingScreen();
-            ls.Show(Handler);
+            ls.show(Handler);
         });
         btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn1.setHoverRule(ItemRule.STRICT);
@@ -153,11 +153,11 @@ public class FlowTest extends ActiveWindow {
         btn4.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         btn4.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn4.addItemState(ItemStateType.HOVERED, hovered);
+        AlbumSideList side = new AlbumSideList(Handler, Side.LEFT);
+        // side.setAttachSide(Side.TOP);
         btn4.eventMouseClick.add((sender, args) -> {
             // flow.addItem(getBlockList());
-            SideArea side = new SideArea(Side.LEFT);
-            // side.setAttachSide(Side.TOP);
-            side.show(getHandler());
+            side.show();
         });
         btn4.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
         btn4.setHoverRule(ItemRule.STRICT);

@@ -209,6 +209,10 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         }
     }
 
+    public void show() {
+        show(this, new MouseArgs());
+    }
+
     private boolean _added = false;
 
     @Override

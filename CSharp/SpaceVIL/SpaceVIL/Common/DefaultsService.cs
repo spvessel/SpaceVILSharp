@@ -308,11 +308,11 @@ namespace SpaceVIL.Common
         {
             if (size == EmbeddedImageSize.Size32x32 && images_32.ContainsKey(image))
             {
-                return images_32[image];
+                return new Bitmap(images_32[image]);
             }
             else if (size == EmbeddedImageSize.Size64x64 && images_64.ContainsKey(image))
             {
-                return images_64[image];
+                return new Bitmap(images_64[image]);
             }
             return null;
         }

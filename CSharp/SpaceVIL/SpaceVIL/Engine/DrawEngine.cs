@@ -1197,7 +1197,23 @@ namespace SpaceVIL
             if (float_items != null)
             {
                 foreach (var item in float_items)
+                {
+                    if (item.GetHeightPolicy() == SizePolicy.Expand)
+                    {
+                        int[] confines = item.GetConfines();
+                        item.SetConfines(confines[0], confines[1], 0, _handler.GetLayout().GetWindow().GetHeight());
+                        item.SetY(0);
+                        item.SetHeight(_handler.GetLayout().GetWindow().GetHeight());
+                    }
+                    if (item.GetWidthPolicy() == SizePolicy.Expand)
+                    {
+                        int[] confines = item.GetConfines();
+                        item.SetConfines(0, _handler.GetLayout().GetWindow().GetWidth(), confines[2], confines[3]);
+                        item.SetX(0);
+                        item.SetWidth(_handler.GetLayout().GetWindow().GetWidth());
+                    }
                     DrawItems(item);
+                }
             }
             //draw tooltip if needed
             DrawToolTip();
@@ -1418,7 +1434,7 @@ namespace SpaceVIL
             {
                 DrawShell(root);
                 glDisable(GL_SCISSOR_TEST);
-                DrawImage(root as ImageItem);
+                DrawImage(root as IImageItem);
                 glDisable(GL_SCISSOR_TEST);
             }
             else
@@ -1668,7 +1684,7 @@ namespace SpaceVIL
             crd_array.Clear();
         }
 
-        void DrawImage(ImageItem image)
+        void DrawImage(IImageItem image)
         {
             //проверка: полностью ли влезает объект в свой контейнер
             CheckOutsideBorders(image as IBaseItem);
@@ -1678,22 +1694,24 @@ namespace SpaceVIL
                 return;
 
             int w = image.GetImageWidth(), h = image.GetImageHeight();
-            float i_x0 = ((float)image.Area.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y0 = ((float)image.Area.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            float i_x1 = (((float)image.Area.GetX() + (float)image.Area.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y1 = (((float)image.Area.GetY() + (float)image.Area.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            RectangleBounds Area = image.GetRectangleBounds();
+
+            float i_x0 = ((float)Area.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y0 = ((float)Area.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)Area.GetX() + (float)Area.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)Area.GetY() + (float)Area.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
             // Console.WriteLine(image.GetItemName() + " " 
-            // + image._area.GetX() + " " 
-            // + image._area.GetWidth() + " "
-            // + image._area.GetY() + " " 
-            // + image._area.GetHeight()
+            // + image.Area.GetX() + " " 
+            // + image.Area.GetWidth() + " "
+            // + image.Area.GetY() + " " 
+            // + image.Area.GetHeight()
             // );
             _texture.UseShader();
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
             store.GenTexture(w, h, bitmap);
             store.SendUniformSample2D(_texture, "tex");
-            if (image.IsColorOverLay())
+            if (image.IsColorOverlay())
             {
                 // Console.WriteLine("is overlay");
                 float[] argb = {

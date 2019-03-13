@@ -211,6 +211,11 @@ namespace SpaceVIL
                 ItemList.GetArea().SetFocus();
             }
         }
+        public void Show()
+        {
+            Show(this,new MouseArgs());
+        }
+
         private bool _added = false;
 
         public override void Clear()

@@ -12,31 +12,14 @@ namespace SpaceVIL
 {
     public class ImageItem : Prototype, IImageItem
     {
-        internal class ImageBounds : Geometry, IPosition
+        private RectangleBounds Area = new RectangleBounds();
+
+        public RectangleBounds GetRectangleBounds()
         {
-            private int _x, _y;
-            public void SetX(int x)
-            {
-                _x = x;
-            }
-            public void SetY(int y)
-            {
-                _y = y;
-            }
-            public int GetX()
-            {
-                return _x;
-            }
-            public int GetY()
-            {
-                return _y;
-            }
+            return Area;
         }
 
-        internal ImageBounds Area = new ImageBounds();
-
         static int count = 0;
-        public Bitmap _image;
         private byte[] _bitmap;
         private String _url;
         private float _angleRotation = 0.0f;
@@ -76,8 +59,7 @@ namespace SpaceVIL
         {
             if (picture == null)
                 return;
-            _image = picture;
-            _bitmap = CreateByteImage();
+            _bitmap = CreateByteImage(picture);
         }
 
         public ImageItem(Bitmap picture, bool hover) : this(picture)
@@ -90,32 +72,28 @@ namespace SpaceVIL
         /// </summary>
         public byte[] GetPixMapImage()
         {
-            if (_image == null)
-                return null;
-
-            if (_bitmap == null)
-                _bitmap = CreateByteImage();
-
             return _bitmap;
         }
 
-        private byte[] CreateByteImage()
+        private byte[] CreateByteImage(Bitmap picture)
         {
             try
             {
+                _imageWidth = picture.Width;
+                _imageHeight = picture.Height;
                 List<byte> result = new List<byte>();
-                Bitmap bmp = new Bitmap(_image);
-                for (int j = _image.Height - 1; j >= 0; j--)
+                for (int j = picture.Height - 1; j >= 0; j--)
                 {
-                    for (int i = 0; i < _image.Width; i++)
+                    for (int i = 0; i < picture.Width; i++)
                     {
-                        Color pixel = bmp.GetPixel(i, j);
+                        Color pixel = picture.GetPixel(i, j);
                         result.Add(pixel.R);
                         result.Add(pixel.G);
                         result.Add(pixel.B);
                         result.Add(pixel.A);
                     }
                 }
+                picture.Dispose();
                 return result.ToArray();
             }
             catch (System.Exception ex)
@@ -125,45 +103,20 @@ namespace SpaceVIL
             }
         }
 
+        private int _imageWidth;
+        private int _imageHeight;
+
         /// <returns> width of the image in the ImageItem </returns>
         public int GetImageWidth()
         {
-            try
-            {
-                if (_image == null)
-                    return -1;
-                return _image.Width;
-            }
-            catch (System.Exception ex)
-            {
-                Console.WriteLine("Getting width " + ex.StackTrace);
-                return -1;
-            }
+            return _imageWidth;
         }
 
         /// <returns> height of the image in the ImageItem </returns>
         public int GetImageHeight()
         {
-            try
-            {
-                if (_image == null)
-                    return -1;
-                return _image.Height;
-            }
-            catch (System.Exception ex)
-            {
-                Console.WriteLine("Getting heigh " + ex.StackTrace);
-                return -1;
-            }
+            return _imageHeight;
         }
-
-        //IImage implements
-        /// <returns> BufferedImage of the ImageItem </returns>
-        public Bitmap GetImage()
-        {
-            return _image;
-        }
-        //internal bool IsChanged = false;
 
         /// <summary>
         /// Set an image into the ImageItem
@@ -172,20 +125,7 @@ namespace SpaceVIL
         {
             if (image == null)
                 return;
-            _image = image;
-            _bitmap = CreateByteImage();
-        }
-
-        /// <summary>
-        /// Image location
-        /// </summary>
-        public String GetImageUrl()
-        {
-            return _url;
-        }
-        public void SetImageUrl(String url)
-        {
-            _url = url;
+            _bitmap = CreateByteImage(image);
         }
 
         private bool _isOverlay = false;
@@ -206,7 +146,7 @@ namespace SpaceVIL
             _isOverlay = overlay;
         }
 
-        public bool IsColorOverLay()
+        public bool IsColorOverlay()
         {
             return _isOverlay;
         }
@@ -230,7 +170,7 @@ namespace SpaceVIL
         {
             base.SetHeight(height);
             Area.SetHeight(height);
-            if (_isKeepAspectRatio && _image != null)
+            if (_isKeepAspectRatio && _bitmap != null)
                 ApplyAspectRatio();
             UpdateLayout();
         }
@@ -239,7 +179,7 @@ namespace SpaceVIL
         {
             base.SetWidth(width);
             Area.SetWidth(width);
-            if (_isKeepAspectRatio && _image != null)
+            if (_isKeepAspectRatio && _bitmap != null)
                 ApplyAspectRatio();
             UpdateLayout();
         }
@@ -258,23 +198,17 @@ namespace SpaceVIL
 
         private void ApplyAspectRatio()
         {
-            int w, h;
-            float ratioW = (float)_image.Width / (float)_image.Height;
-            float ratioH = (float)_image.Height / (float)_image.Width;
-            if (GetWidth() > GetHeight())
-            {
-                h = GetHeight();
-                w = (int)((float)h * ratioW);
-                Area.SetWidth(w);
-                Area.SetHeight(h);
-            }
-            else
-            {
-                w = GetWidth();
-                h = (int)((float)w * ratioH);
-                Area.SetWidth(w);
-                Area.SetHeight(h);
-            }
+            float boundW = GetWidth();
+            float boundH = GetHeight();
+
+            var ratioX = (boundW / _imageWidth);
+            var ratioY = (boundH / _imageHeight);
+            float ratio = ratioX < ratioY ? ratioX : ratioY;
+
+            int resH = (int)(_imageHeight * ratio);
+            int resW = (int)(_imageWidth * ratio);
+            Area.SetWidth(resW);
+            Area.SetHeight(resH);
         }
 
         //self update

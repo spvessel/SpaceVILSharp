@@ -807,7 +807,10 @@ namespace SpaceVIL
         }
         private bool LazyHoverVerification(float xpos, float ypos)
         {
+            
+
             bool result = false;
+
             float minx = GetX();
             float maxx = GetX() + GetWidth();
             float miny = GetY();

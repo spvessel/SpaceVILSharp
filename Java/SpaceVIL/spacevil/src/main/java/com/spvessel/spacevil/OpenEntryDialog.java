@@ -230,7 +230,6 @@ public class OpenEntryDialog extends OpenDialog {
             if (f.isDirectory()) {
                 fi = new FileSystemEntry(FileSystemEntryType.DIRECTORY, f.getName());
                 fi.setIcon(_folder, 16, 16);
-                // fi.setPassEvents(false, InputEventType.MOUSE_DOUBLE_CLICK);
                 _fileList.addItem(fi);
                 fi.eventMouseDoubleClick.add((sender, args) -> {
                     setAddressLine(fi);

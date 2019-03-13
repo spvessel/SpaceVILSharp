@@ -9,7 +9,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    class LoadingScreen : Prototype
+    public class LoadingScreen : Prototype
     {
         static int count = 0;
         private ImageItem _loadIcon;
@@ -18,7 +18,7 @@ namespace SpaceVIL
             _loadIcon = new ImageItem(image);
         }
         private Label _text_object;
-        public void SetValueVisibility(bool visibility)
+        public void SetValueVisible(bool visibility)
         {
             _text_object.SetVisible(visibility);
         }
@@ -26,7 +26,7 @@ namespace SpaceVIL
         {
             return _text_object.IsVisible();
         }
-        
+
         private WindowLayout _handler = null;
 
         public LoadingScreen()
@@ -34,7 +34,7 @@ namespace SpaceVIL
             SetItemName("LoadingScreen_" + count++);
             SetPassEvents(false);
             _loadIcon = new ImageItem();
-            if (_loadIcon.GetImage() == null)
+            if (_loadIcon.GetPixMapImage() == null)
                 _loadIcon.SetImage(DefaultsService.GetDefaultImage(EmbeddedImage.LoadCircle, EmbeddedImageSize.Size64x64));
             _text_object = new Label("0%");
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.LoadingScreen)));
@@ -73,7 +73,6 @@ namespace SpaceVIL
         {
             return _percent;
         }
-
 
         Object _locker = new Object();
         private bool _isShouldClose = false;

@@ -383,7 +383,7 @@ namespace SpaceVIL.Decorations
             }
         }
 
-        public Style GetDefaultCommonStyle()
+        public static Style GetDefaultCommonStyle()
         {
             Style style = new Style();
 

@@ -8,9 +8,11 @@ using SpaceVIL.Decorations;
 namespace SpaceVIL
 {
 
-    public class SideArea : Prototype
+    public class SideArea : Prototype, IFloating
     {
         static int count = 0;
+        private bool _init = false;
+
         private ButtonCore _close;
         public ResizableItem Window;
 
@@ -93,13 +95,16 @@ namespace SpaceVIL
 
         public void SetAreaSize(int size)
         {
+            if (size == _size)
+                return;
             _size = size;
+            ApplyAttach();
         }
 
-        public SideArea(Side attachSide)
+        public SideArea(WindowLayout handler, Side attachSide)
         {
+            SetHandler(handler);
             SetItemName("SideArea_" + count++);
-            SetPassEvents(false);
             _close = new ButtonCore();
             Window = new ResizableItem();
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SideArea)));
@@ -107,8 +112,11 @@ namespace SpaceVIL
             ApplyAttach();
             EventMouseClick += (sender, args) =>
             {
-                Close();
+                Hide();
             };
+            ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
+            SetVisible(false);
+            SetPassEvents(false);
         }
 
         public override void InitElements()
@@ -118,10 +126,13 @@ namespace SpaceVIL
             Window.SetPassEvents(false);
             Window.IsXFloating = false;
             Window.IsYFloating = false;
+
             _close.EventMouseClick += (sender, args) =>
             {
-                Close();
+                Hide();
             };
+
+            _init = true;
         }
 
         public override void AddItem(IBaseItem item)
@@ -142,29 +153,27 @@ namespace SpaceVIL
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
-            if (width < Window.GetWidth())
-                Window.SetWidth(width);
         }
 
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
-            if (height < Window.GetHeight())
-                Window.SetHeight(height);
         }
 
-        WindowLayout _handler = null;
-
-        public void Show(WindowLayout handler)
+        public void Show()
         {
-            _handler = handler;
-            _handler.AddItem(this);
-            _handler.SetFocusedItem(this);
+            if (!_init)
+                InitElements();
+            SetVisible(true);
+        }
+        public void Show(IItem sender, MouseArgs args)
+        {
+            Show();
         }
 
-        public void Close()
+        public void Hide()
         {
-            _handler.GetWindow().RemoveItem(this);
+            SetVisible(false);
         }
 
         public override void SetStyle(Style style)
@@ -182,6 +191,16 @@ namespace SpaceVIL
             {
                 _close.SetStyle(inner_style);
             }
+        }
+
+        private bool _ouside = false;
+        public bool IsOutsideClickClosable()
+        {
+            return _ouside;
+        }
+        public void SetOutsideClickClosable(bool value)
+        {
+            _ouside = value;
         }
     }
 }

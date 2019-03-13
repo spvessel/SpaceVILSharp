@@ -62,12 +62,6 @@ namespace SpaceVIL
             _icon.SetImage(icon);
             _icon.SetVisible(true);
         }
-        public void SetIcon(String url, int width, int height)
-        {
-            _icon.SetSize(width, height);
-            _icon.SetImageUrl(url);
-            _icon.SetVisible(true);
-        }
 
         //text init
         public void SetTextAlignment(ItemAlignment alignment)

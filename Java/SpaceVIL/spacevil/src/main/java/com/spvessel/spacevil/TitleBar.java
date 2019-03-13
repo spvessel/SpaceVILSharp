@@ -102,19 +102,6 @@ public class TitleBar extends WindowAnchor {
         _icon.setVisible(true);
     }
 
-    /**
-     * Set TitleBar icon
-     * 
-     * @param url    the path to the icon file
-     * @param width  icon width
-     * @param height icon height
-     */
-    public void setIcon(String url, int width, int height) {
-        _icon.setSize(width, height);
-        _icon.setImageUrl(url);
-        _icon.setVisible(true);
-    }
-
     // text init
     /**
      * Text alignment in the TitleBar
