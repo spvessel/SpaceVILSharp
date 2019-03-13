@@ -1,9 +1,13 @@
 package com.spvessel.spacevil.Core;
 
+import java.awt.Color;
+
 public interface InterfaceImageItem {
-    String getImageUrl();
-
-    void setImageUrl(String url);
-
     byte[] getPixMapImage();
+    int getImageWidth();
+    int getImageHeight();
+    boolean isColorOverlay();
+    Color getColorOverlay();
+    float getRotationAngle();
+    RectangleBounds getRectangleBounds();
 }

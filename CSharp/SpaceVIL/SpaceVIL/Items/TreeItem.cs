@@ -5,11 +5,14 @@ using System.Collections.Generic;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
 using SpaceVIL.Decorations;
+using System.Threading;
 
 namespace SpaceVIL
 {
     public class TreeItem : Prototype
     {
+        private Object Locker = new Object();
+
         private List<TreeItem> _list_inners;
         public List<TreeItem> GetChildren()
         {
@@ -21,19 +24,32 @@ namespace SpaceVIL
             if (_list_inners.Contains(child))
             {
                 _list_inners.Remove(child);
-                child.RemoveAllChildren();
+                child.RemoveChildren();
                 _treeViewContainer.RemoveItem(child);
             }
         }
 
-        internal void RemoveAllChildren()
+        public void RemoveChildren()
         {
-            foreach (var item in _list_inners)
+            Monitor.Enter(Locker);
+            try
             {
-                item.RemoveAllChildren();
-                _treeViewContainer.RemoveItem(item);
+                foreach (var item in _list_inners)
+                {
+                    item.RemoveChildren();
+                    _treeViewContainer.RemoveItem(item);
+                }
+                _list_inners.Clear();
             }
-            _list_inners.Clear();
+            catch (Exception ex)
+            {
+                Console.WriteLine("Method - RemoveChildren");
+                Console.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+                Monitor.Exit(Locker);
+            }
         }
 
         private TreeItem _parentBranch;

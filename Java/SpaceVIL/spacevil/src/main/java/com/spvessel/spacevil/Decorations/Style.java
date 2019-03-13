@@ -1388,6 +1388,7 @@ public class Style implements Cloneable {
         // style.addItemState(ItemStateType.HOVERED, hovered);
         // ItemState focused = new ItemState();
         // focused.background = new Color(220, 220, 220, 255);
+        // focused.border = new Border(new Color(58,156,209), new CornerRadius(), 2);
         // style.addItemState(ItemStateType.FOCUSED, focused);
 
         Style cursor_style = new Style();
@@ -2181,6 +2182,25 @@ public class Style implements Cloneable {
         style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         style.setBackground(0, 0, 0, 0);
+        return style;
+    }
+
+    public static Style getLoadingScreenStyle() {
+        Style style = new Style();
+        style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        style.setBackground(0, 0, 0, 150);
+
+        Style text_style = getLabelStyle();
+        text_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        text_style.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        text_style.font = DefaultsService.getDefaultFont(Font.BOLD, 14);
+        style.addInnerStyle("text", text_style);
+
+        Style image_style = getImageItemStyle();
+        image_style.setMaxSize(64, 64);
+        style.addInnerStyle("image", image_style);
+
         return style;
     }
 }

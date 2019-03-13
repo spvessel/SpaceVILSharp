@@ -22,13 +22,13 @@ namespace SpaceVIL
             count++;
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.WContainer)));
 
-            EventDrop += (sender, args) =>
-            {
-                foreach (String path in args.Paths)
-                {
-                    Console.WriteLine(path);
-                }
-            };
+            // EventDrop += (sender, args) =>
+            // {
+            //     foreach (String path in args.Paths)
+            //     {
+            //         Console.WriteLine(path);
+            //     }
+            // };
         }
 
         internal void SaveLastFocus(Prototype focused)

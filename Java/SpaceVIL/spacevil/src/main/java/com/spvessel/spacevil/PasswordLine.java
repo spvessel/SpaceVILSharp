@@ -155,6 +155,7 @@ public class PasswordLine extends HorizontalStack {
     /**
      * Remove all text from the PasswordLine
      */
+    @Override
     public void clear() {
         _textEncrypt.clear();
     }

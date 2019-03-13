@@ -161,7 +161,7 @@ namespace SpaceVIL
 
         public override void Clear()
         {
-            _root.RemoveAllChildren();
+            _root.RemoveChildren();
             base.Clear();
             base.AddItem(_root);
             SetRootVisibility(GetRootVisibility());

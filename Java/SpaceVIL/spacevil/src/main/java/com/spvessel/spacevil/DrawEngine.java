@@ -3,6 +3,8 @@ package com.spvessel.spacevil;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.io.BufferedReader;
 import java.io.*;
 import java.nio.*;
@@ -650,6 +652,12 @@ final class DrawEngine {
                 }
             }
         }
+
+        try {
+            Thread.sleep(10);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
     }
 
     private long _start_time = 0; // System.nanoTime();
@@ -1065,12 +1073,62 @@ final class DrawEngine {
         _handler.getLayout().executePollActions();
     }
 
-    float _interval = 1.0f / 15.0f;// 1000 / 60;
-    // internal float _interval = 1.0f / 60.0f;//1000 / 60;
-    // internal int _interval = 11;//1000 / 90;
-    // internal int _interval = 08;//1000 / 120;
+    private float _intervalLow = 1.0f / 10.0f;
+    private float _intervalMedium = 1.0f / 30.0f;
+    private float _intervalHigh = 1.0f / 60.0f;
+    private float _intervalUltra = 1.0f / 120.0f;
+    private float _intervalAssigned = 1.0f / 15.0f;
 
-    // private int gVAO = 0;
+    private RedrawFrequency _frequency = RedrawFrequency.LOW;
+
+    private Lock _locker = new ReentrantLock();
+
+    void setFrequency(RedrawFrequency value) {
+        _locker.lock();
+        try {
+            if (value == RedrawFrequency.LOW) {
+                _intervalAssigned = _intervalLow;
+            } else if (value == RedrawFrequency.MEDIUM) {
+                _intervalAssigned = _intervalMedium;
+            } else if (value == RedrawFrequency.HIGH) {
+                _intervalAssigned = _intervalHigh;
+            } else if (value == RedrawFrequency.ULTRA) {
+                _intervalAssigned = _intervalUltra;
+            }
+        } catch (Exception ex) {
+            System.out.println("Method - SetFrequency");
+            ex.printStackTrace();
+        } finally {
+            _locker.unlock();
+        }
+    }
+
+    private float getFrequency() {
+        _locker.lock();
+        try {
+            return _intervalAssigned;
+        } catch (Exception ex) {
+            System.out.println("Method - SetFrequency");
+            ex.printStackTrace();
+            return _intervalLow;
+        } finally {
+            _locker.unlock();
+        }
+    }
+
+    RedrawFrequency getRedrawFrequency() {
+        _locker.lock();
+        try {
+            return _frequency;
+        } catch (Exception ex) {
+            System.out.println("Method - SetFrequency");
+            ex.printStackTrace();
+            _frequency = RedrawFrequency.LOW;
+            return _frequency;
+        } finally {
+            _locker.unlock();
+        }
+    }
 
     private VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
@@ -1095,16 +1153,16 @@ final class DrawEngine {
         _fbo.unbindFBO();
 
         while (!_handler.isClosing()) {
-            glfwWaitEventsTimeout(_interval);
+            glfwWaitEventsTimeout(getFrequency());
             // glfwWaitEvents();
             // glfwPollEvents();
             // synchronized(this)
             // {
-            //     try {
-            //         this.wait(30);
-            //     } catch (Exception e) {
-            //         //TODO: handle exception
-            //     }
+            // try {
+            // this.wait(30);
+            // } catch (Exception e) {
+            // //TODO: handle exception
+            // }
             // }
 
             // glClearColor(0, 0, 0, 0);
@@ -1147,8 +1205,21 @@ final class DrawEngine {
         List<InterfaceBaseItem> float_items = new LinkedList<>(
                 ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems());
         if (float_items != null) {
-            for (InterfaceBaseItem item : float_items)
+            for (InterfaceBaseItem item : float_items) {
+                if (item.getHeightPolicy() == SizePolicy.EXPAND) {
+                    int[] confines = item.getConfines();
+                    item.setConfines(confines[0], confines[1], 0, _handler.getLayout().getWindow().getHeight());
+                    item.setY(0);
+                    item.setHeight(_handler.getLayout().getWindow().getHeight());
+                }
+                if (item.getWidthPolicy() == SizePolicy.EXPAND) {
+                    int[] confines = item.getConfines();
+                    item.setConfines(0, _handler.getLayout().getWindow().getWidth(), confines[2], confines[3]);
+                    item.setX(0);
+                    item.setWidth(_handler.getLayout().getWindow().getWidth());
+                }
                 drawItems(item);
+            }
         }
         // draw tooltip if needed
         drawToolTip();
@@ -1320,10 +1391,10 @@ final class DrawEngine {
             drawText((InterfaceTextContainer) root);
             glDisable(GL_SCISSOR_TEST);
         }
-        if (root instanceof ImageItem) {
+        if (root instanceof InterfaceImageItem) {
             drawShell(root);
             glDisable(GL_SCISSOR_TEST);
-            drawImage((ImageItem) root);
+            drawImage((InterfaceImageItem) root);
             glDisable(GL_SCISSOR_TEST);
         } else {
             drawShell(root);
@@ -1586,27 +1657,30 @@ final class DrawEngine {
         store.clear();
     }
 
-    private void drawImage(ImageItem image) {
-        // checkOutsideBorders((InterfaceBaseItem) image);
+    private void drawImage(InterfaceImageItem image) {
+        // проверка: полностью ли влезает объект в свой контейнер
+        checkOutsideBorders((InterfaceBaseItem) image);
 
         byte[] bitmap = image.getPixMapImage();
         if (bitmap == null)
             return;
 
         int w = image.getImageWidth(), h = image.getImageHeight();
-        float i_x0 = ((float) image.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y0 = ((float) image.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) image.getX() + (float) image.getWidth()) / (float) _handler.getLayout().getWidth()
-                * 2.0f) - 1.0f;
-        float i_y1 = (((float) image.getY() + (float) image.getHeight()) / (float) _handler.getLayout().getHeight()
-                * 2.0f - 1.0f) * (-1.0f);
+        RectangleBounds area = image.getRectangleBounds();
+
+        float i_x0 = ((float) area.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
+        float i_y0 = ((float) area.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_x1 = (((float) area.getX() + (float) area.getWidth())
+                / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
+        float i_y1 = (((float) area.getY() + (float) area.getHeight())
+                / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
 
         _texture.useShader();
         VRAMTexture store = new VRAMTexture();
         store.genBuffers(i_x0, i_x1, i_y0, i_y1);
         store.genTexture(w, h, bitmap);
         store.sendUniformSample2D(_texture);
-        if (image.isColorOverLay()) {
+        if (image.isColorOverlay()) {
             float[] argb = { (float) image.getColorOverlay().getRed() / 255.0f,
                     (float) image.getColorOverlay().getGreen() / 255.0f,
                     (float) image.getColorOverlay().getBlue() / 255.0f,

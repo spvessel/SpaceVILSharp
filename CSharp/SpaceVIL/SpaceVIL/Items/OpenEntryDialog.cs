@@ -223,6 +223,7 @@ namespace SpaceVIL
 
                 FileSystemEntry fi = new FileSystemEntry(FileSystemEntryType.Directory, dir.Name);
                 fi.SetIcon(new Bitmap(_folder), 16, 16);
+                fi.SetPassEvents(false, InputEventType.MouseDoubleClick);
                 _fileList.AddItem(fi);
                 fi.EventMouseDoubleClick += (sender, args) =>
                 {

@@ -604,7 +604,7 @@ namespace SpaceVIL
             }
         }
 
-        public void Clear()
+        public override void Clear()
         {
             SetText("");
         }

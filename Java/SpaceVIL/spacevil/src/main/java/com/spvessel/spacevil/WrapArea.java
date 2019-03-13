@@ -266,6 +266,11 @@ public class WrapArea extends Prototype implements InterfaceGrid {
         itemListChanged.execute();
     }
 
+    @Override
+    public void clear() {
+        removeAllItems();
+    }
+
     void removeAllItems() {
         _lock.lock();
         try {
@@ -280,6 +285,8 @@ public class WrapArea extends Prototype implements InterfaceGrid {
                 list.remove(0);
             }
             _mapContent.clear();
+            updateLayout();
+            itemListChanged.execute();
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {

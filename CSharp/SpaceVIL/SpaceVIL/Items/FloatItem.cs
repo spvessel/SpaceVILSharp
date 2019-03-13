@@ -53,8 +53,7 @@ namespace SpaceVIL
             EventMouseDrag += OnDragging;
             count++;
 
-            lock (CommonService.GlobalLocker)
-                ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
+            ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
         }
 
         /// <summary>
@@ -75,7 +74,14 @@ namespace SpaceVIL
         /// mouse button press/release, etc.) </param>
         public void Show(IItem sender, MouseArgs args)
         {
-            //LogService.Log().LogBaseItem(this, LogProps.AllGeometry);
+            if (!_init)
+                InitElements();
+            if (GetX() == -GetWidth()) //refactor?
+                SetX(_stored_offset);
+            SetVisible(true);
+        }
+        public void Show()
+        {
             if (!_init)
                 InitElements();
             if (GetX() == -GetWidth()) //refactor?

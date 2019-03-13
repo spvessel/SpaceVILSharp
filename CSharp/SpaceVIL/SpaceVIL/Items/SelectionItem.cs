@@ -45,9 +45,8 @@ namespace SpaceVIL
         public override void InitElements()
         {
             AddItem(_item);
-
         }
-        internal void UpdateSizes()
+        public void UpdateSize()
         {
             SetSize(_item.GetWidth() + _item.GetMargin().Left + _item.GetMargin().Right,
                     _item.GetHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top + 2);

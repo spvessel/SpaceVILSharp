@@ -99,6 +99,7 @@ public class ThemeStyle {
             defaultItemsStyle.put(WrapGrid.class, Style.getWrapGridStyle());
             defaultItemsStyle.put(SideArea.class, Style.getSideAreaStyle());
             defaultItemsStyle.put(ImageItem.class, Style.getImageItemStyle());
+            defaultItemsStyle.put(LoadingScreen.class, Style.getLoadingScreenStyle());
         }
     }
 

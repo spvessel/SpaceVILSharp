@@ -508,5 +508,14 @@ namespace SpaceVIL
             _scaleWidth = w;
             _scaleHeight = h;
         }
+
+        public void SetRenderFrequency(RedrawFrequency value)
+        {
+            engine.SetFrequency(value);
+        }
+        public RedrawFrequency GetRenderFrequency()
+        {
+            return engine.GetRedrawFrequency();
+        }
     }
 }

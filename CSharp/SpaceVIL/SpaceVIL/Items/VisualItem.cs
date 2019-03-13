@@ -21,35 +21,35 @@ namespace SpaceVIL
         internal Prototype _main;
 
         private String _tooltip = String.Empty;
-        public String GetToolTip()
+        internal String GetToolTip()
         {
             return _tooltip;
         }
-        public void SetToolTip(String text)
+        internal void SetToolTip(String text)
         {
             _tooltip = text;
         }
         //container
         private Spacing _spacing = new Spacing();
-        public Spacing GetSpacing()
+        internal Spacing GetSpacing()
         {
             return _spacing;
         }
-        public void SetSpacing(Spacing spacing)
+        internal void SetSpacing(Spacing spacing)
         {
             _spacing = spacing;
         }
-        public void SetSpacing(int horizontal = 0, int vertical = 0)
+        internal void SetSpacing(int horizontal = 0, int vertical = 0)
         {
             _spacing.Horizontal = horizontal;
             _spacing.Vertical = vertical;
         }
         private Indents _padding = new Indents();
-        public Indents GetPadding()
+        internal Indents GetPadding()
         {
             return _padding;
         }
-        public void SetPadding(Indents padding)
+        internal void SetPadding(Indents padding)
         {
             _padding = padding;
             UpdateGeometry();
@@ -71,7 +71,7 @@ namespace SpaceVIL
                     grid.UpdateLayout();
             }
         }
-        public void SetPadding(int left = 0, int top = 0, int right = 0, int bottom = 0)
+        internal void SetPadding(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
             _padding.Left = left;
             _padding.Top = top;
@@ -97,9 +97,9 @@ namespace SpaceVIL
             }
             UpdateGeometry();
         }
-        public EventManager eventManager = null;
+        internal EventManager eventManager = null;
         private List<IBaseItem> _content = new List<IBaseItem>();
-        public virtual List<IBaseItem> GetItems()
+        internal virtual List<IBaseItem> GetItems()
         {
             Monitor.Enter(Locker);
             try
@@ -111,7 +111,7 @@ namespace SpaceVIL
                 Monitor.Exit(Locker);
             }
         }
-        // public void SetContent(List<IBaseItem> content)
+        // internal void SetContent(List<IBaseItem> content)
         // {
         //     _content = content;
         // }
@@ -132,7 +132,7 @@ namespace SpaceVIL
             else
                 (item as BaseItem).RemoveItemFromListeners();
         }
-        public virtual void AddItem(IBaseItem item)
+        internal virtual void AddItem(IBaseItem item)
         {
             Monitor.Enter(Locker);
             try
@@ -153,7 +153,8 @@ namespace SpaceVIL
             }
             catch (Exception ex)
             {
-                Console.WriteLine(item.GetItemName() + "\n" + ex.ToString());
+                Console.WriteLine("Method - AddItem: " + ((item == null) ? "item is null" : item.GetItemName()));
+                Console.WriteLine(ex.StackTrace);
             }
             finally
             {
@@ -183,7 +184,8 @@ namespace SpaceVIL
             }
             catch (Exception ex)
             {
-                Console.WriteLine(item.GetItemName() + "\n" + ex.ToString());
+                Console.WriteLine("Method - InsertItem: " + ((item == null) ? "item is null" : item.GetItemName()));
+                Console.WriteLine(ex.StackTrace);
             }
             finally
             {
@@ -207,7 +209,7 @@ namespace SpaceVIL
             }
         }
 
-        public virtual void RemoveItem(IBaseItem item)
+        internal virtual void RemoveItem(IBaseItem item)
         {
             Monitor.Enter(Locker);
             try
@@ -241,6 +243,26 @@ namespace SpaceVIL
                 Monitor.Exit(Locker);
             }
         }
+
+        internal virtual void Clear()
+        {
+            Monitor.Enter(Locker);
+            try
+            {
+                while (_content.Count > 0)
+                    RemoveItem(_content.First());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Method - Clear");
+                Console.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+                Monitor.Exit(Locker);
+            }
+        }
+
         internal override void AddEventListener(GeometryEventType type, IBaseItem listener)
         {
             eventManager.Subscribe(type, listener);
@@ -252,41 +274,41 @@ namespace SpaceVIL
 
         //item
         private Border _border = new Border();
-        public void SetBorder(Border border)
+        internal void SetBorder(Border border)
         {
             _border = border;
             GetState(ItemStateType.Base).Border = _border;
             UpdateState();
         }
 
-        public void SetBorderFill(Color fill)
+        internal void SetBorderFill(Color fill)
         {
             _border.SetFill(fill);
             GetState(ItemStateType.Base).Border.SetFill(fill);
             UpdateState();
         }
-        public virtual void SetBorderFill(int r, int g, int b)
+        internal virtual void SetBorderFill(int r, int g, int b)
         {
             if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
             if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
             if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
             SetBorderFill(Color.FromArgb(255, r, g, b));
         }
-        public virtual void SetBorderFill(int r, int g, int b, int a)
+        internal virtual void SetBorderFill(int r, int g, int b, int a)
         {
             if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
             if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
             if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
             SetBorderFill(Color.FromArgb(a, r, g, b));
         }
-        public virtual void SetBorderFill(float r, float g, float b)
+        internal virtual void SetBorderFill(float r, float g, float b)
         {
             if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
             if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
             if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
             SetBorderFill(Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
         }
-        public virtual void SetBorderFill(float r, float g, float b, float a)
+        internal virtual void SetBorderFill(float r, float g, float b, float a)
         {
             if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
             if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
@@ -294,33 +316,33 @@ namespace SpaceVIL
             SetBorderFill(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
         }
 
-        public void SetBorderRadius(CornerRadius radius)
+        internal void SetBorderRadius(CornerRadius radius)
         {
             _border.SetRadius(radius);
             GetState(ItemStateType.Base).Border.SetRadius(radius);
             UpdateState();
         }
-        public void SetBorderThickness(int thickness)
+        internal void SetBorderThickness(int thickness)
         {
             _border.SetThickness(thickness);
             GetState(ItemStateType.Base).Border.SetThickness(thickness);
             UpdateState();
         }
-        public CornerRadius GetBorderRadius()
+        internal CornerRadius GetBorderRadius()
         {
             return _border.GetRadius();
         }
-        public int GetBorderThickness()
+        internal int GetBorderThickness()
         {
             return _border.GetThickness();
         }
-        public Color GetBorderFill()
+        internal Color GetBorderFill()
         {
             return _border.GetFill();
         }
 
 
-        public void SetBorder(Color fill, CornerRadius radius, int thickness)
+        internal void SetBorder(Color fill, CornerRadius radius, int thickness)
         {
             _border = new Border(fill, radius, thickness);
             GetState(ItemStateType.Base).Border = _border;
@@ -339,7 +361,7 @@ namespace SpaceVIL
             UpdateState();
         }
 
-        public VisualItem(
+        internal VisualItem(
         int xpos = 0,
         int ypos = 0,
         int width = 0,
@@ -409,7 +431,7 @@ namespace SpaceVIL
                 eventManager.NotifyListeners(GeometryEventType.ResizeHeight, value);
             }
         }
-        public void SetPosition(int _x, int _y)
+        internal void SetPosition(int _x, int _y)
         {
             this.SetX(_x);
             this.SetY(_y);
@@ -509,7 +531,7 @@ namespace SpaceVIL
             }
         }
 
-        internal void SetPassEvents(bool value,params InputEventType[] e)
+        internal void SetPassEvents(bool value, params InputEventType[] e)
         {
             foreach (var item in e)
             {
@@ -519,12 +541,12 @@ namespace SpaceVIL
 
         private bool _disabled;
 
-        public bool IsDisabled()
+        internal bool IsDisabled()
         {
             return _disabled;
         }
 
-        public void SetDisabled(bool value)
+        internal void SetDisabled(bool value)
         {
             if (_disabled == value)
                 return;
@@ -534,12 +556,12 @@ namespace SpaceVIL
 
         private bool _hover;
 
-        public bool IsMouseHover()
+        internal bool IsMouseHover()
         {
             return _hover;
         }
 
-        public void SetMouseHover(bool value)
+        internal void SetMouseHover(bool value)
         {
             if (_hover == value)
                 return;
@@ -548,12 +570,12 @@ namespace SpaceVIL
         }
 
         private bool _pressed;
-        public bool IsMousePressed()
+        internal bool IsMousePressed()
         {
             return _pressed;
         }
 
-        public void SetMousePressed(bool value)
+        internal void SetMousePressed(bool value)
         {
             if (_pressed == value)
                 return;
@@ -562,12 +584,12 @@ namespace SpaceVIL
         }
 
         private bool _focused;
-        public bool IsFocused()
+        internal bool IsFocused()
         {
             return _focused;
         }
 
-        public void SetFocused(bool value)
+        internal void SetFocused(bool value)
         {
             if (_focused == value)
                 return;
@@ -576,11 +598,11 @@ namespace SpaceVIL
         }
 
         private bool _focusable = true;
-        public bool IsFocusable()
+        internal bool IsFocusable()
         {
             return _focusable;
         }
-        public void SetFocusable()
+        internal void SetFocusable()
         {
             //foreach inner item focusable value set?
         }
@@ -593,7 +615,7 @@ namespace SpaceVIL
             }
         }
         //common methods
-        public void AddItemState(ItemStateType type, ItemState state)
+        internal void AddItemState(ItemStateType type, ItemState state)
         {
             if (states.ContainsKey(type))
             {
@@ -605,20 +627,20 @@ namespace SpaceVIL
                 states.Add(type, state);
             }
         }
-        public void RemoveItemState(ItemStateType type)
+        internal void RemoveItemState(ItemStateType type)
         {
             if (type == ItemStateType.Base)
                 return;
             if (states.ContainsKey(type))
                 states.Remove(type);
         }
-        public void RemoveAllItemStates()
+        internal void RemoveAllItemStates()
         {
             var itemsToRemove = states.Where(f => f.Key != ItemStateType.Base).ToArray();
             foreach (var item in itemsToRemove)
                 states.Remove(item.Key);
         }
-        public ItemState GetState(ItemStateType type)
+        internal ItemState GetState(ItemStateType type)
         {
             if (states.ContainsKey(type))
                 return states[type];
@@ -785,7 +807,10 @@ namespace SpaceVIL
         }
         private bool LazyHoverVerification(float xpos, float ypos)
         {
+            
+
             bool result = false;
+
             float minx = GetX();
             float maxx = GetX() + GetWidth();
             float miny = GetY();
@@ -844,7 +869,7 @@ namespace SpaceVIL
 
         //style
         // internal bool _is_style_Set = false;
-        // public virtual void SetInnerStyle(String element, Style style)
+        // internal virtual void SetInnerStyle(String element, Style style)
         // {
 
         // }

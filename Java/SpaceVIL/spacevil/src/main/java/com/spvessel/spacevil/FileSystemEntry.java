@@ -31,12 +31,6 @@ public class FileSystemEntry extends Prototype {
         _icon.setVisible(true);
     }
 
-    public void setIcon(String url, int width, int height) {
-        _icon.setSize(width, height);
-        _icon.setImageUrl(url);
-        _icon.setVisible(true);
-    }
-
     public FileSystemEntry(FileSystemEntryType type, String text) {
         setItemName("FileSystemEntry_" + count);
         count++;

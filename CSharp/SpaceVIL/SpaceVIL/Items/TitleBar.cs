@@ -47,7 +47,7 @@ namespace SpaceVIL
             _close = new ButtonCore();
             _close.IsFocusable = false;
             _icon = new ImageItem();
-            _icon.IsFocusable = false;
+            // _icon.IsFocusable = false;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TitleBar)));
         }
@@ -60,12 +60,6 @@ namespace SpaceVIL
         {
             _icon.SetSize(width, height);
             _icon.SetImage(icon);
-            _icon.SetVisible(true);
-        }
-        public void SetIcon(String url, int width, int height)
-        {
-            _icon.SetSize(width, height);
-            _icon.SetImageUrl(url);
             _icon.SetVisible(true);
         }
 

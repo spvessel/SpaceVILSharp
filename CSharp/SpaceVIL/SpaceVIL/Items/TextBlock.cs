@@ -797,7 +797,12 @@ namespace SpaceVIL
             return _textureStorage.GetLineLetCount(lineNum);
         }
 
-        internal void Clear()
+        public override void Clear()
+        {
+            ClearText();
+        }
+        
+        internal void ClearText()
         {
             _textureStorage.Clear();
             _cursor_position.X = 0;

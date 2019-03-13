@@ -385,6 +385,7 @@ public class ListBox extends Prototype {
         _area.setFocus();
     }
 
+    @Override
     public void clear() {
         _area.removeAllItems();
     }
@@ -493,7 +494,7 @@ public class ListBox extends Prototype {
         return _area.getSelectionItem();
     }
 
-    public InterfaceBaseItem getWrapper(InterfaceBaseItem item) {
+    public SelectionItem getWrapper(InterfaceBaseItem item) {
         return getArea()._mapContent.get(item);
     }
 

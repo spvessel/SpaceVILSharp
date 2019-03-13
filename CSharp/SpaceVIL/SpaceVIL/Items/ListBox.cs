@@ -419,9 +419,10 @@ namespace SpaceVIL
             UpdateElements();
             _area.SetFocus();
         }
-        public virtual void Clear()
+        public override void Clear()
         {
             _area.RemoveAllItems();
+            // UpdateElements();
         }
 
         /// <summary>
@@ -526,7 +527,7 @@ namespace SpaceVIL
                 AddItem(item);
         }
 
-        public IBaseItem GetWrapper(IBaseItem item)
+        public SelectionItem GetWrapper(IBaseItem item)
         {
             return GetArea()._mapContent[item];
         }

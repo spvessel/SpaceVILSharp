@@ -4,12 +4,28 @@ import java.awt.Color;
 
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.InterfaceFloating;
+import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
-public class SideArea extends Prototype {
+public class SideArea extends Prototype implements InterfaceFloating {
+
+    private boolean _init = false;
+    private boolean _ouside = false;
+
+    public boolean isOutsideClickClosable() {
+        return _ouside;
+    }
+
+    public void setOutsideClickClosable(boolean value) {
+        _ouside = value;
+    }
+
     static int count = 0;
     private ButtonCore _close;
     public ResizableItem window;
@@ -87,20 +103,26 @@ public class SideArea extends Prototype {
     }
 
     public void setAreaSize(int size) {
+        if (size == _size)
+            return;
         _size = size;
+        applyAttach();
     }
 
-    public SideArea(Side attachSide) {
+    public SideArea(WindowLayout handler, Side attachSide) {
+        setHandler(handler);
         setItemName("SideArea_" + count++);
-        setPassEvents(false);
         _close = new ButtonCore();
         window = new ResizableItem();
         setStyle(DefaultsService.getDefaultStyle(SideArea.class));
         _attachSide = attachSide;
         applyAttach();
         eventMouseClick.add((sender, args) -> {
-            close();
+            hide();
         });
+        ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
+        setVisible(false);
+        setPassEvents(false);   
     }
 
     @Override
@@ -111,8 +133,9 @@ public class SideArea extends Prototype {
         window.isXFloating = false;
         window.isYFloating = false;
         _close.eventMouseClick.add((sender, args) -> {
-            close();
+            hide();
         });
+        _init = true;
     }
 
     @Override
@@ -133,77 +156,25 @@ public class SideArea extends Prototype {
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
-        if (width < window.getWidth())
-            window.setWidth(width);
     }
 
     @Override
     public void setHeight(int height) {
         super.setHeight(height);
-        if (height < window.getHeight())
-            window.setHeight(height);
     }
 
-    WindowLayout _handler = null;
-
-    public void show(WindowLayout handler) {
-        _handler = handler;
-        _handler.addItem(this);
-        _handler.setFocusedItem(this);
-
-        // Thread task = new Thread(() -> {
-        // int v = -_size;
-        // int a = 10;
-        // while (v < 0) {
-        // v += 60;
-
-        // if (_attachSide == ItemAlignment.LEFT)
-        // window.setMargin(v, 0, 0, 0);
-        // else if (_attachSide == ItemAlignment.RIGHT)
-        // window.setMargin(0, 0, v, 0);
-        // else if (_attachSide == ItemAlignment.TOP)
-        // window.setMargin(0, v, 0, 0);
-        // else if (_attachSide == ItemAlignment.BOTTOM)
-        // window.setMargin(0, 0, 0, v);
-
-        // setBackground(0, 0, 0, a += 10);
-        // try {
-        // Thread.sleep(20);
-        // } catch (InterruptedException e) {
-        // e.printStackTrace();
-        // }
-        // }
-        // });
-        // task.start();
+    public void show() {
+        if (!_init)
+            initElements();
+        setVisible(true);
     }
 
-    public void close() {
-        // Thread task = new Thread(() -> {
-        // int v = 0;
-        // int a = getBackground().getAlpha() - 10;
-        // while (v != -_size) {
-        // v -= 60;
+    public void show(InterfaceItem sender, MouseArgs args) {
+        show();
+    }
 
-        // if (_attachSide == ItemAlignment.LEFT)
-        // window.setMargin(v, 0, 0, 0);
-        // else if (_attachSide == ItemAlignment.RIGHT)
-        // window.setMargin(0, 0, v, 0);
-        // else if (_attachSide == ItemAlignment.TOP)
-        // window.setMargin(0, v, 0, 0);
-        // else if (_attachSide == ItemAlignment.BOTTOM)
-        // window.setMargin(0, 0, 0, v);
-
-        // setBackground(0, 0, 0, a -= 10);
-        // try {
-        // Thread.sleep(20);
-        // } catch (InterruptedException e) {
-        // e.printStackTrace();
-        // }
-        // }
-        // _handler.getWindow().removeItem(this);
-        // });
-        // task.start();
-        _handler.getWindow().removeItem(this);
+    public void hide() {
+        setVisible(false);
     }
 
     @Override

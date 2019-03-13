@@ -28,16 +28,6 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
         _ouside = value;
     }
 
-    // private boolean _lock_ouside = false;
-
-    // public boolean isLockOutside() {
-    //     return _lock_ouside;
-    // }
-
-    // public void setLockOutside(boolean value) {
-    //     _lock_ouside = true;
-    // }
-
     /**
      * Constructs a FloatItem
      * @param handler parent window for the FloatItem
@@ -71,6 +61,13 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
      *             mouse button press/release, etc.)
      */
     public void show(InterfaceItem sender, MouseArgs args) {
+        if (!_init)
+            initElements();
+        if (getX() == -getWidth()) // refactor?
+            setX(_stored_offset);
+        setVisible(true);
+    }
+    public void show() {
         if (!_init)
             initElements();
         if (getX() == -getWidth()) // refactor?

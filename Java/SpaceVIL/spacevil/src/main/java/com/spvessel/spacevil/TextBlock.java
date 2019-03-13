@@ -186,29 +186,29 @@ class TextBlock extends Prototype
             if (args.mods != KeyMods.NO) {
                 // Выделение не сбрасывается, проверяются сочетания
                 switch (args.mods) {
-                    case SHIFT:
-                        if (ShiftValCodes.contains(args.key)) {
-                            if (!_isSelect) {
-                                _isSelect = true;
-                                _selectFrom = new Point(_cursor_position);
-                            }
-                        }
-
-                        break;
-
-                    case CONTROL:
-                        if (args.key == KeyCode.A || args.key == KeyCode.a) {
-                            _selectFrom.x = 0;
-                            _selectFrom.y = 0;
-                            _cursor_position.y = _textureStorage.getCount() - 1;
-                            _cursor_position.x = getLineLetCount(_cursor_position.y);
-                            replaceCursor();
-
+                case SHIFT:
+                    if (ShiftValCodes.contains(args.key)) {
+                        if (!_isSelect) {
                             _isSelect = true;
+                            _selectFrom = new Point(_cursor_position);
                         }
-                        break;
+                    }
 
-                    // alt, super ?
+                    break;
+
+                case CONTROL:
+                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
+                        _selectFrom.x = 0;
+                        _selectFrom.y = 0;
+                        _cursor_position.y = _textureStorage.getCount() - 1;
+                        _cursor_position.x = getLineLetCount(_cursor_position.y);
+                        replaceCursor();
+
+                        _isSelect = true;
+                    }
+                    break;
+
+                // alt, super ?
                 }
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE || args.key == KeyCode.ENTER) {
@@ -448,7 +448,8 @@ class TextBlock extends Prototype
 
         if (!ignoreSetInLine)
             undoStuff();
-        else ignoreSetInLine = false;
+        else
+            ignoreSetInLine = false;
     }
 
     int getTextWidth() {
@@ -462,6 +463,7 @@ class TextBlock extends Prototype
     void setForeground(Color color) {
         _textureStorage.setForeground(color);
     }
+
     void setForeground(int r, int g, int b) {
         if (r < 0)
             r = Math.abs(r);
@@ -477,6 +479,7 @@ class TextBlock extends Prototype
             b = 255;
         setForeground(new Color(r, g, b, 255));
     }
+
     void setForeground(int r, int g, int b, int a) {
         if (r < 0)
             r = Math.abs(r);
@@ -492,6 +495,7 @@ class TextBlock extends Prototype
             b = 255;
         setForeground(new Color(r, g, b, a));
     }
+
     void setForeground(float r, float g, float b) {
         if (r < 0)
             r = Math.abs(r);
@@ -507,6 +511,7 @@ class TextBlock extends Prototype
             b = 1.0f;
         setForeground(new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
     }
+
     void setForeground(float r, float g, float b, float a) {
         if (r < 0)
             r = Math.abs(r);
@@ -759,7 +764,12 @@ class TextBlock extends Prototype
         _justSelected = false;
     }
 
-    void clear() {
+    @Override
+    public void clear() {
+        clearText();
+    }
+
+    void clearText() {
         _textureStorage.clear();
         _cursor_position.x = 0;
         _cursor_position.y = 0;
@@ -829,9 +839,9 @@ class TextBlock extends Prototype
             undoQueue.peekFirst().cursorStateY = _cursor_position.y;
             replaceCursor();
 
-//            _selectFrom = new Point(tmpText.fromSelectState);
-//            _selectTo = new Point(tmpText.toSelectState);
-//            makeSelectedArea(_selectFrom, _selectTo);
+            // _selectFrom = new Point(tmpText.fromSelectState);
+            // _selectTo = new Point(tmpText.toSelectState);
+            // makeSelectedArea(_selectFrom, _selectTo);
             // _textureStorage.redo();
         }
     }
@@ -840,14 +850,15 @@ class TextBlock extends Prototype
         if (undoQueue.size() == 1)
             return;
 
-//        undoStuff();
+        // undoStuff();
 
         TextBlockState tmpText = undoQueue.pollFirst();
         if (tmpText != null) {
             if (redoQueue.size() > queueCapacity)
                 redoQueue.pollLast();
-            redoQueue.addFirst(new TextBlockState(tmpText.textState, new Point(tmpText.cursorStateX, tmpText.cursorStateY)));
-//            tmpText = null;
+            redoQueue.addFirst(
+                    new TextBlockState(tmpText.textState, new Point(tmpText.cursorStateX, tmpText.cursorStateY)));
+            // tmpText = null;
             tmpText = undoQueue.pollFirst();
             if (tmpText != null) {
                 nothingFlag = true;
@@ -858,9 +869,9 @@ class TextBlock extends Prototype
                 undoQueue.peekFirst().cursorStateY = _cursor_position.y;
                 replaceCursor();
 
-//                _selectFrom = new Point(tmpText.fromSelectState);
-//                _selectTo = new Point(tmpText.toSelectState);
-//                makeSelectedArea(_selectFrom, _selectTo);
+                // _selectFrom = new Point(tmpText.fromSelectState);
+                // _selectTo = new Point(tmpText.toSelectState);
+                // makeSelectedArea(_selectFrom, _selectTo);
                 // _textureStorage.undo();
             }
         }
@@ -868,8 +879,8 @@ class TextBlock extends Prototype
 
     private void undoStuff() {
         if (!nothingFlag) {
-//                TextBlockState tbs = new TextBlockState(getText(), _cursor_position);
-//                redoQueue.addFirst(tbs);
+            // TextBlockState tbs = new TextBlockState(getText(), _cursor_position);
+            // redoQueue.addFirst(tbs);
             redoQueue = new ArrayDeque<>();
         } else {
             nothingFlag = false;
@@ -878,10 +889,10 @@ class TextBlock extends Prototype
         if (undoQueue.size() > queueCapacity)
             undoQueue.pollLast();
         TextBlockState tbs = new TextBlockState(getText(), new Point(_cursor_position));
-//        if (_isSelect) {
-//            tbs.fromSelectState = new Point(_selectFrom);
-//            tbs.toSelectState = new Point(_selectTo);
-//        }
+        // if (_isSelect) {
+        // tbs.fromSelectState = new Point(_selectFrom);
+        // tbs.toSelectState = new Point(_selectTo);
+        // }
         undoQueue.addFirst(tbs);
     }
 
@@ -949,16 +960,18 @@ class TextBlock extends Prototype
         String textState;
         int cursorStateX;
         int cursorStateY;
-//        Point fromSelectState;
-//        Point toSelectState;
+
+        // Point fromSelectState;
+        // Point toSelectState;
         TextBlockState() {
         }
+
         TextBlockState(String textState, Point cursorState) {
             this.textState = textState;
             this.cursorStateX = cursorState.x;
             this.cursorStateY = cursorState.y;
-//            fromSelectState = new Point(0, 0);
-//            toSelectState = new Point(0, 0);
+            // fromSelectState = new Point(0, 0);
+            // toSelectState = new Point(0, 0);
         }
     }
 }

@@ -250,6 +250,8 @@ namespace SpaceVIL.Common
             AddImage(stream, images_32, EmbeddedImage.Drive);
             stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.filter32.png"));
             AddImage(stream, images_32, EmbeddedImage.Filter);
+            stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.loadcircle32.png"));
+            AddImage(stream, images_32, EmbeddedImage.LoadCircle);
 
             //////////////////64
             stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.add64.png"));
@@ -292,6 +294,8 @@ namespace SpaceVIL.Common
             AddImage(stream, images_64, EmbeddedImage.Drive);
             stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.filter64.png"));
             AddImage(stream, images_64, EmbeddedImage.Filter);
+            stream = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Images.loadcircle64.png"));
+            AddImage(stream, images_64, EmbeddedImage.LoadCircle);
         }
 
         static void AddImage(Bitmap stream, Dictionary<EmbeddedImage, Bitmap> map, EmbeddedImage key)
@@ -304,11 +308,11 @@ namespace SpaceVIL.Common
         {
             if (size == EmbeddedImageSize.Size32x32 && images_32.ContainsKey(image))
             {
-                return images_32[image];
+                return new Bitmap(images_32[image]);
             }
             else if (size == EmbeddedImageSize.Size64x64 && images_64.ContainsKey(image))
             {
-                return images_64[image];
+                return new Bitmap(images_64[image]);
             }
             return null;
         }

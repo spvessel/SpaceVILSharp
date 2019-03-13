@@ -216,7 +216,7 @@ namespace SpaceVIL
         {
             SelectionItem wrapper = GetWrapper(item);
             base.InsertItem(wrapper, index);
-            wrapper.UpdateSizes();
+            wrapper.UpdateSize();
             _mapContent.Add(item, wrapper);
             UpdateLayout();
         }
@@ -230,7 +230,7 @@ namespace SpaceVIL
         {
             SelectionItem wrapper = GetWrapper(item);
             base.AddItem(wrapper);
-            wrapper.UpdateSizes();
+            wrapper.UpdateSize();
             _mapContent.Add(item, wrapper);
             UpdateLayout();
         }
@@ -245,6 +245,12 @@ namespace SpaceVIL
             UpdateLayout();
             ItemListChanged?.Invoke();
         }
+
+        public override void Clear()
+        {
+            RemoveAllItems();
+        }
+
         internal void RemoveAllItems()
         {
             Monitor.Enter(_lock);
@@ -262,6 +268,8 @@ namespace SpaceVIL
                     list.RemoveAt(0);
                 }
                 _mapContent.Clear();
+                UpdateLayout();
+                ItemListChanged?.Invoke();
             }
             catch (Exception ex)
             {

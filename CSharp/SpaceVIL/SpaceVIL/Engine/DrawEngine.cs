@@ -605,6 +605,8 @@ namespace SpaceVIL
                     }
                 }
             }
+
+            Thread.Sleep(10);
         }
 
         private Stopwatch _double_click_timer = new Stopwatch();
@@ -703,10 +705,7 @@ namespace SpaceVIL
                     {
                         HoveredItem.SetMousePressed(false);
                         if (is_double_click)
-                        {
-                            // Console.WriteLine("H: " + HoveredItem.GetItemName() + " " + FocusedItem.GetItemName());
                             AssignActions(InputEventType.MouseDoubleClick, _margs, false);
-                        }
                         else
                             AssignActions(InputEventType.MouseRelease, _margs, false);
                     }
@@ -1044,11 +1043,87 @@ namespace SpaceVIL
             _handler.GetLayout().ExecutePollActions();
         }
 
-        // internal float _sleep = 1000.0f / 60.0f;//1000 / 60;
-        internal float _interval = 1.0f / 15.0f;//1000 / 60;
-        // internal float _interval = 1.0f / 60.0f;//1000 / 60;
-        // internal int _interval = 11;//1000 / 90;
-        // internal int _interval = 08;//1000 / 120;
+        // internal float _sleep = 1000.0f / 60.0f;
+        private float _intervalLow = 1.0f / 10.0f;
+        private float _intervalMedium = 1.0f / 30.0f;
+        private float _intervalHigh = 1.0f / 60.0f;
+        private float _intervalUltra = 1.0f / 120.0f;
+        private float _intervalAssigned = 1.0f / 15.0f;
+
+        private RedrawFrequency _frequency = RedrawFrequency.Low;
+
+        private Object _locker = new Object();
+        internal void SetFrequency(RedrawFrequency value)
+        {
+            Monitor.Enter(_locker);
+            try
+            {
+                if (value == RedrawFrequency.Low)
+                {
+                    _intervalAssigned = _intervalLow;
+                }
+                else if (value == RedrawFrequency.Medium)
+                {
+                    _intervalAssigned = _intervalMedium;
+                }
+                else if (value == RedrawFrequency.High)
+                {
+                    _intervalAssigned = _intervalHigh;
+                }
+                else if (value == RedrawFrequency.Ultra)
+                {
+                    _intervalAssigned = _intervalUltra;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Method - SetFrequency");
+                Console.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+                Monitor.Exit(_locker);
+            }
+        }
+
+        private float GetFrequency()
+        {
+            Monitor.Enter(_locker);
+            try
+            {
+                return _intervalAssigned;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Method - SetFrequency");
+                Console.WriteLine(ex.StackTrace);
+                return _intervalLow;
+            }
+            finally
+            {
+                Monitor.Exit(_locker);
+            }
+        }
+
+        internal RedrawFrequency GetRedrawFrequency()
+        {
+            Monitor.Enter(_locker);
+            try
+            {
+                return _frequency;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Method - SetFrequency");
+                Console.WriteLine(ex.StackTrace);
+                _frequency = RedrawFrequency.Low;
+                return _frequency;
+            }
+            finally
+            {
+                Monitor.Exit(_locker);
+            }
+        }
 
         VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
@@ -1075,7 +1150,7 @@ namespace SpaceVIL
             // Glfw.SwapInterval(1);
             while (!_handler.IsClosing())
             {
-                Glfw.WaitEventsTimeout(_interval);
+                Glfw.WaitEventsTimeout(GetFrequency());
                 // Thread.Sleep(15);
                 // Glfw.PollEvents();
                 // Glfw.WaitEvents();
@@ -1122,7 +1197,23 @@ namespace SpaceVIL
             if (float_items != null)
             {
                 foreach (var item in float_items)
+                {
+                    if (item.GetHeightPolicy() == SizePolicy.Expand)
+                    {
+                        int[] confines = item.GetConfines();
+                        item.SetConfines(confines[0], confines[1], 0, _handler.GetLayout().GetWindow().GetHeight());
+                        item.SetY(0);
+                        item.SetHeight(_handler.GetLayout().GetWindow().GetHeight());
+                    }
+                    if (item.GetWidthPolicy() == SizePolicy.Expand)
+                    {
+                        int[] confines = item.GetConfines();
+                        item.SetConfines(0, _handler.GetLayout().GetWindow().GetWidth(), confines[2], confines[3]);
+                        item.SetX(0);
+                        item.SetWidth(_handler.GetLayout().GetWindow().GetWidth());
+                    }
                     DrawItems(item);
+                }
             }
             //draw tooltip if needed
             DrawToolTip();
@@ -1343,7 +1434,7 @@ namespace SpaceVIL
             {
                 DrawShell(root);
                 glDisable(GL_SCISSOR_TEST);
-                DrawImage(root as ImageItem);
+                DrawImage(root as IImageItem);
                 glDisable(GL_SCISSOR_TEST);
             }
             else
@@ -1593,7 +1684,7 @@ namespace SpaceVIL
             crd_array.Clear();
         }
 
-        void DrawImage(ImageItem image)
+        void DrawImage(IImageItem image)
         {
             //проверка: полностью ли влезает объект в свой контейнер
             CheckOutsideBorders(image as IBaseItem);
@@ -1603,18 +1694,26 @@ namespace SpaceVIL
                 return;
 
             int w = image.GetImageWidth(), h = image.GetImageHeight();
-            float i_x0 = ((float)image.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y0 = ((float)image.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            float i_x1 = (((float)image.GetX() + (float)image.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y1 = (((float)image.GetY() + (float)image.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            RectangleBounds Area = image.GetRectangleBounds();
+
+            float i_x0 = ((float)Area.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y0 = ((float)Area.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)Area.GetX() + (float)Area.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)Area.GetY() + (float)Area.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            // Console.WriteLine(image.GetItemName() + " " 
+            // + image.Area.GetX() + " " 
+            // + image.Area.GetWidth() + " "
+            // + image.Area.GetY() + " " 
+            // + image.Area.GetHeight()
+            // );
             _texture.UseShader();
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
             store.GenTexture(w, h, bitmap);
             store.SendUniformSample2D(_texture, "tex");
-            if (image.IsColorOverLay())
+            if (image.IsColorOverlay())
             {
-                Console.WriteLine("is overlay");
+                // Console.WriteLine("is overlay");
                 float[] argb = {
                         (float) image.GetColorOverlay().R / 255.0f,
                         (float) image.GetColorOverlay().G / 255.0f,

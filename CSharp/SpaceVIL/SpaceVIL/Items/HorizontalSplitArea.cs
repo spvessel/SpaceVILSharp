@@ -24,7 +24,7 @@ namespace SpaceVIL
         /// <summary>
         /// Sets position of the SplitHolder
         /// </summary>
-        public void SetSplitHolderPosition(int position)
+        public void SetSplitPosition(int position)
         {
             if (position < _tMin || position > GetHeight() - _splitHolder.GetHolderSize() - _bMin)
                 return;
@@ -53,7 +53,7 @@ namespace SpaceVIL
         void OnDragging(object sender, MouseArgs args)
         {
             int offset = args.Position.GetY() - GetY() - _diff;
-            SetSplitHolderPosition(offset);
+            SetSplitPosition(offset);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace SpaceVIL
         {
             //Adding
             AddItem(_splitHolder);
-            SetSplitHolderPosition((GetHeight() - _splitHolder.GetHolderSize()) / 2);
+            SetSplitPosition((GetHeight() - _splitHolder.GetHolderSize()) / 2);
         }
 
         /// <summary>
@@ -102,17 +102,17 @@ namespace SpaceVIL
             int totalSize = GetHeight() - _splitHolder.GetHolderSize();
             if (totalSize < _tMin)
             {
-                SetSplitHolderPosition(totalSize);
+                SetSplitPosition(totalSize);
             }
             else if (totalSize <= _tMin + _bMin)
             {
-                SetSplitHolderPosition(_tMin);
+                SetSplitPosition(_tMin);
             }
             else
             {
                 if (totalSize - _topHeight < _bMin)
                 {
-                    SetSplitHolderPosition(totalSize - _bMin);
+                    SetSplitPosition(totalSize - _bMin);
                 }
             }
         }
@@ -123,7 +123,7 @@ namespace SpaceVIL
         public override void SetY(int _y)
         {
             base.SetY(_y);
-            SetSplitHolderPosition(_topHeight);
+            SetSplitPosition(_topHeight);
             UpdateLayout();
         }
 

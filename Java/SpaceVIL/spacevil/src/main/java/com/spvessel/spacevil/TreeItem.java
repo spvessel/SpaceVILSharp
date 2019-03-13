@@ -16,6 +16,8 @@ import com.spvessel.spacevil.Flags.TreeItemType;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.Comparator;
 import java.util.LinkedList;
 
@@ -32,17 +34,27 @@ public class TreeItem extends Prototype {
     public void removeChild(TreeItem child) {
         if (_list_inners.contains(child)) {
             _list_inners.remove(child);
-            child.removeAllChildren();
+            child.removeChildren();
             _treeViewContainer.removeItem(child);
         }
     }
 
-    void removeAllChildren() {
-        for (TreeItem item : _list_inners) {
-            item.removeAllChildren();
-            _treeViewContainer.removeItem(item);
+    private Lock locker = new ReentrantLock();
+    
+    public void removeChildren() {
+        locker.lock();
+        try {
+            for (TreeItem item : _list_inners) {
+                item.removeChildren();
+                _treeViewContainer.removeItem(item);
+            }
+            _list_inners.clear();
+        } catch (Exception ex) {
+            System.out.println("Method - RemoveChildren");
+            ex.printStackTrace();
+        } finally {
+            locker.unlock();
         }
-        _list_inners.clear();
     }
 
     private TreeItem _parentBranch;
@@ -128,11 +140,11 @@ public class TreeItem extends Prototype {
         if (args.key == KeyCode.ENTER)
             _indicator.eventToggle.execute(sender, new MouseArgs());
         // else if (args.key == KeyCode.SPACE)
-        //     addItem(new TreeItem(TreeItemType.BRANCH, "new branch " + count));
+        // addItem(new TreeItem(TreeItemType.BRANCH, "new branch " + count));
         // else if (args.key == KeyCode.EQUAL)
-        //     addItem(new TreeItem(TreeItemType.LEAF, "new leaf " + count));
+        // addItem(new TreeItem(TreeItemType.LEAF, "new leaf " + count));
         // else if (args.key == KeyCode.DELETE)
-        //     getParentBranch().removeChild(this);
+        // getParentBranch().removeChild(this);
     }
 
     void resetIndents() {
@@ -211,7 +223,7 @@ public class TreeItem extends Prototype {
         item._parentBranch = this;
         item._treeViewContainer = _treeViewContainer;
         item._nesting_level = _nesting_level + 1;
-//        _indicator.setToggled(true);
+        // _indicator.setToggled(true);
 
         Comparator<TreeItem> comp = _treeViewContainer.getComparator();
 

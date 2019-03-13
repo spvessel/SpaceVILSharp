@@ -1,7 +1,11 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Core.Geometry;
 import com.spvessel.spacevil.Core.InterfaceImageItem;
+import com.spvessel.spacevil.Core.InterfacePosition;
+import com.spvessel.spacevil.Core.RectangleBounds;
+import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -11,10 +15,14 @@ import java.nio.ByteBuffer;
 
 public class ImageItem extends Prototype implements InterfaceImageItem {
 
+    private RectangleBounds area = new RectangleBounds();
+    
+    public RectangleBounds getRectangleBounds() {
+        return area;
+    }
+
     private static int count = 0;
-    private BufferedImage _image;
     private byte[] _bitmap;
-    private String _url;
 
     private float _angleRotation = 0.0f;
 
@@ -51,8 +59,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         this();
         if (picture == null)
             return;
-        _image = picture;
-        _bitmap = createByteImage();
+        _bitmap = createByteImage(picture);
     }
 
     /**
@@ -67,79 +74,61 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
      * Returns the image as byte array
      */
     public byte[] getPixMapImage() {
-        if (_image == null)
-            return null;
-
-        if (_bitmap == null) {
-            _bitmap = createByteImage();
-        }
         return _bitmap;
     }
 
-    private byte[] createByteImage() {
-        List<Byte> bmp = new LinkedList<Byte>();
-        for (int j = _image.getHeight() - 1; j >= 0; j--) {
-            for (int i = 0; i < _image.getWidth(); i++) {
-                byte[] bytes = ByteBuffer.allocate(4).putInt(_image.getRGB(i, j)).array();
-                bmp.add(bytes[1]);
-                bmp.add(bytes[2]);
-                bmp.add(bytes[3]);
-                bmp.add(bytes[0]);
+    private byte[] createByteImage(BufferedImage picture) {
+        try {
+            _imageWidth = picture.getWidth();
+            _imageHeight = picture.getHeight();
+            List<Byte> bmp = new LinkedList<Byte>();
+            for (int j = picture.getHeight() - 1; j >= 0; j--) {
+                for (int i = 0; i < picture.getWidth(); i++) {
+                    byte[] bytes = ByteBuffer.allocate(4).putInt(picture.getRGB(i, j)).array();
+                    bmp.add(bytes[1]);
+                    bmp.add(bytes[2]);
+                    bmp.add(bytes[3]);
+                    bmp.add(bytes[0]);
+                }
             }
+            byte[] result = new byte[bmp.size()];
+            int index = 0;
+            for (Byte var : bmp) {
+                result[index] = var;
+                index++;
+            }
+            return result;
+        } catch (Exception ex) {
+            System.out.println("Create byte image");
+            ex.printStackTrace();
+            return null;
         }
-        byte[] result = new byte[bmp.size()];
-        int index = 0;
-        for (Byte var : bmp) {
-            result[index] = var;
-            index++;
-        }
-        return result;
     }
+
+    private int _imageWidth;
+    private int _imageHeight;
 
     /**
      * @return width of the image in the ImageItem
      */
     public int getImageWidth() {
-        if (_image == null)
-            return -1;
-        return _image.getWidth();
+        return _imageWidth;
     }
 
     /**
      * @return height of the image in the ImageItem
      */
     public int getImageHeight() {
-        if (_image == null)
-            return -1;
-        return _image.getHeight();
+        return _imageHeight;
     }
 
     /**
-     * @return BufferedImage of the ImageItem
-     */
-    public BufferedImage getImage() {
-        return _image;
-    }
-
-    /**
-     * Set an image into the ImageItem
+     * set an image into the ImageItem
      */
     public void setImage(BufferedImage image) {
         if (image == null)
             return;
-        _image = image;
-        _bitmap = createByteImage();
-    }
-
-    /**
-     * Image location
-     */
-    public String getImageUrl() {
-        return _url;
-    }
-
-    public void setImageUrl(String url) {
-        _url = url;
+        _bitmap = createByteImage(image);
     }
 
     private Color _colorOverlay;
@@ -152,9 +141,99 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         _colorOverlay = color;
     }
 
-    public boolean isColorOverLay() {
+    public boolean isColorOverlay() {
         if (_colorOverlay != null)
             return true;
         return false;
+    }
+
+    private boolean _isKeepAspectRatio = false;
+
+    public void keepAspectRatio(boolean value) {
+        _isKeepAspectRatio = value;
+    }
+
+    public boolean isAspectRatio() {
+        return _isKeepAspectRatio;
+    }
+
+    @Override
+    public void setSize(int width, int height) {
+        this.setWidth(width);
+        this.setHeight(height);
+    }
+
+    @Override
+    public void setHeight(int height) {
+        super.setHeight(height);
+        area.setHeight(height);
+        if (_isKeepAspectRatio && _bitmap != null)
+            applyAspectRatio();
+        UpdateLayout();
+    }
+
+    @Override
+    public void setWidth(int width) {
+        super.setWidth(width);
+        area.setWidth(width);
+        if (_isKeepAspectRatio && _bitmap != null)
+            applyAspectRatio();
+        UpdateLayout();
+    }
+
+    @Override
+    public void setX(int _x) {
+        super.setX(_x);
+        UpdateLayout();
+    }
+
+    @Override
+    public void setY(int _y) {
+        super.setY(_y);
+        UpdateLayout();
+    }
+
+    private void applyAspectRatio() {
+        float boundW = getWidth();
+        float boundH = getHeight();
+
+        float ratioX = (boundW / _imageWidth);
+        float ratioY = (boundH / _imageHeight);
+        float ratio = ratioX < ratioY ? ratioX : ratioY;
+
+        int resH = (int) (_imageHeight * ratio);
+        int resW = (int) (_imageWidth * ratio);
+        area.setWidth(resW);
+        area.setHeight(resH);
+    }
+
+    // self update
+    public void UpdateLayout() {
+        UpdateVerticalPosition();
+        UpdateHorizontalPosition();
+    }
+
+    private void UpdateHorizontalPosition() {
+        if (getAlignment().contains(ItemAlignment.LEFT)) {
+            area.setX(getX());
+        } else if (getAlignment().contains(ItemAlignment.RIGHT)) {
+            area.setX(getX() + getWidth() - area.getWidth());
+        } else if (getAlignment().contains(ItemAlignment.HCENTER)) {
+            int x = getX();
+            int w = area.getWidth();
+            area.setX((getWidth() - w) / 2 + x);
+        }
+    }
+
+    private void UpdateVerticalPosition() {
+        if (getAlignment().contains(ItemAlignment.TOP)) {
+            area.setY(getY());
+        } else if (getAlignment().contains(ItemAlignment.BOTTOM)) {
+            area.setY(getY() + getHeight() - area.getHeight());
+        } else if (getAlignment().contains(ItemAlignment.VCENTER)) {
+            int y = getY();
+            int h = area.getHeight();
+            area.setY((getHeight() - h) / 2 + y);
+        }
     }
 }

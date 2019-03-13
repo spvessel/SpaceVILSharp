@@ -21,7 +21,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     /**
      * Sets position of the SplitHolder
      */
-    public void setSplitHolderPosition(int position) {
+    public void setSplitPosition(int position) {
         if (position < _lMin || position > getWidth() - _splitHolder.getHolderSize() - _rMin)
             return;
         _leftWidth = position;
@@ -48,7 +48,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
 
     private void onDragging(InterfaceItem sender, MouseArgs args) {
         int offset = args.position.getX() - getX() - _diff;
-        setSplitHolderPosition(offset);
+        setSplitPosition(offset);
     }
 
     /**
@@ -56,7 +56,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
      */
     @Override
     public void initElements() {
-        setSplitHolderPosition((getWidth() - _splitHolder.getHolderSize()) / 2);
+        setSplitPosition((getWidth() - _splitHolder.getHolderSize()) / 2);
 
         // adding
         addItem(_splitHolder);
@@ -96,12 +96,12 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     private void checkMins() {
         int totalSize = getWidth() - _splitHolder.getHolderSize();
         if (totalSize < _lMin) {
-            setSplitHolderPosition(totalSize);
+            setSplitPosition(totalSize);
         } else if (totalSize <= _lMin + _rMin) {
-            setSplitHolderPosition(_lMin);
+            setSplitPosition(_lMin);
         } else {
             if (totalSize - _leftWidth < _rMin) {
-                setSplitHolderPosition(totalSize - _rMin);
+                setSplitPosition(totalSize - _rMin);
             }
         }
     }
@@ -112,7 +112,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     @Override
     public void setX(int _x) {
         super.setX(_x);
-        setSplitHolderPosition(_leftWidth);
+        setSplitPosition(_leftWidth);
         updateLayout();
     }
 
@@ -150,7 +150,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     /**
      * Set width of the SplitHolder
      */
-    public void setSpacerWidth(int spWidth) {
+    public void SetSplitThickness(int spWidth) {
         _splitHolder.setSpacerSize(spWidth);
     }
 

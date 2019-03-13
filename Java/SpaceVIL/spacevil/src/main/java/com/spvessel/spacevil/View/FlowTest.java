@@ -87,23 +87,26 @@ public class FlowTest extends ActiveWindow {
             // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!");
             // pop.show(Handler);
 
-            MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
-            ButtonCore btnnn = new ButtonCore("one");
-            btnnn.eventMouseClick.add((s, a) -> {
-                System.out.println("btnnn");
-            });
+            // MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
+            // ButtonCore btnnn = new ButtonCore("one");
+            // btnnn.eventMouseClick.add((s, a) -> {
+            //     System.out.println("btnnn");
+            // });
             
-            msg.addUserButton(btnnn, 1);
-            msg.addUserButton(new ButtonCore("two"), 2);
-            msg.addUserButton(new ButtonCore("three"), 3);
+            // msg.addUserButton(btnnn, 1);
+            // msg.addUserButton(new ButtonCore("two"), 2);
+            // msg.addUserButton(new ButtonCore("three"), 3);
 
-            msg.onCloseDialog.add(() -> {
-                System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
-            });
-            msg.show(Handler);
+            // msg.onCloseDialog.add(() -> {
+            //     System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
+            // });
+            // msg.show(Handler);
 
             // InputDialog id = new InputDialog("Input text", "Apply");
             // id.show(Handler);
+
+            LoadingScreen ls = new LoadingScreen();
+            ls.show(Handler);
         });
         btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn1.setHoverRule(ItemRule.STRICT);
@@ -130,14 +133,14 @@ public class FlowTest extends ActiveWindow {
         btn3.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn3.addItemState(ItemStateType.HOVERED, hovered);
         btn3.eventMouseClick.add((sender, args) -> {
-            // ResizableItem frame = new ResizableItem();
-            // frame.setPadding(10, 10, 10, 10);
-            // frame.setBackground(100, 100, 100);
-            // frame.setSize(300, 300);
-            // frame.setPosition(200, 200);
-            // flow.addItem(frame);
-            // PointsContainer graph = getPointsContainer();
-            // frame.addItem(graph);
+            ResizableItem frame = new ResizableItem();
+            frame.setPadding(10, 10, 10, 10);
+            frame.setBackground(100, 100, 100);
+            frame.setSize(300, 300);
+            frame.setPosition(200, 200);
+            flow.addItem(frame);
+            PointsContainer graph = getPointsContainer();
+            frame.addItem(graph);
         });
         btn3.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn3.setHoverRule(ItemRule.STRICT);
@@ -150,11 +153,11 @@ public class FlowTest extends ActiveWindow {
         btn4.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         btn4.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn4.addItemState(ItemStateType.HOVERED, hovered);
+        AlbumSideList side = new AlbumSideList(Handler, Side.LEFT);
+        // side.setAttachSide(Side.TOP);
         btn4.eventMouseClick.add((sender, args) -> {
             // flow.addItem(getBlockList());
-            SideArea side = new SideArea(Side.LEFT);
-            // side.setAttachSide(Side.TOP);
-            side.show(getHandler());
+            side.show();
         });
         btn4.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
         btn4.setHoverRule(ItemRule.STRICT);
@@ -262,37 +265,37 @@ public class FlowTest extends ActiveWindow {
     // return block;
     // }
 
-    // private PointsContainer getPointsContainer() {
-    // PointsContainer graph_points = new PointsContainer();
-    // graph_points.setPointColor(new Color(10, 255, 10));
-    // graph_points.setPointThickness(10.0f);
-    // graph_points.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-    // graph_points.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-    // // List<float[]> crd = new List<float[]>();
-    // // crd.add(new float[3] { 100.0f, 0.0f, 0.0f });
-    // // crd.add(new float[3] { 50.0f, 100.0f, 0.0f });
-    // // crd.add(new float[3] { 150.0f, 100.0f, 0.0f });
-    // // graph_points.setPointsCoord(crd);
-    // graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50,
-    // 0, 0));
-    // // graph_points.setPointsCoord(GraphicsMathService.getTriangle(100, 100, 0,
+    private PointsContainer getPointsContainer() {
+    PointsContainer graph_points = new PointsContainer();
+    graph_points.setPointColor(new Color(10, 255, 10));
+    graph_points.setPointThickness(10.0f);
+    graph_points.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+    graph_points.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+    // List<float[]> crd = new List<float[]>();
+    // crd.add(new float[3] { 100.0f, 0.0f, 0.0f });
+    // crd.add(new float[3] { 50.0f, 100.0f, 0.0f });
+    // crd.add(new float[3] { 150.0f, 100.0f, 0.0f });
+    // graph_points.setPointsCoord(crd);
+    graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50,
+    0, 0));
+    // graph_points.setPointsCoord(GraphicsMathService.getTriangle(100, 100, 0,
     // 0,
-    // // 0));
-    // // graph_points.setWidth(300);
-    // // graph_points.setHeight(300);
-    // // graph_points.setX(200);
-    // // graph_points.setY(200);
-    // //
+    // 0));
+    // graph_points.setWidth(300);
+    // graph_points.setHeight(300);
+    // graph_points.setX(200);
+    // graph_points.setY(200);
+    //
     // graph_points.setShapePointer(GraphicsMathService.getTriangle(graph_points.getPointThickness(),
-    // // graph_points.getPointThickness()));
-    // //
-    // graph_points.setShapePointer(GraphicsMathService.getCross(graph_points.getPointThickness(),
-    // // graph_points.getPointThickness(), 2, 45));
-    // //
+    // graph_points.getPointThickness()));
+    //
+    graph_points.setShapePointer(GraphicsMathService.getCross(graph_points.getPointThickness(),
+    graph_points.getPointThickness(), 2, 45));
+    //
     // graph_points.setShapePointer(GraphicsMathService.getStar(graph_points.getPointThickness(),
-    // // graph_points.getPointThickness() / 2.0f));
-    // return graph_points;
-    // }
+    // graph_points.getPointThickness() / 2.0f));
+    return graph_points;
+    }
 
     public ButtonCore getButton(String name) {
         ButtonCore btn = new ButtonCore(name);

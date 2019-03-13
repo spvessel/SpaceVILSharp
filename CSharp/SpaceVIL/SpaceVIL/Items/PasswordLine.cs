@@ -173,7 +173,7 @@ namespace SpaceVIL
         /// <summary>
         /// Remove all text from the PasswordLine
         /// </summary>
-        public void Clear()
+        public override void Clear()
         {
             _textEncrypt.Clear();
         }

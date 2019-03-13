@@ -169,7 +169,7 @@ namespace SpaceVIL
         {
             _core.SetBorderFill(r, g, b, a);
         }
-        
+
         /// <summary>
         /// Radius of the border's corners
         /// </summary>
@@ -337,7 +337,7 @@ namespace SpaceVIL
         /// <summary>
         /// Prototype size (width, height)
         /// </summary>
-        public void SetSize(int width, int height)
+        public virtual void SetSize(int width, int height)
         {
             _core.SetSize(width, height);
         }
@@ -749,6 +749,11 @@ namespace SpaceVIL
         public virtual void RemoveItem(IBaseItem item)
         {
             _core.RemoveItem(item);
+        }
+
+        public virtual void Clear()
+        {
+            _core.Clear();
         }
 
         internal void AddEventListener(GeometryEventType type, IBaseItem listener)

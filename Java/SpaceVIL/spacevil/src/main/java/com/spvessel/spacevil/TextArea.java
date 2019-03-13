@@ -455,8 +455,9 @@ public class TextArea extends Prototype {
     /**
      * Remove all text from the TextArea
      */
-    public void clearArea() {
-        _area.clear();
+    @Override
+    public void clear() {
+        _area.clearText();
     }
 
     public void appendText(String text) {

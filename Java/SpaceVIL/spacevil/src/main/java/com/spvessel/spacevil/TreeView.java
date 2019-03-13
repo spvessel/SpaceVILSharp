@@ -184,7 +184,7 @@ public class TreeView extends ListBox {
 
     @Override
     public void clear() {
-        _root.removeAllChildren();
+        _root.removeChildren();
         super.clear();
         super.addItem(_root);
         setRootVisibility(getRootVisibility());

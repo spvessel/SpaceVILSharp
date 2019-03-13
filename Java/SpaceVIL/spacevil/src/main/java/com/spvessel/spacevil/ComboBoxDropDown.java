@@ -182,6 +182,12 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
             itemList.getArea().setFocus();
         }
     }
+    
+    public void show() {
+        MouseArgs args = new MouseArgs();
+        args.button = activeButton;
+        show(this, args);
+    }
 
     /**
      * Hide the ContextMenu without destroying

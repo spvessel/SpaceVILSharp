@@ -236,6 +236,11 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         itemListChanged.execute();
     }
 
+    @Override
+    public void clear() {
+        removeAllItems();
+    }
+
     void removeAllItems() {
         _lock.lock();
         try {
@@ -250,6 +255,8 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 list.remove(0);
             }
             _mapContent.clear();
+            updateLayout();
+            itemListChanged.execute();
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
