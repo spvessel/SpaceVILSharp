@@ -18,5 +18,8 @@
         "terminal.background": "#1d1d1d",
     },
     "editor.smoothScrolling": true,
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.minimap.showSlider": "always",
+    "editor.overviewRulerBorder": false
 }

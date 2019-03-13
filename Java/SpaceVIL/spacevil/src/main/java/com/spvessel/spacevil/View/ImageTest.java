@@ -84,7 +84,12 @@ public class ImageTest extends ActiveWindow {
             // MessageBox ms = new MessageBox("Send result?", "Message:");
             // ms.show();
             // System.out.println(ms.getResult());
-            h_stack.setVisible(!h_stack.isVisible());
+            // h_stack.setVisible(!h_stack.isVisible());
+
+            btn_action.clear();
+            ImageItem tmp = new ImageItem(
+                    DefaultsService.getDefaultImage(EmbeddedImage.DISKETTE, EmbeddedImageSize.SIZE_64X64), false);
+            btn_action.addItem(tmp);
         };
         btn_action.eventMouseClick.add(btn_action_click);
 

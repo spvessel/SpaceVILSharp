@@ -155,6 +155,15 @@ public class FlowTest extends ActiveWindow {
         btn4.addItemState(ItemStateType.HOVERED, hovered);
         AlbumSideList side = new AlbumSideList(Handler, Side.LEFT);
         // side.setAttachSide(Side.TOP);
+        Album al1 = new Album("Album1", "C:\\");
+        al1._topLayout.setItemName("topLayout1");
+        Album al2 = new Album("Album2", "C:\\");
+        al2._topLayout.setItemName("topLayout2");
+        side.addAlbum(al1);
+        side.addAlbum(al2);
+        // side.addAlbum(new Album("Album2", "C:\\"));
+        // side.addAlbum(new Album("Album3", "C:\\"));
+        // side.addAlbum(new Album("Album4", "C:\\"));
         btn4.eventMouseClick.add((sender, args) -> {
             // flow.addItem(getBlockList());
             side.show();

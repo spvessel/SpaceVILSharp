@@ -313,11 +313,12 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
         long offset = (-1) * getVScrollOffset();
         int startY = getY() + getPadding().top;
+        int child_X = (-1) * (int) _xOffset + getX() + getPadding().left;
         for (InterfaceBaseItem child : super.getItems()) {
             if (!child.isVisible())
                 continue;
 
-            child.setX((-1) * (int) _xOffset + getX() + getPadding().left + child.getMargin().left);
+            child.setX(child_X + child.getMargin().left);
 
             long child_Y = startY + offset + child.getMargin().top;
             offset += child.getHeight() + getSpacing().vertical;

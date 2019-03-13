@@ -247,13 +247,13 @@ namespace SpaceVIL
             if (_blur.GetProgramID() == 0)
                 Console.WriteLine("Could not create blur shaders");
             ///////////////////////////////////////////////
-            _clone = new Shader("_clone",
-            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_points.glsl"),
-            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.gs_points.glsl"),
-            Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_primitive.glsl"));
-            _clone.Compile();
-            if (_clone.GetProgramID() == 0)
-                Console.WriteLine("Could not create blur shaders");
+            // _clone = new Shader("_clone",
+            // Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.vs_points.glsl"),
+            // Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.gs_points.glsl"),
+            // Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_primitive.glsl"));
+            // _clone.Compile();
+            // if (_clone.GetProgramID() == 0)
+            //     Console.WriteLine("Could not create blur shaders");
 
             Run();
         }
@@ -1147,7 +1147,7 @@ namespace SpaceVIL
             _fbo.UnbindFBO();
 
             _double_click_timer.Start();
-            // Glfw.SwapInterval(1);
+            // Glfw.SwapInterval(0);
             while (!_handler.IsClosing())
             {
                 Glfw.WaitEventsTimeout(GetFrequency());
@@ -1171,9 +1171,10 @@ namespace SpaceVIL
             _char.DeleteShader();
             // _fxaa.DeleteShader();
             _blur.DeleteShader();
-            _clone.DeleteShader();
+            // _clone.DeleteShader();
 
             _fbo.ClearFBO();
+            VRAMStorage.Clear();
 
             glDeleteVertexArrays(1, _handler.GVAO);
 
@@ -1183,6 +1184,7 @@ namespace SpaceVIL
 
         internal void Update()
         {
+            VRAMStorage.Flush();
             Render();
             _bounds.Clear();
         }
@@ -1686,7 +1688,6 @@ namespace SpaceVIL
 
         void DrawImage(IImageItem image)
         {
-            //проверка: полностью ли влезает объект в свой контейнер
             CheckOutsideBorders(image as IBaseItem);
 
             byte[] bitmap = image.GetPixMapImage();
@@ -1700,20 +1701,92 @@ namespace SpaceVIL
             float i_y0 = ((float)Area.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
             float i_x1 = (((float)Area.GetX() + (float)Area.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
             float i_y1 = (((float)Area.GetY() + (float)Area.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            // Console.WriteLine(image.GetItemName() + " " 
-            // + image.Area.GetX() + " " 
-            // + image.Area.GetWidth() + " "
-            // + image.Area.GetY() + " " 
-            // + image.Area.GetHeight()
-            // );
+
             _texture.UseShader();
+            ImageItem tmp = image as ImageItem;
+            if (tmp != null)
+            {
+                if (tmp.IsNew())
+                {
+                    Monitor.Enter(VRAMStorage.StorageLocker);
+                    try
+                    {
+                        VRAMStorage.DeleteTexture(image);
+                        //create and store
+                        VRAMTexture tex = new VRAMTexture();
+                        tex.GenBuffers(i_x0, i_x1, i_y0, i_y1);
+                        tex.GenTexture(w, h, bitmap);
+                        VRAMStorage.AddTexture(image, tex);
+                        tmp.SetNew(false);
+
+                        tex.SendUniformSample2D(_texture, "tex");
+                        if (image.IsColorOverlay())
+                        {
+                            float[] argb = {
+                        (float) image.GetColorOverlay().R / 255.0f,
+                        (float) image.GetColorOverlay().G / 255.0f,
+                        (float) image.GetColorOverlay().B / 255.0f,
+                        (float) image.GetColorOverlay().A / 255.0f };
+                            tex.SendUniform1i(_texture, "overlay", 1);
+                            tex.SendUniform4f(_texture, "rgb", argb);
+                        }
+                        else
+                            tex.SendUniform1i(_texture, "overlay", 0);// VEEEEEEEERY interesting!!!
+                        tex.SendUniform1f(_texture, "alpha", image.GetRotationAngle());
+                        tex.Draw();
+                        tex.DeleteIBOBuffer();
+                        tex.DeleteVBOBuffer();
+                        tex.Unbind();
+                    }
+                    finally
+                    {
+                        Monitor.Exit(VRAMStorage.StorageLocker);
+                    }
+                }
+                else
+                {
+                    Monitor.Enter(VRAMStorage.StorageLocker);
+                    try
+                    {
+                        //draw
+                        VRAMTexture tex = VRAMStorage.GetTexture(image);
+                        if (tex == null)
+                            return;
+                        tex.Bind();
+                        tex.GenBuffers(i_x0, i_x1, i_y0, i_y1);
+                        tex.SendUniformSample2D(_texture, "tex");
+                        if (image.IsColorOverlay())
+                        {
+                            float[] argb = {
+                        (float) image.GetColorOverlay().R / 255.0f,
+                        (float) image.GetColorOverlay().G / 255.0f,
+                        (float) image.GetColorOverlay().B / 255.0f,
+                        (float) image.GetColorOverlay().A / 255.0f };
+                            tex.SendUniform1i(_texture, "overlay", 1);
+                            tex.SendUniform4f(_texture, "rgb", argb);
+                        }
+                        else
+                            tex.SendUniform1i(_texture, "overlay", 0);// VEEEEEEEERY interesting!!!
+                        tex.SendUniform1f(_texture, "alpha", image.GetRotationAngle());
+                        tex.Draw();
+                        tex.DeleteIBOBuffer();
+                        tex.DeleteVBOBuffer();
+                        tex.Unbind();
+                    }
+                    finally
+                    {
+                        Monitor.Exit(VRAMStorage.StorageLocker);
+                    }
+                }
+                return;
+            }
+
             VRAMTexture store = new VRAMTexture();
             store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
             store.GenTexture(w, h, bitmap);
             store.SendUniformSample2D(_texture, "tex");
             if (image.IsColorOverlay())
             {
-                // Console.WriteLine("is overlay");
                 float[] argb = {
                         (float) image.GetColorOverlay().R / 255.0f,
                         (float) image.GetColorOverlay().G / 255.0f,

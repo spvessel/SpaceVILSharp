@@ -59,9 +59,6 @@ namespace SpaceVIL
         /// </summary>
         public void UpdateLayout()
         {
-            // if (GetItemName() == "toolbar")
-            //     Console.WriteLine(GetItemName() + " layout update");
-
             int total_space = GetWidth() - GetPadding().Left - GetPadding().Right;
             int free_space = total_space;
             int fixed_count = 0;
@@ -95,8 +92,7 @@ namespace SpaceVIL
                 if (child.IsVisible())
                 {
                     child.SetX(startX + offset + child.GetMargin().Left);//
-                    // if (GetItemName() == "toolbar")
-                    //     Console.WriteLine(child.GetItemName() + " " + child.GetX());
+
                     if (child.GetWidthPolicy() == SizePolicy.Expand)
                     {
                         if (width_for_expanded - child.GetMargin().Left - child.GetMargin().Right < child.GetMaxWidth())

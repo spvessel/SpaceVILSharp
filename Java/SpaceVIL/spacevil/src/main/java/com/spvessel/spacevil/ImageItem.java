@@ -10,13 +10,15 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.LinkedList;
 import java.nio.ByteBuffer;
 
 public class ImageItem extends Prototype implements InterfaceImageItem {
 
     private RectangleBounds area = new RectangleBounds();
-    
+
     public RectangleBounds getRectangleBounds() {
         return area;
     }
@@ -97,6 +99,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
                 result[index] = var;
                 index++;
             }
+            setNew(true);
             return result;
         } catch (Exception ex) {
             System.out.println("Create byte image");
@@ -234,6 +237,32 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
             int y = getY();
             int h = area.getHeight();
             area.setY((getHeight() - h) / 2 + y);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        VRAMStorage.addToDelete(this);
+    }
+
+    private Lock _lock = new ReentrantLock();
+    private boolean _isNew = true;
+
+    boolean isNew() {
+        _lock.lock();
+        try {
+            return _isNew;
+        } finally {
+            _lock.unlock();
+        }
+    }
+
+    void setNew(boolean value) {
+        _lock.lock();
+        try {
+            _isNew = value;
+        } finally {
+            _lock.unlock();
         }
     }
 }

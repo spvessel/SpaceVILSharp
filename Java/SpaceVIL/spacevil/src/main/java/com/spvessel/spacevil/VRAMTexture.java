@@ -176,4 +176,8 @@ final class VRAMTexture {
     void deleteVBOBuffer() {
         glDeleteBuffers(VBO);
     }
+
+    void deleteTexture() {
+        glDeleteTextures(texture);
+    }
 }

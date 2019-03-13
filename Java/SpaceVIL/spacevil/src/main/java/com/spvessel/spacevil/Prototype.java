@@ -738,7 +738,11 @@ abstract public class Prototype implements InterfaceBaseItem {
     public ItemRule getHoverRule() {
         return _core.HoverRule;
     }
+
     public void setHoverRule(ItemRule rule) {
         _core.HoverRule = rule;
     }
+
+    @Override
+    public void destroy() { }
 }
