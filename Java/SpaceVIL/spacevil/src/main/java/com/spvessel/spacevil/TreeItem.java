@@ -232,6 +232,13 @@ public class TreeItem extends Prototype {
         else
             _treeViewContainer.refreshTree(_list_inners.get(ind), item);
         onToggleHide(true);
+
+        List<TreeItem> children = item.getChildren();
+        if (children.size() > 0) {
+            for (int i = 0; i < children.size(); i++) {
+                item.addItem(children.get(i));
+            }
+        }
     }
 
     /**

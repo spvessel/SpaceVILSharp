@@ -90,6 +90,7 @@ public class InputTest extends ActiveWindow {
             // System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " +
             // s.toCharArray()[4]);
             tb.appendText("12345678");
+            te.setText("text edit text");
         });
 
         layout.addItem(bc);
