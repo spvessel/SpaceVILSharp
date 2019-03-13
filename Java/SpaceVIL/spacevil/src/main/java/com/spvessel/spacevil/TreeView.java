@@ -198,4 +198,42 @@ public class TreeView extends ListBox {
             return;
         super.removeItem(item);
     }
+
+    void sortTree() {
+
+    }
+
+    void sortBrunch(TreeItem branch) {
+        if (branch.isRoot)
+            sortTree();
+
+        if (branch.getItemType().equals(TreeItemType.LEAF)) {
+            return; //Либо сделать, чтобы сортировалась родительская ветвь?
+        }
+
+//        List<InterfaceBaseItem> list = getListContent();
+//        List<TreeItem> savedList = new LinkedList<>();
+//        savedList.add(branch);
+//        int indFirst = list.indexOf(branch);
+//        int nestLev = branch._nesting_level;
+//        int indLast = indFirst;
+//        while (indLast < list.size()) {
+//            TreeItem ti = ((TreeItem) list.get(indLast));
+//            if (ti._nesting_level <= nestLev)
+//                break;
+//            savedList.add(ti);
+////            removeItem(ti);
+//            indLast++;
+//        }
+
+        TreeItem saveBranch = branch;
+        TreeItem par = branch.getParentBranch();
+        removeItem(branch);
+        par.addItem(saveBranch); //???
+
+//        insertItem(item, index);
+//        item.resetIndents();
+//        // item.onToggleHide(true);
+        updateElements();
+    }
 }

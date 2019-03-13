@@ -475,7 +475,7 @@ namespace SpaceVIL
                 _text_object.SetItemText(text);
                 _text_object.CheckXShift(_cursorXMax);
 
-                _cursor_position = PrivGetText().Length;
+                // _cursor_position = PrivGetText().Length;
                 ReplaceCursor();
 
                 if (!nothingFlag)
@@ -504,6 +504,8 @@ namespace SpaceVIL
                 CancelJustSelected();
             }
             PrivSetText(text);
+            _cursor_position = PrivGetText().Length;
+            ReplaceCursor();
         }
 
         private String PrivGetText()
