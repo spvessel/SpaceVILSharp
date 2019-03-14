@@ -86,7 +86,7 @@ public class ComplexTest extends ActiveWindow {
 
         Style btn_style = Style.getButtonCoreStyle();
         btn_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-//        btn_style.setStyle(b1, b2, b5, b6);
+        btn_style.setStyle(b1, b2, b5, b6);
 
         // HorizontalSplitArea split_area = new HorizontalSplitArea();
         VerticalSplitArea split_area = new VerticalSplitArea();
@@ -176,6 +176,7 @@ public class ComplexTest extends ActiveWindow {
 
     private int count1 = 0;
     private int count2 = 0;
+
     private TreeItem getTreeBranch() {
         TreeItem item = new TreeItem(TreeItemType.BRANCH, "branch" + count1);
         count1++;

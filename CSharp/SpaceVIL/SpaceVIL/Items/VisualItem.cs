@@ -38,11 +38,47 @@ namespace SpaceVIL
         internal void SetSpacing(Spacing spacing)
         {
             _spacing = spacing;
+            UpdateGeometry();
+
+            if (GetParent() != null)
+            {
+                var hLayout = GetParent() as IHLayout;
+                var vLayout = GetParent() as IVLayout;
+                var grid = GetParent() as IGrid;
+
+                if (hLayout == null && vLayout == null && grid == null)
+                    UpdateBehavior();
+
+                if (hLayout != null)
+                    hLayout.UpdateLayout();
+                if (vLayout != null)
+                    vLayout.UpdateLayout();
+                if (grid != null)
+                    grid.UpdateLayout();
+            }
         }
         internal void SetSpacing(int horizontal = 0, int vertical = 0)
         {
             _spacing.Horizontal = horizontal;
             _spacing.Vertical = vertical;
+            UpdateGeometry();
+
+            if (GetParent() != null)
+            {
+                var hLayout = GetParent() as IHLayout;
+                var vLayout = GetParent() as IVLayout;
+                var grid = GetParent() as IGrid;
+
+                if (hLayout == null && vLayout == null && grid == null)
+                    UpdateBehavior();
+
+                if (hLayout != null)
+                    hLayout.UpdateLayout();
+                if (vLayout != null)
+                    vLayout.UpdateLayout();
+                if (grid != null)
+                    grid.UpdateLayout();
+            }
         }
         private Indents _padding = new Indents();
         internal Indents GetPadding()
@@ -871,19 +907,19 @@ namespace SpaceVIL
                 return;
 
             // _is_style_Set = true;
-            SetBackground(style.Background);
+            SetPosition(style.X, style.Y);
             SetSize(style.Width, style.Height);
             SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
             SetPadding(style.Padding);
             SetMargin(style.Margin);
             SetAlignment(style.Alignment);
-            SetPosition(style.X, style.Y);
 
             SetSpacing(style.Spacing);
 
             SetMinSize(style.MinWidth, style.MinHeight);
             SetMaxSize(style.MaxWidth, style.MaxHeight);
 
+            SetBackground(style.Background);
             SetBorderRadius(style.BorderRadius);
             SetBorderThickness(style.BorderThickness);
             SetBorderFill(style.BorderFill);

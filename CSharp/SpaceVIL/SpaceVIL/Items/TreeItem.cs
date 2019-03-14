@@ -216,7 +216,6 @@ namespace SpaceVIL
             item._nesting_level = _nesting_level + 1;
             if (!_indicator.IsToggled())
                 item.SetVisible(false);
-            // _indicator.SetToggled(true);
 
             List<TreeItem> neighbors = GetChildren();
             int ind = -1;
@@ -234,7 +233,8 @@ namespace SpaceVIL
                 _treeViewContainer.RefreshTree(this, item);
             else
                 _treeViewContainer.RefreshTree(_list_inners[ind], item);
-            OnToggleHide(true);
+
+            // OnToggleHide(true);
         }
 
         public override void AddItem(IBaseItem item)

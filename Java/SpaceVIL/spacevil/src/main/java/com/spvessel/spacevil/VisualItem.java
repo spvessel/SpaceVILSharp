@@ -260,10 +260,42 @@ final class VisualItem extends BaseItem {
 
     void setSpacing(Spacing spacing) {
         _spacing = spacing;
+        updateGeometry();
+        if (getParent() != null) {
+            boolean hLayout = getParent() instanceof InterfaceHLayout;
+            boolean vLayout = getParent() instanceof InterfaceVLayout;
+            boolean grid = getParent() instanceof InterfaceGrid;
+
+            if (!hLayout && !vLayout && !grid)
+                updateBehavior();
+
+            if (hLayout)
+                ((InterfaceHLayout) getParent()).updateLayout();
+            if (vLayout)
+                ((InterfaceVLayout) getParent()).updateLayout();
+            if (grid)
+                ((InterfaceGrid) getParent()).updateLayout();
+        }
     }
 
     void setSpacing(int horizontal, int vertical) {
         _spacing = new Spacing(horizontal, vertical);
+        updateGeometry();
+        if (getParent() != null) {
+            boolean hLayout = getParent() instanceof InterfaceHLayout;
+            boolean vLayout = getParent() instanceof InterfaceVLayout;
+            boolean grid = getParent() instanceof InterfaceGrid;
+
+            if (!hLayout && !vLayout && !grid)
+                updateBehavior();
+
+            if (hLayout)
+                ((InterfaceHLayout) getParent()).updateLayout();
+            if (vLayout)
+                ((InterfaceVLayout) getParent()).updateLayout();
+            if (grid)
+                ((InterfaceGrid) getParent()).updateLayout();
+        }
     }
 
     private Indents _padding = new Indents();
@@ -856,32 +888,15 @@ final class VisualItem extends BaseItem {
         if (style == null)
             return;
 
-        // _is_style_set = true;
-
-        // setSizePolicy(style.widthPolicy, style.heightPolicy);
-        // setSize(style.width, style.height);
-        // setMinSize(style.minWidth, style.minHeight);
-        // setMaxSize(style.maxWidth, style.maxHeight);
-        // setPosition(style.x, style.y);
-        // setMargin(style.margin);
-        // setPadding(style.padding);
-        // setSpacing(style.spacing);
-        // setAlignment(style.alignment);
-
-        // setBackground(style.background);
-        // setBorderRadius(style.borderRadius);
-        // setBorderThickness(style.borderThickness);
-        // setBorderFill(style.borderFill);
-        // setVisible(style.isVisible);
-
-        setBackground(style.background);
+        setPosition(style.x, style.y);
         setSize(style.width, style.height);
         setSizePolicy(style.widthPolicy, style.heightPolicy);
         setPadding(style.padding);
         setMargin(style.margin);
         setAlignment(style.alignment);
-        setPosition(style.x, style.y);
         setSpacing(style.spacing);
+
+        setBackground(style.background);
         setMinSize(style.minWidth, style.minHeight);
         setMaxSize(style.maxWidth, style.maxHeight);
         setBorderRadius(style.borderRadius);
