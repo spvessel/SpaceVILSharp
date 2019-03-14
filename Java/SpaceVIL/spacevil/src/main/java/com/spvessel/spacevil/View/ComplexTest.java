@@ -54,15 +54,24 @@ public class ComplexTest extends ActiveWindow {
         });
         ButtonCore b2 = getButton("b2", 26, 30, SizePolicy.FIXED);
         b2.eventMouseClick.add((sender, args) -> {
-            treeview.addItem(getTreeBranch());
+            TreeItem ti = (TreeItem) treeview.getSelectionItem();
+            if (ti == null)
+                treeview.addItem(getTreeBranch());
+            else
+                ti.addItem(getTreeBranch());
         });
         ButtonCore b3 = getButton("b3", 26, 30, SizePolicy.FIXED);
         b3.eventMouseClick.add((sender, args) -> {
-            treeview.addItem(getTreeLeaf());
+            TreeItem ti = (TreeItem) treeview.getSelectionItem();
+            if (ti == null)
+                treeview.addItem(getTreeLeaf());
+            else
+                ti.addItem(getTreeLeaf());
         });
         ButtonCore b4 = getButton("b4", 26, 30, SizePolicy.FIXED);
         b4.eventMouseClick.add((sender, args) -> {
-            treeview.clear();
+            TreeItem ti = (TreeItem) treeview.getSelectionItem();
+            treeview.sortBrunch(ti);
         });
         ButtonCore b5 = getButton("b5", 26, 30, SizePolicy.FIXED);
         b5.eventMouseClick.add((sender, args) -> {
@@ -161,15 +170,19 @@ public class ComplexTest extends ActiveWindow {
         return btn;
     }
 
+    private int count1 = 0;
+    private int count2 = 0;
     private TreeItem getTreeBranch() {
-        TreeItem item = new TreeItem(TreeItemType.BRANCH, "name2");
+        TreeItem item = new TreeItem(TreeItemType.BRANCH, "branch" + count1);
+        count1++;
         item.setFontSize(15);
         // item.setText(item.getItemName());
         return item;
     }
 
     private TreeItem getTreeLeaf() {
-        TreeItem item = new TreeItem(TreeItemType.LEAF, "name1");
+        TreeItem item = new TreeItem(TreeItemType.LEAF, "leaf" + count2);
+        count2++;
         item.setFontSize(15);
         // item.setText(item.getItemName());
         return item;

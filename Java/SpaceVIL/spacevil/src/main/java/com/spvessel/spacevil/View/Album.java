@@ -30,7 +30,7 @@ public class Album extends VerticalStack {
 
     public Album(String name, String path) {
         setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        setHeight(70);
+        setHeight(30); //70);
         setSpacing(0, 10);
         setMargin(3, 5, 3, 5);
         setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);

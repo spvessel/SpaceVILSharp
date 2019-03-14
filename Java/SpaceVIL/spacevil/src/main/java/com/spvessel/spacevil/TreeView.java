@@ -199,11 +199,12 @@ public class TreeView extends ListBox {
         super.removeItem(item);
     }
 
-    void sortTree() {
+    public void sortTree() {
 
     }
 
-    void sortBrunch(TreeItem branch) {
+    public void sortBrunch(TreeItem branch) {
+        System.out.println("sort brunch");
         if (branch.isRoot)
             sortTree();
 
@@ -226,10 +227,15 @@ public class TreeView extends ListBox {
 //            indLast++;
 //        }
 
-        TreeItem saveBranch = branch;
+//        TreeItem saveBranch = branch;
         TreeItem par = branch.getParentBranch();
         removeItem(branch);
-        par.addItem(saveBranch); //???
+
+        for (TreeItem ti1 : par.getChildren())
+            System.out.print(ti1.getText() + " ");
+        System.out.println();
+
+//        par.addItem(saveBranch); //???
 
 //        insertItem(item, index);
 //        item.resetIndents();

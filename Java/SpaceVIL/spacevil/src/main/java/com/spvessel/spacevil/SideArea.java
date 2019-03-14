@@ -16,14 +16,14 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 public class SideArea extends Prototype implements InterfaceFloating {
 
     private boolean _init = false;
-    private boolean _ouside = false;
+    private boolean _outside = false;
 
     public boolean isOutsideClickClosable() {
-        return _ouside;
+        return _outside;
     }
 
     public void setOutsideClickClosable(boolean value) {
-        _ouside = value;
+        _outside = value;
     }
 
     static int count = 0;

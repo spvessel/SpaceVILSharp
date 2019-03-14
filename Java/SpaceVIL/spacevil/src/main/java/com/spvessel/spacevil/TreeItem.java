@@ -40,7 +40,7 @@ public class TreeItem extends Prototype {
     }
 
     private Lock locker = new ReentrantLock();
-    
+
     public void removeChildren() {
         locker.lock();
         try {
@@ -127,7 +127,7 @@ public class TreeItem extends Prototype {
 
     /**
      * Constructs a TreeItem
-     * 
+     *
      * @param type item type (LEAF or BRUNCH)
      * @param text item text
      */
@@ -175,27 +175,27 @@ public class TreeItem extends Prototype {
     @Override
     public void initElements() {
         switch (_item_type) {
-        case LEAF:
-            _icon_shape.setMargin(2, 0, 0, 0);
-            super.addItem(_icon_shape);
-            super.addItem(_text_object);
-            break;
+            case LEAF:
+                _icon_shape.setMargin(2, 0, 0, 0);
+                super.addItem(_icon_shape);
+                super.addItem(_text_object);
+                break;
 
-        case BRANCH:
-            _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled()));
-            _indicator.isFocusable = false;
-            eventMouseDoubleClick.add((sender, args) -> {
-                if (args.button == MouseButton.BUTTON_LEFT)
-                    _indicator.eventToggle.execute(sender, args);
-            });
-            super.addItem(_indicator);
-            super.addItem(_icon_shape);
-            super.addItem(_text_object);
-            break;
+            case BRANCH:
+                _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled()));
+                _indicator.isFocusable = false;
+                eventMouseDoubleClick.add((sender, args) -> {
+                    if (args.button == MouseButton.BUTTON_LEFT)
+                        _indicator.eventToggle.execute(sender, args);
+                });
+                super.addItem(_indicator);
+                super.addItem(_icon_shape);
+                super.addItem(_text_object);
+                break;
 
-        default:
-            super.addItem(_text_object);
-            break;
+            default:
+                super.addItem(_text_object);
+                break;
         }
         _text_object.isFocusable = false;
     }
@@ -232,6 +232,8 @@ public class TreeItem extends Prototype {
 
         for (int i = 0; i < neighbors.size(); i++) {
             int out = comp.compare(neighbors.get(i), item);
+            if (item.getText().equals("branch5"))
+                System.out.println("compare " + out + " " + neighbors.get(i).getText());
             if (out == 1)
                 break;
             ind = i;
@@ -247,9 +249,14 @@ public class TreeItem extends Prototype {
 
         List<TreeItem> children = item.getChildren();
         if (children.size() > 0) {
-            for (int i = 0; i < children.size(); i++) {
-                item.addItem(children.get(i));
-            }
+            recursiveAddChildren(item, children);
+        }
+    }
+
+    private void recursiveAddChildren(TreeItem item, List<TreeItem> chiList) {
+        for (int i = 0; i < chiList.size(); i++) {
+//            item.addItem(chiList.get(i));
+            chiList.get(i).resetIndents();
         }
     }
 
@@ -301,6 +308,7 @@ public class TreeItem extends Prototype {
     }
 
     // text init
+
     /**
      * Text alignment in the TreeItem
      */

@@ -18,7 +18,7 @@ import com.spvessel.spacevil.OpenEntryDialog.OpenDialogType;
 
 public class AlbumSideList extends SideArea {
     private boolean _isInit = false;
-    private List<Album> _list = new LinkedList<Album>();
+    private List<Album> _list = new LinkedList<>();
     private ListBox _albumList = new ListBox();
     // private VerticalStack _albumList = new VerticalStack();
     private ButtonCore _addButton = new ButtonCore();
@@ -104,8 +104,14 @@ public class AlbumSideList extends SideArea {
                 _albumList.getWrapper(album).updateSize();
                 _albumList.getArea().updateLayout();
             });
-        } else
+        } else {
             _list.add(album);
+        }
+    }
+
+    public void show() {
+        super.show();
+        _albumList.getArea().updateLayout();
     }
 
     public void show(InterfaceItem item, MouseArgs args) {
