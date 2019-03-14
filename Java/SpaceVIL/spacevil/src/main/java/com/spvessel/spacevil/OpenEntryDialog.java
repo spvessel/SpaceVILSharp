@@ -177,8 +177,8 @@ public class OpenEntryDialog extends OpenDialog {
                 if (result == null)
                     return;
                 File file = new File(
-                        _addressLine.getText() + "\\" + ((FileSystemEntry) _fileList.getSelectionItem()).getText());
-                File newFile = new File(_addressLine.getText() + "\\" + result);
+                        _addressLine.getText() + File.separator + ((FileSystemEntry) _fileList.getSelectionItem()).getText());
+                File newFile = new File(_addressLine.getText() + File.separator + result);
                 if (file.renameTo(newFile)) {
                     selected.setText(result);
                 } else {
@@ -292,14 +292,14 @@ public class OpenEntryDialog extends OpenDialog {
 
     private void pathUpward() {
         String name = _addressLine.getText();
-        int ind = name.lastIndexOf("\\");
-        int firstInd = name.indexOf("\\");
-        if (name.endsWith("\\")) {
+        int ind = name.lastIndexOf(File.separator);
+        int firstInd = name.indexOf(File.separator);
+        if (name.endsWith(File.separator)) {
             if (ind <= 1 || name.substring(ind - 1, ind).equals(":"))
                 return;
             name = name.substring(0, name.length() - 1);
             System.out.println(name);
-            ind = name.lastIndexOf("\\");
+            ind = name.lastIndexOf(File.separator);
         }
 
         if (ind == firstInd) {
@@ -322,10 +322,10 @@ public class OpenEntryDialog extends OpenDialog {
 
     private void setAddressLine(FileSystemEntry fse) {
         String name = _addressLine.getText();
-        if (name.endsWith("\\") || name.endsWith("/"))
+        if (name.endsWith(File.separator) || name.endsWith("/"))
             _addressLine.setText(name + fse.getText());
         else
-            _addressLine.setText(name + "\\" + fse.getText());
+            _addressLine.setText(name + File.separator + fse.getText());
 
         _filesTrack.push(_addressLine.getText());
         refreshFolder();
@@ -408,7 +408,7 @@ public class OpenEntryDialog extends OpenDialog {
                     return;
 
                 if (entry.getText().equals("File")) {
-                    File file = new File(_addressLine.getText() + "\\" + result);
+                    File file = new File(_addressLine.getText() + File.separator + result);
                     if (!file.exists()) {
                         try {
                             if (file.createNewFile())
@@ -422,7 +422,7 @@ public class OpenEntryDialog extends OpenDialog {
                         popError.show(getHandler());
                     }
                 } else {
-                    File dir = new File(_addressLine.getText() + "\\" + result);
+                    File dir = new File(_addressLine.getText() + File.separator + result);
                     if (!dir.exists()) {
                         if (dir.mkdir()) {
                             refreshFolder();
@@ -456,14 +456,14 @@ public class OpenEntryDialog extends OpenDialog {
                     popError.show(getHandler());
                     return;
                 }
-                _result = _addressLine.getText() + "\\" + selection.getText();
+                _result = _addressLine.getText() + File.separator + selection.getText();
             } else if (_entryType == FileSystemEntryType.DIRECTORY) {
                 _result = _addressLine.getText();
                 if (selection != null)
-                    _result += "\\" + selection.getText();
+                    _result += File.separator + selection.getText();
             }
         } else if (_dialogType == OpenDialogType.SAVE)
-            _result = _addressLine.getText() + "\\" + _fileName.getText();
+            _result = _addressLine.getText() + File.separator + _fileName.getText();
         close();
     }
 

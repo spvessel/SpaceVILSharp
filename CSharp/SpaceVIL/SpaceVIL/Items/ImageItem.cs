@@ -127,6 +127,9 @@ namespace SpaceVIL
             if (image == null)
                 return;
             _bitmap = CreateByteImage(image);
+            if (_isKeepAspectRatio && _bitmap != null)
+                ApplyAspectRatio();
+            UpdateLayout();
         }
 
         private bool _isOverlay = false;

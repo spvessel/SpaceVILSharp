@@ -375,6 +375,10 @@ namespace SpaceVIL
                 int row = 0;
                 foreach (IBaseItem item in GetItems())
                 {
+                    if (!item.IsVisible())
+                        continue;
+
+                    // Console.WriteLine(item.GetItemName());
                     item.SetX((int)(x + (_cellWidth + GetSpacing().Horizontal) * column));
                     int itemY = (int)(globalY + (_cellHeight + GetSpacing().Vertical) * row);
                     item.SetY(itemY);
@@ -397,7 +401,7 @@ namespace SpaceVIL
                     //bottom check
                     if (itemY + _cellHeight > GetY() + GetHeight() - GetPadding().Bottom)
                     {
-                        if (itemY + _cellHeight <= GetY() + GetHeight() - GetPadding().Bottom)
+                        if (itemY >= GetY() + GetHeight() - GetPadding().Bottom)
                             item.SetDrawable(false);
                         else
                             item.SetDrawable(true);
@@ -443,7 +447,7 @@ namespace SpaceVIL
                     //right check
                     if (itemX + _cellWidth > GetX() + GetWidth() - GetPadding().Left)
                     {
-                        if (itemX + _cellWidth <= GetX() + GetWidth() - GetPadding().Left)
+                        if (itemX >= GetX() + GetWidth() - GetPadding().Left)
                             item.SetDrawable(false);
                         else
                             item.SetDrawable(true);

@@ -62,6 +62,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         if (picture == null)
             return;
         _bitmap = createByteImage(picture);
+        picture.flush();
     }
 
     /**
@@ -132,6 +133,10 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         if (image == null)
             return;
         _bitmap = createByteImage(image);
+        image.flush();
+        if (_isKeepAspectRatio && _bitmap != null)
+            applyAspectRatio();
+        UpdateLayout();
     }
 
     private Color _colorOverlay;

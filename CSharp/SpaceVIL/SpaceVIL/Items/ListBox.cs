@@ -414,7 +414,6 @@ namespace SpaceVIL
         /// </summary>
         public override void RemoveItem(IBaseItem item)
         {
-            Unselect();
             _area.RemoveItem(item);
             UpdateElements();
             _area.SetFocus();

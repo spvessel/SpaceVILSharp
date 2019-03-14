@@ -30,7 +30,7 @@ public class ComplexTest extends ActiveWindow {
 
         treeview = new TreeView();
         block = new Grid(4, 4);
-        wrap = new WrapGrid(100, 100, Orientation.VERTICAL);
+        wrap = new WrapGrid(100, 100, Orientation.HORIZONTAL);
 
         TitleBar title = new TitleBar("ComplexTest");
         Handler.addItem(title);
@@ -91,7 +91,11 @@ public class ComplexTest extends ActiveWindow {
                 DefaultsService.getDefaultImage(EmbeddedImage.IMPORT, EmbeddedImageSize.SIZE_32X32), false);
         img.keepAspectRatio(true);
         img.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        split_area.assignRightItem(img);
+        split_area.assignRightItem(wrap);
+
+        for (int i = 0; i < 1000; i++) {
+            wrap.addItem(getButton("Wrap" + count++, 100, 100, SizePolicy.EXPAND));
+        }
 
         // TabView tabs = new TabView();
         // tabs.setMinWidth(300);

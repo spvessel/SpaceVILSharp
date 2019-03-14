@@ -163,8 +163,8 @@ namespace SpaceVIL
                         return;
                     try
                     {
-                        System.IO.File.Move(_addressLine.GetText() + "\\" + ((FileSystemEntry)_fileList.GetSelectionItem()).GetText(),
-                             _addressLine.GetText() + "\\" + result);
+                        System.IO.File.Move(_addressLine.GetText() + Path.DirectorySeparatorChar + ((FileSystemEntry)_fileList.GetSelectionItem()).GetText(),
+                             _addressLine.GetText() + Path.DirectorySeparatorChar + result);
                         selected.SetText(result);
                     }
                     catch (System.Exception)
@@ -297,14 +297,14 @@ namespace SpaceVIL
         private void PathUpward()
         {
             String name = _addressLine.GetText();
-            int ind = name.LastIndexOf("\\");
-            int firstInd = name.IndexOf("\\");
-            if (name.EndsWith("\\"))
+            int ind = name.LastIndexOf(Path.DirectorySeparatorChar);
+            int firstInd = name.IndexOf(Path.DirectorySeparatorChar);
+            if (name.EndsWith(Path.DirectorySeparatorChar.ToString()))
             {
                 if (ind <= 1 || name.Substring(ind - 1, 1).Equals(":"))
                     return;
                 name = name.Substring(0, name.Length - 1);
-                ind = name.LastIndexOf("\\");
+                ind = name.LastIndexOf(Path.DirectorySeparatorChar);
             }
 
             if (ind == firstInd)
@@ -335,10 +335,10 @@ namespace SpaceVIL
         private void SetAddressLine(FileSystemEntry fse)
         {
             String name = _addressLine.GetText();
-            if (name.EndsWith("\\") || name.EndsWith("/"))
+            if (name.EndsWith(Path.DirectorySeparatorChar.ToString()) || name.EndsWith("/"))
                 _addressLine.SetText(name + fse.GetText());
             else
-                _addressLine.SetText(name + "\\" + fse.GetText());
+                _addressLine.SetText(name + Path.DirectorySeparatorChar + fse.GetText());
 
             _filesTrack.Push(_addressLine.GetText());
             RefreshFolder();
@@ -438,11 +438,11 @@ namespace SpaceVIL
 
                     if (entry.GetText().Equals("File"))
                     {
-                        if (!File.Exists(_addressLine.GetText() + "\\" + result))
+                        if (!File.Exists(_addressLine.GetText() + Path.DirectorySeparatorChar + result))
                         {
                             try
                             {
-                                File.Create(_addressLine.GetText() + "\\" + result);
+                                File.Create(_addressLine.GetText() + Path.DirectorySeparatorChar + result);
                                 RefreshFolder();
                             }
                             catch (System.Exception ex)
@@ -460,11 +460,11 @@ namespace SpaceVIL
                     }
                     else
                     {
-                        if (!Directory.Exists(_addressLine.GetText() + "\\" + result))
+                        if (!Directory.Exists(_addressLine.GetText() + Path.DirectorySeparatorChar + result))
                         {
                             try
                             {
-                                Directory.CreateDirectory(_addressLine.GetText() + "\\" + result);
+                                Directory.CreateDirectory(_addressLine.GetText() + Path.DirectorySeparatorChar + result);
                                 RefreshFolder();
 
                             }
@@ -504,17 +504,17 @@ namespace SpaceVIL
                         popError.Show(GetHandler());
                         return;
                     }
-                    _result = _addressLine.GetText() + "\\" + selection.GetText();
+                    _result = _addressLine.GetText() + Path.DirectorySeparatorChar + selection.GetText();
                 }
                 else if (_entryType == FileSystemEntryType.Directory)
                 {
                     _result = _addressLine.GetText();
                     if (selection != null)
-                        _result += "\\" + selection.GetText();
+                        _result += Path.DirectorySeparatorChar + selection.GetText();
                 }
             }
             else if (_dialogType == OpenDialogType.Save)
-                _result = _addressLine.GetText() + "\\" + _fileName.GetText();
+                _result = _addressLine.GetText() + Path.DirectorySeparatorChar + _fileName.GetText();
             Close();
         }
 
