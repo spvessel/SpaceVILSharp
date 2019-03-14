@@ -88,8 +88,8 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     private void onSelectionChanged() {
-        if (itemList.getSelectionItem() instanceof MenuItem) {
-            MenuItem item = (MenuItem) itemList.getSelectionItem();
+        if (itemList.getSelectedItem() instanceof MenuItem) {
+            MenuItem item = (MenuItem) itemList.getSelectedItem();
             if (item.isActionItem) {
                 return;
             }

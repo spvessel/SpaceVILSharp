@@ -13,9 +13,9 @@ namespace SpaceVIL
         IBaseItem _item;
         private bool _visibility = true;
 
-        internal void SetToggleVisibility(bool visibility)
+        internal void SetToggleVisible(bool value)
         {
-            _visibility = visibility;
+            _visibility = value;
         }
 
         private SelectionItem()

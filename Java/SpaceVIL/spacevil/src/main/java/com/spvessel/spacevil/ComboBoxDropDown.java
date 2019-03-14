@@ -35,8 +35,8 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
             initElements();
 
         itemList.setSelection(index);
-        if (itemList.getSelectionItem() instanceof MenuItem) {
-            MenuItem selection = (MenuItem) itemList.getSelectionItem();
+        if (itemList.getSelectedItem() instanceof MenuItem) {
+            MenuItem selection = (MenuItem) itemList.getSelectedItem();
             _text_selection = selection.getText();
         }
     }
@@ -103,8 +103,8 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     private void onSelectionChanged() {
-        if (itemList.getSelectionItem() instanceof MenuItem) {
-            MenuItem selection = (MenuItem) itemList.getSelectionItem();
+        if (itemList.getSelectedItem() instanceof MenuItem) {
+            MenuItem selection = (MenuItem) itemList.getSelectedItem();
             _text_selection = selection.getText();
         }
         hide();

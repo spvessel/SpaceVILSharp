@@ -23,7 +23,7 @@ public class TreeView extends ListBox {
     /**
      * Is root item visible
      */
-    public void setRootVisibility(boolean visible) {
+    public void setRootVisible(boolean visible) {
         _root.setVisible(visible);
         getWrapper(_root).setVisible(visible);
         // reset all paddings for content
@@ -39,7 +39,7 @@ public class TreeView extends ListBox {
         updateElements();
     }
 
-    public boolean getRootVisibility() {
+    public boolean isRootVisible() {
         return _root.isVisible();
     }
 
@@ -76,7 +76,7 @@ public class TreeView extends ListBox {
         _root._treeViewContainer = this;
         _root.isRoot = true;
         super.addItem(_root);
-        setRootVisibility(false);
+        setRootVisible(false);
 
         // _root.resetIndents();
         _maxWrapperWidth = getWrapper(_root).getMinWidth();
@@ -187,7 +187,7 @@ public class TreeView extends ListBox {
         _root.removeChildren();
         super.clear();
         super.addItem(_root);
-        setRootVisibility(getRootVisibility());
+        setRootVisible(isRootVisible());
         // _root.resetIndents();
         _maxWrapperWidth = getWrapper(_root).getMinWidth();
     }
@@ -223,7 +223,7 @@ public class TreeView extends ListBox {
 //            if (ti._nesting_level <= nestLev)
 //                break;
 //            savedList.add(ti);
-////            removeItem(ti);
+// //            removeItem(ti);
 //            indLast++;
 //        }
 
@@ -234,7 +234,7 @@ public class TreeView extends ListBox {
 
 //        for (TreeItem ti1 : par.getChildren())
 //            System.out.print(ti1.getText() + " ");
-        System.out.println();
+        // System.out.println(saveBranch.getChildren().size());
 
         par.addItem(saveBranch); //???
 

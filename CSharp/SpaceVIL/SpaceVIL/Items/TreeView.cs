@@ -16,10 +16,10 @@ namespace SpaceVIL
 
         internal TreeItem _root; //nesting level = 0
 
-        public void SetRootVisibility(bool visible)
+        public void SetRootVisible(bool value)
         {
-            _root.SetVisible(visible);
-            GetWrapper(_root).SetVisible(visible);
+            _root.SetVisible(value);
+            GetWrapper(_root).SetVisible(value);
             //reset all paddings for content
             List<IBaseItem> list = GetListContent();
             if (list != null)
@@ -33,7 +33,7 @@ namespace SpaceVIL
             }
             UpdateElements();
         }
-        public bool GetRootVisibility()
+        public bool IsRootVisible()
         {
             return _root.IsVisible();
         }
@@ -65,7 +65,7 @@ namespace SpaceVIL
             _root._treeViewContainer = this;
             _root.IsRoot = true;
             base.AddItem(_root);
-            SetRootVisibility(false);
+            SetRootVisible(false);
             // _root.ResetIndents();
             _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
         }
@@ -164,7 +164,7 @@ namespace SpaceVIL
             _root.RemoveChildren();
             base.Clear();
             base.AddItem(_root);
-            SetRootVisibility(GetRootVisibility());
+            SetRootVisible(IsRootVisible());
             // _root.ResetIndents();
             _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
 

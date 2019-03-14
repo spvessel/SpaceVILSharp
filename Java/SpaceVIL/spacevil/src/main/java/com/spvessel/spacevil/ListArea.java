@@ -43,7 +43,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     /**
      * @return selected item
      */
-    public InterfaceBaseItem getSelectionItem() {
+    public InterfaceBaseItem getSelectedItem() {
         if (_selectionItem != null)
             return _selectionItem.getContent();
         return null;
@@ -94,16 +94,16 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     /**
      * Is selection changes view of the item or not
      */
-    public void setSelectionVisibility(boolean visibility) {
-        _isSelectionVisible = visibility;
+    public void setSelectionVisible(boolean value) {
+        _isSelectionVisible = value;
         if (!_isSelectionVisible)
             unselect();
         for (SelectionItem item : _mapContent.values()) {
-            item.setToggleVisibility(_isSelectionVisible);
+            item.setToggleVisible(_isSelectionVisible);
         }
     }
 
-    public boolean getSelectionVisibility() {
+    public boolean isSelectionVisible() {
         return _isSelectionVisible;
     }
 
@@ -182,7 +182,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     private SelectionItem getWrapper(InterfaceBaseItem item) {
         SelectionItem wrapper = new SelectionItem(item);
-        wrapper.setToggleVisibility(_isSelectionVisible);
+        wrapper.setToggleVisible(_isSelectionVisible);
         // wrapper.setStyle(_selectedStyle);
         wrapper.eventMouseClick.add((sender, args) -> {
             int index = 0;

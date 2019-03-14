@@ -50,11 +50,11 @@ public class ComplexTest extends ActiveWindow {
 
         ButtonCore b1 = getButton("b1", 26, 30, SizePolicy.FIXED);
         b1.eventMouseClick.add((sender, args) -> {
-            treeview.setRootVisibility(!treeview.getRootVisibility());
+            treeview.setRootVisible(!treeview.isRootVisible());
         });
         ButtonCore b2 = getButton("b2", 26, 30, SizePolicy.FIXED);
         b2.eventMouseClick.add((sender, args) -> {
-            TreeItem ti = (TreeItem) treeview.getSelectionItem();
+            TreeItem ti = (TreeItem) treeview.getSelectedItem();
             if (ti == null)
                 treeview.addItem(getTreeBranch());
             else
@@ -62,7 +62,7 @@ public class ComplexTest extends ActiveWindow {
         });
         ButtonCore b3 = getButton("b3", 26, 30, SizePolicy.FIXED);
         b3.eventMouseClick.add((sender, args) -> {
-            TreeItem ti = (TreeItem) treeview.getSelectionItem();
+            TreeItem ti = (TreeItem) treeview.getSelectedItem();
             if (ti == null)
                 treeview.addItem(getTreeLeaf());
             else
@@ -70,7 +70,7 @@ public class ComplexTest extends ActiveWindow {
         });
         ButtonCore b4 = getButton("b4", 26, 30, SizePolicy.FIXED);
         b4.eventMouseClick.add((sender, args) -> {
-            TreeItem ti = (TreeItem) treeview.getSelectionItem();
+            TreeItem ti = (TreeItem) treeview.getSelectedItem();
             treeview.sortBrunch(ti);
         });
         ButtonCore b5 = getButton("b5", 26, 30, SizePolicy.FIXED);

@@ -27,7 +27,7 @@ namespace SpaceVIL
                 InitElements();
 
             ItemList.SetSelection(index);
-            MenuItem selection = ItemList.GetSelectionItem() as MenuItem;
+            MenuItem selection = ItemList.GetSelectedItem() as MenuItem;
             if (selection != null)
                 _text_selection = selection.GetText();
         }
@@ -94,7 +94,7 @@ namespace SpaceVIL
 
         void OnSelectionChanged()
         {
-            MenuItem selection = ItemList.GetSelectionItem() as MenuItem;
+            MenuItem selection = ItemList.GetSelectedItem() as MenuItem;
             if (selection != null)
                 _text_selection = selection.GetText();
             Hide();

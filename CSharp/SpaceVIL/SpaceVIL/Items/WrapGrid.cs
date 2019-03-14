@@ -84,13 +84,13 @@ namespace SpaceVIL
         /// <summary>
         /// Is selection changes view of the item or not
         /// </summary>
-        public void SetSelectionVisibility(bool visibility)
+        public void SetSelectionVisible(bool value)
         {
-            _area.SetSelectionVisibility(visibility);
+            _area.SetSelectionVisible(value);
         }
-        public bool GetSelectionVisibility()
+        public bool IsSelectionVisible()
         {
-            return _area.GetSelectionVisibility();
+            return _area.IsSelectionVisible();
         }
 
         private VerticalStack _vlayout;

@@ -89,7 +89,7 @@ namespace SpaceVIL
 
         void OnSelectionChanged()
         {
-            MenuItem item = ItemList.GetSelectionItem() as MenuItem;
+            MenuItem item = ItemList.GetSelectedItem() as MenuItem;
             if (item != null)
             {
                 if (item.IsActionItem)

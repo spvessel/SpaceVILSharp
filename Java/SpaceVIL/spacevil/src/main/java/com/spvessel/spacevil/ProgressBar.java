@@ -13,8 +13,8 @@ public class ProgressBar extends Prototype {
     private static int count = 0;
     private TextLine _text_object;
 
-    public void setValueVisibility(boolean visibility) {
-        _text_object.setVisible(visibility);
+    public void setValueVisible(boolean value) {
+        _text_object.setVisible(value);
     }
 
     public boolean isValueVisible() {

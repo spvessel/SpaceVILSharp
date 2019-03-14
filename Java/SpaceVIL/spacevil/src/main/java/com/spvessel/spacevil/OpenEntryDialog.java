@@ -169,7 +169,7 @@ public class OpenEntryDialog extends OpenDialog {
             _addNewList.show(sender, args);
         });
         _btnRename.eventMouseClick.add((sender, args) -> {
-            FileSystemEntry selected = ((FileSystemEntry) _fileList.getSelectionItem());
+            FileSystemEntry selected = ((FileSystemEntry) _fileList.getSelectedItem());
             InputDialog input = new InputDialog("Rename:", "OK", selected.getText());
             input.selectAll();
             input.onCloseDialog.add(() -> {
@@ -177,7 +177,7 @@ public class OpenEntryDialog extends OpenDialog {
                 if (result == null)
                     return;
                 File file = new File(
-                        _addressLine.getText() + File.separator + ((FileSystemEntry) _fileList.getSelectionItem()).getText());
+                        _addressLine.getText() + File.separator + ((FileSystemEntry) _fileList.getSelectedItem()).getText());
                 File newFile = new File(_addressLine.getText() + File.separator + result);
                 if (file.renameTo(newFile)) {
                     selected.setText(result);
@@ -448,7 +448,7 @@ public class OpenEntryDialog extends OpenDialog {
     }
 
     private void open() {
-        FileSystemEntry selection = ((FileSystemEntry) _fileList.getSelectionItem());
+        FileSystemEntry selection = ((FileSystemEntry) _fileList.getSelectedItem());
         if (_dialogType == OpenDialogType.OPEN) {
             if (_entryType == FileSystemEntryType.FILE) {
                 if (selection == null || selection.getEntryType() == FileSystemEntryType.DIRECTORY) {

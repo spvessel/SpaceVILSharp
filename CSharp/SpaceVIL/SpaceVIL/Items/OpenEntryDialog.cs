@@ -153,7 +153,7 @@ namespace SpaceVIL
             };
             _btnRename.EventMouseClick += (sender, args) =>
             {
-                FileSystemEntry selected = ((FileSystemEntry)_fileList.GetSelectionItem());
+                FileSystemEntry selected = ((FileSystemEntry)_fileList.GetSelectedItem());
                 InputDialog input = new InputDialog("Rename:", "OK", selected.GetText());
                 input.SelectAll();
                 input.OnCloseDialog += () =>
@@ -163,7 +163,7 @@ namespace SpaceVIL
                         return;
                     try
                     {
-                        System.IO.File.Move(_addressLine.GetText() + Path.DirectorySeparatorChar + ((FileSystemEntry)_fileList.GetSelectionItem()).GetText(),
+                        System.IO.File.Move(_addressLine.GetText() + Path.DirectorySeparatorChar + ((FileSystemEntry)_fileList.GetSelectedItem()).GetText(),
                              _addressLine.GetText() + Path.DirectorySeparatorChar + result);
                         selected.SetText(result);
                     }
@@ -493,7 +493,7 @@ namespace SpaceVIL
 
         private void Open()
         {
-            FileSystemEntry selection = ((FileSystemEntry)_fileList.GetSelectionItem());
+            FileSystemEntry selection = ((FileSystemEntry)_fileList.GetSelectedItem());
             if (_dialogType == OpenDialogType.Open)
             {
                 if (_entryType == FileSystemEntryType.File)

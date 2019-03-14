@@ -52,12 +52,12 @@ public class ListBox extends Prototype {
     /**
      * Is selection changes view of the item or not
      */
-    public void setSelectionVisibility(boolean visibility) {
-        _area.setSelectionVisibility(visibility);
+    public void setSelectionVisible(boolean value) {
+        _area.setSelectionVisible(value);
     }
 
-    public boolean getSelectionVisibility() {
-        return _area.getSelectionVisibility();
+    public boolean isSelectionVisible() {
+        return _area.isSelectionVisible();
     }
 
     /**
@@ -488,8 +488,8 @@ public class ListBox extends Prototype {
     /**
      * @return selection item
      */
-    public InterfaceBaseItem getSelectionItem() {
-        return _area.getSelectionItem();
+    public InterfaceBaseItem getSelectedItem() {
+        return _area.getSelectedItem();
     }
 
     public SelectionItem getWrapper(InterfaceBaseItem item) {

@@ -18,9 +18,9 @@ namespace SpaceVIL
             _loadIcon = new ImageItem(image);
         }
         private Label _text_object;
-        public void SetValueVisible(bool visibility)
+        public void SetValueVisible(bool value)
         {
-            _text_object.SetVisible(visibility);
+            _text_object.SetVisible(value);
         }
         public bool IsValueVisible()
         {

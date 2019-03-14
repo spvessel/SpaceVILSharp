@@ -79,12 +79,12 @@ public class WrapGrid extends Prototype {
         _area.unselect();
     }
 
-    public void setSelectionVisibility(boolean visibility) {
-        _area.setSelectionVisibility(visibility);
+    public void setSelectionVisibility(boolean value) {
+        _area.setSelectionVisible(value);
     }
 
-    public boolean getSelectionVisibility() {
-        return _area.getSelectionVisibility();
+    public boolean isSelectionVisibility() {
+        return _area.isSelectionVisible();
     }
 
     private VerticalStack _vlayout;

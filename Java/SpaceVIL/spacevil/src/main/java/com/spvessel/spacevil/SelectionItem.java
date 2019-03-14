@@ -12,8 +12,8 @@ public class SelectionItem extends Prototype {
     InterfaceBaseItem _item;
     private boolean _visibility = true;
 
-    void setToggleVisibility(boolean visibility) {
-        _visibility = visibility;
+    void setToggleVisible(boolean value) {
+        _visibility = value;
     }
 
     private SelectionItem() {
@@ -41,8 +41,8 @@ public class SelectionItem extends Prototype {
 
     @Override
     public void initElements() {
+        setVisible(_item.isVisible());
         addItem(_item);
-
     }
 
     public void updateSize() {

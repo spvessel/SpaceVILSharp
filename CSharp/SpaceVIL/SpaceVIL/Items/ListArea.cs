@@ -42,7 +42,7 @@ namespace SpaceVIL
         private SelectionItem _selectionItem;
 
         /// <returns> selected item </returns>
-        public IBaseItem GetSelectionItem()
+        public IBaseItem GetSelectedItem()
         {
             if (_selectionItem != null)
                 return _selectionItem.GetContent();
@@ -101,17 +101,17 @@ namespace SpaceVIL
         /// <summary>
         /// Is selection changes view of the item or not
         /// </summary>
-        public void SetSelectionVisibility(bool visibility)
+        public void SetSelectionVisible(bool value)
         {
-            _isSelectionVisible = visibility;
+            _isSelectionVisible = value;
             if (!_isSelectionVisible)
                 Unselect();
             foreach (SelectionItem item in _mapContent.Values)
             {
-                item.SetToggleVisibility(_isSelectionVisible);
+                item.SetToggleVisible(_isSelectionVisible);
             }
         }
-        public bool GetSelectionVisibility()
+        public bool IsSelectionVisible()
         {
             return _isSelectionVisible;
         }
@@ -189,7 +189,7 @@ namespace SpaceVIL
         private SelectionItem GetWrapper(IBaseItem item)
         {
             SelectionItem wrapper = new SelectionItem(item);
-            wrapper.SetToggleVisibility(_isSelectionVisible);
+            wrapper.SetToggleVisible(_isSelectionVisible);
             wrapper.EventMouseClick += (sender, args) =>
             {
                 int index = 0;
