@@ -214,6 +214,8 @@ namespace SpaceVIL
             item._parentBranch = this;
             item._treeViewContainer = _treeViewContainer;
             item._nesting_level = _nesting_level + 1;
+            if (!_indicator.IsToggled())
+                item.SetVisible(false);
             // _indicator.SetToggled(true);
 
             List<TreeItem> neighbors = GetChildren();

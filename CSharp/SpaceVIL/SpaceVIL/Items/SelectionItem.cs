@@ -44,6 +44,7 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
+            SetVisible(_item.IsVisible());
             AddItem(_item);
         }
         public void UpdateSize()
