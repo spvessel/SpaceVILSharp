@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class TreeView extends ListBox {
     public EventCommonMethod eventSortTree = new EventCommonMethod();
@@ -75,6 +76,7 @@ public class TreeView extends ListBox {
         super.initElements();
         _root._treeViewContainer = this;
         _root.isRoot = true;
+        _root.getIndicator().setToggled(true);
         super.addItem(_root);
         setRootVisible(false);
 
@@ -200,47 +202,73 @@ public class TreeView extends ListBox {
     }
 
     public void sortTree() {
-
+        sortBrunch(_root);
     }
 
     public void sortBrunch(TreeItem branch) {
-        System.out.println("sort brunch");
-        if (branch.isRoot)
-            sortTree();
-
         if (branch.getItemType().equals(TreeItemType.LEAF)) {
-            return; //Либо сделать, чтобы сортировалась родительская ветвь?
+            return; // Либо сделать, чтобы сортировалась родительская ветвь?
         }
 
-//        List<InterfaceBaseItem> list = getListContent();
-//        List<TreeItem> savedList = new LinkedList<>();
-//        savedList.add(branch);
-//        int indFirst = list.indexOf(branch);
-//        int nestLev = branch._nesting_level;
-//        int indLast = indFirst;
-//        while (indLast < list.size()) {
-//            TreeItem ti = ((TreeItem) list.get(indLast));
-//            if (ti._nesting_level <= nestLev)
-//                break;
-//            savedList.add(ti);
-// //            removeItem(ti);
-//            indLast++;
-//        }
+        List<InterfaceBaseItem> list = new LinkedList<>(getArea().getItems());
+        Map<Integer, List<SelectionItem>> savedMap = new HashMap<>();
+        
+        int indFirst = list.indexOf(getWrapper(branch)) + 1;
+        int nestLev = branch._nesting_level + 1;
+        int indLast = indFirst;
+        int maxLev = nestLev;
 
-        TreeItem saveBranch = branch;
-        TreeItem par = branch.getParentBranch();
-        par.removeChild(branch);
-//        removeItem(branch);
+        while (indLast < list.size()) {
+            SelectionItem si = ((SelectionItem) list.get(indLast));
+            int stiLev = ((TreeItem) si.getContent())._nesting_level;
+            if (stiLev < nestLev)
+                break;
 
-//        for (TreeItem ti1 : par.getChildren())
-//            System.out.print(ti1.getText() + " ");
-        // System.out.println(saveBranch.getChildren().size());
+            if (maxLev < stiLev)
+                maxLev = stiLev;
 
-        par.addItem(saveBranch); //???
+            if (!savedMap.containsKey(stiLev)) {
+                List<SelectionItem> l1 = new LinkedList<>();
+                savedMap.put(stiLev, l1);
+            }
 
-//        insertItem(item, index);
-//        item.resetIndents();
-//        // item.onToggleHide(true);
+            savedMap.get(stiLev).add(si);
+
+            list.remove(indLast);
+        }
+
+        Comparator<TreeItem> comp = getComparator();
+        
+        for (int i = nestLev; i <= maxLev; i++) {
+            List<SelectionItem> siList = savedMap.get(i);
+            if (siList == null)
+                continue;
+
+            for (SelectionItem selIt : siList) {
+                TreeItem curItm = ((TreeItem) selIt.getContent());
+                TreeItem parItm = curItm.getParentBranch();
+                int parNum = list.indexOf(getWrapper(parItm));
+
+                int ind = parNum;
+
+                for (int ii = parNum + 1; ii < list.size(); ii++) {
+                    TreeItem tmpItm = (TreeItem) ((SelectionItem) list.get(ii)).getContent();
+                    if (tmpItm._nesting_level <= parItm._nesting_level)
+                        break;
+
+                    int out = comp.compare(tmpItm, curItm);
+                    if (out > 0)
+                        break;
+                    ind = ii;
+                }
+
+                list.add(ind + 1, selIt);
+            }
+        }
+
+        getArea().setContent(list);
+
         updateElements();
     }
+
 }

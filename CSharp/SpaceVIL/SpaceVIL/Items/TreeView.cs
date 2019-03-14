@@ -64,6 +64,7 @@ namespace SpaceVIL
             base.InitElements();
             _root._treeViewContainer = this;
             _root.IsRoot = true;
+            _root.GetIndicator().SetToggled(true);
             base.AddItem(_root);
             SetRootVisible(false);
             // _root.ResetIndents();
@@ -174,6 +175,82 @@ namespace SpaceVIL
             if (item.Equals(_root))
                 return;
             base.RemoveItem(item);
+        }
+
+        public void SortTree()
+        {
+            SortBrunch(_root);
+        }
+
+        public void SortBrunch(TreeItem branch)
+        {
+            if (branch.GetItemType().Equals(TreeItemType.Leaf))
+            {
+                return; // Либо сделать, чтобы сортировалась родительская ветвь?
+            }
+
+            List<IBaseItem> list = new List<IBaseItem>(GetArea().GetItems());
+            Dictionary<int, List<SelectionItem>> savedMap = new Dictionary<int, List<SelectionItem>>();
+
+            int indFirst = list.IndexOf(GetWrapper(branch)) + 1;
+            int nestLev = branch._nesting_level + 1;
+            int indLast = indFirst;
+            int maxLev = nestLev;
+
+            while (indLast < list.Count)
+            {
+                SelectionItem si = ((SelectionItem)list[indLast]);
+                int stiLev = ((TreeItem)si.GetContent())._nesting_level;
+                if (stiLev < nestLev)
+                    break;
+
+                if (maxLev < stiLev)
+                    maxLev = stiLev;
+
+                if (!savedMap.ContainsKey(stiLev))
+                {
+                    List<SelectionItem> l1 = new List<SelectionItem>();
+                    savedMap.Add(stiLev, l1);
+                }
+
+                savedMap[stiLev].Add(si);
+
+                list.RemoveAt(indLast);
+            }
+
+            for (int i = nestLev; i <= maxLev; i++)
+            {
+                List<SelectionItem> siList = savedMap[i];
+                if (siList == null)
+                    continue;
+
+                foreach (SelectionItem selIt in siList)
+                {
+                    TreeItem curItm = ((TreeItem)selIt.GetContent());
+                    TreeItem parItm = curItm.GetParentBranch();
+                    int parNum = list.IndexOf(GetWrapper(parItm));
+
+                    int ind = parNum;
+
+                    for (int ii = parNum + 1; ii < list.Count; ii++)
+                    {
+                        TreeItem tmpItm = (TreeItem)((SelectionItem)list[ii]).GetContent();
+                        if (tmpItm._nesting_level <= parItm._nesting_level)
+                            break;
+
+                        int compRes = CompareInAlphabet(tmpItm, curItm);
+                        if (compRes > 0)
+                            break;
+                        ind = ii;
+                    }
+                    
+                    list.Insert(ind + 1, selIt);
+                }
+            }
+
+            GetArea().SetContent(list);
+
+            UpdateElements();
         }
     }
 }

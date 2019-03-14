@@ -142,15 +142,32 @@ namespace SpaceVIL
             {
                 return _content;
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
             finally
             {
                 Monitor.Exit(Locker);
             }
         }
-        // internal void SetContent(List<IBaseItem> content)
-        // {
-        //     _content = content;
-        // }
+        internal void SetContent(List<IBaseItem> content)
+        {
+            Monitor.Enter(Locker);
+            try
+            {
+                _content = content;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+                Monitor.Exit(Locker);
+            }
+        }
 
         private void CastAndUpdate(IBaseItem item)
         {

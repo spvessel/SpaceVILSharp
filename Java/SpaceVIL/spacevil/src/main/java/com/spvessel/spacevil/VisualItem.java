@@ -352,16 +352,23 @@ final class VisualItem extends BaseItem {
         try {
             return _content;
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            ex.printStackTrace();
             return null;
         } finally {
             locker.unlock();
         }
     }
 
-    // void setContent(List<InterfaceBaseItem> content) {
-    // _content = content;
-    // }
+    void setContent(List<InterfaceBaseItem> content) {
+        locker.lock();
+        try {
+            _content = content;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            locker.unlock();
+        }
+    }
 
     private void castAndUpdate(InterfaceBaseItem item) {
         if (item instanceof Prototype)

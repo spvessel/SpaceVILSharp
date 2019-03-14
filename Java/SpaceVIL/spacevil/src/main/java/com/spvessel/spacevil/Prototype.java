@@ -714,9 +714,18 @@ abstract public class Prototype implements InterfaceBaseItem {
     // /**
     //  * Set list of the Prototype's inner items. Old items will be removed
     //  */
-    // public void setContent(List<InterfaceBaseItem> content) {
-    //     _core.setContent(content);
-    // }
+    void setContent(List<InterfaceBaseItem> content) {
+        List<InterfaceBaseItem> oldContent = getItems();
+        if (oldContent.size() != content.size())
+            return;
+        
+        for (InterfaceBaseItem ibi : oldContent) {
+            if (!content.contains(ibi))
+                return;
+        }
+
+        _core.setContent(content);
+    }
 
     /**
      * Is Prototype has CustomFigure shape, return it

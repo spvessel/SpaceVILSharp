@@ -786,10 +786,20 @@ namespace SpaceVIL
         // /// <summary>
         // /// Set list of the Prototype's inner items. Old items will be removed
         // /// </summary>
-        // public void SetContent(List<IBaseItem> content)
-        // {
-        //     _core.SetContent(content);
-        // }
+        internal void SetContent(List<IBaseItem> content)
+        {
+            List<IBaseItem> oldContent = GetItems();
+            if (oldContent.Count != content.Count)
+                return;
+
+            foreach (IBaseItem ibi in oldContent)
+            {
+                if (!content.Contains(ibi))
+                    return;
+            }
+
+            _core.SetContent(content);
+        }
 
         /// <summary>
         /// Is Prototype has CustomFigure shape, return it        

@@ -236,7 +236,7 @@ public class TreeItem extends Prototype {
             int out = comp.compare(neighbors.get(i), item);
             // if (item.getText().equals("branch5"))
             // System.out.println("compare " + out + " " + neighbors.get(i).getText());
-            if (out == 1)
+            if (out > 0)
                 break;
             ind = i;
         }
@@ -256,12 +256,12 @@ public class TreeItem extends Prototype {
         // }
     }
 
-    private void recursiveAddChildren(TreeItem item, List<TreeItem> chiList) {
-        for (int i = 0; i < chiList.size(); i++) {
-            // item.addItem(chiList.get(i));
-            chiList.get(i).resetIndents();
-        }
-    }
+    // private void recursiveAddChildren(TreeItem item, List<TreeItem> chiList) {
+    //     for (int i = 0; i < chiList.size(); i++) {
+    //         // item.addItem(chiList.get(i));
+    //         chiList.get(i).resetIndents();
+    //     }
+    // }
 
     /**
      * Add item to the TreeItem

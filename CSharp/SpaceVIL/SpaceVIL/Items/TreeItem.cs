@@ -223,7 +223,7 @@ namespace SpaceVIL
             for (int i = 0; i < neighbors.Count; i++)
             {
                 int compareResult = _treeViewContainer.CompareInAlphabet(neighbors[i], item);
-                if (compareResult == 1)
+                if (compareResult > 0)
                     break;
                 ind = i;
             }

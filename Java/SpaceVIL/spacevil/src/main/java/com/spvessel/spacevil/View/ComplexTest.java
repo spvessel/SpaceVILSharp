@@ -75,7 +75,10 @@ public class ComplexTest extends ActiveWindow {
         });
         ButtonCore b5 = getButton("b5", 26, 30, SizePolicy.FIXED);
         b5.eventMouseClick.add((sender, args) -> {
-            block.setFormat(block.getRowCount() + 1, block.getColumnCount() + 1);
+            //block.setFormat(block.getRowCount() + 1, block.getColumnCount() + 1);
+            TreeItem ti = (TreeItem) treeview.getSelectedItem();
+            if (ti != null)
+                ti.setText("text");
         });
         ButtonCore b6 = getButton("b6", 26, 30, SizePolicy.FIXED);
         b6.eventMouseClick.add((sender, args) -> {
