@@ -227,15 +227,16 @@ public class TreeView extends ListBox {
 //            indLast++;
 //        }
 
-//        TreeItem saveBranch = branch;
+        TreeItem saveBranch = branch;
         TreeItem par = branch.getParentBranch();
-        removeItem(branch);
+        par.removeChild(branch);
+//        removeItem(branch);
 
-        for (TreeItem ti1 : par.getChildren())
-            System.out.print(ti1.getText() + " ");
+//        for (TreeItem ti1 : par.getChildren())
+//            System.out.print(ti1.getText() + " ");
         System.out.println();
 
-//        par.addItem(saveBranch); //???
+        par.addItem(saveBranch); //???
 
 //        insertItem(item, index);
 //        item.resetIndents();

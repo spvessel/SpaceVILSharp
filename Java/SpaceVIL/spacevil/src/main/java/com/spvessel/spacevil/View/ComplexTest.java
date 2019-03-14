@@ -86,7 +86,7 @@ public class ComplexTest extends ActiveWindow {
 
         Style btn_style = Style.getButtonCoreStyle();
         btn_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        btn_style.setStyle(b1, b2, b5, b6);
+//        btn_style.setStyle(b1, b2, b5, b6);
 
         // HorizontalSplitArea split_area = new HorizontalSplitArea();
         VerticalSplitArea split_area = new VerticalSplitArea();
