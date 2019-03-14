@@ -52,13 +52,13 @@ public class LayoutsTest extends ActiveWindow {
 
         ListBox listbox_left_1 = new ListBox();
         listbox_left_1.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        listbox_left_1.setVisible(false);
+        // listbox_left_1.setVisible(false);
         listbox_left_1.eventMouseClick.add(
             (sender, args) ->{
                 // System.out.println(listbox_left_1.getSelection() + " " + listbox_left_1.getSelectionItem().getItemName());
             }
         );
-        listbox_left_1.setSelectionVisibility(false);
+        // listbox_left_1.setSelectionVisibility(false);
         // listbox_left_1.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         listbox_left_1.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         grid.insertItem(listbox_left_1, 0, 0);
@@ -81,12 +81,13 @@ public class LayoutsTest extends ActiveWindow {
         left.setWidth(60);
         left.setHeight(25);
         InterfaceMouseMethodState left_click = (sender, args) -> {
-            VisualContact contact_1 = new VisualContact();
-            contact_1.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
+            // VisualContact contact_1 = new VisualContact();
+            // contact_1.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
             VisualContact contact_2 = new VisualContact();
             contact_2.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
-            listbox_left_1.addItem(contact_1);
-            listbox_left_2.addItem(contact_2);
+            // listbox_left_1.addItem(contact_1);
+            // listbox_left_2.addItem(contact_2);
+            listbox_left_1.addItem(new Album("Album", "C:\\"));
         };
         left.eventMouseClick.add(left_click);
         frame.addItem(left);

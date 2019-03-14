@@ -9,40 +9,52 @@ import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.CustomFigure;
 import com.spvessel.spacevil.Flags.*;
 
-public class Album extends VerticalStack {
+public class Album extends Prototype {
     public EventCommonMethodState onDoubleClick = new EventCommonMethodState();
 
-    private HorizontalStack _topLayout = new HorizontalStack();
-    ButtonToggle _expand = new ButtonToggle();
-    private ImageItem _arrow = new ImageItem(
-            DefaultsService.getDefaultImage(EmbeddedImage.ARROW_LEFT, EmbeddedImageSize.SIZE_32X32));
-    public Label name = new Label();
-    private ButtonCore _remove = new ButtonCore();
+    ButtonToggle _expand;// = new ButtonToggle();
+    public Label name;// = new Label();
+    HorizontalStack _topLayout = new HorizontalStack();
+    HorizontalStack _bottomLayout = new HorizontalStack();
 
-    private HorizontalStack _bottomLayout = new HorizontalStack();
-    private Label _pathLabel = new Label("Path:");
-    private TextEdit _pathEdit = new TextEdit();
-    private ButtonCore _pathBrowse = new ButtonCore();
+    private TextEdit _pathEdit;// = new TextEdit();
 
     public String getPath() {
         return _pathEdit.getText();
     }
 
-    public Album(String name, String path) {
+    static int count = 0;
+
+    public Album(String n, String path) {
+        setItemName("Album_" + count++);
+        setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
         setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        setHeight(30); //70);
+        setHeight(30);
         setSpacing(0, 10);
         setMargin(3, 5, 3, 5);
-        setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
         setBackground(new Color(0, 0, 0, 0));
         setShadow(10, 0, 0, new Color(0, 0, 0, 200));
-        this.name.setText(name);
+
+        _expand = new ButtonToggle();
+        name = new Label();
+        _pathEdit = new TextEdit();
+
+        name.setText(n);
         _pathEdit.setText(path);
-        _bottomLayout.setVisible(false);
     }
 
     @Override
     public void initElements() {
+        
+        ImageItem _arrow = new ImageItem(
+                DefaultsService.getDefaultImage(EmbeddedImage.ARROW_LEFT, EmbeddedImageSize.SIZE_32X32));
+        ButtonCore _remove = new ButtonCore();
+
+        
+        Label _pathLabel = new Label("Path:");
+        ButtonCore _pathBrowse = new ButtonCore();
+
+        _bottomLayout.setVisible(false);
         // top
         _topLayout.setHeightPolicy(SizePolicy.FIXED);
         _topLayout.setHeight(30);
@@ -51,13 +63,14 @@ public class Album extends VerticalStack {
 
         _expand.setSize(20, 30);
         _expand.setBackground(25, 25, 25);
-        _expand.getState(ItemStateType.TOGGLED).background = new Color(25, 25, 25);
+        // _expand.getState(ItemStateType.TOGGLED).background = new Color(25, 25, 25);
         _expand.setPadding(4, 9, 4, 9);
         _arrow.setRotationAngle(180);
         _arrow.setColorOverlay(new Color(210, 210, 210));
         _arrow.keepAspectRatio(true);
 
         name.setHeightPolicy(SizePolicy.FIXED);
+        name.setBackground(new Color(255,0,0,50));
         name.setHeight(30);
         name.setMargin(5, 0, 0, 0);
         name.setFontSize(16);
@@ -82,11 +95,13 @@ public class Album extends VerticalStack {
         _pathBrowse.setSize(30, 30);
         _pathBrowse.setBackground(255, 255, 255, 20);
         _pathBrowse.setPadding(7, 7, 7, 7);
-        _pathBrowse.getState(ItemStateType.HOVERED).background = new Color(150, 255, 255, 255);
+        // _pathBrowse.getState(ItemStateType.HOVERED).background = new Color(255, 255, 255, 150);
 
         _pathEdit.setBackground(Color.white);
 
-        addItems(_topLayout, _bottomLayout);
+        addItems(_topLayout
+                , _bottomLayout
+        );
 
         _topLayout.addItems(_expand, name, _remove);
 

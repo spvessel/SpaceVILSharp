@@ -10,7 +10,7 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
-public class VisualContact extends Prototype {
+public class VisualContact extends HorizontalStack {
     public static int _count = 0;
 
     public VisualContact() {
@@ -53,7 +53,7 @@ public class VisualContact extends Prototype {
         name.setHeight(30);
         name.setHeightPolicy(SizePolicy.FIXED);
         name.setWidthPolicy(SizePolicy.EXPAND);
-        name.setMargin(60, 0, 30, 5);
+        // name.setMargin(60, 0, 30, 5);
         name.setPadding(20, 0, 0, 0);
         name.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
         name.setBorderRadius(10);
@@ -66,7 +66,7 @@ public class VisualContact extends Prototype {
         close.setHeight(14);
         close.setHeightPolicy(SizePolicy.FIXED);
         close.setAlignment(ItemAlignment.TOP, ItemAlignment.RIGHT);
-        close.setMargin(0, 5, 0, 0);
+        // close.setMargin(0, 5, 0, 0);
         close.setCustomFigure(new CustomFigure(false, GraphicsMathService.getCross(14, 14, 5, 45)));
         ItemState hover = new ItemState();
         hover.background = new Color(255, 255, 255, 125);

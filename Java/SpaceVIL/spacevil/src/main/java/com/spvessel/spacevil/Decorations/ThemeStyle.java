@@ -136,7 +136,7 @@ public class ThemeStyle {
     /**
      * Remove unique style for the item
      */
-    public void RemoveSpecificItemStyle(InterfaceBaseItem current_item, Style style)
+    public void removeSpecificItemStyle(InterfaceBaseItem current_item, Style style)
         {
             if (specificItemsStyle.containsKey(current_item))
                 specificItemsStyle.remove(current_item);
@@ -147,7 +147,7 @@ public class ThemeStyle {
     /**
      * Replace default style for the items with class name class_type
      */
-    public Boolean ReplaceDefaultItemStyle(Class<?> class_type, Style style) {
+    public Boolean replaceDefaultItemStyle(Class<?> class_type, Style style) {
         if (defaultItemsStyle.containsKey(class_type)) {
             defaultItemsStyle.replace(class_type, style);
             return true;

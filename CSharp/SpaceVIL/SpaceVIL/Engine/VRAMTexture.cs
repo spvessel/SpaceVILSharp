@@ -39,18 +39,26 @@ namespace SpaceVIL
 
         internal void GenTexture(int w, int h, byte[] bitmap)
         {
-            glGenTextures(1, Texture);
-            glBindTexture(GL_TEXTURE_2D, Texture[0]);
+            Monitor.Enter(VRAMStorage.StorageLocker);
+            try
+            {
+                glGenTextures(1, Texture);
+                glBindTexture(GL_TEXTURE_2D, Texture[0]);
 
-            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
+                glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+                // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            }
+            finally
+            {
+                Monitor.Exit(VRAMStorage.StorageLocker);
+            }
         }
 
         internal void GenBuffers(float x0, float x1, float y0, float y1, bool flip = false)
@@ -101,13 +109,29 @@ namespace SpaceVIL
 
         internal void Unbind()
         {
-            //Texture bind
-            glBindTexture(GL_TEXTURE_2D, 0);
+            Monitor.Enter(VRAMStorage.StorageLocker);
+            try
+            {
+                //Texture bind
+                glBindTexture(GL_TEXTURE_2D, 0);
+            }
+            finally
+            {
+                Monitor.Exit(VRAMStorage.StorageLocker);
+            }
         }
         internal void Bind()
         {
-            //Texture bind
-            glBindTexture(GL_TEXTURE_2D, Texture[0]);
+            Monitor.Enter(VRAMStorage.StorageLocker);
+            try
+            {
+                //Texture bind
+                glBindTexture(GL_TEXTURE_2D, Texture[0]);
+            }
+            finally
+            {
+                Monitor.Exit(VRAMStorage.StorageLocker);
+            }
         }
         internal void Bind(uint[] texture)
         {
@@ -192,35 +216,75 @@ namespace SpaceVIL
 
         internal void Draw()
         {
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
-            glDisableVertexAttribArray(0);
-            glDisableVertexAttribArray(1);
+            Monitor.Enter(VRAMStorage.StorageLocker);
+            try
+            {
+                glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, IntPtr.Zero);
+                glDisableVertexAttribArray(0);
+                glDisableVertexAttribArray(1);
+            }
+            finally
+            {
+                Monitor.Exit(VRAMStorage.StorageLocker);
+            }
         }
 
         internal void Clear()
         {
-            uint[] buffers = new uint[2] { VBO, IBO };
-            glDeleteBuffers(2, buffers);
-            glDeleteTextures(1, Texture);
-            _vbo_data = null;
-            _ibo_data = null;
+            Monitor.Enter(VRAMStorage.StorageLocker);
+            try
+            {
+                uint[] buffers = new uint[2] { VBO, IBO };
+                glDeleteBuffers(2, buffers);
+                glDeleteTextures(1, Texture);
+                _vbo_data = null;
+                _ibo_data = null;
+            }
+            finally
+            {
+                Monitor.Exit(VRAMStorage.StorageLocker);
+            }
         }
 
         internal void DeleteIBOBuffer()
         {
-            uint[] buffers = new uint[] { IBO };
-            glDeleteBuffers(1, buffers);
+            Monitor.Enter(VRAMStorage.StorageLocker);
+            try
+            {
+                uint[] buffers = new uint[] { IBO };
+                glDeleteBuffers(1, buffers);
+            }
+            finally
+            {
+                Monitor.Exit(VRAMStorage.StorageLocker);
+            }
         }
 
         internal void DeleteVBOBuffer()
         {
-            uint[] buffers = new uint[] { VBO };
-            glDeleteBuffers(1, buffers);
+            Monitor.Enter(VRAMStorage.StorageLocker);
+            try
+            {
+                uint[] buffers = new uint[] { VBO };
+                glDeleteBuffers(1, buffers);
+            }
+            finally
+            {
+                Monitor.Exit(VRAMStorage.StorageLocker);
+            }
         }
 
         internal void DeleteTexture()
         {
-            glDeleteTextures(1, Texture);
+            Monitor.Enter(VRAMStorage.StorageLocker);
+            try
+            {
+                glDeleteTextures(1, Texture);
+            }
+            finally
+            {
+                Monitor.Exit(VRAMStorage.StorageLocker);
+            }
         }
     }
 }

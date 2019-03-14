@@ -51,9 +51,15 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
         updateLayout();
     }
 
+    // @Override
+    // public void setY(int _y) {
+    //     super.setY(_y);
+    //     updateLayout();
+    // }
+
     /**
-     * Update all children and HorizontalStack sizes and positions
-     * according to confines
+     * Update all children and HorizontalStack sizes and positions according to
+     * confines
      */
     public void updateLayout() {
         int total_space = getWidth() - getPadding().left - getPadding().right;
@@ -72,26 +78,26 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
             }
         }
         free_space -= getSpacing().horizontal * ((expanded_count + fixed_count) - 1);
-        
+
         int width_for_expanded = 1;
         if (expanded_count > 0 && free_space > expanded_count)
-        width_for_expanded = free_space / expanded_count;
-        
+            width_for_expanded = free_space / expanded_count;
+
         int offset = 0;
         int startX = getX() + getPadding().left;
-        
+
         for (InterfaceBaseItem child : getItems()) {
             if (child.isVisible()) {
                 child.setX(startX + offset + child.getMargin().left);//
                 if (child.getWidthPolicy() == SizePolicy.EXPAND) {
                     if (width_for_expanded - child.getMargin().left - child.getMargin().right < child.getMaxWidth())
-                    child.setWidth(width_for_expanded - child.getMargin().left - child.getMargin().right);
+                        child.setWidth(width_for_expanded - child.getMargin().left - child.getMargin().right);
                     else {
                         expanded_count--;
                         free_space -= (child.getWidth() + child.getMargin().left + child.getMargin().right);//
                         width_for_expanded = 1;
                         if (expanded_count > 0 && free_space > expanded_count)
-                        width_for_expanded = free_space / expanded_count;
+                            width_for_expanded = free_space / expanded_count;
                     }
                 }
                 offset += child.getWidth() + getSpacing().horizontal + child.getMargin().left + child.getMargin().right;//
@@ -99,9 +105,10 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
             // refactor
             child.setConfines();
         }
-        
+
         // for (InterfaceBaseItem child : getItems()) {
-        //     System.out.println(child.getItemName() + " " + child.getWidth() + " " + child.getHeight() + " "  + child.getVisible());
+        // System.out.println(child.getItemName() + " " + child.getWidth() + " " +
+        // child.getHeight() + " " + child.getVisible());
         // }
     }
 }

@@ -93,9 +93,6 @@ final class VisualItem extends BaseItem {
                 boolean layout = getParent() instanceof InterfaceHLayout;
                 boolean grid = getParent() instanceof InterfaceGrid;
 
-                if (!layout && !grid)
-                    updateGeometry();
-
                 if (layout)
                     ((InterfaceHLayout) getParent()).updateLayout();
                 if (grid)
@@ -115,15 +112,16 @@ final class VisualItem extends BaseItem {
                 boolean layout = getParent() instanceof InterfaceVLayout;
                 boolean grid = getParent() instanceof InterfaceGrid;
 
-                if (!layout && !grid)
-                    updateGeometry();
-
                 if (layout)
                     ((InterfaceVLayout) getParent()).updateLayout();
                 if (grid)
                     if (!(getParent() instanceof InterfaceFree))
                         ((InterfaceGrid) getParent()).updateLayout();
             }
+
+            if (getItemName().equals("topLayout2"))
+                System.out.println(value);
+
             eventManager.notifyListeners(GeometryEventType.MOVED_Y, value);
         }
     }
@@ -442,6 +440,7 @@ final class VisualItem extends BaseItem {
             _content.remove(item);
             ItemsLayoutBox.removeItem(getHandler(), item, type);
             castAndRemove(item);
+            item.destroy();
         } catch (Exception ex) {
             System.out.println("Method - RemoveItem: " + ((item == null) ? "item is null" : item.getItemName()));
             ex.printStackTrace();
@@ -850,30 +849,46 @@ final class VisualItem extends BaseItem {
     }
 
     // style
-    private boolean _is_style_set = false;
+    // private boolean _is_style_set = false;
 
     @Override
     public void setStyle(Style style) {
         if (style == null)
             return;
 
-        _is_style_set = true;
+        // _is_style_set = true;
 
-        setSizePolicy(style.widthPolicy, style.heightPolicy);
-        setSize(style.width, style.height);
-        setMinSize(style.minWidth, style.minHeight);
-        setMaxSize(style.maxWidth, style.maxHeight);
-        setPosition(style.x, style.y);
-        setMargin(style.margin);
-        setPadding(style.padding);
-        setSpacing(style.spacing);
-        setAlignment(style.alignment);
+        // setSizePolicy(style.widthPolicy, style.heightPolicy);
+        // setSize(style.width, style.height);
+        // setMinSize(style.minWidth, style.minHeight);
+        // setMaxSize(style.maxWidth, style.maxHeight);
+        // setPosition(style.x, style.y);
+        // setMargin(style.margin);
+        // setPadding(style.padding);
+        // setSpacing(style.spacing);
+        // setAlignment(style.alignment);
+
+        // setBackground(style.background);
+        // setBorderRadius(style.borderRadius);
+        // setBorderThickness(style.borderThickness);
+        // setBorderFill(style.borderFill);
+        // setVisible(style.isVisible);
 
         setBackground(style.background);
+        setSize(style.width, style.height);
+        setSizePolicy(style.widthPolicy, style.heightPolicy);
+        setPadding(style.padding);
+        setMargin(style.margin);
+        setAlignment(style.alignment);
+        setPosition(style.x, style.y);
+        setSpacing(style.spacing);
+        setMinSize(style.minWidth, style.minHeight);
+        setMaxSize(style.maxWidth, style.maxHeight);
         setBorderRadius(style.borderRadius);
         setBorderThickness(style.borderThickness);
         setBorderFill(style.borderFill);
         setVisible(style.isVisible);
+
         removeAllItemStates();
 
         ItemState core_state = new ItemState(style.background);

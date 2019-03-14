@@ -1134,6 +1134,8 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.spacing = new Spacing(0, 0);
+        style.setPadding(new Indents());
+        style.setMargin(new Indents());
 
         return style;
     }

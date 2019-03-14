@@ -1151,7 +1151,7 @@ final class DrawEngine {
         _fbo.genFBO();
         _fbo.genFBOTexture(_framebufferWidth, _framebufferHeight);
         _fbo.unbindFBO();
-
+        // glfwSwapInterval(0);
         while (!_handler.isClosing()) {
             glfwWaitEventsTimeout(getFrequency());
             // glfwWaitEvents();
@@ -1184,6 +1184,7 @@ final class DrawEngine {
         _blur.deleteShader();
 
         _fbo.clearFBO();
+        VRAMStorage.clear();
 
         glDeleteVertexArrays(_handler.gVAO);
 
@@ -1192,6 +1193,7 @@ final class DrawEngine {
     }
 
     void update() {
+        VRAMStorage.flush();
         render();
         _bounds.clear();
     }
@@ -1670,12 +1672,77 @@ final class DrawEngine {
 
         float i_x0 = ((float) area.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
         float i_y0 = ((float) area.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) area.getX() + (float) area.getWidth())
-                / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y1 = (((float) area.getY() + (float) area.getHeight())
-                / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_x1 = (((float) area.getX() + (float) area.getWidth()) / (float) _handler.getLayout().getWidth() * 2.0f)
+                - 1.0f;
+        float i_y1 = (((float) area.getY() + (float) area.getHeight()) / (float) _handler.getLayout().getHeight() * 2.0f
+                - 1.0f) * (-1.0f);
 
         _texture.useShader();
+
+        if (image instanceof ImageItem) {
+            ImageItem tmp = (ImageItem) image;
+            if (tmp.isNew()) {
+                VRAMStorage.storageLocker.lock();
+                try {
+                    VRAMStorage.deleteTexture(image);
+                    // create and store
+                    VRAMTexture tex = new VRAMTexture();
+                    tex.genBuffers(i_x0, i_x1, i_y0, i_y1);
+                    tex.genTexture(w, h, bitmap);
+                    VRAMStorage.addTexture(image, tex);
+                    tmp.setNew(false);
+
+                    tex.sendUniformSample2D(_texture);
+                    if (image.isColorOverlay()) {
+                        float[] argb = { (float) image.getColorOverlay().getRed() / 255.0f,
+                                (float) image.getColorOverlay().getGreen() / 255.0f,
+                                (float) image.getColorOverlay().getBlue() / 255.0f,
+                                (float) image.getColorOverlay().getAlpha() / 255.0f };
+                        tex.sendUniform1i(_texture, "overlay", 1);
+                        tex.sendUniform4f(_texture, "rgb", argb);
+                    } else
+                        tex.sendUniform1i(_texture, "overlay", 0);// VEEEEEEEERY interesting!!!
+
+                    tex.sendUniform1f(_texture, "alpha", image.getRotationAngle());
+                    tex.draw();
+                    tex.deleteIBOBuffer();
+                    tex.deleteVBOBuffer();
+                    tex.unbind();
+                } finally {
+                    VRAMStorage.storageLocker.unlock();
+                }
+            } else {
+                VRAMStorage.storageLocker.lock();
+                try {
+                    // draw
+                    VRAMTexture tex = VRAMStorage.getTexture(image);
+                    if (tex == null)
+                        return;
+                    tex.bind();
+                    tex.genBuffers(i_x0, i_x1, i_y0, i_y1);
+                    tex.sendUniformSample2D(_texture);
+                    if (image.isColorOverlay()) {
+                        float[] argb = { (float) image.getColorOverlay().getRed() / 255.0f,
+                                (float) image.getColorOverlay().getGreen() / 255.0f,
+                                (float) image.getColorOverlay().getBlue() / 255.0f,
+                                (float) image.getColorOverlay().getAlpha() / 255.0f };
+                        tex.sendUniform1i(_texture, "overlay", 1);
+                        tex.sendUniform4f(_texture, "rgb", argb);
+                    } else
+                        tex.sendUniform1i(_texture, "overlay", 0);// VEEEEEEEERY interesting!!!
+
+                    tex.sendUniform1f(_texture, "alpha", image.getRotationAngle());
+                    tex.draw();
+                    tex.deleteIBOBuffer();
+                    tex.deleteVBOBuffer();
+                    tex.unbind();
+                } finally {
+                    VRAMStorage.storageLocker.unlock();
+                }
+            }
+            return;
+        }
+
         VRAMTexture store = new VRAMTexture();
         store.genBuffers(i_x0, i_x1, i_y0, i_y1);
         store.genTexture(w, h, bitmap);

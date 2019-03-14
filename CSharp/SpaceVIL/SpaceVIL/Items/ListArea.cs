@@ -190,11 +190,11 @@ namespace SpaceVIL
         {
             SelectionItem wrapper = new SelectionItem(item);
             wrapper.SetToggleVisibility(_isSelectionVisible);
-            // wrapper.setStyle(_selectedStyle);
             wrapper.EventMouseClick += (sender, args) =>
             {
                 int index = 0;
-                _selectionItem = _mapContent[item];
+                if (_mapContent.ContainsKey(item))
+                    _selectionItem = _mapContent[item];
                 foreach (IBaseItem tmp in base.GetItems())
                 {
                     if (tmp.Equals(_selectionItem))
@@ -240,6 +240,7 @@ namespace SpaceVIL
         /// </summary>
         public override void RemoveItem(IBaseItem item)
         {
+            Unselect();
             base.RemoveItem(_mapContent[item]);
             _mapContent.Remove(item);
             UpdateLayout();

@@ -376,7 +376,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
                 }
                 // bottom check
                 if (itemY + _cellHeight > getY() + getHeight() - getPadding().bottom) {
-                    if (itemY + _cellHeight <= getY() + getHeight() - getPadding().bottom)
+                    if (itemY >= getY() + getHeight() - getPadding().bottom)
                         item.setDrawable(false);
                     else
                         item.setDrawable(true);
@@ -416,7 +416,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
                 }
                 // right check
                 if (itemX + _cellWidth > getX() + getWidth() - getPadding().left) {
-                    if (itemX + _cellWidth <= getX() + getWidth() - getPadding().left)
+                    if (itemX >= getX() + getWidth() - getPadding().left)
                         item.setDrawable(false);
                     else
                         item.setDrawable(true);

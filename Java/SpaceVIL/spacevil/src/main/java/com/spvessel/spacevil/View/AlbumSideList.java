@@ -20,7 +20,6 @@ public class AlbumSideList extends SideArea {
     private boolean _isInit = false;
     private List<Album> _list = new LinkedList<>();
     private ListBox _albumList = new ListBox();
-    // private VerticalStack _albumList = new VerticalStack();
     private ButtonCore _addButton = new ButtonCore();
 
     public AlbumSideList(WindowLayout handler, Side attachSide) {
@@ -45,7 +44,6 @@ public class AlbumSideList extends SideArea {
         _albumList.setSelectionVisibility(false);
         _albumList.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         _albumList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
-        // _albumList.setBackground(new Color(0, 0, 0, 0));
         _albumList.setMargin(10, 100, 10, 50);
         _albumList.vScrollBar.setStyle(Style.getSimpleVerticalScrollBarStyle());
 
@@ -116,6 +114,5 @@ public class AlbumSideList extends SideArea {
 
     public void show(InterfaceItem item, MouseArgs args) {
         super.show(item, args);
-        _albumList.getArea().updateLayout();
     }
 }

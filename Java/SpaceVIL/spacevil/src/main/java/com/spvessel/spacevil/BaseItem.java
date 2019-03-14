@@ -75,6 +75,9 @@ public abstract class BaseItem implements InterfaceBaseItem {
         if (item.getParent() instanceof InterfaceGrid) {
             return;
         }
+        if (item.getParent() instanceof InterfaceFree) {
+            return;
+        }
 
         addEventListener(GeometryEventType.RESIZE_WIDTH, item);
         addEventListener(GeometryEventType.RESIZE_HEIGHT, item);
@@ -922,4 +925,6 @@ public abstract class BaseItem implements InterfaceBaseItem {
     public int[] getConfines() {
         return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
     }
+
+    public void destroy() { }
 }

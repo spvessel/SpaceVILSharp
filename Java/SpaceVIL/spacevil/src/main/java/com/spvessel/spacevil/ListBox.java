@@ -419,10 +419,8 @@ public class ListBox extends Prototype {
         eventScrollUp.add(vScrollBar.eventScrollUp::execute);
         eventScrollDown.add(vScrollBar.eventScrollDown::execute);
 
-        InterfaceCommonMethodState v_changed = (sender) -> updateVListArea();
-        vScrollBar.slider.eventValueChanged.add(v_changed);
-        InterfaceCommonMethodState h_changed = (sender) -> updateHListArea();
-        hScrollBar.slider.eventValueChanged.add(h_changed);
+        vScrollBar.slider.eventValueChanged.add((sender) -> updateVListArea());
+        hScrollBar.slider.eventValueChanged.add((sender) -> updateHListArea());
 
         // create menu
         _menu = new ContextMenu(getHandler());

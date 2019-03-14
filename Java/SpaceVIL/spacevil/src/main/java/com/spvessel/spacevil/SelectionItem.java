@@ -42,18 +42,17 @@ public class SelectionItem extends Prototype {
     @Override
     public void initElements() {
         addItem(_item);
-        
+
     }
 
-    public void updateSize()
-    {
+    public void updateSize() {
         setSize(_item.getWidth() + _item.getMargin().left + _item.getMargin().right,
                 _item.getHeight() + _item.getMargin().bottom + _item.getMargin().top + 2);
         setMinSize(_item.getMinWidth() + _item.getMargin().left + _item.getMargin().right,
                 _item.getMinHeight() + _item.getMargin().bottom + _item.getMargin().top);
         // _item.setParent(getParent());
     }
-    
+
     // private for class
     private boolean _toggled = false;
 
@@ -79,5 +78,16 @@ public class SelectionItem extends Prototype {
                 ((SelectionItem) item).setToggled(false);
             }
         }
+    }
+
+    @Override
+    public void removeItem(InterfaceBaseItem item) {
+        getParent().removeItem(item);
+    }
+
+    @Override
+    public void setMouseHover(boolean value) {
+        if (_visibility)
+            super.setMouseHover(value);
     }
 }

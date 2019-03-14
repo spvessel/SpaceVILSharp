@@ -94,6 +94,7 @@ namespace SpaceVIL
                     }
                 }
                 picture.Dispose();
+                SetNew(true);
                 return result.ToArray();
             }
             catch (System.Exception ex)
@@ -126,6 +127,9 @@ namespace SpaceVIL
             if (image == null)
                 return;
             _bitmap = CreateByteImage(image);
+            if (_isKeepAspectRatio && _bitmap != null)
+                ApplyAspectRatio();
+            UpdateLayout();
         }
 
         private bool _isOverlay = false;
@@ -250,6 +254,39 @@ namespace SpaceVIL
                 int y = GetY();
                 int h = Area.GetHeight();
                 Area.SetY((GetHeight() - h) / 2 + y);
+            }
+        }
+
+        public override void Destroy()
+        {
+            VRAMStorage.AddToDelete(this);
+        }
+
+        //подумать над общим решением
+        private Object _lock = new Object();
+        private bool _isNew = true;
+        internal bool IsNew()
+        {
+            Monitor.Enter(_lock);
+            try
+            {
+                return _isNew;
+            }
+            finally
+            {
+                Monitor.Exit(_lock);
+            }
+        }
+        internal void SetNew(bool value)
+        {
+            Monitor.Enter(_lock);
+            try
+            {
+                _isNew = value;
+            }
+            finally
+            {
+                Monitor.Exit(_lock);
             }
         }
     }

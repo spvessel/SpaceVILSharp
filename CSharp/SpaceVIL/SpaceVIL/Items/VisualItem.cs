@@ -95,7 +95,7 @@ namespace SpaceVIL
                 if (grid != null)
                     grid.UpdateLayout();
             }
-            UpdateGeometry();
+            // UpdateGeometry();
         }
         internal EventManager eventManager = null;
         private List<IBaseItem> _content = new List<IBaseItem>();
@@ -232,6 +232,7 @@ namespace SpaceVIL
                 _content.Remove(item);
                 ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
                 CastAndRemove(item);
+                item.Destroy();
             }
             catch (Exception ex)
             {
@@ -448,9 +449,6 @@ namespace SpaceVIL
                     var layout = GetParent() as IHLayout;
                     var grid = GetParent() as IGrid;
 
-                    if (layout == null && grid == null)
-                        UpdateGeometry();
-
                     if (layout != null)
                         layout.UpdateLayout();
                     if (grid != null)
@@ -466,15 +464,11 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetY(_y);
-                eventManager.NotifyListeners(GeometryEventType.Moved_Y, value);
 
                 if (GetParent() != null && GetHeightPolicy() == SizePolicy.Fixed)
                 {
                     var layout = GetParent() as IVLayout;
                     var grid = GetParent() as IGrid;
-
-                    if (layout == null && grid == null)
-                        UpdateGeometry();
 
                     if (layout != null)
                         layout.UpdateLayout();
@@ -483,7 +477,7 @@ namespace SpaceVIL
                         if ((GetParent() as IFree) == null)
                             grid.UpdateLayout();
                 }
-
+                eventManager.NotifyListeners(GeometryEventType.Moved_Y, value);
             }
         }
 
@@ -807,8 +801,6 @@ namespace SpaceVIL
         }
         private bool LazyHoverVerification(float xpos, float ypos)
         {
-            
-
             bool result = false;
 
             float minx = GetX();

@@ -87,5 +87,16 @@ namespace SpaceVIL
                 }
             }
         }
+
+        public override void RemoveItem(IBaseItem item)
+        {
+            GetParent().RemoveItem(item);
+        }
+
+        public override void SetMouseHover(bool value)
+        {
+            if (_visibility)
+                base.SetMouseHover(value);
+        }
     }
 }
