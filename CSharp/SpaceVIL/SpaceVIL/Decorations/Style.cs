@@ -778,6 +778,7 @@ namespace SpaceVIL.Decorations
             handler_style.Background = Color.FromArgb(255, 100, 100, 100);
             handler_style.Margin = new Indents(0, 3, 0, 3);
             handler_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            handler_style.MinWidth = 15;
             handler_style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
@@ -825,6 +826,7 @@ namespace SpaceVIL.Decorations
             handler_style.Margin = new Indents(0, 5, 0, 5);
             handler_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             handler_style.BorderRadius = new CornerRadius(3);
+            handler_style.MinWidth = 15;
             slider_style.AddInnerStyle("handler", handler_style);
 
             return style;
@@ -888,6 +890,7 @@ namespace SpaceVIL.Decorations
             handler_style.Background = Color.FromArgb(255, 100, 100, 100);
             handler_style.Margin = new Indents(3, 0, 3, 0);
             handler_style.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
+            handler_style.MinHeight = 15;
             handler_style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
@@ -935,6 +938,7 @@ namespace SpaceVIL.Decorations
             handler_style.Margin = new Indents(5, 0, 5, 0);
             handler_style.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
             handler_style.BorderRadius = new CornerRadius(3);
+            handler_style.MinHeight = 15;
             slider_style.AddInnerStyle("handler", handler_style);
 
             return style;

@@ -887,7 +887,7 @@ public class Style implements Cloneable {
         handler_style.margin = new Indents(0, 3, 0, 3);
         handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         handler_style.addItemState(ItemStateType.HOVERED, hovered);
-
+        handler_style.minWidth = 15;
         slider_style.addInnerStyle("handler", handler_style);
 
         return style;
@@ -935,6 +935,7 @@ public class Style implements Cloneable {
         handler_style.margin = new Indents(0, 5, 0, 5);
         handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         handler_style.borderRadius = new CornerRadius(3);
+        handler_style.minWidth = 15;
         slider_style.addInnerStyle("handler", handler_style);
 
         return style;
@@ -1000,6 +1001,7 @@ public class Style implements Cloneable {
         handler_style.background = new Color(100, 100, 100, 255);
         handler_style.margin = new Indents(3, 0, 3, 0);
         handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
+        handler_style.minHeight = 15;
         handler_style.addItemState(ItemStateType.HOVERED, hovered);
         slider_style.addInnerStyle("handler", handler_style);
 
@@ -1048,6 +1050,7 @@ public class Style implements Cloneable {
         handler_style.margin = new Indents(5, 0, 5, 0);
         handler_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.TOP, ItemAlignment.HCENTER));
         handler_style.borderRadius = new CornerRadius(3);
+        handler_style.minHeight = 15;
         slider_style.addInnerStyle("handler", handler_style);
 
         return style;
