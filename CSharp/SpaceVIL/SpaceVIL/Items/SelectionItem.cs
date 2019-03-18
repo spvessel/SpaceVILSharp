@@ -37,7 +37,7 @@ namespace SpaceVIL
             };
         }
 
-        internal IBaseItem GetContent()
+        public IBaseItem GetContent()
         {
             return _item;
         }

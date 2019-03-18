@@ -429,8 +429,7 @@ public final class WindowLayout {
 
     MSAA _msaa = MSAA.MSAA_4X;
 
-    public void setAntiAliasingQuality(MSAA msaa)
-    {
+    public void setAntiAliasingQuality(MSAA msaa) {
         _msaa = msaa;
     }
 
@@ -487,7 +486,7 @@ public final class WindowLayout {
     public void resetItems() {
         engine.resetItems();
     }
-    
+
     public void resetFocus() {
         engine.resetFocus();
     }
@@ -517,10 +516,20 @@ public final class WindowLayout {
     }
 
     public void setRenderFrequency(RedrawFrequency value) {
-        engine.setFrequency(value);
+        engineLocker.lock();
+        try {
+            engine.setFrequency(value);
+        } finally {
+            engineLocker.unlock();
+        }
     }
 
     public RedrawFrequency getRenderFrequency() {
-        return engine.getRedrawFrequency();
+        engineLocker.lock();
+        try {
+            return engine.getRedrawFrequency();
+        } finally {
+            engineLocker.unlock();
+        }
     }
 }

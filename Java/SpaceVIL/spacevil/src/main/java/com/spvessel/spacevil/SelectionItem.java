@@ -35,7 +35,7 @@ public class SelectionItem extends Prototype {
         });
     }
 
-    InterfaceBaseItem getContent() {
+    public InterfaceBaseItem getContent() {
         return _item;
     }
 

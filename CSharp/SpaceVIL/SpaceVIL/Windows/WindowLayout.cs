@@ -391,7 +391,7 @@ namespace SpaceVIL
         }
 
         internal MSAA _msaa = MSAA.MSAA4x;
-        
+
         public void SetAntiAliasingQuality(MSAA msaa)
         {
             _msaa = msaa;
@@ -511,11 +511,27 @@ namespace SpaceVIL
 
         public void SetRenderFrequency(RedrawFrequency value)
         {
-            engine.SetFrequency(value);
+            Monitor.Enter(EngineLocker);
+            try
+            {
+                engine.SetFrequency(value);
+            }
+            finally
+            {
+                Monitor.Exit(EngineLocker);
+            }
         }
         public RedrawFrequency GetRenderFrequency()
         {
-            return engine.GetRedrawFrequency();
+            Monitor.Enter(EngineLocker);
+            try
+            {
+                return engine.GetRedrawFrequency();
+            }
+            finally
+            {
+                Monitor.Exit(EngineLocker);
+            }
         }
     }
 }

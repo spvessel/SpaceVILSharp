@@ -437,6 +437,7 @@ namespace SpaceVIL.Decorations
             style.Width = 10;
             style.Height = 10;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.BorderRadius = new CornerRadius();
             style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
