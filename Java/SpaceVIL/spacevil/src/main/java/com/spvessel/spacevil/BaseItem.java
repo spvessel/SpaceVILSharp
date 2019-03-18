@@ -926,5 +926,5 @@ public abstract class BaseItem implements InterfaceBaseItem {
         return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
     }
 
-    public void destroy() { }
+    public void release() { }
 }

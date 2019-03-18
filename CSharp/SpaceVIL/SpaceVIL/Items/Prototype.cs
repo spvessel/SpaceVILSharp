@@ -828,6 +828,6 @@ namespace SpaceVIL
         {
             _core.HoverRule = rule;
         }
-        public virtual void Destroy() { }
+        public virtual void Release() { }
     }
 }

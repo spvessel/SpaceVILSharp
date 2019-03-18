@@ -246,7 +246,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     }
 
     @Override
-    public void destroy() {
+    public void release() {
         VRAMStorage.addToDelete(this);
     }
 

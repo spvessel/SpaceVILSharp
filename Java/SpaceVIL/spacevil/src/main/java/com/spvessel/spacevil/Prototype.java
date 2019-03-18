@@ -753,5 +753,5 @@ abstract public class Prototype implements InterfaceBaseItem {
     }
 
     @Override
-    public void destroy() { }
+    public void release() { }
 }

@@ -257,7 +257,7 @@ namespace SpaceVIL
             }
         }
 
-        public override void Destroy()
+        public override void Release()
         {
             VRAMStorage.AddToDelete(this);
         }

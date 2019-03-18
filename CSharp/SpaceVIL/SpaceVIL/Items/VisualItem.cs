@@ -285,7 +285,7 @@ namespace SpaceVIL
                 _content.Remove(item);
                 ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
                 CastAndRemove(item);
-                item.Destroy();
+                item.Release();
             }
             catch (Exception ex)
             {

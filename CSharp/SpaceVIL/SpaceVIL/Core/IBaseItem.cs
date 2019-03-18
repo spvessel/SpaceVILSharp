@@ -32,6 +32,6 @@ namespace SpaceVIL.Core
         Position GetShadowPos();
         void SetShadow(int radius, int x, int y, Color color);
         int[] GetConfines();
-        void Destroy();
+        void Release();
     }
 }

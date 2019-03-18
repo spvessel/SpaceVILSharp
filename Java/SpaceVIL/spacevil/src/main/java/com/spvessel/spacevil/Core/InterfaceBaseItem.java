@@ -60,5 +60,5 @@ public interface InterfaceBaseItem
 
     int[] getConfines();
 
-    void destroy();
+    void release();
 }

@@ -479,7 +479,7 @@ final class VisualItem extends BaseItem {
             _content.remove(item);
             ItemsLayoutBox.removeItem(getHandler(), item, type);
             castAndRemove(item);
-            item.destroy();
+            item.release();
         } catch (Exception ex) {
             System.out.println("Method - RemoveItem: " + ((item == null) ? "item is null" : item.getItemName()));
             ex.printStackTrace();

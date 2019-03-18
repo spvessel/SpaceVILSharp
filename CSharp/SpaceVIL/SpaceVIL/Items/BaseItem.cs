@@ -939,6 +939,6 @@ namespace SpaceVIL
             return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
         }
 
-        public virtual void Destroy() { }
+        public virtual void Release() { }
     }
 }
