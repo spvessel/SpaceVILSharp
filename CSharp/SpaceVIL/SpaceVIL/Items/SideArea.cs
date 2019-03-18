@@ -160,18 +160,18 @@ namespace SpaceVIL
             base.SetHeight(height);
         }
 
-        public void Show()
+        public virtual void Show()
         {
             if (!_init)
                 InitElements();
             SetVisible(true);
         }
-        public void Show(IItem sender, MouseArgs args)
+        public virtual void Show(IItem sender, MouseArgs args)
         {
             Show();
         }
 
-        public void Hide()
+        public virtual void Hide()
         {
             SetVisible(false);
         }

@@ -191,6 +191,7 @@ public class FlowTest extends ActiveWindow {
             opd.onCloseDialog.add(() -> {
                 System.out.println(opd.getResult());
             });
+            opd.setDefaultPath("D:\\");
             opd.show(Handler);
         });
         btn5.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
