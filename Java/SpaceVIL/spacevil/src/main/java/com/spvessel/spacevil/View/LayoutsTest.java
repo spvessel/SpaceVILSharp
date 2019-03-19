@@ -73,6 +73,9 @@ public class LayoutsTest extends ActiveWindow {
         listbox_right_2.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         grid.insertItem(listbox_right_2, 1, 1);
 
+        VisualContact visualContact = new VisualContact();
+        listbox_left_1.addItem(visualContact);
+
         // button
         ButtonCore left = new ButtonCore();
         left.setBackground(181, 255, 111);
@@ -132,9 +135,14 @@ public class LayoutsTest extends ActiveWindow {
             // };
             // radio.eventMouseClick.add(r_click);
             // listbox_left_1.addItem(radio);
-            listbox_left_1.setVisible(!listbox_left_1.isVisible());
+            // listbox_left_1.setVisible(!listbox_left_1.isVisible());
+            listbox_left_1.clear();
+            // visualContact.setParent(null);
+            listbox_left_1.addItem(visualContact);
         };
         all.eventMouseClick.add(all_click);
         frame.addItem(all);
+
+        
     }
 }

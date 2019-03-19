@@ -230,6 +230,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     @Override
     public void removeItem(InterfaceBaseItem item) {
         unselect();
+        _mapContent.get(item).clearContent();
         super.removeItem(_mapContent.get(item));
         _mapContent.remove(item);
         updateLayout();
@@ -251,6 +252,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 return;
 
             while (!list.isEmpty()) {
+                ((SelectionItem) list.get(0)).clearContent();
                 super.removeItem(list.get(0));
                 list.remove(0);
             }
@@ -346,8 +348,8 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         _isUpdating = false;
     }
 
-
     private Style _selectedStyle;
+
     /**
      * Set style of the ListArea
      */

@@ -91,7 +91,14 @@ namespace SpaceVIL
 
         public override void RemoveItem(IBaseItem item)
         {
-            GetParent().RemoveItem(item);
+            if (_item != null)
+                GetParent().RemoveItem(item);
+        }
+
+        public void ClearContent() 
+        {
+            base.RemoveItem(_item);
+            _item = null;
         }
 
         public override void SetMouseHover(bool value)
