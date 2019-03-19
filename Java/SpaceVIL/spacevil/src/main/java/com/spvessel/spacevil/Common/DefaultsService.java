@@ -28,6 +28,10 @@ public final class DefaultsService {
         return _default_theme;
     }
 
+    static void initDefaultTheme() {
+        _default_theme = new ThemeStyle();
+    }
+
     public static void setDefaultTheme(ThemeStyle theme) {
         _default_theme = theme;
     }
@@ -58,7 +62,7 @@ public final class DefaultsService {
     private static Map<EmbeddedImage, BufferedImage> images_64 = new HashMap<>();
 
     static void initImages() {
-        ///////////////32
+        /////////////// 32
         InputStream stream = DefaultFont.class.getResourceAsStream("/images/add32.png");
         addImage(stream, images_32, EmbeddedImage.ADD);
         stream = DefaultFont.class.getResourceAsStream("/images/arrowleft32.png");
@@ -102,7 +106,7 @@ public final class DefaultsService {
         stream = DefaultFont.class.getResourceAsStream("/images/loadcircle32.png");
         addImage(stream, images_32, EmbeddedImage.LOAD_CIRCLE);
 
-        //////////////////64
+        ////////////////// 64
         stream = DefaultFont.class.getResourceAsStream("/images/add64.png");
         addImage(stream, images_64, EmbeddedImage.ADD);
         stream = DefaultFont.class.getResourceAsStream("/images/arrowleft64.png");

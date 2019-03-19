@@ -10,6 +10,7 @@ import com.spvessel.spacevil.Core.InterfaceGrid;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
+import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Orientation;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -215,6 +216,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
 
     private SelectionItem getWrapper(InterfaceBaseItem item) {
         SelectionItem wrapper = new SelectionItem(item);
+        wrapper.setStyle(_selectedStyle);
         wrapper.setToggleVisible(_isSelectionVisible);
         wrapper.setSize(_cellWidth, _cellHeight);
         wrapper.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
@@ -430,5 +432,26 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             _rows = (itemCount > getItems().size()) ? getItems().size() : itemCount;
         }
         _isUpdating = false;
+    }
+
+    private Style _selectedStyle;
+
+    /**
+     * Set style of the ListArea
+     */
+    @Override
+    public void setStyle(Style style) {
+        if (style == null)
+            return;
+        super.setStyle(style);
+
+        Style inner_style = style.getInnerStyle("selection");
+        if (inner_style != null) {
+            _selectedStyle = inner_style.clone();
+            List<InterfaceBaseItem> list = new LinkedList<>(getItems());
+            for (InterfaceBaseItem item : list) {
+                item.setStyle(_selectedStyle);
+            }
+        }
     }
 }

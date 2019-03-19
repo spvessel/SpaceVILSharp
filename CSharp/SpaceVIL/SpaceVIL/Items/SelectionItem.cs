@@ -23,7 +23,7 @@ namespace SpaceVIL
             IsFocusable = false;
             SetItemName("SelectionItem_" + count);
             count++;
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SelectionItem)));
+            // SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SelectionItem)));
         }
         public SelectionItem(IBaseItem content) : this()
         {

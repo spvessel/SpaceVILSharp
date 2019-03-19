@@ -182,8 +182,8 @@ public class ListArea extends Prototype implements InterfaceVLayout {
 
     private SelectionItem getWrapper(InterfaceBaseItem item) {
         SelectionItem wrapper = new SelectionItem(item);
+        wrapper.setStyle(_selectedStyle);
         wrapper.setToggleVisible(_isSelectionVisible);
-        // wrapper.setStyle(_selectedStyle);
         wrapper.eventMouseClick.add((sender, args) -> {
             int index = 0;
             if (_mapContent.get(item) != null)
@@ -211,8 +211,6 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         _mapContent.put(item, wrapper);
         updateLayout();
     }
-
-    private Style _selectedStyle;
 
     /**
      * Add item to the ListArea
@@ -346,5 +344,26 @@ public class ListArea extends Prototype implements InterfaceVLayout {
             child.setDrawable(true);
         }
         _isUpdating = false;
+    }
+
+
+    private Style _selectedStyle;
+    /**
+     * Set style of the ListArea
+     */
+    @Override
+    public void setStyle(Style style) {
+        if (style == null)
+            return;
+        super.setStyle(style);
+
+        Style inner_style = style.getInnerStyle("selection");
+        if (inner_style != null) {
+            _selectedStyle = inner_style.clone();
+            List<InterfaceBaseItem> list = new LinkedList<>(getItems());
+            for (InterfaceBaseItem item : list) {
+                item.setStyle(_selectedStyle);
+            }
+        }
     }
 }

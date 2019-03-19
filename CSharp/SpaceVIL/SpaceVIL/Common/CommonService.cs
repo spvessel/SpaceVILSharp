@@ -83,6 +83,7 @@ namespace SpaceVIL.Common
                         Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height);
 
             DefaultsService.InitImages();
+            DefaultsService.InitDefaultTheme();
 
             return true;
         }

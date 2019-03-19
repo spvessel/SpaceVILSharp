@@ -2,6 +2,7 @@ package com.spvessel.spacevil.Decorations;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.GraphicsMathService;
+import com.spvessel.spacevil.SelectionItem;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -428,27 +429,44 @@ public class Style implements Cloneable {
     public Style clone() {
         Style style = new Style();
 
-        style.background = new Color(background.getRGB());
-        style.foreground = new Color(background.getRGB());
-        style.font = DefaultsService.getDefaultFont();
+        if (background != null)
+            style.background = new Color(background.getRed(), background.getGreen(), background.getBlue(),
+                    background.getAlpha());
+        if (foreground != null)
+            style.foreground = new Color(foreground.getRed(), foreground.getGreen(), foreground.getBlue(),
+                    foreground.getAlpha());
+        if (font != null)
+            style.font = font.deriveFont(font.getStyle());
+        else
+            style.font = DefaultsService.getDefaultFont();
         style.setSizePolicy(widthPolicy, heightPolicy);
         style.setSize(width, height);
         style.setMaxSize(maxWidth, maxHeight);
         style.setMinSize(minWidth, minHeight);
-        ItemAlignment[] list = new ItemAlignment[alignment.size()];
-        alignment.toArray(list);
-        style.setAlignment(list);
-        ItemAlignment[] textlist = new ItemAlignment[textAlignment.size()];
-        textAlignment.toArray(textlist);
-        style.setTextAlignment(textlist);
-        style.setPadding(padding.left, padding.top, padding.right, padding.bottom);
-        style.setMargin(margin.left, margin.top, margin.right, margin.bottom);
-        style.setSpacing(spacing.horizontal, spacing.vertical);
+        if (alignment != null) {
+            ItemAlignment[] list = new ItemAlignment[alignment.size()];
+            alignment.toArray(list);
+            style.setAlignment(list);
+        }
+        if (textAlignment != null) {
+            ItemAlignment[] textlist = new ItemAlignment[textAlignment.size()];
+            textAlignment.toArray(textlist);
+            style.setTextAlignment(textlist);
+        }
+        if (padding != null)
+            style.setPadding(padding.left, padding.top, padding.right, padding.bottom);
+        if (margin != null)
+            style.setMargin(margin.left, margin.top, margin.right, margin.bottom);
+        if (spacing != null)
+            style.setSpacing(spacing.horizontal, spacing.vertical);
 
-        style.borderFill = new Color(borderFill.getRGB());
+        if (borderFill != null)
+            style.borderFill = new Color(borderFill.getRed(), borderFill.getGreen(), borderFill.getBlue(),
+                    borderFill.getAlpha());
         style.borderThickness = borderThickness;
-        style.borderRadius = new CornerRadius(borderRadius.leftTop, borderRadius.rightTop, borderRadius.leftBottom,
-                borderRadius.rightBottom);
+        if (borderRadius != null)
+            style.borderRadius = new CornerRadius(borderRadius.leftTop, borderRadius.rightTop, borderRadius.leftBottom,
+                    borderRadius.rightBottom);
         if (shape != null)
             style.shape = new LinkedList<>(shape);
         if (innerShapes != null)
@@ -1225,6 +1243,9 @@ public class Style implements Cloneable {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.padding = new Indents(2, 2, 2, 2);
         style.spacing = new Spacing(0, 5);
+
+        Style selection_style = getSelectionItemStyle();
+        style.addInnerStyle("selection", selection_style);
 
         return style;
     }
@@ -2120,6 +2141,10 @@ public class Style implements Cloneable {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.padding = new Indents(2, 2, 2, 2);
         style.spacing = new Spacing(0, 5);
+
+        Style selection_style = getSelectionItemStyle();
+        // Style selection_style = DefaultsService.getDefaultStyle(SelectionItem.class);
+        style.addInnerStyle("selection", selection_style);
 
         return style;
     }

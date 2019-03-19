@@ -189,6 +189,7 @@ namespace SpaceVIL
         private SelectionItem GetWrapper(IBaseItem item)
         {
             SelectionItem wrapper = new SelectionItem(item);
+            wrapper.SetStyle(_selectedStyle);
             wrapper.SetToggleVisible(_isSelectionVisible);
             wrapper.EventMouseClick += (sender, args) =>
             {
@@ -220,8 +221,6 @@ namespace SpaceVIL
             _mapContent.Add(item, wrapper);
             UpdateLayout();
         }
-
-        private Style _selectedStyle;
 
         /// <summary>
         /// Add item to the ListArea
@@ -369,6 +368,25 @@ namespace SpaceVIL
                 child.SetDrawable(true);
             }
             _isUpdating = false;
+        }
+
+        private Style _selectedStyle;
+        public override void SetStyle(Style style)
+        {
+            if (style == null)
+                return;
+            base.SetStyle(style);
+
+            Style inner_style = style.GetInnerStyle("selection");
+            if (inner_style != null)
+            {
+                _selectedStyle = inner_style.Clone();
+                List<IBaseItem> list = new List<IBaseItem>(GetItems());
+                foreach (IBaseItem item in list)
+                {
+                    item.SetStyle(_selectedStyle);
+                }
+            }
         }
     }
 }

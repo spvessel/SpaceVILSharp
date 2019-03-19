@@ -1,7 +1,13 @@
 package com.spvessel.spacevil.App;
 
 import com.spvessel.spacevil.View.*;
+
+import java.awt.Color;
+
 import com.spvessel.spacevil.*;
+import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Decorations.*;
+import com.spvessel.spacevil.Flags.ItemStateType;
 
 public class Program {
     public static void main(String[] args) {
