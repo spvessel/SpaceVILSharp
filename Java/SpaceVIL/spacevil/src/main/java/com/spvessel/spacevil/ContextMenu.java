@@ -69,6 +69,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         super.addItem(itemList);
         itemList.eventScrollUp.clear();
         itemList.eventScrollDown.clear();
+        itemList.eventMouseClick.clear();
         itemList.getArea().eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.ESCAPE) {
                 hide();

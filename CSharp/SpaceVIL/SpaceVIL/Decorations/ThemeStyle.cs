@@ -107,7 +107,7 @@ namespace SpaceVIL.Decorations
                 DefaultItemsStyle.Add(typeof(SpaceVIL.WContainer), Style.GetWindowContainerStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.OpenEntryDialog), Style.GetOpenEntryDialogStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.FileSystemEntry), Style.GetFileSystemEntryStyle());
-                DefaultItemsStyle.Add(typeof(SpaceVIL.SelectionItem), Style.GetSelectedItemStyle());
+                // DefaultItemsStyle.Add(typeof(SpaceVIL.SelectionItem), Style.GetSelectedItemStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.WrapArea), Style.GetWrapAreaStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.WrapGrid), Style.GetWrapGridStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.SideArea), Style.GetSideAreaStyle());

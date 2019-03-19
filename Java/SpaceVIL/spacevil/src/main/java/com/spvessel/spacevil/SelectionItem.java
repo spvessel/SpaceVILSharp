@@ -2,7 +2,7 @@ package com.spvessel.spacevil;
 
 import java.util.List;
 
-import com.spvessel.spacevil.Common.DefaultsService;
+// import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Flags.ItemStateType;
@@ -20,7 +20,7 @@ public class SelectionItem extends Prototype {
         isFocusable = false;
         setItemName("SelectionItem_" + count);
         count++;
-        setStyle(DefaultsService.getDefaultStyle(SelectionItem.class));
+        // setStyle(DefaultsService.getDefaultStyle(SelectionItem.class));
     }
 
     public SelectionItem(InterfaceBaseItem content) {
@@ -35,7 +35,7 @@ public class SelectionItem extends Prototype {
         });
     }
 
-    InterfaceBaseItem getContent() {
+    public InterfaceBaseItem getContent() {
         return _item;
     }
 

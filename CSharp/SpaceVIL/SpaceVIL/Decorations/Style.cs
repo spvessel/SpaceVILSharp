@@ -383,6 +383,45 @@ namespace SpaceVIL.Decorations
             }
         }
 
+        public Style Clone()
+        {
+            Style style = new Style();
+
+            if (Background != null)
+                style.Background = Color.FromArgb(Background.R, Background.G, Background.B, Background.A);
+            if (Foreground != null)
+                style.Foreground = Color.FromArgb(Foreground.R, Foreground.G, Foreground.B, Foreground.A);
+            if (Font != null)
+                style.Font = new Font(Font.FontFamily, Font.Size, Font.Style);
+            else
+                style.Font = DefaultsService.GetDefaultFont();
+            style.SetSizePolicy(WidthPolicy, HeightPolicy);
+            style.SetSize(Width, Height);
+            style.SetMaxSize(MaxWidth, MaxHeight);
+            style.SetMinSize(MinWidth, MinHeight);
+            style.Alignment = Alignment;
+            style.TextAlignment = TextAlignment;
+            style.SetPadding(Padding.Left, Padding.Top, Padding.Right, Padding.Bottom);
+            style.SetMargin(Margin.Left, Margin.Top, Margin.Right, Margin.Bottom);
+            style.SetSpacing(Spacing.Horizontal, Spacing.Vertical);
+
+            if (BorderFill != null)
+                style.BorderFill = Color.FromArgb(BorderFill.R, BorderFill.G, BorderFill.B, BorderFill.A);
+            style.BorderThickness = BorderThickness;
+            if (BorderRadius != null)
+                style.BorderRadius = new CornerRadius(BorderRadius.LeftTop, BorderRadius.RightTop, BorderRadius.LeftBottom,
+                        BorderRadius.RightBottom);
+            if (Shape != null)
+                style.Shape = new List<float[]>(Shape);
+            if (InnerShapes != null)
+                style.InnerShapes = new List<IBaseItem>(InnerShapes);
+            style.IsFixedShape = IsFixedShape;
+            style.IsVisible = IsVisible;
+            style._item_states = new Dictionary<ItemStateType, ItemState>(_item_states);
+
+            return style;
+        }
+
         public static Style GetDefaultCommonStyle()
         {
             Style style = new Style();
@@ -437,6 +476,7 @@ namespace SpaceVIL.Decorations
             style.Width = 10;
             style.Height = 10;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.BorderRadius = new CornerRadius();
             style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
@@ -1100,6 +1140,9 @@ namespace SpaceVIL.Decorations
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.Padding = new Indents(2, 2, 2, 2);
             style.Spacing = new Spacing(0, 5);
+
+            Style selection_style = GetSelectionItemStyle();
+            style.AddInnerStyle("selection", selection_style);
 
             return style;
         }
@@ -1980,7 +2023,7 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        public static Style GetSelectedItemStyle()
+        public static Style GetSelectionItemStyle()
         {
             Style style = new Style();
             style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
@@ -2000,6 +2043,9 @@ namespace SpaceVIL.Decorations
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.Padding = new Indents(2, 2, 2, 2);
             style.Spacing = new Spacing(0, 5);
+
+            Style selection_style = GetSelectionItemStyle();
+            style.AddInnerStyle("selection", selection_style);
 
             return style;
         }

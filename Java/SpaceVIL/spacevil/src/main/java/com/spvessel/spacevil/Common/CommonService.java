@@ -75,6 +75,7 @@ public final class CommonService {
         DisplayService.SetDisplaySize(vidmode.width(), vidmode.height());
 
         DefaultsService.initImages();
+        DefaultsService.initDefaultTheme();
 
         return true;
     }

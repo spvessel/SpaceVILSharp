@@ -64,6 +64,7 @@ namespace SpaceVIL
             base.AddItem(ItemList);
             ItemList.EventScrollUp = null;
             ItemList.EventScrollDown = null;
+            ItemList.EventMouseClick = null;
             ItemList.GetArea().EventKeyPress += (sender, args) =>
             {
                 if (args.Key == KeyCode.Escape)

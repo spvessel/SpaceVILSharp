@@ -59,15 +59,17 @@ namespace SpaceVIL
             SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
 
             EventMousePress += OnMousePress;
+            // EventMouseClick+= OnMouseRelease;
             EventMouseDrag += OnDragging;
             count++;
         }
-
-        protected virtual void OnMousePress(object sender, MouseArgs args)
+        // private RedrawFrequency _renderFreq;
+        protected virtual void OnMousePress(IItem sender, MouseArgs args)
         {
             if (IsLocked)
                 return;
-
+            // _renderFreq = GetHandler().GetRenderFrequency();
+            // GetHandler().SetRenderFrequency(RedrawFrequency.Ultra);
             _x_global = GetX();
             _y_global = GetY();
             _pressed_x = args.Position.GetX();
@@ -89,7 +91,12 @@ namespace SpaceVIL
             }
         }
 
-        protected virtual void OnDragging(object sender, MouseArgs args)
+        protected virtual void OnMouseRelease(IItem sender, MouseArgs args)
+        {
+            // GetHandler().SetRenderFrequency(_renderFreq);
+        }
+
+        protected virtual void OnDragging(IItem sender, MouseArgs args)
         {
             if (IsLocked)
                 return;

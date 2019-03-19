@@ -21,6 +21,14 @@ public class ComplexTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
+
+        Style style = Style.getWrapGridStyle();
+        Style wrap_style = style.getInnerStyle("area");
+        Style wrapper_style = wrap_style.getInnerStyle("selection");
+        wrapper_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 255, 0, 150)));
+        wrapper_style.borderRadius = new CornerRadius(6);
+        DefaultsService.getDefaultTheme().replaceDefaultItemStyle(WrapGrid.class, style);
+
         WindowLayout Handler = new WindowLayout("ComplexTest", "ComplexTest", 950, 700, true);
         setHandler(Handler);
 
@@ -75,7 +83,7 @@ public class ComplexTest extends ActiveWindow {
         });
         ButtonCore b5 = getButton("b5", 26, 30, SizePolicy.FIXED);
         b5.eventMouseClick.add((sender, args) -> {
-            //block.setFormat(block.getRowCount() + 1, block.getColumnCount() + 1);
+            // block.setFormat(block.getRowCount() + 1, block.getColumnCount() + 1);
             TreeItem ti = (TreeItem) treeview.getSelectedItem();
             if (ti != null)
                 ti.setText("text");

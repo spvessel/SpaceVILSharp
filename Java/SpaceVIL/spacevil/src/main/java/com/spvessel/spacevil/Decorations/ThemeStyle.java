@@ -94,7 +94,7 @@ public class ThemeStyle {
             defaultItemsStyle.put(WContainer.class, Style.getWindowContainerStyle());
             defaultItemsStyle.put(OpenEntryDialog.class, Style.getOpenEntryDialogStyle());
             defaultItemsStyle.put(FileSystemEntry.class, Style.getFileSystemEntryStyle());
-            defaultItemsStyle.put(SelectionItem.class, Style.getSelectionItemStyle());
+            // defaultItemsStyle.put(SelectionItem.class, Style.getSelectionItemStyle());
             defaultItemsStyle.put(WrapArea.class, Style.getWrapAreaStyle());
             defaultItemsStyle.put(WrapGrid.class, Style.getWrapGridStyle());
             defaultItemsStyle.put(SideArea.class, Style.getSideAreaStyle());

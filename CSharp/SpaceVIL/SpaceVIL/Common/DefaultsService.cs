@@ -155,6 +155,11 @@ namespace SpaceVIL.Common
             // _default_theme = ThemeStyle.GetInstance();
         }
 
+        internal static void InitDefaultTheme()
+        {
+            _default_theme = new ThemeStyle();
+        }
+
         public static ThemeStyle GetDefaultTheme()
         {
             if (_default_theme == null)

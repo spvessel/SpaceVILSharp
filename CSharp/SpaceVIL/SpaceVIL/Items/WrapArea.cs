@@ -219,6 +219,8 @@ namespace SpaceVIL
         private SelectionItem GetWrapper(IBaseItem item)
         {
             SelectionItem wrapper = new SelectionItem(item);
+            wrapper.SetStyle(_selectedStyle);
+            
             wrapper.SetToggleVisible(_isSelectionVisible);
             wrapper.SetSize(_cellWidth, _cellHeight);
             wrapper.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
@@ -461,6 +463,25 @@ namespace SpaceVIL
                 _rows = (itemCount > GetItems().Count) ? GetItems().Count : itemCount;
             }
             _isUpdating = false;
+        }
+
+        private Style _selectedStyle;
+        public override void SetStyle(Style style)
+        {
+            if (style == null)
+                return;
+            base.SetStyle(style);
+
+            Style inner_style = style.GetInnerStyle("selection");
+            if (inner_style != null)
+            {
+                _selectedStyle = inner_style.Clone();
+                List<IBaseItem> list = new List<IBaseItem>(GetItems());
+                foreach (IBaseItem item in list)
+                {
+                    item.SetStyle(_selectedStyle);
+                }
+            }
         }
     }
 }
