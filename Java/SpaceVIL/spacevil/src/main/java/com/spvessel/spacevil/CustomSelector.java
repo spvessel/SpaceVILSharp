@@ -30,7 +30,7 @@ class CustomSelector extends Primitive {
         List<float[]> triangles = new LinkedList<>();
         int w1 = 0, w2 = 0;
         int h1 = 0, h2 = 0;
-        if (points != null) {
+        if (points != null && points.size() > 0) {
             w1 = points.get(0).x;
             w2 = w1;
             h1 = points.get(0).y;

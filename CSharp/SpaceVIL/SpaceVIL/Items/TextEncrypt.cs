@@ -89,7 +89,10 @@ namespace SpaceVIL
             {
                 ReplaceCursorAccordingCoord(args.Position.GetX());
                 if (_isSelect)
+                {
                     UnselectText();
+                    CancelJustSelected();
+                }
             }
             finally
             {
@@ -522,6 +525,12 @@ namespace SpaceVIL
             }
             int fromReal = Math.Min(fromPt, toPt);
             int toReal = Math.Max(fromPt, toPt);
+
+            if (fromReal < 0)
+                fromReal = 0;
+            if (toReal > _cursorXMax)
+                toReal = _cursorXMax;
+
             int width = toReal - fromReal + 1;
             _selectedArea.SetX(GetX() + GetPadding().Left + fromReal + _text_object.GetMargin().Left);
             _selectedArea.SetWidth(width);

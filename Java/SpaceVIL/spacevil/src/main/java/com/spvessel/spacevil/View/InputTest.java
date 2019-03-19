@@ -67,7 +67,7 @@ public class InputTest extends ActiveWindow {
         SpinItem sp = new SpinItem();
         sp.setParameters(1, -5.5, 7, 0.51);
 
-        // layout.addItem(password);
+        layout.addItem(password);
         layout.addItem(te);
         layout.addItem(tb);
 
@@ -89,8 +89,8 @@ public class InputTest extends ActiveWindow {
             // s.toCharArray()[3]);
             // System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " +
             // s.toCharArray()[4]);
-            tb.appendText("12345678");
-            te.setText("text edit text");
+            tb.pasteText("12345678");
+            te.pasteText("text edit text");
         });
 
         layout.addItem(bc);

@@ -82,7 +82,10 @@ namespace SpaceVIL
             {
                 ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
                 if (_isSelect)
+                {
                     UnselectText();
+                    CancelJustSelected();
+                }
             }
             finally
             {
@@ -130,7 +133,10 @@ namespace SpaceVIL
             int oldOff = _textureStorage.GetScrollYOffset();
             _textureStorage.SetScrollYOffset(offset);
             int diff = offset - oldOff;
-            _selectedArea.ShiftAreaY(diff);
+            // _selectedArea.ShiftAreaY(diff);
+            if (_justSelected)
+                CancelJustSelected();
+            MakeSelectedArea(_selectFrom, _selectTo);
             _cursor.SetY(_cursor.GetY() + diff);
         }
         internal int GetScrollXOffset()
@@ -142,7 +148,10 @@ namespace SpaceVIL
             int oldOff = _textureStorage.GetScrollXOffset();
             _textureStorage.SetScrollXOffset(offset);
             int diff = offset - oldOff;
-            _selectedArea.ShiftAreaX(diff);
+            // _selectedArea.ShiftAreaX(diff);
+            if (_justSelected)
+                CancelJustSelected();
+            MakeSelectedArea(_selectFrom, _selectTo);
             _cursor.SetX(_cursor.GetX() + diff);
         }
 
@@ -151,7 +160,11 @@ namespace SpaceVIL
             int curPos = _cursor.GetY();
             _cursor.SetY(_textureStorage.ScrollBlockUp(curPos));
             curPos = _cursor.GetY() - curPos;
-            _selectedArea.ShiftAreaY(curPos);
+
+            if (_justSelected)
+                CancelJustSelected();
+            MakeSelectedArea(_selectFrom, _selectTo);
+            // _selectedArea.ShiftAreaY(curPos);
             //ReplaceCursor();
         }
 
@@ -160,7 +173,11 @@ namespace SpaceVIL
             int curPos = _cursor.GetY();
             _cursor.SetY(_textureStorage.ScrollBlockDown(_cursor.GetY()));
             curPos = _cursor.GetY() - curPos;
-            _selectedArea.ShiftAreaY(curPos);
+
+            if (_justSelected)
+                CancelJustSelected();
+            MakeSelectedArea(_selectFrom, _selectTo);
+            // _selectedArea.ShiftAreaY(curPos);
             //ReplaceCursor();
         }
 
@@ -252,7 +269,7 @@ namespace SpaceVIL
                             CutText();
                         else
                         {
-                            _cursor_position = CheckLineFits(_cursor_position);
+                            _cursor_position = _textureStorage.CheckLineFits(_cursor_position);
                             if (args.Key == KeyCode.Backspace)//backspace
                             {
                                 if (_cursor_position.X > 0)
@@ -290,7 +307,7 @@ namespace SpaceVIL
 
                 if (args.Key == KeyCode.Left) //arrow left
                 {
-                    _cursor_position = CheckLineFits(_cursor_position);
+                    _cursor_position = _textureStorage.CheckLineFits(_cursor_position);
                     if (!_justSelected)
                     {
                         if (_cursor_position.X > 0)
@@ -394,7 +411,7 @@ namespace SpaceVIL
                     PrivCutText();
                 }
                 if (_justSelected) CancelJustSelected(); //_justSelected = false;
-                _cursor_position = CheckLineFits(_cursor_position);
+                _cursor_position = _textureStorage.CheckLineFits(_cursor_position);
                 SetTextInLine(_textureStorage.GetTextInLine(_cursor_position.Y).Insert(_cursor_position.X, str));
                 _cursor_position.X++;
                 ReplaceCursor();
@@ -408,6 +425,7 @@ namespace SpaceVIL
             }
         }
 
+        /*
         private Point CheckLineFits(Point checkPoint)
         {
             Point outPt = new Point();
@@ -421,12 +439,13 @@ namespace SpaceVIL
 
             return outPt;
         }
-
+        
         private Point CursorPosToCoord(Point cPos0)
         {
             Point cPos = CheckLineFits(cPos0);
             return _textureStorage.CupsorPosToCoord(cPos);
         }
+        */
 
         private void ReplaceCursor()
         {
@@ -578,10 +597,15 @@ namespace SpaceVIL
             }
 
             List<Point> selectionRectangles = new List<Point>();
+
             Point fromReal, toReal;
             List<Point> listPt = RealFromTo(from, to);
             fromReal = listPt[0];
             toReal = listPt[1];
+
+            selectionRectangles = _textureStorage.SelectedArrays(fromReal, toReal, _cursor.GetHeight());
+
+            /*
             Point tmp = new Point();
             int lsp = GetLineSpacer();
             if (from.Y == to.Y)
@@ -610,7 +634,7 @@ namespace SpaceVIL
                 tmp.Y = i;
                 selectionRectangles.Add(AddXYShifts(0, -lsp / 2 + 1, tmp, false));
             }
-
+            */
             _selectedArea.SetRectangles(selectionRectangles);
             //UpdateLayout();
         }
@@ -653,7 +677,7 @@ namespace SpaceVIL
 
         private Point AddXYShifts(int xShift, int yShift, Point point, bool isx = true)
         {
-            Point outPoint = _textureStorage.AddXYShifts(xShift, yShift, CursorPosToCoord(point), isx);
+            Point outPoint = _textureStorage.AddXYShifts(xShift, yShift, point, isx);
 
             //Indents textMargin = _textureStorage.TextMargin();
             outPoint.X += /* GetX() + GetPadding().Left + textMargin.Left + */ xShift;
@@ -667,8 +691,8 @@ namespace SpaceVIL
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
-                _selectFrom = CheckLineFits(_selectFrom);
-                _selectTo = CheckLineFits(_selectTo);
+                _selectFrom = _textureStorage.CheckLineFits(_selectFrom);
+                _selectTo = _textureStorage.CheckLineFits(_selectTo);
                 if (_selectFrom.X == _selectTo.X && _selectFrom.Y == _selectTo.Y) return "";
                 StringBuilder sb = new StringBuilder();
                 List<Point> listPt = RealFromTo(_selectFrom, _selectTo);
@@ -721,7 +745,7 @@ namespace SpaceVIL
                 if (_isSelect) PrivCutText();
                 if (pasteStr == null || pasteStr.Equals("")) return;
 
-                _cursor_position = CheckLineFits(_cursor_position);
+                _cursor_position = _textureStorage.CheckLineFits(_cursor_position);
                 _cursor_position = _textureStorage.PasteText(pasteStr, _cursor_position);
 
                 ReplaceCursor();
@@ -747,8 +771,8 @@ namespace SpaceVIL
             try
             {
                 string str = PrivGetSelectedText();
-                _selectFrom = CheckLineFits(_selectFrom);
-                _selectTo = CheckLineFits(_selectTo);
+                _selectFrom = _textureStorage.CheckLineFits(_selectFrom);
+                _selectTo = _textureStorage.CheckLineFits(_selectTo);
                 if (_selectFrom.X == _selectTo.X && _selectFrom.Y == _selectTo.Y) return "";
                 List<Point> listPt = RealFromTo(_selectFrom, _selectTo);
                 Point fromReal = listPt[0];

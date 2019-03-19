@@ -89,8 +89,10 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         textInputLock.lock();
         try {
             replaceCursorAccordingCoord(args.position.getX());
-            if (_isSelect)
+            if (_isSelect) {
                 unselectText();
+                cancelJustSelected();
+            }
         } finally {
             textInputLock.unlock();
         }
@@ -473,6 +475,12 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         }
         int fromReal = Math.min(fromPt, toPt);
         int toReal = Math.max(fromPt, toPt);
+
+        if (fromReal < 0)
+            fromReal = 0;
+        if (toReal > _cursorXMax)
+            toReal = _cursorXMax;
+
         int width = toReal - fromReal + 1;
         _selectedArea.setX(getX() + getPadding().left + fromReal + _text_object.getMargin().left);
         _selectedArea.setWidth(width);
