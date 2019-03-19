@@ -216,7 +216,23 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         return pos;
     }
 
-    Point cupsorPosToCoord(Point cPos) {
+    Point checkLineFits(Point checkPoint) {
+        Point outPt = new Point();
+        // ??? check line count
+        outPt.y = checkPoint.y;
+        if (outPt.y == -1)
+            outPt.y = 0;
+        outPt.x = checkPoint.x;
+        if (outPt.x == -1)
+            outPt.x = 0;
+
+        outPt.x = checkLineWidth(outPt.x, checkPoint);
+
+        return outPt;
+    }
+
+    private Point cursorPosToCoord(Point cPos0) {
+        Point cPos = checkLineFits(cPos0);
         Point coord = new Point(0, 0);
         coord.y = getLineY(cPos.y);
 
@@ -492,8 +508,8 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         return _cursor_position;
     }
 
-    Point addXYShifts(int xShift, int yShift, Point outPoint, boolean isx) {
-        // Point outPoint = cursorPosToCoord(point);
+    Point addXYShifts(int xShift, int yShift, Point point, boolean isx) {
+        Point outPoint = cursorPosToCoord(point);
         if (getParent() == null)
             return new Point(0, 0);
         int offset = _cursorXMax / 3;
@@ -532,13 +548,148 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             }
         }
 
-        outPoint.x += getParent().getX() + getParent().getPadding().left + globalXShift + getTextMargin().left;
-        outPoint.y += getParent().getY() + getParent().getPadding().top + globalYShift + getTextMargin().top;
+        outPoint.x += globalXShift;
+        outPoint.y += globalYShift;
+
+//        if (!isx) {
+//            if (outPoint.x < 0)
+//                outPoint.x = 0;
+//            if (outPoint.y < 0)
+//                outPoint.y = 0;
+//            if (outPoint.x > _cursorXMax)
+//                outPoint.x = _cursorXMax;
+//            if (outPoint.y > _cursorYMax)
+//                outPoint.y = _cursorYMax;
+//        }
+
+        outPoint.x += getParent().getX() + getParent().getPadding().left + getTextMargin().left;
+        outPoint.y += getParent().getY() + getParent().getPadding().top + getTextMargin().top;
 
         // outPoint.x += getX() + getPadding().left + _linesList.get(0).getMargin().left + xShift;
         // outPoint.y += getY() + getPadding().top + _linesList.get(0).getMargin().top + yShift;
 
         return outPoint;
+    }
+
+    List<Point> selectedArrays(Point fromPt, Point toPt, int cursorHeight) {
+        List<Point> selectionRectangles = new LinkedList<>();
+
+        int xAdder = getParent().getX() + getParent().getPadding().left + getTextMargin().left;
+        int yAdder = getParent().getY() + getParent().getPadding().top + getTextMargin().top;
+
+        Point tmp = new Point();
+        Point tmp0 = new Point();
+        int x1, y1;
+        int x2, y2;
+        int lsp = getLineSpacer();
+
+//        Point fromCoord = cursorPosToCoord(fromPt);
+//        Point toCoord = cursorPosToCoord(toPt);
+//
+//        if (toCoord.y + globalYShift < 0)
+//            return null;
+//        if (fromCoord.y + globalYShift > _cursorYMax)
+//            return null;
+
+        if (fromPt.y == toPt.y) {
+            if (_linesList.get(fromPt.y).getLetTextures() == null)
+                return null;
+
+            tmp0 = cursorPosToCoord(fromPt); //addXYShifts(0, 0, fromPt, false);
+            x1 = tmp0.x + globalXShift; y1 = tmp0.y + globalYShift;
+            tmp0 = cursorPosToCoord(toPt); //addXYShifts(0, 0, toPt, false);
+            x2 = tmp0.x + globalXShift; y2 = tmp0.y + globalYShift;
+
+            if (x2 < 0 || x1 > _cursorXMax)
+                return null;
+
+            if (x1 < 0)
+                x1 = 0;
+
+            if (x2 > _cursorXMax)
+                x2 = _cursorXMax;
+
+            x1 += xAdder; y1 += yAdder;
+            x2 += xAdder; y2 += yAdder;
+            selectionRectangles.add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
+            selectionRectangles.add(new Point(x2, y2 - lsp / 2 + 1));
+
+            return selectionRectangles;
+        }
+
+        tmp0 = cursorPosToCoord(fromPt); //addXYShifts(0, 0, fromPt, false);
+        x1 = tmp0.x + globalXShift; y1 = tmp0.y + globalYShift;
+
+        tmp.x = getLineLetCount(fromPt.y);
+        tmp.y = fromPt.y;
+        tmp0 = cursorPosToCoord(tmp); //addXYShifts(0, 0, tmp, false);
+        x2 = tmp0.x + globalXShift; y2 = tmp0.y + globalYShift;
+
+
+        if (_linesList.get(fromPt.y).getLetTextures() != null) {
+        if (x2 >= 0 && x1 <= _cursorXMax) {
+            if (x1 < 0)
+                x1 = 0;
+
+            if (x2 > _cursorXMax)
+                x2 = _cursorXMax;
+
+            x1 += xAdder; y1 += yAdder;
+            x2 += xAdder; y2 += yAdder;
+            selectionRectangles.add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
+            selectionRectangles.add(new Point(x2, y2 - lsp / 2 + 1));
+        }
+        }
+
+        tmp.x = 0;
+        tmp.y = toPt.y;
+        tmp0 = cursorPosToCoord(tmp); //addXYShifts(0, 0, tmp, false);
+        x1 = tmp0.x + globalXShift; y1 = tmp0.y + globalYShift;
+        tmp0 = cursorPosToCoord(toPt); //addXYShifts(0, 0, toReal, false);
+        x2 = tmp0.x + globalXShift; y2 = tmp0.y + globalYShift;
+
+        if (_linesList.get(toPt.y).getLetTextures() != null) {
+        if (x2 >= 0 && x1 <= _cursorXMax) {
+            if (x1 < 0)
+                x1 = 0;
+
+            if (x2 > _cursorXMax)
+                x2 = _cursorXMax;
+
+            x1 += xAdder; y1 += yAdder;
+            x2 += xAdder; y2 += yAdder;
+            selectionRectangles.add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
+            selectionRectangles.add(new Point(x2, y2 - lsp / 2 + 1));
+        }
+        }
+
+        for (int i = fromPt.y + 1; i < toPt.y; i++) {
+            tmp.x = 0;
+            tmp.y = i;
+            tmp0 = cursorPosToCoord(tmp); //addXYShifts(0, 0, tmp, false);
+            x1 = tmp0.x + globalXShift; y1 = tmp0.y + globalYShift;
+            tmp.x = getLineLetCount(i);
+            tmp.y = i;
+            tmp0 = cursorPosToCoord(tmp); //addXYShifts(0, 0, tmp, false);
+            x2 = tmp0.x + globalXShift; y2 = tmp0.y + globalYShift;
+
+            if (_linesList.get(i).getLetTextures() != null) {
+            if (x2 >= 0 && x1 <= _cursorXMax) {
+                if (x1 < 0)
+                    x1 = 0;
+
+                if (x2 > _cursorXMax)
+                    x2 = _cursorXMax;
+
+                x1 += xAdder; y1 += yAdder;
+                x2 += xAdder; y2 += yAdder;
+                selectionRectangles.add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
+                selectionRectangles.add(new Point(x2, y2 - lsp / 2 + 1));
+            }
+            }
+        }
+
+        return selectionRectangles;
     }
 
     Color _foreground = Color.BLACK;

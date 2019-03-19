@@ -89,7 +89,10 @@ namespace SpaceVIL
             {
                 ReplaceCursorAccordingCoord(args.Position.GetX());
                 if (_isSelect)
+                {
                     UnselectText();
+                    CancelJustSelected();
+                }
             }
             finally
             {
@@ -138,8 +141,11 @@ namespace SpaceVIL
             _text_object.SetLineXShift(sh);
             _cursor.SetX(curCoord + sh);
 
-            curPos = _cursor.GetX() - curPos;
-            _selectedArea.SetX(_selectedArea.GetX() + curPos);
+            // curPos = _cursor.GetX() - curPos;
+            // _selectedArea.SetX(_selectedArea.GetX() + curPos);
+            if (_justSelected)
+                CancelJustSelected();
+            MakeSelectedArea(_selectFrom, _selectTo);
         }
 
         private void OnScrollDown(object sender, MouseArgs args)
@@ -160,8 +166,11 @@ namespace SpaceVIL
             _text_object.SetLineXShift(sh);
             _cursor.SetX(curCoord + sh);
 
-            curPos = _cursor.GetX() - curPos;
-            _selectedArea.SetX(_selectedArea.GetX() + curPos);
+            // curPos = _cursor.GetX() - curPos;
+            // _selectedArea.SetX(_selectedArea.GetX() + curPos);
+            if (_justSelected)
+                CancelJustSelected();
+            MakeSelectedArea(_selectFrom, _selectTo);
         }
 
         private void ReplaceCursorAccordingCoord(int realPos)
@@ -274,7 +283,7 @@ namespace SpaceVIL
                     }
                     else
                         if (_isSelect && !InsteadKeyMods.Contains(args.Key))
-                        UnselectText();
+                            UnselectText();
                 }
 
                 if (args.Key == KeyCode.Left && _cursor_position > 0)//arrow left
@@ -612,6 +621,12 @@ namespace SpaceVIL
             }
             int fromReal = Math.Min(fromPt, toPt);
             int toReal = Math.Max(fromPt, toPt);
+
+            if (fromReal < 0)
+                fromReal = 0;
+            if (toReal > _cursorXMax)
+                toReal = _cursorXMax;
+
             int width = toReal - fromReal + 1;
 
             int w = GetTextWidth();
@@ -649,7 +664,7 @@ namespace SpaceVIL
 
         public string GetSelectedText()
         {
-            return GetSelectedText();
+            return PrivGetSelectedText();
         }
 
         private void PrivPasteText(string pasteStr)

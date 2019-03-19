@@ -222,8 +222,23 @@ namespace SpaceVIL
             return pos;
         }
 
-        internal Point CupsorPosToCoord(Point cPos)
+        internal Point CheckLineFits(Point checkPoint)
         {
+            Point outPt = new Point();
+            //??? check line count
+            outPt.Y = checkPoint.Y;
+            if (outPt.Y == -1) outPt.Y = 0;
+            outPt.X = checkPoint.X;
+            if (outPt.X == -1) outPt.X = 0;
+
+            outPt.X = CheckLineWidth(outPt.X, checkPoint);
+
+            return outPt;
+        }
+
+        private Point CursorPosToCoord(Point cPos0)
+        {
+            Point cPos = CheckLineFits(cPos0);
             Point coord = new Point(0, 0);
             coord.Y = GetLineY(cPos.Y);
 
@@ -559,8 +574,9 @@ namespace SpaceVIL
             return _cursor_position;
         }
 
-        internal Point AddXYShifts(int xShift, int yShift, Point outPoint, bool isx)
+        internal Point AddXYShifts(int xShift, int yShift, Point point, bool isx)
         {
+            Point outPoint = CursorPosToCoord(point);
             if (GetParent() == null) return new Point(0, 0);
             //Point outPoint = CursorPosToCoord(point);
             int offset = _cursorXMax / 3;
@@ -603,6 +619,129 @@ namespace SpaceVIL
             //outPoint.Y += GetY() + GetPadding().Top + _linesList[0].GetMargin().Top + yShift;
 
             return outPoint;
+        }
+
+        internal List<Point> SelectedArrays(Point fromPt, Point toPt, int cursorHeight)
+        {
+            List<Point> selectionRectangles = new List<Point>();
+
+            int xAdder = GetParent().GetX() + GetParent().GetPadding().Left + GetTextMargin().Left;
+            int yAdder = GetParent().GetY() + GetParent().GetPadding().Top + GetTextMargin().Top;
+
+            Point tmp = new Point();
+            Point tmp0 = new Point();
+            int x1, y1;
+            int x2, y2;
+            int lsp = GetLineSpacer();
+            if (fromPt.Y == toPt.Y)
+            {
+                if (_linesList[fromPt.Y].GetLetTextures() == null)
+                    return null;
+
+                tmp0 = CursorPosToCoord(fromPt);
+                x1 = tmp0.X + globalXShift; y1 = tmp0.Y + globalYShift;
+                tmp0 = CursorPosToCoord(toPt);
+                x2 = tmp0.X + globalXShift; y2 = tmp0.Y + globalYShift;
+
+                if (x2 < 0 || x1 > _cursorXMax)
+                    return null;
+
+                if (x1 < 0)
+                    x1 = 0;
+
+                if (x2 > _cursorXMax)
+                    x2 = _cursorXMax;
+
+                x1 += xAdder; y1 += yAdder;
+                x2 += xAdder; y2 += yAdder;
+                
+                selectionRectangles.Add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
+                selectionRectangles.Add(new Point(x2, y2 - lsp / 2 + 1));
+                
+                return selectionRectangles;
+            }
+
+            tmp0 = CursorPosToCoord(fromPt);
+            x1 = tmp0.X + globalXShift; y1 = tmp0.Y + globalYShift;
+
+            tmp.X = GetLineLetCount(fromPt.Y);
+            tmp.Y = fromPt.Y;
+            tmp0 = CursorPosToCoord(tmp);
+            x2 = tmp0.X + globalXShift; y2 = tmp0.Y + globalYShift;
+
+            if (_linesList[fromPt.Y].GetLetTextures() != null)
+            {
+                if (x2 >= 0 && x1 <= _cursorXMax)
+                {
+                    if (x1 < 0)
+                        x1 = 0;
+
+                    if (x2 > _cursorXMax)
+                        x2 = _cursorXMax;
+
+                    x1 += xAdder; y1 += yAdder;
+                    x2 += xAdder; y2 += yAdder;
+                    selectionRectangles.Add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
+                    selectionRectangles.Add(new Point(x2, y2 - lsp / 2 + 1));
+                }
+            }
+            
+            tmp.X = 0;
+            tmp.Y = toPt.Y;
+            tmp0 = CursorPosToCoord(tmp);
+            x1 = tmp0.X + globalXShift; y1 = tmp0.Y + globalYShift;
+            tmp0 = CursorPosToCoord(toPt);
+            x2 = tmp0.X + globalXShift; y2 = tmp0.Y + globalYShift;
+
+            if (_linesList[toPt.Y].GetLetTextures() != null)
+            {
+                if (x2 >= 0 && x1 <= _cursorXMax)
+                {
+                    if (x1 < 0)
+                        x1 = 0;
+
+                    if (x2 > _cursorXMax)
+                        x2 = _cursorXMax;
+
+                    x1 += xAdder; y1 += yAdder;
+                    x2 += xAdder; y2 += yAdder;
+
+
+                    selectionRectangles.Add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
+                    selectionRectangles.Add(new Point(x2, y2 - lsp / 2 + 1));
+                }
+            }
+
+            for (int i = fromPt.Y + 1; i < toPt.Y; i++)
+            {
+                tmp.X = 0;
+                tmp.Y = i;
+                tmp0 = CursorPosToCoord(tmp);
+                x1 = tmp0.X + globalXShift; y1 = tmp0.Y + globalYShift;
+                tmp.X = GetLineLetCount(i);
+                tmp.Y = i;
+                tmp0 = CursorPosToCoord(tmp);
+                x2 = tmp0.X + globalXShift; y2 = tmp0.Y + globalYShift;
+
+                if (_linesList[i].GetLetTextures() != null)
+                {
+                    if (x2 >= 0 && x1 <= _cursorXMax)
+                    {
+                        if (x1 < 0)
+                            x1 = 0;
+
+                        if (x2 > _cursorXMax)
+                            x2 = _cursorXMax;
+
+                        x1 += xAdder; y1 += yAdder;
+                        x2 += xAdder; y2 += yAdder;
+                        selectionRectangles.Add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
+                        selectionRectangles.Add(new Point(x2, y2 - lsp / 2 + 1));
+                    }
+                }
+            }
+
+            return selectionRectangles;
         }
 
         Color _foreground = Color.Black;

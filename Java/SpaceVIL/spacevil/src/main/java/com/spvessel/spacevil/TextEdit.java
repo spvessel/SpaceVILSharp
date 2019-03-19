@@ -96,8 +96,10 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         textInputLock.lock();
         try {
             replaceCursorAccordingCoord(args.position.getX());
-            if (_isSelect)
+            if (_isSelect) {
                 unselectText();
+                cancelJustSelected();
+            }
         } finally {
             textInputLock.unlock();
         }
@@ -139,8 +141,11 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         _text_object.setLineXShift(sh);
         _cursor.setX(curCoord + sh);
 
-        curPos = _cursor.getX() - curPos;
-        _selectedArea.setX(_selectedArea.getX() + curPos);
+//        curPos = _cursor.getX() - curPos;
+//        _selectedArea.setX(_selectedArea.getX() + curPos);
+        if (_justSelected)
+            cancelJustSelected();
+        makeSelectedArea(_selectFrom, _selectTo);
     }
 
     private void onScrollDown(Object sender, MouseArgs args) {
@@ -162,8 +167,11 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         _text_object.setLineXShift(sh);
         _cursor.setX(curCoord + sh);
 
-        curPos = _cursor.getX() - curPos;
-        _selectedArea.setX(_selectedArea.getX() + curPos);
+//        curPos = _cursor.getX() - curPos;
+//        _selectedArea.setX(_selectedArea.getX() + curPos);
+        if (_justSelected)
+            cancelJustSelected();
+        makeSelectedArea(_selectFrom, _selectTo);
     }
 
     private void replaceCursorAccordingCoord(int realPos) {
@@ -261,8 +269,10 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
                             // replaceCursor();
                         }
                     }
-                } else if (_isSelect && !InsteadKeyMods.contains(args.key))
+                } else if (_isSelect && !InsteadKeyMods.contains(args.key)) {
                     unselectText();
+//                    cancelJustSelected();
+                }
             }
 
             if (args.key == KeyCode.LEFT && _cursor_position > 0) // arrow left
@@ -615,6 +625,12 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         }
         int fromReal = Math.min(fromPt, toPt);
         int toReal = Math.max(fromPt, toPt);
+
+        if (fromReal < 0)
+            fromReal = 0;
+        if (toReal > _cursorXMax)
+            toReal = _cursorXMax;
+
         int width = toReal - fromReal + 1;
 
         int w = getTextWidth();

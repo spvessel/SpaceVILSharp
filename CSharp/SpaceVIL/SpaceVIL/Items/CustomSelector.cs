@@ -36,7 +36,7 @@ namespace SpaceVIL
             List<float[]> triangles = new List<float[]>();
             int w1 = 0, w2 = 0;
             int h1 = 0, h2 = 0;
-            if (points != null)
+            if (points != null && points.Count > 0)
             {
                 w1 = points[0].X;
                 w2 = w1;

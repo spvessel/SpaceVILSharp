@@ -73,8 +73,10 @@ class TextBlock extends Prototype
         _textureStorage.textInputLock.lock();
         try {
             replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
-            if (_isSelect)
+            if (_isSelect) {
                 unselectText();
+                cancelJustSelected();
+            }
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -112,7 +114,10 @@ class TextBlock extends Prototype
         int oldOff = _textureStorage.getScrollYOffset();
         _textureStorage.setScrollYOffset(offset);
         int diff = offset - oldOff;
-        _selectedArea.shiftAreaY(diff);
+//        _selectedArea.shiftAreaY(diff);
+        if (_justSelected)
+            cancelJustSelected();
+        makeSelectedArea(_selectFrom, _selectTo);
         _cursor.setY(_cursor.getY() + diff);
     }
 
@@ -124,7 +129,10 @@ class TextBlock extends Prototype
         int oldOff = _textureStorage.getScrollXOffset();
         _textureStorage.setScrollXOffset(offset);
         int diff = offset - oldOff;
-        _selectedArea.shiftAreaX(diff);
+//        _selectedArea.shiftAreaX(diff);
+        if (_justSelected)
+            cancelJustSelected();
+        makeSelectedArea(_selectFrom, _selectTo);
         _cursor.setX(_cursor.getX() + diff);
     }
 
@@ -132,7 +140,11 @@ class TextBlock extends Prototype
         int curPos = _cursor.getY();
         _cursor.setY(_textureStorage.scrollBlockUp(_cursor.getY()));
         curPos = _cursor.getY() - curPos;
-        _selectedArea.shiftAreaY(curPos);
+
+        if (_justSelected)
+            cancelJustSelected();
+        makeSelectedArea(_selectFrom, _selectTo);
+//        _selectedArea.shiftAreaY(curPos);
         // replaceCursor();
     }
 
@@ -140,7 +152,11 @@ class TextBlock extends Prototype
         int curPos = _cursor.getY();
         _cursor.setY(_textureStorage.scrollBlockDown(_cursor.getY()));
         curPos = _cursor.getY() - curPos;
-        _selectedArea.shiftAreaY(curPos);
+
+        if (_justSelected)
+            cancelJustSelected();
+        makeSelectedArea(_selectFrom, _selectTo);
+//        _selectedArea.shiftAreaY(curPos);
         // replaceCursor();
     }
 
@@ -215,7 +231,7 @@ class TextBlock extends Prototype
                     if (_isSelect)
                         cutText();
                     else {
-                        _cursor_position = checkLineFits(_cursor_position);
+                        _cursor_position = _textureStorage.checkLineFits(_cursor_position);
                         if (args.key == KeyCode.BACKSPACE) // backspace
                         {
                             if (_cursor_position.x > 0) {
@@ -250,7 +266,7 @@ class TextBlock extends Prototype
 
             if (args.key == KeyCode.LEFT) // arrow left
             {
-                _cursor_position = checkLineFits(_cursor_position);
+                _cursor_position = _textureStorage.checkLineFits(_cursor_position);
                 if (!_justSelected) {
                     if (_cursor_position.x > 0)
                         _cursor_position.x--;
@@ -347,7 +363,7 @@ class TextBlock extends Prototype
             if (_justSelected)
                 cancelJustSelected(); // _justSelected = false;
 
-            _cursor_position = checkLineFits(_cursor_position);
+            _cursor_position = _textureStorage.checkLineFits(_cursor_position);
 
             StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursor_position.y));
             setTextInLine(sb.insert(_cursor_position.x, str).toString());
@@ -361,25 +377,25 @@ class TextBlock extends Prototype
         }
     }
 
-    private Point checkLineFits(Point checkPoint) {
-        Point outPt = new Point();
-        // ??? check line count
-        outPt.y = checkPoint.y;
-        if (outPt.y == -1)
-            outPt.y = 0;
-        outPt.x = checkPoint.x;
-        if (outPt.x == -1)
-            outPt.x = 0;
-
-        outPt.x = _textureStorage.checkLineWidth(outPt.x, checkPoint);
-
-        return outPt;
-    }
-
-    private Point cursorPosToCoord(Point cPos0) {
-        Point cPos = checkLineFits(cPos0);
-        return _textureStorage.cupsorPosToCoord(cPos);
-    }
+//    private Point checkLineFits(Point checkPoint) {
+//        Point outPt = new Point();
+//        // ??? check line count
+//        outPt.y = checkPoint.y;
+//        if (outPt.y == -1)
+//            outPt.y = 0;
+//        outPt.x = checkPoint.x;
+//        if (outPt.x == -1)
+//            outPt.x = 0;
+//
+//        outPt.x = _textureStorage.checkLineWidth(outPt.x, checkPoint);
+//
+//        return outPt;
+//    }
+//
+//    private Point cursorPosToCoord(Point cPos0) {
+//        Point cPos = checkLineFits(cPos0);
+//        return _textureStorage.cupsorPosToCoord(cPos);
+//    }
 
     private void replaceCursor() {
         Point pos = addXYShifts(0, 0, _cursor_position);
@@ -579,32 +595,100 @@ class TextBlock extends Prototype
         List<Point> listPt = realFromTo(from, to);
         fromReal = listPt.get(0);
         toReal = listPt.get(1);
-        Point tmp = new Point();
-        int lsp = getLineSpacer();
-        if (from.y == to.y) {
-            selectionRectangles.add(addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, fromReal, false));
-            selectionRectangles.add(addXYShifts(0, -lsp / 2 + 1, toReal, false));
-            _selectedArea.setRectangles(selectionRectangles);
-            return;
-        }
 
-        selectionRectangles.add(addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, fromReal, false));
-        tmp.x = getLineLetCount(fromReal.y);
-        tmp.y = fromReal.y;
-        selectionRectangles.add(addXYShifts(0, -lsp / 2 + 1, tmp, false));
-        tmp.x = 0;
-        tmp.y = toReal.y;
-        selectionRectangles.add(addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, tmp, false));
-        selectionRectangles.add(addXYShifts(0, -lsp / 2 + 1, toReal, false));
+        selectionRectangles = _textureStorage.selectedArrays(fromReal, toReal, _cursor.getHeight());
 
-        for (int i = fromReal.y + 1; i < toReal.y; i++) {
-            tmp.x = 0;
-            tmp.y = i;
-            selectionRectangles.add(addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, tmp, false));
-            tmp.x = getLineLetCount(i);
-            tmp.y = i;
-            selectionRectangles.add(addXYShifts(0, -lsp / 2 + 1, tmp, false));
-        }
+//        Point tmp = new Point();
+//        Point tmp0 = new Point();
+//        int x1, y1;
+//        int x2, y2;
+//        int lsp = getLineSpacer();
+//        System.out.println("from to real " + fromReal + " " + toReal);
+//        int[] visBounds = _textureStorage.getVisible(cursorPosToCoord(fromReal).y, cursorPosToCoord(toReal).y);
+//        System.out.println(visBounds[0] + " " + visBounds[1] + " " + visBounds[2] + " " + visBounds[3]);
+//        if (visBounds[1] == visBounds[3])
+//            return;
+//
+//        if (from.y == to.y) {
+//            tmp0 = addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, fromReal, false);
+//            x1 = tmp0.x; y1 = tmp0.y;
+//            tmp0 = addXYShifts(0, -lsp / 2 + 1, toReal, false);
+//            x2 = tmp0.x; y2 = tmp0.y;
+//
+//            if (x2 < visBounds[0] || x1 > visBounds[2])
+//                return;
+//
+//            if (x1 < visBounds[0])
+//                x1 = visBounds[0];
+//
+//            if (x2 > visBounds[2])
+//                x2 = visBounds[2];
+//
+//            selectionRectangles.add(new Point(x1, y1));
+//            selectionRectangles.add(new Point(x2, y2));
+//
+//            _selectedArea.setRectangles(selectionRectangles);
+//            return;
+//        }
+//
+//        tmp0 = addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, fromReal, false);
+//        x1 = tmp0.x; y1 = tmp0.y;
+//
+//        tmp.x = getLineLetCount(fromReal.y);
+//        tmp.y = fromReal.y;
+//        tmp0 = addXYShifts(0, -lsp / 2 + 1, tmp, false);
+//        x2 = tmp0.x; y2 = tmp0.y;
+//
+//        if (x2 >= visBounds[0] && x1 <= visBounds[2]) {
+//            if (x1 < visBounds[0])
+//                x1 = visBounds[0];
+//
+//            if (x2 > visBounds[2])
+//                x2 = visBounds[2];
+//
+//            selectionRectangles.add(new Point(x1, y1));
+//            selectionRectangles.add(new Point(x2, y2));
+//        }
+//
+//        tmp.x = 0;
+//        tmp.y = toReal.y;
+//        tmp0 = addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, tmp, false);
+//        x1 = tmp0.x; y1 = tmp0.y;
+//        tmp0 = addXYShifts(0, -lsp / 2 + 1, toReal, false);
+//        x2 = tmp0.x; y2 = tmp0.y;
+//
+//        if (x2 >= visBounds[0] && x1 <= visBounds[2]) {
+//            if (x1 < visBounds[0])
+//                x1 = visBounds[0];
+//
+//            if (x2 > visBounds[2])
+//                x2 = visBounds[2];
+//
+//            selectionRectangles.add(new Point(x1, y1));
+//            selectionRectangles.add(new Point(x2, y2));
+//        }
+//
+//        for (int i = fromReal.y + 1; i < toReal.y; i++) {
+//            tmp.x = 0;
+//            tmp.y = i;
+//            tmp0 = addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, tmp, false);
+//            x1 = tmp0.x; y1 = tmp0.y;
+//            tmp.x = getLineLetCount(i);
+//            tmp.y = i;
+//            tmp0 = addXYShifts(0, -lsp / 2 + 1, tmp, false);
+//            x2 = tmp0.x; y2 = tmp0.y;
+//
+//            if (x2 >= visBounds[0] && x1 <= visBounds[2]) {
+//                if (x1 < visBounds[0])
+//                    x1 = visBounds[0];
+//
+//                if (x2 > visBounds[2])
+//                    x2 = visBounds[2];
+//
+//                selectionRectangles.add(new Point(x1, y1));
+//                selectionRectangles.add(new Point(x2, y2));
+//            }
+//        }
 
         _selectedArea.setRectangles(selectionRectangles);
     }
@@ -640,7 +724,7 @@ class TextBlock extends Prototype
     }
 
     private Point addXYShifts(int xShift, int yShift, Point point, boolean isx) {
-        Point outPoint = _textureStorage.addXYShifts(xShift, yShift, cursorPosToCoord(point), isx);
+        Point outPoint = _textureStorage.addXYShifts(xShift, yShift, point, isx);
 
         outPoint.x += /* getX() + getPadding().left + _linesList.get(0).getMargin().left */ +xShift;
         outPoint.y += /* getY() + getPadding().top + _linesList.get(0).getMargin().top */ +yShift;
@@ -651,8 +735,8 @@ class TextBlock extends Prototype
     private String privGetSelectedText() {
         _textureStorage.textInputLock.lock();
         try {
-            _selectFrom = checkLineFits(_selectFrom);
-            _selectTo = checkLineFits(_selectTo);
+            _selectFrom = _textureStorage.checkLineFits(_selectFrom);
+            _selectTo = _textureStorage.checkLineFits(_selectTo);
             if (_selectFrom.x == _selectTo.x && _selectFrom.y == _selectTo.y)
                 return "";
             StringBuilder sb = new StringBuilder();
@@ -701,7 +785,7 @@ class TextBlock extends Prototype
             if (pasteStr == null || pasteStr.equals(""))
                 return;
 
-            _cursor_position = checkLineFits(_cursor_position);
+            _cursor_position = _textureStorage.checkLineFits(_cursor_position);
             _cursor_position = _textureStorage.pasteText(pasteStr, _cursor_position);
 
             replaceCursor();
@@ -723,8 +807,8 @@ class TextBlock extends Prototype
         _textureStorage.textInputLock.lock();
         try {
             String str = privGetSelectedText();
-            _selectFrom = checkLineFits(_selectFrom);
-            _selectTo = checkLineFits(_selectTo);
+            _selectFrom = _textureStorage.checkLineFits(_selectFrom);
+            _selectTo = _textureStorage.checkLineFits(_selectTo);
             if (_selectFrom.x == _selectTo.x && _selectFrom.y == _selectTo.y)
                 return "";
             List<Point> listPt = realFromTo(_selectFrom, _selectTo);
