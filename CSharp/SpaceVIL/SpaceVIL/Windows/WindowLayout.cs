@@ -440,7 +440,8 @@ namespace SpaceVIL
         public bool IsMaximized = false;
         public void Maximize()
         {
-            engine.MaximizeWindow();
+            // engine.MaximizeWindow();
+            engine.MaximizeRequest = true;
         }
 
         public void IsFixed(bool flag)

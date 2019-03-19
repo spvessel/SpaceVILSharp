@@ -379,27 +379,26 @@ final class DrawEngine {
         _inputLocker = false;
     }
 
+    boolean maximizeRequest = false;
+
     void maximizeWindow() {
         _inputLocker = true;
+        IntBuffer w = BufferUtils.createIntBuffer(1);
+        IntBuffer h = BufferUtils.createIntBuffer(1);
         engineEvent.setEvent(InputEventType.WINDOW_RESTORE);
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            if (_handler.getLayout().isMaximized) {
-                glfwRestoreWindow(_handler.getWindowId());
-                _handler.getLayout().isMaximized = false;
-                IntBuffer w = stack.mallocInt(1); // int*
-                IntBuffer h = stack.mallocInt(1); // int*
-                glfwGetWindowSize(_handler.getWindowId(), w, h);
-                _handler.getLayout().setWidth(w.get(0));
-                _handler.getLayout().setHeight(h.get(0));
-            } else {
-                glfwMaximizeWindow(_handler.getWindowId());
-                _handler.getLayout().isMaximized = true;
-                IntBuffer w = stack.mallocInt(1); // int*
-                IntBuffer h = stack.mallocInt(1); // int*
-                glfwGetWindowSize(_handler.getWindowId(), w, h);
-                _handler.getLayout().setWidth(w.get(0));
-                _handler.getLayout().setHeight(h.get(0));
-            }
+
+        if (_handler.getLayout().isMaximized) {
+            glfwRestoreWindow(_handler.getWindowId());
+            _handler.getLayout().isMaximized = false;
+            glfwGetWindowSize(_handler.getWindowId(), w, h);
+            _handler.getLayout().setWidth(w.get(0));
+            _handler.getLayout().setHeight(h.get(0));
+        } else {
+            glfwMaximizeWindow(_handler.getWindowId());
+            _handler.getLayout().isMaximized = true;
+            glfwGetWindowSize(_handler.getWindowId(), w, h);
+            _handler.getLayout().setWidth(w.get(0));
+            _handler.getLayout().setHeight(h.get(0));
         }
         _inputLocker = false;
     }
@@ -1192,6 +1191,10 @@ final class DrawEngine {
             // }
 
             // glClearColor(0, 0, 0, 0);
+            if (maximizeRequest) {
+                maximizeWindow();
+                maximizeRequest = false;
+            }
             if (!engineEvent.lastEvent().contains(InputEventType.WINDOW_RESIZE)) {
                 update();
                 _handler.swap();

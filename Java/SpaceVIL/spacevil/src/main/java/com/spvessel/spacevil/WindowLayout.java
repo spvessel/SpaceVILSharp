@@ -456,7 +456,8 @@ public final class WindowLayout {
     }
 
     public void maximize() {
-        engine.maximizeWindow();
+        // engine.maximizeWindow();
+        engine.maximizeRequest = true;
     }
 
     void isFixed(Boolean flag) {

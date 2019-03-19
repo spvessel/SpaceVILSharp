@@ -314,6 +314,9 @@ namespace SpaceVIL
         }
 
         private bool _inputLocker = false;
+
+        internal bool MaximizeRequest = false;
+
         internal void MaximizeWindow()
         {
             _inputLocker = true;
@@ -1187,6 +1190,12 @@ namespace SpaceVIL
                 // Glfw.PollEvents();
                 // Glfw.WaitEvents();
                 // glClearColor(0, 0, 0, 0);
+
+                if (MaximizeRequest)
+                {
+                    MaximizeWindow();
+                    MaximizeRequest = false;
+                }
 
                 if (!EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize)
                 // && _handler.GetLayout().IsBorderHidden
