@@ -8,8 +8,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.io.BufferedReader;
 import java.io.*;
 import java.nio.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 import com.spvessel.spacevil.Common.*;
 import com.spvessel.spacevil.Core.*;
@@ -18,7 +16,6 @@ import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.MemoryUtil;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
@@ -453,6 +450,35 @@ final class DrawEngine {
     }
 
     void setWindowSize(int w, int h) {
+        if (_handler.getLayout().isKeepAspectRatio) {
+            float currentW = w;
+            float currentH = h;
+
+            float ratioW = _handler.getLayout().ratioW;
+            float ratioH = _handler.getLayout().ratioH;
+
+            float xScale = (currentW / ratioW);
+            float yScale = (currentH / ratioH);
+
+            float scale = 0;
+
+            if ((_handler.getLayout().getWindow()._sides.contains(Side.RIGHT)
+                    && _handler.getLayout().getWindow()._sides.contains(Side.TOP))
+                    || (_handler.getLayout().getWindow()._sides.contains(Side.RIGHT)
+                            && _handler.getLayout().getWindow()._sides.contains(Side.BOTTOM))
+                    || (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)
+                            && _handler.getLayout().getWindow()._sides.contains(Side.TOP))
+                    || (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)
+                            && _handler.getLayout().getWindow()._sides.contains(Side.BOTTOM))
+                    || _handler.getLayout().getWindow()._sides.contains(Side.LEFT)
+                    || _handler.getLayout().getWindow()._sides.contains(Side.RIGHT))
+                scale = xScale;
+            else
+                scale = yScale;
+
+            w = (int) (ratioW * scale);
+            h = (int) (ratioH * scale);
+        }
         glfwSetWindowSize(_handler.getWindowId(), w, h);
         engineEvent.setEvent(InputEventType.WINDOW_RESIZE);
     }
@@ -510,7 +536,7 @@ final class DrawEngine {
                 int x_press = ptrPress.getX();
                 int y_press = ptrPress.getY();
 
-                if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.LEFT)) {
+                if (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)) {
                     if (!(_handler.getLayout().getMinWidth() == _handler.getLayout().getWidth()
                             && (x_release - x_press) >= 0)) {
                         int x5 = x_handler - x_global + (int) xpos - 5;
@@ -518,14 +544,14 @@ final class DrawEngine {
                         w = w_global - x5;
                     }
                 }
-                if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.RIGHT)) {
+                if (_handler.getLayout().getWindow()._sides.contains(Side.RIGHT)) {
                     if (!(x_release < _handler.getLayout().getMinWidth()
                             && _handler.getLayout().getWidth() == _handler.getLayout().getMinWidth())) {
                         w = x_release;
                     }
                     ptrPress.setX(x_release);
                 }
-                if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.TOP)) {
+                if (_handler.getLayout().getWindow()._sides.contains(Side.TOP)) {
                     if (!(_handler.getLayout().getMinHeight() == _handler.getLayout().getHeight()
                             && (y_release - y_press) >= 0)) {
 
@@ -539,7 +565,7 @@ final class DrawEngine {
                         }
                     }
                 }
-                if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.BOTTOM)) {
+                if (_handler.getLayout().getWindow()._sides.contains(Side.BOTTOM)) {
                     if (!(y_release < _handler.getLayout().getMinHeight()
                             && _handler.getLayout().getHeight() == _handler.getLayout().getMinHeight())) {
 
@@ -554,18 +580,18 @@ final class DrawEngine {
 
                     if (CommonService.getOSType() == OSType.MAC) {
                         setWindowSize(w, h);
-                        if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.LEFT)
-                                && _handler.getLayout().getWindow()._sides.contains(ItemAlignment.TOP)) {
+                        if (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)
+                                && _handler.getLayout().getWindow()._sides.contains(Side.TOP)) {
                             setWindowPos(x_handler, (h_global - h) + y_global);
-                        } else if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.LEFT)
-                                || _handler.getLayout().getWindow()._sides.contains(ItemAlignment.BOTTOM)
-                                || _handler.getLayout().getWindow()._sides.contains(ItemAlignment.TOP)) {
+                        } else if (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)
+                                || _handler.getLayout().getWindow()._sides.contains(Side.BOTTOM)
+                                || _handler.getLayout().getWindow()._sides.contains(Side.TOP)) {
                             setWindowPos(x_handler, y_handler);
                             _handler.getPointer().setY(y_handler);
                         }
                     } else {
-                        if (_handler.getLayout().getWindow()._sides.contains(ItemAlignment.LEFT)
-                                || _handler.getLayout().getWindow()._sides.contains(ItemAlignment.TOP))
+                        if (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)
+                                || _handler.getLayout().getWindow()._sides.contains(Side.TOP))
                             setWindowPos(x_handler, y_handler);
                         setWindowSize(w, h);
                     }
@@ -621,11 +647,11 @@ final class DrawEngine {
                     {
                         if ((xpos >= _handler.getLayout().getWindow().getWidth() - 5 && ypos <= 5)
                                 || (xpos >= _handler.getLayout().getWindow().getWidth() - 5
-                                        && ypos >= _handler.getLayout().getWindow().getHeight() - 105)
+                                        && ypos >= _handler.getLayout().getWindow().getHeight() - 5)
                                 || (ypos >= _handler.getLayout().getWindow().getHeight() - 5 && xpos <= 5)
                                 || (ypos >= _handler.getLayout().getWindow().getHeight() - 5
                                         && xpos >= _handler.getLayout().getWindow().getWidth() - 5)
-                                || (xpos <= 10 && ypos <= 10)) {
+                                || (xpos <= 5 && ypos <= 5)) {
                             _handler.setCursorType(GLFW_CROSSHAIR_CURSOR);
                         } else {
                             if (xpos > _handler.getLayout().getWindow().getWidth() - 5 || xpos <= 5)

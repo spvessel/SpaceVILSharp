@@ -533,5 +533,15 @@ namespace SpaceVIL
                 Monitor.Exit(EngineLocker);
             }
         }
+
+        internal int RatioW = -1;
+        internal int RatioH = -1;
+        internal bool IsKeepAspectRatio = false;
+        public void SetAspectRatio(int w, int h)
+        {
+            IsKeepAspectRatio = true;
+            RatioW = w;
+            RatioH = h;
+        }
     }
 }

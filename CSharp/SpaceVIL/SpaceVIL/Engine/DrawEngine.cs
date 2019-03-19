@@ -387,6 +387,37 @@ namespace SpaceVIL
 
         internal void SetWindowSize(int w, int h)
         {
+            if (_handler.GetLayout().IsKeepAspectRatio)
+            {
+                float currentW = w;
+                float currentH = h;
+
+                float ratioW = _handler.GetLayout().RatioW;
+                float ratioH = _handler.GetLayout().RatioH;
+
+                float xScale = (currentW / ratioW);
+                float yScale = (currentH / ratioH);
+
+                float scale = 0;
+
+                if ((_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Right)
+                        && _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top))
+                        || (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Right)
+                                && _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Bottom))
+                        || (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
+                                && _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top))
+                        || (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
+                                && _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Bottom))
+                        || _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
+                        || _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Right))
+                    scale = xScale;
+                else
+                    scale = yScale;
+
+                w = (int)(ratioW * scale);
+                h = (int)(ratioH * scale);
+            }
+
             Glfw.SetWindowSize(_handler.GetWindowId(), w, h);
             EngineEvent.SetEvent(InputEventType.WindowResize);
         }
@@ -441,7 +472,7 @@ namespace SpaceVIL
                     int y_press = ptrPress.GetY();
 
 
-                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left))
+                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left))
                     {
                         if (!(_handler.GetLayout().GetMinWidth() == _handler.GetLayout().GetWidth() && (ptrRelease.GetX() - ptrPress.GetX()) >= 0))
                         {
@@ -450,7 +481,7 @@ namespace SpaceVIL
                             w = w_global - x5;
                         }
                     }
-                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Right))
+                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Right))
                     {
                         if (!(ptrRelease.GetX() < _handler.GetLayout().GetMinWidth() && _handler.GetLayout().GetWidth() == _handler.GetLayout().GetMinWidth()))
                         {
@@ -458,7 +489,7 @@ namespace SpaceVIL
                         }
                         ptrPress.SetX(x_release);
                     }
-                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Top))
+                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top))
                     {
                         if (!(_handler.GetLayout().GetMinHeight() == _handler.GetLayout().GetHeight() && (ptrRelease.GetY() - ptrPress.GetY()) >= 0))
                         {
@@ -475,7 +506,7 @@ namespace SpaceVIL
                             }
                         }
                     }
-                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Bottom))
+                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Bottom))
                     {
                         if (!(ptrRelease.GetY() < _handler.GetLayout().GetMinHeight() && _handler.GetLayout().GetHeight() == _handler.GetLayout().GetMinHeight()))
                         {
@@ -491,15 +522,15 @@ namespace SpaceVIL
                         if (CommonService.GetOSType() == OSType.Mac)
                         {
                             SetWindowSize(w, h);
-                            if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left)
-                            && _handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Top))
+                            if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
+                            && _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top))
                             {
                                 SetWindowPos(x_handler, (h_global - h) + y_global);
                                 // Console.WriteLine("left + top " + _handler.GetPointer().GetY());
                             }
-                            else if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left)
-                            || _handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Bottom)
-                            || _handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Top)
+                            else if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
+                            || _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Bottom)
+                            || _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top)
                             )
                             {
                                 SetWindowPos(x_handler, y_handler);
@@ -508,8 +539,8 @@ namespace SpaceVIL
                         }
                         else
                         {
-                            if (_handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Left)
-                                || _handler.GetLayout().GetWindow()._sides.HasFlag(ItemAlignment.Top))
+                            if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
+                                || _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top))
                                 SetWindowPos(x_handler, y_handler);
                             SetWindowSize(w, h);
                         }
@@ -572,7 +603,7 @@ namespace SpaceVIL
                              || (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5)
                              || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos <= 5)
                              || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5)
-                             || (xpos <= 5 && ypos < 5))
+                             || (xpos <= 5 && ypos <= 5))
                             {
                                 _handler.SetCursorType(Glfw.CursorType.Crosshair);
                             }

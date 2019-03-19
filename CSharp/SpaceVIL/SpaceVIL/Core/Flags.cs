@@ -383,7 +383,10 @@ namespace SpaceVIL.Core
 
     public enum Side
     {
-        Left, Top, Right, Bottom
+        Left = 0x01,
+        Top = 0x02,
+        Right = 0x04,
+        Bottom = 0x08,
     }
 
     public enum RedrawFrequency

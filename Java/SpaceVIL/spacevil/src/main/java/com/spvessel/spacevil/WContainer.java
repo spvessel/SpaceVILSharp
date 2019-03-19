@@ -2,7 +2,7 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventDropMethodState;
-import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.Side;
 
 import java.util.*;
 
@@ -10,7 +10,7 @@ public class WContainer extends Prototype {
     public EventDropMethodState eventDrop = new EventDropMethodState();
 
     private static int count = 0;
-    public List<ItemAlignment> _sides = new LinkedList<>();
+    public List<Side> _sides = new LinkedList<>();
     boolean _is_fixed = false;
     private Prototype _focus = null;
 
@@ -50,19 +50,19 @@ public class WContainer extends Prototype {
         return result;
     }
 
-    List<ItemAlignment> getSides(float xpos, float ypos) {
+    List<Side> getSides(float xpos, float ypos) {
         if (xpos <= 5) {
-            _sides.add(ItemAlignment.LEFT);
+            _sides.add(Side.LEFT);
         }
         if (xpos >= getWidth() - 5) {
-            _sides.add(ItemAlignment.RIGHT);
+            _sides.add(Side.RIGHT);
         }
 
         if (ypos <= 5) {
-            _sides.add(ItemAlignment.TOP);
+            _sides.add(Side.TOP);
         }
         if (ypos >= getHeight() - 5) {
-            _sides.add(ItemAlignment.BOTTOM);
+            _sides.add(Side.BOTTOM);
         }
 
         return _sides;
