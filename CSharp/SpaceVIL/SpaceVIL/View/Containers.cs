@@ -50,7 +50,7 @@ namespace View
             Handler.SetMinSize(400, 400);
             Handler.IsCentered = true;
 
-            TitleBar title = new TitleBar(nameof(ComplexTest));
+            TitleBar title = new TitleBar(nameof(Containers));
             title.SetShadow(5, 0, 3, Color.FromArgb(150, 0, 0, 0));
             Handler.AddItem(title);
 
