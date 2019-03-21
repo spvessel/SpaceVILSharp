@@ -1,6 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.MouseButton;
@@ -36,6 +37,7 @@ public class TextArea extends Prototype {
     public ScrollBarVisibility getVScrollBarVisible() {
         return _v_scrollBarPolicy;
     }
+
     public void setVScrollBarVisible(ScrollBarVisibility policy) {
         _v_scrollBarPolicy = policy;
 
@@ -64,6 +66,7 @@ public class TextArea extends Prototype {
     public ScrollBarVisibility getHScrollBarVisible() {
         return _h_scrollBarPolicy;
     }
+
     public void setHScrollBarVisible(ScrollBarVisibility policy) {
         _h_scrollBarPolicy = policy;
 
@@ -98,7 +101,7 @@ public class TextArea extends Prototype {
         vScrollBar.isFocusable = false;
         vScrollBar.setVisible(true);
         vScrollBar.setItemName(getItemName() + "_" + vScrollBar.getItemName());
-        
+
         // HBar
         hScrollBar.isFocusable = false;
         hScrollBar.setVisible(true);
@@ -108,6 +111,7 @@ public class TextArea extends Prototype {
         // _area.setItemName(getItemName() + "_" + _area.getItemName());
         // _area.setSpacing(0, 5);
     }
+
     public TextArea(String text) {
         this();
         setText(text);
@@ -243,6 +247,8 @@ public class TextArea extends Prototype {
         hScrollBar.slider.updateHandler();
     }
 
+    public EventCommonMethod onTextChanged = new EventCommonMethod();
+
     /**
      * Initialization and adding of all elements in the TextArea
      */
@@ -258,7 +264,10 @@ public class TextArea extends Prototype {
         // Events Connections
         eventScrollUp.add((sender, args) -> vScrollBar.eventScrollUp.execute(sender, args));
         eventScrollDown.add((sender, args) -> vScrollBar.eventScrollDown.execute(sender, args));
-        _area.textChanged.add(() -> updateElements());
+        _area.cursorChanged.add(() -> updateElements());
+        _area.textChanged.add(() -> {
+            onTextChanged.execute();
+        });
 
         vScrollBar.slider.eventValueChanged.add((sender) -> {
             updateVListArea();
@@ -268,12 +277,12 @@ public class TextArea extends Prototype {
             updateHListArea();
             _area.setFocus();
         });
-        
+
         // create menu
         _menu = new ContextMenu(getHandler());
         _menu.setBackground(60, 60, 60);
         _menu.setPassEvents(false);
-        
+
         MenuItem go_up = new MenuItem("Go up");
         go_up.setForeground(new Color(210, 210, 210));
         go_up.eventMouseClick.add((sender, args) -> {
@@ -281,7 +290,7 @@ public class TextArea extends Prototype {
             updateElements();
             _area.setFocus();
         });
-        
+
         MenuItem go_down = new MenuItem("Go down");
         go_down.setForeground(new Color(210, 210, 210));
         go_down.eventMouseClick.add((sender, args) -> {
@@ -289,7 +298,7 @@ public class TextArea extends Prototype {
             updateElements();
             _area.setFocus();
         });
-        
+
         MenuItem go_up_left = new MenuItem("Go up and left");
         go_up_left.setForeground(new Color(210, 210, 210));
         go_up_left.eventMouseClick.add((sender, args) -> {
@@ -298,7 +307,7 @@ public class TextArea extends Prototype {
             updateElements();
             _area.setFocus();
         });
-        
+
         MenuItem go_down_right = new MenuItem("Go down and right");
         go_down_right.setForeground(new Color(210, 210, 210));
         go_down_right.eventMouseClick.add((sender, args) -> {
@@ -310,7 +319,7 @@ public class TextArea extends Prototype {
         _menu.addItems(go_up_left, go_down_right, go_up, go_down);
         menu.eventMouseClick.add((sender, args) -> {
             if (!_is_menu_disabled)
-            _menu.show(sender, args);
+                _menu.show(sender, args);
         });
         _menu.activeButton = MouseButton.BUTTON_LEFT;
         _menu.setShadow(10, 0, 0, Color.black);
@@ -367,6 +376,7 @@ public class TextArea extends Prototype {
     public void setLineSpacer(int lineSpacer) {
         _area.setLineSpacer(lineSpacer);
     }
+
     public int getLineSpacer() {
         return _area.getLineSpacer();
     }
@@ -377,6 +387,7 @@ public class TextArea extends Prototype {
     public void setTextMargin(Indents margin) {
         _area.setTextMargin(margin);
     }
+
     public Indents getTextMargin() {
         return _area.getTextMargin();
     }
@@ -387,6 +398,7 @@ public class TextArea extends Prototype {
     public void setFont(Font font) {
         _area.setFont(font);
     }
+
     public Font getFont() {
         return _area.getFont();
     }
@@ -413,18 +425,23 @@ public class TextArea extends Prototype {
     public void setForeground(Color color) {
         _area.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
         _area.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         _area.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         _area.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         _area.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
         return _area.getForeground();
     }

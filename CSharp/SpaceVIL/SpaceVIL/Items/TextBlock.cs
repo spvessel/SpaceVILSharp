@@ -14,6 +14,7 @@ namespace SpaceVIL
     internal class TextBlock : Prototype, ITextEditable, IDraggable, ITextShortcuts, IGrid//, ITextContainer
     {
         public EventCommonMethod TextChanged;
+        public EventCommonMethod CursorChanged;
 
         public override void Release()
         {
@@ -457,7 +458,7 @@ namespace SpaceVIL
             Point pos = AddXYShifts(0, 0, _cursor_position);
             _cursor.SetX(pos.X);
             _cursor.SetY(pos.Y - GetLineSpacer() / 2 + 1);// - 3);
-            TextChanged?.Invoke(); //???????
+            CursorChanged?.Invoke(); //???????
             //UpdateLayout();
             //Console.WriteLine(pos.X + " cursor pos " + _cursor.GetX());
         }
@@ -965,6 +966,7 @@ namespace SpaceVIL
             //     tbs.toSelectState = new Point(_selectTo);
             // }
             undoQueue.AddFirst(tbs);
+            TextChanged?.Invoke();
         }
 
         public override void SetWidth(int width)

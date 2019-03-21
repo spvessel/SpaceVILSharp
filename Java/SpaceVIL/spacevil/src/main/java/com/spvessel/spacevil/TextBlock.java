@@ -18,6 +18,7 @@ import java.util.List;
 class TextBlock extends Prototype
         implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceGrid {
 
+    EventCommonMethod cursorChanged = new EventCommonMethod();
     EventCommonMethod textChanged = new EventCommonMethod();
     
     @Override
@@ -407,7 +408,7 @@ class TextBlock extends Prototype
         Point pos = addXYShifts(0, 0, _cursor_position);
         _cursor.setX(pos.x);
         _cursor.setY(pos.y - getLineSpacer() / 2 + 1);// - 3);
-        textChanged.execute();
+        cursorChanged.execute();
     }
 
     void setLineSpacer(int lineSpacer) {
@@ -984,6 +985,7 @@ class TextBlock extends Prototype
         // tbs.toSelectState = new Point(_selectTo);
         // }
         undoQueue.addFirst(tbs);
+        textChanged.execute();
     }
 
     @Override
