@@ -88,15 +88,16 @@ public class FlowTest extends ActiveWindow {
             // pop.show(Handler);
 
             MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
-            ButtonCore btnnn = new ButtonCore("one");
-            btnnn.eventMouseClick.add((s, a) -> {
-                System.out.println("btnnn");
-            });
-            msg.getDialogButtonStyle().background = new Color(13, 176, 255);
-            msg.getDialogButtonStyle().setSize(50, 30);
-            msg.addUserButton(btnnn, 4);
-            msg.addUserButton(new ButtonCore("two"), 2);
-            msg.addUserButton(new ButtonCore("three"), 3);
+            msg.getCancelButton().setVisible(false);
+            // ButtonCore btnnn = new ButtonCore("one");
+            // btnnn.eventMouseClick.add((s, a) -> {
+            //     System.out.println("btnnn");
+            // });
+            // msg.getDialogButtonStyle().background = new Color(13, 176, 255);
+            // msg.getDialogButtonStyle().setSize(50, 30);
+            // msg.addUserButton(btnnn, 4);
+            // msg.addUserButton(new ButtonCore("two"), 2);
+            // msg.addUserButton(new ButtonCore("three"), 3);
 
             msg.onCloseDialog.add(() -> {
                 System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
@@ -187,7 +188,7 @@ public class FlowTest extends ActiveWindow {
             // });
             // msg.show(Handler);
 
-            OpenEntryDialog opd = new OpenEntryDialog("Save File:", FileSystemEntryType.FILE, OpenDialogType.OPEN);
+            OpenEntryDialog opd = new OpenEntryDialog("Save File:", FileSystemEntryType.FILE, OpenDialogType.SAVE);
             opd.addFilterExtensions("Text files (*.txt);*.txt", "Images (*.png, *.bmp, *.jpg);*.png,*.bmp,*.jpg");
             opd.onCloseDialog.add(() -> {
                 System.out.println(opd.getResult());

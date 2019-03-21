@@ -83,7 +83,12 @@ public class OpenEntryDialog extends OpenDialog {
         _fileList = new ListBox();
         _fileName = new TextEdit();
         _controlPanel = new Frame();
-        _btnOpen = new ButtonCore("Open");
+
+        if (dialogType == OpenDialogType.SAVE)
+            _btnOpen = new ButtonCore("Save");
+        else
+            _btnOpen = new ButtonCore("Open");
+            
         _btnCancel = new ButtonCore("Cancel");
 
         setStyle(DefaultsService.getDefaultStyle(OpenEntryDialog.class));
