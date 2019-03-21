@@ -134,10 +134,6 @@ namespace SpaceVIL
             //LogService.Log().EndLogging();
             Glfw.Terminate();
         }
-        internal void Close()
-        {
-            _handler.SetToClose();
-        }
 
         private Glfw.Image _icon_big;
         private Glfw.Image _icon_small;
@@ -343,7 +339,8 @@ namespace SpaceVIL
 
         private void CloseWindow(Glfw.Window glfwwnd)
         {
-            _handler.GetLayout().Close();
+            Glfw.SetWindowShouldClose(_handler.GetWindowId(), false);
+            _handler.GetLayout().EventClose?.Invoke();
         }
 
         internal void Focus(Glfw.Window glfwwnd, bool value)

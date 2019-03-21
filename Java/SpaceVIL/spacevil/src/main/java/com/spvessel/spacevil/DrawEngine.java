@@ -119,10 +119,6 @@ final class DrawEngine {
         glfwTerminate();
     }
 
-    void close() {
-        _handler.setToClose();
-    }
-
     private BufferedImage _iconSmall;
     private BufferedImage _iconBig;
 
@@ -404,7 +400,9 @@ final class DrawEngine {
     }
 
     private void closeWindow(long wnd) {
-        _handler.getLayout().close();
+        glfwSetWindowShouldClose(_handler.getWindowId(), false);
+        _handler.getLayout().eventClose.execute();
+        // _handler.getLayout().close();
     }
 
     void focus(long wnd, boolean value) {

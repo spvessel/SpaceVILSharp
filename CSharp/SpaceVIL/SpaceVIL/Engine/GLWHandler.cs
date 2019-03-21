@@ -204,6 +204,7 @@ namespace SpaceVIL
         {
             Glfw.SetWindowShouldClose(_window, true);
         }
+        
         internal void SetCallbackMouseMove(Glfw.CursorPosFunc function)
         {
             MouseMoveCallback = function;
