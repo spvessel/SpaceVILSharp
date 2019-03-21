@@ -16,6 +16,11 @@ namespace SpaceVIL
         public ComboBoxDropDown DropDownArea;
         public EventCommonMethod SelectionChanged;
 
+        public override void Release()
+        {
+            SelectionChanged = null;
+        }
+
         private List<MenuItem> preItemList;
 
         /// <summary>

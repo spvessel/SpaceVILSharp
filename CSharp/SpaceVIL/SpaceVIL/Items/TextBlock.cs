@@ -15,6 +15,11 @@ namespace SpaceVIL
     {
         public EventCommonMethod TextChanged;
 
+        public override void Release()
+        {
+            TextChanged = null;
+        }
+
         private static int count = 0;
         private Rectangle _cursor;
         private Point _cursor_position = new Point(0, 0);

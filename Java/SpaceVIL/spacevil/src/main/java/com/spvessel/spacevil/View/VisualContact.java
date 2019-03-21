@@ -10,7 +10,7 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
-public class VisualContact extends HorizontalStack {
+public class VisualContact extends Prototype {
     public static int _count = 0;
 
     public VisualContact() {

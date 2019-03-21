@@ -414,13 +414,19 @@ namespace SpaceVIL
         /// </summary>
         public override void RemoveItem(IBaseItem item)
         {
+            List<IBaseItem> list = new List<IBaseItem>(GetItems());
+            if (list.Contains(item))
+            {
+                base.RemoveItem(item);
+                return;
+            }
             _area.RemoveItem(item);
             UpdateElements();
             _area.SetFocus();
         }
         public override void Clear()
         {
-            _area.RemoveAllItems();
+            _area.Clear();
             // UpdateElements();
         }
 

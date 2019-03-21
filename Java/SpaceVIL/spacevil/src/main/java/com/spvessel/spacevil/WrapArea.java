@@ -24,6 +24,13 @@ public class WrapArea extends Prototype implements InterfaceGrid {
     public EventCommonMethod selectionChanged = new EventCommonMethod();
     public EventCommonMethod itemListChanged = new EventCommonMethod();
 
+    @Override
+    public void release()
+    {
+        selectionChanged.clear();
+        itemListChanged.clear();
+    }
+
     int _rows = 0;
     int _columns = 0;
 
@@ -263,9 +270,17 @@ public class WrapArea extends Prototype implements InterfaceGrid {
     @Override
     public void removeItem(InterfaceBaseItem item) {
         unselect();
-        _mapContent.get(item).clearContent();
-        super.removeItem(_mapContent.get(item));
-        _mapContent.remove(item);
+        if (item instanceof SelectionItem) {
+            SelectionItem tmp = (SelectionItem) item;
+            _mapContent.remove(tmp.getContent());
+            tmp.clearContent();
+            super.removeItem(tmp);
+        } else {
+            SelectionItem tmp = _mapContent.get(item);
+            _mapContent.remove(item);
+            tmp.clearContent();
+            super.removeItem(tmp);
+        }
         updateLayout();
         itemListChanged.execute();
     }

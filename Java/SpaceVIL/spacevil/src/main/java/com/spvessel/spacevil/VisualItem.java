@@ -378,10 +378,13 @@ final class VisualItem extends BaseItem {
     }
 
     private void castAndRemove(InterfaceBaseItem item) {
-        if (item instanceof Prototype)
-            ((Prototype) item).getCore().removeItemFromListeners();
-        else
+        if (item instanceof Prototype) {
+            Prototype prototype = ((Prototype) item);
+            prototype.getCore().removeItemFromListeners();
+            prototype.freeEvents();
+        } else {
             ((BaseItem) item).removeItemFromListeners();
+        }
     }
 
     void addItem(InterfaceBaseItem item) {
@@ -448,9 +451,9 @@ final class VisualItem extends BaseItem {
         if (item instanceof Prototype)// и если это действительно контейнер
         {
             Prototype container = (Prototype) item;// предполагаю что элемент контейнер
-            List<InterfaceBaseItem> tmp = container.getItems();
+            List<InterfaceBaseItem> tmp = new LinkedList<>(container.getItems());
             while (tmp.size() > 0) {
-                InterfaceBaseItem child = container.getItems().get(0);
+                InterfaceBaseItem child = tmp.get(0);
                 container.removeItem(child);
                 tmp.remove(child);
             }
@@ -461,6 +464,7 @@ final class VisualItem extends BaseItem {
         locker.lock();
         try {
             getHandler().resetItems();
+
             LayoutType type;
             if (item instanceof InterfaceFloating) {
                 cascadeRemoving(item, LayoutType.FLOATING);
@@ -471,11 +475,12 @@ final class VisualItem extends BaseItem {
             }
 
             // removing
+            castAndRemove(item);
+
             _content.remove(item);
             ItemsLayoutBox.removeItem(getHandler(), item, type);
-            castAndRemove(item);
-            item.release();
             item.setParent(null);
+            item.release();
         } catch (Exception ex) {
             System.out.println("Method - RemoveItem: " + ((item == null) ? "item is null" : item.getItemName()));
             ex.printStackTrace();

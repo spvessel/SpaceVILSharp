@@ -60,6 +60,30 @@ namespace SpaceVIL
         /// </summary>
         public EventInputTextMethodState EventTextInput;
 
+        internal void FreeEvents()
+        {
+            EventFocusGet = null;
+            EventFocusLost = null;
+            EventResize = null;
+            EventDestroy = null;
+
+            EventMouseHover = null;
+            EventMouseClick = null;
+            EventMouseDoubleClick = null;
+            EventMousePress = null;
+            EventMouseDrag = null;
+            EventMouseDrop = null;
+            EventScrollUp = null;
+            EventScrollDown = null;
+
+            EventKeyPress = null;
+            EventKeyRelease = null;
+
+            EventTextInput = null;
+        }
+
+        public virtual void Release() { }
+
         /// <summary>
         /// Set parent window for the Prototype
         /// </summary>
@@ -828,6 +852,5 @@ namespace SpaceVIL
         {
             _core.HoverRule = rule;
         }
-        public virtual void Release() { }
     }
 }

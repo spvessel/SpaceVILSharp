@@ -53,11 +53,10 @@ public class LayoutsTest extends ActiveWindow {
         ListBox listbox_left_1 = new ListBox();
         listbox_left_1.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         // listbox_left_1.setVisible(false);
-        listbox_left_1.eventMouseClick.add(
-            (sender, args) ->{
-                // System.out.println(listbox_left_1.getSelection() + " " + listbox_left_1.getSelectionItem().getItemName());
-            }
-        );
+        listbox_left_1.eventMouseClick.add((sender, args) -> {
+            // System.out.println(listbox_left_1.getSelection() + " " +
+            // listbox_left_1.getSelectionItem().getItemName());
+        });
         // listbox_left_1.setSelectionVisibility(false);
         // listbox_left_1.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         listbox_left_1.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
@@ -74,6 +73,9 @@ public class LayoutsTest extends ActiveWindow {
         grid.insertItem(listbox_right_2, 1, 1);
 
         VisualContact visualContact = new VisualContact();
+        visualContact.eventMouseClick.add((sender, args) -> {
+            System.out.println("visualContact");
+        });
         listbox_left_1.addItem(visualContact);
 
         // button
@@ -129,20 +131,18 @@ public class LayoutsTest extends ActiveWindow {
             // radio.setText("Another radio button for testing.");
             // radio.setHeight(20);
             // InterfaceMouseMethodState r_click = (s, a) -> {
-            //     int y_p = radio.getParent().getY();
-            //     int y_c = radio.getY();
-            //     System.out.println(radio.getItemName() + " " + y_p + " " + y_c);
+            // int y_p = radio.getParent().getY();
+            // int y_c = radio.getY();
+            // System.out.println(radio.getItemName() + " " + y_p + " " + y_c);
             // };
             // radio.eventMouseClick.add(r_click);
             // listbox_left_1.addItem(radio);
             // listbox_left_1.setVisible(!listbox_left_1.isVisible());
             listbox_left_1.clear();
-            // visualContact.setParent(null);
             listbox_left_1.addItem(visualContact);
+            // listbox_left_1.getParent().removeItem(listbox_left_1);
         };
         all.eventMouseClick.add(all_click);
         frame.addItem(all);
-
-        
     }
 }

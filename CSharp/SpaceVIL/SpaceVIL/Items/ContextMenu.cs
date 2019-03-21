@@ -12,6 +12,11 @@ namespace SpaceVIL
         public Prototype ReturnFocus = null;
         public ListBox ItemList = new ListBox();
         private Queue<IBaseItem> _queue = new Queue<IBaseItem>();
+        private Prototype _sender = null;
+        public Prototype GetSender()
+        {
+            return _sender;
+        }
 
         private static int count = 0;
         public MouseButton ActiveButton = MouseButton.ButtonRight;
@@ -123,7 +128,6 @@ namespace SpaceVIL
         /// </summary>
         public override void AddItem(IBaseItem item)
         {
-            // (item as MenuItem)._invoked_menu = this;
             MenuItem tmp = (item as MenuItem);
             if (tmp != null)
                 tmp._context_menu = this;
@@ -188,6 +192,10 @@ namespace SpaceVIL
                     UpdateSize();
                     _added = true;
                 }
+                Prototype tmp = sender as Prototype;
+                if (tmp != null)
+                    _sender = tmp;
+
 
                 //проверка снизу
                 if (args.Position.GetY() + GetHeight() > GetHandler().GetHeight())
@@ -214,7 +222,7 @@ namespace SpaceVIL
         }
         public void Show()
         {
-            Show(this,new MouseArgs());
+            Show(this, new MouseArgs());
         }
 
         private bool _added = false;

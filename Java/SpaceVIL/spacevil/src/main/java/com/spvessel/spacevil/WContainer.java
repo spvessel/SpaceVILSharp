@@ -9,6 +9,11 @@ import java.util.*;
 public class WContainer extends Prototype {
     public EventDropMethodState eventDrop = new EventDropMethodState();
 
+    @Override
+    public void release() {
+        eventDrop.clear();
+    }
+
     private static int count = 0;
     public List<Side> _sides = new LinkedList<>();
     boolean _is_fixed = false;

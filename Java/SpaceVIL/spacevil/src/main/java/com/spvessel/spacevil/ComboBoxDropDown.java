@@ -18,6 +18,12 @@ import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 
 public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     public EventCommonMethod selectionChanged = new EventCommonMethod();
+    
+    @Override
+    public void release() {
+        selectionChanged.clear();
+    }
+    
     public Prototype returnFocus = null;
     public ListBox itemList = new ListBox();
     private String _text_selection = "";

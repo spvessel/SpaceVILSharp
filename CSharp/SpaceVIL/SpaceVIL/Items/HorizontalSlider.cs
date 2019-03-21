@@ -37,6 +37,11 @@ namespace SpaceVIL
         }
 
         public EventCommonMethodState EventValueChanged;
+        public override void Release()
+        {
+            EventValueChanged = null;
+        }
+
         private float _current_value = 0;
         public int Direction = 0;
 

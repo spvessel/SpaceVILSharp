@@ -15,21 +15,31 @@ class VRAMStorage {
     static List<InterfaceImageItem> imageToDelete = new LinkedList<>();
 
     static boolean addToDelete(InterfaceImageItem image) {
-        if (!imageToDelete.contains(image)) {
-            imageToDelete.add(image);
-            return true;
+        storageLocker.lock();
+        try {
+            if (!imageToDelete.contains(image)) {
+                imageToDelete.add(image);
+                return true;
+            }
+            return false;
+        } finally {
+            storageLocker.unlock();
         }
-        return false;
     }
 
     static void flush() {
-        for (InterfaceImageItem image : imageToDelete) {
-            if (imageStorage.containsKey(image)) {
-                imageStorage.get(image).deleteTexture();
-                imageStorage.remove(image);
+        storageLocker.lock();
+        try {
+            for (InterfaceImageItem image : imageToDelete) {
+                if (imageStorage.containsKey(image)) {
+                    imageStorage.get(image).deleteTexture();
+                    imageStorage.remove(image);
+                }
             }
+            imageToDelete.clear();
+        } finally {
+            storageLocker.unlock();
         }
-        imageToDelete.clear();
     }
 
     static Lock storageLocker = new ReentrantLock();

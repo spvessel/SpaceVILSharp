@@ -33,6 +33,12 @@ public class VerticalSlider extends Prototype {
     }
 
     public EventCommonMethodState eventValueChanged = new EventCommonMethodState();
+    
+    @Override
+    public void release() {
+        eventValueChanged.clear();
+    }
+    
     private float _current_value = 0;
     /**
      * Slider direction(1 - down direction, -1 - up direction)

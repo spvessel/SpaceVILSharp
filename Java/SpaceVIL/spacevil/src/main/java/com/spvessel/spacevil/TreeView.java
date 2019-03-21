@@ -16,6 +16,11 @@ import java.util.HashMap;
 
 public class TreeView extends ListBox {
     public EventCommonMethod eventSortTree = new EventCommonMethod();
+    
+    @Override
+    public void release() {
+        eventSortTree.clear();
+    }
 
     TreeItem _root; // nesting level = 0
 
@@ -156,7 +161,7 @@ public class TreeView extends ListBox {
                 else
                     return 1;
             }
-            return ti1.getText().compareTo(ti2.getText());
+            return ti1.getText().compareToIgnoreCase(ti2.getText());
         }
     }
 
@@ -169,7 +174,14 @@ public class TreeView extends ListBox {
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
-        _root.addItem(item);
+        if (_root == null) {
+            if (item instanceof TreeItem) {
+                _root = (TreeItem) item;
+                super.addItem(_root);
+            }
+            // exception: ///////
+        } else
+            _root.addItem(item);
     }
 
     /**
@@ -190,14 +202,13 @@ public class TreeView extends ListBox {
         super.clear();
         super.addItem(_root);
         setRootVisible(isRootVisible());
-        // _root.resetIndents();
         _maxWrapperWidth = getWrapper(_root).getMinWidth();
     }
 
     @Override
     public void removeItem(InterfaceBaseItem item) {
         if (item.equals(_root))
-            return;
+            _root = null;
         super.removeItem(item);
     }
 
@@ -212,7 +223,7 @@ public class TreeView extends ListBox {
 
         List<InterfaceBaseItem> list = new LinkedList<>(getArea().getItems());
         Map<Integer, List<SelectionItem>> savedMap = new HashMap<>();
-        
+
         int indFirst = list.indexOf(getWrapper(branch)) + 1;
         int nestLev = branch._nesting_level + 1;
         int indLast = indFirst;
@@ -238,7 +249,7 @@ public class TreeView extends ListBox {
         }
 
         Comparator<TreeItem> comp = getComparator();
-        
+
         for (int i = nestLev; i <= maxLev; i++) {
             List<SelectionItem> siList = savedMap.get(i);
             if (siList == null)

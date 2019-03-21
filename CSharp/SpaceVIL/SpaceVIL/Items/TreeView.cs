@@ -11,6 +11,10 @@ namespace SpaceVIL
     public class TreeView : ListBox
     {
         public EventCommonMethod EventSortTree;
+        public override void Release()
+        {
+            EventSortTree = null;
+        }
 
         internal int _maxWrapperWidth = 0;
 
@@ -144,12 +148,23 @@ namespace SpaceVIL
                 else return 1;
             }
 
-            return ti1.GetText().CompareTo(ti2.GetText());
+            return ti1.GetText().ToLower().CompareTo(ti2.GetText().ToLower());
         }
 
         public override void AddItem(IBaseItem item)
         {
-            _root.AddItem(item);
+            if (_root == null)
+            {
+                TreeItem tmp = item as TreeItem;
+                if (tmp != null)
+                {
+                    _root = tmp;
+                    base.AddItem(_root);
+                }
+                //exception: ///////
+            }
+            else
+                _root.AddItem(item);
         }
 
         public override void SetStyle(Style style)
@@ -166,14 +181,13 @@ namespace SpaceVIL
             base.Clear();
             base.AddItem(_root);
             SetRootVisible(IsRootVisible());
-            // _root.ResetIndents();
             _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
 
         }
         public override void RemoveItem(IBaseItem item)
         {
             if (item.Equals(_root))
-                return;
+                _root = null;
             base.RemoveItem(item);
         }
 
@@ -243,7 +257,7 @@ namespace SpaceVIL
                             break;
                         ind = ii;
                     }
-                    
+
                     list.Insert(ind + 1, selIt);
                 }
             }

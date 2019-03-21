@@ -90,15 +90,15 @@ public class FlowTest extends ActiveWindow {
             // MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
             // ButtonCore btnnn = new ButtonCore("one");
             // btnnn.eventMouseClick.add((s, a) -> {
-            //     System.out.println("btnnn");
+            // System.out.println("btnnn");
             // });
-            
+
             // msg.addUserButton(btnnn, 1);
             // msg.addUserButton(new ButtonCore("two"), 2);
             // msg.addUserButton(new ButtonCore("three"), 3);
 
             // msg.onCloseDialog.add(() -> {
-            //     System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
+            // System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
             // });
             // msg.show(Handler);
 
@@ -211,11 +211,11 @@ public class FlowTest extends ActiveWindow {
         // // res.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
         // // restore.addItem(res);
 
-        // restore.eventMouseClick += (sender, args) ->
-        // {
-        // flow.setHScrollOffset(0);
-        // flow.setVScrollOffset(0);
-        // };
+        restore.eventMouseClick.add((sender, args) -> {
+            flow.setHScrollOffset(0);
+            flow.setVScrollOffset(0);
+            System.out.println(restore.getSender().getItemName());
+        });
         MenuItem x_plus = new MenuItem("X += 100");
         // x_plus.eventMouseClick += (sender, args) ->
         // {
@@ -276,35 +276,34 @@ public class FlowTest extends ActiveWindow {
     // }
 
     private PointsContainer getPointsContainer() {
-    PointsContainer graph_points = new PointsContainer();
-    graph_points.setPointColor(new Color(10, 255, 10));
-    graph_points.setPointThickness(10.0f);
-    graph_points.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-    graph_points.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-    // List<float[]> crd = new List<float[]>();
-    // crd.add(new float[3] { 100.0f, 0.0f, 0.0f });
-    // crd.add(new float[3] { 50.0f, 100.0f, 0.0f });
-    // crd.add(new float[3] { 150.0f, 100.0f, 0.0f });
-    // graph_points.setPointsCoord(crd);
-    graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50,
-    0, 0));
-    // graph_points.setPointsCoord(GraphicsMathService.getTriangle(100, 100, 0,
-    // 0,
-    // 0));
-    // graph_points.setWidth(300);
-    // graph_points.setHeight(300);
-    // graph_points.setX(200);
-    // graph_points.setY(200);
-    //
-    // graph_points.setShapePointer(GraphicsMathService.getTriangle(graph_points.getPointThickness(),
-    // graph_points.getPointThickness()));
-    //
-    graph_points.setShapePointer(GraphicsMathService.getCross(graph_points.getPointThickness(),
-    graph_points.getPointThickness(), 2, 45));
-    //
-    // graph_points.setShapePointer(GraphicsMathService.getStar(graph_points.getPointThickness(),
-    // graph_points.getPointThickness() / 2.0f));
-    return graph_points;
+        PointsContainer graph_points = new PointsContainer();
+        graph_points.setPointColor(new Color(10, 255, 10));
+        graph_points.setPointThickness(10.0f);
+        graph_points.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        graph_points.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        // List<float[]> crd = new List<float[]>();
+        // crd.add(new float[3] { 100.0f, 0.0f, 0.0f });
+        // crd.add(new float[3] { 50.0f, 100.0f, 0.0f });
+        // crd.add(new float[3] { 150.0f, 100.0f, 0.0f });
+        // graph_points.setPointsCoord(crd);
+        graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50, 0, 0));
+        // graph_points.setPointsCoord(GraphicsMathService.getTriangle(100, 100, 0,
+        // 0,
+        // 0));
+        // graph_points.setWidth(300);
+        // graph_points.setHeight(300);
+        // graph_points.setX(200);
+        // graph_points.setY(200);
+        //
+        // graph_points.setShapePointer(GraphicsMathService.getTriangle(graph_points.getPointThickness(),
+        // graph_points.getPointThickness()));
+        //
+        graph_points.setShapePointer(GraphicsMathService.getCross(graph_points.getPointThickness(),
+                graph_points.getPointThickness(), 2, 45));
+        //
+        // graph_points.setShapePointer(GraphicsMathService.getStar(graph_points.getPointThickness(),
+        // graph_points.getPointThickness() / 2.0f));
+        return graph_points;
     }
 
     public ButtonCore getButton(String name) {

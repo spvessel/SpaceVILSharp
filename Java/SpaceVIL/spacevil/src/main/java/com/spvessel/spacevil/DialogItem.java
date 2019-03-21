@@ -38,6 +38,11 @@ abstract public class DialogItem extends Prototype {
     }
 
     public EventCommonMethod onCloseDialog = new EventCommonMethod();
+    
+    @Override
+    public void release() {
+        onCloseDialog.clear();
+    }
 
     @Override
     public void setStyle(Style style) {

@@ -30,6 +30,12 @@ public class HorizontalSlider extends Prototype {
     }
 
     public EventCommonMethodState eventValueChanged = new EventCommonMethodState();
+    
+    @Override
+    public void release() {
+        eventValueChanged.clear();
+    }
+    
     private float _current_value = 0;
     public int direction = 0;
 

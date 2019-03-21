@@ -1,26 +1,4 @@
 /////////////////////////////////////////////////////////////
-01:23:41
-Window name: MainWindow, Title: MainWindow
-
-Geometry:
-    Width 803 (minWidth 500, maxWidth 32767)
-    Height 200 (minHeight 100, maxHeight 32767)
-
-Position: (0, 0)
-
-Padding: Left = 2, Top = 2, Right = 2, Bottom = 2
-
-
-/////////////////////////////////////////////////////////////
-01:23:46
-Window name: LayoutsTest, Title: LayoutsTest
-
-Geometry:
-    Width 1000 (minWidth 250, maxWidth 32767)
-    Height 1000 (minHeight 200, maxHeight 32767)
-
-Position: (0, 0)
-
-Padding: Left = 2, Top = 2, Right = 2, Bottom = 2
-
+10:36:25
+Create window fail - MainWindow
 

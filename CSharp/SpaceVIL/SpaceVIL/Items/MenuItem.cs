@@ -12,9 +12,13 @@ namespace SpaceVIL
         public bool IsActionItem = false;
         static int count = 0;
         private TextLine _text_object;
-        //internal ContextMenu _invoked_menu;
         internal ContextMenu _context_menu;
         private ContextMenu _sub_context_menu;
+
+        public Prototype GetSender()
+        {
+            return _context_menu.GetSender();
+        }
 
         /// <returns> sub context menu </returns>
         public ContextMenu GetSubContextMenu()

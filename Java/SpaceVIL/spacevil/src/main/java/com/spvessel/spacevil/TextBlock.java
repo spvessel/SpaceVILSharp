@@ -19,6 +19,12 @@ class TextBlock extends Prototype
         implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceGrid {
 
     EventCommonMethod textChanged = new EventCommonMethod();
+    
+    @Override
+    public void release() {
+        textChanged.clear();
+    }
+
     private static int count = 0;
     private Rectangle _cursor;
     private Point _cursor_position = new Point(0, 0);

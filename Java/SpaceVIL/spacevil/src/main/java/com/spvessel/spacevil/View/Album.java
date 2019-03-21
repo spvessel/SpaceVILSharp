@@ -11,6 +11,11 @@ import com.spvessel.spacevil.Flags.*;
 
 public class Album extends Prototype {
     public EventCommonMethodState onDoubleClick = new EventCommonMethodState();
+    
+    @Override
+    public void release() {
+        onDoubleClick.clear();
+    }
 
     ButtonToggle _expand;// = new ButtonToggle();
     public Label name;// = new Label();

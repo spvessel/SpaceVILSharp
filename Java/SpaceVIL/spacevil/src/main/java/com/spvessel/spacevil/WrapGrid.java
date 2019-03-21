@@ -379,6 +379,11 @@ public class WrapGrid extends Prototype {
      */
     @Override
     public void removeItem(InterfaceBaseItem item) {
+        List<InterfaceBaseItem> list = new LinkedList<>(getItems());
+        if (list.contains(item)) {
+            super.removeItem(item);
+            return;
+        }
         _area.removeItem(item);
         updateSlider();
     }

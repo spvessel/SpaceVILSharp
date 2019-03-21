@@ -9,28 +9,45 @@ namespace SpaceVIL
     {
         internal static Dictionary<IImageItem, VRAMTexture> ImageStorage = new Dictionary<IImageItem, VRAMTexture>();
         internal static List<IImageItem> ImageToDelete = new List<IImageItem>();
-        
-        internal static  bool AddToDelete(IImageItem image)
+
+        internal static bool AddToDelete(IImageItem image)
         {
-            if (!ImageToDelete.Contains(image))
+            Monitor.Enter(StorageLocker);
+            try
             {
-                ImageToDelete.Add(image);
-                return true;
+                if (!ImageToDelete.Contains(image))
+                {
+                    ImageToDelete.Add(image);
+                    return true;
+                }
+                return false;
             }
-            return false;
+            finally
+            {
+                Monitor.Exit(StorageLocker);
+            }
         }
 
         internal static void Flush()
         {
-            foreach (IImageItem image in ImageToDelete)
+            Monitor.Enter(StorageLocker);
+            try
             {
-                if (ImageStorage.ContainsKey(image))
+                while (ImageToDelete.Count > 0)
                 {
-                    ImageStorage[image].DeleteTexture();
-                    ImageStorage.Remove(image);
+                    IImageItem image = ImageToDelete[0];
+                    if (ImageStorage.ContainsKey(image))
+                    {
+                        ImageStorage[image].DeleteTexture();
+                        ImageStorage.Remove(image);
+                    }
+                    ImageToDelete.RemoveAt(0);
                 }
             }
-            ImageToDelete.Clear();
+            finally
+            {
+                Monitor.Exit(StorageLocker);
+            }
         }
 
         internal static Object StorageLocker = new Object();
@@ -91,7 +108,7 @@ namespace SpaceVIL
             try
             {
                 if (ImageStorage.ContainsKey(image))
-                {                 
+                {
                     ImageStorage[image].DeleteTexture();
                     ImageStorage.Remove(image);
                     return true;

@@ -181,7 +181,10 @@ namespace SpaceVIL
         {
             Prototype prototype = item as Prototype;
             if (prototype != null)
+            {
                 prototype.GetCore().RemoveItemFromListeners();
+                prototype.FreeEvents();
+            }
             else
                 (item as BaseItem).RemoveItemFromListeners();
         }
@@ -252,7 +255,7 @@ namespace SpaceVIL
             if (container != null)//и если это действительно контейнер
             {
                 //то каждому вложенному элементу вызвать команду удалить своих вложенных элементов
-                List<IBaseItem> tmp = container.GetItems();
+                List<IBaseItem> tmp = new List<IBaseItem>(container.GetItems());
                 while (tmp.Count > 0)
                 {
                     IBaseItem child = tmp.ElementAt(0);

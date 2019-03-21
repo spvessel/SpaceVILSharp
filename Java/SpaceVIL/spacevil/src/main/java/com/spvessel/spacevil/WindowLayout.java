@@ -2,6 +2,7 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Common.CommonService;
+import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.Geometry;
 import com.spvessel.spacevil.Core.InterfaceCommonMethod;
 import com.spvessel.spacevil.Core.Position;
@@ -22,9 +23,15 @@ public final class WindowLayout {
     Lock engineLocker = new ReentrantLock();
     private Lock wndLock = new ReentrantLock();
 
-    public InterfaceCommonMethod eventClose;
-    public InterfaceCommonMethod eventMinimize;
-    public InterfaceCommonMethod eventHide;
+    public EventCommonMethod eventClose;
+    public EventCommonMethod eventMinimize;
+    public EventCommonMethod eventHide;
+
+    public void release() {
+        eventClose.clear();
+        eventMinimize.clear();
+        eventHide.clear();
+    }
 
     private UUID _id;
 

@@ -17,6 +17,12 @@ namespace SpaceVIL
         public EventCommonMethod SelectionChanged;
         public EventCommonMethod ItemListChanged;
 
+        public override void Release()
+        {
+            SelectionChanged = null;
+            ItemListChanged = null;
+        }
+
         private int _step = 30;
 
         /// <summary>
@@ -241,9 +247,21 @@ namespace SpaceVIL
         {
             Unselect();
 
-            _mapContent[item].ClearContent();
-            base.RemoveItem(_mapContent[item]);
-            _mapContent.Remove(item);
+            SelectionItem tmp = item as SelectionItem;
+            if (tmp != null)
+            {
+                _mapContent.Remove(tmp.GetContent());
+                tmp.ClearContent();
+                base.RemoveItem(tmp);
+            }
+            else
+            {
+                tmp = _mapContent[item];
+                _mapContent.Remove(item);
+                tmp.ClearContent();
+                base.RemoveItem(tmp);
+            }
+
             UpdateLayout();
             ItemListChanged?.Invoke();
         }

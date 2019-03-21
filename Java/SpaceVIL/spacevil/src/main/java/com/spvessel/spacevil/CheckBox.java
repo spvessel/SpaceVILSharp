@@ -158,7 +158,7 @@ public class CheckBox extends Prototype {
     @Override
     public void initElements() {
         // events
-        _indicator.getIndicatorMarker().eventToggle = null;
+        _indicator.getIndicatorMarker().eventToggle.clear();
         InterfaceMouseMethodState btn_click = (sender, args) -> _indicator.getIndicatorMarker()
                 .setToggled(!_indicator.getIndicatorMarker().isToggled());
         eventMouseClick.add(btn_click);

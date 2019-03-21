@@ -34,7 +34,7 @@ namespace SpaceVIL
         {
             SetText(text);
         }
-        
+
         void OnKeyPress(object sender, KeyArgs args)
         {
             if (args.Key == KeyCode.Enter)
@@ -61,6 +61,10 @@ namespace SpaceVIL
         }
 
         public EventMouseMethodState EventToggle;
+        public override void Release()
+        {
+            EventToggle = null;
+        }
 
         //text init
         /// <summary>

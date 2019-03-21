@@ -16,6 +16,11 @@ public class ButtonToggle extends Prototype {
     private TextLine _text_object;
     public EventMouseMethodState eventToggle = new EventMouseMethodState();
 
+    @Override
+    public void release() {
+        eventToggle.clear();
+    }
+
     /**
      * Constructs a ButtonToggle
      */
@@ -23,20 +28,18 @@ public class ButtonToggle extends Prototype {
         setItemName("ButtonToggle_" + count);
         count++;
         _text_object = new TextLine();
-        eventKeyPress.add(this::onKeyPress);
-        InterfaceMouseMethodState btn_click = (sender, args) -> {
-            if (eventToggle != null)
-                eventToggle.execute(sender, args); // remember
-        };
-        eventMouseClick.add(btn_click);
+        setStyle(DefaultsService.getDefaultStyle(ButtonToggle.class));
 
-        InterfaceMouseMethodState toggle = (sender, args) -> {
+        // event
+        eventToggle.add((sender, args) -> {
             _toggled = !_toggled;
             setToggled(_toggled);
-        };
-        eventToggle.add(toggle);
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ButtonToggle"));
-        setStyle(DefaultsService.getDefaultStyle(ButtonToggle.class));
+        });
+        eventKeyPress.add(this::onKeyPress);
+        eventMouseClick.add((sender, args) -> {
+            if (eventToggle != null)
+                eventToggle.execute(sender, args); // remember
+        });
     }
 
     /**
@@ -56,6 +59,7 @@ public class ButtonToggle extends Prototype {
     public boolean isToggled() {
         return _toggled;
     }
+
     public void setToggled(boolean value) {
         _toggled = value;
         if (value == true)
@@ -77,6 +81,7 @@ public class ButtonToggle extends Prototype {
     public void setTextAlignment(ItemAlignment... alignment) {
         _text_object.setTextAlignment(alignment);
     }
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
@@ -94,15 +99,19 @@ public class ButtonToggle extends Prototype {
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
+
     public void setFontSize(int size) {
         _text_object.setFontSize(size);
     }
+
     public void setFontStyle(int style) {
         _text_object.setFontStyle(style);
     }
+
     public void setFontFamily(String font_family) {
         _text_object.setFontFamily(font_family);
     }
+
     public Font getFont() {
         return _text_object.getFont();
     }
@@ -124,18 +133,23 @@ public class ButtonToggle extends Prototype {
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
         return _text_object.getForeground();
     }

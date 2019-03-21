@@ -19,6 +19,13 @@ namespace SpaceVIL
         public EventCommonMethod EventMinimize;
         public EventCommonMethod EventHide;
 
+        public void Release()
+        {
+            EventClose = null;
+            EventMinimize = null;
+            EventHide = null;
+        }
+
         internal Object EngineLocker = new Object();
         private CoreWindow handler;
         public CoreWindow GetCoreWindow()

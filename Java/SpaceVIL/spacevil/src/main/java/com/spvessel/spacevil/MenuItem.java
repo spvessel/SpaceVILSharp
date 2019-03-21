@@ -25,6 +25,10 @@ public class MenuItem extends Prototype {
     ContextMenu _context_menu;
     private ContextMenu _sub_context_menu;
 
+    public Prototype getSender() {
+        return _context_menu.getSender();
+    }
+
     /**
      * @return sub context menu
      */

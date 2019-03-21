@@ -79,6 +79,7 @@ namespace SpaceVIL
         {
             //important!!! may be the best combination of WINDOW HINTS!!!
 
+            // Glfw.DefaultWindowHints();
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.OpenglProfile, Glfw.OpenGLProfile.Core);
             Glfw.WindowHint(Glfw.Hint.Samples, _w_layout._msaa);
@@ -132,7 +133,7 @@ namespace SpaceVIL
 
             if (_w_layout.IsKeepAspectRatio)
                 Glfw.SetWindowAspectRatio(_window, _w_layout.RatioW, _w_layout.RatioH);
-                
+
             if (Visible)
                 Glfw.ShowWindow(_window);
         }

@@ -379,6 +379,12 @@ public class ListBox extends Prototype {
      */
     @Override
     public void removeItem(InterfaceBaseItem item) {
+        List<InterfaceBaseItem> list = new LinkedList<>(getItems());
+        if (list.contains(item))
+        {
+            super.removeItem(item);
+            return;
+        }
         _area.removeItem(item);
         updateElements();
         _area.setFocus();
@@ -386,7 +392,7 @@ public class ListBox extends Prototype {
 
     @Override
     public void clear() {
-        _area.removeAllItems();
+        _area.clear();
     }
 
     /**
@@ -521,4 +527,12 @@ public class ListBox extends Prototype {
             _area.setStyle(inner_style);
         }
     }
+
+    // @Override
+    // public void release()
+    // {
+    //     System.out.println("release");
+    //     super.clear();
+    //     System.out.println("release done");
+    // }
 }

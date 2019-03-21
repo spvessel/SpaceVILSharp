@@ -24,6 +24,11 @@ public class ComboBox extends Prototype {
     public CustomShape arrow = new CustomShape();
     public ComboBoxDropDown dropDownArea;
     public EventCommonMethod selectionChanged = new EventCommonMethod();
+    
+    @Override
+    public void release() {
+        selectionChanged.clear();
+    }
 
     private List<MenuItem> preItemList;
 

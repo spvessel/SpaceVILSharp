@@ -47,7 +47,7 @@ abstract public class Prototype implements InterfaceBaseItem {
 
     /**
      * Common events (resize, destroy)
-      */
+     */
     EventCommonMethodState eventFocusGet = new EventCommonMethodState();
     EventCommonMethodState eventFocusLost = new EventCommonMethodState();
     public EventCommonMethodState eventResize = new EventCommonMethodState();
@@ -59,7 +59,6 @@ abstract public class Prototype implements InterfaceBaseItem {
     public EventMouseMethodState eventMouseClick = new EventMouseMethodState();
     public EventMouseMethodState eventMouseDoubleClick = new EventMouseMethodState();
     public EventMouseMethodState eventMousePress = new EventMouseMethodState();
-    // public EventMouseMethodState eventMouseRelease = new EventMouseMethodState();
     public EventMouseMethodState eventMouseDrag = new EventMouseMethodState();
     public EventMouseMethodState eventMouseDrop = new EventMouseMethodState();
     public EventMouseMethodState eventScrollUp = new EventMouseMethodState();
@@ -74,12 +73,37 @@ abstract public class Prototype implements InterfaceBaseItem {
      */
     public EventInputTextMethodState eventTextInput = new EventInputTextMethodState();
 
+    void freeEvents() {
+        eventFocusGet.clear();
+        eventFocusLost.clear();
+        eventResize.clear();
+        eventDestroy.clear();
+
+        eventMouseHover.clear();
+        eventMouseClick.clear();
+        eventMouseDoubleClick.clear();
+        eventMousePress.clear();
+        eventMouseDrag.clear();
+        eventMouseDrop.clear();
+        eventScrollUp.clear();
+        eventScrollDown.clear();
+
+        eventKeyPress.clear();
+        eventKeyRelease.clear();
+
+        eventTextInput.clear();
+    }
+
+    public void release() {
+    }
+
     /**
      * Set parent window for the Prototype
      */
     public void setHandler(WindowLayout handler) {
         _core.setHandler(handler);
     }
+
     public WindowLayout getHandler() {
         return _core.getHandler();
     }
@@ -90,6 +114,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public String getToolTip() {
         return _core.getToolTip();
     }
+
     public void setToolTip(String text) {
         _core.setToolTip(text);
     }
@@ -100,6 +125,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public Prototype getParent() {
         return _core.getParent();
     }
+
     public void setParent(Prototype parent) {
         _core.setParent(parent);
     }
@@ -110,9 +136,11 @@ abstract public class Prototype implements InterfaceBaseItem {
     public Spacing getSpacing() {
         return _core.getSpacing();
     }
+
     public void setSpacing(Spacing spacing) {
         _core.setSpacing(spacing);
     }
+
     public void setSpacing(int horizontal, int vertical) {
         _core.setSpacing(horizontal, vertical);
     }
@@ -123,9 +151,11 @@ abstract public class Prototype implements InterfaceBaseItem {
     public Indents getPadding() {
         return _core.getPadding();
     }
+
     public void setPadding(Indents padding) {
         _core.setPadding(padding);
     }
+
     public void setPadding(int left, int top, int right, int bottom) {
         _core.setPadding(left, top, right, bottom);
     }
@@ -136,9 +166,11 @@ abstract public class Prototype implements InterfaceBaseItem {
     public Indents getMargin() {
         return _core.getMargin();
     }
+
     public void setMargin(Indents margin) {
         _core.setMargin(margin);
     }
+
     public void setMargin(int left, int top, int right, int bottom) {
         _core.setMargin(left, top, right, bottom);
     }
@@ -156,31 +188,38 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setBorderFill(Color fill) {
         _core.setBorderFill(fill);
     }
+
     public Color getBorderFill() {
         return _core.getBorderFill();
     }
+
     public void setBorderFill(int r, int g, int b) {
         _core.setBorderFill(r, g, b);
-    }    
+    }
+
     public void setBorderFill(int r, int g, int b, int a) {
         _core.setBorderFill(r, g, b, a);
-    }    
+    }
+
     public void setBorderFill(float r, float g, float b) {
         _core.setBorderFill(r, g, b);
-    }    
+    }
+
     public void setBorderFill(float r, float g, float b, float a) {
         _core.setBorderFill(r, g, b, a);
-    }    
-    
+    }
+
     /**
      * Radius of the border's corners
      */
     public void setBorderRadius(CornerRadius radius) {
         _core.setBorderRadius(radius);
     }
+
     public void setBorderRadius(int radius) {
         _core.setBorderRadius(new CornerRadius(radius));
     }
+
     public CornerRadius getBorderRadius() {
         return _core.getBorderRadius();
     }
@@ -191,6 +230,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setBorderThickness(int thickness) {
         _core.setBorderThickness(thickness);
     }
+
     public int getBorderThickness() {
         return _core.getBorderThickness();
     }
@@ -208,9 +248,11 @@ abstract public class Prototype implements InterfaceBaseItem {
     public List<float[]> getTriangles() {
         return _core.getTriangles();
     }
+
     public void setTriangles(List<float[]> triangles) {
         _core.setTriangles(triangles);
     }
+
     public List<float[]> makeShape() {
         return _core.makeShape();
     }
@@ -221,18 +263,23 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setBackground(Color color) {
         _core.setBackground(color);
     }
+
     public void setBackground(int r, int g, int b) {
         _core.setBackground(r, g, b);
     }
+
     public void setBackground(int r, int g, int b, int a) {
         _core.setBackground(r, g, b, a);
     }
+
     public void setBackground(float r, float g, float b) {
         _core.setBackground(r, g, b);
     }
+
     public void setBackground(float r, float g, float b, float a) {
         _core.setBackground(r, g, b, a);
     }
+
     public Color getBackground() {
         return _core.getBackground();
     }
@@ -243,6 +290,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setItemName(String name) {
         _core.setItemName(name);
     }
+
     public String getItemName() {
         return _core.getItemName();
     }
@@ -253,15 +301,18 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setMinWidth(int width) {
         _core.setMinWidth(width);
     }
+
     public int getMinWidth() {
         return _core.getMinWidth();
     }
+
     /**
      * Prototype width
      */
     public void setWidth(int width) {
         _core.setWidth(width);
     }
+
     public int getWidth() {
         return _core.getWidth();
     }
@@ -272,6 +323,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setMaxWidth(int width) {
         _core.setMaxWidth(width);
     }
+
     public int getMaxWidth() {
         return _core.getMaxWidth();
     }
@@ -282,6 +334,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setMinHeight(int height) {
         _core.setMinHeight(height);
     }
+
     public int getMinHeight() {
         return _core.getMinHeight();
     }
@@ -292,6 +345,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setHeight(int height) {
         _core.setHeight(height);
     }
+
     public int getHeight() {
         return _core.getHeight();
     }
@@ -302,6 +356,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setMaxHeight(int height) {
         _core.setMaxHeight(height);
     }
+
     public int getMaxHeight() {
         return _core.getMaxHeight();
     }
@@ -312,6 +367,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setSize(int width, int height) {
         _core.setSize(width, height);
     }
+
     public int[] getSize() {
         return _core.getSize();
     }
@@ -322,6 +378,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setMinSize(int width, int height) {
         _core.setMinSize(width, height);
     }
+
     public int[] getMinSize() {
         return _core.getMinSize();
     }
@@ -332,6 +389,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setMaxSize(int width, int height) {
         _core.setMaxSize(width, height);
     }
+
     public int[] getMaxSize() {
         return _core.getMaxSize();
     }
@@ -342,9 +400,11 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setAlignment(List<ItemAlignment> alignment) {
         _core.setAlignment(alignment);
     }
+
     public void setAlignment(ItemAlignment... alignment) {
         _core.setAlignment(alignment);
     }
+
     public List<ItemAlignment> getAlignment() {
         return _core.getAlignment();
     }
@@ -355,21 +415,26 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setSizePolicy(SizePolicy width, SizePolicy height) {
         _core.setSizePolicy(width, height);
     }
+
     public void setWidthPolicy(SizePolicy policy) {
         _core.setWidthPolicy(policy);
     }
+
     public SizePolicy getWidthPolicy() {
         return _core.getWidthPolicy();
     }
+
     public void setHeightPolicy(SizePolicy policy) {
         _core.setHeightPolicy(policy);
     }
+
     public SizePolicy getHeightPolicy() {
         return _core.getHeightPolicy();
     }
 
     /**
      * Prototype position
+     * 
      * @param x X position of the left top corner
      * @param y Y position of the left top corner
      */
@@ -377,15 +442,19 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.setX(x);
         _core.setY(y);
     }
+
     public void setX(int x) {
         _core.setX(x);
     }
+
     public int getX() {
         return _core.getX();
     }
+
     public void setY(int y) {
         _core.setY(y);
     }
+
     public int getY() {
         return _core.getY();
     }
@@ -427,6 +496,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public boolean isShadowDrop() {
         return _core.isShadowDrop();
     }
+
     public void setShadowDrop(boolean value) {
         _core.setShadowDrop(value);
     }
@@ -437,6 +507,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setShadowRadius(int radius) {
         _core.setShadowRadius(radius);
     }
+
     public int getShadowRadius() {
         return _core.getShadowRadius();
     }
@@ -447,6 +518,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public Color getShadowColor() {
         return _core.getShadowColor();
     }
+
     public void setShadowColor(Color color) {
         _core.setShadowColor(color);
     }
@@ -460,10 +532,11 @@ abstract public class Prototype implements InterfaceBaseItem {
 
     /**
      * Set Prototype's shadow
+     * 
      * @param radius Radius of the shadow's corners
-     * @param x X position of the shadow
-     * @param y Y Position of the shadow
-     * @param color Shadow color
+     * @param x      X position of the shadow
+     * @param y      Y Position of the shadow
+     * @param color  Shadow color
      */
     public void setShadow(int radius, int x, int y, Color color) {
         _core.setShadow(radius, x, y, color);
@@ -478,8 +551,8 @@ abstract public class Prototype implements InterfaceBaseItem {
     }
 
     /**
-     * Add new item state for one of the item state types (BASE,
-     *     HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED)
+     * Add new item state for one of the item state types (BASE, HOVERED, PRESSED,
+     * TOGGLED, FOCUSED, DISABLED)
      */
     public void addItemState(ItemStateType type, ItemState state) {
         _core.addItemState(type, state);
@@ -514,8 +587,8 @@ abstract public class Prototype implements InterfaceBaseItem {
     }
 
     /**
-     * Insert item to the Prototype. If Prototype has more items
-     * than index replace existing item, else add new item
+     * Insert item to the Prototype. If Prototype has more items than index replace
+     * existing item, else add new item
      */
     public void insertItem(InterfaceBaseItem item, int index) {
         _core.insertItem(item, index);
@@ -529,6 +602,7 @@ abstract public class Prototype implements InterfaceBaseItem {
             this.addItem(item);
         }
     }
+
     public void addItem(InterfaceBaseItem item) {
         _core.addItem(item);
     }
@@ -546,6 +620,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public boolean isDrawable() {
         return _core.isDrawable();
     }
+
     public void setDrawable(boolean value) {
         _core.setDrawable(value);
     }
@@ -556,6 +631,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public boolean isVisible() {
         return _core.isVisible();
     }
+
     public void setVisible(boolean value) {
         _core.setVisible(value);
     }
@@ -598,7 +674,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     }
 
     /**
-     * @param e InputEventType
+     * @param e     InputEventType
      * @param value passed or non passed
      */
     public void setPassEvents(boolean value, InputEventType e) {
@@ -607,12 +683,13 @@ abstract public class Prototype implements InterfaceBaseItem {
 
     /**
      * @param events_set list of the InputEventTypes
-     * @param value passed or non passed for all list events_set
+     * @param value      passed or non passed for all list events_set
      */
-    public void setPassEvents(boolean value, List<InputEventType>  events_set) {
+    public void setPassEvents(boolean value, List<InputEventType> events_set) {
         _core.setPassEvents(value, events_set);
     }
-    public void setPassEvents(boolean value, InputEventType...  events_set) {
+
+    public void setPassEvents(boolean value, InputEventType... events_set) {
         for (InputEventType e : events_set) {
             _core.setPassEvents(value, e);
         }
@@ -624,6 +701,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public boolean isDisabled() {
         return _core.isDisabled();
     }
+
     public void setDisabled(boolean value) {
         _core.setDisabled(value);
     }
@@ -634,6 +712,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public boolean isMouseHover() {
         return _core.isMouseHover();
     }
+
     public void setMouseHover(boolean value) {
         _core.setMouseHover(value);
     }
@@ -644,6 +723,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public boolean isMousePressed() {
         return _core.isMousePressed();
     }
+
     public void setMousePressed(boolean value) {
         _core.setMousePressed(value);
     }
@@ -659,6 +739,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public boolean isFocused() {
         return _core.isFocused();
     }
+
     public void setFocused(boolean value) {
         if (isFocusable) {
             _core.setFocused(value);
@@ -683,8 +764,7 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.removeItem(item);
     }
 
-    public void clear()
-    {
+    public void clear() {
         _core.clear();
     }
 
@@ -706,19 +786,19 @@ abstract public class Prototype implements InterfaceBaseItem {
     ItemStateType getCurrentState() {
         return _core.getCurrentState();
     }
-    
+
     void setState(ItemStateType state) {
         _core.setState(state);
     }
 
     // /**
-    //  * Set list of the Prototype's inner items. Old items will be removed
-    //  */
+    // * Set list of the Prototype's inner items. Old items will be removed
+    // */
     void setContent(List<InterfaceBaseItem> content) {
         List<InterfaceBaseItem> oldContent = getItems();
         if (oldContent.size() != content.size())
             return;
-        
+
         for (InterfaceBaseItem ibi : oldContent) {
             if (!content.contains(ibi))
                 return;
@@ -751,7 +831,4 @@ abstract public class Prototype implements InterfaceBaseItem {
     public void setHoverRule(ItemRule rule) {
         _core.HoverRule = rule;
     }
-
-    @Override
-    public void release() { }
 }

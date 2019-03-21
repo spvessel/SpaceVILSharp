@@ -29,6 +29,12 @@ namespace SpaceVIL
             return _step;
         }
         public EventCommonMethodState EventValueChanged;
+
+        public override void Release()
+        {
+            EventValueChanged = null;
+        }
+        
         private float _current_value = 0;
         public int Direction = 0;
         public void SetCurrentValue(float value)

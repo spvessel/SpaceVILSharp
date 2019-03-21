@@ -36,6 +36,12 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
 
     public EventCommonMethod positionChanged = new EventCommonMethod();
     public EventCommonMethod sizeChanged = new EventCommonMethod();
+    
+    @Override
+    public void release() {
+        positionChanged.clear();
+        sizeChanged.clear();
+    }
 
     public boolean isLocked = false;
     public boolean isWResizable = true;

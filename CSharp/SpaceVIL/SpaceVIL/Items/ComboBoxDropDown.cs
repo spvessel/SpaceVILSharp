@@ -10,6 +10,11 @@ namespace SpaceVIL
     public class ComboBoxDropDown : Prototype, IFloating
     {
         public EventCommonMethod SelectionChanged;
+        public override void Release()
+        {
+            SelectionChanged = null;
+        }
+        
         public Prototype ReturnFocus = null;
         public ListBox ItemList = new ListBox();
         private String _text_selection = String.Empty;

@@ -11,6 +11,11 @@ namespace SpaceVIL
     {
         public EventWindowDropMethod EventDrop;
 
+        public override void Release()
+        {
+            EventDrop = null;
+        }
+
         static int count = 0;
         internal Side _sides = 0;
         internal bool _is_fixed = false;

@@ -19,6 +19,12 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     public ListBox itemList = new ListBox();
     private List<InterfaceBaseItem> _queue = new LinkedList<>();
 
+    private Prototype _sender = null;
+
+    public Prototype getSender() {
+        return _sender;
+    }
+
     private static int count = 0;
     public MouseButton activeButton = MouseButton.BUTTON_RIGHT;
 
@@ -191,6 +197,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
                 updateSize();
                 _added = true;
             }
+
+            if (sender instanceof Prototype)
+                _sender = (Prototype) sender;
 
             // проверка снизу
             if (args.position.getY() + getHeight() > getHandler().getHeight()) {

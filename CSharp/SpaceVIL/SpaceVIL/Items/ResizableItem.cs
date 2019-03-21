@@ -32,6 +32,12 @@ namespace SpaceVIL
         public EventCommonMethod PositionChanged;
         public EventCommonMethod SizeChanged;
 
+        public override void Release()
+        {
+            PositionChanged = null;
+            SizeChanged = null;
+        }
+
         public bool IsLocked = false;
         public bool IsWResizable = true;
         public bool IsHResizable = true;

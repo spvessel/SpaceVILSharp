@@ -130,10 +130,10 @@ public class PasswordLine extends HorizontalStack {
      * Initialization and adding of all elements in the PasswordLine
      */
     public void initElements() {
+        addItems(_textEncrypt, _show_pwd_btn);
+
         _show_pwd_btn.setPassEvents(false);
         _show_pwd_btn.eventToggle.add((sender, args) -> showPassword(sender));
-
-        addItems(_textEncrypt, _show_pwd_btn);
     }
 
     /**

@@ -182,15 +182,16 @@ public class TreeItem extends Prototype {
             break;
 
         case BRANCH:
+            super.addItem(_indicator);
+            super.addItem(_icon_shape);
+            super.addItem(_text_object);
+            
             _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled()));
             _indicator.isFocusable = false;
             eventMouseDoubleClick.add((sender, args) -> {
                 if (args.button == MouseButton.BUTTON_LEFT)
                     _indicator.eventToggle.execute(sender, args);
             });
-            super.addItem(_indicator);
-            super.addItem(_icon_shape);
-            super.addItem(_text_object);
             break;
 
         default:
@@ -257,10 +258,10 @@ public class TreeItem extends Prototype {
     }
 
     // private void recursiveAddChildren(TreeItem item, List<TreeItem> chiList) {
-    //     for (int i = 0; i < chiList.size(); i++) {
-    //         // item.addItem(chiList.get(i));
-    //         chiList.get(i).resetIndents();
-    //     }
+    // for (int i = 0; i < chiList.size(); i++) {
+    // // item.addItem(chiList.get(i));
+    // chiList.get(i).resetIndents();
+    // }
     // }
 
     /**

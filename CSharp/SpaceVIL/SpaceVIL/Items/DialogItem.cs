@@ -44,7 +44,11 @@ namespace SpaceVIL
             _handler.GetWindow().RemoveItem(this);
         }
 
-        public EventCommonMethod OnCloseDialog = null;
+        public EventCommonMethod OnCloseDialog;
+        public override void Release()
+        {
+            OnCloseDialog = null;
+        }
 
         public override void SetStyle(Style style)
         {

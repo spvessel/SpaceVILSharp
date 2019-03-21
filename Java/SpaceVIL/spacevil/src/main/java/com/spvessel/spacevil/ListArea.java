@@ -16,6 +16,12 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     public EventCommonMethod selectionChanged = new EventCommonMethod();
     public EventCommonMethod itemListChanged = new EventCommonMethod();
 
+    @Override
+    public void release() {
+        selectionChanged.clear();
+        itemListChanged.clear();
+    }
+
     private int _step = 30;
 
     /**
@@ -230,9 +236,17 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     @Override
     public void removeItem(InterfaceBaseItem item) {
         unselect();
-        _mapContent.get(item).clearContent();
-        super.removeItem(_mapContent.get(item));
-        _mapContent.remove(item);
+        if (item instanceof SelectionItem) {
+            SelectionItem tmp = (SelectionItem) item;
+            _mapContent.remove(tmp.getContent());
+            tmp.clearContent();
+            super.removeItem(tmp);
+        } else {
+            SelectionItem tmp = _mapContent.get(item);
+            _mapContent.remove(item);
+            tmp.clearContent();
+            super.removeItem(tmp);
+        }
         updateLayout();
         itemListChanged.execute();
     }

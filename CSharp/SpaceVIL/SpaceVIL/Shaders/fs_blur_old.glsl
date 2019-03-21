@@ -1,4 +1,4 @@
-﻿#version 430
+﻿#version 330
 uniform sampler2D tex;
 uniform vec2 frame;
 uniform int res;

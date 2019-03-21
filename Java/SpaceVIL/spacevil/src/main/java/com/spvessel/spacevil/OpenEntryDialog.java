@@ -176,8 +176,8 @@ public class OpenEntryDialog extends OpenDialog {
                 String result = input.getResult();
                 if (result == null)
                     return;
-                File file = new File(
-                        _addressLine.getText() + File.separator + ((FileSystemEntry) _fileList.getSelectedItem()).getText());
+                File file = new File(_addressLine.getText() + File.separator
+                        + ((FileSystemEntry) _fileList.getSelectedItem()).getText());
                 File newFile = new File(_addressLine.getText() + File.separator + result);
                 if (file.renameTo(newFile)) {
                     selected.setText(result);
@@ -464,6 +464,7 @@ public class OpenEntryDialog extends OpenDialog {
             }
         } else if (_dialogType == OpenDialogType.SAVE)
             _result = _addressLine.getText() + File.separator + _fileName.getText();
+
         close();
     }
 
