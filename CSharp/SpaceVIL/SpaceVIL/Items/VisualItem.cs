@@ -248,7 +248,7 @@ namespace SpaceVIL
 
         internal void CascadeRemoving(IBaseItem item, LayoutType type)
         {
-            VisualItem container = item as VisualItem;// предполагаю что элемент контейнер
+            Prototype container = item as Prototype;// предполагаю что элемент контейнер
             if (container != null)//и если это действительно контейнер
             {
                 //то каждому вложенному элементу вызвать команду удалить своих вложенных элементов
@@ -286,6 +286,7 @@ namespace SpaceVIL
                 ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
                 CastAndRemove(item);
                 item.Release();
+                item.SetParent(null);
             }
             catch (Exception ex)
             {

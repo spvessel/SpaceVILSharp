@@ -269,6 +269,8 @@ namespace SpaceVIL
         /// </summary>
         public override void RemoveItem(IBaseItem item)
         {
+            Unselect();
+            _mapContent[item].ClearContent();
             base.RemoveItem(_mapContent[item]);
             _mapContent.Remove(item);
             UpdateLayout();
@@ -293,6 +295,7 @@ namespace SpaceVIL
 
                 while (list.Count != 0)
                 {
+                    (list.ElementAt(0) as SelectionItem).ClearContent();
                     base.RemoveItem(list.ElementAt(0));
                     list.RemoveAt(0);
                 }

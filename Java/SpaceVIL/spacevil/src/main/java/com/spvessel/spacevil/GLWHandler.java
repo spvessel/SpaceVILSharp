@@ -18,7 +18,7 @@ final class GLWHandler {
     // private float _scaleHeight = 1.0f;
 
     // float[] getDpiScale() {
-    //     return new float[] { _scaleWidth, _scaleHeight };
+    // return new float[] { _scaleWidth, _scaleHeight };
     // }
 
     private void setDpiScale(float w, float h) {
@@ -124,13 +124,14 @@ final class GLWHandler {
             throw new SpaceVILException("Create window fails - " + getLayout().getWindowTitle());
         }
         glfwMakeContextCurrent(_window);
-        
+
         long monitor = glfwGetPrimaryMonitor();
         GLFWVidMode vidmode = glfwGetVideoMode(monitor);
         int width = vidmode.width();
         int height = vidmode.height();
         // System.out.println("VIDSIZE: " + width + " " + height);
-        // System.out.println("WSIZE: " + _w_layout.getWidth() + " " + _w_layout.getHeight());
+        // System.out.println("WSIZE: " + _w_layout.getWidth() + " " +
+        // _w_layout.getHeight());
 
         IntBuffer w = BufferUtils.createIntBuffer(1);
         IntBuffer h = BufferUtils.createIntBuffer(1);
@@ -153,6 +154,9 @@ final class GLWHandler {
                 _w_layout.getMaxHeight());
         glfwSetWindowPos(_window, getPointer().getX(), getPointer().getY());
 
+        if (_w_layout.isKeepAspectRatio)
+            glfwSetWindowAspectRatio(_window, _w_layout.ratioW, _w_layout.ratioH);
+            
         if (visible)
             glfwShowWindow(_window);
     }
@@ -269,7 +273,7 @@ final class GLWHandler {
         framebufferCallback = function;
         glfwSetFramebufferSizeCallback(_window, framebufferCallback);
     }
-    
+
     void setCallbackRefresh(GLFWWindowRefreshCallback function) {
         windowRefreshCallback = function;
         glfwSetWindowRefreshCallback(_window, windowRefreshCallback);

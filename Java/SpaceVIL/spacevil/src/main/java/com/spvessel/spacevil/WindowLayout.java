@@ -456,7 +456,8 @@ public final class WindowLayout {
     }
 
     public void maximize() {
-        engine.maximizeWindow();
+        // engine.maximizeWindow();
+        engine.maximizeRequest = true;
     }
 
     void isFixed(Boolean flag) {
@@ -531,5 +532,15 @@ public final class WindowLayout {
         } finally {
             engineLocker.unlock();
         }
+    }
+
+    int ratioW = -1;
+    int ratioH = -1;
+    boolean isKeepAspectRatio = false;
+
+    public void setAspectRatio(int w, int h) {
+        isKeepAspectRatio = true;
+        ratioW = w;
+        ratioH = h;
     }
 }

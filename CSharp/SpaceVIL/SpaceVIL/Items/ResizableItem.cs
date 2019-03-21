@@ -27,7 +27,7 @@ namespace SpaceVIL
             _sidesExclude.Clear();
         }
 
-        internal ItemAlignment _sides = 0;
+        internal Side _sides = 0;
 
         public EventCommonMethod PositionChanged;
         public EventCommonMethod SizeChanged;
@@ -132,7 +132,7 @@ namespace SpaceVIL
                     int w = GetWidth();
                     int h = GetHeight();
 
-                    if (_sides.HasFlag(ItemAlignment.Left))
+                    if (_sides.HasFlag(Side.Left))
                     {
                         if (!(GetMinWidth() == GetWidth() && (args.Position.GetX() - _pressed_x) >= 0))
                         {
@@ -141,12 +141,12 @@ namespace SpaceVIL
                             w = _width + diff;
                         }
                     }
-                    if (_sides.HasFlag(ItemAlignment.Right))
+                    if (_sides.HasFlag(Side.Right))
                     {
                         if (!(args.Position.GetX() < GetMinWidth() && GetWidth() == GetMinWidth()))
                             w = x_release - x_handler;
                     }
-                    if (_sides.HasFlag(ItemAlignment.Top))
+                    if (_sides.HasFlag(Side.Top))
                     {
                         if (!(GetMinHeight() == GetHeight() && (args.Position.GetY() - _pressed_y) >= 0))
                         {
@@ -155,7 +155,7 @@ namespace SpaceVIL
                             h = _height + diff;
                         }
                     }
-                    if (_sides.HasFlag(ItemAlignment.Bottom))
+                    if (_sides.HasFlag(Side.Bottom))
                     {
                         if (!(args.Position.GetY() < GetMinHeight() && GetHeight() == GetMinHeight()))
                             h = y_release - y_handler;
@@ -163,7 +163,7 @@ namespace SpaceVIL
 
                     if (_sides != 0)
                     {
-                        if (_sides.HasFlag(ItemAlignment.Left) || _sides.HasFlag(ItemAlignment.Top))
+                        if (_sides.HasFlag(Side.Left) || _sides.HasFlag(Side.Top))
                         {
                             SetX(x_handler);
                             SetY(y_handler);
@@ -208,20 +208,20 @@ namespace SpaceVIL
             _sides = 0;
             if (xpos <= 10 && !_sidesExclude.Contains(Side.Left))
             {
-                _sides |= ItemAlignment.Left;
+                _sides |= Side.Left;
             }
             if (xpos >= GetWidth() - 10 && !_sidesExclude.Contains(Side.Right))
             {
-                _sides |= ItemAlignment.Right;
+                _sides |= Side.Right;
             }
 
             if (ypos <= 10 && !_sidesExclude.Contains(Side.Top))
             {
-                _sides |= ItemAlignment.Top;
+                _sides |= Side.Top;
             }
             if (ypos >= GetHeight() - 10 && !_sidesExclude.Contains(Side.Bottom))
             {
-                _sides |= ItemAlignment.Bottom;
+                _sides |= Side.Bottom;
             }
         }
     }

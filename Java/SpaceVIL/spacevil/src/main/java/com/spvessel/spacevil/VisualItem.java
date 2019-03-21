@@ -445,17 +445,12 @@ final class VisualItem extends BaseItem {
     }
 
     void cascadeRemoving(InterfaceBaseItem item, LayoutType type) {
-        if (item instanceof VisualItem)// и если это действительно контейнер
+        if (item instanceof Prototype)// и если это действительно контейнер
         {
-            VisualItem container = (VisualItem) item;// предполагаю что элемент контейнер
+            Prototype container = (Prototype) item;// предполагаю что элемент контейнер
             List<InterfaceBaseItem> tmp = container.getItems();
             while (tmp.size() > 0) {
                 InterfaceBaseItem child = container.getItems().get(0);
-                // container.cascadeRemoving(child, type);
-                // container.getItems().remove(child);
-                // child.removeItemFromListeners();
-                // ItemsLayoutBox.removeItem(getHandler(), child, type);
-
                 container.removeItem(child);
                 tmp.remove(child);
             }
@@ -480,6 +475,7 @@ final class VisualItem extends BaseItem {
             ItemsLayoutBox.removeItem(getHandler(), item, type);
             castAndRemove(item);
             item.release();
+            item.setParent(null);
         } catch (Exception ex) {
             System.out.println("Method - RemoveItem: " + ((item == null) ? "item is null" : item.getItemName()));
             ex.printStackTrace();

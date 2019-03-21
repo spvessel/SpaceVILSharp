@@ -440,7 +440,8 @@ namespace SpaceVIL
         public bool IsMaximized = false;
         public void Maximize()
         {
-            engine.MaximizeWindow();
+            // engine.MaximizeWindow();
+            engine.MaximizeRequest = true;
         }
 
         public void IsFixed(bool flag)
@@ -532,6 +533,16 @@ namespace SpaceVIL
             {
                 Monitor.Exit(EngineLocker);
             }
+        }
+
+        internal int RatioW = -1;
+        internal int RatioH = -1;
+        internal bool IsKeepAspectRatio = false;
+        public void SetAspectRatio(int w, int h)
+        {
+            IsKeepAspectRatio = true;
+            RatioW = w;
+            RatioH = h;
         }
     }
 }

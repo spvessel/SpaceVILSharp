@@ -25,8 +25,9 @@ public class MainWindow extends ActiveWindow {
     public void initWindow() {
         WindowLayout Handler = new WindowLayout("MainWindow", "MainWindow", 800, 200, true);
         setHandler(Handler);
-        Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
+        // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
         Handler.setMinSize(500, 100);
+        Handler.setAspectRatio(4, 1);
         // Handler.setBackground(45, 45, 45);
         // Handler.setPadding(2, 2, 2, 2);
 

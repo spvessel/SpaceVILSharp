@@ -130,6 +130,9 @@ namespace SpaceVIL
             Glfw.SetWindowSizeLimits(_window, _w_layout.GetMinWidth(), _w_layout.GetMinHeight(), _w_layout.GetMaxWidth(), _w_layout.GetMaxHeight());
             Glfw.SetWindowPos(_window, WPosition.GetX(), WPosition.GetY());
 
+            if (_w_layout.IsKeepAspectRatio)
+                Glfw.SetWindowAspectRatio(_window, _w_layout.RatioW, _w_layout.RatioH);
+                
             if (Visible)
                 Glfw.ShowWindow(_window);
         }

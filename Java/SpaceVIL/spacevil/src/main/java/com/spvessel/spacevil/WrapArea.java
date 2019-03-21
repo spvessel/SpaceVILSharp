@@ -262,6 +262,8 @@ public class WrapArea extends Prototype implements InterfaceGrid {
      */
     @Override
     public void removeItem(InterfaceBaseItem item) {
+        unselect();
+        _mapContent.get(item).clearContent();
         super.removeItem(_mapContent.get(item));
         _mapContent.remove(item);
         updateLayout();
@@ -283,6 +285,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
                 return;
 
             while (!list.isEmpty()) {
+                ((SelectionItem) list.get(0)).clearContent();
                 super.removeItem(list.get(0));
                 list.remove(0);
             }

@@ -12,7 +12,7 @@ namespace SpaceVIL
         public EventWindowDropMethod EventDrop;
 
         static int count = 0;
-        internal ItemAlignment _sides = 0;
+        internal Side _sides = 0;
         internal bool _is_fixed = false;
         private Prototype _focus = null;
 
@@ -61,24 +61,24 @@ namespace SpaceVIL
             return IsMouseHover();
         }
 
-        internal ItemAlignment GetSides(float xpos, float ypos) //проблемы с глобальным курсором
+        internal Side GetSides(float xpos, float ypos) //проблемы с глобальным курсором
         {
             if (xpos <= 5)
             {
-                _sides |= ItemAlignment.Left;
+                _sides |= Side.Left;
             }
             if (xpos >= GetWidth() - 5)
             {
-                _sides |= ItemAlignment.Right;
+                _sides |= Side.Right;
             }
 
             if (ypos <= 5)
             {
-                _sides |= ItemAlignment.Top;
+                _sides |= Side.Top;
             }
             if (ypos >= GetHeight() - 5)
             {
-                _sides |= ItemAlignment.Bottom;
+                _sides |= Side.Bottom;
             }
 
             return _sides;
