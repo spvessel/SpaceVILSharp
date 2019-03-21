@@ -283,6 +283,8 @@ namespace SpaceVIL
             HScrollBar.Slider.UpdateHandler();
         }
 
+        public EventCommonMethod OnTextChanged;
+
         /// <summary>
         /// Initialization and adding of all elements in the TextArea
         /// </summary>
@@ -298,7 +300,8 @@ namespace SpaceVIL
             //Events Connections
             EventScrollUp += VScrollBar.EventScrollUp.Invoke;
             EventScrollDown += VScrollBar.EventScrollDown.Invoke;
-            _area.TextChanged += UpdateElements;
+            _area.CursorChanged += UpdateElements;
+            _area.TextChanged += () => OnTextChanged?.Invoke();
 
             VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); _area.SetFocus();};
             HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); _area.SetFocus();};
