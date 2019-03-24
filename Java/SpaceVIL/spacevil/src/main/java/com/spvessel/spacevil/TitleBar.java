@@ -193,24 +193,20 @@ public class TitleBar extends WindowAnchor {
         // setFont(new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold));
 
         // _close
-        InterfaceMouseMethodState close_click = (sender, args) -> {
-            getHandler().close();
-        };
-        _close.eventMouseClick.add(close_click);
+        _close.eventMouseClick.add((sender, args) -> {
+            getHandler().eventClose.execute();
+        });
 
         // _minimize
-        InterfaceMouseMethodState minimize_click = (sender, args) -> {
+        _minimize.eventMouseClick.add((sender, args) -> {
             getHandler().minimize();
-        };
-        _minimize.eventMouseClick.add(minimize_click);
+        });
 
         // _maximize
         if (CommonService.getOSType() != OSType.MAC) {
-
-            InterfaceMouseMethodState maximize_click = (sender, args) -> {
+            _maximize.eventMouseClick.add((sender, args) -> {
                 getHandler().maximize();
-            };
-            _maximize.eventMouseClick.add(maximize_click);
+            });
         } else {
             _maximize.setVisible(false);
             _maximize.setDrawable(false);

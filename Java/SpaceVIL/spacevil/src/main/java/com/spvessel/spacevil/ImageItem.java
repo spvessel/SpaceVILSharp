@@ -139,6 +139,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         UpdateLayout();
     }
 
+    private boolean _isOverlay = false;
     private Color _colorOverlay;
 
     public Color getColorOverlay() {
@@ -148,11 +149,13 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     public void setColorOverlay(Color color) {
         _colorOverlay = color;
     }
+    
+    public void setColorOverlay(boolean overlay) {
+        _isOverlay = overlay;
+    }
 
     public boolean isColorOverlay() {
-        if (_colorOverlay != null)
-            return true;
-        return false;
+        return _isOverlay;
     }
 
     private boolean _isKeepAspectRatio = false;

@@ -89,8 +89,7 @@ namespace SpaceVIL
 
             manager = new ActionManager(this);
             engine = new DrawEngine(this);
-
-
+            EventClose += Close;
         }
 
         private WContainer _window;
@@ -355,7 +354,7 @@ namespace SpaceVIL
         {
             if (CommonService.GetOSType() == OSType.Mac)
             {
-                engine.Close();
+                engine._handler.SetToClose();
                 WindowLayoutBox.SetWindowRunning(null);
             }
             else
@@ -369,15 +368,13 @@ namespace SpaceVIL
                 manager.Execute.Set();
             }
             IsClosed = true;
-
-            EventClose?.Invoke();
         }
 
         private void closeInsideNewThread()
         {
             if (IsDialog)
             {
-                engine.Close();
+                engine._handler.SetToClose();
                 SetWindowFocused();
                 Monitor.Enter(wndLock);
                 try
@@ -393,7 +390,7 @@ namespace SpaceVIL
             else
             {
                 if (thread_engine != null && thread_engine.IsAlive)
-                    engine.Close();
+                    engine._handler.SetToClose();
             }
         }
 

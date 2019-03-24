@@ -86,7 +86,6 @@ public class FlowTest extends ActiveWindow {
         btn1.eventMouseClick.add((sender, args) -> {
             // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!");
             // pop.show(Handler);
-
              MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
              msg.setMessageText("msg");
              ButtonCore btnnn = new ButtonCore("one");
@@ -187,7 +186,7 @@ public class FlowTest extends ActiveWindow {
             // });
             // msg.show(Handler);
 
-            OpenEntryDialog opd = new OpenEntryDialog("Save File:", FileSystemEntryType.FILE, OpenDialogType.OPEN);
+            OpenEntryDialog opd = new OpenEntryDialog("Save File:", FileSystemEntryType.FILE, OpenDialogType.SAVE);
             opd.addFilterExtensions("Text files (*.txt);*.txt", "Images (*.png, *.bmp, *.jpg);*.png,*.bmp,*.jpg");
             opd.onCloseDialog.add(() -> {
                 System.out.println(opd.getResult());

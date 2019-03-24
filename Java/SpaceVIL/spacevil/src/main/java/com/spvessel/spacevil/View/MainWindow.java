@@ -11,7 +11,6 @@ import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
-
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Font;
@@ -23,14 +22,22 @@ public class MainWindow extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("MainWindow", "MainWindow", 800, 200, true);
+        WindowLayout Handler = new WindowLayout("MainWindow", "MainWindow", 800, 200, false);
         setHandler(Handler);
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
         Handler.setMinSize(500, 100);
         Handler.setAspectRatio(4, 1);
+        // Handler.eventClose.clear();
+        // Handler.eventClose.add(() -> {
+        //     MessageItem msg = new MessageItem("Close?", "Are You sure?");
+        //     msg.onCloseDialog.add(() -> {
+        //         if (msg.getResult())
+        //             Handler.close();
+        //     });
+        //     msg.show(Handler);
+        // });
         // Handler.setBackground(45, 45, 45);
         // Handler.setPadding(2, 2, 2, 2);
-
 
         BufferedImage iBig = null;
         BufferedImage iSmall = null;

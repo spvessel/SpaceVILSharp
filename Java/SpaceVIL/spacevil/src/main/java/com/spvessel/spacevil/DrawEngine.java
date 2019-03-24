@@ -119,10 +119,6 @@ final class DrawEngine {
         glfwTerminate();
     }
 
-    void close() {
-        _handler.setToClose();
-    }
-
     private BufferedImage _iconSmall;
     private BufferedImage _iconBig;
 
@@ -404,7 +400,9 @@ final class DrawEngine {
     }
 
     private void closeWindow(long wnd) {
-        _handler.getLayout().close();
+        glfwSetWindowShouldClose(_handler.getWindowId(), false);
+        _handler.getLayout().eventClose.execute();
+        // _handler.getLayout().close();
     }
 
     void focus(long wnd, boolean value) {
@@ -890,6 +888,9 @@ final class DrawEngine {
         }
 
         if (queue.size() > 0) {
+            if (hoveredItem != null && hoveredItem != queue.get(queue.size() - 1))
+                assignActions(InputEventType.MOUSE_LEAVE, _margs, hoveredItem, false);
+
             hoveredItem = queue.get(queue.size() - 1);
             hoveredItem.setMouseHover(true);
 
@@ -1746,7 +1747,11 @@ final class DrawEngine {
                     // draw
                     VRAMTexture tex = VRAMStorage.getTexture(image);
                     if (tex == null)
+                    {
+                        tmp.setNew(true);
                         return;
+                    }
+                    
                     tex.bind();
                     tex.genBuffers(i_x0, i_x1, i_y0, i_y1);
                     tex.sendUniformSample2D(_texture);

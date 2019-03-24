@@ -75,7 +75,12 @@ namespace SpaceVIL
             _fileList = new ListBox();
             _fileName = new TextEdit();
             _controlPanel = new Frame();
-            _btnOpen = new ButtonCore("Open");
+            
+            if (dialogType == OpenDialogType.Save)
+                _btnOpen = new ButtonCore("Save");
+            else
+                _btnOpen = new ButtonCore("Open");
+
             _btnCancel = new ButtonCore("Cancel");
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.OpenEntryDialog)));

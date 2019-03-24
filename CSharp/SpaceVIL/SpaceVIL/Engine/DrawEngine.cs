@@ -134,10 +134,6 @@ namespace SpaceVIL
             //LogService.Log().EndLogging();
             Glfw.Terminate();
         }
-        internal void Close()
-        {
-            _handler.SetToClose();
-        }
 
         private Glfw.Image _icon_big;
         private Glfw.Image _icon_small;
@@ -343,7 +339,8 @@ namespace SpaceVIL
 
         private void CloseWindow(Glfw.Window glfwwnd)
         {
-            _handler.GetLayout().Close();
+            Glfw.SetWindowShouldClose(_handler.GetWindowId(), false);
+            _handler.GetLayout().EventClose?.Invoke();
         }
 
         internal void Focus(Glfw.Window glfwwnd, bool value)
@@ -865,6 +862,9 @@ namespace SpaceVIL
 
             if (queue.Count > 0)
             {
+                if(HoveredItem != null && HoveredItem != queue.Last())
+                    AssignActions(InputEventType.MouseLeave, _margs, HoveredItem, false);
+
                 HoveredItem = queue.Last();
                 HoveredItem.SetMouseHover(true);
 
@@ -879,6 +879,7 @@ namespace SpaceVIL
                     if (!item.IsPassEvents(InputEventType.MouseHover))
                         break;//остановить передачу событий последующим элементам
                 }
+
 
                 AssignActions(InputEventType.MouseHover, _margs, false);
                 return true;
@@ -1792,7 +1793,10 @@ namespace SpaceVIL
                         //draw
                         VRAMTexture tex = VRAMStorage.GetTexture(image);
                         if (tex == null)
+                        {
+                            tmp.SetNew(true);
                             return;
+                        }
                         tex.Bind();
                         tex.GenBuffers(i_x0, i_x1, i_y0, i_y1);
                         tex.SendUniformSample2D(_texture, "tex");

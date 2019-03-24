@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
@@ -11,56 +12,92 @@ namespace SpaceVIL
         static int count = 0;
 
         private bool _result = false;
+
+        /**
+         * Get MessageItem boolean result
+         */
         public bool GetResult()
         {
             return _result;
         }
-        private String _message = String.Empty;
+
+        Dictionary<ButtonCore, Int32> _userMap = new Dictionary<ButtonCore, Int32>();
+        ButtonCore _userButtonResult = null;
+
+        public int GetUserButtonResult()
+        {
+            if (_userMap.ContainsKey(_userButtonResult))
+                return _userMap[_userButtonResult];
+            return -1;
+        }
+
         private TitleBar _titleBar;
-        private VerticalStack _layout;
+        private Frame _msg_layout;
         private Label _msg;
         private ButtonCore _ok;
 
-        /// <summary>
-        /// Constructs a MessageItem
-        /// </summary>
+        public ButtonCore GetOkButton()
+        {
+            return _ok;
+        }
+
+        private ButtonCore _cancel;
+
+        public ButtonCore GetCancelButton()
+        {
+            return _cancel;
+        }
+
+        private HorizontalStack _toolbar;
+        private HorizontalStack _userbar;
+
+        /**
+         * Constructs a MessageItem
+         */
         public MessageItem()
         {
             SetItemName("MessageItem_" + count);
             count++;
 
             _titleBar = new TitleBar();
-            _layout = new VerticalStack();
+            _msg_layout = new Frame();
             _msg = new Label();
-            _ok = new ButtonCore("OK");
+            _ok = GetButton("OK");
+            _cancel = GetButton("Cancel");
+
+            _toolbar = new HorizontalStack();
+            _userbar = new HorizontalStack();
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MessageItem)));
         }
 
-        /// <summary>
-        /// Constructs a MessageBox with message and title
-        /// </summary>
+        /**
+         * Constructs a MessageItem with message and title
+         */
         public MessageItem(String message, String title) : this()
         {
-            _message = message;
             _titleBar.SetText(title);
-            _msg.SetText(_message);
+            _msg.SetText(message);
         }
 
+        /**
+         * MessageItem text
+         */
         public void SetMessageText(String text)
         {
-            _message = text;
+            _msg.SetText(text);
         }
 
         public String GetMessageText()
         {
-            return _message;
+            return _msg.GetText();
         }
 
         public void SetTitle(String title)
         {
             _titleBar.SetText(title);
         }
+
         public String GetTitle()
         {
             return _titleBar.GetText();
@@ -68,44 +105,137 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            //important!
+            // important!
             base.InitElements();
-            //adding toolbar
-            _titleBar.GetMaximizeButton().SetVisible(false);
-            Window.AddItems(_titleBar, _layout);
 
-            //ok
+            // Adding toolbar
+            _titleBar.GetMaximizeButton().SetVisible(false);
+
+            int w_global = 0;
+
+            // toolbar size
+            int w = _ok.GetWidth() + _ok.GetMargin().Left + _ok.GetMargin().Right;
+            if (_cancel.IsVisible())
+                w = w * 2 + 10;
+            _toolbar.SetSize(w, _ok.GetHeight() + _ok.GetMargin().Top + _ok.GetMargin().Bottom);
+            w_global += w;
+
+            bool isEmpty = true;
+            w = _userbar.GetPadding().Left + _userbar.GetPadding().Right;
+            if (_queue.Count > 0)
+            {
+                isEmpty = false;
+                foreach (ButtonCore btn in _queue)
+                {
+                    // btn.SetStyle(_btnStyle);
+                    w += btn.GetWidth() + _userbar.GetSpacing().Horizontal;
+                }
+                w -= _userbar.GetSpacing().Horizontal;
+            }
+            _userbar.SetSize(w, _toolbar.GetHeight());
+            w_global += (w + _toolbar.GetMargin().Left + _toolbar.GetMargin().Right + 50);
+            w_global += (_userbar.GetMargin().Left + _userbar.GetMargin().Right);
+
+            Window.SetMinWidth(w_global);
+            if (Window.GetWidth() < w_global)
+                Window.SetWidth(w_global);
+            Window.AddItems(_titleBar, _msg_layout);
+            Window.Update(GeometryEventType.ResizeWidth, 0);
+
+            if (!isEmpty)
+            {
+                _toolbar.SetAlignment(ItemAlignment.Right, ItemAlignment.Bottom);
+                int right = _toolbar.GetWidth() + _toolbar.GetMargin().Left + _toolbar.GetMargin().Right + 10;
+                _userbar.SetMargin(0, 0, right / 2, 0);
+                _msg_layout.AddItems(_msg, _userbar, _toolbar);
+            }
+            else
+            {
+                _msg_layout.AddItems(_msg, _toolbar);
+            }
+
+            // queue
+            if (!isEmpty)
+            {
+                foreach (ButtonCore btn in _queue)
+                {
+                    _userbar.AddItem(btn);
+                }
+            }
+            _toolbar.AddItems(_ok, _cancel);
+            _userMap.Add(_ok, 1);
+            _userMap.Add(_titleBar.GetCloseButton(), 0);
+            _userMap.Add(_cancel, -1);
+            // buttons
             _ok.SetItemName("OK");
             _ok.EventMouseClick += (sender, args) =>
             {
+                _userButtonResult = _ok;
                 _result = true;
                 Close();
             };
-            _layout.AddItems(_msg, _ok);
+            _cancel.SetItemName("Cancel");
+            _cancel.EventMouseClick += (sender, args) =>
+            {
+                _userButtonResult = _cancel;
+                Close();
+            };
 
             _titleBar.GetCloseButton().EventMouseClick = null;
             _titleBar.GetCloseButton().EventMouseClick += (sender, args) =>
             {
+                _userButtonResult = _titleBar.GetCloseButton();
                 Close();
             };
         }
 
-        WindowLayout _handler = null;
-        /// <summary>
-        /// Show MessageBox
-        /// </summary>
+
         public override void Show(WindowLayout handler)
         {
             _result = false;
             base.Show(handler);
         }
 
+
         public override void Close()
         {
-            if (OnCloseDialog != null)
-                OnCloseDialog.Invoke();
-
+            OnCloseDialog?.Invoke();
             base.Close();
+        }
+
+        private List<ButtonCore> _queue = new List<ButtonCore>();
+
+        public void AddUserButton(ButtonCore button, int id)
+        {
+            if (id == -1 || id == 0 || id == 1)
+                return;
+
+            button.SetStyle(_btnStyle);
+            _userMap.Add(button, id);
+            _queue.Add(button);
+            button.EventMouseClick += (sender, args) =>
+            {
+                _userButtonResult = button;
+                Close();
+            };
+        }
+
+        private ButtonCore GetButton(String name)
+        {
+            ButtonCore btn = new ButtonCore(name);
+            return btn;
+        }
+
+        private Style _btnStyle = null;
+
+        public Style GetDialogButtonStyle()
+        {
+            return _btnStyle;
+        }
+
+        public void SetDialogButtonStyle(Style style)
+        {
+            _btnStyle = style;
         }
 
         public override void SetStyle(Style style)
@@ -114,12 +244,7 @@ namespace SpaceVIL
                 return;
             base.SetStyle(style);
 
-            Style inner_style = style.GetInnerStyle("okbutton");
-            if (inner_style != null)
-            {
-                _ok.SetStyle(inner_style);
-            }
-            inner_style = style.GetInnerStyle("message");
+            Style inner_style = style.GetInnerStyle("message");
             if (inner_style != null)
             {
                 _msg.SetStyle(inner_style);
@@ -127,7 +252,24 @@ namespace SpaceVIL
             inner_style = style.GetInnerStyle("layout");
             if (inner_style != null)
             {
-                _layout.SetStyle(inner_style);
+                _msg_layout.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("toolbar");
+            if (inner_style != null)
+            {
+                _toolbar.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("userbar");
+            if (inner_style != null)
+            {
+                _userbar.SetStyle(inner_style);
+            }
+            inner_style = style.GetInnerStyle("button");
+            if (inner_style != null)
+            {
+                _btnStyle = inner_style.Clone();
+                _ok.SetStyle(inner_style);
+                _cancel.SetStyle(inner_style);
             }
         }
     }

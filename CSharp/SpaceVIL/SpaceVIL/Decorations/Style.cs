@@ -1771,9 +1771,6 @@ namespace SpaceVIL.Decorations
             style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             style.SetBackground(0, 0, 0, 150);
             style.BorderRadius = new CornerRadius();
-            style.Padding = new Indents();
-            style.Margin = new Indents();
-            style.Spacing = new Spacing();
 
             Style window_style = GetFrameStyle();
             window_style.SetSize(300, 150);
@@ -1782,33 +1779,41 @@ namespace SpaceVIL.Decorations
             window_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
             window_style.SetPadding(2, 2, 2, 2);
             window_style.SetBackground(45, 45, 45);
-
             style.AddInnerStyle("window", window_style);
 
             Style ok_style = GetButtonCoreStyle();
             ok_style.SetBackground(100, 255, 150);
-            ok_style.Foreground = Color.Black;
             ok_style.SetSize(100, 30);
-            ok_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            ok_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
-            ok_style.BorderRadius = new CornerRadius();
-            ok_style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(80, 255, 255, 255)));
+            ok_style.SetAlignment(ItemAlignment.Left, ItemAlignment.VCenter);
+            style.AddInnerStyle("button", ok_style);
 
-            style.AddInnerStyle("okbutton", ok_style);
+            Style toolbar_style = GetHorizontalStackStyle();
+            toolbar_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
+            toolbar_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            toolbar_style.SetSpacing(10, 0);
+            toolbar_style.SetPadding(0, 0, 0, 0);
+            toolbar_style.SetMargin(0, 0, 0, 0);
+            style.AddInnerStyle("toolbar", toolbar_style);
+
+            Style userbar_style = GetHorizontalStackStyle();
+            userbar_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
+            userbar_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            userbar_style.SetSpacing(10, 0);
+            userbar_style.SetPadding(0, 0, 0, 0);
+            userbar_style.SetMargin(0, 0, 0, 0);
+            style.AddInnerStyle("userbar", userbar_style);
 
             Style msg_style = GetLabelStyle();
             msg_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
-            msg_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
+            msg_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
             msg_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-
+            msg_style.SetMargin(10, 0, 10, 40);
             style.AddInnerStyle("message", msg_style);
 
-            Style layout_style = GetVerticalStackStyle();
+            Style layout_style = GetFrameStyle();
             layout_style.SetMargin(0, 30, 0, 0);
             layout_style.SetPadding(6, 6, 6, 6);
-            layout_style.SetSpacing(0, 10);
             layout_style.SetBackground(255, 255, 255, 20);
-
             style.AddInnerStyle("layout", layout_style);
 
             return style;

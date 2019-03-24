@@ -82,6 +82,9 @@ class ActionManager {
         case MOUSE_HOVER:
             invokeMouseHoverEvent(task.item, (MouseArgs) task.args);
             break;
+        case MOUSE_LEAVE:
+            invokeMouseLeaveEvent(task.item, (MouseArgs) task.args);
+            break;
         case MOUSE_DRAG:
             invokeMouseDragEvent(task.item, (MouseArgs) task.args);
             break;
@@ -147,6 +150,11 @@ class ActionManager {
     private void invokeMouseHoverEvent(Prototype sender, MouseArgs args) {
         if (sender.eventMouseHover != null)
             sender.eventMouseHover.execute(sender, args);
+    }
+
+    private void invokeMouseLeaveEvent(Prototype sender, MouseArgs args) {
+        if (sender.eventMouseLeave != null)
+            sender.eventMouseLeave.execute(sender, args);
     }
 
     private void invokeMousePressedEvent(Prototype sender, MouseArgs args) {

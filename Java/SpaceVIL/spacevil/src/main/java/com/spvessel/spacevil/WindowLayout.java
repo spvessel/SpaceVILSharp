@@ -23,9 +23,9 @@ public final class WindowLayout {
     Lock engineLocker = new ReentrantLock();
     private Lock wndLock = new ReentrantLock();
 
-    public EventCommonMethod eventClose;
-    public EventCommonMethod eventMinimize;
-    public EventCommonMethod eventHide;
+    public EventCommonMethod eventClose = new EventCommonMethod();
+    public EventCommonMethod eventMinimize = new EventCommonMethod();
+    public EventCommonMethod eventHide = new EventCommonMethod();
 
     public void release() {
         eventClose.clear();
@@ -93,6 +93,8 @@ public final class WindowLayout {
 
         manager = new ActionManager(this);
         engine = new DrawEngine(this);
+
+        eventClose.add(this::close);
     }
 
     public WindowLayout(String name, String title, int width, int height, Boolean border_hidden) {
@@ -389,7 +391,7 @@ public final class WindowLayout {
 
     public void close() {
         if (CommonService.getOSType() == OSType.MAC) {
-            engine.close();
+            engine._handler.setToClose();
             WindowLayoutBox.setWindowRunning(null);
         } else {
             closeInsideNewThread();
@@ -400,14 +402,11 @@ public final class WindowLayout {
             manager.execute.set();
         }
         isClosed = true;
-
-        if (eventClose != null)
-            eventClose.execute();
     }
 
     private void closeInsideNewThread() {
         if (isDialog) {
-            engine.close();
+            engine._handler.setToClose();
             setWindowFocused();
             wndLock.lock();
             try {
@@ -418,7 +417,7 @@ public final class WindowLayout {
             }
         } else {
             if (thread_engine != null && thread_engine.isAlive())
-                engine.close();
+                engine._handler.setToClose();
         }
     }
 

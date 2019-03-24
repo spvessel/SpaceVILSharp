@@ -56,6 +56,7 @@ abstract public class Prototype implements InterfaceBaseItem {
      * Mouse input events
      */
     public EventMouseMethodState eventMouseHover = new EventMouseMethodState();
+    public EventMouseMethodState eventMouseLeave = new EventMouseMethodState();
     public EventMouseMethodState eventMouseClick = new EventMouseMethodState();
     public EventMouseMethodState eventMouseDoubleClick = new EventMouseMethodState();
     public EventMouseMethodState eventMousePress = new EventMouseMethodState();

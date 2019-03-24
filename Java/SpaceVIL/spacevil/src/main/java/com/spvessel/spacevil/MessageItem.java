@@ -31,7 +31,6 @@ public class MessageItem extends DialogItem {
         return -1;
     }
 
-    private String _message = "";
     private TitleBar _titleBar;
     private Frame _msg_layout;
     private Label _msg;
@@ -74,21 +73,20 @@ public class MessageItem extends DialogItem {
      */
     public MessageItem(String message, String title) {
         this();
-        _message = message;
 
         _titleBar.setText(title);
-        _msg.setText(_message);
+        _msg.setText(message);
     }
 
     /**
      * MessageItem text
      */
     public void setMessageText(String text) {
-        _message = text;
+        _msg.setText(text);
     }
 
     public String getMessageText() {
-        return _message;
+        return _msg.getText();
     }
 
     public void setTitle(String title) {
@@ -121,7 +119,6 @@ public class MessageItem extends DialogItem {
         if (_queue.size() > 0) {
             isEmpty = false;
             for (ButtonCore btn : _queue) {
-                btn.setStyle(_btnStyle);
                 w += btn.getWidth() + _userbar.getSpacing().horizontal;
             }
             w -= _userbar.getSpacing().horizontal;
@@ -195,6 +192,7 @@ public class MessageItem extends DialogItem {
         if (id == -1 || id == 0 || id == 1)
             return;
 
+        button.setStyle(_btnStyle);
         _userMap.put(button, id);
         _queue.add(button);
         button.eventMouseClick.add((sender, args) -> {
@@ -242,7 +240,7 @@ public class MessageItem extends DialogItem {
         }
         inner_style = style.getInnerStyle("button");
         if (inner_style != null) {
-            _btnStyle = inner_style;
+            _btnStyle = inner_style.clone();
             _ok.setStyle(inner_style);
             _cancel.setStyle(inner_style);
         }

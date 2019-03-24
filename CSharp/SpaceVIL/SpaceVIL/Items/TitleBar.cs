@@ -139,7 +139,7 @@ namespace SpaceVIL
             //_close
             _close.EventMouseClick += (sender, args) =>
             {
-                GetHandler().Close();
+                GetHandler().EventClose?.Invoke();
             };
 
             //_minimize
