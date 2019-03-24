@@ -135,7 +135,7 @@ public class Grid extends Prototype implements InterfaceGrid {
     }
 
     /**
-     * Add item to the Grid
+     * Remove the item from the Grid by the link
      */
     @Override
     public void removeItem(InterfaceBaseItem item) {
@@ -145,6 +145,20 @@ public class Grid extends Prototype implements InterfaceGrid {
                 link.setItem(null);
         }
         // UpdateLayout();
+    }
+
+    /**
+     * Remove the item from the Grid by row and column number
+     */
+    public void removeItem(int row, int column) {
+        if (row == _row_count || column == _column_count)
+            return;
+
+        InterfaceBaseItem ibi = _cells.get(column + row * _column_count).getItem();
+        if (ibi != null) {
+            super.removeItem(ibi);
+            _cells.get(column + row * _column_count).setItem(null);
+        }
     }
 
     private Lock locker = new ReentrantLock();
@@ -164,6 +178,9 @@ public class Grid extends Prototype implements InterfaceGrid {
         }
     }
 
+    /**
+     * Add item to the Grid
+     */
     @Override
     public void addItem(InterfaceBaseItem item) {
         // ignore if it is out of space, add in free cell, attach row and collumn
@@ -187,8 +204,26 @@ public class Grid extends Prototype implements InterfaceGrid {
         super.addItem(item);
         // _cells[row + column * _row_count].setItem(item);
         // System.out.println((column + row * _column_count) + " " + _cells.size());
+
+//        InterfaceBaseItem ibi = _cells.get(column + row * _column_count).getItem();
+//        if (ibi != null) {
+//            removeItem(ibi);
+//        }
+
+        removeItem(row, column);
+
         _cells.get(column + row * _column_count).setItem(item);
         updateLayout();
+    }
+
+    @Override
+    public void insertItem(InterfaceBaseItem item, int index) {
+        if (_column_count == 0)
+            return;
+        int row, column;
+        row = index / _column_count;
+        column = index - row * _column_count;
+        insertItem(item, row, column);
     }
 
     /**

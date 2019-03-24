@@ -146,6 +146,19 @@ namespace SpaceVIL
             // UpdateLayout();
         }
 
+        public void RemoveItem(int row, int column)
+        {
+            if (row == _row_count || column == _column_count)
+                return;
+
+            IBaseItem ibi = _cells[column + row * _column_count].GetItem();
+            if (ibi != null)
+            {
+                base.RemoveItem(ibi);
+                _cells[column + row * _column_count].SetItem(null);
+            }
+        }
+
         private Object Locker = new Object();
         public override void Clear()
         {
@@ -201,8 +214,21 @@ namespace SpaceVIL
             base.AddItem(item);
             //_cells[row + column * _row_count].SetItem(item);
             //Console.WriteLine(column + row * _column_count);
+
+            RemoveItem(row, column);
+
             _cells[column + row * _column_count].SetItem(item);
             UpdateLayout();
+        }
+
+        public override void InsertItem(IBaseItem item, int index)
+        {
+            if (_column_count == 0)
+                return;
+            int row, column;
+            row = index / _column_count;
+            column = index - row * _column_count;
+            InsertItem(item, row, column);
         }
 
         /// <summary>
