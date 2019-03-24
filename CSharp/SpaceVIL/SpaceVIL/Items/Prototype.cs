@@ -41,6 +41,7 @@ namespace SpaceVIL
         /// Mouse input events
         /// </summary>
         public EventMouseMethodState EventMouseHover;
+        public EventMouseMethodState EventMouseLeave;
         public EventMouseMethodState EventMouseClick;
         public EventMouseMethodState EventMouseDoubleClick;
         public EventMouseMethodState EventMousePress;

@@ -110,7 +110,7 @@ public class ImageTest extends ActiveWindow {
         ImageItem img = new ImageItem(
                 DefaultsService.getDefaultImage(EmbeddedImage.FILTER, EmbeddedImageSize.SIZE_64X64), false);
 
-        img.setBackground(new Color(100, 0, 0, 50));
+        // img.setBackground(new Color(100, 0, 0, 50));
         img.setSize(64, 64);
         img.setPadding(32, 32, 32, 32);
         img.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
@@ -123,6 +123,13 @@ public class ImageTest extends ActiveWindow {
         h_slider.eventValueChanged.add((sender) -> {
             img.setRotationAngle(h_slider.getCurrentValue());
             pb.setCurrentValue((int) h_slider.getCurrentValue());
+        });
+
+        btn_action.eventMouseHover.add((sender, args) -> {
+            img.setColorOverlay(new Color(50, 50, 150));
+        });
+        btn_action.eventMouseLeave.add((sender, args) -> {
+            img.setColorOverlay(new Color(0, 0, 0));
         });
 
         // frame.addItem(img);
@@ -189,8 +196,6 @@ public class ImageTest extends ActiveWindow {
         MenuItem restore = new MenuItem("Custom item for selection #RESTORE");
         restore.addItem(res);
         combo.addItem(restore);
-
-
 
         // for (int i = 2; i < 5; i++) {
         // MenuItem menu_item = new MenuItem("Custom item for selection #" + i);

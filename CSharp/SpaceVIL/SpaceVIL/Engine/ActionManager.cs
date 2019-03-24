@@ -94,6 +94,9 @@ namespace SpaceVIL
                 case InputEventType.MouseHover:
                     InvokeMouseHoverEvent(task.Item, task.Args as MouseArgs);
                     break;
+                case InputEventType.MouseLeave:
+                    InvokeMouseLeaveEvent(task.Item, task.Args as MouseArgs);
+                    break;
                 case InputEventType.MouseDrag:
                     InvokeMouseDragEvent(task.Item, task.Args as MouseArgs);
                     break;
@@ -143,6 +146,10 @@ namespace SpaceVIL
         private void InvokeMouseHoverEvent(Prototype sender, MouseArgs args)
         {
             sender.EventMouseHover?.Invoke(sender, args);
+        }
+        private void InvokeMouseLeaveEvent(Prototype sender, MouseArgs args)
+        {
+            sender.EventMouseLeave?.Invoke(sender, args);
         }
         private void InvokeMousePressEvent(Prototype sender, MouseArgs args)
         {
