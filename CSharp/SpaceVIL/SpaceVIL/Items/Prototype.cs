@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Glfw3;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 
@@ -852,6 +853,25 @@ namespace SpaceVIL
         public void SetHoverRule(ItemRule rule)
         {
             _core.HoverRule = rule;
+        }
+
+        private bool _isUserCursor = false;
+        private EmbeddedCursor _cursor = EmbeddedCursor.Arrow;
+        public EmbeddedCursor GetCursor()
+        {
+            return _cursor;
+        }
+        public void SetCursor(EmbeddedCursor cursor)
+        {
+            _cursor = cursor;
+            if (cursor == EmbeddedCursor.Arrow)
+                _isUserCursor = false;
+            else
+                _isUserCursor = true;
+        }
+        internal bool IsUserCursor()
+        {
+            return _isUserCursor;
         }
     }
 }

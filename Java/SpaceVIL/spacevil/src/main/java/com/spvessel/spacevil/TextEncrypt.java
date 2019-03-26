@@ -3,6 +3,7 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.KeyMods;
@@ -68,6 +69,8 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         // setStyle(DefaultsService.getDefaultStyle(TextEncrypt.class));
         // _text_object.setTextAlignment(new
         // LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER)));
+
+        setCursor(EmbeddedCursor.BEAM);
     }
 
     private void onMouseDoubleClick(InterfaceItem sender, MouseArgs args) {

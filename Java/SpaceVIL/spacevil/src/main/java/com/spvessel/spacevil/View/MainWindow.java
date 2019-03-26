@@ -5,6 +5,7 @@ import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.ItemState;
+import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.HorizontalDirection;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
@@ -107,6 +108,7 @@ public class MainWindow extends ActiveWindow {
         btn_flow.setToolTip("Show Flow window.");
         btn_flow.setBackground(193, 142, 221);
         btn_flow.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        btn_flow.setCursor(EmbeddedCursor.HAND);
         InterfaceMouseMethodState flow_click = (sender, args) -> WindowLayoutBox.tryShow("FlowTest");
         btn_flow.eventMouseClick.add(flow_click);
 

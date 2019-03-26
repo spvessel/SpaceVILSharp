@@ -4,6 +4,7 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.KeyMods;
@@ -82,6 +83,8 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
         undoQueue.addFirst(new TextEditState(getText(), _cursor_position));
+
+        setCursor(EmbeddedCursor.BEAM);
     }
     public TextEdit(String text) {
         this();

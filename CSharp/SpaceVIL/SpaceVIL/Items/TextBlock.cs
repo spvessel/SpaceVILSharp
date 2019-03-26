@@ -79,6 +79,8 @@ namespace SpaceVIL
             undoQueue = new LinkedList<TextBlockState>();
             redoQueue = new LinkedList<TextBlockState>();
             undoQueue.AddFirst(new TextBlockState(GetText(), _cursor_position.X, _cursor_position.Y));
+
+            SetCursor(EmbeddedCursor.Beam);
         }
 
         private void OnMousePressed(object sender, MouseArgs args)
@@ -578,7 +580,7 @@ namespace SpaceVIL
         }
 
         public override void InitElements()
-        {
+        {        
             _cursor.SetHeight(_textureStorage.GetCursorHeight());
             AddItems(_selectedArea, _textureStorage, _cursor);
 

@@ -36,7 +36,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         return _angleRotation;
     }
 
-    public boolean isHover = true;
+    public boolean isHover = false;
 
     @Override
     public boolean getHoverVerification(float xpos, float ypos) {

@@ -1243,15 +1243,19 @@ namespace SpaceVIL.Decorations
             // });
 
             Style marker_style = GetIndicatorStyle().GetInnerStyle("marker");
-            marker_style.Background = Color.FromArgb(255, 130, 130, 130);
+            marker_style.Background = Color.FromArgb(255, 100, 100, 100);
             marker_style.SetSize(16, 16);
             marker_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             marker_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Right;
             marker_style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
-            marker_style.BorderRadius = new CornerRadius(4);
+            marker_style.BorderRadius = new CornerRadius(5);
+            marker_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(50, 255, 255, 255)
+            });
             marker_style.AddItemState(ItemStateType.Toggled, new ItemState()
             {
-                Background = Color.FromArgb(255, 60, 60, 60)
+                Background = Color.FromArgb(255, 40, 40, 40)
             });
             style.AddInnerStyle("showmarker", marker_style);
             style.AddInnerStyle("textedit", GetTextEncryptStyle());

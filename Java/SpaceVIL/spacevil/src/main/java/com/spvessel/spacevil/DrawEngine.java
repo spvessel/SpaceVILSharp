@@ -626,49 +626,6 @@ final class DrawEngine {
                     _tooltip.initTimer(true);
                 }
 
-                _handler.setCursorType(GLFW_ARROW_CURSOR);
-                if (_handler.getLayout().isBorderHidden && _handler.getLayout().isResizable
-                        && !_handler.getLayout().isMaximized) {
-                    // resize
-                    if ((xpos < _handler.getLayout().getWindow().getWidth() - 5) && (xpos > 5)
-                            && (ypos < _handler.getLayout().getWindow().getHeight() - 5) && ypos > 5) {
-                        if (hoveredItem instanceof InterfaceTextEditable)
-                            _handler.setCursorType(GLFW_IBEAM_CURSOR);
-                        if (hoveredItem instanceof SplitHolder) {
-                            if (((SplitHolder) hoveredItem).getOrientation().equals(Orientation.HORIZONTAL))
-                                _handler.setCursorType(GLFW_VRESIZE_CURSOR);
-                            else
-                                _handler.setCursorType(GLFW_HRESIZE_CURSOR);
-                        }
-                    } else // refactor!!
-                    {
-                        if ((xpos >= _handler.getLayout().getWindow().getWidth() - 5 && ypos <= 5)
-                                || (xpos >= _handler.getLayout().getWindow().getWidth() - 5
-                                        && ypos >= _handler.getLayout().getWindow().getHeight() - 5)
-                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 5 && xpos <= 5)
-                                || (ypos >= _handler.getLayout().getWindow().getHeight() - 5
-                                        && xpos >= _handler.getLayout().getWindow().getWidth() - 5)
-                                || (xpos <= 5 && ypos <= 5)) {
-                            _handler.setCursorType(GLFW_CROSSHAIR_CURSOR);
-                        } else {
-                            if (xpos > _handler.getLayout().getWindow().getWidth() - 5 || xpos <= 5)
-                                _handler.setCursorType(GLFW_HRESIZE_CURSOR);
-
-                            if (ypos > _handler.getLayout().getWindow().getHeight() - 5 || ypos <= 5)
-                                _handler.setCursorType(GLFW_VRESIZE_CURSOR);
-                        }
-                    }
-                } else {
-                    if (hoveredItem instanceof InterfaceTextEditable) {
-                        _handler.setCursorType(GLFW_IBEAM_CURSOR);
-                    }
-                    if (hoveredItem instanceof SplitHolder) {
-                        if (((SplitHolder) hoveredItem).getOrientation().equals(Orientation.HORIZONTAL))
-                            _handler.setCursorType(GLFW_VRESIZE_CURSOR);
-                        else
-                            _handler.setCursorType(GLFW_HRESIZE_CURSOR);
-                    }
-                }
                 Prototype popup = isInListHoveredItems(PopUpMessage.class);
                 if (popup != null) {
                     ((PopUpMessage) popup).holdSelf(true);
@@ -893,6 +850,23 @@ final class DrawEngine {
 
             hoveredItem = queue.get(queue.size() - 1);
             hoveredItem.setMouseHover(true);
+            _handler.setCursorType(hoveredItem.getCursor());
+
+            if ((xpos >= _handler.getLayout().getWindow().getWidth() - 5 && ypos <= 5)
+                    || (xpos >= _handler.getLayout().getWindow().getWidth() - 5
+                            && ypos >= _handler.getLayout().getWindow().getHeight() - 5)
+                    || (ypos >= _handler.getLayout().getWindow().getHeight() - 5 && xpos <= 5)
+                    || (ypos >= _handler.getLayout().getWindow().getHeight() - 5
+                            && xpos >= _handler.getLayout().getWindow().getWidth() - 5)
+                    || (xpos <= 5 && ypos <= 5)) {
+                _handler.setCursorType(GLFW_CROSSHAIR_CURSOR);
+            } else {
+                if (xpos > _handler.getLayout().getWindow().getWidth() - 5 || xpos <= 5)
+                    _handler.setCursorType(GLFW_HRESIZE_CURSOR);
+
+                if (ypos > _handler.getLayout().getWindow().getHeight() - 5 || ypos <= 5)
+                    _handler.setCursorType(GLFW_VRESIZE_CURSOR);
+            }
 
             hoveredItems = queue;
             Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);

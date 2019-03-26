@@ -62,6 +62,7 @@ namespace SpaceVIL
                 KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
 
             //SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextEncrypt)));
+            SetCursor(EmbeddedCursor.Beam);
         }
 
         private void OnMouseDoubleClick(object sender, MouseArgs args) {

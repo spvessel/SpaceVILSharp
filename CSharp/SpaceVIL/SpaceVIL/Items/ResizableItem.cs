@@ -67,9 +67,36 @@ namespace SpaceVIL
             EventMousePress += OnMousePress;
             // EventMouseClick+= OnMouseRelease;
             EventMouseDrag += OnDragging;
+            EventMouseHover += OnHover;
             count++;
         }
         // private RedrawFrequency _renderFreq;
+        protected virtual void OnHover(IItem sender, MouseArgs args)
+        {
+            if (IsLocked)
+                return;
+
+            GetSides(args.Position.GetX() - GetX(), args.Position.GetY() - GetY());
+
+            if (_sides.HasFlag(Side.Left) || _sides.HasFlag(Side.Right))
+            {
+                if (_sides.HasFlag(Side.Top) || _sides.HasFlag(Side.Bottom))
+                    SetCursor(EmbeddedCursor.Crosshair);
+                else
+                    SetCursor(EmbeddedCursor.ResizeX);
+            }
+            else if (_sides.HasFlag(Side.Top) || _sides.HasFlag(Side.Bottom))
+            {
+                if (_sides.HasFlag(Side.Left) || _sides.HasFlag(Side.Right))
+                    SetCursor(EmbeddedCursor.Crosshair);
+                else
+                    SetCursor(EmbeddedCursor.ResizeY);
+            }
+            else
+                SetCursor(EmbeddedCursor.Arrow);
+
+
+        }
         protected virtual void OnMousePress(IItem sender, MouseArgs args)
         {
             if (IsLocked)

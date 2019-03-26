@@ -33,7 +33,7 @@ namespace SpaceVIL
             return _angleRotation;
         }
 
-        public bool IsHover = true;
+        public bool IsHover = false;
 
         internal override bool GetHoverVerification(float xpos, float ypos)
         {
@@ -139,7 +139,6 @@ namespace SpaceVIL
         {
             return _colorOverlay;
         }
-
         public void SetColorOverlay(Color color)
         {
             _colorOverlay = color;
@@ -149,7 +148,6 @@ namespace SpaceVIL
         {
             _isOverlay = overlay;
         }
-
         public bool IsColorOverlay()
         {
             return _isOverlay;

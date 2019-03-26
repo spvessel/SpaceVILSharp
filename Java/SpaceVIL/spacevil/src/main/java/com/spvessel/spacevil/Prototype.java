@@ -16,6 +16,7 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Spacing;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -831,5 +832,24 @@ abstract public class Prototype implements InterfaceBaseItem {
 
     public void setHoverRule(ItemRule rule) {
         _core.HoverRule = rule;
+    }
+
+    private boolean _isUserCursor = false;
+    private int _cursor = EmbeddedCursor.ARROW;
+
+    public int getCursor() {
+        return _cursor;
+    }
+
+    public void setCursor(int cursor) {
+        _cursor = cursor;
+        if (cursor == EmbeddedCursor.ARROW)
+            _isUserCursor = false;
+        else
+            _isUserCursor = true;
+    }
+
+    boolean isUserCursor() {
+        return _isUserCursor;
     }
 }

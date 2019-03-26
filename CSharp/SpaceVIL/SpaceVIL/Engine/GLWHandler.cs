@@ -160,26 +160,26 @@ namespace SpaceVIL
             DropCallback = null;
         }
 
-        internal void SetCursorType(Glfw.CursorType type)
+        internal void SetCursorType(EmbeddedCursor type)
         {
             switch (type)
             {
-                case Glfw.CursorType.Arrow:
+                case EmbeddedCursor.Arrow:
                     Glfw.SetCursor(_window, CommonService.CursorArrow);
                     break;
-                case Glfw.CursorType.Beam:
+                case EmbeddedCursor.Beam:
                     Glfw.SetCursor(_window, CommonService.CursorInput);
                     break;
-                case Glfw.CursorType.Crosshair:
+                case EmbeddedCursor.Crosshair:
                     Glfw.SetCursor(_window, CommonService.CursorResizeAll);
                     break;
-                case Glfw.CursorType.Hand:
+                case EmbeddedCursor.Hand:
                     Glfw.SetCursor(_window, CommonService.CursorHand);
                     break;
-                case Glfw.CursorType.ResizeX:
+                case EmbeddedCursor.ResizeX:
                     Glfw.SetCursor(_window, CommonService.CursorResizeH);
                     break;
-                case Glfw.CursorType.ResizeY:
+                case EmbeddedCursor.ResizeY:
                     Glfw.SetCursor(_window, CommonService.CursorResizeV);
                     break;
                 default:

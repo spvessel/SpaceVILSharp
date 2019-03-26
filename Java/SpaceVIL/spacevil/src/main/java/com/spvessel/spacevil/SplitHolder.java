@@ -2,6 +2,7 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.InterfaceDraggable;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.Orientation;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -48,12 +49,14 @@ public class SplitHolder extends Prototype implements InterfaceDraggable {
         case VERTICAL:
             setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
             setWidth(_spacerSize);
+            setCursor(EmbeddedCursor.RESIZE_X);
             // setMinWidth(_spacerSize);
             break;
-
-        case HORIZONTAL:
+            
+            case HORIZONTAL:
             setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
             setHeight(_spacerSize);
+            setCursor(EmbeddedCursor.RESIZE_Y);
             // setMinHeight(_spacerSize);
             break;
         }

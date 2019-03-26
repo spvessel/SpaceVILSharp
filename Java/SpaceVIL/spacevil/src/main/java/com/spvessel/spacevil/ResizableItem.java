@@ -4,7 +4,8 @@ import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.InterfaceDraggable;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.MouseArgs;
-import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.EmbeddedCursor;
+import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -28,15 +29,16 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
     public List<Side> getExcludedSides() {
         return _sidesExclude;
     }
+
     public void clearExcludedSides() {
         _sidesExclude.clear();
     }
 
-    List<ItemAlignment> _sides = new LinkedList<>();
+    List<Side> _sides = new LinkedList<>();
 
     public EventCommonMethod positionChanged = new EventCommonMethod();
     public EventCommonMethod sizeChanged = new EventCommonMethod();
-    
+
     @Override
     public void release() {
         positionChanged.clear();
@@ -70,7 +72,28 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
 
         eventMousePress.add(this::onMousePress);
         eventMouseDrag.add(this::onDragging);
+        eventMouseHover.add(this::onHover);
         count++;
+    }
+
+    protected void onHover(InterfaceItem sender, MouseArgs args) {
+        if (isLocked)
+            return;
+
+        getSides(args.position.getX() - getX(), args.position.getY() - getY());
+
+        if (_sides.contains(Side.LEFT) || _sides.contains(Side.RIGHT)) {
+            if (_sides.contains(Side.TOP) || _sides.contains(Side.BOTTOM))
+                setCursor(EmbeddedCursor.CROSSHAIR);
+            else
+                setCursor(EmbeddedCursor.RESIZE_X);
+        } else if (_sides.contains(Side.TOP) || _sides.contains(Side.BOTTOM)) {
+            if (_sides.contains(Side.LEFT) || _sides.contains(Side.RIGHT))
+                setCursor(EmbeddedCursor.CROSSHAIR);
+            else
+                setCursor(EmbeddedCursor.RESIZE_Y);
+        } else
+            setCursor(EmbeddedCursor.ARROW);
     }
 
     private void onMousePress(InterfaceItem sender, MouseArgs args) {
@@ -127,34 +150,34 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
             int w = getWidth();
             int h = getHeight();
 
-            if (_sides.contains(ItemAlignment.LEFT)) {
+            if (_sides.contains(Side.LEFT)) {
                 if (!(getMinWidth() == getWidth() && (args.position.getX() - _pressed_x) >= 0)) {
                     int diff = _x_global - x_release;
                     x_handler = _x_global - diff;
                     w = _width + diff;
                 }
             }
-            if (_sides.contains(ItemAlignment.RIGHT)) {
+            if (_sides.contains(Side.RIGHT)) {
                 if (!(args.position.getX() < getMinWidth() && getWidth() == getMinWidth())) {
                     w = args.position.getX() - getX();
                 }
                 // _pressed_x = args.position.getX();
             }
-            if (_sides.contains(ItemAlignment.TOP)) {
+            if (_sides.contains(Side.TOP)) {
                 if (!(getMinHeight() == getHeight() && (args.position.getY() - _pressed_y) >= 0)) {
                     int diff = _y_global - y_release;
                     y_handler = _y_global - diff;
                     h = _height + diff;
                 }
             }
-            if (_sides.contains(ItemAlignment.BOTTOM)) {
+            if (_sides.contains(Side.BOTTOM)) {
                 if (!(args.position.getY() < getMinHeight() && getHeight() == getMinHeight())) {
                     h = args.position.getY() - getY();
                 }
             }
 
             if (_sides.size() != 0) {
-                if (_sides.contains(ItemAlignment.LEFT) || _sides.contains(ItemAlignment.TOP)) {
+                if (_sides.contains(Side.LEFT) || _sides.contains(Side.TOP)) {
                     setX(x_handler);
                     setY(y_handler);
                     positionChanged.execute();
@@ -196,17 +219,17 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
     void getSides(float xpos, float ypos) {
         _sides.clear();
         if (xpos <= 10 && !_sidesExclude.contains(Side.LEFT)) {
-            _sides.add(ItemAlignment.LEFT);
+            _sides.add(Side.LEFT);
         }
         if (xpos >= getWidth() - 10 && !_sidesExclude.contains(Side.RIGHT)) {
-            _sides.add(ItemAlignment.RIGHT);
+            _sides.add(Side.RIGHT);
         }
 
         if (ypos <= 10 && !_sidesExclude.contains(Side.TOP)) {
-            _sides.add(ItemAlignment.TOP);
+            _sides.add(Side.TOP);
         }
         if (ypos >= getHeight() - 10 && !_sidesExclude.contains(Side.BOTTOM)) {
-            _sides.add(ItemAlignment.BOTTOM);
+            _sides.add(Side.BOTTOM);
         }
     }
 }

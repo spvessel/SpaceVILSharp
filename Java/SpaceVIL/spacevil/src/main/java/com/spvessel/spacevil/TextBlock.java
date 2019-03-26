@@ -3,6 +3,7 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.KeyMods;
@@ -74,6 +75,8 @@ class TextBlock extends Prototype
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
         undoQueue.addFirst(new TextBlockState(getText(), new Point(_cursor_position)));
+
+        setCursor(EmbeddedCursor.BEAM);
     }
 
     private void onMousePressed(Object sender, MouseArgs args) {

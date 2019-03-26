@@ -4,6 +4,7 @@ import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DisplayService;
 import com.spvessel.spacevil.Core.Pointer;
 import com.spvessel.spacevil.Exceptions.SpaceVILException;
+import com.spvessel.spacevil.Flags.EmbeddedCursor;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
@@ -183,22 +184,22 @@ final class GLWHandler {
 
     void setCursorType(int type) {
         switch (type) {
-        case GLFW_ARROW_CURSOR:
+        case EmbeddedCursor.ARROW:
             glfwSetCursor(_window, CommonService.cursorArrow);
             break;
-        case GLFW_IBEAM_CURSOR:
+        case EmbeddedCursor.BEAM:
             glfwSetCursor(_window, CommonService.cursorInput);
             break;
-        case GLFW_CROSSHAIR_CURSOR:
+        case EmbeddedCursor.CROSSHAIR:
             glfwSetCursor(_window, CommonService.cursorResizeAll);
             break;
-        case GLFW_HAND_CURSOR:
+        case EmbeddedCursor.HAND:
             glfwSetCursor(_window, CommonService.cursorHand);
             break;
-        case GLFW_HRESIZE_CURSOR:
+        case EmbeddedCursor.RESIZE_X:
             glfwSetCursor(_window, CommonService.cursorResizeH);
             break;
-        case GLFW_VRESIZE_CURSOR:
+        case EmbeddedCursor.RESIZE_Y:
             glfwSetCursor(_window, CommonService.cursorResizeV);
             break;
         default:

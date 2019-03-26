@@ -581,55 +581,6 @@ namespace SpaceVIL
                         _tooltip.InitTimer(true);
                     }
 
-                    _handler.SetCursorType(Glfw.CursorType.Arrow);
-                    if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble && !_handler.GetLayout().IsMaximized)
-                    {
-                        //resize
-                        if ((xpos < _handler.GetLayout().GetWindow().GetWidth() - 5) && (xpos > 5)
-                            && (ypos < _handler.GetLayout().GetWindow().GetHeight() - 5) && ypos > 5)
-                        {
-                            if (HoveredItem is ITextEditable)
-                                _handler.SetCursorType(Glfw.CursorType.Beam);
-                            if (HoveredItem is SplitHolder)
-                            {
-                                if (((SplitHolder)HoveredItem).GetOrientation().Equals(Orientation.Horizontal))
-                                    _handler.SetCursorType(Glfw.CursorType.ResizeY);
-                                else _handler.SetCursorType(Glfw.CursorType.ResizeX);
-                            }
-                        }
-                        else //refactor!!
-                        {
-                            if ((xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos <= 5)
-                             || (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5)
-                             || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos <= 5)
-                             || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5)
-                             || (xpos <= 5 && ypos <= 5))
-                            {
-                                _handler.SetCursorType(Glfw.CursorType.Crosshair);
-                            }
-                            else
-                            {
-                                if (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 || xpos < 5)
-                                    _handler.SetCursorType(Glfw.CursorType.ResizeX);
-
-                                if (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 || ypos < 5)
-                                    _handler.SetCursorType(Glfw.CursorType.ResizeY);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (HoveredItem is ITextEditable)
-                        {
-                            _handler.SetCursorType(Glfw.CursorType.Beam);
-                        }
-                        if (HoveredItem is SplitHolder)
-                        {
-                            if (((SplitHolder)HoveredItem).GetOrientation().Equals(Orientation.Horizontal))
-                                _handler.SetCursorType(Glfw.CursorType.ResizeY);
-                            else _handler.SetCursorType(Glfw.CursorType.ResizeX);
-                        }
-                    }
                     Prototype popup = IsInListHoveredItems<PopUpMessage>();
                     if (popup != null)
                     {
@@ -862,11 +813,32 @@ namespace SpaceVIL
 
             if (queue.Count > 0)
             {
-                if(HoveredItem != null && HoveredItem != queue.Last())
+                if (HoveredItem != null && HoveredItem != queue.Last())
                     AssignActions(InputEventType.MouseLeave, _margs, HoveredItem, false);
 
                 HoveredItem = queue.Last();
                 HoveredItem.SetMouseHover(true);
+                _handler.SetCursorType(HoveredItem.GetCursor());
+
+                if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble && !_handler.GetLayout().IsMaximized)
+                {
+                    if ((xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos <= 5)
+                     || (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5)
+                     || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos <= 5)
+                     || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5)
+                     || (xpos <= 5 && ypos <= 5))
+                    {
+                        _handler.SetCursorType(EmbeddedCursor.Crosshair);
+                    }
+                    else
+                    {
+                        if (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 || xpos < 5)
+                            _handler.SetCursorType(EmbeddedCursor.ResizeX);
+
+                        if (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 || ypos < 5)
+                            _handler.SetCursorType(EmbeddedCursor.ResizeY);
+                    }
+                }
 
                 HoveredItems = queue;
                 Stack<Prototype> tmp = new Stack<Prototype>(HoveredItems);
