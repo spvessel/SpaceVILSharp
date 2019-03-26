@@ -1,7 +1,9 @@
 package com.spvessel.spacevil.Common;
 
+import com.spvessel.spacevil.CursorImage;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Decorations.ThemeStyle;
+import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.EmbeddedImage;
 import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 
@@ -14,6 +16,18 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 public final class DefaultsService {
+
+    private static CursorImage _defaultCursor = new CursorImage(EmbeddedCursor.ARROW);
+
+    public static void setDefaultCursor(CursorImage cursor) {
+        if (cursor == null)
+            return;
+        _defaultCursor = cursor;
+    }
+
+    public static CursorImage getDefaultCursor() {
+        return _defaultCursor;
+    }
 
     private static ThemeStyle _default_theme; // = ThemeStyle.GetInstance();
     private static DefaultFont _default_font = DefaultFont.getInstance();;

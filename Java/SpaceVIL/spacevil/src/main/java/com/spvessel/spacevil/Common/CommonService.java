@@ -4,8 +4,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import static org.lwjgl.glfw.GLFW.*;
 
-import com.spvessel.spacevil.CursorImage;
-import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.OSType;
 
 import org.lwjgl.glfw.GLFWVidMode;
@@ -43,8 +41,6 @@ public final class CommonService {
     public static long cursorResizeH;
     public static long cursorResizeV;
     public static long cursorResizeAll;
-
-    public static final CursorImage defaultCursor = new CursorImage(EmbeddedCursor.ARROW);
 
     public static boolean initSpaceVILComponents() {
         String OS = System.getProperty("os.name").toLowerCase();

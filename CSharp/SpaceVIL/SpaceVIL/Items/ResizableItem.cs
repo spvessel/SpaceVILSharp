@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using SpaceVIL.Core;
+using SpaceVIL.Common;
 
 namespace SpaceVIL
 {
@@ -93,9 +94,7 @@ namespace SpaceVIL
                     SetCursor(EmbeddedCursor.ResizeY);
             }
             else
-                SetCursor(EmbeddedCursor.Arrow);
-
-
+                SetCursor(DefaultsService.GetDefaultCursor());
         }
         protected virtual void OnMousePress(IItem sender, MouseArgs args)
         {

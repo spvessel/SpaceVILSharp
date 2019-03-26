@@ -855,7 +855,7 @@ namespace SpaceVIL
             _core.HoverRule = rule;
         }
 
-        private CursorImage _cursor = CommonService.DefaultCursor;
+        private CursorImage _cursor = DefaultsService.GetDefaultCursor();
         public CursorImage GetCursor()
         {
             return _cursor;

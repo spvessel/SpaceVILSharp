@@ -1,11 +1,11 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.InterfaceDraggable;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
-import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -93,7 +93,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
             else
                 setCursor(EmbeddedCursor.RESIZE_Y);
         } else
-            setCursor(EmbeddedCursor.ARROW);
+            setCursor(DefaultsService.getDefaultCursor());
     }
 
     private void onMousePress(InterfaceItem sender, MouseArgs args) {

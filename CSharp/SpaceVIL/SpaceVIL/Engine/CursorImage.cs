@@ -6,7 +6,7 @@ using SpaceVIL;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
 
-namespace SpaceVIL.Core
+namespace SpaceVIL
 {
     public sealed class CursorImage
     {

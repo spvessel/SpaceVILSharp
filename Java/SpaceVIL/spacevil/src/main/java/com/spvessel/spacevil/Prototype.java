@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-import com.spvessel.spacevil.Common.CommonService;
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethodState;
 import com.spvessel.spacevil.Core.EventInputTextMethodState;
 import com.spvessel.spacevil.Core.EventKeyMethodState;
@@ -18,7 +18,6 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Spacing;
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -836,7 +835,7 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.HoverRule = rule;
     }
 
-    private CursorImage _cursor = CommonService.defaultCursor;
+    private CursorImage _cursor = DefaultsService.getDefaultCursor();
 
     public CursorImage getCursor() {
         return _cursor;

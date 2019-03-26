@@ -65,8 +65,6 @@ namespace SpaceVIL.Common
         public static Glfw.Cursor CursorResizeV;
         public static Glfw.Cursor CursorResizeAll;
 
-        public static readonly CursorImage DefaultCursor = new CursorImage(EmbeddedCursor.Arrow);
-
         public static bool InitSpaceVILComponents()
         {
             if (!Glfw.Init())

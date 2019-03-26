@@ -146,6 +146,21 @@ namespace SpaceVIL.Common
 
     public static class DefaultsService
     {
+
+        private static CursorImage _defaultCursor = new CursorImage(EmbeddedCursor.Arrow);
+
+        public static void SetDefaultCursor(CursorImage cursor)
+        {
+            if (cursor == null)
+                return;
+            _defaultCursor = cursor;
+        }
+
+        public static CursorImage GetDefaultCursor()
+        {
+            return _defaultCursor;
+        }
+
         private static ThemeStyle _default_theme; // = ThemeStyle.GetInstance();
         private static DefaultFont _default_font; // = ThemeStyle.GetInstance();
 

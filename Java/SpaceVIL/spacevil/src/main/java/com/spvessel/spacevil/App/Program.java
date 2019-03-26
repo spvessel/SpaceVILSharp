@@ -3,6 +3,11 @@ package com.spvessel.spacevil.App;
 import com.spvessel.spacevil.View.*;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Common.DefaultsService;
@@ -14,6 +19,15 @@ public class Program {
     public static void main(String[] args) {
 
         com.spvessel.spacevil.Common.CommonService.initSpaceVILComponents();
+
+        // BufferedImage cursor = null;
+        // try {
+        //     cursor = ImageIO.read(new File("D:\\icon_small.png"));
+        // } catch (IOException e) {
+        //     System.out.println("load icons fail");
+        // }
+
+        // DefaultsService.setDefaultCursor(new CursorImage(cursor, 20, 20));
 
         MainWindow mw = new MainWindow();
         SettingsTest st = new SettingsTest();
