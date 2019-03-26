@@ -818,7 +818,7 @@ namespace SpaceVIL
 
                 HoveredItem = queue.Last();
                 HoveredItem.SetMouseHover(true);
-                _handler.SetCursorType(HoveredItem.GetCursor());
+                Glfw.SetCursor(_handler.GetWindowId(), HoveredItem.GetCursor().GetCursor());
 
                 if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble && !_handler.GetLayout().IsMaximized)
                 {

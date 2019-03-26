@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Glfw3;
+using SpaceVIL.Common;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 
@@ -855,23 +855,26 @@ namespace SpaceVIL
             _core.HoverRule = rule;
         }
 
-        private bool _isUserCursor = false;
-        private EmbeddedCursor _cursor = EmbeddedCursor.Arrow;
-        public EmbeddedCursor GetCursor()
+        private CursorImage _cursor = CommonService.DefaultCursor;
+        public CursorImage GetCursor()
         {
             return _cursor;
         }
-        public void SetCursor(EmbeddedCursor cursor)
+        public void SetCursor(EmbeddedCursor type)
+        {
+            _cursor = new CursorImage(type);
+        }
+        public void SetCursor(CursorImage cursor)
         {
             _cursor = cursor;
-            if (cursor == EmbeddedCursor.Arrow)
-                _isUserCursor = false;
-            else
-                _isUserCursor = true;
         }
-        internal bool IsUserCursor()
+        public void SetCursor(Bitmap bitmap)
         {
-            return _isUserCursor;
+            _cursor = new CursorImage(bitmap);
+        }
+        public void SetCursor(Bitmap bitmap, int width, int height)
+        {
+            _cursor = new CursorImage(bitmap, width, height);
         }
     }
 }

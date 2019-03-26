@@ -4,6 +4,7 @@ import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -825,6 +826,26 @@ public final class GraphicsMathService {
             clockwise.add(new float[] { x3, y3, 0 });
         }
         return clockwise;
+    }
+
+    public static BufferedImage scaleBitmap(BufferedImage img, int w, int h) {
+        float boundW = w;
+        float boundH = h;
+
+        float ratioX = (boundW / img.getWidth());
+        float ratioY = (boundH / img.getHeight());
+        float ratio = ratioX < ratioY ? ratioX : ratioY;
+
+        int resH = (int) (img.getHeight() * ratio);
+        int resW = (int) (img.getWidth() * ratio);
+
+        BufferedImage bmp = new BufferedImage(resW, resH, BufferedImage.TYPE_INT_ARGB);
+        // System.out.println(resW + " " + resH);
+        Graphics2D graphic = bmp.createGraphics();
+        graphic.drawImage(img, 0, 0, resW, resH, null);
+        graphic.dispose();
+
+        return bmp;
     }
 }
 

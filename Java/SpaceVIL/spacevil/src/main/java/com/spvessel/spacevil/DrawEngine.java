@@ -850,7 +850,7 @@ final class DrawEngine {
 
             hoveredItem = queue.get(queue.size() - 1);
             hoveredItem.setMouseHover(true);
-            _handler.setCursorType(hoveredItem.getCursor());
+            glfwSetCursor(_handler.getWindowId(), hoveredItem.getCursor().getCursor());
 
             if ((xpos >= _handler.getLayout().getWindow().getWidth() - 5 && ypos <= 5)
                     || (xpos >= _handler.getLayout().getWindow().getWidth() - 5
@@ -1720,12 +1720,11 @@ final class DrawEngine {
                 try {
                     // draw
                     VRAMTexture tex = VRAMStorage.getTexture(image);
-                    if (tex == null)
-                    {
+                    if (tex == null) {
                         tmp.setNew(true);
                         return;
                     }
-                    
+
                     tex.bind();
                     tex.genBuffers(i_x0, i_x1, i_y0, i_y1);
                     tex.sendUniformSample2D(_texture);

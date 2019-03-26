@@ -30,12 +30,12 @@ public class MainWindow extends ActiveWindow {
         Handler.setAspectRatio(4, 1);
         // Handler.eventClose.clear();
         // Handler.eventClose.add(() -> {
-        //     MessageItem msg = new MessageItem("Close?", "Are You sure?");
-        //     msg.onCloseDialog.add(() -> {
-        //         if (msg.getResult())
-        //             Handler.close();
-        //     });
-        //     msg.show(Handler);
+        // MessageItem msg = new MessageItem("Close?", "Are You sure?");
+        // msg.onCloseDialog.add(() -> {
+        // if (msg.getResult())
+        // Handler.close();
+        // });
+        // msg.show(Handler);
         // });
         // Handler.setBackground(45, 45, 45);
         // Handler.setPadding(2, 2, 2, 2);
@@ -43,13 +43,16 @@ public class MainWindow extends ActiveWindow {
         BufferedImage iBig = null;
         BufferedImage iSmall = null;
         try {
-            iBig = ImageIO.read(new File("D:\\Source\\GitHub\\Game2048\\src\\main\\resources\\Game2048.png"));
-            iSmall = ImageIO.read(new File("D:\\Source\\GitHub\\Game2048\\src\\main\\resources\\Game2048.png"));
+            // iBig = ImageIO.read(new
+            // File("D:\\Source\\GitHub\\Game2048\\src\\main\\resources\\Game2048.png"));
+            // iSmall = ImageIO.read(new
+            // File("D:\\Source\\GitHub\\Game2048\\src\\main\\resources\\Game2048.png"));
+            iSmall = ImageIO.read(new File("D:\\icon_small.png"));
         } catch (IOException e) {
             System.out.println("load icons fail");
         }
-        if (iBig != null && iSmall != null)
-            Handler.setIcon(iBig, iSmall);
+        // if (iBig != null && iSmall != null)
+        // Handler.setIcon(iBig, iSmall);
 
         TitleBar title = new TitleBar("Main King Window - JAVA");
         title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
@@ -108,7 +111,8 @@ public class MainWindow extends ActiveWindow {
         btn_flow.setToolTip("Show Flow window.");
         btn_flow.setBackground(193, 142, 221);
         btn_flow.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        btn_flow.setCursor(EmbeddedCursor.HAND);
+        // btn_flow.setCursor(EmbeddedCursor.HAND);
+        btn_flow.setCursor(iSmall, 10, 30);
         InterfaceMouseMethodState flow_click = (sender, args) -> WindowLayoutBox.tryShow("FlowTest");
         btn_flow.eventMouseClick.add(flow_click);
 

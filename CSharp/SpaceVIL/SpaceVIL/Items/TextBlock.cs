@@ -80,7 +80,7 @@ namespace SpaceVIL
             redoQueue = new LinkedList<TextBlockState>();
             undoQueue.AddFirst(new TextBlockState(GetText(), _cursor_position.X, _cursor_position.Y));
 
-            SetCursor(EmbeddedCursor.Beam);
+            SetCursor(EmbeddedCursor.IBeam);
         }
 
         private void OnMousePressed(object sender, MouseArgs args)

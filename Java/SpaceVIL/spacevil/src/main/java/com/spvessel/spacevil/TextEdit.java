@@ -84,7 +84,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         redoQueue = new ArrayDeque<>();
         undoQueue.addFirst(new TextEditState(getText(), _cursor_position));
 
-        setCursor(EmbeddedCursor.BEAM);
+        setCursor(EmbeddedCursor.IBEAM);
     }
     public TextEdit(String text) {
         this();

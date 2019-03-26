@@ -1,8 +1,10 @@
 package com.spvessel.spacevil;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.EventCommonMethodState;
 import com.spvessel.spacevil.Core.EventInputTextMethodState;
 import com.spvessel.spacevil.Core.EventKeyMethodState;
@@ -834,22 +836,25 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.HoverRule = rule;
     }
 
-    private boolean _isUserCursor = false;
-    private int _cursor = EmbeddedCursor.ARROW;
+    private CursorImage _cursor = CommonService.defaultCursor;
 
-    public int getCursor() {
+    public CursorImage getCursor() {
         return _cursor;
     }
 
     public void setCursor(int cursor) {
-        _cursor = cursor;
-        if (cursor == EmbeddedCursor.ARROW)
-            _isUserCursor = false;
-        else
-            _isUserCursor = true;
+        _cursor = new CursorImage(cursor);
     }
 
-    boolean isUserCursor() {
-        return _isUserCursor;
+    public void setCursor(CursorImage cursor) {
+        _cursor = cursor;
+    }
+
+    public void setCursor(BufferedImage bitmap) {
+        _cursor = new CursorImage(bitmap);
+    }
+
+    public void setCursor(BufferedImage bitmap, int width, int height) {
+        _cursor = new CursorImage(bitmap, width, height);
     }
 }

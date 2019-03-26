@@ -157,7 +157,7 @@ final class GLWHandler {
 
         if (_w_layout.isKeepAspectRatio)
             glfwSetWindowAspectRatio(_window, _w_layout.ratioW, _w_layout.ratioH);
-            
+
         if (visible)
             glfwShowWindow(_window);
     }
@@ -187,7 +187,7 @@ final class GLWHandler {
         case EmbeddedCursor.ARROW:
             glfwSetCursor(_window, CommonService.cursorArrow);
             break;
-        case EmbeddedCursor.BEAM:
+        case EmbeddedCursor.IBEAM:
             glfwSetCursor(_window, CommonService.cursorInput);
             break;
         case EmbeddedCursor.CROSSHAIR:

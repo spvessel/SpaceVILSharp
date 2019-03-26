@@ -70,7 +70,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         // _text_object.setTextAlignment(new
         // LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER)));
 
-        setCursor(EmbeddedCursor.BEAM);
+        setCursor(EmbeddedCursor.IBEAM);
     }
 
     private void onMouseDoubleClick(InterfaceItem sender, MouseArgs args) {

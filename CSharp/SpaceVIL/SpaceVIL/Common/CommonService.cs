@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Glfw3;
+using SpaceVIL.Core;
 
 namespace SpaceVIL.Common
 {
@@ -64,6 +65,8 @@ namespace SpaceVIL.Common
         public static Glfw.Cursor CursorResizeV;
         public static Glfw.Cursor CursorResizeAll;
 
+        public static readonly CursorImage DefaultCursor = new CursorImage(EmbeddedCursor.Arrow);
+
         public static bool InitSpaceVILComponents()
         {
             if (!Glfw.Init())
@@ -79,7 +82,7 @@ namespace SpaceVIL.Common
             CursorResizeV = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
             CursorResizeAll = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
 
-            DisplayService.SetDisplaySize(Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width, 
+            DisplayService.SetDisplaySize(Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width,
                         Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height);
 
             DefaultsService.InitImages();

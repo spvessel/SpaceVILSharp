@@ -72,7 +72,7 @@ namespace SpaceVIL
             redoQueue = new LinkedList<TextEditState>();
             undoQueue.AddFirst(new TextEditState(GetText(), _cursor_position));
 
-            SetCursor(EmbeddedCursor.Beam);
+            SetCursor(EmbeddedCursor.IBeam);
         }
         public TextEdit(String text) : this()
         {            

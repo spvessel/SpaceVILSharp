@@ -167,7 +167,7 @@ namespace SpaceVIL
                 case EmbeddedCursor.Arrow:
                     Glfw.SetCursor(_window, CommonService.CursorArrow);
                     break;
-                case EmbeddedCursor.Beam:
+                case EmbeddedCursor.IBeam:
                     Glfw.SetCursor(_window, CommonService.CursorInput);
                     break;
                 case EmbeddedCursor.Crosshair:

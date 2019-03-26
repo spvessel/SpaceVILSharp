@@ -76,7 +76,7 @@ class TextBlock extends Prototype
         redoQueue = new ArrayDeque<>();
         undoQueue.addFirst(new TextBlockState(getText(), new Point(_cursor_position)));
 
-        setCursor(EmbeddedCursor.BEAM);
+        setCursor(EmbeddedCursor.IBEAM);
     }
 
     private void onMousePressed(Object sender, MouseArgs args) {

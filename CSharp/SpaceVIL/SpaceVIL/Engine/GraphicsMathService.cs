@@ -1081,5 +1081,27 @@ namespace SpaceVIL
             }
             return clockwise;
         }
+
+        public static Bitmap ScaleBitmap(Bitmap img, int w, int h)
+        {
+            float boundW = w;
+            float boundH = h;
+
+            var ratioX = (boundW / img.Width);
+            var ratioY = (boundH / img.Height);
+            float ratio = ratioX < ratioY ? ratioX : ratioY;
+
+            int resW = (int)(img.Width * ratio);
+            int resH = (int)(img.Height * ratio);
+
+            var bmp = new Bitmap(resW, resH);
+            var graphic = Graphics.FromImage(bmp);
+            graphic.DrawImage(img, new System.Drawing.Rectangle(0, 0, resW, resH));
+            graphic.Dispose();
+
+            // Console.WriteLine(resW + " " + resH);
+
+            return bmp;
+        }
     }
 }
