@@ -20,14 +20,14 @@ public class Program {
 
         com.spvessel.spacevil.Common.CommonService.initSpaceVILComponents();
 
-        // BufferedImage cursor = null;
-        // try {
-        //     cursor = ImageIO.read(new File("D:\\icon_small.png"));
-        // } catch (IOException e) {
-        //     System.out.println("load icons fail");
-        // }
+        BufferedImage cursor = null;
+        try {
+            cursor = ImageIO.read(new File("D:\\icon_small.png"));
+        } catch (IOException e) {
+            System.out.println("load icons fail");
+        }
 
-        // DefaultsService.setDefaultCursor(new CursorImage(cursor, 20, 20));
+        DefaultsService.setDefaultCursor(new CursorImage(cursor, 10, 10));
 
         MainWindow mw = new MainWindow();
         SettingsTest st = new SettingsTest();

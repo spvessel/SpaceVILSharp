@@ -148,6 +148,12 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
 
     public void setColorOverlay(Color color) {
         _colorOverlay = color;
+        _isOverlay = true;
+    }
+
+    public void setColorOverlay(Color color, boolean overlay) {
+        _colorOverlay = color;
+        _isOverlay = overlay;
     }
     
     public void setColorOverlay(boolean overlay) {

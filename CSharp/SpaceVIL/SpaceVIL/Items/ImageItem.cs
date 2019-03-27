@@ -144,6 +144,11 @@ namespace SpaceVIL
             _colorOverlay = color;
             _isOverlay = true;
         }
+        public void SetColorOverlay(Color color, bool overlay)
+        {
+            _colorOverlay = color;
+            _isOverlay = overlay;
+        }
         public void SetColorOverlay(bool overlay)
         {
             _isOverlay = overlay;

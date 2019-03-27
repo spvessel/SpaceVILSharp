@@ -842,6 +842,7 @@ public final class GraphicsMathService {
         BufferedImage bmp = new BufferedImage(resW, resH, BufferedImage.TYPE_INT_ARGB);
         // System.out.println(resW + " " + resH);
         Graphics2D graphic = bmp.createGraphics();
+
         graphic.drawImage(img, 0, 0, resW, resH, null);
         graphic.dispose();
 
