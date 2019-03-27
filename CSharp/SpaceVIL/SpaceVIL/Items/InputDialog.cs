@@ -41,6 +41,13 @@ namespace SpaceVIL
             _cancel = new ButtonCore("Cancel");
             _input = new TextEdit();
             _input.SetText(defaultText);
+            Window.IsLocked = true;
+
+            EventKeyPress += (sender, args) =>
+            {
+                if (args.Key == KeyCode.Escape)
+                    Close();
+            };
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.InputDialog)));
         }

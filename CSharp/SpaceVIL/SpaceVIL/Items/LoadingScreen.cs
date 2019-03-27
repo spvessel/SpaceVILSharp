@@ -39,15 +39,11 @@ namespace SpaceVIL
             _text_object = new Label("0%");
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.LoadingScreen)));
 
-            // EventKeyPress += (s, a) =>
-            // {
-            //     if (a.Key == KeyCode.NumpadAdd)
-            //         SetValue(GetValue() + 1);
-            //     else if (a.Key == KeyCode.NumpadSubtract)
-            //         SetValue(GetValue() - 1);
-            //     else if (a.Key == KeyCode.Escape)
-            //         SetToClose();
-            // };
+            EventKeyPress += (s, a) =>
+            {
+                if (a.Key == KeyCode.Escape && a.Mods == KeyMods.Shift)
+                    SetToClose();
+            };
         }
 
         public override void InitElements()

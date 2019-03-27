@@ -13,7 +13,6 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.EmbeddedImage;
 import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.FileSystemEntryType;
-import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;

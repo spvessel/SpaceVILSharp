@@ -7,7 +7,6 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.MouseButton;
-import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.awt.Color;
 import java.awt.Font;

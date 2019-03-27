@@ -4,6 +4,8 @@ import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.EmbeddedImage;
+import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.awt.*;
@@ -13,7 +15,7 @@ import java.util.List;
 public class PasswordLine extends HorizontalStack {
     private static int count = 0;
 
-    private ButtonToggle _show_pwd_btn;
+    private BlankItem _show_pwd_btn;
     private TextEncrypt _textEncrypt;
 
     /**
@@ -21,7 +23,7 @@ public class PasswordLine extends HorizontalStack {
      */
     public PasswordLine() {
         setItemName("PasswordLine_" + count);
-        _show_pwd_btn = new ButtonToggle();
+        _show_pwd_btn = new BlankItem();
         _show_pwd_btn.setItemName(getItemName() + "_marker");
         _textEncrypt = new TextEncrypt();
         count++;
@@ -29,8 +31,8 @@ public class PasswordLine extends HorizontalStack {
         setStyle(DefaultsService.getDefaultStyle(PasswordLine.class));
     }
 
-    private void showPassword(InterfaceItem sender) {
-        _textEncrypt.showPassword(_show_pwd_btn.isToggled());
+    private void showPassword(boolean value) {
+        _textEncrypt.showPassword(value);
     }
 
     /**
@@ -48,6 +50,7 @@ public class PasswordLine extends HorizontalStack {
     public void setTextAlignment(ItemAlignment... alignment) {
         setTextAlignment(Arrays.asList(alignment));
     }
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _textEncrypt.setTextAlignment(alignment);
     }
@@ -82,7 +85,6 @@ public class PasswordLine extends HorizontalStack {
         return _textEncrypt.getFont();
     }
 
-
     /**
      * @return password string
      */
@@ -96,18 +98,23 @@ public class PasswordLine extends HorizontalStack {
     public void setForeground(Color color) {
         _textEncrypt.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
         _textEncrypt.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         _textEncrypt.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         _textEncrypt.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         _textEncrypt.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
         return _textEncrypt.getForeground();
     }
@@ -132,21 +139,37 @@ public class PasswordLine extends HorizontalStack {
     public void initElements() {
         addItems(_textEncrypt, _show_pwd_btn);
 
+        ImageItem eye = new ImageItem(DefaultsService.getDefaultImage(EmbeddedImage.EYE, EmbeddedImageSize.SIZE_32X32));
+        eye.keepAspectRatio(true);
+        eye.setColorOverlay(new Color(80, 80, 80));
+        _show_pwd_btn.addItem(eye);
+        
         _show_pwd_btn.setPassEvents(false);
-        _show_pwd_btn.eventToggle.add((sender, args) -> showPassword(sender));
+        _show_pwd_btn.eventMousePress.add((sender, args) -> {
+            showPassword(true);
+            eye.setColorOverlay(new Color(30, 30, 30));
+        });
+        _show_pwd_btn.eventMouseClick.add((sender, args) -> {
+            showPassword(false);
+            eye.setColorOverlay(new Color(80, 80, 80));
+        });
+        _show_pwd_btn.eventMouseLeave.add((sender, args) -> {
+            showPassword(false);
+            eye.setColorOverlay(new Color(80, 80, 80));
+        });
     }
 
     /**
-     * Returns width of the whole text in the PasswordLine
-     * (includes visible and invisible parts of the text)
+     * Returns width of the whole text in the PasswordLine (includes visible and
+     * invisible parts of the text)
      */
     public int getTextWidth() {
         return _textEncrypt.getWidth();
     }
 
     /**
-     * Returns height of the whole text in the PasswordLine
-     * (includes visible and invisible parts of the text)
+     * Returns height of the whole text in the PasswordLine (includes visible and
+     * invisible parts of the text)
      */
     public int getTextHeight() {
         return _textEncrypt.getHeight();

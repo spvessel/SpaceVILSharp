@@ -9,6 +9,7 @@ import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
@@ -122,7 +123,12 @@ public class SideArea extends Prototype implements InterfaceFloating {
         });
         ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
         setVisible(false);
-        setPassEvents(false);   
+        setPassEvents(false);
+        
+        eventKeyPress.add((sender, args) -> {
+            if (args.key == KeyCode.ESCAPE)
+                hide();
+        });
     }
 
     @Override
@@ -167,6 +173,7 @@ public class SideArea extends Prototype implements InterfaceFloating {
         if (!_init)
             initElements();
         setVisible(true);
+        setFocus();
     }
 
     public void show(InterfaceItem sender, MouseArgs args) {

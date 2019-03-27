@@ -1,7 +1,6 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Flags.HorizontalDirection;
-import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Indents;

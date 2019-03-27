@@ -98,7 +98,6 @@ public class WrapGrid extends Prototype {
         return _area;
     }
 
-    private ContextMenu _menu;
     public VerticalScrollBar vScrollBar;
     public HorizontalScrollBar hScrollBar;
     private ScrollBarVisibility _scrollBarPolicy = ScrollBarVisibility.AS_NEEDED;
