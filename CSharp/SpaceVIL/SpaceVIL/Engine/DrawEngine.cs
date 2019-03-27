@@ -33,7 +33,7 @@ namespace SpaceVIL
         private Dictionary<IBaseItem, int[]> _bounds = new Dictionary<IBaseItem, int[]>();
 
         private ToolTip _tooltip = new ToolTip();
-        private IBaseItem _isStencilSet = null;
+        // private IBaseItem _isStencilSet = null;
         private InputDeviceEvent EngineEvent = new InputDeviceEvent();
         private MouseArgs _margs = new MouseArgs();
         private KeyArgs _kargs = new KeyArgs();
@@ -566,6 +566,12 @@ namespace SpaceVIL
                         Glfw.GetWindowPos(_handler.GetWindowId(), out x, out y);
                         SetWindowPos(x + delta_x, y + delta_y);
                     }
+                }
+
+                if (!HoveredItem.GetHoverVerification((float)xpos, (float)ypos))
+                {
+                    HoveredItem.SetMouseHover(false);
+                    AssignActions(InputEventType.MouseLeave, _margs, HoveredItem, false);
                 }
             }
             else
@@ -1239,18 +1245,6 @@ namespace SpaceVIL
             }
         }
 
-        private void SetStencilMask(List<float[]> crd_array)
-        {
-            if (crd_array == null)
-                return;
-            _primitive.UseShader();
-            VRAMVertex stencil = new VRAMVertex();
-            stencil.GenBuffers(crd_array);
-            stencil.SendColor(_primitive, Color.FromArgb(0, 0, 0, 0));
-            stencil.Draw(GL_TRIANGLES);
-            stencil.Clear();
-        }
-
         private bool CheckOutsideBorders(IBaseItem shell)
         {
             // if(shell.GetItemName() == "_cursor")
@@ -1298,33 +1292,43 @@ namespace SpaceVIL
             return LazyStencil(shell);
         }
 
-        private void StrictStencil(IBaseItem shell, bool current = false)
-        {
-            glEnable(GL_STENCIL_TEST);
-            glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-            // glClear(GL_STENCIL_BUFFER_BIT);
-            glStencilMask(0x00);
+        // private void SetStencilMask(List<float[]> crd_array)
+        // {
+        //     if (crd_array == null)
+        //         return;
+        //     _primitive.UseShader();
+        //     VRAMVertex stencil = new VRAMVertex();
+        //     stencil.GenBuffers(crd_array);
+        //     stencil.SendColor(_primitive, Color.FromArgb(0, 0, 0, 0));
+        //     stencil.Draw(GL_TRIANGLES);
+        //     stencil.Clear();
+        // }
 
-            glStencilFunc(GL_ALWAYS, 1, 0xFF);
-            glStencilMask(0xFF);
-
-            if (current)
-            {
-                SetStencilMask(shell.MakeShape());
-            }
-            else
-            {
-                SetStencilMask(shell.GetParent().MakeShape());
-                shell.GetParent().SetConfines(
-                    shell.GetParent().GetX() + shell.GetParent().GetPadding().Left,
-                    shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right,
-                    shell.GetParent().GetY() + shell.GetParent().GetPadding().Top,
-                    shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom
-                );
-            }
-            glStencilFunc(GL_EQUAL, 1, 0xFF);
-            SetConfines(shell);
-        }
+        // private void StrictStencil(IBaseItem shell, bool current = false)
+        // {
+        //     glEnable(GL_STENCIL_TEST);
+        //     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+        //     // glClear(GL_STENCIL_BUFFER_BIT);
+        //     glStencilMask(0x00);
+        //     glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        //     glStencilMask(0xFF);
+        //     if (current)
+        //     {
+        //         SetStencilMask(shell.MakeShape());
+        //     }
+        //     else
+        //     {
+        //         SetStencilMask(shell.GetParent().MakeShape());
+        //         shell.GetParent().SetConfines(
+        //             shell.GetParent().GetX() + shell.GetParent().GetPadding().Left,
+        //             shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right,
+        //             shell.GetParent().GetY() + shell.GetParent().GetPadding().Top,
+        //             shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom
+        //         );
+        //     }
+        //     glStencilFunc(GL_EQUAL, 1, 0xFF);
+        //     SetConfines(shell);
+        // }
 
         private void SetConfines(IBaseItem shell)
         {
@@ -1418,7 +1422,7 @@ namespace SpaceVIL
                 // || shell.GetParent() is TextBlock
                 )
                 {
-                    _isStencilSet = shell;
+                    // _isStencilSet = shell;
                     // StrictStencil(shell);
                     SetScissorRectangle(shell);
                     return true;

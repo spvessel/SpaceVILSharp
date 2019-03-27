@@ -15,7 +15,7 @@ namespace SpaceVIL
     {
         static int count = 0;
 
-        private ButtonToggle _show_pwd_btn;
+        private BlankItem _show_pwd_btn;
         private TextEncrypt _textEncrypt;
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace SpaceVIL
         public PasswordLine()
         {
             SetItemName("PasswordLine_" + count);
-            _show_pwd_btn = new ButtonToggle();
+            _show_pwd_btn = new BlankItem();
             _show_pwd_btn.SetItemName(GetItemName() + "_marker");
             _textEncrypt = new TextEncrypt();
             count++;
@@ -32,9 +32,9 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.PasswordLine)));
         }
 
-        private void ShowPassword(IItem sender)
+        private void ShowPassword(bool value)
         {
-            _textEncrypt.ShowPassword(_show_pwd_btn.IsToggled());
+            _textEncrypt.ShowPassword(value);
         }
 
         /// <summary>
@@ -147,32 +147,29 @@ namespace SpaceVIL
         /// </summary>
         public override void InitElements()
         {
-            _show_pwd_btn.SetPassEvents(false);
-            _show_pwd_btn.EventToggle += (sender, args) => ShowPassword(sender);
             AddItems(_textEncrypt, _show_pwd_btn);
-            // ImageItem iItem = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Eye, EmbeddedImageSize.Size32x32), true);
-            // iItem.SetColorOverlay(Color.FromArgb(100, 100, 100));
-            // iItem.EventMouseHover += (sender, args) =>
-            // {
-            //     iItem.SetColorOverlay(Color.FromArgb(65, 65, 65));
-            // };
-            // iItem.EventMouseLeave += (sender, args) =>
-            // {
-            //     if (_show_pwd_btn.IsToggled())
-            //         iItem.SetColorOverlay(Color.FromArgb(30, 30, 30));
-            //     else
-            //         iItem.SetColorOverlay(Color.FromArgb(100, 100, 100));
-            // };
-            // iItem.EventMouseClick += (sender, args) =>
-            // {
-            //     if (_show_pwd_btn.IsToggled() && !_show_pwd_btn.IsMouseHover())
-            //         iItem.SetColorOverlay(Color.FromArgb(30, 30, 30));
-            //     else if (!_show_pwd_btn.IsToggled() && !_show_pwd_btn.IsMouseHover())
-            //         iItem.SetColorOverlay(Color.FromArgb(100, 100, 100));
-            //     else
-            //         iItem.SetColorOverlay(Color.FromArgb(65, 65, 65));
-            // };
-            // _show_pwd_btn.AddItem(iItem);
+
+            ImageItem eye = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Eye, EmbeddedImageSize.Size32x32));
+            eye.KeepAspectRatio(true);
+            eye.SetColorOverlay(Color.FromArgb(80, 80, 80));
+            _show_pwd_btn.AddItem(eye);
+
+            _show_pwd_btn.SetPassEvents(false);
+            _show_pwd_btn.EventMousePress += (sender, args) =>
+            {
+                ShowPassword(true);
+                eye.SetColorOverlay(Color.FromArgb(30, 30, 30));
+            };
+            _show_pwd_btn.EventMouseClick += (sender, args) =>
+            {
+                ShowPassword(false);
+                eye.SetColorOverlay(Color.FromArgb(80, 80, 80));
+            };
+            _show_pwd_btn.EventMouseLeave += (sender, args) =>
+            {
+                ShowPassword(false);
+                eye.SetColorOverlay(Color.FromArgb(80, 80, 80));
+            };
         }
 
         /// <summary>

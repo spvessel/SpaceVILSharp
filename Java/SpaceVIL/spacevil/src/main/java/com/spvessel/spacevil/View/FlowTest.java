@@ -86,27 +86,27 @@ public class FlowTest extends ActiveWindow {
         btn1.eventMouseClick.add((sender, args) -> {
             // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!");
             // pop.show(Handler);
-             MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
-             msg.setMessageText("msg");
-             ButtonCore btnnn = new ButtonCore("one");
-             btnnn.eventMouseClick.add((s, a) -> {
+            MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
+            msg.setMessageText("msg");
+            ButtonCore btnnn = new ButtonCore("one");
+            btnnn.eventMouseClick.add((s, a) -> {
                 System.out.println("btnnn");
-             });
+            });
 
-             msg.addUserButton(btnnn, 4);
-             msg.addUserButton(new ButtonCore("two"), 2);
-             msg.addUserButton(new ButtonCore("three"), 3);
+            msg.addUserButton(btnnn, 4);
+            msg.addUserButton(new ButtonCore("two"), 2);
+            msg.addUserButton(new ButtonCore("three"), 3);
 
-             msg.onCloseDialog.add(() -> {
+            msg.onCloseDialog.add(() -> {
                 System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
-             });
-             msg.show(Handler);
+            });
+            msg.show(Handler);
 
             // InputDialog id = new InputDialog("Input text", "Apply");
             // id.show(Handler);
 
-//            LoadingScreen ls = new LoadingScreen();
-//            ls.show(Handler);
+            // LoadingScreen ls = new LoadingScreen();
+            // ls.show(Handler);
         });
         btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn1.setHoverRule(ItemRule.STRICT);
@@ -119,7 +119,10 @@ public class FlowTest extends ActiveWindow {
         btn2.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         btn2.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn2.addItemState(ItemStateType.HOVERED, hovered);
-        // btn2.eventMouseClick.add((sender, args) -> flow_item.show(sender, args));
+        btn2.eventMouseClick.add((sender, args) -> {
+            InputDialog id = new InputDialog("title", "actionName", "defaultText");
+            id.show(getHandler());
+        });
         btn2.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
         btn2.setHoverRule(ItemRule.STRICT);
 

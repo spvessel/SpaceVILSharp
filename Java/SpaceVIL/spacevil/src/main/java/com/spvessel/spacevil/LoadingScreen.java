@@ -11,6 +11,7 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.EmbeddedImage;
 import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
 
 public class LoadingScreen extends Prototype {
@@ -22,7 +23,7 @@ public class LoadingScreen extends Prototype {
     }
 
     private Label _text_object;
-    
+
     public void setValueVisible(boolean value) {
         _text_object.setVisible(value);
     }
@@ -30,7 +31,7 @@ public class LoadingScreen extends Prototype {
     public boolean isValueVisible() {
         return _text_object.isVisible();
     }
-    
+
     private WindowLayout _handler = null;
 
     public LoadingScreen() {
@@ -43,14 +44,10 @@ public class LoadingScreen extends Prototype {
         _text_object = new Label("0%");
         setStyle(DefaultsService.getDefaultStyle(LoadingScreen.class));
 
-        // eventKeyPress.add((s, a) -> {
-        //     if (a.key == KeyCode.NUMPADADD)
-        //         setValue(getValue() + 1);
-        //     else if (a.key == KeyCode.NUMPADSUBTRACT)
-        //         setValue(getValue() - 1);
-        //     else if (a.key == KeyCode.ESCAPE)
-        //         setToClose();
-        // });
+        eventKeyPress.add((s, a) -> {
+            if (a.key == KeyCode.ESCAPE && a.mods == KeyMods.SHIFT)
+                setToClose();
+        });
     }
 
     @Override

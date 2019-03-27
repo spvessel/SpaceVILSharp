@@ -117,6 +117,12 @@ namespace SpaceVIL
             ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
             SetVisible(false);
             SetPassEvents(false);
+
+            EventKeyPress += (sender, args) =>
+            {
+                if (args.Key == KeyCode.Escape)
+                    Hide();
+            };
         }
 
         public override void InitElements()
@@ -165,6 +171,7 @@ namespace SpaceVIL
             if (!_init)
                 InitElements();
             SetVisible(true);
+            SetFocus();
         }
         public virtual void Show(IItem sender, MouseArgs args)
         {

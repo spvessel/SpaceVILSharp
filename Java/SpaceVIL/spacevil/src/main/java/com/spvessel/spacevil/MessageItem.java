@@ -9,6 +9,7 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.KeyCode;
 
 public class MessageItem extends DialogItem {
     static int count = 0;
@@ -64,7 +65,13 @@ public class MessageItem extends DialogItem {
 
         _toolbar = new HorizontalStack();
         _userbar = new HorizontalStack();
+        window.isLocked = true;
 
+        eventKeyPress.add((sender, args) -> {
+            if (args.key == KeyCode.ESCAPE)
+            close();
+        });
+        
         setStyle(DefaultsService.getDefaultStyle(MessageItem.class));
     }
 

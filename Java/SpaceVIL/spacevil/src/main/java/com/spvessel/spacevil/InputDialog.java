@@ -8,9 +8,7 @@ import com.spvessel.spacevil.TitleBar;
 import com.spvessel.spacevil.WindowLayout;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.DialogItem;
 
 public class InputDialog extends DialogItem {
@@ -45,6 +43,12 @@ public class InputDialog extends DialogItem {
         _cancel = new ButtonCore("Cancel");
         _input = new TextEdit();
         _input.setText(defaultText);
+        window.isLocked = true;
+
+        eventKeyPress.add((sender, args) -> {
+            if (args.key == KeyCode.ESCAPE)
+                close();
+        });
 
         setStyle(DefaultsService.getDefaultStyle(InputDialog.class));
     }

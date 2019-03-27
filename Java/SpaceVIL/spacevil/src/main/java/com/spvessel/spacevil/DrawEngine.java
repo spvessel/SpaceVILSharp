@@ -28,7 +28,7 @@ final class DrawEngine {
     private Map<InterfaceBaseItem, int[]> _bounds = new HashMap<>();
 
     private ToolTip _tooltip = new ToolTip();
-    private InterfaceBaseItem _isStencilSet = null;
+    // private InterfaceBaseItem _isStencilSet = null;
     private InputDeviceEvent engineEvent = new InputDeviceEvent();
     private MouseArgs _margs = new MouseArgs();
     private KeyArgs _kargs = new KeyArgs();
@@ -616,6 +616,10 @@ final class DrawEngine {
                     glfwGetWindowPos(_handler.getWindowId(), x, y);
                     setWindowPos(x.get(0) + delta_x, y.get() + delta_y);
                 }
+            }
+            if (!hoveredItem.getHoverVerification((float) xpos, (float) ypos)) {
+                hoveredItem.setMouseHover(false);
+                assignActions(InputEventType.MOUSE_LEAVE, _margs, hoveredItem, false);
             }
         } else {
             ptrPress.setX(ptrRelease.getX());
@@ -1234,17 +1238,6 @@ final class DrawEngine {
         }
     }
 
-    private void setStencilMask(List<float[]> crd_array) {
-        if (crd_array == null)
-            return;
-        _primitive.useShader();
-        VRAMVertex stencil = new VRAMVertex();
-        stencil.genBuffers(crd_array);
-        stencil.sendColor(_primitive, new Color(0, 0, 0, 0));
-        stencil.draw(GL_TRIANGLES);
-        stencil.clear();
-    }
-
     private boolean checkOutsideBorders(InterfaceBaseItem shell) {
         if (shell.getParent() == null)
             return false;
@@ -1281,26 +1274,40 @@ final class DrawEngine {
         return lazyStencil(shell);
     }
 
-    private void strictStencil(InterfaceBaseItem shell) {
-        glEnable(GL_STENCIL_TEST);
+    // private void setStencilMask(List<float[]> crd_array) {
+    // if (crd_array == null)
+    // return;
+    // _primitive.useShader();
+    // VRAMVertex stencil = new VRAMVertex();
+    // stencil.genBuffers(crd_array);
+    // stencil.sendColor(_primitive, new Color(0, 0, 0, 0));
+    // stencil.draw(GL_TRIANGLES);
+    // stencil.clear();
+    // }
 
-        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-        glClear(GL_STENCIL_BUFFER_BIT);
-        glStencilMask(0x00);
+    // private void strictStencil(InterfaceBaseItem shell) {
+    // glEnable(GL_STENCIL_TEST);
 
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glStencilMask(0xFF);
+    // glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    // glClear(GL_STENCIL_BUFFER_BIT);
+    // glStencilMask(0x00);
 
-        setStencilMask(shell.getParent().makeShape());
+    // glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    // glStencilMask(0xFF);
 
-        glStencilFunc(GL_EQUAL, 1, 0xFF);
+    // setStencilMask(shell.getParent().makeShape());
 
-        shell.getParent().setConfines(shell.getParent().getX() + shell.getParent().getPadding().left,
-                shell.getParent().getX() + shell.getParent().getWidth() - shell.getParent().getPadding().right,
-                shell.getParent().getY() + shell.getParent().getPadding().top,
-                shell.getParent().getY() + shell.getParent().getHeight() - shell.getParent().getPadding().bottom);
-        setConfines(shell);
-    }
+    // glStencilFunc(GL_EQUAL, 1, 0xFF);
+
+    // shell.getParent().setConfines(shell.getParent().getX() +
+    // shell.getParent().getPadding().left,
+    // shell.getParent().getX() + shell.getParent().getWidth() -
+    // shell.getParent().getPadding().right,
+    // shell.getParent().getY() + shell.getParent().getPadding().top,
+    // shell.getParent().getY() + shell.getParent().getHeight() -
+    // shell.getParent().getPadding().bottom);
+    // setConfines(shell);
+    // }
 
     private void setConfines(InterfaceBaseItem shell) {
         int[] confines = shell.getParent().getConfines();
@@ -1374,7 +1381,7 @@ final class DrawEngine {
             }
 
             if (outside.size() > 0) {
-                _isStencilSet = shell;
+                // _isStencilSet = shell;
                 // strictStencil(shell);
                 setScissorRectangle(shell);
                 return true;

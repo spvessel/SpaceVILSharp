@@ -2,9 +2,7 @@ package com.spvessel.spacevil.Decorations;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.GraphicsMathService;
-import com.spvessel.spacevil.SelectionItem;
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
@@ -1347,16 +1345,17 @@ public class Style implements Cloneable {
         // style.addItemState(ItemStateType.HOVERED, hovered);
 
         Style marker_style = getIndicatorStyle().getInnerStyle("marker");
-        marker_style.background = new Color(100, 100, 100);
-        marker_style.setSize(16, 16);
+        marker_style.background = new Color(100, 100, 100, 0);
+        marker_style.setSize(20, 20);
         marker_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         marker_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.RIGHT));
         marker_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
-        marker_style.borderRadius = new CornerRadius(5);
-        ItemState toggled = new ItemState();
-        toggled.background = new Color(40, 40, 40, 255);
-        marker_style.addItemState(ItemStateType.TOGGLED, toggled);
-        marker_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 50)));
+        // marker_style.borderRadius = new CornerRadius(5);
+        marker_style.removeItemState(ItemStateType.HOVERED);
+        // ItemState toggled = new ItemState();
+        // toggled.background = new Color(40, 40, 40, 255);
+        // marker_style.addItemState(ItemStateType.TOGGLED, toggled);
+        // marker_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 50)));
         style.addInnerStyle("showmarker", marker_style);
         style.addInnerStyle("textedit", getTextEncryptStyle());
 

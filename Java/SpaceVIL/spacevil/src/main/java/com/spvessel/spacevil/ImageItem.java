@@ -1,9 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.Geometry;
 import com.spvessel.spacevil.Core.InterfaceImageItem;
-import com.spvessel.spacevil.Core.InterfacePosition;
 import com.spvessel.spacevil.Core.RectangleBounds;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 

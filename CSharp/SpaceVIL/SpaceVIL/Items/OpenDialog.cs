@@ -44,8 +44,23 @@ namespace SpaceVIL
             {
                 Close();
             };
+            _titleBar.EventMouseDoubleClick += (sender, args) =>
+            {
+                UpdateWindow();
+            };
+            EventKeyPress += (sender, args) =>
+            {
+                if (args.Key == KeyCode.R && args.Mods == KeyMods.Control)
+                    UpdateWindow();
+                else if (args.Key == KeyCode.Escape)
+                    Close();
+            };
         }
-
+        private void UpdateWindow()
+        {
+            Window.Update(GeometryEventType.ResizeHeight, 0);
+            Window.Update(GeometryEventType.ResizeWidth, 0);
+        }
         public override void Show(WindowLayout handler)
         {
             base.Show(handler);
