@@ -181,8 +181,8 @@ public class ComboBox extends Prototype {
      * Remove item from the ComboBox list
      */
     @Override
-    public void removeItem(InterfaceBaseItem item) {
-        dropDownArea.removeItem(item);
+    public boolean removeItem(InterfaceBaseItem item) {
+        return dropDownArea.removeItem(item);
     }
 
     /**

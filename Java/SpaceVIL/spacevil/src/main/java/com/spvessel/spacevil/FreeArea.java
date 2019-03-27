@@ -98,12 +98,13 @@ public class FreeArea extends Prototype implements InterfaceGrid, InterfaceDragg
      * Remove item from the FreeArea
      */
     @Override
-    public void removeItem(InterfaceBaseItem item) {
-        super.removeItem(item);
+    public boolean removeItem(InterfaceBaseItem item) {
+        boolean b = super.removeItem(item);
         synchronized (this) {
             _stored_crd.remove(item);
         }
         updateLayout();
+        return b;
     }
 
     /**

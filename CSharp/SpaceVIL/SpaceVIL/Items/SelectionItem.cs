@@ -89,10 +89,11 @@ namespace SpaceVIL
             }
         }
 
-        public override void RemoveItem(IBaseItem item)
+        public override bool RemoveItem(IBaseItem item)
         {
             if (_item != null)
-                GetParent().RemoveItem(item);
+                return GetParent().RemoveItem(item);
+            else return false;
         }
 
         public void ClearContent() 

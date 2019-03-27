@@ -772,9 +772,9 @@ namespace SpaceVIL
         /// <summary>
         /// Remove item from the Prototype
         /// </summary>
-        public virtual void RemoveItem(IBaseItem item)
+        public virtual bool RemoveItem(IBaseItem item)
         {
-            _core.RemoveItem(item);
+            return _core.RemoveItem(item);
         }
 
         public virtual void Clear()

@@ -763,8 +763,8 @@ abstract public class Prototype implements InterfaceBaseItem {
     /**
      * Remove item from the Prototype
      */
-    public void removeItem(InterfaceBaseItem item) {
-        _core.removeItem(item);
+    public boolean removeItem(InterfaceBaseItem item) {
+        return _core.removeItem(item);
     }
 
     public void clear() {

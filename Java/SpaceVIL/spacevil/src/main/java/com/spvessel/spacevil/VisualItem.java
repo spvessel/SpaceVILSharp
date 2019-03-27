@@ -460,7 +460,7 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    void removeItem(InterfaceBaseItem item) {
+    boolean removeItem(InterfaceBaseItem item) {
         locker.lock();
         try {
             getHandler().resetItems();
@@ -477,13 +477,15 @@ final class VisualItem extends BaseItem {
             // removing
             castAndRemove(item);
 
-            _content.remove(item);
-            ItemsLayoutBox.removeItem(getHandler(), item, type);
+            boolean contentRemove = _content.remove(item);
+            boolean layoutBoxRemove = ItemsLayoutBox.removeItem(getHandler(), item, type);
             item.setParent(null);
             item.release();
+            return (contentRemove && layoutBoxRemove);
         } catch (Exception ex) {
             System.out.println("Method - RemoveItem: " + ((item == null) ? "item is null" : item.getItemName()));
             ex.printStackTrace();
+            return false;
         } finally {
             locker.unlock();
         }

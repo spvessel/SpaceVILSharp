@@ -149,8 +149,8 @@ public class SideArea extends Prototype implements InterfaceFloating {
     }
 
     @Override
-    public void removeItem(InterfaceBaseItem item) {
-        window.removeItem(item);
+    public boolean removeItem(InterfaceBaseItem item) {
+        return window.removeItem(item);
     }
 
     @Override

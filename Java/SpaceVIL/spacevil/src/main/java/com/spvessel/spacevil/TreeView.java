@@ -30,6 +30,8 @@ public class TreeView extends ListBox {
      * Is root item visible
      */
     public void setRootVisible(boolean visible) {
+        if (_root == null)
+            return;
         _root.setVisible(visible);
         getWrapper(_root).setVisible(visible);
         // reset all paddings for content
@@ -46,15 +48,31 @@ public class TreeView extends ListBox {
     }
 
     public boolean isRootVisible() {
+        if (_root == null)
+            return false;
         return _root.isVisible();
     }
 
     public void setRootText(String text) {
+        if (_root == null)
+            return;
         _root.setText(text);
     }
 
     public String getRootText() {
+        if (_root == null)
+            return "";
         return _root.getText();
+    }
+
+    public TreeItem getRootItem() {
+        return _root;
+    }
+
+    public void setRootItem(TreeItem rootTreeItem) {
+        if (_root != null)
+            removeItem(_root);
+        addItem(rootTreeItem);
     }
 
     private static int count = 0;
@@ -121,6 +139,8 @@ public class TreeView extends ListBox {
     }
 
     private void onSortTree() {
+        if (_root == null)
+            return;
         // sorting
         List<TreeItem> outList = new LinkedList<>();
         outList.add(_root);
@@ -177,7 +197,13 @@ public class TreeView extends ListBox {
         if (_root == null) {
             if (item instanceof TreeItem) {
                 _root = (TreeItem) item;
+                _root._treeViewContainer = this;
+                _root.isRoot = true;
+                _root.getIndicator().setToggled(true);
                 super.addItem(_root);
+                setRootVisible(false);
+
+                _maxWrapperWidth = getWrapper(_root).getMinWidth();
             }
             // exception: ///////
         } else
@@ -206,10 +232,12 @@ public class TreeView extends ListBox {
     }
 
     @Override
-    public void removeItem(InterfaceBaseItem item) {
-        if (item.equals(_root))
+    public boolean removeItem(InterfaceBaseItem item) {
+        if (item.equals(_root)) {
+            _root.removeChildren();
             _root = null;
-        super.removeItem(item);
+        }
+        return super.removeItem(item);
     }
 
     public void sortTree() {

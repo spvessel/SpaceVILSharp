@@ -173,9 +173,9 @@ namespace SpaceVIL
         /// <summary>
         /// Remove item from the ComboBox list
         /// </summary>
-        public override void RemoveItem(IBaseItem item)
+        public override bool RemoveItem(IBaseItem item)
         {
-            DropDownArea.RemoveItem(item);
+            return DropDownArea.RemoveItem(item);
         }
 
         /// <summary>

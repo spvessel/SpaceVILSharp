@@ -22,6 +22,8 @@ namespace SpaceVIL
 
         public void SetRootVisible(bool value)
         {
+            if (_root == null)
+                return;
             _root.SetVisible(value);
             GetWrapper(_root).SetVisible(value);
             //reset all paddings for content
@@ -39,15 +41,33 @@ namespace SpaceVIL
         }
         public bool IsRootVisible()
         {
+            if (_root == null)
+                return false;
             return _root.IsVisible();
         }
         public void SetRootText(String text)
         {
+            if (_root == null)
+                return;
             _root.SetText(text);
         }
         public String GetRootText()
         {
+            if (_root == null)
+                return "";
             return _root.GetText();
+        }
+
+        public TreeItem GetRootItem()
+        {
+            return _root;
+        }
+
+        public void SetRootItem(TreeItem rootTreeItem)
+        {
+            if (_root != null)
+                RemoveItem(_root);
+            AddItem(rootTreeItem);
         }
 
         private static int count = 0;
@@ -112,6 +132,8 @@ namespace SpaceVIL
 
         void OnSortTree()
         {
+            if (_root == null)
+                return;
             //sorting
             List<TreeItem> outList = new List<TreeItem>();
             outList.Add(_root);
@@ -159,7 +181,13 @@ namespace SpaceVIL
                 if (tmp != null)
                 {
                     _root = tmp;
+                    _root._treeViewContainer = this;
+                    _root.IsRoot = true;
+                    _root.GetIndicator().SetToggled(true);
                     base.AddItem(_root);
+                    SetRootVisible(false);
+                    
+                    _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
                 }
                 //exception: ///////
             }
@@ -184,11 +212,14 @@ namespace SpaceVIL
             _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
 
         }
-        public override void RemoveItem(IBaseItem item)
+        public override bool RemoveItem(IBaseItem item)
         {
             if (item.Equals(_root))
+            {
+                _root.RemoveChildren();
                 _root = null;
-            base.RemoveItem(item);
+            }
+            return base.RemoveItem(item);
         }
 
         public void SortTree()

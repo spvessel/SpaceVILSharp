@@ -145,9 +145,9 @@ namespace SpaceVIL
             Window.InsertItem(item, index);
         }
 
-        public override void RemoveItem(IBaseItem item)
+        public override bool RemoveItem(IBaseItem item)
         {
-            Window.RemoveItem(item);
+            return Window.RemoveItem(item);
         }
 
         public override void SetWidth(int width)

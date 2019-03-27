@@ -265,7 +265,7 @@ namespace SpaceVIL
             }
         }
 
-        internal virtual void RemoveItem(IBaseItem item)
+        internal virtual bool RemoveItem(IBaseItem item)
         {
             Monitor.Enter(Locker);
             try
@@ -285,16 +285,18 @@ namespace SpaceVIL
                 }
 
                 //removing
-                _content.Remove(item);
-                ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
+                bool contentRemove = _content.Remove(item);
+                bool layoutBoxRemove = ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
                 CastAndRemove(item);
                 item.Release();
                 item.SetParent(null);
+                return (contentRemove && layoutBoxRemove);
             }
             catch (Exception ex)
             {
                 Console.WriteLine((item == null) ? "item is null" : item.GetItemName() + "\n" + ex.ToString());
                 Console.WriteLine(ex.StackTrace);
+                return false;
             }
             finally
             {

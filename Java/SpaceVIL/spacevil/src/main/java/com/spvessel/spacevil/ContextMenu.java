@@ -136,8 +136,8 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      * Remove item from the ContextMenu
      */
     @Override
-    public void removeItem(InterfaceBaseItem item) {
-        itemList.removeItem(item);
+    public boolean removeItem(InterfaceBaseItem item) {
+        return itemList.removeItem(item);
     }
 
     boolean closeDependencies(MouseArgs args) {

@@ -268,21 +268,23 @@ public class WrapArea extends Prototype implements InterfaceGrid {
      * Remove item from the ListArea
      */
     @Override
-    public void removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(InterfaceBaseItem item) {
         unselect();
+        boolean b;
         if (item instanceof SelectionItem) {
             SelectionItem tmp = (SelectionItem) item;
             _mapContent.remove(tmp.getContent());
             tmp.clearContent();
-            super.removeItem(tmp);
+            b = super.removeItem(tmp);
         } else {
             SelectionItem tmp = _mapContent.get(item);
             _mapContent.remove(item);
             tmp.clearContent();
-            super.removeItem(tmp);
+            b = super.removeItem(tmp);
         }
         updateLayout();
         itemListChanged.execute();
+        return b;
     }
 
     @Override

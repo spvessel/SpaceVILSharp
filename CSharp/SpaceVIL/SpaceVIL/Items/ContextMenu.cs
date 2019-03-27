@@ -137,9 +137,9 @@ namespace SpaceVIL
         /// <summary>
         /// Remove item from the ContextMenu
         /// </summary>
-        public override void RemoveItem(IBaseItem item)
+        public override bool RemoveItem(IBaseItem item)
         {
-            ItemList.RemoveItem(item);
+            return ItemList.RemoveItem(item);
         }
 
         void UpdateSize()

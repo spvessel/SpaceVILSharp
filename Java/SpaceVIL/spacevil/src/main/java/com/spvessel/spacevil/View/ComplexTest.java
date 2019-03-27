@@ -78,8 +78,12 @@ public class ComplexTest extends ActiveWindow {
         });
         ButtonCore b4 = getButton("b4", 26, 30, SizePolicy.FIXED);
         b4.eventMouseClick.add((sender, args) -> {
-            TreeItem ti = (TreeItem) treeview.getSelectedItem();
-            treeview.sortBrunch(ti);
+//            TreeItem ti = (TreeItem) treeview.getSelectedItem();
+//            treeview.sortBrunch(ti);
+            TreeItem ti = treeview.getRootItem();
+            treeview.removeItem(ti);
+            TreeItem ti1 = new TreeItem(TreeItemType.BRANCH, "newRoot");
+            treeview.addItem(ti1);
         });
         ButtonCore b5 = getButton("b5", 26, 30, SizePolicy.FIXED);
         b5.eventMouseClick.add((sender, args) -> {

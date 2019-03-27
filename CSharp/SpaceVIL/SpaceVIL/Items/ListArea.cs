@@ -243,27 +243,28 @@ namespace SpaceVIL
         /// <summary>
         /// Remove item from the ListArea
         /// </summary>
-        public override void RemoveItem(IBaseItem item)
+        public override bool RemoveItem(IBaseItem item)
         {
             Unselect();
-
+            bool b;
             SelectionItem tmp = item as SelectionItem;
             if (tmp != null)
             {
                 _mapContent.Remove(tmp.GetContent());
                 tmp.ClearContent();
-                base.RemoveItem(tmp);
+                b = base.RemoveItem(tmp);
             }
             else
             {
                 tmp = _mapContent[item];
                 _mapContent.Remove(item);
                 tmp.ClearContent();
-                base.RemoveItem(tmp);
+                b = base.RemoveItem(tmp);
             }
 
             UpdateLayout();
             ItemListChanged?.Invoke();
+            return b;
         }
 
         public override void Clear()

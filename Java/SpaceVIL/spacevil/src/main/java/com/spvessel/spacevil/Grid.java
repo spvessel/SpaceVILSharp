@@ -138,13 +138,15 @@ public class Grid extends Prototype implements InterfaceGrid {
      * Remove the item from the Grid by the link
      */
     @Override
-    public void removeItem(InterfaceBaseItem item) {
-        super.removeItem(item);
+    public boolean removeItem(InterfaceBaseItem item) {
+        boolean superBool = super.removeItem(item);
         for (Cell link : _cells) {
-            if (link.getItem() == item)
+            if (link.getItem() == item) {
                 link.setItem(null);
+            }
         }
         // UpdateLayout();
+        return superBool; //Предполагается, что в super и cells добавляется одновременно
     }
 
     /**

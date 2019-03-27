@@ -106,12 +106,13 @@ namespace SpaceVIL
         /// <summary>
         /// Remove item from the FreeArea
         /// </summary>
-        public override void RemoveItem(IBaseItem item)
+        public override bool RemoveItem(IBaseItem item)
         {
             // Console.WriteLine("flow remove");
-            base.RemoveItem(item);
+            bool b = base.RemoveItem(item);
             _stored_crd.Remove(item);
             UpdateLayout();
+            return b;
         }
 
         /// <summary>

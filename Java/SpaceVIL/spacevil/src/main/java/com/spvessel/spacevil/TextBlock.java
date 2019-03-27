@@ -903,14 +903,14 @@ class TextBlock extends Prototype
     }
 
     @Override
-    public void removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(InterfaceBaseItem item) {
         if (item.equals(_cursor)) {
             while (super.getItems().size() > 0) {
                 super.removeItem(super.getItems().get(0));
             }
-            return;
+            return true;
         }
-        super.removeItem(item);
+        return super.removeItem(item);
     }
 
     private ArrayDeque<TextBlockState> undoQueue;

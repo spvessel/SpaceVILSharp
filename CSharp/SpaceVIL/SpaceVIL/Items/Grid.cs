@@ -135,15 +135,16 @@ namespace SpaceVIL
             return _cells;
         }
 
-        public override void RemoveItem(IBaseItem item)
+        public override bool RemoveItem(IBaseItem item)
         {
-            base.RemoveItem(item);
+            bool baseBool = base.RemoveItem(item);
             foreach (var link in _cells)
             {
                 if (link.GetItem() == item)
                     link.SetItem(null);
             }
             // UpdateLayout();
+            return baseBool;
         }
 
         public void RemoveItem(int row, int column)

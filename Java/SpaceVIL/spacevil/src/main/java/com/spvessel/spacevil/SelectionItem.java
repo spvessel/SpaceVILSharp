@@ -81,9 +81,10 @@ public class SelectionItem extends Prototype {
     }
 
     @Override
-    public void removeItem(InterfaceBaseItem item) {
+    public boolean removeItem(InterfaceBaseItem item) {
         if (_item != null)
-            getParent().removeItem(item);
+            return getParent().removeItem(item);
+        else return false;
     }
 
     public void clearContent() {

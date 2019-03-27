@@ -412,17 +412,17 @@ namespace SpaceVIL
         /// <summary>
         /// Remove item from the ListBox
         /// </summary>
-        public override void RemoveItem(IBaseItem item)
+        public override bool RemoveItem(IBaseItem item)
         {
             List<IBaseItem> list = new List<IBaseItem>(GetItems());
             if (list.Contains(item))
             {
-                base.RemoveItem(item);
-                return;
+                return base.RemoveItem(item);                
             }
-            _area.RemoveItem(item);
+            bool b = _area.RemoveItem(item);
             UpdateElements();
             _area.SetFocus();
+            return b;
         }
         public override void Clear()
         {

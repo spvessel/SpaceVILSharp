@@ -876,7 +876,7 @@ namespace SpaceVIL
             return new List<IBaseItem>() { list[0], list[1], list[2] };
         }
 
-        public override void RemoveItem(IBaseItem item)
+        public override bool RemoveItem(IBaseItem item)
         {
             if (item.Equals(_cursor))
             {
@@ -884,9 +884,9 @@ namespace SpaceVIL
                 {
                     base.RemoveItem(base.GetItems().First());
                 }
-                return;
+                return true;
             }
-            base.RemoveItem(item);
+            return base.RemoveItem(item);
         }
 
         private LinkedList<TextBlockState> undoQueue;

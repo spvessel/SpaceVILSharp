@@ -50,19 +50,19 @@ namespace SpaceVIL
                     break;
             }
         }
-        static internal void RemoveItem(WindowLayout layout, IBaseItem item, LayoutType type)
+        static internal bool RemoveItem(WindowLayout layout, IBaseItem item, LayoutType type)
         {
             switch (type)
             {
                 case LayoutType.Static:
-                    layouts[layout.Id].Items.Remove(item);
-                    break;
+                    return layouts[layout.Id].Items.Remove(item);
+                    // break;
                 case LayoutType.Floating:
-                    layouts[layout.Id].FloatItems.Remove(item);
-                    break;
+                    return layouts[layout.Id].FloatItems.Remove(item);
+                    // break;
                 default:
-                    layouts[layout.Id].Items.Remove(item);
-                    break;
+                    return layouts[layout.Id].Items.Remove(item);
+                    // break;
             }
         }
 

@@ -48,17 +48,17 @@ public class ItemsLayoutBox {
         }
     }
 
-    static void removeItem(WindowLayout layout, InterfaceBaseItem item, LayoutType type) {
+    static boolean removeItem(WindowLayout layout, InterfaceBaseItem item, LayoutType type) {
         switch (type) {
         case STATIC:
-            layouts.get(layout.getId()).getItems().remove(item);
-            break;
+            return layouts.get(layout.getId()).getItems().remove(item);
+//            break;
         case FLOATING:
-            layouts.get(layout.getId()).getFloatItems().remove(item);
-            break;
+            return layouts.get(layout.getId()).getFloatItems().remove(item);
+//            break;
         default:
-            layouts.get(layout.getId()).getItems().remove(item);
-            break;
+            return layouts.get(layout.getId()).getItems().remove(item);
+//            break;
         }
     }
 
