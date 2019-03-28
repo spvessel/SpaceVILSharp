@@ -523,6 +523,12 @@ namespace SpaceVIL
             Close();
         }
 
+        public override void Show(WindowLayout handler)
+        {
+            base.Show(handler);
+            _fileList.GetArea().SetFocus();
+        }
+
         public override void SetStyle(Style style)
         {
             if (style == null)
