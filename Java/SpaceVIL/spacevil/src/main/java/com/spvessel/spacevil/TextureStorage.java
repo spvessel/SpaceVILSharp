@@ -571,7 +571,8 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         return outPoint;
     }
 
-    List<Point> selectedArrays(Point fromPt, Point toPt, int cursorHeight) {
+    List<Point> selectedArrays(Point fromPt, Point toPt) {
+        int cursorHeight = getCursorHeight();
         List<Point> selectionRectangles = new LinkedList<>();
 
         int xAdder = getParent().getX() + getParent().getPadding().left + getTextMargin().left;

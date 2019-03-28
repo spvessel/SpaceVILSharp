@@ -606,7 +606,7 @@ class TextBlock extends Prototype
         fromReal = listPt.get(0);
         toReal = listPt.get(1);
 
-        selectionRectangles = _textureStorage.selectedArrays(fromReal, toReal, _cursor.getHeight());
+        selectionRectangles = _textureStorage.selectedArrays(fromReal, toReal);
 
 //        Point tmp = new Point();
 //        Point tmp0 = new Point();
@@ -1068,5 +1068,10 @@ class TextBlock extends Prototype
             // fromSelectState = new Point(0, 0);
             // toSelectState = new Point(0, 0);
         }
+    }
+
+    void rewindText() {
+        _cursor_position = new Point(0,0);
+        replaceCursor();
     }
 }

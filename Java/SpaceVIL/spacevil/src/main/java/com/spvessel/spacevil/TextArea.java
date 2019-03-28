@@ -399,6 +399,30 @@ public class TextArea extends Prototype {
         _area.setFont(font);
     }
 
+    public void setFontSize(int size) {
+        Font oldFont = getFont();
+        if (oldFont.getSize() != size) {
+            Font newFont = new Font(oldFont.getFamily(), oldFont.getStyle(), size);
+            setFont(newFont);
+        }
+    }
+
+    public void setFontStyle(int style) {
+        Font oldFont = getFont();
+        if (oldFont.getStyle() != style) {
+            Font newFont = new Font(oldFont.getFamily(), style, oldFont.getSize());
+            setFont(newFont);
+        }
+    }
+
+    public void setFontFamily(String font_family) {
+        Font oldFont = getFont();
+        if (!oldFont.getFamily().equals(font_family)) {
+            Font newFont = new Font(font_family, oldFont.getStyle(), oldFont.getSize());
+            setFont(newFont);
+        }
+    }
+
     public Font getFont() {
         return _area.getFont();
     }
@@ -483,5 +507,12 @@ public class TextArea extends Prototype {
 
     public void pasteText(String text) {
         _area.pasteText(text);
+    }
+
+    /**
+     * Move cursor to the text beginning
+     */
+    public void rewindText() {
+        _area.rewindText();
     }
 }
