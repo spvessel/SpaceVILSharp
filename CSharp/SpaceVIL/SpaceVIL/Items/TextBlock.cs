@@ -611,7 +611,7 @@ namespace SpaceVIL
             fromReal = listPt[0];
             toReal = listPt[1];
 
-            selectionRectangles = _textureStorage.SelectedArrays(fromReal, toReal, _cursor.GetHeight());
+            selectionRectangles = _textureStorage.SelectedArrays(fromReal, toReal);
 
             /*
             Point tmp = new Point();
@@ -867,6 +867,8 @@ namespace SpaceVIL
             if (inner_style != null)
             {
                 _cursor.SetStyle(inner_style);
+                if (_cursor.GetHeight() == 0)
+                    _cursor.SetHeight(_textureStorage.GetCursorHeight());
             }
         }
 

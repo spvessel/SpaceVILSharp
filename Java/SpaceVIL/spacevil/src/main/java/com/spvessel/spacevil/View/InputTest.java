@@ -5,6 +5,7 @@ import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.TextArea;
+import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.*;
 
 import java.awt.*;
@@ -71,6 +72,7 @@ public class InputTest extends ActiveWindow {
         layout.addItem(password);
         layout.addItem(te);
         layout.addItem(tb);
+        tb.setStyle(Style.getTextAreaStyle());
 
         ButtonCore bc = new ButtonCore("pizdec");
         bc.setSize(150, 30);

@@ -1355,7 +1355,8 @@ public class Style implements Cloneable {
         // ItemState toggled = new ItemState();
         // toggled.background = new Color(40, 40, 40, 255);
         // marker_style.addItemState(ItemStateType.TOGGLED, toggled);
-        // marker_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 50)));
+        // marker_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255,
+        // 255, 255, 50)));
         style.addInnerStyle("showmarker", marker_style);
         style.addInnerStyle("textedit", getTextEncryptStyle());
 
@@ -1446,8 +1447,8 @@ public class Style implements Cloneable {
      */
     public static Style getTextBlockStyle() {
         Style style = new Style();
-        style.background = new Color(210, 210, 210, 0);
-        style.foreground = new Color(25, 25, 25);
+        style.background = new Color(210, 210, 210);
+        style.foreground = new Color(70, 70, 70);
         style.font = DefaultsService.getDefaultFont(16);
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
@@ -1474,10 +1475,10 @@ public class Style implements Cloneable {
 
         Style selection_style = new Style();
         selection_style.background = new Color(111, 181, 255);
+        // selection_style.background = new Color(255, 181, 255);
         selection_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        // selection_style.alignment = new
-        // LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.VCENTER,
-        // ItemAlignment.LEFT));
+        selection_style.alignment = new LinkedList<ItemAlignment>(
+                Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         style.addInnerStyle("selection", selection_style);
 
         return style;
@@ -1488,7 +1489,7 @@ public class Style implements Cloneable {
      */
     public static Style getTextAreaStyle() {
         Style style = new Style();
-        style.background = new Color(210, 210, 210);
+        style.background = new Color(210, 210, 210, 0);
         style.foreground = new Color(25, 25, 25);
         style.font = DefaultsService.getDefaultFont(16);
         style.widthPolicy = SizePolicy.EXPAND;

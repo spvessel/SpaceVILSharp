@@ -69,9 +69,9 @@ public class MessageItem extends DialogItem {
 
         eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.ESCAPE)
-            close();
+                close();
         });
-        
+
         setStyle(DefaultsService.getDefaultStyle(MessageItem.class));
     }
 
@@ -137,6 +137,11 @@ public class MessageItem extends DialogItem {
         window.setMinWidth(w_global);
         if (window.getWidth() < w_global)
             window.setWidth(w_global);
+        int w_text = _msg.getTextWidth() + _msg_layout.getMargin().left + _msg_layout.getMargin().right
+                + _msg_layout.getPadding().left + _msg_layout.getPadding().right + _msg.getMargin().left
+                + _msg.getMargin().right + _msg.getPadding().left + _msg.getPadding().right + 10;
+        if (window.getWidth() < w_text)
+            window.setWidth(w_text);
         window.addItems(_titleBar, _msg_layout);
         window.update(GeometryEventType.RESIZE_WIDTH, 0);
 

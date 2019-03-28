@@ -12,7 +12,7 @@ import java.awt.*;
 public class TextArea extends Prototype {
     private static int count = 0;
     private Grid _grid = new Grid(2, 2);
-    private TextBlock _area = new TextBlock();
+    private TextBlock _area;// = new TextBlock();
 
     public BlankItem menu = new BlankItem();
     private boolean _is_menu_disabled = false;
@@ -95,6 +95,7 @@ public class TextArea extends Prototype {
     public TextArea() {
         setItemName("TextArea_" + count);
         count++;
+        _area = new TextBlock();
         setStyle(DefaultsService.getDefaultStyle(TextArea.class));
 
         // VBar

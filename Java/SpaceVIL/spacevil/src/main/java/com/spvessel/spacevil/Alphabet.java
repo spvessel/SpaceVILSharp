@@ -67,7 +67,8 @@ class Alphabet {
         alphMinY = (alphMinY > letter.minY) ? letter.minY : alphMinY;
         alphMaxY = (alphMaxY < letter.minY + letter.height - 1) ? letter.minY + letter.height - 1 : alphMaxY;
         alphHeight = Math.abs(alphMaxY - alphMinY + 1);
-        //if (font.getSize() == 18 && (alphMaxY == (letter.minY + letter.height - 1))) System.out.println(letter.name + " " + alphMaxY);
+        // if (font.getSize() == 18 && (alphMaxY == (letter.minY + letter.height - 1)))
+        // System.out.println(letter.name + " " + alphMaxY);
     }
 
     List<ModifyLetter> makeTextNew(String text) {
@@ -92,7 +93,8 @@ class Alphabet {
             currLet = letters.get(c);
 
             if (currLet.isSpec) {
-                if (prevLet != null) x0 = updateSpecX0(currLet, x0);
+                if (prevLet != null)
+                    x0 = updateSpecX0(currLet, x0);
             } else {
                 if (prevLet != null) {
                     // int ly0 = prevLet.minY;
@@ -102,34 +104,40 @@ class Alphabet {
 
                     // boolean b1 = false, b2 = false;
                     // for (int i = Math.max(ly0, ry0); i < Math.min(ly1, ry1); i++) {
-                    //     // if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[0, i -
-                    //     // ry0] > err)
-                    //     if (prevLet.rightArr[1][i - ly0] > err && currLet.leftArr[0][i - ry0] > err) {
-                    //         b1 = true;
-                    //         break;
-                    //     }
+                    // // if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[0,
+                    // i -
+                    // // ry0] > err)
+                    // if (prevLet.rightArr[1][i - ly0] > err && currLet.leftArr[0][i - ry0] > err)
+                    // {
+                    // b1 = true;
+                    // break;
+                    // }
                     // }
 
                     // if (b1)
-                    //     x0++;
+                    // x0++;
                     // else {
-                    //     for (int i = Math.max(ly0, ry0); i < Math.min(ly1, ry1); i++) {
-                    //         // if (prevLet.alphas[prevLet.width - 2, i - ly0] > err && currLet.alphas[0, i -
-                    //         // ry0] > err)
-                    //         if (prevLet.rightArr[0][i - ly0] > err && currLet.leftArr[0][i - ry0] > err) {
-                    //             b2 = true;
-                    //             break;
-                    //         }
-                    //         // if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[1, i -
-                    //         // ry0] > err)
-                    //         if (prevLet.rightArr[1][i - ly0] > err && currLet.leftArr[1][i - ry0] > err) {
-                    //             b2 = true;
-                    //             break;
-                    //         }
-                    //     }
+                    // for (int i = Math.max(ly0, ry0); i < Math.min(ly1, ry1); i++) {
+                    // // if (prevLet.alphas[prevLet.width - 2, i - ly0] > err && currLet.alphas[0,
+                    // i -
+                    // // ry0] > err)
+                    // if (prevLet.rightArr[0][i - ly0] > err && currLet.leftArr[0][i - ry0] > err)
+                    // {
+                    // b2 = true;
+                    // break;
+                    // }
+                    // // if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[1,
+                    // i -
+                    // // ry0] > err)
+                    // if (prevLet.rightArr[1][i - ly0] > err && currLet.leftArr[1][i - ry0] > err)
+                    // {
+                    // b2 = true;
+                    // break;
+                    // }
+                    // }
 
-                    //     //if (!b2)
-                    //     //    x0--;
+                    // //if (!b2)
+                    // // x0--;
                     // }
                     x0++;
                 }
@@ -185,27 +193,33 @@ class Alphabet {
         // Shape outline = layout.getOutline(transform);
         // shape.append(outline, true);
         // try {
-        //     return new Letter(let, shape);
+        // return new Letter(let, shape);
         // } catch (Exception e) {
-        //     System.out.println("Bug letter exception");
-        //     return bugLetter;
+        // System.out.println("Bug letter exception");
+        // return bugLetter;
         // }
 
-        //Font font = DefaultsService.getDefaultFont(Font.BOLD, 30);
-        //String message = "Make a Chance!";
+        // Font font = DefaultsService.getDefaultFont(Font.BOLD, 30);
+        // String message = "Make a Chance!";
 
-        BufferedImage bi = new BufferedImage(font.getSize() * 2, font.getSize()*2, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bi = new BufferedImage(font.getSize() * 2, font.getSize() * 2, BufferedImage.TYPE_INT_ARGB);
         Graphics2D ig2 = bi.createGraphics();
-        RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
-                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        ig2.setRenderingHints(rh);
+        ig2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        ig2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        ig2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+
+        // Map<?, ?> desktopHints = (Map<?, ?>) Toolkit.getDefaultToolkit().getDesktopProperty("awt.font.desktophints");
+        // if (desktopHints != null) {
+        //     ig2.setRenderingHints(desktopHints);
+        // }
+
         ig2.setFont(font);
         FontMetrics metrics = ig2.getFontMetrics();
-        //int stringWidth = metrics.stringWidth(let);
+        // int stringWidth = metrics.stringWidth(let);
         int stringHeight = metrics.getAscent();
         ig2.setPaint(Color.white);
         ig2.drawString(let, 0, stringHeight);
-        
+
         try {
             return new Letter(let, bi);
         } catch (Exception e) {
@@ -242,8 +256,8 @@ class Alphabet {
         bugLetter.minY = (int) (font.getSize() / 3f);// minY;
         bugLetter.isSpec = false;
         float[][] arr = new float[bugLetter.width][bugLetter.height];
-        //List<Float> col = new LinkedList<>();
-        //List<Float> pix = new LinkedList<>();
+        // List<Float> col = new LinkedList<>();
+        // List<Float> pix = new LinkedList<>();
         for (int i = 0; i < bugLetter.width; i++) {
             arr[i][0] = 1;
             // col.add(1f);
@@ -273,11 +287,11 @@ class Alphabet {
         // bugLetter.alphas = arr;
         // bugLetter.col.addAll(col);
         // for (Float var : col) {
-        //     bugLetter.col.add(var);
+        // bugLetter.col.add(var);
         // }
         // // bugLetter.pix.addAll(pix);
         // for (Float var : pix) {
-        //     bugLetter.pix.add(var);
+        // bugLetter.pix.add(var);
         // }
 
         bugLetter.twoDimToOne(arr);
@@ -293,14 +307,14 @@ class Alphabet {
         boolean isSpec = false;
         float[][] leftArr;
         float[][] rightArr;
-        //List<Float> col;
-        //List<Float> pix;
+        // List<Float> col;
+        // List<Float> pix;
         byte[] arr;
 
         Letter(String name, Shape shape) {// GraphicsPath shape) {
             // System.out.println("make letter " + name);
-            //col = new LinkedList<>();
-            //pix = new LinkedList<>();
+            // col = new LinkedList<>();
+            // pix = new LinkedList<>();
 
             this.name = name;
             if (shape != null)
@@ -326,11 +340,11 @@ class Alphabet {
             int i = 0;
             for (int xx = 0; xx < width; xx++) {
                 for (int yy = 0; yy < height; yy++) {
-                    arr[i] = (byte)255;
+                    arr[i] = (byte) 255;
                     i++;
-                    arr[i] = (byte)255;
+                    arr[i] = (byte) 255;
                     i++;
-                    arr[i] = (byte)255;
+                    arr[i] = (byte) 255;
                     i++;
                     arr[i] = (byte) (twoDim[xx][yy] * 255);
                     i++;
@@ -355,7 +369,7 @@ class Alphabet {
 
             minX = x0;
             minY = y0;
-            //maxY = y1;
+            // maxY = y1;
 
             int boolInd;
 
@@ -469,30 +483,25 @@ class Alphabet {
             int i = 0;
             for (int xx = x0shift; xx <= x1shift; xx++) {
                 for (int yy = y0shift; yy <= y1shift; yy++) {
-                    arr[i] = (byte)255;
+                    arr[i] = (byte) 255;
                     i++;
-                    arr[i] = (byte)255;
+                    arr[i] = (byte) 255;
                     i++;
-                    arr[i] = (byte)255;
+                    arr[i] = (byte) 255;
                     i++;
                     arr[i] = (byte) (alph[xx][yy] * 255);
                     i++;
                 }
             }
             /*
-            for (int xx = x0shift; xx <= x1shift; xx++) {
-                for (int yy = y0shift; yy <= y1shift; yy++) {
-
-                    if (alph[xx][yy] != 0) {
-                        col.add((float) alph[xx][yy]);
-                        pix.add((float) xx - x0shift);
-                        pix.add((float) yy - y0shift);
-                        pix.add(0f);
-                    }
-
-                }
-            }
-            */
+             * for (int xx = x0shift; xx <= x1shift; xx++) { for (int yy = y0shift; yy <=
+             * y1shift; yy++) {
+             * 
+             * if (alph[xx][yy] != 0) { col.add((float) alph[xx][yy]); pix.add((float) xx -
+             * x0shift); pix.add((float) yy - y0shift); pix.add(0f); }
+             * 
+             * } }
+             */
             leftArr = new float[2][height];
             rightArr = new float[2][height];
             for (int yy = y0shift; yy <= y1shift; yy++) {
@@ -560,13 +569,13 @@ class Alphabet {
          * } }
          */
 
-         private void bitmapToArray(BufferedImage bi) {
+        private void bitmapToArray(BufferedImage bi) {
             int x0shift = 0;
             boolean isBraked = false;
             byte[] bytes;
             while (x0shift < bi.getWidth()) {
                 for (int i = 0; i < bi.getHeight(); i++) {
-                    bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(x0shift, i)).array();                
+                    bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(x0shift, i)).array();
                     if (bytes[0] != 0) {
                         isBraked = true;
                         break;
@@ -621,7 +630,7 @@ class Alphabet {
 
             this.height = y1shift - y0shift + 1;
             this.width = x1shift - x0shift + 1;
-            //System.out.println(name + " height " + y1shift + " " + y0shift);
+            // System.out.println(name + " height " + y1shift + " " + y0shift);
             // --------------------------------------------------------------------------------------
 
             arr = new byte[(this.width * this.height) * 4];
@@ -629,13 +638,13 @@ class Alphabet {
             for (int xx = x0shift; xx <= x1shift; xx++) {
                 for (int yy = y0shift; yy <= y1shift; yy++) {
                     bytes = ByteBuffer.allocate(4).putInt(bi.getRGB(xx, yy)).array();
-                    arr[i] = bytes[1]; //(byte) 255;
+                    arr[i] = bytes[1]; // (byte) 255;
                     i++;
-                    arr[i] = bytes[2]; //(byte) 255;
+                    arr[i] = bytes[2]; // (byte) 255;
                     i++;
-                    arr[i] = bytes[3]; //(byte) 255;
+                    arr[i] = bytes[3]; // (byte) 255;
                     i++;
-                    arr[i] = bytes[0]; //(byte) (alph[xx][yy] * 255);
+                    arr[i] = bytes[0]; // (byte) (alph[xx][yy] * 255);
                     i++;
                 }
             }
@@ -659,7 +668,7 @@ class Alphabet {
                 rightArr[1][yy - y0shift] = (float) (bytes[0] * 1f / 255f);
 
             }
-         }
+        }
     }
 
     class ModifyLetter {
@@ -682,15 +691,12 @@ class Alphabet {
             isSpec = let.isSpec;
             _letter = let;
         }
-        /*
-        public List<Float> getCol() {
-            return _letter.col;
-        }
 
-        public List<Float> getPix() {
-            return _letter.pix;
-        }
-        */
+        /*
+         * public List<Float> getCol() { return _letter.col; }
+         * 
+         * public List<Float> getPix() { return _letter.pix; }
+         */
         byte[] getArr() {
             return _letter.arr;
         }

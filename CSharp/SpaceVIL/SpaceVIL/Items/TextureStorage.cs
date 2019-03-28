@@ -621,8 +621,9 @@ namespace SpaceVIL
             return outPoint;
         }
 
-        internal List<Point> SelectedArrays(Point fromPt, Point toPt, int cursorHeight)
+        internal List<Point> SelectedArrays(Point fromPt, Point toPt)
         {
+            int cursorHeight = GetCursorHeight();
             List<Point> selectionRectangles = new List<Point>();
 
             int xAdder = GetParent().GetX() + GetParent().GetPadding().Left + GetTextMargin().Left;

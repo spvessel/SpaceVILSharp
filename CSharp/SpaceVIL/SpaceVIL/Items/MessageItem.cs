@@ -75,7 +75,7 @@ namespace SpaceVIL
                 if (args.Key == KeyCode.Escape)
                     Close();
             };
-            
+
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MessageItem)));
         }
 
@@ -147,6 +147,11 @@ namespace SpaceVIL
             Window.SetMinWidth(w_global);
             if (Window.GetWidth() < w_global)
                 Window.SetWidth(w_global);
+            int w_text = _msg.GetTextWidth() + _msg_layout.GetMargin().Left + _msg_layout.GetMargin().Right
+            + _msg_layout.GetPadding().Left + _msg_layout.GetPadding().Right + _msg.GetMargin().Left
+            + _msg.GetMargin().Right + _msg.GetPadding().Left + _msg.GetPadding().Right + 10;
+            if (Window.GetWidth() < w_text)
+                Window.SetWidth(w_text);
             Window.AddItems(_titleBar, _msg_layout);
             Window.Update(GeometryEventType.ResizeWidth, 0);
 

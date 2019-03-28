@@ -606,7 +606,7 @@ class TextBlock extends Prototype
         fromReal = listPt.get(0);
         toReal = listPt.get(1);
 
-        selectionRectangles = _textureStorage.selectedArrays(fromReal, toReal, _cursor.getHeight());
+        selectionRectangles = _textureStorage.selectedArrays(fromReal, toReal);
 
 //        Point tmp = new Point();
 //        Point tmp0 = new Point();
@@ -893,6 +893,8 @@ class TextBlock extends Prototype
         inner_style = style.getInnerStyle("cursor");
         if (inner_style != null) {
             _cursor.setStyle(inner_style);
+            if (_cursor.getHeight() == 0)
+                _cursor.setHeight(_textureStorage.getCursorHeight());
         }
     }
 
