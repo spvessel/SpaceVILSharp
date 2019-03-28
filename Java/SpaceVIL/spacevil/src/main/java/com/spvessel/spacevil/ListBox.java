@@ -164,10 +164,10 @@ public class ListBox extends Prototype {
         menu.setItemName(getItemName() + "_menu");
 
         eventMouseClick.add((sender, args) -> {
+            // зачем нужен этот if???
             if (_area.getSelection() >= 0)
                 _area.setSelection(_area.getSelection());
-            else
-                _area.setFocus();
+            _area.setFocus();
         });
         eventKeyPress.add(this::onKeyPress);
     }
@@ -202,7 +202,9 @@ public class ListBox extends Prototype {
             break;
         case DOWN:
             if (isOutsideArea(selection_Y, selection.getHeight(), selection.getMargin())) {
-                _area.setVScrollOffset(offset - (startY - selection_Y));
+                // _area.setVScrollOffset(offset - (startY - selection_Y));
+                _area.setVScrollOffset(
+                        offset + selection.getHeight() + (selection.getY() - (_area.getY() + _area.getHeight())));
                 updateVerticalSlider();
                 break;
             }
@@ -380,8 +382,7 @@ public class ListBox extends Prototype {
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
         List<InterfaceBaseItem> list = new LinkedList<>(getItems());
-        if (list.contains(item))
-        {
+        if (list.contains(item)) {
             return super.removeItem(item);
         }
         boolean b = _area.removeItem(item);
@@ -531,8 +532,8 @@ public class ListBox extends Prototype {
     // @Override
     // public void release()
     // {
-    //     System.out.println("release");
-    //     super.clear();
-    //     System.out.println("release done");
+    // System.out.println("release");
+    // super.clear();
+    // System.out.println("release done");
     // }
 }

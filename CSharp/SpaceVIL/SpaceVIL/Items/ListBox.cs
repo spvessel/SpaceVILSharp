@@ -177,10 +177,10 @@ namespace SpaceVIL
             //events
             EventMouseClick += (sender, args) =>
             {
+                // зачем нужен этот if???   
                 if (_area.GetSelection() >= 0)
                     _area.SetSelection(_area.GetSelection());
-                else
-                    _area.SetFocus();
+                _area.SetFocus();
             };
             EventKeyPress += OnKeyPress;
         }
@@ -221,7 +221,8 @@ namespace SpaceVIL
                 case KeyCode.Down:
                     if (IsOutsideArea(selection_Y, selection.GetHeight(), selection.GetMargin()))
                     {
-                        _area.SetVScrollOffset(offset - (startY - selection_Y));
+                        // _area.SetVScrollOffset(offset - (startY - selection_Y));
+                        _area.SetVScrollOffset(offset + selection.GetHeight() + (selection.GetY() - (_area.GetY() + _area.GetHeight())));
                         UpdateVerticalSlider();
                         break;
                     }
@@ -417,7 +418,7 @@ namespace SpaceVIL
             List<IBaseItem> list = new List<IBaseItem>(GetItems());
             if (list.Contains(item))
             {
-                return base.RemoveItem(item);                
+                return base.RemoveItem(item);
             }
             bool b = _area.RemoveItem(item);
             UpdateElements();
