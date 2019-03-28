@@ -64,7 +64,7 @@ public class InputTest extends ActiveWindow {
         // tb.setPadding(15, 0, 15, 0);
         // tb.setMargin(new Indents(50, 30, 30, 30));
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
-        tb.onTextChanged.add(() -> System.out.println("text changed"));
+//        tb.onTextChanged.add(() -> System.out.println("text changed"));
 
         SpinItem sp = new SpinItem();
         sp.setParameters(1, -5.5, 7, 0.51);
@@ -92,9 +92,10 @@ public class InputTest extends ActiveWindow {
             // s.toCharArray()[3]);
             // System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " +
             // s.toCharArray()[4]);
-            tb.pasteText("12345678");
+//            tb.pasteText("12345678");
 //            te.pasteText("text edit text");
-            Handler.setWindowTitle(te.getSelectedText());
+//            Handler.setWindowTitle(te.getSelectedText());
+            tb.rewindText();
         });
 
         layout.addItem(bc);

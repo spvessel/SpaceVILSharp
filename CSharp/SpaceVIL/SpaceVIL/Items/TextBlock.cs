@@ -1066,5 +1066,11 @@ namespace SpaceVIL
                 // toSelectState = new Point(0, 0);
             }
         }
+
+        internal void RewindText()
+        {
+            _cursor_position = new Point(0, 0);
+            ReplaceCursor();
+        }
     }
 }

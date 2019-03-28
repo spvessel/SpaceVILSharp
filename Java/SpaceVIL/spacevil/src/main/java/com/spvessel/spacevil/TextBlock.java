@@ -1071,4 +1071,9 @@ class TextBlock extends Prototype
             // toSelectState = new Point(0, 0);
         }
     }
+
+    void rewindText() {
+        _cursor_position = new Point(0,0);
+        replaceCursor();
+    }
 }

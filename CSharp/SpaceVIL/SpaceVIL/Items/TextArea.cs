@@ -486,6 +486,35 @@ namespace SpaceVIL
         {
             _area.SetFont(font);
         }
+
+        public void SetFontSize(int size)
+        {
+            Font oldFont = GetFont();
+            if (oldFont.Size != size)
+            {
+                Font newFont = new Font(oldFont.FontFamily, size, oldFont.Style);
+                SetFont(newFont);
+            }
+        }
+        public void SetFontStyle(FontStyle style)
+        {
+            Font oldFont = GetFont();
+            if (oldFont.Style != style)
+            {
+                Font newFont = new Font(oldFont.FontFamily, oldFont.Size, style);
+                SetFont(newFont);
+            }
+        }
+        public void SetFontFamily(FontFamily font_family)
+        {
+            Font oldFont = GetFont();
+            if (oldFont.FontFamily != font_family)
+            {
+                Font newFont = new Font(font_family, oldFont.Size, oldFont.Style);
+                SetFont(newFont);
+            }
+        }
+
         public Font GetFont()
         {
             return _area.GetFont();
@@ -530,6 +559,14 @@ namespace SpaceVIL
         public void PasteText(String text)
         {
             _area.PasteText(text);
+        }
+
+        /// <summary>
+        /// Move cursor to the text beginning
+        /// </summary>
+        public void RewindText()
+        {
+            _area.RewindText();
         }
     }
 }
