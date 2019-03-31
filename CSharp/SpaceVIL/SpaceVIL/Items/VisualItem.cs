@@ -271,7 +271,13 @@ namespace SpaceVIL
             try
             {
                 //reset focus
-                GetHandler().ResetItems();
+                Prototype tmp = ((Prototype)item);
+                if (tmp != null)
+                {
+                    if (tmp.IsFocused())
+                        GetHandler().ResetItems();
+                }
+
                 LayoutType type;
                 if (item is IFloating)
                 {

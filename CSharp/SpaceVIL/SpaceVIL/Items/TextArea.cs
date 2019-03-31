@@ -127,14 +127,16 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextArea)));
 
             //VBar
-            VScrollBar.IsFocusable = false;
             VScrollBar.SetDrawable(true);
             VScrollBar.SetItemName(GetItemName() + "_" + VScrollBar.GetItemName());
 
             //HBar
-            HScrollBar.IsFocusable = false;
             HScrollBar.SetDrawable(true);
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
+
+            EventMouseClick += (sender, args)=> {
+                _area.SetFocus();
+            };
         }
         public TextArea(String text) : this()
         {
@@ -303,8 +305,8 @@ namespace SpaceVIL
             _area.CursorChanged += UpdateElements;
             _area.TextChanged += () => OnTextChanged?.Invoke();
 
-            VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); _area.SetFocus();};
-            HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); _area.SetFocus();};
+            VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea();};
+            HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea();};
 
             // create menu
             _menu = new ContextMenu(GetHandler());
@@ -537,10 +539,10 @@ namespace SpaceVIL
         /// <summary>
         /// Set TextArea focused/unfocused
         /// </summary>
-        public override void SetFocused(bool value)
+        public override void SetFocus()
         {
-            base.SetFocused(value);
-            _area.SetFocused(value);
+            base.SetFocus();
+            _area.SetFocus();
         }
 
         /// <summary>

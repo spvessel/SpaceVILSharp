@@ -99,18 +99,19 @@ public class TextArea extends Prototype {
         setStyle(DefaultsService.getDefaultStyle(TextArea.class));
 
         // VBar
-        vScrollBar.isFocusable = false;
-        vScrollBar.setVisible(true);
+        vScrollBar.setDrawable(true);
         vScrollBar.setItemName(getItemName() + "_" + vScrollBar.getItemName());
 
         // HBar
-        hScrollBar.isFocusable = false;
-        hScrollBar.setVisible(true);
+        hScrollBar.setDrawable(true);
         hScrollBar.setItemName(getItemName() + "_" + hScrollBar.getItemName());
 
         // Area
         // _area.setItemName(getItemName() + "_" + _area.getItemName());
         // _area.setSpacing(0, 5);
+        eventMouseClick.add((sender, args) -> {
+            _area.setFocus();
+        });
     }
 
     public TextArea(String text) {
@@ -266,17 +267,13 @@ public class TextArea extends Prototype {
         eventScrollUp.add((sender, args) -> vScrollBar.eventScrollUp.execute(sender, args));
         eventScrollDown.add((sender, args) -> vScrollBar.eventScrollDown.execute(sender, args));
         _area.cursorChanged.add(() -> updateElements());
-        _area.textChanged.add(() -> {
-            onTextChanged.execute();
-        });
+        _area.textChanged.add(() -> onTextChanged.execute());
 
         vScrollBar.slider.eventValueChanged.add((sender) -> {
             updateVListArea();
-            _area.setFocus();
         });
         hScrollBar.slider.eventValueChanged.add((sender) -> {
             updateHListArea();
-            _area.setFocus();
         });
 
         // create menu
@@ -333,6 +330,7 @@ public class TextArea extends Prototype {
      */
     public void setText(String text) {
         _area.setText(text);
+        updateElements();
     }
 
     /**
@@ -489,9 +487,9 @@ public class TextArea extends Prototype {
      * Set TextArea focused/unfocused
      */
     @Override
-    public void setFocused(boolean value) {
-        super.setFocused(value);
-        _area.setFocused(value);
+    public void setFocus() {
+        super.setFocus();
+        _area.setFocus();
     }
 
     /**

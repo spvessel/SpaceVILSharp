@@ -59,6 +59,8 @@ namespace SpaceVIL
                 FocusedItem = null;
                 return;
             }
+            if (FocusedItem != null && FocusedItem.Equals(item))
+                return;
             if (FocusedItem != null)
                 FocusedItem.SetFocused(false);
             FocusedItem = item;
@@ -722,11 +724,17 @@ namespace SpaceVIL
                         //Focus get
                         if (HoveredItem.IsFocusable)
                         {
-                            if (FocusedItem != null)
+                            if (FocusedItem == null)
+                            {
+                                FocusedItem = HoveredItem;
+                                FocusedItem.SetFocused(true);
+                            }
+                            else if (!FocusedItem.Equals(HoveredItem))
+                            {
                                 FocusedItem.SetFocused(false);
-
-                            FocusedItem = HoveredItem;
-                            FocusedItem.SetFocused(true);
+                                FocusedItem = HoveredItem;
+                                FocusedItem.SetFocused(true);
+                            }
                         }
                         else
                         {
