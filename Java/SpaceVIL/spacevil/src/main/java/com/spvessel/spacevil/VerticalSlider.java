@@ -28,17 +28,18 @@ public class VerticalSlider extends Prototype {
     public void setStep(float value) {
         _step = value;
     }
+
     public float getStep() {
         return _step;
     }
 
     public EventCommonMethodState eventValueChanged = new EventCommonMethodState();
-    
+
     @Override
     public void release() {
         eventValueChanged.clear();
     }
-    
+
     private float _current_value = 0;
     /**
      * Slider direction(1 - down direction, -1 - up direction)
@@ -87,6 +88,7 @@ public class VerticalSlider extends Prototype {
     public void setMinValue(float value) {
         _min_value = value;
     }
+
     public float getMinValue() {
         return _min_value;
     }
@@ -99,6 +101,7 @@ public class VerticalSlider extends Prototype {
     public void setMaxValue(float value) {
         _max_value = value;
     }
+
     public float getMaxValue() {
         return _max_value;
     }
@@ -113,7 +116,6 @@ public class VerticalSlider extends Prototype {
 
         // Handler
         handler.direction = Orientation.VERTICAL;
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.VerticalSlider"));
         setStyle(DefaultsService.getDefaultStyle(VerticalSlider.class));
     }
 
@@ -126,15 +128,18 @@ public class VerticalSlider extends Prototype {
         addItems(track, handler);
 
         // Event connections
-        eventMouseDrop.add(this::onDropHandler);
+        eventMouseDrop.add(this::onDragHandler);
         handler.eventMouseDrag.add(eventMouseDrop::execute);
     }
+
+    private boolean _dragging = false;
 
     /**
      * Slider drop event
      */
-    public void onDropHandler(InterfaceItem sender, MouseArgs args)// что-то с тобой не так
+    protected void onDragHandler(InterfaceItem sender, MouseArgs args)// что-то с тобой не так
     {
+        _dragging = true;
         // иногда число NAN
         float result = (float) (handler.getY() - getY()) * (_max_value - _min_value)
                 / ((float) getHeight() - handler.getHeight());
@@ -145,10 +150,12 @@ public class VerticalSlider extends Prototype {
     /**
      * Click on the sliders track (outside the slider handler)
      */
-    public void onTrackClick(InterfaceItem sender, MouseArgs args) {
+    protected void onTrackClick(InterfaceItem sender, MouseArgs args) {
         // Compute CurrentValue
-        setCurrentValue((float) (args.position.getY() - getY() - handler.getHeight() / 2) * (_max_value - _min_value)
-                / ((float) getHeight() - handler.getHeight()));
+        if (!_dragging)
+            setCurrentValue((float) (args.position.getY() - getY() - handler.getHeight() / 2)
+                    * (_max_value - _min_value) / ((float) getHeight() - handler.getHeight()));
+        _dragging = false;
     }
 
     /**

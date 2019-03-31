@@ -3,11 +3,23 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceHLayout;
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class HorizontalStack extends Prototype implements InterfaceHLayout {
     private static int count = 0;
 
+    private ItemAlignment _contentAlignment = ItemAlignment.LEFT;
+
+    public void setContentAlignment(ItemAlignment alignment) {
+        if (alignment == ItemAlignment.LEFT || alignment == ItemAlignment.HCENTER || alignment == ItemAlignment.RIGHT)
+            _contentAlignment = alignment;
+    }
+
+    public ItemAlignment getContentAlignment() {
+        return _contentAlignment;
+    }
+    
     /**
      * Constructs a HorizontalStack
      */

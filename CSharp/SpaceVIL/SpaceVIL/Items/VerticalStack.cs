@@ -8,6 +8,20 @@ namespace SpaceVIL
     public class VerticalStack : Prototype, IVLayout
     {
         static int count = 0;
+
+        private ItemAlignment _contentAlignment = ItemAlignment.Top;
+
+        public void SetContentAlignment(ItemAlignment alignment)
+        {
+            if (alignment == ItemAlignment.Top || alignment == ItemAlignment.VCenter || alignment == ItemAlignment.Bottom)
+                _contentAlignment = alignment;
+        }
+
+        public ItemAlignment GetContentAlignment()
+        {
+            return _contentAlignment;
+        }
+
         public VerticalStack()
         {
             SetItemName("VerticalStack_" + count);
@@ -22,7 +36,7 @@ namespace SpaceVIL
         {
             return false;
         }
-        
+
         public override void AddItem(IBaseItem item)
         {
             base.AddItem(item);

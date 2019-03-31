@@ -27,6 +27,7 @@ import static org.lwjgl.opengl.GL11.*;
 final class DrawEngine {
     private Map<InterfaceBaseItem, int[]> _bounds = new HashMap<>();
 
+    // private ToolTip _tooltip = ToolTip.getInstance();
     private ToolTip _tooltip = new ToolTip();
     // private InterfaceBaseItem _isStencilSet = null;
     private InputDeviceEvent engineEvent = new InputDeviceEvent();
@@ -509,10 +510,11 @@ final class DrawEngine {
         if (_inputLocker)
             return;
         engineEvent.setEvent(InputEventType.MOUSE_MOVE);
-        _tooltip.initTimer(false);
         if (!flag_move)
             return;
         flag_move = false;
+
+        _tooltip.initTimer(false);
 
         if (!_handler.focusable)
             return;
@@ -604,6 +606,7 @@ final class DrawEngine {
                 Prototype anchor = isInListHoveredItems(InterfaceWindowAnchor.class);
 
                 if (draggable != null && hoveredItem == draggable) {
+                    engineEvent.setEvent(InputEventType.MOUSE_DRAG);
                     draggable.eventMouseDrag.execute(draggable, _margs);
                 } else if (anchor != null && !(hoveredItem instanceof ButtonCore)
                         && !_handler.getLayout().isMaximized) {
@@ -723,7 +726,8 @@ final class DrawEngine {
                 engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
                 return;
             }
-            if (engineEvent.lastEvent().contains(InputEventType.MOUSE_MOVE)) {
+            if (engineEvent.lastEvent().contains(InputEventType.MOUSE_MOVE)
+                    && !engineEvent.lastEvent().contains(InputEventType.MOUSE_DRAG)) {
                 float len = (float) Math.sqrt(Math.pow(ptrRelease.getX() - ptrClick.getX(), 2)
                         + Math.pow(ptrRelease.getY() - ptrClick.getY(), 2));
                 if (len > 10.0f) {
@@ -1803,11 +1807,12 @@ final class DrawEngine {
         } else {
             _tooltip.setX(ptrRelease.getX() - 10);
         }
-
+        // System.out.println(_tooltip.getY());
         drawShell(_tooltip);
         glDisable(GL_SCISSOR_TEST);
         _tooltip.getTextLine().updateGeometry();
         drawText(_tooltip.getTextLine());
+        // System.out.println(_tooltip.getTextLine().getY());
         glDisable(GL_SCISSOR_TEST);
     }
 

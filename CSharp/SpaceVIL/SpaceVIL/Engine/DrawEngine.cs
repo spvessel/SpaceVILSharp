@@ -33,7 +33,6 @@ namespace SpaceVIL
         private Dictionary<IBaseItem, int[]> _bounds = new Dictionary<IBaseItem, int[]>();
 
         private ToolTip _tooltip = new ToolTip();
-        // private IBaseItem _isStencilSet = null;
         private InputDeviceEvent EngineEvent = new InputDeviceEvent();
         private MouseArgs _margs = new MouseArgs();
         private KeyArgs _kargs = new KeyArgs();
@@ -122,6 +121,7 @@ namespace SpaceVIL
             HoveredItems = new List<Prototype>();
             _handler = new GLWHandler(handler);
 
+            // _tooltip = ToolTip.GetInstance();
             _tooltip.SetHandler(handler);
             _tooltip.GetTextLine().SetHandler(handler);
             _tooltip.GetTextLine().SetParent(_tooltip);
@@ -446,10 +446,11 @@ namespace SpaceVIL
             if (_inputLocker)
                 return;
             EngineEvent.SetEvent(InputEventType.MouseMove);
-            _tooltip.InitTimer(false);
             if (!flag_move)
                 return;
             flag_move = false;
+
+            _tooltip.InitTimer(false);
 
             if (!_handler.Focusable)
                 return;
@@ -556,6 +557,7 @@ namespace SpaceVIL
                     Prototype anchor = IsInListHoveredItems<WindowAnchor>();
                     if (draggable != null && HoveredItem == draggable)
                     {
+                        EngineEvent.SetEvent(InputEventType.MouseDrag);
                         draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
                     }
                     else if (anchor != null && !(HoveredItem is ButtonCore) && !_handler.GetLayout().IsMaximized)
@@ -630,6 +632,8 @@ namespace SpaceVIL
         }
         private void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
+            _tooltip.InitTimer(false);
+
             if (_inputLocker)
                 return;
             _handler.GetLayout().GetWindow()._sides = 0;
@@ -637,7 +641,6 @@ namespace SpaceVIL
             if (!_handler.Focusable)
                 return;
 
-            _tooltip.InitTimer(false);
 
             _margs.Button = button;
             _margs.State = state;
@@ -681,7 +684,7 @@ namespace SpaceVIL
                         EngineEvent.SetEvent(InputEventType.MouseRelease);
                         return;
                     }
-                    if (EngineEvent.LastEvent().HasFlag(InputEventType.MouseMove))
+                    if (EngineEvent.LastEvent().HasFlag(InputEventType.MouseMove) && !EngineEvent.LastEvent().HasFlag(InputEventType.MouseDrag))
                     {
                         float len = (float)Math.Sqrt(Math.Pow(ptrRelease.GetX() - ptrClick.GetX(), 2) + Math.Pow(ptrRelease.GetY() - ptrClick.GetY(), 2));
                         if (len > 10.0f)
@@ -907,9 +910,10 @@ namespace SpaceVIL
 
         private void MouseScroll(Glfw.Window glfwwnd, double dx, double dy)
         {
+            _tooltip.InitTimer(false);
+
             if (_inputLocker)
                 return;
-            _tooltip.InitTimer(false);
 
             Stack<Prototype> tmp = new Stack<Prototype>(HoveredItems);
             while (tmp.Count > 0)
@@ -928,12 +932,13 @@ namespace SpaceVIL
 
         private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
+            _tooltip.InitTimer(false);
+
             if (_inputLocker)
                 return;
             if (!_handler.Focusable)
                 return;
 
-            _tooltip.InitTimer(false);
 
             _kargs.Key = key;
             _kargs.Scancode = scancode;
@@ -987,11 +992,12 @@ namespace SpaceVIL
 
         private void TextInput(Glfw.Window glfwwnd, uint codepoint, KeyMods mods)
         {
+            _tooltip.InitTimer(false);
+
             if (_inputLocker)
                 return;
             if (!_handler.Focusable)
                 return;
-            _tooltip.InitTimer(false);
             _tiargs.Character = codepoint;
             _tiargs.Mods = mods;
             FocusedItem?.EventTextInput?.Invoke(FocusedItem, _tiargs);

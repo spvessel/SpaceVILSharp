@@ -9,6 +9,19 @@ namespace SpaceVIL
     {
         static int count = 0;
 
+        private ItemAlignment _contentAlignment = ItemAlignment.Left;
+
+        public void SetContentAlignment(ItemAlignment alignment)
+        {
+            if (alignment == ItemAlignment.Top || alignment == ItemAlignment.HCenter || alignment == ItemAlignment.Right)
+                _contentAlignment = alignment;
+        }
+
+        public ItemAlignment GetContentAlignment()
+        {
+            return _contentAlignment;
+        }
+
         /// <summary>
         /// Constructs a HorizontalStack
         /// </summary>

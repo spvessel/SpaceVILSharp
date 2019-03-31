@@ -34,7 +34,7 @@ namespace SpaceVIL
         {
             EventValueChanged = null;
         }
-        
+
         private float _current_value = 0;
         public int Direction = 0;
         public void SetCurrentValue(float value)
@@ -105,25 +105,30 @@ namespace SpaceVIL
             AddItems(Track, Handler);
 
             //Event connections
-            EventMouseDrop += OnDropHandler;
+            EventMouseDrop += OnDragHandler;
             Handler.EventMouseDrag += EventMouseDrop.Invoke;
         }
 
-        public void OnDropHandler(object sender, MouseArgs args)//что-то с тобой не так
+        private bool _dragging = false;
+
+        protected virtual void OnDragHandler(object sender, MouseArgs args)//что-то с тобой не так
         {
+            _dragging = true;
             //иногда число NAN 
             float result = (float)(Handler.GetY() - GetY()) * (_max_value - _min_value) / ((float)GetHeight() - Handler.GetHeight());
             if (!Single.IsNaN(result))
                 SetCurrentValue(result);
         }
 
-        public virtual void OnTrackClick(object sender, MouseArgs args)
+        protected virtual void OnTrackClick(object sender, MouseArgs args)
         {
             //Compute CurrentValue
-            SetCurrentValue(
-                    (float)(args.Position.GetY() - GetY() - Handler.GetHeight() / 2)
-                    * (_max_value - _min_value)
-                    / ((float)GetHeight() - Handler.GetHeight()));
+            if (!_dragging)
+                SetCurrentValue(
+                        (float)(args.Position.GetY() - GetY() - Handler.GetHeight() / 2)
+                        * (_max_value - _min_value)
+                        / ((float)GetHeight() - Handler.GetHeight()));
+            _dragging = false;
         }
 
         public override void SetY(int _y)

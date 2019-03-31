@@ -1481,12 +1481,13 @@ namespace SpaceVIL.Decorations
         {
             Style style = new Style();
 
-            style.Font = DefaultsService.GetDefaultFont(10);
+            style.Font = DefaultsService.GetDefaultFont();
             style.Background = Color.White;
-            style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
+            style.Foreground = Color.FromArgb(255, 70, 70, 70);
             style.Height = 30;
             style.WidthPolicy = SizePolicy.Fixed;
             style.HeightPolicy = SizePolicy.Fixed;
+            style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(5, 0, 5, 0);
             style.BorderRadius = new CornerRadius(4);

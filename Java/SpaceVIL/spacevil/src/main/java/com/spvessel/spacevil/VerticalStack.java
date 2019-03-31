@@ -3,10 +3,22 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceVLayout;
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class VerticalStack extends Prototype implements InterfaceVLayout {
     private static int count = 0;
+
+    private ItemAlignment _contentAlignment = ItemAlignment.LEFT;
+
+    public void setContentAlignment(ItemAlignment alignment) {
+        if (alignment == ItemAlignment.LEFT || alignment == ItemAlignment.HCENTER || alignment == ItemAlignment.RIGHT)
+            _contentAlignment = alignment;
+    }
+
+    public ItemAlignment getContentAlignment() {
+        return _contentAlignment;
+    }
 
     /**
      * Constructs a VerticalStack
@@ -53,8 +65,8 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Update all children and VerticalStack sizes and positions
-     * according to confines
+     * Update all children and VerticalStack sizes and positions according to
+     * confines
      */
     public void updateLayout() {
         int total_space = getHeight() - getPadding().top - getPadding().bottom;
