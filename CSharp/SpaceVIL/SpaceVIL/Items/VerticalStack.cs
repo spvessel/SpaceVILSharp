@@ -18,7 +18,7 @@ namespace SpaceVIL
         }
 
         //overrides
-        internal override bool GetHoverVerification(float xpos, float ypos)
+        protected internal override bool GetHoverVerification(float xpos, float ypos)
         {
             return false;
         }

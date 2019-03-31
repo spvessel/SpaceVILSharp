@@ -47,7 +47,7 @@ namespace SpaceVIL
             _focus = null;
         }
 
-        internal override bool GetHoverVerification(float xpos, float ypos)
+        protected internal override bool GetHoverVerification(float xpos, float ypos)
         {
             if (_is_fixed)
                 return false;

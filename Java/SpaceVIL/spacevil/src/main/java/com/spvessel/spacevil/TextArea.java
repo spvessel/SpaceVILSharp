@@ -272,11 +272,9 @@ public class TextArea extends Prototype {
 
         vScrollBar.slider.eventValueChanged.add((sender) -> {
             updateVListArea();
-            _area.setFocus();
         });
         hScrollBar.slider.eventValueChanged.add((sender) -> {
             updateHListArea();
-            _area.setFocus();
         });
 
         // create menu
@@ -489,9 +487,8 @@ public class TextArea extends Prototype {
      * Set TextArea focused/unfocused
      */
     @Override
-    public void setFocused(boolean value) {
-        super.setFocused(value);
-        _area.setFocused(value);
+    public void setFocus() {
+        _area.setFocus();
     }
 
     /**

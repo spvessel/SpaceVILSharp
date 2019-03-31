@@ -6,7 +6,7 @@ import com.spvessel.spacevil.Decorations.Style;
 public class Indicator extends Prototype {
     class CustomToggle extends ButtonToggle {
         @Override
-        public boolean getHoverVerification(float xpos, float ypos) {
+        protected boolean getHoverVerification(float xpos, float ypos) {
             return false;
         }
     }

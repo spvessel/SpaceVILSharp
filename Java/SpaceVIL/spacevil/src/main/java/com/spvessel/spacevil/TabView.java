@@ -42,7 +42,7 @@ public class TabView extends Prototype {
     }
 
     @Override
-    boolean getHoverVerification(float xpos, float ypos) {
+    protected boolean getHoverVerification(float xpos, float ypos) {
         return false;
     }
 

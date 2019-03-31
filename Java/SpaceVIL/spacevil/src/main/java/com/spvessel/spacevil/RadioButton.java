@@ -13,7 +13,7 @@ import java.util.List;
 public class RadioButton extends Prototype {
     class CustomIndicator extends Indicator {
         @Override
-        boolean getHoverVerification(float xpos, float ypos) {
+        protected boolean getHoverVerification(float xpos, float ypos) {
             return false;
         }
     }

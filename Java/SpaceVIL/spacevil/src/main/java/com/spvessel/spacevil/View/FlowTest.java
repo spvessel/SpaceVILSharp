@@ -168,6 +168,7 @@ public class FlowTest extends ActiveWindow {
         // side.addAlbum(new Album("Album2", "C:\\"));
         // side.addAlbum(new Album("Album3", "C:\\"));
         // side.addAlbum(new Album("Album4", "C:\\"));
+        
         btn4.eventMouseClick.add((sender, args) -> {
             // flow.addItem(getBlockList());
             side.show();
@@ -183,6 +184,7 @@ public class FlowTest extends ActiveWindow {
         btn5.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         btn5.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn5.addItemState(ItemStateType.HOVERED, hovered);
+
         btn5.eventMouseClick.add((sender, args) -> {
             // MessageItem msg = new MessageItem("Set TRUE?", "Message:");
             // msg.onCloseDialog.add(() -> {

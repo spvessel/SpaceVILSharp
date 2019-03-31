@@ -558,15 +558,6 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set focus on the Prototype if its focusable
-        /// </summary>
-        public void SetFocus()
-        {
-            if (IsFocusable)
-                GetHandler().SetFocusedItem(this);
-        }
-
-        /// <summary>
         /// Add new item state for one of the item state types (BASE,
         /// HOVERED, PRESSED, TOGGLED, FOCUSED, DISABLED)
         /// </summary>
@@ -748,7 +739,7 @@ namespace SpaceVIL
         {
             return _core.IsFocused();
         }
-        public virtual void SetFocused(bool value)
+        protected internal virtual void SetFocused(bool value)
         {
             if (IsFocusable)
             {
@@ -756,7 +747,16 @@ namespace SpaceVIL
             }
         }
 
-        internal virtual bool GetHoverVerification(float xpos, float ypos)
+        /// <summary>
+        /// Set focus on the Prototype if its focusable
+        /// </summary>
+        public virtual void SetFocus()
+        {
+            if (IsFocusable)
+                GetHandler().SetFocusedItem(this);
+        }
+
+        protected internal virtual bool GetHoverVerification(float xpos, float ypos)
         {
             return _core.GetHoverVerification(xpos, ypos);
         }

@@ -21,7 +21,7 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
 
     // overrides
     @Override
-    public boolean getHoverVerification(float xpos, float ypos) {
+    protected boolean getHoverVerification(float xpos, float ypos) {
         return false;
     }
 

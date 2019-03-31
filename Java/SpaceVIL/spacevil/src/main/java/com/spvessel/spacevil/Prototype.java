@@ -546,14 +546,6 @@ abstract public class Prototype implements InterfaceBaseItem {
     }
 
     /**
-     * Set focus on the Prototype if its focusable
-     */
-    public void setFocus() {
-        if (isFocusable)
-            getHandler().setFocusedItem(this);
-    }
-
-    /**
      * Add new item state for one of the item state types (BASE, HOVERED, PRESSED,
      * TOGGLED, FOCUSED, DISABLED)
      */
@@ -743,13 +735,21 @@ abstract public class Prototype implements InterfaceBaseItem {
         return _core.isFocused();
     }
 
-    public void setFocused(boolean value) {
+    protected void setFocused(boolean value) {
         if (isFocusable) {
             _core.setFocused(value);
         }
     }
 
-    boolean getHoverVerification(float xpos, float ypos) {
+    /**
+     * Set focus on the Prototype if its focusable
+     */
+    public void setFocus() {
+        if (isFocusable)
+            getHandler().setFocusedItem(this);
+    }
+
+    protected boolean getHoverVerification(float xpos, float ypos) {
         return _core.getHoverVerification(xpos, ypos);
     }
 

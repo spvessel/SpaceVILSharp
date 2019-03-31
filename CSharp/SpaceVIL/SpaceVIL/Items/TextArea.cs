@@ -41,6 +41,12 @@ namespace SpaceVIL
             _area.IsEditable = value;
         }
 
+
+        public override void SetFocus()
+        {
+            _area.SetFocus();
+        }
+
         public VerticalScrollBar VScrollBar = new VerticalScrollBar();
         public HorizontalScrollBar HScrollBar = new HorizontalScrollBar();
         private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.AsNeeded;// Always;
@@ -303,8 +309,8 @@ namespace SpaceVIL
             _area.CursorChanged += UpdateElements;
             _area.TextChanged += () => OnTextChanged?.Invoke();
 
-            VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); _area.SetFocus();};
-            HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); _area.SetFocus();};
+            VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); };
+            HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };
 
             // create menu
             _menu = new ContextMenu(GetHandler());
@@ -532,15 +538,6 @@ namespace SpaceVIL
         public int GetTextHeight()
         {
             return _area.GetTextHeight();
-        }
-
-        /// <summary>
-        /// Set TextArea focused/unfocused
-        /// </summary>
-        public override void SetFocused(bool value)
-        {
-            base.SetFocused(value);
-            _area.SetFocused(value);
         }
 
         /// <summary>

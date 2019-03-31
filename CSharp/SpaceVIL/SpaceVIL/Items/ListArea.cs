@@ -184,14 +184,6 @@ namespace SpaceVIL
             }
         }
 
-        /// <summary>
-        /// If something changes when mouse hovered
-        /// </summary>
-        public override void SetMouseHover(bool value)
-        {
-            base.SetMouseHover(value);
-        }
-
         private SelectionItem GetWrapper(IBaseItem item)
         {
             SelectionItem wrapper = new SelectionItem(item);
