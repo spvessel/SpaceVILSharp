@@ -41,12 +41,6 @@ namespace SpaceVIL
             _area.IsEditable = value;
         }
 
-
-        public override void SetFocus()
-        {
-            _area.SetFocus();
-        }
-
         public VerticalScrollBar VScrollBar = new VerticalScrollBar();
         public HorizontalScrollBar HScrollBar = new HorizontalScrollBar();
         private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.AsNeeded;// Always;
@@ -133,14 +127,16 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextArea)));
 
             //VBar
-            VScrollBar.IsFocusable = false;
             VScrollBar.SetDrawable(true);
             VScrollBar.SetItemName(GetItemName() + "_" + VScrollBar.GetItemName());
 
             //HBar
-            HScrollBar.IsFocusable = false;
             HScrollBar.SetDrawable(true);
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
+
+            EventMouseClick += (sender, args)=> {
+                _area.SetFocus();
+            };
         }
         public TextArea(String text) : this()
         {
@@ -538,6 +534,14 @@ namespace SpaceVIL
         public int GetTextHeight()
         {
             return _area.GetTextHeight();
+        }
+
+        /// <summary>
+        /// Set TextArea focused/unfocused
+        /// </summary>
+        public override void SetFocus()
+        {
+            _area.SetFocus();
         }
 
         /// <summary>

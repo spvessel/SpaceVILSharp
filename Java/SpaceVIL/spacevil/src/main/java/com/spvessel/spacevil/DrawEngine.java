@@ -51,6 +51,8 @@ final class DrawEngine {
             focusedItem = null;
             return;
         }
+        if (focusedItem != null && focusedItem.equals(item))
+            return;
         if (focusedItem != null)
             focusedItem.setFocused(false);
         focusedItem = item;
@@ -770,12 +772,17 @@ final class DrawEngine {
                 assignActions(InputEventType.MOUSE_PRESS, _margs, false);
                 if (hoveredItem.isFocusable) {
                     // Focus get
-                    if (focusedItem != null)
+
+                    if (focusedItem == null) {
+                        focusedItem = hoveredItem;
+                        focusedItem.setFocused(true);
+                    } else if (!focusedItem.equals(hoveredItem)) {
                         focusedItem.setFocused(false);
-                    focusedItem = hoveredItem;
-                    focusedItem.setFocused(true);
+                        focusedItem = hoveredItem;
+                        focusedItem.setFocused(true);
+                    }
                 } else {
-                    Deque<Prototype> focused_list = new ArrayDeque<Prototype>(hoveredItems);
+                    Deque<Prototype> focused_list = new ArrayDeque<>(hoveredItems);
                     while (!focused_list.isEmpty()) {
                         Prototype f = focused_list.pollLast();
                         if (f.equals(hoveredItem) && hoveredItem.isDisabled())

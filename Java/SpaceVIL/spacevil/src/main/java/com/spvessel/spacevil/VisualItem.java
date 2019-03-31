@@ -463,7 +463,12 @@ final class VisualItem extends BaseItem {
     boolean removeItem(InterfaceBaseItem item) {
         locker.lock();
         try {
-            getHandler().resetItems();
+            if(item instanceof  Prototype)
+            {
+                Prototype tmp = ((Prototype)item);
+                if(tmp.isFocused())
+                    getHandler().resetItems();
+            }
 
             LayoutType type;
             if (item instanceof InterfaceFloating) {

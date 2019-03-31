@@ -6,11 +6,13 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Label extends Prototype {
     private static int count = 0;
-    private TextLine _text_object;
+    private List<TextLine> _text_objects;
 
     /**
      * Constructs a Label
@@ -18,7 +20,8 @@ public class Label extends Prototype {
     public Label() {
         setItemName("Label_" + count);
         count++;
-        _text_object = new TextLine();
+        _text_objects = new ArrayList<>();
+        _text_objects.add(new TextLine());
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Label"));
         setStyle(DefaultsService.getDefaultStyle(Label.class));
         isFocusable = false;
@@ -37,102 +40,191 @@ public class Label extends Prototype {
      * Text alignment in the Label
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        _text_object.setTextAlignment(alignment);
+        setTextAlignment(Arrays.asList(alignment));
     }
 
     public void setTextAlignment(List<ItemAlignment> alignment) {
-        _text_object.setTextAlignment(alignment);
+        for (TextLine tl : _text_objects)
+            tl.setTextAlignment(alignment);
+
+        int gyshift = 0;
+        if (alignment.contains(ItemAlignment.BOTTOM)) {
+            gyshift = - (getTextHeight() - getLineY(1));
+        } else if (alignment.contains(ItemAlignment.VCENTER)) {
+            gyshift = - ((getTextHeight() - getLineY(1)) / 2);
+        }
+        updateLinesYShifts(gyshift);
     }
 
     /**
      * Text margin in the Label
      */
     public void setTextMargin(Indents margin) {
-        _text_object.setMargin(margin);
+        for (TextLine tl : _text_objects)
+            tl.setMargin(margin);
     }
 
     /**
      * Text font parameters in the Label
      */
     public void setFont(Font font) {
-        _text_object.setFont(font);
+        for (TextLine tl : _text_objects)
+            tl.setFont(font);
     }
 
     public void setFontSize(int size) {
-        _text_object.setFontSize(size);
+        for (TextLine tl : _text_objects)
+            tl.setFontSize(size);
     }
 
     public void setFontStyle(int style) {
-        _text_object.setFontStyle(style);
+        for (TextLine tl : _text_objects)
+            tl.setFontStyle(style);
     }
 
     public void setFontFamily(String font_family) {
-        _text_object.setFontFamily(font_family);
+        for (TextLine tl : _text_objects)
+            tl.setFontFamily(font_family);
     }
 
     public Font getFont() {
-        return _text_object.getFont();
+        return _text_objects.get(0).getFont();
     }
 
     /**
      * Set text in the Label
      */
     public void setText(String text) {
-        _text_object.setItemText(text);
+        if (_text_objects.size() > 1) {
+            while (_text_objects.size() > 1) {
+                removeItem(_text_objects.get(1));
+                _text_objects.remove(1);
+            }
+        }
+
+        String[] line = text.split("\n");
+        String s;
+
+        s = line[0].replaceAll("\r", "");
+        _text_objects.get(0).setItemText(s);
+
+
+
+        int inc = 0;
+        for (int i = 1; i < line.length; i++) {
+            inc++;
+            s = line[i].replaceAll("\r", "");
+
+            TextLine te = new TextLine();
+            addItem(te);
+
+            te.setItemText(s);
+
+            _text_objects.add(inc, te);
+
+
+        }
+
+        setForeground(getForeground());
+        setTextAlignment(_text_objects.get(0).getTextAlignment());
+        setMargin(_text_objects.get(0).getMargin());
+        setFont(getFont());
+
+//        _text_object.setItemText(text);
+    }
+
+    private void updateLinesYShifts(int globalYShift) {
+        int inc = 0;
+        for (TextLine tl : _text_objects) {
+            tl.setLineYShift(getLineY(inc) + globalYShift);
+            inc++;
+        }
     }
 
     public String getText() {
-        return _text_object.getItemText();
+        StringBuilder sb = new StringBuilder();
+        if (_text_objects == null)
+            return "";
+        if (_text_objects.size() == 1) {
+            sb.append(_text_objects.get(0).getText());
+        } else {
+            for (int i = 0; i < _text_objects.size() - 1; i++) {
+                sb.append(_text_objects.get(i).getText());
+                sb.append("\n");
+            }
+            sb.append(_text_objects.get(_text_objects.size() - 1).getText());
+        }
+        return sb.toString();
     }
 
     /**
      * Text color in the Label
      */
     public void setForeground(Color color) {
-        _text_object.setForeground(color);
+        for (TextLine tl : _text_objects)
+            tl.setForeground(color);
     }
 
     public void setForeground(int r, int g, int b) {
-        _text_object.setForeground(r, g, b);
+        for (TextLine tl : _text_objects)
+            tl.setForeground(r, g, b);
     }
 
     public void setForeground(int r, int g, int b, int a) {
-        _text_object.setForeground(r, g, b, a);
+        for (TextLine tl : _text_objects)
+            tl.setForeground(r, g, b, a);
     }
 
     public void setForeground(float r, float g, float b) {
-        _text_object.setForeground(r, g, b);
+        for (TextLine tl : _text_objects)
+            tl.setForeground(r, g, b);
     }
 
     public void setForeground(float r, float g, float b, float a) {
-        _text_object.setForeground(r, g, b, a);
+        for (TextLine tl : _text_objects)
+            tl.setForeground(r, g, b, a);
     }
 
     public Color getForeground() {
-        return _text_object.getForeground();
+        return _text_objects.get(0).getForeground();
     }
 
     /**
      * Text width in the Label
      */
     public int getTextWidth() {
-        return _text_object.getWidth();
+        int wdt = _text_objects.get(0).getWidth();
+        for (int i = 1; i < _text_objects.size(); i++) {
+            int w = _text_objects.get(i).getWidth();
+            if (w > wdt) wdt = w;
+        }
+        return wdt;
     }
 
     /**
      * Text height in the Label
      */
     public int getTextHeight() {
-        return _text_object.getHeight();
+        return getLineY(_text_objects.size());
+    }
+
+    private int getLineY(int num) {
+        int minLineSpacer = _text_objects.get(0).getFontDims()[0];
+        int lineHeight = _text_objects.get(0).getHeight();
+        return (lineHeight + minLineSpacer) * num;
     }
 
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
-        int _cursorXMax = getWidth() - getPadding().left - getPadding().right - _text_object.getMargin().left
-                - _text_object.getMargin().right;
-        _text_object.setAllowWidth(_cursorXMax);
-        _text_object.checkXShift(_cursorXMax); // _text_object.setLineXShift();
+        TextLine txtObj = _text_objects.get(0);
+        int _cursorXMax = getWidth() - getPadding().left - getPadding().right - txtObj.getMargin().left
+                - txtObj.getMargin().right;
+
+        for (TextLine tl : _text_objects) {
+            tl.setAllowWidth(_cursorXMax);
+            tl.checkXShift(_cursorXMax); // ???
+        }
     }
 
     /**
@@ -140,7 +232,8 @@ public class Label extends Prototype {
      */
     @Override
     public void initElements() {
-        addItem(_text_object);
+        for (TextLine tl : _text_objects)
+            addItem(tl);
     }
 
     /**
