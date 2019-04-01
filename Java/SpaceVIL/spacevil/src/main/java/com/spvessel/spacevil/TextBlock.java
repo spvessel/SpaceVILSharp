@@ -298,7 +298,6 @@ class TextBlock extends Prototype
                     }
                     replaceCursor();
                 }
-
             }
             if (args.key == KeyCode.UP) // arrow up
             {
@@ -308,7 +307,6 @@ class TextBlock extends Prototype
                     // ?????
                     replaceCursor();
                 }
-
             }
             if (args.key == KeyCode.DOWN) // arrow down
             {
@@ -318,7 +316,6 @@ class TextBlock extends Prototype
                     // ?????
                     replaceCursor();
                 }
-
             }
 
             if (args.key == KeyCode.END) // end
@@ -386,26 +383,6 @@ class TextBlock extends Prototype
             _textureStorage.textInputLock.unlock();
         }
     }
-
-//    private Point checkLineFits(Point checkPoint) {
-//        Point outPt = new Point();
-//        // ??? check line count
-//        outPt.y = checkPoint.y;
-//        if (outPt.y == -1)
-//            outPt.y = 0;
-//        outPt.x = checkPoint.x;
-//        if (outPt.x == -1)
-//            outPt.x = 0;
-//
-//        outPt.x = _textureStorage.checkLineWidth(outPt.x, checkPoint);
-//
-//        return outPt;
-//    }
-//
-//    private Point cursorPosToCoord(Point cPos0) {
-//        Point cPos = checkLineFits(cPos0);
-//        return _textureStorage.cupsorPosToCoord(cPos);
-//    }
 
     private void replaceCursor() {
         Point pos = addXYShifts(0, 0, _cursor_position);
@@ -745,6 +722,8 @@ class TextBlock extends Prototype
     private String privGetSelectedText() {
         _textureStorage.textInputLock.lock();
         try {
+            if (_selectFrom.x == -1 || _selectTo.x == -1)
+                return "";
             _selectFrom = _textureStorage.checkLineFits(_selectFrom);
             _selectTo = _textureStorage.checkLineFits(_selectTo);
             if (_selectFrom.x == _selectTo.x && _selectFrom.y == _selectTo.y)
@@ -816,6 +795,8 @@ class TextBlock extends Prototype
             return "";
         _textureStorage.textInputLock.lock();
         try {
+            if (_selectFrom.x == -1 || _selectTo.x == -1)
+                return "";
             String str = privGetSelectedText();
             _selectFrom = _textureStorage.checkLineFits(_selectFrom);
             _selectTo = _textureStorage.checkLineFits(_selectTo);
@@ -898,22 +879,22 @@ class TextBlock extends Prototype
         }
     }
 
-    @Override
-    public List<InterfaceBaseItem> getItems() {
-        List<InterfaceBaseItem> list = super.getItems();
-        return new LinkedList<>(Arrays.asList(list.get(0), list.get(1), list.get(2)));
-    }
-
-    @Override
-    public boolean removeItem(InterfaceBaseItem item) {
-        if (item.equals(_cursor)) {
-            while (super.getItems().size() > 0) {
-                super.removeItem(super.getItems().get(0));
-            }
-            return true;
-        }
-        return super.removeItem(item);
-    }
+//    @Override
+//    public List<InterfaceBaseItem> getItems() {
+//        List<InterfaceBaseItem> list = super.getItems();
+//        return new LinkedList<>(Arrays.asList(list.get(0), list.get(1), list.get(2)));
+//    }
+//
+//    @Override
+//    public boolean removeItem(InterfaceBaseItem item) {
+//        if (item.equals(_cursor)) {
+//            while (super.getItems().size() > 0) {
+//                super.removeItem(super.getItems().get(0));
+//            }
+//            return true;
+//        }
+//        return super.removeItem(item);
+//    }
 
     private ArrayDeque<TextBlockState> undoQueue;
     private ArrayDeque<TextBlockState> redoQueue;

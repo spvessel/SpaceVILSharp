@@ -368,6 +368,7 @@ namespace SpaceVIL
         public void SetText(String text)
         {
             _area.SetText(text);
+            UpdateElements();
         }
 
         /// <returns> text from the TextArea </returns>

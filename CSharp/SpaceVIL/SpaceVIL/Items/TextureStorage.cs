@@ -130,7 +130,10 @@ namespace SpaceVIL
         {
             //RemoveItem(_cursor);
             foreach (TextLine tl in _linesList)
-                GetParent().AddItem(tl);
+            {
+                //GetParent().AddItem(tl);
+                tl.SetParent(GetParent());
+            }
             //AddItem(_cursor);
         }
 
@@ -168,7 +171,9 @@ namespace SpaceVIL
             if (_elementFont != null)
                 te.SetFont(_elementFont);
 
-            GetParent().AddItem(te);
+            //GetParent().AddItem(te);
+            te.SetParent(GetParent());
+
             //text.TrimEnd('\r');
             te.SetItemText(text);
             te.SetRecountable(true);
@@ -296,7 +301,9 @@ namespace SpaceVIL
             int inc = fromLine;
             while (inc <= toLine)
             {
-                GetParent().RemoveItem(_linesList[fromLine]);
+                //GetParent().RemoveItem(_linesList[fromLine]);
+                _linesList[fromLine].SetParent(null);
+
                 _linesList.RemoveAt(fromLine);
                 inc++;
             }

@@ -330,7 +330,7 @@ public class TextArea extends Prototype {
      */
     public void setText(String text) {
         _area.setText(text);
-        updateElements();
+        updateElements(); //??? Возможно нужно добавить еще что-то
     }
 
     /**

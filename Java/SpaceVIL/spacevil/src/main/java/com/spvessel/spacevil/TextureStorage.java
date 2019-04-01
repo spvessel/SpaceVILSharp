@@ -132,8 +132,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
     private void addAllLines() {
         // removeItem(_cursor);
-        for (TextLine tl : _linesList)
-            getParent().addItem(tl);
+        for (TextLine tl : _linesList) {
+//            getParent().addItem(tl);
+            tl.setParent(getParent());
+        }
         // addItem(_cursor);
     }
 
@@ -165,7 +167,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         te.setMargin(getTextMargin());
         if (_elementFont != null)
             te.setFont(_elementFont);
-        getParent().addItem(te);
+
+        //getParent().addItem(te);
+        te.setParent(getParent());
+
         // text.TrimEnd('\r');
         te.setItemText(text);
         te.setRecountable(true);
@@ -220,11 +225,15 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         Point outPt = new Point();
         // ??? check line count
         outPt.y = checkPoint.y;
-        if (outPt.y == -1)
+        if (outPt.y == -1) {
+//            System.out.println("point.y == -1");
             outPt.y = 0;
+        }
         outPt.x = checkPoint.x;
-        if (outPt.x == -1)
+        if (outPt.x == -1) {
+//            System.out.println("point.x == -1");
             outPt.x = 0;
+        }
 
         outPt.x = checkLineWidth(outPt.x, checkPoint);
 
@@ -282,7 +291,9 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     private void removeLines(int fromLine, int toLine) {
         int inc = fromLine;
         while (inc <= toLine) {
-            getParent().removeItem(_linesList.get(fromLine));
+//            getParent().removeItem(_linesList.get(fromLine));
+            _linesList.get(fromLine).setParent(null);
+
             _linesList.remove(fromLine);
             inc++;
         }

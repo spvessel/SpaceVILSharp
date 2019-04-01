@@ -433,28 +433,6 @@ namespace SpaceVIL
             }
         }
 
-        /*
-        private Point CheckLineFits(Point checkPoint)
-        {
-            Point outPt = new Point();
-            //??? check line count
-            outPt.Y = checkPoint.Y;
-            if (outPt.Y == -1) outPt.Y = 0;
-            outPt.X = checkPoint.X;
-            if (outPt.X == -1) outPt.X = 0;
-
-            outPt.X = _textureStorage.CheckLineWidth(outPt.X, checkPoint);
-
-            return outPt;
-        }
-        
-        private Point CursorPosToCoord(Point cPos0)
-        {
-            Point cPos = CheckLineFits(cPos0);
-            return _textureStorage.CupsorPosToCoord(cPos);
-        }
-        */
-
         private void ReplaceCursor()
         {
             Point pos = AddXYShifts(0, 0, _cursor_position);
@@ -699,6 +677,8 @@ namespace SpaceVIL
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
+                if (_selectFrom.X == -1 || _selectTo.X == -1)
+                    return "";
                 _selectFrom = _textureStorage.CheckLineFits(_selectFrom);
                 _selectTo = _textureStorage.CheckLineFits(_selectTo);
                 if (_selectFrom.X == _selectTo.X && _selectFrom.Y == _selectTo.Y) return "";
@@ -778,6 +758,8 @@ namespace SpaceVIL
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
+                if (_selectFrom.X == -1 || _selectTo.X == -1)
+                    return "";
                 string str = PrivGetSelectedText();
                 _selectFrom = _textureStorage.CheckLineFits(_selectFrom);
                 _selectTo = _textureStorage.CheckLineFits(_selectTo);
@@ -872,6 +854,7 @@ namespace SpaceVIL
             }
         }
 
+        /*
         public override List<IBaseItem> GetItems()
         {
             List<IBaseItem> list = base.GetItems();
@@ -890,6 +873,7 @@ namespace SpaceVIL
             }
             return base.RemoveItem(item);
         }
+        */
 
         private LinkedList<TextBlockState> undoQueue;
         private LinkedList<TextBlockState> redoQueue;
