@@ -697,7 +697,9 @@ final class DrawEngine {
 
         Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
 
+        Prototype lastHovered = hoveredItem;
         if (!getHoverPrototype(ptrRelease.getX(), ptrRelease.getY(), m_state)) {
+            lastHovered.setMousePressed(false);
             engineEvent.resetAllEvents();
             engineEvent.setEvent(InputEventType.MOUSE_RELEASE);
             return;
