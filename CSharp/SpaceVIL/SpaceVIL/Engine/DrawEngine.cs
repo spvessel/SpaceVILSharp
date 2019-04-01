@@ -31,6 +31,7 @@ namespace SpaceVIL
     internal sealed class DrawEngine
     {
         private Dictionary<IBaseItem, int[]> _bounds = new Dictionary<IBaseItem, int[]>();
+        Prototype _draggable = null;
 
         private ToolTip _tooltip = new ToolTip();
         private InputDeviceEvent EngineEvent = new InputDeviceEvent();
@@ -553,12 +554,12 @@ namespace SpaceVIL
                 {
                     int x_click = ptrClick.GetX();
                     int y_click = ptrClick.GetY();
-                    Prototype draggable = IsInListHoveredItems<IDraggable>();
+                    _draggable = IsInListHoveredItems<IDraggable>();
                     Prototype anchor = IsInListHoveredItems<WindowAnchor>();
-                    if (draggable != null && HoveredItem == draggable)
+                    if (_draggable != null && HoveredItem.Equals(_draggable))
                     {
                         EngineEvent.SetEvent(InputEventType.MouseDrag);
-                        draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
+                        _draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
                     }
                     else if (anchor != null && !(HoveredItem is ButtonCore) && !_handler.GetLayout().IsMaximized)
                     {
@@ -684,11 +685,26 @@ namespace SpaceVIL
                         EngineEvent.SetEvent(InputEventType.MouseRelease);
                         return;
                     }
-                    if (EngineEvent.LastEvent().HasFlag(InputEventType.MouseMove) && !EngineEvent.LastEvent().HasFlag(InputEventType.MouseDrag))
+                    if (EngineEvent.LastEvent().HasFlag(InputEventType.MouseMove))
                     {
-                        float len = (float)Math.Sqrt(Math.Pow(ptrRelease.GetX() - ptrClick.GetX(), 2) + Math.Pow(ptrRelease.GetY() - ptrClick.GetY(), 2));
-                        if (len > 10.0f)
+                        if (!EngineEvent.LastEvent().HasFlag(InputEventType.MouseDrag))
                         {
+                            float len = (float)Math.Sqrt(Math.Pow(ptrRelease.GetX() - ptrClick.GetX(), 2) + Math.Pow(ptrRelease.GetY() - ptrClick.GetY(), 2));
+                            if (len > 10.0f)
+                            {
+                                EngineEvent.ResetAllEvents();
+                                EngineEvent.SetEvent(InputEventType.MouseRelease);
+                                return;
+                            }
+                        }
+                        else if (_draggable != HoveredItem)
+                        {
+                            Prototype lastFocused = FocusedItem;
+                            FocusedItem = _draggable;
+                            FindUnderFocusedItems(_draggable);
+                            FocusedItem = lastFocused;
+
+                            AssignActions(InputEventType.MouseRelease, _margs, _draggable, true);
                             EngineEvent.ResetAllEvents();
                             EngineEvent.SetEvent(InputEventType.MouseRelease);
                             return;
