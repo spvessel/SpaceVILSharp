@@ -31,9 +31,9 @@ namespace SpaceVIL
     internal sealed class DrawEngine
     {
         private Dictionary<IBaseItem, int[]> _bounds = new Dictionary<IBaseItem, int[]>();
+        Prototype _draggable = null;
 
         private ToolTip _tooltip = new ToolTip();
-        // private IBaseItem _isStencilSet = null;
         private InputDeviceEvent EngineEvent = new InputDeviceEvent();
         private MouseArgs _margs = new MouseArgs();
         private KeyArgs _kargs = new KeyArgs();
@@ -122,6 +122,7 @@ namespace SpaceVIL
             HoveredItems = new List<Prototype>();
             _handler = new GLWHandler(handler);
 
+            // _tooltip = ToolTip.GetInstance();
             _tooltip.SetHandler(handler);
             _tooltip.GetTextLine().SetHandler(handler);
             _tooltip.GetTextLine().SetParent(_tooltip);
@@ -446,10 +447,11 @@ namespace SpaceVIL
             if (_inputLocker)
                 return;
             EngineEvent.SetEvent(InputEventType.MouseMove);
-            _tooltip.InitTimer(false);
             if (!flag_move)
                 return;
             flag_move = false;
+
+            _tooltip.InitTimer(false);
 
             if (!_handler.Focusable)
                 return;
@@ -552,11 +554,12 @@ namespace SpaceVIL
                 {
                     int x_click = ptrClick.GetX();
                     int y_click = ptrClick.GetY();
-                    Prototype draggable = IsInListHoveredItems<IDraggable>();
+                    _draggable = IsInListHoveredItems<IDraggable>();
                     Prototype anchor = IsInListHoveredItems<WindowAnchor>();
-                    if (draggable != null && HoveredItem == draggable)
+                    if (_draggable != null && HoveredItem.Equals(_draggable))
                     {
-                        draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
+                        EngineEvent.SetEvent(InputEventType.MouseDrag);
+                        _draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
                     }
                     else if (anchor != null && !(HoveredItem is ButtonCore) && !_handler.GetLayout().IsMaximized)
                     {
@@ -630,6 +633,8 @@ namespace SpaceVIL
         }
         private void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
+            _tooltip.InitTimer(false);
+
             if (_inputLocker)
                 return;
             _handler.GetLayout().GetWindow()._sides = 0;
@@ -637,7 +642,6 @@ namespace SpaceVIL
             if (!_handler.Focusable)
                 return;
 
-            _tooltip.InitTimer(false);
 
             _margs.Button = button;
             _margs.State = state;
@@ -683,9 +687,24 @@ namespace SpaceVIL
                     }
                     if (EngineEvent.LastEvent().HasFlag(InputEventType.MouseMove))
                     {
-                        float len = (float)Math.Sqrt(Math.Pow(ptrRelease.GetX() - ptrClick.GetX(), 2) + Math.Pow(ptrRelease.GetY() - ptrClick.GetY(), 2));
-                        if (len > 10.0f)
+                        if (!EngineEvent.LastEvent().HasFlag(InputEventType.MouseDrag))
                         {
+                            float len = (float)Math.Sqrt(Math.Pow(ptrRelease.GetX() - ptrClick.GetX(), 2) + Math.Pow(ptrRelease.GetY() - ptrClick.GetY(), 2));
+                            if (len > 10.0f)
+                            {
+                                EngineEvent.ResetAllEvents();
+                                EngineEvent.SetEvent(InputEventType.MouseRelease);
+                                return;
+                            }
+                        }
+                        else if (_draggable != HoveredItem)
+                        {
+                            Prototype lastFocused = FocusedItem;
+                            FocusedItem = _draggable;
+                            FindUnderFocusedItems(_draggable);
+                            FocusedItem = lastFocused;
+
+                            AssignActions(InputEventType.MouseRelease, _margs, _draggable, true);
                             EngineEvent.ResetAllEvents();
                             EngineEvent.SetEvent(InputEventType.MouseRelease);
                             return;
@@ -907,9 +926,10 @@ namespace SpaceVIL
 
         private void MouseScroll(Glfw.Window glfwwnd, double dx, double dy)
         {
+            _tooltip.InitTimer(false);
+
             if (_inputLocker)
                 return;
-            _tooltip.InitTimer(false);
 
             Stack<Prototype> tmp = new Stack<Prototype>(HoveredItems);
             while (tmp.Count > 0)
@@ -928,12 +948,13 @@ namespace SpaceVIL
 
         private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
+            _tooltip.InitTimer(false);
+
             if (_inputLocker)
                 return;
             if (!_handler.Focusable)
                 return;
 
-            _tooltip.InitTimer(false);
 
             _kargs.Key = key;
             _kargs.Scancode = scancode;
@@ -987,11 +1008,12 @@ namespace SpaceVIL
 
         private void TextInput(Glfw.Window glfwwnd, uint codepoint, KeyMods mods)
         {
+            _tooltip.InitTimer(false);
+
             if (_inputLocker)
                 return;
             if (!_handler.Focusable)
                 return;
-            _tooltip.InitTimer(false);
             _tiargs.Character = codepoint;
             _tiargs.Mods = mods;
             FocusedItem?.EventTextInput?.Invoke(FocusedItem, _tiargs);
@@ -1245,6 +1267,28 @@ namespace SpaceVIL
                     DrawItems(item);
                 }
             }
+            // List<IBaseItem> dialog_items = new List<IBaseItem>(ItemsLayoutBox.GetLayout(_handler.GetLayout().Id).DialogItems);
+            // if (dialog_items != null)
+            // {
+            //     foreach (var item in dialog_items)
+            //     {
+            //         if (item.GetHeightPolicy() == SizePolicy.Expand)
+            //         {
+            //             int[] confines = item.GetConfines();
+            //             item.SetConfines(confines[0], confines[1], 0, _handler.GetLayout().GetWindow().GetHeight());
+            //             item.SetY(0);
+            //             item.SetHeight(_handler.GetLayout().GetWindow().GetHeight());
+            //         }
+            //         if (item.GetWidthPolicy() == SizePolicy.Expand)
+            //         {
+            //             int[] confines = item.GetConfines();
+            //             item.SetConfines(0, _handler.GetLayout().GetWindow().GetWidth(), confines[2], confines[3]);
+            //             item.SetX(0);
+            //             item.SetWidth(_handler.GetLayout().GetWindow().GetWidth());
+            //         }
+            //         DrawItems(item);
+            //     }
+            // }
             //draw tooltip if needed
             DrawToolTip();
             if (!_handler.Focusable)

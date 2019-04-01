@@ -41,7 +41,7 @@ public class WContainer extends Prototype {
     }
 
     @Override
-    boolean getHoverVerification(float xpos, float ypos) {
+    protected boolean getHoverVerification(float xpos, float ypos) {
         boolean result = false;
         if (_is_fixed)
             return false;

@@ -565,7 +565,7 @@ namespace SpaceVIL
             _textureStorage.InitLines(_cursor.GetWidth());
         }
 
-        public override void SetFocused(bool value)
+        protected internal override void SetFocused(bool value)
         {
             base.SetFocused(value);
             if (IsFocused() && _isEditable)

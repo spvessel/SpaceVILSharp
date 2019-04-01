@@ -143,7 +143,7 @@ public class PasswordLine extends HorizontalStack {
         eye.keepAspectRatio(true);
         eye.setColorOverlay(new Color(80, 80, 80));
         _show_pwd_btn.addItem(eye);
-        
+
         _show_pwd_btn.setPassEvents(false);
         _show_pwd_btn.eventMousePress.add((sender, args) -> {
             showPassword(true);
@@ -154,8 +154,10 @@ public class PasswordLine extends HorizontalStack {
             eye.setColorOverlay(new Color(80, 80, 80));
         });
         _show_pwd_btn.eventMouseLeave.add((sender, args) -> {
-            showPassword(false);
-            eye.setColorOverlay(new Color(80, 80, 80));
+            if (isFocused()) {
+                showPassword(false);
+                eye.setColorOverlay(new Color(80, 80, 80));
+            }
         });
     }
 

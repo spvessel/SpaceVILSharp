@@ -132,28 +132,30 @@ namespace SpaceVIL
             AddItems(Track, Handler);
 
             //Event connections
-            EventMouseDrop += OnDropHandler;
+            EventMouseDrop += OnDragHandler;
             Handler.EventMouseDrag += EventMouseDrop.Invoke;
         }
 
-        void OnDropHandler(object sender, MouseArgs args)//что-то с тобой не так
+        private bool _dragging = false;
+
+        protected virtual void OnDragHandler(object sender, MouseArgs args)//что-то с тобой не так
         {
+            _dragging = true;
             //иногда число NAN 
             float result = (float)(Handler.GetX() - GetX()) * (_max_value - _min_value) / ((float)GetWidth() - Handler.GetWidth());
             if (!Single.IsNaN(result))
                 SetCurrentValue(result);
         }
 
-        void OnTrackClick(object sender, MouseArgs args)
+        protected virtual void OnTrackClick(object sender, MouseArgs args)
         {
-            if (Handler.IsMouseHover())
-                return;
-
             //Compute CurrentValue
-            SetCurrentValue(
-                (float)(args.Position.GetX() - GetX() - Handler.GetWidth() / 2)
-                * (_max_value - _min_value)
-                / ((float)GetWidth() - Handler.GetWidth()));
+            if (!_dragging)
+                SetCurrentValue(
+                    (float)(args.Position.GetX() - GetX() - Handler.GetWidth() / 2)
+                    * (_max_value - _min_value)
+                    / ((float)GetWidth() - Handler.GetWidth()));
+            _dragging = false;
         }
 
         /// <summary>

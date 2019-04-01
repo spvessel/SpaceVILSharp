@@ -22,6 +22,10 @@ public class ItemsLayoutBox {
         // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
         return layouts.get(id).getFloatItems();
     }
+    static public List<InterfaceBaseItem> getLayoutDialogItems(UUID id) {
+        // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
+        return layouts.get(id).getDialogItems();
+    }
 
     static ItemsLayout getLayout(UUID id) {
         return layouts.get(id);
@@ -42,6 +46,9 @@ public class ItemsLayoutBox {
         case FLOATING:
             layouts.get(layout.getId()).getFloatItems().add(item);
             break;
+        case DIALOG:
+            layouts.get(layout.getId()).getDialogItems().add(item);
+            break;
         default:
             layouts.get(layout.getId()).getItems().add(item);
             break;
@@ -55,6 +62,9 @@ public class ItemsLayoutBox {
 //            break;
         case FLOATING:
             return layouts.get(layout.getId()).getFloatItems().remove(item);
+//            break;
+        case DIALOG:
+            return layouts.get(layout.getId()).getDialogItems().remove(item);
 //            break;
         default:
             return layouts.get(layout.getId()).getItems().remove(item);

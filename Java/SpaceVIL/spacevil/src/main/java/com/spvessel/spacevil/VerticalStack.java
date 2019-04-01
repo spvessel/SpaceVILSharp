@@ -3,10 +3,22 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceVLayout;
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class VerticalStack extends Prototype implements InterfaceVLayout {
     private static int count = 0;
+
+    private ItemAlignment _contentAlignment = ItemAlignment.TOP;
+
+    public void setContentAlignment(ItemAlignment alignment) {
+        if (alignment == ItemAlignment.TOP || alignment == ItemAlignment.VCENTER || alignment == ItemAlignment.BOTTOM)
+            _contentAlignment = alignment;
+    }
+
+    public ItemAlignment getContentAlignment() {
+        return _contentAlignment;
+    }
 
     /**
      * Constructs a VerticalStack
@@ -21,7 +33,7 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
 
     // overrides
     @Override
-    public boolean getHoverVerification(float xpos, float ypos) {
+    protected boolean getHoverVerification(float xpos, float ypos) {
         return false;
     }
 
@@ -53,8 +65,8 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Update all children and VerticalStack sizes and positions
-     * according to confines
+     * Update all children and VerticalStack sizes and positions according to
+     * confines
      */
     public void updateLayout() {
         int total_space = getHeight() - getPadding().top - getPadding().bottom;
@@ -81,33 +93,49 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
         int offset = 0;
         int startY = getY() + getPadding().top;
 
-        for (InterfaceBaseItem child : getItems()) {
-            if (child.isVisible()) {
-                child.setY(startY + offset + child.getMargin().top);//
-                if (child.getHeightPolicy() == SizePolicy.EXPAND) {
-                    if (height_for_expanded - child.getMargin().top - child.getMargin().bottom < child.getMaxHeight())//
-                        child.setHeight(height_for_expanded - child.getMargin().top - child.getMargin().bottom);//
-                    else {
-                        expanded_count--;
-                        free_space -= (child.getHeight() + child.getMargin().top + child.getMargin().bottom);
-                        height_for_expanded = 1;
-                        if (expanded_count > 0 && free_space > expanded_count)
-                            height_for_expanded = free_space / expanded_count;
+        if (expanded_count > 0 || _contentAlignment.equals(ItemAlignment.TOP)) {
+            for (InterfaceBaseItem child : getItems()) {
+                if (child.isVisible()) {
+                    child.setY(startY + offset + child.getMargin().top);//
+                    if (child.getHeightPolicy() == SizePolicy.EXPAND) {
+                        if (height_for_expanded - child.getMargin().top - child.getMargin().bottom < child
+                                .getMaxHeight())//
+                            child.setHeight(height_for_expanded - child.getMargin().top - child.getMargin().bottom);//
+                        else {
+                            expanded_count--;
+                            free_space -= (child.getHeight() + child.getMargin().top + child.getMargin().bottom);
+                            height_for_expanded = 1;
+                            if (expanded_count > 0 && free_space > expanded_count)
+                                height_for_expanded = free_space / expanded_count;
+                        }
                     }
+                    offset += child.getHeight() + getSpacing().vertical + child.getMargin().top
+                            + child.getMargin().bottom;//
                 }
-
-                // if (child.getY() + child.getHeight() + child.getMargin().top +
-                // child.getMargin().bottom >= startY //
-                // && child.getY() <= getY() + getHeight() - getPadding().bottom)
-                // child.IsVisible = true;
-                // else
-                // child.IsVisible = false;
-
-                offset += child.getHeight() + getSpacing().vertical + child.getMargin().top + child.getMargin().bottom;//
+                // refactor
+                child.setConfines();
             }
-
-            // refactor
-            child.setConfines();
+        } else {
+            if (_contentAlignment.equals(ItemAlignment.BOTTOM)) {
+                for (InterfaceBaseItem child : getItems()) {
+                    if (child.isVisible()) {
+                        child.setY(startY + offset + child.getMargin().top + free_space);//
+                        offset += child.getHeight() + getSpacing().vertical + child.getMargin().top
+                                + child.getMargin().bottom;//
+                    }
+                    child.setConfines();
+                }
+            } else if (_contentAlignment.equals(ItemAlignment.VCENTER)) {
+                for (InterfaceBaseItem child : getItems()) {
+                    if (child.isVisible()) {
+                        child.setY(startY + offset + child.getMargin().top + free_space / 2);//
+                        offset += child.getHeight() + getSpacing().vertical + child.getMargin().top
+                                + child.getMargin().bottom;//
+                    }
+                    child.setConfines();
+                }
+            }
         }
+
     }
 }

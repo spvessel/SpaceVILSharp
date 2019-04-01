@@ -163,7 +163,7 @@ namespace SpaceVIL
             return _text_object.GetForeground();
         }
 
-        internal override bool GetHoverVerification(float xpos, float ypos)
+        protected internal override bool GetHoverVerification(float xpos, float ypos)
         {
             return false;
         }

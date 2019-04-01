@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
@@ -8,6 +9,19 @@ namespace SpaceVIL
     public class HorizontalStack : Prototype, IHLayout
     {
         static int count = 0;
+
+        private ItemAlignment _contentAlignment = ItemAlignment.Left;
+
+        public void SetContentAlignment(ItemAlignment alignment)
+        {
+            if (alignment == ItemAlignment.Top || alignment == ItemAlignment.HCenter || alignment == ItemAlignment.Right)
+                _contentAlignment = alignment;
+        }
+
+        public ItemAlignment GetContentAlignment()
+        {
+            return _contentAlignment;
+        }
 
         /// <summary>
         /// Constructs a HorizontalStack
@@ -21,7 +35,7 @@ namespace SpaceVIL
         }
 
         //overrides
-        internal override bool GetHoverVerification(float xpos, float ypos)
+        protected internal override bool GetHoverVerification(float xpos, float ypos)
         {
             return false;
         }
@@ -87,29 +101,62 @@ namespace SpaceVIL
 
             int offset = 0;
             int startX = GetX() + GetPadding().Left;
-            foreach (var child in GetItems())
+            
+            if (expanded_count > 0 || _contentAlignment.Equals(ItemAlignment.Left))
             {
-                if (child.IsVisible())
+                foreach (var child in GetItems())
                 {
-                    child.SetX(startX + offset + child.GetMargin().Left);//
-
-                    if (child.GetWidthPolicy() == SizePolicy.Expand)
+                    if (child.IsVisible())
                     {
-                        if (width_for_expanded - child.GetMargin().Left - child.GetMargin().Right < child.GetMaxWidth())
-                            child.SetWidth(width_for_expanded - child.GetMargin().Left - child.GetMargin().Right);
-                        else
+                        child.SetX(startX + offset + child.GetMargin().Left);//
+
+                        if (child.GetWidthPolicy() == SizePolicy.Expand)
                         {
-                            expanded_count--;
-                            free_space -= (child.GetWidth() + child.GetMargin().Left + child.GetMargin().Right);//
-                            width_for_expanded = 1;
-                            if (expanded_count > 0 && free_space > expanded_count)
-                                width_for_expanded = free_space / expanded_count;
+                            if (width_for_expanded - child.GetMargin().Left - child.GetMargin().Right < child.GetMaxWidth())
+                                child.SetWidth(width_for_expanded - child.GetMargin().Left - child.GetMargin().Right);
+                            else
+                            {
+                                expanded_count--;
+                                free_space -= (child.GetWidth() + child.GetMargin().Left + child.GetMargin().Right);//
+                                width_for_expanded = 1;
+                                if (expanded_count > 0 && free_space > expanded_count)
+                                    width_for_expanded = free_space / expanded_count;
+                            }
                         }
+                        offset += child.GetWidth() + GetSpacing().Horizontal + child.GetMargin().Left + child.GetMargin().Right;//
                     }
-                    offset += child.GetWidth() + GetSpacing().Horizontal + child.GetMargin().Left + child.GetMargin().Right;//
+                    //refactor
+                    child.SetConfines();
                 }
-                //refactor
-                child.SetConfines();
+            }
+            else
+            {
+                //for content alignment right
+                if (_contentAlignment.Equals(ItemAlignment.Right))
+                {
+                    foreach (var child in GetItems())
+                    {
+                        if (child.IsVisible())
+                        {
+                            child.SetX(startX + offset + child.GetMargin().Left + free_space);
+                            offset += child.GetWidth() + GetSpacing().Horizontal + child.GetMargin().Left + child.GetMargin().Right;//
+                        }
+                        child.SetConfines();
+                    }
+                }
+                //for content alignment hcenter
+                else if (_contentAlignment.Equals(ItemAlignment.HCenter))
+                {
+                    foreach (var child in GetItems())
+                    {
+                        if (child.IsVisible())
+                        {
+                            child.SetX(startX + offset + child.GetMargin().Left + free_space / 2);
+                            offset += child.GetWidth() + GetSpacing().Horizontal + child.GetMargin().Left + child.GetMargin().Right;//
+                        }
+                        child.SetConfines();
+                    }
+                }
             }
         }
     }

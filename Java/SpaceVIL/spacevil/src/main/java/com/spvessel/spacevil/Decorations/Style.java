@@ -1585,7 +1585,7 @@ public class Style implements Cloneable {
         style.font = DefaultsService.getDefaultFont();
         style.background = new Color(255, 255, 255);
         style.foreground = new Color(70, 70, 70);
-        ;
+        
         style.height = 30;
         style.widthPolicy = SizePolicy.FIXED;
         style.heightPolicy = SizePolicy.FIXED;

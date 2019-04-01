@@ -35,7 +35,7 @@ namespace SpaceVIL
 
         public bool IsHover = false;
 
-        internal override bool GetHoverVerification(float xpos, float ypos)
+        protected internal override bool GetHoverVerification(float xpos, float ypos)
         {
             if (IsHover)
                 return base.GetHoverVerification(xpos, ypos);

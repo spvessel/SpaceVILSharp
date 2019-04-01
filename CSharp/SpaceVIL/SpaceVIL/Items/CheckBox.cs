@@ -14,7 +14,7 @@ namespace SpaceVIL
     {
         internal class CustomIndicator : Indicator
         {
-            internal override bool GetHoverVerification(float xpos, float ypos)
+            protected internal override bool GetHoverVerification(float xpos, float ypos)
             {
                 return false;
             }

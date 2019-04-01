@@ -488,7 +488,6 @@ public class TextArea extends Prototype {
      */
     @Override
     public void setFocus() {
-        super.setFocus();
         _area.setFocus();
     }
 

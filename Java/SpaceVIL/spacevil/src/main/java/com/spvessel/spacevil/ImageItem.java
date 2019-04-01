@@ -37,7 +37,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     public boolean isHover = false;
 
     @Override
-    public boolean getHoverVerification(float xpos, float ypos) {
+    protected boolean getHoverVerification(float xpos, float ypos) {
         if (isHover)
             return super.getHoverVerification(xpos, ypos);
         return false;

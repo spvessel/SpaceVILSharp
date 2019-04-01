@@ -44,6 +44,6 @@ public class Program {
         // ScissorsTest sc = new ScissorsTest();
         // sc.show();
 
-        mw.show();
+        it.show();
     }
 }

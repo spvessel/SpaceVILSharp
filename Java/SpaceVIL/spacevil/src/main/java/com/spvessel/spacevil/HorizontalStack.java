@@ -3,10 +3,22 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceHLayout;
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class HorizontalStack extends Prototype implements InterfaceHLayout {
     private static int count = 0;
+
+    private ItemAlignment _contentAlignment = ItemAlignment.LEFT;
+
+    public void setContentAlignment(ItemAlignment alignment) {
+        if (alignment == ItemAlignment.LEFT || alignment == ItemAlignment.HCENTER || alignment == ItemAlignment.RIGHT)
+            _contentAlignment = alignment;
+    }
+
+    public ItemAlignment getContentAlignment() {
+        return _contentAlignment;
+    }
 
     /**
      * Constructs a HorizontalStack
@@ -20,7 +32,7 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
 
     // overrides
     @Override
-    public boolean getHoverVerification(float xpos, float ypos) {
+    protected boolean getHoverVerification(float xpos, float ypos) {
         return false;
     }
 
@@ -53,8 +65,8 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
 
     // @Override
     // public void setY(int _y) {
-    //     super.setY(_y);
-    //     updateLayout();
+    // super.setY(_y);
+    // updateLayout();
     // }
 
     /**
@@ -86,29 +98,47 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
         int offset = 0;
         int startX = getX() + getPadding().left;
 
-        for (InterfaceBaseItem child : getItems()) {
-            if (child.isVisible()) {
-                child.setX(startX + offset + child.getMargin().left);//
-                if (child.getWidthPolicy() == SizePolicy.EXPAND) {
-                    if (width_for_expanded - child.getMargin().left - child.getMargin().right < child.getMaxWidth())
-                        child.setWidth(width_for_expanded - child.getMargin().left - child.getMargin().right);
-                    else {
-                        expanded_count--;
-                        free_space -= (child.getWidth() + child.getMargin().left + child.getMargin().right);//
-                        width_for_expanded = 1;
-                        if (expanded_count > 0 && free_space > expanded_count)
-                            width_for_expanded = free_space / expanded_count;
+        if (expanded_count > 0 || _contentAlignment.equals(ItemAlignment.LEFT)) {
+            for (InterfaceBaseItem child : getItems()) {
+                if (child.isVisible()) {
+                    child.setX(startX + offset + child.getMargin().left);//
+                    if (child.getWidthPolicy() == SizePolicy.EXPAND) {
+                        if (width_for_expanded - child.getMargin().left - child.getMargin().right < child.getMaxWidth())
+                            child.setWidth(width_for_expanded - child.getMargin().left - child.getMargin().right);
+                        else {
+                            expanded_count--;
+                            free_space -= (child.getWidth() + child.getMargin().left + child.getMargin().right);//
+                            width_for_expanded = 1;
+                            if (expanded_count > 0 && free_space > expanded_count)
+                                width_for_expanded = free_space / expanded_count;
+                        }
                     }
+                    offset += child.getWidth() + getSpacing().horizontal + child.getMargin().left
+                            + child.getMargin().right;//
                 }
-                offset += child.getWidth() + getSpacing().horizontal + child.getMargin().left + child.getMargin().right;//
+                // refactor
+                child.setConfines();
             }
-            // refactor
-            child.setConfines();
+        } else {
+            if (_contentAlignment.equals(ItemAlignment.RIGHT)) {
+                for (InterfaceBaseItem child : getItems()) {
+                    if (child.isVisible()) {
+                        child.setX(startX + offset + child.getMargin().left + free_space);//
+                        offset += child.getWidth() + getSpacing().horizontal + child.getMargin().left
+                                + child.getMargin().right;//
+                    }
+                    child.setConfines();
+                }
+            } else if (_contentAlignment.equals(ItemAlignment.HCENTER)) {
+                for (InterfaceBaseItem child : getItems()) {
+                    if (child.isVisible()) {
+                        child.setX(startX + offset + child.getMargin().left + free_space / 2);//
+                        offset += child.getWidth() + getSpacing().horizontal + child.getMargin().left
+                                + child.getMargin().right;//
+                    }
+                    child.setConfines();
+                }
+            }
         }
-
-        // for (InterfaceBaseItem child : getItems()) {
-        // System.out.println(child.getItemName() + " " + child.getWidth() + " " +
-        // child.getHeight() + " " + child.getVisible());
-        // }
     }
 }

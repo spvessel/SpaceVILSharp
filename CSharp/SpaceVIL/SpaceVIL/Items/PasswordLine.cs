@@ -40,10 +40,9 @@ namespace SpaceVIL
         /// <summary>
         /// Set PasswordLine focused/unfocused
         /// </summary>
-        public override void SetFocused(bool value)
+        public override void SetFocus()
         {
-            base.SetFocused(value);
-            _textEncrypt.SetFocused(value);
+            _textEncrypt.SetFocus();
         }
 
         /// <summary>
@@ -167,8 +166,11 @@ namespace SpaceVIL
             };
             _show_pwd_btn.EventMouseLeave += (sender, args) =>
             {
-                ShowPassword(false);
-                eye.SetColorOverlay(Color.FromArgb(80, 80, 80));
+                if (IsFocused())
+                {
+                    ShowPassword(false);
+                    eye.SetColorOverlay(Color.FromArgb(80, 80, 80));
+                }
             };
         }
 

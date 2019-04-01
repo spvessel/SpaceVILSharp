@@ -40,4 +40,14 @@ final class ItemsLayout {
     void setFloatItems(List<InterfaceBaseItem> value) {
         _float_items = value;
     }
+
+    List<InterfaceBaseItem> _dialog_items = new LinkedList<>();
+
+    List<InterfaceBaseItem> getDialogItems() {
+        return _dialog_items;
+    }
+
+    void setDialogItems(List<InterfaceBaseItem> value) {
+        _dialog_items = value;
+    }
 }

@@ -88,7 +88,7 @@ namespace SpaceVIL.Decorations
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TextArea), Style.GetTextAreaStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.PopUpMessage), Style.GetPopUpMessageStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.ProgressBar), Style.GetProgressBarStyle());
-                // DefaultItemsStyle.Add(typeof(SpaceVIL.ToolTip), Style.GetToolTipStyle());
+                DefaultItemsStyle.Add(typeof(SpaceVIL.ToolTip), Style.GetToolTipStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.TitleBar), Style.GetTitleBarStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.VerticalScrollBar), Style.GetVerticalScrollBarStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.VerticalSlider), Style.GetVerticalSliderStyle());

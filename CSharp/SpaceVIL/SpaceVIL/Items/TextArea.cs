@@ -305,8 +305,8 @@ namespace SpaceVIL
             _area.CursorChanged += UpdateElements;
             _area.TextChanged += () => OnTextChanged?.Invoke();
 
-            VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea();};
-            HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea();};
+            VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); };
+            HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };
 
             // create menu
             _menu = new ContextMenu(GetHandler());
@@ -542,7 +542,6 @@ namespace SpaceVIL
         /// </summary>
         public override void SetFocus()
         {
-            base.SetFocus();
             _area.SetFocus();
         }
 

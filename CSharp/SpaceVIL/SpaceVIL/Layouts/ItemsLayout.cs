@@ -29,5 +29,11 @@ namespace SpaceVIL
             get { return float_items; }
             set { float_items = value; }
         }
+        List<IBaseItem> dialog_items = new List<IBaseItem>();
+        internal List<IBaseItem> DialogItems
+        {
+            get { return dialog_items; }
+            set { dialog_items = value; }
+        }
     }
 }

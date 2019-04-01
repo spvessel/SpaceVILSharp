@@ -2,6 +2,7 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.LayoutType;
 
 import java.awt.Color;
 
@@ -29,11 +30,15 @@ abstract public class DialogItem extends Prototype {
 
     public void show(WindowLayout handler) {
         _handler = handler;
+        // setHandler(handler);
+        // initElements();
+        // ItemsLayoutBox.addItem(handler, this, LayoutType.DIALOG);
         _handler.addItem(this);
-        _handler.setFocusedItem(this);
+        this.setFocus();
     }
 
     public void close() {
+        // ItemsLayoutBox.addItem(getHandler(), this, LayoutType.DIALOG);
         _handler.getWindow().removeItem(this);
     }
 

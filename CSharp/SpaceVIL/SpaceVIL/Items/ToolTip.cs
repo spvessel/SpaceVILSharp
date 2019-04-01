@@ -27,16 +27,26 @@ namespace SpaceVIL
         {
             return _timeout;
         }
-        public ToolTip()
+
+        // private static ToolTip _instance = null;
+
+        internal ToolTip()
         {
             SetVisible(false);
             _text_object = new TextLine();
             SetItemName("ToolTip");
-
-            // SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ToolTip)));
-            SetStyle(Style.GetToolTipStyle());
             IsFocusable = false;
+
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ToolTip)));
         }
+
+        // public static ToolTip GetInstance()
+        // {
+        //     if (_instance == null)
+        //         _instance = new ToolTip();
+        //     return _instance;
+        // }
+
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _text_object.SetTextAlignment(alignment);
@@ -86,13 +96,6 @@ namespace SpaceVIL
             return _text_object.GetForeground();
         }
 
-        public override void InitElements()
-        {
-            //text
-            // _text_object.SetTextAlignment(ItemAlignment.Left | ItemAlignment.VCenter);
-            // _text_object.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
-        }
-
         internal void InitTimer(bool value)
         {
             if (value)
@@ -119,14 +122,11 @@ namespace SpaceVIL
 
         private void VisibleSelf()
         {
-            
             SetVisible(true);
 
             _stop.Stop();
             _stop.Dispose();
             _stop = null;
-
-            //GetHandler().UpdateScene();
         }
 
         //style

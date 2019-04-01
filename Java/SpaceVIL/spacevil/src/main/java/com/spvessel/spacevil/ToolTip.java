@@ -1,5 +1,6 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -13,29 +14,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.Timer;
 
-final class ToolTip extends Prototype {
-    // class TooltipVisibility extends Thread {
-    //     private int _ms = 500;
-
-    //     TooltipVisibility() {}
-
-    //     TooltipVisibility(int ms) {
-    //         _ms = ms;
-    //     }
-
-    //     boolean isCanceled = false;
-
-    //     @Override
-    //     public void run() {
-    //         long startTime = System.currentTimeMillis();
-    //         while (!isCanceled) {
-    //             if (System.currentTimeMillis() - startTime >= _ms) {
-    //                 visibleSelf();
-    //                 break;
-    //             }
-    //         }
-    //     }
-    // }
+public final class ToolTip extends Prototype {
 
     private static int count = 0;
 
@@ -46,7 +25,7 @@ final class ToolTip extends Prototype {
     }
 
     private Timer _stop = null;
-    private int _timeout = 1000;
+    private int _timeout = 500;
 
     public void setTimeOut(int milliseconds) {
         _timeout = milliseconds;
@@ -56,19 +35,28 @@ final class ToolTip extends Prototype {
         return _timeout;
     }
 
-    public ToolTip() {
+    // private static ToolTip _instance = null;
+
+    protected ToolTip() {
         setVisible(false);
         _text_object = new TextLine();
         setItemName("ToolTip_" + count);
         count++;
-
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ToolTip"));
-        setStyle(Style.getToolTipStyle());
         isFocusable = false;
+
+        setStyle(DefaultsService.getDefaultStyle(ToolTip.class));
     }
 
+    // public static ToolTip getInstance() {
+    // if (_instance == null)
+    // _instance = new ToolTip();
+    // return _instance;
+    // }
+
     @Override
-    public void initElements() {}
+    public void initElements() {
+        // addItem(_text_object);
+    }
 
     private Lock locker = new ReentrantLock();
 
