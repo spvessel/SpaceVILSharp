@@ -40,7 +40,7 @@ public abstract class OpenDialog extends DialogItem {
             updateWindow();
         });
         eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.R && args.mods == KeyMods.CONTROL)
+            if (args.key == KeyCode.R && args.mods.contains(KeyMods.CONTROL))
                 updateWindow();
             else if (args.key == KeyCode.ESCAPE)
                 close();

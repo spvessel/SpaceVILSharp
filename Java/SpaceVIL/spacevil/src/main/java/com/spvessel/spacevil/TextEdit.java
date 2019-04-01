@@ -86,6 +86,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
 
         setCursor(EmbeddedCursor.IBEAM);
     }
+
     public TextEdit(String text) {
         this();
         setText(text);
@@ -144,8 +145,8 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         _text_object.setLineXShift(sh);
         _cursor.setX(curCoord + sh);
 
-//        curPos = _cursor.getX() - curPos;
-//        _selectedArea.setX(_selectedArea.getX() + curPos);
+        // curPos = _cursor.getX() - curPos;
+        // _selectedArea.setX(_selectedArea.getX() + curPos);
         if (_justSelected)
             cancelJustSelected();
         makeSelectedArea(_selectFrom, _selectTo);
@@ -170,8 +171,8 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         _text_object.setLineXShift(sh);
         _cursor.setX(curCoord + sh);
 
-//        curPos = _cursor.getX() - curPos;
-//        _selectedArea.setX(_selectedArea.getX() + curPos);
+        // curPos = _cursor.getX() - curPos;
+        // _selectedArea.setX(_selectedArea.getX() + curPos);
         if (_justSelected)
             cancelJustSelected();
         makeSelectedArea(_selectFrom, _selectTo);
@@ -226,22 +227,18 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
                 // _justSelected = false;
                 cancelJustSelected();
             }
-            if (args.mods != KeyMods.NO) {
+            if (!args.mods.contains(KeyMods.NO)) {
                 // Выделение не сбрасывается, проверяются сочетания
-                // 
-                //
-                switch (args.mods) {
-                case SHIFT:
+                if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 1) {
                     if (ShiftValCodes.contains(args.key)) {
                         if (!_isSelect) {
                             _isSelect = true;
                             _selectFrom = _cursor_position;
                         }
                     }
+                }
 
-                    break;
-
-                case CONTROL:
+                if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1) {
                     if (args.key == KeyCode.A || args.key == KeyCode.a) {
                         _selectFrom = 0;
                         _cursor_position = privGetText().length();
@@ -249,10 +246,8 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
 
                         _isSelect = true;
                     }
-                    break;
-
-                // alt, super ?
                 }
+                // alt, super ?
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE) {
                     if (_isSelect) {
@@ -274,7 +269,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
                     }
                 } else if (_isSelect && !InsteadKeyMods.contains(args.key)) {
                     unselectText();
-//                    cancelJustSelected();
+                    // cancelJustSelected();
                 }
             }
 
@@ -309,7 +304,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
                     makeSelectedArea(_selectFrom, _selectTo);
                 }
             }
-        } finally {
+        } finally
+
+        {
             textInputLock.unlock();
         }
     }
@@ -332,7 +329,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
             }
             if (getLineXShift() + coord > _cursorXMax)
                 _text_object.setLineXShift(_cursorXMax - coord);
-            }
+        }
 
         return getLineXShift() + coord;
     }
@@ -465,16 +462,15 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         try {
             if (_substrate_text.isVisible())
                 _substrate_text.setVisible(false);
-            if (text.equals("")) 
+            if (text.equals(""))
                 _substrate_text.setVisible(true);
             // _text_object.setLineXShift(_lineXShift, getWidth());
             _text_object.setItemText(text);
             _text_object.checkXShift(_cursorXMax);
             // _text_object.UpdateData(UpdateType.Critical); //Doing in the _text_object
 
-//            _cursor_position = privGetText().length();
+            // _cursor_position = privGetText().length();
             replaceCursor();
-
 
             if (!nothingFlag) {
                 redoQueue = new ArrayDeque<>();
@@ -582,8 +578,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     public void initElements() {
         addItems(_substrate_text, _selectedArea, _text_object, _cursor);
 
-        // _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left - getPadding().right
-        //         - _text_object.getMargin().left - _text_object.getMargin().right;
+        // _cursorXMax = getWidth() - _cursor.getWidth() - getPadding().left -
+        // getPadding().right
+        // - _text_object.getMargin().left - _text_object.getMargin().right;
         // _text_object.setAllowWidth(_cursorXMax);
         // _text_object.setLineXShift();
 
@@ -621,7 +618,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
             toPt = 0;
         fromPt = cursorPosToCoord(fromPt, false);
         toPt = cursorPosToCoord(toPt, false);
-        
+
         if (fromPt == toPt) {
             _selectedArea.setWidth(0);
             return;
@@ -804,15 +801,18 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
 
     private int queueCapacity = 100;
     private boolean nothingFlag = false;
+
     /**
      * Undo last action
      */
     public void undo() {
-//        _text_object.undo();
+        // _text_object.undo();
         undoAction();
-//        replaceCursor();
+        // replaceCursor();
     }
+
     private ArrayDeque<TextEditState> undoQueue;
+
     private void undoAction() {
         if (undoQueue.size() == 1)
             return;
@@ -839,11 +839,13 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
      * Redo last undo action
      */
     public void redo() {
-//        _text_object.redo();
+        // _text_object.redo();
         redoAction();
-//        replaceCursor();
+        // replaceCursor();
     }
+
     private ArrayDeque<TextEditState> redoQueue;
+
     private void redoAction() {
         if (redoQueue.size() == 0)
             return;
@@ -910,8 +912,10 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     private class TextEditState {
         String textState;
         int cursorState;
+
         TextEditState() {
         }
+
         TextEditState(String textState, int cursorState) {
             this.textState = textState;
             this.cursorState = cursorState;

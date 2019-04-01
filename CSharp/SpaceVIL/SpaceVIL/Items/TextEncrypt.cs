@@ -21,7 +21,7 @@ namespace SpaceVIL
 
         private Rectangle _cursor;
         private int _cursor_position = 0;
-        
+
         private Rectangle _selectedArea;
         private bool _isEditable = true;
 
@@ -65,7 +65,8 @@ namespace SpaceVIL
             SetCursor(EmbeddedCursor.IBeam);
         }
 
-        private void OnMouseDoubleClick(object sender, MouseArgs args) {
+        private void OnMouseDoubleClick(object sender, MouseArgs args)
+        {
             Monitor.Enter(textInputLock);
             try
             {
@@ -149,7 +150,7 @@ namespace SpaceVIL
 
             return pos;
         }
-        
+
         private void OnKeyPress(object sender, KeyArgs args)
         {
             if (!_isEditable) return;
@@ -179,9 +180,7 @@ namespace SpaceVIL
                                     _selectFrom = _cursor_position;
                                 }
                             }
-
                             break;
-
                         case KeyMods.Control:
                             if (args.Key == KeyCode.A || args.Key == KeyCode.a)
                             {
@@ -192,7 +191,6 @@ namespace SpaceVIL
                                 _isSelect = true;
                             }
                             break;
-
                             //alt, super ?
                     }
                 }
@@ -460,7 +458,7 @@ namespace SpaceVIL
             return _isEditable;
         }
         internal void SetEditable(bool value)
-        { 
+        {
             if (_isEditable == value)
                 return;
             _isEditable = value;
@@ -592,7 +590,7 @@ namespace SpaceVIL
             }
         }
 
-        private string GetSelectedText() 
+        private string GetSelectedText()
         {
             Monitor.Enter(textInputLock);
             try
