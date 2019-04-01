@@ -45,6 +45,9 @@ namespace SpaceVIL
                 case LayoutType.Floating:
                     layouts[layout.Id].FloatItems.Add(item);
                     break;
+                case LayoutType.Dialog:
+                    layouts[layout.Id].DialogItems.Add(item);
+                    break;
                 default:
                     layouts[layout.Id].Items.Add(item);
                     break;
@@ -59,6 +62,9 @@ namespace SpaceVIL
                     // break;
                 case LayoutType.Floating:
                     return layouts[layout.Id].FloatItems.Remove(item);
+                    // break;
+                case LayoutType.Dialog:
+                    return layouts[layout.Id].DialogItems.Remove(item);
                     // break;
                 default:
                     return layouts[layout.Id].Items.Remove(item);

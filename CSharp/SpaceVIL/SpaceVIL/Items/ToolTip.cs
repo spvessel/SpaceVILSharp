@@ -30,7 +30,7 @@ namespace SpaceVIL
 
         // private static ToolTip _instance = null;
 
-        public ToolTip()
+        internal ToolTip()
         {
             SetVisible(false);
             _text_object = new TextLine();

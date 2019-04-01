@@ -83,36 +83,61 @@ namespace SpaceVIL
 
             int offset = 0;
             int startY = GetY() + GetPadding().Top;
-            foreach (var child in GetItems())
+
+            if (expanded_count > 0 || _contentAlignment.Equals(ItemAlignment.Top))
             {
-                if (child.IsVisible())
+                foreach (var child in GetItems())
                 {
-                    child.SetY(startY + offset + child.GetMargin().Top);//
-                    if (child.GetHeightPolicy() == SizePolicy.Expand)
+                    if (child.IsVisible())
                     {
-                        if (height_for_expanded - child.GetMargin().Top - child.GetMargin().Bottom < child.GetMaxHeight())//
-                            child.SetHeight(height_for_expanded - child.GetMargin().Top - child.GetMargin().Bottom);//
-                        else
+                        child.SetY(startY + offset + child.GetMargin().Top);//
+                        if (child.GetHeightPolicy() == SizePolicy.Expand)
                         {
-                            expanded_count--;
-                            free_space -= (child.GetHeight() + child.GetMargin().Top + child.GetMargin().Bottom);
-                            height_for_expanded = 1;
-                            if (expanded_count > 0 && free_space > expanded_count)
-                                height_for_expanded = free_space / expanded_count;
+                            if (height_for_expanded - child.GetMargin().Top - child.GetMargin().Bottom < child.GetMaxHeight())//
+                                child.SetHeight(height_for_expanded - child.GetMargin().Top - child.GetMargin().Bottom);//
+                            else
+                            {
+                                expanded_count--;
+                                free_space -= (child.GetHeight() + child.GetMargin().Top + child.GetMargin().Bottom);
+                                height_for_expanded = 1;
+                                if (expanded_count > 0 && free_space > expanded_count)
+                                    height_for_expanded = free_space / expanded_count;
+                            }
                         }
+                        offset += child.GetHeight() + GetSpacing().Vertical + child.GetMargin().Top + child.GetMargin().Bottom;//
                     }
-
-                    // if (child.GetY() + child.GetHeight() + child.GetMargin().Top + child.GetMargin().Bottom >= startY //
-                    //     && child.GetY() <= GetY() + GetHeight() - GetPadding().Bottom)
-                    //     child.IsVisible = true;
-                    // else
-                    //     child.IsVisible = false;
-
-                    offset += child.GetHeight() + GetSpacing().Vertical + child.GetMargin().Top + child.GetMargin().Bottom;//
+                    //refactor
+                    child.SetConfines();
                 }
-
-                //refactor
-                child.SetConfines();
+            }
+            else
+            {
+                //for content alignment right
+                if (_contentAlignment.Equals(ItemAlignment.Bottom))
+                {
+                    foreach (var child in GetItems())
+                    {
+                        if (child.IsVisible())
+                        {
+                            child.SetY(startY + offset + child.GetMargin().Top + free_space);
+                            offset += child.GetHeight() + GetSpacing().Vertical + child.GetMargin().Top + child.GetMargin().Bottom;//
+                        }
+                        child.SetConfines();
+                    }
+                }
+                //for content alignment hcenter
+                else if (_contentAlignment.Equals(ItemAlignment.VCenter))
+                {
+                    foreach (var child in GetItems())
+                    {
+                        if (child.IsVisible())
+                        {
+                            child.SetY(startY + offset + child.GetMargin().Top + free_space / 2);
+                            offset += child.GetHeight() + GetSpacing().Vertical + child.GetMargin().Top + child.GetMargin().Bottom;//
+                        }
+                        child.SetConfines();
+                    }
+                }
             }
         }
     }

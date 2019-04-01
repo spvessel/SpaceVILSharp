@@ -58,9 +58,10 @@ public class FlowTest extends ActiveWindow {
         toolbar.setBackground(51, 51, 51);
         toolbar.setItemName("toolbar");
         toolbar.setHeight(40);
-        toolbar.setPadding(10, 0, 0, 0);
+        toolbar.setPadding(10, 0, 10, 0);
         toolbar.setSpacing(-10, 0);
         toolbar.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        toolbar.setContentAlignment(ItemAlignment.RIGHT);
         layout.addItem(toolbar);
 
         FreeArea flow = new FreeArea();
@@ -86,7 +87,9 @@ public class FlowTest extends ActiveWindow {
         btn1.eventMouseClick.add((sender, args) -> {
             // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!");
             // pop.show(Handler);
-            MessageItem msg = new MessageItem("Choose one of this buttons Choose one of this buttons Choose one of this buttons Choose one of this buttons", "Message:");
+            MessageItem msg = new MessageItem(
+                    "Choose one of this buttons Choose one of this buttons Choose one of this buttons Choose one of this buttons",
+                    "Message:");
             // msg.setMessageText("msg");
             ButtonCore btnnn = new ButtonCore("Do not save");
             btnnn.eventMouseClick.add((s, a) -> {
@@ -101,7 +104,6 @@ public class FlowTest extends ActiveWindow {
                 System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
             });
             msg.show(Handler);
-
 
             // InputDialog id = new InputDialog("Input text", "Apply");
             // id.show(Handler);
@@ -168,7 +170,7 @@ public class FlowTest extends ActiveWindow {
         // side.addAlbum(new Album("Album2", "C:\\"));
         // side.addAlbum(new Album("Album3", "C:\\"));
         // side.addAlbum(new Album("Album4", "C:\\"));
-        
+
         btn4.eventMouseClick.add((sender, args) -> {
             // flow.addItem(getBlockList());
             side.show();
@@ -184,7 +186,7 @@ public class FlowTest extends ActiveWindow {
         btn5.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         btn5.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn5.addItemState(ItemStateType.HOVERED, hovered);
-
+        // btn5.setMargin(0, 0, 50, 0);
         btn5.eventMouseClick.add((sender, args) -> {
             // MessageItem msg = new MessageItem("Set TRUE?", "Message:");
             // msg.onCloseDialog.add(() -> {

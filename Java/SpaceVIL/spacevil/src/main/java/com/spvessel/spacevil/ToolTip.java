@@ -37,7 +37,7 @@ public final class ToolTip extends Prototype {
 
     // private static ToolTip _instance = null;
 
-    public ToolTip() {
+    protected ToolTip() {
         setVisible(false);
         _text_object = new TextLine();
         setItemName("ToolTip_" + count);

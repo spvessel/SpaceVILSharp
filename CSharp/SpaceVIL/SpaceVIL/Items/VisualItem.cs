@@ -271,7 +271,7 @@ namespace SpaceVIL
             try
             {
                 //reset focus
-                Prototype tmp = ((Prototype)item);
+                Prototype tmp = item as Prototype;
                 if (tmp != null)
                 {
                     if (tmp.IsFocused())

@@ -349,7 +349,8 @@ namespace SpaceVIL.Core
     internal enum LayoutType
     {
         Static,
-        Floating
+        Floating,
+        Dialog
     }
 
     public enum TreeItemType

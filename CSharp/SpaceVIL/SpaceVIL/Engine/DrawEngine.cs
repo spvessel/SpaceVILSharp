@@ -1251,6 +1251,28 @@ namespace SpaceVIL
                     DrawItems(item);
                 }
             }
+            // List<IBaseItem> dialog_items = new List<IBaseItem>(ItemsLayoutBox.GetLayout(_handler.GetLayout().Id).DialogItems);
+            // if (dialog_items != null)
+            // {
+            //     foreach (var item in dialog_items)
+            //     {
+            //         if (item.GetHeightPolicy() == SizePolicy.Expand)
+            //         {
+            //             int[] confines = item.GetConfines();
+            //             item.SetConfines(confines[0], confines[1], 0, _handler.GetLayout().GetWindow().GetHeight());
+            //             item.SetY(0);
+            //             item.SetHeight(_handler.GetLayout().GetWindow().GetHeight());
+            //         }
+            //         if (item.GetWidthPolicy() == SizePolicy.Expand)
+            //         {
+            //             int[] confines = item.GetConfines();
+            //             item.SetConfines(0, _handler.GetLayout().GetWindow().GetWidth(), confines[2], confines[3]);
+            //             item.SetX(0);
+            //             item.SetWidth(_handler.GetLayout().GetWindow().GetWidth());
+            //         }
+            //         DrawItems(item);
+            //     }
+            // }
             //draw tooltip if needed
             DrawToolTip();
             if (!_handler.Focusable)

@@ -833,6 +833,15 @@ final class DrawEngine {
                 layout_box_of_items.addAll(getInnerItems((Prototype) item));
         }
 
+        // for (InterfaceBaseItem item : ItemsLayoutBox.getLayoutDialogItems(_handler.getLayout().getId())) {
+        //     if (!item.isVisible() || !item.isDrawable())
+        //         continue;
+        //     layout_box_of_items.add(item);
+
+        //     if (item instanceof Prototype)
+        //         layout_box_of_items.addAll(getInnerItems((Prototype) item));
+        // }
+
         for (InterfaceBaseItem item : layout_box_of_items) {
             if (item instanceof Prototype) {
                 Prototype tmp = (Prototype) item;
@@ -1242,6 +1251,27 @@ final class DrawEngine {
                 drawItems(item);
             }
         }
+
+        // List<InterfaceBaseItem> dialog_items = new LinkedList<>(
+        //         ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getDialogItems());
+        // if (dialog_items != null) {
+        //     for (InterfaceBaseItem item : dialog_items) {
+        //         if (item.getHeightPolicy() == SizePolicy.EXPAND) {
+        //             int[] confines = item.getConfines();
+        //             item.setConfines(confines[0], confines[1], 0, _handler.getLayout().getWindow().getHeight());
+        //             item.setY(0);
+        //             item.setHeight(_handler.getLayout().getWindow().getHeight());
+        //         }
+        //         if (item.getWidthPolicy() == SizePolicy.EXPAND) {
+        //             int[] confines = item.getConfines();
+        //             item.setConfines(0, _handler.getLayout().getWindow().getWidth(), confines[2], confines[3]);
+        //             item.setX(0);
+        //             item.setWidth(_handler.getLayout().getWindow().getWidth());
+        //         }
+        //         drawItems(item);
+        //     }
+        // }
+
         // draw tooltip if needed
         drawToolTip();
         if (!_handler.focusable) {
