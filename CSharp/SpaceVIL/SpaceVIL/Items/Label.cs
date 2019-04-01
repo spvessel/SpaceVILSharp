@@ -143,7 +143,7 @@ namespace SpaceVIL
 
             SetForeground(GetForeground());
             SetTextAlignment(_text_objects[0].GetTextAlignment());
-            SetMargin(_text_objects[0].GetMargin());
+            SetTextMargin(_text_objects[0].GetMargin());
             SetFont(GetFont());
         }
 

@@ -388,9 +388,9 @@ namespace SpaceVIL.Decorations
             Style style = new Style();
 
             if (Background != null)
-                style.Background = Color.FromArgb(Background.R, Background.G, Background.B, Background.A);
+                style.Background = Color.FromArgb(Background.A, Background.R, Background.G, Background.B);
             if (Foreground != null)
-                style.Foreground = Color.FromArgb(Foreground.R, Foreground.G, Foreground.B, Foreground.A);
+                style.Foreground = Color.FromArgb(Foreground.A, Foreground.R, Foreground.G, Foreground.B);
             if (Font != null)
                 style.Font = new Font(Font.FontFamily, Font.Size, Font.Style);
             else
@@ -406,7 +406,7 @@ namespace SpaceVIL.Decorations
             style.SetSpacing(Spacing.Horizontal, Spacing.Vertical);
 
             if (BorderFill != null)
-                style.BorderFill = Color.FromArgb(BorderFill.R, BorderFill.G, BorderFill.B, BorderFill.A);
+                style.BorderFill = Color.FromArgb(BorderFill.A, BorderFill.R, BorderFill.G, BorderFill.B);
             style.BorderThickness = BorderThickness;
             if (BorderRadius != null)
                 style.BorderRadius = new CornerRadius(BorderRadius.LeftTop, BorderRadius.RightTop, BorderRadius.LeftBottom,
@@ -1811,7 +1811,7 @@ namespace SpaceVIL.Decorations
             style.AddInnerStyle("userbar", userbar_style);
 
             Style msg_style = GetLabelStyle();
-            msg_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            msg_style.SetAlignment(ItemAlignment.Top, ItemAlignment.VCenter);
             msg_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
             msg_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             msg_style.SetMargin(10, 0, 10, 40);

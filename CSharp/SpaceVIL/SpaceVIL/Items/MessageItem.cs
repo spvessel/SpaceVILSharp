@@ -68,7 +68,7 @@ namespace SpaceVIL
             _toolbar = new HorizontalStack();
             _userbar = new HorizontalStack();
 
-            Window.IsLocked = true;
+            // Window.IsLocked = true;
 
             EventKeyPress += (sender, args) =>
             {
@@ -76,7 +76,7 @@ namespace SpaceVIL
                     Close();
             };
 
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MessageItem)));
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MessageItem))); 
         }
 
         /**
@@ -85,6 +85,7 @@ namespace SpaceVIL
         public MessageItem(String message, String title) : this()
         {
             _titleBar.SetText(title);
+            Console.WriteLine(_msg.GetMargin().Bottom);
             _msg.SetText(message);
         }
 
@@ -155,6 +156,7 @@ namespace SpaceVIL
             Window.AddItems(_titleBar, _msg_layout);
             Window.Update(GeometryEventType.ResizeWidth, 0);
 
+            
             if (!isEmpty)
             {
                 _toolbar.SetAlignment(ItemAlignment.Right, ItemAlignment.Bottom);
@@ -261,6 +263,7 @@ namespace SpaceVIL
             if (inner_style != null)
             {
                 _msg.SetStyle(inner_style);
+                Console.WriteLine(_msg.GetMargin().Bottom);
             }
             inner_style = style.GetInnerStyle("layout");
             if (inner_style != null)

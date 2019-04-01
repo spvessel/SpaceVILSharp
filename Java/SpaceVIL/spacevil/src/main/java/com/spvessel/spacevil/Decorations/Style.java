@@ -1907,7 +1907,7 @@ public class Style implements Cloneable {
         msg_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         msg_style.setMargin(10, 0, 10, 40);
         style.addInnerStyle("message", msg_style);
-
+        
         Style layout_style = getFrameStyle();
         layout_style.setMargin(0, 30, 0, 0);
         layout_style.setPadding(6, 6, 6, 6);
