@@ -642,7 +642,6 @@ namespace SpaceVIL
             if (!_handler.Focusable)
                 return;
 
-
             _margs.Button = button;
             _margs.State = state;
             _margs.Mods = mods;
@@ -655,8 +654,10 @@ namespace SpaceVIL
 
             Queue<Prototype> tmp = new Queue<Prototype>(HoveredItems);
 
+            Prototype lastHovered = HoveredItem;
             if (!GetHoverPrototype(ptrRelease.GetX(), ptrRelease.GetY(), m_state))
             {
+                lastHovered.SetMousePressed(false);
                 EngineEvent.ResetAllEvents();
                 EngineEvent.SetEvent(InputEventType.MouseRelease);
                 return;
@@ -669,6 +670,7 @@ namespace SpaceVIL
             switch (state)
             {
                 case InputState.Release:
+
                     _handler.GetLayout().GetWindow().RestoreFocus();
                     bool is_double_click = IsDoubleClick(HoveredItem);
                     while (tmp.Count > 0)

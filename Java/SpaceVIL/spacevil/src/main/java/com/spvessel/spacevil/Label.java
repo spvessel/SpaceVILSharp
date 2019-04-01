@@ -108,8 +108,6 @@ public class Label extends Prototype {
         s = line[0].replaceAll("\r", "");
         _text_objects.get(0).setItemText(s);
 
-
-
         int inc = 0;
         for (int i = 1; i < line.length; i++) {
             inc++;
@@ -121,13 +119,11 @@ public class Label extends Prototype {
             te.setItemText(s);
 
             _text_objects.add(inc, te);
-
-
         }
 
         setForeground(getForeground());
         setTextAlignment(_text_objects.get(0).getTextAlignment());
-        setMargin(_text_objects.get(0).getMargin());
+        setTextMargin(_text_objects.get(0).getMargin());
         setFont(getFont());
 
 //        _text_object.setItemText(text);
