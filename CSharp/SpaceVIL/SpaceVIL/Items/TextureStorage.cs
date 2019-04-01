@@ -628,8 +628,18 @@ namespace SpaceVIL
             return outPoint;
         }
 
+        private bool CheckPoints(Point point)
+        {
+            return (!(point.Y >= _linesList.Count));
+        }
+
         internal List<Point> SelectedArrays(Point fromPt, Point toPt)
         {
+            if (!CheckPoints(fromPt))
+                return null;
+            if (!CheckPoints(toPt))
+                return null;
+
             int cursorHeight = GetCursorHeight();
             List<Point> selectionRectangles = new List<Point>();
 

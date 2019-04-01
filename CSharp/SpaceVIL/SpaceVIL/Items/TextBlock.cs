@@ -582,13 +582,13 @@ namespace SpaceVIL
                 return;
             }
 
-            List<Point> selectionRectangles = new List<Point>();
+            List<Point> selectionRectangles; // = new List<Point>();
 
             Point fromReal, toReal;
             List<Point> listPt = RealFromTo(from, to);
             fromReal = listPt[0];
             toReal = listPt[1];
-
+            
             selectionRectangles = _textureStorage.SelectedArrays(fromReal, toReal);
 
             /*

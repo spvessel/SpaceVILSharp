@@ -582,7 +582,18 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         return outPoint;
     }
 
+    private boolean checkPoints(Point point) {
+        return (!(point.y >= _linesList.size()));
+//            return false;
+//        return true; //(!(getLineLetCount(point.y) < point.x));
+    }
+
     List<Point> selectedArrays(Point fromPt, Point toPt) {
+        if (!checkPoints(fromPt))
+            return null;
+        if (!checkPoints(toPt))
+            return null;
+
         int cursorHeight = getCursorHeight();
         List<Point> selectionRectangles = new LinkedList<>();
 

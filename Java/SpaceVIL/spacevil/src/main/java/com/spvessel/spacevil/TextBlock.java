@@ -576,7 +576,7 @@ class TextBlock extends Prototype
             return;
         }
 
-        List<Point> selectionRectangles = new LinkedList<>();
+        List<Point> selectionRectangles; // = new LinkedList<>();
 
         Point fromReal, toReal;
         List<Point> listPt = realFromTo(from, to);
@@ -1010,7 +1010,6 @@ class TextBlock extends Prototype
         _cursor.setX(pos.x);
         _cursor.setY(pos.y - getLineSpacer() / 2 + 1);// - 3);
         makeSelectedArea(_selectFrom, _selectTo);
-
     }
 
     // private class TextCursor : Rectangle {
