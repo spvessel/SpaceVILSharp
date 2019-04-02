@@ -464,47 +464,50 @@ namespace SpaceVIL
             HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };
 
             // create menu
-            _menu = new ContextMenu(GetHandler());
-            _menu.SetBackground(60, 60, 60);
-            _menu.SetPassEvents(false);
+            if (!_is_menu_disabled)
+            {
+                _menu = new ContextMenu(GetHandler());
+                _menu.SetBackground(60, 60, 60);
+                _menu.SetPassEvents(false);
 
-            MenuItem go_up = new MenuItem("Go up");
-            go_up.SetForeground(Color.FromArgb(210, 210, 210));
-            go_up.EventMouseClick += ((sender, args) =>
-            {
-                VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMinValue());
-            });
+                MenuItem go_up = new MenuItem("Go up");
+                go_up.SetForeground(Color.FromArgb(210, 210, 210));
+                go_up.EventMouseClick += ((sender, args) =>
+                {
+                    VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMinValue());
+                });
 
-            MenuItem go_down = new MenuItem("Go down");
-            go_down.SetForeground(Color.FromArgb(210, 210, 210));
-            go_down.EventMouseClick += ((sender, args) =>
-            {
-                VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMaxValue());
-            });
+                MenuItem go_down = new MenuItem("Go down");
+                go_down.SetForeground(Color.FromArgb(210, 210, 210));
+                go_down.EventMouseClick += ((sender, args) =>
+                {
+                    VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMaxValue());
+                });
 
-            MenuItem go_up_left = new MenuItem("Go up and left");
-            go_up_left.SetForeground(Color.FromArgb(210, 210, 210));
-            go_up_left.EventMouseClick += ((sender, args) =>
-            {
-                VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMinValue());
-                HScrollBar.Slider.SetCurrentValue(HScrollBar.Slider.GetMinValue());
-            });
+                MenuItem go_up_left = new MenuItem("Go up and left");
+                go_up_left.SetForeground(Color.FromArgb(210, 210, 210));
+                go_up_left.EventMouseClick += ((sender, args) =>
+                {
+                    VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMinValue());
+                    HScrollBar.Slider.SetCurrentValue(HScrollBar.Slider.GetMinValue());
+                });
 
-            MenuItem go_down_right = new MenuItem("Go down and right");
-            go_down_right.SetForeground(Color.FromArgb(210, 210, 210));
-            go_down_right.EventMouseClick += ((sender, args) =>
-            {
-                VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMaxValue());
-                HScrollBar.Slider.SetCurrentValue(HScrollBar.Slider.GetMaxValue());
-            });
-            _menu.AddItems(go_up_left, go_down_right, go_up, go_down);
-            Menu.EventMouseClick += (sender, args) =>
-            {
-                if (!_is_menu_disabled)
-                    _menu.Show(sender, args);
-            };
-            _menu.ActiveButton = MouseButton.ButtonLeft;
-            _menu.SetShadow(10, 0, 0, Color.Black);
+                MenuItem go_down_right = new MenuItem("Go down and right");
+                go_down_right.SetForeground(Color.FromArgb(210, 210, 210));
+                go_down_right.EventMouseClick += ((sender, args) =>
+                {
+                    VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMaxValue());
+                    HScrollBar.Slider.SetCurrentValue(HScrollBar.Slider.GetMaxValue());
+                });
+                _menu.AddItems(go_up_left, go_down_right, go_up, go_down);
+                Menu.EventMouseClick += (sender, args) =>
+                {
+                    if (!_is_menu_disabled)
+                        _menu.Show(sender, args);
+                };
+                _menu.ActiveButton = MouseButton.ButtonLeft;
+                _menu.SetShadow(10, 0, 0, Color.Black);
+            }
         }
 
         /// <returns> list of all ListBox items </returns>

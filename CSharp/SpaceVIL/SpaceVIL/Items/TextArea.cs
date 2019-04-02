@@ -134,7 +134,8 @@ namespace SpaceVIL
             HScrollBar.SetDrawable(true);
             HScrollBar.SetItemName(GetItemName() + "_" + HScrollBar.GetItemName());
 
-            EventMouseClick += (sender, args)=> {
+            EventMouseClick += (sender, args) =>
+            {
                 _area.SetFocus();
             };
         }
@@ -309,55 +310,58 @@ namespace SpaceVIL
             HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };
 
             // create menu
-            _menu = new ContextMenu(GetHandler());
-            _menu.SetBackground(60, 60, 60);
-            _menu.SetPassEvents(false);
+            if (!_is_menu_disabled)
+            {
+                _menu = new ContextMenu(GetHandler());
+                _menu.SetBackground(60, 60, 60);
+                _menu.SetPassEvents(false);
 
-            MenuItem go_up = new MenuItem("Go up");
-            go_up.SetForeground(Color.FromArgb(210, 210, 210));
-            go_up.EventMouseClick += ((sender, args) =>
-            {
-                _area.SetScrollYOffset(0);
-                UpdateElements();
-                _area.SetFocus();
-            });
+                MenuItem go_up = new MenuItem("Go up");
+                go_up.SetForeground(Color.FromArgb(210, 210, 210));
+                go_up.EventMouseClick += ((sender, args) =>
+                {
+                    _area.SetScrollYOffset(0);
+                    UpdateElements();
+                    _area.SetFocus();
+                });
 
-            MenuItem go_down = new MenuItem("Go down");
-            go_down.SetForeground(Color.FromArgb(210, 210, 210));
-            go_down.EventMouseClick += ((sender, args) =>
-            {
-                _area.SetScrollYOffset(-_area.GetTextHeight());
-                UpdateElements();
-                _area.SetFocus();
-            });
+                MenuItem go_down = new MenuItem("Go down");
+                go_down.SetForeground(Color.FromArgb(210, 210, 210));
+                go_down.EventMouseClick += ((sender, args) =>
+                {
+                    _area.SetScrollYOffset(-_area.GetTextHeight());
+                    UpdateElements();
+                    _area.SetFocus();
+                });
 
-            MenuItem go_up_left = new MenuItem("Go up and left");
-            go_up_left.SetForeground(Color.FromArgb(210, 210, 210));
-            go_up_left.EventMouseClick += ((sender, args) =>
-            {
-                _area.SetScrollYOffset(0);
-                _area.SetScrollXOffset(0);
-                UpdateElements();
-                _area.SetFocus();
-            });
+                MenuItem go_up_left = new MenuItem("Go up and left");
+                go_up_left.SetForeground(Color.FromArgb(210, 210, 210));
+                go_up_left.EventMouseClick += ((sender, args) =>
+                {
+                    _area.SetScrollYOffset(0);
+                    _area.SetScrollXOffset(0);
+                    UpdateElements();
+                    _area.SetFocus();
+                });
 
-            MenuItem go_down_right = new MenuItem("Go down and right");
-            go_down_right.SetForeground(Color.FromArgb(210, 210, 210));
-            go_down_right.EventMouseClick += ((sender, args) =>
-            {
-                _area.SetScrollYOffset(-_area.GetTextHeight());
-                _area.SetScrollXOffset(-_area.GetTextWidth());
-                UpdateElements();
-                _area.SetFocus();
-            });
-            _menu.AddItems(go_up_left, go_down_right, go_up, go_down);
-            Menu.EventMouseClick += (sender, args) =>
-            {
-                if (!_is_menu_disabled)
-                    _menu.Show(sender, args);
-            };
-            _menu.ActiveButton = MouseButton.ButtonLeft;
-            _menu.SetShadow(10, 0, 0, Color.Black);
+                MenuItem go_down_right = new MenuItem("Go down and right");
+                go_down_right.SetForeground(Color.FromArgb(210, 210, 210));
+                go_down_right.EventMouseClick += ((sender, args) =>
+                {
+                    _area.SetScrollYOffset(-_area.GetTextHeight());
+                    _area.SetScrollXOffset(-_area.GetTextWidth());
+                    UpdateElements();
+                    _area.SetFocus();
+                });
+                _menu.AddItems(go_up_left, go_down_right, go_up, go_down);
+                Menu.EventMouseClick += (sender, args) =>
+                {
+                    if (!_is_menu_disabled)
+                        _menu.Show(sender, args);
+                };
+                _menu.ActiveButton = MouseButton.ButtonLeft;
+                _menu.SetShadow(10, 0, 0, Color.Black);
+            }
 
             UpdateElements();
         }

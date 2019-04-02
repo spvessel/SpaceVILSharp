@@ -13,11 +13,12 @@ import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import java.awt.Color;
+import java.awt.Font;
 
 public class MainWindow extends ActiveWindow {
 

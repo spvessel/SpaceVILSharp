@@ -65,6 +65,7 @@ final class DrawEngine {
         Deque<Prototype> queue = new ArrayDeque<>();
 
         if (item == _handler.getLayout().getWindow()) {
+            underFocusedItem = null;
             return;
         }
 

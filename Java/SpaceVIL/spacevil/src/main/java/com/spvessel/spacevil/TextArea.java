@@ -32,7 +32,8 @@ public class TextArea extends Prototype {
     private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
 
     /**
-     * Vertical scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the TextArea
+     * Vertical scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the
+     * TextArea
      */
     public ScrollBarVisibility getVScrollBarVisible() {
         return _v_scrollBarPolicy;
@@ -61,7 +62,8 @@ public class TextArea extends Prototype {
     }
 
     /**
-     * Horizontal scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the TextArea
+     * Horizontal scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the
+     * TextArea
      */
     public ScrollBarVisibility getHScrollBarVisible() {
         return _h_scrollBarPolicy;
@@ -180,7 +182,8 @@ public class TextArea extends Prototype {
 
     private void updateHorizontalSlider()// horizontal slider
     {
-        int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right - 2 * _area.getCursorWidth();
+        int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right
+                - 2 * _area.getCursorWidth();
         if (visible_area < 0)
             visible_area = 0;
         int total = _area.getTextWidth();
@@ -277,50 +280,51 @@ public class TextArea extends Prototype {
         });
 
         // create menu
-        _menu = new ContextMenu(getHandler());
-        _menu.setBackground(60, 60, 60);
-        _menu.setPassEvents(false);
+        if (!_is_menu_disabled) {
+            _menu = new ContextMenu(getHandler());
+            _menu.setBackground(60, 60, 60);
+            _menu.setPassEvents(false);
 
-        MenuItem go_up = new MenuItem("Go up");
-        go_up.setForeground(new Color(210, 210, 210));
-        go_up.eventMouseClick.add((sender, args) -> {
-            _area.setScrollYOffset(0);
-            updateElements();
-            _area.setFocus();
-        });
+            MenuItem go_up = new MenuItem("Go up");
+            go_up.setForeground(new Color(210, 210, 210));
+            go_up.eventMouseClick.add((sender, args) -> {
+                _area.setScrollYOffset(0);
+                updateElements();
+                _area.setFocus();
+            });
 
-        MenuItem go_down = new MenuItem("Go down");
-        go_down.setForeground(new Color(210, 210, 210));
-        go_down.eventMouseClick.add((sender, args) -> {
-            _area.setScrollYOffset(-_area.getTextHeight());
-            updateElements();
-            _area.setFocus();
-        });
+            MenuItem go_down = new MenuItem("Go down");
+            go_down.setForeground(new Color(210, 210, 210));
+            go_down.eventMouseClick.add((sender, args) -> {
+                _area.setScrollYOffset(-_area.getTextHeight());
+                updateElements();
+                _area.setFocus();
+            });
 
-        MenuItem go_up_left = new MenuItem("Go up and left");
-        go_up_left.setForeground(new Color(210, 210, 210));
-        go_up_left.eventMouseClick.add((sender, args) -> {
-            _area.setScrollYOffset(0);
-            _area.setScrollXOffset(0);
-            updateElements();
-            _area.setFocus();
-        });
+            MenuItem go_up_left = new MenuItem("Go up and left");
+            go_up_left.setForeground(new Color(210, 210, 210));
+            go_up_left.eventMouseClick.add((sender, args) -> {
+                _area.setScrollYOffset(0);
+                _area.setScrollXOffset(0);
+                updateElements();
+                _area.setFocus();
+            });
 
-        MenuItem go_down_right = new MenuItem("Go down and right");
-        go_down_right.setForeground(new Color(210, 210, 210));
-        go_down_right.eventMouseClick.add((sender, args) -> {
-            _area.setScrollYOffset(-_area.getTextHeight());
-            _area.setScrollXOffset(-_area.getTextWidth());
-            updateElements();
-            _area.setFocus();
-        });
-        _menu.addItems(go_up_left, go_down_right, go_up, go_down);
-        menu.eventMouseClick.add((sender, args) -> {
-            if (!_is_menu_disabled)
+            MenuItem go_down_right = new MenuItem("Go down and right");
+            go_down_right.setForeground(new Color(210, 210, 210));
+            go_down_right.eventMouseClick.add((sender, args) -> {
+                _area.setScrollYOffset(-_area.getTextHeight());
+                _area.setScrollXOffset(-_area.getTextWidth());
+                updateElements();
+                _area.setFocus();
+            });
+            _menu.addItems(go_up_left, go_down_right, go_up, go_down);
+            menu.eventMouseClick.add((sender, args) -> {
                 _menu.show(sender, args);
-        });
-        _menu.activeButton = MouseButton.BUTTON_LEFT;
-        _menu.setShadow(10, 0, 0, Color.black);
+            });
+            _menu.activeButton = MouseButton.BUTTON_LEFT;
+            _menu.setShadow(10, 0, 0, Color.black);
+        }
 
         updateElements();
     }
@@ -330,7 +334,7 @@ public class TextArea extends Prototype {
      */
     public void setText(String text) {
         _area.setText(text);
-        updateElements(); //??? Возможно нужно добавить еще что-то
+        updateElements(); // ??? Возможно нужно добавить еще что-то
     }
 
     /**
@@ -427,16 +431,16 @@ public class TextArea extends Prototype {
     }
 
     /**
-     * Returns width of the whole text in the TextArea
-     * (includes visible and invisible parts of the text)
+     * Returns width of the whole text in the TextArea (includes visible and
+     * invisible parts of the text)
      */
     public int getTextWidth() {
         return _area.getWidth();
     }
 
     /**
-     * Returns height of the whole text in the TextArea
-     * (includes visible and invisible parts of the text)
+     * Returns height of the whole text in the TextArea (includes visible and
+     * invisible parts of the text)
      */
     public int getTextHeight() {
         return _area.getTextHeight();

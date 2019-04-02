@@ -63,13 +63,14 @@ namespace SpaceVIL
         public override void InitElements()
         {
             SetConfines();
+            ItemList.DisableMenu(true);
             ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
             ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
-            ItemList.GetArea().SelectionChanged += OnSelectionChanged;
             base.AddItem(ItemList);
             ItemList.EventScrollUp = null;
             ItemList.EventScrollDown = null;
             ItemList.EventMouseClick = null;
+            ItemList.EventKeyPress = null;
             ItemList.GetArea().EventKeyPress += (sender, args) =>
             {
                 if (args.Key == KeyCode.Escape)
@@ -77,16 +78,19 @@ namespace SpaceVIL
                     Hide();
                     HideDependentMenus();
                 }
+                if (args.Key == KeyCode.Enter)
+                    OnSelectionChanged();
             };
             _init = true;
         }
 
         private void HideDependentMenus()
         {
+            //тут находит еще одно меню, у ItemList
             foreach (var context_menu in ItemsLayoutBox.GetLayoutFloatItems(GetHandler().Id))
             {
                 ContextMenu menu = context_menu as ContextMenu;
-                if (menu != null && !menu.Equals(this))
+                if (menu != null && menu.GetItemName() != this.GetItemName())
                 {
                     menu.Hide();
                 }
@@ -130,7 +134,13 @@ namespace SpaceVIL
         {
             MenuItem tmp = (item as MenuItem);
             if (tmp != null)
+            {
                 tmp._context_menu = this;
+                tmp.EventMouseClick += (sender, args) =>
+                {
+                    OnSelectionChanged();
+                };
+            }
             _queue.Enqueue(item);
         }
 
@@ -196,7 +206,6 @@ namespace SpaceVIL
                 if (tmp != null)
                     _sender = tmp;
 
-
                 //проверка снизу
                 if (args.Position.GetY() + GetHeight() > GetHandler().GetHeight())
                 {
@@ -242,7 +251,11 @@ namespace SpaceVIL
             ItemList.Unselect();
             SetVisible(false);
             SetX(-GetWidth());
-            ReturnFocus?.SetFocus();
+ 
+            if (ReturnFocus != null)
+                ReturnFocus.SetFocus();
+            else
+                GetHandler().GetWindow().SetFocus();
         }
 
         /// <summary>

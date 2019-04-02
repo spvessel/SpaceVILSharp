@@ -429,42 +429,44 @@ public class ListBox extends Prototype {
         hScrollBar.slider.eventValueChanged.add((sender) -> updateHListArea());
 
         // create menu
-        _menu = new ContextMenu(getHandler());
-        _menu.setBackground(60, 60, 60);
-        _menu.setPassEvents(false);
+        if (!_is_menu_disabled) {
+            _menu = new ContextMenu(getHandler());
+            _menu.setBackground(60, 60, 60);
+            _menu.setPassEvents(false);
 
-        MenuItem go_up = new MenuItem("Go up");
-        go_up.setForeground(new Color(210, 210, 210));
-        go_up.eventMouseClick.add((sender, args) -> {
-            vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMinValue());
-        });
+            MenuItem go_up = new MenuItem("Go up");
+            go_up.setForeground(new Color(210, 210, 210));
+            go_up.eventMouseClick.add((sender, args) -> {
+                vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMinValue());
+            });
 
-        MenuItem go_down = new MenuItem("Go down");
-        go_down.setForeground(new Color(210, 210, 210));
-        go_down.eventMouseClick.add((sender, args) -> {
-            vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMaxValue());
-        });
+            MenuItem go_down = new MenuItem("Go down");
+            go_down.setForeground(new Color(210, 210, 210));
+            go_down.eventMouseClick.add((sender, args) -> {
+                vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMaxValue());
+            });
 
-        MenuItem go_up_left = new MenuItem("Go up and left");
-        go_up_left.setForeground(new Color(210, 210, 210));
-        go_up_left.eventMouseClick.add((sender, args) -> {
-            hScrollBar.slider.setCurrentValue(hScrollBar.slider.getMinValue());
-            vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMinValue());
-        });
+            MenuItem go_up_left = new MenuItem("Go up and left");
+            go_up_left.setForeground(new Color(210, 210, 210));
+            go_up_left.eventMouseClick.add((sender, args) -> {
+                hScrollBar.slider.setCurrentValue(hScrollBar.slider.getMinValue());
+                vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMinValue());
+            });
 
-        MenuItem go_down_right = new MenuItem("Go down and right");
-        go_down_right.setForeground(new Color(210, 210, 210));
-        go_down_right.eventMouseClick.add((sender, args) -> {
-            hScrollBar.slider.setCurrentValue(hScrollBar.slider.getMaxValue());
-            vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMaxValue());
-        });
-        _menu.addItems(go_up_left, go_down_right, go_up, go_down);
-        menu.eventMouseClick.add((sender, args) -> {
-            if (!_is_menu_disabled)
-                _menu.show(sender, args);
-        });
-        _menu.activeButton = MouseButton.BUTTON_LEFT;
-        _menu.setShadow(10, 0, 0, Color.black);
+            MenuItem go_down_right = new MenuItem("Go down and right");
+            go_down_right.setForeground(new Color(210, 210, 210));
+            go_down_right.eventMouseClick.add((sender, args) -> {
+                hScrollBar.slider.setCurrentValue(hScrollBar.slider.getMaxValue());
+                vScrollBar.slider.setCurrentValue(vScrollBar.slider.getMaxValue());
+            });
+            _menu.addItems(go_up_left, go_down_right, go_up, go_down);
+            menu.eventMouseClick.add((sender, args) -> {
+                if (!_is_menu_disabled)
+                    _menu.show(sender, args);
+            });
+            _menu.activeButton = MouseButton.BUTTON_LEFT;
+            _menu.setShadow(10, 0, 0, Color.black);
+        }
     }
 
     /**

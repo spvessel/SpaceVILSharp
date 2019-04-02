@@ -71,16 +71,18 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setConfines();
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
-        itemList.getArea().selectionChanged.add(this::onSelectionChanged);
         super.addItem(itemList);
         itemList.eventScrollUp.clear();
         itemList.eventScrollDown.clear();
         itemList.eventMouseClick.clear();
+        itemList.eventKeyPress.clear();
         itemList.getArea().eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.ESCAPE) {
                 hide();
                 hideDependentMenus();
             }
+            if (args.key == KeyCode.ENTER)
+                onSelectionChanged();
         });
         _init = true;
     }
@@ -128,6 +130,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         if (item instanceof MenuItem) {
             MenuItem tmp = (MenuItem) item;
             tmp._context_menu = this;
+            tmp.eventMouseClick.add((sender, args) -> {
+                onSelectionChanged();
+            });
         }
         _queue.add(item);
     }
@@ -241,6 +246,8 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setX(-getWidth());
         if (returnFocus != null)
             returnFocus.setFocus();
+        else
+            getHandler().getWindow().setFocus();
     }
 
     /**

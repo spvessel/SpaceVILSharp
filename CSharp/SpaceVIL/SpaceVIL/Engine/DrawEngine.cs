@@ -53,7 +53,6 @@ namespace SpaceVIL
         }
         internal void SetFocusedItem(Prototype item)
         {
-            // Console.WriteLine(item.GetItemName());
             if (item == null)
             {
                 FocusedItem = null;
@@ -73,6 +72,7 @@ namespace SpaceVIL
 
             if (item == _handler.GetLayout().GetWindow())
             {
+                UnderFocusedItem = null;
                 return;
             }
 
