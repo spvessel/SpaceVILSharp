@@ -21,7 +21,7 @@ class TextBlock extends Prototype
 
     EventCommonMethod cursorChanged = new EventCommonMethod();
     EventCommonMethod textChanged = new EventCommonMethod();
-    
+
     @Override
     public void release() {
         textChanged.clear();

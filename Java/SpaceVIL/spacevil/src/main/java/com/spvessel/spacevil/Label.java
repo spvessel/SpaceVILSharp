@@ -13,6 +13,7 @@ import java.util.List;
 public class Label extends Prototype {
     private static int count = 0;
     private List<TextLine> _text_objects;
+    private boolean _init = false;
 
     /**
      * Constructs a Label
@@ -91,10 +92,17 @@ public class Label extends Prototype {
         return _text_objects.get(0).getFont();
     }
 
+    String preIniText = "";
+
     /**
      * Set text in the Label
      */
     public void setText(String text) {
+        if (!_init) {
+            preIniText = text;
+            return;
+        }
+
         if (_text_objects.size() > 1) {
             while (_text_objects.size() > 1) {
                 removeItem(_text_objects.get(1));
@@ -230,6 +238,10 @@ public class Label extends Prototype {
     public void initElements() {
         for (TextLine tl : _text_objects)
             addItem(tl);
+        _init = true;
+        if (!preIniText.equals("")) {
+            setText(preIniText);
+        }
     }
 
     /**

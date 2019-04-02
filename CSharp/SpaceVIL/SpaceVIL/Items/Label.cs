@@ -13,8 +13,8 @@ namespace SpaceVIL
     public class Label : Prototype
     {
         static int count = 0;
-
         private List<TextLine> _text_objects;
+        private bool _init = false;
 
         /// <summary>
         /// Constructs a Label
@@ -107,11 +107,19 @@ namespace SpaceVIL
             return _text_objects[0].GetFont();
         }
 
+        string preInitText = "";
+
         /// <summary>
         /// Set text in the Label
         /// </summary>
         public void SetText(String text)
         {
+            if (!_init)
+            {
+                preInitText = text;
+                return;
+            }
+
             if (_text_objects.Count > 1)
             {
                 while (_text_objects.Count > 1)
@@ -217,6 +225,9 @@ namespace SpaceVIL
         {
             foreach (TextLine tl in _text_objects)
                 AddItem(tl);
+            _init = true;
+            if (!preInitText.Equals(""))
+                SetText(preInitText);
         }
 
         /// <summary>
