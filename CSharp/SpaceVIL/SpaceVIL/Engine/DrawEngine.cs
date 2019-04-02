@@ -60,10 +60,15 @@ namespace SpaceVIL
             }
             if (FocusedItem != null && FocusedItem.Equals(item))
                 return;
+
             if (FocusedItem != null)
                 FocusedItem.SetFocused(false);
+
+            Console.WriteLine(item.GetItemName());
+
             FocusedItem = item;
             FocusedItem.SetFocused(true);
+            
             FindUnderFocusedItems(item);
         }
         private void FindUnderFocusedItems(Prototype item)

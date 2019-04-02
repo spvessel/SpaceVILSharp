@@ -15,7 +15,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ContextMenu extends Prototype implements InterfaceFloating {
-    public Prototype returnFocus = null;
+    private Prototype _returnFocus = null;
+
+    public void setReturnFocus(Prototype item) {
+        _returnFocus = item;
+    }
+    public Prototype getReturnFocusItem() {
+        return _returnFocus;
+    }
+
     public ListBox itemList = new ListBox();
     private List<InterfaceBaseItem> _queue = new LinkedList<>();
 
@@ -69,6 +77,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     @Override
     public void initElements() {
         setConfines();
+        itemList.disableMenu(true);
         itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
         itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
         super.addItem(itemList);
@@ -78,8 +87,8 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         itemList.eventKeyPress.clear();
         itemList.getArea().eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.ESCAPE) {
-                hide();
                 hideDependentMenus();
+                hide();
             }
             if (args.key == KeyCode.ENTER)
                 onSelectionChanged();
@@ -103,8 +112,8 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
                 return;
             }
         }
-        hide();
         hideDependentMenus();
+        hide();
     }
 
     /**
@@ -244,10 +253,10 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         itemList.unselect();
         setVisible(false);
         setX(-getWidth());
-        if (returnFocus != null)
-            returnFocus.setFocus();
-        else
-            getHandler().getWindow().setFocus();
+        if (_returnFocus != null)
+            _returnFocus.setFocus();
+        // else
+        //     getHandler().getWindow().setFocus();
     }
 
     /**

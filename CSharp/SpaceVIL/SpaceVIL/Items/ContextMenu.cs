@@ -9,7 +9,16 @@ namespace SpaceVIL
 {
     public class ContextMenu : Prototype, IFloating
     {
-        public Prototype ReturnFocus = null;
+        public Prototype _returnFocus = null;
+        public void SetReturnFocus(Prototype item)
+        {
+            _returnFocus = item;
+        }
+        public Prototype GetReturnFocusItem()
+        {
+            return _returnFocus;
+        }
+
         public ListBox ItemList = new ListBox();
         private Queue<IBaseItem> _queue = new Queue<IBaseItem>();
         private Prototype _sender = null;
@@ -90,7 +99,7 @@ namespace SpaceVIL
             foreach (var context_menu in ItemsLayoutBox.GetLayoutFloatItems(GetHandler().Id))
             {
                 ContextMenu menu = context_menu as ContextMenu;
-                if (menu != null && menu.GetItemName() != this.GetItemName())
+                if (menu != null && menu.Equals(this))
                 {
                     menu.Hide();
                 }
@@ -251,11 +260,11 @@ namespace SpaceVIL
             ItemList.Unselect();
             SetVisible(false);
             SetX(-GetWidth());
- 
-            if (ReturnFocus != null)
-                ReturnFocus.SetFocus();
-            else
-                GetHandler().GetWindow().SetFocus();
+
+            if (_returnFocus != null)
+                _returnFocus.SetFocus();
+            // else
+            //     GetHandler().GetWindow().SetFocus();
         }
 
         /// <summary>

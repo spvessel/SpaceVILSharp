@@ -54,8 +54,10 @@ final class DrawEngine {
         }
         if (focusedItem != null && focusedItem.equals(item))
             return;
+
         if (focusedItem != null)
             focusedItem.setFocused(false);
+
         focusedItem = item;
         focusedItem.setFocused(true);
         findUnderFocusedItems(item);
