@@ -64,6 +64,7 @@ public class TitleBar extends WindowAnchor {
 
         _layout = new HorizontalStack();
         _text_object = new Label();
+        _text_object.isFocusable = false;
         _minimize = new ButtonCore();
         _minimize.isFocusable = false;
         _maximize = new ButtonCore();

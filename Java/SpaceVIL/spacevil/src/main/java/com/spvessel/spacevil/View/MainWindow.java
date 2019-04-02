@@ -176,5 +176,6 @@ public class MainWindow extends ActiveWindow {
             }
         });
 
+        btn_flow.setFocus();
     }
 }
