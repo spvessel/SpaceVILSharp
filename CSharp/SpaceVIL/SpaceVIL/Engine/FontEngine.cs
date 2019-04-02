@@ -351,7 +351,7 @@ namespace SpaceVIL
             {
                 String str = "aj"; // bcdefghijklmnopqrstuvwxyz";
                 str += str.ToUpper();
-                str += "-"; //".,?!1234567890-+=_"; //
+                str += "-|"; //".,?!1234567890-+=_"; //
 
 
                 char[] defLetters = str.ToCharArray();
@@ -363,7 +363,7 @@ namespace SpaceVIL
             {
                 String str = "abcdefghijklmnopqrstuvwxyz";
                 str += str.ToUpper();
-                str += "-.,?!1234567890-+=_";
+                str += "-.,?!1234567890-+=_|/\\";
 
 
                 char[] defLetters = str.ToCharArray();
