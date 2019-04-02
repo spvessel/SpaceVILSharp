@@ -1,6 +1,6 @@
 package com.spvessel.spacevil.Exceptions;
 
-public class SpaceVILException extends Exception {
+public class SpaceVILException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     // static final long serialVersionUID = 0;
