@@ -53,7 +53,6 @@ namespace SpaceVIL
         }
         internal void SetFocusedItem(Prototype item)
         {
-            // Console.WriteLine(item.GetItemName());
             if (item == null)
             {
                 FocusedItem = null;
@@ -61,10 +60,15 @@ namespace SpaceVIL
             }
             if (FocusedItem != null && FocusedItem.Equals(item))
                 return;
+
             if (FocusedItem != null)
                 FocusedItem.SetFocused(false);
+
+            Console.WriteLine(item.GetItemName());
+
             FocusedItem = item;
             FocusedItem.SetFocused(true);
+            
             FindUnderFocusedItems(item);
         }
         private void FindUnderFocusedItems(Prototype item)
@@ -73,6 +77,7 @@ namespace SpaceVIL
 
             if (item == _handler.GetLayout().GetWindow())
             {
+                UnderFocusedItem = null;
                 return;
             }
 
@@ -990,11 +995,20 @@ namespace SpaceVIL
                 else
                 {
                     if (action == InputState.Press)
-                        FocusedItem?.EventKeyPress(FocusedItem, _kargs); //AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
+                    {
+                        FocusedItem.EventKeyPress(FocusedItem, _kargs);
+                        AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
+                    }
                     if (action == InputState.Repeat)
-                        FocusedItem?.EventKeyPress(FocusedItem, _kargs); //AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
+                    {
+                        FocusedItem.EventKeyPress(FocusedItem, _kargs);
+                        AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
+                    }
                     if (action == InputState.Release)
-                        FocusedItem?.EventKeyRelease(FocusedItem, _kargs); //AssignActions(InputEventType.KeyRelease, _kargs, FocusedItem);
+                    {
+                        FocusedItem.EventKeyRelease(FocusedItem, _kargs);
+                        AssignActions(InputEventType.KeyRelease, _kargs, FocusedItem);
+                    }
                 }
             } //Нехорошо это все
             else
@@ -1052,7 +1066,7 @@ namespace SpaceVIL
             }
             _handler.GetLayout().ExecutePollActions();
         }
-        private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender, bool is_pass_under = false)
+        private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender, bool is_pass_under)
         {
             if (sender.IsDisabled())
                 return;
@@ -1065,6 +1079,35 @@ namespace SpaceVIL
             });
 
             if (is_pass_under && sender.IsPassEvents(action))
+            {
+                if (UnderFocusedItem != null)
+                {
+                    Stack<Prototype> tmp = new Stack<Prototype>(UnderFocusedItem);
+                    while (tmp.Count != 0)
+                    {
+                        Prototype item = tmp.Pop();
+                        if (item.Equals(FocusedItem) && FocusedItem.IsDisabled())
+                            continue;//пропустить
+
+                        _handler.GetLayout().SetEventTask(new EventTask()
+                        {
+                            Item = item,
+                            Action = action,
+                            Args = args
+                        });
+                        if (!item.IsPassEvents(action))
+                            break;//остановить передачу событий последующим элементам
+                    }
+                }
+            }
+            _handler.GetLayout().ExecutePollActions();
+        }
+        private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender)
+        {
+            if (sender.IsDisabled())
+                return;
+
+            if (sender.IsPassEvents(action))
             {
                 if (UnderFocusedItem != null)
                 {

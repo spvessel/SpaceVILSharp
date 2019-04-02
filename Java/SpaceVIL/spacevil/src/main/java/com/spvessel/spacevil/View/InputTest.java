@@ -1,6 +1,8 @@
 package com.spvessel.spacevil.View;
 
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.Label;
@@ -61,10 +63,15 @@ public class InputTest extends ActiveWindow {
         tb.setWidth(300);
         tb.setHeight(300);
         tb.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        tb.eventKeyPress.add((sender, args) -> {
+            if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.S) {
+                System.out.println(args.mods.size() + " mods: " + args.mods + " code: " + args.key);
+            }
+        });
         // tb.setPadding(15, 0, 15, 0);
         // tb.setMargin(new Indents(50, 30, 30, 30));
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
-//        tb.onTextChanged.add(() -> System.out.println("text changed"));
+        // tb.onTextChanged.add(() -> System.out.println("text changed"));
 
         SpinItem sp = new SpinItem();
         sp.setParameters(1, -5.5, 7, 0.51);
@@ -76,6 +83,7 @@ public class InputTest extends ActiveWindow {
 
         ButtonCore bc = new ButtonCore("pizdec");
         bc.setSize(150, 30);
+
         //tb.setEditable(false);
 
         bc.eventMouseClick.add((sender, args) -> {
@@ -94,6 +102,7 @@ public class InputTest extends ActiveWindow {
             // s.toCharArray()[3]);
             // System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " +
             // s.toCharArray()[4]);
+
 //            tb.pasteText("12345678");
 //            te.pasteText("text edit text");
 //            Handler.setWindowTitle(te.getSelectedText());

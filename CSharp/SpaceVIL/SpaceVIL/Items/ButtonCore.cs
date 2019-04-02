@@ -32,8 +32,8 @@ namespace SpaceVIL
         {
             SetText(text);
         }
-        
-        void OnKeyPress(object sender, KeyArgs args)
+
+        void OnKeyPress(IItem sender, KeyArgs args)
         {
             if (args.Key == KeyCode.Enter)
                 EventMouseClick?.Invoke(this, new MouseArgs());

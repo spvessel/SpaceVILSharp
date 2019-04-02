@@ -155,19 +155,17 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                 cancelJustSelected();
             }
 
-            if (args.mods != KeyMods.NO) {
-                switch (args.mods) {
-                case SHIFT:
+            if (!args.mods.contains(KeyMods.NO)) {
+                if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 1) {
                     if (ShiftValCodes.contains(args.key)) {
                         if (!_isSelect) {
                             _isSelect = true;
                             _selectFrom = _cursor_position;
                         }
                     }
+                }
 
-                    break;
-
-                case CONTROL:
+                if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1) {
                     if (args.key == KeyCode.A || args.key == KeyCode.a) {
                         _selectFrom = 0;
                         _cursor_position = getText().length();
@@ -175,10 +173,8 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
                         _isSelect = true;
                     }
-                    break;
-
-                // alt, super ?
                 }
+                // alt, super ?
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE) {
                     if (_isSelect)

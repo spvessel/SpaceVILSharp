@@ -45,7 +45,7 @@ public class LoadingScreen extends Prototype {
         setStyle(DefaultsService.getDefaultStyle(LoadingScreen.class));
 
         eventKeyPress.add((s, a) -> {
-            if (a.key == KeyCode.ESCAPE && a.mods == KeyMods.SHIFT)
+            if (a.key == KeyCode.ESCAPE && a.mods.contains(KeyMods.SHIFT))
                 setToClose();
         });
     }

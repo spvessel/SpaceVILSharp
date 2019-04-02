@@ -54,8 +54,10 @@ final class DrawEngine {
         }
         if (focusedItem != null && focusedItem.equals(item))
             return;
+
         if (focusedItem != null)
             focusedItem.setFocused(false);
+
         focusedItem = item;
         focusedItem.setFocused(true);
         findUnderFocusedItems(item);
@@ -65,6 +67,7 @@ final class DrawEngine {
         Deque<Prototype> queue = new ArrayDeque<>();
 
         if (item == _handler.getLayout().getWindow()) {
+            underFocusedItem = null;
             return;
         }
 
@@ -687,7 +690,7 @@ final class DrawEngine {
 
         _margs.button = MouseButton.getEnum(button);
         _margs.state = InputState.getEnum(action);
-        _margs.mods = KeyMods.getEnum(mods);
+        _margs.mods = KeyMods.getEnums(mods);
 
         InputEventType m_state;
         if (action == InputState.PRESS.getValue())
@@ -739,7 +742,7 @@ final class DrawEngine {
                         return;
                     }
                 } else if (_draggable != hoveredItem) {
-                    
+
                     Prototype lastFocused = focusedItem;
                     focusedItem = _draggable;
                     findUnderFocusedItems(_draggable);
@@ -989,13 +992,14 @@ final class DrawEngine {
         // System.out.println("key repeat");
         // break;
         // }
+        // System.out.println(mods);
         if (!_handler.focusable)
             return;
         _tooltip.initTimer(false);
         _kargs.key = KeyCode.getEnum(key);
         _kargs.scancode = scancode;
         _kargs.state = InputState.getEnum(action);
-        _kargs.mods = KeyMods.getEnum(mods);
+        _kargs.mods = KeyMods.getEnums(mods);
 
         if ((focusedItem instanceof InterfaceTextShortcuts) && action == InputState.PRESS.getValue()) {
             if ((mods == KeyMods.CONTROL.getValue() && key == KeyCode.V.getValue())
@@ -1014,15 +1018,21 @@ final class DrawEngine {
             } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.Y.getValue()) {
                 ((InterfaceTextShortcuts) focusedItem).redo();
             } else {
-                if (action == InputState.PRESS.getValue())
-                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); // assignActions(InputEventType.KEY_PRESS,
-                                                                            // _kargs, focusedItem);
-                if (action == InputState.REPEAT.getValue())
-                    focusedItem.eventKeyPress.execute(focusedItem, _kargs); // assignActions(InputEventType.KEY_PRESS,
-                                                                            // _kargs, focusedItem);
-                if (action == InputState.RELEASE.getValue())
-                    focusedItem.eventKeyRelease.execute(focusedItem, _kargs); // assignActions(InputEventType.KEY_RELEASE,
-                                                                              // _kargs, focusedItem);
+                if (action == InputState.PRESS.getValue()) {
+                    focusedItem.eventKeyPress.execute(focusedItem, _kargs);
+                    assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
+                }
+
+                if (action == InputState.REPEAT.getValue()) {
+                    focusedItem.eventKeyPress.execute(focusedItem, _kargs);
+                    assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
+                }
+
+                if (action == InputState.RELEASE.getValue()) {
+                    focusedItem.eventKeyRelease.execute(focusedItem, _kargs);
+                    assignActions(InputEventType.KEY_RELEASE, _kargs, focusedItem);
+                }
+
             }
         } else {
             if (action == InputState.PRESS.getValue())
@@ -1047,7 +1057,7 @@ final class DrawEngine {
 
         _tooltip.initTimer(false);
         _tiargs.character = character;
-        _tiargs.mods = KeyMods.getEnum(mods);
+        _tiargs.mods = KeyMods.getEnums(mods);
         if (focusedItem != null) {
             if (focusedItem.eventTextInput != null)
                 focusedItem.eventTextInput.execute(focusedItem, _tiargs);
@@ -1108,6 +1118,32 @@ final class DrawEngine {
                     t.args = args;
                     _handler.getLayout().setEventTask(t);
 
+                    if (!item.isPassEvents(action))
+                        break;// остановить передачу событий последующим элементам
+                }
+            }
+        }
+        _handler.getLayout().executePollActions();
+    }
+
+    private void assignActions(InputEventType action, InputEventArgs args, Prototype sender) {
+        if (sender.isDisabled())
+            return;
+
+        if (sender.isPassEvents(action)) {
+            if (underFocusedItem != null) {
+                Deque<Prototype> tmp = new ArrayDeque<Prototype>(underFocusedItem);
+                while (tmp.size() != 0) {
+                    Prototype item = tmp.pollLast();
+
+                    if (item.equals(focusedItem) && focusedItem.isDisabled())
+                        continue;// пропустить
+
+                    EventTask t = new EventTask();
+                    t.item = item;
+                    t.action = action;
+                    t.args = args;
+                    _handler.getLayout().setEventTask(t);
 
                     if (!item.isPassEvents(action))
                         break;// остановить передачу событий последующим элементам

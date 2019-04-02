@@ -3,21 +3,25 @@ package com.spvessel.spacevil.View;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
+import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.HorizontalDirection;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
+import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.MSAA;
+import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import java.awt.Color;
+import java.awt.Font;
 
 public class MainWindow extends ActiveWindow {
 
@@ -107,6 +111,7 @@ public class MainWindow extends ActiveWindow {
         btn_label.eventMouseClick.add(btn_action_click);
 
         ButtonCore btn_flow = new ButtonCore("Flow");
+        btn_flow.setItemName("Flow");
         btn_flow.setFont(font);
         btn_flow.setToolTip("Show Flow window.");
         btn_flow.setBackground(193, 142, 221);
@@ -143,6 +148,33 @@ public class MainWindow extends ActiveWindow {
         });
 
         grid.addItems(btn_layout, btn_settings, btn_label, btn_flow, btn_input, btn_image, btn_complex);
+
+        MenuItem mi1 = new MenuItem("MenuItem 1");
+        mi1.eventMouseClick.add((sender, args) -> {
+            System.out.println("mi1 click");
+        });
+        MenuItem mi2 = new MenuItem("MenuItem 2");
+        mi2.eventMouseClick.add((sender, args) -> {
+            System.out.println("mi2 click");
+        });
+        MenuItem mi3 = new MenuItem("MenuItem 3");
+        mi3.eventMouseClick.add((sender, args) -> {
+            System.out.println("mi3 click");
+        });
+        MenuItem mi4 = new MenuItem("MenuItem 4");
+        mi4.eventMouseClick.add((sender, args) -> {
+            System.out.println("mi4 click");
+        });
+        ContextMenu menu = new ContextMenu(Handler, mi1, mi2, mi3, mi4);
+        menu.setReturnFocus(btn_flow);
+        Handler.getWindow().eventMouseClick.add((sender, args) -> menu.show(sender, args));
+        Handler.getWindow().eventKeyPress.add((sender, args) -> {
+            if (args.key == KeyCode.MENU) {
+                MouseArgs margs = new MouseArgs();
+                margs.button = MouseButton.BUTTON_RIGHT;
+                menu.show(sender, margs);
+            }
+        });
 
     }
 }
