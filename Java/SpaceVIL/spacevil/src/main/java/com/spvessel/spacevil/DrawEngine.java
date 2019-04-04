@@ -794,7 +794,6 @@ final class DrawEngine {
                 assignActions(InputEventType.MOUSE_PRESS, _margs, false);
                 if (hoveredItem.isFocusable) {
                     // Focus get
-
                     if (focusedItem == null) {
                         focusedItem = hoveredItem;
                         focusedItem.setFocused(true);
@@ -810,9 +809,13 @@ final class DrawEngine {
                         if (f.equals(hoveredItem) && hoveredItem.isDisabled())
                             continue;// пропустить
                         if (f.isFocusable) {
-                            focusedItem = f;
-                            focusedItem.setFocused(true);
-                            break;
+                            if (f instanceof WindowAnchor)
+                                _handler.getLayout().getWindow().saveLastFocus(focusedItem);
+                            else {
+                                focusedItem = f;
+                                focusedItem.setFocused(true);
+                            }
+                            break;// остановить передачу событий последующим элементам
                         }
                     }
                 }

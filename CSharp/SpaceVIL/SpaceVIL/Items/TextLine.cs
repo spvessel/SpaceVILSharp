@@ -58,7 +58,7 @@ namespace SpaceVIL
 
                 _letters = FontEngine.GetModifyLetters(text, font);
                 _letEndPos = new List<int>();
-                
+
                 if (_letters.Count > 0)
                     _lineWidth = _letters[_letters.Count - 1].xShift + _letters[_letters.Count - 1].width +
                         _letters[_letters.Count - 1].xBeg; //xBeg не обязательно, т.к. везде 0, но вдруг
@@ -78,7 +78,8 @@ namespace SpaceVIL
                 else
                 {
                     _screenScale = wLayout.GetDpiScale()[0];
-                    if (_screenScale != 1) {
+                    if (_screenScale != 1)
+                    {
                         MakeBigArr();
                     }
                 }
@@ -93,13 +94,14 @@ namespace SpaceVIL
 
         private void MakeBigArr()
         {
-            if (GetFont() == null) {
+            if (GetFont() == null)
+            {
                 return;
             }
             Font fontBig = new Font(GetFont().FontFamily, (int)(GetFont().Size * _screenScale), GetFont().Style);
 
             _bigLetters = FontEngine.GetModifyLetters(GetItemText(), fontBig);
-            
+
             _bigWidth = 0;
             if (_bigLetters.Count > 0)
             {
@@ -182,11 +184,11 @@ namespace SpaceVIL
                         foreach (FontEngine.ModifyLetter modL in _letters)
                         {
 
-                        int widthFrom = 0;
-                        int widthTo = modL.width;
+                            int widthFrom = 0;
+                            int widthTo = modL.width;
 
                             if (_isRecountable)
-                            { 
+                            {
                                 if (modL.xBeg + modL.xShift + modL.width + _lineXShift < 0)
                                 { //До разрешенной области
                                     continue;
@@ -208,28 +210,28 @@ namespace SpaceVIL
                                 }
                             }
                             byte[] bitmap = modL.getArr();
-                        if (bitmap == null)
-                        {
-                            continue;
-                        }
-
-                        int offset = (modL.yBeg - fontDims[1]) * bb_w * 4 + (modL.xBeg + modL.xShift + widthFrom - xFirstBeg) * 4;
-
-                        for (int j = 0; j < modL.height; j++)
-                        {
-                            for (int i = widthFrom; i < widthTo; i++)
+                            if (bitmap == null)
                             {
-                                int b1 = bitmap[3 + j * 4 + i * (modL.height * 4)];
-                                int b2 = cacheBB[3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)];
-                                if (b1 < b2)
-                                    continue;
-
-                                cacheBB[0 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[0 + j * 4 + i * (modL.height * 4)];
-                                cacheBB[1 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[1 + j * 4 + i * (modL.height * 4)];
-                                cacheBB[2 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[2 + j * 4 + i * (modL.height * 4)];
-                                cacheBB[3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[3 + j * 4 + i * (modL.height * 4)];
+                                continue;
                             }
-                        }
+
+                            int offset = (modL.yBeg - fontDims[1]) * bb_w * 4 + (modL.xBeg + modL.xShift + widthFrom - xFirstBeg) * 4;
+
+                            for (int j = 0; j < modL.height; j++)
+                            {
+                                for (int i = widthFrom; i < widthTo; i++)
+                                {
+                                    int b1 = bitmap[3 + j * 4 + i * (modL.height * 4)];
+                                    int b2 = cacheBB[3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)];
+                                    if (b1 < b2)
+                                        continue;
+
+                                    cacheBB[0 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[0 + j * 4 + i * (modL.height * 4)];
+                                    cacheBB[1 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[1 + j * 4 + i * (modL.height * 4)];
+                                    cacheBB[2 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[2 + j * 4 + i * (modL.height * 4)];
+                                    cacheBB[3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[3 + j * 4 + i * (modL.height * 4)];
+                                }
+                            }
                         }
                     }
                     flagBB = false;
@@ -260,7 +262,7 @@ namespace SpaceVIL
                 { // До разрешенной области
                     continue;
                 }
-                
+
                 if (!isFirstFound)
                 {
                     firstInd = ii;
@@ -292,7 +294,7 @@ namespace SpaceVIL
             int parWidth = (int)(_parentAllowWidth * _screenScale);
 
             int xFirstBeg = _bigLetters[firstInd].xBeg + _bigLetters[firstInd].xShift;
-            
+
             for (int ii = firstInd; ii <= lastInd; ii++)
             {
                 FontEngine.ModifyLetter bigLet = _bigLetters[ii];
@@ -331,7 +333,7 @@ namespace SpaceVIL
                 }
 
                 int offset = (bigLet.yBeg - bigMinY) * 4 * wdt + (bigLet.xBeg + bigLet.xShift + widthFrom - xFirstBeg) * 4;
-                
+
                 for (int j = 0; j < bigLet.height; j++)
                 {
                     for (int i = widthFrom; i < widthTo; i++)
@@ -341,13 +343,13 @@ namespace SpaceVIL
                         if (b1 < b2)
                             continue;
 
-                        outCache[0 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] = 
+                        outCache[0 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] =
                                 bitmap[0 + j * 4 + i * (bigLet.height * 4)];
-                        outCache[1 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] = 
+                        outCache[1 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] =
                                 bitmap[1 + j * 4 + i * (bigLet.height * 4)];
-                        outCache[2 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] = 
+                        outCache[2 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] =
                                 bitmap[2 + j * 4 + i * (bigLet.height * 4)];
-                        outCache[3 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] = 
+                        outCache[3 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] =
                                 bitmap[3 + j * 4 + i * (bigLet.height * 4)];
                     }
                 }
@@ -389,7 +391,7 @@ namespace SpaceVIL
                 return;
             int[] fontDims = GetFontDims();
             int height = fontDims[2];
-            
+
             ItemAlignment alignments = GetTextAlignment();
             float alignShiftX = 1;
             float alignShiftY = 0;
@@ -423,7 +425,7 @@ namespace SpaceVIL
                 alignShiftY = (GetParent().GetHeight() - height) / 2f + GetParent().GetPadding().Top;
 
             xFirstBeg = _letters[0].xBeg + _letters[0].xShift;
-            
+
             textPrt.XTextureShift = (int)alignShiftX + GetParent().GetX() + xFirstBeg; // + _lineXShift
             textPrt.YTextureShift = (int)alignShiftY + _lineYShift + GetParent().GetY();
 

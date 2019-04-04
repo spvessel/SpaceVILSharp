@@ -6,7 +6,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class TitleBar : WindowAnchor
+    public class TitleBar : WindowAnchor//, IFocusKeeper
     {
         static int count = 0;
         private HorizontalStack _layout;
@@ -40,6 +40,7 @@ namespace SpaceVIL
 
             _layout = new HorizontalStack();
             _text_object = new Label();
+            _text_object.IsFocusable = false;
             _minimize = new ButtonCore();
             _minimize.IsFocusable = false;
             _maximize = new ButtonCore();
@@ -47,7 +48,7 @@ namespace SpaceVIL
             _close = new ButtonCore();
             _close.IsFocusable = false;
             _icon = new ImageItem();
-            // _icon.IsFocusable = false;
+            _icon.IsFocusable = false;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TitleBar)));
         }
@@ -132,9 +133,6 @@ namespace SpaceVIL
         public override void InitElements()
         {
             AddItem(_layout);
-
-            //text
-            // SetFont(new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold));
 
             //_close
             _close.EventMouseClick += (sender, args) =>

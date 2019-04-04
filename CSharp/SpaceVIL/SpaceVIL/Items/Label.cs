@@ -160,9 +160,12 @@ namespace SpaceVIL
         private void UpdateLinesYShifts(int globalYShift)
         {
             int inc = 0;
+            int y = _text_objects[0].GetY();
             foreach (TextLine tl in _text_objects)
             {
                 tl.SetLineYShift(GetLineY(inc) + globalYShift);
+                // tl.SetY(y + GetLineY(inc) + globalYShift);
+                // tl.SetConfines();
                 inc++;
             }
         }
@@ -233,6 +236,7 @@ namespace SpaceVIL
             _init = true;
             if (!preInitText.Equals(""))
                 SetText(preInitText);
+
         }
 
         /// <summary>
@@ -287,7 +291,7 @@ namespace SpaceVIL
             if (style == null)
                 return;
             base.SetStyle(style);
-            
+
             SetFont(style.Font);
             SetForeground(style.Foreground);
             SetTextAlignment(style.TextAlignment);

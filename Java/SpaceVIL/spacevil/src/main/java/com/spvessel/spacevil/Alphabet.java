@@ -155,7 +155,7 @@ class Alphabet {
     private void fillABC() {
         String str = "aj"; // bcdefghijklmnopqrstuvwxyz";
         str += str.toUpperCase();
-        str += "-"; // ".,?!1234567890-+=_"; //
+        str += "-|"; // ".,?!1234567890-+=_"; //
 
         char[] defLetters = str.toCharArray();
         for (char c : defLetters)
@@ -165,7 +165,7 @@ class Alphabet {
     void addMoreLetters() {
         String str = "abcdefghijklmnopqrstuvwxyz";
         str += str.toUpperCase();
-        str += "-.,?!1234567890-+=_";
+        str += "-.,?!1234567890-+=_|/\\";
 
         char[] defLetters = str.toCharArray();
         for (char c : defLetters)

@@ -86,7 +86,7 @@ public class InputTest extends ActiveWindow {
         ButtonCore bc = new ButtonCore("pizdec");
         bc.setSize(150, 30);
 
-        //tb.setEditable(false);
+        // tb.setEditable(false);
 
 
         layout.addItem(bc);

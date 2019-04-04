@@ -64,11 +64,10 @@ namespace SpaceVIL
             if (FocusedItem != null)
                 FocusedItem.SetFocused(false);
 
-            Console.WriteLine(item.GetItemName());
-
             FocusedItem = item;
             FocusedItem.SetFocused(true);
-            
+            // Console.WriteLine(FocusedItem.GetItemName());
+
             FindUnderFocusedItems(item);
         }
         private void FindUnderFocusedItems(Prototype item)
@@ -675,7 +674,6 @@ namespace SpaceVIL
             switch (state)
             {
                 case InputState.Release:
-
                     _handler.GetLayout().GetWindow().RestoreFocus();
                     bool is_double_click = IsDoubleClick(HoveredItem);
                     while (tmp.Count > 0)
@@ -731,7 +729,6 @@ namespace SpaceVIL
                     break;
 
                 case InputState.Press:
-
                     Glfw.GetFramebufferSize(_handler.GetWindowId(), out w_global, out h_global);
                     x_global = _handler.GetPointer().GetX();
                     y_global = _handler.GetPointer().GetY();
@@ -770,16 +767,21 @@ namespace SpaceVIL
                                 Prototype f = focused_list.Pop();
                                 if (f.Equals(HoveredItem) && HoveredItem.IsDisabled())
                                     continue;
+
                                 if (f.IsFocusable)
                                 {
-                                    FocusedItem = f;
-                                    FocusedItem.SetFocused(true);
+                                    if (f is WindowAnchor)
+                                        _handler.GetLayout().GetWindow().SaveLastFocus(FocusedItem);
+                                    else
+                                    {
+                                        FocusedItem = f;
+                                        FocusedItem.SetFocused(true);
+                                    }
                                     break;//остановить передачу событий последующим элементам
                                 }
                             }
                         }
                         UnderFocusedItem = new List<Prototype>(HoveredItems);
-                        // UnderFocusedItem.Reverse();
                         UnderFocusedItem.Remove(FocusedItem);
                     }
                     EngineEvent.ResetAllEvents();
