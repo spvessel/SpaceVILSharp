@@ -149,9 +149,6 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         try {
 
             if (!_isSelect && _justSelected) {
-                // _selectFrom = -1; // 0;
-                // _selectTo = -1; // 0;
-                // _justSelected = false;
                 cancelJustSelected();
             }
 
@@ -350,7 +347,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         try {
             if (_substrate_text.isVisible())
                 _substrate_text.setVisible(false);
-            if (text.equals(""))
+            if (text == null || text.equals(""))
                 _substrate_text.setVisible(true);
 
             _pwd = text;

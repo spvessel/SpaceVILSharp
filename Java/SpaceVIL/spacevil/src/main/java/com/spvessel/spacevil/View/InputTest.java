@@ -11,6 +11,8 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.*;
 
 import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
@@ -86,19 +88,21 @@ public class InputTest extends ActiveWindow {
 
         // tb.setEditable(false);
 
-        
+
+        layout.addItem(bc);
+
         // layout.addItem(sp);
-        
+
         Label tl = new Label();
-        tl.setBackground(255, 255, 255, 100);
-        // tl.setFontSize(17);
+        tl.setBackground(255,255,255,100);
+//        tl.setFontSize(17);
         tl.setForeground(Color.WHITE);
         tl.setTextAlignment(ItemAlignment.TOP);
-        // System.out.println(tl.getTextWidth());
-        tl.setText("\n1qwertyuiopasdfghjkl\nzxcvbnm123\n4567890");
-        
+//        System.out.println(tl.getTextWidth());
+        tl.setText(null);
+
         layout.addItem(tl);
-        
+
         bc.eventMouseClick.add((sender, args) -> {
             // String s = " qwerty\n// tb.setTextMargin(new Indents(50, 30, 30, 30));//
             // tb.setTextMargin(new Indents(50, 30, 30, 30));";
@@ -116,39 +120,36 @@ public class InputTest extends ActiveWindow {
             // System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " +
             // s.toCharArray()[4]);
 
-            // tb.pasteText("12345678");
-            // te.pasteText("text edit text");
-            // Handler.setWindowTitle(te.getSelectedText());
-            // tb.setFocused(false);
-            // tb.setText("package com.spvessel.spacevil;\n" +
-            //
-            // " // HBar\n" +
-            // " hScrollBar.isFocusable = false;\n" +
-            // " hScrollBar.setVisible(true);\n" +
-            // " hScrollBar.setItemName(getItemName() + \"_\" +
-            // hScrollBar.getItemName());\n" +
-            // "\n" +
-            // " // Area\n" +
-            // " // _area.setItemName(getItemName() + \"_\" + _area.getItemName());\n" +
-            // " // _area.setSpacing(0, 5);\n" +
-            // " }\n" +
-            // "\n" +
-            // " public TextArea(String text) {\n" +
-            // " this();\n" +
-            // " setText(text);\n" +
-            // " }\n" +
-            // "\n" +
-            // " private long v_size = 0;\n" +
-            // " private long h_size = 0;\n" +
-            // "\n" +
-            // " private void updateVListArea() {\n" +
-            // " // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
-            // tb.rewindText();
-            // tb.setEditable(!tb.isEditable());
-            System.out.println(tl.getTextHeight());
+//            tb.pasteText("12345678");
+//            te.pasteText("text edit text");
+//            Handler.setWindowTitle(te.getSelectedText());
+            //tb.setFocused(false);
+//            tb.setText("package com.spvessel.spacevil;\n" +
+//
+//                    "        // HBar\n" +
+//                    "        hScrollBar.isFocusable = false;\n" +
+//                    "        hScrollBar.setVisible(true);\n" +
+//                    "        hScrollBar.setItemName(getItemName() + \"_\" + hScrollBar.getItemName());\n" +
+//                    "\n" +
+//                    "        // Area\n" +
+//                    "        // _area.setItemName(getItemName() + \"_\" + _area.getItemName());\n" +
+//                    "        // _area.setSpacing(0, 5);\n" +
+//                    "    }\n" +
+//                    "\n" +
+//                    "    public TextArea(String text) {\n" +
+//                    "        this();\n" +
+//                    "        setText(text);\n" +
+//                    "    }\n" +
+//                    "\n" +
+//                    "    private long v_size = 0;\n" +
+//                    "    private long h_size = 0;\n" +
+//                    "\n" +
+//                    "    private void updateVListArea() {\n" +
+//                    "        // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
+//            tb.rewindText();
+//            tb.setEditable(!tb.isEditable());
         });
 
-        layout.addItem(bc);
         Handler.getWindow().eventDrop.add((sender, args) -> {
             if (args.count > 0) {
                 System.out.println(args.item.getItemName());

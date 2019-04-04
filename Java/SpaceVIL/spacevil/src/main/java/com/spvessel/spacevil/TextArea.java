@@ -419,6 +419,8 @@ public class TextArea extends Prototype {
     }
 
     public void setFontFamily(String font_family) {
+        if (font_family == null)
+            return;
         Font oldFont = getFont();
         if (!oldFont.getFamily().equals(font_family)) {
             Font newFont = new Font(font_family, oldFont.getStyle(), oldFont.getSize());

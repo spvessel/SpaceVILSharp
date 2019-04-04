@@ -191,8 +191,10 @@ class TextBlock extends Prototype
     private void onKeyPress(Object sender, KeyArgs args) {
         _textureStorage.textInputLock.lock();
         try {
+//            if (args == null)
+//                return;
             if (!_isEditable) {
-                if (args.mods.equals(KeyMods.CONTROL) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
+                if (args.mods.contains(KeyMods.CONTROL) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
                     _selectFrom.x = 0;
                     _selectFrom.y = 0;
                     _cursor_position.y = _textureStorage.getCount() - 1;
@@ -233,7 +235,7 @@ class TextBlock extends Prototype
                 }
                 // alt, super ?
             } else {
-                if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE || args.key == KeyCode.ENTER) {
+                if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE || args.key == KeyCode.ENTER || args.key == KeyCode.TAB) {
                     if (_isSelect)
                         cutText();
                     else {
@@ -334,6 +336,10 @@ class TextBlock extends Prototype
                 replaceCursor();
                 // textChanged.execute();
                 undoStuff();
+            }
+
+            if (args.key == KeyCode.TAB) {
+                privPasteText("    ");
             }
 
             if (_isSelect) {

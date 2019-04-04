@@ -217,7 +217,7 @@ namespace SpaceVIL
             {
                 if (!_isEditable)
                 {
-                    if (args.Mods.Equals(KeyMods.Control) && (args.Key == KeyCode.A || args.Key == KeyCode.a))
+                    if (args.Mods == KeyMods.Control && (args.Key == KeyCode.A || args.Key == KeyCode.a))
                     {
                         _selectFrom.X = 0;
                         _selectFrom.Y = 0;
@@ -271,7 +271,7 @@ namespace SpaceVIL
                 }
                 else
                 {
-                    if (args.Key == KeyCode.Backspace || args.Key == KeyCode.Delete || args.Key == KeyCode.Enter)
+                    if (args.Key == KeyCode.Backspace || args.Key == KeyCode.Delete || args.Key == KeyCode.Enter || args.Key == KeyCode.Tab)
                     {
                         if (_isSelect)
                             CutText();
@@ -386,6 +386,11 @@ namespace SpaceVIL
                     ReplaceCursor();
                     //TextChanged?.Invoke();
                     UndoStuff();
+                }
+
+                if (args.Key == KeyCode.Tab)
+                {
+                    PrivPasteText("    ");
                 }
 
                 if (_isSelect)

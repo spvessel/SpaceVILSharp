@@ -233,6 +233,8 @@ public class TreeView extends ListBox {
 
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
+        if (item == null)
+            return false;
         if (item.equals(_root)) {
             _root.removeChildren();
             _root = null;
@@ -245,6 +247,8 @@ public class TreeView extends ListBox {
     }
 
     public void sortBrunch(TreeItem branch) {
+        if (branch == null)
+            return;
         if (branch.getItemType().equals(TreeItemType.LEAF)) {
             return; // Либо сделать, чтобы сортировалась родительская ветвь?
         }

@@ -392,11 +392,13 @@ namespace SpaceVIL
 
         internal void SetFont(Font font)
         {
+            if (font == null)
+                return;
             if (!font.Equals(_elementFont))
             {
                 _elementFont = font;
-                if (_elementFont == null)
-                    return;
+                // if (_elementFont == null)
+                //     return;
 
                 if (_linesList == null) return;
                 foreach (TextLine te in _linesList)
@@ -765,7 +767,9 @@ namespace SpaceVIL
         Color _foreground = Color.Black;
         internal void SetForeground(Color foreground)
         {
-            if (_linesList != null && !foreground.Equals(GetForeground()))
+            if (_linesList == null || foreground == null)
+                return;
+            if (!foreground.Equals(GetForeground()))
             {
                 _foreground = foreground;
                 foreach (TextLine te in _linesList)

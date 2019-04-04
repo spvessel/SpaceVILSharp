@@ -214,17 +214,16 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         textInputLock.lock();
         try {
+//            if (args == null)
+//                return;
             if (!_isEditable) {
-                if (args.mods.equals(KeyMods.CONTROL) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
+                if (args.mods.contains(KeyMods.CONTROL) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
                     selectAll();
                 }
                 return;
             }
 
             if (!_isSelect && _justSelected) {
-                // _selectFrom = -1;// 0;
-                // _selectTo = -1;// 0;
-                // _justSelected = false;
                 cancelJustSelected();
             }
             if (!args.mods.contains(KeyMods.NO)) {
@@ -462,7 +461,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         try {
             if (_substrate_text.isVisible())
                 _substrate_text.setVisible(false);
-            if (text.equals(""))
+            if (text == null || text.equals(""))
                 _substrate_text.setVisible(true);
             // _text_object.setLineXShift(_lineXShift, getWidth());
             _text_object.setItemText(text);

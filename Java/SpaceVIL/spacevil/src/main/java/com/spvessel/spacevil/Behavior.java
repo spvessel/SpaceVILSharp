@@ -18,7 +18,7 @@ class Behavior implements InterfaceBehavior {
     }
 
     public void setAlignment(List<ItemAlignment> alignment) {
-        if (_alignment.equals(alignment))
+        if (_alignment != null && _alignment.equals(alignment))
             return;
 
         if (alignment == null) {

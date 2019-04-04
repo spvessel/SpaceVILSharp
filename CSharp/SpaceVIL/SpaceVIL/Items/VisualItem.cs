@@ -193,6 +193,11 @@ namespace SpaceVIL
             Monitor.Enter(Locker);
             try
             {
+                if (item == null)
+                {
+                    Console.WriteLine("Trying to add null item");
+                    return;
+                }
                 if (item.Equals(this))
                 {
                     Console.WriteLine("Trying to add current item in himself.");
@@ -222,6 +227,16 @@ namespace SpaceVIL
             Monitor.Enter(Locker);
             try
             {
+                if (item == null)
+                {
+                    Console.WriteLine("Trying to insert null item");
+                    return;
+                }
+                if (index < 0)
+                {
+                    Console.WriteLine("Invalid index");
+                    return;
+                }
                 if (item.Equals(this))
                 {
                     Console.WriteLine("Trying to add current item in himself.");

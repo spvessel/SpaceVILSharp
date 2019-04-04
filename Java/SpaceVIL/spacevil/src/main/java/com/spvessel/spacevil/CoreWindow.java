@@ -1,5 +1,7 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Exceptions.SpaceVILException;
+
 import java.util.*;
 
 public abstract class CoreWindow {
@@ -27,6 +29,10 @@ public abstract class CoreWindow {
      * Parent item for the CoreWindow
      */
     public void setHandler(WindowLayout value) {
+        if (value == null) {
+            System.out.println("Window handler can't be null");
+            return;
+        }
         wnd_handler = value;
         value.setCoreWindow(this);
     }

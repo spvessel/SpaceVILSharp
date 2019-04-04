@@ -514,6 +514,8 @@ namespace SpaceVIL
         }
         public void SetFontFamily(FontFamily font_family)
         {
+            if (font_family == null)
+                return;
             Font oldFont = GetFont();
             if (oldFont.FontFamily != font_family)
             {

@@ -362,10 +362,12 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     void setFont(Font font) {
+        if (font == null)
+            return;
         if (!font.equals(_elementFont)) {
             _elementFont = font;
-            if (_elementFont == null)
-                return;
+            // if (_elementFont == null)
+            //     return;
             if (_linesList == null)
                 return;
             for (TextLine te : _linesList)
@@ -718,7 +720,9 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     Color _foreground = Color.BLACK;
 
     void setForeground(Color foreground) {
-        if (_linesList != null && !foreground.equals(getForeground())) {
+        if (foreground == null || _linesList == null)
+            return;
+        if (!foreground.equals(getForeground())) {
             _foreground = foreground;
             for (TextLine te : _linesList)
                 te.setForeground(foreground); // Вроде бы это больше не нужно

@@ -86,7 +86,7 @@ namespace SpaceVIL
         /// </summary>
         public void SetRowCount(int capacity)
         {
-            if (!capacity.Equals(_row_count))
+            if (capacity != _row_count)
                 _row_count = capacity;
             RearrangeCells();
         }
@@ -101,7 +101,7 @@ namespace SpaceVIL
         /// </summary>
         public void SetColumnCount(int capacity)
         {
-            if (!capacity.Equals(_column_count))
+            if (capacity != _column_count)
                 _column_count = capacity;
             //Need to InitCells REFACTOR!
             RearrangeCells();
