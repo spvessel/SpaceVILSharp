@@ -29,8 +29,11 @@ abstract class TextItem extends Primitive {
 
     TextItem(String text, Font font) {
         this();
+        if (text == null)
+            text = "";
         _itemText = text;
-        _font = font;
+        if (font != null)
+            _font = font;
     }
 
     TextItem(String text, Font font, String name) {
@@ -52,6 +55,8 @@ abstract class TextItem extends Primitive {
     }
 
     void setItemText(String itemText) {
+        if (itemText == null)
+            itemText = "";
         if (!_itemText.equals(itemText)) {
             _itemText = itemText;
             updateData();
@@ -65,8 +70,10 @@ abstract class TextItem extends Primitive {
     }
 
     void setFont(Font font) {
-        // if (!_font.Equals(font))
-        if (_font != font) {
+        if (font == null)
+            return;
+        if (!_font.equals(font)) {
+        // if (_font != font)
             _font = font;
             updateData();
         }
@@ -87,6 +94,8 @@ abstract class TextItem extends Primitive {
     }
 
     void setFontFamily(String font_family) {
+        if (font_family == null)
+            return;
         if (!_font.getFamily().equals(font_family)) {
             _font = new Font(font_family, _font.getStyle(), _font.getSize());
             updateData();

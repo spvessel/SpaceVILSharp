@@ -608,7 +608,7 @@ final class DrawEngine {
                 _draggable = isInListHoveredItems(InterfaceDraggable.class);
                 Prototype anchor = isInListHoveredItems(InterfaceWindowAnchor.class);
 
-                if (_draggable != null && hoveredItem == _draggable) {
+                if (_draggable != null && _draggable.equals(hoveredItem)) {
                     engineEvent.setEvent(InputEventType.MOUSE_DRAG);
                     _draggable.eventMouseDrag.execute(_draggable, _margs);
                 } else if (anchor != null && !(hoveredItem instanceof ButtonCore)
@@ -634,7 +634,7 @@ final class DrawEngine {
             ptrPress.setY(ptrRelease.getY());
 
             if (getHoverPrototype(ptrRelease.getX(), ptrRelease.getY(), InputEventType.MOUSE_MOVE)) {
-                if (hoveredItem != null && hoveredItem.getToolTip() != "") {
+                if (hoveredItem != null && !("".equals(hoveredItem.getToolTip()))) {
                     _tooltip.initTimer(true);
                 }
 

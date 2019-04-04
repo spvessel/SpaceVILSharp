@@ -11,6 +11,8 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.*;
 
 import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
@@ -86,6 +88,21 @@ public class InputTest extends ActiveWindow {
 
         //tb.setEditable(false);
 
+
+        layout.addItem(bc);
+
+        // layout.addItem(sp);
+
+        Label tl = new Label();
+        tl.setBackground(255,255,255,100);
+//        tl.setFontSize(17);
+        tl.setForeground(Color.WHITE);
+        tl.setTextAlignment(ItemAlignment.TOP);
+//        System.out.println(tl.getTextWidth());
+        tl.setText(null);
+
+        layout.addItem(tl);
+
         bc.eventMouseClick.add((sender, args) -> {
             // String s = " qwerty\n// tb.setTextMargin(new Indents(50, 30, 30, 30));//
             // tb.setTextMargin(new Indents(50, 30, 30, 30));";
@@ -130,21 +147,8 @@ public class InputTest extends ActiveWindow {
 //                    "    private void updateVListArea() {\n" +
 //                    "        // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
 //            tb.rewindText();
-            tb.setEditable(!tb.isEditable());
+//            tb.setEditable(!tb.isEditable());
         });
-
-        layout.addItem(bc);
-
-        // layout.addItem(sp);
-
-        Label tl = new Label();
-        tl.setBackground(255,255,255,100);
-        tl.setFontSize(17);
-        tl.setForeground(Color.WHITE);
-        tl.setTextAlignment(ItemAlignment.BOTTOM);
-//        System.out.println(tl.getTextWidth());
-        tl.setText("1qwertyuiopasdfghjkl\nzxcvbnm123\n4567890");
-        layout.addItem(tl);
 
         Handler.getWindow().eventDrop.add((sender, args) -> {
             if (args.count > 0) {

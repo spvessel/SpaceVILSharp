@@ -161,9 +161,6 @@ namespace SpaceVIL
 
                 if (!_isSelect && _justSelected)
                 {
-                    //_selectFrom = -1;// 0;
-                    //_selectTo = -1;// 0;
-                    //_justSelected = false;
                     CancelJustSelected();
                 }
 
@@ -396,7 +393,7 @@ namespace SpaceVIL
             {
                 if (_substrate_text.IsVisible())
                     _substrate_text.SetVisible(false);
-                if (text == String.Empty)
+                if (text == null || text == String.Empty)
                     _substrate_text.SetVisible(true);
 
                 _pwd = text;

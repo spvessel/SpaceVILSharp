@@ -118,6 +118,8 @@ public class TabView extends Prototype {
      * Remove tab by name
      */
     public void removeTab(String tab_name) {
+        if (tab_name == null)
+            return;
         for (InterfaceBaseItem tab : _tab_bar.getItems()) {
             if (tab_name.equals(tab.getItemName())) {
                 _tab_list.remove(tab);

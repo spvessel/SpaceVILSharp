@@ -10,7 +10,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class Label : Prototype
+    public class Label : Prototype, IVLayout
     {
         static int count = 0;
         private List<TextLine> _text_objects;
@@ -107,13 +107,15 @@ namespace SpaceVIL
             return _text_objects[0].GetFont();
         }
 
-        string preInitText = "";
+        private string preInitText = "";
 
         /// <summary>
         /// Set text in the Label
         /// </summary>
         public void SetText(String text)
         {
+            if (text == null)
+                text = "";
             if (!_init)
             {
                 preInitText = text;
@@ -167,6 +169,9 @@ namespace SpaceVIL
 
         public String GetText()
         {
+            if (!_init)
+                return preInitText;
+
             StringBuilder sb = new StringBuilder();
             if (_text_objects == null) return "";
             if (_text_objects.Count == 1)
@@ -286,6 +291,10 @@ namespace SpaceVIL
             SetFont(style.Font);
             SetForeground(style.Foreground);
             SetTextAlignment(style.TextAlignment);
+        }
+
+        public void UpdateLayout() {
+
         }
     }
 }

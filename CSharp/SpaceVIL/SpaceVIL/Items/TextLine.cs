@@ -31,9 +31,10 @@ namespace SpaceVIL
 
         private bool _isRecountable = false;
 
-        internal TextLine()
+        internal TextLine() : base()
         {
             count++;
+            UpdateData();
         }
 
         internal TextLine(string text, Font font)

@@ -221,29 +221,32 @@ namespace SpaceVIL
                 return;
 
             // Maybe need some sorting
-            foreach (DirectoryInfo dir in dirs)
+            if (dirs != null)
             {
-                if (!_btnShowHidden.IsToggled() && dir.Attributes.HasFlag(FileAttributes.Hidden))
-                    continue;
+                foreach (DirectoryInfo dir in dirs)
+                {
+                    if (!_btnShowHidden.IsToggled() && dir.Attributes.HasFlag(FileAttributes.Hidden))
+                        continue;
 
-                FileSystemEntry fi = new FileSystemEntry(FileSystemEntryType.Directory, dir.Name);
-                fi.SetIcon(new Bitmap(_folder), 16, 16);
-                fi.SetPassEvents(false, InputEventType.MouseDoubleClick);
-                _fileList.AddItem(fi);
-                fi.EventMouseDoubleClick += (sender, args) =>
-                {
-                    SetAddressLine(fi);
-                };
-                fi.EventKeyRelease += (sender, args) =>
-                {
-                    if (args.Key == KeyCode.Enter)
+                    FileSystemEntry fi = new FileSystemEntry(FileSystemEntryType.Directory, dir.Name);
+                    fi.SetIcon(new Bitmap(_folder), 16, 16);
+                    fi.SetPassEvents(false, InputEventType.MouseDoubleClick);
+                    _fileList.AddItem(fi);
+                    fi.EventMouseDoubleClick += (sender, args) =>
                     {
                         SetAddressLine(fi);
-                    }
-                };
+                    };
+                    fi.EventKeyRelease += (sender, args) =>
+                    {
+                        if (args.Key == KeyCode.Enter)
+                        {
+                            SetAddressLine(fi);
+                        }
+                    };
+                }
             }
 
-            if (_entryType.Equals(FileSystemEntryType.File))
+            if (_entryType == FileSystemEntryType.File && files != null)
             {
                 foreach (FileInfo f in files)
                 {
@@ -441,7 +444,7 @@ namespace SpaceVIL
                     if (result == null)
                         return;
 
-                    if (entry.GetText().Equals("File"))
+                    if ("File".Equals(entry.GetText()))
                     {
                         if (!File.Exists(_addressLine.GetText() + Path.DirectorySeparatorChar + result))
                         {

@@ -223,7 +223,7 @@ public class OpenEntryDialog extends OpenDialog {
 
         File fileFolder = new File(path);
         File[] files = fileFolder.listFiles();
-        if (_fileList == null)
+        if (_fileList == null || files == null)
             return;
 
         // Maybe need some sorting
@@ -246,7 +246,7 @@ public class OpenEntryDialog extends OpenDialog {
             }
         }
 
-        if (_entryType.equals(FileSystemEntryType.FILE)) {
+        if (_entryType == FileSystemEntryType.FILE) {
             for (File f : files) {
                 if (!_btnShowHidden.isToggled() && f.isHidden())
                     continue;
@@ -411,7 +411,7 @@ public class OpenEntryDialog extends OpenDialog {
                 if (result == null)
                     return;
 
-                if (entry.getText().equals("File")) {
+                if ("File".equals(entry.getText())) {
                     File file = new File(_addressLine.getText() + File.separator + result);
                     if (!file.exists()) {
                         try {

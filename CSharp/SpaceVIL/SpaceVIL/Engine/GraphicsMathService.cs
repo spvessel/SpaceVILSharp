@@ -773,7 +773,7 @@ namespace SpaceVIL
 
             for (int i = min; i <= max; i++)
             {
-                if (dir.Equals(LineDir.Horiz))
+                if (dir == LineDir.Horiz)
                 {
                     arr.Add(i);
                     arr.Add(permanent);

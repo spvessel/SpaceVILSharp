@@ -32,7 +32,9 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     private boolean _isRecountable = false;
 
     TextLine() {
+        super();
         count++;
+        updateData();
     }
 
     TextLine(String text, Font font) {

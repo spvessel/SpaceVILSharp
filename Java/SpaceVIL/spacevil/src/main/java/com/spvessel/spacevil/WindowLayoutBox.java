@@ -96,20 +96,24 @@ public final class WindowLayoutBox {
      * @return WidowLayout object by its name
      */
     static public WindowLayout getWindowInstance(String name) {
-        if (windowsName.containsKey(name))
-            return windowsName.get(name);
-        else
-            return null;
+        return windowsName.getOrDefault(name, null);
+
+//        if (windowsName.containsKey(name))
+//            return windowsName.get(name);
+//        else
+//            return null;
     }
 
     /**
      * @return WidowLayout object by its UUID
      */
     static public WindowLayout getWindowInstance(UUID guid) {
-        if (windowsUUID.containsKey(guid))
-            return windowsUUID.get(guid);
-        else
-            return null;
+        return windowsUUID.getOrDefault(guid, null);
+
+//        if (windowsUUID.containsKey(guid))
+//            return windowsUUID.get(guid);
+//        else
+//            return null;
     }
 
     static void addToWindowDispatcher(WindowLayout sender_wnd) {

@@ -110,6 +110,8 @@ public class TreeItem extends Prototype {
      * Constructs a TreeItem type of TreeItemType (LEAF or BRANCH)
      */
     public TreeItem(TreeItemType type) {
+        if (type == null)
+            type = TreeItemType.LEAF;
         _item_type = type;
         setItemName(type.toString().toLowerCase() + "_v" + count);
         count++;
@@ -235,8 +237,6 @@ public class TreeItem extends Prototype {
 
         for (int i = 0; i < neighbors.size(); i++) {
             int out = comp.compare(neighbors.get(i), item);
-            // if (item.getText().equals("branch5"))
-            // System.out.println("compare " + out + " " + neighbors.get(i).getText());
             if (out > 0)
                 break;
             ind = i;

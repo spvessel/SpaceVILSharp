@@ -214,6 +214,8 @@ namespace SpaceVIL
         }
         public override bool RemoveItem(IBaseItem item)
         {
+            if (item == null)
+                return false;
             if (item.Equals(_root))
             {
                 _root.RemoveChildren();
@@ -229,6 +231,8 @@ namespace SpaceVIL
 
         public void SortBrunch(TreeItem branch)
         {
+            if (branch == null)
+                return;
             if (branch.GetItemType().Equals(TreeItemType.Leaf))
             {
                 return; // Либо сделать, чтобы сортировалась родительская ветвь?

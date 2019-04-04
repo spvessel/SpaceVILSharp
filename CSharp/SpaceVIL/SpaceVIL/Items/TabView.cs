@@ -129,6 +129,8 @@ namespace SpaceVIL
         /// </summary>
         public void RemoveTab(String tab_name)
         {
+            if (tab_name == null)
+                return;
             foreach (var tab in _tab_bar.GetItems())
             {
                 if (tab_name.Equals(tab.GetItemName()))

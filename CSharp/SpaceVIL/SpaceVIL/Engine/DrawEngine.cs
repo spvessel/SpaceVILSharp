@@ -561,7 +561,7 @@ namespace SpaceVIL
                     int y_click = ptrClick.GetY();
                     _draggable = IsInListHoveredItems<IDraggable>();
                     Prototype anchor = IsInListHoveredItems<WindowAnchor>();
-                    if (_draggable != null && HoveredItem.Equals(_draggable))
+                    if (_draggable != null && _draggable.Equals(HoveredItem))
                     {
                         EngineEvent.SetEvent(InputEventType.MouseDrag);
                         _draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
@@ -592,7 +592,7 @@ namespace SpaceVIL
                 //check tooltip
                 if (GetHoverPrototype(ptrRelease.GetX(), ptrRelease.GetY(), InputEventType.MouseMove))
                 {
-                    if (HoveredItem != null && HoveredItem.GetToolTip() != String.Empty)
+                    if (HoveredItem != null && !(String.Empty.Equals(HoveredItem.GetToolTip())))
                     {
                         _tooltip.InitTimer(true);
                     }

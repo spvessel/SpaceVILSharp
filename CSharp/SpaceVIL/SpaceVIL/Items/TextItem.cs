@@ -30,8 +30,11 @@ namespace SpaceVIL
 
         internal TextItem(String text, Font font) : this()
         {
+            if (text == null)
+                text = "";
             _itemText = text;
-            _font = font;
+            if (font != null)
+                _font = font;
         }
 
         internal TextItem(String text, Font font, String name) : this(text, font)
@@ -57,6 +60,8 @@ namespace SpaceVIL
 
         internal void SetItemText(String itemText)
         {
+            if (itemText == null)
+                itemText = "";
             if (!_itemText.Equals(itemText))
             {
                 _itemText = itemText;
@@ -72,9 +77,11 @@ namespace SpaceVIL
         }
         internal void SetFont(Font font)
         {
-            // if (!_font.Equals(font))
-            if (_font != font)
+            if (font == null)
+                return;
+            if (!_font.Equals(font))
             {
+            // if (_font != font)
                 _font = font;
                 UpdateData();
             }
@@ -97,6 +104,8 @@ namespace SpaceVIL
         }
         internal void SetFontFamily(FontFamily font_family)
         {
+            if (font_family == null)
+                return;
             if (_font.FontFamily != font_family)
             {
                 _font = new Font(font_family, _font.Size, _font.Style);
@@ -204,6 +213,8 @@ namespace SpaceVIL
         }
         public void SetTextAlignment(params ItemAlignment[] alignment)
         {
+            if (alignment == null)
+                return;
             ItemAlignment common = alignment.ElementAt(0);
             if (alignment.Length > 1)
             {

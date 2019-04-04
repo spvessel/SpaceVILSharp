@@ -216,7 +216,7 @@ namespace SpaceVIL
                 //Console.WriteLine(args.Scancode);
                 if (!_isEditable)
                 {
-                    if (args.Mods.Equals(KeyMods.Control) && (args.Key == KeyCode.A || args.Key == KeyCode.a))
+                    if (args.Mods == KeyMods.Control && (args.Key == KeyCode.A || args.Key == KeyCode.a))
                     {
                         SelectAll();
                     }
@@ -480,7 +480,7 @@ namespace SpaceVIL
             {
                 if (_substrate_text.IsVisible())
                     _substrate_text.SetVisible(false);
-                if (text == String.Empty)
+                if (text == null || text.Equals(String.Empty))
                     _substrate_text.SetVisible(true);
 
                 _text_object.SetItemText(text);

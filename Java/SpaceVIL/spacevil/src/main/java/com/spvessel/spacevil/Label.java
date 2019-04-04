@@ -1,6 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Core.InterfaceVLayout;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Label extends Prototype {
+public class Label extends Prototype implements InterfaceVLayout {
     private static int count = 0;
     private List<TextLine> _text_objects;
     private boolean _init = false;
@@ -92,14 +93,16 @@ public class Label extends Prototype {
         return _text_objects.get(0).getFont();
     }
 
-    String preIniText = "";
+    private String preInitText = "";
 
     /**
      * Set text in the Label
      */
     public void setText(String text) {
+        if (text == null)
+            text = "";
         if (!_init) {
-            preIniText = text;
+            preInitText = text;
             return;
         }
 
@@ -139,13 +142,18 @@ public class Label extends Prototype {
 
     private void updateLinesYShifts(int globalYShift) {
         int inc = 0;
+//        int y = _text_objects.get(0).getY();
         for (TextLine tl : _text_objects) {
             tl.setLineYShift(getLineY(inc) + globalYShift);
+//            tl.setY(y + getLineY(inc) + globalYShift);
             inc++;
         }
     }
 
     public String getText() {
+        if (!_init)
+            return preInitText;
+
         StringBuilder sb = new StringBuilder();
         if (_text_objects == null)
             return "";
@@ -239,8 +247,8 @@ public class Label extends Prototype {
         for (TextLine tl : _text_objects)
             addItem(tl);
         _init = true;
-        if (!preIniText.equals("")) {
-            setText(preIniText);
+        if (!preInitText.equals("")) {
+            setText(preInitText);
         }
     }
 
@@ -258,5 +266,10 @@ public class Label extends Prototype {
             setForeground(style.foreground);
         // if (style.textAlignment != null)
             setTextAlignment(style.textAlignment);
+    }
+
+    @Override
+    public void updateLayout() {
+
     }
 }

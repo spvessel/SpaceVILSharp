@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
@@ -35,6 +36,10 @@ namespace SpaceVIL
         /// </summary>
         public void SetHandler(WindowLayout value)
         {
+            if (value == null)
+            {
+                throw new SpaceVILException("Window handler can't be null");
+            }
             wnd_handler = value;
             value.SetCoreWindow(this);
         }

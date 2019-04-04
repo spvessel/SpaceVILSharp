@@ -119,9 +119,6 @@ final class VisualItem extends BaseItem {
                         ((InterfaceGrid) getParent()).updateLayout();
             }
 
-            if (getItemName().equals("topLayout2"))
-                System.out.println(value);
-
             eventManager.notifyListeners(GeometryEventType.MOVED_Y, value);
         }
     }
@@ -390,6 +387,10 @@ final class VisualItem extends BaseItem {
     void addItem(InterfaceBaseItem item) {
         locker.lock();
         try {
+            if (item == null) {
+                System.out.println("Trying to add null item");
+                return;
+            }
             if (item.equals(this)) {
                 System.out.println("Trying to add current item in himself.");
                 return;
@@ -412,6 +413,14 @@ final class VisualItem extends BaseItem {
     void insertItem(InterfaceBaseItem item, int index) {
         locker.lock();
         try {
+            if (item == null) {
+                System.out.println("Trying to insert null item");
+                return;
+            }
+            if (index < 0) {
+                System.out.println("Invalid index");
+                return;
+            }
             if (item.equals(this)) {
                 System.out.println("Trying to add current item in himself.");
                 return;
