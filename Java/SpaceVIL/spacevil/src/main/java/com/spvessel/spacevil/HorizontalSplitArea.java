@@ -1,5 +1,7 @@
 package com.spvessel.spacevil;
 
+import java.awt.Color;
+
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceItem;
@@ -13,7 +15,7 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     private InterfaceBaseItem _topBlock;
     private InterfaceBaseItem _bottomBlock;
     private SplitHolder _splitHolder = new SplitHolder(Orientation.HORIZONTAL);
-    private int _topHeight = 0;
+    private int _topHeight = -1;
     private int _diff = 0;
     private int _tMin = 0;
     private int _bMin = 0;
@@ -22,11 +24,18 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
      * Sets position of the SplitHolder
      */
     public void setSplitPosition(int position) {
-        if (position < _tMin || position > getHeight() - _splitHolder.getHolderSize() - _bMin)
-            return;
-        _topHeight = position;
-        _splitHolder.setY(position + getY());
-        updateLayout();
+        if (_init) {
+            if (position < _tMin || position > getHeight() - _splitHolder.getHolderSize() - _bMin)
+                return;
+            _topHeight = position;
+            _splitHolder.setY(position + getY());
+            updateLayout();
+        } else
+            _topHeight = position;
+    }
+
+    public void setSplitColor(Color color) {
+        _splitHolder.setBackground(color);
     }
 
     /**
@@ -51,16 +60,20 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
         setSplitPosition(offset);
     }
 
+    private boolean _init = false;
+
     /**
      * Initialization and adding of all elements in the HorizontalSplitArea
      */
     @Override
     public void initElements() {
-        setSplitPosition((getHeight() - _splitHolder.getHolderSize()) / 2);
-
         // Adding
         addItem(_splitHolder);
-        updateLayout();
+        _init = true;
+        if (_topHeight < 0)
+            setSplitPosition((getHeight() - _splitHolder.getHolderSize()) / 2);
+        else
+            setSplitPosition(_topHeight);
     }
 
     /**
@@ -117,8 +130,7 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     }
 
     /**
-     * Update all children and HSplitArea sizes and positions
-     * according to confines
+     * Update all children and HSplitArea sizes and positions according to confines
      */
     public void updateLayout() {
         _splitHolder.setWidth(getWidth());

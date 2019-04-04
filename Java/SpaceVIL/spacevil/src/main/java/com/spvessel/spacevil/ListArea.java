@@ -216,6 +216,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         wrapper.updateSize();
         _mapContent.put(item, wrapper);
         updateLayout();
+
+        if (index <= _selection)
+            setSelection(_selection + 1);
     }
 
     /**
@@ -235,6 +238,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
      */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
+        boolean restore = !getTrueSelection().getContent().equals(item);
+        SelectionItem currentSelection = getTrueSelection();
+
         unselect();
         boolean b;
         if (item instanceof SelectionItem) {
@@ -249,6 +255,10 @@ public class ListArea extends Prototype implements InterfaceVLayout {
             b = super.removeItem(tmp);
         }
         updateLayout();
+
+        if (restore)
+            setSelection(getItems().indexOf(currentSelection));
+
         itemListChanged.execute();
         return b;
     }

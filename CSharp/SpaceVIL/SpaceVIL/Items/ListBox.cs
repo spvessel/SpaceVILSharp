@@ -83,7 +83,7 @@ namespace SpaceVIL
         private ContextMenu _menu;
         public VerticalScrollBar VScrollBar = new VerticalScrollBar();
         public HorizontalScrollBar HScrollBar = new HorizontalScrollBar();
-        private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.Always;
+        private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.AsNeeded;
 
         /// <summary>
         /// Is vertical scroll bar visible
@@ -120,7 +120,7 @@ namespace SpaceVIL
             HScrollBar.Slider.UpdateHandler();
         }
 
-        private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.Always;
+        private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.AsNeeded;
 
         /// <summary>
         /// Is horizontal scroll bar visible

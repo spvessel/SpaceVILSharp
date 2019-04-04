@@ -28,8 +28,8 @@ public class TextArea extends Prototype {
     public VerticalScrollBar vScrollBar = new VerticalScrollBar();
     public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
 
-    private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
-    private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
+    private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.AS_NEEDED;
+    private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.AS_NEEDED;
 
     /**
      * Vertical scroll bar visibility policy (ALWAYS, AS_NEEDED, NEVER) in the

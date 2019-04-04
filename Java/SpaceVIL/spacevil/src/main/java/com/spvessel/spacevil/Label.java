@@ -50,9 +50,9 @@ public class Label extends Prototype {
 
         int gyshift = 0;
         if (alignment.contains(ItemAlignment.BOTTOM)) {
-            gyshift = - (getTextHeight() - getLineY(1));
+            gyshift = -(getTextHeight() - getLineY(1));
         } else if (alignment.contains(ItemAlignment.VCENTER)) {
-            gyshift = - ((getTextHeight() - getLineY(1)) / 2);
+            gyshift = -((getTextHeight() - getLineY(1)) / 2);
         }
         updateLinesYShifts(gyshift);
     }
@@ -134,7 +134,7 @@ public class Label extends Prototype {
         setTextMargin(_text_objects.get(0).getMargin());
         setFont(getFont());
 
-//        _text_object.setItemText(text);
+        // _text_object.setItemText(text);
     }
 
     private void updateLinesYShifts(int globalYShift) {
@@ -146,6 +146,8 @@ public class Label extends Prototype {
     }
 
     public String getText() {
+        if (!_init)
+            return preIniText;
         StringBuilder sb = new StringBuilder();
         if (_text_objects == null)
             return "";
@@ -200,7 +202,8 @@ public class Label extends Prototype {
         int wdt = _text_objects.get(0).getWidth();
         for (int i = 1; i < _text_objects.size(); i++) {
             int w = _text_objects.get(i).getWidth();
-            if (w > wdt) wdt = w;
+            if (w > wdt)
+                wdt = w;
         }
         return wdt;
     }
@@ -253,10 +256,10 @@ public class Label extends Prototype {
             return;
         super.setStyle(style);
         // if (style.font != null)
-            setFont(style.font);
+        setFont(style.font);
         // if (style.foreground != null)
-            setForeground(style.foreground);
+        setForeground(style.foreground);
         // if (style.textAlignment != null)
-            setTextAlignment(style.textAlignment);
+        setTextAlignment(style.textAlignment);
     }
 }

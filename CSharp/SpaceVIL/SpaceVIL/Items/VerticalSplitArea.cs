@@ -16,18 +16,28 @@ namespace SpaceVIL
         private IBaseItem _leftBlock;
         private IBaseItem _rightBlock;
         private SplitHolder _splitHolder = new SplitHolder(Orientation.Vertical);
-        private int _leftWidth = 0;
+        private int _leftWidth = -1;
         private int _diff = 0;
         private int _lMin = 0;
         private int _rMin = 0;
 
         public void SetSplitPosition(int position)
         {
-            if (position < _lMin || position > GetWidth() - _splitHolder.GetHolderSize() - _rMin)
-                return;
-            _leftWidth = position;
-            _splitHolder.SetX(position + GetX());
-            UpdateLayout();
+            if (_init)
+            {
+                if (position < _lMin || position > GetWidth() - _splitHolder.GetHolderSize() - _rMin)
+                    return;
+                _leftWidth = position;
+                _splitHolder.SetX(position + GetX());
+                UpdateLayout();
+            }
+            else
+                _leftWidth = position;
+        }
+
+        public void SetSplitColor(Color color)
+        {
+            _splitHolder.SetBackground(color);
         }
 
         public VerticalSplitArea()
@@ -50,13 +60,17 @@ namespace SpaceVIL
             SetSplitPosition(offset);
         }
 
+        private bool _init = false;
         public override void InitElements()
         {
             //Adding
             AddItem(_splitHolder);
-            SetSplitPosition((GetWidth() - _splitHolder.GetHolderSize()) / 2);
-            // Console.WriteLine(_splitHolder.GetX() + " " + _splitHolder.GetWidth());
-            // UpdateLayout();
+            _init = true;
+
+            if (_leftWidth < 0)
+                SetSplitPosition((GetWidth() - _splitHolder.GetHolderSize()) / 2);
+            else
+                SetSplitPosition(_leftWidth);
         }
 
         public void AssignLeftItem(IBaseItem item)
@@ -109,8 +123,6 @@ namespace SpaceVIL
 
         public void UpdateLayout()
         {
-            // _splitHolder.SetHeight(GetHeight());
-
             int tmpWidth = _leftWidth - GetPadding().Left;
 
             if (_leftBlock != null)

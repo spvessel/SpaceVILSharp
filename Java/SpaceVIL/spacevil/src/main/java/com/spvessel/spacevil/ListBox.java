@@ -82,7 +82,7 @@ public class ListBox extends Prototype {
     private ContextMenu _menu;
     public VerticalScrollBar vScrollBar = new VerticalScrollBar();
     public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
-    private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
+    private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.AS_NEEDED;
 
     /**
      * Is vertical scroll bar visible
@@ -113,7 +113,7 @@ public class ListBox extends Prototype {
         vScrollBar.slider.updateHandler();
     }
 
-    private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.ALWAYS;
+    private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.AS_NEEDED;
 
     /**
      * Is horizontal scroll bar visible

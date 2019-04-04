@@ -257,6 +257,9 @@ namespace SpaceVIL
             base.InsertItem(wrapper, index);
             _mapContent.Add(item, wrapper);
             UpdateLayout();
+
+            if (index <= _selection)
+                SetSelection(_selection + 1);
         }
 
         /// <summary>
@@ -275,6 +278,9 @@ namespace SpaceVIL
         /// </summary>
         public override bool RemoveItem(IBaseItem item)
         {
+            bool restore = !GetTrueSelection().GetContent().Equals(item);
+            SelectionItem currentSelection = GetTrueSelection();
+
             Unselect();
             bool b;
             SelectionItem tmp = item as SelectionItem;
@@ -293,6 +299,10 @@ namespace SpaceVIL
             }
             
             UpdateLayout();
+
+            if (restore)
+                SetSelection(GetItems().IndexOf(currentSelection));
+                
             ItemListChanged?.Invoke();
             return b;
         }

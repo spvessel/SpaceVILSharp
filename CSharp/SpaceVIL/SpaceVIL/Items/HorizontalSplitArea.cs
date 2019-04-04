@@ -16,7 +16,7 @@ namespace SpaceVIL
         private IBaseItem _topBlock;
         private IBaseItem _bottomBlock;
         private SplitHolder _splitHolder = new SplitHolder(Orientation.Horizontal);
-        private int _topHeight = 0;
+        private int _topHeight = -1;
         private int _diff = 0;
         private int _tMin = 0;
         private int _bMin = 0;
@@ -26,11 +26,21 @@ namespace SpaceVIL
         /// </summary>
         public void SetSplitPosition(int position)
         {
-            if (position < _tMin || position > GetHeight() - _splitHolder.GetHolderSize() - _bMin)
-                return;
-            _topHeight = position;
-            _splitHolder.SetY(position + GetY());
-            UpdateLayout();
+            if (_init)
+            {
+                if (position < _tMin || position > GetHeight() - _splitHolder.GetHolderSize() - _bMin)
+                    return;
+                _topHeight = position;
+                _splitHolder.SetY(position + GetY());
+                UpdateLayout();
+            }
+            else
+                _topHeight = position;
+        }
+
+        public void SetSplitColor(Color color)
+        {
+            _splitHolder.SetBackground(color);
         }
 
         /// <summary>
@@ -55,7 +65,7 @@ namespace SpaceVIL
             int offset = args.Position.GetY() - GetY() - _diff;
             SetSplitPosition(offset);
         }
-
+        private bool _init = false;
         /// <summary>
         /// Initialization and adding of all elements in the HorizontalSplitArea
         /// </summary>
@@ -63,7 +73,11 @@ namespace SpaceVIL
         {
             //Adding
             AddItem(_splitHolder);
-            SetSplitPosition((GetHeight() - _splitHolder.GetHolderSize()) / 2);
+            _init = true;
+            if (_topHeight < 0)
+                SetSplitPosition((GetHeight() - _splitHolder.GetHolderSize()) / 2);
+            else
+                SetSplitPosition(_topHeight);
         }
 
         /// <summary>

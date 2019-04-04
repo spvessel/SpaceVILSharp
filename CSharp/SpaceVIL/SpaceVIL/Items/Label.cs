@@ -170,6 +170,8 @@ namespace SpaceVIL
 
         public String GetText()
         {
+            if (!_init)
+                return preInitText;
             StringBuilder sb = new StringBuilder();
             if (_text_objects == null) return "";
             if (_text_objects.Count == 1)

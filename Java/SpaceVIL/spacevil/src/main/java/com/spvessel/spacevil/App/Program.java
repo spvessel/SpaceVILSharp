@@ -38,12 +38,12 @@ public class Program {
         InputTest it = new InputTest();
         TextTest tt = new TextTest();
 
-        // EventTest et = new EventTest();
-        // et.show();
+        EventTest et = new EventTest();
+        et.show();
 
         // ScissorsTest sc = new ScissorsTest();
         // sc.show();
 
-        mw.show();
+        // mw.show();
     }
 }

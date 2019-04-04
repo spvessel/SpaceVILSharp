@@ -52,7 +52,7 @@ public class ComplexTest extends ActiveWindow {
         toolbar.setPadding(10, 0, 0, 0);
         toolbar.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
         Handler.addItem(toolbar);
-        TreeView treeview = new TreeView();
+
         treeview.setItemName("TreeView Fucker!");
         treeview.setMinWidth(100);
 
@@ -106,8 +106,8 @@ public class ComplexTest extends ActiveWindow {
         // HorizontalSplitArea split_area = new HorizontalSplitArea();
         VerticalSplitArea split_area = new VerticalSplitArea();
         split_area.setMargin(0, 72, 0, 0);
-        Handler.addItem(split_area);
         split_area.setSplitPosition(300);
+        Handler.addItem(split_area);
 
         split_area.assignLeftItem(treeview);
 
