@@ -113,7 +113,7 @@ public class Label extends Prototype implements InterfaceVLayout {
             }
         }
 
-        String[] line = text.split("\n");
+        String[] line = text.split("\n", -1);
         String s;
 
         s = line[0].replaceAll("\r", "");

@@ -451,7 +451,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
         _wholeText = text;
 
-        String[] line = text.split("\n");
+        String[] line = text.split("\n", -1);
         int inc = 0;
         String s;
 
@@ -495,7 +495,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         if (_cursor_position.x < getLineLetCount(_cursor_position.y))
             textEnd = new StringBuilder(_linesList.get(_cursor_position.y).getItemText()).substring(_cursor_position.x);
 
-        String[] line = pasteStr.split("\n");
+        String[] line = pasteStr.split("\n", -1);
         for (int i = 0; i < line.length; i++) {
             line[i] = line[i].replaceAll("\r", ""); // .TrimEnd('\r');
         }

@@ -91,7 +91,7 @@ public class InputTest extends ActiveWindow {
 
         layout.addItem(bc);
 
-        // layout.addItem(sp);
+         layout.addItem(sp);
 
         Label tl = new Label();
         tl.setBackground(255,255,255,100);
@@ -148,6 +148,8 @@ public class InputTest extends ActiveWindow {
 //                    "        // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
 //            tb.rewindText();
 //            tb.setEditable(!tb.isEditable());
+            tb.setText("123\nqwe\nwer\n\n\n");
+            tb.pasteText("123\nqwe\nwer\n\n\n");
         });
 
         Handler.getWindow().eventDrop.add((sender, args) -> {
