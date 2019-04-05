@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -84,6 +85,9 @@ namespace SpaceVIL
             SetCursor(EmbeddedCursor.IBeam);
         }
 
+        private Stopwatch _startTime = new Stopwatch();
+        private bool _isDoubleClick = false;
+
         private void OnDoubleClick(object sender, MouseArgs args)
         {
             Monitor.Enter(_textureStorage.textInputLock);
@@ -106,6 +110,13 @@ namespace SpaceVIL
                         _selectTo = new Point(wordBounds[1], _cursor_position.Y);
                         MakeSelectedArea(_selectFrom, _selectTo);
                     }
+
+                    _startTime.Restart();
+                    _isDoubleClick = true;
+                }
+                else
+                {
+                    _isDoubleClick = false;
                 }
             }
             finally
@@ -127,7 +138,16 @@ namespace SpaceVIL
                         UnselectText();
                         CancelJustSelected();
                     }
+
+                    if (_isDoubleClick && _startTime.ElapsedMilliseconds < 500)
+                    {
+                        _isSelect = true;
+                        _selectFrom = new Point(0, _cursor_position.Y);
+                        _selectTo = new Point(GetLineLetCount(_cursor_position.Y), _cursor_position.Y);
+                        MakeSelectedArea(_selectFrom, _selectTo);
+                    }
                 }
+                _isDoubleClick = false;
             }
             finally
             {
@@ -153,6 +173,7 @@ namespace SpaceVIL
                         _selectTo = new Point(_cursor_position.X, _cursor_position.Y);
                         MakeSelectedArea(_selectFrom, _selectTo);
                     }
+                    _isDoubleClick = false;
                 }
             }
             finally

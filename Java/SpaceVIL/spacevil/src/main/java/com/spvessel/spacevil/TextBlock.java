@@ -77,6 +77,9 @@ class TextBlock extends Prototype
         setCursor(EmbeddedCursor.IBEAM);
     }
 
+    private long _startTime = 0;
+    private boolean _isDoubleClick = false;
+
     private void onDoubleClick(Object sender, MouseArgs args) {
         _textureStorage.textInputLock.lock();
         try {
@@ -94,6 +97,11 @@ class TextBlock extends Prototype
                     _selectTo = new Point(wordBounds[1], _cursor_position.y);
                     makeSelectedArea(_selectFrom, _selectTo);
                 }
+
+                _startTime = System.nanoTime();
+                _isDoubleClick = true;
+            } else {
+                _isDoubleClick = false;
             }
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -109,7 +117,15 @@ class TextBlock extends Prototype
                     unselectText();
                     cancelJustSelected();
                 }
+
+                if (_isDoubleClick && (System.nanoTime() - _startTime) / 1000000 < 500) {
+                    _isSelect = true;
+                    _selectFrom = new Point(0, _cursor_position.y);
+                    _selectTo = new Point(getLineLetCount(_cursor_position.y), _cursor_position.y);
+                    makeSelectedArea(_selectFrom, _selectTo);
+                }
             }
+            _isDoubleClick = false;
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -128,6 +144,7 @@ class TextBlock extends Prototype
                     makeSelectedArea(_selectFrom, _selectTo);
                 }
             }
+            _isDoubleClick = false;
         } finally {
             _textureStorage.textInputLock.unlock();
         }
