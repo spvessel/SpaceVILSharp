@@ -81,7 +81,8 @@ namespace SpaceVIL
 
         private void OnMouseDoubleClick(object sender, MouseArgs args)
         {
-            SelectAll();
+            if (args.Button == MouseButton.ButtonLeft)
+                SelectAll();
         }
 
         private void OnMousePressed(object sender, MouseArgs args)
@@ -89,11 +90,14 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
-                ReplaceCursorAccordingCoord(args.Position.GetX());
-                if (_isSelect)
+                if (args.Button == MouseButton.ButtonLeft)
                 {
-                    UnselectText();
-                    CancelJustSelected();
+                    ReplaceCursorAccordingCoord(args.Position.GetX());
+                    if (_isSelect)
+                    {
+                        UnselectText();
+                        CancelJustSelected();
+                    }
                 }
             }
             finally
@@ -107,17 +111,20 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
-                ReplaceCursorAccordingCoord(args.Position.GetX());
+                if (args.Button == MouseButton.ButtonLeft)
+                {
+                    ReplaceCursorAccordingCoord(args.Position.GetX());
 
-                if (!_isSelect)
-                {
-                    _isSelect = true;
-                    _selectFrom = _cursor_position;
-                }
-                else
-                {
-                    _selectTo = _cursor_position;
-                    MakeSelectedArea(_selectFrom, _selectTo);
+                    if (!_isSelect)
+                    {
+                        _isSelect = true;
+                        _selectFrom = _cursor_position;
+                    }
+                    else
+                    {
+                        _selectTo = _cursor_position;
+                        MakeSelectedArea(_selectFrom, _selectTo);
+                    }
                 }
             }
             finally

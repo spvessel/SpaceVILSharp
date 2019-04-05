@@ -27,8 +27,11 @@ namespace SpaceVIL
         private InputRestriction inres = InputRestriction.DoubleNumbers;
 
         private void OnMouseDoubleClick(Object sender, MouseArgs args) {
-            SelectAll();
-            IsEditable = true;
+            if (args.Button == MouseButton.ButtonLeft)
+            {
+                SelectAll();
+                IsEditable = true;
+            }
         }
 
         private void OnKeyPress(IItem sender, KeyArgs args) {

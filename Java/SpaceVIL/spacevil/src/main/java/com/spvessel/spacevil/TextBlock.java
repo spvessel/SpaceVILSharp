@@ -3,10 +3,7 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.EmbeddedCursor;
-import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.KeyMods;
+import com.spvessel.spacevil.Flags.*;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -64,6 +61,7 @@ class TextBlock extends Prototype
         eventTextInput.add(this::onTextInput);
         eventScrollUp.add(this::onScrollUp);
         eventScrollDown.add(this::onScrollDown);
+        eventMouseDoubleClick.add(this::onDoubleClick);
 
         ShiftValCodes = new LinkedList<>(
                 Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME, KeyCode.UP, KeyCode.DOWN));
@@ -79,13 +77,38 @@ class TextBlock extends Prototype
         setCursor(EmbeddedCursor.IBEAM);
     }
 
+    private void onDoubleClick(Object sender, MouseArgs args) {
+        _textureStorage.textInputLock.lock();
+        try {
+            if (args.button == MouseButton.BUTTON_LEFT) {
+                replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
+                if (_isSelect) {
+                    unselectText();
+                    cancelJustSelected();
+                }
+                int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
+
+                if (wordBounds[0] != wordBounds[1]) {
+                    _isSelect = true;
+                    _selectFrom = new Point(wordBounds[0], _cursor_position.y);
+                    _selectTo = new Point(wordBounds[1], _cursor_position.y);
+                    makeSelectedArea(_selectFrom, _selectTo);
+                }
+            }
+        } finally {
+            _textureStorage.textInputLock.unlock();
+        }
+    }
+
     private void onMousePressed(Object sender, MouseArgs args) {
         _textureStorage.textInputLock.lock();
         try {
-            replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
-            if (_isSelect) {
-                unselectText();
-                cancelJustSelected();
+            if (args.button == MouseButton.BUTTON_LEFT) {
+                replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
+                if (_isSelect) {
+                    unselectText();
+                    cancelJustSelected();
+                }
             }
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -95,13 +118,15 @@ class TextBlock extends Prototype
     private void onDragging(Object sender, MouseArgs args) {
         _textureStorage.textInputLock.lock();
         try {
-            replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
-            if (!_isSelect) {
-                _isSelect = true;
-                _selectFrom = new Point(_cursor_position);
-            } else {
-                _selectTo = new Point(_cursor_position);
-                makeSelectedArea(_selectFrom, _selectTo);
+            if (args.button == MouseButton.BUTTON_LEFT) {
+                replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
+                if (!_isSelect) {
+                    _isSelect = true;
+                    _selectFrom = new Point(_cursor_position);
+                } else {
+                    _selectTo = new Point(_cursor_position);
+                    makeSelectedArea(_selectFrom, _selectTo);
+                }
             }
         } finally {
             _textureStorage.textInputLock.unlock();

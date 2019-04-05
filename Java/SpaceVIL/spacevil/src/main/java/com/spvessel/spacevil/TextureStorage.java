@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.spvessel.spacevil.Core.InterfaceTextContainer;
 import com.spvessel.spacevil.Decorations.Indents;
@@ -451,7 +453,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
         _wholeText = text;
 
-        String[] line = text.split("\n");
+        String[] line = text.split("\n", -1);
         int inc = 0;
         String s;
 
@@ -495,7 +497,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         if (_cursor_position.x < getLineLetCount(_cursor_position.y))
             textEnd = new StringBuilder(_linesList.get(_cursor_position.y).getItemText()).substring(_cursor_position.x);
 
-        String[] line = pasteStr.split("\n");
+        String[] line = pasteStr.split("\n", -1);
         for (int i = 0; i < line.length; i++) {
             line[i] = line[i].replaceAll("\r", ""); // .TrimEnd('\r');
         }
@@ -884,5 +886,30 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
         setWidth(w);
         setHeight(h);
+    }
+
+    private Pattern patternWordBounds = Pattern.compile("\\W|_", Pattern.UNICODE_CHARACTER_CLASS);
+    int[] findWordBounds(Point cursorPosition) {
+        //С положение курсора должно быть все в порядке, не нужно проверять вроде бы
+        String lineText = getTextInLine(cursorPosition.y);
+        int index = cursorPosition.x;
+
+        String testString = lineText.substring(index);
+        Matcher matcher = patternWordBounds.matcher(testString);
+
+        int begPt = 0;
+        int endPt = getLineLetCount(cursorPosition.y);
+
+        if (matcher.find())
+            endPt = index + matcher.start();
+
+        testString = lineText.substring(0, index);
+        matcher = patternWordBounds.matcher(testString);
+
+        while (matcher.find()) {
+            begPt = matcher.start() + 1;
+        }
+
+        return new int[] {begPt, endPt};
     }
 }

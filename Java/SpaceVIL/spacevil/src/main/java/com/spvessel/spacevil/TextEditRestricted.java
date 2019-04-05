@@ -6,6 +6,7 @@ import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Core.TextInputArgs;
 import com.spvessel.spacevil.Flags.InputRestriction;
 import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.MouseButton;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -38,8 +39,10 @@ class TextEditRestricted extends TextEdit {
     private InputRestriction inres = InputRestriction.DOUBLENUMBERS;
 
     private void onMouseDoubleClick(Object sender, MouseArgs args) {
-        selectAll();
-        setEditable(true);
+        if (args.button == MouseButton.BUTTON_LEFT) {
+            selectAll();
+            setEditable(true);
+        }
     }
 
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {

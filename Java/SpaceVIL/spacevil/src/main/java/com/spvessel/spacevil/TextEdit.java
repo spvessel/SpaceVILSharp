@@ -4,10 +4,7 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.EmbeddedCursor;
-import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.KeyMods;
+import com.spvessel.spacevil.Flags.*;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -93,16 +90,19 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     }
 
     private void onMouseDoubleClick(Object sender, MouseArgs args) {
-        selectAll();
+        if (args.button == MouseButton.BUTTON_LEFT)
+            selectAll();
     }
 
     private void onMousePressed(Object sender, MouseArgs args) {
         textInputLock.lock();
         try {
-            replaceCursorAccordingCoord(args.position.getX());
-            if (_isSelect) {
-                unselectText();
-                cancelJustSelected();
+            if (args.button == MouseButton.BUTTON_LEFT) {
+                replaceCursorAccordingCoord(args.position.getX());
+                if (_isSelect) {
+                    unselectText();
+                    cancelJustSelected();
+                }
             }
         } finally {
             textInputLock.unlock();
@@ -112,14 +112,16 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     private void onDragging(Object sender, MouseArgs args) {
         textInputLock.lock();
         try {
-            replaceCursorAccordingCoord(args.position.getX());
+            if (args.button == MouseButton.BUTTON_LEFT) {
+                replaceCursorAccordingCoord(args.position.getX());
 
-            if (!_isSelect) {
-                _isSelect = true;
-                _selectFrom = _cursor_position;
-            } else {
-                _selectTo = _cursor_position;
-                makeSelectedArea(_selectFrom, _selectTo);
+                if (!_isSelect) {
+                    _isSelect = true;
+                    _selectFrom = _cursor_position;
+                } else {
+                    _selectTo = _cursor_position;
+                    makeSelectedArea(_selectFrom, _selectTo);
+                }
             }
         } finally {
             textInputLock.unlock();
