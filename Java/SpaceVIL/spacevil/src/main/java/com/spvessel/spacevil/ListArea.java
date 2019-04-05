@@ -238,7 +238,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
      */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
-        boolean restore = !getTrueSelection().getContent().equals(item);
+        boolean restore = false;
+        if (getTrueSelection() != null)
+            restore = !getTrueSelection().getContent().equals(item);
         SelectionItem currentSelection = getTrueSelection();
 
         unselect();

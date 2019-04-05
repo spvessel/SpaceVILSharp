@@ -42,6 +42,19 @@ namespace SpaceVIL
             base.AddItem(item);
             UpdateLayout();
         }
+        public override void InsertItem(IBaseItem item, int index)
+        {
+            base.InsertItem(item, index);
+            UpdateLayout();
+        }
+
+        public override bool RemoveItem(IBaseItem item)
+        {
+            bool result = base.RemoveItem(item);
+            if (result)
+                UpdateLayout();
+            return result;
+        }
         public override void SetHeight(int height)
         {
             base.SetHeight(height);

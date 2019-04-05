@@ -87,23 +87,16 @@ public class FlowTest extends ActiveWindow {
         btn1.eventMouseClick.add((sender, args) -> {
             // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!");
             // pop.show(Handler);
-            MessageItem msg = new MessageItem(
-                    "Choose one of this buttons Choose one of this buttons Choose one of this buttons Choose one of this buttons",
-                    "Message:");
-            // msg.setMessageText("msg");
-            ButtonCore btnnn = new ButtonCore("Do not save");
-            btnnn.eventMouseClick.add((s, a) -> {
-                System.out.println("btnnn");
+            MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
+            ButtonCore btnDontSave = new ButtonCore("Do not save");
+            btnDontSave.eventMouseClick.add((s, a) -> {
+                System.out.println("btnDontSave is chosen");
             });
-
-            msg.addUserButton(btnnn, 4);
-            // msg.addUserButton(new ButtonCore("two"), 2);
-            // msg.addUserButton(new ButtonCore("three"), 3);
-
+            msg.addUserButton(btnDontSave, 2); //id must be > 1
             msg.onCloseDialog.add(() -> {
                 System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
             });
-            msg.show(Handler);
+            msg.show(getHandler());
 
             // InputDialog id = new InputDialog("Input text", "Apply");
             // id.show(Handler);

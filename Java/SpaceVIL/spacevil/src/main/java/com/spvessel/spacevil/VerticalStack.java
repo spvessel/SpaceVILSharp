@@ -46,6 +46,20 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
         updateLayout();
     }
 
+    @Override
+    public void insertItem(InterfaceBaseItem item, int index) {
+        super.insertItem(item, index);
+        updateLayout();
+    }
+
+    @Override
+    public boolean removeItem(InterfaceBaseItem item) {
+        boolean result = super.removeItem(item);
+        if (result)
+            updateLayout();
+        return result;
+    }
+
     /**
      * Set height of the VerticalStack
      */

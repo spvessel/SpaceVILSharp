@@ -49,6 +49,20 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
+        public override void InsertItem(IBaseItem item, int index)
+        {
+            base.InsertItem(item, index);
+            UpdateLayout();
+        }
+
+        public override bool RemoveItem(IBaseItem item)
+        {
+            bool result = base.RemoveItem(item);
+            if (result)
+                UpdateLayout();
+            return result;
+        }
+
         /// <summary>
         /// Set width of the HorizontalStack
         /// </summary>
@@ -101,7 +115,7 @@ namespace SpaceVIL
 
             int offset = 0;
             int startX = GetX() + GetPadding().Left;
-            
+
             if (expanded_count > 0 || _contentAlignment.Equals(ItemAlignment.Left))
             {
                 foreach (var child in GetItems())

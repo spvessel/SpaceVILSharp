@@ -45,6 +45,20 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
         updateLayout();
     }
 
+    @Override
+    public void insertItem(InterfaceBaseItem item, int index) {
+        super.insertItem(item, index);
+        updateLayout();
+    }
+
+    @Override
+    public boolean removeItem(InterfaceBaseItem item) {
+        boolean result = super.removeItem(item);
+        if (result)
+            updateLayout();
+        return result;
+    }
+    
     /**
      * Set width of the HorizontalStack
      */

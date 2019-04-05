@@ -218,7 +218,7 @@ namespace SpaceVIL
             wrapper.UpdateSize();
             _mapContent.Add(item, wrapper);
             UpdateLayout();
-            
+
             if (index <= _selection)
                 SetSelection(_selection + 1);
         }
@@ -240,7 +240,11 @@ namespace SpaceVIL
         /// </summary>
         public override bool RemoveItem(IBaseItem item)
         {
-            bool restore = !GetTrueSelection().GetContent().Equals(item);
+            bool restore = false;
+            if (GetTrueSelection() != null 
+            //&& GetTrueSelection()?.GetContent() != null
+            )
+                restore = !GetTrueSelection().GetContent().Equals(item);
             SelectionItem currentSelection = GetTrueSelection();
 
             Unselect();
