@@ -1523,7 +1523,7 @@ public class Style implements Cloneable {
         Style style = new Style();
         style.background = new Color(45, 45, 45, 255);
         style.foreground = new Color(210, 210, 210);
-        style.font = DefaultsService.getDefaultFont(16);
+        style.font = DefaultsService.getDefaultFont(14);
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.BOTTOM, ItemAlignment.RIGHT));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         style.setSize(300, 70);
@@ -1532,7 +1532,7 @@ public class Style implements Cloneable {
         style.padding = new Indents(5, 5, 5, 5);
         style.margin = new Indents(10, 10, 10, 10);
         ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 10);
+        hovered.background = new Color(255, 255, 255, 3);
         style.addItemState(ItemStateType.HOVERED, hovered);
 
         Style close_style = getButtonCoreStyle();

@@ -1424,7 +1424,6 @@ namespace SpaceVIL.Decorations
             style.Background = Color.FromArgb(255, 45, 45, 45);
             style.Foreground = Color.LightGray;
             style.Font = DefaultsService.GetDefaultFont(14);
-            // style.Font = new Font(style.Font.FontFamily, 14, style.Font.Style);
             style.Alignment = ItemAlignment.Bottom | ItemAlignment.Right;
             style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.SetSize(300, 70);
@@ -1434,7 +1433,7 @@ namespace SpaceVIL.Decorations
             style.Margin = new Indents(10, 10, 10, 10);
             style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(10, 255, 255, 255)
+                Background = Color.FromArgb(3, 255, 255, 255)
             });
 
             Style close_style = new Style();

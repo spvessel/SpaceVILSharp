@@ -14,7 +14,7 @@ import java.util.TimerTask;
 
 public class PopUpMessage extends Prototype {
     private static int count = 0;
-    private TextLine _text_object;
+    private Label _text_object;
     private ButtonCore _btn_close;
     Timer _stop;
     private int _timeout = 2000;
@@ -26,6 +26,7 @@ public class PopUpMessage extends Prototype {
     public void setTimeOut(int milliseconds) {
         _timeout = milliseconds;
     }
+
     public int getTimeOut() {
         return _timeout;
     }
@@ -39,10 +40,11 @@ public class PopUpMessage extends Prototype {
 
         _btn_close = new ButtonCore();
         _btn_close.setItemName("ClosePopUp");
-        _text_object = new TextLine();
-        _text_object.setItemText(message);
+        _text_object = new Label();
+        _text_object.setText(message);
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.PopUpMessage"));
+        setShadow(10, 3, 3, new Color(0, 0, 0, 140));
         setStyle(DefaultsService.getDefaultStyle(PopUpMessage.class));
         // handler.getWindow().addItem(this);
         setPassEvents(false);
@@ -55,6 +57,7 @@ public class PopUpMessage extends Prototype {
     public void setTextAlignment(ItemAlignment... alignment) {
         _text_object.setTextAlignment(alignment);
     }
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
         _text_object.setTextAlignment(alignment);
     }
@@ -72,15 +75,19 @@ public class PopUpMessage extends Prototype {
     public void setFont(Font font) {
         _text_object.setFont(font);
     }
+
     public void setFontSize(int size) {
         _text_object.setFontSize(size);
     }
+
     public void setFontStyle(int style) {
         _text_object.setFontStyle(style);
     }
+
     public void setFontFamily(String font_family) {
         _text_object.setFontFamily(font_family);
     }
+
     public Font getFont() {
         return _text_object.getFont();
     }
@@ -89,14 +96,14 @@ public class PopUpMessage extends Prototype {
      * Set text in the PopUpMessage
      */
     public void setText(String text) {
-        _text_object.setItemText(text);
+        _text_object.setText(text);
     }
 
     /**
      * Get the PopUpMessage text
      */
     public String getText() {
-        return _text_object.getItemText();
+        return _text_object.getText();
     }
 
     /**
@@ -105,18 +112,23 @@ public class PopUpMessage extends Prototype {
     public void setForeground(Color color) {
         _text_object.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
         _text_object.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
         _text_object.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
         return _text_object.getForeground();
     }
@@ -133,6 +145,7 @@ public class PopUpMessage extends Prototype {
     }
 
     private WindowLayout _handler = null;
+
     /**
      * Show the PopUpMessage
      */
