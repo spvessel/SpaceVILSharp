@@ -13,7 +13,7 @@ namespace SpaceVIL
     public class PopUpMessage : Prototype
     {
         static int count = 0;
-        private TextLine _text_object;
+        private Label _text_object;
         private ButtonCore _btn_close;
         internal Timer _stop;
         private int _timeout = 2000;
@@ -40,12 +40,11 @@ namespace SpaceVIL
 
             _btn_close = new ButtonCore();
             _btn_close.SetItemName("ClosePopUp");
-            _text_object = new TextLine();
-            _text_object.SetItemText(message);
+            _text_object = new Label();
+            _text_object.SetText(message);
             count++;
-
+            SetShadow(10, 3, 3, Color.FromArgb(140, 0, 0, 0));
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.PopUpMessage)));
-            // handler.GetWindow().AddItem(this);
             SetPassEvents(false);
         }
 
@@ -98,7 +97,7 @@ namespace SpaceVIL
         /// </summary>
         public void SetText(String text)
         {
-            _text_object.SetItemText(text);
+            _text_object.SetText(text);
         }
 
         /// <summary>
@@ -106,7 +105,7 @@ namespace SpaceVIL
         /// </summary>
         public String GetText()
         {
-            return _text_object.GetItemText();
+            return _text_object.GetText();
         }
 
         /// <summary>
@@ -157,7 +156,7 @@ namespace SpaceVIL
             _handler.AddItem(this);
             InitTimer();
         }
-        
+
         internal void InitTimer()
         {
             if (_stop != null)

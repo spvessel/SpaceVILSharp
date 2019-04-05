@@ -166,7 +166,12 @@ public class FlowTest extends ActiveWindow {
 
         btn4.eventMouseClick.add((sender, args) -> {
             // flow.addItem(getBlockList());
-            side.show();
+            // side.show();
+            PopUpMessage popUpInfo = new PopUpMessage(
+                    "\n" + "Age: " + "\n" + "Sex: " + "\n" + "Race: " + "\n" + "Class: ");
+            popUpInfo.setTimeOut(3000);
+            popUpInfo.setHeight(200);
+            popUpInfo.show(getHandler());
         });
         btn4.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
         btn4.setHoverRule(ItemRule.STRICT);

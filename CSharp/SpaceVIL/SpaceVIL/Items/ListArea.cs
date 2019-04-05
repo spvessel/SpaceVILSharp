@@ -241,23 +241,30 @@ namespace SpaceVIL
         public override bool RemoveItem(IBaseItem item)
         {
             bool restore = false;
-            if (GetTrueSelection() != null 
-            //&& GetTrueSelection()?.GetContent() != null
-            )
-                restore = !GetTrueSelection().GetContent().Equals(item);
-            SelectionItem currentSelection = GetTrueSelection();
+            SelectionItem currentSelection = null;
 
-            Unselect();
             bool b;
             SelectionItem tmp = item as SelectionItem;
             if (tmp != null)
             {
+                if (GetTrueSelection() != null)
+                {
+                    currentSelection = GetTrueSelection();
+                    restore = !currentSelection.Equals(tmp);
+                }
+                Unselect();
                 _mapContent.Remove(tmp.GetContent());
                 tmp.ClearContent();
                 b = base.RemoveItem(tmp);
             }
             else
             {
+                if (GetTrueSelection() != null)
+                {
+                    currentSelection = GetTrueSelection();
+                    restore = !currentSelection.GetContent().Equals(item);
+                }
+                Unselect();
                 tmp = _mapContent[item];
                 _mapContent.Remove(item);
                 tmp.ClearContent();
@@ -268,6 +275,7 @@ namespace SpaceVIL
 
             if (restore)
                 SetSelection(GetItems().IndexOf(currentSelection));
+            
 
             ItemListChanged?.Invoke();
             return b;
