@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.spvessel.spacevil.Core.InterfaceTextContainer;
 import com.spvessel.spacevil.Decorations.Indents;
@@ -884,5 +886,30 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
         setWidth(w);
         setHeight(h);
+    }
+
+    private Pattern patternWordBounds = Pattern.compile("\\W|_", Pattern.UNICODE_CHARACTER_CLASS);
+    int[] findWordBounds(Point cursorPosition) {
+        //С положение курсора должно быть все в порядке, не нужно проверять вроде бы
+        String lineText = getTextInLine(cursorPosition.y);
+        int index = cursorPosition.x;
+
+        String testString = lineText.substring(index);
+        Matcher matcher = patternWordBounds.matcher(testString);
+
+        int begPt = 0;
+        int endPt = getLineLetCount(cursorPosition.y);
+
+        if (matcher.find())
+            endPt = index + matcher.start();
+
+        testString = lineText.substring(0, index);
+        matcher = patternWordBounds.matcher(testString);
+
+        while (matcher.find()) {
+            begPt = matcher.start() + 1;
+        }
+
+        return new int[] {begPt, endPt};
     }
 }

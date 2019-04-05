@@ -3,10 +3,7 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.EmbeddedCursor;
-import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.KeyMods;
+import com.spvessel.spacevil.Flags.*;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -76,13 +73,15 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     private void onMouseDoubleClick(InterfaceItem sender, MouseArgs args) {
         textInputLock.lock();
         try {
-            _selectFrom = 0;
-            _cursor_position = getText().length();
-            _selectTo = _cursor_position;
-            replaceCursor();
+            if (args.button == MouseButton.BUTTON_LEFT) {
+                _selectFrom = 0;
+                _cursor_position = getText().length();
+                _selectTo = _cursor_position;
+                replaceCursor();
 
-            _isSelect = true;
-            makeSelectedArea(_selectFrom, _selectTo);
+                _isSelect = true;
+                makeSelectedArea(_selectFrom, _selectTo);
+            }
         } finally {
             textInputLock.unlock();
         }
@@ -91,10 +90,12 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     private void onMousePressed(InterfaceItem sender, MouseArgs args) {
         textInputLock.lock();
         try {
-            replaceCursorAccordingCoord(args.position.getX());
-            if (_isSelect) {
-                unselectText();
-                cancelJustSelected();
+            if (args.button == MouseButton.BUTTON_LEFT) {
+                replaceCursorAccordingCoord(args.position.getX());
+                if (_isSelect) {
+                    unselectText();
+                    cancelJustSelected();
+                }
             }
         } finally {
             textInputLock.unlock();
@@ -104,14 +105,16 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     private void onDragging(InterfaceItem sender, MouseArgs args) {
         textInputLock.lock();
         try {
-            replaceCursorAccordingCoord(args.position.getX());
+            if (args.button == MouseButton.BUTTON_LEFT) {
+                replaceCursorAccordingCoord(args.position.getX());
 
-            if (!_isSelect) {
-                _isSelect = true;
-                _selectFrom = _cursor_position;
-            } else {
-                _selectTo = _cursor_position;
-                makeSelectedArea(_selectFrom, _selectTo);
+                if (!_isSelect) {
+                    _isSelect = true;
+                    _selectFrom = _cursor_position;
+                } else {
+                    _selectTo = _cursor_position;
+                    makeSelectedArea(_selectFrom, _selectTo);
+                }
             }
         } finally {
             textInputLock.unlock();

@@ -15,6 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InputTest extends ActiveWindow {
     @Override
@@ -61,7 +63,7 @@ public class InputTest extends ActiveWindow {
         TextArea tb = new TextArea();
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         tb.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        tb.setText("123qwe");
+        tb.setText("123qwe sdfsdf;l!k(sdfsdf)sdfsdf_ sdfsdfs_dff+gh");
         tb.setWidth(300);
         tb.setHeight(300);
         tb.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
@@ -148,8 +150,16 @@ public class InputTest extends ActiveWindow {
 //                    "        // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
 //            tb.rewindText();
 //            tb.setEditable(!tb.isEditable());
-            tb.setText("123\nqwe\nwer\n\n\n");
-            tb.pasteText("123\nqwe\nwer\n\n\n");
+            String testString = tb.getText();
+            Pattern p = Pattern.compile("\\W|_");
+            Matcher m = p.matcher(testString);
+            System.out.println(testString + " " + m.groupCount());
+
+            while (m.find()) {
+                System.out.print("Start index: " + m.start());
+                System.out.print(" End index: " + m.end() + " ");
+                System.out.println(m.group());
+            }
         });
 
         Handler.getWindow().eventDrop.add((sender, args) -> {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
@@ -936,6 +937,40 @@ namespace SpaceVIL
             
             SetWidth(w);
             SetHeight(h);
+        }
+
+        private Regex patternWordBounds = new Regex(@"\W|_");
+        internal int[] FindWordBounds(Point cursorPosition)
+        {
+            //С положение курсора должно быть все в порядке, не нужно проверять вроде бы
+            String lineText = GetTextInLine(cursorPosition.Y);
+            int index = cursorPosition.X;
+
+            String testString = lineText.Substring(index);
+            MatchCollection matcher = patternWordBounds.Matches(testString);
+
+            int begPt = 0;
+            int endPt = GetLineLetCount(cursorPosition.Y);
+
+            if (matcher.Count > 0)
+            {
+                foreach (Match match in matcher)
+                {
+                    endPt = index + match.Index;
+                    break;
+                }
+            }
+
+            testString = lineText.Substring(0, index);
+            matcher = patternWordBounds.Matches(testString);
+
+            if (matcher.Count > 0)
+            {
+                foreach (Match match in matcher)
+                    begPt = match.Index + 1;
+            }
+
+            return new int[] { begPt, endPt };
         }
     }
 }

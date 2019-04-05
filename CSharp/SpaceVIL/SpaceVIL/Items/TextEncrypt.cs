@@ -70,13 +70,16 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
-                _selectFrom = 0;
-                _cursor_position = GetText().Length;
-                _selectTo = _cursor_position;
-                ReplaceCursor();
+                if (args.Button == MouseButton.ButtonLeft)
+                {
+                    _selectFrom = 0;
+                    _cursor_position = GetText().Length;
+                    _selectTo = _cursor_position;
+                    ReplaceCursor();
 
-                _isSelect = true;
-                MakeSelectedArea(_selectFrom, _selectTo);
+                    _isSelect = true;
+                    MakeSelectedArea(_selectFrom, _selectTo);
+                }
             }
             finally
             {
@@ -89,11 +92,14 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
-                ReplaceCursorAccordingCoord(args.Position.GetX());
-                if (_isSelect)
+                if (args.Button == MouseButton.ButtonLeft)
                 {
-                    UnselectText();
-                    CancelJustSelected();
+                    ReplaceCursorAccordingCoord(args.Position.GetX());
+                    if (_isSelect)
+                    {
+                        UnselectText();
+                        CancelJustSelected();
+                    }
                 }
             }
             finally
@@ -107,17 +113,20 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
-                ReplaceCursorAccordingCoord(args.Position.GetX());
+                if (args.Button == MouseButton.ButtonLeft)
+                {
+                    ReplaceCursorAccordingCoord(args.Position.GetX());
 
-                if (!_isSelect)
-                {
-                    _isSelect = true;
-                    _selectFrom = _cursor_position;
-                }
-                else
-                {
-                    _selectTo = _cursor_position;
-                    MakeSelectedArea(_selectFrom, _selectTo);
+                    if (!_isSelect)
+                    {
+                        _isSelect = true;
+                        _selectFrom = _cursor_position;
+                    }
+                    else
+                    {
+                        _selectTo = _cursor_position;
+                        MakeSelectedArea(_selectFrom, _selectTo);
+                    }
                 }
             }
             finally

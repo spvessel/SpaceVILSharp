@@ -60,6 +60,7 @@ namespace SpaceVIL
             EventTextInput += OnTextInput;
             EventScrollUp += OnScrollUp;
             EventScrollDown += OnScrollDown;
+            EventMouseDoubleClick += OnDoubleClick;
 
             ShiftValCodes = new List<KeyCode>() {KeyCode.Left, KeyCode.Right, KeyCode.End,
                 KeyCode.Home, KeyCode.Up, KeyCode.Down};
@@ -83,16 +84,49 @@ namespace SpaceVIL
             SetCursor(EmbeddedCursor.IBeam);
         }
 
+        private void OnDoubleClick(object sender, MouseArgs args)
+        {
+            Monitor.Enter(_textureStorage.textInputLock);
+            try
+            {
+                if (args.Button == MouseButton.ButtonLeft)
+                {
+                    ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
+                    if (_isSelect)
+                    {
+                        UnselectText();
+                        CancelJustSelected();
+                    }
+                    int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
+
+                    if (wordBounds[0] != wordBounds[1])
+                    {
+                        _isSelect = true;
+                        _selectFrom = new Point(wordBounds[0], _cursor_position.Y);
+                        _selectTo = new Point(wordBounds[1], _cursor_position.Y);
+                        MakeSelectedArea(_selectFrom, _selectTo);
+                    }
+                }
+            }
+            finally
+            {
+                Monitor.Exit(_textureStorage.textInputLock);
+            }
+        }
+
         private void OnMousePressed(object sender, MouseArgs args)
         {
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
-                ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
-                if (_isSelect)
+                if (args.Button == MouseButton.ButtonLeft)
                 {
-                    UnselectText();
-                    CancelJustSelected();
+                    ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
+                    if (_isSelect)
+                    {
+                        UnselectText();
+                        CancelJustSelected();
+                    }
                 }
             }
             finally
@@ -106,16 +140,19 @@ namespace SpaceVIL
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
-                ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
-                if (!_isSelect)
+                if (args.Button == MouseButton.ButtonLeft)
                 {
-                    _isSelect = true;
-                    _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
-                }
-                else
-                {
-                    _selectTo = new Point(_cursor_position.X, _cursor_position.Y);
-                    MakeSelectedArea(_selectFrom, _selectTo);
+                    ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
+                    if (!_isSelect)
+                    {
+                        _isSelect = true;
+                        _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
+                    }
+                    else
+                    {
+                        _selectTo = new Point(_cursor_position.X, _cursor_position.Y);
+                        MakeSelectedArea(_selectFrom, _selectTo);
+                    }
                 }
             }
             finally
