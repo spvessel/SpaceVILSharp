@@ -438,7 +438,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         // _substrate_text.setFontFamily(font.getFamily());
         // System.out.println("set font " + _substrate_text.getFont().getStyle());
         _substrate_text.setFont(
-                new Font(font.getFamily(), _substrate_text.getFont().getStyle(), _substrate_text.getFont().getSize()));
+            GraphicsMathService.changeFontFamily(font.getFamily(), _substrate_text.getFont())); //new Font(font.getFamily(), _substrate_text.getFont().getStyle(), _substrate_text.getFont().getSize()));
     }
 
     public void setFontSize(int size) {

@@ -405,7 +405,7 @@ public class TextArea extends Prototype {
     public void setFontSize(int size) {
         Font oldFont = getFont();
         if (oldFont.getSize() != size) {
-            Font newFont = new Font(oldFont.getFamily(), oldFont.getStyle(), size);
+            Font newFont = GraphicsMathService.changeFontSize(size, oldFont); //new Font(oldFont.getFamily(), oldFont.getStyle(), size);
             setFont(newFont);
         }
     }
@@ -413,7 +413,7 @@ public class TextArea extends Prototype {
     public void setFontStyle(int style) {
         Font oldFont = getFont();
         if (oldFont.getStyle() != style) {
-            Font newFont = new Font(oldFont.getFamily(), style, oldFont.getSize());
+            Font newFont = GraphicsMathService.changeFontStyle(style, oldFont); //new Font(oldFont.getFamily(), style, oldFont.getSize());
             setFont(newFont);
         }
     }
@@ -423,7 +423,7 @@ public class TextArea extends Prototype {
             return;
         Font oldFont = getFont();
         if (!oldFont.getFamily().equals(font_family)) {
-            Font newFont = new Font(font_family, oldFont.getStyle(), oldFont.getSize());
+            Font newFont = GraphicsMathService.changeFontFamily(font_family, oldFont); //new Font(font_family, oldFont.getStyle(), oldFont.getSize());
             setFont(newFont);
         }
     }
