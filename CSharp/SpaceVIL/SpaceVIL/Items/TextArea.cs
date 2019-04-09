@@ -431,31 +431,31 @@ namespace SpaceVIL
         }
         public void SetForeground(int r, int g, int b)
         {
-            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            _area.SetForeground(Color.FromArgb(255, r, g, b));
+            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b)); //Color.FromArgb(255, r, g, b));
         }
         public void SetForeground(int r, int g, int b, int a)
         {
-            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            _area.SetForeground(Color.FromArgb(a, r, g, b));
+            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b, a)); //Color.FromArgb(a, r, g, b));
         }
         public void SetForeground(float r, float g, float b)
         {
-            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            _area.SetForeground(Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b)); //Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
         }
         public void SetForeground(float r, float g, float b, float a)
         {
-            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            _area.SetForeground(Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b, a)); //Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
         }
         public Color GetForeground()
         {
@@ -499,7 +499,7 @@ namespace SpaceVIL
             Font oldFont = GetFont();
             if (oldFont.Size != size)
             {
-                Font newFont = new Font(oldFont.FontFamily, size, oldFont.Style);
+                Font newFont = GraphicsMathService.ChangeFontSize(size, oldFont); //new Font(oldFont.FontFamily, size, oldFont.Style);
                 SetFont(newFont);
             }
         }
@@ -508,7 +508,7 @@ namespace SpaceVIL
             Font oldFont = GetFont();
             if (oldFont.Style != style)
             {
-                Font newFont = new Font(oldFont.FontFamily, oldFont.Size, style);
+                Font newFont = GraphicsMathService.ChangeFontStyle(style, oldFont); //new Font(oldFont.FontFamily, oldFont.Size, style);
                 SetFont(newFont);
             }
         }
@@ -519,7 +519,7 @@ namespace SpaceVIL
             Font oldFont = GetFont();
             if (oldFont.FontFamily != font_family)
             {
-                Font newFont = new Font(font_family, oldFont.Size, oldFont.Style);
+                Font newFont = GraphicsMathService.ChangeFontFamily(font_family, oldFont); //new Font(font_family, oldFont.Size, oldFont.Style);
                 SetFont(newFont);
             }
         }

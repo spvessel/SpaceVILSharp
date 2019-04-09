@@ -361,7 +361,7 @@ namespace SpaceVIL
         internal void SetFont(Font font)
         {
             _text_object.SetFont(font);
-            _substrate_text.SetFont(new Font(font.FontFamily, _substrate_text.GetFont().Size, _substrate_text.GetFont().Style));
+            _substrate_text.SetFont(GraphicsMathService.ChangeFontFamily(font.FontFamily, _substrate_text.GetFont())); //new Font(font.FontFamily, _substrate_text.GetFont().Size, _substrate_text.GetFont().Style));
         }
 
         internal void SetFontSize(int size)

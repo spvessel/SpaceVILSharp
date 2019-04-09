@@ -5,13 +5,15 @@ import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
+import java.awt.*;
+
 public class SpinItem extends Prototype {
     private static int count = 0;
     private HorizontalStack _horzStack = new HorizontalStack();
     private VerticalStack _vertStack = new VerticalStack();
     public ButtonCore upButton = new ButtonCore();
     public ButtonCore downButton = new ButtonCore();
-    public TextEditRestricted textInput = new TextEditRestricted();
+    private TextEditRestricted textInput = new TextEditRestricted();
 
     /**
      * Constructs a SpinItem
@@ -98,5 +100,73 @@ public class SpinItem extends Prototype {
         if (inner_style != null) {
             textInput.setStyle(inner_style);
         }
+    }
+
+    public void setBackground(Color color) {
+        textInput.setBackground(color);
+    }
+
+    public void setBackground(int r, int g, int b) {
+        textInput.setBackground(r, g, b);
+    }
+
+    public void setBackground(int r, int g, int b, int a) {
+        textInput.setBackground(r, g, b, a);
+    }
+
+    public void setBackground(float r, float g, float b) {
+        textInput.setBackground(r, g, b);
+    }
+
+    public void setBackground(float r, float g, float b, float a) {
+        textInput.setBackground(r, g, b, a);
+    }
+
+    public Color getBackground() {
+        return textInput.getBackground();
+    }
+
+    public void setFont(Font font) {
+        textInput.setFont(font);
+    }
+
+    public void setFontSize(int size) {
+        textInput.setFontSize(size);
+    }
+
+    public void setFontStyle(int style) {
+        textInput.setFontStyle(style);
+    }
+
+    public void setFontFamily(String font_family) {
+        textInput.setFontFamily(font_family);
+    }
+
+    public Font getFont() {
+        return textInput.getFont();
+    }
+
+    public void setForeground(Color color) {
+        textInput.setForeground(color);
+    }
+
+    public void setForeground(int r, int g, int b) {
+        textInput.setForeground(r, g, b);
+    }
+
+    public void setForeground(int r, int g, int b, int a) {
+        textInput.setForeground(r, g, b, a);
+    }
+
+    public void setForeground(float r, float g, float b) {
+        textInput.setForeground(r, g, b);
+    }
+
+    public void setForeground(float r, float g, float b, float a) {
+        textInput.setForeground(r, g, b, a);
+    }
+
+    public Color getForeground() {
+        return textInput.getForeground();
     }
 }

@@ -98,7 +98,8 @@ namespace SpaceVIL
             {
                 return;
             }
-            Font fontBig = new Font(GetFont().FontFamily, (int)(GetFont().Size * _screenScale), GetFont().Style);
+            // Font fontBig = new Font(GetFont().FontFamily, (int)(GetFont().Size * _screenScale), GetFont().Style);
+            Font fontBig = GraphicsMathService.ChangeFontSize((int)(GetFont().Size * _screenScale), GetFont());
 
             _bigLetters = FontEngine.GetModifyLetters(GetItemText(), fontBig);
 
@@ -169,7 +170,9 @@ namespace SpaceVIL
 
                     if (_screenScale != 0 && _screenScale != 1)
                     {
-                        Font fontBig = new Font(GetFont().FontFamily, (int)(GetFont().Size * _screenScale), GetFont().Style);
+                        // Font fontBig = new Font(GetFont().FontFamily, (int)(GetFont().Size * _screenScale), GetFont().Style);
+                        Font fontBig = GraphicsMathService.ChangeFontSize((int)(GetFont().Size * _screenScale), GetFont());
+
                         int[] output = FontEngine.GetSpacerDims(fontBig);
                         bb_h = output[2];
                         bb_w = _bigWidth;

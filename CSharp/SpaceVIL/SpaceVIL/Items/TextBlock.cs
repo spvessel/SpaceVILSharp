@@ -884,6 +884,7 @@ namespace SpaceVIL
             _textureStorage.Clear();
             _cursor_position.X = 0;
             _cursor_position.Y = 0;
+            ReplaceCursor();
             if (_isSelect)
                 UnselectText();
             if (_justSelected)

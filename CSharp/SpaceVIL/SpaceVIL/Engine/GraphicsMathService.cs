@@ -1103,5 +1103,52 @@ namespace SpaceVIL
 
             return bmp;
         }
+
+        public static Color ColorTransform(int r, int g, int b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            return Color.FromArgb(255, r, g, b);
+        }
+
+        public static Color ColorTransform(int r, int g, int b, int a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
+            if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
+            if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
+            return Color.FromArgb(a, r, g, b);
+        }
+
+        public static Color ColorTransform(float r, float g, float b)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            return Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+        }
+
+        public static Color ColorTransform(float r, float g, float b, float a)
+        {
+            if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
+            if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
+            if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
+            return Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+        }
+
+        public static Font ChangeFontSize(int size, Font oldFont)
+        {
+            return new Font(oldFont.FontFamily, size, oldFont.Style);
+        }
+
+        public static Font ChangeFontStyle(FontStyle style, Font oldFont)
+        {
+            return new Font(oldFont.FontFamily, oldFont.Size, style);
+        }
+
+        public static Font ChangeFontFamily(FontFamily fontFamily, Font oldFont)
+        {
+            return new Font(fontFamily, oldFont.Size, oldFont.Style);
+        }
     }
 }

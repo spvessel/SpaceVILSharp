@@ -107,153 +107,153 @@ public class Style implements Cloneable {
      * Sets background color of the object
      */
     public void setBackground(int r, int g, int b) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 255)
-            r = 255;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 255)
-            g = 255;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 255)
-            b = 255;
-        background = new Color(r, g, b, 255);
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 255)
+        //     r = 255;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 255)
+        //     g = 255;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 255)
+        //     b = 255;
+        background = GraphicsMathService.colorTransform(r, g, b); //new Color(r, g, b, 255);
     }
 
     /**
      * Sets background color of the object
      */
     public void setBackground(int r, int g, int b, int a) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 255)
-            r = 255;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 255)
-            g = 255;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 255)
-            b = 255;
-        background = new Color(r, g, b, a);
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 255)
+        //     r = 255;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 255)
+        //     g = 255;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 255)
+        //     b = 255;
+        background = GraphicsMathService.colorTransform(r, g, b, a); //new Color(r, g, b, a);
     }
 
     /**
      * Sets background color of the object
      */
     public void setBackground(float r, float g, float b) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 1.0f)
-            r = 1.0f;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 1.0f)
-            g = 1.0f;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 1.0f)
-            b = 1.0f;
-        background = new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 1.0f)
+        //     r = 1.0f;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 1.0f)
+        //     g = 1.0f;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 1.0f)
+        //     b = 1.0f;
+        background = GraphicsMathService.colorTransform(r, g, b); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
     }
 
     /**
      * Sets background color of the object
      */
     public void setBackground(float r, float g, float b, float a) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 1.0f)
-            r = 1.0f;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 1.0f)
-            g = 1.0f;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 1.0f)
-            b = 1.0f;
-        background = new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 1.0f)
+        //     r = 1.0f;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 1.0f)
+        //     g = 1.0f;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 1.0f)
+        //     b = 1.0f;
+        background = GraphicsMathService.colorTransform(r, g, b, a); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
     }
 
     /**
      * Sets text color of the object
      */
     public void setForeground(int r, int g, int b) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 255)
-            r = 255;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 255)
-            g = 255;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 255)
-            b = 255;
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 255)
+        //     r = 255;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 255)
+        //     g = 255;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 255)
+        //     b = 255;
 
-        foreground = new Color(r, g, b, 255);
+        foreground = GraphicsMathService.colorTransform(r, g, b); //new Color(r, g, b, 255);
     }
 
     /**
      * Sets text color of the object
      */
     public void setForeground(int r, int g, int b, int a) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 255)
-            r = 255;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 255)
-            g = 255;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 255)
-            b = 255;
-        foreground = new Color(r, g, b, a);
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 255)
+        //     r = 255;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 255)
+        //     g = 255;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 255)
+        //     b = 255;
+        foreground = GraphicsMathService.colorTransform(r, g, b, a); //new Color(r, g, b, a);
     }
 
     /**
      * Sets text color of the object
      */
     public void setForeground(float r, float g, float b) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 1.0f)
-            r = 1.0f;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 1.0f)
-            g = 1.0f;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 1.0f)
-            b = 1.0f;
-        foreground = new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 1.0f)
+        //     r = 1.0f;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 1.0f)
+        //     g = 1.0f;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 1.0f)
+        //     b = 1.0f;
+        foreground = GraphicsMathService.colorTransform(r, g, b); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
     }
 
     /**
      * Sets text color of the object
      */
     public void setForeground(float r, float g, float b, float a) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 1.0f)
-            r = 1.0f;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 1.0f)
-            g = 1.0f;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 1.0f)
-            b = 1.0f;
-        foreground = new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f));
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 1.0f)
+        //     r = 1.0f;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 1.0f)
+        //     g = 1.0f;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 1.0f)
+        //     b = 1.0f;
+        foreground = GraphicsMathService.colorTransform(r, g, b, a); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f));
     }
 
     /**

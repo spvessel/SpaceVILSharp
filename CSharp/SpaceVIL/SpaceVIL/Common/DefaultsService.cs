@@ -67,7 +67,7 @@ namespace SpaceVIL.Common
                 AddFontFromMemory();
                 _default_font = new Font(privateFontCollection.Families[0], 12, FontStyle.Regular);
             }
-            return new Font(_default_font.FontFamily, size, _default_font.Style);
+            return GraphicsMathService.ChangeFontSize(size, _default_font); //new Font(_default_font.FontFamily, size, _default_font.Style);
             // return new Font(new FontFamily("Ubuntu"), size, FontStyle.Regular);
         }
         public Font GetDefaultFont(FontStyle style, int size)

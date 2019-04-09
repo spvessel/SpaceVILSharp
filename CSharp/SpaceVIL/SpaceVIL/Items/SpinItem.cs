@@ -3,6 +3,7 @@ using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace SpaceVIL
         private VerticalStack _vertStack = new VerticalStack();
         public ButtonCore UpButton = new ButtonCore();
         public ButtonCore DownButton = new ButtonCore();
-        internal TextEditRestricted textInput = new TextEditRestricted();
+        private TextEditRestricted textInput = new TextEditRestricted();
 
         /// <summary>
         /// Constructs a SpinItem
@@ -112,6 +113,77 @@ namespace SpaceVIL
             {
                 textInput.SetStyle(inner_style);
             }
+        }
+
+        public void SetBackground(Color color)
+        {
+            textInput.SetBackground(color);
+        }
+        public void SetBackground(int r, int g, int b)
+        {
+            textInput.SetBackground(r, g, b);
+        }
+        public void SetBackground(int r, int g, int b, int a)
+        {
+            textInput.SetBackground(r, g, b, a);
+        }
+        public void SetBackground(float r, float g, float b)
+        {
+            textInput.SetBackground(r, g, b);
+        }
+        public void SetBackground(float r, float g, float b, float a)
+        {
+            textInput.SetBackground(r, g, b, a);
+        }
+        public Color GetBackground()
+        {
+            return textInput.GetBackground();
+        }
+
+        public void SetFont(Font font)
+        {
+            textInput.SetFont(font);
+        }
+        public void SetFontSize(int size)
+        {
+            textInput.SetFontSize(size);
+        }
+        public void SetFontStyle(FontStyle style)
+        {
+            textInput.SetFontStyle(style);
+        }
+        public void SetFontFamily(FontFamily font_family)
+        {
+            textInput.SetFontFamily(font_family);
+        }
+        public Font GetFont()
+        {
+            return textInput.GetFont();
+        }
+
+        public void SetForeground(Color color)
+        {
+            textInput.SetForeground(color);
+        }
+        public void SetForeground(int r, int g, int b)
+        {
+            textInput.SetForeground(r, g, b);
+        }
+        public void SetForeground(int r, int g, int b, int a)
+        {
+            textInput.SetForeground(r, g, b, a);
+        }
+        public void SetForeground(float r, float g, float b)
+        {
+            textInput.SetForeground(r, g, b);
+        }
+        public void SetForeground(float r, float g, float b, float a)
+        {
+            textInput.SetForeground(r, g, b, a);
+        }
+        public Color GetForeground()
+        {
+            return textInput.GetForeground();
         }
     }
 }

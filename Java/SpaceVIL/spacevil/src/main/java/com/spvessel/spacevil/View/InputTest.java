@@ -150,16 +150,10 @@ public class InputTest extends ActiveWindow {
 //                    "        // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
 //            tb.rewindText();
 //            tb.setEditable(!tb.isEditable());
-            String testString = tb.getText();
-            Pattern p = Pattern.compile("\\W|_");
-            Matcher m = p.matcher(testString);
-            System.out.println(testString + " " + m.groupCount());
-
-            while (m.find()) {
-                System.out.print("Start index: " + m.start());
-                System.out.print(" End index: " + m.end() + " ");
-                System.out.println(m.group());
-            }
+//            tb.setEditable(false);
+            tb.clear();
+            tb.setFocus();
+//            tb.setEditable(true);
         });
 
         Handler.getWindow().eventDrop.add((sender, args) -> {

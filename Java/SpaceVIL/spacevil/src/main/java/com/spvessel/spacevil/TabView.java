@@ -194,64 +194,64 @@ public class TabView extends Prototype {
         _foreground = color;
     }
     public void setForeground(int r, int g, int b) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 255)
-            r = 255;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 255)
-            g = 255;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 255)
-            b = 255;
-        setForeground(new Color(r, g, b));
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 255)
+        //     r = 255;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 255)
+        //     g = 255;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 255)
+        //     b = 255;
+        setForeground(GraphicsMathService.colorTransform(r, g, b)); //new Color(r, g, b));
     }
     public void setForeground(int r, int g, int b, int a) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 255)
-            r = 255;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 255)
-            g = 255;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 255)
-            b = 255;
-        setForeground(new Color(r, g, b, a));
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 255)
+        //     r = 255;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 255)
+        //     g = 255;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 255)
+        //     b = 255;
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color(r, g, b, a));
     }
     public void setForeground(float r, float g, float b) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 1.0f)
-            r = 1.0f;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 1.0f)
-            g = 1.0f;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 1.0f)
-            b = 1.0f;
-        setForeground(new Color(r, g, b));
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 1.0f)
+        //     r = 1.0f;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 1.0f)
+        //     g = 1.0f;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 1.0f)
+        //     b = 1.0f;
+        setForeground(GraphicsMathService.colorTransform(r, g, b)); //new Color(r, g, b));
     }
     public void setForeground(float r, float g, float b, float a) {
-        if (r < 0)
-            r = Math.abs(r);
-        if (r > 1.0f)
-            r = 1.0f;
-        if (g < 0)
-            g = Math.abs(g);
-        if (g > 1.0f)
-            g = 1.0f;
-        if (b < 0)
-            b = Math.abs(b);
-        if (b > 1.0f)
-            b = 1.0f;
-        setForeground(new Color(r, g, b, a));
+        // if (r < 0)
+        //     r = Math.abs(r);
+        // if (r > 1.0f)
+        //     r = 1.0f;
+        // if (g < 0)
+        //     g = Math.abs(g);
+        // if (g > 1.0f)
+        //     g = 1.0f;
+        // if (b < 0)
+        //     b = Math.abs(b);
+        // if (b > 1.0f)
+        //     b = 1.0f;
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color(r, g, b, a));
     }
 
     /**
