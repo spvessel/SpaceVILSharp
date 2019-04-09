@@ -49,6 +49,22 @@ namespace SpaceVIL
             textInput.DecreaseValue();
         }
 
+
+        public double GetValue()
+        {
+            return textInput.GetValue();
+        }
+
+        public void SetValue(int value)
+        {
+            textInput.SetValue(value);
+        }
+
+        public void SetValue(double value)
+        {
+            textInput.SetValue(value);
+        }
+
         /// <summary>
         /// Set SpinItem's parameters
         /// </summary>

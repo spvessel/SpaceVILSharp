@@ -172,6 +172,11 @@ class TextEditRestricted extends TextEdit {
         updateCurrentValue();
     }
 
+    public double getValue()
+    {
+        return currentValue;
+    }
+
     public void setAccuracy(int accuracy) {
         signsCount = accuracy;
         rou = "%." + String.valueOf(signsCount) + "f";

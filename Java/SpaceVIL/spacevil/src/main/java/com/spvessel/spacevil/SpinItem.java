@@ -11,7 +11,7 @@ public class SpinItem extends Prototype {
     private VerticalStack _vertStack = new VerticalStack();
     public ButtonCore upButton = new ButtonCore();
     public ButtonCore downButton = new ButtonCore();
-    public TextEditRestricted textInput = new TextEditRestricted();
+    TextEditRestricted textInput = new TextEditRestricted();
 
     /**
      * Constructs a SpinItem
@@ -40,6 +40,19 @@ public class SpinItem extends Prototype {
 
     private void onDownClick(Object sender, MouseArgs args) {
         textInput.decreaseValue();
+    }
+
+    public double getValue()
+    {
+        return textInput.getValue();
+    }
+
+    public void setValue(int value) {
+        textInput.setValue(value);
+    }
+
+    public void setValue(double value) {
+        textInput.setValue(value);
     }
 
     /**
