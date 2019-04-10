@@ -50,7 +50,7 @@ namespace SpaceVIL
         /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
-            _textEncrypt.SetAlignment(alignment);
+            _textEncrypt.SetTextAlignment(alignment);
         }
         public void SetTextAlignment(params ItemAlignment[] alignment)
         {
@@ -224,7 +224,7 @@ namespace SpaceVIL
 
         public void SetSubstrateText(String substrateText)
         {
-            _textEncrypt.setSubstrateText(substrateText);
+            _textEncrypt.SetSubstrateText(substrateText);
         }
 
         public void SetSubstrateFontSize(int size)

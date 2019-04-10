@@ -195,6 +195,7 @@ public class ComplexTest extends ActiveWindow {
     private TreeItem getTreeBranch() {
         TreeItem item = new TreeItem(TreeItemType.BRANCH, "branch" + count1);
         count1++;
+        item.setFont(new Font("Arial Black",Font.PLAIN,10));
         item.setFontSize(15);
         // item.setText(item.getItemName());
         return item;

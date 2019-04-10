@@ -137,7 +137,11 @@ namespace SpaceVIL
 
         private void ReplaceCursorAccordingCoord(int realPos)
         {
-            realPos -= GetX() + GetPadding().Left + _text_object.GetMargin().Left;
+            int w = GetTextWidth();
+            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
+                realPos -= GetX() + (GetWidth() - w) - GetPadding().Right - _text_object.GetMargin().Right - _cursor.GetWidth();
+            else
+                realPos -= GetX() + GetPadding().Left + _text_object.GetMargin().Left;
 
             _cursor_position = CoordXToPos(realPos);
             ReplaceCursor();
@@ -268,19 +272,32 @@ namespace SpaceVIL
             }
         }
 
-        private int CursorPosToCoord(int cPos)
+        private int CursorPosToCoord(int cPos, bool isx)
         {
             int coord = 0;
             if (_text_object.GetLetPosArray() == null) return coord;
-            //int letCount = _text_object.GetLetPosArray().Count;
-
+            int letCount = _text_object.GetLetPosArray().Count;
+            //_cursor_position = (_cursor_position < 0) ? 0 : _cursor_position;
+            //_cursor_position = (_cursor_position > letCount) ? letCount : _cursor_position;
+            //Console.WriteLine(cPos + " " + letCount);
             if (cPos > 0)
-                coord = _text_object.GetLetPosArray()[cPos - 1] + _cursor.GetWidth();
+            {
+                coord = _text_object.GetLetPosArray()[cPos - 1];
+                if ((GetTextWidth() >= _cursorXMax) || !_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
+                {
+                    coord += _cursor.GetWidth();
+                }
+            }
 
-            if (GetLineXShift() + coord < 0)
-                _text_object.SetLineXShift(-coord);
-            if (GetLineXShift() + coord > _cursorXMax)
-                _text_object.SetLineXShift(_cursorXMax - coord);
+            if (isx)
+            {
+                if (GetLineXShift() + coord < 0)
+                {
+                    _text_object.SetLineXShift(-coord);
+                }
+                if (GetLineXShift() + coord > _cursorXMax)
+                    _text_object.SetLineXShift(_cursorXMax - coord);
+            }
 
             return GetLineXShift() + coord;
         }
@@ -294,8 +311,22 @@ namespace SpaceVIL
                 _cursor_position = len;
                 //replaceCursor();
             }
-            int pos = CursorPosToCoord(_cursor_position);
-            _cursor.SetX(GetX() + GetPadding().Left + pos + _text_object.GetMargin().Left);
+            int pos = CursorPosToCoord(_cursor_position, true);
+            int w = GetTextWidth();
+
+            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
+            {
+                int xcp = GetX() + GetWidth() - w + pos - GetPadding().Right // - _cursor.GetWidth()
+                    - _text_object.GetMargin().Right - _cursor.GetWidth();
+                if (_cursor_position == 0)
+                    xcp -= _cursor.GetWidth();
+                _cursor.SetX(xcp);
+            }
+            else
+            {
+                int cnt = GetX() + GetPadding().Left + pos + _text_object.GetMargin().Left;
+                _cursor.SetX(cnt);
+            }
         }
 
         private void OnTextInput(object sender, TextInputArgs args)
@@ -337,10 +368,15 @@ namespace SpaceVIL
         internal void SetTextAlignment(ItemAlignment alignment)
         {
             //Ignore all changes
-            _text_object.SetTextAlignment(alignment);
-            _substrate_text.SetTextAlignment(alignment);
+            ItemAlignment ial;
+            if (alignment.HasFlag(ItemAlignment.Right))
+                ial = ItemAlignment.Right | ItemAlignment.VCenter;
+            else
+                ial = ItemAlignment.Left | ItemAlignment.VCenter;
+            _text_object.SetTextAlignment(ial);
+            _substrate_text.SetTextAlignment(ial);
         }
-        public void SetTextAlignment(params ItemAlignment[] alignment)
+        internal void SetTextAlignment(params ItemAlignment[] alignment)
         {
             ItemAlignment common = alignment.ElementAt(0);
             if (alignment.Length > 1)
@@ -391,6 +427,7 @@ namespace SpaceVIL
         {
             this._needShow = needShow;
             SetText(_pwd);
+            MakeSelectedArea(_selectFrom, _selectTo);
             ReplaceCursor();
             GetHandler().SetFocusedItem(this);
         }
@@ -485,6 +522,10 @@ namespace SpaceVIL
 
             _substrate_text.SetAllowWidth(_cursorXMax);
             _substrate_text.CheckXShift(_cursorXMax);
+
+            ReplaceCursor();
+            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
+                MakeSelectedArea(_selectFrom, _selectTo);
         }
 
         public override void InitElements()
@@ -520,8 +561,8 @@ namespace SpaceVIL
                 fromPt = 0;
             if (toPt == -1)
                 toPt = 0;
-            fromPt = CursorPosToCoord(fromPt);
-            toPt = CursorPosToCoord(toPt);
+            fromPt = CursorPosToCoord(fromPt, false);
+            toPt = CursorPosToCoord(toPt, false);
 
             if (fromPt == toPt)
             {
@@ -537,7 +578,13 @@ namespace SpaceVIL
                 toReal = _cursorXMax;
 
             int width = toReal - fromReal + 1;
-            _selectedArea.SetX(GetX() + GetPadding().Left + fromReal + _text_object.GetMargin().Left);
+            
+            int w = GetTextWidth();
+            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
+                _selectedArea.SetX(GetX() + GetWidth() - w + fromReal - GetPadding().Right -
+                    _text_object.GetMargin().Right - _cursor.GetWidth());
+            else
+                _selectedArea.SetX(GetX() + GetPadding().Left + fromReal + _text_object.GetMargin().Left);
             _selectedArea.SetWidth(width);
         }
 
@@ -656,7 +703,7 @@ namespace SpaceVIL
             return _text_object.GetLineXShift();
         }
 
-        internal void setSubstrateText(String substrateText)
+        internal void SetSubstrateText(String substrateText)
         {
             _substrate_text.SetItemText(substrateText);
         }

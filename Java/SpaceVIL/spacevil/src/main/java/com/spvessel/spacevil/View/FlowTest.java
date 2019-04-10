@@ -227,13 +227,12 @@ public class FlowTest extends ActiveWindow {
         // {
         // flow.setHScrollOffset(flow.getHScrollOffset() + 10);
         // };
-        MenuItem y_plus = new MenuItem("Y += 100");
+        MenuItem y_plus = new MenuItem("Build Tool");
         // y_plus.eventMouseClick += (sender, args) ->
         // {
         // flow.setVScrollOffset(flow.getVScrollOffset() + 10);
         // };
-        MenuItem addition = new MenuItem("Addition");
-
+        MenuItem addition = new MenuItem("ADdition");
         // context
         _context_menu = new ContextMenu(Handler);// new ContextMenu(Handler, restore, x_plus, y_plus, addition);
         _context_menu.setItemName("Base");
@@ -248,15 +247,15 @@ public class FlowTest extends ActiveWindow {
         // flow.setHScrollOffset(flow.getHScrollOffset() - 10);
         // };
         MenuItem y_minus = new MenuItem("Y -= 100");
-        // y_minus.eventMouseClick += (sender, args) ->
-        // {
-        // Console.WriteLine("y minus");
-        // flow.setVScrollOffset(flow.getVScrollOffset() - 10);
-        // };
+         y_minus.eventMouseClick.add((sender, args) ->
+         {
+//            flow.setVScrollOffset(flow.getVScrollOffset() - 10);
+            System.out.println("menu width " + _context_menu.getWidth());
+         });
         MenuItem ex_addition = new MenuItem("addition");
         addition_menu.addItems(x_minus, y_minus, ex_addition);
 
-        addition.assignContextMenu(addition_menu);
+//        addition.assignContextMenu(addition_menu);
 
         ContextMenu ex_menu = new ContextMenu(Handler);
         ex_menu.setSize(110, 64);

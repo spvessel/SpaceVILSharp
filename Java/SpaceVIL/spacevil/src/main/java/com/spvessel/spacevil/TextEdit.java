@@ -570,6 +570,8 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         _substrate_text.checkXShift(_cursorXMax);
 
         replaceCursor();
+        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT))
+            makeSelectedArea(_selectFrom, _selectTo);
     }
 
     /**

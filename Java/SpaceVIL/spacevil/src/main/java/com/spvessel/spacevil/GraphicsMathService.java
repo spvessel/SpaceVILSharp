@@ -914,7 +914,7 @@ public final class GraphicsMathService {
     }
 
     public static Font changeFontSize(int size, Font oldFont) {
-        return new Font(oldFont.getFamily(), oldFont.getStyle(), size);
+        return new Font(oldFont.getFamily(), oldFont.getStyle(), size);//oldFont.getName(), oldFont.getStyle(), size); //
     }
 
     public static Font changeFontStyle(int style, Font oldFont) {

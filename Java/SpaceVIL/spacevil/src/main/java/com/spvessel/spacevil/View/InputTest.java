@@ -49,6 +49,7 @@ public class InputTest extends ActiveWindow {
 
         PasswordLine password = new PasswordLine();
         password.setSubstrateText("Enter a password...");
+        password.setTextAlignment(ItemAlignment.RIGHT);
 
         TextEdit te = new TextEdit();
         // te.setText("TextZaranee");

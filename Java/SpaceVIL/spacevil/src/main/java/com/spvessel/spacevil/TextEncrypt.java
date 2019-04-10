@@ -122,7 +122,12 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     }
 
     private void replaceCursorAccordingCoord(int realPos) {
-        realPos -= getX() + getPadding().left + _text_object.getMargin().left;
+        int w = getTextWidth();
+        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
+            realPos -= getX() + (getWidth() - w) - getPadding().right - _text_object.getMargin().right
+                    - _cursor.getWidth();
+        else
+            realPos -= getX() + getPadding().left + _text_object.getMargin().left;
 
         _cursor_position = coordXToPos(realPos);
         replaceCursor();
@@ -234,20 +239,25 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         }
     }
 
-    private int cursorPosToCoord(int cPos) {
+    private int cursorPosToCoord(int cPos, boolean isx) {
         int coord = 0;
         if (_text_object.getLetPosArray() == null)
             return coord;
-        // int letCount = _text_object.getLetPosArray().size();
 
-        if (cPos > 0)
-            coord = _text_object.getLetPosArray().get(cPos - 1) + _cursor.getWidth();
+        if (cPos > 0) {
+            coord = _text_object.getLetPosArray().get(cPos - 1);
+            if ((getTextWidth() >= _cursorXMax) || !_text_object.getTextAlignment().contains(ItemAlignment.RIGHT)) {
+                coord += _cursor.getWidth();
+            }
+        }
 
-        if (getLineXShift() + coord < 0) // _cursorXMin)
-            _text_object.setLineXShift(-coord); // _lineXShift + _text_object.getLetWidth(_cursor_position));
-        if (getLineXShift() + coord > _cursorXMax)
-            _text_object.setLineXShift(_cursorXMax - coord); // _lineXShift - _text_object.getLetWidth(_cursor_position
-        // - 1));
+        if (isx) {
+            if (getLineXShift() + coord < 0) {
+                _text_object.setLineXShift(-coord);
+            }
+            if (getLineXShift() + coord > _cursorXMax)
+                _text_object.setLineXShift(_cursorXMax - coord);
+        }
 
         return getLineXShift() + coord;
     }
@@ -259,8 +269,22 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
             _cursor_position = len;
             // replaceCursor();
         }
-        int pos = cursorPosToCoord(_cursor_position);
-        _cursor.setX(getX() + getPadding().left + pos + _text_object.getMargin().left);
+        int pos = cursorPosToCoord(_cursor_position, true);
+
+        int w = getTextWidth();
+
+        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
+            int xcp = getX() + getWidth() - w + pos - getPadding().right // - _cursor.getWidth()
+                    - _text_object.getMargin().right - _cursor.getWidth();
+            if (_cursor_position == 0)
+                xcp -= _cursor.getWidth();
+            _cursor.setX(xcp);
+        } else {
+            int cnt = getX() + getPadding().left + pos + _text_object.getMargin().left;
+            // if (_cursor_position > 0)
+            // cnt += _cursor.getWidth();
+            _cursor.setX(cnt);
+        }
     }
 
     private void onTextInput(InterfaceItem sender, TextInputArgs args) {
@@ -304,8 +328,16 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
     void setTextAlignment(List<ItemAlignment> alignment) {
         // Ignore all changes
-        _text_object.setTextAlignment(alignment);
-        _substrate_text.setTextAlignment(alignment);
+        List<ItemAlignment> ial = new LinkedList<>();
+        if (alignment.contains(ItemAlignment.RIGHT)) {
+            ial.add(ItemAlignment.RIGHT);
+            ial.add(ItemAlignment.VCENTER);
+        } else {
+            ial.add(ItemAlignment.LEFT);
+            ial.add(ItemAlignment.VCENTER);
+        }
+        _text_object.setTextAlignment(ial);
+        _substrate_text.setTextAlignment(ial);
     }
 
     void setTextMargin(Indents margin) {
@@ -341,6 +373,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     void showPassword(boolean _isHidden) {
         this._needShow = _isHidden;
         setText(_pwd);
+        makeSelectedArea(_selectFrom, _selectTo);
         replaceCursor();
         getHandler().setFocusedItem(this);
     }
@@ -428,6 +461,10 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
         _substrate_text.setAllowWidth(_cursorXMax);
         _substrate_text.checkXShift(_cursorXMax);
+
+        replaceCursor();
+        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT))
+            makeSelectedArea(_selectFrom, _selectTo);
     }
 
     public void initElements() {
@@ -465,8 +502,8 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
             fromPt = 0;
         if (toPt == -1)
             toPt = 0;
-        fromPt = cursorPosToCoord(fromPt);
-        toPt = cursorPosToCoord(toPt);
+        fromPt = cursorPosToCoord(fromPt, false);
+        toPt = cursorPosToCoord(toPt, false);
 
         if (fromPt == toPt) {
             _selectedArea.setWidth(0);
@@ -481,7 +518,13 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
             toReal = _cursorXMax;
 
         int width = toReal - fromReal + 1;
-        _selectedArea.setX(getX() + getPadding().left + fromReal + _text_object.getMargin().left);
+
+        int w = getTextWidth();
+        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
+            _selectedArea.setX(getX() + getWidth() - w + fromReal - getPadding().right - _text_object.getMargin().right
+                    - _cursor.getWidth());
+        else
+            _selectedArea.setX(getX() + getPadding().left + fromReal + _text_object.getMargin().left);
         _selectedArea.setWidth(width);
     }
 

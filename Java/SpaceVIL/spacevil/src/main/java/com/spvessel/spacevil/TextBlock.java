@@ -95,6 +95,8 @@ class TextBlock extends Prototype
                     _isSelect = true;
                     _selectFrom = new Point(wordBounds[0], _cursor_position.y);
                     _selectTo = new Point(wordBounds[1], _cursor_position.y);
+                    _cursor_position = new Point(_selectTo);
+                    replaceCursor();
                     makeSelectedArea(_selectFrom, _selectTo);
                 }
 
@@ -122,6 +124,8 @@ class TextBlock extends Prototype
                     _isSelect = true;
                     _selectFrom = new Point(0, _cursor_position.y);
                     _selectTo = new Point(getLineLetCount(_cursor_position.y), _cursor_position.y);
+                    _cursor_position = new Point(_selectTo);
+                    replaceCursor();
                     makeSelectedArea(_selectFrom, _selectTo);
                 }
             }

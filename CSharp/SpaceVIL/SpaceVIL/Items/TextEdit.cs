@@ -586,6 +586,8 @@ namespace SpaceVIL
             _substrate_text.CheckXShift(_cursorXMax);
 
             ReplaceCursor();
+            if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
+                MakeSelectedArea(_selectFrom, _selectTo);
         }
 
         public override void InitElements()

@@ -108,6 +108,8 @@ namespace SpaceVIL
                         _isSelect = true;
                         _selectFrom = new Point(wordBounds[0], _cursor_position.Y);
                         _selectTo = new Point(wordBounds[1], _cursor_position.Y);
+                        _cursor_position = new Point(_selectTo.X, _selectTo.Y);
+                        ReplaceCursor();
                         MakeSelectedArea(_selectFrom, _selectTo);
                     }
 
@@ -144,6 +146,8 @@ namespace SpaceVIL
                         _isSelect = true;
                         _selectFrom = new Point(0, _cursor_position.Y);
                         _selectTo = new Point(GetLineLetCount(_cursor_position.Y), _cursor_position.Y);
+                        _cursor_position = new Point(_selectTo.X, _selectTo.Y);
+                        ReplaceCursor();
                         MakeSelectedArea(_selectFrom, _selectTo);
                     }
                 }

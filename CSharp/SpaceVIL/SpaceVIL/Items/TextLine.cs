@@ -136,8 +136,12 @@ namespace SpaceVIL
                     float scl = wLayout.GetDpiScale()[0];
                     if (scl != _screenScale && !isBigExist)
                     { //Это при допущении, что скейл меняется только один раз!
-                        _screenScale = scl;
-                        MakeBigArr();
+                        if (_screenScale != 0 || scl != 1)
+                        {
+                            //Возможно может возникнуть проблема при переходе от большего к меньшему
+                            _screenScale = scl;
+                            MakeBigArr();
+                        }
                     }
                 }
 

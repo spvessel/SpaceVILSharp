@@ -89,8 +89,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         if (getFont() == null) {
             return;
         }
-        // Font fontBig = new Font(getFont().getName(), getFont().getStyle(), (int) (getFont().getSize() * _screenScale));
-        Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
+        Font fontBig = new Font(getFont().getName(), getFont().getStyle(), (int) (getFont().getSize() * _screenScale));
+//        Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
 
         _bigLetters = FontEngine.getModifyLetters(getItemText(), fontBig);
         // int[] output = FontEngine.getSpacerDims(fontBig);
@@ -121,8 +121,11 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             if (wLayout != null && wLayout.getDpiScale() != null) {
                 float scl = wLayout.getDpiScale()[0];
                 if (scl != _screenScale && !isBigExist) { //Это при допущении, что скейл меняется только один раз!
-                    _screenScale = scl;
-                    makeBigArr();
+                    if (_screenScale != 0 || scl != 1) {
+                        //Возможно может возникнуть проблема при переходе от большего к меньшему
+                        _screenScale = scl;
+                        makeBigArr();
+                    }
                 }
             }
 
@@ -152,8 +155,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 int xFirstBeg = _letters.get(0).xBeg + _letters.get(0).xShift;
 
                 if (_screenScale != 0 && _screenScale != 1) {
-                    // Font fontBig = new Font(getFont().getName(), getFont().getStyle(), (int) (getFont().getSize() * _screenScale));
-                    Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
+                    Font fontBig = new Font(getFont().getName(), getFont().getStyle(), (int) (getFont().getSize() * _screenScale));
+                    // Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
 
                     int[] output = FontEngine.getSpacerDims(fontBig);
                     bb_h = output[2];
