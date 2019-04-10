@@ -174,6 +174,11 @@ namespace SpaceVIL
             UpdateCurrentValue();
         }
 
+        public double GetValue()
+        {
+            return currentValue;
+        }
+
         public void SetAccuracy(int accuracy) {
             signsCount = accuracy;
             rou = "F" + (signsCount.ToString());

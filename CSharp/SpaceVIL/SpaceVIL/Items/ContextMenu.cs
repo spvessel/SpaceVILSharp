@@ -84,11 +84,18 @@ namespace SpaceVIL
             {
                 if (args.Key == KeyCode.Escape)
                 {
-                    Hide();
                     HideDependentMenus();
+                    Hide();
                 }
                 if (args.Key == KeyCode.Enter)
-                    OnSelectionChanged();
+                {
+                    Prototype selected = ItemList.GetSelectedItem() as Prototype;
+                    if (selected != null)
+                    {
+                        selected.EventMousePress.Invoke(selected, null);
+                        selected.EventMouseClick.Invoke(selected, null);
+                    }
+                }
             };
             _init = true;
         }
@@ -99,25 +106,19 @@ namespace SpaceVIL
             foreach (var context_menu in ItemsLayoutBox.GetLayoutFloatItems(GetHandler().Id))
             {
                 ContextMenu menu = context_menu as ContextMenu;
-                if (menu != null && menu.Equals(this))
-                {
+                if (menu != null && !menu.Equals(this))
                     menu.Hide();
-                }
             }
         }
 
-        void OnSelectionChanged()
+        void OnSelectionChanged(MenuItem sender)
         {
-            MenuItem item = ItemList.GetSelectedItem() as MenuItem;
-            if (item != null)
-            {
-                if (item.IsActionItem)
-                {
+            if (sender != null)
+                if (sender.IsActionItem)
                     return;
-                }
-            }
-            Hide();
+
             HideDependentMenus();
+            Hide();
         }
 
         /// <summary>
@@ -147,7 +148,7 @@ namespace SpaceVIL
                 tmp._context_menu = this;
                 tmp.EventMouseClick += (sender, args) =>
                 {
-                    OnSelectionChanged();
+                    OnSelectionChanged(tmp);
                 };
             }
             _queue.Enqueue(item);
@@ -187,7 +188,12 @@ namespace SpaceVIL
                 if (width < tmp)
                     width = tmp;
             }
-            SetSize(width, height - ItemList.GetArea().GetSpacing().Vertical);
+            if (height == 0)
+                height = GetHeight();
+            else
+                height -= ItemList.GetArea().GetSpacing().Vertical;
+
+            SetSize(width, height);
         }
 
         /// <summary>
@@ -263,8 +269,6 @@ namespace SpaceVIL
 
             if (_returnFocus != null)
                 _returnFocus.SetFocus();
-            // else
-            //     GetHandler().GetWindow().SetFocus();
         }
 
         /// <summary>
@@ -282,7 +286,6 @@ namespace SpaceVIL
 
         internal bool CloseDependencies(MouseArgs args)
         {
-            // Console.WriteLine(GetItemName() + " " + args.Position.X);
             foreach (var item in GetListContent())
             {
                 MenuItem menu_item = item as MenuItem;

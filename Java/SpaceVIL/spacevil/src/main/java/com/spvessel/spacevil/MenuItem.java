@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class MenuItem extends Prototype {
     public boolean isActionItem = false;
     private static int count = 0;
-    private TextLine _text_object;
+    private Label _text_object;
     ContextMenu _context_menu;
     private ContextMenu _sub_context_menu;
 
@@ -73,7 +73,7 @@ public class MenuItem extends Prototype {
 
         InterfaceMouseMethodState m_press = (sender, args) -> onMouseAction();
         eventMousePress.add(m_press);
-        _text_object = new TextLine();
+        _text_object = new Label();
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.MenuItem"));
         setStyle(DefaultsService.getDefaultStyle(MenuItem.class));
@@ -140,11 +140,11 @@ public class MenuItem extends Prototype {
      * MenuItem text
      */
     public void setText(String text) {
-        _text_object.setItemText(text);
+        _text_object.setText(text);
     }
 
     public String getText() {
-        return _text_object.getItemText();
+        return _text_object.getText();
     }
 
     /**
@@ -178,14 +178,14 @@ public class MenuItem extends Prototype {
      * @return text width in the MenuItem
      */
     public int getTextWidth() {
-        return _text_object.getWidth();
+        return _text_object.getTextWidth();
     }
 
     /**
      * @return text height in the MenuItem
      */
     public int getTextHeight() {
-        return _text_object.getHeight();
+        return _text_object.getTextHeight();
     }
 
     /**

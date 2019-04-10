@@ -637,14 +637,15 @@ namespace SpaceVIL
         }
         private void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
         {
-            _tooltip.InitTimer(false);
-
             if (_inputLocker)
                 return;
+
             _handler.GetLayout().GetWindow()._sides = 0;
 
             if (!_handler.Focusable)
                 return;
+
+            _tooltip.InitTimer(false);
 
             _margs.Button = button;
             _margs.State = state;
@@ -659,6 +660,18 @@ namespace SpaceVIL
             Queue<Prototype> tmp = new Queue<Prototype>(HoveredItems);
 
             Prototype lastHovered = HoveredItem;
+            // if (lastHovered != null && !GetHoverPrototype(ptrRelease.GetX(), ptrRelease.GetY(), m_state))
+            if (lastHovered == null)
+            {
+                double x, y;
+                Glfw.GetCursorPos(_handler.GetWindowId(), out x, out y);
+                GetHoverPrototype((int)x, (int)y, m_state);
+                lastHovered = HoveredItem;
+                _margs.Position.SetPosition((float)x, (float)y);
+                ptrRelease.SetPosition((float)x, (float)y);
+                ptrPress.SetPosition((float)x, (float)y);
+                ptrClick.SetPosition((float)x, (float)y);
+            }
             if (!GetHoverPrototype(ptrRelease.GetX(), ptrRelease.GetY(), m_state))
             {
                 lastHovered.SetMousePressed(false);
@@ -812,10 +825,14 @@ namespace SpaceVIL
             {
                 if (!item.IsVisible() || !item.IsDrawable())
                     continue;
-                layout_box_of_items.Add(item);
                 Prototype leaf = item as Prototype;
                 if (leaf != null)
+                {
+                    if (leaf.IsDisabled())
+                        continue;
+                    layout_box_of_items.Add(item);
                     layout_box_of_items.AddRange(GetInnerItems(leaf));
+                }
             }
 
             foreach (var item in layout_box_of_items)
@@ -905,15 +922,19 @@ namespace SpaceVIL
         private List<IBaseItem> GetInnerItems(Prototype root)
         {
             List<IBaseItem> list = new List<IBaseItem>();
-            List<IBaseItem> root_items = root.GetItems();
+            List<IBaseItem> root_items = new List<IBaseItem>(root.GetItems());
             foreach (var item in root_items)
             {
                 if (!item.IsVisible() || !item.IsDrawable())
                     continue;
-                list.Add(item);
                 Prototype leaf = item as Prototype;
                 if (leaf != null)
+                {
+                    if (leaf.IsDisabled())
+                        continue;
+                    list.Add(item);
                     list.AddRange(GetInnerItems(leaf));
+                }
             }
             return list;
         }
@@ -1054,7 +1075,7 @@ namespace SpaceVIL
                 while (tmp.Count > 0)
                 {
                     Prototype item = tmp.Pop();
-                    if (item.Equals(HoveredItem) && HoveredItem.IsDisabled())
+                    if (item.Equals(HoveredItem) && HoveredItem.IsDisabled() || item.IsDisabled())
                         continue;
                     _handler.GetLayout().SetEventTask(new EventTask()
                     {
@@ -1088,7 +1109,7 @@ namespace SpaceVIL
                     while (tmp.Count != 0)
                     {
                         Prototype item = tmp.Pop();
-                        if (item.Equals(FocusedItem) && FocusedItem.IsDisabled())
+                        if (item.Equals(FocusedItem) && FocusedItem.IsDisabled() || item.IsDisabled())
                             continue;//пропустить
 
                         _handler.GetLayout().SetEventTask(new EventTask()
@@ -1371,10 +1392,19 @@ namespace SpaceVIL
                     int y = _handler.GetLayout().GetHeight() - (shell.GetY() + shell.GetHeight());
                     int w = shell.GetWidth();
                     int h = shell.GetHeight();
+                    int x1 = x + w;
+                    int y1 = y + h;
 
-                    if (x < shape[0]) x = shape[0];
-                    if (y < shape[1]) y = shape[1];
-
+                    if (x < shape[0])
+                    {
+                        x = shape[0];
+                        w = x1 - x;
+                    }
+                    if (y < shape[1])
+                    {
+                        y = shape[1];
+                        h = y1 - y;
+                    }
 
                     if (x + w > shape[0] + shape[2])
                     {
@@ -1442,7 +1472,7 @@ namespace SpaceVIL
             Prototype root = shell as Prototype;
             if (root != null)
             {
-                List<IBaseItem> root_items = root.GetItems();
+                List<IBaseItem> root_items = new List<IBaseItem>(root.GetItems());
                 foreach (var item in root_items)
                     SetConfines(item);
             }
@@ -1450,7 +1480,6 @@ namespace SpaceVIL
 
         private void SetScissorRectangle(IBaseItem rect)
         {
-            glEnable(GL_SCISSOR_TEST);
             int x = rect.GetParent().GetX();
             int y = _handler.GetLayout().GetHeight() - (rect.GetParent().GetY() + rect.GetParent().GetHeight());
             int w = rect.GetParent().GetWidth();
@@ -1461,6 +1490,7 @@ namespace SpaceVIL
             w = (int)((float)w * scale);
             h = (int)((float)h * scale);
 
+            glEnable(GL_SCISSOR_TEST);
             glScissor(x, y, w, h);
 
             if (!_bounds.ContainsKey(rect))
@@ -1533,7 +1563,7 @@ namespace SpaceVIL
         //Common Draw function
         private void DrawItems(IBaseItem root)
         {
-            if (!root.IsVisible() || !root.IsDrawable())
+            if (root == null || !root.IsVisible() || !root.IsDrawable())
                 return;
 
             if (root is ILine)
@@ -1560,6 +1590,7 @@ namespace SpaceVIL
             {
                 DrawShell(root);
                 glDisable(GL_SCISSOR_TEST);
+
                 if (root is Prototype)
                 {
                     List<IBaseItem> list = new List<IBaseItem>(((Prototype)root).GetItems());

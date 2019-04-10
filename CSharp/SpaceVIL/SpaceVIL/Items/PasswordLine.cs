@@ -166,11 +166,8 @@ namespace SpaceVIL
             };
             _show_pwd_btn.EventMouseLeave += (sender, args) =>
             {
-                if (IsFocused())
-                {
-                    ShowPassword(false);
-                    eye.SetColorOverlay(Color.FromArgb(80, 80, 80));
-                }
+                ShowPassword(false);
+                eye.SetColorOverlay(Color.FromArgb(80, 80, 80));
             };
         }
 

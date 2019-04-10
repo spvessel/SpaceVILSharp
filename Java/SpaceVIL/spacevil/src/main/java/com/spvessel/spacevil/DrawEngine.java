@@ -679,9 +679,12 @@ final class DrawEngine {
     private void mouseClick(long wnd, int button, int action, int mods) {
         if (_inputLocker)
             return;
+
         _handler.getLayout().getWindow()._sides.clear();
+
         if (!_handler.focusable)
             return;
+
         // if (!flag_click)
         // return;
         // flag_click = false;
@@ -701,6 +704,19 @@ final class DrawEngine {
         Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
 
         Prototype lastHovered = hoveredItem;
+        if (lastHovered == null) {
+            DoubleBuffer x_pos = BufferUtils.createDoubleBuffer(1);
+            DoubleBuffer y_pos = BufferUtils.createDoubleBuffer(1);
+            glfwGetCursorPos(_handler.getWindowId(), x_pos, y_pos);
+            int x = (int) x_pos.get(0);
+            int y = (int) y_pos.get(0);
+            getHoverPrototype(x, y, m_state);
+            lastHovered = hoveredItem;
+            _margs.position.setPosition(x, y);
+            ptrRelease.setPosition(x, y);
+            ptrPress.setPosition(x, y);
+            ptrClick.setPosition(x, y);
+        }
         if (!getHoverPrototype(ptrRelease.getX(), ptrRelease.getY(), m_state)) {
             lastHovered.setMousePressed(false);
             engineEvent.resetAllEvents();
@@ -932,8 +948,9 @@ final class DrawEngine {
 
     private List<InterfaceBaseItem> getInnerItems(Prototype root) {
         List<InterfaceBaseItem> list = new LinkedList<InterfaceBaseItem>();
+        List<InterfaceBaseItem> root_items = new LinkedList<InterfaceBaseItem>(root.getItems());
 
-        for (InterfaceBaseItem item : root.getItems()) {
+        for (InterfaceBaseItem item : root_items) {
             if (!item.isVisible() || !item.isDrawable())
                 continue;
             list.add(item);
@@ -1357,10 +1374,18 @@ final class DrawEngine {
                 int w = shell.getWidth();
                 int h = shell.getHeight();
 
-                if (x < shape[0])
+                int x1 = x + w;
+                int y1 = y + h;
+
+                if (x < shape[0]) {
                     x = shape[0];
-                if (y < shape[1])
+                    w = x1 - x;
+                }
+
+                if (y < shape[1]) {
                     y = shape[1];
+                    h = y1 - y;
+                }
 
                 if (x + w > shape[0] + shape[2]) {
                     w = shape[0] + shape[2] - x;
@@ -1368,6 +1393,9 @@ final class DrawEngine {
 
                 if (y + h > shape[1] + shape[3])
                     h = shape[1] + shape[3] - y;
+
+                // if (shell.getParent() instanceof ListArea)
+                // System.out.println(shape[1] + " " + shape[3] + " " + shell.getItemName());
 
                 _bounds.put(shell, new int[] { x, y, w, h });
             }
@@ -1417,24 +1445,27 @@ final class DrawEngine {
 
         if (shell instanceof Prototype) {
             Prototype root = (Prototype) shell;
-            for (InterfaceBaseItem item : root.getItems()) {
+            List<InterfaceBaseItem> root_items = new LinkedList<>(root.getItems());
+            for (InterfaceBaseItem item : root_items) {
                 setConfines(item);
             }
         }
     }
 
     private void setScissorRectangle(InterfaceBaseItem rect) {
-        glEnable(GL_SCISSOR_TEST);
-        int x = rect.getParent().getX();// + rect.getParent().getPadding().left;
+
+        int x = rect.getParent().getX();
         int y = _handler.getLayout().getHeight() - (rect.getParent().getY() + rect.getParent().getHeight());
-        int w = rect.getParent().getWidth();// - rect.getParent().getPadding().right -
-                                            // rect.getParent().getPadding().left;
+        int w = rect.getParent().getWidth();
         int h = rect.getParent().getHeight();
+
         float scale = _handler.getLayout().getDpiScale()[0];
         x *= scale;
         y *= scale;
         w *= scale;
         h *= scale;
+
+        glEnable(GL_SCISSOR_TEST);
         glScissor(x, y, w, h);
 
         if (!_bounds.containsKey(rect))

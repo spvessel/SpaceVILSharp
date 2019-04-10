@@ -108,18 +108,18 @@ public class Style implements Cloneable {
      */
     public void setBackground(int r, int g, int b) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 255)
-        //     r = 255;
+        // r = 255;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 255)
-        //     g = 255;
+        // g = 255;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 255)
-        //     b = 255;
-        background = GraphicsMathService.colorTransform(r, g, b); //new Color(r, g, b, 255);
+        // b = 255;
+        background = GraphicsMathService.colorTransform(r, g, b); // new Color(r, g, b, 255);
     }
 
     /**
@@ -127,18 +127,18 @@ public class Style implements Cloneable {
      */
     public void setBackground(int r, int g, int b, int a) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 255)
-        //     r = 255;
+        // r = 255;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 255)
-        //     g = 255;
+        // g = 255;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 255)
-        //     b = 255;
-        background = GraphicsMathService.colorTransform(r, g, b, a); //new Color(r, g, b, a);
+        // b = 255;
+        background = GraphicsMathService.colorTransform(r, g, b, a); // new Color(r, g, b, a);
     }
 
     /**
@@ -146,18 +146,19 @@ public class Style implements Cloneable {
      */
     public void setBackground(float r, float g, float b) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 1.0f)
-        //     r = 1.0f;
+        // r = 1.0f;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 1.0f)
-        //     g = 1.0f;
+        // g = 1.0f;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 1.0f)
-        //     b = 1.0f;
-        background = GraphicsMathService.colorTransform(r, g, b); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
+        // b = 1.0f;
+        background = GraphicsMathService.colorTransform(r, g, b); // new Color((int) (r * 255.0f), (int) (g * 255.0f),
+                                                                  // (int) (b * 255.0f), 255);
     }
 
     /**
@@ -165,18 +166,19 @@ public class Style implements Cloneable {
      */
     public void setBackground(float r, float g, float b, float a) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 1.0f)
-        //     r = 1.0f;
+        // r = 1.0f;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 1.0f)
-        //     g = 1.0f;
+        // g = 1.0f;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 1.0f)
-        //     b = 1.0f;
-        background = GraphicsMathService.colorTransform(r, g, b, a); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
+        // b = 1.0f;
+        background = GraphicsMathService.colorTransform(r, g, b, a); // new Color((int) (r * 255.0f), (int) (g *
+                                                                     // 255.0f), (int) (b * 255.0f), 255);
     }
 
     /**
@@ -184,19 +186,19 @@ public class Style implements Cloneable {
      */
     public void setForeground(int r, int g, int b) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 255)
-        //     r = 255;
+        // r = 255;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 255)
-        //     g = 255;
+        // g = 255;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 255)
-        //     b = 255;
+        // b = 255;
 
-        foreground = GraphicsMathService.colorTransform(r, g, b); //new Color(r, g, b, 255);
+        foreground = GraphicsMathService.colorTransform(r, g, b); // new Color(r, g, b, 255);
     }
 
     /**
@@ -204,18 +206,18 @@ public class Style implements Cloneable {
      */
     public void setForeground(int r, int g, int b, int a) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 255)
-        //     r = 255;
+        // r = 255;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 255)
-        //     g = 255;
+        // g = 255;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 255)
-        //     b = 255;
-        foreground = GraphicsMathService.colorTransform(r, g, b, a); //new Color(r, g, b, a);
+        // b = 255;
+        foreground = GraphicsMathService.colorTransform(r, g, b, a); // new Color(r, g, b, a);
     }
 
     /**
@@ -223,18 +225,19 @@ public class Style implements Cloneable {
      */
     public void setForeground(float r, float g, float b) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 1.0f)
-        //     r = 1.0f;
+        // r = 1.0f;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 1.0f)
-        //     g = 1.0f;
+        // g = 1.0f;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 1.0f)
-        //     b = 1.0f;
-        foreground = GraphicsMathService.colorTransform(r, g, b); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255);
+        // b = 1.0f;
+        foreground = GraphicsMathService.colorTransform(r, g, b); // new Color((int) (r * 255.0f), (int) (g * 255.0f),
+                                                                  // (int) (b * 255.0f), 255);
     }
 
     /**
@@ -242,18 +245,20 @@ public class Style implements Cloneable {
      */
     public void setForeground(float r, float g, float b, float a) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 1.0f)
-        //     r = 1.0f;
+        // r = 1.0f;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 1.0f)
-        //     g = 1.0f;
+        // g = 1.0f;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 1.0f)
-        //     b = 1.0f;
-        foreground = GraphicsMathService.colorTransform(r, g, b, a); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f));
+        // b = 1.0f;
+        foreground = GraphicsMathService.colorTransform(r, g, b, a); // new Color((int) (r * 255.0f), (int) (g *
+                                                                     // 255.0f), (int) (b * 255.0f), (int) (a *
+                                                                     // 255.0f));
     }
 
     /**
@@ -1447,7 +1452,7 @@ public class Style implements Cloneable {
      */
     public static Style getTextBlockStyle() {
         Style style = new Style();
-        style.background = new Color(210, 210, 210);
+        style.background = new Color(0, 0, 0, 0);
         style.foreground = new Color(70, 70, 70);
         style.font = DefaultsService.getDefaultFont(16);
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
@@ -1489,7 +1494,7 @@ public class Style implements Cloneable {
      */
     public static Style getTextAreaStyle() {
         Style style = new Style();
-        style.background = new Color(210, 210, 210, 0);
+        style.background = new Color(210, 210, 210);
         style.foreground = new Color(25, 25, 25);
         style.font = DefaultsService.getDefaultFont(16);
         style.widthPolicy = SizePolicy.EXPAND;
@@ -1585,7 +1590,7 @@ public class Style implements Cloneable {
         style.font = DefaultsService.getDefaultFont();
         style.background = new Color(255, 255, 255);
         style.foreground = new Color(70, 70, 70);
-        
+
         style.height = 30;
         style.widthPolicy = SizePolicy.FIXED;
         style.heightPolicy = SizePolicy.FIXED;
@@ -1907,7 +1912,7 @@ public class Style implements Cloneable {
         msg_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         msg_style.setMargin(10, 0, 10, 40);
         style.addInnerStyle("message", msg_style);
-        
+
         Style layout_style = getFrameStyle();
         layout_style.setMargin(0, 30, 0, 0);
         layout_style.setPadding(6, 6, 6, 6);

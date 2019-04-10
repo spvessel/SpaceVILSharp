@@ -44,6 +44,19 @@ public class SpinItem extends Prototype {
         textInput.decreaseValue();
     }
 
+    public double getValue()
+    {
+        return textInput.getValue();
+    }
+
+    public void setValue(int value) {
+        textInput.setValue(value);
+    }
+
+    public void setValue(double value) {
+        textInput.setValue(value);
+    }
+
     /**
      * Set SpinItem's parameters
      * @param currentValue SpinItem current value
@@ -102,26 +115,32 @@ public class SpinItem extends Prototype {
         }
     }
 
+    @Override
     public void setBackground(Color color) {
         textInput.setBackground(color);
     }
 
+    @Override
     public void setBackground(int r, int g, int b) {
         textInput.setBackground(r, g, b);
     }
 
+    @Override
     public void setBackground(int r, int g, int b, int a) {
         textInput.setBackground(r, g, b, a);
     }
 
+    @Override
     public void setBackground(float r, float g, float b) {
         textInput.setBackground(r, g, b);
     }
 
+    @Override
     public void setBackground(float r, float g, float b, float a) {
         textInput.setBackground(r, g, b, a);
     }
 
+    @Override
     public Color getBackground() {
         return textInput.getBackground();
     }

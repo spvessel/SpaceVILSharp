@@ -20,6 +20,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     public void setReturnFocus(Prototype item) {
         _returnFocus = item;
     }
+
     public Prototype getReturnFocusItem() {
         return _returnFocus;
     }
@@ -87,11 +88,17 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         itemList.eventKeyPress.clear();
         itemList.getArea().eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.ESCAPE) {
-                hideDependentMenus();
                 hide();
+                hideDependentMenus();
             }
-            if (args.key == KeyCode.ENTER)
-                onSelectionChanged();
+            if (args.key == KeyCode.ENTER) {
+                if (itemList.getSelectedItem() instanceof Prototype)
+                {
+                    Prototype selected = (Prototype) itemList.getSelectedItem();
+                    selected.eventMousePress.execute(selected, null);
+                    selected.eventMouseClick.execute(selected, null);
+                }
+            }
         });
         _init = true;
     }
@@ -105,15 +112,15 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         }
     }
 
-    private void onSelectionChanged() {
-        if (itemList.getSelectedItem() instanceof MenuItem) {
-            MenuItem item = (MenuItem) itemList.getSelectedItem();
-            if (item.isActionItem) {
+    private void onSelectionChanged(InterfaceBaseItem sender) {
+        if (sender instanceof MenuItem) {
+            MenuItem menu = (MenuItem) sender;
+            if (menu.isActionItem)
                 return;
-            }
         }
-        hideDependentMenus();
+
         hide();
+        hideDependentMenus();
     }
 
     /**
@@ -140,7 +147,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
             MenuItem tmp = (MenuItem) item;
             tmp._context_menu = this;
             tmp.eventMouseClick.add((sender, args) -> {
-                onSelectionChanged();
+                onSelectionChanged(tmp);
             });
         }
         _queue.add(item);
@@ -190,7 +197,11 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
             if (width < tmp)
                 width = tmp;
         }
-        setSize(width, height - itemList.getArea().getSpacing().vertical);
+        if (height == 0)
+            height = getHeight();
+        else
+            height -= itemList.getArea().getSpacing().vertical;
+        setSize(width, height);
     }
 
     /**
@@ -256,7 +267,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         if (_returnFocus != null)
             _returnFocus.setFocus();
         // else
-        //     getHandler().getWindow().setFocus();
+        // getHandler().getWindow().setFocus();
     }
 
     /**

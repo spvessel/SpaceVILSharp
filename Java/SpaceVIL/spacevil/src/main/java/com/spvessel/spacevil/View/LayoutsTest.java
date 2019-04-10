@@ -1,6 +1,7 @@
 package com.spvessel.spacevil.View;
 
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.RedrawFrequency;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 
@@ -17,6 +18,8 @@ public class LayoutsTest extends ActiveWindow {
         Handler.setMinSize(250, 200);
         Handler.setPadding(2, 2, 2, 2);
         Handler.setBackground(45, 45, 45);
+
+        Handler.setRenderFrequency(RedrawFrequency.ULTRA);
 
         // DragAnchor
         TitleBar title = new TitleBar("LayoutsTest");
@@ -139,8 +142,12 @@ public class LayoutsTest extends ActiveWindow {
             // listbox_left_1.addItem(radio);
             // listbox_left_1.setVisible(!listbox_left_1.isVisible());
             listbox_left_1.clear();
-            listbox_left_1.addItem(visualContact);
+            // listbox_left_1.addItem(visualContact);
             // listbox_left_1.getParent().removeItem(listbox_left_1);
+
+            for (int i = 0; i < 1000; i++) {
+                listbox_left_1.addItem(new VisualContact());
+            }
         };
         all.eventMouseClick.add(all_click);
         frame.addItem(all);

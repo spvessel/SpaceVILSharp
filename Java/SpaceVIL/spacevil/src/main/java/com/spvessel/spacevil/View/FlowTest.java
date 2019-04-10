@@ -207,7 +207,7 @@ public class FlowTest extends ActiveWindow {
         toolbar.addItems(btn1, btn2, btn3, btn4, btn5);
 
         // _context_menu.setWidth(110);
-        MenuItem restore = new MenuItem("Restore");
+        MenuItem restore = new MenuItem("Build Tool");
         // ImageItem res = new ImageItem(
         // DefaultsService.getDefaultImage(EmbeddedImage.RECYCLE_BIN,
         // EmbeddedImageSize.SIZE_32X32));
@@ -237,6 +237,7 @@ public class FlowTest extends ActiveWindow {
         _context_menu = new ContextMenu(Handler);// new ContextMenu(Handler, restore, x_plus, y_plus, addition);
         _context_menu.setItemName("Base");
         _context_menu.addItems(restore, x_plus, y_plus, addition);
+        // _context_menu.setWidth(200);
 
         ContextMenu addition_menu = new ContextMenu(Handler);
         addition_menu.setItemName("Addition");
