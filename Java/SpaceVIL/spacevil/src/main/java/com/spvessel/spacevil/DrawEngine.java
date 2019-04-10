@@ -681,8 +681,10 @@ final class DrawEngine {
             return;
 
         _handler.getLayout().getWindow()._sides.clear();
+
         if (!_handler.focusable)
             return;
+
         // if (!flag_click)
         // return;
         // flag_click = false;
@@ -702,6 +704,19 @@ final class DrawEngine {
         Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
 
         Prototype lastHovered = hoveredItem;
+        if (lastHovered == null) {
+            DoubleBuffer x_pos = BufferUtils.createDoubleBuffer(1);
+            DoubleBuffer y_pos = BufferUtils.createDoubleBuffer(1);
+            glfwGetCursorPos(_handler.getWindowId(), x_pos, y_pos);
+            int x = (int) x_pos.get(0);
+            int y = (int) y_pos.get(0);
+            getHoverPrototype(x, y, m_state);
+            lastHovered = hoveredItem;
+            _margs.position.setPosition(x, y);
+            ptrRelease.setPosition(x, y);
+            ptrPress.setPosition(x, y);
+            ptrClick.setPosition(x, y);
+        }
         if (!getHoverPrototype(ptrRelease.getX(), ptrRelease.getY(), m_state)) {
             lastHovered.setMousePressed(false);
             engineEvent.resetAllEvents();
@@ -1362,14 +1377,12 @@ final class DrawEngine {
                 int x1 = x + w;
                 int y1 = y + h;
 
-                if (x < shape[0])
-                {
+                if (x < shape[0]) {
                     x = shape[0];
                     w = x1 - x;
                 }
 
-                if (y < shape[1])
-                {
+                if (y < shape[1]) {
                     y = shape[1];
                     h = y1 - y;
                 }
@@ -1382,7 +1395,7 @@ final class DrawEngine {
                     h = shape[1] + shape[3] - y;
 
                 // if (shell.getParent() instanceof ListArea)
-                //     System.out.println(shape[1] + " " + shape[3] + " " + shell.getItemName());
+                // System.out.println(shape[1] + " " + shape[3] + " " + shell.getItemName());
 
                 _bounds.put(shell, new int[] { x, y, w, h });
             }

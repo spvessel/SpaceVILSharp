@@ -131,27 +131,27 @@ namespace SpaceVIL
             }
         }
 
-        public void SetBackground(Color color)
+        public override void SetBackground(Color color)
         {
             textInput.SetBackground(color);
         }
-        public void SetBackground(int r, int g, int b)
+        public override void SetBackground(int r, int g, int b)
         {
             textInput.SetBackground(r, g, b);
         }
-        public void SetBackground(int r, int g, int b, int a)
+        public override void SetBackground(int r, int g, int b, int a)
         {
             textInput.SetBackground(r, g, b, a);
         }
-        public void SetBackground(float r, float g, float b)
+        public override void SetBackground(float r, float g, float b)
         {
             textInput.SetBackground(r, g, b);
         }
-        public void SetBackground(float r, float g, float b, float a)
+        public override void SetBackground(float r, float g, float b, float a)
         {
             textInput.SetBackground(r, g, b, a);
         }
-        public Color GetBackground()
+        public override Color GetBackground()
         {
             return textInput.GetBackground();
         }

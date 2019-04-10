@@ -660,6 +660,18 @@ namespace SpaceVIL
             Queue<Prototype> tmp = new Queue<Prototype>(HoveredItems);
 
             Prototype lastHovered = HoveredItem;
+            // if (lastHovered != null && !GetHoverPrototype(ptrRelease.GetX(), ptrRelease.GetY(), m_state))
+            if (lastHovered == null)
+            {
+                double x, y;
+                Glfw.GetCursorPos(_handler.GetWindowId(), out x, out y);
+                GetHoverPrototype((int)x, (int)y, m_state);
+                lastHovered = HoveredItem;
+                _margs.Position.SetPosition((float)x, (float)y);
+                ptrRelease.SetPosition((float)x, (float)y);
+                ptrPress.SetPosition((float)x, (float)y);
+                ptrClick.SetPosition((float)x, (float)y);
+            }
             if (!GetHoverPrototype(ptrRelease.GetX(), ptrRelease.GetY(), m_state))
             {
                 lastHovered.SetMousePressed(false);

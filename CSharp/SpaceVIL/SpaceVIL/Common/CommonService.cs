@@ -69,7 +69,7 @@ namespace SpaceVIL.Common
         {
             if (!Glfw.Init())
             {
-                Console.WriteLine("Init SpaceVIL Framework fail. Abort.");
+                Console.WriteLine("Init SpaceVIL framework failed. Abort.\nReason: Init GLFW failed.");
                 return false;
             }
             //cursors

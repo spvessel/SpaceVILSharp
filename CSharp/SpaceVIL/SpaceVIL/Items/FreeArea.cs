@@ -24,7 +24,7 @@ namespace SpaceVIL
         /// </summary>
         public FreeArea()
         {
-            SetItemName("FlowArea_" + count);
+            SetItemName("FreeArea_" + count);
             count++;
             EventMousePress += OnMousePress;
             EventMouseDrag += OnDragging;
@@ -38,7 +38,11 @@ namespace SpaceVIL
         /// </summary>
         public void AddContextMenu(ContextMenu context_menu)
         {
-            EventMouseClick += (sender, args) => context_menu.Show(sender, args);
+            EventMouseClick += (sender, args) =>
+            {
+                context_menu.Show(sender, args);
+            };
+
         }
 
         void OnMousePress(IItem sender, MouseArgs args)

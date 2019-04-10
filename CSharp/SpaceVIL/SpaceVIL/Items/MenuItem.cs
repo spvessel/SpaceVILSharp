@@ -11,7 +11,7 @@ namespace SpaceVIL
     {
         public bool IsActionItem = false;
         static int count = 0;
-        private TextLine _text_object;
+        private Label _text_object;
         internal ContextMenu _context_menu;
         private ContextMenu _sub_context_menu;
 
@@ -52,9 +52,9 @@ namespace SpaceVIL
         /// </summary>
         public void AssignContextMenu(ContextMenu context_menu)
         {
+            IsActionItem = true;
             _sub_context_menu = context_menu;
             _sub_context_menu.SetOutsideClickClosable(false);
-            IsActionItem = true;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace SpaceVIL
             EventKeyPress += OnKeyPress;
             EventMousePress += (sender, args) => OnMouseAction();
 
-            _text_object = new TextLine();
+            _text_object = new Label();
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MenuItem)));
         }
@@ -99,13 +99,13 @@ namespace SpaceVIL
         /// <returns> text width in the MenuItem </returns>
         public int GetTextWidth()
         {
-            return _text_object.GetWidth();
+            return _text_object.GetTextWidth();
         }
 
         /// <returns> text height in the MenuItem </returns>
         public int GetTextHeight()
         {
-            return _text_object.GetHeight();
+            return _text_object.GetTextHeight();
         }
 
         /// <summary>
@@ -150,11 +150,11 @@ namespace SpaceVIL
         /// </summary>
         public void SetText(String text)
         {
-            _text_object.SetItemText(text);
+            _text_object.SetText(text);
         }
         public String GetText()
         {
-            return _text_object.GetItemText();
+            return _text_object.GetText();
         }
 
         /// <summary>

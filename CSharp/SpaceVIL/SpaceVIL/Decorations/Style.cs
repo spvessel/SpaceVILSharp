@@ -1390,7 +1390,7 @@ namespace SpaceVIL.Decorations
         public static Style GetTextAreaStyle()
         {
             Style style = new Style();
-            style.Background = Color.FromArgb(255, 210, 210, 210);
+            style.Background = Color.FromArgb(210, 210, 210);
             style.Foreground = Color.FromArgb(25, 25, 25);
             style.Font = DefaultsService.GetDefaultFont(16);
             style.WidthPolicy = SizePolicy.Expand;
