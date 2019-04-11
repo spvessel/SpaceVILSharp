@@ -392,8 +392,11 @@ namespace SpaceVIL
 
                 Bitmap bm = new Bitmap((int)(font.Size * 2), (int)(font.Size * 2));
                 Graphics g = Graphics.FromImage(bm);
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                g.TextRenderingHint = TextRenderingHint.AntiAlias /* | TextRenderingHint.SystemDefault*/;
+                // g.SmoothingMode = SmoothingMode.AntiAlias;
+                // g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                // g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                // g.SmoothingMode = SmoothingMode.HighQuality;
+                g.TextRenderingHint = TextRenderingHint.AntiAlias;
                 Font tmp = new Font(font.FontFamily, font.Size, font.Style, GraphicsUnit.Pixel);
                 g.DrawString(let, tmp, Brushes.White, new PointF(0f, 0f)/*, StringFormat.GenericDefault*/);
                 g.Dispose();

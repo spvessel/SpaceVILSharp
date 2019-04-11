@@ -116,8 +116,10 @@ public class FlowTest extends ActiveWindow {
         btn2.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn2.addItemState(ItemStateType.HOVERED, hovered);
         btn2.eventMouseClick.add((sender, args) -> {
-            InputDialog id = new InputDialog("title", "actionName", "defaultText");
-            id.show(getHandler());
+            // InputDialog id = new InputDialog("title", "actionName", "defaultText");
+            // id.show(getHandler());
+            Page pg = new Page();
+            pg.PrintPage(this);
         });
         btn2.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
         btn2.setHoverRule(ItemRule.STRICT);
@@ -319,4 +321,5 @@ public class FlowTest extends ActiveWindow {
         btn.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
         return btn;
     }
+
 }
