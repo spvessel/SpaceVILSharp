@@ -158,8 +158,8 @@ public class InputTest extends ActiveWindow {
         });
 
         Label label = new Label("1234567890");
-        layout.addItem(label);
         System.out.println(label.getTextWidth());
+        layout.addItem(label);
 
         Handler.getWindow().eventDrop.add((sender, args) -> {
             if (args.count > 0) {

@@ -107,7 +107,7 @@ namespace SpaceVIL
             return _text_objects[0].GetFont();
         }
 
-        private string preInitText = "";
+        // private string preInitText = "";
 
         /// <summary>
         /// Set text in the Label
@@ -116,17 +116,18 @@ namespace SpaceVIL
         {
             if (text == null)
                 text = "";
-            if (!_init)
-            {
-                preInitText = text;
-                return;
-            }
+            // if (!_init)
+            // {
+            //     preInitText = text;
+            //     return;
+            // }
 
             if (_text_objects.Count > 1)
             {
                 while (_text_objects.Count > 1)
                 {
-                    RemoveItem(_text_objects[1]);
+                    if (_init)
+                        RemoveItem(_text_objects[1]);
                     _text_objects.RemoveAt(1);
                 }
             }
@@ -144,7 +145,8 @@ namespace SpaceVIL
                 s = line[i].TrimEnd('\r');
 
                 TextLine te = new TextLine();
-                AddItem(te);
+                if (_init)
+                    AddItem(te);
 
                 te.SetItemText(s);
 
@@ -172,8 +174,8 @@ namespace SpaceVIL
 
         public String GetText()
         {
-            if (!_init)
-                return preInitText;
+            // if (!_init)
+            //     return preInitText;
 
             StringBuilder sb = new StringBuilder();
             if (_text_objects == null) return "";
@@ -234,8 +236,8 @@ namespace SpaceVIL
             foreach (TextLine tl in _text_objects)
                 AddItem(tl);
             _init = true;
-            if (!preInitText.Equals(""))
-                SetText(preInitText);
+            // if (!preInitText.Equals(""))
+            //     SetText(preInitText);
 
         }
 

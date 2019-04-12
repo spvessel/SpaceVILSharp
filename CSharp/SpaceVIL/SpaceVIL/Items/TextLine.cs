@@ -152,6 +152,9 @@ namespace SpaceVIL
                     base.SetHeight(height);
                 }
 
+                if (GetParent() == null) //Вроде не очень-то и нужно
+                    return null;
+
                 if (_isRecountable)
                 {
                     if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)

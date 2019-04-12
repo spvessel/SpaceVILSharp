@@ -93,7 +93,7 @@ public class Label extends Prototype implements InterfaceVLayout {
         return _text_objects.get(0).getFont();
     }
 
-    private String preInitText = "";
+//    private String preInitText = "";
 
     /**
      * Set text in the Label
@@ -101,14 +101,15 @@ public class Label extends Prototype implements InterfaceVLayout {
     public void setText(String text) {
         if (text == null)
             text = "";
-        if (!_init) {
-            preInitText = text;
-            return;
-        }
+//        if (!_init) {
+//            preInitText = text;
+//            return;
+//        }
 
         if (_text_objects.size() > 1) {
             while (_text_objects.size() > 1) {
-                removeItem(_text_objects.get(1));
+                if (_init)
+                    removeItem(_text_objects.get(1));
                 _text_objects.remove(1);
             }
         }
@@ -125,7 +126,8 @@ public class Label extends Prototype implements InterfaceVLayout {
             s = line[i].replaceAll("\r", "");
 
             TextLine te = new TextLine();
-            addItem(te);
+            if (_init)
+                addItem(te);
 
             te.setItemText(s);
 
@@ -151,8 +153,8 @@ public class Label extends Prototype implements InterfaceVLayout {
     }
 
     public String getText() {
-        if (!_init)
-            return preInitText;
+//        if (!_init)
+//            return preInitText;
 
         StringBuilder sb = new StringBuilder();
         if (_text_objects == null)
@@ -248,9 +250,9 @@ public class Label extends Prototype implements InterfaceVLayout {
         for (TextLine tl : _text_objects)
             addItem(tl);
         _init = true;
-        if (!preInitText.equals("")) {
-            setText(preInitText);
-        }
+//        if (!preInitText.equals("")) {
+//            setText(preInitText);
+//        }
     }
 
     /**
