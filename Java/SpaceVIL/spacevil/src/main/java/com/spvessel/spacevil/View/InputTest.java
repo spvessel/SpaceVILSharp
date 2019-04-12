@@ -127,35 +127,39 @@ public class InputTest extends ActiveWindow {
 //            te.pasteText("text edit text");
 //            Handler.setWindowTitle(te.getSelectedText());
             //tb.setFocused(false);
-//            tb.setText("package com.spvessel.spacevil;\n" +
-//
-//                    "        // HBar\n" +
-//                    "        hScrollBar.isFocusable = false;\n" +
-//                    "        hScrollBar.setVisible(true);\n" +
-//                    "        hScrollBar.setItemName(getItemName() + \"_\" + hScrollBar.getItemName());\n" +
-//                    "\n" +
-//                    "        // Area\n" +
-//                    "        // _area.setItemName(getItemName() + \"_\" + _area.getItemName());\n" +
-//                    "        // _area.setSpacing(0, 5);\n" +
-//                    "    }\n" +
-//                    "\n" +
-//                    "    public TextArea(String text) {\n" +
-//                    "        this();\n" +
-//                    "        setText(text);\n" +
-//                    "    }\n" +
-//                    "\n" +
-//                    "    private long v_size = 0;\n" +
-//                    "    private long h_size = 0;\n" +
-//                    "\n" +
-//                    "    private void updateVListArea() {\n" +
-//                    "        // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
+            tb.setText("package com.spvessel.spacevil;\n" +
+
+                    "        // HBar\n" +
+                    "        hScrollBar.isFocusable = false;\n" +
+                    "        hScrollBar.setVisible(true);\n" +
+                    "        hScrollBar.setItemName(getItemName() + \"_\" + hScrollBar.getItemName());\n" +
+                    "\n" +
+                    "        // Area\n" +
+                    "        // _area.setItemName(getItemName() + \"_\" + _area.getItemName());\n" +
+                    "        // _area.setSpacing(0, 5);\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    public TextArea(String text) {\n" +
+                    "        this();\n" +
+                    "        setText(text);\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    private long v_size = 0;\n" +
+                    "    private long h_size = 0;\n" +
+                    "\n" +
+                    "    private void updateVListArea() {\n" +
+                    "        // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
 //            tb.rewindText();
 //            tb.setEditable(!tb.isEditable());
 //            tb.setEditable(false);
-            tb.clear();
-            tb.setFocus();
+//            tb.clear();
+//            tb.setFocus();
 //            tb.setEditable(true);
         });
+
+        Label label = new Label("1234567890");
+        layout.addItem(label);
+        System.out.println(label.getTextWidth());
 
         Handler.getWindow().eventDrop.add((sender, args) -> {
             if (args.count > 0) {

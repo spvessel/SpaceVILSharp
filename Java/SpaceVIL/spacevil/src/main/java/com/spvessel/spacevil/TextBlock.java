@@ -321,7 +321,42 @@ class TextBlock extends Prototype
             if (args.key == KeyCode.LEFT) // arrow left
             {
                 _cursor_position = _textureStorage.checkLineFits(_cursor_position);
-                if (!_justSelected) {
+
+                boolean doUsual = true;
+
+                if (args.mods.contains(KeyMods.CONTROL)) {
+                    if (args.mods.size() == 1) {
+                        if (_isSelect) {
+                            unselectText();
+                            cancelJustSelected();
+                        }
+
+                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
+
+                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[0]) {
+                            _cursor_position = new Point(wordBounds[0], _cursor_position.y);
+                            replaceCursor();
+                            doUsual = false;
+                        }
+                    } else if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 2) {
+                        if (!_isSelect) {
+                            _selectFrom = new Point(_cursor_position);
+                            _isSelect = true;
+                        }
+
+                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
+
+                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[0]) {
+                            _selectTo = new Point(wordBounds[0], _cursor_position.y);
+                            _cursor_position = new Point(_selectTo);
+                            replaceCursor();
+//                            makeSelectedArea(_selectFrom, _selectTo);
+                            doUsual = false;
+                        }
+                    }
+                }
+
+                if (!_justSelected && doUsual) {
                     if (_cursor_position.x > 0)
                         _cursor_position.x--;
                     else if (_cursor_position.y > 0) {
@@ -333,7 +368,41 @@ class TextBlock extends Prototype
             }
             if (args.key == KeyCode.RIGHT) // arrow right
             {
-                if (!_justSelected) {
+                boolean doUsual = true;
+
+                if (args.mods.contains(KeyMods.CONTROL)) {
+                    if (args.mods.size() == 1) {
+                        if (_isSelect) {
+                            unselectText();
+                            cancelJustSelected();
+                        }
+
+                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
+
+                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[1]) {
+                            _cursor_position = new Point(wordBounds[1], _cursor_position.y);
+                            replaceCursor();
+                            doUsual = false;
+                        }
+                    } else if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 2) {
+                        if (!_isSelect) {
+                            _selectFrom = new Point(_cursor_position);
+                            _isSelect = true;
+                        }
+
+                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
+
+                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[1]) {
+                            _selectTo = new Point(wordBounds[1], _cursor_position.y);
+                            _cursor_position = new Point(_selectTo);
+                            replaceCursor();
+//                            makeSelectedArea(_selectFrom, _selectTo);
+                            doUsual = false;
+                        }
+                    }
+                }
+
+                if (!_justSelected && doUsual) {
                     if (_cursor_position.x < getLineLetCount(_cursor_position.y))
                         _cursor_position.x++;
                     else if (_cursor_position.y < _textureStorage.getCount() - 1) {
@@ -364,13 +433,74 @@ class TextBlock extends Prototype
 
             if (args.key == KeyCode.END) // end
             {
-                _cursor_position.x = getLineLetCount(_cursor_position.y);
-                replaceCursor();
+                boolean doUsual = true;
+
+                if (args.mods.contains(KeyMods.CONTROL)) {
+                    if (args.mods.size() == 1) {
+                        if (_isSelect) {
+                            unselectText();
+                            cancelJustSelected();
+                        }
+
+                        int lineNum = _textureStorage.getCount() - 1;
+                        _cursor_position = new Point(getLineLetCount(lineNum), lineNum);
+                        replaceCursor();
+                        doUsual = false;
+
+                    } else if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 2) {
+                        if (!_isSelect) {
+                            _selectFrom = new Point(_cursor_position);
+                            _isSelect = true;
+                        }
+
+                        int lineNum = _textureStorage.getCount() - 1;
+
+                        _selectTo = new Point(getLineLetCount(lineNum), lineNum);
+                        _cursor_position = new Point(_selectTo);
+                        replaceCursor();
+//                        makeSelectedArea(_selectFrom, _selectTo);
+                        doUsual = false;
+                    }
+                }
+
+                if (doUsual) {
+                    _cursor_position.x = getLineLetCount(_cursor_position.y);
+                    replaceCursor();
+                }
             }
             if (args.key == KeyCode.HOME) // home
             {
-                _cursor_position.x = 0;
-                replaceCursor();
+                boolean doUsual = true;
+
+                if (args.mods.contains(KeyMods.CONTROL)) {
+                    if (args.mods.size() == 1) {
+                        if (_isSelect) {
+                            unselectText();
+                            cancelJustSelected();
+                        }
+
+                        _cursor_position = new Point(0, 0);
+                        replaceCursor();
+                        doUsual = false;
+
+                    } else if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 2) {
+                        if (!_isSelect) {
+                            _selectFrom = new Point(_cursor_position);
+                            _isSelect = true;
+                        }
+
+                        _selectTo = new Point(0, 0);
+                        _cursor_position = new Point(_selectTo);
+                        replaceCursor();
+//                        makeSelectedArea(_selectFrom, _selectTo);
+                        doUsual = false;
+                    }
+                }
+
+                if (doUsual) {
+                    _cursor_position.x = 0;
+                    replaceCursor();
+                }
             }
 
             if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) // enter
