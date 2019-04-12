@@ -378,7 +378,7 @@ namespace SpaceVIL.Common
             AddText(outText.ToString());
         }
 
-        public void LogWindow(WindowLayout window, LogProps props)
+        public void LogWindow(CoreWindow window, LogProps props)
         {
             if (!isLogging) return;
 
@@ -416,7 +416,7 @@ namespace SpaceVIL.Common
             */
             if (props.HasFlag(LogProps.Padding))
             {
-                Indents pdi = window.GetWindow().GetPadding();
+                Indents pdi = window.GetLayout().GetContainer().GetPadding();
                 outText.AppendLine("Padding: Left = " + pdi.Left + ", Top = " + pdi.Top +
                     ", Right = " + pdi.Right + ", Bottom = " + pdi.Bottom);
                 outText.AppendLine();
@@ -426,21 +426,21 @@ namespace SpaceVIL.Common
             {
                 outText.AppendLine("Events:");
 
-                if (window.GetWindow().EventFocusGet != null) outText.AppendLine("   EventFocusGet");
-                if (window.GetWindow().EventFocusLost != null) outText.AppendLine("   EventFocusLost");
-                if (window.GetWindow().EventResize != null) outText.AppendLine("   EventResized");
-                if (window.GetWindow().EventDestroy != null) outText.AppendLine("   EventDestroyed");
-                if (window.GetWindow().EventMouseHover != null) outText.AppendLine("   EventMouseHover");
-                if (window.GetWindow().EventMouseClick != null) outText.AppendLine("   EventMouseClick");
-                if (window.GetWindow().EventMousePress != null) outText.AppendLine("   EventMousePressed");
-                if (window.GetWindow().EventMouseDoubleClick != null) outText.AppendLine("   EventMouseDoubleClick");
-                if (window.GetWindow().EventMouseDrag != null) outText.AppendLine("   EventMouseDrag");
-                if (window.GetWindow().EventMouseDrop != null) outText.AppendLine("   EventMouseDrop");
-                if (window.GetWindow().EventScrollUp != null) outText.AppendLine("   EventScrollUp");
-                if (window.GetWindow().EventScrollDown != null) outText.AppendLine("   EventScrollDown");
-                if (window.GetWindow().EventKeyPress != null) outText.AppendLine("   EventKeyPress");
-                if (window.GetWindow().EventKeyRelease != null) outText.AppendLine("   EventKeyRelease");
-                if (window.GetWindow().EventTextInput != null) outText.AppendLine("   EventTextInput");
+                // if (window.EventFocusGet != null) outText.AppendLine("   EventFocusGet");
+                // if (window.EventFocusLost != null) outText.AppendLine("   EventFocusLost");
+                if (window.EventResize != null) outText.AppendLine("   EventResized");
+                if (window.EventDestroy != null) outText.AppendLine("   EventDestroyed");
+                if (window.EventMouseHover != null) outText.AppendLine("   EventMouseHover");
+                if (window.EventMouseClick != null) outText.AppendLine("   EventMouseClick");
+                if (window.EventMousePress != null) outText.AppendLine("   EventMousePressed");
+                if (window.EventMouseDoubleClick != null) outText.AppendLine("   EventMouseDoubleClick");
+                if (window.EventMouseDrag != null) outText.AppendLine("   EventMouseDrag");
+                if (window.EventMouseDrop != null) outText.AppendLine("   EventMouseDrop");
+                if (window.EventScrollUp != null) outText.AppendLine("   EventScrollUp");
+                if (window.EventScrollDown != null) outText.AppendLine("   EventScrollDown");
+                if (window.EventKeyPress != null) outText.AppendLine("   EventKeyPress");
+                if (window.EventKeyRelease != null) outText.AppendLine("   EventKeyRelease");
+                if (window.EventTextInput != null) outText.AppendLine("   EventTextInput");
 
                 outText.AppendLine();
             }
@@ -448,7 +448,7 @@ namespace SpaceVIL.Common
             if (props.HasFlag(LogProps.Children))
             {
                 outText.AppendLine("Children:");
-                List<IBaseItem> chi = window.GetWindow().GetItems();
+                List<IBaseItem> chi = window.GetItems();
                 foreach (IBaseItem bi in chi)
                 {
                     outText.AppendLine("    " + bi.GetItemName());

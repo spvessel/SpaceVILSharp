@@ -6,7 +6,6 @@ import com.spvessel.spacevil.ActiveWindow;
 import com.spvessel.spacevil.BlankItem;
 import com.spvessel.spacevil.Frame;
 import com.spvessel.spacevil.TitleBar;
-import com.spvessel.spacevil.WindowLayout;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.Style;
@@ -41,19 +40,23 @@ public class EventTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("EventTest", "EventTest", 400, 400, true);
-        setHandler(Handler);
-        Handler.setMinSize(400, 400);
-        Handler.isCentered = true;
+
+        isBorderHidden = true;
+        setSize(400, 400);
+        setWindowName("EventTest");
+        setWindowTitle("EventTest");
+
+        setMinSize(400, 400);
+        isCentered = true;
 
         TitleBar title = new TitleBar("EventTest");
         title.setShadow(5, 0, 3, new Color(0, 0, 0, 150));
-        Handler.addItem(title);
+        addItem(title);
 
         Frame cc = new Frame();
         cc.setMargin(0, title.getHeight() + 10, 0, 0);
         cc.setBackground(50, 50, 50);
-        Handler.addItem(cc);
+        addItem(cc);
 
         BlankItem b1 = getBlankItem("Blank1");
         BlankItem b2 = getBlankItem("Blank2");
@@ -69,20 +72,20 @@ public class EventTest extends ActiveWindow {
         b2.setPassEvents(false);
         // b2.setPassEvents(true, InputEventType.KEY_PRESS, InputEventType.KEY_RELEASE);
 
-        Handler.getWindow().eventMouseClick.add((sender, args) -> {
-            System.out.println(Handler.getWindow().getItemName() + " EventMouseClick");
+        eventMouseClick.add((sender, args) -> {
+            System.out.println(getWindowName() + " EventMouseClick");
         });
-        Handler.getWindow().eventMouseDoubleClick.add((sender, args) -> {
-            System.out.println(Handler.getWindow().getItemName() + " EventMouseDoubleClick");
+        eventMouseDoubleClick.add((sender, args) -> {
+            System.out.println(getWindowName() + " EventMouseDoubleClick");
         });
-        Handler.getWindow().eventKeyPress.add((sender, args) -> {
-            System.out.println(Handler.getWindow().getItemName() + " EventKeyPress");
+        eventKeyPress.add((sender, args) -> {
+            System.out.println(getWindowName() + " EventKeyPress");
         });
-        Handler.getWindow().eventKeyRelease.add((sender, args) -> {
-            System.out.println(Handler.getWindow().getItemName() + " EventKeyRelease");
+        eventKeyRelease.add((sender, args) -> {
+            System.out.println(getWindowName() + " EventKeyRelease");
         });
-        // Handler.getWindow().eventMouseHover.add((sender, args) -> {
-        //     System.out.println(Handler.getWindow().getItemName() + " EventMouseHover");
+        // getWindow().eventMouseHover.add((sender, args) -> {
+        //     System.out.println(getWindow().getItemName() + " EventMouseHover");
         // });
     }
 }

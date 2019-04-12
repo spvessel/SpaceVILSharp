@@ -739,7 +739,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         textInputLock.lock();
         try {
             float _screenScale = 1;
-            WindowLayout wLayout = getHandler();
+            CoreWindow wLayout = getHandler();
             if (wLayout == null || wLayout.getDpiScale() == null)
                 _screenScale = 1;
             else {

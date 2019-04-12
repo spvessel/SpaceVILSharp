@@ -14,25 +14,29 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InputTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("InputTest", "InputTest", 700, 550, true);
-        // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
-        setHandler(Handler);
+        isBorderHidden = true;
+        setSize(700, 550);
+        setWindowName("InputTest");
+        setWindowTitle("InputTest");
 
-        Handler.setMinSize(50, 100);
-        Handler.setBackground(45, 45, 45);
-        Handler.setPadding(2, 2, 2, 2);
+        setMinSize(50, 100);
+        setBackground(45, 45, 45);
+        setPadding(2, 2, 2, 2);
 
         TitleBar title = new TitleBar("Input Test");
         // title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
         // title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
-        Handler.addItem(title);
+        addItem(title);
 
         VerticalStack layout = new VerticalStack();
         ///////////////////////////////////////////////////////////////////////
@@ -45,7 +49,7 @@ public class InputTest extends ActiveWindow {
         layout.setBackground(70, 70, 70);
         layout.setSpacing(6, 30);
         layout.setPadding(2, 2, 2, 2);
-        Handler.addItem(layout);
+        addItem(layout);
 
         PasswordLine password = new PasswordLine();
         password.setSubstrateText("Enter a password...");
@@ -91,17 +95,16 @@ public class InputTest extends ActiveWindow {
 
         // tb.setEditable(false);
 
-
         layout.addItem(bc);
 
-         layout.addItem(sp);
+        layout.addItem(sp);
 
         Label tl = new Label();
-        tl.setBackground(255,255,255,100);
-//        tl.setFontSize(17);
+        tl.setBackground(255, 255, 255, 100);
+        // tl.setFontSize(17);
         tl.setForeground(Color.WHITE);
         tl.setTextAlignment(ItemAlignment.TOP);
-//        System.out.println(tl.getTextWidth());
+        // System.out.println(tl.getTextWidth());
         tl.setText(null);
 
         layout.addItem(tl);
@@ -123,49 +126,50 @@ public class InputTest extends ActiveWindow {
             // System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " +
             // s.toCharArray()[4]);
 
-//            tb.pasteText("12345678");
-//            te.pasteText("text edit text");
-//            Handler.setWindowTitle(te.getSelectedText());
-            //tb.setFocused(false);
-//            tb.setText("package com.spvessel.spacevil;\n" +
-//
-//                    "        // HBar\n" +
-//                    "        hScrollBar.isFocusable = false;\n" +
-//                    "        hScrollBar.setVisible(true);\n" +
-//                    "        hScrollBar.setItemName(getItemName() + \"_\" + hScrollBar.getItemName());\n" +
-//                    "\n" +
-//                    "        // Area\n" +
-//                    "        // _area.setItemName(getItemName() + \"_\" + _area.getItemName());\n" +
-//                    "        // _area.setSpacing(0, 5);\n" +
-//                    "    }\n" +
-//                    "\n" +
-//                    "    public TextArea(String text) {\n" +
-//                    "        this();\n" +
-//                    "        setText(text);\n" +
-//                    "    }\n" +
-//                    "\n" +
-//                    "    private long v_size = 0;\n" +
-//                    "    private long h_size = 0;\n" +
-//                    "\n" +
-//                    "    private void updateVListArea() {\n" +
-//                    "        // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
-//            tb.rewindText();
-//            tb.setEditable(!tb.isEditable());
-//            tb.setEditable(false);
+            // tb.pasteText("12345678");
+            // te.pasteText("text edit text");
+            // setWindowTitle(te.getSelectedText());
+            // tb.setFocused(false);
+            // tb.setText("package com.spvessel.spacevil;\n" +
+            //
+            // " // HBar\n" +
+            // " hScrollBar.isFocusable = false;\n" +
+            // " hScrollBar.setVisible(true);\n" +
+            // " hScrollBar.setItemName(getItemName() + \"_\" +
+            // hScrollBar.getItemName());\n" +
+            // "\n" +
+            // " // Area\n" +
+            // " // _area.setItemName(getItemName() + \"_\" + _area.getItemName());\n" +
+            // " // _area.setSpacing(0, 5);\n" +
+            // " }\n" +
+            // "\n" +
+            // " public TextArea(String text) {\n" +
+            // " this();\n" +
+            // " setText(text);\n" +
+            // " }\n" +
+            // "\n" +
+            // " private long v_size = 0;\n" +
+            // " private long h_size = 0;\n" +
+            // "\n" +
+            // " private void updateVListArea() {\n" +
+            // " // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
+            // tb.rewindText();
+            // tb.setEditable(!tb.isEditable());
+            // tb.setEditable(false);
             tb.clear();
             tb.setFocus();
-//            tb.setEditable(true);
+            // tb.setEditable(true);
         });
 
-        Handler.getWindow().eventDrop.add((sender, args) -> {
+        eventDrop.add((sender, args) -> {
             if (args.count > 0) {
                 System.out.println(args.item.getItemName());
                 String line = null;
                 String FilePath = args.paths.get(0);
                 StringBuilder sb = new StringBuilder();
                 try {
-                    FileReader fileReader = new FileReader(FilePath);
-                    BufferedReader bufferedReader = new BufferedReader(fileReader);
+                    InputStreamReader stream = new InputStreamReader(new FileInputStream(FilePath), "UTF-8");
+                    BufferedReader bufferedReader = new BufferedReader(stream);
                     while ((line = bufferedReader.readLine()) != null) {
                         sb.append(line + "\n");
                     }

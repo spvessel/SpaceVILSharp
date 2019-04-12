@@ -19,14 +19,17 @@ import javax.imageio.ImageIO;
 public class ImageTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("ImageTest", "ImageTest", 500, 500, true);
-        setHandler(Handler);
-        Handler.setBackground(45, 45, 45);
-        Handler.setPadding(2, 2, 2, 2);
+        isBorderHidden = true;
+        setSize(700, 550);
+        setWindowName("ImageTest");
+        setWindowTitle("ImageTest");
+        
+        setBackground(45, 45, 45);
+        setPadding(2, 2, 2, 2);
 
         // DragAnchor
         TitleBar title = new TitleBar("ImageTest");
-        Handler.addItem(title);
+        addItem(title);
 
         // Frame
         VerticalStack frame = new VerticalStack();
@@ -36,7 +39,7 @@ public class ImageTest extends ActiveWindow {
         frame.setWidthPolicy(SizePolicy.EXPAND);
         frame.setHeightPolicy(SizePolicy.EXPAND);
         frame.setSpacing(0, 20);
-        Handler.addItem(frame);
+        addItem(frame);
 
         HorizontalStack h_stack = new HorizontalStack();
         h_stack.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);

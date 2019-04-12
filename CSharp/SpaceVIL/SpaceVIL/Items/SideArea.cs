@@ -101,7 +101,7 @@ namespace SpaceVIL
             ApplyAttach();
         }
 
-        public SideArea(WindowLayout handler, Side attachSide)
+        public SideArea(CoreWindow handler, Side attachSide)
         {
             SetHandler(handler);
             SetItemName("SideArea_" + count++);

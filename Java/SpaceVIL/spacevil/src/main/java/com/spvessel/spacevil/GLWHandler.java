@@ -27,7 +27,7 @@ final class GLWHandler {
         // _scaleHeight = h * 2;
         // System.out.println(w + " " + h);
         DisplayService.SetDisplayDpiScale(w);
-        _w_layout.setDpiScale(w, h);
+        _coreWindow.setDpiScale(w, h);
     }
 
     ///////////////////////////////////////////////
@@ -60,10 +60,10 @@ final class GLWHandler {
     }
     ///////////////////////////////////////////////
 
-    private WindowLayout _w_layout;
+    private CoreWindow _coreWindow;
 
-    WindowLayout getLayout() {
-        return _w_layout;
+    CoreWindow getCoreWindow() {
+        return _coreWindow;
     }
 
     private long _window = NULL;
@@ -74,8 +74,8 @@ final class GLWHandler {
 
     int gVAO = 0;
 
-    GLWHandler(WindowLayout handler) {
-        _w_layout = handler;
+    GLWHandler(CoreWindow handler) {
+        _coreWindow = handler;
         getPointer().setX(0);
         getPointer().setY(0);
     }
@@ -85,7 +85,7 @@ final class GLWHandler {
 
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_SAMPLES, _w_layout._msaa.getValue());
+        glfwWindowHint(GLFW_SAMPLES, _coreWindow._msaa.getValue());
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -118,11 +118,11 @@ final class GLWHandler {
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
-        _window = glfwCreateWindow(_w_layout.getWidth(), _w_layout.getHeight(), _w_layout.getWindowTitle(), NULL, NULL);
+        _window = glfwCreateWindow(_coreWindow.getWidth(), _coreWindow.getHeight(), _coreWindow.getWindowTitle(), NULL, NULL);
 
         if (_window == NULL) {
             System.out.println("glfwCreateWindow fail");
-            throw new SpaceVILException("Create window fails - " + getLayout().getWindowTitle());
+            throw new SpaceVILException("Create window fails - " + getCoreWindow().getWindowTitle());
         }
         glfwMakeContextCurrent(_window);
 
@@ -131,32 +131,32 @@ final class GLWHandler {
         int width = vidmode.width();
         int height = vidmode.height();
         // System.out.println("VIDSIZE: " + width + " " + height);
-        // System.out.println("WSIZE: " + _w_layout.getWidth() + " " +
-        // _w_layout.getHeight());
+        // System.out.println("WSIZE: " + _coreWindow.getWidth() + " " +
+        // _coreWindow.getHeight());
 
         IntBuffer w = BufferUtils.createIntBuffer(1);
         IntBuffer h = BufferUtils.createIntBuffer(1);
         glfwGetFramebufferSize(_window, w, h);
         // System.out.println("FBSIZE: " + w.get(0) + " " + h.get(0));
 
-        setDpiScale((float) w.get(0) / (float) _w_layout.getWidth(), (float) h.get(0) / (float) _w_layout.getHeight());
+        setDpiScale((float) w.get(0) / (float) _coreWindow.getWidth(), (float) h.get(0) / (float) _coreWindow.getHeight());
 
         if (appearInCenter) {
-            getPointer().setX((width - _w_layout.getWidth()) / 2);
-            getPointer().setY((height - _w_layout.getHeight()) / 2);
+            getPointer().setX((width - _coreWindow.getWidth()) / 2);
+            getPointer().setY((height - _coreWindow.getHeight()) / 2);
 
         } else {
-            _w_layout.setX(200);
-            _w_layout.setY(50);
+            _coreWindow.setX(200);
+            _coreWindow.setY(50);
             getPointer().setX(200);
             getPointer().setY(50);
         }
-        glfwSetWindowSizeLimits(_window, _w_layout.getMinWidth(), _w_layout.getMinHeight(), _w_layout.getMaxWidth(),
-                _w_layout.getMaxHeight());
+        glfwSetWindowSizeLimits(_window, _coreWindow.getMinWidth(), _coreWindow.getMinHeight(), _coreWindow.getMaxWidth(),
+                _coreWindow.getMaxHeight());
         glfwSetWindowPos(_window, getPointer().getX(), getPointer().getY());
 
-        if (_w_layout.isKeepAspectRatio)
-            glfwSetWindowAspectRatio(_window, _w_layout.ratioW, _w_layout.ratioH);
+        if (_coreWindow.isKeepAspectRatio)
+            glfwSetWindowAspectRatio(_window, _coreWindow.ratioW, _coreWindow.ratioH);
 
         if (visible)
             glfwShowWindow(_window);

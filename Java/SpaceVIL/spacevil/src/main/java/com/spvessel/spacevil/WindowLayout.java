@@ -1,63 +1,40 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Common.CommonService;
-import com.spvessel.spacevil.Core.EventCommonMethod;
-import com.spvessel.spacevil.Core.Geometry;
-import com.spvessel.spacevil.Core.Position;
-import com.spvessel.spacevil.Decorations.Indents;
-import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.OSType;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
 
 import java.util.*;
-import java.util.List;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.stream.Collectors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public final class WindowLayout {
+final class WindowLayout {
     Lock engineLocker = new ReentrantLock();
     private Lock wndLock = new ReentrantLock();
 
-    public EventCommonMethod eventClose = new EventCommonMethod();
-    public EventCommonMethod eventMinimize = new EventCommonMethod();
-    public EventCommonMethod eventHide = new EventCommonMethod();
-
-    public void release() {
-        eventClose.clear();
-        eventMinimize.clear();
-        eventHide.clear();
-    }
-
     private UUID _id;
 
-    public UUID getId() {
+    UUID getId() {
         return _id;
     }
 
-    public void setId(UUID value) {
+    void setId(UUID value) {
         _id = value;
     }
 
-    private CoreWindow handler;
+    private CoreWindow _coreWindow;
 
-    public CoreWindow getCoreWindow() {
-        return handler;
+    CoreWindow getCoreWindow() {
+        return _coreWindow;
     }
 
-    void setCoreWindow(CoreWindow window) {
-        if (handler != null && handler.equals(window))
-            return;
-        
-        handler = window;
-        _id = handler.getWindowGuid();
+    void setCoreWindow() {
+        _id = _coreWindow.getWindowGuid();
 
         wndLock.lock();
         try {
-            WindowLayoutBox.initWindow(this);
+            WindowsBox.initWindow(_coreWindow);
             setFocusedItem(_window);
         } catch (Exception ex) {
             System.out.println(ex.toString());
@@ -75,276 +52,38 @@ public final class WindowLayout {
     private Thread thread_manager;
     private ActionManager manager;
 
-    public WindowLayout(String name, String title) {
-
-        setWindowName(name);
-        setWindowTitle(title);
-
-        isDialog = false;
-        isBorderHidden = false;
-        isClosed = true;
-        isHidden = false;
-        isResizable = true;
-        isCentered = false;
-        isFocusable = true;
-        isAlwaysOnTop = false;
-        isOutsideClickClosable = false;
-        isMaximized = false;
-
-        manager = new ActionManager(this);
-        engine = new DrawEngine(this);
-
-        eventClose.add(this::close);
-    }
-
-    public WindowLayout(String name, String title, int width, int height, Boolean border_hidden) {
-        this(name, title);
-
-        setWidth(width);
-        setHeight(height);
-
-        isBorderHidden = border_hidden;
+    WindowLayout(CoreWindow cWindow) {
+        _coreWindow = cWindow;
+        manager = new ActionManager(_coreWindow);
+        engine = new DrawEngine(_coreWindow);
+        _coreWindow.eventClose.add(this::close);
     }
 
     private WContainer _window;
 
-    public WContainer getWindow() {
+    WContainer getContainer() {
         return _window;
     }
 
-    public void setWindow(WContainer window) {
+    void setWindow(WContainer window) {
         _window = window;
     }
 
-    public void setBackground(Color color) {
-        _window.setBackground(color);
-    }
-
-    public void setBackground(int r, int g, int b) {
-        // if (r < 0)
-        // r = Math.abs(r);
-        // if (r > 255)
-        // r = 255;
-        // if (g < 0)
-        // g = Math.abs(g);
-        // if (g > 255)
-        // g = 255;
-        // if (b < 0)
-        // b = Math.abs(b);
-        // if (b > 255)
-        // b = 255;
-        _window.setBackground(GraphicsMathService.colorTransform(r, g, b)); // new Color(r, g, b, 255));
-    }
-
-    public void setBackground(int r, int g, int b, int a) {
-        // if (r < 0)
-        // r = Math.abs(r);
-        // if (r > 255)
-        // r = 255;
-        // if (g < 0)
-        // g = Math.abs(g);
-        // if (g > 255)
-        // g = 255;
-        // if (b < 0)
-        // b = Math.abs(b);
-        // if (b > 255)
-        // b = 255;
-        _window.setBackground(GraphicsMathService.colorTransform(r, g, b, a)); // new Color(r, g, b, a));
-    }
-
-    public void setBackground(float r, float g, float b) {
-        // if (r < 0)
-        // r = Math.abs(r);
-        // if (r > 1.0f)
-        // r = 1.0f;
-        // if (g < 0)
-        // g = Math.abs(g);
-        // if (g > 1.0f)
-        // g = 1.0f;
-        // if (b < 0)
-        // b = Math.abs(b);
-        // if (b > 1.0f)
-        // b = 1.0f;
-        _window.setBackground(GraphicsMathService.colorTransform(r, g, b)); // new Color((int) (r * 255.0f), (int) (g *
-                                                                            // 255.0f), (int) (b * 255.0f)));
-    }
-
-    public void setBackground(float r, float g, float b, float a) {
-        // if (r < 0)
-        // r = Math.abs(r);
-        // if (r > 1.0f)
-        // r = 1.0f;
-        // if (g < 0)
-        // g = Math.abs(g);
-        // if (g > 1.0f)
-        // g = 1.0f;
-        // if (b < 0)
-        // b = Math.abs(b);
-        // if (b > 1.0f)
-        // b = 1.0f;
-        _window.setBackground(GraphicsMathService.colorTransform(r, g, b, a)); // new Color((int) (r * 255.0f), (int) (g
-                                                                               // * 255.0f), (int) (b * 255.0f), (int)
-                                                                               // (a * 255.0f)));
-    }
-
-    public Color getBackground() {
-        return _window.getBackground();
-    }
-
-    public void setPadding(Indents padding) {
-        _window.setPadding(padding);
-    }
-
-    public void setPadding(int left, int top, int right, int bottom) {
-        _window.setPadding(left, top, right, bottom);
-    }
-
-    public void addItem(InterfaceBaseItem item) {
-        _window.addItem(item);
-    }
-
-    public void addItems(InterfaceBaseItem... items) {
-        List<InterfaceBaseItem> list = Arrays.stream(items).collect(Collectors.toList());
-        for (InterfaceBaseItem item : list) {
-            _window.addItem(item);
-        }
-    }
-
-    private String _name;
-
-    void setWindowName(String value) {
-        _name = value;
-    }
-
-    public String getWindowName() {
-        return _name;
-    }
-
-    private String _title;
-
-    public void setWindowTitle(String title) {
-        _title = title;
-    }
-
-    public String getWindowTitle() {
-        return _title;
-    }
-
-    // geometry
-    private Geometry _itemGeometry = new Geometry();
-
-    public void setMinWidth(int width) {
-        _itemGeometry.setMinWidth(width);
-        if (_window != null)
-            _window.setMinWidth(width);
-    }
-
-    public void setWidth(int width) {
-        _itemGeometry.setWidth(width);
-        if (_window != null)
-            _window.setWidth(width);
-    }
-
-    public void setMaxWidth(int width) {
-        _itemGeometry.setMaxWidth(width);
-        if (_window != null)
-            _window.setMaxWidth(width);
-    }
-
-    public void setMinHeight(int height) {
-        _itemGeometry.setMinHeight(height);
-        if (_window != null)
-            _window.setMinHeight(height);
-    }
-
-    public void setHeight(int height) {
-        _itemGeometry.setHeight(height);
-        if (_window != null)
-            _window.setHeight(height);
-    }
-
-    public void setMaxHeight(int height) {
-        _itemGeometry.setMaxHeight(height);
-        if (_window != null)
-            _window.setMaxHeight(height);
-    }
-
-    public int getMinWidth() {
-        return _itemGeometry.getMinWidth();
-    }
-
-    public int getWidth() {
-        return _itemGeometry.getWidth();
-    }
-
-    public int getMaxWidth() {
-        return _itemGeometry.getMaxWidth();
-    }
-
-    public int getMinHeight() {
-        return _itemGeometry.getMinHeight();
-    }
-
-    public int getHeight() {
-        return _itemGeometry.getHeight();
-    }
-
-    public int getMaxHeight() {
-        return _itemGeometry.getMaxHeight();
-    }
-
-    public void setSize(int width, int height) {
-        setWidth(width);
-        setHeight(height);
-    }
-
-    public void setMinSize(int width, int height) {
-        setMinWidth(width);
-        setMinHeight(height);
-    }
-
-    public void setMaxSize(int width, int height) {
-        setMaxWidth(width);
-        setMaxHeight(height);
-    }
-
-    public int[] getSize() {
-        return _itemGeometry.getSize();
-    }
-
-    // position
-    private Position _itemPosition = new Position();
-
-    public void setX(int x) {
-        _itemPosition.setX(x);
-    }
-
-    public int getX() {
-        return _itemPosition.getX();
-    }
-
-    public void setY(int y) {
-        _itemPosition.setY(y);
-    }
-
-    public int getY() {
-        return _itemPosition.getY();
-    }
-
-    public void show() {
-        if (isHidden)
+    final void show() {
+        if (_coreWindow.isHidden)
             setHidden(false);
-        isClosed = false;
+        _coreWindow.isClosed = false;
 
-        engine._handler.maximized = isMaximized;
-        engine._handler.visible = !isHidden;
-        engine._handler.resizeble = isResizable;
-        engine._handler.borderHidden = isBorderHidden;
-        engine._handler.appearInCenter = isCentered;
-        engine._handler.focusable = isFocusable;
-        engine._handler.alwaysOnTop = isAlwaysOnTop;
-        engine._handler.getPointer().setX(getX());
-        engine._handler.getPointer().setY(getY());
+        engine._handler.maximized = _coreWindow.isMaximized;
+        engine._handler.visible = !_coreWindow.isHidden;
+        engine._handler.resizeble = _coreWindow.isResizable;
+        engine._handler.borderHidden = _coreWindow.isBorderHidden;
+        engine._handler.appearInCenter = _coreWindow.isCentered;
+        engine._handler.focusable = _coreWindow.isFocusable;
+        engine._handler.alwaysOnTop = _coreWindow.isAlwaysOnTop;
+        
+        engine._handler.getPointer().setX(_coreWindow.getX());
+        engine._handler.getPointer().setY(_coreWindow.getY());
 
         thread_manager = new Thread(() -> {
             manager.startManager();
@@ -353,8 +92,8 @@ public final class WindowLayout {
         thread_manager.start();
 
         if (CommonService.getOSType() == OSType.MAC) {
-            if (!WindowLayoutBox.isAnyWindowRunning()) {
-                WindowLayoutBox.setWindowRunning(this);
+            if (!WindowsBox.isAnyWindowRunning()) {
+                WindowsBox.setWindowRunning(_coreWindow);
                 engine.init();
             }
         } else {
@@ -369,12 +108,12 @@ public final class WindowLayout {
             engine.init();
         });
 
-        if (isDialog) {
+        if (_coreWindow.isDialog) {
             wndLock.lock();
             try {
-                ParentGUID = WindowLayoutBox.lastFocusedWindow.getId();
-                WindowLayoutBox.addToWindowDispatcher(this);
-                WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.focusable = false;
+                ParentGUID = WindowsBox.lastFocusedWindow.getWindowGuid();
+                WindowsBox.addToWindowDispatcher(_coreWindow);
+                WindowsBox.getWindowInstance(ParentGUID).setFocusable(false);
             } finally {
                 wndLock.unlock();
             }
@@ -391,10 +130,10 @@ public final class WindowLayout {
         }
     }
 
-    public void close() {
+    void close() {
         if (CommonService.getOSType() == OSType.MAC) {
             engine._handler.setToClose();
-            WindowLayoutBox.setWindowRunning(null);
+            WindowsBox.setWindowRunning(null);
         } else {
             closeInsideNewThread();
         }
@@ -403,17 +142,17 @@ public final class WindowLayout {
             manager.stopManager();
             manager.execute.set();
         }
-        isClosed = true;
+        _coreWindow.isClosed = true;
     }
 
     private void closeInsideNewThread() {
-        if (isDialog) {
+        if (_coreWindow.isDialog) {
             engine._handler.setToClose();
             setWindowFocused();
             wndLock.lock();
             try {
-                WindowLayoutBox.removeWindow(this);
-                WindowLayoutBox.removeFromWindowDispatcher(this);
+                WindowsBox.removeWindow(_coreWindow);
+                WindowsBox.removeFromWindowDispatcher(_coreWindow);
             } finally {
                 wndLock.unlock();
             }
@@ -423,48 +162,25 @@ public final class WindowLayout {
         }
     }
 
-    public boolean isDialog;
-    public boolean isClosed;
-    public boolean isHidden;
-    public boolean isResizable;
-    public boolean isAlwaysOnTop;
-    public boolean isBorderHidden;
-    public boolean isCentered;
-    public boolean isFocusable;
-    public boolean isOutsideClickClosable;
-    public boolean isFocused;
-    public boolean isMaximized = false;
-
-    MSAA _msaa = MSAA.MSAA_4X;
-
-    public void setAntiAliasingQuality(MSAA msaa) {
-        _msaa = msaa;
-    }
-
-    public void setFocus(Boolean value) {
-        if (isFocused == value)
-            return;
-        isFocused = value;
-        if (value)
-            setWindowFocused();
-    }
-
-    public void setWindowFocused() {
+    void setWindowFocused() {
         wndLock.lock();
         try {
-            if (WindowLayoutBox.getWindowInstance(ParentGUID) != null)
-                WindowLayoutBox.getWindowInstance(ParentGUID).engine._handler.focusable = true;
+            if (WindowsBox.getWindowInstance(ParentGUID) != null)
+                WindowsBox.getWindowInstance(ParentGUID).setFocusable(true);
         } finally {
             wndLock.unlock();
         }
     }
 
-    public void minimize() {
+    void setFocusable(boolean value) {
+        engine._handler.focusable = value;
+    }
+
+    void minimize() {
         engine.minimizeWindow();
     }
 
-    public void maximize() {
-        // engine.maximizeWindow();
+    void maximize() {
         engine.maximizeRequest = true;
     }
 
@@ -472,42 +188,36 @@ public final class WindowLayout {
     }
 
     void setEventTask(EventTask task) {
-        // manager.stackEvents.add(task);
         manager.addTask(task);
     }
 
-    // private volatile Boolean set = true;
-
     void executePollActions() {
-        // manager.execute.release();
-        // manager.notify();
         manager.execute.set();
     }
 
-    public Prototype getFocusedItem() {
+    Prototype getFocusedItem() {
         return engine.getFocusedItem();
     }
 
-    public void setFocusedItem(Prototype item) {
+    void setFocusedItem(Prototype item) {
         engine.setFocusedItem(item);
     }
 
-    public void resetItems() {
+    void resetItems() {
         engine.resetItems();
     }
 
-    public void resetFocus() {
+    void resetFocus() {
         engine.resetFocus();
     }
 
-    public void setIcon(BufferedImage icon_big, BufferedImage icon_small) {
+    void setIcon(BufferedImage icon_big, BufferedImage icon_small) {
         engine.setBigIcon(icon_big);
         engine.setSmallIcon(icon_small);
     }
 
-    public void setHidden(Boolean value) {
+    void setHidden(Boolean value) {
         engine._handler.setHidden(value);
-        isHidden = value;
     }
 
     private float _scaleWidth = 1.0f;
@@ -524,7 +234,7 @@ public final class WindowLayout {
         // _scaleHeight = h * 2;
     }
 
-    public void setRenderFrequency(RedrawFrequency value) {
+    void setRenderFrequency(RedrawFrequency value) {
         engineLocker.lock();
         try {
             engine.setFrequency(value);
@@ -533,22 +243,12 @@ public final class WindowLayout {
         }
     }
 
-    public RedrawFrequency getRenderFrequency() {
+    RedrawFrequency getRenderFrequency() {
         engineLocker.lock();
         try {
             return engine.getRedrawFrequency();
         } finally {
             engineLocker.unlock();
         }
-    }
-
-    int ratioW = -1;
-    int ratioH = -1;
-    boolean isKeepAspectRatio = false;
-
-    public void setAspectRatio(int w, int h) {
-        isKeepAspectRatio = true;
-        ratioW = w;
-        ratioH = h;
     }
 }

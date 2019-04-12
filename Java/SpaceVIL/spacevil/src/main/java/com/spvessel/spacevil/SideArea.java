@@ -110,7 +110,7 @@ public class SideArea extends Prototype implements InterfaceFloating {
         applyAttach();
     }
 
-    public SideArea(WindowLayout handler, Side attachSide) {
+    public SideArea(CoreWindow handler, Side attachSide) {
         setHandler(handler);
         setItemName("SideArea_" + count++);
         _close = new ButtonCore();

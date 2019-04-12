@@ -89,11 +89,11 @@ namespace SpaceVIL
         /// <summary>
         /// Set parent window for the Prototype
         /// </summary>
-        public void SetHandler(WindowLayout handler)
+        public void SetHandler(CoreWindow handler)
         {
             _core.SetHandler(handler);
         }
-        public WindowLayout GetHandler()
+        public CoreWindow GetHandler()
         {
             return _core.GetHandler();
         }

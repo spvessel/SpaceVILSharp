@@ -42,7 +42,7 @@ namespace SpaceVIL
         /// Constructs a FloatItem
         /// </summary>
         /// <param name="handler"> parent window for the FloatItem </param>
-        public FloatItem(WindowLayout handler)
+        public FloatItem(CoreWindow handler)
         {
             SetVisible(false);
             SetHandler(handler);

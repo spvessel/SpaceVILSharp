@@ -69,7 +69,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 _letEndPos.add(modL.xBeg + modL.xShift + modL.width);
             }
 
-            WindowLayout wLayout = getHandler();
+            CoreWindow wLayout = getHandler();
             if (wLayout == null || wLayout.getDpiScale() == null)
                 _screenScale = 0;
             else {
@@ -117,7 +117,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     public TextPrinter getLetTextures() {
         textLock.lock();
         try {
-            WindowLayout wLayout = getHandler();
+            CoreWindow wLayout = getHandler();
             if (wLayout != null && wLayout.getDpiScale() != null) {
                 float scl = wLayout.getDpiScale()[0];
                 if (scl != _screenScale && !isBigExist) { //Это при допущении, что скейл меняется только один раз!

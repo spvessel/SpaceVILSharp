@@ -1,13 +1,13 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventDropMethodState;
+import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Side;
 
 import java.util.*;
 
-public class WContainer extends Prototype {
-    public EventDropMethodState eventDrop = new EventDropMethodState();
+final class WContainer extends Prototype {
+    EventDropMethodState eventDrop = new EventDropMethodState();
 
     @Override
     public void release() {
@@ -15,19 +15,75 @@ public class WContainer extends Prototype {
     }
 
     private static int count = 0;
-    public List<Side> _sides = new LinkedList<>();
+    List<Side> _sides = new LinkedList<>();
     boolean _is_fixed = false;
     private Prototype _focus = null;
 
-    public WContainer() {
+    WContainer() {
         setItemName("WContainer_" + count);
         count++;
-        setStyle(DefaultsService.getDefaultStyle(WContainer.class));
+        // setStyle(DefaultsService.getDefaultStyle(WContainer.class));
+        setStyle(Style.getWindowContainerStyle());
+        setEvents();
         // eventDrop.add((sender, args) -> {
-        //     for (String item : args.paths) {
-        //         System.out.println(item);
-        //     }
+        // for (String item : args.paths) {
+        // System.out.println(item);
+        // }
         // });
+    }
+
+    void setEvents() {
+        eventFocusGet.add((sender) -> {
+            getHandler().eventFocusGet.execute(sender);
+        });
+        eventFocusLost.add((sender) -> {
+            getHandler().eventFocusLost.execute(sender);
+        });
+        eventResize.add((sender) -> {
+            getHandler().eventResize.execute(sender);
+        });
+        eventDestroy.add((sender) -> {
+            getHandler().eventDestroy.execute(sender);
+        });
+        eventMouseHover.add((sender, args) -> {
+            getHandler().eventMouseHover.execute(sender, args);
+        });
+        eventMouseLeave.add((sender, args) -> {
+            getHandler().eventMouseLeave.execute(sender, args);
+        });
+        eventMouseClick.add((sender, args) -> {
+            getHandler().eventMouseClick.execute(sender, args);
+        });
+        eventMouseDoubleClick.add((sender, args) -> {
+            getHandler().eventMouseDoubleClick.execute(sender, args);
+        });
+        eventMousePress.add((sender, args) -> {
+            getHandler().eventMousePress.execute(sender, args);
+        });
+        eventMouseDrag.add((sender, args) -> {
+            getHandler().eventMouseDrag.execute(sender, args);
+        });
+        eventMouseDrop.add((sender, args) -> {
+            getHandler().eventMouseDrop.execute(sender, args);
+        });
+        eventScrollUp.add((sender, args) -> {
+            getHandler().eventScrollUp.execute(sender, args);
+        });
+        eventScrollDown.add((sender, args) -> {
+            getHandler().eventScrollDown.execute(sender, args);
+        });
+        eventKeyPress.add((sender, args) -> {
+            getHandler().eventKeyPress.execute(sender, args);
+        });
+        eventKeyRelease.add((sender, args) -> {
+            getHandler().eventKeyRelease.execute(sender, args);
+        });
+        eventTextInput.add((sender, args) -> {
+            getHandler().eventTextInput.execute(sender, args);
+        });
+        eventDrop.add((sender, args) -> {
+            getHandler().eventDrop.execute(sender, args);
+        });
     }
 
     void saveLastFocus(Prototype focused) {

@@ -16,13 +16,15 @@ import java.awt.*;
 public class ScissorsTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("ScissorsTest", "ScissorsTest", 900, 900, false);
-        setHandler(Handler);
+        isBorderHidden = true;
+        setSize(900, 900);
+        setWindowName("ScissorsTest");
+        setWindowTitle("ScissorsTest");
 
-        Handler.setMinSize(300, 100);
-        Handler.setBackground(45, 45, 45);
-        Handler.setPadding(2, 2, 2, 2);
-        Handler.isCentered = true;
+        setMinSize(300, 100);
+        setBackground(45, 45, 45);
+        setPadding(2, 2, 2, 2);
+        isCentered = true;
 
         TitleBar title = new TitleBar("SpaceVIL Builder Tool");
 
@@ -106,7 +108,7 @@ public class ScissorsTest extends ActiveWindow {
         textServiceInfo.setFont(DefaultsService.getDefaultFont(12));
 
         // adding
-        Handler.addItems(title, layout);
+        addItems(title, layout);
         layout.addItems(version, platform, startBtn, textServiceInfo);
         version.addItems(settings, v_major, v_middle, v_minor, v_extend, phase, month);
         platform.addItems(java, net, net_version);

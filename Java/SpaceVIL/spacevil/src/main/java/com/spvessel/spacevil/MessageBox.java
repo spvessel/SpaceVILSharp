@@ -53,20 +53,21 @@ public class MessageBox extends DialogWindow {
     public void initWindow() {
         titleBar = new TitleBar();
         msg = new Label();
-        WindowLayout Handler = new WindowLayout("MessageBox_" + getCount(), "MessageBox_" + getCount());
-        setHandler(Handler);
+
         // window's attr
-        Handler.setWidth(300);
-        Handler.setMinWidth(300);
-        Handler.setHeight(150);
-        Handler.setMinHeight(150);
-        Handler.setPadding(2, 2, 2, 2);
-        Handler.setBackground(new Color(45, 45, 45));
-        Handler.isBorderHidden = true;
-        Handler.isDialog = true;
-        Handler.isAlwaysOnTop = true;
-        Handler.isCentered = true;
-        Handler.addItem(titleBar);
+        setWindowName("MessageBox_" + getCount());
+        setWindowTitle("MessageBox_" + getCount());
+        setWidth(300);
+        setMinWidth(300);
+        setHeight(150);
+        setMinHeight(150);
+        setPadding(2, 2, 2, 2);
+        setBackground(new Color(45, 45, 45));
+        isBorderHidden = true;
+        isDialog = true;
+        isAlwaysOnTop = true;
+        isCentered = true;
+        addItem(titleBar);
 
         VerticalStack layout = new VerticalStack();
         layout.setAlignment(ItemAlignment.TOP, ItemAlignment.HCENTER);
@@ -76,7 +77,7 @@ public class MessageBox extends DialogWindow {
         layout.setBackground(255, 255, 255, 20);
 
         // adding toolbar
-        Handler.addItem(layout);
+        addItem(layout);
 
         // message
         // msg.setFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
@@ -99,7 +100,7 @@ public class MessageBox extends DialogWindow {
         ok.addItemState(ItemStateType.HOVERED, hovered);
         InterfaceMouseMethodState ok_click = (sender, args) -> {
             _result = true;
-            Handler.close();
+            close();
         };
         ok.eventMouseClick.add(ok_click);
         layout.addItems(msg, ok);

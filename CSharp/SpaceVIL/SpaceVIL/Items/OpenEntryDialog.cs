@@ -526,7 +526,7 @@ namespace SpaceVIL
             Close();
         }
 
-        public override void Show(WindowLayout handler)
+        public override void Show(CoreWindow handler)
         {
             base.Show(handler);
             _fileList.GetArea().SetFocus();

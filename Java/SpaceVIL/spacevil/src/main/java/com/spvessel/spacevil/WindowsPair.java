@@ -4,6 +4,6 @@ import java.util.*;
 
 class WindowsPair {
     UUID GUID;
-    WindowLayout WINDOW;
+    CoreWindow WINDOW;
     
 }

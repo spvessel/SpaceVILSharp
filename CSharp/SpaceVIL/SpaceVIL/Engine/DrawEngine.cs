@@ -74,7 +74,7 @@ namespace SpaceVIL
         {
             Stack<Prototype> queue = new Stack<Prototype>();
 
-            if (item == _handler.GetLayout().GetWindow())
+            if (item == _handler.GetCoreWindow().GetLayout().GetContainer())
             {
                 UnderFocusedItem = null;
                 return;
@@ -96,7 +96,7 @@ namespace SpaceVIL
             if (FocusedItem != null)
                 FocusedItem.SetFocused(false);
             //set focus to WContainer
-            FocusedItem = _handler.GetLayout().GetWindow();
+            FocusedItem = _handler.GetCoreWindow().GetLayout().GetContainer();
             FocusedItem.SetFocused(true);
             UnderFocusedItem?.Clear();
         }
@@ -121,7 +121,7 @@ namespace SpaceVIL
         private Shader _blur;
         private Shader _clone;
 
-        internal DrawEngine(WindowLayout handler)
+        internal DrawEngine(CoreWindow handler)
         {
             HoveredItems = new List<Prototype>();
             _handler = new GLWHandler(handler);
@@ -204,7 +204,7 @@ namespace SpaceVIL
                 _handler.ClearEventsCallbacks();
                 if (_handler.GetWindowId())
                     _handler.Destroy();
-                _handler.GetLayout().Close();
+                _handler.GetCoreWindow().Close();
                 return;
             }
             finally
@@ -284,7 +284,7 @@ namespace SpaceVIL
             dargs.Count = count;
             dargs.Paths = new List<String>(paths);
             dargs.Item = HoveredItem;
-            AssignActions(InputEventType.WindowDrop, dargs, _handler.GetLayout().GetWindow(), false);
+            AssignActions(InputEventType.WindowDrop, dargs, _handler.GetCoreWindow().GetLayout().GetContainer(), false);
         }
 
         private void Refresh(Glfw.Window glfwwnd)
@@ -323,23 +323,23 @@ namespace SpaceVIL
         internal void MaximizeWindow()
         {
             _inputLocker = true;
-            if (_handler.GetLayout().IsMaximized)
+            if (_handler.GetCoreWindow().IsMaximized)
             {
                 Glfw.RestoreWindow(_handler.GetWindowId());
-                _handler.GetLayout().IsMaximized = false;
+                _handler.GetCoreWindow().IsMaximized = false;
                 int w, h;
                 Glfw.GetFramebufferSize(_handler.GetWindowId(), out w, out h);
-                _handler.GetLayout().SetWidth(w);
-                _handler.GetLayout().SetHeight(h);
+                _handler.GetCoreWindow().SetWidth(w);
+                _handler.GetCoreWindow().SetHeight(h);
             }
             else
             {
                 Glfw.MaximizeWindow(_handler.GetWindowId());
-                _handler.GetLayout().IsMaximized = true;
+                _handler.GetCoreWindow().IsMaximized = true;
                 int w, h;
                 Glfw.GetFramebufferSize(_handler.GetWindowId(), out w, out h);
-                _handler.GetLayout().SetWidth(w);
-                _handler.GetLayout().SetHeight(h);
+                _handler.GetCoreWindow().SetWidth(w);
+                _handler.GetCoreWindow().SetHeight(h);
             }
             _inputLocker = false;
         }
@@ -347,7 +347,7 @@ namespace SpaceVIL
         private void CloseWindow(Glfw.Window glfwwnd)
         {
             Glfw.SetWindowShouldClose(_handler.GetWindowId(), false);
-            _handler.GetLayout().EventClose?.Invoke();
+            _handler.GetCoreWindow().EventClose?.Invoke();
         }
 
         internal void Focus(Glfw.Window glfwwnd, bool value)
@@ -358,21 +358,21 @@ namespace SpaceVIL
             {
                 if (_handler.Focusable)
                 {
-                    WindowLayoutBox.SetCurrentFocusedWindow(_handler.GetLayout());
+                    WindowsBox.SetCurrentFocusedWindow(_handler.GetCoreWindow());
                     _handler.Focused = value;
                 }
             }
             else
             {
-                if (_handler.GetLayout().IsDialog)
+                if (_handler.GetCoreWindow().IsDialog)
                     _handler.Focused = true;
                 else
                 {
                     _handler.Focused = value;
-                    if (_handler.GetLayout().IsOutsideClickClosable)
+                    if (_handler.GetCoreWindow().IsOutsideClickClosable)
                     {
                         ResetItems();
-                        _handler.GetLayout().Close();
+                        _handler.GetCoreWindow().Close();
                     }
                 }
             }
@@ -381,10 +381,10 @@ namespace SpaceVIL
         private void Resize(Glfw.Window glfwwnd, int width, int height)
         {
             _tooltip.InitTimer(false);
-            _handler.GetLayout().SetWidth(width);
-            _handler.GetLayout().SetHeight(height);
+            _handler.GetCoreWindow().SetWidth(width);
+            _handler.GetCoreWindow().SetHeight(height);
 
-            // if (!_handler.GetLayout().IsBorderHidden)
+            // if (!_handler.GetCoreWindow().IsBorderHidden)
             // {
             //     glClearColor(0, 0, 0, 0);
             //     Update();
@@ -394,29 +394,29 @@ namespace SpaceVIL
 
         internal void SetWindowSize(int w, int h)
         {
-            if (_handler.GetLayout().IsKeepAspectRatio)
+            if (_handler.GetCoreWindow().IsKeepAspectRatio)
             {
                 float currentW = w;
                 float currentH = h;
 
-                float ratioW = _handler.GetLayout().RatioW;
-                float ratioH = _handler.GetLayout().RatioH;
+                float ratioW = _handler.GetCoreWindow().RatioW;
+                float ratioH = _handler.GetCoreWindow().RatioH;
 
                 float xScale = (currentW / ratioW);
                 float yScale = (currentH / ratioH);
 
                 float scale = 0;
 
-                if ((_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Right)
-                        && _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top))
-                        || (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Right)
-                                && _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Bottom))
-                        || (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
-                                && _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top))
-                        || (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
-                                && _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Bottom))
-                        || _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
-                        || _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Right))
+                if ((_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Right)
+                        && _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top))
+                        || (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Right)
+                                && _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Bottom))
+                        || (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
+                                && _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top))
+                        || (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
+                                && _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Bottom))
+                        || _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
+                        || _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Right))
                     scale = xScale;
                 else
                     scale = yScale;
@@ -434,8 +434,8 @@ namespace SpaceVIL
             _handler.GetPointer().SetX(xpos);
             _handler.GetPointer().SetY(ypos);
 
-            _handler.GetLayout().SetX(xpos);
-            _handler.GetLayout().SetY(ypos);
+            _handler.GetCoreWindow().SetX(xpos);
+            _handler.GetCoreWindow().SetY(ypos);
             //  Console.WriteLine("x: " + xpos + " y: " + ypos);
         }
 
@@ -468,10 +468,10 @@ namespace SpaceVIL
 
             if (EngineEvent.LastEvent().HasFlag(InputEventType.MousePress)) // жость какая-то ХЕРОТАААА!!!
             {
-                if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble)
+                if (_handler.GetCoreWindow().IsBorderHidden && _handler.GetCoreWindow().IsResizable)
                 {
-                    int w = _handler.GetLayout().GetWidth();
-                    int h = _handler.GetLayout().GetHeight();
+                    int w = _handler.GetCoreWindow().GetWidth();
+                    int h = _handler.GetCoreWindow().GetHeight();
                     int x_handler = _handler.GetPointer().GetX();
                     int y_handler = _handler.GetPointer().GetY();
                     int x_release = ptrRelease.GetX();
@@ -480,26 +480,26 @@ namespace SpaceVIL
                     int y_press = ptrPress.GetY();
 
 
-                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left))
+                    if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left))
                     {
-                        if (!(_handler.GetLayout().GetMinWidth() == _handler.GetLayout().GetWidth() && (ptrRelease.GetX() - ptrPress.GetX()) >= 0))
+                        if (!(_handler.GetCoreWindow().GetMinWidth() == _handler.GetCoreWindow().GetWidth() && (ptrRelease.GetX() - ptrPress.GetX()) >= 0))
                         {
                             int x5 = x_handler - x_global + (int)xpos - 5;
                             x_handler = x_global + x5;
                             w = w_global - x5;
                         }
                     }
-                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Right))
+                    if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Right))
                     {
-                        if (!(ptrRelease.GetX() < _handler.GetLayout().GetMinWidth() && _handler.GetLayout().GetWidth() == _handler.GetLayout().GetMinWidth()))
+                        if (!(ptrRelease.GetX() < _handler.GetCoreWindow().GetMinWidth() && _handler.GetCoreWindow().GetWidth() == _handler.GetCoreWindow().GetMinWidth()))
                         {
                             w = x_release;
                         }
                         ptrPress.SetX(x_release);
                     }
-                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top))
+                    if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top))
                     {
-                        if (!(_handler.GetLayout().GetMinHeight() == _handler.GetLayout().GetHeight() && (ptrRelease.GetY() - ptrPress.GetY()) >= 0))
+                        if (!(_handler.GetCoreWindow().GetMinHeight() == _handler.GetCoreWindow().GetHeight() && (ptrRelease.GetY() - ptrPress.GetY()) >= 0))
                         {
                             if (CommonService.GetOSType() == OSType.Mac)
                             {
@@ -514,9 +514,9 @@ namespace SpaceVIL
                             }
                         }
                     }
-                    if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Bottom))
+                    if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Bottom))
                     {
-                        if (!(ptrRelease.GetY() < _handler.GetLayout().GetMinHeight() && _handler.GetLayout().GetHeight() == _handler.GetLayout().GetMinHeight()))
+                        if (!(ptrRelease.GetY() < _handler.GetCoreWindow().GetMinHeight() && _handler.GetCoreWindow().GetHeight() == _handler.GetCoreWindow().GetMinHeight()))
                         {
                             if (CommonService.GetOSType() == OSType.Mac)
                                 y_handler = y_global;
@@ -525,20 +525,20 @@ namespace SpaceVIL
                         }
                     }
 
-                    if (_handler.GetLayout().GetWindow()._sides != 0 && !_handler.GetLayout().IsMaximized)
+                    if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides != 0 && !_handler.GetCoreWindow().IsMaximized)
                     {
                         if (CommonService.GetOSType() == OSType.Mac)
                         {
                             SetWindowSize(w, h);
-                            if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
-                            && _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top))
+                            if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
+                            && _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top))
                             {
                                 SetWindowPos(x_handler, (h_global - h) + y_global);
                                 // Console.WriteLine("left + top " + _handler.GetPointer().GetY());
                             }
-                            else if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
-                            || _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Bottom)
-                            || _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top)
+                            else if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
+                            || _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Bottom)
+                            || _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top)
                             )
                             {
                                 SetWindowPos(x_handler, y_handler);
@@ -547,14 +547,14 @@ namespace SpaceVIL
                         }
                         else
                         {
-                            if (_handler.GetLayout().GetWindow()._sides.HasFlag(Side.Left)
-                                || _handler.GetLayout().GetWindow()._sides.HasFlag(Side.Top))
+                            if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
+                                || _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top))
                                 SetWindowPos(x_handler, y_handler);
                             SetWindowSize(w, h);
                         }
                     }
                 }
-                if (_handler.GetLayout().GetWindow()._sides == 0)
+                if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides == 0)
                 {
                     int x_click = ptrClick.GetX();
                     int y_click = ptrClick.GetY();
@@ -565,7 +565,7 @@ namespace SpaceVIL
                         EngineEvent.SetEvent(InputEventType.MouseDrag);
                         _draggable.EventMouseDrag?.Invoke(HoveredItem, _margs);
                     }
-                    else if (anchor != null && !(HoveredItem is ButtonCore) && !_handler.GetLayout().IsMaximized)
+                    else if (anchor != null && !(HoveredItem is ButtonCore) && !_handler.GetCoreWindow().IsMaximized)
                     {
                         double x_pos, y_pos;
                         Glfw.GetCursorPos(_handler.GetWindowId(), out x_pos, out y_pos);
@@ -640,7 +640,7 @@ namespace SpaceVIL
             if (_inputLocker)
                 return;
 
-            _handler.GetLayout().GetWindow()._sides = 0;
+            _handler.GetCoreWindow().GetLayout().GetContainer()._sides = 0;
 
             if (!_handler.Focusable)
                 return;
@@ -679,15 +679,15 @@ namespace SpaceVIL
                 EngineEvent.SetEvent(InputEventType.MouseRelease);
                 return;
             }
-            if (state == InputState.Press && _handler.GetLayout().GetWindow().GetSides(ptrRelease.GetX(), ptrRelease.GetY()) != 0)
+            if (state == InputState.Press && _handler.GetCoreWindow().GetLayout().GetContainer().GetSides(ptrRelease.GetX(), ptrRelease.GetY()) != 0)
             {
-                _handler.GetLayout().GetWindow().SaveLastFocus(FocusedItem);
+                _handler.GetCoreWindow().GetLayout().GetContainer().SaveLastFocus(FocusedItem);
             }
 
             switch (state)
             {
                 case InputState.Release:
-                    _handler.GetLayout().GetWindow().RestoreFocus();
+                    _handler.GetCoreWindow().GetLayout().GetContainer().RestoreFocus();
                     bool is_double_click = IsDoubleClick(HoveredItem);
                     while (tmp.Count > 0)
                     {
@@ -784,7 +784,7 @@ namespace SpaceVIL
                                 if (f.IsFocusable)
                                 {
                                     if (f is WindowAnchor)
-                                        _handler.GetLayout().GetWindow().SaveLastFocus(FocusedItem);
+                                        _handler.GetCoreWindow().GetLayout().GetContainer().SaveLastFocus(FocusedItem);
                                     else
                                     {
                                         FocusedItem = f;
@@ -818,10 +818,10 @@ namespace SpaceVIL
             HoveredItems.Clear();
 
             List<IBaseItem> layout_box_of_items = new List<IBaseItem>();
-            layout_box_of_items.Add(_handler.GetLayout().GetWindow());
-            layout_box_of_items.AddRange(GetInnerItems(_handler.GetLayout().GetWindow()));
+            layout_box_of_items.Add(_handler.GetCoreWindow().GetLayout().GetContainer());
+            layout_box_of_items.AddRange(GetInnerItems(_handler.GetCoreWindow().GetLayout().GetContainer()));
 
-            foreach (var item in ItemsLayoutBox.GetLayoutFloatItems(_handler.GetLayout().Id))
+            foreach (var item in ItemsLayoutBox.GetLayoutFloatItems(_handler.GetCoreWindow().GetWindowGuid()))
             {
                 if (!item.IsVisible() || !item.IsDrawable())
                     continue;
@@ -879,22 +879,22 @@ namespace SpaceVIL
                 HoveredItem.SetMouseHover(true);
                 Glfw.SetCursor(_handler.GetWindowId(), HoveredItem.GetCursor().GetCursor());
 
-                if (_handler.GetLayout().IsBorderHidden && _handler.GetLayout().IsResizeble && !_handler.GetLayout().IsMaximized)
+                if (_handler.GetCoreWindow().IsBorderHidden && _handler.GetCoreWindow().IsResizable && !_handler.GetCoreWindow().IsMaximized)
                 {
-                    if ((xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos <= 5)
-                     || (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 && ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5)
-                     || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos <= 5)
-                     || (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 && xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5)
+                    if ((xpos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth() - 5 && ypos <= 5)
+                     || (xpos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth() - 5 && ypos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight() - 5)
+                     || (ypos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight() - 5 && xpos <= 5)
+                     || (ypos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight() - 5 && xpos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth() - 5)
                      || (xpos <= 5 && ypos <= 5))
                     {
                         _handler.SetCursorType(EmbeddedCursor.Crosshair);
                     }
                     else
                     {
-                        if (xpos >= _handler.GetLayout().GetWindow().GetWidth() - 5 || xpos < 5)
+                        if (xpos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth() - 5 || xpos < 5)
                             _handler.SetCursorType(EmbeddedCursor.ResizeX);
 
-                        if (ypos >= _handler.GetLayout().GetWindow().GetHeight() - 5 || ypos < 5)
+                        if (ypos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight() - 5 || ypos < 5)
                             _handler.SetCursorType(EmbeddedCursor.ResizeY);
                     }
                 }
@@ -1062,7 +1062,7 @@ namespace SpaceVIL
         {
             if (only_last && !HoveredItem.IsDisabled())
             {
-                _handler.GetLayout().SetEventTask(new EventTask()
+                _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
                 {
                     Item = HoveredItem,
                     Action = action,
@@ -1077,7 +1077,7 @@ namespace SpaceVIL
                     Prototype item = tmp.Pop();
                     if (item.Equals(HoveredItem) && HoveredItem.IsDisabled() || item.IsDisabled())
                         continue;
-                    _handler.GetLayout().SetEventTask(new EventTask()
+                    _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
                     {
                         Item = item,
                         Action = action,
@@ -1087,14 +1087,14 @@ namespace SpaceVIL
                         break;//остановить передачу событий последующим элементам
                 }
             }
-            _handler.GetLayout().ExecutePollActions();
+            _handler.GetCoreWindow().GetLayout().ExecutePollActions();
         }
         private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender, bool is_pass_under)
         {
             if (sender.IsDisabled())
                 return;
 
-            _handler.GetLayout().SetEventTask(new EventTask()
+            _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
             {
                 Item = sender,
                 Action = action,
@@ -1112,7 +1112,7 @@ namespace SpaceVIL
                         if (item.Equals(FocusedItem) && FocusedItem.IsDisabled() || item.IsDisabled())
                             continue;//пропустить
 
-                        _handler.GetLayout().SetEventTask(new EventTask()
+                        _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
                         {
                             Item = item,
                             Action = action,
@@ -1123,7 +1123,7 @@ namespace SpaceVIL
                     }
                 }
             }
-            _handler.GetLayout().ExecutePollActions();
+            _handler.GetCoreWindow().GetLayout().ExecutePollActions();
         }
         private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender)
         {
@@ -1141,7 +1141,7 @@ namespace SpaceVIL
                         if (item.Equals(FocusedItem) && FocusedItem.IsDisabled())
                             continue;//пропустить
 
-                        _handler.GetLayout().SetEventTask(new EventTask()
+                        _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
                         {
                             Item = item,
                             Action = action,
@@ -1152,7 +1152,7 @@ namespace SpaceVIL
                     }
                 }
             }
-            _handler.GetLayout().ExecutePollActions();
+            _handler.GetCoreWindow().GetLayout().ExecutePollActions();
         }
 
         // internal float _sleep = 1000.0f / 60.0f;
@@ -1275,7 +1275,7 @@ namespace SpaceVIL
                 }
 
                 if (!EngineEvent.LastEvent().HasFlag(InputEventType.WindowResize)
-                // && _handler.GetLayout().IsBorderHidden
+                // && _handler.GetCoreWindow().IsBorderHidden
                 )
                 {
                     Update();
@@ -1311,9 +1311,9 @@ namespace SpaceVIL
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
             //draw static
-            DrawItems(_handler.GetLayout().GetWindow());
+            DrawItems(_handler.GetCoreWindow().GetLayout().GetContainer());
             //draw float
-            List<IBaseItem> float_items = new List<IBaseItem>(ItemsLayoutBox.GetLayout(_handler.GetLayout().Id).FloatItems);
+            List<IBaseItem> float_items = new List<IBaseItem>(ItemsLayoutBox.GetLayout(_handler.GetCoreWindow().GetWindowGuid()).FloatItems);
             if (float_items != null)
             {
                 foreach (var item in float_items)
@@ -1321,21 +1321,21 @@ namespace SpaceVIL
                     if (item.GetHeightPolicy() == SizePolicy.Expand)
                     {
                         int[] confines = item.GetConfines();
-                        item.SetConfines(confines[0], confines[1], 0, _handler.GetLayout().GetWindow().GetHeight());
+                        item.SetConfines(confines[0], confines[1], 0, _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight());
                         item.SetY(0);
-                        item.SetHeight(_handler.GetLayout().GetWindow().GetHeight());
+                        item.SetHeight(_handler.GetCoreWindow().GetLayout().GetContainer().GetHeight());
                     }
                     if (item.GetWidthPolicy() == SizePolicy.Expand)
                     {
                         int[] confines = item.GetConfines();
-                        item.SetConfines(0, _handler.GetLayout().GetWindow().GetWidth(), confines[2], confines[3]);
+                        item.SetConfines(0, _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth(), confines[2], confines[3]);
                         item.SetX(0);
-                        item.SetWidth(_handler.GetLayout().GetWindow().GetWidth());
+                        item.SetWidth(_handler.GetCoreWindow().GetLayout().GetContainer().GetWidth());
                     }
                     DrawItems(item);
                 }
             }
-            // List<IBaseItem> dialog_items = new List<IBaseItem>(ItemsLayoutBox.GetLayout(_handler.GetLayout().Id).DialogItems);
+            // List<IBaseItem> dialog_items = new List<IBaseItem>(ItemsLayoutBox.GetLayout(_handler.GetCoreWindow().Id).DialogItems);
             // if (dialog_items != null)
             // {
             //     foreach (var item in dialog_items)
@@ -1343,16 +1343,16 @@ namespace SpaceVIL
             //         if (item.GetHeightPolicy() == SizePolicy.Expand)
             //         {
             //             int[] confines = item.GetConfines();
-            //             item.SetConfines(confines[0], confines[1], 0, _handler.GetLayout().GetWindow().GetHeight());
+            //             item.SetConfines(confines[0], confines[1], 0, _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight());
             //             item.SetY(0);
-            //             item.SetHeight(_handler.GetLayout().GetWindow().GetHeight());
+            //             item.SetHeight(_handler.GetCoreWindow().GetLayout().GetContainer().GetHeight());
             //         }
             //         if (item.GetWidthPolicy() == SizePolicy.Expand)
             //         {
             //             int[] confines = item.GetConfines();
-            //             item.SetConfines(0, _handler.GetLayout().GetWindow().GetWidth(), confines[2], confines[3]);
+            //             item.SetConfines(0, _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth(), confines[2], confines[3]);
             //             item.SetX(0);
-            //             item.SetWidth(_handler.GetLayout().GetWindow().GetWidth());
+            //             item.SetWidth(_handler.GetCoreWindow().GetLayout().GetContainer().GetWidth());
             //         }
             //         DrawItems(item);
             //     }
@@ -1389,7 +1389,7 @@ namespace SpaceVIL
                 if (!_bounds.ContainsKey(shell))
                 {
                     int x = shell.GetX();
-                    int y = _handler.GetLayout().GetHeight() - (shell.GetY() + shell.GetHeight());
+                    int y = _handler.GetCoreWindow().GetHeight() - (shell.GetY() + shell.GetHeight());
                     int w = shell.GetWidth();
                     int h = shell.GetHeight();
                     int x1 = x + w;
@@ -1481,10 +1481,10 @@ namespace SpaceVIL
         private void SetScissorRectangle(IBaseItem rect)
         {
             int x = rect.GetParent().GetX();
-            int y = _handler.GetLayout().GetHeight() - (rect.GetParent().GetY() + rect.GetParent().GetHeight());
+            int y = _handler.GetCoreWindow().GetHeight() - (rect.GetParent().GetY() + rect.GetParent().GetHeight());
             int w = rect.GetParent().GetWidth();
             int h = rect.GetParent().GetHeight();
-            float scale = _handler.GetLayout().GetDpiScale()[0];
+            float scale = _handler.GetCoreWindow().GetDpiScale()[0];
             x = (int)((float)x * scale);
             y = (int)((float)y * scale);
             w = (int)((float)w * scale);
@@ -1707,7 +1707,7 @@ namespace SpaceVIL
             store.Bind(fbo_texture);
             store.SendUniformSample2D(_blur, "tex");
             store.SendUniform1fv(_blur, "weights", 5, weights);
-            store.SendUniform2fv(_blur, "frame", new float[2] { _handler.GetLayout().GetWidth(), _handler.GetLayout().GetHeight() });
+            store.SendUniform2fv(_blur, "frame", new float[2] { _handler.GetCoreWindow().GetWidth(), _handler.GetCoreWindow().GetHeight() });
             store.SendUniform1f(_blur, "res", (res * 1f / 10));
             store.SendUniform2fv(_blur, "point", xy);
             store.SendUniform2fv(_blur, "size", wh);
@@ -1736,10 +1736,10 @@ namespace SpaceVIL
             CheckOutsideBorders(text as IBaseItem);
 
             int bb_h = textPrt.HeightTexture, bb_w = textPrt.WidthTexture;
-            float i_x0 = ((float)textPrt.XTextureShift / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y0 = ((float)textPrt.YTextureShift / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w / _handler.GetLayout().GetDpiScale()[0]) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y1 = (((float)textPrt.YTextureShift + (float)bb_h / _handler.GetLayout().GetDpiScale()[0]) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x0 = ((float)textPrt.XTextureShift / (float)_handler.GetCoreWindow().GetWidth() * 2.0f) - 1.0f;
+            float i_y0 = ((float)textPrt.YTextureShift / (float)_handler.GetCoreWindow().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w / _handler.GetCoreWindow().GetDpiScale()[0]) / (float)_handler.GetCoreWindow().GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)textPrt.YTextureShift + (float)bb_h / _handler.GetCoreWindow().GetDpiScale()[0]) / (float)_handler.GetCoreWindow().GetHeight() * 2.0f - 1.0f) * (-1.0f);
             // float i_x0 = ((float)textPrt.XTextureShift / (float)_framebufferWidth * 2.0f) - 1.0f;
             // float i_y0 = ((float)textPrt.YTextureShift / (float)_framebufferHeight * 2.0f - 1.0f) * (-1.0f);
             // float i_x1 = (((float)textPrt.XTextureShift + (float)bb_w/* * 0.9f*/) / (float)_framebufferWidth * 2.0f) - 1.0f;
@@ -1777,7 +1777,7 @@ namespace SpaceVIL
             foreach (float[] shape in crd_array)
             {
                 List<float[]> fig = GraphicsMathService.ToGL(GraphicsMathService.MoveShape(point, shape[0] - center_offset, shape[1] - center_offset),
-                    _handler.GetLayout());
+                    _handler.GetCoreWindow());
                 for (int i = 0; i < fig.Count; i++)
                 {
                     result[skew + i * 3 + 0] = fig[i][0];
@@ -1821,7 +1821,7 @@ namespace SpaceVIL
             if (item.GetLineColor().A == 0)
                 return;
 
-            List<float[]> crd_array = GraphicsMathService.ToGL(item.MakeShape(), _handler.GetLayout());
+            List<float[]> crd_array = GraphicsMathService.ToGL(item.MakeShape(), _handler.GetCoreWindow());
             if (crd_array == null)
                 return;
             CheckOutsideBorders(item as IBaseItem);
@@ -1845,10 +1845,10 @@ namespace SpaceVIL
             int w = image.GetImageWidth(), h = image.GetImageHeight();
             RectangleBounds Area = image.GetRectangleBounds();
 
-            float i_x0 = ((float)Area.GetX() / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y0 = ((float)Area.GetY() / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            float i_x1 = (((float)Area.GetX() + (float)Area.GetWidth()) / (float)_handler.GetLayout().GetWidth() * 2.0f) - 1.0f;
-            float i_y1 = (((float)Area.GetY() + (float)Area.GetHeight()) / (float)_handler.GetLayout().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x0 = ((float)Area.GetX() / (float)_handler.GetCoreWindow().GetWidth() * 2.0f) - 1.0f;
+            float i_y0 = ((float)Area.GetY() / (float)_handler.GetCoreWindow().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            float i_x1 = (((float)Area.GetX() + (float)Area.GetWidth()) / (float)_handler.GetCoreWindow().GetWidth() * 2.0f) - 1.0f;
+            float i_y1 = (((float)Area.GetY() + (float)Area.GetHeight()) / (float)_handler.GetCoreWindow().GetHeight() * 2.0f - 1.0f) * (-1.0f);
 
             _texture.UseShader();
             ImageItem tmp = image as ImageItem;
@@ -1972,8 +1972,8 @@ namespace SpaceVIL
             else
                 _tooltip.SetY(ptrRelease.GetY() + _tooltip.GetHeight() + 2);
             //проверка справа
-            if (ptrRelease.GetX() - 10 + _tooltip.GetWidth() > _handler.GetLayout().GetWidth())
-                _tooltip.SetX(_handler.GetLayout().GetWidth() - _tooltip.GetWidth() - 10);
+            if (ptrRelease.GetX() - 10 + _tooltip.GetWidth() > _handler.GetCoreWindow().GetWidth())
+                _tooltip.SetX(_handler.GetCoreWindow().GetWidth() - _tooltip.GetWidth() - 10);
             else
                 _tooltip.SetX(ptrRelease.GetX() - 10);
 

@@ -7,7 +7,7 @@ namespace SpaceVIL
 {
     public delegate void EventWindowDropMethod(IItem sender, DropArgs args);
 
-    public class WContainer : Prototype//, IWindow
+    internal sealed class WContainer : Prototype//, IWindow
     {
         public EventWindowDropMethod EventDrop;
 
@@ -26,6 +26,7 @@ namespace SpaceVIL
             SetItemName("WContainer_" + count);
             count++;
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.WContainer)));
+            setEvents();
 
             // EventDrop += (sender, args) =>
             // {
@@ -34,6 +35,78 @@ namespace SpaceVIL
             //         Console.WriteLine(path);
             //     }
             // };
+        }
+
+        void setEvents()
+        {
+            EventFocusGet += (sender) =>
+            {
+                GetHandler().EventFocusGet?.Invoke(sender);
+            };
+            EventFocusLost += (sender) =>
+            {
+                GetHandler().EventFocusLost?.Invoke(sender);
+            };
+            EventResize += (sender) =>
+            {
+                GetHandler().EventResize?.Invoke(sender);
+            };
+            EventDestroy += (sender) =>
+            {
+                GetHandler().EventDestroy?.Invoke(sender);
+            };
+            EventMouseHover += (sender, args) =>
+            {
+                GetHandler().EventMouseHover?.Invoke(sender, args);
+            };
+            EventMouseLeave += (sender, args) =>
+            {
+                GetHandler().EventMouseLeave?.Invoke(sender, args);
+            };
+            EventMouseClick += (sender, args) =>
+            {
+                GetHandler().EventMouseClick?.Invoke(sender, args);
+            };
+            EventMouseDoubleClick += (sender, args) =>
+            {
+                GetHandler().EventMouseDoubleClick?.Invoke(sender, args);
+            };
+            EventMousePress += (sender, args) =>
+            {
+                GetHandler().EventMousePress?.Invoke(sender, args);
+            };
+            EventMouseDrag += (sender, args) =>
+            {
+                GetHandler().EventMouseDrag?.Invoke(sender, args);
+            };
+            EventMouseDrop += (sender, args) =>
+            {
+                GetHandler().EventMouseDrop?.Invoke(sender, args);
+            };
+            EventScrollUp += (sender, args) =>
+            {
+                GetHandler().EventScrollUp?.Invoke(sender, args);
+            };
+            EventScrollDown += (sender, args) =>
+            {
+                GetHandler().EventScrollDown?.Invoke(sender, args);
+            };
+            EventKeyPress += (sender, args) =>
+            {
+                GetHandler().EventKeyPress?.Invoke(sender, args);
+            };
+            EventKeyRelease += (sender, args) =>
+            {
+                GetHandler().EventKeyRelease?.Invoke(sender, args);
+            };
+            EventTextInput += (sender, args) =>
+            {
+                GetHandler().EventTextInput?.Invoke(sender, args);
+            };
+            EventDrop += (sender, args) =>
+            {
+                GetHandler().EventDrop?.Invoke(sender, args);
+            };
         }
 
         internal void SaveLastFocus(Prototype focused)

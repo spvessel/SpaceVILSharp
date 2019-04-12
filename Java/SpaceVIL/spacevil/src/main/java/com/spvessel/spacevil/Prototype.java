@@ -103,11 +103,11 @@ abstract public class Prototype implements InterfaceBaseItem {
     /**
      * Set parent window for the Prototype
      */
-    public void setHandler(WindowLayout handler) {
+    public void setHandler(CoreWindow handler) {
         _core.setHandler(handler);
     }
 
-    public WindowLayout getHandler() {
+    public CoreWindow getHandler() {
         return _core.getHandler();
     }
 

@@ -14,15 +14,15 @@ namespace SpaceVIL
         internal int _confines_y_0 = 0;
         internal int _confines_y_1 = 0;
 
-        private WindowLayout _handler;
+        private CoreWindow _handler;
 
         /// <param name="handler"> WindowLayout handler - window that 
         /// contains the BaseItem </param>
-        public void SetHandler(WindowLayout handler)
+        public void SetHandler(CoreWindow handler)
         {
             _handler = handler;
         }
-        public WindowLayout GetHandler()
+        public CoreWindow GetHandler()
         {
             return _handler;
         }

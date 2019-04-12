@@ -185,7 +185,7 @@ public class MessageItem extends DialogItem {
     }
 
     @Override
-    public void show(WindowLayout handler) {
+    public void show(CoreWindow handler) {
         _result = false;
         super.show(handler);
     }

@@ -108,7 +108,7 @@ namespace SpaceVIL
         }
 
 
-        public override void Show(WindowLayout handler)
+        public override void Show(CoreWindow handler)
         {
             base.Show(handler);
             _input.SetFocus();

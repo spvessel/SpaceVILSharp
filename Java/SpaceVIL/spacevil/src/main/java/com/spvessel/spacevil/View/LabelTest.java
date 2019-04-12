@@ -9,19 +9,19 @@ import java.awt.*;
 public class LabelTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("LabelTest", "LabelTest");
-        Handler.setWidth(500);
-        Handler.setMinWidth(200);
-        Handler.setHeight(500);
-        Handler.setMinHeight(200);
-        Handler.setWindowTitle("LabelTest");
-        Handler.setPadding(2, 2, 2, 2);
-        Handler.setBackground(new Color(45, 45, 45, 255));
-        Handler.isBorderHidden = true;
+        isBorderHidden = true;
+        setSize(500, 200);
+        setWindowName("LabelTest");
+        setWindowTitle("LabelTest");
+        
+        setMinWidth(200);
+        setMinHeight(200);
+        setPadding(2, 2, 2, 2);
+        setBackground(new Color(45, 45, 45, 255));
 
         //DragAnchor
         TitleBar title = new TitleBar("LabelTest");
-        Handler.addItem(title);
+        addItem(title);
 
         //ToolBar
         VerticalStack layout = new VerticalStack();
@@ -30,7 +30,7 @@ public class LabelTest extends ActiveWindow {
         layout.setBackground(255, 255, 255, 20);
 
         //adding toolbar
-        Handler.addItem(layout);
+        addItem(layout);
 
         //Frame
         HorizontalStack toolbar = new HorizontalStack();

@@ -146,11 +146,11 @@ namespace SpaceVIL
             AddItems(_text_object, _btn_close);
         }
 
-        private WindowLayout _handler = null;
+        private CoreWindow _handler = null;
         /// <summary>
         /// Show the PopUpMessage
         /// </summary>
-        public void Show(WindowLayout handler)
+        public void Show(CoreWindow handler)
         {
             _handler = handler;
             _handler.AddItem(this);
@@ -178,7 +178,7 @@ namespace SpaceVIL
                 _stop.Dispose();
                 _stop = null;
             }
-            _handler.GetWindow().RemoveItem(this);
+            _handler.RemoveItem(this);
         }
 
         internal void HoldSelf(bool ok)

@@ -11,11 +11,11 @@ namespace SpaceVIL
         ConcurrentQueue<EventTask> StackEvents = new ConcurrentQueue<EventTask>();
 
         internal ManualResetEventSlim Execute = new ManualResetEventSlim(false);
-        WindowLayout _handler;
+        CoreWindow _handler;
         bool _stoped;
         private Object managerLock = new Object();
 
-        internal ActionManager(WindowLayout wnd)
+        internal ActionManager(CoreWindow wnd)
         {
             _handler = wnd;
         }

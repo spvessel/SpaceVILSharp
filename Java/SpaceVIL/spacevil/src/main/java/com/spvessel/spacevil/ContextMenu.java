@@ -56,7 +56,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      * 
      * @param handler parent window for the ContextMenu
      */
-    public ContextMenu(WindowLayout handler) {
+    public ContextMenu(CoreWindow handler) {
         setItemName("ContextMenu_" + count);
         count++;
         setPassEvents(false);
@@ -66,7 +66,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setStyle(DefaultsService.getDefaultStyle(ContextMenu.class));
     }
 
-    public ContextMenu(WindowLayout handler, MenuItem... items) {
+    public ContextMenu(CoreWindow handler, MenuItem... items) {
         this(handler);
         for (MenuItem item : items)
             addItem(item);
@@ -104,7 +104,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     private void hideDependentMenus() {
-        for (InterfaceBaseItem context_menu : ItemsLayoutBox.getLayoutFloatItems(getHandler().getId())) {
+        for (InterfaceBaseItem context_menu : ItemsLayoutBox.getLayoutFloatItems(getHandler().getWindowGuid())) {
             if (context_menu instanceof ContextMenu && !context_menu.equals(this)) {
                 ContextMenu menu = (ContextMenu) context_menu;
                 menu.hide();

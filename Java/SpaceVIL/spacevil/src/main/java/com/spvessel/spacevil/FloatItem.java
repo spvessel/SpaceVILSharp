@@ -32,7 +32,7 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
      * Constructs a FloatItem
      * @param handler parent window for the FloatItem
      */
-    public FloatItem(WindowLayout handler) {
+    public FloatItem(CoreWindow handler) {
         setVisible(false);
         setHandler(handler);
         setItemName("FloatItem_" + count);

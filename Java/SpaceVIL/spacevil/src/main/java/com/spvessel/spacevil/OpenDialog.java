@@ -53,7 +53,7 @@ public abstract class OpenDialog extends DialogItem {
     }
 
     @Override
-    public void show(WindowLayout handler) {
+    public void show(CoreWindow handler) {
         super.show(handler);
     }
 

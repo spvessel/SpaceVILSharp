@@ -5,7 +5,6 @@ import java.awt.Color;
 import com.spvessel.spacevil.ButtonCore;
 import com.spvessel.spacevil.TextEdit;
 import com.spvessel.spacevil.TitleBar;
-import com.spvessel.spacevil.WindowLayout;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyCode;
@@ -100,7 +99,7 @@ public class InputDialog extends DialogItem {
     }
 
     @Override
-    public void show(WindowLayout handler) {
+    public void show(CoreWindow handler) {
         super.show(handler);
         _input.setFocus();
     }

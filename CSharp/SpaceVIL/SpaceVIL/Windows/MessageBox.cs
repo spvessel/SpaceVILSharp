@@ -59,20 +59,19 @@ namespace SpaceVIL
         /// </summary>
         public override void InitWindow()
         {
-            WindowLayout Handler = new WindowLayout("MessageBox_" + GetCount(), "MessageBox_" + GetCount());
-            SetHandler(Handler);
+            SetParameters("MessageBox_" + GetCount(), "MessageBox_" + GetCount());
             //window's attr
-            Handler.SetWidth(300);
-            Handler.SetMinWidth(300);
-            Handler.SetHeight(150);
-            Handler.SetMinHeight(150);
-            Handler.SetPadding(2, 2, 2, 2);
-            Handler.SetBackground(Color.FromArgb(255, 45, 45, 45));
-            Handler.IsBorderHidden = true;
-            Handler.IsDialog = true;
-            Handler.IsAlwaysOnTop = true;
-            Handler.IsCentered = true;
-            Handler.AddItem(titleBar);
+            SetWidth(300);
+            SetMinWidth(300);
+            SetHeight(150);
+            SetMinHeight(150);
+            SetPadding(2, 2, 2, 2);
+            SetBackground(Color.FromArgb(255, 45, 45, 45));
+            IsBorderHidden = true;
+            IsDialog = true;
+            IsAlwaysOnTop = true;
+            IsCentered = true;
+            AddItem(titleBar);
 
             VerticalStack layout = new VerticalStack();
             layout.SetAlignment(ItemAlignment.Top | ItemAlignment.HCenter);
@@ -82,7 +81,7 @@ namespace SpaceVIL
             layout.SetBackground(255, 255, 255, 20);
 
             //adding toolbar
-            Handler.AddItem(layout);
+            AddItem(layout);
 
             //message
             // msg.SetFont(new Font(new FontFamily("Courier New"), 14, FontStyle.Regular));
@@ -107,7 +106,7 @@ namespace SpaceVIL
             ok.EventMouseClick += (sender, args) =>
             {
                 _result = true;
-                Handler.Close();
+                Close();
             };
             layout.AddItems(msg, ok);
         }

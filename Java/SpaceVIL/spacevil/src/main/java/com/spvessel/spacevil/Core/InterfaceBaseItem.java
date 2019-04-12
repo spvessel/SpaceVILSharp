@@ -2,17 +2,17 @@ package com.spvessel.spacevil.Core;
 
 import java.awt.Color;
 
+import com.spvessel.spacevil.CoreWindow;
 import com.spvessel.spacevil.Prototype;
-import com.spvessel.spacevil.WindowLayout;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 
 public interface InterfaceBaseItem
         extends InterfaceItem, InterfaceSize, InterfacePosition, InterfaceEventUpdate, InterfaceBehavior {
 
-    void setHandler(WindowLayout handler);
+    void setHandler(CoreWindow handler);
 
-    WindowLayout getHandler();
+    CoreWindow getHandler();
 
     void setParent(Prototype parent);
 

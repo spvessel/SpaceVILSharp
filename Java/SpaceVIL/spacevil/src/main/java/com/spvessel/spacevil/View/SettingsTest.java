@@ -16,16 +16,18 @@ public class SettingsTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("SettingsTest", "SettingsTest", 600, 550, true);
-        setHandler(Handler);
-        Handler.setMinSize(600, 550);
-        Handler.setBackground(45, 45, 45);
-        Handler.setPadding(2, 2, 2, 2);
+        isBorderHidden = true;
+        setSize(600, 550);
+        setWindowName("SettingsTest");
+        setWindowTitle("SettingsTest");
+        setMinSize(600, 550);
+        setBackground(45, 45, 45);
+        setPadding(2, 2, 2, 2);
         int count = 10;
 
         // Titlebar
         TitleBar title = new TitleBar("Settings Test");
-        Handler.addItem(title);
+        addItem(title);
 
         // Frame
         Frame frame = new Frame();
@@ -35,7 +37,7 @@ public class SettingsTest extends ActiveWindow {
         // frame.setPadding(10, 10, 10, 10);
         frame.setWidthPolicy(SizePolicy.EXPAND);
         frame.setHeightPolicy(SizePolicy.EXPAND);
-        Handler.addItem(frame);
+        addItem(frame);
 
         CustomShape random_shape = new CustomShape();
         random_shape.setBackground(new Color(200, 51, 220));

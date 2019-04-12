@@ -144,12 +144,12 @@ public class PopUpMessage extends Prototype {
         addItems(_text_object, _btn_close);
     }
 
-    private WindowLayout _handler = null;
+    private CoreWindow _handler = null;
 
     /**
      * Show the PopUpMessage
      */
-    public void show(WindowLayout handler) {
+    public void show(CoreWindow handler) {
         _handler = handler;
         _handler.addItem(this);
         initTimer();
@@ -175,7 +175,7 @@ public class PopUpMessage extends Prototype {
             _stop.cancel();
             _stop = null;
         }
-        _handler.getWindow().removeItem(this);
+        _handler.removeItem(this);
     }
 
     void holdSelf(boolean value) {

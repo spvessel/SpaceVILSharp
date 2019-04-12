@@ -21,6 +21,11 @@ public class ComplexTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
+        isBorderHidden = true;
+        setSize(950, 700);
+        setWindowName("ComplexTest");
+        setWindowTitle("ComplexTest");
+
 
         Style style = Style.getWrapGridStyle();
         Style wrap_style = style.getInnerStyle("area");
@@ -29,19 +34,17 @@ public class ComplexTest extends ActiveWindow {
         wrapper_style.borderRadius = new CornerRadius(6);
         DefaultsService.getDefaultTheme().replaceDefaultItemStyle(WrapGrid.class, style);
 
-        WindowLayout Handler = new WindowLayout("ComplexTest", "ComplexTest", 950, 700, true);
-        setHandler(Handler);
 
-        Handler.setMinSize(500, 100);
-        Handler.setBackground(45, 45, 45);
-        Handler.setPadding(2, 2, 2, 2);
+        setMinSize(500, 100);
+        setBackground(45, 45, 45);
+        setPadding(2, 2, 2, 2);
 
         treeview = new TreeView();
         block = new Grid(4, 4);
         wrap = new WrapGrid(100, 100, Orientation.HORIZONTAL);
 
         TitleBar title = new TitleBar("ComplexTest");
-        Handler.addItem(title);
+        addItem(title);
 
         HorizontalStack toolbar = new HorizontalStack();
         toolbar.setBackground(51, 51, 51);
@@ -51,7 +54,7 @@ public class ComplexTest extends ActiveWindow {
         toolbar.setHeight(40);
         toolbar.setPadding(10, 0, 0, 0);
         toolbar.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        Handler.addItem(toolbar);
+        addItem(toolbar);
 
         treeview.setItemName("TreeView Fucker!");
         treeview.setMinWidth(100);
@@ -107,7 +110,7 @@ public class ComplexTest extends ActiveWindow {
         VerticalSplitArea split_area = new VerticalSplitArea();
         split_area.setMargin(0, 72, 0, 0);
         split_area.setSplitPosition(300);
-        Handler.addItem(split_area);
+        addItem(split_area);
 
         split_area.assignLeftItem(treeview);
 
@@ -139,7 +142,7 @@ public class ComplexTest extends ActiveWindow {
         // block.insertItem(getButton("Button7", 100, 100, SizePolicy.EXPAND), 0, 6);
         // block.insertItem(getButton("Button8", 100, 100, SizePolicy.EXPAND), 0, 7);
 
-        // Handler.getWindow().eventKeyPress.add((sender, args) -> {
+        // getWindow().eventKeyPress.add((sender, args) -> {
         // System.out.println("FocusedItem: " +
         // getHandler().getFocusedItem().getItemName());
         // });

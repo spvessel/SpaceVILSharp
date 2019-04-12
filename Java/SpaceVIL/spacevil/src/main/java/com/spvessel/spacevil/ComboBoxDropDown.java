@@ -71,7 +71,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      * 
      * @param handler parent window for the ContextMenu
      */
-    public ComboBoxDropDown(WindowLayout handler) {
+    public ComboBoxDropDown(CoreWindow handler) {
         setPassEvents(false);
         setVisible(false);
         setHandler(handler);

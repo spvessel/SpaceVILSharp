@@ -10,37 +10,36 @@ using SpaceVIL.Common;
 
 namespace SpaceVIL
 {
-    public sealed class WindowLayout : ISize, IPosition
+    internal sealed class WindowLayout
     //where TLayout : Prototype
     {
+        internal Object EngineLocker = new Object();
         private Object wndLock = new Object();
 
-        public EventCommonMethod EventClose;
-        public EventCommonMethod EventMinimize;
-        public EventCommonMethod EventHide;
+        private Guid _id;
 
-        public void Release()
+        Guid getId()
         {
-            EventClose = null;
-            EventMinimize = null;
-            EventHide = null;
+            return _id;
         }
 
-        internal Object EngineLocker = new Object();
-        private CoreWindow handler;
-        public CoreWindow GetCoreWindow()
+        void setId(Guid value)
         {
-            return handler;
+            _id = value;
         }
-        internal void SetCoreWindow(CoreWindow window)
+
+        private CoreWindow _coreWindow;
+        internal CoreWindow GetCoreWindow()
         {
-            if (handler != null && handler.Equals(window)) return;
-            handler = window;
-            Id = handler.GetWindowGuid();
+            return _coreWindow;
+        }
+        internal void SetCoreWindow()
+        {
+            _id = _coreWindow.GetWindowGuid();
             Monitor.Enter(wndLock);
             try
             {
-                WindowLayoutBox.InitWindow(this);
+                WindowsBox.InitWindow(_coreWindow);
                 SetFocusedItem(_window);
             }
             catch (Exception ex)
@@ -62,251 +61,49 @@ namespace SpaceVIL
         private Task thread_manager;
         private ActionManager manager;
 
-        public WindowLayout(
-            string name,
-            string title,
-            int width = 300,
-            int height = 300,
-            bool border_hidden = false
-            )
+        internal WindowLayout(CoreWindow cWindow)
         {
-            SetWindowName(name);
-            SetWindowTitle(title);
-
-            SetWidth(width);
-            SetHeight(height);
-
-            IsDialog = false;
-            IsBorderHidden = border_hidden;
-            IsClosed = true;
-            IsHidden = false;
-            IsResizeble = true;
-            IsCentered = false;
-            IsFocusable = true;
-            IsAlwaysOnTop = false;
-            IsOutsideClickClosable = false;
-            IsMaximized = false;
-
-            manager = new ActionManager(this);
-            engine = new DrawEngine(this);
-            EventClose += Close;
+            _coreWindow = cWindow;
+            manager = new ActionManager(_coreWindow);
+            engine = new DrawEngine(_coreWindow);
+            _coreWindow.EventClose += Close;
         }
 
         private WContainer _window;
-        public WContainer GetWindow()
+        internal WContainer GetContainer()
         {
             return _window;
         }
-        public void SetWindow(WContainer window)
+        internal void SetWindow(WContainer window)
         {
             _window = window;
         }
-        public void SetBackground(Color color)
-        {
-            _window.SetBackground(color);
-        }
-        public void SetBackground(int r, int g, int b)
-        {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            _window.SetBackground(GraphicsMathService.ColorTransform(r, g, b)); //Color.FromArgb(255, r, g, b));
-        }
-        public void SetBackground(int r, int g, int b, int a)
-        {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            _window.SetBackground(GraphicsMathService.ColorTransform(r, g, b, a)); //Color.FromArgb(a, r, g, b));
-        }
-        public void SetBackground(float r, float g, float b)
-        {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            _window.SetBackground(GraphicsMathService.ColorTransform(r, g, b)); //Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
-        }
-        public void SetBackground(float r, float g, float b, float a)
-        {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            _window.SetBackground(GraphicsMathService.ColorTransform(r, g, b, a)); //Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
-        }
-        public Color GetBackground()
-        {
-            return _window.GetBackground();
-        }
-        public void SetPadding(Indents padding)
-        {
-            _window.SetPadding(padding);
-        }
-        public void SetPadding(int left = 0, int top = 0, int right = 0, int bottom = 0)
-        {
-            _window.SetPadding(left, top, right, bottom);
-        }
-        public void AddItem(IBaseItem item)
-        {
-            _window.AddItem(item);
-        }
-        public void AddItems(params IBaseItem[] items)
-        {
-            foreach (var item in items)
-            {
-                _window.AddItem(item);
-            }
-        }
-
-        internal Guid Id { get; set; }
-
-        private string _name;
-        internal void SetWindowName(string name)
-        {
-            _name = name;
-        }
-        public string GetWindowName()
-        {
-            return _name;
-        }
-
-        private string _title;
-        public void SetWindowTitle(string title)
-        {
-            _title = title;
-        }
-        public string GetWindowTitle()
-        {
-            return _title;
-        }
-
-        //geometry
-        private Geometry _itemGeometry = new Geometry();
-        public void SetMinWidth(int width)
-        {
-            _itemGeometry.SetMinWidth(width);
-            _window?.SetMinWidth(width);
-        }
-        public void SetWidth(int width)
-        {
-            _itemGeometry.SetWidth(width);
-            if (_window != null)
-                _window.SetWidth(width);
-        }
-        public void SetMaxWidth(int width)
-        {
-            _itemGeometry.SetMaxWidth(width);
-            _window?.SetMaxWidth(width);
-        }
-        public void SetMinHeight(int height)
-        {
-            _itemGeometry.SetMinHeight(height);
-            _window?.SetMinHeight(height);
-        }
-        public void SetHeight(int height)
-        {
-            _itemGeometry.SetHeight(height);
-            if (_window != null)
-                _window.SetHeight(height);
-        }
-        public void SetMaxHeight(int height)
-        {
-            _itemGeometry.SetMaxHeight(height);
-            _window?.SetMaxHeight(height);
-        }
-        public int GetMinWidth()
-        {
-            return _itemGeometry.GetMinWidth();
-        }
-        public int GetWidth()
-        {
-            return _itemGeometry.GetWidth();
-        }
-        public int GetMaxWidth()
-        {
-            return _itemGeometry.GetMaxWidth();
-        }
-        public int GetMinHeight()
-        {
-            return _itemGeometry.GetMinHeight();
-        }
-        public int GetHeight()
-        {
-            return _itemGeometry.GetHeight();
-        }
-        public int GetMaxHeight()
-        {
-            return _itemGeometry.GetMaxHeight();
-        }
-        public void SetSize(int width, int height)
-        {
-            SetWidth(width);
-            SetHeight(height);
-        }
-        public void SetMinSize(int width, int height)
-        {
-            SetMinWidth(width);
-            SetMinHeight(height);
-        }
-        public void SetMaxSize(int width, int height)
-        {
-            SetMaxWidth(width);
-            SetMaxHeight(height);
-        }
-        public int[] GetSize()
-        {
-            return _itemGeometry.GetSize();
-        }
-
-        //position
-        private Position _itemPosition = new Position();
-        public void SetX(int x)
-        {
-            _itemPosition.SetX(x);
-        }
-        public int GetX()
-        {
-            return _itemPosition.GetX();
-        }
-        public void SetY(int y)
-        {
-            _itemPosition.SetY(y);
-        }
-        public int GetY()
-        {
-            return _itemPosition.GetY();
-        }
-
-        private bool _is_main = false;
-
-        public void SetMainThread()
-        {
-            _is_main = true;
-        }
+        
         //methods
-        public void Show()
+        internal void Show()
         {
-            if (IsHidden)
+            if (_coreWindow.IsHidden)
                 SetHidden(false);
-            IsClosed = false;
+            _coreWindow.IsClosed = false;
 
-            engine._handler.Maximized = IsMaximized;
-            engine._handler.Visible = !IsHidden;
-            engine._handler.Resizeble = IsResizeble;
-            engine._handler.BorderHidden = IsBorderHidden;
-            engine._handler.AppearInCenter = IsCentered;
-            engine._handler.Focusable = IsFocusable;
-            engine._handler.AlwaysOnTop = IsAlwaysOnTop;
-            engine._handler.GetPointer().SetX(GetX());
-            engine._handler.GetPointer().SetY(GetY());
+            engine._handler.Maximized = _coreWindow.IsMaximized;
+            engine._handler.Visible = !_coreWindow.IsHidden;
+            engine._handler.Resizeble = _coreWindow.IsResizable;
+            engine._handler.BorderHidden = _coreWindow.IsBorderHidden;
+            engine._handler.AppearInCenter = _coreWindow.IsCentered;
+            engine._handler.Focusable = _coreWindow.IsFocusable;
+            engine._handler.AlwaysOnTop = _coreWindow.IsAlwaysOnTop;
+            engine._handler.GetPointer().SetX(_coreWindow.GetX());
+            engine._handler.GetPointer().SetY(_coreWindow.GetY());
 
             thread_manager = new Task(() => manager.StartManager());
             thread_manager.Start();
 
             if (CommonService.GetOSType() == OSType.Mac)
             {
-                if (!WindowLayoutBox.IsAnyWindowRunning())
+                if (!WindowsBox.IsAnyWindowRunning())
                 {
-                    WindowLayoutBox.SetWindowRunning(this);
+                    WindowsBox.SetWindowRunning(_coreWindow);
                     engine.Init();
                 }
             }
@@ -323,14 +120,14 @@ namespace SpaceVIL
 
             thread_engine = new Thread(() => engine.Init());
 
-            if (IsDialog)
+            if (_coreWindow.IsDialog)
             {
                 Monitor.Enter(wndLock);
                 try
                 {
-                    ParentGUID = WindowLayoutBox.LastFocusedWindow.Id;
-                    WindowLayoutBox.AddToWindowDispatcher(this);
-                    WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = false;
+                    ParentGUID = WindowsBox.LastFocusedWindow.GetWindowGuid();
+                    WindowsBox.AddToWindowDispatcher(_coreWindow);
+                    WindowsBox.GetWindowInstance(ParentGUID).SetFocusable(false);
                 }
                 catch (Exception ex)
                 {
@@ -350,12 +147,12 @@ namespace SpaceVIL
             }
         }
 
-        public void Close()
+        internal void Close()
         {
             if (CommonService.GetOSType() == OSType.Mac)
             {
                 engine._handler.SetToClose();
-                WindowLayoutBox.SetWindowRunning(null);
+                WindowsBox.SetWindowRunning(null);
             }
             else
             {
@@ -367,20 +164,20 @@ namespace SpaceVIL
                 manager.StopManager();
                 manager.Execute.Set();
             }
-            IsClosed = true;
+            _coreWindow.IsClosed = true;
         }
 
         private void closeInsideNewThread()
         {
-            if (IsDialog)
+            if (_coreWindow.IsDialog)
             {
                 engine._handler.SetToClose();
                 SetWindowFocused();
                 Monitor.Enter(wndLock);
                 try
                 {
-                    WindowLayoutBox.RemoveWindow(this);
-                    WindowLayoutBox.RemoveFromWindowDispatcher(this);
+                    WindowsBox.RemoveWindow(_coreWindow);
+                    WindowsBox.RemoveFromWindowDispatcher(_coreWindow);
                 }
                 finally
                 {
@@ -394,23 +191,7 @@ namespace SpaceVIL
             }
         }
 
-        internal MSAA _msaa = MSAA.MSAA4x;
-
-        public void SetAntiAliasingQuality(MSAA msaa)
-        {
-            _msaa = msaa;
-        }
-
-        public bool IsDialog { get; set; }
-        public bool IsClosed { get; set; }
-        public bool IsHidden { get; set; }
-        public bool IsResizeble { get; set; }
-        public bool IsAlwaysOnTop { get; set; }
-        public bool IsBorderHidden { get; set; }
-        public bool IsCentered { get; set; }
-        public bool IsFocusable { get; set; }
-        public bool IsOutsideClickClosable { get; set; }
-        public bool IsFocused
+        internal bool IsFocused
         {
             get
             {
@@ -429,26 +210,32 @@ namespace SpaceVIL
             Monitor.Enter(wndLock);
             try
             {
-                if (WindowLayoutBox.GetWindowInstance(ParentGUID) != null)
-                    WindowLayoutBox.GetWindowInstance(ParentGUID).engine._handler.Focusable = true;
+                if (WindowsBox.GetWindowInstance(ParentGUID) != null)
+                    WindowsBox.GetWindowInstance(ParentGUID).SetFocusable(true);
             }
             finally
             {
                 Monitor.Exit(wndLock);
             }
         }
-        public void Minimize()
+        
+        internal void SetFocusable(bool value)
+        {
+            engine._handler.Focusable = value;
+        }
+
+        internal void Minimize()
         {
             engine.MinimizeWindow();
         }
-        public bool IsMaximized = false;
-        public void Maximize()
+        internal bool IsMaximized = false;
+        internal void Maximize()
         {
             // engine.MaximizeWindow();
             engine.MaximizeRequest = true;
         }
 
-        public void IsFixed(bool flag)
+        internal void IsFixed(bool flag)
         {
             _window._is_fixed = flag;
         }
@@ -466,36 +253,36 @@ namespace SpaceVIL
                 manager.Execute.Set();
         }
 
-        public void SetFocusedItem(Prototype item)
+        internal void SetFocusedItem(Prototype item)
         {
             engine.SetFocusedItem(item);
         }
-        public Prototype GetFocusedItem()
+        internal Prototype GetFocusedItem()
         {
             return engine.GetFocusedItem();
         }
-        public void SetFocus(bool value)
+        internal void SetFocus(bool value)
         {
             engine.Focus(engine._handler.GetWindowId(), value);
         }
-        public void ResetItems()
+        internal void ResetItems()
         {
             engine.ResetItems();
         }
-        public void ResetFocus()
+        internal void ResetFocus()
         {
             engine.ResetFocus();
         }
 
-        public void SetIcon(Image icon_big, Image icon_small)
+        internal void SetIcon(Image icon_big, Image icon_small)
         {
             engine.SetIcons(icon_big, icon_small);
         }
 
-        public void SetHidden(bool value)
+        internal void SetHidden(bool value)
         {
             engine._handler.SetHidden(value);
-            IsHidden = value;
+            _coreWindow.IsHidden = value;
         }
 
         private float _scaleWidth = 1.0f;
@@ -514,7 +301,7 @@ namespace SpaceVIL
             _scaleHeight = h;
         }
 
-        public void SetRenderFrequency(RedrawFrequency value)
+        internal void SetRenderFrequency(RedrawFrequency value)
         {
             Monitor.Enter(EngineLocker);
             try
@@ -526,7 +313,7 @@ namespace SpaceVIL
                 Monitor.Exit(EngineLocker);
             }
         }
-        public RedrawFrequency GetRenderFrequency()
+        internal RedrawFrequency GetRenderFrequency()
         {
             Monitor.Enter(EngineLocker);
             try
@@ -542,7 +329,7 @@ namespace SpaceVIL
         internal int RatioW = -1;
         internal int RatioH = -1;
         internal bool IsKeepAspectRatio = false;
-        public void SetAspectRatio(int w, int h)
+        internal void SetAspectRatio(int w, int h)
         {
             IsKeepAspectRatio = true;
             RatioW = w;

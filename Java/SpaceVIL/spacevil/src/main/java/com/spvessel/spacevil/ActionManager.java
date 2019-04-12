@@ -14,10 +14,10 @@ class ActionManager {
 
     ManualResetEvent execute = new ManualResetEvent(false);
     private Lock managerLock = new ReentrantLock();
-    private WindowLayout _handler;
+    private CoreWindow _handler;
     private boolean _stoped;
 
-    ActionManager(WindowLayout wnd) {
+    ActionManager(CoreWindow wnd) {
         _handler = wnd;
     }
 

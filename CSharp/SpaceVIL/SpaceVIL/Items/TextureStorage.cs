@@ -788,7 +788,7 @@ namespace SpaceVIL
             try
             {
                 float _screenScale = 1;
-                WindowLayout wLayout = GetHandler();
+                CoreWindow wLayout = GetHandler();
                 if (wLayout == null || wLayout.GetDpiScale() == null)
                     _screenScale = 1;
                 else

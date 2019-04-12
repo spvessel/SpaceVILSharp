@@ -26,9 +26,9 @@ abstract public class DialogItem extends Prototype {
         addItem(window);
     }
 
-    WindowLayout _handler = null;
+    CoreWindow _handler = null;
 
-    public void show(WindowLayout handler) {
+    public void show(CoreWindow handler) {
         _handler = handler;
         // setHandler(handler);
         // initElements();
@@ -39,7 +39,7 @@ abstract public class DialogItem extends Prototype {
 
     public void close() {
         // ItemsLayoutBox.addItem(getHandler(), this, LayoutType.DIALOG);
-        _handler.getWindow().removeItem(this);
+        _handler.removeItem(this);
     }
 
     public EventCommonMethod onCloseDialog = new EventCommonMethod();

@@ -38,57 +38,57 @@ public class ItemsLayoutBox {
         layouts.put(l.getId(), l);
     }
 
-    static void addItem(WindowLayout layout, InterfaceBaseItem item, LayoutType type) {
+    static void addItem(CoreWindow layout, InterfaceBaseItem item, LayoutType type) {
         switch (type) {
         case STATIC:
-            layouts.get(layout.getId()).getItems().add(item);
+            layouts.get(layout.getWindowGuid()).getItems().add(item);
             break;
         case FLOATING:
-            layouts.get(layout.getId()).getFloatItems().add(item);
+            layouts.get(layout.getWindowGuid()).getFloatItems().add(item);
             break;
         case DIALOG:
-            layouts.get(layout.getId()).getDialogItems().add(item);
+            layouts.get(layout.getWindowGuid()).getDialogItems().add(item);
             break;
         default:
-            layouts.get(layout.getId()).getItems().add(item);
+            layouts.get(layout.getWindowGuid()).getItems().add(item);
             break;
         }
     }
 
-    static boolean removeItem(WindowLayout layout, InterfaceBaseItem item, LayoutType type) {
+    static boolean removeItem(CoreWindow layout, InterfaceBaseItem item, LayoutType type) {
         switch (type) {
         case STATIC:
-            return layouts.get(layout.getId()).getItems().remove(item);
+            return layouts.get(layout.getWindowGuid()).getItems().remove(item);
 //            break;
         case FLOATING:
-            return layouts.get(layout.getId()).getFloatItems().remove(item);
+            return layouts.get(layout.getWindowGuid()).getFloatItems().remove(item);
 //            break;
         case DIALOG:
-            return layouts.get(layout.getId()).getDialogItems().remove(item);
+            return layouts.get(layout.getWindowGuid()).getDialogItems().remove(item);
 //            break;
         default:
-            return layouts.get(layout.getId()).getItems().remove(item);
+            return layouts.get(layout.getWindowGuid()).getItems().remove(item);
 //            break;
         }
     }
 
-    static public String[] getListOfItemsNames(WindowLayout layout) {
-        String[] result = new String[layouts.get(layout.getId()).getItems().size()];
+    static public String[] getListOfItemsNames(CoreWindow layout) {
+        String[] result = new String[layouts.get(layout.getWindowGuid()).getItems().size()];
         for (int i = 0; i < result.length; i++) {
-            result[i] = layouts.get(layout.getId()).getItems().get(i).getItemName();
+            result[i] = layouts.get(layout.getWindowGuid()).getItems().get(i).getItemName();
         }
         return result;
     }
 
-    static public String[] getListOfItemsColors(WindowLayout layout) {
-        String[] result = new String[layouts.get(layout.getId()).getItems().size()];
+    static public String[] getListOfItemsColors(CoreWindow layout) {
+        String[] result = new String[layouts.get(layout.getWindowGuid()).getItems().size()];
         for (int i = 0; i < result.length; i++) {
-            result[i] = layouts.get(layout.getId()).getItems().get(i).getBackground().toString();
+            result[i] = layouts.get(layout.getWindowGuid()).getItems().get(i).getBackground().toString();
         }
         return result;
     }
 
-    static public void printListOfItems(WindowLayout layout) {
+    static public void printListOfItems(CoreWindow layout) {
         String[] list = getListOfItemsNames(layout);
         for (String item : list) {
             System.out.println(item);

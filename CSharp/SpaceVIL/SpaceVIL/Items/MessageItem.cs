@@ -205,7 +205,7 @@ namespace SpaceVIL
         }
 
 
-        public override void Show(WindowLayout handler)
+        public override void Show(CoreWindow handler)
         {
             _result = false;
             base.Show(handler);

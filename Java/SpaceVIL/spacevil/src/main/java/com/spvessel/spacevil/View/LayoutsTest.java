@@ -13,17 +13,20 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 public class LayoutsTest extends ActiveWindow {
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("LayoutsTest", "LayoutsTest", 1000, 1000, true);
-        setHandler(Handler);
-        Handler.setMinSize(250, 200);
-        Handler.setPadding(2, 2, 2, 2);
-        Handler.setBackground(45, 45, 45);
+        isBorderHidden = true;
+        setSize(1000, 1000);
+        setWindowName("LayoutsTest");
+        setWindowTitle("LayoutsTest");
 
-        Handler.setRenderFrequency(RedrawFrequency.ULTRA);
+        setMinSize(250, 200);
+        setPadding(2, 2, 2, 2);
+        setBackground(45, 45, 45);
+
+        setRenderFrequency(RedrawFrequency.ULTRA);
 
         // DragAnchor
         TitleBar title = new TitleBar("LayoutsTest");
-        Handler.addItem(title);
+        addItem(title);
 
         // Bar
         VerticalStack btn_bar = new VerticalStack();
@@ -34,7 +37,7 @@ public class LayoutsTest extends ActiveWindow {
         btn_bar.setHeightPolicy(SizePolicy.EXPAND);
         btn_bar.setSpacing(10, 10);
         btn_bar.setMargin(0, 30, 0, 0);
-        Handler.addItem(btn_bar);
+        addItem(btn_bar);
 
         // Frame
         HorizontalStack frame = new HorizontalStack();

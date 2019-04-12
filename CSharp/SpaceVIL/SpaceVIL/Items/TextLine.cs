@@ -72,7 +72,7 @@ namespace SpaceVIL
                     _letEndPos.Add(modL.xBeg + modL.xShift + modL.width);
                 }
 
-                WindowLayout wLayout = GetHandler();
+                CoreWindow wLayout = GetHandler();
                 if (wLayout == null || wLayout.GetDpiScale() == null)
                     _screenScale = 0;
                 else
@@ -130,7 +130,7 @@ namespace SpaceVIL
             Monitor.Enter(textLock);
             try
             {
-                WindowLayout wLayout = GetHandler();
+                CoreWindow wLayout = GetHandler();
                 if (wLayout != null && wLayout.GetDpiScale() != null)
                 {
                     float scl = wLayout.GetDpiScale()[0];

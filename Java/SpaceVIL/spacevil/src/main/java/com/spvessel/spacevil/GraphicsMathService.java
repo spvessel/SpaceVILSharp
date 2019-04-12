@@ -48,7 +48,7 @@ public final class GraphicsMathService {
         return new Color((int) r, (int) g, (int) b, (int) a);
     }
 
-    static List<float[]> toGL(InterfaceBaseItem item, WindowLayout handler) // where TLayout : VisualItem
+    static List<float[]> toGL(InterfaceBaseItem item, CoreWindow handler) // where TLayout : VisualItem
     {
         if (item.getTriangles() == null)
             return null;
@@ -63,7 +63,7 @@ public final class GraphicsMathService {
         return result;
     }
 
-    static List<float[]> toGL(List<float[]> triangles, WindowLayout handler) // where TLayout : VisualItem
+    static List<float[]> toGL(List<float[]> triangles, CoreWindow handler) // where TLayout : VisualItem
     {
         List<float[]> result = new LinkedList<>();
 
@@ -75,7 +75,7 @@ public final class GraphicsMathService {
         return result;
     }
 
-    static float[] toGL(float[] triangles, WindowLayout handler) // where TLayout : VisualItem
+    static float[] toGL(float[] triangles, CoreWindow handler) // where TLayout : VisualItem
     {
         for (int i = 0; i < triangles.length / 2; i++) {
             triangles[i * 2 + 0] /= (((float) handler.getWidth()) * 2.0f - 1.0f);

@@ -49,7 +49,7 @@ namespace SpaceVIL
         /// Constructs a ContextMenu
         /// </summary>
         /// <param name="handler"> parent window for the ContextMenu </param>
-        public ContextMenu(WindowLayout handler)
+        public ContextMenu(CoreWindow handler)
         {
             SetPassEvents(false);
             SetVisible(false);
@@ -60,7 +60,7 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ContextMenu)));
         }
 
-        public ContextMenu(WindowLayout handler, params MenuItem[] items) : this(handler)
+        public ContextMenu(CoreWindow handler, params MenuItem[] items) : this(handler)
         {
             foreach (MenuItem item in items)
                 AddItem(item);
@@ -103,7 +103,7 @@ namespace SpaceVIL
         private void HideDependentMenus()
         {
             //тут находит еще одно меню, у ItemList
-            foreach (var context_menu in ItemsLayoutBox.GetLayoutFloatItems(GetHandler().Id))
+            foreach (var context_menu in ItemsLayoutBox.GetLayoutFloatItems(GetHandler().GetWindowGuid()))
             {
                 ContextMenu menu = context_menu as ContextMenu;
                 if (menu != null && !menu.Equals(this))

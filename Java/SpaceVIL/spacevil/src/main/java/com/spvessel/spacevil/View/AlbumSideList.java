@@ -22,7 +22,7 @@ public class AlbumSideList extends SideArea {
     private ListBox _albumList = new ListBox();
     private ButtonCore _addButton = new ButtonCore();
 
-    public AlbumSideList(WindowLayout handler, Side attachSide) {
+    public AlbumSideList(CoreWindow handler, Side attachSide) {
         super(handler, attachSide);
     }
 

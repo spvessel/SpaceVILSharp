@@ -32,7 +32,7 @@ public class LoadingScreen extends Prototype {
         return _text_object.isVisible();
     }
 
-    private WindowLayout _handler = null;
+    private CoreWindow _handler = null;
 
     public LoadingScreen() {
         setItemName("LoadingScreen_" + count++);
@@ -102,7 +102,7 @@ public class LoadingScreen extends Prototype {
         }
     }
 
-    public void show(WindowLayout handler) {
+    public void show(CoreWindow handler) {
         _handler = handler;
         _handler.addItem(this);
         _handler.setFocusedItem(this);
@@ -129,7 +129,7 @@ public class LoadingScreen extends Prototype {
     }
 
     private void Close() {
-        _handler.getWindow().removeItem(this);
+        _handler.removeItem(this);
     }
 
     /**

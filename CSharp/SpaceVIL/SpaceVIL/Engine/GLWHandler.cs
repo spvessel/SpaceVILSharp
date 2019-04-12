@@ -22,7 +22,7 @@ namespace SpaceVIL
             // _scaleHeight = h;
             // Console.WriteLine(String.Format("{0:0.0} {1:0.0}", w, h));
             DisplayService.SetDisplayDpiScale(w);
-            _w_layout.SetDpiScale(w, h);
+            _coreWindow.SetDpiScale(w, h);
         }
 
         ///////////////////////////////////////////////
@@ -55,10 +55,10 @@ namespace SpaceVIL
         }
         ///////////////////////////////////////////////
 
-        private WindowLayout _w_layout;
-        internal WindowLayout GetLayout()
+        private CoreWindow _coreWindow;
+        internal CoreWindow GetCoreWindow()
         {
-            return _w_layout;
+            return _coreWindow;
         }
         Glfw.Window _window;
         internal Glfw.Window GetWindowId()
@@ -68,9 +68,9 @@ namespace SpaceVIL
         internal uint[] GVAO = new uint[1];
 
         internal GLWHandler() { }
-        internal GLWHandler(WindowLayout handler)
+        internal GLWHandler(CoreWindow handler)
         {
-            _w_layout = handler;
+            _coreWindow = handler;
             WPosition.SetX(0);
             WPosition.SetY(0);
         }
@@ -82,7 +82,7 @@ namespace SpaceVIL
             // Glfw.DefaultWindowHints();
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.OpenglProfile, Glfw.OpenGLProfile.Core);
-            Glfw.WindowHint(Glfw.Hint.Samples, _w_layout._msaa);
+            Glfw.WindowHint(Glfw.Hint.Samples, _coreWindow._msaa);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 3);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
 
@@ -93,46 +93,46 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Maximized, Maximized);
             Glfw.WindowHint(Glfw.Hint.Visible, false);
 
-            _window = Glfw.CreateWindow(_w_layout.GetWidth(), _w_layout.GetHeight(), _w_layout.GetWindowTitle());
+            _window = Glfw.CreateWindow(_coreWindow.GetWidth(), _coreWindow.GetHeight(), _coreWindow.GetWindowTitle());
 
             if (!_window)
             {
-                LogService.Log().LogText("Create window fail - " + GetLayout().GetWindowTitle());
-                throw new SpaceVILException("SpaceVILException: Create window fail - " + GetLayout().GetWindowTitle());
+                LogService.Log().LogText("Create window fail - " + GetCoreWindow().GetWindowTitle());
+                throw new SpaceVILException("SpaceVILException: Create window fail - " + GetCoreWindow().GetWindowTitle());
             }
             Glfw.MakeContextCurrent(_window);
 
             // Console.WriteLine("VIDSIZE: " + Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width
             //             + " " + Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height);
 
-            // Console.WriteLine("WSIZE: " + _w_layout.GetWidth() + " " + _w_layout.GetHeight());
+            // Console.WriteLine("WSIZE: " + _coreWindow.GetWidth() + " " + _coreWindow.GetHeight());
             int w, h;
             Glfw.GetFramebufferSize(_window, out w, out h);
             // Console.WriteLine("FBSIZE: " + w + " " + h);
 
-            SetDpiScale((float)w / (float)_w_layout.GetWidth(), (float)h / (float)_w_layout.GetHeight());
+            SetDpiScale((float)w / (float)_coreWindow.GetWidth(), (float)h / (float)_coreWindow.GetHeight());
 
             if (AppearInCenter)
             {
-                GetPointer().SetX((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - _w_layout.GetWidth()) / 2);
-                GetPointer().SetY((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - _w_layout.GetHeight()) / 2);
-                // _w_layout.SetX(WPosition.GetX());
-                // _w_layout.SetY(WPosition.GetY());
+                GetPointer().SetX((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - _coreWindow.GetWidth()) / 2);
+                GetPointer().SetY((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - _coreWindow.GetHeight()) / 2);
+                // _coreWindow.SetX(WPosition.GetX());
+                // _coreWindow.SetY(WPosition.GetY());
             }
             else
             {
-                // WPosition.SetX(_w_layout.GetX());
-                // WPosition.SetY(_w_layout.GetY());
-                _w_layout.SetX(200);
-                _w_layout.SetY(50);
+                // WPosition.SetX(_coreWindow.GetX());
+                // WPosition.SetY(_coreWindow.GetY());
+                _coreWindow.SetX(200);
+                _coreWindow.SetY(50);
                 GetPointer().SetX(200);
                 GetPointer().SetY(50);
             }
-            Glfw.SetWindowSizeLimits(_window, _w_layout.GetMinWidth(), _w_layout.GetMinHeight(), _w_layout.GetMaxWidth(), _w_layout.GetMaxHeight());
+            Glfw.SetWindowSizeLimits(_window, _coreWindow.GetMinWidth(), _coreWindow.GetMinHeight(), _coreWindow.GetMaxWidth(), _coreWindow.GetMaxHeight());
             Glfw.SetWindowPos(_window, WPosition.GetX(), WPosition.GetY());
 
-            if (_w_layout.IsKeepAspectRatio)
-                Glfw.SetWindowAspectRatio(_window, _w_layout.RatioW, _w_layout.RatioH);
+            if (_coreWindow.IsKeepAspectRatio)
+                Glfw.SetWindowAspectRatio(_window, _coreWindow.RatioW, _coreWindow.RatioH);
 
             if (Visible)
                 Glfw.ShowWindow(_window);

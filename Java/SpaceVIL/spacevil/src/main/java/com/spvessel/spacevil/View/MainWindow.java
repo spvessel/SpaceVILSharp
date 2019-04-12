@@ -27,11 +27,14 @@ public class MainWindow extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("MainWindow", "MainWindow", 800, 200, false);
-        setHandler(Handler);
+        isBorderHidden = true;
+        setSize(800, 200);
+        setWindowName("MainWindow");
+        setWindowTitle("MainWindow");
+        setMinSize(500, 100);
+        setAspectRatio(4, 1);
+
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
-        Handler.setMinSize(500, 100);
-        Handler.setAspectRatio(4, 1);
         // Handler.eventClose.clear();
         // Handler.eventClose.add(() -> {
         // MessageItem msg = new MessageItem("Close?", "Are You sure?");
@@ -62,14 +65,14 @@ public class MainWindow extends ActiveWindow {
         title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
         title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
         // title.setIcon(iBig, 20, 20);
-        Handler.addItem(title);
+        addItem(title);
 
         Grid grid = new Grid(1, 7);
         grid.setMargin(0, 0, 0, 30);
         grid.setPadding(6, 6, 6, 6);
         grid.setBackground(70, 70, 70);
         grid.setSpacing(6, 6);
-        Handler.addItem(grid);
+        addItem(grid);
 
         Font font = DefaultsService.getDefaultFont(Font.PLAIN, 16);
         // Font font = DefaultsService.getDefaultFont(18);
@@ -87,7 +90,7 @@ public class MainWindow extends ActiveWindow {
         state.border.setFill(new Color(255, 255, 255, 200));
         state.border.setRadius(new CornerRadius(12, 12, 6, 6));
         btn_layout.addItemState(ItemStateType.HOVERED, state);
-        InterfaceMouseMethodState layout_click = (sender, args) -> WindowLayoutBox.tryShow("LayoutsTest");
+        InterfaceMouseMethodState layout_click = (sender, args) -> WindowsBox.tryShow("LayoutsTest");
         btn_layout.eventMouseClick.add(layout_click);
 
         ButtonCore btn_settings = new ButtonCore("Settings");
@@ -95,7 +98,7 @@ public class MainWindow extends ActiveWindow {
         btn_settings.setToolTip("Show Settings window.");
         btn_settings.setBackground(255, 181, 111);
         btn_settings.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        InterfaceMouseMethodState settings_click = (sender, args) -> WindowLayoutBox.tryShow("SettingsTest");
+        InterfaceMouseMethodState settings_click = (sender, args) -> WindowsBox.tryShow("SettingsTest");
         btn_settings.eventMouseClick.add(settings_click);
 
         ButtonCore btn_label = new ButtonCore("Label");
@@ -118,7 +121,7 @@ public class MainWindow extends ActiveWindow {
         btn_flow.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         // btn_flow.setCursor(EmbeddedCursor.HAND);
         btn_flow.setCursor(iSmall, 10, 30);
-        InterfaceMouseMethodState flow_click = (sender, args) -> WindowLayoutBox.tryShow("FlowTest");
+        InterfaceMouseMethodState flow_click = (sender, args) -> WindowsBox.tryShow("FlowTest");
         btn_flow.eventMouseClick.add(flow_click);
 
         ButtonCore btn_complex = new ButtonCore("Complex");
@@ -126,7 +129,7 @@ public class MainWindow extends ActiveWindow {
         btn_complex.setToolTip("Show Complex window.");
         btn_complex.setBackground(114, 153, 211);
         btn_complex.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        InterfaceMouseMethodState complex_click = (sender, args) -> WindowLayoutBox.tryShow("ComplexTest");
+        InterfaceMouseMethodState complex_click = (sender, args) -> WindowsBox.tryShow("ComplexTest");
         btn_complex.eventMouseClick.add(complex_click);
 
         ButtonCore btn_image = new ButtonCore("Image");
@@ -134,7 +137,7 @@ public class MainWindow extends ActiveWindow {
         btn_image.setToolTip("Show Image window.");
         btn_image.setBackground(238, 174, 128);
         btn_image.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        InterfaceMouseMethodState img_click = (sender, args) -> WindowLayoutBox.tryShow("ImageTest");
+        InterfaceMouseMethodState img_click = (sender, args) -> WindowsBox.tryShow("ImageTest");
         btn_image.eventMouseClick.add(img_click);
 
         ButtonCore btn_input = new ButtonCore("Input");
@@ -144,7 +147,7 @@ public class MainWindow extends ActiveWindow {
         btn_input.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         btn_input.eventMouseClick.add((sender, args) -> {
             // System.out.println(WindowLayoutBox.getListOfWindows().length);
-            WindowLayoutBox.tryShow("InputTest");
+            WindowsBox.tryShow("InputTest");
         });
 
         grid.addItems(btn_layout, btn_settings, btn_label, btn_flow, btn_input, btn_image, btn_complex);
@@ -165,10 +168,12 @@ public class MainWindow extends ActiveWindow {
         mi4.eventMouseClick.add((sender, args) -> {
             System.out.println("mi4 click");
         });
-        ContextMenu menu = new ContextMenu(Handler, mi1, mi2, mi3, mi4);
+        ContextMenu menu = new ContextMenu(this, mi1, mi2, mi3, mi4);
         menu.setReturnFocus(btn_flow);
-        Handler.getWindow().eventMouseClick.add((sender, args) -> menu.show(sender, args));
-        Handler.getWindow().eventKeyPress.add((sender, args) -> {
+
+        
+        eventMouseClick.add((sender, args) -> menu.show(sender, args));
+        eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.MENU) {
                 MouseArgs margs = new MouseArgs();
                 margs.button = MouseButton.BUTTON_RIGHT;

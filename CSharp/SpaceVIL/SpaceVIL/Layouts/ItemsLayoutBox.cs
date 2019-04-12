@@ -35,46 +35,46 @@ namespace SpaceVIL
             ItemsLayout l = new ItemsLayout(_layout);
             layouts.Add(l.Id, l);
         }
-        static internal void AddItem(WindowLayout layout, IBaseItem item, LayoutType type)
+        static internal void AddItem(CoreWindow layout, IBaseItem item, LayoutType type)
         {
             switch (type)
             {
                 case LayoutType.Static:
-                    layouts[layout.Id].Items.Add(item);
+                    layouts[layout.GetWindowGuid()].Items.Add(item);
                     break;
                 case LayoutType.Floating:
-                    layouts[layout.Id].FloatItems.Add(item);
+                    layouts[layout.GetWindowGuid()].FloatItems.Add(item);
                     break;
                 case LayoutType.Dialog:
-                    layouts[layout.Id].DialogItems.Add(item);
+                    layouts[layout.GetWindowGuid()].DialogItems.Add(item);
                     break;
                 default:
-                    layouts[layout.Id].Items.Add(item);
+                    layouts[layout.GetWindowGuid()].Items.Add(item);
                     break;
             }
         }
-        static internal bool RemoveItem(WindowLayout layout, IBaseItem item, LayoutType type)
+        static internal bool RemoveItem(CoreWindow layout, IBaseItem item, LayoutType type)
         {
             switch (type)
             {
                 case LayoutType.Static:
-                    return layouts[layout.Id].Items.Remove(item);
+                    return layouts[layout.GetWindowGuid()].Items.Remove(item);
                     // break;
                 case LayoutType.Floating:
-                    return layouts[layout.Id].FloatItems.Remove(item);
+                    return layouts[layout.GetWindowGuid()].FloatItems.Remove(item);
                     // break;
                 case LayoutType.Dialog:
-                    return layouts[layout.Id].DialogItems.Remove(item);
+                    return layouts[layout.GetWindowGuid()].DialogItems.Remove(item);
                     // break;
                 default:
-                    return layouts[layout.Id].Items.Remove(item);
+                    return layouts[layout.GetWindowGuid()].Items.Remove(item);
                     // break;
             }
         }
 
-        static public string[] GetListOfItemsNames(WindowLayout layout) => layouts[layout.Id].Items.Select(_ => _.GetItemName()).ToArray();
-        static public string[] GetListOfItemsColors(WindowLayout layout) => layouts[layout.Id].Items.Select(_ => _.GetBackground().ToString()).ToArray();
-        static public void PrintListOfItems(WindowLayout layout)
+        static public string[] GetListOfItemsNames(CoreWindow layout) => layouts[layout.GetWindowGuid()].Items.Select(_ => _.GetItemName()).ToArray();
+        static public string[] GetListOfItemsColors(CoreWindow layout) => layouts[layout.GetWindowGuid()].Items.Select(_ => _.GetBackground().ToString()).ToArray();
+        static public void PrintListOfItems(CoreWindow layout)
         {
             string[] list = GetListOfItemsNames(layout);
             foreach (var item in list)

@@ -27,7 +27,7 @@ namespace SpaceVIL
             return _text_object.IsVisible();
         }
 
-        private WindowLayout _handler = null;
+        private CoreWindow _handler = null;
 
         public LoadingScreen()
         {
@@ -110,7 +110,7 @@ namespace SpaceVIL
             }
         }
 
-        public void Show(WindowLayout handler)
+        public void Show(CoreWindow handler)
         {
             _handler = handler;
             _handler.AddItem(this);
@@ -138,7 +138,7 @@ namespace SpaceVIL
 
         private void Close()
         {
-            _handler.GetWindow().RemoveItem(this);
+            _handler.RemoveItem(this);
         }
 
         /// <summary>

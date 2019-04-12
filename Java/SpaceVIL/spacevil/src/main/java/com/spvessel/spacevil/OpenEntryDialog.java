@@ -473,7 +473,7 @@ public class OpenEntryDialog extends OpenDialog {
     }
 
     @Override
-    public void show(WindowLayout handler) {
+    public void show(CoreWindow handler) {
         super.show(handler);
         _fileList.getArea().setFocus();
     }

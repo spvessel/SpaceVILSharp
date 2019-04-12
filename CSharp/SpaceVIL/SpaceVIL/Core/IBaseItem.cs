@@ -6,8 +6,8 @@ namespace SpaceVIL.Core
 {
     public interface IBaseItem : IItem, ISize, IPosition, IEventUpdate, IBehavior
     {
-        void SetHandler(WindowLayout handler);
-        WindowLayout GetHandler();
+        void SetHandler(CoreWindow handler);
+        CoreWindow GetHandler();
         void SetParent(Prototype parent);
         Prototype GetParent();
         void SetConfines();

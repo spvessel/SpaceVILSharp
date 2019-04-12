@@ -28,11 +28,11 @@ namespace SpaceVIL
             AddItem(Window);
         }
 
-        WindowLayout _handler = null;
+        CoreWindow _handler = null;
         /// <summary>
         /// Show DialogItem
         /// </summary>
-        public virtual void Show(WindowLayout handler)
+        public virtual void Show(CoreWindow handler)
         {
             // ItemsLayoutBox.AddItem(handler, this, LayoutType.Dialog);
             // SetHandler(handler);
@@ -44,7 +44,7 @@ namespace SpaceVIL
         public virtual void Close()
         {
             // ItemsLayoutBox.RemoveItem(GetHandler(), this, LayoutType.Dialog);
-            _handler.GetWindow().RemoveItem(this);
+            _handler.RemoveItem(this);
         }
 
         public EventCommonMethod OnCloseDialog;

@@ -60,7 +60,7 @@ namespace SpaceVIL
         /// Constructs a ComboBoxDropDown
         /// </summary>
         /// <param name="handler"> parent window for the ComboBoxDropDown </param>
-        public ComboBoxDropDown(WindowLayout handler)
+        public ComboBoxDropDown(CoreWindow handler)
         {
             SetPassEvents(false);
             SetVisible(false);

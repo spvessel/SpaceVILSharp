@@ -45,19 +45,18 @@ namespace View
         }
         public override void InitWindow()
         {
-            WindowLayout Handler = new WindowLayout(nameof(Containers), nameof(Containers), 400, 400, true);
-            SetHandler(Handler);
-            Handler.SetMinSize(400, 400);
-            Handler.IsCentered = true;
+            SetParameters(nameof(Containers), nameof(Containers), 400, 400, true);
+            this.SetMinSize(400, 400);
+            this.IsCentered = true;
 
             TitleBar title = new TitleBar(nameof(Containers));
             title.SetShadow(5, 0, 3, Color.FromArgb(150, 0, 0, 0));
-            Handler.AddItem(title);
+            this.AddItem(title);
 
             Frame cc = new Frame();
             cc.SetMargin(0, title.GetHeight() + 10, 0, 0);
             cc.SetBackground(50, 50, 50);
-            Handler.AddItem(cc);
+            this.AddItem(cc);
 
             // BlankItem b1 = GetBlankItem("Blank1");
             // BlankItem b2 = GetBlankItem("Blank2");
@@ -73,25 +72,25 @@ namespace View
             // b2.SetPassEvents(false);
             // // b2.SetPassEvents(true, InputEventType.KeyPress, InputEventType.KeyRelease);
 
-            // Handler.GetWindow().EventMouseClick += (sender, args) =>
+            // this.GetWindow().EventMouseClick += (sender, args) =>
             // {
-            //     Console.WriteLine(Handler.GetWindow().GetItemName() + " EventMouseClick");
+            //     Console.WriteLine(this.GetWindow().GetItemName() + " EventMouseClick");
             // };
-            // Handler.GetWindow().EventMouseDoubleClick += (sender, args) =>
+            // this.GetWindow().EventMouseDoubleClick += (sender, args) =>
             // {
-            //     Console.WriteLine(Handler.GetWindow().GetItemName() + " EventMouseDoubleClick");
+            //     Console.WriteLine(this.GetWindow().GetItemName() + " EventMouseDoubleClick");
             // };
-            // Handler.GetWindow().EventKeyPress += (sender, args) =>
+            // this.GetWindow().EventKeyPress += (sender, args) =>
             // {
-            //     Console.WriteLine(Handler.GetWindow().GetItemName() + " EventKeyPress");
+            //     Console.WriteLine(this.GetWindow().GetItemName() + " EventKeyPress");
             // };
-            // Handler.GetWindow().EventKeyRelease += (sender, args) =>
+            // this.GetWindow().EventKeyRelease += (sender, args) =>
             // {
-            //     Console.WriteLine(Handler.GetWindow().GetItemName() + " EventKeyRelease");
+            //     Console.WriteLine(this.GetWindow().GetItemName() + " EventKeyRelease");
             // };
-            // Handler.GetWindow().EventMouseHover += (sender, args) =>
+            // this.GetWindow().EventMouseHover += (sender, args) =>
             // {
-            //     Console.WriteLine(Handler.GetWindow().GetItemName() + " EventMouseHover");
+            //     Console.WriteLine(this.GetWindow().GetItemName() + " EventMouseHover");
             // };
 
             TabView tabs = new TabView();

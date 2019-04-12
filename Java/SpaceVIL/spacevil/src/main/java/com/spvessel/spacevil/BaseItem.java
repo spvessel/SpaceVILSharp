@@ -19,17 +19,17 @@ public abstract class BaseItem implements InterfaceBaseItem {
     int _confines_y_0 = 0;
     int _confines_y_1 = 0;
 
-    private WindowLayout _handler;
+    private CoreWindow _coreWindow;
 
     /**
-     * WindowLayout handler - window that contains the BaseItem
+     * CoreWindow handler - window that contains the BaseItem
      */
-    public void setHandler(WindowLayout handler) {
-        _handler = handler;
+    public void setHandler(CoreWindow handler) {
+        _coreWindow = handler;
     }
 
-    public WindowLayout getHandler() {
-        return _handler;
+    public CoreWindow getHandler() {
+        return _coreWindow;
     }
 
     // parent

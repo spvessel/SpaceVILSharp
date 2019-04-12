@@ -66,7 +66,7 @@ final class DrawEngine {
     private void findUnderFocusedItems(Prototype item) {
         Deque<Prototype> queue = new ArrayDeque<>();
 
-        if (item == _handler.getLayout().getWindow()) {
+        if (item == _handler.getCoreWindow().getLayout().getContainer()) {
             underFocusedItem = null;
             return;
         }
@@ -85,7 +85,7 @@ final class DrawEngine {
         if (focusedItem != null)
             focusedItem.setFocused(false);
         // set focus to WContainer
-        focusedItem = _handler.getLayout().getWindow();
+        focusedItem = _handler.getCoreWindow().getLayout().getContainer();
         focusedItem.setFocused(true);
         if (underFocusedItem != null)
             underFocusedItem.clear();
@@ -111,7 +111,7 @@ final class DrawEngine {
     // private Shader _fxaa;
     private Shader _blur;
 
-    DrawEngine(WindowLayout handler) {
+    DrawEngine(CoreWindow handler) {
         hoveredItems = new LinkedList<Prototype>();
         _handler = new GLWHandler(handler);
 
@@ -204,7 +204,7 @@ final class DrawEngine {
             _handler.clearEventsCallbacks();
             if (_handler.getWindowId() == NULL)
                 _handler.destroy();
-            _handler.getLayout().close();
+            _handler.getCoreWindow().getLayout().close();
             return;
         } finally {
             CommonService.GlobalLocker.unlock();
@@ -336,7 +336,7 @@ final class DrawEngine {
             String str = GLFWDropCallback.getName(paths, i);
             dargs.paths.add(str);
         }
-        assignActions(InputEventType.WINDOW_DROP, dargs, _handler.getLayout().getWindow(), false);
+        assignActions(InputEventType.WINDOW_DROP, dargs, _handler.getCoreWindow().getLayout().getContainer(), false);
     }
 
     // public static void printBytes(byte[] array, String name) {
@@ -389,45 +389,45 @@ final class DrawEngine {
         IntBuffer h = BufferUtils.createIntBuffer(1);
         engineEvent.setEvent(InputEventType.WINDOW_RESTORE);
 
-        if (_handler.getLayout().isMaximized) {
+        if (_handler.getCoreWindow().isMaximized) {
             glfwRestoreWindow(_handler.getWindowId());
-            _handler.getLayout().isMaximized = false;
+            _handler.getCoreWindow().isMaximized = false;
             glfwGetWindowSize(_handler.getWindowId(), w, h);
-            _handler.getLayout().setWidth(w.get(0));
-            _handler.getLayout().setHeight(h.get(0));
+            _handler.getCoreWindow().setWidth(w.get(0));
+            _handler.getCoreWindow().setHeight(h.get(0));
         } else {
             glfwMaximizeWindow(_handler.getWindowId());
-            _handler.getLayout().isMaximized = true;
+            _handler.getCoreWindow().isMaximized = true;
             glfwGetWindowSize(_handler.getWindowId(), w, h);
-            _handler.getLayout().setWidth(w.get(0));
-            _handler.getLayout().setHeight(h.get(0));
+            _handler.getCoreWindow().setWidth(w.get(0));
+            _handler.getCoreWindow().setHeight(h.get(0));
         }
         _inputLocker = false;
     }
 
     private void closeWindow(long wnd) {
         glfwSetWindowShouldClose(_handler.getWindowId(), false);
-        _handler.getLayout().eventClose.execute();
-        // _handler.getLayout().close();
+        _handler.getCoreWindow().eventClose.execute();
+        // _handler.getCoreWindow().close();
     }
 
     void focus(long wnd, boolean value) {
         engineEvent.resetAllEvents();
         _tooltip.initTimer(false);
-        _handler.getLayout().isFocused = value;
+        _handler.getCoreWindow().isFocused = value;
         if (value) {
             if (_handler.focusable) {
-                WindowLayoutBox.setCurrentFocusedWindow(_handler.getLayout());
+                WindowsBox.setCurrentFocusedWindow(_handler.getCoreWindow());
                 _handler.focused = value;
             }
         } else {
-            if (_handler.getLayout().isDialog) {
+            if (_handler.getCoreWindow().isDialog) {
                 _handler.focused = true;
             } else {
                 _handler.focused = value;
-                if (_handler.getLayout().isOutsideClickClosable) {
+                if (_handler.getCoreWindow().isOutsideClickClosable) {
                     resetItems();
-                    _handler.getLayout().close();
+                    _handler.getCoreWindow().close();
                 }
             }
         }
@@ -439,13 +439,13 @@ final class DrawEngine {
         // flag_resize = false;
 
         _tooltip.initTimer(false);
-        _handler.getLayout().setWidth(width);
-        _handler.getLayout().setHeight(height);
+        _handler.getCoreWindow().setWidth(width);
+        _handler.getCoreWindow().setHeight(height);
 
         // if (engineEvent.lastEvent().contains(InputEventType.WINDOW_RESTORE))
         // return;
 
-        // if (!_handler.getLayout().isBorderHidden) {
+        // if (!_handler.getCoreWindow().isBorderHidden) {
         // // glClearColor(0, 0, 0, 0);
         // update();
         // _handler.swap();
@@ -453,28 +453,28 @@ final class DrawEngine {
     }
 
     void setWindowSize(int w, int h) {
-        if (_handler.getLayout().isKeepAspectRatio) {
+        if (_handler.getCoreWindow().isKeepAspectRatio) {
             float currentW = w;
             float currentH = h;
 
-            float ratioW = _handler.getLayout().ratioW;
-            float ratioH = _handler.getLayout().ratioH;
+            float ratioW = _handler.getCoreWindow().ratioW;
+            float ratioH = _handler.getCoreWindow().ratioH;
 
             float xScale = (currentW / ratioW);
             float yScale = (currentH / ratioH);
 
             float scale = 0;
 
-            if ((_handler.getLayout().getWindow()._sides.contains(Side.RIGHT)
-                    && _handler.getLayout().getWindow()._sides.contains(Side.TOP))
-                    || (_handler.getLayout().getWindow()._sides.contains(Side.RIGHT)
-                            && _handler.getLayout().getWindow()._sides.contains(Side.BOTTOM))
-                    || (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)
-                            && _handler.getLayout().getWindow()._sides.contains(Side.TOP))
-                    || (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)
-                            && _handler.getLayout().getWindow()._sides.contains(Side.BOTTOM))
-                    || _handler.getLayout().getWindow()._sides.contains(Side.LEFT)
-                    || _handler.getLayout().getWindow()._sides.contains(Side.RIGHT))
+            if ((_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.RIGHT)
+                    && _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP))
+                    || (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.RIGHT)
+                            && _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.BOTTOM))
+                    || (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
+                            && _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP))
+                    || (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
+                            && _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.BOTTOM))
+                    || _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
+                    || _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.RIGHT))
                 scale = xScale;
             else
                 scale = yScale;
@@ -494,8 +494,8 @@ final class DrawEngine {
         _handler.getPointer().setX(xpos);
         _handler.getPointer().setY(ypos);
 
-        _handler.getLayout().setX(xpos);
-        _handler.getLayout().setY(ypos);
+        _handler.getCoreWindow().setX(xpos);
+        _handler.getCoreWindow().setY(ypos);
     }
 
     void setWindowPos(int x, int y) {
@@ -529,9 +529,9 @@ final class DrawEngine {
         _margs.position.setPosition((float) xpos, (float) ypos);
 
         if (engineEvent.lastEvent().contains(InputEventType.MOUSE_PRESS)) {
-            if (_handler.getLayout().isBorderHidden && _handler.getLayout().isResizable) {
-                int w = _handler.getLayout().getWidth();
-                int h = _handler.getLayout().getHeight();
+            if (_handler.getCoreWindow().isBorderHidden && _handler.getCoreWindow().isResizable) {
+                int w = _handler.getCoreWindow().getWidth();
+                int h = _handler.getCoreWindow().getHeight();
 
                 int x_handler = _handler.getPointer().getX();
                 int y_handler = _handler.getPointer().getY();
@@ -540,23 +540,23 @@ final class DrawEngine {
                 int x_press = ptrPress.getX();
                 int y_press = ptrPress.getY();
 
-                if (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)) {
-                    if (!(_handler.getLayout().getMinWidth() == _handler.getLayout().getWidth()
+                if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)) {
+                    if (!(_handler.getCoreWindow().getMinWidth() == _handler.getCoreWindow().getWidth()
                             && (x_release - x_press) >= 0)) {
                         int x5 = x_handler - x_global + (int) xpos - 5;
                         x_handler = x_global + x5;
                         w = w_global - x5;
                     }
                 }
-                if (_handler.getLayout().getWindow()._sides.contains(Side.RIGHT)) {
-                    if (!(x_release < _handler.getLayout().getMinWidth()
-                            && _handler.getLayout().getWidth() == _handler.getLayout().getMinWidth())) {
+                if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.RIGHT)) {
+                    if (!(x_release < _handler.getCoreWindow().getMinWidth()
+                            && _handler.getCoreWindow().getWidth() == _handler.getCoreWindow().getMinWidth())) {
                         w = x_release;
                     }
                     ptrPress.setX(x_release);
                 }
-                if (_handler.getLayout().getWindow()._sides.contains(Side.TOP)) {
-                    if (!(_handler.getLayout().getMinHeight() == _handler.getLayout().getHeight()
+                if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP)) {
+                    if (!(_handler.getCoreWindow().getMinHeight() == _handler.getCoreWindow().getHeight()
                             && (y_release - y_press) >= 0)) {
 
                         if (CommonService.getOSType() == OSType.MAC) {
@@ -569,9 +569,9 @@ final class DrawEngine {
                         }
                     }
                 }
-                if (_handler.getLayout().getWindow()._sides.contains(Side.BOTTOM)) {
-                    if (!(y_release < _handler.getLayout().getMinHeight()
-                            && _handler.getLayout().getHeight() == _handler.getLayout().getMinHeight())) {
+                if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.BOTTOM)) {
+                    if (!(y_release < _handler.getCoreWindow().getMinHeight()
+                            && _handler.getCoreWindow().getHeight() == _handler.getCoreWindow().getMinHeight())) {
 
                         if (CommonService.getOSType() == OSType.MAC)
                             y_handler = y_global;
@@ -580,29 +580,29 @@ final class DrawEngine {
                     }
                 }
 
-                if (_handler.getLayout().getWindow()._sides.size() != 0 && !_handler.getLayout().isMaximized) {
+                if (_handler.getCoreWindow().getLayout().getContainer()._sides.size() != 0 && !_handler.getCoreWindow().isMaximized) {
 
                     if (CommonService.getOSType() == OSType.MAC) {
                         setWindowSize(w, h);
-                        if (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)
-                                && _handler.getLayout().getWindow()._sides.contains(Side.TOP)) {
+                        if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
+                                && _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP)) {
                             setWindowPos(x_handler, (h_global - h) + y_global);
-                        } else if (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)
-                                || _handler.getLayout().getWindow()._sides.contains(Side.BOTTOM)
-                                || _handler.getLayout().getWindow()._sides.contains(Side.TOP)) {
+                        } else if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
+                                || _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.BOTTOM)
+                                || _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP)) {
                             setWindowPos(x_handler, y_handler);
                             _handler.getPointer().setY(y_handler);
                         }
                     } else {
-                        if (_handler.getLayout().getWindow()._sides.contains(Side.LEFT)
-                                || _handler.getLayout().getWindow()._sides.contains(Side.TOP))
+                        if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
+                                || _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP))
                             setWindowPos(x_handler, y_handler);
                         setWindowSize(w, h);
                     }
                 }
             }
 
-            if (_handler.getLayout().getWindow()._sides.size() == 0) {
+            if (_handler.getCoreWindow().getLayout().getContainer()._sides.size() == 0) {
                 int x_click = ptrClick.getX();
                 int y_click = ptrClick.getY();
                 _draggable = isInListHoveredItems(InterfaceDraggable.class);
@@ -612,7 +612,7 @@ final class DrawEngine {
                     engineEvent.setEvent(InputEventType.MOUSE_DRAG);
                     _draggable.eventMouseDrag.execute(_draggable, _margs);
                 } else if (anchor != null && !(hoveredItem instanceof ButtonCore)
-                        && !_handler.getLayout().isMaximized) {
+                        && !_handler.getCoreWindow().isMaximized) {
 
                     DoubleBuffer x_pos = BufferUtils.createDoubleBuffer(1);
                     DoubleBuffer y_pos = BufferUtils.createDoubleBuffer(1);
@@ -680,7 +680,7 @@ final class DrawEngine {
         if (_inputLocker)
             return;
 
-        _handler.getLayout().getWindow()._sides.clear();
+        _handler.getCoreWindow().getLayout().getContainer()._sides.clear();
 
         if (!_handler.focusable)
             return;
@@ -725,13 +725,13 @@ final class DrawEngine {
         }
 
         if (action == InputState.PRESS.getValue()
-                && _handler.getLayout().getWindow().getSides(ptrRelease.getX(), ptrRelease.getY()).size() != 0) {
-            _handler.getLayout().getWindow().saveLastFocus(focusedItem);
+                && _handler.getCoreWindow().getLayout().getContainer().getSides(ptrRelease.getX(), ptrRelease.getY()).size() != 0) {
+            _handler.getCoreWindow().getLayout().getContainer().saveLastFocus(focusedItem);
         }
 
         switch (action) {
         case GLFW_RELEASE:
-            _handler.getLayout().getWindow().restoreFocus();
+            _handler.getCoreWindow().getLayout().getContainer().restoreFocus();
             boolean is_double_click = isDoubleClick(hoveredItem);
 
             while (!tmp.isEmpty()) {
@@ -826,7 +826,7 @@ final class DrawEngine {
                             continue;// пропустить
                         if (f.isFocusable) {
                             if (f instanceof WindowAnchor)
-                                _handler.getLayout().getWindow().saveLastFocus(focusedItem);
+                                _handler.getCoreWindow().getLayout().getContainer().saveLastFocus(focusedItem);
                             else {
                                 focusedItem = f;
                                 focusedItem.setFocused(true);
@@ -858,10 +858,10 @@ final class DrawEngine {
         hoveredItems.clear();
 
         List<InterfaceBaseItem> layout_box_of_items = new LinkedList<InterfaceBaseItem>();
-        layout_box_of_items.add(_handler.getLayout().getWindow());
-        layout_box_of_items.addAll(getInnerItems(_handler.getLayout().getWindow()));
+        layout_box_of_items.add(_handler.getCoreWindow().getLayout().getContainer());
+        layout_box_of_items.addAll(getInnerItems(_handler.getCoreWindow().getLayout().getContainer()));
 
-        for (InterfaceBaseItem item : ItemsLayoutBox.getLayoutFloatItems(_handler.getLayout().getId())) {
+        for (InterfaceBaseItem item : ItemsLayoutBox.getLayoutFloatItems(_handler.getCoreWindow().getWindowGuid())) {
             if (!item.isVisible() || !item.isDrawable())
                 continue;
             layout_box_of_items.add(item);
@@ -871,7 +871,7 @@ final class DrawEngine {
         }
 
         // for (InterfaceBaseItem item :
-        // ItemsLayoutBox.getLayoutDialogItems(_handler.getLayout().getId())) {
+        // ItemsLayoutBox.getLayoutDialogItems(_handler.getCoreWindow().getId())) {
         // if (!item.isVisible() || !item.isDrawable())
         // continue;
         // layout_box_of_items.add(item);
@@ -914,19 +914,19 @@ final class DrawEngine {
             hoveredItem.setMouseHover(true);
             glfwSetCursor(_handler.getWindowId(), hoveredItem.getCursor().getCursor());
 
-            if ((xpos >= _handler.getLayout().getWindow().getWidth() - 5 && ypos <= 5)
-                    || (xpos >= _handler.getLayout().getWindow().getWidth() - 5
-                            && ypos >= _handler.getLayout().getWindow().getHeight() - 5)
-                    || (ypos >= _handler.getLayout().getWindow().getHeight() - 5 && xpos <= 5)
-                    || (ypos >= _handler.getLayout().getWindow().getHeight() - 5
-                            && xpos >= _handler.getLayout().getWindow().getWidth() - 5)
+            if ((xpos >= _handler.getCoreWindow().getLayout().getContainer().getWidth() - 5 && ypos <= 5)
+                    || (xpos >= _handler.getCoreWindow().getLayout().getContainer().getWidth() - 5
+                            && ypos >= _handler.getCoreWindow().getLayout().getContainer().getHeight() - 5)
+                    || (ypos >= _handler.getCoreWindow().getLayout().getContainer().getHeight() - 5 && xpos <= 5)
+                    || (ypos >= _handler.getCoreWindow().getLayout().getContainer().getHeight() - 5
+                            && xpos >= _handler.getCoreWindow().getLayout().getContainer().getWidth() - 5)
                     || (xpos <= 5 && ypos <= 5)) {
                 _handler.setCursorType(GLFW_CROSSHAIR_CURSOR);
             } else {
-                if (xpos > _handler.getLayout().getWindow().getWidth() - 5 || xpos <= 5)
+                if (xpos > _handler.getCoreWindow().getLayout().getContainer().getWidth() - 5 || xpos <= 5)
                     _handler.setCursorType(GLFW_HRESIZE_CURSOR);
 
-                if (ypos > _handler.getLayout().getWindow().getHeight() - 5 || ypos <= 5)
+                if (ypos > _handler.getCoreWindow().getLayout().getContainer().getHeight() - 5 || ypos <= 5)
                     _handler.setCursorType(GLFW_VRESIZE_CURSOR);
             }
 
@@ -1092,7 +1092,7 @@ final class DrawEngine {
             task.item = hoveredItem;
             task.action = action;
             task.args = args;
-            _handler.getLayout().setEventTask(task);
+            _handler.getCoreWindow().getLayout().setEventTask(task);
         } else {
             Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
             while (!tmp.isEmpty()) {
@@ -1104,12 +1104,12 @@ final class DrawEngine {
                 task.item = item;
                 task.action = action;
                 task.args = args;
-                _handler.getLayout().setEventTask(task);
+                _handler.getCoreWindow().getLayout().setEventTask(task);
                 if (!item.isPassEvents(action))
                     break;
             }
         }
-        _handler.getLayout().executePollActions();
+        _handler.getCoreWindow().getLayout().executePollActions();
     }
 
     // focused
@@ -1121,7 +1121,7 @@ final class DrawEngine {
         task.item = sender;
         task.action = action;
         task.args = args;
-        _handler.getLayout().setEventTask(task);
+        _handler.getCoreWindow().getLayout().setEventTask(task);
 
         if (is_pass_under && sender.isPassEvents(action)) {
             if (underFocusedItem != null) {
@@ -1136,14 +1136,14 @@ final class DrawEngine {
                     t.item = item;
                     t.action = action;
                     t.args = args;
-                    _handler.getLayout().setEventTask(t);
+                    _handler.getCoreWindow().getLayout().setEventTask(t);
 
                     if (!item.isPassEvents(action))
                         break;// остановить передачу событий последующим элементам
                 }
             }
         }
-        _handler.getLayout().executePollActions();
+        _handler.getCoreWindow().getLayout().executePollActions();
     }
 
     private void assignActions(InputEventType action, InputEventArgs args, Prototype sender) {
@@ -1163,14 +1163,14 @@ final class DrawEngine {
                     t.item = item;
                     t.action = action;
                     t.args = args;
-                    _handler.getLayout().setEventTask(t);
+                    _handler.getCoreWindow().getLayout().setEventTask(t);
 
                     if (!item.isPassEvents(action))
                         break;// остановить передачу событий последующим элементам
                 }
             }
         }
-        _handler.getLayout().executePollActions();
+        _handler.getCoreWindow().getLayout().executePollActions();
     }
 
     private float _intervalLow = 1.0f / 10.0f;
@@ -1306,45 +1306,45 @@ final class DrawEngine {
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         // draw static
-        drawItems(_handler.getLayout().getWindow());
+        drawItems(_handler.getCoreWindow().getLayout().getContainer());
         // draw float
         List<InterfaceBaseItem> float_items = new LinkedList<>(
-                ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getFloatItems());
+                ItemsLayoutBox.getLayout(_handler.getCoreWindow().getWindowGuid()).getFloatItems());
         if (float_items != null) {
             for (InterfaceBaseItem item : float_items) {
                 if (item.getHeightPolicy() == SizePolicy.EXPAND) {
                     int[] confines = item.getConfines();
-                    item.setConfines(confines[0], confines[1], 0, _handler.getLayout().getWindow().getHeight());
+                    item.setConfines(confines[0], confines[1], 0, _handler.getCoreWindow().getLayout().getContainer().getHeight());
                     item.setY(0);
-                    item.setHeight(_handler.getLayout().getWindow().getHeight());
+                    item.setHeight(_handler.getCoreWindow().getLayout().getContainer().getHeight());
                 }
                 if (item.getWidthPolicy() == SizePolicy.EXPAND) {
                     int[] confines = item.getConfines();
-                    item.setConfines(0, _handler.getLayout().getWindow().getWidth(), confines[2], confines[3]);
+                    item.setConfines(0, _handler.getCoreWindow().getLayout().getContainer().getWidth(), confines[2], confines[3]);
                     item.setX(0);
-                    item.setWidth(_handler.getLayout().getWindow().getWidth());
+                    item.setWidth(_handler.getCoreWindow().getLayout().getContainer().getWidth());
                 }
                 drawItems(item);
             }
         }
 
         // List<InterfaceBaseItem> dialog_items = new LinkedList<>(
-        // ItemsLayoutBox.getLayout(_handler.getLayout().getId()).getDialogItems());
+        // ItemsLayoutBox.getLayout(_handler.getCoreWindow().getId()).getDialogItems());
         // if (dialog_items != null) {
         // for (InterfaceBaseItem item : dialog_items) {
         // if (item.getHeightPolicy() == SizePolicy.EXPAND) {
         // int[] confines = item.getConfines();
         // item.setConfines(confines[0], confines[1], 0,
-        // _handler.getLayout().getWindow().getHeight());
+        // _handler.getCoreWindow().getWindow().getHeight());
         // item.setY(0);
-        // item.setHeight(_handler.getLayout().getWindow().getHeight());
+        // item.setHeight(_handler.getCoreWindow().getWindow().getHeight());
         // }
         // if (item.getWidthPolicy() == SizePolicy.EXPAND) {
         // int[] confines = item.getConfines();
-        // item.setConfines(0, _handler.getLayout().getWindow().getWidth(), confines[2],
+        // item.setConfines(0, _handler.getCoreWindow().getWindow().getWidth(), confines[2],
         // confines[3]);
         // item.setX(0);
-        // item.setWidth(_handler.getLayout().getWindow().getWidth());
+        // item.setWidth(_handler.getCoreWindow().getWindow().getWidth());
         // }
         // drawItems(item);
         // }
@@ -1370,7 +1370,7 @@ final class DrawEngine {
 
             if (!_bounds.containsKey(shell)) {
                 int x = shell.getX();
-                int y = _handler.getLayout().getHeight() - (shell.getY() + shell.getHeight());
+                int y = _handler.getCoreWindow().getHeight() - (shell.getY() + shell.getHeight());
                 int w = shell.getWidth();
                 int h = shell.getHeight();
 
@@ -1455,11 +1455,11 @@ final class DrawEngine {
     private void setScissorRectangle(InterfaceBaseItem rect) {
 
         int x = rect.getParent().getX();
-        int y = _handler.getLayout().getHeight() - (rect.getParent().getY() + rect.getParent().getHeight());
+        int y = _handler.getCoreWindow().getHeight() - (rect.getParent().getY() + rect.getParent().getHeight());
         int w = rect.getParent().getWidth();
         int h = rect.getParent().getHeight();
 
-        float scale = _handler.getLayout().getDpiScale()[0];
+        float scale = _handler.getCoreWindow().getDpiScale()[0];
         x *= scale;
         y *= scale;
         w *= scale;
@@ -1710,7 +1710,7 @@ final class DrawEngine {
         // store.sendUniform2fv(_blur, "frame", new float[] { _framebufferWidth,
         // _framebufferHeight });
         store.sendUniform2fv(_blur, "frame",
-                new float[] { _handler.getLayout().getWidth(), _handler.getLayout().getHeight() });
+                new float[] { _handler.getCoreWindow().getWidth(), _handler.getCoreWindow().getHeight() });
         store.sendUniform1f(_blur, "res", (res * 1f / 10));
         store.sendUniform2fv(_blur, "point", xy);
         store.sendUniform2fv(_blur, "size", wh);
@@ -1735,12 +1735,12 @@ final class DrawEngine {
         checkOutsideBorders((InterfaceBaseItem) text);
 
         int bb_h = textPrt.heightTexture, bb_w = textPrt.widthTexture;
-        float i_x0 = ((float) textPrt.xTextureShift / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y0 = ((float) textPrt.yTextureShift / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w / _handler.getLayout().getDpiScale()[0])
-                / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h / _handler.getLayout().getDpiScale()[0])
-                / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_x0 = ((float) textPrt.xTextureShift / (float) _handler.getCoreWindow().getWidth() * 2.0f) - 1.0f;
+        float i_y0 = ((float) textPrt.yTextureShift / (float) _handler.getCoreWindow().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w / _handler.getCoreWindow().getDpiScale()[0])
+                / (float) _handler.getCoreWindow().getWidth() * 2.0f) - 1.0f;
+        float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h / _handler.getCoreWindow().getDpiScale()[0])
+                / (float) _handler.getCoreWindow().getHeight() * 2.0f - 1.0f) * (-1.0f);
         float[] argb = { (float) text.getForeground().getRed() / 255.0f,
                 (float) text.getForeground().getGreen() / 255.0f, (float) text.getForeground().getBlue() / 255.0f,
                 (float) text.getForeground().getAlpha() / 255.0f };
@@ -1770,7 +1770,7 @@ final class DrawEngine {
         for (float[] shape : crd_array) {
             List<float[]> fig = GraphicsMathService.toGL(
                     GraphicsMathService.moveShape(point, shape[0] - center_offset, shape[1] - center_offset),
-                    _handler.getLayout());
+                    _handler.getCoreWindow());
 
             for (int i = 0; i < fig.size(); i++) {
                 result[skew + i * 3 + 0] = fig.get(i)[0];
@@ -1791,7 +1791,7 @@ final class DrawEngine {
         if (item.getLineColor().getAlpha() == 0)
             return;
 
-        List<float[]> crd_array = GraphicsMathService.toGL(item.makeShape(), _handler.getLayout());
+        List<float[]> crd_array = GraphicsMathService.toGL(item.makeShape(), _handler.getCoreWindow());
         if (crd_array == null)
             return;
         checkOutsideBorders((InterfaceBaseItem) item);
@@ -1814,11 +1814,11 @@ final class DrawEngine {
         int w = image.getImageWidth(), h = image.getImageHeight();
         RectangleBounds area = image.getRectangleBounds();
 
-        float i_x0 = ((float) area.getX() / (float) _handler.getLayout().getWidth() * 2.0f) - 1.0f;
-        float i_y0 = ((float) area.getY() / (float) _handler.getLayout().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) area.getX() + (float) area.getWidth()) / (float) _handler.getLayout().getWidth() * 2.0f)
+        float i_x0 = ((float) area.getX() / (float) _handler.getCoreWindow().getWidth() * 2.0f) - 1.0f;
+        float i_y0 = ((float) area.getY() / (float) _handler.getCoreWindow().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_x1 = (((float) area.getX() + (float) area.getWidth()) / (float) _handler.getCoreWindow().getWidth() * 2.0f)
                 - 1.0f;
-        float i_y1 = (((float) area.getY() + (float) area.getHeight()) / (float) _handler.getLayout().getHeight() * 2.0f
+        float i_y1 = (((float) area.getY() + (float) area.getHeight()) / (float) _handler.getCoreWindow().getHeight() * 2.0f
                 - 1.0f) * (-1.0f);
 
         _texture.useShader();
@@ -1924,8 +1924,8 @@ final class DrawEngine {
             _tooltip.setY(ptrRelease.getY() + _tooltip.getHeight() + 2);
         }
         // проверка справа
-        if (ptrRelease.getX() - 10 + _tooltip.getWidth() > _handler.getLayout().getWidth()) {
-            _tooltip.setX(_handler.getLayout().getWidth() - _tooltip.getWidth() - 10);
+        if (ptrRelease.getX() - 10 + _tooltip.getWidth() > _handler.getCoreWindow().getWidth()) {
+            _tooltip.setX(_handler.getCoreWindow().getWidth() - _tooltip.getWidth() - 10);
         } else {
             _tooltip.setX(ptrRelease.getX() - 10);
         }

@@ -25,19 +25,21 @@ public class FlowTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        WindowLayout Handler = new WindowLayout("FlowTest", "FlowTest", 1000, 800, true);
-        setHandler(Handler);
+        isBorderHidden = true;
+        setSize(1000, 800);
+        setWindowName("FlowTest");
+        setWindowTitle("FlowTest");
 
-        Handler.setMinSize(500, 100);
-        // Handler.setBackground(45, 45, 45);
-        // Handler.setPadding(2, 2, 2, 2);
+        setMinSize(500, 100);
+        // setBackground(45, 45, 45);
+        // setPadding(2, 2, 2, 2);
 
         TitleBar title = new TitleBar("FlowTest");
-        Handler.addItem(title);
-        // Handler.getWindow().eventKeyPress.add((sender, args) -> {
+        addItem(title);
+        // getWindow().eventKeyPress.add((sender, args) -> {
         // // System.out.println(getHandler().getFocusedItem());
         // });
-        // Handler.getWindow().eventKeyRelease.add((sender, args) -> {
+        // getWindow().eventKeyRelease.add((sender, args) -> {
         // if (args.key == KeyCode.SPACE) {
         // btn5.eventMouseClick.execute(btn5, new MouseArgs());
         // }
@@ -51,7 +53,7 @@ public class FlowTest extends ActiveWindow {
         layout.setBackground(255, 255, 255, 20);
 
         // adding toolbar
-        Handler.addItem(layout);
+        addItem(layout);
 
         // Frame
         HorizontalStack toolbar = new HorizontalStack();
@@ -70,7 +72,7 @@ public class FlowTest extends ActiveWindow {
         layout.addItem(flow);
 
         // btn add_at_center
-        FloatItem flow_item = new FloatItem(Handler);
+        FloatItem flow_item = new FloatItem(this);
         flow_item.setPosition(200, 200);
         flow_item.setSize(300, 100);
 
@@ -86,7 +88,7 @@ public class FlowTest extends ActiveWindow {
         btn1.addItemState(ItemStateType.HOVERED, hovered);
         btn1.eventMouseClick.add((sender, args) -> {
             // PopUpMessage pop = new PopUpMessage("Hello PopUpMessage!");
-            // pop.show(Handler);
+            // pop.show(this);
             MessageItem msg = new MessageItem("Choose one of this buttons", "Message:");
             ButtonCore btnDontSave = new ButtonCore("Do not save");
             btnDontSave.eventMouseClick.add((s, a) -> {
@@ -96,13 +98,13 @@ public class FlowTest extends ActiveWindow {
             msg.onCloseDialog.add(() -> {
                 System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
             });
-            msg.show(getHandler());
+            msg.show(this);
 
             // InputDialog id = new InputDialog("Input text", "Apply");
-            // id.show(Handler);
+            // id.show(this);
 
             // LoadingScreen ls = new LoadingScreen();
-            // ls.show(Handler);
+            // ls.show(this);
         });
         btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn1.setHoverRule(ItemRule.STRICT);
@@ -116,10 +118,8 @@ public class FlowTest extends ActiveWindow {
         btn2.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn2.addItemState(ItemStateType.HOVERED, hovered);
         btn2.eventMouseClick.add((sender, args) -> {
-            // InputDialog id = new InputDialog("title", "actionName", "defaultText");
-            // id.show(getHandler());
-            Page pg = new Page();
-            pg.PrintPage(this);
+            InputDialog id = new InputDialog("title", "actionName", "defaultText");
+            id.show(this);
         });
         btn2.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
         btn2.setHoverRule(ItemRule.STRICT);
@@ -154,7 +154,7 @@ public class FlowTest extends ActiveWindow {
         btn4.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         btn4.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn4.addItemState(ItemStateType.HOVERED, hovered);
-        AlbumSideList side = new AlbumSideList(Handler, Side.LEFT);
+        AlbumSideList side = new AlbumSideList(this, Side.LEFT);
         // side.setAttachSide(Side.TOP);
         Album al1 = new Album("Album1", "C:\\");
         al1._topLayout.setItemName("topLayout1");
@@ -173,7 +173,7 @@ public class FlowTest extends ActiveWindow {
                     "\n" + "Age: " + "\n" + "Sex: " + "\n" + "Race: " + "\n" + "Class: ");
             popUpInfo.setTimeOut(3000);
             popUpInfo.setHeight(200);
-            popUpInfo.show(getHandler());
+            popUpInfo.show(this);
         });
         btn4.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
         btn4.setHoverRule(ItemRule.STRICT);
@@ -192,7 +192,7 @@ public class FlowTest extends ActiveWindow {
             // msg.onCloseDialog.add(() -> {
             // System.out.println(msg.getResult());
             // });
-            // msg.show(Handler);
+            // msg.show(this);
 
             OpenEntryDialog opd = new OpenEntryDialog("Save File:", FileSystemEntryType.FILE, OpenDialogType.SAVE);
             opd.addFilterExtensions("Text files (*.txt);*.txt", "Images (*.png, *.bmp, *.jpg);*.png,*.bmp,*.jpg");
@@ -200,7 +200,7 @@ public class FlowTest extends ActiveWindow {
                 System.out.println(opd.getResult());
             });
             opd.setDefaultPath("D:\\");
-            opd.show(Handler);
+            opd.show(this);
         });
         btn5.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn5.setHoverRule(ItemRule.STRICT);
@@ -236,12 +236,12 @@ public class FlowTest extends ActiveWindow {
         // };
         MenuItem addition = new MenuItem("ADdition");
         // context
-        _context_menu = new ContextMenu(Handler);// new ContextMenu(Handler, restore, x_plus, y_plus, addition);
+        _context_menu = new ContextMenu(this);// new ContextMenu(this, restore, x_plus, y_plus, addition);
         _context_menu.setItemName("Base");
         _context_menu.addItems(restore, x_plus, y_plus, addition);
         // _context_menu.setWidth(200);
 
-        ContextMenu addition_menu = new ContextMenu(Handler);
+        ContextMenu addition_menu = new ContextMenu(this);
         addition_menu.setItemName("Addition");
         addition_menu.setSize(110, 94);
         MenuItem x_minus = new MenuItem("X -= 100");
@@ -260,12 +260,12 @@ public class FlowTest extends ActiveWindow {
 
 //        addition.assignContextMenu(addition_menu);
 
-        ContextMenu ex_menu = new ContextMenu(Handler);
+        ContextMenu ex_menu = new ContextMenu(this);
         ex_menu.setSize(110, 64);
         ex_addition.assignContextMenu(ex_menu);
         flow.addContextMenu(_context_menu);
 
-        // Handler.addItem(new StopMenu());
+        // addItem(new StopMenu());
     }
 
     // private ResizableItem getBlockList() {

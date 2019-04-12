@@ -61,7 +61,7 @@ namespace SpaceVIL
             Window.Update(GeometryEventType.ResizeHeight, 0);
             Window.Update(GeometryEventType.ResizeWidth, 0);
         }
-        public override void Show(WindowLayout handler)
+        public override void Show(CoreWindow handler)
         {
             base.Show(handler);
         }
