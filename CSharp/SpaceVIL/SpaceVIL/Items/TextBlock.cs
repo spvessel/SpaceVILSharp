@@ -110,7 +110,7 @@ namespace SpaceVIL
                         _selectTo = new Point(wordBounds[1], _cursor_position.Y);
                         _cursor_position = new Point(_selectTo.X, _selectTo.Y);
                         ReplaceCursor();
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
 
                     _startTime.Restart();
@@ -148,7 +148,7 @@ namespace SpaceVIL
                         _selectTo = new Point(GetLineLetCount(_cursor_position.Y), _cursor_position.Y);
                         _cursor_position = new Point(_selectTo.X, _selectTo.Y);
                         ReplaceCursor();
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                 }
                 _isDoubleClick = false;
@@ -175,7 +175,7 @@ namespace SpaceVIL
                     else
                     {
                         _selectTo = new Point(_cursor_position.X, _cursor_position.Y);
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                     _isDoubleClick = false;
                 }
@@ -206,7 +206,7 @@ namespace SpaceVIL
             // _selectedArea.ShiftAreaY(diff);
             if (_justSelected)
                 CancelJustSelected();
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
             _cursor.SetY(_cursor.GetY() + diff);
         }
         internal int GetScrollXOffset()
@@ -221,7 +221,7 @@ namespace SpaceVIL
             // _selectedArea.ShiftAreaX(diff);
             if (_justSelected)
                 CancelJustSelected();
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
             _cursor.SetX(_cursor.GetX() + diff);
         }
 
@@ -233,7 +233,7 @@ namespace SpaceVIL
 
             if (_justSelected)
                 CancelJustSelected();
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
             // _selectedArea.ShiftAreaY(curPos);
             //ReplaceCursor();
         }
@@ -246,7 +246,7 @@ namespace SpaceVIL
 
             if (_justSelected)
                 CancelJustSelected();
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
             // _selectedArea.ShiftAreaY(curPos);
             //ReplaceCursor();
         }
@@ -288,7 +288,7 @@ namespace SpaceVIL
                         _selectTo = new Point(_cursor_position.X, _cursor_position.Y);
                         ReplaceCursor();
                         _isSelect = true;
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                     return;
                 }
@@ -378,7 +378,46 @@ namespace SpaceVIL
                 if (args.Key == KeyCode.Left) //arrow left
                 {
                     _cursor_position = _textureStorage.CheckLineFits(_cursor_position);
-                    if (!_justSelected)
+
+                    bool doUsual = true;
+
+                    if (args.Mods == KeyMods.Control)
+                    {
+                        if (_isSelect)
+                        {
+                            UnselectText();
+                            CancelJustSelected();
+                        }
+                        int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
+
+                        if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[0])
+                        {
+                            _cursor_position = new Point(wordBounds[0], _cursor_position.Y);
+                            ReplaceCursor();
+                            doUsual = false;
+                        }
+                    }
+                    else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
+                    {
+                        if (!_isSelect)
+                        {
+                            _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
+                            _isSelect = true;
+                        }
+
+                        int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
+
+                        if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[0])
+                        {
+                            _selectTo = new Point(wordBounds[0], _cursor_position.Y);
+                            _cursor_position = new Point(_selectTo.X, _selectTo.Y);
+                            ReplaceCursor();
+                            // MakeSelectedArea(); //_selectFrom, _selectTo);
+                            doUsual = false;
+                        }
+                    }
+
+                    if (!_justSelected && doUsual)
                     {
                         if (_cursor_position.X > 0)
                             _cursor_position.X--;
@@ -392,7 +431,45 @@ namespace SpaceVIL
                 }
                 if (args.Key == KeyCode.Right) //arrow right
                 {
-                    if (!_justSelected)
+                    bool doUsual = true;
+
+                    if (args.Mods == KeyMods.Control)
+                    {
+                        if (_isSelect)
+                        {
+                            UnselectText();
+                            CancelJustSelected();
+                        }
+                        int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
+
+                        if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[1])
+                        {
+                            _cursor_position = new Point(wordBounds[1], _cursor_position.Y);
+                            ReplaceCursor();
+                            doUsual = false;
+                        }
+                    }
+                    else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
+                    {
+                        if (!_isSelect)
+                        {
+                            _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
+                            _isSelect = true;
+                        }
+
+                        int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
+
+                        if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[1])
+                        {
+                            _selectTo = new Point(wordBounds[1], _cursor_position.Y);
+                            _cursor_position = new Point(_selectTo.X, _selectTo.Y);
+                            ReplaceCursor();
+                            // MakeSelectedArea(); //_selectFrom, _selectTo);
+                            doUsual = false;
+                        }
+                    }
+
+                    if (!_justSelected && doUsual)
                     {
                         if (_cursor_position.X < GetLineLetCount(_cursor_position.Y))
                             _cursor_position.X++;
@@ -430,13 +507,80 @@ namespace SpaceVIL
 
                 if (args.Key == KeyCode.End) //end
                 {
-                    _cursor_position.X = GetLineLetCount(_cursor_position.Y);
-                    ReplaceCursor();
+                    bool doUsual = true;
+
+                    if (args.Mods == KeyMods.Control)
+                    {
+                        if (_isSelect)
+                        {
+                            UnselectText();
+                            CancelJustSelected();
+                        }
+                        
+                        int lineNum = _textureStorage.GetCount() - 1;
+                        _cursor_position = new Point(GetLineLetCount(lineNum), lineNum);
+                        ReplaceCursor();
+                        doUsual = false;                        
+                    }
+                    else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
+                    {
+                        if (!_isSelect)
+                        {
+                            _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
+                            _isSelect = true;
+                        }
+
+                        int lineNum = _textureStorage.GetCount() - 1;
+
+                        _selectTo = new Point(GetLineLetCount(lineNum), lineNum);
+                        _cursor_position = new Point(_selectTo.X, _selectTo.Y);
+                        ReplaceCursor();
+                        // MakeSelectedArea(); //_selectFrom, _selectTo);
+                        doUsual = false;                        
+                    }
+
+                    if (doUsual)
+                    {
+                        _cursor_position.X = GetLineLetCount(_cursor_position.Y);
+                        ReplaceCursor();
+                    }
                 }
                 if (args.Key == KeyCode.Home) //home
                 {
-                    _cursor_position.X = 0;
-                    ReplaceCursor();
+                    bool doUsual = true;
+
+                    if (args.Mods == KeyMods.Control)
+                    {
+                        if (_isSelect)
+                        {
+                            UnselectText();
+                            CancelJustSelected();
+                        }
+                        
+                        _cursor_position = new Point(0, 0);
+                        ReplaceCursor();
+                        doUsual = false;                        
+                    }
+                    else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
+                    {
+                        if (!_isSelect)
+                        {
+                            _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
+                            _isSelect = true;
+                        }
+
+                        _selectTo = new Point(0, 0);
+                        _cursor_position = new Point(_selectTo.X, _selectTo.Y);
+                        ReplaceCursor();
+                        // MakeSelectedArea(); //_selectFrom, _selectTo);
+                        doUsual = false;                        
+                    }
+
+                    if (doUsual)
+                    {
+                        _cursor_position.X = 0;
+                        ReplaceCursor();
+                    }
                 }
 
                 if (args.Key == KeyCode.Enter || args.Key == KeyCode.NumpadEnter) //enter
@@ -460,7 +604,7 @@ namespace SpaceVIL
                     if (!_selectTo.Equals(_cursor_position))
                     {
                         _selectTo = _cursor_position;
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                 }
             }
@@ -639,6 +783,11 @@ namespace SpaceVIL
                 _cursor.SetVisible(true);
             else
                 _cursor.SetVisible(false);
+        }
+
+        private void MakeSelectedArea()
+        {
+            MakeSelectedArea(_selectFrom, _selectTo);
         }
 
         private void MakeSelectedArea(Point from, Point to)
@@ -861,7 +1010,7 @@ namespace SpaceVIL
         {
             _isSelect = false;
             _justSelected = true;
-            MakeSelectedArea(new Point(0, 0), new Point(0, 0));
+            MakeSelectedArea(new Point(_cursor_position.X, _cursor_position.Y), new Point(_cursor_position.X, _cursor_position.Y));
         }
 
         private void CancelJustSelected()
@@ -1073,7 +1222,7 @@ namespace SpaceVIL
             Point pos = AddXYShifts(0, 0, _cursor_position);
             _cursor.SetX(pos.X);
             _cursor.SetY(pos.Y - GetLineSpacer() / 2 + 1);// - 3);
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
         }
 
         // private class TextCursor : Rectangle {

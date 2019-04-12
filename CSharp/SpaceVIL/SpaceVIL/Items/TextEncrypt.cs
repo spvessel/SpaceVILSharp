@@ -78,7 +78,7 @@ namespace SpaceVIL
                     ReplaceCursor();
 
                     _isSelect = true;
-                    MakeSelectedArea(_selectFrom, _selectTo);
+                    MakeSelectedArea(); //_selectFrom, _selectTo);
                 }
             }
             finally
@@ -125,7 +125,7 @@ namespace SpaceVIL
                     else
                     {
                         _selectTo = _cursor_position;
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                 }
             }
@@ -262,7 +262,7 @@ namespace SpaceVIL
                     if (_selectTo != _cursor_position)
                     {
                         _selectTo = _cursor_position;
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                 }
             }
@@ -427,7 +427,7 @@ namespace SpaceVIL
         {
             this._needShow = needShow;
             SetText(_pwd);
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
             ReplaceCursor();
             GetHandler().SetFocusedItem(this);
         }
@@ -525,7 +525,7 @@ namespace SpaceVIL
 
             ReplaceCursor();
             if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
-                MakeSelectedArea(_selectFrom, _selectTo);
+                MakeSelectedArea(); //_selectFrom, _selectTo);
         }
 
         public override void InitElements()
@@ -553,6 +553,11 @@ namespace SpaceVIL
         internal int GetTextHeight()
         {
             return _text_object.GetHeight();
+        }
+
+        private void MakeSelectedArea()
+        {
+            MakeSelectedArea(_selectFrom, _selectTo);
         }
 
         private void MakeSelectedArea(int fromPt, int toPt)
@@ -592,7 +597,7 @@ namespace SpaceVIL
         {
             _isSelect = false;
             _justSelected = true;
-            MakeSelectedArea(0, 0);
+            MakeSelectedArea(_cursor_position, _cursor_position);
         }
 
         private void CancelJustSelected()

@@ -120,7 +120,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
                     _selectFrom = _cursor_position;
                 } else {
                     _selectTo = _cursor_position;
-                    makeSelectedArea(_selectFrom, _selectTo);
+                    makeSelectedArea(); //_selectFrom, _selectTo);
                 }
             }
         } finally {
@@ -151,7 +151,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         // _selectedArea.setX(_selectedArea.getX() + curPos);
         if (_justSelected)
             cancelJustSelected();
-        makeSelectedArea(_selectFrom, _selectTo);
+        makeSelectedArea(); //_selectFrom, _selectTo);
     }
 
     private void onScrollDown(Object sender, MouseArgs args) {
@@ -177,7 +177,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         // _selectedArea.setX(_selectedArea.getX() + curPos);
         if (_justSelected)
             cancelJustSelected();
-        makeSelectedArea(_selectFrom, _selectTo);
+        makeSelectedArea(); //_selectFrom, _selectTo);
     }
 
     private void replaceCursorAccordingCoord(int realPos) {
@@ -302,7 +302,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
             if (_isSelect) {
                 if (_selectTo != _cursor_position) {
                     _selectTo = _cursor_position;
-                    makeSelectedArea(_selectFrom, _selectTo);
+                    makeSelectedArea(); //_selectFrom, _selectTo);
                 }
             }
         } finally
@@ -571,7 +571,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
 
         replaceCursor();
         if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT))
-            makeSelectedArea(_selectFrom, _selectTo);
+            makeSelectedArea(); //_selectFrom, _selectTo);
     }
 
     /**
@@ -612,6 +612,10 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
      */
     public int getTextHeight() {
         return _text_object.getHeight();
+    }
+
+    private void makeSelectedArea() {
+        makeSelectedArea(_selectFrom, _selectTo);
     }
 
     private void makeSelectedArea(int fromPt, int toPt) {
@@ -796,7 +800,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
             _selectTo = _cursor_position;
             replaceCursor();
             _isSelect = true;
-            makeSelectedArea(_selectFrom, _selectTo);
+            makeSelectedArea(); //_selectFrom, _selectTo);
         } finally {
             textInputLock.unlock();
         }

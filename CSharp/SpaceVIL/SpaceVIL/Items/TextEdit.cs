@@ -123,7 +123,7 @@ namespace SpaceVIL
                     else
                     {
                         _selectTo = _cursor_position;
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                 }
             }
@@ -154,7 +154,7 @@ namespace SpaceVIL
             // _selectedArea.SetX(_selectedArea.GetX() + curPos);
             if (_justSelected)
                 CancelJustSelected();
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
         }
 
         private void OnScrollDown(object sender, MouseArgs args)
@@ -179,7 +179,7 @@ namespace SpaceVIL
             // _selectedArea.SetX(_selectedArea.GetX() + curPos);
             if (_justSelected)
                 CancelJustSelected();
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
         }
 
         private void ReplaceCursorAccordingCoord(int realPos)
@@ -327,7 +327,7 @@ namespace SpaceVIL
                     if (_selectTo != _cursor_position)
                     {
                         _selectTo = _cursor_position;
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                 }
             }
@@ -587,7 +587,7 @@ namespace SpaceVIL
 
             ReplaceCursor();
             if (_text_object.GetTextAlignment().HasFlag(ItemAlignment.Right))
-                MakeSelectedArea(_selectFrom, _selectTo);
+                MakeSelectedArea(); //_selectFrom, _selectTo);
         }
 
         public override void InitElements()
@@ -614,6 +614,11 @@ namespace SpaceVIL
         public int GetTextHeight()
         {
             return _text_object.GetHeight();
+        }
+
+        private void MakeSelectedArea()
+        {
+            MakeSelectedArea(_selectFrom, _selectTo);
         }
 
         private void MakeSelectedArea(int fromPt, int toPt)
@@ -824,7 +829,7 @@ namespace SpaceVIL
                 _selectTo = _cursor_position;
                 ReplaceCursor();
                 _isSelect = true;
-                MakeSelectedArea(_selectFrom, _selectTo);
+                MakeSelectedArea(); //_selectFrom, _selectTo);
             }
             finally
             {
