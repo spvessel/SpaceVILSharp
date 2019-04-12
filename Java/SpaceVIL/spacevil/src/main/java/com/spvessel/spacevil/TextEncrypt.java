@@ -80,7 +80,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                 replaceCursor();
 
                 _isSelect = true;
-                makeSelectedArea(_selectFrom, _selectTo);
+                makeSelectedArea(); //_selectFrom, _selectTo);
             }
         } finally {
             textInputLock.unlock();
@@ -113,7 +113,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                     _selectFrom = _cursor_position;
                 } else {
                     _selectTo = _cursor_position;
-                    makeSelectedArea(_selectFrom, _selectTo);
+                    makeSelectedArea(); //_selectFrom, _selectTo);
                 }
             }
         } finally {
@@ -231,7 +231,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
             if (_isSelect) {
                 if (_selectTo != _cursor_position) {
                     _selectTo = _cursor_position;
-                    makeSelectedArea(_selectFrom, _selectTo);
+                    makeSelectedArea(); //_selectFrom, _selectTo);
                 }
             }
         } finally {
@@ -373,7 +373,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     void showPassword(boolean _isHidden) {
         this._needShow = _isHidden;
         setText(_pwd);
-        makeSelectedArea(_selectFrom, _selectTo);
+        makeSelectedArea(); //_selectFrom, _selectTo);
         replaceCursor();
         getHandler().setFocusedItem(this);
     }
@@ -464,7 +464,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
         replaceCursor();
         if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT))
-            makeSelectedArea(_selectFrom, _selectTo);
+            makeSelectedArea(); //_selectFrom, _selectTo);
     }
 
     public void initElements() {
@@ -495,6 +495,10 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
     int getTextHeight() {
         return _text_object.getHeight();
+    }
+
+    private void makeSelectedArea() {
+        makeSelectedArea(_selectFrom, _selectTo);
     }
 
     private void makeSelectedArea(int fromPt, int toPt) {
@@ -531,7 +535,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     private void unselectText() {
         _isSelect = false;
         _justSelected = true;
-        makeSelectedArea(0, 0);
+        makeSelectedArea(_cursor_position, _cursor_position);
     }
 
     private void cancelJustSelected() {

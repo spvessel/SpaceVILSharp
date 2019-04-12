@@ -110,7 +110,7 @@ namespace SpaceVIL
                         _selectTo = new Point(wordBounds[1], _cursor_position.Y);
                         _cursor_position = new Point(_selectTo.X, _selectTo.Y);
                         ReplaceCursor();
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
 
                     _startTime.Restart();
@@ -148,7 +148,7 @@ namespace SpaceVIL
                         _selectTo = new Point(GetLineLetCount(_cursor_position.Y), _cursor_position.Y);
                         _cursor_position = new Point(_selectTo.X, _selectTo.Y);
                         ReplaceCursor();
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                 }
                 _isDoubleClick = false;
@@ -175,7 +175,7 @@ namespace SpaceVIL
                     else
                     {
                         _selectTo = new Point(_cursor_position.X, _cursor_position.Y);
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                     _isDoubleClick = false;
                 }
@@ -206,7 +206,7 @@ namespace SpaceVIL
             // _selectedArea.ShiftAreaY(diff);
             if (_justSelected)
                 CancelJustSelected();
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
             _cursor.SetY(_cursor.GetY() + diff);
         }
         internal int GetScrollXOffset()
@@ -221,7 +221,7 @@ namespace SpaceVIL
             // _selectedArea.ShiftAreaX(diff);
             if (_justSelected)
                 CancelJustSelected();
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
             _cursor.SetX(_cursor.GetX() + diff);
         }
 
@@ -233,7 +233,7 @@ namespace SpaceVIL
 
             if (_justSelected)
                 CancelJustSelected();
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
             // _selectedArea.ShiftAreaY(curPos);
             //ReplaceCursor();
         }
@@ -246,7 +246,7 @@ namespace SpaceVIL
 
             if (_justSelected)
                 CancelJustSelected();
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
             // _selectedArea.ShiftAreaY(curPos);
             //ReplaceCursor();
         }
@@ -288,7 +288,7 @@ namespace SpaceVIL
                         _selectTo = new Point(_cursor_position.X, _cursor_position.Y);
                         ReplaceCursor();
                         _isSelect = true;
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                     return;
                 }
@@ -412,7 +412,7 @@ namespace SpaceVIL
                             _selectTo = new Point(wordBounds[0], _cursor_position.Y);
                             _cursor_position = new Point(_selectTo.X, _selectTo.Y);
                             ReplaceCursor();
-                            // MakeSelectedArea(_selectFrom, _selectTo);
+                            // MakeSelectedArea(); //_selectFrom, _selectTo);
                             doUsual = false;
                         }
                     }
@@ -464,7 +464,7 @@ namespace SpaceVIL
                             _selectTo = new Point(wordBounds[1], _cursor_position.Y);
                             _cursor_position = new Point(_selectTo.X, _selectTo.Y);
                             ReplaceCursor();
-                            // MakeSelectedArea(_selectFrom, _selectTo);
+                            // MakeSelectedArea(); //_selectFrom, _selectTo);
                             doUsual = false;
                         }
                     }
@@ -535,7 +535,7 @@ namespace SpaceVIL
                         _selectTo = new Point(GetLineLetCount(lineNum), lineNum);
                         _cursor_position = new Point(_selectTo.X, _selectTo.Y);
                         ReplaceCursor();
-                        // MakeSelectedArea(_selectFrom, _selectTo);
+                        // MakeSelectedArea(); //_selectFrom, _selectTo);
                         doUsual = false;                        
                     }
 
@@ -572,7 +572,7 @@ namespace SpaceVIL
                         _selectTo = new Point(0, 0);
                         _cursor_position = new Point(_selectTo.X, _selectTo.Y);
                         ReplaceCursor();
-                        // MakeSelectedArea(_selectFrom, _selectTo);
+                        // MakeSelectedArea(); //_selectFrom, _selectTo);
                         doUsual = false;                        
                     }
 
@@ -604,7 +604,7 @@ namespace SpaceVIL
                     if (!_selectTo.Equals(_cursor_position))
                     {
                         _selectTo = _cursor_position;
-                        MakeSelectedArea(_selectFrom, _selectTo);
+                        MakeSelectedArea(); //_selectFrom, _selectTo);
                     }
                 }
             }
@@ -783,6 +783,11 @@ namespace SpaceVIL
                 _cursor.SetVisible(true);
             else
                 _cursor.SetVisible(false);
+        }
+
+        private void MakeSelectedArea()
+        {
+            MakeSelectedArea(_selectFrom, _selectTo);
         }
 
         private void MakeSelectedArea(Point from, Point to)
@@ -1005,7 +1010,7 @@ namespace SpaceVIL
         {
             _isSelect = false;
             _justSelected = true;
-            MakeSelectedArea(new Point(0, 0), new Point(0, 0));
+            MakeSelectedArea(new Point(_cursor_position.X, _cursor_position.Y), new Point(_cursor_position.X, _cursor_position.Y));
         }
 
         private void CancelJustSelected()
@@ -1217,7 +1222,7 @@ namespace SpaceVIL
             Point pos = AddXYShifts(0, 0, _cursor_position);
             _cursor.SetX(pos.X);
             _cursor.SetY(pos.Y - GetLineSpacer() / 2 + 1);// - 3);
-            MakeSelectedArea(_selectFrom, _selectTo);
+            MakeSelectedArea(); //_selectFrom, _selectTo);
         }
 
         // private class TextCursor : Rectangle {

@@ -97,7 +97,7 @@ class TextBlock extends Prototype
                     _selectTo = new Point(wordBounds[1], _cursor_position.y);
                     _cursor_position = new Point(_selectTo);
                     replaceCursor();
-                    makeSelectedArea(_selectFrom, _selectTo);
+                    makeSelectedArea(); //_selectFrom, _selectTo);
                 }
 
                 _startTime = System.nanoTime();
@@ -126,7 +126,7 @@ class TextBlock extends Prototype
                     _selectTo = new Point(getLineLetCount(_cursor_position.y), _cursor_position.y);
                     _cursor_position = new Point(_selectTo);
                     replaceCursor();
-                    makeSelectedArea(_selectFrom, _selectTo);
+                    makeSelectedArea(); //_selectFrom, _selectTo);
                 }
             }
             _isDoubleClick = false;
@@ -145,7 +145,7 @@ class TextBlock extends Prototype
                     _selectFrom = new Point(_cursor_position);
                 } else {
                     _selectTo = new Point(_cursor_position);
-                    makeSelectedArea(_selectFrom, _selectTo);
+                    makeSelectedArea(); //_selectFrom, _selectTo);
                 }
             }
             _isDoubleClick = false;
@@ -173,7 +173,7 @@ class TextBlock extends Prototype
         // _selectedArea.shiftAreaY(diff);
         if (_justSelected)
             cancelJustSelected();
-        makeSelectedArea(_selectFrom, _selectTo);
+        makeSelectedArea(); //_selectFrom, _selectTo);
         _cursor.setY(_cursor.getY() + diff);
     }
 
@@ -188,7 +188,7 @@ class TextBlock extends Prototype
         // _selectedArea.shiftAreaX(diff);
         if (_justSelected)
             cancelJustSelected();
-        makeSelectedArea(_selectFrom, _selectTo);
+        makeSelectedArea(); //_selectFrom, _selectTo);
         _cursor.setX(_cursor.getX() + diff);
     }
 
@@ -199,7 +199,7 @@ class TextBlock extends Prototype
 
         if (_justSelected)
             cancelJustSelected();
-        makeSelectedArea(_selectFrom, _selectTo);
+        makeSelectedArea(); //_selectFrom, _selectTo);
         // _selectedArea.shiftAreaY(curPos);
         // replaceCursor();
     }
@@ -211,7 +211,7 @@ class TextBlock extends Prototype
 
         if (_justSelected)
             cancelJustSelected();
-        makeSelectedArea(_selectFrom, _selectTo);
+        makeSelectedArea(); //_selectFrom, _selectTo);
         // _selectedArea.shiftAreaY(curPos);
         // replaceCursor();
     }
@@ -248,7 +248,7 @@ class TextBlock extends Prototype
                     _selectTo = new Point(_cursor_position);
                     replaceCursor();
                     _isSelect = true;
-                    makeSelectedArea(_selectFrom, _selectTo);
+                    makeSelectedArea(); //_selectFrom, _selectTo);
                 }
                 return;
             }
@@ -350,7 +350,7 @@ class TextBlock extends Prototype
                             _selectTo = new Point(wordBounds[0], _cursor_position.y);
                             _cursor_position = new Point(_selectTo);
                             replaceCursor();
-//                            makeSelectedArea(_selectFrom, _selectTo);
+//                            makeSelectedArea(); //_selectFrom, _selectTo);
                             doUsual = false;
                         }
                     }
@@ -396,7 +396,7 @@ class TextBlock extends Prototype
                             _selectTo = new Point(wordBounds[1], _cursor_position.y);
                             _cursor_position = new Point(_selectTo);
                             replaceCursor();
-//                            makeSelectedArea(_selectFrom, _selectTo);
+//                            makeSelectedArea(); //_selectFrom, _selectTo);
                             doUsual = false;
                         }
                     }
@@ -458,7 +458,7 @@ class TextBlock extends Prototype
                         _selectTo = new Point(getLineLetCount(lineNum), lineNum);
                         _cursor_position = new Point(_selectTo);
                         replaceCursor();
-//                        makeSelectedArea(_selectFrom, _selectTo);
+//                        makeSelectedArea(); //_selectFrom, _selectTo);
                         doUsual = false;
                     }
                 }
@@ -492,7 +492,7 @@ class TextBlock extends Prototype
                         _selectTo = new Point(0, 0);
                         _cursor_position = new Point(_selectTo);
                         replaceCursor();
-//                        makeSelectedArea(_selectFrom, _selectTo);
+//                        makeSelectedArea(); //_selectFrom, _selectTo);
                         doUsual = false;
                     }
                 }
@@ -521,7 +521,7 @@ class TextBlock extends Prototype
             if (_isSelect) {
                 if (!_selectTo.equals(_cursor_position)) {
                     _selectTo = new Point(_cursor_position);
-                    makeSelectedArea(_selectFrom, _selectTo);
+                    makeSelectedArea(); //_selectFrom, _selectTo);
                 }
             }
         } finally {
@@ -746,6 +746,10 @@ class TextBlock extends Prototype
 
     private int getLineLetCount(int lineNum) {
         return _textureStorage.getLineLetCount(lineNum);
+    }
+
+    private void makeSelectedArea() {
+        makeSelectedArea(_selectFrom, _selectTo);
     }
 
     private void makeSelectedArea(Point from, Point to) {
@@ -1008,7 +1012,7 @@ class TextBlock extends Prototype
     private void unselectText() {
         _isSelect = false;
         _justSelected = true;
-        makeSelectedArea(new Point(0, 0), new Point(0, 0));
+        makeSelectedArea(new Point(_cursor_position), new Point(_cursor_position));
     }
 
     private void cancelJustSelected() {
@@ -1100,7 +1104,7 @@ class TextBlock extends Prototype
 
             // _selectFrom = new Point(tmpText.fromSelectState);
             // _selectTo = new Point(tmpText.toSelectState);
-            // makeSelectedArea(_selectFrom, _selectTo);
+            // makeSelectedArea(); //_selectFrom, _selectTo);
             // _textureStorage.redo();
         }
     }
@@ -1130,7 +1134,7 @@ class TextBlock extends Prototype
 
                 // _selectFrom = new Point(tmpText.fromSelectState);
                 // _selectTo = new Point(tmpText.toSelectState);
-                // makeSelectedArea(_selectFrom, _selectTo);
+                // makeSelectedArea(); //_selectFrom, _selectTo);
                 // _textureStorage.undo();
             }
         }
@@ -1191,7 +1195,7 @@ class TextBlock extends Prototype
         Point pos = addXYShifts(0, 0, _cursor_position);
         _cursor.setX(pos.x);
         _cursor.setY(pos.y - getLineSpacer() / 2 + 1);// - 3);
-        makeSelectedArea(_selectFrom, _selectTo);
+        makeSelectedArea(); //_selectFrom, _selectTo);
     }
 
     // private class TextCursor : Rectangle {
