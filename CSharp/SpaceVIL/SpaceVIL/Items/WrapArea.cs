@@ -226,7 +226,7 @@ namespace SpaceVIL
         {
             SelectionItem wrapper = new SelectionItem(item);
             wrapper.SetStyle(_selectedStyle);
-            
+
             wrapper.SetToggleVisible(_isSelectionVisible);
             wrapper.SetSize(_cellWidth, _cellHeight);
             wrapper.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
@@ -308,12 +308,12 @@ namespace SpaceVIL
                 tmp.ClearContent();
                 b = base.RemoveItem(tmp);
             }
-            
+
             UpdateLayout();
 
             if (restore)
                 SetSelection(GetItems().IndexOf(currentSelection));
-                
+
             ItemListChanged?.Invoke();
             return b;
         }
@@ -424,6 +424,7 @@ namespace SpaceVIL
                     if (!item.IsVisible())
                         continue;
 
+                    item.SetSize(_cellWidth, _cellHeight);
                     // Console.WriteLine(item.GetItemName());
                     item.SetX((int)(x + (_cellWidth + GetSpacing().Horizontal) * column));
                     int itemY = (int)(globalY + (_cellHeight + GetSpacing().Vertical) * row);
@@ -470,6 +471,10 @@ namespace SpaceVIL
                 int row = 0;
                 foreach (IBaseItem item in GetItems())
                 {
+                    if (!item.IsVisible())
+                        continue;
+                        
+                    item.SetSize(_cellWidth, _cellHeight);
                     item.SetY((int)(y + (_cellHeight + GetSpacing().Vertical) * row));
 
                     int itemX = (int)(globalX + (_cellWidth + GetSpacing().Horizontal) * column);

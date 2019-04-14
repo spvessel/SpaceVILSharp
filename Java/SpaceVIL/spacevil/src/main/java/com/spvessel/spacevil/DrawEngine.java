@@ -625,7 +625,7 @@ final class DrawEngine {
                     setWindowPos(x.get(0) + delta_x, y.get() + delta_y);
                 }
             }
-            if (!hoveredItem.getHoverVerification((float) xpos, (float) ypos)) {
+            if (hoveredItem != null && !hoveredItem.getHoverVerification((float) xpos, (float) ypos)) {
                 hoveredItem.setMouseHover(false);
                 assignActions(InputEventType.MOUSE_LEAVE, _margs, hoveredItem, false);
             }

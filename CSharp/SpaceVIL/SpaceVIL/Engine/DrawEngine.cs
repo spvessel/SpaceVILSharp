@@ -577,7 +577,7 @@ namespace SpaceVIL
                     }
                 }
 
-                if (!HoveredItem.GetHoverVerification((float)xpos, (float)ypos))
+                if (HoveredItem != null && !HoveredItem.GetHoverVerification((float)xpos, (float)ypos))
                 {
                     HoveredItem.SetMouseHover(false);
                     AssignActions(InputEventType.MouseLeave, _margs, HoveredItem, false);

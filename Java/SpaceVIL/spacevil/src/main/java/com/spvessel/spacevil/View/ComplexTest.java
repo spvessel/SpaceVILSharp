@@ -26,14 +26,12 @@ public class ComplexTest extends ActiveWindow {
         setWindowName("ComplexTest");
         setWindowTitle("ComplexTest");
 
-
         Style style = Style.getWrapGridStyle();
         Style wrap_style = style.getInnerStyle("area");
         Style wrapper_style = wrap_style.getInnerStyle("selection");
         wrapper_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 255, 0, 150)));
         wrapper_style.borderRadius = new CornerRadius(6);
         DefaultsService.getDefaultTheme().replaceDefaultItemStyle(WrapGrid.class, style);
-
 
         setMinSize(500, 100);
         setBackground(45, 45, 45);
@@ -81,8 +79,8 @@ public class ComplexTest extends ActiveWindow {
         });
         ButtonCore b4 = getButton("b4", 26, 30, SizePolicy.FIXED);
         b4.eventMouseClick.add((sender, args) -> {
-//            TreeItem ti = (TreeItem) treeview.getSelectedItem();
-//            treeview.sortBrunch(ti);
+            // TreeItem ti = (TreeItem) treeview.getSelectedItem();
+            // treeview.sortBrunch(ti);
             TreeItem ti = treeview.getRootItem();
             treeview.removeItem(ti);
             TreeItem ti1 = new TreeItem(TreeItemType.BRANCH, "newRoot");
@@ -146,6 +144,17 @@ public class ComplexTest extends ActiveWindow {
         // System.out.println("FocusedItem: " +
         // getHandler().getFocusedItem().getItemName());
         // });
+
+        wrap.eventScrollUp.add((sender, args) -> {
+            if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1) {
+                wrap.setCellSize(wrap.getCellWidth() + 10, wrap.getCellHeight() + 10);
+            }
+        });
+        wrap.eventScrollDown.add((sender, args) -> {
+            if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1) {
+                wrap.setCellSize(wrap.getCellWidth() - 10, wrap.getCellHeight() - 10);
+            }
+        });
     }
 
     private void fillBlocks() {
@@ -165,11 +174,11 @@ public class ComplexTest extends ActiveWindow {
         style.font = DefaultsService.getDefaultFont();// new Font("Courier New", Font.PLAIN, 16);
         style.width = w;
         style.minWidth = 30;
-        style.maxWidth = 100;
+        // style.maxWidth = 100;
         style.widthPolicy = policy;
         style.height = h;
         style.minHeight = 30;
-        style.maxHeight = 100;
+        // style.maxHeight = 100;
         style.heightPolicy = policy;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
@@ -198,7 +207,7 @@ public class ComplexTest extends ActiveWindow {
     private TreeItem getTreeBranch() {
         TreeItem item = new TreeItem(TreeItemType.BRANCH, "branch" + count1);
         count1++;
-        item.setFont(new Font("Arial Black",Font.PLAIN,10));
+        item.setFont(new Font("Arial Black", Font.PLAIN, 10));
         item.setFontSize(15);
         // item.setText(item.getItemName());
         return item;

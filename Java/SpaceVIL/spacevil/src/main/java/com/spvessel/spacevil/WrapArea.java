@@ -25,8 +25,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
     public EventCommonMethod itemListChanged = new EventCommonMethod();
 
     @Override
-    public void release()
-    {
+    public void release() {
         selectionChanged.clear();
         itemListChanged.clear();
     }
@@ -399,6 +398,9 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             int column = 0;
             int row = 0;
             for (InterfaceBaseItem item : getItems()) {
+                if (!item.isVisible())
+                    continue;
+                item.setSize(_cellWidth, _cellHeight);
                 item.setX((int) (x + (_cellWidth + getSpacing().horizontal) * column));
                 int itemY = (int) (globalY + (_cellHeight + getSpacing().vertical) * row);
                 item.setY(itemY);
@@ -438,6 +440,9 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             int column = 0;
             int row = 0;
             for (InterfaceBaseItem item : getItems()) {
+                if (!item.isVisible())
+                    continue;
+                item.setSize(_cellWidth, _cellHeight);
                 item.setY((int) (y + (_cellHeight + getSpacing().vertical) * row));
 
                 int itemX = (int) (globalX + (_cellWidth + getSpacing().horizontal) * column);
