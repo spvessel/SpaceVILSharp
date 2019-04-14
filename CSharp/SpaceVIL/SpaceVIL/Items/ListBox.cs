@@ -456,8 +456,17 @@ namespace SpaceVIL
             _grid.InsertItem(Menu, 1, 1);
 
             //Events Connections
-            EventScrollUp += VScrollBar.EventScrollUp.Invoke;
-            EventScrollDown += VScrollBar.EventScrollDown.Invoke;
+            EventScrollUp += (sender, args) =>
+            {
+                if (args.Mods == 0)
+                    VScrollBar.EventScrollUp.Invoke(sender, args);
+            };
+
+            EventScrollDown += (sender, args) =>
+            {
+                if (args.Mods == 0)
+                    VScrollBar.EventScrollDown.Invoke(sender, args);
+            };
             _area.ItemListChanged += () => { UpdateElements(); };
 
             VScrollBar.Slider.EventValueChanged += (sender) => { UpdateVListArea(); };

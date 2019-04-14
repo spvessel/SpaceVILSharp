@@ -1020,6 +1020,7 @@ final class DrawEngine {
         _kargs.scancode = scancode;
         _kargs.state = InputState.getEnum(action);
         _kargs.mods = KeyMods.getEnums(mods);
+        _margs.mods = KeyMods.getEnums(mods);
 
         if ((focusedItem instanceof InterfaceTextShortcuts) && action == InputState.PRESS.getValue()) {
             if ((mods == KeyMods.CONTROL.getValue() && key == KeyCode.V.getValue())

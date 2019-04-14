@@ -446,16 +446,37 @@ namespace SpaceVIL
             {
                 base.AddItem(_hlayout);
                 _hlayout.AddItems(_area, VScrollBar);
-                EventScrollUp += VScrollBar.EventScrollUp.Invoke;
-                EventScrollDown += VScrollBar.EventScrollDown.Invoke;
+
+                EventScrollUp += (sender, args) =>
+                {
+                    if (args.Mods == 0)
+                        VScrollBar.EventScrollUp.Invoke(sender, args);
+                };
+
+                EventScrollDown += (sender, args) =>
+                {
+                    if (args.Mods == 0)
+                        VScrollBar.EventScrollDown.Invoke(sender, args);
+                };
+
                 VScrollBar.Slider.EventValueChanged += (sender) => { UpdateWrapArea(); };
             }
             else
             {
                 base.AddItem(_vlayout);
                 _vlayout.AddItems(_area, HScrollBar);
-                EventScrollUp += HScrollBar.EventScrollUp.Invoke;
-                EventScrollDown += HScrollBar.EventScrollDown.Invoke;
+
+                EventScrollUp += (sender, args) =>
+                {
+                    if (args.Mods == 0)
+                        HScrollBar.EventScrollUp.Invoke(sender, args);
+                };
+
+                EventScrollDown += (sender, args) =>
+                {
+                    if (args.Mods == 0)
+                        HScrollBar.EventScrollDown.Invoke(sender, args);
+                };
                 HScrollBar.Slider.EventValueChanged += (sender) => { UpdateWrapArea(); };
             }
         }

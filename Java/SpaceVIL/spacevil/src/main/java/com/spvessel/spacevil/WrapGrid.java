@@ -5,6 +5,7 @@ import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.Orientation;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 
@@ -404,14 +405,26 @@ public class WrapGrid extends Prototype {
         if (getOrientation() == Orientation.HORIZONTAL) {
             super.addItem(_hlayout);
             _hlayout.addItems(_area, vScrollBar);
-            eventScrollUp.add(vScrollBar.eventScrollUp::execute);
-            eventScrollDown.add(vScrollBar.eventScrollDown::execute);
+            eventScrollUp.add((sender, args) -> {
+                if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+                    vScrollBar.eventScrollUp.execute(sender, args);
+            });
+            eventScrollDown.add((sender, args) -> {
+                if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+                    vScrollBar.eventScrollDown.execute(sender, args);
+            });
             vScrollBar.slider.eventValueChanged.add((sender) -> updateWrapArea());
         } else {
             super.addItem(_vlayout);
             _vlayout.addItems(_area, hScrollBar);
-            eventScrollUp.add(hScrollBar.eventScrollUp::execute);
-            eventScrollDown.add(hScrollBar.eventScrollDown::execute);
+            eventScrollUp.add((sender, args) -> {
+                if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+                    hScrollBar.eventScrollUp.execute(sender, args);
+            });
+            eventScrollDown.add((sender, args) -> {
+                if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+                    hScrollBar.eventScrollDown.execute(sender, args);
+            });
             hScrollBar.slider.eventValueChanged.add((sender) -> updateWrapArea());
         }
     }

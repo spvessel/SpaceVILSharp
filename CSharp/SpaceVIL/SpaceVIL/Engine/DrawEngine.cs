@@ -990,6 +990,8 @@ namespace SpaceVIL
             _kargs.Scancode = scancode;
             _kargs.State = action;
             _kargs.Mods = mods;
+            _margs.Mods = mods;
+            
             if ((FocusedItem is ITextShortcuts) && action == InputState.Press)
             {
                 if ((mods == KeyMods.Control && key == KeyCode.V) || (mods == KeyMods.Shift && key == KeyCode.Insert))

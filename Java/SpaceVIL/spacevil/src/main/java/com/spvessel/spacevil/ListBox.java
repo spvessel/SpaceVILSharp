@@ -6,6 +6,7 @@ import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 
@@ -422,8 +423,14 @@ public class ListBox extends Prototype {
         // Events Connections
         _area.itemListChanged.add(this::updateElements);
 
-        eventScrollUp.add(vScrollBar.eventScrollUp::execute);
-        eventScrollDown.add(vScrollBar.eventScrollDown::execute);
+        eventScrollUp.add((sender, args) -> {
+            if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+                vScrollBar.eventScrollUp.execute(sender, args);
+        });
+        eventScrollDown.add((sender, args) -> {
+            if (args.mods.contains(KeyMods.NO) && args.mods.size() == 1)
+                vScrollBar.eventScrollDown.execute(sender, args);
+        });
 
         vScrollBar.slider.eventValueChanged.add((sender) -> updateVListArea());
         hScrollBar.slider.eventValueChanged.add((sender) -> updateHListArea());
