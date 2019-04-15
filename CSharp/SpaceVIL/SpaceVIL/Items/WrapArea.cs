@@ -41,6 +41,21 @@ namespace SpaceVIL
             return _step;
         }
 
+        private bool _isStretch = false;
+
+        public bool IsStretch()
+        {
+            return _isStretch;
+        }
+
+        public void SetStretch(bool value)
+        {
+            if (value == _isStretch)
+                return;
+            _isStretch = value;
+            UpdateLayout();
+        }
+
         private int _selection = -1;
 
         /// <returns> Number of the selected item </returns>
@@ -419,14 +434,26 @@ namespace SpaceVIL
                 int itemCount = (w + GetSpacing().Horizontal) / (_cellWidth + GetSpacing().Horizontal);
                 int column = 0;
                 int row = 0;
+                _columns = (itemCount > GetItems().Count) ? GetItems().Count : itemCount;
+
+                // stretch
+                int xOffset = 0;
+                if (_isStretch)
+                {
+                    int freeSpace = w - ((_cellWidth + GetSpacing().Horizontal) * _columns) - GetSpacing().Horizontal;
+                    xOffset = freeSpace / _columns;
+                    if (_columns > 1)
+                        xOffset = freeSpace / (_columns - 1);
+                }
+
                 foreach (IBaseItem item in GetItems())
                 {
                     if (!item.IsVisible())
                         continue;
 
                     item.SetSize(_cellWidth, _cellHeight);
-                    // Console.WriteLine(item.GetItemName());
-                    item.SetX((int)(x + (_cellWidth + GetSpacing().Horizontal) * column));
+
+                    item.SetX((int)(x + (_cellWidth + GetSpacing().Horizontal + xOffset) * column));
                     int itemY = (int)(globalY + (_cellHeight + GetSpacing().Vertical) * row);
                     item.SetY(itemY);
                     item.SetConfines();
@@ -459,7 +486,6 @@ namespace SpaceVIL
                 if (GetItems().Count % itemCount == 0)
                     row--;
                 _rows = row + 1;
-                _columns = (itemCount > GetItems().Count) ? GetItems().Count : itemCount;
             }
             else if (_orientation == Orientation.Vertical)
             {
@@ -469,14 +495,26 @@ namespace SpaceVIL
                 int itemCount = (h + GetSpacing().Vertical) / (_cellHeight + GetSpacing().Vertical);
                 int column = 0;
                 int row = 0;
+                _rows = (itemCount > GetItems().Count) ? GetItems().Count : itemCount;
+
+                // stretch
+                int yOffset = 0;
+                if (_isStretch)
+                {
+                    int freeSpace = h - ((_cellHeight + GetSpacing().Vertical + yOffset) * _rows) - GetSpacing().Vertical;
+                    yOffset = freeSpace / _rows;
+                    if (_rows > 1)
+                        yOffset = freeSpace / (_rows - 1);
+                }
+
                 foreach (IBaseItem item in GetItems())
                 {
                     if (!item.IsVisible())
                         continue;
-                        
-                    item.SetSize(_cellWidth, _cellHeight);
-                    item.SetY((int)(y + (_cellHeight + GetSpacing().Vertical) * row));
 
+                    item.SetSize(_cellWidth, _cellHeight);
+
+                    item.SetY((int)(y + (_cellHeight + GetSpacing().Vertical + yOffset) * row));
                     int itemX = (int)(globalX + (_cellWidth + GetSpacing().Horizontal) * column);
                     item.SetX(itemX);
                     item.SetConfines();
@@ -509,7 +547,6 @@ namespace SpaceVIL
                 if (GetItems().Count % itemCount == 0)
                     column--;
                 _columns = column + 1;
-                _rows = (itemCount > GetItems().Count) ? GetItems().Count : itemCount;
             }
             _isUpdating = false;
         }

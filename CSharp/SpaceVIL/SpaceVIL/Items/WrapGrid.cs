@@ -12,6 +12,16 @@ namespace SpaceVIL
     {
         static int count = 0;
 
+        public bool IsStretch()
+        {
+            return _area.IsStretch();
+        }
+
+        public void SetStretch(bool value)
+        {
+            _area.SetStretch(value);
+        }
+
         public int GetRowCount()
         {
             return _area._rows;

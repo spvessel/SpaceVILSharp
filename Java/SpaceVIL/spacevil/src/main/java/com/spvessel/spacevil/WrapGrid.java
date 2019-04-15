@@ -15,6 +15,14 @@ import java.util.List;
 public class WrapGrid extends Prototype {
     static int count = 0;
 
+    public boolean isStretch() {
+        return _area.isStretch();
+    }
+
+    public void setStretch(boolean value) {
+        _area.setStretch(value);
+    }
+
     public int getRowCount() {
         return _area._rows;
     }

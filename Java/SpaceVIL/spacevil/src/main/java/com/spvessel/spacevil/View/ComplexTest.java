@@ -39,7 +39,8 @@ public class ComplexTest extends ActiveWindow {
 
         treeview = new TreeView();
         block = new Grid(4, 4);
-        wrap = new WrapGrid(100, 100, Orientation.HORIZONTAL);
+        wrap = new WrapGrid(100, 100, Orientation.VERTICAL);
+        wrap.setStretch(true);
 
         TitleBar title = new TitleBar("ComplexTest");
         addItem(title);

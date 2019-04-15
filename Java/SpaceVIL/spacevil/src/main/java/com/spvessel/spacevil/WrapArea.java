@@ -46,6 +46,19 @@ public class WrapArea extends Prototype implements InterfaceGrid {
         return _step;
     }
 
+    private boolean _isStretch = false;
+
+    public boolean isStretch() {
+        return _isStretch;
+    }
+
+    public void setStretch(boolean value) {
+        if (value == _isStretch)
+            return;
+        _isStretch = value;
+        updateLayout();
+    }
+
     private int _selection = -1;
 
     /**
@@ -397,11 +410,22 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             int itemCount = (w + getSpacing().horizontal) / (_cellWidth + getSpacing().horizontal);
             int column = 0;
             int row = 0;
+            _columns = (itemCount > getItems().size()) ? getItems().size() : itemCount;
+
+            // stretch
+            int xOffset = 0;
+            if (_isStretch) {
+                int freeSpace = w - ((_cellWidth + getSpacing().horizontal) * _columns) - getSpacing().horizontal;
+                xOffset = freeSpace / _columns;
+                if (_columns > 1)
+                    xOffset = freeSpace / (_columns - 1);
+            }
+
             for (InterfaceBaseItem item : getItems()) {
                 if (!item.isVisible())
                     continue;
                 item.setSize(_cellWidth, _cellHeight);
-                item.setX((int) (x + (_cellWidth + getSpacing().horizontal) * column));
+                item.setX((int) (x + (_cellWidth + getSpacing().horizontal + xOffset) * column));
                 int itemY = (int) (globalY + (_cellHeight + getSpacing().vertical) * row);
                 item.setY(itemY);
                 item.setConfines();
@@ -431,7 +455,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             if (getItems().size() % itemCount == 0)
                 row--;
             _rows = row + 1;
-            _columns = (itemCount > getItems().size()) ? getItems().size() : itemCount;
+
         } else if (_orientation == Orientation.VERTICAL) {
             // update
             long globalX = x + offset;
@@ -439,11 +463,22 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             int itemCount = (h + getSpacing().vertical) / (_cellHeight + getSpacing().vertical);
             int column = 0;
             int row = 0;
+            _rows = (itemCount > getItems().size()) ? getItems().size() : itemCount;
+
+            // stretch
+            int yOffset = 0;
+            if (_isStretch) {
+                int freeSpace = h - ((_cellHeight + getSpacing().vertical + yOffset) * _rows) - getSpacing().vertical;
+                yOffset = freeSpace / _rows;
+                if (_rows > 1)
+                    yOffset = freeSpace / (_rows - 1);
+            }
+
             for (InterfaceBaseItem item : getItems()) {
                 if (!item.isVisible())
                     continue;
                 item.setSize(_cellWidth, _cellHeight);
-                item.setY((int) (y + (_cellHeight + getSpacing().vertical) * row));
+                item.setY((int) (y + (_cellHeight + getSpacing().vertical + yOffset) * row));
 
                 int itemX = (int) (globalX + (_cellWidth + getSpacing().horizontal) * column);
                 item.setX(itemX);
@@ -474,7 +509,6 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             if (getItems().size() % itemCount == 0)
                 column--;
             _columns = column + 1;
-            _rows = (itemCount > getItems().size()) ? getItems().size() : itemCount;
         }
         _isUpdating = false;
     }
