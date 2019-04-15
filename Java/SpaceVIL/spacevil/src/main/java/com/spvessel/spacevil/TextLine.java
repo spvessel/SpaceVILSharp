@@ -135,8 +135,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 super.setHeight(height);
             }
 
-            if (getParent() == null) //Вроде не очень-то и нужно
-                return null;
+//            if (getParent() == null) //Вроде не очень-то и нужно
+//                return null;
 
             if (_isRecountable) {
                 if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
