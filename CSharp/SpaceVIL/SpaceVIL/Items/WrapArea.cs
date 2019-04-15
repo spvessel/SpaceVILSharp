@@ -435,10 +435,15 @@ namespace SpaceVIL
                 int column = 0;
                 int row = 0;
                 _columns = (itemCount > GetItems().Count) ? GetItems().Count : itemCount;
+                if (_columns == 0)
+                {
+                    _columns = 1;
+                    itemCount = 1;
+                }
 
                 // stretch
                 int xOffset = 0;
-                if (_isStretch)
+                if (_isStretch && itemCount < GetItems().Count)
                 {
                     int freeSpace = w - ((_cellWidth + GetSpacing().Horizontal) * _columns) - GetSpacing().Horizontal;
                     xOffset = freeSpace / _columns;
@@ -496,10 +501,15 @@ namespace SpaceVIL
                 int column = 0;
                 int row = 0;
                 _rows = (itemCount > GetItems().Count) ? GetItems().Count : itemCount;
+                if (_rows == 0)
+                {
+                    _rows = 1;
+                    itemCount = 1;
+                }
 
                 // stretch
                 int yOffset = 0;
-                if (_isStretch)
+                if (_isStretch && itemCount < GetItems().Count)
                 {
                     int freeSpace = h - ((_cellHeight + GetSpacing().Vertical + yOffset) * _rows) - GetSpacing().Vertical;
                     yOffset = freeSpace / _rows;

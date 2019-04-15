@@ -33,7 +33,7 @@ public class ComplexTest extends ActiveWindow {
         wrapper_style.borderRadius = new CornerRadius(6);
         DefaultsService.getDefaultTheme().replaceDefaultItemStyle(WrapGrid.class, style);
 
-        setMinSize(500, 100);
+        setMinSize(150, 100);
         setBackground(45, 45, 45);
         setPadding(2, 2, 2, 2);
 
@@ -119,7 +119,7 @@ public class ComplexTest extends ActiveWindow {
         img.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         split_area.assignRightItem(wrap);
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 5; i++) {
             wrap.addItem(getButton("Wrap" + count++, 100, 100, SizePolicy.EXPAND));
         }
 

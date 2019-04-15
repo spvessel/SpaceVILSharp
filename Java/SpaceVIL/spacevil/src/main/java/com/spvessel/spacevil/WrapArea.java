@@ -411,10 +411,14 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             int column = 0;
             int row = 0;
             _columns = (itemCount > getItems().size()) ? getItems().size() : itemCount;
+            if (_columns == 0) {
+                _columns = 1;
+                itemCount = 1;
+            }
 
             // stretch
             int xOffset = 0;
-            if (_isStretch) {
+            if (_isStretch && itemCount < getItems().size()) {
                 int freeSpace = w - ((_cellWidth + getSpacing().horizontal) * _columns) - getSpacing().horizontal;
                 xOffset = freeSpace / _columns;
                 if (_columns > 1)
@@ -464,10 +468,14 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             int column = 0;
             int row = 0;
             _rows = (itemCount > getItems().size()) ? getItems().size() : itemCount;
+            if (_rows == 0) {
+                _rows = 1;
+                itemCount = 1;
+            }
 
             // stretch
             int yOffset = 0;
-            if (_isStretch) {
+            if (_isStretch && itemCount < getItems().size()) {
                 int freeSpace = h - ((_cellHeight + getSpacing().vertical + yOffset) * _rows) - getSpacing().vertical;
                 yOffset = freeSpace / _rows;
                 if (_rows > 1)
