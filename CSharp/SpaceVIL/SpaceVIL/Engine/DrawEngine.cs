@@ -989,9 +989,42 @@ namespace SpaceVIL
             _kargs.Key = key;
             _kargs.Scancode = scancode;
             _kargs.State = action;
-            _kargs.Mods = mods;
-            _margs.Mods = mods;
-            
+            if (CommonService.GetOSType().Equals(OSType.Linux))
+            {
+                if (mods == 0 && key != 0 && action == InputState.Press)
+                {
+                    _kargs.Mods = 0;
+                    // shift
+                    if (key == KeyCode.LeftShift || key == KeyCode.RightShift)
+                    {
+                        _kargs.Mods |= KeyMods.Shift;
+                    }
+                    // control
+                    if (key == KeyCode.LeftControl || key == KeyCode.RightControl)
+                    {
+                        _kargs.Mods |= KeyMods.Control;
+                    }
+                    // alt
+                    if (key == KeyCode.LeftAlt || key == KeyCode.LeftAlt)
+                    {
+                        _kargs.Mods |= KeyMods.Alt;
+                    }
+                    // super
+                    if (key == KeyCode.LeftSuper || key == KeyCode.LeftSuper)
+                    {
+                        _kargs.Mods |= KeyMods.Super;
+                    }
+                }
+                if (action == 0)
+                {
+                    _kargs.Mods = 0;
+                }
+            }
+            else
+                _kargs.Mods = mods;
+
+            _margs.Mods = _kargs.Mods;
+
             if ((FocusedItem is ITextShortcuts) && action == InputState.Press)
             {
                 if ((mods == KeyMods.Control && key == KeyCode.V) || (mods == KeyMods.Shift && key == KeyCode.Insert))
@@ -1158,6 +1191,7 @@ namespace SpaceVIL
         }
 
         // internal float _sleep = 1000.0f / 60.0f;
+        private float _intervalVeryLow = 1.0f;
         private float _intervalLow = 1.0f / 10.0f;
         private float _intervalMedium = 1.0f / 30.0f;
         private float _intervalHigh = 1.0f / 60.0f;
@@ -1172,6 +1206,10 @@ namespace SpaceVIL
             Monitor.Enter(_locker);
             try
             {
+                if (value == RedrawFrequency.VeryLow)
+                {
+                    _intervalAssigned = _intervalVeryLow;
+                }
                 if (value == RedrawFrequency.Low)
                 {
                     _intervalAssigned = _intervalLow;

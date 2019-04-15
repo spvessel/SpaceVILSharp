@@ -119,6 +119,10 @@ final class DrawEngine {
         _tooltip.getTextLine().setHandler(handler);
         _tooltip.getTextLine().setParent(_tooltip);
         _tooltip.initElements();
+
+        _margs.clear();
+        _kargs.clear();
+        _tiargs.clear();
     }
 
     void dispose() {
@@ -580,7 +584,8 @@ final class DrawEngine {
                     }
                 }
 
-                if (_handler.getCoreWindow().getLayout().getContainer()._sides.size() != 0 && !_handler.getCoreWindow().isMaximized) {
+                if (_handler.getCoreWindow().getLayout().getContainer()._sides.size() != 0
+                        && !_handler.getCoreWindow().isMaximized) {
 
                     if (CommonService.getOSType() == OSType.MAC) {
                         setWindowSize(w, h);
@@ -724,8 +729,8 @@ final class DrawEngine {
             return;
         }
 
-        if (action == InputState.PRESS.getValue()
-                && _handler.getCoreWindow().getLayout().getContainer().getSides(ptrRelease.getX(), ptrRelease.getY()).size() != 0) {
+        if (action == InputState.PRESS.getValue() && _handler.getCoreWindow().getLayout().getContainer()
+                .getSides(ptrRelease.getX(), ptrRelease.getY()).size() != 0) {
             _handler.getCoreWindow().getLayout().getContainer().saveLastFocus(focusedItem);
         }
 
@@ -1019,8 +1024,37 @@ final class DrawEngine {
         _kargs.key = KeyCode.getEnum(key);
         _kargs.scancode = scancode;
         _kargs.state = InputState.getEnum(action);
-        _kargs.mods = KeyMods.getEnums(mods);
-        _margs.mods = KeyMods.getEnums(mods);
+        if (CommonService.getOSType().equals(OSType.LINUX)) {
+            if (mods == 0 && key != 0 && action == 1) {
+                _kargs.mods.clear();
+                // shift
+                if (key == 340 || key == 344) {
+                    _kargs.mods.add(KeyMods.SHIFT);
+                }
+                // control
+                if (key == 341 || key == 345) {
+                    _kargs.mods.add(KeyMods.CONTROL);
+                }
+                // alt
+                if (key == 342 || key == 346) {
+                    _kargs.mods.add(KeyMods.ALT);
+                }
+                // super
+                if (key == 343 || key == 347) {
+                    _kargs.mods.add(KeyMods.SUPER);
+                }
+
+                if (_kargs.mods.size() == 0)
+                    _kargs.mods.add(KeyMods.NO);
+            }
+            if (action == 0) {
+                _kargs.mods.clear();
+                _kargs.mods.add(KeyMods.NO);
+            }
+        } else
+            _kargs.mods = KeyMods.getEnums(mods);
+
+        _margs.mods = _kargs.mods;
 
         if ((focusedItem instanceof InterfaceTextShortcuts) && action == InputState.PRESS.getValue()) {
             if ((mods == KeyMods.CONTROL.getValue() && key == KeyCode.V.getValue())
@@ -1174,6 +1208,7 @@ final class DrawEngine {
         _handler.getCoreWindow().getLayout().executePollActions();
     }
 
+    private float _intervalVeryLow = 1.0f;
     private float _intervalLow = 1.0f / 10.0f;
     private float _intervalMedium = 1.0f / 30.0f;
     private float _intervalHigh = 1.0f / 60.0f;
@@ -1187,7 +1222,9 @@ final class DrawEngine {
     void setFrequency(RedrawFrequency value) {
         _locker.lock();
         try {
-            if (value == RedrawFrequency.LOW) {
+            if (value == RedrawFrequency.VERY_LOW) {
+                _intervalAssigned = _intervalVeryLow;
+            } else if (value == RedrawFrequency.LOW) {
                 _intervalAssigned = _intervalLow;
             } else if (value == RedrawFrequency.MEDIUM) {
                 _intervalAssigned = _intervalMedium;
@@ -1315,13 +1352,15 @@ final class DrawEngine {
             for (InterfaceBaseItem item : float_items) {
                 if (item.getHeightPolicy() == SizePolicy.EXPAND) {
                     int[] confines = item.getConfines();
-                    item.setConfines(confines[0], confines[1], 0, _handler.getCoreWindow().getLayout().getContainer().getHeight());
+                    item.setConfines(confines[0], confines[1], 0,
+                            _handler.getCoreWindow().getLayout().getContainer().getHeight());
                     item.setY(0);
                     item.setHeight(_handler.getCoreWindow().getLayout().getContainer().getHeight());
                 }
                 if (item.getWidthPolicy() == SizePolicy.EXPAND) {
                     int[] confines = item.getConfines();
-                    item.setConfines(0, _handler.getCoreWindow().getLayout().getContainer().getWidth(), confines[2], confines[3]);
+                    item.setConfines(0, _handler.getCoreWindow().getLayout().getContainer().getWidth(), confines[2],
+                            confines[3]);
                     item.setX(0);
                     item.setWidth(_handler.getCoreWindow().getLayout().getContainer().getWidth());
                 }
@@ -1342,7 +1381,8 @@ final class DrawEngine {
         // }
         // if (item.getWidthPolicy() == SizePolicy.EXPAND) {
         // int[] confines = item.getConfines();
-        // item.setConfines(0, _handler.getCoreWindow().getWindow().getWidth(), confines[2],
+        // item.setConfines(0, _handler.getCoreWindow().getWindow().getWidth(),
+        // confines[2],
         // confines[3]);
         // item.setX(0);
         // item.setWidth(_handler.getCoreWindow().getWindow().getWidth());
@@ -1737,7 +1777,8 @@ final class DrawEngine {
 
         int bb_h = textPrt.heightTexture, bb_w = textPrt.widthTexture;
         float i_x0 = ((float) textPrt.xTextureShift / (float) _handler.getCoreWindow().getWidth() * 2.0f) - 1.0f;
-        float i_y0 = ((float) textPrt.yTextureShift / (float) _handler.getCoreWindow().getHeight() * 2.0f - 1.0f) * (-1.0f);
+        float i_y0 = ((float) textPrt.yTextureShift / (float) _handler.getCoreWindow().getHeight() * 2.0f - 1.0f)
+                * (-1.0f);
         float i_x1 = (((float) textPrt.xTextureShift + (float) bb_w / _handler.getCoreWindow().getDpiScale()[0])
                 / (float) _handler.getCoreWindow().getWidth() * 2.0f) - 1.0f;
         float i_y1 = (((float) textPrt.yTextureShift + (float) bb_h / _handler.getCoreWindow().getDpiScale()[0])
@@ -1817,10 +1858,10 @@ final class DrawEngine {
 
         float i_x0 = ((float) area.getX() / (float) _handler.getCoreWindow().getWidth() * 2.0f) - 1.0f;
         float i_y0 = ((float) area.getY() / (float) _handler.getCoreWindow().getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float i_x1 = (((float) area.getX() + (float) area.getWidth()) / (float) _handler.getCoreWindow().getWidth() * 2.0f)
-                - 1.0f;
-        float i_y1 = (((float) area.getY() + (float) area.getHeight()) / (float) _handler.getCoreWindow().getHeight() * 2.0f
-                - 1.0f) * (-1.0f);
+        float i_x1 = (((float) area.getX() + (float) area.getWidth()) / (float) _handler.getCoreWindow().getWidth()
+                * 2.0f) - 1.0f;
+        float i_y1 = (((float) area.getY() + (float) area.getHeight()) / (float) _handler.getCoreWindow().getHeight()
+                * 2.0f - 1.0f) * (-1.0f);
 
         _texture.useShader();
 

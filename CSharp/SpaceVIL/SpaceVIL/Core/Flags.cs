@@ -393,7 +393,7 @@ namespace SpaceVIL.Core
 
     public enum RedrawFrequency
     {
-        Low, Medium, High, Ultra
+        VeryLow, Low, Medium, High, Ultra
     }
 
     public enum EmbeddedCursor
