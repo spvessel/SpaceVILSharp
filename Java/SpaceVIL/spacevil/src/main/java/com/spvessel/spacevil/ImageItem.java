@@ -223,7 +223,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     }
 
     // self update
-    public void UpdateLayout() {
+    void UpdateLayout() {
         UpdateVerticalPosition();
         UpdateHorizontalPosition();
     }
