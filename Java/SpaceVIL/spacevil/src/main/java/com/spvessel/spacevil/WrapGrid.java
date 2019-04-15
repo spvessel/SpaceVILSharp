@@ -88,11 +88,11 @@ public class WrapGrid extends Prototype {
         _area.unselect();
     }
 
-    public void setSelectionVisibility(boolean value) {
+    public void setSelectionVisible(boolean value) {
         _area.setSelectionVisible(value);
     }
 
-    public boolean isSelectionVisibility() {
+    public boolean isSelectionVisible() {
         return _area.isSelectionVisible();
     }
 
