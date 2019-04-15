@@ -105,7 +105,7 @@ public class InputTest extends ActiveWindow {
         tl.setForeground(Color.WHITE);
         tl.setTextAlignment(ItemAlignment.TOP);
         // System.out.println(tl.getTextWidth());
-        tl.setText(null);
+        tl.setText("sdasdasd");
 
         layout.addItem(tl);
 
@@ -151,7 +151,7 @@ public class InputTest extends ActiveWindow {
         });
 
         Label label = new Label("1234567890");
-        System.out.println(label.getTextWidth());
+//        System.out.println(label.getTextWidth());
         layout.addItem(label);
 
         eventDrop.add((sender, args) -> {

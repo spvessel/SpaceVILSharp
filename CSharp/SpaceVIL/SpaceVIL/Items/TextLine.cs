@@ -152,8 +152,8 @@ namespace SpaceVIL
                     base.SetHeight(height);
                 }
 
-                if (GetParent() == null) //Вроде не очень-то и нужно
-                    return null;
+                // if (GetParent() == null) //Вроде не очень-то и нужно
+                //     return null;
 
                 if (_isRecountable)
                 {
