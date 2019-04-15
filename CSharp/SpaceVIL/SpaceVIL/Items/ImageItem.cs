@@ -219,7 +219,7 @@ namespace SpaceVIL
         }
 
         //self update
-        public void UpdateLayout()
+        internal void UpdateLayout()
         {
             UpdateVerticalPosition();
             UpdateHorizontalPosition();
