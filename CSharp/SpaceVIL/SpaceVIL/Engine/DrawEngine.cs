@@ -814,6 +814,7 @@ namespace SpaceVIL
 
         private bool GetHoverPrototype(float xpos, float ypos, InputEventType action)
         {
+            _inputLocker = true;
             List<Prototype> queue = new List<Prototype>();
             HoveredItems.Clear();
 
@@ -834,7 +835,7 @@ namespace SpaceVIL
                     layout_box_of_items.AddRange(GetInnerItems(leaf));
                 }
             }
-
+            _inputLocker = false;
             foreach (var item in layout_box_of_items)
             {
                 Prototype tmp = item as Prototype;
@@ -922,11 +923,12 @@ namespace SpaceVIL
         private List<IBaseItem> GetInnerItems(Prototype root)
         {
             List<IBaseItem> list = new List<IBaseItem>();
-            List<IBaseItem> root_items = new List<IBaseItem>(root.GetItems());
+            List<IBaseItem> root_items = root.GetItems();
             foreach (var item in root_items)
             {
                 if (!item.IsVisible() || !item.IsDrawable())
                     continue;
+
                 Prototype leaf = item as Prototype;
                 if (leaf != null)
                 {
@@ -985,10 +987,11 @@ namespace SpaceVIL
             if (!_handler.Focusable)
                 return;
 
-
             _kargs.Key = key;
             _kargs.Scancode = scancode;
             _kargs.State = action;
+            _kargs.Mods = mods;
+
             if (CommonService.GetOSType().Equals(OSType.Linux))
             {
                 if (mods == 0 && key != 0 && action == InputState.Press)
@@ -996,32 +999,22 @@ namespace SpaceVIL
                     _kargs.Mods = 0;
                     // shift
                     if (key == KeyCode.LeftShift || key == KeyCode.RightShift)
-                    {
                         _kargs.Mods |= KeyMods.Shift;
-                    }
                     // control
                     if (key == KeyCode.LeftControl || key == KeyCode.RightControl)
-                    {
                         _kargs.Mods |= KeyMods.Control;
-                    }
                     // alt
                     if (key == KeyCode.LeftAlt || key == KeyCode.LeftAlt)
-                    {
                         _kargs.Mods |= KeyMods.Alt;
-                    }
                     // super
                     if (key == KeyCode.LeftSuper || key == KeyCode.LeftSuper)
-                    {
                         _kargs.Mods |= KeyMods.Super;
-                    }
                 }
                 if (action == 0)
                 {
                     _kargs.Mods = 0;
                 }
             }
-            else
-                _kargs.Mods = mods;
 
             _margs.Mods = _kargs.Mods;
 
@@ -1299,14 +1292,14 @@ namespace SpaceVIL
             _fbo.UnbindFBO();
 
             _double_click_timer.Start();
-            // Glfw.SwapInterval(0);
+            Glfw.SwapInterval(0);
             while (!_handler.IsClosing())
             {
-                Glfw.WaitEventsTimeout(GetFrequency());
-                // Thread.Sleep(15);
-                // Glfw.PollEvents();
+                // Glfw.WaitEventsTimeout(GetFrequency());
+                Glfw.PollEvents();
                 // Glfw.WaitEvents();
                 // glClearColor(0, 0, 0, 0);
+                // Thread.Sleep(15);
 
                 if (MaximizeRequest)
                 {
@@ -1407,22 +1400,14 @@ namespace SpaceVIL
 
         private bool CheckOutsideBorders(IBaseItem shell)
         {
-            // if(shell.GetItemName() == "_cursor")
-            // {
-            //     Console.WriteLine(
-            //         shell.GetItemName() + " " +
-            //         shell.GetX() + " " +
-            //         shell.GetY() + " " 
-            //     );
-            // }
-            if (shell.GetParent() == null)
-                return false;
-
-            if (_bounds.ContainsKey(shell.GetParent()))
+            Prototype parent = shell.GetParent();
+            if (parent != null && _bounds.ContainsKey(parent))
             {
-                int[] shape = _bounds[shell.GetParent()];
-                if (shape == null)/////////////////////////////////////
+                int[] shape = _bounds[parent];
+
+                if (shape == null)
                     return false;
+
                 glEnable(GL_SCISSOR_TEST);
                 glScissor(shape[0], shape[1], shape[2], shape[3]);
 
@@ -1499,31 +1484,34 @@ namespace SpaceVIL
         //     SetConfines(shell);
         // }
 
-        private void SetConfines(IBaseItem shell)
+        private void SetConfines(IBaseItem shell, int[] parentConfines)
         {
-            int[] confines = shell.GetParent().GetConfines();
             shell.SetConfines(
-                confines[0],
-                confines[1],
-                confines[2],
-                confines[3]
+                parentConfines[0],
+                parentConfines[1],
+                parentConfines[2],
+                parentConfines[3]
             );
 
             Prototype root = shell as Prototype;
             if (root != null)
             {
-                List<IBaseItem> root_items = new List<IBaseItem>(root.GetItems());
+                List<IBaseItem> root_items = root.GetItems();
                 foreach (var item in root_items)
-                    SetConfines(item);
+                    SetConfines(item, shell.GetConfines());
             }
         }
 
         private void SetScissorRectangle(IBaseItem rect)
         {
-            int x = rect.GetParent().GetX();
-            int y = _handler.GetCoreWindow().GetHeight() - (rect.GetParent().GetY() + rect.GetParent().GetHeight());
-            int w = rect.GetParent().GetWidth();
-            int h = rect.GetParent().GetHeight();
+            Prototype parent = rect.GetParent();
+            if (parent == null)
+                return;
+
+            int x = parent.GetX();
+            int y = _handler.GetCoreWindow().GetHeight() - (parent.GetY() + parent.GetHeight());
+            int w = parent.GetWidth();
+            int h = parent.GetHeight();
             float scale = _handler.GetCoreWindow().GetDpiScale()[0];
             x = (int)((float)x * scale);
             y = (int)((float)y * scale);
@@ -1536,59 +1524,59 @@ namespace SpaceVIL
             if (!_bounds.ContainsKey(rect))
                 _bounds.Add(rect, new int[] { x, y, w, h });
 
-            rect.GetParent().SetConfines(
-                rect.GetParent().GetX() + rect.GetParent().GetPadding().Left,
-                rect.GetParent().GetX() + rect.GetParent().GetWidth() - rect.GetParent().GetPadding().Right,
-                rect.GetParent().GetY() + rect.GetParent().GetPadding().Top,
-                rect.GetParent().GetY() + rect.GetParent().GetHeight() - rect.GetParent().GetPadding().Bottom
+            parent.SetConfines(
+                parent.GetX() + parent.GetPadding().Left,
+                parent.GetX() + parent.GetWidth() - parent.GetPadding().Right,
+                parent.GetY() + parent.GetPadding().Top,
+                parent.GetY() + parent.GetHeight() - parent.GetPadding().Bottom
             );
-            SetConfines(rect);
+            SetConfines(rect, parent.GetConfines());
         }
 
         private bool LazyStencil(IBaseItem shell)
         {
             var outside = new Dictionary<ItemAlignment, Int32[]>();
-
-            if (shell.GetParent() != null
+            Prototype parent = shell.GetParent();
+            if (parent != null
                 // && _isStencilSet == null
                 )
             {
                 //bottom
-                if (shell.GetParent().GetY() + shell.GetParent().GetHeight() < shell.GetY() + shell.GetHeight())
+                if (parent.GetY() + parent.GetHeight() < shell.GetY() + shell.GetHeight())
                 {
                     //match
-                    int y = shell.GetParent().GetY() + shell.GetParent().GetHeight() - shell.GetParent().GetPadding().Bottom;
+                    int y = parent.GetY() + parent.GetHeight() - parent.GetPadding().Bottom;
                     int h = shell.GetHeight();
                     outside.Add(ItemAlignment.Bottom, new int[] { y, h });
                 }
                 //top
-                if (shell.GetParent().GetY() + shell.GetParent().GetPadding().Top > shell.GetY())
+                if (parent.GetY() + parent.GetPadding().Top > shell.GetY())
                 {
                     //match
                     int y = shell.GetY();
-                    int h = shell.GetParent().GetY() + shell.GetParent().GetPadding().Top - shell.GetY();
+                    int h = parent.GetY() + parent.GetPadding().Top - shell.GetY();
                     outside.Add(ItemAlignment.Top, new int[] { y, h });
                 }
                 //right
-                if (shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right <
+                if (parent.GetX() + parent.GetWidth() - parent.GetPadding().Right <
                     shell.GetX() + shell.GetWidth())
                 {
                     //match
-                    int x = shell.GetParent().GetX() + shell.GetParent().GetWidth() - shell.GetParent().GetPadding().Right;
+                    int x = parent.GetX() + parent.GetWidth() - parent.GetPadding().Right;
                     int w = shell.GetWidth();
                     outside.Add(ItemAlignment.Right, new int[] { x, w });
                 }
                 //left
-                if (shell.GetParent().GetX() + shell.GetParent().GetPadding().Left > shell.GetX())
+                if (parent.GetX() + parent.GetPadding().Left > shell.GetX())
                 {
                     //match
                     int x = shell.GetX();
-                    int w = shell.GetParent().GetX() + shell.GetParent().GetPadding().Left - shell.GetX();
+                    int w = parent.GetX() + parent.GetPadding().Left - shell.GetX();
                     outside.Add(ItemAlignment.Left, new int[] { x, w });
                 }
 
                 if (outside.Count > 0
-                // || shell.GetParent() is TextBlock
+                // || parent is TextBlock
                 )
                 {
                     // _isStencilSet = shell;
@@ -1633,7 +1621,7 @@ namespace SpaceVIL
 
                 if (root is Prototype)
                 {
-                    List<IBaseItem> list = new List<IBaseItem>(((Prototype)root).GetItems());
+                    List<IBaseItem> list = ((Prototype)root).GetItems();
                     foreach (var child in list)
                     {
                         DrawItems(child);

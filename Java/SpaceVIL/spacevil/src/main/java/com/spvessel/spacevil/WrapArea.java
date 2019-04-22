@@ -178,7 +178,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             x = _selection / _rows;
             y = _selection % _rows;
         }
-
+        List<InterfaceBaseItem> list = getItems();
         switch (args.key) {
         case UP:
             y--;
@@ -193,8 +193,8 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             if (y >= _rows)
                 y = _rows - 1;
             index = getIndexByCoord(x, y);
-            if (index >= getItems().size())
-                index = getItems().size() - 1;
+            if (index >= list.size())
+                index = list.size() - 1;
             if (index != _selection)
                 setSelection(index);
             break;
@@ -212,8 +212,8 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             if (x >= _columns)
                 x = _columns - 1;
             index = getIndexByCoord(x, y);
-            if (index >= getItems().size())
-                index = getItems().size() - 1;
+            if (index >= list.size())
+                index = list.size() - 1;
             if (index != _selection)
                 setSelection(index);
             break;
@@ -242,7 +242,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
         wrapper.eventMouseClick.add((sender, args) -> {
             int index = 0;
             _selectionItem = _mapContent.get(item);
-            for (InterfaceBaseItem var : super.getItems()) {
+            for (InterfaceBaseItem var : getItems()) {
                 if (var.equals(_selectionItem)) {
                     _selection = index;
                     selectionChanged.execute();
@@ -328,7 +328,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
         _lock.lock();
         try {
             unselect();
-            List<InterfaceBaseItem> list = new LinkedList<>(getItems());
+            List<InterfaceBaseItem> list = getItems();
 
             if (list == null || list.size() == 0)
                 return;
@@ -396,7 +396,8 @@ public class WrapArea extends Prototype implements InterfaceGrid {
      */
     // Update Layout
     public void updateLayout() {
-        if (getItems().size() == 0 || _isUpdating)
+        List<InterfaceBaseItem> list = getItems();
+        if (list == null || list.size() == 0 || _isUpdating)
             return;
         _isUpdating = true;
 
@@ -410,7 +411,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             int itemCount = (w + getSpacing().horizontal) / (_cellWidth + getSpacing().horizontal);
             int column = 0;
             int row = 0;
-            _columns = (itemCount > getItems().size()) ? getItems().size() : itemCount;
+            _columns = (itemCount > list.size()) ? list.size() : itemCount;
             if (_columns == 0) {
                 _columns = 1;
                 itemCount = 1;
@@ -418,14 +419,14 @@ public class WrapArea extends Prototype implements InterfaceGrid {
 
             // stretch
             int xOffset = 0;
-            if (_isStretch && itemCount < getItems().size()) {
+            if (_isStretch && itemCount < list.size()) {
                 int freeSpace = w - ((_cellWidth + getSpacing().horizontal) * _columns) - getSpacing().horizontal;
                 xOffset = freeSpace / _columns;
                 if (_columns > 1)
                     xOffset = freeSpace / (_columns - 1);
             }
 
-            for (InterfaceBaseItem item : getItems()) {
+            for (InterfaceBaseItem item : list) {
                 if (!item.isVisible())
                     continue;
                 item.setSize(_cellWidth, _cellHeight);
@@ -456,7 +457,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
                 }
                 item.setDrawable(true);
             }
-            if (getItems().size() % itemCount == 0)
+            if (list.size() % itemCount == 0)
                 row--;
             _rows = row + 1;
 
@@ -467,7 +468,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
             int itemCount = (h + getSpacing().vertical) / (_cellHeight + getSpacing().vertical);
             int column = 0;
             int row = 0;
-            _rows = (itemCount > getItems().size()) ? getItems().size() : itemCount;
+            _rows = (itemCount > list.size()) ? list.size() : itemCount;
             if (_rows == 0) {
                 _rows = 1;
                 itemCount = 1;
@@ -475,14 +476,14 @@ public class WrapArea extends Prototype implements InterfaceGrid {
 
             // stretch
             int yOffset = 0;
-            if (_isStretch && itemCount < getItems().size()) {
+            if (_isStretch && itemCount < list.size()) {
                 int freeSpace = h - ((_cellHeight + getSpacing().vertical + yOffset) * _rows) - getSpacing().vertical;
                 yOffset = freeSpace / _rows;
                 if (_rows > 1)
                     yOffset = freeSpace / (_rows - 1);
             }
 
-            for (InterfaceBaseItem item : getItems()) {
+            for (InterfaceBaseItem item : list) {
                 if (!item.isVisible())
                     continue;
                 item.setSize(_cellWidth, _cellHeight);
@@ -514,7 +515,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
                 }
                 item.setDrawable(true);
             }
-            if (getItems().size() % itemCount == 0)
+            if (list.size() % itemCount == 0)
                 column--;
             _columns = column + 1;
         }
@@ -535,7 +536,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
         Style inner_style = style.getInnerStyle("selection");
         if (inner_style != null) {
             _selectedStyle = inner_style.clone();
-            List<InterfaceBaseItem> list = new LinkedList<>(getItems());
+            List<InterfaceBaseItem> list = getItems();
             for (InterfaceBaseItem item : list) {
                 item.setStyle(_selectedStyle);
             }

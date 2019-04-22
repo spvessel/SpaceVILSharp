@@ -177,7 +177,7 @@ namespace SpaceVIL
                 x = _selection / _rows;
                 y = _selection % _rows;
             }
-
+            List<IBaseItem> list = GetItems();
             switch (args.Key)
             {
                 case KeyCode.Up:
@@ -193,8 +193,8 @@ namespace SpaceVIL
                     if (y >= _rows)
                         y = _rows - 1;
                     index = GetIndexByCoord(x, y);
-                    if (index >= GetItems().Count)
-                        index = GetItems().Count - 1;
+                    if (index >= list.Count)
+                        index = list.Count - 1;
                     if (index != _selection)
                         SetSelection(index);
                     break;
@@ -212,8 +212,8 @@ namespace SpaceVIL
                     if (x >= _columns)
                         x = _columns - 1;
                     index = GetIndexByCoord(x, y);
-                    if (index >= GetItems().Count)
-                        index = GetItems().Count - 1;
+                    if (index >= list.Count)
+                        index = list.Count - 1;
                     if (index != _selection)
                         SetSelection(index);
                     break;
@@ -249,7 +249,7 @@ namespace SpaceVIL
             {
                 int index = 0;
                 _selectionItem = _mapContent[item];
-                foreach (IBaseItem tmp in base.GetItems())
+                foreach (IBaseItem tmp in GetItems())
                 {
                     if (tmp.Equals(_selectionItem))
                     {
@@ -344,7 +344,7 @@ namespace SpaceVIL
             try
             {
                 Unselect();
-                List<IBaseItem> list = new List<IBaseItem>(GetItems());
+                List<IBaseItem> list = GetItems();
 
                 if (list == null || list.Count == 0)
                     return;
@@ -419,7 +419,9 @@ namespace SpaceVIL
         //Update Layout
         public void UpdateLayout()
         {
-            if (GetItems().Count == 0 || _isUpdating)
+            List<IBaseItem> list = GetItems();
+
+            if (list == null || list.Count == 0 || _isUpdating)
                 return;
             _isUpdating = true;
 
@@ -434,7 +436,7 @@ namespace SpaceVIL
                 int itemCount = (w + GetSpacing().Horizontal) / (_cellWidth + GetSpacing().Horizontal);
                 int column = 0;
                 int row = 0;
-                _columns = (itemCount > GetItems().Count) ? GetItems().Count : itemCount;
+                _columns = (itemCount > list.Count) ? list.Count : itemCount;
                 if (_columns == 0)
                 {
                     _columns = 1;
@@ -443,7 +445,7 @@ namespace SpaceVIL
 
                 // stretch
                 int xOffset = 0;
-                if (_isStretch && itemCount < GetItems().Count)
+                if (_isStretch && itemCount < list.Count)
                 {
                     int freeSpace = w - ((_cellWidth + GetSpacing().Horizontal) * _columns) - GetSpacing().Horizontal;
                     xOffset = freeSpace / _columns;
@@ -451,7 +453,7 @@ namespace SpaceVIL
                         xOffset = freeSpace / (_columns - 1);
                 }
 
-                foreach (IBaseItem item in GetItems())
+                foreach (IBaseItem item in list)
                 {
                     if (!item.IsVisible())
                         continue;
@@ -488,7 +490,7 @@ namespace SpaceVIL
                     }
                     item.SetDrawable(true);
                 }
-                if (GetItems().Count % itemCount == 0)
+                if (list.Count % itemCount == 0)
                     row--;
                 _rows = row + 1;
             }
@@ -500,7 +502,7 @@ namespace SpaceVIL
                 int itemCount = (h + GetSpacing().Vertical) / (_cellHeight + GetSpacing().Vertical);
                 int column = 0;
                 int row = 0;
-                _rows = (itemCount > GetItems().Count) ? GetItems().Count : itemCount;
+                _rows = (itemCount > list.Count) ? list.Count : itemCount;
                 if (_rows == 0)
                 {
                     _rows = 1;
@@ -509,7 +511,7 @@ namespace SpaceVIL
 
                 // stretch
                 int yOffset = 0;
-                if (_isStretch && itemCount < GetItems().Count)
+                if (_isStretch && itemCount < list.Count)
                 {
                     int freeSpace = h - ((_cellHeight + GetSpacing().Vertical + yOffset) * _rows) - GetSpacing().Vertical;
                     yOffset = freeSpace / _rows;
@@ -517,7 +519,7 @@ namespace SpaceVIL
                         yOffset = freeSpace / (_rows - 1);
                 }
 
-                foreach (IBaseItem item in GetItems())
+                foreach (IBaseItem item in list)
                 {
                     if (!item.IsVisible())
                         continue;
@@ -554,7 +556,7 @@ namespace SpaceVIL
                     }
                     item.SetDrawable(true);
                 }
-                if (GetItems().Count % itemCount == 0)
+                if (list.Count % itemCount == 0)
                     column--;
                 _columns = column + 1;
             }
@@ -572,7 +574,7 @@ namespace SpaceVIL
             if (inner_style != null)
             {
                 _selectedStyle = inner_style.Clone();
-                List<IBaseItem> list = new List<IBaseItem>(GetItems());
+                List<IBaseItem> list = GetItems();
                 foreach (IBaseItem item in list)
                 {
                     item.SetStyle(_selectedStyle);

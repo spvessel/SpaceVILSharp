@@ -387,7 +387,7 @@ public class WrapGrid extends Prototype {
      */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
-        List<InterfaceBaseItem> list = new LinkedList<>(getItems());
+        List<InterfaceBaseItem> list = getItems();
         if (list.contains(item)) {
             return super.removeItem(item);
         }
@@ -442,7 +442,8 @@ public class WrapGrid extends Prototype {
      */
     public List<InterfaceBaseItem> getListContent() {
         List<InterfaceBaseItem> result = new LinkedList<>();
-        for (InterfaceBaseItem item : _area.getItems()) {
+        List<InterfaceBaseItem> list = _area.getItems();
+        for (InterfaceBaseItem item : list) {
             result.add(((SelectionItem) item).getContent());
         }
         return result;

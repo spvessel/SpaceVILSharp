@@ -142,12 +142,13 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         int index = _selection;
         boolean changed = false;
+        List<InterfaceBaseItem> list = getItems();
 
         switch (args.key) {
         case UP:
             while (index > 0) {
                 index--;
-                _selectionItem = ((SelectionItem) getItems().get(index));
+                _selectionItem = ((SelectionItem) list.get(index));
                 if (_selectionItem.isVisible()) {
                     changed = true;
                     break;
@@ -157,9 +158,9 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 setSelection(index);
             break;
         case DOWN:
-            while (index < super.getItems().size() - 1) {
+            while (index < list.size() - 1) {
                 index++;
-                _selectionItem = ((SelectionItem) getItems().get(index));
+                _selectionItem = ((SelectionItem) list.get(index));
                 if (_selectionItem.isVisible()) {
                     changed = true;
                     break;
@@ -281,7 +282,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         _lock.lock();
         try {
             unselect();
-            List<InterfaceBaseItem> list = new LinkedList<>(getItems());
+            List<InterfaceBaseItem> list = getItems();
 
             if (list == null || list.size() == 0)
                 return;
@@ -344,14 +345,15 @@ public class ListArea extends Prototype implements InterfaceVLayout {
      * Update all children and ListArea sizes and positions according to confines
      */
     public void updateLayout() {
-        if (getItems().size() == 0 || _isUpdating)
+        List<InterfaceBaseItem> list = getItems();
+        if (list == null || list.size() == 0 || _isUpdating)
             return;
         _isUpdating = true;
 
         long offset = (-1) * getVScrollOffset();
         int startY = getY() + getPadding().top;
         int child_X = (-1) * (int) _xOffset + getX() + getPadding().left;
-        for (InterfaceBaseItem child : super.getItems()) {
+        for (InterfaceBaseItem child : list) {
             if (!child.isVisible())
                 continue;
 
@@ -397,7 +399,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         Style inner_style = style.getInnerStyle("selection");
         if (inner_style != null) {
             _selectedStyle = inner_style.clone();
-            List<InterfaceBaseItem> list = new LinkedList<>(getItems());
+            List<InterfaceBaseItem> list = getItems();
             for (InterfaceBaseItem item : list) {
                 item.setStyle(_selectedStyle);
             }

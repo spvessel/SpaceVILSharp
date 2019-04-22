@@ -429,7 +429,7 @@ namespace SpaceVIL
         /// </summary>
         public override bool RemoveItem(IBaseItem item)
         {
-            List<IBaseItem> list = new List<IBaseItem>(GetItems());
+            List<IBaseItem> list = GetItems();
             if (list.Contains(item))
             {
                 return base.RemoveItem(item);
@@ -495,7 +495,7 @@ namespace SpaceVIL
         public List<IBaseItem> GetListContent()
         {
             List<IBaseItem> result = new List<IBaseItem>();
-            List<IBaseItem> list = new List<IBaseItem>(_area.GetItems());
+            List<IBaseItem> list = _area.GetItems();
 
             foreach (IBaseItem item in list)
             {
