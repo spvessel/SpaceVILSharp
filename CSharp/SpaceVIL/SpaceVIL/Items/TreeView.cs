@@ -238,7 +238,7 @@ namespace SpaceVIL
                 return; // Либо сделать, чтобы сортировалась родительская ветвь?
             }
 
-            List<IBaseItem> list = new List<IBaseItem>(GetArea().GetItems());
+            List<IBaseItem> list = GetArea().GetItems();
             Dictionary<int, List<SelectionItem>> savedMap = new Dictionary<int, List<SelectionItem>>();
 
             int indFirst = list.IndexOf(GetWrapper(branch)) + 1;

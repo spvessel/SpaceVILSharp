@@ -145,14 +145,14 @@ namespace SpaceVIL
         {
             int index = _selection;
             bool changed = false;
-
+            List<IBaseItem> list = GetItems();
             switch (args.Key)
             {
                 case KeyCode.Up:
                     while (index > 0)
                     {
                         index--;
-                        _selectionItem = GetItems().ElementAt(index) as SelectionItem;
+                        _selectionItem = list.ElementAt(index) as SelectionItem;
                         if (_selectionItem.IsVisible())
                         {
                             changed = true;
@@ -163,10 +163,10 @@ namespace SpaceVIL
                         SetSelection(index);
                     break;
                 case KeyCode.Down:
-                    while (index < base.GetItems().Count - 1)
+                    while (index < list.Count - 1)
                     {
                         index++;
-                        _selectionItem = GetItems().ElementAt(index) as SelectionItem;
+                        _selectionItem = list.ElementAt(index) as SelectionItem;
                         if (_selectionItem.IsVisible())
                         {
                             changed = true;
@@ -194,7 +194,7 @@ namespace SpaceVIL
                 int index = 0;
                 if (_mapContent.ContainsKey(item))
                     _selectionItem = _mapContent[item];
-                foreach (IBaseItem tmp in base.GetItems())
+                foreach (IBaseItem tmp in GetItems())
                 {
                     if (tmp.Equals(_selectionItem))
                     {
@@ -275,7 +275,7 @@ namespace SpaceVIL
 
             if (restore)
                 SetSelection(GetItems().IndexOf(currentSelection));
-            
+
 
             ItemListChanged?.Invoke();
             return b;
@@ -292,18 +292,18 @@ namespace SpaceVIL
             try
             {
                 Unselect();
-                List<IBaseItem> list = new List<IBaseItem>(GetItems());
+                List<IBaseItem> list = GetItems();
 
                 if (list == null || list.Count == 0)
                     return;
+                _mapContent.Clear();
 
-                while (list.Count != 0)
+                while (list.Count > 0)
                 {
                     (list.ElementAt(0) as SelectionItem).ClearContent();
                     base.RemoveItem(list.ElementAt(0));
                     list.RemoveAt(0);
                 }
-                _mapContent.Clear();
                 UpdateLayout();
                 ItemListChanged?.Invoke();
             }
@@ -363,14 +363,15 @@ namespace SpaceVIL
         /// </summary>
         public void UpdateLayout()
         {
-            if (GetItems().Count == 0 || _isUpdating)
+            List<IBaseItem> list = GetItems();
+
+            if (list == null || list.Count == 0 || _isUpdating)
                 return;
             _isUpdating = true;
-
             Int64 offset = (-1) * GetVScrollOffset();
             int startY = GetY() + GetPadding().Top;
             int child_X = (-1) * (int)_xOffset + GetX() + GetPadding().Left;
-            foreach (var child in base.GetItems())
+            foreach (var child in list)
             {
                 if (!child.IsVisible())
                     continue;
@@ -417,7 +418,7 @@ namespace SpaceVIL
             if (inner_style != null)
             {
                 _selectedStyle = inner_style.Clone();
-                List<IBaseItem> list = new List<IBaseItem>(GetItems());
+                List<IBaseItem> list = GetItems();
                 foreach (IBaseItem item in list)
                 {
                     item.SetStyle(_selectedStyle);

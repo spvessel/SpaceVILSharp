@@ -140,66 +140,69 @@ final class VisualItem extends BaseItem {
 
     public void setBorderFill(int r, int g, int b) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 255)
-        //     r = 255;
+        // r = 255;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 255)
-        //     g = 255;
+        // g = 255;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 255)
-        //     b = 255;
-        setBorderFill(GraphicsMathService.colorTransform(r, g, b)); //new Color(r, g, b));
+        // b = 255;
+        setBorderFill(GraphicsMathService.colorTransform(r, g, b)); // new Color(r, g, b));
     }
 
     public void setBorderFill(int r, int g, int b, int a) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 255)
-        //     r = 255;
+        // r = 255;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 255)
-        //     g = 255;
+        // g = 255;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 255)
-        //     b = 255;
-        setBorderFill(GraphicsMathService.colorTransform(r, g, b, a)); //new Color(r, g, b, a));
+        // b = 255;
+        setBorderFill(GraphicsMathService.colorTransform(r, g, b, a)); // new Color(r, g, b, a));
     }
 
     public void setBorderFill(float r, float g, float b) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 1.0f)
-        //     r = 1.0f;
+        // r = 1.0f;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 1.0f)
-        //     g = 1.0f;
+        // g = 1.0f;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 1.0f)
-        //     b = 1.0f;
-        setBorderFill(GraphicsMathService.colorTransform(r, g, b)); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f)));
+        // b = 1.0f;
+        setBorderFill(GraphicsMathService.colorTransform(r, g, b)); // new Color((int) (r * 255.0f), (int) (g * 255.0f),
+                                                                    // (int) (b * 255.0f)));
     }
 
     public void setBorderFill(float r, float g, float b, float a) {
         // if (r < 0)
-        //     r = Math.abs(r);
+        // r = Math.abs(r);
         // if (r > 1.0f)
-        //     r = 1.0f;
+        // r = 1.0f;
         // if (g < 0)
-        //     g = Math.abs(g);
+        // g = Math.abs(g);
         // if (g > 1.0f)
-        //     g = 1.0f;
+        // g = 1.0f;
         // if (b < 0)
-        //     b = Math.abs(b);
+        // b = Math.abs(b);
         // if (b > 1.0f)
-        //     b = 1.0f;
-        setBorderFill(GraphicsMathService.colorTransform(r, g, b, a)); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
+        // b = 1.0f;
+        setBorderFill(GraphicsMathService.colorTransform(r, g, b, a)); // new Color((int) (r * 255.0f), (int) (g *
+                                                                       // 255.0f), (int) (b * 255.0f), (int) (a *
+                                                                       // 255.0f)));
     }
 
     void setBorderRadius(CornerRadius radius) {
@@ -347,7 +350,7 @@ final class VisualItem extends BaseItem {
     List<InterfaceBaseItem> getItems() {
         locker.lock();
         try {
-            return _content;
+            return new LinkedList<InterfaceBaseItem>(_content);
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -460,7 +463,7 @@ final class VisualItem extends BaseItem {
         if (item instanceof Prototype)// и если это действительно контейнер
         {
             Prototype container = (Prototype) item;// предполагаю что элемент контейнер
-            List<InterfaceBaseItem> tmp = new LinkedList<>(container.getItems());
+            List<InterfaceBaseItem> tmp = container.getItems();
             while (tmp.size() > 0) {
                 InterfaceBaseItem child = tmp.get(0);
                 container.removeItem(child);
@@ -472,10 +475,9 @@ final class VisualItem extends BaseItem {
     boolean removeItem(InterfaceBaseItem item) {
         locker.lock();
         try {
-            if(item instanceof  Prototype)
-            {
-                Prototype tmp = ((Prototype)item);
-                if(tmp.isFocused())
+            if (item instanceof Prototype) {
+                Prototype tmp = ((Prototype) item);
+                if (tmp.isFocused())
                     getHandler().resetItems();
             }
 

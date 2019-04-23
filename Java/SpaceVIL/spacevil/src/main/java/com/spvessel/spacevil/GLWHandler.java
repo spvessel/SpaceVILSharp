@@ -53,6 +53,7 @@ final class GLWHandler {
     Boolean visible;
     Boolean alwaysOnTop;
     Boolean maximized;
+    Boolean transparent;
     private Pointer wPosition = new Pointer();
 
     Pointer getPointer() {
@@ -116,9 +117,15 @@ final class GLWHandler {
         else
             glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
 
+        if (transparent)
+            glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
+        else
+            glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_FALSE);
+
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
-        _window = glfwCreateWindow(_coreWindow.getWidth(), _coreWindow.getHeight(), _coreWindow.getWindowTitle(), NULL, NULL);
+        _window = glfwCreateWindow(_coreWindow.getWidth(), _coreWindow.getHeight(), _coreWindow.getWindowTitle(), NULL,
+                NULL);
 
         if (_window == NULL) {
             System.out.println("glfwCreateWindow fail");
@@ -139,7 +146,8 @@ final class GLWHandler {
         glfwGetFramebufferSize(_window, w, h);
         // System.out.println("FBSIZE: " + w.get(0) + " " + h.get(0));
 
-        setDpiScale((float) w.get(0) / (float) _coreWindow.getWidth(), (float) h.get(0) / (float) _coreWindow.getHeight());
+        setDpiScale((float) w.get(0) / (float) _coreWindow.getWidth(),
+                (float) h.get(0) / (float) _coreWindow.getHeight());
 
         if (appearInCenter) {
             getPointer().setX((width - _coreWindow.getWidth()) / 2);
@@ -151,8 +159,8 @@ final class GLWHandler {
             getPointer().setX(200);
             getPointer().setY(50);
         }
-        glfwSetWindowSizeLimits(_window, _coreWindow.getMinWidth(), _coreWindow.getMinHeight(), _coreWindow.getMaxWidth(),
-                _coreWindow.getMaxHeight());
+        glfwSetWindowSizeLimits(_window, _coreWindow.getMinWidth(), _coreWindow.getMinHeight(),
+                _coreWindow.getMaxWidth(), _coreWindow.getMaxHeight());
         glfwSetWindowPos(_window, getPointer().getX(), getPointer().getY());
 
         if (_coreWindow.isKeepAspectRatio)

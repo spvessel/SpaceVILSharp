@@ -268,7 +268,10 @@ namespace SpaceVIL
             int visible_area = _area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom;
             if (visible_area < 0)
                 visible_area = 0;
-            foreach (var item in _area.GetItems())
+
+            List<IBaseItem> list = _area.GetItems();
+
+            foreach (var item in list)
             {
                 if (!item.IsVisible())
                     continue;
@@ -321,7 +324,10 @@ namespace SpaceVIL
             int visible_area = _area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right;
             if (visible_area < 0)
                 visible_area = 0;
-            foreach (var item in _area.GetItems())
+
+            List<IBaseItem> list = _area.GetItems();
+
+            foreach (var item in list)
             {
                 if (!item.IsVisible())
                     continue;
@@ -415,7 +421,7 @@ namespace SpaceVIL
         /// </summary>
         public override bool RemoveItem(IBaseItem item)
         {
-            List<IBaseItem> list = new List<IBaseItem>(GetItems());
+            List<IBaseItem> list = GetItems();
             if (list.Contains(item))
             {
                 return base.RemoveItem(item);
@@ -523,14 +529,12 @@ namespace SpaceVIL
         public List<IBaseItem> GetListContent()
         {
             List<IBaseItem> result = new List<IBaseItem>();
-            List<IBaseItem> list = new List<IBaseItem>(_area.GetItems());
+            List<IBaseItem> list = _area.GetItems();
 
             foreach (IBaseItem item in list)
             {
                 SelectionItem tmp = item as SelectionItem;
-                // if (tmp != null)
                 result.Add(tmp.GetContent());
-                // Console.WriteLine(item.GetItemName() + " " + GetParent().GetItemName() + " " + GetHandler().GetWindowName());
             }
             return result;
         }

@@ -144,7 +144,7 @@ namespace SpaceVIL
         {
             return wnd_layout.GetContainer().GetItems();
         }
-        
+
         public void AddItem(IBaseItem item)
         {
             wnd_layout.GetContainer().AddItem(item);
@@ -330,6 +330,7 @@ namespace SpaceVIL
             IsFocusable = true;
             IsOutsideClickClosable = false;
             IsMaximized = false;
+            IsTransparent = false;
         }
 
         public bool IsDialog;
@@ -341,7 +342,8 @@ namespace SpaceVIL
         public bool IsCentered;
         public bool IsFocusable;
         public bool IsOutsideClickClosable;
-        public bool IsMaximized = false;
+        public bool IsMaximized;
+        public bool IsTransparent;
 
         public bool IsFocused;
 
@@ -503,6 +505,75 @@ namespace SpaceVIL
             EventKeyRelease = null;
 
             EventTextInput = null;
+        }
+
+
+        public void SetBorder(Border border)
+        {
+            if (wnd_layout.GetContainer() != null)
+                wnd_layout.GetContainer().SetBorder(border);
+        }
+
+        public void SetBorderFill(Color fill)
+        {
+            if (wnd_layout.GetContainer() != null)
+                wnd_layout.GetContainer().SetBorderFill(fill);
+        }
+        public void SetBorderFill(int r, int g, int b)
+        {
+            if (wnd_layout.GetContainer() != null)
+                wnd_layout.GetContainer().SetBorderFill(r, g, b);
+        }
+        public void SetBorderFill(int r, int g, int b, int a)
+        {
+            if (wnd_layout.GetContainer() != null)
+                wnd_layout.GetContainer().SetBorderFill(r, g, b, a);
+        }
+        public void SetBorderFill(float r, float g, float b)
+        {
+            if (wnd_layout.GetContainer() != null)
+                wnd_layout.GetContainer().SetBorderFill(r, g, b);
+        }
+        public void SetBorderFill(float r, float g, float b, float a)
+        {
+            if (wnd_layout.GetContainer() != null)
+                wnd_layout.GetContainer().SetBorderFill(r, g, b, a);
+        }
+
+        public void SetBorderRadius(CornerRadius radius)
+        {
+            if (wnd_layout.GetContainer() != null)
+                wnd_layout.GetContainer().SetBorderRadius(radius);
+        }
+        public void SetBorderRadius(int radius)
+        {
+            if (wnd_layout.GetContainer() != null)
+                wnd_layout.GetContainer().SetBorderRadius(new CornerRadius(radius));
+        }
+
+        public void SetBorderThickness(int thickness)
+        {
+            if (wnd_layout.GetContainer() != null)
+                wnd_layout.GetContainer().SetBorderThickness(thickness);
+        }
+
+        public CornerRadius GetBorderRadius()
+        {
+            if (wnd_layout.GetContainer() != null)
+                return wnd_layout.GetContainer().GetBorderRadius();
+            return null;
+        }
+        public int GetBorderThickness()
+        {
+            if (wnd_layout.GetContainer() != null)
+                return wnd_layout.GetContainer().GetBorderThickness();
+            return 0;
+        }
+        public Color GetBorderFill()
+        {
+            if (wnd_layout.GetContainer() != null)
+                return wnd_layout.GetContainer().GetBorderFill();
+            return Color.Transparent;
         }
     }
 }

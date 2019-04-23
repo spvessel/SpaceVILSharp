@@ -244,7 +244,8 @@ public class ListBox extends Prototype {
         int visible_area = _area.getHeight() - _area.getPadding().top - _area.getPadding().bottom;
         if (visible_area < 0)
             visible_area = 0;
-        for (InterfaceBaseItem item : _area.getItems()) {
+        List<InterfaceBaseItem> list = _area.getItems();
+        for (InterfaceBaseItem item : list) {
             if (!item.isVisible())
                 continue;
             total_invisible_size += (item.getHeight() + _area.getSpacing().vertical);
@@ -292,7 +293,8 @@ public class ListBox extends Prototype {
         int visible_area = _area.getWidth() - _area.getPadding().left - _area.getPadding().right;
         if (visible_area < 0)
             visible_area = 0;
-        for (InterfaceBaseItem item : _area.getItems()) {
+        List<InterfaceBaseItem> list = _area.getItems();
+        for (InterfaceBaseItem item : list) {
             if (!item.isVisible())
                 continue;
             if (max_size < item.getWidth() + item.getMargin().left + item.getMargin().right)
@@ -382,7 +384,7 @@ public class ListBox extends Prototype {
      */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
-        List<InterfaceBaseItem> list = new LinkedList<>(getItems());
+        List<InterfaceBaseItem> list = getItems();
         if (list.contains(item)) {
             return super.removeItem(item);
         }
@@ -481,11 +483,9 @@ public class ListBox extends Prototype {
      */
     public List<InterfaceBaseItem> getListContent() {
         List<InterfaceBaseItem> result = new LinkedList<>();
-        for (InterfaceBaseItem item : _area.getItems()) {
+        List<InterfaceBaseItem> list = _area.getItems();
+        for (InterfaceBaseItem item : list) {
             result.add(((SelectionItem) item).getContent());
-            // System.out.println(
-            // item.getItemName() + " " + getParent().getItemName() + " " +
-            // getHandler().getWindowName());
         }
         return result;
     }

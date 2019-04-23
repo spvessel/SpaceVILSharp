@@ -859,6 +859,7 @@ final class DrawEngine {
     private int y_global = 0;
 
     private boolean getHoverPrototype(float xpos, float ypos, InputEventType action) {
+        _inputLocker = true;
         List<Prototype> queue = new LinkedList<>();
         hoveredItems.clear();
 
@@ -884,6 +885,8 @@ final class DrawEngine {
         // if (item instanceof Prototype)
         // layout_box_of_items.addAll(getInnerItems((Prototype) item));
         // }
+
+        _inputLocker = false;
 
         for (InterfaceBaseItem item : layout_box_of_items) {
             if (item instanceof Prototype) {
@@ -953,14 +956,18 @@ final class DrawEngine {
 
     private List<InterfaceBaseItem> getInnerItems(Prototype root) {
         List<InterfaceBaseItem> list = new LinkedList<InterfaceBaseItem>();
-        List<InterfaceBaseItem> root_items = new LinkedList<InterfaceBaseItem>(root.getItems());
+        List<InterfaceBaseItem> root_items = root.getItems();
 
         for (InterfaceBaseItem item : root_items) {
             if (!item.isVisible() || !item.isDrawable())
                 continue;
-            list.add(item);
-            if (item instanceof Prototype)
-                list.addAll(getInnerItems((Prototype) item));
+            if (item instanceof Prototype) {
+                Prototype leaf = (Prototype) item;
+                if (leaf.isDisabled())
+                    continue;
+                list.add(item);
+                list.addAll(getInnerItems(leaf));
+            }
         }
         return list;
     }
@@ -1018,12 +1025,15 @@ final class DrawEngine {
         // break;
         // }
         // System.out.println(mods);
+
         if (!_handler.focusable)
             return;
         _tooltip.initTimer(false);
         _kargs.key = KeyCode.getEnum(key);
         _kargs.scancode = scancode;
         _kargs.state = InputState.getEnum(action);
+        _kargs.mods = KeyMods.getEnums(mods);
+
         if (CommonService.getOSType().equals(OSType.LINUX)) {
             if (mods == 0 && key != 0 && action == 1) {
                 _kargs.mods.clear();
@@ -1051,8 +1061,8 @@ final class DrawEngine {
                 _kargs.mods.clear();
                 _kargs.mods.add(KeyMods.NO);
             }
-        } else
-            _kargs.mods = KeyMods.getEnums(mods);
+        } // else
+          // _kargs.mods = KeyMods.getEnums(mods);
 
         _margs.mods = _kargs.mods;
 
@@ -1289,6 +1299,8 @@ final class DrawEngine {
         _fbo.genFBO();
         _fbo.genFBOTexture(_framebufferWidth, _framebufferHeight);
         _fbo.unbindFBO();
+        glClearColor(0, 0, 0, 0);
+        
         // glfwSwapInterval(0);
         while (!_handler.isClosing()) {
             glfwWaitEventsTimeout(getFrequency());
@@ -1399,13 +1411,15 @@ final class DrawEngine {
     }
 
     private boolean checkOutsideBorders(InterfaceBaseItem shell) {
-        if (shell.getParent() == null)
-            return false;
+        Prototype parent = shell.getParent();
 
-        if (_bounds.containsKey(shell.getParent())) {
-            int[] shape = _bounds.get(shell.getParent());
-            if (shape == null)/////////////////////////////////////
+        if (parent != null && _bounds.containsKey(parent)) {
+
+            int[] shape = _bounds.get(parent);
+
+            if (shape == null)
                 return false;
+
             glEnable(GL_SCISSOR_TEST);
             glScissor(shape[0], shape[1], shape[2], shape[3]);
 
@@ -1434,9 +1448,6 @@ final class DrawEngine {
 
                 if (y + h > shape[1] + shape[3])
                     h = shape[1] + shape[3] - y;
-
-                // if (shell.getParent() instanceof ListArea)
-                // System.out.println(shape[1] + " " + shape[3] + " " + shell.getItemName());
 
                 _bounds.put(shell, new int[] { x, y, w, h });
             }
@@ -1480,25 +1491,28 @@ final class DrawEngine {
     // setConfines(shell);
     // }
 
-    private void setConfines(InterfaceBaseItem shell) {
-        int[] confines = shell.getParent().getConfines();
-        shell.setConfines(confines[0], confines[1], confines[2], confines[3]);
+    private void setConfines(InterfaceBaseItem shell, int[] parentConfines) {
+        shell.setConfines(parentConfines[0], parentConfines[1], parentConfines[2], parentConfines[3]);
 
         if (shell instanceof Prototype) {
             Prototype root = (Prototype) shell;
-            List<InterfaceBaseItem> root_items = new LinkedList<>(root.getItems());
+            List<InterfaceBaseItem> root_items = root.getItems();
             for (InterfaceBaseItem item : root_items) {
-                setConfines(item);
+                setConfines(item, parentConfines);
             }
         }
     }
 
     private void setScissorRectangle(InterfaceBaseItem rect) {
 
-        int x = rect.getParent().getX();
-        int y = _handler.getCoreWindow().getHeight() - (rect.getParent().getY() + rect.getParent().getHeight());
-        int w = rect.getParent().getWidth();
-        int h = rect.getParent().getHeight();
+        Prototype parent = rect.getParent();
+        if (parent == null)
+            return;
+
+        int x = parent.getX();
+        int y = _handler.getCoreWindow().getHeight() - (parent.getY() + parent.getHeight());
+        int w = parent.getWidth();
+        int h = parent.getHeight();
 
         float scale = _handler.getCoreWindow().getDpiScale()[0];
         x *= scale;
@@ -1512,45 +1526,43 @@ final class DrawEngine {
         if (!_bounds.containsKey(rect))
             _bounds.put(rect, new int[] { x, y, w, h });
 
-        rect.getParent().setConfines(rect.getParent().getX() + rect.getParent().getPadding().left,
-                rect.getParent().getX() + rect.getParent().getWidth() - rect.getParent().getPadding().right,
-                rect.getParent().getY() + rect.getParent().getPadding().top,
-                rect.getParent().getY() + rect.getParent().getHeight() - rect.getParent().getPadding().bottom);
-        setConfines(rect);
+        parent.setConfines(parent.getX() + parent.getPadding().left,
+                parent.getX() + parent.getWidth() - parent.getPadding().right, parent.getY() + parent.getPadding().top,
+                parent.getY() + parent.getHeight() - parent.getPadding().bottom);
+        setConfines(rect, parent.getConfines());
     }
 
     private Boolean lazyStencil(InterfaceBaseItem shell) {
         Map<ItemAlignment, int[]> outside = new HashMap<ItemAlignment, int[]>();
+        Prototype parent = shell.getParent();
 
-        if (shell.getParent() != null) {
+        if (parent != null) {
             // bottom
-            if (shell.getParent().getY() + shell.getParent().getHeight() < shell.getY() + shell.getHeight()) {
+            if (parent.getY() + parent.getHeight() < shell.getY() + shell.getHeight()) {
                 // match
-                int y = shell.getParent().getY() + shell.getParent().getHeight()
-                        - shell.getParent().getPadding().bottom;
+                int y = parent.getY() + parent.getHeight() - parent.getPadding().bottom;
                 int h = shell.getHeight();
                 outside.put(ItemAlignment.BOTTOM, new int[] { y, h });
             }
             // top
-            if (shell.getParent().getY() + shell.getParent().getPadding().top > shell.getY()) {
+            if (parent.getY() + parent.getPadding().top > shell.getY()) {
                 // match
                 int y = shell.getY();
-                int h = shell.getParent().getY() + shell.getParent().getPadding().top - shell.getY();
+                int h = parent.getY() + parent.getPadding().top - shell.getY();
                 outside.put(ItemAlignment.TOP, new int[] { y, h });
             }
             // right
-            if (shell.getParent().getX() + shell.getParent().getWidth()
-                    - shell.getParent().getPadding().right < shell.getX() + shell.getWidth()) {
+            if (parent.getX() + parent.getWidth() - parent.getPadding().right < shell.getX() + shell.getWidth()) {
                 // match
-                int x = shell.getParent().getX() + shell.getParent().getWidth() - shell.getParent().getPadding().right;
+                int x = parent.getX() + parent.getWidth() - parent.getPadding().right;
                 int w = shell.getWidth();
                 outside.put(ItemAlignment.RIGHT, new int[] { x, w });
             }
             // left
-            if (shell.getParent().getX() + shell.getParent().getPadding().left > shell.getX()) {
+            if (parent.getX() + parent.getPadding().left > shell.getX()) {
                 // match
                 int x = shell.getX();
-                int w = shell.getParent().getX() + shell.getParent().getPadding().left - shell.getX();
+                int w = parent.getX() + parent.getPadding().left - shell.getX();
                 outside.put(ItemAlignment.LEFT, new int[] { x, w });
             }
 
@@ -1587,7 +1599,7 @@ final class DrawEngine {
             drawShell(root);
             glDisable(GL_SCISSOR_TEST);
             if (root instanceof Prototype) {
-                List<InterfaceBaseItem> list = new LinkedList<>(((Prototype) root).getItems());
+                List<InterfaceBaseItem> list = ((Prototype) root).getItems();
                 for (InterfaceBaseItem child : list) {
                     drawItems(child);
                 }

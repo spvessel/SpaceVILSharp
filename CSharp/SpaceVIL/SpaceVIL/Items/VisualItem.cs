@@ -140,7 +140,7 @@ namespace SpaceVIL
             Monitor.Enter(Locker);
             try
             {
-                return _content;
+                return new List<IBaseItem>(_content);
             }
             catch (Exception ex)
             {
@@ -266,11 +266,10 @@ namespace SpaceVIL
 
         internal void CascadeRemoving(IBaseItem item, LayoutType type)
         {
-            Prototype container = item as Prototype;// предполагаю что элемент контейнер
-            if (container != null)//и если это действительно контейнер
+            Prototype container = item as Prototype;
+            if (container != null)
             {
-                //то каждому вложенному элементу вызвать команду удалить своих вложенных элементов
-                List<IBaseItem> tmp = new List<IBaseItem>(container.GetItems());
+                List<IBaseItem> tmp = container.GetItems();
                 while (tmp.Count > 0)
                 {
                     IBaseItem child = tmp.ElementAt(0);

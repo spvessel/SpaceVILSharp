@@ -74,6 +74,7 @@ final class WindowLayout {
             setHidden(false);
         _coreWindow.isClosed = false;
 
+        engine._handler.transparent = _coreWindow.isTransparent;
         engine._handler.maximized = _coreWindow.isMaximized;
         engine._handler.visible = !_coreWindow.isHidden;
         engine._handler.resizeble = _coreWindow.isResizable;

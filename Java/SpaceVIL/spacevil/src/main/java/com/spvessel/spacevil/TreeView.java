@@ -253,7 +253,7 @@ public class TreeView extends ListBox {
             return; // Либо сделать, чтобы сортировалась родительская ветвь?
         }
 
-        List<InterfaceBaseItem> list = new LinkedList<>(getArea().getItems());
+        List<InterfaceBaseItem> list = getArea().getItems();
         Map<Integer, List<SelectionItem>> savedMap = new HashMap<>();
 
         int indFirst = list.indexOf(getWrapper(branch)) + 1;
