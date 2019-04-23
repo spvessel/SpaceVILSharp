@@ -110,6 +110,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     private int cursorWidth = 0;
+
     void initLines(int curWidth) {
         cursorWidth = curWidth;
         Indents textMargin = getTextMargin();
@@ -257,7 +258,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             return coord;
         } else {
 //            if (!(cPos.x == 0 && cPos.y == 0)) {
-                coord.x = getLetPosInLine(cPos.y, cPos.x - 1) + cursorWidth;
+            coord.x = getLetPosInLine(cPos.y, cPos.x - 1) + cursorWidth;
 //            }
         }
         return coord;
@@ -357,8 +358,9 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         int[] output = _linesList.get(0).getFontDims();
         _minLineSpacer = output[0];
         _lineHeight = output[2];
-        if (_lineSpacer < _minLineSpacer)
-            _lineSpacer = _minLineSpacer;
+//        if (_lineSpacer < _minLineSpacer)
+//            _lineSpacer = _minLineSpacer;
+        setLineSpacer(_minLineSpacer);
 
         return output;
     }
@@ -623,9 +625,11 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
                 return null;
 
             tmp0 = cursorPosToCoord(fromPt); //addXYShifts(0, 0, fromPt, false);
-            x1 = tmp0.x + globalXShift; y1 = tmp0.y + globalYShift;
+            x1 = tmp0.x + globalXShift;
+            y1 = tmp0.y + globalYShift;
             tmp0 = cursorPosToCoord(toPt); //addXYShifts(0, 0, toPt, false);
-            x2 = tmp0.x + globalXShift; y2 = tmp0.y + globalYShift;
+            x2 = tmp0.x + globalXShift;
+            y2 = tmp0.y + globalYShift;
 
             if (x2 < 0 || x1 > _cursorXMax)
                 return null;
@@ -636,8 +640,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             if (x2 > _cursorXMax)
                 x2 = _cursorXMax;
 
-            x1 += xAdder; y1 += yAdder;
-            x2 += xAdder; y2 += yAdder;
+            x1 += xAdder;
+            y1 += yAdder;
+            x2 += xAdder;
+            y2 += yAdder;
             selectionRectangles.add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
             selectionRectangles.add(new Point(x2, y2 - lsp / 2 + 1));
 
@@ -645,62 +651,17 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         }
 
         tmp0 = cursorPosToCoord(fromPt); //addXYShifts(0, 0, fromPt, false);
-        x1 = tmp0.x + globalXShift; y1 = tmp0.y + globalYShift;
+        x1 = tmp0.x + globalXShift;
+        y1 = tmp0.y + globalYShift;
 
         tmp.x = getLineLetCount(fromPt.y);
         tmp.y = fromPt.y;
         tmp0 = cursorPosToCoord(tmp); //addXYShifts(0, 0, tmp, false);
-        x2 = tmp0.x + globalXShift; y2 = tmp0.y + globalYShift;
+        x2 = tmp0.x + globalXShift;
+        y2 = tmp0.y + globalYShift;
 
 
         if (_linesList.get(fromPt.y).getLetTextures() != null) {
-        if (x2 >= 0 && x1 <= _cursorXMax) {
-            if (x1 < 0)
-                x1 = 0;
-
-            if (x2 > _cursorXMax)
-                x2 = _cursorXMax;
-
-            x1 += xAdder; y1 += yAdder;
-            x2 += xAdder; y2 += yAdder;
-            selectionRectangles.add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
-            selectionRectangles.add(new Point(x2, y2 - lsp / 2 + 1));
-        }
-        }
-
-        tmp.x = 0;
-        tmp.y = toPt.y;
-        tmp0 = cursorPosToCoord(tmp); //addXYShifts(0, 0, tmp, false);
-        x1 = tmp0.x + globalXShift; y1 = tmp0.y + globalYShift;
-        tmp0 = cursorPosToCoord(toPt); //addXYShifts(0, 0, toReal, false);
-        x2 = tmp0.x + globalXShift; y2 = tmp0.y + globalYShift;
-
-        if (_linesList.get(toPt.y).getLetTextures() != null) {
-        if (x2 >= 0 && x1 <= _cursorXMax) {
-            if (x1 < 0)
-                x1 = 0;
-
-            if (x2 > _cursorXMax)
-                x2 = _cursorXMax;
-
-            x1 += xAdder; y1 += yAdder;
-            x2 += xAdder; y2 += yAdder;
-            selectionRectangles.add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
-            selectionRectangles.add(new Point(x2, y2 - lsp / 2 + 1));
-        }
-        }
-
-        for (int i = fromPt.y + 1; i < toPt.y; i++) {
-            tmp.x = 0;
-            tmp.y = i;
-            tmp0 = cursorPosToCoord(tmp); //addXYShifts(0, 0, tmp, false);
-            x1 = tmp0.x + globalXShift; y1 = tmp0.y + globalYShift;
-            tmp.x = getLineLetCount(i);
-            tmp.y = i;
-            tmp0 = cursorPosToCoord(tmp); //addXYShifts(0, 0, tmp, false);
-            x2 = tmp0.x + globalXShift; y2 = tmp0.y + globalYShift;
-
-            if (_linesList.get(i).getLetTextures() != null) {
             if (x2 >= 0 && x1 <= _cursorXMax) {
                 if (x1 < 0)
                     x1 = 0;
@@ -708,18 +669,75 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
                 if (x2 > _cursorXMax)
                     x2 = _cursorXMax;
 
-                x1 += xAdder; y1 += yAdder;
-                x2 += xAdder; y2 += yAdder;
+                x1 += xAdder;
+                y1 += yAdder;
+                x2 += xAdder;
+                y2 += yAdder;
                 selectionRectangles.add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
                 selectionRectangles.add(new Point(x2, y2 - lsp / 2 + 1));
             }
+        }
+
+        tmp.x = 0;
+        tmp.y = toPt.y;
+        tmp0 = cursorPosToCoord(tmp); //addXYShifts(0, 0, tmp, false);
+        x1 = tmp0.x + globalXShift;
+        y1 = tmp0.y + globalYShift;
+        tmp0 = cursorPosToCoord(toPt); //addXYShifts(0, 0, toReal, false);
+        x2 = tmp0.x + globalXShift;
+        y2 = tmp0.y + globalYShift;
+
+        if (_linesList.get(toPt.y).getLetTextures() != null) {
+            if (x2 >= 0 && x1 <= _cursorXMax) {
+                if (x1 < 0)
+                    x1 = 0;
+
+                if (x2 > _cursorXMax)
+                    x2 = _cursorXMax;
+
+                x1 += xAdder;
+                y1 += yAdder;
+                x2 += xAdder;
+                y2 += yAdder;
+                selectionRectangles.add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
+                selectionRectangles.add(new Point(x2, y2 - lsp / 2 + 1));
+            }
+        }
+
+        for (int i = fromPt.y + 1; i < toPt.y; i++) {
+            tmp.x = 0;
+            tmp.y = i;
+            tmp0 = cursorPosToCoord(tmp); //addXYShifts(0, 0, tmp, false);
+            x1 = tmp0.x + globalXShift;
+            y1 = tmp0.y + globalYShift;
+            tmp.x = getLineLetCount(i);
+            tmp.y = i;
+            tmp0 = cursorPosToCoord(tmp); //addXYShifts(0, 0, tmp, false);
+            x2 = tmp0.x + globalXShift;
+            y2 = tmp0.y + globalYShift;
+
+            if (_linesList.get(i).getLetTextures() != null) {
+                if (x2 >= 0 && x1 <= _cursorXMax) {
+                    if (x1 < 0)
+                        x1 = 0;
+
+                    if (x2 > _cursorXMax)
+                        x2 = _cursorXMax;
+
+                    x1 += xAdder;
+                    y1 += yAdder;
+                    x2 += xAdder;
+                    y2 += yAdder;
+                    selectionRectangles.add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
+                    selectionRectangles.add(new Point(x2, y2 - lsp / 2 + 1));
+                }
             }
         }
 
         return selectionRectangles;
     }
 
-    Color _foreground = Color.BLACK;
+    private Color _foreground = Color.BLACK;
 
     void setForeground(Color foreground) {
         if (foreground == null || _linesList == null)
@@ -746,12 +764,12 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
                 _screenScale = wLayout.getDpiScale()[0];
                 if (_screenScale == 0) //!= 1)
                     _screenScale = 1;
-                    // makeBigArr();
+                // makeBigArr();
             }
 
             List<TextPrinter> tpLines = new LinkedList<>();
             int w = 0, h = 0, bigWidth = 0;
-            int lineHeigh = (int)(getLineY(1) * _screenScale);
+            int lineHeigh = (int) (getLineY(1) * _screenScale);
             int visibleHeight = 0;
             int startNumb = -1;
 //            int endNumb = -1;
@@ -771,8 +789,8 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 //                if (_screenScale != 1) {
 //                    int bw = 0;
 //                    if (tmp != null)
-                    int bw = tmp.widthTexture;
-                    bigWidth = (bigWidth > bw) ? bigWidth : bw;
+                int bw = tmp.widthTexture;
+                bigWidth = (bigWidth > bw) ? bigWidth : bw;
 //                }
 
                 //w = (w > tmp.widthTexture) ? w : tmp.widthTexture;
@@ -782,11 +800,11 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             }
             //w += _cursorXMax / 3;
             setWidth(w);
-            setHeight((int)((float)h / _screenScale));
+            setHeight((int) ((float) h / _screenScale));
 
 //            if (_screenScale != 1) {
-                // setWidth((int)(bigWidth * 1f / _screenScale));
-                w = bigWidth;
+            // setWidth((int)(bigWidth * 1f / _screenScale));
+            w = bigWidth;
 //            }
 
             ByteBuffer bigByte = BufferUtils.createByteBuffer(visibleHeight * w * 4); //h
@@ -889,6 +907,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     private Pattern patternWordBounds = Pattern.compile("\\W|_", Pattern.UNICODE_CHARACTER_CLASS);
+
     int[] findWordBounds(Point cursorPosition) {
         //С положение курсора должно быть все в порядке, не нужно проверять вроде бы
         String lineText = getTextInLine(cursorPosition.y);
@@ -910,6 +929,6 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             begPt = matcher.start() + 1;
         }
 
-        return new int[] {begPt, endPt};
+        return new int[]{begPt, endPt};
     }
 }

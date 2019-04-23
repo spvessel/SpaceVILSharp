@@ -601,6 +601,7 @@ class TextBlock extends Prototype
     void setFont(Font font) {
         _textureStorage.setFont(font);
         _cursor.setHeight(_textureStorage.getCursorHeight());
+        replaceCursor();
     }
 
     Font getFont() {

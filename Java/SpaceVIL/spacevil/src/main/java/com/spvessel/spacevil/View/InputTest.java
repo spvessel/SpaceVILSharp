@@ -92,12 +92,12 @@ public class InputTest extends ActiveWindow {
 
         ButtonCore bc = new ButtonCore("pizdec");
         bc.setSize(150, 30);
+        ButtonCore bc1 = new ButtonCore("orNot");
+        bc1.setSize(150, 30);
 
         // tb.setEditable(false);
 
-        layout.addItem(bc);
-
-        layout.addItem(sp);
+        layout.addItems(bc, bc1, sp);
 
         Label tl = new Label();
         tl.setBackground(255, 255, 255, 100);
@@ -130,24 +130,36 @@ public class InputTest extends ActiveWindow {
             // te.pasteText("text edit text");
             // this.setWindowTitle(te.getSelectedText());
             // tb.setFocused(false);
-            tb.setText("package com.spvessel.spacevil;\n" +
-
-                    "        // HBar\n" + "        hScrollBar.isFocusable = false;\n"
-                    + "        hScrollBar.setVisible(true);\n"
-                    + "        hScrollBar.setItemName(getItemName() + \"_\" + hScrollBar.getItemName());\n" + "\n"
-                    + "        // Area\n"
-                    + "        // _area.setItemName(getItemName() + \"_\" + _area.getItemName());\n"
-                    + "        // _area.setSpacing(0, 5);\n" + "    }\n" + "\n" + "    public TextArea(String text) {\n"
-                    + "        this();\n" + "        setText(text);\n" + "    }\n" + "\n"
-                    + "    private long v_size = 0;\n" + "    private long h_size = 0;\n" + "\n"
-                    + "    private void updateVListArea() {\n"
-                    + "        // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
+//            tb.setText("package com.spvessel.spacevil;\n" +
+//
+//                    "        // HBar\n" + "        hScrollBar.isFocusable = false;\n"
+//                    + "        hScrollBar.setVisible(true);\n"
+//                    + "        hScrollBar.setItemName(getItemName() + \"_\" + hScrollBar.getItemName());\n" + "\n"
+//                    + "        // Area\n"
+//                    + "        // _area.setItemName(getItemName() + \"_\" + _area.getItemName());\n"
+//                    + "        // _area.setSpacing(0, 5);\n" + "    }\n" + "\n" + "    public TextArea(String text) {\n"
+//                    + "        this();\n" + "        setText(text);\n" + "    }\n" + "\n"
+//                    + "    private long v_size = 0;\n" + "    private long h_size = 0;\n" + "\n"
+//                    + "    private void updateVListArea() {\n"
+//                    + "        // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
             // tb.rewindText();
             // tb.setEditable(!tb.isEditable());
             // tb.setEditable(false);
             // tb.clear();
             // tb.setFocus();
             // tb.setEditable(true);
+            int sz = tb.getFont().getSize() + 1;
+            tb.setFontSize(sz);
+
+            System.out.println(tb.getFont().getSize());
+        });
+
+        bc1.eventMouseClick.add((sender, args) -> {
+            int sz = tb.getFont().getSize();
+            if (sz > 10)
+                tb.setFontSize(sz - 1);
+
+            System.out.println(tb.getFont().getSize());
         });
 
         Label label = new Label("1234567890");
