@@ -34,6 +34,12 @@ public class MainWindow extends ActiveWindow {
         setMinSize(500, 100);
         setAspectRatio(4, 1);
 
+        setPadding(2, 2, 2, 2);
+        setBackground(new Color(0, 162, 232));
+        setBorderRadius(10);
+        setAntiAliasingQuality(MSAA.MSAA_8X);
+        isTransparent = true;
+
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
         // Handler.eventClose.clear();
         // Handler.eventClose.add(() -> {
@@ -63,11 +69,13 @@ public class MainWindow extends ActiveWindow {
 
         TitleBar title = new TitleBar("Main King Window - JAVA");
         title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
+        title.setBorderRadius(new CornerRadius(0, 0, 7, 7));
         title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
         // title.setIcon(iBig, 20, 20);
         addItem(title);
 
         Grid grid = new Grid(1, 7);
+        grid.setBorderRadius(new CornerRadius(7, 7, 0, 0));
         grid.setMargin(0, 0, 0, 30);
         grid.setPadding(6, 6, 6, 6);
         grid.setBackground(70, 70, 70);

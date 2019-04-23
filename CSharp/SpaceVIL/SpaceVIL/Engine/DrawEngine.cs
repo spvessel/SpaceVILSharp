@@ -1291,6 +1291,8 @@ namespace SpaceVIL
             _fbo.GenFBOTexture(_framebufferWidth, _framebufferHeight);
             _fbo.UnbindFBO();
 
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
             _double_click_timer.Start();
             Glfw.SwapInterval(0);
             while (!_handler.IsClosing())
@@ -1298,7 +1300,6 @@ namespace SpaceVIL
                 // Glfw.WaitEventsTimeout(GetFrequency());
                 Glfw.PollEvents();
                 // Glfw.WaitEvents();
-                // glClearColor(0, 0, 0, 0);
                 // Thread.Sleep(15);
 
                 if (MaximizeRequest)

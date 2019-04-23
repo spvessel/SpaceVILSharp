@@ -1299,6 +1299,8 @@ final class DrawEngine {
         _fbo.genFBO();
         _fbo.genFBOTexture(_framebufferWidth, _framebufferHeight);
         _fbo.unbindFBO();
+        glClearColor(0, 0, 0, 0);
+        
         // glfwSwapInterval(0);
         while (!_handler.isClosing()) {
             glfwWaitEventsTimeout(getFrequency());

@@ -9,6 +9,8 @@ import com.spvessel.spacevil.Core.EventMouseMethodState;
 import com.spvessel.spacevil.Core.Geometry;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.Position;
+import com.spvessel.spacevil.Decorations.Border;
+import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
@@ -78,7 +80,7 @@ public abstract class CoreWindow {
      */
     public void show() {
         wnd_layout.show();
-        // WindowLayoutBox.SetFocusedWindow(this);
+        // WindowLayoutBox.setFocusedWindow(this);
     }
 
     /**
@@ -299,6 +301,7 @@ public abstract class CoreWindow {
         isFocusable = true;
         isOutsideClickClosable = false;
         isMaximized = false;
+        isTransparent = false;
     }
 
     public boolean isDialog;
@@ -310,7 +313,8 @@ public abstract class CoreWindow {
     public boolean isCentered;
     public boolean isFocusable;
     public boolean isOutsideClickClosable;
-    public boolean isMaximized = false;
+    public boolean isMaximized;
+    public boolean isTransparent;
 
     public boolean isFocused;
 
@@ -451,5 +455,68 @@ public abstract class CoreWindow {
         eventKeyRelease.clear();
 
         eventTextInput.clear();
+    }
+
+    public void setBorder(Border border) {
+        if (wnd_layout.getContainer() != null)
+            wnd_layout.getContainer().setBorder(border);
+    }
+
+    public void setBorderFill(Color fill) {
+        if (wnd_layout.getContainer() != null)
+            wnd_layout.getContainer().setBorderFill(fill);
+    }
+
+    public void setBorderFill(int r, int g, int b) {
+        if (wnd_layout.getContainer() != null)
+            wnd_layout.getContainer().setBorderFill(r, g, b);
+    }
+
+    public void setBorderFill(int r, int g, int b, int a) {
+        if (wnd_layout.getContainer() != null)
+            wnd_layout.getContainer().setBorderFill(r, g, b, a);
+    }
+
+    public void setBorderFill(float r, float g, float b) {
+        if (wnd_layout.getContainer() != null)
+            wnd_layout.getContainer().setBorderFill(r, g, b);
+    }
+
+    public void setBorderFill(float r, float g, float b, float a) {
+        if (wnd_layout.getContainer() != null)
+            wnd_layout.getContainer().setBorderFill(r, g, b, a);
+    }
+
+    public void setBorderRadius(CornerRadius radius) {
+        if (wnd_layout.getContainer() != null)
+            wnd_layout.getContainer().setBorderRadius(radius);
+    }
+
+    public void setBorderRadius(int radius) {
+        if (wnd_layout.getContainer() != null)
+            wnd_layout.getContainer().setBorderRadius(new CornerRadius(radius));
+    }
+
+    public void setBorderThickness(int thickness) {
+        if (wnd_layout.getContainer() != null)
+            wnd_layout.getContainer().setBorderThickness(thickness);
+    }
+
+    public CornerRadius GetBorderRadius() {
+        if (wnd_layout.getContainer() != null)
+            return wnd_layout.getContainer().getBorderRadius();
+        return null;
+    }
+
+    public int GetBorderThickness() {
+        if (wnd_layout.getContainer() != null)
+            return wnd_layout.getContainer().getBorderThickness();
+        return 0;
+    }
+
+    public Color GetBorderFill() {
+        if (wnd_layout.getContainer() != null)
+            return wnd_layout.getContainer().getBorderFill();
+        return new Color(0, 0, 0, 0);
     }
 }

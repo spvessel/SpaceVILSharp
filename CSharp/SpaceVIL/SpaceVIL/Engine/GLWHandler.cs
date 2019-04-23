@@ -48,6 +48,7 @@ namespace SpaceVIL
         internal bool Visible;
         internal bool AlwaysOnTop;
         internal bool Maximized;
+        internal bool Transparent;
         private Pointer WPosition = new Pointer();
         internal Pointer GetPointer()
         {
@@ -92,6 +93,7 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Floating, AlwaysOnTop);
             Glfw.WindowHint(Glfw.Hint.Maximized, Maximized);
             Glfw.WindowHint(Glfw.Hint.Visible, false);
+            Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, Transparent);
 
             _window = Glfw.CreateWindow(_coreWindow.GetWidth(), _coreWindow.GetHeight(), _coreWindow.GetWindowTitle());
 

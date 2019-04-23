@@ -86,6 +86,7 @@ namespace SpaceVIL
                 SetHidden(false);
             _coreWindow.IsClosed = false;
 
+            engine._handler.Transparent = _coreWindow.IsTransparent;
             engine._handler.Maximized = _coreWindow.IsMaximized;
             engine._handler.Visible = !_coreWindow.IsHidden;
             engine._handler.Resizeble = _coreWindow.IsResizable;
