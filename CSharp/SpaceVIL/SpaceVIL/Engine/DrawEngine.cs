@@ -220,6 +220,7 @@ namespace SpaceVIL
             glEnable(GL_ALPHA_TEST);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_MULTISAMPLE);
+            // glEnable(GL_DEPTH_TEST);
             // glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
             ////////////////////////////////////////////////
@@ -1294,11 +1295,11 @@ namespace SpaceVIL
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
             _double_click_timer.Start();
-            Glfw.SwapInterval(0);
+            // Glfw.SwapInterval(0);
             while (!_handler.IsClosing())
             {
-                // Glfw.WaitEventsTimeout(GetFrequency());
-                Glfw.PollEvents();
+                Glfw.WaitEventsTimeout(GetFrequency());
+                // Glfw.PollEvents();
                 // Glfw.WaitEvents();
                 // Thread.Sleep(15);
 
@@ -1343,7 +1344,9 @@ namespace SpaceVIL
 
         internal void Render()
         {
-            glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT
+            // | GL_DEPTH_BUFFER_BIT
+            );
             //draw static
             DrawItems(_handler.GetCoreWindow().GetLayout().GetContainer());
             //draw float
@@ -1352,20 +1355,20 @@ namespace SpaceVIL
             {
                 foreach (var item in float_items)
                 {
-                    if (item.GetHeightPolicy() == SizePolicy.Expand)
-                    {
-                        int[] confines = item.GetConfines();
-                        item.SetConfines(confines[0], confines[1], 0, _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight());
-                        item.SetY(0);
-                        item.SetHeight(_handler.GetCoreWindow().GetLayout().GetContainer().GetHeight());
-                    }
-                    if (item.GetWidthPolicy() == SizePolicy.Expand)
-                    {
-                        int[] confines = item.GetConfines();
-                        item.SetConfines(0, _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth(), confines[2], confines[3]);
-                        item.SetX(0);
-                        item.SetWidth(_handler.GetCoreWindow().GetLayout().GetContainer().GetWidth());
-                    }
+                    // if (item.GetHeightPolicy() == SizePolicy.Expand)
+                    // {
+                    //     int[] confines = item.GetConfines();
+                    //     item.SetConfines(confines[0], confines[1], 0, _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight());
+                    //     // item.SetY(0);
+                    //     // item.SetHeight(_handler.GetCoreWindow().GetLayout().GetContainer().GetHeight());
+                    // }
+                    // if (item.GetWidthPolicy() == SizePolicy.Expand)
+                    // {
+                    //     int[] confines = item.GetConfines();
+                    //     item.SetConfines(0, _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth(), confines[2], confines[3]);
+                    //     // item.SetX(0);
+                    //     // item.SetWidth(_handler.GetCoreWindow().GetLayout().GetContainer().GetWidth());
+                    // }
                     DrawItems(item);
                 }
             }

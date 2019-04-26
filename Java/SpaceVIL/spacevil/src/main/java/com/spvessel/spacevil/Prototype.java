@@ -77,24 +77,24 @@ abstract public class Prototype implements InterfaceBaseItem {
     public EventInputTextMethodState eventTextInput = new EventInputTextMethodState();
 
     void freeEvents() {
-        eventFocusGet.clear();
-        eventFocusLost.clear();
-        eventResize.clear();
-        eventDestroy.clear();
+        eventFocusGet = null;
+        eventFocusLost = null;
+        eventResize = null;
+        eventDestroy = null;
 
-        eventMouseHover.clear();
-        eventMouseClick.clear();
-        eventMouseDoubleClick.clear();
-        eventMousePress.clear();
-        eventMouseDrag.clear();
-        eventMouseDrop.clear();
-        eventScrollUp.clear();
-        eventScrollDown.clear();
+        eventMouseHover = null;
+        eventMouseClick = null;
+        eventMouseDoubleClick = null;
+        eventMousePress = null;
+        eventMouseDrag = null;
+        eventMouseDrop = null;
+        eventScrollUp = null;
+        eventScrollDown = null;
 
-        eventKeyPress.clear();
-        eventKeyRelease.clear();
+        eventKeyPress = null;
+        eventKeyRelease = null;
 
-        eventTextInput.clear();
+        eventTextInput = null;
     }
 
     public void release() {

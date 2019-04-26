@@ -72,14 +72,11 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      * @param handler parent window for the ContextMenu
      */
     public ComboBoxDropDown(CoreWindow handler) {
+        ItemsLayoutBox.addItem(handler, this, LayoutType.FLOATING);
         setPassEvents(false);
         setVisible(false);
-        setHandler(handler);
-        setItemName("ComboBoxDropDown_" + count);
-        count++;
-        ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
+        setItemName("ComboBoxDropDown_" + count++);
         setStyle(DefaultsService.getDefaultStyle(ComboBoxDropDown.class));
-        setShadow(5, 3, 3, new Color(0, 0, 0, 180));
     }
 
     /**

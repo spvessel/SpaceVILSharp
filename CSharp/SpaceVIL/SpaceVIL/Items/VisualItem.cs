@@ -938,18 +938,11 @@ namespace SpaceVIL
             return GraphicsMathService.ToGL(this as IBaseItem, GetHandler());
         }
 
-        //style
-        // internal bool _is_style_Set = false;
-        // internal virtual void SetInnerStyle(String element, Style style)
-        // {
-
-        // }
         public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
 
-            // _is_style_Set = true;
             SetPosition(style.X, style.Y);
             SetSize(style.Width, style.Height);
             SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
@@ -966,6 +959,10 @@ namespace SpaceVIL
             SetBorderRadius(style.BorderRadius);
             SetBorderThickness(style.BorderThickness);
             SetBorderFill(style.BorderFill);
+
+            SetShadow(style.ShadowRadius, style.ShadowXOffset, style.ShadowYOffset, style.ShadowColor);
+            SetShadowDrop(style.IsShadowDrop);
+
             SetVisible(style.IsVisible);
             RemoveAllItemStates();
 
@@ -982,7 +979,6 @@ namespace SpaceVIL
             {
                 IsCustom = new CustomFigure(style.IsFixedShape, style.Shape);
                 core_state.Shape = IsCustom;
-                // GetState(ItemStateType.Base).Shape = IsCustom;
             }
             AddItemState(ItemStateType.Base, core_state);
         }

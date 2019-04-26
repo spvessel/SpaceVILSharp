@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
@@ -6,39 +7,46 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class ButtonToggle : Prototype
+    public class Tab : Prototype
     {
-        private static int count = 0;
-        private TextLine _text_object;
-
-        /// <summary>
-        /// Constructs a ButtonToggle
-        /// </summary>
-        public ButtonToggle()
+        static int count = 0;
+        internal Frame View;
+        private Label _text_object;
+        private ButtonCore _close;
+        public ButtonCore GetCloseButton()
         {
-            SetItemName("ButtonToggle_" + count);
-            SetToggled(false);
-            EventKeyPress += OnKeyPress;
-            EventMouseClick += (sender, args) => EventToggle?.Invoke(sender, args); //remember
-            EventToggle += (sender, args) => SetToggled(!_toggled);
-            count++;
-            _text_object = new TextLine();
-
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ButtonToggle)));
+            return _close;
         }
 
-        /// <summary>
-        /// Constructs a ButtonToggle with text
-        /// </summary>
-        public ButtonToggle(String text) : this()
+        private bool _isClosable = false;
+
+        public void SetClosable(bool value)
         {
+            if (_isClosable == value)
+                return;
+            _isClosable = value;
+            _close.SetVisible(_isClosable);
+            UpdateTabWidth();
+        }
+
+        public bool IsClosable()
+        {
+            return _isClosable;
+        }
+
+        public Tab(String text) : this(text, text) { }
+        public Tab(String text, String name) : this()
+        {
+            SetItemName(name);
             SetText(text);
         }
-
-        void OnKeyPress(object sender, KeyArgs args)
+        public Tab() : base()
         {
-            if (args.Key == KeyCode.Enter)
-                EventMouseClick?.Invoke(this, new MouseArgs());
+            SetItemName("Tab_" + count++);
+            _close = new ButtonCore();
+            _text_object = new Label();
+            View = new Frame();
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Tab)));
         }
 
         //private for class
@@ -61,9 +69,11 @@ namespace SpaceVIL
         }
 
         public EventMouseMethodState EventToggle;
+        internal EventCommonMethod EventRemoved;
         public override void Release()
         {
             EventToggle = null;
+            EventRemoved = null;
         }
 
         //text init
@@ -114,27 +124,23 @@ namespace SpaceVIL
         {
             return _text_object.GetFont();
         }
-
-        /// <summary>
-        /// Set text in the ButtonToggle
-        /// </summary>
         public virtual void SetText(String text)
         {
-            _text_object.SetItemText(text);
+            _text_object.SetText(text);
+            UpdateTabWidth();
         }
         public virtual String GetText()
         {
-            return _text_object.GetItemText();
+            return _text_object.GetText();
         }
         public int GetTextWidth()
         {
-            return _text_object.GetWidth();
+            return _text_object.GetTextWidth();
         }
         public int GetTextHeight()
         {
-            return _text_object.GetHeight();
+            return _text_object.GetTextHeight();
         }
-
         /// <summary>
         /// Text color in the ButtonToggle
         /// </summary>
@@ -163,23 +169,79 @@ namespace SpaceVIL
             return _text_object.GetForeground();
         }
 
-        /// <summary>
-        /// Initialization and adding of all elements in the ButtonToggle
-        /// </summary>
-        public override void InitElements()
+        private int _labelRightMargin = 0;
+
+        private void UpdateTabWidth()
         {
-            AddItem(_text_object);
+            int w = GetPadding().Left + GetTextWidth() + GetPadding().Right;
+
+            if (_isClosable)
+            {
+                w += GetSpacing().Horizontal + _close.GetWidth();
+
+                _text_object.SetMargin(
+                _text_object.GetMargin().Left,
+                _text_object.GetMargin().Top,
+                GetSpacing().Horizontal + _close.GetWidth(),
+                _text_object.GetMargin().Bottom
+                );
+            }
+            else
+            {
+                _text_object.SetMargin(
+                _text_object.GetMargin().Left,
+                _text_object.GetMargin().Top,
+                _labelRightMargin,
+                _text_object.GetMargin().Bottom
+                );
+            }
+            SetWidth(w);
         }
 
-        //style
-        /// <summary>
-        /// Set style of the ButtonToggle
-        /// </summary>
+        public override void InitElements()
+        {
+            base.InitElements();
+            _close.SetVisible(_isClosable);
+            AddItems(_text_object, _close);
+            EventToggle = null;
+            EventToggle += (sender, args) =>
+            {
+                if (IsToggled())
+                    return;
+                SetToggled(true);
+            };
+
+            _close.IsFocusable = false;
+            _close.EventMouseClick += (sender, args) =>
+            {
+                RemoveTab();
+            };
+        }
+
+        public void RemoveTab()
+        {
+            EventRemoved?.Invoke();
+        }
+
         public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
             base.SetStyle(style);
+
+            Style inner_style = style.GetInnerStyle("closebutton");
+            if (inner_style != null)
+                _close.SetStyle(inner_style);
+            inner_style = style.GetInnerStyle("view");
+            if (inner_style != null)
+                View.SetStyle(inner_style);
+            inner_style = style.GetInnerStyle("text");
+            if (inner_style != null)
+            {
+                _text_object.SetStyle(inner_style);
+                _labelRightMargin = _text_object.GetMargin().Right;
+            }
+
             SetForeground(style.Foreground);
             SetFont(style.Font);
             SetTextAlignment(style.TextAlignment);

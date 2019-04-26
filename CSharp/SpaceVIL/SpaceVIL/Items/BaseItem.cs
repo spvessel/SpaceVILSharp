@@ -106,8 +106,6 @@ namespace SpaceVIL
         /// </summary>
         public void RemoveItemFromListeners()
         {
-            // if (GetParent() == null)
-            //     return;
             GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this);
             GetParent().RemoveEventListener(GeometryEventType.ResizeHeight, this);
             GetParent().RemoveEventListener(GeometryEventType.Moved_X, this);
@@ -538,6 +536,21 @@ namespace SpaceVIL
             if (_itemBehavior.GetWidthPolicy() != policy)
             {
                 _itemBehavior.SetWidthPolicy(policy);
+
+                VisualItem vItem = this as VisualItem;
+                Prototype protoItem = null;
+                if(vItem != null)
+                    protoItem = vItem._main;
+                IFloating floatingItem = protoItem as IFloating;
+                if (floatingItem != null)
+                {
+                    if (policy == SizePolicy.Expand)
+                        ItemsLayoutBox.SubscribeWindowSizeMonitoring(protoItem, GeometryEventType.ResizeWidth);
+                    else
+                        ItemsLayoutBox.UnsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.ResizeWidth);
+
+                    UpdateGeometry();
+                }
             }
         }
         public SizePolicy GetWidthPolicy()
@@ -549,6 +562,21 @@ namespace SpaceVIL
             if (_itemBehavior.GetHeightPolicy() != policy)
             {
                 _itemBehavior.SetHeightPolicy(policy);
+
+                VisualItem vItem = this as VisualItem;
+                Prototype protoItem = null;
+                if (vItem != null)
+                    protoItem = vItem._main;
+                IFloating floatingItem = protoItem as IFloating;
+                if (floatingItem != null)
+                {
+                    if (policy == SizePolicy.Expand)
+                        ItemsLayoutBox.SubscribeWindowSizeMonitoring(this, GeometryEventType.ResizeHeight);
+                    else
+                        ItemsLayoutBox.UnsubscribeWindowSizeMonitoring(this, GeometryEventType.ResizeHeight);
+
+                    UpdateGeometry();
+                }
             }
         }
         public SizePolicy GetHeightPolicy()
@@ -912,6 +940,14 @@ namespace SpaceVIL
             _shadow_color = color;
             _shadow_pos.SetX(x);
             _shadow_pos.SetY(y);
+        }
+        public void SetShadow(Shadow shadow)
+        {
+            _is_shadow_drop = shadow.IsDrop();
+            _shadow_radius = shadow.GetRadius();
+            _shadow_color = shadow.GetColor();
+            _shadow_pos.SetX(shadow.GetXOffset());
+            _shadow_pos.SetY(shadow.GetYOffset());
         }
 
         //update

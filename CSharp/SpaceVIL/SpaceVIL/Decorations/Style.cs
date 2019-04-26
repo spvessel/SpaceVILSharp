@@ -43,6 +43,11 @@ namespace SpaceVIL.Decorations
         public Color BorderFill;
         public List<float[]> Shape;// = new List<float[]>();
         public List<IBaseItem> InnerShapes;// = new List<float[]>();
+        public int ShadowRadius;
+        public int ShadowXOffset;
+        public int ShadowYOffset;
+        public bool IsShadowDrop = false;
+        public Color ShadowColor;
         public bool IsFixedShape;
         public bool IsVisible;
 
@@ -108,31 +113,19 @@ namespace SpaceVIL.Decorations
         /// <overloads> Sets background color of the object </overloads>
         public void SetBackground(int r, int g, int b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            Background = GraphicsMathService.ColorTransform(r, g, b); //Color.FromArgb(255, r, g, b);
+            Background = GraphicsMathService.ColorTransform(r, g, b);
         }
         public void SetBackground(int r, int g, int b, int a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            Background = GraphicsMathService.ColorTransform(r, g, b, a); //Color.FromArgb(a, r, g, b);
+            Background = GraphicsMathService.ColorTransform(r, g, b, a);
         }
         public void SetBackground(float r, float g, float b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            Background = GraphicsMathService.ColorTransform(r, g, b); //Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+            Background = GraphicsMathService.ColorTransform(r, g, b);
         }
         public void SetBackground(float r, float g, float b, float a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            Background = GraphicsMathService.ColorTransform(r, g, b, a); //Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+            Background = GraphicsMathService.ColorTransform(r, g, b, a);
         }
 
         /// <summary>
@@ -141,31 +134,19 @@ namespace SpaceVIL.Decorations
         /// <overloads> Sets text color of the object </overloads>
         public void SetForeground(int r, int g, int b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            Foreground = GraphicsMathService.ColorTransform(r, g, b); //Color.FromArgb(255, r, g, b);
+            Foreground = GraphicsMathService.ColorTransform(r, g, b);
         }
         public void SetForeground(int r, int g, int b, int a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            Foreground = GraphicsMathService.ColorTransform(r, g, b, a); //Color.FromArgb(a, r, g, b);
+            Foreground = GraphicsMathService.ColorTransform(r, g, b, a);
         }
         public void SetForeground(float r, float g, float b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            Foreground = GraphicsMathService.ColorTransform(r, g, b); //Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+            Foreground = GraphicsMathService.ColorTransform(r, g, b);
         }
         public void SetForeground(float r, float g, float b, float a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            Foreground = GraphicsMathService.ColorTransform(r, g, b, a); //Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+            Foreground = GraphicsMathService.ColorTransform(r, g, b, a);
         }
 
         /// <summary>
@@ -231,7 +212,7 @@ namespace SpaceVIL.Decorations
             BorderFill = border.GetFill();
             BorderRadius = border.GetRadius();
             BorderThickness = border.GetThickness();
-        }
+        } 
 
         /// <summary>
         /// Set border of the object
@@ -246,6 +227,14 @@ namespace SpaceVIL.Decorations
             BorderThickness = thickness;
         }
 
+        public void SetShadow(Shadow shadow)
+        {
+            ShadowColor = shadow.GetColor();
+            ShadowRadius = shadow.GetRadius();
+            ShadowXOffset = shadow.GetXOffset();
+            ShadowYOffset = shadow.GetYOffset();
+        }
+        
         /// <summary>
         /// Set object alignment
         /// </summary>
@@ -411,11 +400,20 @@ namespace SpaceVIL.Decorations
             if (BorderRadius != null)
                 style.BorderRadius = new CornerRadius(BorderRadius.LeftTop, BorderRadius.RightTop, BorderRadius.LeftBottom,
                         BorderRadius.RightBottom);
+
+            if (ShadowColor != null)
+                style.ShadowColor = Color.FromArgb(ShadowColor.A, ShadowColor.R, ShadowColor.G, ShadowColor.B);
+            style.ShadowRadius = ShadowRadius;
+            style.ShadowXOffset = ShadowXOffset;
+            style.ShadowYOffset = ShadowYOffset;
+            style.IsShadowDrop = IsShadowDrop;
+
             if (Shape != null)
                 style.Shape = new List<float[]>(Shape);
             if (InnerShapes != null)
                 style.InnerShapes = new List<IBaseItem>(InnerShapes);
             style.IsFixedShape = IsFixedShape;
+
             style.IsVisible = IsVisible;
             style._item_states = new Dictionary<ItemStateType, ItemState>(_item_states);
 
@@ -630,6 +628,8 @@ namespace SpaceVIL.Decorations
             style.WidthPolicy = SizePolicy.Fixed;
             style.HeightPolicy = SizePolicy.Fixed;
             style.Padding = new Indents(0, 0, 0, 0);
+            style.SetShadow(new Shadow(5, 3, 3, Color.FromArgb(180, 0, 0, 0)));
+            style.IsShadowDrop = true;
 
             Style itemlist_style = GetListBoxStyle();
             itemlist_style.Background = Color.Transparent;
@@ -1431,6 +1431,8 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Fixed;
             style.Padding = new Indents(5, 5, 5, 5);
             style.Margin = new Indents(10, 10, 10, 10);
+            style.SetShadow(new Shadow(10, 3, 3, Color.FromArgb(140, 0, 0, 0)));
+            style.IsShadowDrop = true;
             style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(3, 255, 255, 255)
@@ -1539,7 +1541,6 @@ namespace SpaceVIL.Decorations
             style.AddInnerStyle("minimizebutton", minimize_style);
 
             Style maximize_style = new Style();
-            // maximize_style.Background = Color.Transparent;
 
             maximize_style.BorderThickness = 2;
             maximize_style.BorderFill = Color.FromArgb(255, 100, 100, 100);
@@ -1551,7 +1552,6 @@ namespace SpaceVIL.Decorations
             maximize_style.Padding = new Indents(2, 2, 2, 2);
 
             ItemState hovered = new ItemState();
-            // hovered.Background = Color.Transparent;
             hovered.Border.SetFill(Color.FromArgb(255, 84, 124, 94));
             maximize_style.AddItemState(ItemStateType.Hovered, hovered);
             maximize_style.Shape = GraphicsMathService.GetRectangle();
@@ -1567,70 +1567,23 @@ namespace SpaceVIL.Decorations
         /// <returns> default style for TabView objects </returns>
         public static Style GetTabViewStyle()
         {
-            Style style = new Style();
-
+            Style style = GetVerticalStackStyle();
             style.Background = Color.FromArgb(255, 50, 50, 50);
-            style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
 
-            Style view_style = new Style();
-            view_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            view_style.Background = Color.FromArgb(255, 71, 71, 71);
-            view_style.IsVisible = false;
-            view_style.Padding = new Indents(2, 2, 2, 2);
-            style.AddInnerStyle("tabview", view_style);
+            Style tabBarStyle = GetHorizontalStackStyle();
+            tabBarStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            tabBarStyle.Height = 30;
+            style.AddInnerStyle("tabbar", tabBarStyle);
 
-            Style tab_style = new Style();
-            tab_style.BorderRadius = new CornerRadius(3, 3, 0, 0);
-            tab_style.Font = DefaultsService.GetDefaultFont(14);
-            tab_style.Background = Color.Transparent;
-            tab_style.Foreground = Color.FromArgb(255, 210, 210, 210);
-            tab_style.Width = 100;
-            tab_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            tab_style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
-            tab_style.Padding = new Indents(2, 2, 2, 2);
-            tab_style.AddItemState(ItemStateType.Hovered, new ItemState()
-            {
-                Background = Color.FromArgb(80, 255, 255, 255)
-            });
-            tab_style.AddItemState(ItemStateType.Toggled, new ItemState()
-            {
-                Background = Color.FromArgb(71, 71, 71)
-            });
+            Style tab_style = GetTabStyle();
             style.AddInnerStyle("tab", tab_style);
 
-            // Style inactive_style = new Style();
-            // inactive_style.BorderRadius = new CornerRadius(3, 3, 0, 0);
-            // inactive_style.Font = DefaultsService.GetDefaultFont(14);
-            // inactive_style.Background = Color.Transparent;
-            // inactive_style.Foreground = Color.FromArgb(255, 210, 210, 210);
-            // inactive_style.Width = 100;
-            // inactive_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            // inactive_style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
-            // inactive_style.Padding = new Indents(2, 2, 2, 2);
-            // inactive_style.AddItemState(ItemStateType.Hovered, new ItemState()
-            // {
-            //     Background = Color.FromArgb(100, 255, 255, 255)
-            // });
-            // inactive_style.AddItemState(ItemStateType.Toggled, new ItemState()
-            // {
-            //     Background = Color.FromArgb(71, 71, 71)
-            // });
-            // style.AddInnerStyle("inactive", inactive_style);
+            Style view_style = tab_style.GetInnerStyle("view");
+            if (view_style != null)
+                style.AddInnerStyle("view", view_style);
 
             return style;
         }
-
-        // public static Style GetTextItemStyle()
-        // {
-        //     Style style = new Style();
-
-        //     style.Background = Color.Transparent;
-        //     style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-        //     style.Font = DefaultsService.GetDefaultFont();
-        //     style.Foreground = Color.FromArgb(255, 70, 70, 70);;
-
-        //     return style;
-        // }
 
         /// <returns> default style for TreeView objects </returns>
         public static Style GetTreeViewStyle()
@@ -1764,6 +1717,8 @@ namespace SpaceVIL.Decorations
             window_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
             window_style.SetPadding(2, 2, 2, 2);
             window_style.SetBackground(45, 45, 45);
+            window_style.SetShadow(new Shadow(5, 3, 3, Color.FromArgb(180, 0, 0, 0)));
+            window_style.IsShadowDrop = true;
 
             style.AddInnerStyle("window", window_style);
 
@@ -1791,6 +1746,8 @@ namespace SpaceVIL.Decorations
             ok_style.SetBackground(100, 255, 150);
             ok_style.SetSize(100, 30);
             ok_style.SetAlignment(ItemAlignment.Left, ItemAlignment.VCenter);
+            ok_style.SetShadow(new Shadow(5, 0, 4, Color.FromArgb(120, 0, 0, 0)));
+            ok_style.IsShadowDrop = true;
             style.AddInnerStyle("button", ok_style);
 
             Style toolbar_style = GetHorizontalStackStyle();
@@ -2010,6 +1967,8 @@ namespace SpaceVIL.Decorations
             ok_style.SetAlignment(ItemAlignment.Left, ItemAlignment.Bottom);
             ok_style.SetMargin(0, 0, 0, 0);
             ok_style.BorderRadius = new CornerRadius();
+            ok_style.SetShadow(new Shadow(5, 0, 4, Color.FromArgb(120, 0, 0, 0)));
+            ok_style.IsShadowDrop = true;
             ok_style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(80, 255, 255, 255)));
             style.AddInnerStyle("button", ok_style);
 
@@ -2145,6 +2104,57 @@ namespace SpaceVIL.Decorations
             Style image_style = GetImageItemStyle();
             image_style.SetMaxSize(64, 64);
             style.AddInnerStyle("image", image_style);
+
+            return style;
+        }
+
+        public static Style GetTabStyle()
+        {
+            Style style = new Style();
+            style.BorderRadius = new CornerRadius(3, 3, 0, 0);
+            style.Font = DefaultsService.GetDefaultFont(14);
+            style.Background = Color.Transparent;
+            style.Foreground = Color.FromArgb(255, 210, 210, 210);
+            style.MinWidth = 70;
+            style.MaxWidth = 200;
+            style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            style.Padding = new Indents(10, 2, 5, 2);
+            style.Spacing = new Spacing(5, 0);
+            style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                Background = Color.FromArgb(20, 255, 255, 255)
+            });
+            style.AddItemState(ItemStateType.Toggled, new ItemState()
+            {
+                Background = Color.FromArgb(71, 71, 71)
+            });
+            style.SetShadow(new Shadow(5, 2, -1, Color.FromArgb(150, 0, 0, 0)));
+            style.IsShadowDrop = false;
+
+            Style textStyle = GetLabelStyle();
+            style.AddInnerStyle("text", textStyle);
+
+            Style close_style = new Style();
+            close_style.Background = Color.FromArgb(255, 100, 100, 100);
+            close_style.SetSize(10, 10);
+            close_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            close_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Right;
+            close_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            {
+                // Background = Color.FromArgb(255, 186, 95, 97)
+                Background = Color.FromArgb(255, 0, 162, 232)
+            });
+            close_style.Shape = GraphicsMathService.GetCross(10, 10, 2, 45);
+            close_style.IsFixedShape = true;
+            style.AddInnerStyle("closebutton", close_style);
+
+            Style view_style = new Style();
+            view_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            view_style.Background = Color.FromArgb(255, 71, 71, 71);
+            view_style.IsVisible = false;
+            view_style.Padding = new Indents(2, 2, 2, 2);
+            style.AddInnerStyle("view", view_style);
 
             return style;
         }

@@ -62,10 +62,6 @@ namespace SpaceVIL
             _title.GetMinimizeButton().SetVisible(false);
             _title.GetMaximizeButton().SetVisible(false);
 
-            // add
-            _add.SetShadow(5, 0, 4, Color.FromArgb(120, 0, 0, 0));
-            _cancel.SetShadow(5, 0, 4, Color.FromArgb(120, 0, 0, 0));
-
             // adding
             Window.AddItems(_title, _layout);
 

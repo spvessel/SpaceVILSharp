@@ -62,14 +62,12 @@ namespace SpaceVIL
         /// <param name="handler"> parent window for the ComboBoxDropDown </param>
         public ComboBoxDropDown(CoreWindow handler)
         {
+            ItemsLayoutBox.AddItem(handler, this, LayoutType.Floating);
             SetPassEvents(false);
             SetVisible(false);
-            SetHandler(handler);
             SetItemName("ComboBoxDropDown_" + count);
             count++;
-            ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBoxDropDown)));
-            SetShadow(5, 3, 3, Color.FromArgb(180, 0, 0, 0));
         }
 
         /// <summary>

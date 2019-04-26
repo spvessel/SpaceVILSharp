@@ -2,6 +2,7 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
+import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -96,8 +97,6 @@ public abstract class BaseItem implements InterfaceBaseItem {
      * Item will not react on parent's changes
      */
     public void removeItemFromListeners() {
-        // if (getParent() == null)
-        //     return;
         getParent().removeEventListener(GeometryEventType.RESIZE_WIDTH, this);
         getParent().removeEventListener(GeometryEventType.RESIZE_HEIGHT, this);
         getParent().removeEventListener(GeometryEventType.MOVED_X, this);
@@ -219,67 +218,19 @@ public abstract class BaseItem implements InterfaceBaseItem {
     }
 
     public void setBackground(int r, int g, int b) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 255)
-        //     r = 255;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 255)
-        //     g = 255;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 255)
-        //     b = 255;
-        _item.setBackground(GraphicsMathService.colorTransform(r, g, b)); //new Color(r, g, b, 255));
+        _item.setBackground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setBackground(int r, int g, int b, int a) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 255)
-        //     r = 255;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 255)
-        //     g = 255;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 255)
-        //     b = 255;
-        _item.setBackground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color(r, g, b, a));
+        _item.setBackground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public void setBackground(float r, float g, float b) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 1.0f)
-        //     r = 1.0f;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 1.0f)
-        //     g = 1.0f;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 1.0f)
-        //     b = 1.0f;
-        _item.setBackground(GraphicsMathService.colorTransform(r, g, b)); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
+        _item.setBackground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setBackground(float r, float g, float b, float a) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 1.0f)
-        //     r = 1.0f;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 1.0f)
-        //     g = 1.0f;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 1.0f)
-        //     b = 1.0f;
-        _item.setBackground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
+        _item.setBackground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public Color getBackground() {
@@ -543,6 +494,20 @@ public abstract class BaseItem implements InterfaceBaseItem {
     public void setWidthPolicy(SizePolicy policy) {
         if (_itemBehavior.getWidthPolicy() != policy) {
             _itemBehavior.setWidthPolicy(policy);
+
+            if (this instanceof VisualItem) {
+                VisualItem vItem = (VisualItem) this;
+                Prototype protoItem = vItem._main;
+
+                if (protoItem instanceof InterfaceFloating) {
+                    if (policy == SizePolicy.EXPAND)
+                        ItemsLayoutBox.subscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_WIDTH);
+                    else
+                        ItemsLayoutBox.unsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_WIDTH);
+
+                    updateGeometry();
+                }
+            }
         }
     }
 
@@ -553,6 +518,20 @@ public abstract class BaseItem implements InterfaceBaseItem {
     public void setHeightPolicy(SizePolicy policy) {
         if (_itemBehavior.getHeightPolicy() != policy) {
             _itemBehavior.setHeightPolicy(policy);
+
+            if (this instanceof VisualItem) {
+                VisualItem vItem = (VisualItem) this;
+                Prototype protoItem = vItem._main;
+
+                if (protoItem instanceof InterfaceFloating) {
+                    if (policy == SizePolicy.EXPAND)
+                        ItemsLayoutBox.subscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_HEIGHT);
+                    else
+                        ItemsLayoutBox.unsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_HEIGHT);
+
+                    updateGeometry();
+                }
+            }
         }
     }
 
@@ -901,6 +880,14 @@ public abstract class BaseItem implements InterfaceBaseItem {
         _shadow_pos.setY(y);
     }
 
+    public void setShadow(Shadow shadow) {
+        _is_shadow_drop = shadow.isDrop();
+        _shadow_radius = shadow.getRadius();
+        _shadow_color = shadow.getColor();
+        _shadow_pos.setX(shadow.getXOffset());
+        _shadow_pos.setY(shadow.getYOffset());
+    }
+
     // update
 
     /**
@@ -926,5 +913,6 @@ public abstract class BaseItem implements InterfaceBaseItem {
         return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
     }
 
-    public void release() { }
+    public void release() {
+    }
 }

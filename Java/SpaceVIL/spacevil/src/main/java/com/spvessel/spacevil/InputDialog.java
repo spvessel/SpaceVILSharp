@@ -60,10 +60,6 @@ public class InputDialog extends DialogItem {
         _title.getMinimizeButton().setVisible(false);
         _title.getMaximizeButton().setVisible(false);
 
-        // add
-        _add.setShadow(5, 0, 4, new Color(0, 0, 0, 120));
-        _cancel.setShadow(5, 0, 4, new Color(0, 0, 0, 120));
-
         // adding
         window.addItems(_title, _layout);
 

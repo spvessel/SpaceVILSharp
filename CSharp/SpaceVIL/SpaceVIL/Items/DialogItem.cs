@@ -24,7 +24,6 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            Window.SetShadow(5, 3, 3, Color.FromArgb(180, 0, 0, 0));
             AddItem(Window);
         }
 

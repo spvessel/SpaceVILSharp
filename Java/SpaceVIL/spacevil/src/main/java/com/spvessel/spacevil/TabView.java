@@ -2,42 +2,36 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.MouseArgs;
-import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.SizePolicy;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-public class TabView extends Prototype {
+public class TabView extends VerticalStack {
     private static int count = 0;
 
     // private Grid _tab_view;
-    private VerticalStack _tab_view;
-    private HorizontalStack _tab_bar;
-    private Map<ButtonToggle, Frame> _tab_list;
-    private Style _stored_style;
+    private HorizontalStack _tabBar;
+    private Map<Tab, Frame> _tabMapView;
+    private List<Tab> _tabList;
+
+    public List<Tab> getTabs() {
+        return new LinkedList<Tab>(_tabList);
+    }
+
+    private Tab _selectedTab = null;
 
     /**
      * Constructs a TabView
      */
     public TabView() {
-        setItemName("TabView_" + count);
-        count++;
-
-        _tab_view = new VerticalStack();
-        _tab_list = new HashMap<>();
-        _tab_bar = new HorizontalStack();
-
+        setItemName("TabView_" + count++);
+        _tabList = new LinkedList<>();
+        _tabMapView = new LinkedHashMap<>();
+        _tabBar = new HorizontalStack();
         setStyle(DefaultsService.getDefaultStyle(TabView.class));
     }
 
@@ -52,206 +46,166 @@ public class TabView extends Prototype {
     @Override
     public void initElements() {
         // tab view
-        addItem(_tab_view);
-
-        // _tab_bar
-        _tab_bar.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        _tab_bar.setHeight(30);
-        _tab_view.addItem(_tab_bar);
+        addItem(_tabBar);
     }
 
-    private void hideOthers(InterfaceItem sender, MouseArgs args) {
-        for (Map.Entry<ButtonToggle, Frame> tab : _tab_list.entrySet()) {
-            if (!tab.getKey().getItemName().equals(sender.getItemName())) {
-                tab.getKey().setToggled(false);
-                tab.getValue().setVisible(false);
-            } else {
-                tab.getValue().setVisible(true);
-                tab.getKey().setVisible(true);
+    private void hideOthers(Tab sender, MouseArgs args) {
+
+        if (_selectedTab.equals(sender))
+            return;
+        if (_selectedTab != null) {
+            _selectedTab.setToggled(false);
+            _selectedTab.setShadowDrop(false);
+            _tabMapView.get(_selectedTab).setVisible(false);
+        }
+
+        sender.setToggled(true);
+        sender.setShadowDrop(true);
+        _tabMapView.get(sender).setVisible(true);
+
+        _selectedTab = sender;
+
+        updateLayout();
+    }
+
+    public void selectTab(Tab tab) {
+        hideOthers(tab, null);
+    }
+
+    public void selectTabByName(String tabName) {
+        for (Tab tab : _tabMapView.keySet()) {
+            if (tabName.equals(tab.getItemName())) {
+                hideOthers(tab, null);
+                return;
             }
         }
-        _tab_view.updateLayout();
+    }
+
+    public void selectTabByText(String tabText) {
+        for (Tab tab : _tabMapView.keySet()) {
+            if (tabText.equals(tab.getText())) {
+                hideOthers(tab, null);
+                return;
+            }
+        }
+    }
+
+    private void selectBestLeftoverTab(Tab tab) {
+        if (_tabList.size() == 0)
+            return;
+        int index = _tabList.indexOf(tab);
+        if (index > 0)
+            selectTab(_tabList.get(index - 1));
+        else if (_tabList.size() != 1)
+            selectTab(_tabList.get(index + 1));
     }
 
     /**
      * Add new tab to the TabView
+     * 
      * @param tab_name name of the new tab
      */
-    public void addTab(String tab_name) {
-        Style tab_style = _stored_style.getInnerStyle("tab");
-        Style view_style = _stored_style.getInnerStyle("tabview");
+    public void addTab(Tab tab) {
+        tab.view.setItemName(tab.getItemName() + "_view");
+        tab.eventMouseClick.add((sender, args) -> {
+            hideOthers(tab, args);
+        });
+        tab.eventRemoved.add(() -> {
+            selectBestLeftoverTab(tab);
+            removeTab(tab);
+        });
+        _tabMapView.put(tab, tab.view);
+        _tabList.add(tab);
+        addItem(tab.view);
 
-        ButtonToggle tab = new ButtonToggle(tab_name);
-        tab.setItemName(tab_name);
-        if (tab_style != null) {
-            // tab.RemoveItemState(ItemStateType.Pressed);
-            tab.setStyle(tab_style);
-        }
-        tab.eventMouseClick.add(this::hideOthers);
-        _tab_bar.addItem(tab);
-
-        Frame view = new Frame();
-        view.setItemName(tab_name + "_view");
-
-        if (view_style != null)
-            view.setStyle(view_style);
-
-        _tab_view.addItem(view);
-        _tab_list.put(tab, view);
-
-        if (_tab_bar.getItems().size() == 1) {
+        if (_tabBar.getItems().size() == 0) {
             tab.setToggled(true);
-            view.setVisible(true);
-        }
-    }
+            tab.view.setVisible(true);
+            tab.setShadowDrop(true);
+            _selectedTab = tab;
+        } else
+            tab.setShadowDrop(false);
 
-    /**
-     * Add new tab to the TabView
-     * @param tab_name name of the new tab
-     * @param tab_style style of the new tab
-     */
-    public void addTab(String tab_name, Style tab_style, Style view_style) {
-        // refactor
+        _tabBar.addItem(tab);
     }
 
     /**
      * Remove tab by name
      */
-    public void removeTab(String tab_name) {
-        if (tab_name == null)
-            return;
-        for (InterfaceBaseItem tab : _tab_bar.getItems()) {
-            if (tab_name.equals(tab.getItemName())) {
-                _tab_list.remove(tab);
+    public boolean removeTabByName(String tabName) {
+        if (tabName == null)
+            return false;
+        for (Tab tab : _tabMapView.keySet()) {
+            if (tabName.equals(tab.getItemName())) {
+                removeItem(_tabMapView.get(tab));
+                _tabBar.removeItem(tab);
+                _tabMapView.remove(tab);
+                _tabList.remove(tab);
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    /**
+     * Remove tab by tab text
+     */
+    public boolean removeTabByText(String tabText) {
+        if (tabText == null)
+            return false;
+        for (Tab tab : _tabMapView.keySet()) {
+            if (tabText.equals(tab.getText())) {
+                removeItem(_tabMapView.get(tab));
+                _tabBar.removeItem(tab);
+                _tabMapView.remove(tab);
+                _tabList.remove(tab);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Remove tab
+     */
+    public boolean removeTab(Tab tab) {
+        if (tab == null)
+            return false;
+        if (_tabMapView.containsKey(tab)) {
+            removeItem(_tabMapView.get(tab));
+            _tabBar.removeItem(tab);
+            _tabMapView.remove(tab);
+            _tabList.remove(tab);
+            return true;
+        }
+        return false;
+    }
+
+    public void addItemToTabByName(String tabName, InterfaceBaseItem item) {
+        for (Tab tab : _tabMapView.keySet()) {
+            if (tabName.equals(tab.getItemName())) {
+                _tabMapView.get(tab).addItem(item);
+                return;
+            }
+        }
+    }
+
+    public void addItemToTabByText(String tabText, InterfaceBaseItem item) {
+        for (Tab tab : _tabMapView.keySet()) {
+            if (tabText.equals(tab.getText())) {
+                _tabMapView.get(tab).addItem(item);
+                return;
             }
         }
     }
 
     /**
-     * Add InterfaceBaseItem item to the tab with name tab_name
+     * Add InterfaceBaseItem item to the tab by tab
      */
-    public void addItemToTab(String tab_name, InterfaceBaseItem item) {
-        for (InterfaceBaseItem tab : _tab_bar.getItems()) {
-            if (tab_name == tab.getItemName()) {
-                _tab_list.get(tab).addItem(item);
-            }
-        }
-    }
-
-    // text init
-    private List<ItemAlignment> _textAlignment = new LinkedList<>();
-
-    /**
-     * Text alignment in the TabView
-     */
-    public void setTextAlignment(List<ItemAlignment> alignment) {
-        _textAlignment = alignment;
-    }
-    public void setTextAlignment(ItemAlignment... alignment) {
-        List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
-        _textAlignment = list;
-    }
-
-    private Indents _textMargin = new Indents();
-
-    /**
-     * Text margin in the TabView
-     */
-    public void setTextMargin(Indents margin) {
-        _textMargin = margin;
-    }
-
-    private Font _font = DefaultsService.getDefaultFont(16);
-    private int _font_size = 16;
-    private int _font_style = Font.BOLD;
-    private String _font_family = "Ubuntu";
-
-    /**
-     * Text font parameters in the TabView
-     */
-    public void setFont(Font font) {
-        _font = font;
-    }
-    public void setFontSize(int size) {
-        _font_size = size;
-    }
-    public void setFontStyle(int style) {
-        _font_style = style;
-    }
-    public void setFontFamily(String font_family) {
-        _font_family = font_family;
-    }
-    public Font getFont() {
-        return _font;
-    }
-
-    private Color _foreground = new Color(255, 255, 255);
-
-    /**
-     * Text color in the TabView
-     */
-    public void setForeground(Color color) {
-        _foreground = color;
-    }
-    public void setForeground(int r, int g, int b) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 255)
-        //     r = 255;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 255)
-        //     g = 255;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 255)
-        //     b = 255;
-        setForeground(GraphicsMathService.colorTransform(r, g, b)); //new Color(r, g, b));
-    }
-    public void setForeground(int r, int g, int b, int a) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 255)
-        //     r = 255;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 255)
-        //     g = 255;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 255)
-        //     b = 255;
-        setForeground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color(r, g, b, a));
-    }
-    public void setForeground(float r, float g, float b) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 1.0f)
-        //     r = 1.0f;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 1.0f)
-        //     g = 1.0f;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 1.0f)
-        //     b = 1.0f;
-        setForeground(GraphicsMathService.colorTransform(r, g, b)); //new Color(r, g, b));
-    }
-    public void setForeground(float r, float g, float b, float a) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 1.0f)
-        //     r = 1.0f;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 1.0f)
-        //     g = 1.0f;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 1.0f)
-        //     b = 1.0f;
-        setForeground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color(r, g, b, a));
+    public void addItemToTab(Tab tab, InterfaceBaseItem item) {
+        if (_tabMapView.containsKey(tab))
+            _tabMapView.get(tab).addItem(item);
     }
 
     /**
@@ -264,19 +218,9 @@ public class TabView extends Prototype {
             return;
 
         super.setStyle(style);
-        _stored_style = style;
 
-        setForeground(style.foreground);
-        setFont(style.font);
-        setTextAlignment(style.textAlignment);
-
-        Style tab_style = style.getInnerStyle("tab");
-        Style view_style = style.getInnerStyle("tabview");
-        for (Map.Entry<ButtonToggle, Frame> item : _tab_list.entrySet()) {
-            if (tab_style != null)
-                item.getKey().setStyle(tab_style);
-            if (view_style != null)
-                item.getValue().setStyle(view_style);
-        }
+        Style innerStyle = style.getInnerStyle("tabbar");
+        if (innerStyle != null)
+            _tabBar.setStyle(innerStyle);
     }
 }

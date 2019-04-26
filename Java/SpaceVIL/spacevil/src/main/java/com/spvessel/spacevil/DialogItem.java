@@ -22,7 +22,6 @@ abstract public class DialogItem extends Prototype {
 
     @Override
     public void initElements() {
-        window.setShadow(5, 3, 3, new Color(0, 0, 0, 180));
         addItem(window);
     }
 

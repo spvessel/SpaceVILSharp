@@ -37,6 +37,7 @@ public class Program {
         ComplexTest ct = new ComplexTest();
         InputTest it = new InputTest();
         TextTest tt = new TextTest();
+        Containers con = new Containers();
 
         // EventTest et = new EventTest();
         // et.show();
@@ -44,6 +45,7 @@ public class Program {
         // ScissorsTest sc = new ScissorsTest();
         // sc.show();
 
-        mw.show();
+        // mw.show();
+        con.show();
     }
 }

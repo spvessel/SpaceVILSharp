@@ -59,6 +59,10 @@ public class ButtonCore extends Prototype {
     public void setTextMargin(Indents margin) {
         _text_object.setMargin(margin);
     }
+    
+    public Indents getTextMargin() {
+        return _text_object.getMargin();
+    }
 
     /**
      * Text font parameters in the ButtonCore
@@ -88,6 +92,14 @@ public class ButtonCore extends Prototype {
 
     public String getText() {
         return _text_object.getItemText();
+    }
+
+    public int getTextWidth() {
+        return _text_object.getWidth();
+    }
+
+    public int getTextHeight() {
+        return _text_object.getHeight();
     }
 
     /**

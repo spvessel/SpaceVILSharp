@@ -51,12 +51,11 @@ namespace SpaceVIL
         /// <param name="handler"> parent window for the ContextMenu </param>
         public ContextMenu(CoreWindow handler)
         {
+            ItemsLayoutBox.AddItem(handler, this, LayoutType.Floating);
             SetPassEvents(false);
             SetVisible(false);
-            SetHandler(handler);
             SetItemName("ContextMenu_" + count);
             count++;
-            ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ContextMenu)));
         }
 

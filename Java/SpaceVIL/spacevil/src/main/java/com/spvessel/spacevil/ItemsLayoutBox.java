@@ -1,6 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.LayoutType;
 
 import java.util.*;
@@ -22,6 +23,7 @@ public class ItemsLayoutBox {
         // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
         return layouts.get(id).getFloatItems();
     }
+
     static public List<InterfaceBaseItem> getLayoutDialogItems(UUID id) {
         // return layouts[id].Items.Concat(layouts[id].FloatItems).ToList();
         return layouts.get(id).getDialogItems();
@@ -38,14 +40,16 @@ public class ItemsLayoutBox {
         layouts.put(l.getId(), l);
     }
 
-    static void addItem(CoreWindow layout, InterfaceBaseItem item, LayoutType type) {
+    static public void addItem(CoreWindow layout, InterfaceBaseItem item, LayoutType type) {
         switch (type) {
         case STATIC:
             layouts.get(layout.getWindowGuid()).getItems().add(item);
             break;
-        case FLOATING:
+        case FLOATING: {
             layouts.get(layout.getWindowGuid()).getFloatItems().add(item);
+            item.setHandler(layout);
             break;
+        }
         case DIALOG:
             layouts.get(layout.getWindowGuid()).getDialogItems().add(item);
             break;
@@ -55,21 +59,36 @@ public class ItemsLayoutBox {
         }
     }
 
-    static boolean removeItem(CoreWindow layout, InterfaceBaseItem item, LayoutType type) {
+    static public boolean removeItem(CoreWindow layout, InterfaceBaseItem item, LayoutType type) {
         switch (type) {
         case STATIC:
             return layouts.get(layout.getWindowGuid()).getItems().remove(item);
-//            break;
-        case FLOATING:
+        // break;
+        case FLOATING: {
+            unsubscribeWindowSizeMonitoring(item, GeometryEventType.RESIZE_WIDTH);
+            unsubscribeWindowSizeMonitoring(item, GeometryEventType.RESIZE_HEIGHT);
             return layouts.get(layout.getWindowGuid()).getFloatItems().remove(item);
-//            break;
+        }
+        // break;
         case DIALOG:
             return layouts.get(layout.getWindowGuid()).getDialogItems().remove(item);
-//            break;
+        // break;
         default:
             return layouts.get(layout.getWindowGuid()).getItems().remove(item);
-//            break;
+        // break;
         }
+    }
+
+    static void subscribeWindowSizeMonitoring(InterfaceBaseItem item, GeometryEventType type) {
+        // подписка
+        item.setParent(item.getHandler().getLayout().getContainer());
+        item.getHandler().getLayout().getContainer().addEventListener(type, item);
+    }
+
+    static void unsubscribeWindowSizeMonitoring(InterfaceBaseItem item, GeometryEventType type) {
+        // отписка
+        item.setParent(null);
+        item.getHandler().getLayout().getContainer().removeEventListener(type, item);
     }
 
     static public String[] getListOfItemsNames(CoreWindow layout) {

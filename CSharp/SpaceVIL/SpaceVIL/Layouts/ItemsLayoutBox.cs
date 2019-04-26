@@ -35,7 +35,7 @@ namespace SpaceVIL
             ItemsLayout l = new ItemsLayout(_layout);
             layouts.Add(l.Id, l);
         }
-        static internal void AddItem(CoreWindow layout, IBaseItem item, LayoutType type)
+        static public void AddItem(CoreWindow layout, IBaseItem item, LayoutType type)
         {
             switch (type)
             {
@@ -43,8 +43,11 @@ namespace SpaceVIL
                     layouts[layout.GetWindowGuid()].Items.Add(item);
                     break;
                 case LayoutType.Floating:
-                    layouts[layout.GetWindowGuid()].FloatItems.Add(item);
-                    break;
+                    {
+                        layouts[layout.GetWindowGuid()].FloatItems.Add(item);
+                        item.SetHandler(layout);
+                        break;
+                    }
                 case LayoutType.Dialog:
                     layouts[layout.GetWindowGuid()].DialogItems.Add(item);
                     break;
@@ -53,23 +56,40 @@ namespace SpaceVIL
                     break;
             }
         }
-        static internal bool RemoveItem(CoreWindow layout, IBaseItem item, LayoutType type)
+        static public bool RemoveItem(CoreWindow layout, IBaseItem item, LayoutType type)
         {
             switch (type)
             {
                 case LayoutType.Static:
                     return layouts[layout.GetWindowGuid()].Items.Remove(item);
-                    // break;
+                // break;
                 case LayoutType.Floating:
-                    return layouts[layout.GetWindowGuid()].FloatItems.Remove(item);
-                    // break;
+                    {
+                        UnsubscribeWindowSizeMonitoring(item, GeometryEventType.ResizeWidth);
+                        UnsubscribeWindowSizeMonitoring(item, GeometryEventType.ResizeHeight);
+                        return layouts[layout.GetWindowGuid()].FloatItems.Remove(item);
+                    }
+                // break;
                 case LayoutType.Dialog:
                     return layouts[layout.GetWindowGuid()].DialogItems.Remove(item);
-                    // break;
+                // break;
                 default:
                     return layouts[layout.GetWindowGuid()].Items.Remove(item);
                     // break;
             }
+        }
+
+        static internal void SubscribeWindowSizeMonitoring(IBaseItem item, GeometryEventType type)
+        {
+            //подписка
+            item.SetParent(item.GetHandler().GetLayout().GetContainer());
+            item.GetHandler().GetLayout().GetContainer().AddEventListener(type, item);
+        }
+        static internal void UnsubscribeWindowSizeMonitoring(IBaseItem item, GeometryEventType type)
+        {
+            //отписка
+            item.SetParent(null);
+            item.GetHandler().GetLayout().GetContainer().RemoveEventListener(type, item);
         }
 
         static public string[] GetListOfItemsNames(CoreWindow layout) => layouts[layout.GetWindowGuid()].Items.Select(_ => _.GetItemName()).ToArray();

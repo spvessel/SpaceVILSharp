@@ -290,6 +290,10 @@ namespace SpaceVIL
         {
             _text_object.SetMargin(margin);
         }
+        public Indents GetTextMargin()
+        {
+            return _text_object.GetMargin();
+        }
         public void SetFont(Font font)
         {
             _text_object.SetFont(font);
@@ -310,12 +314,12 @@ namespace SpaceVIL
         {
             return _text_object.GetFont();
         }
-        public void SetText(String text)
+        public virtual void SetText(String text)
         {
             _text_object.SetText(text);
             UpdateLayout();
         }
-        public String GetText()
+        public virtual String GetText()
         {
             return _text_object.GetText();
         }

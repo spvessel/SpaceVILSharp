@@ -32,13 +32,13 @@ public class MainWindow extends ActiveWindow {
         setWindowName("MainWindow");
         setWindowTitle("MainWindow");
         setMinSize(500, 100);
-        setAspectRatio(4, 1);
+        // setAspectRatio(4, 1);
 
         setPadding(2, 2, 2, 2);
         setBackground(new Color(0, 162, 232));
         setBorderRadius(10);
         setAntiAliasingQuality(MSAA.MSAA_8X);
-        isTransparent = true;
+        // isTransparent = true;
 
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
         // Handler.eventClose.clear();
@@ -90,12 +90,12 @@ public class MainWindow extends ActiveWindow {
         btn_layout.setShadow(5, 3, 3, new Color(0, 0, 0, 140));
         btn_layout.setFont(font);
         btn_layout.setToolTip("Show Layout window.");
-        btn_layout.setBackground(255, 151, 153);
+        btn_layout.setBackground(255, 151, 153, 255);
         btn_layout.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         btn_layout.setBorderRadius(new CornerRadius(6));
         ItemState state = new ItemState(new Color(255, 255, 255, 80));
         state.border.setThickness(10);
-        state.border.setFill(new Color(255, 255, 255, 200));
+        state.border.setFill(new Color(255, 255, 255, 150));
         state.border.setRadius(new CornerRadius(12, 12, 6, 6));
         btn_layout.addItemState(ItemStateType.HOVERED, state);
         InterfaceMouseMethodState layout_click = (sender, args) -> WindowsBox.tryShow("LayoutsTest");
@@ -115,9 +115,11 @@ public class MainWindow extends ActiveWindow {
         btn_label.setBackground(111, 181, 255);
         btn_label.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         InterfaceMouseMethodState btn_action_click = (sender, args) -> {
-            MessageBox ms = new MessageBox("Send result?", "Message:");
-            ms.show();
-            System.out.println(ms.getResult());
+            // MessageBox ms = new MessageBox("Send result?", "Message:");
+            // ms.show();
+            // System.out.println(ms.getResult());
+            MessageItem ms = new MessageItem("Send result?", "Message:");
+            ms.show(this);
         };
         btn_label.eventMouseClick.add(btn_action_click);
 

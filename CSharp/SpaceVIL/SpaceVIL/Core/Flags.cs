@@ -346,7 +346,7 @@ namespace SpaceVIL.Core
         Button8 = 7,
     }
 
-    internal enum LayoutType
+    public enum LayoutType
     {
         Static,
         Floating,

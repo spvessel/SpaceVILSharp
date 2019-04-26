@@ -1300,7 +1300,7 @@ final class DrawEngine {
         _fbo.genFBOTexture(_framebufferWidth, _framebufferHeight);
         _fbo.unbindFBO();
         glClearColor(0, 0, 0, 0);
-        
+
         // glfwSwapInterval(0);
         while (!_handler.isClosing()) {
             glfwWaitEventsTimeout(getFrequency());
@@ -2001,10 +2001,11 @@ final class DrawEngine {
         vertex.add(new float[] { 1.0f, -1.0f, 0.0f });
         vertex.add(new float[] { 1.0f, 1.0f, 0.0f });
         vertex.add(new float[] { -1.0f, 1.0f, 0.0f });
+        //
         _primitive.useShader();
         VRAMVertex store = new VRAMVertex();
         store.genBuffers(vertex);
-        store.sendColor(_primitive, new Color(0, 0, 0, 150));
+        store.sendColor(_primitive, new Color(0, 0, 0, 200));
         store.draw(GL_TRIANGLES);
         store.clear();
     }

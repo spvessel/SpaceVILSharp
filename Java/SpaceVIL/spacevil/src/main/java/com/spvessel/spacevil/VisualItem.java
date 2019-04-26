@@ -928,8 +928,11 @@ final class VisualItem extends BaseItem {
         setBorderRadius(style.borderRadius);
         setBorderThickness(style.borderThickness);
         setBorderFill(style.borderFill);
-        setVisible(style.isVisible);
 
+        setShadow(style.shadowRadius, style.shadowXOffset, style.shadowYOffset, style.shadowColor);
+        setShadowDrop(style.isShadowDrop);
+
+        setVisible(style.isVisible);
         removeAllItemStates();
 
         ItemState core_state = new ItemState(style.background);

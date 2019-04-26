@@ -59,6 +59,10 @@ namespace SpaceVIL
         {
             _text_object.SetMargin(margin);
         }
+        public Indents GetTextMargin()
+        {
+            return _text_object.GetMargin();
+        }
 
         /// <summary>
         /// Text font parameters in the ButtonCore
@@ -87,13 +91,22 @@ namespace SpaceVIL
         /// <summary>
         /// Set text in the ButtonCore
         /// </summary>
-        public void SetText(String text)
+        public virtual void SetText(String text)
         {
             _text_object.SetItemText(text);
         }
-        public String GetText()
+        public virtual String GetText()
         {
             return _text_object.GetItemText();
+        }
+
+        public int GetTextWidth()
+        {
+            return _text_object.GetWidth();
+        }
+        public int GetTextHeight()
+        {
+            return _text_object.GetHeight();
         }
 
         /// <summary>

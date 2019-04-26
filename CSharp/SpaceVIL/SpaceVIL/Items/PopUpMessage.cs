@@ -43,7 +43,6 @@ namespace SpaceVIL
             _text_object = new Label();
             _text_object.SetText(message);
             count++;
-            SetShadow(10, 3, 3, Color.FromArgb(140, 0, 0, 0));
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.PopUpMessage)));
             SetPassEvents(false);
         }

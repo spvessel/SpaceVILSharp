@@ -13,39 +13,9 @@ namespace View
         // TreeView treeview = new TreeView();
         // Grid block = new Grid(2, 2);
 
-        private BlankItem GetBlankItem(String name)
-        {
-            BlankItem blank = new BlankItem();
-            blank.SetItemName(name);
-            blank.SetStyle(Style.GetFrameStyle());
-            blank.SetMargin(50, 50, 50, 50);
-            blank.SetBorder(new Border(Color.FromArgb(0, 162, 232), new CornerRadius(10), 3));
-            blank.SetBackground(255, 255, 255, 50);
-            blank.EventMouseClick += (sender, args) =>
-            {
-                Console.WriteLine(blank.GetItemName() + " EventMouseClick");
-            };
-            blank.EventMouseDoubleClick += (sender, args) =>
-            {
-                Console.WriteLine(blank.GetItemName() + " EventMouseDoubleClick");
-            };
-            blank.EventKeyPress += (sender, args) =>
-            {
-                Console.WriteLine(blank.GetItemName() + " EventKeyPress");
-            };
-            blank.EventKeyRelease += (sender, args) =>
-            {
-                Console.WriteLine(blank.GetItemName() + " EventKeyRelease");
-            };
-            // blank.EventMouseHover += (sender, args) =>
-            // {
-            //     Console.WriteLine(blank.GetItemName() + " EventMouseHover");
-            // };
-            return blank;
-        }
         public override void InitWindow()
         {
-            SetParameters(nameof(Containers), nameof(Containers), 400, 400, true);
+            SetParameters(nameof(Containers), nameof(Containers), 700, 500, false);
             this.SetMinSize(400, 400);
             this.IsCentered = true;
 
@@ -97,8 +67,17 @@ namespace View
             cc.AddItem(tabs);
             // tabs.AddTab("Common");
             // tabs.AddTab("Stack");
-            tabs.AddTab("Grid");
-            tabs.AddTab("List");
+            tabs.AddTab(new Tab("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1"));
+            tabs.AddTab(new Tab("List"));
+            tabs.AddTab(new Tab("List"));
+
+            EventKeyPress += (sender, args) =>
+            {
+                if (args.Key == KeyCode.Menu)
+                    foreach (Tab tab in tabs.GetTabs())
+                        tab.SetClosable(!tab.IsClosable());
+            };
+
             // tabs.AddTab("Split");
             // tabs.AddTab("Free");
             // tabs.AddTab("Items");
@@ -147,7 +126,7 @@ namespace View
             grid.SetBackground(255, 255, 255, 20);
             grid.SetSpacing(2, 2);
             grid.SetMargin(20, 30, 20, 30);
-            tabs.AddItemToTab("Grid", grid);
+            tabs.AddItemToTabByName("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1", grid);
             Grid subgrid = new Grid(1, 2);
             grid.InsertItem(subgrid, 1, 1);
             HorizontalSlider slider = new HorizontalSlider();
@@ -403,6 +382,37 @@ namespace View
             // c3.AddItem(GetLabel("10. SpaceVIL.VerticalStack"));
         }
 
+        private BlankItem GetBlankItem(String name)
+        {
+            BlankItem blank = new BlankItem();
+            blank.SetItemName(name);
+            blank.SetStyle(Style.GetFrameStyle());
+            blank.SetMargin(50, 50, 50, 50);
+            blank.SetBorder(new Border(Color.FromArgb(0, 162, 232), new CornerRadius(10), 3));
+            blank.SetBackground(255, 255, 255, 50);
+            blank.EventMouseClick += (sender, args) =>
+            {
+                Console.WriteLine(blank.GetItemName() + " EventMouseClick");
+            };
+            blank.EventMouseDoubleClick += (sender, args) =>
+            {
+                Console.WriteLine(blank.GetItemName() + " EventMouseDoubleClick");
+            };
+            blank.EventKeyPress += (sender, args) =>
+            {
+                Console.WriteLine(blank.GetItemName() + " EventKeyPress");
+            };
+            blank.EventKeyRelease += (sender, args) =>
+            {
+                Console.WriteLine(blank.GetItemName() + " EventKeyRelease");
+            };
+            // blank.EventMouseHover += (sender, args) =>
+            // {
+            //     Console.WriteLine(blank.GetItemName() + " EventMouseHover");
+            // };
+            return blank;
+        }
+
         private ButtonCore GetButton(String name, int w = 0, int h = 0, SizePolicy policy = SizePolicy.Expand)
         {
             //Style
@@ -419,7 +429,7 @@ namespace View
             style.HeightPolicy = policy;
             style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
-            ItemState hovered = new ItemState(Color.FromArgb(30, 255, 255, 255));
+            ItemState hovered = new ItemState(Color.FromArgb(60, 255, 255, 255));
             style.AddItemState(ItemStateType.Hovered, hovered);
             ItemState pressed = new ItemState(Color.FromArgb(30, 0, 0, 60));
             pressed.Border.SetFill(Color.FromArgb(255, 255, 255, 255));

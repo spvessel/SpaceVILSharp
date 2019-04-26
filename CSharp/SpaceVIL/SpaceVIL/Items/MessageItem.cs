@@ -26,7 +26,7 @@ namespace SpaceVIL
 
         public int GetUserButtonResult()
         {
-            if (_userMap.ContainsKey(_userButtonResult))
+            if (_userButtonResult != null && _userMap.ContainsKey(_userButtonResult))
                 return _userMap[_userButtonResult];
             return -1;
         }
@@ -67,8 +67,7 @@ namespace SpaceVIL
 
             _toolbar = new HorizontalStack();
             _userbar = new HorizontalStack();
-
-            // Window.IsLocked = true;
+            Window.IsLocked = true;
 
             EventKeyPress += (sender, args) =>
             {
@@ -76,7 +75,7 @@ namespace SpaceVIL
                     Close();
             };
 
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MessageItem))); 
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MessageItem)));
         }
 
         /**
@@ -156,7 +155,7 @@ namespace SpaceVIL
             Window.AddItems(_titleBar, _msg_layout);
             Window.Update(GeometryEventType.ResizeWidth, 0);
 
-            
+
             if (!isEmpty)
             {
                 _toolbar.SetAlignment(ItemAlignment.Right, ItemAlignment.Bottom);

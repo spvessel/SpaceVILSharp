@@ -343,7 +343,7 @@ namespace SpaceVIL
         public bool IsFocusable;
         public bool IsOutsideClickClosable;
         public bool IsMaximized;
-        public bool IsTransparent;
+        internal bool IsTransparent;
 
         public bool IsFocused;
 

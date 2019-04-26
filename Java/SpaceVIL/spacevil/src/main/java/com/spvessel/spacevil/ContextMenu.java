@@ -57,12 +57,10 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      * @param handler parent window for the ContextMenu
      */
     public ContextMenu(CoreWindow handler) {
-        setItemName("ContextMenu_" + count);
-        count++;
+        ItemsLayoutBox.addItem(handler, this, LayoutType.FLOATING);
+        setItemName("ContextMenu_" + count++);
         setPassEvents(false);
         setVisible(false);
-        setHandler(handler);
-        ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
         setStyle(DefaultsService.getDefaultStyle(ContextMenu.class));
     }
 

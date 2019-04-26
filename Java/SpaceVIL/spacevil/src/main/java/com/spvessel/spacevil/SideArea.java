@@ -111,7 +111,7 @@ public class SideArea extends Prototype implements InterfaceFloating {
     }
 
     public SideArea(CoreWindow handler, Side attachSide) {
-        setHandler(handler);
+        ItemsLayoutBox.addItem(handler, this, LayoutType.FLOATING);
         setItemName("SideArea_" + count++);
         _close = new ButtonCore();
         window = new ResizableItem();
@@ -121,7 +121,6 @@ public class SideArea extends Prototype implements InterfaceFloating {
         eventMouseClick.add((sender, args) -> {
             hide();
         });
-        ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
         setVisible(false);
         setPassEvents(false);
         

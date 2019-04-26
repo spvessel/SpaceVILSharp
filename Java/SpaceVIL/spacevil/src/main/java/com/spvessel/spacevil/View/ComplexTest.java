@@ -29,7 +29,7 @@ public class ComplexTest extends ActiveWindow {
         Style style = Style.getWrapGridStyle();
         Style wrap_style = style.getInnerStyle("area");
         Style wrapper_style = wrap_style.getInnerStyle("selection");
-        wrapper_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 255, 0, 150)));
+        wrapper_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 255, 0, 50)));
         wrapper_style.borderRadius = new CornerRadius(6);
         DefaultsService.getDefaultTheme().replaceDefaultItemStyle(WrapGrid.class, style);
 

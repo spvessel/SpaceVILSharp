@@ -8,7 +8,7 @@ namespace SpaceVIL
     public class FloatItem : Prototype, IFloating, IDraggable //create abstract!!!!
     {
         private int _stored_offset = 0;
-        private bool IsFloating = true;
+        public bool IsFloating = true;
         private bool _init = false;
         static int count = 0;
         private int _diff_x = 0;
@@ -44,16 +44,15 @@ namespace SpaceVIL
         /// <param name="handler"> parent window for the FloatItem </param>
         public FloatItem(CoreWindow handler)
         {
+            ItemsLayoutBox.AddItem(handler, this, LayoutType.Floating);
             SetVisible(false);
-            SetHandler(handler);
+
             SetItemName("FloatItem_" + count);
             SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             EventMouseHover += OnMousePress;
             EventMousePress += OnMousePress;
             EventMouseDrag += OnDragging;
             count++;
-
-            ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
         }
 
         /// <summary>
