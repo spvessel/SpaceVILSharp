@@ -385,8 +385,9 @@ namespace SpaceVIL
             _minLineSpacer = output[0];
             _lineHeight = output[2];
 
-            if (_lineSpacer < _minLineSpacer)
-                _lineSpacer = _minLineSpacer;
+            // if (_lineSpacer < _minLineSpacer)
+            //     _lineSpacer = _minLineSpacer;
+            SetLineSpacer(_minLineSpacer);
 
             return output;
         }
@@ -765,7 +766,7 @@ namespace SpaceVIL
             return selectionRectangles;
         }
 
-        Color _foreground = Color.Black;
+        private Color _foreground = Color.Black;
         internal void SetForeground(Color foreground)
         {
             if (_linesList == null || foreground == null)

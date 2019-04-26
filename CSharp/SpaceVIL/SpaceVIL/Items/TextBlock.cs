@@ -698,6 +698,7 @@ namespace SpaceVIL
         {
             _textureStorage.SetFont(font);
             _cursor.SetHeight(_textureStorage.GetCursorHeight());
+            ReplaceCursor();
         }
         internal Font GetFont()
         {
