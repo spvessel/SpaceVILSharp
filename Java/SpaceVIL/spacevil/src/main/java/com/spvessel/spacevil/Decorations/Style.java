@@ -1651,7 +1651,7 @@ public class Style implements Cloneable {
         style.padding = new Indents(5, 0, 0, 0);
         style.margin = new Indents(0, 0, 0, 0);
         ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 130);
+        hovered.background = new Color(255, 255, 255, 30);
         style.addItemState(ItemStateType.HOVERED, hovered);
 
         Style indicator_style = new Style();
@@ -1852,7 +1852,7 @@ public class Style implements Cloneable {
         style.font = DefaultsService.getDefaultFont();
         style.setForeground(210, 210, 210);
         style.setPadding(10, 0, 0, 0);
-        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 130)));
+        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 30)));
 
         Style icon_style = getFrameStyle();
         icon_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
@@ -2154,9 +2154,10 @@ public class Style implements Cloneable {
         style.background = new Color(0, 0, 0, 0);
         style.setForeground(210, 210, 210);
         style.minWidth = 70;
-        style.maxWidth = 200;
+        // style.maxWidth = 200;
         style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
         style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        style.padding = new Indents(0, 0, 0, 0);
         style.padding = new Indents(10, 2, 5, 2);
         style.spacing = new Spacing(5, 0);
         style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 20)));

@@ -2,6 +2,9 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceHLayout;
+
+import java.util.List;
+
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
@@ -58,7 +61,7 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
             updateLayout();
         return result;
     }
-    
+
     /**
      * Set width of the HorizontalStack
      */
@@ -77,12 +80,6 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
         updateLayout();
     }
 
-    // @Override
-    // public void setY(int _y) {
-    // super.setY(_y);
-    // updateLayout();
-    // }
-
     /**
      * Update all children and HorizontalStack sizes and positions according to
      * confines
@@ -93,7 +90,9 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
         int fixed_count = 0;
         int expanded_count = 0;
 
-        for (InterfaceBaseItem child : getItems()) {
+        List<InterfaceBaseItem> itemList = getItems();
+
+        for (InterfaceBaseItem child : itemList) {
             if (child.isVisible()) {
                 if (child.getWidthPolicy() == SizePolicy.FIXED) {
                     fixed_count++;
@@ -113,13 +112,14 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
         int startX = getX() + getPadding().left;
 
         if (expanded_count > 0 || _contentAlignment.equals(ItemAlignment.LEFT)) {
-            for (InterfaceBaseItem child : getItems()) {
+            for (InterfaceBaseItem child : itemList) {
                 if (child.isVisible()) {
-                    child.setX(startX + offset + child.getMargin().left);//
+                    child.setX(startX + offset + child.getMargin().left);
                     if (child.getWidthPolicy() == SizePolicy.EXPAND) {
-                        if (width_for_expanded - child.getMargin().left - child.getMargin().right < child.getMaxWidth())
+                        if (width_for_expanded - child.getMargin().left - child.getMargin().right < child
+                                .getMaxWidth()) {
                             child.setWidth(width_for_expanded - child.getMargin().left - child.getMargin().right);
-                        else {
+                        } else {
                             expanded_count--;
                             free_space -= (child.getWidth() + child.getMargin().left + child.getMargin().right);//
                             width_for_expanded = 1;
@@ -135,7 +135,7 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
             }
         } else {
             if (_contentAlignment.equals(ItemAlignment.RIGHT)) {
-                for (InterfaceBaseItem child : getItems()) {
+                for (InterfaceBaseItem child : itemList) {
                     if (child.isVisible()) {
                         child.setX(startX + offset + child.getMargin().left + free_space);//
                         offset += child.getWidth() + getSpacing().horizontal + child.getMargin().left
@@ -144,7 +144,7 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
                     child.setConfines();
                 }
             } else if (_contentAlignment.equals(ItemAlignment.HCENTER)) {
-                for (InterfaceBaseItem child : getItems()) {
+                for (InterfaceBaseItem child : itemList) {
                     if (child.isVisible()) {
                         child.setX(startX + offset + child.getMargin().left + free_space / 2);//
                         offset += child.getWidth() + getSpacing().horizontal + child.getMargin().left

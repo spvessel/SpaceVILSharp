@@ -548,8 +548,26 @@ namespace SpaceVIL
                         ItemsLayoutBox.SubscribeWindowSizeMonitoring(protoItem, GeometryEventType.ResizeWidth);
                     else
                         ItemsLayoutBox.UnsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.ResizeWidth);
-
                     UpdateGeometry();
+                }
+
+                if (GetParent() != null)
+                {
+                    var hLayout = GetParent() as IHLayout;
+                    var vLayout = GetParent() as IVLayout;
+                    var grid = GetParent() as IGrid;
+
+                    if (hLayout == null
+                    && vLayout == null
+                    && grid == null)
+                        UpdateBehavior();
+
+                    if (hLayout != null)
+                        hLayout.UpdateLayout();
+                    if (vLayout != null)
+                        vLayout.UpdateLayout();
+                    if (grid != null)
+                        grid.UpdateLayout();
                 }
             }
         }
@@ -576,6 +594,25 @@ namespace SpaceVIL
                         ItemsLayoutBox.UnsubscribeWindowSizeMonitoring(this, GeometryEventType.ResizeHeight);
 
                     UpdateGeometry();
+                }
+
+                if (GetParent() != null)
+                {
+                    var hLayout = GetParent() as IHLayout;
+                    var vLayout = GetParent() as IVLayout;
+                    var grid = GetParent() as IGrid;
+
+                    if (hLayout == null
+                    && vLayout == null
+                    && grid == null)
+                        UpdateBehavior();
+
+                    if (hLayout != null)
+                        hLayout.UpdateLayout();
+                    if (vLayout != null)
+                        vLayout.UpdateLayout();
+                    if (grid != null)
+                        grid.UpdateLayout();
                 }
             }
         }

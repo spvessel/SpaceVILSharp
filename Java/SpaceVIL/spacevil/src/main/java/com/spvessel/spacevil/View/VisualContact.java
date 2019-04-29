@@ -27,7 +27,7 @@ public class VisualContact extends Prototype {
         addItemState(ItemStateType.HOVERED, hover);
         setPadding(10, 0, 5, 0);
         setMargin(1, 1, 1, 1);
-        setShadow(10, 3, 3, new Color(0, 0, 0, 160));
+        // setShadow(10, 3, 3, new Color(0, 0, 0, 160));
         _count++;
     }
 
@@ -46,7 +46,8 @@ public class VisualContact extends Prototype {
         // border.setTriangles(GraphicsMathService.getEllipse(50, 50, 0, 0, 32));
 
         // contact name
-        Label name = new Label(getItemName() + " contact");
+        // Label name = new Label(getItemName() + " contact");
+        Label name = new Label();
         name.setTextAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
         name.setBackground(255, 255, 255, 32);
         name.setForeground(210, 210, 210);
@@ -71,8 +72,8 @@ public class VisualContact extends Prototype {
         ItemState hover = new ItemState();
         hover.background = new Color(255, 255, 255, 125);
         close.addItemState(ItemStateType.HOVERED, hover);
-        InterfaceMouseMethodState click = (sender, args) -> disposeSelf();
-        close.eventMouseClick.add(click);
+        // InterfaceMouseMethodState click = (sender, args) -> disposeSelf();
+        // close.eventMouseClick.add(click);
 
         // adding
         addItem(border);

@@ -8,11 +8,13 @@ import java.awt.Color;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.*;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 final class VisualItem extends BaseItem {
 
@@ -139,70 +141,19 @@ final class VisualItem extends BaseItem {
     }
 
     public void setBorderFill(int r, int g, int b) {
-        // if (r < 0)
-        // r = Math.abs(r);
-        // if (r > 255)
-        // r = 255;
-        // if (g < 0)
-        // g = Math.abs(g);
-        // if (g > 255)
-        // g = 255;
-        // if (b < 0)
-        // b = Math.abs(b);
-        // if (b > 255)
-        // b = 255;
-        setBorderFill(GraphicsMathService.colorTransform(r, g, b)); // new Color(r, g, b));
+        setBorderFill(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setBorderFill(int r, int g, int b, int a) {
-        // if (r < 0)
-        // r = Math.abs(r);
-        // if (r > 255)
-        // r = 255;
-        // if (g < 0)
-        // g = Math.abs(g);
-        // if (g > 255)
-        // g = 255;
-        // if (b < 0)
-        // b = Math.abs(b);
-        // if (b > 255)
-        // b = 255;
-        setBorderFill(GraphicsMathService.colorTransform(r, g, b, a)); // new Color(r, g, b, a));
+        setBorderFill(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public void setBorderFill(float r, float g, float b) {
-        // if (r < 0)
-        // r = Math.abs(r);
-        // if (r > 1.0f)
-        // r = 1.0f;
-        // if (g < 0)
-        // g = Math.abs(g);
-        // if (g > 1.0f)
-        // g = 1.0f;
-        // if (b < 0)
-        // b = Math.abs(b);
-        // if (b > 1.0f)
-        // b = 1.0f;
-        setBorderFill(GraphicsMathService.colorTransform(r, g, b)); // new Color((int) (r * 255.0f), (int) (g * 255.0f),
-                                                                    // (int) (b * 255.0f)));
+        setBorderFill(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setBorderFill(float r, float g, float b, float a) {
-        // if (r < 0)
-        // r = Math.abs(r);
-        // if (r > 1.0f)
-        // r = 1.0f;
-        // if (g < 0)
-        // g = Math.abs(g);
-        // if (g > 1.0f)
-        // g = 1.0f;
-        // if (b < 0)
-        // b = Math.abs(b);
-        // if (b > 1.0f)
-        // b = 1.0f;
-        setBorderFill(GraphicsMathService.colorTransform(r, g, b, a)); // new Color((int) (r * 255.0f), (int) (g *
-                                                                       // 255.0f), (int) (b * 255.0f), (int) (a *
-                                                                       // 255.0f)));
+        setBorderFill(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     void setBorderRadius(CornerRadius radius) {
@@ -345,7 +296,7 @@ final class VisualItem extends BaseItem {
     }
 
     EventManager eventManager = null;
-    private List<InterfaceBaseItem> _content = new LinkedList<>();
+    private Set<InterfaceBaseItem> _content = new LinkedHashSet<>();
 
     List<InterfaceBaseItem> getItems() {
         locker.lock();
@@ -362,7 +313,8 @@ final class VisualItem extends BaseItem {
     void setContent(List<InterfaceBaseItem> content) {
         locker.lock();
         try {
-            _content = content;
+            // _content = content;
+            _content = new LinkedHashSet<>(content);
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -434,8 +386,11 @@ final class VisualItem extends BaseItem {
 
             if (index > _content.size())
                 _content.add(item);
-            else
-                _content.add(index, item);
+            else {
+                List<InterfaceBaseItem> list = new LinkedList<>(_content);
+                list.add(index, item);
+                _content = new LinkedHashSet<>(list);
+            }
 
             try {
                 ItemsLayoutBox.addItem(getHandler(), item, LayoutType.STATIC);
@@ -475,6 +430,8 @@ final class VisualItem extends BaseItem {
     boolean removeItem(InterfaceBaseItem item) {
         locker.lock();
         try {
+            if (!_content.contains(item))
+                return false;
             if (item instanceof Prototype) {
                 Prototype tmp = ((Prototype) item);
                 if (tmp.isFocused())
@@ -510,8 +467,9 @@ final class VisualItem extends BaseItem {
     void clear() {
         locker.lock();
         try {
-            while (!_content.isEmpty())
-                removeItem(_content.get(0));
+            while (!_content.isEmpty()) {
+                removeItem(_content.iterator().next());
+            }
         } catch (Exception ex) {
             System.out.println("Method - Clear");
             ex.printStackTrace();
@@ -831,27 +789,16 @@ final class VisualItem extends BaseItem {
                 l = (Px - m * Cx) / Bx;
                 if (l >= 0 && (m + l) <= 1) {
                     result = true;
-                    // _mouse_ptr.setPosition(xpos, ypos);
                     return result;
                 }
             }
         }
 
-        // _mouse_ptr.clear();
         return result;
     }
 
     private boolean lazyHoverVerification(float xpos, float ypos) {
-        // if(this instanceof ContextMenu)
-        // {
-        // System.out.println("context menu");
-        // System.out.println(
-        // _confines_x_0 + " " +
-        // _confines_x_1 + " " +
-        // _confines_y_0 + " " +
-        // _confines_y_1 + " "
-        // );
-        // }
+
         boolean result = false;
         float minx = getX();
         float maxx = getX() + getWidth();
@@ -872,11 +819,7 @@ final class VisualItem extends BaseItem {
 
         if (xpos >= minx && xpos <= maxx && ypos >= miny && ypos <= maxy) {
             result = true;
-            // _mouse_ptr.setPosition(xpos, ypos);
         }
-        // else {
-        // _mouse_ptr.clear();
-        // }
         return result;
     }
 

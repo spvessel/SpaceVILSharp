@@ -1,11 +1,11 @@
 package com.spvessel.spacevil.Core;
 
-import java.util.List;
-import java.util.LinkedList;
+import java.util.Set;
+import java.util.LinkedHashSet;
 
 public class EventCommonMethod {
 
-    List<InterfaceCommonMethod> events;
+    Set<InterfaceCommonMethod> events = null;
 
     public int size() {
         if (events == null)
@@ -15,7 +15,7 @@ public class EventCommonMethod {
     
     public void add(InterfaceCommonMethod action) {
         if (events == null)
-            events = new LinkedList<>();
+            events = new LinkedHashSet<>();
         events.add(action);
     }
 

@@ -3,9 +3,12 @@ package com.spvessel.spacevil.View;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Flags.SizePolicy;
@@ -14,7 +17,7 @@ public class LayoutsTest extends ActiveWindow {
     @Override
     public void initWindow() {
         isBorderHidden = true;
-        setSize(1000, 1000);
+        setSize(800, 1000);
         setWindowName("LayoutsTest");
         setWindowTitle("LayoutsTest");
 
@@ -22,7 +25,7 @@ public class LayoutsTest extends ActiveWindow {
         setPadding(2, 2, 2, 2);
         setBackground(45, 45, 45);
 
-        setRenderFrequency(RedrawFrequency.ULTRA);
+        // setRenderFrequency(RedrawFrequency.ULTRA);
 
         // DragAnchor
         TitleBar title = new TitleBar("LayoutsTest");
@@ -130,6 +133,7 @@ public class LayoutsTest extends ActiveWindow {
         all.setText("All");
         all.setWidth(60);
         all.setHeight(25);
+        Set<InterfaceBaseItem> list = new LinkedHashSet<>();
         InterfaceMouseMethodState all_click = (sender, args) -> {
             // listbox_left_1.setSelectionVisibility(!listbox_left_1.getSelectionVisibility());
             // RadioButton radio = new RadioButton();
@@ -144,13 +148,23 @@ public class LayoutsTest extends ActiveWindow {
             // radio.eventMouseClick.add(r_click);
             // listbox_left_1.addItem(radio);
             // listbox_left_1.setVisible(!listbox_left_1.isVisible());
-            listbox_left_1.clear();
-            // listbox_left_1.addItem(visualContact);
-            // listbox_left_1.getParent().removeItem(listbox_left_1);
 
-            for (int i = 0; i < 1000; i++) {
-                listbox_left_1.addItem(new VisualContact());
+            // listbox_left_1.clear();
+            // // list.clear();
+            // long startTime = System.currentTimeMillis();
+            // for (int i = 0; i < 1000; i++) {
+            // listbox_left_1.addItem(new VisualContact());
+            // // list.add(new VisualContact());
+            // }
+            // System.out.println("Fuction run " + (System.currentTimeMillis() - startTime)
+            // + " ms");
+            // System.gc();
+            
+            list.clear();
+            for (int i = 0; i < 100000; i++) {
+                list.add(new VisualContact());
             }
+            System.gc();
         };
         all.eventMouseClick.add(all_click);
         frame.addItem(all);

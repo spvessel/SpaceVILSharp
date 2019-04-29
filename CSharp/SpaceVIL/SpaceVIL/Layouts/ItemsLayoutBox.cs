@@ -93,7 +93,7 @@ namespace SpaceVIL
         }
 
         static public string[] GetListOfItemsNames(CoreWindow layout) => layouts[layout.GetWindowGuid()].Items.Select(_ => _.GetItemName()).ToArray();
-        static public string[] GetListOfItemsColors(CoreWindow layout) => layouts[layout.GetWindowGuid()].Items.Select(_ => _.GetBackground().ToString()).ToArray();
+        static internal string[] GetListOfItemsColors(CoreWindow layout) => layouts[layout.GetWindowGuid()].Items.Select(_ => _.GetBackground().ToString()).ToArray();
         static public void PrintListOfItems(CoreWindow layout)
         {
             string[] list = GetListOfItemsNames(layout);

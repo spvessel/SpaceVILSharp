@@ -1606,7 +1606,7 @@ namespace SpaceVIL.Decorations
             style.Spacing = new Spacing(5, 0);
             style.Padding = new Indents(5, 0, 0, 0);
             ItemState hovered = new ItemState();
-            hovered.Background = Color.FromArgb(130, 255, 255, 255);
+            hovered.Background = Color.FromArgb(30, 255, 255, 255);
             style.AddItemState(ItemStateType.Hovered, hovered);
 
             Style indicator_style = new Style();//GetButtonToggleStyle();
@@ -1807,7 +1807,7 @@ namespace SpaceVIL.Decorations
             style.Font = DefaultsService.GetDefaultFont();
             style.SetForeground(210, 210, 210);
             style.SetPadding(10, 0, 0, 0);
-            style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(130, 255, 255, 255)));
+            style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(30, 255, 255, 255)));
 
             Style icon_style = GetFrameStyle();
             icon_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
@@ -2116,7 +2116,7 @@ namespace SpaceVIL.Decorations
             style.Background = Color.Transparent;
             style.Foreground = Color.FromArgb(255, 210, 210, 210);
             style.MinWidth = 70;
-            style.MaxWidth = 200;
+            // style.MaxWidth = 200;
             style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(10, 2, 5, 2);

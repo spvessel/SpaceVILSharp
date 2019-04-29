@@ -22,13 +22,19 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class Containers extends ActiveWindow {
 
+    TabView tabs;
+    Tab tab1;
+    Tab tab2;
+    Tab tab3;
+    TitleBar title;
+
     @Override
     public void initWindow() {
         setParameters("Containers", "Containers", 700, 500, false);
         this.setMinSize(400, 400);
         this.isCentered = true;
 
-        TitleBar title = new TitleBar("Containers");
+        title = new TitleBar("Containers");
         title.setShadow(5, 0, 3, new Color(0, 0, 0, 150));
         this.addItem(title);
 
@@ -37,16 +43,28 @@ public class Containers extends ActiveWindow {
         cc.setBackground(50, 50, 50);
         this.addItem(cc);
 
-        TabView tabs = new TabView();
+        tabs = new TabView();
+        tab1 = new Tab("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1");
+        tab2 = new Tab("List");
+        tab3 = new Tab("List");
         cc.addItem(tabs);
-        tabs.addTab(new Tab("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1"));
-        tabs.addTab(new Tab("List"));
-        tabs.addTab(new Tab("List"));
+
+        tabs.addTabs(tab1, tab2, tab3);
+        tab1.setWidthPolicy(SizePolicy.EXPAND);
 
         eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.MENU)
                 for (Tab tab : tabs.getTabs())
                     tab.setClosable(!tab.isClosable());
+            if (args.key == KeyCode.DELETE) {
+                clearAllTabs();
+            }
+            if (args.key == KeyCode.ENTER) {
+                if(tabs != null)
+                {
+                    System.out.println(tabs.getTabs().size());
+                }
+            }
         });
 
         Grid grid = new Grid(3, 4);
@@ -56,8 +74,7 @@ public class Containers extends ActiveWindow {
         tabs.addItemToTabByName("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1", grid);
         Grid subgrid = new Grid(1, 2);
         grid.insertItem(subgrid, 1, 1);
-        HorizontalSlider slider = new HorizontalSlider();
-        slider.setBackground(0, 0, 0, 255);
+
         subgrid.addItems(new VerticalScrollBar(), new VerticalScrollBar());
         for (int i = 0; i < 11; i++) {
             ButtonCore h_btn = getButton("Cell" + i, 150, 50, SizePolicy.EXPAND);
@@ -65,6 +82,15 @@ public class Containers extends ActiveWindow {
             h_btn.setBackground(121, 223, 152);
             grid.addItem(h_btn);
         }
+    }
+
+    private void clearAllTabs() {
+        // title.removeItem(tabs);
+        // tabs.removeAllTabs();
+        tabs.getParent().removeItem(tabs);
+        tab1 = null;
+        tab2 = null;
+        tab3 = null;
     }
 
     private ButtonCore getButton(String name, int w, int h, SizePolicy policy) {

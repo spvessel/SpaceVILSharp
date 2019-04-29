@@ -113,6 +113,12 @@ namespace SpaceVIL
         /// <param name="tab">the new tab </param>
         public void AddTab(Tab tab)
         {
+            if (_tabMapView.ContainsKey(tab))
+                return;
+
+            _tabMapView.Add(tab, tab.View);
+            _tabList.Add(tab);
+
             tab.View.SetItemName(tab.GetItemName() + "_view");
             tab.EventMouseClick += (sender, args) =>
             {
@@ -123,8 +129,7 @@ namespace SpaceVIL
                 SelectBestLeftoverTab(tab);
                 RemoveTab(tab);
             };
-            _tabMapView.Add(tab, tab.View);
-            _tabList.Add(tab);
+
             AddItem(tab.View);
 
             if (_tabBar.GetItems().Count == 0)
@@ -138,6 +143,37 @@ namespace SpaceVIL
                 tab.SetShadowDrop(false);
 
             _tabBar.AddItem(tab);
+        }
+
+        public void AddTabs(params Tab[] tabs)
+        {
+            foreach (Tab tab in tabs)
+                AddTab(tab);
+        }
+
+        public override bool RemoveItem(IBaseItem item)
+        {
+            Tab tmpTab = item as Tab;
+            if (tmpTab != null)
+            {
+                if (_tabMapView.ContainsKey(tmpTab))
+                {
+                    return RemoveTab(tmpTab);
+                }
+                return false;
+            }
+            else if (item.Equals(_tabBar))
+            {
+                Tab tab = null;
+                while (_tabList.Count != 0)
+                {
+                    tab = _tabList[0];
+                    _tabBar.RemoveItem(tab);
+                    _tabMapView.Remove(tab);
+                    _tabList.Remove(tab);
+                }
+            }
+            return base.RemoveItem(item);
         }
 
         /// <summary>
@@ -196,6 +232,22 @@ namespace SpaceVIL
                 return true;
             }
             return false;
+        }
+
+        public bool RemoveAllTabs()
+        {
+            if (_tabList.Count == 0)
+                return false;
+            Tab tab = null;
+            while (_tabList.Count != 0)
+            {
+                tab = _tabList[0];
+                RemoveItem(_tabMapView[tab]);
+                _tabBar.RemoveItem(tab);
+                _tabMapView.Remove(tab);
+                _tabList.Remove(tab);
+            }
+            return true;
         }
 
         /// <summary>

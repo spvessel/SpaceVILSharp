@@ -173,29 +173,37 @@ namespace SpaceVIL
 
         private void UpdateTabWidth()
         {
-            int w = GetPadding().Left + GetTextWidth() + GetPadding().Right;
-
-            if (_isClosable)
+            if (GetWidthPolicy() == SizePolicy.Fixed)
             {
-                w += GetSpacing().Horizontal + _close.GetWidth();
-
-                _text_object.SetMargin(
-                _text_object.GetMargin().Left,
-                _text_object.GetMargin().Top,
-                GetSpacing().Horizontal + _close.GetWidth(),
-                _text_object.GetMargin().Bottom
-                );
+                int w = GetPadding().Left + GetTextWidth() + GetPadding().Right;
+                if (_isClosable)
+                {
+                    w += GetSpacing().Horizontal + _close.GetWidth();
+                    ApplyRightTextMargin(GetSpacing().Horizontal + _close.GetWidth());
+                }
+                else
+                {
+                    ApplyRightTextMargin(_labelRightMargin);
+                }
+                SetWidth(w);
             }
             else
             {
-                _text_object.SetMargin(
+                if (_isClosable)
+                    ApplyRightTextMargin(GetSpacing().Horizontal + _close.GetWidth());
+                else
+                    ApplyRightTextMargin(_labelRightMargin);
+            }
+        }
+
+        private void ApplyRightTextMargin(int value)
+        {
+            _text_object.SetMargin(
                 _text_object.GetMargin().Left,
                 _text_object.GetMargin().Top,
-                _labelRightMargin,
+                value,
                 _text_object.GetMargin().Bottom
                 );
-            }
-            SetWidth(w);
         }
 
         public override void InitElements()

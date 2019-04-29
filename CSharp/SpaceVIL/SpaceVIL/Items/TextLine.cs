@@ -396,6 +396,9 @@ namespace SpaceVIL
 
         private void UpdateCoords()
         {
+            if (GetParent() == null)
+                return;
+
             //AddAllShifts();
             if (_letters.Count() == 0)
                 return;

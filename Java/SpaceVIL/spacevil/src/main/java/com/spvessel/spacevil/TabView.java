@@ -106,6 +106,11 @@ public class TabView extends VerticalStack {
      * @param tab_name name of the new tab
      */
     public void addTab(Tab tab) {
+        if (_tabMapView.containsKey(tab))
+            return;
+
+        _tabMapView.put(tab, tab.view);
+        _tabList.add(tab);
         tab.view.setItemName(tab.getItemName() + "_view");
         tab.eventMouseClick.add((sender, args) -> {
             hideOthers(tab, args);
@@ -114,10 +119,7 @@ public class TabView extends VerticalStack {
             selectBestLeftoverTab(tab);
             removeTab(tab);
         });
-        _tabMapView.put(tab, tab.view);
-        _tabList.add(tab);
         addItem(tab.view);
-
         if (_tabBar.getItems().size() == 0) {
             tab.setToggled(true);
             tab.view.setVisible(true);
@@ -127,6 +129,33 @@ public class TabView extends VerticalStack {
             tab.setShadowDrop(false);
 
         _tabBar.addItem(tab);
+    }
+
+    public void addTabs(Tab... tabs) {
+        for (Tab tab : tabs) {
+            addTab(tab);
+        }
+    }
+
+    @Override
+    public boolean removeItem(InterfaceBaseItem item) {
+        if (item instanceof Tab) {
+            Tab tmpTab = (Tab) item;
+            if (_tabMapView.containsKey(tmpTab)) {
+                return removeTab(tmpTab);
+            }
+            return false;
+        }
+        if (item.equals(_tabBar)) {
+            Tab tab = null;
+            while (!_tabList.isEmpty()) {
+                tab = _tabList.get(0);
+                _tabBar.removeItem(tab);
+                _tabMapView.remove(tab);
+                _tabList.remove(tab);
+            }
+        }
+        return super.removeItem(item);
     }
 
     /**
@@ -180,6 +209,20 @@ public class TabView extends VerticalStack {
             return true;
         }
         return false;
+    }
+
+    public boolean removeAllTabs() {
+        if (_tabList.size() == 0)
+            return false;
+        Tab tab = null;
+        while (!_tabList.isEmpty()) {
+            tab = _tabList.get(0);
+            removeItem(_tabMapView.get(tab));
+            _tabBar.removeItem(tab);
+            _tabMapView.remove(tab);
+            _tabList.remove(tab);
+        }
+        return true;
     }
 
     public void addItemToTabByName(String tabName, InterfaceBaseItem item) {

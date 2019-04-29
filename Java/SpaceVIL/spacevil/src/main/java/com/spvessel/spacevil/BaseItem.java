@@ -504,9 +504,24 @@ public abstract class BaseItem implements InterfaceBaseItem {
                         ItemsLayoutBox.subscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_WIDTH);
                     else
                         ItemsLayoutBox.unsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_WIDTH);
-
                     updateGeometry();
                 }
+            }
+
+            if (getParent() != null) {
+                boolean hLayout = getParent() instanceof InterfaceHLayout;
+                boolean vLayout = getParent() instanceof InterfaceVLayout;
+                boolean grid = getParent() instanceof InterfaceGrid;
+
+                if (!hLayout && !vLayout && !grid)
+                    updateBehavior();
+
+                if (hLayout)
+                    ((InterfaceHLayout) getParent()).updateLayout();
+                if (vLayout)
+                    ((InterfaceVLayout) getParent()).updateLayout();
+                if (grid)
+                    ((InterfaceGrid) getParent()).updateLayout();
             }
         }
     }
@@ -528,9 +543,24 @@ public abstract class BaseItem implements InterfaceBaseItem {
                         ItemsLayoutBox.subscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_HEIGHT);
                     else
                         ItemsLayoutBox.unsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_HEIGHT);
-
                     updateGeometry();
                 }
+            }
+
+            if (getParent() != null) {
+                boolean hLayout = getParent() instanceof InterfaceHLayout;
+                boolean vLayout = getParent() instanceof InterfaceVLayout;
+                boolean grid = getParent() instanceof InterfaceGrid;
+
+                if (!hLayout && !vLayout && !grid)
+                    updateBehavior();
+
+                if (hLayout)
+                    ((InterfaceHLayout) getParent()).updateLayout();
+                if (vLayout)
+                    ((InterfaceVLayout) getParent()).updateLayout();
+                if (grid)
+                    ((InterfaceGrid) getParent()).updateLayout();
             }
         }
     }

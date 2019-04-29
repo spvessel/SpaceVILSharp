@@ -13,13 +13,18 @@ namespace View
         // TreeView treeview = new TreeView();
         // Grid block = new Grid(2, 2);
 
+        TabView tabs = new TabView();
+        Tab tab1 = new Tab("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1");
+        Tab tab2 = new Tab("List");
+        Tab tab3 = new Tab("List");
+        TitleBar title = new TitleBar(nameof(Containers));
+
         public override void InitWindow()
         {
             SetParameters(nameof(Containers), nameof(Containers), 700, 500, false);
             this.SetMinSize(400, 400);
             this.IsCentered = true;
 
-            TitleBar title = new TitleBar(nameof(Containers));
             title.SetShadow(5, 0, 3, Color.FromArgb(150, 0, 0, 0));
             this.AddItem(title);
 
@@ -63,19 +68,26 @@ namespace View
             //     Console.WriteLine(this.GetWindow().GetItemName() + " EventMouseHover");
             // };
 
-            TabView tabs = new TabView();
+
             cc.AddItem(tabs);
             // tabs.AddTab("Common");
             // tabs.AddTab("Stack");
-            tabs.AddTab(new Tab("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1"));
-            tabs.AddTab(new Tab("List"));
-            tabs.AddTab(new Tab("List"));
+            tabs.AddTabs(tab1, tab2, tab3);
+            tab1.SetWidthPolicy(SizePolicy.Expand);
+
+            tabs.GetTabs()[0].SetWidthPolicy(SizePolicy.Expand);
 
             EventKeyPress += (sender, args) =>
             {
                 if (args.Key == KeyCode.Menu)
                     foreach (Tab tab in tabs.GetTabs())
                         tab.SetClosable(!tab.IsClosable());
+
+                if (args.Key == KeyCode.Delete)
+                    ClearAllTabs();
+                if (args.Key == KeyCode.Enter)
+                    if (tabs != null)
+                        Console.WriteLine(tabs.GetTabs().Count);
             };
 
             // tabs.AddTab("Split");
@@ -380,6 +392,16 @@ namespace View
             // c3.AddItem(GetLabel("8. SpaceVIL.TreeView"));
             // c3.AddItem(GetLabel("9. SpaceVIL.VerticalSplitArea"));
             // c3.AddItem(GetLabel("10. SpaceVIL.VerticalStack"));
+        }
+
+        private void ClearAllTabs()
+        {
+            tabs.RemoveAllTabs();
+            tabs.GetParent().RemoveItem(tabs);
+            // title.RemoveItem(tabs);
+            tab1 = null;
+            tab2 = null;
+            tab3 = null;
         }
 
         private BlankItem GetBlankItem(String name)

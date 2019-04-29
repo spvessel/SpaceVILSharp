@@ -134,7 +134,8 @@ namespace SpaceVIL
             // UpdateGeometry();
         }
         internal EventManager eventManager = null;
-        private List<IBaseItem> _content = new List<IBaseItem>();
+        // private List<IBaseItem> _content = new List<IBaseItem>();
+        private LinkedHashSet<IBaseItem> _content = new LinkedHashSet<IBaseItem>();
         internal virtual List<IBaseItem> GetItems()
         {
             Monitor.Enter(Locker);
@@ -157,7 +158,8 @@ namespace SpaceVIL
             Monitor.Enter(Locker);
             try
             {
-                _content = content;
+                // _content = content;
+                _content = new LinkedHashSet<IBaseItem>(content);
             }
             catch (Exception ex)
             {
@@ -247,7 +249,11 @@ namespace SpaceVIL
                 if (index > _content.Count)
                     _content.Add(item);
                 else
-                    _content.Insert(index, item);
+                {
+                    List<IBaseItem> list = new List<IBaseItem>(_content);
+                    list.Insert(index, item);
+                    _content = new LinkedHashSet<IBaseItem>(list);
+                }
                 ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
                 //needs to force update all attributes
                 CastAndUpdate(item);
@@ -284,6 +290,8 @@ namespace SpaceVIL
             Monitor.Enter(Locker);
             try
             {
+                if (!_content.Contains(item))
+                    return false;
                 //reset focus
                 Prototype tmp = item as Prototype;
                 if (tmp != null)

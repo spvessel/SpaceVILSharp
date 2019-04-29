@@ -11,6 +11,7 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
+import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class Tab extends Prototype {
     static int count = 0;
@@ -74,7 +75,9 @@ public class Tab extends Prototype {
 
     @Override
     public void release() {
+        eventToggle.clear();
         eventToggle = null;
+        eventRemoved.clear();;
         eventRemoved = null;
     }
 
@@ -162,18 +165,27 @@ public class Tab extends Prototype {
     private int _labelRightMargin = 0;
 
     private void updateTabWidth() {
-        int w = getPadding().left + getTextWidth() + getPadding().right;
-
-        if (_isClosable) {
-            w += getSpacing().horizontal + _close.getWidth();
-
-            _text_object.setMargin(_text_object.getMargin().left, _text_object.getMargin().top,
-                    getSpacing().horizontal + _close.getWidth(), _text_object.getMargin().bottom);
+        if (getWidthPolicy() == SizePolicy.FIXED) {
+            int w = getPadding().left + getTextWidth() + getPadding().right;
+            if (_isClosable) {
+                w += getSpacing().horizontal + _close.getWidth();
+                applyRightTextMargin(getSpacing().horizontal + _close.getWidth());
+            } else {
+                applyRightTextMargin(_labelRightMargin);
+            }
+            setWidth(w);
         } else {
-            _text_object.setMargin(_text_object.getMargin().left, _text_object.getMargin().top, _labelRightMargin,
-                    _text_object.getMargin().bottom);
+            if (_isClosable) {
+                applyRightTextMargin(getSpacing().horizontal + _close.getWidth());
+            } else {
+                applyRightTextMargin(_labelRightMargin);
+            }
         }
-        setWidth(w);
+    }
+
+    private void applyRightTextMargin(int value) {
+        _text_object.setMargin(_text_object.getMargin().left, _text_object.getMargin().top, value,
+                _text_object.getMargin().bottom);
     }
 
     @Override
