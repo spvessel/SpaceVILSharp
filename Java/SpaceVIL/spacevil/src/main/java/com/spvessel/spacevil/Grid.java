@@ -205,7 +205,6 @@ public class Grid extends Prototype implements InterfaceGrid {
             return;
         super.addItem(item);
         // _cells[row + column * _row_count].setItem(item);
-        // System.out.println((column + row * _column_count) + " " + _cells.size());
 
 //        InterfaceBaseItem ibi = _cells.get(column + row * _column_count).getItem();
 //        if (ibi != null) {

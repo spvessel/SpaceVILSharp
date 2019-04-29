@@ -43,11 +43,11 @@ public class ImageTest extends ActiveWindow {
 
         HorizontalStack h_stack = new HorizontalStack();
         h_stack.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        h_stack.setBackground(255, 255, 255, 10);
+        h_stack.setBackground(255, 255, 255, 200);
         h_stack.setHeight(30);
         h_stack.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
         h_stack.setSpacing(5, 0);
-        h_stack.setVisible(false);
+//        h_stack.setVisible(false);
 
         frame.addItem(h_stack);
 
@@ -57,11 +57,17 @@ public class ImageTest extends ActiveWindow {
         h_stack.addItem(r1);
         for (int i = 0; i < 4; i++) {
             Rectangle rect = new Rectangle();
-            rect.setBackground(255, 255, 0);
+            rect.setBackground(0, 255, 0);
             rect.setSize(30, 30);
-            rect.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+            rect.setMaxWidth(30);
+            rect.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
             h_stack.addItem(rect);
         }
+        Rectangle rect = new Rectangle();
+        rect.setBackground(125, 125, 0);
+        rect.setSize(30, 30);
+        rect.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        h_stack.addItem(rect);
 
         ProgressBar pb = new ProgressBar();
         pb.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);

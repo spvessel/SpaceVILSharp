@@ -68,14 +68,6 @@ namespace SpaceVIL
             InsteadKeyMods = new List<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl,
                 KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
 
-            //int[] output = _textureStorage.GetDims(); //te.GetFontDims();// FontEngine.GetSpacerDims(te.GetFont());
-            //_minLineSpacer = output[0];
-            //_minFontY = output[1];
-            //_maxFontY = output[2];
-            //_lineHeight = output[2]; //Math.Abs(_maxFontY - _minFontY);
-            //if (_lineSpacer < _minLineSpacer)
-            //    _lineSpacer = _minLineSpacer;
-
             _cursor.SetHeight(_textureStorage.GetCursorHeight());
 
             undoQueue = new LinkedList<TextBlockState>();
@@ -269,8 +261,7 @@ namespace SpaceVIL
 
         private void OnKeyRelease(object sender, KeyArgs args)
         {
-            //if (args.Scancode == 0x2F && args.Mods == KeyMods.Control)
-            //    PasteText(CommonService.ClipboardTextStorage);
+            
         }
         private void OnKeyPress(object sender, KeyArgs args)
         {
@@ -651,7 +642,6 @@ namespace SpaceVIL
             _cursor.SetY(pos.Y - GetLineSpacer() / 2 + 1);// - 3);
             CursorChanged?.Invoke(); //???????
             //UpdateLayout();
-            //Console.WriteLine(pos.X + " cursor pos " + _cursor.GetX());
         }
 
         internal void SetLineSpacer(int lineSpacer)
@@ -683,7 +673,6 @@ namespace SpaceVIL
             */
         }
 
-        //private Indents _text_margin = new Indents();
         internal void SetTextMargin(Indents margin)
         {
             _textureStorage.SetTextMargin(margin);
@@ -799,7 +788,7 @@ namespace SpaceVIL
                 return;
             }
 
-            List<Point> selectionRectangles; // = new List<Point>();
+            List<Point> selectionRectangles;
 
             Point fromReal, toReal;
             List<Point> listPt = RealFromTo(from, to);
@@ -808,36 +797,6 @@ namespace SpaceVIL
             
             selectionRectangles = _textureStorage.SelectedArrays(fromReal, toReal);
 
-            /*
-            Point tmp = new Point();
-            int lsp = GetLineSpacer();
-            if (from.Y == to.Y)
-            {
-                selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight() - lsp / 2 + 1, fromReal, false));
-                selectionRectangles.Add(AddXYShifts(0, -lsp / 2 + 1, toReal, false));
-                _selectedArea.SetRectangles(selectionRectangles);
-                return;
-            }
-
-            selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight() - lsp / 2 + 1, fromReal, false));
-            tmp.X = GetLineLetCount(fromReal.Y);
-            tmp.Y = fromReal.Y;
-            selectionRectangles.Add(AddXYShifts(0, -lsp / 2 + 1, tmp, false));
-            tmp.X = 0;
-            tmp.Y = toReal.Y;
-            selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight() - lsp / 2 + 1, tmp, false));
-            selectionRectangles.Add(AddXYShifts(0, -lsp / 2 + 1, toReal, false));
-
-            for (int i = fromReal.Y + 1; i < toReal.Y; i++)
-            {
-                tmp.X = 0;
-                tmp.Y = i;
-                selectionRectangles.Add(AddXYShifts(0, -_cursor.GetHeight() - lsp / 2 + 1, tmp, false));
-                tmp.X = GetLineLetCount(i);
-                tmp.Y = i;
-                selectionRectangles.Add(AddXYShifts(0, -lsp / 2 + 1, tmp, false));
-            }
-            */
             _selectedArea.SetRectangles(selectionRectangles);
             //UpdateLayout();
         }
@@ -1071,27 +1030,6 @@ namespace SpaceVIL
                     _cursor.SetHeight(_textureStorage.GetCursorHeight());
             }
         }
-
-        /*
-        public override List<IBaseItem> GetItems()
-        {
-            List<IBaseItem> list = base.GetItems();
-            return new List<IBaseItem>() { list[0], list[1], list[2] };
-        }
-
-        public override bool RemoveItem(IBaseItem item)
-        {
-            if (item.Equals(_cursor))
-            {
-                while (base.GetItems().Count > 0)
-                {
-                    base.RemoveItem(base.GetItems().First());
-                }
-                return true;
-            }
-            return base.RemoveItem(item);
-        }
-        */
 
         private LinkedList<TextBlockState> undoQueue;
         private LinkedList<TextBlockState> redoQueue;

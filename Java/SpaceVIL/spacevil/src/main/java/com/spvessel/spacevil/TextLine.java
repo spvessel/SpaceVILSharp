@@ -227,6 +227,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         }
     }
 
+    /*
     private int[] findFirstLast(List<Alphabet.ModifyLetter> letList, int winWidth) { //, float someShift) {
         int firstInd = 0, lastInd = 0;
         int someShift = (int) (_lineXShift * _screenScale);
@@ -259,6 +260,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 
         return new int[]{firstInd, lastInd, visWidth}; //, outShift};
     }
+    */
 
     private ByteBuffer makeSomeBig(int hgt, int wdt, int bigMinY, int firstInd, int lastInd) {
         ByteBuffer outCache = BufferUtils.createByteBuffer(hgt * wdt * 4);
@@ -345,7 +347,6 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     }
 
     private void updateCoords() {
-        // addAllShifts();
         // if (_letters == null)
         //     return;
 
@@ -428,21 +429,21 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         return _lineXShift;
     }
 
-    float getLineTopCoord() {
-        float lineTopCoord = 0;
-        List<ItemAlignment> alignments = getTextAlignment();
-        int[] fontDims = getFontDims();
-        float height = fontDims[2];
-        if (alignments.contains(ItemAlignment.BOTTOM))
-            lineTopCoord = getParent().getHeight() - height;
-
-        else if (alignments.contains(ItemAlignment.VCENTER))
-            lineTopCoord = (getParent().getHeight() - height) / 2f;
-
-        lineTopCoord += _lineYShift - fontDims[1];
-
-        return lineTopCoord;
-    }
+//    float getLineTopCoord() {
+//        float lineTopCoord = 0;
+//        List<ItemAlignment> alignments = getTextAlignment();
+//        int[] fontDims = getFontDims();
+//        float height = fontDims[2];
+//        if (alignments.contains(ItemAlignment.BOTTOM))
+//            lineTopCoord = getParent().getHeight() - height;
+//
+//        else if (alignments.contains(ItemAlignment.VCENTER))
+//            lineTopCoord = (getParent().getHeight() - height) / 2f;
+//
+//        lineTopCoord += _lineYShift - fontDims[1];
+//
+//        return lineTopCoord;
+//    }
 
     int[] getFontDims() {
         return FontEngine.getSpacerDims(getFont());
@@ -456,9 +457,9 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         setSizePolicy(style.widthPolicy, style.heightPolicy);
     }
 
-    void setLineXShift() {
-        setLineXShift(_lineXShift);
-    }
+//    void setLineXShift() {
+//        setLineXShift(_lineXShift);
+//    }
 
     void checkXShift(int _cursorXMax) {
         if (getLetPosArray() == null || getLetPosArray().size() == 0)
@@ -471,9 +472,9 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         }
     }
 
-    void setLineYShift() {
-        setLineYShift(_lineYShift);
-    }
+//    void setLineYShift() {
+//        setLineYShift(_lineYShift);
+//    }
 
     void setAllowWidth(int allowWidth) {
         if (_parentAllowWidth != allowWidth)

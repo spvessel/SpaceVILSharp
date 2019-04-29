@@ -311,15 +311,7 @@ namespace SpaceVIL
 
             UpdLinesYShift(); //Пока обновляются все, но в принципе, нужно только под fromLine
         }
-        /*
-                private int GetLineXShift(int n)
-                {
-                    if (_linesList.Count > n)
-                        return _linesList[n].GetLineXShift();
-                    else
-                        return 0;
-                }
-        */
+
         private void UpdLinesYShift()
         {
             int inc = 0;
@@ -328,7 +320,6 @@ namespace SpaceVIL
                 line.SetLineYShift(GetLineY(inc) + globalYShift);
                 inc++;
             }
-
         }
 
         private void UpdLinesXShift()
@@ -399,24 +390,12 @@ namespace SpaceVIL
             if (!font.Equals(_elementFont))
             {
                 _elementFont = font;
-                // if (_elementFont == null)
-                //     return;
 
                 if (_linesList == null) return;
                 foreach (TextLine te in _linesList)
                     te.SetFont(font);
 
                 GetDims();
-                /*
-                int[] output = FontEngine.GetSpacerDims(font);
-                _minLineSpacer = output[0];
-                //_minFontY = output[1];
-                //_maxFontY = output[2];
-                _lineHeight = output[2]; //Math.Abs(_maxFontY - _minFontY);
-                if (_lineSpacer < _minLineSpacer)
-                    _lineSpacer = _minLineSpacer;
-                _cursor.SetHeight(_lineHeight + _lineSpacer); // + 6);
-                */
             }
         }
 
@@ -428,8 +407,6 @@ namespace SpaceVIL
         internal void SetTextInLine(string text, int lineY)
         {
             _linesList[lineY].SetItemText(text);
-            //_linesList[_cursor_position.Y].UpdateData(UpdateType.Critical); //Doing in TextItem
-
             CheckWidth();
         }
 
@@ -455,14 +432,6 @@ namespace SpaceVIL
             }
             else
             {
-                /*
-                foreach (TextLine te in _linesList)
-                {
-                    sb.Append(te.GetText());
-                    sb.Append("\n");
-                }
-                sb.Remove(sb.Length - 3, 2);
-                */
                 for (int i = 0; i < _linesList.Count - 1; i++)
                 {
                     sb.Append(_linesList[i].GetText());

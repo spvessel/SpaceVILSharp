@@ -476,7 +476,6 @@ namespace SpaceVIL.Common
 
         public void EndLogging()
         {
-            //Console.WriteLine("end");
             //fstream.Flush();
             fstream.Close();
         }
@@ -521,7 +520,6 @@ namespace SpaceVIL.Common
             fstream = new StreamWriter(logPath, true, Encoding.Default);
             fstream.WriteLine(text);
             fstream.Close();
-            //Console.WriteLine(text);
         }
     }
 

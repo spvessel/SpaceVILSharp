@@ -214,7 +214,6 @@ namespace SpaceVIL
                 return;
             base.AddItem(item);
             //_cells[row + column * _row_count].SetItem(item);
-            //Console.WriteLine(column + row * _column_count);
 
             RemoveItem(row, column);
 
@@ -313,19 +312,11 @@ namespace SpaceVIL
             //1, 2
             Int32[] columns_width = GetColumnsWidth();
             colWidth = columns_width;
-            /*foreach (var item in columns_width)
-            {
-                Console.Write(item + " ");
-            }
-            Console.WriteLine();*/
+            
             //3, 4
             Int32[] rows_height = GetRowsHeight();
             rowHeight = rows_height;
-            /*foreach (var item in rows_height)
-            {
-                Console.Write(item + " ");
-            }
-            Console.WriteLine();*/
+            
             //5
             int x_offset = 0;
             int y_offset = 0;
@@ -364,7 +355,6 @@ namespace SpaceVIL
                     _cells[index].UpdateBehavior();
 
                     x_offset += _cells[index].GetWidth() + GetSpacing().Horizontal;
-                    //Console.WriteLine(item.GetX() + " " + item.GetY() + " " + item.GetWidth() + " " + item.GetHeight());
                 }
                 y_offset += _cells[index].GetHeight() + GetSpacing().Vertical;
                 x_offset = 0;
@@ -400,7 +390,6 @@ namespace SpaceVIL
                     }
                     else
                     {
-                        //Console.WriteLine(r + " " + c);
                         list_height.Add(new int[2] { r, 0 });
                     }
                 }
@@ -414,7 +403,6 @@ namespace SpaceVIL
                 {
                     if (list_height[c + r * _column_count][1] > max)
                         max = list_height[c + r * _column_count][1];
-                    //Console.WriteLine(c + r * _column_count);
                 }
                 m_height.Add(new int[2] { r, max });
                 if (max == -1)
@@ -425,11 +413,7 @@ namespace SpaceVIL
                     prefer_height = (free_space - GetSpacing().Vertical * (count - 1)) / count;
                 }
             }
-            /*foreach (var item in m_height)
-            {
-                Console.Write(item[0] + " " + item[1] + " ");
-            }
-            Console.WriteLine();*/
+            
             m_height.Sort((x, y) => y[1].CompareTo(x[1]));
 
             foreach (var pair in m_height)
@@ -467,14 +451,12 @@ namespace SpaceVIL
             int free_space = total_space;
             //int prefer_width = (int)Math.Round((float)(total_space - GetSpacing().Horizontal * (_column_count - 1)) / (float)_column_count, MidpointRounding.AwayFromZero);
             int prefer_width = (total_space - GetSpacing().Horizontal * (_column_count - 1)) / _column_count;
-            // Console.WriteLine(prefer_width);
             int count = _column_count;
 
             for (int c = 0; c < _column_count; c++)
             {
                 for (int r = 0; r < _row_count; r++)
                 {
-                    //Console.WriteLine(c + r * _column_count);
                     IBaseItem item = _cells[c + r * _column_count].GetItem();
                     if (item == null || !item.IsVisible() || !item.IsDrawable())
                     {
@@ -499,7 +481,6 @@ namespace SpaceVIL
                 int max = -10;
                 for (int r = 0; r < _row_count; r++)
                 {
-                    //Console.Write(list_width[c + r * _column_count][1] + " ");
                     if (list_width[r + c * _row_count][1] > max)
                         max = list_width[r + c * _row_count][1];
                 }
@@ -511,14 +492,7 @@ namespace SpaceVIL
                         count++;
                     prefer_width = (free_space - GetSpacing().Horizontal * (count - 1)) / count;
                 }
-                //Console.WriteLine(max);
             }
-            //Console.WriteLine();
-            // foreach (var item in m_width)
-            // {
-            //     Console.Write(item[1] + " ");
-            // }
-            //Console.WriteLine();
 
             m_width.Sort((x, y) => y[1].CompareTo(x[1]));
 

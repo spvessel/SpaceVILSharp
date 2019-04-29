@@ -304,17 +304,12 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         updLinesYShift(); // Пока обновляются все, но в принципе, нужно только под fromLine
     }
 
-    /*
-     * private int getLineXShift(int n) { if (_linesList.size() > n) return
-     * _linesList.get(n).getLineXShift(); else return 0; }
-     */
     private void updLinesYShift() {
         int inc = 0;
         for (TextLine line : _linesList) {
             line.setLineYShift(getLineY(inc) + globalYShift);
             inc++;
         }
-
     }
 
     private void updLinesXShift() {
@@ -370,8 +365,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             return;
         if (!font.equals(_elementFont)) {
             _elementFont = font;
-            // if (_elementFont == null)
-            //     return;
+            
             if (_linesList == null)
                 return;
             for (TextLine te : _linesList)
@@ -387,7 +381,6 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
     void setTextInLine(String text, int lineY) {
         _linesList.get(lineY).setItemText(text);
-
         checkWidth();
     }
 
@@ -408,11 +401,6 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         if (_linesList.size() == 1) {
             sb.append(_linesList.get(0).getText());
         } else {
-//            for (TextLine te : _linesList) {
-//                sb.append(te.getText());
-//                sb.append("\n");
-//            }
-//            sb.delete(sb.length() - 3, sb.length() - 1); // Remove(sb.Length - 3, 2);
             for (int i = 0; i < _linesList.size() - 1; i++) {
                 sb.append(_linesList.get(i).getText());
                 sb.append("\n");

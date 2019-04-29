@@ -41,15 +41,6 @@ abstract class TextItem extends Primitive {
         setItemName(name);
     }
 
-//    void setRealCoords(List<Float> realCoords) {
-//        _coordinates = toGL(realCoords);
-//    }
-//
-//    void setAlphas(List<Float> alphas) {
-//        _alphas = alphas;
-//        //setColor(alphas);
-//    }
-
     String getItemText() {
         return _itemText;
     }
@@ -104,42 +95,6 @@ abstract class TextItem extends Primitive {
 
     public abstract void updateData();
 
-    //protected abstract void updateCoords();
-
-//    float[] getCoordinates() {
-//        return _coordinates;
-//    }
-
-    // public float[] getColors() {
-    //     return _colors;
-    // }
-
-//    private float[] toGL(List<Float> coord) {
-//        float[] outCoord = new float[coord.size()];
-//        float f;
-//        float x0 = getX();
-//        float y0 = getY();
-//        float windowH = getHandler().getHeight() / 2f;
-//        float windowW = getHandler().getWidth() / 2f;
-//
-//        for (int i = 0; i < coord.size(); i += 3) {
-//            f = coord.get(i);
-//            f += x0;
-//            f = f / windowW - 1.0f;
-//            outCoord[i] = f;
-//
-//            f = coord.get(i + 1);
-//            f += y0;
-//            f = -(f / windowH - 1.0f);
-//            outCoord[i + 1] = f;
-//
-//            f = coord.get(i + 2);
-//            outCoord[i + 2] = f;
-//        }
-//
-//        return outCoord;
-//    }
-
     private Color _foreground = Color.BLACK; // default
 
     public Color getForeground() {
@@ -149,73 +104,23 @@ abstract class TextItem extends Primitive {
     public void setForeground(Color foreground) {
         if (foreground != null && !_foreground.equals(foreground)) {
             _foreground = foreground;
-            //setColor(_alphas); // _colorFlag = true;
         }
     }
 
     public void setForeground(int r, int g, int b) {
-//        if (r < 0)
-//            r = Math.abs(r);
-//        if (r > 255)
-//            r = 255;
-//        if (g < 0)
-//            g = Math.abs(g);
-//        if (g > 255)
-//            g = 255;
-//        if (b < 0)
-//            b = Math.abs(b);
-//        if (b > 255)
-//            b = 255;
-
-        setForeground(GraphicsMathService.colorTransform(r, g, b)); //new Color(r, g, b, 255));
+        setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setForeground(int r, int g, int b, int a) {
-//        if (r < 0)
-//            r = Math.abs(r);
-//        if (r > 255)
-//            r = 255;
-//        if (g < 0)
-//            g = Math.abs(g);
-//        if (g > 255)
-//            g = 255;
-//        if (b < 0)
-//            b = Math.abs(b);
-//        if (b > 255)
-//            b = 255;
-        setForeground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color(r, g, b, a));
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public void setForeground(float r, float g, float b) {
-//        if (r < 0)
-//            r = Math.abs(r);
-//        if (r > 1.0f)
-//            r = 1.0f;
-//        if (g < 0)
-//            g = Math.abs(g);
-//        if (g > 1.0f)
-//            g = 1.0f;
-//        if (b < 0)
-//            b = Math.abs(b);
-//        if (b > 1.0f)
-//            b = 1.0f;
-        setForeground(GraphicsMathService.colorTransform(r, g ,b)); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
+        setForeground(GraphicsMathService.colorTransform(r, g ,b));
     }
 
     public void setForeground(float r, float g, float b, float a) {
-//        if (r < 0)
-//            r = Math.abs(r);
-//        if (r > 1.0f)
-//            r = 1.0f;
-//        if (g < 0)
-//            g = Math.abs(g);
-//        if (g > 1.0f)
-//            g = 1.0f;
-//        if (b < 0)
-//            b = Math.abs(b);
-//        if (b > 1.0f)
-//            b = 1.0f;
-        setForeground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     private List<ItemAlignment> _textAlignment = new LinkedList<>();
@@ -231,11 +136,6 @@ abstract class TextItem extends Primitive {
     public void setTextAlignment(List<ItemAlignment> list) {
         if (list != null && !_textAlignment.equals(list)) {
             _textAlignment = list;
-            //updateCoords(); // _coordsFlag = true;
         }
     }
-
-//    public float[] shape() {
-//        return getCoordinates();
-//    }
 }

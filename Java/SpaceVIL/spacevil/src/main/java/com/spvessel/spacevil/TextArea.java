@@ -285,8 +285,10 @@ public class TextArea extends Prototype {
             _menu.setBackground(60, 60, 60);
             _menu.setPassEvents(false);
 
+            Color menuItemCForeground = new Color(210, 210, 210);
+
             MenuItem go_up = new MenuItem("Go up");
-            go_up.setForeground(new Color(210, 210, 210));
+            go_up.setForeground(menuItemCForeground);
             go_up.eventMouseClick.add((sender, args) -> {
                 _area.setScrollYOffset(0);
                 updateElements();
@@ -294,7 +296,7 @@ public class TextArea extends Prototype {
             });
 
             MenuItem go_down = new MenuItem("Go down");
-            go_down.setForeground(new Color(210, 210, 210));
+            go_down.setForeground(menuItemCForeground);
             go_down.eventMouseClick.add((sender, args) -> {
                 _area.setScrollYOffset(-_area.getTextHeight());
                 updateElements();
@@ -302,7 +304,7 @@ public class TextArea extends Prototype {
             });
 
             MenuItem go_up_left = new MenuItem("Go up and left");
-            go_up_left.setForeground(new Color(210, 210, 210));
+            go_up_left.setForeground(menuItemCForeground);
             go_up_left.eventMouseClick.add((sender, args) -> {
                 _area.setScrollYOffset(0);
                 _area.setScrollXOffset(0);
@@ -311,7 +313,7 @@ public class TextArea extends Prototype {
             });
 
             MenuItem go_down_right = new MenuItem("Go down and right");
-            go_down_right.setForeground(new Color(210, 210, 210));
+            go_down_right.setForeground(menuItemCForeground);
             go_down_right.eventMouseClick.add((sender, args) -> {
                 _area.setScrollYOffset(-_area.getTextHeight());
                 _area.setScrollXOffset(-_area.getTextWidth());

@@ -316,8 +316,10 @@ namespace SpaceVIL
                 _menu.SetBackground(60, 60, 60);
                 _menu.SetPassEvents(false);
 
+                Color menuItemCForeground = Color.FromArgb(210, 210, 210);
+
                 MenuItem go_up = new MenuItem("Go up");
-                go_up.SetForeground(Color.FromArgb(210, 210, 210));
+                go_up.SetForeground(menuItemCForeground);
                 go_up.EventMouseClick += ((sender, args) =>
                 {
                     _area.SetScrollYOffset(0);
@@ -326,7 +328,7 @@ namespace SpaceVIL
                 });
 
                 MenuItem go_down = new MenuItem("Go down");
-                go_down.SetForeground(Color.FromArgb(210, 210, 210));
+                go_down.SetForeground(menuItemCForeground);
                 go_down.EventMouseClick += ((sender, args) =>
                 {
                     _area.SetScrollYOffset(-_area.GetTextHeight());
@@ -335,7 +337,7 @@ namespace SpaceVIL
                 });
 
                 MenuItem go_up_left = new MenuItem("Go up and left");
-                go_up_left.SetForeground(Color.FromArgb(210, 210, 210));
+                go_up_left.SetForeground(menuItemCForeground);
                 go_up_left.EventMouseClick += ((sender, args) =>
                 {
                     _area.SetScrollYOffset(0);
@@ -345,7 +347,7 @@ namespace SpaceVIL
                 });
 
                 MenuItem go_down_right = new MenuItem("Go down and right");
-                go_down_right.SetForeground(Color.FromArgb(210, 210, 210));
+                go_down_right.SetForeground(menuItemCForeground);
                 go_down_right.EventMouseClick += ((sender, args) =>
                 {
                     _area.SetScrollYOffset(-_area.GetTextHeight());
@@ -431,31 +433,19 @@ namespace SpaceVIL
         }
         public void SetForeground(int r, int g, int b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b)); //Color.FromArgb(255, r, g, b));
+            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
         public void SetForeground(int r, int g, int b, int a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b, a)); //Color.FromArgb(a, r, g, b));
+            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
         public void SetForeground(float r, float g, float b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b)); //Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
         public void SetForeground(float r, float g, float b, float a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b, a)); //Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
         public Color GetForeground()
         {

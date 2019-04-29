@@ -104,14 +104,7 @@ namespace SpaceVIL
             if (GetTriangles() == null || GetTriangles().Count < 2)
                 return null;
 
-            // List<float[]> figure = UpdateShape();
-            // List<float[]> result = new List<float[]>();
-            // foreach (var shape in figure)
-            //     result.AddRange(GraphicsMathService.MoveShape(GetShapePointer(), shape[0], shape[1]));
-            // return GraphicsMathService.ToGL(result, GetHandler());
-            // Console.WriteLine("update?");
             return UpdateShape();
-            // return GraphicsMathService.ToGL(UpdateShape(), GetHandler());
         }
 
         float _line_thickness = 1.0f;

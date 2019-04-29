@@ -81,6 +81,8 @@ final class GLWHandler {
         getPointer().setY(0);
     }
 
+    private Pointer defWindowPos = new Pointer(200, 50);
+
     void createWindow() throws SpaceVILException {
         // important!!! may be the best combination of WINDOW HINTS!!!
 
@@ -137,14 +139,10 @@ final class GLWHandler {
         GLFWVidMode vidmode = glfwGetVideoMode(monitor);
         int width = vidmode.width();
         int height = vidmode.height();
-        // System.out.println("VIDSIZE: " + width + " " + height);
-        // System.out.println("WSIZE: " + _coreWindow.getWidth() + " " +
-        // _coreWindow.getHeight());
 
         IntBuffer w = BufferUtils.createIntBuffer(1);
         IntBuffer h = BufferUtils.createIntBuffer(1);
         glfwGetFramebufferSize(_window, w, h);
-        // System.out.println("FBSIZE: " + w.get(0) + " " + h.get(0));
 
         setDpiScale((float) w.get(0) / (float) _coreWindow.getWidth(),
                 (float) h.get(0) / (float) _coreWindow.getHeight());
@@ -154,10 +152,10 @@ final class GLWHandler {
             getPointer().setY((height - _coreWindow.getHeight()) / 2);
 
         } else {
-            _coreWindow.setX(200);
-            _coreWindow.setY(50);
-            getPointer().setX(200);
-            getPointer().setY(50);
+            _coreWindow.setX(defWindowPos.getX());//200);
+            _coreWindow.setY(defWindowPos.getY());//50);
+            getPointer().setX(defWindowPos.getX());//200);
+            getPointer().setY(defWindowPos.getY());//50);
         }
         glfwSetWindowSizeLimits(_window, _coreWindow.getMinWidth(), _coreWindow.getMinHeight(),
                 _coreWindow.getMaxWidth(), _coreWindow.getMaxHeight());

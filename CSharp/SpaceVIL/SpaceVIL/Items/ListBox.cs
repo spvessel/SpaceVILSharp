@@ -485,22 +485,24 @@ namespace SpaceVIL
                 _menu.SetBackground(60, 60, 60);
                 _menu.SetPassEvents(false);
 
+                Color menuItemForeground = Color.FromArgb(210, 210, 210);
+
                 MenuItem go_up = new MenuItem("Go up");
-                go_up.SetForeground(Color.FromArgb(210, 210, 210));
+                go_up.SetForeground(menuItemForeground);
                 go_up.EventMouseClick += ((sender, args) =>
                 {
                     VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMinValue());
                 });
 
                 MenuItem go_down = new MenuItem("Go down");
-                go_down.SetForeground(Color.FromArgb(210, 210, 210));
+                go_down.SetForeground(menuItemForeground);
                 go_down.EventMouseClick += ((sender, args) =>
                 {
                     VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMaxValue());
                 });
 
                 MenuItem go_up_left = new MenuItem("Go up and left");
-                go_up_left.SetForeground(Color.FromArgb(210, 210, 210));
+                go_up_left.SetForeground(menuItemForeground);
                 go_up_left.EventMouseClick += ((sender, args) =>
                 {
                     VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMinValue());
@@ -508,7 +510,7 @@ namespace SpaceVIL
                 });
 
                 MenuItem go_down_right = new MenuItem("Go down and right");
-                go_down_right.SetForeground(Color.FromArgb(210, 210, 210));
+                go_down_right.SetForeground(menuItemForeground);
                 go_down_right.EventMouseClick += ((sender, args) =>
                 {
                     VScrollBar.Slider.SetCurrentValue(VScrollBar.Slider.GetMaxValue());

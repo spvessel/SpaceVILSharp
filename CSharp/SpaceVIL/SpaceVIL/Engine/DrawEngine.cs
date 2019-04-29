@@ -66,7 +66,6 @@ namespace SpaceVIL
 
             FocusedItem = item;
             FocusedItem.SetFocused(true);
-            // Console.WriteLine(FocusedItem.GetItemName());
 
             FindUnderFocusedItems(item);
         }
@@ -256,8 +255,6 @@ namespace SpaceVIL
             // Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.gs_points.glsl"),
             // Assembly.GetExecutingAssembly().GetManifestResourceStream("SpaceVIL.Shaders.fs_primitive.glsl"));
             // _clone.Compile();
-            // if (_clone.GetProgramID() == 0)
-            //     Console.WriteLine("Could not create blur shaders");
 
             Run();
         }
@@ -407,16 +404,15 @@ namespace SpaceVIL
 
                 float scale = 0;
 
-                if ((_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Right)
-                        && _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top))
-                        || (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Right)
-                                && _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Bottom))
-                        || (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
-                                && _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top))
-                        || (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
-                                && _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Bottom))
-                        || _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
-                        || _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Right))
+                Side handlerContainerSides = _handler.GetCoreWindow().GetLayout().GetContainer()._sides;
+
+                if (//(handlerContainerSides.HasFlag(Side.Right) && handlerContainerSides.HasFlag(Side.Top))
+                        // || (handlerContainerSides.HasFlag(Side.Right) && handlerContainerSides.HasFlag(Side.Bottom))
+                        // || (handlerContainerSides.HasFlag(Side.Left) && handlerContainerSides.HasFlag(Side.Top))
+                        // || (handlerContainerSides.HasFlag(Side.Left) && handlerContainerSides.HasFlag(Side.Bottom))
+                        // || 
+                        handlerContainerSides.HasFlag(Side.Left)
+                        || handlerContainerSides.HasFlag(Side.Right))
                     scale = xScale;
                 else
                     scale = yScale;
@@ -436,7 +432,6 @@ namespace SpaceVIL
 
             _handler.GetCoreWindow().SetX(xpos);
             _handler.GetCoreWindow().SetY(ypos);
-            //  Console.WriteLine("x: " + xpos + " y: " + ypos);
         }
 
         internal void SetWindowPos(int x, int y)
@@ -479,17 +474,18 @@ namespace SpaceVIL
                     int x_press = ptrPress.GetX();
                     int y_press = ptrPress.GetY();
 
+                    Side handlerContainerSides = _handler.GetCoreWindow().GetLayout().GetContainer()._sides;
 
-                    if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left))
+                    if (handlerContainerSides.HasFlag(Side.Left))
                     {
                         if (!(_handler.GetCoreWindow().GetMinWidth() == _handler.GetCoreWindow().GetWidth() && (ptrRelease.GetX() - ptrPress.GetX()) >= 0))
                         {
-                            int x5 = x_handler - x_global + (int)xpos - 5;
+                            int x5 = x_handler - x_global + (int)xpos - SpaceVILConstants.BorderCursorTolerance;
                             x_handler = x_global + x5;
                             w = w_global - x5;
                         }
                     }
-                    if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Right))
+                    if (handlerContainerSides.HasFlag(Side.Right))
                     {
                         if (!(ptrRelease.GetX() < _handler.GetCoreWindow().GetMinWidth() && _handler.GetCoreWindow().GetWidth() == _handler.GetCoreWindow().GetMinWidth()))
                         {
@@ -497,7 +493,7 @@ namespace SpaceVIL
                         }
                         ptrPress.SetX(x_release);
                     }
-                    if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top))
+                    if (handlerContainerSides.HasFlag(Side.Top))
                     {
                         if (!(_handler.GetCoreWindow().GetMinHeight() == _handler.GetCoreWindow().GetHeight() && (ptrRelease.GetY() - ptrPress.GetY()) >= 0))
                         {
@@ -508,13 +504,13 @@ namespace SpaceVIL
                             }
                             else
                             {
-                                int y5 = y_handler - y_global + (int)ypos - 5;
+                                int y5 = y_handler - y_global + (int)ypos - SpaceVILConstants.BorderCursorTolerance;
                                 y_handler = y_global + y5;
                                 h = h_global - y5;
                             }
                         }
                     }
-                    if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Bottom))
+                    if (handlerContainerSides.HasFlag(Side.Bottom))
                     {
                         if (!(ptrRelease.GetY() < _handler.GetCoreWindow().GetMinHeight() && _handler.GetCoreWindow().GetHeight() == _handler.GetCoreWindow().GetMinHeight()))
                         {
@@ -524,22 +520,19 @@ namespace SpaceVIL
                             ptrPress.SetY(y_release);
                         }
                     }
-
-                    if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides != 0 && !_handler.GetCoreWindow().IsMaximized)
+                    
+                    
+                    if (handlerContainerSides != 0 && !_handler.GetCoreWindow().IsMaximized)
                     {
                         if (CommonService.GetOSType() == OSType.Mac)
                         {
                             SetWindowSize(w, h);
-                            if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
-                            && _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top))
+                            if (handlerContainerSides.HasFlag(Side.Left) && handlerContainerSides.HasFlag(Side.Top))
                             {
                                 SetWindowPos(x_handler, (h_global - h) + y_global);
-                                // Console.WriteLine("left + top " + _handler.GetPointer().GetY());
                             }
-                            else if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
-                            || _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Bottom)
-                            || _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top)
-                            )
+                            else if (handlerContainerSides.HasFlag(Side.Left) || handlerContainerSides.HasFlag(Side.Bottom)
+                                || handlerContainerSides.HasFlag(Side.Top))
                             {
                                 SetWindowPos(x_handler, y_handler);
                                 _handler.GetPointer().SetY(y_handler);//???
@@ -547,8 +540,7 @@ namespace SpaceVIL
                         }
                         else
                         {
-                            if (_handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Left)
-                                || _handler.GetCoreWindow().GetLayout().GetContainer()._sides.HasFlag(Side.Top))
+                            if (handlerContainerSides.HasFlag(Side.Left) || handlerContainerSides.HasFlag(Side.Top))
                                 SetWindowPos(x_handler, y_handler);
                             SetWindowSize(w, h);
                         }
@@ -882,20 +874,25 @@ namespace SpaceVIL
 
                 if (_handler.GetCoreWindow().IsBorderHidden && _handler.GetCoreWindow().IsResizable && !_handler.GetCoreWindow().IsMaximized)
                 {
-                    if ((xpos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth() - 5 && ypos <= 5)
-                     || (xpos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth() - 5 && ypos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight() - 5)
-                     || (ypos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight() - 5 && xpos <= 5)
-                     || (ypos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight() - 5 && xpos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth() - 5)
-                     || (xpos <= 5 && ypos <= 5))
+                    int handlerContainerWidth = _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth();
+                    int handlerContainerHeight = _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight();
+                    
+                    bool cursorNearLeftTop = (xpos <= SpaceVILConstants.BorderCursorTolerance && ypos <= SpaceVILConstants.BorderCursorTolerance);
+                    bool cursorNearLeftBottom = (ypos >= handlerContainerHeight - SpaceVILConstants.BorderCursorTolerance && xpos <= SpaceVILConstants.BorderCursorTolerance);
+                    bool cursorNearRightTop = (xpos >= handlerContainerWidth - SpaceVILConstants.BorderCursorTolerance && ypos <= SpaceVILConstants.BorderCursorTolerance);
+                    bool cursorNearRightBottom = (xpos >= handlerContainerWidth - SpaceVILConstants.BorderCursorTolerance && ypos >= handlerContainerHeight - SpaceVILConstants.BorderCursorTolerance);
+                                                //(ypos >= handlerContainerHeight - Constants.BorderCursorTolerance && xpos >= handlerContainerWidth - Constants.BorderCursorTolerance)
+
+                    if ( cursorNearRightTop || cursorNearRightBottom || cursorNearLeftBottom || cursorNearLeftTop)
                     {
                         _handler.SetCursorType(EmbeddedCursor.Crosshair);
                     }
                     else
                     {
-                        if (xpos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth() - 5 || xpos < 5)
+                        if (xpos >= handlerContainerWidth - SpaceVILConstants.BorderCursorTolerance || xpos < SpaceVILConstants.BorderCursorTolerance)
                             _handler.SetCursorType(EmbeddedCursor.ResizeX);
 
-                        if (ypos >= _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight() - 5 || ypos < 5)
+                        if (ypos >= handlerContainerHeight - SpaceVILConstants.BorderCursorTolerance || ypos < SpaceVILConstants.BorderCursorTolerance)
                             _handler.SetCursorType(EmbeddedCursor.ResizeY);
                     }
                 }
@@ -1983,6 +1980,8 @@ namespace SpaceVIL
             store.Clear();
         }
 
+        private Pointer tooltipBorderIndent = new Pointer(10, 2);
+
         private void DrawToolTip() //refactor
         {
             if (!_tooltip.IsVisible())
@@ -1997,14 +1996,14 @@ namespace SpaceVIL
 
             //проверка сверху
             if (ptrRelease.GetY() > _tooltip.GetHeight())
-                _tooltip.SetY(ptrRelease.GetY() - _tooltip.GetHeight() - 2);
+                _tooltip.SetY(ptrRelease.GetY() - _tooltip.GetHeight() - tooltipBorderIndent.GetY());
             else
-                _tooltip.SetY(ptrRelease.GetY() + _tooltip.GetHeight() + 2);
+                _tooltip.SetY(ptrRelease.GetY() + _tooltip.GetHeight() + tooltipBorderIndent.GetY());
             //проверка справа
-            if (ptrRelease.GetX() - 10 + _tooltip.GetWidth() > _handler.GetCoreWindow().GetWidth())
-                _tooltip.SetX(_handler.GetCoreWindow().GetWidth() - _tooltip.GetWidth() - 10);
+            if (ptrRelease.GetX() - tooltipBorderIndent.GetX() + _tooltip.GetWidth() > _handler.GetCoreWindow().GetWidth())
+                _tooltip.SetX(_handler.GetCoreWindow().GetWidth() - _tooltip.GetWidth() - tooltipBorderIndent.GetX());
             else
-                _tooltip.SetX(ptrRelease.GetX() - 10);
+                _tooltip.SetX(ptrRelease.GetX() - tooltipBorderIndent.GetX());
 
             DrawShell(_tooltip);
             glDisable(GL_SCISSOR_TEST);

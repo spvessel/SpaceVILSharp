@@ -18,6 +18,7 @@ final class DefaultFont {
 
     private InputStream privateFontCollection = null;
     private Font _default_font = null;
+    private final int defFontSize = 12;
 
     public void setDefaultFont(Font font) {
         _default_font = font;
@@ -27,7 +28,7 @@ final class DefaultFont {
         try {
             privateFontCollection = font_stream;
             Font font = Font.createFont(Font.TRUETYPE_FONT, privateFontCollection);
-            _default_font = font.deriveFont(Font.PLAIN, 12);
+            _default_font = font.deriveFont(Font.PLAIN, defFontSize);
         } catch (Exception ex) {
 
         }
@@ -38,7 +39,7 @@ final class DefaultFont {
             addFontFromMemory();
             try {
                 Font font = Font.createFont(Font.TRUETYPE_FONT, privateFontCollection);
-                _default_font = font.deriveFont(Font.PLAIN, 12);
+                _default_font = font.deriveFont(Font.PLAIN, defFontSize);
             } catch (Exception ex) {
 
             }
@@ -47,15 +48,14 @@ final class DefaultFont {
     }
 
     public Font getDefaultFont(int size) {
-        // Console.WriteLine(size);
         if (size == 0) {
-            size = 10;
+            size = defFontSize;
         }
         if (_default_font == null) {
             addFontFromMemory();
             try {
                 Font font = Font.createFont(Font.TRUETYPE_FONT, privateFontCollection);
-                _default_font = font.deriveFont(Font.PLAIN, 12);
+                _default_font = font.deriveFont(Font.PLAIN, defFontSize);
             } catch (Exception ex) {
 
             }
@@ -64,15 +64,14 @@ final class DefaultFont {
     }
 
     public Font getDefaultFont(int style, int size) {
-        // Console.WriteLine(size);
         if (size == 0) {
-            size = 10;
+            size = defFontSize;
         }
         if (_default_font == null) {
             addFontFromMemory();
             try {
                 Font font = Font.createFont(Font.TRUETYPE_FONT, privateFontCollection);
-                _default_font = font.deriveFont(Font.PLAIN, 12);
+                _default_font = font.deriveFont(Font.PLAIN, defFontSize);
             } catch (Exception ex) {
 
             }

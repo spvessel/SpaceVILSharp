@@ -348,7 +348,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     void setFont(Font font) {
         _text_object.setFont(font);
         _substrate_text.setFont(
-            GraphicsMathService.changeFontFamily(font.getFamily(), _substrate_text.getFont())); //new Font(font.getFamily(), _substrate_text.getFont().getStyle(), _substrate_text.getFont().getSize()));
+            GraphicsMathService.changeFontFamily(font.getFamily(), _substrate_text.getFont()));
     }
 
     void setFontSize(int size) {
@@ -468,9 +468,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     }
 
     public void initElements() {
-        // _cursor.IsVisible = false;
         // adding
-
         addItems(_substrate_text, _selectedArea, _text_object, _cursor);
         // getHandler().setFocusedItem(this);
 
@@ -543,17 +541,6 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         _selectTo = -1;// 0;
         _justSelected = false;
     }
-
-    // private int nearestPosToCursor(double xPos) {
-    // List<Integer> endPos = _text_object.getLetPosArray();
-    // int pos = (int) endPos.stream().map(x -> Math.abs(x -
-    // xPos)).sorted().toArray()[0];
-    // return pos;
-    // }
-
-    // void setCursorPosition(double newPos) {
-    // _cursor_position = nearestPosToCursor(newPos);
-    // }
 
     private String cutText() // ������ �� ����������, ������, �����������, ��� �����
     {

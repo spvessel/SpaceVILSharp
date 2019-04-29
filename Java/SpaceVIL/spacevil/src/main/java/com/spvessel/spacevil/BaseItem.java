@@ -219,67 +219,19 @@ public abstract class BaseItem implements InterfaceBaseItem {
     }
 
     public void setBackground(int r, int g, int b) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 255)
-        //     r = 255;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 255)
-        //     g = 255;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 255)
-        //     b = 255;
-        _item.setBackground(GraphicsMathService.colorTransform(r, g, b)); //new Color(r, g, b, 255));
+        _item.setBackground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setBackground(int r, int g, int b, int a) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 255)
-        //     r = 255;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 255)
-        //     g = 255;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 255)
-        //     b = 255;
-        _item.setBackground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color(r, g, b, a));
+        _item.setBackground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public void setBackground(float r, float g, float b) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 1.0f)
-        //     r = 1.0f;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 1.0f)
-        //     g = 1.0f;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 1.0f)
-        //     b = 1.0f;
-        _item.setBackground(GraphicsMathService.colorTransform(r, g, b)); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
+        _item.setBackground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setBackground(float r, float g, float b, float a) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 1.0f)
-        //     r = 1.0f;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 1.0f)
-        //     g = 1.0f;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 1.0f)
-        //     b = 1.0f;
-        _item.setBackground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
+        _item.setBackground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public Color getBackground() {

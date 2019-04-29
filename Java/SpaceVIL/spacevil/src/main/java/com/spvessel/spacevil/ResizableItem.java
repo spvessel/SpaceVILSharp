@@ -218,17 +218,17 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
 
     void getSides(float xpos, float ypos) {
         _sides.clear();
-        if (xpos <= 10 && !_sidesExclude.contains(Side.LEFT)) {
+        if (xpos <= SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.LEFT)) {
             _sides.add(Side.LEFT);
         }
-        if (xpos >= getWidth() - 10 && !_sidesExclude.contains(Side.RIGHT)) {
+        if (xpos >= getWidth() - SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.RIGHT)) {
             _sides.add(Side.RIGHT);
         }
 
-        if (ypos <= 10 && !_sidesExclude.contains(Side.TOP)) {
+        if (ypos <= SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.TOP)) {
             _sides.add(Side.TOP);
         }
-        if (ypos >= getHeight() - 10 && !_sidesExclude.contains(Side.BOTTOM)) {
+        if (ypos >= getHeight() - SpaceVILConstants.borderCursorTolerance && !_sidesExclude.contains(Side.BOTTOM)) {
             _sides.add(Side.BOTTOM);
         }
     }

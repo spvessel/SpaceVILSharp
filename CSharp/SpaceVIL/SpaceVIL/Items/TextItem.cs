@@ -114,47 +114,6 @@ namespace SpaceVIL
         }
 
         public abstract void UpdateData();
-        //protected abstract void UpdateCoords();
-
-        // internal float[] GetCoordinates()
-        // {
-        //     return _coordinates;
-        // }
-
-        /*
-        internal float[] GetColors()
-        {
-            return _colors;
-        }
-        */
-
-        // private float[] ToGL(List<float> coord)
-        // {
-        //     float[] outCoord = new float[coord.Count];
-        //     float f;
-        //     float x0 = GetX();
-        //     float y0 = GetY();
-        //     float windowH = GetHandler().GetHeight() / 2f;
-        //     float windowW = GetHandler().GetWidth() / 2f;
-        // 
-        //     for (int i = 0; i < coord.Count; i += 3)
-        //     {
-        //         f = coord[i];
-        //         f += x0;
-        //         f = f / windowW - 1.0f;
-        //         outCoord[i] = f;
-        // 
-        //         f = coord[i + 1];
-        //         f += y0;
-        //         f = -(f / windowH - 1.0f);
-        //         outCoord[i + 1] = f;
-        // 
-        //         f = coord[i + 2];
-        //         outCoord[i + 2] = f;
-        //     }
-        // 
-        //     return outCoord;
-        // }
 
         private Color _foreground = Color.Black; //default
         public Color GetForeground()
@@ -166,36 +125,23 @@ namespace SpaceVIL
             if (!_foreground.Equals(foreground))
             {
                 _foreground = foreground;
-                //SetColor(_alphas); //_colorFlag = true;
             }
         }
         public void SetForeground(int r, int g, int b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            SetForeground(GraphicsMathService.ColorTransform(r, g, b)); //Color.FromArgb(255, r, g, b));
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
         public void SetForeground(int r, int g, int b, int a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a)); //Color.FromArgb(a, r, g, b));
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
         public void SetForeground(float r, float g, float b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            SetForeground(GraphicsMathService.ColorTransform(r, g, b)); //Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
         public void SetForeground(float r, float g, float b, float a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a)); //Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f)));
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
 
         private ItemAlignment _textAlignment;
@@ -208,7 +154,6 @@ namespace SpaceVIL
             if (!_textAlignment.Equals(value))
             {
                 _textAlignment = value;
-                //UpdateCoords(); //_coordsFlag = true;
             }
         }
         public void SetTextAlignment(params ItemAlignment[] alignment)
@@ -225,11 +170,5 @@ namespace SpaceVIL
             }
             SetTextAlignment(common);
         }
-
-        // public virtual float[] Shape()
-        // {
-        //     return GetCoordinates();
-        // }
-
     }
 }

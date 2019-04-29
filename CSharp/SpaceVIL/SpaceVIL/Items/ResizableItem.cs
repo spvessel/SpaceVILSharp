@@ -238,20 +238,20 @@ namespace SpaceVIL
         internal void GetSides(float xpos, float ypos)
         {
             _sides = 0;
-            if (xpos <= 10 && !_sidesExclude.Contains(Side.Left))
+            if (xpos <= SpaceVILConstants.BorderCursorTolerance && !_sidesExclude.Contains(Side.Left))
             {
                 _sides |= Side.Left;
             }
-            if (xpos >= GetWidth() - 10 && !_sidesExclude.Contains(Side.Right))
+            if (xpos >= GetWidth() - SpaceVILConstants.BorderCursorTolerance && !_sidesExclude.Contains(Side.Right))
             {
                 _sides |= Side.Right;
             }
 
-            if (ypos <= 10 && !_sidesExclude.Contains(Side.Top))
+            if (ypos <= SpaceVILConstants.BorderCursorTolerance && !_sidesExclude.Contains(Side.Top))
             {
                 _sides |= Side.Top;
             }
-            if (ypos >= GetHeight() - 10 && !_sidesExclude.Contains(Side.Bottom))
+            if (ypos >= GetHeight() - SpaceVILConstants.BorderCursorTolerance && !_sidesExclude.Contains(Side.Bottom))
             {
                 _sides |= Side.Bottom;
             }

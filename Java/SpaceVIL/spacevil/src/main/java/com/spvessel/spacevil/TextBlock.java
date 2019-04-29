@@ -230,8 +230,6 @@ class TextBlock extends Prototype
     }
 
     private void onKeyRelease(Object sender, KeyArgs args) {
-        // if (args.key == KeyCode.v/* 0x2F*/ && args.mods == KeyMods.CONTROL)
-        // pasteText(CommonService.ClipboardTextStorage);
     }
 
     private void onKeyPress(Object sender, KeyArgs args) {
@@ -647,67 +645,19 @@ class TextBlock extends Prototype
     }
 
     void setForeground(int r, int g, int b) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 255)
-        //     r = 255;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 255)
-        //     g = 255;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 255)
-        //     b = 255;
-        setForeground(GraphicsMathService.colorTransform(r, g, b)); //new Color(r, g, b, 255));
+        setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     void setForeground(int r, int g, int b, int a) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 255)
-        //     r = 255;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 255)
-        //     g = 255;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 255)
-        //     b = 255;
-        setForeground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color(r, g, b, a));
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     void setForeground(float r, float g, float b) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 1.0f)
-        //     r = 1.0f;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 1.0f)
-        //     g = 1.0f;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 1.0f)
-        //     b = 1.0f;
-        setForeground(GraphicsMathService.colorTransform(r, g, b)); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), 255));
+        setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     void setForeground(float r, float g, float b, float a) {
-        // if (r < 0)
-        //     r = Math.abs(r);
-        // if (r > 1.0f)
-        //     r = 1.0f;
-        // if (g < 0)
-        //     g = Math.abs(g);
-        // if (g > 1.0f)
-        //     g = 1.0f;
-        // if (b < 0)
-        //     b = Math.abs(b);
-        // if (b > 1.0f)
-        //     b = 1.0f;
-        setForeground(GraphicsMathService.colorTransform(r, g, b, a)); //new Color((int) (r * 255.0f), (int) (g * 255.0f), (int) (b * 255.0f), (int) (a * 255.0f)));
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     Color getForeground() {
@@ -759,7 +709,7 @@ class TextBlock extends Prototype
             return;
         }
 
-        List<Point> selectionRectangles; // = new LinkedList<>();
+        List<Point> selectionRectangles;
 
         Point fromReal, toReal;
         List<Point> listPt = realFromTo(from, to);
@@ -767,100 +717,6 @@ class TextBlock extends Prototype
         toReal = listPt.get(1);
 
         selectionRectangles = _textureStorage.selectedArrays(fromReal, toReal);
-
-        // Point tmp = new Point();
-        // Point tmp0 = new Point();
-        // int x1, y1;
-        // int x2, y2;
-        // int lsp = getLineSpacer();
-        // System.out.println("from to real " + fromReal + " " + toReal);
-        // int[] visBounds = _textureStorage.getVisible(cursorPosToCoord(fromReal).y,
-        // cursorPosToCoord(toReal).y);
-        // System.out.println(visBounds[0] + " " + visBounds[1] + " " + visBounds[2] + "
-        // " + visBounds[3]);
-        // if (visBounds[1] == visBounds[3])
-        // return;
-        //
-        // if (from.y == to.y) {
-        // tmp0 = addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, fromReal, false);
-        // x1 = tmp0.x; y1 = tmp0.y;
-        // tmp0 = addXYShifts(0, -lsp / 2 + 1, toReal, false);
-        // x2 = tmp0.x; y2 = tmp0.y;
-        //
-        // if (x2 < visBounds[0] || x1 > visBounds[2])
-        // return;
-        //
-        // if (x1 < visBounds[0])
-        // x1 = visBounds[0];
-        //
-        // if (x2 > visBounds[2])
-        // x2 = visBounds[2];
-        //
-        // selectionRectangles.add(new Point(x1, y1));
-        // selectionRectangles.add(new Point(x2, y2));
-        //
-        // _selectedArea.setRectangles(selectionRectangles);
-        // return;
-        // }
-        //
-        // tmp0 = addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, fromReal, false);
-        // x1 = tmp0.x; y1 = tmp0.y;
-        //
-        // tmp.x = getLineLetCount(fromReal.y);
-        // tmp.y = fromReal.y;
-        // tmp0 = addXYShifts(0, -lsp / 2 + 1, tmp, false);
-        // x2 = tmp0.x; y2 = tmp0.y;
-        //
-        // if (x2 >= visBounds[0] && x1 <= visBounds[2]) {
-        // if (x1 < visBounds[0])
-        // x1 = visBounds[0];
-        //
-        // if (x2 > visBounds[2])
-        // x2 = visBounds[2];
-        //
-        // selectionRectangles.add(new Point(x1, y1));
-        // selectionRectangles.add(new Point(x2, y2));
-        // }
-        //
-        // tmp.x = 0;
-        // tmp.y = toReal.y;
-        // tmp0 = addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, tmp, false);
-        // x1 = tmp0.x; y1 = tmp0.y;
-        // tmp0 = addXYShifts(0, -lsp / 2 + 1, toReal, false);
-        // x2 = tmp0.x; y2 = tmp0.y;
-        //
-        // if (x2 >= visBounds[0] && x1 <= visBounds[2]) {
-        // if (x1 < visBounds[0])
-        // x1 = visBounds[0];
-        //
-        // if (x2 > visBounds[2])
-        // x2 = visBounds[2];
-        //
-        // selectionRectangles.add(new Point(x1, y1));
-        // selectionRectangles.add(new Point(x2, y2));
-        // }
-        //
-        // for (int i = fromReal.y + 1; i < toReal.y; i++) {
-        // tmp.x = 0;
-        // tmp.y = i;
-        // tmp0 = addXYShifts(0, -_cursor.getHeight() - lsp / 2 + 1, tmp, false);
-        // x1 = tmp0.x; y1 = tmp0.y;
-        // tmp.x = getLineLetCount(i);
-        // tmp.y = i;
-        // tmp0 = addXYShifts(0, -lsp / 2 + 1, tmp, false);
-        // x2 = tmp0.x; y2 = tmp0.y;
-        //
-        // if (x2 >= visBounds[0] && x1 <= visBounds[2]) {
-        // if (x1 < visBounds[0])
-        // x1 = visBounds[0];
-        //
-        // if (x2 > visBounds[2])
-        // x2 = visBounds[2];
-        //
-        // selectionRectangles.add(new Point(x1, y1));
-        // selectionRectangles.add(new Point(x2, y2));
-        // }
-        // }
 
         _selectedArea.setRectangles(selectionRectangles);
     }
@@ -1064,24 +920,6 @@ class TextBlock extends Prototype
                 _cursor.setHeight(_textureStorage.getCursorHeight());
         }
     }
-
-    // @Override
-    // public List<InterfaceBaseItem> getItems() {
-    // List<InterfaceBaseItem> list = super.getItems();
-    // return new LinkedList<>(Arrays.asList(list.get(0), list.get(1),
-    // list.get(2)));
-    // }
-    //
-    // @Override
-    // public boolean removeItem(InterfaceBaseItem item) {
-    // if (item.equals(_cursor)) {
-    // while (super.getItems().size() > 0) {
-    // super.removeItem(super.getItems().get(0));
-    // }
-    // return true;
-    // }
-    // return super.removeItem(item);
-    // }
 
     private ArrayDeque<TextBlockState> undoQueue;
     private ArrayDeque<TextBlockState> redoQueue;

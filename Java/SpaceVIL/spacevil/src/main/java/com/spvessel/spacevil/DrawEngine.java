@@ -245,8 +245,6 @@ final class DrawEngine {
         // _fxaa = new Shader(getResourceString("/shaders/vs_fxaa.glsl"),
         // getResourceString("/shaders/fs_fxaa.glsl"));
         // _fxaa.compile();
-        // if (_fxaa.getProgramID() == 0)
-        // System.out.println("Could not create fxaa shaders");
 
         _blur = new Shader(getResourceString("/shaders/vs_blur.glsl"), getResourceString("/shaders/fs_blur.glsl"));
         _blur.compile();
@@ -469,16 +467,15 @@ final class DrawEngine {
 
             float scale = 0;
 
-            if ((_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.RIGHT)
-                    && _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP))
-                    || (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.RIGHT)
-                            && _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.BOTTOM))
-                    || (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
-                            && _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP))
-                    || (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
-                            && _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.BOTTOM))
-                    || _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
-                    || _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.RIGHT))
+            List<Side> handlerContainerSides = _handler.getCoreWindow().getLayout().getContainer()._sides;
+
+            if (//(handlerContainerSides.contains(Side.RIGHT) && handlerContainerSides.contains(Side.TOP))
+                    // || (handlerContainerSides.contains(Side.RIGHT) && handlerContainerSides.contains(Side.BOTTOM))
+                    // || (handlerContainerSides.contains(Side.LEFT) && handlerContainerSides.contains(Side.TOP))
+                    // || (handlerContainerSides.contains(Side.LEFT) && handlerContainerSides.contains(Side.BOTTOM))
+                    // || 
+                    handlerContainerSides.contains(Side.LEFT)
+                    || handlerContainerSides.contains(Side.RIGHT))
                 scale = xScale;
             else
                 scale = yScale;
@@ -544,22 +541,24 @@ final class DrawEngine {
                 int x_press = ptrPress.getX();
                 int y_press = ptrPress.getY();
 
-                if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)) {
+                List<Side> handlerContainerSides = _handler.getCoreWindow().getLayout().getContainer()._sides;
+
+                if (handlerContainerSides.contains(Side.LEFT)) {
                     if (!(_handler.getCoreWindow().getMinWidth() == _handler.getCoreWindow().getWidth()
                             && (x_release - x_press) >= 0)) {
-                        int x5 = x_handler - x_global + (int) xpos - 5;
+                        int x5 = x_handler - x_global + (int) xpos - SpaceVILConstants.borderCursorTolerance;
                         x_handler = x_global + x5;
                         w = w_global - x5;
                     }
                 }
-                if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.RIGHT)) {
+                if (handlerContainerSides.contains(Side.RIGHT)) {
                     if (!(x_release < _handler.getCoreWindow().getMinWidth()
                             && _handler.getCoreWindow().getWidth() == _handler.getCoreWindow().getMinWidth())) {
                         w = x_release;
                     }
                     ptrPress.setX(x_release);
                 }
-                if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP)) {
+                if (handlerContainerSides.contains(Side.TOP)) {
                     if (!(_handler.getCoreWindow().getMinHeight() == _handler.getCoreWindow().getHeight()
                             && (y_release - y_press) >= 0)) {
 
@@ -567,13 +566,13 @@ final class DrawEngine {
                             h -= y_release - y_press;
                             y_handler = (h_global - h) + y_global;
                         } else {
-                            int y5 = y_handler - y_global + (int) ypos - 5;
+                            int y5 = y_handler - y_global + (int) ypos - SpaceVILConstants.borderCursorTolerance;
                             y_handler = y_global + y5;
                             h = h_global - y5;
                         }
                     }
                 }
-                if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.BOTTOM)) {
+                if (handlerContainerSides.contains(Side.BOTTOM)) {
                     if (!(y_release < _handler.getCoreWindow().getMinHeight()
                             && _handler.getCoreWindow().getHeight() == _handler.getCoreWindow().getMinHeight())) {
 
@@ -584,23 +583,20 @@ final class DrawEngine {
                     }
                 }
 
-                if (_handler.getCoreWindow().getLayout().getContainer()._sides.size() != 0
+                if (handlerContainerSides.size() != 0
                         && !_handler.getCoreWindow().isMaximized) {
 
                     if (CommonService.getOSType() == OSType.MAC) {
                         setWindowSize(w, h);
-                        if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
-                                && _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP)) {
+                        if (handlerContainerSides.contains(Side.LEFT) && handlerContainerSides.contains(Side.TOP)) {
                             setWindowPos(x_handler, (h_global - h) + y_global);
-                        } else if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
-                                || _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.BOTTOM)
-                                || _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP)) {
+                        } else if (handlerContainerSides.contains(Side.LEFT) || handlerContainerSides.contains(Side.BOTTOM)
+                                || handlerContainerSides.contains(Side.TOP)) {
                             setWindowPos(x_handler, y_handler);
                             _handler.getPointer().setY(y_handler);
                         }
                     } else {
-                        if (_handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.LEFT)
-                                || _handler.getCoreWindow().getLayout().getContainer()._sides.contains(Side.TOP))
+                        if (handlerContainerSides.contains(Side.LEFT) || handlerContainerSides.contains(Side.TOP))
                             setWindowPos(x_handler, y_handler);
                         setWindowSize(w, h);
                     }
@@ -922,21 +918,27 @@ final class DrawEngine {
             hoveredItem.setMouseHover(true);
             glfwSetCursor(_handler.getWindowId(), hoveredItem.getCursor().getCursor());
 
-            if ((xpos >= _handler.getCoreWindow().getLayout().getContainer().getWidth() - 5 && ypos <= 5)
-                    || (xpos >= _handler.getCoreWindow().getLayout().getContainer().getWidth() - 5
-                            && ypos >= _handler.getCoreWindow().getLayout().getContainer().getHeight() - 5)
-                    || (ypos >= _handler.getCoreWindow().getLayout().getContainer().getHeight() - 5 && xpos <= 5)
-                    || (ypos >= _handler.getCoreWindow().getLayout().getContainer().getHeight() - 5
-                            && xpos >= _handler.getCoreWindow().getLayout().getContainer().getWidth() - 5)
-                    || (xpos <= 5 && ypos <= 5)) {
-                _handler.setCursorType(GLFW_CROSSHAIR_CURSOR);
-            } else {
-                if (xpos > _handler.getCoreWindow().getLayout().getContainer().getWidth() - 5 || xpos <= 5)
-                    _handler.setCursorType(GLFW_HRESIZE_CURSOR);
+            if (_handler.getCoreWindow().isBorderHidden && _handler.getCoreWindow().isResizable && !_handler.getCoreWindow().isMaximized)
+            {
+                int handlerContainerWidth = _handler.getCoreWindow().getLayout().getContainer().getWidth();
+                int handlerContainerHeight = _handler.getCoreWindow().getLayout().getContainer().getHeight();
+                
+                boolean cursorNearLeftTop = (xpos <= SpaceVILConstants.borderCursorTolerance && ypos <= SpaceVILConstants.borderCursorTolerance);
+                boolean cursorNearLeftBottom = (ypos >= handlerContainerHeight - SpaceVILConstants.borderCursorTolerance && xpos <= SpaceVILConstants.borderCursorTolerance);
+                boolean cursorNearRightTop = (xpos >= handlerContainerWidth - SpaceVILConstants.borderCursorTolerance && ypos <= SpaceVILConstants.borderCursorTolerance);
+                boolean cursorNearRightBottom = (xpos >= handlerContainerWidth - SpaceVILConstants.borderCursorTolerance && ypos >= handlerContainerHeight - SpaceVILConstants.borderCursorTolerance);
+                                              //(ypos >= handlerContainerHeight - SpaceVILConstants.borderCursorTolerance && xpos >= handlerContainerWidth - SpaceVILConstants.borderCursorTolerance)
+                if (cursorNearRightTop || cursorNearRightBottom || cursorNearLeftBottom || cursorNearLeftTop) {
+                    _handler.setCursorType(GLFW_CROSSHAIR_CURSOR);
+                } else {
+                    if (xpos > handlerContainerWidth - SpaceVILConstants.borderCursorTolerance || xpos <= SpaceVILConstants.borderCursorTolerance)
+                        _handler.setCursorType(GLFW_HRESIZE_CURSOR);
 
-                if (ypos > _handler.getCoreWindow().getLayout().getContainer().getHeight() - 5 || ypos <= 5)
-                    _handler.setCursorType(GLFW_VRESIZE_CURSOR);
+                    if (ypos > handlerContainerHeight - SpaceVILConstants.borderCursorTolerance || ypos <= SpaceVILConstants.borderCursorTolerance)
+                        _handler.setCursorType(GLFW_VRESIZE_CURSOR);
+                }
             }
+
 
             hoveredItems = queue;
             Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
@@ -1964,6 +1966,8 @@ final class DrawEngine {
         store.clear();
     }
 
+    private Pointer tooltipBorderIndent = new Pointer(10, 2);
+
     private void drawToolTip() {
         if (!_tooltip.isVisible())
             return;
@@ -1973,15 +1977,15 @@ final class DrawEngine {
 
         // проверка сверху
         if (ptrRelease.getY() > _tooltip.getHeight()) {
-            _tooltip.setY(ptrRelease.getY() - _tooltip.getHeight() - 2);
+            _tooltip.setY(ptrRelease.getY() - _tooltip.getHeight() - tooltipBorderIndent.getY());
         } else {
-            _tooltip.setY(ptrRelease.getY() + _tooltip.getHeight() + 2);
+            _tooltip.setY(ptrRelease.getY() + _tooltip.getHeight() + tooltipBorderIndent.getY());
         }
         // проверка справа
-        if (ptrRelease.getX() - 10 + _tooltip.getWidth() > _handler.getCoreWindow().getWidth()) {
-            _tooltip.setX(_handler.getCoreWindow().getWidth() - _tooltip.getWidth() - 10);
+        if (ptrRelease.getX() - tooltipBorderIndent.getX() + _tooltip.getWidth() > _handler.getCoreWindow().getWidth()) {
+            _tooltip.setX(_handler.getCoreWindow().getWidth() - _tooltip.getWidth() - tooltipBorderIndent.getX());
         } else {
-            _tooltip.setX(ptrRelease.getX() - 10);
+            _tooltip.setX(ptrRelease.getX() - tooltipBorderIndent.getX());
         }
         // System.out.println(_tooltip.getY());
         drawShell(_tooltip);

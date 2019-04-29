@@ -1,6 +1,17 @@
 package com.spvessel.spacevil.Core;
 
 public class Pointer {
+    public Pointer() {
+
+    }
+
+    public Pointer(int x, int y) {
+        setX(x);
+        setY(y);
+    }
+
+    private final int defPointValue = -1;
+
     private Boolean _is_set = false;
 
     /**
@@ -10,7 +21,7 @@ public class Pointer {
         return _is_set;
     }
 
-    private int X = -1;
+    private int X = defPointValue;
 
     /**
      * @return X position of the pointer
@@ -26,7 +37,7 @@ public class Pointer {
         X = x;
     }
 
-    private int Y = -1;
+    private int Y = defPointValue;
 
     /**
      * @return Y position of the pointer
@@ -42,8 +53,8 @@ public class Pointer {
         Y = y;
     }
 
-    private int PrevX = -1;
-    private int PrevY = -1;
+    private int PrevX = defPointValue;
+    private int PrevY = defPointValue;
 
     /**
      * Set pointer position
@@ -51,7 +62,7 @@ public class Pointer {
      * @param y Y position of the pointer
      */
     public  void setPosition(float x, float y) {
-        if (PrevX == -1 || PrevY == -1) {
+        if (PrevX == defPointValue || PrevY == defPointValue) {
             PrevX = (int) x;
             PrevY = (int) y;
         } else {
@@ -69,7 +80,7 @@ public class Pointer {
      * @param y Y position of the pointer
      */
     public  void setPosition(int x, int y) {
-        if (PrevX == -1 || PrevY == -1) {
+        if (PrevX == defPointValue || PrevY == defPointValue) {
             PrevX = x;
             PrevY = y;
         } else {
@@ -85,10 +96,10 @@ public class Pointer {
      * Set all pointer positions default
      */
     public void clear() {
-        PrevX = -1;
-        PrevY = -1;
-        X = -1;
-        Y = -1;
+        PrevX = defPointValue;
+        PrevY = defPointValue;
+        X = defPointValue;
+        Y = defPointValue;
         _is_set = false;
     }
 }

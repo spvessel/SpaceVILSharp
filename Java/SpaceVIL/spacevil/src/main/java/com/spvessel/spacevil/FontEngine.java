@@ -8,20 +8,14 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 class FontEngine {
-    /*
-    static public FontEngine() {
-
-    }
-    */
     static String _preloadDefFile = "./somefile.dat";
 
     private static Map<Font, Alphabet> fonts = new HashMap<>();
 
     private static Lock fontLock = new ReentrantLock();
 
-    static List<Alphabet.ModifyLetter> getModifyLetters(String text, Font font) // PixMapData
+    static List<Alphabet.ModifyLetter> getModifyLetters(String text, Font font)
     {
-        //return FontReview.getTextArrays(text, font);
         if (!fonts.containsKey(font)) {
             fontLock.lock();
             try {
@@ -32,12 +26,10 @@ class FontEngine {
             }
         }
 
-        return fonts.get(font).makeTextNew(text);// MakeText(text);
+        return fonts.get(font).makeTextNew(text);
     }
 
     static int[] getSpacerDims(Font font) {
-        //return FontReview.getDims();
-
         if (!fonts.containsKey(font)) {
             fontLock.lock();
             try {

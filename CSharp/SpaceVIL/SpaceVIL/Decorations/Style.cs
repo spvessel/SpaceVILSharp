@@ -108,31 +108,19 @@ namespace SpaceVIL.Decorations
         /// <overloads> Sets background color of the object </overloads>
         public void SetBackground(int r, int g, int b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            Background = GraphicsMathService.ColorTransform(r, g, b); //Color.FromArgb(255, r, g, b);
+            Background = GraphicsMathService.ColorTransform(r, g, b);
         }
         public void SetBackground(int r, int g, int b, int a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            Background = GraphicsMathService.ColorTransform(r, g, b, a); //Color.FromArgb(a, r, g, b);
+            Background = GraphicsMathService.ColorTransform(r, g, b, a);
         }
         public void SetBackground(float r, float g, float b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            Background = GraphicsMathService.ColorTransform(r, g, b); //Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+            Background = GraphicsMathService.ColorTransform(r, g, b);
         }
         public void SetBackground(float r, float g, float b, float a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            Background = GraphicsMathService.ColorTransform(r, g, b, a); //Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+            Background = GraphicsMathService.ColorTransform(r, g, b, a);
         }
 
         /// <summary>
@@ -141,31 +129,19 @@ namespace SpaceVIL.Decorations
         /// <overloads> Sets text color of the object </overloads>
         public void SetForeground(int r, int g, int b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            Foreground = GraphicsMathService.ColorTransform(r, g, b); //Color.FromArgb(255, r, g, b);
+            Foreground = GraphicsMathService.ColorTransform(r, g, b);
         }
         public void SetForeground(int r, int g, int b, int a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
-            // if (g < 0) g = Math.Abs(g); if (g > 255) g = 255;
-            // if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
-            Foreground = GraphicsMathService.ColorTransform(r, g, b, a); //Color.FromArgb(a, r, g, b);
+            Foreground = GraphicsMathService.ColorTransform(r, g, b, a);
         }
         public void SetForeground(float r, float g, float b)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            Foreground = GraphicsMathService.ColorTransform(r, g, b); //Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+            Foreground = GraphicsMathService.ColorTransform(r, g, b);
         }
         public void SetForeground(float r, float g, float b, float a)
         {
-            // if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
-            // if (g < 0) g = Math.Abs(g); if (g > 1.0f) g = 1.0f;
-            // if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
-            Foreground = GraphicsMathService.ColorTransform(r, g, b, a); //Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+            Foreground = GraphicsMathService.ColorTransform(r, g, b, a);
         }
 
         /// <summary>
@@ -616,7 +592,7 @@ namespace SpaceVIL.Decorations
             arrow_style.HeightPolicy = SizePolicy.Fixed;
             arrow_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             arrow_style.Background = Color.FromArgb(255, 50, 50, 50);
-            arrow_style.Shape = GraphicsMathService.GetTriangle(a: 180);
+            arrow_style.Shape = GraphicsMathService.GetTriangle(angle: 180);
             style.AddInnerStyle("arrow", arrow_style);
 
             return style;
@@ -684,7 +660,7 @@ namespace SpaceVIL.Decorations
             arrow_style.Alignment = ItemAlignment.Right | ItemAlignment.VCenter;
             arrow_style.Background = Color.FromArgb(255, 80, 80, 80);
             arrow_style.Margin = new Indents(10, 0, 0, 0);
-            arrow_style.Shape = GraphicsMathService.GetTriangle(a: 90);
+            arrow_style.Shape = GraphicsMathService.GetTriangle(angle: 90);
             style.AddInnerStyle("arrow", arrow_style);
 
             return style;

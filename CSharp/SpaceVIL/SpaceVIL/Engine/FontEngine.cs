@@ -26,16 +26,6 @@ namespace SpaceVIL
 
         internal static List<ModifyLetter> GetModifyLetters(string text, Font font)
         {
-            //return FontReview.getTextArrays(text, font);
-
-            // Font biggerFont = font;
-            // float cof = 1f;
-
-            // if (font.Size < 20) {
-            //     biggerFont = new Font(font.FontFamily, 50, font.Style);
-            //     cof = font.Size * 1f / 50f;
-            // }
-
             if (!fonts.ContainsKey(font))
             {
                 Monitor.Enter(fontLock);
@@ -48,21 +38,13 @@ namespace SpaceVIL
                     Monitor.Exit(fontLock);
                 }
             }
-            return fonts[font].MakeTextNew(text); //, cof);
+            return fonts[font].MakeTextNew(text);
         }
 
         internal static int[] GetSpacerDims(Font font)
         {
             if (font == null)
                 return new int[] { 0, 0, 0 };
-            //return FontReview.getDims();
-
-            // Font biggerFont = font;
-            // float cof = 1f;
-            // if (font.Size < 20) {
-            //     biggerFont = new Font(font.FontFamily, 50, font.Style);
-            //     cof = font.Size * 1f / 50f;
-            // }
 
             if (!fonts.ContainsKey(font))
             {
@@ -78,7 +60,7 @@ namespace SpaceVIL
                 }
             }
             Alphabet a = fonts[font];
-            return new int[] { a.lineSpacer, a.alphMinY, a.alphHeight }; //(int)(a.lineSpacer * cof), (int)(a.alphMinY * cof), (int)(a.alphHeight * cof), a.alphHeight, a.alphMinY };
+            return new int[] { a.lineSpacer, a.alphMinY, a.alphHeight };
         }
 
         internal static bool SavePreloadFont(Font font)
@@ -157,107 +139,12 @@ namespace SpaceVIL
 
             private void AddLetter(char c)
             {
-                //Console.WriteLine(font.Name + " " + font.Size + " Add letter " + c);
                 Letter letter = MakeLetter(char.ToString(c));
                 letters.Add(c, letter);
                 alphMinY = (alphMinY > letter.minY) ? letter.minY : alphMinY;
                 alphMaxY = (alphMaxY < letter.minY + letter.height - 1) ? letter.minY + letter.height - 1 : alphMaxY;
                 alphHeight = Math.Abs(alphMaxY - alphMinY + 1);
             }
-            /*
-            internal PixMapData MakeText(String text)
-            {
-                double err = 0.15; //переехало из буквы
-                double x0 = 0;
-
-                List<float> pix = new List<float>();
-                List<float> col = new List<float>();
-                List<int> letEndPos = new List<int>();
-
-                Letter currLet;
-                Letter prevLet = null;
-                foreach (char c in text.ToCharArray())
-                {
-                    if (!letters.ContainsKey(c)) AddLetter(c);
-
-                    currLet = letters[c];
-
-                    if (currLet.isSpec)
-                    {
-                        x0 = UpdateSpecX0(currLet, x0);
-                    }
-                    else
-                    {
-                        if (prevLet != null)
-                        {
-                            int ly0 = prevLet.minY;
-                            int ly1 = ly0 + prevLet.height - 1;
-                            int ry0 = currLet.minY;
-                            int ry1 = ry0 + currLet.height - 1;
-
-                            bool b1 = false, b2 = false;
-                            for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
-                            {
-                                if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
-                                {
-                                    b1 = true;
-                                    break;
-                                }
-                            }
-
-                            if (b1) x0++;
-                            else
-                            {
-                                for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
-                                {
-                                    if (prevLet.alphas[prevLet.width - 2, i - ly0] > err && currLet.alphas[0, i - ry0] > err)
-                                    {
-                                        b2 = true;
-                                        break;
-                                    }
-                                    if (prevLet.alphas[prevLet.width - 1, i - ly0] > err && currLet.alphas[1, i - ry0] > err)
-                                    {
-                                        b2 = true;
-                                        break;
-                                    }
-                                }
-
-                                if (!b2) x0--;
-                            }
-                        }
-
-
-                        //col.AddRange(currLet.GetAlphas());
-                        //pix.AddRange(AddShift((float)x0, currLet.GetCoords()));
-
-                        //Вместо AddShift
-
-                        int xBeg = currLet.minX;
-                        int yBeg = currLet.minY;
-                        for (int ix = 0; ix < currLet.width; ix++)
-                        {
-                            for (int iy = 0; iy < currLet.height; iy++)
-                            {
-                                if (currLet.alphas[ix, iy] > 0)
-                                {
-                                    col.Add((float)currLet.alphas[ix, iy]);
-                                    pix.Add(ix + xBeg + (float)x0);
-                                    pix.Add(iy + yBeg);
-                                    pix.Add(0);
-                                }
-                            }
-                        }
-
-                    }
-
-                    x0 += currLet.width;
-                    prevLet = currLet;
-                    letEndPos.Add((int)x0);
-                }
-
-                return new PixMapData(pix, col, letEndPos);// (float)x0);
-            }
-            */
 
             internal List<ModifyLetter> MakeTextNew(String text) //, float cof)
             {
@@ -407,7 +294,7 @@ namespace SpaceVIL
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Bug letter exception");
+                    // Console.WriteLine("Bug letter exception");
                     return bugLetter;
                 }
 
@@ -435,12 +322,14 @@ namespace SpaceVIL
 
             private void MakeBigPoint() {
                 string let = Encoding.UTF32.GetString(BitConverter.GetBytes(0x25CF)); //big point
-                Letter hideSign = new Letter(let);
-                hideSign.height = alphHeight;
-                hideSign.width = (int)(alphHeight * 2 / 3f);
-                hideSign.minY = alphMinY;
-                hideSign.isSpec = false;
-                float[,] arr = new float[hideSign.width, hideSign.height];
+                Letter hideSign = new Letter(let)
+                {
+                    height = alphHeight,
+                    width = (int)(alphHeight * 2 / 3f),
+                    minY = alphMinY,
+                    isSpec = false
+                };
+            float[,] arr = new float[hideSign.width, hideSign.height];
                 int rad = hideSign.height / 3 - 1, tmp;
                 for (int i = 0; i < hideSign.width; i++)
                 {
@@ -458,44 +347,24 @@ namespace SpaceVIL
 
             private void MakeBugLetter()
             {
-                bugLetter = new Letter("bug");
-                bugLetter.width = (int)(font.Size / 3f);// lineSpacer;
-                bugLetter.height = (int)(font.Size * 2 / 3f);// Math.Abs(maxY - minY + 1);
-                bugLetter.minY = (int)(font.Size / 3f);// minY;
-                bugLetter.isSpec = false;
-                float[,] arr = new float[bugLetter.width, bugLetter.height];
-                //List<float> col = new List<float>();
-                //List<float> pix = new List<float>();
+                bugLetter = new Letter("bug")
+                {
+                    width = (int)(font.Size / 3f), // lineSpacer;
+                    height = (int)(font.Size * 2 / 3f), // Math.Abs(maxY - minY + 1);
+                    minY = (int)(font.Size / 3f), // minY;
+                    isSpec = false
+                };
+            float[,] arr = new float[bugLetter.width, bugLetter.height];
                 for (int i = 0; i < bugLetter.width; i++)
                 {
                     arr[i, 0] = 1;
-                    // col.Add(1);
-                    // pix.Add(bugLetter.minX + i);
-                    // pix.Add(bugLetter.minY);
-                    // pix.Add(0f);
                     arr[i, bugLetter.height - 1] = 1;
-                    // col.Add(1);
-                    // pix.Add(bugLetter.minX + i);
-                    // pix.Add(bugLetter.minY + bugLetter.height - 1);
-                    // pix.Add(0f);
                 }
                 for (int i = 1; i < bugLetter.height - 1; i++)
                 {
                     arr[0, i] = 1;
-                    // col.Add(1);
-                    // pix.Add(bugLetter.minX);
-                    // pix.Add(bugLetter.minY + i);
-                    // pix.Add(0f);
                     arr[bugLetter.width - 1, i] = 1;
-                    // col.Add(1);
-                    // pix.Add(bugLetter.minX + bugLetter.width - 1);
-                    // pix.Add(bugLetter.minY + i);
-                    // pix.Add(0f);
                 }
-
-                //bugLetter.alphas = arr;
-                //bugLetter.col.AddRange(col);
-                //bugLetter.pix.AddRange(pix);
 
                 bugLetter.TwoDimToOne(arr);
             }
@@ -506,14 +375,11 @@ namespace SpaceVIL
             internal String name;
             internal int width;
             internal int height;
-            //internal double[,] alphas;
             internal int minY = 0;
             internal int minX = 0;
             internal bool isSpec = false;
             internal float[,] leftArr;
             internal float[,] rightArr;
-            //internal List<float> col;
-            //internal List<float> pix;
             internal byte[] arr;
 
             public Letter(String name)
@@ -525,15 +391,10 @@ namespace SpaceVIL
 
             public Letter(String name, GraphicsPath shape)
             {
-                //col = new List<float>();
-                //pix = new List<float>();
-                //Console.WriteLine("Creating letter " + name);
                 this.name = name;
                 if (shape != null)
                     MakeLetterArrays(shape);
                 else isSpec = true;
-
-                //LogService.Log().LogArr(new int[] {minY, height}, "Let " + name);
             }
 
             public Letter(String name, Bitmap bm)
@@ -545,7 +406,7 @@ namespace SpaceVIL
             internal void TwoDimToOne(float[,] twoDim)
             {
                 arr = new byte[(this.width * this.height) * 4];
-                // System.out.println(name + " width " + this.width + " " + this.height);
+                
                 int i = 0;
                 for (int xx = 0; xx < width; xx++)
                 {
@@ -641,7 +502,7 @@ namespace SpaceVIL
                 //--------------------------------------------------------------------------------------
 
                 arr = new byte[(this.width * this.height) * 4];
-                // System.out.println(name + " width " + this.width + " " + this.height);
+                
                 int i = 0;
                 for (int xx = x0shift; xx <= x1shift; xx++)
                 {
@@ -661,22 +522,6 @@ namespace SpaceVIL
                     }
                 }
 
-                /*
-                for (int xx = x0shift; xx <= x1shift; xx++)
-                {
-                    for (int yy = y0shift; yy <= y1shift; yy++)
-                    {
-                        if (alph[xx, yy] != 0)
-                        {
-                            col.Add((float)alph[xx, yy]);
-                            pix.Add(xx - x0shift);
-                            pix.Add(yy - y0shift);
-                            pix.Add(0f);
-                        }
-
-                    }
-                }
-                */
                 leftArr = new float[2, height];
                 rightArr = new float[2, height];
                 for (int yy = y0shift; yy <= y1shift; yy++)
@@ -689,27 +534,6 @@ namespace SpaceVIL
                     rightArr[1, yy - y0shift] = (float)alph[xx, yy];
 
                 }
-
-                //--------------------------------------------------------------------------------------
-                /*
-                alphas = new double[width, height];
-                for (int xx = x0shift; xx <= x1shift; xx++)
-                {
-                    for (int yy = y0shift; yy <= y1shift; yy++)
-                    {
-                        // if (alph[xx, yy] != 0.0f)
-                        // {
-                        //     if (alph[xx, yy] < 0.21f)
-                        //         alph[xx, yy] = 0.0f;
-                        //     //alph[xx, yy] = (alph[xx, yy] < 1) ? alph[xx, yy] + 0.15f : alph[xx, yy];
-                        //     //alph[xx, yy] = (alph[xx, yy] > 1) ? 1 : alph[xx, yy];
-                        // }
-                        
-                        alphas[xx - x0shift, yy - y0shift] = alph[xx, yy];
-
-                    }
-                }
-                */
             }
 
             private void BitmapToArrays(Bitmap bm)
@@ -774,12 +598,11 @@ namespace SpaceVIL
                 width = x1shift - x0shift + 1;
                 //--------------------------------------------------------------------------------------
                 arr = new byte[(this.width * this.height) * 4];
-                // System.out.println(name + " width " + this.width + " " + this.height);
+                
                 int i = 0;
                 for (int xx = x0shift; xx <= x1shift; xx++)
                 {
                     for (int yy = y0shift; yy <= y1shift; yy++)
-                    // for (int yy = y1shift; yy >= y0shift; yy--)
                     {
                         Color pixel = bm.GetPixel(xx, yy);
                         arr[i] = pixel.R;
@@ -1211,7 +1034,7 @@ namespace SpaceVIL
                 return _letter.pix;
             }
             */
-            internal byte[] getArr()
+            internal byte[] GetArr()
             {
                 return _letter.arr;
             }

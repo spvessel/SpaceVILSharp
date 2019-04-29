@@ -6,14 +6,7 @@ import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.ItemState;
-import com.spvessel.spacevil.Flags.EmbeddedCursor;
-import com.spvessel.spacevil.Flags.HorizontalDirection;
-import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.ItemStateType;
-import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.MSAA;
-import com.spvessel.spacevil.Flags.MouseButton;
-import com.spvessel.spacevil.Flags.SizePolicy;
+import com.spvessel.spacevil.Flags.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -22,6 +15,8 @@ import java.io.IOException;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainWindow extends ActiveWindow {
 
@@ -34,11 +29,11 @@ public class MainWindow extends ActiveWindow {
         setMinSize(500, 100);
         setAspectRatio(4, 1);
 
-        setPadding(2, 2, 2, 2);
-        setBackground(new Color(0, 162, 232));
-        setBorderRadius(10);
-        setAntiAliasingQuality(MSAA.MSAA_8X);
-        isTransparent = true;
+//        setPadding(2, 2, 2, 2);
+//        setBackground(new Color(0, 162, 232));
+//        setBorderRadius(10);
+//        setAntiAliasingQuality(MSAA.MSAA_8X);
+//        isTransparent = true;
 
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
         // Handler.eventClose.clear();
@@ -190,5 +185,105 @@ public class MainWindow extends ActiveWindow {
         });
 
         btn_flow.setFocus();
+//
+//
+//        List<List<Side>> testListSide = new LinkedList<>();
+//        LinkedList test1 = new LinkedList();
+//        test1.add(Side.TOP);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.BOTTOM);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.RIGHT);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.LEFT);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.TOP);
+//        test1.add(Side.BOTTOM);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.TOP);
+//        test1.add(Side.LEFT);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.TOP);
+//        test1.add(Side.RIGHT);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.BOTTOM);
+//        test1.add(Side.LEFT);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.BOTTOM);
+//        test1.add(Side.RIGHT);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.RIGHT);
+//        test1.add(Side.LEFT);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.TOP);
+//        test1.add(Side.BOTTOM);
+//        test1.add(Side.RIGHT);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.TOP);
+//        test1.add(Side.BOTTOM);
+//        test1.add(Side.LEFT);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.TOP);
+//        test1.add(Side.LEFT);
+//        test1.add(Side.RIGHT);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.BOTTOM);
+//        test1.add(Side.RIGHT);
+//        test1.add(Side.LEFT);
+//        testListSide.add(test1);
+//
+//        test1 = new LinkedList();
+//        test1.add(Side.TOP);
+//        test1.add(Side.BOTTOM);
+//        test1.add(Side.RIGHT);
+//        test1.add(Side.LEFT);
+//        testListSide.add(test1);
+//
+//        boolean oldExp = false, newExp = false;
+//
+//        for (List<Side> currentTest : testListSide) {
+//            oldExp = ((currentTest.contains(Side.RIGHT) && currentTest.contains(Side.TOP))
+//                    || (currentTest.contains(Side.RIGHT) && currentTest.contains(Side.BOTTOM))
+//                    || (currentTest.contains(Side.LEFT) && currentTest.contains(Side.TOP))
+//                    || (currentTest.contains(Side.LEFT) && currentTest.contains(Side.BOTTOM))
+//                    || currentTest.contains(Side.LEFT)
+//                    || currentTest.contains(Side.RIGHT));
+//
+//            newExp = (currentTest.contains(Side.LEFT) || currentTest.contains(Side.RIGHT));
+//
+//            System.out.print("test: " + currentTest);
+//            if (oldExp == newExp)
+//                System.out.println(" OK");
+//            else
+//                System.out.println(" FAIL");
+//        }
+//
+//
     }
 }

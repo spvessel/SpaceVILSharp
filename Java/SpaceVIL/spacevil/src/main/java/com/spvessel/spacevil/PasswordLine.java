@@ -141,7 +141,8 @@ public class PasswordLine extends HorizontalStack {
 
         ImageItem eye = new ImageItem(DefaultsService.getDefaultImage(EmbeddedImage.EYE, EmbeddedImageSize.SIZE_32X32));
         eye.keepAspectRatio(true);
-        eye.setColorOverlay(new Color(80, 80, 80));
+        Color eyeBtnShadeColor = new Color(80, 80, 80);
+        eye.setColorOverlay(eyeBtnShadeColor);
         _show_pwd_btn.addItem(eye);
 
         _show_pwd_btn.setPassEvents(false);
@@ -151,11 +152,11 @@ public class PasswordLine extends HorizontalStack {
         });
         _show_pwd_btn.eventMouseClick.add((sender, args) -> {
             showPassword(false);
-            eye.setColorOverlay(new Color(80, 80, 80));
+            eye.setColorOverlay(eyeBtnShadeColor);
         });
         _show_pwd_btn.eventMouseLeave.add((sender, args) -> {
                 showPassword(false);
-                eye.setColorOverlay(new Color(80, 80, 80));
+                eye.setColorOverlay(eyeBtnShadeColor);
         });
     }
 

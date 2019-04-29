@@ -8,6 +8,19 @@ namespace SpaceVIL.Core
 {
     public class Pointer
     {
+        public Pointer()
+        {
+
+        }
+
+        public Pointer(int x, int y)
+        {
+            SetX(x);
+            SetY(y);
+        }
+
+        private const int defPointValue = -1;
+
         private bool _is_set = false;
 
         /// <summary>
@@ -17,7 +30,7 @@ namespace SpaceVIL.Core
         {
             return _is_set;
         }
-        private int X = -1;
+        private int X = defPointValue;
 
         /// <returns> X position of the pointer </returns>
         public int GetX()
@@ -31,7 +44,7 @@ namespace SpaceVIL.Core
             X = x;
         }
 
-        private int Y = -1;
+        private int Y = defPointValue;
 
         /// <returns> Y position of the pointer </returns>
         public int GetY()
@@ -44,8 +57,8 @@ namespace SpaceVIL.Core
         {
             Y = y;
         }
-        private int PrevX = -1;
-        private int PrevY = -1;
+        private int PrevX = defPointValue;
+        private int PrevY = defPointValue;
 
         /// <summary>
         /// Set pointer position
@@ -54,7 +67,7 @@ namespace SpaceVIL.Core
         /// <param name="y"> Y position of the pointer </param>
         public void SetPosition(float x, float y)
         {
-            if (PrevX == -1 || PrevY == -1)
+            if (PrevX == defPointValue || PrevY == defPointValue)
             {
                 PrevX = (int)x;
                 PrevY = (int)y;
@@ -76,7 +89,7 @@ namespace SpaceVIL.Core
         /// <param name="y"> Y position of the pointer </param>
         public void SetPosition(int x, int y)
         {
-            if (PrevX == -1 || PrevY == -1)
+            if (PrevX == defPointValue || PrevY == defPointValue)
             {
                 PrevX = x;
                 PrevY = y;
@@ -96,10 +109,10 @@ namespace SpaceVIL.Core
         /// </summary>
         public void Clear()
         {
-            PrevX = -1;
-            PrevY = -1;
-            X = -1;
-            Y = -1;
+            PrevX = defPointValue;
+            PrevY = defPointValue;
+            X = defPointValue;
+            Y = defPointValue;
             _is_set = false;
         }
     }

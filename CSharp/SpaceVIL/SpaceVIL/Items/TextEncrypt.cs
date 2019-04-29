@@ -276,10 +276,10 @@ namespace SpaceVIL
         {
             int coord = 0;
             if (_text_object.GetLetPosArray() == null) return coord;
-            int letCount = _text_object.GetLetPosArray().Count;
+            // int letCount = _text_object.GetLetPosArray().Count;
             //_cursor_position = (_cursor_position < 0) ? 0 : _cursor_position;
             //_cursor_position = (_cursor_position > letCount) ? letCount : _cursor_position;
-            //Console.WriteLine(cPos + " " + letCount);
+            
             if (cPos > 0)
             {
                 coord = _text_object.GetLetPosArray()[cPos - 1];
@@ -397,7 +397,7 @@ namespace SpaceVIL
         internal void SetFont(Font font)
         {
             _text_object.SetFont(font);
-            _substrate_text.SetFont(GraphicsMathService.ChangeFontFamily(font.FontFamily, _substrate_text.GetFont())); //new Font(font.FontFamily, _substrate_text.GetFont().Size, _substrate_text.GetFont().Style));
+            _substrate_text.SetFont(GraphicsMathService.ChangeFontFamily(font.FontFamily, _substrate_text.GetFont()));
         }
 
         internal void SetFontSize(int size)
@@ -530,9 +530,7 @@ namespace SpaceVIL
 
         public override void InitElements()
         {
-            // _cursor.IsVisible = false;
             //adding
-
             AddItems(_substrate_text, _selectedArea, _text_object, _cursor);
             // GetHandler().SetFocusedItem(this);
 
@@ -606,18 +604,6 @@ namespace SpaceVIL
             _selectTo = -1;// 0;
             _justSelected = false;
         }
-
-        //        private int NearestPosToCursor(double xPos)
-        //        {
-        //            List<int> endPos = _text_object.GetLetPosArray();
-        //            int pos = endPos.OrderBy(x => Math.Abs(x - xPos)).First();
-        //            return pos;
-        //        }
-
-        //internal void SetCursorPosition(double newPos)
-        //{
-        //    _cursor_position = NearestPosToCursor(newPos);
-        //}
 
         private string CutText()
         {

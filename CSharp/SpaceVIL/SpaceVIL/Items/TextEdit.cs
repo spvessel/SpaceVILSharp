@@ -756,26 +756,6 @@ namespace SpaceVIL
             _justSelected = false;
         }
 
-        /*
-        internal void ShowCursor(bool isShow) {
-            if (isShow)
-                _cursor.SetWidth(2);
-            else
-                _cursor.SetWidth(0);
-        }
-        */
-        // private int NearestPosToCursor(double xPos)
-        // {
-        //     List<int> endPos = _text_object.GetLetPosArray();
-        //     int pos = endPos.OrderBy(x => Math.Abs(x - xPos)).First();
-        //     return pos;
-        // }
-        /*
-                internal void SetCursorPosition(double newPos)
-                {
-                    _cursor_position = NearestPosToCursor(newPos);
-                }
-        */
         public override void Clear()
         {
             SetText("");

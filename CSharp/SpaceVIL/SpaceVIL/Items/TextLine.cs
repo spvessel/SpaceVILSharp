@@ -15,7 +15,7 @@ namespace SpaceVIL
     {
         private static int count = 0;
         private TextPrinter textPrt = new TextPrinter();
-        private Object textLock = new Object();
+        private readonly Object textLock = new Object();
         private bool flagBB = false;
 
         private List<int> _letEndPos;
@@ -219,7 +219,7 @@ namespace SpaceVIL
                                     widthTo = _parentAllowWidth - (modL.xBeg + modL.xShift + widthFrom - xFirstBeg); // + _lineXShift
                                 }
                             }
-                            byte[] bitmap = modL.getArr();
+                            byte[] bitmap = modL.GetArr();
                             if (bitmap == null)
                             {
                                 continue;
@@ -245,9 +245,11 @@ namespace SpaceVIL
                         }
                     }
                     flagBB = false;
-                    textPrt = new TextPrinter(cacheBB);
-                    textPrt.WidthTexture = bb_w;
-                    textPrt.HeightTexture = bb_h;
+                    textPrt = new TextPrinter(cacheBB)
+                    {
+                        WidthTexture = bb_w,
+                        HeightTexture = bb_h
+                    };
                 }
 
                 UpdateCoords();
@@ -259,6 +261,7 @@ namespace SpaceVIL
             }
         }
 
+        /*
         private int[] FindFirstLast(List<FontEngine.ModifyLetter> letList, int winWidth)
         { //, float someShift) {
             int firstInd = 0, lastInd = 0;
@@ -296,6 +299,7 @@ namespace SpaceVIL
 
             return new int[] { firstInd, lastInd, visWidth }; //, outShift};
         }
+        */
 
         private byte[] MakeSomeBig(int hgt, int wdt, int bigMinY, int firstInd, int lastInd)
         {
@@ -336,7 +340,7 @@ namespace SpaceVIL
                     }
                 }
 
-                byte[] bitmap = bigLet.getArr();
+                byte[] bitmap = bigLet.GetArr();
                 if (bitmap == null)
                 {
                     continue;
@@ -396,7 +400,6 @@ namespace SpaceVIL
 
         private void UpdateCoords()
         {
-            //AddAllShifts();
             if (_letters.Count() == 0)
                 return;
             int[] fontDims = GetFontDims();
@@ -486,22 +489,22 @@ namespace SpaceVIL
             return _lineXShift;
         }
 
-        internal float GetLineTopCoord()
-        {
-            float lineTopCoord = 0;
-            ItemAlignment alignments = GetTextAlignment();
-            int[] fontDims = GetFontDims();
-            float height = fontDims[2];
-            if (alignments.HasFlag(ItemAlignment.Bottom))
-                lineTopCoord = GetParent().GetHeight() - height;
+        // internal float GetLineTopCoord()
+        // {
+        //     float lineTopCoord = 0;
+        //     ItemAlignment alignments = GetTextAlignment();
+        //     int[] fontDims = GetFontDims();
+        //     float height = fontDims[2];
+        //     if (alignments.HasFlag(ItemAlignment.Bottom))
+        //         lineTopCoord = GetParent().GetHeight() - height;
 
-            else if (alignments.HasFlag(ItemAlignment.VCenter))
-                lineTopCoord = (GetParent().GetHeight() - height) / 2f;
+        //     else if (alignments.HasFlag(ItemAlignment.VCenter))
+        //         lineTopCoord = (GetParent().GetHeight() - height) / 2f;
 
-            lineTopCoord += _lineYShift - fontDims[1];
+        //     lineTopCoord += _lineYShift - fontDims[1];
 
-            return lineTopCoord;
-        }
+        //     return lineTopCoord;
+        // }
 
         internal int[] GetFontDims()
         {
@@ -516,10 +519,10 @@ namespace SpaceVIL
             SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
         }
 
-        internal void SetLineXShift()
-        {
-            SetLineXShift(_lineXShift);
-        }
+        // internal void SetLineXShift()
+        // {
+        //     SetLineXShift(_lineXShift);
+        // }
 
         internal void CheckXShift(int _cursorXMax)
         {
@@ -533,10 +536,10 @@ namespace SpaceVIL
             }
         }
 
-        internal void SetLineYShift()
-        {
-            SetLineYShift(_lineYShift);
-        }
+        // internal void SetLineYShift()
+        // {
+        //     SetLineYShift(_lineYShift);
+        // }
 
         internal void SetAllowWidth(int allowWidth)
         {

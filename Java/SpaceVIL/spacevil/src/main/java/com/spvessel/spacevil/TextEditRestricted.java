@@ -123,6 +123,8 @@ class TextEditRestricted extends TextEdit {
     private double step = 1;
     private String rou = "%.2f";
     private int signsCount = 2;
+    private int minSignsCount = 2;
+    private int maxSignsCount = 5;
 
     void setParameters(double currentValue, double minValue, double maxValue, double step) {
         this.currentValue = currentValue;
@@ -132,22 +134,26 @@ class TextEditRestricted extends TextEdit {
         inres = InputRestriction.DOUBLENUMBERS;
         updateCurrentValue();
 
-        String[] splitter = String.valueOf(currentValue).split("\\.");
         int i = 0;
+        String[] splitter = String.valueOf(currentValue).split("\\.");
         if (splitter.length > 1)
             i = splitter[1].length();
+
         splitter = String.valueOf(minValue).split("\\.");
         if (splitter.length > 1 && i < splitter[1].length())
             i = splitter[1].length();
+
         splitter = String.valueOf(maxValue).split("\\.");
         if (splitter.length > 1 && i < splitter[1].length())
             i = splitter[1].length();
+
         splitter = String.valueOf(step).split("\\.");
         if (splitter.length > 1 && i < splitter[1].length())
             i = splitter[1].length();
-        if (i < 2)
-            i = 2;
-        else if (i > 5) i = 5;
+
+        if (i < minSignsCount)
+            i = minSignsCount;
+        else if (i > maxSignsCount) i = maxSignsCount;
         signsCount = i;
         rou = "%." + String.valueOf(signsCount) + "f";
     }

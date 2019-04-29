@@ -122,6 +122,8 @@ namespace SpaceVIL
         private double step = 1;
         private String rou = "F2";
         private int signsCount = 2;
+        private int minSignsCount = 2;
+        private int maxSignsCount = 5;
 
         internal void SetParameters(double currentValue, double minValue, double maxValue, double step)
         {
@@ -131,22 +133,27 @@ namespace SpaceVIL
             this.step = step;
             inres = InputRestriction.DoubleNumbers;
             UpdateCurrentValue();
-            String[] splitter = (currentValue.ToString()).Split('.');
             int i = 0;
+            String[] splitter = (currentValue.ToString()).Split('.');
             if (splitter.Length > 1)
                 i = splitter[1].Length;
-            splitter = (minValue.ToString()).Split('.');
+
+            splitter = (minValue.ToString()).Split('.');            
             if (splitter.Length > 1 && i < splitter[1].Length)
                 i = splitter[1].Length;
-            splitter = (maxValue.ToString()).Split('.');
+
+            splitter = (maxValue.ToString()).Split('.');            
             if (splitter.Length > 1 && i < splitter[1].Length)
                 i = splitter[1].Length;
-            splitter = (step.ToString()).Split('.');
+
+            splitter = (step.ToString()).Split('.');            
             if (splitter.Length > 1 && i < splitter[1].Length)
                 i = splitter[1].Length;
-            if (i < 2)
-                i = 2;
-            else if (i > 5) i = 5;
+            
+            if (i < minSignsCount)
+                i = minSignsCount;
+            else if (i > maxSignsCount) i = maxSignsCount;
+
             signsCount = i;
             rou = "F" + (signsCount.ToString());
         }

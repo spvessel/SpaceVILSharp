@@ -13,11 +13,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 class Alphabet {
-    // Alphabet
-    // class Alphabet {
     Font font;
     private Map<Character, Letter> letters;
-    // internal Dictionary<char, ModifyLetter> newLetters;
     int alphMinY = Integer.MAX_VALUE;
     int alphMaxY = Integer.MIN_VALUE;
     int alphHeight = 0;
@@ -67,14 +64,12 @@ class Alphabet {
         alphMinY = (alphMinY > letter.minY) ? letter.minY : alphMinY;
         alphMaxY = (alphMaxY < letter.minY + letter.height - 1) ? letter.minY + letter.height - 1 : alphMaxY;
         alphHeight = Math.abs(alphMaxY - alphMinY + 1);
-        // if (font.getSize() == 18 && (alphMaxY == (letter.minY + letter.height - 1)))
-        // System.out.println(letter.name + " " + alphMaxY);
     }
 
     List<ModifyLetter> makeTextNew(String text) {
         List<ModifyLetter> letList = new LinkedList<>();
 
-        double err = 0.15; // переехало из буквы
+        double err = 0.25; // переехало из буквы
         int x0 = 0;
 
         Letter currLet;
@@ -223,7 +218,7 @@ class Alphabet {
         try {
             return new Letter(let, bi);
         } catch (Exception e) {
-            System.out.println("Bug letter exception");
+//            System.out.println("Bug letter exception");
             return bugLetter;
         }
     }
@@ -256,43 +251,15 @@ class Alphabet {
         bugLetter.minY = (int) (font.getSize() / 3f);// minY;
         bugLetter.isSpec = false;
         float[][] arr = new float[bugLetter.width][bugLetter.height];
-        // List<Float> col = new LinkedList<>();
-        // List<Float> pix = new LinkedList<>();
+        
         for (int i = 0; i < bugLetter.width; i++) {
             arr[i][0] = 1;
-            // col.add(1f);
-            // pix.add((float) bugLetter.minX + i);
-            // pix.add((float) bugLetter.minY);
-            // pix.add(0f);
             arr[i][bugLetter.height - 1] = 1;
-            // col.add(1f);
-            // pix.add((float) bugLetter.minX + i);
-            // pix.add((float) bugLetter.minY + bugLetter.height - 1);
-            // pix.add(0f);
         }
         for (int i = 1; i < bugLetter.height - 1; i++) {
             arr[0][i] = 1;
-            // col.add(1f);
-            // pix.add((float) bugLetter.minX);
-            // pix.add((float) bugLetter.minY + i);
-            // pix.add(0f);
             arr[bugLetter.width - 1][i] = 1;
-            // col.add(1f);
-            // pix.add((float) bugLetter.minX + bugLetter.width - 1);
-            // pix.add((float) bugLetter.minY + i);
-            // pix.add(0f);
-
         }
-
-        // bugLetter.alphas = arr;
-        // bugLetter.col.addAll(col);
-        // for (Float var : col) {
-        // bugLetter.col.add(var);
-        // }
-        // // bugLetter.pix.addAll(pix);
-        // for (Float var : pix) {
-        // bugLetter.pix.add(var);
-        // }
 
         bugLetter.twoDimToOne(arr);
     }
@@ -307,15 +274,9 @@ class Alphabet {
         boolean isSpec = false;
         float[][] leftArr;
         float[][] rightArr;
-        // List<Float> col;
-        // List<Float> pix;
         byte[] arr;
 
         Letter(String name, Shape shape) {// GraphicsPath shape) {
-            // System.out.println("make letter " + name);
-            // col = new LinkedList<>();
-            // pix = new LinkedList<>();
-
             this.name = name;
             if (shape != null)
                 makeLetterArrays(shape);
@@ -336,7 +297,7 @@ class Alphabet {
 
         void twoDimToOne(float[][] twoDim) {
             arr = new byte[(this.width * this.height) * 4];
-            // System.out.println(name + " width " + this.width + " " + this.height);
+            
             int i = 0;
             for (int xx = 0; xx < width; xx++) {
                 for (int yy = 0; yy < height; yy++) {
@@ -479,7 +440,7 @@ class Alphabet {
             // --------------------------------------------------------------------------------------
 
             arr = new byte[(this.width * this.height) * 4];
-            // System.out.println(name + " width " + this.width + " " + this.height);
+            
             int i = 0;
             for (int xx = x0shift; xx <= x1shift; xx++) {
                 for (int yy = y0shift; yy <= y1shift; yy++) {
@@ -493,15 +454,7 @@ class Alphabet {
                     i++;
                 }
             }
-            /*
-             * for (int xx = x0shift; xx <= x1shift; xx++) { for (int yy = y0shift; yy <=
-             * y1shift; yy++) {
-             * 
-             * if (alph[xx][yy] != 0) { col.add((float) alph[xx][yy]); pix.add((float) xx -
-             * x0shift); pix.add((float) yy - y0shift); pix.add(0f); }
-             * 
-             * } }
-             */
+            
             leftArr = new float[2][height];
             rightArr = new float[2][height];
             for (int yy = y0shift; yy <= y1shift; yy++) {
@@ -630,7 +583,7 @@ class Alphabet {
 
             this.height = y1shift - y0shift + 1;
             this.width = x1shift - x0shift + 1;
-            // System.out.println(name + " height " + y1shift + " " + y0shift);
+            
             // --------------------------------------------------------------------------------------
 
             arr = new byte[(this.width * this.height) * 4];

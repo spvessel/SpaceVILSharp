@@ -112,17 +112,17 @@ final class WContainer extends Prototype {
     }
 
     List<Side> getSides(float xpos, float ypos) {
-        if (xpos <= 5) {
+        if (xpos <= SpaceVILConstants.borderCursorTolerance) {
             _sides.add(Side.LEFT);
         }
-        if (xpos >= getWidth() - 5) {
+        if (xpos >= getWidth() - SpaceVILConstants.borderCursorTolerance) {
             _sides.add(Side.RIGHT);
         }
 
-        if (ypos <= 5) {
+        if (ypos <= SpaceVILConstants.borderCursorTolerance) {
             _sides.add(Side.TOP);
         }
-        if (ypos >= getHeight() - 5) {
+        if (ypos >= getHeight() - SpaceVILConstants.borderCursorTolerance) {
             _sides.add(Side.BOTTOM);
         }
 

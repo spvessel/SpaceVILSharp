@@ -150,7 +150,8 @@ namespace SpaceVIL
 
             ImageItem eye = new ImageItem(DefaultsService.GetDefaultImage(EmbeddedImage.Eye, EmbeddedImageSize.Size32x32));
             eye.KeepAspectRatio(true);
-            eye.SetColorOverlay(Color.FromArgb(80, 80, 80));
+            Color eyeBtnShadeColor = Color.FromArgb(80, 80, 80);
+            eye.SetColorOverlay(eyeBtnShadeColor);
             _show_pwd_btn.AddItem(eye);
 
             _show_pwd_btn.SetPassEvents(false);
@@ -162,12 +163,12 @@ namespace SpaceVIL
             _show_pwd_btn.EventMouseClick += (sender, args) =>
             {
                 ShowPassword(false);
-                eye.SetColorOverlay(Color.FromArgb(80, 80, 80));
+                eye.SetColorOverlay(eyeBtnShadeColor);
             };
             _show_pwd_btn.EventMouseLeave += (sender, args) =>
             {
                 ShowPassword(false);
-                eye.SetColorOverlay(Color.FromArgb(80, 80, 80));
+                eye.SetColorOverlay(eyeBtnShadeColor);
             };
         }
 

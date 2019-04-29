@@ -141,20 +141,20 @@ namespace SpaceVIL
 
         internal Side GetSides(float xpos, float ypos) //проблемы с глобальным курсором
         {
-            if (xpos <= 5)
+            if (xpos <= SpaceVILConstants.BorderCursorTolerance)
             {
                 _sides |= Side.Left;
             }
-            if (xpos >= GetWidth() - 5)
+            if (xpos >= GetWidth() - SpaceVILConstants.BorderCursorTolerance)
             {
                 _sides |= Side.Right;
             }
 
-            if (ypos <= 5)
+            if (ypos <= SpaceVILConstants.BorderCursorTolerance)
             {
                 _sides |= Side.Top;
             }
-            if (ypos >= GetHeight() - 5)
+            if (ypos >= GetHeight() - SpaceVILConstants.BorderCursorTolerance)
             {
                 _sides |= Side.Bottom;
             }

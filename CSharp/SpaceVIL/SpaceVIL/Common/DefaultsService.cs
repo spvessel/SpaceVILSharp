@@ -55,27 +55,27 @@ namespace SpaceVIL.Common
         //     return new Font(_default_font.FontFamily, 10, _default_font.Style);
         //     // return new Font(new FontFamily("Ubuntu"), 10, FontStyle.Regular);
         // }
-        public Font GetDefaultFont(int size = 12) //объекты не инициализируются почему-то, выяснить
+
+        private const int defFontSize = 12;
+        public Font GetDefaultFont(int size = defFontSize) //объекты не инициализируются почему-то, выяснить
         {
-            // Console.WriteLine(size);
             if (size == 0)
             {
-                size = 12;
+                size = defFontSize;
             }
             if (_default_font == null)
             {
                 AddFontFromMemory();
-                _default_font = new Font(privateFontCollection.Families[0], 12, FontStyle.Regular);
+                _default_font = new Font(privateFontCollection.Families[0], defFontSize, FontStyle.Regular);
             }
             return GraphicsMathService.ChangeFontSize(size, _default_font); //new Font(_default_font.FontFamily, size, _default_font.Style);
             // return new Font(new FontFamily("Ubuntu"), size, FontStyle.Regular);
         }
         public Font GetDefaultFont(FontStyle style, int size)
         {
-            // Console.WriteLine(size);
             if (size == 0)
             {
-                size = 10;
+                size = defFontSize;
             }
             if (_default_font == null)
             {
@@ -146,7 +146,6 @@ namespace SpaceVIL.Common
 
     public static class DefaultsService
     {
-
         private static CursorImage _defaultCursor = new CursorImage(EmbeddedCursor.Arrow);
 
         public static void SetDefaultCursor(CursorImage cursor)
