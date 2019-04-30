@@ -14,13 +14,6 @@ class EventManager {
     //protected static Boolean isLocked = true;
     private Map<GeometryEventType, List<InterfaceEventUpdate>> listeners = new HashMap<>();
 
-    void setListeners(GeometryEventType... events) {
-        List<GeometryEventType> list = Arrays.stream(events).collect(Collectors.toList());
-        for (GeometryEventType s : list) {
-            listeners.put(s, new LinkedList<InterfaceEventUpdate>());
-        }
-    }
-
     void subscribe(GeometryEventType type, InterfaceEventUpdate listener) {
         if (!listeners.containsKey(type))
             listeners.put(type, new LinkedList<InterfaceEventUpdate>());

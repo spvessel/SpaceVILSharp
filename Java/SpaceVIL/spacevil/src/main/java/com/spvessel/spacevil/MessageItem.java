@@ -27,7 +27,7 @@ public class MessageItem extends DialogItem {
     ButtonCore _userButtonResult = null;
 
     public int getUserButtonResult() {
-        if (_userMap.containsKey(_userButtonResult))
+        if (_userButtonResult != null && _userMap.containsKey(_userButtonResult))
             return _userMap.get(_userButtonResult);
         return -1;
     }

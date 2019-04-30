@@ -81,8 +81,9 @@ abstract public class Prototype implements InterfaceBaseItem {
         eventFocusLost.clear();
         eventResize.clear();
         eventDestroy.clear();
-
+        
         eventMouseHover.clear();
+        eventMouseLeave.clear();
         eventMouseClick.clear();
         eventMouseDoubleClick.clear();
         eventMousePress.clear();
@@ -93,8 +94,25 @@ abstract public class Prototype implements InterfaceBaseItem {
 
         eventKeyPress.clear();
         eventKeyRelease.clear();
-
+        
         eventTextInput.clear();
+
+        eventFocusGet = null;
+        eventFocusLost = null;
+        eventResize = null;
+        eventDestroy = null;
+        eventMouseHover = null;
+        eventMouseLeave = null;
+        eventMouseClick = null;
+        eventMouseDoubleClick = null;
+        eventMousePress = null;
+        eventMouseDrag = null;
+        eventMouseDrop = null;
+        eventScrollUp = null;
+        eventScrollDown = null;
+        eventKeyPress = null;
+        eventKeyRelease = null;
+        eventTextInput = null;
     }
 
     public void release() {

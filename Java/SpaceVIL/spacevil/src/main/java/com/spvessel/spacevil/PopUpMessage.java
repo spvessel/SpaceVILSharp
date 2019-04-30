@@ -43,10 +43,7 @@ public class PopUpMessage extends Prototype {
         _text_object = new Label();
         _text_object.setText(message);
 
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.PopUpMessage"));
-        setShadow(10, 3, 3, new Color(0, 0, 0, 140));
         setStyle(DefaultsService.getDefaultStyle(PopUpMessage.class));
-        // handler.getWindow().addItem(this);
         setPassEvents(false);
     }
 

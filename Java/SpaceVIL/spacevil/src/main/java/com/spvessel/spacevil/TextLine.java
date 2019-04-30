@@ -349,6 +349,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     private void updateCoords() {
         // if (_letters == null)
         //     return;
+        if (getParent() == null)
+            return;
 
         if (_letters.size() == 0)
             return;

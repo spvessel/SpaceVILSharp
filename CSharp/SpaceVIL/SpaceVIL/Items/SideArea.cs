@@ -103,7 +103,8 @@ namespace SpaceVIL
 
         public SideArea(CoreWindow handler, Side attachSide)
         {
-            SetHandler(handler);
+            ItemsLayoutBox.AddItem(handler, this, LayoutType.Floating);
+
             SetItemName("SideArea_" + count++);
             _close = new ButtonCore();
             Window = new ResizableItem();
@@ -114,7 +115,6 @@ namespace SpaceVIL
             {
                 Hide();
             };
-            ItemsLayoutBox.AddItem(GetHandler(), this, LayoutType.Floating);
             SetVisible(false);
             SetPassEvents(false);
 

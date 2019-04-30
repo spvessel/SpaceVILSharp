@@ -314,7 +314,7 @@ public abstract class CoreWindow {
     public boolean isFocusable;
     public boolean isOutsideClickClosable;
     public boolean isMaximized;
-    public boolean isTransparent;
+    boolean isTransparent;
 
     public boolean isFocused;
 

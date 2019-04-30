@@ -30,7 +30,7 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs a ButtonToggle with text
         /// </summary>
-        public ButtonToggle(String text = "") : this()
+        public ButtonToggle(String text) : this()
         {
             SetText(text);
         }
@@ -86,6 +86,10 @@ namespace SpaceVIL
         {
             _text_object.SetMargin(margin);
         }
+        public Indents GetTextMargin()
+        {
+            return _text_object.GetMargin();
+        }
 
         /// <summary>
         /// Text font parameters in the ButtonToggle
@@ -114,13 +118,21 @@ namespace SpaceVIL
         /// <summary>
         /// Set text in the ButtonToggle
         /// </summary>
-        public void SetText(String text)
+        public virtual void SetText(String text)
         {
             _text_object.SetItemText(text);
         }
-        public String GetText()
+        public virtual String GetText()
         {
             return _text_object.GetItemText();
+        }
+        public int GetTextWidth()
+        {
+            return _text_object.GetWidth();
+        }
+        public int GetTextHeight()
+        {
+            return _text_object.GetHeight();
         }
 
         /// <summary>
@@ -156,17 +168,7 @@ namespace SpaceVIL
         /// </summary>
         public override void InitElements()
         {
-            //text
-            // _text_object.SetAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
-
-            //aligment
-            // SetTextAlignment(ItemAlignment.HCenter | ItemAlignment.VCenter);
-
-            //adding
             AddItem(_text_object);
-
-            //update text data
-            //_text_object.UpdateData(UpdateType.Critical);
         }
 
         //style

@@ -2,6 +2,7 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
+import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -96,8 +97,6 @@ public abstract class BaseItem implements InterfaceBaseItem {
      * Item will not react on parent's changes
      */
     public void removeItemFromListeners() {
-        // if (getParent() == null)
-        //     return;
         getParent().removeEventListener(GeometryEventType.RESIZE_WIDTH, this);
         getParent().removeEventListener(GeometryEventType.RESIZE_HEIGHT, this);
         getParent().removeEventListener(GeometryEventType.MOVED_X, this);
@@ -495,6 +494,35 @@ public abstract class BaseItem implements InterfaceBaseItem {
     public void setWidthPolicy(SizePolicy policy) {
         if (_itemBehavior.getWidthPolicy() != policy) {
             _itemBehavior.setWidthPolicy(policy);
+
+            if (this instanceof VisualItem) {
+                VisualItem vItem = (VisualItem) this;
+                Prototype protoItem = vItem._main;
+
+                if (protoItem instanceof InterfaceFloating) {
+                    if (policy == SizePolicy.EXPAND)
+                        ItemsLayoutBox.subscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_WIDTH);
+                    else
+                        ItemsLayoutBox.unsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_WIDTH);
+                    updateGeometry();
+                }
+            }
+
+            if (getParent() != null) {
+                boolean hLayout = getParent() instanceof InterfaceHLayout;
+                boolean vLayout = getParent() instanceof InterfaceVLayout;
+                boolean grid = getParent() instanceof InterfaceGrid;
+
+                if (!hLayout && !vLayout && !grid)
+                    updateBehavior();
+
+                if (hLayout)
+                    ((InterfaceHLayout) getParent()).updateLayout();
+                if (vLayout)
+                    ((InterfaceVLayout) getParent()).updateLayout();
+                if (grid)
+                    ((InterfaceGrid) getParent()).updateLayout();
+            }
         }
     }
 
@@ -505,6 +533,35 @@ public abstract class BaseItem implements InterfaceBaseItem {
     public void setHeightPolicy(SizePolicy policy) {
         if (_itemBehavior.getHeightPolicy() != policy) {
             _itemBehavior.setHeightPolicy(policy);
+
+            if (this instanceof VisualItem) {
+                VisualItem vItem = (VisualItem) this;
+                Prototype protoItem = vItem._main;
+
+                if (protoItem instanceof InterfaceFloating) {
+                    if (policy == SizePolicy.EXPAND)
+                        ItemsLayoutBox.subscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_HEIGHT);
+                    else
+                        ItemsLayoutBox.unsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.RESIZE_HEIGHT);
+                    updateGeometry();
+                }
+            }
+
+            if (getParent() != null) {
+                boolean hLayout = getParent() instanceof InterfaceHLayout;
+                boolean vLayout = getParent() instanceof InterfaceVLayout;
+                boolean grid = getParent() instanceof InterfaceGrid;
+
+                if (!hLayout && !vLayout && !grid)
+                    updateBehavior();
+
+                if (hLayout)
+                    ((InterfaceHLayout) getParent()).updateLayout();
+                if (vLayout)
+                    ((InterfaceVLayout) getParent()).updateLayout();
+                if (grid)
+                    ((InterfaceGrid) getParent()).updateLayout();
+            }
         }
     }
 
@@ -853,6 +910,14 @@ public abstract class BaseItem implements InterfaceBaseItem {
         _shadow_pos.setY(y);
     }
 
+    public void setShadow(Shadow shadow) {
+        _is_shadow_drop = shadow.isDrop();
+        _shadow_radius = shadow.getRadius();
+        _shadow_color = shadow.getColor();
+        _shadow_pos.setX(shadow.getXOffset());
+        _shadow_pos.setY(shadow.getYOffset());
+    }
+
     // update
 
     /**
@@ -878,5 +943,6 @@ public abstract class BaseItem implements InterfaceBaseItem {
         return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
     }
 
-    public void release() { }
+    public void release() {
+    }
 }

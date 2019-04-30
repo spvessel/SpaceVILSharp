@@ -116,6 +116,10 @@ namespace SpaceVIL
         {
             _text_object.SetMargin(margin);
         }
+        public Indents GetTextMargin()
+        {
+            return _text_object.GetMargin();
+        }
 
         /// <summary>
         /// Text font parameters in the CheckBox
@@ -144,14 +148,23 @@ namespace SpaceVIL
         /// <summary>
         /// Set text in the CheckBox
         /// </summary>
-        public void SetText(String text)
+        public virtual void SetText(String text)
         {
             _text_object.SetItemText(text);
         }
-        public String GetText()
+        public virtual String GetText()
         {
             return _text_object.GetText();
         }
+        public int GetTextWidth()
+        {
+            return _text_object.GetWidth();
+        }
+        public int GetTextHeight()
+        {
+            return _text_object.GetHeight();
+        }
+        
 
         /// <summary>
         /// Text color in the CheckBox

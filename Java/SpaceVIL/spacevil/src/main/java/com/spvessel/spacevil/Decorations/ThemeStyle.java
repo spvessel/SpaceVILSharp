@@ -100,6 +100,7 @@ public class ThemeStyle {
             defaultItemsStyle.put(SideArea.class, Style.getSideAreaStyle());
             defaultItemsStyle.put(ImageItem.class, Style.getImageItemStyle());
             defaultItemsStyle.put(LoadingScreen.class, Style.getLoadingScreenStyle());
+            defaultItemsStyle.put(Tab.class, Style.getTabStyle());
         }
     }
 

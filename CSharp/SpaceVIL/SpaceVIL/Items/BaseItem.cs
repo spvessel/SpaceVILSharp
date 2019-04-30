@@ -104,10 +104,8 @@ namespace SpaceVIL
         /// <summary>
         /// Item will not react on parent's changes
         /// </summary>
-        public void RemoveItemFromListeners()
+        public virtual void RemoveItemFromListeners()
         {
-            // if (GetParent() == null)
-            //     return;
             GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this);
             GetParent().RemoveEventListener(GeometryEventType.ResizeHeight, this);
             GetParent().RemoveEventListener(GeometryEventType.Moved_X, this);
@@ -526,6 +524,39 @@ namespace SpaceVIL
             if (_itemBehavior.GetWidthPolicy() != policy)
             {
                 _itemBehavior.SetWidthPolicy(policy);
+
+                VisualItem vItem = this as VisualItem;
+                Prototype protoItem = null;
+                if(vItem != null)
+                    protoItem = vItem._main;
+                IFloating floatingItem = protoItem as IFloating;
+                if (floatingItem != null)
+                {
+                    if (policy == SizePolicy.Expand)
+                        ItemsLayoutBox.SubscribeWindowSizeMonitoring(protoItem, GeometryEventType.ResizeWidth);
+                    else
+                        ItemsLayoutBox.UnsubscribeWindowSizeMonitoring(protoItem, GeometryEventType.ResizeWidth);
+                    UpdateGeometry();
+                }
+
+                if (GetParent() != null)
+                {
+                    var hLayout = GetParent() as IHLayout;
+                    var vLayout = GetParent() as IVLayout;
+                    var grid = GetParent() as IGrid;
+
+                    if (hLayout == null
+                    && vLayout == null
+                    && grid == null)
+                        UpdateBehavior();
+
+                    if (hLayout != null)
+                        hLayout.UpdateLayout();
+                    if (vLayout != null)
+                        vLayout.UpdateLayout();
+                    if (grid != null)
+                        grid.UpdateLayout();
+                }
             }
         }
         public SizePolicy GetWidthPolicy()
@@ -537,6 +568,40 @@ namespace SpaceVIL
             if (_itemBehavior.GetHeightPolicy() != policy)
             {
                 _itemBehavior.SetHeightPolicy(policy);
+
+                VisualItem vItem = this as VisualItem;
+                Prototype protoItem = null;
+                if (vItem != null)
+                    protoItem = vItem._main;
+                IFloating floatingItem = protoItem as IFloating;
+                if (floatingItem != null)
+                {
+                    if (policy == SizePolicy.Expand)
+                        ItemsLayoutBox.SubscribeWindowSizeMonitoring(this, GeometryEventType.ResizeHeight);
+                    else
+                        ItemsLayoutBox.UnsubscribeWindowSizeMonitoring(this, GeometryEventType.ResizeHeight);
+
+                    UpdateGeometry();
+                }
+
+                if (GetParent() != null)
+                {
+                    var hLayout = GetParent() as IHLayout;
+                    var vLayout = GetParent() as IVLayout;
+                    var grid = GetParent() as IGrid;
+
+                    if (hLayout == null
+                    && vLayout == null
+                    && grid == null)
+                        UpdateBehavior();
+
+                    if (hLayout != null)
+                        hLayout.UpdateLayout();
+                    if (vLayout != null)
+                        vLayout.UpdateLayout();
+                    if (grid != null)
+                        grid.UpdateLayout();
+                }
             }
         }
         public SizePolicy GetHeightPolicy()
@@ -897,6 +962,14 @@ namespace SpaceVIL
             _shadow_color = color;
             _shadow_pos.SetX(x);
             _shadow_pos.SetY(y);
+        }
+        public void SetShadow(Shadow shadow)
+        {
+            _is_shadow_drop = shadow.IsDrop();
+            _shadow_radius = shadow.GetRadius();
+            _shadow_color = shadow.GetColor();
+            _shadow_pos.SetX(shadow.GetXOffset());
+            _shadow_pos.SetY(shadow.GetYOffset());
         }
 
         //update

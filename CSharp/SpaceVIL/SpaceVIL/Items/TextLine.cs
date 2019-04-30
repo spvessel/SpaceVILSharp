@@ -152,8 +152,8 @@ namespace SpaceVIL
                     base.SetHeight(height);
                 }
 
-                // if (GetParent() == null) //Вроде не очень-то и нужно
-                //     return null;
+                if (GetParent() == null) //Вроде не очень-то и нужно
+                    return null;
 
                 if (_isRecountable)
                 {
@@ -400,6 +400,10 @@ namespace SpaceVIL
 
         private void UpdateCoords()
         {
+            // if (GetParent() == null)
+            //     return;
+
+            //AddAllShifts();
             if (_letters.Count() == 0)
                 return;
             int[] fontDims = GetFontDims();

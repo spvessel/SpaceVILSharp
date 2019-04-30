@@ -134,7 +134,8 @@ namespace SpaceVIL
             // UpdateGeometry();
         }
         internal EventManager eventManager = null;
-        private List<IBaseItem> _content = new List<IBaseItem>();
+        // private List<IBaseItem> _content = new List<IBaseItem>();
+        private LinkedHashSet<IBaseItem> _content = new LinkedHashSet<IBaseItem>();
         internal virtual List<IBaseItem> GetItems()
         {
             Monitor.Enter(Locker);
@@ -157,7 +158,8 @@ namespace SpaceVIL
             Monitor.Enter(Locker);
             try
             {
-                _content = content;
+                // _content = content;
+                _content = new LinkedHashSet<IBaseItem>(content);
             }
             catch (Exception ex)
             {
@@ -188,6 +190,15 @@ namespace SpaceVIL
             else
                 (item as BaseItem).RemoveItemFromListeners();
         }
+        
+        public override void RemoveItemFromListeners()
+        {
+            GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this._main);
+            GetParent().RemoveEventListener(GeometryEventType.ResizeHeight, this._main);
+            GetParent().RemoveEventListener(GeometryEventType.Moved_X, this._main);
+            GetParent().RemoveEventListener(GeometryEventType.Moved_Y, this._main);
+        }
+
         internal virtual void AddItem(IBaseItem item)
         {
             Monitor.Enter(Locker);
@@ -247,7 +258,11 @@ namespace SpaceVIL
                 if (index > _content.Count)
                     _content.Add(item);
                 else
-                    _content.Insert(index, item);
+                {
+                    List<IBaseItem> list = new List<IBaseItem>(_content);
+                    list.Insert(index, item);
+                    _content = new LinkedHashSet<IBaseItem>(list);
+                }
                 ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
                 //needs to force update all attributes
                 CastAndUpdate(item);
@@ -284,6 +299,8 @@ namespace SpaceVIL
             Monitor.Enter(Locker);
             try
             {
+                if (!_content.Contains(item))
+                    return false;
                 //reset focus
                 Prototype tmp = item as Prototype;
                 if (tmp != null)
@@ -926,18 +943,11 @@ namespace SpaceVIL
             return GraphicsMathService.ToGL(this as IBaseItem, GetHandler());
         }
 
-        //style
-        // internal bool _is_style_Set = false;
-        // internal virtual void SetInnerStyle(String element, Style style)
-        // {
-
-        // }
         public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
 
-            // _is_style_Set = true;
             SetPosition(style.X, style.Y);
             SetSize(style.Width, style.Height);
             SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
@@ -954,6 +964,10 @@ namespace SpaceVIL
             SetBorderRadius(style.BorderRadius);
             SetBorderThickness(style.BorderThickness);
             SetBorderFill(style.BorderFill);
+
+            SetShadow(style.ShadowRadius, style.ShadowXOffset, style.ShadowYOffset, style.ShadowColor);
+            SetShadowDrop(style.IsShadowDrop);
+
             SetVisible(style.IsVisible);
             RemoveAllItemStates();
 
@@ -970,7 +984,6 @@ namespace SpaceVIL
             {
                 IsCustom = new CustomFigure(style.IsFixedShape, style.Shape);
                 core_state.Shape = IsCustom;
-                // GetState(ItemStateType.Base).Shape = IsCustom;
             }
             AddItemState(ItemStateType.Base, core_state);
         }

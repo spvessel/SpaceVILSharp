@@ -331,6 +331,10 @@ public class TreeItem extends Prototype {
         _text_object.setMargin(margin);
     }
 
+    public Indents getTextMargin() {
+        return _text_object.getMargin();
+    }
+
     /**
      * Text font parameters in the TreeItem
      */

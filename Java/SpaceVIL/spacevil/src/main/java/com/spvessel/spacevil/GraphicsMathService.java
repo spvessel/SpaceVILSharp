@@ -25,24 +25,41 @@ public final class GraphicsMathService {
         if (colors.length == 1)
             return colors[0];
 
-        float r = 0, g = 0, b = 0, a = 0.0f; // 255.0f;
+        float r = 0, g = 0, b = 0, a = 0.0f;
 
         for (Color item : colors) {
-            if (item == null)
+            if (item == null || item.getAlpha() == 0)
                 continue;
+
             if (item.getAlpha() == 255) // exchange
             {
                 r = item.getRed();
                 g = item.getGreen();
                 b = item.getBlue();
                 a = 255.0f;
-            } else // mixing
-            {
-                r = r * (1.0f - item.getAlpha() / 255.0f) + item.getRed() * (item.getAlpha() / 255.0f);
-                g = g * (1.0f - item.getAlpha() / 255.0f) + item.getGreen() * (item.getAlpha() / 255.0f);
-                b = b * (1.0f - item.getAlpha() / 255.0f) + item.getBlue() * (item.getAlpha() / 255.0f);
-                if (a < 255)
-                    a = a * (1.0f - item.getAlpha() / 255.0f) + item.getAlpha() * (item.getAlpha() / 255.0f);
+            } else { // mixing
+                float alpha = item.getAlpha() / 255.0f;
+                float notAlpha = 1.0f - alpha;
+
+                if (r == 0.0f)
+                    r = item.getRed();
+                else
+                    r = r * notAlpha + item.getRed() * alpha;
+
+                if (g == 0.0f)
+                    g = item.getGreen();
+                else
+                    g = g * notAlpha + item.getGreen() * alpha;
+
+                if (b == 0.0f)
+                    b = item.getBlue();
+                else
+                    b = b * notAlpha + item.getBlue() * alpha;
+
+                if (a == 0.0f)
+                    a = item.getAlpha();
+                else if (a < 255.0f)
+                    a = a * notAlpha + item.getAlpha() * alpha;
             }
         }
         return new Color((int) r, (int) g, (int) b, (int) a);
@@ -931,7 +948,8 @@ public final class GraphicsMathService {
     }
 
     public static Font changeFontSize(int size, Font oldFont) {
-        return new Font(oldFont.getFamily(), oldFont.getStyle(), size);//oldFont.getName(), oldFont.getStyle(), size); //
+        return new Font(oldFont.getFamily(), oldFont.getStyle(), size);// oldFont.getName(), oldFont.getStyle(), size);
+                                                                       // //
     }
 
     public static Font changeFontStyle(int style, Font oldFont) {

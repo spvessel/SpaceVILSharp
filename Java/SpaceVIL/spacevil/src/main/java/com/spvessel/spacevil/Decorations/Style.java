@@ -49,6 +49,11 @@ public class Style implements Cloneable {
     public Color borderFill = new Color(0, 0, 0, 0);
     public List<float[]> shape;// = new List<float[]>();
     public List<InterfaceBaseItem> innerShapes;// = new List<float[]>();
+    public int shadowRadius;
+    public int shadowXOffset;
+    public int shadowYOffset;
+    public boolean isShadowDrop = false;
+    public Color shadowColor;
     public boolean isFixedShape = false;
     public boolean isVisible;
 
@@ -230,6 +235,13 @@ public class Style implements Cloneable {
         borderThickness = thickness;
     }
 
+    public void setShadow(Shadow shadow) {
+        shadowColor = shadow.getColor();
+        shadowRadius = shadow.getRadius();
+        shadowXOffset = shadow.getXOffset();
+        shadowYOffset = shadow.getYOffset();
+    }
+
     /**
      * Set object alignment
      */
@@ -368,6 +380,15 @@ public class Style implements Cloneable {
         if (borderRadius != null)
             style.borderRadius = new CornerRadius(borderRadius.leftTop, borderRadius.rightTop, borderRadius.leftBottom,
                     borderRadius.rightBottom);
+
+        if (shadowColor != null)
+            style.shadowColor = new Color(shadowColor.getRed(), shadowColor.getGreen(), shadowColor.getBlue(),
+                    shadowColor.getAlpha());
+        style.shadowRadius = shadowRadius;
+        style.shadowXOffset = shadowXOffset;
+        style.shadowYOffset = shadowYOffset;
+        style.isShadowDrop = isShadowDrop;
+
         if (shape != null)
             style.shape = new LinkedList<>(shape);
         if (innerShapes != null)
@@ -613,6 +634,8 @@ public class Style implements Cloneable {
         style.widthPolicy = SizePolicy.FIXED;
         style.heightPolicy = SizePolicy.FIXED;
         style.padding = new Indents(0, 0, 0, 0);
+        style.setShadow(new Shadow(5, 3, 3, new Color(0, 0, 0, 180)));
+        style.isShadowDrop = true;
 
         Style itemlist_style = getListBoxStyle();
         itemlist_style.background = new Color(0, 0, 0, 0);
@@ -1434,6 +1457,8 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.FIXED;
         style.padding = new Indents(5, 5, 5, 5);
         style.margin = new Indents(10, 10, 10, 10);
+        style.setShadow(new Shadow(10, 3, 3, new Color(0, 0, 0, 140)));
+        style.isShadowDrop = true;
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 3);
         style.addItemState(ItemStateType.HOVERED, hovered);
@@ -1584,40 +1609,20 @@ public class Style implements Cloneable {
      * @return default style for TabView objects
      */
     public static Style getTabViewStyle() {
-        Style style = new Style();
-
+        Style style = getVerticalStackStyle();
         style.background = new Color(50, 50, 50);
-        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        style.spacing = new Spacing(0, 0);
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
-        Style view_style = new Style();
-        view_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-        view_style.background = new Color(71, 71, 71);
-        view_style.isVisible = false;
-        view_style.padding = new Indents(2, 2, 2, 2);
-        view_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        view_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
-        style.addInnerStyle("tabview", view_style);
+        Style tabBarStyle = getHorizontalStackStyle();
+        tabBarStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        tabBarStyle.height = 30;
+        style.addInnerStyle("tabbar", tabBarStyle);
 
-        Style tab_style = new Style();
-        tab_style.font = DefaultsService.getDefaultFont(14);
-        tab_style.background = new Color(0, 0, 0, 0);
-        tab_style.foreground = new Color(210, 210, 210);
-        tab_style.width = 100;
-        tab_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
-        tab_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        tab_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        tab_style.padding = new Indents(2, 2, 2, 2);
-
-        ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 80);
-        tab_style.addItemState(ItemStateType.HOVERED, hovered);
-        ItemState toggled = new ItemState();
-        toggled.background = new Color(71, 71, 71);
-        tab_style.addItemState(ItemStateType.TOGGLED, toggled);
-
+        Style tab_style = getTabStyle();
         style.addInnerStyle("tab", tab_style);
+
+        Style view_style = tab_style.getInnerStyle("view");
+        if (view_style != null)
+            style.addInnerStyle("view", view_style);
 
         return style;
     }
@@ -1646,7 +1651,7 @@ public class Style implements Cloneable {
         style.padding = new Indents(5, 0, 0, 0);
         style.margin = new Indents(0, 0, 0, 0);
         ItemState hovered = new ItemState();
-        hovered.background = new Color(255, 255, 255, 130);
+        hovered.background = new Color(255, 255, 255, 30);
         style.addItemState(ItemStateType.HOVERED, hovered);
 
         Style indicator_style = new Style();
@@ -1757,6 +1762,8 @@ public class Style implements Cloneable {
         window_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         window_style.setPadding(2, 2, 2, 2);
         window_style.setBackground(45, 45, 45);
+        window_style.setShadow(new Shadow(5, 3, 3, new Color(0, 0, 0, 180)));
+        window_style.isShadowDrop = true;
 
         style.addInnerStyle("window", window_style);
 
@@ -1786,6 +1793,8 @@ public class Style implements Cloneable {
         ok_style.setBackground(100, 255, 150);
         ok_style.setSize(100, 30);
         ok_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        ok_style.setShadow(new Shadow(5, 0, 4, new Color(0, 0, 0, 120)));
+        ok_style.isShadowDrop = true;
         style.addInnerStyle("button", ok_style);
 
         Style toolbar_style = getHorizontalStackStyle();
@@ -1843,7 +1852,7 @@ public class Style implements Cloneable {
         style.font = DefaultsService.getDefaultFont();
         style.setForeground(210, 210, 210);
         style.setPadding(10, 0, 0, 0);
-        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 130)));
+        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 30)));
 
         Style icon_style = getFrameStyle();
         icon_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
@@ -2000,6 +2009,8 @@ public class Style implements Cloneable {
         ok_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
         ok_style.setMargin(0, 0, 0, 0);
         ok_style.borderRadius = new CornerRadius();
+        ok_style.setShadow(new Shadow(5, 0, 4, new Color(0, 0, 0, 150)));
+        ok_style.isShadowDrop = true;
         ok_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
         style.addInnerStyle("button", ok_style);
 
@@ -2132,6 +2143,47 @@ public class Style implements Cloneable {
         Style image_style = getImageItemStyle();
         image_style.setMaxSize(64, 64);
         style.addInnerStyle("image", image_style);
+
+        return style;
+    }
+
+    public static Style getTabStyle() {
+        Style style = new Style();
+        style.borderRadius = new CornerRadius(3, 3, 0, 0);
+        style.font = DefaultsService.getDefaultFont(14);
+        style.background = new Color(0, 0, 0, 0);
+        style.setForeground(210, 210, 210);
+        style.minWidth = 70;
+        // style.maxWidth = 200;
+        style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
+        style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        style.padding = new Indents(0, 0, 0, 0);
+        style.padding = new Indents(10, 2, 5, 2);
+        style.spacing = new Spacing(5, 0);
+        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 20)));
+        style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(71, 71, 71)));
+        style.setShadow(new Shadow(5, 2, -1, new Color(0, 0, 0, 150)));
+        style.isShadowDrop = false;
+
+        Style textStyle = getLabelStyle();
+        style.addInnerStyle("text", textStyle);
+
+        Style close_style = new Style();
+        close_style.setBackground(100, 100, 100);
+        close_style.setSize(10, 10);
+        close_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        close_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
+        close_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 162, 232)));
+        close_style.shape = GraphicsMathService.getCross(10, 10, 2, 45);
+        close_style.isFixedShape = true;
+        style.addInnerStyle("closebutton", close_style);
+
+        Style view_style = new Style();
+        view_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        view_style.background = new Color(71, 71, 71);
+        view_style.isVisible = false;
+        view_style.padding = new Indents(2, 2, 2, 2);
+        style.addInnerStyle("view", view_style);
 
         return style;
     }

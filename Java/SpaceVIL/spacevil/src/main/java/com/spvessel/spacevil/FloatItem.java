@@ -9,7 +9,7 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class FloatItem extends Prototype implements InterfaceFloating, InterfaceDraggable {
     private int _stored_offset = 0;
-    private boolean IsFloating = true;
+    public boolean IsFloating = true;
     private boolean _init = false;
     private static int count = 0;
     private int _diff_x = 0;
@@ -33,15 +33,12 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
      * @param handler parent window for the FloatItem
      */
     public FloatItem(CoreWindow handler) {
+        ItemsLayoutBox.addItem(handler, this, LayoutType.FLOATING);
         setVisible(false);
-        setHandler(handler);
-        setItemName("FloatItem_" + count);
+        setItemName("FloatItem_" + count++);
         setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         eventMousePress.add(this::onMousePress);
         eventMouseDrag.add(this::onDragging);
-        count++;
-        
-        ItemsLayoutBox.addItem(getHandler(), this, LayoutType.FLOATING);
     }
 
     /**
