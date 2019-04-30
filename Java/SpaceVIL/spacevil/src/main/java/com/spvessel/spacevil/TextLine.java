@@ -135,7 +135,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 super.setHeight(height);
             }
 
-            if (getParent() == null) //Вроде не очень-то и нужно
+            Prototype parent = getParent();
+            if (parent == null) //Вроде не очень-то и нужно
                 return null;
 
             if (_isRecountable) {
@@ -220,7 +221,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 textPrt.widthTexture = bb_w;
                 textPrt.heightTexture = bb_h;
             }
-            updateCoords();
+            updateCoords(parent);
             return textPrt;
         } finally {
             textLock.unlock();
@@ -346,12 +347,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         }
     }
 
-    private void updateCoords() {
-        // if (_letters == null)
-        //     return;
-//        if (getParent() == null)
-//            return;
-
+    private void updateCoords(Prototype parent) {
         if (_letters.size() == 0)
             return;
         int[] fontDims = getFontDims();
@@ -364,29 +360,29 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         int _lineWidth = getWidth();
         // Horizontal
         if (alignments.contains(ItemAlignment.LEFT) || (_lineWidth >= _parentAllowWidth)) {
-            alignShiftX = getParent().getPadding().left + getMargin().left + cursorWidth;
+            alignShiftX = parent.getPadding().left + getMargin().left + cursorWidth;
         } else if (alignments.contains(ItemAlignment.RIGHT) && (_lineWidth < _parentAllowWidth))
-            alignShiftX = getParent().getWidth() - _lineWidth - getParent().getPadding().right - getMargin().right - cursorWidth;
+            alignShiftX = parent.getWidth() - _lineWidth - parent.getPadding().right - getMargin().right - cursorWidth;
 
         else if (alignments.contains(ItemAlignment.HCENTER) && (_lineWidth < _parentAllowWidth))
-            // alignShiftX = ((getParent().getWidth() - getParent().getPadding().left - getParent().getPadding().right
+            // alignShiftX = ((parent.getWidth() - parent.getPadding().left - parent.getPadding().right
             //         + getMargin().left - getMargin().right) - _lineWidth) / 2f;
-            alignShiftX = (_parentAllowWidth - _lineWidth) / 2f + getParent().getPadding().left + getMargin().left + cursorWidth; //(getParent().getWidth() - _lineWidth) / 2f + getParent().getPadding().left;
+            alignShiftX = (_parentAllowWidth - _lineWidth) / 2f + parent.getPadding().left + getMargin().left + cursorWidth; //(parent.getWidth() - _lineWidth) / 2f + parent.getPadding().left;
 
         // Vertical
         if (alignments.contains(ItemAlignment.TOP)) {
-            alignShiftY = getParent().getPadding().top + getMargin().top;
+            alignShiftY = parent.getPadding().top + getMargin().top;
         } else if (alignments.contains(ItemAlignment.BOTTOM))
-            alignShiftY = getParent().getHeight() - height - getParent().getPadding().bottom - getMargin().bottom;
+            alignShiftY = parent.getHeight() - height - parent.getPadding().bottom - getMargin().bottom;
 
         else if (alignments.contains(ItemAlignment.VCENTER))
-            // alignShiftY = ((getParent().getHeight() - getParent().getPadding().bottom - getParent().getPadding().top)
+            // alignShiftY = ((parent.getHeight() - parent.getPadding().bottom - parent.getPadding().top)
             //         - height) / 2f - getMargin().bottom + getMargin().top;
-            alignShiftY = (getParent().getHeight() - height) / 2f + getParent().getPadding().top;
+            alignShiftY = (parent.getHeight() - height) / 2f + parent.getPadding().top;
 
         int xFirstBeg = _letters.get(0).xBeg + _letters.get(0).xShift;
-        textPrt.xTextureShift = (int) alignShiftX + getParent().getX() + xFirstBeg; // + _lineXShift
-        textPrt.yTextureShift = (int) alignShiftY + _lineYShift + getParent().getY();
+        textPrt.xTextureShift = (int) alignShiftX + parent.getX() + xFirstBeg; // + _lineXShift
+        textPrt.yTextureShift = (int) alignShiftY + _lineYShift + parent.getY();
 
         if (!_isRecountable)
             textPrt.xTextureShift += _lineXShift;

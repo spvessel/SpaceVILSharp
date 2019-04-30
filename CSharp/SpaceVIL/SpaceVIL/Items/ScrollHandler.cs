@@ -37,11 +37,11 @@ namespace SpaceVIL
         void OnDragging(object sender, MouseArgs args)
         {
             int offset;
-
+            Prototype parent = GetParent();
             if (Orientation == Orientation.Horizontal)
-                offset = args.Position.GetX() - GetParent().GetX() - _diff;
+                offset = args.Position.GetX() - parent.GetX() - _diff;
             else
-                offset = args.Position.GetY() - GetParent().GetY() - _diff;
+                offset = args.Position.GetY() - parent.GetY() - _diff;
 
             SetOffset(offset);
         }
@@ -51,15 +51,16 @@ namespace SpaceVIL
         /// </summary>
         public void SetOffset(int offset)
         {
-            if (GetParent() == null)
+            Prototype parent = GetParent();
+            if (parent == null)
                 return;
 
             _offset = offset;
 
             if (Orientation == Orientation.Horizontal)
-                SetX(_offset + GetParent().GetX());
+                SetX(_offset + parent.GetX());
             else
-                SetY(_offset + GetParent().GetY());
+                SetY(_offset + parent.GetY());
         }
 
         // public void InvokeScrollUp(MouseArgs args)

@@ -80,23 +80,28 @@ namespace SpaceVIL
         internal void SetBlockWidth(int width, int curWidth)
         {
             cursorWidth = curWidth;
-            if (GetParent() == null) return;
+            Prototype parent = GetParent();
+            if (parent == null)
+                return;
             Indents textMargin = GetTextMargin();
-            _cursorXMax = GetParent().GetWidth() - cursorWidth - GetParent().GetPadding().Left -
-                GetParent().GetPadding().Right - textMargin.Left - textMargin.Right;
+            _cursorXMax = parent.GetWidth() - cursorWidth - parent.GetPadding().Left -
+                parent.GetPadding().Right - textMargin.Left - textMargin.Right;
             SetAllowWidth();
             UpdLinesXShift();
         }
 
         internal void SetBlockHeight(int height)
         {
-            if (GetParent() == null) {
+            Prototype parent = GetParent();
+            if (parent == null)
+            {
                 _cursorYMax = 0;
-            }//return;
-            else {
-            Indents textMargin = GetTextMargin();
-            _cursorYMax = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom
-                 - textMargin.Top - textMargin.Bottom;
+            }
+            else
+            {
+                Indents textMargin = GetTextMargin();
+                _cursorYMax = parent.GetHeight() - parent.GetPadding().Top - parent.GetPadding().Bottom
+                     - textMargin.Top - textMargin.Bottom;
             }
             SetAllowHeight();
             UpdLinesYShift();
@@ -107,11 +112,11 @@ namespace SpaceVIL
         {
             cursorWidth = curWidth;
             Indents textMargin = GetTextMargin();
+            Prototype parent = GetParent();
+            _cursorXMax = parent.GetWidth() - cursorWidth - parent.GetPadding().Left
+                 - parent.GetPadding().Right - textMargin.Left - textMargin.Right;
 
-            _cursorXMax = GetParent().GetWidth() - cursorWidth - GetParent().GetPadding().Left
-                 - GetParent().GetPadding().Right - textMargin.Left - textMargin.Right;
-
-            _cursorYMax = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom
+            _cursorYMax = parent.GetHeight() - parent.GetPadding().Top - parent.GetPadding().Bottom
                  - textMargin.Top - textMargin.Bottom;
 
             AddAllLines();
@@ -132,7 +137,6 @@ namespace SpaceVIL
             //RemoveItem(_cursor);
             foreach (TextLine tl in _linesList)
             {
-                //GetParent().AddItem(tl);
                 tl.SetParent(GetParent());
             }
             //AddItem(_cursor);
@@ -263,7 +267,7 @@ namespace SpaceVIL
             {
                 //if (!(cPos.X == 0 && cPos.Y == 0))
                 //{
-                    coord.X = GetLetPosInLine(cPos.Y, cPos.X - 1) + cursorWidth;
+                coord.X = GetLetPosInLine(cPos.Y, cPos.X - 1) + cursorWidth;
                 //}
             }
             return coord;
@@ -271,14 +275,15 @@ namespace SpaceVIL
 
         internal Point ReplaceCursorAccordingCoord(Point realPos)
         {
-            realPos.Y -= GetParent().GetY() + GetParent().GetPadding().Top + globalYShift + GetTextMargin().Top;
+            Prototype parent = GetParent();
+            realPos.Y -= parent.GetY() + parent.GetPadding().Top + globalYShift + GetTextMargin().Top;
             int lineNumb = realPos.Y / GetLineY(1);
             if (lineNumb >= GetCount())
                 lineNumb = GetCount() - 1;
             if (lineNumb < 0) lineNumb = 0;
             //return lineNumb;
 
-            realPos.X -= GetParent().GetX() + GetParent().GetPadding().Left + GetTextMargin().Left;
+            realPos.X -= parent.GetX() + parent.GetPadding().Left + GetTextMargin().Left;
 
             Point outPt = new Point(0, 0);
             outPt.Y = lineNumb;
@@ -557,7 +562,9 @@ namespace SpaceVIL
         internal Point AddXYShifts(int xShift, int yShift, Point point, bool isx)
         {
             Point outPoint = CursorPosToCoord(point);
-            if (GetParent() == null) return new Point(0, 0);
+            Prototype parent = GetParent();
+            if (parent == null)
+                return new Point(0, 0);
             //Point outPoint = CursorPosToCoord(point);
             int offset = _cursorXMax / 3;
             if (isx)
@@ -591,9 +598,9 @@ namespace SpaceVIL
                     UpdLinesYShift();
                 }
             }
-            
-            outPoint.X += GetParent().GetX() + GetParent().GetPadding().Left + globalXShift + GetTextMargin().Left;
-            outPoint.Y += GetParent().GetY() + GetParent().GetPadding().Top + globalYShift + GetTextMargin().Top;
+
+            outPoint.X += parent.GetX() + parent.GetPadding().Left + globalXShift + GetTextMargin().Left;
+            outPoint.Y += parent.GetY() + parent.GetPadding().Top + globalYShift + GetTextMargin().Top;
 
             //outPoint.X += GetX() + GetPadding().Left + _linesList[0].GetMargin().Left + xShift;
             //outPoint.Y += GetY() + GetPadding().Top + _linesList[0].GetMargin().Top + yShift;
@@ -615,9 +622,9 @@ namespace SpaceVIL
 
             int cursorHeight = GetCursorHeight();
             List<Point> selectionRectangles = new List<Point>();
-
-            int xAdder = GetParent().GetX() + GetParent().GetPadding().Left + GetTextMargin().Left;
-            int yAdder = GetParent().GetY() + GetParent().GetPadding().Top + GetTextMargin().Top;
+            Prototype parent = GetParent();
+            int xAdder = parent.GetX() + parent.GetPadding().Left + GetTextMargin().Left;
+            int yAdder = parent.GetY() + parent.GetPadding().Top + GetTextMargin().Top;
 
             Point tmp = new Point();
             Point tmp0 = new Point();
@@ -645,10 +652,10 @@ namespace SpaceVIL
 
                 x1 += xAdder; y1 += yAdder;
                 x2 += xAdder; y2 += yAdder;
-                
+
                 selectionRectangles.Add(new Point(x1, y1 - cursorHeight - lsp / 2 + 1));
                 selectionRectangles.Add(new Point(x2, y2 - lsp / 2 + 1));
-                
+
                 return selectionRectangles;
             }
 
@@ -676,7 +683,7 @@ namespace SpaceVIL
                     selectionRectangles.Add(new Point(x2, y2 - lsp / 2 + 1));
                 }
             }
-            
+
             tmp.X = 0;
             tmp.Y = toPt.Y;
             tmp0 = CursorPosToCoord(tmp);
@@ -786,8 +793,8 @@ namespace SpaceVIL
                     //{
                     //    int bw = 0;
                     //    if (tmp != null)
-                        int bw = tmp.WidthTexture;
-                        bigWidth = (bigWidth > bw) ? bigWidth : bw;
+                    int bw = tmp.WidthTexture;
+                    bigWidth = (bigWidth > bw) ? bigWidth : bw;
                     //}
                     //w = (w > tmp.WidthTexture) ? w : tmp.WidthTexture;
                     visibleHeight += lineHeigh;
@@ -799,7 +806,7 @@ namespace SpaceVIL
                 SetHeight((int)((float)h / _screenScale));
                 //if (_screenScale != 1)
                 //{
-                    w = bigWidth;
+                w = bigWidth;
                 //}
 
                 byte[] bigByte = new byte[visibleHeight * w * 4]; //h
@@ -816,7 +823,7 @@ namespace SpaceVIL
                         bigOff += lineHeigh * w * 4;
                         continue;
                     }
-                    
+
                     for (int p = 0; p < 4; p++)
                     {
                         for (int j = 0; j < tptmp.HeightTexture; j++)
@@ -845,23 +852,23 @@ namespace SpaceVIL
                 TextPrinter tpout = new TextPrinter(bigByte);
                 tpout.WidthTexture = w;
                 tpout.HeightTexture = visibleHeight; // h;
+                Prototype parent = GetParent();
+                tpout.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX() + cursorWidth;
+                tpout.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY();
 
-                tpout.XTextureShift = GetParent().GetPadding().Left + GetTextMargin().Left + GetParent().GetX() + cursorWidth;
-                tpout.YTextureShift = GetParent().GetPadding().Top + GetTextMargin().Top + GetParent().GetY();
-
-//                if (tpLines.Count == 0 || tpLines[0] == null)
-//                {
-//                    tpout.XTextureShift = GetParent().GetPadding().Left + GetTextMargin().Left + GetParent().GetX();
-//                    tpout.YTextureShift = GetParent().GetPadding().Top + GetTextMargin().Top + GetParent().GetY();
-//
-//                    tpout.XTextureShift += 0; // _linesList[0].GetLineXShift();
-//                    tpout.YTextureShift += 0; // _linesList[0].GetLineYShift();
-//                }
-//                else
-//                {
-//                    tpout.XTextureShift = GetParent().GetPadding().Left + GetTextMargin().Left + GetParent().GetX(); //tpLines[0].XTextureShift;
-//                    tpout.YTextureShift = GetParent().GetPadding().Top + GetTextMargin().Top + GetParent().GetY(); //tpLines[0].YTextureShift;
- //               }
+                //                if (tpLines.Count == 0 || tpLines[0] == null)
+                //                {
+                //                    tpout.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX();
+                //                    tpout.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY();
+                //
+                //                    tpout.XTextureShift += 0; // _linesList[0].GetLineXShift();
+                //                    tpout.YTextureShift += 0; // _linesList[0].GetLineYShift();
+                //                }
+                //                else
+                //                {
+                //                    tpout.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX(); //tpLines[0].XTextureShift;
+                //                    tpout.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY(); //tpLines[0].YTextureShift;
+                //               }
 
                 if (startNumb > -1)
                     tpout.YTextureShift += _linesList[startNumb].GetLineYShift();
@@ -874,10 +881,12 @@ namespace SpaceVIL
             }
         }
 
-        internal int GetScrollStep() {
+        internal int GetScrollStep()
+        {
             return GetLineY(1);
         }
-        internal int GetScrollYOffset() {
+        internal int GetScrollYOffset()
+        {
             return globalYShift;
         }
         internal void SetScrollYOffset(int offset)
@@ -885,7 +894,8 @@ namespace SpaceVIL
             globalYShift = offset;
             UpdLinesYShift();
         }
-        internal int GetScrollXOffset() {
+        internal int GetScrollXOffset()
+        {
             return globalXShift;
         }
         internal void SetScrollXOffset(int offset)
@@ -904,7 +914,7 @@ namespace SpaceVIL
                 h += lineHeigh;
                 w = (w > tl.GetWidth()) ? w : tl.GetWidth();
             }
-            
+
             SetWidth(w);
             SetHeight(h);
         }

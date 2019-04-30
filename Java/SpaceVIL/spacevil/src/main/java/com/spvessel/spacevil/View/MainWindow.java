@@ -27,6 +27,7 @@ public class MainWindow extends ActiveWindow {
         setWindowName("MainWindow");
         setWindowTitle("MainWindow");
         setMinSize(500, 100);
+        
         // setAspectRatio(4, 1);
 
 //        setPadding(2, 2, 2, 2);

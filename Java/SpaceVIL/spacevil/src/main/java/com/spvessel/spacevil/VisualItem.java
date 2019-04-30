@@ -42,18 +42,18 @@ final class VisualItem extends BaseItem {
         int value = width - getWidth();
         if (value != 0) {
             super.setWidth(width);
-
-            if (getParent() != null && getWidthPolicy() == SizePolicy.FIXED) {
-                boolean layout = getParent() instanceof InterfaceHLayout;
-                boolean grid = getParent() instanceof InterfaceGrid;
+            Prototype parent = getParent();
+            if (parent != null && getWidthPolicy() == SizePolicy.FIXED) {
+                boolean layout = parent instanceof InterfaceHLayout;
+                boolean grid = parent instanceof InterfaceGrid;
 
                 if (!layout && !grid)
                     updateBehavior();
 
                 if (layout)
-                    ((InterfaceHLayout) getParent()).updateLayout();
+                    ((InterfaceHLayout) parent).updateLayout();
                 if (grid)
-                    ((InterfaceGrid) getParent()).updateLayout();
+                    ((InterfaceGrid) parent).updateLayout();
             }
             eventManager.notifyListeners(GeometryEventType.RESIZE_WIDTH, value);
         }
@@ -65,17 +65,18 @@ final class VisualItem extends BaseItem {
         if (value != 0) {
             super.setHeight(height);
 
-            if (getParent() != null && getHeightPolicy() == SizePolicy.FIXED) {
-                boolean layout = getParent() instanceof InterfaceVLayout;
-                boolean grid = getParent() instanceof InterfaceGrid;
+            Prototype parent = getParent();
+            if (parent != null && getHeightPolicy() == SizePolicy.FIXED) {
+                boolean layout = parent instanceof InterfaceVLayout;
+                boolean grid = parent instanceof InterfaceGrid;
 
                 if (!layout && !grid)
                     updateBehavior();
 
                 if (layout)
-                    ((InterfaceVLayout) getParent()).updateLayout();
+                    ((InterfaceVLayout) parent).updateLayout();
                 if (grid)
-                    ((InterfaceGrid) getParent()).updateLayout();
+                    ((InterfaceGrid) parent).updateLayout();
             }
             eventManager.notifyListeners(GeometryEventType.RESIZE_HEIGHT, value);
         }
@@ -91,15 +92,16 @@ final class VisualItem extends BaseItem {
         int value = _x - getX();
         if (value != 0) {
             super.setX(_x);
-            if (getParent() != null && getWidthPolicy() == SizePolicy.FIXED) {
-                boolean layout = getParent() instanceof InterfaceHLayout;
-                boolean grid = getParent() instanceof InterfaceGrid;
+            Prototype parent = getParent();
+            if (parent != null && getWidthPolicy() == SizePolicy.FIXED) {
+                boolean layout = parent instanceof InterfaceHLayout;
+                boolean grid = parent instanceof InterfaceGrid;
 
                 if (layout)
-                    ((InterfaceHLayout) getParent()).updateLayout();
+                    ((InterfaceHLayout) parent).updateLayout();
                 if (grid)
-                    if (!(getParent() instanceof InterfaceFree))
-                        ((InterfaceGrid) getParent()).updateLayout();
+                    if (!(parent instanceof InterfaceFree))
+                        ((InterfaceGrid) parent).updateLayout();
             }
             eventManager.notifyListeners(GeometryEventType.MOVED_X, value);
         }
@@ -110,15 +112,16 @@ final class VisualItem extends BaseItem {
         int value = _y - getY();
         if (value != 0) {
             super.setY(_y);
-            if (getParent() != null && getHeightPolicy() == SizePolicy.FIXED) {
-                boolean layout = getParent() instanceof InterfaceVLayout;
-                boolean grid = getParent() instanceof InterfaceGrid;
+            Prototype parent = getParent();
+            if (parent != null && getHeightPolicy() == SizePolicy.FIXED) {
+                boolean layout = parent instanceof InterfaceVLayout;
+                boolean grid = parent instanceof InterfaceGrid;
 
                 if (layout)
-                    ((InterfaceVLayout) getParent()).updateLayout();
+                    ((InterfaceVLayout) parent).updateLayout();
                 if (grid)
-                    if (!(getParent() instanceof InterfaceFree))
-                        ((InterfaceGrid) getParent()).updateLayout();
+                    if (!(parent instanceof InterfaceFree))
+                        ((InterfaceGrid) parent).updateLayout();
             }
 
             eventManager.notifyListeners(GeometryEventType.MOVED_Y, value);
@@ -212,40 +215,42 @@ final class VisualItem extends BaseItem {
     void setSpacing(Spacing spacing) {
         _spacing = spacing;
         updateGeometry();
-        if (getParent() != null) {
-            boolean hLayout = getParent() instanceof InterfaceHLayout;
-            boolean vLayout = getParent() instanceof InterfaceVLayout;
-            boolean grid = getParent() instanceof InterfaceGrid;
+        Prototype parent = getParent();
+        if (parent != null) {
+            boolean hLayout = parent instanceof InterfaceHLayout;
+            boolean vLayout = parent instanceof InterfaceVLayout;
+            boolean grid = parent instanceof InterfaceGrid;
 
             if (!hLayout && !vLayout && !grid)
                 updateBehavior();
 
             if (hLayout)
-                ((InterfaceHLayout) getParent()).updateLayout();
+                ((InterfaceHLayout) parent).updateLayout();
             if (vLayout)
-                ((InterfaceVLayout) getParent()).updateLayout();
+                ((InterfaceVLayout) parent).updateLayout();
             if (grid)
-                ((InterfaceGrid) getParent()).updateLayout();
+                ((InterfaceGrid) parent).updateLayout();
         }
     }
 
     void setSpacing(int horizontal, int vertical) {
         _spacing = new Spacing(horizontal, vertical);
         updateGeometry();
-        if (getParent() != null) {
-            boolean hLayout = getParent() instanceof InterfaceHLayout;
-            boolean vLayout = getParent() instanceof InterfaceVLayout;
-            boolean grid = getParent() instanceof InterfaceGrid;
+        Prototype parent = getParent();
+        if (parent != null) {
+            boolean hLayout = parent instanceof InterfaceHLayout;
+            boolean vLayout = parent instanceof InterfaceVLayout;
+            boolean grid = parent instanceof InterfaceGrid;
 
             if (!hLayout && !vLayout && !grid)
                 updateBehavior();
 
             if (hLayout)
-                ((InterfaceHLayout) getParent()).updateLayout();
+                ((InterfaceHLayout) parent).updateLayout();
             if (vLayout)
-                ((InterfaceVLayout) getParent()).updateLayout();
+                ((InterfaceVLayout) parent).updateLayout();
             if (grid)
-                ((InterfaceGrid) getParent()).updateLayout();
+                ((InterfaceGrid) parent).updateLayout();
         }
     }
 
@@ -258,40 +263,42 @@ final class VisualItem extends BaseItem {
     void setPadding(Indents padding) {
         _padding = padding;
         updateGeometry();
-        if (getParent() != null) {
-            boolean hLayout = getParent() instanceof InterfaceHLayout;
-            boolean vLayout = getParent() instanceof InterfaceVLayout;
-            boolean grid = getParent() instanceof InterfaceGrid;
+        Prototype parent = getParent();
+        if (parent != null) {
+            boolean hLayout = parent instanceof InterfaceHLayout;
+            boolean vLayout = parent instanceof InterfaceVLayout;
+            boolean grid = parent instanceof InterfaceGrid;
 
             if (!hLayout && !vLayout && !grid)
                 updateBehavior();
 
             if (hLayout)
-                ((InterfaceHLayout) getParent()).updateLayout();
+                ((InterfaceHLayout) parent).updateLayout();
             if (vLayout)
-                ((InterfaceVLayout) getParent()).updateLayout();
+                ((InterfaceVLayout) parent).updateLayout();
             if (grid)
-                ((InterfaceGrid) getParent()).updateLayout();
+                ((InterfaceGrid) parent).updateLayout();
         }
     }
 
     void setPadding(int left, int top, int right, int bottom) {
         _padding = new Indents(left, top, right, bottom);
         updateGeometry();
-        if (getParent() != null) {
-            boolean hLayout = getParent() instanceof InterfaceHLayout;
-            boolean vLayout = getParent() instanceof InterfaceVLayout;
-            boolean grid = getParent() instanceof InterfaceGrid;
+        Prototype parent = getParent();
+        if (parent != null) {
+            boolean hLayout = parent instanceof InterfaceHLayout;
+            boolean vLayout = parent instanceof InterfaceVLayout;
+            boolean grid = parent instanceof InterfaceGrid;
 
             if (!hLayout && !vLayout && !grid)
                 updateBehavior();
 
             if (hLayout)
-                ((InterfaceHLayout) getParent()).updateLayout();
+                ((InterfaceHLayout) parent).updateLayout();
             if (vLayout)
-                ((InterfaceVLayout) getParent()).updateLayout();
+                ((InterfaceVLayout) parent).updateLayout();
             if (grid)
-                ((InterfaceGrid) getParent()).updateLayout();
+                ((InterfaceGrid) parent).updateLayout();
         }
     }
 
@@ -341,10 +348,11 @@ final class VisualItem extends BaseItem {
 
     @Override
     public void removeItemFromListeners() {
-        getParent().removeEventListener(GeometryEventType.RESIZE_WIDTH, this._main);
-        getParent().removeEventListener(GeometryEventType.RESIZE_HEIGHT, this._main);
-        getParent().removeEventListener(GeometryEventType.MOVED_X, this._main);
-        getParent().removeEventListener(GeometryEventType.MOVED_Y, this._main);
+        Prototype parent = getParent();
+        parent.removeEventListener(GeometryEventType.RESIZE_WIDTH, this._main);
+        parent.removeEventListener(GeometryEventType.RESIZE_HEIGHT, this._main);
+        parent.removeEventListener(GeometryEventType.MOVED_X, this._main);
+        parent.removeEventListener(GeometryEventType.MOVED_Y, this._main);
     }
 
     void addItem(InterfaceBaseItem item) {

@@ -939,7 +939,6 @@ final class DrawEngine {
                 }
             }
 
-
             hoveredItems = queue;
             Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
             while (!tmp.isEmpty()) {

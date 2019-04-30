@@ -34,6 +34,7 @@ public abstract class CoreWindow {
         count++;
         setHandler(new WindowLayout(this));
         setSize(300, 300);
+        setMinSize(150, 100);
     }
 
     public void setParameters(String name, String title) {
