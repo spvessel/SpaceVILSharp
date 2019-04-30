@@ -92,6 +92,8 @@ namespace SpaceVIL
             int fixed_count = 0;
             int expanded_count = 0;
 
+            List<int> maxWidthExpands = new List<int>();
+
             foreach (var child in GetItems())
             {
                 if (child.IsVisible())
@@ -103,6 +105,9 @@ namespace SpaceVIL
                     }
                     else
                     {
+                        if (child.GetMaxWidth() < total_space) {
+                            maxWidthExpands.Add(child.GetMaxWidth() + child.GetMargin().Right + child.GetMargin().Left);
+                        }
                         expanded_count++;
                     }
                 }
@@ -110,11 +115,41 @@ namespace SpaceVIL
             free_space -= GetSpacing().Horizontal * ((expanded_count + fixed_count) - 1);
 
             int width_for_expanded = 1;
-            if (expanded_count > 0 && free_space > expanded_count)
-                width_for_expanded = free_space / expanded_count;
+            // if (expanded_count > 0 && free_space > expanded_count)
+            //     width_for_expanded = free_space / expanded_count;
+            maxWidthExpands.Sort();
+
+            while (true) {
+                if (expanded_count == 0)
+                    break;
+    
+                if (free_space > expanded_count)
+                    width_for_expanded = free_space / expanded_count;
+    
+                if (width_for_expanded <= 1 || maxWidthExpands.Count == 0) {
+//                    width_for_expanded = 1;
+                    break;
+                }
+    
+                if (width_for_expanded > maxWidthExpands[0]) {
+                    while (maxWidthExpands.Count > 0 && width_for_expanded > maxWidthExpands[0]) {
+                        free_space -= maxWidthExpands[0];
+                        maxWidthExpands.RemoveAt(0);
+                        expanded_count--;
+                    }
+                } else {
+                    break;
+                }
+//                width_for_expanded = widthForExpand(free_space, expanded_count);
+            }
 
             int offset = 0;
             int startX = GetX() + GetPadding().Left;
+            bool isFirstExpand = false;
+            int diff = (free_space - width_for_expanded * expanded_count);
+            if (expanded_count != 0 && diff > 0) {
+                isFirstExpand = true;
+            }
 
             if (expanded_count > 0 || _contentAlignment.Equals(ItemAlignment.Left))
             {
@@ -127,15 +162,25 @@ namespace SpaceVIL
                         if (child.GetWidthPolicy() == SizePolicy.Expand)
                         {
                             if (width_for_expanded - child.GetMargin().Left - child.GetMargin().Right < child.GetMaxWidth())
+                            {
                                 child.SetWidth(width_for_expanded - child.GetMargin().Left - child.GetMargin().Right);
+                            }
                             else
                             {
-                                expanded_count--;
-                                free_space -= (child.GetWidth() + child.GetMargin().Left + child.GetMargin().Right);//
-                                width_for_expanded = 1;
-                                if (expanded_count > 0 && free_space > expanded_count)
-                                    width_for_expanded = free_space / expanded_count;
+                                // expanded_count--;
+                                // free_space -= (child.GetWidth() + child.GetMargin().Left + child.GetMargin().Right);//
+                                // width_for_expanded = 1;
+                                // if (expanded_count > 0 && free_space > expanded_count)
+                                //     width_for_expanded = free_space / expanded_count;
+                                child.SetWidth(child.GetMaxWidth());
                             }
+
+                            if (isFirstExpand) {
+                            if (child.GetWidth() + diff < child.GetMaxWidth()) {
+                                child.SetWidth(child.GetWidth() + diff);
+                                isFirstExpand = false;
+                            }
+                        }
                         }
                         offset += child.GetWidth() + GetSpacing().Horizontal + child.GetMargin().Left + child.GetMargin().Right;//
                     }
@@ -154,6 +199,9 @@ namespace SpaceVIL
                         {
                             child.SetX(startX + offset + child.GetMargin().Left + free_space);
                             offset += child.GetWidth() + GetSpacing().Horizontal + child.GetMargin().Left + child.GetMargin().Right;//
+
+                            if (child.GetWidthPolicy() == SizePolicy.Expand)
+                                child.SetWidth(child.GetMaxWidth());
                         }
                         child.SetConfines();
                     }
@@ -167,6 +215,9 @@ namespace SpaceVIL
                         {
                             child.SetX(startX + offset + child.GetMargin().Left + free_space / 2);
                             offset += child.GetWidth() + GetSpacing().Horizontal + child.GetMargin().Left + child.GetMargin().Right;//
+
+                            if (child.GetWidthPolicy() == SizePolicy.Expand)
+                                child.SetWidth(child.GetMaxWidth());
                         }
                         child.SetConfines();
                     }

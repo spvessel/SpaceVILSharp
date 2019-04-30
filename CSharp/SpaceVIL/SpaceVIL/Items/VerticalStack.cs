@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
+using System.Collections.Generic;
 
 namespace SpaceVIL
 {
@@ -73,6 +74,8 @@ namespace SpaceVIL
             int fixed_count = 0;
             int expanded_count = 0;
 
+            List<int> maxHeightExpands = new List<int>();
+
             foreach (var child in GetItems())
             {
                 if (child.IsVisible())
@@ -84,6 +87,9 @@ namespace SpaceVIL
                     }
                     else
                     {
+                        if (child.GetMaxHeight() < total_space) {
+                            maxHeightExpands.Add(child.GetMaxHeight() + child.GetMargin().Top + child.GetMargin().Bottom);
+                        }
                         expanded_count++;
                     }
                 }
@@ -91,11 +97,40 @@ namespace SpaceVIL
             free_space -= GetSpacing().Vertical * ((expanded_count + fixed_count) - 1);
 
             int height_for_expanded = 1;
-            if (expanded_count > 0 && free_space > expanded_count)
-                height_for_expanded = free_space / expanded_count;
+            // if (expanded_count > 0 && free_space > expanded_count)
+            //     height_for_expanded = free_space / expanded_count;
+
+            maxHeightExpands.Sort();
+
+            while (true) {
+                if (expanded_count == 0)
+                    break;
+
+                if (free_space > expanded_count)
+                    height_for_expanded = free_space / expanded_count;
+
+                if (height_for_expanded <= 1 || maxHeightExpands.Count == 0) {
+                    break;
+                }
+
+                if (height_for_expanded > maxHeightExpands[0]) {
+                    while (maxHeightExpands.Count > 0 && height_for_expanded > maxHeightExpands[0]) {
+                        free_space -= maxHeightExpands[0];
+                        maxHeightExpands.RemoveAt(0);
+                        expanded_count--;
+                    }
+                } else {
+                    break;
+                }
+            }
 
             int offset = 0;
             int startY = GetY() + GetPadding().Top;
+            bool isFirstExpand = false;
+            int diff = (free_space - height_for_expanded * expanded_count);
+            if (expanded_count != 0 && diff > 0) {
+                isFirstExpand = true;
+            }
 
             if (expanded_count > 0 || _contentAlignment.Equals(ItemAlignment.Top))
             {
@@ -107,14 +142,24 @@ namespace SpaceVIL
                         if (child.GetHeightPolicy() == SizePolicy.Expand)
                         {
                             if (height_for_expanded - child.GetMargin().Top - child.GetMargin().Bottom < child.GetMaxHeight())//
+                            {
                                 child.SetHeight(height_for_expanded - child.GetMargin().Top - child.GetMargin().Bottom);//
+                            }
                             else
                             {
-                                expanded_count--;
-                                free_space -= (child.GetHeight() + child.GetMargin().Top + child.GetMargin().Bottom);
-                                height_for_expanded = 1;
-                                if (expanded_count > 0 && free_space > expanded_count)
-                                    height_for_expanded = free_space / expanded_count;
+                                // expanded_count--;
+                                // free_space -= (child.GetHeight() + child.GetMargin().Top + child.GetMargin().Bottom);
+                                // height_for_expanded = 1;
+                                // if (expanded_count > 0 && free_space > expanded_count)
+                                //     height_for_expanded = free_space / expanded_count;
+                                child.SetHeight(child.GetMaxHeight()); //?
+                            }
+
+                            if (isFirstExpand) {
+                                if (child.GetHeight() + diff < child.GetMaxHeight()) {
+                                    child.SetHeight(child.GetHeight() + diff);
+                                    isFirstExpand = false;
+                                }
                             }
                         }
                         offset += child.GetHeight() + GetSpacing().Vertical + child.GetMargin().Top + child.GetMargin().Bottom;//
@@ -134,6 +179,9 @@ namespace SpaceVIL
                         {
                             child.SetY(startY + offset + child.GetMargin().Top + free_space);
                             offset += child.GetHeight() + GetSpacing().Vertical + child.GetMargin().Top + child.GetMargin().Bottom;//
+
+                            if (child.GetHeightPolicy() == SizePolicy.Expand)
+                                child.SetHeight(child.GetMaxHeight());
                         }
                         child.SetConfines();
                     }
@@ -147,6 +195,9 @@ namespace SpaceVIL
                         {
                             child.SetY(startY + offset + child.GetMargin().Top + free_space / 2);
                             offset += child.GetHeight() + GetSpacing().Vertical + child.GetMargin().Top + child.GetMargin().Bottom;//
+
+                            if (child.GetHeightPolicy() == SizePolicy.Expand)
+                                child.SetHeight(child.GetMaxHeight());
                         }
                         child.SetConfines();
                     }

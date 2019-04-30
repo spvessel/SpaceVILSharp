@@ -105,7 +105,6 @@ namespace Glfw3
         /// <summary>
         /// Image data.
         /// </summary>
-        /// <seealso cref=""/>
         public struct Image
         {
             /// <summary>
