@@ -1,4 +1,5 @@
 package com.spvessel.spacevil.Core;
+import com.spvessel.spacevil.*;
 
 public class Geometry implements InterfaceSize {
     /**
@@ -12,7 +13,7 @@ public class Geometry implements InterfaceSize {
     // width
     private int _minWidth = 0;
     private int _width = 0;
-    private int _maxWidth = 65535;// Integer.MAX_VALUE;// glfw dont like Int32.MaxValue
+    private int _maxWidth = SpaceVILConstants.sizeMaxValue;// Integer.MAX_VALUE;// glfw dont like Int32.MaxValue
 
     /**
      * @param width width of the item
@@ -89,7 +90,7 @@ public class Geometry implements InterfaceSize {
     // height
     private int _minHeight = 0;
     private int _height = 0;
-    private int _maxHeight = 65535;// glfw dont like Int32.MaxValue
+    private int _maxHeight = SpaceVILConstants.sizeMaxValue;// glfw dont like Int32.MaxValue
 
     /**
      * @param height height of the item
@@ -144,7 +145,7 @@ public class Geometry implements InterfaceSize {
      */
     public void setMaxHeight(int height) {
         if (height < 0) {
-            _maxHeight = 65535;
+            _maxHeight = SpaceVILConstants.sizeMaxValue;
             return;
         }
 

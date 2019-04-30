@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpaceVIL.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace SpaceVIL.Core
         //width
         private int _minWidth = 0;
         private int _width = 0;
-        private int _maxWidth = Int16.MaxValue;//glfw dont like Int32.MaxValue
+        private int _maxWidth = SpaceVILConstants.SizeMaxValue; //glfw dont like Int32.MaxValue
 
         /// <param name="width"> width width of the item </param>
         public void SetWidth(int width)
@@ -88,7 +89,7 @@ namespace SpaceVIL.Core
         //height
         private int _minHeight = 0;
         private int _height = 0;
-        private int _maxHeight = Int16.MaxValue;//glfw dont like Int32.MaxValue
+        private int _maxHeight = SpaceVILConstants.SizeMaxValue;//glfw dont like Int32.MaxValue
 
         /// <param name="height"> height height of the item </param>
         public void SetHeight(int height)
@@ -141,7 +142,7 @@ namespace SpaceVIL.Core
         {
             if (height < 0)
             {
-                _maxHeight = Int32.MaxValue;
+                _maxHeight = SpaceVILConstants.SizeMaxValue;
                 return;
             }
 

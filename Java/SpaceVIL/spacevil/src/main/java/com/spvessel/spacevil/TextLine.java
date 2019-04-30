@@ -4,6 +4,7 @@ import com.spvessel.spacevil.Core.InterfaceTextContainer;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import org.lwjgl.BufferUtils;
+import com.spvessel.spacevil.SpaceVILConstants;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -21,8 +22,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     private List<Integer> _letEndPos;
     private int _lineYShift = 0;
     private int _lineXShift = 0;
-    private int _parentAllowWidth = Integer.MAX_VALUE;
-    private int _parentAllowHeight = Integer.MAX_VALUE;
+    private int _parentAllowWidth = SpaceVILConstants.sizeMaxValue;
+    private int _parentAllowHeight = SpaceVILConstants.sizeMaxValue;
     private int _bigWidth = 0;
     private float _screenScale = 1;
 

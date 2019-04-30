@@ -6,9 +6,10 @@ import com.spvessel.spacevil.GraphicsMathService;
 
 public final class Shadow {
     private int _radius = 0;
+    private int maxAvailableRadius = 10;
 
     public void setRadius(int value) {
-        if (value < 0 || value > 10)
+        if (value < 0 || value > maxAvailableRadius)
             return;
         _radius = value;
     }

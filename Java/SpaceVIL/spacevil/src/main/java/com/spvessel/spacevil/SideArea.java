@@ -52,6 +52,10 @@ public class SideArea extends Prototype implements InterfaceFloating {
         window.isHResizable = false;
         window.clearExcludedSides();
 
+        Color shadowColor = new Color(0, 0, 0, 150);
+        int shadowRadius = 5;
+        int shadowIndent = 3;
+
         switch (_attachSide) {
         case LEFT:
             window.isWResizable = true;
@@ -59,7 +63,7 @@ public class SideArea extends Prototype implements InterfaceFloating {
             window.setWidth(_size);
             window.excludeSides(Side.LEFT, Side.BOTTOM, Side.TOP);
             window.setAlignment(ItemAlignment.LEFT);
-            window.setShadow(5, 3, 0, new Color(0, 0, 0, 150));
+            window.setShadow(shadowRadius, shadowIndent, 0, shadowColor);
             break;
 
         case TOP:
@@ -68,7 +72,7 @@ public class SideArea extends Prototype implements InterfaceFloating {
             window.setHeight(_size);
             window.excludeSides(Side.LEFT, Side.RIGHT, Side.TOP);
             window.setAlignment(ItemAlignment.TOP);
-            window.setShadow(5, 0, 3, new Color(0, 0, 0, 150));
+            window.setShadow(shadowRadius, 0, shadowIndent, shadowColor);
             break;
 
         case RIGHT:
@@ -76,7 +80,7 @@ public class SideArea extends Prototype implements InterfaceFloating {
             window.setWidthPolicy(SizePolicy.FIXED);
             window.setWidth(_size);
             window.excludeSides(Side.RIGHT, Side.BOTTOM, Side.TOP);
-            window.setShadow(5, -3, 0, new Color(0, 0, 0, 150));
+            window.setShadow(shadowRadius, -shadowIndent, 0, shadowColor);
             window.setAlignment(ItemAlignment.RIGHT);
             break;
 
@@ -85,14 +89,14 @@ public class SideArea extends Prototype implements InterfaceFloating {
             window.setHeightPolicy(SizePolicy.FIXED);
             window.setHeight(_size);
             window.excludeSides(Side.LEFT, Side.RIGHT, Side.BOTTOM);
-            window.setShadow(5, 0, -3, new Color(0, 0, 0, 150));
+            window.setShadow(shadowRadius, 0, -shadowIndent, shadowColor);
             window.setAlignment(ItemAlignment.BOTTOM);
             break;
 
         default:
             window.setWidth(_size);
             window.setAlignment(ItemAlignment.LEFT);
-            window.setShadow(5, 3, 0, new Color(0, 0, 0, 150));
+            window.setShadow(shadowRadius, shadowIndent, 0, shadowColor);
             break;
         }
     }

@@ -4,7 +4,6 @@ import java.util.List;
 
 public class CustomShape extends Primitive {
     static int count = 0;
-    public int RotationAngle = 32;
 
     /**
      * Constructs a CustomShape

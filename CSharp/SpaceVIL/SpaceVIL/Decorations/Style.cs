@@ -57,8 +57,8 @@ namespace SpaceVIL.Decorations
         public Style()//default
         {
             IsVisible = true;
-            MaxWidth = Int16.MaxValue;
-            MaxHeight = Int16.MaxValue;
+            MaxWidth = SpaceVILConstants.SizeMaxValue;
+            MaxHeight = SpaceVILConstants.SizeMaxValue;
             Alignment = ItemAlignment.Top | ItemAlignment.Left;
         }
 

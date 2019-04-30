@@ -4,6 +4,7 @@ import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
+import com.spvessel.spacevil.SpaceVILConstants;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -28,7 +29,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     private Rectangle _selectedArea;
     private boolean _isEditable = true;
 
-    private int _cursorXMax = Integer.MAX_VALUE;
+    private int _cursorXMax = SpaceVILConstants.sizeMaxValue;
 
     private int _selectFrom = -1;
     private int _selectTo = -1;

@@ -6,9 +6,11 @@ namespace SpaceVIL
     public sealed class Shadow
     {
         private int _radius = 0;
+        private int _maxAvailableRadius = 10;
+
         public void SetRadius(int value)
         {
-            if (value < 0 || value > 10)
+            if (value < 0 || value > _maxAvailableRadius)
                 return;
             _radius = value;
         }

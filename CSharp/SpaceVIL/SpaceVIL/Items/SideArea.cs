@@ -40,6 +40,10 @@ namespace SpaceVIL
             Window.IsHResizable = false;
             Window.ClearExcludedSides();
 
+            Color shadowColor = Color.FromArgb(150, 0, 0, 0);
+            int shadowRadius = 5;
+            int shadowIndent = 3;
+
             switch (_attachSide)
             {
                 case Side.Left:
@@ -48,7 +52,7 @@ namespace SpaceVIL
                     Window.SetWidth(_size);
                     Window.ExcludeSides(Side.Left, Side.Bottom, Side.Top);
                     Window.SetAlignment(ItemAlignment.Left);
-                    Window.SetShadow(5, 3, 0, Color.FromArgb(150, 0, 0, 0));
+                    Window.SetShadow(shadowRadius, shadowIndent, 0, shadowColor);
                     break;
 
                 case Side.Top:
@@ -57,7 +61,7 @@ namespace SpaceVIL
                     Window.SetHeight(_size);
                     Window.ExcludeSides(Side.Left, Side.Right, Side.Top);
                     Window.SetAlignment(ItemAlignment.Top);
-                    Window.SetShadow(5, 0, 3, Color.FromArgb(150, 0, 0, 0));
+                    Window.SetShadow(shadowRadius, 0, shadowIndent, shadowColor);
                     break;
 
                 case Side.Right:
@@ -65,7 +69,7 @@ namespace SpaceVIL
                     Window.SetWidthPolicy(SizePolicy.Fixed);
                     Window.SetWidth(_size);
                     Window.ExcludeSides(Side.Right, Side.Bottom, Side.Top);
-                    Window.SetShadow(5, -3, 0, Color.FromArgb(150, 0, 0, 0));
+                    Window.SetShadow(shadowRadius, -shadowIndent, 0, shadowColor);
                     Window.SetAlignment(ItemAlignment.Right);
                     break;
 
@@ -74,14 +78,14 @@ namespace SpaceVIL
                     Window.SetHeightPolicy(SizePolicy.Fixed);
                     Window.SetHeight(_size);
                     Window.ExcludeSides(Side.Left, Side.Right, Side.Bottom);
-                    Window.SetShadow(5, 0, -3, Color.FromArgb(150, 0, 0, 0));
+                    Window.SetShadow(shadowRadius, 0, -shadowIndent, shadowColor);
                     Window.SetAlignment(ItemAlignment.Bottom);
                     break;
 
                 default:
                     Window.SetWidth(_size);
                     Window.SetAlignment(ItemAlignment.Left);
-                    Window.SetShadow(5, 3, 0, Color.FromArgb(150, 0, 0, 0));
+                    Window.SetShadow(shadowRadius, shadowIndent, 0, shadowColor);
                     break;
             }
         }

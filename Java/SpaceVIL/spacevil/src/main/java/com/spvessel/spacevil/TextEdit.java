@@ -5,6 +5,7 @@ import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
+import com.spvessel.spacevil.SpaceVILConstants;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -25,7 +26,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     private Rectangle _selectedArea;
     private boolean _isEditable = true;
 
-    private int _cursorXMax = Integer.MAX_VALUE;
+    private int _cursorXMax = SpaceVILConstants.sizeMaxValue;
 
     /**
      * @return selection area Rectangle for styling
@@ -806,7 +807,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         }
     }
 
-    private int queueCapacity = 100;
+    private int queueCapacity = SpaceVILConstants.textUndoCapacity;
     private boolean nothingFlag = false;
 
     /**

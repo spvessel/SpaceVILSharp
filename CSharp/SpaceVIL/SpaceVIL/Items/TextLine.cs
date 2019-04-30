@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SpaceVIL.Common;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 
@@ -21,8 +22,8 @@ namespace SpaceVIL
         private List<int> _letEndPos;
         private int _lineYShift = 0;
         private int _lineXShift = 0;
-        private int _parentAllowWidth = int.MaxValue;
-        private int _parentAllowHeight = int.MaxValue;
+        private int _parentAllowWidth = SpaceVILConstants.SizeMaxValue;
+        private int _parentAllowHeight = SpaceVILConstants.SizeMaxValue;
         private int _bigWidth = 0;
         private float _screenScale = 1;
 

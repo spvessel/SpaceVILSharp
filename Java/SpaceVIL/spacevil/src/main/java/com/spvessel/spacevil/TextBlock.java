@@ -924,7 +924,7 @@ class TextBlock extends Prototype
     private ArrayDeque<TextBlockState> undoQueue;
     private ArrayDeque<TextBlockState> redoQueue;
     private boolean nothingFlag = false;
-    private int queueCapacity = 100;
+    private int queueCapacity = SpaceVILConstants.textUndoCapacity;
     private boolean ignoreSetInLine = false;
 
     public void redo() {

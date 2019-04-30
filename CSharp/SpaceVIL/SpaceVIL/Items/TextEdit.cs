@@ -22,7 +22,7 @@ namespace SpaceVIL
         private Rectangle _selectedArea;
         private bool _isEditable = true;
 
-        private int _cursorXMax = int.MaxValue;
+        private int _cursorXMax = SpaceVILConstants.SizeMaxValue;
 
         public Rectangle GetSelectionArea()
         {
@@ -817,7 +817,7 @@ namespace SpaceVIL
             }
         }
 
-        private int queueCapacity = 100;
+        private int queueCapacity = SpaceVILConstants.TextUndoCapacity;
         private bool nothingFlag = false;
         public void Undo()
         {

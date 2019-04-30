@@ -1034,7 +1034,7 @@ namespace SpaceVIL
         private LinkedList<TextBlockState> undoQueue;
         private LinkedList<TextBlockState> redoQueue;
         private bool nothingFlag = false;
-        private int queueCapacity = 100;
+        private int queueCapacity = SpaceVILConstants.TextUndoCapacity;
         private bool ignoreSetInLine = false;
 
         public void Redo()

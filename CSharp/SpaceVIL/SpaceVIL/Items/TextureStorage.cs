@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
+using SpaceVIL.Common;
 
 namespace SpaceVIL
 {
@@ -20,8 +21,8 @@ namespace SpaceVIL
 
         private int globalXShift = 0;
         private int globalYShift = 0;
-        private int _cursorXMax = int.MaxValue;
-        private int _cursorYMax = int.MaxValue;
+        private int _cursorXMax = SpaceVILConstants.SizeMaxValue;
+        private int _cursorYMax = SpaceVILConstants.SizeMaxValue;
 
         internal Object textInputLock = new Object();
 

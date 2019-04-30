@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import com.spvessel.spacevil.Core.InterfaceTextContainer;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.SpaceVILConstants;
 import org.lwjgl.BufferUtils;
 
 final class TextureStorage extends Primitive implements InterfaceTextContainer {
@@ -27,8 +28,8 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
     private int globalXShift = 0;
     private int globalYShift = 0;
-    private int _cursorXMax = Integer.MAX_VALUE;
-    private int _cursorYMax = Integer.MAX_VALUE;
+    private int _cursorXMax = SpaceVILConstants.sizeMaxValue;
+    private int _cursorYMax = SpaceVILConstants.sizeMaxValue;
 
     Lock textInputLock = new ReentrantLock();
 

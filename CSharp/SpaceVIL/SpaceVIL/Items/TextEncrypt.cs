@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Threading;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
+using SpaceVIL.Common;
 
 namespace SpaceVIL
 {
@@ -25,7 +26,7 @@ namespace SpaceVIL
         private Rectangle _selectedArea;
         private bool _isEditable = true;
 
-        private int _cursorXMax = int.MaxValue;
+        private int _cursorXMax = SpaceVILConstants.SizeMaxValue;
 
         private int _selectFrom = -1;
         private int _selectTo = -1;

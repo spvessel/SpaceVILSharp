@@ -6,6 +6,7 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
+import com.spvessel.spacevil.SpaceVILConstants;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -63,8 +64,8 @@ public class Style implements Cloneable {
     public Style()// default
     {
         isVisible = true;
-        maxWidth = 65535;
-        maxHeight = 65535;
+        maxWidth = SpaceVILConstants.sizeMaxValue;
+        maxHeight = SpaceVILConstants.sizeMaxValue;
         setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
     }
 

@@ -69,7 +69,7 @@ class Alphabet {
     List<ModifyLetter> makeTextNew(String text) {
         List<ModifyLetter> letList = new LinkedList<>();
 
-        double err = 0.25; // переехало из буквы
+//        double err = 0.25; // переехало из буквы
         int x0 = 0;
 
         Letter currLet;
@@ -333,6 +333,8 @@ class Alphabet {
             // maxY = y1;
 
             int boolInd;
+            double intersectTol = 0.5;
+            double intersectStep = 2.0 * intersectTol / 10.0;
 
             for (int dd = y0; dd <= y1; dd++) {
                 boolInd = (dd - y0);
@@ -346,14 +348,14 @@ class Alphabet {
                          * alphas.add(1.0f);
                          */
 
-                    } else if (shape.intersects(d - 0.5, dd - 0.5, 1, 1)) {
+                    } else if (shape.intersects(d - intersectTol, dd - intersectTol, 2.0 * intersectTol, 2.0 * intersectTol)) {
                         double inter;
 
                         int count = 0;
                         int countTmp = 0;
 
-                        for (double xx = -0.5; xx <= 0.5; xx += 0.1) {
-                            for (double yy = -0.5; yy <= 0.5; yy += 0.1) {
+                        for (double xx = -intersectTol; xx <= intersectTol; xx += intersectStep) {
+                            for (double yy = -intersectTol; yy <= intersectTol; yy += intersectStep) {
                                 countTmp++;
                                 if (shape.contains(d + xx, dd + yy))
                                     count++;
