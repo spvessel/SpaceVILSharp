@@ -53,42 +53,31 @@ namespace SpaceVIL
 
         internal void AddChildren(IBaseItem item)
         {
-            if (item.GetParent() != null)
-                item.GetParent().RemoveItem(item);
-
-            //Console.WriteLine(this.GetItemName() + " " + (this is BaseItem) + " or " + (this is Prototype));
+            Prototype itemParent = item.GetParent();
+            if (itemParent != null)
+                itemParent.RemoveItem(item);
 
             item.SetParent((this as VisualItem)._main);
 
-            //refactor events verification
-            // Console.WriteLine(item.GetParent().GetType());
-
-            var v_stack = item.GetParent() as IVLayout;
-            if (v_stack != null)
+            if (itemParent is IVLayout)
             {
                 AddEventListener(GeometryEventType.ResizeWidth, item);
                 AddEventListener(GeometryEventType.Moved_X, item);
                 CastAndUpdate(item);
                 return;
             }
-            var h_stack = item.GetParent() as IHLayout;
-            if (h_stack != null)
+            if (itemParent is IHLayout)
             {
                 AddEventListener(GeometryEventType.ResizeHeight, item);
                 AddEventListener(GeometryEventType.Moved_Y, item);
                 CastAndUpdate(item);
                 return;
             }
-            var grid_stack = item.GetParent() as IGrid;
-            if (grid_stack != null)
-            {
+            if (itemParent is IGrid)
                 return;
-            }
-            var free_stack = item.GetParent() as IFree;
-            if (free_stack != null)
-            {
+
+            if (itemParent is IFree)
                 return;
-            }
 
             AddEventListener(GeometryEventType.ResizeWidth, item);
             AddEventListener(GeometryEventType.ResizeHeight, item);
@@ -106,10 +95,11 @@ namespace SpaceVIL
         /// </summary>
         public virtual void RemoveItemFromListeners()
         {
-            GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this);
-            GetParent().RemoveEventListener(GeometryEventType.ResizeHeight, this);
-            GetParent().RemoveEventListener(GeometryEventType.Moved_X, this);
-            GetParent().RemoveEventListener(GeometryEventType.Moved_Y, this);
+            Prototype parent = GetParent();
+            parent.RemoveEventListener(GeometryEventType.ResizeWidth, this);
+            parent.RemoveEventListener(GeometryEventType.ResizeHeight, this);
+            parent.RemoveEventListener(GeometryEventType.Moved_X, this);
+            parent.RemoveEventListener(GeometryEventType.Moved_Y, this);
         }
 
         /// <summary>
@@ -132,12 +122,12 @@ namespace SpaceVIL
         {
             _margin = margin;
             UpdateGeometry();
-
-            if (GetParent() != null)
+            Prototype parent = GetParent();
+            if (parent != null)
             {
-                var hLayout = GetParent() as IHLayout;
-                var vLayout = GetParent() as IVLayout;
-                var grid = GetParent() as IGrid;
+                var hLayout = parent as IHLayout;
+                var vLayout = parent as IVLayout;
+                var grid = parent as IGrid;
 
                 if (hLayout == null && vLayout == null && grid == null)
                     UpdateBehavior();
@@ -157,12 +147,12 @@ namespace SpaceVIL
             _margin.Right = right;
             _margin.Bottom = bottom;
             UpdateGeometry();
-
-            if (GetParent() != null)
+            Prototype parent = GetParent();
+            if (parent != null)
             {
-                var hLayout = GetParent() as IHLayout;
-                var vLayout = GetParent() as IVLayout;
-                var grid = GetParent() as IGrid;
+                var hLayout = parent as IHLayout;
+                var vLayout = parent as IVLayout;
+                var grid = parent as IGrid;
 
                 if (hLayout == null && vLayout == null && grid == null)
                     UpdateBehavior();
@@ -403,11 +393,12 @@ namespace SpaceVIL
             _itemBehavior.SetAlignment(alignment);
             UpdateGeometry();
 
-            if (GetParent() != null)
+            Prototype parent = GetParent();
+            if (parent != null)
             {
-                var hLayout = GetParent() as IHLayout;
-                var vLayout = GetParent() as IVLayout;
-                var grid = GetParent() as IGrid;
+                var hLayout = parent as IHLayout;
+                var vLayout = parent as IVLayout;
+                var grid = parent as IGrid;
 
                 if (hLayout == null
                 && vLayout == null
@@ -442,12 +433,13 @@ namespace SpaceVIL
 
         internal void UpdateBehavior()
         {
-            if (GetParent() == null)
+            Prototype parent = GetParent();
+            if (parent == null)
                 return;
 
             if ((this as VisualItem) != null)
             {
-                ProtoUpdateBehavior();
+                ProtoUpdateBehavior(parent);
                 return;
             }
 
@@ -455,31 +447,31 @@ namespace SpaceVIL
 
             if (alignment.HasFlag(ItemAlignment.Left))
             {
-                SetX(GetParent().GetX() + GetParent().GetPadding().Left + GetMargin().Left);//
+                SetX(parent.GetX() + parent.GetPadding().Left + GetMargin().Left);//
             }
             if (alignment.HasFlag(ItemAlignment.Right))
             {
-                SetX(GetParent().GetX() + GetParent().GetWidth() - GetWidth() - GetParent().GetPadding().Right - GetMargin().Right);//
+                SetX(parent.GetX() + parent.GetWidth() - GetWidth() - parent.GetPadding().Right - GetMargin().Right);//
             }
             if (alignment.HasFlag(ItemAlignment.Top))
             {
-                SetY(GetParent().GetY() + GetParent().GetPadding().Top + GetMargin().Top);//
+                SetY(parent.GetY() + parent.GetPadding().Top + GetMargin().Top);//
             }
             if (alignment.HasFlag(ItemAlignment.Bottom))
             {
-                SetY(GetParent().GetY() + GetParent().GetHeight() - GetHeight() - GetParent().GetPadding().Bottom - GetMargin().Bottom);//
+                SetY(parent.GetY() + parent.GetHeight() - GetHeight() - parent.GetPadding().Bottom - GetMargin().Bottom);//
             }
             if (alignment.HasFlag(ItemAlignment.HCenter))
             {
-                SetX(GetParent().GetX() + (GetParent().GetWidth() - GetWidth()) / 2 + GetMargin().Left - GetMargin().Right);//
+                SetX(parent.GetX() + (parent.GetWidth() - GetWidth()) / 2 + GetMargin().Left - GetMargin().Right);//
             }
             if (alignment.HasFlag(ItemAlignment.VCenter))
             {
-                SetY(GetParent().GetY() + (GetParent().GetHeight() - GetHeight()) / 2 + GetMargin().Top - GetMargin().Bottom);//
+                SetY(parent.GetY() + (parent.GetHeight() - GetHeight()) / 2 + GetMargin().Top - GetMargin().Bottom);//
             }
         }
 
-        private void ProtoUpdateBehavior()
+        private void ProtoUpdateBehavior(Prototype parent)
         {
             Prototype prt = (this as VisualItem)._main;
 
@@ -487,27 +479,27 @@ namespace SpaceVIL
 
             if (alignment.HasFlag(ItemAlignment.Left))
             {
-                prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetPadding().Left + prt.GetMargin().Left);//
+                prt.SetX(parent.GetX() + parent.GetPadding().Left + prt.GetMargin().Left);//
             }
             if (alignment.HasFlag(ItemAlignment.Right))
             {
-                prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetWidth() - prt.GetWidth() - prt.GetParent().GetPadding().Right - prt.GetMargin().Right);//
+                prt.SetX(parent.GetX() + parent.GetWidth() - prt.GetWidth() - parent.GetPadding().Right - prt.GetMargin().Right);//
             }
             if (alignment.HasFlag(ItemAlignment.Top))
             {
-                prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetPadding().Top + prt.GetMargin().Top);//
+                prt.SetY(parent.GetY() + parent.GetPadding().Top + prt.GetMargin().Top);//
             }
             if (alignment.HasFlag(ItemAlignment.Bottom))
             {
-                prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetHeight() - prt.GetHeight() - prt.GetParent().GetPadding().Bottom - prt.GetMargin().Bottom);//
+                prt.SetY(parent.GetY() + parent.GetHeight() - prt.GetHeight() - parent.GetPadding().Bottom - prt.GetMargin().Bottom);//
             }
             if (alignment.HasFlag(ItemAlignment.HCenter))
             {
-                prt.SetX(prt.GetParent().GetX() + (prt.GetParent().GetWidth() - prt.GetWidth()) / 2 + prt.GetMargin().Left - prt.GetMargin().Right);//
+                prt.SetX(parent.GetX() + (parent.GetWidth() - prt.GetWidth()) / 2 + prt.GetMargin().Left - prt.GetMargin().Right);//
             }
             if (alignment.HasFlag(ItemAlignment.VCenter))
             {
-                prt.SetY(prt.GetParent().GetY() + (prt.GetParent().GetHeight() - prt.GetHeight()) / 2 + prt.GetMargin().Top - prt.GetMargin().Bottom);//
+                prt.SetY(parent.GetY() + (parent.GetHeight() - prt.GetHeight()) / 2 + prt.GetMargin().Top - prt.GetMargin().Bottom);//
             }
         }
 
@@ -527,7 +519,7 @@ namespace SpaceVIL
 
                 VisualItem vItem = this as VisualItem;
                 Prototype protoItem = null;
-                if(vItem != null)
+                if (vItem != null)
                     protoItem = vItem._main;
                 IFloating floatingItem = protoItem as IFloating;
                 if (floatingItem != null)
@@ -539,11 +531,12 @@ namespace SpaceVIL
                     UpdateGeometry();
                 }
 
-                if (GetParent() != null)
+                Prototype parent = GetParent();
+                if (parent != null)
                 {
-                    var hLayout = GetParent() as IHLayout;
-                    var vLayout = GetParent() as IVLayout;
-                    var grid = GetParent() as IGrid;
+                    var hLayout = parent as IHLayout;
+                    var vLayout = parent as IVLayout;
+                    var grid = parent as IGrid;
 
                     if (hLayout == null
                     && vLayout == null
@@ -583,12 +576,12 @@ namespace SpaceVIL
 
                     UpdateGeometry();
                 }
-
-                if (GetParent() != null)
+                Prototype parent = GetParent();
+                if (parent != null)
                 {
-                    var hLayout = GetParent() as IHLayout;
-                    var vLayout = GetParent() as IVLayout;
-                    var grid = GetParent() as IGrid;
+                    var hLayout = parent as IHLayout;
+                    var vLayout = parent as IVLayout;
+                    var grid = parent as IGrid;
 
                     if (hLayout == null
                     && vLayout == null
@@ -649,12 +642,13 @@ namespace SpaceVIL
         /// </summary>
         public void Update(GeometryEventType type, int value = 0)
         {
-            if (GetParent() == null)
+            Prototype parent = GetParent();
+            if (parent == null)
                 return;
 
             if ((this as VisualItem) != null)
             {
-                ProtoUpdate(type, value);
+                ProtoUpdate(type, value, parent);
                 return;
             }
 
@@ -674,40 +668,40 @@ namespace SpaceVIL
                     {
                         if (GetAlignment().HasFlag(ItemAlignment.Right))
                         {
-                            SetX(GetParent().GetX() + GetParent().GetWidth() - GetWidth() - GetParent().GetPadding().Right - GetMargin().Right);//
+                            SetX(parent.GetX() + parent.GetWidth() - GetWidth() - parent.GetPadding().Right - GetMargin().Right);//
                         }
                         if (GetAlignment().HasFlag(ItemAlignment.HCenter))
                         {
-                            SetX(GetParent().GetX() + (GetParent().GetWidth() - GetWidth()) / 2 + GetMargin().Left - GetMargin().Right);
+                            SetX(parent.GetX() + (parent.GetWidth() - GetWidth()) / 2 + GetMargin().Left - GetMargin().Right);
                         }
                     }
                     else if (GetWidthPolicy() == SizePolicy.Expand)
                     {
-                        int prefered = GetParent().GetWidth() - GetParent().GetPadding().Left - GetParent().GetPadding().Right - GetMargin().Right - GetMargin().Left;//
+                        int prefered = parent.GetWidth() - parent.GetPadding().Left - parent.GetPadding().Right - GetMargin().Right - GetMargin().Left;//
                         prefered = (prefered > GetMaxWidth()) ? GetMaxWidth() : prefered;
                         prefered = (prefered < GetMinWidth()) ? GetMinWidth() : prefered;
                         SetWidth(prefered);
 
-                        if (prefered + GetParent().GetPadding().Left + GetParent().GetPadding().Right + GetMargin().Right + GetMargin().Left == GetParent().GetWidth())//
+                        if (prefered + parent.GetPadding().Left + parent.GetPadding().Right + GetMargin().Right + GetMargin().Left == parent.GetWidth())//
                         {
-                            SetX(GetParent().GetX() + GetParent().GetPadding().Left + GetMargin().Left);//
+                            SetX(parent.GetX() + parent.GetPadding().Left + GetMargin().Left);//
                         }
-                        else if (prefered + GetParent().GetPadding().Left + GetParent().GetPadding().Right + GetMargin().Right + GetMargin().Left < GetParent().GetWidth())//
+                        else if (prefered + parent.GetPadding().Left + parent.GetPadding().Right + GetMargin().Right + GetMargin().Left < parent.GetWidth())//
                         {
                             if (GetAlignment().HasFlag(ItemAlignment.Right))
                             {
-                                SetX(GetParent().GetX() + GetParent().GetWidth() - GetWidth() - GetParent().GetPadding().Right - GetMargin().Right);//
+                                SetX(parent.GetX() + parent.GetWidth() - GetWidth() - parent.GetPadding().Right - GetMargin().Right);//
                             }
                             if (GetAlignment().HasFlag(ItemAlignment.HCenter))
                             {
-                                SetX(GetParent().GetX() + (GetParent().GetWidth() - GetWidth()) / 2 + GetMargin().Left);//
+                                SetX(parent.GetX() + (parent.GetWidth() - GetWidth()) / 2 + GetMargin().Left);//
                             }
                         }
-                        else if (prefered + GetParent().GetPadding().Left + GetParent().GetPadding().Right + GetMargin().Right + GetMargin().Left > GetParent().GetWidth())//
+                        else if (prefered + parent.GetPadding().Left + parent.GetPadding().Right + GetMargin().Right + GetMargin().Left > parent.GetWidth())//
                         {
                             //никогда не должен зайти
-                            SetX(GetParent().GetX() + GetParent().GetPadding().Left + GetMargin().Left);//
-                            prefered = GetParent().GetWidth() - GetParent().GetPadding().Left - GetParent().GetPadding().Right - GetMargin().Left - GetMargin().Right;//
+                            SetX(parent.GetX() + parent.GetPadding().Left + GetMargin().Left);//
+                            prefered = parent.GetWidth() - parent.GetPadding().Left - parent.GetPadding().Right - GetMargin().Left - GetMargin().Right;//
                             SetWidth(prefered);
                         }
                     }
@@ -718,40 +712,40 @@ namespace SpaceVIL
                     {
                         if (GetAlignment().HasFlag(ItemAlignment.Bottom))
                         {
-                            SetY(GetParent().GetY() + GetParent().GetHeight() - GetHeight() - GetParent().GetPadding().Bottom - GetMargin().Bottom);//
+                            SetY(parent.GetY() + parent.GetHeight() - GetHeight() - parent.GetPadding().Bottom - GetMargin().Bottom);//
                         }
                         if (GetAlignment().HasFlag(ItemAlignment.VCenter))
                         {
-                            SetY(GetParent().GetY() + (GetParent().GetHeight() - GetHeight()) / 2 + GetMargin().Top - GetMargin().Bottom);
+                            SetY(parent.GetY() + (parent.GetHeight() - GetHeight()) / 2 + GetMargin().Top - GetMargin().Bottom);
                         }
                     }
                     else if (GetHeightPolicy() == SizePolicy.Expand)
                     {
-                        int prefered = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom - GetMargin().Bottom - GetMargin().Top;//
+                        int prefered = parent.GetHeight() - parent.GetPadding().Top - parent.GetPadding().Bottom - GetMargin().Bottom - GetMargin().Top;//
                         prefered = (prefered > GetMaxHeight()) ? GetMaxHeight() : prefered;
                         prefered = (prefered < GetMinHeight()) ? GetMinHeight() : prefered;
                         SetHeight(prefered);
 
-                        if (prefered + GetParent().GetPadding().Top + GetParent().GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top == GetParent().GetHeight())//
+                        if (prefered + parent.GetPadding().Top + parent.GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top == parent.GetHeight())//
                         {
-                            SetY(GetParent().GetY() + GetParent().GetPadding().Top + GetMargin().Top);//
+                            SetY(parent.GetY() + parent.GetPadding().Top + GetMargin().Top);//
                         }
-                        else if (prefered + GetParent().GetPadding().Top + GetParent().GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top < GetParent().GetHeight())//
+                        else if (prefered + parent.GetPadding().Top + parent.GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top < parent.GetHeight())//
                         {
                             if (GetAlignment().HasFlag(ItemAlignment.Bottom))
                             {
-                                SetY(GetParent().GetY() + GetParent().GetHeight() - GetHeight() - GetParent().GetPadding().Bottom - GetMargin().Bottom);//
+                                SetY(parent.GetY() + parent.GetHeight() - GetHeight() - parent.GetPadding().Bottom - GetMargin().Bottom);//
                             }
                             if (GetAlignment().HasFlag(ItemAlignment.VCenter))
                             {
-                                SetY(GetParent().GetY() + (GetParent().GetHeight() - GetHeight()) / 2 + GetMargin().Top);//
+                                SetY(parent.GetY() + (parent.GetHeight() - GetHeight()) / 2 + GetMargin().Top);//
                             }
                         }
-                        else if (prefered + GetParent().GetPadding().Top + GetParent().GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top > GetParent().GetHeight())//
+                        else if (prefered + parent.GetPadding().Top + parent.GetPadding().Bottom + GetMargin().Bottom + GetMargin().Top > parent.GetHeight())//
                         {
                             //никогда не должен зайти
-                            SetY(GetParent().GetY() + GetParent().GetPadding().Top + GetMargin().Top);//
-                            prefered = GetParent().GetHeight() - GetParent().GetPadding().Top - GetParent().GetPadding().Bottom - GetMargin().Top - GetMargin().Bottom;//
+                            SetY(parent.GetY() + parent.GetPadding().Top + GetMargin().Top);//
+                            prefered = parent.GetHeight() - parent.GetPadding().Top - parent.GetPadding().Bottom - GetMargin().Top - GetMargin().Bottom;//
                             SetHeight(prefered);
                         }
                     }
@@ -762,7 +756,7 @@ namespace SpaceVIL
             }
         }
 
-        private void ProtoUpdate(GeometryEventType type, int value = 0)
+        private void ProtoUpdate(GeometryEventType type, int value, Prototype parent)
         {
             Prototype prt = (this as VisualItem)._main;
             prt.SetConfines();
@@ -781,40 +775,40 @@ namespace SpaceVIL
                     {
                         if (prt.GetAlignment().HasFlag(ItemAlignment.Right))
                         {
-                            prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetWidth() - prt.GetWidth() - prt.GetParent().GetPadding().Right - prt.GetMargin().Right);//
+                            prt.SetX(parent.GetX() + parent.GetWidth() - prt.GetWidth() - parent.GetPadding().Right - prt.GetMargin().Right);//
                         }
                         if (prt.GetAlignment().HasFlag(ItemAlignment.HCenter))
                         {
-                            prt.SetX(prt.GetParent().GetX() + (prt.GetParent().GetWidth() - prt.GetWidth()) / 2 + prt.GetMargin().Left - prt.GetMargin().Right);
+                            prt.SetX(parent.GetX() + (parent.GetWidth() - prt.GetWidth()) / 2 + prt.GetMargin().Left - prt.GetMargin().Right);
                         }
                     }
                     else if (prt.GetWidthPolicy() == SizePolicy.Expand)
                     {
-                        int prefered = prt.GetParent().GetWidth() - prt.GetParent().GetPadding().Left - prt.GetParent().GetPadding().Right - prt.GetMargin().Right - prt.GetMargin().Left;//
+                        int prefered = parent.GetWidth() - parent.GetPadding().Left - parent.GetPadding().Right - prt.GetMargin().Right - prt.GetMargin().Left;//
                         prefered = (prefered > prt.GetMaxWidth()) ? prt.GetMaxWidth() : prefered;
                         prefered = (prefered < prt.GetMinWidth()) ? prt.GetMinWidth() : prefered;
                         prt.SetWidth(prefered);
 
-                        if (prefered + prt.GetParent().GetPadding().Left + prt.GetParent().GetPadding().Right + prt.GetMargin().Right + prt.GetMargin().Left == prt.GetParent().GetWidth())//
+                        if (prefered + parent.GetPadding().Left + parent.GetPadding().Right + prt.GetMargin().Right + prt.GetMargin().Left == parent.GetWidth())//
                         {
-                            prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetPadding().Left + prt.GetMargin().Left);//
+                            prt.SetX(parent.GetX() + parent.GetPadding().Left + prt.GetMargin().Left);//
                         }
-                        else if (prefered + prt.GetParent().GetPadding().Left + prt.GetParent().GetPadding().Right + prt.GetMargin().Right + prt.GetMargin().Left < prt.GetParent().GetWidth())//
+                        else if (prefered + parent.GetPadding().Left + parent.GetPadding().Right + prt.GetMargin().Right + prt.GetMargin().Left < parent.GetWidth())//
                         {
                             if (prt.GetAlignment().HasFlag(ItemAlignment.Right))
                             {
-                                prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetWidth() - prt.GetWidth() - prt.GetParent().GetPadding().Right - prt.GetMargin().Right);//
+                                prt.SetX(parent.GetX() + parent.GetWidth() - prt.GetWidth() - parent.GetPadding().Right - prt.GetMargin().Right);//
                             }
                             if (prt.GetAlignment().HasFlag(ItemAlignment.HCenter))
                             {
-                                prt.SetX(prt.GetParent().GetX() + (prt.GetParent().GetWidth() - prt.GetWidth()) / 2 + prt.GetMargin().Left);//
+                                prt.SetX(parent.GetX() + (parent.GetWidth() - prt.GetWidth()) / 2 + prt.GetMargin().Left);//
                             }
                         }
-                        else if (prefered + prt.GetParent().GetPadding().Left + prt.GetParent().GetPadding().Right + prt.GetMargin().Right + prt.GetMargin().Left > prt.GetParent().GetWidth())//
+                        else if (prefered + parent.GetPadding().Left + parent.GetPadding().Right + prt.GetMargin().Right + prt.GetMargin().Left > parent.GetWidth())//
                         {
                             //никогда не должен зайти
-                            prt.SetX(prt.GetParent().GetX() + prt.GetParent().GetPadding().Left + prt.GetMargin().Left);//
-                            prefered = prt.GetParent().GetWidth() - prt.GetParent().GetPadding().Left - prt.GetParent().GetPadding().Right - prt.GetMargin().Left - prt.GetMargin().Right;//
+                            prt.SetX(parent.GetX() + parent.GetPadding().Left + prt.GetMargin().Left);//
+                            prefered = parent.GetWidth() - parent.GetPadding().Left - parent.GetPadding().Right - prt.GetMargin().Left - prt.GetMargin().Right;//
                             prt.SetWidth(prefered);
                         }
                     }
@@ -825,40 +819,40 @@ namespace SpaceVIL
                     {
                         if (prt.GetAlignment().HasFlag(ItemAlignment.Bottom))
                         {
-                            prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetHeight() - prt.GetHeight() - prt.GetParent().GetPadding().Bottom - prt.GetMargin().Bottom);//
+                            prt.SetY(parent.GetY() + parent.GetHeight() - prt.GetHeight() - parent.GetPadding().Bottom - prt.GetMargin().Bottom);//
                         }
                         if (prt.GetAlignment().HasFlag(ItemAlignment.VCenter))
                         {
-                            prt.SetY(prt.GetParent().GetY() + (prt.GetParent().GetHeight() - prt.GetHeight()) / 2 + prt.GetMargin().Top - prt.GetMargin().Bottom);
+                            prt.SetY(parent.GetY() + (parent.GetHeight() - prt.GetHeight()) / 2 + prt.GetMargin().Top - prt.GetMargin().Bottom);
                         }
                     }
                     else if (prt.GetHeightPolicy() == SizePolicy.Expand)
                     {
-                        int prefered = prt.GetParent().GetHeight() - prt.GetParent().GetPadding().Top - prt.GetParent().GetPadding().Bottom - prt.GetMargin().Bottom - prt.GetMargin().Top;//
+                        int prefered = parent.GetHeight() - parent.GetPadding().Top - parent.GetPadding().Bottom - prt.GetMargin().Bottom - prt.GetMargin().Top;//
                         prefered = (prefered > prt.GetMaxHeight()) ? prt.GetMaxHeight() : prefered;
                         prefered = (prefered < prt.GetMinHeight()) ? prt.GetMinHeight() : prefered;
                         prt.SetHeight(prefered);
 
-                        if (prefered + prt.GetParent().GetPadding().Top + prt.GetParent().GetPadding().Bottom + prt.GetMargin().Bottom + prt.GetMargin().Top == prt.GetParent().GetHeight())//
+                        if (prefered + parent.GetPadding().Top + parent.GetPadding().Bottom + prt.GetMargin().Bottom + prt.GetMargin().Top == parent.GetHeight())//
                         {
-                            prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetPadding().Top + prt.GetMargin().Top);//
+                            prt.SetY(parent.GetY() + parent.GetPadding().Top + prt.GetMargin().Top);//
                         }
-                        else if (prefered + prt.GetParent().GetPadding().Top + prt.GetParent().GetPadding().Bottom + prt.GetMargin().Bottom + prt.GetMargin().Top < prt.GetParent().GetHeight())//
+                        else if (prefered + parent.GetPadding().Top + parent.GetPadding().Bottom + prt.GetMargin().Bottom + prt.GetMargin().Top < parent.GetHeight())//
                         {
                             if (prt.GetAlignment().HasFlag(ItemAlignment.Bottom))
                             {
-                                prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetHeight() - prt.GetHeight() - prt.GetParent().GetPadding().Bottom - prt.GetMargin().Bottom);//
+                                prt.SetY(parent.GetY() + parent.GetHeight() - prt.GetHeight() - parent.GetPadding().Bottom - prt.GetMargin().Bottom);//
                             }
                             if (prt.GetAlignment().HasFlag(ItemAlignment.VCenter))
                             {
-                                prt.SetY(prt.GetParent().GetY() + (prt.GetParent().GetHeight() - prt.GetHeight()) / 2 + prt.GetMargin().Top);//
+                                prt.SetY(parent.GetY() + (parent.GetHeight() - prt.GetHeight()) / 2 + prt.GetMargin().Top);//
                             }
                         }
-                        else if (prefered + prt.GetParent().GetPadding().Top + prt.GetParent().GetPadding().Bottom + prt.GetMargin().Bottom + prt.GetMargin().Top > prt.GetParent().GetHeight())//
+                        else if (prefered + parent.GetPadding().Top + parent.GetPadding().Bottom + prt.GetMargin().Bottom + prt.GetMargin().Top > parent.GetHeight())//
                         {
                             //никогда не должен зайти
-                            prt.SetY(prt.GetParent().GetY() + prt.GetParent().GetPadding().Top + prt.GetMargin().Top);//
-                            prefered = prt.GetParent().GetHeight() - prt.GetParent().GetPadding().Top - prt.GetParent().GetPadding().Bottom - prt.GetMargin().Top - prt.GetMargin().Bottom;//
+                            prt.SetY(parent.GetY() + parent.GetPadding().Top + prt.GetMargin().Top);//
+                            prefered = parent.GetHeight() - parent.GetPadding().Top - parent.GetPadding().Bottom - prt.GetMargin().Top - prt.GetMargin().Bottom;//
                             prt.SetHeight(prefered);
                         }
                     }
@@ -978,12 +972,13 @@ namespace SpaceVIL
         /// </summary>
         public virtual void SetConfines()
         {
-            if (GetParent() == null)
+            Prototype parent = GetParent();
+            if (parent == null)
                 return;
-            _confines_x_0 = GetParent().GetX() + GetParent().GetPadding().Left;
-            _confines_x_1 = GetParent().GetX() + GetParent().GetWidth() - GetParent().GetPadding().Right;
-            _confines_y_0 = GetParent().GetY() + GetParent().GetPadding().Top;
-            _confines_y_1 = GetParent().GetY() + GetParent().GetHeight() - GetParent().GetPadding().Bottom;
+            _confines_x_0 = parent.GetX() + parent.GetPadding().Left;
+            _confines_x_1 = parent.GetX() + parent.GetWidth() - parent.GetPadding().Right;
+            _confines_y_0 = parent.GetY() + parent.GetPadding().Top;
+            _confines_y_1 = parent.GetY() + parent.GetHeight() - parent.GetPadding().Bottom;
         }
         public void SetConfines(int x0, int x1, int y0, int y1)
         {

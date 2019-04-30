@@ -153,7 +153,8 @@ namespace SpaceVIL
                     base.SetHeight(height);
                 }
 
-                if (GetParent() == null) //Вроде не очень-то и нужно
+                Prototype parent = GetParent();
+                if (parent == null) //Вроде не очень-то и нужно
                     return null;
 
                 if (_isRecountable)
@@ -253,7 +254,7 @@ namespace SpaceVIL
                     };
                 }
 
-                UpdateCoords();
+                UpdateCoords(parent);
                 return textPrt;
             }
             finally
@@ -399,11 +400,8 @@ namespace SpaceVIL
             }
         }
 
-        private void UpdateCoords()
+        private void UpdateCoords(Prototype parent)
         {
-            // if (GetParent() == null)
-            //     return;
-
             //AddAllShifts();
             if (_letters.Count() == 0)
                 return;
@@ -419,33 +417,33 @@ namespace SpaceVIL
             // Horizontal
             if (alignments.HasFlag(ItemAlignment.Left) || (_lineWidth >= _parentAllowWidth))
             {
-                alignShiftX = GetParent().GetPadding().Left + GetMargin().Left + cursorWidth;
+                alignShiftX = parent.GetPadding().Left + GetMargin().Left + cursorWidth;
             }
             else if (alignments.HasFlag(ItemAlignment.Right) && (_lineWidth < _parentAllowWidth))
-                alignShiftX = GetParent().GetWidth() - _lineWidth - GetParent().GetPadding().Right - GetMargin().Right - cursorWidth;
+                alignShiftX = parent.GetWidth() - _lineWidth - parent.GetPadding().Right - GetMargin().Right - cursorWidth;
 
             else if (alignments.HasFlag(ItemAlignment.HCenter) && (_lineWidth < _parentAllowWidth))
-                // alignShiftX = ((GetParent().GetWidth() - GetParent().GetPadding().Left - GetParent().GetPadding().Right
+                // alignShiftX = ((parent.GetWidth() - parent.GetPadding().Left - parent.GetPadding().Right
                 //         + GetMargin().Left - GetMargin().Right) - _lineWidth) / 2f;
-                alignShiftX = (_parentAllowWidth - _lineWidth) / 2f + GetParent().GetPadding().Left + GetMargin().Left + cursorWidth; //(GetParent().GetWidth() - _lineWidth) / 2f + GetParent().GetPadding().Left;
+                alignShiftX = (_parentAllowWidth - _lineWidth) / 2f + parent.GetPadding().Left + GetMargin().Left + cursorWidth; //(parent.GetWidth() - _lineWidth) / 2f + parent.GetPadding().Left;
 
             // Vertical
             if (alignments.HasFlag(ItemAlignment.Top))
             {
-                alignShiftY = GetParent().GetPadding().Top + GetMargin().Top;
+                alignShiftY = parent.GetPadding().Top + GetMargin().Top;
             }
             else if (alignments.HasFlag(ItemAlignment.Bottom))
-                alignShiftY = GetParent().GetHeight() - height - GetParent().GetPadding().Bottom - GetMargin().Bottom;
+                alignShiftY = parent.GetHeight() - height - parent.GetPadding().Bottom - GetMargin().Bottom;
 
             else if (alignments.HasFlag(ItemAlignment.VCenter))
-                // alignShiftY = ((GetParent().GetHeight() - GetParent().GetPadding().Bottom - GetParent().GetPadding().Top)
+                // alignShiftY = ((parent.GetHeight() - parent.GetPadding().Bottom - parent.GetPadding().Top)
                 //         - height) / 2f - GetMargin().Bottom + GetMargin().Top;
-                alignShiftY = (GetParent().GetHeight() - height) / 2f + GetParent().GetPadding().Top;
+                alignShiftY = (parent.GetHeight() - height) / 2f + parent.GetPadding().Top;
 
             xFirstBeg = _letters[0].xBeg + _letters[0].xShift;
 
-            textPrt.XTextureShift = (int)alignShiftX + GetParent().GetX() + xFirstBeg; // + _lineXShift
-            textPrt.YTextureShift = (int)alignShiftY + _lineYShift + GetParent().GetY();
+            textPrt.XTextureShift = (int)alignShiftX + parent.GetX() + xFirstBeg; // + _lineXShift
+            textPrt.YTextureShift = (int)alignShiftY + _lineYShift + parent.GetY();
 
             if (!_isRecountable)
                 textPrt.XTextureShift += _lineXShift;

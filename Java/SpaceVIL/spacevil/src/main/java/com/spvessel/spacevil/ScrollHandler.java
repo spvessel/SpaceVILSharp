@@ -31,11 +31,11 @@ public class ScrollHandler extends Prototype implements InterfaceDraggable {
 
     private void onDragging(InterfaceItem sender, MouseArgs args) {
         int offset;
-
+        Prototype parent = getParent();
         if (direction == Orientation.HORIZONTAL)
-            offset = args.position.getX() - getParent().getX() - _diff;
+            offset = args.position.getX() - parent.getX() - _diff;
         else
-            offset = args.position.getY() - getParent().getY() - _diff;
+            offset = args.position.getY() - parent.getY() - _diff;
 
         setOffset(offset);
     }
@@ -44,14 +44,15 @@ public class ScrollHandler extends Prototype implements InterfaceDraggable {
      * Set offset of the ScrollHandler
      */
     public void setOffset(int offset) {
-        if (getParent() == null)
+        Prototype parent = getParent();
+        if (parent == null)
             return;
 
         _offset = offset;
 
         if (direction == Orientation.HORIZONTAL)
-            setX(_offset + getParent().getX());
+            setX(_offset + parent.getX());
         else
-            setY(_offset + getParent().getY());
+            setY(_offset + parent.getY());
     }
 }

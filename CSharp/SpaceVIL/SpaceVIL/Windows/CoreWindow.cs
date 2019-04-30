@@ -25,6 +25,7 @@ namespace SpaceVIL
             SetDefaults();
             SetHandler(new WindowLayout(this));
             SetSize(300, 300);
+            SetMinSize(150, 100);
             count++;
         }
 

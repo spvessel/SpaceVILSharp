@@ -13,7 +13,7 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 public class VisualContact extends Prototype {
     public static int _count = 0;
 
-    private Integer[] _array;
+    // private Integer[] _array;
 
     public VisualContact() {
         // self view attr

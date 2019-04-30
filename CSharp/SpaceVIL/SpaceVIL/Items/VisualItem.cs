@@ -39,12 +39,12 @@ namespace SpaceVIL
         {
             _spacing = spacing;
             UpdateGeometry();
-
-            if (GetParent() != null)
+            Prototype parent = GetParent();
+            if (parent != null)
             {
-                var hLayout = GetParent() as IHLayout;
-                var vLayout = GetParent() as IVLayout;
-                var grid = GetParent() as IGrid;
+                var hLayout = parent as IHLayout;
+                var vLayout = parent as IVLayout;
+                var grid = parent as IGrid;
 
                 if (hLayout == null && vLayout == null && grid == null)
                     UpdateBehavior();
@@ -62,12 +62,12 @@ namespace SpaceVIL
             _spacing.Horizontal = horizontal;
             _spacing.Vertical = vertical;
             UpdateGeometry();
-
-            if (GetParent() != null)
+            Prototype parent = GetParent();
+            if (parent != null)
             {
-                var hLayout = GetParent() as IHLayout;
-                var vLayout = GetParent() as IVLayout;
-                var grid = GetParent() as IGrid;
+                var hLayout = parent as IHLayout;
+                var vLayout = parent as IVLayout;
+                var grid = parent as IGrid;
 
                 if (hLayout == null && vLayout == null && grid == null)
                     UpdateBehavior();
@@ -89,12 +89,12 @@ namespace SpaceVIL
         {
             _padding = padding;
             UpdateGeometry();
-
-            if (GetParent() != null)
+            Prototype parent = GetParent();
+            if (parent != null)
             {
-                var hLayout = GetParent() as IHLayout;
-                var vLayout = GetParent() as IVLayout;
-                var grid = GetParent() as IGrid;
+                var hLayout = parent as IHLayout;
+                var vLayout = parent as IVLayout;
+                var grid = parent as IGrid;
 
                 if (hLayout == null && vLayout == null && grid == null)
                     UpdateBehavior();
@@ -114,12 +114,12 @@ namespace SpaceVIL
             _padding.Right = right;
             _padding.Bottom = bottom;
             UpdateGeometry();
-
-            if (GetParent() != null)
+            Prototype parent = GetParent();
+            if (parent != null)
             {
-                var hLayout = GetParent() as IHLayout;
-                var vLayout = GetParent() as IVLayout;
-                var grid = GetParent() as IGrid;
+                var hLayout = parent as IHLayout;
+                var vLayout = parent as IVLayout;
+                var grid = parent as IGrid;
 
                 if (hLayout == null && vLayout == null && grid == null)
                     UpdateBehavior();
@@ -131,7 +131,6 @@ namespace SpaceVIL
                 if (grid != null)
                     grid.UpdateLayout();
             }
-            // UpdateGeometry();
         }
         internal EventManager eventManager = null;
         // private List<IBaseItem> _content = new List<IBaseItem>();
@@ -190,13 +189,14 @@ namespace SpaceVIL
             else
                 (item as BaseItem).RemoveItemFromListeners();
         }
-        
+
         public override void RemoveItemFromListeners()
         {
-            GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this._main);
-            GetParent().RemoveEventListener(GeometryEventType.ResizeHeight, this._main);
-            GetParent().RemoveEventListener(GeometryEventType.Moved_X, this._main);
-            GetParent().RemoveEventListener(GeometryEventType.Moved_Y, this._main);
+            Prototype parent = GetParent();
+            parent.RemoveEventListener(GeometryEventType.ResizeWidth, this._main);
+            parent.RemoveEventListener(GeometryEventType.ResizeHeight, this._main);
+            parent.RemoveEventListener(GeometryEventType.Moved_X, this._main);
+            parent.RemoveEventListener(GeometryEventType.Moved_Y, this._main);
         }
 
         internal virtual void AddItem(IBaseItem item)
@@ -453,15 +453,10 @@ namespace SpaceVIL
         int height = 0,
         string name = "VisualItem")
         {
-            /*if (GetParent().GetHandler() != null)
-                SetHandler(GetParent().GetHandler());*/
-            //create state
             states.Add(ItemStateType.Base, new ItemState()
             {
                 Value = true,
                 Background = GetBackground(),
-                // Text = null,
-                // ImageUri = null
             });
 
             //common default prop
@@ -476,11 +471,11 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetWidth(width);
-
-                if (GetParent() != null && GetWidthPolicy() == SizePolicy.Fixed)
+                Prototype parent = GetParent();
+                if (parent != null && GetWidthPolicy() == SizePolicy.Fixed)
                 {
-                    var layout = GetParent() as IHLayout;
-                    var grid = GetParent() as IGrid;
+                    var layout = parent as IHLayout;
+                    var grid = parent as IGrid;
 
                     if (layout == null && grid == null)
                         UpdateBehavior();
@@ -499,11 +494,11 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetHeight(height);
-
-                if (GetParent() != null && GetHeightPolicy() == SizePolicy.Fixed)
+                Prototype parent = GetParent();
+                if (parent != null && GetHeightPolicy() == SizePolicy.Fixed)
                 {
-                    var layout = GetParent() as IVLayout;
-                    var grid = GetParent() as IGrid;
+                    var layout = parent as IVLayout;
+                    var grid = parent as IGrid;
 
                     if (layout == null && grid == null)
                         UpdateBehavior();
@@ -527,16 +522,16 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetX(_x);
-
-                if (GetParent() != null && GetWidthPolicy() == SizePolicy.Fixed)
+                Prototype parent = GetParent();
+                if (parent != null && GetWidthPolicy() == SizePolicy.Fixed)
                 {
-                    var layout = GetParent() as IHLayout;
-                    var grid = GetParent() as IGrid;
+                    var layout = parent as IHLayout;
+                    var grid = parent as IGrid;
 
                     if (layout != null)
                         layout.UpdateLayout();
                     if (grid != null)
-                        if ((GetParent() as IFree) == null)
+                        if ((parent as IFree) == null)
                             grid.UpdateLayout();
                 }
                 eventManager.NotifyListeners(GeometryEventType.Moved_X, value);
@@ -548,17 +543,17 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetY(_y);
-
-                if (GetParent() != null && GetHeightPolicy() == SizePolicy.Fixed)
+                Prototype parent = GetParent();
+                if (parent != null && GetHeightPolicy() == SizePolicy.Fixed)
                 {
-                    var layout = GetParent() as IVLayout;
-                    var grid = GetParent() as IGrid;
+                    var layout = parent as IVLayout;
+                    var grid = parent as IGrid;
 
                     if (layout != null)
                         layout.UpdateLayout();
 
                     if (grid != null)
-                        if ((GetParent() as IFree) == null)
+                        if ((parent as IFree) == null)
                             grid.UpdateLayout();
                 }
                 eventManager.NotifyListeners(GeometryEventType.Moved_Y, value);
