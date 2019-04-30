@@ -6,6 +6,7 @@ import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -81,11 +82,11 @@ public class LayoutsTest extends ActiveWindow {
         listbox_right_2.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         grid.insertItem(listbox_right_2, 1, 1);
 
-        VisualContact visualContact = new VisualContact();
-        visualContact.eventMouseClick.add((sender, args) -> {
-            System.out.println("visualContact");
-        });
-        listbox_left_1.addItem(visualContact);
+        // VisualContact visualContact = new VisualContact();
+        // visualContact.eventMouseClick.add((sender, args) -> {
+        //     System.out.println("visualContact");
+        // });
+        // listbox_left_1.addItem(visualContact);
 
         // button
         ButtonCore left = new ButtonCore();
@@ -98,10 +99,9 @@ public class LayoutsTest extends ActiveWindow {
             // VisualContact contact_1 = new VisualContact();
             // contact_1.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
             VisualContact contact_2 = new VisualContact();
-            contact_2.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
-            // listbox_left_1.addItem(contact_1);
+            listbox_left_1.addItem(contact_2);
             // listbox_left_2.addItem(contact_2);
-            listbox_left_1.addItem(new Album("Album", "C:\\"));
+            // listbox_left_1.addItem(new Album("Album", "C:\\"));
         };
         left.eventMouseClick.add(left_click);
         frame.addItem(left);
@@ -113,16 +113,21 @@ public class LayoutsTest extends ActiveWindow {
         right.setWidth(60);
         right.setHeight(25);
         InterfaceMouseMethodState right_click = (sender, args) -> {
-            VisualContact c_1 = new VisualContact();
-            VisualContact c_2 = new VisualContact();
-            VisualContact c_3 = new VisualContact();
-            VisualContact c_4 = new VisualContact();
-            VisualContact r_1 = new VisualContact();
-            VisualContact r_2 = new VisualContact();
-            VisualContact r_3 = new VisualContact();
-            VisualContact r_4 = new VisualContact();
-            listbox_right_1.setListContent(Arrays.asList(c_1, c_2, c_3, c_4));
-            listbox_right_2.setListContent(Arrays.asList(r_4, r_3, r_2, r_1));
+            // VisualContact c_1 = new VisualContact();
+            // VisualContact c_2 = new VisualContact();
+            // VisualContact c_3 = new VisualContact();
+            // VisualContact c_4 = new VisualContact();
+            // VisualContact r_1 = new VisualContact();
+            // VisualContact r_2 = new VisualContact();
+            // VisualContact r_3 = new VisualContact();
+            // VisualContact r_4 = new VisualContact();
+            // listbox_right_1.setListContent(Arrays.asList(c_1, c_2, c_3, c_4));
+            // listbox_right_2.setListContent(Arrays.asList(r_4, r_3, r_2, r_1));
+            listbox_left_1.clear();
+            // System.gc();
+            // gc();
+            Runtime r = Runtime.getRuntime();
+            r.gc();
         };
         right.eventMouseClick.add(right_click);
         frame.addItem(right);
@@ -159,7 +164,7 @@ public class LayoutsTest extends ActiveWindow {
             // System.out.println("Fuction run " + (System.currentTimeMillis() - startTime)
             // + " ms");
             // System.gc();
-            
+
             list.clear();
             for (int i = 0; i < 100000; i++) {
                 list.add(new VisualContact());
@@ -168,5 +173,14 @@ public class LayoutsTest extends ActiveWindow {
         };
         all.eventMouseClick.add(all_click);
         frame.addItem(all);
+    }
+
+    public static void gc() {
+        Object obj = new Object();
+        WeakReference ref = new WeakReference<Object>(obj);
+        obj = null;
+        while (ref.get() != null) {
+            System.gc();
+        }
     }
 }

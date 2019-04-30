@@ -64,12 +64,15 @@ namespace SpaceVIL
 
         internal void FreeEvents()
         {
+            // Console.WriteLine("free events " + GetItemName());
+
             EventFocusGet = null;
             EventFocusLost = null;
             EventResize = null;
             EventDestroy = null;
 
             EventMouseHover = null;
+            EventMouseLeave = null;
             EventMouseClick = null;
             EventMouseDoubleClick = null;
             EventMousePress = null;

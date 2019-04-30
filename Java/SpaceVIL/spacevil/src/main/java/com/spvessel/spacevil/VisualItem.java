@@ -339,6 +339,14 @@ final class VisualItem extends BaseItem {
         }
     }
 
+    @Override
+    public void removeItemFromListeners() {
+        getParent().removeEventListener(GeometryEventType.RESIZE_WIDTH, this._main);
+        getParent().removeEventListener(GeometryEventType.RESIZE_HEIGHT, this._main);
+        getParent().removeEventListener(GeometryEventType.MOVED_X, this._main);
+        getParent().removeEventListener(GeometryEventType.MOVED_Y, this._main);
+    }
+
     void addItem(InterfaceBaseItem item) {
         locker.lock();
         try {

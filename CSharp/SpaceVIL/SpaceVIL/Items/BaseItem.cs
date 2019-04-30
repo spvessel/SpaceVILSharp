@@ -104,7 +104,7 @@ namespace SpaceVIL
         /// <summary>
         /// Item will not react on parent's changes
         /// </summary>
-        public void RemoveItemFromListeners()
+        public virtual void RemoveItemFromListeners()
         {
             GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this);
             GetParent().RemoveEventListener(GeometryEventType.ResizeHeight, this);

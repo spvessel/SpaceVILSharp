@@ -190,6 +190,15 @@ namespace SpaceVIL
             else
                 (item as BaseItem).RemoveItemFromListeners();
         }
+        
+        public override void RemoveItemFromListeners()
+        {
+            GetParent().RemoveEventListener(GeometryEventType.ResizeWidth, this._main);
+            GetParent().RemoveEventListener(GeometryEventType.ResizeHeight, this._main);
+            GetParent().RemoveEventListener(GeometryEventType.Moved_X, this._main);
+            GetParent().RemoveEventListener(GeometryEventType.Moved_Y, this._main);
+        }
+
         internal virtual void AddItem(IBaseItem item)
         {
             Monitor.Enter(Locker);
