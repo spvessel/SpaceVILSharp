@@ -453,10 +453,7 @@ public class WrapGrid extends Prototype {
      * Set list of items
      */
     public void setListContent(List<InterfaceBaseItem> content) {
-        _area.removeAllItems();
-        for (InterfaceBaseItem item : content) {
-            addItem(item);
-        }
+        _area.setListContent(content);
     }
 
     public InterfaceBaseItem getWrapper(InterfaceBaseItem item) {

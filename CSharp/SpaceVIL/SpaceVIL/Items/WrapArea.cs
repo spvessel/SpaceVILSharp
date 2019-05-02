@@ -288,6 +288,19 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
+        public virtual void SetListContent(List<IBaseItem> content)
+        {
+            RemoveAllItems();
+            foreach (IBaseItem item in content)
+            {
+                SelectionItem wrapper = GetWrapper(item);
+                base.AddItem(wrapper);
+                _mapContent.Add(item, wrapper);
+            }
+            UpdateLayout();
+            ItemListChanged?.Invoke();
+        }
+
         /// <summary>
         /// Remove item from the WrapArea
         /// </summary>
