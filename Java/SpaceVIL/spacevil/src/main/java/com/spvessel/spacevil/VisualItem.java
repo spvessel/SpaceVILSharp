@@ -215,43 +215,50 @@ final class VisualItem extends BaseItem {
     void setSpacing(Spacing spacing) {
         _spacing = spacing;
         updateGeometry();
+
         Prototype parent = getParent();
-        if (parent != null) {
-            boolean hLayout = parent instanceof InterfaceHLayout;
-            boolean vLayout = parent instanceof InterfaceVLayout;
-            boolean grid = parent instanceof InterfaceGrid;
-
-            if (!hLayout && !vLayout && !grid)
-                updateBehavior();
-
-            if (hLayout)
-                ((InterfaceHLayout) parent).updateLayout();
-            if (vLayout)
-                ((InterfaceVLayout) parent).updateLayout();
-            if (grid)
-                ((InterfaceGrid) parent).updateLayout();
+        if (parent == null) {
+            return;
         }
+
+        boolean hLayout = parent instanceof InterfaceHLayout;
+        boolean vLayout = parent instanceof InterfaceVLayout;
+        boolean grid = parent instanceof InterfaceGrid;
+
+        if (!hLayout && !vLayout && !grid)
+            updateBehavior();
+
+        if (hLayout)
+            ((InterfaceHLayout) parent).updateLayout();
+        if (vLayout)
+            ((InterfaceVLayout) parent).updateLayout();
+        if (grid)
+            ((InterfaceGrid) parent).updateLayout();
     }
 
     void setSpacing(int horizontal, int vertical) {
-        _spacing = new Spacing(horizontal, vertical);
-        updateGeometry();
-        Prototype parent = getParent();
-        if (parent != null) {
-            boolean hLayout = parent instanceof InterfaceHLayout;
-            boolean vLayout = parent instanceof InterfaceVLayout;
-            boolean grid = parent instanceof InterfaceGrid;
-
-            if (!hLayout && !vLayout && !grid)
-                updateBehavior();
-
-            if (hLayout)
-                ((InterfaceHLayout) parent).updateLayout();
-            if (vLayout)
-                ((InterfaceVLayout) parent).updateLayout();
-            if (grid)
-                ((InterfaceGrid) parent).updateLayout();
-        }
+        setSpacing(new Spacing(horizontal, vertical));
+//        _spacing = new Spacing(horizontal, vertical);
+//        updateGeometry();
+//
+//        Prototype parent = getParent();
+//        if (parent == null) {
+//            return;
+//        }
+//
+//        boolean hLayout = parent instanceof InterfaceHLayout;
+//        boolean vLayout = parent instanceof InterfaceVLayout;
+//        boolean grid = parent instanceof InterfaceGrid;
+//
+//        if (!hLayout && !vLayout && !grid)
+//            updateBehavior();
+//
+//        if (hLayout)
+//            ((InterfaceHLayout) parent).updateLayout();
+//        if (vLayout)
+//            ((InterfaceVLayout) parent).updateLayout();
+//        if (grid)
+//            ((InterfaceGrid) parent).updateLayout();
     }
 
     private Indents _padding = new Indents();
@@ -263,43 +270,50 @@ final class VisualItem extends BaseItem {
     void setPadding(Indents padding) {
         _padding = padding;
         updateGeometry();
+
         Prototype parent = getParent();
-        if (parent != null) {
-            boolean hLayout = parent instanceof InterfaceHLayout;
-            boolean vLayout = parent instanceof InterfaceVLayout;
-            boolean grid = parent instanceof InterfaceGrid;
-
-            if (!hLayout && !vLayout && !grid)
-                updateBehavior();
-
-            if (hLayout)
-                ((InterfaceHLayout) parent).updateLayout();
-            if (vLayout)
-                ((InterfaceVLayout) parent).updateLayout();
-            if (grid)
-                ((InterfaceGrid) parent).updateLayout();
+        if (parent == null) {
+            return;
         }
+
+        boolean hLayout = parent instanceof InterfaceHLayout;
+        boolean vLayout = parent instanceof InterfaceVLayout;
+        boolean grid = parent instanceof InterfaceGrid;
+
+        if (!hLayout && !vLayout && !grid)
+            updateBehavior();
+
+        if (hLayout)
+            ((InterfaceHLayout) parent).updateLayout();
+        if (vLayout)
+            ((InterfaceVLayout) parent).updateLayout();
+        if (grid)
+            ((InterfaceGrid) parent).updateLayout();
     }
 
     void setPadding(int left, int top, int right, int bottom) {
-        _padding = new Indents(left, top, right, bottom);
-        updateGeometry();
-        Prototype parent = getParent();
-        if (parent != null) {
-            boolean hLayout = parent instanceof InterfaceHLayout;
-            boolean vLayout = parent instanceof InterfaceVLayout;
-            boolean grid = parent instanceof InterfaceGrid;
-
-            if (!hLayout && !vLayout && !grid)
-                updateBehavior();
-
-            if (hLayout)
-                ((InterfaceHLayout) parent).updateLayout();
-            if (vLayout)
-                ((InterfaceVLayout) parent).updateLayout();
-            if (grid)
-                ((InterfaceGrid) parent).updateLayout();
-        }
+        setPadding(new Indents(left, top, right, bottom));
+//        _padding = new Indents(left, top, right, bottom);
+//        updateGeometry();
+//
+//        Prototype parent = getParent();
+//        if (parent == null) {
+//            return;
+//        }
+//
+//        boolean hLayout = parent instanceof InterfaceHLayout;
+//        boolean vLayout = parent instanceof InterfaceVLayout;
+//        boolean grid = parent instanceof InterfaceGrid;
+//
+//        if (!hLayout && !vLayout && !grid)
+//            updateBehavior();
+//
+//        if (hLayout)
+//            ((InterfaceHLayout) parent).updateLayout();
+//        if (vLayout)
+//            ((InterfaceVLayout) parent).updateLayout();
+//        if (grid)
+//            ((InterfaceGrid) parent).updateLayout();
     }
 
     EventManager eventManager = null;

@@ -10,6 +10,7 @@ import com.spvessel.spacevil.Flags.ItemRule;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,8 +58,8 @@ public abstract class BaseItem implements InterfaceBaseItem {
     void addChildren(InterfaceBaseItem item) {
         Prototype itemParent = item.getParent();
         if (itemParent != null)
-        itemParent.removeItem(item);
-        
+            itemParent.removeItem(item);
+
         item.setParent(((VisualItem) this)._main);
         itemParent = item.getParent();
 
@@ -127,43 +128,50 @@ public abstract class BaseItem implements InterfaceBaseItem {
     public void setMargin(Indents margin) {
         _margin = margin;
         updateGeometry();
+
         Prototype parent = getParent();
-        if (parent != null) {
-            boolean hLayout = parent instanceof InterfaceHLayout;
-            boolean vLayout = parent instanceof InterfaceVLayout;
-            boolean grid = parent instanceof InterfaceGrid;
-
-            if (!hLayout && !vLayout && !grid)
-                updateBehavior();
-
-            if (hLayout)
-                ((InterfaceHLayout) parent).updateLayout();
-            if (vLayout)
-                ((InterfaceVLayout) parent).updateLayout();
-            if (grid)
-                ((InterfaceGrid) parent).updateLayout();
+        if (parent == null) {
+            return;
         }
+
+        boolean hLayout = parent instanceof InterfaceHLayout;
+        boolean vLayout = parent instanceof InterfaceVLayout;
+        boolean grid = parent instanceof InterfaceGrid;
+
+        if (!hLayout && !vLayout && !grid)
+            updateBehavior();
+
+        if (hLayout)
+            ((InterfaceHLayout) parent).updateLayout();
+        if (vLayout)
+            ((InterfaceVLayout) parent).updateLayout();
+        if (grid)
+            ((InterfaceGrid) parent).updateLayout();
     }
 
     public void setMargin(int left, int top, int right, int bottom) {
-        _margin = new Indents(left, top, right, bottom);
-        updateGeometry();
-        Prototype parent = getParent();
-        if (parent != null) {
-            boolean hLayout = parent instanceof InterfaceHLayout;
-            boolean vLayout = parent instanceof InterfaceVLayout;
-            boolean grid = parent instanceof InterfaceGrid;
+        setMargin(new Indents(left, top, right, bottom));
+        // _margin = new Indents(left, top, right, bottom);
+        // updateGeometry();
 
-            if (!hLayout && !vLayout && !grid)
-                updateBehavior();
+        // Prototype parent = getParent();
+        // if (parent == null) {
+        //     return;
+        // }
 
-            if (hLayout)
-                ((InterfaceHLayout) parent).updateLayout();
-            if (vLayout)
-                ((InterfaceVLayout) parent).updateLayout();
-            if (grid)
-                ((InterfaceGrid) parent).updateLayout();
-        }
+        // boolean hLayout = parent instanceof InterfaceHLayout;
+        // boolean vLayout = parent instanceof InterfaceVLayout;
+        // boolean grid = parent instanceof InterfaceGrid;
+
+        // if (!hLayout && !vLayout && !grid)
+        //     updateBehavior();
+
+        // if (hLayout)
+        //     ((InterfaceHLayout) parent).updateLayout();
+        // if (vLayout)
+        //     ((InterfaceVLayout) parent).updateLayout();
+        // if (grid)
+        //     ((InterfaceGrid) parent).updateLayout();
     }
 
     /**
@@ -182,7 +190,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
     /**
      * @return shape points list in GL coordinates, using triangles from
-     *         getTriangles()
+     * getTriangles()
      */
     public List<float[]> makeShape() {
         return _item.makeShape();
@@ -196,7 +204,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
         List<float[]> result = new LinkedList<>();
 
         for (int i = 0; i < getTriangles().size(); i++) {
-            result.add(new float[] { getTriangles().get(i)[0], getTriangles().get(i)[1], getTriangles().get(i)[2] });
+            result.add(new float[]{getTriangles().get(i)[0], getTriangles().get(i)[1], getTriangles().get(i)[2]});
         }
 
         // List<float[]> result = getTriangles();
@@ -366,11 +374,11 @@ public abstract class BaseItem implements InterfaceBaseItem {
     }
 
     public int[] getMinSize() {
-        return new int[] { _itemGeometry.getMinWidth(), _itemGeometry.getMinHeight() };
+        return new int[]{_itemGeometry.getMinWidth(), _itemGeometry.getMinHeight()};
     }
 
     public int[] getMaxSize() {
-        return new int[] { _itemGeometry.getMaxWidth(), _itemGeometry.getMaxHeight() };
+        return new int[]{_itemGeometry.getMaxWidth(), _itemGeometry.getMaxHeight()};
     }
 
     // behavior
@@ -380,45 +388,52 @@ public abstract class BaseItem implements InterfaceBaseItem {
      * BaseItem alignment
      */
     public void setAlignment(ItemAlignment... alignment) {
-        _itemBehavior.setAlignment(alignment);
-        updateGeometry();
-        Prototype parent = getParent();
-        if (parent != null) {
-            boolean hLayout = parent instanceof InterfaceHLayout;
-            boolean vLayout = parent instanceof InterfaceVLayout;
-            boolean grid = parent instanceof InterfaceGrid;
-
-            if (!hLayout && !vLayout && !grid)
-                updateBehavior();
-
-            if (hLayout)
-                ((InterfaceHLayout) parent).updateLayout();
-            if (vLayout)
-                ((InterfaceVLayout) parent).updateLayout();
-            if (grid)
-                ((InterfaceGrid) parent).updateLayout();
-        }
+        setAlignment(Arrays.asList(alignment));
+//        _itemBehavior.setAlignment(alignment);
+//        updateGeometry();
+//
+//        Prototype parent = getParent();
+//        if (parent == null) {
+//            return;
+//        }
+//
+//        boolean hLayout = parent instanceof InterfaceHLayout;
+//        boolean vLayout = parent instanceof InterfaceVLayout;
+//        boolean grid = parent instanceof InterfaceGrid;
+//
+//        if (!hLayout && !vLayout && !grid)
+//            updateBehavior();
+//
+//        if (hLayout)
+//            ((InterfaceHLayout) parent).updateLayout();
+//        if (vLayout)
+//            ((InterfaceVLayout) parent).updateLayout();
+//        if (grid)
+//            ((InterfaceGrid) parent).updateLayout();
     }
 
     public void setAlignment(List<ItemAlignment> alignment) {
         _itemBehavior.setAlignment(alignment);
         updateGeometry();
+
         Prototype parent = getParent();
-        if (parent != null) {
-            boolean hLayout = parent instanceof InterfaceHLayout;
-            boolean vLayout = parent instanceof InterfaceVLayout;
-            boolean grid = parent instanceof InterfaceGrid;
-
-            if (!hLayout && !vLayout && !grid)
-                updateBehavior();
-
-            if (hLayout)
-                ((InterfaceHLayout) parent).updateLayout();
-            if (vLayout)
-                ((InterfaceVLayout) parent).updateLayout();
-            if (grid)
-                ((InterfaceGrid) parent).updateLayout();
+        if (parent == null) {
+            return;
         }
+
+        boolean hLayout = parent instanceof InterfaceHLayout;
+        boolean vLayout = parent instanceof InterfaceVLayout;
+        boolean grid = parent instanceof InterfaceGrid;
+
+        if (!hLayout && !vLayout && !grid)
+            updateBehavior();
+
+        if (hLayout)
+            ((InterfaceHLayout) parent).updateLayout();
+        if (vLayout)
+            ((InterfaceVLayout) parent).updateLayout();
+        if (grid)
+            ((InterfaceGrid) parent).updateLayout();
     }
 
     public List<ItemAlignment> getAlignment() {
@@ -515,21 +530,23 @@ public abstract class BaseItem implements InterfaceBaseItem {
             }
 
             Prototype parent = getParent();
-            if (parent != null) {
-                boolean hLayout = parent instanceof InterfaceHLayout;
-                boolean vLayout = parent instanceof InterfaceVLayout;
-                boolean grid = parent instanceof InterfaceGrid;
-
-                if (!hLayout && !vLayout && !grid)
-                    updateBehavior();
-
-                if (hLayout)
-                    ((InterfaceHLayout) parent).updateLayout();
-                if (vLayout)
-                    ((InterfaceVLayout) parent).updateLayout();
-                if (grid)
-                    ((InterfaceGrid) parent).updateLayout();
+            if (parent == null) {
+                return;
             }
+
+            boolean hLayout = parent instanceof InterfaceHLayout;
+            boolean vLayout = parent instanceof InterfaceVLayout;
+            boolean grid = parent instanceof InterfaceGrid;
+
+            if (!hLayout && !vLayout && !grid)
+                updateBehavior();
+
+            if (hLayout)
+                ((InterfaceHLayout) parent).updateLayout();
+            if (vLayout)
+                ((InterfaceVLayout) parent).updateLayout();
+            if (grid)
+                ((InterfaceGrid) parent).updateLayout();
         }
     }
 
@@ -555,21 +572,23 @@ public abstract class BaseItem implements InterfaceBaseItem {
             }
 
             Prototype parent = getParent();
-            if (parent != null) {
-                boolean hLayout = parent instanceof InterfaceHLayout;
-                boolean vLayout = parent instanceof InterfaceVLayout;
-                boolean grid = parent instanceof InterfaceGrid;
-
-                if (!hLayout && !vLayout && !grid)
-                    updateBehavior();
-
-                if (hLayout)
-                    ((InterfaceHLayout) parent).updateLayout();
-                if (vLayout)
-                    ((InterfaceVLayout) parent).updateLayout();
-                if (grid)
-                    ((InterfaceGrid) parent).updateLayout();
+            if (parent == null) {
+                return;
             }
+
+            boolean hLayout = parent instanceof InterfaceHLayout;
+            boolean vLayout = parent instanceof InterfaceVLayout;
+            boolean grid = parent instanceof InterfaceGrid;
+
+            if (!hLayout && !vLayout && !grid)
+                updateBehavior();
+
+            if (hLayout)
+                ((InterfaceHLayout) parent).updateLayout();
+            if (vLayout)
+                ((InterfaceVLayout) parent).updateLayout();
+            if (grid)
+                ((InterfaceGrid) parent).updateLayout();
         }
     }
 
@@ -623,102 +642,102 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
         setConfines();
         switch (type) {
-        case MOVED_X:
-            setX(getX() + value);
-            break;
+            case MOVED_X:
+                setX(getX() + value);
+                break;
 
-        case MOVED_Y:
-            setY(getY() + value);
-            break;
+            case MOVED_Y:
+                setY(getY() + value);
+                break;
 
-        case RESIZE_WIDTH:
-            if (getWidthPolicy() == SizePolicy.FIXED) {
-                if (getAlignment().contains(ItemAlignment.RIGHT)) {
-                    setX(parent.getX() + parent.getWidth() - getWidth() - parent.getPadding().right
-                            - getMargin().right);//
-                }
-                if (getAlignment().contains(ItemAlignment.HCENTER)) {
-                    setX(parent.getX() + (parent.getWidth() - getWidth()) / 2 + getMargin().left
-                            - getMargin().right);
-                }
-            } else if (getWidthPolicy() == SizePolicy.EXPAND) {
-                int prefered = parent.getWidth() - parent.getPadding().left - parent.getPadding().right
-                        - getMargin().right - getMargin().left;//
-                prefered = (prefered > getMaxWidth()) ? getMaxWidth() : prefered;
-                prefered = (prefered < getMinWidth()) ? getMinWidth() : prefered;
-                setWidth(prefered);
-
-                if (prefered + parent.getPadding().left + parent.getPadding().right + getMargin().right
-                        + getMargin().left == parent.getWidth())//
-                {
-                    setX(parent.getX() + parent.getPadding().left + getMargin().left);//
-                } else if (prefered + parent.getPadding().left + parent.getPadding().right + getMargin().right
-                        + getMargin().left < parent.getWidth())//
-                {
+            case RESIZE_WIDTH:
+                if (getWidthPolicy() == SizePolicy.FIXED) {
                     if (getAlignment().contains(ItemAlignment.RIGHT)) {
                         setX(parent.getX() + parent.getWidth() - getWidth() - parent.getPadding().right
                                 - getMargin().right);//
                     }
                     if (getAlignment().contains(ItemAlignment.HCENTER)) {
-                        setX(parent.getX() + (parent.getWidth() - getWidth()) / 2 + getMargin().left);//
+                        setX(parent.getX() + (parent.getWidth() - getWidth()) / 2 + getMargin().left
+                                - getMargin().right);
                     }
-                } else if (prefered + parent.getPadding().left + parent.getPadding().right + getMargin().right
-                        + getMargin().left > parent.getWidth())//
-                {
-                    // никогда не должен зайти
-                    setX(parent.getX() + parent.getPadding().left + getMargin().left);//
-                    prefered = parent.getWidth() - parent.getPadding().left - parent.getPadding().right
-                            - getMargin().left - getMargin().right;//
+                } else if (getWidthPolicy() == SizePolicy.EXPAND) {
+                    int prefered = parent.getWidth() - parent.getPadding().left - parent.getPadding().right
+                            - getMargin().right - getMargin().left;//
+                    prefered = (prefered > getMaxWidth()) ? getMaxWidth() : prefered;
+                    prefered = (prefered < getMinWidth()) ? getMinWidth() : prefered;
                     setWidth(prefered);
-                }
-            }
-            break;
 
-        case RESIZE_HEIGHT:
-            if (getHeightPolicy() == SizePolicy.FIXED) {
-                if (getAlignment().contains(ItemAlignment.BOTTOM)) {
-                    setY(parent.getY() + parent.getHeight() - getHeight() - parent.getPadding().bottom
-                            - getMargin().bottom);//
+                    if (prefered + parent.getPadding().left + parent.getPadding().right + getMargin().right
+                            + getMargin().left == parent.getWidth())//
+                    {
+                        setX(parent.getX() + parent.getPadding().left + getMargin().left);//
+                    } else if (prefered + parent.getPadding().left + parent.getPadding().right + getMargin().right
+                            + getMargin().left < parent.getWidth())//
+                    {
+                        if (getAlignment().contains(ItemAlignment.RIGHT)) {
+                            setX(parent.getX() + parent.getWidth() - getWidth() - parent.getPadding().right
+                                    - getMargin().right);//
+                        }
+                        if (getAlignment().contains(ItemAlignment.HCENTER)) {
+                            setX(parent.getX() + (parent.getWidth() - getWidth()) / 2 + getMargin().left);//
+                        }
+                    } else if (prefered + parent.getPadding().left + parent.getPadding().right + getMargin().right
+                            + getMargin().left > parent.getWidth())//
+                    {
+                        // никогда не должен зайти
+                        setX(parent.getX() + parent.getPadding().left + getMargin().left);//
+                        prefered = parent.getWidth() - parent.getPadding().left - parent.getPadding().right
+                                - getMargin().left - getMargin().right;//
+                        setWidth(prefered);
+                    }
                 }
-                if (getAlignment().contains(ItemAlignment.VCENTER)) {
-                    setY(parent.getY() + (parent.getHeight() - getHeight()) / 2 + getMargin().top
-                            - getMargin().bottom);
-                }
-            } else if (getHeightPolicy() == SizePolicy.EXPAND) {
-                int prefered = parent.getHeight() - parent.getPadding().top - parent.getPadding().bottom
-                        - getMargin().bottom - getMargin().top;//
-                prefered = (prefered > getMaxHeight()) ? getMaxHeight() : prefered;
-                prefered = (prefered < getMinHeight()) ? getMinHeight() : prefered;
-                setHeight(prefered);
+                break;
 
-                if (prefered + parent.getPadding().top + parent.getPadding().bottom + getMargin().bottom
-                        + getMargin().top == parent.getHeight())//
-                {
-                    setY(parent.getY() + parent.getPadding().top + getMargin().top);//
-                } else if (prefered + parent.getPadding().top + parent.getPadding().bottom
-                        + getMargin().bottom + getMargin().top < parent.getHeight())//
-                {
+            case RESIZE_HEIGHT:
+                if (getHeightPolicy() == SizePolicy.FIXED) {
                     if (getAlignment().contains(ItemAlignment.BOTTOM)) {
-                        setY(parent.getY() + parent.getHeight() - getHeight()
-                                - parent.getPadding().bottom - getMargin().bottom);//
+                        setY(parent.getY() + parent.getHeight() - getHeight() - parent.getPadding().bottom
+                                - getMargin().bottom);//
                     }
                     if (getAlignment().contains(ItemAlignment.VCENTER)) {
-                        setY(parent.getY() + (parent.getHeight() - getHeight()) / 2 + getMargin().top);//
+                        setY(parent.getY() + (parent.getHeight() - getHeight()) / 2 + getMargin().top
+                                - getMargin().bottom);
                     }
-                } else if (prefered + parent.getPadding().top + parent.getPadding().bottom
-                        + getMargin().bottom + getMargin().top > parent.getHeight())//
-                {
-                    // никогда не должен зайти
-                    setY(parent.getY() + parent.getPadding().top + getMargin().top);//
-                    prefered = parent.getHeight() - parent.getPadding().top - parent.getPadding().bottom
-                            - getMargin().top - getMargin().bottom;//
+                } else if (getHeightPolicy() == SizePolicy.EXPAND) {
+                    int prefered = parent.getHeight() - parent.getPadding().top - parent.getPadding().bottom
+                            - getMargin().bottom - getMargin().top;//
+                    prefered = (prefered > getMaxHeight()) ? getMaxHeight() : prefered;
+                    prefered = (prefered < getMinHeight()) ? getMinHeight() : prefered;
                     setHeight(prefered);
-                }
-            }
-            break;
 
-        default:
-            break;
+                    if (prefered + parent.getPadding().top + parent.getPadding().bottom + getMargin().bottom
+                            + getMargin().top == parent.getHeight())//
+                    {
+                        setY(parent.getY() + parent.getPadding().top + getMargin().top);//
+                    } else if (prefered + parent.getPadding().top + parent.getPadding().bottom
+                            + getMargin().bottom + getMargin().top < parent.getHeight())//
+                    {
+                        if (getAlignment().contains(ItemAlignment.BOTTOM)) {
+                            setY(parent.getY() + parent.getHeight() - getHeight()
+                                    - parent.getPadding().bottom - getMargin().bottom);//
+                        }
+                        if (getAlignment().contains(ItemAlignment.VCENTER)) {
+                            setY(parent.getY() + (parent.getHeight() - getHeight()) / 2 + getMargin().top);//
+                        }
+                    } else if (prefered + parent.getPadding().top + parent.getPadding().bottom
+                            + getMargin().bottom + getMargin().top > parent.getHeight())//
+                    {
+                        // никогда не должен зайти
+                        setY(parent.getY() + parent.getPadding().top + getMargin().top);//
+                        prefered = parent.getHeight() - parent.getPadding().top - parent.getPadding().bottom
+                                - getMargin().top - getMargin().bottom;//
+                        setHeight(prefered);
+                    }
+                }
+                break;
+
+            default:
+                break;
         }
     }
 
@@ -727,104 +746,104 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
         prt.setConfines();
         switch (type) {
-        case MOVED_X:
-            prt.setX(getX() + value);
-            break;
+            case MOVED_X:
+                prt.setX(getX() + value);
+                break;
 
-        case MOVED_Y:
-            prt.setY(getY() + value);
-            break;
+            case MOVED_Y:
+                prt.setY(getY() + value);
+                break;
 
-        case RESIZE_WIDTH:
-            if (prt.getWidthPolicy() == SizePolicy.FIXED) {
-                if (prt.getAlignment().contains(ItemAlignment.RIGHT)) {
-                    prt.setX(parent.getX() + parent.getWidth() - prt.getWidth()
-                            - parent.getPadding().right - prt.getMargin().right);//
-                }
-                if (prt.getAlignment().contains(ItemAlignment.HCENTER)) {
-                    prt.setX(parent.getX() + (parent.getWidth() - prt.getWidth()) / 2
-                            + prt.getMargin().left - prt.getMargin().right);
-                }
-            } else if (prt.getWidthPolicy() == SizePolicy.EXPAND) {
-                int prefered = parent.getWidth() - parent.getPadding().left
-                        - parent.getPadding().right - prt.getMargin().right - prt.getMargin().left;//
-                prefered = (prefered > prt.getMaxWidth()) ? prt.getMaxWidth() : prefered;
-                prefered = (prefered < prt.getMinWidth()) ? prt.getMinWidth() : prefered;
-                prt.setWidth(prefered);
-
-                if (prefered + parent.getPadding().left + parent.getPadding().right
-                        + prt.getMargin().right + prt.getMargin().left == parent.getWidth())//
-                {
-                    prt.setX(parent.getX() + parent.getPadding().left + prt.getMargin().left);//
-                } else if (prefered + parent.getPadding().left + parent.getPadding().right
-                        + prt.getMargin().right + prt.getMargin().left < parent.getWidth())//
-                {
+            case RESIZE_WIDTH:
+                if (prt.getWidthPolicy() == SizePolicy.FIXED) {
                     if (prt.getAlignment().contains(ItemAlignment.RIGHT)) {
                         prt.setX(parent.getX() + parent.getWidth() - prt.getWidth()
                                 - parent.getPadding().right - prt.getMargin().right);//
                     }
                     if (prt.getAlignment().contains(ItemAlignment.HCENTER)) {
                         prt.setX(parent.getX() + (parent.getWidth() - prt.getWidth()) / 2
-                                + prt.getMargin().left);//
+                                + prt.getMargin().left - prt.getMargin().right);
                     }
-                } else if (prefered + parent.getPadding().left + parent.getPadding().right
-                        + prt.getMargin().right + prt.getMargin().left > parent.getWidth())//
-                {
-                    // никогда не должен зайти
-                    prt.setX(parent.getX() + parent.getPadding().left + prt.getMargin().left);//
-                    prefered = parent.getWidth() - parent.getPadding().left
-                            - parent.getPadding().right - prt.getMargin().left - prt.getMargin().right;//
+                } else if (prt.getWidthPolicy() == SizePolicy.EXPAND) {
+                    int prefered = parent.getWidth() - parent.getPadding().left
+                            - parent.getPadding().right - prt.getMargin().right - prt.getMargin().left;//
+                    prefered = (prefered > prt.getMaxWidth()) ? prt.getMaxWidth() : prefered;
+                    prefered = (prefered < prt.getMinWidth()) ? prt.getMinWidth() : prefered;
                     prt.setWidth(prefered);
-                }
-            }
-            break;
 
-        case RESIZE_HEIGHT:
-            if (prt.getHeightPolicy() == SizePolicy.FIXED) {
-                if (prt.getAlignment().contains(ItemAlignment.BOTTOM)) {
-                    prt.setY(parent.getY() + parent.getHeight() - prt.getHeight()
-                            - parent.getPadding().bottom - prt.getMargin().bottom);//
+                    if (prefered + parent.getPadding().left + parent.getPadding().right
+                            + prt.getMargin().right + prt.getMargin().left == parent.getWidth())//
+                    {
+                        prt.setX(parent.getX() + parent.getPadding().left + prt.getMargin().left);//
+                    } else if (prefered + parent.getPadding().left + parent.getPadding().right
+                            + prt.getMargin().right + prt.getMargin().left < parent.getWidth())//
+                    {
+                        if (prt.getAlignment().contains(ItemAlignment.RIGHT)) {
+                            prt.setX(parent.getX() + parent.getWidth() - prt.getWidth()
+                                    - parent.getPadding().right - prt.getMargin().right);//
+                        }
+                        if (prt.getAlignment().contains(ItemAlignment.HCENTER)) {
+                            prt.setX(parent.getX() + (parent.getWidth() - prt.getWidth()) / 2
+                                    + prt.getMargin().left);//
+                        }
+                    } else if (prefered + parent.getPadding().left + parent.getPadding().right
+                            + prt.getMargin().right + prt.getMargin().left > parent.getWidth())//
+                    {
+                        // никогда не должен зайти
+                        prt.setX(parent.getX() + parent.getPadding().left + prt.getMargin().left);//
+                        prefered = parent.getWidth() - parent.getPadding().left
+                                - parent.getPadding().right - prt.getMargin().left - prt.getMargin().right;//
+                        prt.setWidth(prefered);
+                    }
                 }
-                if (prt.getAlignment().contains(ItemAlignment.VCENTER)) {
-                    prt.setY(parent.getY() + (parent.getHeight() - prt.getHeight()) / 2
-                            + prt.getMargin().top - prt.getMargin().bottom);
-                }
-            } else if (prt.getHeightPolicy() == SizePolicy.EXPAND) {
-                int prefered = parent.getHeight() - parent.getPadding().top
-                        - parent.getPadding().bottom - prt.getMargin().bottom - prt.getMargin().top;//
-                prefered = (prefered > prt.getMaxHeight()) ? prt.getMaxHeight() : prefered;
-                prefered = (prefered < prt.getMinHeight()) ? prt.getMinHeight() : prefered;
-                prt.setHeight(prefered);
+                break;
 
-                if (prefered + parent.getPadding().top + parent.getPadding().bottom
-                        + prt.getMargin().bottom + prt.getMargin().top == parent.getHeight())//
-                {
-                    prt.setY(parent.getY() + parent.getPadding().top + prt.getMargin().top);//
-                } else if (prefered + parent.getPadding().top + parent.getPadding().bottom
-                        + prt.getMargin().bottom + prt.getMargin().top < parent.getHeight())//
-                {
+            case RESIZE_HEIGHT:
+                if (prt.getHeightPolicy() == SizePolicy.FIXED) {
                     if (prt.getAlignment().contains(ItemAlignment.BOTTOM)) {
                         prt.setY(parent.getY() + parent.getHeight() - prt.getHeight()
                                 - parent.getPadding().bottom - prt.getMargin().bottom);//
                     }
                     if (prt.getAlignment().contains(ItemAlignment.VCENTER)) {
                         prt.setY(parent.getY() + (parent.getHeight() - prt.getHeight()) / 2
-                                + prt.getMargin().top);//
+                                + prt.getMargin().top - prt.getMargin().bottom);
                     }
-                } else if (prefered + parent.getPadding().top + parent.getPadding().bottom
-                        + prt.getMargin().bottom + prt.getMargin().top > parent.getHeight())//
-                {
-                    // никогда не должен зайти
-                    prt.setY(parent.getY() + parent.getPadding().top + prt.getMargin().top);//
-                    prefered = parent.getHeight() - parent.getPadding().top
-                            - parent.getPadding().bottom - prt.getMargin().top - prt.getMargin().bottom;//
+                } else if (prt.getHeightPolicy() == SizePolicy.EXPAND) {
+                    int prefered = parent.getHeight() - parent.getPadding().top
+                            - parent.getPadding().bottom - prt.getMargin().bottom - prt.getMargin().top;//
+                    prefered = (prefered > prt.getMaxHeight()) ? prt.getMaxHeight() : prefered;
+                    prefered = (prefered < prt.getMinHeight()) ? prt.getMinHeight() : prefered;
                     prt.setHeight(prefered);
-                }
-            }
-            break;
 
-        default:
-            break;
+                    if (prefered + parent.getPadding().top + parent.getPadding().bottom
+                            + prt.getMargin().bottom + prt.getMargin().top == parent.getHeight())//
+                    {
+                        prt.setY(parent.getY() + parent.getPadding().top + prt.getMargin().top);//
+                    } else if (prefered + parent.getPadding().top + parent.getPadding().bottom
+                            + prt.getMargin().bottom + prt.getMargin().top < parent.getHeight())//
+                    {
+                        if (prt.getAlignment().contains(ItemAlignment.BOTTOM)) {
+                            prt.setY(parent.getY() + parent.getHeight() - prt.getHeight()
+                                    - parent.getPadding().bottom - prt.getMargin().bottom);//
+                        }
+                        if (prt.getAlignment().contains(ItemAlignment.VCENTER)) {
+                            prt.setY(parent.getY() + (parent.getHeight() - prt.getHeight()) / 2
+                                    + prt.getMargin().top);//
+                        }
+                    } else if (prefered + parent.getPadding().top + parent.getPadding().bottom
+                            + prt.getMargin().bottom + prt.getMargin().top > parent.getHeight())//
+                    {
+                        // никогда не должен зайти
+                        prt.setY(parent.getY() + parent.getPadding().top + prt.getMargin().top);//
+                        prefered = parent.getHeight() - parent.getPadding().top
+                                - parent.getPadding().bottom - prt.getMargin().top - prt.getMargin().bottom;//
+                        prt.setHeight(prefered);
+                    }
+                }
+                break;
+
+            default:
+                break;
         }
     }
 
@@ -907,7 +926,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
     /**
      * Set BaseItem's shadow with parameters
-     * 
+     *
      * @param radius Shadow corners radius (same for all corners)
      * @param x      Shadow X position
      * @param y      Shadow Y position
@@ -952,7 +971,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
     }
 
     public int[] getConfines() {
-        return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
+        return new int[]{_confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1};
     }
 
     public void release() {
