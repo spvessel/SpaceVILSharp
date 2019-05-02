@@ -57,9 +57,10 @@ public abstract class BaseItem implements InterfaceBaseItem {
     void addChildren(InterfaceBaseItem item) {
         Prototype itemParent = item.getParent();
         if (itemParent != null)
-            itemParent.removeItem(item);
-
+        itemParent.removeItem(item);
+        
         item.setParent(((VisualItem) this)._main);
+        itemParent = item.getParent();
 
         // refactor events verification
         if (itemParent instanceof InterfaceVLayout) {

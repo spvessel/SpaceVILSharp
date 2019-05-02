@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -235,6 +236,20 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
+        public virtual void SetListContent(IEnumerable<IBaseItem> content)
+        {
+            RemoveAllItems();
+            foreach (IBaseItem item in content)
+            {
+                SelectionItem wrapper = GetWrapper(item);
+                base.AddItem(wrapper);
+                wrapper.UpdateSize();
+                _mapContent.Add(item, wrapper);
+            }
+            // UpdateLayout();
+            ItemListChanged?.Invoke();
+        }
+
         /// <summary>
         /// Remove item from the ListArea
         /// </summary>
@@ -368,6 +383,7 @@ namespace SpaceVIL
             if (list == null || list.Count == 0 || _isUpdating)
                 return;
             _isUpdating = true;
+
             Int64 offset = (-1) * GetVScrollOffset();
             int startY = GetY() + GetPadding().Top;
             int child_X = (-1) * (int)_xOffset + GetX() + GetPadding().Left;
@@ -404,6 +420,7 @@ namespace SpaceVIL
                 }
                 child.SetDrawable(true);
             }
+
             _isUpdating = false;
         }
 

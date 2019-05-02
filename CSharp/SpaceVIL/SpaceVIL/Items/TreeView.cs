@@ -121,7 +121,7 @@ namespace SpaceVIL
             UpdateElements();
         }
 
-        public override void SetListContent(List<IBaseItem> content)
+        public override void SetListContent(IEnumerable<IBaseItem> content)
         {
             GetArea().RemoveAllItems();
             foreach (IBaseItem item in content)

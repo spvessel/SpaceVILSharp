@@ -9,12 +9,12 @@ namespace SpaceVIL.Core
     internal sealed class EventManager
     {
         //internal static bool IsLocked = true;
-        internal Dictionary<GeometryEventType, List<IEventUpdate>> listeners = new Dictionary<GeometryEventType, List<IEventUpdate>>();
+        internal Dictionary<GeometryEventType, LinkedHashSet<IEventUpdate>> listeners = new Dictionary<GeometryEventType, LinkedHashSet<IEventUpdate>>();
 
         internal void Subscribe(GeometryEventType type, IEventUpdate listener)
         {
             if (!listeners.ContainsKey(type))
-                listeners.Add(type, new List<IEventUpdate>());
+                listeners.Add(type, new LinkedHashSet<IEventUpdate>());
 
             if (!listeners[type].Contains(listener))
                 listeners[type].Add(listener);

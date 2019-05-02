@@ -234,6 +234,18 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         updateLayout();
     }
 
+    public void setListContent(List<InterfaceBaseItem> content) {
+        removeAllItems();
+        for (InterfaceBaseItem item : content) {
+            SelectionItem wrapper = getWrapper(item);
+            super.addItem(wrapper);
+            wrapper.updateSize();
+            _mapContent.put(item, wrapper);
+        }
+        // updateLayout();
+        itemListChanged.execute();
+    }
+
     /**
      * Remove item from the ListArea
      */

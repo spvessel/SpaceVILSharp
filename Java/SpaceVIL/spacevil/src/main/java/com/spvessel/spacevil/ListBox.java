@@ -496,10 +496,7 @@ public class ListBox extends Prototype {
      * Set list of items
      */
     public void setListContent(List<InterfaceBaseItem> content) {
-        _area.removeAllItems();
-        for (InterfaceBaseItem item : content) {
-            addItem(item);
-        }
+        _area.setListContent(content);
     }
 
     /**

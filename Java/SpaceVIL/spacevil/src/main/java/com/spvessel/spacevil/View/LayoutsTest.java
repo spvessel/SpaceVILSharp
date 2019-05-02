@@ -154,22 +154,21 @@ public class LayoutsTest extends ActiveWindow {
             // listbox_left_1.addItem(radio);
             // listbox_left_1.setVisible(!listbox_left_1.isVisible());
 
-            // listbox_left_1.clear();
-            // // list.clear();
-            // long startTime = System.currentTimeMillis();
-            // for (int i = 0; i < 1000; i++) {
-            // listbox_left_1.addItem(new VisualContact());
-            // // list.add(new VisualContact());
-            // }
-            // System.out.println("Fuction run " + (System.currentTimeMillis() - startTime)
-            // + " ms");
-            // System.gc();
-
-            list.clear();
-            for (int i = 0; i < 100000; i++) {
-                list.add(new VisualContact());
+            listbox_left_1.clear();
+            // list.clear();
+            long startTime = System.currentTimeMillis();
+            for (int i = 0; i < 1000; i++) {
+            listbox_left_1.addItem(new VisualContact());
             }
+            System.out.println("Fuction run " + (System.currentTimeMillis() - startTime)
+            + " ms");
             System.gc();
+
+            // list.clear();
+            // for (int i = 0; i < 1000; i++) {
+            //     list.add(new VisualContact());
+            // }
+            // System.gc();
         };
         all.eventMouseClick.add(all_click);
         frame.addItem(all);

@@ -544,11 +544,9 @@ namespace SpaceVIL
         /// <summary>
         /// Set list of items
         /// </summary>
-        public virtual void SetListContent(List<IBaseItem> content)
+        public virtual void SetListContent(IEnumerable<IBaseItem> content)
         {
-            _area.RemoveAllItems();
-            foreach (IBaseItem item in content)
-                AddItem(item);
+            _area.SetListContent(content);
         }
 
         public SelectionItem GetWrapper(IBaseItem item)

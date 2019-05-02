@@ -58,6 +58,7 @@ namespace SpaceVIL
                 itemParent.RemoveItem(item);
 
             item.SetParent((this as VisualItem)._main);
+            itemParent = item.GetParent();
 
             if (itemParent is IVLayout)
             {

@@ -3,20 +3,17 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Core.InterfaceEventUpdate;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 
-import java.util.List;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.stream.Collectors;
+import java.util.LinkedHashSet;
 
 class EventManager {
     //protected static Boolean isLocked = true;
-    private Map<GeometryEventType, List<InterfaceEventUpdate>> listeners = new HashMap<>();
+    private Map<GeometryEventType, LinkedHashSet<InterfaceEventUpdate>> listeners = new HashMap<>();
 
     void subscribe(GeometryEventType type, InterfaceEventUpdate listener) {
         if (!listeners.containsKey(type))
-            listeners.put(type, new LinkedList<InterfaceEventUpdate>());
+            listeners.put(type, new LinkedHashSet<InterfaceEventUpdate>());
 
         if (!listeners.get(type).contains(listener))
             listeners.get(type).add(listener);
