@@ -39,46 +39,53 @@ namespace SpaceVIL
         {
             _spacing = spacing;
             UpdateGeometry();
+
             Prototype parent = GetParent();
-            if (parent != null)
+            if (parent == null)
             {
-                var hLayout = parent as IHLayout;
-                var vLayout = parent as IVLayout;
-                var grid = parent as IGrid;
-
-                if (hLayout == null && vLayout == null && grid == null)
-                    UpdateBehavior();
-
-                if (hLayout != null)
-                    hLayout.UpdateLayout();
-                if (vLayout != null)
-                    vLayout.UpdateLayout();
-                if (grid != null)
-                    grid.UpdateLayout();
+                return;
             }
+
+            var hLayout = parent as IHLayout;
+            var vLayout = parent as IVLayout;
+            var grid = parent as IGrid;
+
+            if (hLayout == null && vLayout == null && grid == null)
+                UpdateBehavior();
+
+            if (hLayout != null)
+                hLayout.UpdateLayout();
+            if (vLayout != null)
+                vLayout.UpdateLayout();
+            if (grid != null)
+                grid.UpdateLayout();
         }
         internal void SetSpacing(int horizontal = 0, int vertical = 0)
         {
-            _spacing.Horizontal = horizontal;
-            _spacing.Vertical = vertical;
-            UpdateGeometry();
-            Prototype parent = GetParent();
-            if (parent != null)
-            {
-                var hLayout = parent as IHLayout;
-                var vLayout = parent as IVLayout;
-                var grid = parent as IGrid;
+            SetSpacing(new Spacing(horizontal, vertical));
+            // _spacing.Horizontal = horizontal;
+            // _spacing.Vertical = vertical;
+            // UpdateGeometry();
 
-                if (hLayout == null && vLayout == null && grid == null)
-                    UpdateBehavior();
+            // Prototype parent = GetParent();
+            // if (parent == null)
+            // {
+            //     return;
+            // }
 
-                if (hLayout != null)
-                    hLayout.UpdateLayout();
-                if (vLayout != null)
-                    vLayout.UpdateLayout();
-                if (grid != null)
-                    grid.UpdateLayout();
-            }
+            // var hLayout = parent as IHLayout;
+            // var vLayout = parent as IVLayout;
+            // var grid = parent as IGrid;
+
+            // if (hLayout == null && vLayout == null && grid == null)
+            //     UpdateBehavior();
+
+            // if (hLayout != null)
+            //     hLayout.UpdateLayout();
+            // if (vLayout != null)
+            //     vLayout.UpdateLayout();
+            // if (grid != null)
+            //     grid.UpdateLayout();
         }
         private Indents _padding = new Indents();
         internal Indents GetPadding()
@@ -89,48 +96,54 @@ namespace SpaceVIL
         {
             _padding = padding;
             UpdateGeometry();
+
             Prototype parent = GetParent();
-            if (parent != null)
+            if (parent == null)
             {
-                var hLayout = parent as IHLayout;
-                var vLayout = parent as IVLayout;
-                var grid = parent as IGrid;
-
-                if (hLayout == null && vLayout == null && grid == null)
-                    UpdateBehavior();
-
-                if (hLayout != null)
-                    hLayout.UpdateLayout();
-                if (vLayout != null)
-                    vLayout.UpdateLayout();
-                if (grid != null)
-                    grid.UpdateLayout();
+                return;
             }
+
+            var hLayout = parent as IHLayout;
+            var vLayout = parent as IVLayout;
+            var grid = parent as IGrid;
+
+            if (hLayout == null && vLayout == null && grid == null)
+                UpdateBehavior();
+
+            if (hLayout != null)
+                hLayout.UpdateLayout();
+            if (vLayout != null)
+                vLayout.UpdateLayout();
+            if (grid != null)
+                grid.UpdateLayout();
         }
         internal void SetPadding(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
-            _padding.Left = left;
-            _padding.Top = top;
-            _padding.Right = right;
-            _padding.Bottom = bottom;
-            UpdateGeometry();
-            Prototype parent = GetParent();
-            if (parent != null)
-            {
-                var hLayout = parent as IHLayout;
-                var vLayout = parent as IVLayout;
-                var grid = parent as IGrid;
+            SetPadding(new Indents(left, top, right, bottom));
+            // _padding.Left = left;
+            // _padding.Top = top;
+            // _padding.Right = right;
+            // _padding.Bottom = bottom;
+            // UpdateGeometry();
+            // Prototype parent = GetParent();
+            // if (parent == null)
+            // {
+            //     return;
+            // }
 
-                if (hLayout == null && vLayout == null && grid == null)
-                    UpdateBehavior();
+            // var hLayout = parent as IHLayout;
+            // var vLayout = parent as IVLayout;
+            // var grid = parent as IGrid;
 
-                if (hLayout != null)
-                    hLayout.UpdateLayout();
-                if (vLayout != null)
-                    vLayout.UpdateLayout();
-                if (grid != null)
-                    grid.UpdateLayout();
-            }
+            // if (hLayout == null && vLayout == null && grid == null)
+            //     UpdateBehavior();
+
+            // if (hLayout != null)
+            //     hLayout.UpdateLayout();
+            // if (vLayout != null)
+            //     vLayout.UpdateLayout();
+            // if (grid != null)
+            //     grid.UpdateLayout();
         }
         internal EventManager eventManager = null;
         // private List<IBaseItem> _content = new List<IBaseItem>();
