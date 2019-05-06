@@ -33,6 +33,8 @@ public enum KeyMods {
         }
         if (list.size() > 0)
             return list;
-        return Arrays.asList(KeyMods.NO);
+
+        list.add(KeyMods.NO);
+        return list;
     }
 }
