@@ -510,9 +510,7 @@ namespace SpaceVIL
         /// </summary>
         public virtual void SetListContent(List<IBaseItem> content)
         {
-            _area.RemoveAllItems();
-            foreach (IBaseItem item in content)
-                AddItem(item);
+            _area.SetListContent(content);
         }
 
         public IBaseItem GetWrapper(IBaseItem item)
