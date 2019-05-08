@@ -54,7 +54,7 @@ public class SideArea extends Prototype implements InterfaceFloating {
 
         Color shadowColor = new Color(0, 0, 0, 150);
         int shadowRadius = 5;
-        int shadowIndent = 3;
+        int shadowIndent = 2;
 
         switch (_attachSide) {
         case LEFT:

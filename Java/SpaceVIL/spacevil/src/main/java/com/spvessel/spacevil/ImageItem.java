@@ -78,7 +78,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         return _bitmap;
     }
 
-    private byte[] createByteImage(BufferedImage picture) {
+    protected byte[] createByteImage(BufferedImage picture) {
         try {
             _imageWidth = picture.getWidth();
             _imageHeight = picture.getHeight();

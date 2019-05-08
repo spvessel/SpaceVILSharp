@@ -75,7 +75,7 @@ namespace SpaceVIL
             return _bitmap;
         }
 
-        private byte[] CreateByteImage(Bitmap picture)
+        protected virtual byte[] CreateByteImage(Bitmap picture)
         {
             try
             {

@@ -55,14 +55,14 @@ final class VRAMVertex {
         // glEnableVertexAttribArray(1);
     }
 
-    void genBuffers(List<float[]> vertices) {
+    void genBuffers(List<float[]> vertices, float level) {
         length = vertices.size();
         // Vertices
         _vbo_data = BufferUtils.createFloatBuffer(vertices.size() * 3);
         for (int i = 0; i < vertices.size(); i++) {
             _vbo_data.put(i * 3 + 0, vertices.get(i)[0]);
             _vbo_data.put(i * 3 + 1, vertices.get(i)[1]);
-            _vbo_data.put(i * 3 + 2, vertices.get(i)[2]);
+            _vbo_data.put(i * 3 + 2, level);
         }
         _vbo_data.rewind();
 

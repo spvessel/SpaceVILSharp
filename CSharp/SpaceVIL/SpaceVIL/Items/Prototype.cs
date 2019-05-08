@@ -548,6 +548,15 @@ namespace SpaceVIL
             return _core.GetShadowPos();
         }
 
+        public int[] GetShadowExtension()
+        {
+            return _core.GetShadowExtension();
+        }
+        public void SetShadowExtension(int wExtension, int hExtension)
+        {
+            _core.SetShadowExtension(wExtension, hExtension);
+        }
+
         /// <summary>
         /// Set Prototype's shadow
         /// </summary>

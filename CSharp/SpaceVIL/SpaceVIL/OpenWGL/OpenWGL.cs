@@ -458,6 +458,14 @@ namespace GL.WGL
         }
 
         //OpenGL Extensions Functions
+
+        private delegate uint blendFuncSeparate(uint srcRGB, uint dstRGB, uint srcAlpha, uint dstAlpha);
+        public static void glBlendFuncSeparate(uint srcRGB, uint dstRGB, uint srcAlpha, uint dstAlpha)
+        {
+            Delegate wgl = InvokeWGL<blendFuncSeparate>("glBlendFuncSeparate");
+            wgl.DynamicInvoke(srcRGB, dstRGB, srcAlpha, dstAlpha);
+        }
+
         private delegate uint createShader(uint shader);
         static public uint glCreateShader(uint shader)
         {

@@ -61,25 +61,25 @@ namespace SpaceVIL
             }
         }
 
-        internal void GenBuffers(float x0, float x1, float y0, float y1, bool flip = false)
+        internal void GenBuffers(float x0, float x1, float y0, float y1, float level, bool flip = false)
         {
             if (!flip)
                 _vbo_data = new float[]
                 {
                 //X    Y      Z         //U     V
-                x0,  y0,  0.0f,     0.0f, 1.0f, //x0
-                x0,  y1,  0.0f,     0.0f, 0.0f, //x1
-                x1,  y1,  0.0f,     1.0f, 0.0f, //x2
-                x1,  y0,  0.0f,     1.0f, 1.0f, //x3
+                x0,  y0,  level,     0.0f, 1.0f, //x0
+                x0,  y1,  level,     0.0f, 0.0f, //x1
+                x1,  y1,  level,     1.0f, 0.0f, //x2
+                x1,  y0,  level,     1.0f, 1.0f, //x3
                 };
             else
                 _vbo_data = new float[]
                 {
                 //X    Y      Z         //U     V
-                x0,  y0,  0.0f,     0.0f, 0.0f, //x0
-                x0,  y1,  0.0f,     0.0f, 1.0f, //x1
-                x1,  y1,  0.0f,     1.0f, 1.0f, //x2
-                x1,  y0,  0.0f,     1.0f, 0.0f, //x3
+                x0,  y0,  level,     0.0f, 0.0f, //x0
+                x0,  y1,  level,     0.0f, 1.0f, //x1
+                x1,  y1,  level,     1.0f, 1.0f, //x2
+                x1,  y0,  level,     1.0f, 0.0f, //x3
                 };
 
             _ibo_data = new int[]

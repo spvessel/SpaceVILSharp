@@ -23,8 +23,24 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.*;
 
 final class DrawEngine {
+    private float _itemPyramidLevel = 1.0f;
+
+    private float getItemPyramidLevel() {
+        incItemPyramidLevel();
+        return _itemPyramidLevel;
+    }
+
+    private void restoreItemPyramidLevel() {
+        _itemPyramidLevel = 1.0f;
+    }
+
+    private void incItemPyramidLevel() {
+        _itemPyramidLevel -= 0.001f;
+    }
+
     private Map<InterfaceBaseItem, int[]> _bounds = new HashMap<>();
     Prototype _draggable = null;
     // private ToolTip _tooltip = ToolTip.getInstance();
@@ -219,7 +235,9 @@ final class DrawEngine {
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_ALPHA_TEST);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_DST_ALPHA);
+        glEnable(GL_DEPTH_TEST);
 
         ////////////////////////////////////////////////
         _primitive = new Shader(getResourceString("/shaders/vs_primitive.glsl"),
@@ -469,13 +487,16 @@ final class DrawEngine {
 
             List<Side> handlerContainerSides = _handler.getCoreWindow().getLayout().getContainer()._sides;
 
-            if (//(handlerContainerSides.contains(Side.RIGHT) && handlerContainerSides.contains(Side.TOP))
-                    // || (handlerContainerSides.contains(Side.RIGHT) && handlerContainerSides.contains(Side.BOTTOM))
-                    // || (handlerContainerSides.contains(Side.LEFT) && handlerContainerSides.contains(Side.TOP))
-                    // || (handlerContainerSides.contains(Side.LEFT) && handlerContainerSides.contains(Side.BOTTOM))
-                    // || 
-                    handlerContainerSides.contains(Side.LEFT)
-                    || handlerContainerSides.contains(Side.RIGHT))
+            if (// (handlerContainerSides.contains(Side.RIGHT) &&
+                // handlerContainerSides.contains(Side.TOP))
+                // || (handlerContainerSides.contains(Side.RIGHT) &&
+                // handlerContainerSides.contains(Side.BOTTOM))
+                // || (handlerContainerSides.contains(Side.LEFT) &&
+                // handlerContainerSides.contains(Side.TOP))
+                // || (handlerContainerSides.contains(Side.LEFT) &&
+                // handlerContainerSides.contains(Side.BOTTOM))
+                // ||
+            handlerContainerSides.contains(Side.LEFT) || handlerContainerSides.contains(Side.RIGHT))
                 scale = xScale;
             else
                 scale = yScale;
@@ -583,14 +604,14 @@ final class DrawEngine {
                     }
                 }
 
-                if (handlerContainerSides.size() != 0
-                        && !_handler.getCoreWindow().isMaximized) {
+                if (handlerContainerSides.size() != 0 && !_handler.getCoreWindow().isMaximized) {
 
                     if (CommonService.getOSType() == OSType.MAC) {
                         setWindowSize(w, h);
                         if (handlerContainerSides.contains(Side.LEFT) && handlerContainerSides.contains(Side.TOP)) {
                             setWindowPos(x_handler, (h_global - h) + y_global);
-                        } else if (handlerContainerSides.contains(Side.LEFT) || handlerContainerSides.contains(Side.BOTTOM)
+                        } else if (handlerContainerSides.contains(Side.LEFT)
+                                || handlerContainerSides.contains(Side.BOTTOM)
                                 || handlerContainerSides.contains(Side.TOP)) {
                             setWindowPos(x_handler, y_handler);
                             _handler.getPointer().setY(y_handler);
@@ -918,23 +939,30 @@ final class DrawEngine {
             hoveredItem.setMouseHover(true);
             glfwSetCursor(_handler.getWindowId(), hoveredItem.getCursor().getCursor());
 
-            if (_handler.getCoreWindow().isBorderHidden && _handler.getCoreWindow().isResizable && !_handler.getCoreWindow().isMaximized)
-            {
+            if (_handler.getCoreWindow().isBorderHidden && _handler.getCoreWindow().isResizable
+                    && !_handler.getCoreWindow().isMaximized) {
                 int handlerContainerWidth = _handler.getCoreWindow().getLayout().getContainer().getWidth();
                 int handlerContainerHeight = _handler.getCoreWindow().getLayout().getContainer().getHeight();
-                
-                boolean cursorNearLeftTop = (xpos <= SpaceVILConstants.borderCursorTolerance && ypos <= SpaceVILConstants.borderCursorTolerance);
-                boolean cursorNearLeftBottom = (ypos >= handlerContainerHeight - SpaceVILConstants.borderCursorTolerance && xpos <= SpaceVILConstants.borderCursorTolerance);
-                boolean cursorNearRightTop = (xpos >= handlerContainerWidth - SpaceVILConstants.borderCursorTolerance && ypos <= SpaceVILConstants.borderCursorTolerance);
-                boolean cursorNearRightBottom = (xpos >= handlerContainerWidth - SpaceVILConstants.borderCursorTolerance && ypos >= handlerContainerHeight - SpaceVILConstants.borderCursorTolerance);
-                                              //(ypos >= handlerContainerHeight - SpaceVILConstants.borderCursorTolerance && xpos >= handlerContainerWidth - SpaceVILConstants.borderCursorTolerance)
+
+                boolean cursorNearLeftTop = (xpos <= SpaceVILConstants.borderCursorTolerance
+                        && ypos <= SpaceVILConstants.borderCursorTolerance);
+                boolean cursorNearLeftBottom = (ypos >= handlerContainerHeight - SpaceVILConstants.borderCursorTolerance
+                        && xpos <= SpaceVILConstants.borderCursorTolerance);
+                boolean cursorNearRightTop = (xpos >= handlerContainerWidth - SpaceVILConstants.borderCursorTolerance
+                        && ypos <= SpaceVILConstants.borderCursorTolerance);
+                boolean cursorNearRightBottom = (xpos >= handlerContainerWidth - SpaceVILConstants.borderCursorTolerance
+                        && ypos >= handlerContainerHeight - SpaceVILConstants.borderCursorTolerance);
+                // (ypos >= handlerContainerHeight - SpaceVILConstants.borderCursorTolerance &&
+                // xpos >= handlerContainerWidth - SpaceVILConstants.borderCursorTolerance)
                 if (cursorNearRightTop || cursorNearRightBottom || cursorNearLeftBottom || cursorNearLeftTop) {
                     _handler.setCursorType(GLFW_CROSSHAIR_CURSOR);
                 } else {
-                    if (xpos > handlerContainerWidth - SpaceVILConstants.borderCursorTolerance || xpos <= SpaceVILConstants.borderCursorTolerance)
+                    if (xpos > handlerContainerWidth - SpaceVILConstants.borderCursorTolerance
+                            || xpos <= SpaceVILConstants.borderCursorTolerance)
                         _handler.setCursorType(GLFW_HRESIZE_CURSOR);
 
-                    if (ypos > handlerContainerHeight - SpaceVILConstants.borderCursorTolerance || ypos <= SpaceVILConstants.borderCursorTolerance)
+                    if (ypos > handlerContainerHeight - SpaceVILConstants.borderCursorTolerance
+                            || ypos <= SpaceVILConstants.borderCursorTolerance)
                         _handler.setCursorType(GLFW_VRESIZE_CURSOR);
                 }
             }
@@ -1351,10 +1379,11 @@ final class DrawEngine {
         VRAMStorage.flush();
         render();
         _bounds.clear();
+        restoreItemPyramidLevel();
     }
 
     private void render() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // draw static
         drawItems(_handler.getCoreWindow().getLayout().getContainer());
@@ -1633,7 +1662,7 @@ final class DrawEngine {
 
         _primitive.useShader();
         VRAMVertex store = new VRAMVertex();
-        store.genBuffers(crd_array);
+        store.genBuffers(crd_array, getItemPyramidLevel());
         store.sendColor(_primitive, shell.getBackground());
         store.draw(GL_TRIANGLES);
         store.clear();
@@ -1661,10 +1690,15 @@ final class DrawEngine {
     }
 
     private void drawShadow(InterfaceBaseItem shell) {
+        int[] extension = shell.getShadowExtension();
+        int xAddidion = extension[0] / 2;
+        int yAddidion = extension[1] / 2;
+
         CustomShape shadow = new CustomShape();
         shadow.setBackground(shell.getShadowColor());
-        shadow.setSize(shell.getWidth(), shell.getHeight());
-        shadow.setPosition(shell.getX() + shell.getShadowPos().getX(), shell.getY() + shell.getShadowPos().getY());
+        shadow.setSize(shell.getWidth() + extension[0], shell.getHeight() + extension[1]);
+        shadow.setPosition(shell.getX() + shell.getShadowPos().getX() - xAddidion,
+                shell.getY() + shell.getShadowPos().getY() - yAddidion);
         shadow.setParent(shell.getParent());
         shadow.setHandler(shell.getHandler());
         shadow.setTriangles(shell.getTriangles());
@@ -1757,7 +1791,7 @@ final class DrawEngine {
         float i_y1 = -1.0f;
         _blur.useShader();
         VRAMTexture store = new VRAMTexture();
-        store.genBuffers(i_x0, i_x1, i_y0, i_y1);
+        store.genBuffers(i_x0, i_x1, i_y0, i_y1, getItemPyramidLevel());
         store.bind(fbo_texture);
         store.sendUniformSample2D(_blur);
         store.sendUniform1fv(_blur, "weights", 11, weights);
@@ -1802,7 +1836,7 @@ final class DrawEngine {
 
         _char.useShader();
         VRAMTexture store = new VRAMTexture();
-        store.genBuffers(i_x0, i_x1, i_y0, i_y1, true);
+        store.genBuffers(i_x0, i_x1, i_y0, i_y1, getItemPyramidLevel(), true);
         store.genTexture(bb_w, bb_h, bb);
         store.sendUniformSample2D(_char);
         store.sendUniform4f(_char, "rgb", argb);
@@ -1822,6 +1856,7 @@ final class DrawEngine {
         float center_offset = item.getPointThickness() / 2.0f;
         float[] result = new float[point.size() * crd_array.size() * 3];
         int skew = 0;
+        float level = getItemPyramidLevel();
         for (float[] shape : crd_array) {
             List<float[]> fig = GraphicsMathService.toGL(
                     GraphicsMathService.moveShape(point, shape[0] - center_offset, shape[1] - center_offset),
@@ -1830,7 +1865,7 @@ final class DrawEngine {
             for (int i = 0; i < fig.size(); i++) {
                 result[skew + i * 3 + 0] = fig.get(i)[0];
                 result[skew + i * 3 + 1] = fig.get(i)[1];
-                result[skew + i * 3 + 2] = fig.get(i)[2];
+                result[skew + i * 3 + 2] = level;
             }
             skew += fig.size() * 3;
         }
@@ -1852,7 +1887,7 @@ final class DrawEngine {
         checkOutsideBorders((InterfaceBaseItem) item);
         _primitive.useShader();
         VRAMVertex store = new VRAMVertex();
-        store.genBuffers(crd_array);
+        store.genBuffers(crd_array, getItemPyramidLevel());
         store.sendColor(_primitive, item.getLineColor());
         store.draw(GL_LINE_STRIP);
         store.clear();
@@ -1886,7 +1921,7 @@ final class DrawEngine {
                     VRAMStorage.deleteTexture(image);
                     // create and store
                     VRAMTexture tex = new VRAMTexture();
-                    tex.genBuffers(i_x0, i_x1, i_y0, i_y1);
+                    tex.genBuffers(i_x0, i_x1, i_y0, i_y1, getItemPyramidLevel());
                     tex.genTexture(w, h, bitmap);
                     VRAMStorage.addTexture(image, tex);
                     tmp.setNew(false);
@@ -1921,7 +1956,7 @@ final class DrawEngine {
                     }
 
                     tex.bind();
-                    tex.genBuffers(i_x0, i_x1, i_y0, i_y1);
+                    tex.genBuffers(i_x0, i_x1, i_y0, i_y1, getItemPyramidLevel());
                     tex.sendUniformSample2D(_texture);
                     if (image.isColorOverlay()) {
                         float[] argb = { (float) image.getColorOverlay().getRed() / 255.0f,
@@ -1946,7 +1981,7 @@ final class DrawEngine {
         }
 
         VRAMTexture store = new VRAMTexture();
-        store.genBuffers(i_x0, i_x1, i_y0, i_y1);
+        store.genBuffers(i_x0, i_x1, i_y0, i_y1, getItemPyramidLevel());
         store.genTexture(w, h, bitmap);
         store.sendUniformSample2D(_texture);
         if (image.isColorOverlay()) {
@@ -1981,7 +2016,8 @@ final class DrawEngine {
             _tooltip.setY(ptrRelease.getY() + _tooltip.getHeight() + tooltipBorderIndent.getY());
         }
         // проверка справа
-        if (ptrRelease.getX() - tooltipBorderIndent.getX() + _tooltip.getWidth() > _handler.getCoreWindow().getWidth()) {
+        if (ptrRelease.getX() - tooltipBorderIndent.getX() + _tooltip.getWidth() > _handler.getCoreWindow()
+                .getWidth()) {
             _tooltip.setX(_handler.getCoreWindow().getWidth() - _tooltip.getWidth() - tooltipBorderIndent.getX());
         } else {
             _tooltip.setX(ptrRelease.getX() - tooltipBorderIndent.getX());
@@ -2007,7 +2043,7 @@ final class DrawEngine {
         //
         _primitive.useShader();
         VRAMVertex store = new VRAMVertex();
-        store.genBuffers(vertex);
+        store.genBuffers(vertex, getItemPyramidLevel());
         store.sendColor(_primitive, new Color(0, 0, 0, 200));
         store.draw(GL_TRIANGLES);
         store.clear();

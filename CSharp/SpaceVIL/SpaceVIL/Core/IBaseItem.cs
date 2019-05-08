@@ -30,6 +30,7 @@ namespace SpaceVIL.Core
         Color GetShadowColor();
         void SetShadowColor(Color color);
         Position GetShadowPos();
+        int[] GetShadowExtension();
         void SetShadow(int radius, int x, int y, Color color);
         int[] GetConfines();
         void Release();

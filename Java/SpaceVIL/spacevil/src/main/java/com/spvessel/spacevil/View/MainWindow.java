@@ -23,18 +23,20 @@ public class MainWindow extends ActiveWindow {
     @Override
     public void initWindow() {
         isBorderHidden = true;
-        setSize(800, 200);
+        setSize(820, 220);
         setWindowName("MainWindow");
         setWindowTitle("MainWindow");
         setMinSize(500, 100);
-        
+
         // setAspectRatio(4, 1);
 
-//        setPadding(2, 2, 2, 2);
-//        setBackground(new Color(0, 162, 232));
-//        setBorderRadius(10);
-//        setAntiAliasingQuality(MSAA.MSAA_8X);
-//        isTransparent = true;
+        // setPadding(10, 10, 10, 10);
+        setPadding(10, 10, 10, 10);
+        setBackground(new Color(0, 0, 0, 10));
+        setBorderRadius(10);
+        setAntiAliasingQuality(MSAA.MSAA_8X);
+        isTransparent = true;
+        // setShadow(10, 0, 0, Color.black);
 
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
         // Handler.eventClose.clear();
@@ -63,30 +65,47 @@ public class MainWindow extends ActiveWindow {
         // if (iBig != null && iSmall != null)
         // Handler.setIcon(iBig, iSmall);
 
+        Frame layout = new Frame();
+        layout.setBackground(70, 70, 70);
+        layout.setBorderRadius(10);
+        layout.setPadding(0, 0, 0, 0);
+        layout.setShadow(8, 0, 0, new Color(0, 0, 0, 255));
+        layout.setShadowExtension(6, 6);
+        addItem(layout);
+
         TitleBar title = new TitleBar("Main King Window - JAVA");
         title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
         title.setBorderRadius(new CornerRadius(0, 0, 7, 7));
         title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
         // title.setIcon(iBig, 20, 20);
-        addItem(title);
+        layout.addItem(title);
+
+        // Ellipse ellipse = new Ellipse();
+        // ellipse.setBackground(Color.WHITE);
+        // ellipse.setSize(30, 30);
+        // // ellipse.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        // ellipse.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+
+        // addItem(ellipse);
 
         Grid grid = new Grid(1, 7);
         grid.setBorderRadius(new CornerRadius(7, 7, 0, 0));
         grid.setMargin(0, 0, 0, 30);
         grid.setPadding(6, 6, 6, 6);
-        grid.setBackground(70, 70, 70);
+        grid.setBackground(70, 70, 70, 250);
         grid.setSpacing(6, 6);
-        addItem(grid);
+        layout.addItem(grid);
 
         Font font = DefaultsService.getDefaultFont(Font.PLAIN, 16);
         // Font font = DefaultsService.getDefaultFont(18);
 
         ButtonCore btn_layout = new ButtonCore("Layout");
         btn_layout.setTextAlignment(ItemAlignment.BOTTOM, ItemAlignment.HCENTER);
-        btn_layout.setShadow(5, 3, 3, new Color(0, 0, 0, 140));
+        btn_layout.setShadow(5, 0, 0, new Color(255, 0, 255, 180));
+        btn_layout.setShadowExtension(4, 4);
         btn_layout.setFont(font);
         btn_layout.setToolTip("Show Layout window.");
-        btn_layout.setBackground(255, 151, 153, 255);
+        btn_layout.setBackground(211, 120, 134);
         btn_layout.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         btn_layout.setBorderRadius(new CornerRadius(6));
         ItemState state = new ItemState(new Color(255, 255, 255, 80));
@@ -177,7 +196,6 @@ public class MainWindow extends ActiveWindow {
         ContextMenu menu = new ContextMenu(this, mi1, mi2, mi3, mi4);
         menu.setReturnFocus(btn_flow);
 
-        
         eventMouseClick.add((sender, args) -> menu.show(sender, args));
         eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.MENU) {
@@ -188,105 +206,107 @@ public class MainWindow extends ActiveWindow {
         });
 
         btn_flow.setFocus();
-//
-//
-//        List<List<Side>> testListSide = new LinkedList<>();
-//        LinkedList test1 = new LinkedList();
-//        test1.add(Side.TOP);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.BOTTOM);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.RIGHT);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.LEFT);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.TOP);
-//        test1.add(Side.BOTTOM);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.TOP);
-//        test1.add(Side.LEFT);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.TOP);
-//        test1.add(Side.RIGHT);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.BOTTOM);
-//        test1.add(Side.LEFT);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.BOTTOM);
-//        test1.add(Side.RIGHT);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.RIGHT);
-//        test1.add(Side.LEFT);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.TOP);
-//        test1.add(Side.BOTTOM);
-//        test1.add(Side.RIGHT);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.TOP);
-//        test1.add(Side.BOTTOM);
-//        test1.add(Side.LEFT);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.TOP);
-//        test1.add(Side.LEFT);
-//        test1.add(Side.RIGHT);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.BOTTOM);
-//        test1.add(Side.RIGHT);
-//        test1.add(Side.LEFT);
-//        testListSide.add(test1);
-//
-//        test1 = new LinkedList();
-//        test1.add(Side.TOP);
-//        test1.add(Side.BOTTOM);
-//        test1.add(Side.RIGHT);
-//        test1.add(Side.LEFT);
-//        testListSide.add(test1);
-//
-//        boolean oldExp = false, newExp = false;
-//
-//        for (List<Side> currentTest : testListSide) {
-//            oldExp = ((currentTest.contains(Side.RIGHT) && currentTest.contains(Side.TOP))
-//                    || (currentTest.contains(Side.RIGHT) && currentTest.contains(Side.BOTTOM))
-//                    || (currentTest.contains(Side.LEFT) && currentTest.contains(Side.TOP))
-//                    || (currentTest.contains(Side.LEFT) && currentTest.contains(Side.BOTTOM))
-//                    || currentTest.contains(Side.LEFT)
-//                    || currentTest.contains(Side.RIGHT));
-//
-//            newExp = (currentTest.contains(Side.LEFT) || currentTest.contains(Side.RIGHT));
-//
-//            System.out.print("test: " + currentTest);
-//            if (oldExp == newExp)
-//                System.out.println(" OK");
-//            else
-//                System.out.println(" FAIL");
-//        }
-//
-//
+        //
+        //
+        // List<List<Side>> testListSide = new LinkedList<>();
+        // LinkedList test1 = new LinkedList();
+        // test1.add(Side.TOP);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.BOTTOM);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.RIGHT);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.LEFT);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.TOP);
+        // test1.add(Side.BOTTOM);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.TOP);
+        // test1.add(Side.LEFT);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.TOP);
+        // test1.add(Side.RIGHT);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.BOTTOM);
+        // test1.add(Side.LEFT);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.BOTTOM);
+        // test1.add(Side.RIGHT);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.RIGHT);
+        // test1.add(Side.LEFT);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.TOP);
+        // test1.add(Side.BOTTOM);
+        // test1.add(Side.RIGHT);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.TOP);
+        // test1.add(Side.BOTTOM);
+        // test1.add(Side.LEFT);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.TOP);
+        // test1.add(Side.LEFT);
+        // test1.add(Side.RIGHT);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.BOTTOM);
+        // test1.add(Side.RIGHT);
+        // test1.add(Side.LEFT);
+        // testListSide.add(test1);
+        //
+        // test1 = new LinkedList();
+        // test1.add(Side.TOP);
+        // test1.add(Side.BOTTOM);
+        // test1.add(Side.RIGHT);
+        // test1.add(Side.LEFT);
+        // testListSide.add(test1);
+        //
+        // boolean oldExp = false, newExp = false;
+        //
+        // for (List<Side> currentTest : testListSide) {
+        // oldExp = ((currentTest.contains(Side.RIGHT) &&
+        // currentTest.contains(Side.TOP))
+        // || (currentTest.contains(Side.RIGHT) && currentTest.contains(Side.BOTTOM))
+        // || (currentTest.contains(Side.LEFT) && currentTest.contains(Side.TOP))
+        // || (currentTest.contains(Side.LEFT) && currentTest.contains(Side.BOTTOM))
+        // || currentTest.contains(Side.LEFT)
+        // || currentTest.contains(Side.RIGHT));
+        //
+        // newExp = (currentTest.contains(Side.LEFT) ||
+        // currentTest.contains(Side.RIGHT));
+        //
+        // System.out.print("test: " + currentTest);
+        // if (oldExp == newExp)
+        // System.out.println(" OK");
+        // else
+        // System.out.println(" FAIL");
+        // }
+        //
+        //
     }
 }

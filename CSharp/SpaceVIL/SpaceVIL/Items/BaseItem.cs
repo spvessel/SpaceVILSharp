@@ -957,6 +957,18 @@ namespace SpaceVIL
         {
             return _shadow_pos;
         }
+
+        private int _xExtension = 0;
+        private int _yExtension = 0;
+        public int[] GetShadowExtension()
+        {
+            return new int[] { _xExtension, _yExtension };
+        }
+        public void SetShadowExtension(int wExtension, int hExtension)
+        {
+            _xExtension = wExtension;
+            _yExtension = hExtension;
+        }
         /// <summary>
         /// Set BaseItem's shadow with parameters
         /// </summary>

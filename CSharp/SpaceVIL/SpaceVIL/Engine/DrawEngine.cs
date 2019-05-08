@@ -30,7 +30,23 @@ namespace SpaceVIL
 {
     internal sealed class DrawEngine
     {
+        private float _itemPyramidLevel = 1.0f;
+        private float GetItemPyramidLevel()
+        {
+            IncItemPyramidLevel();
+            return _itemPyramidLevel;
+        }
+        private void RestoreItemPyramidLevel()
+        {
+            _itemPyramidLevel = 1.0f;
+        }
+        private void IncItemPyramidLevel()
+        {
+            _itemPyramidLevel -= 0.001f;
+        }
+
         private Dictionary<IBaseItem, int[]> _bounds = new Dictionary<IBaseItem, int[]>();
+
         Prototype _draggable = null;
 
         private ToolTip _tooltip = new ToolTip();
@@ -217,9 +233,10 @@ namespace SpaceVIL
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
             glEnable(GL_ALPHA_TEST);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_DST_ALPHA);
             glEnable(GL_MULTISAMPLE);
-            // glEnable(GL_DEPTH_TEST);
+            glEnable(GL_DEPTH_TEST);
             // glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
             ////////////////////////////////////////////////
@@ -408,10 +425,10 @@ namespace SpaceVIL
                 Side handlerContainerSides = _handler.GetCoreWindow().GetLayout().GetContainer()._sides;
 
                 if (//(handlerContainerSides.HasFlag(Side.Right) && handlerContainerSides.HasFlag(Side.Top))
-                        // || (handlerContainerSides.HasFlag(Side.Right) && handlerContainerSides.HasFlag(Side.Bottom))
-                        // || (handlerContainerSides.HasFlag(Side.Left) && handlerContainerSides.HasFlag(Side.Top))
-                        // || (handlerContainerSides.HasFlag(Side.Left) && handlerContainerSides.HasFlag(Side.Bottom))
-                        // || 
+                    // || (handlerContainerSides.HasFlag(Side.Right) && handlerContainerSides.HasFlag(Side.Bottom))
+                    // || (handlerContainerSides.HasFlag(Side.Left) && handlerContainerSides.HasFlag(Side.Top))
+                    // || (handlerContainerSides.HasFlag(Side.Left) && handlerContainerSides.HasFlag(Side.Bottom))
+                    // || 
                         handlerContainerSides.HasFlag(Side.Left)
                         || handlerContainerSides.HasFlag(Side.Right))
                     scale = xScale;
@@ -521,8 +538,7 @@ namespace SpaceVIL
                             ptrPress.SetY(y_release);
                         }
                     }
-                    
-                    
+
                     if (handlerContainerSides != 0 && !_handler.GetCoreWindow().IsMaximized)
                     {
                         if (CommonService.GetOSType() == OSType.Mac)
@@ -877,14 +893,14 @@ namespace SpaceVIL
                 {
                     int handlerContainerWidth = _handler.GetCoreWindow().GetLayout().GetContainer().GetWidth();
                     int handlerContainerHeight = _handler.GetCoreWindow().GetLayout().GetContainer().GetHeight();
-                    
+
                     bool cursorNearLeftTop = (xpos <= SpaceVILConstants.BorderCursorTolerance && ypos <= SpaceVILConstants.BorderCursorTolerance);
                     bool cursorNearLeftBottom = (ypos >= handlerContainerHeight - SpaceVILConstants.BorderCursorTolerance && xpos <= SpaceVILConstants.BorderCursorTolerance);
                     bool cursorNearRightTop = (xpos >= handlerContainerWidth - SpaceVILConstants.BorderCursorTolerance && ypos <= SpaceVILConstants.BorderCursorTolerance);
                     bool cursorNearRightBottom = (xpos >= handlerContainerWidth - SpaceVILConstants.BorderCursorTolerance && ypos >= handlerContainerHeight - SpaceVILConstants.BorderCursorTolerance);
-                                                //(ypos >= handlerContainerHeight - Constants.BorderCursorTolerance && xpos >= handlerContainerWidth - Constants.BorderCursorTolerance)
+                    //(ypos >= handlerContainerHeight - Constants.BorderCursorTolerance && xpos >= handlerContainerWidth - Constants.BorderCursorTolerance)
 
-                    if ( cursorNearRightTop || cursorNearRightBottom || cursorNearLeftBottom || cursorNearLeftTop)
+                    if (cursorNearRightTop || cursorNearRightBottom || cursorNearLeftBottom || cursorNearLeftTop)
                     {
                         _handler.SetCursorType(EmbeddedCursor.Crosshair);
                     }
@@ -1337,13 +1353,12 @@ namespace SpaceVIL
             VRAMStorage.Flush();
             Render();
             _bounds.Clear();
+            RestoreItemPyramidLevel();
         }
 
         internal void Render()
         {
-            glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT
-            // | GL_DEPTH_BUFFER_BIT
-            );
+            glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             //draw static
             DrawItems(_handler.GetCoreWindow().GetLayout().GetContainer());
             //draw float
@@ -1656,7 +1671,7 @@ namespace SpaceVIL
 
             _primitive.UseShader();
             VRAMVertex store = new VRAMVertex();
-            store.GenBuffers(crd_array);
+            store.GenBuffers(crd_array, GetItemPyramidLevel());
             store.SendColor(_primitive, shell.GetBackground());
             store.Draw(GL_TRIANGLES);
             store.Clear();
@@ -1692,10 +1707,15 @@ namespace SpaceVIL
         }
         void DrawShadow(IBaseItem shell)
         {
+            int[] extension = shell.GetShadowExtension();
+            int xAddidion = extension[0] / 2;
+            int yAddidion = extension[1] / 2;
+
             CustomShape shadow = new CustomShape();
             shadow.SetBackground(shell.GetShadowColor());
-            shadow.SetSize(shell.GetWidth(), shell.GetHeight());
-            shadow.SetPosition(shell.GetX() + shell.GetShadowPos().GetX(), shell.GetY() + shell.GetShadowPos().GetY());
+            shadow.SetSize(shell.GetWidth() + extension[0], shell.GetHeight() + extension[1]);
+            shadow.SetPosition(shell.GetX() + shell.GetShadowPos().GetX() - xAddidion,
+                shell.GetY() + shell.GetShadowPos().GetY() - yAddidion);
             shadow.SetParent(shell.GetParent());
             shadow.SetHandler(shell.GetHandler());
             shadow.SetTriangles(shell.GetTriangles());
@@ -1732,7 +1752,7 @@ namespace SpaceVIL
 
             _blur.UseShader();
             VRAMTexture store = new VRAMTexture();
-            store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
+            store.GenBuffers(i_x0, i_x1, i_y0, i_y1, GetItemPyramidLevel());
             store.Bind(fbo_texture);
             store.SendUniformSample2D(_blur, "tex");
             store.SendUniform1fv(_blur, "weights", 5, weights);
@@ -1781,7 +1801,7 @@ namespace SpaceVIL
 
             _char.UseShader();
             VRAMTexture store = new VRAMTexture();
-            store.GenBuffers(i_x0, i_x1, i_y0, i_y1, true);
+            store.GenBuffers(i_x0, i_x1, i_y0, i_y1, GetItemPyramidLevel(), true);
             store.GenTexture(bb_w, bb_h, bb);
             store.SendUniformSample2D(_char, "tex");
             store.SendUniform4f(_char, "rgb", argb);
@@ -1803,6 +1823,7 @@ namespace SpaceVIL
             float center_offset = item.GetPointThickness() / 2.0f;
             float[] result = new float[point.Count * crd_array.Count * 3];
             int skew = 0;
+            float level = GetItemPyramidLevel();
             foreach (float[] shape in crd_array)
             {
                 List<float[]> fig = GraphicsMathService.ToGL(GraphicsMathService.MoveShape(point, shape[0] - center_offset, shape[1] - center_offset),
@@ -1811,7 +1832,7 @@ namespace SpaceVIL
                 {
                     result[skew + i * 3 + 0] = fig[i][0];
                     result[skew + i * 3 + 1] = fig[i][1];
-                    result[skew + i * 3 + 2] = fig[i][2];
+                    result[skew + i * 3 + 2] = level;
                 }
                 skew += fig.Count * 3;
             }
@@ -1856,7 +1877,7 @@ namespace SpaceVIL
             CheckOutsideBorders(item as IBaseItem);
             _primitive.UseShader();
             VRAMVertex store = new VRAMVertex();
-            store.GenBuffers(crd_array);
+            store.GenBuffers(crd_array, GetItemPyramidLevel());
             store.SendColor(_primitive, item.GetLineColor());
             store.Draw(GL_LINE_STRIP);
             store.Clear();
@@ -1891,7 +1912,7 @@ namespace SpaceVIL
                         VRAMStorage.DeleteTexture(image);
                         //create and store
                         VRAMTexture tex = new VRAMTexture();
-                        tex.GenBuffers(i_x0, i_x1, i_y0, i_y1);
+                        tex.GenBuffers(i_x0, i_x1, i_y0, i_y1, GetItemPyramidLevel());
                         tex.GenTexture(w, h, bitmap);
                         VRAMStorage.AddTexture(image, tex);
                         tmp.SetNew(false);
@@ -1933,7 +1954,7 @@ namespace SpaceVIL
                             return;
                         }
                         tex.Bind();
-                        tex.GenBuffers(i_x0, i_x1, i_y0, i_y1);
+                        tex.GenBuffers(i_x0, i_x1, i_y0, i_y1, GetItemPyramidLevel());
                         tex.SendUniformSample2D(_texture, "tex");
                         if (image.IsColorOverlay())
                         {
@@ -1962,7 +1983,7 @@ namespace SpaceVIL
             }
 
             VRAMTexture store = new VRAMTexture();
-            store.GenBuffers(i_x0, i_x1, i_y0, i_y1);
+            store.GenBuffers(i_x0, i_x1, i_y0, i_y1, GetItemPyramidLevel());
             store.GenTexture(w, h, bitmap);
             store.SendUniformSample2D(_texture, "tex");
             if (image.IsColorOverlay())
@@ -2031,7 +2052,7 @@ namespace SpaceVIL
             };
             _primitive.UseShader();
             VRAMVertex store = new VRAMVertex();
-            store.GenBuffers(vertex);
+            store.GenBuffers(vertex, GetItemPyramidLevel());
             store.SendColor(_primitive, Color.FromArgb(150, 0, 0, 0));
             store.Draw(GL_TRIANGLES);
             store.Clear();

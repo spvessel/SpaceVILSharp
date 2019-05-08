@@ -36,7 +36,7 @@ namespace SpaceVIL
 
         internal void SendColor(Shader shader, Color fill)
         {
-            float[] argb = { (float) fill.R / 255.0f, (float) fill.G / 255.0f, (float) fill.B / 255.0f, (float) fill.A / 255.0f };
+            float[] argb = { (float)fill.R / 255.0f, (float)fill.G / 255.0f, (float)fill.B / 255.0f, (float)fill.A / 255.0f };
             SendUniform4f(shader, "background", argb);
         }
 
@@ -53,7 +53,7 @@ namespace SpaceVIL
             glEnableVertexAttribArray(0);
         }
 
-        internal void GenBuffers(List<float[]> vertices)
+        internal void GenBuffers(List<float[]> vertices, float level)
         {
             length = vertices.Count;
             float[] _vbo_data = new float[vertices.Count * 3];
@@ -62,12 +62,10 @@ namespace SpaceVIL
             {
                 _vbo_data[i * 3 + 0] = vertices.ElementAt(i)[0];
                 _vbo_data[i * 3 + 1] = vertices.ElementAt(i)[1];
-                _vbo_data[i * 3 + 2] = vertices.ElementAt(i)[2];
+                _vbo_data[i * 3 + 2] = level;
             }
-
             VBO = new uint[1];
             glGenBuffers(1, VBO);
-
             glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
             glBufferData(GL_ARRAY_BUFFER, _vbo_data, GL_STATIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, IntPtr.Zero);

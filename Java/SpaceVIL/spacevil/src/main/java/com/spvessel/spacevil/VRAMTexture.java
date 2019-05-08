@@ -22,7 +22,7 @@ final class VRAMTexture {
     void genTexture(int w, int h, ByteBuffer bitmap) {
         texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texture);
-        
+
         GL42.glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
         GL11.glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
 
@@ -31,6 +31,7 @@ final class VRAMTexture {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     }
+
     void genTexture(int w, int h, byte[] bitmap) {
         ByteBuffer bb = BufferUtils.createByteBuffer(bitmap.length);
         bb.put(bitmap);
@@ -38,45 +39,45 @@ final class VRAMTexture {
         genTexture(w, h, bb);
     }
 
-    void genBuffers(float x0, float x1, float y0, float y1) {
-        genBuffers(x0, x1, y0, y1, false);
+    void genBuffers(float x0, float x1, float y0, float y1, float level) {
+        genBuffers(x0, x1, y0, y1, level, false);
     }
 
-    void genBuffers(float x0, float x1, float y0, float y1, boolean flip) {
+    void genBuffers(float x0, float x1, float y0, float y1, float level, boolean flip) {
         // Vertices
         if (!flip) {
             _vbo_data = new float[] {
                     // X Y Z //U V
-                    x0, y0, 0.0f, 0.0f, 1.0f, // x0
-                    x0, y1, 0.0f, 0.0f, 0.0f, // x1
-                    x1, y1, 0.0f, 1.0f, 0.0f, // x2
-                    x1, y0, 0.0f, 1.0f, 1.0f, // x3
+                    x0, y0, level, 0.0f, 1.0f, // x0
+                    x0, y1, level, 0.0f, 0.0f, // x1
+                    x1, y1, level, 1.0f, 0.0f, // x2
+                    x1, y0, level, 1.0f, 1.0f, // x3
             };
         } else {
             _vbo_data = new float[] {
                     // X Y Z //U V
-                    x0, y0, 0.0f, 0.0f, 0.0f, // x0
-                    x0, y1, 0.0f, 0.0f, 1.0f, // x1
-                    x1, y1, 0.0f, 1.0f, 1.0f, // x2
-                    x1, y0, 0.0f, 1.0f, 0.0f, // x3
+                    x0, y0, level, 0.0f, 0.0f, // x0
+                    x0, y1, level, 0.0f, 1.0f, // x1
+                    x1, y1, level, 1.0f, 1.0f, // x2
+                    x1, y0, level, 1.0f, 0.0f, // x3
             };
         }
         // ibo
         _ibo_data = new int[] { 0, 1, 2, // first triangle
-            2, 3, 0, // second triangle
+                2, 3, 0, // second triangle
         };
 
         VBO = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferData(GL_ARRAY_BUFFER, _vbo_data, GL_STATIC_DRAW);
-        
+
         IBO = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, _ibo_data, GL_STATIC_DRAW);
-        
+
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0);
         glEnableVertexAttribArray(0);
-        
+
         glVertexAttribPointer(1, 2, GL_FLOAT, true, 5 * 4, (3 * 4));
         glEnableVertexAttribArray(1);
     }
@@ -90,6 +91,7 @@ final class VRAMTexture {
         // Texture bind
         glBindTexture(GL_TEXTURE_2D, tex);
     }
+
     void bind() {
         // Texture bind
         glBindTexture(GL_TEXTURE_2D, texture);

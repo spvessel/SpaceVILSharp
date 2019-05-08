@@ -56,6 +56,8 @@ public interface InterfaceBaseItem
 
     Position getShadowPos();
 
+    int[] getShadowExtension();
+
     void setShadow(int radius, int x, int y, Color color);
 
     int[] getConfines();

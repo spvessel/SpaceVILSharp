@@ -551,6 +551,13 @@ abstract public class Prototype implements InterfaceBaseItem {
         return _core.getShadowPos();
     }
 
+    public int[] getShadowExtension() {
+        return _core.getShadowExtension();
+    }
+    public void setShadowExtension(int wExtension, int hExtension) {
+        _core.setShadowExtension(wExtension, hExtension);
+    }
+
     /**
      * Set Prototype's shadow
      * 

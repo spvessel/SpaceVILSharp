@@ -390,6 +390,7 @@ namespace GL.LGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDeleteProgram(uint program);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenBuffers(int n, uint[] buffers);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenFramebuffersEXT(int n, uint[] buffers);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glBlendFuncSeparate(uint srcRGB, uint dstRGB, uint srcAlpha, uint dstAlpha);
         static public void glGenFramebuffers(int n, uint[] buffers)
         {
             glGenFramebuffersEXT(n, buffers);
