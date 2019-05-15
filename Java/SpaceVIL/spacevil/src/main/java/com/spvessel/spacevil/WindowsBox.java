@@ -138,6 +138,9 @@ public final class WindowsBox {
     static void setCurrentFocusedWindow(CoreWindow wnd) {
         lastFocusedWindow = wnd;
     }
+    public static CoreWindow getCurrentFocusedWindow() {
+        return lastFocusedWindow;
+    }
 
     static void setFocusedWindow(CoreWindow window) {
         window.setFocus(true);

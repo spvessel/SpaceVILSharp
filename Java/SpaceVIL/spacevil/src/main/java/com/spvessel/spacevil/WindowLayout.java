@@ -4,6 +4,7 @@ import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Flags.OSType;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
 
+import static org.lwjgl.system.MemoryUtil.*;
 import java.util.*;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.locks.Lock;
@@ -251,5 +252,11 @@ final class WindowLayout {
         } finally {
             engineLocker.unlock();
         }
+    }
+
+    long getGLWID() {
+        if (engine == null)
+            return NULL;
+        return engine._handler.getWindowId();
     }
 }

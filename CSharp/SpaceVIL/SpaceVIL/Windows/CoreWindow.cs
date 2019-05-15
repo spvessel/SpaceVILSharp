@@ -576,5 +576,10 @@ namespace SpaceVIL
                 return wnd_layout.GetContainer().GetBorderFill();
             return Color.Transparent;
         }
+
+        public Glfw3.Glfw.Window GetGLWID()
+        {
+            return GetLayout().GetGLWID();
+        }
     }
 }

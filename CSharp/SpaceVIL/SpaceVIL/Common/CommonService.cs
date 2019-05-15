@@ -89,6 +89,28 @@ namespace SpaceVIL.Common
             return true;
         }
 
+        public static String GetClipboardString()
+        {
+            CoreWindow window = WindowsBox.GetCurrentFocusedWindow();
+            if (window == null)
+                return "";
+            Glfw.Window id = window.GetGLWID();
+            if (!id)
+                return String.Empty;
+            return Glfw.GetClipboardString(id);
+        }
+
+        public static void SetClipboardString(String text)
+        {
+            CoreWindow window = WindowsBox.GetCurrentFocusedWindow();
+            if (window == null)
+                return;
+            Glfw.Window id = window.GetGLWID();
+            if (!id)
+                return;
+            Glfw.SetClipboardString(id, text);
+        }
+
 
         // internal static String ScanCodeToASCII(int scancode, KeyMods mods, int layout)
         // {

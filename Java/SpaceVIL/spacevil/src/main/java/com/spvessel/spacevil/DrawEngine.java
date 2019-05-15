@@ -51,8 +51,8 @@ final class DrawEngine {
     private KeyArgs _kargs = new KeyArgs();
     private TextInputArgs _tiargs = new TextInputArgs();
 
-    private List<Prototype> hoveredItems;
-    private List<Prototype> underFocusedItem;
+    private List<Prototype> _underHoveredItems;
+    private List<Prototype> _underFocusedItem;
     private Prototype hoveredItem = null;
     private Prototype focusedItem = null;
 
@@ -83,7 +83,7 @@ final class DrawEngine {
         Deque<Prototype> queue = new ArrayDeque<>();
 
         if (item == _handler.getCoreWindow().getLayout().getContainer()) {
-            underFocusedItem = null;
+            _underFocusedItem = null;
             return;
         }
 
@@ -93,8 +93,8 @@ final class DrawEngine {
             queue.addFirst(parent);
             parent = parent.getParent();
         }
-        underFocusedItem = new LinkedList<Prototype>(queue);
-        underFocusedItem.remove(focusedItem);
+        _underFocusedItem = new LinkedList<Prototype>(queue);
+        _underFocusedItem.remove(focusedItem);
     }
 
     void resetFocus() {
@@ -103,8 +103,8 @@ final class DrawEngine {
         // set focus to WContainer
         focusedItem = _handler.getCoreWindow().getLayout().getContainer();
         focusedItem.setFocused(true);
-        if (underFocusedItem != null)
-            underFocusedItem.clear();
+        if (_underFocusedItem != null)
+            _underFocusedItem.clear();
     }
 
     void resetItems() {
@@ -113,7 +113,7 @@ final class DrawEngine {
         if (hoveredItem != null)
             hoveredItem.setMouseHover(false);
         hoveredItem = null;
-        hoveredItems.clear();
+        _underHoveredItems.clear();
     }
 
     private Pointer ptrPress = new Pointer();
@@ -128,7 +128,7 @@ final class DrawEngine {
     private Shader _blur;
 
     DrawEngine(CoreWindow handler) {
-        hoveredItems = new LinkedList<Prototype>();
+        _underHoveredItems = new LinkedList<Prototype>();
         _handler = new GLWHandler(handler);
 
         _tooltip.setHandler(handler);
@@ -723,7 +723,7 @@ final class DrawEngine {
         else
             m_state = InputEventType.MOUSE_RELEASE;
 
-        Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
+        Deque<Prototype> tmp = new ArrayDeque<>(_underHoveredItems);
 
         Prototype lastHovered = hoveredItem;
         if (lastHovered == null) {
@@ -841,7 +841,7 @@ final class DrawEngine {
                         focusedItem.setFocused(true);
                     }
                 } else {
-                    Deque<Prototype> focused_list = new ArrayDeque<>(hoveredItems);
+                    Deque<Prototype> focused_list = new ArrayDeque<>(_underHoveredItems);
                     while (!focused_list.isEmpty()) {
                         Prototype f = focused_list.pollLast();
                         if (f.equals(hoveredItem) && hoveredItem.isDisabled())
@@ -857,8 +857,8 @@ final class DrawEngine {
                         }
                     }
                 }
-                underFocusedItem = new LinkedList<Prototype>(hoveredItems);
-                underFocusedItem.remove(focusedItem);
+                _underFocusedItem = new LinkedList<Prototype>(_underHoveredItems);
+                _underFocusedItem.remove(focusedItem);
             }
             engineEvent.resetAllEvents();
             engineEvent.setEvent(InputEventType.MOUSE_PRESS);
@@ -878,7 +878,7 @@ final class DrawEngine {
     private boolean getHoverPrototype(float xpos, float ypos, InputEventType action) {
         _inputLocker = true;
         List<Prototype> queue = new LinkedList<>();
-        hoveredItems.clear();
+        _underHoveredItems.clear();
 
         List<InterfaceBaseItem> layout_box_of_items = new LinkedList<InterfaceBaseItem>();
         layout_box_of_items.add(_handler.getCoreWindow().getLayout().getContainer());
@@ -967,8 +967,8 @@ final class DrawEngine {
                 }
             }
 
-            hoveredItems = queue;
-            Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
+            _underHoveredItems = queue;
+            Deque<Prototype> tmp = new ArrayDeque<>(_underHoveredItems);
             while (!tmp.isEmpty()) {
                 Prototype item = tmp.pollLast();
                 if (item.equals(hoveredItem) && hoveredItem.isDisabled())
@@ -1003,7 +1003,7 @@ final class DrawEngine {
 
     private <T> Prototype isInListHoveredItems(Class<T> type) {
         Prototype wanted = null;
-        List<Prototype> list = new LinkedList<Prototype>(hoveredItems);
+        List<Prototype> list = new LinkedList<Prototype>(_underHoveredItems);
         for (Prototype item : list) {
             try {
                 boolean found = type.isInstance(item);
@@ -1023,9 +1023,9 @@ final class DrawEngine {
         if (_inputLocker)
             return;
         _tooltip.initTimer(false);
-        if (hoveredItems.size() == 0)
+        if (_underHoveredItems.size() == 0)
             return;
-        Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
+        Deque<Prototype> tmp = new ArrayDeque<>(_underHoveredItems);
         while (!tmp.isEmpty()) {
             Prototype item = tmp.pollLast();
             if (dy > 0 || dx < 0)
@@ -1096,37 +1096,41 @@ final class DrawEngine {
         _margs.mods = _kargs.mods;
 
         if ((focusedItem instanceof InterfaceTextShortcuts) && action == InputState.PRESS.getValue()) {
-            if ((mods == KeyMods.CONTROL.getValue() && key == KeyCode.V.getValue())
-                    || (mods == KeyMods.SHIFT.getValue() && key == KeyCode.INSERT.getValue())) {
-                String paste_str = "";
-                paste_str = glfwGetClipboardString(_handler.getWindowId());
-                ((InterfaceTextShortcuts) focusedItem).pasteText(paste_str);
-            } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.C.getValue()) {
-                String copy_str = ((InterfaceTextShortcuts) focusedItem).getSelectedText();
-                glfwSetClipboardString(_handler.getWindowId(), copy_str);
-            } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.X.getValue()) {
-                String cut_str = ((InterfaceTextShortcuts) focusedItem).cutText();
-                glfwSetClipboardString(_handler.getWindowId(), cut_str);
-            } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.Z.getValue()) {
-                ((InterfaceTextShortcuts) focusedItem).undo();
-            } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.Y.getValue()) {
-                ((InterfaceTextShortcuts) focusedItem).redo();
-            } else {
-                if (action == InputState.PRESS.getValue()) {
-                    focusedItem.eventKeyPress.execute(focusedItem, _kargs);
-                    assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
-                }
+            // if ((mods == KeyMods.CONTROL.getValue() && key == KeyCode.V.getValue())
+            // || (mods == KeyMods.SHIFT.getValue() && key == KeyCode.INSERT.getValue())) {
+            // String paste_str = "";
+            // paste_str = glfwGetClipboardString(_handler.getWindowId());
+            // ((InterfaceTextShortcuts) focusedItem).pasteText(paste_str);
+            // } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.C.getValue())
+            // {
+            // String copy_str = ((InterfaceTextShortcuts) focusedItem).getSelectedText();
+            // glfwSetClipboardString(_handler.getWindowId(), copy_str);
+            // } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.X.getValue())
+            // {
+            // String cut_str = ((InterfaceTextShortcuts) focusedItem).cutText();
+            // glfwSetClipboardString(_handler.getWindowId(), cut_str);
+            // } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.Z.getValue())
+            // {
+            // ((InterfaceTextShortcuts) focusedItem).undo();
+            // } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.Y.getValue())
+            // {
+            // ((InterfaceTextShortcuts) focusedItem).redo();
+            // } else {
 
-                if (action == InputState.REPEAT.getValue()) {
-                    focusedItem.eventKeyPress.execute(focusedItem, _kargs);
-                    assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
-                }
+            // }
+            if (action == InputState.PRESS.getValue()) {
+                focusedItem.eventKeyPress.execute(focusedItem, _kargs);
+                assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
+            }
 
-                if (action == InputState.RELEASE.getValue()) {
-                    focusedItem.eventKeyRelease.execute(focusedItem, _kargs);
-                    assignActions(InputEventType.KEY_RELEASE, _kargs, focusedItem);
-                }
+            if (action == InputState.REPEAT.getValue()) {
+                focusedItem.eventKeyPress.execute(focusedItem, _kargs);
+                assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
+            }
 
+            if (action == InputState.RELEASE.getValue()) {
+                focusedItem.eventKeyRelease.execute(focusedItem, _kargs);
+                assignActions(InputEventType.KEY_RELEASE, _kargs, focusedItem);
             }
         } else {
             if (action == InputState.PRESS.getValue())
@@ -1159,92 +1163,121 @@ final class DrawEngine {
     }
 
     // hovered
-    private void assignActions(InputEventType action, InputEventArgs args, Boolean only_last) {
+    private void assignActions(InputEventType action, InputEventArgs args, Boolean only_hovered) {
 
-        if (only_last && !hoveredItem.isDisabled()) {
+        if (only_hovered) {
+            if (hoveredItem.isDisabled())
+                return;
+
             EventTask task = new EventTask();
             task.item = hoveredItem;
             task.action = action;
             task.args = args;
             _handler.getCoreWindow().getLayout().setEventTask(task);
         } else {
-            Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
-            while (!tmp.isEmpty()) {
-                Prototype item = tmp.pollLast();
-                if (item.equals(hoveredItem) && hoveredItem.isDisabled())
-                    continue;// пропустить
+            // Deque<Prototype> tmp = new ArrayDeque<>(hoveredItems);
+            // while (!tmp.isEmpty()) {
+            // Prototype item = tmp.pollLast();
+            // if (item.isDisabled())
+            // continue;// пропустить
 
-                EventTask task = new EventTask();
-                task.item = item;
-                task.action = action;
-                task.args = args;
-                _handler.getCoreWindow().getLayout().setEventTask(task);
-                if (!item.isPassEvents(action))
-                    break;
-            }
+            // EventTask task = new EventTask();
+            // task.item = item;
+            // task.action = action;
+            // task.args = args;
+            // _handler.getCoreWindow().getLayout().setEventTask(task);
+            // if (!item.isPassEvents(action))
+            // break;
+            // }
+
+            goThroughItemPyramid(_underHoveredItems, action, args);
         }
         _handler.getCoreWindow().getLayout().executePollActions();
     }
 
     // focused
     private void assignActions(InputEventType action, InputEventArgs args, Prototype sender, boolean is_pass_under) {
-        if (sender.isDisabled())
-            return;
-
-        EventTask task = new EventTask();
-        task.item = sender;
-        task.action = action;
-        task.args = args;
-        _handler.getCoreWindow().getLayout().setEventTask(task);
+        if (!sender.isDisabled()) {
+            EventTask task = new EventTask();
+            task.item = sender;
+            task.action = action;
+            task.args = args;
+            _handler.getCoreWindow().getLayout().setEventTask(task);
+        }
 
         if (is_pass_under && sender.isPassEvents(action)) {
-            if (underFocusedItem != null) {
-                Deque<Prototype> tmp = new ArrayDeque<Prototype>(underFocusedItem);
-                while (tmp.size() != 0) {
-                    Prototype item = tmp.pollLast();
+            if (_underFocusedItem != null) {
+                // Deque<Prototype> tmp = new ArrayDeque<Prototype>(_underFocusedItem);
+                // while (tmp.size() != 0) {
+                // Prototype item = tmp.pollLast();
 
-                    if (item.equals(focusedItem) && focusedItem.isDisabled())
-                        continue;// пропустить
+                // if (item.isDisabled()) //item.equals(focusedItem) &&
+                // focusedItem.isDisabled())
+                // continue;// пропустить
 
-                    EventTask t = new EventTask();
-                    t.item = item;
-                    t.action = action;
-                    t.args = args;
-                    _handler.getCoreWindow().getLayout().setEventTask(t);
+                // EventTask t = new EventTask();
+                // t.item = item;
+                // t.action = action;
+                // t.args = args;
+                // _handler.getCoreWindow().getLayout().setEventTask(t);
 
-                    if (!item.isPassEvents(action))
-                        break;// остановить передачу событий последующим элементам
-                }
+                // if (!item.isPassEvents(action))
+                // break;// остановить передачу событий последующим элементам
+
+                // }
+
+                goThroughItemPyramid(_underFocusedItem, action, args);
             }
         }
         _handler.getCoreWindow().getLayout().executePollActions();
     }
 
     private void assignActions(InputEventType action, InputEventArgs args, Prototype sender) {
-        if (sender.isDisabled())
-            return;
+        // if (sender.isDisabled())
+        // return;
 
         if (sender.isPassEvents(action)) {
-            if (underFocusedItem != null) {
-                Deque<Prototype> tmp = new ArrayDeque<Prototype>(underFocusedItem);
-                while (tmp.size() != 0) {
-                    Prototype item = tmp.pollLast();
+            if (_underFocusedItem != null) {
+                // Deque<Prototype> tmp = new ArrayDeque<Prototype>(underFocusedItem);
+                // while (tmp.size() != 0) {
+                // Prototype item = tmp.pollLast();
 
-                    if (item.equals(focusedItem) && focusedItem.isDisabled())
-                        continue;// пропустить
+                // if (item.equals(focusedItem) && focusedItem.isDisabled())
+                // continue;// пропустить
 
-                    EventTask t = new EventTask();
-                    t.item = item;
-                    t.action = action;
-                    t.args = args;
-                    _handler.getCoreWindow().getLayout().setEventTask(t);
+                // EventTask t = new EventTask();
+                // t.item = item;
+                // t.action = action;
+                // t.args = args;
+                // _handler.getCoreWindow().getLayout().setEventTask(t);
 
-                    if (!item.isPassEvents(action))
-                        break;// остановить передачу событий последующим элементам
-                }
+                // if (!item.isPassEvents(action))
+                // break;// остановить передачу событий последующим элементам
+                // }
+
+                goThroughItemPyramid(_underFocusedItem, action, args);
             }
         }
         _handler.getCoreWindow().getLayout().executePollActions();
+    }
+
+    private void goThroughItemPyramid(List<Prototype> itemsList, InputEventType action, InputEventArgs args) {
+        Deque<Prototype> tmp = new ArrayDeque<Prototype>(itemsList);
+        while (tmp.size() != 0) {
+            Prototype item = tmp.pollLast();
+
+            if (item.isDisabled())
+                continue;// пропустить
+
+            EventTask t = new EventTask();
+            t.item = item;
+            t.action = action;
+            t.args = args;
+            _handler.getCoreWindow().getLayout().setEventTask(t);
+
+            if (!item.isPassEvents(action))
+                break;// остановить передачу событий последующим элементам
+        }
     }
 
     private float _intervalVeryLow = 1.0f;

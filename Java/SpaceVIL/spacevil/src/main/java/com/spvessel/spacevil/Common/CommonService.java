@@ -2,8 +2,13 @@ package com.spvessel.spacevil.Common;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import static org.lwjgl.glfw.GLFW.*;
 
+import org.lwjgl.glfw.*;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.system.MemoryUtil.*;
+
+import com.spvessel.spacevil.CoreWindow;
+import com.spvessel.spacevil.WindowsBox;
 import com.spvessel.spacevil.Flags.OSType;
 
 import org.lwjgl.glfw.GLFWVidMode;
@@ -90,5 +95,25 @@ public final class CommonService {
 
     private static boolean isUnix(String OS) {
         return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
+    }
+
+    public static String getClipboardString() {
+        CoreWindow window = WindowsBox.getCurrentFocusedWindow();
+        if (window == null)
+            return "";
+        long id = window.getGLWID();
+        if (id == NULL)
+            return "";
+        return glfwGetClipboardString(id);
+    }
+
+    public static void SetClipboardString(String text) {
+        CoreWindow window = WindowsBox.getCurrentFocusedWindow();
+        if (window == null)
+            return;
+        long id = window.getGLWID();
+        if (id == NULL)
+            return;
+        glfwSetClipboardString(id, text);
     }
 }

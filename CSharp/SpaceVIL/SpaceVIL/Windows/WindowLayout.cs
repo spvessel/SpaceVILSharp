@@ -78,7 +78,7 @@ namespace SpaceVIL
         {
             _window = window;
         }
-        
+
         //methods
         internal void Show()
         {
@@ -219,7 +219,7 @@ namespace SpaceVIL
                 Monitor.Exit(wndLock);
             }
         }
-        
+
         internal void SetFocusable(bool value)
         {
             engine._handler.Focusable = value;
@@ -335,6 +335,13 @@ namespace SpaceVIL
             IsKeepAspectRatio = true;
             RatioW = w;
             RatioH = h;
+        }
+
+        internal Glfw3.Glfw.Window GetGLWID()
+        {
+            if (engine == null)
+                return new Glfw3.Glfw.Window(IntPtr.Zero);
+            return engine._handler.GetWindowId();
         }
     }
 }

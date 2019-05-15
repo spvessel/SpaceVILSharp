@@ -55,8 +55,8 @@ namespace SpaceVIL
         private KeyArgs _kargs = new KeyArgs();
         private TextInputArgs _tiargs = new TextInputArgs();
 
-        private List<Prototype> HoveredItems;
-        private List<Prototype> UnderFocusedItem;
+        private List<Prototype> _underHoveredItem;
+        private List<Prototype> _underFocusedItem;
         private Prototype HoveredItem = null;
         private Prototype FocusedItem = null;
 
@@ -91,7 +91,7 @@ namespace SpaceVIL
 
             if (item == _handler.GetCoreWindow().GetLayout().GetContainer())
             {
-                UnderFocusedItem = null;
+                _underFocusedItem = null;
                 return;
             }
 
@@ -102,8 +102,8 @@ namespace SpaceVIL
                 queue.Push(parent);
                 parent = parent.GetParent();
             }
-            UnderFocusedItem = new List<Prototype>(queue);
-            UnderFocusedItem.Remove(FocusedItem);
+            _underFocusedItem = new List<Prototype>(queue);
+            _underFocusedItem.Remove(FocusedItem);
         }
 
         internal void ResetFocus()
@@ -113,7 +113,7 @@ namespace SpaceVIL
             //set focus to WContainer
             FocusedItem = _handler.GetCoreWindow().GetLayout().GetContainer();
             FocusedItem.SetFocused(true);
-            UnderFocusedItem?.Clear();
+            _underFocusedItem?.Clear();
         }
         internal void ResetItems()
         {
@@ -122,7 +122,7 @@ namespace SpaceVIL
             if (HoveredItem != null)
                 HoveredItem.SetMouseHover(false);
             HoveredItem = null;
-            HoveredItems.Clear();
+            _underHoveredItem.Clear();
         }
         private Pointer ptrPress = new Pointer();
         private Pointer ptrRelease = new Pointer();
@@ -138,7 +138,7 @@ namespace SpaceVIL
 
         internal DrawEngine(CoreWindow handler)
         {
-            HoveredItems = new List<Prototype>();
+            _underHoveredItem = new List<Prototype>();
             _handler = new GLWHandler(handler);
 
             // _tooltip = ToolTip.GetInstance();
@@ -666,7 +666,7 @@ namespace SpaceVIL
             else
                 m_state = InputEventType.MouseRelease;
 
-            Queue<Prototype> tmp = new Queue<Prototype>(HoveredItems);
+            Queue<Prototype> tmp = new Queue<Prototype>(_underHoveredItem);
 
             Prototype lastHovered = HoveredItem;
             // if (lastHovered != null && !GetHoverPrototype(ptrRelease.GetX(), ptrRelease.GetY(), m_state))
@@ -783,7 +783,7 @@ namespace SpaceVIL
                         }
                         else
                         {
-                            Stack<Prototype> focused_list = new Stack<Prototype>(HoveredItems);
+                            Stack<Prototype> focused_list = new Stack<Prototype>(_underHoveredItem);
                             while (tmp.Count > 0)
                             {
                                 Prototype f = focused_list.Pop();
@@ -803,8 +803,8 @@ namespace SpaceVIL
                                 }
                             }
                         }
-                        UnderFocusedItem = new List<Prototype>(HoveredItems);
-                        UnderFocusedItem.Remove(FocusedItem);
+                        _underFocusedItem = new List<Prototype>(_underHoveredItem);
+                        _underFocusedItem.Remove(FocusedItem);
                     }
                     EngineEvent.ResetAllEvents();
                     EngineEvent.SetEvent(InputEventType.MousePress);
@@ -825,7 +825,7 @@ namespace SpaceVIL
         {
             _inputLocker = true;
             List<Prototype> queue = new List<Prototype>();
-            HoveredItems.Clear();
+            _underHoveredItem.Clear();
 
             List<IBaseItem> layout_box_of_items = new List<IBaseItem>();
             layout_box_of_items.Add(_handler.GetCoreWindow().GetLayout().GetContainer());
@@ -914,8 +914,8 @@ namespace SpaceVIL
                     }
                 }
 
-                HoveredItems = queue;
-                Stack<Prototype> tmp = new Stack<Prototype>(HoveredItems);
+                _underHoveredItem = queue;
+                Stack<Prototype> tmp = new Stack<Prototype>(_underHoveredItem);
                 while (tmp.Count > 0)
                 {
                     Prototype item = tmp.Pop();
@@ -958,7 +958,7 @@ namespace SpaceVIL
         private Prototype IsInListHoveredItems<T>()//idraggable adaptations
         {
             Prototype wanted = null;
-            foreach (var item in HoveredItems)
+            foreach (var item in _underHoveredItem)
             {
                 if (item is T)
                 {
@@ -977,7 +977,7 @@ namespace SpaceVIL
             if (_inputLocker)
                 return;
 
-            Stack<Prototype> tmp = new Stack<Prototype>(HoveredItems);
+            Stack<Prototype> tmp = new Stack<Prototype>(_underHoveredItem);
             while (tmp.Count > 0)
             {
                 Prototype item = tmp.Pop();
@@ -1034,48 +1034,48 @@ namespace SpaceVIL
 
             if ((FocusedItem is ITextShortcuts) && action == InputState.Press)
             {
-                if ((mods == KeyMods.Control && key == KeyCode.V) || (mods == KeyMods.Shift && key == KeyCode.Insert))
+                // if ((mods == KeyMods.Control && key == KeyCode.V) || (mods == KeyMods.Shift && key == KeyCode.Insert))
+                // {
+                // string paste_str = Glfw.GetClipboardString(_handler.GetWindowId());
+                //     (FocusedItem as ITextShortcuts).PasteText(paste_str);
+                // }
+                // else if (mods == KeyMods.Control && key == KeyCode.C)
+                // {
+                //     string copy_str = (FocusedItem as ITextShortcuts).GetSelectedText();
+                //     Glfw.SetClipboardString(_handler.GetWindowId(), copy_str);
+                // }
+                // else if (mods == KeyMods.Control && key == KeyCode.X)
+                // {
+                //     string cut_str = (FocusedItem as ITextShortcuts).CutText();
+                //     Glfw.SetClipboardString(_handler.GetWindowId(), cut_str);
+                // }
+                // else if (mods == KeyMods.Control && key == KeyCode.Z)
+                // {
+                //     (FocusedItem as ITextShortcuts).Undo();
+                // }
+                // else if (mods == KeyMods.Control && key == KeyCode.Y)
+                // {
+                //     (FocusedItem as ITextShortcuts).Redo();
+                // }
+                // else
+                // {
+                // }
+                if (action == InputState.Press)
                 {
-                    string paste_str = Glfw.GetClipboardString(_handler.GetWindowId());
-                    (FocusedItem as ITextShortcuts).PasteText(paste_str);//!!!!!!!!!!!
+                    FocusedItem.EventKeyPress(FocusedItem, _kargs);
+                    AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
                 }
-                else if (mods == KeyMods.Control && key == KeyCode.C)
+                if (action == InputState.Repeat)
                 {
-                    string copy_str = (FocusedItem as ITextShortcuts).GetSelectedText();
-                    Glfw.SetClipboardString(_handler.GetWindowId(), copy_str);
+                    FocusedItem.EventKeyPress(FocusedItem, _kargs);
+                    AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
                 }
-                else if (mods == KeyMods.Control && key == KeyCode.X)
+                if (action == InputState.Release)
                 {
-                    string cut_str = (FocusedItem as ITextShortcuts).CutText();
-                    Glfw.SetClipboardString(_handler.GetWindowId(), cut_str);
+                    FocusedItem.EventKeyRelease(FocusedItem, _kargs);
+                    AssignActions(InputEventType.KeyRelease, _kargs, FocusedItem);
                 }
-                else if (mods == KeyMods.Control && key == KeyCode.Z)
-                {
-                    (FocusedItem as ITextShortcuts).Undo();
-                }
-                else if (mods == KeyMods.Control && key == KeyCode.Y)
-                {
-                    (FocusedItem as ITextShortcuts).Redo();
-                }
-                else
-                {
-                    if (action == InputState.Press)
-                    {
-                        FocusedItem.EventKeyPress(FocusedItem, _kargs);
-                        AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
-                    }
-                    if (action == InputState.Repeat)
-                    {
-                        FocusedItem.EventKeyPress(FocusedItem, _kargs);
-                        AssignActions(InputEventType.KeyPress, _kargs, FocusedItem);
-                    }
-                    if (action == InputState.Release)
-                    {
-                        FocusedItem.EventKeyRelease(FocusedItem, _kargs);
-                        AssignActions(InputEventType.KeyRelease, _kargs, FocusedItem);
-                    }
-                }
-            } //Нехорошо это все
+            }
             else
             {
                 if (action == InputState.Press)
@@ -1100,101 +1100,134 @@ namespace SpaceVIL
             FocusedItem?.EventTextInput?.Invoke(FocusedItem, _tiargs);
         }
 
-        private void AssignActions(InputEventType action, InputEventArgs args, bool only_last)
+        // отправляет на выполнение событий ввода для выделенного элемента курсором мыши и для всех под этим элементом
+        private void AssignActions(InputEventType action, InputEventArgs args, bool only_hovered)
         {
-            if (only_last && !HoveredItem.IsDisabled())
+            if (only_hovered)
             {
+                if (HoveredItem.IsDisabled())
+                    return;
+                
                 _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
                 {
                     Item = HoveredItem,
                     Action = action,
                     Args = args
-                });
+                });                
             }
             else
             {
-                Stack<Prototype> tmp = new Stack<Prototype>(HoveredItems);
-                while (tmp.Count > 0)
-                {
-                    Prototype item = tmp.Pop();
-                    if (item.Equals(HoveredItem) && HoveredItem.IsDisabled() || item.IsDisabled())
-                        continue;
-                    _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
-                    {
-                        Item = item,
-                        Action = action,
-                        Args = args
-                    });
-                    if (!item.IsPassEvents(action))
-                        break;//остановить передачу событий последующим элементам
-                }
+                // Stack<Prototype> tmp = new Stack<Prototype>(_underHoveredItem);
+                // while (tmp.Count > 0)
+                // {
+                //     Prototype item = tmp.Pop();
+                //     if (item.IsDisabled())
+                //         continue;
+
+                //     _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
+                //     {
+                //         Item = item,
+                //         Action = action,
+                //         Args = args
+                //     });
+                //     if (!item.IsPassEvents(action))
+                //         break;//остановить передачу событий последующим элементам
+                // }
+                GoThroughItemPyramid(_underHoveredItem, action, args);
             }
             _handler.GetCoreWindow().GetLayout().ExecutePollActions();
         }
+
+        // отправляет на выполнение событий ввода для заданного элемента и 
+        // для всех последующих элементов из коллекции UnderFocusedItem (элементы под фокусным элементом)
         private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender, bool is_pass_under)
         {
-            if (sender.IsDisabled())
-                return;
-
-            _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
-            {
-                Item = sender,
-                Action = action,
-                Args = args
-            });
+            if (!sender.IsDisabled())
+            { 
+                _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
+                {
+                    Item = sender,
+                    Action = action,
+                    Args = args
+                });
+            }
 
             if (is_pass_under && sender.IsPassEvents(action))
             {
-                if (UnderFocusedItem != null)
+                if (_underFocusedItem != null)
                 {
-                    Stack<Prototype> tmp = new Stack<Prototype>(UnderFocusedItem);
-                    while (tmp.Count != 0)
-                    {
-                        Prototype item = tmp.Pop();
-                        if (item.Equals(FocusedItem) && FocusedItem.IsDisabled() || item.IsDisabled())
-                            continue;//пропустить
+                    // Stack<Prototype> tmp = new Stack<Prototype>(_underFocusedItem);
+                    // while (tmp.Count != 0)
+                    // {
+                    //     Prototype item = tmp.Pop();
+                    //     if (item.IsDisabled()) //item.Equals(FocusedItem) && FocusedItem.IsDisabled() || 
+                    //         continue;//пропустить
 
-                        _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
-                        {
-                            Item = item,
-                            Action = action,
-                            Args = args
-                        });
-                        if (!item.IsPassEvents(action))
-                            break;//остановить передачу событий последующим элементам
-                    }
+                    //     _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
+                    //     {
+                    //         Item = item,
+                    //         Action = action,
+                    //         Args = args
+                    //     });
+                    //     if (!item.IsPassEvents(action))
+                    //         break;//остановить передачу событий последующим элементам
+                    // }
+                    GoThroughItemPyramid(_underFocusedItem, action, args);
                 }
             }
             _handler.GetCoreWindow().GetLayout().ExecutePollActions();
         }
+
+        // отправляет на выполнение событий ввода для всех последующих элементов из коллекции UnderFocusedItem (элементы под фокусным элементом)
         private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender)
         {
-            if (sender.IsDisabled())
-                return;
+            // if (sender.IsDisabled())
+            //     return;
 
             if (sender.IsPassEvents(action))
             {
-                if (UnderFocusedItem != null)
+                if (_underFocusedItem != null)
                 {
-                    Stack<Prototype> tmp = new Stack<Prototype>(UnderFocusedItem);
-                    while (tmp.Count != 0)
-                    {
-                        Prototype item = tmp.Pop();
-                        if (item.Equals(FocusedItem) && FocusedItem.IsDisabled())
-                            continue;//пропустить
+                    // Stack<Prototype> tmp = new Stack<Prototype>(_underFocusedItem);
+                    // while (tmp.Count != 0)
+                    // {
+                    //     Prototype item = tmp.Pop();
+                    //     if (item.IsDisabled()) //item.Equals(FocusedItem) && FocusedItem.IsDisabled())
+                    //         continue;//пропустить
 
-                        _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
-                        {
-                            Item = item,
-                            Action = action,
-                            Args = args
-                        });
-                        if (!item.IsPassEvents(action))
-                            break;//остановить передачу событий последующим элементам
-                    }
+                    //     _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
+                    //     {
+                    //         Item = item,
+                    //         Action = action,
+                    //         Args = args
+                    //     });
+                    //     if (!item.IsPassEvents(action))
+                    //         break;//остановить передачу событий последующим элементам
+                    // }
+                    GoThroughItemPyramid(_underFocusedItem, action, args);
                 }
             }
             _handler.GetCoreWindow().GetLayout().ExecutePollActions();
+        }
+
+        private void GoThroughItemPyramid(IEnumerable<Prototype> itemsList, InputEventType action, InputEventArgs args)
+        {
+            Stack<Prototype> tmp = new Stack<Prototype>(itemsList);
+            while (tmp.Count != 0)
+            {
+                Prototype item = tmp.Pop();
+                if (item.IsDisabled())
+                    continue;//пропустить
+
+                _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
+                {
+                    Item = item,
+                    Action = action,
+                    Args = args
+                });
+                if (!item.IsPassEvents(action))
+                    break;//остановить передачу событий последующим элементам
+            }
         }
 
         // internal float _sleep = 1000.0f / 60.0f;

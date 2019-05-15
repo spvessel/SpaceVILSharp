@@ -520,4 +520,8 @@ public abstract class CoreWindow {
             return wnd_layout.getContainer().getBorderFill();
         return new Color(0, 0, 0, 0);
     }
+
+    public long getGLWID() {
+        return getLayout().getGLWID();
+    }
 }

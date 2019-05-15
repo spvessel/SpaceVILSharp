@@ -130,6 +130,10 @@ namespace SpaceVIL
         {
             LastFocusedWindow = wnd;
         }
+        public static CoreWindow GetCurrentFocusedWindow()
+        {
+            return LastFocusedWindow;
+        }
         static internal void SetFocusedWindow(CoreWindow window)
         {
             window.GetLayout().SetFocus(true);
