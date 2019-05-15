@@ -587,7 +587,7 @@ namespace SpaceVIL
 
                 if (args.Key == KeyCode.Tab)
                 {
-                    PrivPasteText("    ");
+                    PasteText("    "); //PrivPasteText
                 }
 
                 if (_isSelect)
@@ -901,8 +901,7 @@ namespace SpaceVIL
         }
 
         private void PrivPasteText(string pasteStr)
-        {
-            if (!_isEditable) return;
+        {            
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
@@ -924,13 +923,13 @@ namespace SpaceVIL
 
         public void PasteText(string text)
         {
+            if (!_isEditable) return;
             if (text != null)
                 PrivPasteText(text);
         }
 
         private string PrivCutText()
-        {
-            if (!_isEditable) return "";
+        {            
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
@@ -961,6 +960,7 @@ namespace SpaceVIL
 
         public string CutText()
         {
+            if (!_isEditable) return "";
             String ans = PrivCutText();
             UndoStuff();
             return ans;
@@ -1184,7 +1184,7 @@ namespace SpaceVIL
             CancelJustSelected();
             int lineNum = _textureStorage.GetCount() - 1;
             _cursor_position = new Point(GetLineLetCount(lineNum), lineNum);
-            PasteText(text);
+            PrivPasteText(text); //PasteText
         }
 
         internal class TextBlockState

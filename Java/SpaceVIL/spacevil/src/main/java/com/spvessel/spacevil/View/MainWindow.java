@@ -31,11 +31,11 @@ public class MainWindow extends ActiveWindow {
         // setAspectRatio(4, 1);
 
         // setPadding(10, 10, 10, 10);
-        setPadding(10, 10, 10, 10);
-        setBackground(new Color(0, 0, 0, 10));
-        setBorderRadius(10);
-        setAntiAliasingQuality(MSAA.MSAA_8X);
-        isTransparent = true;
+//        setPadding(10, 10, 10, 10);
+//        setBackground(new Color(0, 0, 0, 10));
+//        setBorderRadius(10);
+//        setAntiAliasingQuality(MSAA.MSAA_8X);
+//        isTransparent = true;
         // setShadow(10, 0, 0, Color.black);
 
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);

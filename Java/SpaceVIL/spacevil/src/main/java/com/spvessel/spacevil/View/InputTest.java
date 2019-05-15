@@ -148,18 +148,22 @@ public class InputTest extends ActiveWindow {
             // tb.clear();
             // tb.setFocus();
             // tb.setEditable(true);
-            int sz = tb.getFont().getSize() + 1;
-            tb.setFontSize(sz);
+//            int sz = tb.getFont().getSize() + 1;
+//            tb.setFontSize(sz);
+//
+//            System.out.println(tb.getFont().getSize());
 
-            System.out.println(tb.getFont().getSize());
+            tb.setEditable(!tb.isEditable());
         });
 
         bc1.eventMouseClick.add((sender, args) -> {
-            int sz = tb.getFont().getSize();
-            if (sz > 10)
-                tb.setFontSize(sz - 1);
-
-            System.out.println(tb.getFont().getSize());
+//            int sz = tb.getFont().getSize();
+//            if (sz > 10)
+//                tb.setFontSize(sz - 1);
+//
+//            System.out.println(tb.getFont().getSize());
+            tb.pasteText("123");
+            tb.appendText("789");
         });
 
         Label label = new Label("1234567890");

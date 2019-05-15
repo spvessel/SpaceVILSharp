@@ -513,7 +513,7 @@ class TextBlock extends Prototype
             }
 
             if (args.key == KeyCode.TAB) {
-                privPasteText("    ");
+                pasteText("    "); //privPasteText
             }
 
             if (_isSelect) {
@@ -806,8 +806,6 @@ class TextBlock extends Prototype
     }
 
     private void privPasteText(String pasteStr) {
-        if (!_isEditable)
-            return;
         _textureStorage.textInputLock.lock();
         try {
             if (_isSelect)
@@ -827,13 +825,13 @@ class TextBlock extends Prototype
     }
 
     public void pasteText(String pasteStr) {
+        if (!_isEditable)
+            return;
         if (pasteStr != null)
             privPasteText(pasteStr);
     }
 
     private String privCutText() {
-        if (!_isEditable)
-            return "";
         _textureStorage.textInputLock.lock();
         try {
             if (_selectFrom.x == -1 || _selectTo.x == -1)
@@ -861,6 +859,8 @@ class TextBlock extends Prototype
     }
 
     public String cutText() {
+        if (!_isEditable)
+            return "";
         String ans = privCutText();
         undoStuff();
         return ans;
@@ -1055,7 +1055,7 @@ class TextBlock extends Prototype
         cancelJustSelected();
         int lineNum = _textureStorage.getCount() - 1;
         _cursor_position = new Point(getLineLetCount(lineNum), lineNum);
-        pasteText(text);
+        privPasteText(text); //pasteText
     }
 
     private class TextBlockState {
