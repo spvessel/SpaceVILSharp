@@ -515,6 +515,14 @@ public class TextArea extends Prototype {
         _area.pasteText(text);
     }
 
+    public String cutText() {
+        return _area.cutText();
+    }
+
+    public String getSelectedText() {
+        return _area.getSelectedText();
+    }
+
     /**
      * Move cursor to the text beginning
      */

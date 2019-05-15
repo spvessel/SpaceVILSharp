@@ -559,6 +559,16 @@ namespace SpaceVIL
             _area.PasteText(text);
         }
 
+        public string CutText()
+        {
+            return _area.CutText();
+        }
+
+        public string GetSelectedText()
+        {
+            return _area.GetSelectedText();
+        }
+
         /// <summary>
         /// Move cursor to the text beginning
         /// </summary>
