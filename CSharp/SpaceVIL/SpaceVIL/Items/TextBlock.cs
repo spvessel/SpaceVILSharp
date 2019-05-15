@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
+using SpaceVIL.Items;
 
 namespace SpaceVIL
 {
@@ -268,19 +269,14 @@ namespace SpaceVIL
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
+                TextShortcutProcessor.ProcessShortcut(this, args);
+
                 if (!_isEditable)
                 {
-                    if (args.Mods == KeyMods.Control && (args.Key == KeyCode.A || args.Key == KeyCode.a))
-                    {
-                        _selectFrom.X = 0;
-                        _selectFrom.Y = 0;
-                        _cursor_position.Y = _textureStorage.GetCount() - 1;
-                        _cursor_position.X = GetLineLetCount(_cursor_position.Y);
-                        _selectTo = new Point(_cursor_position.X, _cursor_position.Y);
-                        ReplaceCursor();
-                        _isSelect = true;
-                        MakeSelectedArea(); //_selectFrom, _selectTo);
-                    }
+                    // if (args.Mods == KeyMods.Control && (args.Key == KeyCode.A || args.Key == KeyCode.a))
+                    // {
+                    //     SelectAll();
+                    // }
                     return;
                 }
 
@@ -306,18 +302,18 @@ namespace SpaceVIL
 
                             break;
 
-                        case KeyMods.Control:
-                            if (args.Key == KeyCode.A || args.Key == KeyCode.a)
-                            {
-                                _selectFrom.X = 0;
-                                _selectFrom.Y = 0;
-                                _cursor_position.Y = _textureStorage.GetCount() - 1;
-                                _cursor_position.X = GetLineLetCount(_cursor_position.Y);
-                                ReplaceCursor();
+                        // case KeyMods.Control:
+                        //     if (args.Key == KeyCode.A || args.Key == KeyCode.a)
+                        //     {
+                        //         _selectFrom.X = 0;
+                        //         _selectFrom.Y = 0;
+                        //         _cursor_position.Y = _textureStorage.GetCount() - 1;
+                        //         _cursor_position.X = GetLineLetCount(_cursor_position.Y);
+                        //         ReplaceCursor();
 
-                                _isSelect = true;
-                            }
-                            break;
+                        //         _isSelect = true;
+                        //     }
+                        //     break;
 
                             //alt, super ?
                     }
@@ -1004,6 +1000,26 @@ namespace SpaceVIL
                 CancelJustSelected();
 
             UndoStuff();
+        }
+
+        public void SelectAll()
+        {
+            Monitor.Enter(_textureStorage.textInputLock);
+            try
+            {
+                _selectFrom.X = 0;
+                _selectFrom.Y = 0;
+                _cursor_position.Y = _textureStorage.GetCount() - 1;
+                _cursor_position.X = GetLineLetCount(_cursor_position.Y);
+                _selectTo = new Point(_cursor_position.X, _cursor_position.Y);
+                ReplaceCursor();
+                _isSelect = true;
+                MakeSelectedArea();
+            }
+            finally
+            {
+                Monitor.Exit(_textureStorage.textInputLock);
+            }
         }
 
         //style

@@ -13,5 +13,6 @@ namespace SpaceVIL.Core
         string CutText();
         void Undo();
         void Redo();
+        void SelectAll();
     }
 }

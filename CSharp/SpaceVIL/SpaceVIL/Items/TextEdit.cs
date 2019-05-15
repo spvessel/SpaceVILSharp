@@ -8,6 +8,7 @@ using System.Threading;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
 using SpaceVIL.Decorations;
+using SpaceVIL.Items;
 
 namespace SpaceVIL
 {
@@ -220,21 +221,19 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
-                //Console.WriteLine(args.Scancode);
+                TextShortcutProcessor.ProcessShortcut(this, args);
+
                 if (!_isEditable)
                 {
-                    if (args.Mods == KeyMods.Control && (args.Key == KeyCode.A || args.Key == KeyCode.a))
-                    {
-                        SelectAll();
-                    }
+                    // if (args.Mods == KeyMods.Control && (args.Key == KeyCode.A || args.Key == KeyCode.a))
+                    // {
+                    //     SelectAll();
+                    // }
                     return;
                 }
 
                 if (!_isSelect && _justSelected)
                 {
-                    //_selectFrom = -1;// 0;
-                    //_selectTo = -1;// 0;
-                    //_justSelected = false;
                     CancelJustSelected();
                 }
 
@@ -255,16 +254,16 @@ namespace SpaceVIL
 
                             break;
 
-                        case KeyMods.Control:
-                            if (args.Key == KeyCode.A || args.Key == KeyCode.a)
-                            {
-                                _selectFrom = 0;
-                                _cursor_position = PrivGetText().Length;
-                                ReplaceCursor();
+                        // case KeyMods.Control:
+                        //     if (args.Key == KeyCode.A || args.Key == KeyCode.a)
+                        //     {
+                        //         _selectFrom = 0;
+                        //         _cursor_position = PrivGetText().Length;
+                        //         ReplaceCursor();
 
-                                _isSelect = true;
-                            }
-                            break;
+                        //         _isSelect = true;
+                        //     }
+                        //     break;
 
                             //alt, super ?
                     }

@@ -10,4 +10,6 @@ public interface InterfaceTextShortcuts {
     void undo();
 
     void redo();
+
+    void selectAll();
 }

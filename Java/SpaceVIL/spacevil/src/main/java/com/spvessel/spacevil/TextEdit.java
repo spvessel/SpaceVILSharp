@@ -219,10 +219,13 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         try {
 //            if (args == null)
 //                return;
+
+            TextShortcutProcessor.processShortcut(this, args);
+
             if (!_isEditable) {
-                if (args.mods.contains(KeyMods.CONTROL) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
-                    selectAll();
-                }
+//                if (args.mods.contains(KeyMods.CONTROL) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
+//                    selectAll();
+//                }
                 return;
             }
 
@@ -240,15 +243,15 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
                     }
                 }
 
-                if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1) {
-                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
-                        _selectFrom = 0;
-                        _cursor_position = privGetText().length();
-                        replaceCursor();
-
-                        _isSelect = true;
-                    }
-                }
+//                if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1) {
+//                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
+//                        _selectFrom = 0;
+//                        _cursor_position = privGetText().length();
+//                        replaceCursor();
+//
+//                        _isSelect = true;
+//                    }
+//                }
                 // alt, super ?
             } else {
                 if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE) {
