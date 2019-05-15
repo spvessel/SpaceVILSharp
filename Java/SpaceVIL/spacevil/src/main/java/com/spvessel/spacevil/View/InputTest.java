@@ -66,6 +66,7 @@ public class InputTest extends ActiveWindow {
         te.setWidthPolicy(SizePolicy.EXPAND);
 
         TextArea tb = new TextArea();
+        tb.setEditable(false);
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         tb.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         tb.setText("123qwe sdfsdf;l!k(sdfsdf)sdfsdf_ sdfsdfs_dff+gh");
@@ -75,6 +76,11 @@ public class InputTest extends ActiveWindow {
         tb.eventKeyPress.add((sender, args) -> {
             if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.S) {
                 System.out.println(args.mods.size() + " mods: " + args.mods + " code: " + args.key);
+                tb.appendText("appended text line...\n");
+            }
+            else if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.R) {
+                System.out.println(args.mods.size() + " mods: " + args.mods + " code: " + args.key);
+                tb.setText("SetText...");
             }
         });
         // tb.setPadding(15, 0, 15, 0);
