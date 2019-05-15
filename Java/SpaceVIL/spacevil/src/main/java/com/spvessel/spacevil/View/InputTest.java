@@ -168,8 +168,8 @@ public class InputTest extends ActiveWindow {
 //                tb.setFontSize(sz - 1);
 //
 //            System.out.println(tb.getFont().getSize());
-            tb.pasteText("123");
-            tb.appendText("789");
+//            tb.pasteText("123");
+            System.out.println(tb.getSelectedText());
         });
 
         Label label = new Label("1234567890");
