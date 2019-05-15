@@ -38,7 +38,7 @@ namespace SpaceVIL.Common
 #endif
         }
 
-        public static String ClipboardTextStorage = String.Empty;
+        private static String ClipboardTextStorage = String.Empty;
         internal static readonly object GlobalLocker = new object();
 
         //os type

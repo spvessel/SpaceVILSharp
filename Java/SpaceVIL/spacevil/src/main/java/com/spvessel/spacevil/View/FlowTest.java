@@ -14,6 +14,7 @@ import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.OpenEntryDialog.OpenDialogType;
 import com.spvessel.spacevil.MenuItem;
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.MouseArgs;
 
@@ -266,6 +267,15 @@ public class FlowTest extends ActiveWindow {
         flow.addContextMenu(_context_menu);
 
         // addItem(new StopMenu());
+
+        eventKeyPress.add((sender, args) -> {
+            if (args.key == KeyCode.V)
+                CommonService.setClipboardString("SetClipBoardString");
+            if (args.key == KeyCode.C)
+                System.out.println(CommonService.getClipboardString());
+            if (args.key == KeyCode.F)
+                System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
+        });
     }
 
     // private ResizableItem getBlockList() {

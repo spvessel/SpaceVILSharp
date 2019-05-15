@@ -29,7 +29,7 @@ public final class CommonService {
         return info;
     }
 
-    public static String ClipboardTextStorage = "";
+    private static String ClipboardTextStorage = "";
     public final static Lock GlobalLocker = new ReentrantLock();
 
     // os type
@@ -107,7 +107,7 @@ public final class CommonService {
         return glfwGetClipboardString(id);
     }
 
-    public static void SetClipboardString(String text) {
+    public static void setClipboardString(String text) {
         CoreWindow window = WindowsBox.getCurrentFocusedWindow();
         if (window == null)
             return;

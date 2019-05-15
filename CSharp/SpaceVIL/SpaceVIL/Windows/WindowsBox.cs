@@ -22,7 +22,7 @@ namespace SpaceVIL
         static internal HashSet<CoreWindow> windows = new HashSet<CoreWindow>();
         static internal Dictionary<Guid, CoreWindow> windows_guid = new Dictionary<Guid, CoreWindow>();
         static internal List<WindowPair> current_calling_pair = new List<WindowPair>();
-        static internal CoreWindow LastFocusedWindow;
+        static internal CoreWindow _lastFocusedWindow;
 
         static internal void InitWindow(CoreWindow _layout)
         {
@@ -117,22 +117,22 @@ namespace SpaceVIL
         {
             WindowPair pair = new WindowPair();
             pair.WINDOW = sender_wnd;
-            if (LastFocusedWindow == null)
+            if (_lastFocusedWindow == null)
             {
                 pair.GUID = sender_wnd.GetWindowGuid();//root
-                LastFocusedWindow = sender_wnd;
+                _lastFocusedWindow = sender_wnd;
             }
             else
-                pair.GUID = LastFocusedWindow.GetWindowGuid();
+                pair.GUID = _lastFocusedWindow.GetWindowGuid();
             current_calling_pair.Add(pair);
         }
         static internal void SetCurrentFocusedWindow(CoreWindow wnd)
         {
-            LastFocusedWindow = wnd;
+            _lastFocusedWindow = wnd;
         }
         public static CoreWindow GetCurrentFocusedWindow()
         {
-            return LastFocusedWindow;
+            return _lastFocusedWindow;
         }
         static internal void SetFocusedWindow(CoreWindow window)
         {
