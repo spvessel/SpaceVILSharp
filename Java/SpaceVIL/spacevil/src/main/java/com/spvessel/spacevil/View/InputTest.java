@@ -35,12 +35,12 @@ public class InputTest extends ActiveWindow {
         setPadding(2, 2, 2, 2);
 
         eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.V)
-                CommonService.setClipboardString("SetClipBoardString");
+            // if (args.key == KeyCode.V)
+            //     CommonService.setClipboardString("SetClipBoardString");
             if (args.key == KeyCode.C)
                 System.out.println(CommonService.getClipboardString());
-            if (args.key == KeyCode.F)
-                System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
+            // if (args.key == KeyCode.F)
+            //     System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
         });
 
         TitleBar title = new TitleBar("Input Test");
