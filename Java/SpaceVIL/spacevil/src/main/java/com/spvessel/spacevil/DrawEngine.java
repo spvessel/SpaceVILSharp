@@ -41,6 +41,8 @@ final class DrawEngine {
         _itemPyramidLevel -= 0.001f;
     }
 
+    private Map<KeyMods, Integer> keyMap;
+
     private Map<InterfaceBaseItem, int[]> _bounds = new HashMap<>();
     Prototype _draggable = null;
     // private ToolTip _tooltip = ToolTip.getInstance();
@@ -139,6 +141,14 @@ final class DrawEngine {
         _margs.clear();
         _kargs.clear();
         _tiargs.clear();
+
+        if (CommonService.getOSType().equals(OSType.LINUX)) {
+            keyMap = new HashMap<KeyMods, Integer>();
+            keyMap.put(KeyMods.SHIFT, 0);
+            keyMap.put(KeyMods.CONTROL, 0);
+            keyMap.put(KeyMods.ALT, 0);
+            keyMap.put(KeyMods.SUPER, 0);
+        }
     }
 
     void dispose() {
@@ -1041,19 +1051,6 @@ final class DrawEngine {
     private void keyPress(long wnd, int key, int scancode, int action, int mods) {
         if (_inputLocker)
             return;
-        // System.out.println("keypress");
-        // switch (action) {
-        // case 1 :
-        // System.out.println("key press");
-        // break;
-        // case 0 :
-        // System.out.println("key release");
-        // break;
-        // case 2 :
-        // System.out.println("key repeat");
-        // break;
-        // }
-        // System.out.println(mods);
 
         if (!_handler.focusable)
             return;
@@ -1061,63 +1058,42 @@ final class DrawEngine {
         _kargs.key = KeyCode.getEnum(key);
         _kargs.scancode = scancode;
         _kargs.state = InputState.getEnum(action);
-        _kargs.mods = KeyMods.getEnums(mods);
 
         if (CommonService.getOSType().equals(OSType.LINUX)) {
-            if (mods == 0 && key != 0 && action == 1) {
-                _kargs.mods.clear();
-                // shift
-                if (key == 340 || key == 344) {
-                    _kargs.mods.add(KeyMods.SHIFT);
+            if (key != 0) {
+                KeyMods keyMod = getKeyModByKey(key);
+                if (!keyMod.equals(KeyMods.NO)) {
+                    if (action == 1) {
+                        if (_kargs.mods.contains(KeyMods.NO)) {
+                            _kargs.mods.remove(KeyMods.NO);
+                        }
+                        if (keyMap.get(keyMod) == 0) {
+                            _kargs.mods.add(keyMod);
+                        }
+                        keyMap.put(keyMod, keyMap.get(keyMod) + 1);
+                    }
+                    if (mods != 0 && action == 0) {
+                        if (_kargs.mods.contains(keyMod)) {
+                            if (keyMap.get(keyMod) == 1)
+                                _kargs.mods.remove(keyMod);
+                            keyMap.put(keyMod, keyMap.get(keyMod) - 1);
+                        }
+                    }
                 }
-                // control
-                if (key == 341 || key == 345) {
-                    _kargs.mods.add(KeyMods.CONTROL);
-                }
-                // alt
-                if (key == 342 || key == 346) {
-                    _kargs.mods.add(KeyMods.ALT);
-                }
-                // super
-                if (key == 343 || key == 347) {
-                    _kargs.mods.add(KeyMods.SUPER);
-                }
-
                 if (_kargs.mods.size() == 0)
                     _kargs.mods.add(KeyMods.NO);
             }
-            if (action == 0) {
+            if (action == 0 && mods == 0 && key == 0) {
                 _kargs.mods.clear();
                 _kargs.mods.add(KeyMods.NO);
             }
-        } // else
-          // _kargs.mods = KeyMods.getEnums(mods);
+        } else {
+            _kargs.mods = KeyMods.getEnums(mods);
+        }
 
         _margs.mods = _kargs.mods;
 
         if ((focusedItem instanceof InterfaceTextShortcuts) && action == InputState.PRESS.getValue()) {
-            // if ((mods == KeyMods.CONTROL.getValue() && key == KeyCode.V.getValue())
-            // || (mods == KeyMods.SHIFT.getValue() && key == KeyCode.INSERT.getValue())) {
-            // String paste_str = "";
-            // paste_str = glfwGetClipboardString(_handler.getWindowId());
-            // ((InterfaceTextShortcuts) focusedItem).pasteText(paste_str);
-            // } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.C.getValue())
-            // {
-            // String copy_str = ((InterfaceTextShortcuts) focusedItem).getSelectedText();
-            // glfwSetClipboardString(_handler.getWindowId(), copy_str);
-            // } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.X.getValue())
-            // {
-            // String cut_str = ((InterfaceTextShortcuts) focusedItem).cutText();
-            // glfwSetClipboardString(_handler.getWindowId(), cut_str);
-            // } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.Z.getValue())
-            // {
-            // ((InterfaceTextShortcuts) focusedItem).undo();
-            // } else if (mods == KeyMods.CONTROL.getValue() && key == KeyCode.Y.getValue())
-            // {
-            // ((InterfaceTextShortcuts) focusedItem).redo();
-            // } else {
-
-            // }
             if (action == InputState.PRESS.getValue()) {
                 focusedItem.eventKeyPress.execute(focusedItem, _kargs);
                 assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem);
@@ -1140,6 +1116,30 @@ final class DrawEngine {
             else if (action == InputState.RELEASE.getValue())
                 assignActions(InputEventType.KEY_RELEASE, _kargs, focusedItem, true);
         }
+    }
+
+    private KeyMods getKeyModByKey(int key) {
+        boolean isShiftKey = (key == 340 || key == 344);
+        if (isShiftKey) {
+            return KeyMods.SHIFT;
+        }
+
+        boolean isCtrlKey = (key == 341 || key == 345);
+        if (isCtrlKey) {
+            return KeyMods.CONTROL;
+        }
+
+        boolean isAltKey = (key == 342 || key == 346);
+        if (isAltKey) {
+            return KeyMods.ALT;
+        }
+
+        boolean isSuperKey = (key == 343 || key == 347);
+        if (isSuperKey) {
+            return KeyMods.SUPER;
+        }
+
+        return KeyMods.NO;
     }
 
     private void textInput(long wnd, int character, int mods) {

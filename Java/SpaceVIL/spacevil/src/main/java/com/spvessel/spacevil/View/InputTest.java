@@ -76,7 +76,7 @@ public class InputTest extends ActiveWindow {
         te.setWidthPolicy(SizePolicy.EXPAND);
 
         TextArea tb = new TextArea();
-        tb.setEditable(false);
+        // tb.setEditable(false);
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         tb.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         tb.setText("123qwe sdfsdf;l!k(sdfsdf)sdfsdf_ sdfsdfs_dff+gh");
