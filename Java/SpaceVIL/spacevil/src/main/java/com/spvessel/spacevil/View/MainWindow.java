@@ -206,6 +206,15 @@ public class MainWindow extends ActiveWindow {
         });
 
         btn_flow.setFocus();
+
+        eventKeyPress.add((args, src) -> {
+            System.out.println("Press " + src.mods + " " + src.key);
+        });
+
+        eventKeyRelease.add((args, src) -> {
+            System.out.println("Release " + src.mods + " " + src.key);
+        });
+
         //
         //
         // List<List<Side>> testListSide = new LinkedList<>();
