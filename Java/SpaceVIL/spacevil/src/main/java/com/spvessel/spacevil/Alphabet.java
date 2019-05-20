@@ -333,8 +333,15 @@ class Alphabet {
             // maxY = y1;
 
             int boolInd;
+            int intersectCheckPoints = 11;
+            double[] intersectArray = new double[intersectCheckPoints];
             double intersectTol = 0.5;
-            double intersectStep = 2.0 * intersectTol / 10.0;
+            double intersectStep = 2.0 * intersectTol / (double) (intersectCheckPoints - 1);
+            double interPt = -intersectTol;
+            for (int i = 0; i <= intersectCheckPoints; i++) {
+                intersectArray[i] = interPt;
+                interPt += intersectStep;
+            }
 
             for (int dd = y0; dd <= y1; dd++) {
                 boolInd = (dd - y0);
@@ -354,8 +361,10 @@ class Alphabet {
                         int count = 0;
                         int countTmp = 0;
 
-                        for (double xx = -intersectTol; xx <= intersectTol; xx += intersectStep) {
-                            for (double yy = -intersectTol; yy <= intersectTol; yy += intersectStep) {
+                        for (int xDir = 0; xDir <= intersectCheckPoints; xDir++) { // for (double xx = -intersectTol; xx <= intersectTol; xx += intersectStep) {
+                            double xx = intersectArray[xDir], yy;
+                            for (int yDir = 0; yDir <= intersectCheckPoints; yDir++) { // for (double yy = -intersectTol; yy <= intersectTol; yy += intersectStep) {
+                                yy = intersectArray[yDir];
                                 countTmp++;
                                 if (shape.contains(d + xx, dd + yy))
                                     count++;
