@@ -1,5 +1,6 @@
 package com.spvessel.spacevil.View;
 
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
@@ -203,6 +204,13 @@ public class MainWindow extends ActiveWindow {
                 margs.button = MouseButton.BUTTON_RIGHT;
                 menu.show(sender, margs);
             }
+
+            if (args.key == KeyCode.V)
+                CommonService.setClipboardString("SetClipBoardString");
+            if (args.key == KeyCode.C)
+                System.out.println(CommonService.getClipboardString());
+            if (args.key == KeyCode.F)
+                System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
         });
 
         btn_flow.setFocus();

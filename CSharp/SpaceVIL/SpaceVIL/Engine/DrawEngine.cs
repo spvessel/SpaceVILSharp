@@ -992,6 +992,16 @@ namespace SpaceVIL
             EngineEvent.SetEvent(InputEventType.MouseScroll);
         }
 
+#if LINUX
+        Dictionary<KeyMods, int> keyMap = new Dictionary<KeyMods, int>()
+        {
+            {KeyMods.Shift, 0},
+            {KeyMods.Control, 0},
+            {KeyMods.Alt, 0},
+            {KeyMods.Super, 0}
+        };
+#endif
+
         private void KeyPress(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
             _tooltip.InitTimer(false);
@@ -1004,62 +1014,41 @@ namespace SpaceVIL
             _kargs.Key = key;
             _kargs.Scancode = scancode;
             _kargs.State = action;
-            _kargs.Mods = mods;
 
-            if (CommonService.GetOSType().Equals(OSType.Linux))
+#if LINUX
+            if (key != 0)
             {
-                if (mods == 0 && key != 0 && action == InputState.Press)
+                KeyMods keyMod = GetKeyModByKey(key);
+                if (keyMod != 0)
                 {
-                    _kargs.Mods = 0;
-                    // shift
-                    if (key == KeyCode.LeftShift || key == KeyCode.RightShift)
-                        _kargs.Mods |= KeyMods.Shift;
-                    // control
-                    if (key == KeyCode.LeftControl || key == KeyCode.RightControl)
-                        _kargs.Mods |= KeyMods.Control;
-                    // alt
-                    if (key == KeyCode.LeftAlt || key == KeyCode.LeftAlt)
-                        _kargs.Mods |= KeyMods.Alt;
-                    // super
-                    if (key == KeyCode.LeftSuper || key == KeyCode.LeftSuper)
-                        _kargs.Mods |= KeyMods.Super;
-                }
-                if (action == 0)
-                {
-                    _kargs.Mods = 0;
+                    if (action == InputState.Press)
+                    {
+                        _kargs.Mods |= keyMod;
+                        keyMap[keyMod]++;
+                    }
+                    if (mods != 0 && action == InputState.Release)
+                    {
+                        if (_kargs.Mods.HasFlag(keyMod))
+                        {
+                            if(keyMap[keyMod] == 1)
+                                _kargs.Mods &= ~keyMod;
+                            keyMap[keyMod]--;
+                        }
+                    }
                 }
             }
+            if (action == InputState.Release && mods == 0 && key == 0)
+            {
+                _kargs.Mods = 0;
+            }
+#else
+            _kargs.Mods = mods;
+#endif
 
             _margs.Mods = _kargs.Mods;
 
             if ((FocusedItem is ITextShortcuts) && action == InputState.Press)
             {
-                // if ((mods == KeyMods.Control && key == KeyCode.V) || (mods == KeyMods.Shift && key == KeyCode.Insert))
-                // {
-                // string paste_str = Glfw.GetClipboardString(_handler.GetWindowId());
-                //     (FocusedItem as ITextShortcuts).PasteText(paste_str);
-                // }
-                // else if (mods == KeyMods.Control && key == KeyCode.C)
-                // {
-                //     string copy_str = (FocusedItem as ITextShortcuts).GetSelectedText();
-                //     Glfw.SetClipboardString(_handler.GetWindowId(), copy_str);
-                // }
-                // else if (mods == KeyMods.Control && key == KeyCode.X)
-                // {
-                //     string cut_str = (FocusedItem as ITextShortcuts).CutText();
-                //     Glfw.SetClipboardString(_handler.GetWindowId(), cut_str);
-                // }
-                // else if (mods == KeyMods.Control && key == KeyCode.Z)
-                // {
-                //     (FocusedItem as ITextShortcuts).Undo();
-                // }
-                // else if (mods == KeyMods.Control && key == KeyCode.Y)
-                // {
-                //     (FocusedItem as ITextShortcuts).Redo();
-                // }
-                // else
-                // {
-                // }
                 if (action == InputState.Press)
                 {
                     FocusedItem.EventKeyPress(FocusedItem, _kargs);
@@ -1087,6 +1076,35 @@ namespace SpaceVIL
             }
         }
 
+        private KeyMods GetKeyModByKey(KeyCode key)
+        {
+            bool isShiftKey = (key == KeyCode.LeftShift || key == KeyCode.RightShift);
+            if (isShiftKey)
+            {
+                return KeyMods.Shift;
+            }
+
+            bool isCtrlKey = (key == KeyCode.LeftControl || key == KeyCode.RightControl);
+            if (isCtrlKey)
+            {
+                return KeyMods.Control;
+            }
+
+            bool isAltKey = (key == KeyCode.LeftAlt || key == KeyCode.RightAlt);
+            if (isAltKey)
+            {
+                return KeyMods.Alt;
+            }
+
+            bool isSuperKey = (key == KeyCode.LeftSuper || key == KeyCode.RightSuper);
+            if (isSuperKey)
+            {
+                return KeyMods.Super;
+            }
+
+            return 0;
+        }
+
         private void TextInput(Glfw.Window glfwwnd, uint codepoint, KeyMods mods)
         {
             _tooltip.InitTimer(false);
@@ -1107,32 +1125,16 @@ namespace SpaceVIL
             {
                 if (HoveredItem.IsDisabled())
                     return;
-                
+
                 _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
                 {
                     Item = HoveredItem,
                     Action = action,
                     Args = args
-                });                
+                });
             }
             else
             {
-                // Stack<Prototype> tmp = new Stack<Prototype>(_underHoveredItem);
-                // while (tmp.Count > 0)
-                // {
-                //     Prototype item = tmp.Pop();
-                //     if (item.IsDisabled())
-                //         continue;
-
-                //     _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
-                //     {
-                //         Item = item,
-                //         Action = action,
-                //         Args = args
-                //     });
-                //     if (!item.IsPassEvents(action))
-                //         break;//остановить передачу событий последующим элементам
-                // }
                 GoThroughItemPyramid(_underHoveredItem, action, args);
             }
             _handler.GetCoreWindow().GetLayout().ExecutePollActions();
@@ -1143,7 +1145,7 @@ namespace SpaceVIL
         private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender, bool is_pass_under)
         {
             if (!sender.IsDisabled())
-            { 
+            {
                 _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
                 {
                     Item = sender,
@@ -1156,22 +1158,6 @@ namespace SpaceVIL
             {
                 if (_underFocusedItem != null)
                 {
-                    // Stack<Prototype> tmp = new Stack<Prototype>(_underFocusedItem);
-                    // while (tmp.Count != 0)
-                    // {
-                    //     Prototype item = tmp.Pop();
-                    //     if (item.IsDisabled()) //item.Equals(FocusedItem) && FocusedItem.IsDisabled() || 
-                    //         continue;//пропустить
-
-                    //     _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
-                    //     {
-                    //         Item = item,
-                    //         Action = action,
-                    //         Args = args
-                    //     });
-                    //     if (!item.IsPassEvents(action))
-                    //         break;//остановить передачу событий последующим элементам
-                    // }
                     GoThroughItemPyramid(_underFocusedItem, action, args);
                 }
             }
@@ -1181,29 +1167,10 @@ namespace SpaceVIL
         // отправляет на выполнение событий ввода для всех последующих элементов из коллекции UnderFocusedItem (элементы под фокусным элементом)
         private void AssignActions(InputEventType action, InputEventArgs args, Prototype sender)
         {
-            // if (sender.IsDisabled())
-            //     return;
-
             if (sender.IsPassEvents(action))
             {
                 if (_underFocusedItem != null)
                 {
-                    // Stack<Prototype> tmp = new Stack<Prototype>(_underFocusedItem);
-                    // while (tmp.Count != 0)
-                    // {
-                    //     Prototype item = tmp.Pop();
-                    //     if (item.IsDisabled()) //item.Equals(FocusedItem) && FocusedItem.IsDisabled())
-                    //         continue;//пропустить
-
-                    //     _handler.GetCoreWindow().GetLayout().SetEventTask(new EventTask()
-                    //     {
-                    //         Item = item,
-                    //         Action = action,
-                    //         Args = args
-                    //     });
-                    //     if (!item.IsPassEvents(action))
-                    //         break;//остановить передачу событий последующим элементам
-                    // }
                     GoThroughItemPyramid(_underFocusedItem, action, args);
                 }
             }

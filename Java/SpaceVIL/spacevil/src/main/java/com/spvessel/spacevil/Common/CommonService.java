@@ -29,7 +29,7 @@ public final class CommonService {
         return info;
     }
 
-    public static String ClipboardTextStorage = "";
+    private static String ClipboardTextStorage = "";
     public final static Lock GlobalLocker = new ReentrantLock();
 
     // os type

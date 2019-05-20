@@ -126,7 +126,7 @@ namespace SpaceVIL
                 Monitor.Enter(wndLock);
                 try
                 {
-                    ParentGUID = WindowsBox.LastFocusedWindow.GetWindowGuid();
+                    ParentGUID = WindowsBox._lastFocusedWindow.GetWindowGuid();
                     WindowsBox.AddToWindowDispatcher(_coreWindow);
                     WindowsBox.GetWindowInstance(ParentGUID).SetFocusable(false);
                 }

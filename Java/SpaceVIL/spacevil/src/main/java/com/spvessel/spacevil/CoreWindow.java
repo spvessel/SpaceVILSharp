@@ -503,19 +503,19 @@ public abstract class CoreWindow {
             wnd_layout.getContainer().setBorderThickness(thickness);
     }
 
-    public CornerRadius GetBorderRadius() {
+    public CornerRadius getBorderRadius() {
         if (wnd_layout.getContainer() != null)
             return wnd_layout.getContainer().getBorderRadius();
         return null;
     }
 
-    public int GetBorderThickness() {
+    public int getBorderThickness() {
         if (wnd_layout.getContainer() != null)
             return wnd_layout.getContainer().getBorderThickness();
         return 0;
     }
 
-    public Color GetBorderFill() {
+    public Color getBorderFill() {
         if (wnd_layout.getContainer() != null)
             return wnd_layout.getContainer().getBorderFill();
         return new Color(0, 0, 0, 0);
