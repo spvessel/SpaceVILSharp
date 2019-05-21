@@ -1,7 +1,5 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Common.CommonService;
-import com.spvessel.spacevil.Flags.OSType;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
 
 import static org.lwjgl.system.MemoryUtil.*;
@@ -45,18 +43,15 @@ final class WindowLayout {
         }
     }
 
-    private UUID ParentGUID;
+    private DrawEngine _engine;
 
-    private Thread thread_engine;
-    private DrawEngine engine;
+    private Thread _threadActionManager;
+    private ActionManager _actionManager;
 
-    private Thread thread_manager;
-    private ActionManager manager;
-
-    WindowLayout(CoreWindow cWindow) {
-        _coreWindow = cWindow;
-        manager = new ActionManager(_coreWindow);
-        engine = new DrawEngine(_coreWindow);
+    WindowLayout(CoreWindow window) {
+        _coreWindow = window;
+        _actionManager = new ActionManager(_coreWindow);
+        _engine = new DrawEngine(_coreWindow);
         _coreWindow.eventClose.add(this::close);
     }
 
@@ -71,155 +66,62 @@ final class WindowLayout {
     }
 
     final void show() {
-        if (_coreWindow.isHidden)
-            setHidden(false);
-        _coreWindow.isClosed = false;
-
-        engine._handler.transparent = _coreWindow.isTransparent;
-        engine._handler.maximized = _coreWindow.isMaximized;
-        engine._handler.visible = !_coreWindow.isHidden;
-        engine._handler.resizeble = _coreWindow.isResizable;
-        engine._handler.borderHidden = _coreWindow.isBorderHidden;
-        engine._handler.appearInCenter = _coreWindow.isCentered;
-        engine._handler.focusable = _coreWindow.isFocusable;
-        engine._handler.alwaysOnTop = _coreWindow.isAlwaysOnTop;
-        
-        engine._handler.getPointer().setX(_coreWindow.getX());
-        engine._handler.getPointer().setY(_coreWindow.getY());
-
-        thread_manager = new Thread(() -> {
-            manager.startManager();
-        });
-        thread_manager.setDaemon(true);
-        thread_manager.start();
-
-        if (CommonService.getOSType() == OSType.MAC) {
-            if (!WindowsBox.isAnyWindowRunning()) {
-                WindowsBox.setWindowRunning(_coreWindow);
-                engine.init();
-            }
-        } else {
-            showInsideNewThread();
-        }
-    }
-
-    private void showInsideNewThread() {
-        if (thread_engine != null && thread_engine.isAlive())
-            return;
-        thread_engine = new Thread(() -> {
-            engine.init();
-        });
-
-        if (_coreWindow.isDialog) {
-            wndLock.lock();
-            try {
-                ParentGUID = WindowsBox.lastFocusedWindow.getWindowGuid();
-                WindowsBox.addToWindowDispatcher(_coreWindow);
-                WindowsBox.getWindowInstance(ParentGUID).setFocusable(false);
-            } finally {
-                wndLock.unlock();
-            }
-            thread_engine.setDaemon(false);
-            thread_engine.start();
-            try {
-                thread_engine.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            thread_engine.setDaemon(false);
-            thread_engine.start();
-        }
+        if (!WindowManager.isRunning())
+            WindowManager.startWith(_coreWindow);
+        else
+            WindowManager.addWindow(_coreWindow);
     }
 
     void close() {
-        if (CommonService.getOSType() == OSType.MAC) {
-            engine._handler.setToClose();
-            WindowsBox.setWindowRunning(null);
-        } else {
-            closeInsideNewThread();
-        }
-
-        if (thread_manager != null && thread_manager.isAlive()) {
-            manager.stopManager();
-            manager.execute.set();
-        }
-        _coreWindow.isClosed = true;
-    }
-
-    private void closeInsideNewThread() {
-        if (_coreWindow.isDialog) {
-            engine._handler.setToClose();
-            setWindowFocused();
-            wndLock.lock();
-            try {
-                WindowsBox.removeWindow(_coreWindow);
-                WindowsBox.removeFromWindowDispatcher(_coreWindow);
-            } finally {
-                wndLock.unlock();
-            }
-        } else {
-            if (thread_engine != null && thread_engine.isAlive())
-                engine._handler.setToClose();
-        }
-    }
-
-    void setWindowFocused() {
-        wndLock.lock();
-        try {
-            if (WindowsBox.getWindowInstance(ParentGUID) != null)
-                WindowsBox.getWindowInstance(ParentGUID).setFocusable(true);
-        } finally {
-            wndLock.unlock();
-        }
+        WindowManager.closeWindow(_coreWindow);
     }
 
     void setFocusable(boolean value) {
-        engine._handler.focusable = value;
+        _engine.glwHandler.focusable = value;
     }
 
     void minimize() {
-        engine.minimizeWindow();
+        _engine.minimizeWindow();
     }
 
     void maximize() {
-        engine.maximizeRequest = true;
+        _engine.maximizeRequest = true;
     }
 
     void isFixed(Boolean flag) {
     }
 
     void setEventTask(EventTask task) {
-        manager.addTask(task);
+        _actionManager.addTask(task);
     }
 
     void executePollActions() {
-        manager.execute.set();
+        _actionManager.execute.set();
     }
 
     Prototype getFocusedItem() {
-        return engine.getFocusedItem();
+        return _engine.getFocusedItem();
     }
 
     void setFocusedItem(Prototype item) {
-        engine.setFocusedItem(item);
+        _engine.setFocusedItem(item);
     }
 
     void resetItems() {
-        engine.resetItems();
+        _engine.resetItems();
     }
 
     void resetFocus() {
-        engine.resetFocus();
+        _engine.resetFocus();
     }
 
     void setIcon(BufferedImage icon_big, BufferedImage icon_small) {
-        engine.setBigIcon(icon_big);
-        engine.setSmallIcon(icon_small);
+        _engine.setBigIcon(icon_big);
+        _engine.setSmallIcon(icon_small);
     }
 
     void setHidden(Boolean value) {
-        engine._handler.setHidden(value);
+        _engine.glwHandler.setHidden(value);
     }
 
     private float _scaleWidth = 1.0f;
@@ -232,31 +134,81 @@ final class WindowLayout {
     void setDpiScale(float w, float h) {
         _scaleWidth = w;
         _scaleHeight = h;
-        // _scaleWidth = w * 2;
-        // _scaleHeight = h * 2;
-    }
-
-    void setRenderFrequency(RedrawFrequency value) {
-        engineLocker.lock();
-        try {
-            engine.setFrequency(value);
-        } finally {
-            engineLocker.unlock();
-        }
-    }
-
-    RedrawFrequency getRenderFrequency() {
-        engineLocker.lock();
-        try {
-            return engine.getRedrawFrequency();
-        } finally {
-            engineLocker.unlock();
-        }
     }
 
     long getGLWID() {
-        if (engine == null)
+        if (_engine == null)
             return NULL;
-        return engine._handler.getWindowId();
+        return _engine.glwHandler.getWindowId();
+    }
+
+    boolean initEngine() {
+        if (_coreWindow.isHidden)
+            setHidden(false);
+        _coreWindow.isClosed = false;
+
+        _engine.glwHandler.transparent = _coreWindow.isTransparent;
+        _engine.glwHandler.maximized = _coreWindow.isMaximized;
+        _engine.glwHandler.visible = !_coreWindow.isHidden;
+        _engine.glwHandler.resizeble = _coreWindow.isResizable;
+        _engine.glwHandler.borderHidden = _coreWindow.isBorderHidden;
+        _engine.glwHandler.appearInCenter = _coreWindow.isCentered;
+        _engine.glwHandler.focusable = _coreWindow.isFocusable;
+        _engine.glwHandler.alwaysOnTop = _coreWindow.isAlwaysOnTop;
+
+        _engine.glwHandler.getPointer().setX(_coreWindow.getX());
+        _engine.glwHandler.getPointer().setY(_coreWindow.getY());
+
+        _threadActionManager = new Thread(() -> {
+            _actionManager.startManager();
+        });
+        _threadActionManager.setDaemon(true);
+        _threadActionManager.start();
+
+        createWindowsPair();
+        
+        return _engine.init();
+    }
+
+    void createWindowsPair() {
+        WindowsBox.createWindowsPair(_coreWindow);
+        if (_coreWindow.isDialog) {
+            WindowsBox.getWindowPair(_coreWindow).setFocusable(false);
+        }
+    }
+
+    void dispose() {
+        CoreWindow currentPair = getPairForCurrentWindow();
+        destroyWindowsPair();
+        if (_threadActionManager != null && _threadActionManager.isAlive()) {
+            _actionManager.stopManager();
+            _actionManager.execute.set();
+        }
+        _engine.freeOnClose();
+        if (currentPair != null && !currentPair.isClosed)
+            currentPair.setWindowFocused();
+    }
+
+    void destroyWindowsPair() {
+        if (_coreWindow.isDialog) {
+            CoreWindow pair = WindowsBox.getWindowPair(_coreWindow);
+            if (pair != null)
+                pair.setFocusable(true);
+            WindowsBox.removeWindow(_coreWindow);
+        }
+        WindowsBox.removeFromWindowDispatcher(_coreWindow);
+    }
+
+    CoreWindow getPairForCurrentWindow() {
+        return WindowsBox.getWindowPair(_coreWindow);
+    }
+
+    void render() {
+        _engine.drawScene();
+    }
+
+    void setFocus() {
+        setFocusable(true);
+        _engine.setWindowFocused();
     }
 }

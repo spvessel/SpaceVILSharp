@@ -8,7 +8,7 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.awt.Color;
 
-public class MessageBox extends DialogWindow {
+public class MessageBox extends ActiveWindow {
     private boolean _result = false;
 
     /**
@@ -38,10 +38,10 @@ public class MessageBox extends DialogWindow {
      */
     public MessageBox(String message, String title) {
         _message = message;
-        setDialogTitle(title);
+        setWindowTitle(title);
 
         // Title
-        titleBar.setText(getDialogTitle());
+        titleBar.setText(getWindowTitle());
         titleBar.setPadding(0, 0, 10, 0);
         msg.setText(getMessageText());
     }

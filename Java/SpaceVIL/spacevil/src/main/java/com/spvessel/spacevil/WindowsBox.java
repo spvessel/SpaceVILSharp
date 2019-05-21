@@ -11,18 +11,15 @@ public final class WindowsBox {
      * A storage-class that provides an access to existing window layouts by name
      * and UUID
      */
-    // static Map<String, CoreWindow> windowsName = new HashMap<>();
     static Set<CoreWindow> windows = new HashSet<>();
     static Map<UUID, CoreWindow> windowsUUID = new HashMap<>();
-    static List<WindowsPair> currentCallingPair = new LinkedList<>();
+    static Map<CoreWindow, CoreWindow> pairs = new HashMap<>();
     static CoreWindow lastFocusedWindow;
-    // static private Object locker = new Object();
 
     static void initWindow(CoreWindow _layout) {
-        if (windowsUUID.containsKey(_layout.getWindowGuid())) // windowsName.containsKey(_layout.getWindowName()) ||
+        if (windowsUUID.containsKey(_layout.getWindowGuid()))
             return;
 
-        // windowsName.put(_layout.getWindowName(), _layout);
         windows.add(_layout);
         windowsUUID.put(_layout.getWindowGuid(), _layout);
 
@@ -47,24 +44,9 @@ public final class WindowsBox {
     }
 
     static void removeWindow(CoreWindow _layout) {
-        // windowsName.remove(_layout.getWindowName());
         windows.remove(_layout);
         windowsUUID.remove(_layout.getWindowGuid());
-        if (_is_main_running == _layout)
-            _is_main_running = null;
         _layout.release();
-    }
-
-    private static CoreWindow _is_main_running = null;
-
-    static boolean isAnyWindowRunning() {
-        if (_is_main_running != null)
-            return true;
-        return false;
-    }
-
-    static void setWindowRunning(CoreWindow window) {
-        _is_main_running = window;
     }
 
     /**
@@ -104,12 +86,6 @@ public final class WindowsBox {
                 return wnd;
         }
         return null;
-        // return windowsName.getOrDefault(name, null);
-
-        // if (windowsName.containsKey(name))
-        // return windowsName.get(name);
-        // else
-        // return null;
     }
 
     /**
@@ -117,62 +93,54 @@ public final class WindowsBox {
      */
     static public CoreWindow getWindowInstance(UUID guid) {
         return windowsUUID.getOrDefault(guid, null);
-
-        // if (windowsUUID.containsKey(guid))
-        // return windowsUUID.get(guid);
-        // else
-        // return null;
     }
 
-    static void addToWindowDispatcher(CoreWindow sender_wnd) {
-        WindowsPair pair = new WindowsPair();
-        pair.WINDOW = sender_wnd;
-        if (lastFocusedWindow == null) {
-            pair.GUID = sender_wnd.getWindowGuid();// root
-            lastFocusedWindow = sender_wnd;
-        } else
-            pair.GUID = lastFocusedWindow.getWindowGuid();
-        currentCallingPair.add(pair);
+    static void createWindowsPair(CoreWindow wnd) {
+        addToWindowDispatcher(wnd);
+    }
+
+    static void destroyWindowsPair(CoreWindow wnd) {
+        removeFromWindowDispatcher(wnd);
+    }
+
+    static CoreWindow getWindowPair(CoreWindow wnd) {
+        if (pairs.containsKey(wnd))
+            return pairs.get(wnd);
+        else
+            return null;
+    }
+
+    static void addToWindowDispatcher(CoreWindow wnd) {
+        if (!pairs.containsKey(wnd))
+            pairs.put(wnd, lastFocusedWindow);
     }
 
     static void setCurrentFocusedWindow(CoreWindow wnd) {
         lastFocusedWindow = wnd;
     }
+
     public static CoreWindow getCurrentFocusedWindow() {
         return lastFocusedWindow;
     }
 
     static void setFocusedWindow(CoreWindow window) {
-        window.setFocus(true);
+        if (window != null)
+            window.setFocus(true);
     }
 
-    static void removeFromWindowDispatcher(CoreWindow sender_wnd) {
-        List<WindowsPair> pairs_to_delete = new LinkedList<WindowsPair>();
-        for (WindowsPair windows_pair : currentCallingPair) {
-            if (windows_pair.WINDOW.equals(sender_wnd)) {
-                pairs_to_delete.add(windows_pair);
-            }
-        }
-
-        for (WindowsPair pairs : pairs_to_delete) {
-            currentCallingPair.remove(pairs);
-        }
-
-        pairs_to_delete = null;
+    static void removeFromWindowDispatcher(CoreWindow wnd) {
+        if (pairs.containsKey(wnd))
+            pairs.remove(wnd);
     }
 
     /**
      * @return list of all windows names
      */
     static public List<String> getWindowsList() {
-        // String[] result = new String[windowsName.size()];
-        // windowsName.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList()).toArray(result);
         List<String> result = new LinkedList<>();
-
         for (CoreWindow wl : windows) {
             result.add(wl.getWindowName());
         }
-
         return result;
     }
 

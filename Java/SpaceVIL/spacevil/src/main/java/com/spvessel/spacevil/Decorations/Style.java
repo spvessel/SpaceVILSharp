@@ -247,18 +247,16 @@ public class Style implements Cloneable {
      * Set object alignment
      */
     public void setAlignment(ItemAlignment... alignment) {
-        // List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
-        // this.alignment = list;
-        this.alignment = Arrays.asList(alignment);
+        List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
+        this.alignment = list;
     }
 
     /**
      * Set text alignment in the object
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        // List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
-        // this.textAlignment = list;
-        this.textAlignment = Arrays.asList(alignment);
+        List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
+        this.textAlignment = list;
     }
 
     ////////////////////////////////////////////////////////////////

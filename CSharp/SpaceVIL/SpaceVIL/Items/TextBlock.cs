@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
-using SpaceVIL.Items;
 
 namespace SpaceVIL
 {

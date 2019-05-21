@@ -20,17 +20,17 @@ namespace SpaceVIL
     public static class WindowsBox
     {
         static internal HashSet<CoreWindow> windows = new HashSet<CoreWindow>();
-        static internal Dictionary<Guid, CoreWindow> windows_guid = new Dictionary<Guid, CoreWindow>();
-        static internal List<WindowPair> current_calling_pair = new List<WindowPair>();
-        static internal CoreWindow _lastFocusedWindow;
+        static internal Dictionary<Guid, CoreWindow> windowsGuid = new Dictionary<Guid, CoreWindow>();
+        static internal Dictionary<CoreWindow, CoreWindow> pairs = new Dictionary<CoreWindow, CoreWindow>();
+        static internal CoreWindow lastFocusedWindow;
 
         static internal void InitWindow(CoreWindow _layout)
         {
-            if (windows_guid.ContainsKey(_layout.GetWindowGuid()))
+            if (windowsGuid.ContainsKey(_layout.GetWindowGuid()))
                 return;
 
             windows.Add(_layout);
-            windows_guid.Add(_layout.GetWindowGuid(), _layout);
+            windowsGuid.Add(_layout.GetWindowGuid(), _layout);
 
             ItemsLayoutBox.InitLayout(_layout.GetWindowGuid());
 
@@ -55,24 +55,8 @@ namespace SpaceVIL
         static internal void RemoveWindow(CoreWindow _layout)
         {
             windows.Remove(_layout);
-            windows_guid.Remove(_layout.GetWindowGuid());
-            if (_is_main_running == _layout)
-                _is_main_running = null;
+            windowsGuid.Remove(_layout.GetWindowGuid());
             _layout.Release();
-        }
-
-        private static CoreWindow _is_main_running = null;
-
-        internal static bool IsAnyWindowRunning()
-        {
-            if (_is_main_running != null)
-                return true;
-            return false;
-        }
-
-        internal static void SetWindowRunning(CoreWindow window)
-        {
-            _is_main_running = window;
         }
 
         static public bool TryShow(Guid guid)
@@ -106,56 +90,59 @@ namespace SpaceVIL
             }
             return null;
         }
+
         static public CoreWindow GetWindowInstance(Guid guid)
         {
-            if (windows_guid.ContainsKey(guid))
-                return windows_guid[guid];
+            if (windowsGuid.ContainsKey(guid))
+                return windowsGuid[guid];
             else return null;
         }
 
-        static internal void AddToWindowDispatcher(CoreWindow sender_wnd)
+        static internal void CreateWindowsPair(CoreWindow wnd)
         {
-            WindowPair pair = new WindowPair();
-            pair.WINDOW = sender_wnd;
-            if (_lastFocusedWindow == null)
-            {
-                pair.GUID = sender_wnd.GetWindowGuid();//root
-                _lastFocusedWindow = sender_wnd;
-            }
-            else
-                pair.GUID = _lastFocusedWindow.GetWindowGuid();
-            current_calling_pair.Add(pair);
+            AddToWindowDispatcher(wnd);
         }
+
+        static internal void DestroyWindowsPair(CoreWindow wnd)
+        {
+            RemoveFromWindowDispatcher(wnd);
+        }
+
+        static internal CoreWindow GetWindowPair(CoreWindow wnd)
+        {
+            if (pairs.ContainsKey(wnd))
+                return pairs[wnd];
+            else
+                return null;
+        }
+
+        static void AddToWindowDispatcher(CoreWindow wnd)
+        {
+            if (!pairs.ContainsKey(wnd))
+                pairs.Add(wnd, lastFocusedWindow);
+        }
+
         static internal void SetCurrentFocusedWindow(CoreWindow wnd)
         {
-            _lastFocusedWindow = wnd;
+            lastFocusedWindow = wnd;
         }
+
         public static CoreWindow GetCurrentFocusedWindow()
         {
-            return _lastFocusedWindow;
+            return lastFocusedWindow;
         }
+
         static internal void SetFocusedWindow(CoreWindow window)
         {
-            window.GetLayout().SetFocus(true);
+            window.SetFocus(true);
         }
-        static internal void RemoveFromWindowDispatcher(CoreWindow sender_wnd)
+
+        static internal void RemoveFromWindowDispatcher(CoreWindow wnd)
         {
-            List<WindowPair> pairs_to_delete = new List<WindowPair>();
-            foreach (var windows_pair in current_calling_pair)
-            {
-                if (windows_pair.WINDOW.Equals(sender_wnd))
-                {
-                    pairs_to_delete.Add(windows_pair);
-                }
-            }
-
-            foreach (var pairs in pairs_to_delete)
-            {
-                current_calling_pair.Remove(pairs);
-            }
-
-            pairs_to_delete = null;
+            if (pairs.ContainsKey(wnd))
+                pairs.Remove(wnd);
         }
+
         static public List<String> GetWindowsList()
         {
             List<String> result = new List<String>();
@@ -167,6 +154,7 @@ namespace SpaceVIL
 
             return result;
         }
+
         static public void PrintStoredWindows()
         {
             foreach (var item in GetWindowsList())

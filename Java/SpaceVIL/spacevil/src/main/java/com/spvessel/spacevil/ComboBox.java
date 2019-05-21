@@ -46,8 +46,7 @@ public class ComboBox extends Prototype {
 
     public ComboBox(MenuItem... items) {
         this();
-        // preItemList = Arrays.stream(items).collect(Collectors.toList());
-        preItemList = Arrays.asList(items);
+        preItemList = Arrays.stream(items).collect(Collectors.toList());
     }
 
     void onKeyPress(InterfaceItem sender, KeyArgs args) {

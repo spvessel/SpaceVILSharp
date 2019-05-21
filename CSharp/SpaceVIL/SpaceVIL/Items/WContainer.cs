@@ -162,5 +162,15 @@ namespace SpaceVIL
 
             return _sides;
         }
+
+        internal Side GetSides()
+        {
+            return _sides;
+        }
+
+        internal void ClearSides()
+        {
+            _sides = 0;
+        }
     }
 }
