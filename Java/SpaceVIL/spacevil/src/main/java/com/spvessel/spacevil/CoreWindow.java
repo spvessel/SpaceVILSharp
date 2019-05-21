@@ -356,8 +356,7 @@ public abstract class CoreWindow {
         windowLayout.getContainer().setFocus();
     }
 
-    public void setWindowFocused()
-    {
+    public void setWindowFocused() {
         windowLayout.setFocus();
     }
 
@@ -530,17 +529,40 @@ public abstract class CoreWindow {
     boolean initEngine() {
         return windowLayout.initEngine();
     }
-    void render()
-    {
+
+    void render() {
         windowLayout.render();
     }
 
-    void dispose()
-    {
+    void dispose() {
         windowLayout.dispose();
     }
 
     CoreWindow getPairForCurrentWindow() {
         return windowLayout.getPairForCurrentWindow();
+    }
+
+    public void setShadeColor(Color color) {
+        windowLayout.setShadeColor(color);
+    }
+
+    public void setShadeColor(int r, int g, int b) {
+        windowLayout.setShadeColor(r, g, b);
+    }
+
+    public void setShadeColor(int r, int g, int b, int a) {
+        windowLayout.setShadeColor(r, g, b, a);
+    }
+
+    public void setShadeColor(float r, float g, float b) {
+        windowLayout.setShadeColor(r, g, b);
+    }
+
+    public void setShadeColor(float r, float g, float b, float a) {
+        windowLayout.setShadeColor(r, g, b, a);
+    }
+
+    public Color getShadeColor() {
+        return windowLayout.getShadeColor();
     }
 }

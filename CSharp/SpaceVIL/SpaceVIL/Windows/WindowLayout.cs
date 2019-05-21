@@ -252,5 +252,53 @@ namespace SpaceVIL
             SetFocusable(true);
             _engine.SetWindowFocused();
         }
+
+        private Color _shadeColor = Color.FromArgb(200, 0, 0, 0);
+
+        internal void SetShadeColor(Color color)
+        {
+            Monitor.Enter(wndLock);
+            try
+            {
+                _shadeColor = Color.FromArgb(color.R, color.G, color.B, color.A);
+            }
+            finally
+            {
+                Monitor.Exit(wndLock);
+            }
+        }
+
+        internal void SetShadeColor(int r, int g, int b)
+        {
+            SetShadeColor(GraphicsMathService.ColorTransform(r, g, b));
+        }
+
+        internal void SetShadeColor(int r, int g, int b, int a)
+        {
+            SetShadeColor(GraphicsMathService.ColorTransform(r, g, b, a));
+        }
+
+        internal void SetShadeColor(float r, float g, float b)
+        {
+            SetShadeColor(GraphicsMathService.ColorTransform(r, g, b));
+        }
+
+        internal void SetShadeColor(float r, float g, float b, float a)
+        {
+            SetShadeColor(GraphicsMathService.ColorTransform(r, g, b, a));
+        }
+
+        internal Color GetShadeColor()
+        {
+            Monitor.Enter(wndLock);
+            try
+            {
+                return _shadeColor;
+            }
+            finally
+            {
+                Monitor.Exit(wndLock);
+            }
+        }
     }
 }

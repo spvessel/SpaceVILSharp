@@ -1,9 +1,8 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Flags.RedrawFrequency;
-
 import static org.lwjgl.system.MemoryUtil.*;
 import java.util.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -166,7 +165,7 @@ final class WindowLayout {
         _threadActionManager.start();
 
         createWindowsPair();
-        
+
         return _engine.init();
     }
 
@@ -210,5 +209,41 @@ final class WindowLayout {
     void setFocus() {
         setFocusable(true);
         _engine.setWindowFocused();
+    }
+
+    private Color _shadeColor = new Color(0, 0, 0, 200);
+
+    void setShadeColor(Color color) {
+        wndLock.lock();
+        try {
+            _shadeColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        } finally {
+            wndLock.unlock();
+        }
+    }
+
+    void setShadeColor(int r, int g, int b) {
+        setShadeColor(GraphicsMathService.colorTransform(r, g, b));
+    }
+
+    void setShadeColor(int r, int g, int b, int a) {
+        setShadeColor(GraphicsMathService.colorTransform(r, g, b, a));
+    }
+
+    void setShadeColor(float r, float g, float b) {
+        setShadeColor(GraphicsMathService.colorTransform(r, g, b));
+    }
+
+    void setShadeColor(float r, float g, float b, float a) {
+        setShadeColor(GraphicsMathService.colorTransform(r, g, b, a));
+    }
+
+    Color getShadeColor() {
+        wndLock.lock();
+        try {
+            return _shadeColor;
+        } finally {
+            wndLock.unlock();
+        }
     }
 }

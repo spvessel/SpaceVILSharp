@@ -691,6 +691,7 @@ final class DrawEngine {
             return;
 
         List<float[]> vertex = new LinkedList<>(RenderProcessor.getFullWindowRectangle());
-        _renderProcessor.drawVertex(_primitive, vertex, getItemPyramidLevel(), new Color(0, 0, 0, 200), GL_TRIANGLES);
+        _renderProcessor.drawVertex(_primitive, vertex, getItemPyramidLevel(),
+                glwHandler.getCoreWindow().getShadeColor(), GL_TRIANGLES);
     }
 }

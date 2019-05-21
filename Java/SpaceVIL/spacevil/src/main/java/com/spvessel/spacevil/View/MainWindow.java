@@ -32,11 +32,11 @@ public class MainWindow extends ActiveWindow {
         // setAspectRatio(4, 1);
 
         // setPadding(10, 10, 10, 10);
-//        setPadding(10, 10, 10, 10);
-//        setBackground(new Color(0, 0, 0, 10));
-//        setBorderRadius(10);
-//        setAntiAliasingQuality(MSAA.MSAA_8X);
-//        isTransparent = true;
+        // setPadding(10, 10, 10, 10);
+        // setBackground(new Color(0, 0, 0, 10));
+        // setBorderRadius(10);
+        // setAntiAliasingQuality(MSAA.MSAA_8X);
+        // isTransparent = true;
         // setShadow(10, 0, 0, Color.black);
 
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
@@ -131,6 +131,7 @@ public class MainWindow extends ActiveWindow {
         btn_label.setBackground(111, 181, 255);
         btn_label.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         InterfaceMouseMethodState btn_action_click = (sender, args) -> {
+            setShadeColor(new Color( 100, 100, 100, 125));
             MessageBox ms = new MessageBox("Send result?", "Message:");
             ms.show();
             System.out.println(ms.getResult());
