@@ -110,8 +110,9 @@ public class MenuItem extends Prototype {
     }
 
     public void setTextAlignment(ItemAlignment... alignment) {
-        List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
-        _text_object.setTextAlignment(list);
+        // List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
+        // _text_object.setTextAlignment(list);
+        _text_object.setTextAlignment(Arrays.asList(alignment));
     }
 
     /**

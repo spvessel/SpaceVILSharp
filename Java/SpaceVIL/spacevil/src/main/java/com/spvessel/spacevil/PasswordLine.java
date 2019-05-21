@@ -1,6 +1,5 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
@@ -155,8 +154,8 @@ public class PasswordLine extends HorizontalStack {
             eye.setColorOverlay(eyeBtnShadeColor);
         });
         _show_pwd_btn.eventMouseLeave.add((sender, args) -> {
-                showPassword(false);
-                eye.setColorOverlay(eyeBtnShadeColor);
+            showPassword(false);
+            eye.setColorOverlay(eyeBtnShadeColor);
         });
     }
 

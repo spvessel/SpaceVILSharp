@@ -372,6 +372,8 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
     private boolean _needShow = false;
 
     void showPassword(boolean _isHidden) {
+        if (_isHidden == _needShow)
+            return;
         this._needShow = _isHidden;
         setText(_pwd);
         makeSelectedArea(); //_selectFrom, _selectTo);

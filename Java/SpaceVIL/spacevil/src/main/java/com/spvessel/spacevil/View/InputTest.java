@@ -79,9 +79,9 @@ public class InputTest extends ActiveWindow {
         // tb.setEditable(false);
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         tb.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        tb.setText("123qwe sdfsdf;l!k(sdfsdf)sdfsdf_ sdfsdfs_dff+gh");
+        tb.setText("123\nqwe sdfsdf;l!\nk(sdfsdf)sdf\nsdf_ sdfs\ndfs_dff+gh");
         tb.setWidth(300);
-        tb.setHeight(300);
+        tb.setHeight(500);
         tb.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
         tb.eventKeyPress.add((sender, args) -> {
             if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.S) {
@@ -169,7 +169,8 @@ public class InputTest extends ActiveWindow {
 //
 //            System.out.println(tb.getFont().getSize());
 
-            tb.setEditable(!tb.isEditable());
+//            tb.setEditable(!tb.isEditable());
+            tb.clear();
         });
 
         bc1.eventMouseClick.add((sender, args) -> {

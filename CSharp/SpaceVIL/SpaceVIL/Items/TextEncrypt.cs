@@ -426,6 +426,8 @@ namespace SpaceVIL
 
         internal void ShowPassword(bool needShow)
         {
+            if (needShow == _needShow)
+                return;
             this._needShow = needShow;
             SetText(_pwd);
             MakeSelectedArea(); //_selectFrom, _selectTo);

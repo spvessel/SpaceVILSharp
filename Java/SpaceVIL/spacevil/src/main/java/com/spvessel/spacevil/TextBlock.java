@@ -8,9 +8,7 @@ import com.spvessel.spacevil.Flags.*;
 import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 class TextBlock extends Prototype
@@ -38,8 +36,9 @@ class TextBlock extends Prototype
     private boolean _isSelect = false;
     private boolean _justSelected = false;
 
-    private List<KeyCode> ShiftValCodes;
-    private List<KeyCode> InsteadKeyMods;
+    private Set<KeyCode> _cursorControlKeys;
+//    private Set<KeyCode> _insteadKeyMods;
+    private Set<KeyCode> _serviceEditKeys;
 
     private int scrollXStep = 30;
 
@@ -63,10 +62,12 @@ class TextBlock extends Prototype
         eventScrollDown.add(this::onScrollDown);
         eventMouseDoubleClick.add(this::onDoubleClick);
 
-        ShiftValCodes = new LinkedList<>(
+        _cursorControlKeys = new HashSet<>(
                 Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME, KeyCode.UP, KeyCode.DOWN));
-        InsteadKeyMods = new LinkedList<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
-                KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
+//        _insteadKeyMods = new HashSet<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
+//                KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
+        _serviceEditKeys = new HashSet<>(Arrays.asList(KeyCode.BACKSPACE, KeyCode.DELETE, KeyCode.ENTER,
+                KeyCode.NUMPADENTER, KeyCode.TAB));
 
         _cursor.setHeight(_textureStorage.getCursorHeight());
 
@@ -193,9 +194,9 @@ class TextBlock extends Prototype
     }
 
     private void onScrollUp(Object sender, MouseArgs args) {
-        int curPos = _cursor.getY();
+//        int curPos = _cursor.getY();
         _cursor.setY(_textureStorage.scrollBlockUp(_cursor.getY()));
-        curPos = _cursor.getY() - curPos;
+//        curPos = _cursor.getY() - curPos;
 
         if (_justSelected)
             cancelJustSelected();
@@ -205,9 +206,9 @@ class TextBlock extends Prototype
     }
 
     private void onScrollDown(Object sender, MouseArgs args) {
-        int curPos = _cursor.getY();
+//        int curPos = _cursor.getY();
         _cursor.setY(_textureStorage.scrollBlockDown(_cursor.getY()));
-        curPos = _cursor.getY() - curPos;
+//        curPos = _cursor.getY() - curPos;
 
         if (_justSelected)
             cancelJustSelected();
@@ -250,18 +251,32 @@ class TextBlock extends Prototype
                 cancelJustSelected();
             }
 
+            boolean isCursorControlKey = _cursorControlKeys.contains(args.key);
+            boolean hasShift = args.mods.contains(KeyMods.SHIFT);
+            boolean hasControl = args.mods.contains(KeyMods.CONTROL);
+
             if (!args.mods.contains(KeyMods.NO)) {
                 // Выделение не сбрасывается, проверяются сочетания
-                if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 1) {
-                    if (ShiftValCodes.contains(args.key)) {
-                        if (!_isSelect) {
-                            _isSelect = true;
-                            _selectFrom = new Point(_cursor_position);
+                if (isCursorControlKey) {
+                    if (!_isSelect) {
+                        if (hasShift) {
+                            if ((args.mods.size() == 1) || (args.mods.size() == 2) && hasControl) {
+                                _isSelect = true;
+                                _selectFrom = new Point(_cursor_position);
+                            }
+
+                        }
+                    } else { //_isSelect
+                        if ((args.mods.size() == 1) && hasControl) {
+                            //(args.key == KeyCode.LEFT) || (args.key == KeyCode.RIGHT) || (args.key == KeyCode.END) || (args.key == KeyCode.HOME)) {
+                            unselectText();
+                            cancelJustSelected();
+
                         }
                     }
                 }
 
-//                if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1) {
+//                if (hasControl && args.mods.size() == 1) {
 //                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
 //                        _selectFrom.x = 0;
 //                        _selectFrom.y = 0;
@@ -274,7 +289,7 @@ class TextBlock extends Prototype
 //                }
                 // alt, super ?
             } else {
-                if (args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE || args.key == KeyCode.ENTER || args.key == KeyCode.TAB) {
+                if (_serviceEditKeys.contains(args.key)) { //args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE || args.key == KeyCode.ENTER || args.key == KeyCode.TAB) {
                     if (_isSelect)
                         cutText();
                     else {
@@ -283,13 +298,15 @@ class TextBlock extends Prototype
                         {
                             if (_cursor_position.x > 0) {
                                 StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursor_position.y));
-                                setTextInLine(sb.deleteCharAt(_cursor_position.x - 1).toString());
                                 _cursor_position.x--;
+//                                replaceCursor();
+                                setTextInLine(sb.deleteCharAt(_cursor_position.x).toString());
                             } else if (_cursor_position.y > 0) {
                                 _cursor_position.y--;
                                 _cursor_position.x = getLineLetCount(_cursor_position.y);
                                 _textureStorage.combineLines(_cursor_position.y);
-                                undoStuff();
+//                                replaceCursor();
+                                addToUndoAndReplaceCursor();
                             }
                             replaceCursor();
                         }
@@ -300,215 +317,219 @@ class TextBlock extends Prototype
                                 setTextInLine(sb.deleteCharAt(_cursor_position.x).toString());
                             } else if (_cursor_position.y < _textureStorage.getCount() - 1) {
                                 _textureStorage.combineLines(_cursor_position.y);
-                                undoStuff();
+                                addToUndoAndReplaceCursor();
                             }
                         }
+
                     }
 
-                } else if (_isSelect && !InsteadKeyMods.contains(args.key)) {
-                    unselectText();
-                    // _justSelected = true;
-                }
-            }
-
-            if (args.key == KeyCode.LEFT) // arrow left
-            {
-                _cursor_position = _textureStorage.checkLineFits(_cursor_position);
-
-                boolean doUsual = true;
-
-                if (args.mods.contains(KeyMods.CONTROL)) {
-                    if (args.mods.size() == 1) {
-                        if (_isSelect) {
-                            unselectText();
-                            cancelJustSelected();
-                        }
-
-                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
-
-                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[0]) {
-                            _cursor_position = new Point(wordBounds[0], _cursor_position.y);
-                            replaceCursor();
-                            doUsual = false;
-                        }
-                    } else if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 2) {
-                        if (!_isSelect) {
-                            _selectFrom = new Point(_cursor_position);
-                            _isSelect = true;
-                        }
-
-                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
-
-                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[0]) {
-                            _selectTo = new Point(wordBounds[0], _cursor_position.y);
-                            _cursor_position = new Point(_selectTo);
-                            replaceCursor();
-//                            makeSelectedArea(); //_selectFrom, _selectTo);
-                            doUsual = false;
-                        }
-                    }
-                }
-
-                if (!_justSelected && doUsual) {
-                    if (_cursor_position.x > 0)
-                        _cursor_position.x--;
-                    else if (_cursor_position.y > 0) {
-                        _cursor_position.y--;
-                        _cursor_position.x = getLineLetCount(_cursor_position.y);
-                    }
-                    replaceCursor();
-                }
-            }
-            if (args.key == KeyCode.RIGHT) // arrow right
-            {
-                boolean doUsual = true;
-
-                if (args.mods.contains(KeyMods.CONTROL)) {
-                    if (args.mods.size() == 1) {
-                        if (_isSelect) {
-                            unselectText();
-                            cancelJustSelected();
-                        }
-
-                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
-
-                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[1]) {
-                            _cursor_position = new Point(wordBounds[1], _cursor_position.y);
-                            replaceCursor();
-                            doUsual = false;
-                        }
-                    } else if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 2) {
-                        if (!_isSelect) {
-                            _selectFrom = new Point(_cursor_position);
-                            _isSelect = true;
-                        }
-
-                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
-
-                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[1]) {
-                            _selectTo = new Point(wordBounds[1], _cursor_position.y);
-                            _cursor_position = new Point(_selectTo);
-                            replaceCursor();
-//                            makeSelectedArea(); //_selectFrom, _selectTo);
-                            doUsual = false;
-                        }
-                    }
-                }
-
-                if (!_justSelected && doUsual) {
-                    if (_cursor_position.x < getLineLetCount(_cursor_position.y))
-                        _cursor_position.x++;
-                    else if (_cursor_position.y < _textureStorage.getCount() - 1) {
+                    if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) // enter
+                    {
+                        _textureStorage.breakLine(_cursor_position);
                         _cursor_position.y++;
                         _cursor_position.x = 0;
+
+//                        replaceCursor();
+                        addToUndoAndReplaceCursor();
                     }
-                    replaceCursor();
-                }
-            }
-            if (args.key == KeyCode.UP) // arrow up
-            {
-                if (!_justSelected) {
-                    if (_cursor_position.y > 0)
-                        _cursor_position.y--;
-                    // ?????
-                    replaceCursor();
-                }
-            }
-            if (args.key == KeyCode.DOWN) // arrow down
-            {
-                if (!_justSelected) {
-                    if (_cursor_position.y < _textureStorage.getCount() - 1)
-                        _cursor_position.y++;
-                    // ?????
-                    replaceCursor();
+
+                    if (args.key == KeyCode.TAB) {
+                        pasteText("    "); //privPasteText
+                    }
+
+                } else if (_isSelect) { // && !_insteadKeyMods.contains(args.key)) { //кажется, вторая проверка лишняя теперь
+                    unselectText();
                 }
             }
 
-            if (args.key == KeyCode.END) // end
-            {
-                boolean doUsual = true;
+            if (isCursorControlKey) {
+                if (!args.mods.contains(KeyMods.ALT) && !args.mods.contains(KeyMods.SUPER)) {
 
-                if (args.mods.contains(KeyMods.CONTROL)) {
-                    if (args.mods.size() == 1) {
-                        if (_isSelect) {
-                            unselectText();
-                            cancelJustSelected();
+                    if (args.key == KeyCode.LEFT) // arrow left
+                    {
+                        _cursor_position = _textureStorage.checkLineFits(_cursor_position);
+
+                        boolean doUsual = true;
+
+                        if (hasControl) {
+//                    if (args.mods.size() == 1) {
+//                        if (_isSelect) {
+//                            unselectText();
+//                            cancelJustSelected();
+//                        }
+
+                            int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
+
+                            if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[0]) {
+                                _cursor_position = new Point(wordBounds[0], _cursor_position.y);
+                                replaceCursor();
+                                doUsual = false;
+                            }
+//                    } else if (hasShift && args.mods.size() == 2) {
+//                        if (!_isSelect) {
+//                            _selectFrom = new Point(_cursor_position);
+//                            _isSelect = true;
+//                        }
+
+//                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
+
+//                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[0]) {
+//                            _selectTo = new Point(wordBounds[0], _cursor_position.y);
+//                            _cursor_position = new Point(_selectTo);
+//                            replaceCursor();
+//                            makeSelectedArea(); //_selectFrom, _selectTo);
+//                            doUsual = false;
+//                        }
+//                    }
                         }
 
-                        int lineNum = _textureStorage.getCount() - 1;
-                        _cursor_position = new Point(getLineLetCount(lineNum), lineNum);
-                        replaceCursor();
-                        doUsual = false;
+                        if (!_justSelected && doUsual) {
+                            if (_cursor_position.x > 0)
+                                _cursor_position.x--;
+                            else if (_cursor_position.y > 0) {
+                                _cursor_position.y--;
+                                _cursor_position.x = getLineLetCount(_cursor_position.y);
+                            }
+                            replaceCursor();
+                        }
+                    }
+                    if (args.key == KeyCode.RIGHT) // arrow right
+                    {
+                        boolean doUsual = true;
 
-                    } else if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 2) {
-                        if (!_isSelect) {
-                            _selectFrom = new Point(_cursor_position);
-                            _isSelect = true;
+                        if (hasControl) {
+//                    if (args.mods.size() == 1) {
+//                        if (_isSelect) {
+//                            unselectText();
+//                            cancelJustSelected();
+//                        }
+
+                            int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
+
+                            if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[1]) {
+                                _cursor_position = new Point(wordBounds[1], _cursor_position.y);
+                                replaceCursor();
+                                doUsual = false;
+                            }
+//                    } else if (hasShift && args.mods.size() == 2) {
+//                        if (!_isSelect) {
+//                            _selectFrom = new Point(_cursor_position);
+//                            _isSelect = true;
+//                        }
+
+//                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
+//
+//                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[1]) {
+//                            _selectTo = new Point(wordBounds[1], _cursor_position.y);
+//                            _cursor_position = new Point(_selectTo);
+//                            replaceCursor();
+//                            makeSelectedArea(); //_selectFrom, _selectTo);
+//                            doUsual = false;
+//                        }
+//                    }
                         }
 
-                        int lineNum = _textureStorage.getCount() - 1;
+                        if (!_justSelected && doUsual) {
+                            if (_cursor_position.x < getLineLetCount(_cursor_position.y))
+                                _cursor_position.x++;
+                            else if (_cursor_position.y < _textureStorage.getCount() - 1) {
+                                _cursor_position.y++;
+                                _cursor_position.x = 0;
+                            }
+                            replaceCursor();
+                        }
+                    }
+                    if (args.key == KeyCode.UP) // arrow up
+                    {
+                        if (!_justSelected) {
+                            if (_cursor_position.y > 0)
+                                _cursor_position.y--;
+                            // ?????
+                            replaceCursor();
+                        }
+                    }
+                    if (args.key == KeyCode.DOWN) // arrow down
+                    {
+                        if (!_justSelected) {
+                            if (_cursor_position.y < _textureStorage.getCount() - 1)
+                                _cursor_position.y++;
+                            // ?????
+                            replaceCursor();
+                        }
+                    }
 
-                        _selectTo = new Point(getLineLetCount(lineNum), lineNum);
-                        _cursor_position = new Point(_selectTo);
-                        replaceCursor();
+                    if (args.key == KeyCode.END) // end
+                    {
+                        boolean doUsual = true;
+
+                        if (hasControl) {
+//                    if (args.mods.size() == 1) {
+//                        if (_isSelect) {
+//                            unselectText();
+//                            cancelJustSelected();
+//                        }
+
+                            int lineNum = _textureStorage.getCount() - 1;
+                            _cursor_position = new Point(getLineLetCount(lineNum), lineNum);
+                            replaceCursor();
+                            doUsual = false;
+
+//                    } else if (hasShift && args.mods.size() == 2) {
+//                        if (!_isSelect) {
+//                            _selectFrom = new Point(_cursor_position);
+//                            _isSelect = true;
+//                        }
+
+//                        int lineNum = _textureStorage.getCount() - 1;
+//
+//                        _selectTo = new Point(getLineLetCount(lineNum), lineNum);
+//                        _cursor_position = new Point(_selectTo);
+//                        replaceCursor();
 //                        makeSelectedArea(); //_selectFrom, _selectTo);
-                        doUsual = false;
+//                        doUsual = false;
+//                    }
+                        }
+
+                        if (doUsual) {
+                            _cursor_position.x = getLineLetCount(_cursor_position.y);
+                            replaceCursor();
+                        }
                     }
-                }
+                    if (args.key == KeyCode.HOME) // home
+                    {
+                        boolean doUsual = true;
 
-                if (doUsual) {
-                    _cursor_position.x = getLineLetCount(_cursor_position.y);
-                    replaceCursor();
-                }
-            }
-            if (args.key == KeyCode.HOME) // home
-            {
-                boolean doUsual = true;
+                        if (hasControl) {
+//                    if (args.mods.size() == 1) {
+//                        if (_isSelect) {
+//                            unselectText();
+//                            cancelJustSelected();
+//                        }
 
-                if (args.mods.contains(KeyMods.CONTROL)) {
-                    if (args.mods.size() == 1) {
-                        if (_isSelect) {
-                            unselectText();
-                            cancelJustSelected();
-                        }
+                            _cursor_position = new Point(0, 0);
+                            replaceCursor();
+                            doUsual = false;
 
-                        _cursor_position = new Point(0, 0);
-                        replaceCursor();
-                        doUsual = false;
+//                    } else if (hasShift && args.mods.size() == 2) {
+//                        if (!_isSelect) {
+//                            _selectFrom = new Point(_cursor_position);
+//                            _isSelect = true;
+//                        }
 
-                    } else if (args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 2) {
-                        if (!_isSelect) {
-                            _selectFrom = new Point(_cursor_position);
-                            _isSelect = true;
-                        }
-
-                        _selectTo = new Point(0, 0);
-                        _cursor_position = new Point(_selectTo);
-                        replaceCursor();
+//                        _selectTo = new Point(0, 0);
+//                        _cursor_position = new Point(_selectTo);
+//                        replaceCursor();
 //                        makeSelectedArea(); //_selectFrom, _selectTo);
-                        doUsual = false;
+//                        doUsual = false;
+//                    }
+                        }
+
+                        if (doUsual) {
+                            _cursor_position.x = 0;
+                            replaceCursor();
+                        }
                     }
                 }
-
-                if (doUsual) {
-                    _cursor_position.x = 0;
-                    replaceCursor();
-                }
-            }
-
-            if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) // enter
-            {
-                _textureStorage.breakLine(_cursor_position);
-                _cursor_position.y++;
-                _cursor_position.x = 0;
-
-                replaceCursor();
-                // textChanged.execute();
-                undoStuff();
-            }
-
-            if (args.key == KeyCode.TAB) {
-                pasteText("    "); //privPasteText
             }
 
             if (_isSelect) {
@@ -546,9 +567,8 @@ class TextBlock extends Prototype
             StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursor_position.y));
             setTextInLine(sb.insert(_cursor_position.x, str).toString());
             _cursor_position.x++;
-            replaceCursor();
-
-            undoStuff();
+//            replaceCursor();
+            addToUndoAndReplaceCursor();
 
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -610,9 +630,8 @@ class TextBlock extends Prototype
                 cancelJustSelected();
 
             _cursor_position = _textureStorage.setText(text, _cursor_position);
-            replaceCursor();
-
-            undoStuff();
+//            replaceCursor();
+            addToUndoAndReplaceCursor();
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -622,7 +641,7 @@ class TextBlock extends Prototype
         _textureStorage.setTextInLine(text, _cursor_position.y);
 
         if (!ignoreSetInLine)
-            undoStuff();
+            addToUndoAndReplaceCursor();
         else
             ignoreSetInLine = false;
     }
@@ -811,9 +830,8 @@ class TextBlock extends Prototype
             _cursor_position = _textureStorage.checkLineFits(_cursor_position);
             _cursor_position = _textureStorage.pasteText(pasteStr, _cursor_position);
 
-            replaceCursor();
-
-            undoStuff();
+//            replaceCursor();
+            addToUndoAndReplaceCursor();
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -857,7 +875,7 @@ class TextBlock extends Prototype
         if (!_isEditable)
             return "";
         String ans = privCutText();
-        undoStuff();
+        addToUndoAndReplaceCursor();
         return ans;
     }
 
@@ -884,13 +902,13 @@ class TextBlock extends Prototype
         _textureStorage.clear();
         _cursor_position.x = 0;
         _cursor_position.y = 0;
-        replaceCursor();
         if (_isSelect)
             unselectText();
         if (_justSelected)
             cancelJustSelected();
 
-        undoStuff();
+//        replaceCursor();
+        addToUndoAndReplaceCursor();
     }
 
     public final void selectAll() {
@@ -963,7 +981,7 @@ class TextBlock extends Prototype
         if (undoQueue.size() == 1)
             return;
 
-        // undoStuff();
+        // addToUndoAndReplaceCursor();
 
         TextBlockState tmpText = undoQueue.pollFirst();
         if (tmpText != null) {
@@ -981,16 +999,12 @@ class TextBlock extends Prototype
                 undoQueue.peekFirst().cursorStateX = _cursor_position.x;
                 undoQueue.peekFirst().cursorStateY = _cursor_position.y;
                 replaceCursor();
-
-                // _selectFrom = new Point(tmpText.fromSelectState);
-                // _selectTo = new Point(tmpText.toSelectState);
-                // makeSelectedArea(); //_selectFrom, _selectTo);
-                // _textureStorage.undo();
             }
         }
     }
 
-    private void undoStuff() {
+    private void addToUndoAndReplaceCursor() {
+        replaceCursor();
         if (!nothingFlag) {
             // TextBlockState tbs = new TextBlockState(getText(), _cursor_position);
             // redoQueue.addFirst(tbs);
@@ -1076,8 +1090,6 @@ class TextBlock extends Prototype
 
         // Point fromSelectState;
         // Point toSelectState;
-        TextBlockState() {
-        }
 
         TextBlockState(String textState, Point cursorState) {
             this.textState = textState;

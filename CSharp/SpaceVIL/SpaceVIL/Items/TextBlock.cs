@@ -38,8 +38,9 @@ namespace SpaceVIL
 
         //private Color _blockForeground;
 
-        private List<KeyCode> ShiftValCodes;
-        private List<KeyCode> InsteadKeyMods;
+        private HashSet<KeyCode> _cursorControlKeys;
+        //private HashSet<KeyCode> _insteadKeyMods;
+        private HashSet<KeyCode> _serviceEditKeys;
 
         private int scrollXStep = 15;
 
@@ -63,10 +64,12 @@ namespace SpaceVIL
             EventScrollDown += OnScrollDown;
             EventMouseDoubleClick += OnDoubleClick;
 
-            ShiftValCodes = new List<KeyCode>() {KeyCode.Left, KeyCode.Right, KeyCode.End,
+            _cursorControlKeys = new HashSet<KeyCode>() {KeyCode.Left, KeyCode.Right, KeyCode.End,
                 KeyCode.Home, KeyCode.Up, KeyCode.Down};
-            InsteadKeyMods = new List<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl,
-                KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
+            //_insteadKeyMods = new HashSet<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl,
+            //    KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
+            _serviceEditKeys = new HashSet<KeyCode>() {KeyCode.Backspace, KeyCode.Delete, KeyCode.Enter, 
+                KeyCode.NumpadEnter, KeyCode.Tab};
 
             _cursor.SetHeight(_textureStorage.GetCursorHeight());
 
@@ -219,9 +222,9 @@ namespace SpaceVIL
 
         private void OnScrollUp(object sender, MouseArgs args)
         {
-            int curPos = _cursor.GetY();
-            _cursor.SetY(_textureStorage.ScrollBlockUp(curPos));
-            curPos = _cursor.GetY() - curPos;
+            // int curPos = _cursor.GetY();
+            _cursor.SetY(_textureStorage.ScrollBlockUp(_cursor.GetY()));
+            // curPos = _cursor.GetY() - curPos;
 
             if (_justSelected)
                 CancelJustSelected();
@@ -232,9 +235,9 @@ namespace SpaceVIL
 
         private void OnScrollDown(object sender, MouseArgs args)
         {
-            int curPos = _cursor.GetY();
+            // int curPos = _cursor.GetY();
             _cursor.SetY(_textureStorage.ScrollBlockDown(_cursor.GetY()));
-            curPos = _cursor.GetY() - curPos;
+            // curPos = _cursor.GetY() - curPos;
 
             if (_justSelected)
                 CancelJustSelected();
@@ -284,22 +287,36 @@ namespace SpaceVIL
                     CancelJustSelected();
                 }
 
+                bool isCursorControlKey = _cursorControlKeys.Contains(args.Key);
+                bool hasShift = args.Mods.HasFlag(KeyMods.Shift);
+                bool hasControl = args.Mods.HasFlag(KeyMods.Control);
+
                 if (args.Mods != 0)
                 {
                     //Выделение не сбрасывается, проверяются сочетания
-                    switch (args.Mods)
+                    if (isCursorControlKey)
                     {
-                        case KeyMods.Shift:
-                            if (ShiftValCodes.Contains(args.Key))
+                        if (!_isSelect)
+                        {
+                            if (hasShift)
                             {
-                                if (!_isSelect)
+                                if ((args.Mods == KeyMods.Shift) || (args.Mods == (KeyMods.Control | KeyMods.Shift)))
                                 {
                                     _isSelect = true;
                                     _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
                                 }
-                            }
+                            }                       
 
-                            break;
+                        }
+                        else //_isSelect
+                        {
+                            if (args.Mods == KeyMods.Control)
+                            {
+                                UnselectText();
+                                CancelJustSelected();                                
+                            }
+                        }
+                    }
 
                         // case KeyMods.Control:
                         //     if (args.Key == KeyCode.A || args.Key == KeyCode.a)
@@ -315,11 +332,10 @@ namespace SpaceVIL
                         //     break;
 
                             //alt, super ?
-                    }
                 }
                 else
                 {
-                    if (args.Key == KeyCode.Backspace || args.Key == KeyCode.Delete || args.Key == KeyCode.Enter || args.Key == KeyCode.Tab)
+                    if (_serviceEditKeys.Contains(args.Key)) //(args.Key == KeyCode.Backspace || args.Key == KeyCode.Delete || args.Key == KeyCode.Enter || args.Key == KeyCode.Tab)
                     {
                         if (_isSelect)
                             CutText();
@@ -330,15 +346,16 @@ namespace SpaceVIL
                             {
                                 if (_cursor_position.X > 0)
                                 {
-                                    SetTextInLine(_textureStorage.GetTextInLine(_cursor_position.Y).Remove(_cursor_position.X - 1, 1));
+                                    string sb = _textureStorage.GetTextInLine(_cursor_position.Y);
                                     _cursor_position.X--;
+                                    SetTextInLine(sb.Remove(_cursor_position.X, 1));
                                 }
                                 else if (_cursor_position.Y > 0)
                                 {
                                     _cursor_position.Y--;
                                     _cursor_position.X = GetLineLetCount(_cursor_position.Y);
                                     _textureStorage.CombineLines(_cursor_position.Y);
-                                    UndoStuff();
+                                    AddToUndoAndReplaceCursor();
                                 }
                                 ReplaceCursor();
                             }
@@ -351,238 +368,243 @@ namespace SpaceVIL
                                 else if (_cursor_position.Y < _textureStorage.GetCount() - 1)
                                 {
                                     _textureStorage.CombineLines(_cursor_position.Y);
-                                    UndoStuff();
+                                    AddToUndoAndReplaceCursor();
                                 }
                             }
                         }
-                    }
-                    else
-                        if (_isSelect && !InsteadKeyMods.Contains(args.Key))
-                        UnselectText();
-                }
 
-                if (args.Key == KeyCode.Left) //arrow left
-                {
-                    _cursor_position = _textureStorage.CheckLineFits(_cursor_position);
-
-                    bool doUsual = true;
-
-                    if (args.Mods == KeyMods.Control)
-                    {
-                        if (_isSelect)
+                        if (args.Key == KeyCode.Enter || args.Key == KeyCode.NumpadEnter) //enter
                         {
-                            UnselectText();
-                            CancelJustSelected();
-                        }
-                        int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
-
-                        if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[0])
-                        {
-                            _cursor_position = new Point(wordBounds[0], _cursor_position.Y);
-                            ReplaceCursor();
-                            doUsual = false;
-                        }
-                    }
-                    else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
-                    {
-                        if (!_isSelect)
-                        {
-                            _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
-                            _isSelect = true;
-                        }
-
-                        int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
-
-                        if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[0])
-                        {
-                            _selectTo = new Point(wordBounds[0], _cursor_position.Y);
-                            _cursor_position = new Point(_selectTo.X, _selectTo.Y);
-                            ReplaceCursor();
-                            // MakeSelectedArea(); //_selectFrom, _selectTo);
-                            doUsual = false;
-                        }
-                    }
-
-                    if (!_justSelected && doUsual)
-                    {
-                        if (_cursor_position.X > 0)
-                            _cursor_position.X--;
-                        else if (_cursor_position.Y > 0)
-                        {
-                            _cursor_position.Y--;
-                            _cursor_position.X = GetLineLetCount(_cursor_position.Y);
-                        }
-                        ReplaceCursor();
-                    }
-                }
-                if (args.Key == KeyCode.Right) //arrow right
-                {
-                    bool doUsual = true;
-
-                    if (args.Mods == KeyMods.Control)
-                    {
-                        if (_isSelect)
-                        {
-                            UnselectText();
-                            CancelJustSelected();
-                        }
-                        int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
-
-                        if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[1])
-                        {
-                            _cursor_position = new Point(wordBounds[1], _cursor_position.Y);
-                            ReplaceCursor();
-                            doUsual = false;
-                        }
-                    }
-                    else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
-                    {
-                        if (!_isSelect)
-                        {
-                            _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
-                            _isSelect = true;
-                        }
-
-                        int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
-
-                        if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[1])
-                        {
-                            _selectTo = new Point(wordBounds[1], _cursor_position.Y);
-                            _cursor_position = new Point(_selectTo.X, _selectTo.Y);
-                            ReplaceCursor();
-                            // MakeSelectedArea(); //_selectFrom, _selectTo);
-                            doUsual = false;
-                        }
-                    }
-
-                    if (!_justSelected && doUsual)
-                    {
-                        if (_cursor_position.X < GetLineLetCount(_cursor_position.Y))
-                            _cursor_position.X++;
-                        else if (_cursor_position.Y < _textureStorage.GetCount() - 1)
-                        {
+                            _textureStorage.BreakLine(_cursor_position);
                             _cursor_position.Y++;
                             _cursor_position.X = 0;
+
+                            // ReplaceCursor();
+                            AddToUndoAndReplaceCursor();
                         }
-                        ReplaceCursor();
-                    }
 
-                }
-                if (args.Key == KeyCode.Up) //arrow up
-                {
-                    if (!_justSelected)
-                    {
-                        if (_cursor_position.Y > 0)
-                            _cursor_position.Y--;
-                        //?????
-                        ReplaceCursor();
-                    }
-
-                }
-                if (args.Key == KeyCode.Down) //arrow down
-                {
-                    if (!_justSelected)
-                    {
-                        if (_cursor_position.Y < _textureStorage.GetCount() - 1)
-                            _cursor_position.Y++;
-                        //?????
-                        ReplaceCursor();
-                    }
-
-                }
-
-                if (args.Key == KeyCode.End) //end
-                {
-                    bool doUsual = true;
-
-                    if (args.Mods == KeyMods.Control)
-                    {
-                        if (_isSelect)
+                        if (args.Key == KeyCode.Tab)
                         {
-                            UnselectText();
-                            CancelJustSelected();
+                            PasteText("    "); //PrivPasteText
                         }
+                    }
+                    else if (_isSelect) // && !_insteadKeyMods.Contains(args.Key))
+                    {
+                        UnselectText();
+                    }
+                }
+
+                if (isCursorControlKey)
+                {
+                    if (!args.Mods.HasFlag(KeyMods.Alt) && !args.Mods.HasFlag(KeyMods.Super))
+                    {
+                        if (args.Key == KeyCode.Left) //arrow left
+                        {
+                            _cursor_position = _textureStorage.CheckLineFits(_cursor_position);
+
+                            bool doUsual = true;
+
+                            if (hasControl) //args.Mods == KeyMods.Control)
+                            {
+                                // if (_isSelect)
+                                // {
+                                //     UnselectText();
+                                //     CancelJustSelected();
+                                // }
+                                int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
+
+                                if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[0])
+                                {
+                                    _cursor_position = new Point(wordBounds[0], _cursor_position.Y);
+                                    ReplaceCursor();
+                                    doUsual = false;
+                                }
+                    // }
+                    // else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
+                    // {
+                    //     if (!_isSelect)
+                    //     {
+                    //         _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
+                    //         _isSelect = true;
+                    //     }
+
+                    //     int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
+
+                    //     if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[0])
+                    //     {
+                    //         _selectTo = new Point(wordBounds[0], _cursor_position.Y);
+                    //         _cursor_position = new Point(_selectTo.X, _selectTo.Y);
+                    //         ReplaceCursor();
+                    //         // MakeSelectedArea(); //_selectFrom, _selectTo);
+                    //         doUsual = false;
+                    //     }
+                            }
+
+                            if (!_justSelected && doUsual)
+                            {
+                                if (_cursor_position.X > 0)
+                                    _cursor_position.X--;
+                                else if (_cursor_position.Y > 0)
+                                {
+                                    _cursor_position.Y--;
+                                    _cursor_position.X = GetLineLetCount(_cursor_position.Y);
+                                }
+                                ReplaceCursor();
+                            }
+                        }
+                        if (args.Key == KeyCode.Right) //arrow right
+                        {
+                            bool doUsual = true;
+
+                            if (hasControl) //(args.Mods == KeyMods.Control)
+                            {
+                                // if (_isSelect)
+                                // {
+                                //     UnselectText();
+                                //     CancelJustSelected();
+                                // }
+                                int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
+
+                                if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[1])
+                                {
+                                    _cursor_position = new Point(wordBounds[1], _cursor_position.Y);
+                                    ReplaceCursor();
+                                    doUsual = false;
+                                }
+                    // }
+                    // else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
+                    // {
+                    //     if (!_isSelect)
+                    //     {
+                    //         _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
+                    //         _isSelect = true;
+                    //     }
+
+                    //     int[] wordBounds = _textureStorage.FindWordBounds(_cursor_position);
+
+                    //     if (wordBounds[0] != wordBounds[1] && _cursor_position.X != wordBounds[1])
+                    //     {
+                    //         _selectTo = new Point(wordBounds[1], _cursor_position.Y);
+                    //         _cursor_position = new Point(_selectTo.X, _selectTo.Y);
+                    //         ReplaceCursor();
+                    //         // MakeSelectedArea(); //_selectFrom, _selectTo);
+                    //         doUsual = false;
+                    //     }
+                            }
+
+                            if (!_justSelected && doUsual)
+                            {
+                                if (_cursor_position.X < GetLineLetCount(_cursor_position.Y))
+                                    _cursor_position.X++;
+                                else if (_cursor_position.Y < _textureStorage.GetCount() - 1)
+                                {
+                                    _cursor_position.Y++;
+                                    _cursor_position.X = 0;
+                                }
+                                ReplaceCursor();
+                            }
+
+                        }
+                        if (args.Key == KeyCode.Up) //arrow up
+                        {
+                            if (!_justSelected)
+                            {
+                                if (_cursor_position.Y > 0)
+                                    _cursor_position.Y--;
+                                //?????
+                                ReplaceCursor();
+                            }
+
+                        }
+                        if (args.Key == KeyCode.Down) //arrow down
+                        {
+                            if (!_justSelected)
+                            {
+                                if (_cursor_position.Y < _textureStorage.GetCount() - 1)
+                                    _cursor_position.Y++;
+                                //?????
+                                ReplaceCursor();
+                            }        
+                        }
+
+                        if (args.Key == KeyCode.End) //end
+                        {
+                            bool doUsual = true;
+
+                            if (hasControl) //(args.Mods == KeyMods.Control)
+                            {
+                                // if (_isSelect)
+                                // {
+                                //     UnselectText();
+                                //     CancelJustSelected();
+                                // }
                         
-                        int lineNum = _textureStorage.GetCount() - 1;
-                        _cursor_position = new Point(GetLineLetCount(lineNum), lineNum);
-                        ReplaceCursor();
-                        doUsual = false;                        
-                    }
-                    else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
-                    {
-                        if (!_isSelect)
-                        {
-                            _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
-                            _isSelect = true;
+                                int lineNum = _textureStorage.GetCount() - 1;
+                                _cursor_position = new Point(GetLineLetCount(lineNum), lineNum);
+                                ReplaceCursor();
+                                doUsual = false;                        
+                    // }
+                    // else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
+                    // {
+                    //     if (!_isSelect)
+                    //     {
+                    //         _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
+                    //         _isSelect = true;
+                    //     }
+
+                    //     int lineNum = _textureStorage.GetCount() - 1;
+
+                    //     _selectTo = new Point(GetLineLetCount(lineNum), lineNum);
+                    //     _cursor_position = new Point(_selectTo.X, _selectTo.Y);
+                    //     ReplaceCursor();
+                    //     // MakeSelectedArea(); //_selectFrom, _selectTo);
+                    //     doUsual = false;                        
+                            }
+
+                            if (doUsual)
+                            {
+                                _cursor_position.X = GetLineLetCount(_cursor_position.Y);
+                                ReplaceCursor();
+                            }
                         }
-
-                        int lineNum = _textureStorage.GetCount() - 1;
-
-                        _selectTo = new Point(GetLineLetCount(lineNum), lineNum);
-                        _cursor_position = new Point(_selectTo.X, _selectTo.Y);
-                        ReplaceCursor();
-                        // MakeSelectedArea(); //_selectFrom, _selectTo);
-                        doUsual = false;                        
-                    }
-
-                    if (doUsual)
-                    {
-                        _cursor_position.X = GetLineLetCount(_cursor_position.Y);
-                        ReplaceCursor();
-                    }
-                }
-                if (args.Key == KeyCode.Home) //home
-                {
-                    bool doUsual = true;
-
-                    if (args.Mods == KeyMods.Control)
-                    {
-                        if (_isSelect)
+                        if (args.Key == KeyCode.Home) //home
                         {
-                            UnselectText();
-                            CancelJustSelected();
+                            bool doUsual = true;
+
+                            if (hasControl) //(args.Mods == KeyMods.Control)
+                            {
+                                // if (_isSelect)
+                                // {
+                                //     UnselectText();
+                                //     CancelJustSelected();
+                                // }
+
+                                _cursor_position = new Point(0, 0);
+                                ReplaceCursor();
+                                doUsual = false;                        
+                    // }
+                    // else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
+                    // {
+                    //     if (!_isSelect)
+                    //     {
+                    //         _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
+                    //         _isSelect = true;
+                    //     }
+
+                    //     _selectTo = new Point(0, 0);
+                    //     _cursor_position = new Point(_selectTo.X, _selectTo.Y);
+                    //     ReplaceCursor();
+                    //     // MakeSelectedArea(); //_selectFrom, _selectTo);
+                    //     doUsual = false;                        
+                            }
+
+                            if (doUsual)
+                            {
+                                _cursor_position.X = 0;
+                                ReplaceCursor();
+                            }
                         }
-                        
-                        _cursor_position = new Point(0, 0);
-                        ReplaceCursor();
-                        doUsual = false;                        
                     }
-                    else if (args.Mods == (KeyMods.Control | KeyMods.Shift))
-                    {
-                        if (!_isSelect)
-                        {
-                            _selectFrom = new Point(_cursor_position.X, _cursor_position.Y);
-                            _isSelect = true;
-                        }
-
-                        _selectTo = new Point(0, 0);
-                        _cursor_position = new Point(_selectTo.X, _selectTo.Y);
-                        ReplaceCursor();
-                        // MakeSelectedArea(); //_selectFrom, _selectTo);
-                        doUsual = false;                        
-                    }
-
-                    if (doUsual)
-                    {
-                        _cursor_position.X = 0;
-                        ReplaceCursor();
-                    }
-                }
-
-                if (args.Key == KeyCode.Enter || args.Key == KeyCode.NumpadEnter) //enter
-                {
-                    _textureStorage.BreakLine(_cursor_position);
-                    _cursor_position.Y++;
-                    _cursor_position.X = 0;
-
-                    ReplaceCursor();
-                    //TextChanged?.Invoke();
-                    UndoStuff();
-                }
-
-                if (args.Key == KeyCode.Tab)
-                {
-                    PasteText("    "); //PrivPasteText
                 }
 
                 if (_isSelect)
@@ -619,10 +641,8 @@ namespace SpaceVIL
                 _cursor_position = _textureStorage.CheckLineFits(_cursor_position);
                 SetTextInLine(_textureStorage.GetTextInLine(_cursor_position.Y).Insert(_cursor_position.X, str));
                 _cursor_position.X++;
-                ReplaceCursor();
-                //TextChanged?.Invoke();
-
-                UndoStuff();
+                // ReplaceCursor();
+                AddToUndoAndReplaceCursor();
             }
             finally
             {
@@ -659,13 +679,7 @@ namespace SpaceVIL
 
         internal void SetTextAlignment(ItemAlignment alignment)
         {
-            //Ignore all changes
-            /*
-            _blockAlignment = alignment;
-            if (_linesList == null) return;
-            foreach (TextLine te in _linesList)
-                te.SetTextAlignment(alignment);
-            */
+            //Ignore all changes for yet
         }
 
         internal void SetTextMargin(Indents margin)
@@ -699,10 +713,8 @@ namespace SpaceVIL
                     CancelJustSelected();
 
                 _cursor_position = _textureStorage.SetText(text, _cursor_position);
-                ReplaceCursor();
-                //TextChanged?.Invoke();
-
-                UndoStuff();
+                // ReplaceCursor();
+                AddToUndoAndReplaceCursor();
             }
             finally
             {
@@ -715,7 +727,7 @@ namespace SpaceVIL
             _textureStorage.SetTextInLine(text, _cursor_position.Y);
 
             if (!ignoreSetInLine)
-                UndoStuff();
+                AddToUndoAndReplaceCursor();
             else ignoreSetInLine = false;
         }
 
@@ -900,15 +912,16 @@ namespace SpaceVIL
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
-                if (_isSelect) PrivCutText();
-                if (pasteStr == null || pasteStr.Equals("")) return;
+                if (_isSelect)
+                    PrivCutText();
+                if (pasteStr == null || pasteStr.Equals(""))
+                    return;
 
                 _cursor_position = _textureStorage.CheckLineFits(_cursor_position);
                 _cursor_position = _textureStorage.PasteText(pasteStr, _cursor_position);
 
-                ReplaceCursor();
-
-                UndoStuff();
+                // ReplaceCursor();
+                AddToUndoAndReplaceCursor();
             }
             finally
             {
@@ -955,9 +968,10 @@ namespace SpaceVIL
 
         public string CutText()
         {
-            if (!_isEditable) return "";
+            if (!_isEditable)
+                return "";
             String ans = PrivCutText();
-            UndoStuff();
+            AddToUndoAndReplaceCursor();
             return ans;
         }
 
@@ -992,13 +1006,13 @@ namespace SpaceVIL
             _textureStorage.Clear();
             _cursor_position.X = 0;
             _cursor_position.Y = 0;
-            ReplaceCursor();
             if (_isSelect)
                 UnselectText();
             if (_justSelected)
                 CancelJustSelected();
 
-            UndoStuff();
+            // ReplaceCursor();
+            AddToUndoAndReplaceCursor();
         }
 
         public void SelectAll()
@@ -1078,7 +1092,7 @@ namespace SpaceVIL
             if (undoQueue.Count == 1)
                 return;
 
-            // undoStuff();
+            // AddToUndoAndReplaceCursor();
 
             TextBlockState tmpText = undoQueue.First.Value;
             if (tmpText != null)
@@ -1099,13 +1113,13 @@ namespace SpaceVIL
                     undoQueue.First.Value.cursorStateX = _cursor_position.X;
                     undoQueue.First.Value.cursorStateY = _cursor_position.Y;
                     ReplaceCursor();
-                    //_textureStorage.Undo();
                 }
             }
         }
 
-        private void UndoStuff()
+        private void AddToUndoAndReplaceCursor()
         {
+            ReplaceCursor();
             if (!nothingFlag)
             {
                 // TextBlockState tbs = new TextBlockState(getText(), _cursor_position);
@@ -1159,19 +1173,8 @@ namespace SpaceVIL
 
         public void UpdateLayout()
         {
-            // Console.Write("upd");
-            // int xSh = _selectedArea.GetX();
-            // int ySh = _selectedArea.GetY();
-            // if (xSh > 0)
-            //     xSh = GetX() + GetPadding().Left - xSh;
-            // if (ySh > 0)
-            //     ySh = GetY() + GetPadding().Top - ySh;
-            // _selectedArea.ShiftAreaX(GetX() + GetPadding().Left - xSh);
-            // _selectedArea.ShiftAreaY(GetY() + GetPadding().Top - ySh);
-            // _cursor.SetX(_cursor.GetX() + GetX() + GetPadding().Left);
-            // _cursor.SetY(_cursor.GetY() + GetY() + GetPadding().Top);
-            // Console.WriteLine(" " + _selectedArea.GetX() + " " + _selectedArea.GetY());
-            if (_textureStorage.GetParent() == null) return;
+            if (_textureStorage.GetParent() == null)
+                return;
             //ReplaceCursor();
             Point pos = AddXYShifts(0, 0, _cursor_position);
             _cursor.SetX(pos.X);
@@ -1209,9 +1212,7 @@ namespace SpaceVIL
             internal int cursorStateY;
             // internal Point fromSelectState;
             // internal Point toSelectState;
-            internal TextBlockState()
-            {
-            }
+            
             internal TextBlockState(String textState, int cursorStateX, int cursorStateY)
             {
                 this.textState = textState;
