@@ -96,13 +96,15 @@ namespace SpaceVIL
         {
             return _name;
         }
-        internal Shader(String name)
+        internal Shader(String designation)
         {
-            _name = name;
+            _name = designation;
             InitDefaults();
         }
-        internal Shader(String name, String vertex_code, String fragmend_code)
+        internal Shader(String vertex_code, String fragmend_code, String designation)
         {
+            _name = designation;
+
             _code_vertex = vertex_code;
             _code_fragment = fragmend_code;
 
@@ -110,8 +112,9 @@ namespace SpaceVIL
             _code_geometry = String.Empty;
             _code_compute = String.Empty;
         }
-        internal Shader(String name, Stream vertex_code, Stream fragmend_code)
+        internal Shader(Stream vertex_code, Stream fragmend_code, String designation)
         {
+            _name = designation;
             _code_vertex = ReadSource(vertex_code);
             _code_fragment = ReadSource(fragmend_code);
 
@@ -119,8 +122,9 @@ namespace SpaceVIL
             _code_geometry = String.Empty;
             _code_compute = String.Empty;
         }
-        internal Shader(String name, Stream vertex_code, Stream geometry_code, Stream fragmend_code)
+        internal Shader(Stream vertex_code, Stream geometry_code, Stream fragmend_code, String designation)
         {
+            _name = designation;
             _code_vertex = ReadSource(vertex_code);
             _code_geometry = ReadSource(geometry_code);
             _code_fragment = ReadSource(fragmend_code);

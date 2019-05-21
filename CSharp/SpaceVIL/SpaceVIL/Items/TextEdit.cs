@@ -8,7 +8,6 @@ using System.Threading;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
 using SpaceVIL.Decorations;
-using SpaceVIL.Items;
 
 namespace SpaceVIL
 {

@@ -50,14 +50,14 @@ namespace SpaceVIL
             IsBorderHidden = !isBorder;
         }
 
-        private WindowLayout wnd_layout;
+        private WindowLayout windowLayout;
 
         /// <summary>
         /// Parent item for the CoreWindow
         /// </summary>
         internal WindowLayout GetLayout()
         {
-            return wnd_layout;
+            return windowLayout;
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace SpaceVIL
             {
                 throw new SpaceVILException("Window handler can't be null");
             }
-            wnd_layout = wl;
+            windowLayout = wl;
             wl.SetCoreWindow();
         }
 
@@ -78,7 +78,7 @@ namespace SpaceVIL
         /// </summary>
         public virtual void Show()
         {
-            wnd_layout.Show();
+            windowLayout.Show();
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace SpaceVIL
         /// </summary>
         public virtual void Close()
         {
-            wnd_layout.Close();
+            windowLayout.Close();
         }
 
         /// <summary>
@@ -103,75 +103,75 @@ namespace SpaceVIL
         // ------------------------------------------------------------------------------------------
         public void SetBackground(Color color)
         {
-            wnd_layout.GetContainer().SetBackground(color);
+            windowLayout.GetContainer().SetBackground(color);
         }
 
         public void SetBackground(int r, int g, int b)
         {
-            wnd_layout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b));
+            windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b));
         }
 
         public void SetBackground(int r, int g, int b, int a)
         {
-            wnd_layout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
+            windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
 
         public void SetBackground(float r, float g, float b)
         {
-            wnd_layout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b));
+            windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b));
         }
 
         public void SetBackground(float r, float g, float b, float a)
         {
-            wnd_layout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
+            windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
 
         public Color GetBackground()
         {
-            return wnd_layout.GetContainer().GetBackground();
+            return windowLayout.GetContainer().GetBackground();
         }
 
         public void SetPadding(Indents padding)
         {
-            wnd_layout.GetContainer().SetPadding(padding);
+            windowLayout.GetContainer().SetPadding(padding);
         }
 
         public void SetPadding(int left, int top, int right, int bottom)
         {
-            wnd_layout.GetContainer().SetPadding(left, top, right, bottom);
+            windowLayout.GetContainer().SetPadding(left, top, right, bottom);
         }
 
         public List<IBaseItem> GetItems()
         {
-            return wnd_layout.GetContainer().GetItems();
+            return windowLayout.GetContainer().GetItems();
         }
 
         public void AddItem(IBaseItem item)
         {
-            wnd_layout.GetContainer().AddItem(item);
+            windowLayout.GetContainer().AddItem(item);
         }
 
         public void AddItems(params IBaseItem[] items)
         {
             foreach (IBaseItem item in items)
             {
-                wnd_layout.GetContainer().AddItem(item);
+                windowLayout.GetContainer().AddItem(item);
             }
         }
 
         public void InsertItem(IBaseItem item, int index)
         {
-            wnd_layout.GetContainer().InsertItem(item, index);
+            windowLayout.GetContainer().InsertItem(item, index);
         }
 
         public bool RemoveItem(IBaseItem item)
         {
-            return wnd_layout.GetContainer().RemoveItem(item);
+            return windowLayout.GetContainer().RemoveItem(item);
         }
 
         public void clear()
         {
-            wnd_layout.GetContainer().Clear();
+            windowLayout.GetContainer().Clear();
         }
 
         private String _name;
@@ -204,43 +204,43 @@ namespace SpaceVIL
         public void SetMinWidth(int width)
         {
             _itemGeometry.SetMinWidth(width);
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetMinWidth(width);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetMinWidth(width);
         }
 
         public void SetWidth(int width)
         {
             _itemGeometry.SetWidth(width);
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetWidth(width);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetWidth(width);
         }
 
         public void SetMaxWidth(int width)
         {
             _itemGeometry.SetMaxWidth(width);
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetMaxWidth(width);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetMaxWidth(width);
         }
 
         public void SetMinHeight(int height)
         {
             _itemGeometry.SetMinHeight(height);
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetMinHeight(height);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetMinHeight(height);
         }
 
         public void SetHeight(int height)
         {
             _itemGeometry.SetHeight(height);
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetHeight(height);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetHeight(height);
         }
 
         public void SetMaxHeight(int height)
         {
             _itemGeometry.SetMaxHeight(height);
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetMaxHeight(height);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetMaxHeight(height);
         }
 
         public int GetMinWidth()
@@ -357,7 +357,7 @@ namespace SpaceVIL
 
         internal void SetFocusable(bool value)
         {
-            wnd_layout.SetFocusable(value);
+            windowLayout.SetFocusable(value);
         }
 
         public void SetFocus(Boolean value)
@@ -366,68 +366,68 @@ namespace SpaceVIL
                 return;
             IsFocused = value;
             if (value)
-                SetWindowFocused();
+                windowLayout.SetFocus();
         }
 
         public void SetWindowFocused()
         {
-            wnd_layout.SetWindowFocused();
+            windowLayout.SetFocus();
         }
 
         public void Minimize()
         {
-            wnd_layout.Minimize();
+            windowLayout.Minimize();
         }
 
         public void Maximize()
         {
-            wnd_layout.Maximize();
+            windowLayout.Maximize();
         }
 
         public Prototype GetFocusedItem()
         {
-            return wnd_layout.GetFocusedItem();
+            return windowLayout.GetFocusedItem();
         }
 
         public void SetFocusedItem(Prototype item)
         {
-            wnd_layout.SetFocusedItem(item);
+            windowLayout.SetFocusedItem(item);
         }
 
         public void SetFocus()
         {
-            wnd_layout.GetContainer().SetFocus();
+            windowLayout.GetContainer().SetFocus();
         }
 
         public void ResetItems()
         {
-            wnd_layout.ResetItems();
+            windowLayout.ResetItems();
         }
 
         public void ResetFocus()
         {
-            wnd_layout.ResetFocus();
+            windowLayout.ResetFocus();
         }
 
         public void SetIcon(Image icon_big, Image icon_small)
         {
-            wnd_layout.SetIcon(icon_big, icon_small);
+            windowLayout.SetIcon(icon_big, icon_small);
         }
 
         public void SetHidden(Boolean value)
         {
-            wnd_layout.SetHidden(value);
+            windowLayout.SetHidden(value);
             IsHidden = value;
         }
 
         public void SetRenderFrequency(RedrawFrequency value)
         {
-            wnd_layout.SetRenderFrequency(value);
+            WindowManager.SetRenderFrequency(value);
         }
 
         public RedrawFrequency GetRenderFrequency()
         {
-            return wnd_layout.GetRenderFrequency();
+            return WindowManager.GetRenderFrequency();
         }
 
         public EventCommonMethod EventClose;
@@ -444,17 +444,17 @@ namespace SpaceVIL
 
         internal void SetWindow(WContainer window)
         {
-            wnd_layout.SetWindow(window);
+            windowLayout.SetWindow(window);
         }
 
         internal float[] GetDpiScale()
         {
-            return wnd_layout.GetDpiScale();
+            return windowLayout.GetDpiScale();
         }
 
         internal void SetDpiScale(float w, float h)
         {
-            wnd_layout.SetDpiScale(w, h);
+            windowLayout.SetDpiScale(w, h);
         }
 
         internal int RatioW = -1;
@@ -511,75 +511,94 @@ namespace SpaceVIL
 
         public void SetBorder(Border border)
         {
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetBorder(border);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetBorder(border);
         }
 
         public void SetBorderFill(Color fill)
         {
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetBorderFill(fill);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetBorderFill(fill);
         }
         public void SetBorderFill(int r, int g, int b)
         {
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetBorderFill(r, g, b);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetBorderFill(r, g, b);
         }
         public void SetBorderFill(int r, int g, int b, int a)
         {
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetBorderFill(r, g, b, a);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetBorderFill(r, g, b, a);
         }
         public void SetBorderFill(float r, float g, float b)
         {
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetBorderFill(r, g, b);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetBorderFill(r, g, b);
         }
         public void SetBorderFill(float r, float g, float b, float a)
         {
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetBorderFill(r, g, b, a);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetBorderFill(r, g, b, a);
         }
 
         public void SetBorderRadius(CornerRadius radius)
         {
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetBorderRadius(radius);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetBorderRadius(radius);
         }
         public void SetBorderRadius(int radius)
         {
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetBorderRadius(new CornerRadius(radius));
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetBorderRadius(new CornerRadius(radius));
         }
 
         public void SetBorderThickness(int thickness)
         {
-            if (wnd_layout.GetContainer() != null)
-                wnd_layout.GetContainer().SetBorderThickness(thickness);
+            if (windowLayout.GetContainer() != null)
+                windowLayout.GetContainer().SetBorderThickness(thickness);
         }
 
         public CornerRadius GetBorderRadius()
         {
-            if (wnd_layout.GetContainer() != null)
-                return wnd_layout.GetContainer().GetBorderRadius();
+            if (windowLayout.GetContainer() != null)
+                return windowLayout.GetContainer().GetBorderRadius();
             return null;
         }
         public int GetBorderThickness()
         {
-            if (wnd_layout.GetContainer() != null)
-                return wnd_layout.GetContainer().GetBorderThickness();
+            if (windowLayout.GetContainer() != null)
+                return windowLayout.GetContainer().GetBorderThickness();
             return 0;
         }
         public Color GetBorderFill()
         {
-            if (wnd_layout.GetContainer() != null)
-                return wnd_layout.GetContainer().GetBorderFill();
+            if (windowLayout.GetContainer() != null)
+                return windowLayout.GetContainer().GetBorderFill();
             return Color.Transparent;
         }
 
         public Glfw3.Glfw.Window GetGLWID()
         {
             return GetLayout().GetGLWID();
+        }
+
+        internal bool InitEngine()
+        {
+            return windowLayout.InitEngine();
+        }
+        internal void Render()
+        {
+            windowLayout.Render();
+        }
+
+        internal void Dispose()
+        {
+            windowLayout.Dispose();
+        }
+
+        internal CoreWindow GetPairForCurrentWindow()
+        {
+            return windowLayout.GetPairForCurrentWindow();
         }
     }
 }

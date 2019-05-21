@@ -112,7 +112,6 @@ namespace SpaceVIL
         /// </summary>
         public override bool RemoveItem(IBaseItem item)
         {
-            // Console.WriteLine("flow remove");
             bool b = base.RemoveItem(item);
             _stored_crd.Remove(item);
             UpdateLayout();

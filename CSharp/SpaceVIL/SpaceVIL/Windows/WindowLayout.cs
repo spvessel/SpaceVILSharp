@@ -11,7 +11,6 @@ using SpaceVIL.Common;
 namespace SpaceVIL
 {
     internal sealed class WindowLayout
-    //where TLayout : Prototype
     {
         internal Object EngineLocker = new Object();
         private Object wndLock = new Object();
@@ -29,10 +28,12 @@ namespace SpaceVIL
         }
 
         private CoreWindow _coreWindow;
+
         internal CoreWindow GetCoreWindow()
         {
             return _coreWindow;
         }
+
         internal void SetCoreWindow()
         {
             _id = _coreWindow.GetWindowGuid();
@@ -53,19 +54,16 @@ namespace SpaceVIL
             }
         }
 
-        private Guid ParentGUID;
+        private DrawEngine _engine;
 
-        private Thread thread_engine;
-        private DrawEngine engine;
-
-        private Task thread_manager;
-        private ActionManager manager;
+        private Task _threadActionManager;
+        private ActionManager _actionManager;
 
         internal WindowLayout(CoreWindow cWindow)
         {
             _coreWindow = cWindow;
-            manager = new ActionManager(_coreWindow);
-            engine = new DrawEngine(_coreWindow);
+            _actionManager = new ActionManager(_coreWindow);
+            _engine = new DrawEngine(_coreWindow);
             _coreWindow.EventClose += Close;
         }
 
@@ -82,207 +80,78 @@ namespace SpaceVIL
         //methods
         internal void Show()
         {
-            if (_coreWindow.IsHidden)
-                SetHidden(false);
-            _coreWindow.IsClosed = false;
-
-            engine._handler.Transparent = _coreWindow.IsTransparent;
-            engine._handler.Maximized = _coreWindow.IsMaximized;
-            engine._handler.Visible = !_coreWindow.IsHidden;
-            engine._handler.Resizeble = _coreWindow.IsResizable;
-            engine._handler.BorderHidden = _coreWindow.IsBorderHidden;
-            engine._handler.AppearInCenter = _coreWindow.IsCentered;
-            engine._handler.Focusable = _coreWindow.IsFocusable;
-            engine._handler.AlwaysOnTop = _coreWindow.IsAlwaysOnTop;
-            engine._handler.GetPointer().SetX(_coreWindow.GetX());
-            engine._handler.GetPointer().SetY(_coreWindow.GetY());
-
-            thread_manager = new Task(() => manager.StartManager());
-            thread_manager.Start();
-
-            if (CommonService.GetOSType() == OSType.Mac)
-            {
-                if (!WindowsBox.IsAnyWindowRunning())
-                {
-                    WindowsBox.SetWindowRunning(_coreWindow);
-                    engine.Init();
-                }
-            }
+            if (!WindowManager.IsRunning())
+                WindowManager.StartWith(_coreWindow);
             else
-            {
-                ShowInsideNewThread();
-            }
-        }
-
-        private void ShowInsideNewThread()
-        {
-            if (thread_engine != null && thread_engine.IsAlive)
-                return;
-
-            thread_engine = new Thread(() => engine.Init());
-
-            if (_coreWindow.IsDialog)
-            {
-                Monitor.Enter(wndLock);
-                try
-                {
-                    ParentGUID = WindowsBox._lastFocusedWindow.GetWindowGuid();
-                    WindowsBox.AddToWindowDispatcher(_coreWindow);
-                    WindowsBox.GetWindowInstance(ParentGUID).SetFocusable(false);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-                finally
-                {
-                    Monitor.Exit(wndLock);
-                }
-
-                thread_engine.Start();
-                thread_engine.Join();
-            }
-            else
-            {
-                thread_engine.Start();
-            }
+                WindowManager.AddWindow(_coreWindow);
         }
 
         internal void Close()
         {
-            if (CommonService.GetOSType() == OSType.Mac)
-            {
-                engine._handler.SetToClose();
-                WindowsBox.SetWindowRunning(null);
-            }
-            else
-            {
-                closeInsideNewThread();
-            }
-
-            if (thread_manager != null && thread_manager.Status == TaskStatus.Running)
-            {
-                manager.StopManager();
-                manager.Execute.Set();
-            }
-            _coreWindow.IsClosed = true;
-        }
-
-        private void closeInsideNewThread()
-        {
-            if (_coreWindow.IsDialog)
-            {
-                engine._handler.SetToClose();
-                SetWindowFocused();
-                Monitor.Enter(wndLock);
-                try
-                {
-                    WindowsBox.RemoveWindow(_coreWindow);
-                    WindowsBox.RemoveFromWindowDispatcher(_coreWindow);
-                }
-                finally
-                {
-                    Monitor.Exit(wndLock);
-                }
-            }
-            else
-            {
-                if (thread_engine != null && thread_engine.IsAlive)
-                    engine._handler.SetToClose();
-            }
-        }
-
-        internal bool IsFocused
-        {
-            get
-            {
-                if (engine != null)
-                    return engine._handler.Focused;
-                return false;
-            }
-            set
-            {
-                if (engine != null)
-                    engine._handler.Focused = value;
-            }
-        }
-        internal void SetWindowFocused()
-        {
-            Monitor.Enter(wndLock);
-            try
-            {
-                if (WindowsBox.GetWindowInstance(ParentGUID) != null)
-                    WindowsBox.GetWindowInstance(ParentGUID).SetFocusable(true);
-            }
-            finally
-            {
-                Monitor.Exit(wndLock);
-            }
+            WindowManager.CloseWindow(_coreWindow);
         }
 
         internal void SetFocusable(bool value)
         {
-            engine._handler.Focusable = value;
+            _engine.GLWHandler.Focusable = value;
         }
 
         internal void Minimize()
         {
-            engine.MinimizeWindow();
+            _engine.MinimizeWindow();
         }
-        internal bool IsMaximized = false;
+
         internal void Maximize()
         {
-            // engine.MaximizeWindow();
-            engine.MaximizeRequest = true;
+            _engine.MaximizeRequest = true;
         }
 
         internal void IsFixed(bool flag)
         {
             _window._is_fixed = flag;
         }
+
         internal void SetEventTask(EventTask task)
         {
-            //manager.StackEvents.Enqueue(task);
-            manager.AddTask(task);
+            _actionManager.AddTask(task);
         }
+
         volatile bool set = true;
 
         internal void ExecutePollActions()
         {
-            set = manager.Execute.IsSet;
+            set = _actionManager.Execute.IsSet;
             if (!set)
-                manager.Execute.Set();
+                _actionManager.Execute.Set();
+        }
+
+        internal Prototype GetFocusedItem()
+        {
+            return _engine.GetFocusedItem();
         }
 
         internal void SetFocusedItem(Prototype item)
         {
-            engine.SetFocusedItem(item);
+            _engine.SetFocusedItem(item);
         }
-        internal Prototype GetFocusedItem()
-        {
-            return engine.GetFocusedItem();
-        }
-        internal void SetFocus(bool value)
-        {
-            engine.Focus(engine._handler.GetWindowId(), value);
-        }
+
         internal void ResetItems()
         {
-            engine.ResetItems();
+            _engine.ResetItems();
         }
         internal void ResetFocus()
         {
-            engine.ResetFocus();
+            _engine.ResetFocus();
         }
 
         internal void SetIcon(Image icon_big, Image icon_small)
         {
-            engine.SetIcons(icon_big, icon_small);
+            _engine.SetIcons(icon_big, icon_small);
         }
 
         internal void SetHidden(bool value)
         {
-            engine._handler.SetHidden(value);
+            _engine.GLWHandler.SetHidden(value);
             _coreWindow.IsHidden = value;
         }
 
@@ -296,52 +165,92 @@ namespace SpaceVIL
 
         internal void SetDpiScale(float w, float h)
         {
-            // _scaleWidth = w * 2;
-            // _scaleHeight = h * 2;
             _scaleWidth = w;
             _scaleHeight = h;
         }
 
-        internal void SetRenderFrequency(RedrawFrequency value)
-        {
-            Monitor.Enter(EngineLocker);
-            try
-            {
-                engine.SetFrequency(value);
-            }
-            finally
-            {
-                Monitor.Exit(EngineLocker);
-            }
-        }
-        internal RedrawFrequency GetRenderFrequency()
-        {
-            Monitor.Enter(EngineLocker);
-            try
-            {
-                return engine.GetRedrawFrequency();
-            }
-            finally
-            {
-                Monitor.Exit(EngineLocker);
-            }
-        }
-
-        internal int RatioW = -1;
-        internal int RatioH = -1;
-        internal bool IsKeepAspectRatio = false;
-        internal void SetAspectRatio(int w, int h)
-        {
-            IsKeepAspectRatio = true;
-            RatioW = w;
-            RatioH = h;
-        }
-
         internal Glfw3.Glfw.Window GetGLWID()
         {
-            if (engine == null)
+            if (_engine == null)
                 return new Glfw3.Glfw.Window(IntPtr.Zero);
-            return engine._handler.GetWindowId();
+            return _engine.GLWHandler.GetWindowId();
+        }
+
+        internal bool InitEngine()
+        {
+            if (_coreWindow.IsHidden)
+                SetHidden(false);
+            _coreWindow.IsClosed = false;
+
+            _engine.GLWHandler.Transparent = _coreWindow.IsTransparent;
+            _engine.GLWHandler.Maximized = _coreWindow.IsMaximized;
+            _engine.GLWHandler.Visible = !_coreWindow.IsHidden;
+            _engine.GLWHandler.Resizeble = _coreWindow.IsResizable;
+            _engine.GLWHandler.BorderHidden = _coreWindow.IsBorderHidden;
+            _engine.GLWHandler.AppearInCenter = _coreWindow.IsCentered;
+            _engine.GLWHandler.Focusable = _coreWindow.IsFocusable;
+            _engine.GLWHandler.AlwaysOnTop = _coreWindow.IsAlwaysOnTop;
+
+            _engine.GLWHandler.GetPointer().SetX(_coreWindow.GetX());
+            _engine.GLWHandler.GetPointer().SetY(_coreWindow.GetY());
+
+            _threadActionManager = new Task(() => _actionManager.StartManager());
+            _threadActionManager.Start();
+
+            CreateWindowsPair();
+
+            return _engine.Init();
+        }
+
+        void CreateWindowsPair()
+        {
+            WindowsBox.CreateWindowsPair(_coreWindow);
+            if (_coreWindow.IsDialog)
+            {
+                WindowsBox.GetWindowPair(_coreWindow).SetFocusable(false);
+            }
+        }
+
+        internal void Dispose()
+        {
+            CoreWindow currentPair = GetPairForCurrentWindow();
+            DestroyWindowsPair();
+            if (_threadActionManager != null && _threadActionManager.Status == TaskStatus.Running)
+            {
+                _actionManager.StopManager();
+                _actionManager.Execute.Set();
+            }
+            _engine.FreeOnClose();
+            if (currentPair != null && !currentPair.IsClosed)
+                currentPair.SetWindowFocused();
+        }
+
+        void DestroyWindowsPair()
+        {
+            if (_coreWindow.IsDialog)
+            {
+                CoreWindow pair = WindowsBox.GetWindowPair(_coreWindow);
+                if (pair != null)
+                    pair.SetFocusable(true);
+                WindowsBox.RemoveWindow(_coreWindow);
+            }
+            WindowsBox.RemoveFromWindowDispatcher(_coreWindow);
+        }
+
+        internal CoreWindow GetPairForCurrentWindow()
+        {
+            return WindowsBox.GetWindowPair(_coreWindow);
+        }
+
+        internal void Render()
+        {
+            _engine.DrawScene();
+        }
+
+        internal void SetFocus()
+        {
+            SetFocusable(true);
+            _engine.SetWindowFocused();
         }
     }
 }
