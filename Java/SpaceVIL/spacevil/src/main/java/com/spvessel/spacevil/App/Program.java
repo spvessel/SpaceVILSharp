@@ -45,9 +45,11 @@ public class Program {
         // ScissorsTest sc = new ScissorsTest();
         // sc.show();
 
-        // mw.show();
+        mw.show();
         
         // lt.show();
         // con.show();
+
+        // WindowManager.startWith(mw);
     }
 }

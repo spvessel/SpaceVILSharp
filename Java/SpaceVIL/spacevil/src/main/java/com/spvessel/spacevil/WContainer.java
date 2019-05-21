@@ -128,4 +128,12 @@ final class WContainer extends Prototype {
 
         return _sides;
     }
+    
+    List<Side> getSides() {
+        return _sides;
+    }
+
+    void clearSides() {
+        _sides.clear();
+    }
 }

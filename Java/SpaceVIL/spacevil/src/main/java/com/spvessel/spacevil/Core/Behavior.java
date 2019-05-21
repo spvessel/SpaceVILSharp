@@ -70,9 +70,8 @@ class Behavior implements InterfaceBehavior {
         _alignment = alignment;
     }
     public void setAlignment(ItemAlignment... alignment) {
-        // List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
-        // setAlignment(list);
-        setAlignment(Arrays.asList(alignment));
+        List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
+        setAlignment(list);
     }
 
     public SizePolicy _w_policy = SizePolicy.FIXED;

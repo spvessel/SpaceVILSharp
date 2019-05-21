@@ -35,6 +35,11 @@ public class FlowTest extends ActiveWindow {
         // setBackground(45, 45, 45);
         // setPadding(2, 2, 2, 2);
 
+        eventClose.clear();
+        eventClose.add(() -> {
+            WindowManager.appExit();
+        });
+
         TitleBar title = new TitleBar("FlowTest");
         addItem(title);
         // getWindow().eventKeyPress.add((sender, args) -> {
@@ -95,7 +100,7 @@ public class FlowTest extends ActiveWindow {
             btnDontSave.eventMouseClick.add((s, a) -> {
                 System.out.println("btnDontSave is chosen");
             });
-            msg.addUserButton(btnDontSave, 2); //id must be > 1
+            msg.addUserButton(btnDontSave, 2); // id must be > 1
             msg.onCloseDialog.add(() -> {
                 System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
             });
@@ -171,7 +176,7 @@ public class FlowTest extends ActiveWindow {
             // flow.addItem(getBlockList());
             side.show();
             // PopUpMessage popUpInfo = new PopUpMessage(
-            //         "\n" + "Age: " + "\n" + "Sex: " + "\n" + "Race: " + "\n" + "Class: ");
+            // "\n" + "Age: " + "\n" + "Sex: " + "\n" + "Race: " + "\n" + "Class: ");
             // popUpInfo.setTimeOut(3000);
             // popUpInfo.setHeight(200);
             // popUpInfo.show(this);
@@ -251,15 +256,14 @@ public class FlowTest extends ActiveWindow {
         // flow.setHScrollOffset(flow.getHScrollOffset() - 10);
         // };
         MenuItem y_minus = new MenuItem("Y -= 100");
-         y_minus.eventMouseClick.add((sender, args) ->
-         {
-//            flow.setVScrollOffset(flow.getVScrollOffset() - 10);
+        y_minus.eventMouseClick.add((sender, args) -> {
+            // flow.setVScrollOffset(flow.getVScrollOffset() - 10);
             System.out.println("menu width " + _context_menu.getWidth());
-         });
+        });
         MenuItem ex_addition = new MenuItem("addition");
         addition_menu.addItems(x_minus, y_minus, ex_addition);
 
-//        addition.assignContextMenu(addition_menu);
+        // addition.assignContextMenu(addition_menu);
 
         ContextMenu ex_menu = new ContextMenu(this);
         ex_menu.setSize(110, 64);

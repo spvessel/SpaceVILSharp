@@ -131,11 +131,11 @@ public class MainWindow extends ActiveWindow {
         btn_label.setBackground(111, 181, 255);
         btn_label.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         InterfaceMouseMethodState btn_action_click = (sender, args) -> {
-            // MessageBox ms = new MessageBox("Send result?", "Message:");
-            // ms.show();
-            // System.out.println(ms.getResult());
-            MessageItem ms = new MessageItem("Send result?", "Message:");
-            ms.show(this);
+            MessageBox ms = new MessageBox("Send result?", "Message:");
+            ms.show();
+            System.out.println(ms.getResult());
+            // MessageItem ms = new MessageItem("Send result?", "Message:");
+            // ms.show(this);
         };
         btn_label.eventMouseClick.add(btn_action_click);
 
@@ -214,15 +214,6 @@ public class MainWindow extends ActiveWindow {
         });
 
         btn_flow.setFocus();
-
-        eventKeyPress.add((args, src) -> {
-            System.out.println("Press " + src.mods + " " + src.key);
-        });
-
-        eventKeyRelease.add((args, src) -> {
-            System.out.println("Release " + src.mods + " " + src.key);
-        });
-
         //
         //
         // List<List<Side>> testListSide = new LinkedList<>();

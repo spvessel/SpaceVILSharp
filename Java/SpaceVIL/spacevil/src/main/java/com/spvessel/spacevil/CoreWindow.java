@@ -55,13 +55,13 @@ public abstract class CoreWindow {
         isBorderHidden = !isBorder;
     }
 
-    private WindowLayout wnd_layout;
+    private WindowLayout windowLayout;
 
     /**
      * Parent item for the CoreWindow
      */
     WindowLayout getLayout() {
-        return wnd_layout;
+        return windowLayout;
     }
 
     /**
@@ -72,7 +72,7 @@ public abstract class CoreWindow {
             System.out.println("Window handler can't be null");
             return;
         }
-        wnd_layout = wl;
+        windowLayout = wl;
         wl.setCoreWindow();
     }
 
@@ -80,15 +80,14 @@ public abstract class CoreWindow {
      * Show the CoreWindow
      */
     public void show() {
-        wnd_layout.show();
-        // WindowLayoutBox.setFocusedWindow(this);
+        windowLayout.show();
     }
 
     /**
      * Close the CoreWindow
      */
     public void close() {
-        wnd_layout.close();
+        windowLayout.close();
     }
 
     /**
@@ -113,61 +112,61 @@ public abstract class CoreWindow {
 
     // ------------------------------------------------------------------------------------------
     public void setBackground(Color color) {
-        wnd_layout.getContainer().setBackground(color);
+        windowLayout.getContainer().setBackground(color);
     }
 
     public void setBackground(int r, int g, int b) {
-        wnd_layout.getContainer().setBackground(GraphicsMathService.colorTransform(r, g, b));
+        windowLayout.getContainer().setBackground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setBackground(int r, int g, int b, int a) {
-        wnd_layout.getContainer().setBackground(GraphicsMathService.colorTransform(r, g, b, a));
+        windowLayout.getContainer().setBackground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public void setBackground(float r, float g, float b) {
-        wnd_layout.getContainer().setBackground(GraphicsMathService.colorTransform(r, g, b));
+        windowLayout.getContainer().setBackground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setBackground(float r, float g, float b, float a) {
-        wnd_layout.getContainer().setBackground(GraphicsMathService.colorTransform(r, g, b, a));
+        windowLayout.getContainer().setBackground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public Color getBackground() {
-        return wnd_layout.getContainer().getBackground();
+        return windowLayout.getContainer().getBackground();
     }
 
     public void setPadding(Indents padding) {
-        wnd_layout.getContainer().setPadding(padding);
+        windowLayout.getContainer().setPadding(padding);
     }
 
     public void setPadding(int left, int top, int right, int bottom) {
-        wnd_layout.getContainer().setPadding(left, top, right, bottom);
+        windowLayout.getContainer().setPadding(left, top, right, bottom);
     }
 
     public List<InterfaceBaseItem> getItems() {
-        return wnd_layout.getContainer().getItems();
+        return windowLayout.getContainer().getItems();
     }
 
     public void addItem(InterfaceBaseItem item) {
-        wnd_layout.getContainer().addItem(item);
+        windowLayout.getContainer().addItem(item);
     }
 
     public void addItems(InterfaceBaseItem... items) {
         for (InterfaceBaseItem item : items) {
-            wnd_layout.getContainer().addItem(item);
+            windowLayout.getContainer().addItem(item);
         }
     }
 
     public void insertItem(InterfaceBaseItem item, int index) {
-        wnd_layout.getContainer().insertItem(item, index);
+        windowLayout.getContainer().insertItem(item, index);
     }
 
     public boolean removeItem(InterfaceBaseItem item) {
-        return wnd_layout.getContainer().removeItem(item);
+        return windowLayout.getContainer().removeItem(item);
     }
 
     public void clear() {
-        wnd_layout.getContainer().clear();
+        windowLayout.getContainer().clear();
     }
 
     private String _name;
@@ -195,38 +194,38 @@ public abstract class CoreWindow {
 
     public void setMinWidth(int width) {
         _itemGeometry.setMinWidth(width);
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setMinWidth(width);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setMinWidth(width);
     }
 
     public void setWidth(int width) {
         _itemGeometry.setWidth(width);
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setWidth(width);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setWidth(width);
     }
 
     public void setMaxWidth(int width) {
         _itemGeometry.setMaxWidth(width);
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setMaxWidth(width);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setMaxWidth(width);
     }
 
     public void setMinHeight(int height) {
         _itemGeometry.setMinHeight(height);
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setMinHeight(height);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setMinHeight(height);
     }
 
     public void setHeight(int height) {
         _itemGeometry.setHeight(height);
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setHeight(height);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setHeight(height);
     }
 
     public void setMaxHeight(int height) {
         _itemGeometry.setMaxHeight(height);
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setMaxHeight(height);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setMaxHeight(height);
     }
 
     public int getMinWidth() {
@@ -326,7 +325,7 @@ public abstract class CoreWindow {
     }
 
     void setFocusable(boolean value) {
-        wnd_layout.setFocusable(value);
+        windowLayout.setFocusable(value);
     }
 
     public void setFocus(Boolean value) {
@@ -334,56 +333,59 @@ public abstract class CoreWindow {
             return;
         isFocused = value;
         if (value)
-            setWindowFocused();
-    }
-
-    public void setWindowFocused() {
-        wnd_layout.setWindowFocused();
+            windowLayout.setFocus();
     }
 
     public void minimize() {
-        wnd_layout.minimize();
+        windowLayout.minimize();
     }
 
     public void maximize() {
-        wnd_layout.maximize();
+        windowLayout.maximize();
     }
 
     public Prototype getFocusedItem() {
-        return wnd_layout.getFocusedItem();
+        return windowLayout.getFocusedItem();
     }
 
     public void setFocusedItem(Prototype item) {
-        wnd_layout.setFocusedItem(item);
+        windowLayout.setFocusedItem(item);
     }
 
     public void setFocus() {
-        wnd_layout.getContainer().setFocus();
+        windowLayout.getContainer().setFocus();
+    }
+
+    public void setWindowFocused()
+    {
+        windowLayout.setFocus();
     }
 
     public void resetItems() {
-        wnd_layout.resetItems();
+        windowLayout.resetItems();
     }
 
     public void resetFocus() {
-        wnd_layout.resetFocus();
+        windowLayout.resetFocus();
     }
 
     public void setIcon(BufferedImage icon_big, BufferedImage icon_small) {
-        wnd_layout.setIcon(icon_big, icon_small);
+        windowLayout.setIcon(icon_big, icon_small);
     }
 
     public void setHidden(Boolean value) {
-        wnd_layout.setHidden(value);
+        windowLayout.setHidden(value);
         isHidden = value;
     }
 
     public void setRenderFrequency(RedrawFrequency value) {
-        wnd_layout.setRenderFrequency(value);
+        // windowLayout.setRenderFrequency(value);
+        WindowManager.setRenderFrequency(value);
     }
 
     public RedrawFrequency getRenderFrequency() {
-        return wnd_layout.getRenderFrequency();
+        return WindowManager.getRenderFrequency();
+        // return windowLayout.getRenderFrequency();
     }
 
     public EventCommonMethod eventClose = new EventCommonMethod();
@@ -398,15 +400,15 @@ public abstract class CoreWindow {
     }
 
     void setWindow(WContainer window) {
-        wnd_layout.setWindow(window);
+        windowLayout.setWindow(window);
     }
 
     float[] getDpiScale() {
-        return wnd_layout.getDpiScale();
+        return windowLayout.getDpiScale();
     }
 
     void setDpiScale(float w, float h) {
-        wnd_layout.setDpiScale(w, h);
+        windowLayout.setDpiScale(w, h);
     }
 
     int ratioW = -1;
@@ -459,69 +461,86 @@ public abstract class CoreWindow {
     }
 
     public void setBorder(Border border) {
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setBorder(border);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setBorder(border);
     }
 
     public void setBorderFill(Color fill) {
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setBorderFill(fill);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setBorderFill(fill);
     }
 
     public void setBorderFill(int r, int g, int b) {
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setBorderFill(r, g, b);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setBorderFill(r, g, b);
     }
 
     public void setBorderFill(int r, int g, int b, int a) {
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setBorderFill(r, g, b, a);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setBorderFill(r, g, b, a);
     }
 
     public void setBorderFill(float r, float g, float b) {
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setBorderFill(r, g, b);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setBorderFill(r, g, b);
     }
 
     public void setBorderFill(float r, float g, float b, float a) {
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setBorderFill(r, g, b, a);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setBorderFill(r, g, b, a);
     }
 
     public void setBorderRadius(CornerRadius radius) {
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setBorderRadius(radius);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setBorderRadius(radius);
     }
 
     public void setBorderRadius(int radius) {
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setBorderRadius(new CornerRadius(radius));
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setBorderRadius(new CornerRadius(radius));
     }
 
     public void setBorderThickness(int thickness) {
-        if (wnd_layout.getContainer() != null)
-            wnd_layout.getContainer().setBorderThickness(thickness);
+        if (windowLayout.getContainer() != null)
+            windowLayout.getContainer().setBorderThickness(thickness);
     }
 
     public CornerRadius getBorderRadius() {
-        if (wnd_layout.getContainer() != null)
-            return wnd_layout.getContainer().getBorderRadius();
+        if (windowLayout.getContainer() != null)
+            return windowLayout.getContainer().getBorderRadius();
         return null;
     }
 
     public int getBorderThickness() {
-        if (wnd_layout.getContainer() != null)
-            return wnd_layout.getContainer().getBorderThickness();
+        if (windowLayout.getContainer() != null)
+            return windowLayout.getContainer().getBorderThickness();
         return 0;
     }
 
     public Color getBorderFill() {
-        if (wnd_layout.getContainer() != null)
-            return wnd_layout.getContainer().getBorderFill();
+        if (windowLayout.getContainer() != null)
+            return windowLayout.getContainer().getBorderFill();
         return new Color(0, 0, 0, 0);
     }
 
     public long getGLWID() {
         return getLayout().getGLWID();
+    }
+
+    boolean initEngine() {
+        return windowLayout.initEngine();
+    }
+    void render()
+    {
+        windowLayout.render();
+    }
+
+    void dispose()
+    {
+        windowLayout.dispose();
+    }
+
+    CoreWindow getPairForCurrentWindow() {
+        return windowLayout.getPairForCurrentWindow();
     }
 }
