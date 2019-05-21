@@ -712,7 +712,7 @@ namespace SpaceVIL
                 return;
 
             List<float[]> vertex = new List<float[]>(RenderProcessor.GetFullWindowRectangle());
-            _renderProcessor.DrawVertex(_primitive, vertex, GetItemPyramidLevel(), Color.FromArgb(200, 0, 0, 0), GL_TRIANGLES);
+            _renderProcessor.DrawVertex(_primitive, vertex, GetItemPyramidLevel(), GLWHandler.GetCoreWindow().GetShadeColor(), GL_TRIANGLES);
         }
     }
 }

@@ -600,5 +600,35 @@ namespace SpaceVIL
         {
             return windowLayout.GetPairForCurrentWindow();
         }
+
+        public void SetShadeColor(Color color)
+        {
+            windowLayout.SetShadeColor(color);
+        }
+
+        public void SetShadeColor(int r, int g, int b)
+        {
+            windowLayout.SetShadeColor(r, g, b);
+        }
+
+        public void SetShadeColor(int r, int g, int b, int a)
+        {
+            windowLayout.SetShadeColor(r, g, b, a);
+        }
+
+        public void SetShadeColor(float r, float g, float b)
+        {
+            windowLayout.SetShadeColor(r, g, b);
+        }
+
+        public void SetShadeColor(float r, float g, float b, float a)
+        {
+            windowLayout.SetShadeColor(r, g, b, a);
+        }
+
+        public Color GetShadeColor()
+        {
+            return windowLayout.GetShadeColor();
+        }
     }
 }
