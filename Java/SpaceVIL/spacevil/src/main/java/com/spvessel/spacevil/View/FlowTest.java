@@ -140,14 +140,29 @@ public class FlowTest extends ActiveWindow {
         btn3.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn3.addItemState(ItemStateType.HOVERED, hovered);
         btn3.eventMouseClick.add((sender, args) -> {
-            ResizableItem frame = new ResizableItem();
-            frame.setPadding(10, 10, 10, 10);
-            frame.setBackground(100, 100, 100);
-            frame.setSize(300, 300);
-            frame.setPosition(200, 200);
-            flow.addItem(frame);
-            PointsContainer graph = getPointsContainer();
-            frame.addItem(graph);
+            // ResizableItem frame = new ResizableItem();
+            // frame.setPadding(10, 10, 10, 10);
+            // frame.setBackground(100, 100, 100);
+            // frame.setSize(300, 300);
+            // frame.setPosition(200, 200);
+            // flow.addItem(frame);
+            // PointsContainer graph = getPointsContainer();
+            // frame.addItem(graph);
+
+            LoadingScreen screen = new LoadingScreen();
+            screen.show(this);
+
+            Thread task = new Thread(() -> {
+                for (int i = 1; i <= 100; i++) {
+                    screen.setValue(i);
+                    try {
+                        Thread.sleep(50);
+                    } catch (Exception e) {
+                    }
+                }
+                screen.setToClose();
+            });
+            task.start();
         });
         btn3.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn3.setHoverRule(ItemRule.STRICT);

@@ -248,6 +248,7 @@ namespace SpaceVIL
                 if (wnd.InitEngine())
                 {
                     _initializedWindows.Add(wnd, true);
+                    wnd.EventOnStart?.Invoke();
                 }
             }
         }

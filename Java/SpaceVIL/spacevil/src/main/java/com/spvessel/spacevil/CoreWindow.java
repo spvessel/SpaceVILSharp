@@ -387,6 +387,7 @@ public abstract class CoreWindow {
         // return windowLayout.getRenderFrequency();
     }
 
+    public EventCommonMethod eventOnStart = new EventCommonMethod();
     public EventCommonMethod eventClose = new EventCommonMethod();
     public EventCommonMethod eventMinimize = new EventCommonMethod();
     public EventCommonMethod eventHide = new EventCommonMethod();

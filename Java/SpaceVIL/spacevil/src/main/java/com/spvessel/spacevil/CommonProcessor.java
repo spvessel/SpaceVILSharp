@@ -215,11 +215,11 @@ final class CommonProcessor {
             focusedItem = null;
             return;
         }
-        if (focusedItem != null && focusedItem.equals(item))
-            return;
-
-        if (focusedItem != null)
+        if (focusedItem != null) {
+            if (focusedItem.equals(item))
+                return;
             focusedItem.setFocused(false);
+        }
         focusedItem = item;
         focusedItem.setFocused(true);
         findUnderFocusedItems(item);
@@ -236,7 +236,6 @@ final class CommonProcessor {
 
     void resetItems() {
         resetFocus();
-
         if (hoveredItem != null)
             hoveredItem.setMouseHover(false);
         hoveredItem = null;

@@ -430,6 +430,7 @@ namespace SpaceVIL
             return WindowManager.GetRenderFrequency();
         }
 
+        public EventCommonMethod EventOnStart;
         public EventCommonMethod EventClose;
         public EventCommonMethod EventMinimize;
         public EventCommonMethod EventHide;

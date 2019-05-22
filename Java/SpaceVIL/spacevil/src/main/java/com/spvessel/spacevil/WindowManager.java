@@ -183,6 +183,7 @@ public final class WindowManager {
         if (!_initializedWindows.containsKey(wnd)) {
             if (wnd.initEngine()) {
                 _initializedWindows.put(wnd, true);
+                wnd.eventOnStart.execute();
             }
         }
     }

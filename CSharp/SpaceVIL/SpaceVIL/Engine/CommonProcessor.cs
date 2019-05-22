@@ -226,10 +226,12 @@ namespace SpaceVIL
                 FocusedItem = null;
                 return;
             }
-            if (FocusedItem != null && FocusedItem.Equals(item))
-                return;
             if (FocusedItem != null)
+            {
+                if (FocusedItem.Equals(item))
+                    return;
                 FocusedItem.SetFocused(false);
+            }
             FocusedItem = item;
             FocusedItem.SetFocused(true);
             FindUnderFocusedItems(item);
