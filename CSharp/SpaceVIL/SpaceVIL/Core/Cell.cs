@@ -28,7 +28,7 @@ namespace SpaceVIL
         }
         internal Cell(IGrid grid, int row, int column, IBaseItem item) : this(grid, row, column)
         {
-            _item_link = item;
+            _itemLink = item;
         }
 
         //Indecies
@@ -88,65 +88,65 @@ namespace SpaceVIL
             return _y;
         }
 
-        private IBaseItem _item_link = null;
+        private IBaseItem _itemLink = null;
 
         /// <returns> cell item </returns>
         public IBaseItem GetItem()
         {
-            return _item_link;
+            return _itemLink;
         }
 
         /// <param name="item"> Set item into cell </param>
         public void SetItem(IBaseItem item)
         {
-            _item_link = item;
+            _itemLink = item;
         }
 
         internal void UpdateBehavior()
         {
-            if (GetParentGrid() == null || _item_link == null)
+            if (GetParentGrid() == null || _itemLink == null)
                 return;
 
-            ItemAlignment alignment = _item_link.GetAlignment();
+            ItemAlignment alignment = _itemLink.GetAlignment();
 
             if (alignment.HasFlag(ItemAlignment.Left))
             {
-                _item_link.SetX(GetX() + _item_link.GetMargin().Left);//
+                _itemLink.SetX(GetX() + _itemLink.GetMargin().Left);//
             }
             if (alignment.HasFlag(ItemAlignment.Right))
             {
-                _item_link.SetX(GetX() + GetWidth() - _item_link.GetWidth() - _item_link.GetMargin().Right);//
+                _itemLink.SetX(GetX() + GetWidth() - _itemLink.GetWidth() - _itemLink.GetMargin().Right);//
             }
             if (alignment.HasFlag(ItemAlignment.Top))
             {
-                _item_link.SetY(GetY() + _item_link.GetMargin().Top);//
+                _itemLink.SetY(GetY() + _itemLink.GetMargin().Top);//
             }
             if (alignment.HasFlag(ItemAlignment.Bottom))
             {
-                _item_link.SetY(GetY() + GetHeight() - _item_link.GetHeight() - _item_link.GetMargin().Bottom);//
+                _itemLink.SetY(GetY() + GetHeight() - _itemLink.GetHeight() - _itemLink.GetMargin().Bottom);//
             }
             if (alignment.HasFlag(ItemAlignment.HCenter))
             {
-                _item_link.SetX(GetX() + (GetWidth() - _item_link.GetWidth()) / 2 + _item_link.GetMargin().Left - _item_link.GetMargin().Right);//
+                _itemLink.SetX(GetX() + (GetWidth() - _itemLink.GetWidth()) / 2 + _itemLink.GetMargin().Left - _itemLink.GetMargin().Right);//
             }
             if (alignment.HasFlag(ItemAlignment.VCenter))
             {
-                _item_link.SetY(GetY() + (GetHeight() - _item_link.GetHeight()) / 2 + _item_link.GetMargin().Top - _item_link.GetMargin().Bottom);//
+                _itemLink.SetY(GetY() + (GetHeight() - _itemLink.GetHeight()) / 2 + _itemLink.GetMargin().Top - _itemLink.GetMargin().Bottom);//
             }
         }
 
         internal void PrintCellInfo()
         {
             Console.WriteLine(
-                "X: " + _item_link.GetX() + "\n" +
-                "Y: " + _item_link.GetY() + "\n" +
+                "X: " + _itemLink.GetX() + "\n" +
+                "Y: " + _itemLink.GetY() + "\n" +
                 "Row: " + _row_index + "\n" +
                 "Column: " + _column_index + "\n" +
                 "Width: " + GetWidth() + "\n" +
-                "ItemW: " + _item_link.GetWidth() + "\n" +
+                "ItemW: " + _itemLink.GetWidth() + "\n" +
                 "Height: " + GetHeight() + "\n" +
-                "ItemH: " + _item_link.GetHeight() + "\n" +
-                "Item: " + _item_link?.GetItemName() + " type: " + _item_link?.ToString()
+                "ItemH: " + _itemLink.GetHeight() + "\n" +
+                "Item: " + _itemLink?.GetItemName() + " type: " + _itemLink?.ToString()
                 );
         }
     }

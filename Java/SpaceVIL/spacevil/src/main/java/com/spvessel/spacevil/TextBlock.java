@@ -24,7 +24,7 @@ class TextBlock extends Prototype
 
     private static int count = 0;
     private Rectangle _cursor;
-    private Point _cursor_position = new Point(0, 0);
+    private Point _cursorPosition = new Point(0, 0);
     private CustomSelector _selectedArea;
 
     private TextureStorage _textureStorage;
@@ -51,8 +51,6 @@ class TextBlock extends Prototype
         _cursor = new Rectangle();
         _selectedArea = new CustomSelector();
 
-        // setStyle(DefaultsService.getDefaultStyle(TextBlock.class));
-
         eventMousePress.add(this::onMousePressed);
         eventMouseDrag.add(this::onDragging);
         eventKeyPress.add(this::onKeyPress);
@@ -73,7 +71,7 @@ class TextBlock extends Prototype
 
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
-        undoQueue.addFirst(new TextBlockState(getText(), new Point(_cursor_position)));
+        undoQueue.addFirst(new TextBlockState(getText(), new Point(_cursorPosition)));
 
         setCursor(EmbeddedCursor.IBEAM);
     }
@@ -90,15 +88,15 @@ class TextBlock extends Prototype
                     unselectText();
                     cancelJustSelected();
                 }
-                int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
+                int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
 
                 if (wordBounds[0] != wordBounds[1]) {
                     _isSelect = true;
-                    _selectFrom = new Point(wordBounds[0], _cursor_position.y);
-                    _selectTo = new Point(wordBounds[1], _cursor_position.y);
-                    _cursor_position = new Point(_selectTo);
+                    _selectFrom = new Point(wordBounds[0], _cursorPosition.y);
+                    _selectTo = new Point(wordBounds[1], _cursorPosition.y);
+                    _cursorPosition = new Point(_selectTo);
                     replaceCursor();
-                    makeSelectedArea(); //_selectFrom, _selectTo);
+                    makeSelectedArea();
                 }
 
                 _startTime = System.nanoTime();
@@ -123,11 +121,11 @@ class TextBlock extends Prototype
 
                 if (_isDoubleClick && (System.nanoTime() - _startTime) / 1000000 < 500) {
                     _isSelect = true;
-                    _selectFrom = new Point(0, _cursor_position.y);
-                    _selectTo = new Point(getLineLetCount(_cursor_position.y), _cursor_position.y);
-                    _cursor_position = new Point(_selectTo);
+                    _selectFrom = new Point(0, _cursorPosition.y);
+                    _selectTo = new Point(getLineLetCount(_cursorPosition.y), _cursorPosition.y);
+                    _cursorPosition = new Point(_selectTo);
                     replaceCursor();
-                    makeSelectedArea(); //_selectFrom, _selectTo);
+                    makeSelectedArea();
                 }
             }
             _isDoubleClick = false;
@@ -143,10 +141,10 @@ class TextBlock extends Prototype
                 replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
                 if (!_isSelect) {
                     _isSelect = true;
-                    _selectFrom = new Point(_cursor_position);
+                    _selectFrom = new Point(_cursorPosition);
                 } else {
-                    _selectTo = new Point(_cursor_position);
-                    makeSelectedArea(); //_selectFrom, _selectTo);
+                    _selectTo = new Point(_cursorPosition);
+                    makeSelectedArea();
                 }
             }
             _isDoubleClick = false;
@@ -171,10 +169,9 @@ class TextBlock extends Prototype
         int oldOff = _textureStorage.getScrollYOffset();
         _textureStorage.setScrollYOffset(offset);
         int diff = offset - oldOff;
-        // _selectedArea.shiftAreaY(diff);
         if (_justSelected)
             cancelJustSelected();
-        makeSelectedArea(); //_selectFrom, _selectTo);
+        makeSelectedArea();
         _cursor.setY(_cursor.getY() + diff);
     }
 
@@ -186,47 +183,30 @@ class TextBlock extends Prototype
         int oldOff = _textureStorage.getScrollXOffset();
         _textureStorage.setScrollXOffset(offset);
         int diff = offset - oldOff;
-        // _selectedArea.shiftAreaX(diff);
         if (_justSelected)
             cancelJustSelected();
-        makeSelectedArea(); //_selectFrom, _selectTo);
+        makeSelectedArea();
         _cursor.setX(_cursor.getX() + diff);
     }
 
     private void onScrollUp(Object sender, MouseArgs args) {
-//        int curPos = _cursor.getY();
         _cursor.setY(_textureStorage.scrollBlockUp(_cursor.getY()));
-//        curPos = _cursor.getY() - curPos;
 
         if (_justSelected)
             cancelJustSelected();
-        makeSelectedArea(); //_selectFrom, _selectTo);
-        // _selectedArea.shiftAreaY(curPos);
-        // replaceCursor();
+        makeSelectedArea();
     }
 
     private void onScrollDown(Object sender, MouseArgs args) {
-//        int curPos = _cursor.getY();
         _cursor.setY(_textureStorage.scrollBlockDown(_cursor.getY()));
-//        curPos = _cursor.getY() - curPos;
 
         if (_justSelected)
             cancelJustSelected();
-        makeSelectedArea(); //_selectFrom, _selectTo);
-        // _selectedArea.shiftAreaY(curPos);
-        // replaceCursor();
+        makeSelectedArea();
     }
 
-    // public void invokeScrollUp(MouseArgs args) {
-    // eventScrollUp.execute(this, args);
-    // }
-
-    // public void invokeScrollDown(MouseArgs args) {
-    // eventScrollDown.execute(this, args);
-    // }
-
     private void replaceCursorAccordingCoord(Point realPos) {
-        _cursor_position = _textureStorage.replaceCursorAccordingCoord(realPos);
+        _cursorPosition = _textureStorage.replaceCursorAccordingCoord(realPos);
         replaceCursor();
     }
 
@@ -236,14 +216,9 @@ class TextBlock extends Prototype
     private void onKeyPress(Object sender, KeyArgs args) {
         _textureStorage.textInputLock.lock();
         try {
-//            if (args == null)
-//                return;
             TextShortcutProcessor.processShortcut(this, args);
 
             if (!_isEditable) {
-//                if (args.mods.contains(KeyMods.CONTROL) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
-//                    selectAll();
-//                }
                 return;
             }
 
@@ -262,13 +237,12 @@ class TextBlock extends Prototype
                         if (hasShift) {
                             if ((args.mods.size() == 1) || (args.mods.size() == 2) && hasControl) {
                                 _isSelect = true;
-                                _selectFrom = new Point(_cursor_position);
+                                _selectFrom = new Point(_cursorPosition);
                             }
 
                         }
                     } else { //_isSelect
                         if ((args.mods.size() == 1) && hasControl) {
-                            //(args.key == KeyCode.LEFT) || (args.key == KeyCode.RIGHT) || (args.key == KeyCode.END) || (args.key == KeyCode.HOME)) {
                             unselectText();
                             cancelJustSelected();
 
@@ -276,47 +250,36 @@ class TextBlock extends Prototype
                     }
                 }
 
-//                if (hasControl && args.mods.size() == 1) {
-//                    if (args.key == KeyCode.A || args.key == KeyCode.a) {
-//                        _selectFrom.x = 0;
-//                        _selectFrom.y = 0;
-//                        _cursor_position.y = _textureStorage.getCount() - 1;
-//                        _cursor_position.x = getLineLetCount(_cursor_position.y);
-//                        replaceCursor();
-//
-//                        _isSelect = true;
-//                    }
-//                }
                 // alt, super ?
             } else {
-                if (_serviceEditKeys.contains(args.key)) { //args.key == KeyCode.BACKSPACE || args.key == KeyCode.DELETE || args.key == KeyCode.ENTER || args.key == KeyCode.TAB) {
+                if (_serviceEditKeys.contains(args.key)) {
                     if (_isSelect)
                         cutText();
                     else {
-                        _cursor_position = _textureStorage.checkLineFits(_cursor_position);
+                        _cursorPosition = _textureStorage.checkLineFits(_cursorPosition);
                         if (args.key == KeyCode.BACKSPACE) // backspace
                         {
-                            if (_cursor_position.x > 0) {
-                                StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursor_position.y));
-                                _cursor_position.x--;
-//                                replaceCursor();
-                                setTextInLine(sb.deleteCharAt(_cursor_position.x).toString());
-                            } else if (_cursor_position.y > 0) {
-                                _cursor_position.y--;
-                                _cursor_position.x = getLineLetCount(_cursor_position.y);
-                                _textureStorage.combineLines(_cursor_position.y);
-//                                replaceCursor();
+                            if (_cursorPosition.x > 0) {
+                                StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursorPosition.y));
+                                _cursorPosition.x--;
+////                                replaceCursor();
+                                setTextInLine(sb.deleteCharAt(_cursorPosition.x).toString());
+                            } else if (_cursorPosition.y > 0) {
+                                _cursorPosition.y--;
+                                _cursorPosition.x = getLineLetCount(_cursorPosition.y);
+                                _textureStorage.combineLines(_cursorPosition.y);
+////                                replaceCursor();
                                 addToUndoAndReplaceCursor();
                             }
-                            replaceCursor();
+//                            replaceCursor();
                         }
                         if (args.key == KeyCode.DELETE) // delete
                         {
-                            if (_cursor_position.x < getLineLetCount(_cursor_position.y)) {
-                                StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursor_position.y));
-                                setTextInLine(sb.deleteCharAt(_cursor_position.x).toString());
-                            } else if (_cursor_position.y < _textureStorage.getCount() - 1) {
-                                _textureStorage.combineLines(_cursor_position.y);
+                            if (_cursorPosition.x < getLineLetCount(_cursorPosition.y)) {
+                                StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursorPosition.y));
+                                setTextInLine(sb.deleteCharAt(_cursorPosition.x).toString());
+                            } else if (_cursorPosition.y < _textureStorage.getCount() - 1) {
+                                _textureStorage.combineLines(_cursorPosition.y);
                                 addToUndoAndReplaceCursor();
                             }
                         }
@@ -325,11 +288,11 @@ class TextBlock extends Prototype
 
                     if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) // enter
                     {
-                        _textureStorage.breakLine(_cursor_position);
-                        _cursor_position.y++;
-                        _cursor_position.x = 0;
+                        _textureStorage.breakLine(_cursorPosition);
+                        _cursorPosition.y++;
+                        _cursorPosition.x = 0;
 
-//                        replaceCursor();
+////                        replaceCursor();
                         addToUndoAndReplaceCursor();
                     }
 
@@ -347,50 +310,29 @@ class TextBlock extends Prototype
 
                     if (args.key == KeyCode.LEFT) // arrow left
                     {
-                        _cursor_position = _textureStorage.checkLineFits(_cursor_position);
+                        _cursorPosition = _textureStorage.checkLineFits(_cursorPosition);
 
                         boolean doUsual = true;
 
                         if (hasControl) {
-//                    if (args.mods.size() == 1) {
-//                        if (_isSelect) {
-//                            unselectText();
-//                            cancelJustSelected();
-//                        }
 
-                            int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
+                            int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
 
-                            if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[0]) {
-                                _cursor_position = new Point(wordBounds[0], _cursor_position.y);
-                                replaceCursor();
+                            if (wordBounds[0] != wordBounds[1] && _cursorPosition.x != wordBounds[0]) {
+                                _cursorPosition = new Point(wordBounds[0], _cursorPosition.y);
+//                                replaceCursor();
                                 doUsual = false;
                             }
-//                    } else if (hasShift && args.mods.size() == 2) {
-//                        if (!_isSelect) {
-//                            _selectFrom = new Point(_cursor_position);
-//                            _isSelect = true;
-//                        }
-
-//                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
-
-//                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[0]) {
-//                            _selectTo = new Point(wordBounds[0], _cursor_position.y);
-//                            _cursor_position = new Point(_selectTo);
-//                            replaceCursor();
-//                            makeSelectedArea(); //_selectFrom, _selectTo);
-//                            doUsual = false;
-//                        }
-//                    }
                         }
 
                         if (!_justSelected && doUsual) {
-                            if (_cursor_position.x > 0)
-                                _cursor_position.x--;
-                            else if (_cursor_position.y > 0) {
-                                _cursor_position.y--;
-                                _cursor_position.x = getLineLetCount(_cursor_position.y);
+                            if (_cursorPosition.x > 0)
+                                _cursorPosition.x--;
+                            else if (_cursorPosition.y > 0) {
+                                _cursorPosition.y--;
+                                _cursorPosition.x = getLineLetCount(_cursorPosition.y);
                             }
-                            replaceCursor();
+//                            replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.RIGHT) // arrow right
@@ -398,63 +340,41 @@ class TextBlock extends Prototype
                         boolean doUsual = true;
 
                         if (hasControl) {
-//                    if (args.mods.size() == 1) {
-//                        if (_isSelect) {
-//                            unselectText();
-//                            cancelJustSelected();
-//                        }
+                            int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
 
-                            int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
-
-                            if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[1]) {
-                                _cursor_position = new Point(wordBounds[1], _cursor_position.y);
-                                replaceCursor();
+                            if (wordBounds[0] != wordBounds[1] && _cursorPosition.x != wordBounds[1]) {
+                                _cursorPosition = new Point(wordBounds[1], _cursorPosition.y);
+//                                replaceCursor();
                                 doUsual = false;
                             }
-//                    } else if (hasShift && args.mods.size() == 2) {
-//                        if (!_isSelect) {
-//                            _selectFrom = new Point(_cursor_position);
-//                            _isSelect = true;
-//                        }
-
-//                        int[] wordBounds = _textureStorage.findWordBounds(_cursor_position);
-//
-//                        if (wordBounds[0] != wordBounds[1] && _cursor_position.x != wordBounds[1]) {
-//                            _selectTo = new Point(wordBounds[1], _cursor_position.y);
-//                            _cursor_position = new Point(_selectTo);
-//                            replaceCursor();
-//                            makeSelectedArea(); //_selectFrom, _selectTo);
-//                            doUsual = false;
-//                        }
-//                    }
                         }
 
                         if (!_justSelected && doUsual) {
-                            if (_cursor_position.x < getLineLetCount(_cursor_position.y))
-                                _cursor_position.x++;
-                            else if (_cursor_position.y < _textureStorage.getCount() - 1) {
-                                _cursor_position.y++;
-                                _cursor_position.x = 0;
+                            if (_cursorPosition.x < getLineLetCount(_cursorPosition.y))
+                                _cursorPosition.x++;
+                            else if (_cursorPosition.y < _textureStorage.getCount() - 1) {
+                                _cursorPosition.y++;
+                                _cursorPosition.x = 0;
                             }
-                            replaceCursor();
+//                            replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.UP) // arrow up
                     {
                         if (!_justSelected) {
-                            if (_cursor_position.y > 0)
-                                _cursor_position.y--;
+                            if (_cursorPosition.y > 0)
+                                _cursorPosition.y--;
                             // ?????
-                            replaceCursor();
+//                            replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.DOWN) // arrow down
                     {
                         if (!_justSelected) {
-                            if (_cursor_position.y < _textureStorage.getCount() - 1)
-                                _cursor_position.y++;
+                            if (_cursorPosition.y < _textureStorage.getCount() - 1)
+                                _cursorPosition.y++;
                             // ?????
-                            replaceCursor();
+//                            replaceCursor();
                         }
                     }
 
@@ -463,36 +383,15 @@ class TextBlock extends Prototype
                         boolean doUsual = true;
 
                         if (hasControl) {
-//                    if (args.mods.size() == 1) {
-//                        if (_isSelect) {
-//                            unselectText();
-//                            cancelJustSelected();
-//                        }
-
                             int lineNum = _textureStorage.getCount() - 1;
-                            _cursor_position = new Point(getLineLetCount(lineNum), lineNum);
-                            replaceCursor();
+                            _cursorPosition = new Point(getLineLetCount(lineNum), lineNum);
+//                            replaceCursor();
                             doUsual = false;
-
-//                    } else if (hasShift && args.mods.size() == 2) {
-//                        if (!_isSelect) {
-//                            _selectFrom = new Point(_cursor_position);
-//                            _isSelect = true;
-//                        }
-
-//                        int lineNum = _textureStorage.getCount() - 1;
-//
-//                        _selectTo = new Point(getLineLetCount(lineNum), lineNum);
-//                        _cursor_position = new Point(_selectTo);
-//                        replaceCursor();
-//                        makeSelectedArea(); //_selectFrom, _selectTo);
-//                        doUsual = false;
-//                    }
                         }
 
                         if (doUsual) {
-                            _cursor_position.x = getLineLetCount(_cursor_position.y);
-                            replaceCursor();
+                            _cursorPosition.x = getLineLetCount(_cursorPosition.y);
+//                            replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.HOME) // home
@@ -500,42 +399,23 @@ class TextBlock extends Prototype
                         boolean doUsual = true;
 
                         if (hasControl) {
-//                    if (args.mods.size() == 1) {
-//                        if (_isSelect) {
-//                            unselectText();
-//                            cancelJustSelected();
-//                        }
-
-                            _cursor_position = new Point(0, 0);
-                            replaceCursor();
+                            _cursorPosition = new Point(0, 0);
+//                            replaceCursor();
                             doUsual = false;
-
-//                    } else if (hasShift && args.mods.size() == 2) {
-//                        if (!_isSelect) {
-//                            _selectFrom = new Point(_cursor_position);
-//                            _isSelect = true;
-//                        }
-
-//                        _selectTo = new Point(0, 0);
-//                        _cursor_position = new Point(_selectTo);
-//                        replaceCursor();
-//                        makeSelectedArea(); //_selectFrom, _selectTo);
-//                        doUsual = false;
-//                    }
                         }
 
                         if (doUsual) {
-                            _cursor_position.x = 0;
-                            replaceCursor();
+                            _cursorPosition.x = 0;
+//                            replaceCursor();
                         }
                     }
                 }
             }
-
+            replaceCursor();
             if (_isSelect) {
-                if (!_selectTo.equals(_cursor_position)) {
-                    _selectTo = new Point(_cursor_position);
-                    makeSelectedArea(); //_selectFrom, _selectTo);
+                if (!_selectTo.equals(_cursorPosition)) {
+                    _selectTo = new Point(_cursorPosition);
+                    makeSelectedArea();
                 }
             }
         } finally {
@@ -549,24 +429,21 @@ class TextBlock extends Prototype
         _textureStorage.textInputLock.lock();
         try {
             ignoreSetInLine = true;
-
-            // byte[] input = BitConverter.getBytes(args.Character);
-            // String str = Encoding.UTF32.getString(input);
             byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
-            String str = new String(input, Charset.forName("UTF-32")); // StandardCharsets.UTF_8);
+            String str = new String(input, Charset.forName("UTF-32"));
 
             if (_isSelect || _justSelected) {
                 unselectText();
                 privCutText();
             }
             if (_justSelected)
-                cancelJustSelected(); // _justSelected = false;
+                cancelJustSelected();
 
-            _cursor_position = _textureStorage.checkLineFits(_cursor_position);
+            _cursorPosition = _textureStorage.checkLineFits(_cursorPosition);
 
-            StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursor_position.y));
-            setTextInLine(sb.insert(_cursor_position.x, str).toString());
-            _cursor_position.x++;
+            StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursorPosition.y));
+            setTextInLine(sb.insert(_cursorPosition.x, str).toString());
+            _cursorPosition.x++;
 //            replaceCursor();
             addToUndoAndReplaceCursor();
 
@@ -576,15 +453,15 @@ class TextBlock extends Prototype
     }
 
     private void replaceCursor() {
-        Point pos = addXYShifts(0, 0, _cursor_position);
+        Point pos = addXYShifts(_cursorPosition);
         _cursor.setX(pos.x);
-        _cursor.setY(pos.y - getLineSpacer() / 2 + 1);// - 3);
+        _cursor.setY(pos.y - getLineSpacer() / 2 + 1);
         cursorChanged.execute();
     }
 
     void setLineSpacer(int lineSpacer) {
         _textureStorage.setLineSpacer(lineSpacer);
-        _cursor.setHeight(_textureStorage.getCursorHeight()); // + 6);
+        _cursor.setHeight(_textureStorage.getCursorHeight());
     }
 
     int getLineSpacer() {
@@ -629,8 +506,8 @@ class TextBlock extends Prototype
             if (_justSelected)
                 cancelJustSelected();
 
-            _cursor_position = _textureStorage.setText(text, _cursor_position);
-//            replaceCursor();
+            _cursorPosition = _textureStorage.setText(text, _cursorPosition);
+//            replacecursor();
             addToUndoAndReplaceCursor();
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -638,7 +515,7 @@ class TextBlock extends Prototype
     }
 
     private void setTextInLine(String text) {
-        _textureStorage.setTextInLine(text, _cursor_position.y);
+        _textureStorage.setTextInLine(text, _cursorPosition.y);
 
         if (!ignoreSetInLine)
             addToUndoAndReplaceCursor();
@@ -761,15 +638,11 @@ class TextBlock extends Prototype
         return ans;
     }
 
-    private Point addXYShifts(int xShift, int yShift, Point point) {
-        return addXYShifts(xShift, yShift, point, true);
-    }
+    private Point addXYShifts(Point point) {
+        Point outPoint = _textureStorage.addXYShifts(point);
 
-    private Point addXYShifts(int xShift, int yShift, Point point, boolean isx) {
-        Point outPoint = _textureStorage.addXYShifts(xShift, yShift, point, isx);
-
-        outPoint.x += /* getX() + getPadding().left + _linesList.get(0).getMargin().left */ +xShift;
-        outPoint.y += /* getY() + getPadding().top + _linesList.get(0).getMargin().top */ +yShift;
+//        outPoint.x += xShift; //xShift = 0;
+//        outPoint.y += yShift; //yShift = 0;
 
         return outPoint;
     }
@@ -827,8 +700,8 @@ class TextBlock extends Prototype
             if (pasteStr == null || pasteStr.equals(""))
                 return;
 
-            _cursor_position = _textureStorage.checkLineFits(_cursor_position);
-            _cursor_position = _textureStorage.pasteText(pasteStr, _cursor_position);
+            _cursorPosition = _textureStorage.checkLineFits(_cursorPosition);
+            _cursorPosition = _textureStorage.pasteText(pasteStr, _cursorPosition);
 
 //            replaceCursor();
             addToUndoAndReplaceCursor();
@@ -860,7 +733,7 @@ class TextBlock extends Prototype
 
             _textureStorage.cutText(fromReal, toReal);
 
-            _cursor_position = new Point(fromReal);
+            _cursorPosition = new Point(fromReal);
             replaceCursor();
             if (_isSelect)
                 unselectText();
@@ -882,13 +755,13 @@ class TextBlock extends Prototype
     private void unselectText() {
         _isSelect = false;
         _justSelected = true;
-        makeSelectedArea(new Point(_cursor_position), new Point(_cursor_position));
+        makeSelectedArea(new Point(_cursorPosition), new Point(_cursorPosition));
     }
 
     private void cancelJustSelected() {
-        _selectFrom.x = -1;// 0;
+        _selectFrom.x = -1;
         _selectFrom.y = 0;
-        _selectTo.x = -1;// 0;
+        _selectTo.x = -1;
         _selectTo.y = 0;
         _justSelected = false;
     }
@@ -900,8 +773,8 @@ class TextBlock extends Prototype
 
     void clearText() {
         _textureStorage.clear();
-        _cursor_position.x = 0;
-        _cursor_position.y = 0;
+        _cursorPosition.x = 0;
+        _cursorPosition.y = 0;
         if (_isSelect)
             unselectText();
         if (_justSelected)
@@ -916,12 +789,12 @@ class TextBlock extends Prototype
         try {
             _selectFrom.x = 0;
             _selectFrom.y = 0;
-            _cursor_position.y = _textureStorage.getCount() - 1;
-            _cursor_position.x = getLineLetCount(_cursor_position.y);
-            _selectTo = new Point(_cursor_position);
+            _cursorPosition.y = _textureStorage.getCount() - 1;
+            _cursorPosition.x = getLineLetCount(_cursorPosition.y);
+            _selectTo = new Point(_cursorPosition);
             replaceCursor();
             _isSelect = true;
-            makeSelectedArea(); //_selectFrom, _selectTo);
+            makeSelectedArea();
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -965,15 +838,14 @@ class TextBlock extends Prototype
             nothingFlag = true;
 
             setText(tmpText.textState);
-            _cursor_position = new Point(tmpText.cursorStateX, tmpText.cursorStateY);
-            undoQueue.peekFirst().cursorStateX = _cursor_position.x;
-            undoQueue.peekFirst().cursorStateY = _cursor_position.y;
+            _cursorPosition = new Point(tmpText.cursorStateX, tmpText.cursorStateY);
+            undoQueue.peekFirst().cursorStateX = _cursorPosition.x;
+            undoQueue.peekFirst().cursorStateY = _cursorPosition.y;
             replaceCursor();
 
             // _selectFrom = new Point(tmpText.fromSelectState);
             // _selectTo = new Point(tmpText.toSelectState);
-            // makeSelectedArea(); //_selectFrom, _selectTo);
-            // _textureStorage.redo();
+            // makeSelectedArea();
         }
     }
 
@@ -981,23 +853,21 @@ class TextBlock extends Prototype
         if (undoQueue.size() == 1)
             return;
 
-        // addToUndoAndReplaceCursor();
-
         TextBlockState tmpText = undoQueue.pollFirst();
         if (tmpText != null) {
             if (redoQueue.size() > queueCapacity)
                 redoQueue.pollLast();
             redoQueue.addFirst(
                     new TextBlockState(tmpText.textState, new Point(tmpText.cursorStateX, tmpText.cursorStateY)));
-            // tmpText = null;
+
             tmpText = undoQueue.pollFirst();
             if (tmpText != null) {
                 nothingFlag = true;
 
                 setText(tmpText.textState);
-                _cursor_position = new Point(tmpText.cursorStateX, tmpText.cursorStateY);
-                undoQueue.peekFirst().cursorStateX = _cursor_position.x;
-                undoQueue.peekFirst().cursorStateY = _cursor_position.y;
+                _cursorPosition = new Point(tmpText.cursorStateX, tmpText.cursorStateY);
+                undoQueue.peekFirst().cursorStateX = _cursorPosition.x;
+                undoQueue.peekFirst().cursorStateY = _cursorPosition.y;
                 replaceCursor();
             }
         }
@@ -1006,8 +876,6 @@ class TextBlock extends Prototype
     private void addToUndoAndReplaceCursor() {
         replaceCursor();
         if (!nothingFlag) {
-            // TextBlockState tbs = new TextBlockState(getText(), _cursor_position);
-            // redoQueue.addFirst(tbs);
             redoQueue = new ArrayDeque<>();
         } else {
             nothingFlag = false;
@@ -1015,7 +883,7 @@ class TextBlock extends Prototype
 
         if (undoQueue.size() > queueCapacity)
             undoQueue.pollLast();
-        TextBlockState tbs = new TextBlockState(getText(), new Point(_cursor_position));
+        TextBlockState tbs = new TextBlockState(getText(), new Point(_cursorPosition));
         // if (_isSelect) {
         // tbs.fromSelectState = new Point(_selectFrom);
         // tbs.toSelectState = new Point(_selectTo);
@@ -1056,14 +924,14 @@ class TextBlock extends Prototype
         if (_textureStorage.getParent() == null)
             return;
         // ReplaceCursor();
-        Point pos = addXYShifts(0, 0, _cursor_position);
+        Point pos = addXYShifts(_cursorPosition);
         _cursor.setX(pos.x);
-        _cursor.setY(pos.y - getLineSpacer() / 2 + 1);// - 3);
-        makeSelectedArea(); //_selectFrom, _selectTo);
+        _cursor.setY(pos.y - getLineSpacer() / 2 + 1);
+        makeSelectedArea();
     }
 
     // private class TextCursor : Rectangle {
-    // Point _cursor_position = new Point(0, 0);
+    // Point _cursorPosition = new Point(0, 0);
     // TextCursor(int height) {
     // SetItemName("TextCursor_" + count);
     // SetHeight(height);
@@ -1079,7 +947,7 @@ class TextBlock extends Prototype
         unselectText();
         cancelJustSelected();
         int lineNum = _textureStorage.getCount() - 1;
-        _cursor_position = new Point(getLineLetCount(lineNum), lineNum);
+        _cursorPosition = new Point(getLineLetCount(lineNum), lineNum);
         privPasteText(text); //pasteText
     }
 
@@ -1101,7 +969,7 @@ class TextBlock extends Prototype
     }
 
     void rewindText() {
-        _cursor_position = new Point(0, 0);
+        _cursorPosition = new Point(0, 0);
         replaceCursor();
     }
 }

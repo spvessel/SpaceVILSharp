@@ -51,7 +51,7 @@ namespace SpaceVIL
                     }
                 }
             }
-            if (action == InputState.Release && mods == 0 && key == 0)
+            if ((action == InputState.Release) && (mods == 0) && (key == 0))
             {
                 _kargs.Mods = 0;
             }
@@ -62,7 +62,7 @@ namespace SpaceVIL
 
             if ((_commonProcessor.FocusedItem is ITextShortcuts) && action == InputState.Press)
             {
-                if (action == InputState.Press)
+                // if (action == InputState.Press)
                 {
                     _commonProcessor.FocusedItem.EventKeyPress(_commonProcessor.FocusedItem, _kargs);
                     _commonProcessor.Manager.AssignActionsForItemPyramid(InputEventType.KeyPress, _kargs,

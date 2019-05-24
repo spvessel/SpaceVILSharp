@@ -62,7 +62,7 @@ namespace SpaceVIL
         public void SetToggled(bool value)
         {
             _toggled = value;
-            if (value == true)
+            if (value)
                 SetState(ItemStateType.Toggled);
             else
                 SetState(ItemStateType.Base);

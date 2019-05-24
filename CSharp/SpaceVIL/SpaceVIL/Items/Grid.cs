@@ -30,8 +30,8 @@ namespace SpaceVIL
         /// </summary>
         public Grid(int rows, int columns) : this()
         {
-            _row_count = rows;
-            _column_count = columns;
+            _rowCount = rows;
+            _columnCount = columns;
             InitCells();
         }
 
@@ -40,9 +40,9 @@ namespace SpaceVIL
         internal void InitCells()
         {
             _cells = new List<Cell>();
-            for (int i = 0; i < _row_count; i++)
+            for (int i = 0; i < _rowCount; i++)
             {
-                for (int j = 0; j < _column_count; j++)
+                for (int j = 0; j < _columnCount; j++)
                 {
                     _cells.Add(new Cell(this, i, j));
                 }
@@ -50,11 +50,11 @@ namespace SpaceVIL
         }
         public void SetFormat(int rows, int columns)
         {
-            if (rows == _row_count && columns == _column_count)
+            if (rows == _rowCount && columns == _columnCount)
                 return;
 
-            _row_count = rows;
-            _column_count = columns;
+            _rowCount = rows;
+            _columnCount = columns;
             RearrangeCells();
         }
         private void RearrangeCells()
@@ -79,36 +79,36 @@ namespace SpaceVIL
             }
             UpdateLayout();
         }
-        private int _row_count = 1;
+        private int _rowCount = 1;
 
         /// <summary>
         /// Set count of the rows
         /// </summary>
         public void SetRowCount(int capacity)
         {
-            if (capacity != _row_count)
-                _row_count = capacity;
+            if (capacity != _rowCount)
+                _rowCount = capacity;
             RearrangeCells();
         }
         public int GetRowCount()
         {
-            return _row_count;
+            return _rowCount;
         }
-        private int _column_count = 1;
+        private int _columnCount = 1;
 
         /// <summary>
         /// Set count of the columns
         /// </summary>
         public void SetColumnCount(int capacity)
         {
-            if (capacity != _column_count)
-                _column_count = capacity;
+            if (capacity != _columnCount)
+                _columnCount = capacity;
             //Need to InitCells REFACTOR!
             RearrangeCells();
         }
         public int GetColumnCount()
         {
-            return _column_count;
+            return _columnCount;
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace SpaceVIL
             Cell cell = null;
             try
             {
-                cell = _cells[column + row * _column_count];
+                cell = _cells[column + row * _columnCount];
             }
             catch (Exception ex)
             {
@@ -149,14 +149,14 @@ namespace SpaceVIL
 
         public void RemoveItem(int row, int column)
         {
-            if (row == _row_count || column == _column_count)
+            if (row == _rowCount || column == _columnCount)
                 return;
 
-            IBaseItem ibi = _cells[column + row * _column_count].GetItem();
+            IBaseItem ibi = _cells[column + row * _columnCount].GetItem();
             if (ibi != null)
             {
                 base.RemoveItem(ibi);
-                _cells[column + row * _column_count].SetItem(null);
+                _cells[column + row * _columnCount].SetItem(null);
             }
         }
 
@@ -210,24 +210,24 @@ namespace SpaceVIL
         /// </summary>
         public void InsertItem(IBaseItem item, int row, int column)
         {
-            if (row == _row_count || column == _column_count)
+            if (row == _rowCount || column == _columnCount)
                 return;
             base.AddItem(item);
-            //_cells[row + column * _row_count].SetItem(item);
+            //_cells[row + column * _rowCount].SetItem(item);
 
             RemoveItem(row, column);
 
-            _cells[column + row * _column_count].SetItem(item);
+            _cells[column + row * _columnCount].SetItem(item);
             UpdateLayout();
         }
 
         public override void InsertItem(IBaseItem item, int index)
         {
-            if (_column_count == 0)
+            if (_columnCount == 0)
                 return;
             int row, column;
-            row = index / _column_count;
-            column = index - row * _column_count;
+            row = index / _columnCount;
+            column = index - row * _columnCount;
             InsertItem(item, row, column);
         }
 
@@ -320,13 +320,13 @@ namespace SpaceVIL
             //5
             int x_offset = 0;
             int y_offset = 0;
-            for (int r = 0; r < _row_count; r++)
+            for (int r = 0; r < _rowCount; r++)
             {
                 int index = 0;
-                for (int c = 0; c < _column_count; c++)
+                for (int c = 0; c < _columnCount; c++)
                 {
-                    // index = r + c * _row_count;
-                    index = c + r * _column_count;
+                    // index = r + c * _rowCount;
+                    index = c + r * _columnCount;
 
                     IBaseItem item = _cells[index].GetItem();
                     /*if (item == null)
@@ -364,19 +364,19 @@ namespace SpaceVIL
 
         private Int32[] GetRowsHeight()
         {
-            Int32[] rows_height = new Int32[_row_count];
+            Int32[] rows_height = new Int32[_rowCount];
             List<int[]> list_height = new List<int[]>();
 
             int total_space = GetHeight() - GetPadding().Top - GetPadding().Bottom;
             int free_space = total_space;
-            int prefer_height = (total_space - GetSpacing().Vertical * (_row_count - 1)) / _row_count;
-            int count = _row_count;
+            int prefer_height = (total_space - GetSpacing().Vertical * (_rowCount - 1)) / _rowCount;
+            int count = _rowCount;
 
-            for (int r = 0; r < _row_count; r++)
+            for (int r = 0; r < _rowCount; r++)
             {
-                for (int c = 0; c < _column_count; c++)
+                for (int c = 0; c < _columnCount; c++)
                 {
-                    IBaseItem item = _cells[c + r * _column_count].GetItem();
+                    IBaseItem item = _cells[c + r * _columnCount].GetItem();
 
                     if (item == null || !item.IsVisible() || !item.IsDrawable())
                     {
@@ -396,13 +396,13 @@ namespace SpaceVIL
             }
             ///////////
             List<int[]> m_height = new List<int[]>();
-            for (int r = 0; r < _row_count; r++)
+            for (int r = 0; r < _rowCount; r++)
             {
                 int max = -10;
-                for (int c = 0; c < _column_count; c++)
+                for (int c = 0; c < _columnCount; c++)
                 {
-                    if (list_height[c + r * _column_count][1] > max)
-                        max = list_height[c + r * _column_count][1];
+                    if (list_height[c + r * _columnCount][1] > max)
+                        max = list_height[c + r * _columnCount][1];
                 }
                 m_height.Add(new int[2] { r, max });
                 if (max == -1)
@@ -444,20 +444,20 @@ namespace SpaceVIL
 
         private Int32[] GetColumnsWidth()
         {
-            Int32[] columns_width = new Int32[_column_count];
+            Int32[] columns_width = new Int32[_columnCount];
             List<int[]> list_width = new List<int[]>();
 
             int total_space = GetWidth() - GetPadding().Left - GetPadding().Right;
             int free_space = total_space;
-            //int prefer_width = (int)Math.Round((float)(total_space - GetSpacing().Horizontal * (_column_count - 1)) / (float)_column_count, MidpointRounding.AwayFromZero);
-            int prefer_width = (total_space - GetSpacing().Horizontal * (_column_count - 1)) / _column_count;
-            int count = _column_count;
+            //int prefer_width = (int)Math.Round((float)(total_space - GetSpacing().Horizontal * (_columnCount - 1)) / (float)_columnCount, MidpointRounding.AwayFromZero);
+            int prefer_width = (total_space - GetSpacing().Horizontal * (_columnCount - 1)) / _columnCount;
+            int count = _columnCount;
 
-            for (int c = 0; c < _column_count; c++)
+            for (int c = 0; c < _columnCount; c++)
             {
-                for (int r = 0; r < _row_count; r++)
+                for (int r = 0; r < _rowCount; r++)
                 {
-                    IBaseItem item = _cells[c + r * _column_count].GetItem();
+                    IBaseItem item = _cells[c + r * _columnCount].GetItem();
                     if (item == null || !item.IsVisible() || !item.IsDrawable())
                     {
                         list_width.Add(new int[2] { c, -1 });
@@ -476,13 +476,13 @@ namespace SpaceVIL
             }
             //////////
             List<int[]> m_width = new List<int[]>();
-            for (int c = 0; c < _column_count; c++)
+            for (int c = 0; c < _columnCount; c++)
             {
                 int max = -10;
-                for (int r = 0; r < _row_count; r++)
+                for (int r = 0; r < _rowCount; r++)
                 {
-                    if (list_width[r + c * _row_count][1] > max)
-                        max = list_width[r + c * _row_count][1];
+                    if (list_width[r + c * _rowCount][1] > max)
+                        max = list_width[r + c * _rowCount][1];
                 }
                 m_width.Add(new int[2] { c, max });
                 if (max == -1)

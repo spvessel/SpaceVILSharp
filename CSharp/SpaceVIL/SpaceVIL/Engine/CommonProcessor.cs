@@ -115,7 +115,7 @@ namespace SpaceVIL
 
             if (queue.Count > 0)
             {
-                if (HoveredItem != null && HoveredItem != queue.Last())
+                if (HoveredItem != null && (HoveredItem != queue.Last()))
                     Manager.AssignActionsForSender(InputEventType.MouseLeave, Margs, HoveredItem, UnderFocusedItems, false);
 
                 HoveredItem = queue.Last();
