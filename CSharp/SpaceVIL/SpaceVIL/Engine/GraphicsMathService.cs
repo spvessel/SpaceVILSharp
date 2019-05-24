@@ -103,8 +103,12 @@ namespace SpaceVIL
                         a = a * notAlpha + item.A * alpha;
                 }
             }
-            // Console.WriteLine((int)r + " " + (int)g + " " + (int)b + " " + (int)a + " ");
             return Color.FromArgb((int)a, (int)r, (int)g, (int)b);
+        }
+
+        public static Color CloneColor(Color color)
+        {
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
         /// <summary>

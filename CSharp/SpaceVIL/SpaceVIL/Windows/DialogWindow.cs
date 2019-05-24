@@ -11,26 +11,16 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs a DialogWindow
         /// </summary>
-        public DialogWindow()
+        public DialogWindow() : base()
         {
-            InitWindow();
+            IsDialog = true;
+            IsCentered = true;
         }
 
-        String _title = String.Empty;
-
-        /// <summary>
-        /// DialogWindow title text
-        /// </summary>
-        public String DialogTitle
+        public override void Show()
         {
-            get
-            {
-                return _title;
-            }
-            set
-            {
-                _title = value;
-            }
+            InitWindow();
+            base.Show();
         }
     }
 }

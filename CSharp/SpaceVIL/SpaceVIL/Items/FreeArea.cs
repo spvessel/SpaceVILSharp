@@ -13,12 +13,12 @@ namespace SpaceVIL
     public class FreeArea : Prototype, IGrid, IDraggable, IFree
     {
         static int count = 0;
-        private int _x_press = 0;
-        private int _y_press = 0;
-        private int _diff_x = 0;
-        private int _diff_y = 0;
-        Dictionary<IBaseItem, int[]> _stored_crd;
-        // public ContextMenu _dropdownmenu = new ContextMenu();
+        private int _xPress = 0;
+        private int _yPress = 0;
+        private int _diffX = 0;
+        private int _diffY = 0;
+        Dictionary<IBaseItem, int[]> _storedItemsCoords;
+
         /// <summary>
         /// Constructs a FreeArea
         /// </summary>
@@ -28,42 +28,24 @@ namespace SpaceVIL
             count++;
             EventMousePress += OnMousePress;
             EventMouseDrag += OnDragging;
-            _stored_crd = new Dictionary<IBaseItem, int[]>();
+            _storedItemsCoords = new Dictionary<IBaseItem, int[]>();
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.FreeArea)));
         }
 
-        /// <summary>
-        /// Add ContextMenu to the FreeArea
-        /// </summary>
-        public void AddContextMenu(ContextMenu context_menu)
-        {
-            EventMouseClick += (sender, args) =>
-            {
-                context_menu.Show(sender, args);
-            };
-
-        }
-
         void OnMousePress(IItem sender, MouseArgs args)
         {
-            if (args.Button == MouseButton.ButtonLeft)
-            {
-                _x_press = args.Position.GetX();
-                _y_press = args.Position.GetY();
-                _diff_x = (int)_xOffset;
-                _diff_y = (int)_yOffset;
-            }
+            _xPress = args.Position.GetX();
+            _yPress = args.Position.GetY();
+            _diffX = (int)_xOffset;
+            _diffY = (int)_yOffset;
         }
 
         void OnDragging(IItem sender, MouseArgs args)
         {
-            if (args.Button == MouseButton.ButtonLeft)
-            {
-                _xOffset = _diff_x - _x_press + args.Position.GetX();
-                _yOffset = _diff_y + args.Position.GetY() - _y_press;
-                UpdateLayout();
-            }
+            _xOffset = _diffX - _xPress + args.Position.GetX();
+            _yOffset = _diffY + args.Position.GetY() - _yPress;
+            UpdateLayout();
         }
 
         private Int64 _yOffset = 0;
@@ -87,13 +69,12 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
-        //overrides
         /// <summary>
         /// Add item to the FreeArea
         /// </summary>
         public override void AddItem(IBaseItem item)
         {
-            _stored_crd.Add(item, new int[]
+            _storedItemsCoords.Add(item, new int[]
             {
                 item.GetX() ,
                 item.GetY()
@@ -113,7 +94,7 @@ namespace SpaceVIL
         public override bool RemoveItem(IBaseItem item)
         {
             bool b = base.RemoveItem(item);
-            _stored_crd.Remove(item);
+            _storedItemsCoords.Remove(item);
             UpdateLayout();
             return b;
         }
@@ -123,15 +104,13 @@ namespace SpaceVIL
         /// </summary>
         public void UpdateLayout()
         {
-            // Console.WriteLine(GetX() + " " + GetY());
             foreach (var child in GetItems())
             {
-                child.SetX((int)_xOffset + GetX() + GetPadding().Left + _stored_crd[child][0] + child.GetMargin().Left);
-                child.SetY((int)_yOffset + GetY() + GetPadding().Top + _stored_crd[child][1] + child.GetMargin().Top);
+                child.SetX((int)_xOffset + GetX() + GetPadding().Left + _storedItemsCoords[child][0] + child.GetMargin().Left);
+                child.SetY((int)_yOffset + GetY() + GetPadding().Top + _storedItemsCoords[child][1] + child.GetMargin().Top);
             }
         }
 
-        //ContexMenu
         private void CorrectPosition(ResizableItem item)
         {
             int actual_x = item.GetX();
@@ -141,8 +120,8 @@ namespace SpaceVIL
                 actual_x - (int)_xOffset - GetX() - GetPadding().Left - item.GetMargin().Left,
                 actual_y - (int)_yOffset - GetY() - GetPadding().Top - item.GetMargin().Top
             };
-            _stored_crd.Remove(item);
-            _stored_crd.Add(item, crd);
+            _storedItemsCoords.Remove(item);
+            _storedItemsCoords.Add(item, crd);
         }
     }
 }

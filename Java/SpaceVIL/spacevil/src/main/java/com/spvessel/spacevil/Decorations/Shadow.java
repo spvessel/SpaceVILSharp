@@ -41,7 +41,7 @@ public final class Shadow {
     private Color _color = Color.BLACK;
 
     public void setColor(Color color) {
-        _color = new Color(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue());
+        _color = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
     public void setColor(int r, int g, int b) {
@@ -61,7 +61,7 @@ public final class Shadow {
     }
 
     public Color getColor() {
-        return new Color(_color.getAlpha(), _color.getRed(), _color.getGreen(), _color.getBlue());
+        return new Color(_color.getRed(), _color.getGreen(), _color.getBlue(), _color.getAlpha());
     }
 
     private boolean _isDrop;
@@ -83,6 +83,6 @@ public final class Shadow {
         _radius = radius;
         _x = x;
         _y = y;
-        _color = new Color(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue());
+        _color = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 }

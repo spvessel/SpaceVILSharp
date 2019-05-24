@@ -84,7 +84,6 @@ namespace SpaceVIL
         public MessageItem(String message, String title) : this()
         {
             _titleBar.SetText(title);
-            Console.WriteLine(_msg.GetMargin().Bottom);
             _msg.SetText(message);
         }
 

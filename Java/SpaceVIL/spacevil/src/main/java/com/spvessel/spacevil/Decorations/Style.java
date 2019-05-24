@@ -237,7 +237,7 @@ public class Style implements Cloneable {
     }
 
     public void setShadow(Shadow shadow) {
-        shadowColor = shadow.getColor();
+        shadowColor = shadow.getColor();//GraphicsMathService.cloneColor(shadow.getColor());
         shadowRadius = shadow.getRadius();
         shadowXOffset = shadow.getXOffset();
         shadowYOffset = shadow.getYOffset();
@@ -1792,13 +1792,13 @@ public class Style implements Cloneable {
         window_style.setBackground(45, 45, 45);
         style.addInnerStyle("window", window_style);
 
-        Style ok_style = getButtonCoreStyle();
-        ok_style.setBackground(100, 255, 150);
-        ok_style.setSize(100, 30);
-        ok_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
-        ok_style.setShadow(new Shadow(5, 0, 4, new Color(0, 0, 0, 120)));
-        ok_style.isShadowDrop = true;
-        style.addInnerStyle("button", ok_style);
+        Style btnStyle = getButtonCoreStyle();
+        btnStyle.setBackground(100, 255, 150);
+        btnStyle.setSize(100, 30);
+        btnStyle.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        btnStyle.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 120)));
+        btnStyle.isShadowDrop = true;
+        style.addInnerStyle("button", btnStyle);
 
         Style toolbar_style = getHorizontalStackStyle();
         toolbar_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
@@ -1825,7 +1825,7 @@ public class Style implements Cloneable {
 
         Style layout_style = getFrameStyle();
         layout_style.setMargin(0, 30, 0, 0);
-        layout_style.setPadding(6, 6, 6, 6);
+        layout_style.setPadding(6, 6, 6, 15);
         layout_style.setBackground(255, 255, 255, 20);
         style.addInnerStyle("layout", layout_style);
 
@@ -2012,7 +2012,7 @@ public class Style implements Cloneable {
         ok_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
         ok_style.setMargin(0, 0, 0, 0);
         ok_style.borderRadius = new CornerRadius();
-        ok_style.setShadow(new Shadow(5, 0, 4, new Color(0, 0, 0, 150)));
+        ok_style.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 120)));
         ok_style.isShadowDrop = true;
         ok_style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 80)));
         style.addInnerStyle("button", ok_style);
@@ -2025,7 +2025,7 @@ public class Style implements Cloneable {
 
         Style layout_style = getFrameStyle();
         layout_style.setMargin(0, 30, 0, 0);
-        layout_style.setPadding(6, 6, 6, 6);
+        layout_style.setPadding(6, 6, 6, 15);
         layout_style.setBackground(255, 255, 255, 20);
         style.addInnerStyle("layout", layout_style);
 

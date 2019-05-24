@@ -33,12 +33,12 @@ public class MessageItem extends DialogItem {
     }
 
     private TitleBar _titleBar;
-    private Frame _msg_layout;
-    private Label _msg;
-    private ButtonCore _ok;
+    private Frame _msgLayout;
+    private Label _msgLabel;
+    private ButtonCore _okButton;
 
     public ButtonCore getOkButton() {
-        return _ok;
+        return _okButton;
     }
 
     private ButtonCore _cancel;
@@ -58,9 +58,9 @@ public class MessageItem extends DialogItem {
         count++;
 
         _titleBar = new TitleBar();
-        _msg_layout = new Frame();
-        _msg = new Label();
-        _ok = getButton("OK");
+        _msgLayout = new Frame();
+        _msgLabel = new Label();
+        _okButton = getButton("OK");
         _cancel = getButton("Cancel");
 
         _toolbar = new HorizontalStack();
@@ -82,18 +82,18 @@ public class MessageItem extends DialogItem {
         this();
 
         _titleBar.setText(title);
-        _msg.setText(message);
+        _msgLabel.setText(message);
     }
 
     /**
      * MessageItem text
      */
     public void setMessageText(String text) {
-        _msg.setText(text);
+        _msgLabel.setText(text);
     }
 
     public String getMessageText() {
-        return _msg.getText();
+        return _msgLabel.getText();
     }
 
     public void setTitle(String title) {
@@ -115,10 +115,10 @@ public class MessageItem extends DialogItem {
         int w_global = 0;
 
         // toolbar size
-        int w = _ok.getWidth() + _ok.getMargin().left + _ok.getMargin().right;
+        int w = _okButton.getWidth() + _okButton.getMargin().left + _okButton.getMargin().right;
         if (_cancel.isVisible())
             w = w * 2 + 10;
-        _toolbar.setSize(w, _ok.getHeight() + _ok.getMargin().top + _ok.getMargin().bottom);
+        _toolbar.setSize(w, _okButton.getHeight() + _okButton.getMargin().top + _okButton.getMargin().bottom);
         w_global += w;
 
         boolean isEmpty = true;
@@ -137,21 +137,21 @@ public class MessageItem extends DialogItem {
         window.setMinWidth(w_global);
         if (window.getWidth() < w_global)
             window.setWidth(w_global);
-        int w_text = _msg.getTextWidth() + _msg_layout.getMargin().left + _msg_layout.getMargin().right
-                + _msg_layout.getPadding().left + _msg_layout.getPadding().right + _msg.getMargin().left
-                + _msg.getMargin().right + _msg.getPadding().left + _msg.getPadding().right + 10;
+        int w_text = _msgLabel.getTextWidth() + _msgLayout.getMargin().left + _msgLayout.getMargin().right
+                + _msgLayout.getPadding().left + _msgLayout.getPadding().right + _msgLabel.getMargin().left
+                + _msgLabel.getMargin().right + _msgLabel.getPadding().left + _msgLabel.getPadding().right + 10;
         if (window.getWidth() < w_text)
             window.setWidth(w_text);
-        window.addItems(_titleBar, _msg_layout);
+        window.addItems(_titleBar, _msgLayout);
         window.update(GeometryEventType.RESIZE_WIDTH, 0);
 
         if (!isEmpty) {
             _toolbar.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
             int right = _toolbar.getWidth() + _toolbar.getMargin().left + _toolbar.getMargin().right + 10;
             _userbar.setMargin(0, 0, right / 2, 0);
-            _msg_layout.addItems(_msg, _userbar, _toolbar);
+            _msgLayout.addItems(_msgLabel, _userbar, _toolbar);
         } else {
-            _msg_layout.addItems(_msg, _toolbar);
+            _msgLayout.addItems(_msgLabel, _toolbar);
         }
 
         // queue
@@ -160,14 +160,14 @@ public class MessageItem extends DialogItem {
                 _userbar.addItem(btn);
             }
         }
-        _toolbar.addItems(_ok, _cancel);
-        _userMap.put(_ok, 1);
+        _toolbar.addItems(_okButton, _cancel);
+        _userMap.put(_okButton, 1);
         _userMap.put(_titleBar.getCloseButton(), 0);
         _userMap.put(_cancel, -1);
         // buttons
-        _ok.setItemName("OK");
-        _ok.eventMouseClick.add((sender, args) -> {
-            _userButtonResult = _ok;
+        _okButton.setItemName("OK");
+        _okButton.eventMouseClick.add((sender, args) -> {
+            _userButtonResult = _okButton;
             _result = true;
             close();
         });
@@ -236,11 +236,11 @@ public class MessageItem extends DialogItem {
 
         Style inner_style = style.getInnerStyle("message");
         if (inner_style != null) {
-            _msg.setStyle(inner_style);
+            _msgLabel.setStyle(inner_style);
         }
         inner_style = style.getInnerStyle("layout");
         if (inner_style != null) {
-            _msg_layout.setStyle(inner_style);
+            _msgLayout.setStyle(inner_style);
         }
         inner_style = style.getInnerStyle("toolbar");
         if (inner_style != null) {
@@ -253,7 +253,7 @@ public class MessageItem extends DialogItem {
         inner_style = style.getInnerStyle("button");
         if (inner_style != null) {
             _btnStyle = inner_style.clone();
-            _ok.setStyle(inner_style);
+            _okButton.setStyle(inner_style);
             _cancel.setStyle(inner_style);
         }
     }

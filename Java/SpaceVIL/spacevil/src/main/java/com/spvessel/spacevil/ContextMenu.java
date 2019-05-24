@@ -90,8 +90,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
                 hideDependentMenus();
             }
             if (args.key == KeyCode.ENTER) {
-                if (itemList.getSelectedItem() instanceof Prototype)
-                {
+                if (itemList.getSelectedItem() instanceof Prototype) {
                     Prototype selected = (Prototype) itemList.getSelectedItem();
                     selected.eventMousePress.execute(selected, null);
                     selected.eventMouseClick.execute(selected, null);
@@ -210,7 +209,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      *               button press/release, etc.)
      */
     public void show(InterfaceItem sender, MouseArgs args) {
-        if (args.button.getValue() == activeButton.getValue()) {
+        if (args.button.equals(activeButton)) {
             if (!_init)
                 initElements();
             if (!_added) {
@@ -243,7 +242,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     public void show() {
-        show(this, new MouseArgs());
+        MouseArgs margs = new MouseArgs();
+        margs.button = MouseButton.BUTTON_RIGHT;
+        show(this, margs);
     }
 
     private boolean _added = false;

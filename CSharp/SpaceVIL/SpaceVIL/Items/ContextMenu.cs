@@ -245,7 +245,9 @@ namespace SpaceVIL
         }
         public void Show()
         {
-            Show(this, new MouseArgs());
+            MouseArgs margs = new MouseArgs();
+            margs.Button = MouseButton.ButtonRight;
+            Show(this, margs);
         }
 
         private bool _added = false;
