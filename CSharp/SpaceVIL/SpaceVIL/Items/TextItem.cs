@@ -81,7 +81,6 @@ namespace SpaceVIL
                 return;
             if (!_font.Equals(font))
             {
-            // if (_font != font)
                 _font = font;
                 UpdateData();
             }

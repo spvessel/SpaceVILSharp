@@ -116,32 +116,32 @@ namespace SpaceVIL
             }
         }
 
-        private Glfw.Image _icon_big;
-        private Glfw.Image _icon_small;
+        private Glfw.Image _iconBig;
+        private Glfw.Image _iconSmall;
 
         internal void SetIcons(Image ibig, Image ismall)
         {
-            if (_icon_big.Pixels == null)
+            if (_iconBig.Pixels == null)
             {
-                _icon_big.Width = ibig.Width;
-                _icon_big.Height = ibig.Height;
-                _icon_big.Pixels = GetImagePixels(ibig);
+                _iconBig.Width = ibig.Width;
+                _iconBig.Height = ibig.Height;
+                _iconBig.Pixels = GetImagePixels(ibig);
             }
-            if (_icon_small.Pixels == null)
+            if (_iconSmall.Pixels == null)
             {
-                _icon_small.Width = ismall.Width;
-                _icon_small.Height = ismall.Height;
-                _icon_small.Pixels = GetImagePixels(ismall);
+                _iconSmall.Width = ismall.Width;
+                _iconSmall.Height = ismall.Height;
+                _iconSmall.Pixels = GetImagePixels(ismall);
             }
         }
 
         internal void ApplyIcon()
         {
-            if (_icon_big.Pixels == null || _icon_small.Pixels == null)
+            if ((_iconBig.Pixels == null) || (_iconSmall.Pixels == null))
                 return;
             Glfw.Image[] images = new Glfw.Image[2];
-            images[0] = _icon_big;
-            images[1] = _icon_small;
+            images[0] = _iconBig;
+            images[1] = _iconSmall;
             Glfw.SetWindowIcon(_commonProcessor.Handler.GetWindowId(), images);
         }
 

@@ -102,7 +102,7 @@ namespace SpaceVIL
                     noContains++;
                 }
             }
-            return contains == Count && noContains > 0;
+            return ((contains == Count) && (noContains > 0));
         }
 
         public bool IsProperSupersetOf(IEnumerable<T> other)
@@ -129,7 +129,7 @@ namespace SpaceVIL
                     noContains++;
                 }
             }
-            return contains == otherCount && noContains > 0;
+            return ((contains == otherCount) && (noContains > 0));
         }
 
         public bool IsSubsetOf(IEnumerable<T> other)

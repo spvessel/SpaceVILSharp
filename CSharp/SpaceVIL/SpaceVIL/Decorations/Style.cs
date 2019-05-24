@@ -362,13 +362,13 @@ namespace SpaceVIL.Decorations
 
         internal static void ItemStatesSyncBase(Style style)
         {
-            ItemState core_state = style.GetState(ItemStateType.Base);
+            ItemState coreState = style.GetState(ItemStateType.Base);
             foreach (var state in style.GetAllStates())
             {
-                if (core_state == state.Value)
+                if (coreState == state.Value)
                     continue;
 
-                state.Value.Border = core_state.Border;
+                state.Value.Border = coreState.Border;
             }
         }
 

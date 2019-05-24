@@ -555,7 +555,7 @@ namespace SpaceVIL
             if (textPrt == null)
                 return;
             byte[] byteBuffer = textPrt.Texture;
-            if (byteBuffer == null || byteBuffer.Length == 0)
+            if ((byteBuffer == null) || (byteBuffer.Length == 0))
                 return;
 
             CheckOutsideBorders(text as IBaseItem);

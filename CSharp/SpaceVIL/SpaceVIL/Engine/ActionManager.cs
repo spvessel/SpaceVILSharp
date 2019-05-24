@@ -157,9 +157,8 @@ namespace SpaceVIL
         }
         private void InvokeMouseDoubleClickEvent(Prototype sender, MouseArgs args)
         {
-            if (sender.EventMouseDoubleClick == null
-                || sender.EventMouseDoubleClick.GetInvocationList().Length == 0
-                )
+            if ((sender.EventMouseDoubleClick == null)
+                || (sender.EventMouseDoubleClick.GetInvocationList().Length == 0))
             {
                 InvokeMouseClickEvent(sender, args);
             }

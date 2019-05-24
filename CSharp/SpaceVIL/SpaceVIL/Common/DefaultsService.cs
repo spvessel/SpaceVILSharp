@@ -22,10 +22,10 @@ namespace SpaceVIL.Common
         }
 
         private PrivateFontCollection privateFontCollection = null;
-        private Font _default_font;
+        private Font _defaultFont;
         public void SetDefaultFont(Font font)
         {
-            _default_font = font;
+            _defaultFont = font;
         }
         // public void SetDefaultFont(String font_path)
         // {
@@ -43,16 +43,16 @@ namespace SpaceVIL.Common
         //     privateFontCollection.AddMemoryFont(data, (int)font_stream.Length);
         //     font_stream.Close();
         //     Marshal.FreeCoTaskMem(data);
-        //     _default_font = new Font(privateFontCollection.Families[0], 10, FontStyle.Regular);
+        //     _defaultFont = new Font(privateFontCollection.Families[0], 10, FontStyle.Regular);
         // }
         // public Font GetDefaultFont() //объекты не инициализируются почему-то, выяснить
         // {
-        //     if (_default_font == null)
+        //     if (_defaultFont == null)
         //     {
         //         AddFontFromMemory();
-        //         _default_font = new Font(privateFontCollection.Families[0], 10, FontStyle.Regular);
+        //         _defaultFont = new Font(privateFontCollection.Families[0], 10, FontStyle.Regular);
         //     }
-        //     return new Font(_default_font.FontFamily, 10, _default_font.Style);
+        //     return new Font(_defaultFont.FontFamily, 10, _defaultFont.Style);
         //     // return new Font(new FontFamily("Ubuntu"), 10, FontStyle.Regular);
         // }
 
@@ -63,12 +63,12 @@ namespace SpaceVIL.Common
             {
                 size = defFontSize;
             }
-            if (_default_font == null)
+            if (_defaultFont == null)
             {
                 AddFontFromMemory();
-                _default_font = new Font(privateFontCollection.Families[0], defFontSize, FontStyle.Regular);
+                _defaultFont = new Font(privateFontCollection.Families[0], defFontSize, FontStyle.Regular);
             }
-            return GraphicsMathService.ChangeFontSize(size, _default_font); //new Font(_default_font.FontFamily, size, _default_font.Style);
+            return GraphicsMathService.ChangeFontSize(size, _defaultFont); //new Font(_defaultFont.FontFamily, size, _defaultFont.Style);
             // return new Font(new FontFamily("Ubuntu"), size, FontStyle.Regular);
         }
         public Font GetDefaultFont(FontStyle style, int size)
@@ -77,12 +77,12 @@ namespace SpaceVIL.Common
             {
                 size = defFontSize;
             }
-            if (_default_font == null)
+            if (_defaultFont == null)
             {
                 AddFontFromMemory();
-                _default_font = new Font(privateFontCollection.Families[0], size, style);
+                _defaultFont = new Font(privateFontCollection.Families[0], size, style);
             }
-            return new Font(_default_font.FontFamily, size, style);
+            return new Font(_defaultFont.FontFamily, size, style);
         }
         // public Font GetEmbeddedFont(EmbeddedFont font, int size, FontStyle style)
         // {
@@ -99,12 +99,12 @@ namespace SpaceVIL.Common
         // }
         private void AddFontFromMemory()
         {
-            if (_embedded_font == null || _embedded_font == String.Empty)
+            if (String.IsNullOrEmpty(_embeddedFont)) // _embeddedFont == null || _embeddedFont == String.Empty)
                 SetDefaultEmbeddedFont(EmbeddedFont.Ubuntu);
 
             privateFontCollection = new PrivateFontCollection();
 
-            Stream fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_embedded_font);
+            Stream fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_embeddedFont);
             System.IntPtr data = Marshal.AllocCoTaskMem((int)fontStream.Length);
             byte[] fontdata = new byte[fontStream.Length];
             fontStream.Read(fontdata, 0, (int)fontStream.Length);
@@ -113,17 +113,17 @@ namespace SpaceVIL.Common
             fontStream.Close();
             Marshal.FreeCoTaskMem(data);
         }
-        private String _embedded_font = null;
+        private String _embeddedFont = null;
         public void SetDefaultEmbeddedFont(EmbeddedFont font)
         {
             switch (font)
             {
                 case EmbeddedFont.Ubuntu:
-                    _embedded_font = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
+                    _embeddedFont = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
                     break;
 
                 default:
-                    _embedded_font = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
+                    _embeddedFont = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
                     break;
             }
         }
@@ -160,67 +160,67 @@ namespace SpaceVIL.Common
             return _defaultCursor;
         }
 
-        private static ThemeStyle _default_theme; // = ThemeStyle.GetInstance();
-        private static DefaultFont _default_font; // = ThemeStyle.GetInstance();
+        private static ThemeStyle _defaultTheme; // = ThemeStyle.GetInstance();
+        private static DefaultFont _defaultFont; // = ThemeStyle.GetInstance();
 
         static DefaultsService()
         {
-            _default_font = DefaultFont.GetInstance();
-            // _default_theme = ThemeStyle.GetInstance();
+            _defaultFont = DefaultFont.GetInstance();
+            // _defaultTheme = ThemeStyle.GetInstance();
         }
 
         internal static void InitDefaultTheme()
         {
-            _default_theme = new ThemeStyle();
+            _defaultTheme = new ThemeStyle();
         }
 
         public static ThemeStyle GetDefaultTheme()
         {
-            if (_default_theme == null)
-                _default_theme = new ThemeStyle();
-            return _default_theme;
+            if (_defaultTheme == null)
+                _defaultTheme = new ThemeStyle();
+            return _defaultTheme;
         }
         public static void SetDefaultTheme(ThemeStyle theme)
         {
-            _default_theme = theme;
+            _defaultTheme = theme;
         }
         public static Style GetDefaultStyle(Type type)
         {
-            if (_default_theme == null)
-                _default_theme = new ThemeStyle();
-            return _default_theme.GetThemeStyle(type);
+            if (_defaultTheme == null)
+                _defaultTheme = new ThemeStyle();
+            return _defaultTheme.GetThemeStyle(type);
         }
         public static Font GetDefaultFont()
         {
-            return _default_font.GetDefaultFont();
+            return _defaultFont.GetDefaultFont();
         }
         public static Font GetDefaultFont(int size)
         {
-            return _default_font.GetDefaultFont(size);
+            return _defaultFont.GetDefaultFont(size);
         }
         public static Font GetDefaultFont(FontStyle style, int size)
         {
-            return _default_font.GetDefaultFont(style, size);
+            return _defaultFont.GetDefaultFont(style, size);
         }
         // public static void SetDefaultEmbeddedFont(EmbeddedFont font)
         // {
-        //     _default_font.SetDefaultEmbeddedFont(font);
+        //     _defaultFont.SetDefaultEmbeddedFont(font);
         // }
         // public static void SetDefaultFont(String font_path)
         // {
-        //     _default_font.SetDefaultFont(font_path);
+        //     _defaultFont.SetDefaultFont(font_path);
         // }
         public static void SetDefaultFont(Font font)
         {
-            _default_font.SetDefaultFont(font);
+            _defaultFont.SetDefaultFont(font);
         }
         // public static void SetDefaultFont(Stream font_stream)
         // {
-        //     _default_font.SetDefaultFont(font_stream);
+        //     _defaultFont.SetDefaultFont(font_stream);
         // }
         // public static Font GetEmbeddedFont(EmbeddedFont font, int size, FontStyle style)
         // {
-        //     return _default_font.GetEmbeddedFont(font, size, style);
+        //     return _defaultFont.GetEmbeddedFont(font, size, style);
         // }
 
         private static Dictionary<EmbeddedImage, Bitmap> images_32 = new Dictionary<EmbeddedImage, Bitmap>();

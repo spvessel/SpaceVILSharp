@@ -67,7 +67,7 @@ namespace SpaceVIL.Core
         /// <param name="y"> Y position of the pointer </param>
         public void SetPosition(float x, float y)
         {
-            if (PrevX == defPointValue || PrevY == defPointValue)
+            if ((PrevX == defPointValue) || (PrevY == defPointValue))
             {
                 PrevX = (int)x;
                 PrevY = (int)y;
@@ -89,7 +89,7 @@ namespace SpaceVIL.Core
         /// <param name="y"> Y position of the pointer </param>
         public void SetPosition(int x, int y)
         {
-            if (PrevX == defPointValue || PrevY == defPointValue)
+            if ((PrevX == defPointValue) || (PrevY == defPointValue))
             {
                 PrevX = x;
                 PrevY = y;
