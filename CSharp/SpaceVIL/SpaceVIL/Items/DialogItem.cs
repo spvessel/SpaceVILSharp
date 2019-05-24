@@ -33,8 +33,6 @@ namespace SpaceVIL
         /// </summary>
         public virtual void Show(CoreWindow handler)
         {
-            // ItemsLayoutBox.AddItem(handler, this, LayoutType.Dialog);
-            // SetHandler(handler);
             _handler = handler;
             _handler.AddItem(this);
             this.SetFocus();
@@ -42,7 +40,6 @@ namespace SpaceVIL
 
         public virtual void Close()
         {
-            // ItemsLayoutBox.RemoveItem(GetHandler(), this, LayoutType.Dialog);
             _handler.RemoveItem(this);
         }
 

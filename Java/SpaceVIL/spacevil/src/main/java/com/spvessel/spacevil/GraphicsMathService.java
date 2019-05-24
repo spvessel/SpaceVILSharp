@@ -65,6 +65,11 @@ public final class GraphicsMathService {
         return new Color((int) r, (int) g, (int) b, (int) a);
     }
 
+    public static Color cloneColor(Color color)
+    {
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    }
+
     static List<float[]> toGL(InterfaceBaseItem item, CoreWindow handler) // where TLayout : VisualItem
     {
         if (item.getTriangles() == null)

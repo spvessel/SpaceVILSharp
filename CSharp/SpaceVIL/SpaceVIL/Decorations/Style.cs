@@ -1746,7 +1746,7 @@ namespace SpaceVIL.Decorations
             ok_style.SetBackground(100, 255, 150);
             ok_style.SetSize(100, 30);
             ok_style.SetAlignment(ItemAlignment.Left, ItemAlignment.VCenter);
-            ok_style.SetShadow(new Shadow(5, 0, 4, Color.FromArgb(120, 0, 0, 0)));
+            ok_style.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(120, 0, 0, 0)));
             ok_style.IsShadowDrop = true;
             style.AddInnerStyle("button", ok_style);
 
@@ -1775,7 +1775,7 @@ namespace SpaceVIL.Decorations
 
             Style layout_style = GetFrameStyle();
             layout_style.SetMargin(0, 30, 0, 0);
-            layout_style.SetPadding(6, 6, 6, 6);
+            layout_style.SetPadding(6, 6, 6, 15);
             layout_style.SetBackground(255, 255, 255, 20);
             style.AddInnerStyle("layout", layout_style);
 
@@ -1967,7 +1967,7 @@ namespace SpaceVIL.Decorations
             ok_style.SetAlignment(ItemAlignment.Left, ItemAlignment.Bottom);
             ok_style.SetMargin(0, 0, 0, 0);
             ok_style.BorderRadius = new CornerRadius();
-            ok_style.SetShadow(new Shadow(5, 0, 4, Color.FromArgb(120, 0, 0, 0)));
+            ok_style.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(120, 0, 0, 0)));
             ok_style.IsShadowDrop = true;
             ok_style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(80, 255, 255, 255)));
             style.AddInnerStyle("button", ok_style);
@@ -1980,7 +1980,7 @@ namespace SpaceVIL.Decorations
 
             Style layout_style = GetFrameStyle();
             layout_style.SetMargin(0, 30, 0, 0);
-            layout_style.SetPadding(6, 6, 6, 6);
+            layout_style.SetPadding(6, 6, 6, 15);
             layout_style.SetBackground(255, 255, 255, 20);
             style.AddInnerStyle("layout", layout_style);
 

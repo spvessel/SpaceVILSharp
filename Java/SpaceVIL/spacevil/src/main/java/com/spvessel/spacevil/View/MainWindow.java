@@ -131,10 +131,18 @@ public class MainWindow extends ActiveWindow {
         btn_label.setBackground(111, 181, 255);
         btn_label.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         InterfaceMouseMethodState btn_action_click = (sender, args) -> {
-            setShadeColor(new Color( 100, 100, 100, 125));
-            MessageBox ms = new MessageBox("Send result?", "Message:");
-            ms.show();
-            System.out.println(ms.getResult());
+            // setShadeColor(new Color( 100, 100, 100, 125));
+            MessageBox msg = new MessageBox("Send result?", "Message:");
+            ButtonCore btnDontSave = new ButtonCore("Do not save");
+            btnDontSave.eventMouseClick.add((s, a) -> {
+                System.out.println("btnDontSave is chosen");
+            });
+            msg.addUserButton(btnDontSave, 2); // id must be > 1
+            msg.onCloseDialog.add(() -> {
+                System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
+            });
+            msg.show();
+
             // MessageItem ms = new MessageItem("Send result?", "Message:");
             // ms.show(this);
         };

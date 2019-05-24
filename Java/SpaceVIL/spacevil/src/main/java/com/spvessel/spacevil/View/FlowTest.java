@@ -10,6 +10,7 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemRule;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.OpenEntryDialog.OpenDialogType;
@@ -140,29 +141,29 @@ public class FlowTest extends ActiveWindow {
         btn3.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn3.addItemState(ItemStateType.HOVERED, hovered);
         btn3.eventMouseClick.add((sender, args) -> {
-            // ResizableItem frame = new ResizableItem();
-            // frame.setPadding(10, 10, 10, 10);
-            // frame.setBackground(100, 100, 100);
-            // frame.setSize(300, 300);
-            // frame.setPosition(200, 200);
-            // flow.addItem(frame);
-            // PointsContainer graph = getPointsContainer();
-            // frame.addItem(graph);
+            ResizableItem frame = new ResizableItem();
+            frame.setPadding(10, 10, 10, 10);
+            frame.setBackground(100, 100, 100);
+            frame.setSize(300, 300);
+            frame.setPosition(200, 200);
+            flow.addItem(frame);
+            PointsContainer graph = getPointsContainer();
+            frame.addItem(graph);
 
-            LoadingScreen screen = new LoadingScreen();
-            screen.show(this);
+            // LoadingScreen screen = new LoadingScreen();
+            // screen.show(this);
 
-            Thread task = new Thread(() -> {
-                for (int i = 1; i <= 100; i++) {
-                    screen.setValue(i);
-                    try {
-                        Thread.sleep(50);
-                    } catch (Exception e) {
-                    }
-                }
-                screen.setToClose();
-            });
-            task.start();
+            // Thread task = new Thread(() -> {
+            //     for (int i = 1; i <= 100; i++) {
+            //         screen.setValue(i);
+            //         try {
+            //             Thread.sleep(50);
+            //         } catch (Exception e) {
+            //         }
+            //     }
+            //     screen.setToClose();
+            // });
+            // task.start();
         });
         btn3.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn3.setHoverRule(ItemRule.STRICT);
@@ -283,8 +284,7 @@ public class FlowTest extends ActiveWindow {
         ContextMenu ex_menu = new ContextMenu(this);
         ex_menu.setSize(110, 64);
         ex_addition.assignContextMenu(ex_menu);
-        flow.addContextMenu(_context_menu);
-
+        flow.eventMouseClick.add((sender, args) -> _context_menu.show(sender, args));
         // addItem(new StopMenu());
 
         eventKeyPress.add((sender, args) -> {
