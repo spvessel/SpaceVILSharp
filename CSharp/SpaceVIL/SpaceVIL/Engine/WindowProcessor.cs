@@ -69,6 +69,7 @@ namespace SpaceVIL
             _commonProcessor.InputLocker = true;
             if (_commonProcessor.Window.IsMaximized)
             {
+                // Glfw.SetWindowMonitor(_commonProcessor.Handler.GetWindowId(), Glfw.Monitor.None, 0, 0, 500, 300, 60);
                 Glfw.RestoreWindow(_commonProcessor.Handler.GetWindowId());
                 _commonProcessor.Window.IsMaximized = false;
                 int w, h;
@@ -78,6 +79,9 @@ namespace SpaceVIL
             }
             else
             {
+                // Glfw.Monitor monitor = Glfw.GetPrimaryMonitor();
+                // Glfw.VideoMode vid = Glfw.GetVideoMode(monitor);
+                // Glfw.SetWindowMonitor(_commonProcessor.Handler.GetWindowId(), monitor, 0, 0, vid.Width, vid.Height, vid.RefreshRate);
                 Glfw.MaximizeWindow(_commonProcessor.Handler.GetWindowId());
                 _commonProcessor.Window.IsMaximized = true;
                 int w, h;
@@ -164,6 +168,17 @@ namespace SpaceVIL
                 }
             }
             return _map.ToArray();
+        }
+
+        internal static void ToggleToFullScreenMode(CoreWindow window)
+        {
+            Glfw.Monitor monitor = Glfw.GetPrimaryMonitor();
+            Glfw.VideoMode vid = Glfw.GetVideoMode(monitor);
+            Glfw.SetWindowMonitor(window.GetGLWID(), monitor, 0, 0, vid.Width, vid.Height, vid.RefreshRate);
+        }
+        internal static void ToggleToWindowedMode(Glfw.Window window)
+        {
+            Glfw.SetWindowMonitor(window, Glfw.Monitor.None, 0, 0, 500, 300, 60);
         }
     }
 }
