@@ -22,9 +22,10 @@ public final class WindowManager {
     private static float _intervalAssigned = 1.0f / 15.0f;
     private static RedrawFrequency _frequency = RedrawFrequency.LOW;
 
-    static void setRenderFrequency(RedrawFrequency value) {
+    public static void setRenderFrequency(RedrawFrequency value) {
         _lock.lock();
         try {
+            _frequency = value;
             if (value == RedrawFrequency.VERY_LOW) {
                 _intervalAssigned = _intervalVeryLow;
             } else if (value == RedrawFrequency.LOW) {
@@ -57,7 +58,7 @@ public final class WindowManager {
         }
     }
 
-    static RedrawFrequency getRenderFrequency() {
+    public static RedrawFrequency getRenderFrequency() {
         _lock.lock();
         try {
             return _frequency;
@@ -96,22 +97,6 @@ public final class WindowManager {
                 }
             }
         } catch (Exception e) {
-        } finally {
-            _lock.unlock();
-        }
-    }
-
-    public static boolean removeWindow(CoreWindow wnd) {
-        _lock.lock();
-        try {
-            if (_windows.contains(wnd)) {
-                _windows.remove(wnd);
-                _isEmpty = _windows.isEmpty();
-                return true;
-            }
-            return false;
-        } catch (Exception e) {
-            return false;
         } finally {
             _lock.unlock();
         }

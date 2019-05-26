@@ -6,7 +6,7 @@ using Glfw3;
 
 namespace SpaceVIL
 {
-    internal static class WindowManager
+    public static class WindowManager
     {
         private static Object _lock = new Object();
         private static readonly float _intervalVeryLow = 1.0f;
@@ -17,11 +17,12 @@ namespace SpaceVIL
         private static float _intervalAssigned = 1.0f / 15.0f;
         private static RedrawFrequency _frequency = RedrawFrequency.Low;
 
-        internal static void SetRenderFrequency(RedrawFrequency value)
+        public static void SetRenderFrequency(RedrawFrequency value)
         {
             Monitor.Enter(_lock);
             try
             {
+                _frequency = value;
                 if (value == RedrawFrequency.VeryLow)
                 {
                     _intervalAssigned = _intervalVeryLow;
@@ -73,7 +74,7 @@ namespace SpaceVIL
             }
         }
 
-        internal static RedrawFrequency GetRenderFrequency()
+        public static RedrawFrequency GetRenderFrequency()
         {
             Monitor.Enter(_lock);
             try
@@ -127,30 +128,6 @@ namespace SpaceVIL
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
-            }
-            finally
-            {
-                Monitor.Exit(_lock);
-            }
-        }
-
-        public static bool RemoveWindow(CoreWindow wnd)
-        {
-            Monitor.Enter(_lock);
-            try
-            {
-                if (_windows.Contains(wnd))
-                {
-                    _windows.Remove(wnd);
-                    _isEmpty = (_windows.Count == 0);
-                    return true;
-                }
-                return false;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.StackTrace);
-                return false;
             }
             finally
             {
