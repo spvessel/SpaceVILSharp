@@ -122,8 +122,8 @@ namespace SpaceVIL
             {
                 // WPosition.SetX(_coreWindow.GetX());
                 // WPosition.SetY(_coreWindow.GetY());
-                _coreWindow.SetX(defWindowPos.GetX());//200);
-                _coreWindow.SetY(defWindowPos.GetY());//50);
+                _coreWindow.SetXDirect(defWindowPos.GetX());//200);
+                _coreWindow.SetYDirect(defWindowPos.GetY());//50);
                 GetPointer().SetX(defWindowPos.GetX());//200);
                 GetPointer().SetY(defWindowPos.GetY());//50);
             }

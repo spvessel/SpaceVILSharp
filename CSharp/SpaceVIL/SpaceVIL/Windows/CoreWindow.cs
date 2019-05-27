@@ -201,6 +201,40 @@ namespace SpaceVIL
         // geometry
         private Geometry _itemGeometry = new Geometry();
 
+        public void SetWidth(int width)
+        {
+            _itemGeometry.SetWidth(width);
+            windowLayout.GetContainer().SetWidth(width);
+
+            if (windowLayout.IsGLWIDValid())
+            {
+                windowLayout.UpdateSize();
+            }
+        }
+
+        public void SetHeight(int height)
+        {
+            _itemGeometry.SetHeight(height);
+            windowLayout.GetContainer().SetHeight(height);
+            if (windowLayout.IsGLWIDValid())
+            {
+                windowLayout.UpdateSize();
+            }
+        }
+
+        public void SetSize(int width, int height)
+        {
+            _itemGeometry.SetWidth(width);
+            windowLayout.GetContainer().SetWidth(width);
+            _itemGeometry.SetHeight(height);
+            windowLayout.GetContainer().SetHeight(height);
+
+            if (windowLayout.IsGLWIDValid())
+            {
+                windowLayout.UpdateSize();
+            }
+        }
+
         public void SetMinWidth(int width)
         {
             _itemGeometry.SetMinWidth(width);
@@ -208,11 +242,16 @@ namespace SpaceVIL
                 windowLayout.GetContainer().SetMinWidth(width);
         }
 
-        public void SetWidth(int width)
+        public void SetMinHeight(int height)
         {
-            _itemGeometry.SetWidth(width);
+            _itemGeometry.SetMinHeight(height);
             if (windowLayout.GetContainer() != null)
-                windowLayout.GetContainer().SetWidth(width);
+                windowLayout.GetContainer().SetMinHeight(height);
+        }
+        public void SetMinSize(int width, int height)
+        {
+            SetMinWidth(width);
+            SetMinHeight(height);
         }
 
         public void SetMaxWidth(int width)
@@ -222,25 +261,17 @@ namespace SpaceVIL
                 windowLayout.GetContainer().SetMaxWidth(width);
         }
 
-        public void SetMinHeight(int height)
-        {
-            _itemGeometry.SetMinHeight(height);
-            if (windowLayout.GetContainer() != null)
-                windowLayout.GetContainer().SetMinHeight(height);
-        }
-
-        public void SetHeight(int height)
-        {
-            _itemGeometry.SetHeight(height);
-            if (windowLayout.GetContainer() != null)
-                windowLayout.GetContainer().SetHeight(height);
-        }
-
         public void SetMaxHeight(int height)
         {
             _itemGeometry.SetMaxHeight(height);
             if (windowLayout.GetContainer() != null)
                 windowLayout.GetContainer().SetMaxHeight(height);
+        }
+
+        public void SetMaxSize(int width, int height)
+        {
+            SetMaxWidth(width);
+            SetMaxHeight(height);
         }
 
         public int GetMinWidth()
@@ -273,24 +304,6 @@ namespace SpaceVIL
             return _itemGeometry.GetMaxHeight();
         }
 
-        public void SetSize(int width, int height)
-        {
-            SetWidth(width);
-            SetHeight(height);
-        }
-
-        public void SetMinSize(int width, int height)
-        {
-            SetMinWidth(width);
-            SetMinHeight(height);
-        }
-
-        public void SetMaxSize(int width, int height)
-        {
-            SetMaxWidth(width);
-            SetMaxHeight(height);
-        }
-
         public int[] GetSize()
         {
             return _itemGeometry.GetSize();
@@ -299,9 +312,16 @@ namespace SpaceVIL
         // position
         private Position _itemPosition = new Position();
 
-        public void SetX(int x)
+        internal void SetXDirect(int x)
         {
             _itemPosition.SetX(x);
+        }
+
+        public void SetX(int x)
+        {
+            SetXDirect(x);
+            if (windowLayout.IsGLWIDValid())
+                windowLayout.UpdatePosition();
         }
 
         public int GetX()
@@ -309,9 +329,16 @@ namespace SpaceVIL
             return _itemPosition.GetX();
         }
 
-        public void SetY(int y)
+        public void SetYDirect(int y)
         {
             _itemPosition.SetY(y);
+        }
+
+        public void SetY(int y)
+        {
+            SetYDirect(y);
+            if (windowLayout.IsGLWIDValid())
+                windowLayout.UpdatePosition();
         }
 
         public int GetY()

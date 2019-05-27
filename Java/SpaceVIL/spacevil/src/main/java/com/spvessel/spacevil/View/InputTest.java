@@ -126,61 +126,15 @@ public class InputTest extends ActiveWindow {
         layout.addItem(tl);
 
         bc.eventMouseClick.add((sender, args) -> {
-            // String s = " qwerty\n// tb.setTextMargin(new Indents(50, 30, 30, 30));//
-            // tb.setTextMargin(new Indents(50, 30, 30, 30));";
-            // String text = ""; // tb.getText();
-            // // s = tb.getText();
-            // tb.setText(text + s);
-            // System.out.println((s.toCharArray()[0] == " ".charAt(0)) + " " +
-            // s.toCharArray()[0]);
-            // System.out.println((s.toCharArray()[1] == " ".charAt(0)) + " " +
-            // s.toCharArray()[1]);
-            // System.out.println((s.toCharArray()[2] == " ".charAt(0)) + " " +
-            // s.toCharArray()[2]);
-            // System.out.println((s.toCharArray()[3] == " ".charAt(0)) + " " +
-            // s.toCharArray()[3]);
-            // System.out.println((s.toCharArray()[4] == " ".charAt(0)) + " " +
-            // s.toCharArray()[4]);
-
-            // tb.pasteText("12345678");
-            // te.pasteText("text edit text");
-            // this.setWindowTitle(te.getSelectedText());
-            // tb.setFocused(false);
-//            tb.setText("package com.spvessel.spacevil;\n" +
-//
-//                    "        // HBar\n" + "        hScrollBar.isFocusable = false;\n"
-//                    + "        hScrollBar.setVisible(true);\n"
-//                    + "        hScrollBar.setItemName(getItemName() + \"_\" + hScrollBar.getItemName());\n" + "\n"
-//                    + "        // Area\n"
-//                    + "        // _area.setItemName(getItemName() + \"_\" + _area.getItemName());\n"
-//                    + "        // _area.setSpacing(0, 5);\n" + "    }\n" + "\n" + "    public TextArea(String text) {\n"
-//                    + "        this();\n" + "        setText(text);\n" + "    }\n" + "\n"
-//                    + "    private long v_size = 0;\n" + "    private long h_size = 0;\n" + "\n"
-//                    + "    private void updateVListArea() {\n"
-//                    + "        // ve EventCommonMethod onTextChanged = new EventCommonMethod()");
-            // tb.rewindText();
-            // tb.setEditable(!tb.isEditable());
-            // tb.setEditable(false);
-            // tb.clear();
-            // tb.setFocus();
-            // tb.setEditable(true);
-//            int sz = tb.getFont().getSize() + 1;
-//            tb.setFontSize(sz);
-//
-//            System.out.println(tb.getFont().getSize());
-
-//            tb.setEditable(!tb.isEditable());
-            tb.clear();
+            System.out.print(getX() + " ");
+            setHeight(getHeight() + 10);
+            System.out.println(getX());
         });
 
         bc1.eventMouseClick.add((sender, args) -> {
-//            int sz = tb.getFont().getSize();
-//            if (sz > 10)
-//                tb.setFontSize(sz - 1);
-//
-//            System.out.println(tb.getFont().getSize());
-//            tb.pasteText("123");
-            System.out.println(tb.getSelectedText());
+            System.out.print(getX() + " ");
+            setHeight(getHeight() - 10);
+            System.out.println(getX());
         });
 
         Label label = new Label("1234567890");

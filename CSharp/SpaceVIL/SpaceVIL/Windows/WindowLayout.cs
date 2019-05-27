@@ -98,12 +98,22 @@ namespace SpaceVIL
 
         internal void Minimize()
         {
-            _engine.MinimizeWindow();
+            _engine.MinimizeRequest = true;
         }
 
         internal void Maximize()
         {
             _engine.MaximizeRequest = true;
+        }
+
+        internal void UpdatePosition()
+        {
+            _engine.UpdatePositionRequest = true;
+        }
+
+        internal void UpdateSize()
+        {
+            _engine.UpdateSizeRequest = true;
         }
 
         internal void IsFixed(bool flag)
@@ -171,9 +181,14 @@ namespace SpaceVIL
 
         internal Glfw3.Glfw.Window GetGLWID()
         {
-            if (_engine == null)
-                return new Glfw3.Glfw.Window(IntPtr.Zero);
             return _engine.GLWHandler.GetWindowId();
+        }
+
+        internal bool IsGLWIDValid()
+        {
+            if (GetGLWID() == Glfw3.Glfw.Window.None)
+                return false;
+            return true;
         }
 
         internal bool InitEngine()

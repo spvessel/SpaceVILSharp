@@ -80,11 +80,19 @@ final class WindowLayout {
     }
 
     void minimize() {
-        _engine.minimizeWindow();
+        _engine.minimizeRequest = true;
     }
 
     void maximize() {
         _engine.maximizeRequest = true;
+    }
+
+    void updatePosition() {
+        _engine.updatePositionRequest = true;
+    }
+
+    void updateSize() {
+        _engine.updateSizeRequest = true;
     }
 
     void isFixed(Boolean flag) {
@@ -136,9 +144,13 @@ final class WindowLayout {
     }
 
     long getGLWID() {
-        if (_engine == null)
-            return NULL;
         return _engine.glwHandler.getWindowId();
+    }
+
+    boolean isGLWIDValid() {
+        if (getGLWID() == NULL)
+            return false;
+        return true;
     }
 
     boolean initEngine() {

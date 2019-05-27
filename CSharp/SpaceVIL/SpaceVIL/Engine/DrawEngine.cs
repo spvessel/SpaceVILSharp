@@ -30,6 +30,12 @@ namespace SpaceVIL
 {
     internal sealed class DrawEngine
     {
+        internal bool FullscreenRequest = false;
+        internal bool MaximizeRequest = false;
+        internal bool MinimizeRequest = false;
+        internal bool UpdateSizeRequest = false;
+        internal bool UpdatePositionRequest = false;
+
         private CommonProcessor _commonProcessor;
         private TextInputProcessor _textInputProcessor;
         private KeyInputProcessor _keyInputProcessor;
@@ -214,12 +220,22 @@ namespace SpaceVIL
             _fbo.UnbindFBO();
         }
 
+        internal void UpdateWindowSize()
+        {
+            _commonProcessor.WndProcessor.SetWindowSize(_commonProcessor.Window.GetWidth(),
+                    _commonProcessor.Window.GetHeight());
+        }
+
+        internal void UpdateWindowPosition()
+        {
+            _commonProcessor.WndProcessor.SetWindowPos(_commonProcessor.Window.GetX(), 
+                    _commonProcessor.Window.GetY());
+        }
+
         internal void MinimizeWindow()
         {
             _commonProcessor.WndProcessor.MinimizeWindow();
         }
-
-        internal bool MaximizeRequest = false;
 
         internal void MaximizeWindow()
         {
@@ -258,8 +274,8 @@ namespace SpaceVIL
         {
             GLWHandler.GetPointer().SetX(xpos);
             GLWHandler.GetPointer().SetY(ypos);
-            _commonProcessor.Window.SetX(xpos);
-            _commonProcessor.Window.SetY(ypos);
+            _commonProcessor.Window.SetXDirect(xpos);
+            _commonProcessor.Window.SetYDirect(ypos);
         }
 
         internal void SetWindowPos(int x, int y)
@@ -333,6 +349,21 @@ namespace SpaceVIL
             {
                 MaximizeWindow();
                 MaximizeRequest = false;
+            }
+            if (MinimizeRequest)
+            {
+                MinimizeWindow();
+                MinimizeRequest = false;
+            }
+            if (UpdateSizeRequest)
+            {
+                UpdateWindowSize();
+                UpdateSizeRequest = false;
+            }
+            if (UpdatePositionRequest)
+            {
+                UpdateWindowPosition();
+                UpdatePositionRequest = false;
             }
             if (!_commonProcessor.Events.LastEvent().HasFlag(InputEventType.WindowResize))
             {
@@ -547,7 +578,6 @@ namespace SpaceVIL
             _renderProcessor.DrawShadow(_blur, GetItemPyramidLevel(), weights, res, fboTexture, xy, wh,
                 _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
         }
-
 
         void DrawText(ITextContainer text)
         {
