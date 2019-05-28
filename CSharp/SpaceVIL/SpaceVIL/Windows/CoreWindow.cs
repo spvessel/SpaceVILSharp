@@ -201,15 +201,26 @@ namespace SpaceVIL
         // geometry
         private Geometry _itemGeometry = new Geometry();
 
+        internal void SetWidthDirect(int width)
+        {
+            _itemGeometry.SetWidth(width);
+            windowLayout.GetContainer().SetWidth(width);
+        }
+
         public void SetWidth(int width)
         {
             _itemGeometry.SetWidth(width);
             windowLayout.GetContainer().SetWidth(width);
-
             if (windowLayout.IsGLWIDValid())
             {
                 windowLayout.UpdateSize();
             }
+        }
+
+        internal void SetHeightDirect(int height)
+        {
+            _itemGeometry.SetHeight(height);
+            windowLayout.GetContainer().SetHeight(height);
         }
 
         public void SetHeight(int height)
@@ -359,6 +370,7 @@ namespace SpaceVIL
             IsOutsideClickClosable = false;
             IsMaximized = false;
             IsTransparent = false;
+            IsFullScreen = false;
         }
 
         public bool IsDialog;
@@ -372,6 +384,7 @@ namespace SpaceVIL
         public bool IsOutsideClickClosable;
         public bool IsMaximized;
         public bool IsTransparent;
+        internal bool IsFullScreen;
 
         public bool IsFocused;
 
@@ -409,6 +422,11 @@ namespace SpaceVIL
         public void Maximize()
         {
             windowLayout.Maximize();
+        }
+
+        public void ToggleFullScreen()
+        {
+            windowLayout.ToggleFullScreen();
         }
 
         public Prototype GetFocusedItem()

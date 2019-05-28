@@ -87,6 +87,10 @@ final class WindowLayout {
         _engine.maximizeRequest = true;
     }
 
+    void toggleFullScreen() {
+        _engine.fullScreenRequest = true;
+    }
+
     void updatePosition() {
         _engine.updatePositionRequest = true;
     }

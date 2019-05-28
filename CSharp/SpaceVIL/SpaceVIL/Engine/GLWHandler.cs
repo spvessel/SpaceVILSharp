@@ -81,8 +81,8 @@ namespace SpaceVIL
         internal void CreateWindow()
         {
             //important!!! may be the best combination of WINDOW HINTS!!!
-
             // Glfw.DefaultWindowHints();
+            // Glfw.WindowHint(Glfw.Hint.AutoIconify, false);
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.OpenglProfile, Glfw.OpenGLProfile.Core);
             Glfw.WindowHint(Glfw.Hint.Samples, _coreWindow._msaa);

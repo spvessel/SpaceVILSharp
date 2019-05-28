@@ -158,6 +158,7 @@ namespace SpaceVIL.Core
         WindowGetFocus = 0x80000,
         WindowLostFocus = 0x100000,
         WindowDrop = 0x2000000,
+        WindowMaximize = 0x4000000,
     }
 
     public enum InputState

@@ -30,7 +30,7 @@ final class DrawEngine {
     private RenderProcessor _renderProcessor;
     private StencilProcessor _stencilProcessor;
 
-    boolean fullscreenRequest = false;
+    boolean fullScreenRequest = false;
     boolean maximizeRequest = false;
     boolean minimizeRequest = false;
     boolean updateSizeRequest = false;
@@ -273,6 +273,10 @@ final class DrawEngine {
         _commonProcessor.wndProcessor.maximizeWindow();
     }
 
+    void fullScreen() {
+        _commonProcessor.wndProcessor.fullScreenWindow();
+    }
+
     private void closeWindow(long wnd) {
         glfwSetWindowShouldClose(glwHandler.getWindowId(), false);
         _commonProcessor.window.eventClose.execute();
@@ -288,8 +292,8 @@ final class DrawEngine {
 
     private void resize(long wnd, int width, int height) {
         _tooltip.initTimer(false);
-        _commonProcessor.window.setWidth(width);
-        _commonProcessor.window.setHeight(height);
+        _commonProcessor.window.setWidthDirect(width);
+        _commonProcessor.window.setHeightDirect(height);
     }
 
     void setWindowSize(int width, int height) {
@@ -361,11 +365,15 @@ final class DrawEngine {
     private VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
     void drawScene() {
-        if (maximizeRequest) {
+        if (fullScreenRequest) {
+            fullScreen();
+            fullScreenRequest = false;
+        }
+        else if (maximizeRequest) {
             maximizeWindow();
             maximizeRequest = false;
         }
-        if (minimizeRequest) {
+        else if (minimizeRequest) {
             minimizeWindow();
             minimizeRequest = false;
         }

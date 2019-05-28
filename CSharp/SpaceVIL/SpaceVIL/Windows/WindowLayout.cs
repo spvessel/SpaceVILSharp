@@ -106,6 +106,11 @@ namespace SpaceVIL
             _engine.MaximizeRequest = true;
         }
 
+        internal void ToggleFullScreen()
+        {
+            _engine.FullScreenRequest = true;
+        }
+
         internal void UpdatePosition()
         {
             _engine.UpdatePositionRequest = true;

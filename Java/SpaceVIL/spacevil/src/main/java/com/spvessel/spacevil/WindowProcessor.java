@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.spvessel.spacevil.Core.DropArgs;
+import com.spvessel.spacevil.Core.Geometry;
+import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.Side;
 
@@ -11,10 +13,15 @@ import java.awt.image.BufferedImage;
 import java.nio.*;
 import org.lwjgl.glfw.GLFWDropCallback;
 import org.lwjgl.*;
+import static org.lwjgl.system.MemoryUtil.*;
 import org.lwjgl.glfw.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 final class WindowProcessor {
+    private Geometry _geometryForRestore = new Geometry();
+    private Position _positionForRestore = new Position();
+    private long _monitor;
+    private GLFWVidMode _vid;
     private CommonProcessor _commonProcessor;
 
     WindowProcessor(CommonProcessor processor) {
@@ -66,8 +73,8 @@ final class WindowProcessor {
             String str = GLFWDropCallback.getName(paths, i);
             dargs.paths.add(str);
         }
-        _commonProcessor.manager.assignActionsForSender(InputEventType.WINDOW_DROP, dargs, _commonProcessor.rootContainer,
-                _commonProcessor.underFocusedItems, false);
+        _commonProcessor.manager.assignActionsForSender(InputEventType.WINDOW_DROP, dargs,
+                _commonProcessor.rootContainer, _commonProcessor.underFocusedItems, false);
     }
 
     void minimizeWindow() {
@@ -79,22 +86,42 @@ final class WindowProcessor {
 
     void maximizeWindow() {
         _commonProcessor.inputLocker = true;
-        IntBuffer w = BufferUtils.createIntBuffer(1);
-        IntBuffer h = BufferUtils.createIntBuffer(1);
-        _commonProcessor.events.setEvent(InputEventType.WINDOW_RESTORE);
 
         if (_commonProcessor.window.isMaximized) {
             glfwRestoreWindow(_commonProcessor.handler.getWindowId());
+            _commonProcessor.events.setEvent(InputEventType.WINDOW_RESTORE);
             _commonProcessor.window.isMaximized = false;
-            glfwGetWindowSize(_commonProcessor.handler.getWindowId(), w, h);
-            _commonProcessor.window.setWidth(w.get(0));
-            _commonProcessor.window.setHeight(h.get(0));
         } else {
             glfwMaximizeWindow(_commonProcessor.handler.getWindowId());
+            _commonProcessor.events.setEvent(InputEventType.WINDOW_MAXIMIZE);
             _commonProcessor.window.isMaximized = true;
-            glfwGetWindowSize(_commonProcessor.handler.getWindowId(), w, h);
-            _commonProcessor.window.setWidth(w.get(0));
-            _commonProcessor.window.setHeight(h.get(0));
+        }
+        IntBuffer w = BufferUtils.createIntBuffer(1);
+        IntBuffer h = BufferUtils.createIntBuffer(1);
+        glfwGetWindowSize(_commonProcessor.handler.getWindowId(), w, h);
+        _commonProcessor.window.setWidthDirect(w.get(0));
+        _commonProcessor.window.setHeightDirect(h.get(0));
+        _commonProcessor.inputLocker = false;
+    }
+
+    void fullScreenWindow() {
+        _commonProcessor.inputLocker = true;
+        _monitor = glfwGetPrimaryMonitor();
+        if (!_commonProcessor.window.isFullScreen) {
+            _vid = glfwGetVideoMode(_monitor);
+            _geometryForRestore.setSize(_commonProcessor.window.getWidth(), _commonProcessor.window.getHeight());
+            _positionForRestore.setPosition(_commonProcessor.window.getX(), _commonProcessor.window.getY());
+            glfwSetWindowMonitor(_commonProcessor.handler.getWindowId(), _monitor, 0, 0, _vid.width(), _vid.height(),
+                    _vid.refreshRate());
+            _commonProcessor.window.setWidthDirect(_vid.width());
+            _commonProcessor.window.setHeightDirect(_vid.height());
+            _commonProcessor.window.isFullScreen = true;
+        } else {
+            glfwSetWindowMonitor(_commonProcessor.handler.getWindowId(), NULL, _positionForRestore.getX(),
+                    _positionForRestore.getY(), _geometryForRestore.getWidth(), _geometryForRestore.getHeight(), 0);
+            _commonProcessor.window.setWidthDirect(_geometryForRestore.getWidth());
+            _commonProcessor.window.setHeightDirect(_geometryForRestore.getHeight());
+            _commonProcessor.window.isFullScreen = false;
         }
         _commonProcessor.inputLocker = false;
     }

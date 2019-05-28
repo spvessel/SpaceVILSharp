@@ -36,11 +36,13 @@ public class InputTest extends ActiveWindow {
 
         eventKeyPress.add((sender, args) -> {
             // if (args.key == KeyCode.V)
-            //     CommonService.setClipboardString("SetClipBoardString");
-            if (args.key == KeyCode.C)
-                System.out.println(CommonService.getClipboardString());
+            // CommonService.setClipboardString("SetClipBoardString");
+            // if (args.key == KeyCode.C)
+            // System.out.println(CommonService.getClipboardString());
             // if (args.key == KeyCode.F)
-            //     System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
+            // System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
+            if (args.key == KeyCode.F11)
+                toggleFullScreen();
         });
 
         TitleBar title = new TitleBar("Input Test");
@@ -87,8 +89,7 @@ public class InputTest extends ActiveWindow {
             if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.S) {
                 System.out.println(args.mods.size() + " mods: " + args.mods + " code: " + args.key);
                 tb.appendText("appended text line...\n");
-            }
-            else if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.R) {
+            } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.R) {
                 System.out.println(args.mods.size() + " mods: " + args.mods + " code: " + args.key);
                 tb.setText("SetText...");
             }
@@ -138,7 +139,7 @@ public class InputTest extends ActiveWindow {
         });
 
         Label label = new Label("1234567890");
-//        System.out.println(label.getTextWidth());
+        // System.out.println(label.getTextWidth());
         layout.addItem(label);
 
         eventDrop.add((sender, args) -> {

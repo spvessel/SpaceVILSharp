@@ -30,7 +30,7 @@ namespace SpaceVIL
 {
     internal sealed class DrawEngine
     {
-        internal bool FullscreenRequest = false;
+        internal bool FullScreenRequest = false;
         internal bool MaximizeRequest = false;
         internal bool MinimizeRequest = false;
         internal bool UpdateSizeRequest = false;
@@ -228,7 +228,7 @@ namespace SpaceVIL
 
         internal void UpdateWindowPosition()
         {
-            _commonProcessor.WndProcessor.SetWindowPos(_commonProcessor.Window.GetX(), 
+            _commonProcessor.WndProcessor.SetWindowPos(_commonProcessor.Window.GetX(),
                     _commonProcessor.Window.GetY());
         }
 
@@ -240,6 +240,11 @@ namespace SpaceVIL
         internal void MaximizeWindow()
         {
             _commonProcessor.WndProcessor.MaximizeWindow();
+        }
+
+        internal void FullScreen()
+        {
+            _commonProcessor.WndProcessor.FullScreenWindow();
         }
 
         private void CloseWindow(Glfw.Window window)
@@ -261,8 +266,8 @@ namespace SpaceVIL
         private void Resize(Glfw.Window window, int width, int height)
         {
             _tooltip.InitTimer(false);
-            GLWHandler.GetCoreWindow().SetWidth(width);
-            GLWHandler.GetCoreWindow().SetHeight(height);
+            GLWHandler.GetCoreWindow().SetWidthDirect(width);
+            GLWHandler.GetCoreWindow().SetHeightDirect(height);
         }
 
         internal void SetWindowSize(int width, int height)
@@ -345,12 +350,17 @@ namespace SpaceVIL
 
         internal void DrawScene()
         {
-            if (MaximizeRequest)
+            if (FullScreenRequest)
+            {
+                FullScreen();
+                FullScreenRequest = false;
+            }
+            else if (MaximizeRequest)
             {
                 MaximizeWindow();
                 MaximizeRequest = false;
             }
-            if (MinimizeRequest)
+            else if (MinimizeRequest)
             {
                 MinimizeWindow();
                 MinimizeRequest = false;

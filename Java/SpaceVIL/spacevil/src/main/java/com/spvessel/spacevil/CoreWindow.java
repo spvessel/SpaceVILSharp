@@ -192,19 +192,27 @@ public abstract class CoreWindow {
     // geometry
     private Geometry _itemGeometry = new Geometry();
 
+    void setWidthDirect(int width) {
+        _itemGeometry.setWidth(width);
+        windowLayout.getContainer().setWidth(width);
+    }
+
     public void setWidth(int width) {
         _itemGeometry.setWidth(width);
         windowLayout.getContainer().setWidth(width);
-
         if (windowLayout.isGLWIDValid()) {
             windowLayout.updateSize();
         }
     }
 
+    void setHeightDirect(int height) {
+        _itemGeometry.setHeight(height);
+        windowLayout.getContainer().setHeight(height);
+    }
+
     public void setHeight(int height) {
         _itemGeometry.setHeight(height);
         windowLayout.getContainer().setHeight(height);
-
         if (windowLayout.isGLWIDValid()) {
             windowLayout.updateSize();
         }
@@ -345,6 +353,7 @@ public abstract class CoreWindow {
         isOutsideClickClosable = false;
         isMaximized = false;
         isTransparent = false;
+        isFullScreen = false;
     }
 
     public boolean isDialog;
@@ -358,6 +367,7 @@ public abstract class CoreWindow {
     public boolean isOutsideClickClosable;
     public boolean isMaximized;
     public boolean isTransparent;
+    boolean isFullScreen;
 
     public boolean isFocused;
 
@@ -385,6 +395,10 @@ public abstract class CoreWindow {
 
     public void maximize() {
         windowLayout.maximize();
+    }
+
+    public void toggleFullScreen() {
+        windowLayout.toggleFullScreen();
     }
 
     public Prototype getFocusedItem() {
