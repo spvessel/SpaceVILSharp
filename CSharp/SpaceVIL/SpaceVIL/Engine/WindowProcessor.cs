@@ -42,7 +42,6 @@ namespace SpaceVIL
 
             Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(), width, height);
             _commonProcessor.Events.SetEvent(InputEventType.WindowResize);
-            Console.WriteLine("set size");
         }
 
         internal void SetWindowPos(int x, int y)
