@@ -235,7 +235,7 @@ class TextBlock extends Prototype
                 if (isCursorControlKey) {
                     if (!_isSelect) {
                         if (hasShift) {
-                            if ((args.mods.size() == 1) || (args.mods.size() == 2) && hasControl) {
+                            if ((args.mods.size() == 1) || ((args.mods.size() == 2) && hasControl)) {
                                 _isSelect = true;
                                 _selectFrom = new Point(_cursorPosition);
                             }
