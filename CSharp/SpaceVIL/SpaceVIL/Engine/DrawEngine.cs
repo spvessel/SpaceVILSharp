@@ -30,6 +30,12 @@ namespace SpaceVIL
 {
     internal sealed class DrawEngine
     {
+        internal bool FullScreenRequest = false;
+        internal bool MaximizeRequest = false;
+        internal bool MinimizeRequest = false;
+        internal bool UpdateSizeRequest = false;
+        internal bool UpdatePositionRequest = false;
+
         private CommonProcessor _commonProcessor;
         private TextInputProcessor _textInputProcessor;
         private KeyInputProcessor _keyInputProcessor;
@@ -214,16 +220,31 @@ namespace SpaceVIL
             _fbo.UnbindFBO();
         }
 
+        internal void UpdateWindowSize()
+        {
+            _commonProcessor.WndProcessor.SetWindowSize(_commonProcessor.Window.GetWidth(),
+                    _commonProcessor.Window.GetHeight());
+        }
+
+        internal void UpdateWindowPosition()
+        {
+            _commonProcessor.WndProcessor.SetWindowPos(_commonProcessor.Window.GetX(),
+                    _commonProcessor.Window.GetY());
+        }
+
         internal void MinimizeWindow()
         {
             _commonProcessor.WndProcessor.MinimizeWindow();
         }
 
-        internal bool MaximizeRequest = false;
-
         internal void MaximizeWindow()
         {
             _commonProcessor.WndProcessor.MaximizeWindow();
+        }
+
+        internal void FullScreen()
+        {
+            _commonProcessor.WndProcessor.FullScreenWindow();
         }
 
         private void CloseWindow(Glfw.Window window)
@@ -245,8 +266,8 @@ namespace SpaceVIL
         private void Resize(Glfw.Window window, int width, int height)
         {
             _tooltip.InitTimer(false);
-            GLWHandler.GetCoreWindow().SetWidth(width);
-            GLWHandler.GetCoreWindow().SetHeight(height);
+            GLWHandler.GetCoreWindow().SetWidthDirect(width);
+            GLWHandler.GetCoreWindow().SetHeightDirect(height);
         }
 
         internal void SetWindowSize(int width, int height)
@@ -258,8 +279,8 @@ namespace SpaceVIL
         {
             GLWHandler.GetPointer().SetX(xpos);
             GLWHandler.GetPointer().SetY(ypos);
-            _commonProcessor.Window.SetX(xpos);
-            _commonProcessor.Window.SetY(ypos);
+            _commonProcessor.Window.SetXDirect(xpos);
+            _commonProcessor.Window.SetYDirect(ypos);
         }
 
         internal void SetWindowPos(int x, int y)
@@ -329,10 +350,30 @@ namespace SpaceVIL
 
         internal void DrawScene()
         {
-            if (MaximizeRequest)
+            if (FullScreenRequest)
+            {
+                FullScreen();
+                FullScreenRequest = false;
+            }
+            else if (MaximizeRequest)
             {
                 MaximizeWindow();
                 MaximizeRequest = false;
+            }
+            else if (MinimizeRequest)
+            {
+                MinimizeWindow();
+                MinimizeRequest = false;
+            }
+            if (UpdateSizeRequest)
+            {
+                UpdateWindowSize();
+                UpdateSizeRequest = false;
+            }
+            if (UpdatePositionRequest)
+            {
+                UpdateWindowPosition();
+                UpdatePositionRequest = false;
             }
             if (!_commonProcessor.Events.LastEvent().HasFlag(InputEventType.WindowResize))
             {
@@ -547,7 +588,6 @@ namespace SpaceVIL
             _renderProcessor.DrawShadow(_blur, GetItemPyramidLevel(), weights, res, fboTexture, xy, wh,
                 _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
         }
-
 
         void DrawText(ITextContainer text)
         {

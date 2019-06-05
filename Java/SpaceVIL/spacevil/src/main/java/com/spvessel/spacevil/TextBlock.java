@@ -262,13 +262,11 @@ class TextBlock extends Prototype
                             if (_cursorPosition.x > 0) {
                                 StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursorPosition.y));
                                 _cursorPosition.x--;
-////                                replaceCursor();
                                 setTextInLine(sb.deleteCharAt(_cursorPosition.x).toString());
                             } else if (_cursorPosition.y > 0) {
                                 _cursorPosition.y--;
                                 _cursorPosition.x = getLineLetCount(_cursorPosition.y);
                                 _textureStorage.combineLines(_cursorPosition.y);
-////                                replaceCursor();
                                 addToUndoAndReplaceCursor();
                             }
 //                            replaceCursor();
@@ -320,7 +318,7 @@ class TextBlock extends Prototype
 
                             if (wordBounds[0] != wordBounds[1] && _cursorPosition.x != wordBounds[0]) {
                                 _cursorPosition = new Point(wordBounds[0], _cursorPosition.y);
-//                                replaceCursor();
+                               replaceCursor();
                                 doUsual = false;
                             }
                         }
@@ -332,7 +330,7 @@ class TextBlock extends Prototype
                                 _cursorPosition.y--;
                                 _cursorPosition.x = getLineLetCount(_cursorPosition.y);
                             }
-//                            replaceCursor();
+                           replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.RIGHT) // arrow right
@@ -344,7 +342,7 @@ class TextBlock extends Prototype
 
                             if (wordBounds[0] != wordBounds[1] && _cursorPosition.x != wordBounds[1]) {
                                 _cursorPosition = new Point(wordBounds[1], _cursorPosition.y);
-//                                replaceCursor();
+                               replaceCursor();
                                 doUsual = false;
                             }
                         }
@@ -356,7 +354,7 @@ class TextBlock extends Prototype
                                 _cursorPosition.y++;
                                 _cursorPosition.x = 0;
                             }
-//                            replaceCursor();
+                           replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.UP) // arrow up
@@ -365,7 +363,7 @@ class TextBlock extends Prototype
                             if (_cursorPosition.y > 0)
                                 _cursorPosition.y--;
                             // ?????
-//                            replaceCursor();
+                           replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.DOWN) // arrow down
@@ -374,7 +372,7 @@ class TextBlock extends Prototype
                             if (_cursorPosition.y < _textureStorage.getCount() - 1)
                                 _cursorPosition.y++;
                             // ?????
-//                            replaceCursor();
+                           replaceCursor();
                         }
                     }
 
@@ -385,13 +383,13 @@ class TextBlock extends Prototype
                         if (hasControl) {
                             int lineNum = _textureStorage.getCount() - 1;
                             _cursorPosition = new Point(getLineLetCount(lineNum), lineNum);
-//                            replaceCursor();
+                           replaceCursor();
                             doUsual = false;
                         }
 
                         if (doUsual) {
                             _cursorPosition.x = getLineLetCount(_cursorPosition.y);
-//                            replaceCursor();
+                           replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.HOME) // home
@@ -400,18 +398,18 @@ class TextBlock extends Prototype
 
                         if (hasControl) {
                             _cursorPosition = new Point(0, 0);
-//                            replaceCursor();
+                           replaceCursor();
                             doUsual = false;
                         }
 
                         if (doUsual) {
                             _cursorPosition.x = 0;
-//                            replaceCursor();
+                           replaceCursor();
                         }
                     }
                 }
             }
-            replaceCursor();
+            // replaceCursor();
             if (_isSelect) {
                 if (!_selectTo.equals(_cursorPosition)) {
                     _selectTo = new Point(_cursorPosition);
@@ -456,6 +454,8 @@ class TextBlock extends Prototype
         Point pos = addXYShifts(_cursorPosition);
         _cursor.setX(pos.x);
         _cursor.setY(pos.y - getLineSpacer() / 2 + 1);
+
+        //invoke cancelJustSelected
         cursorChanged.execute();
     }
 

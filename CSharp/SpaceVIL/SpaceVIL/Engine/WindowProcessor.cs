@@ -8,6 +8,10 @@ namespace SpaceVIL
 {
     internal class WindowProcessor
     {
+        private Geometry _geometryForRestore = new Geometry();
+        private Position _positionForRestore = new Position();
+        private Glfw.Monitor _monitor;
+        private Glfw.VideoMode _vid;
         CommonProcessor _commonProcessor;
         internal WindowProcessor(CommonProcessor commonProcessor)
         {
@@ -69,25 +73,46 @@ namespace SpaceVIL
             _commonProcessor.InputLocker = true;
             if (_commonProcessor.Window.IsMaximized)
             {
-                // Glfw.SetWindowMonitor(_commonProcessor.Handler.GetWindowId(), Glfw.Monitor.None, 0, 0, 500, 300, 60);
                 Glfw.RestoreWindow(_commonProcessor.Handler.GetWindowId());
+                _commonProcessor.Events.SetEvent(InputEventType.WindowRestore);
                 _commonProcessor.Window.IsMaximized = false;
-                int w, h;
-                Glfw.GetFramebufferSize(_commonProcessor.Handler.GetWindowId(), out w, out h);
-                _commonProcessor.Window.SetWidth(w);
-                _commonProcessor.Window.SetHeight(h);
             }
             else
             {
-                // Glfw.Monitor monitor = Glfw.GetPrimaryMonitor();
-                // Glfw.VideoMode vid = Glfw.GetVideoMode(monitor);
-                // Glfw.SetWindowMonitor(_commonProcessor.Handler.GetWindowId(), monitor, 0, 0, vid.Width, vid.Height, vid.RefreshRate);
                 Glfw.MaximizeWindow(_commonProcessor.Handler.GetWindowId());
+                _commonProcessor.Events.SetEvent(InputEventType.WindowMaximize);
                 _commonProcessor.Window.IsMaximized = true;
-                int w, h;
-                Glfw.GetFramebufferSize(_commonProcessor.Handler.GetWindowId(), out w, out h);
-                _commonProcessor.Window.SetWidth(w);
-                _commonProcessor.Window.SetHeight(h);
+            }
+            int w, h;
+            Glfw.GetWindowSize(_commonProcessor.Handler.GetWindowId(), out w, out h);
+            _commonProcessor.Window.SetWidthDirect(w);
+            _commonProcessor.Window.SetHeightDirect(h);
+            _commonProcessor.InputLocker = false;
+        }
+
+        internal void FullScreenWindow()
+        {
+            _commonProcessor.InputLocker = true;
+            _monitor = Glfw.GetPrimaryMonitor();
+            if (!_commonProcessor.Window.IsFullScreen)
+            {
+                _vid = Glfw.GetVideoMode(_monitor);
+                _geometryForRestore.SetSize(_commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
+                _positionForRestore.SetPosition(_commonProcessor.Window.GetX(), _commonProcessor.Window.GetY());
+                Glfw.SetWindowMonitor(_commonProcessor.Handler.GetWindowId(), _monitor, 0, 0, _vid.Width, _vid.Height, _vid.RefreshRate);
+                Glfw.FocusWindow(_commonProcessor.Handler.GetWindowId());
+                _commonProcessor.Window.SetWidthDirect(_vid.Width);
+                _commonProcessor.Window.SetHeightDirect(_vid.Height);
+                _commonProcessor.Window.IsFullScreen = true;
+            }
+            else
+            {
+                Glfw.SetWindowMonitor(_commonProcessor.Handler.GetWindowId(), Glfw.Monitor.None,
+                        _positionForRestore.GetX(), _positionForRestore.GetY(),
+                        _geometryForRestore.GetWidth(), _geometryForRestore.GetHeight(), 0);
+                _commonProcessor.Window.SetWidthDirect(_geometryForRestore.GetWidth());
+                _commonProcessor.Window.SetHeightDirect(_geometryForRestore.GetHeight());
+                _commonProcessor.Window.IsFullScreen = false;
             }
             _commonProcessor.InputLocker = false;
         }

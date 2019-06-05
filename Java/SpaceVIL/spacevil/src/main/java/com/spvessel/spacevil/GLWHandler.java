@@ -152,8 +152,8 @@ final class GLWHandler {
             getPointer().setY((height - _coreWindow.getHeight()) / 2);
 
         } else {
-            _coreWindow.setX(defWindowPos.getX());//200);
-            _coreWindow.setY(defWindowPos.getY());//50);
+            _coreWindow.setXDirect(defWindowPos.getX());//200);
+            _coreWindow.setYDirect(defWindowPos.getY());//50);
             getPointer().setX(defWindowPos.getX());//200);
             getPointer().setY(defWindowPos.getY());//50);
         }

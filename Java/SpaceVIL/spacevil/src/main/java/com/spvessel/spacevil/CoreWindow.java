@@ -192,22 +192,47 @@ public abstract class CoreWindow {
     // geometry
     private Geometry _itemGeometry = new Geometry();
 
-    public void setMinWidth(int width) {
-        _itemGeometry.setMinWidth(width);
-        if (windowLayout.getContainer() != null)
-            windowLayout.getContainer().setMinWidth(width);
+    void setWidthDirect(int width) {
+        _itemGeometry.setWidth(width);
+        windowLayout.getContainer().setWidth(width);
     }
 
     public void setWidth(int width) {
         _itemGeometry.setWidth(width);
-        if (windowLayout.getContainer() != null)
-            windowLayout.getContainer().setWidth(width);
+        windowLayout.getContainer().setWidth(width);
+        if (windowLayout.isGLWIDValid()) {
+            windowLayout.updateSize();
+        }
     }
 
-    public void setMaxWidth(int width) {
-        _itemGeometry.setMaxWidth(width);
+    void setHeightDirect(int height) {
+        _itemGeometry.setHeight(height);
+        windowLayout.getContainer().setHeight(height);
+    }
+
+    public void setHeight(int height) {
+        _itemGeometry.setHeight(height);
+        windowLayout.getContainer().setHeight(height);
+        if (windowLayout.isGLWIDValid()) {
+            windowLayout.updateSize();
+        }
+    }
+
+    public void setSize(int width, int height) {
+        _itemGeometry.setWidth(width);
+        windowLayout.getContainer().setWidth(width);
+        _itemGeometry.setHeight(height);
+        windowLayout.getContainer().setHeight(height);
+
+        if (windowLayout.isGLWIDValid()) {
+            windowLayout.updateSize();
+        }
+    }
+
+    public void setMinWidth(int width) {
+        _itemGeometry.setMinWidth(width);
         if (windowLayout.getContainer() != null)
-            windowLayout.getContainer().setMaxWidth(width);
+            windowLayout.getContainer().setMinWidth(width);
     }
 
     public void setMinHeight(int height) {
@@ -216,16 +241,26 @@ public abstract class CoreWindow {
             windowLayout.getContainer().setMinHeight(height);
     }
 
-    public void setHeight(int height) {
-        _itemGeometry.setHeight(height);
+    public void setMinSize(int width, int height) {
+        setMinWidth(width);
+        setMinHeight(height);
+    }
+
+    public void setMaxWidth(int width) {
+        _itemGeometry.setMaxWidth(width);
         if (windowLayout.getContainer() != null)
-            windowLayout.getContainer().setHeight(height);
+            windowLayout.getContainer().setMaxWidth(width);
     }
 
     public void setMaxHeight(int height) {
         _itemGeometry.setMaxHeight(height);
         if (windowLayout.getContainer() != null)
             windowLayout.getContainer().setMaxHeight(height);
+    }
+
+    public void setMaxSize(int width, int height) {
+        setMaxWidth(width);
+        setMaxHeight(height);
     }
 
     public int getMinWidth() {
@@ -252,21 +287,6 @@ public abstract class CoreWindow {
         return _itemGeometry.getMaxHeight();
     }
 
-    public void setSize(int width, int height) {
-        setWidth(width);
-        setHeight(height);
-    }
-
-    public void setMinSize(int width, int height) {
-        setMinWidth(width);
-        setMinHeight(height);
-    }
-
-    public void setMaxSize(int width, int height) {
-        setMaxWidth(width);
-        setMaxHeight(height);
-    }
-
     public int[] getSize() {
         return _itemGeometry.getSize();
     }
@@ -274,20 +294,51 @@ public abstract class CoreWindow {
     // position
     private Position _itemPosition = new Position();
 
-    public void setX(int x) {
+    void setXDirect(int x) {
         _itemPosition.setX(x);
+    }
+
+    public void setX(int x) {
+        setXDirect(x);
+        if (windowLayout.isGLWIDValid())
+            windowLayout.updatePosition();
     }
 
     public int getX() {
         return _itemPosition.getX();
     }
 
-    public void setY(int y) {
+    void setYDirect(int y) {
         _itemPosition.setY(y);
+    }
+
+    public void setY(int y) {
+        setYDirect(y);
+
+        if (windowLayout.isGLWIDValid())
+            windowLayout.updatePosition();
     }
 
     public int getY() {
         return _itemPosition.getY();
+    }
+
+    public void setPosition(int x, int y) {
+        _itemPosition.setPosition(x, y);
+
+        if (windowLayout.isGLWIDValid())
+            windowLayout.updatePosition();
+    }
+
+    public void setPosition(Position position) {
+        _itemPosition.setPosition(position.getX(), position.getY());
+
+        if (windowLayout.isGLWIDValid())
+            windowLayout.updatePosition();
+    }
+
+    public Position getPosition() {
+        return _itemPosition;
     }
 
     private void setDefaults() {
@@ -302,6 +353,7 @@ public abstract class CoreWindow {
         isOutsideClickClosable = false;
         isMaximized = false;
         isTransparent = false;
+        isFullScreen = false;
     }
 
     public boolean isDialog;
@@ -315,6 +367,7 @@ public abstract class CoreWindow {
     public boolean isOutsideClickClosable;
     public boolean isMaximized;
     public boolean isTransparent;
+    boolean isFullScreen;
 
     public boolean isFocused;
 
@@ -342,6 +395,10 @@ public abstract class CoreWindow {
 
     public void maximize() {
         windowLayout.maximize();
+    }
+
+    public void toggleFullScreen() {
+        windowLayout.toggleFullScreen();
     }
 
     public Prototype getFocusedItem() {
@@ -378,13 +435,11 @@ public abstract class CoreWindow {
     }
 
     public void setRenderFrequency(RedrawFrequency value) {
-        // windowLayout.setRenderFrequency(value);
         WindowManager.setRenderFrequency(value);
     }
 
     public RedrawFrequency getRenderFrequency() {
         return WindowManager.getRenderFrequency();
-        // return windowLayout.getRenderFrequency();
     }
 
     public EventCommonMethod eventOnStart = new EventCommonMethod();

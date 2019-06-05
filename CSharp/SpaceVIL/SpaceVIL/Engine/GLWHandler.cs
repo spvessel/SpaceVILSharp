@@ -81,8 +81,8 @@ namespace SpaceVIL
         internal void CreateWindow()
         {
             //important!!! may be the best combination of WINDOW HINTS!!!
-
             // Glfw.DefaultWindowHints();
+            // Glfw.WindowHint(Glfw.Hint.AutoIconify, false);
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.OpenglProfile, Glfw.OpenGLProfile.Core);
             Glfw.WindowHint(Glfw.Hint.Samples, _coreWindow._msaa);
@@ -122,8 +122,8 @@ namespace SpaceVIL
             {
                 // WPosition.SetX(_coreWindow.GetX());
                 // WPosition.SetY(_coreWindow.GetY());
-                _coreWindow.SetX(defWindowPos.GetX());//200);
-                _coreWindow.SetY(defWindowPos.GetY());//50);
+                _coreWindow.SetXDirect(defWindowPos.GetX());//200);
+                _coreWindow.SetYDirect(defWindowPos.GetY());//50);
                 GetPointer().SetX(defWindowPos.GetX());//200);
                 GetPointer().SetY(defWindowPos.GetY());//50);
             }

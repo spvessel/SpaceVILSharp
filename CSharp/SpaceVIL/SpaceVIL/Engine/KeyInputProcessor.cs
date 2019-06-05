@@ -8,7 +8,7 @@ namespace SpaceVIL
     internal class KeyInputProcessor
     {
         private KeyArgs _kargs;
-        private Dictionary<KeyMods, int> keyMap;
+        private Dictionary<KeyMods, Int32> keyMap;
         CommonProcessor _commonProcessor;
         internal KeyInputProcessor(CommonProcessor commonProcessor)
         {
@@ -16,7 +16,7 @@ namespace SpaceVIL
             _kargs = new KeyArgs();
             _kargs.Clear();
 #if LINUX
-                keyMap = new Dictionary<KeyMods, Integer>();
+                keyMap = new Dictionary<KeyMods, Int32>();
                 keyMap.Add(KeyMods.Shift, 0);
                 keyMap.Add(KeyMods.Control, 0);
                 keyMap.Add(KeyMods.Alt, 0);

@@ -11,6 +11,17 @@ namespace SpaceVIL.Core
     /// </summary>
     public class Position : IPosition
     {
+        public Position()
+        {
+
+        }
+
+        public Position(int x, int y)
+        {
+            _x = x;
+            _y = y;
+        }
+        
         private int _x = 0;
         private int _y = 0;
 
@@ -36,6 +47,12 @@ namespace SpaceVIL.Core
         public int GetY()
         {
             return _y;
+        }
+
+        public void SetPosition(int x, int y)
+        {
+            SetX(x);
+            SetY(y);
         }
     }
 }

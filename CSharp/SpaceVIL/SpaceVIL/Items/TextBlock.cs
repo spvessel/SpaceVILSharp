@@ -14,8 +14,8 @@ namespace SpaceVIL
 {
     internal class TextBlock : Prototype, ITextEditable, IDraggable, ITextShortcuts, IGrid//, ITextContainer
     {
-        public EventCommonMethod TextChanged;
-        public EventCommonMethod CursorChanged;
+        internal EventCommonMethod TextChanged;
+        internal EventCommonMethod CursorChanged;
 
         public override void Release()
         {
@@ -37,12 +37,12 @@ namespace SpaceVIL
         private bool _justSelected = false;
 
         private HashSet<KeyCode> _cursorControlKeys;
-        //private HashSet<KeyCode> _insteadKeyMods;
+        // private HashSet<KeyCode> _insteadKeyMods;
         private HashSet<KeyCode> _serviceEditKeys;
 
         private int scrollXStep = 15;
 
-        public TextBlock()
+        internal TextBlock()
         {
             SetItemName("TextBlock_" + count);
             count++;
@@ -62,7 +62,7 @@ namespace SpaceVIL
 
             _cursorControlKeys = new HashSet<KeyCode>() {KeyCode.Left, KeyCode.Right, KeyCode.End,
                 KeyCode.Home, KeyCode.Up, KeyCode.Down};
-            //_insteadKeyMods = new HashSet<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl,
+            // _insteadKeyMods = new HashSet<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl,
             //    KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
             _serviceEditKeys = new HashSet<KeyCode>() {KeyCode.Backspace, KeyCode.Delete, KeyCode.Enter, 
                 KeyCode.NumpadEnter, KeyCode.Tab};
@@ -370,7 +370,7 @@ namespace SpaceVIL
                                 if (wordBounds[0] != wordBounds[1] && _cursorPosition.X != wordBounds[0])
                                 {
                                     _cursorPosition = new Point(wordBounds[0], _cursorPosition.Y);
-                                    // ReplaceCursor();
+                                    ReplaceCursor();
                                     doUsual = false;
                                 }
                             }
@@ -384,7 +384,7 @@ namespace SpaceVIL
                                     _cursorPosition.Y--;
                                     _cursorPosition.X = GetLineLetCount(_cursorPosition.Y);
                                 }
-                                // ReplaceCursor();
+                                ReplaceCursor();
                             }
                         }
                         if (args.Key == KeyCode.Right) //arrow right
@@ -398,7 +398,7 @@ namespace SpaceVIL
                                 if (wordBounds[0] != wordBounds[1] && _cursorPosition.X != wordBounds[1])
                                 {
                                     _cursorPosition = new Point(wordBounds[1], _cursorPosition.Y);
-                                    // ReplaceCursor();
+                                    ReplaceCursor();
                                     doUsual = false;
                                 }
                             }
@@ -412,7 +412,7 @@ namespace SpaceVIL
                                     _cursorPosition.Y++;
                                     _cursorPosition.X = 0;
                                 }
-                                // ReplaceCursor();
+                                ReplaceCursor();
                             }
 
                         }
@@ -423,7 +423,7 @@ namespace SpaceVIL
                                 if (_cursorPosition.Y > 0)
                                     _cursorPosition.Y--;
                                 //?????
-                                // ReplaceCursor();
+                                ReplaceCursor();
                             }
 
                         }
@@ -434,7 +434,7 @@ namespace SpaceVIL
                                 if (_cursorPosition.Y < _textureStorage.GetCount() - 1)
                                     _cursorPosition.Y++;
                                 //?????
-                                // ReplaceCursor();
+                                ReplaceCursor();
                             }        
                         }
 
@@ -446,14 +446,14 @@ namespace SpaceVIL
                             {                        
                                 int lineNum = _textureStorage.GetCount() - 1;
                                 _cursorPosition = new Point(GetLineLetCount(lineNum), lineNum);
-                                // ReplaceCursor();
+                                ReplaceCursor();
                                 doUsual = false;                        
                             }
 
                             if (doUsual)
                             {
                                 _cursorPosition.X = GetLineLetCount(_cursorPosition.Y);
-                                // ReplaceCursor();
+                                ReplaceCursor();
                             }
                         }
                         if (args.Key == KeyCode.Home) //home
@@ -463,19 +463,19 @@ namespace SpaceVIL
                             if (hasControl)
                             {
                                 _cursorPosition = new Point(0, 0);
-                                // ReplaceCursor();
+                                ReplaceCursor();
                                 doUsual = false;                        
                             }
 
                             if (doUsual)
                             {
                                 _cursorPosition.X = 0;
-                                // ReplaceCursor();
+                                ReplaceCursor();
                             }
                         }
                     }
                 }
-                ReplaceCursor();
+                // ReplaceCursor();
                 if (_isSelect)
                 {
                     if (!_selectTo.Equals(_cursorPosition))
@@ -526,6 +526,8 @@ namespace SpaceVIL
             Point pos = AddXYShifts(_cursorPosition);
             _cursor.SetX(pos.X);
             _cursor.SetY(pos.Y - GetLineSpacer() / 2 + 1);
+
+            //invoke cancelJustSelected
             CursorChanged?.Invoke();
         }
 

@@ -30,6 +30,12 @@ final class DrawEngine {
     private RenderProcessor _renderProcessor;
     private StencilProcessor _stencilProcessor;
 
+    boolean fullScreenRequest = false;
+    boolean maximizeRequest = false;
+    boolean minimizeRequest = false;
+    boolean updateSizeRequest = false;
+    boolean updatePositionRequest = false;
+
     private float _itemPyramidLevel = 1.0f;
 
     private float getItemPyramidLevel() {
@@ -250,14 +256,25 @@ final class DrawEngine {
         _fbo.unbindFBO();
     }
 
+    void updateWindowSize() {
+        _commonProcessor.wndProcessor.setWindowSize(_commonProcessor.window.getWidth(),
+                _commonProcessor.window.getHeight());
+    }
+
+    void updateWindowPosition() {
+        _commonProcessor.wndProcessor.setWindowPos(_commonProcessor.window.getX(), _commonProcessor.window.getY());
+    }
+
     void minimizeWindow() {
         _commonProcessor.wndProcessor.minimizeWindow();
     }
 
-    boolean maximizeRequest = false;
-
     void maximizeWindow() {
         _commonProcessor.wndProcessor.maximizeWindow();
+    }
+
+    void fullScreen() {
+        _commonProcessor.wndProcessor.fullScreenWindow();
     }
 
     private void closeWindow(long wnd) {
@@ -275,8 +292,8 @@ final class DrawEngine {
 
     private void resize(long wnd, int width, int height) {
         _tooltip.initTimer(false);
-        _commonProcessor.window.setWidth(width);
-        _commonProcessor.window.setHeight(height);
+        _commonProcessor.window.setWidthDirect(width);
+        _commonProcessor.window.setHeightDirect(height);
     }
 
     void setWindowSize(int width, int height) {
@@ -286,20 +303,20 @@ final class DrawEngine {
     private void position(long wnd, int xpos, int ypos) {
         glwHandler.getPointer().setX(xpos);
         glwHandler.getPointer().setY(ypos);
-        _commonProcessor.window.setX(xpos);
-        _commonProcessor.window.setY(ypos);
+        _commonProcessor.window.setXDirect(xpos);
+        _commonProcessor.window.setYDirect(ypos);
     }
 
     void setWindowPos(int x, int y) {
         _commonProcessor.wndProcessor.setWindowPos(x, y);
     }
 
-    boolean flag_move = false;
+    boolean flagMove = false;
 
     private void mouseMove(long wnd, double xpos, double ypos) {
-        if (!flag_move || _commonProcessor.inputLocker)
+        if (!flagMove || _commonProcessor.inputLocker)
             return;
-        flag_move = false;
+        flagMove = false;
         _commonProcessor.events.setEvent(InputEventType.MOUSE_MOVE);
         _tooltip.initTimer(false);
         if (!glwHandler.focusable)
@@ -348,15 +365,31 @@ final class DrawEngine {
     private VRAMFramebuffer _fbo = new VRAMFramebuffer();
 
     void drawScene() {
-        if (maximizeRequest) {
+        if (fullScreenRequest) {
+            fullScreen();
+            fullScreenRequest = false;
+        }
+        else if (maximizeRequest) {
             maximizeWindow();
             maximizeRequest = false;
+        }
+        else if (minimizeRequest) {
+            minimizeWindow();
+            minimizeRequest = false;
+        }
+        if (updateSizeRequest) {
+            updateWindowSize();
+            updateSizeRequest = false;
+        }
+        if (updatePositionRequest) {
+            updateWindowPosition();
+            updatePositionRequest = false;
         }
         if (!_commonProcessor.events.lastEvent().contains(InputEventType.WINDOW_RESIZE)) {
             update();
             glwHandler.swap();
         }
-        flag_move = true;
+        flagMove = true;
     }
 
     private void update() {
