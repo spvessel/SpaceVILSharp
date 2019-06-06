@@ -437,7 +437,7 @@ public class Style implements Cloneable {
         style.height = 30;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        style.borderRadius = new CornerRadius();
+        style.borderRadius = new CornerRadius(2);
 
         // style.borderThickness = 2;
         // style.borderFill = new Color(255, 255, 255);
@@ -1941,7 +1941,7 @@ public class Style implements Cloneable {
         // controlpanel
         Style controlpanel_style = getFrameStyle();
         controlpanel_style.heightPolicy = SizePolicy.FIXED;
-        controlpanel_style.height = 40;
+        controlpanel_style.height = 45;
         controlpanel_style.setBackground(45, 45, 45);
         controlpanel_style.setPadding(6, 6, 6, 6);
         style.addInnerStyle("controlpanel", controlpanel_style);
@@ -1949,14 +1949,16 @@ public class Style implements Cloneable {
         Style okbutton_style = getButtonCoreStyle();
         okbutton_style.setSize(100, 30);
         okbutton_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
-        okbutton_style.setMargin(0, 0, 105, 0);
-        okbutton_style.borderRadius = new CornerRadius();
+        okbutton_style.setMargin(0, 0, 110, 0);
+        okbutton_style.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 180)));
+        okbutton_style.isShadowDrop = true;
         style.addInnerStyle("okbutton", okbutton_style);
 
         Style cancelbutton_style = getButtonCoreStyle();
         cancelbutton_style.setSize(100, 30);
         cancelbutton_style.setAlignment(ItemAlignment.VCENTER, ItemAlignment.RIGHT);
-        cancelbutton_style.borderRadius = new CornerRadius();
+        cancelbutton_style.setShadow(new Shadow(5, 2, 2, new Color(0, 0, 0, 180)));
+        cancelbutton_style.isShadowDrop = true;
         style.addInnerStyle("cancelbutton", cancelbutton_style);
 
         Style filter_style = getButtonCoreStyle();

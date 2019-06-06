@@ -50,6 +50,16 @@ public class Program {
         // lt.show();
         // con.show();
 
-        WindowManager.startWith(it);
+        WindowManager.startWith(
+            mw
+            // st
+            // im
+            // ft
+            // lt
+            // ct
+            // it
+            // tt
+            // con
+        );
     }
 }

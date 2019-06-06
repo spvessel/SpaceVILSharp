@@ -212,7 +212,7 @@ namespace SpaceVIL.Decorations
             BorderFill = border.GetFill();
             BorderRadius = border.GetRadius();
             BorderThickness = border.GetThickness();
-        } 
+        }
 
         /// <summary>
         /// Set border of the object
@@ -234,7 +234,7 @@ namespace SpaceVIL.Decorations
             ShadowXOffset = shadow.GetXOffset();
             ShadowYOffset = shadow.GetYOffset();
         }
-        
+
         /// <summary>
         /// Set object alignment
         /// </summary>
@@ -453,7 +453,7 @@ namespace SpaceVIL.Decorations
             style.Height = 10;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
-            style.BorderRadius = new CornerRadius();
+            style.BorderRadius = new CornerRadius(2);
             ItemState hovered = new ItemState(Color.FromArgb(60, 255, 255, 255));
             style.AddItemState(ItemStateType.Hovered, hovered);
             ItemState pressed = new ItemState(Color.FromArgb(60, 0, 0, 0));
@@ -1894,7 +1894,7 @@ namespace SpaceVIL.Decorations
             // controlpanel
             Style controlpanel_style = GetFrameStyle();
             controlpanel_style.HeightPolicy = SizePolicy.Fixed;
-            controlpanel_style.Height = 40;
+            controlpanel_style.Height = 45;
             controlpanel_style.SetBackground(45, 45, 45);
             controlpanel_style.SetPadding(6, 6, 6, 6);
             style.AddInnerStyle("controlpanel", controlpanel_style);
@@ -1902,14 +1902,16 @@ namespace SpaceVIL.Decorations
             Style okbutton_style = GetButtonCoreStyle();
             okbutton_style.SetSize(100, 30);
             okbutton_style.SetAlignment(ItemAlignment.VCenter, ItemAlignment.Right);
-            okbutton_style.SetMargin(0, 0, 105, 0);
-            okbutton_style.BorderRadius = new CornerRadius();
+            okbutton_style.SetMargin(0, 0, 110, 0);
+            okbutton_style.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(180, 0, 0, 0)));
+            okbutton_style.IsShadowDrop = true;
             style.AddInnerStyle("okbutton", okbutton_style);
 
             Style cancelbutton_style = GetButtonCoreStyle();
             cancelbutton_style.SetSize(100, 30);
             cancelbutton_style.SetAlignment(ItemAlignment.VCenter, ItemAlignment.Right);
-            cancelbutton_style.BorderRadius = new CornerRadius();
+            cancelbutton_style.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(180, 0, 0, 0)));
+            cancelbutton_style.IsShadowDrop = true;
             style.AddInnerStyle("cancelbutton", cancelbutton_style);
 
             Style filter_style = GetButtonCoreStyle();
