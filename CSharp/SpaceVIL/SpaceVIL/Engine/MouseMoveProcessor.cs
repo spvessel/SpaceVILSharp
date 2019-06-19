@@ -14,7 +14,7 @@ namespace SpaceVIL
             _commonProcessor = commonProcessor;
         }
 
-        internal void Process(Glfw.Window wnd, double xpos, double ypos)
+        internal void Process(Int64 wnd, double xpos, double ypos)
         {
             _commonProcessor.PtrRelease.SetX((int)xpos);
             _commonProcessor.PtrRelease.SetY((int)ypos);

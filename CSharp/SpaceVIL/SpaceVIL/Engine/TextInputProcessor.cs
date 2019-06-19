@@ -15,7 +15,7 @@ namespace SpaceVIL
             _tiargs.Clear();
         }
 
-        internal void Process(Glfw.Window wnd, uint character, KeyMods mods)
+        internal void Process(Int64 wnd, uint character, KeyMods mods)
         {
             _tiargs.Character = character;
             _tiargs.Mods = mods;

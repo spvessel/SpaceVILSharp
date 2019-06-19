@@ -50,7 +50,7 @@ namespace SpaceVIL
             _commonProcessor.Events.SetEvent(InputEventType.WindowMove);
         }
 
-        internal void Drop(Glfw.Window glfwwnd, int count, string[] paths)
+        internal void Drop(Int64 glfwwnd, int count, string[] paths)
         {
             DropArgs dargs = new DropArgs();
             dargs.Count = count;
@@ -117,7 +117,7 @@ namespace SpaceVIL
             _commonProcessor.InputLocker = false;
         }
 
-        internal void Focus(Glfw.Window wnd, bool value)
+        internal void Focus(Int64 wnd, bool value)
         {
             _commonProcessor.Events.ResetAllEvents();
             _commonProcessor.Tooltip.InitTimer(false);
@@ -201,7 +201,7 @@ namespace SpaceVIL
             Glfw.VideoMode vid = Glfw.GetVideoMode(monitor);
             Glfw.SetWindowMonitor(window.GetGLWID(), monitor, 0, 0, vid.Width, vid.Height, vid.RefreshRate);
         }
-        internal static void ToggleToWindowedMode(Glfw.Window window)
+        internal static void ToggleToWindowedMode(Int64 window)
         {
             Glfw.SetWindowMonitor(window, Glfw.Monitor.None, 0, 0, 500, 300, 60);
         }

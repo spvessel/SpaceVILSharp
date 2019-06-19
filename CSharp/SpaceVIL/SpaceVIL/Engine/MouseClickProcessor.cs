@@ -46,7 +46,7 @@ namespace SpaceVIL
             return false;
         }
 
-        internal void Process(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
+        internal void Process(Int64 window, MouseButton button, InputState state, KeyMods mods)
         {
             _commonProcessor.Margs.Button = button;
             _commonProcessor.Margs.State = state;
@@ -100,7 +100,7 @@ namespace SpaceVIL
             }
         }
 
-        internal void Press(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
+        internal void Press(Int64 window, MouseButton button, InputState state, KeyMods mods)
         {
             Glfw.GetFramebufferSize(_commonProcessor.Handler.GetWindowId(), out _commonProcessor.WGlobal, out _commonProcessor.HGlobal);
             _commonProcessor.XGlobal = _commonProcessor.Handler.GetPointer().GetX();
@@ -159,7 +159,7 @@ namespace SpaceVIL
             _commonProcessor.Events.SetEvent(InputEventType.MousePress);
         }
 
-        internal void Release(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
+        internal void Release(Int64 window, MouseButton button, InputState state, KeyMods mods)
         {
             _commonProcessor.RootContainer.RestoreFocus();
             bool isDoubleClick = IsDoubleClick(_commonProcessor.HoveredItem);

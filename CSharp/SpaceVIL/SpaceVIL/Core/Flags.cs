@@ -405,5 +405,6 @@ namespace SpaceVIL.Core
         Hand = 0x00036004,
         ResizeX = 0x00036005,
         ResizeY = 0x00036006,
+        ResizeXY = 0x00036007
     }
 }

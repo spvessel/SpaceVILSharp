@@ -1,25 +1,17 @@
 // #define LINUX 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.IO;
-using System.Text;
 
-using Glfw3;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Drawing;
+using static OpenGL.OpenGLConstants;
 
 #if MAC
-using static GL.LGL.OpenLGL;
+using static OpenGL.UnixGL;
 #elif WINDOWS
-using static GL.WGL.OpenWGL;
+using static OpenGL.WindowsGL;
 #elif LINUX
-using static GL.LGL.OpenLGL;
+using static OpenGL.UnixGL;
 #else
-using static GL.WGL.OpenWGL;
+using static OpenGL.WindowsGL;
 #endif
 
 namespace SpaceVIL

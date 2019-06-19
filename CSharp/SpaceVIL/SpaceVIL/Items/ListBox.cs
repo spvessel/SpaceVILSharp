@@ -221,7 +221,6 @@ namespace SpaceVIL
                 case KeyCode.Down:
                     if (IsOutsideArea(selection_Y, selection.GetHeight(), selection.GetMargin()))
                     {
-                        // _area.SetVScrollOffset(offset - (startY - selection_Y));
                         _area.SetVScrollOffset(offset + selection.GetHeight() + (selection.GetY() - (_area.GetY() + _area.GetHeight())));
                         UpdateVerticalSlider();
                         break;
@@ -238,11 +237,11 @@ namespace SpaceVIL
             }
         }
 
-        private void UpdateListAreaAttributes(object sender)
-        {
-            UpdateVListArea();
-            UpdateHListArea();
-        }
+        // private void UpdateListAreaAttributes(object sender)
+        // {
+        //     UpdateVListArea();
+        //     UpdateHListArea();
+        // }
 
         private Int64 v_size = 0;
         private Int64 h_size = 0;
@@ -325,7 +324,8 @@ namespace SpaceVIL
             if (visible_area < 0)
                 visible_area = 0;
 
-            List<IBaseItem> list = _area.GetItems();
+            // List<IBaseItem> list = _area.GetItems();
+            List<IBaseItem> list = GetListContent();
 
             foreach (var item in list)
             {
@@ -377,6 +377,15 @@ namespace SpaceVIL
             float f = (100.0f / (float)total_invisible_size) * (float)_area.GetHScrollOffset();
             HScrollBar.Slider.SetCurrentValue(f);
         }
+
+        // internal void RefreshWrapperWidth()
+        // {
+        //     foreach (SelectionItem wrp in GetArea()._mapContent.Values)
+        //     {
+        //         wrp.SetMinWidth(_maxWrapperWidth);
+        //         wrp.GetContent().SetMinWidth(_maxWrapperWidth);
+        //     }
+        // }
 
         /// <summary>
         /// Set width of the ListBox
@@ -434,7 +443,6 @@ namespace SpaceVIL
         public override void Clear()
         {
             _area.Clear();
-            // UpdateElements();
         }
 
         /// <summary>

@@ -58,12 +58,12 @@ namespace SpaceVIL.Common
         }
 
         //cursors 
-        public static Glfw.Cursor CursorArrow;
-        public static Glfw.Cursor CursorInput;
-        public static Glfw.Cursor CursorHand;
-        public static Glfw.Cursor CursorResizeH;
-        public static Glfw.Cursor CursorResizeV;
-        public static Glfw.Cursor CursorResizeAll;
+        internal static Glfw3.Glfw.Cursor CursorArrow;
+        internal static Glfw3.Glfw.Cursor CursorInput;
+        internal static Glfw3.Glfw.Cursor CursorHand;
+        internal static Glfw3.Glfw.Cursor CursorResizeH;
+        internal static Glfw3.Glfw.Cursor CursorResizeV;
+        internal static Glfw3.Glfw.Cursor CursorResizeAll;
 
         public static bool InitSpaceVILComponents()
         {
@@ -73,12 +73,12 @@ namespace SpaceVIL.Common
                 return false;
             }
             //cursors
-            CursorArrow = Glfw.CreateStandardCursor(Glfw.CursorType.Arrow);
-            CursorInput = Glfw.CreateStandardCursor(Glfw.CursorType.Beam);
-            CursorHand = Glfw.CreateStandardCursor(Glfw.CursorType.Hand);
-            CursorResizeH = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeX);
-            CursorResizeV = Glfw.CreateStandardCursor(Glfw.CursorType.ResizeY);
-            CursorResizeAll = Glfw.CreateStandardCursor(Glfw.CursorType.Crosshair);
+            CursorArrow = Glfw.CreateStandardCursor(EmbeddedCursor.Arrow);
+            CursorInput = Glfw.CreateStandardCursor(EmbeddedCursor.IBeam);
+            CursorHand = Glfw.CreateStandardCursor(EmbeddedCursor.Hand);
+            CursorResizeH = Glfw.CreateStandardCursor(EmbeddedCursor.ResizeX);
+            CursorResizeV = Glfw.CreateStandardCursor(EmbeddedCursor.ResizeY);
+            CursorResizeAll = Glfw.CreateStandardCursor(EmbeddedCursor.Crosshair);
 
             DisplayService.SetDisplaySize(Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width,
                         Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height);
@@ -94,8 +94,8 @@ namespace SpaceVIL.Common
             CoreWindow window = WindowsBox.GetCurrentFocusedWindow();
             if (window == null)
                 return "";
-            Glfw.Window id = window.GetGLWID();
-            if (!id)
+            Int64 id = window.GetGLWID();
+            if (id == 0)
                 return String.Empty;
             return Glfw.GetClipboardString(id);
         }
@@ -105,8 +105,8 @@ namespace SpaceVIL.Common
             CoreWindow window = WindowsBox.GetCurrentFocusedWindow();
             if (window == null)
                 return;
-            Glfw.Window id = window.GetGLWID();
-            if (!id)
+            Int64 id = window.GetGLWID();
+            if (id == 0)
                 return;
             Glfw.SetClipboardString(id, text);
         }

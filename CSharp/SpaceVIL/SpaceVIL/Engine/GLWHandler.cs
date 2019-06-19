@@ -61,8 +61,8 @@ namespace SpaceVIL
         {
             return _coreWindow;
         }
-        Glfw.Window _window;
-        internal Glfw.Window GetWindowId()
+        Int64 _window;
+        internal Int64 GetWindowId()
         {
             return _window;
         }
@@ -99,7 +99,7 @@ namespace SpaceVIL
 
             _window = Glfw.CreateWindow(_coreWindow.GetWidth(), _coreWindow.GetHeight(), _coreWindow.GetWindowTitle());
 
-            if (!_window)
+            if (_window == 0)
             {
                 LogService.Log().LogText("Create window fail - " + GetCoreWindow().GetWindowTitle());
                 throw new SpaceVILException("SpaceVILException: Create window fail - " + GetCoreWindow().GetWindowTitle());
@@ -139,7 +139,7 @@ namespace SpaceVIL
 
         internal void SwitchContext()
         {
-            Glfw.MakeContextCurrent(Glfw.Window.None);
+            Glfw.MakeContextCurrent(0);
             Glfw.MakeContextCurrent(_window);
         }
 

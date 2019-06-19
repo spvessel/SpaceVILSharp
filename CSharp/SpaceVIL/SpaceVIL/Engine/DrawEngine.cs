@@ -2,28 +2,23 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.IO;
-using System.Text;
 
 using Glfw3;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Drawing;
 using SpaceVIL.Core;
 using Pointer = SpaceVIL.Core.Pointer;
 using SpaceVIL.Common;
-using System.Diagnostics;
+using static OpenGL.OpenGLConstants;
 
 #if MAC
-using static GL.LGL.OpenLGL;
+using static OpenGL.UnixGL;
 #elif WINDOWS
-using static GL.WGL.OpenWGL;
+using static OpenGL.WindowsGL;
 #elif LINUX
-using static GL.LGL.OpenLGL;
+using static OpenGL.UnixGL;
 #else
-using static GL.WGL.OpenWGL;
+using static OpenGL.WindowsGL;
 #endif
 
 namespace SpaceVIL
@@ -140,7 +135,7 @@ namespace SpaceVIL
             {
                 Console.WriteLine(ex.ToString());
                 GLWHandler.ClearEventsCallbacks();
-                if (GLWHandler.GetWindowId())
+                if (GLWHandler.GetWindowId() == 0)
                     GLWHandler.Destroy();
                 GLWHandler.GetCoreWindow().Close();
                 return false;
@@ -197,18 +192,18 @@ namespace SpaceVIL
             GLWHandler.SetCallbackDrop(Drop);
         }
 
-        private void Drop(Glfw.Window window, int count, string[] paths)
+        private void Drop(Int64 window, int count, string[] paths)
         {
             _commonProcessor.WndProcessor.Drop(window, count, paths);
         }
 
-        private void Refresh(Glfw.Window window)
+        private void Refresh(Int64 window)
         {
             Update();
             GLWHandler.Swap();
         }
 
-        void Framebuffer(Glfw.Window window, int w, int h)
+        void Framebuffer(Int64 window, int w, int h)
         {
             _framebufferWidth = w;
             _framebufferHeight = h;
@@ -247,13 +242,13 @@ namespace SpaceVIL
             _commonProcessor.WndProcessor.FullScreenWindow();
         }
 
-        private void CloseWindow(Glfw.Window window)
+        private void CloseWindow(Int64 window)
         {
             Glfw.SetWindowShouldClose(GLWHandler.GetWindowId(), false);
             _commonProcessor.Window.EventClose.Invoke();
         }
 
-        internal void Focus(Glfw.Window window, bool value)
+        internal void Focus(Int64 window, bool value)
         {
             _commonProcessor.WndProcessor.Focus(window, value);
         }
@@ -263,7 +258,7 @@ namespace SpaceVIL
             Glfw.FocusWindow(GLWHandler.GetWindowId());
         }
 
-        private void Resize(Glfw.Window window, int width, int height)
+        private void Resize(Int64 window, int width, int height)
         {
             _tooltip.InitTimer(false);
             GLWHandler.GetCoreWindow().SetWidthDirect(width);
@@ -275,7 +270,7 @@ namespace SpaceVIL
             _commonProcessor.WndProcessor.SetWindowSize(width, height);
         }
 
-        private void Position(Glfw.Window window, int xpos, int ypos)
+        private void Position(Int64 window, int xpos, int ypos)
         {
             GLWHandler.GetPointer().SetX(xpos);
             GLWHandler.GetPointer().SetY(ypos);
@@ -290,7 +285,7 @@ namespace SpaceVIL
 
         private bool flag_move = false;
 
-        private void MouseMove(Glfw.Window wnd, double xpos, double ypos)
+        private void MouseMove(Int64 wnd, double xpos, double ypos)
         {
             if (!flag_move || _commonProcessor.InputLocker)
                 return;
@@ -302,7 +297,7 @@ namespace SpaceVIL
             _mouseMoveProcessor.Process(wnd, xpos, ypos);
         }
 
-        private void MouseClick(Glfw.Window window, MouseButton button, InputState state, KeyMods mods)
+        private void MouseClick(Int64 window, MouseButton button, InputState state, KeyMods mods)
         {
             if (_commonProcessor.InputLocker || !GLWHandler.Focusable)
                 return;
@@ -311,7 +306,7 @@ namespace SpaceVIL
             _mouseClickProcessor.Process(window, button, state, mods);
         }
 
-        private void MouseScroll(Glfw.Window window, double dx, double dy)
+        private void MouseScroll(Int64 window, double dx, double dy)
         {
             if (_commonProcessor.InputLocker)
                 return;
@@ -320,7 +315,7 @@ namespace SpaceVIL
             _commonProcessor.Events.SetEvent(InputEventType.MouseScroll);
         }
 
-        private void KeyPress(Glfw.Window window, KeyCode key, int scancode, InputState action, KeyMods mods)
+        private void KeyPress(Int64 window, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
             if (_commonProcessor.InputLocker || !GLWHandler.Focusable)
                 return;
@@ -328,7 +323,7 @@ namespace SpaceVIL
             _keyInputProcessor.Process(window, key, scancode, action, mods);
         }
 
-        private void TextInput(Glfw.Window window, uint character, KeyMods mods)
+        private void TextInput(Int64 window, uint character, KeyMods mods)
         {
             if (_commonProcessor.InputLocker || !GLWHandler.Focusable)
                 return;

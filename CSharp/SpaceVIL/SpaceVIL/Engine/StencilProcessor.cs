@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using SpaceVIL.Core;
 
+using static OpenGL.OpenGLConstants;
+
 #if MAC
-using static GL.LGL.OpenLGL;
+using static OpenGL.UnixGL;
 #elif WINDOWS
-using static GL.WGL.OpenWGL;
+using static OpenGL.WindowsGL;
 #elif LINUX
-using static GL.LGL.OpenLGL;
+using static OpenGL.UnixGL;
 #else
-using static GL.WGL.OpenWGL;
+using static OpenGL.WindowsGL;
 #endif
 
 namespace SpaceVIL

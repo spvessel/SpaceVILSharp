@@ -19,9 +19,9 @@ public class VisualContact extends Prototype {
         // self view attr
         setItemName("VC_" + _count);
         setBackground(80, 80, 80);
-        setMinSize(250, 60);
-        setSize(100, 60);
-        setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        // setMinSize(250, 60);
+        setSize(300, 60);
+        setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
         setBorderRadius(15);
         ItemState hover = new ItemState();

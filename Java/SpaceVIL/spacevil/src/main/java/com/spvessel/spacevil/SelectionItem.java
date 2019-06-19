@@ -50,7 +50,16 @@ public class SelectionItem extends Prototype {
                 _item.getHeight() + _item.getMargin().bottom + _item.getMargin().top + 2);
         setMinSize(_item.getMinWidth() + _item.getMargin().left + _item.getMargin().right,
                 _item.getMinHeight() + _item.getMargin().bottom + _item.getMargin().top);
-        // _item.setParent(getParent());
+    }
+
+    public void updateWidth() {
+        setWidth(_item.getWidth() + _item.getMargin().left + _item.getMargin().right);
+        setMinWidth(_item.getMinWidth() + _item.getMargin().left + _item.getMargin().right);
+    }
+
+    public void updateHeight() {
+        setHeight(_item.getHeight() + _item.getMargin().bottom + _item.getMargin().top + 2);
+        setMinHeight(_item.getMinHeight() + _item.getMargin().bottom + _item.getMargin().top);
     }
 
     // private for class
@@ -84,7 +93,8 @@ public class SelectionItem extends Prototype {
     public boolean removeItem(InterfaceBaseItem item) {
         if (_item != null)
             return getParent().removeItem(item);
-        else return false;
+        else
+            return false;
     }
 
     public void clearContent() {

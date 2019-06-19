@@ -1,18 +1,12 @@
-// #define LINUX 
-
 namespace Glfw3
 {
     using System;
-    using System.IO;
     using System.Runtime.InteropServices;
     using System.Text;
 
-    /// <summary>
-    /// <a href="http://www.glfw.org/">GLFW 3</a> bindings.
-    /// </summary>
-    public static partial class Glfw
+    internal static partial class Glfw
     {
-        
+
 #if LINUX
                 const string kLibrary = "libglfw.so"; //lunux
 #elif WINDOWS
@@ -23,14 +17,6 @@ namespace Glfw3
         const string kLibrary = "glfw3.dll"; //windows
 #endif
 
-        /// <summary>
-        /// Adds the specified native directory path to the Path environment variable to facilitate
-        /// native loading.
-        /// </summary>
-        /// <param name="nativeDirectory">The directory that the native library is stored
-        /// in.</param>
-        /// <exception cref="DirectoryNotFoundException">When <paramref name="nativeDirectory"/> is
-        /// not found.</exception>
         // public static void ConfigureNativesDirectory(string nativeDirectory)
         // {
         //     // if (Directory.Exists(nativeDirectory))
@@ -39,30 +25,12 @@ namespace Glfw3
         //     //     throw new DirectoryNotFoundException(nativeDirectory);
         // }
 
-        /// <summary>
-        /// GLFW_DONT_CARE
-        /// </summary>
-        public readonly static int DontCare = -1;
 
-        /// <summary>
-        /// The major version number of the GLFW library. This is incremented when the API is
-        /// changed in non-compatible ways.
-        /// </summary>
-        public readonly static int VersionMajor = 3;
+        internal readonly static int DontCare = -1;
+        internal readonly static int VersionMajor = 3;
+        internal readonly static int VersionMinor = 2;
+        internal readonly static int VersionRevision = 1;
 
-        /// <summary>
-        /// The minor version number of the GLFW library. This is incremented when features are
-        /// added to the API but it remains backward-compatible.
-        /// </summary>
-        public readonly static int VersionMinor = 2;
-
-        /// <summary>
-        /// The revision number of the GLFW library. This is incremented when a bug fix release is
-        /// made that does not contain any API changes.
-        /// </summary>
-        public readonly static int VersionRevision = 1;
-
-        // string <> utf8 utility functions
         internal static IntPtr ToUTF8(string text)
         {
             int len = Encoding.UTF8.GetByteCount(text);

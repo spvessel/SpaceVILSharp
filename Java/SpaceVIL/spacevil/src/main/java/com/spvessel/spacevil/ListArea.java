@@ -1,7 +1,6 @@
 package com.spvessel.spacevil;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
@@ -214,7 +213,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     public void insertItem(InterfaceBaseItem item, int index) {
         SelectionItem wrapper = getWrapper(item);
         super.insertItem(wrapper, index);
-        wrapper.updateSize();
+        wrapper.updateHeight();
         _mapContent.put(item, wrapper);
         updateLayout();
 
@@ -229,7 +228,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     public void addItem(InterfaceBaseItem item) {
         SelectionItem wrapper = getWrapper(item);
         super.addItem(wrapper);
-        wrapper.updateSize();
+        wrapper.updateHeight();
         _mapContent.put(item, wrapper);
         updateLayout();
     }

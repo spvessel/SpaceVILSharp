@@ -184,14 +184,14 @@ namespace SpaceVIL
             _scaleHeight = h;
         }
 
-        internal Glfw3.Glfw.Window GetGLWID()
+        internal Int64 GetGLWID()
         {
             return _engine.GLWHandler.GetWindowId();
         }
 
         internal bool IsGLWIDValid()
         {
-            if (GetGLWID() == Glfw3.Glfw.Window.None)
+            if (GetGLWID() == 0)
                 return false;
             return true;
         }

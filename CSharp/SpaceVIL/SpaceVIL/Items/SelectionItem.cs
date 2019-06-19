@@ -23,7 +23,6 @@ namespace SpaceVIL
             IsFocusable = false;
             SetItemName("SelectionItem_" + count);
             count++;
-            // SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.SelectionItem)));
         }
         public SelectionItem(IBaseItem content) : this()
         {
@@ -53,7 +52,18 @@ namespace SpaceVIL
                     _item.GetHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top + 2);
             SetMinSize(_item.GetMinWidth() + _item.GetMargin().Left + _item.GetMargin().Right,
                     _item.GetMinHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top);
-            // _item.SetParent(GetParent());
+        }
+
+        public void UpdateWidth()
+        {
+            SetWidth(_item.GetWidth() + _item.GetMargin().Left + _item.GetMargin().Right);
+            SetMinWidth(_item.GetMinWidth() + _item.GetMargin().Left + _item.GetMargin().Right);
+        }
+
+        public void UpdateHeight()
+        {
+            SetHeight(_item.GetHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top + 2);
+            SetMinHeight(_item.GetMinHeight() + _item.GetMargin().Bottom + _item.GetMargin().Top);
         }
 
         // private for class
@@ -96,7 +106,7 @@ namespace SpaceVIL
             else return false;
         }
 
-        public void ClearContent() 
+        public void ClearContent()
         {
             base.RemoveItem(_item);
             _item = null;

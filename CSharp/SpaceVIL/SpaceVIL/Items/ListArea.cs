@@ -216,7 +216,7 @@ namespace SpaceVIL
         {
             SelectionItem wrapper = GetWrapper(item);
             base.InsertItem(wrapper, index);
-            wrapper.UpdateSize();
+            wrapper.UpdateHeight();
             _mapContent.Add(item, wrapper);
             UpdateLayout();
 
@@ -231,7 +231,7 @@ namespace SpaceVIL
         {
             SelectionItem wrapper = GetWrapper(item);
             base.AddItem(wrapper);
-            wrapper.UpdateSize();
+            wrapper.UpdateHeight();
             _mapContent.Add(item, wrapper);
             UpdateLayout();
         }

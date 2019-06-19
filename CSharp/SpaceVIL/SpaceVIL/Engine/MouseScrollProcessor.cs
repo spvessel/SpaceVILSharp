@@ -14,7 +14,7 @@ namespace SpaceVIL
             _commonProcessor = processor;
         }
 
-        internal void Process(Glfw.Window glfwwnd, double dx, double dy)
+        internal void Process(Int64 glfwwnd, double dx, double dy)
         {
             if (_commonProcessor.UnderHoveredItems.Count == 0)
                 return;

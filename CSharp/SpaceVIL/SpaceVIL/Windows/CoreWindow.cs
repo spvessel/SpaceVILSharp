@@ -623,7 +623,7 @@ namespace SpaceVIL
             return Color.Transparent;
         }
 
-        public Glfw3.Glfw.Window GetGLWID()
+        public Int64 GetGLWID()
         {
             return GetLayout().GetGLWID();
         }

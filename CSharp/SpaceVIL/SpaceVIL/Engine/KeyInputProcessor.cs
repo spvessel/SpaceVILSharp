@@ -24,7 +24,7 @@ namespace SpaceVIL
 #endif
         }
 
-        internal void Process(Glfw.Window glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
+        internal void Process(Int64 glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
         {
             _kargs.Key = key;
             _kargs.Scancode = scancode;

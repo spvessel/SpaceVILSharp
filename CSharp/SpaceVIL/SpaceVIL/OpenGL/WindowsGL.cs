@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Linq;
-using System.Reflection;
-using System.IO;
+using System.Threading;
+using SpaceVIL.Core;
 
-namespace GL.LGL
+namespace OpenGL
 {
-    static internal partial class OpenLGL
+    internal static class WindowsGL
     {
         #region OpenGL_Basic_Functions
-#if MAC
-        public const string LIBRARY_OPENGL = "//System//Library//Frameworks//OpenGL.framework//Libraries//libGL.dylib";
-#else
-        public const string LIBRARY_OPENGL = "libGL.so.1";
-#endif
+        public const string LIBRARY_OPENGL = "opengl32.dll";
 
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glAccum(uint op, float value);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glAlphaFunc(uint func, float ref_notkeword);
@@ -321,7 +313,7 @@ namespace GL.LGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexCoordPointer(int size, uint type, int stride, float[] pointer);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexEnvf(uint target, uint pname, float param);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexEnvfv(uint target, uint pname, float[] params_notkeyword);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexEnvi(uint target, uint pname, int param);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexEnvi(uint target, uint pname, uint param);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexEnviv(uint target, uint pname, int[] params_notkeyword);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexGend(uint coord, uint pname, double param);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexGendv(uint coord, uint pname, double[] params_notkeyword);
@@ -335,10 +327,10 @@ namespace GL.LGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameterf(uint target, uint pname, float param);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameterfv(uint target, uint pname, float[] params_notkeyword);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameteri(uint target, uint pname, uint param);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameteriv(uint target, uint pname, int[] params_notkeyword);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexParameteriv(uint target, uint pname, uint[] params_notkeyword);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexSubImage1D(uint target, int level, int xoffset, int width, uint format, uint type, int[] pixels);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexSubImage2D(uint target, int level, int xoffset, int yoffset, int width, int height, uint format, uint type, byte[] pixels);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexStorage2D(uint target, int level, uint internalformat, int width, int height);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexSubImage2D(uint target, int level, int xoffset, int yoffset, int width, int height, uint format, uint type, IntPtr pixels);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTranslated(double x, double y, double z);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTranslatef(float x, float y, float z);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glVertex2d(double x, double y);
@@ -373,109 +365,458 @@ namespace GL.LGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glViewport(int x, int y, int width, int height);
         #endregion
 
+        #region GLU_Basic_Functions
+        internal const string LIBRARY_GLU = "Glu32.dll";
+
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static unsafe extern sbyte* gluErrorString(uint errCode);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static unsafe extern sbyte* gluGetString(int name);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluOrtho2D(double left, double right, double bottom, double top);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluPerspective(double fovy, double aspect, double zNear, double zFar);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluPickMatrix(double x, double y, double width, double height, int[] viewport);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluLookAt(double eyex, double eyey, double eyez, double centerx, double centery, double centerz, double upx, double upy, double upz);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluProject(double objx, double objy, double objz, double[] modelMatrix, double[] projMatrix, int[] viewport, double[] winx, double[] winy, double[] winz);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluUnProject(double winx, double winy, double winz, double[] modelMatrix, double[] projMatrix, int[] viewport, ref double objx, ref double objy, ref double objz);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluScaleImage(int format, int widthin, int heightin, int typein, int[] datain, int widthout, int heightout, int typeout, int[] dataout);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluBuild1DMipmaps(uint target, uint components, int width, uint format, uint type, IntPtr data);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluBuild2DMipmaps(uint target, uint components, int width, int height, uint format, uint type, IntPtr data);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern IntPtr gluNewQuadric();
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluDeleteQuadric(IntPtr state);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluQuadricNormals(IntPtr quadObject, uint normals);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluQuadricTexture(IntPtr quadObject, int textureCoords);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluQuadricOrientation(IntPtr quadObject, int orientation);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluQuadricDrawStyle(IntPtr quadObject, uint drawStyle);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluCylinder(IntPtr qobj, double baseRadius, double topRadius, double height, int slices, int stacks);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluDisk(IntPtr qobj, double innerRadius, double outerRadius, int slices, int loops);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluPartialDisk(IntPtr qobj, double innerRadius, double outerRadius, int slices, int loops, double startAngle, double sweepAngle);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluSphere(IntPtr qobj, double radius, int slices, int stacks);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern IntPtr gluNewTess();
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluDeleteTess(IntPtr tess);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluTessBeginPolygon(IntPtr tess, IntPtr polygonData);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluTessBeginContour(IntPtr tess);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluTessVertex(IntPtr tess, double[] coords, double[] data);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluTessEndContour(IntPtr tess);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluTessEndPolygon(IntPtr tess);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluTessProperty(IntPtr tess, int which, double value);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluTessNormal(IntPtr tess, double x, double y, double z);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluGetTessProperty(IntPtr tess, int which, double value);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern IntPtr gluNewNurbsRenderer();
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluDeleteNurbsRenderer(IntPtr nobj);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluBeginSurface(IntPtr nobj);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluBeginCurve(IntPtr nobj);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluEndCurve(IntPtr nobj);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluEndSurface(IntPtr nobj);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluBeginTrim(IntPtr nobj);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluEndTrim(IntPtr nobj);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluPwlCurve(IntPtr nobj, int count, float array, int stride, uint type);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluNurbsCurve(IntPtr nobj, int nknots, float[] knot, int stride, float[] ctlarray, int order, uint type);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluNurbsSurface(IntPtr nobj, int sknot_count, float[] sknot, int tknot_count, float[] tknot, int s_stride, int t_stride, float[] ctlarray, int sorder, int torder, uint type);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluLoadSamplingMatrices(IntPtr nobj, float[] modelMatrix, float[] projMatrix, int[] viewport);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluNurbsProperty(IntPtr nobj, int property, float value);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void gluGetNurbsProperty(IntPtr nobj, int property, float value);
+        [DllImport(LIBRARY_GLU, SetLastError = true)] public static extern void IntPtrCallback(IntPtr nobj, int which, IntPtr Callback);
+        #endregion
+
+        //Extensions
+        static private Dictionary<string, Delegate> extensionFunctions = new Dictionary<string, Delegate>();
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern IntPtr wglGetProcAddress(string name);
+        static private Object locker = new Object();
+        static private Delegate InvokeWGL<T>(string name)
+        {
+            Type delegateType = typeof(T);
+            Delegate del = null;
+            Monitor.Enter(locker);
+            try
+            {
+                if (!extensionFunctions.ContainsKey(name))
+                {
+                    IntPtr proc = wglGetProcAddress(name);
+                    if (proc == IntPtr.Zero)
+                        throw new SpaceVILException("SpaceVILException: Extension function " + name + " not supported");
+
+                    del = Marshal.GetDelegateForFunctionPointer(proc, delegateType);
+                    if (del == null)
+                        throw new SpaceVILException("SpaceVILException: Extension function " + name + " not supported");
+
+                    extensionFunctions.Add(name, del);
+                }
+                del = extensionFunctions[name];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ex: " + ex.ToString());
+            }
+            finally
+            {
+                Monitor.Exit(locker);
+            }
+
+            return del;
+        }
+
         //OpenGL Extensions Functions
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern int glGetUniformLocation(uint shader, string value);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern uint glCreateShader(uint type);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glShaderSource(uint shader, int count, string[] source, int[] length);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glCompileShader(uint shader);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern uint glCreateProgram();
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glAttachShader(uint program, uint shader);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glLinkProgram(uint program);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenVertexArrays(int n, uint[] arrays);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glBindVertexArray(uint array);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUseProgram(uint program);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDetachShader(uint program, uint shader);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDeleteShader(uint shader);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDeleteVertexArrays(int n, uint[] arrays);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDeleteProgram(uint program);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenBuffers(int n, uint[] buffers);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenFramebuffersEXT(int n, uint[] buffers);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glBlendFuncSeparate(uint srcRGB, uint dstRGB, uint srcAlpha, uint dstAlpha);
+
+        private delegate uint blendFuncSeparate(uint srcRGB, uint dstRGB, uint srcAlpha, uint dstAlpha);
+        public static void glBlendFuncSeparate(uint srcRGB, uint dstRGB, uint srcAlpha, uint dstAlpha)
+        {
+            Delegate wgl = InvokeWGL<blendFuncSeparate>("glBlendFuncSeparate");
+            wgl.DynamicInvoke(srcRGB, dstRGB, srcAlpha, dstAlpha);
+        }
+
+        private delegate uint createShader(uint shader);
+        static public uint glCreateShader(uint shader)
+        {
+            Delegate wgl = InvokeWGL<createShader>("glCreateShader");
+            return (uint)wgl.DynamicInvoke(shader);
+        }
+
+        public delegate void shaderSource(uint shader, int count, string[] source, int[] length);
+        static public void glShaderSource(uint shader, int count, string[] source, int[] length)
+        {
+            Delegate wgl = InvokeWGL<shaderSource>("glShaderSource");
+            wgl.DynamicInvoke(shader, count, source, length);
+        }
+
+        public delegate void compileShader(uint shader);
+        static public void glCompileShader(uint shader)
+        {
+            Delegate wgl = InvokeWGL<compileShader>("glCompileShader");
+            wgl.DynamicInvoke(shader);
+        }
+
+        public delegate uint createProgram();
+        static public uint glCreateProgram()
+        {
+            Delegate wgl = InvokeWGL<createProgram>("glCreateProgram");
+            return (uint)wgl.DynamicInvoke();
+        }
+
+        public delegate void attachShader(uint program, uint shader);
+        static public void glAttachShader(uint program, uint shader)
+        {
+            Delegate wgl = InvokeWGL<attachShader>("glAttachShader");
+            wgl.DynamicInvoke(program, shader);
+        }
+
+        public delegate void linkProgram(uint program);
+        static public void glLinkProgram(uint program)
+        {
+            Delegate wgl = InvokeWGL<linkProgram>("glLinkProgram");
+            wgl.DynamicInvoke(program);
+        }
+
+        public delegate void genVertexArrays(int n, uint[] arrays);
+        static public void glGenVertexArrays(int n, uint[] arrays)
+        {
+            Delegate wgl = InvokeWGL<genVertexArrays>("glGenVertexArrays");
+            wgl.DynamicInvoke(n, arrays);
+        }
+
+        public delegate void bindVertexArray(uint array);
+        static public void glBindVertexArray(uint array)
+        {
+            Delegate wgl = InvokeWGL<bindVertexArray>("glBindVertexArray");
+            wgl.DynamicInvoke(array);
+        }
+
+        public delegate void useProgram(uint program);
+        static public void glUseProgram(uint program)
+        {
+            Delegate wgl = InvokeWGL<useProgram>("glUseProgram");
+            wgl.DynamicInvoke(program);
+        }
+
+        public delegate void detachShader(uint program, uint shader);
+        static public void glDetachShader(uint program, uint shader)
+        {
+            Delegate wgl = InvokeWGL<detachShader>("glDetachShader");
+            wgl.DynamicInvoke(program, shader);
+        }
+
+        public delegate void deleteShader(uint shader);
+        static public void glDeleteShader(uint shader)
+        {
+            Delegate wgl = InvokeWGL<deleteShader>("glDeleteShader");
+            wgl.DynamicInvoke(shader);
+        }
+
+        public delegate void deleteVertexArrays(int n, uint[] arrays);
+        static public void glDeleteVertexArrays(int n, uint[] arrays)
+        {
+            Delegate wgl = InvokeWGL<deleteVertexArrays>("glDeleteVertexArrays");
+            wgl.DynamicInvoke(n, arrays);
+        }
+
+        public delegate void deleteProgram(uint program);
+        static public void glDeleteProgram(uint program)
+        {
+            Delegate wgl = InvokeWGL<deleteProgram>("glDeleteProgram");
+            wgl.DynamicInvoke(program);
+        }
+
+        public delegate void genBuffers(int n, uint[] buffers);
+        static public void glGenBuffers(int n, uint[] buffers)
+        {
+            Delegate wgl = InvokeWGL<genBuffers>("glGenBuffers");
+            wgl.DynamicInvoke(n, buffers);
+        }
+        public delegate void genFramebuffers(int n, uint[] buffers);
         static public void glGenFramebuffers(int n, uint[] buffers)
         {
-            glGenFramebuffersEXT(n, buffers);
+            Delegate wgl = InvokeWGL<genFramebuffers>("glGenFramebuffersEXT");
+            wgl.DynamicInvoke(n, buffers);
         }
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenRenderbuffersEXT(int n, uint[] buffers);
+        public delegate void genRenderbuffers(int n, uint[] buffers);
         static public void glGenRenderbuffers(int n, uint[] buffers)
         {
-            glGenRenderbuffersEXT(n, buffers);
+            Delegate wgl = InvokeWGL<genRenderbuffers>("glGenRenderbuffersEXT");
+            wgl.DynamicInvoke(n, buffers);
         }
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glBindBuffer(uint target, uint buffer);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glBindFramebufferEXT(uint target, uint buffer);
-        static public void glBindFramebuffer(uint target, uint buffers)
+        public delegate void bindBuffer(uint target, uint buffer);
+        static public void glBindBuffer(uint target, uint buffer)
         {
-            glBindFramebufferEXT(target, buffers);
+            Delegate wgl = InvokeWGL<bindBuffer>("glBindBuffer");
+            wgl.DynamicInvoke(target, buffer);
         }
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenRenderbuffersEXT(uint target, uint buffer);
-        static public void glGenRenderbuffers(uint target, uint buffers)
+        public delegate void bindFramebuffer(uint target, uint buffer);
+        static public void glBindFramebuffer(uint target, uint buffer)
         {
-            glGenRenderbuffersEXT(target, buffers);
+            Delegate wgl = InvokeWGL<bindFramebuffer>("glBindFramebufferEXT");
+            wgl.DynamicInvoke(target, buffer);
         }
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glBufferData(uint target, int size, IntPtr data, uint usage);
-        public static void glBufferData(uint target, float[] data, uint usage)
+        public delegate void bindRenderbuffer(uint target, uint buffer);
+        static public void glBindRenderbuffer(uint target, uint buffer)
         {
-            IntPtr vp = Marshal.AllocHGlobal(data.Length * sizeof(float));
-            Marshal.Copy(data, 0, vp, data.Length);
-            glBufferData(target, data.Length * sizeof(float), vp, usage);
-            Marshal.FreeHGlobal(vp);
+            Delegate wgl = InvokeWGL<bindRenderbuffer>("glBindRenderbufferEXT");
+            wgl.DynamicInvoke(target, buffer);
         }
-        public static void glBufferData(uint target, int[] data, uint usage)
+        public delegate void bufferData(uint target, int size, IntPtr data, uint usage);
+        static public void glBufferData(uint target, float[] data, uint usage)
         {
-            IntPtr vp = Marshal.AllocHGlobal(data.Length * sizeof(float));
-            Marshal.Copy(data, 0, vp, data.Length);
-            glBufferData(target, data.Length * sizeof(float), vp, usage);
-            Marshal.FreeHGlobal(vp);
+            IntPtr ptr = Marshal.AllocHGlobal(data.Length * sizeof(float));
+            Marshal.Copy(data, 0, ptr, data.Length);
+
+            Delegate wgl = InvokeWGL<bufferData>("glBufferData");
+            wgl.DynamicInvoke(target, data.Length * sizeof(float), ptr, usage);
+
+            Marshal.FreeHGlobal(ptr);
         }
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glVertexAttribPointer(uint index, int size, uint type, bool normalized, int stride, IntPtr pointer);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDisableVertexAttribArray(uint index);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glEnableVertexAttribArray(uint index);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDeleteBuffers(int n, uint[] buffers);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDeleteFramebuffersEXT(int n, uint[] buffers);
+        static public void glBufferData(uint target, int[] data, uint usage)
+        {
+            IntPtr ptr = Marshal.AllocHGlobal(data.Length * sizeof(float));
+            Marshal.Copy(data, 0, ptr, data.Length);
+
+            Delegate wgl = InvokeWGL<bufferData>("glBufferData");
+            wgl.DynamicInvoke(target, data.Length * sizeof(uint), ptr, usage);
+
+            Marshal.FreeHGlobal(ptr);
+        }
+
+        public delegate void vertexAttribPointer(uint index, int size, uint type, bool normalized, int stride, IntPtr pointer);
+        static public void glVertexAttribPointer(uint index, int size, uint type, bool normalized, int stride, IntPtr pointer)
+        {
+            Delegate wgl = InvokeWGL<vertexAttribPointer>("glVertexAttribPointer");
+            wgl.DynamicInvoke(index, size, type, normalized, stride, pointer);
+        }
+
+        public delegate void disableVertexAttribArray(uint index);
+        static public void glDisableVertexAttribArray(uint index)
+        {
+            Delegate wgl = InvokeWGL<disableVertexAttribArray>("glDisableVertexAttribArray");
+            wgl.DynamicInvoke(index);
+        }
+
+        public delegate void enableVertexAttribArray(uint index);
+        static public void glEnableVertexAttribArray(uint index)
+        {
+            Delegate wgl = InvokeWGL<enableVertexAttribArray>("glEnableVertexAttribArray");
+            wgl.DynamicInvoke(index);
+        }
+
+        public delegate void deleteBuffers(int n, uint[] buffers);
+        static public void glDeleteBuffers(int n, uint[] buffers)
+        {
+            Delegate wgl = InvokeWGL<deleteBuffers>("glDeleteBuffers");
+            wgl.DynamicInvoke(n, buffers);
+        }
+        public delegate void deleteFrameBuffers(int n, uint[] buffers);
         static public void glDeleteFramebuffers(int n, uint[] buffers)
         {
-            glDeleteFramebuffersEXT(n, buffers);
+            Delegate wgl = InvokeWGL<deleteFrameBuffers>("glDeleteFramebuffersEXT");
+            wgl.DynamicInvoke(n, buffers);
         }
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDeleteRenderbuffersEXT(int n, uint[] buffers);
+        public delegate void deleteRenderBuffers(int n, uint[] buffers);
         static public void glDeleteRenderbuffers(int n, uint[] buffers)
         {
-            glDeleteRenderbuffersEXT(n, buffers);
+            Delegate wgl = InvokeWGL<deleteRenderBuffers>("glDeleteRenderbuffersEXT");
+            wgl.DynamicInvoke(n, buffers);
+        }
+        //Work with Textures
+        public delegate void generateMipmap(uint target);
+        static public void glGenerateMipmap(uint target)
+        {
+            Delegate wgl = InvokeWGL<generateMipmap>("glGenerateMipmap");
+            wgl.DynamicInvoke(target);
         }
 
-        //Work with Textures
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenerateMipmap(uint target);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glActiveTexture(uint texture);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform1f(int location, float v0);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform2f(int location, float v0, float v1);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform3f(int location, float v0, float v1, float v2);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform4f(int location, float v0, float v1, float v2, float v3);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform1i(int location, int v0);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform2i(int location, int v0, int v1);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform3i(int location, int v0, int v1, int v2);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform4i(int location, int v0, int v1, int v2, int v3);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform1fv(int location, int count, float[] value);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform2fv(int location, int count, float[] value);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform3fv(int location, int count, float[] value);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform4fv(int location, int count, float[] value);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform1iv(int location, int count, int[] value);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform2iv(int location, int count, int[] value);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform3iv(int location, int count, int[] value);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform4iv(int location, int count, int[] value);
+        public delegate void activeTexture(uint texture);
+        static public void glActiveTexture(uint texture)
+        {
+            Delegate wgl = InvokeWGL<activeTexture>("glActiveTexture");
+            wgl.DynamicInvoke(texture);
+        }
 
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glFramebufferTextureEXT(uint target, uint attachment, uint texture, int level);
+        public delegate void uniform1f(int location, float v0);
+        static public void glUniform1f(int location, float v0)
+        {
+            Delegate wgl = InvokeWGL<uniform1f>("glUniform1f");
+            wgl.DynamicInvoke(location, v0);
+        }
+
+        public delegate void uniform2f(int location, float v0, float v1);
+        static public void glUniform2f(int location, float v0, float v1)
+        {
+            Delegate wgl = InvokeWGL<uniform2f>("glUniform2f");
+            wgl.DynamicInvoke(location, v0, v1);
+        }
+
+        public delegate void uniform3f(int location, float v0, float v1, float v2);
+        static public void glUniform3f(int location, float v0, float v1, float v2)
+        {
+            Delegate wgl = InvokeWGL<uniform3f>("glUniform3f");
+            wgl.DynamicInvoke(location, v0, v1, v2);
+        }
+
+        public delegate void uniform4f(int location, float v0, float v1, float v2, float v3);
+        static public void glUniform4f(int location, float v0, float v1, float v2, float v3)
+        {
+            Delegate wgl = InvokeWGL<uniform4f>("glUniform4f");
+            wgl.DynamicInvoke(location, v0, v1, v2, v3);
+        }
+
+        public delegate void uniform1i(int location, int v0);
+        static public void glUniform1i(int location, int v0)
+        {
+            Delegate wgl = InvokeWGL<uniform1i>("glUniform1i");
+            wgl.DynamicInvoke(location, v0);
+        }
+
+        public delegate void uniform2i(int location, int v0, int v1);
+        static public void glUniform2i(int location, int v0, int v1)
+        {
+            Delegate wgl = InvokeWGL<uniform2i>("glUniform2i");
+            wgl.DynamicInvoke(location, v0, v1);
+        }
+
+        public delegate void uniform3i(int location, int v0, int v1, int v2);
+        static public void glUniform3i(int location, int v0, int v1, int v2)
+        {
+            Delegate wgl = InvokeWGL<uniform3i>("glUniform3i");
+            wgl.DynamicInvoke(location, v0, v1, v2);
+        }
+
+        public delegate void uniform4i(int location, int v0, int v1, int v2, int v3);
+        static public void glUniform4i(int location, int v0, int v1, int v2, int v3)
+        {
+            Delegate wgl = InvokeWGL<uniform4i>("glUniform4i");
+            wgl.DynamicInvoke(location, v0, v1, v2, v3);
+        }
+
+        public delegate void uniform1fv(int location, int count, float[] value);
+        static public void glUniform1fv(int location, int count, float[] value)
+        {
+            Delegate wgl = InvokeWGL<uniform1fv>("glUniform1fv");
+            wgl.DynamicInvoke(location, count, value);
+        }
+
+        public delegate void uniform2fv(int location, int count, float[] value);
+        static public void glUniform2fv(int location, int count, float[] value)
+        {
+            Delegate wgl = InvokeWGL<uniform2fv>("glUniform2fv");
+            wgl.DynamicInvoke(location, count, value);
+        }
+
+        public delegate void uniform3fv(int location, int count, float[] value);
+        static public void glUniform3fv(int location, int count, float[] value)
+        {
+            Delegate wgl = InvokeWGL<uniform3fv>("glUniform3fv");
+            wgl.DynamicInvoke(location, count, value);
+        }
+
+        public delegate void uniform4fv(int location, int count, float[] value);
+        static public void glUniform4fv(int location, int count, float[] value)
+        {
+            Delegate wgl = InvokeWGL<uniform4fv>("glUniform4fv");
+            wgl.DynamicInvoke(location, count, value);
+        }
+
+        public delegate void uniform1iv(int location, int count, int[] value);
+        static public void glUniform1iv(int location, int count, int[] value)
+        {
+            Delegate wgl = InvokeWGL<uniform1iv>("glUniform1iv");
+            wgl.DynamicInvoke(location, count, value);
+        }
+
+        public delegate void uniform2iv(int location, int count, int[] value);
+        static public void glUniform2iv(int location, int count, int[] value)
+        {
+            Delegate wgl = InvokeWGL<uniform2iv>("glUniform2iv");
+            wgl.DynamicInvoke(location, count, value);
+        }
+
+        public delegate void uniform3iv(int location, int count, int[] value);
+        static public void glUniform3(int location, int count, int[] value)
+        {
+            Delegate wgl = InvokeWGL<uniform3iv>("glUniform3iv");
+            wgl.DynamicInvoke(location, count, value);
+        }
+
+        public delegate void uniform4iv(int location, int count, int[] value);
+        static public void glUniform4(int location, int count, int[] value)
+        {
+            Delegate wgl = InvokeWGL<uniform4iv>("glUniform4iv");
+            wgl.DynamicInvoke(location, count, value);
+        }
+
+        public delegate int getuniformlocation(uint shader, string value);
+        static public int glGetUniformLocation(uint shader, string value)
+        {
+            Delegate wgl = InvokeWGL<getuniformlocation>("glGetUniformLocation");
+            return (int)wgl.DynamicInvoke(shader, value);
+        }
+
+        public delegate void texStorage2D(uint target, int level, uint internalformat, int width, int height);
+        static public void glTexStorage2D(uint target, int level, uint internalformat, int width, int height)
+        {
+            Delegate wgl = InvokeWGL<texStorage2D>("glTexStorage2D");
+            wgl.DynamicInvoke(target, level, internalformat, width, height);
+        }
+
+        public delegate void framebufferTexture(uint target, uint attachment, uint texture, int level);
         static public void glFramebufferTexture(uint target, uint attachment, uint texture, int level)
         {
-            glFramebufferTextureEXT(target, attachment, texture, level);
+            Delegate wgl = InvokeWGL<framebufferTexture>("glFramebufferTextureEXT");
+            wgl.DynamicInvoke(target, attachment, texture, level);
         }
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glFramebufferTexture2DEXT(uint target, uint attachment, uint textarget, uint texture, int level);
+
+        public delegate void framebufferTexture2D(uint target, uint attachment, uint textarget, uint texture, int level);
         static public void glFramebufferTexture2D(uint target, uint attachment, uint textarget, uint texture, int level)
         {
-            glFramebufferTexture2DEXT(target, attachment, textarget, texture, level);
+            Delegate wgl = InvokeWGL<framebufferTexture2D>("glFramebufferTexture2DEXT");
+            wgl.DynamicInvoke(target, attachment, textarget, texture, level);
         }
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDrawBuffers(int n, uint[] bufs);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glCheckFramebufferStatusEXT(uint target);
-        static public void glCheckFramebufferStatus(uint target)
+
+        public delegate void drawBuffers(int n, uint[] bufs);
+        static public void glDrawBuffers(int n, uint[] bufs)
         {
-            glCheckFramebufferStatusEXT(target);
+            Delegate wgl = InvokeWGL<drawBuffers>("glDrawBuffers");
+            wgl.DynamicInvoke(n, bufs);
+        }
+
+        public delegate uint checkFramebufferStatus(uint target);
+        static public uint glCheckFramebufferStatus(uint target)
+        {
+            Delegate wgl = InvokeWGL<checkFramebufferStatus>("glCheckFramebufferStatusEXT");
+            return (uint)wgl.DynamicInvoke(target);
         }
     }
 }
