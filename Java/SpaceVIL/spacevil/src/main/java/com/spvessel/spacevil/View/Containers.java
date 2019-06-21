@@ -49,6 +49,8 @@ public class Containers extends ActiveWindow {
         tab3 = new Tab("List");
         cc.addItem(tabs);
 
+        
+
         tabs.addTabs(tab1, tab2, tab3);
         tab1.setWidthPolicy(SizePolicy.EXPAND);
 
@@ -60,8 +62,7 @@ public class Containers extends ActiveWindow {
                 clearAllTabs();
             }
             if (args.key == KeyCode.ENTER) {
-                if(tabs != null)
-                {
+                if (tabs != null) {
                     System.out.println(tabs.getTabs().size());
                 }
             }
@@ -82,6 +83,10 @@ public class Containers extends ActiveWindow {
             h_btn.setBackground(121, 223, 152);
             grid.addItem(h_btn);
         }
+
+        tab1.eventOnClose.add(() -> {
+            System.out.println("close");
+        });
     }
 
     private void clearAllTabs() {

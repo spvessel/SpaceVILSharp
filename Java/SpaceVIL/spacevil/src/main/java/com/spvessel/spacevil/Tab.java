@@ -71,14 +71,17 @@ public class Tab extends Prototype {
     }
 
     public EventMouseMethodState eventToggle = new EventMouseMethodState();
-    EventCommonMethod eventRemoved = new EventCommonMethod();
+    public EventCommonMethod eventOnClose = new EventCommonMethod();
+    EventCommonMethod eventTabRemove = new EventCommonMethod();
 
     @Override
     public void release() {
         eventToggle.clear();
         eventToggle = null;
-        eventRemoved.clear();;
-        eventRemoved = null;
+        eventTabRemove.clear();;
+        eventTabRemove = null;
+        eventOnClose.clear();;
+        eventOnClose = null;
     }
 
     public void setTextAlignment(ItemAlignment alignment) {
@@ -207,7 +210,8 @@ public class Tab extends Prototype {
     }
 
     public void RemoveTab() {
-        eventRemoved.execute();
+        eventOnClose.execute();
+        eventTabRemove.execute();
     }
 
     @Override

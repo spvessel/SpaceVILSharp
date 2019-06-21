@@ -257,15 +257,12 @@ public class TitleBar extends WindowAnchor {
         inner_style = style.getInnerStyle("maximizebutton");
         if (inner_style != null) {
             _maximize.setStyle(inner_style);
-            // System.out.println(_maximize.getBorderThickness() + " "
-            // +_maximize.getBorderFill());
         }
         inner_style = style.getInnerStyle("title");
         if (inner_style != null) {
             setTextMargin(inner_style.margin);
         }
 
-        // icon
         _icon.setVisible(false);
         _icon.setBackground(0, 0, 0, 0);
         _icon.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);

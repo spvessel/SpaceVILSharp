@@ -2167,7 +2167,7 @@ public class Style implements Cloneable {
         style.spacing = new Spacing(5, 0);
         style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 20)));
         style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(71, 71, 71)));
-        style.setShadow(new Shadow(5, 2, -1, new Color(0, 0, 0, 150)));
+        style.setShadow(new Shadow(5, 0, 0, new Color(0, 0, 0, 150)));
         style.isShadowDrop = false;
 
         Style textStyle = getLabelStyle();

@@ -69,11 +69,13 @@ namespace SpaceVIL
         }
 
         public EventMouseMethodState EventToggle;
-        internal EventCommonMethod EventRemoved;
+        public EventCommonMethod EventOnClose;
+        internal EventCommonMethod EventTabRemoved;
         public override void Release()
         {
             EventToggle = null;
-            EventRemoved = null;
+            EventTabRemoved = null;
+            EventOnClose = null;
         }
 
         //text init
@@ -228,7 +230,8 @@ namespace SpaceVIL
 
         public void RemoveTab()
         {
-            EventRemoved?.Invoke();
+            EventOnClose?.Invoke();
+            EventTabRemoved?.Invoke();
         }
 
         public override void SetStyle(Style style)

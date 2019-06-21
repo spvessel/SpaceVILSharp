@@ -33,40 +33,84 @@ namespace View
             cc.SetBackground(50, 50, 50);
             this.AddItem(cc);
 
-            BlankItem b1 = GetBlankItem("Blank1");
-            BlankItem b2 = GetBlankItem("Blank2");
-            BlankItem b3 = GetBlankItem("Blank3");
+            cc.AddItem(tabs);
 
-            cc.AddItem(b1);
-            b1.AddItem(b2);
-            b2.AddItem(b3);
+            tabs.AddTabs(tab1, tab2, tab3);
+            tab1.SetWidthPolicy(SizePolicy.Expand);
 
-            b3.SetFocus();
-
-            b3.SetPassEvents(false);
-            b2.SetPassEvents(false);
-            // b2.SetPassEvents(true, InputEventType.KeyPress, InputEventType.KeyRelease);
-
-            EventMouseClick += (sender, args) =>
-            {
-                Console.WriteLine(sender.GetItemName() + " EventMouseClick");
-            };
-            EventMouseDoubleClick += (sender, args) =>
-            {
-                Console.WriteLine(sender.GetItemName() + " EventMouseDoubleClick");
-            };
             EventKeyPress += (sender, args) =>
             {
-                Console.WriteLine(sender.GetItemName() + " EventKeyPress");
+                if (args.Key == KeyCode.Menu)
+                    foreach (Tab tab in tabs.GetTabs())
+                        tab.SetClosable(!tab.IsClosable());
+                if (args.Key == KeyCode.Delete)
+                {
+                    ClearAllTabs();
+                }
+                if (args.Key == KeyCode.Enter)
+                {
+                    if (tabs != null)
+                    {
+                        Console.WriteLine(tabs.GetTabs().Count);
+                    }
+                }
             };
-            EventKeyRelease += (sender, args) =>
+
+            Grid grid = new Grid(3, 4);
+            grid.SetBackground(255, 255, 255, 20);
+            grid.SetSpacing(2, 2);
+            grid.SetMargin(20, 30, 20, 30);
+            tabs.AddItemToTabByName("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1", grid);
+            Grid subgrid = new Grid(1, 2);
+            grid.InsertItem(subgrid, 1, 1);
+
+            subgrid.AddItems(new VerticalScrollBar(), new VerticalScrollBar());
+            for (int i = 0; i < 11; i++)
             {
-                Console.WriteLine(sender.GetItemName() + " EventKeyRelease");
+                ButtonCore h_btn = GetButton("Cell" + i, 150, 50, SizePolicy.Expand);
+                h_btn.SetMaxSize(200, 100);
+                h_btn.SetBackground(121, 223, 152);
+                grid.AddItem(h_btn);
+            }
+
+            tab1.EventOnClose += () => {
+                Console.WriteLine("close");
             };
-            EventMouseHover += (sender, args) =>
-            {
-                Console.WriteLine(sender.GetItemName() + " EventMouseHover");
-            };
+
+            // BlankItem b1 = GetBlankItem("Blank1");
+            // BlankItem b2 = GetBlankItem("Blank2");
+            // BlankItem b3 = GetBlankItem("Blank3");
+
+            // cc.AddItem(b1);
+            // b1.AddItem(b2);
+            // b2.AddItem(b3);
+
+            // b3.SetFocus();
+
+            // b3.SetPassEvents(false);
+            // b2.SetPassEvents(false);
+            // // b2.SetPassEvents(true, InputEventType.KeyPress, InputEventType.KeyRelease);
+
+            // EventMouseClick += (sender, args) =>
+            // {
+            //     Console.WriteLine(sender.GetItemName() + " EventMouseClick");
+            // };
+            // EventMouseDoubleClick += (sender, args) =>
+            // {
+            //     Console.WriteLine(sender.GetItemName() + " EventMouseDoubleClick");
+            // };
+            // EventKeyPress += (sender, args) =>
+            // {
+            //     Console.WriteLine(sender.GetItemName() + " EventKeyPress");
+            // };
+            // EventKeyRelease += (sender, args) =>
+            // {
+            //     Console.WriteLine(sender.GetItemName() + " EventKeyRelease");
+            // };
+            // EventMouseHover += (sender, args) =>
+            // {
+            //     Console.WriteLine(sender.GetItemName() + " EventMouseHover");
+            // };
 
 
             // cc.AddItem(tabs);

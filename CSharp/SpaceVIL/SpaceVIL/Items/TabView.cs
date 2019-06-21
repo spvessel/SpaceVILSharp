@@ -124,7 +124,7 @@ namespace SpaceVIL
             {
                 HideOthers(tab, args);
             };
-            tab.EventRemoved += () =>
+            tab.EventTabRemoved += () =>
             {
                 SelectBestLeftoverTab(tab);
                 RemoveTab(tab);

@@ -2118,7 +2118,6 @@ namespace SpaceVIL.Decorations
             style.Background = Color.Transparent;
             style.Foreground = Color.FromArgb(255, 210, 210, 210);
             style.MinWidth = 70;
-            // style.MaxWidth = 200;
             style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(10, 2, 5, 2);
@@ -2131,7 +2130,7 @@ namespace SpaceVIL.Decorations
             {
                 Background = Color.FromArgb(71, 71, 71)
             });
-            style.SetShadow(new Shadow(5, 2, -1, Color.FromArgb(150, 0, 0, 0)));
+            style.SetShadow(new Shadow(5, 0, 0, Color.FromArgb(150, 0, 0, 0)));
             style.IsShadowDrop = false;
 
             Style textStyle = GetLabelStyle();

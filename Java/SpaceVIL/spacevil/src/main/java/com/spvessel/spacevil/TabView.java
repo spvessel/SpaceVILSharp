@@ -115,7 +115,7 @@ public class TabView extends VerticalStack {
         tab.eventMouseClick.add((sender, args) -> {
             hideOthers(tab, args);
         });
-        tab.eventRemoved.add(() -> {
+        tab.eventTabRemove.add(() -> {
             selectBestLeftoverTab(tab);
             removeTab(tab);
         });
