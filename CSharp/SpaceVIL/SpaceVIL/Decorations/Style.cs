@@ -453,7 +453,7 @@ namespace SpaceVIL.Decorations
             style.Height = 10;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
-            style.BorderRadius = new CornerRadius(2);
+            style.BorderRadius = new CornerRadius();
             ItemState hovered = new ItemState(Color.FromArgb(60, 255, 255, 255));
             style.AddItemState(ItemStateType.Hovered, hovered);
             ItemState pressed = new ItemState(Color.FromArgb(60, 0, 0, 0));

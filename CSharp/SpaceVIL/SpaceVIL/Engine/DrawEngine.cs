@@ -203,7 +203,7 @@ namespace SpaceVIL
             GLWHandler.Swap();
         }
 
-        void Framebuffer(Int64 window, int w, int h)
+        private void Framebuffer(Int64 window, int w, int h)
         {
             _framebufferWidth = w;
             _framebufferHeight = h;

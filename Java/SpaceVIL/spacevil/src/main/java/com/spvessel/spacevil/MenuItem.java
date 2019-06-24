@@ -16,7 +16,6 @@ import java.awt.Font;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MenuItem extends Prototype {
     public boolean isActionItem = false;

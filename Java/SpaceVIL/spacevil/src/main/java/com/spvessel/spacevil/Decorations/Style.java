@@ -437,7 +437,7 @@ public class Style implements Cloneable {
         style.height = 30;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
-        style.borderRadius = new CornerRadius(2);
+        style.borderRadius = new CornerRadius();
 
         // style.borderThickness = 2;
         // style.borderFill = new Color(255, 255, 255);

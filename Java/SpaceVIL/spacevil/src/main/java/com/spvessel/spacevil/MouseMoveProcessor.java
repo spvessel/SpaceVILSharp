@@ -142,9 +142,9 @@ final class MouseMoveProcessor {
             }
         }
 
-        try {
-            Thread.sleep(10);
-        } catch (Exception e) {
-        }
+        // try {
+        //     Thread.sleep(5);
+        // } catch (Exception e) {
+        // }
     }
 }

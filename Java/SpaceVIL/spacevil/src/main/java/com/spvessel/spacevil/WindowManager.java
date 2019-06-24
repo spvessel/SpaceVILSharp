@@ -133,7 +133,7 @@ public final class WindowManager {
             glfwWaitEventsTimeout(getCurrentFrequency());
             for (CoreWindow window : list) {
                 glfwMakeContextCurrent(window.getGLWID());
-                window.render();
+                window.updateScene();
             }
             CoreWindow wnd = WindowsBox.getCurrentFocusedWindow();
             if (wnd != null && _initializedWindows.containsKey(wnd)) {

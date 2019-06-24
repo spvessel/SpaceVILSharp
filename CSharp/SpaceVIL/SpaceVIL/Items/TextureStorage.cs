@@ -271,12 +271,14 @@ namespace SpaceVIL
             return coord;
         }
 
-        private Point CursorPosToCoordAndGlobalShifts(Point cursorPos) {
+        private Point CursorPosToCoordAndGlobalShifts(Point cursorPos)
+        {
             Point coord = CursorPosToCoord(cursorPos);
             return SumPoints(coord, new Point(globalXShift, globalYShift));
         }
 
-        private Point SumPoints(Point cursorPos, Point adderPoint) {
+        private Point SumPoints(Point cursorPos, Point adderPoint)
+        {
             Point coord = cursorPos;
             coord.X += adderPoint.X;
             coord.Y += adderPoint.Y;
@@ -578,34 +580,34 @@ namespace SpaceVIL
             int offset = _cursorXMax / 3;
             // if (isx)
             // {
-                if (globalXShift + outPoint.X < 0)
-                {
-                    globalXShift = -outPoint.X;
-                    globalXShift += offset;
-                    if (globalXShift > 0) globalXShift = 0;
-                    UpdLinesXShift();
-                }
-                if (globalXShift + outPoint.X > _cursorXMax)
-                {
-                    globalXShift = _cursorXMax - outPoint.X;
+            if (globalXShift + outPoint.X < 0)
+            {
+                globalXShift = -outPoint.X;
+                globalXShift += offset;
+                if (globalXShift > 0) globalXShift = 0;
+                UpdLinesXShift();
+            }
+            if (globalXShift + outPoint.X > _cursorXMax)
+            {
+                globalXShift = _cursorXMax - outPoint.X;
 
-                    if (outPoint.X < GetWidth())
-                        globalXShift -= offset;
+                if (outPoint.X < GetWidth())
+                    globalXShift -= offset;
 
-                    UpdLinesXShift();
-                }
+                UpdLinesXShift();
+            }
 
-                if (outPoint.Y + globalYShift < 0)
-                {
-                    globalYShift = -outPoint.Y;
-                    UpdLinesYShift();
+            if (outPoint.Y + globalYShift < 0)
+            {
+                globalYShift = -outPoint.Y;
+                UpdLinesYShift();
 
-                }
-                if (outPoint.Y + _lineHeight + globalYShift > _cursorYMax)
-                {
-                    globalYShift = _cursorYMax - outPoint.Y - _lineHeight;
-                    UpdLinesYShift();
-                }
+            }
+            if (outPoint.Y + _lineHeight + globalYShift > _cursorYMax)
+            {
+                globalYShift = _cursorYMax - outPoint.Y - _lineHeight;
+                UpdLinesYShift();
+            }
             // }
 
             outPoint.X += parent.GetX() + parent.GetPadding().Left + globalXShift + GetTextMargin().Left;
@@ -806,6 +808,10 @@ namespace SpaceVIL
             Monitor.Enter(textInputLock);
             try
             {
+                Prototype parent = GetParent();
+                if (parent == null) //Вроде не очень-то и нужно
+                    return null;
+
                 float _screenScale = 1;
                 CoreWindow wLayout = GetHandler();
                 if (wLayout == null || wLayout.GetDpiScale() == null)
@@ -894,7 +900,6 @@ namespace SpaceVIL
                 TextPrinter tpout = new TextPrinter(bigByte);
                 tpout.WidthTexture = w;
                 tpout.HeightTexture = visibleHeight; // h;
-                Prototype parent = GetParent();
                 tpout.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX() + cursorWidth;
                 tpout.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY();
 

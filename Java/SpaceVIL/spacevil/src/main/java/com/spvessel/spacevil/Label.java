@@ -16,6 +16,15 @@ public class Label extends Prototype implements InterfaceVLayout {
     private List<TextLine> _text_objects;
     private boolean _init = false;
 
+    public boolean isHover = true;
+
+    @Override
+    protected boolean getHoverVerification(float xpos, float ypos) {
+        if (isHover)
+            return super.getHoverVerification(xpos, ypos);
+        return false;
+    }
+
     /**
      * Constructs a Label
      */
@@ -24,7 +33,6 @@ public class Label extends Prototype implements InterfaceVLayout {
         count++;
         _text_objects = new ArrayList<>();
         _text_objects.add(new TextLine());
-        // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.Label"));
         setStyle(DefaultsService.getDefaultStyle(Label.class));
         isFocusable = false;
     }
@@ -35,6 +43,12 @@ public class Label extends Prototype implements InterfaceVLayout {
     public Label(String text) {
         this();
         setText(text);
+    }
+
+
+    public Label(String text, boolean hover) {
+        this(text);
+        isHover = hover;
     }
 
     // text init

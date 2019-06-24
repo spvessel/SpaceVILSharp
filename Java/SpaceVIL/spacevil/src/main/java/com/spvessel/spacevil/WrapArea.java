@@ -15,7 +15,6 @@ import com.spvessel.spacevil.Flags.Orientation;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class WrapArea extends Prototype implements InterfaceGrid {

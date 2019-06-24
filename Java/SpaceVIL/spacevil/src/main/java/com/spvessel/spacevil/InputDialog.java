@@ -1,7 +1,5 @@
 package com.spvessel.spacevil;
 
-import java.awt.Color;
-
 import com.spvessel.spacevil.ButtonCore;
 import com.spvessel.spacevil.TextEdit;
 import com.spvessel.spacevil.TitleBar;

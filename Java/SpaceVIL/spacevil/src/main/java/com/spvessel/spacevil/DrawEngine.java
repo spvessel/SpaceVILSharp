@@ -1,6 +1,5 @@
 package com.spvessel.spacevil;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.nio.*;
@@ -427,7 +426,7 @@ final class DrawEngine {
         glwHandler.destroy();
     }
 
-    private void render() {
+    void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         drawStaticItems();
         drawFloatItems();

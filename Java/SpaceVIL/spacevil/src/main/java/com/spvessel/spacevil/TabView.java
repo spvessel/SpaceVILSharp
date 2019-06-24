@@ -72,6 +72,18 @@ public class TabView extends VerticalStack {
         hideOthers(tab, null);
     }
 
+    public Tab getSelectedTab() {
+        return _selectedTab;
+    }
+
+    public Frame getTabFrame(Tab tab) {
+        return _tabMapView.get(tab);
+    }
+
+    public List<InterfaceBaseItem> getTabContent(Tab tab) {
+        return _tabMapView.get(tab).getItems();
+    }
+
     public void selectTabByName(String tabName) {
         for (Tab tab : _tabMapView.keySet()) {
             if (tabName.equals(tab.getItemName())) {
@@ -115,10 +127,12 @@ public class TabView extends VerticalStack {
         tab.eventMouseClick.add((sender, args) -> {
             hideOthers(tab, args);
         });
+        
         tab.eventTabRemove.add(() -> {
             selectBestLeftoverTab(tab);
             removeTab(tab);
         });
+
         addItem(tab.view);
         if (_tabBar.getItems().size() == 0) {
             tab.setToggled(true);

@@ -632,9 +632,9 @@ namespace SpaceVIL
         {
             return windowLayout.InitEngine();
         }
-        internal void Render()
+        internal void UpdateScene()
         {
-            windowLayout.Render();
+            windowLayout.UpdateScene();
         }
 
         internal void Dispose()

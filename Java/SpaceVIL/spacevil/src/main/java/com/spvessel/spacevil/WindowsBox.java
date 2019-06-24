@@ -4,7 +4,6 @@ import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.util.*;
-import java.util.stream.*;
 
 public final class WindowsBox {
     /**

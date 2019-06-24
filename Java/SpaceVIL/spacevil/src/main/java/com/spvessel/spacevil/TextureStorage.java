@@ -748,6 +748,11 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     public TextPrinter getLetTextures() {
         textInputLock.lock();
         try {
+
+            Prototype parent = getParent();
+            if (parent == null)
+                return null;
+
             float _screenScale = 1;
             CoreWindow wLayout = getHandler();
             if (wLayout == null || wLayout.getDpiScale() == null)
@@ -835,7 +840,6 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             TextPrinter tpout = new TextPrinter(bigByte);
             tpout.widthTexture = w;
             tpout.heightTexture = visibleHeight; //h;
-            Prototype parent = getParent();
             tpout.xTextureShift = parent.getPadding().left + getTextMargin().left + parent.getX() + cursorWidth;
             tpout.yTextureShift = parent.getPadding().top + getTextMargin().top + parent.getY();
 

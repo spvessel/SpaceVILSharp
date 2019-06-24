@@ -262,9 +262,14 @@ namespace SpaceVIL
             return WindowsBox.GetWindowPair(_coreWindow);
         }
 
-        internal void Render()
+        internal void UpdateScene()
         {
             _engine.DrawScene();
+        }
+
+        internal void Render()
+        {
+            _engine.Render();
         }
 
         internal void SetFocus()

@@ -586,8 +586,8 @@ public abstract class CoreWindow {
         return windowLayout.initEngine();
     }
 
-    void render() {
-        windowLayout.render();
+    void updateScene() {
+        windowLayout.updateScene();
     }
 
     void dispose() {

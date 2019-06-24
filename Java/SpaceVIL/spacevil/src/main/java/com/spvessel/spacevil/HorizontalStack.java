@@ -11,7 +11,6 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 
 public class HorizontalStack extends Prototype implements InterfaceHLayout {
     private static int count = 0;

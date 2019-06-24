@@ -218,8 +218,12 @@ final class WindowLayout {
         return WindowsBox.getWindowPair(_coreWindow);
     }
 
-    void render() {
+    void updateScene() {
         _engine.drawScene();
+    }
+
+    void render() {
+        _engine.render();
     }
 
     void setFocus() {

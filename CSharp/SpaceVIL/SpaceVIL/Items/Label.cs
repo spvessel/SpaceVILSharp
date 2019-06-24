@@ -16,6 +16,15 @@ namespace SpaceVIL
         private List<TextLine> _text_objects;
         private bool _init = false;
 
+        public bool IsHover = true;
+
+        protected internal override bool GetHoverVerification(float xpos, float ypos)
+        {
+            if (IsHover)
+                return base.GetHoverVerification(xpos, ypos);
+            return false;
+        }
+
         /// <summary>
         /// Constructs a Label
         /// </summary>
@@ -33,9 +42,15 @@ namespace SpaceVIL
         /// <summary>
         /// Constructs a Label with text
         /// </summary>
-        public Label(String text = "") : this()
+        public Label(String text) : this()
         {
             SetText(text);
+        }
+
+        public Label(String text, bool hover) : this(text)
+        {
+            SetText(text);
+            IsHover = hover;
         }
 
         /// <summary>
@@ -299,7 +314,8 @@ namespace SpaceVIL
             SetTextAlignment(style.TextAlignment);
         }
 
-        public void UpdateLayout() {
+        public void UpdateLayout()
+        {
 
         }
     }

@@ -182,7 +182,7 @@ namespace SpaceVIL
                 foreach (CoreWindow window in list)
                 {
                     Glfw.MakeContextCurrent(window.GetGLWID());
-                    window.Render();
+                    window.UpdateScene();
                 }
                 CoreWindow wnd = WindowsBox.GetCurrentFocusedWindow();
                 if (wnd != null && _initializedWindows.ContainsKey(wnd))

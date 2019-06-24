@@ -72,6 +72,20 @@ namespace SpaceVIL
             HideOthers(tab, null);
         }
 
+        public Tab GetSelectedTab()
+        {
+            return _selectedTab;
+        }
+        public Frame GetTabFrame(Tab tab)
+        {
+            return _tabMapView[tab];
+        }
+
+        public List<IBaseItem> GetTabContent(Tab tab)
+        {
+            return _tabMapView[tab].GetItems();
+        }
+
         public void SelectTabByName(String tabName)
         {
             foreach (Tab tab in _tabMapView.Keys)

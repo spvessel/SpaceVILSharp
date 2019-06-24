@@ -156,7 +156,6 @@ namespace SpaceVIL
                     }
                 }
             }
-            Thread.Sleep(10);
         }
     }
 }

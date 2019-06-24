@@ -52,6 +52,7 @@ public class Tab extends Prototype {
         setItemName("Tab_" + count++);
         _close = new ButtonCore();
         _text_object = new Label();
+        _text_object.isHover = false;
         view = new Frame();
         setStyle(DefaultsService.getDefaultStyle(Tab.class));
     }
@@ -71,6 +72,7 @@ public class Tab extends Prototype {
     }
 
     public EventMouseMethodState eventToggle = new EventMouseMethodState();
+
     public EventCommonMethod eventOnClose = new EventCommonMethod();
     EventCommonMethod eventTabRemove = new EventCommonMethod();
 
@@ -205,11 +207,11 @@ public class Tab extends Prototype {
 
         _close.isFocusable = false;
         _close.eventMouseClick.add((sender, args) -> {
-            RemoveTab();
+            removeTab();
         });
     }
 
-    public void RemoveTab() {
+    public void removeTab() {
         eventOnClose.execute();
         eventTabRemove.execute();
     }

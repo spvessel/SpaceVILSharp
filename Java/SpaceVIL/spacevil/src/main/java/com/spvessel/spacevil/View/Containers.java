@@ -45,11 +45,10 @@ public class Containers extends ActiveWindow {
 
         tabs = new TabView();
         tab1 = new Tab("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1");
+        tab1.setToolTip("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1");
         tab2 = new Tab("List");
         tab3 = new Tab("List");
         cc.addItem(tabs);
-
-        
 
         tabs.addTabs(tab1, tab2, tab3);
         tab1.setWidthPolicy(SizePolicy.EXPAND);
