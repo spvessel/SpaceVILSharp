@@ -75,13 +75,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
         textInputLock.lock();
         try {
             if (args.button == MouseButton.BUTTON_LEFT) {
-                _selectFrom = 0;
-                _cursor_position = getText().length();
-                _selectTo = _cursor_position;
-                replaceCursor();
-
-                _isSelect = true;
-                makeSelectedArea(); //_selectFrom, _selectTo);
+                selectAll();
             }
         } finally {
             textInputLock.unlock();
@@ -173,11 +167,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
 
                 if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1) {
                     if (args.key == KeyCode.A || args.key == KeyCode.a) {
-                        _selectFrom = 0;
-                        _cursor_position = getText().length();
-                        replaceCursor();
-
-                        _isSelect = true;
+                        selectAll();
                     }
                 }
                 // alt, super ?
@@ -621,6 +611,16 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
             _substrate_text.setFont(inner_style.font);
             _substrate_text.setForeground(inner_style.foreground);
         }
+    }
+
+    private void selectAll() {
+        _selectFrom = 0;
+        _cursor_position = getText().length();
+        _selectTo = _cursor_position;
+        replaceCursor();
+
+        _isSelect = true;
+        makeSelectedArea(); //_selectFrom, _selectTo);
     }
 
     private int getLineXShift() {
