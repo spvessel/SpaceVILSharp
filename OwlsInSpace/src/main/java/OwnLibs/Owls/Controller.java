@@ -6,6 +6,8 @@ import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.*;
 
+import OwnLibs.Owls.Views.Windows.*;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Map;
 public class Controller {
     final String rootFolder;// = ".\\workspace";
     private OwlWindow owlWindow;
+    private Settings setsWindow;
     private OwlsTreeItem rootItem;
     private OwlsTreeItem workItem;
     private OwlsTreeItem workDirectory;
@@ -25,6 +28,7 @@ public class Controller {
         String userDir = System.getProperty("user.dir");
         rootFolder = userDir + File.separator + "workspace";
         this.owlWindow = owlWindow;
+        setsWindow = new Settings();
         InterfaceSupport.controller = this;
         tabToOwls = new HashMap<>();
     }
@@ -228,6 +232,10 @@ public class Controller {
             // // alertDialog.show(owlWindow.Handler);
             // }
         });
+
+        owlWindow.settingsBtn.eventMouseClick.add((sender, args) -> {
+            setsWindow.show();
+        });
     }
 
     int count = 0;
@@ -237,7 +245,7 @@ public class Controller {
         OwlsTab selectedTab = getSelectedTab();
 
         if (selectedTab == null) {
-            owlWindow.close();
+            WindowManager.appExit();
             return;
         }
 

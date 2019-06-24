@@ -1,7 +1,6 @@
-package OwnLibs.Owls;
+package OwnLibs.Owls.Views.Items;
 
 import java.awt.Color;
-import java.awt.Font;
 
 import com.spvessel.spacevil.CoreWindow;
 import com.spvessel.spacevil.Frame;
@@ -17,7 +16,7 @@ import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
-class KeyBindings extends Prototype implements InterfaceFloating {
+public class KeyBindings extends Prototype implements InterfaceFloating {
 
     public KeyBindings(CoreWindow coreWindow) {
         window = new Frame();

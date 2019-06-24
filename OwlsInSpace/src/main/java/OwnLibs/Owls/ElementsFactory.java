@@ -2,13 +2,15 @@ package OwnLibs.Owls;
 
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.EventMouseMethodState;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
+
+import OwnLibs.Owls.Views.Windows.OwlWindow;
+
 import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.MenuItem;
 import com.spvessel.spacevil.TextArea;
@@ -28,7 +30,7 @@ public class ElementsFactory {
         return treeItem;
     }
 
-    static Prototype getFunctionalButton(boolean isToggle) {
+    public static Prototype getFunctionalButton(boolean isToggle) {
         Prototype button;
         if (isToggle)
             button = new ButtonToggle();
@@ -47,7 +49,7 @@ public class ElementsFactory {
         return button;
     }
 
-    static Prototype setButtonImage(Prototype button, String imgPath) {
+    public static Prototype setButtonImage(Prototype button, String imgPath) {
         BufferedImage img = null;
         try {
             img = ImageIO.read(OwlWindow.class.getResourceAsStream(imgPath));
@@ -61,7 +63,7 @@ public class ElementsFactory {
         return button;
     }
 
-    static Prototype setButtonImage(Prototype button, BufferedImage img) {
+    public static Prototype setButtonImage(Prototype button, BufferedImage img) {
         ImageItem imgFile = new ImageItem(img, false);
         imgFile.setMargin(4, 4, 4, 4);
         imgFile.keepAspectRatio(true);
@@ -69,7 +71,7 @@ public class ElementsFactory {
         return button;
     }
 
-    static MenuItem setMenuItemImage(MenuItem menuItem, BufferedImage img) {
+    public static MenuItem setMenuItemImage(MenuItem menuItem, BufferedImage img) {
         // Style imgBtnStyle = Style.getImageItemStyle();
         // imgBtnStyle.background = new Color(0, 0, 0, 0);
         // imgBtnStyle.setSize(16, 16);
@@ -85,7 +87,7 @@ public class ElementsFactory {
         return menuItem;
     }
 
-    static KeyWordItem getKeyWord(String word) {
+    public static KeyWordItem getKeyWord(String word) {
         KeyWordItem kwItem = new KeyWordItem(word);
 
         // kwButton.setText(word);
@@ -93,15 +95,15 @@ public class ElementsFactory {
         return kwItem;
     }
 
-    static Style getMenuStyle() {
+    public static Style getMenuStyle() {
         Style style = Style.getMenuItemStyle();
         style.getInnerStyle("text").setMargin(25, 0, 0, 0);
         style.setForeground(210, 210, 210);
-        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 130)));
+        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 30)));
         return style;
     }
 
-    static InterfaceBaseItem searchResultItem(String text, HorizontalStack hStack) {
+    public static InterfaceBaseItem searchResultItem(String text, HorizontalStack hStack) {
         CustomShape dot = new CustomShape();
         Style leaf_icon_style = new Style();
         leaf_icon_style.background = new Color(129, 187, 133);
@@ -122,7 +124,7 @@ public class ElementsFactory {
         return hStack;
     }
 
-    static void removeListBoxSelection(InterfaceBaseItem item, ListBox listBox) {
+    public static void removeListBoxSelection(InterfaceBaseItem item, ListBox listBox) {
         Style style = Style.getSelectionItemStyle();
         SelectionItem selection = (SelectionItem) listBox.getWrapper(item);
         style.setSize(selection.getWidth(), selection.getHeight());
@@ -131,7 +133,7 @@ public class ElementsFactory {
         selection.setStyle(style);
     }
 
-    static Style getTextAreaStyle() {
+    public static Style getTextAreaStyle() {
         Style style = new Style();
         style.background = new Color(0x555555);
         style.foreground = new Color(210, 210, 210);
@@ -166,7 +168,7 @@ public class ElementsFactory {
         return style;
     }
 
-    static TextArea getTextArea() {
+    public static TextArea getTextArea() {
         TextArea tArea = new TextArea();
         tArea.setStyle(ElementsFactory.getTextAreaStyle());
         tArea.setEditable(false);
@@ -193,7 +195,7 @@ public class ElementsFactory {
         return tArea;
     }
 
-    static OwlsTab getNewTab(String name) {
+    public static OwlsTab getNewTab(String name) {
         OwlsTab tab = new OwlsTab(name);
         tab.setToolTip(name);
         tab.setWidthPolicy(SizePolicy.EXPAND);

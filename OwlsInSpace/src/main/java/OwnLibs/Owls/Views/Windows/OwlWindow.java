@@ -1,4 +1,4 @@
-package OwnLibs.Owls;
+package OwnLibs.Owls.Views.Windows;
 
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Common.DefaultsService;
@@ -7,10 +7,12 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
+
+import OwnLibs.Owls.ElementsFactory;
+
 import com.spvessel.spacevil.Frame;
 import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.MenuItem;
-import com.spvessel.spacevil.TextArea;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,38 +21,38 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class OwlWindow extends ActiveWindow {
-    TitleBar titleBar;
+    public TitleBar titleBar;
 
-    ButtonCore newFileBtn;
-    ButtonCore newFolderBtn;
-    ButtonCore importBtn;
-    ButtonCore saveBtn;
-    ButtonCore deleteBtn;
-    ButtonCore searchBtn;
-    ButtonToggle editBtn;
-    ButtonCore backBtn;
+    public ButtonCore newFileBtn;
+    public ButtonCore newFolderBtn;
+    public ButtonCore importBtn;
+    public ButtonCore saveBtn;
+    public ButtonCore deleteBtn;
+    public ButtonCore searchBtn;
+    public ButtonToggle editBtn;
+    public ButtonCore settingsBtn;
+    public ButtonCore backBtn;
 
-    TreeView filesTree;
-    // TextArea codeArea;
-    TabView workTabArea;
+    public TreeView filesTree;
+    public TabView workTabArea;
 
-    ButtonCore addKeyWordsBtn;
-    HorizontalStack keyWordsStack;
+    public ButtonCore addKeyWordsBtn;
+    public HorizontalStack keyWordsStack;
 
     ContextMenu treeContextMenu;
-    MenuItem miTreeDelete;
-    MenuItem miKWDelete;
-    MenuItem miKWUse;
-    MenuItem miRename;
-    MenuItem miAddExist;
-    MenuItem miNewFile;
-    MenuItem miNewFolder;
+    public MenuItem miTreeDelete;
+    public MenuItem miKWDelete;
+    public MenuItem miKWUse;
+    public MenuItem miRename;
+    public MenuItem miAddExist;
+    public MenuItem miNewFile;
+    public MenuItem miNewFolder;
 
-    ContextMenu keyWordsContextMenu;
+    public ContextMenu keyWordsContextMenu;
 
-    ListBox kwResultsListBox;
-    Label kwResultLabel1;
-    Label kwResultLabel2;
+    public ListBox kwResultsListBox;
+    public Label kwResultLabel1;
+    public Label kwResultLabel2;
 
     @Override
     public void initWindow() {
@@ -102,13 +104,15 @@ public class OwlWindow extends ActiveWindow {
         editBtn = (ButtonToggle) ElementsFactory.getFunctionalButton(true);
         editBtn.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(0x595959)));
         editBtn.setToolTip("Edit");
+        settingsBtn = (ButtonCore) ElementsFactory.getFunctionalButton(false);
+        settingsBtn.setToolTip("Settings");
         backBtn = (ButtonCore) ElementsFactory.getFunctionalButton(false);
         backBtn.setToolTip("Back");
         backBtn.setHeightPolicy(SizePolicy.FIXED);
         backBtn.setHeight(30);
 
         mainVStack.addItems(functionalBtnsStack);
-        functionalBtnsStack.addItems(newFileBtn, newFolderBtn, importBtn, saveBtn, deleteBtn, searchBtn, editBtn);
+        functionalBtnsStack.addItems(newFileBtn, newFolderBtn, importBtn, saveBtn, deleteBtn, searchBtn, editBtn, settingsBtn);
 
         ElementsFactory.setButtonImage(newFileBtn,
                 DefaultsService.getDefaultImage(EmbeddedImage.FILE, EmbeddedImageSize.SIZE_32X32));
@@ -124,6 +128,8 @@ public class OwlWindow extends ActiveWindow {
                 DefaultsService.getDefaultImage(EmbeddedImage.LOUPE, EmbeddedImageSize.SIZE_32X32));
         ElementsFactory.setButtonImage(editBtn,
                 DefaultsService.getDefaultImage(EmbeddedImage.PENCIL, EmbeddedImageSize.SIZE_32X32));
+        ElementsFactory.setButtonImage(settingsBtn,
+                DefaultsService.getDefaultImage(EmbeddedImage.GEAR, EmbeddedImageSize.SIZE_32X32));
 
         // --------------------------------------------------------------------------------------------------------------
 
@@ -324,7 +330,7 @@ public class OwlWindow extends ActiveWindow {
 
     }
 
-    void setTitle(String title) {
+    public void setTitle(String title) {
         titleBar.setText(title);
     }
 }

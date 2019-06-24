@@ -1,11 +1,11 @@
-package OwnLibs.Owls;
+package OwnLibs.Owls.Views.Items;
 
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
-class OwlsTab extends Tab {
+public class OwlsTab extends Tab {
 
     private Ellipse _unsavedMarker;
     private boolean _isUnsaved = false;

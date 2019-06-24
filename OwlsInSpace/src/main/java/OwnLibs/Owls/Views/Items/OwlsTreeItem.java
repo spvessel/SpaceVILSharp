@@ -1,17 +1,16 @@
-package OwnLibs.Owls;
+package OwnLibs.Owls.Views.Items;
 
 import com.spvessel.spacevil.Flags.TreeItemType;
 
 import com.spvessel.spacevil.TreeItem;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class OwlsTreeItem extends TreeItem {
+public class OwlsTreeItem extends TreeItem {
     private boolean editing = false;
 
     private String fullPath;
