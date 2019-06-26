@@ -1,6 +1,7 @@
 package com.spvessel.spacevil.View;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 
 import com.spvessel.spacevil.ActiveWindow;
 import com.spvessel.spacevil.ButtonCore;
@@ -15,6 +16,8 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Flags.EmbeddedImage;
+import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
@@ -34,7 +37,12 @@ public class Containers extends ActiveWindow {
         this.setMinSize(400, 400);
         this.isCentered = true;
 
+        BufferedImage iBig = DefaultsService.getDefaultImage(EmbeddedImage.GEAR, EmbeddedImageSize.SIZE_64X64);
+        BufferedImage iSmall = DefaultsService.getDefaultImage(EmbeddedImage.GEAR, EmbeddedImageSize.SIZE_32X32);
+        setIcon(iBig, iSmall);
+
         title = new TitleBar("Containers");
+        title.setIcon(iSmall, 10, 10);
         title.setShadow(5, 0, 3, new Color(0, 0, 0, 150));
         this.addItem(title);
 
@@ -45,13 +53,13 @@ public class Containers extends ActiveWindow {
 
         tabs = new TabView();
         tab1 = new Tab("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1");
-        tab1.setToolTip("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1");
+        // tab1.setToolTip("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1");
         tab2 = new Tab("List");
         tab3 = new Tab("List");
         cc.addItem(tabs);
 
         tabs.addTabs(tab1, tab2, tab3);
-        tab1.setWidthPolicy(SizePolicy.EXPAND);
+        // tab1.setWidthPolicy(SizePolicy.EXPAND);
 
         eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.MENU)
@@ -67,21 +75,21 @@ public class Containers extends ActiveWindow {
             }
         });
 
-        Grid grid = new Grid(3, 4);
-        grid.setBackground(255, 255, 255, 20);
-        grid.setSpacing(2, 2);
-        grid.setMargin(20, 30, 20, 30);
-        tabs.addItemToTabByName("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1", grid);
-        Grid subgrid = new Grid(1, 2);
-        grid.insertItem(subgrid, 1, 1);
+        // Grid grid = new Grid(3, 4);
+        // grid.setBackground(255, 255, 255, 20);
+        // grid.setSpacing(2, 2);
+        // grid.setMargin(20, 30, 20, 30);
+        // tabs.addItemToTabByName("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1", grid);
+        // Grid subgrid = new Grid(1, 2);
+        // grid.insertItem(subgrid, 1, 1);
 
-        subgrid.addItems(new VerticalScrollBar(), new VerticalScrollBar());
-        for (int i = 0; i < 11; i++) {
-            ButtonCore h_btn = getButton("Cell" + i, 150, 50, SizePolicy.EXPAND);
-            h_btn.setMaxSize(200, 100);
-            h_btn.setBackground(121, 223, 152);
-            grid.addItem(h_btn);
-        }
+        // subgrid.addItems(new VerticalScrollBar(), new VerticalScrollBar());
+        // for (int i = 0; i < 11; i++) {
+        //     ButtonCore h_btn = getButton("Cell" + i, 150, 50, SizePolicy.EXPAND);
+        //     h_btn.setMaxSize(200, 100);
+        //     h_btn.setBackground(121, 223, 152);
+        //     grid.addItem(h_btn);
+        // }
 
         tab1.eventOnClose.add(() -> {
             System.out.println("close");

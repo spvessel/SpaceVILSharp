@@ -18,15 +18,15 @@ public class OwlsTreeItem extends TreeItem {
     private String keyWordsString = "";
     private List<String> keyWordsArr = new ArrayList<>();
 
-    OwlsTreeItem(TreeItemType type) {
+    public OwlsTreeItem(TreeItemType type) {
         super(type);
     }
 
-    OwlsTreeItem(TreeItemType type, String text) {
+    public OwlsTreeItem(TreeItemType type, String text) {
         super(type, text);
     }
 
-    OwlsTreeItem(TreeItemType type, String name, String fullPath, boolean isNew) {
+    public OwlsTreeItem(TreeItemType type, String name, String fullPath, boolean isNew) {
         this(type, name);
 
         this.fullPath = fullPath;
@@ -41,35 +41,35 @@ public class OwlsTreeItem extends TreeItem {
         super.initElements();
     }
 
-    boolean isEditing() {
+    public boolean isEditing() {
         return editing;
     }
 
-    void setEditing(boolean editing) {
+    public void setEditing(boolean editing) {
         this.editing = editing;
     }
 
-    Boolean isDirectory() {
+    public Boolean isDirectory() {
         return getItemType().equals(TreeItemType.BRANCH);
     }
 
-    String getFullPath() {
+    public String getFullPath() {
         return fullPath;
     }
 
     //void setFullPath(String fullPath) { this.fullPath = fullPath; }
 
-    String getDirectoryPath() {
+    public String getDirectoryPath() {
         // fullPath.substring(0, fullPath.length() - getText().length() - 1);
         File f = new File(fullPath);
         return f.getParentFile().getPath();
     }
 
-    List<String> getKeyWordsArr() {
+    public List<String> getKeyWordsArr() {
         return keyWordsArr;
     }
 
-    void clearKeyWordArr() {
+    public void clearKeyWordArr() {
         keyWordsArr = new ArrayList<>();
     }
 
@@ -79,15 +79,15 @@ public class OwlsTreeItem extends TreeItem {
      * @param kWord is contains in the  keyWordsArray
      * @return true or false
      */
-    boolean isKeyWordExist(String kWord) {
+    public boolean isKeyWordExist(String kWord) {
         return keyWordsArr.contains(kWord);
     }
 
-    boolean isKeyWordExist(List<String> kWords) {
+    public boolean isKeyWordExist(List<String> kWords) {
         return keyWordsArr.containsAll(kWords);
     }
 
-    String loadItem() {
+    public String loadItem() {
         String s = "";
         //Обновляем строку ключевых слов. На всякий случай. Может быть не нужно это делать
         //Если будет какая-то проверка на то, изменился ли файл с момента запуска программы (в другой программе),
@@ -134,7 +134,7 @@ public class OwlsTreeItem extends TreeItem {
         keyWordsString = String.join(" ", keyWordsArr);
     }
 
-    void saveItem(String text) {
+    public void saveItem(String text) {
         try {
             File file = new File(fullPath);
             BufferedWriter out = new BufferedWriter(new FileWriter(file));
@@ -153,7 +153,7 @@ public class OwlsTreeItem extends TreeItem {
         }
     }
 
-    boolean newFolder() {
+    public boolean newFolder() {
         File dir = new File(getFullPath());
         if (!(dir.exists())) {
             return dir.mkdir();
@@ -161,7 +161,7 @@ public class OwlsTreeItem extends TreeItem {
             return false;
     }
 
-    boolean removeItem() {
+    public boolean removeItem() {
         File file = new File(fullPath);
         if (file.exists())
             return file.delete();
@@ -190,7 +190,7 @@ public class OwlsTreeItem extends TreeItem {
             }
         }
     */
-    boolean renameFile(String newName) {
+    public boolean renameFile(String newName) {
         File file = new File(fullPath);
         fullPath = getDirectoryPath() + File.separator + newName;
 
@@ -198,7 +198,7 @@ public class OwlsTreeItem extends TreeItem {
         return file.renameTo(new File(fullPath));
     }
 
-    void closeItem() {
+    public void closeItem() {
         //Закрытие элемента и обнуление несохраненных изменений
         parseKeyWordsString();
     }

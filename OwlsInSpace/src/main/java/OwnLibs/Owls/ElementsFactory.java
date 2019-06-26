@@ -9,6 +9,8 @@ import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
 
+import OwnLibs.Owls.Views.Items.KeyWordItem;
+import OwnLibs.Owls.Views.Items.OwlsTab;
 import OwnLibs.Owls.Views.Windows.OwlWindow;
 
 import com.spvessel.spacevil.Label;
@@ -82,6 +84,7 @@ public class ElementsFactory {
         imgFile.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         imgFile.setSize(16, 16);
         imgFile.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        imgFile.keepAspectRatio(true);
         // imgFile.setStyle(imgBtnStyle);
         menuItem.addItem(imgFile);
         return menuItem;

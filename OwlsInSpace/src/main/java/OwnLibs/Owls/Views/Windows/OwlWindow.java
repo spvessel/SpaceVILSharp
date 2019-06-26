@@ -9,6 +9,9 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
 
 import OwnLibs.Owls.ElementsFactory;
+import OwnLibs.Owls.Views.Items.AttachSideArea;
+import OwnLibs.Owls.Views.Items.OwlsTab;
+import OwnLibs.Owls.Views.Items.StartPage;
 
 import com.spvessel.spacevil.Frame;
 import com.spvessel.spacevil.Label;
@@ -36,7 +39,7 @@ public class OwlWindow extends ActiveWindow {
     public TreeView filesTree;
     public TabView workTabArea;
 
-    public ButtonCore addKeyWordsBtn;
+    public ButtonCore filePreferencesBtn;
     public HorizontalStack keyWordsStack;
 
     ContextMenu treeContextMenu;
@@ -49,10 +52,17 @@ public class OwlWindow extends ActiveWindow {
     public MenuItem miNewFolder;
 
     public ContextMenu keyWordsContextMenu;
+    public ContextMenu filePreferencesContextMenu;
+    public MenuItem miAddKeyWords;
+    public MenuItem miShowFilePreferences;
+    public MenuItem miShowAttachedContent;
 
     public ListBox kwResultsListBox;
     public Label kwResultLabel1;
     public Label kwResultLabel2;
+
+    public AttachSideArea attachedContentSideArea;
+    public StartPage startPage;
 
     @Override
     public void initWindow() {
@@ -112,7 +122,8 @@ public class OwlWindow extends ActiveWindow {
         backBtn.setHeight(30);
 
         mainVStack.addItems(functionalBtnsStack);
-        functionalBtnsStack.addItems(newFileBtn, newFolderBtn, importBtn, saveBtn, deleteBtn, searchBtn, editBtn, settingsBtn);
+        functionalBtnsStack.addItems(newFileBtn, newFolderBtn, importBtn, saveBtn, deleteBtn, searchBtn, editBtn,
+                settingsBtn);
 
         ElementsFactory.setButtonImage(newFileBtn,
                 DefaultsService.getDefaultImage(EmbeddedImage.FILE, EmbeddedImageSize.SIZE_32X32));
@@ -189,9 +200,17 @@ public class OwlWindow extends ActiveWindow {
 
         // codeArea = new TextArea();
         workTabArea = new TabView();
+        startPage = new StartPage();
 
         // codeVStack.addItems(kwFrame, codeArea);
         codeVStack.addItems(kwFrame, workTabArea);
+
+        OwlsTab firstPage = ElementsFactory.getNewTab("Welcome");
+        firstPage.setClosable(false);
+        firstPage.setWidthPolicy(SizePolicy.FIXED);
+        workTabArea.addTab(firstPage);
+        workTabArea.addItemToTab(firstPage, startPage);
+        workTabArea.updateLayout();
 
         // codeArea.setStyle(ElementsFactory.getTextAreaStyle());
         // codeArea.setEditable(false);
@@ -200,15 +219,32 @@ public class OwlWindow extends ActiveWindow {
         // codeArea.disableMenu(true);
         // codeArea.menu.setDrawable(false);
 
-        addKeyWordsBtn = (ButtonCore) ElementsFactory.getFunctionalButton(false);
-        addKeyWordsBtn.setPadding(0, 0, 0, 0);
-        keyWordsStack.setMargin(5, 0, addKeyWordsBtn.getWidth() + 3, 0);
+        attachedContentSideArea = new AttachSideArea(this, Side.RIGHT);
+        filePreferencesContextMenu = new ContextMenu(this);
+        filePreferencesContextMenu.setItemName("FilePreferenceContextMenu");
+        filePreferencesContextMenu.activeButton = MouseButton.BUTTON_LEFT;
+        filePreferencesContextMenu.setBorderThickness(1);
+        filePreferencesContextMenu.setBorderFill(32, 32, 32);
+        filePreferencesContextMenu.setBackground(60, 60, 60);
+        filePreferencesContextMenu.setShadow(5, 2, 2, new Color(0, 0, 0, 180));
+
+        miAddKeyWords = new MenuItem("Add tags");
+        miShowAttachedContent = new MenuItem("Show attached");
+        miShowFilePreferences = new MenuItem("Preferences");
+
+        filePreferencesContextMenu.addItems(miAddKeyWords, miShowAttachedContent, miShowFilePreferences);
+
+        filePreferencesBtn = (ButtonCore) ElementsFactory.getFunctionalButton(false);
+        filePreferencesBtn.setPadding(4, 4, 4, 4);
+        keyWordsStack.setMargin(5, 0, filePreferencesBtn.getWidth() + 3, 0);
         keyWordsStack.setSpacing(5, 0);
 
-        kwFrame.addItems(keyWordsStack, addKeyWordsBtn);
-        addKeyWordsBtn.setAlignment(ItemAlignment.RIGHT);
+        kwFrame.addItems(keyWordsStack, filePreferencesBtn);
+        filePreferencesBtn.setAlignment(ItemAlignment.RIGHT);
 
-        ElementsFactory.setButtonImage(addKeyWordsBtn, "/images/add.png");
+        // ElementsFactory.setButtonImage(filePreferenceBtn, "/images/add.png");
+        ElementsFactory.setButtonImage(filePreferencesBtn,
+                DefaultsService.getDefaultImage(EmbeddedImage.LINES, EmbeddedImageSize.SIZE_32X32));
 
         treeContextMenu = new ContextMenu(this);
         treeContextMenu.setItemName("TreeContextMenu");
@@ -241,7 +277,7 @@ public class OwlWindow extends ActiveWindow {
         miNewFolder = new MenuItem("New folder");
 
         ElementsFactory.getMenuStyle().setStyle(miTreeDelete, miKWDelete, miKWUse, miRename, miAddExist, miNewFile,
-                miNewFolder);
+                miNewFolder, miAddKeyWords, miShowAttachedContent, miShowFilePreferences);
 
         treeContextMenu.addItems(miTreeDelete, miRename, miAddExist, miNewFile, miNewFolder);
         keyWordsContextMenu.addItems(miKWDelete, miKWUse);
@@ -260,6 +296,20 @@ public class OwlWindow extends ActiveWindow {
                 DefaultsService.getDefaultImage(EmbeddedImage.FILE, EmbeddedImageSize.SIZE_32X32));
         ElementsFactory.setMenuItemImage(miNewFolder,
                 DefaultsService.getDefaultImage(EmbeddedImage.FOLDER_PLUS, EmbeddedImageSize.SIZE_32X32));
+
+        BufferedImage addIcon = null;
+        BufferedImage attachIcon = null;
+        BufferedImage preferencesIcon = null;
+        try {
+            addIcon = ImageIO.read(OwlWindow.class.getResourceAsStream("/images/add.png"));
+            attachIcon = ImageIO.read(OwlWindow.class.getResourceAsStream("/images/attach.png"));
+            preferencesIcon = ImageIO.read(OwlWindow.class.getResourceAsStream("/images/preferences.png"));
+        } catch (IOException e) {
+            System.out.println("load icons fail");
+        }
+        ElementsFactory.setMenuItemImage(miAddKeyWords, addIcon);
+        ElementsFactory.setMenuItemImage(miShowAttachedContent, attachIcon);
+        ElementsFactory.setMenuItemImage(miShowFilePreferences, preferencesIcon);
 
         filesTree.eventMouseClick.add((sender, args) -> {
             treeContextMenu.show(sender, args);

@@ -1,11 +1,14 @@
 package OwnLibs.Owls;
 
 import com.spvessel.spacevil.*;
-import com.spvessel.spacevil.Core.EventMouseMethodState;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.*;
 
+import OwnLibs.Owls.Views.Items.KeyBindings;
+import OwnLibs.Owls.Views.Items.KeyWordItem;
+import OwnLibs.Owls.Views.Items.OwlsTab;
+import OwnLibs.Owls.Views.Items.OwlsTreeItem;
 import OwnLibs.Owls.Views.Windows.*;
 
 import java.io.File;
@@ -14,9 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Controller {
-    final String rootFolder;// = ".\\workspace";
+    final String rootFolder;
     private OwlWindow owlWindow;
-    private Settings setsWindow;
+    private SettingsWindow setsWindow;
     private OwlsTreeItem rootItem;
     private OwlsTreeItem workItem;
     private OwlsTreeItem workDirectory;
@@ -28,7 +31,7 @@ public class Controller {
         String userDir = System.getProperty("user.dir");
         rootFolder = userDir + File.separator + "workspace";
         this.owlWindow = owlWindow;
-        setsWindow = new Settings();
+        setsWindow = new SettingsWindow();
         InterfaceSupport.controller = this;
         tabToOwls = new HashMap<>();
     }
@@ -70,7 +73,7 @@ public class Controller {
                 getCurrentTextArea().setFocus();
 
             } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.K) {
-                owlWindow.addKeyWordsBtn.eventMouseClick.execute(owlWindow.addKeyWordsBtn, new MouseArgs());
+                owlWindow.filePreferencesBtn.eventMouseClick.execute(owlWindow.filePreferencesBtn, new MouseArgs());
             } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.contains(KeyMods.SHIFT) && args.mods.size() == 2
                     && args.key == KeyCode.R) {
                 owlWindow.filesTree.getArea().setFocus();
@@ -133,9 +136,15 @@ public class Controller {
         });
 
         // Add key words
-        owlWindow.addKeyWordsBtn.eventMouseClick.add((sender, args) -> { // Пока непонятно, стоит ли добавлять для этого
-                                                                         // отдельный метод
+        owlWindow.filePreferencesBtn.eventMouseClick.add((sender, args) -> {
+            owlWindow.filePreferencesContextMenu.show(sender, args);
+        });
+        
+        owlWindow.miAddKeyWords.eventMouseClick.add((sender, args) -> {
             keyWordsInputDialog("New keywords", "add");
+        });
+        owlWindow.miShowAttachedContent.eventMouseClick.add((sender, args) -> {
+            owlWindow.attachedContentSideArea.show();
         });
 
         // Delete key words
@@ -457,6 +466,7 @@ public class Controller {
             return;
 
         InterfaceSupport.saveOwlFile(workItem, getCurrentTextArea().getText());
+        setItemEdited(workItem, false, getTabByOwlsTreeItem(workItem));
     }
 
     private void saveAllFiles() {

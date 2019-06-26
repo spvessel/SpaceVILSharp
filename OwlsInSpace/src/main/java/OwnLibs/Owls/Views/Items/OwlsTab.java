@@ -26,7 +26,7 @@ public class OwlsTab extends Tab {
         }
     }
 
-    OwlsTab(String text) {
+    public OwlsTab(String text) {
         super(text);
         _unsavedMarker = new Ellipse(12);
         _unsavedMarker.setVisible(_isUnsaved);

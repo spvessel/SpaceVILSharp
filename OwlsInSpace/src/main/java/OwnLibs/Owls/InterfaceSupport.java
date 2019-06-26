@@ -1,10 +1,11 @@
 package OwnLibs.Owls;
 
 import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.TreeItemType;
 import com.spvessel.spacevil.TreeItem;
-import com.spvessel.spacevil.Core.MouseArgs;
+
+import OwnLibs.Owls.Views.Items.OwlsTreeItem;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,7 +21,7 @@ class InterfaceSupport {
     public static Controller controller;
     private static boolean owlMode = true; // true - tree mode, false - find mode.
 
-    static OwlsTreeItem makeOwlItem(String name, String fullPath, TreeItemType treeItemType, OwlsTreeItem parentItem,
+    public static OwlsTreeItem makeOwlItem(String name, String fullPath, TreeItemType treeItemType, OwlsTreeItem parentItem,
             boolean isNew) {
         OwlsTreeItem owlItem;
 
@@ -40,7 +41,7 @@ class InterfaceSupport {
         return owlItem;
     }
 
-    static OwlsTreeItem makeOwlItem(String name, String fullPath, TreeItemType treeItemType, OwlsTreeItem parentItem) {
+    public static OwlsTreeItem makeOwlItem(String name, String fullPath, TreeItemType treeItemType, OwlsTreeItem parentItem) {
         return makeOwlItem(name, fullPath, treeItemType, parentItem, false);
     }
 
@@ -51,7 +52,7 @@ class InterfaceSupport {
     // Создание иерархической структуры элементов типа
     // LibTreeItem-------------------------------------------------------
     // Скорее всего, можно заменить на walkFilesTree
-    static OwlsTreeItem filesTreeMaker(String rootFolder, OwlsTreeItem rootSti) {
+    public static OwlsTreeItem filesTreeMaker(String rootFolder, OwlsTreeItem rootSti) {
         // OwlsTreeItem rootSti = makeOwlItem(rootFolder.substring(2), rootFolder,
         // TreeItemType.BRANCH, null);
         rootSti.setExpanded(true);

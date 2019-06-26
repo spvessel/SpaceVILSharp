@@ -14,7 +14,7 @@ public class KeyWordItem extends Label {
         super();
         setWidthPolicy(SizePolicy.FIXED);
         setBackground(0, 0, 0, 0);
-        setForeground(new Color(0x168DC1));
+        setForeground(20, 180, 255);
         setFontSize(15);
         setFontStyle(Font.BOLD);
         addItemState(ItemStateType.HOVERED, new ItemState(new Color(0x595959)));
