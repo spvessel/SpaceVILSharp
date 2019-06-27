@@ -10,8 +10,9 @@ import com.spvessel.spacevil.Flags.*;
 
 import OwnLibs.Owls.ElementsFactory;
 import OwnLibs.Owls.Views.Items.AttachSideArea;
-import OwnLibs.Owls.Views.Items.OwlsTab;
-import OwnLibs.Owls.Views.Items.StartPage;
+import OwnLibs.Owls.Views.Items.HomeTab;
+import OwnLibs.Owls.Views.Items.FileEntryTab;
+import OwnLibs.Owls.Views.Items.HomePage;
 
 import com.spvessel.spacevil.Frame;
 import com.spvessel.spacevil.Label;
@@ -23,7 +24,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class OwlWindow extends ActiveWindow {
+public class MainWindow extends ActiveWindow {
     public TitleBar titleBar;
 
     public ButtonCore newFileBtn;
@@ -62,7 +63,8 @@ public class OwlWindow extends ActiveWindow {
     public Label kwResultLabel2;
 
     public AttachSideArea attachedContentSideArea;
-    public StartPage startPage;
+    public HomePage homePage;
+    public HomeTab homeTab;
 
     @Override
     public void initWindow() {
@@ -74,8 +76,8 @@ public class OwlWindow extends ActiveWindow {
         BufferedImage iBig = null;
         BufferedImage iSmall = null;
         try {
-            iBig = ImageIO.read(OwlWindow.class.getResourceAsStream("/images/iconbig.png"));
-            iSmall = ImageIO.read(OwlWindow.class.getResourceAsStream("/images/iconsmall.png"));
+            iBig = ImageIO.read(MainWindow.class.getResourceAsStream("/images/iconbig.png"));
+            iSmall = ImageIO.read(MainWindow.class.getResourceAsStream("/images/iconsmall.png"));
         } catch (IOException e) {
             System.out.println("load icons fail");
         }
@@ -200,16 +202,15 @@ public class OwlWindow extends ActiveWindow {
 
         // codeArea = new TextArea();
         workTabArea = new TabView();
-        startPage = new StartPage();
+        homePage = new HomePage();
 
         // codeVStack.addItems(kwFrame, codeArea);
         codeVStack.addItems(kwFrame, workTabArea);
 
-        OwlsTab firstPage = ElementsFactory.getNewTab("Welcome");
-        firstPage.setClosable(false);
-        firstPage.setWidthPolicy(SizePolicy.FIXED);
-        workTabArea.addTab(firstPage);
-        workTabArea.addItemToTab(firstPage, startPage);
+        homeTab = new HomeTab();
+
+        workTabArea.addTab(homeTab);
+        workTabArea.addItemToTab(homeTab, homePage);
         workTabArea.updateLayout();
 
         // codeArea.setStyle(ElementsFactory.getTextAreaStyle());
@@ -301,9 +302,9 @@ public class OwlWindow extends ActiveWindow {
         BufferedImage attachIcon = null;
         BufferedImage preferencesIcon = null;
         try {
-            addIcon = ImageIO.read(OwlWindow.class.getResourceAsStream("/images/add.png"));
-            attachIcon = ImageIO.read(OwlWindow.class.getResourceAsStream("/images/attach.png"));
-            preferencesIcon = ImageIO.read(OwlWindow.class.getResourceAsStream("/images/preferences.png"));
+            addIcon = ImageIO.read(MainWindow.class.getResourceAsStream("/images/add.png"));
+            attachIcon = ImageIO.read(MainWindow.class.getResourceAsStream("/images/attach.png"));
+            preferencesIcon = ImageIO.read(MainWindow.class.getResourceAsStream("/images/preferences.png"));
         } catch (IOException e) {
             System.out.println("load icons fail");
         }
@@ -377,7 +378,6 @@ public class OwlWindow extends ActiveWindow {
         //// ((Prototype)alertDialog.window.getItems().get(1)).addItem(bc);
         //// inputDialog.show(Handler);
         // });
-
     }
 
     public void setTitle(String title) {

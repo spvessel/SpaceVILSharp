@@ -5,10 +5,11 @@ import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.*;
 
+import OwnLibs.Owls.Views.Items.HomeTab;
 import OwnLibs.Owls.Views.Items.KeyBindings;
 import OwnLibs.Owls.Views.Items.KeyWordItem;
-import OwnLibs.Owls.Views.Items.OwlsTab;
-import OwnLibs.Owls.Views.Items.OwlsTreeItem;
+import OwnLibs.Owls.Views.Items.FileEntryTab;
+import OwnLibs.Owls.Views.Items.FileEntryTreeItem;
 import OwnLibs.Owls.Views.Windows.*;
 
 import java.io.File;
@@ -18,16 +19,18 @@ import java.util.Map;
 
 public class Controller {
     final String rootFolder;
-    private OwlWindow owlWindow;
+    private MainWindow owlWindow;
     private SettingsWindow setsWindow;
-    private OwlsTreeItem rootItem;
-    private OwlsTreeItem workItem;
-    private OwlsTreeItem workDirectory;
-    private OwlsTreeItem tmpItem;
+    private FileEntryTreeItem rootItem;
+    private FileEntryTreeItem workItem;
+    private FileEntryTreeItem workDirectory;
+    private FileEntryTreeItem tmpItem;
     private KeyBindings helpWnd;
-    private Map<OwlsTab, OwlsTreeItem> tabToOwls;
+    private Map<FileEntryTab, FileEntryTreeItem> tabToOwls;
 
-    public Controller(OwlWindow owlWindow) {
+    History historyStore = new History();
+
+    public Controller(MainWindow owlWindow) {
         String userDir = System.getProperty("user.dir");
         rootFolder = userDir + File.separator + "workspace";
         this.owlWindow = owlWindow;
@@ -55,9 +58,17 @@ public class Controller {
         // fillFields();
 
         // New file
+        owlWindow.homePage.newFileLabel.eventMouseClick
+                .add((sender, args) -> treeNewFileOrFolder(workDirectory, "file"));
+        owlWindow.homePage.newFolderLabel.eventMouseClick
+                .add((sender, args) -> treeNewFileOrFolder(workDirectory, "folder"));
+        owlWindow.homePage.importFileLabel.eventMouseClick.add((sender, args) -> treeImportFile(workDirectory));
+        owlWindow.homePage.settingsLabel.eventMouseClick.add((sender, args) -> setsWindow.show());
+        owlWindow.homePage.quickTipsLabel.eventMouseClick.add((sender, args) -> helpWnd.show());
+
         owlWindow.newFileBtn.eventMouseClick.add((sender, args) -> treeNewFileOrFolder(workDirectory, "file"));
-        owlWindow.miNewFile.eventMouseClick.add(
-                (sender, args) -> treeNewFileOrFolder((OwlsTreeItem) owlWindow.filesTree.getSelectedItem(), "file"));
+        owlWindow.miNewFile.eventMouseClick.add((sender,
+                args) -> treeNewFileOrFolder((FileEntryTreeItem) owlWindow.filesTree.getSelectedItem(), "file"));
 
         // Save file
         owlWindow.saveBtn.eventMouseClick.add((sender, args) -> saveFile());
@@ -122,7 +133,7 @@ public class Controller {
             treeDeleteFile();
         });
         owlWindow.miTreeDelete.eventMouseClick.add((sender, args) -> {
-            tmpItem = (OwlsTreeItem) owlWindow.filesTree.getSelectedItem();
+            tmpItem = (FileEntryTreeItem) owlWindow.filesTree.getSelectedItem();
             treeDeleteFile();
         });
 
@@ -139,7 +150,7 @@ public class Controller {
         owlWindow.filePreferencesBtn.eventMouseClick.add((sender, args) -> {
             owlWindow.filePreferencesContextMenu.show(sender, args);
         });
-        
+
         owlWindow.miAddKeyWords.eventMouseClick.add((sender, args) -> {
             keyWordsInputDialog("New keywords", "add");
         });
@@ -176,22 +187,22 @@ public class Controller {
         // Import existing file
         owlWindow.importBtn.eventMouseClick.add((sender, args) -> treeImportFile(workDirectory));
         owlWindow.miAddExist.eventMouseClick
-                .add((sender, args) -> treeImportFile((OwlsTreeItem) owlWindow.filesTree.getSelectedItem()));
+                .add((sender, args) -> treeImportFile((FileEntryTreeItem) owlWindow.filesTree.getSelectedItem()));
 
         // New folder
         owlWindow.newFolderBtn.eventMouseClick.add((sender, args) -> treeNewFileOrFolder(workDirectory, "folder"));
-        owlWindow.miNewFolder.eventMouseClick.add(
-                (sender, args) -> treeNewFileOrFolder((OwlsTreeItem) owlWindow.filesTree.getSelectedItem(), "folder"));
+        owlWindow.miNewFolder.eventMouseClick.add((sender,
+                args) -> treeNewFileOrFolder((FileEntryTreeItem) owlWindow.filesTree.getSelectedItem(), "folder"));
 
         // Rename item
         owlWindow.miRename.eventMouseClick
-                .add((sender, args) -> renameFile((OwlsTreeItem) owlWindow.filesTree.getSelectedItem()));
+                .add((sender, args) -> renameFile((FileEntryTreeItem) owlWindow.filesTree.getSelectedItem()));
 
         // Close app
         // owlWindow.titleBar.getCloseButton().eventMouseClick.clear();
         owlWindow.eventClose.clear();
         owlWindow.eventClose.add(() -> {
-
+            History.serialize(historyStore);
             checkAndCloseWindow();
 
             // List<Tab> allTabs = owlWindow.workTabArea.getTabs();
@@ -245,13 +256,20 @@ public class Controller {
         owlWindow.settingsBtn.eventMouseClick.add((sender, args) -> {
             setsWindow.show();
         });
+
+        owlWindow.eventOnStart.add(() -> {
+            historyStore =  History.deserialize("history.cfg");
+            for (String record : historyStore.getRecords()) {
+                owlWindow.homePage.addItemToHistoryList(record);
+            }
+        });
     }
 
     int count = 0;
 
     private void checkAndCloseWindow() {
 
-        OwlsTab selectedTab = getSelectedTab();
+        FileEntryTab selectedTab = getSelectedTab();
 
         if (selectedTab == null) {
             WindowManager.appExit();
@@ -279,7 +297,7 @@ public class Controller {
         }
     }
 
-    private void closeTabAlertDialog(OwlsTab tab) {
+    private void closeTabAlertDialog(FileEntryTab tab) {
         // TextArea selectedTextArea = getCurrentTextArea();
         // if (selectedTextArea != null &&
         // (InterfaceSupport.isEditing(selectedTextArea))) {
@@ -306,7 +324,7 @@ public class Controller {
         owlWindow.kwResultsListBox.getArea().updateLayout();
     }
 
-    private void fillFilesTree(OwlsTreeItem sti) {
+    private void fillFilesTree(FileEntryTreeItem sti) {
         // owlWindow.filesTree.clear();
         owlWindow.filesTree.setRootVisible(false);
 
@@ -316,12 +334,12 @@ public class Controller {
         // owlWindow.treeStack.updateLayout();
     }
 
-    void loadFileLauncher(OwlsTreeItem loadingItem) {
+    void loadFileLauncher(FileEntryTreeItem loadingItem) {
         if (loadingItem.isDirectory()) {
             return;
         }
 
-        OwlsTab existingTab = getTabByOwlsTreeItem(loadingItem);
+        FileEntryTab existingTab = getTabByOwlsTreeItem(loadingItem);
 
         if (existingTab != null) {
             owlWindow.workTabArea.selectTab(existingTab);
@@ -329,15 +347,18 @@ public class Controller {
             return;
         }
 
-        OwlsTab tab = addNewTabAndSelect(loadingItem);
+        owlWindow.homePage.addItemToHistoryList(loadingItem.getText());
+        historyStore.addRecord(loadingItem.getText());
+
+        FileEntryTab tab = addNewTabAndSelect(loadingItem);
 
         launchContinue(loadingItem, tab);
 
     }
 
-    private OwlsTab getTabByOwlsTreeItem(OwlsTreeItem oti) {
-        OwlsTab tab = null;
-        for (Map.Entry<OwlsTab, OwlsTreeItem> entry : tabToOwls.entrySet()) {
+    private FileEntryTab getTabByOwlsTreeItem(FileEntryTreeItem oti) {
+        FileEntryTab tab = null;
+        for (Map.Entry<FileEntryTab, FileEntryTreeItem> entry : tabToOwls.entrySet()) {
             if (entry.getValue().equals(oti)) {
                 tab = entry.getKey();
                 // return tab;
@@ -347,9 +368,9 @@ public class Controller {
         return tab;
     }
 
-    private OwlsTab addNewTabAndSelect(OwlsTreeItem tabItem) {
+    private FileEntryTab addNewTabAndSelect(FileEntryTreeItem tabItem) {
         // создание и добавление вкладки
-        OwlsTab tab = ElementsFactory.getNewTab(tabItem.getText());
+        FileEntryTab tab = ElementsFactory.getNewTab(tabItem.getText());
         owlWindow.workTabArea.addTab(tab);
 
         tab.getCloseButton().eventMouseClick.clear();
@@ -381,7 +402,7 @@ public class Controller {
         return tab;
     }
 
-    private boolean fileUnsaved(OwlsTab tab, boolean adres, int buttonId) { // OwlsTreeItem loadingItem,
+    private boolean fileUnsaved(FileEntryTab tab, boolean adres, int buttonId) { // OwlsTreeItem loadingItem,
         if (adres) { // save and close
             saveFile(); // сама меняет setEditing
         } else {
@@ -401,19 +422,19 @@ public class Controller {
         return true;
     }
 
-    private void removeTab(OwlsTab tab) {
+    private void removeTab(FileEntryTab tab) {
         tab.removeTab();
         checkNewSelectedTab();
         tabToOwls.remove(tab);
     }
 
     private void checkNewSelectedTab() {
-        OwlsTab selectedTab = getSelectedTab();
+        FileEntryTab selectedTab = getSelectedTab();
         if (selectedTab == null)
             return;
 
         workItem = tabToOwls.get(selectedTab);
-        workDirectory = (OwlsTreeItem) workItem.getParentBranch();
+        workDirectory = (FileEntryTreeItem) workItem.getParentBranch();
         setLinksFlow();
 
         TextArea selectedTextArea = getCurrentTextArea();
@@ -425,7 +446,7 @@ public class Controller {
         }
     }
 
-    private void launchContinue(OwlsTreeItem loadingItem, OwlsTab tab) {
+    private void launchContinue(FileEntryTreeItem loadingItem, FileEntryTab tab) {
         // areaCleaner();
         itemToDefault();
 
@@ -433,7 +454,7 @@ public class Controller {
         // workDirectory = loadingItem;
         // } else {
         workItem = loadingItem;
-        workDirectory = (OwlsTreeItem) workItem.getParentBranch();
+        workDirectory = (FileEntryTreeItem) workItem.getParentBranch();
         setLinksFlow();
 
         // TextArea textArea = ElementsFactory.getTextArea();
@@ -470,7 +491,7 @@ public class Controller {
     }
 
     private void saveAllFiles() {
-        for (Map.Entry<OwlsTab, OwlsTreeItem> entry : tabToOwls.entrySet()) {
+        for (Map.Entry<FileEntryTab, FileEntryTreeItem> entry : tabToOwls.entrySet()) {
             if (InterfaceSupport.isEditing(entry.getValue())) {
                 InterfaceSupport.saveOwlFile(entry.getValue(), getTextAreaByTab(entry.getKey()).getText());
                 setItemEdited(entry.getValue(), false, entry.getKey()); // TODO что-нибудь с этим отстоем
@@ -480,14 +501,14 @@ public class Controller {
 
     private TextArea getCurrentTextArea() {
         TextArea selectedTextArea = null;
-        OwlsTab selectedTab = getSelectedTab();
+        FileEntryTab selectedTab = getSelectedTab();
         if (selectedTab == null)
             return selectedTextArea;
 
         return getTextAreaByTab(selectedTab);
     }
 
-    private TextArea getTextAreaByTab(OwlsTab tab) {
+    private TextArea getTextAreaByTab(FileEntryTab tab) {
         TextArea textArea = null;
         List<InterfaceBaseItem> tabContent = owlWindow.workTabArea.getTabContent(tab);
         for (InterfaceBaseItem item : tabContent) {
@@ -499,11 +520,12 @@ public class Controller {
         return textArea;
     }
 
-    private OwlsTab getSelectedTab() {
-        if (owlWindow.workTabArea.getTabs().size() == 0)
+    private FileEntryTab getSelectedTab() {
+        if (owlWindow.workTabArea.getTabs().size() == 0 || owlWindow.workTabArea.getSelectedTab() instanceof HomeTab) {
             return null;
+        }
 
-        return (OwlsTab) owlWindow.workTabArea.getSelectedTab();
+        return (FileEntryTab) owlWindow.workTabArea.getSelectedTab();
     }
 
     // Delete file
@@ -531,7 +553,7 @@ public class Controller {
                     // // itemToDefault();
                     // }
 
-                    OwlsTab existingTab = getTabByOwlsTreeItem(tmpItem);
+                    FileEntryTab existingTab = getTabByOwlsTreeItem(tmpItem);
                     if (existingTab != null) {
                         removeTab(existingTab);
                     }
@@ -625,7 +647,7 @@ public class Controller {
         return checkExistence(name, workDirectory);
     }
 
-    private boolean checkExistence(String name, OwlsTreeItem parentItem) {
+    private boolean checkExistence(String name, FileEntryTreeItem parentItem) {
         String fp = InterfaceSupport.makeFullPath(parentItem, name);
         return (new File(fp).exists());
     }
@@ -644,8 +666,8 @@ public class Controller {
 
         owlWindow.kwResultLabel2.setText(keyWords);
 
-        List<OwlsTreeItem> kwFilesList = InterfaceSupport.findOwlFiles(keyWords, rootItem);
-        for (OwlsTreeItem oti : kwFilesList) {
+        List<FileEntryTreeItem> kwFilesList = InterfaceSupport.findOwlFiles(keyWords, rootItem);
+        for (FileEntryTreeItem oti : kwFilesList) {
             HorizontalStack hStack = new HorizontalStack();
             hStack.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
             hStack.setHeight(30);
@@ -656,14 +678,14 @@ public class Controller {
         }
     }
 
-    private void treeImportFile(OwlsTreeItem parentSti) {
+    private void treeImportFile(FileEntryTreeItem parentSti) {
         if (parentSti == null)
             return;
 
         if (InterfaceSupport.isDirectory(parentSti)) {
             workDirectory = parentSti;
         } else {
-            workDirectory = (OwlsTreeItem) parentSti.getParentBranch();
+            workDirectory = (FileEntryTreeItem) parentSti.getParentBranch();
         }
 
         OpenEntryDialog opd = new OpenEntryDialog("Import File:", FileSystemEntryType.FILE,
@@ -674,7 +696,7 @@ public class Controller {
             String path = opd.getResult();
             if (path != null) {
                 File file = new File(path);
-                OwlsTreeItem sti = InterfaceSupport.importNewFile(file, workDirectory);
+                FileEntryTreeItem sti = InterfaceSupport.importNewFile(file, workDirectory);
                 if (sti == null) {
                     System.out.println("Файл с таким именем уже есть в этой директории, заменить?");
                 } else {
@@ -688,7 +710,7 @@ public class Controller {
     }
 
     // New file or folder
-    private void treeNewFileOrFolder(OwlsTreeItem stitmp, String itemType) {
+    private void treeNewFileOrFolder(FileEntryTreeItem stitmp, String itemType) {
         // TODO: Нужна проверка на то, что там вообще что-то есть
         if (stitmp == null)
             return;
@@ -696,7 +718,7 @@ public class Controller {
         if (InterfaceSupport.isDirectory(stitmp)) {
             workDirectory = stitmp;
         } else {
-            workDirectory = (OwlsTreeItem) stitmp.getParentBranch();
+            workDirectory = (FileEntryTreeItem) stitmp.getParentBranch();
         }
 
         String defName, defType;
@@ -774,7 +796,7 @@ public class Controller {
         // }
         // return out;
 
-        OwlsTreeItem parentItem = workDirectory;
+        FileEntryTreeItem parentItem = workDirectory;
 
         // TODO: different styles for the fist call and others
         InputDialog input = new InputDialog(dialogName, "Ok", textField);
@@ -832,13 +854,13 @@ public class Controller {
 
     }
 
-    private void renameFile(OwlsTreeItem renamedItem) {
+    private void renameFile(FileEntryTreeItem renamedItem) {
         tmpItem = renamedItem;
 
         if (renamedItem.isRoot) {
             workDirectory = renamedItem;
         } else {
-            workDirectory = (OwlsTreeItem) renamedItem.getParentBranch();
+            workDirectory = (FileEntryTreeItem) renamedItem.getParentBranch();
         }
 
         String itemType;
@@ -856,16 +878,16 @@ public class Controller {
         }
     }
 
-    private void setItemEdited(OwlsTreeItem itemEdit, boolean isEdited, OwlsTab tab) {
+    private void setItemEdited(FileEntryTreeItem itemEdit, boolean isEdited, FileEntryTab tab) {
         InterfaceSupport.setEditing(itemEdit, isEdited);
         changeTabState(tab, isEdited);
     }
 
-    private void setItemEdited(OwlsTreeItem itemEdit, boolean isEdited) {
+    private void setItemEdited(FileEntryTreeItem itemEdit, boolean isEdited) {
         setItemEdited(itemEdit, isEdited, getSelectedTab());
     }
 
-    void changeTabState(OwlsTab tab, boolean state) {
+    void changeTabState(FileEntryTab tab, boolean state) {
         tab.setUnsaved(state);
     }
 }

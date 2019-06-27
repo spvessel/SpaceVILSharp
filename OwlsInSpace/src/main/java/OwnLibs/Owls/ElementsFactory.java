@@ -10,8 +10,8 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
 
 import OwnLibs.Owls.Views.Items.KeyWordItem;
-import OwnLibs.Owls.Views.Items.OwlsTab;
-import OwnLibs.Owls.Views.Windows.OwlWindow;
+import OwnLibs.Owls.Views.Items.FileEntryTab;
+import OwnLibs.Owls.Views.Windows.MainWindow;
 
 import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.MenuItem;
@@ -54,7 +54,7 @@ public class ElementsFactory {
     public static Prototype setButtonImage(Prototype button, String imgPath) {
         BufferedImage img = null;
         try {
-            img = ImageIO.read(OwlWindow.class.getResourceAsStream(imgPath));
+            img = ImageIO.read(MainWindow.class.getResourceAsStream(imgPath));
         } catch (IOException e) {
             System.out.println("Icons loading exception: " + e);
         }
@@ -198,13 +198,40 @@ public class ElementsFactory {
         return tArea;
     }
 
-    public static OwlsTab getNewTab(String name) {
-        OwlsTab tab = new OwlsTab(name);
+    public static FileEntryTab getNewTab(String name) {
+        FileEntryTab tab = new FileEntryTab(name);
         tab.setToolTip(name);
         tab.setWidthPolicy(SizePolicy.EXPAND);
         tab.setFontSize(12);
         tab.setBorderRadius(0);
         tab.setClosable(true);
         return tab;
+    }
+
+    public static Style getHeaderLabelStyle() {
+        Style style = Style.getLabelStyle();
+        style.foreground = new Color(20, 180, 255);
+        style.font = DefaultsService.getDefaultFont(Font.BOLD, 16);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        style.height = 50;
+        style.setMargin(0, 30, 0, 0);
+        return style;
+    }
+
+    public static Style getCasualLabelStyle() {
+        Style style = Style.getLabelStyle();
+        style.font = DefaultsService.getDefaultFont(12);
+        style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        style.height = 25;
+        return style;
+    }
+
+    public static Style getIndicatorStyle() {
+
+        Style style = Style.getCheckBoxStyle();
+        Style marker = style.getInnerStyle("indicator").getInnerStyle("marker");
+        marker.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(10, 162, 232)));
+
+        return style;
     }
 }

@@ -15,7 +15,7 @@ import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
-import OwnLibs.Owls.Views.Items.TextMarker;
+import OwnLibs.Owls.Views.Items.SelectionMarker;
 
 public class SettingsWindow extends ActiveWindow {
     TitleBar titleBar;
@@ -25,9 +25,10 @@ public class SettingsWindow extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        setParameters("Settings", "Settings", 800, 800, false);
+        setParameters("Settings", "Settings", 800, 600, false);
         setMinSize(400, 400);
         setPadding(2, 2, 2, 2);
+        isCentered = true;
 
         BufferedImage iBig = DefaultsService.getDefaultImage(EmbeddedImage.GEAR, EmbeddedImageSize.SIZE_64X64);
         BufferedImage iSmall = DefaultsService.getDefaultImage(EmbeddedImage.GEAR, EmbeddedImageSize.SIZE_32X32);
@@ -56,6 +57,6 @@ public class SettingsWindow extends ActiveWindow {
 
         addItems(titleBar, layout);
         layout.addItems(tabSections, _subline);
-        tabSections.addItems(new TextMarker("COMMON"), new TextMarker("EDITOR"), new TextMarker("SHORTCUTS"));
+        tabSections.addItems(new SelectionMarker("COMMON"), new SelectionMarker("EDITOR"), new SelectionMarker("SHORTCUTS"));
     }
 }

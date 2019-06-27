@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OwlsTreeItem extends TreeItem {
+public class FileEntryTreeItem extends TreeItem {
     private boolean editing = false;
 
     private String fullPath;
@@ -18,15 +18,15 @@ public class OwlsTreeItem extends TreeItem {
     private String keyWordsString = "";
     private List<String> keyWordsArr = new ArrayList<>();
 
-    public OwlsTreeItem(TreeItemType type) {
+    public FileEntryTreeItem(TreeItemType type) {
         super(type);
     }
 
-    public OwlsTreeItem(TreeItemType type, String text) {
+    public FileEntryTreeItem(TreeItemType type, String text) {
         super(type, text);
     }
 
-    public OwlsTreeItem(TreeItemType type, String name, String fullPath, boolean isNew) {
+    public FileEntryTreeItem(TreeItemType type, String name, String fullPath, boolean isNew) {
         this(type, name);
 
         this.fullPath = fullPath;

@@ -10,7 +10,7 @@ public class App {
     public static void main(String[] args) {
         if (CommonService.initSpaceVILComponents()) {
             // System.out.println(CommonService.getSpaceVILInfo());
-            OwlWindow ow = new OwlWindow();
+            MainWindow ow = new MainWindow();
             Controller controller = new Controller(ow);
             controller.start();
         } else

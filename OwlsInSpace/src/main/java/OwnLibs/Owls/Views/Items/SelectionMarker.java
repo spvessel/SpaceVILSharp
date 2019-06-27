@@ -12,25 +12,25 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
-public class TextMarker extends ButtonToggle {
+public class SelectionMarker extends ButtonToggle {
 
     private Rectangle _subline = new Rectangle();
 
-    public TextMarker(String text) {
+    public SelectionMarker(String text) {
         super(text);
         setBackground(0, 0, 0, 0);
         setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         setFontSize(16);
-        setFontStyle(Font.BOLD);
-        setFontStyle(Font.PLAIN);
-        setForeground(210, 210, 210);
+        // setFontStyle(Font.BOLD);
+        // setFontStyle(Font.PLAIN);
+        setForeground(180, 180, 180);
         setTextAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         removeItemState(ItemStateType.HOVERED);
         removeItemState(ItemStateType.PRESSED);
         addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 20)));
     }
 
-    public TextMarker(String text, int width) {
+    public SelectionMarker(String text, int width) {
         this(text);
         setWidthPolicy(SizePolicy.FIXED);
         setWidth(width);
@@ -54,25 +54,26 @@ public class TextMarker extends ButtonToggle {
         });
 
         eventMouseHover.add((sender, args) -> {
-            setFontStyle(Font.BOLD);
             if (isToggled())
                 return;
             _subline.setVisible(true);
+            setForeground(Color.WHITE);
         });
         eventMouseLeave.add((sender, args) -> {
-            setFontStyle(Font.PLAIN);
             if (isToggled())
                 return;
             _subline.setVisible(false);
+            setForeground(180, 180, 180);
         });
     }
 
     @Override
     public void setToggled(boolean value) {
         super.setToggled(value);
-        if (isToggled())
+        if (isToggled()) {
+            setForeground(Color.WHITE);
             _subline.setVisible(true);
-        else
+        } else
             _subline.setVisible(false);
 
     }
@@ -80,9 +81,12 @@ public class TextMarker extends ButtonToggle {
     private void untoggleOthers() {
         List<InterfaceBaseItem> list = getParent().getItems();
         for (InterfaceBaseItem item : list) {
-            if (item instanceof TextMarker && !item.equals(this)) {
-                TextMarker tm = (TextMarker) item;
+            if (item.equals(this))
+                continue;
+            if (item instanceof SelectionMarker) {
+                SelectionMarker tm = (SelectionMarker) item;
                 tm.setToggled(false);
+                tm.setForeground(180, 180, 180);
             }
         }
     }

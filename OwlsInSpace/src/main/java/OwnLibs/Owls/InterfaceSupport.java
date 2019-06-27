@@ -4,7 +4,7 @@ import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.TreeItemType;
 import com.spvessel.spacevil.TreeItem;
 
-import OwnLibs.Owls.Views.Items.OwlsTreeItem;
+import OwnLibs.Owls.Views.Items.FileEntryTreeItem;
 
 
 import java.io.BufferedReader;
@@ -21,11 +21,11 @@ class InterfaceSupport {
     public static Controller controller;
     private static boolean owlMode = true; // true - tree mode, false - find mode.
 
-    public static OwlsTreeItem makeOwlItem(String name, String fullPath, TreeItemType treeItemType, OwlsTreeItem parentItem,
+    public static FileEntryTreeItem makeOwlItem(String name, String fullPath, TreeItemType treeItemType, FileEntryTreeItem parentItem,
             boolean isNew) {
-        OwlsTreeItem owlItem;
+        FileEntryTreeItem owlItem;
 
-        owlItem = new OwlsTreeItem(treeItemType, name, fullPath, isNew);
+        owlItem = new FileEntryTreeItem(treeItemType, name, fullPath, isNew);
 
         if (parentItem != null)
             parentItem.addItem(owlItem);
@@ -41,18 +41,18 @@ class InterfaceSupport {
         return owlItem;
     }
 
-    public static OwlsTreeItem makeOwlItem(String name, String fullPath, TreeItemType treeItemType, OwlsTreeItem parentItem) {
+    public static FileEntryTreeItem makeOwlItem(String name, String fullPath, TreeItemType treeItemType, FileEntryTreeItem parentItem) {
         return makeOwlItem(name, fullPath, treeItemType, parentItem, false);
     }
 
-    private static OwlsTreeItem makeOwlItem(OwlsTreeItem copyingItem, OwlsTreeItem newParent) {
+    private static FileEntryTreeItem makeOwlItem(FileEntryTreeItem copyingItem, FileEntryTreeItem newParent) {
         return makeOwlItem(copyingItem.getText(), copyingItem.getFullPath(), copyingItem.getItemType(), newParent);
     }
 
     // Создание иерархической структуры элементов типа
     // LibTreeItem-------------------------------------------------------
     // Скорее всего, можно заменить на walkFilesTree
-    public static OwlsTreeItem filesTreeMaker(String rootFolder, OwlsTreeItem rootSti) {
+    public static FileEntryTreeItem filesTreeMaker(String rootFolder, FileEntryTreeItem rootSti) {
         // OwlsTreeItem rootSti = makeOwlItem(rootFolder.substring(2), rootFolder,
         // TreeItemType.BRANCH, null);
         rootSti.setExpanded(true);
@@ -68,7 +68,7 @@ class InterfaceSupport {
         return rootSti;
     }
 
-    private static OwlsTreeItem makeFilesTree(String folderPath, OwlsTreeItem rootBranch) {
+    private static FileEntryTreeItem makeFilesTree(String folderPath, FileEntryTreeItem rootBranch) {
         File fileFolder = new File(folderPath);
         File[] fileList = fileFolder.listFiles();
 
@@ -79,13 +79,13 @@ class InterfaceSupport {
             String name = f.getName();
 
             if (f.isDirectory()) { // Если элемент - папка
-                OwlsTreeItem branch = makeOwlItem(name, f.getPath(), TreeItemType.BRANCH, rootBranch);
+                FileEntryTreeItem branch = makeOwlItem(name, f.getPath(), TreeItemType.BRANCH, rootBranch);
                 // branch.eventMouseDoubleClick.add((sender, args) ->
                 // controller.loadFileLauncher(branch));
                 makeFilesTree(f.getPath(), branch);
                 // refreshDir(branch); //После заполнения папки, упорядочить ее элементы
             } else { // Если элемент - файл
-                OwlsTreeItem oti = makeOwlItem(name, f.getPath(), TreeItemType.LEAF, rootBranch);
+                FileEntryTreeItem oti = makeOwlItem(name, f.getPath(), TreeItemType.LEAF, rootBranch);
                 // oti.eventMouseDoubleClick.add((sender, args) ->
                 // controller.loadFileLauncher(oti));
             }
@@ -139,23 +139,23 @@ class InterfaceSupport {
 
     // ------------------------------------------------------------------------------------------------------------------
 
-    static String getFullPath(OwlsTreeItem dir) {
+    static String getFullPath(FileEntryTreeItem dir) {
         return dir.getFullPath();
     }
 
-    static String getDirectoryPath(OwlsTreeItem dir) {
+    static String getDirectoryPath(FileEntryTreeItem dir) {
         return dir.getDirectoryPath();
     }
 
-    static boolean isDirectory(OwlsTreeItem sti) {
+    static boolean isDirectory(FileEntryTreeItem sti) {
         return sti.isDirectory();
     }
 
-    static String getFileName(OwlsTreeItem sti) {
+    static String getFileName(FileEntryTreeItem sti) {
         return sti.getText();
     }
 
-    static String getFileText(OwlsTreeItem sti) {
+    static String getFileText(FileEntryTreeItem sti) {
         return sti.loadItem();
     }
 
@@ -167,7 +167,7 @@ class InterfaceSupport {
         return owlMode;
     }
 
-    static void saveOwlFile(OwlsTreeItem savingItem, String owlText) {
+    static void saveOwlFile(FileEntryTreeItem savingItem, String owlText) {
         savingItem.saveItem(owlText);
         setEditing(savingItem, false);
     }
@@ -175,12 +175,12 @@ class InterfaceSupport {
     /**
      * Close without saving
      */
-    static void closeOwlFile(OwlsTreeItem closingItem) {
+    static void closeOwlFile(FileEntryTreeItem closingItem) {
         closingItem.closeItem();
         setEditing(closingItem, false);
     }
 
-    static void removeOwlFile(OwlsTreeItem removingItem) {
+    static void removeOwlFile(FileEntryTreeItem removingItem) {
         // removingItem.getParent().getChildren().remove(removingItem);
 
         if (!removingItem.getItemType().equals(TreeItemType.LEAF)) {
@@ -192,30 +192,30 @@ class InterfaceSupport {
 
     }
 
-    private static void recursiveRemove(OwlsTreeItem removingItem) {
+    private static void recursiveRemove(FileEntryTreeItem removingItem) {
         if (!removingItem.getItemType().equals(TreeItemType.LEAF)) {
             for (TreeItem ti : removingItem.getChildren()) {
-                recursiveRemove((OwlsTreeItem) ti);
+                recursiveRemove((FileEntryTreeItem) ti);
             }
         } else {
             removingItem.removeItem();
         }
     }
 
-    static OwlsTreeItem makeNewOwlFile(OwlsTreeItem parentSti, String name) {
+    static FileEntryTreeItem makeNewOwlFile(FileEntryTreeItem parentSti, String name) {
         String fullPath = makeFullPath(parentSti, name);
         return makeOwlItem(name, fullPath, TreeItemType.LEAF, parentSti, true);
     }
 
-    static OwlsTreeItem makeNewOwlDir(OwlsTreeItem parentSti, String name) {
+    static FileEntryTreeItem makeNewOwlDir(FileEntryTreeItem parentSti, String name) {
         String fullPath = makeFullPath(parentSti, name);
-        OwlsTreeItem newTreeItem = makeOwlItem(name, fullPath, TreeItemType.BRANCH, parentSti, true);
+        FileEntryTreeItem newTreeItem = makeOwlItem(name, fullPath, TreeItemType.BRANCH, parentSti, true);
         newTreeItem.newFolder();
         return newTreeItem;
     }
 
-    static boolean renameOwlFile(OwlsTreeItem sti, String newName) {
-        String fp = makeFullPath((OwlsTreeItem) sti.getParentBranch(), newName);
+    static boolean renameOwlFile(FileEntryTreeItem sti, String newName) {
+        String fp = makeFullPath((FileEntryTreeItem) sti.getParentBranch(), newName);
 
         if (new File(fp).exists()) {
             System.out.println("File with such name already exist in this folder");
@@ -225,7 +225,7 @@ class InterfaceSupport {
         }
     }
 
-    static String makeFullPath(OwlsTreeItem workDirectory, String name) {
+    static String makeFullPath(FileEntryTreeItem workDirectory, String name) {
         String parentPath = getFullPath(workDirectory);
         return makeFullPath(parentPath, name);
     }
@@ -234,21 +234,21 @@ class InterfaceSupport {
         return (parentPath + File.separator + name); // Нужна проверка разделителя для винды и линукса
     }
 
-    static boolean isEditing(OwlsTreeItem sti) {
+    static boolean isEditing(FileEntryTreeItem sti) {
         return sti.isEditing();
     }
 
-    static void setEditing(OwlsTreeItem sti, boolean editType) {
+    static void setEditing(FileEntryTreeItem sti, boolean editType) {
         sti.setEditing(editType);
     }
 
-    static void removeKeyWord(OwlsTreeItem sti, String keyWord) {
+    static void removeKeyWord(FileEntryTreeItem sti, String keyWord) {
         sti.getKeyWordsArr().remove(keyWord);
     }
 
-    static boolean addKeyWords(String dialogLinks, OwlsTreeItem ti) {
+    static boolean addKeyWords(String dialogLinks, FileEntryTreeItem ti) {
         List<String> newLinks = new ArrayList<>(Arrays.asList(dialogLinks.split("\\s")));
-        OwlsTreeItem sti = ti;
+        FileEntryTreeItem sti = ti;
         // int count = 0;
         boolean b = false;
         for (String s : newLinks) {
@@ -267,27 +267,27 @@ class InterfaceSupport {
         return b;
     }
 
-    static void removeAllKeyWords(OwlsTreeItem sti) {
+    static void removeAllKeyWords(FileEntryTreeItem sti) {
         sti.clearKeyWordArr();
     }
 
     /**
      * @param searchSTIItem search directory
      */
-    static List<OwlsTreeItem> findOwlFiles(String keyWord, OwlsTreeItem searchSTIItem) {
-        List<OwlsTreeItem> list = new LinkedList<>();
+    static List<FileEntryTreeItem> findOwlFiles(String keyWord, FileEntryTreeItem searchSTIItem) {
+        List<FileEntryTreeItem> list = new LinkedList<>();
 
         list = findFilesWithKeyWord(Arrays.asList(keyWord.split("\\s")), searchSTIItem, list);
 
         return list;
     }
 
-    private static List<OwlsTreeItem> findFilesWithKeyWord(List<String> s, OwlsTreeItem ti,
-            List<OwlsTreeItem> filesWithKW) {
+    private static List<FileEntryTreeItem> findFilesWithKeyWord(List<String> s, FileEntryTreeItem ti,
+            List<FileEntryTreeItem> filesWithKW) {
         if (!ti.getItemType().equals(TreeItemType.LEAF)) { // isDirectory()) {
             if (!ti.getChildren().isEmpty()) {
                 for (TreeItem childLti : ti.getChildren()) {
-                    filesWithKW = findFilesWithKeyWord(s, (OwlsTreeItem) childLti, filesWithKW);
+                    filesWithKW = findFilesWithKeyWord(s, (FileEntryTreeItem) childLti, filesWithKW);
                 }
             }
         } else {
@@ -299,7 +299,7 @@ class InterfaceSupport {
         return filesWithKW;
     }
 
-    static OwlsTreeItem importNewFile(File newFile, OwlsTreeItem parentItem) {
+    static FileEntryTreeItem importNewFile(File newFile, FileEntryTreeItem parentItem) {
         String newPath = makeFullPath(getFullPath(parentItem), newFile.getName());
         if (new File(newPath).exists())
             return null; // Файл с таким именем уже есть
@@ -312,7 +312,7 @@ class InterfaceSupport {
             e.printStackTrace();
         }
 
-        OwlsTreeItem sti = makeOwlItem(newFile.getName(), newPath, TreeItemType.LEAF, parentItem, true); // Создаем
+        FileEntryTreeItem sti = makeOwlItem(newFile.getName(), newPath, TreeItemType.LEAF, parentItem, true); // Создаем
                                                                                                          // элемент
                                                                                                          // дерева
         saveOwlFile(sti, s);

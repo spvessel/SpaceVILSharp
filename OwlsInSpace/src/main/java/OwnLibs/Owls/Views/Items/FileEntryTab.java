@@ -5,7 +5,7 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
-public class OwlsTab extends Tab {
+public class FileEntryTab extends Tab {
 
     private Ellipse _unsavedMarker;
     private boolean _isUnsaved = false;
@@ -26,7 +26,7 @@ public class OwlsTab extends Tab {
         }
     }
 
-    public OwlsTab(String text) {
+    public FileEntryTab(String text) {
         super(text);
         _unsavedMarker = new Ellipse(12);
         _unsavedMarker.setVisible(_isUnsaved);

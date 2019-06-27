@@ -1,7 +1,9 @@
 package com.spvessel.spacevil.View;
 
 import com.spvessel.spacevil.*;
+import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.awt.Color;
@@ -79,7 +81,7 @@ public class SettingsTest extends ActiveWindow {
 
         ButtonToggle btn1 = new ButtonToggle();
         stack.addItem(btn1);
-        // btn1.setBackground(new Color(46, 204, 112));
+        btn1.setBackground(32, 32, 32);
         btn1.setItemName("PrintWindows");
         btn1.setText("Print all windows.");
         btn1.setForeground(new Color(0, 0, 0));
@@ -89,6 +91,18 @@ public class SettingsTest extends ActiveWindow {
         btn1.setMinHeight(30);
         btn1.setAlignment(ItemAlignment.HCENTER);
         btn1.setWidthPolicy(SizePolicy.FIXED);
+
+        
+        ItemState toggled = new ItemState();
+        toggled.background = new Color(255, 181, 111);
+        btn1.addItemState(ItemStateType.TOGGLED, toggled);
+        
+        btn1.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(10, 162, 232)));
+
+        ItemState hovered = new ItemState();
+        hovered.background = new Color(255, 255, 255, 20);
+        btn1.addItemState(ItemStateType.HOVERED, hovered);
+
         btn1.eventMouseClick.add((sender, args) -> {
             System.out.println(btn1.getItemName());
             // WindowLayoutBox.tryShow("FlowTest");
