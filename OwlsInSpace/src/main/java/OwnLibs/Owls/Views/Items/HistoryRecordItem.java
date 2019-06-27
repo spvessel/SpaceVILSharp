@@ -1,6 +1,8 @@
 package OwnLibs.Owls.Views.Items;
 
 import java.awt.Color;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.spvessel.spacevil.ButtonCore;
 import com.spvessel.spacevil.GraphicsMathService;
@@ -12,6 +14,7 @@ import com.spvessel.spacevil.Decorations.CustomFigure;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
+import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -19,15 +22,20 @@ public class HistoryRecordItem extends Prototype {
     HorizontalStack layout;
     ButtonCore removeBtn;
     Label nameLabel;
+    Label dateLabel;
     String _recordPath;
+    Date date;
 
     public EventCommonMethod eventOnRemove = new EventCommonMethod();
 
     public HistoryRecordItem(String recordName, String recordPath) {
+        date = new Date();
         _recordPath = recordPath;
         layout = new HorizontalStack();
         removeBtn = new ButtonCore();
         nameLabel = new Label(recordName, false);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd.MM.yy");
+        dateLabel = new Label(dateFormat.format(date).toString(), false);
         setStyle(Style.getDefaultCommonStyle());
         setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
         setHeight(25);
@@ -39,6 +47,13 @@ public class HistoryRecordItem extends Prototype {
 
     @Override
     public void initElements() {
+        layout.setSpacing(5, 0);
+
+        dateLabel.setTextAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        dateLabel.setWidthPolicy(SizePolicy.FIXED);
+        dateLabel.setWidth(100);
+        dateLabel.setBackground(255, 255, 255, 20);
+
         removeBtn.setBackground(120, 120, 120);
         removeBtn.setSize(10, 10);
         removeBtn.setCustomFigure(new CustomFigure(false, GraphicsMathService.getCross(16, 16, 2, 45)));
@@ -49,7 +64,7 @@ public class HistoryRecordItem extends Prototype {
         });
 
         addItem(layout);
-        layout.addItems(nameLabel, removeBtn);
+        layout.addItems(nameLabel, dateLabel, removeBtn);
     }
 
     public void remove() {
