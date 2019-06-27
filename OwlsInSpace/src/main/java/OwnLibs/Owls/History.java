@@ -4,9 +4,12 @@ import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -23,7 +26,10 @@ public class History implements Serializable {
 
     public List<String> getRecords() {
         List<String> list = new LinkedList<>(listHistory);
-        Collections.reverse(list);
+        // for (String record : list) {
+        // System.out.println(record);
+        // }
+        // Collections.reverse(list);
         return list;
     }
 
@@ -53,25 +59,32 @@ public class History implements Serializable {
     }
 
     public static void serialize(History history) {
-        XMLEncoder encoder = null;
         try {
-            encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(history._path)));
-            encoder.writeObject(history);
-            encoder.close();
-        } catch (FileNotFoundException fileNotFound) {
-            System.out.println("ERROR: While Creating or Opening the File dvd.xml");
+
+            FileOutputStream fos = new FileOutputStream(history._path);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(history);
+            oos.flush();
+            oos.close();
+        } catch (Exception e) {
+            System.out.println("exception while try serializing.");
+            e.printStackTrace();
         }
     }
 
     public static History deserialize(String path) {
-        XMLDecoder encoder = null;
         try {
-            encoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(path)));
-            History h = (History) encoder.readObject();
-            encoder.close();
+            File f = new File(path);
+            if (!f.exists()) {
+                return new History();
+            }
+            FileInputStream fis = new FileInputStream(path);
+            ObjectInputStream oin = new ObjectInputStream(fis);
+            History h = (History) oin.readObject();
+            oin.close();
             return h;
-        } catch (FileNotFoundException fileNotFound) {
-            System.out.println("ERROR: While Creating or Opening the File dvd.xml");
+        } catch (Exception ex) {
+            System.out.println("exception while try deserializing.");
             return new History();
         }
     }

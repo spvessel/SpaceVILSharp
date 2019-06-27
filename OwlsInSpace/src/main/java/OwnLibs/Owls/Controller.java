@@ -258,9 +258,9 @@ public class Controller {
         });
 
         owlWindow.eventOnStart.add(() -> {
-            historyStore =  History.deserialize("history.cfg");
+            historyStore =  History.deserialize(historyStore._path);
             for (String record : historyStore.getRecords()) {
-                owlWindow.homePage.addItemToHistoryList(record);
+                owlWindow.homePage.addItemToHistoryList(record, "");
             }
         });
     }
@@ -347,8 +347,8 @@ public class Controller {
             return;
         }
 
-        owlWindow.homePage.addItemToHistoryList(loadingItem.getText());
-        historyStore.addRecord(loadingItem.getText());
+        owlWindow.homePage.addItemToHistoryList(loadingItem.getText(), loadingItem.getFullPath());
+        historyStore.addRecord(loadingItem.getFullPath());
 
         FileEntryTab tab = addNewTabAndSelect(loadingItem);
 

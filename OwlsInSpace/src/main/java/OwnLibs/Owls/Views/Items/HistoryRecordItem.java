@@ -19,13 +19,15 @@ public class HistoryRecordItem extends Prototype {
     HorizontalStack layout;
     ButtonCore removeBtn;
     Label nameLabel;
+    String _recordPath;
 
     public EventCommonMethod eventOnRemove = new EventCommonMethod();
 
-    public HistoryRecordItem(String record) {
+    public HistoryRecordItem(String recordName, String recordPath) {
+        _recordPath = recordPath;
         layout = new HorizontalStack();
         removeBtn = new ButtonCore();
-        nameLabel = new Label(record, false);
+        nameLabel = new Label(recordName, false);
         setStyle(Style.getDefaultCommonStyle());
         setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
         setHeight(25);

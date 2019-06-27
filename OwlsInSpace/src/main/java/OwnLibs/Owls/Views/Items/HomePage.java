@@ -80,8 +80,8 @@ public class HomePage extends HorizontalStack {
         // historyList.addItems(new HistoryRecordItem("TestCase_1"), new HistoryRecordItem("TestCase_2"));
     }
 
-    public void addItemToHistoryList(String name) {
-        historyList.addItem(new HistoryRecordItem(name));
+    public void addItemToHistoryList(String name, String path) {
+        historyList.insertItem(new HistoryRecordItem(name, path), 0);
     }
 
     private void setLabelCursor(Label... labels) {
