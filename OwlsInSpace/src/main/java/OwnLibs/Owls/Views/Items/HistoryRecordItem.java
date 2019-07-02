@@ -1,6 +1,7 @@
 package OwnLibs.Owls.Views.Items;
 
 import java.awt.Color;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,21 +20,21 @@ import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class HistoryRecordItem extends Prototype {
-    HorizontalStack layout;
-    ButtonCore removeBtn;
-    Label nameLabel;
-    Label dateLabel;
-    String _recordPath;
-    Date date;
+    private HorizontalStack layout;
+    private ButtonCore removeBtn;
+    private Label nameLabel;
+    private Label dateLabel;
+    private Date date;
+    private String _recordPath;
 
     public EventCommonMethod eventOnRemove = new EventCommonMethod();
 
-    public HistoryRecordItem(String recordName, String recordPath) {
-        date = new Date();
+    public HistoryRecordItem(String recordPath) {
         _recordPath = recordPath;
+        date = new Date();
         layout = new HorizontalStack();
         removeBtn = new ButtonCore();
-        nameLabel = new Label(recordName, false);
+        nameLabel = new Label(getNameByPath(_recordPath), false);
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd.MM.yy");
         dateLabel = new Label(dateFormat.format(date).toString(), false);
         setStyle(Style.getDefaultCommonStyle());
@@ -43,6 +44,16 @@ public class HistoryRecordItem extends Prototype {
         setPadding(10, 0, 5, 0);
         addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 20)));
         setCursor(EmbeddedCursor.HAND);
+    }
+
+    private String getNameByPath(String path) {
+        int ind = path.lastIndexOf(File.separator);
+        String name = path.substring(ind + 1);
+        return name;
+    }
+
+    public String getRecordPath() {
+        return _recordPath;
     }
 
     @Override

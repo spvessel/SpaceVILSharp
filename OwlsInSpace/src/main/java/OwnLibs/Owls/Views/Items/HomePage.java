@@ -2,6 +2,7 @@ package OwnLibs.Owls.Views.Items;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
 
 import com.spvessel.spacevil.CheckBox;
 import com.spvessel.spacevil.HorizontalStack;
@@ -18,14 +19,14 @@ import OwnLibs.Owls.History;
 
 public class HomePage extends HorizontalStack {
 
-    CheckBox showOnSturtup = new CheckBox("Show this page on startup");
-    VerticalStack menuLayout = new VerticalStack();
-    VerticalStack historyLayout = new VerticalStack();
-    ListBox historyList = new ListBox();
+    private CheckBox showOnSturtup = new CheckBox("Show this page on startup");
+    private VerticalStack menuLayout = new VerticalStack();
+    private VerticalStack historyLayout = new VerticalStack();
+    private ListBox historyList = new ListBox();
 
-    Label startLabel = new Label("START");
-    Label historyLabel = new Label("HISTORY");
-    Label aboutLabel = new Label("ABOUT");
+    private Label startLabel = new Label("START");
+    private Label historyLabel = new Label("HISTORY");
+    private Label aboutLabel = new Label("ABOUT");
 
     public HomeMenuItem newFileLabel = new HomeMenuItem("Create new file...");
     public HomeMenuItem newFolderLabel = new HomeMenuItem("Create new folder...");
@@ -34,7 +35,7 @@ public class HomePage extends HorizontalStack {
     public HomeMenuItem settingsLabel = new HomeMenuItem("Settings");
     public HomeMenuItem quickTipsLabel = new HomeMenuItem("Quick tips");
 
-    public History history = new History();
+//    public History history = new History();
 
     public HomePage() {
         setPadding(50, 0, 10, 50);
@@ -80,8 +81,17 @@ public class HomePage extends HorizontalStack {
         // historyList.addItems(new HistoryRecordItem("TestCase_1"), new HistoryRecordItem("TestCase_2"));
     }
 
-    public void addItemToHistoryList(String name, String path) {
-        historyList.insertItem(new HistoryRecordItem(name, path), 0);
+//    public HistoryRecordItem addItemToHistoryList(String path) {
+//        int ind = path.lastIndexOf(File.separator);
+//        String name = path.substring(ind + 1);
+//        HistoryRecordItem hri = new HistoryRecordItem(name);
+//        historyList.insertItem(hri, 0);
+//        return hri;
+//    }
+
+    public HistoryRecordItem addItemToHistoryList(HistoryRecordItem hri) {
+        historyList.insertItem(hri, 0);
+        return hri;
     }
 
     private void setLabelCursor(Label... labels) {

@@ -1,91 +1,120 @@
 package OwnLibs.Owls;
 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import OwnLibs.Owls.Views.Items.HistoryRecordItem;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-public class History implements Serializable {
+public class History {
 
     private static final long serialVersionUID = -6879691495422628222L;
 
     private int _capacity = 50;
-    public Set<String> listHistory;
+    private Controller _controller;
+//    public Set<String> listHistory;
+    private Map<String, HistoryRecordItem> historyPairs;
 
-    public List<String> getRecords() {
-        List<String> list = new LinkedList<>(listHistory);
-        // for (String record : list) {
-        // System.out.println(record);
-        // }
-        // Collections.reverse(list);
-        return list;
-    }
+//    public List<String> getRecords() {
+//        List<String> list = new LinkedList<>(listHistory);
+//        // for (String record : list) {
+//        // System.out.println(record);
+//        // }
+//        // Collections.reverse(list);
+//        return list;
+//    }
 
     String _path;
 
-    public History() {
+    public History(Controller controller) {
+        _controller = controller;
         _path = "history.cfg";
-        listHistory = new LinkedHashSet<>();
+        historyPairs = new LinkedHashMap<>();
+
     }
 
     public void addRecord(String record) {
-        if (listHistory.contains(record)) {
-            listHistory.remove(record);
+        if (historyPairs.containsKey(record)) {
+            historyPairs.get(record).remove();
         }
-        if (listHistory.size() < _capacity)
-            listHistory.add(record);
+        if (historyPairs.size() == _capacity) {
+            String first = historyPairs.keySet().toArray(new String[0])[0];
+            historyPairs.get(first).remove();
+        }
+
+        addNewRecord(record);
     }
 
-    public void removeRecord(String record) {
-        if (listHistory.contains(record)) {
-            listHistory.remove(record);
+    private void addNewRecord(String recordPath) {
+        HistoryRecordItem hri = new HistoryRecordItem(recordPath);
+        historyPairs.put(recordPath, hri);
+        _controller.historyAddRecordSetEvent(hri, recordPath);
+        hri.eventOnRemove.add(() -> {
+            removeRecord(hri);
+        });
+    }
+
+    public void removeRecord(HistoryRecordItem hri) {
+        if (historyPairs.containsKey(hri.getRecordPath())) {
+            historyPairs.remove(hri.getRecordPath());
         }
     }
 
     public void clearRecords() {
-        listHistory = new LinkedHashSet<>();
+        for (HistoryRecordItem hri : historyPairs.values()) {
+            hri.remove();
+        }
+        historyPairs = new LinkedHashMap<>();
     }
 
-    public static void serialize(History history) {
-        try {
+    private void fillHistoryRecords(List<String> recordsList) {
+        if (historyPairs.size() != 0) {
+            clearRecords();
+        }
 
-            FileOutputStream fos = new FileOutputStream(history._path);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(history);
-            oos.flush();
-            oos.close();
-        } catch (Exception e) {
-            System.out.println("exception while try serializing.");
-            e.printStackTrace();
+        for (int i = recordsList.size() - 1; i >= 0; i--) {
+            addRecord(recordsList.get(i));
         }
     }
 
-    public static History deserialize(String path) {
+    public void serialize() {
         try {
-            File f = new File(path);
+
+            FileOutputStream fos = new FileOutputStream(_path);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            List<String> list = new LinkedList<>(historyPairs.keySet());
+            oos.writeObject(list); //history);
+            oos.flush();
+            oos.close();
+        } catch (Exception e) {
+            System.out.println("exception while try serializing. " + e);
+//            e.printStackTrace();
+        }
+    }
+
+    public void deserialize() {
+        try {
+            File f = new File(_path);
             if (!f.exists()) {
-                return new History();
+                clearRecords();
+                return; // new History();
             }
-            FileInputStream fis = new FileInputStream(path);
+            FileInputStream fis = new FileInputStream(_path);
             ObjectInputStream oin = new ObjectInputStream(fis);
-            History h = (History) oin.readObject();
+
+            List<String> recordsSet = (LinkedList<String>) oin.readObject();
+//            History h = (History) oin.readObject();
             oin.close();
-            return h;
+//            return h;
+
+            fillHistoryRecords(recordsSet);
         } catch (Exception ex) {
-            System.out.println("exception while try deserializing.");
-            return new History();
+            System.out.println("exception while try deserializing. " + ex);
+            return; // new History();
         }
     }
 }

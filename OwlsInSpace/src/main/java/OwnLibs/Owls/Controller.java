@@ -1,15 +1,11 @@
 package OwnLibs.Owls;
 
+import OwnLibs.Owls.Views.Items.*;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.*;
 
-import OwnLibs.Owls.Views.Items.HomeTab;
-import OwnLibs.Owls.Views.Items.KeyBindings;
-import OwnLibs.Owls.Views.Items.KeyWordItem;
-import OwnLibs.Owls.Views.Items.FileEntryTab;
-import OwnLibs.Owls.Views.Items.FileEntryTreeItem;
 import OwnLibs.Owls.Views.Windows.*;
 
 import java.io.File;
@@ -28,7 +24,7 @@ public class Controller {
     private KeyBindings helpWnd;
     private Map<FileEntryTab, FileEntryTreeItem> tabToOwls;
 
-    History historyStore = new History();
+    private History historyStore;
 
     public Controller(MainWindow owlWindow) {
         String userDir = System.getProperty("user.dir");
@@ -37,6 +33,7 @@ public class Controller {
         setsWindow = new SettingsWindow();
         InterfaceSupport.controller = this;
         tabToOwls = new HashMap<>();
+        historyStore = new History(this);
     }
 
     public void start() {
@@ -202,7 +199,8 @@ public class Controller {
         // owlWindow.titleBar.getCloseButton().eventMouseClick.clear();
         owlWindow.eventClose.clear();
         owlWindow.eventClose.add(() -> {
-            History.serialize(historyStore);
+//            History.serialize(historyStore);
+            historyStore.serialize();
             checkAndCloseWindow();
 
             // List<Tab> allTabs = owlWindow.workTabArea.getTabs();
@@ -258,14 +256,14 @@ public class Controller {
         });
 
         owlWindow.eventOnStart.add(() -> {
-            historyStore =  History.deserialize(historyStore._path);
-            for (String record : historyStore.getRecords()) {
-                owlWindow.homePage.addItemToHistoryList(record, "");
-            }
+            historyStore.deserialize();
+//            historyStore =  History.deserialize(historyStore._path);
+//            for (String record : historyStore.getRecords()) {
+//                historyAddRecordSetEvent(record);
+////                owlWindow.homePage.addItemToHistoryList(record);
+//            }
         });
     }
-
-    int count = 0;
 
     private void checkAndCloseWindow() {
 
@@ -347,13 +345,24 @@ public class Controller {
             return;
         }
 
-        owlWindow.homePage.addItemToHistoryList(loadingItem.getText(), loadingItem.getFullPath());
+//        historyAddRecordSetEvent(loadingItem.getFullPath());
         historyStore.addRecord(loadingItem.getFullPath());
 
         FileEntryTab tab = addNewTabAndSelect(loadingItem);
 
         launchContinue(loadingItem, tab);
 
+    }
+
+    void historyAddRecordSetEvent(HistoryRecordItem hri, String path) {
+        owlWindow.homePage.addItemToHistoryList(hri);
+        hri.eventMouseClick.add((sender, args) -> {
+            FileEntryTreeItem feti = InterfaceSupport.findFETIByAddress(path, rootItem);
+            if (feti == null)
+                System.out.println("No such file");
+            else
+                loadFileLauncher(feti);
+        });
     }
 
     private FileEntryTab getTabByOwlsTreeItem(FileEntryTreeItem oti) {
