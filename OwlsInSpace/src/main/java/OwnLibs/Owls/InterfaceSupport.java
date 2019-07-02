@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 class InterfaceSupport {
@@ -317,5 +318,40 @@ class InterfaceSupport {
                                                                                                          // дерева
         saveOwlFile(sti, s);
         return sti;
+    }
+
+    static FileEntryTreeItem findFETIByAddress(String path, FileEntryTreeItem branch) {
+        FileEntryTreeItem fetItem = null;
+
+        String pattern = Pattern.quote(System.getProperty("file.separator"));
+        String[] pathDirs = path.split(pattern);
+        String[] branchDirs = branch.getFullPath().split(pattern);
+
+        int pos = 0, len = pathDirs.length;
+        for (String dir : branchDirs) {
+            if (pos < len && dir.equals(pathDirs[pos])) {
+                pos++;
+            } else {
+                break;
+            }
+        }
+
+        if (pos < len && pos == branchDirs.length) {
+            fetItem = (FileEntryTreeItem) breadthFirstSearch(branch, pathDirs, pos);
+        }
+
+        return  fetItem;
+    }
+
+    static TreeItem breadthFirstSearch(TreeItem branch, String[] pathDirs, int pos) {
+        for (TreeItem ti : branch.getChildren()) {
+            if (ti.getText().equals(pathDirs[pos])) {
+                pos++;
+                if (pos == pathDirs.length)
+                    return ti;
+                return breadthFirstSearch(ti, pathDirs, pos);
+            }
+        }
+        return null;
     }
 }
