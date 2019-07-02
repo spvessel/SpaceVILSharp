@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class TabView extends VerticalStack {
     private static int count = 0;
-
+    
     // private Grid _tab_view;
     private HorizontalStack _tabBar;
     private Map<Tab, Frame> _tabMapView;
@@ -55,12 +55,10 @@ public class TabView extends VerticalStack {
             return;
         if (_selectedTab != null) {
             _selectedTab.setToggled(false);
-            _selectedTab.setShadowDrop(false);
             _tabMapView.get(_selectedTab).setVisible(false);
         }
 
         sender.setToggled(true);
-        sender.setShadowDrop(true);
         _tabMapView.get(sender).setVisible(true);
 
         _selectedTab = sender;
@@ -137,10 +135,8 @@ public class TabView extends VerticalStack {
         if (_tabBar.getItems().size() == 0) {
             tab.setToggled(true);
             tab.view.setVisible(true);
-            tab.setShadowDrop(true);
             _selectedTab = tab;
-        } else
-            tab.setShadowDrop(false);
+        }
 
         _tabBar.addItem(tab);
     }

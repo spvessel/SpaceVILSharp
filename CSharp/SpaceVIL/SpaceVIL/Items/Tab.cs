@@ -68,12 +68,12 @@ namespace SpaceVIL
                 SetState(ItemStateType.Base);
         }
 
-        public EventMouseMethodState EventToggle;
+        public EventMouseMethodState EventOnSelect;
         public EventCommonMethod EventOnClose;
         internal EventCommonMethod EventTabRemoved;
         public override void Release()
         {
-            EventToggle = null;
+            EventOnSelect = null;
             EventTabRemoved = null;
             EventOnClose = null;
         }
@@ -213,8 +213,8 @@ namespace SpaceVIL
             base.InitElements();
             _close.SetVisible(_isClosable);
             AddItems(_text_object, _close);
-            EventToggle = null;
-            EventToggle += (sender, args) =>
+            EventOnSelect = null;
+            EventOnSelect += (sender, args) =>
             {
                 if (IsToggled())
                     return;

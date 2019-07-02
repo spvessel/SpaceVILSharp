@@ -54,12 +54,10 @@ namespace SpaceVIL
             if (_selectedTab != null)
             {
                 _selectedTab.SetToggled(false);
-                _selectedTab.SetShadowDrop(false);
                 _tabMapView[_selectedTab].SetVisible(false);
             }
 
             sender.SetToggled(true);
-            sender.SetShadowDrop(true);
             _tabMapView[sender].SetVisible(true);
 
             _selectedTab = sender;
@@ -150,11 +148,8 @@ namespace SpaceVIL
             {
                 tab.SetToggled(true);
                 tab.View.SetVisible(true);
-                tab.SetShadowDrop(true);
                 _selectedTab = tab;
             }
-            else
-                tab.SetShadowDrop(false);
 
             _tabBar.AddItem(tab);
         }
