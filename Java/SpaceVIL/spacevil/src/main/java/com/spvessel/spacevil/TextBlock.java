@@ -308,7 +308,7 @@ class TextBlock extends Prototype
 
                     if (args.key == KeyCode.LEFT) // arrow left
                     {
-//                        _cursorPosition = _textureStorage.checkLineFits(_cursorPosition); //???????????
+                        _cursorPosition = _textureStorage.checkLineFits(_cursorPosition); //NECESSARY!
 
                         boolean doUsual = true;
 
