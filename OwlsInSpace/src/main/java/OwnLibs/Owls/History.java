@@ -16,17 +16,17 @@ public class History {
 
     private int _capacity = 50;
     private Controller _controller;
-//    public Set<String> listHistory;
+    // public Set<String> listHistory;
     private Map<String, HistoryRecordItem> historyPairs;
 
-//    public List<String> getRecords() {
-//        List<String> list = new LinkedList<>(listHistory);
-//        // for (String record : list) {
-//        // System.out.println(record);
-//        // }
-//        // Collections.reverse(list);
-//        return list;
-//    }
+    // public List<String> getRecords() {
+    // List<String> list = new LinkedList<>(listHistory);
+    // // for (String record : list) {
+    // // System.out.println(record);
+    // // }
+    // // Collections.reverse(list);
+    // return list;
+    // }
 
     String _path;
 
@@ -76,23 +76,26 @@ public class History {
             clearRecords();
         }
 
-        for (int i = recordsList.size() - 1; i >= 0; i--) {
-            addRecord(recordsList.get(i));
+        // for (int i = recordsList.size() - 1; i >= 0; i--) {
+        // addRecord(recordsList.get(i));
+        // }
+
+        for (String record : recordsList) {
+            addRecord(record);
         }
     }
 
     public void serialize() {
         try {
-
             FileOutputStream fos = new FileOutputStream(_path);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             List<String> list = new LinkedList<>(historyPairs.keySet());
-            oos.writeObject(list); //history);
+            oos.writeObject(list); // history);
             oos.flush();
             oos.close();
         } catch (Exception e) {
             System.out.println("exception while try serializing. " + e);
-//            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 
@@ -107,9 +110,9 @@ public class History {
             ObjectInputStream oin = new ObjectInputStream(fis);
 
             List<String> recordsSet = (LinkedList<String>) oin.readObject();
-//            History h = (History) oin.readObject();
+            // History h = (History) oin.readObject();
             oin.close();
-//            return h;
+            // return h;
 
             fillHistoryRecords(recordsSet);
         } catch (Exception ex) {

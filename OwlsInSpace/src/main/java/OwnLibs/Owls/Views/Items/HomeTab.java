@@ -40,6 +40,5 @@ public class HomeTab extends Tab {
         _homeIcon.setSize(20, 20);
         _homeIcon.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         addItem(_homeIcon);
-        // setShadowDrop(false);
     }
 }
