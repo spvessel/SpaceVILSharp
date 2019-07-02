@@ -71,15 +71,15 @@ public class Tab extends Prototype {
             setState(ItemStateType.BASE);
     }
 
-    public EventMouseMethodState eventToggle = new EventMouseMethodState();
+    public EventMouseMethodState eventOnSelect = new EventMouseMethodState();
 
     public EventCommonMethod eventOnClose = new EventCommonMethod();
     EventCommonMethod eventTabRemove = new EventCommonMethod();
 
     @Override
     public void release() {
-        eventToggle.clear();
-        eventToggle = null;
+        eventOnSelect.clear();
+        eventOnSelect = null;
         eventTabRemove.clear();;
         eventTabRemove = null;
         eventOnClose.clear();;
@@ -198,8 +198,8 @@ public class Tab extends Prototype {
         super.initElements();
         _close.setVisible(_isClosable);
         addItems(_text_object, _close);
-        eventToggle.clear();
-        eventToggle.add((sender, args) -> {
+        eventOnSelect.clear();
+        eventOnSelect.add((sender, args) -> {
             if (isToggled())
                 return;
             setToggled(true);

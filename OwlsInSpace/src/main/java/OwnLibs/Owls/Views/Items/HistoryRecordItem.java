@@ -64,6 +64,7 @@ public class HistoryRecordItem extends Prototype {
         dateLabel.setWidthPolicy(SizePolicy.FIXED);
         dateLabel.setWidth(100);
         dateLabel.setBackground(255, 255, 255, 20);
+        dateLabel.setVisible(false);//////////////
 
         removeBtn.setBackground(120, 120, 120);
         removeBtn.setSize(10, 10);

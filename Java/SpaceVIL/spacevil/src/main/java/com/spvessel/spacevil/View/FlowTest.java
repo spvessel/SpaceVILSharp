@@ -36,10 +36,10 @@ public class FlowTest extends ActiveWindow {
         // setBackground(45, 45, 45);
         // setPadding(2, 2, 2, 2);
 
-        eventClose.clear();
-        eventClose.add(() -> {
-            WindowManager.appExit();
-        });
+        // eventClose.clear();
+        // eventClose.add(() -> {
+        //     WindowManager.appExit();
+        // });
 
         TitleBar title = new TitleBar("FlowTest");
         addItem(title);
