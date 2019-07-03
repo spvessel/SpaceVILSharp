@@ -107,6 +107,28 @@ public class Controller {
                 owlWindow.newFolderBtn.eventMouseClick.execute(owlWindow.searchBtn, null);
             } else if (args.key == KeyCode.F11) {
                 owlWindow.titleBar.getMaximizeButton().eventMouseClick.execute(owlWindow.titleBar, null);
+            } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.contains(KeyMods.ALT) && args.mods.size() == 2
+                    && args.key == KeyCode.LEFT) {
+                List<Tab> tabs = owlWindow.workTabArea.getTabs();
+                int index = tabs.indexOf(owlWindow.workTabArea.getSelectedTab());
+                index--;
+                if (index < 0)
+                    return;
+                owlWindow.workTabArea.selectTab(tabs.get(index));
+                TextArea area = getCurrentTextArea();
+                if (area != null)
+                    area.setFocus();
+            } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.contains(KeyMods.ALT) && args.mods.size() == 2
+                    && args.key == KeyCode.RIGHT) {
+                List<Tab> tabs = owlWindow.workTabArea.getTabs();
+                int index = tabs.indexOf(owlWindow.workTabArea.getSelectedTab());
+                index++;
+                if (index >= tabs.size())
+                    return;
+                owlWindow.workTabArea.selectTab(tabs.get(index));
+                TextArea area = getCurrentTextArea();
+                if (area != null)
+                    area.setFocus();
             }
         });
 
@@ -199,7 +221,7 @@ public class Controller {
         // owlWindow.titleBar.getCloseButton().eventMouseClick.clear();
         owlWindow.eventClose.clear();
         owlWindow.eventClose.add(() -> {
-//            History.serialize(historyStore);
+            // History.serialize(historyStore);
             historyStore.serialize();
             checkAndCloseWindow();
 
@@ -257,11 +279,11 @@ public class Controller {
 
         owlWindow.eventOnStart.add(() -> {
             historyStore.deserialize();
-//            historyStore =  History.deserialize(historyStore._path);
-//            for (String record : historyStore.getRecords()) {
-//                historyAddRecordSetEvent(record);
-////                owlWindow.homePage.addItemToHistoryList(record);
-//            }
+            // historyStore = History.deserialize(historyStore._path);
+            // for (String record : historyStore.getRecords()) {
+            // historyAddRecordSetEvent(record);
+            //// owlWindow.homePage.addItemToHistoryList(record);
+            // }
         });
     }
 
@@ -345,7 +367,7 @@ public class Controller {
             return;
         }
 
-//        historyAddRecordSetEvent(loadingItem.getFullPath());
+        // historyAddRecordSetEvent(loadingItem.getFullPath());
         historyStore.addRecord(loadingItem.getFullPath());
 
         FileEntryTab tab = addNewTabAndSelect(loadingItem);

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.spvessel.spacevil.ButtonToggle;
 import com.spvessel.spacevil.Rectangle;
+import com.spvessel.spacevil.VerticalStack;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Flags.ItemAlignment;
@@ -16,22 +17,23 @@ public class SelectionMarker extends ButtonToggle {
 
     private Rectangle _subline = new Rectangle();
 
-    public SelectionMarker(String text) {
+    private VerticalStack _layout;
+
+    public SelectionMarker(String text, VerticalStack layout) {
         super(text);
         setBackground(0, 0, 0, 0);
         setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         setFontSize(16);
-        // setFontStyle(Font.BOLD);
-        // setFontStyle(Font.PLAIN);
         setForeground(180, 180, 180);
         setTextAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         removeItemState(ItemStateType.HOVERED);
         removeItemState(ItemStateType.PRESSED);
         addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 20)));
+        _layout = layout;
     }
 
-    public SelectionMarker(String text, int width) {
-        this(text);
+    public SelectionMarker(String text, int width, VerticalStack layout) {
+        this(text, layout);
         setWidthPolicy(SizePolicy.FIXED);
         setWidth(width);
     }
@@ -49,8 +51,8 @@ public class SelectionMarker extends ButtonToggle {
         addItem(_subline);
 
         eventMouseClick.add((sender, args) -> {
-            setToggled(true);
             untoggleOthers();
+            setToggled(true);
         });
 
         eventMouseHover.add((sender, args) -> {
@@ -73,9 +75,13 @@ public class SelectionMarker extends ButtonToggle {
         if (isToggled()) {
             setForeground(Color.WHITE);
             _subline.setVisible(true);
-        } else
+            _layout.setVisible(true);
+            _layout.updateLayout();
+        } else {
             _subline.setVisible(false);
-
+            _layout.setVisible(false);
+            _layout.updateLayout();
+        }
     }
 
     private void untoggleOthers() {
