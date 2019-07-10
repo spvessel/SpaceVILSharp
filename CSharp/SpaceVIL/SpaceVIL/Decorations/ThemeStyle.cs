@@ -114,6 +114,7 @@ namespace SpaceVIL.Decorations
                 DefaultItemsStyle.Add(typeof(SpaceVIL.ImageItem), Style.GetImageItemStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.LoadingScreen), Style.GetLoadingScreenStyle());
                 DefaultItemsStyle.Add(typeof(SpaceVIL.Tab), Style.GetTabStyle());
+                DefaultItemsStyle.Add(typeof(SpaceVIL.TabBar), Style.GetTabBarStyle());
             }
         }
 

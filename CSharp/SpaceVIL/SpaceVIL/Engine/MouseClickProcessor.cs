@@ -77,6 +77,8 @@ namespace SpaceVIL
                 lastHovered.SetMousePressed(false);
                 _commonProcessor.Events.ResetAllEvents();
                 _commonProcessor.Events.SetEvent(InputEventType.MouseRelease);
+                if (lastHovered is IDraggable)
+                    lastHovered.EventMouseDrop?.Invoke(lastHovered, _commonProcessor.Margs);
                 return;
             }
             if (state == InputState.Press
@@ -180,6 +182,11 @@ namespace SpaceVIL
             }
             if (_commonProcessor.Events.LastEvent().HasFlag(InputEventType.MouseMove))
             {
+                if (_commonProcessor.DraggableItem != null)
+                {
+                    _commonProcessor.DraggableItem.EventMouseDrop?.Invoke(_commonProcessor.DraggableItem, _commonProcessor.Margs);
+                }
+
                 if (!_commonProcessor.Events.LastEvent().HasFlag(InputEventType.MouseDrag))
                 {
                     float len = GetLengthBetweenTwoPixelPoints(_commonProcessor.PtrClick.GetX(),

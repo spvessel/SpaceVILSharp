@@ -1564,27 +1564,6 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for TabView objects </returns>
-        public static Style GetTabViewStyle()
-        {
-            Style style = GetVerticalStackStyle();
-            style.Background = Color.FromArgb(255, 50, 50, 50);
-
-            Style tabBarStyle = GetHorizontalStackStyle();
-            tabBarStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
-            tabBarStyle.Height = 30;
-            style.AddInnerStyle("tabbar", tabBarStyle);
-
-            Style tab_style = GetTabStyle();
-            style.AddInnerStyle("tab", tab_style);
-
-            Style view_style = tab_style.GetInnerStyle("view");
-            if (view_style != null)
-                style.AddInnerStyle("view", view_style);
-
-            return style;
-        }
-
         /// <returns> default style for TreeView objects </returns>
         public static Style GetTreeViewStyle()
         {
@@ -2115,9 +2094,10 @@ namespace SpaceVIL.Decorations
             Style style = new Style();
             style.BorderRadius = new CornerRadius(3, 3, 0, 0);
             style.Font = DefaultsService.GetDefaultFont(14);
-            style.Background = Color.Transparent;
+            // style.Background = Color.Transparent;
+            style.Background = Color.FromArgb(60, 60, 60);
             style.Foreground = Color.FromArgb(255, 210, 210, 210);
-            style.MinWidth = 70;
+            style.MinWidth = 30;
             style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(10, 2, 5, 2);
@@ -2156,6 +2136,34 @@ namespace SpaceVIL.Decorations
             view_style.IsVisible = false;
             view_style.Padding = new Indents(2, 2, 2, 2);
             style.AddInnerStyle("view", view_style);
+
+            return style;
+        }
+
+        public static Style GetTabBarStyle()
+        {
+            Style style = GetHorizontalStackStyle();
+            style.SetSpacing(1, 0);
+            return style;
+        }
+
+        /// <returns> default style for TabView objects </returns>
+        public static Style GetTabViewStyle()
+        {
+            Style style = GetVerticalStackStyle();
+            style.Background = Color.FromArgb(255, 50, 50, 50);
+
+            Style tabBarStyle = GetTabBarStyle();
+            tabBarStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Fixed);
+            tabBarStyle.Height = 30;
+            style.AddInnerStyle("tabbar", tabBarStyle);
+
+            Style tab_style = GetTabStyle();
+            style.AddInnerStyle("tab", tab_style);
+
+            Style view_style = tab_style.GetInnerStyle("view");
+            if (view_style != null)
+                style.AddInnerStyle("view", view_style);
 
             return style;
         }

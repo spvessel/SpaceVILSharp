@@ -51,17 +51,17 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
     public boolean isXFloating = true;
     public boolean isYFloating = true;
 
-    private Moving _is_moved;
+    private Moving _isMoved;
 
     private static int count = 0;
-    private int _pressed_x = 0;
-    private int _pressed_y = 0;
+    private int _pressedX = 0;
+    private int _pressedY = 0;
     private int _width = 0;
     private int _height = 0;
-    private int _x_global = 0;
-    private int _y_global = 0;
-    private int _diff_x = 0;
-    private int _diff_y = 0;
+    private int _globalX = 0;
+    private int _globalY = 0;
+    private int _diffX = 0;
+    private int _diffY = 0;
 
     /**
      * Constructs a ResizableItem
@@ -100,39 +100,39 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         if (isLocked)
             return;
 
-        _pressed_x = args.position.getX();
-        _pressed_y = args.position.getY();
-        _x_global = getX();
-        _y_global = getY();
-        _diff_x = args.position.getX() - getX();
-        _diff_y = args.position.getY() - getY();
+        _pressedX = args.position.getX();
+        _pressedY = args.position.getY();
+        _globalX = getX();
+        _globalY = getY();
+        _diffX = args.position.getX() - getX();
+        _diffY = args.position.getY() - getY();
         _width = getWidth();
         _height = getHeight();
 
-        getSides(_diff_x, _diff_y);
+        getSides(_diffX, _diffY);
 
         if (_sides.size() == 0) {
-            _is_moved = Moving.TRUE;
+            _isMoved = Moving.TRUE;
         } else {
-            _is_moved = Moving.FALSE;
+            _isMoved = Moving.FALSE;
         }
     }
 
     private void onDragging(InterfaceItem sender, MouseArgs args) {
         if (isLocked)
-            return;
-
+        return;
+        
         int offset_x;
         int offset_y;
-
-        switch (_is_moved) {
-        case TRUE:
+        
+        switch (_isMoved) {
+            case TRUE:
             if (isXFloating) {
-                offset_x = args.position.getX() - _diff_x;
+                offset_x = args.position.getX() - _diffX;
                 setX(offset_x);
             }
             if (isYFloating) {
-                offset_y = args.position.getY() - _diff_y;
+                offset_y = args.position.getY() - _diffY;
                 setY(offset_y);
             }
             positionChanged.execute();
@@ -151,9 +151,9 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
             int h = getHeight();
 
             if (_sides.contains(Side.LEFT)) {
-                if (!(getMinWidth() == getWidth() && (args.position.getX() - _pressed_x) >= 0)) {
-                    int diff = _x_global - x_release;
-                    x_handler = _x_global - diff;
+                if (!(getMinWidth() == getWidth() && (args.position.getX() - _pressedX) >= 0)) {
+                    int diff = _globalX - x_release;
+                    x_handler = _globalX - diff;
                     w = _width + diff;
                 }
             }
@@ -161,12 +161,11 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
                 if (!(args.position.getX() < getMinWidth() && getWidth() == getMinWidth())) {
                     w = args.position.getX() - getX();
                 }
-                // _pressed_x = args.position.getX();
             }
             if (_sides.contains(Side.TOP)) {
-                if (!(getMinHeight() == getHeight() && (args.position.getY() - _pressed_y) >= 0)) {
-                    int diff = _y_global - y_release;
-                    y_handler = _y_global - diff;
+                if (!(getMinHeight() == getHeight() && (args.position.getY() - _pressedY) >= 0)) {
+                    int diff = _globalY - y_release;
+                    y_handler = _globalY - diff;
                     h = _height + diff;
                 }
             }

@@ -74,10 +74,7 @@ namespace SpaceVIL
                 CastAndUpdate(item);
                 return;
             }
-            if (itemParent is IGrid)
-                return;
-
-            if (itemParent is IFree)
+            if (itemParent is IFreeLayout)
                 return;
 
             AddEventListener(GeometryEventType.ResizeWidth, item);
@@ -132,7 +129,7 @@ namespace SpaceVIL
 
             var hLayout = parent as IHLayout;
             var vLayout = parent as IVLayout;
-            var grid = parent as IGrid;
+            var grid = parent as IFreeLayout;
 
             if (hLayout == null && vLayout == null && grid == null)
                 UpdateBehavior();
@@ -409,7 +406,7 @@ namespace SpaceVIL
             
             var hLayout = parent as IHLayout;
             var vLayout = parent as IVLayout;
-            var grid = parent as IGrid;
+            var grid = parent as IFreeLayout;
 
             if (hLayout == null
                 && vLayout == null
@@ -549,7 +546,7 @@ namespace SpaceVIL
 
                 var hLayout = parent as IHLayout;
                 var vLayout = parent as IVLayout;
-                var grid = parent as IGrid;
+                var grid = parent as IFreeLayout;
 
                 if (hLayout == null
                     && vLayout == null
@@ -597,7 +594,7 @@ namespace SpaceVIL
 
                 var hLayout = parent as IHLayout;
                 var vLayout = parent as IVLayout;
-                var grid = parent as IGrid;
+                var grid = parent as IFreeLayout;
 
                 if (hLayout == null
                     && vLayout == null

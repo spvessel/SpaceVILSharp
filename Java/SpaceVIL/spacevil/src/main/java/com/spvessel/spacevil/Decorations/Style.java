@@ -1608,27 +1608,7 @@ public class Style implements Cloneable {
         return style;
     }
 
-    /**
-     * @return default style for TabView objects
-     */
-    public static Style getTabViewStyle() {
-        Style style = getVerticalStackStyle();
-        style.background = new Color(50, 50, 50);
-
-        Style tabBarStyle = getHorizontalStackStyle();
-        tabBarStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        tabBarStyle.height = 30;
-        style.addInnerStyle("tabbar", tabBarStyle);
-
-        Style tab_style = getTabStyle();
-        style.addInnerStyle("tab", tab_style);
-
-        Style view_style = tab_style.getInnerStyle("view");
-        if (view_style != null)
-            style.addInnerStyle("view", view_style);
-
-        return style;
-    }
+    
 
     /**
      * @return default style for TreeView objects
@@ -2156,10 +2136,10 @@ public class Style implements Cloneable {
         Style style = new Style();
         style.borderRadius = new CornerRadius(3, 3, 0, 0);
         style.font = DefaultsService.getDefaultFont(14);
-        style.background = new Color(0, 0, 0, 0);
+        // style.background = new Color(0, 0, 0, 0);
+        style.background = new Color(60, 60, 60);
         style.setForeground(210, 210, 210);
-        style.minWidth = 70;
-        // style.maxWidth = 200;
+        style.minWidth = 30;
         style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
         style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         style.padding = new Indents(0, 0, 0, 0);
@@ -2189,6 +2169,34 @@ public class Style implements Cloneable {
         view_style.isVisible = false;
         view_style.padding = new Indents(2, 2, 2, 2);
         style.addInnerStyle("view", view_style);
+
+        return style;
+    }
+
+    public static Style getTabBarStyle() {
+        Style style = getHorizontalStackStyle();
+        style.setSpacing(1, 0);
+        return style;
+    }
+
+    /**
+     * @return default style for TabView objects
+     */
+    public static Style getTabViewStyle() {
+        Style style = getVerticalStackStyle();
+        style.background = new Color(50, 50, 50);
+
+        Style tabBarStyle = getTabBarStyle();
+        tabBarStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        tabBarStyle.height = 30;
+        style.addInnerStyle("tabbar", tabBarStyle);
+
+        Style tab_style = getTabStyle();
+        style.addInnerStyle("tab", tab_style);
+
+        Style view_style = tab_style.getInnerStyle("view");
+        if (view_style != null)
+            style.addInnerStyle("view", view_style);
 
         return style;
     }

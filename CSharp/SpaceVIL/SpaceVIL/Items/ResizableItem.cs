@@ -45,17 +45,17 @@ namespace SpaceVIL
         public bool IsXFloating = true;
         public bool IsYFloating = true;
 
-        private bool _is_moved;
+        private bool _isMoved;
 
         static int count = 0;
-        private int _pressed_x = 0;
-        private int _pressed_y = 0;
-        private int _x_global = 0;
-        private int _y_global = 0;
+        private int _pressedX = 0;
+        private int _pressedY = 0;
+        private int _globalX = 0;
+        private int _globalY = 0;
         private int _width = 0;
         private int _height = 0;
-        private int _diff_x = 0;
-        private int _diff_y = 0;
+        private int _diffX = 0;
+        private int _diffY = 0;
 
         /// <summary>
         /// Constructs a ResizableItem
@@ -102,24 +102,24 @@ namespace SpaceVIL
                 return;
             // _renderFreq = GetHandler().GetRenderFrequency();
             // GetHandler().SetRenderFrequency(RedrawFrequency.Ultra);
-            _x_global = GetX();
-            _y_global = GetY();
-            _pressed_x = args.Position.GetX();
-            _pressed_y = args.Position.GetY();
-            _diff_x = args.Position.GetX() - GetX();
-            _diff_y = args.Position.GetY() - GetY();
+            _globalX = GetX();
+            _globalY = GetY();
+            _pressedX = args.Position.GetX();
+            _pressedY = args.Position.GetY();
+            _diffX = args.Position.GetX() - GetX();
+            _diffY = args.Position.GetY() - GetY();
             _width = GetWidth();
             _height = GetHeight();
 
-            GetSides(_diff_x, _diff_y);
+            GetSides(_diffX, _diffY);
 
             if (_sides == 0)
             {
-                _is_moved = true;
+                _isMoved = true;
             }
             else
             {
-                _is_moved = false;
+                _isMoved = false;
             }
         }
 
@@ -136,17 +136,17 @@ namespace SpaceVIL
             int offset_x;
             int offset_y;
 
-            switch (_is_moved)
+            switch (_isMoved)
             {
                 case true:
                     if (IsXFloating)
                     {
-                        offset_x = args.Position.GetX() - _diff_x;
+                        offset_x = args.Position.GetX() - _diffX;
                         SetX(offset_x);
                     }
                     if (IsYFloating)
                     {
-                        offset_y = args.Position.GetY() - _diff_y;
+                        offset_y = args.Position.GetY() - _diffY;
                         SetY(offset_y);
                     }
                     SetConfines();
@@ -166,10 +166,10 @@ namespace SpaceVIL
 
                     if (_sides.HasFlag(Side.Left))
                     {
-                        if (!(GetMinWidth() == GetWidth() && (args.Position.GetX() - _pressed_x) >= 0))
+                        if (!(GetMinWidth() == GetWidth() && (args.Position.GetX() - _pressedX) >= 0))
                         {
-                            int diff = _x_global - x_release;
-                            x_handler = _x_global - diff;
+                            int diff = _globalX - x_release;
+                            x_handler = _globalX - diff;
                             w = _width + diff;
                         }
                     }
@@ -180,10 +180,10 @@ namespace SpaceVIL
                     }
                     if (_sides.HasFlag(Side.Top))
                     {
-                        if (!(GetMinHeight() == GetHeight() && (args.Position.GetY() - _pressed_y) >= 0))
+                        if (!(GetMinHeight() == GetHeight() && (args.Position.GetY() - _pressedY) >= 0))
                         {
-                            int diff = _y_global - y_release;
-                            y_handler = _y_global - diff;
+                            int diff = _globalY - y_release;
+                            y_handler = _globalY - diff;
                             h = _height + diff;
                         }
                     }

@@ -420,7 +420,6 @@ namespace SpaceVIL
                 }
                 child.SetDrawable(true);
             }
-
             _isUpdating = false;
         }
 

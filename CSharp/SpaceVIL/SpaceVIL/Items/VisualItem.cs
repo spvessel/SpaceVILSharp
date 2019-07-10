@@ -48,7 +48,7 @@ namespace SpaceVIL
 
             var hLayout = parent as IHLayout;
             var vLayout = parent as IVLayout;
-            var grid = parent as IGrid;
+            var grid = parent as IFreeLayout;
 
             if (hLayout == null && vLayout == null && grid == null)
                 UpdateBehavior();
@@ -105,7 +105,7 @@ namespace SpaceVIL
 
             var hLayout = parent as IHLayout;
             var vLayout = parent as IVLayout;
-            var grid = parent as IGrid;
+            var grid = parent as IFreeLayout;
 
             if (hLayout == null && vLayout == null && grid == null)
                 UpdateBehavior();
@@ -335,11 +335,11 @@ namespace SpaceVIL
                 }
 
                 //removing
+                CastAndRemove(item);
                 bool contentRemove = _content.Remove(item);
                 bool layoutBoxRemove = ItemsLayoutBox.RemoveItem(GetHandler(), item, type);
-                CastAndRemove(item);
-                item.Release();
                 item.SetParent(null);
+                item.Release();
                 return (contentRemove && layoutBoxRemove);
             }
             catch (Exception ex)
@@ -488,7 +488,7 @@ namespace SpaceVIL
                 if (parent != null && GetWidthPolicy() == SizePolicy.Fixed)
                 {
                     var layout = parent as IHLayout;
-                    var grid = parent as IGrid;
+                    var grid = parent as IFreeLayout;
 
                     if (layout == null && grid == null)
                         UpdateBehavior();
@@ -511,7 +511,7 @@ namespace SpaceVIL
                 if (parent != null && GetHeightPolicy() == SizePolicy.Fixed)
                 {
                     var layout = parent as IVLayout;
-                    var grid = parent as IGrid;
+                    var grid = parent as IFreeLayout;
 
                     if (layout == null && grid == null)
                         UpdateBehavior();
@@ -535,18 +535,18 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetX(_x);
-                Prototype parent = GetParent();
-                if (parent != null && GetWidthPolicy() == SizePolicy.Fixed)
-                {
-                    var layout = parent as IHLayout;
-                    var grid = parent as IGrid;
+                // Prototype parent = GetParent();
+                // if (parent != null && GetWidthPolicy() == SizePolicy.Fixed)
+                // {
+                //     var layout = parent as IHLayout;
+                //     var grid = parent as IGrid;
 
-                    if (layout != null)
-                        layout.UpdateLayout();
-                    if (grid != null)
-                        if ((parent as IFree) == null)
-                            grid.UpdateLayout();
-                }
+                //     if (layout != null)
+                //         layout.UpdateLayout();
+                //     if (grid != null)
+                //         if ((parent as IFree) == null)
+                //             grid.UpdateLayout();
+                // }
                 eventManager.NotifyListeners(GeometryEventType.Moved_X, value);
             }
         }
@@ -556,19 +556,19 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetY(_y);
-                Prototype parent = GetParent();
-                if (parent != null && GetHeightPolicy() == SizePolicy.Fixed)
-                {
-                    var layout = parent as IVLayout;
-                    var grid = parent as IGrid;
+                // Prototype parent = GetParent();
+                // if (parent != null && GetHeightPolicy() == SizePolicy.Fixed)
+                // {
+                //     var layout = parent as IVLayout;
+                //     var grid = parent as IGrid;
 
-                    if (layout != null)
-                        layout.UpdateLayout();
+                //     if (layout != null)
+                //         layout.UpdateLayout();
 
-                    if (grid != null)
-                        if ((parent as IFree) == null)
-                            grid.UpdateLayout();
-                }
+                //     if (grid != null)
+                //         if ((parent as IFree) == null)
+                //             grid.UpdateLayout();
+                // }
                 eventManager.NotifyListeners(GeometryEventType.Moved_Y, value);
             }
         }

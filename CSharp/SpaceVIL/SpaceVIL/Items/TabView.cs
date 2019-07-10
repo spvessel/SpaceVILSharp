@@ -11,14 +11,13 @@ namespace SpaceVIL
     {
         static int count = 0;
 
-        private HorizontalStack _tabBar;
-        private Dictionary<Tab, Frame> _tabMapView;
-        private List<Tab> _tabList;
+        private TabBar _tabBar;
+
         public List<Tab> GetTabs()
         {
-            return new List<Tab>(_tabList);
+            return _tabBar.GetTabs();
         }
-        private Tab _selectedTab = null;
+
 
         /// <summary>
         /// Constructs a TabView
@@ -26,9 +25,7 @@ namespace SpaceVIL
         public TabView()
         {
             SetItemName("TabView_" + count++);
-            _tabList = new List<Tab>();
-            _tabMapView = new Dictionary<Tab, Frame>();
-            _tabBar = new HorizontalStack();
+            _tabBar = new TabBar();
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TabView)));
         }
 
@@ -42,81 +39,46 @@ namespace SpaceVIL
         /// </summary>
         public override void InitElements()
         {
-            //_tab_bar
             AddItem(_tabBar);
-        }
-
-        private void HideOthers(Tab sender, MouseArgs args)
-        {
-            if (_selectedTab.Equals(sender))
-                return;
-
-            if (_selectedTab != null)
-            {
-                _selectedTab.SetToggled(false);
-                _tabMapView[_selectedTab].SetVisible(false);
-            }
-
-            sender.SetToggled(true);
-            _tabMapView[sender].SetVisible(true);
-
-            _selectedTab = sender;
-
-            UpdateLayout();
         }
 
         public void SelectTab(Tab tab)
         {
-            HideOthers(tab, null);
+            _tabBar.SelectTab(tab);
+        }
+
+        public void SelectTab(int index)
+        {
+            _tabBar.SelectTab(index);
+        }
+
+        public int GetSelectedTabIndex()
+        {
+            return _tabBar.GetSelectedTabIndex();
         }
 
         public Tab GetSelectedTab()
         {
-            return _selectedTab;
+            return _tabBar.GetSelectedTab();
         }
         public Frame GetTabFrame(Tab tab)
         {
-            return _tabMapView[tab];
+            return _tabBar.GetTabFrame(tab);
         }
 
         public List<IBaseItem> GetTabContent(Tab tab)
         {
-            return _tabMapView[tab].GetItems();
+            return _tabBar.GetTabContent(tab);
         }
 
         public void SelectTabByName(String tabName)
         {
-            foreach (Tab tab in _tabMapView.Keys)
-            {
-                if (tabName.Equals(tab.GetItemName()))
-                {
-                    HideOthers(tab, null);
-                    return;
-                }
-            }
+            _tabBar.SelectTabByName(tabName);
         }
 
         public void SelectTabByText(String tabText)
         {
-            foreach (Tab tab in _tabMapView.Keys)
-            {
-                if (tabText.Equals(tab.GetText()))
-                {
-                    HideOthers(tab, null);
-                    return;
-                }
-            }
-        }
-
-        private void SelectBestLeftoverTab(Tab tab)
-        {
-            if (_tabList.Count == 0)
-                return;
-            int index = _tabList.IndexOf(tab);
-            if (index > 0)
-                SelectTab(_tabList[index - 1]);
-            else if (_tabList.Count != 1)
-                SelectTab(_tabList[index + 1]);
+            _tabBar.SelectTabByText(tabText);
         }
 
         /// <summary>
@@ -125,33 +87,21 @@ namespace SpaceVIL
         /// <param name="tab">the new tab </param>
         public void AddTab(Tab tab)
         {
-            if (_tabMapView.ContainsKey(tab))
+            if (_tabBar.TabMapView.ContainsKey(tab))
                 return;
 
-            _tabMapView.Add(tab, tab.View);
-            _tabList.Add(tab);
-
-            tab.View.SetItemName(tab.GetItemName() + "_view");
-            tab.EventMouseClick += (sender, args) =>
-            {
-                HideOthers(tab, args);
-            };
-            tab.EventTabRemoved += () =>
-            {
-                SelectBestLeftoverTab(tab);
-                RemoveTab(tab);
-            };
-
+            _tabBar.TabMapView.Add(tab, tab.View);
             AddItem(tab.View);
-
-            if (_tabBar.GetItems().Count == 0)
-            {
-                tab.SetToggled(true);
-                tab.View.SetVisible(true);
-                _selectedTab = tab;
-            }
-
             _tabBar.AddItem(tab);
+            tab.EventMousePress += (sender, args) =>
+            {
+                UpdateLayout();
+            };
+            tab.EventTabRemove += () =>
+            {
+                RemoveTab(tab);
+                UpdateLayout();
+            };
         }
 
         public void AddTabs(params Tab[] tabs)
@@ -165,7 +115,7 @@ namespace SpaceVIL
             Tab tmpTab = item as Tab;
             if (tmpTab != null)
             {
-                if (_tabMapView.ContainsKey(tmpTab))
+                if (_tabBar.TabMapView.ContainsKey(tmpTab))
                 {
                     return RemoveTab(tmpTab);
                 }
@@ -173,14 +123,7 @@ namespace SpaceVIL
             }
             else if (item.Equals(_tabBar))
             {
-                Tab tab = null;
-                while (_tabList.Count != 0)
-                {
-                    tab = _tabList[0];
-                    _tabBar.RemoveItem(tab);
-                    _tabMapView.Remove(tab);
-                    _tabList.Remove(tab);
-                }
+                _tabBar.RemoveAllTabs();
             }
             return base.RemoveItem(item);
         }
@@ -190,38 +133,12 @@ namespace SpaceVIL
         /// </summary>
         public bool RemoveTabByName(String tabName)
         {
-            if (tabName == null)
-                return false;
-            foreach (var tab in _tabMapView.Keys)
-            {
-                if (tabName.Equals(tab.GetItemName()))
-                {
-                    RemoveItem(_tabMapView[tab]);
-                    _tabBar.RemoveItem(tab);
-                    _tabMapView.Remove(tab);
-                    _tabList.Remove(tab);
-                    return true;
-                }
-            }
-            return false;
+            return _tabBar.RemoveTabByName(tabName);
         }
 
         public bool RemoveTabByText(String tabText)
         {
-            if (tabText == null)
-                return false;
-            foreach (var tab in _tabMapView.Keys)
-            {
-                if (tabText.Equals(tab.GetText()))
-                {
-                    RemoveItem(_tabMapView[tab]);
-                    _tabBar.RemoveItem(tab);
-                    _tabMapView.Remove(tab);
-                    _tabList.Remove(tab);
-                    return true;
-                }
-            }
-            return false;
+            return _tabBar.RemoveTabByText(tabText);
         }
 
         /// <summary>
@@ -229,34 +146,12 @@ namespace SpaceVIL
         /// </summary>
         public bool RemoveTab(Tab tab)
         {
-            if (tab == null)
-                return false;
-
-            if (_tabMapView.ContainsKey(tab))
-            {
-                RemoveItem(_tabMapView[tab]);
-                _tabBar.RemoveItem(tab);
-                _tabMapView.Remove(tab);
-                _tabList.Remove(tab);
-                return true;
-            }
-            return false;
+            return _tabBar.RemoveTab(tab);
         }
 
         public bool RemoveAllTabs()
         {
-            if (_tabList.Count == 0)
-                return false;
-            Tab tab = null;
-            while (_tabList.Count != 0)
-            {
-                tab = _tabList[0];
-                RemoveItem(_tabMapView[tab]);
-                _tabBar.RemoveItem(tab);
-                _tabMapView.Remove(tab);
-                _tabList.Remove(tab);
-            }
-            return true;
+            return _tabBar.RemoveAllTabs();
         }
 
         /// <summary>
@@ -264,25 +159,11 @@ namespace SpaceVIL
         /// </summary>
         public void AddItemToTabByName(String tabName, IBaseItem item)
         {
-            foreach (var tab in _tabMapView.Keys)
-            {
-                if (tabName.Equals(tab.GetItemName()))
-                {
-                    _tabMapView[tab].AddItem(item);
-                    return;
-                }
-            }
+            _tabBar.AddItemToTabByName(tabName, item);
         }
         public void AddItemToTabByText(String tabText, IBaseItem item)
         {
-            foreach (var tab in _tabMapView.Keys)
-            {
-                if (tabText.Equals(tab.GetText()))
-                {
-                    _tabMapView[tab].AddItem(item);
-                    return;
-                }
-            }
+            _tabBar.AddItemToTabByText(tabText, item);
         }
 
         /// <summary>
@@ -290,8 +171,7 @@ namespace SpaceVIL
         /// </summary>
         public void AddItemToTab(Tab tab, IBaseItem item)
         {
-            if (_tabMapView.ContainsKey(tab))
-                _tabMapView[tab].AddItem(item);
+            _tabBar.AddItemToTab(tab, item);
         }
 
         /// <summary>

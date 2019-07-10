@@ -52,13 +52,18 @@ public class Containers extends ActiveWindow {
         this.addItem(cc);
 
         tabs = new TabView();
-        tab1 = new Tab("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1");
-        // tab1.setToolTip("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1");
+        tab1 = new Tab("FirstLeftTab");
+        tab1.setDraggable(false);
+        // tab1.setMaxWidth(30);
         tab2 = new Tab("List");
         tab3 = new Tab("List");
         cc.addItem(tabs);
-
-        tabs.addTabs(tab1, tab2, tab3);
+        // tabs.setContentPolicy(SizePolicy.EXPAND);
+        tabs.addTabs(tab1, tab2, tab3, new Tab("TabForTest1"), new Tab("TabForTest2"), new Tab("TabForTest3"),
+                new Tab("TabForTest4"), new Tab("TabForTest5")
+                // new Tab("TabForTest6"), new Tab("TabForTest7"),
+                // new Tab("TabForTest8")
+                );
         // tab1.setWidthPolicy(SizePolicy.EXPAND);
 
         eventKeyPress.add((sender, args) -> {
@@ -75,21 +80,21 @@ public class Containers extends ActiveWindow {
             }
         });
 
-        // Grid grid = new Grid(3, 4);
-        // grid.setBackground(255, 255, 255, 20);
-        // grid.setSpacing(2, 2);
-        // grid.setMargin(20, 30, 20, 30);
-        // tabs.addItemToTabByName("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1", grid);
-        // Grid subgrid = new Grid(1, 2);
-        // grid.insertItem(subgrid, 1, 1);
+        Grid grid = new Grid(3, 4);
+        grid.setBackground(255, 255, 255, 20);
+        grid.setSpacing(2, 2);
+        grid.setMargin(20, 30, 20, 30);
+        tabs.addItemToTabByName("FirstLeftTab", grid);
+        Grid subgrid = new Grid(1, 2);
+        grid.insertItem(subgrid, 1, 1);
 
-        // subgrid.addItems(new VerticalScrollBar(), new VerticalScrollBar());
-        // for (int i = 0; i < 11; i++) {
-        //     ButtonCore h_btn = getButton("Cell" + i, 150, 50, SizePolicy.EXPAND);
-        //     h_btn.setMaxSize(200, 100);
-        //     h_btn.setBackground(121, 223, 152);
-        //     grid.addItem(h_btn);
-        // }
+        subgrid.addItems(new VerticalScrollBar(), new VerticalScrollBar());
+        for (int i = 0; i < 11; i++) {
+            ButtonCore h_btn = getButton("Cell" + i, 150, 50, SizePolicy.EXPAND);
+            h_btn.setMaxSize(200, 100);
+            h_btn.setBackground(121, 223, 152);
+            grid.addItem(h_btn);
+        }
 
         tab1.eventOnClose.add(() -> {
             System.out.println("close");
@@ -112,6 +117,7 @@ public class Containers extends ActiveWindow {
         style.background = new Color(111, 181, 255);
         style.foreground = Color.black;
         style.borderRadius = new CornerRadius(3);
+        style.font = DefaultsService.getDefaultFont();
         style.width = w;
         style.minWidth = 30;
         style.minHeight = 30;

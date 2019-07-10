@@ -76,10 +76,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
             castAndUpdate(item);
             return;
         }
-        if (itemParent instanceof InterfaceGrid) {
-            return;
-        }
-        if (itemParent instanceof InterfaceFree) {
+        if (itemParent instanceof InterfaceFreeLayout) {
             return;
         }
 
@@ -136,7 +133,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
         boolean hLayout = parent instanceof InterfaceHLayout;
         boolean vLayout = parent instanceof InterfaceVLayout;
-        boolean grid = parent instanceof InterfaceGrid;
+        boolean grid = parent instanceof InterfaceFreeLayout;
 
         if (!hLayout && !vLayout && !grid)
             updateBehavior();
@@ -146,7 +143,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
         if (vLayout)
             ((InterfaceVLayout) parent).updateLayout();
         if (grid)
-            ((InterfaceGrid) parent).updateLayout();
+            ((InterfaceFreeLayout) parent).updateLayout();
     }
 
     public void setMargin(int left, int top, int right, int bottom) {
@@ -423,7 +420,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
         boolean hLayout = parent instanceof InterfaceHLayout;
         boolean vLayout = parent instanceof InterfaceVLayout;
-        boolean grid = parent instanceof InterfaceGrid;
+        boolean grid = parent instanceof InterfaceFreeLayout;
 
         if (!hLayout && !vLayout && !grid)
             updateBehavior();
@@ -433,7 +430,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
         if (vLayout)
             ((InterfaceVLayout) parent).updateLayout();
         if (grid)
-            ((InterfaceGrid) parent).updateLayout();
+            ((InterfaceFreeLayout) parent).updateLayout();
     }
 
     public List<ItemAlignment> getAlignment() {
@@ -533,7 +530,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
             boolean hLayout = parent instanceof InterfaceHLayout;
             boolean vLayout = parent instanceof InterfaceVLayout;
-            boolean grid = parent instanceof InterfaceGrid;
+            boolean grid = parent instanceof InterfaceFreeLayout;
 
             if (!hLayout && !vLayout && !grid)
                 updateBehavior();
@@ -543,7 +540,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
             if (vLayout)
                 ((InterfaceVLayout) parent).updateLayout();
             if (grid)
-                ((InterfaceGrid) parent).updateLayout();
+                ((InterfaceFreeLayout) parent).updateLayout();
         }
     }
 
@@ -575,7 +572,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
             boolean hLayout = parent instanceof InterfaceHLayout;
             boolean vLayout = parent instanceof InterfaceVLayout;
-            boolean grid = parent instanceof InterfaceGrid;
+            boolean grid = parent instanceof InterfaceFreeLayout;
 
             if (!hLayout && !vLayout && !grid)
                 updateBehavior();
@@ -585,7 +582,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
             if (vLayout)
                 ((InterfaceVLayout) parent).updateLayout();
             if (grid)
-                ((InterfaceGrid) parent).updateLayout();
+                ((InterfaceFreeLayout) parent).updateLayout();
         }
     }
 

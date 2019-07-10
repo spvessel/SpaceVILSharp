@@ -2,23 +2,23 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.Geometry;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.InterfaceFreeLayout;
 import com.spvessel.spacevil.Core.InterfacePosition;
-import com.spvessel.spacevil.Grid;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.util.List;
 
 public final class Cell extends Geometry implements InterfacePosition {
-    private Grid _parent = null;
+    private InterfaceFreeLayout _parent = null;
 
     /**
      * @return parent grid of the cell
      */
-    public Grid getParentGrid() {
+    public InterfaceFreeLayout getParentGrid() {
         return _parent;
     }
 
-    Cell(Grid grid, int row, int column) {
+    Cell(InterfaceFreeLayout grid, int row, int column) {
         _parent = grid;
         _row_index = row;
         _column_index = column;

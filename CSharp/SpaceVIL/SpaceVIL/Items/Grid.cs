@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace SpaceVIL
 {
-    public class Grid : Prototype, IGrid
+    public class Grid : Prototype, IFreeLayout
     {
         static int count = 0;
 

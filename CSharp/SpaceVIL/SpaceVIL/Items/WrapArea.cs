@@ -11,7 +11,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class WrapArea : Prototype, IGrid
+    public class WrapArea : Prototype, IFreeLayout
     {
         internal Dictionary<IBaseItem, SelectionItem> _mapContent = new Dictionary<IBaseItem, SelectionItem>();
         private Object _lock = new Object();

@@ -14,9 +14,9 @@ namespace View
         // Grid block = new Grid(2, 2);
 
         TabView tabs = new TabView();
-        Tab tab1 = new Tab("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1");
-        Tab tab2 = new Tab("List");
-        Tab tab3 = new Tab("List");
+        Tab tab1 = new Tab("FirstLeftTab");
+        Tab tab2 = new Tab("List1");
+        Tab tab3 = new Tab("List2");
         TitleBar title = new TitleBar(nameof(Containers));
 
         public override void InitWindow()
@@ -35,8 +35,15 @@ namespace View
 
             cc.AddItem(tabs);
 
-            tabs.AddTabs(tab1, tab2, tab3);
-            tab1.SetWidthPolicy(SizePolicy.Expand);
+            tabs.AddTabs(tab1, tab2, tab3, 
+                new Tab("TabForTest1"), 
+                new Tab("TabForTest2"), 
+                new Tab("TabForTest3"), 
+                new Tab("TabForTest4"),
+                new Tab("TabForTest5")
+                );
+            // tab1.SetWidthPolicy(SizePolicy.Expand);
+            tab1.SetDraggable(false);
 
             EventKeyPress += (sender, args) =>
             {
@@ -60,7 +67,7 @@ namespace View
             grid.SetBackground(255, 255, 255, 20);
             grid.SetSpacing(2, 2);
             grid.SetMargin(20, 30, 20, 30);
-            tabs.AddItemToTabByName("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1", grid);
+            tabs.AddItemToTabByName("FirstLeftTab", grid);
             Grid subgrid = new Grid(1, 2);
             grid.InsertItem(subgrid, 1, 1);
 

@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.List;
 
 class TextBlock extends Prototype
-        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceGrid {
+        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceFreeLayout {
 
     EventCommonMethod cursorChanged = new EventCommonMethod();
     EventCommonMethod textChanged = new EventCommonMethod();

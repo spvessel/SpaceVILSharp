@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceGrid;
+import com.spvessel.spacevil.Core.InterfaceFreeLayout;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
@@ -17,7 +17,7 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 import java.util.HashMap;
 import java.util.List;
 
-public class WrapArea extends Prototype implements InterfaceGrid {
+public class WrapArea extends Prototype implements InterfaceFreeLayout {
     Map<InterfaceBaseItem, SelectionItem> _mapContent = new HashMap<>();
     private Lock _lock = new ReentrantLock();
     public EventCommonMethod selectionChanged = new EventCommonMethod();

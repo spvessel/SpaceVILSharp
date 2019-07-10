@@ -12,7 +12,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    internal class TextBlock : Prototype, ITextEditable, IDraggable, ITextShortcuts, IGrid//, ITextContainer
+    internal class TextBlock : Prototype, ITextEditable, IDraggable, ITextShortcuts, IFreeLayout//, ITextContainer
     {
         internal EventCommonMethod TextChanged;
         internal EventCommonMethod CursorChanged;

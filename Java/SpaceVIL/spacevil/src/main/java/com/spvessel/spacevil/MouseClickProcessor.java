@@ -9,6 +9,7 @@ import org.lwjgl.*;
 import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.system.MemoryStack;
 
+import com.spvessel.spacevil.Core.InterfaceDraggable;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.InputState;
 import com.spvessel.spacevil.Flags.KeyMods;
@@ -76,6 +77,8 @@ final class MouseClickProcessor {
             lastHovered.setMousePressed(false);
             _commonProcessor.events.resetAllEvents();
             _commonProcessor.events.setEvent(InputEventType.MOUSE_RELEASE);
+            if (lastHovered instanceof InterfaceDraggable)
+                lastHovered.eventMouseDrop.execute(lastHovered, _commonProcessor.margs);
             return;
         }
 
@@ -180,7 +183,10 @@ final class MouseClickProcessor {
             return;
         }
         if (_commonProcessor.events.lastEvent().contains(InputEventType.MOUSE_MOVE)) {
-
+            if (_commonProcessor.draggableItem != null) {
+                _commonProcessor.draggableItem.eventMouseDrop.execute(_commonProcessor.draggableItem,
+                        _commonProcessor.margs);
+            }
             if (!_commonProcessor.events.lastEvent().contains(InputEventType.MOUSE_DRAG)) {
                 float len = getLengthBetweenTwoPixelPoints(_commonProcessor.ptrClick.getX(),
                         _commonProcessor.ptrClick.getY(), _commonProcessor.ptrRelease.getX(),

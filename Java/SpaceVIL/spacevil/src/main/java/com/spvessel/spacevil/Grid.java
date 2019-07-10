@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceGrid;
+import com.spvessel.spacevil.Core.InterfaceFreeLayout;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -10,7 +10,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.LinkedList;
 
-public class Grid extends Prototype implements InterfaceGrid {
+public class Grid extends Prototype implements InterfaceFreeLayout {
     private static int count = 0;
 
     /**

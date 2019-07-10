@@ -45,7 +45,7 @@ final class VisualItem extends BaseItem {
             Prototype parent = getParent();
             if (parent != null && getWidthPolicy() == SizePolicy.FIXED) {
                 boolean layout = parent instanceof InterfaceHLayout;
-                boolean grid = parent instanceof InterfaceGrid;
+                boolean grid = parent instanceof InterfaceFreeLayout;
 
                 if (!layout && !grid)
                     updateBehavior();
@@ -53,7 +53,7 @@ final class VisualItem extends BaseItem {
                 if (layout)
                     ((InterfaceHLayout) parent).updateLayout();
                 if (grid)
-                    ((InterfaceGrid) parent).updateLayout();
+                    ((InterfaceFreeLayout) parent).updateLayout();
             }
             eventManager.notifyListeners(GeometryEventType.RESIZE_WIDTH, value);
         }
@@ -68,7 +68,7 @@ final class VisualItem extends BaseItem {
             Prototype parent = getParent();
             if (parent != null && getHeightPolicy() == SizePolicy.FIXED) {
                 boolean layout = parent instanceof InterfaceVLayout;
-                boolean grid = parent instanceof InterfaceGrid;
+                boolean grid = parent instanceof InterfaceFreeLayout;
 
                 if (!layout && !grid)
                     updateBehavior();
@@ -76,7 +76,7 @@ final class VisualItem extends BaseItem {
                 if (layout)
                     ((InterfaceVLayout) parent).updateLayout();
                 if (grid)
-                    ((InterfaceGrid) parent).updateLayout();
+                    ((InterfaceFreeLayout) parent).updateLayout();
             }
             eventManager.notifyListeners(GeometryEventType.RESIZE_HEIGHT, value);
         }
@@ -92,17 +92,18 @@ final class VisualItem extends BaseItem {
         int value = _x - getX();
         if (value != 0) {
             super.setX(_x);
-            Prototype parent = getParent();
-            if (parent != null && getWidthPolicy() == SizePolicy.FIXED) {
-                boolean layout = parent instanceof InterfaceHLayout;
-                boolean grid = parent instanceof InterfaceGrid;
+            // Prototype parent = getParent();
+            // if (parent != null && getWidthPolicy() == SizePolicy.FIXED) {
+            //     boolean layout = parent instanceof InterfaceHLayout;
+            //     boolean grid = parent instanceof InterfaceGrid;
 
-                if (layout)
-                    ((InterfaceHLayout) parent).updateLayout();
-                if (grid)
-                    if (!(parent instanceof InterfaceFree))
-                        ((InterfaceGrid) parent).updateLayout();
-            }
+            //     if (layout)
+            //         ((InterfaceHLayout) parent).updateLayout();
+            //     if (grid)
+            //         if (!(parent instanceof InterfaceFree))
+            //             ((InterfaceGrid) parent).updateLayout();
+            // }
+
             eventManager.notifyListeners(GeometryEventType.MOVED_X, value);
         }
     }
@@ -112,17 +113,17 @@ final class VisualItem extends BaseItem {
         int value = _y - getY();
         if (value != 0) {
             super.setY(_y);
-            Prototype parent = getParent();
-            if (parent != null && getHeightPolicy() == SizePolicy.FIXED) {
-                boolean layout = parent instanceof InterfaceVLayout;
-                boolean grid = parent instanceof InterfaceGrid;
+            // Prototype parent = getParent();
+            // if (parent != null && getHeightPolicy() == SizePolicy.FIXED) {
+            //     boolean layout = parent instanceof InterfaceVLayout;
+            //     boolean grid = parent instanceof InterfaceGrid;
 
-                if (layout)
-                    ((InterfaceVLayout) parent).updateLayout();
-                if (grid)
-                    if (!(parent instanceof InterfaceFree))
-                        ((InterfaceGrid) parent).updateLayout();
-            }
+            //     if (layout)
+            //         ((InterfaceVLayout) parent).updateLayout();
+            //     if (grid)
+            //         if (!(parent instanceof InterfaceFree))
+            //             ((InterfaceGrid) parent).updateLayout();
+            // }
 
             eventManager.notifyListeners(GeometryEventType.MOVED_Y, value);
         }
@@ -223,7 +224,7 @@ final class VisualItem extends BaseItem {
 
         boolean hLayout = parent instanceof InterfaceHLayout;
         boolean vLayout = parent instanceof InterfaceVLayout;
-        boolean grid = parent instanceof InterfaceGrid;
+        boolean grid = parent instanceof InterfaceFreeLayout;
 
         if (!hLayout && !vLayout && !grid)
             updateBehavior();
@@ -233,7 +234,7 @@ final class VisualItem extends BaseItem {
         if (vLayout)
             ((InterfaceVLayout) parent).updateLayout();
         if (grid)
-            ((InterfaceGrid) parent).updateLayout();
+            ((InterfaceFreeLayout) parent).updateLayout();
     }
 
     void setSpacing(int horizontal, int vertical) {
@@ -278,7 +279,7 @@ final class VisualItem extends BaseItem {
 
         boolean hLayout = parent instanceof InterfaceHLayout;
         boolean vLayout = parent instanceof InterfaceVLayout;
-        boolean grid = parent instanceof InterfaceGrid;
+        boolean grid = parent instanceof InterfaceFreeLayout;
 
         if (!hLayout && !vLayout && !grid)
             updateBehavior();
@@ -288,7 +289,7 @@ final class VisualItem extends BaseItem {
         if (vLayout)
             ((InterfaceVLayout) parent).updateLayout();
         if (grid)
-            ((InterfaceGrid) parent).updateLayout();
+            ((InterfaceFreeLayout) parent).updateLayout();
     }
 
     void setPadding(int left, int top, int right, int bottom) {
@@ -479,7 +480,6 @@ final class VisualItem extends BaseItem {
 
             // removing
             castAndRemove(item);
-
             boolean contentRemove = _content.remove(item);
             boolean layoutBoxRemove = ItemsLayoutBox.removeItem(getHandler(), item, type);
             item.setParent(null);

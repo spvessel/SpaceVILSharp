@@ -332,8 +332,8 @@ final class DrawEngine {
     }
 
     private void mouseScroll(long wnd, double dx, double dy) {
-        if (_commonProcessor.inputLocker)
-            return;
+        // if (_commonProcessor.inputLocker)
+        //     return;
         _tooltip.initTimer(false);
         _mouseScrollProcessor.process(wnd, dx, dy);
         _commonProcessor.events.setEvent(InputEventType.MOUSE_SCROLL);

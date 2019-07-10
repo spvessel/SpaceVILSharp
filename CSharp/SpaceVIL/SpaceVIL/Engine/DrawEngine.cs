@@ -308,8 +308,8 @@ namespace SpaceVIL
 
         private void MouseScroll(Int64 window, double dx, double dy)
         {
-            if (_commonProcessor.InputLocker)
-                return;
+            // if (_commonProcessor.InputLocker)
+            //     return;
             _tooltip.InitTimer(false);
             _mouseScrollProcessor.Process(window, dx, dy);
             _commonProcessor.Events.SetEvent(InputEventType.MouseScroll);
