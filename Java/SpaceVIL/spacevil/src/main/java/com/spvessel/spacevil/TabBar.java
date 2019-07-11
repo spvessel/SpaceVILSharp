@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceHLayout;
@@ -163,9 +164,10 @@ class TabBar extends Prototype implements InterfaceHLayout {
     }
 
     private boolean _isUpdating = false;
-
+    int c = 0;
     @Override
     public void updateLayout() {
+        System.out.println(c++);
         List<InterfaceBaseItem> itemList = getItems();
         if (itemList.size() == 0 || _isUpdating)
             return;
@@ -177,34 +179,17 @@ class TabBar extends Prototype implements InterfaceHLayout {
         int itemOffsetX = getX() + getPadding().left;
 
         if (_contentPolicy == SizePolicy.EXPAND) {
-            int totalSpace = getWidth() - getPadding().left - getPadding().right
-                    - (itemList.size() - 1) * getSpacing().horizontal;
-            int itemWidth = totalSpace / itemList.size();
-            int itemsRemaining = itemList.size();
+            Map<InterfaceBaseItem, Integer> sizes = getMapItemSize(itemList);
             for (InterfaceBaseItem item : itemList) {
-                itemsRemaining--;
-                if (!item.isVisible())
+                if (!sizes.containsKey(item))
                     continue;
 
-                if (itemsRemaining == 0)
-                    itemWidth = totalSpace;
-
-                if (item.getWidth() < itemWidth) { // } && itemsRemaining != 0) {
-                    // itemWidth = item.getWidth();
-                    totalSpace -= item.getWidth();
-                    if (itemsRemaining != 0)
-                        itemWidth = totalSpace / itemsRemaining;
-                } else { // if (itemsRemaining != 0) {
-                    item.setWidth(itemWidth);
-                    totalSpace -= item.getWidth();
-                }
+                item.setWidth(sizes.get(item));
 
                 if (!(_selectedTab.dragging && _selectedTab == item)) {
                     item.setX(itemOffsetX);
                     item.setConfines();
                 }
-                // System.out.println(((Tab) item).getText() + " " + itemOffsetX + " " +
-                // itemWidth);
                 itemOffsetX += item.getWidth() + getSpacing().horizontal;
             }
         } else {
@@ -240,7 +225,6 @@ class TabBar extends Prototype implements InterfaceHLayout {
                         item.setDrawable(true);
                     continue;
                 }
-
                 item.setDrawable(true);
             }
         }
@@ -468,5 +452,44 @@ class TabBar extends Prototype implements InterfaceHLayout {
     public void addItemToTab(Tab tab, InterfaceBaseItem item) {
         if (tabMapView.containsKey(tab))
             tabMapView.get(tab).addItem(item);
+    }
+
+    private Map<InterfaceBaseItem, Integer> getMapItemSize(List<InterfaceBaseItem> list) {
+        int totalSpace = getWidth() - getPadding().left - getPadding().right
+                - (list.size() - 1) * getSpacing().horizontal;
+        Map<InterfaceBaseItem, Integer> mapExpand = new HashMap<>();
+        Map<InterfaceBaseItem, Integer> mapFixed = new HashMap<>();
+        List<InterfaceBaseItem> visibleList = new LinkedList<>();
+        for (InterfaceBaseItem item : list) {
+            if (!item.isVisible())
+                continue;
+            visibleList.add(item);
+        }
+        int itemWidth = totalSpace / visibleList.size();
+        int lastIndex = 0, orderInd = -1;
+        for (InterfaceBaseItem item : visibleList) {
+            orderInd++;
+            if (item.getMaxWidth() < itemWidth) {
+                mapFixed.put(item, item.getMaxWidth());
+                totalSpace -= item.getMaxWidth();
+                continue;
+            }
+            if (item.getMinWidth() > itemWidth) {
+                mapFixed.put(item, item.getMinWidth());
+                totalSpace -= item.getMinWidth();
+                continue;
+            }
+            mapExpand.put(item, itemWidth);
+            lastIndex = orderInd;
+        }
+        if (!mapExpand.isEmpty())
+            itemWidth = totalSpace / mapExpand.size();
+        for (InterfaceBaseItem item : mapExpand.keySet()) {
+            mapFixed.put(item, itemWidth);
+        }
+        if (!mapExpand.isEmpty())
+            itemWidth += totalSpace % mapExpand.size();
+        mapFixed.replace(list.get(lastIndex), new Integer(itemWidth));
+        return mapFixed;
     }
 }

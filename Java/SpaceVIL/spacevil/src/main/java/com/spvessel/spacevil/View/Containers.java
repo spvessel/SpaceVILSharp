@@ -54,11 +54,11 @@ public class Containers extends ActiveWindow {
         tabs = new TabView();
         tab1 = new Tab("FirstLeftTab");
         tab1.setDraggable(false);
-        // tab1.setMaxWidth(30);
+        tab1.setMaxWidth(30);
         tab2 = new Tab("List");
         tab3 = new Tab("List");
         cc.addItem(tabs);
-        // tabs.setContentPolicy(SizePolicy.EXPAND);
+        tabs.setContentPolicy(SizePolicy.EXPAND);
         tabs.addTabs(tab1, tab2, tab3, new Tab("TabForTest1"), new Tab("TabForTest2"), new Tab("TabForTest3"),
                 new Tab("TabForTest4"), new Tab("TabForTest5")
                 // new Tab("TabForTest6"), new Tab("TabForTest7"),

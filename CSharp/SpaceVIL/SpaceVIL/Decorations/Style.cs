@@ -2161,9 +2161,13 @@ namespace SpaceVIL.Decorations
             Style tab_style = GetTabStyle();
             style.AddInnerStyle("tab", tab_style);
 
-            Style view_style = tab_style.GetInnerStyle("view");
-            if (view_style != null)
-                style.AddInnerStyle("view", view_style);
+            // Style view_style = tab_style.GetInnerStyle("view");
+            // if (view_style != null)
+            //     style.AddInnerStyle("view", view_style);
+
+            Style area_style = GetFrameStyle();
+            area_style.SetPadding(0, 0, 0, 0);
+            style.AddInnerStyle("viewarea", area_style);
 
             return style;
         }

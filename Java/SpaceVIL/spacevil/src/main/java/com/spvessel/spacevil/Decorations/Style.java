@@ -2194,9 +2194,13 @@ public class Style implements Cloneable {
         Style tab_style = getTabStyle();
         style.addInnerStyle("tab", tab_style);
 
-        Style view_style = tab_style.getInnerStyle("view");
-        if (view_style != null)
-            style.addInnerStyle("view", view_style);
+        // Style view_style = tab_style.getInnerStyle("view");
+        // if (view_style != null)
+        //     style.addInnerStyle("view", view_style);
+
+        Style area_style = getFrameStyle();
+        area_style.setPadding(0, 0, 0, 0);
+        style.addInnerStyle("viewarea", area_style);
 
         return style;
     }

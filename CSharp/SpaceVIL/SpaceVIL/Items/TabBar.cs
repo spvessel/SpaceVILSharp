@@ -192,10 +192,12 @@ namespace SpaceVIL
         /// Update all items and TabBar sizes and positions
         /// according to confines
         /// </summary>
+        int c = 0;
         public void UpdateLayout()
         {
+            Console.WriteLine(c++);
             List<IBaseItem> itemList = GetItems();
-            if (itemList.Count == 0 || _isUpdating)
+            if (itemList.Count == 0  || _isUpdating)
                 return;
 
             _isUpdating = true;
@@ -206,19 +208,18 @@ namespace SpaceVIL
 
             if (_contentPolicy == SizePolicy.Expand)
             {
-                int totalSpace = GetWidth() - GetPadding().Left - GetPadding().Right;
-                int itemWidth = (totalSpace - (itemList.Count - 1) * GetSpacing().Horizontal) / itemList.Count;
+                Dictionary<IBaseItem, Int32> sizes = GetMapItemSize(itemList);
                 foreach (var item in itemList)
                 {
-                    if (!item.IsVisible())
+                    if (!sizes.ContainsKey(item))
                         continue;
-                    item.SetWidth(itemWidth);
+                    item.SetWidth(sizes[item]);
                     if (!(_selectedTab.Dragging && _selectedTab == item))
                     {
                         item.SetX(itemOffsetX);
                         item.SetConfines();
                     }
-                    itemOffsetX += itemWidth + GetSpacing().Horizontal;
+                    itemOffsetX += item.GetWidth() + GetSpacing().Horizontal;
                 }
             }
             else
@@ -510,7 +511,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Add InterfaceBaseItem item to the tab with name tabName
+        /// Add IBaseItem item to the tab with name tabName
         /// </summary>
         public void AddItemToTabByName(String tabName, IBaseItem item)
         {
@@ -536,12 +537,56 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Add InterfaceBaseItem item to the tab by tab
+        /// Add IBaseItem item to the tab by tab
         /// </summary>
         public void AddItemToTab(Tab tab, IBaseItem item)
         {
             if (TabMapView.ContainsKey(tab))
                 TabMapView[tab].AddItem(item);
+        }
+
+        private Dictionary<IBaseItem, Int32> GetMapItemSize(List<IBaseItem> list)
+        {
+            int totalSpace = GetWidth() - GetPadding().Left - GetPadding().Right - (list.Count - 1) * GetSpacing().Horizontal;
+            Dictionary<IBaseItem, Int32> mapExpand = new Dictionary<IBaseItem, Int32>();
+            Dictionary<IBaseItem, Int32> mapFixed = new Dictionary<IBaseItem, Int32>();
+            List<IBaseItem> visibleList = new List<IBaseItem>();
+            foreach (IBaseItem item in list)
+            {
+                if (!item.IsVisible())
+                    continue;
+                visibleList.Add(item);
+            }
+            int itemWidth = totalSpace / visibleList.Count;
+            int lastIndex = 0, orderInd = -1;
+            foreach (IBaseItem item in visibleList)
+            {
+                orderInd++;
+                if (item.GetMaxWidth() < itemWidth)
+                {
+                    mapFixed.Add(item, item.GetMaxWidth());
+                    totalSpace -= item.GetMaxWidth();
+                    continue;
+                }
+                if (item.GetMinWidth() > itemWidth)
+                {
+                    mapFixed.Add(item, item.GetMinWidth());
+                    totalSpace -= item.GetMinWidth();
+                    continue;
+                }
+                mapExpand.Add(item, itemWidth);
+                lastIndex = orderInd;
+            }
+            if (mapExpand.Count > 0)
+                itemWidth = totalSpace / mapExpand.Count;
+            foreach (IBaseItem item in mapExpand.Keys)
+            {
+                mapFixed.Add(item, itemWidth);
+            }
+            if (mapExpand.Count > 0)
+                itemWidth += totalSpace % mapExpand.Count;
+            mapFixed[list[lastIndex]] = itemWidth;
+            return mapFixed;
         }
     }
 }

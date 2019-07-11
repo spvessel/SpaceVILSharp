@@ -35,6 +35,8 @@ namespace View
 
             cc.AddItem(tabs);
 
+            // tab1.SetDraggable(false);
+            tab1.SetMaxWidth(30);
             tabs.AddTabs(tab1, tab2, tab3, 
                 new Tab("TabForTest1"), 
                 new Tab("TabForTest2"), 
@@ -42,8 +44,7 @@ namespace View
                 new Tab("TabForTest4"),
                 new Tab("TabForTest5")
                 );
-            // tab1.SetWidthPolicy(SizePolicy.Expand);
-            tab1.SetDraggable(false);
+            tabs.SetContentPolicy(SizePolicy.Expand);
 
             EventKeyPress += (sender, args) =>
             {

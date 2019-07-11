@@ -19,6 +19,7 @@ public class TabView extends VerticalStack {
     }
 
     private TabBar _tabBar;
+    private Frame _viewArea;
 
     public List<Tab> getTabs() {
         return _tabBar.getTabs();
@@ -30,6 +31,7 @@ public class TabView extends VerticalStack {
     public TabView() {
         setItemName("TabView_" + count++);
         _tabBar = new TabBar();
+        _viewArea = new Frame();
         setStyle(DefaultsService.getDefaultStyle(TabView.class));
     }
 
@@ -43,7 +45,7 @@ public class TabView extends VerticalStack {
      */
     @Override
     public void initElements() {
-        addItem(_tabBar);
+        addItems(_tabBar, _viewArea);
     }
 
     public void selectTab(Tab tab) {
@@ -84,7 +86,7 @@ public class TabView extends VerticalStack {
             return;
 
         _tabBar.tabMapView.put(tab, tab.view);
-        addItem(tab.view);
+        _viewArea.addItem(tab.view);
         _tabBar.addItem(tab);
         tab.eventMousePress.add((sender, args) -> {
             updateLayout();
@@ -170,5 +172,8 @@ public class TabView extends VerticalStack {
         Style innerStyle = style.getInnerStyle("tabbar");
         if (innerStyle != null)
             _tabBar.setStyle(innerStyle);
+            innerStyle = style.getInnerStyle("viewarea");
+        if (innerStyle != null)
+            _viewArea.setStyle(innerStyle);
     }
 }

@@ -11,7 +11,17 @@ namespace SpaceVIL
     {
         static int count = 0;
 
+        public void SetContentPolicy(SizePolicy policy)
+        {
+            _tabBar.SetContentPolicy(policy);
+        }
+        public SizePolicy GetContentPolicy()
+        {
+            return _tabBar.GetContentPolicy();
+        }
+
         private TabBar _tabBar;
+        private Frame _viewArea;
 
         public List<Tab> GetTabs()
         {
@@ -26,6 +36,7 @@ namespace SpaceVIL
         {
             SetItemName("TabView_" + count++);
             _tabBar = new TabBar();
+            _viewArea = new Frame();
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TabView)));
         }
 
@@ -39,7 +50,7 @@ namespace SpaceVIL
         /// </summary>
         public override void InitElements()
         {
-            AddItem(_tabBar);
+            AddItems(_tabBar, _viewArea);
         }
 
         public void SelectTab(Tab tab)
@@ -91,7 +102,7 @@ namespace SpaceVIL
                 return;
 
             _tabBar.TabMapView.Add(tab, tab.View);
-            AddItem(tab.View);
+            _viewArea.AddItem(tab.View);
             _tabBar.AddItem(tab);
             tab.EventMousePress += (sender, args) =>
             {
@@ -187,6 +198,9 @@ namespace SpaceVIL
             Style innerStyle = style.GetInnerStyle("tabbar");
             if (innerStyle != null)
                 _tabBar.SetStyle(innerStyle);
+            innerStyle = style.GetInnerStyle("viewarea");
+            if (innerStyle != null)
+                _viewArea.SetStyle(innerStyle);
         }
     }
 }
