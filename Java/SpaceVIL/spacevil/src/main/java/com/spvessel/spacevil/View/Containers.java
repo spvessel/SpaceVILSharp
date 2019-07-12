@@ -55,31 +55,16 @@ public class Containers extends ActiveWindow {
         tab1 = new Tab("FirstLeftTab");
         tab1.setDraggable(false);
         tab1.setMaxWidth(30);
-        tab2 = new Tab("List");
-        tab3 = new Tab("List");
+
+        tab2 = new Tab("List1");
+        tab2.setClosable(true);
+        
+        tab3 = new Tab("List2");
+        tab3.setClosable(true);
+
         cc.addItem(tabs);
-        tabs.setContentPolicy(SizePolicy.EXPAND);
-        tabs.addTabs(tab1, tab2, tab3, new Tab("TabForTest1"), new Tab("TabForTest2"), new Tab("TabForTest3"),
-                new Tab("TabForTest4"), new Tab("TabForTest5")
-                // new Tab("TabForTest6"), new Tab("TabForTest7"),
-                // new Tab("TabForTest8")
-                );
-        // tab1.setWidthPolicy(SizePolicy.EXPAND);
-
-        eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.MENU)
-                for (Tab tab : tabs.getTabs())
-                    tab.setClosable(!tab.isClosable());
-            if (args.key == KeyCode.DELETE) {
-                clearAllTabs();
-            }
-            if (args.key == KeyCode.ENTER) {
-                if (tabs != null) {
-                    System.out.println(tabs.getTabs().size());
-                }
-            }
-        });
-
+        // tabs.setContentPolicy(SizePolicy.EXPAND);
+        tabs.addTab(tab1);
         Grid grid = new Grid(3, 4);
         grid.setBackground(255, 255, 255, 20);
         grid.setSpacing(2, 2);
@@ -95,6 +80,37 @@ public class Containers extends ActiveWindow {
             h_btn.setBackground(121, 223, 152);
             grid.addItem(h_btn);
         }
+
+        tabs.addTab(tab2);
+        tabs.selectTab(tab2);
+        tabs.selectTab(tab1);
+        tabs.addTab(tab3);
+        // tabs.selectTab(tab3);
+        // tabs.addTab(new Tab("TabForTest1"));
+        // tabs.addTab(new Tab("TabForTest2"));
+        // tabs.addTab(new Tab("TabForTest3"));
+        // tabs.addTabs(tab1, tab2, tab3//,
+        // new Tab("TabForTest1"), new Tab("TabForTest2"),
+        // new Tab("TabForTest3"),
+        // new Tab("TabForTest4"), new Tab("TabForTest5")
+        // new Tab("TabForTest6"), new Tab("TabForTest7"),
+        // new Tab("TabForTest8")
+        // );
+        // tab1.setWidthPolicy(SizePolicy.EXPAND);
+
+        eventKeyPress.add((sender, args) -> {
+            if (args.key == KeyCode.MENU)
+                for (Tab tab : tabs.getTabs())
+                    tab.setClosable(!tab.isClosable());
+            if (args.key == KeyCode.DELETE) {
+                clearAllTabs();
+            }
+            if (args.key == KeyCode.ENTER) {
+                if (tabs != null) {
+                    System.out.println(tabs.getTabs().size());
+                }
+            }
+        });
 
         tab1.eventOnClose.add(() -> {
             System.out.println("close");

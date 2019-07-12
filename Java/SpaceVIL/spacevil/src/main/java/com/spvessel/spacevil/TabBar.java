@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
+// import com.spvessel.spacevil.Core.AbstractHorizontalLayout;
 import com.spvessel.spacevil.Core.InterfaceHLayout;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.SizePolicy;
@@ -18,7 +18,8 @@ class TabBar extends Prototype implements InterfaceHLayout {
     private List<Tab> _tabList;
 
     public List<Tab> getTabs() {
-        return new LinkedList<Tab>(_tabList);
+        reindexing();
+        return new LinkedList<>(_tabList);
     }
 
     static int count = 0;
@@ -165,9 +166,9 @@ class TabBar extends Prototype implements InterfaceHLayout {
 
     private boolean _isUpdating = false;
     int c = 0;
+
     @Override
     public void updateLayout() {
-        System.out.println(c++);
         List<InterfaceBaseItem> itemList = getItems();
         if (itemList.size() == 0 || _isUpdating)
             return;
@@ -236,21 +237,6 @@ class TabBar extends Prototype implements InterfaceHLayout {
 
     void onTabDrop(Tab tab, MouseArgs args) {
         if (tab.dragging) {
-            List<Tab> tabList = getTabs();
-            tabList.remove(tab);
-            for (Tab t : tabList) {
-                if (!t.isDraggable())
-                    continue;
-                int tX = t.getX();
-                int tW = t.getWidth();
-                if (args.position.getX() > tX + tW / 3 && args.position.getX() < tX + tW - tW / 3) {
-                    int index = tabList.indexOf(t);
-                    if (_selectedTabIndex <= index)
-                        index++;
-                    _selectedTabIndex = index;
-                    break;
-                }
-            }
             tab.dragging = false;
             updateLayout();
         }
@@ -258,24 +244,68 @@ class TabBar extends Prototype implements InterfaceHLayout {
 
     void onTabDrag(Tab tab, MouseArgs args) {
         if (tab.dragging) {
+            if (_tabList.size() < 2)
+                return;
+
             if (tab.getX() == getX())
                 addScrollOffset(-_dragScrollStep);
             else if (tab.getX() + tab.getWidth() == getX() + getWidth())
                 addScrollOffset(_dragScrollStep);
+
+            //////////////////
             List<Tab> tabList = getTabs();
+            int tabCount = tabList.size();
             tabList.remove(tab);
-            for (Tab t : tabList) {
-                if (!t.isDraggable())
+
+            // check first
+            if (args.position.getX() < tabList.get(0).getX() + tabList.get(0).getWidth() / 2) {
+                if (!tabList.get(0).isDraggable())
+                    return;
+                _selectedTabIndex = 0;
+                updateLayout();
+                return;
+            }
+            // check last
+            if (args.position.getX() > tabList.get(tabList.size() - 1).getX()
+                    + tabList.get(tabList.size() - 1).getWidth() / 2) {
+                if (!tabList.get(tabList.size() - 1).isDraggable())
+                    return;
+                _selectedTabIndex = tabCount - 1;
+                updateLayout();
+                return;
+            }
+
+            int startIndex = 1;
+            int lastIndex = tabList.size() - 1;
+            if (tabList.size() == 2) {
+                startIndex = 0;
+                lastIndex = 1;
+            }
+            for (int index = startIndex; index < lastIndex; index++) {
+                Tab currnetTab = tabList.get(index);
+                if (!currnetTab.isDraggable() && tabList.size() > 2)
                     continue;
-                int tX = t.getX();
-                int tW = t.getWidth();
-                if (args.position.getX() > tX + tW / 3 && args.position.getX() < tX + tW - tW / 3) {
-                    int index = tabList.indexOf(t);
-                    if (_selectedTabIndex <= index)
-                        index++;
-                    _selectedTabIndex = index;
-                    updateLayout();
-                    break;
+
+                int tX = currnetTab.getX();
+                int tW = currnetTab.getWidth();
+
+                // check move left
+                if (args.position.getX() < tX + tW / 3) {
+                    Tab prevTab = tabList.get(index - 1);
+                    if (args.position.getX() > prevTab.getX() + prevTab.getWidth() - prevTab.getWidth() / 3) {
+                        _selectedTabIndex = index;
+                        updateLayout();
+                        return;
+                    }
+                }
+                // check move right
+                if (args.position.getX() > tX + tW - tW / 3) {
+                    Tab nextTab = tabList.get(index + 1);
+                    if (args.position.getX() < nextTab.getX() + nextTab.getWidth() / 3) {
+                        _selectedTabIndex = index + 1;
+                        updateLayout();
+                        return;
+                    }
                 }
             }
         }
@@ -316,7 +346,6 @@ class TabBar extends Prototype implements InterfaceHLayout {
     private void unselectOthers(Tab sender, MouseArgs args) {
         if (_selectedTab == sender)
             return;
-
         sender.setToggled(true);
         tabMapView.get(sender).setVisible(true);
 
@@ -327,9 +356,11 @@ class TabBar extends Prototype implements InterfaceHLayout {
 
         _selectedTab = sender;
         _selectedTabIndex = _tabList.indexOf(sender);
+        reindexing();
     }
 
     public void selectTab(Tab tab) {
+        onTop(tab);
         unselectOthers(tab, null);
     }
 
@@ -338,6 +369,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
     public void selectTab(int index) {
         if (index < 0 || index >= _tabList.size())
             return;
+        onTop(_tabList.get(index));
         unselectOthers(_tabList.get(index), null);
     }
 

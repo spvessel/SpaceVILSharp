@@ -2136,8 +2136,8 @@ public class Style implements Cloneable {
         Style style = new Style();
         style.borderRadius = new CornerRadius(3, 3, 0, 0);
         style.font = DefaultsService.getDefaultFont(14);
-        // style.background = new Color(0, 0, 0, 0);
-        style.background = new Color(60, 60, 60);
+        style.background = new Color(255, 255, 255, 10);
+        // style.background = new Color(60, 60, 60);
         style.setForeground(210, 210, 210);
         style.minWidth = 30;
         style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
@@ -2145,8 +2145,9 @@ public class Style implements Cloneable {
         style.padding = new Indents(0, 0, 0, 0);
         style.padding = new Indents(10, 2, 5, 2);
         style.spacing = new Spacing(5, 0);
-        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 20)));
-        style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(71, 71, 71)));
+        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 60)));
+        // style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(71, 71, 71)));
+        style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 25)));
         style.setShadow(new Shadow(5, 0, 0, new Color(0, 0, 0, 150)));
         style.isShadowDrop = false;
 

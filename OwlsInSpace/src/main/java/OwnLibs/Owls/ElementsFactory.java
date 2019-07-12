@@ -201,7 +201,7 @@ public class ElementsFactory {
     public static FileEntryTab getNewTab(String name) {
         FileEntryTab tab = new FileEntryTab(name);
         tab.setToolTip(name);
-        tab.setWidthPolicy(SizePolicy.EXPAND);
+        // tab.setWidthPolicy(SizePolicy.EXPAND);
         tab.setFontSize(12);
         tab.setBorderRadius(0);
         tab.setClosable(true);

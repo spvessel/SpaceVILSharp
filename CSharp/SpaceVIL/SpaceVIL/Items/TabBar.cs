@@ -12,6 +12,7 @@ namespace SpaceVIL
         private List<Tab> _tabList;
         public List<Tab> GetTabs()
         {
+            Reindexing();
             return new List<Tab>(_tabList);
         }
 
@@ -80,7 +81,6 @@ namespace SpaceVIL
             tab.EventTabRemove += () =>
             {
                 SelectBestRightoverTab();
-                // RemoveTab(tab);
             };
             tab.EventMouseDrop += (sender, args) =>
             {
@@ -195,9 +195,8 @@ namespace SpaceVIL
         int c = 0;
         public void UpdateLayout()
         {
-            Console.WriteLine(c++);
             List<IBaseItem> itemList = GetItems();
-            if (itemList.Count == 0  || _isUpdating)
+            if (itemList.Count == 0 || _isUpdating)
                 return;
 
             _isUpdating = true;
@@ -274,24 +273,6 @@ namespace SpaceVIL
         {
             if (tab.Dragging)
             {
-                List<Tab> tabList = GetTabs();
-                tabList.Remove(tab);
-                foreach (Tab t in tabList)
-                {
-                    if (!t.IsDraggable())
-                        continue;
-
-                    int tX = t.GetX();
-                    int tW = t.GetWidth();
-                    if (args.Position.GetX() > tX + tW / 3 && args.Position.GetX() < tX + tW - tW / 3)
-                    {
-                        int index = tabList.IndexOf(t);
-                        if (_selectedTabIndex <= index)
-                            index++;
-                        _selectedTabIndex = index;
-                        break;
-                    }
-                }
                 tab.Dragging = false;
                 UpdateLayout();
             }
@@ -301,28 +282,75 @@ namespace SpaceVIL
         {
             if (tab.Dragging)
             {
+                if (_tabList.Count < 2)
+                    return;
+
                 if (tab.GetX() == GetX())
                     AddScrollOffset(-_dragScrollStep);
                 else if (tab.GetX() + tab.GetWidth() == GetX() + GetWidth())
                     AddScrollOffset(_dragScrollStep);
 
                 List<Tab> tabList = GetTabs();
+                int tabCount = tabList.Count;
                 tabList.Remove(tab);
-                foreach (Tab t in tabList)
+
+                // check first
+                if (args.Position.GetX() < tabList[0].GetX() + tabList[0].GetWidth() / 2)
                 {
-                    if (!t.IsDraggable())
+                    if (!tabList[0].IsDraggable())
+                        return;
+                    _selectedTabIndex = 0;
+                    UpdateLayout();
+                    return;
+                }
+                // check last
+                if (args.Position.GetX() > tabList[tabList.Count - 1].GetX()
+                    + tabList[tabList.Count - 1].GetWidth() / 2)
+                {
+                    if (!tabList[tabList.Count - 1].IsDraggable())
+                        return;
+                    _selectedTabIndex = tabCount - 1;
+                    UpdateLayout();
+                    return;
+                }
+
+                int startIndex = 1;
+                int lastIndex = tabList.Count - 1;
+                if (tabList.Count == 2)
+                {
+                    startIndex = 0;
+                    lastIndex = 1;
+                }
+                for (int index = startIndex; index < lastIndex; index++)
+                {
+                    Tab currnetTab = tabList[index];
+                    if (!currnetTab.IsDraggable() && tabList.Count > 2)
                         continue;
 
-                    int tX = t.GetX();
-                    int tW = t.GetWidth();
-                    if (args.Position.GetX() > tX + tW / 3 && args.Position.GetX() < tX + tW - tW / 3)
+                    int tX = currnetTab.GetX();
+                    int tW = currnetTab.GetWidth();
+
+                    // check move left
+                    if (args.Position.GetX() < tX + tW / 3)
                     {
-                        int index = tabList.IndexOf(t);
-                        if (_selectedTabIndex <= index)
-                            index++;
-                        _selectedTabIndex = index;
-                        UpdateLayout();
-                        break;
+                        Tab prevTab = tabList[index - 1];
+                        if (args.Position.GetX() > prevTab.GetX() + prevTab.GetWidth() - prevTab.GetWidth() / 3)
+                        {
+                            _selectedTabIndex = index;
+                            UpdateLayout();
+                            return;
+                        }
+                    }
+                    // check move right
+                    if (args.Position.GetX() > tX + tW - tW / 3)
+                    {
+                        Tab nextTab = tabList[index + 1];
+                        if (args.Position.GetX() < nextTab.GetX() + nextTab.GetWidth() / 3)
+                        {
+                            _selectedTabIndex = index + 1;
+                            UpdateLayout();
+                            return;
+                        }
                     }
                 }
             }
@@ -368,22 +396,21 @@ namespace SpaceVIL
         {
             if (_selectedTab == sender)
                 return;
-
             sender.SetToggled(true);
             TabMapView[sender].SetVisible(true);
-
             if (_selectedTab != null)
             {
                 _selectedTab.SetToggled(false);
                 TabMapView[_selectedTab].SetVisible(false);
             }
-
             _selectedTab = sender;
             _selectedTabIndex = _tabList.IndexOf(sender);
+            Reindexing();
         }
 
         public void SelectTab(Tab tab)
         {
+            OnTop(tab);
             UnselectOthers(tab, null);
         }
 
@@ -392,6 +419,7 @@ namespace SpaceVIL
         {
             if (index < 0 || index >= _tabList.Count)
                 return;
+            OnTop(_tabList[index]);
             UnselectOthers(_tabList[index], null);
         }
 

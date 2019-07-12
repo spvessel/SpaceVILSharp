@@ -822,7 +822,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     // /**
     // * Set list of the Prototype's inner items. Old items will be removed
     // */
-    void setContent(List<InterfaceBaseItem> content) {
+    public void setContent(List<InterfaceBaseItem> content) {
         List<InterfaceBaseItem> oldContent = getItems();
         if (oldContent.size() != content.size())
             return;

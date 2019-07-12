@@ -2095,7 +2095,8 @@ namespace SpaceVIL.Decorations
             style.BorderRadius = new CornerRadius(3, 3, 0, 0);
             style.Font = DefaultsService.GetDefaultFont(14);
             // style.Background = Color.Transparent;
-            style.Background = Color.FromArgb(60, 60, 60);
+            // style.Background = Color.FromArgb(60, 60, 60);
+            style.Background = Color.FromArgb(10, 255, 255, 255);
             style.Foreground = Color.FromArgb(255, 210, 210, 210);
             style.MinWidth = 30;
             style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
@@ -2104,11 +2105,13 @@ namespace SpaceVIL.Decorations
             style.Spacing = new Spacing(5, 0);
             style.AddItemState(ItemStateType.Hovered, new ItemState()
             {
-                Background = Color.FromArgb(20, 255, 255, 255)
+                // Background = Color.FromArgb(20, 255, 255, 255)
+                Background = Color.FromArgb(60, 255, 255, 255)
             });
             style.AddItemState(ItemStateType.Toggled, new ItemState()
             {
-                Background = Color.FromArgb(71, 71, 71)
+                // Background = Color.FromArgb(71, 71, 71)
+                Background = Color.FromArgb(25, 255, 255, 255)
             });
             style.SetShadow(new Shadow(5, 0, 0, Color.FromArgb(150, 0, 0, 0)));
             style.IsShadowDrop = false;

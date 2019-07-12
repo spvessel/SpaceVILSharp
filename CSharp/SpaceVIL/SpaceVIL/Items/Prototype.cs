@@ -824,7 +824,7 @@ namespace SpaceVIL
         // /// <summary>
         // /// Set list of the Prototype's inner items. Old items will be removed
         // /// </summary>
-        internal void SetContent(List<IBaseItem> content)
+        public void SetContent(List<IBaseItem> content)
         {
             List<IBaseItem> oldContent = GetItems();
             if (oldContent.Count != content.Count)

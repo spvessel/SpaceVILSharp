@@ -202,6 +202,7 @@ public class MainWindow extends ActiveWindow {
 
         // codeArea = new TextArea();
         workTabArea = new TabView();
+        workTabArea.setContentPolicy(SizePolicy.EXPAND);
         homePage = new HomePage();
 
         // codeVStack.addItems(kwFrame, codeArea);
@@ -211,7 +212,7 @@ public class MainWindow extends ActiveWindow {
 
         workTabArea.addTab(homeTab);
         workTabArea.addItemToTab(homeTab, homePage);
-        workTabArea.updateLayout();
+        // workTabArea.updateLayout();
 
         // codeArea.setStyle(ElementsFactory.getTextAreaStyle());
         // codeArea.setEditable(false);

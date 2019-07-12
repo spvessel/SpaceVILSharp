@@ -414,21 +414,22 @@ public class Controller {
 
         tabToOwls.put(tab, tabItem);
 
-        owlWindow.workTabArea.selectTab(tab);
-        owlWindow.workTabArea.updateLayout();
-
+        // owlWindow.workTabArea.updateLayout();
+        
         TextArea textArea = ElementsFactory.getTextArea();
         owlWindow.workTabArea.addItemToTab(tab, textArea);
         textArea.setText(""); // Переместить это в fillFields или
         // // одного вызова достаточно?
         // textArea.rewindText();
-
+        
         // Check editing
         textArea.onTextChanged.add(() -> {
             if (workItem != null && owlWindow.editBtn.isToggled() && !InterfaceSupport.isEditing(workItem)) {
                 setItemEdited(workItem, true);
             }
         });
+
+        owlWindow.workTabArea.selectTab(tab);
 
         return tab;
     }

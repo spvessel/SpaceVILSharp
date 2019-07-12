@@ -51,7 +51,7 @@ public class Program {
         // con.show();
 
         WindowManager.startWith(
-            // mw
+            mw
             // st
             // im
             // ft
@@ -59,7 +59,7 @@ public class Program {
             // ct
             // it
             // tt
-            con
+            // con
         );
     }
 }
