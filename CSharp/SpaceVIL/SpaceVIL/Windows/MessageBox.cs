@@ -215,8 +215,8 @@ namespace SpaceVIL
 
         public override void Close()
         {
-            OnCloseDialog?.Invoke();
             base.Close();
+            OnCloseDialog?.Invoke();
         }
 
         private List<ButtonCore> _queue = new List<ButtonCore>();

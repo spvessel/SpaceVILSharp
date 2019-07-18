@@ -94,14 +94,14 @@ final class VisualItem extends BaseItem {
             super.setX(_x);
             // Prototype parent = getParent();
             // if (parent != null && getWidthPolicy() == SizePolicy.FIXED) {
-            //     boolean layout = parent instanceof InterfaceHLayout;
-            //     boolean grid = parent instanceof InterfaceGrid;
+            // boolean layout = parent instanceof InterfaceHLayout;
+            // boolean grid = parent instanceof InterfaceGrid;
 
-            //     if (layout)
-            //         ((InterfaceHLayout) parent).updateLayout();
-            //     if (grid)
-            //         if (!(parent instanceof InterfaceFree))
-            //             ((InterfaceGrid) parent).updateLayout();
+            // if (layout)
+            // ((InterfaceHLayout) parent).updateLayout();
+            // if (grid)
+            // if (!(parent instanceof InterfaceFree))
+            // ((InterfaceGrid) parent).updateLayout();
             // }
 
             eventManager.notifyListeners(GeometryEventType.MOVED_X, value);
@@ -115,14 +115,14 @@ final class VisualItem extends BaseItem {
             super.setY(_y);
             // Prototype parent = getParent();
             // if (parent != null && getHeightPolicy() == SizePolicy.FIXED) {
-            //     boolean layout = parent instanceof InterfaceVLayout;
-            //     boolean grid = parent instanceof InterfaceGrid;
+            // boolean layout = parent instanceof InterfaceVLayout;
+            // boolean grid = parent instanceof InterfaceGrid;
 
-            //     if (layout)
-            //         ((InterfaceVLayout) parent).updateLayout();
-            //     if (grid)
-            //         if (!(parent instanceof InterfaceFree))
-            //             ((InterfaceGrid) parent).updateLayout();
+            // if (layout)
+            // ((InterfaceVLayout) parent).updateLayout();
+            // if (grid)
+            // if (!(parent instanceof InterfaceFree))
+            // ((InterfaceGrid) parent).updateLayout();
             // }
 
             eventManager.notifyListeners(GeometryEventType.MOVED_Y, value);
@@ -895,12 +895,8 @@ final class VisualItem extends BaseItem {
         setAlignment(style.alignment);
         setSpacing(style.spacing);
 
-        setBackground(style.background);
         setMinSize(style.minWidth, style.minHeight);
         setMaxSize(style.maxWidth, style.maxHeight);
-        setBorderRadius(style.borderRadius);
-        setBorderThickness(style.borderThickness);
-        setBorderFill(style.borderFill);
 
         setShadow(style.shadowRadius, style.shadowXOffset, style.shadowYOffset, style.shadowColor);
         setShadowDrop(style.isShadowDrop);
@@ -921,6 +917,11 @@ final class VisualItem extends BaseItem {
             core_state.shape = _is_custom;
         }
         addItemState(ItemStateType.BASE, core_state);
+
+        setBackground(style.background);
+        setBorderRadius(style.borderRadius);
+        setBorderThickness(style.borderThickness);
+        setBorderFill(style.borderFill);
     }
 
     @Override

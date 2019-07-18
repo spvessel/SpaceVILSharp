@@ -59,9 +59,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     public ContextMenu(CoreWindow handler) {
         ItemsLayoutBox.addItem(handler, this, LayoutType.FLOATING);
         setItemName("ContextMenu_" + count++);
+        setStyle(DefaultsService.getDefaultStyle(ContextMenu.class));
         setPassEvents(false);
         setVisible(false);
-        setStyle(DefaultsService.getDefaultStyle(ContextMenu.class));
     }
 
     public ContextMenu(CoreWindow handler, MenuItem... items) {
@@ -284,15 +284,11 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     public void setStyle(Style style) {
         if (style == null)
             return;
-        setPadding(style.padding);
-        setSizePolicy(style.widthPolicy, style.heightPolicy);
-        setBackground(style.background);
+        super.setStyle(style);
 
         Style inner_style = style.getInnerStyle("itemlist");
         if (inner_style != null) {
-            itemList.setBackground(inner_style.background);
-            itemList.setAlignment(inner_style.alignment);
-            itemList.setPadding(inner_style.padding);
+            itemList.setStyle(inner_style);
         }
         inner_style = style.getInnerStyle("listarea");
         if (inner_style != null) {

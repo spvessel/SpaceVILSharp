@@ -81,8 +81,6 @@ final class GLWHandler {
         getPointer().setY(0);
     }
 
-    private Pointer defWindowPos = new Pointer(200, 50);
-
     void createWindow() throws SpaceVILException {
         // important!!! may be the best combination of WINDOW HINTS!!!
 
@@ -152,10 +150,10 @@ final class GLWHandler {
             getPointer().setY((height - _coreWindow.getHeight()) / 2);
 
         } else {
-            _coreWindow.setXDirect(defWindowPos.getX());//200);
-            _coreWindow.setYDirect(defWindowPos.getY());//50);
-            getPointer().setX(defWindowPos.getX());//200);
-            getPointer().setY(defWindowPos.getY());//50);
+            _coreWindow.setXDirect(_coreWindow.getX());//200);
+            _coreWindow.setYDirect(_coreWindow.getY());//50);
+            getPointer().setX(_coreWindow.getX());//200);
+            getPointer().setY(_coreWindow.getY());//50);
         }
         glfwSetWindowSizeLimits(_window, _coreWindow.getMinWidth(), _coreWindow.getMinHeight(),
                 _coreWindow.getMaxWidth(), _coreWindow.getMaxHeight());

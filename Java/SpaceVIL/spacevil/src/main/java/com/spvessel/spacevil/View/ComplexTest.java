@@ -21,6 +21,7 @@ public class ComplexTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
+        isCentered = true;
         isBorderHidden = true;
         setSize(950, 700);
         setWindowName("ComplexTest");
@@ -39,7 +40,7 @@ public class ComplexTest extends ActiveWindow {
 
         treeview = new TreeView();
         block = new Grid(4, 4);
-        wrap = new WrapGrid(100, 100, Orientation.VERTICAL);
+        wrap = new WrapGrid(100, 100, Orientation.HORIZONTAL);
         wrap.setStretch(true);
 
         TitleBar title = new TitleBar("ComplexTest");
@@ -103,7 +104,9 @@ public class ComplexTest extends ActiveWindow {
 
         Style btn_style = Style.getButtonCoreStyle();
         btn_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        btn_style.setStyle(b1, b2, b5, b6);
+        btn_style.borderRadius = new CornerRadius(6);
+        // btn_style.setStyle(b1, b2, b5, b6);
+        btn_style.setStyle(b1, b2, b3, b4, b5, b6);
 
         // HorizontalSplitArea split_area = new HorizontalSplitArea();
         VerticalSplitArea split_area = new VerticalSplitArea();

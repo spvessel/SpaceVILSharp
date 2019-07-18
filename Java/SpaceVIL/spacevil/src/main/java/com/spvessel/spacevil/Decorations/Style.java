@@ -237,7 +237,7 @@ public class Style implements Cloneable {
     }
 
     public void setShadow(Shadow shadow) {
-        shadowColor = shadow.getColor();//GraphicsMathService.cloneColor(shadow.getColor());
+        shadowColor = shadow.getColor();// GraphicsMathService.cloneColor(shadow.getColor());
         shadowRadius = shadow.getRadius();
         shadowXOffset = shadow.getXOffset();
         shadowYOffset = shadow.getYOffset();
@@ -247,7 +247,8 @@ public class Style implements Cloneable {
      * Set object alignment
      */
     public void setAlignment(ItemAlignment... alignment) {
-        // List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
+        // List<ItemAlignment> list =
+        // Arrays.stream(alignment).collect(Collectors.toList());
         // this.alignment = list;
         this.alignment = Arrays.asList(alignment);
     }
@@ -256,7 +257,8 @@ public class Style implements Cloneable {
      * Set text alignment in the object
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        // List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
+        // List<ItemAlignment> list =
+        // Arrays.stream(alignment).collect(Collectors.toList());
         // this.textAlignment = list;
         this.textAlignment = Arrays.asList(alignment);
     }
@@ -705,20 +707,17 @@ public class Style implements Cloneable {
      * @return default style for ContextMenu objects
      */
     public static Style getContextMenuStyle() {
-        Style style = new Style();
+        Style style = getDefaultCommonStyle();
         style.background = new Color(210, 210, 210);
-        style.widthPolicy = SizePolicy.FIXED;
-        style.heightPolicy = SizePolicy.FIXED;
-        style.padding = new Indents(0, 0, 0, 0);
+        style.isVisible = false;
 
-        Style itemlist_style = new Style();
+        Style itemlist_style = getListBoxStyle();
         itemlist_style.background = new Color(0, 0, 0, 0);
         itemlist_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         style.addInnerStyle("itemlist", itemlist_style);
 
-        Style area_style = getListAreaStyle();
+        Style area_style = itemlist_style.getInnerStyle("area");
         area_style.setPadding(0, 0, 0, 0);
-        style.addInnerStyle("listarea", area_style);
 
         return style;
     }
@@ -1608,8 +1607,6 @@ public class Style implements Cloneable {
         return style;
     }
 
-    
-
     /**
      * @return default style for TreeView objects
      */
@@ -2146,7 +2143,8 @@ public class Style implements Cloneable {
         style.padding = new Indents(10, 2, 5, 2);
         style.spacing = new Spacing(5, 0);
         style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 60)));
-        // style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(71, 71, 71)));
+        // style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(71, 71,
+        // 71)));
         style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 25)));
         style.setShadow(new Shadow(5, 0, 0, new Color(0, 0, 0, 150)));
         style.isShadowDrop = false;
@@ -2197,7 +2195,7 @@ public class Style implements Cloneable {
 
         // Style view_style = tab_style.getInnerStyle("view");
         // if (view_style != null)
-        //     style.addInnerStyle("view", view_style);
+        // style.addInnerStyle("view", view_style);
 
         Style area_style = getFrameStyle();
         area_style.setPadding(0, 0, 0, 0);

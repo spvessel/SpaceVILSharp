@@ -7,6 +7,7 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.EmbeddedImage;
 import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.awt.Color;
@@ -19,10 +20,12 @@ import javax.imageio.ImageIO;
 public class ImageTest extends ActiveWindow {
     @Override
     public void initWindow() {
+        isCentered = true;
         isBorderHidden = true;
-        setSize(700, 550);
+        setSize(500, 500);
         setWindowName("ImageTest");
         setWindowTitle("ImageTest");
+        setAntiAliasingQuality(MSAA.MSAA_8X);
 
         setBackground(45, 45, 45);
         setPadding(2, 2, 2, 2);
@@ -41,8 +44,8 @@ public class ImageTest extends ActiveWindow {
             h_stack.setWidth(30);
             h_stack.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
             h_stack.setSpacing(0, 5);
-//        h_stack.setContentAlignment(ItemAlignment.RIGHT);
-//        h_stack.setVisible(false);
+            // h_stack.setContentAlignment(ItemAlignment.RIGHT);
+            // h_stack.setVisible(false);
 
             addItem(h_stack);
 
@@ -51,14 +54,14 @@ public class ImageTest extends ActiveWindow {
             r1.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
             r1.setMaxHeight(150);
             h_stack.addItem(r1);
-//        for (int i = 0; i < 4; i++) {
-//            Rectangle rect = new Rectangle();
-//            rect.setBackground(0, 255, 0);
-//            rect.setSize(30, 30);
-//            rect.setMaxHeight(30);
-//            rect.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-//            h_stack.addItem(rect);
-//        }
+            // for (int i = 0; i < 4; i++) {
+            // Rectangle rect = new Rectangle();
+            // rect.setBackground(0, 255, 0);
+            // rect.setSize(30, 30);
+            // rect.setMaxHeight(30);
+            // rect.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+            // h_stack.addItem(rect);
+            // }
             Rectangle rect = new Rectangle();
             rect.setBackground(125, 125, 0);
             rect.setSize(30, 30);
@@ -74,6 +77,7 @@ public class ImageTest extends ActiveWindow {
             frame.setWidthPolicy(SizePolicy.EXPAND);
             frame.setHeightPolicy(SizePolicy.EXPAND);
             frame.setSpacing(0, 20);
+            frame.setPadding(20, 60, 20, 20);
             addItem(frame);
 
             HorizontalStack h_stack = new HorizontalStack();
@@ -82,8 +86,8 @@ public class ImageTest extends ActiveWindow {
             h_stack.setHeight(30);
             h_stack.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
             h_stack.setSpacing(5, 0);
-//        h_stack.setContentAlignment(ItemAlignment.VCENTER);
-//        h_stack.setVisible(false);
+            // h_stack.setContentAlignment(ItemAlignment.VCENTER);
+            // h_stack.setVisible(false);
 
             frame.addItem(h_stack);
 
@@ -92,14 +96,15 @@ public class ImageTest extends ActiveWindow {
             r1.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
             r1.setMaxWidth(150);
             h_stack.addItem(r1);
-//        for (int i = 0; i < 4; i++) {
-//            Rectangle rect = new Rectangle();
-//            rect.setBackground(0, 255, 0);
-//            rect.setSize(30, 30);
-//            rect.setMaxWidth(30);
-//            rect.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
-//            h_stack.addItem(rect);
-//        }
+            // for (int i = 0; i < 4; i++) {
+            // Rectangle rect = new Rectangle();
+            // rect.setBackground(0, 255, 0);
+            // rect.setSize(30, 30);
+            // rect.setMaxWidth(30);
+            // rect.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+            // h_stack.addItem(rect);
+            // }
+            h_stack.setVisible(false);
             Rectangle rect = new Rectangle();
             rect.setBackground(125, 125, 0);
             rect.setSize(30, 30);
@@ -126,6 +131,8 @@ public class ImageTest extends ActiveWindow {
             btn_action.setMargin(new Indents(30, 0, 30, 0));
             btn_action.setBorderRadius(10);
             btn_action.setTextMargin(new Indents(0, 45, 0, 0));
+            btn_action.setShadow(8, 0, 0, new Color(0, 0, 0, 180));
+            btn_action.setShadowExtension(4, 4);
             InterfaceMouseMethodState btn_action_click = (sender, args) -> {
                 // MessageBox ms = new MessageBox("Send result?", "Message:");
                 // ms.show();
@@ -154,29 +161,32 @@ public class ImageTest extends ActiveWindow {
             // Image img1 = Image.FromFile("icon.jpg");
 
             ImageItem img = new ImageItem(
-                    DefaultsService.getDefaultImage(EmbeddedImage.FILTER, EmbeddedImageSize.SIZE_64X64), false);
+                    // DefaultsService.getDefaultImage(EmbeddedImage.FILTER,
+                    // EmbeddedImageSize.SIZE_64X64), false);
+                    DefaultsService.getDefaultImage(EmbeddedImage.REFRESH, EmbeddedImageSize.SIZE_64X64), false);
 
             // img.setBackground(new Color(100, 0, 0, 50));
             img.setSize(64, 64);
-            img.setPadding(32, 32, 32, 32);
+            // img.setPadding(32, 32, 32, 32);
             img.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
             img.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+            img.setColorOverlay(Color.black);
 
             HorizontalSlider h_slider = new HorizontalSlider();
             h_slider.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
             h_slider.setMargin(25, 0, 25, 0);
             h_slider.setMaxValue(360);
             h_slider.eventValueChanged.add((sender) -> {
-                img.setRotationAngle(h_slider.getCurrentValue());
+                img.setRotationAngle(-h_slider.getCurrentValue());
                 pb.setCurrentValue((int) h_slider.getCurrentValue());
             });
 
-            btn_action.eventMouseHover.add((sender, args) -> {
-                img.setColorOverlay(new Color(50, 50, 150));
-            });
-            btn_action.eventMouseLeave.add((sender, args) -> {
-                img.setColorOverlay(new Color(0, 0, 0));
-            });
+            // btn_action.eventMouseHover.add((sender, args) -> {
+            // img.setColorOverlay(new Color(50, 50, 150));
+            // });
+            // btn_action.eventMouseLeave.add((sender, args) -> {
+            // img.setColorOverlay(new Color(0, 0, 0));
+            // });
 
             // frame.addItem(img);
 
@@ -242,6 +252,7 @@ public class ImageTest extends ActiveWindow {
             MenuItem restore = new MenuItem("Custom item for selection #RESTORE");
             restore.addItem(res);
             combo.addItem(restore);
+            combo.setVisible(false);
 
             // for (int i = 2; i < 5; i++) {
             // MenuItem menu_item = new MenuItem("Custom item for selection #" + i);
@@ -296,8 +307,8 @@ public class ImageTest extends ActiveWindow {
                         // dtmp += (weights[Math.abs(k)] / sum) * (weights[Math.abs(l)] / sum) * db;
                     }
                 }
-                bufim.setRGB(i, j, ByteBuffer.wrap(new byte[]{(byte) (tmp[0] * 255), (byte) (tmp[1] * 255),
-                        (byte) (tmp[2] * 255), (byte) (tmp[3] * 255)}).getInt());
+                bufim.setRGB(i, j, ByteBuffer.wrap(new byte[] { (byte) (tmp[0] * 255), (byte) (tmp[1] * 255),
+                        (byte) (tmp[2] * 255), (byte) (tmp[3] * 255) }).getInt());
                 // bufim.setRGB(i, j, (int)dtmp);
 
                 // outarr[i][j] = tmp;

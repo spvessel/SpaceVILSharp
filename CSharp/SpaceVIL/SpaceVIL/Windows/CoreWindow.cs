@@ -321,7 +321,7 @@ namespace SpaceVIL
         }
 
         // position
-        private Position _itemPosition = new Position();
+        private Position _itemPosition = new Position(200, 50);
 
         internal void SetXDirect(int x)
         {
@@ -355,6 +355,27 @@ namespace SpaceVIL
         public int GetY()
         {
             return _itemPosition.GetY();
+        }
+
+        public void SetPosition(int x, int y)
+        {
+            _itemPosition.SetPosition(x, y);
+
+            if (windowLayout.IsGLWIDValid())
+                windowLayout.UpdatePosition();
+        }
+
+        public void SetPosition(Position position)
+        {
+            _itemPosition.SetPosition(position.GetX(), position.GetY());
+
+            if (windowLayout.IsGLWIDValid())
+                windowLayout.UpdatePosition();
+        }
+
+        public Position GetPosition()
+        {
+            return _itemPosition;
         }
 
         private void SetDefaults()

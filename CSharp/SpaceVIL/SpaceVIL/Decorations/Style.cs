@@ -693,20 +693,17 @@ namespace SpaceVIL.Decorations
         /// <returns> default style for ContextMenu objects </returns>
         public static Style GetContextMenuStyle()
         {
-            Style style = new Style();
-            style.Background = Color.FromArgb(255, 210, 210, 210);
-            style.WidthPolicy = SizePolicy.Fixed;
-            style.HeightPolicy = SizePolicy.Fixed;
-            style.Padding = new Indents(0, 0, 0, 0);
+            Style style = GetDefaultCommonStyle();
+            style.Background = Color.FromArgb(210, 210, 210);
+            style.IsVisible = false;
 
-            Style itemlist_style = new Style();
+            Style itemlist_style = GetListBoxStyle();
             itemlist_style.Background = Color.Transparent;
             itemlist_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.AddInnerStyle("itemlist", itemlist_style);
 
-            Style area_style = GetListAreaStyle();
+            Style area_style = itemlist_style.GetInnerStyle("area");
             area_style.SetPadding(0, 0, 0, 0);
-            style.AddInnerStyle("listarea", area_style);
 
             return style;
         }

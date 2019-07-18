@@ -31,12 +31,12 @@ public class MainWindow extends ActiveWindow {
 
         // setAspectRatio(4, 1);
 
-        // setPadding(10, 10, 10, 10);
-        // setPadding(10, 10, 10, 10);
-        // setBackground(new Color(0, 0, 0, 10));
-        // setBorderRadius(10);
-        // setAntiAliasingQuality(MSAA.MSAA_8X);
-        // isTransparent = true;
+        setPadding(10, 10, 10, 10);
+        setPadding(10, 10, 10, 10);
+        setBackground(new Color(0, 0, 0, 10));
+        setBorderRadius(10);
+        setAntiAliasingQuality(MSAA.MSAA_8X);
+        isTransparent = true;
         // setShadow(10, 0, 0, Color.black);
 
         // Handler.setAntiAliasingQuality(MSAA.MSAA_8X);
@@ -70,7 +70,7 @@ public class MainWindow extends ActiveWindow {
         layout.setBackground(70, 70, 70);
         layout.setBorderRadius(10);
         layout.setPadding(0, 0, 0, 0);
-        layout.setShadow(8, 0, 0, new Color(0, 0, 0, 255));
+        layout.setShadow(8, 0, 0, new Color(255, 80, 80, 255));
         layout.setShadowExtension(6, 6);
         addItem(layout);
 
@@ -93,7 +93,6 @@ public class MainWindow extends ActiveWindow {
         grid.setBorderRadius(new CornerRadius(7, 7, 0, 0));
         grid.setMargin(0, 0, 0, 30);
         grid.setPadding(6, 6, 6, 6);
-        grid.setBackground(70, 70, 70, 250);
         grid.setSpacing(6, 6);
         layout.addItem(grid);
 
@@ -101,7 +100,7 @@ public class MainWindow extends ActiveWindow {
         // Font font = DefaultsService.getDefaultFont(18);
 
         ButtonCore btn_layout = new ButtonCore("Layout");
-        btn_layout.setTextAlignment(ItemAlignment.BOTTOM, ItemAlignment.HCENTER);
+        // btn_layout.setTextAlignment(ItemAlignment.BOTTOM, ItemAlignment.HCENTER);
         btn_layout.setShadow(5, 0, 0, new Color(255, 0, 255, 180));
         btn_layout.setShadowExtension(4, 4);
         btn_layout.setFont(font);
@@ -121,6 +120,9 @@ public class MainWindow extends ActiveWindow {
         btn_settings.setFont(font);
         btn_settings.setToolTip("Show Settings window.");
         btn_settings.setBackground(255, 181, 111);
+        btn_settings.setShadow(5, 0, 0, new Color(255, 111, 111, 180));
+        btn_settings.setShadowExtension(4, 4);
+        btn_settings.setBorderRadius(6);
         btn_settings.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         InterfaceMouseMethodState settings_click = (sender, args) -> WindowsBox.tryShow("SettingsTest");
         btn_settings.eventMouseClick.add(settings_click);
@@ -130,6 +132,9 @@ public class MainWindow extends ActiveWindow {
         btn_label.setToolTip("Show Label window.");
         btn_label.setBackground(111, 181, 255);
         btn_label.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        btn_label.setShadow(5, 0, 0, new Color(0, 181, 255, 180));
+        btn_label.setShadowExtension(4, 4);
+        btn_label.setBorderRadius(6);
         InterfaceMouseMethodState btn_action_click = (sender, args) -> {
             // setShadeColor(new Color( 100, 100, 100, 125));
             MessageBox msg = new MessageBox("Send result?", "Message:");
@@ -154,6 +159,9 @@ public class MainWindow extends ActiveWindow {
         btn_flow.setToolTip("Show Flow window.");
         btn_flow.setBackground(193, 142, 221);
         btn_flow.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        btn_flow.setShadow(5, 0, 0, new Color(193, 142, 221, 180));
+        btn_flow.setShadowExtension(4, 4);
+        btn_flow.setBorderRadius(6);
         // btn_flow.setCursor(EmbeddedCursor.HAND);
         btn_flow.setCursor(iSmall, 10, 30);
         InterfaceMouseMethodState flow_click = (sender, args) -> WindowsBox.tryShow("FlowTest");
@@ -164,6 +172,9 @@ public class MainWindow extends ActiveWindow {
         btn_complex.setToolTip("Show Complex window.");
         btn_complex.setBackground(114, 153, 211);
         btn_complex.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        btn_complex.setShadow(5, 0, 0, new Color(114, 153, 211, 180));
+        btn_complex.setShadowExtension(4, 4);
+        btn_complex.setBorderRadius(6);
         InterfaceMouseMethodState complex_click = (sender, args) -> WindowsBox.tryShow("ComplexTest");
         btn_complex.eventMouseClick.add(complex_click);
 
@@ -172,6 +183,9 @@ public class MainWindow extends ActiveWindow {
         btn_image.setToolTip("Show Image window.");
         btn_image.setBackground(238, 174, 128);
         btn_image.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        btn_image.setShadow(5, 0, 0, new Color(238, 174, 128, 180));
+        btn_image.setShadowExtension(4, 4);
+        btn_image.setBorderRadius(6);
         InterfaceMouseMethodState img_click = (sender, args) -> WindowsBox.tryShow("ImageTest");
         btn_image.eventMouseClick.add(img_click);
 
@@ -180,6 +194,9 @@ public class MainWindow extends ActiveWindow {
         btn_input.setToolTip("Show Input window.");
         btn_input.setBackground(121, 223, 152);
         btn_input.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        btn_input.setShadow(5, 0, 0, new Color(121, 223, 152, 180));
+        btn_input.setShadowExtension(4, 4);
+        btn_input.setBorderRadius(6);
         btn_input.eventMouseClick.add((sender, args) -> {
             // System.out.println(WindowLayoutBox.getListOfWindows().length);
             WindowsBox.tryShow("InputTest");
@@ -205,6 +222,7 @@ public class MainWindow extends ActiveWindow {
         });
         ContextMenu menu = new ContextMenu(this, mi1, mi2, mi3, mi4);
         menu.setReturnFocus(btn_flow);
+        // menu.setBorderRadius(15);
 
         eventMouseClick.add((sender, args) -> menu.show(sender, args));
         eventKeyPress.add((sender, args) -> {
@@ -325,5 +343,16 @@ public class MainWindow extends ActiveWindow {
         // }
         //
         //
+
+        // eventClose.clear();
+        // eventClose.add(() -> {
+        //     MessageBox msg = new MessageBox("Are you sure?", "Message:");
+        //     msg.onCloseDialog.add(() -> {
+        //         if (msg.getResult())
+        //             // close();
+        //             WindowManager.appExit();
+        //     });
+        //     msg.show();
+        // });
     }
 }

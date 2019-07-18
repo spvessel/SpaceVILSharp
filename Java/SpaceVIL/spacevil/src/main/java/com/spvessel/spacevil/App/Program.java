@@ -22,14 +22,16 @@ public class Program {
 
         // BufferedImage cursor = null;
         // try {
-        //     cursor = ImageIO.read(new File("D:\\icon_small.png"));
+        // cursor = ImageIO.read(new File("D:\\icon_small.png"));
         // } catch (IOException e) {
-        //     System.out.println("load icons fail");
+        // System.out.println("load icons fail");
         // }
 
         // DefaultsService.setDefaultCursor(new CursorImage(cursor, 10, 10));
 
         MainWindow mw = new MainWindow();
+        // MainWindow mw2 = new MainWindow();
+        mw.setPosition(500, 500);
         SettingsTest st = new SettingsTest();
         ImageTest im = new ImageTest();
         FlowTest ft = new FlowTest();
@@ -38,6 +40,7 @@ public class Program {
         InputTest it = new InputTest();
         TextTest tt = new TextTest();
         Containers con = new Containers();
+        SideAreaTest sat = new SideAreaTest();
 
         // EventTest et = new EventTest();
         // et.show();
@@ -46,20 +49,22 @@ public class Program {
         // sc.show();
 
         // mw.show();
-        
+
         // lt.show();
         // con.show();
 
         WindowManager.startWith(
-            mw
-            // st
-            // im
-            // ft
-            // lt
-            // ct
-            // it
-            // tt
-            // con
+                mw
+            // , mw2
+        // st
+        // im
+        // ft
+        // lt
+        // ct
+        // it
+        // tt
+        // con
+        // sat
         );
     }
 }
