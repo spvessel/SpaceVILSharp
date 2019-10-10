@@ -132,6 +132,7 @@ final class MouseClickProcessor {
             _commonProcessor.hoveredItem.setMousePressed(true);
             _commonProcessor.manager.assignActionsForHoveredItem(InputEventType.MOUSE_PRESS, _commonProcessor.margs,
                     _commonProcessor.hoveredItem, _commonProcessor.underHoveredItems, false);
+
             if (_commonProcessor.hoveredItem.isFocusable) {
                 if (_commonProcessor.focusedItem == null) {
                     _commonProcessor.focusedItem = _commonProcessor.hoveredItem;
@@ -141,6 +142,8 @@ final class MouseClickProcessor {
                     _commonProcessor.focusedItem = _commonProcessor.hoveredItem;
                     _commonProcessor.focusedItem.setFocused(true);
                 }
+                _commonProcessor.underFocusedItems = new LinkedList<Prototype>(_commonProcessor.underHoveredItems);
+                _commonProcessor.underFocusedItems.remove(_commonProcessor.focusedItem);
             } else {
                 Deque<Prototype> underHoveredQueue = new ArrayDeque<>(_commonProcessor.underHoveredItems);
                 while (!underHoveredQueue.isEmpty()) {
@@ -154,19 +157,20 @@ final class MouseClickProcessor {
                         else {
                             _commonProcessor.focusedItem = f;
                             _commonProcessor.focusedItem.setFocused(true);
+                            _commonProcessor.findUnderFocusedItems(_commonProcessor.focusedItem);
                         }
                         break;
                     }
                 }
             }
-            _commonProcessor.underFocusedItems = new LinkedList<Prototype>(_commonProcessor.underHoveredItems);
-            _commonProcessor.underFocusedItems.remove(_commonProcessor.focusedItem);
         }
         _commonProcessor.events.resetAllEvents();
         _commonProcessor.events.setEvent(InputEventType.MOUSE_PRESS);
     }
 
     private void release(long wnd, int button, int action, int mods) {
+        _commonProcessor.focusedItem.setMousePressed(false);
+
         _commonProcessor.rootContainer.restoreFocus();
         boolean is_double_click = isDoubleClick(_commonProcessor.hoveredItem);
         Deque<Prototype> underHoveredQueue = new ArrayDeque<>(_commonProcessor.underHoveredItems);

@@ -307,17 +307,7 @@ public class MainWindow extends ActiveWindow {
                 appendText("1. -->");
                 appendText("Verifying .Net Core: " + Configs.VerificateNetCore);
                 // linux
-                if (FileManager.CopyLibs(Configs.ReleasePathNetCore + "\\Linux\\SpaceVIL.dll",
-                        Configs.VerificateNetCore + "\\SpaceVIL.dll")) {
-                    CommandLineEmulator.CmdExecute("cd " + Configs.VerificateNetCore + " && " + "run.bat");
-                }
-                // mac os x
-                if (FileManager.CopyLibs(Configs.ReleasePathNetCore + "\\MacOSX\\SpaceVIL.dll",
-                        Configs.VerificateNetCore + "\\SpaceVIL.dll")) {
-                    CommandLineEmulator.CmdExecute("cd " + Configs.VerificateNetCore + " && " + "run.bat");
-                }
-                // windows
-                if (FileManager.CopyLibs(Configs.ReleasePathNetCore + "\\Windows\\SpaceVIL.dll",
+                if (FileManager.CopyLibs(Configs.ReleasePathNetCore + "\\SpaceVIL.dll",
                         Configs.VerificateNetCore + "\\SpaceVIL.dll")) {
                     CommandLineEmulator.CmdExecute("cd " + Configs.VerificateNetCore + " && " + "run.bat");
                 }
@@ -336,23 +326,25 @@ public class MainWindow extends ActiveWindow {
         // textServiceInfo.setEditable(false);
         textServiceInfo.setFont(DefaultsService.getDefaultFont(12));
         VerticalScrollBar vs = textServiceInfo.vScrollBar;
-        vs.slider.removeAllItemStates();
-        vs.setArrowsVisible(false);
-        vs.setBackground(0, 0, 0, 0);
-        vs.setPadding(0, 2, 0, 2);
-        vs.slider.track.setBackground(new Color(0, 0, 0, 0));
-        vs.slider.setBorderRadius(4);
-        vs.slider.setBackground(80, 80, 80);
-        vs.slider.setMargin(5, 0, 4, 0);
+        vs.setStyle(Style.getSimpleVerticalScrollBarStyle());
+        // vs.slider.removeAllItemStates();
+        // vs.setArrowsVisible(false);
+        // vs.setBackground(0, 0, 0, 0);
+        // vs.setPadding(0, 2, 0, 2);
+        // vs.slider.track.setBackground(new Color(0, 0, 0, 0));
+        // vs.slider.setBorderRadius(4);
+        // vs.slider.setBackground(80, 80, 80);
+        // vs.slider.setMargin(5, 0, 4, 0);
         HorizontalScrollBar hs = textServiceInfo.hScrollBar;
-        hs.slider.removeAllItemStates();
-        hs.setArrowsVisible(false);
-        hs.setBackground(0, 0, 0, 0);
-        hs.setPadding(2, 0, 2, 0);
-        hs.slider.track.setBackground(new Color(0, 0, 0, 0));
-        hs.slider.setBorderRadius(5);
-        hs.slider.setBackground(80, 80, 80);
-        hs.slider.setMargin(0, 5, 0, 4);
+        hs.setStyle(Style.getSimpleHorizontalScrollBarStyle());
+        // hs.slider.removeAllItemStates();
+        // hs.setArrowsVisible(false);
+        // hs.setBackground(0, 0, 0, 0);
+        // hs.setPadding(2, 0, 2, 0);
+        // hs.slider.track.setBackground(new Color(0, 0, 0, 0));
+        // hs.slider.setBorderRadius(5);
+        // hs.slider.setBackground(80, 80, 80);
+        // hs.slider.setMargin(0, 5, 0, 4);
         textServiceInfo.menu.setBorderRadius(4);
         textServiceInfo.menu.setMargin(3, 3, 3, 3);
         textServiceInfo.menu.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 20)));
@@ -402,7 +394,7 @@ public class MainWindow extends ActiveWindow {
                 pop.setMargin(new Indents(50, 50, 50, 20));
                 pop.setSize(200, 70);
                 pop.removeAllItemStates();
-                pop.setBackground(20, 20, 20);
+                pop.setBackground(64, 64, 64);
                 pop.setBorderRadius(6);
                 pop.setTimeOut(2000);
                 pop.show(this);
@@ -600,9 +592,7 @@ public class MainWindow extends ActiveWindow {
                 appendText(" ");
             } else {
                 // 0. Clear Libs
-                FileManager.ClearLibs(Configs.ReleasePathNetCore + "\\Linux\\SpaceVIL.dll");
-                FileManager.ClearLibs(Configs.ReleasePathNetCore + "\\MacOSX\\SpaceVIL.dll");
-                FileManager.ClearLibs(Configs.ReleasePathNetCore + "\\Windows\\SpaceVIL.dll");
+                FileManager.ClearLibs(Configs.ReleasePathNetCore + "\\SpaceVIL.dll");
 
                 // 1. copy src -> template
                 appendText("1. -->");
@@ -622,14 +612,14 @@ public class MainWindow extends ActiveWindow {
                 setAssembly(Configs.TemplatePathNetCore + "\\" + Configs.AssemblyInfoNetCore);
 
                 appendText("2. -->");
-                // LINUX///////////////////////////
+                // NETCORE///////////////////////////
                 // 2. exec compile
-                appendText("Compile Net Core - LINUX: " + Configs.TemplatePathNetCore + "\\"
-                        + Configs.netCore_compileLinux);
-                setNetCorePackage(Configs.TemplatePathNetCore + "\\SpaceVIL.csproj", 0);
+                appendText("Compile Net Core: " + Configs.TemplatePathNetCore + "\\"
+                        + Configs.netCore_compile);
+                // setNetCorePackage(Configs.TemplatePathNetCore + "\\SpaceVIL.csproj", 0);
                 // String outStr = ;
                 CommandLineEmulator.CmdExecute(
-                        "cd " + Configs.TemplatePathNetCore + " && dotnet restore && " + Configs.netCore_compileLinux);
+                        "cd " + Configs.TemplatePathNetCore + " && dotnet restore && " + Configs.netCore_compile);
                 // appendText(outStr);
                 appendText("Compile: done.\n");
                 appendText(" ");
@@ -648,57 +638,7 @@ public class MainWindow extends ActiveWindow {
                 CommandLineEmulator.CmdExecute("cd " + Configs.ObfPathNet + " && " + Configs.obfNet_start);
                 // appendText(outStr);
                 FileManager.CopyLibs(Configs.ObfPathNet + "\\SpaceVIL.dll",
-                        Configs.ReleasePathNetCore + "\\Linux\\SpaceVIL.dll");
-                appendText("Obfuscating: done.\n");
-                appendText(" ");
-
-                // MACOSX///////////////////////////
-                setNetCorePackage(Configs.TemplatePathNetCore + "\\SpaceVIL.csproj", 1);
-                appendText("Compile Net Core - MACOSX: " + Configs.TemplatePathNetCore + "\\"
-                        + Configs.netCore_compileMac);
-                // outStr = ;
-                CommandLineEmulator.CmdExecute(
-                        "cd " + Configs.TemplatePathNetCore + " && dotnet restore && " + Configs.netCore_compileMac);
-                appendText("Compile: done.\n");
-                appendText(" ");
-                // 3. copy spacevil.jar -> release
-                appendText("Extract Release .Net Core MACOSX: " + Configs.TemplatePathNetCore
-                        + "\\bin\\Release\\netcoreapp2.1 -> " + Configs.ObfPathNet + "\\input\\SpaceVIL.dll");
-                FileManager.CopyLibs(Configs.TemplatePathNetCore + "\\bin\\Release\\netcoreapp2.1\\SpaceVIL.dll",
-                        Configs.ObfPathNet + "\\input\\SpaceVIL.dll");
-                appendText("Extract Release .Net Core: done.\n");
-                appendText(" ");
-                appendText("Obfuscating SpaceVIL: .Net version. " + "cd " + Configs.ObfPathNet + " && "
-                        + Configs.obfNet_start);
-                // outStr = ;
-                CommandLineEmulator.CmdExecute("cd " + Configs.ObfPathNet + " && " + Configs.obfNet_start);
-                // appendText(outStr);
-                FileManager.CopyLibs(Configs.ObfPathNet + "\\SpaceVIL.dll",
-                        Configs.ReleasePathNetCore + "\\MacOSX\\SpaceVIL.dll");
-                appendText("Obfuscating: done.\n");
-                appendText(" ");
-
-                // WINDOWS///////////////////////////
-                setNetCorePackage(Configs.TemplatePathNetCore + "\\SpaceVIL.csproj", 2);
-                appendText("Compile Net Core - WINDOWS: " + Configs.TemplatePathNetCore + "\\"
-                        + Configs.netCore_compileWin);
-                CommandLineEmulator.CmdExecute(
-                        "cd " + Configs.TemplatePathNetCore + " && dotnet restore && " + Configs.netCore_compileWin);
-                appendText("Compile: done.\n");
-                appendText(" ");
-                // 3. copy spacevil.jar -> release
-                appendText("Extract Release .Net Core WINDOWS: " + Configs.TemplatePathNetCore
-                        + "\\bin\\Release\\netcoreapp2.1 -> " + Configs.ObfPathNet + "\\input\\SpaceVIL.dll");
-                FileManager.CopyLibs(Configs.TemplatePathNetCore + "\\bin\\Release\\netcoreapp2.1\\SpaceVIL.dll",
-                        Configs.ObfPathNet + "\\input\\SpaceVIL.dll");
-                appendText("Extract Release .Net: done.");
-                appendText(" ");
-                appendText("Obfuscating SpaceVIL: .Net version. " + "cd " + Configs.ObfPathNet + " && "
-                        + Configs.obfNet_start);
-                CommandLineEmulator.CmdExecute("cd " + Configs.ObfPathNet + " && " + Configs.obfNet_start);
-                // appendText(outStr);
-                FileManager.CopyLibs(Configs.ObfPathNet + "\\SpaceVIL.dll",
-                        Configs.ReleasePathNetCore + "\\Windows\\SpaceVIL.dll");
+                        Configs.ReleasePathNetCore + "\\SpaceVIL.dll");
                 appendText("Obfuscating: done.\n");
                 appendText(" ");
                 /////////////////////////////////////
@@ -788,62 +728,62 @@ public class MainWindow extends ActiveWindow {
         }
     }
 
-    private void setNetCorePackage(String projectName, int indexVersion) {
-        File commonPath = null;
-        commonPath = new File(projectName);
-        if (commonPath != null)
-            setVersion(commonPath);
+    // private void setNetCorePackage(String projectName, int indexVersion) {
+    //     File commonPath = null;
+    //     commonPath = new File(projectName);
+    //     if (commonPath != null)
+    //         setVersion(commonPath);
 
-        BufferedReader br = null;
-        FileReader fr = null;
-        boolean packRef = true;
+    //     BufferedReader br = null;
+    //     FileReader fr = null;
+    //     boolean packRef = true;
 
-        try {
-            fr = new FileReader(projectName);
-            br = new BufferedReader(fr);
+    //     try {
+    //         fr = new FileReader(projectName);
+    //         br = new BufferedReader(fr);
 
-            String sCurrentLine;
-            StringBuilder outsb = new StringBuilder();
-            while ((sCurrentLine = br.readLine()) != null) {
-                String str = sCurrentLine;
-                if (sCurrentLine.contains("PackageReference")) {
-                    if (packRef) {
-                        if (indexVersion == 0 || indexVersion == 2) {
-                            str = "<PackageReference Include=\"System.Drawing.Common\" Version=\"4.5.0\" />";
-                        } else if (indexVersion == 1) {
-                            str = "<PackageReference Include=\"CoreCompat.System.Drawing.v2\" Version=\"5.2.0-preview1-r131\" />";
-                            str += "\n";
-                            str += "<PackageReference Include=\"runtime.osx.10.10-x64.CoreCompat.System.Drawing\" Version=\"5.6.20\" />";
-                        }
-                        packRef = false;
-                    } else {
-                        str = "";
-                    }
-                }
-                outsb.append(str);
-                outsb.append("\n");
-            }
+    //         String sCurrentLine;
+    //         StringBuilder outsb = new StringBuilder();
+    //         while ((sCurrentLine = br.readLine()) != null) {
+    //             String str = sCurrentLine;
+    //             if (sCurrentLine.contains("PackageReference")) {
+    //                 if (packRef) {
+    //                     if (indexVersion == 0 || indexVersion == 2) {
+    //                         str = "<PackageReference Include=\"System.Drawing.Common\" Version=\"4.6.0-preview7.19362.9\" />";
+    //                     } else if (indexVersion == 1) {
+    //                         str = "<PackageReference Include=\"System.Drawing.Common\" Version=\"4.6.0-preview7.19362.9\" />";
+    //                         // str += "\n";
+    //                         // str += "<PackageReference Include=\"runtime.osx.10.10-x64.CoreCompat.System.Drawing\" Version=\"5.8.64\" />";
+    //                     }
+    //                     packRef = false;
+    //                 } else {
+    //                     str = "";
+    //                 }
+    //             }
+    //             outsb.append(str);
+    //             outsb.append("\n");
+    //         }
 
-            File file = new File(projectName);
-            // file.createNewFile();
-            FileWriter writer = new FileWriter(file);
-            writer.write(outsb.toString());
-            writer.flush();
-            writer.close();
+    //         File file = new File(projectName);
+    //         // file.createNewFile();
+    //         FileWriter writer = new FileWriter(file);
+    //         writer.write(outsb.toString());
+    //         writer.flush();
+    //         writer.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (br != null)
-                    br.close();
-                if (fr != null)
-                    fr.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //     } finally {
+    //         try {
+    //             if (br != null)
+    //                 br.close();
+    //             if (fr != null)
+    //                 fr.close();
+    //         } catch (IOException ex) {
+    //             ex.printStackTrace();
+    //         }
+    //     }
+    // }
 
     private String getFullVersion() {
         StringBuilder sb = new StringBuilder("\"");

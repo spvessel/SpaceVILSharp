@@ -28,12 +28,11 @@ namespace SpaceVIL
         /// <summary>
         /// Make shape with triangles and convert to GL coordinates
         /// </summary>
-        public override List<float[]> MakeShape()
+        public override void MakeShape()
         {
             if (GetTriangles() == null || GetTriangles().Count == 0)
-                return null;
-
-            return GraphicsMathService.ToGL(UpdateShape(), GetHandler());
+                return;
+            SetTriangles(UpdateShape());
         }
     }
 }

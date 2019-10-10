@@ -20,6 +20,12 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
 final class DrawEngine {
+    <T> void freeVRAMResource(T resource) {
+        if (_renderProcessor == null)
+            return;
+        _renderProcessor.freeResource(resource);
+    }
+
     private CommonProcessor _commonProcessor;
     private TextInputProcessor _textInputProcessor;
     private KeyInputProcessor _keyInputProcessor;
@@ -47,10 +53,14 @@ final class DrawEngine {
     }
 
     private void incItemPyramidLevel() {
-        _itemPyramidLevel -= 0.001f;
+        _itemPyramidLevel -= 0.000001f;
     }
 
-    private ToolTip _tooltip = new ToolTip();
+    private ToolTipItem _tooltip = new ToolTipItem();
+
+    ToolTipItem getToolTip() {
+        return _tooltip;
+    }
 
     private int _framebufferWidth = 0;
     private int _framebufferHeight = 0;
@@ -92,9 +102,6 @@ final class DrawEngine {
         glwHandler = new GLWHandler(handler);
         _commonProcessor = new CommonProcessor();
         _tooltip.setHandler(handler);
-        _tooltip.getTextLine().setHandler(handler);
-        _tooltip.getTextLine().setParent(_tooltip);
-        _tooltip.initElements();
     }
 
     void dispose() {
@@ -110,6 +117,7 @@ final class DrawEngine {
         if (_iconSmall != null && _iconBig != null)
             _commonProcessor.wndProcessor.applyIcon(_iconBig, _iconSmall);
         prepareCanvas();
+        _tooltip.initElements();
         return true;
     }
 
@@ -119,6 +127,8 @@ final class DrawEngine {
             glwHandler.createWindow();
             setEventsCallbacks();
             GL.createCapabilities();
+            if (WindowManager.getVSyncValue() != 1)
+                glfwSwapInterval(WindowManager.getVSyncValue());
             return true;
         } catch (Exception ex) {
             System.out.println(ex.toString());
@@ -249,10 +259,11 @@ final class DrawEngine {
         _framebufferHeight = h;
         glfwMakeContextCurrent(_commonProcessor.window.getGLWID());
         glViewport(0, 0, _framebufferWidth, _framebufferHeight);
-        _fbo.bindFBO();
-        _fbo.clearTexture();
-        _fbo.genFBOTexture(_framebufferWidth, _framebufferHeight);
-        _fbo.unbindFBO();
+
+        _renderProcessor.screenSquare.clear();
+        _renderProcessor.screenSquare
+                .genBuffers(RenderProcessor.getFullWindowRectangle(_framebufferWidth, _framebufferHeight));
+        _renderProcessor.screenSquare.unbind();
     }
 
     void updateWindowSize() {
@@ -293,6 +304,25 @@ final class DrawEngine {
         _tooltip.initTimer(false);
         _commonProcessor.window.setWidthDirect(width);
         _commonProcessor.window.setHeightDirect(height);
+
+        if (!glwHandler.getCoreWindow().isBorderHidden) {
+            List<InterfaceBaseItem> list = ItemsLayoutBox.getLayoutFloatItems(_commonProcessor.window.getWindowGuid());
+            for (InterfaceBaseItem item : list) {
+                if (item instanceof InterfaceFloating) {
+                    InterfaceFloating floatItem = (InterfaceFloating) item;
+                    if (floatItem.isOutsideClickClosable()) {
+
+                        if (item instanceof ContextMenu) {
+                            ContextMenu toClose = (ContextMenu) item;
+                            if (toClose.closeDependencies(new MouseArgs()))
+                                floatItem.hide();
+                        } else {
+                            floatItem.hide();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     void setWindowSize(int width, int height) {
@@ -333,7 +363,7 @@ final class DrawEngine {
 
     private void mouseScroll(long wnd, double dx, double dy) {
         // if (_commonProcessor.inputLocker)
-        //     return;
+        // return;
         _tooltip.initTimer(false);
         _mouseScrollProcessor.process(wnd, dx, dy);
         _commonProcessor.events.setEvent(InputEventType.MOUSE_SCROLL);
@@ -361,18 +391,17 @@ final class DrawEngine {
         return _renderProcessor.getRedrawFrequency();
     }
 
-    private VRAMFramebuffer _fbo = new VRAMFramebuffer();
+    private VramFramebuffer _fboVertex = new VramFramebuffer();
+    private VramFramebuffer _fboBlur = new VramFramebuffer();
 
     void drawScene() {
         if (fullScreenRequest) {
             fullScreen();
             fullScreenRequest = false;
-        }
-        else if (maximizeRequest) {
+        } else if (maximizeRequest) {
             maximizeWindow();
             maximizeRequest = false;
-        }
-        else if (minimizeRequest) {
+        } else if (minimizeRequest) {
             minimizeWindow();
             minimizeRequest = false;
         }
@@ -382,6 +411,7 @@ final class DrawEngine {
         }
         if (updatePositionRequest) {
             updateWindowPosition();
+            _commonProcessor.events.resetEvent(InputEventType.WINDOW_RESIZE);
             updatePositionRequest = false;
         }
         if (!_commonProcessor.events.lastEvent().contains(InputEventType.WINDOW_RESIZE)) {
@@ -392,10 +422,11 @@ final class DrawEngine {
     }
 
     private void update() {
-        VRAMStorage.flush();
+        _renderProcessor.flushResources();
         render();
         _stencilProcessor.clearBounds();
         restoreItemPyramidLevel();
+        // Runtime.getRuntime().gc();
     }
 
     private void prepareCanvas() {
@@ -408,10 +439,15 @@ final class DrawEngine {
         _framebufferWidth = w.get(0);
         _framebufferHeight = h.get(0);
         glViewport(0, 0, _framebufferWidth, _framebufferHeight);
-        _fbo.genFBO();
-        _fbo.genFBOTexture(_framebufferWidth, _framebufferHeight);
-        _fbo.unbindFBO();
+        _fboVertex.genFBO();
+        _fboVertex.unbind();
+        _fboBlur.genFBO();
+        _fboBlur.unbind();
+
         glClearColor(0, 0, 0, 0);
+        _renderProcessor.screenSquare
+                .genBuffers(RenderProcessor.getFullWindowRectangle(_framebufferWidth, _framebufferHeight));
+        _renderProcessor.screenSquare.unbind();
     }
 
     void freeOnClose() {
@@ -419,8 +455,9 @@ final class DrawEngine {
         _texture.deleteShader();
         _char.deleteShader();
         _blur.deleteShader();
-        _fbo.clearFBO();
-        VRAMStorage.clear();
+        _fboVertex.clear();
+        _fboBlur.clear();
+        _renderProcessor.clearResources();
         glDeleteVertexArrays(glwHandler.gVAO);
         glwHandler.clearEventsCallbacks();
         glwHandler.destroy();
@@ -439,24 +476,11 @@ final class DrawEngine {
     }
 
     private void drawFloatItems() {
-        List<InterfaceBaseItem> float_items = new LinkedList<>(
+        List<InterfaceBaseItem> floatItems = new LinkedList<>(
                 ItemsLayoutBox.getLayout(_commonProcessor.window.getWindowGuid()).getFloatItems());
-        if (float_items != null) {
-            for (InterfaceBaseItem item : float_items) {
-                // if (item.getHeightPolicy() == SizePolicy.EXPAND) {
-                // int[] confines = item.getConfines();
-                // item.setConfines(confines[0], confines[1], 0,
-                // _commonProcessor.rootContainer.getHeight());
-                // item.setY(0);
-                // item.setHeight(_commonProcessor.rootContainer.getHeight());
-                // }
-                // if (item.getWidthPolicy() == SizePolicy.EXPAND) {
-                // int[] confines = item.getConfines();
-                // item.setConfines(0, _commonProcessor.rootContainer.getWidth(), confines[2],
-                // confines[3]);
-                // item.setX(0);
-                // item.setWidth(_commonProcessor.rootContainer.getWidth());
-                // }
+        floatItems.remove(_tooltip);
+        if (floatItems != null) {
+            for (InterfaceBaseItem item : floatItems) {
                 drawItems(item);
             }
         }
@@ -498,12 +522,7 @@ final class DrawEngine {
     }
 
     private void drawShell(InterfaceBaseItem shell) {
-        drawShell(shell, false);
-    }
-
-    private void drawShell(InterfaceBaseItem shell, boolean ignore_borders) {
-        if (!ignore_borders)
-            checkOutsideBorders(shell);
+        boolean stencil = checkOutsideBorders(shell);
 
         if (shell.getBackground().getAlpha() == 0) {
             if (shell instanceof Prototype)
@@ -511,16 +530,21 @@ final class DrawEngine {
             return;
         }
 
-        List<float[]> crdArray = shell.makeShape();
-        if (crdArray == null)
-            return;
-
-        if (shell.isShadowDrop()) {
-            drawShadow(shell);
+        if (shell.isRemakeRequest()) {
+            shell.makeShape();
+            if (shell.isShadowDrop())
+                drawShadow(shell, stencil);
+            shell.setRemakeRequest(false);
+            _renderProcessor.drawFreshVertex(_primitive, shell, getItemPyramidLevel(), shell.getX(), shell.getY(),
+                    _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), shell.getBackground(),
+                    GL_TRIANGLES);
+        } else {
+            if (shell.isShadowDrop())
+                drawShadow(shell, stencil);
+            _renderProcessor.drawStoredVertex(_primitive, shell, getItemPyramidLevel(), shell.getX(), shell.getY(),
+                    _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), shell.getBackground(),
+                    GL_TRIANGLES);
         }
-
-        _renderProcessor.drawVertex(_primitive, crdArray, getItemPyramidLevel(), shell.getBackground(), GL_TRIANGLES);
-        crdArray.clear();
 
         if (shell instanceof Prototype)
             drawBorder((Prototype) shell);
@@ -528,53 +552,85 @@ final class DrawEngine {
 
     private void drawBorder(Prototype vi) {
         if (vi.getBorderThickness() > 0) {
-            CustomShape border = new CustomShape();
-            border.setBackground(vi.getBorderFill());
-            border.setSize(vi.getWidth(), vi.getHeight());
-            border.setPosition(vi.getX(), vi.getY());
-            border.setParent(vi);
-            border.setHandler(vi.getHandler());
+            List<float[]> vertex = BaseItemStatics
+                    .updateShape(GraphicsMathService.getRoundSquareBorder(vi.getBorderRadius(), vi.getWidth(),
+                            vi.getHeight(), vi.getBorderThickness(), 0, 0), vi.getWidth(), vi.getHeight());
 
-            border.setTriangles(GraphicsMathService.getRoundSquareBorder(vi.getBorderRadius(), vi.getWidth(),
-                    vi.getHeight(), vi.getBorderThickness(), 0, 0));
-            drawShell(border, true);
+            _renderProcessor.drawDirectVertex(_primitive, vertex, getItemPyramidLevel(), vi.getX(), vi.getY(),
+                    _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), vi.getBorderFill(),
+                    GL_TRIANGLES);
         }
     }
 
-    private void drawShadow(InterfaceBaseItem shell) {
+    float[] _weights;
+
+    private void drawShadow(InterfaceBaseItem shell, boolean stencil) {
         int[] extension = shell.getShadowExtension();
         int xAddidion = extension[0] / 2;
         int yAddidion = extension[1] / 2;
-
-        CustomShape shadow = new CustomShape();
-        shadow.setBackground(shell.getShadowColor());
-        shadow.setSize(shell.getWidth() + extension[0], shell.getHeight() + extension[1]);
-        shadow.setPosition(shell.getX() + shell.getShadowPos().getX() - xAddidion,
-                shell.getY() + shell.getShadowPos().getY() - yAddidion);
-        shadow.setParent(shell.getParent());
-        shadow.setHandler(shell.getHandler());
-        shadow.setTriangles(shell.getTriangles());
-
-        _fbo.bindFBO();
-        glClear(GL_COLOR_BUFFER_BIT);
-        drawShell(shadow, true);
-
         int res = shell.getShadowRadius();
-        float[] weights = new float[11];
-        float sum, sigma2 = 4.0f;
-        weights[0] = gauss(0, sigma2);
-        sum = weights[0];
-        for (int i = 1; i < 11; i++) {
-            weights[i] = gauss(i, sigma2);
-            sum += 2 * weights[i];
-        }
-        for (int i = 0; i < 11; i++)
-            weights[i] /= sum;
 
-        _fbo.unbindFBO();
-        drawShadowPart(weights, res, _fbo.texture,
-                new float[] { shell.getX() + shell.getShadowPos().getX(), shell.getY() + shell.getShadowPos().getY() },
-                new float[] { shell.getWidth(), shell.getHeight() });
+        if (_weights == null) {
+            _weights = new float[11];
+            float sum, sigma2 = 4.0f;
+            _weights[0] = gauss(0, sigma2);
+            sum = _weights[0];
+            for (int i = 1; i < 11; i++) {
+                _weights[i] = gauss(i, sigma2);
+                sum += 2 * _weights[i];
+            }
+            for (int i = 0; i < 11; i++)
+                _weights[i] /= sum;
+        }
+
+        int fboWidth = shell.getWidth() + extension[0] + 2 * res;
+        int fboHeight = shell.getHeight() + extension[1] + 2 * res;
+        if (shell.isRemakeRequest()) {
+            if (stencil)
+                glDisable(GL_SCISSOR_TEST);
+
+            glViewport(0, 0, fboWidth, fboHeight);
+            _fboVertex.genFBO();
+            _fboVertex.genFboTexture(fboWidth, fboHeight);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            List<float[]> vertex = BaseItemStatics.updateShape(shell.getTriangles(), shell.getWidth() + extension[0],
+                    shell.getHeight() + extension[1]);
+
+            _renderProcessor.drawDirectVertex(_primitive, vertex, 0.0f, res, res, fboWidth, fboHeight,
+                    shell.getShadowColor(), GL_TRIANGLES);
+
+            _fboVertex.unbindTexture();
+            _fboVertex.unbind();
+            _fboBlur.bind();
+            _fboBlur.genFboTexture(fboWidth, fboHeight);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            VramTexture store = _renderProcessor.drawDirectShadow(_blur, 0.0f, _weights, res, _fboVertex.texture, 0, 0,
+                    shell.getWidth() + extension[0], shell.getHeight() + extension[1], fboWidth, fboHeight);
+            store.clear();
+
+            _fboBlur.unbindTexture();
+            _fboBlur.unbind();
+
+            if (stencil)
+                glEnable(GL_SCISSOR_TEST);
+            glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+
+            _renderProcessor.drawFreshShadow(_texture, shell, getItemPyramidLevel(), _fboBlur.texture,
+                    shell.getX() + shell.getShadowPos().getX() - xAddidion - res,
+                    shell.getY() + shell.getShadowPos().getY() - yAddidion - res, fboWidth, fboHeight,
+                    _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight());
+
+            // _fboVertex.clearTexture();
+            _fboVertex.clear();
+            _fboBlur.clear();
+        } else {
+            _renderProcessor.drawStoredShadow(_texture, shell, getItemPyramidLevel(),
+                    shell.getX() + shell.getShadowPos().getX() - xAddidion - res,
+                    shell.getY() + shell.getShadowPos().getY() - yAddidion - res, _commonProcessor.window.getWidth(),
+                    _commonProcessor.window.getHeight());
+        }
     }
 
     private float gauss(float x, float sigma) {
@@ -583,110 +639,118 @@ final class DrawEngine {
         return (float) ans;
     }
 
-    private void drawShadowPart(float[] weights, int res, int fboTexture, float[] xy, float[] wh) {
-        _renderProcessor.drawShadow(_blur, getItemPyramidLevel(), weights, res, fboTexture, xy, wh,
-                _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight());
-    }
-
     private void drawText(InterfaceTextContainer text) {
+
         TextPrinter textPrt = text.getLetTextures();
         if (textPrt == null)
             return;
-        ByteBuffer byteBuffer = textPrt.texture;
-        if (byteBuffer == null || byteBuffer.limit() == 0)
+
+        byte[] byteBuffer = textPrt.texture;
+        if (byteBuffer == null || byteBuffer.length == 0)
             return;
 
         checkOutsideBorders((InterfaceBaseItem) text);
 
-        int byteBufferHeight = textPrt.heightTexture, byteBufferWidth = textPrt.widthTexture;
-        float x0 = ((float) textPrt.xTextureShift / (float) _commonProcessor.window.getWidth() * 2.0f) - 1.0f;
-        float y0 = ((float) textPrt.yTextureShift / (float) _commonProcessor.window.getHeight() * 2.0f - 1.0f)
-                * (-1.0f);
-        float x1 = (((float) textPrt.xTextureShift + (float) byteBufferWidth / _commonProcessor.window.getDpiScale()[0])
-                / (float) _commonProcessor.window.getWidth() * 2.0f) - 1.0f;
-        float y1 = (((float) textPrt.yTextureShift
-                + (float) byteBufferHeight / _commonProcessor.window.getDpiScale()[0])
-                / (float) _commonProcessor.window.getHeight() * 2.0f - 1.0f) * (-1.0f);
         float[] argb = { (float) text.getForeground().getRed() / 255.0f,
                 (float) text.getForeground().getGreen() / 255.0f, (float) text.getForeground().getBlue() / 255.0f,
                 (float) text.getForeground().getAlpha() / 255.0f };
 
-        _renderProcessor.drawText(_char, x0, x1, y0, y1, byteBufferWidth, byteBufferHeight, byteBuffer,
-                getItemPyramidLevel(), argb);
+        if (text.isRemakeText()) {
+            text.setRemakeText(false);
+            _renderProcessor.drawFreshText(_char, text, textPrt, _commonProcessor.window.getWidth(),
+                    _commonProcessor.window.getHeight(), getItemPyramidLevel(), argb);
+        } else {
+            _renderProcessor.drawStoredText(_char, text, textPrt, _commonProcessor.window.getWidth(),
+                    _commonProcessor.window.getHeight(), getItemPyramidLevel(), argb);
+        }
     }
 
     private void drawPoints(InterfacePoints item) {
         if (item.getPointColor().getAlpha() == 0)
             return;
 
-        List<float[]> crd_array = item.makeShape();
-        if (crd_array == null)
+        if (!(item instanceof InterfaceBaseItem))
             return;
-        checkOutsideBorders((InterfaceBaseItem) item);
-        List<float[]> point = item.getShapePointer();
-        float centerOffset = item.getPointThickness() / 2.0f;
-        float[] result = new float[point.size() * crd_array.size() * 3];
-        int skew = 0;
-        float level = getItemPyramidLevel();
-        for (float[] shape : crd_array) {
-            List<float[]> fig = GraphicsMathService.toGL(
-                    GraphicsMathService.moveShape(point, shape[0] - centerOffset, shape[1] - centerOffset),
-                    _commonProcessor.window);
+        InterfaceBaseItem shell = (InterfaceBaseItem) item;
+        checkOutsideBorders(shell);
 
-            for (int i = 0; i < fig.size(); i++) {
-                result[skew + i * 3 + 0] = fig.get(i)[0];
-                result[skew + i * 3 + 1] = fig.get(i)[1];
-                result[skew + i * 3 + 2] = level;
+        float level = getItemPyramidLevel();
+
+        if (shell.isRemakeRequest()) {
+            shell.setRemakeRequest(false);
+            shell.makeShape();
+
+            List<float[]> points = item.getPoints();
+            if (points == null)
+                return;
+
+            List<float[]> shape = item.getShapePointer();
+            float centerOffset = item.getPointThickness() / 2.0f;
+            float[] result = new float[shape.size() * points.size() * 2];
+            int skew = 0;
+            for (float[] p : points) {
+                List<float[]> fig = GraphicsMathService.moveShape(shape, p[0] - centerOffset, p[1] - centerOffset);
+                for (int i = 0; i < fig.size(); i++) {
+                    result[skew + i * 2 + 0] = fig.get(i)[0];
+                    result[skew + i * 2 + 1] = fig.get(i)[1];
+                }
+                skew += fig.size() * 2;
             }
-            skew += fig.size() * 3;
+            _renderProcessor.drawFreshVertex(_primitive, shell, result, level, shell.getX(), shell.getY(),
+                    _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), item.getPointColor(),
+                    GL_TRIANGLES);
+        } else {
+            _renderProcessor.drawStoredVertex(_primitive, shell, level, shell.getX(), shell.getY(),
+                    _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), item.getPointColor(),
+                    GL_TRIANGLES);
         }
-        _renderProcessor.drawVertex(_primitive, result, item.getPointColor(), GL_TRIANGLES);
     }
 
     private void drawLines(InterfaceLine item) {
         if (item.getLineColor().getAlpha() == 0)
             return;
 
-        List<float[]> crd_array = GraphicsMathService.toGL(item.makeShape(), _commonProcessor.window);
-        if (crd_array == null)
+        if (!(item instanceof InterfaceBaseItem))
             return;
-        checkOutsideBorders((InterfaceBaseItem) item);
-        _renderProcessor.drawVertex(_primitive, crd_array, getItemPyramidLevel(), item.getLineColor(), GL_LINE_STRIP);
+        InterfaceBaseItem shell = (InterfaceBaseItem) item;// BAD!
+        checkOutsideBorders(shell);
+
+        if (shell.isRemakeRequest()) {
+            shell.setRemakeRequest(false);
+            shell.makeShape();
+
+            _renderProcessor.drawFreshVertex(_primitive, shell, getItemPyramidLevel(), item.getX(), item.getY(),
+                    _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), item.getLineColor(),
+                    GL_LINE_STRIP);
+        } else {
+            _renderProcessor.drawStoredVertex(_primitive, shell, getItemPyramidLevel(), shell.getX(), shell.getY(),
+                    _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), item.getLineColor(),
+                    GL_LINE_STRIP);
+        }
     }
 
     private void drawImage(InterfaceImageItem image) {
         checkOutsideBorders((InterfaceBaseItem) image);
 
-        byte[] bitmap = image.getPixMapImage();
-        if (bitmap == null)
-            return;
-
         int w = image.getImageWidth(), h = image.getImageHeight();
         RectangleBounds area = image.getRectangleBounds();
 
-        float x0 = ((float) area.getX() / (float) _commonProcessor.window.getWidth() * 2.0f) - 1.0f;
-        float y0 = ((float) area.getY() / (float) _commonProcessor.window.getHeight() * 2.0f - 1.0f) * (-1.0f);
-        float x1 = (((float) area.getX() + (float) area.getWidth()) / (float) _commonProcessor.window.getWidth() * 2.0f)
-                - 1.0f;
-        float y1 = (((float) area.getY() + (float) area.getHeight()) / (float) _commonProcessor.window.getHeight()
-                * 2.0f - 1.0f) * (-1.0f);
-
         if (image instanceof ImageItem) {
             ImageItem tmp = (ImageItem) image;
+
             if (tmp.isNew()) {
-                _renderProcessor.drawFreshTexture(tmp, _texture, x0, x1, y0, y1, w, h, bitmap, getItemPyramidLevel());
+                _renderProcessor.drawFreshTexture(tmp, _texture, area.getX(), area.getY(), area.getWidth(),
+                        area.getHeight(), w, h, _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(),
+                        getItemPyramidLevel());
             } else {
-                _renderProcessor.drawStoredTexture(tmp, _texture, x0, x1, y0, y1, getItemPyramidLevel());
+                _renderProcessor.drawStoredTexture(tmp, _texture, area.getX(), area.getY(),
+                        _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), getItemPyramidLevel());
             }
             return;
         }
 
-        if (image.isColorOverlay())
-            _renderProcessor.drawTextureWithColorOverlay(_texture, x0, x1, y0, y1, w, h, bitmap, getItemPyramidLevel(),
-                    image.getRotationAngle(), image.getColorOverlay());
-        else
-            _renderProcessor.drawTextureAsIs(_texture, x0, x1, y0, y1, w, h, bitmap, getItemPyramidLevel(),
-                    image.getRotationAngle());
+        _renderProcessor.drawTextureAsIs(_texture, image, area.getX(), area.getY(), area.getWidth(), area.getHeight(),
+                w, h, _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), getItemPyramidLevel());
     }
 
     private Pointer tooltipBorderIndent = new Pointer(10, 2);
@@ -696,34 +760,110 @@ final class DrawEngine {
             return;
 
         _tooltip.setText(_commonProcessor.hoveredItem.getToolTip());
-        _tooltip.setWidth(_tooltip.getPadding().left + _tooltip.getPadding().right + _tooltip.getTextWidth());
+
+        int width = _tooltip.getPadding().left + _tooltip.getPadding().right + _tooltip.getTextLabel().getMargin().left
+                + _tooltip.getTextLabel().getMargin().right + _tooltip.getTextWidth();
+        _tooltip.setWidth(width);
+
+        int height = _tooltip.getPadding().top + _tooltip.getPadding().bottom + _tooltip.getTextLabel().getMargin().top
+                + _tooltip.getTextLabel().getMargin().bottom + _tooltip.getTextHeight();
+        _tooltip.setHeight(height);
 
         // проверка сверху
         if (_commonProcessor.ptrRelease.getY() > _tooltip.getHeight()) {
             _tooltip.setY(_commonProcessor.ptrRelease.getY() - _tooltip.getHeight() - tooltipBorderIndent.getY());
         } else {
-            _tooltip.setY(_commonProcessor.ptrRelease.getY() + _tooltip.getHeight() + tooltipBorderIndent.getY());
+            _tooltip.setY(_commonProcessor.ptrRelease.getY() + CommonService.currentCursor.getCursorHeight() + tooltipBorderIndent.getY());
         }
         // проверка справа
         if (_commonProcessor.ptrRelease.getX() - tooltipBorderIndent.getX() + _tooltip.getWidth() > glwHandler
-                .getCoreWindow().getWidth()) {
+                .getCoreWindow().getWidth() - tooltipBorderIndent.getX()) {
             _tooltip.setX(_commonProcessor.window.getWidth() - _tooltip.getWidth() - tooltipBorderIndent.getX());
         } else {
             _tooltip.setX(_commonProcessor.ptrRelease.getX() - tooltipBorderIndent.getX());
         }
-        drawShell(_tooltip);
+
+        _tooltip.makeShape();
+
+        if (_tooltip.isShadowDrop())
+            drawToolTipShadow();
+
+        _renderProcessor.drawDirectVertex(_primitive, _tooltip.getTriangles(), getItemPyramidLevel(), _tooltip.getX(),
+                _tooltip.getY(), _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(),
+                _tooltip.getBackground(), GL_TRIANGLES);
+
+        drawBorder(_tooltip);
+
         glDisable(GL_SCISSOR_TEST);
-        _tooltip.getTextLine().updateGeometry();
-        drawText(_tooltip.getTextLine());
+
+        drawItems(_tooltip);
+
         glDisable(GL_SCISSOR_TEST);
+    }
+
+    private void drawToolTipShadow() {
+        int[] extension = _tooltip.getShadowExtension();
+        int xAddidion = extension[0] / 2;
+        int yAddidion = extension[1] / 2;
+        int res = _tooltip.getShadowRadius();
+
+        if (_weights == null) {
+            _weights = new float[11];
+            float sum, sigma2 = 4.0f;
+            _weights[0] = gauss(0, sigma2);
+            sum = _weights[0];
+            for (int i = 1; i < 11; i++) {
+                _weights[i] = gauss(i, sigma2);
+                sum += 2 * _weights[i];
+            }
+            for (int i = 0; i < 11; i++)
+                _weights[i] /= sum;
+        }
+
+        int fboWidth = _tooltip.getWidth() + extension[0] + 2 * res;
+        int fboHeight = _tooltip.getHeight() + extension[1] + 2 * res;
+
+        glViewport(0, 0, fboWidth, fboHeight);
+        _fboVertex.genFBO();
+        _fboVertex.genFboTexture(fboWidth, fboHeight);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        List<float[]> vertex = BaseItemStatics.updateShape(_tooltip.getTriangles(), _tooltip.getWidth() + extension[0],
+                _tooltip.getHeight() + extension[1]);
+
+        _renderProcessor.drawDirectVertex(_primitive, vertex, 0.0f, res, res, fboWidth, fboHeight,
+                _tooltip.getShadowColor(), GL_TRIANGLES);
+
+        _fboVertex.unbindTexture();
+        _fboVertex.unbind();
+        _fboBlur.bind();
+        _fboBlur.genFboTexture(fboWidth, fboHeight);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        VramTexture store = _renderProcessor.drawDirectShadow(_blur, 0.0f, _weights, res, _fboVertex.texture, 0, 0,
+                _tooltip.getWidth() + extension[0], _tooltip.getHeight() + extension[1], fboWidth, fboHeight);
+        store.clear();
+
+        _fboBlur.unbindTexture();
+        _fboBlur.unbind();
+
+        glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+
+        _renderProcessor.drawRawShadow(_texture, getItemPyramidLevel(), _fboBlur.texture,
+                _tooltip.getX() + _tooltip.getShadowPos().getX() - xAddidion - res,
+                _tooltip.getY() + _tooltip.getShadowPos().getY() - yAddidion - res, fboWidth, fboHeight,
+                _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight());
+
+        _fboVertex.clear();
+        _fboBlur.clear();
     }
 
     private void drawShadePillow() {
         if (glwHandler.focusable)
             return;
 
-        List<float[]> vertex = new LinkedList<>(RenderProcessor.getFullWindowRectangle());
-        _renderProcessor.drawVertex(_primitive, vertex, getItemPyramidLevel(),
+        _renderProcessor.drawScreenRectangle(_primitive, getItemPyramidLevel(), 0, 0,
+                _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(),
                 glwHandler.getCoreWindow().getShadeColor(), GL_TRIANGLES);
     }
 }

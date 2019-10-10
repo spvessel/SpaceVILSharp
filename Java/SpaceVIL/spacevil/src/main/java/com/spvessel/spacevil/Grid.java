@@ -275,14 +275,17 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
         return rowHeight;
     }
 
+    private boolean _isUpdating = false;
     /**
      * Update all children and grid sizes and positions according to confines
      */
     // update Layout
     public void updateLayout() {
 
-        if (getItems().size() == 0)
+        List<InterfaceBaseItem> list = getItems();
+        if (list == null || list.size() == 0 || _isUpdating)
             return;
+        _isUpdating = true;
 
         int[] columns_width = getColumnsWidth();
         colWidth = columns_width;
@@ -324,7 +327,7 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
             y_offset += _cells.get(index).getHeight() + getSpacing().vertical;
             x_offset = 0;
         }
-
+        _isUpdating = false;
     }
 
     private int[] getRowsHeight() {

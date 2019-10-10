@@ -4,19 +4,19 @@ import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
-final class VRAMFramebuffer {
+final class VramFramebuffer {
     int FBO;
     int texture;
 
-    VRAMFramebuffer() {
+    VramFramebuffer() {
     }
 
     void genFBO() {
         FBO = glGenFramebuffersEXT();
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, FBO);
     }
-    
-    void genFBOTexture(int w, int h) {
+
+    void genFboTexture(int w, int h) {
         texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
@@ -27,19 +27,25 @@ final class VRAMFramebuffer {
         glBindTexture(GL_TEXTURE_2D, 0);
 
         glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture, 0);
-        // int[] draw_bufs = new int[] { GL_COLOR_ATTACHMENT0_EXT };
-        // glDrawBuffers(draw_bufs);
     }
 
-    void bindFBO() {
+    void bind() {
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, FBO);
     }
 
-    void unbindFBO() {
+    void bindTexture() {
+        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D, texture, 0);
+    }
+
+    void unbind() {
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
     }
 
-    void clearFBO() {
+    void unbindTexture() {
+        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, 0, 0);
+    }
+
+    public void clear() {
         glDeleteFramebuffersEXT(FBO);
     }
 

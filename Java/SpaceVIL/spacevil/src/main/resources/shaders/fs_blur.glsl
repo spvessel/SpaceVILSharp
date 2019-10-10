@@ -2,20 +2,25 @@
 uniform sampler2D tex;
 uniform vec2 frame;
 uniform float res;
-uniform float weights[100];
+uniform float weights[11];
 uniform vec2 point;
 uniform vec2 size;
+// uniform int applyBlur;
 in vec2 fragTexCoord;
 out vec4 fragColor;
+
 vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
 {
 	int rad = 5;
-	float uvx = uv.x * resolution.x;
-	float uvy = resolution.y - uv.y * resolution.y;
+	float uvx = uv.x * resolution.x + point.x - res * 10.0;
+	float uvy = resolution.y - uv.y * resolution.y + point.y - res * 10.0;
 	vec4 color = vec4(0.0);
 	vec4 tmp = vec4(0.0);
 
-	if (uvx >= point.x - rad && uvx <= point.x + size.x + rad && uvy >= point.y - rad && uvy <= point.y + size.y + rad)
+	if (uvx >= point.x - rad 
+    && uvx <= point.x + size.x + rad 
+    && uvy >= point.y - rad 
+    && uvy <= point.y + size.y + rad)
 	{
 		for (int i = -rad; i <= rad; i++) {
 				for (int j = -rad; j <= rad; j++) {
@@ -32,8 +37,8 @@ vec4 blur(sampler2D image, vec2 uv, vec2 resolution)
 	return color;
 }
 
-
 void main()
 {
 	fragColor = blur(tex, fragTexCoord, frame.xy);
+    // fragColor = texture(tex, fragTexCoord);
 }

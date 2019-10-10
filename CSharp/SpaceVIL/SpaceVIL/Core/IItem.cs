@@ -15,6 +15,6 @@ namespace SpaceVIL.Core
         Color GetBackground();
         List<float[]> GetTriangles();
         void SetTriangles(List<float[]> triangles);
-        List<float[]> MakeShape();
+        void MakeShape();
     }
 }

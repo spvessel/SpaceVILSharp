@@ -17,7 +17,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     private static int count = 0;
 
     private TextPrinter textPrt = new TextPrinter();
-    private boolean flagBB = false;
+    private boolean _isUpdateNeed = false;
 
     private List<Integer> _letEndPos;
     private int _lineYShift = 0;
@@ -91,7 +91,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             return;
         }
         Font fontBig = new Font(getFont().getName(), getFont().getStyle(), (int) (getFont().getSize() * _screenScale));
-//        Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
+        //        Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
 
         _bigLetters = FontEngine.getModifyLetters(getItemText(), fontBig);
         // int[] output = FontEngine.getSpacerDims(fontBig);
@@ -147,7 +147,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             if (_letters.size() == 0) {
                 return new TextPrinter(); //null;
             }
-            if (flagBB && (_isRecountable || afterCreate)) {
+            if (_isUpdateNeed && (_isRecountable || afterCreate)) {
                 afterCreate = false;
                 int bb_h = getHeight();
                 int bb_w = getWidth();
@@ -155,19 +155,23 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 if (_parentAllowWidth > 0 && _isRecountable)
                     bb_w = bb_w > _parentAllowWidth ? _parentAllowWidth : bb_w;
 
-                ByteBuffer cacheBB = BufferUtils.createByteBuffer(bb_h * bb_w * 4);
+                // ByteBuffer cacheBB = BufferUtils.createByteBuffer(bb_h * bb_w * 4);
+                byte[] cacheBB = new byte[bb_h * bb_w * 4];
 
                 int xFirstBeg = _letters.get(0).xBeg + _letters.get(0).xShift;
 
                 if (_screenScale != 0 && _screenScale != 1) {
-                    Font fontBig = new Font(getFont().getName(), getFont().getStyle(), (int) (getFont().getSize() * _screenScale));
+                    Font fontBig = new Font(getFont().getName(), getFont().getStyle(),
+                            (int) (getFont().getSize() * _screenScale));
                     // Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
 
                     int[] output = FontEngine.getSpacerDims(fontBig);
                     bb_h = output[2];
                     bb_w = _bigWidth;
                     if (_isRecountable)
-                        bb_w = _bigWidth > (int) (_parentAllowWidth * _screenScale) ? (int) (_parentAllowWidth * _screenScale) : _bigWidth;
+                        bb_w = _bigWidth > (int) (_parentAllowWidth * _screenScale)
+                                ? (int) (_parentAllowWidth * _screenScale)
+                                : _bigWidth;
 
                     int bigMinY = output[1];
                     cacheBB = makeSomeBig(bb_h, bb_w, bigMinY, 0, _letters.size() - 1);
@@ -199,28 +203,39 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                             continue;
                         }
 
-                        int offset = (modL.yBeg - fontDims[1]) * 4 * bb_w + (modL.xBeg + modL.xShift + widthFrom - xFirstBeg) * 4;
+                        int offset = (modL.yBeg - fontDims[1]) * 4 * bb_w
+                                + (modL.xBeg + modL.xShift + widthFrom - xFirstBeg) * 4;
 
                         for (int j = 0; j < modL.height; j++) {
                             for (int i = widthFrom; i < widthTo; i++) {
                                 int b1 = bitmap[3 + j * 4 + i * (modL.height * 4)] & 0xFF;
-                                int b2 = cacheBB.get(3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)) & 0xFF;
+                                // int b2 = cacheBB.get(3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)) & 0xFF;
+                                int b2 = cacheBB[3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] & 0xFF;
                                 if (b1 < b2)
                                     continue;
 
-                                cacheBB.put(0 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[0 + j * 4 + i * (modL.height * 4)]);
-                                cacheBB.put(1 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[1 + j * 4 + i * (modL.height * 4)]);
-                                cacheBB.put(2 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[2 + j * 4 + i * (modL.height * 4)]);
-                                cacheBB.put(3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[3 + j * 4 + i * (modL.height * 4)]);
+                                // cacheBB.put(0 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[0 + j * 4 + i * (modL.height * 4)]);
+                                // cacheBB.put(1 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[1 + j * 4 + i * (modL.height * 4)]);
+                                // cacheBB.put(2 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[2 + j * 4 + i * (modL.height * 4)]);
+                                // cacheBB.put(3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[3 + j * 4 + i * (modL.height * 4)]);
+                                cacheBB[0 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[0 + j * 4
+                                        + i * (modL.height * 4)];
+                                cacheBB[1 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[1 + j * 4
+                                        + i * (modL.height * 4)];
+                                cacheBB[2 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[2 + j * 4
+                                        + i * (modL.height * 4)];
+                                cacheBB[3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)] = bitmap[3 + j * 4
+                                        + i * (modL.height * 4)];
                             }
                         }
                     }
                 }
-                cacheBB.rewind();
-                flagBB = false;
+                // cacheBB.rewind();
+                _isUpdateNeed = false;
                 textPrt = new TextPrinter(cacheBB);
                 textPrt.widthTexture = bb_w;
                 textPrt.heightTexture = bb_h;
+                setRemakeText(true);
             }
             updateCoords(parent);
             return textPrt;
@@ -234,38 +249,39 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         int firstInd = 0, lastInd = 0;
         int someShift = (int) (_lineXShift * _screenScale);
         boolean isFirstFound = false;
-
+    
         for (int ii = 0; ii < letList.size(); ii++) {
             Alphabet.ModifyLetter modL = letList.get(ii);
-
+    
             if (modL.xBeg + modL.xShift + modL.width + someShift < 0) { // До разрешенной области
                 continue;
             }
-
+    
             if (!isFirstFound) {
                 firstInd = ii;
                 isFirstFound = true;
             }
-
+    
             if (modL.xBeg + modL.xShift + modL.width + someShift >= winWidth) {
                 lastInd = ii;
                 break;
             }
         }
-
+    
         if (lastInd == 0) lastInd = letList.size() - 1;
-
+    
         Alphabet.ModifyLetter letFirst = letList.get(firstInd);
         Alphabet.ModifyLetter letLast = letList.get(lastInd);
-
+    
         int visWidth = letLast.xShift + letLast.width + letLast.xBeg - letFirst.xBeg - letFirst.xShift;
-
+    
         return new int[]{firstInd, lastInd, visWidth}; //, outShift};
     }
     */
 
-    private ByteBuffer makeSomeBig(int hgt, int wdt, int bigMinY, int firstInd, int lastInd) {
-        ByteBuffer outCache = BufferUtils.createByteBuffer(hgt * wdt * 4);
+    private byte[] makeSomeBig(int hgt, int wdt, int bigMinY, int firstInd, int lastInd) {
+        // ByteBuffer outCache = BufferUtils.createByteBuffer(hgt * wdt * 4);
+        byte[] outCache = new byte[hgt * wdt * 4];
         int someShift = (int) (_lineXShift * _screenScale);
         int parWidth = (int) (_parentAllowWidth * _screenScale);
 
@@ -306,18 +322,27 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             for (int j = 0; j < bigLet.height; j++) {
                 for (int i = widthFrom; i < widthTo; i++) {
                     int b1 = bitmap[3 + j * 4 + i * (bigLet.height * 4)] & 0xFF;
-                    int b2 = outCache.get(3 + offset + (i - widthFrom) * 4 + j * (wdt * 4)) & 0xFF;
+                    // int b2 = outCache.get(3 + offset + (i - widthFrom) * 4 + j * (wdt * 4)) & 0xFF;
+                    int b2 = outCache[3 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] & 0xFF;
                     if (b1 < b2)
                         continue;
 
-                    outCache.put(0 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
-                            bitmap[0 + j * 4 + i * (bigLet.height * 4)]);
-                    outCache.put(1 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
-                            bitmap[1 + j * 4 + i * (bigLet.height * 4)]);
-                    outCache.put(2 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
-                            bitmap[2 + j * 4 + i * (bigLet.height * 4)]);
-                    outCache.put(3 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
-                            bitmap[3 + j * 4 + i * (bigLet.height * 4)]);
+                    // outCache.put(0 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
+                    //         bitmap[0 + j * 4 + i * (bigLet.height * 4)]);
+                    // outCache.put(1 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
+                    //         bitmap[1 + j * 4 + i * (bigLet.height * 4)]);
+                    // outCache.put(2 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
+                    //         bitmap[2 + j * 4 + i * (bigLet.height * 4)]);
+                    // outCache.put(3 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
+                    //         bitmap[3 + j * 4 + i * (bigLet.height * 4)]);
+                    outCache[0 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] = bitmap[0 + j * 4
+                            + i * (bigLet.height * 4)];
+                    outCache[1 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] = bitmap[1 + j * 4
+                            + i * (bigLet.height * 4)];
+                    outCache[2 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] = bitmap[2 + j * 4
+                            + i * (bigLet.height * 4)];
+                    outCache[3 + offset + (i - widthFrom) * 4 + j * (wdt * 4)] = bitmap[3 + j * 4
+                            + i * (bigLet.height * 4)];
                 }
             }
         }
@@ -342,7 +367,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             if (getFont() == null)
                 return;
             createText();
-            flagBB = true;
+            _isUpdateNeed = true;
         } finally {
             textLock.unlock();
         }
@@ -368,7 +393,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         else if (alignments.contains(ItemAlignment.HCENTER) && (_lineWidth < _parentAllowWidth))
             // alignShiftX = ((parent.getWidth() - parent.getPadding().left - parent.getPadding().right
             //         + getMargin().left - getMargin().right) - _lineWidth) / 2f;
-            alignShiftX = (_parentAllowWidth - _lineWidth) / 2f + parent.getPadding().left + getMargin().left + cursorWidth; //(parent.getWidth() - _lineWidth) / 2f + parent.getPadding().left;
+            alignShiftX = (_parentAllowWidth - _lineWidth) / 2f + parent.getPadding().left + getMargin().left
+                    + cursorWidth; //(parent.getWidth() - _lineWidth) / 2f + parent.getPadding().left;
 
         // Vertical
         if (alignments.contains(ItemAlignment.TOP)) {
@@ -409,7 +435,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     void setLineYShift(int sp) {
         _lineYShift = sp;
         // updateCoords();
-        flagBB = true;
+        _isUpdateNeed = true;
     }
 
     int getLineYShift() {
@@ -420,7 +446,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         // if (_lineXShift == sp) return;
         _lineXShift = sp;
         // updateCoords();
-        flagBB = true;
+        _isUpdateNeed = true;
 
     }
 
@@ -428,21 +454,21 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         return _lineXShift;
     }
 
-//    float getLineTopCoord() {
-//        float lineTopCoord = 0;
-//        List<ItemAlignment> alignments = getTextAlignment();
-//        int[] fontDims = getFontDims();
-//        float height = fontDims[2];
-//        if (alignments.contains(ItemAlignment.BOTTOM))
-//            lineTopCoord = getParent().getHeight() - height;
-//
-//        else if (alignments.contains(ItemAlignment.VCENTER))
-//            lineTopCoord = (getParent().getHeight() - height) / 2f;
-//
-//        lineTopCoord += _lineYShift - fontDims[1];
-//
-//        return lineTopCoord;
-//    }
+    //    float getLineTopCoord() {
+    //        float lineTopCoord = 0;
+    //        List<ItemAlignment> alignments = getTextAlignment();
+    //        int[] fontDims = getFontDims();
+    //        float height = fontDims[2];
+    //        if (alignments.contains(ItemAlignment.BOTTOM))
+    //            lineTopCoord = getParent().getHeight() - height;
+    //
+    //        else if (alignments.contains(ItemAlignment.VCENTER))
+    //            lineTopCoord = (getParent().getHeight() - height) / 2f;
+    //
+    //        lineTopCoord += _lineYShift - fontDims[1];
+    //
+    //        return lineTopCoord;
+    //    }
 
     int[] getFontDims() {
         return FontEngine.getSpacerDims(getFont());
@@ -456,9 +482,9 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         setSizePolicy(style.widthPolicy, style.heightPolicy);
     }
 
-//    void setLineXShift() {
-//        setLineXShift(_lineXShift);
-//    }
+    //    void setLineXShift() {
+    //        setLineXShift(_lineXShift);
+    //    }
 
     void checkXShift(int _cursorXMax) {
         if (getLetPosArray() == null || getLetPosArray().size() == 0)
@@ -471,19 +497,19 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         }
     }
 
-//    void setLineYShift() {
-//        setLineYShift(_lineYShift);
-//    }
+    //    void setLineYShift() {
+    //        setLineYShift(_lineYShift);
+    //    }
 
     void setAllowWidth(int allowWidth) {
         if (_parentAllowWidth != allowWidth)
-            flagBB = true;
+            _isUpdateNeed = true;
         _parentAllowWidth = allowWidth;
     }
 
     void setAllowHeight(int allowHeight) {
         if (_parentAllowHeight != allowHeight)
-            flagBB = true;
+            _isUpdateNeed = true;
         _parentAllowHeight = allowHeight;
     }
 
@@ -491,11 +517,23 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 
     void setCursorWidth(int cwidth) {
         if (cursorWidth != cwidth)
-            flagBB = true;
+            _isUpdateNeed = true;
         cursorWidth = cwidth;
     }
 
     void setRecountable(boolean isRecountable) {
         _isRecountable = isRecountable;
+    }
+
+    private boolean _isRemakeText = true;
+
+    @Override
+    public void setRemakeText(boolean value) {
+        _isRemakeText = value;
+    }
+
+    @Override
+    public boolean isRemakeText() {
+        return _isRemakeText;
     }
 }

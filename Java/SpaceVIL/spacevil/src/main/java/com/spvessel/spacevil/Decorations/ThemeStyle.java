@@ -77,7 +77,7 @@ public class ThemeStyle {
             // defaultItemsStyle.put(TextEncrypt.class, Style.getTextEncryptStyle());
             defaultItemsStyle.put(TextEdit.class, Style.getTextEditStyle());
             defaultItemsStyle.put(TitleBar.class, Style.getTitleBarStyle());
-            defaultItemsStyle.put(ToolTip.class, Style.getToolTipStyle());
+            defaultItemsStyle.put(ToolTipItem.class, Style.getToolTipStyle());
             defaultItemsStyle.put(VerticalScrollBar.class, Style.getVerticalScrollBarStyle());
             defaultItemsStyle.put(VerticalSlider.class, Style.getVerticalSliderStyle());
             defaultItemsStyle.put(VerticalSplitArea.class, Style.getVerticalSplitAreaStyle());

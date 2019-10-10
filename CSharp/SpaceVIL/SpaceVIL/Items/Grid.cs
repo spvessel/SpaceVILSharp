@@ -279,6 +279,7 @@ namespace SpaceVIL
             return rowHeight;
         }
 
+        private bool _isUpdating = false;
         /// <summary>
         /// Update all children and grid sizes and positions
         /// according to confines
@@ -306,17 +307,19 @@ namespace SpaceVIL
              * Выравнивание элемента
              * Политику растягивания размеров
              */
-            if (GetItems().Count == 0)
+            List<IBaseItem> list = GetItems();
+            if (list == null || list.Count == 0 || _isUpdating)
                 return;
+            _isUpdating = true;
 
             //1, 2
             Int32[] columns_width = GetColumnsWidth();
             colWidth = columns_width;
-            
+
             //3, 4
             Int32[] rows_height = GetRowsHeight();
             rowHeight = rows_height;
-            
+
             //5
             int x_offset = 0;
             int y_offset = 0;
@@ -359,7 +362,7 @@ namespace SpaceVIL
                 y_offset += _cells[index].GetHeight() + GetSpacing().Vertical;
                 x_offset = 0;
             }
-
+            _isUpdating = false;
         }
 
         private Int32[] GetRowsHeight()
@@ -413,7 +416,7 @@ namespace SpaceVIL
                     prefer_height = (free_space - GetSpacing().Vertical * (count - 1)) / count;
                 }
             }
-            
+
             m_height.Sort((x, y) => y[1].CompareTo(x[1]));
 
             foreach (var pair in m_height)

@@ -13,6 +13,7 @@ namespace SpaceVIL.Decorations
             return _figure;
         }
         private bool _is_fixed = false;
+        private List<float[]> list;
 
         /// <summary>
         /// Is CustomFigure fixed
@@ -31,6 +32,11 @@ namespace SpaceVIL.Decorations
         {
             _is_fixed = isFixed;
             _figure = new List<float[]>(triangles);
+        }
+
+        public CustomFigure(List<float[]> list)
+        {
+            this.list = list;
         }
 
         /// <returns> new CustomFugure points list changed according to the new position (x, y) </returns>

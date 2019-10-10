@@ -1,3 +1,6 @@
+using System;
+using System.Runtime.InteropServices;
+
 namespace OpenGL
 {
     internal static class OpenGLConstants

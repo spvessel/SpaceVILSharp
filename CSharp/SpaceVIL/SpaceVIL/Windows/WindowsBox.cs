@@ -33,9 +33,9 @@ namespace SpaceVIL
             windowsGuid.Add(_layout.GetWindowGuid(), _layout);
 
             ItemsLayoutBox.InitLayout(_layout.GetWindowGuid());
-
             //add filling frame
             //ALL ATTRIBUTES STRICTLY NEEDED!!!
+
             WContainer container = new WContainer();
             container.SetHandler(_layout);
             container.SetItemName(_layout.GetWindowName());

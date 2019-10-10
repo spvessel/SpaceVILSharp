@@ -26,6 +26,15 @@ import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 abstract public class Prototype implements InterfaceBaseItem {
+
+    public boolean isRemakeRequest() {
+        return _core.isRemakeRequest();
+    }
+
+    public void setRemakeRequest(boolean value) {
+        _core.setRemakeRequest(value);
+    }
+
     private VisualItem _core = new VisualItem();
 
     VisualItem getCore() {
@@ -274,8 +283,8 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.setTriangles(triangles);
     }
 
-    public List<float[]> makeShape() {
-        return _core.makeShape();
+    public void makeShape() {
+        _core.makeShape();
     }
 
     /**
@@ -811,8 +820,8 @@ abstract public class Prototype implements InterfaceBaseItem {
         return _core.getConfines();
     }
 
-    ItemStateType getCurrentState() {
-        return _core.getCurrentState();
+    ItemStateType getCurrentStateType() {
+        return _core.getCurrentStateType();
     }
 
     void setState(ItemStateType state) {

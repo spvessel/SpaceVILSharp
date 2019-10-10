@@ -1,8 +1,7 @@
 package OwnLibs.Owls.Views.Items;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.io.File;
+// import java.awt.Font;
 
 import com.spvessel.spacevil.CheckBox;
 import com.spvessel.spacevil.HorizontalStack;
@@ -10,12 +9,10 @@ import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.ListBox;
 import com.spvessel.spacevil.VerticalStack;
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.EmbeddedCursor;
-import com.spvessel.spacevil.Flags.ItemAlignment;
+// import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 
 import OwnLibs.Owls.ElementsFactory;
-import OwnLibs.Owls.History;
 
 public class HomePage extends HorizontalStack {
 
@@ -94,20 +91,20 @@ public class HomePage extends HorizontalStack {
         return hri;
     }
 
-    private void setLabelCursor(Label... labels) {
-        for (Label label : labels) {
-            label.setCursor(EmbeddedCursor.HAND);
-        }
-    }
+    // private void setLabelCursor(Label... labels) {
+    //     for (Label label : labels) {
+    //         label.setCursor(EmbeddedCursor.HAND);
+    //     }
+    // }
 
-    private void setLabelHoverness(Label... labels) {
-        for (Label label : labels) {
-            label.eventMouseHover.add((sender, args) -> {
-                label.setFontStyle(Font.BOLD);
-            });
-            label.eventMouseLeave.add((sender, args) -> {
-                label.setFontStyle(Font.PLAIN);
-            });
-        }
-    }
+    // private void setLabelHoverness(Label... labels) {
+    //     for (Label label : labels) {
+    //         label.eventMouseHover.add((sender, args) -> {
+    //             label.setFontStyle(Font.BOLD);
+    //         });
+    //         label.eventMouseLeave.add((sender, args) -> {
+    //             label.setFontStyle(Font.PLAIN);
+    //         });
+    //     }
+    // }
 }

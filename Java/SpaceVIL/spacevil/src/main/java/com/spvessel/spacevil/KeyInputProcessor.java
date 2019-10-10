@@ -98,16 +98,15 @@ final class KeyInputProcessor {
             if (action == InputState.PRESS.getValue())
                 _commonProcessor.manager.assignActionsForSender(InputEventType.KEY_PRESS, _kargs, _commonProcessor.focusedItem,
                         _commonProcessor.underFocusedItems, true);
-            // assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem, true);
+
             else if (action == InputState.REPEAT.getValue())
                 _commonProcessor.manager.assignActionsForSender(InputEventType.KEY_PRESS, _kargs, _commonProcessor.focusedItem,
                         _commonProcessor.underFocusedItems, true);
-            // assignActions(InputEventType.KEY_PRESS, _kargs, focusedItem, true);
+                        
             else if (action == InputState.RELEASE.getValue())
                 _commonProcessor.manager.assignActionsForSender(InputEventType.KEY_RELEASE, _kargs, 
                         _commonProcessor.focusedItem,
                         _commonProcessor.underFocusedItems, true);
-            // assignActions(InputEventType.KEY_RELEASE, _kargs, focusedItem, true);
         }
     }
 

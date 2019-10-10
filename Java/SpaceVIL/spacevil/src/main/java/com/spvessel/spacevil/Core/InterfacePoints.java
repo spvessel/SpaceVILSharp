@@ -16,7 +16,7 @@ public interface InterfacePoints {
 
     List<float[]> getShapePointer();
 
-    List<float[]> makeShape();
+    List<float[]> getPoints();
 
     void setPointsCoord(List<float[]> coord);
 }

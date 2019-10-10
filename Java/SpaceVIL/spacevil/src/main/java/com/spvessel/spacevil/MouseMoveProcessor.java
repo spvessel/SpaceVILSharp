@@ -1,6 +1,9 @@
 package com.spvessel.spacevil;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.nio.*;
 
 import org.lwjgl.*;
@@ -130,6 +133,9 @@ final class MouseMoveProcessor {
             _commonProcessor.ptrPress.setX(_commonProcessor.ptrRelease.getX());
             _commonProcessor.ptrPress.setY(_commonProcessor.ptrRelease.getY());
 
+            Prototype lastHovered = _commonProcessor.hoveredItem;
+            List<Prototype> tmpList = new LinkedList<>(_commonProcessor.underHoveredItems);
+
             if (_commonProcessor.getHoverPrototype(_commonProcessor.ptrRelease.getX(),
                     _commonProcessor.ptrRelease.getY(), InputEventType.MOUSE_MOVE)) {
                 if (_commonProcessor.hoveredItem != null && !("".equals(_commonProcessor.hoveredItem.getToolTip()))) {
@@ -139,12 +145,26 @@ final class MouseMoveProcessor {
                 if (popup != null) {
                     ((PopUpMessage) popup).holdSelf(true);
                 }
+
+                if (lastHovered != null) {
+                    if (!_commonProcessor.underHoveredItems.contains(lastHovered))
+                        lastHovered.setMouseHover(false);
+                    List<Prototype> uniqueList = getUniqueList(tmpList, _commonProcessor.underHoveredItems);
+                    for (Prototype item : uniqueList) {
+                        item.setMouseHover(false);
+                    }
+                }
             }
         }
+    }
 
-        // try {
-        //     Thread.sleep(5);
-        // } catch (Exception e) {
-        // }
+    private <T> List<T> getUniqueList(List<T> firstList, List<T> secondList) {
+        Set<T> hashset = new HashSet<>(secondList);
+        List<T> result = new LinkedList<>();
+        for (T item : firstList) {
+            if (!hashset.contains(item))
+                result.add(item);
+        }
+        return result;
     }
 }

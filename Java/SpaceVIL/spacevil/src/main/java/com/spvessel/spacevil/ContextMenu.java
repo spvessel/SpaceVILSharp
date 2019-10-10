@@ -268,6 +268,10 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         // else
         // getHandler().getWindow().setFocus();
     }
+    
+    public void hide(MouseArgs args) {
+        hide();
+    }
 
     /**
      * Set confines according to position and size of the ContextMenu

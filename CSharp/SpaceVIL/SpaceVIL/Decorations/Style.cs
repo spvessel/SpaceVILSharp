@@ -38,7 +38,7 @@ namespace SpaceVIL.Decorations
         public Indents Padding;// = new Indents();
         public Spacing Spacing;// = new Spacing();
         public Indents Margin;// = new Indents();
-        public CornerRadius BorderRadius;
+        public CornerRadius BorderRadius = new CornerRadius();
         public int BorderThickness;
         public Color BorderFill;
         public List<float[]> Shape;// = new List<float[]>();
@@ -574,7 +574,7 @@ namespace SpaceVIL.Decorations
         public static Style GetComboBoxStyle()
         {
             Style style = new Style();
-            style.Background = Color.Transparent;
+            style.Background = Color.FromArgb(255, 220, 220, 220);
             style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
@@ -584,7 +584,7 @@ namespace SpaceVIL.Decorations
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
 
             Style selection_style = new Style();
-            selection_style.Background = Color.FromArgb(255, 220, 220, 220);
+            selection_style.Background = Color.Transparent;
             selection_style.Foreground = Color.FromArgb(255, 70, 70, 70); ;
             selection_style.Font = DefaultsService.GetDefaultFont(14);
             selection_style.WidthPolicy = SizePolicy.Expand;
@@ -607,6 +607,8 @@ namespace SpaceVIL.Decorations
             });
             style.AddInnerStyle("dropdownbutton", dropdownbutton_style);
 
+            style.AddInnerStyle("dropdownarea", GetComboBoxDropDownStyle());
+
             Style arrow_style = new Style();
             arrow_style.Width = 14;
             arrow_style.Height = 6;
@@ -628,13 +630,18 @@ namespace SpaceVIL.Decorations
             style.WidthPolicy = SizePolicy.Fixed;
             style.HeightPolicy = SizePolicy.Fixed;
             style.Padding = new Indents(0, 0, 0, 0);
-            style.SetShadow(new Shadow(5, 3, 3, Color.FromArgb(180, 0, 0, 0)));
-            style.IsShadowDrop = true;
+            style.IsVisible = false;
 
             Style itemlist_style = GetListBoxStyle();
             itemlist_style.Background = Color.Transparent;
             itemlist_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
             style.AddInnerStyle("itemlist", itemlist_style);
+
+            Style itemlistarea_style = itemlist_style.GetInnerStyle("area");
+            if (itemlistarea_style != null)
+            {
+                itemlist_style.SetPadding(0, 0, 0, 0);
+            }
 
             Style vsb_style = GetSimpleVerticalScrollBarStyle();
             vsb_style.Alignment = ItemAlignment.Right | ItemAlignment.Top;
@@ -661,7 +668,7 @@ namespace SpaceVIL.Decorations
         {
             Style style = new Style();
             style.Background = Color.Transparent;
-            style.Foreground = Color.FromArgb(70, 70, 70); ;
+            style.Foreground = Color.FromArgb(70, 70, 70);
             style.Font = DefaultsService.GetDefaultFont();
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
@@ -670,7 +677,7 @@ namespace SpaceVIL.Decorations
             style.SetAlignment(ItemAlignment.Left | ItemAlignment.Top);
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.Padding = new Indents(10, 0, 10, 0);
-            style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(255, 150, 150, 150)));
+            style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(200, 200, 200)));
 
             Style text_style = new Style();
             text_style.SetMargin(0, 0, 0, 0);
@@ -696,6 +703,8 @@ namespace SpaceVIL.Decorations
             Style style = GetDefaultCommonStyle();
             style.Background = Color.FromArgb(210, 210, 210);
             style.IsVisible = false;
+            style.SetShadow(new Shadow(10, 3, 3, Color.FromArgb(180, 0, 0, 0)));
+            style.IsShadowDrop = true;
 
             Style itemlist_style = GetListBoxStyle();
             itemlist_style.Background = Color.Transparent;
@@ -1136,7 +1145,7 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Expand;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.Padding = new Indents(2, 2, 2, 2);
-            style.Spacing = new Spacing(0, 5);
+            style.Spacing = new Spacing(0, 4);
 
             Style selection_style = GetSelectionItemStyle();
             style.AddInnerStyle("selection", selection_style);
@@ -1479,7 +1488,7 @@ namespace SpaceVIL.Decorations
         {
             Style style = new Style();
 
-            style.Font = DefaultsService.GetDefaultFont();
+            style.Font = DefaultsService.GetDefaultFont(12);
             style.Background = Color.White;
             style.Foreground = Color.FromArgb(255, 70, 70, 70);
             style.Height = 30;
@@ -1487,8 +1496,16 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Fixed;
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            style.Padding = new Indents(5, 0, 5, 0);
+            style.Padding = new Indents(5, 5, 5, 5);
             style.BorderRadius = new CornerRadius(4);
+
+            Style text_style = new Style();
+            text_style.Background = Color.Transparent;
+            text_style.WidthPolicy = SizePolicy.Expand;
+            text_style.HeightPolicy = SizePolicy.Expand;
+            text_style.Alignment = ItemAlignment.VCenter | ItemAlignment.HCenter;
+            text_style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.HCenter;
+            style.AddInnerStyle("text", text_style);
 
             return style;
         }

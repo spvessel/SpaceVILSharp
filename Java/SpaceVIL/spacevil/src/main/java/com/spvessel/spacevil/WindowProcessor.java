@@ -149,27 +149,27 @@ final class WindowProcessor {
     }
 
     private ByteBuffer createByteImage(BufferedImage image) {
-        List<Byte> bmp = new LinkedList<Byte>();
-        for (int j = 0; j < image.getHeight(); j++) {
-            for (int i = 0; i < image.getWidth(); i++) {
-                byte[] bytes = ByteBuffer.allocate(4).putInt(image.getRGB(i, j)).array();
-                bmp.add(bytes[1]);
-                bmp.add(bytes[2]);
-                bmp.add(bytes[3]);
-                bmp.add(bytes[0]);
-            }
-        }
-        ByteBuffer result = BufferUtils.createByteBuffer(bmp.size());
-        int index = 0;
-        for (byte var : bmp) {
-            result.put(index, var);
-            index++;
-        }
-        result.rewind();
-        return result;
+        // List<Byte> bmp = new LinkedList<Byte>();
+        // for (int j = 0; j < image.getHeight(); j++) {
+        //     for (int i = 0; i < image.getWidth(); i++) {
+        //         byte[] bytes = ByteBuffer.allocate(4).putInt(image.getRGB(i, j)).array();
+        //         bmp.add(bytes[1]);
+        //         bmp.add(bytes[2]);
+        //         bmp.add(bytes[3]);
+        //         bmp.add(bytes[0]);
+        //     }
+        // }
+        // ByteBuffer result = BufferUtils.createByteBuffer(bmp.size());
+        // for (byte var : bmp) {
+        //     result.put(var);
+        // }
+        // result.rewind();
+        return VramTexture.getByteBuffer(image);
     }
 
     void applyIcon(BufferedImage iconBig, BufferedImage iconSmall) {
+        if ((iconBig == null) || (iconSmall == null))
+            return;
         GLFWImage.Buffer gb = GLFWImage.malloc(2);
         GLFWImage s = GLFWImage.malloc();
         s.set(iconSmall.getWidth(), iconSmall.getHeight(), createByteImage(iconSmall));

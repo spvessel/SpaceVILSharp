@@ -142,6 +142,9 @@ namespace SpaceVIL
 
         internal Side GetSides(float xpos, float ypos) //проблемы с глобальным курсором
         {
+            if(!GetHandler().IsBorderHidden)
+                return 0;
+                
             if (xpos <= SpaceVILConstants.BorderCursorTolerance)
             {
                 _sides |= Side.Left;

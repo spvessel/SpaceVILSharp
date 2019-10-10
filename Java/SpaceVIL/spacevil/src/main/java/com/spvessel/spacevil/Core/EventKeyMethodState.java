@@ -6,6 +6,10 @@ import java.util.LinkedList;
 public class EventKeyMethodState {
 
     List<InterfaceKeyMethodState> events;
+    
+    public List<InterfaceKeyMethodState> getActions() {
+        return new LinkedList<>(events);
+    }
 
     public int size() {
         if (events == null)

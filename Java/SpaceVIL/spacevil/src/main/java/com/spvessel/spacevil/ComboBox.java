@@ -6,24 +6,23 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.MouseButton;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ComboBox extends Prototype {
-    // Queue<BaseItem> _queue = new Queue<BaseItem>();
 
     static int count = 0;
-    public ButtonCore selection = new ButtonCore();
-    public ButtonCore dropDown = new ButtonCore();
-    public CustomShape arrow = new CustomShape();
-    public ComboBoxDropDown dropDownArea;
+    ButtonCore selection;
+    ButtonCore dropDown;
+    CustomShape arrow;
+    ComboBoxDropDown dropDownArea;
     public EventCommonMethod selectionChanged = new EventCommonMethod();
-    
+
     @Override
     public void release() {
         selectionChanged.clear();
@@ -41,12 +40,16 @@ public class ComboBox extends Prototype {
         eventKeyPress.add(this::onKeyPress);
         eventMousePress.add((sender, args) -> showDropDownList());
 
+        selection = new ButtonCore();
+        dropDown = new ButtonCore();
+        arrow = new CustomShape();
+        dropDownArea = new ComboBoxDropDown();
+
         setStyle(DefaultsService.getDefaultStyle(ComboBox.class));
     }
 
     public ComboBox(MenuItem... items) {
         this();
-        // preItemList = Arrays.stream(items).collect(Collectors.toList());
         preItemList = Arrays.asList(items);
     }
 
@@ -72,7 +75,11 @@ public class ComboBox extends Prototype {
      * Text margin in the ComboBox
      */
     public void setTextMargin(Indents margin) {
-        selection.setMargin(margin);
+        selection.setTextMargin(margin);
+    }
+
+    public void setTextMargin(int left, int top, int right, int bottom) {
+        selection.setTextMargin(new Indents(left, top, right, bottom));
     }
 
     /**
@@ -147,8 +154,8 @@ public class ComboBox extends Prototype {
         dropDown.addItem(arrow);
 
         // dropDownArea
-        dropDownArea = new ComboBoxDropDown(getHandler());
-        dropDownArea.setOutsideClickClosable(true);
+        ItemsLayoutBox.addItem(getHandler(), dropDownArea, LayoutType.FLOATING);
+        dropDownArea.parent = this;
         dropDownArea.selectionChanged.add(() -> onSelectionChanged());
 
         if (preItemList != null) {
@@ -158,14 +165,25 @@ public class ComboBox extends Prototype {
         }
     }
 
+    boolean isOpened = false;
+
     private void showDropDownList() {
 
-        // dropDownArea
-        dropDownArea.setPosition(getX(), getY() + getHeight());
-        dropDownArea.setWidth(selection.getWidth());
-        MouseArgs args = new MouseArgs();
-        args.button = MouseButton.BUTTON_LEFT;
-        dropDownArea.show(this, args);
+        if (isOpened) {
+            isOpened = false;
+        } else {
+            dropDownArea.setPosition(getX(), getY() + getHeight());
+            dropDownArea.setWidth(selection.getWidth());
+            MouseArgs args = new MouseArgs();
+            args.button = MouseButton.BUTTON_LEFT;
+            dropDownArea.show(this, args);
+        }
+    }
+
+    void isDropDownAreaOutsideClicked(MouseArgs args) {
+        if (getHoverVerification(args.position.getX(), args.position.getY())) {
+            isOpened = true;
+        }
     }
 
     /**
@@ -173,8 +191,10 @@ public class ComboBox extends Prototype {
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
-        dropDownArea.addItem(item);
-        // _queue.Enqueue(item);
+        if (item instanceof MenuItem)
+            dropDownArea.addItem(item);
+        else
+            super.addItem(item);
     }
 
     /**
@@ -212,20 +232,24 @@ public class ComboBox extends Prototype {
             return;
 
         super.setStyle(style);
+
+        Style innerStyle = style.getInnerStyle("selection");
+        if (innerStyle != null)
+            selection.setStyle(innerStyle);
+
+        innerStyle = style.getInnerStyle("dropdownbutton");
+        if (innerStyle != null)
+            dropDown.setStyle(innerStyle);
+
+        innerStyle = style.getInnerStyle("arrow");
+        if (innerStyle != null)
+            arrow.setStyle(innerStyle);
+
+        innerStyle = style.getInnerStyle("dropdownarea");
+        if (innerStyle != null)
+            dropDownArea.setStyle(innerStyle);
+
         setForeground(style.foreground);
         setFont(style.font);
-
-        Style inner_style = style.getInnerStyle("selection");
-        if (inner_style != null) {
-            selection.setStyle(inner_style);
-        }
-        inner_style = style.getInnerStyle("dropdownbutton");
-        if (inner_style != null) {
-            dropDown.setStyle(inner_style);
-        }
-        inner_style = style.getInnerStyle("arrow");
-        if (inner_style != null) {
-            arrow.setStyle(inner_style);
-        }
     }
 }

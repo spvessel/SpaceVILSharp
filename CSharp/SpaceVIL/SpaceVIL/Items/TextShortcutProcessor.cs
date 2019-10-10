@@ -13,7 +13,7 @@ namespace SpaceVIL
         internal static void ProcessShortcut(ITextShortcuts textItem, KeyArgs args)
         {
             //copy
-            if (args.Mods == KeyMods.Control && args.Key == KeyCode.C)
+            if (args.Mods == CommonService.GetOsControlMod() && args.Key == KeyCode.C)
             {
                 string copy_str = textItem.GetSelectedText();
                 // Glfw.SetClipboardString(_handler.GetWindowId(), copy_str);
@@ -22,21 +22,21 @@ namespace SpaceVIL
             }
             
             //undo
-            if (args.Mods == KeyMods.Control && args.Key == KeyCode.Z)
+            if (args.Mods == CommonService.GetOsControlMod() && args.Key == KeyCode.Z)
             {
                 textItem.Undo();
                 return;
             }
             
             //redo
-            if (args.Mods == KeyMods.Control && args.Key == KeyCode.Y)
+            if (args.Mods == CommonService.GetOsControlMod() && args.Key == KeyCode.Y)
             {
                 textItem.Redo();
                 return;
             }
             
             //select all
-            if (args.Mods == KeyMods.Control && (args.Key == KeyCode.A || args.Key == KeyCode.a))
+            if (args.Mods == CommonService.GetOsControlMod() && (args.Key == KeyCode.A || args.Key == KeyCode.a))
             {
                 textItem.SelectAll();
                 return;
@@ -45,7 +45,7 @@ namespace SpaceVIL
             //editable only but has inner checks------------------------------------------------------------------------
 
             //insert/paste
-            if ((args.Mods == KeyMods.Control && args.Key == KeyCode.V) ||
+            if ((args.Mods == CommonService.GetOsControlMod() && args.Key == KeyCode.V) ||
                 (args.Mods == KeyMods.Shift && args.Key == KeyCode.Insert))
             {
                 string paste_str = "";
@@ -56,7 +56,7 @@ namespace SpaceVIL
             }
             
             //cut
-            if (args.Mods == KeyMods.Control && args.Key == KeyCode.X)
+            if (args.Mods == CommonService.GetOsControlMod() && args.Key == KeyCode.X)
             {
                 string cut_str = textItem.CutText();
                 // Glfw.SetClipboardString(_handler.GetWindowId(), cut_str);

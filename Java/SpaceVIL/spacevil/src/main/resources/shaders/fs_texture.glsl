@@ -4,7 +4,7 @@ uniform int overlay;
 uniform vec4 rgb;
 uniform float alpha;
 in vec2 fragTexCoord;
-layout(location = 0) out vec4 finalColor;
+out vec4 finalColor;
 
 void main()
 {

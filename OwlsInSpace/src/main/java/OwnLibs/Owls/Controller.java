@@ -10,6 +10,7 @@ import OwnLibs.Owls.Views.Windows.*;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +55,18 @@ public class Controller {
         itemToDefault();
         // fillFields();
 
+        owlWindow.eventKeyRelease.add((sender, args) -> {
+            if (args.key == KeyCode.PAGEDOWN) {
+                List<InterfaceBaseItem> list = ItemsLayoutBox.getLayoutItems(owlWindow.getWindowGuid());
+                int result = 0;
+                for (InterfaceBaseItem item : list) {
+                    if (item.getBackground().getAlpha() > 0 && item.isDrawable() && item.isVisible()) {
+                        result++;
+                    }
+                }
+                System.out.println(result);
+            }
+        });
         // New file
         owlWindow.homePage.newFileLabel.eventMouseClick
                 .add((sender, args) -> treeNewFileOrFolder(workDirectory, "file"));
@@ -415,13 +428,13 @@ public class Controller {
         tabToOwls.put(tab, tabItem);
 
         // owlWindow.workTabArea.updateLayout();
-        
+
         TextArea textArea = ElementsFactory.getTextArea();
-        owlWindow.workTabArea.addItemToTab(tab, textArea);
-        textArea.setText(""); // Переместить это в fillFields или
-        // // одного вызова достаточно?
+        // textArea.setText(""); // Переместить это в fillFields или
         // textArea.rewindText();
-        
+        owlWindow.workTabArea.addItemToTab(tab, textArea);
+        // // одного вызова достаточно?
+
         // Check editing
         textArea.onTextChanged.add(() -> {
             if (workItem != null && owlWindow.editBtn.isToggled() && !InterfaceSupport.isEditing(workItem)) {
@@ -497,6 +510,7 @@ public class Controller {
         // // одного вызова достаточно?
         // textArea.rewindText();
         getCurrentTextArea().rewindText();
+        // getCurrentTextArea().eventScrollUp.execute(getCurrentTextArea(), new MouseArgs());
 
         // // Check editing
         // textArea.onTextChanged.add(() -> {
@@ -507,7 +521,7 @@ public class Controller {
         // });
 
         setItemEdited(workItem, false); // Загрузка сама считается изменением поля. Это нужно
-                                        // обязательно
+        // обязательно
         // }
 
         fillFields();

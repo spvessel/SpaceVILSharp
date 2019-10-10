@@ -497,6 +497,7 @@ public class ListBox extends Prototype {
      */
     public void setListContent(List<InterfaceBaseItem> content) {
         _area.setListContent(content);
+        updateElements();
     }
 
     /**

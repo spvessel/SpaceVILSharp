@@ -398,8 +398,7 @@ public class WrapGrid extends Prototype {
 
     @Override
     public void clear() {
-        _area.removeAllItems();
-        // updateSlider();
+        _area.clear();
     }
 
     /**
@@ -454,6 +453,7 @@ public class WrapGrid extends Prototype {
      */
     public void setListContent(List<InterfaceBaseItem> content) {
         _area.setListContent(content);
+        // updateSlider();
     }
 
     public InterfaceBaseItem getWrapper(InterfaceBaseItem item) {

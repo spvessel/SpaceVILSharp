@@ -131,7 +131,7 @@ public class TreeView extends ListBox {
 
     @Override
     public void setListContent(List<InterfaceBaseItem> content) {
-        getArea().removeAllItems();
+        getArea().clear();
 
         for (InterfaceBaseItem item : content) {
             addItem(item);

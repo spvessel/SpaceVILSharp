@@ -1,5 +1,7 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Common.CommonService;
+import com.spvessel.spacevil.Core.Area;
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.EventCommonMethodState;
 import com.spvessel.spacevil.Core.EventDropMethodState;
@@ -13,11 +15,17 @@ import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.MSAA;
+import com.spvessel.spacevil.Flags.OSType;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.nio.IntBuffer;
 import java.util.*;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.glfw.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 public abstract class CoreWindow {
     private static int count = 0;
@@ -220,9 +228,9 @@ public abstract class CoreWindow {
 
     public void setSize(int width, int height) {
         _itemGeometry.setWidth(width);
-        windowLayout.getContainer().setWidth(width);
         _itemGeometry.setHeight(height);
-        windowLayout.getContainer().setHeight(height);
+        windowLayout.getContainer().setWidth(_itemGeometry.getWidth());
+        windowLayout.getContainer().setHeight(_itemGeometry.getHeight());
 
         if (windowLayout.isGLWIDValid()) {
             windowLayout.updateSize();
@@ -394,7 +402,26 @@ public abstract class CoreWindow {
     }
 
     public void maximize() {
-        windowLayout.maximize();
+        if (CommonService.getOSType() != OSType.MAC)
+            windowLayout.maximize();
+        else
+            macOSMaximize();
+    }
+
+    private Area _savedArea = new Area();
+
+    private void macOSMaximize() {
+        if (!isMaximized) {
+            _savedArea.setAttr(getX(), getY(), getWidth(), getHeight());
+            Area area = getWorkArea();
+            setPosition(area.getX(), area.getY());
+            setSize(area.getWidth(), area.getHeight());
+            isMaximized = true;
+        } else {
+            setPosition(_savedArea.getX(), _savedArea.getY());
+            setSize(_savedArea.getWidth(), _savedArea.getHeight());
+            isMaximized = false;
+        }
     }
 
     public void toggleFullScreen() {
@@ -620,5 +647,23 @@ public abstract class CoreWindow {
 
     public Color getShadeColor() {
         return windowLayout.getShadeColor();
+    }
+
+    <T> void freeVRAMResource(T resource) {
+        getLayout().freeVRAMResource(resource);
+    }
+
+    public Area getWorkArea() {
+        // long monitor = GLFW.glfwGetWindowMonitor(getGLWID());
+        long monitor = GLFW.glfwGetPrimaryMonitor();
+        if (monitor != NULL) {
+            IntBuffer x = BufferUtils.createIntBuffer(1);
+            IntBuffer y = BufferUtils.createIntBuffer(1);
+            IntBuffer w = BufferUtils.createIntBuffer(1);
+            IntBuffer h = BufferUtils.createIntBuffer(1);
+            GLFW.glfwGetMonitorWorkarea(monitor, x, y, w, h);
+            return new Area(x.get(0), y.get(0), w.get(0), h.get(0));
+        }
+        return null;
     }
 }

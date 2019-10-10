@@ -348,7 +348,7 @@ public class OpenEntryDialog extends OpenDialog {
     }
 
     private void clearListBox() {
-        _fileList.getArea().removeAllItems();
+        _fileList.getArea().clear();
     }
 
     private Map<String, String[]> _extensionFilter = new LinkedHashMap<>();

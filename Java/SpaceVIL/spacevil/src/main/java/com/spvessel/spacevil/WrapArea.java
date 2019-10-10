@@ -278,8 +278,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
         updateLayout();
     }
 
-    public void setListContent(List<InterfaceBaseItem> content)
-    {
+    public void setListContent(List<InterfaceBaseItem> content) {
         removeAllItems();
         for (InterfaceBaseItem item : content) {
             SelectionItem wrapper = getWrapper(item);
@@ -333,30 +332,23 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     @Override
     public void clear() {
         removeAllItems();
+        updateLayout();
+        itemListChanged.execute();
     }
 
-    void removeAllItems() {
-        _lock.lock();
-        try {
-            unselect();
-            List<InterfaceBaseItem> list = getItems();
+    private void removeAllItems() {
+        unselect();
+        List<InterfaceBaseItem> list = getItems();
 
-            if (list == null || list.size() == 0)
-                return;
+        if (list == null || list.size() == 0)
+            return;
 
-            while (!list.isEmpty()) {
-                ((SelectionItem) list.get(0)).clearContent();
-                super.removeItem(list.get(0));
-                list.remove(0);
-            }
-            _mapContent.clear();
-            updateLayout();
-            itemListChanged.execute();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            _lock.unlock();
+        while (!list.isEmpty()) {
+            ((SelectionItem) list.get(0)).clearContent();
+            super.removeItem(list.get(0));
+            list.remove(0);
         }
+        _mapContent.clear();
     }
 
     /**

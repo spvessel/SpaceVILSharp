@@ -3,7 +3,7 @@ package com.spvessel.spacevil.Core;
 import java.awt.Color;
 import java.util.List;
 
-public interface InterfaceLine {
+public interface InterfaceLine extends InterfacePosition {
     void setLineThickness(float thickness);
 
     float getLineThickness();
@@ -12,7 +12,7 @@ public interface InterfaceLine {
 
     Color getLineColor();
 
-    List<float[]> makeShape();
+    List<float[]> getPoints();
 
     void setPointsCoord(List<float[]> coord);
 }

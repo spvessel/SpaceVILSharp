@@ -2,6 +2,7 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DisplayService;
+import com.spvessel.spacevil.Core.Area;
 import com.spvessel.spacevil.Core.Pointer;
 import com.spvessel.spacevil.Exceptions.SpaceVILException;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
@@ -89,7 +90,6 @@ final class GLWHandler {
         glfwWindowHint(GLFW_SAMPLES, _coreWindow._msaa.getValue());
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         // glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE);
 
         if (resizeble)

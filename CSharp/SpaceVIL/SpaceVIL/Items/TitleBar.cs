@@ -51,7 +51,13 @@ namespace SpaceVIL
             _icon.IsFocusable = false;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TitleBar)));
+
+            EventMouseDoubleClick += (sender, args) =>
+            {
+                GetHandler().Maximize();
+            };
         }
+
         public TitleBar(String text = "") : this()
         {
             SetText(text);
@@ -147,18 +153,10 @@ namespace SpaceVIL
             };
 
             //_maximize
-            if (Common.CommonService.GetOSType() != OSType.Mac)
+            _maximize.EventMouseClick += (sender, args) =>
             {
-                _maximize.EventMouseClick += (sender, args) =>
-                {
-                    GetHandler().Maximize();
-                };
-            }
-            else
-            {
-                _maximize.SetVisible(false);
-                _maximize.SetDrawable(false);
-            }
+                GetHandler().Maximize();
+            };
 
             //adding
             switch (Direction)

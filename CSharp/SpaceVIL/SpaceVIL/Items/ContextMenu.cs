@@ -271,6 +271,11 @@ namespace SpaceVIL
                 _returnFocus.SetFocus();
         }
 
+        public void Hide(MouseArgs args)
+        {
+            Hide();
+        }
+
         /// <summary>
         /// Set confines according to position and size of the ContextMenu
         /// </summary>

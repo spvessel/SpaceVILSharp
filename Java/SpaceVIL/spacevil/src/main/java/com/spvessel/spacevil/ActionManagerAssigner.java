@@ -62,6 +62,7 @@ final class ActionManagerAssigner {
     private void goThroughItemPyramid(List<Prototype> itemsList, InputEventType action, InputEventArgs args) {
         Deque<Prototype> tmp = new ArrayDeque<Prototype>(itemsList);
         while (tmp.size() != 0) {
+
             Prototype item = tmp.pollLast();
 
             if (item.isDisabled())
@@ -75,6 +76,8 @@ final class ActionManagerAssigner {
 
             if (!item.isPassEvents(action))
                 break;
+
+            // System.out.println(item.getItemName());
         }
     }
 }

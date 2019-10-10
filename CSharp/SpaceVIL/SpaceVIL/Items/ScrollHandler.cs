@@ -26,7 +26,7 @@ namespace SpaceVIL
             IsFocusable = false;
         }
 
-        void OnMousePress(object sender, MouseArgs args)
+        void OnMousePress(IItem sender, MouseArgs args)
         {
             if (Orientation == Orientation.Horizontal)
                 _diff = args.Position.GetX() - GetX();
@@ -34,7 +34,7 @@ namespace SpaceVIL
                 _diff = args.Position.GetY() - GetY();
         }
 
-        void OnDragging(object sender, MouseArgs args)
+        void OnDragging(IItem sender, MouseArgs args)
         {
             int offset;
             Prototype parent = GetParent();

@@ -60,6 +60,8 @@ public class ItemsLayoutBox {
     }
 
     static public boolean removeItem(CoreWindow layout, InterfaceBaseItem item, LayoutType type) {
+        layout.freeVRAMResource(item);
+
         switch (type) {
         case STATIC:
             return layouts.get(layout.getWindowGuid()).getItems().remove(item);

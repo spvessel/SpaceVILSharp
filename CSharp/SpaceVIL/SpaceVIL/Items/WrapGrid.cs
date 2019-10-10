@@ -440,8 +440,7 @@ namespace SpaceVIL
         }
         public override void Clear()
         {
-            _area.RemoveAllItems();
-            // UpdateSlider();
+            _area.Clear();
         }
 
         /// <summary>
@@ -511,6 +510,7 @@ namespace SpaceVIL
         public virtual void SetListContent(List<IBaseItem> content)
         {
             _area.SetListContent(content);
+            // UpdateSlider();
         }
 
         public IBaseItem GetWrapper(IBaseItem item)

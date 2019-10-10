@@ -10,10 +10,10 @@ namespace SpaceVIL
     public class ComboBox : Prototype
     {
         static int count = 0;
-        public ButtonCore Selection = new ButtonCore();
-        public ButtonCore DropDown = new ButtonCore();
-        public CustomShape Arrow;
-        public ComboBoxDropDown DropDownArea;
+        internal ButtonCore Selection;
+        internal ButtonCore DropDown;
+        internal CustomShape Arrow;
+        internal ComboBoxDropDown DropDownArea;
         public EventCommonMethod SelectionChanged;
 
         public override void Release()
@@ -34,7 +34,11 @@ namespace SpaceVIL
             EventKeyPress += OnKeyPress;
             EventMousePress += (sender, args) => ShowDropDownList();
 
+            Selection = new ButtonCore();
+            DropDown = new ButtonCore();
             Arrow = new CustomShape();
+            DropDownArea = new ComboBoxDropDown();
+
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBox)));
         }
 
@@ -63,7 +67,12 @@ namespace SpaceVIL
         /// </summary>
         public void SetTextMargin(Indents margin)
         {
-            Selection.SetMargin(margin);
+            Selection.SetTextMargin(margin);
+        }
+
+        public void SetTextMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
+        {
+            Selection.SetTextMargin(new Indents(left, top, right, bottom));
         }
 
         /// <summary>
@@ -141,8 +150,9 @@ namespace SpaceVIL
             DropDown.AddItem(Arrow);
 
             //DropDownArea
-            DropDownArea = new ComboBoxDropDown(GetHandler());
-            DropDownArea.SetOutsideClickClosable(true);
+            // DropDownArea = new ComboBoxDropDown(GetHandler());
+            ItemsLayoutBox.AddItem(GetHandler(), DropDownArea, LayoutType.Floating);
+            DropDownArea.Parent = this;
             DropDownArea.SelectionChanged += OnSelectionChanged;
             if (preItemList != null)
             {
@@ -152,14 +162,30 @@ namespace SpaceVIL
             }
         }
 
+        internal bool IsOpened = false;
+
         private void ShowDropDownList()
         {
-            //DropDownArea
-            DropDownArea.SetPosition(GetX(), GetY() + GetHeight());
-            DropDownArea.SetWidth(Selection.GetWidth());
-            MouseArgs args = new MouseArgs();
-            args.Button = MouseButton.ButtonLeft;
-            DropDownArea.Show(this, args);
+            if (IsOpened)
+            {
+                IsOpened = false;
+            }
+            else
+            {
+                DropDownArea.SetPosition(GetX(), GetY() + GetHeight());
+                DropDownArea.SetWidth(Selection.GetWidth());
+                MouseArgs args = new MouseArgs();
+                args.Button = MouseButton.ButtonLeft;
+                DropDownArea.Show(this, args);
+            }
+        }
+
+        internal void IsDropDownAreaOutsideClicked(MouseArgs args)
+        {
+            if (GetHoverVerification(args.Position.GetX(), args.Position.GetY()))
+            {
+                IsOpened = true;
+            }
         }
 
         /// <summary>
@@ -167,7 +193,10 @@ namespace SpaceVIL
         /// </summary>
         public override void AddItem(IBaseItem item)
         {
-            DropDownArea.AddItem(item);
+            if (item is MenuItem)
+                DropDownArea.AddItem(item);
+            else
+                base.AddItem(item);
         }
 
         /// <summary>
@@ -206,24 +235,25 @@ namespace SpaceVIL
                 return;
 
             base.SetStyle(style);
+
+            Style innerStyle = style.GetInnerStyle("selection");
+            if (innerStyle != null)
+                Selection.SetStyle(innerStyle);
+
+            innerStyle = style.GetInnerStyle("dropdownbutton");
+            if (innerStyle != null)
+                DropDown.SetStyle(innerStyle);
+
+            innerStyle = style.GetInnerStyle("arrow");
+            if (innerStyle != null)
+                Arrow.SetStyle(innerStyle);
+
+            innerStyle = style.GetInnerStyle("dropdownarea");
+            if (innerStyle != null)
+                DropDownArea.SetStyle(innerStyle);
+
             SetForeground(style.Foreground);
             SetFont(style.Font);
-
-            Style inner_style = style.GetInnerStyle("selection");
-            if (inner_style != null)
-            {
-                Selection.SetStyle(inner_style);
-            }
-            inner_style = style.GetInnerStyle("dropdownbutton");
-            if (inner_style != null)
-            {
-                DropDown.SetStyle(inner_style);
-            }
-            inner_style = style.GetInnerStyle("arrow");
-            if (inner_style != null)
-            {
-                Arrow.SetStyle(inner_style);
-            }
         }
     }
 }

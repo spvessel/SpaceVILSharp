@@ -59,6 +59,7 @@ final class StencilProcessor {
                     h = shape[1] + shape[3] - y;
 
                 _bounds.put(shell, new int[] { x, y, w, h });
+                // _bounds.put(shell, new int[] { shape[0], shape[1], shape[2], shape[3] });
             }
             return true;
         }

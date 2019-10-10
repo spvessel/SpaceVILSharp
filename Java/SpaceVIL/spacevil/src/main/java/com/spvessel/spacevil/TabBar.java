@@ -521,7 +521,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         }
         if (!mapExpand.isEmpty())
             itemWidth += totalSpace % mapExpand.size();
-        mapFixed.replace(list.get(lastIndex), new Integer(itemWidth));
+        mapFixed.replace(list.get(lastIndex), itemWidth);
         return mapFixed;
     }
 }

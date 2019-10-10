@@ -27,7 +27,7 @@ namespace SpaceVIL.Core
         {
             return _bg;
         }
-        private List<float[]> _triangles = new List<float[]>();
+        private List<float[]> _triangles = null;//new List<float[]>();
         public void SetTriangles(List<float[]> triangles)
         {
             _triangles = triangles;
@@ -36,9 +36,6 @@ namespace SpaceVIL.Core
         {
             return _triangles;
         }
-        public virtual List<float[]> MakeShape()
-        {
-            return GetTriangles();
-        }
+        public virtual void MakeShape() { }
     }
 }

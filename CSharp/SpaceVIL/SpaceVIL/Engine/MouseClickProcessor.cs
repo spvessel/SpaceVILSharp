@@ -71,8 +71,9 @@ namespace SpaceVIL
                 _commonProcessor.PtrPress.SetPosition((float)x, (float)y);
                 _commonProcessor.PtrClick.SetPosition((float)x, (float)y);
             }
-            if (!_commonProcessor.GetHoverPrototype(_commonProcessor.PtrRelease.GetX(),
-                                    _commonProcessor.PtrRelease.GetY(), m_state))
+
+            if (!_commonProcessor.GetHoverPrototype(_commonProcessor.PtrRelease.GetX(), 
+                    _commonProcessor.PtrRelease.GetY(), m_state))
             {
                 lastHovered.SetMousePressed(false);
                 _commonProcessor.Events.ResetAllEvents();
@@ -81,8 +82,9 @@ namespace SpaceVIL
                     lastHovered.EventMouseDrop?.Invoke(lastHovered, _commonProcessor.Margs);
                 return;
             }
-            if (state == InputState.Press
-                && _commonProcessor.RootContainer.GetSides(_commonProcessor.PtrRelease.GetX(), _commonProcessor.PtrRelease.GetY()) != 0)
+
+            if (state == InputState.Press && _commonProcessor.RootContainer.GetSides(
+                    _commonProcessor.PtrRelease.GetX(), _commonProcessor.PtrRelease.GetY()) != 0)
             {
                 _commonProcessor.RootContainer.SaveLastFocus(_commonProcessor.FocusedItem);
             }
@@ -131,6 +133,8 @@ namespace SpaceVIL
                         _commonProcessor.FocusedItem = _commonProcessor.HoveredItem;
                         _commonProcessor.FocusedItem.SetFocused(true);
                     }
+                    _commonProcessor.UnderFocusedItems = new List<Prototype>(_commonProcessor.UnderHoveredItems);
+                    _commonProcessor.UnderFocusedItems.Remove(_commonProcessor.FocusedItem);
                 }
                 else
                 {
@@ -149,13 +153,12 @@ namespace SpaceVIL
                             {
                                 _commonProcessor.FocusedItem = f;
                                 _commonProcessor.FocusedItem.SetFocused(true);
+                                _commonProcessor.FindUnderFocusedItems(_commonProcessor.FocusedItem);
                             }
                             break;
                         }
                     }
                 }
-                _commonProcessor.UnderFocusedItems = new List<Prototype>(_commonProcessor.UnderHoveredItems);
-                _commonProcessor.UnderFocusedItems.Remove(_commonProcessor.FocusedItem);
             }
             _commonProcessor.Events.ResetAllEvents();
             _commonProcessor.Events.SetEvent(InputEventType.MousePress);
@@ -163,6 +166,8 @@ namespace SpaceVIL
 
         internal void Release(Int64 window, MouseButton button, InputState state, KeyMods mods)
         {
+            _commonProcessor.FocusedItem.SetMousePressed(false);
+            
             _commonProcessor.RootContainer.RestoreFocus();
             bool isDoubleClick = IsDoubleClick(_commonProcessor.HoveredItem);
             Queue<Prototype> underHoveredList = new Queue<Prototype>(_commonProcessor.UnderHoveredItems);

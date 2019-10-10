@@ -266,4 +266,12 @@ final class WindowLayout {
             wndLock.unlock();
         }
     }
+
+    <T> void freeVRAMResource(T resource) {
+        _engine.freeVRAMResource(resource);
+    }
+
+    ToolTipItem getToolTip() {
+        return _engine.getToolTip();
+    }
 }

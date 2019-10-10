@@ -20,7 +20,12 @@ namespace SpaceVIL
         }
 
         static int count = 0;
-        private byte[] _bitmap;
+        // private byte[] _bitmap;
+        private Bitmap _image = null;
+        public Bitmap GetImage()
+        {
+            return _image;
+        }
         private String _url;
         private float _angleRotation = 0.0f;
         public void SetRotationAngle(float angle)
@@ -59,7 +64,7 @@ namespace SpaceVIL
         {
             if (picture == null)
                 return;
-            _bitmap = CreateByteImage(picture);
+            SetImage(picture);
         }
 
         public ImageItem(Bitmap picture, bool hover) : this(picture)
@@ -70,39 +75,39 @@ namespace SpaceVIL
         /// <summary>
         /// Returns the image as byte array
         /// </summary>
-        public byte[] GetPixMapImage()
-        {
-            return _bitmap;
-        }
+        // public byte[] GetPixMapImage()
+        // {
+        //     // return _bitmap;
+        //     return null;
+        // }
 
-        protected virtual byte[] CreateByteImage(Bitmap picture)
-        {
-            try
-            {
-                _imageWidth = picture.Width;
-                _imageHeight = picture.Height;
-                List<byte> result = new List<byte>();
-                for (int j = picture.Height - 1; j >= 0; j--)
-                {
-                    for (int i = 0; i < picture.Width; i++)
-                    {
-                        Color pixel = picture.GetPixel(i, j);
-                        result.Add(pixel.R);
-                        result.Add(pixel.G);
-                        result.Add(pixel.B);
-                        result.Add(pixel.A);
-                    }
-                }
-                picture.Dispose();
-                SetNew(true);
-                return result.ToArray();
-            }
-            catch (System.Exception ex)
-            {
-                Console.WriteLine("Create byte image" + ex.StackTrace);
-                return null;
-            }
-        }
+        // protected virtual byte[] CreateByteImage(Bitmap picture)
+        // {
+        //     try
+        //     {
+        //         _imageWidth = picture.Width;
+        //         _imageHeight = picture.Height;
+        //         List<byte> result = new List<byte>();
+        //         for (int j = picture.Height - 1; j >= 0; j--)
+        //         {
+        //             for (int i = 0; i < picture.Width; i++)
+        //             {
+        //                 Color pixel = picture.GetPixel(i, j);
+        //                 result.Add(pixel.R);
+        //                 result.Add(pixel.G);
+        //                 result.Add(pixel.B);
+        //                 result.Add(pixel.A);
+        //             }
+        //         }
+        //         picture.Dispose();
+        //         return result.ToArray();
+        //     }
+        //     catch (System.Exception ex)
+        //     {
+        //         Console.WriteLine("Create byte image" + ex.StackTrace);
+        //         return null;
+        //     }
+        // }
 
         private int _imageWidth;
         private int _imageHeight;
@@ -126,8 +131,13 @@ namespace SpaceVIL
         {
             if (image == null)
                 return;
-            _bitmap = CreateByteImage(image);
-            if (_isKeepAspectRatio && _bitmap != null)
+        
+            _image = (Bitmap)image.Clone();
+            _imageWidth = image.Width;
+            _imageHeight = image.Height;
+            // _bitmap = CreateByteImage(image);
+            // if (_isKeepAspectRatio && _bitmap != null)
+            if (_isKeepAspectRatio && _image != null)
                 ApplyAspectRatio();
             UpdateLayout();
         }
@@ -177,7 +187,8 @@ namespace SpaceVIL
         {
             base.SetHeight(height);
             Area.SetHeight(height);
-            if (_isKeepAspectRatio && _bitmap != null)
+            // if (_isKeepAspectRatio && _bitmap != null)
+            if (_isKeepAspectRatio && _image != null)
                 ApplyAspectRatio();
             UpdateLayout();
         }
@@ -186,7 +197,8 @@ namespace SpaceVIL
         {
             base.SetWidth(width);
             Area.SetWidth(width);
-            if (_isKeepAspectRatio && _bitmap != null)
+            // if (_isKeepAspectRatio && _bitmap != null)
+            if (_isKeepAspectRatio && _image != null)
                 ApplyAspectRatio();
             UpdateLayout();
         }
@@ -223,6 +235,7 @@ namespace SpaceVIL
         {
             UpdateVerticalPosition();
             UpdateHorizontalPosition();
+            SetNew(true);
         }
 
         private void UpdateHorizontalPosition()
@@ -262,7 +275,9 @@ namespace SpaceVIL
 
         public override void Release()
         {
-            VRAMStorage.AddToDelete(this);
+            // VRAMStorage.AddToDelete(this);
+            if(_image != null)
+                _image.Dispose();
         }
 
         //подумать над общим решением

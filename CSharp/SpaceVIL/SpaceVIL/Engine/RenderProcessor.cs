@@ -6,11 +6,21 @@ using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
-    internal class RenderProcessor
+    internal sealed class RenderProcessor
     {
-        internal RenderProcessor() { }
-
         private Object _locker = new Object();
+
+        internal RenderProcessor()
+        {
+            ScreenSquare = new VramVertex();
+        }
+
+        internal VramVertex ScreenSquare;
+
+        internal VramStorage<IImageItem, VramTexture> TextureStorage = new VramStorage<IImageItem, VramTexture>();
+        internal VramStorage<ITextContainer, VramTexture> TextStorage = new VramStorage<ITextContainer, VramTexture>();
+        internal VramStorage<IBaseItem, VramVertex> VertexStorage = new VramStorage<IBaseItem, VramVertex>();
+        internal VramStorage<IBaseItem, VramTexture> ShadowStorage = new VramStorage<IBaseItem, VramTexture>();
 
         private readonly float _intervalVeryLow = 1.0f;
         private readonly float _intervalLow = 1.0f / 10.0f;
@@ -96,186 +106,407 @@ namespace SpaceVIL
             }
         }
 
-        internal void DrawVertex(Shader shader, List<float[]> vertex, float level, Color color, uint type)
+        internal void DrawDirectVertex(
+            Shader shader, List<float[]> vertex, float level,
+            int x, int y, int w, int h, Color color, uint type)
         {
+            if (vertex == null)
+                return;
+                
             shader.UseShader();
-            VRAMVertex store = new VRAMVertex();
-            store.GenBuffers(vertex, level);
-            store.SendColor(shader, color);
-            store.Draw(type);
-            store.Clear();
-        }
-
-        internal void DrawVertex(Shader shader, float[] vertex, Color color, uint type)
-        {
-            shader.UseShader();
-            VRAMVertex store = new VRAMVertex();
+            VramVertex store = new VramVertex();
             store.GenBuffers(vertex);
             store.SendColor(shader, color);
-            store.Draw(type);
+            store.SendUniform4f(shader, "position", new float[] { x, y, w, h });
+            store.SendUniform1f(shader, "level", level);
+            store.Type = type;
+            store.Draw();
             store.Clear();
         }
 
-        internal void DrawText(Shader shader, float x0, float x1, float y0, float y1, int w, int h, byte[] buffer, float level,
-                float[] color)
+        internal void DrawScreenRectangle(
+            Shader shader, float level, int x, int y, int w, int h, Color color, uint type)
         {
             shader.UseShader();
-            VRAMTexture store = new VRAMTexture();
-            store.GenBuffers(x0, x1, y0, y1, level, true);
-            store.GenTexture(w, h, buffer);
+            ScreenSquare.Bind();
+            ScreenSquare.SendColor(shader, color);
+            ScreenSquare.SendUniform4f(shader, "position", new float[] { 0, 0, w, h });
+            ScreenSquare.SendUniform1f(shader, "level", level);
+            ScreenSquare.Type = type;
+            ScreenSquare.Draw();
+            ScreenSquare.Unbind();
+        }
+
+        internal void DrawFreshVertex(
+            Shader shader, IBaseItem item, float level, int x, int y, int w, int h, Color color, uint type)
+        {
+            VertexStorage.DeleteResource(item);
+            List<float[]> vertex = item.GetTriangles();
+            if (vertex == null)
+                return;
+
+            shader.UseShader();
+
+            VramVertex store = new VramVertex();
+            store.GenBuffers(vertex);
+            store.SendColor(shader, color);
+            store.SendUniform4f(shader, "position", new float[] { x, y, w, h });
+            store.SendUniform1f(shader, "level", level);
+            store.Type = type;
+            store.Draw();
+
+            VertexStorage.AddResource(item, store);
+        }
+
+        internal void DrawStoredVertex(
+            Shader shader, IBaseItem item, float level, int x, int y, int w, int h, Color color, uint type)
+        {
+            VramVertex store = VertexStorage.GetResource(item);
+            if (store == null)
+            {
+                item.SetRemakeRequest(true);
+                return;
+            }
+
+            shader.UseShader();
+            store.Bind();
+            store.SendColor(shader, color);
+            store.SendUniform4f(shader, "position", new float[] { x, y, w, h });
+            store.SendUniform1f(shader, "level", level);
+            store.Type = type;
+            store.Draw();
+        }
+
+        internal void DrawFreshVertex(
+            Shader shader, IBaseItem item, float[] vertex, float level, int x, int y, int w, int h, Color color, uint type)
+        {
+            VertexStorage.DeleteResource(item);
+
+            if (vertex == null)
+                return;
+
+            shader.UseShader();
+
+            VramVertex store = new VramVertex();
+            store.GenBuffers(vertex);
+            store.SendColor(shader, color);
+            store.SendUniform4f(shader, "position", new float[] { x, y, w, h });
+            store.SendUniform1f(shader, "level", level);
+            store.Type = type;
+            store.Draw();
+
+            VertexStorage.AddResource(item, store);
+        }
+
+        internal void DrawFreshText(
+            Shader shader, ITextContainer item, TextPrinter printer, float w, float h,
+            float level, float[] color)
+        {
+            TextStorage.DeleteResource(item);
+
+            byte[] buffer = printer.Texture;
+            if (buffer == null || buffer.Length == 0)
+                return;
+
+            shader.UseShader();
+            VramTexture store = new VramTexture();
+            store.GenBuffers(0, printer.WidthTexture, 0, printer.HeightTexture, true);
+            store.GenTexture(printer.WidthTexture, printer.HeightTexture, buffer);
+            TextStorage.AddResource(item, store);
+
+            store.SendUniform4f(shader, "position", new float[] { printer.XTextureShift, printer.YTextureShift, w, h });
+            store.SendUniform1f(shader, "level", level);
             store.SendUniformSample2D(shader, "tex");
             store.SendUniform4f(shader, "rgb", color);
             store.Draw();
-            store.Clear();
+            store.Unbind();
         }
 
-        internal void DrawShadow(Shader shader, float level, float[] weights, int res, uint[] fboTexture, float[] xy, float[] wh,
-                int width, int height)
+        internal void DrawStoredText(
+            Shader shader, ITextContainer item, TextPrinter printer, float w, float h,
+            float level, float[] color)
         {
-            float i_x0 = -1.0f;
-            float i_y0 = 1.0f;
-            float i_x1 = 1.0f;
-            float i_y1 = -1.0f;
+            VramTexture store = TextStorage.GetResource(item);
+            if (store == null)
+            {
+                item.SetRemakeText(true);
+                return;
+            }
+
             shader.UseShader();
-            VRAMTexture store = new VRAMTexture();
-            store.GenBuffers(i_x0, i_x1, i_y0, i_y1, level);
+            store.BindVboIbo();
+            store.Bind();
+            store.SendUniformSample2D(shader, "tex");
+            store.SendUniform4f(shader, "position", new float[] { printer.XTextureShift, printer.YTextureShift, w, h });
+            store.SendUniform1f(shader, "level", level);
+            store.SendUniform4f(shader, "rgb", color);
+            store.Draw();
+            store.Unbind();
+        }
+
+        internal VramTexture DrawDirectShadow(
+                    Shader shader, float level, float[] weights, int res, uint[] fboTexture,
+                    float x, float y, float w, float h, int width, int height)
+        {
+            shader.UseShader();
+            VramTexture store = new VramTexture();
+            store.GenBuffers(0, width, 0, height);
+            store.Texture[0] = fboTexture[0];
             store.Bind(fboTexture);
             store.SendUniformSample2D(shader, "tex");
+            store.SendUniform4f(shader, "position", new float[] { x, y, width, height });
+            store.SendUniform1f(shader, "level", level);
             store.SendUniform1fv(shader, "weights", 11, weights);
             store.SendUniform2fv(shader, "frame", new float[] { width, height });
-            store.SendUniform1f(shader, "res", (res * 1f / 10));
-            store.SendUniform2fv(shader, "point", xy);
-            store.SendUniform2fv(shader, "size", wh);
+            store.SendUniform1f(shader, "res", res / 10.0f);
+            store.SendUniform2fv(shader, "point", new float[] { x, y });
+            store.SendUniform2fv(shader, "size", new float[] { w, h });
             store.Draw();
-            store.Clear();
+            return store;
         }
 
-        internal void DrawTextureAsIs(Shader shader, float x0, float x1, float y0, float y1, int w, int h, byte[] buffer,
-                float level, float alpha)
+        internal void DrawRawShadow(
+            Shader shader, float level, uint[] fboTexture,
+            float x, float y, float w, float h, int width, int height)
         {
+            VramTexture store = new VramTexture();
+            store.GenBuffers(0, w, 0, h);
+            store.Texture[0] = fboTexture[0];
+            store.Bind(fboTexture);
+
             shader.UseShader();
-            VRAMTexture store = new VRAMTexture();
-            store.GenBuffers(x0, x1, y0, y1, level);
-            store.GenTexture(w, h, buffer);
             store.SendUniformSample2D(shader, "tex");
+            store.SendUniform4f(shader, "position", new float[] { x, y, width, height });
+            store.SendUniform1f(shader, "level", level);
             store.SendUniform1i(shader, "overlay", 0);
-            store.SendUniform1f(shader, "alpha", alpha);
+            store.SendUniform1f(shader, "alpha", 0);
+
             store.Draw();
             store.Clear();
         }
 
-        internal void DrawTextureWithColorOverlay(Shader shader, float x0, float x1, float y0, float y1, int w, int h, byte[] buffer,
-                float level, float alpha, Color color)
+        internal void DrawFreshShadow(
+            Shader shader, IBaseItem item, float level, uint[] fboTexture,
+            float x, float y, float w, float h, int width, int height)
         {
-            float[] argb = {
-                        (float) color.R / 255.0f,
-                        (float) color.G / 255.0f,
-                        (float) color.B / 255.0f,
-                        (float) color.A / 255.0f };
+            ShadowStorage.DeleteResource(item);
+
+            VramTexture store = new VramTexture();
+            store.GenBuffers(0, w, 0, h);
+            store.Texture[0] = fboTexture[0];
+            store.Bind(fboTexture);
+
+            ShadowStorage.AddResource(item, store);
 
             shader.UseShader();
-            VRAMTexture store = new VRAMTexture();
-            store.GenBuffers(x0, x1, y0, y1, level, true);
-            store.GenTexture(w, h, buffer);
             store.SendUniformSample2D(shader, "tex");
-            store.SendUniform1i(shader, "overlay", 1);
-            store.SendUniform4f(shader, "rgb", argb);
-            store.SendUniform1f(shader, "alpha", alpha);
+            store.SendUniform4f(shader, "position", new float[] { x, y, width, height });
+            store.SendUniform1f(shader, "level", level);
+
+            // store.SendUniform1fv(shader, "weights", 11, weights);
+            // store.SendUniform2fv(shader, "frame", new float[] { width, height });
+            // store.SendUniform1f(shader, "res", (res / 10.0f));
+            // store.SendUniform2fv(shader, "point", new float[] { x, y });
+            // store.SendUniform2fv(shader, "size", new float[] { w, h });
+
+            store.SendUniform1i(shader, "overlay", 0);
+            store.SendUniform1f(shader, "alpha", 0);
+
             store.Draw();
-            store.Clear();
+            store.Unbind();
         }
 
-        internal void DrawFreshTexture(ImageItem image, Shader shader, float x0, float x1, float y0, float y1, int w, int h,
-                byte[] buffer, float level)
+        internal void DrawStoredShadow(Shader shader, IBaseItem item, float level,
+            float x, float y, int width, int height)
         {
-            Monitor.Enter(VRAMStorage.StorageLocker);
-            try
-            {
-                VRAMStorage.DeleteTexture(image);
-                shader.UseShader();
-                VRAMTexture tex = new VRAMTexture();
-                tex.GenBuffers(x0, x1, y0, y1, level);
-                tex.GenTexture(w, h, buffer);
-                VRAMStorage.AddTexture(image, tex);
-                image.SetNew(false);
+            VramTexture store = ShadowStorage.GetResource(item);
+            if (store == null)
+                return;
 
-                tex.SendUniformSample2D(shader, "tex");
-                if (image.IsColorOverlay())
-                {
-                    float[] argb = {
+            shader.UseShader();
+            store.BindVboIbo();
+            store.Bind(store.Texture);
+            store.SendUniformSample2D(shader, "tex");
+            store.SendUniform4f(shader, "position", new float[] { x, y, width, height });
+            store.SendUniform1f(shader, "level", level);
+            // store.SendUniform1fv(shader, "weights", 11, weights);
+            // store.SendUniform2fv(shader, "frame", new float[] { store.StoredWidth, store.StoredHeight });
+            // store.SendUniform1f(shader, "res", res / 10.0f);
+            // store.SendUniform2fv(shader, "point", xy);
+            // store.SendUniform2fv(shader, "size", wh);
+            // store.SendUniform1i(shader, "applyBlur", 0);
+            store.SendUniform1i(shader, "overlay", 0);
+            store.SendUniform1f(shader, "alpha", 0);
+
+            store.Draw();
+            store.Unbind();
+        }
+
+        internal void DrawTextureAsIs(
+            Shader shader, IImageItem image, float ax, float ay, float aw, float ah,
+            int iw, int ih, int width, int height, float level)
+        {
+            Bitmap bmp = image.GetImage();
+            if (bmp == null)
+                return;
+            // byte[] buffer = image.GetPixMapImage();
+            // if (buffer == null)
+            //     return;
+
+            shader.UseShader();
+            VramTexture store = new VramTexture();
+            store.GenBuffers(0, aw, 0, ah);
+            // store.GenTexture(iw, ih, buffer);
+            store.GenTexture(iw, ih, bmp);
+            store.SendUniformSample2D(shader, "tex");
+            if (image.IsColorOverlay())
+            {
+                float[] argb = {
                         (float) image.GetColorOverlay().R / 255.0f,
                         (float) image.GetColorOverlay().G / 255.0f,
                         (float) image.GetColorOverlay().B / 255.0f,
                         (float) image.GetColorOverlay().A / 255.0f };
-                    tex.SendUniform1i(shader, "overlay", 1);
-                    tex.SendUniform4f(shader, "rgb", argb);
-                }
-                else
-                    tex.SendUniform1i(shader, "overlay", 0);
-
-                tex.SendUniform1f(shader, "alpha", image.GetRotationAngle());
-                tex.Draw();
-                tex.DeleteIBOBuffer();
-                tex.DeleteVBOBuffer();
-                tex.Unbind();
-
+                store.SendUniform1i(shader, "overlay", 1);
+                store.SendUniform4f(shader, "rgb", argb);
             }
-            finally
-            {
-                Monitor.Exit(VRAMStorage.StorageLocker);
-            }
+            else
+                store.SendUniform1i(shader, "overlay", 0);
+
+            store.SendUniform4f(shader, "position", new float[] { ax, ay, width, height });
+            store.SendUniform1f(shader, "level", level);
+            store.SendUniform1f(shader, "alpha", image.GetRotationAngle());
+            store.Draw();
+            store.Clear();
         }
 
-        internal void DrawStoredTexture(ImageItem image, Shader shader, float x0, float x1, float y0, float y1, float level)
+        internal void DrawFreshTexture(
+            ImageItem image, Shader shader, float ax, float ay, float aw, float ah,
+            int iw, int ih, int width, int height, float level)
         {
-            Monitor.Enter(VRAMStorage.StorageLocker);
-            try
+            TextureStorage.DeleteResource(image);
+            Bitmap bmp = image.GetImage();
+            if (bmp == null)
+                return;
+            // byte[] buffer = image.GetPixMapImage();
+            // if (buffer == null)
+            // {
+            //     return;
+            // }
+
+            shader.UseShader();
+            VramTexture tex = new VramTexture();
+            tex.GenBuffers(0, aw, 0, ah);
+            // tex.GenTexture(iw, ih, bitmap);
+            tex.GenTexture(iw, ih, bmp);
+            TextureStorage.AddResource(image, tex);
+
+            image.SetNew(false);
+
+            tex.SendUniformSample2D(shader, "tex");
+            if (image.IsColorOverlay())
             {
-                shader.UseShader();
-                VRAMTexture tex = VRAMStorage.GetTexture(image);
-                if (tex == null)
-                {
-                    image.SetNew(true);
-                    return;
-                }
-                tex.Bind();
-                tex.GenBuffers(x0, x1, y0, y1, level);
-                tex.SendUniformSample2D(shader, "tex");
-                if (image.IsColorOverlay())
-                {
-                    float[] argb = { (float) image.GetColorOverlay().R / 255.0f,
+                float[] argb = {
+                        (float) image.GetColorOverlay().R / 255.0f,
                         (float) image.GetColorOverlay().G / 255.0f,
                         (float) image.GetColorOverlay().B / 255.0f,
                         (float) image.GetColorOverlay().A / 255.0f };
-                    tex.SendUniform1i(shader, "overlay", 1);
-                    tex.SendUniform4f(shader, "rgb", argb);
-                }
-                else
-                    tex.SendUniform1i(shader, "overlay", 0);
-
-                tex.SendUniform1f(shader, "alpha", image.GetRotationAngle());
-                tex.Draw();
-                tex.DeleteIBOBuffer();
-                tex.DeleteVBOBuffer();
-                tex.Unbind();
-
+                tex.SendUniform1i(shader, "overlay", 1);
+                tex.SendUniform4f(shader, "rgb", argb);
             }
-            finally
-            {
-                Monitor.Exit(VRAMStorage.StorageLocker);
-            }
+            else
+                tex.SendUniform1i(shader, "overlay", 0);
+
+            tex.SendUniform4f(shader, "position", new float[] { ax, ay, width, height });
+            tex.SendUniform1f(shader, "level", level);
+            tex.SendUniform1f(shader, "alpha", image.GetRotationAngle());
+            tex.Draw();
+            tex.Unbind();
         }
 
-        internal static List<float[]> GetFullWindowRectangle()
+        internal void DrawStoredTexture(
+            ImageItem image, Shader shader, float ax, float ay, int width, int height, float level)
+        {
+            VramTexture tex = TextureStorage.GetResource(image);
+            if (tex == null)
+            {
+                image.SetNew(true);
+                return;
+            }
+
+            shader.UseShader();
+            tex.BindVboIbo();
+            tex.Bind();
+            tex.SendUniformSample2D(shader, "tex");
+            if (image.IsColorOverlay())
+            {
+                float[] argb = { (float) image.GetColorOverlay().R / 255.0f,
+                        (float) image.GetColorOverlay().G / 255.0f,
+                        (float) image.GetColorOverlay().B / 255.0f,
+                        (float) image.GetColorOverlay().A / 255.0f };
+                tex.SendUniform1i(shader, "overlay", 1);
+                tex.SendUniform4f(shader, "rgb", argb);
+            }
+            else
+                tex.SendUniform1i(shader, "overlay", 0);
+
+            tex.SendUniform4f(shader, "position", new float[] { ax, ay, width, height });
+            tex.SendUniform1f(shader, "level", level);
+            tex.SendUniform1f(shader, "alpha", image.GetRotationAngle());
+            tex.Draw();
+            tex.Unbind();
+        }
+
+        internal static List<float[]> GetFullWindowRectangle(int w, int h)
         {
             List<float[]> vertex = new List<float[]>();
-            vertex.Add(new float[] { -1.0f, 1.0f, 0.0f });
-            vertex.Add(new float[] { -1.0f, -1.0f, 0.0f });
-            vertex.Add(new float[] { 1.0f, -1.0f, 0.0f });
-            vertex.Add(new float[] { 1.0f, -1.0f, 0.0f });
-            vertex.Add(new float[] { 1.0f, 1.0f, 0.0f });
-            vertex.Add(new float[] { -1.0f, 1.0f, 0.0f });
+            // vertex.Add(new float[] { -1.0f, 1.0f });
+            // vertex.Add(new float[] { -1.0f, -1.0f });
+            // vertex.Add(new float[] { 1.0f, -1.0f });
+            // vertex.Add(new float[] { 1.0f, -1.0f });
+            // vertex.Add(new float[] { 1.0f, 1.0f });
+            // vertex.Add(new float[] { -1.0f, 1.0f });
+            vertex.Add(new float[] { 0, 0 });
+            vertex.Add(new float[] { 0, h });
+            vertex.Add(new float[] { w, h });
+            vertex.Add(new float[] { 0, 0 });
+            vertex.Add(new float[] { w, h });
+            vertex.Add(new float[] { w, 0 });
             return vertex;
+        }
+
+        internal void FlushResources()
+        {
+            TextStorage.Flush();
+            TextureStorage.Flush();
+            VertexStorage.Flush();
+            ShadowStorage.Flush();
+        }
+
+        internal void ClearResources()
+        {
+            TextStorage.Clear();
+            TextureStorage.Clear();
+            VertexStorage.Clear();
+            ShadowStorage.Clear();
+            ScreenSquare.Clear();
+        }
+
+        internal void FreeResource<T>(T resource)
+        {
+            ITextContainer text = resource as ITextContainer;
+            if (text != null)
+                TextStorage.FlushResource(text);
+
+            IImageItem image = resource as IImageItem;
+            if (image != null)
+                TextureStorage.FlushResource(image);
+
+            IBaseItem item = resource as IBaseItem;
+            if (item != null)
+            {
+                VertexStorage.FlushResource(item);
+                ShadowStorage.FlushResource(item);
+            }
         }
     }
 }

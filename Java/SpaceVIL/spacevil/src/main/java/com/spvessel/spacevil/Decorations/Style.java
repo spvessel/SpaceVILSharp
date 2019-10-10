@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.HashMap;
 
 public class Style implements Cloneable {
@@ -45,7 +44,7 @@ public class Style implements Cloneable {
     public Indents padding = new Indents();
     public Spacing spacing = new Spacing();
     public Indents margin = new Indents();
-    public CornerRadius borderRadius = null;
+    public CornerRadius borderRadius = new CornerRadius();
     public int borderThickness = 0;
     public Color borderFill = new Color(0, 0, 0, 0);
     public List<float[]> shape;// = new List<float[]>();
@@ -579,7 +578,7 @@ public class Style implements Cloneable {
      */
     public static Style getComboBoxStyle() {
         Style style = new Style();
-        style.background = new Color(0, 0, 0, 0);
+        style.background = new Color(220, 220, 220);
         style.foreground = new Color(70, 70, 70);
         style.font = DefaultsService.getDefaultFont();
         style.widthPolicy = SizePolicy.EXPAND;
@@ -591,7 +590,7 @@ public class Style implements Cloneable {
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
 
         Style selection_style = new Style();
-        selection_style.background = new Color(220, 220, 220);
+        selection_style.background = new Color(0, 0, 0, 0);
         selection_style.foreground = new Color(70, 70, 70);
 
         selection_style.font = DefaultsService.getDefaultFont(14);
@@ -617,6 +616,8 @@ public class Style implements Cloneable {
 
         style.addInnerStyle("dropdownbutton", dropdownbutton_style);
 
+        style.addInnerStyle("dropdownarea", getComboBoxDropDownStyle());
+
         Style arrow_style = new Style();
         arrow_style.width = 14;
         arrow_style.height = 6;
@@ -639,13 +640,17 @@ public class Style implements Cloneable {
         style.widthPolicy = SizePolicy.FIXED;
         style.heightPolicy = SizePolicy.FIXED;
         style.padding = new Indents(0, 0, 0, 0);
-        style.setShadow(new Shadow(5, 3, 3, new Color(0, 0, 0, 180)));
-        style.isShadowDrop = true;
+        style.isVisible = false;
 
         Style itemlist_style = getListBoxStyle();
         itemlist_style.background = new Color(0, 0, 0, 0);
         itemlist_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         style.addInnerStyle("itemlist", itemlist_style);
+
+        Style itemlistarea_style = itemlist_style.getInnerStyle("area");
+        if (itemlistarea_style != null) {
+            itemlist_style.setPadding(0, 0, 0, 0);
+        }
 
         Style vsb_style = getSimpleVerticalScrollBarStyle();
         vsb_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.TOP);
@@ -682,8 +687,7 @@ public class Style implements Cloneable {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.padding = new Indents(10, 0, 10, 0);
-
-        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(150, 150, 150)));
+        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(200, 200, 200)));
 
         Style text_style = new Style();
         text_style.setMargin(0, 0, 0, 0);
@@ -1168,7 +1172,7 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.padding = new Indents(2, 2, 2, 2);
-        style.spacing = new Spacing(0, 5);
+        style.spacing = new Spacing(0, 4);
 
         Style selection_style = getSelectionItemStyle();
         style.addInnerStyle("selection", selection_style);
@@ -1521,8 +1525,16 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.FIXED;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.padding = new Indents(5, 0, 5, 0);
+        style.padding = new Indents(5, 5, 5, 5);
         style.borderRadius = new CornerRadius(4);
+
+        Style text_style = new Style();
+        text_style.background = new Color(0, 0, 0, 0);
+        text_style.widthPolicy = SizePolicy.EXPAND;
+        text_style.heightPolicy = SizePolicy.EXPAND;
+        text_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+        text_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+        style.addInnerStyle("text", text_style);
 
         return style;
     }

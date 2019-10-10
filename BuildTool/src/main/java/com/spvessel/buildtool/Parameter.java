@@ -29,6 +29,7 @@ class Parameter extends Prototype {
         setHeight(50);
         parName.setText(name);
         parField.setText(par);
+        parField.setPassEvents(false);
     }
 
     @Override

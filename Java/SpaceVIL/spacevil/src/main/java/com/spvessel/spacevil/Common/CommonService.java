@@ -1,5 +1,10 @@
 package com.spvessel.spacevil.Common;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -7,10 +12,16 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 import com.spvessel.spacevil.CoreWindow;
+import com.spvessel.spacevil.CursorImage;
 import com.spvessel.spacevil.WindowsBox;
+import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.OSType;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.system.Configuration;
+import org.lwjgl.system.MemoryUtil;
 
 public final class CommonService {
 
@@ -39,6 +50,7 @@ public final class CommonService {
     }
 
     // cursors
+    public static CursorImage currentCursor = null;
     public static long cursorArrow;
     public static long cursorInput;
     public static long cursorHand;
@@ -52,6 +64,9 @@ public final class CommonService {
             _os_type = OSType.WINDOWS;
         } else if (isMac(OS)) {
             _os_type = OSType.MAC;
+            _controlRight = KeyCode.RIGHTSUPER;
+            _controlLeft = KeyCode.LEFTSUPER;
+            _controlMod = KeyMods.SUPER;
         } else if (isUnix(OS)) {
             _os_type = OSType.LINUX;
         } else {
@@ -66,6 +81,8 @@ public final class CommonService {
 
         System.setProperty("java.awt.headless", "true");
         System.setProperty("org.lwjgl.opengl.Display.enableHighDPI", "false");
+        // System.setProperty("org.lwjgl.system.stackSize", Integer.toString(Integer.MAX_VALUE));
+        // org.lwjgl.system.Configuration.STACK_SIZE = new Configuration<Integer>("org.lwjgl.system.stackSize", Integer.MAX_VALUE);
 
         // cursors
         cursorArrow = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
@@ -81,7 +98,24 @@ public final class CommonService {
         DefaultsService.initImages();
         DefaultsService.initDefaultTheme();
 
+        // runCG();
+
         return true;
+    }
+
+    private static void runCG(int ms) {
+        Thread freeMemoryThread = new Thread(() -> {
+            Runtime rt = Runtime.getRuntime();
+            while (true) {
+                try {
+                    Thread.sleep(ms);
+                } catch (Exception e) {
+                }
+                rt.gc();
+            }
+        });
+        freeMemoryThread.setDaemon(true);
+        freeMemoryThread.start();
     }
 
     private static boolean isWindows(String OS) {
@@ -113,6 +147,27 @@ public final class CommonService {
         long id = window.getGLWID();
         if (id == NULL)
             return;
-        glfwSetClipboardString(id, text);
+        byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
+        ByteBuffer bb = BufferUtils.createByteBuffer(bytes.length + 1);
+        bb.put(bytes);
+        bb.put(bytes.length, (byte) 0);
+        bb.rewind();
+        glfwSetClipboardString(id, bb);
+    }
+
+    private static KeyCode _controlRight = KeyCode.RIGHTCONTROL;
+    private static KeyCode _controlLeft = KeyCode.LEFTCONTROL;
+    private static KeyMods _controlMod = KeyMods.CONTROL;
+
+    public static KeyCode getOsControlKeyRight() {
+        return _controlRight;
+    }
+
+    public static KeyCode getOsControlKeyLeft() {
+        return _controlLeft;
+    }
+    
+    public static KeyMods getOsControlMod() {
+        return _controlMod;
     }
 }

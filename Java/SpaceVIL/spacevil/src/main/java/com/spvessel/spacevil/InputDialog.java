@@ -43,8 +43,10 @@ public class InputDialog extends DialogItem {
         window.isLocked = true;
 
         eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.ESCAPE)
+            if (args.key == KeyCode.ESCAPE) {
+                _inputResult = "";
                 close();
+            }
         });
 
         setStyle(DefaultsService.getDefaultStyle(InputDialog.class));
@@ -72,6 +74,7 @@ public class InputDialog extends DialogItem {
 
         _title.getCloseButton().eventMouseClick.clear();
         _title.getCloseButton().eventMouseClick.add((sender, args) -> {
+            _inputResult = "";
             close();
         });
 
@@ -80,6 +83,7 @@ public class InputDialog extends DialogItem {
             close();
         });
         _cancel.eventMouseClick.add((sender, args) -> {
+            _inputResult = "";
             close();
         });
         _input.eventKeyPress.add((sender, args) -> {
@@ -87,6 +91,7 @@ public class InputDialog extends DialogItem {
                 _inputResult = _input.getText();
                 close();
             } else if (args.key == KeyCode.ESCAPE) {
+                _inputResult = "";
                 close();
             }
         });
@@ -96,6 +101,7 @@ public class InputDialog extends DialogItem {
     public void show(CoreWindow handler) {
         super.show(handler);
         _input.setFocus();
+        _input.selectAll();
     }
 
     @Override

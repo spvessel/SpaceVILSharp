@@ -19,7 +19,9 @@ import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.MouseArgs;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Point;
+import java.util.*;
 
 public class FlowTest extends ActiveWindow {
     int count = 0;
@@ -28,7 +30,7 @@ public class FlowTest extends ActiveWindow {
     @Override
     public void initWindow() {
         isBorderHidden = true;
-        setSize(1000, 800);
+        setSize(870, 1000);
         setWindowName("FlowTest");
         setWindowTitle("FlowTest");
 
@@ -38,7 +40,7 @@ public class FlowTest extends ActiveWindow {
 
         // eventClose.clear();
         // eventClose.add(() -> {
-        //     WindowManager.appExit();
+        // WindowManager.appExit();
         // });
 
         TitleBar title = new TitleBar("FlowTest");
@@ -113,7 +115,8 @@ public class FlowTest extends ActiveWindow {
             // LoadingScreen ls = new LoadingScreen();
             // ls.show(this);
         });
-        btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
+        // btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
+        btn1.setMargin(0, 0, 20, 0);
         btn1.setHoverRule(ItemRule.STRICT);
 
         ButtonCore btn2 = new ButtonCore();
@@ -141,27 +144,38 @@ public class FlowTest extends ActiveWindow {
         btn3.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn3.addItemState(ItemStateType.HOVERED, hovered);
         btn3.eventMouseClick.add((sender, args) -> {
-            ResizableItem frame = new ResizableItem();
-            frame.setPadding(10, 10, 10, 10);
-            frame.setBackground(100, 100, 100);
-            frame.setSize(300, 300);
-            frame.setPosition(200, 200);
-            flow.addItem(frame);
-            PointsContainer graph = getPointsContainer();
-            frame.addItem(graph);
+            for (int i = 0; i < 1; i++) {
+                for (int j = 0; j < 1; j++) {
+                    ResizableItem frame = new ResizableItem();
+                    frame.setShadow(10, 5, 5, Color.RED);
+                    frame.setPadding(5, 5, 5, 5);
+                    frame.setBackground(100, 100, 100);
+                    frame.setSize(100, 100);
+                    frame.setPosition(10 + i * 103, 10 + j * 103);
+                    frame.setShadowExtension(20, 20);
+                    flow.addItem(frame);
+                    Graph graph = getGraph();
+                    graph.setPadding(5, 5, 5, 5);
+                    frame.addItem(graph);
+                }
+            }
+
+            // frame.eventMouseDrag.add((s, a) -> {
+            // System.out.println("clicl");
+            // });
 
             // LoadingScreen screen = new LoadingScreen();
             // screen.show(this);
 
             // Thread task = new Thread(() -> {
-            //     for (int i = 1; i <= 100; i++) {
-            //         screen.setValue(i);
-            //         try {
-            //             Thread.sleep(50);
-            //         } catch (Exception e) {
-            //         }
-            //     }
-            //     screen.setToClose();
+            // for (int i = 1; i <= 100; i++) {
+            // screen.setValue(i);
+            // try {
+            // Thread.sleep(50);
+            // } catch (Exception e) {
+            // }
+            // }
+            // screen.setToClose();
             // });
             // task.start();
         });
@@ -279,7 +293,7 @@ public class FlowTest extends ActiveWindow {
         MenuItem ex_addition = new MenuItem("addition");
         addition_menu.addItems(x_minus, y_minus, ex_addition);
 
-        // addition.assignContextMenu(addition_menu);
+        addition.assignContextMenu(addition_menu);
 
         ContextMenu ex_menu = new ContextMenu(this);
         ex_menu.setSize(110, 64);
@@ -288,10 +302,10 @@ public class FlowTest extends ActiveWindow {
         // addItem(new StopMenu());
 
         eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.V)
-                CommonService.setClipboardString("SetClipBoardString");
-            if (args.key == KeyCode.C)
-                System.out.println(CommonService.getClipboardString());
+            // if (args.key == KeyCode.V)
+            //     CommonService.setClipboardString("SetClipBoardString");
+            // if (args.key == KeyCode.C)
+            //     System.out.println(CommonService.getClipboardString());
             if (args.key == KeyCode.F)
                 System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
         });
@@ -311,11 +325,16 @@ public class FlowTest extends ActiveWindow {
     // block.setY(100);
     // return block;
     // }
+    List<float[]> koh = new LinkedList<>();
 
-    private PointsContainer getPointsContainer() {
-        PointsContainer graph_points = new PointsContainer();
-        graph_points.setPointColor(new Color(10, 255, 10));
-        graph_points.setPointThickness(10.0f);
+    private Graph getGraph() {
+        Graph graph_points = new Graph();
+        // graph_points.setMargin(20, 20, 20, 20);
+        graph_points.setBackground(32, 32, 32);
+        // graph_points.setLineColor(new Color(218, 82, 160, 255));
+        graph_points.setLineColor(new Color(100, 100, 100, 255));
+        graph_points.setPointColor(new Color(10, 162, 232));
+        graph_points.setPointThickness(20.0f);
         graph_points.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         graph_points.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         // List<float[]> crd = new List<float[]>();
@@ -323,7 +342,46 @@ public class FlowTest extends ActiveWindow {
         // crd.add(new float[3] { 50.0f, 100.0f, 0.0f });
         // crd.add(new float[3] { 150.0f, 100.0f, 0.0f });
         // graph_points.setPointsCoord(crd);
-        graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50, 0, 0));
+        // graph_points.setPointsCoord(GraphicsMathService.getRoundSquare(300, 300, 50, 0, 0));
+
+        if (koh.isEmpty()) {
+            Point point1 = new Point(200, 200);
+            Point point2 = new Point(500, 200);
+            Point point3 = new Point(350, 400);
+            fractalKoh(koh, point1, point2, point3, 4);
+            fractalKoh(koh, point2, point3, point1, 4);
+            fractalKoh(koh, point3, point1, point2, 4);
+
+            point1 = new Point(100, 100);
+            point2 = new Point(250, 100);
+            point3 = new Point(175, 200);
+            List<float[]> koh2 = new LinkedList<>();
+            fractalKoh(koh2, point1, point2, point3, 4);
+            fractalKoh(koh2, point2, point3, point1, 4);
+            fractalKoh(koh2, point3, point1, point2, 4);
+            koh2 = GraphicsMathService.moveShape(koh2, 175, 135);
+
+            point1 = new Point(50, 50);
+            point2 = new Point(125, 50);
+            point3 = new Point(87, 100);
+            List<float[]> koh3 = new LinkedList<>();
+            fractalKoh(koh3, point1, point2, point3, 3);
+            fractalKoh(koh3, point2, point3, point1, 3);
+            fractalKoh(koh3, point3, point1, point2, 3);
+            koh3 = GraphicsMathService.moveShape(koh3, 262, 200);
+
+            koh.addAll(koh2);
+            koh.addAll(koh3);
+            System.out.println(koh.size());
+        }
+
+        graph_points.setPointsCoord(koh);
+
+        // Point a = new Point(0, 10);
+        // Point b = new Point(this.getWidth(), 10);
+        // drawKochLine(koh, a, b, 0, 1000);
+
+        // graph_points.setPointsCoord(getTest());
         // graph_points.setPointsCoord(GraphicsMathService.getTriangle(100, 100, 0,
         // 0,
         // 0));
@@ -336,10 +394,10 @@ public class FlowTest extends ActiveWindow {
         // graph_points.getPointThickness()));
         //
         graph_points.setShapePointer(GraphicsMathService.getCross(graph_points.getPointThickness(),
-                graph_points.getPointThickness(), 2, 45));
-        //
+                graph_points.getPointThickness(), 1, 45));
+
         // graph_points.setShapePointer(GraphicsMathService.getStar(graph_points.getPointThickness(),
-        // graph_points.getPointThickness() / 2.0f));
+        // graph_points.getPointThickness() / 2.0f, 8));
         return graph_points;
     }
 
@@ -351,4 +409,37 @@ public class FlowTest extends ActiveWindow {
         return btn;
     }
 
+    public void fractalKoh(List<float[]> pointsList, Point p1, Point p2, Point p3, int iterations) {
+
+        if (iterations > 0) {
+            Point p4 = new Point((p2.x + 2 * p1.x) / 3, (p2.y + 2 * p1.y) / 3);
+            Point p5 = new Point((2 * p2.x + p1.x) / 3, (p1.y + 2 * p2.y) / 3);
+            Point ps = new Point((p2.x + p1.x) / 2, (p2.y + p1.y) / 2);
+            Point pn = new Point((4 * ps.x - p3.x) / 3, (4 * ps.y - p3.y) / 3);
+
+            pointsList.add(new float[] { p4.x, p4.y });
+            pointsList.add(new float[] { pn.x, pn.y });
+            pointsList.add(new float[] { p5.x, p5.y });
+            pointsList.add(new float[] { pn.x, pn.y });
+            pointsList.add(new float[] { p4.x, p4.y });
+            pointsList.add(new float[] { p5.x, p5.y });
+
+            //рекурсивно вызываем функцию нужное число раз
+            fractalKoh(pointsList, p4, pn, p5, iterations - 1);
+            fractalKoh(pointsList, pn, p5, p4, iterations - 1);
+            fractalKoh(pointsList, p1, p4, new Point((2 * p1.x + p3.x) / 3, (2 * p1.y + p3.y) / 3), iterations - 1);
+            fractalKoh(pointsList, p5, p2, new Point((2 * p2.x + p3.x) / 3, (2 * p2.y + p3.y) / 3), iterations - 1);
+        }
+    }
+
+    private List<float[]> getTest() {
+        List<float[]> stars = new LinkedList<>();
+        int skew = 10;
+        for (int i = 0; i < 50; i++) {
+            for (int j = 0; j < 50; j++) {
+                stars.add(new float[] { i * skew + skew, j * skew + skew });
+            }
+        }
+        return stars;
+    }
 }

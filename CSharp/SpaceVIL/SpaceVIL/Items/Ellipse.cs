@@ -28,10 +28,9 @@ namespace SpaceVIL
         /// <summary>
         /// Make shape with triangles and convert to GL coordinates
         /// </summary>
-        public override List<float[]> MakeShape()
+        public override void MakeShape()
         {
-            SetTriangles(GraphicsMathService.GetEllipse(GetWidth(), GetHeight(), GetX(), GetY(), Quality));
-            return GraphicsMathService.ToGL(this, GetHandler());
+            SetTriangles(GraphicsMathService.GetEllipse(GetWidth(), GetHeight(), 0, 0, Quality));
         }
     }
 }

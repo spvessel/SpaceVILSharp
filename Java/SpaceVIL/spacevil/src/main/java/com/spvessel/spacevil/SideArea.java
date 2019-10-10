@@ -187,6 +187,10 @@ public class SideArea extends Prototype implements InterfaceFloating {
         setVisible(false);
     }
 
+    public void hide(MouseArgs args) {
+        hide();
+    }
+
     @Override
     public void setStyle(Style style) {
         if (style == null)

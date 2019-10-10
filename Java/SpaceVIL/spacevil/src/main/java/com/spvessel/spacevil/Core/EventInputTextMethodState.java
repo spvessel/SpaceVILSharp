@@ -7,6 +7,10 @@ public class EventInputTextMethodState {
 
     List<InterfaceInputTextMethodState> events;
 
+    public List<InterfaceInputTextMethodState> getActions() {
+        return new LinkedList<>(events);
+    }
+
     public int size() {
         if (events == null)
             return 0;

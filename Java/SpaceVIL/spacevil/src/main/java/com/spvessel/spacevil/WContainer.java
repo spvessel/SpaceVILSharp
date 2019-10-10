@@ -112,6 +112,12 @@ final class WContainer extends Prototype {
     }
 
     List<Side> getSides(float xpos, float ypos) {
+        if (!getHandler().isBorderHidden)
+        {
+            _sides.clear();
+            return _sides;
+        }
+
         if (xpos <= SpaceVILConstants.borderCursorTolerance) {
             _sides.add(Side.LEFT);
         }
@@ -128,7 +134,7 @@ final class WContainer extends Prototype {
 
         return _sides;
     }
-    
+
     List<Side> getSides() {
         return _sides;
     }

@@ -2,7 +2,6 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Decorations.CornerRadius;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
@@ -65,8 +64,7 @@ public final class GraphicsMathService {
         return new Color((int) r, (int) g, (int) b, (int) a);
     }
 
-    public static Color cloneColor(Color color)
-    {
+    public static Color cloneColor(Color color) {
         return new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
@@ -133,27 +131,32 @@ public final class GraphicsMathService {
                 cornerRadius.rightBottom = 0;
         }
 
+        if (cornerRadius.isCornersZero()) {
+            return getRectangle(width, height, x, y);
+        }
+
         List<float[]> triangles = new LinkedList<>();
         // Начало координат в левом углу
 
         // 1
-        triangles.addAll(RectToTri(cornerRadius.leftTop + x, 0.0f + y, width / 2f + x, height / 2f + y));
-        triangles.addAll(RectToTri(0.0f + x, cornerRadius.leftTop + y, cornerRadius.leftTop + x, height / 2f + y));
+        triangles.addAll(RectToTri(cornerRadius.leftTop + x, y, width / 2f + x, height / 2f + y));
+        // triangles.addAll(RectToTri(0.0f + x, cornerRadius.leftTop + y, cornerRadius.leftTop + x, height / 2f + y));
 
         // 2
-        triangles.addAll(RectToTri(width / 2f + x, 0.0f + y, width - cornerRadius.rightTop + x, height / 2f + y));
-        triangles.addAll(
-                RectToTri(width - cornerRadius.rightTop + x, cornerRadius.rightTop + y, width + x, height / 2f + y));
+        triangles.addAll(RectToTri(width / 2f + x, y, width - cornerRadius.rightTop + x, height / 2f + y));
+        // triangles.addAll(
+        //         RectToTri(width - cornerRadius.rightTop + x, cornerRadius.rightTop + y, width + x, height / 2f + y));
 
         // 3
         triangles.addAll(RectToTri(cornerRadius.leftBottom + x, height / 2f + y, width / 2f + x, height + y));
-        triangles.addAll(
-                RectToTri(0 + x, height / 2f + y, cornerRadius.leftBottom + x, height - cornerRadius.leftBottom + y));
+        // triangles.addAll(
+        // RectToTri(0 + x, height / 2f + y, cornerRadius.leftBottom + x, height -
+        // cornerRadius.leftBottom + y));
 
         // 4
         triangles.addAll(RectToTri(width / 2f + x, height / 2f + y, width - cornerRadius.rightBottom + x, height + y));
-        triangles.addAll(RectToTri(width - cornerRadius.rightBottom + x, height / 2f + y, width + x,
-                height - cornerRadius.rightBottom + y));
+        // triangles.addAll(RectToTri(width - cornerRadius.rightBottom + x, height / 2f + y, width + x,
+        //         height - cornerRadius.rightBottom + y));
 
         // if (radius < 1)
         // return triangles;
@@ -162,6 +165,8 @@ public final class GraphicsMathService {
         int quadrantInd;
 
         if (cornerRadius.rightBottom >= 1) {
+            triangles.addAll(RectToTri(width - cornerRadius.rightBottom + x, height / 2f + y, width + x,
+                    height - cornerRadius.rightBottom + y));
             x0 = width - cornerRadius.rightBottom + x;
             y0 = height - cornerRadius.rightBottom + y;
             quadrantInd = 1;
@@ -169,6 +174,8 @@ public final class GraphicsMathService {
         }
 
         if (cornerRadius.rightTop >= 1) {
+            triangles.addAll(RectToTri(width - cornerRadius.rightTop + x, cornerRadius.rightTop + y, width + x,
+                    height / 2f + y));
             x0 = width - cornerRadius.rightTop + x;
             y0 = cornerRadius.rightTop + y;
             quadrantInd = 4;
@@ -176,6 +183,7 @@ public final class GraphicsMathService {
         }
 
         if (cornerRadius.leftTop >= 1) {
+            triangles.addAll(RectToTri(0.0f + x, cornerRadius.leftTop + y, cornerRadius.leftTop + x, height / 2f + y));
             x0 = cornerRadius.leftTop + x;
             y0 = cornerRadius.leftTop + y;
             quadrantInd = 3;
@@ -183,6 +191,8 @@ public final class GraphicsMathService {
         }
 
         if (cornerRadius.leftBottom >= 1) {
+            triangles.addAll(RectToTri(0 + x, height / 2f + y, cornerRadius.leftBottom + x,
+                    height - cornerRadius.leftBottom + y));
             x0 = cornerRadius.leftBottom + x;
             y0 = height - cornerRadius.leftBottom + y;
             quadrantInd = 2;
@@ -196,13 +206,13 @@ public final class GraphicsMathService {
         // Начало координат в левом верхнем углу
         List<float[]> tri = new LinkedList<>();
 
-        tri.add(new float[] { leftTopX, leftTopY, 0.0f });
-        tri.add(new float[] { leftTopX, rightBottomY, 0.0f });
-        tri.add(new float[] { rightBottomX, rightBottomY, 0.0f });
+        tri.add(new float[] { leftTopX, leftTopY });
+        tri.add(new float[] { leftTopX, rightBottomY });
+        tri.add(new float[] { rightBottomX, rightBottomY });
 
-        tri.add(new float[] { rightBottomX, rightBottomY, 0.0f });
-        tri.add(new float[] { rightBottomX, leftTopY, 0.0f });
-        tri.add(new float[] { leftTopX, leftTopY, 0.0f });
+        tri.add(new float[] { rightBottomX, rightBottomY });
+        tri.add(new float[] { rightBottomX, leftTopY });
+        tri.add(new float[] { leftTopX, leftTopY });
 
         return tri;
     }
@@ -218,72 +228,11 @@ public final class GraphicsMathService {
      * @return Points list of the rectangle with roundness corners
      */
     public static List<float[]> getRoundSquare(float width, float height, float radius, int x, int y) {
-        if (radius < 0)
-            radius = 0;
-
-        List<float[]> triangles = new LinkedList<>();
-        // Начало координат в углу
-
-        triangles.add(new float[] { radius + x, height + y, 0.0f });
-        triangles.add(new float[] { width - radius + x, y, 0.0f });
-        triangles.add(new float[] { radius + x, y, 0.0f });
-        // 1
-
-        triangles.add(new float[] { radius + x, height + y, 0.0f });
-        triangles.add(new float[] { width - radius + x, height + y, 0.0f });
-        triangles.add(new float[] { width - radius + x, y, 0.0f });
-        // 2
-
-        triangles.add(new float[] { width - radius + x, height - radius + y, 0.0f });
-        triangles.add(new float[] { width + x, radius + y, 0.0f });
-        triangles.add(new float[] { width - radius + x, radius + y, 0.0f });
-        // 3
-
-        triangles.add(new float[] { width - radius + x, height - radius + y, 0.0f });
-        triangles.add(new float[] { width + x, height - radius + y, 0.0f });
-        triangles.add(new float[] { width + x, radius + y, 0.0f });
-        // 4
-
-        triangles.add(new float[] { x, height - radius + y, 0.0f });
-        triangles.add(new float[] { radius + x, radius + y, 0.0f });
-        triangles.add(new float[] { x, radius + y, 0.0f });
-        // 5
-
-        triangles.add(new float[] { x, height - radius + y, 0.0f });
-        triangles.add(new float[] { radius + x, height - radius + y, 0.0f });
-        triangles.add(new float[] { radius + x, radius + y, 0.0f });
-        // 6
-
-        if (radius < 1)
-            return triangles;
-
-        float x0, y0;
-        int quadrantInd;
-        x0 = width - radius + x;
-        y0 = height - radius + y;
-        quadrantInd = 1;
-        triangles.addAll(countCircleSector(quadrantInd, x0, y0, radius)); // 7
-
-        x0 = width - radius + x;
-        y0 = radius + y;
-        quadrantInd = 4;
-        triangles.addAll(countCircleSector(quadrantInd, x0, y0, radius)); // 8
-
-        x0 = radius + x;
-        y0 = radius + y;
-        quadrantInd = 3;
-        triangles.addAll(countCircleSector(quadrantInd, x0, y0, radius)); // 9
-
-        x0 = radius + x;
-        y0 = height - radius + y;
-        quadrantInd = 2;
-        triangles.addAll(countCircleSector(quadrantInd, x0, y0, radius)); // 10
-
-        return triangles;
+        return getRoundSquare(new CornerRadius(radius), width, height, x, y);
     }
 
     static private List<float[]> countCircleSector(int quadrantInd, float x0, float y0, float radius) {
-        int[][] quadrantAngles = new int[][] { {0, 90}, {90, 180}, {180, 270}, {270, 360} };
+        int[][] quadrantAngles = new int[][] { { 0, 90 }, { 90, 180 }, { 180, 270 }, { 270, 360 } };
 
         int firstAngle = quadrantAngles[quadrantInd - 1][0];
         int lastAngle = quadrantAngles[quadrantInd - 1][1];
@@ -296,17 +245,17 @@ public final class GraphicsMathService {
         for (int alf = firstAngle + 1; alf <= lastAngle; alf += 5) {
             x2 = radius * (float) cosGrad(alf) + x0;
             y2 = radius * (float) sinGrad(alf) + y0;
-            circleSect.add(new float[] { x0, y0, 0.0f });
-            circleSect.add(new float[] { x2, y2, 0.0f });
-            circleSect.add(new float[] { x1, y1, 0.0f }); // против часовой стрелки
+            circleSect.add(new float[] { x0, y0 });
+            circleSect.add(new float[] { x2, y2 });
+            circleSect.add(new float[] { x1, y1 }); // против часовой стрелки
             x1 = x2;
             y1 = y2;
         }
         x2 = radius * (float) cosGrad(lastAngle) + x0;
         y2 = radius * (float) sinGrad(lastAngle) + y0;
-        circleSect.add(new float[] { x0, y0, 0.0f });
-        circleSect.add(new float[] { x2, y2, 0.0f });
-        circleSect.add(new float[] { x1, y1, 0.0f });
+        circleSect.add(new float[] { x0, y0 });
+        circleSect.add(new float[] { x2, y2 });
+        circleSect.add(new float[] { x1, y1 });
 
         return circleSect;
     }
@@ -323,9 +272,9 @@ public final class GraphicsMathService {
 
         List<float[]> figure = new LinkedList<>();
 
-        figure.add(new float[] { x + w / 2, y, 0.0f });
-        figure.add(new float[] { x, y + h, 0.0f });
-        figure.add(new float[] { x + w, y + h, 0.0f });
+        figure.add(new float[] { x + w / 2, y });
+        figure.add(new float[] { x, y + h });
+        figure.add(new float[] { x + w, y + h });
 
         for (float[] crd : figure) {
             float x_crd = crd[0];
@@ -349,15 +298,15 @@ public final class GraphicsMathService {
 
         float alpha = 0;
         for (int i = 0; i < n; i++) {
-            triangles.add(new float[] { x_center, y_center, 0.0f });
+            triangles.add(new float[] { x_center, y_center });
 
-            triangles.add(new float[] { (float) (x_center + r * cosGrad(alpha)),
-                    (float) (y_center - r * sinGrad(alpha)), 0.0f });
+            triangles.add(
+                    new float[] { (float) (x_center + r * cosGrad(alpha)), (float) (y_center - r * sinGrad(alpha)) });
 
             alpha = alpha + 360.0f / n;
 
-            triangles.add(new float[] { (float) (x_center + r * cosGrad(alpha)),
-                    (float) (y_center - r * sinGrad(alpha)), 0.0f });
+            triangles.add(
+                    new float[] { (float) (x_center + r * cosGrad(alpha)), (float) (y_center - r * sinGrad(alpha)) });
         }
 
         return triangles;
@@ -381,15 +330,15 @@ public final class GraphicsMathService {
 
         float alpha = 0;
         for (int i = 0; i < n; i++) {
-            triangles.add(new float[] { x_center, y_center, 0.0f });
+            triangles.add(new float[] { x_center, y_center });
 
-            triangles.add(new float[] { (float) (x_center + rX * cosGrad(alpha)),
-                    (float) (y_center - rY * sinGrad(alpha)), 0.0f });
+            triangles.add(
+                    new float[] { (float) (x_center + rX * cosGrad(alpha)), (float) (y_center - rY * sinGrad(alpha)) });
 
             alpha = alpha + 360.0f / n;
 
-            triangles.add(new float[] { (float) (x_center + rX * cosGrad(alpha)),
-                    (float) (y_center - rY * sinGrad(alpha)), 0.0f });
+            triangles.add(
+                    new float[] { (float) (x_center + rX * cosGrad(alpha)), (float) (y_center - rY * sinGrad(alpha)) });
         }
 
         return triangles;
@@ -410,49 +359,49 @@ public final class GraphicsMathService {
         float y0 = (h - thickness) / 2;
 
         // center
-        figure.add(new float[] { x0, y0, 0.0f });
-        figure.add(new float[] { x0, y0 + thickness, 0.0f });
-        figure.add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+        figure.add(new float[] { x0, y0 });
+        figure.add(new float[] { x0, y0 + thickness });
+        figure.add(new float[] { x0 + thickness, y0 + thickness });
 
-        figure.add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
-        figure.add(new float[] { x0 + thickness, y0, 0.0f });
-        figure.add(new float[] { x0, y0, 0.0f });
+        figure.add(new float[] { x0 + thickness, y0 + thickness });
+        figure.add(new float[] { x0 + thickness, y0 });
+        figure.add(new float[] { x0, y0 });
 
         // top
-        figure.add(new float[] { x0, 0, 0.0f });
-        figure.add(new float[] { x0, y0, 0.0f });
-        figure.add(new float[] { x0 + thickness, y0, 0.0f });
+        figure.add(new float[] { x0, 0 });
+        figure.add(new float[] { x0, y0 });
+        figure.add(new float[] { x0 + thickness, y0 });
 
-        figure.add(new float[] { x0 + thickness, y0, 0.0f });
-        figure.add(new float[] { x0 + thickness, 0, 0.0f });
-        figure.add(new float[] { x0, 0, 0.0f });
+        figure.add(new float[] { x0 + thickness, y0 });
+        figure.add(new float[] { x0 + thickness, 0 });
+        figure.add(new float[] { x0, 0 });
 
         // bottom
-        figure.add(new float[] { x0, y0 + thickness, 0.0f });
-        figure.add(new float[] { x0, h, 0.0f });
-        figure.add(new float[] { x0 + thickness, h, 0.0f });
+        figure.add(new float[] { x0, y0 + thickness });
+        figure.add(new float[] { x0, h });
+        figure.add(new float[] { x0 + thickness, h });
 
-        figure.add(new float[] { x0 + thickness, h, 0.0f });
-        figure.add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
-        figure.add(new float[] { x0, y0 + thickness, 0.0f });
+        figure.add(new float[] { x0 + thickness, h });
+        figure.add(new float[] { x0 + thickness, y0 + thickness });
+        figure.add(new float[] { x0, y0 + thickness });
 
         // left
-        figure.add(new float[] { 0, y0, 0.0f });
-        figure.add(new float[] { 0, y0 + thickness, 0.0f });
-        figure.add(new float[] { x0, y0 + thickness, 0.0f });
+        figure.add(new float[] { 0, y0 });
+        figure.add(new float[] { 0, y0 + thickness });
+        figure.add(new float[] { x0, y0 + thickness });
 
-        figure.add(new float[] { x0, y0 + thickness, 0.0f });
-        figure.add(new float[] { x0, y0, 0.0f });
-        figure.add(new float[] { 0, y0, 0.0f });
+        figure.add(new float[] { x0, y0 + thickness, });
+        figure.add(new float[] { x0, y0 });
+        figure.add(new float[] { 0, y0 });
 
         // right
-        figure.add(new float[] { x0 + thickness, y0, 0.0f });
-        figure.add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
-        figure.add(new float[] { h, y0 + thickness, 0.0f });
+        figure.add(new float[] { x0 + thickness, y0 });
+        figure.add(new float[] { x0 + thickness, y0 + thickness });
+        figure.add(new float[] { h, y0 + thickness });
 
-        figure.add(new float[] { h, y0 + thickness, 0.0f });
-        figure.add(new float[] { h, y0, 0.0f });
-        figure.add(new float[] { x0 + thickness, y0, 0.0f });
+        figure.add(new float[] { h, y0 + thickness });
+        figure.add(new float[] { h, y0 });
+        figure.add(new float[] { x0 + thickness, y0 });
 
         // rotate
         x0 = w / 2;
@@ -486,31 +435,31 @@ public final class GraphicsMathService {
         float y0 = (h - thickness) / 2;
 
         // center
-        figure.add(new float[] { x0, y0, 0.0f });
-        figure.add(new float[] { x0, y0 + thickness, 0.0f });
-        figure.add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+        figure.add(new float[] { x0, y0 });
+        figure.add(new float[] { x0, y0 + thickness });
+        figure.add(new float[] { x0 + thickness, y0 + thickness });
 
-        figure.add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
-        figure.add(new float[] { x0 + thickness, y0, 0.0f });
-        figure.add(new float[] { x0, y0, 0.0f });
+        figure.add(new float[] { x0 + thickness, y0 + thickness });
+        figure.add(new float[] { x0 + thickness, y0 });
+        figure.add(new float[] { x0, y0 });
 
         // top
-        figure.add(new float[] { x0, 0, 0.0f });
-        figure.add(new float[] { x0, y0, 0.0f });
-        figure.add(new float[] { x0 + thickness, y0, 0.0f });
+        figure.add(new float[] { x0, 0 });
+        figure.add(new float[] { x0, y0 });
+        figure.add(new float[] { x0 + thickness, y0 });
 
-        figure.add(new float[] { x0 + thickness, y0, 0.0f });
-        figure.add(new float[] { x0 + thickness, 0, 0.0f });
-        figure.add(new float[] { x0, 0, 0.0f });
+        figure.add(new float[] { x0 + thickness, y0 });
+        figure.add(new float[] { x0 + thickness, 0 });
+        figure.add(new float[] { x0, 0 });
 
         // left
-        figure.add(new float[] { 0, y0, 0.0f });
-        figure.add(new float[] { 0, y0 + thickness, 0.0f });
-        figure.add(new float[] { x0, y0 + thickness, 0.0f });
+        figure.add(new float[] { 0, y0 });
+        figure.add(new float[] { 0, y0 + thickness });
+        figure.add(new float[] { x0, y0 + thickness });
 
-        figure.add(new float[] { x0, y0 + thickness, 0.0f });
-        figure.add(new float[] { x0, y0, 0.0f });
-        figure.add(new float[] { 0, y0, 0.0f });
+        figure.add(new float[] { x0, y0 + thickness });
+        figure.add(new float[] { x0, y0 });
+        figure.add(new float[] { 0, y0 });
 
         // rotate
         x0 = w / 2;
@@ -530,13 +479,13 @@ public final class GraphicsMathService {
      */
     public static List<float[]> getRectangle(float w, float h, float x, float y) {
         List<float[]> figure = new LinkedList<>();
-        figure.add(new float[] { x, y, 0.0f });
-        figure.add(new float[] { x, y + h, 0.0f });
-        figure.add(new float[] { x + w, y + h, 0.0f });
+        figure.add(new float[] { x, y });
+        figure.add(new float[] { x, y + h });
+        figure.add(new float[] { x + w, y + h });
 
-        figure.add(new float[] { x + w, y + h, 0.0f });
-        figure.add(new float[] { x + w, y, 0.0f });
-        figure.add(new float[] { x, y, 0.0f });
+        figure.add(new float[] { x + w, y + h });
+        figure.add(new float[] { x + w, y });
+        figure.add(new float[] { x, y });
         return figure;
     }
 
@@ -550,7 +499,7 @@ public final class GraphicsMathService {
         // clone triangles
         List<float[]> result = new LinkedList<>();
         for (int i = 0; i < shape.size(); i++) {
-            result.add(new float[] { shape.get(i)[0], shape.get(i)[1], shape.get(i)[2] });
+            result.add(new float[] { shape.get(i)[0], shape.get(i)[1] });
         }
         // to the left top corner
         for (float[] point : result) {
@@ -587,15 +536,15 @@ public final class GraphicsMathService {
 
         float alpha = 0.0f;
         for (int i = 0; i < n; i++) {
-            triangles.add(new float[] { x_center, y_center, 0.0f });
+            triangles.add(new float[] { x_center, y_center });
 
             triangles.add(new float[] { (float) (x_center + r / 2 * cosGrad(alpha)),
-                    (float) (y_center - r / 2 * sinGrad(alpha)), 0.0f });
+                    (float) (y_center - r / 2 * sinGrad(alpha)) });
 
             alpha = alpha + 360.0f / n;
 
             triangles.add(new float[] { (float) (x_center + r / 2 * cosGrad(alpha)),
-                    (float) (y_center - r / 2 * sinGrad(alpha)), 0.0f });
+                    (float) (y_center - r / 2 * sinGrad(alpha)) });
         }
 
         alpha = 0.0f;
@@ -603,18 +552,18 @@ public final class GraphicsMathService {
         for (int i = 1; i < n * 2 + 2; i++) {
             if ((i % 2) != 0) {
                 triangles.add(new float[] { (float) (x_center + r / 2 * cosGrad(alpha)),
-                        (float) (y_center - r / 2 * sinGrad(alpha)), 0.0f });
+                        (float) (y_center - r / 2 * sinGrad(alpha)) });
                 if (count % 3 == 0) {
                     triangles.add(new float[] { (float) (x_center + r / 2 * cosGrad(alpha)),
-                            (float) (y_center - r / 2 * sinGrad(alpha)), 0.0f });
+                            (float) (y_center - r / 2 * sinGrad(alpha)) });
                     count = 1;
                 }
             } else {
                 triangles.add(new float[] { (float) (x_center + R / 2 * cosGrad(alpha)),
-                        (float) (y_center - R / 2 * sinGrad(alpha)), 0.0f });
+                        (float) (y_center - R / 2 * sinGrad(alpha)) });
                 if (count % 3 == 0) {
                     triangles.add(new float[] { (float) (x_center + R / 2 * cosGrad(alpha)),
-                            (float) (y_center - R / 2 * sinGrad(alpha)), 0.0f });
+                            (float) (y_center - R / 2 * sinGrad(alpha)) });
                     count = 1;
                 }
             }
@@ -636,15 +585,15 @@ public final class GraphicsMathService {
 
         float alpha = 0;
         for (int i = 0; i < n; i++) {
-            triangles.add(new float[] { x_center, y_center, 0.0f });
+            triangles.add(new float[] { x_center, y_center });
 
             triangles.add(new float[] { (float) (x_center + r / 2 * cosGrad(alpha)),
-                    (float) (y_center - r / 2 * sinGrad(alpha)), 0.0f });
+                    (float) (y_center - r / 2 * sinGrad(alpha)) });
 
             alpha = alpha + 360.0f / n;
 
             triangles.add(new float[] { (float) (x_center + r / 2 * cosGrad(alpha)),
-                    (float) (y_center - r / 2 * sinGrad(alpha)), 0.0f });
+                    (float) (y_center - r / 2 * sinGrad(alpha)) });
         }
 
         return triangles;
@@ -743,45 +692,26 @@ public final class GraphicsMathService {
         // Начало координат в левом углу
 
         // 1
-        border.add(new BorderSection(cornerRadius.leftTop + x, 0.0f + y, width / 2f + x, 0.0f + y, width / 2f + x,
-                height + y + 1)); // width / 2f + x, height / 2f + y));
-        // triangles.addAll(RectToTri(cornerRadius.leftTop, 0.0f, width / 2f, height /
-        // 2f));
-        border.add(new BorderSection(0.0f + x, cornerRadius.leftTop + y, 0.0f + x, height / 2f + y, width + 1 + x,
-                height / 2f + y)); // cornerRadius.leftTop + x, height / 2f + y));
-        // triangles.addAll(RectToTri(0.0f, cornerRadius.leftTop, cornerRadius.leftTop,
-        // height / 2f));
+        border.add(new BorderSection(cornerRadius.leftTop + x, y, width / 2f + x, y, width / 2f + x, height + y + 1));
+        border.add(new BorderSection(x, cornerRadius.leftTop + y, x, height / 2f + y, width + 1 + x, height / 2f + y));
 
         // 2
-        // triangles.addAll(RectToTri(width / 2f, 0.0f, width - cornerRadius.rightTop,
-        // height / 2f));
-        border.add(new BorderSection(width / 2f + x, 0.0f + y, width - cornerRadius.rightTop + x, 0.0f + y,
-                width / 2f + x, height + y + 1)); // width - cornerRadius.rightTop + x, height / 2f + y));
-        // triangles.addAll(RectToTri(width - cornerRadius.rightTop,
-        // cornerRadius.rightTop, width, height / 2f));
+        border.add(new BorderSection(width / 2f + x, y, width - cornerRadius.rightTop + x, y, width / 2f + x,
+                height + y + 1));
         border.add(new BorderSection(width + x, height / 2f + y, width + x, cornerRadius.rightTop + y, x - 1,
-                height / 2f + y)); // width - cornerRadius.rightTop + x, cornerRadius.rightTop + y));
+                height / 2f + y));
 
         // 3
-        // triangles.addAll(RectToTri(cornerRadius.leftBottom, height / 2f, width / 2f,
-        // height));
         border.add(new BorderSection(width / 2f + x, height + y, cornerRadius.leftBottom + x, height + y, width / 2f,
-                y - 1)); // cornerRadius.leftBottom + x, height / 2f + y));
-        // triangles.addAll(RectToTri(0, height / 2f, cornerRadius.leftBottom, height -
-        // cornerRadius.leftBottom));
-        border.add(new BorderSection(0.0f + x, height / 2f + y, 0.0f + x, height - cornerRadius.leftBottom + y,
-                width + 1 + x, height / 2f + y)); // cornerRadius.leftBottom + x, height - cornerRadius.leftBottom +
-                                                  // y));
+                y - 1));
+        border.add(new BorderSection(x, height / 2f + y, x, height - cornerRadius.leftBottom + y, width + 1 + x,
+                height / 2f + y));
 
         // 4
-        // triangles.addAll(RectToTri(width / 2f, height / 2f, width -
-        // cornerRadius.rightBottom, height));
         border.add(new BorderSection(width - cornerRadius.rightBottom + x, height + y, width / 2f + x, height + y,
-                width / 2f, y - 1)); // width / 2f + x, height / 2f + y));
-        // triangles.addAll(RectToTri(width - cornerRadius.rightBottom, height / 2f,
-        // width, height - cornerRadius.rightBottom));
+                width / 2f, y - 1));
         border.add(new BorderSection(width + x, height - cornerRadius.rightBottom + y, width + x, height / 2f + y,
-                x - 1, height / 2f + y)); // width - cornerRadius.rightBottom + x, height / 2f + y));
+                x - 1, height / 2f + y));
 
         // if (radius < 1)
         // return triangles;
@@ -856,13 +786,13 @@ public final class GraphicsMathService {
         List<float[]> clockwise = new LinkedList<>();
         float f = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
         if (f < 0) {
-            clockwise.add(new float[] { x1, y1, 0 });
-            clockwise.add(new float[] { x2, y2, 0 });
-            clockwise.add(new float[] { x3, y3, 0 });
+            clockwise.add(new float[] { x1, y1 });
+            clockwise.add(new float[] { x2, y2 });
+            clockwise.add(new float[] { x3, y3 });
         } else {
-            clockwise.add(new float[] { x2, y2, 0 });
-            clockwise.add(new float[] { x1, y1, 0 });
-            clockwise.add(new float[] { x3, y3, 0 });
+            clockwise.add(new float[] { x2, y2 });
+            clockwise.add(new float[] { x1, y1 });
+            clockwise.add(new float[] { x3, y3 });
         }
         return clockwise;
     }
@@ -954,7 +884,6 @@ public final class GraphicsMathService {
 
     public static Font changeFontSize(int size, Font oldFont) {
         return new Font(oldFont.getFamily(), oldFont.getStyle(), size);// oldFont.getName(), oldFont.getStyle(), size);
-                                                                       // //
     }
 
     public static Font changeFontStyle(int style, Font oldFont) {

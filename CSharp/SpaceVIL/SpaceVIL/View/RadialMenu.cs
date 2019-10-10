@@ -144,6 +144,11 @@ namespace RadialMenu
         {
             SetVisible(false);
         }
+        public void Hide(MouseArgs args)
+        {
+            Hide();
+        }
+
         public void Show()
         {
             if (!_init)

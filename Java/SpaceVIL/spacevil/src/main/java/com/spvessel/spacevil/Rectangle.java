@@ -31,8 +31,7 @@ public class Rectangle extends Primitive {
      * Make rectangle with width, height, X, Y
      */
     @Override
-    public List<float[]> makeShape() {
-        setTriangles(GraphicsMathService.getRoundSquare(_border_radius, getWidth(), getHeight(), getX(), getY()));
-        return GraphicsMathService.toGL(this, getHandler());
+    public void makeShape() {
+        setTriangles(GraphicsMathService.getRoundSquare(_border_radius, getWidth(), getHeight(), 0, 0));
     }
 }

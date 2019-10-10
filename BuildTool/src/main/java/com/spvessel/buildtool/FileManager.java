@@ -106,7 +106,8 @@ public class FileManager {
         FileOutputStream fos = null;
         ZipOutputStream zipOut = null;
         try {
-            fos = new FileOutputStream(path);
+            path = path.replace(".zip", "");
+            fos = new FileOutputStream(path + "_" + getVersionAsString() + ".zip");
             zipOut = new ZipOutputStream(fos);
             File fileToZip = new File(source);
 
@@ -152,5 +153,9 @@ public class FileManager {
             zipOut.write(bytes, 0, length);
         }
         fis.close();
+    }
+
+    private static String getVersionAsString() {
+        return Configs.VerMajor + "." + Configs.VerMiddle + "." + Configs.VerMinor + "." + Configs.VerExtend;
     }
 }

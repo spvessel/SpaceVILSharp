@@ -81,6 +81,7 @@ public class Album extends Prototype {
         name.setFontSize(16);
         name.setFontStyle(Font.BOLD);
 
+        _remove.setItemName("_remove");
         _remove.setSize(12, 12);
         _remove.setCustomFigure(new CustomFigure(false, GraphicsMathService.getCross(12, 12, 3, 45)));
         _remove.setBackground(100, 100, 100);
@@ -109,7 +110,6 @@ public class Album extends Prototype {
         );
 
         _topLayout.addItems(_expand, name, _remove);
-
         _bottomLayout.addItems(_pathLabel, _pathEdit, _pathBrowse);
 
         _expand.addItem(_arrow);
@@ -131,6 +131,10 @@ public class Album extends Prototype {
 
         name.eventMouseDoubleClick.add((sender, args) -> {
             onDoubleClick.execute(this);
+        });
+
+        _remove.eventMouseClick.add((sender, args) -> {
+            System.out.println(_remove.isCustomFigure() == null);
         });
     }
 }

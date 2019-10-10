@@ -3,16 +3,7 @@
 using System;
 using System.Text;
 using System.IO;
-
-#if MAC
-using static OpenGL.UnixGL;
-#elif WINDOWS
-using static OpenGL.WindowsGL;
-#elif LINUX
-using static OpenGL.UnixGL;
-#else
-using static OpenGL.WindowsGL;
-#endif
+using static OpenGL.OpenGLWrapper;
 
 namespace SpaceVIL
 {

@@ -75,6 +75,19 @@ namespace Glfw3
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         static extern unsafe void glfwGetMonitorPhysicalSize(IntPtr monitor, int* widthMM, int* heightMM);
 
+        internal static unsafe void GetMonitorWorkArea(Monitor monitor, out int xpos, out int ypos, out int width, out int height)
+        {
+            int x, y, w, h;
+            glfwGetMonitorWorkarea(monitor.Ptr, &x, &y, &w, &h);
+            xpos = x; 
+            ypos = y; 
+            width = w; 
+            height = h; 
+        }
+
+        [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        static extern unsafe void glfwGetMonitorWorkarea(IntPtr monitor, int* xpos, int* ypos, int* width, int* height);
+
         internal static unsafe string GetMonitorName(Monitor monitor) => FromUTF8(glfwGetMonitorName(monitor.Ptr));
 
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]

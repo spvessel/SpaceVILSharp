@@ -39,53 +39,11 @@ namespace SpaceVIL
         {
             _spacing = spacing;
             UpdateGeometry();
-
-            Prototype parent = GetParent();
-            if (parent == null)
-            {
-                return;
-            }
-
-            var hLayout = parent as IHLayout;
-            var vLayout = parent as IVLayout;
-            var grid = parent as IFreeLayout;
-
-            if (hLayout == null && vLayout == null && grid == null)
-                UpdateBehavior();
-
-            if (hLayout != null)
-                hLayout.UpdateLayout();
-            if (vLayout != null)
-                vLayout.UpdateLayout();
-            if (grid != null)
-                grid.UpdateLayout();
+            BaseItemStatics.UpdateAllLayout(this);
         }
         internal void SetSpacing(int horizontal = 0, int vertical = 0)
         {
             SetSpacing(new Spacing(horizontal, vertical));
-            // _spacing.Horizontal = horizontal;
-            // _spacing.Vertical = vertical;
-            // UpdateGeometry();
-
-            // Prototype parent = GetParent();
-            // if (parent == null)
-            // {
-            //     return;
-            // }
-
-            // var hLayout = parent as IHLayout;
-            // var vLayout = parent as IVLayout;
-            // var grid = parent as IGrid;
-
-            // if (hLayout == null && vLayout == null && grid == null)
-            //     UpdateBehavior();
-
-            // if (hLayout != null)
-            //     hLayout.UpdateLayout();
-            // if (vLayout != null)
-            //     vLayout.UpdateLayout();
-            // if (grid != null)
-            //     grid.UpdateLayout();
         }
         private Indents _padding = new Indents();
         internal Indents GetPadding()
@@ -96,54 +54,11 @@ namespace SpaceVIL
         {
             _padding = padding;
             UpdateGeometry();
-
-            Prototype parent = GetParent();
-            if (parent == null)
-            {
-                return;
-            }
-
-            var hLayout = parent as IHLayout;
-            var vLayout = parent as IVLayout;
-            var grid = parent as IFreeLayout;
-
-            if (hLayout == null && vLayout == null && grid == null)
-                UpdateBehavior();
-
-            if (hLayout != null)
-                hLayout.UpdateLayout();
-            if (vLayout != null)
-                vLayout.UpdateLayout();
-            if (grid != null)
-                grid.UpdateLayout();
+            BaseItemStatics.UpdateAllLayout(this);
         }
         internal void SetPadding(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
             SetPadding(new Indents(left, top, right, bottom));
-            // _padding.Left = left;
-            // _padding.Top = top;
-            // _padding.Right = right;
-            // _padding.Bottom = bottom;
-            // UpdateGeometry();
-            // Prototype parent = GetParent();
-            // if (parent == null)
-            // {
-            //     return;
-            // }
-
-            // var hLayout = parent as IHLayout;
-            // var vLayout = parent as IVLayout;
-            // var grid = parent as IGrid;
-
-            // if (hLayout == null && vLayout == null && grid == null)
-            //     UpdateBehavior();
-
-            // if (hLayout != null)
-            //     hLayout.UpdateLayout();
-            // if (vLayout != null)
-            //     vLayout.UpdateLayout();
-            // if (grid != null)
-            //     grid.UpdateLayout();
         }
         internal EventManager eventManager = null;
         // private List<IBaseItem> _content = new List<IBaseItem>();
@@ -183,14 +98,6 @@ namespace SpaceVIL
             }
         }
 
-        private void CastAndUpdate(IBaseItem item)
-        {
-            Prototype prototype = item as Prototype;
-            if (prototype != null)
-                prototype.GetCore().UpdateGeometry();
-            else
-                (item as BaseItem).UpdateGeometry();
-        }
         private void CastAndRemove(IBaseItem item)
         {
             Prototype prototype = item as Prototype;
@@ -208,8 +115,8 @@ namespace SpaceVIL
             Prototype parent = GetParent();
             parent.RemoveEventListener(GeometryEventType.ResizeWidth, this._main);
             parent.RemoveEventListener(GeometryEventType.ResizeHeight, this._main);
-            parent.RemoveEventListener(GeometryEventType.Moved_X, this._main);
-            parent.RemoveEventListener(GeometryEventType.Moved_Y, this._main);
+            parent.RemoveEventListener(GeometryEventType.MovedX, this._main);
+            parent.RemoveEventListener(GeometryEventType.MovedY, this._main);
         }
 
         internal virtual void AddItem(IBaseItem item)
@@ -233,7 +140,7 @@ namespace SpaceVIL
                 ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
 
                 //needs to force update all attributes
-                CastAndUpdate(item);
+                BaseItemStatics.CastToUpdateGeometry(item);
                 item.InitElements();
             }
             catch (Exception ex)
@@ -278,7 +185,7 @@ namespace SpaceVIL
                 }
                 ItemsLayoutBox.AddItem(GetHandler(), item, LayoutType.Static);
                 //needs to force update all attributes
-                CastAndUpdate(item);
+                BaseItemStatics.CastToUpdateGeometry(item);
                 item.InitElements();
             }
             catch (Exception ex)
@@ -383,7 +290,17 @@ namespace SpaceVIL
         }
 
         //item
-        private Border _border = new Border();
+        internal Border _border = new Border();
+        internal void SetBorderDirect(Border border)
+        {
+            _border = border;
+        }
+
+        internal Border GetBorderDirect()
+        {
+            return _border;
+        }
+
         internal void SetBorder(Border border)
         {
             _border = border;
@@ -447,9 +364,9 @@ namespace SpaceVIL
             UpdateState();
         }
 
-        protected Dictionary<ItemStateType, ItemState> states = new Dictionary<ItemStateType, ItemState>();
-        protected ItemStateType _state = ItemStateType.Base;
-        internal ItemStateType GetCurrentState()
+        internal Dictionary<ItemStateType, ItemState> states = new Dictionary<ItemStateType, ItemState>();
+        internal ItemStateType _state = ItemStateType.Base;
+        internal ItemStateType GetCurrentStateType()
         {
             return _state;
         }
@@ -484,20 +401,7 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetWidth(width);
-                Prototype parent = GetParent();
-                if (parent != null && GetWidthPolicy() == SizePolicy.Fixed)
-                {
-                    var layout = parent as IHLayout;
-                    var grid = parent as IFreeLayout;
-
-                    if (layout == null && grid == null)
-                        UpdateBehavior();
-
-                    if (layout != null)
-                        layout.UpdateLayout();
-                    if (grid != null)
-                        grid.UpdateLayout();
-                }
+                BaseItemStatics.UpdateHLayout(this);
                 eventManager.NotifyListeners(GeometryEventType.ResizeWidth, value);
             }
         }
@@ -507,20 +411,7 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetHeight(height);
-                Prototype parent = GetParent();
-                if (parent != null && GetHeightPolicy() == SizePolicy.Fixed)
-                {
-                    var layout = parent as IVLayout;
-                    var grid = parent as IFreeLayout;
-
-                    if (layout == null && grid == null)
-                        UpdateBehavior();
-
-                    if (layout != null)
-                        layout.UpdateLayout();
-                    if (grid != null)
-                        grid.UpdateLayout();
-                }
+                BaseItemStatics.UpdateVLayout(this);
                 eventManager.NotifyListeners(GeometryEventType.ResizeHeight, value);
             }
         }
@@ -535,19 +426,7 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetX(_x);
-                // Prototype parent = GetParent();
-                // if (parent != null && GetWidthPolicy() == SizePolicy.Fixed)
-                // {
-                //     var layout = parent as IHLayout;
-                //     var grid = parent as IGrid;
-
-                //     if (layout != null)
-                //         layout.UpdateLayout();
-                //     if (grid != null)
-                //         if ((parent as IFree) == null)
-                //             grid.UpdateLayout();
-                // }
-                eventManager.NotifyListeners(GeometryEventType.Moved_X, value);
+                eventManager.NotifyListeners(GeometryEventType.MovedX, value);
             }
         }
         public override void SetY(int _y)
@@ -556,20 +435,7 @@ namespace SpaceVIL
             if (value != 0)
             {
                 base.SetY(_y);
-                // Prototype parent = GetParent();
-                // if (parent != null && GetHeightPolicy() == SizePolicy.Fixed)
-                // {
-                //     var layout = parent as IVLayout;
-                //     var grid = parent as IGrid;
-
-                //     if (layout != null)
-                //         layout.UpdateLayout();
-
-                //     if (grid != null)
-                //         if ((parent as IFree) == null)
-                //             grid.UpdateLayout();
-                // }
-                eventManager.NotifyListeners(GeometryEventType.Moved_Y, value);
+                eventManager.NotifyListeners(GeometryEventType.MovedY, value);
             }
         }
 
@@ -732,6 +598,12 @@ namespace SpaceVIL
                 return states[type];
             return null;
         }
+
+        internal void SetBackgroundDirect(Color color)
+        {
+            base.SetBackground(color);
+        }
+
         public override void SetBackground(Color color)
         {
             GetState(ItemStateType.Base).Background = color;
@@ -764,165 +636,12 @@ namespace SpaceVIL
 
         internal void UpdateState()
         {
-            ItemState s_base = GetState(ItemStateType.Base);
-            ItemState current = GetState(_state);
-            base.SetBackground(current.Background);
-            _border = CloneBorder(current.Border);
-
-            if (_border.GetRadius() == null)
-                _border.SetRadius(s_base.Border.GetRadius());
-            if (_border.GetThickness() < 0)
-                _border.SetThickness(s_base.Border.GetThickness());
-            if (_border.GetFill().A == 0)
-                _border.SetFill(s_base.Border.GetFill());
-
-            if (current.Shape != null)
-                IsCustom = current.Shape;
-
-            ItemState s_disabled = GetState(ItemStateType.Disabled);
-            if (IsDisabled())
-            {
-                if (s_disabled != null)
-                    UpdateVisualProperties(s_disabled, s_base);
-                return;
-            }
-            ItemState s_focused = GetState(ItemStateType.Focused);
-            if (IsFocused() && s_focused != null)
-            {
-                UpdateVisualProperties(s_focused, s_base);
-                s_base = s_focused;
-            }
-            ItemState s_hover = GetState(ItemStateType.Hovered);
-            if (IsMouseHover() && s_hover != null)
-            {
-                UpdateVisualProperties(s_hover, s_base);
-                s_base = s_hover;
-            }
-            ItemState s_pressed = GetState(ItemStateType.Pressed);
-            if (IsMousePressed() && s_pressed != null)
-            {
-                UpdateVisualProperties(s_pressed, s_base);
-                s_base = s_pressed;
-            }
+            VisualItemStatics.UpdateState(this);
         }
 
-        internal void UpdateVisualProperties(ItemState state, ItemState prev_state)
-        {
-            ItemState current = GetState(_state);
-            base.SetBackground(GraphicsMathService.MixColors(current.Background, state.Background));
-            _border = CloneBorder(state.Border);
-
-            if (_border.GetRadius() == null)
-                _border.SetRadius(prev_state.Border.GetRadius());
-            if (_border.GetRadius() == null)
-                _border.SetRadius(GetState(ItemStateType.Base).Border.GetRadius());
-
-            if (_border.GetThickness() < 0)
-                _border.SetThickness(prev_state.Border.GetThickness());
-            if (_border.GetThickness() < 0)
-                _border.SetThickness(GetState(ItemStateType.Base).Border.GetThickness());
-
-            if (_border.GetFill().A == 0)
-                _border.SetFill(prev_state.Border.GetFill());
-            if (_border.GetFill().A == 0)
-                _border.SetFill(GetState(ItemStateType.Base).Border.GetFill());
-
-            if (state.Shape != null)
-                IsCustom = state.Shape;
-        }
-
-        private Border CloneBorder(Border border)
-        {
-            Border clone = new Border();
-            clone.SetFill(border.GetFill());
-            clone.SetRadius(border.GetRadius());
-            clone.SetThickness(border.GetThickness());
-            return clone;
-        }
         internal virtual bool GetHoverVerification(float xpos, float ypos)
         {
-            switch (HoverRule)
-            {
-                case ItemRule.Lazy:
-                    return LazyHoverVerification(xpos, ypos);
-                case ItemRule.Strict:
-                    return StrictHoverVerification(xpos, ypos);
-                default:
-                    return false;
-            }
-        }
-        private bool StrictHoverVerification(float xpos, float ypos)
-        {
-            List<float[]> tmp = UpdateShape();
-            if (tmp == null)
-                return false;
-
-            float Ax, Ay, Bx, By, Cx, Cy, Px, Py, m, l;
-            bool result = false;
-
-            for (int point = 0; point < tmp.Count; point += 3)
-            {
-                Px = xpos;
-                Py = ypos;
-                Ax = tmp[point][0];
-                Ay = tmp[point][1];
-                Bx = tmp[point + 1][0];
-                By = tmp[point + 1][1];
-                Cx = tmp[point + 2][0];
-                Cy = tmp[point + 2][1];
-
-
-                Bx = Bx - Ax; By = By - Ay;
-                Cx = Cx - Ax; Cy = Cy - Ay;
-                Px = Px - Ax; Py = Py - Ay;
-                Ax = 0; Ay = 0;
-
-                m = (Px * By - Bx * Py) / (Cx * By - Bx * Cy);
-                if (m >= 0)
-                {
-                    l = (Px - m * Cx) / Bx;
-                    if (l >= 0 && (m + l) <= 1)
-                    {
-                        result = true;
-                        return result;
-                    }
-                }
-            }
-
-            return result;
-        }
-        private bool LazyHoverVerification(float xpos, float ypos)
-        {
-            bool result = false;
-
-            float minx = GetX();
-            float maxx = GetX() + GetWidth();
-            float miny = GetY();
-            float maxy = GetY() + GetHeight();
-
-            if (_confines_x_0 > minx)
-                minx = _confines_x_0;
-
-            if (_confines_x_1 < maxx)
-                maxx = _confines_x_1;
-
-            if (_confines_y_0 > miny)
-                miny = _confines_y_0;
-
-            if (_confines_y_1 < maxy)
-                maxy = _confines_y_1;
-
-            if (xpos >= minx
-                && xpos <= maxx
-                && ypos >= miny
-                && ypos <= maxy)
-            {
-                result = true;
-            }
-            else
-            {
-            }
-            return result;
+            return VisualItemStatics.GetHoverVerification(this, xpos, ypos);
         }
 
         CustomFigure IsCustom = null;
@@ -933,99 +652,34 @@ namespace SpaceVIL
         internal void SetCustomFigure(CustomFigure figure)
         {
             IsCustom = figure;
+            SetRemakeRequest(true);
         }
 
-        public override List<float[]> MakeShape()
+        public override void MakeShape()
         {
-            if (IsCustom != null)
+            if (IsCustomFigure() != null)
             {
-                SetTriangles(IsCustom.GetFigure());
+                SetTriangles(IsCustomFigure().GetFigure());
+                if (GetState(ItemStateType.Base).Shape == null)
+                    GetState(ItemStateType.Base).Shape = IsCustomFigure();
 
-                if (IsCustom.IsFixed())
-                    return GraphicsMathService.ToGL(IsCustom.UpdatePosition(GetX(), GetY()), GetHandler());
-                else
-                    return GraphicsMathService.ToGL(UpdateShape(), GetHandler());
+                if (!IsCustomFigure().IsFixed())
+                    SetTriangles(UpdateShape());
             }
-
-            SetTriangles(GraphicsMathService.GetRoundSquare(GetBorderRadius(), GetWidth(), GetHeight(), GetX(), GetY()));
-            return GraphicsMathService.ToGL(this as IBaseItem, GetHandler());
+            else
+            {
+                SetTriangles(GraphicsMathService.GetRoundSquare(GetBorderRadius(), GetWidth(), GetHeight(), 0, 0));
+            }
         }
 
         public override void SetStyle(Style style)
         {
-            if (style == null)
-                return;
-
-            SetPosition(style.X, style.Y);
-            SetSize(style.Width, style.Height);
-            SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
-            SetPadding(style.Padding);
-            SetMargin(style.Margin);
-            SetAlignment(style.Alignment);
-
-            SetSpacing(style.Spacing);
-
-            SetMinSize(style.MinWidth, style.MinHeight);
-            SetMaxSize(style.MaxWidth, style.MaxHeight);
-
-            SetBackground(style.Background);
-            SetBorderRadius(style.BorderRadius);
-            SetBorderThickness(style.BorderThickness);
-            SetBorderFill(style.BorderFill);
-
-            SetShadow(style.ShadowRadius, style.ShadowXOffset, style.ShadowYOffset, style.ShadowColor);
-            SetShadowDrop(style.IsShadowDrop);
-
-            SetVisible(style.IsVisible);
-            RemoveAllItemStates();
-
-            ItemState core_state = new ItemState(style.Background);
-            core_state.Border.SetRadius(style.BorderRadius);
-            core_state.Border.SetThickness(style.BorderThickness);
-            core_state.Border.SetFill(style.BorderFill);
-
-            foreach (var state in style.GetAllStates())
-            {
-                AddItemState(state.Key, state.Value);
-            }
-            if (style.Shape != null)
-            {
-                IsCustom = new CustomFigure(style.IsFixedShape, style.Shape);
-                core_state.Shape = IsCustom;
-            }
-            AddItemState(ItemStateType.Base, core_state);
+            VisualItemStatics.SetStyle(this, style);
         }
+
         public override Style GetCoreStyle()
         {
-            Style style = new Style();
-            style.SetSize(GetWidth(), GetHeight());
-            style.SetSizePolicy(GetWidthPolicy(), GetHeightPolicy());
-            style.Background = GetBackground();
-            style.MinWidth = GetMinWidth();
-            style.MinHeight = GetMinHeight();
-            style.MaxWidth = GetMaxWidth();
-            style.MaxHeight = GetMaxHeight();
-            style.X = GetX();
-            style.Y = GetY();
-            style.Padding = new Indents(GetPadding().Left, GetPadding().Top, GetPadding().Right, GetPadding().Bottom);
-            style.Margin = new Indents(GetMargin().Left, GetMargin().Top, GetMargin().Right, GetMargin().Bottom);
-            style.Spacing = new Spacing(GetSpacing().Horizontal, GetSpacing().Vertical);
-            style.Alignment = GetAlignment();
-            style.BorderFill = GetBorderFill();
-            style.BorderRadius = GetBorderRadius();
-            style.BorderThickness = GetBorderThickness();
-            style.IsVisible = IsVisible();
-            if (IsCustom != null)
-            {
-                style.Shape = IsCustom.GetFigure();
-                style.IsFixedShape = IsCustom.IsFixed();
-            }
-            foreach (var state in states)
-            {
-                style.AddItemState(state.Key, state.Value);
-            }
-
-            return style;
+            return VisualItemStatics.ExtractCoreStyle(this);
         }
 
         public override void InitElements() { }

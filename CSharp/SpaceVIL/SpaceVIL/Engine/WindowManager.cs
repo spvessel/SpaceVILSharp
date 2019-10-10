@@ -14,7 +14,7 @@ namespace SpaceVIL
         private static readonly float _intervalMedium = 1.0f / 30.0f;
         private static readonly float _intervalHigh = 1.0f / 60.0f;
         private static readonly float _intervalUltra = 1.0f / 120.0f;
-        private static float _intervalAssigned = 1.0f / 15.0f;
+        private static float _intervalAssigned = 1.0f / 10.0f;
         private static RedrawFrequency _frequency = RedrawFrequency.Low;
 
         public static void SetRenderFrequency(RedrawFrequency value)
@@ -47,6 +47,51 @@ namespace SpaceVIL
             catch (Exception ex)
             {
                 Console.WriteLine("Method - SetFrequency");
+                Console.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+                Monitor.Exit(_lock);
+            }
+        }
+
+        private static int _vsync = 1;
+
+        public static void EnableVSync(int value)
+        {
+            if (_isRunning)
+                return;
+            _vsync = value;
+        }
+
+        public static int GetVSyncValue()
+        {
+            return _vsync;
+        }
+
+        public static void SetRenderType(RenderType value)
+        {
+            Monitor.Enter(_lock);
+            try
+            {
+                waitfunc = null;
+                if (value == RenderType.IfNeeded)
+                {
+                    waitfunc += () => Glfw.WaitEvents();
+                }
+                else if (value == RenderType.Periodic)
+                {
+                    waitfunc += () => Glfw.WaitEventsTimeout(GetCurrentFrequency());
+                }
+                else if (value == RenderType.Always)
+                {
+                    waitfunc += () => Glfw.PollEvents();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Method - SetRenderType");
                 Console.WriteLine(ex.StackTrace);
             }
             finally
@@ -168,17 +213,21 @@ namespace SpaceVIL
             }
         }
 
+        private static EventCommonMethod waitfunc;
         static void Run()
         {
             foreach (CoreWindow wnd in _windows)
             {
                 InitWindow(wnd);
             }
+            if (waitfunc == null)
+                waitfunc += () => Glfw.WaitEventsTimeout(GetCurrentFrequency());
+
             _isRunning = true;
             while (!_isEmpty)
             {
                 List<CoreWindow> list = GetStoredWindows();
-                Glfw.WaitEventsTimeout(GetCurrentFrequency());
+                waitfunc.Invoke();
                 foreach (CoreWindow window in list)
                 {
                     Glfw.MakeContextCurrent(window.GetGLWID());

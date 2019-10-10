@@ -17,7 +17,7 @@ namespace SpaceVIL
         private static int count = 0;
         private TextPrinter textPrt = new TextPrinter();
         private readonly Object textLock = new Object();
-        private bool flagBB = false;
+        private bool _isUpdateNeed = false;
 
         private List<int> _letEndPos;
         private int _lineYShift = 0;
@@ -164,7 +164,7 @@ namespace SpaceVIL
                 }
                 if (_letters.Count() == 0)
                     return new TextPrinter(); //null;
-                if (flagBB && (_isRecountable || afterCreate))
+                if (_isUpdateNeed && (_isRecountable || afterCreate))
                 {
                     afterCreate = false;
                     int bb_h = GetHeight();
@@ -246,14 +246,14 @@ namespace SpaceVIL
                             }
                         }
                     }
-                    flagBB = false;
+                    _isUpdateNeed = false;
                     textPrt = new TextPrinter(cacheBB)
                     {
                         WidthTexture = bb_w,
                         HeightTexture = bb_h
                     };
+                    SetRemakeText(true);
                 }
-
                 UpdateCoords(parent);
                 return textPrt;
             }
@@ -392,7 +392,7 @@ namespace SpaceVIL
                 if (GetFont() == null)
                     return;
                 CreateText();
-                flagBB = true;
+                _isUpdateNeed = true;
             }
             finally
             {
@@ -471,7 +471,7 @@ namespace SpaceVIL
         {
             _lineYShift = sp;
             //UpdateCoords(); //SetCoordsFlag(true);
-            flagBB = true;
+            _isUpdateNeed = true;
         }
 
         internal int GetLineYShift()
@@ -484,7 +484,7 @@ namespace SpaceVIL
             //if (_lineXShift == sp) return;
             _lineXShift = sp;
             //UpdateCoords();
-            flagBB = true;
+            _isUpdateNeed = true;
         }
 
         internal int GetLineXShift()
@@ -547,14 +547,14 @@ namespace SpaceVIL
         internal void SetAllowWidth(int allowWidth)
         {
             if (_parentAllowWidth != allowWidth)
-                flagBB = true;
+                _isUpdateNeed = true;
             _parentAllowWidth = allowWidth;
         }
 
         internal void SetAllowHeight(int allowHeight)
         {
             if (_parentAllowHeight != allowHeight)
-                flagBB = true;
+                _isUpdateNeed = true;
             _parentAllowHeight = allowHeight;
         }
 
@@ -562,7 +562,7 @@ namespace SpaceVIL
         internal void SetCursorWidth(int cwidth)
         {
             if (cursorWidth != cwidth)
-                flagBB = true;
+                _isUpdateNeed = true;
             cursorWidth = cwidth;
         }
 
@@ -570,6 +570,16 @@ namespace SpaceVIL
         {
             _isRecountable = isRecountable;
         }
-    }
 
+        private bool _isRemakeText = true;
+        public void SetRemakeText(bool value)
+        {
+            _isRemakeText = value;
+        }
+
+        public bool IsRemakeText()
+        {
+            return _isRemakeText;
+        }
+    }
 }

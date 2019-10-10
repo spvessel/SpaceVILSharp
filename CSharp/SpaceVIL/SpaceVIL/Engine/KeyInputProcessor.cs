@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Glfw3;
+using SpaceVIL.Common;
 using SpaceVIL.Core;
 
 namespace SpaceVIL
@@ -15,13 +16,15 @@ namespace SpaceVIL
             _commonProcessor = commonProcessor;
             _kargs = new KeyArgs();
             _kargs.Clear();
-#if LINUX
+
+            if (CommonService.GetOSType() == OSType.Linux)
+            {
                 keyMap = new Dictionary<KeyMods, Int32>();
                 keyMap.Add(KeyMods.Shift, 0);
                 keyMap.Add(KeyMods.Control, 0);
                 keyMap.Add(KeyMods.Alt, 0);
                 keyMap.Add(KeyMods.Super, 0);
-#endif
+            }
         }
 
         internal void Process(Int64 glfwwnd, KeyCode key, int scancode, InputState action, KeyMods mods)
@@ -29,40 +32,43 @@ namespace SpaceVIL
             _kargs.Key = key;
             _kargs.Scancode = scancode;
             _kargs.State = action;
-#if LINUX
-            if (key != 0)
+            if (CommonService.GetOSType() == OSType.Linux)
             {
-                KeyMods keyMod = GetKeyModByKey(key);
-                if (keyMod != 0)
+                if (key != 0)
                 {
-                    if (action == InputState.Press)
+                    KeyMods keyMod = GetKeyModByKey(key);
+                    if (keyMod != 0)
                     {
-                        _kargs.Mods |= keyMod;
-                        keyMap[keyMod]++;
-                    }
-                    if (mods != 0 && action == InputState.Release)
-                    {
-                        if (_kargs.Mods.HasFlag(keyMod))
+                        if (action == InputState.Press)
                         {
-                            if(keyMap[keyMod] == 1)
-                                _kargs.Mods &= ~keyMod;
-                            keyMap[keyMod]--;
+                            _kargs.Mods |= keyMod;
+                            keyMap[keyMod]++;
+                        }
+                        if (mods != 0 && action == InputState.Release)
+                        {
+                            if (_kargs.Mods.HasFlag(keyMod))
+                            {
+                                if (keyMap[keyMod] == 1)
+                                    _kargs.Mods &= ~keyMod;
+                                keyMap[keyMod]--;
+                            }
                         }
                     }
                 }
+                if ((action == InputState.Release) && (mods == 0) && (key == 0))
+                {
+                    _kargs.Mods = 0;
+                }
             }
-            if ((action == InputState.Release) && (mods == 0) && (key == 0))
+            else
             {
-                _kargs.Mods = 0;
+                _kargs.Mods = mods;
             }
-#else
-            _kargs.Mods = mods;
-#endif
             _commonProcessor.Margs.Mods = _kargs.Mods;
 
             if ((_commonProcessor.FocusedItem is ITextShortcuts) && action == InputState.Press)
             {
-                // if (action == InputState.Press)
+                if (action == InputState.Press)
                 {
                     _commonProcessor.FocusedItem.EventKeyPress(_commonProcessor.FocusedItem, _kargs);
                     _commonProcessor.Manager.AssignActionsForItemPyramid(InputEventType.KeyPress, _kargs,

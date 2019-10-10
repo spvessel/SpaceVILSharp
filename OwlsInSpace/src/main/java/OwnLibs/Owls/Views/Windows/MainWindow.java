@@ -11,7 +11,6 @@ import com.spvessel.spacevil.Flags.*;
 import OwnLibs.Owls.ElementsFactory;
 import OwnLibs.Owls.Views.Items.AttachSideArea;
 import OwnLibs.Owls.Views.Items.HomeTab;
-import OwnLibs.Owls.Views.Items.FileEntryTab;
 import OwnLibs.Owls.Views.Items.HomePage;
 
 import com.spvessel.spacevil.Frame;
@@ -228,7 +227,7 @@ public class MainWindow extends ActiveWindow {
         filePreferencesContextMenu.setBorderThickness(1);
         filePreferencesContextMenu.setBorderFill(32, 32, 32);
         filePreferencesContextMenu.setBackground(60, 60, 60);
-        filePreferencesContextMenu.setShadow(5, 2, 2, new Color(0, 0, 0, 180));
+        // filePreferencesContextMenu.setShadow(5, 2, 2, new Color(0, 0, 0, 180));
 
         miAddKeyWords = new MenuItem("Add tags");
         miShowAttachedContent = new MenuItem("Show attached");
@@ -254,7 +253,7 @@ public class MainWindow extends ActiveWindow {
         treeContextMenu.setBorderThickness(1);
         treeContextMenu.setBorderFill(32, 32, 32);
         treeContextMenu.setBackground(60, 60, 60);
-        treeContextMenu.setShadow(5, 2, 2, new Color(0, 0, 0, 180));
+        // treeContextMenu.setShadow(5, 2, 2, new Color(0, 0, 0, 180));
         // treeContextMenu.setBorderRadius(5);
         // treeContextMenu.itemList.setSelectionVisible(false);
         // treeContextMenu.setReturnFocus(filesTree.getArea());
@@ -267,7 +266,7 @@ public class MainWindow extends ActiveWindow {
         keyWordsContextMenu.setBackground(60, 60, 60);
         keyWordsContextMenu.itemList.setSelectionVisible(false);
 
-        keyWordsContextMenu.setShadow(5, 2, 2, new Color(0, 0, 0, 180));
+        // keyWordsContextMenu.setShadow(5, 2, 2, new Color(0, 0, 0, 180));
 
         miKWDelete = new MenuItem("Remove");
         miKWUse = new MenuItem("Use");

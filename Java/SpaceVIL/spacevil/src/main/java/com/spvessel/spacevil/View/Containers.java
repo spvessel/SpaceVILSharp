@@ -10,6 +10,7 @@ import com.spvessel.spacevil.Grid;
 import com.spvessel.spacevil.HorizontalSlider;
 import com.spvessel.spacevil.Tab;
 import com.spvessel.spacevil.TabView;
+import com.spvessel.spacevil.TextArea;
 import com.spvessel.spacevil.TitleBar;
 import com.spvessel.spacevil.VerticalScrollBar;
 import com.spvessel.spacevil.Common.DefaultsService;
@@ -21,6 +22,7 @@ import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class Containers extends ActiveWindow {
@@ -58,7 +60,7 @@ public class Containers extends ActiveWindow {
 
         tab2 = new Tab("List1");
         tab2.setClosable(true);
-        
+
         tab3 = new Tab("List2");
         tab3.setClosable(true);
 
@@ -85,6 +87,13 @@ public class Containers extends ActiveWindow {
         tabs.selectTab(tab2);
         tabs.selectTab(tab1);
         tabs.addTab(tab3);
+
+        TextArea text = new TextArea();
+        text.setEditable(false);
+        text.setText(getBigText());
+        text.rewindText();
+        tabs.addItemToTab(tab2, text);
+
         // tabs.selectTab(tab3);
         // tabs.addTab(new Tab("TabForTest1"));
         // tabs.addTab(new Tab("TabForTest2"));
@@ -106,9 +115,27 @@ public class Containers extends ActiveWindow {
                 clearAllTabs();
             }
             if (args.key == KeyCode.ENTER) {
-                if (tabs != null) {
-                    System.out.println(tabs.getTabs().size());
-                }
+                Tab tab = new Tab("TAB!");
+                tabs.addTab(tab);
+                tabs.selectTab(tab);
+
+                TextArea t = new TextArea();
+                tabs.addItemToTab(tab, t);
+                // t.setEditable(false);
+                t.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+                t.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+                t.disableMenu(true);
+                t.menu.setDrawable(false);
+
+                t.setText(getBigText());
+                t.rewindText();
+
+                t.eventKeyRelease.add((s, a) -> {
+                    if (a.key == KeyCode.PAGEDOWN) {
+                        t.setText(getBigText());
+                        t.rewindText();
+                    }
+                });
             }
         });
 
@@ -157,5 +184,46 @@ public class Containers extends ActiveWindow {
         btn.setShadow(5, 0, 3, new Color(0, 0, 0, 150));
 
         return btn;
+    }
+
+    private String getBigText() {
+        return "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweighUAHFS98yqw9d8yhq98whd9u hwqduhq9wyfd98qowfhqoijehfioquwhefiuwhieufhgikwuehgfiuweghf\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" + "";
     }
 }

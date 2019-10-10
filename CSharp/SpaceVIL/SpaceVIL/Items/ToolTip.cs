@@ -1,143 +1,94 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
-using System.Timers;
 using SpaceVIL.Core;
-using SpaceVIL.Common;
 using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    internal class ToolTip : Prototype, IToolTip
+    public static class ToolTip
     {
-        private TextLine _text_object;
-        internal TextLine GetTextLine()
+        private static ToolTipItem GetToolTip(CoreWindow window)
         {
-            return _text_object;
-        }
-        internal Timer _stop;
-        private int _timeout = 300;
-        public void SetTimeOut(int milliseconds)
-        {
-            _timeout = milliseconds;
-        }
-        public int GetTimeOut()
-        {
-            return _timeout;
+            return window.GetLayout().GetToolTip();
         }
 
-        // private static ToolTip _instance = null;
-
-        internal ToolTip()
+        public static void SetStyle(CoreWindow window, Style style)
         {
-            SetVisible(false);
-            _text_object = new TextLine();
-            SetItemName("ToolTip");
-            IsFocusable = false;
-
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ToolTip)));
-        }
-
-        // public static ToolTip GetInstance()
-        // {
-        //     if (_instance == null)
-        //         _instance = new ToolTip();
-        //     return _instance;
-        // }
-
-        public void SetTextAlignment(ItemAlignment alignment)
-        {
-            _text_object.SetTextAlignment(alignment);
-        }
-        public void SetTextAlignment(params ItemAlignment[] alignment)
-        {
-            _text_object.SetTextAlignment(alignment);
-        }
-        public void SetFont(Font font)
-        {
-            _text_object.SetFont(font);
-        }
-        public void SetFontSize(int size)
-        {
-            _text_object.SetFontSize(size);
-        }
-        public void SetFontStyle(FontStyle style)
-        {
-            _text_object.SetFontStyle(style);
-        }
-        public void SetFontFamily(FontFamily font_family)
-        {
-            _text_object.SetFontFamily(font_family);
-        }
-        public Font GetFont()
-        {
-            return _text_object.GetFont();
-        }
-        public void SetText(String text)
-        {
-            _text_object.SetItemText(text);
-        }
-        public String GetText()
-        {
-            return _text_object.GetItemText();
-        }
-        public int GetTextWidth()
-        {
-            return _text_object.GetWidth();
-        }
-        public void SetForeground(Color color)
-        {
-            _text_object.SetForeground(color);
-        }
-        public Color GetForeground()
-        {
-            return _text_object.GetForeground();
-        }
-
-        internal void InitTimer(bool value)
-        {
-            if (value)
-            {
-                if (_stop != null)
-                    return;
-
-                _stop = new System.Timers.Timer(_timeout);
-                _stop.Elapsed += (sender, e) => VisibleSelf();
-                _stop.Start();
-            }
-            else
-            {
-                SetVisible(false);
-
-                if (_stop == null)
-                    return;
-
-                _stop.Stop();
-                _stop.Dispose();
-                _stop = null;
-            }
-        }
-
-        private void VisibleSelf()
-        {
-            SetVisible(true);
-
-            _stop.Stop();
-            _stop.Dispose();
-            _stop = null;
-        }
-
-        //style
-        public override void SetStyle(Style style)
-        {
-            if (style == null)
+            if (window == null)
                 return;
-            base.SetStyle(style);
-            SetForeground(style.Foreground);
-            SetFont(style.Font);
-            SetTextAlignment(style.TextAlignment);
+            ToolTipItem toolTip = GetToolTip(window);
+            toolTip.SetStyle(style);
+        }
+
+        public static void SetTimeOut(CoreWindow window, int ms)
+        {
+            if (window == null)
+                return;
+            ToolTipItem toolTip = GetToolTip(window);
+            toolTip.SetTimeOut(ms);
+        }
+
+        public static int GetTimeOut(CoreWindow window)
+        {
+            if (window == null)
+                return -1;
+            ToolTipItem toolTip = GetToolTip(window);
+            return toolTip.GetTimeOut();
+        }
+
+        public static void SetBackground(CoreWindow window, Color color)
+        {
+            if (window == null)
+                return;
+            ToolTipItem toolTip = GetToolTip(window);
+            toolTip.SetBackground(color);
+        }
+
+        public static void SetForeground(CoreWindow window, Color color)
+        {
+            if (window == null)
+                return;
+            ToolTipItem toolTip = GetToolTip(window);
+            toolTip.SetForeground(color);
+        }
+
+        public static void SetFont(CoreWindow window, Font font)
+        {
+            if (window == null)
+                return;
+            ToolTipItem toolTip = GetToolTip(window);
+            toolTip.SetFont(font);
+        }
+
+        public static void SetBorder(CoreWindow window, Border border)
+        {
+            if (window == null)
+                return;
+            ToolTipItem toolTip = GetToolTip(window);
+            toolTip.SetBorder(border);
+        }
+
+        public static void SetShadow(CoreWindow window, Shadow shadow)
+        {
+            if (window == null)
+                return;
+            ToolTipItem toolTip = GetToolTip(window);
+            toolTip.SetShadow(shadow.GetRadius(), shadow.GetXOffset(), shadow.GetYOffset(), shadow.GetColor());
+        }
+
+        public static void SetShadowDrop(CoreWindow window, bool value)
+        {
+            if (window == null)
+                return;
+            ToolTipItem toolTip = GetToolTip(window);
+            toolTip.SetShadowDrop(value);
+        }
+
+        public static void AddItems(CoreWindow window, params IBaseItem[] items)
+        {
+            if (window == null)
+                return;
+            ToolTipItem toolTip = GetToolTip(window);
+            toolTip.AddItems(items);
         }
     }
 }

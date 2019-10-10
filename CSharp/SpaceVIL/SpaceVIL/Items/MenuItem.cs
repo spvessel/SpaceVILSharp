@@ -11,7 +11,7 @@ namespace SpaceVIL
     {
         public bool IsActionItem = false;
         static int count = 0;
-        private Label _text_object;
+        private Label _textObject;
         internal ContextMenu _context_menu;
         private ContextMenu _sub_context_menu;
 
@@ -67,7 +67,8 @@ namespace SpaceVIL
             EventKeyPress += OnKeyPress;
             EventMousePress += (sender, args) => OnMouseAction();
 
-            _text_object = new Label();
+            _textObject = new Label();
+            _textObject.IsHover = false;
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MenuItem)));
         }
@@ -99,13 +100,13 @@ namespace SpaceVIL
         /// <returns> text width in the MenuItem </returns>
         public int GetTextWidth()
         {
-            return _text_object.GetTextWidth();
+            return _textObject.GetTextWidth();
         }
 
         /// <returns> text height in the MenuItem </returns>
         public int GetTextHeight()
         {
-            return _text_object.GetTextHeight();
+            return _textObject.GetTextHeight();
         }
 
         /// <summary>
@@ -113,11 +114,11 @@ namespace SpaceVIL
         /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
-            _text_object.SetTextAlignment(alignment);
+            _textObject.SetTextAlignment(alignment);
         }
         public void SetTextAlignment(params ItemAlignment[] alignment)
         {
-            _text_object.SetTextAlignment(alignment);
+            _textObject.SetTextAlignment(alignment);
         }
 
         /// <summary>
@@ -125,12 +126,12 @@ namespace SpaceVIL
         /// </summary>
         public Indents GetTextMargin()
         {
-            return _text_object.GetMargin();
+            return _textObject.GetMargin();
         }
 
         public void SetTextMargin(Indents margin)
         {
-            _text_object.SetMargin(margin);
+            _textObject.SetMargin(margin);
         }
 
         /// <summary>
@@ -138,11 +139,11 @@ namespace SpaceVIL
         /// </summary>
         public void SetFont(Font font)
         {
-            _text_object.SetFont(font);
+            _textObject.SetFont(font);
         }
         public Font GetFont()
         {
-            return _text_object.GetFont();
+            return _textObject.GetFont();
         }
 
         /// <summary>
@@ -150,11 +151,11 @@ namespace SpaceVIL
         /// </summary>
         public void SetText(String text)
         {
-            _text_object.SetText(text);
+            _textObject.SetText(text);
         }
         public String GetText()
         {
-            return _text_object.GetText();
+            return _textObject.GetText();
         }
 
         /// <summary>
@@ -162,27 +163,27 @@ namespace SpaceVIL
         /// </summary>
         public void SetForeground(Color color)
         {
-            _text_object.SetForeground(color);
+            _textObject.SetForeground(color);
         }
         public void SetForeground(int r, int g, int b)
         {
-            _text_object.SetForeground(r, g, b);
+            _textObject.SetForeground(r, g, b);
         }
         public void SetForeground(int r, int g, int b, int a)
         {
-            _text_object.SetForeground(r, g, b, a);
+            _textObject.SetForeground(r, g, b, a);
         }
         public void SetForeground(float r, float g, float b)
         {
-            _text_object.SetForeground(r, g, b);
+            _textObject.SetForeground(r, g, b);
         }
         public void SetForeground(float r, float g, float b, float a)
         {
-            _text_object.SetForeground(r, g, b, a);
+            _textObject.SetForeground(r, g, b, a);
         }
         public Color GetForeground()
         {
-            return _text_object.GetForeground();
+            return _textObject.GetForeground();
         }
 
         /// <summary>
@@ -191,7 +192,7 @@ namespace SpaceVIL
         public override void InitElements()
         {
             //adding
-            AddItem(_text_object);
+            AddItem(_textObject);
             if (IsActionItem)
                 AddItem(_arrow);
             foreach (IBaseItem item in _queue)
@@ -231,7 +232,7 @@ namespace SpaceVIL
             inner_style = style.GetInnerStyle("text");
             if (inner_style != null)
             {
-                _text_object.SetMargin(inner_style.Margin);
+                _textObject.SetMargin(inner_style.Margin);
             }
         }
 

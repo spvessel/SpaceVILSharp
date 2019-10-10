@@ -1,13 +1,12 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.InterfaceLine;
 import com.spvessel.spacevil.Core.InterfacePoints;
 
 import java.util.List;
 import java.util.LinkedList;
 import java.awt.Color;
 
-public class PointsContainer extends Primitive implements InterfacePoints, InterfaceLine {
+public class PointsContainer extends Primitive implements InterfacePoints {
     private static int count = 0;
 
     /**
@@ -27,6 +26,7 @@ public class PointsContainer extends Primitive implements InterfacePoints, Inter
     public void setPointThickness(float thickness) {
         _thickness = thickness;
     }
+
     public float getPointThickness() {
         return _thickness;
     }
@@ -39,6 +39,7 @@ public class PointsContainer extends Primitive implements InterfacePoints, Inter
     public void setPointColor(Color color) {
         _color = color;
     }
+
     public Color getPointColor() {
         return _color;
     }
@@ -54,6 +55,7 @@ public class PointsContainer extends Primitive implements InterfacePoints, Inter
         _shape_pointer = shape;
 
     }
+
     public List<float[]> getShapePointer() {
         if (_shape_pointer == null)
             _shape_pointer = GraphicsMathService.getEllipse(getPointThickness() / 2.0f, 16);
@@ -64,10 +66,7 @@ public class PointsContainer extends Primitive implements InterfacePoints, Inter
      * List of the points coordinates
      */
     public void setPointsCoord(List<float[]> coord) {
-        List<float[]> tmp = new LinkedList<>();
-        for (float[] item : coord) {
-            tmp.add(item);
-        }
+        List<float[]> tmp = new LinkedList<>(coord);
         setTriangles(tmp);
     }
 
@@ -75,33 +74,15 @@ public class PointsContainer extends Primitive implements InterfacePoints, Inter
      * Make shape according to triangles list assigned with setTriangles
      */
     @Override
-    public List<float[]> makeShape() {
+    public void makeShape() {
+        if (getTriangles() != null)
+            setTriangles(updateShape());
+    }
+
+    @Override
+    public List<float[]> getPoints() {
         if (getTriangles() == null || getTriangles().size() < 2)
             return null;
-        return updateShape();
-    }
-
-    private float _line_thickness = 1.0f;
-
-    /**
-     * Thickness of the line between the points
-     */
-    public void setLineThickness(float thickness) {
-        _line_thickness = thickness;
-    }
-    public float getLineThickness() {
-        return _line_thickness;
-    }
-
-    private Color _line_color = new Color(0, 0, 255);
-
-    /**
-     * The line color
-     */
-    public void setLineColor(Color color) {
-        _line_color = color;
-    }
-    public Color getLineColor() {
-        return _line_color;
+        return getTriangles();
     }
 }

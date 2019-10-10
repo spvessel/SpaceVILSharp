@@ -442,7 +442,30 @@ namespace SpaceVIL
 
         public void Maximize()
         {
-            windowLayout.Maximize();
+            if (Common.CommonService.GetOSType() != OSType.Mac)
+                windowLayout.Maximize();
+            else
+                MacOSMaximize();
+        }
+
+        private Area _savedArea = new Area();
+
+        private void MacOSMaximize()
+        {
+            if (!IsMaximized)
+            {
+                _savedArea.SetAttr(GetX(), GetY(), GetWidth(), GetHeight());
+                Area area = GetWorkArea();
+                SetPosition(area.GetX(), area.GetY());
+                SetSize(area.GetWidth(), area.GetHeight());
+                IsMaximized = true;
+            }
+            else
+            {
+                SetPosition(_savedArea.GetX(), _savedArea.GetY());
+                SetSize(_savedArea.GetWidth(), _savedArea.GetHeight());
+                IsMaximized = false;
+            }
         }
 
         public void ToggleFullScreen()
@@ -475,9 +498,9 @@ namespace SpaceVIL
             windowLayout.ResetFocus();
         }
 
-        public void SetIcon(Image icon_big, Image icon_small)
+        public void SetIcon(Bitmap iconBig, Bitmap iconSmall)
         {
-            windowLayout.SetIcon(icon_big, icon_small);
+            windowLayout.SetIcon(iconBig, iconSmall);
         }
 
         public void SetHidden(Boolean value)
@@ -696,6 +719,24 @@ namespace SpaceVIL
         public Color GetShadeColor()
         {
             return windowLayout.GetShadeColor();
+        }
+
+        internal void FreeVRAMResource<T>(T resource)
+        {
+            GetLayout().FreeVRAMResource(resource);
+        }
+
+        public Area GetWorkArea()
+        {
+            // Glfw3.Glfw.Monitor monitor = Glfw3.Glfw.GetWindowMonitor(GetGLWID());
+            Glfw3.Glfw.Monitor monitor = Glfw3.Glfw.GetPrimaryMonitor();
+            if (monitor != null)
+            {
+                int x, y, w, h;
+                Glfw3.Glfw.GetMonitorWorkArea(monitor, out x, out y, out w, out h);
+                return new Area(x, y, w, h);
+            }
+            return null;
         }
     }
 }

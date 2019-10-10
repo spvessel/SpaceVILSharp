@@ -3,9 +3,11 @@ package com.spvessel.spacevil.View;
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.CornerRadius;
+import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.*;
+import com.spvessel.spacevil.App.Program;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Flags.*;
 
@@ -23,7 +25,7 @@ public class MainWindow extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        isBorderHidden = true;
+        // isBorderHidden = true;
         setSize(820, 220);
         setWindowName("MainWindow");
         setWindowTitle("MainWindow");
@@ -32,8 +34,7 @@ public class MainWindow extends ActiveWindow {
         // setAspectRatio(4, 1);
 
         setPadding(10, 10, 10, 10);
-        setPadding(10, 10, 10, 10);
-        setBackground(new Color(0, 0, 0, 10));
+        setBackground(new Color(0, 0, 0, 0));
         setBorderRadius(10);
         setAntiAliasingQuality(MSAA.MSAA_8X);
         isTransparent = true;
@@ -54,31 +55,30 @@ public class MainWindow extends ActiveWindow {
 
         BufferedImage iBig = null;
         BufferedImage iSmall = null;
+        BufferedImage iS = null;
         try {
-            // iBig = ImageIO.read(new
-            // File("D:\\Source\\GitHub\\Game2048\\src\\main\\resources\\Game2048.png"));
-            // iSmall = ImageIO.read(new
-            // File("D:\\Source\\GitHub\\Game2048\\src\\main\\resources\\Game2048.png"));
-            iSmall = ImageIO.read(new File("D:\\icon_small.png"));
+            iBig = ImageIO.read(new File("D:\\icon.png"));
+            iSmall = ImageIO.read(new File("D:\\icon.png"));
+            iS = ImageIO.read(new File("D:\\spimages.png"));
         } catch (IOException e) {
             System.out.println("load icons fail");
         }
-        // if (iBig != null && iSmall != null)
-        // Handler.setIcon(iBig, iSmall);
+        if (iBig != null && iSmall != null)
+            setIcon(iBig, iSmall);
 
         Frame layout = new Frame();
         layout.setBackground(70, 70, 70);
         layout.setBorderRadius(10);
-        layout.setPadding(0, 0, 0, 0);
-        layout.setShadow(8, 0, 0, new Color(255, 80, 80, 255));
-        layout.setShadowExtension(6, 6);
+        layout.setPadding(0, 5, 0, 0);
+        layout.setShadow(10, 0, 0, new Color(255, 80, 80, 255));
+        layout.setShadowExtension(10, 10);
         addItem(layout);
 
         TitleBar title = new TitleBar("Main King Window - JAVA");
         title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
         title.setBorderRadius(new CornerRadius(0, 0, 7, 7));
         title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
-        // title.setIcon(iBig, 20, 20);
+        title.setIcon(iBig, 20, 20);
         layout.addItem(title);
 
         // Ellipse ellipse = new Ellipse();
@@ -97,21 +97,21 @@ public class MainWindow extends ActiveWindow {
         layout.addItem(grid);
 
         Font font = DefaultsService.getDefaultFont(Font.PLAIN, 16);
-        // Font font = DefaultsService.getDefaultFont(18);
+        // Font font = DefaultsService.getDefaultFont();
 
         ButtonCore btn_layout = new ButtonCore("Layout");
         // btn_layout.setTextAlignment(ItemAlignment.BOTTOM, ItemAlignment.HCENTER);
-        btn_layout.setShadow(5, 0, 0, new Color(255, 0, 255, 180));
+        btn_layout.setShadow(5, 0, 0, new Color(255, 0, 255, 255));
         btn_layout.setShadowExtension(4, 4);
         btn_layout.setFont(font);
-        btn_layout.setToolTip("Show Layout window.");
+        btn_layout.setToolTip("Show Layout window.\nIn there you can test ListBox.");
         btn_layout.setBackground(211, 120, 134);
         btn_layout.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         btn_layout.setBorderRadius(new CornerRadius(6));
         ItemState state = new ItemState(new Color(255, 255, 255, 80));
-        state.border.setThickness(10);
+        state.border.setThickness(2);
         state.border.setFill(new Color(255, 255, 255, 150));
-        state.border.setRadius(new CornerRadius(12, 12, 6, 6));
+        state.border.setRadius(new CornerRadius(30, 12, 6, 6));
         btn_layout.addItemState(ItemStateType.HOVERED, state);
         InterfaceMouseMethodState layout_click = (sender, args) -> WindowsBox.tryShow("LayoutsTest");
         btn_layout.eventMouseClick.add(layout_click);
@@ -129,6 +129,7 @@ public class MainWindow extends ActiveWindow {
 
         ButtonCore btn_label = new ButtonCore("Label");
         btn_label.setFont(font);
+        btn_label.setItemName("Show Label window.");
         btn_label.setToolTip("Show Label window.");
         btn_label.setBackground(111, 181, 255);
         btn_label.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
@@ -136,7 +137,7 @@ public class MainWindow extends ActiveWindow {
         btn_label.setShadowExtension(4, 4);
         btn_label.setBorderRadius(6);
         InterfaceMouseMethodState btn_action_click = (sender, args) -> {
-            // setShadeColor(new Color( 100, 100, 100, 125));
+            setShadeColor(new Color(100, 100, 100, 125));
             MessageBox msg = new MessageBox("Send result?", "Message:");
             ButtonCore btnDontSave = new ButtonCore("Do not save");
             btnDontSave.eventMouseClick.add((s, a) -> {
@@ -150,8 +151,10 @@ public class MainWindow extends ActiveWindow {
 
             // MessageItem ms = new MessageItem("Send result?", "Message:");
             // ms.show(this);
+            System.out.println(btn_label.isFocusable + " " + getFocusedItem().getItemName());
         };
         btn_label.eventMouseClick.add(btn_action_click);
+        btn_label.isFocusable = false;
 
         ButtonCore btn_flow = new ButtonCore("Flow");
         btn_flow.setItemName("Flow");
@@ -163,7 +166,7 @@ public class MainWindow extends ActiveWindow {
         btn_flow.setShadowExtension(4, 4);
         btn_flow.setBorderRadius(6);
         // btn_flow.setCursor(EmbeddedCursor.HAND);
-        btn_flow.setCursor(iSmall, 10, 30);
+        btn_flow.setCursor(iS, 64, 64);
         InterfaceMouseMethodState flow_click = (sender, args) -> WindowsBox.tryShow("FlowTest");
         btn_flow.eventMouseClick.add(flow_click);
 
@@ -232,15 +235,36 @@ public class MainWindow extends ActiveWindow {
                 menu.show(sender, margs);
             }
 
-            if (args.key == KeyCode.V)
-                CommonService.setClipboardString("SetClipBoardString");
+            // if (args.key == KeyCode.V)
+            // CommonService.setClipboardString("SetClipBoardString");
             if (args.key == KeyCode.C)
                 System.out.println(CommonService.getClipboardString());
             if (args.key == KeyCode.F)
                 System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
+
         });
 
+        eventKeyRelease.add((sender, args) -> {
+            // System.out.println("root is focused");
+            if (args.key == KeyCode.ALPHA1) {
+                WindowManager.setRenderType(RenderType.IF_NEEDED);
+            }
+            if (args.key == KeyCode.ALPHA2) {
+                WindowManager.setRenderType(RenderType.PERIODIC);
+            }
+            if (args.key == KeyCode.ALPHA3) {
+                WindowManager.setRenderType(RenderType.ALWAYS);
+            }
+            if (args.key == KeyCode.P)
+                System.out.println(getWorkArea().toString());
+        });
+        // WindowManager.enableVSync(0);
+        // WindowManager.setRenderType(RenderType.ALWAYS);
         btn_flow.setFocus();
+
+        // eventOnStart.add(() -> {
+        // System.out.println(getWorkArea().toString());
+        // });
         //
         //
         // List<List<Side>> testListSide = new LinkedList<>();
@@ -346,13 +370,34 @@ public class MainWindow extends ActiveWindow {
 
         // eventClose.clear();
         // eventClose.add(() -> {
-        //     MessageBox msg = new MessageBox("Are you sure?", "Message:");
-        //     msg.onCloseDialog.add(() -> {
-        //         if (msg.getResult())
-        //             // close();
-        //             WindowManager.appExit();
-        //     });
-        //     msg.show();
+        // MessageBox msg = new MessageBox("Are you sure?", "Message:");
+        // msg.onCloseDialog.add(() -> {
+        // if (msg.getResult())
+        // // close();
+        // WindowManager.appExit();
         // });
+        // msg.show();
+        // });
+
+        ToolTip.setStyle(this, Program.getNewToolTipStyle());
+        ToolTip.addItems(this, getDecor());
+    }
+
+    private InterfaceBaseItem getDecor() {
+        // Ellipse ellipse = new Ellipse(12);
+        // ellipse.setSize(8, 8);
+        // ellipse.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        // ellipse.setMargin(10, 0, 0, 0);
+        // return ellipse;
+
+        ImageItem image = new ImageItem(
+                DefaultsService.getDefaultImage(EmbeddedImage.EYE, EmbeddedImageSize.SIZE_32X32), false);
+        image.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        image.setSize(20, 20);
+        image.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
+        image.setMargin(2, 0, 0, 0);
+        image.keepAspectRatio(true);
+        
+        return image;
     }
 }

@@ -19,6 +19,7 @@ public class Triangle extends Primitive {
 
     /**
      * Constructs a Triangle
+     * 
      * @param angle Triangle rotation angle (degrees)
      */
     public Triangle(int angle) {
@@ -30,8 +31,7 @@ public class Triangle extends Primitive {
      * Make Triangle shape as list of floats
      */
     @Override
-    public List<float[]> makeShape() {
-        setTriangles(GraphicsMathService.getTriangle(getWidth(), getHeight(), getX(), getY(), rotationAngle));
-        return GraphicsMathService.toGL(updateShape(), getHandler());
+    public void makeShape() {
+        setTriangles(GraphicsMathService.getTriangle(getWidth(), getHeight(), 0, 0, rotationAngle));
     }
 }

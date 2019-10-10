@@ -187,6 +187,11 @@ namespace SpaceVIL
             SetVisible(false);
         }
 
+        public void Hide(MouseArgs args)
+        {
+            Hide();
+        }
+
         public override void SetStyle(Style style)
         {
             if (style == null)

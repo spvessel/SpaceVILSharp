@@ -7,6 +7,10 @@ public class EventCommonMethodState {
 
     List<InterfaceCommonMethodState> events;
 
+    public List<InterfaceCommonMethodState> getActions() {
+        return new LinkedList<>(events);
+    }
+
     public int size() {
         if (events == null)
             return 0;

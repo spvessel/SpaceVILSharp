@@ -8,7 +8,6 @@ import com.spvessel.spacevil.Frame;
 import com.spvessel.spacevil.HorizontalStack;
 import com.spvessel.spacevil.Rectangle;
 import com.spvessel.spacevil.TitleBar;
-import com.spvessel.spacevil.VerticalStack;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.EmbeddedImage;

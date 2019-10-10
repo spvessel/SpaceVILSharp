@@ -49,7 +49,7 @@ public class ComplexTest extends ActiveWindow {
         HorizontalStack toolbar = new HorizontalStack();
         toolbar.setBackground(51, 51, 51);
         toolbar.setItemName("toolbar");
-        toolbar.setSpacing(6, 0);
+        toolbar.setSpacing(-5, 0);
         toolbar.setMargin(0, 30, 0, 0);
         toolbar.setHeight(40);
         toolbar.setPadding(10, 0, 0, 0);
@@ -174,7 +174,7 @@ public class ComplexTest extends ActiveWindow {
         Style style = new Style();
         style.background = new Color(255, 181, 111);
         style.foreground = new Color(0, 0, 0);
-        style.borderRadius = new CornerRadius(6);
+        style.borderRadius = new CornerRadius(15);
         style.font = DefaultsService.getDefaultFont();// new Font("Courier New", Font.PLAIN, 16);
         style.width = w;
         style.minWidth = 30;
@@ -186,7 +186,7 @@ public class ComplexTest extends ActiveWindow {
         style.heightPolicy = policy;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
-        style.margin = new Indents(5, 5, 5, 5);
+        // style.margin = new Indents(5, 5, 5, 5);
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 30);
         style.addItemState(ItemStateType.HOVERED, hovered);

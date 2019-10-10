@@ -7,18 +7,16 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.spvessel.spacevil.Core.InterfaceImageItem;
+final class VRamStorage<TKey, TValue extends InterfaceVramResource> {
 
-class VRAMStorage {
+    Map<TKey, TValue> resourceStorage = new HashMap<>();
+    List<TKey> flushList = new LinkedList<>();
 
-    static Map<InterfaceImageItem, VRAMTexture> imageStorage = new HashMap<>();
-    static List<InterfaceImageItem> imageToDelete = new LinkedList<>();
-
-    static boolean addToDelete(InterfaceImageItem image) {
+    boolean flushResource(TKey resource) {
         storageLocker.lock();
         try {
-            if (!imageToDelete.contains(image)) {
-                imageToDelete.add(image);
+            if (!flushList.contains(resource)) {
+                flushList.add(resource);
                 return true;
             }
             return false;
@@ -27,80 +25,55 @@ class VRAMStorage {
         }
     }
 
-    static void flush() {
+    void flush() {
         storageLocker.lock();
         try {
-            for (InterfaceImageItem image : imageToDelete) {
-                if (imageStorage.containsKey(image)) {
-                    imageStorage.get(image).deleteTexture();
-                    imageStorage.remove(image);
-                }
+            flushStorage(flushList, resourceStorage);
+        } finally {
+            storageLocker.unlock();
+        }
+    }
+
+    private <T, F extends InterfaceVramResource> void flushStorage(List<T> flushList, Map<T, F> storage) {
+        for (T resource : flushList) {
+            if (storage.containsKey(resource)) {
+                storage.get(resource).clear();
+                storage.remove(resource);
             }
-            imageToDelete.clear();
-        } finally {
-            storageLocker.unlock();
         }
+        flushList.clear();
     }
 
-    static Lock storageLocker = new ReentrantLock();
+    Lock storageLocker = new ReentrantLock();
 
-    static VRAMTexture getTexture(InterfaceImageItem image) {
-        storageLocker.lock();
-        try {
-            if (imageStorage.containsKey(image))
-                return imageStorage.get(image);
-            else
-                return null;
-        } finally {
-            storageLocker.unlock();
-        }
+    TValue getResource(TKey resource) {
+        if (resourceStorage.containsKey(resource))
+            return resourceStorage.get(resource);
+        else
+            return null;
     }
 
-    static boolean replaceTexture(InterfaceImageItem image, VRAMTexture tex) {
-        storageLocker.lock();
-        try {
-            if (imageStorage.containsKey(image)) {
-                imageStorage.get(image).clear();
-                imageStorage.remove(image);
-                imageStorage.put(image, tex);
-            }
-            return true;
-        } finally {
-            storageLocker.unlock();
-        }
-    }
-
-    static boolean addTexture(InterfaceImageItem image, VRAMTexture tex) {
-        storageLocker.lock();
-        try {
-            if (imageStorage.containsKey(image))
-                return false;
-            else
-                imageStorage.put(image, tex);
-            return true;
-        } finally {
-            storageLocker.unlock();
-        }
-    }
-
-    static boolean deleteTexture(InterfaceImageItem image) {
-        storageLocker.lock();
-        try {
-            if (imageStorage.containsKey(image)) {
-                imageStorage.get(image).deleteTexture();
-                imageStorage.remove(image);
-                return true;
-            }
+    boolean addResource(TKey resource, TValue vramObject) {
+        if (resourceStorage.containsKey(resource))
             return false;
-        } finally {
-            storageLocker.unlock();
-        }
+        else
+            resourceStorage.put(resource, vramObject);
+        return true;
     }
 
-    static void clear() {
-        for (VRAMTexture tex : imageStorage.values()) {
-            tex.clear();
+    boolean deleteResource(TKey resource) {
+        if (resourceStorage.containsKey(resource)) {
+            resourceStorage.get(resource).clear();
+            resourceStorage.remove(resource);
+            return true;
         }
-        imageStorage.clear();
+        return false;
+    }
+
+    void clear() {
+        for (TValue resource : resourceStorage.values()) {
+            resource.clear();
+        }
+        resourceStorage.clear();
     }
 }

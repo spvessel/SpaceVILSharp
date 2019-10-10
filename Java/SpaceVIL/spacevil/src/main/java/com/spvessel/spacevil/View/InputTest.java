@@ -23,16 +23,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InputTest extends ActiveWindow {
+    Label _infoOutput;
+
     @Override
     public void initWindow() {
-        isBorderHidden = true;
         setSize(700, 550);
         setWindowName("InputTest");
         setWindowTitle("InputTest");
 
         setMinSize(50, 100);
         setBackground(45, 45, 45);
-        setPadding(2, 2, 2, 2);
+        setPadding(0, 0, 0, 0);
+
+        _infoOutput = new Label("0 lines : 0 characters");
+        _infoOutput.setHeight(25);
+        _infoOutput.setHeightPolicy(SizePolicy.FIXED);
+        _infoOutput.setBackground(80, 80, 80);
+        _infoOutput.setForeground(210, 210, 210);
+        _infoOutput.setFontSize(18);
+        _infoOutput.setFontStyle(Font.BOLD);
+        _infoOutput.setAlignment(ItemAlignment.BOTTOM);
+        _infoOutput.setTextAlignment(ItemAlignment.HCENTER, ItemAlignment.BOTTOM);
+        _infoOutput.setPadding(0, 0, 0, 3);
+        addItem(_infoOutput);
 
         eventKeyPress.add((sender, args) -> {
             // if (args.key == KeyCode.V)
@@ -44,11 +57,6 @@ public class InputTest extends ActiveWindow {
             if (args.key == KeyCode.F11)
                 toggleFullScreen();
         });
-
-        TitleBar title = new TitleBar("Input Test");
-        // title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
-        // title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
-        addItem(title);
 
         VerticalStack layout = new VerticalStack();
         ///////////////////////////////////////////////////////////////////////
@@ -78,10 +86,11 @@ public class InputTest extends ActiveWindow {
         te.setWidthPolicy(SizePolicy.EXPAND);
 
         TextArea tb = new TextArea();
+        tb.setMargin(2, 2, 2, 27);
         // tb.setEditable(false);
         tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         tb.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        tb.setText("123\nqwe sdfsdf;l!\nk(sdfsdf)sdf\nsdf_ sdfs\ndfs_dff+gh");
+        // tb.setText("123\nqwe sdfsdf;l!\nk(sdfsdf)sdf\nsdf_ sdfs\ndfs_dff+gh");
         tb.setWidth(300);
         tb.setHeight(500);
         tb.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
@@ -94,6 +103,9 @@ public class InputTest extends ActiveWindow {
                 tb.setText("SetText...");
             }
         });
+        tb.onTextChanged.add(() -> {
+            _infoOutput.setText(countLines(tb.getText()) + " lines : " + tb.getText().length() + " characters");
+        });
         // tb.setPadding(15, 0, 15, 0);
         // tb.setMargin(new Indents(50, 30, 30, 30));
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
@@ -102,8 +114,8 @@ public class InputTest extends ActiveWindow {
         SpinItem sp = new SpinItem();
         sp.setParameters(1, -5.5, 7, 0.51);
 
-        layout.addItem(password);
-        layout.addItem(te);
+        // layout.addItem(password);
+        // layout.addItem(te);
         layout.addItem(tb);
         tb.setStyle(Style.getTextAreaStyle());
 
@@ -114,9 +126,9 @@ public class InputTest extends ActiveWindow {
 
         // tb.setEditable(false);
 
-        layout.addItems(bc, bc1, sp);
+        // layout.addItems(bc, bc1, sp);
 
-        Label tl = new Label();
+        Label tl = new Label("\na\na\na\na\n\na\na\na\n");
         tl.setBackground(255, 255, 255, 100);
         // tl.setFontSize(17);
         tl.setForeground(Color.WHITE);
@@ -124,7 +136,7 @@ public class InputTest extends ActiveWindow {
         // System.out.println(tl.getTextWidth());
         tl.setText("sdasdasd");
 
-        layout.addItem(tl);
+        // layout.addItem(tl);
 
         bc.eventMouseClick.add((sender, args) -> {
             System.out.print(getX() + " ");
@@ -140,7 +152,7 @@ public class InputTest extends ActiveWindow {
 
         Label label = new Label("1234567890");
         // System.out.println(label.getTextWidth());
-        layout.addItem(label);
+        // layout.addItem(label);
 
         eventDrop.add((sender, args) -> {
 
@@ -162,5 +174,57 @@ public class InputTest extends ActiveWindow {
                 tb.setText(sb.toString());
             }
         });
+
+        // tb.setText(getBigText());
+        // tb.rewindText();
+        tb.setWrapText(true);
+    }
+    
+    private static int countLines(String str) {
+        String[] lines = str.split("\r\n|\r|\n");
+        return lines.length;
+    }
+
+    private String getBigText()
+    {
+        return "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+                "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" +
+        "";
     }
 }

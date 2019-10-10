@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using SpaceVIL.Decorations;
+﻿using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
@@ -14,12 +12,6 @@ namespace SpaceVIL
             string name = "Primitive_")
         {
             SetItemName(name);
-        }
-
-        /// <returns> item shape made with triangles </returns>
-        public override List<float[]> MakeShape()
-        {
-            return GetTriangles();
         }
 
         /// <summary>

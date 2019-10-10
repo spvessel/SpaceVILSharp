@@ -555,6 +555,7 @@ namespace SpaceVIL
         public virtual void SetListContent(IEnumerable<IBaseItem> content)
         {
             _area.SetListContent(content);
+            UpdateElements();
         }
 
         public SelectionItem GetWrapper(IBaseItem item)
