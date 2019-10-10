@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static org.lwjgl.system.MemoryUtil.memAlloc;
+
 class TextLine extends TextItem implements InterfaceTextContainer {
     private static int count = 0;
 
@@ -58,9 +60,10 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             _letters = FontEngine.getModifyLetters(text, font);
             _letEndPos = new LinkedList<>();
 
-            if (_letters.size() > 0)
+            if (_letters.size() > 0) {
                 _lineWidth = _letters.get(_letters.size() - 1).xShift + _letters.get(_letters.size() - 1).width
                         + _letters.get(_letters.size() - 1).xBeg; // xBeg не обязательно, т.к. везде 0, но вдруг
+            }
 
             int[] fontDims = getFontDims();
             super.setWidth(_lineWidth);
@@ -71,12 +74,13 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             }
 
             CoreWindow wLayout = getHandler();
-            if (wLayout == null || wLayout.getDpiScale() == null)
+            if (wLayout == null || wLayout.getDpiScale() == null) {
                 _screenScale = 0;
-            else {
+            } else {
                 _screenScale = wLayout.getDpiScale()[0];
-                if (_screenScale != 1)
+                if (_screenScale != 1) {
                     makeBigArr();
+                }
             }
 
         } finally {
@@ -137,12 +141,14 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             }
 
             Prototype parent = getParent();
-            if (parent == null) //Вроде не очень-то и нужно
+            if (parent == null) { //Обязательно
                 return null;
+            }
 
             if (_isRecountable) {
-                if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
+                if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight) {
                     return null;
+                }
             }
             if (_letters.size() == 0) {
                 return new TextPrinter(); //null;
@@ -152,10 +158,11 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 int bb_h = getHeight();
                 int bb_w = getWidth();
 
-                if (_parentAllowWidth > 0 && _isRecountable)
+                if (_parentAllowWidth > 0 && _isRecountable) {
                     bb_w = bb_w > _parentAllowWidth ? _parentAllowWidth : bb_w;
+                }
 
-                ByteBuffer cacheBB = BufferUtils.createByteBuffer(bb_h * bb_w * 4);
+                ByteBuffer cacheBB = memAlloc(bb_h * bb_w * 4);//BufferUtils.createByteBuffer(bb_h * bb_w * 4);
 
                 int xFirstBeg = _letters.get(0).xBeg + _letters.get(0).xShift;
 
@@ -166,8 +173,9 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                     int[] output = FontEngine.getSpacerDims(fontBig);
                     bb_h = output[2];
                     bb_w = _bigWidth;
-                    if (_isRecountable)
+                    if (_isRecountable) {
                         bb_w = _bigWidth > (int) (_parentAllowWidth * _screenScale) ? (int) (_parentAllowWidth * _screenScale) : _bigWidth;
+                    }
 
                     int bigMinY = output[1];
                     cacheBB = makeSomeBig(bb_h, bb_w, bigMinY, 0, _letters.size() - 1);
@@ -205,8 +213,9 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                             for (int i = widthFrom; i < widthTo; i++) {
                                 int b1 = bitmap[3 + j * 4 + i * (modL.height * 4)] & 0xFF;
                                 int b2 = cacheBB.get(3 + offset + (i - widthFrom) * 4 + j * (bb_w * 4)) & 0xFF;
-                                if (b1 < b2)
+                                if (b1 < b2) {
                                     continue;
+                                }
 
                                 cacheBB.put(0 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[0 + j * 4 + i * (modL.height * 4)]);
                                 cacheBB.put(1 + offset + (i - widthFrom) * 4 + j * (bb_w * 4), bitmap[1 + j * 4 + i * (modL.height * 4)]);
@@ -307,8 +316,9 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 for (int i = widthFrom; i < widthTo; i++) {
                     int b1 = bitmap[3 + j * 4 + i * (bigLet.height * 4)] & 0xFF;
                     int b2 = outCache.get(3 + offset + (i - widthFrom) * 4 + j * (wdt * 4)) & 0xFF;
-                    if (b1 < b2)
+                    if (b1 < b2) {
                         continue;
+                    }
 
                     outCache.put(0 + offset + (i - widthFrom) * 4 + j * (wdt * 4),
                             bitmap[0 + j * 4 + i * (bigLet.height * 4)]);
@@ -339,8 +349,9 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     public void updateData() {
         textLock.lock();
         try {
-            if (getFont() == null)
+            if (getFont() == null) {
                 return;
+            }
             createText();
             flagBB = true;
         } finally {
@@ -362,31 +373,32 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         // Horizontal
         if (alignments.contains(ItemAlignment.LEFT) || (_lineWidth >= _parentAllowWidth)) {
             alignShiftX = parent.getPadding().left + getMargin().left + cursorWidth;
-        } else if (alignments.contains(ItemAlignment.RIGHT) && (_lineWidth < _parentAllowWidth))
+        } else if (alignments.contains(ItemAlignment.RIGHT) && (_lineWidth < _parentAllowWidth)) {
             alignShiftX = parent.getWidth() - _lineWidth - parent.getPadding().right - getMargin().right - cursorWidth;
-
-        else if (alignments.contains(ItemAlignment.HCENTER) && (_lineWidth < _parentAllowWidth))
+        } else if (alignments.contains(ItemAlignment.HCENTER) && (_lineWidth < _parentAllowWidth)) {
             // alignShiftX = ((parent.getWidth() - parent.getPadding().left - parent.getPadding().right
             //         + getMargin().left - getMargin().right) - _lineWidth) / 2f;
             alignShiftX = (_parentAllowWidth - _lineWidth) / 2f + parent.getPadding().left + getMargin().left + cursorWidth; //(parent.getWidth() - _lineWidth) / 2f + parent.getPadding().left;
+        }
 
         // Vertical
         if (alignments.contains(ItemAlignment.TOP)) {
             alignShiftY = parent.getPadding().top + getMargin().top;
-        } else if (alignments.contains(ItemAlignment.BOTTOM))
+        } else if (alignments.contains(ItemAlignment.BOTTOM)) {
             alignShiftY = parent.getHeight() - height - parent.getPadding().bottom - getMargin().bottom;
-
-        else if (alignments.contains(ItemAlignment.VCENTER))
+        } else if (alignments.contains(ItemAlignment.VCENTER)) {
             // alignShiftY = ((parent.getHeight() - parent.getPadding().bottom - parent.getPadding().top)
             //         - height) / 2f - getMargin().bottom + getMargin().top;
             alignShiftY = (parent.getHeight() - height) / 2f + parent.getPadding().top;
+        }
 
         int xFirstBeg = _letters.get(0).xBeg + _letters.get(0).xShift;
         textPrt.xTextureShift = (int) alignShiftX + parent.getX() + xFirstBeg; // + _lineXShift
         textPrt.yTextureShift = (int) alignShiftY + _lineYShift + parent.getY();
 
-        if (!_isRecountable)
-            textPrt.xTextureShift += _lineXShift;
+        if (!_isRecountable) {
+            textPrt.xTextureShift += _lineXShift; //???
+        }
     }
 
     String getText() {
@@ -398,10 +410,12 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     }
 
     int getLetWidth(int count) {
-        if (_letters == null)
+        if (_letters == null) {
             return 0;
-        if ((count < 0) || (count >= _letters.size()))
+        }
+        if ((count < 0) || (count >= _letters.size())) {
             return 0;
+        }
 
         return _letters.get(count).width;
     }
@@ -461,12 +475,13 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 //    }
 
     void checkXShift(int _cursorXMax) {
-        if (getLetPosArray() == null || getLetPosArray().size() == 0)
+        if (getLetPosArray() == null || getLetPosArray().size() == 0) {
             return;
+        }
         int s = getLetPosArray().get(getLetPosArray().size() - 1) - _cursorXMax;
-        if (s <= 0)
+        if (s <= 0) {
             setLineXShift(0);
-        else if (s + _lineXShift < 0) { //&& (s > 0)
+        } else if (s + _lineXShift < 0) { //&& (s > 0)
             setLineXShift(-s);
         }
     }
@@ -476,22 +491,25 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 //    }
 
     void setAllowWidth(int allowWidth) {
-        if (_parentAllowWidth != allowWidth)
+        if (_parentAllowWidth != allowWidth) {
             flagBB = true;
+        }
         _parentAllowWidth = allowWidth;
     }
 
     void setAllowHeight(int allowHeight) {
-        if (_parentAllowHeight != allowHeight)
+        if (_parentAllowHeight != allowHeight) {
             flagBB = true;
+        }
         _parentAllowHeight = allowHeight;
     }
 
     private int cursorWidth = 0;
 
     void setCursorWidth(int cwidth) {
-        if (cursorWidth != cwidth)
+        if (cursorWidth != cwidth) {
             flagBB = true;
+        }
         cursorWidth = cwidth;
     }
 

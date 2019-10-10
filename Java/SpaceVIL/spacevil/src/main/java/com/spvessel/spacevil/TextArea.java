@@ -529,4 +529,12 @@ public class TextArea extends Prototype {
     public void rewindText() {
         _area.rewindText();
     }
+
+    public boolean isWrapText() {
+        return _area.isWrapText();
+    }
+
+    public void setWrapText(boolean wrapText) {
+        _area.setWrapText(wrapText);
+    }
 }

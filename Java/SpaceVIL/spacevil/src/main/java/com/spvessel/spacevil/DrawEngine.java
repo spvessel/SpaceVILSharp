@@ -590,6 +590,8 @@ final class DrawEngine {
 
     private void drawText(InterfaceTextContainer text) {
         TextPrinter textPrt = text.getLetTextures();
+//        textPrt = null;
+
         if (textPrt == null)
             return;
         ByteBuffer byteBuffer = textPrt.texture;
@@ -613,6 +615,7 @@ final class DrawEngine {
 
         _renderProcessor.drawText(_char, x0, x1, y0, y1, byteBufferWidth, byteBufferHeight, byteBuffer,
                 getItemPyramidLevel(), argb);
+//        Runtime.getRuntime().gc();
     }
 
     private void drawPoints(InterfacePoints item) {

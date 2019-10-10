@@ -576,5 +576,15 @@ namespace SpaceVIL
         {
             _area.RewindText();
         }
+
+        public bool IsWrapText()
+        {
+            return _area.IsWrapText();
+        }
+
+        public void SetWrapText(bool wrapText)
+        {
+            _area.SetWrapText(wrapText);
+        }
     }
 }

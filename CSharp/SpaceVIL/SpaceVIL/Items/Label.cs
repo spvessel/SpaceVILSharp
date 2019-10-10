@@ -21,7 +21,9 @@ namespace SpaceVIL
         protected internal override bool GetHoverVerification(float xpos, float ypos)
         {
             if (IsHover)
+            {
                 return base.GetHoverVerification(xpos, ypos);
+            }
             return false;
         }
 
@@ -59,19 +61,12 @@ namespace SpaceVIL
         public void SetTextAlignment(ItemAlignment alignment)
         {
             foreach (TextLine tl in _text_objects)
+            {
                 tl.SetTextAlignment(alignment);
-
-            int gyshift = 0;
-            if (alignment.HasFlag(ItemAlignment.Bottom))
-            {
-                gyshift = -(GetTextHeight() - GetLineY(1));
             }
-            else if (alignment.HasFlag(ItemAlignment.VCenter))
-            {
-                gyshift = -((GetTextHeight() - GetLineY(1)) / 2);
-            }
-            UpdateLinesYShifts(gyshift);
+            UpdateLayout();
         }
+
         public void SetTextAlignment(params ItemAlignment[] alignment)
         {
             ItemAlignment common = alignment.ElementAt(0);
@@ -85,13 +80,26 @@ namespace SpaceVIL
             SetTextAlignment(common);
         }
 
+        public ItemAlignment GetTextAlignment()
+        {
+            return _text_objects[0].GetTextAlignment();
+        }
+
         /// <summary>
         /// Text margin in the Label
         /// </summary>
         public void SetTextMargin(Indents margin)
         {
             foreach (TextLine tl in _text_objects)
+            {
                 tl.SetMargin(margin);
+            }
+            UpdateLayout();
+        }
+
+        public Indents GetTextMargin()
+        {
+            return _text_objects[0].GetMargin();
         }
 
         /// <summary>
@@ -100,29 +108,41 @@ namespace SpaceVIL
         public void SetFont(Font font)
         {
             foreach (TextLine tl in _text_objects)
+            {
                 tl.SetFont(font);
+            }
+            UpdateLayout();
         }
+
         public void SetFontSize(int size)
         {
             foreach (TextLine tl in _text_objects)
+            {
                 tl.SetFontSize(size);
+            }
+            UpdateLayout();
         }
+
         public void SetFontStyle(FontStyle style)
         {
             foreach (TextLine tl in _text_objects)
+            {
                 tl.SetFontStyle(style);
+            }
         }
+        
         public void SetFontFamily(FontFamily font_family)
         {
             foreach (TextLine tl in _text_objects)
+            {
                 tl.SetFontFamily(font_family);
+            }
         }
+
         public Font GetFont()
         {
             return _text_objects[0].GetFont();
         }
-
-        // private string preInitText = "";
 
         /// <summary>
         /// Set text in the Label
@@ -130,19 +150,18 @@ namespace SpaceVIL
         public void SetText(String text)
         {
             if (text == null)
+            {
                 text = "";
-            // if (!_init)
-            // {
-            //     preInitText = text;
-            //     return;
-            // }
+            }
 
             if (_text_objects.Count > 1)
             {
                 while (_text_objects.Count > 1)
                 {
                     if (_init)
+                    {
                         RemoveItem(_text_objects[1]);
+                    }
                     _text_objects.RemoveAt(1);
                 }
             }
@@ -161,7 +180,9 @@ namespace SpaceVIL
 
                 TextLine te = new TextLine();
                 if (_init)
+                {
                     AddItem(te);
+                }
 
                 te.SetItemText(s);
 
@@ -174,26 +195,13 @@ namespace SpaceVIL
             SetFont(GetFont());
         }
 
-        private void UpdateLinesYShifts(int globalYShift)
-        {
-            int inc = 0;
-            int y = _text_objects[0].GetY();
-            foreach (TextLine tl in _text_objects)
-            {
-                tl.SetLineYShift(GetLineY(inc) + globalYShift);
-                // tl.SetY(y + GetLineY(inc) + globalYShift);
-                // tl.SetConfines();
-                inc++;
-            }
-        }
-
         public String GetText()
         {
-            // if (!_init)
-            //     return preInitText;
-
             StringBuilder sb = new StringBuilder();
-            if (_text_objects == null) return "";
+            if (_text_objects == null)
+            {
+                return "";
+            }
             if (_text_objects.Count == 1)
             {
                 sb.Append(_text_objects[0].GetText());
@@ -216,44 +224,41 @@ namespace SpaceVIL
         public void SetForeground(Color color)
         {
             foreach (TextLine tl in _text_objects)
+            {
                 tl.SetForeground(color);
+            }
         }
         public void SetForeground(int r, int g, int b)
         {
             foreach (TextLine tl in _text_objects)
+            {
                 tl.SetForeground(r, g, b);
+            }
         }
         public void SetForeground(int r, int g, int b, int a)
         {
             foreach (TextLine tl in _text_objects)
+            {
                 tl.SetForeground(r, g, b, a);
+            }
         }
         public void SetForeground(float r, float g, float b)
         {
             foreach (TextLine tl in _text_objects)
+            {
                 tl.SetForeground(r, g, b);
+            }
         }
         public void SetForeground(float r, float g, float b, float a)
         {
             foreach (TextLine tl in _text_objects)
+            {
                 tl.SetForeground(r, g, b, a);
+            }
         }
         public Color GetForeground()
         {
             return _text_objects[0].GetForeground();
-        }
-
-        /// <summary>
-        /// Initialization and adding of all elements in the Label
-        /// </summary>
-        public override void InitElements()
-        {
-            foreach (TextLine tl in _text_objects)
-                AddItem(tl);
-            _init = true;
-            // if (!preInitText.Equals(""))
-            //     SetText(preInitText);
-
         }
 
         /// <summary>
@@ -265,7 +270,10 @@ namespace SpaceVIL
             for (int i = 1; i < _text_objects.Count; i++)
             {
                 int w = _text_objects[i].GetWidth();
-                if (w > wdt) wdt = w;
+                if (w > wdt)
+                {
+                    wdt = w;
+                }
             }
             return wdt;
         }
@@ -298,15 +306,28 @@ namespace SpaceVIL
                 tl.CheckXShift(_cursorXMax); // ???
             }
         }
+        
+        /// <summary>
+        /// Initialization and adding of all elements in the Label
+        /// </summary>
+        public override void InitElements()
+        {
+            foreach (TextLine tl in _text_objects)
+            {
+                AddItem(tl);
+            }
+            _init = true;
+        }
 
-        //style
         /// <summary>
         /// Set style of the Label
         /// </summary>
         public override void SetStyle(Style style)
         {
             if (style == null)
+            {
                 return;
+            }
             base.SetStyle(style);
 
             SetFont(style.Font);
@@ -316,7 +337,23 @@ namespace SpaceVIL
 
         public void UpdateLayout()
         {
-
+            //UpdateLinesYShifts
+            ItemAlignment alignment = GetTextAlignment();
+            int globalYShift = 0;
+            if (alignment.HasFlag(ItemAlignment.Bottom))
+            {
+                globalYShift = -(GetTextHeight() - GetLineY(1));
+            }
+            else if (alignment.HasFlag(ItemAlignment.VCenter))
+            {
+                globalYShift = -((GetTextHeight() - GetLineY(1)) / 2);
+            }
+            int inc = 0;
+            foreach (TextLine tl in _text_objects)
+            {
+                tl.SetLineYShift(GetLineY(inc) + globalYShift);
+                inc++;
+            }
         }
     }
 }

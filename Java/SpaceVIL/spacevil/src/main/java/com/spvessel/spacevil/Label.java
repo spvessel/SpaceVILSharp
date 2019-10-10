@@ -21,7 +21,9 @@ public class Label extends Prototype implements InterfaceVLayout {
     @Override
     protected boolean getHoverVerification(float xpos, float ypos) {
         if (isHover)
+        {
             return super.getHoverVerification(xpos, ypos);
+        }
         return false;
     }
 
@@ -51,7 +53,6 @@ public class Label extends Prototype implements InterfaceVLayout {
         isHover = hover;
     }
 
-    // text init
     /**
      * Text alignment in the Label
      */
@@ -60,70 +61,76 @@ public class Label extends Prototype implements InterfaceVLayout {
     }
 
     public void setTextAlignment(List<ItemAlignment> alignment) {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             tl.setTextAlignment(alignment);
-
-        int gyshift = 0;
-        if (alignment.contains(ItemAlignment.BOTTOM)) {
-            gyshift = -(getTextHeight() - getLineY(1));
-        } else if (alignment.contains(ItemAlignment.VCENTER)) {
-            gyshift = -((getTextHeight() - getLineY(1)) / 2);
         }
-        updateLinesYShifts(gyshift);
+        updateLayout();
+    }
+
+    public List<ItemAlignment> getTextAlignment() {
+        return _text_objects.get(0).getTextAlignment();
     }
 
     /**
      * Text margin in the Label
      */
     public void setTextMargin(Indents margin) {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             tl.setMargin(margin);
+        }
+        updateLayout();
+    }
+
+    public Indents getTextMargin() {
+        return _text_objects.get(0).getMargin();
     }
 
     /**
      * Text font parameters in the Label
      */
     public void setFont(Font font) {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             tl.setFont(font);
+        }
+        updateLayout();
     }
 
     public void setFontSize(int size) {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             tl.setFontSize(size);
+        }
+        updateLayout();
     }
 
     public void setFontStyle(int style) {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             tl.setFontStyle(style);
+        }
     }
 
     public void setFontFamily(String font_family) {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             tl.setFontFamily(font_family);
+        }
     }
 
     public Font getFont() {
         return _text_objects.get(0).getFont();
     }
 
-//    private String preInitText = "";
-
     /**
      * Set text in the Label
      */
     public void setText(String text) {
-        if (text == null)
+        if (text == null) {
             text = "";
-//        if (!_init) {
-//            preInitText = text;
-//            return;
-//        }
+        }
 
         if (_text_objects.size() > 1) {
             while (_text_objects.size() > 1) {
-                if (_init)
+                if (_init) {
                     removeItem(_text_objects.get(1));
+                }
                 _text_objects.remove(1);
             }
         }
@@ -140,8 +147,9 @@ public class Label extends Prototype implements InterfaceVLayout {
             s = line[i].replaceAll("\r", "");
 
             TextLine te = new TextLine();
-            if (_init)
+            if (_init) {
                 addItem(te);
+            }
 
             te.setItemText(s);
 
@@ -152,27 +160,13 @@ public class Label extends Prototype implements InterfaceVLayout {
         setTextAlignment(_text_objects.get(0).getTextAlignment());
         setTextMargin(_text_objects.get(0).getMargin());
         setFont(getFont());
-
-        // _text_object.setItemText(text);
-    }
-
-    private void updateLinesYShifts(int globalYShift) {
-        int inc = 0;
-//        int y = _text_objects.get(0).getY();
-        for (TextLine tl : _text_objects) {
-            tl.setLineYShift(getLineY(inc) + globalYShift);
-//            tl.setY(y + getLineY(inc) + globalYShift);
-            inc++;
-        }
     }
 
     public String getText() {
-//        if (!_init)
-//            return preInitText;
-
         StringBuilder sb = new StringBuilder();
-        if (_text_objects == null)
+        if (_text_objects == null) {
             return "";
+        }
         if (_text_objects.size() == 1) {
             sb.append(_text_objects.get(0).getText());
         } else {
@@ -189,28 +183,33 @@ public class Label extends Prototype implements InterfaceVLayout {
      * Text color in the Label
      */
     public void setForeground(Color color) {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             tl.setForeground(color);
+        }
     }
 
     public void setForeground(int r, int g, int b) {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             tl.setForeground(r, g, b);
+        }
     }
 
     public void setForeground(int r, int g, int b, int a) {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             tl.setForeground(r, g, b, a);
+        }
     }
 
     public void setForeground(float r, float g, float b) {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             tl.setForeground(r, g, b);
+        }
     }
 
     public void setForeground(float r, float g, float b, float a) {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             tl.setForeground(r, g, b, a);
+        }
     }
 
     public Color getForeground() {
@@ -224,8 +223,9 @@ public class Label extends Prototype implements InterfaceVLayout {
         int wdt = _text_objects.get(0).getWidth();
         for (int i = 1; i < _text_objects.size(); i++) {
             int w = _text_objects.get(i).getWidth();
-            if (w > wdt)
+            if (w > wdt) {
                 wdt = w;
+            }
         }
         return wdt;
     }
@@ -261,12 +261,10 @@ public class Label extends Prototype implements InterfaceVLayout {
      */
     @Override
     public void initElements() {
-        for (TextLine tl : _text_objects)
+        for (TextLine tl : _text_objects) {
             addItem(tl);
+        }
         _init = true;
-//        if (!preInitText.equals("")) {
-//            setText(preInitText);
-//        }
     }
 
     /**
@@ -274,19 +272,30 @@ public class Label extends Prototype implements InterfaceVLayout {
      */
     @Override
     public void setStyle(Style style) {
-        if (style == null)
+        if (style == null) {
             return;
+        }
         super.setStyle(style);
-        // if (style.font != null)
+        
         setFont(style.font);
-        // if (style.foreground != null)
         setForeground(style.foreground);
-        // if (style.textAlignment != null)
         setTextAlignment(style.textAlignment);
     }
 
     @Override
     public void updateLayout() {
-
+        //updateLinesYShifts
+        List<ItemAlignment> alignment = getTextAlignment();
+        int globalYShift = 0;
+        if (alignment.contains(ItemAlignment.BOTTOM)) {
+            globalYShift = -(getTextHeight() - getLineY(1));
+        } else if (alignment.contains(ItemAlignment.VCENTER)) {
+            globalYShift = -((getTextHeight() - getLineY(1)) / 2);
+        }
+        int inc = 0;
+        for (TextLine tl : _text_objects) {
+            tl.setLineYShift(getLineY(inc) + globalYShift);
+            inc++;
+        }
     }
 }
