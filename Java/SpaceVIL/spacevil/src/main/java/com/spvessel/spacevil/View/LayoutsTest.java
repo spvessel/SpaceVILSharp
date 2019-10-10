@@ -9,6 +9,8 @@ import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import com.spvessel.spacevil.*;
@@ -69,7 +71,7 @@ public class LayoutsTest extends ActiveWindow {
         });
         // listbox_left_1.setSelectionVisibility(false);
         // listbox_left_1.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        listbox_left_1.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+        // listbox_left_1.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         grid.insertItem(listbox_left_1, 0, 0);
         ListBox listbox_left_2 = new ListBox();
         listbox_left_2.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
@@ -156,12 +158,14 @@ public class LayoutsTest extends ActiveWindow {
 
             listbox_left_1.clear();
             // list.clear();
-            long startTime = System.currentTimeMillis();
+            List<InterfaceBaseItem> content = new LinkedList<>();
             for (int i = 0; i < 1000; i++) {
-            listbox_left_1.addItem(new VisualContact());
+                // listbox_left_1.addItem(new VisualContact());
+                content.add(new VisualContact());
             }
-            System.out.println("Fuction run " + (System.currentTimeMillis() - startTime)
-            + " ms");
+            long startTime = System.nanoTime();
+            listbox_left_1.setListContent(content);
+            System.out.println("Fuction run " + ((System.nanoTime() - startTime) / 1000000) + " ms");
             System.gc();
 
             // list.clear();
@@ -169,6 +173,15 @@ public class LayoutsTest extends ActiveWindow {
             //     list.add(new VisualContact());
             // }
             // System.gc();
+
+            // Fuction run 317 ms
+            // Fuction run 240 ms
+            // Fuction run 195 ms
+            // Fuction run 188 ms
+            // Fuction run 188 ms
+            // Fuction run 188 ms
+            // Fuction run 191 ms
+            // Fuction run 181 ms
         };
         all.eventMouseClick.add(all_click);
         frame.addItem(all);

@@ -79,6 +79,10 @@ namespace SpaceVIL
             }
             SetTextAlignment(common);
         }
+        public ItemAlignment GetTextAlignment()
+        {
+            return _text_objects[0].GetTextAlignment();
+        }
 
         public ItemAlignment GetTextAlignment()
         {
@@ -96,7 +100,6 @@ namespace SpaceVIL
             }
             UpdateLayout();
         }
-
         public Indents GetTextMargin()
         {
             return _text_objects[0].GetMargin();
@@ -306,7 +309,7 @@ namespace SpaceVIL
                 tl.CheckXShift(_cursorXMax); // ???
             }
         }
-        
+
         /// <summary>
         /// Initialization and adding of all elements in the Label
         /// </summary>
@@ -319,6 +322,7 @@ namespace SpaceVIL
             _init = true;
         }
 
+        //style
         /// <summary>
         /// Set style of the Label
         /// </summary>

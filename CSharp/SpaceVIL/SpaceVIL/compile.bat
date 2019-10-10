@@ -1,8 +1,7 @@
 "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\Roslyn\csc.exe" ^
--define:WINDOWS ^
 -define:STANDARD ^
--platform:x86 ^
--optimize ^
+-platform:AnyCpu ^
+/optimize+ ^
 /unsafe ^
 /t:exe ^
 /r:System.Drawing.dll ^

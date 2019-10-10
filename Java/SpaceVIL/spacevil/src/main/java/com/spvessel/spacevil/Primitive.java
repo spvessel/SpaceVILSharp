@@ -4,8 +4,6 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
-import java.util.List;
-
 abstract public class Primitive extends BaseItem {
     /**
      * Constructs a Primitive
@@ -20,14 +18,6 @@ abstract public class Primitive extends BaseItem {
     public Primitive(String name) {
         setItemName(name);
         setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
-    }
-
-    /**
-     * @return item shape made with triangles
-     */
-    @Override
-    public List<float[]> makeShape() {
-        return getTriangles();
     }
 
     /**

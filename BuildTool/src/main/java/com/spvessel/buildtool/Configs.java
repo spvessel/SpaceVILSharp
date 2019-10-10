@@ -49,9 +49,7 @@ public class Configs {
 
     public static String jvm_compile = "compile.bat";
 
-    public static String netCore_compileLinux = "compile_linux.bat";
-    public static String netCore_compileMac = "compile_mac.bat";
-    public static String netCore_compileWin = "compile.bat";
+    public static String netCore_compile = "compile.bat";
 
     public static String netStandard_compile = "compile.bat";
     // "\"C:\\Program Files (x86)\\Microsoft Visual

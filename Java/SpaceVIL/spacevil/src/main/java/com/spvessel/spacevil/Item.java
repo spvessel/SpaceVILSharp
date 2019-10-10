@@ -4,7 +4,6 @@ import com.spvessel.spacevil.Core.InterfaceItem;
 
 import java.awt.*;
 import java.util.List;
-import java.util.LinkedList;
 
 class Item implements InterfaceItem {
     private String _name;
@@ -27,7 +26,7 @@ class Item implements InterfaceItem {
         return _bg;
     }
 
-    private List<float[]> _triangles = new LinkedList<float[]>();
+    private List<float[]> _triangles = null;//new LinkedList<float[]>();
 
     public void setTriangles(List<float[]> triangles) {
         _triangles = triangles;
@@ -37,7 +36,7 @@ class Item implements InterfaceItem {
         return _triangles;
     }
 
-    public List<float[]> makeShape() {
-        return getTriangles();
+    public void makeShape() {
+        
     }
 }

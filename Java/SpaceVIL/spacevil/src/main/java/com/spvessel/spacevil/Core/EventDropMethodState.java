@@ -6,6 +6,10 @@ import java.util.LinkedList;
 public class EventDropMethodState {
 
     List<InterfaceDropMethodState> events;
+    
+    public List<InterfaceDropMethodState> getActions() {
+        return new LinkedList<>(events);
+    }
 
     public int size() {
         if (events == null)

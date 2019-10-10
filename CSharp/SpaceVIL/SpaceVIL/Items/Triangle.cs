@@ -13,11 +13,15 @@ namespace SpaceVIL
             count++;
         }
 
-        public int RotationAngle = 0;
-        public override List<float[]> MakeShape()
+        public Triangle(int angle) : this()
         {
-            SetTriangles(GraphicsMathService.GetTriangle(GetWidth(), GetHeight(), GetX(), GetY(), RotationAngle));
-            return GraphicsMathService.ToGL(UpdateShape(), GetHandler());
+            RotationAngle = angle;
+        }
+
+        public int RotationAngle = 0;
+        public override void MakeShape()
+        {
+            SetTriangles(GraphicsMathService.GetTriangle(GetWidth(), GetHeight(), 0, 0, RotationAngle));
         }
     }
 }

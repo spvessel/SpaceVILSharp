@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    internal class TextBlock : Prototype, ITextEditable, IDraggable, ITextShortcuts, IGrid//, ITextContainer
+    internal class TextBlock : Prototype, ITextEditable, IDraggable, ITextShortcuts, IFreeLayout//, ITextContainer
     {
         internal EventCommonMethod TextChanged;
         internal EventCommonMethod CursorChanged;
@@ -271,7 +269,8 @@ namespace SpaceVIL
 
                 bool isCursorControlKey = _cursorControlKeys.Contains(args.Key);
                 bool hasShift = args.Mods.HasFlag(KeyMods.Shift);
-                bool hasControl = args.Mods.HasFlag(KeyMods.Control);
+                // bool hasControl = args.Mods.HasFlag(KeyMods.Control);
+                bool hasControl = args.Mods.HasFlag(CommonService.GetOsControlMod());
 
                 if (args.Mods != 0)
                 {
@@ -282,7 +281,7 @@ namespace SpaceVIL
                         {
                             if (hasShift)
                             {
-                                if ((args.Mods == KeyMods.Shift) || (args.Mods == (KeyMods.Control | KeyMods.Shift)))
+                                if ((args.Mods == KeyMods.Shift) || (args.Mods == (CommonService.GetOsControlMod() | KeyMods.Shift)))
                                 {
                                     _isSelect = true;
                                     _selectFrom = new Point(_cursorPosition.X, _cursorPosition.Y);
@@ -292,7 +291,7 @@ namespace SpaceVIL
                         }
                         else //_isSelect
                         {
-                            if (args.Mods == KeyMods.Control)
+                            if (args.Mods == CommonService.GetOsControlMod())
                             {
                                 UnselectText();
                                 CancelJustSelected();                                
@@ -548,12 +547,20 @@ namespace SpaceVIL
 
         private void ReplaceCursor()
         {
-            Point pos = AddXYShifts(_cursorPosition);
-            _cursor.SetX(pos.X);
-            _cursor.SetY(pos.Y - GetLineSpacer() / 2 + 1);
+            Monitor.Enter(_textureStorage.textInputLock);
+            try
+            {
+                Point pos = AddXYShifts(_cursorPosition);
+                _cursor.SetX(pos.X);
+                _cursor.SetY(pos.Y - GetLineSpacer() / 2 + 1);
 
-            //invoke cancelJustSelected
-            CursorChanged?.Invoke();
+                //invoke cancelJustSelected
+                CursorChanged?.Invoke();
+            }
+            finally
+            {
+                Monitor.Exit(_textureStorage.textInputLock);
+            }
         }
 
         internal void SetLineSpacer(int lineSpacer)
@@ -1103,10 +1110,10 @@ namespace SpaceVIL
 
         public override void SetWidth(int width)
         {
-            if (GetWidth() == width)
-            {
-                return;
-            }
+            // if (GetWidth() == width)
+            // {
+            //     return;
+            // }
             Point tmpCursor = new Point(_cursorPosition.X, _cursorPosition.Y);
             if (IsWrapText())
             {
@@ -1123,10 +1130,10 @@ namespace SpaceVIL
         }
         public override void SetHeight(int height)
         {
-            if (GetHeight() == height)
-            {
-                return;
-            }
+            // if (GetHeight() == height)
+            // {
+            //     return;
+            // }
             base.SetHeight(height);
             _textureStorage.UpdateBlockHeight();
         }
@@ -1218,9 +1225,9 @@ namespace SpaceVIL
         return _isWrapText;
     }
 
-    public void SetWrapText(bool wrapText)
+    public void SetWrapText(bool value)
     {
-        if (wrapText == _isWrapText)
+        if (value == _isWrapText)
         {
             return;
         }
@@ -1230,7 +1237,7 @@ namespace SpaceVIL
         {
             String text = GetText();
 
-            _isWrapText = wrapText;
+            _isWrapText = value;
 
             _textureStorage.SetText(text); //not added into redo/undo
         }

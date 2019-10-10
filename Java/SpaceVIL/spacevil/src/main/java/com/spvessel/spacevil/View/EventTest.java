@@ -68,8 +68,8 @@ public class EventTest extends ActiveWindow {
 
         b3.setFocus();
 
-        b3.setPassEvents(false);
-        b2.setPassEvents(false);
+        // b3.setPassEvents(false);
+        // b2.setPassEvents(false);
         // b2.setPassEvents(true, InputEventType.KEY_PRESS, InputEventType.KEY_RELEASE);
 
         eventMouseClick.add((sender, args) -> {

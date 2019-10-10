@@ -7,24 +7,7 @@ namespace Glfw3
     internal static partial class Glfw
     {
 
-#if LINUX
-                const string kLibrary = "libglfw.so"; //lunux
-#elif WINDOWS
-                const string kLibrary = "glfw3.dll"; //windows
-#elif MAC
-                const string kLibrary = "libglfw.dylib";
-#else
-        const string kLibrary = "glfw3.dll"; //windows
-#endif
-
-        // public static void ConfigureNativesDirectory(string nativeDirectory)
-        // {
-        //     // if (Directory.Exists(nativeDirectory))
-        //     //     Environment.SetEnvironmentVariable("Path", Environment.GetEnvironmentVariable("Path") + ";" + Path.GetFullPath(nativeDirectory) + ";");
-        //     // else
-        //     //     throw new DirectoryNotFoundException(nativeDirectory);
-        // }
-
+        const string kLibrary = "glfw";
 
         internal readonly static int DontCare = -1;
         internal readonly static int VersionMajor = 3;

@@ -771,8 +771,8 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         if (outPoint.y + globalYShift < 0) {
             globalYShift = -outPoint.y;
             updLinesYShift();
-
         }
+
         if (outPoint.y + _lineHeight + globalYShift > _cursorYMax) {
             globalYShift = _cursorYMax - outPoint.y - _lineHeight;
             updLinesYShift();
@@ -932,10 +932,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         return _foreground;
     }
 
-
     private boolean _isUpdateTextureNeed = true;
     private TextPrinter _blockTexture = null;
     private int _firstVisibleLineNumb = -1;
+
     public TextPrinter getLetTextures() {
         textInputLock.lock();
         try {
@@ -995,7 +995,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
                 w = bigWidth;
 //            }
 
-                ByteBuffer bigByte = memAlloc(visibleHeight * w * 4);//BufferUtils.createByteBuffer(visibleHeight * w * 4); //h
+                byte[] bigByte = new byte[visibleHeight * w * 4];
                 int bigOff = 0;
 
                 for (TextPrinter tptmp : tpLines) {
@@ -1011,18 +1011,22 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
                     for (int p = 0; p < 4; p++) {
                         for (int j = 0; j < tptmp.heightTexture; j++) {
                             for (int i = 0; i < tptmp.widthTexture; i++) {
-                                bigByte.put(bigOff + p + i * 4 + j * (w * 4),
-                                        tptmp.texture.get(p + i * 4 + j * (tptmp.widthTexture * 4)));
+                                // bigByte.put(bigOff + p + i * 4 + j * (w * 4),
+                                //         tptmp.texture.get(p + i * 4 + j * (tptmp.widthTexture * 4)));
+                                bigByte[bigOff + p + i * 4 + j * (w * 4)] = tptmp.texture[p + i * 4
+                                        + j * (tptmp.widthTexture * 4)];
                             }
 
                             for (int i = tptmp.widthTexture; i < w; i++) {
-                                bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte) 0);
+                                // bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte) 0);
+                                bigByte[bigOff + p + i * 4 + j * (w * 4)] = 0;
                             }
                         }
 
                         for (int j = tptmp.heightTexture; j < lineHeigh; j++) {
                             for (int i = 0; i < w; i++) {
-                                bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte) 0);
+                                // bigByte.put(bigOff + p + i * 4 + j * (w * 4), (byte) 0);
+                                bigByte[bigOff + p + i * 4 + j * (w * 4)] = 0;
                             }
                         }
                     }
@@ -1049,6 +1053,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 //                tpout.yTextureShift += _linesList.get(startNumb).getLineYShift();
 
                 _isUpdateTextureNeed = false;
+                setRemakeText(true);
 //            _blockTexture = tpout;
 
             }
@@ -1131,6 +1136,18 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         return new int[]{begPt, endPt};
     }
 
+    private boolean _isRemakeText = true;
+
+    @Override
+    public void setRemakeText(boolean value) {
+        _isRemakeText = value;
+    }
+
+    @Override
+    public boolean isRemakeText() {
+        return _isRemakeText;
+    }
+    
     //Wrap Text Stuff---------------------------------------------------------------------------------------------------
 
     private void wrapLine(int lineNum) {

@@ -58,6 +58,8 @@ namespace SpaceVIL
         }
         static public bool RemoveItem(CoreWindow layout, IBaseItem item, LayoutType type)
         {
+            layout.FreeVRAMResource(item);
+            
             switch (type)
             {
                 case LayoutType.Static:

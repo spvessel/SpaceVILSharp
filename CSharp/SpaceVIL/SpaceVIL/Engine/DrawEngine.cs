@@ -1,5 +1,3 @@
-// #define LINUX 
-
 using System;
 using System.Collections.Generic;
 
@@ -10,21 +8,20 @@ using SpaceVIL.Core;
 using Pointer = SpaceVIL.Core.Pointer;
 using SpaceVIL.Common;
 using static OpenGL.OpenGLConstants;
-
-#if MAC
-using static OpenGL.UnixGL;
-#elif WINDOWS
-using static OpenGL.WindowsGL;
-#elif LINUX
-using static OpenGL.UnixGL;
-#else
-using static OpenGL.WindowsGL;
-#endif
+using static OpenGL.OpenGLWrapper;
 
 namespace SpaceVIL
 {
     internal sealed class DrawEngine
     {
+        internal void FreeVRAMResource<T>(T resource)
+        {
+
+            if (_renderProcessor == null)
+                return;
+            _renderProcessor.FreeResource(resource);
+        }
+
         internal bool FullScreenRequest = false;
         internal bool MaximizeRequest = false;
         internal bool MinimizeRequest = false;
@@ -55,10 +52,14 @@ namespace SpaceVIL
 
         private void IncItemPyramidLevel()
         {
-            _itemPyramidLevel -= 0.001f;
+            _itemPyramidLevel -= 0.000001f;
         }
 
-        private ToolTip _tooltip = new ToolTip();
+        private ToolTipItem _tooltip = new ToolTipItem();
+        internal ToolTipItem GetToolTip()
+        {
+            return _tooltip;
+        }
 
         private int _framebufferWidth = 0;
         private int _framebufferHeight = 0;
@@ -83,7 +84,7 @@ namespace SpaceVIL
             _commonProcessor.ResetItems();
         }
 
-        internal void SetIcons(Image ibig, Image ismall)
+        internal void SetIcons(Bitmap ibig, Bitmap ismall)
         {
             _commonProcessor.WndProcessor.SetIcons(ibig, ismall);
         }
@@ -100,9 +101,6 @@ namespace SpaceVIL
             GLWHandler = new GLWHandler(handler);
             _commonProcessor = new CommonProcessor();
             _tooltip.SetHandler(handler);
-            _tooltip.GetTextLine().SetHandler(handler);
-            _tooltip.GetTextLine().SetParent(_tooltip);
-            _tooltip.InitElements();
         }
 
         internal void Dispose()
@@ -119,6 +117,7 @@ namespace SpaceVIL
             InitProcessors();
             _commonProcessor.WndProcessor.ApplyIcon();
             PrepareCanvas();
+            _tooltip.InitElements();
             return true;
         }
 
@@ -129,6 +128,8 @@ namespace SpaceVIL
             {
                 GLWHandler.CreateWindow();
                 SetEventsCallbacks();
+                if (WindowManager.GetVSyncValue() != 1)
+                    Glfw.SwapInterval(WindowManager.GetVSyncValue());
                 return true;
             }
             catch (Exception ex)
@@ -209,10 +210,9 @@ namespace SpaceVIL
             _framebufferHeight = h;
             Glfw.MakeContextCurrent(_commonProcessor.Window.GetGLWID());
             glViewport(0, 0, _framebufferWidth, _framebufferHeight);
-            _fbo.BindFBO();
-            _fbo.ClearTexture();
-            _fbo.GenFBOTexture(_framebufferWidth, _framebufferHeight);
-            _fbo.UnbindFBO();
+            _renderProcessor.ScreenSquare.GenBuffers(
+                RenderProcessor.GetFullWindowRectangle(_framebufferWidth, _framebufferHeight));
+            _renderProcessor.ScreenSquare.Unbind();
         }
 
         internal void UpdateWindowSize()
@@ -263,6 +263,28 @@ namespace SpaceVIL
             _tooltip.InitTimer(false);
             GLWHandler.GetCoreWindow().SetWidthDirect(width);
             GLWHandler.GetCoreWindow().SetHeightDirect(height);
+
+            if (!GLWHandler.GetCoreWindow().IsBorderHidden)
+            {
+                List<IBaseItem> list = ItemsLayoutBox.GetLayoutFloatItems(_commonProcessor.Window.GetWindowGuid());
+                foreach (var item in list)
+                {
+                    IFloating floatItem = item as IFloating;
+                    if (floatItem != null && floatItem.IsOutsideClickClosable())
+                    {
+                        ContextMenu toClose = item as ContextMenu;
+                        if (toClose != null)
+                        {
+                            if (toClose.CloseDependencies(new MouseArgs()))
+                                floatItem.Hide();
+                        }
+                        else
+                        {
+                            floatItem.Hide();
+                        }
+                    }
+                }
+            }
         }
 
         internal void SetWindowSize(int width, int height)
@@ -308,8 +330,8 @@ namespace SpaceVIL
 
         private void MouseScroll(Int64 window, double dx, double dy)
         {
-            if (_commonProcessor.InputLocker)
-                return;
+            // if (_commonProcessor.InputLocker)
+            //     return;
             _tooltip.InitTimer(false);
             _mouseScrollProcessor.Process(window, dx, dy);
             _commonProcessor.Events.SetEvent(InputEventType.MouseScroll);
@@ -341,7 +363,8 @@ namespace SpaceVIL
             return _renderProcessor.GetRedrawFrequency();
         }
 
-        VRAMFramebuffer _fbo = new VRAMFramebuffer();
+        VramFramebuffer _fboVertex = new VramFramebuffer();
+        VramFramebuffer _fboBlur = new VramFramebuffer();
 
         internal void DrawScene()
         {
@@ -363,6 +386,7 @@ namespace SpaceVIL
             if (UpdateSizeRequest)
             {
                 UpdateWindowSize();
+                _commonProcessor.Events.ResetEvent(InputEventType.WindowResize);
                 UpdateSizeRequest = false;
             }
             if (UpdatePositionRequest)
@@ -380,7 +404,7 @@ namespace SpaceVIL
 
         internal void Update()
         {
-            VRAMStorage.Flush();
+            _renderProcessor.FlushResources();
             Render();
             _stencilProcessor.ClearBounds();
             RestoreItemPyramidLevel();
@@ -396,10 +420,15 @@ namespace SpaceVIL
             _framebufferWidth = w;
             _framebufferHeight = h;
             glViewport(0, 0, _framebufferWidth, _framebufferHeight);
-            _fbo.GenFBO();
-            _fbo.GenFBOTexture(_framebufferWidth, _framebufferHeight);
-            _fbo.UnbindFBO();
+            _fboVertex.GenFBO();
+            _fboVertex.Unbind();
+            _fboBlur.GenFBO();
+            _fboBlur.Unbind();
+
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            _renderProcessor.ScreenSquare.GenBuffers(
+                RenderProcessor.GetFullWindowRectangle(_framebufferWidth, _framebufferHeight));
+            _renderProcessor.ScreenSquare.Unbind();
         }
 
         internal void FreeOnClose()
@@ -408,8 +437,9 @@ namespace SpaceVIL
             _texture.DeleteShader();
             _char.DeleteShader();
             _blur.DeleteShader();
-            _fbo.ClearFBO();
-            VRAMStorage.Clear();
+            _fboVertex.Clear();
+            _fboBlur.Clear();
+            _renderProcessor.ClearResources();
             glDeleteVertexArrays(1, GLWHandler.GVAO);
             GLWHandler.ClearEventsCallbacks();
             GLWHandler.Destroy();
@@ -431,9 +461,10 @@ namespace SpaceVIL
 
         private void DrawFloatItems()
         {
-            List<IBaseItem> float_items = new List<IBaseItem>(ItemsLayoutBox.GetLayout(_commonProcessor.Window.GetWindowGuid()).FloatItems);
-            if (float_items != null)
-                foreach (var item in float_items)
+            List<IBaseItem> floatItems = new List<IBaseItem>(ItemsLayoutBox.GetLayout(_commonProcessor.Window.GetWindowGuid()).FloatItems);
+            floatItems.Remove(_tooltip);
+            if (floatItems != null)
+                foreach (var item in floatItems)
                     DrawItems(item);
         }
 
@@ -444,7 +475,7 @@ namespace SpaceVIL
 
         private void DrawItems(IBaseItem root)
         {
-            if (root == null || !root.IsVisible() || !root.IsDrawable())
+            if (!root.IsVisible() || !root.IsDrawable())
                 return;
 
             if (root is ILine)
@@ -471,10 +502,10 @@ namespace SpaceVIL
             {
                 DrawShell(root);
                 glDisable(GL_SCISSOR_TEST);
-
-                if (root is Prototype)
+                Prototype rProto = root as Prototype;
+                if (rProto != null)
                 {
-                    List<IBaseItem> list = ((Prototype)root).GetItems();
+                    List<IBaseItem> list = rProto.GetItems();
                     foreach (var child in list)
                     {
                         DrawItems(child);
@@ -483,10 +514,9 @@ namespace SpaceVIL
             }
         }
 
-        private void DrawShell(IBaseItem shell, bool ignore_borders = false)
+        private void DrawShell(IBaseItem shell)
         {
-            if (!ignore_borders)
-                CheckOutsideBorders(shell);
+            bool stencil = CheckOutsideBorders(shell);
 
             if (shell.GetBackground().A == 0)
             {
@@ -496,15 +526,26 @@ namespace SpaceVIL
                 return;
             }
 
-            List<float[]> crdArray = shell.MakeShape();
-            if (crdArray == null)
-                return;
-
-            if (shell.IsShadowDrop())
-                DrawShadow(shell);
-
-            _renderProcessor.DrawVertex(_primitive, crdArray, GetItemPyramidLevel(), shell.GetBackground(), GL_TRIANGLES); ;
-            crdArray.Clear();
+            if (shell.IsRemakeRequest())
+            {
+                shell.MakeShape();
+                if (shell.IsShadowDrop())
+                    DrawShadow(shell, stencil);
+                shell.SetRemakeRequest(false);
+                _renderProcessor.DrawFreshVertex(
+                    _primitive, shell, GetItemPyramidLevel(), shell.GetX(), shell.GetY(),
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    shell.GetBackground(), GL_TRIANGLES);
+            }
+            else
+            {
+                if (shell.IsShadowDrop())
+                    DrawShadow(shell, stencil);
+                _renderProcessor.DrawStoredVertex(
+                    _primitive, shell, GetItemPyramidLevel(), shell.GetX(), shell.GetY(),
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    shell.GetBackground(), GL_TRIANGLES);
+            }
 
             Prototype vi = shell as Prototype;
             if (vi != null)
@@ -515,60 +556,99 @@ namespace SpaceVIL
         {
             if (vi.GetBorderThickness() > 0)
             {
-                CustomShape border = new CustomShape();
-                border.SetBackground(vi.GetBorderFill());
-                border.SetSize(vi.GetWidth(), vi.GetHeight());
-                border.SetPosition(vi.GetX(), vi.GetY());
-                border.SetParent(vi);
-                border.SetHandler(vi.GetHandler());
-                border.SetTriangles(GraphicsMathService.GetRoundSquareBorder(
-                    vi.GetBorderRadius(),
-                    vi.GetWidth(),
-                    vi.GetHeight(),
-                    vi.GetBorderThickness(),
-                    vi.GetX(),
-                    vi.GetY()
-                    ));
-                DrawShell(border, true);
+                List<float[]> vertex = BaseItemStatics.UpdateShape(
+                    GraphicsMathService.GetRoundSquareBorder(
+                        vi.GetBorderRadius(),
+                        vi.GetWidth(),
+                        vi.GetHeight(),
+                        vi.GetBorderThickness(),
+                        0,
+                        0),
+                        vi.GetWidth(),
+                        vi.GetHeight());
+                _renderProcessor.DrawDirectVertex(
+                    _primitive, vertex, GetItemPyramidLevel(), vi.GetX(), vi.GetY(),
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    vi.GetBorderFill(), GL_TRIANGLES);
             }
         }
 
-        void DrawShadow(IBaseItem shell)
+        float[] _weights;
+
+        void DrawShadow(IBaseItem shell, bool stencil)
         {
             int[] extension = shell.GetShadowExtension();
             int xAddidion = extension[0] / 2;
             int yAddidion = extension[1] / 2;
-
-            CustomShape shadow = new CustomShape();
-            shadow.SetBackground(shell.GetShadowColor());
-            shadow.SetSize(shell.GetWidth() + extension[0], shell.GetHeight() + extension[1]);
-            shadow.SetPosition(shell.GetX() + shell.GetShadowPos().GetX() - xAddidion,
-                shell.GetY() + shell.GetShadowPos().GetY() - yAddidion);
-            shadow.SetParent(shell.GetParent());
-            shadow.SetHandler(shell.GetHandler());
-            shadow.SetTriangles(shell.GetTriangles());
-
-            _fbo.BindFBO();
-            glClear(GL_COLOR_BUFFER_BIT);
-            DrawShell(shadow, true);
-
             int res = shell.GetShadowRadius();
-            float[] weights = new float[11];
-            float sum, sigma2 = 4.0f;
-            weights[0] = Gauss(0, sigma2);
-            sum = weights[0];
-            for (int i = 1; i < 11; i++)
-            {
-                weights[i] = Gauss(i, sigma2);
-                sum += 2 * weights[i];
-            }
-            for (int i = 0; i < 11; i++)
-                weights[i] /= sum;
 
-            _fbo.UnbindFBO();
-            DrawShadowPart(weights, res, _fbo.Texture,
-            new float[] { shell.GetX() + shell.GetShadowPos().GetX(), shell.GetY() + shell.GetShadowPos().GetY() },
-                new float[] { shell.GetWidth(), shell.GetHeight() });
+            if (_weights == null)
+            {
+                _weights = new float[11];
+                float sum, sigma2 = 4.0f;
+                _weights[0] = Gauss(0, sigma2);
+                sum = _weights[0];
+                for (int i = 1; i < 11; i++)
+                {
+                    _weights[i] = Gauss(i, sigma2);
+                    sum += 2 * _weights[i];
+                }
+                for (int i = 0; i < 11; i++)
+                    _weights[i] /= sum;
+            }
+
+            int fboWidth = shell.GetWidth() + extension[0] + 2 * res;
+            int fboHeight = shell.GetHeight() + extension[1] + 2 * res;
+            if (shell.IsRemakeRequest())
+            {
+                if (stencil)
+                    glDisable(GL_SCISSOR_TEST);
+
+                glViewport(0, 0, fboWidth, fboHeight);
+                _fboVertex.GenFBO();
+                _fboVertex.GenFboTexture(fboWidth, fboHeight);
+                glClear(GL_COLOR_BUFFER_BIT);
+
+                List<float[]> vertex = BaseItemStatics.UpdateShape(
+                    shell.GetTriangles(), shell.GetWidth() + extension[0], shell.GetHeight() + extension[1]);
+
+                _renderProcessor.DrawDirectVertex(_primitive, vertex, 0.0f, res, res,
+                    fboWidth, fboHeight, shell.GetShadowColor(), GL_TRIANGLES);
+
+                _fboVertex.UnbindTexture();
+                _fboVertex.Unbind();
+                _fboBlur.Bind();
+                _fboBlur.GenFboTexture(fboWidth, fboHeight);
+                glClear(GL_COLOR_BUFFER_BIT);
+
+                VramTexture store = _renderProcessor.DrawDirectShadow(
+                    _blur, 0.0f, _weights, res, _fboVertex.Texture, 0, 0,
+                    shell.GetWidth() + extension[0], shell.GetHeight() + extension[1],
+                    fboWidth, fboHeight);
+                store.Clear();
+
+                _fboBlur.UnbindTexture();
+                _fboBlur.Unbind();
+
+                if (stencil)
+                    glEnable(GL_SCISSOR_TEST);
+                glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+
+                _renderProcessor.DrawFreshShadow(_texture, shell, GetItemPyramidLevel(), _fboBlur.Texture,
+                    shell.GetX() + shell.GetShadowPos().GetX() - xAddidion - res,
+                    shell.GetY() + shell.GetShadowPos().GetY() - yAddidion - res,
+                    fboWidth, fboHeight, _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
+
+                _fboVertex.Clear();
+                _fboBlur.Clear();
+            }
+            else
+            {
+                _renderProcessor.DrawStoredShadow(_texture, shell, GetItemPyramidLevel(),
+                    shell.GetX() + shell.GetShadowPos().GetX() - xAddidion - res,
+                    shell.GetY() + shell.GetShadowPos().GetY() - yAddidion - res,
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
+            }
         }
 
         float Gauss(float x, float sigma)
@@ -578,38 +658,37 @@ namespace SpaceVIL
             return (float)ans;
         }
 
-        private void DrawShadowPart(float[] weights, int res, uint[] fboTexture, float[] xy, float[] wh)
-        {
-            _renderProcessor.DrawShadow(_blur, GetItemPyramidLevel(), weights, res, fboTexture, xy, wh,
-                _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
-        }
-
         void DrawText(ITextContainer text)
         {
             TextPrinter textPrt = text.GetLetTextures();
             if (textPrt == null)
                 return;
+
             byte[] byteBuffer = textPrt.Texture;
             if ((byteBuffer == null) || (byteBuffer.Length == 0))
                 return;
 
             CheckOutsideBorders(text as IBaseItem);
 
-            int byteBufferHeight = textPrt.HeightTexture, byteBufferWidth = textPrt.WidthTexture;
-            float x0 = ((float)textPrt.XTextureShift / (float)GLWHandler.GetCoreWindow().GetWidth() * 2.0f) - 1.0f;
-            float y0 = ((float)textPrt.YTextureShift / (float)GLWHandler.GetCoreWindow().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            float x1 = (((float)textPrt.XTextureShift + (float)byteBufferWidth / GLWHandler.GetCoreWindow().GetDpiScale()[0])
-                    / (float)GLWHandler.GetCoreWindow().GetWidth() * 2.0f) - 1.0f;
-            float y1 = (((float)textPrt.YTextureShift + (float)byteBufferHeight / GLWHandler.GetCoreWindow().GetDpiScale()[0])
-                    / (float)GLWHandler.GetCoreWindow().GetHeight() * 2.0f - 1.0f) * (-1.0f);
             float[] argb = {
                 (float) text.GetForeground().R / 255.0f,
                 (float) text.GetForeground().G / 255.0f,
                 (float) text.GetForeground().B / 255.0f,
                 (float) text.GetForeground().A / 255.0f };
 
-            _renderProcessor.DrawText(_char, x0, x1, y0, y1, byteBufferWidth, byteBufferHeight, byteBuffer,
-                GetItemPyramidLevel(), argb);
+            if (text.IsRemakeText())
+            {
+                text.SetRemakeText(false);
+                _renderProcessor.DrawFreshText(_char, text, textPrt,
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    GetItemPyramidLevel(), argb);
+            }
+            else
+            {
+                _renderProcessor.DrawStoredText(_char, text, textPrt,
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    GetItemPyramidLevel(), argb);
+            }
         }
 
         void DrawPoints(IPoints item)
@@ -617,50 +696,48 @@ namespace SpaceVIL
             if (item.GetPointColor().A == 0)
                 return;
 
-            List<float[]> crd_array = item.MakeShape();
-            if (crd_array == null)
+            IBaseItem shell = item as IBaseItem;
+            if (shell == null)
                 return;
-            CheckOutsideBorders(item as IBaseItem);
-            List<float[]> point = item.GetShapePointer();
-            float centerOffset = item.GetPointThickness() / 2.0f;
-            float[] result = new float[point.Count * crd_array.Count * 3];
-            int skew = 0;
+            CheckOutsideBorders(shell);
+
             float level = GetItemPyramidLevel();
-            foreach (float[] shape in crd_array)
+
+            if (shell.IsRemakeRequest())
             {
-                List<float[]> fig = GraphicsMathService.ToGL(GraphicsMathService.MoveShape(point, shape[0] - centerOffset, shape[1] - centerOffset),
-                    GLWHandler.GetCoreWindow());
-                for (int i = 0; i < fig.Count; i++)
+                shell.SetRemakeRequest(false);
+                shell.MakeShape();
+
+                List<float[]> points = item.GetPoints();
+                if (points == null)
+                    return;
+
+                List<float[]> shape = item.GetShapePointer();
+                float centerOffset = item.GetPointThickness() / 2.0f;
+                float[] result = new float[shape.Count * points.Count * 2];
+                int skew = 0;
+                foreach (float[] p in points)
                 {
-                    result[skew + i * 3 + 0] = fig[i][0];
-                    result[skew + i * 3 + 1] = fig[i][1];
-                    result[skew + i * 3 + 2] = level;
+                    List<float[]> fig = GraphicsMathService.MoveShape(shape, p[0] - centerOffset, p[1] - centerOffset);
+                    for (int i = 0; i < fig.Count; i++)
+                    {
+                        result[skew + i * 2 + 0] = fig[i][0];
+                        result[skew + i * 2 + 1] = fig[i][1];
+                    }
+                    skew += fig.Count * 2;
                 }
-                skew += fig.Count * 3;
+                _renderProcessor.DrawFreshVertex(
+                    _primitive, shell, result, level, shell.GetX(), shell.GetY(),
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    item.GetPointColor(), GL_TRIANGLES);
             }
-            _renderProcessor.DrawVertex(_primitive, result, item.GetPointColor(), GL_TRIANGLES);
-
-            ////////////////////////////////////////
-            // _clone.UseShader();
-            // List<float[]> point = GraphicsMathService.ToGL(item.GetShapePointer().Distinct().ToList(), GLWHandler.GetLayout());//item.GetShapePointer().Distinct().ToList(); //
-            // float[] result = new float[point.Count * 2];
-            // for (int i = 0; i < result.Length / 2; i++)
-            // {
-            //     result[i * 2 + 0] = point.ElementAt(i)[0];
-            //     result[i * 2 + 1] = point.ElementAt(i)[1];
-            //     // Console.WriteLine(result[i * 2 + 0] + " " + result[i * 2 + 1]);
-            // }
-
-            // VRAMVertex store = new VRAMVertex();
-            // store.SendColor(_clone, item.GetPointColor());
-            // store.GenBuffers(GraphicsMathService.ToGL(crd_array, GLWHandler.GetLayout()));
-            // store.SendUniform1i(_clone, "size", point.Count);
-            // store.SendUniform2fv(_clone, "shape", result);
-            // store.Draw(GL_POINTS);
-            // store.Clear();
-            // crd_array.Clear();
-            // _primitive.UseShader();
-            ////////////////////////////////////////
+            else
+            {
+                _renderProcessor.DrawStoredVertex(
+                    _primitive, shell, level, shell.GetX(), shell.GetY(),
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    item.GetPointColor(), GL_TRIANGLES);
+            }
         }
 
         void DrawLines(ILine item)
@@ -668,49 +745,62 @@ namespace SpaceVIL
             if (item.GetLineColor().A == 0)
                 return;
 
-            List<float[]> crd_array = GraphicsMathService.ToGL(item.MakeShape(), GLWHandler.GetCoreWindow());
-            if (crd_array == null)
+            IBaseItem shell = item as IBaseItem;
+            if (shell == null)
                 return;
-            CheckOutsideBorders(item as IBaseItem);
-            _renderProcessor.DrawVertex(_primitive, crd_array, GetItemPyramidLevel(), item.GetLineColor(), GL_LINE_STRIP);
+
+            CheckOutsideBorders(shell);
+
+            if (shell.IsRemakeRequest())
+            {
+                shell.SetRemakeRequest(false);
+                shell.MakeShape();
+                _renderProcessor.DrawFreshVertex(
+                    _primitive, shell, GetItemPyramidLevel(), item.GetX(), item.GetY(),
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    item.GetLineColor(), GL_LINE_STRIP);
+            }
+            else
+            {
+                _renderProcessor.DrawStoredVertex(
+                    _primitive, shell, GetItemPyramidLevel(), item.GetX(), item.GetY(),
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    item.GetLineColor(), GL_LINE_STRIP);
+            }
         }
 
         void DrawImage(IImageItem image)
         {
             CheckOutsideBorders(image as IBaseItem);
 
-            byte[] bitmap = image.GetPixMapImage();
-            if (bitmap == null)
-                return;
-
             int w = image.GetImageWidth(), h = image.GetImageHeight();
-            RectangleBounds Area = image.GetRectangleBounds();
-
-            float x0 = ((float)Area.GetX() / (float)GLWHandler.GetCoreWindow().GetWidth() * 2.0f) - 1.0f;
-            float y0 = ((float)Area.GetY() / (float)GLWHandler.GetCoreWindow().GetHeight() * 2.0f - 1.0f) * (-1.0f);
-            float x1 = (((float)Area.GetX() + (float)Area.GetWidth()) / (float)GLWHandler.GetCoreWindow().GetWidth() * 2.0f) - 1.0f;
-            float y1 = (((float)Area.GetY() + (float)Area.GetHeight()) / (float)GLWHandler.GetCoreWindow().GetHeight() * 2.0f - 1.0f) * (-1.0f);
+            RectangleBounds area = image.GetRectangleBounds();
 
             ImageItem tmp = image as ImageItem;
             if (tmp != null)
             {
                 if (tmp.IsNew())
                 {
-                    _renderProcessor.DrawFreshTexture(tmp, _texture, x0, x1, y0, y1, w, h, bitmap, GetItemPyramidLevel());
+                    _renderProcessor.DrawFreshTexture(
+                        tmp, _texture,
+                        area.GetX(), area.GetY(), area.GetWidth(), area.GetHeight(),
+                        w, h,
+                        _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                        GetItemPyramidLevel());
                 }
                 else
                 {
-                    _renderProcessor.DrawStoredTexture(tmp, _texture, x0, x1, y0, y1, GetItemPyramidLevel());
+                    _renderProcessor.DrawStoredTexture(
+                        tmp, _texture, area.GetX(), area.GetY(),
+                        _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                        GetItemPyramidLevel());
                 }
                 return;
             }
-
-            if (image.IsColorOverlay())
-                _renderProcessor.DrawTextureWithColorOverlay(_texture, x0, x1, y0, y1, w, h, bitmap, GetItemPyramidLevel(),
-                        image.GetRotationAngle(), image.GetColorOverlay());
-            else
-                _renderProcessor.DrawTextureAsIs(_texture, x0, x1, y0, y1, w, h, bitmap, GetItemPyramidLevel(),
-                        image.GetRotationAngle());
+            _renderProcessor.DrawTextureAsIs(
+                _texture, image, area.GetX(), area.GetY(), area.GetWidth(), area.GetHeight(),
+                w, h, _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                GetItemPyramidLevel());
         }
 
         private Pointer tooltipBorderIndent = new Pointer(10, 2);
@@ -721,24 +811,106 @@ namespace SpaceVIL
                 return;
 
             _tooltip.SetText(_commonProcessor.HoveredItem.GetToolTip());
-            _tooltip.SetWidth(_tooltip.GetPadding().Left + _tooltip.GetPadding().Right + _tooltip.GetTextWidth());
+            int width = _tooltip.GetPadding().Left + _tooltip.GetPadding().Right + _tooltip.GetTextLabel().GetMargin().Left
+                + _tooltip.GetTextLabel().GetMargin().Right + _tooltip.GetTextWidth();
+            _tooltip.SetWidth(width);
+
+            int height = _tooltip.GetPadding().Top + _tooltip.GetPadding().Bottom + _tooltip.GetTextLabel().GetMargin().Top
+                + _tooltip.GetTextLabel().GetMargin().Bottom + _tooltip.GetTextHeight();
+            _tooltip.SetHeight(height);
 
             //проверка сверху
             if (_commonProcessor.PtrRelease.GetY() > _tooltip.GetHeight())
                 _tooltip.SetY(_commonProcessor.PtrRelease.GetY() - _tooltip.GetHeight() - tooltipBorderIndent.GetY());
             else
-                _tooltip.SetY(_commonProcessor.PtrRelease.GetY() + _tooltip.GetHeight() + tooltipBorderIndent.GetY());
+                _tooltip.SetY(_commonProcessor.PtrRelease.GetY() + CommonService.CurrentCursor.GetCursorHeight() + tooltipBorderIndent.GetY());
             //проверка справа
-            if (_commonProcessor.PtrRelease.GetX() - tooltipBorderIndent.GetX() + _tooltip.GetWidth() > GLWHandler.GetCoreWindow().GetWidth())
+            if (_commonProcessor.PtrRelease.GetX() - tooltipBorderIndent.GetX() + _tooltip.GetWidth()
+                > GLWHandler.GetCoreWindow().GetWidth() - tooltipBorderIndent.GetX())
                 _tooltip.SetX(GLWHandler.GetCoreWindow().GetWidth() - _tooltip.GetWidth() - tooltipBorderIndent.GetX());
             else
                 _tooltip.SetX(_commonProcessor.PtrRelease.GetX() - tooltipBorderIndent.GetX());
 
-            DrawShell(_tooltip);
+            _tooltip.MakeShape();
+
+            if (_tooltip.IsShadowDrop())
+                DrawToolTipShadow();
+
+            _renderProcessor.DrawDirectVertex(
+                _primitive, _tooltip.GetTriangles(), GetItemPyramidLevel(), _tooltip.GetX(), _tooltip.GetY(),
+                _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(), _tooltip.GetBackground(),
+                GL_TRIANGLES);
+
+            DrawBorder(_tooltip);
+
             glDisable(GL_SCISSOR_TEST);
-            _tooltip.GetTextLine().UpdateGeometry();
-            DrawText(_tooltip.GetTextLine());
+
+            DrawItems(_tooltip);
+
             glDisable(GL_SCISSOR_TEST);
+        }
+
+        private void DrawToolTipShadow()
+        {
+            int[] extension = _tooltip.GetShadowExtension();
+            int xAddidion = extension[0] / 2;
+            int yAddidion = extension[1] / 2;
+            int res = _tooltip.GetShadowRadius();
+
+            if (_weights == null)
+            {
+                _weights = new float[11];
+                float sum, sigma2 = 4.0f;
+                _weights[0] = Gauss(0, sigma2);
+                sum = _weights[0];
+                for (int i = 1; i < 11; i++)
+                {
+                    _weights[i] = Gauss(i, sigma2);
+                    sum += 2 * _weights[i];
+                }
+                for (int i = 0; i < 11; i++)
+                    _weights[i] /= sum;
+            }
+
+            int fboWidth = _tooltip.GetWidth() + extension[0] + 2 * res;
+            int fboHeight = _tooltip.GetHeight() + extension[1] + 2 * res;
+
+            glViewport(0, 0, fboWidth, fboHeight);
+            _fboVertex.GenFBO();
+            _fboVertex.GenFboTexture(fboWidth, fboHeight);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            List<float[]> vertex = BaseItemStatics.UpdateShape(
+                _tooltip.GetTriangles(), _tooltip.GetWidth() + extension[0], _tooltip.GetHeight() + extension[1]);
+
+            _renderProcessor.DrawDirectVertex(_primitive, vertex, 0.0f, res, res,
+                fboWidth, fboHeight, _tooltip.GetShadowColor(), GL_TRIANGLES);
+
+            _fboVertex.UnbindTexture();
+            _fboVertex.Unbind();
+            _fboBlur.Bind();
+            _fboBlur.GenFboTexture(fboWidth, fboHeight);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            VramTexture store = _renderProcessor.DrawDirectShadow(
+                _blur, 0.0f, _weights, res, _fboVertex.Texture, 0, 0,
+                _tooltip.GetWidth() + extension[0], _tooltip.GetHeight() + extension[1],
+                fboWidth, fboHeight);
+            store.Clear();
+
+            _fboBlur.UnbindTexture();
+            _fboBlur.Unbind();
+
+            glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+
+            _renderProcessor.DrawRawShadow(_texture, GetItemPyramidLevel(), _fboBlur.Texture,
+                _tooltip.GetX() + _tooltip.GetShadowPos().GetX() - xAddidion - res,
+                _tooltip.GetY() + _tooltip.GetShadowPos().GetY() - yAddidion - res,
+                fboWidth, fboHeight,
+                _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight());
+
+            _fboVertex.Clear();
+            _fboBlur.Clear();
         }
 
         private void DrawShadePillow()
@@ -746,8 +918,10 @@ namespace SpaceVIL
             if (GLWHandler.Focusable)
                 return;
 
-            List<float[]> vertex = new List<float[]>(RenderProcessor.GetFullWindowRectangle());
-            _renderProcessor.DrawVertex(_primitive, vertex, GetItemPyramidLevel(), GLWHandler.GetCoreWindow().GetShadeColor(), GL_TRIANGLES);
+            _renderProcessor.DrawScreenRectangle(
+                _primitive, GetItemPyramidLevel(), 0, 0,
+                _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                GLWHandler.GetCoreWindow().GetShadeColor(), GL_TRIANGLES);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿#version 330
+#version 430
 uniform sampler2D tex;
 uniform vec2 frame;
 uniform int res;
@@ -6,7 +6,7 @@ uniform float weights[100];
 uniform int isFirst;
 in vec2 fragTexCoord;
 
-vec4 blur0(sampler2D image, vec2 uv, vec2 resolution) 
+vec4 blur0(sampler2D image, vec2 uv, vec2 resolution)
 {
 	vec4 color = vec4(0.0);
 	vec4 tmp = vec4(0.0);
@@ -24,11 +24,11 @@ vec4 blur0(sampler2D image, vec2 uv, vec2 resolution)
 		}
 
 		color += tmp * weights[abs(i)];
-	}	
+	}
 	return color;
 }
 
-vec4 blur1(sampler2D image, vec2 uv, vec2 resolution) 
+vec4 blur1(sampler2D image, vec2 uv, vec2 resolution)
 {
 	vec4 color = vec4(0.0);
 	vec4 tmp = vec4(0.0);
@@ -47,13 +47,13 @@ vec4 blur1(sampler2D image, vec2 uv, vec2 resolution)
 
 		color += tmp * weights[abs(j)];
 	}
-		
+
 	return color;
 }
 
 void main()
 {
-    if (isFirst == 1)
+	if (isFirst == 1)
 		gl_FragColor = blur0(tex, fragTexCoord, frame.xy);
 	else gl_FragColor = blur1(tex, fragTexCoord, frame.xy);
 }

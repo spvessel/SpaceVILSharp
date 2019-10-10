@@ -17,7 +17,7 @@ class TextShortcutProcessor {
         if (modsCount == 1) {
 
             //copy
-            if (args.mods.contains(KeyMods.CONTROL) && args.key == KeyCode.C) {
+            if (args.mods.contains(CommonService.getOsControlMod()) && args.key == KeyCode.C) {
                 String copy_str = textItem.getSelectedText();
 //                glfwSetClipboardString(_handler.getWindowId(), copy_str);
                 CommonService.setClipboardString(copy_str);
@@ -25,19 +25,19 @@ class TextShortcutProcessor {
             }
 
             //undo
-            if (args.mods.contains(KeyMods.CONTROL) && args.key == KeyCode.Z) {
+            if (args.mods.contains(CommonService.getOsControlMod()) && args.key == KeyCode.Z) {
                 textItem.undo();
                 return;
             }
 
             //redo
-            if (args.mods.contains(KeyMods.CONTROL) && args.key == KeyCode.Y) {
+            if (args.mods.contains(CommonService.getOsControlMod()) && args.key == KeyCode.Y) {
                 textItem.redo();
                 return;
             }
 
             //select all
-            if (args.mods.contains(KeyMods.CONTROL) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
+            if (args.mods.contains(CommonService.getOsControlMod()) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
                 textItem.selectAll();
                 return;
             }
@@ -45,7 +45,7 @@ class TextShortcutProcessor {
             //editable only but has inner checks------------------------------------------------------------------------
 
             //insert/paste
-            if ((args.mods.contains(KeyMods.CONTROL) && args.key == KeyCode.V) ||
+            if ((args.mods.contains(CommonService.getOsControlMod()) && args.key == KeyCode.V) ||
                     (args.mods.contains(KeyMods.SHIFT) && args.key == KeyCode.INSERT)) {
                 String paste_str = "";
 //                paste_str = glfwGetClipboardString(_handler.getWindowId());
@@ -55,7 +55,7 @@ class TextShortcutProcessor {
             }
 
             //cut
-            if (args.mods.contains(KeyMods.CONTROL) && args.key == KeyCode.X) {
+            if (args.mods.contains(CommonService.getOsControlMod()) && args.key == KeyCode.X) {
                 String cut_str = textItem.cutText();
 //                glfwSetClipboardString(_handler.getWindowId(), cut_str);
                 CommonService.setClipboardString(cut_str);

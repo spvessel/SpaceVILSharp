@@ -7,7 +7,7 @@ using SpaceVIL.Core;
 
 namespace RadialMenu
 {
-    public class RadialMenuItem : Prototype, IDraggable, IFloating, IGrid
+    public class RadialMenuItem : Prototype, IDraggable, IFloating, IFreeLayout
     {
         private bool _init = false;
         public Int32 Radius = 150;
@@ -144,6 +144,11 @@ namespace RadialMenu
         {
             SetVisible(false);
         }
+        public void Hide(MouseArgs args)
+        {
+            Hide();
+        }
+
         public void Show()
         {
             if (!_init)

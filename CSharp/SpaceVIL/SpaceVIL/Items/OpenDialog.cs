@@ -50,7 +50,7 @@ namespace SpaceVIL
             };
             EventKeyPress += (sender, args) =>
             {
-                if (args.Key == KeyCode.R && args.Mods == KeyMods.Control)
+                if (args.Key == KeyCode.R && args.Mods == CommonService.GetOsControlMod())
                     UpdateWindow();
                 else if (args.Key == KeyCode.Escape)
                     Close();

@@ -7,11 +7,11 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class Tab : Prototype
+    public class Tab : Prototype, IDraggable
     {
         static int count = 0;
         internal Frame View;
-        private Label _text_object;
+        private Label _textLabel;
         private ButtonCore _close;
         public ButtonCore GetCloseButton()
         {
@@ -44,9 +44,71 @@ namespace SpaceVIL
         {
             SetItemName("Tab_" + count++);
             _close = new ButtonCore();
-            _text_object = new Label();
+            _textLabel = new Label();
+            _textLabel.IsHover = false;
             View = new Frame();
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.Tab)));
+
+            //draggable tabs
+            SetPassEvents(false,
+                InputEventType.MouseDoubleClick,
+                InputEventType.MousePress,
+                InputEventType.MouseRelease);
+            IsFocusable = false;
+
+            EventMousePress += OnMousePress;
+            EventMouseDrag += OnDragging;
+        }
+
+        private int _xClick = 0;
+        private int _xDiff = 0;
+        internal bool Dragging = false;
+
+        private bool _isDraggable = true;
+
+        public void SetDraggable(bool value)
+        {
+            _isDraggable = value;
+        }
+
+        public bool IsDraggable()
+        {
+            return _isDraggable;
+        }
+
+        void OnMousePress(IItem sender, MouseArgs args)
+        {
+            if (!IsDraggable())
+                return;
+            _xClick = args.Position.GetX();
+            _xDiff = args.Position.GetX() - GetX();
+        }
+
+        void OnDragging(IItem sender, MouseArgs args)
+        {
+            if (!IsDraggable())
+                return;
+            if (Dragging)
+            {
+                Prototype parent = GetParent();
+                int offset = args.Position.GetX() - parent.GetX() - _xDiff;
+                int x = offset + parent.GetX();
+                if (x <= parent.GetX())
+                {
+                    x = parent.GetX();
+                }
+                if (x >= parent.GetX() + parent.GetWidth() - GetWidth())
+                {
+                    x = parent.GetX() + parent.GetWidth() - GetWidth();
+                }
+                SetX(x);
+            }
+            else
+            {
+                if (Math.Abs(_xClick - args.Position.GetX()) <= 20)
+                    return;
+                Dragging = true;
+            }
         }
 
         //private for class
@@ -70,12 +132,12 @@ namespace SpaceVIL
 
         public EventMouseMethodState EventOnSelect;
         public EventCommonMethod EventOnClose;
-        internal EventCommonMethod EventTabRemoved;
+        internal EventCommonMethod EventTabRemove;
         public override void Release()
         {
             EventOnSelect = null;
-            EventTabRemoved = null;
             EventOnClose = null;
+            EventTabRemove = null;
         }
 
         //text init
@@ -84,11 +146,11 @@ namespace SpaceVIL
         /// </summary>
         public void SetTextAlignment(ItemAlignment alignment)
         {
-            _text_object.SetTextAlignment(alignment);
+            _textLabel.SetTextAlignment(alignment);
         }
         public void SetTextAlignment(params ItemAlignment[] alignment)
         {
-            _text_object.SetTextAlignment(alignment);
+            _textLabel.SetTextAlignment(alignment);
         }
 
         /// <summary>
@@ -96,11 +158,11 @@ namespace SpaceVIL
         /// </summary>
         public void SetTextMargin(Indents margin)
         {
-            _text_object.SetMargin(margin);
+            _textLabel.SetMargin(margin);
         }
         public Indents GetTextMargin()
         {
-            return _text_object.GetMargin();
+            return _textLabel.GetMargin();
         }
 
         /// <summary>
@@ -108,72 +170,72 @@ namespace SpaceVIL
         /// </summary>
         public void SetFont(Font font)
         {
-            _text_object.SetFont(font);
+            _textLabel.SetFont(font);
         }
         public void SetFontSize(int size)
         {
-            _text_object.SetFontSize(size);
+            _textLabel.SetFontSize(size);
         }
         public void SetFontStyle(FontStyle style)
         {
-            _text_object.SetFontStyle(style);
+            _textLabel.SetFontStyle(style);
         }
         public void SetFontFamily(FontFamily font_family)
         {
-            _text_object.SetFontFamily(font_family);
+            _textLabel.SetFontFamily(font_family);
         }
         public Font GetFont()
         {
-            return _text_object.GetFont();
+            return _textLabel.GetFont();
         }
         public virtual void SetText(String text)
         {
-            _text_object.SetText(text);
+            _textLabel.SetText(text);
             UpdateTabWidth();
         }
         public virtual String GetText()
         {
-            return _text_object.GetText();
+            return _textLabel.GetText();
         }
         public int GetTextWidth()
         {
-            return _text_object.GetTextWidth();
+            return _textLabel.GetTextWidth();
         }
         public int GetTextHeight()
         {
-            return _text_object.GetTextHeight();
+            return _textLabel.GetTextHeight();
         }
         /// <summary>
         /// Text color in the ButtonToggle
         /// </summary>
         public void SetForeground(Color color)
         {
-            _text_object.SetForeground(color);
+            _textLabel.SetForeground(color);
         }
         public void SetForeground(int r, int g, int b)
         {
-            _text_object.SetForeground(r, g, b);
+            _textLabel.SetForeground(r, g, b);
         }
         public void SetForeground(int r, int g, int b, int a)
         {
-            _text_object.SetForeground(r, g, b, a);
+            _textLabel.SetForeground(r, g, b, a);
         }
         public void SetForeground(float r, float g, float b)
         {
-            _text_object.SetForeground(r, g, b);
+            _textLabel.SetForeground(r, g, b);
         }
         public void SetForeground(float r, float g, float b, float a)
         {
-            _text_object.SetForeground(r, g, b, a);
+            _textLabel.SetForeground(r, g, b, a);
         }
         public Color GetForeground()
         {
-            return _text_object.GetForeground();
+            return _textLabel.GetForeground();
         }
 
         private int _labelRightMargin = 0;
 
-        private void UpdateTabWidth()
+        internal void UpdateTabWidth()
         {
             if (GetWidthPolicy() == SizePolicy.Fixed)
             {
@@ -200,11 +262,11 @@ namespace SpaceVIL
 
         private void ApplyRightTextMargin(int value)
         {
-            _text_object.SetMargin(
-                _text_object.GetMargin().Left,
-                _text_object.GetMargin().Top,
+            _textLabel.SetMargin(
+                _textLabel.GetMargin().Left,
+                _textLabel.GetMargin().Top,
                 value,
-                _text_object.GetMargin().Bottom
+                _textLabel.GetMargin().Bottom
                 );
         }
 
@@ -212,7 +274,7 @@ namespace SpaceVIL
         {
             base.InitElements();
             _close.SetVisible(_isClosable);
-            AddItems(_text_object, _close);
+            AddItems(_textLabel, _close);
             EventOnSelect = null;
             EventOnSelect += (sender, args) =>
             {
@@ -231,7 +293,7 @@ namespace SpaceVIL
         public void RemoveTab()
         {
             EventOnClose?.Invoke();
-            EventTabRemoved?.Invoke();
+            EventTabRemove?.Invoke();
         }
 
         public override void SetStyle(Style style)
@@ -249,8 +311,8 @@ namespace SpaceVIL
             inner_style = style.GetInnerStyle("text");
             if (inner_style != null)
             {
-                _text_object.SetStyle(inner_style);
-                _labelRightMargin = _text_object.GetMargin().Right;
+                _textLabel.SetStyle(inner_style);
+                _labelRightMargin = _textLabel.GetMargin().Right;
             }
 
             SetForeground(style.Foreground);

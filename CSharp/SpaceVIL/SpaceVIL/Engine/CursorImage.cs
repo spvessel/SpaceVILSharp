@@ -5,6 +5,8 @@ using System.Drawing;
 using SpaceVIL;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace SpaceVIL
 {
@@ -44,6 +46,8 @@ namespace SpaceVIL
                     _cursor = CommonService.CursorArrow;
                     break;
             }
+            _imageHeight = 25;
+            _imageWidth = 25;
         }
 
         public CursorImage(Bitmap bitmap)
@@ -101,20 +105,40 @@ namespace SpaceVIL
 
             _imageWidth = bitmap.Width;
             _imageHeight = bitmap.Height;
-            List<byte> _map = new List<byte>();
-            Bitmap bmp = new Bitmap(bitmap);
-            for (int j = 0; j < bitmap.Height; j++)
+            int size = _imageWidth * _imageHeight;
+            BitmapData bitData = bitmap.LockBits(
+                new System.Drawing.Rectangle(Point.Empty, bitmap.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            int[] pixels = new int[size];
+            Marshal.Copy(bitData.Scan0, pixels, 0, size);
+            bitmap.UnlockBits(bitData);
+            byte[] result = new byte[size * 4];
+            int index = 0;
+            foreach (int pixel in pixels)
             {
-                for (int i = 0; i < bitmap.Width; i++)
-                {
-                    Color pixel = bmp.GetPixel(i, j);
-                    _map.Add(pixel.R);
-                    _map.Add(pixel.G);
-                    _map.Add(pixel.B);
-                    _map.Add(pixel.A);
-                }
+                byte a = (byte)((pixel & 0xFF000000) >> 24);
+                byte r = (byte)((pixel & 0x00FF0000) >> 16);
+                byte g = (byte)((pixel & 0x0000FF00) >> 8);
+                byte b = (byte)(pixel & 0x000000FF);
+                result[index++] = r;
+                result[index++] = g;
+                result[index++] = b;
+                result[index++] = a;
             }
-            return _map.ToArray();
+            return result;
+            
+            // Bitmap bmp = new Bitmap(bitmap);
+            // for (int j = 0; j < bitmap.Height; j++)
+            // {
+            //     for (int i = 0; i < bitmap.Width; i++)
+            //     {
+            //         Color pixel = bmp.GetPixel(i, j);
+            //         _map.Add(pixel.R);
+            //         _map.Add(pixel.G);
+            //         _map.Add(pixel.B);
+            //         _map.Add(pixel.A);
+            //     }
+            // }
+            // return _map.ToArray();
         }
     }
 }

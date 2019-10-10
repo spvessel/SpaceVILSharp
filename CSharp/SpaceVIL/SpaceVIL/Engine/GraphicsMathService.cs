@@ -118,13 +118,13 @@ namespace SpaceVIL
         {
             return new List<float[]>
             {
-                new float[] { x, y, 0.0f },
-                new float[] { x, y + h, 0.0f },
-                new float[] { x + w, y + h, 0.0f },
+                new float[] { x, y },
+                new float[] { x, y + h },
+                new float[] { x + w, y + h },
 
-                new float[] { x + w, y + h, 0.0f },
-                new float[] { x + w, y, 0.0f },
-                new float[] { x, y, 0.0f }
+                new float[] { x + w, y + h },
+                new float[] { x + w, y },
+                new float[] { x, y }
             };
         }
 
@@ -156,32 +156,36 @@ namespace SpaceVIL
                     cornerRadius.RightBottom = 0;
             }
 
+            if (cornerRadius.IsCornersZero()) {
+                return GetRectangle(width, height, x, y);
+            }
 
             List<float[]> triangles = new List<float[]>();
+            // triangles.Capacity = 100;
             //Начало координат в левом углу
 
             //1
-
-            triangles.AddRange(RectToTri(new PointF(cornerRadius.LeftTop + x, 0.0f + y), new PointF(width / 2f + x, height / 2f + y)));
-            triangles.AddRange(RectToTri(new PointF(0.0f + x, cornerRadius.LeftTop + y), new PointF(cornerRadius.LeftTop + x, height / 2f + y)));
+            triangles.AddRange(RectToTri(new PointF(cornerRadius.LeftTop + x, y), new PointF(width / 2f + x, height / 2f + y)));
+            // triangles.AddRange(RectToTri(new PointF(0.0f + x, cornerRadius.LeftTop + y), new PointF(cornerRadius.LeftTop + x, height / 2f + y)));
 
             //2
-            triangles.AddRange(RectToTri(new PointF(width / 2f + x, 0.0f + y), new PointF(width - cornerRadius.RightTop + x, height / 2f + y)));
-            triangles.AddRange(RectToTri(new PointF(width - cornerRadius.RightTop + x, cornerRadius.RightTop + y), new PointF(width + x, height / 2f + y)));
+            triangles.AddRange(RectToTri(new PointF(width / 2f + x, y), new PointF(width - cornerRadius.RightTop + x, height / 2f + y)));
+            // triangles.AddRange(RectToTri(new PointF(width - cornerRadius.RightTop + x, cornerRadius.RightTop + y), new PointF(width + x, height / 2f + y)));
 
             //3
             triangles.AddRange(RectToTri(new PointF(cornerRadius.LeftBottom + x, height / 2f + y), new PointF(width / 2f + x, height + y)));
-            triangles.AddRange(RectToTri(new PointF(0.0f + x, height / 2f + y), new PointF(cornerRadius.LeftBottom + x, height - cornerRadius.LeftBottom + y)));
+            // triangles.AddRange(RectToTri(new PointF(0.0f + x, height / 2f + y), new PointF(cornerRadius.LeftBottom + x, height - cornerRadius.LeftBottom + y)));
 
             //4
             triangles.AddRange(RectToTri(new PointF(width / 2f + x, height / 2f + y), new PointF(width - cornerRadius.RightBottom + x, height + y)));
-            triangles.AddRange(RectToTri(new PointF(width - cornerRadius.RightBottom + x, height / 2f + y), new PointF(width + x, height - cornerRadius.RightBottom + y)));
+            // triangles.AddRange(RectToTri(new PointF(width - cornerRadius.RightBottom + x, height / 2f + y), new PointF(width + x, height - cornerRadius.RightBottom + y)));
 
             float x0, y0;
             int quadrantInd;
 
             if (cornerRadius.RightBottom >= 1)
             {
+                triangles.AddRange(RectToTri(new PointF(width - cornerRadius.RightBottom + x, height / 2f + y), new PointF(width + x, height - cornerRadius.RightBottom + y)));
                 x0 = width - cornerRadius.RightBottom + x;
                 y0 = height - cornerRadius.RightBottom + y;
                 quadrantInd = 1;
@@ -190,6 +194,7 @@ namespace SpaceVIL
 
             if (cornerRadius.RightTop >= 1)
             {
+                triangles.AddRange(RectToTri(new PointF(width - cornerRadius.RightTop + x, cornerRadius.RightTop + y), new PointF(width + x, height / 2f + y)));
                 x0 = width - cornerRadius.RightTop + x;
                 y0 = cornerRadius.RightTop + y;
                 quadrantInd = 4;
@@ -198,6 +203,7 @@ namespace SpaceVIL
 
             if (cornerRadius.LeftTop >= 1)
             {
+                triangles.AddRange(RectToTri(new PointF(0.0f + x, cornerRadius.LeftTop + y), new PointF(cornerRadius.LeftTop + x, height / 2f + y)));
                 x0 = cornerRadius.LeftTop + x;
                 y0 = cornerRadius.LeftTop + y;
                 quadrantInd = 3;
@@ -206,6 +212,7 @@ namespace SpaceVIL
 
             if (cornerRadius.LeftBottom >= 1)
             {
+                triangles.AddRange(RectToTri(new PointF(0.0f + x, height / 2f + y), new PointF(cornerRadius.LeftBottom + x, height - cornerRadius.LeftBottom + y)));
                 x0 = cornerRadius.LeftBottom + x;
                 y0 = height - cornerRadius.LeftBottom + y;
                 quadrantInd = 2;
@@ -220,13 +227,13 @@ namespace SpaceVIL
             //Начало координат в левом верхнем углу
             List<float[]> tri = new List<float[]>();
 
-            tri.Add(new float[] { leftTop.X, leftTop.Y, 0.0f });
-            tri.Add(new float[] { leftTop.X, rightBottom.Y, 0.0f });
-            tri.Add(new float[] { rightBottom.X, rightBottom.Y, 0.0f });
+            tri.Add(new float[] { leftTop.X, leftTop.Y });
+            tri.Add(new float[] { leftTop.X, rightBottom.Y });
+            tri.Add(new float[] { rightBottom.X, rightBottom.Y });
 
-            tri.Add(new float[] { rightBottom.X, rightBottom.Y, 0.0f });
-            tri.Add(new float[] { rightBottom.X, leftTop.Y, 0.0f });
-            tri.Add(new float[] { leftTop.X, leftTop.Y, 0.0f });
+            tri.Add(new float[] { rightBottom.X, rightBottom.Y });
+            tri.Add(new float[] { rightBottom.X, leftTop.Y });
+            tri.Add(new float[] { leftTop.X, leftTop.Y });
 
             return tri;
         }
@@ -251,34 +258,34 @@ namespace SpaceVIL
             List<float[]> triangles = new List<float[]>();
             //Начало координат в углу
 
-            triangles.Add(new float[] { radius + x, height + y, 0.0f });
-            triangles.Add(new float[] { width - radius + x, y, 0.0f });
-            triangles.Add(new float[] { radius + x, y, 0.0f });
+            triangles.Add(new float[] { radius + x, height + y });
+            triangles.Add(new float[] { width - radius + x, y });
+            triangles.Add(new float[] { radius + x, y });
             //1
 
-            triangles.Add(new float[] { radius + x, height + y, 0.0f });
-            triangles.Add(new float[] { width - radius + x, height + y, 0.0f });
-            triangles.Add(new float[] { width - radius + x, y, 0.0f });
+            triangles.Add(new float[] { radius + x, height + y });
+            triangles.Add(new float[] { width - radius + x, height + y });
+            triangles.Add(new float[] { width - radius + x, y });
             //2
 
-            triangles.Add(new float[] { width - radius + x, height - radius + y, 0.0f });
-            triangles.Add(new float[] { width + x, radius + y, 0.0f });
-            triangles.Add(new float[] { width - radius + x, radius + y, 0.0f });
+            triangles.Add(new float[] { width - radius + x, height - radius + y });
+            triangles.Add(new float[] { width + x, radius + y });
+            triangles.Add(new float[] { width - radius + x, radius + y });
             //3
 
-            triangles.Add(new float[] { width - radius + x, height - radius + y, 0.0f });
-            triangles.Add(new float[] { width + x, height - radius + y, 0.0f });
-            triangles.Add(new float[] { width + x, radius + y, 0.0f });
+            triangles.Add(new float[] { width - radius + x, height - radius + y });
+            triangles.Add(new float[] { width + x, height - radius + y });
+            triangles.Add(new float[] { width + x, radius + y });
             //4
 
-            triangles.Add(new float[] { x, height - radius + y, 0.0f });
-            triangles.Add(new float[] { radius + x, radius + y, 0.0f });
-            triangles.Add(new float[] { x, radius + y, 0.0f });
+            triangles.Add(new float[] { x, height - radius + y });
+            triangles.Add(new float[] { radius + x, radius + y });
+            triangles.Add(new float[] { x, radius + y });
             //5
 
-            triangles.Add(new float[] { x, height - radius + y, 0.0f });
-            triangles.Add(new float[] { radius + x, height - radius + y, 0.0f });
-            triangles.Add(new float[] { radius + x, radius + y, 0.0f });
+            triangles.Add(new float[] { x, height - radius + y });
+            triangles.Add(new float[] { radius + x, height - radius + y });
+            triangles.Add(new float[] { radius + x, radius + y });
             //6
 
             if (radius < 1)
@@ -326,17 +333,17 @@ namespace SpaceVIL
             { //Шаг можно сделать больше 1 градуса, нужны тестирования
                 x2 = radius * (float)CosGrad(alf) + x0;
                 y2 = radius * (float)SinGrad(alf) + y0;
-                circleSect.Add(new float[] { x0, y0, 0.0f });
-                circleSect.Add(new float[] { x2, y2, 0.0f });
-                circleSect.Add(new float[] { x1, y1, 0.0f }); //против часовой стрелки
+                circleSect.Add(new float[] { x0, y0 });
+                circleSect.Add(new float[] { x2, y2 });
+                circleSect.Add(new float[] { x1, y1 }); //против часовой стрелки
                 x1 = x2;
                 y1 = y2;
             }
             x2 = radius * (float)CosGrad(lastAngle) + x0;
             y2 = radius * (float)SinGrad(lastAngle) + y0;
-            circleSect.Add(new float[] { x0, y0, 0.0f });
-            circleSect.Add(new float[] { x2, y2, 0.0f });
-            circleSect.Add(new float[] { x1, y1, 0.0f });
+            circleSect.Add(new float[] { x0, y0 });
+            circleSect.Add(new float[] { x2, y2 });
+            circleSect.Add(new float[] { x1, y1 });
 
             return circleSect;
         }
@@ -346,11 +353,14 @@ namespace SpaceVIL
                 return null;
 
             List<float[]> result = new List<float[]>();
+            List<float[]> triangles = item.GetTriangles();
 
-            foreach (var vector in item.GetTriangles())
+            foreach (var vector in triangles)
             {
                 float x = (vector[0] / (float)handler.GetWidth()) * 2.0f - 1.0f;
                 float y = (vector[1] / (float)handler.GetHeight() * 2.0f - 1.0f) * (-1.0f);
+                // float x = vector[0];
+                // float y = vector[1];
                 result.Add(new float[] { x, y, vector[2] });
             }
             return result;
@@ -388,14 +398,12 @@ namespace SpaceVIL
                 {
                     x_center,
                     y_center,
-                    0.0f
                 });
 
                 triangles.Add(new float[]
                 {
                     (float)(x_center + r / 2 * CosGrad(alpha)),
-                    (float)(y_center - r / 2 * SinGrad(alpha)),
-                    0.0f
+                    (float)(y_center - r / 2 * SinGrad(alpha))
                 });
 
                 alpha = alpha + 360.0f / n;
@@ -404,7 +412,6 @@ namespace SpaceVIL
                 {
                     (float)(x_center + r / 2 * CosGrad(alpha)),
                     (float)(y_center - r / 2 * SinGrad(alpha)),
-                    0.0f
                 });
             }
 
@@ -418,7 +425,6 @@ namespace SpaceVIL
                     {
                         (float)(x_center + r / 2 * CosGrad(alpha)),
                         (float)(y_center - r / 2 * SinGrad(alpha)),
-                        0.0f
                     });
                     if (count % 3 == 0)
                     {
@@ -437,15 +443,13 @@ namespace SpaceVIL
                     {
                         (float)(x_center + R / 2 * CosGrad(alpha)),
                         (float)(y_center - R / 2 * SinGrad(alpha)),
-                        0.0f
                     });
                     if (count % 3 == 0)
                     {
                         triangles.Add(new float[]
                         {
                             (float)(x_center + R / 2 * CosGrad(alpha)),
-                            (float)(y_center - R / 2 * SinGrad(alpha)),
-                            0.0f
+                            (float)(y_center - R / 2 * SinGrad(alpha))
                         });
                         count = 1;
                     }
@@ -473,15 +477,13 @@ namespace SpaceVIL
                 triangles.Add(new float[]
                 {
                     x_center,
-                    y_center,
-                    0.0f
+                    y_center
                 });
 
                 triangles.Add(new float[]
                 {
                     (float)(x_center + r / 2 * CosGrad(alpha)),
-                    (float)(y_center - r / 2 * SinGrad(alpha)),
-                    0.0f
+                    (float)(y_center - r / 2 * SinGrad(alpha))
                 });
 
                 alpha = alpha + 360.0f / n;
@@ -489,8 +491,7 @@ namespace SpaceVIL
                 triangles.Add(new float[]
                 {
                     (float)(x_center + r / 2 * CosGrad(alpha)),
-                    (float)(y_center - r / 2 * SinGrad(alpha)),
-                    0.0f
+                    (float)(y_center - r / 2 * SinGrad(alpha))
                 });
             }
 
@@ -514,15 +515,13 @@ namespace SpaceVIL
                 triangles.Add(new float[]
                 {
                     x_center,
-                    y_center,
-                    0.0f
+                    y_center
                 });
 
                 triangles.Add(new float[]
                 {
                     (float)(x_center + r * CosGrad(alpha)),
-                    (float)(y_center - r * SinGrad(alpha)),
-                    0.0f
+                    (float)(y_center - r * SinGrad(alpha))
                 });
 
                 alpha = alpha + 360.0f / n;
@@ -530,8 +529,7 @@ namespace SpaceVIL
                 triangles.Add(new float[]
                 {
                     (float)(x_center + r * CosGrad(alpha)),
-                    (float)(y_center - r * SinGrad(alpha)),
-                    0.0f
+                    (float)(y_center - r * SinGrad(alpha))
                 });
             }
 
@@ -560,15 +558,13 @@ namespace SpaceVIL
                 triangles.Add(new float[]
                 {
                     x_center,
-                    y_center,
-                    0.0f
+                    y_center
                 });
 
                 triangles.Add(new float[]
                 {
                     (float)(x_center + rX * CosGrad(alpha)),
-                    (float)(y_center - rY * SinGrad(alpha)),
-                    0.0f
+                    (float)(y_center - rY * SinGrad(alpha))
                 });
 
                 alpha = alpha + 360.0f / n;
@@ -576,8 +572,7 @@ namespace SpaceVIL
                 triangles.Add(new float[]
                 {
                     (float)(x_center + rX * CosGrad(alpha)),
-                    (float)(y_center - rY * SinGrad(alpha)),
-                    0.0f
+                    (float)(y_center - rY * SinGrad(alpha))
                 });
             }
 
@@ -595,9 +590,9 @@ namespace SpaceVIL
 
             List<float[]> figure = new List<float[]>();
 
-            figure.Add(new float[] { x + w / 2, y, 0.0f });
-            figure.Add(new float[] { x, y + h, 0.0f });
-            figure.Add(new float[] { x + w, y + h, 0.0f });
+            figure.Add(new float[] { x + w / 2, y });
+            figure.Add(new float[] { x, y + h });
+            figure.Add(new float[] { x + w, y + h });
 
             foreach (var crd in figure)
             {
@@ -612,13 +607,13 @@ namespace SpaceVIL
         internal static List<float[]> GetLine(float lenght, float thichness, int alpha)
         {
             List<float[]> figure = new List<float[]>();
-            figure.Add(new float[] { 0, 0, 0.0f });
-            figure.Add(new float[] { 0, thichness, 0.0f });
-            figure.Add(new float[] { 0 + lenght, thichness, 0.0f });
+            figure.Add(new float[] { 0, 0 });
+            figure.Add(new float[] { 0, thichness });
+            figure.Add(new float[] { 0 + lenght, thichness });
 
-            figure.Add(new float[] { lenght, thichness, 0.0f });
-            figure.Add(new float[] { lenght, 0, 0.0f });
-            figure.Add(new float[] { 0, 0, 0.0f });
+            figure.Add(new float[] { lenght, thichness });
+            figure.Add(new float[] { lenght, 0 });
+            figure.Add(new float[] { 0, 0 });
 
             //rotate
             float x0 = lenght / 2;
@@ -649,49 +644,49 @@ namespace SpaceVIL
             float y0 = (h - thickness) / 2;
 
             //center
-            figure.Add(new float[] { x0, y0, 0.0f });
-            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
-            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0, y0 });
+            figure.Add(new float[] { x0, y0 + thickness });
+            figure.Add(new float[] { x0 + thickness, y0 + thickness });
 
-            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
-            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
-            figure.Add(new float[] { x0, y0, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0 + thickness });
+            figure.Add(new float[] { x0 + thickness, y0 });
+            figure.Add(new float[] { x0, y0 });
 
             //top
-            figure.Add(new float[] { x0, 0, 0.0f });
-            figure.Add(new float[] { x0, y0, 0.0f });
-            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
+            figure.Add(new float[] { x0, 0 });
+            figure.Add(new float[] { x0, y0 });
+            figure.Add(new float[] { x0 + thickness, y0 });
 
-            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
-            figure.Add(new float[] { x0 + thickness, 0, 0.0f });
-            figure.Add(new float[] { x0, 0, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0 });
+            figure.Add(new float[] { x0 + thickness, 0 });
+            figure.Add(new float[] { x0, 0 });
 
             //bottom
-            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
-            figure.Add(new float[] { x0, h, 0.0f });
-            figure.Add(new float[] { x0 + thickness, h, 0.0f });
+            figure.Add(new float[] { x0, y0 + thickness });
+            figure.Add(new float[] { x0, h });
+            figure.Add(new float[] { x0 + thickness, h });
 
-            figure.Add(new float[] { x0 + thickness, h, 0.0f });
-            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
-            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0 + thickness, h });
+            figure.Add(new float[] { x0 + thickness, y0 + thickness });
+            figure.Add(new float[] { x0, y0 + thickness });
 
             //left
-            figure.Add(new float[] { 0, y0, 0.0f });
-            figure.Add(new float[] { 0, y0 + thickness, 0.0f });
-            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
+            figure.Add(new float[] { 0, y0 });
+            figure.Add(new float[] { 0, y0 + thickness });
+            figure.Add(new float[] { x0, y0 + thickness });
 
-            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
-            figure.Add(new float[] { x0, y0, 0.0f });
-            figure.Add(new float[] { 0, y0, 0.0f });
+            figure.Add(new float[] { x0, y0 + thickness });
+            figure.Add(new float[] { x0, y0 });
+            figure.Add(new float[] { 0, y0 });
 
             //right
-            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
-            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
-            figure.Add(new float[] { h, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0 });
+            figure.Add(new float[] { x0 + thickness, y0 + thickness });
+            figure.Add(new float[] { h, y0 + thickness });
 
-            figure.Add(new float[] { h, y0 + thickness, 0.0f });
-            figure.Add(new float[] { h, y0, 0.0f });
-            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
+            figure.Add(new float[] { h, y0 + thickness });
+            figure.Add(new float[] { h, y0 });
+            figure.Add(new float[] { x0 + thickness, y0 });
 
             //rotate
             x0 = w / 2;
@@ -730,31 +725,31 @@ namespace SpaceVIL
             float y0 = (h - thickness) / 2;
 
             //center
-            figure.Add(new float[] { x0, y0, 0.0f });
-            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
-            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
+            figure.Add(new float[] { x0, y0 });
+            figure.Add(new float[] { x0, y0 + thickness });
+            figure.Add(new float[] { x0 + thickness, y0 + thickness });
 
-            figure.Add(new float[] { x0 + thickness, y0 + thickness, 0.0f });
-            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
-            figure.Add(new float[] { x0, y0, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0 + thickness });
+            figure.Add(new float[] { x0 + thickness, y0 });
+            figure.Add(new float[] { x0, y0 });
 
             //top
-            figure.Add(new float[] { x0, 0, 0.0f });
-            figure.Add(new float[] { x0, y0, 0.0f });
-            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
+            figure.Add(new float[] { x0, 0 });
+            figure.Add(new float[] { x0, y0 });
+            figure.Add(new float[] { x0 + thickness, y0 });
 
-            figure.Add(new float[] { x0 + thickness, y0, 0.0f });
-            figure.Add(new float[] { x0 + thickness, 0, 0.0f });
-            figure.Add(new float[] { x0, 0, 0.0f });
+            figure.Add(new float[] { x0 + thickness, y0 });
+            figure.Add(new float[] { x0 + thickness, 0 });
+            figure.Add(new float[] { x0, 0 });
 
             //left
-            figure.Add(new float[] { 0, y0, 0.0f });
-            figure.Add(new float[] { 0, y0 + thickness, 0.0f });
-            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
+            figure.Add(new float[] { 0, y0 });
+            figure.Add(new float[] { 0, y0 + thickness });
+            figure.Add(new float[] { x0, y0 + thickness });
 
-            figure.Add(new float[] { x0, y0 + thickness, 0.0f });
-            figure.Add(new float[] { x0, y0, 0.0f });
-            figure.Add(new float[] { 0, y0, 0.0f });
+            figure.Add(new float[] { x0, y0 + thickness });
+            figure.Add(new float[] { x0, y0 });
+            figure.Add(new float[] { 0, y0 });
 
             //rotate
             x0 = w / 2;
@@ -829,7 +824,7 @@ namespace SpaceVIL
             List<float[]> result = new List<float[]>();
             for (int i = 0; i < shape.Count; i++)
             {
-                result.Add(new float[] { shape.ElementAt(i)[0], shape.ElementAt(i)[1], shape.ElementAt(i)[2] });
+                result.Add(new float[] { shape.ElementAt(i)[0], shape.ElementAt(i)[1] });
             }
             //to the left top corner
             foreach (var point in result)
@@ -872,24 +867,24 @@ namespace SpaceVIL
             // Начало координат в углу
 
             border.Add(new BorderSection(width - radius + x, y, radius + x, y, width / 2f + x, height + 1 + y)); //radius + x, height + y));
-            //triangles.add(new float[] { radius + x, height + y, 0.0f });
-            //    triangles.add(new float[] { width - radius + x, y, 0.0f });
-            //    triangles.add(new float[] { radius + x, y, 0.0f });
+            //triangles.add(new float[] { radius + x, height + y });
+            //    triangles.add(new float[] { width - radius + x, y });
+            //    triangles.add(new float[] { radius + x, y });
 
             border.Add(new BorderSection(width - radius + x, height + y, radius + x, height + y, width / 2f + x, y - 1)); //width - radius + x, y));
-            //    triangles.add(new float[] { radius + x, height + y, 0.0f });
-            //    triangles.add(new float[] { width - radius + x, height + y, 0.0f });
-            //triangles.add(new float[] { width - radius + x, y, 0.0f });
+            //    triangles.add(new float[] { radius + x, height + y });
+            //    triangles.add(new float[] { width - radius + x, height + y });
+            //triangles.add(new float[] { width - radius + x, y });
 
             border.Add(new BorderSection(width + x, height - radius + y, width + x, radius + y, x - 1, height / 2f + y)); //width - radius + x, height - radius + y));
-            //triangles.add(new float[] { width - radius + x, height - radius + y, 0.0f });
-            //    triangles.add(new float[] { width + x, height - radius + y, 0.0f });
-            //    triangles.add(new float[] { width + x, radius + y, 0.0f });
+            //triangles.add(new float[] { width - radius + x, height - radius + y });
+            //    triangles.add(new float[] { width + x, height - radius + y });
+            //    triangles.add(new float[] { width + x, radius + y });
 
             border.Add(new BorderSection(x, height - radius + y, x, radius + y, width + 1 + x, height / 2f + y)); //radius + x, radius + y));
-            //    triangles.add(new float[] { x, height - radius + y, 0.0f });
-            //triangles.add(new float[] { radius + x, radius + y, 0.0f });
-            //    triangles.add(new float[] { x, radius + y, 0.0f });
+            //    triangles.add(new float[] { x, height - radius + y });
+            //triangles.add(new float[] { radius + x, radius + y });
+            //    triangles.add(new float[] { x, radius + y });
 
             if (radius < 1)
                 return MakeBorder(border, thickness);
@@ -958,16 +953,16 @@ namespace SpaceVIL
             //Начало координат в левом углу
 
             //1
-            border.Add(new BorderSection(cornerRadius.LeftTop + x, 0.0f + y, width / 2f + x, 0.0f + y, width / 2f + x, height + y + 1));
-            border.Add(new BorderSection(0.0f + x, cornerRadius.LeftTop + y, 0.0f + x, height / 2f + y, width + 1 + x, height / 2f + y));
+            border.Add(new BorderSection(cornerRadius.LeftTop + x, y, width / 2f + x, y, width / 2f + x, height + y + 1));
+            border.Add(new BorderSection(0.0f + x, cornerRadius.LeftTop + y, x, height / 2f + y, width + 1 + x, height / 2f + y));
 
             //2
-            border.Add(new BorderSection(width / 2f + x, 0.0f + y, width - cornerRadius.RightTop + x, 0.0f + y, width / 2f + x, height + y + 1));
+            border.Add(new BorderSection(width / 2f + x, y, width - cornerRadius.RightTop + x, y, width / 2f + x, height + y + 1));
             border.Add(new BorderSection(width + x, height / 2f + y, width + x, cornerRadius.RightTop + y, x - 1, height / 2f + y));
 
             //3
             border.Add(new BorderSection(width / 2f + x, height + y, cornerRadius.LeftBottom + x, height + y, width / 2f, y - 1));
-            border.Add(new BorderSection(0.0f + x, height / 2f + y, 0.0f + x, height - cornerRadius.LeftBottom + y, width + 1 + x, height / 2f + y));
+            border.Add(new BorderSection(0.0f + x, height / 2f + y, x, height - cornerRadius.LeftBottom + y, width + 1 + x, height / 2f + y));
 
             //4
             border.Add(new BorderSection(width - cornerRadius.RightBottom + x, height + y, width / 2f + x, height + y, width / 2f, y - 1));
@@ -1071,8 +1066,8 @@ namespace SpaceVIL
             var ratioY = (boundH / img.Height);
             float ratio = ratioX < ratioY ? ratioX : ratioY;
 
-            int resW = (int)(img.Width * ratio);
             int resH = (int)(img.Height * ratio);
+            int resW = (int)(img.Width * ratio);
 
             var bmp = new Bitmap(resW, resH);
             var graphic = Graphics.FromImage(bmp);

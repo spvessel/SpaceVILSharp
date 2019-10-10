@@ -2,6 +2,7 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DisplayService;
+import com.spvessel.spacevil.Core.Area;
 import com.spvessel.spacevil.Core.Pointer;
 import com.spvessel.spacevil.Exceptions.SpaceVILException;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
@@ -81,8 +82,6 @@ final class GLWHandler {
         getPointer().setY(0);
     }
 
-    private Pointer defWindowPos = new Pointer(200, 50);
-
     void createWindow() throws SpaceVILException {
         // important!!! may be the best combination of WINDOW HINTS!!!
 
@@ -91,7 +90,6 @@ final class GLWHandler {
         glfwWindowHint(GLFW_SAMPLES, _coreWindow._msaa.getValue());
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         // glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE);
 
         if (resizeble)
@@ -152,10 +150,10 @@ final class GLWHandler {
             getPointer().setY((height - _coreWindow.getHeight()) / 2);
 
         } else {
-            _coreWindow.setXDirect(defWindowPos.getX());//200);
-            _coreWindow.setYDirect(defWindowPos.getY());//50);
-            getPointer().setX(defWindowPos.getX());//200);
-            getPointer().setY(defWindowPos.getY());//50);
+            _coreWindow.setXDirect(_coreWindow.getX());//200);
+            _coreWindow.setYDirect(_coreWindow.getY());//50);
+            getPointer().setX(_coreWindow.getX());//200);
+            getPointer().setY(_coreWindow.getY());//50);
         }
         glfwSetWindowSizeLimits(_window, _coreWindow.getMinWidth(), _coreWindow.getMinHeight(),
                 _coreWindow.getMaxWidth(), _coreWindow.getMaxHeight());

@@ -139,6 +139,7 @@ public class ElementsFactory {
     public static Style getTextAreaStyle() {
         Style style = new Style();
         style.background = new Color(0x555555);
+        // style.background = Color.RED;
         style.foreground = new Color(210, 210, 210);
         style.font = DefaultsService.getDefaultFont(12);
         style.widthPolicy = SizePolicy.EXPAND;
@@ -201,7 +202,7 @@ public class ElementsFactory {
     public static FileEntryTab getNewTab(String name) {
         FileEntryTab tab = new FileEntryTab(name);
         tab.setToolTip(name);
-        tab.setWidthPolicy(SizePolicy.EXPAND);
+        // tab.setWidthPolicy(SizePolicy.EXPAND);
         tab.setFontSize(12);
         tab.setBorderRadius(0);
         tab.setClosable(true);

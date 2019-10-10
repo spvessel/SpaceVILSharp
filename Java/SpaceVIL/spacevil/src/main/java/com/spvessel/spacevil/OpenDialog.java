@@ -1,8 +1,8 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.KeyMods;
 
 public abstract class OpenDialog extends DialogItem {
 
@@ -40,7 +40,7 @@ public abstract class OpenDialog extends DialogItem {
             updateWindow();
         });
         eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.R && args.mods.contains(KeyMods.CONTROL))
+            if (args.key == KeyCode.R && args.mods.contains(CommonService.getOsControlMod()))
                 updateWindow();
             else if (args.key == KeyCode.ESCAPE)
                 close();

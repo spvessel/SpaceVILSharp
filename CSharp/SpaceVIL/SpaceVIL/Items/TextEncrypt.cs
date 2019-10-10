@@ -180,30 +180,36 @@ namespace SpaceVIL
 
                 if (args.Mods != 0)
                 {
-                    switch (args.Mods)
+                    // switch (args.Mods)
+                    // {
+                    //     case KeyMods.Shift:
+                    if (args.Mods == KeyMods.Shift)
                     {
-                        case KeyMods.Shift:
-                            if (ShiftValCodes.Contains(args.Key))
+                        if (ShiftValCodes.Contains(args.Key))
+                        {
+                            if (!_isSelect)
                             {
-                                if (!_isSelect)
-                                {
-                                    _isSelect = true;
-                                    _selectFrom = _cursorPosition;
-                                }
-                            }
-                            break;
-                        case KeyMods.Control:
-                            if (args.Key == KeyCode.A || args.Key == KeyCode.a)
-                            {
-                                _selectFrom = 0;
-                                _cursorPosition = GetText().Length;
-                                ReplaceCursor();
-
                                 _isSelect = true;
+                                _selectFrom = _cursorPosition;
                             }
-                            break;
-                            //alt, super ?
+                        }
                     }
+                    //     break;
+                    // case control:
+                    if (args.Mods == CommonService.GetOsControlMod())
+                    {
+                        if (args.Key == KeyCode.A || args.Key == KeyCode.a)
+                        {
+                            _selectFrom = 0;
+                            _cursorPosition = GetText().Length;
+                            ReplaceCursor();
+
+                            _isSelect = true;
+                        }
+                    }
+                    // break;
+                    //alt, super ?
+                    // }
                 }
                 else
                 {
@@ -277,7 +283,7 @@ namespace SpaceVIL
         {
             int coord = 0;
             if (_textObject.GetLetPosArray() == null) return coord;
-            
+
             if (cPos > 0)
             {
                 coord = _textObject.GetLetPosArray()[cPos - 1];
@@ -581,7 +587,7 @@ namespace SpaceVIL
                 toReal = _cursorXMax;
 
             int width = toReal - fromReal + 1;
-            
+
             int w = GetTextWidth();
             if (_textObject.GetTextAlignment().HasFlag(ItemAlignment.Right) && (w < _cursorXMax))
                 _selectedArea.SetX(GetX() + GetWidth() - w + fromReal - GetPadding().Right -

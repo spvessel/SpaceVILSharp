@@ -11,7 +11,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class WrapArea : Prototype, IGrid
+    public class WrapArea : Prototype, IFreeLayout
     {
         internal Dictionary<IBaseItem, SelectionItem> _mapContent = new Dictionary<IBaseItem, SelectionItem>();
         private Object _lock = new Object();
@@ -349,37 +349,25 @@ namespace SpaceVIL
         public override void Clear()
         {
             RemoveAllItems();
+            UpdateLayout();
+            ItemListChanged?.Invoke();
         }
 
-        internal void RemoveAllItems()
+        private void RemoveAllItems()
         {
-            Monitor.Enter(_lock);
-            try
-            {
-                Unselect();
-                List<IBaseItem> list = GetItems();
+            Unselect();
+            List<IBaseItem> list = GetItems();
 
-                if (list == null || list.Count == 0)
-                    return;
+            if (list == null || list.Count == 0)
+                return;
 
-                while (list.Count != 0)
-                {
-                    (list.ElementAt(0) as SelectionItem).ClearContent();
-                    base.RemoveItem(list.ElementAt(0));
-                    list.RemoveAt(0);
-                }
-                _mapContent.Clear();
-                UpdateLayout();
-                ItemListChanged?.Invoke();
-            }
-            catch (Exception ex)
+            while (list.Count != 0)
             {
-                Console.WriteLine(ex.StackTrace);
+                (list.ElementAt(0) as SelectionItem).ClearContent();
+                base.RemoveItem(list.ElementAt(0));
+                list.RemoveAt(0);
             }
-            finally
-            {
-                Monitor.Exit(_lock);
-            }
+            _mapContent.Clear();
         }
 
         /// <summary>
@@ -433,7 +421,6 @@ namespace SpaceVIL
         public void UpdateLayout()
         {
             List<IBaseItem> list = GetItems();
-
             if (list == null || list.Count == 0 || _isUpdating)
                 return;
             _isUpdating = true;

@@ -8,5 +8,10 @@ import java.awt.Color;
 public interface InterfaceTextContainer {
     //TextItem getText();
     TextPrinter getLetTextures();
+
     Color getForeground();
+    
+    void setRemakeText(boolean value);
+
+    boolean isRemakeText();
 }

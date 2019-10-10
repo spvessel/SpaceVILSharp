@@ -18,7 +18,6 @@ namespace SpaceVIL.Core
         void InitElements();
         void SetStyle(Style style);
         Style GetCoreStyle();
-
         bool IsDrawable();
         void SetDrawable(bool value);
         bool IsVisible();
@@ -34,5 +33,7 @@ namespace SpaceVIL.Core
         void SetShadow(int radius, int x, int y, Color color);
         int[] GetConfines();
         void Release();
+        bool IsRemakeRequest();
+        void SetRemakeRequest(bool value);
     }
 }

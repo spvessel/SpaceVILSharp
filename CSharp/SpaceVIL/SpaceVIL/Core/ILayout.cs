@@ -14,11 +14,8 @@ namespace SpaceVIL.Core
     {
         void UpdateLayout();
     }
-    public interface IGrid
+    public interface IFreeLayout
     {
         void UpdateLayout();
-    }
-    public interface IFree
-    {
     }
 }

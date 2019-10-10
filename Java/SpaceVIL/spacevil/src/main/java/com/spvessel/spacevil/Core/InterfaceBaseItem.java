@@ -63,4 +63,8 @@ public interface InterfaceBaseItem
     int[] getConfines();
 
     void release();
+
+    boolean isRemakeRequest();
+
+    void setRemakeRequest(boolean value);
 }

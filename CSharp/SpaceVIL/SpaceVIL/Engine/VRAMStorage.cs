@@ -5,19 +5,19 @@ using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
-    internal static class VRAMStorage
+    internal sealed class VramStorage<TKey, TValue> where TValue : IVramResource
     {
-        internal static Dictionary<IImageItem, VRAMTexture> ImageStorage = new Dictionary<IImageItem, VRAMTexture>();
-        internal static List<IImageItem> ImageToDelete = new List<IImageItem>();
+        internal Dictionary<TKey, TValue> ResourceStorage = new Dictionary<TKey, TValue>();
+        internal List<TKey> FlushList = new List<TKey>();
 
-        internal static bool AddToDelete(IImageItem image)
+        internal bool FlushResource(TKey resource)
         {
             Monitor.Enter(StorageLocker);
             try
             {
-                if (!ImageToDelete.Contains(image))
+                if (!FlushList.Contains(resource))
                 {
-                    ImageToDelete.Add(image);
+                    FlushList.Add(resource);
                     return true;
                 }
                 return false;
@@ -28,21 +28,12 @@ namespace SpaceVIL
             }
         }
 
-        internal static void Flush()
+        internal void Flush()
         {
             Monitor.Enter(StorageLocker);
             try
             {
-                while (ImageToDelete.Count > 0)
-                {
-                    IImageItem image = ImageToDelete[0];
-                    if (ImageStorage.ContainsKey(image))
-                    {
-                        ImageStorage[image].DeleteTexture();
-                        ImageStorage.Remove(image);
-                    }
-                    ImageToDelete.RemoveAt(0);
-                }
+                FlushStorage(FlushList, ResourceStorage);
             }
             finally
             {
@@ -50,34 +41,31 @@ namespace SpaceVIL
             }
         }
 
-        internal static Object StorageLocker = new Object();
-        internal static VRAMTexture GetTexture(IImageItem image)
+        private void FlushStorage<T, F>(List<T> flushList, Dictionary<T, F> storage)
+            where F : IVramResource
+        {
+            foreach (T item in flushList)
+            {
+                if (storage.ContainsKey(item))
+                {
+                    storage[item].Clear();
+                    storage.Remove(item);
+                }
+            }
+            flushList.Clear();
+        }
+
+        internal Object StorageLocker = new Object();
+
+        internal TValue GetResource(TKey resource)
         {
             Monitor.Enter(StorageLocker);
             try
             {
-                if (ImageStorage.ContainsKey(image))
-                    return ImageStorage[image];
+                if (ResourceStorage.ContainsKey(resource))
+                    return ResourceStorage[resource];
                 else
-                    return null;
-            }
-            finally
-            {
-                Monitor.Exit(StorageLocker);
-            }
-        }
-        internal static bool ReplaceTexture(IImageItem image, VRAMTexture tex)
-        {
-            Monitor.Enter(StorageLocker);
-            try
-            {
-                if (ImageStorage.ContainsKey(image))
-                {
-                    ImageStorage[image].Clear();
-                    ImageStorage.Remove(image);
-                    ImageStorage.Add(image, tex);
-                }
-                return true;
+                    return default(TValue);
             }
             finally
             {
@@ -85,49 +73,33 @@ namespace SpaceVIL
             }
         }
 
-        internal static bool AddTexture(IImageItem image, VRAMTexture tex)
+        internal bool AddResource(TKey resource, TValue vramObject)
         {
-            Monitor.Enter(StorageLocker);
-            try
-            {
-                if (ImageStorage.ContainsKey(image))
-                    return false;
-                else
-                    ImageStorage.Add(image, tex);
-                return true;
-            }
-            finally
-            {
-                Monitor.Exit(StorageLocker);
-            }
-        }
-
-        internal static bool DeleteTexture(IImageItem image)
-        {
-            Monitor.Enter(StorageLocker);
-            try
-            {
-                if (ImageStorage.ContainsKey(image))
-                {
-                    ImageStorage[image].DeleteTexture();
-                    ImageStorage.Remove(image);
-                    return true;
-                }
+            if (ResourceStorage.ContainsKey(resource))
                 return false;
-            }
-            finally
-            {
-                Monitor.Exit(StorageLocker);
-            }
+            else
+                ResourceStorage.Add(resource, vramObject);
+            return true;
         }
 
-        internal static void Clear()
+        internal bool DeleteResource(TKey resource)
         {
-            foreach (VRAMTexture tex in ImageStorage.Values)
+            if (ResourceStorage.ContainsKey(resource))
             {
-                tex.Clear();
+                ResourceStorage[resource].Clear();
+                ResourceStorage.Remove(resource);
+                return true;
             }
-            ImageStorage.Clear();
+            return false;
+        }
+
+        internal void Clear()
+        {
+            foreach (TValue resource in ResourceStorage.Values)
+            {
+                resource.Clear();
+            }
+            ResourceStorage.Clear();
         }
     }
 }

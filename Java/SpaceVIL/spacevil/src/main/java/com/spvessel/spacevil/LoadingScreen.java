@@ -38,7 +38,7 @@ public class LoadingScreen extends Prototype {
         setItemName("LoadingScreen_" + count++);
         setPassEvents(false);
         _loadIcon = new ImageItem();
-        if (_loadIcon.getPixMapImage() == null)
+        if (_loadIcon.getImage() == null)
             _loadIcon
                     .setImage(DefaultsService.getDefaultImage(EmbeddedImage.LOAD_CIRCLE, EmbeddedImageSize.SIZE_64X64));
         _text_object = new Label("0%");

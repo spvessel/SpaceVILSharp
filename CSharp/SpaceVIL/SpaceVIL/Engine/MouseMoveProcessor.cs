@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Glfw3;
 using SpaceVIL.Common;
@@ -36,7 +37,7 @@ namespace SpaceVIL
 
                     if (handlerContainerSides.HasFlag(Side.Left))
                     {
-                        if (!(_commonProcessor.Window.GetMinWidth() == _commonProcessor.Window.GetWidth() 
+                        if (!(_commonProcessor.Window.GetMinWidth() == _commonProcessor.Window.GetWidth()
                             && (_commonProcessor.PtrRelease.GetX() - _commonProcessor.PtrPress.GetX()) >= 0))
                         {
                             int x5 = xHandler - _commonProcessor.XGlobal + (int)xpos - SpaceVILConstants.BorderCursorTolerance;
@@ -46,7 +47,7 @@ namespace SpaceVIL
                     }
                     if (handlerContainerSides.HasFlag(Side.Right))
                     {
-                        if (!(_commonProcessor.PtrRelease.GetX() < _commonProcessor.Window.GetMinWidth() 
+                        if (!(_commonProcessor.PtrRelease.GetX() < _commonProcessor.Window.GetMinWidth()
                             && _commonProcessor.Window.GetWidth() == _commonProcessor.Window.GetMinWidth()))
                         {
                             w = xRelease;
@@ -55,7 +56,7 @@ namespace SpaceVIL
                     }
                     if (handlerContainerSides.HasFlag(Side.Top))
                     {
-                        if (!(_commonProcessor.Window.GetMinHeight() == _commonProcessor.Window.GetHeight() 
+                        if (!(_commonProcessor.Window.GetMinHeight() == _commonProcessor.Window.GetHeight()
                             && (_commonProcessor.PtrRelease.GetY() - _commonProcessor.PtrPress.GetY()) >= 0))
                         {
                             if (CommonService.GetOSType() == OSType.Mac)
@@ -73,7 +74,7 @@ namespace SpaceVIL
                     }
                     if (handlerContainerSides.HasFlag(Side.Bottom))
                     {
-                        if (!(_commonProcessor.PtrRelease.GetY() < _commonProcessor.Window.GetMinHeight() 
+                        if (!(_commonProcessor.PtrRelease.GetY() < _commonProcessor.Window.GetMinHeight()
                             && _commonProcessor.Window.GetHeight() == _commonProcessor.Window.GetMinHeight()))
                         {
                             if (CommonService.GetOSType() == OSType.Mac)
@@ -112,7 +113,9 @@ namespace SpaceVIL
                     int yClick = _commonProcessor.PtrClick.GetY();
                     _commonProcessor.DraggableItem = _commonProcessor.IsInListHoveredItems<IDraggable>();
                     Prototype anchor = _commonProcessor.IsInListHoveredItems<WindowAnchor>();
-                    if (_commonProcessor.DraggableItem != null && _commonProcessor.DraggableItem.Equals(_commonProcessor.HoveredItem))
+                    if (_commonProcessor.DraggableItem != null
+                        && _commonProcessor.DraggableItem.Equals(_commonProcessor.HoveredItem)
+                        )
                     {
                         _commonProcessor.Events.SetEvent(InputEventType.MouseDrag);
                         _commonProcessor.DraggableItem.EventMouseDrag?.Invoke(_commonProcessor.HoveredItem, _commonProcessor.Margs);
@@ -129,7 +132,7 @@ namespace SpaceVIL
                     }
                 }
 
-                if (_commonProcessor.HoveredItem != null 
+                if (_commonProcessor.HoveredItem != null
                     && !_commonProcessor.HoveredItem.GetHoverVerification((float)xpos, (float)ypos))
                 {
                     _commonProcessor.HoveredItem.SetMouseHover(false);
@@ -141,10 +144,14 @@ namespace SpaceVIL
             {
                 _commonProcessor.PtrPress.SetX(_commonProcessor.PtrRelease.GetX());
                 _commonProcessor.PtrPress.SetY(_commonProcessor.PtrRelease.GetY());
+
+                Prototype lastHovered = _commonProcessor.HoveredItem;
+                List<Prototype> tmpList = new List<Prototype>(_commonProcessor.UnderHoveredItems);
+
                 if (_commonProcessor.GetHoverPrototype(_commonProcessor.PtrRelease.GetX(), _commonProcessor.PtrRelease.GetY(),
                     InputEventType.MouseMove))
                 {
-                    if (_commonProcessor.HoveredItem != null 
+                    if (_commonProcessor.HoveredItem != null
                         && !(String.Empty.Equals(_commonProcessor.HoveredItem.GetToolTip())))
                     {
                         _commonProcessor.Tooltip.InitTimer(true);
@@ -154,8 +161,31 @@ namespace SpaceVIL
                     {
                         (popup as PopUpMessage).HoldSelf(true);
                     }
+
+                    if (lastHovered != null)
+                    {
+                        if (!_commonProcessor.UnderHoveredItems.Contains(lastHovered))
+                            lastHovered.SetMouseHover(false);
+                        List<Prototype> uniqueList = GetUniqueList(tmpList, _commonProcessor.UnderHoveredItems);
+                        foreach (Prototype item in uniqueList)
+                        {
+                            item.SetMouseHover(false);
+                        }
+                    }
                 }
             }
+        }
+
+        private List<T> GetUniqueList<T>(List<T> firstList, List<T> secondList)
+        {
+            HashSet<T> hashset = new HashSet<T>(secondList);
+            List<T> result = new List<T>();
+            foreach (T item in firstList)
+            {
+                if (!hashset.Contains(item))
+                    result.Add(item);
+            }
+            return result;
         }
     }
 }

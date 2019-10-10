@@ -113,8 +113,8 @@ namespace SpaceVIL.Core
     public enum GeometryEventType
     {
         Focused = 0x01,
-        Moved_X = 0x02,
-        Moved_Y = 0x04,
+        MovedX = 0x02,
+        MovedY = 0x04,
         ResizeWidth = 0x08,
         ResizeHeight = 0x10
     }
@@ -406,5 +406,9 @@ namespace SpaceVIL.Core
         ResizeX = 0x00036005,
         ResizeY = 0x00036006,
         ResizeXY = 0x00036007
+    }
+    public enum RenderType
+    {
+        IfNeeded, Periodic, Always
     }
 }

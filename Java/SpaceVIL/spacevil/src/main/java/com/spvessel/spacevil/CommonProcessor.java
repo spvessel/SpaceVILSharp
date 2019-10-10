@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceFloating;
 import com.spvessel.spacevil.Core.MouseArgs;
@@ -20,7 +21,7 @@ import com.spvessel.spacevil.Flags.InputEventType;
 
 final class CommonProcessor {
     WindowProcessor wndProcessor;
-    ToolTip toolTip;
+    ToolTipItem toolTip;
     ActionManagerAssigner manager;
     GLWHandler handler;
     CoreWindow window;
@@ -52,7 +53,7 @@ final class CommonProcessor {
         wndProcessor = new WindowProcessor(this);
     }
 
-    void initProcessor(GLWHandler handler, ToolTip toolTip) {
+    void initProcessor(GLWHandler handler, ToolTipItem toolTip) {
         this.handler = handler;
         this.toolTip = toolTip;
         window = handler.getCoreWindow();
@@ -64,12 +65,11 @@ final class CommonProcessor {
 
     boolean getHoverPrototype(float xpos, float ypos, InputEventType action) {
         inputLocker = true;
-        List<Prototype> queue = new LinkedList<>();
         underHoveredItems.clear();
 
         List<InterfaceBaseItem> layout_box_of_items = new LinkedList<InterfaceBaseItem>();
         layout_box_of_items.add(rootContainer);
-        layout_box_of_items.addAll(getInnerItems(rootContainer));
+        layout_box_of_items.addAll(getInnerItems(rootContainer, xpos, ypos));
 
         for (InterfaceBaseItem item : ItemsLayoutBox.getLayoutFloatItems(guid)) {
             if (!item.isVisible() || !item.isDrawable())
@@ -77,29 +77,29 @@ final class CommonProcessor {
             layout_box_of_items.add(item);
 
             if (item instanceof Prototype)
-                layout_box_of_items.addAll(getInnerItems((Prototype) item));
+                layout_box_of_items.addAll(getInnerItems((Prototype) item, xpos, ypos));
         }
         inputLocker = false;
 
+        List<Prototype> queue = new LinkedList<>();
+
         for (InterfaceBaseItem item : layout_box_of_items) {
             if (item instanceof Prototype) {
-                Prototype tmp = (Prototype) item;
-                if (!tmp.isVisible() || !tmp.isDrawable())
-                    continue;
-                if (tmp.getHoverVerification(xpos, ypos)) {
-                    queue.add(tmp);
+                Prototype prototype = (Prototype) item;
+                if (prototype.getHoverVerification(xpos, ypos)) {
+                    queue.add(prototype);
                 } else {
-                    tmp.setMouseHover(false);
+                    prototype.setMouseHover(false);
                     if (item instanceof InterfaceFloating && action == InputEventType.MOUSE_PRESS) {
-                        InterfaceFloating float_item = (InterfaceFloating) item;
-                        if (float_item.isOutsideClickClosable()) {
+                        InterfaceFloating floatItem = (InterfaceFloating) item;
+                        if (floatItem.isOutsideClickClosable()) {
                             if (item instanceof ContextMenu) {
-                                ContextMenu to_close = (ContextMenu) item;
-                                if (to_close.closeDependencies(margs)) {
-                                    float_item.hide();
+                                ContextMenu cmToClose = (ContextMenu) item;
+                                if (cmToClose.closeDependencies(margs)) {
+                                    floatItem.hide();
                                 }
                             } else {
-                                float_item.hide();
+                                floatItem.hide(margs);
                             }
                         }
                     }
@@ -114,7 +114,8 @@ final class CommonProcessor {
 
             hoveredItem = queue.get(queue.size() - 1);
             hoveredItem.setMouseHover(true);
-            glfwSetCursor(handler.getWindowId(), hoveredItem.getCursor().getCursor());
+            CommonService.currentCursor = hoveredItem.getCursor();
+            glfwSetCursor(handler.getWindowId(), CommonService.currentCursor.getCursor());
 
             if (window.isBorderHidden && window.isResizable && !window.isMaximized) {
                 int handlerContainerWidth = rootContainer.getWidth();
@@ -172,6 +173,25 @@ final class CommonProcessor {
                     continue;
                 list.add(item);
                 list.addAll(getInnerItems(leaf));
+            }
+        }
+        return list;
+    }
+
+    private List<InterfaceBaseItem> getInnerItems(Prototype root, float xpos, float ypos) {
+        List<InterfaceBaseItem> list = new LinkedList<InterfaceBaseItem>();
+        List<InterfaceBaseItem> rootItems = root.getItems();
+
+        for (InterfaceBaseItem item : rootItems) {
+            if (!item.isVisible() || !item.isDrawable())
+                continue;
+            if (item instanceof Prototype) {
+                Prototype leaf = (Prototype) item;
+                if (leaf.isDisabled())
+                    continue;
+                if (leaf.getHoverVerification(xpos, ypos))
+                    list.add(item);
+                list.addAll(getInnerItems(leaf, xpos, ypos));
             }
         }
         return list;

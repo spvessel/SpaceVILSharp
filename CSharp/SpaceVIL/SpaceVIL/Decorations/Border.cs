@@ -83,6 +83,7 @@ namespace SpaceVIL.Decorations
         {
             SetFill(Color.Transparent);
             SetThickness(-1);
+            SetRadius(new CornerRadius());
         }
 
         /// <summary>

@@ -368,7 +368,7 @@ namespace SpaceVIL
 
         private void ClearListBox()
         {
-            _fileList.GetArea().RemoveAllItems();
+            _fileList.GetArea().Clear();
         }
 
         private Dictionary<String, String[]> _extensionFilter = new Dictionary<String, String[]>();

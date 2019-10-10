@@ -1,12 +1,10 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Flags.HorizontalDirection;
-import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.OSType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 import java.awt.*;
@@ -18,7 +16,7 @@ public class TitleBar extends WindowAnchor {
     private static int count = 0;
     private HorizontalStack _layout;
     public HorizontalDirection direction = HorizontalDirection.FROM_LEFT_TO_RIGHT;
-    private Label _text_object;
+    private Label _textObject;
     private ImageItem _icon;
 
     /**
@@ -63,8 +61,8 @@ public class TitleBar extends WindowAnchor {
         count++;
 
         _layout = new HorizontalStack();
-        _text_object = new Label();
-        _text_object.isFocusable = false;
+        _textObject = new Label();
+        _textObject.isFocusable = false;
         _minimize = new ButtonCore();
         _minimize.isFocusable = false;
         _maximize = new ButtonCore();
@@ -79,6 +77,10 @@ public class TitleBar extends WindowAnchor {
         setStyle(DefaultsService.getDefaultStyle(TitleBar.class));
         // ItemState state = new ItemState(new Color(255, 255, 255, 100));
         // _text_object.addItemState(ItemStateType.HOVERED, state);
+
+        eventMouseDoubleClick.add((sender, args) -> {
+            getHandler().maximize();
+        });
     }
 
     /**
@@ -107,79 +109,79 @@ public class TitleBar extends WindowAnchor {
      * Text alignment in the TitleBar
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        _text_object.setTextAlignment(alignment);
+        _textObject.setTextAlignment(alignment);
     }
 
     public void setTextAlignment(List<ItemAlignment> alignment) {
-        _text_object.setTextAlignment(alignment);
+        _textObject.setTextAlignment(alignment);
     }
 
     /**
      * Text margin in the TitleBar
      */
     public void setTextMargin(Indents margin) {
-        _text_object.setMargin(margin);
+        _textObject.setMargin(margin);
     }
 
     /**
      * Text font parameters in the TitleBar
      */
     public void setFont(Font font) {
-        _text_object.setFont(font);
+        _textObject.setFont(font);
     }
 
     public void setFontSize(int size) {
-        _text_object.setFontSize(size);
+        _textObject.setFontSize(size);
     }
 
     public void setFontStyle(int style) {
-        _text_object.setFontStyle(style);
+        _textObject.setFontStyle(style);
     }
 
     public void setFontFamily(String font_family) {
-        _text_object.setFontFamily(font_family);
+        _textObject.setFontFamily(font_family);
     }
 
     public Font getFont() {
-        return _text_object.getFont();
+        return _textObject.getFont();
     }
 
     /**
      * TitleBar text
      */
     public void setText(String text) {
-        _text_object.setText(text);
+        _textObject.setText(text);
     }
 
     public String getText() {
-        return _text_object.getText();
+        return _textObject.getText();
     }
 
     /**
      * Text color in the TitleBar
      */
     public void setForeground(Color color) {
-        _text_object.setForeground(color);
+        _textObject.setForeground(color);
     }
 
     public void setForeground(int r, int g, int b) {
-        _text_object.setForeground(r, g, b);
+        _textObject.setForeground(r, g, b);
     }
 
     public void setForeground(int r, int g, int b, int a) {
-        _text_object.setForeground(r, g, b, a);
+        _textObject.setForeground(r, g, b, a);
     }
 
     public void setForeground(float r, float g, float b) {
-        _text_object.setForeground(r, g, b);
+        _textObject.setForeground(r, g, b);
     }
 
     public void setForeground(float r, float g, float b, float a) {
-        _text_object.setForeground(r, g, b, a);
+        _textObject.setForeground(r, g, b, a);
     }
 
     public Color getForeground() {
-        return _text_object.getForeground();
+        return _textObject.getForeground();
     }
 
     /**
@@ -188,9 +190,6 @@ public class TitleBar extends WindowAnchor {
     @Override
     public void initElements() {
         addItem(_layout);
-
-        // text
-        // setFont(new Font(new FontFamily("Open Sans Light"), 16, FontStyle.Bold));
 
         // _close
         _close.eventMouseClick.add((sender, args) -> {
@@ -203,31 +202,30 @@ public class TitleBar extends WindowAnchor {
         });
 
         // _maximize
-        if (CommonService.getOSType() != OSType.MAC) {
-            _maximize.eventMouseClick.add((sender, args) -> {
-                getHandler().maximize();
-            });
-        } else {
-            _maximize.setVisible(false);
-            _maximize.setDrawable(false);
-        }
+        _maximize.eventMouseClick.add((sender, args) -> {
+            getHandler().maximize();
+        });
 
         // adding
         switch (direction) {
         case FROM_LEFT_TO_RIGHT:
-            _layout.addItems(_icon, _text_object, _minimize, _maximize, _close);
+            _layout.addItems(_icon, _textObject, _minimize, _maximize, _close);
             break;
         case FROM_RIGHT_TO_LEFT:
-            _text_object.setTextAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-            _layout.addItems(_close, _minimize, _maximize, _icon, _text_object);
+            _textObject.setTextAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+            _layout.addItems(_close, _minimize, _maximize, _icon, _textObject);
             break;
         default:
-            _layout.addItems(_icon, _text_object, _minimize, _maximize, _close);
+            _layout.addItems(_icon, _textObject, _minimize, _maximize, _close);
             break;
         }
         _minimize.setPassEvents(false);
         _maximize.setPassEvents(false);
         _close.setPassEvents(false);
+
+        _maximize.eventMouseClick.add((sender, args) -> {
+            System.out.println(_maximize.isFocusable + " " + _minimize.isFocusable + " " + _close.isFocusable + " ");
+        });
     }
 
     /**

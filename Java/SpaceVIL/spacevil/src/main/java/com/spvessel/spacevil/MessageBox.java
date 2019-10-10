@@ -226,10 +226,10 @@ public class MessageBox extends DialogWindow {
 
     @Override
     public void close() {
+        super.close();
+        
         if (onCloseDialog != null)
             onCloseDialog.execute();
-
-        super.close();
     }
 
     public void setStyle(Style style) {

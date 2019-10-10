@@ -34,10 +34,9 @@ namespace SpaceVIL
         /// <summary>
         /// Make rectangle with width, height, X, Y
         /// </summary>
-        public override List<float[]> MakeShape()
+        public override void MakeShape()
         {
-            SetTriangles(GraphicsMathService.GetRoundSquare(_border_radius, GetWidth(), GetHeight(), GetX(), GetY()));
-            return GraphicsMathService.ToGL(this, GetHandler());
+            SetTriangles(GraphicsMathService.GetRoundSquare(_border_radius, GetWidth(), GetHeight(), 0, 0));
         }
     }
 }

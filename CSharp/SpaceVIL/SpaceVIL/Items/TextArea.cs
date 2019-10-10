@@ -582,9 +582,9 @@ namespace SpaceVIL
             return _area.IsWrapText();
         }
 
-        public void SetWrapText(bool wrapText)
+        public void SetWrapText(bool value)
         {
-            _area.SetWrapText(wrapText);
+            _area.SetWrapText(value);
         }
     }
 }

@@ -7,6 +7,8 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -22,7 +24,12 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     }
 
     private static int count = 0;
-    private byte[] _bitmap;
+    // private byte[] _bitmap;
+    private BufferedImage _image = null;
+
+    public BufferedImage getImage() {
+        return _image;
+    }
 
     private float _angleRotation = 0.0f;
 
@@ -59,8 +66,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         this();
         if (picture == null)
             return;
-        _bitmap = createByteImage(picture);
-        picture.flush();
+        setImage(picture);
     }
 
     /**
@@ -74,38 +80,37 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     /**
      * Returns the image as byte array
      */
-    public byte[] getPixMapImage() {
-        return _bitmap;
-    }
+    // public byte[] getPixMapImage() {
+    //     return _bitmap;
+    // }
 
-    protected byte[] createByteImage(BufferedImage picture) {
-        try {
-            _imageWidth = picture.getWidth();
-            _imageHeight = picture.getHeight();
-            List<Byte> bmp = new LinkedList<Byte>();
-            for (int j = picture.getHeight() - 1; j >= 0; j--) {
-                for (int i = 0; i < picture.getWidth(); i++) {
-                    byte[] bytes = ByteBuffer.allocate(4).putInt(picture.getRGB(i, j)).array();
-                    bmp.add(bytes[1]);
-                    bmp.add(bytes[2]);
-                    bmp.add(bytes[3]);
-                    bmp.add(bytes[0]);
-                }
-            }
-            byte[] result = new byte[bmp.size()];
-            int index = 0;
-            for (Byte var : bmp) {
-                result[index] = var;
-                index++;
-            }
-            setNew(true);
-            return result;
-        } catch (Exception ex) {
-            System.out.println("Create byte image");
-            ex.printStackTrace();
-            return null;
-        }
-    }
+    // protected byte[] createByteImage(BufferedImage picture) {
+    //     try {
+    //         _imageWidth = picture.getWidth();
+    //         _imageHeight = picture.getHeight();
+    //         List<Byte> bmp = new LinkedList<Byte>();
+    //         for (int j = picture.getHeight() - 1; j >= 0; j--) {
+    //             for (int i = 0; i < picture.getWidth(); i++) {
+    //                 byte[] bytes = ByteBuffer.allocate(4).putInt(picture.getRGB(i, j)).array();
+    //                 bmp.add(bytes[1]);
+    //                 bmp.add(bytes[2]);
+    //                 bmp.add(bytes[3]);
+    //                 bmp.add(bytes[0]);
+    //             }
+    //         }
+    //         byte[] result = new byte[bmp.size()];
+    //         int index = 0;
+    //         for (Byte var : bmp) {
+    //             result[index] = var;
+    //             index++;
+    //         }
+    //         return result;
+    //     } catch (Exception ex) {
+    //         System.out.println("Create byte image");
+    //         ex.printStackTrace();
+    //         return null;
+    //     }
+    // }
 
     private int _imageWidth;
     private int _imageHeight;
@@ -130,9 +135,13 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     public void setImage(BufferedImage image) {
         if (image == null)
             return;
-        _bitmap = createByteImage(image);
-        image.flush();
-        if (_isKeepAspectRatio && _bitmap != null)
+        _image = ImageItem.cloneImage(image);
+        _imageWidth = image.getWidth();
+        _imageHeight = image.getHeight();
+        // _bitmap = createByteImage(image);
+        // image.flush();
+        // if (_isKeepAspectRatio && _bitmap != null)
+        if (_isKeepAspectRatio && _image != null)
             applyAspectRatio();
         UpdateLayout();
     }
@@ -153,7 +162,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         _colorOverlay = color;
         _isOverlay = overlay;
     }
-    
+
     public void setColorOverlay(boolean overlay) {
         _isOverlay = overlay;
     }
@@ -182,7 +191,8 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     public void setHeight(int height) {
         super.setHeight(height);
         area.setHeight(height);
-        if (_isKeepAspectRatio && _bitmap != null)
+        // if (_isKeepAspectRatio && _bitmap != null)
+        if (_isKeepAspectRatio && _image != null)
             applyAspectRatio();
         UpdateLayout();
     }
@@ -191,7 +201,8 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     public void setWidth(int width) {
         super.setWidth(width);
         area.setWidth(width);
-        if (_isKeepAspectRatio && _bitmap != null)
+        // if (_isKeepAspectRatio && _bitmap != null)
+        if (_isKeepAspectRatio && _image != null)
             applyAspectRatio();
         UpdateLayout();
     }
@@ -226,6 +237,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     void UpdateLayout() {
         UpdateVerticalPosition();
         UpdateHorizontalPosition();
+        setNew(true);
     }
 
     private void UpdateHorizontalPosition() {
@@ -254,7 +266,9 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
 
     @Override
     public void release() {
-        VRAMStorage.addToDelete(this);
+        // VRAMStorage.addTextureToDelete(this);
+        if (_image != null)
+            _image.flush();
     }
 
     private Lock _lock = new ReentrantLock();
@@ -276,5 +290,12 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         } finally {
             _lock.unlock();
         }
+    }
+
+    static private BufferedImage cloneImage(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(bi.getRaster().createCompatibleWritableRaster());
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 }

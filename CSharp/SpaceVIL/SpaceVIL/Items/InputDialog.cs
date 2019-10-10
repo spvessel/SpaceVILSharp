@@ -46,7 +46,10 @@ namespace SpaceVIL
             EventKeyPress += (sender, args) =>
             {
                 if (args.Key == KeyCode.Escape)
+                {
+                    _inputResult = String.Empty;
                     Close();
+                }
             };
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.InputDialog)));
@@ -77,6 +80,7 @@ namespace SpaceVIL
             _title.GetCloseButton().EventMouseClick = null;
             _title.GetCloseButton().EventMouseClick += (sender, args) =>
             {
+                _inputResult = String.Empty;
                 Close();
             };
 
@@ -87,6 +91,7 @@ namespace SpaceVIL
             };
             _cancel.EventMouseClick += (sender, args) =>
             {
+                _inputResult = String.Empty;
                 Close();
             };
             _input.EventKeyPress += (sender, args) =>
@@ -98,6 +103,7 @@ namespace SpaceVIL
                 }
                 else if (args.Key == KeyCode.Escape)
                 {
+                    _inputResult = String.Empty;
                     Close();
                 }
             };
@@ -108,6 +114,7 @@ namespace SpaceVIL
         {
             base.Show(handler);
             _input.SetFocus();
+            _input.SelectAll();
         }
 
         public override void Close()

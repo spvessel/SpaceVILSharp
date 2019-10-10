@@ -6,24 +6,29 @@ import java.util.List;
 
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
+import com.spvessel.spacevil.Core.EventKeyMethodState;
+import com.spvessel.spacevil.Core.EventMouseMethodState;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceFloating;
 import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.InterfaceKeyMethodState;
+import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 
 public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
+
+    ComboBox parent = null;
     public EventCommonMethod selectionChanged = new EventCommonMethod();
-    
+
     @Override
     public void release() {
         selectionChanged.clear();
     }
-    
+
     public Prototype returnFocus = null;
     public ListBox itemList = new ListBox();
     private String _text_selection = "";
@@ -68,15 +73,61 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
 
     /**
      * Constructs a ContextMenu
-     * 
-     * @param handler parent window for the ContextMenu
      */
-    public ComboBoxDropDown(CoreWindow handler) {
-        ItemsLayoutBox.addItem(handler, this, LayoutType.FLOATING);
-        setPassEvents(false);
-        setVisible(false);
+    public ComboBoxDropDown() {
         setItemName("ComboBoxDropDown_" + count++);
         setStyle(DefaultsService.getDefaultStyle(ComboBoxDropDown.class));
+        setPassEvents(false);
+        setVisible(false);
+    }
+
+    private EventMouseMethodState linkEventScrollUp = new EventMouseMethodState();
+    private EventMouseMethodState linkEventScrollDown = new EventMouseMethodState();
+    private EventMouseMethodState linkEventMouseClick = new EventMouseMethodState();
+    private EventKeyMethodState linkEventKeyPress = new EventKeyMethodState();
+
+    private void disableAdditionalControls() {
+        itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
+        itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
+        if (itemList.eventScrollUp.size() != 0)
+            itemList.eventScrollUp.clear();
+        if (itemList.eventScrollDown.size() != 0)
+            itemList.eventScrollDown.clear();
+        if (itemList.eventMouseClick.size() != 0)
+            itemList.eventMouseClick.clear();
+        if (itemList.eventKeyPress.size() != 0)
+            itemList.eventKeyPress.clear();
+    }
+
+    private void enableAdditionalControls() {
+        itemList.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+        itemList.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+
+        for (InterfaceMouseMethodState action : linkEventScrollUp.getActions())
+            itemList.eventScrollUp.add(action);
+
+        for (InterfaceMouseMethodState action : linkEventScrollDown.getActions())
+            itemList.eventScrollDown.add(action);
+
+        for (InterfaceMouseMethodState action : linkEventMouseClick.getActions())
+            itemList.eventMouseClick.add(action);
+
+        for (InterfaceKeyMethodState action : linkEventKeyPress.getActions())
+            itemList.eventKeyPress.add(action);
+    }
+
+    private void saveAdditionalControls() {
+        for (InterfaceMouseMethodState action : itemList.eventScrollUp.getActions())
+            linkEventScrollUp.add(action);
+
+        for (InterfaceMouseMethodState action : itemList.eventScrollDown.getActions())
+            linkEventScrollDown.add(action);
+
+        for (InterfaceMouseMethodState action : itemList.eventMouseClick.getActions())
+            linkEventMouseClick.add(action);
+
+        for (InterfaceKeyMethodState action : itemList.eventKeyPress.getActions())
+            linkEventKeyPress.add(action);
     }
 
     /**
@@ -84,24 +135,23 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      */
     @Override
     public void initElements() {
-        setConfines();
-        itemList.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        itemList.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        itemList.getArea().selectionChanged.add(this::onSelectionChanged);
-
-        super.addItem(itemList);
-
-        for (InterfaceBaseItem item : _queue) {
-            itemList.addItem(item);
-        }
-        _queue = null;
-        _init = true;
-
-        itemList.getArea().eventKeyPress.add((sender, args) -> {
-            if (args.key == KeyCode.ESCAPE) {
-                hide();
+        if (!_init) {
+            itemList.disableMenu(true);
+            super.addItem(itemList);
+            saveAdditionalControls();
+            disableAdditionalControls();
+            itemList.getArea().selectionChanged.add(this::onSelectionChanged);
+            itemList.getArea().eventKeyPress.add((sender, args) -> {
+                if (args.key == KeyCode.ESCAPE) {
+                    hide();
+                }
+            });
+            for (InterfaceBaseItem item : _queue) {
+                itemList.addItem(item);
             }
-        });
+            _queue = null;
+            _init = true;
+        }
         updateSize();
     }
 
@@ -133,7 +183,10 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
-        _queue.add(item);
+        if (_init)
+            itemList.addItem(item);
+        else
+            _queue.add(item);
     }
 
     /**
@@ -145,7 +198,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     private void updateSize() {
-        int height = 0;
+        int height = itemList.getPadding().top + itemList.getPadding().bottom;
         int width = getWidth();
         List<InterfaceBaseItem> list = itemList.getListContent();
         for (InterfaceBaseItem item : list) {
@@ -164,9 +217,15 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
             if (width < tmp)
                 width = tmp;
         }
-        // SetSize(width, height);
+        if ((getY() + height) > getHandler().getHeight()) {
+            enableAdditionalControls();
+            setHeight(getHandler().getHeight() - getY() - 10);
+        } else {
+            disableAdditionalControls();
+            setHeight(height);
+            itemList.vScrollBar.slider.setCurrentValue(itemList.vScrollBar.slider.getMinValue());
+        }
         setWidth(width);
-        setHeight(height);
     }
 
     /**
@@ -178,14 +237,13 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      */
     public void show(InterfaceItem sender, MouseArgs args) {
         if (args.button.getValue() == activeButton.getValue()) {
-            if (!_init)
-                initElements();
+            initElements();
             setVisible(true);
             setConfines();
             itemList.getArea().setFocus();
         }
     }
-    
+
     public void show() {
         MouseArgs args = new MouseArgs();
         args.button = activeButton;
@@ -196,11 +254,18 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      * Hide the ContextMenu without destroying
      */
     public void hide() {
-        setX(-getWidth());
         setVisible(false);
-        // itemList.Unselect();
+        itemList.unselect();
         if (returnFocus != null)
             returnFocus.setFocus();
+    }
+
+    public void hide(MouseArgs args) {
+        if (!isVisible())
+            return;
+
+        hide();
+        parent.isDropDownAreaOutsideClicked(args);
     }
 
     /**
@@ -218,17 +283,10 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     public void setStyle(Style style) {
         if (style == null)
             return;
-        setPadding(style.padding);
-        setSizePolicy(style.widthPolicy, style.heightPolicy);
-        setBackground(style.background);
-
+        super.setStyle(style);
         Style inner_style = style.getInnerStyle("itemlist");
         if (inner_style != null) {
             itemList.setStyle(inner_style);
-        }
-        inner_style = style.getInnerStyle("listarea");
-        if (inner_style != null) {
-            itemList.getArea().setStyle(inner_style);
         }
     }
 }

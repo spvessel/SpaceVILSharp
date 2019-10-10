@@ -52,11 +52,10 @@ namespace SpaceVIL
         public ContextMenu(CoreWindow handler)
         {
             ItemsLayoutBox.AddItem(handler, this, LayoutType.Floating);
+            SetItemName("ContextMenu_" + count++);
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ContextMenu)));
             SetPassEvents(false);
             SetVisible(false);
-            SetItemName("ContextMenu_" + count);
-            count++;
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ContextMenu)));
         }
 
         public ContextMenu(CoreWindow handler, params MenuItem[] items) : this(handler)
@@ -272,6 +271,11 @@ namespace SpaceVIL
                 _returnFocus.SetFocus();
         }
 
+        public void Hide(MouseArgs args)
+        {
+            Hide();
+        }
+
         /// <summary>
         /// Set confines according to position and size of the ContextMenu
         /// </summary>
@@ -314,21 +318,12 @@ namespace SpaceVIL
         {
             if (style == null)
                 return;
-            SetPadding(style.Padding);
-            SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
-            SetBackground(style.Background);
+            base.SetStyle(style);
 
             Style inner_style = style.GetInnerStyle("itemlist");
             if (inner_style != null)
             {
-                ItemList.SetBackground(inner_style.Background);
-                ItemList.SetAlignment(inner_style.Alignment);
-                ItemList.SetPadding(inner_style.Padding);
-            }
-            inner_style = style.GetInnerStyle("listarea");
-            if (inner_style != null)
-            {
-                ItemList.GetArea().SetStyle(inner_style);
+                ItemList.SetStyle(inner_style);
             }
         }
     }

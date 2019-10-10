@@ -7,6 +7,10 @@ public class EventMouseMethodState {
 
     List<InterfaceMouseMethodState> events;
 
+    public List<InterfaceMouseMethodState> getActions() {
+        return new LinkedList<>(events);
+    }
+
     public int size() {
         if (events == null)
             return 0;

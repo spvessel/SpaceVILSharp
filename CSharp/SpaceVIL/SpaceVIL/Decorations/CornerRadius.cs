@@ -10,6 +10,15 @@ namespace SpaceVIL.Decorations
         public float LeftBottom;
         public float RightBottom;
 
+        public bool IsCornersZero()
+        {
+            if (LeftTop != 0) return false;
+            if (RightTop != 0) return false;
+            if (RightBottom != 0) return false;
+            if (LeftBottom != 0) return false;
+            return true;
+        }
+
         /// <summary>
         /// Constructs a CornerRadius with the same radius values for each corner of the rectangle object
         /// </summary>
@@ -42,6 +51,26 @@ namespace SpaceVIL.Decorations
             RightTop = rt;
             LeftBottom = lb;
             RightBottom = rb;
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj == this)
+                return true;
+            CornerRadius raduis = (CornerRadius)obj;
+            if (obj == null || raduis == null)
+                return false;
+
+            if (raduis.LeftBottom == this.LeftBottom
+                && raduis.RightBottom == this.RightBottom
+                && raduis.LeftTop == this.LeftTop
+                && raduis.RightTop == this.RightTop)
+                return true;
+            else
+                return false;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 using Glfw3;
 using SpaceVIL.Core;
 
@@ -20,6 +22,9 @@ namespace SpaceVIL
 
         internal void SetWindowSize(int width, int height)
         {
+            if (WindowsBox.GetCurrentFocusedWindow() != _commonProcessor.Window)
+                Glfw.FocusWindow(_commonProcessor.Window.GetGLWID());
+                
             if (_commonProcessor.Window.IsKeepAspectRatio)
             {
                 float currentW = width;
@@ -148,7 +153,7 @@ namespace SpaceVIL
         private Glfw.Image _iconBig;
         private Glfw.Image _iconSmall;
 
-        internal void SetIcons(Image ibig, Image ismall)
+        internal void SetIcons(Bitmap ibig, Bitmap ismall)
         {
             if (_iconBig.Pixels == null)
             {
@@ -174,25 +179,48 @@ namespace SpaceVIL
             Glfw.SetWindowIcon(_commonProcessor.Handler.GetWindowId(), images);
         }
 
-        private byte[] GetImagePixels(Image icon)
+        private byte[] GetImagePixels(Bitmap icon)
         {
             if (icon == null)
                 return null;
 
-            List<byte> _map = new List<byte>();
-            Bitmap bmp = new Bitmap(icon);
-            for (int j = 0; j < icon.Height; j++)
+            // List<byte> _map = new List<byte>();
+            // Bitmap bmp = new Bitmap(icon);
+            // for (int j = 0; j < icon.Height; j++)
+            // {
+            //     for (int i = 0; i < icon.Width; i++)
+            //     {
+            //         Color pixel = bmp.GetPixel(i, j);
+            //         _map.Add(pixel.R);
+            //         _map.Add(pixel.G);
+            //         _map.Add(pixel.B);
+            //         _map.Add(pixel.A);
+            //     }
+            // }
+            // return _map.ToArray();
+
+            int imageWidth = icon.Width;
+            int imageHeight = icon.Height;
+            int size = imageWidth * imageHeight;
+            BitmapData bitData = icon.LockBits(
+                new System.Drawing.Rectangle(Point.Empty, icon.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            int[] pixels = new int[size];
+            Marshal.Copy(bitData.Scan0, pixels, 0, size);
+            icon.UnlockBits(bitData);
+            byte[] result = new byte[size * 4];
+            int index = 0;
+            foreach (int pixel in pixels)
             {
-                for (int i = 0; i < icon.Width; i++)
-                {
-                    Color pixel = bmp.GetPixel(i, j);
-                    _map.Add(pixel.R);
-                    _map.Add(pixel.G);
-                    _map.Add(pixel.B);
-                    _map.Add(pixel.A);
-                }
+                byte a = (byte)((pixel & 0xFF000000) >> 24);
+                byte r = (byte)((pixel & 0x00FF0000) >> 16);
+                byte g = (byte)((pixel & 0x0000FF00) >> 8);
+                byte b = (byte)(pixel & 0x000000FF);
+                result[index++] = r;
+                result[index++] = g;
+                result[index++] = b;
+                result[index++] = a;
             }
-            return _map.ToArray();
+            return result;
         }
 
         internal static void ToggleToFullScreenMode(CoreWindow window)

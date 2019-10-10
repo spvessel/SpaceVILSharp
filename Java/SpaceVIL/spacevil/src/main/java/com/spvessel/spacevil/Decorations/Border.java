@@ -32,7 +32,7 @@ public class Border {
         return _border_color;
     }
 
-	/**
+    /**
      * Border color
      */
     public void setFill(Color color) {
@@ -48,7 +48,7 @@ public class Border {
         return _border_thickness;
     }
 
-	/**
+    /**
      * Border thickness
      */
     public void setThickness(int value) {
@@ -66,6 +66,7 @@ public class Border {
     public Border() {
         _border_color = new Color(0, 0, 0, 0);
         _border_thickness = -1;
+        _border_radius = new CornerRadius();
     }
 
     /**
@@ -76,4 +77,20 @@ public class Border {
         setRadius(radius);
         setThickness(thickness);
     }
+
+    // @Override
+    // public boolean equals(Object obj) {
+    //     if (obj == this) {
+    //         return true;
+    //     }
+    //     if (obj == null || obj.getClass() != this.getClass()) {
+    //         return false;
+    //     }
+
+    //     Border border = (Border) obj;
+    //     if (this.getRadius().equals(border.getRadius())) {
+    //         return true;
+    //     } else
+    //         return false;
+    // }
 }

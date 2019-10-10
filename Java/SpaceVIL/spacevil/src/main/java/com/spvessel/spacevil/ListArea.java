@@ -233,7 +233,7 @@ public class ListArea extends Prototype implements InterfaceVLayout {
         updateLayout();
     }
 
-    public void setListContent(List<InterfaceBaseItem> content) {
+    void setListContent(List<InterfaceBaseItem> content) {
         removeAllItems();
         for (InterfaceBaseItem item : content) {
             SelectionItem wrapper = getWrapper(item);
@@ -241,8 +241,6 @@ public class ListArea extends Prototype implements InterfaceVLayout {
             wrapper.updateSize();
             _mapContent.put(item, wrapper);
         }
-        // updateLayout();
-        itemListChanged.execute();
     }
 
     /**
@@ -287,11 +285,11 @@ public class ListArea extends Prototype implements InterfaceVLayout {
     @Override
     public void clear() {
         removeAllItems();
+        updateLayout();
+        itemListChanged.execute();
     }
 
-    void removeAllItems() {
-        _lock.lock();
-        try {
+    private void removeAllItems() {
             unselect();
             List<InterfaceBaseItem> list = getItems();
 
@@ -304,13 +302,6 @@ public class ListArea extends Prototype implements InterfaceVLayout {
                 list.remove(0);
             }
             _mapContent.clear();
-            updateLayout();
-            itemListChanged.execute();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            _lock.unlock();
-        }
     }
 
     /**

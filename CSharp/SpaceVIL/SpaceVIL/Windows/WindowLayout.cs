@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Drawing;
 using SpaceVIL.Core;
-using SpaceVIL.Decorations;
-using SpaceVIL.Common;
 
 namespace SpaceVIL
 {
@@ -159,7 +155,7 @@ namespace SpaceVIL
             _engine.ResetFocus();
         }
 
-        internal void SetIcon(Image icon_big, Image icon_small)
+        internal void SetIcon(Bitmap icon_big, Bitmap icon_small)
         {
             _engine.SetIcons(icon_big, icon_small);
         }
@@ -285,7 +281,7 @@ namespace SpaceVIL
             Monitor.Enter(wndLock);
             try
             {
-                _shadeColor = Color.FromArgb(color.R, color.G, color.B, color.A);
+                _shadeColor = Color.FromArgb(color.A, color.R, color.G, color.B);
             }
             finally
             {
@@ -325,5 +321,14 @@ namespace SpaceVIL
                 Monitor.Exit(wndLock);
             }
         }
+
+        internal void FreeVRAMResource<T>(T resource)
+        {
+            _engine.FreeVRAMResource(resource);
+        }
+
+        internal ToolTipItem GetToolTip() {
+        return _engine.GetToolTip();
+    }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using Glfw3;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
+using static Glfw3.Glfw;
 
 namespace SpaceVIL
 {
@@ -76,8 +77,6 @@ namespace SpaceVIL
             WPosition.SetY(0);
         }
 
-        private Pointer defWindowPos = new Pointer(200, 50);
-
         internal void CreateWindow()
         {
             //important!!! may be the best combination of WINDOW HINTS!!!
@@ -94,8 +93,8 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Focused, Focused);
             Glfw.WindowHint(Glfw.Hint.Floating, AlwaysOnTop);
             Glfw.WindowHint(Glfw.Hint.Maximized, Maximized);
-            Glfw.WindowHint(Glfw.Hint.Visible, false);
             Glfw.WindowHint(Glfw.Hint.TranspatentFramebuffer, Transparent);
+            Glfw.WindowHint(Glfw.Hint.Visible, false);
 
             _window = Glfw.CreateWindow(_coreWindow.GetWidth(), _coreWindow.GetHeight(), _coreWindow.GetWindowTitle());
 
@@ -115,17 +114,13 @@ namespace SpaceVIL
             {
                 GetPointer().SetX((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - _coreWindow.GetWidth()) / 2);
                 GetPointer().SetY((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - _coreWindow.GetHeight()) / 2);
-                // _coreWindow.SetX(WPosition.GetX());
-                // _coreWindow.SetY(WPosition.GetY());
             }
             else
             {
-                // WPosition.SetX(_coreWindow.GetX());
-                // WPosition.SetY(_coreWindow.GetY());
-                _coreWindow.SetXDirect(defWindowPos.GetX());//200);
-                _coreWindow.SetYDirect(defWindowPos.GetY());//50);
-                GetPointer().SetX(defWindowPos.GetX());//200);
-                GetPointer().SetY(defWindowPos.GetY());//50);
+                _coreWindow.SetXDirect(_coreWindow.GetX());//200);
+                _coreWindow.SetYDirect(_coreWindow.GetY());//50);
+                GetPointer().SetX(_coreWindow.GetX());//200);
+                GetPointer().SetY(_coreWindow.GetY());//50);
             }
             Glfw.SetWindowSizeLimits(_window, _coreWindow.GetMinWidth(), _coreWindow.GetMinHeight(), _coreWindow.GetMaxWidth(), _coreWindow.GetMaxHeight());
             Glfw.SetWindowPos(_window, WPosition.GetX(), WPosition.GetY());
@@ -203,7 +198,7 @@ namespace SpaceVIL
         {
             Glfw.SetWindowShouldClose(_window, true);
         }
-        
+
         internal void SetCallbackMouseMove(Glfw.CursorPosFunc function)
         {
             MouseMoveCallback = function;

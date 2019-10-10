@@ -1,27 +1,16 @@
-// #define LINUX 
-
 using System;
 
 using static OpenGL.OpenGLConstants;
-
-#if MAC
-using static OpenGL.UnixGL;
-#elif WINDOWS
-using static OpenGL.WindowsGL;
-#elif LINUX
-using static OpenGL.UnixGL;
-#else
-using static OpenGL.WindowsGL;
-#endif
+using static OpenGL.OpenGLWrapper;
 
 namespace SpaceVIL
 {
-    internal sealed class VRAMFramebuffer
+    internal sealed class VramFramebuffer
     {
         public uint[] FBO;
         public uint[] Texture;
 
-        internal VRAMFramebuffer()
+        internal VramFramebuffer()
         {
             Texture = new uint[1];
             FBO = new uint[1];
@@ -32,7 +21,7 @@ namespace SpaceVIL
             glGenFramebuffers(1, FBO);
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, FBO[0]);
         }
-        internal void GenFBOTexture(int w, int h)
+        internal void GenFboTexture(int w, int h)
         {
             glGenTextures(1, Texture);
             glBindTexture(GL_TEXTURE_2D, Texture[0]);
@@ -44,18 +33,24 @@ namespace SpaceVIL
             glBindTexture(GL_TEXTURE_2D, 0);
 
             glFramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, Texture[0], 0);
-            // uint[] draw_bufs = new uint[] { GL_COLOR_ATTACHMENT0_EXT };
-            // glDrawBuffers(1, draw_bufs);
         }
-        internal void BindFBO()
+        internal void Bind()
         {
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, FBO[0]);
         }
-        internal void UnbindFBO()
+        internal void BindTexture()
+        {
+            glFramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, Texture[0], 0);
+        }
+        internal void Unbind()
         {
             glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
         }
-        internal void ClearFBO()
+        internal void UnbindTexture()
+        {
+            glFramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, 0, 0);
+        }
+        internal void Clear()
         {
             glDeleteFramebuffers(1, FBO);
         }

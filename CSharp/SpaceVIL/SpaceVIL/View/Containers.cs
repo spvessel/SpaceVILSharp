@@ -14,9 +14,9 @@ namespace View
         // Grid block = new Grid(2, 2);
 
         TabView tabs = new TabView();
-        Tab tab1 = new Tab("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1");
-        Tab tab2 = new Tab("List");
-        Tab tab3 = new Tab("List");
+        Tab tab1 = new Tab("FirstLeftTab");
+        Tab tab2 = new Tab("List1");
+        Tab tab3 = new Tab("List2");
         TitleBar title = new TitleBar(nameof(Containers));
 
         public override void InitWindow()
@@ -35,8 +35,16 @@ namespace View
 
             cc.AddItem(tabs);
 
-            tabs.AddTabs(tab1, tab2, tab3);
-            tab1.SetWidthPolicy(SizePolicy.Expand);
+            // tab1.SetDraggable(false);
+            // tab1.SetMaxWidth(30);
+            tabs.AddTabs(tab1, tab2, tab3,
+                new Tab("TabForTest1"),
+                new Tab("TabForTest2")//, 
+                                      // new Tab("TabForTest3"), 
+                                      // new Tab("TabForTest4"),
+                                      // new Tab("TabForTest5")
+                );
+            tabs.SetContentPolicy(SizePolicy.Expand);
 
             EventKeyPress += (sender, args) =>
             {
@@ -58,22 +66,23 @@ namespace View
 
             Grid grid = new Grid(3, 4);
             grid.SetBackground(255, 255, 255, 20);
-            grid.SetSpacing(2, 2);
+            grid.SetSpacing(20, 20);
             grid.SetMargin(20, 30, 20, 30);
-            tabs.AddItemToTabByName("Gridadofigjhopaijgpaijgpoiajhsogijhaosighj1", grid);
-            Grid subgrid = new Grid(1, 2);
-            grid.InsertItem(subgrid, 1, 1);
+            tabs.AddItemToTabByName("FirstLeftTab", grid);
+            // Grid subgrid = new Grid(1, 2);
+            // grid.InsertItem(subgrid, 1, 1);
 
-            subgrid.AddItems(new VerticalScrollBar(), new VerticalScrollBar());
-            for (int i = 0; i < 11; i++)
+            // subgrid.AddItems(new VerticalScrollBar(), new VerticalScrollBar());
+            for (int i = 0; i < 12; i++)
             {
-                ButtonCore h_btn = GetButton("Cell" + i, 150, 50, SizePolicy.Expand);
+                ButtonCore h_btn = GetButton("Button №" + i, 150, 50, SizePolicy.Expand);
                 h_btn.SetMaxSize(200, 100);
                 h_btn.SetBackground(121, 223, 152);
                 grid.AddItem(h_btn);
             }
 
-            tab1.EventOnClose += () => {
+            tab1.EventOnClose += () =>
+            {
                 Console.WriteLine("close");
             };
 
@@ -486,7 +495,7 @@ namespace View
             style.Background = Color.FromArgb(255, 111, 181, 255);
             style.Foreground = Color.Black;
             style.BorderRadius = new CornerRadius(3);
-            style.Font = DefaultsService.GetDefaultFont();
+            style.Font = DefaultsService.GetDefaultFont(16);
             style.Width = w;
             style.MinWidth = 30;
             style.MinHeight = 30;
@@ -509,6 +518,17 @@ namespace View
             btn.SetSizePolicy(policy, policy);
             btn.SetItemName(name);
             btn.SetShadow(5, 0, 3, Color.FromArgb(150, 0, 0, 0));
+
+            btn.EventMouseLeave += (sender, ags) =>
+            {
+                btn.SetBackground(121, 223, 152);
+                btn.SetText("Leave");
+            };
+            btn.EventMouseHover += (sender, ags) =>
+            {
+                btn.SetText("Hover");
+                btn.SetBackground(10, 162, 232);
+            };
             return btn;
         }
         private Label GetLabel(String text)

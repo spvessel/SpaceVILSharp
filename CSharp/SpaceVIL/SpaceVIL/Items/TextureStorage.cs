@@ -57,7 +57,7 @@ namespace SpaceVIL
             curCoord -= globalYShift;
 
             globalYShift += GetLineY(1);
-            if (globalYShift > 0) 
+            if (globalYShift > 0)
             {
                 globalYShift = 0;
             }
@@ -71,7 +71,8 @@ namespace SpaceVIL
             int h = GetTextHeight();
             int curCoord = cursorY;
 
-            if (h < _cursorYMax && h + globalYShift <= _cursorYMax) {
+            if (h < _cursorYMax && h + globalYShift <= _cursorYMax)
+            {
                 return curCoord;
             }
 
@@ -104,7 +105,6 @@ namespace SpaceVIL
             Indents textPadding = parent.GetPadding();
             _cursorXMax = parent.GetWidth() - cursorWidth - textPadding.Left -
                 textPadding.Right - textMargin.Left - textMargin.Right;
-            
             SetAllowWidth(); // <- UpdLinesXShift();
         }
 
@@ -115,12 +115,10 @@ namespace SpaceVIL
             {
                 return;
             }
-            
             Indents textMargin = GetTextMargin();
             Indents textPadding = parent.GetPadding();
             _cursorYMax = parent.GetHeight() - textPadding.Top - textPadding.Bottom
                 - textMargin.Top - textMargin.Bottom;
-            
             SetAllowHeight(); // <- UpdLinesYShift();
         }
 
@@ -196,7 +194,7 @@ namespace SpaceVIL
             Prototype parent = GetParent();
             if (parent != null)
             {
-                return (((TextBlock) parent).IsWrapText());
+                return (((TextBlock)parent).IsWrapText());
             }
             return false;
         }
@@ -212,7 +210,6 @@ namespace SpaceVIL
             te.SetForeground(GetForeground());
             te.SetTextAlignment(_blockAlignment);
             te.SetMargin(GetTextMargin());
-            
             if (_elementFont != null)
             {
                 te.SetFont(_elementFont);
@@ -293,7 +290,7 @@ namespace SpaceVIL
             int pos = 0;
 
             List<int> lineLetPos = GetTextLine(lineNumb).GetLetPosArray(); //_linesList[lineNumb].GetLetPosArray();
-            if (lineLetPos == null) 
+            if (lineLetPos == null)
             {
                 return pos;
             }
@@ -429,7 +426,8 @@ namespace SpaceVIL
             UpdLinesYShift(); //Пока обновляются все, но в принципе, нужно только под fromLine
         }
 
-        private void RemoveLineBreakes(int lineNum) {
+        private void RemoveLineBreakes(int lineNum)
+        {
             if (lineNum >= _lineBreakes.Count)
             {
                 return;
@@ -440,8 +438,10 @@ namespace SpaceVIL
             int nextLineVal = (lineNum < _lineBreakes.Count - 1) ? _lineBreakes[lineNum + 1] : lineVal;
 
             _lineBreakes.Remove(lineNum);
-            if (lineVal != prevLineVal && lineVal != nextLineVal) {
-                for (int i = lineNum; i < _lineBreakes.Count; i++) {
+            if (lineVal != prevLineVal && lineVal != nextLineVal)
+            {
+                for (int i = lineNum; i < _lineBreakes.Count; i++)
+                {
                     _lineBreakes[i] = _lineBreakes[i] - 1;
                 }
             }
@@ -576,7 +576,7 @@ namespace SpaceVIL
         internal string GetWholeText()
         {
             StringBuilder sb = new StringBuilder();
-            if (_linesList == null) 
+            if (_linesList == null)
             {
                 return "";
             }
@@ -590,7 +590,8 @@ namespace SpaceVIL
                 {
                     MakeTextAccordingToBreaks(sb);
                 }
-                else {
+                else
+                {
                     MakeUnwrapText(sb);
                 }
             }
@@ -664,7 +665,8 @@ namespace SpaceVIL
             {
                 nextVal = _lineBreakes[i + 1];
                 sb.Append(GetTextInLine(i)); //_linesList.get(i).getText());
-                if (currentVal != nextVal) {
+                if (currentVal != nextVal)
+                {
                     sb.Append("\n");
                 }
                 currentVal = nextVal;
@@ -849,12 +851,11 @@ namespace SpaceVIL
             if (parent == null)
                 return new Point(0, 0);
             int offset = _cursorXMax / 3;
-            
             if (globalXShift + outPoint.X < 0)
             {
                 globalXShift = -outPoint.X;
                 globalXShift += offset;
-                if (globalXShift > 0) 
+                if (globalXShift > 0)
                 {
                     globalXShift = 0;
                 }
@@ -1177,27 +1178,28 @@ namespace SpaceVIL
                     _blockTexture = new TextPrinter(bigByte); //TextPrinter tpout = new TextPrinter(bigByte);
                     _blockTexture.WidthTexture = w; //tpout.WidthTexture = w;
                     _blockTexture.HeightTexture = visibleHeight; // h; //tpout.HeightTexture = visibleHeight; // h;
-                //     tpout.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX() + cursorWidth;
-                //     tpout.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY();
+                                                                 //     tpout.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX() + cursorWidth;
+                                                                 //     tpout.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY();
 
-                // //                if (tpLines.Count == 0 || tpLines[0] == null)
-                // //                {
-                // //                    tpout.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX();
-                // //                    tpout.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY();
-                // //
-                // //                    tpout.XTextureShift += 0; // _linesList[0].GetLineXShift();
-                // //                    tpout.YTextureShift += 0; // _linesList[0].GetLineYShift();
-                // //                }
-                // //                else
-                // //                {
-                // //                    tpout.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX(); //tpLines[0].XTextureShift;
-                // //                    tpout.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY(); //tpLines[0].YTextureShift;
-                // //               }
+                    // //                if (tpLines.Count == 0 || tpLines[0] == null)
+                    // //                {
+                    // //                    tpout.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX();
+                    // //                    tpout.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY();
+                    // //
+                    // //                    tpout.XTextureShift += 0; // _linesList[0].GetLineXShift();
+                    // //                    tpout.YTextureShift += 0; // _linesList[0].GetLineYShift();
+                    // //                }
+                    // //                else
+                    // //                {
+                    // //                    tpout.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX(); //tpLines[0].XTextureShift;
+                    // //                    tpout.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY(); //tpLines[0].YTextureShift;
+                    // //               }
 
-                //     if (startNumb > -1)
-                //         tpout.YTextureShift += _linesList[startNumb].GetLineYShift();
+                    //     if (startNumb > -1)
+                    //         tpout.YTextureShift += _linesList[startNumb].GetLineYShift();
 
                     _isUpdateTextureNeed = false;
+                    SetRemakeText(true);
                 }
                 UpdateCoords(parent);
                 return _blockTexture; //tpout;
@@ -1294,9 +1296,21 @@ namespace SpaceVIL
             return new int[] { begPt, endPt };
         }
 
+        private bool _isRemakeText = true;
+        public void SetRemakeText(bool value)
+        {
+            _isRemakeText = value;
+        }
+
+        public bool IsRemakeText()
+        {
+            return _isRemakeText;
+        }
+
         //Wrap Text Stuff---------------------------------------------------------------------------------------------------
 
-        private void WrapLine(int lineNum) {
+        private void WrapLine(int lineNum)
+        {
             TextLine textLine = GetTextLine(lineNum); //_linesList.get(lineNum);
 
             if (textLine.GetWidth() == _cursorXMax)
@@ -1410,10 +1424,11 @@ namespace SpaceVIL
             return fromInd;
         }
 
-        internal void RewrapText() {
+        internal void RewrapText()
+        {
             SetText(GetWholeText());
         }
-        
+
         internal Point WrapCursorPosToReal(Point wrapPos)
         {
             //Convert wrap cursor position to real position

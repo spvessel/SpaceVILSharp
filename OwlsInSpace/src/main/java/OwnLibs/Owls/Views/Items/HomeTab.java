@@ -19,11 +19,11 @@ public class HomeTab extends Tab {
         super();
         _homeIcon = new ImageItem(DefaultsService.getDefaultImage(EmbeddedImage.HOME, EmbeddedImageSize.SIZE_32X32),
                 false);
-                
+
+        setDraggable(false);
         setClosable(false);
         setBackground(70, 70, 70);
         setBorderRadius(0);
-        setWidthPolicy(SizePolicy.FIXED);
         setMinWidth(35);
         setMaxWidth(35);
         setMargin(0, 0, 2, 0);
@@ -40,6 +40,5 @@ public class HomeTab extends Tab {
         _homeIcon.setSize(20, 20);
         _homeIcon.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         addItem(_homeIcon);
-        // setShadowDrop(false);
     }
 }

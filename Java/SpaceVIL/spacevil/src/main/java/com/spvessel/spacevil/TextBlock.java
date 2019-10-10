@@ -1,5 +1,6 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
@@ -12,7 +13,7 @@ import java.util.*;
 import java.util.List;
 
 class TextBlock extends Prototype
-        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceGrid {
+        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceFreeLayout {
 
     EventCommonMethod cursorChanged = new EventCommonMethod();
     EventCommonMethod textChanged = new EventCommonMethod();
@@ -37,7 +38,7 @@ class TextBlock extends Prototype
     private boolean _justSelected = false;
 
     private Set<KeyCode> _cursorControlKeys;
-//    private Set<KeyCode> _insteadKeyMods;
+    //    private Set<KeyCode> _insteadKeyMods;
     private Set<KeyCode> _serviceEditKeys;
 
     private int scrollXStep = 30;
@@ -62,10 +63,10 @@ class TextBlock extends Prototype
 
         _cursorControlKeys = new HashSet<>(
                 Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME, KeyCode.UP, KeyCode.DOWN));
-//        _insteadKeyMods = new HashSet<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
-//                KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
-        _serviceEditKeys = new HashSet<>(Arrays.asList(KeyCode.BACKSPACE, KeyCode.DELETE, KeyCode.ENTER,
-                KeyCode.NUMPADENTER, KeyCode.TAB));
+        //        _insteadKeyMods = new HashSet<>(Arrays.asList(KeyCode.LEFTSHIFT, KeyCode.RIGHTSHIFT, KeyCode.LEFTCONTROL,
+        //                KeyCode.RIGHTCONTROL, KeyCode.LEFTALT, KeyCode.RIGHTALT, KeyCode.LEFTSUPER, KeyCode.RIGHTSUPER));
+        _serviceEditKeys = new HashSet<>(
+                Arrays.asList(KeyCode.BACKSPACE, KeyCode.DELETE, KeyCode.ENTER, KeyCode.NUMPADENTER, KeyCode.TAB));
 
         _cursor.setHeight(_textureStorage.getCursorHeight());
 
@@ -234,7 +235,8 @@ class TextBlock extends Prototype
 
             boolean isCursorControlKey = _cursorControlKeys.contains(args.key);
             boolean hasShift = args.mods.contains(KeyMods.SHIFT);
-            boolean hasControl = args.mods.contains(KeyMods.CONTROL);
+            // boolean hasControl = args.mods.contains(KeyMods.CONTROL);
+            boolean hasControl = args.mods.contains(CommonService.getOsControlMod());
 
             if (!args.mods.contains(KeyMods.NO)) {
                 // Выделение не сбрасывается, проверяются сочетания
@@ -251,7 +253,6 @@ class TextBlock extends Prototype
                         if ((args.mods.size() == 1) && hasControl) {
                             unselectText();
                             cancelJustSelected();
-
                         }
                     }
                 }
@@ -275,7 +276,7 @@ class TextBlock extends Prototype
                                 _textureStorage.combineLines(_cursorPosition); //.y);
                                 addToUndoAndReplaceCursor();
                             }
-//                            replaceCursor();
+                            //                            replaceCursor();
                         }
                         if (args.key == KeyCode.DELETE) // delete
                         {
@@ -296,7 +297,7 @@ class TextBlock extends Prototype
                         _cursorPosition.y++; //TODO or not
                         _cursorPosition.x = 0;
 
-////                        replaceCursor();
+                        ////                        replaceCursor();
                         addToUndoAndReplaceCursor();
                     }
 
@@ -323,7 +324,7 @@ class TextBlock extends Prototype
 
                             if (wordBounds[0] != wordBounds[1] && _cursorPosition.x != wordBounds[0]) {
                                 _cursorPosition = new Point(wordBounds[0], _cursorPosition.y);
-                               replaceCursor();
+                                replaceCursor();
                                 doUsual = false;
                             }
                         }
@@ -335,7 +336,7 @@ class TextBlock extends Prototype
                                 _cursorPosition.y--;
                                 _cursorPosition.x = getLettersCountInLine(_cursorPosition.y);
                             }
-                           replaceCursor();
+                            replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.RIGHT) // arrow right
@@ -347,7 +348,7 @@ class TextBlock extends Prototype
 
                             if (wordBounds[0] != wordBounds[1] && _cursorPosition.x != wordBounds[1]) {
                                 _cursorPosition = new Point(wordBounds[1], _cursorPosition.y);
-                               replaceCursor();
+                                replaceCursor();
                                 doUsual = false;
                             }
                         }
@@ -359,7 +360,7 @@ class TextBlock extends Prototype
                                 _cursorPosition.y++;
                                 _cursorPosition.x = 0;
                             }
-                           replaceCursor();
+                            replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.UP) // arrow up
@@ -369,7 +370,7 @@ class TextBlock extends Prototype
                                 _cursorPosition.y--;
                             }
                             // ?????
-                           replaceCursor();
+                            replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.DOWN) // arrow down
@@ -379,7 +380,7 @@ class TextBlock extends Prototype
                                 _cursorPosition.y++;
                             }
                             // ?????
-                           replaceCursor();
+                            replaceCursor();
                         }
                     }
 
@@ -390,13 +391,13 @@ class TextBlock extends Prototype
                         if (hasControl) {
                             int lineNum = _textureStorage.getLinesCount() - 1;
                             _cursorPosition = new Point(getLettersCountInLine(lineNum), lineNum);
-                           replaceCursor();
+                            replaceCursor();
                             doUsual = false;
                         }
 
                         if (doUsual) {
                             _cursorPosition.x = getLettersCountInLine(_cursorPosition.y);
-                           replaceCursor();
+                            replaceCursor();
                         }
                     }
                     if (args.key == KeyCode.HOME) // home
@@ -405,13 +406,13 @@ class TextBlock extends Prototype
 
                         if (hasControl) {
                             _cursorPosition = new Point(0, 0);
-                           replaceCursor();
+                            replaceCursor();
                             doUsual = false;
                         }
 
                         if (doUsual) {
                             _cursorPosition.x = 0;
-                           replaceCursor();
+                            replaceCursor();
                         }
                     }
                 }
@@ -460,12 +461,17 @@ class TextBlock extends Prototype
     }
 
     private void replaceCursor() {
-        Point pos = addXYShifts(_cursorPosition);
-        _cursor.setX(pos.x);
-        _cursor.setY(pos.y - getLineSpacer() / 2 + 1);
+        _textureStorage.textInputLock.lock();
+        try {
+            Point pos = addXYShifts(_cursorPosition);
+            _cursor.setX(pos.x);
+            _cursor.setY(pos.y - getLineSpacer() / 2 + 1);
 
-        //invoke cancelJustSelected
-        cursorChanged.execute();
+            //invoke cancelJustSelected
+            cursorChanged.execute();
+        } finally {
+            _textureStorage.textInputLock.unlock();
+        }
     }
 
     void setLineSpacer(int lineSpacer) {
@@ -518,7 +524,7 @@ class TextBlock extends Prototype
             }
 
             _cursorPosition = _textureStorage.setText(text); //, _cursorPosition);
-//            replacecursor();
+            //            replacecursor();
             addToUndoAndReplaceCursor();
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -682,21 +688,21 @@ class TextBlock extends Prototype
 
             _textureStorage.getSelectedText(sb, fromReal, toReal);
 
-//            if (fromReal.x >= getLettersCountInLine(fromReal.y))
-//                sb.append("\n");
-//            else {
-//                stmp = new StringBuilder(_textureStorage.getTextInLine(fromReal.y));
-//                sb.append(stmp.substring(fromReal.x));
-//                sb.append("\n");
-//            }
-//            for (int i = fromReal.y + 1; i < toReal.y; i++) {
-//                stmp = new StringBuilder(_textureStorage.getTextInLine(i));
-//                sb.append(stmp);
-//                sb.append("\n");
-//            }
-//
-//            stmp = new StringBuilder(_textureStorage.getTextInLine(toReal.y));
-//            sb.append(stmp.substring(0, toReal.x));
+            //            if (fromReal.x >= getLettersCountInLine(fromReal.y))
+            //                sb.append("\n");
+            //            else {
+            //                stmp = new StringBuilder(_textureStorage.getTextInLine(fromReal.y));
+            //                sb.append(stmp.substring(fromReal.x));
+            //                sb.append("\n");
+            //            }
+            //            for (int i = fromReal.y + 1; i < toReal.y; i++) {
+            //                stmp = new StringBuilder(_textureStorage.getTextInLine(i));
+            //                sb.append(stmp);
+            //                sb.append("\n");
+            //            }
+            //
+            //            stmp = new StringBuilder(_textureStorage.getTextInLine(toReal.y));
+            //            sb.append(stmp.substring(0, toReal.x));
 
             return sb.toString();
         } finally {
@@ -721,7 +727,7 @@ class TextBlock extends Prototype
             _cursorPosition = _textureStorage.checkLineFits(_cursorPosition);
             _cursorPosition = _textureStorage.pasteText(pasteStr, _cursorPosition);
 
-//            replaceCursor();
+            //            replaceCursor();
             addToUndoAndReplaceCursor();
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -806,7 +812,7 @@ class TextBlock extends Prototype
             cancelJustSelected();
         }
 
-//        replaceCursor();
+        //        replaceCursor();
         addToUndoAndReplaceCursor();
     }
 
@@ -835,7 +841,6 @@ class TextBlock extends Prototype
         super.setStyle(style);
         setForeground(style.foreground);
         setFont(style.font);
-        
         _textureStorage.setLineContainerAlignment(style.textAlignment);
 
         Style inner_style = style.getInnerStyle("selection");
@@ -933,9 +938,9 @@ class TextBlock extends Prototype
 
     @Override
     public void setWidth(int width) {
-        if (getWidth() == width) {
-            return;
-        }
+        // if (getWidth() == width) {
+        //     return;
+        // }
         Point tmpCursor = new Point(_cursorPosition);
         if (isWrapText()) {
             tmpCursor = _textureStorage.wrapCursorPosToReal(_cursorPosition);
@@ -951,9 +956,9 @@ class TextBlock extends Prototype
 
     @Override
     public void setHeight(int height) {
-        if (getHeight() == height) {
-            return;
-        }
+        // if (getHeight() == height) {
+        //     return;
+        // }
         super.setHeight(height);
         _textureStorage.updateBlockHeight();
     }
@@ -1038,8 +1043,8 @@ class TextBlock extends Prototype
         return _isWrapText;
     }
 
-    public void setWrapText(boolean wrapText) {
-        if (wrapText == _isWrapText) {
+    public void setWrapText(boolean value) {
+        if (value == _isWrapText) {
             return;
         }
 
@@ -1047,7 +1052,7 @@ class TextBlock extends Prototype
         try {
             String text = getText();
 
-            _isWrapText = wrapText;
+            _isWrapText = value;
 
             _textureStorage.setText(text); //not added into redo/undo
         } finally {

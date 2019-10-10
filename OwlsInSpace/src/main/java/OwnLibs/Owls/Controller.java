@@ -10,6 +10,7 @@ import OwnLibs.Owls.Views.Windows.*;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +55,18 @@ public class Controller {
         itemToDefault();
         // fillFields();
 
+        owlWindow.eventKeyRelease.add((sender, args) -> {
+            if (args.key == KeyCode.PAGEDOWN) {
+                List<InterfaceBaseItem> list = ItemsLayoutBox.getLayoutItems(owlWindow.getWindowGuid());
+                int result = 0;
+                for (InterfaceBaseItem item : list) {
+                    if (item.getBackground().getAlpha() > 0 && item.isDrawable() && item.isVisible()) {
+                        result++;
+                    }
+                }
+                System.out.println(result);
+            }
+        });
         // New file
         owlWindow.homePage.newFileLabel.eventMouseClick
                 .add((sender, args) -> treeNewFileOrFolder(workDirectory, "file"));
@@ -107,6 +120,28 @@ public class Controller {
                 owlWindow.newFolderBtn.eventMouseClick.execute(owlWindow.searchBtn, null);
             } else if (args.key == KeyCode.F11) {
                 owlWindow.titleBar.getMaximizeButton().eventMouseClick.execute(owlWindow.titleBar, null);
+            } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.contains(KeyMods.ALT) && args.mods.size() == 2
+                    && args.key == KeyCode.LEFT) {
+                List<Tab> tabs = owlWindow.workTabArea.getTabs();
+                int index = tabs.indexOf(owlWindow.workTabArea.getSelectedTab());
+                index--;
+                if (index < 0)
+                    return;
+                owlWindow.workTabArea.selectTab(tabs.get(index));
+                TextArea area = getCurrentTextArea();
+                if (area != null)
+                    area.setFocus();
+            } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.contains(KeyMods.ALT) && args.mods.size() == 2
+                    && args.key == KeyCode.RIGHT) {
+                List<Tab> tabs = owlWindow.workTabArea.getTabs();
+                int index = tabs.indexOf(owlWindow.workTabArea.getSelectedTab());
+                index++;
+                if (index >= tabs.size())
+                    return;
+                owlWindow.workTabArea.selectTab(tabs.get(index));
+                TextArea area = getCurrentTextArea();
+                if (area != null)
+                    area.setFocus();
             }
         });
 
@@ -199,7 +234,7 @@ public class Controller {
         // owlWindow.titleBar.getCloseButton().eventMouseClick.clear();
         owlWindow.eventClose.clear();
         owlWindow.eventClose.add(() -> {
-//            History.serialize(historyStore);
+            // History.serialize(historyStore);
             historyStore.serialize();
             checkAndCloseWindow();
 
@@ -257,11 +292,11 @@ public class Controller {
 
         owlWindow.eventOnStart.add(() -> {
             historyStore.deserialize();
-//            historyStore =  History.deserialize(historyStore._path);
-//            for (String record : historyStore.getRecords()) {
-//                historyAddRecordSetEvent(record);
-////                owlWindow.homePage.addItemToHistoryList(record);
-//            }
+            // historyStore = History.deserialize(historyStore._path);
+            // for (String record : historyStore.getRecords()) {
+            // historyAddRecordSetEvent(record);
+            //// owlWindow.homePage.addItemToHistoryList(record);
+            // }
         });
     }
 
@@ -345,7 +380,7 @@ public class Controller {
             return;
         }
 
-//        historyAddRecordSetEvent(loadingItem.getFullPath());
+        // historyAddRecordSetEvent(loadingItem.getFullPath());
         historyStore.addRecord(loadingItem.getFullPath());
 
         FileEntryTab tab = addNewTabAndSelect(loadingItem);
@@ -392,14 +427,13 @@ public class Controller {
 
         tabToOwls.put(tab, tabItem);
 
-        owlWindow.workTabArea.selectTab(tab);
-        owlWindow.workTabArea.updateLayout();
+        // owlWindow.workTabArea.updateLayout();
 
         TextArea textArea = ElementsFactory.getTextArea();
-        owlWindow.workTabArea.addItemToTab(tab, textArea);
-        textArea.setText(""); // Переместить это в fillFields или
-        // // одного вызова достаточно?
+        // textArea.setText(""); // Переместить это в fillFields или
         // textArea.rewindText();
+        owlWindow.workTabArea.addItemToTab(tab, textArea);
+        // // одного вызова достаточно?
 
         // Check editing
         textArea.onTextChanged.add(() -> {
@@ -407,6 +441,8 @@ public class Controller {
                 setItemEdited(workItem, true);
             }
         });
+
+        owlWindow.workTabArea.selectTab(tab);
 
         return tab;
     }
@@ -474,6 +510,7 @@ public class Controller {
         // // одного вызова достаточно?
         // textArea.rewindText();
         getCurrentTextArea().rewindText();
+        // getCurrentTextArea().eventScrollUp.execute(getCurrentTextArea(), new MouseArgs());
 
         // // Check editing
         // textArea.onTextChanged.add(() -> {
@@ -484,7 +521,7 @@ public class Controller {
         // });
 
         setItemEdited(workItem, false); // Загрузка сама считается изменением поля. Это нужно
-                                        // обязательно
+        // обязательно
         // }
 
         fillFields();

@@ -48,7 +48,7 @@ public class KeyBindings extends Prototype implements InterfaceFloating {
         window.setSize(500, 350);
         window.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         window.setBackground(50, 50, 50);
-        window.setShadow(5, 2, 2, new Color(0, 0, 0));
+        // window.setShadow(5, 2, 2, new Color(0, 0, 0));
 
         closeBtn.setBackground(100, 100, 100);
         closeBtn.setSize(12, 12);

@@ -9,18 +9,28 @@ namespace SpaceVIL
 {
     public class ComboBoxDropDown : Prototype, IFloating
     {
+        internal ComboBox Parent = null;
         public EventCommonMethod SelectionChanged;
         public override void Release()
         {
             SelectionChanged = null;
         }
-        
-        public Prototype ReturnFocus = null;
+
+        public Prototype _returnFocus = null;
+        public void SetReturnFocus(Prototype item)
+        {
+            _returnFocus = item;
+        }
+        public Prototype GetReturnFocusItem()
+        {
+            return _returnFocus;
+        }
+
         public ListBox ItemList = new ListBox();
-        private String _text_selection = String.Empty;
+        private String _textSelection = String.Empty;
         public String GetText()
         {
-            return _text_selection;
+            return _textSelection;
         }
         public int GetCurrentIndex()
         {
@@ -28,13 +38,12 @@ namespace SpaceVIL
         }
         public void SetCurrentIndex(int index)
         {
-            if (!_init)
-                InitElements();
+            InitElements();
 
             ItemList.SetSelection(index);
             MenuItem selection = ItemList.GetSelectedItem() as MenuItem;
             if (selection != null)
-                _text_selection = selection.GetText();
+                _textSelection = selection.GetText();
         }
         private List<IBaseItem> _queue = new List<IBaseItem>();
 
@@ -60,14 +69,45 @@ namespace SpaceVIL
         /// Constructs a ComboBoxDropDown
         /// </summary>
         /// <param name="handler"> parent window for the ComboBoxDropDown </param>
-        public ComboBoxDropDown(CoreWindow handler)
+        internal ComboBoxDropDown()
         {
-            ItemsLayoutBox.AddItem(handler, this, LayoutType.Floating);
+            SetItemName("ComboBoxDropDown_" + count++);
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBoxDropDown)));
             SetPassEvents(false);
             SetVisible(false);
-            SetItemName("ComboBoxDropDown_" + count);
-            count++;
-            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBoxDropDown)));
+        }
+
+        private EventMouseMethodState linkEventScrollUp = null;
+        private EventMouseMethodState linkEventScrollDown = null;
+        private EventMouseMethodState linkEventMouseClick = null;
+        private EventKeyMethodState linkEventKeyPress = null;
+
+        private void DisableAdditionalControls()
+        {
+            ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
+            ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
+            ItemList.EventScrollUp = null;
+            ItemList.EventScrollDown = null;
+            ItemList.EventMouseClick = null;
+            ItemList.EventKeyPress = null;
+        }
+
+        private void EnableAdditionalControls()
+        {
+            ItemList.SetVScrollBarVisible(ScrollBarVisibility.AsNeeded);
+            ItemList.SetHScrollBarVisible(ScrollBarVisibility.AsNeeded);
+            ItemList.EventScrollUp = linkEventScrollUp;
+            ItemList.EventScrollDown = linkEventScrollDown;
+            ItemList.EventMouseClick = linkEventMouseClick;
+            ItemList.EventKeyPress = linkEventKeyPress;
+        }
+
+        private void SaveAdditionalControls()
+        {
+            linkEventScrollUp = ItemList.EventScrollUp;
+            linkEventScrollDown = ItemList.EventScrollDown;
+            linkEventMouseClick = ItemList.EventMouseClick;
+            linkEventKeyPress = ItemList.EventKeyPress;
         }
 
         /// <summary>
@@ -75,31 +115,31 @@ namespace SpaceVIL
         /// </summary>
         public override void InitElements()
         {
-            SetConfines();
-            ItemList.SetVScrollBarVisible(ScrollBarVisibility.AsNeeded);
-            ItemList.SetHScrollBarVisible(ScrollBarVisibility.AsNeeded);
-            ItemList.GetArea().SelectionChanged += OnSelectionChanged;
-
-            base.AddItem(ItemList);
-
-            foreach (var item in _queue)
-                ItemList.AddItem(item);
-            _queue = null;
-            _init = true;
-
-            ItemList.GetArea().EventKeyPress += (sender, args) =>
+            if (!_init)
             {
-                if (args.Key == KeyCode.Escape)
-                    Hide();
-            };
+                ItemList.DisableMenu(true);
+                base.AddItem(ItemList);
+                SaveAdditionalControls();
+                DisableAdditionalControls();
+                ItemList.GetArea().SelectionChanged += OnSelectionChanged;
+                ItemList.GetArea().EventKeyPress += (sender, args) =>
+                {
+                    if (args.Key == KeyCode.Escape)
+                        Hide();
+                };
+                foreach (var item in _queue)
+                    ItemList.AddItem(item);
+                _queue = null;
+                _init = true;
+            }
             UpdateSize();
         }
 
-        void OnSelectionChanged()
+        private void OnSelectionChanged()
         {
             MenuItem selection = ItemList.GetSelectedItem() as MenuItem;
             if (selection != null)
-                _text_selection = selection.GetText();
+                _textSelection = selection.GetText();
             Hide();
             SelectionChanged?.Invoke();
         }
@@ -125,7 +165,10 @@ namespace SpaceVIL
         /// </summary>
         public override void AddItem(IBaseItem item)
         {
-            _queue.Add(item);
+            if (_init)
+                ItemList.AddItem(item);
+            else
+                _queue.Add(item);
         }
 
         /// <summary>
@@ -138,7 +181,7 @@ namespace SpaceVIL
 
         void UpdateSize()
         {
-            int height = 0;
+            int height = 0;// ItemList.GetPadding().Top + ItemList.GetPadding().Bottom;
             int width = GetWidth();
             List<IBaseItem> list = ItemList.GetListContent();
             foreach (var item in list)
@@ -159,8 +202,18 @@ namespace SpaceVIL
                 if (width < tmp)
                     width = tmp;
             }
+            if ((GetY() + height) > GetHandler().GetHeight())
+            {
+                EnableAdditionalControls();
+                SetHeight(GetHandler().GetHeight() - GetY() - 10);
+            }
+            else
+            {
+                DisableAdditionalControls();
+                SetHeight(height);
+                ItemList.VScrollBar.Slider.SetCurrentValue(ItemList.VScrollBar.Slider.GetMinValue());
+            }
             SetWidth(width);
-            SetHeight(height);
         }
 
         /// <summary>
@@ -173,9 +226,7 @@ namespace SpaceVIL
         {
             if (args.Button == ActiveButton)
             {
-                if (!_init)
-                    InitElements();
-
+                InitElements();
                 SetVisible(true);
                 SetConfines();
                 ItemList.GetArea().SetFocus();
@@ -193,11 +244,20 @@ namespace SpaceVIL
         /// </summary>
         public void Hide()
         {
-            SetX(-GetWidth());
             SetVisible(false);
-            // ItemList.Unselect();
-            ReturnFocus?.SetFocus();
+            ItemList.Unselect();
+            _returnFocus?.SetFocus();
         }
+
+        public void Hide(MouseArgs args)
+        {
+            if (!IsVisible())
+                return;
+
+            Hide();
+            Parent.IsDropDownAreaOutsideClicked(args);
+        }
+
 
         /// <summary>
         /// Set confines according to position and size of the ComboBoxDropDown
@@ -220,19 +280,11 @@ namespace SpaceVIL
         {
             if (style == null)
                 return;
-            SetPadding(style.Padding);
-            SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
-            SetBackground(style.Background);
-
+            base.SetStyle(style);
             Style inner_style = style.GetInnerStyle("itemlist");
             if (inner_style != null)
             {
                 ItemList.SetStyle(inner_style);
-            }
-            inner_style = style.GetInnerStyle("listarea");
-            if (inner_style != null)
-            {
-                ItemList.GetArea().SetStyle(inner_style);
             }
         }
     }

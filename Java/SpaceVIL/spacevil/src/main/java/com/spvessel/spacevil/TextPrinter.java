@@ -1,9 +1,7 @@
 package com.spvessel.spacevil;
 
-import java.nio.ByteBuffer;
-
 public class TextPrinter {
-    ByteBuffer texture = null;
+    byte[] texture = null;
     int xTextureShift = 0;
     int yTextureShift = 0;
     int widthTexture = 0;
@@ -13,7 +11,7 @@ public class TextPrinter {
         texture = null;
     }
 
-    TextPrinter(ByteBuffer bb) {
+    TextPrinter(byte[] bb) {
         texture = bb;
     }
 }

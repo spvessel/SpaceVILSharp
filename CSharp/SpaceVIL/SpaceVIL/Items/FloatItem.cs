@@ -98,6 +98,11 @@ namespace SpaceVIL
             SetVisible(false);
         }
 
+        public void Hide(MouseArgs args)
+        {
+            Hide();
+        }
+
         void OnMousePress(object sender, MouseArgs args)
         {
             _diff_x = args.Position.GetX() - GetX();

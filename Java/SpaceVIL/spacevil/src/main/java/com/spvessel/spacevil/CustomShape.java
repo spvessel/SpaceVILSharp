@@ -25,9 +25,9 @@ public class CustomShape extends Primitive {
      * Make shape with triangles and convert to GL coordinates
      */
     @Override
-    public List<float[]> makeShape() {
+    public void makeShape() {
         if (getTriangles() == null || getTriangles().size() == 0)
-            return null;
-        return GraphicsMathService.toGL(updateShape(), getHandler());
+            return;
+        setTriangles(updateShape());
     }
 }

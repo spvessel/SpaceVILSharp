@@ -44,6 +44,9 @@ public final class CursorImage {
             _cursor = CommonService.cursorArrow;
             break;
         }
+
+        _imageHeight = 25;
+        _imageWidth = 25;
     }
 
     public CursorImage(BufferedImage bitmap) {
@@ -93,23 +96,24 @@ public final class CursorImage {
 
         _imageWidth = bitmap.getWidth();
         _imageHeight = bitmap.getHeight();
-        List<Byte> _map = new LinkedList<Byte>();
-        for (int j = 0; j < bitmap.getHeight(); j++) {
-            for (int i = 0; i < bitmap.getWidth(); i++) {
-                byte[] bytes = ByteBuffer.allocate(4).putInt(bitmap.getRGB(i, j)).array();
-                _map.add(bytes[1]);
-                _map.add(bytes[2]);
-                _map.add(bytes[3]);
-                _map.add(bytes[0]);
-            }
-        }
-        ByteBuffer result = BufferUtils.createByteBuffer(_map.size());
-        int index = 0;
-        for (byte var : _map) {
-            result.put(index, var);
-            index++;
-        }
-        result.rewind();
-        return result;
+        // List<Byte> _map = new LinkedList<Byte>();
+        // for (int j = 0; j < bitmap.getHeight(); j++) {
+        //     for (int i = 0; i < bitmap.getWidth(); i++) {
+        //         byte[] bytes = ByteBuffer.allocate(4).putInt(bitmap.getRGB(i, j)).array();
+        //         _map.add(bytes[1]);
+        //         _map.add(bytes[2]);
+        //         _map.add(bytes[3]);
+        //         _map.add(bytes[0]);
+        //     }
+        // }
+        // ByteBuffer result = BufferUtils.createByteBuffer(_map.size());
+        // int index = 0;
+        // for (byte var : _map) {
+        //     result.put(index, var);
+        //     index++;
+        // }
+        // result.rewind();
+        // return result;
+        return VramTexture.getByteBuffer(bitmap);
     }
 }

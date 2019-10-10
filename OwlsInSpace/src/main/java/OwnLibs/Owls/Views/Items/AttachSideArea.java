@@ -1,7 +1,6 @@
 package OwnLibs.Owls.Views.Items;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.util.LinkedList;
 import java.util.List;
 

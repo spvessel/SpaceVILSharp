@@ -9,17 +9,24 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
+import com.spvessel.spacevil.Flags.RenderType;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public final class WindowManager {
+
+    private WindowManager() {
+        waitfunc.add(() -> glfwWaitEventsTimeout(getCurrentFrequency()));
+    }
+
     private static float _intervalVeryLow = 1.0f;
     private static float _intervalLow = 1.0f / 10.0f;
     private static float _intervalMedium = 1.0f / 30.0f;
     private static float _intervalHigh = 1.0f / 60.0f;
     private static float _intervalUltra = 1.0f / 120.0f;
-    private static float _intervalAssigned = 1.0f / 15.0f;
+    private static float _intervalAssigned = 1.0f / 10.0f;
     private static RedrawFrequency _frequency = RedrawFrequency.LOW;
 
     public static void setRenderFrequency(RedrawFrequency value) {
@@ -39,6 +46,38 @@ public final class WindowManager {
             }
         } catch (Exception ex) {
             System.out.println("Method - SetFrequency");
+            ex.printStackTrace();
+        } finally {
+            _lock.unlock();
+        }
+    }
+
+    private static int _vsync = 1;
+
+    public static void enableVSync(int value) {
+        if (_isRunning)
+            return;
+        _vsync = value;
+    }
+
+    public static int getVSyncValue() {
+        return _vsync;
+    }
+
+    public static void setRenderType(RenderType value) {
+        _lock.lock();
+        try {
+            waitfunc.clear();
+            if (value == RenderType.IF_NEEDED) {
+                waitfunc.add(() -> glfwWaitEvents());
+            } else if (value == RenderType.PERIODIC) {
+                waitfunc.add(() -> glfwWaitEventsTimeout(getCurrentFrequency()));
+            } else if (value == RenderType.ALWAYS) {
+                waitfunc.add(() -> glfwPollEvents());
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Method - setRenderType");
             ex.printStackTrace();
         } finally {
             _lock.unlock();
@@ -123,18 +162,24 @@ public final class WindowManager {
         }
     }
 
+    private static EventCommonMethod waitfunc = new EventCommonMethod();
+
     private static void run() {
         for (CoreWindow wnd : _windows) {
             initWindow(wnd);
         }
+        if (waitfunc.size() == 0)
+            waitfunc.add(() -> glfwWaitEventsTimeout(getCurrentFrequency()));
+
         _isRunning = true;
         while (!_isEmpty) {
             List<CoreWindow> list = getStoredWindows();
-            glfwWaitEventsTimeout(getCurrentFrequency());
+            waitfunc.execute();
             for (CoreWindow window : list) {
                 glfwMakeContextCurrent(window.getGLWID());
                 window.updateScene();
             }
+
             CoreWindow wnd = WindowsBox.getCurrentFocusedWindow();
             if (wnd != null && _initializedWindows.containsKey(wnd)) {
                 glfwMakeContextCurrent(wnd.getGLWID());

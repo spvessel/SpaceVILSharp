@@ -16,5 +16,5 @@ public interface InterfaceItem {
 
     void setTriangles(List<float[]> triangles);
 
-    List<float[]> makeShape();
+    void makeShape();
 }

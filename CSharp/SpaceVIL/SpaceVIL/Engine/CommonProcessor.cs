@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Glfw3;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
@@ -10,7 +9,7 @@ namespace SpaceVIL
     internal class CommonProcessor
     {
         internal WindowProcessor WndProcessor;
-        internal ToolTip Tooltip;
+        internal ToolTipItem Tooltip;
         internal ActionManagerAssigner Manager;
         internal GLWHandler Handler;
         internal CoreWindow Window;
@@ -43,7 +42,7 @@ namespace SpaceVIL
             WndProcessor = new WindowProcessor(this);
         }
 
-        internal void InitProcessor(GLWHandler handler, ToolTip toolTip)
+        internal void InitProcessor(GLWHandler handler, ToolTipItem toolTip)
         {
             this.Handler = handler;
             this.Tooltip = toolTip;
@@ -57,55 +56,52 @@ namespace SpaceVIL
         internal bool GetHoverPrototype(float xpos, float ypos, InputEventType action)
         {
             InputLocker = true;
-            List<Prototype> queue = new List<Prototype>();
             UnderHoveredItems.Clear();
 
             List<IBaseItem> layout_box_of_items = new List<IBaseItem>();
-            layout_box_of_items.Add(Handler.GetCoreWindow().GetLayout().GetContainer());
-            layout_box_of_items.AddRange(GetInnerItems(Handler.GetCoreWindow().GetLayout().GetContainer()));
+            layout_box_of_items.Add(RootContainer);
+            layout_box_of_items.AddRange(GetInnerItems(RootContainer, xpos, ypos));
 
-            foreach (var item in ItemsLayoutBox.GetLayoutFloatItems(Handler.GetCoreWindow().GetWindowGuid()))
+            foreach (var item in ItemsLayoutBox.GetLayoutFloatItems(Guid))
             {
                 if (!item.IsVisible() || !item.IsDrawable())
                     continue;
+                layout_box_of_items.Add(item);
+
                 Prototype leaf = item as Prototype;
                 if (leaf != null)
-                {
-                    if (leaf.IsDisabled())
-                        continue;
-                    layout_box_of_items.Add(item);
-                    layout_box_of_items.AddRange(GetInnerItems(leaf));
-                }
+                    layout_box_of_items.AddRange(GetInnerItems(leaf, xpos, ypos));
             }
             InputLocker = false;
+
+            List<Prototype> queue = new List<Prototype>();
+
             foreach (var item in layout_box_of_items)
             {
-                Prototype tmp = item as Prototype;
-                if (tmp != null)
+                Prototype prototype = item as Prototype;
+                if (prototype != null)
                 {
-                    if (!tmp.IsVisible() || !tmp.IsDrawable())
-                        continue;
-                    if (tmp.GetHoverVerification(xpos, ypos))
+                    if (prototype.GetHoverVerification(xpos, ypos))
                     {
-                        queue.Add(tmp);
+                        queue.Add(prototype);
                     }
                     else
                     {
-                        tmp.SetMouseHover(false);
-                        IFloating float_item = item as IFloating;
-                        if (float_item != null && action == InputEventType.MousePress)
+                        prototype.SetMouseHover(false);
+                        IFloating floatItem = item as IFloating;
+                        if (floatItem != null && action == InputEventType.MousePress)
                         {
-                            if (float_item.IsOutsideClickClosable())
+                            if (floatItem.IsOutsideClickClosable())
                             {
-                                ContextMenu to_close = (item as ContextMenu);
-                                if (to_close != null)
+                                ContextMenu cmToClose = (item as ContextMenu);
+                                if (cmToClose != null)
                                 {
-                                    if (to_close.CloseDependencies(Margs))
-                                        float_item.Hide();
+                                    if (cmToClose.CloseDependencies(Margs))
+                                        floatItem.Hide();
                                 }
                                 else
                                 {
-                                    float_item.Hide();
+                                    floatItem.Hide(Margs);
                                 }
                             }
                         }
@@ -115,12 +111,13 @@ namespace SpaceVIL
 
             if (queue.Count > 0)
             {
-                if (HoveredItem != null && (HoveredItem != queue.Last()))
+                if (HoveredItem != null && (HoveredItem != queue[queue.Count - 1]))
                     Manager.AssignActionsForSender(InputEventType.MouseLeave, Margs, HoveredItem, UnderFocusedItems, false);
 
-                HoveredItem = queue.Last();
+                HoveredItem = queue[queue.Count - 1];
                 HoveredItem.SetMouseHover(true);
-                Glfw.SetCursor(Handler.GetWindowId(), HoveredItem.GetCursor().GetCursor());
+                CommonService.CurrentCursor = HoveredItem.GetCursor();
+                Glfw.SetCursor(Handler.GetWindowId(), CommonService.CurrentCursor.GetCursor());
 
                 if (Handler.GetCoreWindow().IsBorderHidden && Handler.GetCoreWindow().IsResizable && !Handler.GetCoreWindow().IsMaximized)
                 {
@@ -181,6 +178,28 @@ namespace SpaceVIL
                         continue;
                     list.Add(item);
                     list.AddRange(GetInnerItems(leaf));
+                }
+            }
+            return list;
+        }
+
+        private List<IBaseItem> GetInnerItems(Prototype root, float xpos, float ypos)
+        {
+            List<IBaseItem> list = new List<IBaseItem>();
+            List<IBaseItem> rootItems = root.GetItems();
+
+            foreach (IBaseItem item in rootItems)
+            {
+                if (!item.IsVisible() || !item.IsDrawable())
+                    continue;
+                Prototype leaf = item as Prototype;
+                if (leaf != null)
+                {
+                    if (leaf.IsDisabled())
+                        continue;
+                    if (leaf.GetHoverVerification(xpos, ypos))
+                        list.Add(item);
+                    list.AddRange(GetInnerItems(leaf, xpos, ypos));
                 }
             }
             return list;

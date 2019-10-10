@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.HashMap;
 
 public class Style implements Cloneable {
@@ -45,7 +44,7 @@ public class Style implements Cloneable {
     public Indents padding = new Indents();
     public Spacing spacing = new Spacing();
     public Indents margin = new Indents();
-    public CornerRadius borderRadius = null;
+    public CornerRadius borderRadius = new CornerRadius();
     public int borderThickness = 0;
     public Color borderFill = new Color(0, 0, 0, 0);
     public List<float[]> shape;// = new List<float[]>();
@@ -237,7 +236,7 @@ public class Style implements Cloneable {
     }
 
     public void setShadow(Shadow shadow) {
-        shadowColor = shadow.getColor();//GraphicsMathService.cloneColor(shadow.getColor());
+        shadowColor = shadow.getColor();// GraphicsMathService.cloneColor(shadow.getColor());
         shadowRadius = shadow.getRadius();
         shadowXOffset = shadow.getXOffset();
         shadowYOffset = shadow.getYOffset();
@@ -247,7 +246,8 @@ public class Style implements Cloneable {
      * Set object alignment
      */
     public void setAlignment(ItemAlignment... alignment) {
-        // List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
+        // List<ItemAlignment> list =
+        // Arrays.stream(alignment).collect(Collectors.toList());
         // this.alignment = list;
         this.alignment = Arrays.asList(alignment);
     }
@@ -256,7 +256,8 @@ public class Style implements Cloneable {
      * Set text alignment in the object
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        // List<ItemAlignment> list = Arrays.stream(alignment).collect(Collectors.toList());
+        // List<ItemAlignment> list =
+        // Arrays.stream(alignment).collect(Collectors.toList());
         // this.textAlignment = list;
         this.textAlignment = Arrays.asList(alignment);
     }
@@ -577,7 +578,7 @@ public class Style implements Cloneable {
      */
     public static Style getComboBoxStyle() {
         Style style = new Style();
-        style.background = new Color(0, 0, 0, 0);
+        style.background = new Color(220, 220, 220);
         style.foreground = new Color(70, 70, 70);
         style.font = DefaultsService.getDefaultFont();
         style.widthPolicy = SizePolicy.EXPAND;
@@ -589,7 +590,7 @@ public class Style implements Cloneable {
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
 
         Style selection_style = new Style();
-        selection_style.background = new Color(220, 220, 220);
+        selection_style.background = new Color(0, 0, 0, 0);
         selection_style.foreground = new Color(70, 70, 70);
 
         selection_style.font = DefaultsService.getDefaultFont(14);
@@ -615,6 +616,8 @@ public class Style implements Cloneable {
 
         style.addInnerStyle("dropdownbutton", dropdownbutton_style);
 
+        style.addInnerStyle("dropdownarea", getComboBoxDropDownStyle());
+
         Style arrow_style = new Style();
         arrow_style.width = 14;
         arrow_style.height = 6;
@@ -637,13 +640,17 @@ public class Style implements Cloneable {
         style.widthPolicy = SizePolicy.FIXED;
         style.heightPolicy = SizePolicy.FIXED;
         style.padding = new Indents(0, 0, 0, 0);
-        style.setShadow(new Shadow(5, 3, 3, new Color(0, 0, 0, 180)));
-        style.isShadowDrop = true;
+        style.isVisible = false;
 
         Style itemlist_style = getListBoxStyle();
         itemlist_style.background = new Color(0, 0, 0, 0);
         itemlist_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         style.addInnerStyle("itemlist", itemlist_style);
+
+        Style itemlistarea_style = itemlist_style.getInnerStyle("area");
+        if (itemlistarea_style != null) {
+            itemlist_style.setPadding(0, 0, 0, 0);
+        }
 
         Style vsb_style = getSimpleVerticalScrollBarStyle();
         vsb_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.TOP);
@@ -680,8 +687,7 @@ public class Style implements Cloneable {
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.padding = new Indents(10, 0, 10, 0);
-
-        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(150, 150, 150)));
+        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(200, 200, 200)));
 
         Style text_style = new Style();
         text_style.setMargin(0, 0, 0, 0);
@@ -705,20 +711,17 @@ public class Style implements Cloneable {
      * @return default style for ContextMenu objects
      */
     public static Style getContextMenuStyle() {
-        Style style = new Style();
+        Style style = getDefaultCommonStyle();
         style.background = new Color(210, 210, 210);
-        style.widthPolicy = SizePolicy.FIXED;
-        style.heightPolicy = SizePolicy.FIXED;
-        style.padding = new Indents(0, 0, 0, 0);
+        style.isVisible = false;
 
-        Style itemlist_style = new Style();
+        Style itemlist_style = getListBoxStyle();
         itemlist_style.background = new Color(0, 0, 0, 0);
         itemlist_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.HCENTER, ItemAlignment.VCENTER));
         style.addInnerStyle("itemlist", itemlist_style);
 
-        Style area_style = getListAreaStyle();
+        Style area_style = itemlist_style.getInnerStyle("area");
         area_style.setPadding(0, 0, 0, 0);
-        style.addInnerStyle("listarea", area_style);
 
         return style;
     }
@@ -1169,7 +1172,7 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
         style.padding = new Indents(2, 2, 2, 2);
-        style.spacing = new Spacing(0, 5);
+        style.spacing = new Spacing(0, 4);
 
         Style selection_style = getSelectionItemStyle();
         style.addInnerStyle("selection", selection_style);
@@ -1522,8 +1525,16 @@ public class Style implements Cloneable {
         style.heightPolicy = SizePolicy.FIXED;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
-        style.padding = new Indents(5, 0, 5, 0);
+        style.padding = new Indents(5, 5, 5, 5);
         style.borderRadius = new CornerRadius(4);
+
+        Style text_style = new Style();
+        text_style.background = new Color(0, 0, 0, 0);
+        text_style.widthPolicy = SizePolicy.EXPAND;
+        text_style.heightPolicy = SizePolicy.EXPAND;
+        text_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+        text_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
+        style.addInnerStyle("text", text_style);
 
         return style;
     }
@@ -1604,28 +1615,6 @@ public class Style implements Cloneable {
         Style title_style = new Style();
         title_style.margin = new Indents(10, 0, 0, 0);
         style.addInnerStyle("title", title_style);
-
-        return style;
-    }
-
-    /**
-     * @return default style for TabView objects
-     */
-    public static Style getTabViewStyle() {
-        Style style = getVerticalStackStyle();
-        style.background = new Color(50, 50, 50);
-
-        Style tabBarStyle = getHorizontalStackStyle();
-        tabBarStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
-        tabBarStyle.height = 30;
-        style.addInnerStyle("tabbar", tabBarStyle);
-
-        Style tab_style = getTabStyle();
-        style.addInnerStyle("tab", tab_style);
-
-        Style view_style = tab_style.getInnerStyle("view");
-        if (view_style != null)
-            style.addInnerStyle("view", view_style);
 
         return style;
     }
@@ -2156,17 +2145,19 @@ public class Style implements Cloneable {
         Style style = new Style();
         style.borderRadius = new CornerRadius(3, 3, 0, 0);
         style.font = DefaultsService.getDefaultFont(14);
-        style.background = new Color(0, 0, 0, 0);
+        style.background = new Color(255, 255, 255, 10);
+        // style.background = new Color(60, 60, 60);
         style.setForeground(210, 210, 210);
-        style.minWidth = 70;
-        // style.maxWidth = 200;
+        style.minWidth = 30;
         style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
         style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         style.padding = new Indents(0, 0, 0, 0);
         style.padding = new Indents(10, 2, 5, 2);
         style.spacing = new Spacing(5, 0);
-        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 20)));
-        style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(71, 71, 71)));
+        style.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 60)));
+        // style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(71, 71,
+        // 71)));
+        style.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(255, 255, 255, 25)));
         style.setShadow(new Shadow(5, 0, 0, new Color(0, 0, 0, 150)));
         style.isShadowDrop = false;
 
@@ -2189,6 +2180,38 @@ public class Style implements Cloneable {
         view_style.isVisible = false;
         view_style.padding = new Indents(2, 2, 2, 2);
         style.addInnerStyle("view", view_style);
+
+        return style;
+    }
+
+    public static Style getTabBarStyle() {
+        Style style = getHorizontalStackStyle();
+        style.setSpacing(1, 0);
+        return style;
+    }
+
+    /**
+     * @return default style for TabView objects
+     */
+    public static Style getTabViewStyle() {
+        Style style = getVerticalStackStyle();
+        style.background = new Color(50, 50, 50);
+
+        Style tabBarStyle = getTabBarStyle();
+        tabBarStyle.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        tabBarStyle.height = 30;
+        style.addInnerStyle("tabbar", tabBarStyle);
+
+        Style tab_style = getTabStyle();
+        style.addInnerStyle("tab", tab_style);
+
+        // Style view_style = tab_style.getInnerStyle("view");
+        // if (view_style != null)
+        // style.addInnerStyle("view", view_style);
+
+        Style area_style = getFrameStyle();
+        area_style.setPadding(0, 0, 0, 0);
+        style.addInnerStyle("viewarea", area_style);
 
         return style;
     }

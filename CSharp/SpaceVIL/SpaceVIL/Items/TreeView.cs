@@ -123,7 +123,7 @@ namespace SpaceVIL
 
         public override void SetListContent(IEnumerable<IBaseItem> content)
         {
-            GetArea().RemoveAllItems();
+            GetArea().Clear();
             foreach (IBaseItem item in content)
             {
                 AddItem(item);

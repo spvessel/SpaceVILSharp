@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -239,15 +240,14 @@ namespace SpaceVIL
         public virtual void SetListContent(IEnumerable<IBaseItem> content)
         {
             RemoveAllItems();
-            foreach (IBaseItem item in content)
+            IEnumerator<IBaseItem> node = content.GetEnumerator();
+            while(node.MoveNext())
             {
-                SelectionItem wrapper = GetWrapper(item);
+                SelectionItem wrapper = GetWrapper(node.Current);
                 base.AddItem(wrapper);
                 wrapper.UpdateSize();
-                _mapContent.Add(item, wrapper);
+                _mapContent.Add(node.Current, wrapper);
             }
-            // UpdateLayout();
-            ItemListChanged?.Invoke();
         }
 
         /// <summary>
@@ -299,37 +299,26 @@ namespace SpaceVIL
         public override void Clear()
         {
             RemoveAllItems();
+            UpdateLayout();
+            ItemListChanged?.Invoke();
         }
 
-        internal void RemoveAllItems()
+        private void RemoveAllItems()
         {
-            Monitor.Enter(_lock);
-            try
-            {
-                Unselect();
-                List<IBaseItem> list = GetItems();
+            Unselect();
+            List<IBaseItem> list = GetItems();
 
-                if (list == null || list.Count == 0)
-                    return;
-                _mapContent.Clear();
+            if (list == null || list.Count == 0)
+                return;
 
-                while (list.Count > 0)
-                {
-                    (list.ElementAt(0) as SelectionItem).ClearContent();
-                    base.RemoveItem(list.ElementAt(0));
-                    list.RemoveAt(0);
-                }
-                UpdateLayout();
-                ItemListChanged?.Invoke();
-            }
-            catch (Exception ex)
+            while (list.Count > 0)
             {
-                Console.WriteLine(ex.StackTrace);
+                (list.ElementAt(0) as SelectionItem).ClearContent();
+                base.RemoveItem(list.ElementAt(0));
+                list.RemoveAt(0);
             }
-            finally
-            {
-                Monitor.Exit(_lock);
-            }
+
+            _mapContent.Clear();
         }
 
         /// <summary>
@@ -420,7 +409,6 @@ namespace SpaceVIL
                 }
                 child.SetDrawable(true);
             }
-
             _isUpdating = false;
         }
 

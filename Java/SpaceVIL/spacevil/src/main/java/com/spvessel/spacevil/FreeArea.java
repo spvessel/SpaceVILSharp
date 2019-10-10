@@ -6,7 +6,7 @@ import com.spvessel.spacevil.Core.*;
 import java.util.Map;
 import java.util.HashMap;
 
-public class FreeArea extends Prototype implements InterfaceDraggable, InterfaceFree {
+public class FreeArea extends Prototype implements InterfaceDraggable, InterfaceFreeLayout {
     /**
      * Unbounded area with free location of inner items
      */
@@ -75,6 +75,7 @@ public class FreeArea extends Prototype implements InterfaceDraggable, Interface
         _storedItemsCoords.put(item, new int[] { item.getX(), item.getY() });
         if (item instanceof ResizableItem) {
             ResizableItem wanted = (ResizableItem) item;
+            wanted.setPassEvents(false);
             wanted.positionChanged.add(() -> correctPosition(wanted));
         }
         updateLayout();
@@ -98,9 +99,10 @@ public class FreeArea extends Prototype implements InterfaceDraggable, Interface
      */
     public void updateLayout() {
         for (InterfaceBaseItem child : getItems()) {
-            child.setX(
-                    (int) _xOffset + getX() + getPadding().left + _storedItemsCoords.get(child)[0] + child.getMargin().left);
-            child.setY((int) _yOffset + getY() + getPadding().top + _storedItemsCoords.get(child)[1] + child.getMargin().top);
+            child.setX((int) _xOffset + getX() + getPadding().left + _storedItemsCoords.get(child)[0]
+                    + child.getMargin().left);
+            child.setY((int) _yOffset + getY() + getPadding().top + _storedItemsCoords.get(child)[1]
+                    + child.getMargin().top);
         }
     }
 

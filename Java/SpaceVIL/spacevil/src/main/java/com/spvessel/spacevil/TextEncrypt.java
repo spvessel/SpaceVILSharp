@@ -5,6 +5,7 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
 import com.spvessel.spacevil.SpaceVILConstants;
+import com.spvessel.spacevil.Common.CommonService;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -165,7 +166,7 @@ class TextEncrypt extends Prototype implements InterfaceTextEditable, InterfaceD
                     }
                 }
 
-                if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1) {
+                if (args.mods.contains(CommonService.getOsControlMod()) && args.mods.size() == 1) {
                     if (args.key == KeyCode.A || args.key == KeyCode.a) {
                         selectAll();
                     }

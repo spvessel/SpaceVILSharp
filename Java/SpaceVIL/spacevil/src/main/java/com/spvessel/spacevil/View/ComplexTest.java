@@ -21,6 +21,7 @@ public class ComplexTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
+        isCentered = true;
         isBorderHidden = true;
         setSize(950, 700);
         setWindowName("ComplexTest");
@@ -39,7 +40,7 @@ public class ComplexTest extends ActiveWindow {
 
         treeview = new TreeView();
         block = new Grid(4, 4);
-        wrap = new WrapGrid(100, 100, Orientation.VERTICAL);
+        wrap = new WrapGrid(100, 100, Orientation.HORIZONTAL);
         wrap.setStretch(true);
 
         TitleBar title = new TitleBar("ComplexTest");
@@ -48,7 +49,7 @@ public class ComplexTest extends ActiveWindow {
         HorizontalStack toolbar = new HorizontalStack();
         toolbar.setBackground(51, 51, 51);
         toolbar.setItemName("toolbar");
-        toolbar.setSpacing(6, 0);
+        toolbar.setSpacing(-5, 0);
         toolbar.setMargin(0, 30, 0, 0);
         toolbar.setHeight(40);
         toolbar.setPadding(10, 0, 0, 0);
@@ -103,7 +104,9 @@ public class ComplexTest extends ActiveWindow {
 
         Style btn_style = Style.getButtonCoreStyle();
         btn_style.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
-        btn_style.setStyle(b1, b2, b5, b6);
+        btn_style.borderRadius = new CornerRadius(6);
+        // btn_style.setStyle(b1, b2, b5, b6);
+        btn_style.setStyle(b1, b2, b3, b4, b5, b6);
 
         // HorizontalSplitArea split_area = new HorizontalSplitArea();
         VerticalSplitArea split_area = new VerticalSplitArea();
@@ -171,7 +174,7 @@ public class ComplexTest extends ActiveWindow {
         Style style = new Style();
         style.background = new Color(255, 181, 111);
         style.foreground = new Color(0, 0, 0);
-        style.borderRadius = new CornerRadius(6);
+        style.borderRadius = new CornerRadius(15);
         style.font = DefaultsService.getDefaultFont();// new Font("Courier New", Font.PLAIN, 16);
         style.width = w;
         style.minWidth = 30;
@@ -183,7 +186,7 @@ public class ComplexTest extends ActiveWindow {
         style.heightPolicy = policy;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
-        style.margin = new Indents(5, 5, 5, 5);
+        // style.margin = new Indents(5, 5, 5, 5);
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 30);
         style.addItemState(ItemStateType.HOVERED, hovered);

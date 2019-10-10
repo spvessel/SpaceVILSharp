@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceGrid;
+import com.spvessel.spacevil.Core.InterfaceFreeLayout;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
@@ -17,7 +17,7 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 import java.util.HashMap;
 import java.util.List;
 
-public class WrapArea extends Prototype implements InterfaceGrid {
+public class WrapArea extends Prototype implements InterfaceFreeLayout {
     Map<InterfaceBaseItem, SelectionItem> _mapContent = new HashMap<>();
     private Lock _lock = new ReentrantLock();
     public EventCommonMethod selectionChanged = new EventCommonMethod();
@@ -278,8 +278,7 @@ public class WrapArea extends Prototype implements InterfaceGrid {
         updateLayout();
     }
 
-    public void setListContent(List<InterfaceBaseItem> content)
-    {
+    public void setListContent(List<InterfaceBaseItem> content) {
         removeAllItems();
         for (InterfaceBaseItem item : content) {
             SelectionItem wrapper = getWrapper(item);
@@ -333,30 +332,23 @@ public class WrapArea extends Prototype implements InterfaceGrid {
     @Override
     public void clear() {
         removeAllItems();
+        updateLayout();
+        itemListChanged.execute();
     }
 
-    void removeAllItems() {
-        _lock.lock();
-        try {
-            unselect();
-            List<InterfaceBaseItem> list = getItems();
+    private void removeAllItems() {
+        unselect();
+        List<InterfaceBaseItem> list = getItems();
 
-            if (list == null || list.size() == 0)
-                return;
+        if (list == null || list.size() == 0)
+            return;
 
-            while (!list.isEmpty()) {
-                ((SelectionItem) list.get(0)).clearContent();
-                super.removeItem(list.get(0));
-                list.remove(0);
-            }
-            _mapContent.clear();
-            updateLayout();
-            itemListChanged.execute();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            _lock.unlock();
+        while (!list.isEmpty()) {
+            ((SelectionItem) list.get(0)).clearContent();
+            super.removeItem(list.get(0));
+            list.remove(0);
         }
+        _mapContent.clear();
     }
 
     /**

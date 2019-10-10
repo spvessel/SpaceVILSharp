@@ -20,8 +20,7 @@ public class Label extends Prototype implements InterfaceVLayout {
 
     @Override
     protected boolean getHoverVerification(float xpos, float ypos) {
-        if (isHover)
-        {
+        if (isHover) {
             return super.getHoverVerification(xpos, ypos);
         }
         return false;
@@ -46,7 +45,6 @@ public class Label extends Prototype implements InterfaceVLayout {
         this();
         setText(text);
     }
-
 
     public Label(String text, boolean hover) {
         this(text);
@@ -276,7 +274,6 @@ public class Label extends Prototype implements InterfaceVLayout {
             return;
         }
         super.setStyle(style);
-        
         setFont(style.font);
         setForeground(style.foreground);
         setTextAlignment(style.textAlignment);

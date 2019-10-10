@@ -81,6 +81,10 @@ public class FloatItem extends Prototype implements InterfaceFloating, Interface
         setVisible(false);
     }
 
+    public void hide(MouseArgs args) {
+        hide();
+    }
+
     private void onMousePress(InterfaceItem sender, MouseArgs args) {
         _diff_x = args.position.getX() - getX();
         _diff_y = args.position.getY() - getY();

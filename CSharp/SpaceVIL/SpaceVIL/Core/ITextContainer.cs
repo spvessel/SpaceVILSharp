@@ -13,5 +13,7 @@ namespace SpaceVIL.Core
 
         TextPrinter GetLetTextures();
         Color GetForeground();
+        void SetRemakeText(bool value);
+        bool IsRemakeText();
     }
 }

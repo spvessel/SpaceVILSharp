@@ -9,6 +9,16 @@ namespace SpaceVIL
 {
     abstract public class Prototype : IBaseItem
     {
+        public bool IsRemakeRequest()
+        {
+            return _core.IsRemakeRequest();
+        }
+
+        public void SetRemakeRequest(bool value)
+        {
+            _core.SetRemakeRequest(value);
+        }
+
         private VisualItem _core = new VisualItem();
         internal VisualItem GetCore()
         {
@@ -246,9 +256,9 @@ namespace SpaceVIL
         {
             _core.SetTriangles(triangles);
         }
-        public virtual List<float[]> MakeShape()
+        public virtual void MakeShape()
         {
-            return _core.MakeShape();
+            _core.MakeShape();
         }
 
         /// <summary>
@@ -811,9 +821,9 @@ namespace SpaceVIL
             return _core.GetConfines();
         }
 
-        internal ItemStateType GetCurrentState()
+        internal ItemStateType GetCurrentStateType()
         {
-            return _core.GetCurrentState();
+            return _core.GetCurrentStateType();
         }
 
         internal void SetState(ItemStateType state)
@@ -824,7 +834,7 @@ namespace SpaceVIL
         // /// <summary>
         // /// Set list of the Prototype's inner items. Old items will be removed
         // /// </summary>
-        internal void SetContent(List<IBaseItem> content)
+        public void SetContent(List<IBaseItem> content)
         {
             List<IBaseItem> oldContent = GetItems();
             if (oldContent.Count != content.Count)

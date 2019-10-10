@@ -534,7 +534,7 @@ public class TextArea extends Prototype {
         return _area.isWrapText();
     }
 
-    public void setWrapText(boolean wrapText) {
-        _area.setWrapText(wrapText);
+    public void setWrapText(boolean value) {
+        _area.setWrapText(value);
     }
 }

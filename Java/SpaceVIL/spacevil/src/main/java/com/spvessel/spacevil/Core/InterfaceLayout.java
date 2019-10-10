@@ -1,5 +1,5 @@
 package com.spvessel.spacevil.Core;
 
-public interface InterfaceGrid {
+public interface InterfaceLayout {
     void updateLayout();
 }

@@ -34,7 +34,7 @@ namespace SpaceVIL
             SetItemName("LoadingScreen_" + count++);
             SetPassEvents(false);
             _loadIcon = new ImageItem();
-            if (_loadIcon.GetPixMapImage() == null)
+            if (_loadIcon.GetImage() == null)
                 _loadIcon.SetImage(DefaultsService.GetDefaultImage(EmbeddedImage.LoadCircle, EmbeddedImageSize.Size64x64));
             _text_object = new Label("0%");
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.LoadingScreen)));

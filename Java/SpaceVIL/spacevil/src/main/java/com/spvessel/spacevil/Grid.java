@@ -1,7 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.InterfaceGrid;
+import com.spvessel.spacevil.Core.InterfaceFreeLayout;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -10,7 +10,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.LinkedList;
 
-public class Grid extends Prototype implements InterfaceGrid {
+public class Grid extends Prototype implements InterfaceFreeLayout {
     private static int count = 0;
 
     /**
@@ -275,14 +275,17 @@ public class Grid extends Prototype implements InterfaceGrid {
         return rowHeight;
     }
 
+    private boolean _isUpdating = false;
     /**
      * Update all children and grid sizes and positions according to confines
      */
     // update Layout
     public void updateLayout() {
 
-        if (getItems().size() == 0)
+        List<InterfaceBaseItem> list = getItems();
+        if (list == null || list.size() == 0 || _isUpdating)
             return;
+        _isUpdating = true;
 
         int[] columns_width = getColumnsWidth();
         colWidth = columns_width;
@@ -324,7 +327,7 @@ public class Grid extends Prototype implements InterfaceGrid {
             y_offset += _cells.get(index).getHeight() + getSpacing().vertical;
             x_offset = 0;
         }
-
+        _isUpdating = false;
     }
 
     private int[] getRowsHeight() {

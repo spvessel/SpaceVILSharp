@@ -6,9 +6,8 @@ using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
-    public class PointsContainer : Primitive, IPoints, ILine
+    public class PointsContainer : Primitive, IPoints
     {
-        // PrimitiveType _shape
         static int count = 0;
 
         /// <summary>
@@ -71,68 +70,26 @@ namespace SpaceVIL
         /// </summary>
         public void SetPointsCoord(List<float[]> coord)
         {
-            List<float[]> tmp = new List<float[]>();
-            foreach (var item in coord)
-            {
-                tmp.Add(item);
-            }
+            List<float[]> tmp = new List<float[]>(coord);
             SetTriangles(tmp);
-        }
-
-        private List<float[]> UpdateCrd()
-        {
-            //clone triangles
-            List<float[]> result = new List<float[]>();
-            for (int i = 0; i < GetTriangles().Count; i++)
-                result.Add(new float[] { GetTriangles().ElementAt(i)[0], GetTriangles().ElementAt(i)[1], GetTriangles().ElementAt(i)[2] });
-            
-            //to the left top corner
-            foreach (var item in result)
-            {
-                item[0] = (item[0]) + GetX();
-                item[1] = (item[1]) + GetY();
-            }
-
-            return result;
         }
 
         /// <summary>
         /// Make shape according to triangles list assigned with setTriangles
         /// </summary>
-        public override List<float[]> MakeShape()
+        public override void MakeShape()
+        {
+            if (GetTriangles() != null)
+            {
+                SetTriangles(UpdateShape());
+            }
+        }
+
+        public List<float[]> GetPoints()
         {
             if (GetTriangles() == null || GetTriangles().Count < 2)
                 return null;
-
-            return UpdateShape();
-        }
-
-        float _line_thickness = 1.0f;
-
-        /// <summary>
-        /// Thickness of the line between the points
-        /// </summary>
-        public void SetLineThickness(float thickness)
-        {
-            _line_thickness = thickness;
-        }
-        public float GetLineThickness()
-        {
-            return _line_thickness;
-        }
-
-        Color _line_color = Color.Blue;
-
-        /// <summary>
-        /// The line color
-        /// </summary>
-        public void SetLineColor(Color color)
-        {
-            _line_color = color;
-        }
-        public Color GetLineColor()
-        {
-            return _line_color;
+            return GetTriangles();
         }
     }
 }
