@@ -1110,14 +1110,21 @@ namespace SpaceVIL
 
         public override void SetWidth(int width)
         {
-            // if (GetWidth() == width)
-            // {
-            //     return;
-            // }
+            if (GetWidth() == width)
+            {
+                return;
+            }
             Point tmpCursor = new Point(_cursorPosition.X, _cursorPosition.Y);
+            Point fromTmp = new Point(_selectFrom.X, _selectFrom.Y);
+            Point toTmp = new Point(_selectTo.X, _selectTo.Y);
             if (IsWrapText())
             {
                 tmpCursor = _textureStorage.WrapCursorPosToReal(_cursorPosition);
+                if (_isSelect)
+                {
+                    fromTmp = _textureStorage.WrapCursorPosToReal(_selectFrom);
+                    toTmp = _textureStorage.WrapCursorPosToReal(_selectTo);
+                }
             }
             base.SetWidth(width);
             ReorganizeText();
@@ -1126,14 +1133,22 @@ namespace SpaceVIL
             {
                 _cursorPosition = _textureStorage.RealCursorPosToWrap(tmpCursor);
                 ReplaceCursor();
+                if (_isSelect)
+                {
+                    fromTmp = _textureStorage.RealCursorPosToWrap(fromTmp);
+                    toTmp = _textureStorage.RealCursorPosToWrap(toTmp);
+                    _selectFrom = fromTmp;
+                    _selectTo = toTmp;
+                    MakeSelectedArea();
+                }
             }
         }
         public override void SetHeight(int height)
         {
-            // if (GetHeight() == height)
-            // {
-            //     return;
-            // }
+            if (GetHeight() == height)
+            {
+                return;
+            }
             base.SetHeight(height);
             _textureStorage.UpdateBlockHeight();
         }
@@ -1220,12 +1235,12 @@ namespace SpaceVIL
 
     private bool _isWrapText;
 
-    public bool IsWrapText()
+    internal bool IsWrapText()
     {
         return _isWrapText;
     }
 
-    public void SetWrapText(bool value)
+    internal void SetWrapText(bool value)
     {
         if (value == _isWrapText)
         {
@@ -1237,9 +1252,41 @@ namespace SpaceVIL
         {
             String text = GetText();
 
+            Point cursorTmp = _cursorPosition;
+            Point fromTmp = new Point();
+            Point toTmp = new Point();
+            if (_isWrapText)
+            {
+                cursorTmp = _textureStorage.WrapCursorPosToReal(cursorTmp);
+                if (_isSelect)
+                {
+                    fromTmp = _textureStorage.WrapCursorPosToReal(_selectFrom);
+                    toTmp = _textureStorage.WrapCursorPosToReal(_selectTo);
+                }
+            }
+
             _isWrapText = value;
 
             _textureStorage.SetText(text); //not added into redo/undo
+
+            if (_isWrapText) //was unwrap become wrap
+            {
+                cursorTmp = _textureStorage.RealCursorPosToWrap(cursorTmp);
+                if (_isSelect)
+                {
+                    fromTmp = _textureStorage.RealCursorPosToWrap(_selectFrom);
+                    toTmp = _textureStorage.RealCursorPosToWrap(_selectTo);
+                }
+            }
+
+            _cursorPosition = cursorTmp;
+            ReplaceCursor();
+            if (_isSelect)
+            {
+                _selectFrom = fromTmp;
+                _selectTo = toTmp;
+                MakeSelectedArea();
+            }
         }
         finally
         {
