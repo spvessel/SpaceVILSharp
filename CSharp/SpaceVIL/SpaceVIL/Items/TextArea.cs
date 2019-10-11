@@ -262,8 +262,11 @@ namespace SpaceVIL
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
-            UpdateHorizontalSlider();
-            HScrollBar.Slider.UpdateHandler();
+            if (!IsWrapText())
+            {
+                UpdateHorizontalSlider();
+                HScrollBar.Slider.UpdateHandler();
+            }
             // _area.SetWidth(width);
         }
 
@@ -282,8 +285,11 @@ namespace SpaceVIL
         {
             UpdateVerticalSlider();
             VScrollBar.Slider.UpdateHandler();
-            UpdateHorizontalSlider();
-            HScrollBar.Slider.UpdateHandler();
+            if (!IsWrapText())
+            {
+                UpdateHorizontalSlider();
+                HScrollBar.Slider.UpdateHandler();
+            }
         }
 
         public EventCommonMethod OnTextChanged;
@@ -585,6 +591,7 @@ namespace SpaceVIL
         public void SetWrapText(bool value)
         {
             _area.SetWrapText(value);
+            UpdateHorizontalSlider();
         }
     }
 }

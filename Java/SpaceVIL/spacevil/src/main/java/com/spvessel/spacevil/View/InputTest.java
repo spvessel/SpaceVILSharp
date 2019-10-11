@@ -85,17 +85,17 @@ public class InputTest extends ActiveWindow {
         te.setWidth(300);
         te.setWidthPolicy(SizePolicy.EXPAND);
 
-//        TextArea tb = new TextArea();
-        TextView tb = new TextView();
+        TextArea tb = new TextArea();
+        // TextView tb = new TextView();
         tb.setMargin(2, 2, 2, 27);
         // tb.setEditable(false);
-//        tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-//        tb.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+        //        tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+        //        tb.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         tb.setText("123\nqwe sdfsdqwe qweqwe qewqqweq wqeq f;l!\nk(sdfsdf) sdf\nsdqeq eqeqw eqwf_ sdfs\ndfs_d ff+gh");
-//        tb.setPadding(10,0,10,0);
-//        tb.setWidth(30);
-        tb.setHeight(50);
-        tb.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
+        //        tb.setPadding(10,0,10,0);
+        //        tb.setWidth(30);
+        // tb.setHeight(50);
+        // tb.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
 
         //        tb.eventKeyPress.add((sender, args) -> {
         //            if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.S) {
@@ -118,7 +118,7 @@ public class InputTest extends ActiveWindow {
         //        layout.addItem(te);
 
         layout.addItem(tb);
-//        tb.setStyle(Style.getTextAreaStyle());
+            //    tb.setStyle(Style.getTextAreaStyle());
 
         ButtonCore bc = new ButtonCore("pizdec");
         bc.setSize(150, 30);
@@ -224,7 +224,7 @@ public class InputTest extends ActiveWindow {
                     fontSize--;
                     System.out.println(fontSize);
                     if (fontSize < 10)
-                    return;
+                        return;
                     tb.setFontSize(fontSize);
                 }
             }

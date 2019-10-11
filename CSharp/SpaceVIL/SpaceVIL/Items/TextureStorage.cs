@@ -178,7 +178,7 @@ namespace SpaceVIL
             }
         }
 
-        private int CheckLineWidth(int xpt, Point checkPoint)
+        private int CheckLineWidth(int xpt, SpaceVIL.Core.Point checkPoint)
         {
             int outPtX = xpt;
             int letCount = GetLettersCountInLine(checkPoint.Y);
@@ -251,12 +251,12 @@ namespace SpaceVIL
             CheckWidth(); // <- _isUpdateTextureNeed = true;
         }
 
-        internal void BreakLine(Point _cursorPosition)
+        internal void BreakLine(SpaceVIL.Core.Point _cursorPosition)
         {
             BreakLine(_cursorPosition, true);
         }
 
-        private void BreakLine(Point _cursorPosition, bool isRealBreak)
+        private void BreakLine(SpaceVIL.Core.Point _cursorPosition, bool isRealBreak)
         {
             string newText;
             if (_cursorPosition.X >= GetLettersCountInLine(_cursorPosition.Y))
@@ -279,7 +279,7 @@ namespace SpaceVIL
         {
             _lineBreakes = new List<int>();
             _lineBreakes.Add(0);
-            SetTextInLine("", new Point(0, 0)); //_linesList[0].SetItemText("");
+            SetTextInLine("", new SpaceVIL.Core.Point(0, 0)); //_linesList[0].SetItemText("");
             RemoveLines(1, _linesList.Count - 1);
 
             CheckWidth();
@@ -310,9 +310,9 @@ namespace SpaceVIL
             return pos;
         }
 
-        internal Point CheckLineFits(Point checkPoint)
+        internal SpaceVIL.Core.Point CheckLineFits(SpaceVIL.Core.Point checkPoint)
         {
-            Point outPt = new Point();
+            SpaceVIL.Core.Point outPt = new SpaceVIL.Core.Point();
             //??? check line count
             outPt.Y = checkPoint.Y;
             if (outPt.Y == -1)
@@ -330,10 +330,10 @@ namespace SpaceVIL
             return outPt;
         }
 
-        private Point CursorPosToCoord(Point cPos0)
+        private SpaceVIL.Core.Point CursorPosToCoord(SpaceVIL.Core.Point cPos0)
         {
-            Point cPos = CheckLineFits(cPos0);
-            Point coord = new Point(0, 0);
+            SpaceVIL.Core.Point cPos = CheckLineFits(cPos0);
+            SpaceVIL.Core.Point coord = new SpaceVIL.Core.Point(0, 0);
             coord.Y = GetLineY(cPos.Y);
 
             int letCount = GetLettersCountInLine(cPos.Y);
@@ -359,21 +359,21 @@ namespace SpaceVIL
             return GetTextLine(cPosY).GetLetPosArray()[cPosX]; //_linesList[cPosY].GetLetPosArray()[cPosX];
         }
 
-        private Point CursorPosToCoordAndGlobalShifts(Point cursorPos)
+        private SpaceVIL.Core.Point CursorPosToCoordAndGlobalShifts(SpaceVIL.Core.Point cursorPos)
         {
-            Point coord = CursorPosToCoord(cursorPos);
-            return SumPoints(coord, new Point(globalXShift, globalYShift));
+            SpaceVIL.Core.Point coord = CursorPosToCoord(cursorPos);
+            return SumPoints(coord, new SpaceVIL.Core.Point(globalXShift, globalYShift));
         }
 
-        private Point SumPoints(Point cursorPos, Point adderPoint)
+        private SpaceVIL.Core.Point SumPoints(SpaceVIL.Core.Point cursorPos, SpaceVIL.Core.Point adderPoint)
         {
-            Point coord = new Point(cursorPos.X, cursorPos.Y);
+            SpaceVIL.Core.Point coord = new SpaceVIL.Core.Point(cursorPos.X, cursorPos.Y);
             coord.X += adderPoint.X;
             coord.Y += adderPoint.Y;
             return coord;
         }
 
-        internal Point ReplaceCursorAccordingCoord(Point realPos)
+        internal SpaceVIL.Core.Point ReplaceCursorAccordingCoord(SpaceVIL.Core.Point realPos)
         {
             Prototype parent = GetParent();
             realPos.Y -= parent.GetY() + parent.GetPadding().Top + globalYShift + GetTextMargin().Top;
@@ -389,13 +389,13 @@ namespace SpaceVIL
 
             realPos.X -= parent.GetX() + parent.GetPadding().Left + GetTextMargin().Left;
 
-            Point outPt = new Point(0, 0);
+            SpaceVIL.Core.Point outPt = new SpaceVIL.Core.Point(0, 0);
             outPt.Y = lineNumb;
             outPt.X = CoordXToPos(realPos.X, lineNumb);
             return outPt;
         }
 
-        internal void CombineLines(Point combinePos) //int topLineY)
+        internal void CombineLines(SpaceVIL.Core.Point combinePos) //int topLineY)
         {
             string text = GetTextInLine(combinePos.Y); //_linesList[topLineY].GetItemText();
             text += GetTextInLine(combinePos.Y + 1); //_linesList[topLineY + 1].GetItemText();
@@ -437,7 +437,8 @@ namespace SpaceVIL
             int prevLineVal = (lineNum > 0) ? _lineBreakes[lineNum - 1] : -1;
             int nextLineVal = (lineNum < _lineBreakes.Count - 1) ? _lineBreakes[lineNum + 1] : lineVal;
 
-            _lineBreakes.Remove(lineNum);
+            _lineBreakes.RemoveAt(lineNum);
+
             if (lineVal != prevLineVal && lineVal != nextLineVal)
             {
                 for (int i = lineNum; i < _lineBreakes.Count; i++)
@@ -460,6 +461,10 @@ namespace SpaceVIL
 
         private void UpdLinesXShift()
         {
+            if (CheckIsWrap())
+            {
+                return;
+            }
             foreach (TextLine line in _linesList)
             {
                 line.SetLineXShift(globalXShift);
@@ -550,13 +555,13 @@ namespace SpaceVIL
             return _elementFont;
         }
 
-        internal void SetTextInLine(string text, Point cursorPos) //int lineY)
+        internal void SetTextInLine(string text, SpaceVIL.Core.Point cursorPos) //int lineY)
         {
             GetTextLine(cursorPos.Y).SetItemText(text); //_linesList[lineY].SetItemText(text);
             if (CheckIsWrap())
             {
                 WrapLine(cursorPos.Y);
-                Point newPos = FindNewPosition(cursorPos);
+                SpaceVIL.Core.Point newPos = FindNewPosition(cursorPos);
                 cursorPos.X = newPos.X;
                 cursorPos.Y = newPos.Y;
             }
@@ -601,7 +606,7 @@ namespace SpaceVIL
             return _wholeText;
         }
 
-        internal void GetSelectedText(StringBuilder sb, Point fromPt, Point toPt)
+        internal void GetSelectedText(StringBuilder sb, SpaceVIL.Core.Point fromPt, SpaceVIL.Core.Point toPt)
         {
             if (CheckIsWrap())
             {
@@ -615,10 +620,10 @@ namespace SpaceVIL
 
         private void MakeUnwrapText(StringBuilder sb)
         {
-            MakeUnwrapText(sb, new Point(0, 0), new Point(GetLettersCountInLine(_linesList.Count - 1), _linesList.Count - 1));
+            MakeUnwrapText(sb, new SpaceVIL.Core.Point(0, 0), new SpaceVIL.Core.Point(GetLettersCountInLine(_linesList.Count - 1), _linesList.Count - 1));
         }
 
-        private void MakeUnwrapText(StringBuilder sb, Point fromPt, Point toPt)
+        private void MakeUnwrapText(StringBuilder sb, SpaceVIL.Core.Point fromPt, SpaceVIL.Core.Point toPt)
         {
             if (fromPt.X >= GetLettersCountInLine(fromPt.Y))
             {
@@ -642,10 +647,10 @@ namespace SpaceVIL
 
         private void MakeTextAccordingToBreaks(StringBuilder sb)
         {
-            MakeTextAccordingToBreaks(sb, new Point(0, 0), new Point(GetLettersCountInLine(_linesList.Count - 1), _linesList.Count - 1));
+            MakeTextAccordingToBreaks(sb, new SpaceVIL.Core.Point(0, 0), new SpaceVIL.Core.Point(GetLettersCountInLine(_linesList.Count - 1), _linesList.Count - 1));
         }
 
-        private void MakeTextAccordingToBreaks(StringBuilder sb, Point fromPt, Point toPt)
+        private void MakeTextAccordingToBreaks(StringBuilder sb, SpaceVIL.Core.Point fromPt, SpaceVIL.Core.Point toPt)
         {
             int currentVal = _lineBreakes[fromPt.Y];
             int nextVal = (fromPt.Y < toPt.Y) ? _lineBreakes[fromPt.Y + 1] : currentVal;
@@ -677,9 +682,9 @@ namespace SpaceVIL
             sb.Append(textLast); //_linesList.get(_linesList.size() - 1).getText());
         }
 
-        internal Point SetText(string text)
+        internal SpaceVIL.Core.Point SetText(string text)
         {
-            Point curPos = new Point(0, 0);
+            SpaceVIL.Core.Point curPos = new SpaceVIL.Core.Point(0, 0);
             if (String.IsNullOrEmpty(text)) //text == null || text.Equals(""))
             {
                 Clear();
@@ -716,7 +721,7 @@ namespace SpaceVIL
             return _lineSpacer;
         }
 
-        private Point SplitAndMakeLines(string text)
+        private SpaceVIL.Core.Point SplitAndMakeLines(string text)
         {
             Clear();
 
@@ -727,7 +732,7 @@ namespace SpaceVIL
             string s;
 
             s = line[0].TrimEnd('\r');
-            SetTextInLine(s, new Point(line[0].Length, 0)); //_linesList[0].SetItemText(s);
+            SetTextInLine(s, new SpaceVIL.Core.Point(line[0].Length, 0)); //_linesList[0].SetItemText(s);
 
             for (int i = 1; i < line.Length; i++)
             {
@@ -735,7 +740,7 @@ namespace SpaceVIL
                 AddNewLine(s, _linesList.Count);
             }
 
-            Point curPos = new Point(0, 0);
+            SpaceVIL.Core.Point curPos = new SpaceVIL.Core.Point(0, 0);
             curPos.Y = _linesList.Count - 1; //line.Length - 1;
             curPos.X = GetLettersCountInLine(curPos.Y);
 
@@ -743,7 +748,7 @@ namespace SpaceVIL
             return curPos;
         }
 
-        internal void CutText(Point fromReal, Point toReal)
+        internal void CutText(SpaceVIL.Core.Point fromReal, SpaceVIL.Core.Point toReal)
         {
             if (fromReal.Y == toReal.Y)
             {
@@ -765,7 +770,7 @@ namespace SpaceVIL
             CheckWidth();
         }
 
-        internal Point PasteText(string pasteStr, Point _cursor_position)
+        internal SpaceVIL.Core.Point PasteText(string pasteStr, SpaceVIL.Core.Point _cursor_position)
         {
             string textInLine = GetTextInLine(_cursor_position.Y); //_linesList[_cursor_position.Y].GetItemText()
             string textBeg = textInLine.Substring(0, _cursor_position.X);
@@ -806,7 +811,7 @@ namespace SpaceVIL
                 //------------------------------------------------------------------------------
                 BreakLine(_cursor_position);
                 int beforeSize = _linesList.Count;
-                SetTextInLine(textBeg + line[0], new Point(0, _cursor_position.Y)); //_cursor_position.y); //textBeg = getTextInLine(_cursor_position.y);
+                SetTextInLine(textBeg + line[0], new SpaceVIL.Core.Point(0, _cursor_position.Y)); //_cursor_position.y); //textBeg = getTextInLine(_cursor_position.y);
                 int nextLineNumb = _cursor_position.Y;
                 int afterSize = _linesList.Count;
                 nextLineNumb += (afterSize - beforeSize) + 1;
@@ -818,7 +823,7 @@ namespace SpaceVIL
                     nextLineNumb += (afterSize - beforeSize);
                 }
 
-                _cursor_position = new Point(line[line.Length - 1].Length, nextLineNumb);
+                _cursor_position = new SpaceVIL.Core.Point(line[line.Length - 1].Length, nextLineNumb);
                 SetTextInLine(line[line.Length - 1] + textEnd, _cursor_position); //nextLineNumb);
             }
 
@@ -826,7 +831,7 @@ namespace SpaceVIL
             return _cursor_position;
         }
 
-        private Point FindNewPosition(Point oldCoord)
+        private SpaceVIL.Core.Point FindNewPosition(SpaceVIL.Core.Point oldCoord)
         {
             int linesInc = oldCoord.Y;
             while (oldCoord.X >= 0 && linesInc < _linesList.Count)
@@ -839,19 +844,19 @@ namespace SpaceVIL
                 }
                 else
                 {
-                    return new Point(oldCoord.X, linesInc); //_cursor_position.x = lastLineLength; // - 1;
+                    return new SpaceVIL.Core.Point(oldCoord.X, linesInc); //_cursor_position.x = lastLineLength; // - 1;
                 }
             }
 
-            return new Point(0, oldCoord.Y);
+            return new SpaceVIL.Core.Point(0, oldCoord.Y);
         }
 
-        internal Point AddXYShifts(Point point)
+        internal SpaceVIL.Core.Point AddXYShifts(SpaceVIL.Core.Point point)
         {
-            Point outPoint = CursorPosToCoord(point);
+            SpaceVIL.Core.Point outPoint = CursorPosToCoord(point);
             Prototype parent = GetParent();
             if (parent == null)
-                return new Point(0, 0);
+                return new SpaceVIL.Core.Point(0, 0);
             int offset = _cursorXMax / 3;
             if (globalXShift + outPoint.X < 0)
             {
@@ -896,12 +901,12 @@ namespace SpaceVIL
             return outPoint;
         }
 
-        private bool CheckPoints(Point point)
+        private bool CheckPoints(SpaceVIL.Core.Point point)
         {
             return (!(point.Y >= _linesList.Count));
         }
 
-        internal List<Point> SelectedArrays(Point fromPt, Point toPt)
+        internal List<SpaceVIL.Core.Point> SelectedArrays(SpaceVIL.Core.Point fromPt, SpaceVIL.Core.Point toPt)
         {
             if (!CheckPoints(fromPt))
             {
@@ -913,15 +918,15 @@ namespace SpaceVIL
             }
 
             int cursorHeight = GetCursorHeight();
-            List<Point> selectionRectangles = new List<Point>();
+            List<SpaceVIL.Core.Point> selectionRectangles = new List<SpaceVIL.Core.Point>();
             Prototype parent = GetParent();
-            Point adderPt = new Point();
+            SpaceVIL.Core.Point adderPt = new SpaceVIL.Core.Point();
             adderPt.X = parent.GetX() + parent.GetPadding().Left + GetTextMargin().Left;
             adderPt.Y = parent.GetY() + parent.GetPadding().Top + GetTextMargin().Top;
 
-            Point tmp = new Point();
-            Point xy1;
-            Point xy2;
+            SpaceVIL.Core.Point tmp = new SpaceVIL.Core.Point();
+            SpaceVIL.Core.Point xy1;
+            SpaceVIL.Core.Point xy2;
             int lsp = GetLineSpacer();
 
             if (fromPt.Y == toPt.Y)
@@ -951,8 +956,8 @@ namespace SpaceVIL
 
                 xy1 = SumPoints(xy1, adderPt);
                 xy2 = SumPoints(xy2, adderPt);
-                selectionRectangles.Add(new Point(xy1.X, xy1.Y - cursorHeight - lsp / 2 + 1));
-                selectionRectangles.Add(new Point(xy2.X, xy2.Y - lsp / 2 + 1));
+                selectionRectangles.Add(new SpaceVIL.Core.Point(xy1.X, xy1.Y - cursorHeight - lsp / 2 + 1));
+                selectionRectangles.Add(new SpaceVIL.Core.Point(xy2.X, xy2.Y - lsp / 2 + 1));
 
                 return selectionRectangles;
             }
@@ -979,8 +984,8 @@ namespace SpaceVIL
                     xy1 = SumPoints(xy1, adderPt);
                     xy2 = SumPoints(xy2, adderPt);
 
-                    selectionRectangles.Add(new Point(xy1.X, xy1.Y - cursorHeight - lsp / 2 + 1));
-                    selectionRectangles.Add(new Point(xy2.X, xy2.Y - lsp / 2 + 1));
+                    selectionRectangles.Add(new SpaceVIL.Core.Point(xy1.X, xy1.Y - cursorHeight - lsp / 2 + 1));
+                    selectionRectangles.Add(new SpaceVIL.Core.Point(xy2.X, xy2.Y - lsp / 2 + 1));
                 }
             }
 
@@ -1005,8 +1010,8 @@ namespace SpaceVIL
 
                     xy1 = SumPoints(xy1, adderPt);
                     xy2 = SumPoints(xy2, adderPt);
-                    selectionRectangles.Add(new Point(xy1.X, xy1.Y - cursorHeight - lsp / 2 + 1));
-                    selectionRectangles.Add(new Point(xy2.X, xy2.Y - lsp / 2 + 1));
+                    selectionRectangles.Add(new SpaceVIL.Core.Point(xy1.X, xy1.Y - cursorHeight - lsp / 2 + 1));
+                    selectionRectangles.Add(new SpaceVIL.Core.Point(xy2.X, xy2.Y - lsp / 2 + 1));
                 }
             }
 
@@ -1036,8 +1041,8 @@ namespace SpaceVIL
 
                         xy1 = SumPoints(xy1, adderPt);
                         xy2 = SumPoints(xy2, adderPt);
-                        selectionRectangles.Add(new Point(xy1.X, xy1.Y - cursorHeight - lsp / 2 + 1));
-                        selectionRectangles.Add(new Point(xy2.X, xy2.Y - lsp / 2 + 1));
+                        selectionRectangles.Add(new SpaceVIL.Core.Point(xy1.X, xy1.Y - cursorHeight - lsp / 2 + 1));
+                        selectionRectangles.Add(new SpaceVIL.Core.Point(xy2.X, xy2.Y - lsp / 2 + 1));
                     }
                 }
             }
@@ -1263,7 +1268,7 @@ namespace SpaceVIL
         }
 
         private Regex patternWordBounds = new Regex(@"\W|_");
-        internal int[] FindWordBounds(Point cursorPosition)
+        internal int[] FindWordBounds(SpaceVIL.Core.Point cursorPosition)
         {
             //С положение курсора должно быть все в порядке, не нужно проверять вроде бы
             String lineText = GetTextInLine(cursorPosition.Y);
@@ -1331,7 +1336,7 @@ namespace SpaceVIL
                     int nextLet = GetTextLine(lineNum + 1).GetLetPosArray()[0];
                     if (textLine.GetWidth() + nextLet < _cursorXMax)
                     {
-                        CombineLines(new Point(textInLine.Length, lineNum));
+                        CombineLines(new SpaceVIL.Core.Point(textInLine.Length, lineNum));
                     }
                 }
                 return;
@@ -1344,7 +1349,6 @@ namespace SpaceVIL
 
             int ind = 0;
             int pos = textInLine.IndexOf(" ", ind);
-
             while (pos >= 0)
             {
                 listSpace.Add(letPosArr[pos]);
@@ -1353,7 +1357,7 @@ namespace SpaceVIL
                 pos = textInLine.IndexOf(" ", ind);
             }
 
-            Point breakPos;
+            SpaceVIL.Core.Point breakPos;
             int splitPos = 0;
             if (listSpace.Count == 0) //one long word
             {
@@ -1378,10 +1382,10 @@ namespace SpaceVIL
 
             if (splitPos == letPosArr.Count - 1 || splitPos == 0)
             {
-                return; //or it will be splitted with an empty line
+                return; //or it will be splitted with an empty linef
             }
 
-            breakPos = new Point(splitPos, lineNum);
+            breakPos = new SpaceVIL.Core.Point(splitPos, lineNum);
 
             if (lineVal == nextLineVal)
             {
@@ -1389,7 +1393,7 @@ namespace SpaceVIL
                 StringBuilder newText = new StringBuilder(text.Substring(breakPos.X));
                 newText.Append(GetTextInLine(breakPos.Y + 1));
                 textLine.SetItemText(text.Substring(0, breakPos.X)); // setTextInLine(text.substring(0, breakPos.x), new Point(breakPos.x, breakPos.y));
-                SetTextInLine(newText.ToString(), new Point(newText.Length, breakPos.Y + 1));
+                SetTextInLine(newText.ToString(), new SpaceVIL.Core.Point(newText.Length, breakPos.Y + 1));
             }
             else
             {
@@ -1448,14 +1452,14 @@ namespace SpaceVIL
             }
         }
 
-        internal Point WrapCursorPosToReal(Point wrapPos)
+        internal SpaceVIL.Core.Point WrapCursorPosToReal(SpaceVIL.Core.Point wrapPos)
         {
             //Convert wrap cursor position to real position
             if (_lineBreakes.Count != _linesList.Count)
             {
                 return wrapPos;
             }
-            Point realPos = new Point(0, 0);
+            SpaceVIL.Core.Point realPos = new SpaceVIL.Core.Point(0, 0);
             int lineNum = FindLineBegInBreakLines(wrapPos.Y);
             int lineRealLength = wrapPos.X;
             for (int i = lineNum; i < wrapPos.Y; i++)
@@ -1469,14 +1473,14 @@ namespace SpaceVIL
             return realPos;
         }
 
-        internal Point RealCursorPosToWrap(Point realPos)
+        internal SpaceVIL.Core.Point RealCursorPosToWrap(SpaceVIL.Core.Point realPos)
         {
             //Convert real cursor position to wrap position
             if (_lineBreakes.Count != _linesList.Count)
             {
                 return realPos;
             }
-            Point wrapPos = new Point(0, 0);
+            SpaceVIL.Core.Point wrapPos = new SpaceVIL.Core.Point(0, 0);
 
             int lineBeg = _lineBreakes[realPos.Y];
             if (lineBeg != realPos.Y) //which means less

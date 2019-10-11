@@ -22,7 +22,7 @@ namespace SpaceVIL
         /// <summary>
         /// Make CustomSelector's rectangles with left top and right bottom points
         /// </summary>
-        public void SetRectangles(List<Point> points)
+        public void SetRectangles(List<SpaceVIL.Core.Point> points)
         {
             List<float[]> triangles = new List<float[]>();
             int w1 = 0, w2 = 0;
@@ -38,8 +38,8 @@ namespace SpaceVIL
                 rectY = points[1].Y;
                 for (int i = 0; i < points.Count / 2; i++)
                 {
-                    Point p1 = points[i * 2 + 0];
-                    Point p2 = points[i * 2 + 1];
+                    SpaceVIL.Core.Point p1 = points[i * 2 + 0];
+                    SpaceVIL.Core.Point p2 = points[i * 2 + 1];
                     triangles.AddRange(
                         GraphicsMathService.GetRectangle((p2.X - p1.X), (p2.Y - p1.Y), p1.X - rectX, p2.Y - rectY));
                     w1 = (p1.X < w1) ? p1.X : w1;

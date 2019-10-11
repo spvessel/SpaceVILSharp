@@ -107,7 +107,7 @@ namespace SpaceVIL
             _imageHeight = bitmap.Height;
             int size = _imageWidth * _imageHeight;
             BitmapData bitData = bitmap.LockBits(
-                new System.Drawing.Rectangle(Point.Empty, bitmap.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                new System.Drawing.Rectangle(System.Drawing.Point.Empty, bitmap.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             int[] pixels = new int[size];
             Marshal.Copy(bitData.Scan0, pixels, 0, size);
             bitmap.UnlockBits(bitData);

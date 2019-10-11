@@ -229,8 +229,10 @@ public class TextArea extends Prototype {
     @Override
     public void setWidth(int width) {
         super.setWidth(width);
-        updateHorizontalSlider();
-        hScrollBar.slider.updateHandler();
+        if (!isWrapText()) {
+            updateHorizontalSlider();
+            hScrollBar.slider.updateHandler();
+        }
         // _area.setWidth(width);
     }
 
@@ -248,8 +250,10 @@ public class TextArea extends Prototype {
     private void updateElements() {
         updateVerticalSlider();
         vScrollBar.slider.updateHandler();
-        updateHorizontalSlider();
-        hScrollBar.slider.updateHandler();
+        if (!isWrapText()) {
+            updateHorizontalSlider();
+            hScrollBar.slider.updateHandler();
+        }
     }
 
     public EventCommonMethod onTextChanged = new EventCommonMethod();
@@ -536,5 +540,6 @@ public class TextArea extends Prototype {
 
     public void setWrapText(boolean value) {
         _area.setWrapText(value);
+        updateHorizontalSlider();
     }
 }

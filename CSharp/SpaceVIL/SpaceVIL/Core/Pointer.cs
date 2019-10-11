@@ -8,10 +8,7 @@ namespace SpaceVIL.Core
 {
     public class Pointer
     {
-        public Pointer()
-        {
-
-        }
+        public Pointer() { }
 
         public Pointer(int x, int y)
         {

@@ -203,7 +203,7 @@ namespace SpaceVIL
             int imageHeight = icon.Height;
             int size = imageWidth * imageHeight;
             BitmapData bitData = icon.LockBits(
-                new System.Drawing.Rectangle(Point.Empty, icon.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                new System.Drawing.Rectangle(System.Drawing.Point.Empty, icon.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             int[] pixels = new int[size];
             Marshal.Copy(bitData.Scan0, pixels, 0, size);
             icon.UnlockBits(bitData);

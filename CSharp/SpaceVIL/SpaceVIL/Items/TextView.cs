@@ -13,13 +13,13 @@ namespace SpaceVIL
     public class TextView : Prototype, IDraggable, ITextShortcuts, ITextWrap
     {
         private static int count = 0;
-        private Point _cursorPosition = new Point(0, 0);
+        private SpaceVIL.Core.Point _cursorPosition = new SpaceVIL.Core.Point(0, 0);
         private CustomSelector _selectedArea;
 
         private TextureStorage _textureStorage;
 
-        private Point _selectFrom = new Point(-1, 0);
-        private Point _selectTo = new Point(-1, 0);
+        private SpaceVIL.Core.Point _selectFrom = new SpaceVIL.Core.Point(-1, 0);
+        private SpaceVIL.Core.Point _selectTo = new SpaceVIL.Core.Point(-1, 0);
         private bool _isSelect = false;
 
         public TextView()
@@ -48,7 +48,7 @@ namespace SpaceVIL
             {
                 if (args.Button == MouseButton.ButtonLeft)
                 {
-                    ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
+                    ReplaceCursorAccordingCoord(new SpaceVIL.Core.Point(args.Position.GetX(), args.Position.GetY()));
                     if (_isSelect)
                     {
                         UnselectText();
@@ -58,9 +58,9 @@ namespace SpaceVIL
                     if (wordBounds[0] != wordBounds[1])
                     {
                         _isSelect = true;
-                        _selectFrom = new Point(wordBounds[0], _cursorPosition.Y);
-                        _selectTo = new Point(wordBounds[1], _cursorPosition.Y);
-                        _cursorPosition = new Point(_selectTo.X, _selectTo.Y);
+                        _selectFrom = new SpaceVIL.Core.Point(wordBounds[0], _cursorPosition.Y);
+                        _selectTo = new SpaceVIL.Core.Point(wordBounds[1], _cursorPosition.Y);
+                        _cursorPosition = new SpaceVIL.Core.Point(_selectTo.X, _selectTo.Y);
                         MakeSelectedArea();
                     }
 
@@ -85,7 +85,7 @@ namespace SpaceVIL
             {
                 if (args.Button == MouseButton.ButtonLeft)
                 {
-                    ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
+                    ReplaceCursorAccordingCoord(new SpaceVIL.Core.Point(args.Position.GetX(), args.Position.GetY()));
                     if (_isSelect)
                     {
                         UnselectText();
@@ -94,9 +94,9 @@ namespace SpaceVIL
                     if (_isDoubleClick && _startTime.ElapsedMilliseconds < 500) //Select line on triple click
                     {
                         _isSelect = true;
-                        _selectFrom = new Point(0, _cursorPosition.Y);
-                        _selectTo = new Point(GetLettersCountInLine(_cursorPosition.Y), _cursorPosition.Y);
-                        _cursorPosition = new Point(_selectTo.X, _selectTo.Y);
+                        _selectFrom = new SpaceVIL.Core.Point(0, _cursorPosition.Y);
+                        _selectTo = new SpaceVIL.Core.Point(GetLettersCountInLine(_cursorPosition.Y), _cursorPosition.Y);
+                        _cursorPosition = new SpaceVIL.Core.Point(_selectTo.X, _selectTo.Y);
                         MakeSelectedArea();
                     }
                 }
@@ -115,15 +115,15 @@ namespace SpaceVIL
             {
                 if (args.Button == MouseButton.ButtonLeft)
                 {
-                    ReplaceCursorAccordingCoord(new Point(args.Position.GetX(), args.Position.GetY()));
+                    ReplaceCursorAccordingCoord(new SpaceVIL.Core.Point(args.Position.GetX(), args.Position.GetY()));
                     if (!_isSelect)
                     {
                         _isSelect = true;
-                        _selectFrom = new Point(_cursorPosition.X, _cursorPosition.Y);
+                        _selectFrom = new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y);
                     }
                     else
                     {
-                        _selectTo = new Point(_cursorPosition.X, _cursorPosition.Y);
+                        _selectTo = new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y);
                         MakeSelectedArea();
                     }
                     _isDoubleClick = false;
@@ -135,7 +135,7 @@ namespace SpaceVIL
             }
         }
 
-        private void ReplaceCursorAccordingCoord(Point realPos)
+        private void ReplaceCursorAccordingCoord(SpaceVIL.Core.Point realPos)
         {
             _cursorPosition = _textureStorage.ReplaceCursorAccordingCoord(realPos);
         }
@@ -201,7 +201,7 @@ namespace SpaceVIL
             MakeSelectedArea(_selectFrom, _selectTo);
         }
 
-        private void MakeSelectedArea(Point from, Point to)
+        private void MakeSelectedArea(SpaceVIL.Core.Point from, SpaceVIL.Core.Point to)
         {
             if (from.X == to.X && from.Y == to.Y)
             {
@@ -209,10 +209,10 @@ namespace SpaceVIL
                 return;
             }
 
-            List<Point> selectionRectangles;
+            List<SpaceVIL.Core.Point> selectionRectangles;
 
-            Point fromReal, toReal;
-            List<Point> listPt = RealFromTo(from, to);
+            SpaceVIL.Core.Point fromReal, toReal;
+            List<SpaceVIL.Core.Point> listPt = RealFromTo(from, to);
             fromReal = listPt[0];
             toReal = listPt[1];
             
@@ -221,10 +221,10 @@ namespace SpaceVIL
             _selectedArea.SetRectangles(selectionRectangles);
         }
 
-        private List<Point> RealFromTo(Point from, Point to)
+        private List<SpaceVIL.Core.Point> RealFromTo(SpaceVIL.Core.Point from, SpaceVIL.Core.Point to)
         {
-            List<Point> ans = new List<Point>();
-            Point fromReal, toReal;
+            List<SpaceVIL.Core.Point> ans = new List<SpaceVIL.Core.Point>();
+            SpaceVIL.Core.Point fromReal, toReal;
             if (from.Y == to.Y)
             {
                 if (from.X < to.X)
@@ -273,9 +273,9 @@ namespace SpaceVIL
                     return "";
                 }
                 StringBuilder sb = new StringBuilder();
-                List<Point> listPt = RealFromTo(_selectFrom, _selectTo);
-                Point fromReal = listPt[0];
-                Point toReal = listPt[1];
+                List<SpaceVIL.Core.Point> listPt = RealFromTo(_selectFrom, _selectTo);
+                SpaceVIL.Core.Point fromReal = listPt[0];
+                SpaceVIL.Core.Point toReal = listPt[1];
 
                 string stmp;
                 if (fromReal.Y == toReal.Y)
@@ -307,7 +307,7 @@ namespace SpaceVIL
             _selectFrom.Y = 0;
             _selectTo.X = -1;
             _selectTo.Y = 0;
-            MakeSelectedArea(new Point(_cursorPosition.X, _cursorPosition.Y), new Point(_cursorPosition.X, _cursorPosition.Y));
+            MakeSelectedArea(new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y), new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y));
         }
 
         public void SelectAll()
@@ -319,7 +319,7 @@ namespace SpaceVIL
                 _selectFrom.Y = 0;
                 _cursorPosition.Y = _textureStorage.GetLinesCount() - 1;
                 _cursorPosition.X = GetLettersCountInLine(_cursorPosition.Y);
-                _selectTo = new Point(_cursorPosition.X, _cursorPosition.Y);
+                _selectTo = new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y);
                 _isSelect = true;
                 MakeSelectedArea();
             }
@@ -335,9 +335,9 @@ namespace SpaceVIL
             {
                 return;
             }
-            Point tmpCursor = new Point(_cursorPosition.X, _cursorPosition.Y);
-            Point fromTmp = new Point(_selectFrom.X, _selectFrom.Y);
-            Point toTmp = new Point(_selectTo.X, _selectTo.Y);
+            SpaceVIL.Core.Point tmpCursor = new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y);
+            SpaceVIL.Core.Point fromTmp = new SpaceVIL.Core.Point(_selectFrom.X, _selectFrom.Y);
+            SpaceVIL.Core.Point toTmp = new SpaceVIL.Core.Point(_selectTo.X, _selectTo.Y);
             
             tmpCursor = _textureStorage.WrapCursorPosToReal(_cursorPosition);
             if (_isSelect)
