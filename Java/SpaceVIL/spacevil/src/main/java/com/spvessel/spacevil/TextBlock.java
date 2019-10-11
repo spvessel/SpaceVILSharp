@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.List;
 
 class TextBlock extends Prototype
-        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceFreeLayout {
+        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceFreeLayout, InterfaceTextWrap {
 
     EventCommonMethod cursorChanged = new EventCommonMethod();
     EventCommonMethod textChanged = new EventCommonMethod();
@@ -595,6 +595,9 @@ class TextBlock extends Prototype
         _cursor.setHeight(_textureStorage.getCursorHeight());
         addItems(_selectedArea, _textureStorage, _cursor);
         _textureStorage.initLines(_cursor.getWidth());
+        if (isWrapText()) {
+            reorganizeText();
+        }
     }
 
     @Override
@@ -938,12 +941,18 @@ class TextBlock extends Prototype
 
     @Override
     public void setWidth(int width) {
-        // if (getWidth() == width) {
-        //     return;
-        // }
+        if (getWidth() == width) {
+            return;
+        }
         Point tmpCursor = new Point(_cursorPosition);
+        Point fromTmp = new Point(_selectFrom);
+        Point toTmp = new Point(_selectTo);
         if (isWrapText()) {
             tmpCursor = _textureStorage.wrapCursorPosToReal(_cursorPosition);
+            if (_isSelect) {
+                fromTmp = _textureStorage.wrapCursorPosToReal(_selectFrom);
+                toTmp = _textureStorage.wrapCursorPosToReal(_selectTo);
+            }
         }
         super.setWidth(width);
         reorganizeText();
@@ -951,14 +960,21 @@ class TextBlock extends Prototype
         if (isWrapText()) {
             _cursorPosition = _textureStorage.realCursorPosToWrap(tmpCursor);
             replaceCursor();
+            if (_isSelect) {
+                fromTmp = _textureStorage.realCursorPosToWrap(fromTmp);
+                toTmp = _textureStorage.realCursorPosToWrap(toTmp);
+                _selectFrom = fromTmp;
+                _selectTo = toTmp;
+                makeSelectedArea();
+            }
         }
     }
 
     @Override
     public void setHeight(int height) {
-        // if (getHeight() == height) {
-        //     return;
-        // }
+        if (getHeight() == height) {
+            return;
+        }
         super.setHeight(height);
         _textureStorage.updateBlockHeight();
     }
@@ -1043,7 +1059,7 @@ class TextBlock extends Prototype
         return _isWrapText;
     }
 
-    public void setWrapText(boolean value) {
+    void setWrapText(boolean value) {
         if (value == _isWrapText) {
             return;
         }
@@ -1052,9 +1068,37 @@ class TextBlock extends Prototype
         try {
             String text = getText();
 
+            Point cursorTmp = _cursorPosition;
+            Point fromTmp = new Point();
+            Point toTmp = new Point();
+            if (_isWrapText) {
+                cursorTmp = _textureStorage.wrapCursorPosToReal(cursorTmp);
+                if (_isSelect) {
+                    fromTmp = _textureStorage.wrapCursorPosToReal(_selectFrom);
+                    toTmp = _textureStorage.wrapCursorPosToReal(_selectTo);
+                }
+            }
+
             _isWrapText = value;
 
             _textureStorage.setText(text); //not added into redo/undo
+
+            if (_isWrapText) { //was unwrap become wrap
+                cursorTmp = _textureStorage.realCursorPosToWrap(cursorTmp);
+                if (_isSelect) {
+                    fromTmp = _textureStorage.realCursorPosToWrap(_selectFrom);
+                    toTmp = _textureStorage.realCursorPosToWrap(_selectTo);
+                }
+            }
+
+            _cursorPosition = cursorTmp;
+            replaceCursor();
+            if (_isSelect) {
+                _selectFrom = fromTmp;
+                _selectTo = toTmp;
+                makeSelectedArea();
+            }
+
         } finally {
             _textureStorage.textInputLock.unlock();
         }

@@ -269,7 +269,7 @@ public class TextArea extends Prototype {
         // Events Connections
         eventScrollUp.add((sender, args) -> vScrollBar.eventScrollUp.execute(sender, args));
         eventScrollDown.add((sender, args) -> vScrollBar.eventScrollDown.execute(sender, args));
-        _area.cursorChanged.add(() -> updateElements());
+        _area.cursorChanged.add(this::updateElements);
         _area.textChanged.add(() -> onTextChanged.execute());
 
         vScrollBar.slider.eventValueChanged.add((sender) -> {

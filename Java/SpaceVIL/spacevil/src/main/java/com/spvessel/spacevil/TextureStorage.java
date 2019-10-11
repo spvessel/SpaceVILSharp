@@ -3,7 +3,6 @@ package com.spvessel.spacevil;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
-import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -11,10 +10,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.spvessel.spacevil.Core.InterfaceTextContainer;
+import com.spvessel.spacevil.Core.InterfaceTextWrap;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-
-import static org.lwjgl.system.MemoryUtil.memAlloc;
 
 final class TextureStorage extends Primitive implements InterfaceTextContainer {
     private static int count = 0;
@@ -183,7 +181,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     private boolean checkIsWrap() {
         Prototype parent = getParent();
         if (parent != null) {
-            return (((TextBlock) parent).isWrapText());
+            return (((InterfaceTextWrap) parent).isWrapText());
         }
         return false;
     }
@@ -436,6 +434,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         for (TextLine var : _linesList) {
             var.setMargin(margin);
         }
+        updateLayout();
     }
 
     Indents getTextMargin() {
@@ -468,6 +467,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             }
 
             getDims(); // <- setLineSpacer <- updLinesYShift
+            updateLayout();
         }
     }
 
@@ -1247,8 +1247,23 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         setText(getWholeText());
     }
 
+    private void updateLayout() {
+        if (!checkIsWrap()) {
+            return;
+        }
+        textInputLock.lock();
+        try {
+            rewrapText();
+        } finally {
+            textInputLock.unlock();
+        }
+    }
+
     Point wrapCursorPosToReal(Point wrapPos) {
         //Convert wrap cursor position to real position
+        if (_lineBreakes.size() != _linesList.size()) {
+            return wrapPos;
+        }
         Point realPos = new Point(0, 0);
         int lineNum = findLineBegInBreakLines(wrapPos.y);
         int lineRealLength = wrapPos.x;
@@ -1264,7 +1279,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
     Point realCursorPosToWrap(Point realPos) {
         //Convert real cursor position to wrap position
-        Point wrapPos = new Point();
+        if (_lineBreakes.size() != _linesList.size()) {
+            return realPos;
+        }
+        Point wrapPos = new Point(0, 0);
 
         int lineBeg = _lineBreakes.get(realPos.y);
         if (lineBeg != realPos.y) { //which means less
