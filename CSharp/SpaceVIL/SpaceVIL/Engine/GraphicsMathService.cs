@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
@@ -1071,6 +1072,7 @@ namespace SpaceVIL
 
             var bmp = new Bitmap(resW, resH);
             var graphic = Graphics.FromImage(bmp);
+            graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
             graphic.DrawImage(img, new System.Drawing.Rectangle(0, 0, resW, resH));
             graphic.Dispose();
 

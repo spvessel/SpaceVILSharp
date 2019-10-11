@@ -25,7 +25,7 @@ public class MainWindow extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        // isBorderHidden = true;
+        isBorderHidden = true;
         setSize(820, 220);
         setWindowName("MainWindow");
         setWindowTitle("MainWindow");
@@ -74,7 +74,8 @@ public class MainWindow extends ActiveWindow {
         layout.setShadowExtension(10, 10);
         addItem(layout);
 
-        TitleBar title = new TitleBar("Main King Window - JAVA");
+        // TitleBar title = new TitleBar("Main King Window - JAVA");
+        TitleBar title = new TitleBar("Owls. Your own libs");
         title.setAlignment(ItemAlignment.BOTTOM, ItemAlignment.LEFT);
         title.setBorderRadius(new CornerRadius(0, 0, 7, 7));
         title.direction = HorizontalDirection.FROM_RIGHT_TO_LEFT;
@@ -96,7 +97,8 @@ public class MainWindow extends ActiveWindow {
         grid.setSpacing(6, 6);
         layout.addItem(grid);
 
-        Font font = DefaultsService.getDefaultFont(Font.PLAIN, 16);
+        Font font = DefaultsService.getDefaultFont(Font.PLAIN, 18);
+        // Font font = new Font("Arial", Font.BOLD, 16);
         // Font font = DefaultsService.getDefaultFont();
 
         ButtonCore btn_layout = new ButtonCore("Layout");

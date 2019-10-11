@@ -1422,7 +1422,7 @@ public class Style implements Cloneable {
     public static Style getTextAreaStyle() {
         Style style = new Style();
         style.background = new Color(210, 210, 210);
-        style.foreground = new Color(25, 25, 25);
+        style.foreground = new Color(70, 70, 70);
         style.font = DefaultsService.getDefaultFont(16);
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.EXPAND;

@@ -69,7 +69,7 @@ class Alphabet {
     List<ModifyLetter> makeTextNew(String text) {
         List<ModifyLetter> letList = new LinkedList<>();
 
-//        double err = 0.25; // переехало из буквы
+        //        double err = 0.25; // переехало из буквы
         int x0 = 0;
 
         Letter currLet;
@@ -197,30 +197,34 @@ class Alphabet {
         // Font font = DefaultsService.getDefaultFont(Font.BOLD, 30);
         // String message = "Make a Chance!";
 
-        BufferedImage bi = new BufferedImage(font.getSize() * 2, font.getSize() * 2, BufferedImage.TYPE_INT_ARGB);
+        // needs to be tested on different displays
+        Font tmpFont = null;
+        if (font.getSize() > 11 && font.getSize() < 20) {
+            tmpFont = font.deriveFont(font.getStyle(), font.getSize() * 2);
+        } else {
+            tmpFont = font;
+        }
+
+        BufferedImage bi = new BufferedImage(tmpFont.getSize() * 2, tmpFont.getSize() * 2, BufferedImage.TYPE_INT_ARGB);
         Graphics2D ig2 = bi.createGraphics();
-        ig2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        ig2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        ig2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        ig2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
         ig2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        // ig2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
-        // ig2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-
-        // Map<?, ?> desktopHints = (Map<?, ?>) Toolkit.getDefaultToolkit().getDesktopProperty("awt.font.desktophints");
-        // if (desktopHints != null) {
-        //     ig2.setRenderingHints(desktopHints);
-        // }
-
-        ig2.setFont(font);
+        ig2.setFont(tmpFont);
         FontMetrics metrics = ig2.getFontMetrics();
-        // int stringWidth = metrics.stringWidth(let);
         int stringHeight = metrics.getAscent();
         ig2.setPaint(Color.white);
         ig2.drawString(let, 0, stringHeight);
 
         try {
-            return new Letter(let, bi);
+            if (tmpFont == font) {
+                return new Letter(let, bi);
+            } else {
+                return new Letter(let, GraphicsMathService.scaleBitmap(bi, bi.getWidth() / 2, bi.getHeight() / 2));
+            }
         } catch (Exception e) {
-//            System.out.println("Bug letter exception");
             return bugLetter;
         }
     }
@@ -253,7 +257,7 @@ class Alphabet {
         bugLetter.minY = (int) (font.getSize() / 3f);// minY;
         bugLetter.isSpec = false;
         float[][] arr = new float[bugLetter.width][bugLetter.height];
-        
+
         for (int i = 0; i < bugLetter.width; i++) {
             arr[i][0] = 1;
             arr[i][bugLetter.height - 1] = 1;
@@ -299,7 +303,7 @@ class Alphabet {
 
         void twoDimToOne(float[][] twoDim) {
             arr = new byte[(this.width * this.height) * 4];
-            
+
             int i = 0;
             for (int xx = 0; xx < width; xx++) {
                 for (int yy = 0; yy < height; yy++) {
@@ -357,7 +361,8 @@ class Alphabet {
                          * alphas.add(1.0f);
                          */
 
-                    } else if (shape.intersects(d - intersectTol, dd - intersectTol, 2.0 * intersectTol, 2.0 * intersectTol)) {
+                    } else if (shape.intersects(d - intersectTol, dd - intersectTol, 2.0 * intersectTol,
+                            2.0 * intersectTol)) {
                         double inter;
 
                         int count = 0;
@@ -453,7 +458,7 @@ class Alphabet {
             // --------------------------------------------------------------------------------------
 
             arr = new byte[(this.width * this.height) * 4];
-            
+
             int i = 0;
             for (int xx = x0shift; xx <= x1shift; xx++) {
                 for (int yy = y0shift; yy <= y1shift; yy++) {
@@ -467,7 +472,7 @@ class Alphabet {
                     i++;
                 }
             }
-            
+
             leftArr = new float[2][height];
             rightArr = new float[2][height];
             for (int yy = y0shift; yy <= y1shift; yy++) {
@@ -596,7 +601,7 @@ class Alphabet {
 
             this.height = y1shift - y0shift + 1;
             this.width = x1shift - x0shift + 1;
-            
+
             // --------------------------------------------------------------------------------------
 
             arr = new byte[(this.width * this.height) * 4];

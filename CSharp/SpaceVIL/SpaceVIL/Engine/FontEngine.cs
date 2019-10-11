@@ -29,7 +29,8 @@ namespace SpaceVIL
             if (!fonts.ContainsKey(font))
             {
                 Monitor.Enter(fontLock);
-                try {
+                try
+                {
                     if (!fonts.ContainsKey(font))
                         fonts.Add(font, new Alphabet(font));
                 }
@@ -101,7 +102,7 @@ namespace SpaceVIL
             {
                 this.font = font;
                 letters = new Dictionary<char, Letter>();
-                
+
                 MakeBugLetter();
                 FillABC();
                 FillSpecLetters();
@@ -122,14 +123,14 @@ namespace SpaceVIL
                 letters.Add(specLet, letter1);
                 letter1.width = letter.width * 4;
                 letter1.height = 0;
-                
+
                 //!Может стоит вернуть это, если новые модификации текста будут работать нормально
                 specLet = "\r"[0];
                 Letter letter2 = new Letter("\r");
                 letters.Add(specLet, letter2);
                 letter2.width = 0;
                 letter2.height = 0;
-                
+
             }
 
             private int UpdateSpecX0(Letter letter, int x0)
@@ -158,7 +159,8 @@ namespace SpaceVIL
                 Letter prevLet = null;
                 foreach (char c in text.ToCharArray())
                 {
-                    if (!letters.ContainsKey(c)) {
+                    if (!letters.ContainsKey(c))
+                    {
                         Monitor.Enter(alphabetLock);
                         try
                         {
@@ -217,7 +219,7 @@ namespace SpaceVIL
                             //         }
                             //     }
 
-                                // if (!b2) x0--;
+                            // if (!b2) x0--;
                             // }
                         }
 
@@ -276,21 +278,46 @@ namespace SpaceVIL
                 //     return bugLetter;
                 // }
 
+                // Font tmpFont = new Font(font.FontFamily, font.Size, font.Style, GraphicsUnit.Pixel);
+                Font tmpFont = null;
+                int k = 1;
+                if (font.Size < 20)
+                {
+                    k = 2;
+                }
+                tmpFont = new Font(font.FontFamily, font.Size * k, font.Style, GraphicsUnit.Pixel);
 
-                Bitmap bm = new Bitmap((int)(font.Size * 2), (int)(font.Size * 2));
+                Bitmap bm = new Bitmap((int)(tmpFont.Size * 2), (int)(tmpFont.Size * 2));
+
                 Graphics g = Graphics.FromImage(bm);
-                // g.SmoothingMode = SmoothingMode.AntiAlias;
-                // g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                // g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                // g.SmoothingMode = SmoothingMode.HighQuality;
-                g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                Font tmp = new Font(font.FontFamily, font.Size, font.Style, GraphicsUnit.Pixel);
-                g.DrawString(let, tmp, Brushes.White, new PointF(0f, 0f)/*, StringFormat.GenericDefault*/);
+
+                if (k == 2)
+                {
+                    g.SmoothingMode = SmoothingMode.None;
+                    // g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    g.CompositingQuality = CompositingQuality.HighQuality;
+                    g.TextContrast = 12;
+                    g.CompositingMode = CompositingMode.SourceOver;
+                }
+                else
+                {
+                    g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                }
+                g.DrawString(let, tmpFont, Brushes.White, new PointF(0f, 0f)/*, StringFormat.GenericDefault*/);
                 g.Dispose();
 
                 try
                 {
-                    return new Letter(let, bm);
+                    if (k == 1)
+                    {
+                        return new Letter(let, bm);
+                    }
+                    else
+                    {
+                        return new Letter(let, GraphicsMathService.ScaleBitmap(bm, bm.Width / 2, bm.Height / 2));
+                    }
                 }
                 catch (Exception)
                 {
@@ -320,7 +347,8 @@ namespace SpaceVIL
             }
             */
 
-            private void MakeBigPoint() {
+            private void MakeBigPoint()
+            {
                 string let = Encoding.UTF32.GetString(BitConverter.GetBytes(0x25CF)); //big point
                 Letter hideSign = new Letter(let)
                 {
@@ -329,7 +357,7 @@ namespace SpaceVIL
                     minY = alphMinY,
                     isSpec = false
                 };
-            float[,] arr = new float[hideSign.width, hideSign.height];
+                float[,] arr = new float[hideSign.width, hideSign.height];
                 int rad = hideSign.height / 3 - 1, tmp;
                 for (int i = 0; i < hideSign.width; i++)
                 {
@@ -354,7 +382,7 @@ namespace SpaceVIL
                     minY = (int)(font.Size / 3f), // minY;
                     isSpec = false
                 };
-            float[,] arr = new float[bugLetter.width, bugLetter.height];
+                float[,] arr = new float[bugLetter.width, bugLetter.height];
                 for (int i = 0; i < bugLetter.width; i++)
                 {
                     arr[i, 0] = 1;
@@ -406,7 +434,7 @@ namespace SpaceVIL
             internal void TwoDimToOne(float[,] twoDim)
             {
                 arr = new byte[(this.width * this.height) * 4];
-                
+
                 int i = 0;
                 for (int xx = 0; xx < width; xx++)
                 {
@@ -502,7 +530,7 @@ namespace SpaceVIL
                 //--------------------------------------------------------------------------------------
 
                 arr = new byte[(this.width * this.height) * 4];
-                
+
                 int i = 0;
                 for (int xx = x0shift; xx <= x1shift; xx++)
                 {
@@ -598,7 +626,7 @@ namespace SpaceVIL
                 width = x1shift - x0shift + 1;
                 //--------------------------------------------------------------------------------------
                 arr = new byte[(this.width * this.height) * 4];
-                
+
                 int i = 0;
                 for (int xx = x0shift; xx <= x1shift; xx++)
                 {

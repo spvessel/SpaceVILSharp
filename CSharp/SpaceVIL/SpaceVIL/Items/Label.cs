@@ -84,11 +84,6 @@ namespace SpaceVIL
             return _text_objects[0].GetTextAlignment();
         }
 
-        public ItemAlignment GetTextAlignment()
-        {
-            return _text_objects[0].GetTextAlignment();
-        }
-
         /// <summary>
         /// Text margin in the Label
         /// </summary>
