@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.List;
 
 class TextBlock extends Prototype
-        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceFreeLayout {
+        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceFreeLayout, InterfaceTextWrap {
 
     EventCommonMethod cursorChanged = new EventCommonMethod();
     EventCommonMethod textChanged = new EventCommonMethod();
@@ -595,6 +595,9 @@ class TextBlock extends Prototype
         _cursor.setHeight(_textureStorage.getCursorHeight());
         addItems(_selectedArea, _textureStorage, _cursor);
         _textureStorage.initLines(_cursor.getWidth());
+        if (isWrapText()) {
+            reorganizeText();
+        }
     }
 
     @Override
@@ -1052,7 +1055,7 @@ class TextBlock extends Prototype
 
     private boolean _isWrapText;
 
-    boolean isWrapText() {
+    public boolean isWrapText() {
         return _isWrapText;
     }
 
@@ -1060,7 +1063,7 @@ class TextBlock extends Prototype
         if (value == _isWrapText) {
             return;
         }
-        
+
         _textureStorage.textInputLock.lock();
         try {
             String text = getText();

@@ -10,7 +10,7 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    internal class TextBlock : Prototype, ITextEditable, IDraggable, ITextShortcuts, IFreeLayout//, ITextContainer
+    internal class TextBlock : Prototype, ITextEditable, IDraggable, ITextShortcuts, IFreeLayout, ITextWrap//, ITextContainer
     {
         internal EventCommonMethod TextChanged;
         internal EventCommonMethod CursorChanged;
@@ -689,6 +689,10 @@ namespace SpaceVIL
             _cursor.SetHeight(_textureStorage.GetCursorHeight());
             AddItems(_selectedArea, _textureStorage, _cursor);
             _textureStorage.InitLines(_cursor.GetWidth());
+            if (IsWrapText())
+            {
+                ReorganizeText();
+            }
         }
 
         protected internal override void SetFocused(bool value)
@@ -1235,7 +1239,7 @@ namespace SpaceVIL
 
     private bool _isWrapText;
 
-    internal bool IsWrapText()
+    public bool IsWrapText()
     {
         return _isWrapText;
     }

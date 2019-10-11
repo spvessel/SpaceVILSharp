@@ -194,7 +194,7 @@ namespace SpaceVIL
             Prototype parent = GetParent();
             if (parent != null)
             {
-                return (((TextBlock)parent).IsWrapText());
+                return (((ITextWrap)parent).IsWrapText());
             }
             return false;
         }
@@ -501,6 +501,7 @@ namespace SpaceVIL
             {
                 var.SetMargin(margin);
             }
+            UpdateLayout();
         }
 
         internal Indents GetTextMargin()
@@ -540,6 +541,7 @@ namespace SpaceVIL
                 }
 
                 GetDims(); // <- SetLineSpacer <- UpdLinesYShift
+                UpdateLayout();
             }
         }
 
@@ -1429,9 +1431,30 @@ namespace SpaceVIL
             SetText(GetWholeText());
         }
 
+        private void UpdateLayout()
+        {
+            if (!CheckIsWrap())
+            {
+                return;
+            }
+            Monitor.Enter(textInputLock);
+            try
+            {
+                RewrapText();
+            }
+            finally
+            {
+                Monitor.Exit(textInputLock);
+            }
+        }
+
         internal Point WrapCursorPosToReal(Point wrapPos)
         {
             //Convert wrap cursor position to real position
+            if (_lineBreakes.Count != _linesList.Count)
+            {
+                return wrapPos;
+            }
             Point realPos = new Point(0, 0);
             int lineNum = FindLineBegInBreakLines(wrapPos.Y);
             int lineRealLength = wrapPos.X;
@@ -1449,7 +1472,11 @@ namespace SpaceVIL
         internal Point RealCursorPosToWrap(Point realPos)
         {
             //Convert real cursor position to wrap position
-            Point wrapPos = new Point();
+            if (_lineBreakes.Count != _linesList.Count)
+            {
+                return realPos;
+            }
+            Point wrapPos = new Point(0, 0);
 
             int lineBeg = _lineBreakes[realPos.Y];
             if (lineBeg != realPos.Y) //which means less
