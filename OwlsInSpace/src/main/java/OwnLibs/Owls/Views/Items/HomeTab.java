@@ -22,7 +22,7 @@ public class HomeTab extends Tab {
 
         setDraggable(false);
         setClosable(false);
-        setBackground(70, 70, 70);
+        setBackground(55, 55, 55);
         setBorderRadius(0);
         setMinWidth(35);
         setMaxWidth(35);

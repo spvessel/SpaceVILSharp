@@ -28,14 +28,18 @@ namespace SpaceVIL
             count++;
 
             _textureStorage = new TextureStorage();
-            
+
             _selectedArea = new CustomSelector();
+            _selectedArea.SetBackground(150, 150, 150);
 
             EventMousePress += OnMousePressed;
             EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;
             EventMouseDoubleClick += OnDoubleClick;
+
+            // style
+            SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextView)));
         }
 
         private Stopwatch _startTime = new Stopwatch();
@@ -215,7 +219,7 @@ namespace SpaceVIL
             List<SpaceVIL.Core.Point> listPt = RealFromTo(from, to);
             fromReal = listPt[0];
             toReal = listPt[1];
-            
+
             selectionRectangles = _textureStorage.SelectedArrays(fromReal, toReal);
 
             _selectedArea.SetRectangles(selectionRectangles);
@@ -335,10 +339,11 @@ namespace SpaceVIL
             {
                 return;
             }
+
             SpaceVIL.Core.Point tmpCursor = new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y);
             SpaceVIL.Core.Point fromTmp = new SpaceVIL.Core.Point(_selectFrom.X, _selectFrom.Y);
             SpaceVIL.Core.Point toTmp = new SpaceVIL.Core.Point(_selectTo.X, _selectTo.Y);
-            
+
             tmpCursor = _textureStorage.WrapCursorPosToReal(_cursorPosition);
             if (_isSelect)
             {
@@ -347,9 +352,9 @@ namespace SpaceVIL
             }
 
             base.SetWidth(width);
-            ReorganizeText();
             _textureStorage.UpdateBlockWidth(2); //_cursor.GetWidth());
-            
+            ReorganizeText();
+
             _cursorPosition = _textureStorage.RealCursorPosToWrap(tmpCursor);
             if (_isSelect)
             {
@@ -359,7 +364,7 @@ namespace SpaceVIL
                 _selectTo = toTmp;
                 MakeSelectedArea();
             }
-            
+
             ChangeHeightAccordingToText();
         }
         public override void SetHeight(int height)
@@ -374,6 +379,8 @@ namespace SpaceVIL
 
         private void ChangeHeightAccordingToText()
         {
+            if (GetHeightPolicy() == SizePolicy.Expand)
+                return;
             int textHeight = GetTextHeight();
             SetHeight(textHeight);
         }
@@ -386,7 +393,8 @@ namespace SpaceVIL
         }
 
         //Something changed (text is always wrapped)
-        private void ReorganizeText() {
+        private void ReorganizeText()
+        {
 
             Monitor.Enter(_textureStorage.textInputLock);
             try
@@ -411,7 +419,7 @@ namespace SpaceVIL
             return _textureStorage.GetLineSpacer();
         }
 
-        
+
         public void SetTextAlignment(ItemAlignment alignment)
         {
             //Ignore all changes for yet
@@ -447,40 +455,43 @@ namespace SpaceVIL
             return _textureStorage.GetForeground();
         }
 
-        
+
         //Style
         public override void SetStyle(Style style)
         {
             if (style == null)
-            {
                 return;
-            }
+
             base.SetStyle(style);
             SetForeground(style.Foreground);
             SetFont(style.Font);
             _textureStorage.SetLineContainerAlignment(style.TextAlignment);
 
-            Style inner_style = style.GetInnerStyle("selection");
-            if (inner_style != null)
+            Style innerStyle = style.GetInnerStyle("selection");
+            if (innerStyle != null)
             {
-                _selectedArea.SetStyle(inner_style);
+                _selectedArea.SetStyle(innerStyle);
             }
         }
 
         //Shortcut methods disable------------------------------------------------------------------------------------------
-        public void PasteText(String pasteStr) {
+        public void PasteText(String pasteStr)
+        {
 
         }
 
-        public String CutText() {
+        public String CutText()
+        {
             return null;
         }
 
-        public void Undo() {
+        public void Undo()
+        {
 
         }
 
-        public void Redo() {
+        public void Redo()
+        {
 
         }
     }

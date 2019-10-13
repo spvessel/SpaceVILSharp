@@ -44,7 +44,8 @@ public class ElementsFactory {
         funcBtnStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
         funcBtnStyle.width = 30;
         funcBtnStyle.setBackground(0, 0, 0, 0);
-        funcBtnStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0x595959)));
+        // funcBtnStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(0x595959)));
+        funcBtnStyle.addItemState(ItemStateType.HOVERED, new ItemState(new Color(255, 255, 255, 20)));
         funcBtnStyle.setPadding(2, 2, 2, 2);
 
         button.setStyle(funcBtnStyle);
@@ -70,6 +71,18 @@ public class ElementsFactory {
         imgFile.setMargin(4, 4, 4, 4);
         imgFile.keepAspectRatio(true);
         button.addItem(imgFile);
+        if (button instanceof ButtonToggle) {
+            imgFile.setColorOverlay(Color.black);
+            imgFile.setColorOverlay(false);
+            ButtonToggle btn = ((ButtonToggle) button);
+            btn.eventMouseClick.add((sender, args) -> {
+                if (btn.isToggled()) {
+                    imgFile.setColorOverlay(true);
+                } else {
+                    imgFile.setColorOverlay(false);
+                }
+            });
+        }
         return button;
     }
 
@@ -138,19 +151,20 @@ public class ElementsFactory {
 
     public static Style getTextAreaStyle() {
         Style style = new Style();
-        style.background = new Color(0x555555);
+        // style.background = new Color(0x555555);
+        style.background = new Color(70, 70, 70);
+        style.font = DefaultsService.getDefaultFont();
         // style.background = Color.RED;
-        style.foreground = new Color(210, 210, 210);
-        style.font = DefaultsService.getDefaultFont(12);
+        // style.foreground = new Color(100, 100, 100);
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
         Style text_style = Style.getTextBlockStyle();
         text_style.font = DefaultsService.getDefaultFont(14);
-        text_style.background = new Color(0x555555);
-        text_style.foreground = new Color(200, 200, 200);
-        text_style.getInnerStyle("selection").background = new Color(255, 255, 255, 40);
+        // text_style.background = new Color(0x555555);
+        text_style.foreground = new Color(180, 180, 180);
+        text_style.getInnerStyle("selection").background = new Color(255, 255, 255, 25);
         text_style.getInnerStyle("cursor").background = new Color(0, 162, 232);
         text_style.getInnerStyle("selection").setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
         style.addInnerStyle("textedit", text_style);
@@ -175,6 +189,7 @@ public class ElementsFactory {
     public static TextArea getTextArea() {
         TextArea tArea = new TextArea();
         tArea.setStyle(ElementsFactory.getTextAreaStyle());
+        tArea.setWrapText(true);
         tArea.setEditable(false);
         tArea.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         tArea.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);

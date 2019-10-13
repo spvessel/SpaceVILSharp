@@ -85,9 +85,9 @@ public class InputTest extends ActiveWindow {
         te.setWidth(300);
         te.setWidthPolicy(SizePolicy.EXPAND);
 
-        TextArea tb = new TextArea();
-        // TextView tb = new TextView();
-        tb.setMargin(2, 2, 2, 27);
+        // TextArea tb = new TextArea();
+        TextView tb = new TextView();
+        // tb.setMargin(2, 2, 2, 27);
         // tb.setEditable(false);
         //        tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
         //        tb.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
@@ -118,7 +118,7 @@ public class InputTest extends ActiveWindow {
         //        layout.addItem(te);
 
         layout.addItem(tb);
-            //    tb.setStyle(Style.getTextAreaStyle());
+        //    tb.setStyle(Style.getTextAreaStyle());
 
         ButtonCore bc = new ButtonCore("pizdec");
         bc.setSize(150, 30);
@@ -137,7 +137,6 @@ public class InputTest extends ActiveWindow {
         //
         //        layout.addItem(tl);
 
-        tb.setWrapText(false);
         bc.eventMouseClick.add((sender, args) -> {
             tb.setText("Welcome on the channel spvessel.\n"
                     + "In this video I’ll show first steps for using framework SpaceVIL. You will find detailed instructions on the site spvessel.com or in my github repository. All links at the end of the video.\n"
@@ -168,7 +167,7 @@ public class InputTest extends ActiveWindow {
             //            System.out.print(getX() + " ");
             //            setHeight(getHeight() - 10);
             //            System.out.println(getX());
-            tb.setWrapText(!tb.isWrapText());
+            // tb.setWrapText(!tb.isWrapText());
             //            System.out.println(tb.isWrapText());
         });
 
@@ -205,30 +204,31 @@ public class InputTest extends ActiveWindow {
             }
         });
 
-        // tb.setText(getBigText());
         // tb.rewindText();
-        tb.setWrapText(true);
+        // tb.setWrapText(true);
+        tb.setText(getBigText());
+        // tb.setBackground(0, 0, 0);
 
-        tb.eventKeyRelease.add((sender, args) -> {
-            if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1) {
-                if (args.key == KeyCode.EQUAL) {
-                    int fontSize = tb.getFont().getSize();
-                    fontSize++;
-                    System.out.println(fontSize);
-                    if (fontSize > 32)
-                        return;
-                    tb.setFontSize(fontSize);
-                }
-                if (args.key == KeyCode.MINUS) {
-                    int fontSize = tb.getFont().getSize();
-                    fontSize--;
-                    System.out.println(fontSize);
-                    if (fontSize < 10)
-                        return;
-                    tb.setFontSize(fontSize);
-                }
-            }
-        });
+        // tb.eventKeyRelease.add((sender, args) -> {
+        //     if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1) {
+        //         if (args.key == KeyCode.EQUAL) {
+        //             int fontSize = tb.getFont().getSize();
+        //             fontSize++;
+        //             System.out.println(fontSize);
+        //             if (fontSize > 32)
+        //                 return;
+        //             tb.setFontSize(fontSize);
+        //         }
+        //         if (args.key == KeyCode.MINUS) {
+        //             int fontSize = tb.getFont().getSize();
+        //             fontSize--;
+        //             System.out.println(fontSize);
+        //             if (fontSize < 10)
+        //                 return;
+        //             tb.setFontSize(fontSize);
+        //         }
+        //     }
+        // });
     }
 
     private static int countLines(String str) {

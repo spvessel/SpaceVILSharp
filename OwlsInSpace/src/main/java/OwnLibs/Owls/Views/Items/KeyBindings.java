@@ -135,4 +135,9 @@ public class KeyBindings extends Prototype implements InterfaceFloating {
     public void show(InterfaceItem arg0, MouseArgs arg1) {
         show();
     }
+
+    @Override
+    public void hide(MouseArgs arg0) {
+        hide();
+    }
 }

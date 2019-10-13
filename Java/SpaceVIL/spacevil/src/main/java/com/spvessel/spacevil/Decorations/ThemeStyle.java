@@ -73,6 +73,7 @@ public class ThemeStyle {
             defaultItemsStyle.put(RadioButton.class, Style.getRadioButtonStyle());
             defaultItemsStyle.put(TabView.class, Style.getTabViewStyle());
             defaultItemsStyle.put(TextArea.class, Style.getTextAreaStyle());
+            defaultItemsStyle.put(TextView.class, Style.getTextViewStyle());
             // defaultItemsStyle.put(TextBlock.class, Style.getTextBlockStyle());
             // defaultItemsStyle.put(TextEncrypt.class, Style.getTextEncryptStyle());
             defaultItemsStyle.put(TextEdit.class, Style.getTextEditStyle());

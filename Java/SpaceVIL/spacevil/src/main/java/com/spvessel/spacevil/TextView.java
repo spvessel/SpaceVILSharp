@@ -1,5 +1,6 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
@@ -28,13 +29,14 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         _textureStorage = new TextureStorage();
 
         _selectedArea = new CustomSelector();
-        _selectedArea.setBackground(150,150,150);
 
         eventMousePress.add(this::onMousePressed);
         eventMouseDrag.add(this::onDragging);
         eventKeyPress.add(this::onKeyPress);
         eventKeyRelease.add(this::onKeyRelease);
         eventMouseDoubleClick.add(this::onDoubleClick);
+
+        setStyle(DefaultsService.getDefaultStyle(TextView.class));
     }
 
     private long _startTime = 0;
@@ -266,7 +268,6 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         }
     }
 
-
     @Override
     public void setWidth(int width) {
         if (getWidth() == width) {
@@ -284,8 +285,8 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
         }
 
         super.setWidth(width);
-        reorganizeText();
         _textureStorage.updateBlockWidth(2); //_cursor.getWidth());
+        reorganizeText();
 
         _cursorPosition = _textureStorage.realCursorPosToWrap(tmpCursor);
         if (_isSelect) {
@@ -309,6 +310,8 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
     }
 
     private void changeHeightAccordingToText() {
+        if (getHeightPolicy() == SizePolicy.EXPAND)
+            return;
         int textHeight = getTextHeight();
         setHeight(textHeight);
     }

@@ -103,7 +103,7 @@ namespace SpaceVIL
             }
             Indents textMargin = GetTextMargin();
             Indents textPadding = parent.GetPadding();
-            _cursorXMax = parent.GetWidth() - cursorWidth - textPadding.Left -
+            _cursorXMax = parent.GetWidth() - cursorWidth * 2 - textPadding.Left -
                 textPadding.Right - textMargin.Left - textMargin.Right;
             SetAllowWidth(); // <- UpdLinesXShift();
         }
@@ -461,10 +461,6 @@ namespace SpaceVIL
 
         private void UpdLinesXShift()
         {
-            if (CheckIsWrap())
-            {
-                return;
-            }
             foreach (TextLine line in _linesList)
             {
                 line.SetLineXShift(globalXShift);

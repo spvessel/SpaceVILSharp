@@ -765,11 +765,11 @@ class TextBlock extends Prototype
             _textureStorage.cutText(fromReal, toReal);
 
             _cursorPosition = new Point(fromReal);
-            replaceCursor();
             if (_isSelect) {
                 unselectText();
             }
             cancelJustSelected();
+            replaceCursor();
             return str;
         } finally {
             _textureStorage.textInputLock.unlock();
@@ -955,8 +955,8 @@ class TextBlock extends Prototype
             }
         }
         super.setWidth(width);
-        reorganizeText();
         _textureStorage.updateBlockWidth(_cursor.getWidth());
+        reorganizeText();
         if (isWrapText()) {
             _cursorPosition = _textureStorage.realCursorPosToWrap(tmpCursor);
             replaceCursor();

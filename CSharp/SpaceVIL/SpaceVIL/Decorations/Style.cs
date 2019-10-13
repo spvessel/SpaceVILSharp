@@ -1359,34 +1359,22 @@ namespace SpaceVIL.Decorations
             style.Background = Color.Transparent;
             style.Foreground = Color.FromArgb(40, 40, 40);
             style.Font = DefaultsService.GetDefaultFont(16);
-            // style.Font = new Font(style.Font.FontFamily, 16, style.Font.Style);
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.Left | ItemAlignment.Top;
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Expand;
             style.Padding = new Indents(5, 5, 5, 5);
-            // style.AddItemState(ItemStateType.Hovered, new ItemState()
-            // {
-            //     Background = Color.FromArgb(255, 220, 220, 220)
-            // });
-            // style.AddItemState(ItemStateType.Focused, new ItemState()
-            // {
-            //     Background = Color.FromArgb(255, 220, 220, 220)
-            // });
 
             Style cursor_style = new Style();
             cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
             cursor_style.Width = 2;
             cursor_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            // cursor_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
-            cursor_style.Margin = new Indents(0, 5, 0, 5);
             cursor_style.IsVisible = false;
             style.AddInnerStyle("cursor", cursor_style);
 
             Style selection_style = new Style();
             selection_style.Background = Color.FromArgb(255, 111, 181, 255);
             selection_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            // selection_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
             style.AddInnerStyle("selection", selection_style);
 
             return style;
@@ -1419,6 +1407,25 @@ namespace SpaceVIL.Decorations
             menu_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             menu_style.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
             style.AddInnerStyle("menu", menu_style);
+
+            return style;
+        }
+
+        public static Style GetTextViewStyle()
+        {
+            Style style = new Style();
+            style.Background = Color.Transparent;
+            style.Foreground = Color.FromArgb(210, 210, 210);
+            style.Font = DefaultsService.GetDefaultFont(16);
+            style.WidthPolicy = SizePolicy.Expand;
+            style.HeightPolicy = SizePolicy.Expand;
+            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            style.SetPadding(5, 5, 5, 5);
+
+            Style selection_style = new Style();
+            selection_style.Background = Color.FromArgb(40, 255, 255, 255);
+            selection_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            style.AddInnerStyle("selection", selection_style);
 
             return style;
         }

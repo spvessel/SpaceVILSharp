@@ -102,7 +102,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
         Indents textMargin = getTextMargin();
         Indents textPadding = parent.getPadding();
-        _cursorXMax = parent.getWidth() - cursorWidth - textPadding.left - textPadding.right - textMargin.left
+        _cursorXMax = parent.getWidth() - cursorWidth * 2 - textPadding.left - textPadding.right - textMargin.left
                 - textMargin.right;
 
         setAllowWidth(); // <- updLinesXShift();
@@ -400,9 +400,6 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     private void updLinesXShift() {
-        if (checkIsWrap()) {
-            return;
-        }
         for (TextLine line : _linesList) {
             line.setLineXShift(globalXShift);
         }

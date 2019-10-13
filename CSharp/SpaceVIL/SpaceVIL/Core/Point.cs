@@ -12,5 +12,11 @@ namespace SpaceVIL.Core
             X = x;
             Y = y;
         }
+
+        internal Point(Point point)
+        {
+            X = point.X;
+            Y = point.Y;
+        }
     }
 }

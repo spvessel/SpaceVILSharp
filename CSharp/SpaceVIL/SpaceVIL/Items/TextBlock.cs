@@ -899,12 +899,12 @@ namespace SpaceVIL
                 _textureStorage.CutText(fromReal, toReal);
 
                 _cursorPosition = new SpaceVIL.Core.Point(fromReal.X, fromReal.Y);
-                ReplaceCursor();
                 if (_isSelect)
                 {
                     UnselectText();
                 }
                 CancelJustSelected();
+                ReplaceCursor();
                 return str;
             }
             finally
@@ -1131,8 +1131,8 @@ namespace SpaceVIL
                 }
             }
             base.SetWidth(width);
-            ReorganizeText();
             _textureStorage.UpdateBlockWidth(_cursor.GetWidth());
+            ReorganizeText();
             if (IsWrapText())
             {
                 _cursorPosition = _textureStorage.RealCursorPosToWrap(tmpCursor);

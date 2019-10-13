@@ -1387,27 +1387,16 @@ public class Style implements Cloneable {
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.EXPAND;
         style.padding = new Indents(5, 5, 5, 5);
-        // ItemState hovered = new ItemState();
-        // hovered.background = new Color(220, 220, 220, 255);
-        // style.addItemState(ItemStateType.HOVERED, hovered);
-        // ItemState focused = new ItemState();
-        // focused.background = new Color(220, 220, 220, 255);
-        // style.addItemState(ItemStateType.FOCUSED, focused);
 
         Style cursor_style = new Style();
         cursor_style.background = new Color(60, 60, 60);
         cursor_style.width = 2;
         cursor_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
-        // cursor_style.alignment = new
-        // LinkedList<ItemAlignment>(Arrays.asList(ItemAlignment.VCENTER,
-        // ItemAlignment.LEFT));
-        cursor_style.margin = new Indents(0, 5, 0, 5);
         cursor_style.isVisible = false;
         style.addInnerStyle("cursor", cursor_style);
 
         Style selection_style = new Style();
         selection_style.background = new Color(111, 181, 255);
-        // selection_style.background = new Color(255, 181, 255);
         selection_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
         selection_style.alignment = new LinkedList<ItemAlignment>(
                 Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
@@ -1444,6 +1433,24 @@ public class Style implements Cloneable {
         menu_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
         menu_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
         style.addInnerStyle("menu", menu_style);
+
+        return style;
+    }
+
+    public static Style getTextViewStyle() {
+        Style style = new Style();
+        style.background = new Color(0, 0, 0, 0);
+        style.foreground = new Color(210, 210, 210);
+        style.font = DefaultsService.getDefaultFont(16);
+        style.widthPolicy = SizePolicy.EXPAND;
+        style.heightPolicy = SizePolicy.EXPAND;
+        style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
+        style.setPadding(5, 5, 5, 5);
+
+        Style selectionStyle = new Style();
+        selectionStyle.background = new Color(255, 255, 255, 40);
+        selectionStyle.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        style.addInnerStyle("selection", selectionStyle);
 
         return style;
     }
