@@ -173,10 +173,10 @@ public class MainWindow extends ActiveWindow {
                 filesTree = new TreeView();
                 vSplitArea.assignLeftItem(leftArea); // treeStack);
                 filesTree.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-                filesTree.vScrollBar.setStyle(Style.getSimpleVerticalScrollBarStyle());
+                // filesTree.vScrollBar.setStyle(Style.getSimpleVerticalScrollBarStyle());
+                filesTree.vScrollBar.setStyle(ElementsFactory.getVScrollBarStyle());
                 filesTree.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-                filesTree.hScrollBar.setStyle(Style.getSimpleHorizontalScrollBarStyle());
-                filesTree.setBackground(new Color(0x505050));
+                filesTree.hScrollBar.setStyle(ElementsFactory.getHScrollBarStyle());
                 filesTree.disableMenu(true);
                 filesTree.menu.setDrawable(false);
                 filesTree.setBackground(65, 65, 65);

@@ -62,7 +62,7 @@ namespace SpaceVIL
                 KeyCode.Home, KeyCode.Up, KeyCode.Down};
             // _insteadKeyMods = new HashSet<KeyCode>() {KeyCode.LeftShift, KeyCode.RightShift, KeyCode.LeftControl,
             //    KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt, KeyCode.LeftSuper, KeyCode.RightSuper};
-            _serviceEditKeys = new HashSet<KeyCode>() {KeyCode.Backspace, KeyCode.Delete, KeyCode.Enter, 
+            _serviceEditKeys = new HashSet<KeyCode>() {KeyCode.Backspace, KeyCode.Delete, KeyCode.Enter,
                 KeyCode.NumpadEnter, KeyCode.Tab};
 
             _cursor.SetHeight(_textureStorage.GetCursorHeight());
@@ -248,7 +248,7 @@ namespace SpaceVIL
 
         private void OnKeyRelease(object sender, KeyArgs args)
         {
-            
+
         }
         private void OnKeyPress(object sender, KeyArgs args)
         {
@@ -286,7 +286,7 @@ namespace SpaceVIL
                                     _isSelect = true;
                                     _selectFrom = new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y);
                                 }
-                            }                       
+                            }
 
                         }
                         else //_isSelect
@@ -294,7 +294,7 @@ namespace SpaceVIL
                             if (args.Mods == CommonService.GetOsControlMod())
                             {
                                 UnselectText();
-                                CancelJustSelected();                                
+                                CancelJustSelected();
                             }
                         }
                     }
@@ -453,7 +453,7 @@ namespace SpaceVIL
                                 }
                                 //?????
                                 ReplaceCursor();
-                            }        
+                            }
                         }
 
                         if (args.Key == KeyCode.End) //end
@@ -461,11 +461,11 @@ namespace SpaceVIL
                             bool doUsual = true;
 
                             if (hasControl)
-                            {                        
+                            {
                                 int lineNum = _textureStorage.GetLinesCount() - 1;
                                 _cursorPosition = new SpaceVIL.Core.Point(GetLettersCountInLine(lineNum), lineNum);
                                 ReplaceCursor();
-                                doUsual = false;                        
+                                doUsual = false;
                             }
 
                             if (doUsual)
@@ -482,7 +482,7 @@ namespace SpaceVIL
                             {
                                 _cursorPosition = new SpaceVIL.Core.Point(0, 0);
                                 ReplaceCursor();
-                                doUsual = false;                        
+                                doUsual = false;
                             }
 
                             if (doUsual)
@@ -511,7 +511,8 @@ namespace SpaceVIL
 
         private void OnTextInput(object sender, TextInputArgs args)
         {
-            if (!_isEditable) {
+            if (!_isEditable)
+            {
                 return;
             }
             Monitor.Enter(_textureStorage.textInputLock);
@@ -536,7 +537,7 @@ namespace SpaceVIL
                 string sb = _textureStorage.GetTextInLine(_cursorPosition.Y);
                 _cursorPosition.X++;
                 SetTextInLine(sb.Insert(_cursorPosition.X - 1, str));
-                
+
                 AddToUndoAndReplaceCursor();
             }
             finally
@@ -685,7 +686,7 @@ namespace SpaceVIL
         }
 
         public override void InitElements()
-        {        
+        {
             _cursor.SetHeight(_textureStorage.GetCursorHeight());
             AddItems(_selectedArea, _textureStorage, _cursor);
             _textureStorage.InitLines(_cursor.GetWidth());
@@ -732,7 +733,7 @@ namespace SpaceVIL
             List<SpaceVIL.Core.Point> listPt = RealFromTo(from, to);
             fromReal = listPt[0];
             toReal = listPt[1];
-            
+
             selectionRectangles = _textureStorage.SelectedArrays(fromReal, toReal);
 
             _selectedArea.SetRectangles(selectionRectangles);
@@ -839,7 +840,7 @@ namespace SpaceVIL
         }
 
         private void PrivPasteText(string pasteStr)
-        {            
+        {
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
@@ -877,7 +878,7 @@ namespace SpaceVIL
         }
 
         private string PrivCutText()
-        {            
+        {
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
@@ -944,7 +945,7 @@ namespace SpaceVIL
         {
             ClearText();
         }
-        
+
         internal void ClearText()
         {
             _textureStorage.Clear();
@@ -993,7 +994,7 @@ namespace SpaceVIL
             base.SetStyle(style);
             SetForeground(style.Foreground);
             SetFont(style.Font);
-            
+
             _textureStorage.SetLineContainerAlignment(style.TextAlignment);
 
             Style inner_style = style.GetInnerStyle("selection");
@@ -1160,7 +1161,7 @@ namespace SpaceVIL
         {
             if (GetX() == _x)
             {
-                return;            
+                return;
             }
             base.SetX(_x);
             UpdateLayout();
@@ -1172,7 +1173,7 @@ namespace SpaceVIL
                 return;
             }
             base.SetY(_y);
-            UpdateLayout();            
+            UpdateLayout();
         }
 
         public void UpdateLayout()
@@ -1218,7 +1219,7 @@ namespace SpaceVIL
             internal int cursorStateY;
             // internal SpaceVIL.Core.Point fromSelectState;
             // internal SpaceVIL.Core.Point toSelectState;
-            
+
             internal TextBlockState(String textState, int cursorStateX, int cursorStateY)
             {
                 this.textState = textState;
@@ -1237,83 +1238,89 @@ namespace SpaceVIL
 
         //Wrap Text Stuff---------------------------------------------------------------------------------------------------
 
-    private bool _isWrapText;
+        private bool _isWrapText;
 
-    public bool IsWrapText()
-    {
-        return _isWrapText;
-    }
-
-    internal void SetWrapText(bool value)
-    {
-        if (value == _isWrapText)
+        public bool IsWrapText()
         {
-            return;
+            return _isWrapText;
         }
 
-        Monitor.Enter(_textureStorage.textInputLock);
-        try
+        internal void SetWrapText(bool value)
         {
-            String text = GetText();
-
-            SpaceVIL.Core.Point cursorTmp = _cursorPosition;
-            SpaceVIL.Core.Point fromTmp = new SpaceVIL.Core.Point();
-            SpaceVIL.Core.Point toTmp = new SpaceVIL.Core.Point();
-            if (_isWrapText)
+            if (value == _isWrapText)
             {
-                cursorTmp = _textureStorage.WrapCursorPosToReal(cursorTmp);
+                return;
+            }
+
+            Monitor.Enter(_textureStorage.textInputLock);
+            try
+            {
+                String text = GetText();
+
+                SpaceVIL.Core.Point cursorTmp = _cursorPosition;
+                SpaceVIL.Core.Point fromTmp = new SpaceVIL.Core.Point();
+                SpaceVIL.Core.Point toTmp = new SpaceVIL.Core.Point();
+                if (_isWrapText)
+                {
+                    cursorTmp = _textureStorage.WrapCursorPosToReal(cursorTmp);
+                    if (_isSelect)
+                    {
+                        fromTmp = _textureStorage.WrapCursorPosToReal(_selectFrom);
+                        toTmp = _textureStorage.WrapCursorPosToReal(_selectTo);
+                    }
+                }
+
+                _isWrapText = value;
+
+                _textureStorage.SetText(text); //not added into redo/undo
+
+                if (_isWrapText) //was unwrap become wrap
+                {
+                    cursorTmp = _textureStorage.RealCursorPosToWrap(cursorTmp);
+                    if (_isSelect)
+                    {
+                        fromTmp = _textureStorage.RealCursorPosToWrap(_selectFrom);
+                        toTmp = _textureStorage.RealCursorPosToWrap(_selectTo);
+                    }
+                }
+
+                _cursorPosition = cursorTmp;
+                ReplaceCursor();
                 if (_isSelect)
                 {
-                    fromTmp = _textureStorage.WrapCursorPosToReal(_selectFrom);
-                    toTmp = _textureStorage.WrapCursorPosToReal(_selectTo);
+                    _selectFrom = fromTmp;
+                    _selectTo = toTmp;
+                    MakeSelectedArea();
                 }
             }
-
-            _isWrapText = value;
-
-            _textureStorage.SetText(text); //not added into redo/undo
-
-            if (_isWrapText) //was unwrap become wrap
+            finally
             {
-                cursorTmp = _textureStorage.RealCursorPosToWrap(cursorTmp);
-                if (_isSelect)
-                {
-                    fromTmp = _textureStorage.RealCursorPosToWrap(_selectFrom);
-                    toTmp = _textureStorage.RealCursorPosToWrap(_selectTo);
-                }
-            }
-
-            _cursorPosition = cursorTmp;
-            ReplaceCursor();
-            if (_isSelect)
-            {
-                _selectFrom = fromTmp;
-                _selectTo = toTmp;
-                MakeSelectedArea();
+                Monitor.Exit(_textureStorage.textInputLock);
             }
         }
-        finally
-        {
-            Monitor.Exit(_textureStorage.textInputLock);
-        }
-    }
 
-    // if wrapText is on && something changed
-    private void ReorganizeText() {
-        if (!_isWrapText)
+        // if wrapText is on && something changed
+        private void ReorganizeText()
         {
-            return;
+            if (!_isWrapText)
+            {
+                return;
+            }
+
+            Monitor.Enter(_textureStorage.textInputLock);
+            try
+            {
+                _textureStorage.RewrapText();
+            }
+            finally
+            {
+                Monitor.Exit(_textureStorage.textInputLock);
+            }
         }
 
-        Monitor.Enter(_textureStorage.textInputLock);
-        try
+        internal void SetScrollStepFactor(float value)
         {
-            _textureStorage.RewrapText();
+            _textureStorage.SetScrollStepFactor(value);
         }
-        finally
-        {
-            Monitor.Exit(_textureStorage.textInputLock);
-        }
-    }
     }
 }

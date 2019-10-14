@@ -313,6 +313,31 @@ namespace OpenGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexSubImage2D(uint target, int level, int xoffset, int yoffset, int width, int height, uint format, uint type, byte[] pixels);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexSubImage2D(uint target, int level, int xoffset, int yoffset, int width, int height, uint format, uint type, IntPtr pixels);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glViewport(int x, int y, int width, int height);
+        // stencil
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glClearStencil(int s);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glStencilFunc(uint func, int refnotkeword, uint mask);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glStencilMask(uint mask);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glStencilOp(uint fail, uint zfail, uint zpass);
+
+        public void ClearStencil(int value)
+        {
+            glClearStencil(value);
+        }
+
+        public void StencilMask(uint mask)
+        {
+            glStencilMask(mask);
+        }
+
+        public void StencilFunc(uint func, int refnotkeword, uint mask)
+        {
+            glStencilFunc(func, refnotkeword, mask);
+        }
+
+        public void StencilOp(uint fail, uint zfail, uint zpass)
+        {
+            glStencilOp(fail, zfail, zpass);
+        }
 
         //Extensions
         static private Dictionary<string, Delegate> extensionFunctions = new Dictionary<string, Delegate>();

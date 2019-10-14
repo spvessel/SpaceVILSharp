@@ -9,6 +9,7 @@ using Pointer = SpaceVIL.Core.Pointer;
 using SpaceVIL.Common;
 using static OpenGL.OpenGLConstants;
 using static OpenGL.OpenGLWrapper;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
@@ -526,6 +527,8 @@ namespace SpaceVIL
                 return;
             }
 
+            bool preEffect = DrawPreEffect(shell);
+
             if (shell.IsRemakeRequest())
             {
                 shell.MakeShape();
@@ -550,6 +553,9 @@ namespace SpaceVIL
             Prototype vi = shell as Prototype;
             if (vi != null)
                 DrawBorder(vi);
+
+            if (preEffect)
+                glDisable(GL_STENCIL_TEST);
         }
 
         void DrawBorder(Prototype vi)
@@ -922,6 +928,53 @@ namespace SpaceVIL
                 _primitive, GetItemPyramidLevel(), 0, 0,
                 _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                 GLWHandler.GetCoreWindow().GetShadeColor(), GL_TRIANGLES);
+        }
+
+        private bool DrawPreEffect(IBaseItem item)
+        {
+            if (Effects.GetEffects(item) == null)
+                return false;
+
+            List<IEffect> effects = Effects.GetEffects(item);
+            glEnable(GL_STENCIL_TEST);
+            glClearStencil(1);
+            glStencilMask(0xFF);
+            glStencilFunc(GL_NEVER, 2, 0);
+            glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
+            foreach (IEffect effect in effects)
+            {
+                if (effect is ISubtractFigure)
+                {
+                    ISubtractFigure subtractFigure = (ISubtractFigure)effect;
+                    List<float[]> vertex = null;
+
+                    if (subtractFigure.GetSubtractFigure().IsFixed())
+                    {
+                        vertex = GraphicsMathService.MoveShape(
+                            subtractFigure.GetSubtractFigure().GetFigure(),
+                            subtractFigure.GetXOffset(),
+                            subtractFigure.GetYOffset(),
+                            new Area(0, 0, item.GetWidth(), item.GetHeight()),
+                            subtractFigure.GetAlignment());
+                    }
+                    else
+                    {
+                        vertex = GraphicsMathService.MoveShape(
+                                GraphicsMathService.UpdateShape(subtractFigure.GetSubtractFigure().GetFigure(),
+                                        (int)(item.GetWidth() * subtractFigure.GetWidthScale()),
+                                        (int)(item.GetHeight() * subtractFigure.GetHeightScale()),
+                                        new Area(0, 0, item.GetWidth(), item.GetHeight()), subtractFigure.GetAlignment()),
+                                subtractFigure.GetXOffset(), subtractFigure.GetYOffset());
+                    }
+
+                    _renderProcessor.DrawDirectVertex(_primitive, vertex, 0, item.GetX(), item.GetY(),
+                            _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(), Color.White,
+                            GL_TRIANGLES);
+
+                }
+            }
+            glStencilFunc(GL_NOTEQUAL, 2, 255);
+            return true;
         }
     }
 }

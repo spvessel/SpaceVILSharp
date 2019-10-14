@@ -9,11 +9,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
-import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.LinkedList;
-import java.nio.ByteBuffer;
 
 public class ImageItem extends Prototype implements InterfaceImageItem {
 

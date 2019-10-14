@@ -4,6 +4,7 @@ import com.spvessel.spacevil.Core.EventCommonMethodState;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Orientation;
 
@@ -66,9 +67,18 @@ public class HorizontalSlider extends Prototype {
         return _current_value;
     }
 
+    private int getSumOfHorizontalIndents() {
+        Indents marginHandler = handler.getMargin();
+        Indents paddingSlider = getPadding();
+        int margin = marginHandler.left + marginHandler.right;
+        int padding = paddingSlider.left + paddingSlider.right;
+        return margin + padding;
+    }
+
     void updateHandler() {
-        float offset = ((float) getWidth() - handler.getWidth()) / (_max_value - _min_value) * _current_value;
-        handler.setOffset((int) offset);
+        float offset = ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth())
+                / (_max_value - _min_value) * _current_value;
+        handler.setOffset((int) offset + getPadding().left + handler.getMargin().left);
     }
 
     private float _min_value = 0;
@@ -131,7 +141,7 @@ public class HorizontalSlider extends Prototype {
         _dragging = true;
         // иногда число NAN
         float result = (float) (handler.getX() - getX()) * (_max_value - _min_value)
-                / ((float) getWidth() - handler.getWidth());
+                / ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth());
         if (!Float.isNaN(result))
             setCurrentValue(result);
     }
@@ -140,7 +150,7 @@ public class HorizontalSlider extends Prototype {
         // Compute CurrentValue
         if (!_dragging)
             setCurrentValue((float) (args.position.getX() - getX() - handler.getWidth() / 2) * (_max_value - _min_value)
-                    / ((float) getWidth() - handler.getWidth()));
+                    / ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth()));
         _dragging = false;
     }
 

@@ -42,6 +42,7 @@ public class FileEntryTab extends Tab {
     @Override
     public void initElements() {
         super.initElements();
+        // getCloseButton().setPassEvents(false);
         //
         setBackground(55, 55, 55);
         setPadding(0, 0, 5, 0);

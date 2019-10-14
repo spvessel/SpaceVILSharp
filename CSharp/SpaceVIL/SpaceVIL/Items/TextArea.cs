@@ -585,5 +585,10 @@ namespace SpaceVIL
             _area.SetWrapText(value);
             UpdateHorizontalSlider();
         }
+
+        public void SetScrollStepFactor(float value)
+        {
+            _area.SetScrollStepFactor(value);
+        }
     }
 }

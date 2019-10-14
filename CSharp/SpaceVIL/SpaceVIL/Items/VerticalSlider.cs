@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
 using SpaceVIL.Decorations;
@@ -56,11 +51,22 @@ namespace SpaceVIL
             if (EventValueChanged != null) EventValueChanged.Invoke(this);
         }
 
+        private Int32 GetSumOfVerticalIndents()
+        {
+            Indents marginHandler = Handler.GetMargin();
+            Indents paddingSlider = GetPadding();
+            int margin = marginHandler.Top + marginHandler.Bottom;
+            int padding = paddingSlider.Top + paddingSlider.Bottom;
+            return margin + padding;
+        }
+
         internal void UpdateHandler()
         {
-            float offset = ((float)GetHeight() - Handler.GetHeight()) / (_max_value - _min_value) * _current_value;
-            Handler.SetOffset((int)offset);
+            float offset = ((float)GetHeight() - GetSumOfVerticalIndents() - Handler.GetHeight())
+                    / (_max_value - _min_value) * _current_value;
+            Handler.SetOffset((int)offset + GetPadding().Top + Handler.GetMargin().Top);
         }
+
         public float GetCurrentValue()
         {
             return _current_value;
@@ -115,7 +121,8 @@ namespace SpaceVIL
         {
             _dragging = true;
             //иногда число NAN 
-            float result = (float)(Handler.GetY() - GetY()) * (_max_value - _min_value) / ((float)GetHeight() - Handler.GetHeight());
+            float result = (float)(Handler.GetY() - GetY()) * (_max_value - _min_value) 
+                    / ((float)GetHeight() - GetSumOfVerticalIndents() - Handler.GetHeight());
             if (!Single.IsNaN(result))
                 SetCurrentValue(result);
         }
@@ -127,7 +134,7 @@ namespace SpaceVIL
                 SetCurrentValue(
                         (float)(args.Position.GetY() - GetY() - Handler.GetHeight() / 2)
                         * (_max_value - _min_value)
-                        / ((float)GetHeight() - Handler.GetHeight()));
+                        / ((float)GetHeight() - GetSumOfVerticalIndents() - Handler.GetHeight()));
             _dragging = false;
         }
 

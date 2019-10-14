@@ -32,7 +32,7 @@ public class HomePage extends HorizontalStack {
     public HomeMenuItem settingsLabel = new HomeMenuItem("Settings");
     public HomeMenuItem quickTipsLabel = new HomeMenuItem("Quick tips");
 
-//    public History history = new History();
+    //    public History history = new History();
 
     public HomePage() {
         setPadding(50, 0, 10, 50);
@@ -52,8 +52,8 @@ public class HomePage extends HorizontalStack {
         historyList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
         historyList.disableMenu(true);
         historyList.menu.setDrawable(false);
-        historyList.vScrollBar.setStyle(Style.getSimpleVerticalScrollBarStyle());
-        historyList.hScrollBar.setStyle(Style.getSimpleHorizontalScrollBarStyle());
+        historyList.vScrollBar.setStyle(ElementsFactory.getVScrollBarStyle());
+        historyList.hScrollBar.setStyle(ElementsFactory.getHScrollBarStyle());
         historyList.setShadow(6, 0, 0, new Color(0, 0, 0, 255));
         historyList.setSelectionVisible(false);
         historyList.setPadding(3, 6, 3, 6);
@@ -78,13 +78,13 @@ public class HomePage extends HorizontalStack {
         // historyList.addItems(new HistoryRecordItem("TestCase_1"), new HistoryRecordItem("TestCase_2"));
     }
 
-//    public HistoryRecordItem addItemToHistoryList(String path) {
-//        int ind = path.lastIndexOf(File.separator);
-//        String name = path.substring(ind + 1);
-//        HistoryRecordItem hri = new HistoryRecordItem(name);
-//        historyList.insertItem(hri, 0);
-//        return hri;
-//    }
+    //    public HistoryRecordItem addItemToHistoryList(String path) {
+    //        int ind = path.lastIndexOf(File.separator);
+    //        String name = path.substring(ind + 1);
+    //        HistoryRecordItem hri = new HistoryRecordItem(name);
+    //        historyList.insertItem(hri, 0);
+    //        return hri;
+    //    }
 
     public HistoryRecordItem addItemToHistoryList(HistoryRecordItem hri) {
         historyList.insertItem(hri, 0);

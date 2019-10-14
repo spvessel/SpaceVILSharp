@@ -255,5 +255,23 @@ namespace OpenGL
         {
             GL.Viewport(x, y, width, height);
         }
+
+        // stencil
+        internal static void glClearStencil(int value)
+        {
+            GL.ClearStencil(value);
+        }
+        internal static void glStencilMask(uint mask)
+        {
+            GL.StencilMask(mask);
+        }
+        internal static void glStencilFunc(uint func, int refnotkeword, uint mask)
+        {
+            GL.StencilFunc(func, refnotkeword, mask);
+        }
+        internal static void glStencilOp(uint fail, uint zfail, uint zpass)
+        {
+            GL.StencilOp(fail, zfail, zpass);
+        }
     }
 }

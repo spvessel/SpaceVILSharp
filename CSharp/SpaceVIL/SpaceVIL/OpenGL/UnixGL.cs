@@ -317,5 +317,30 @@ namespace OpenGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glFramebufferTexture2DEXT(uint target, uint attachment, uint textarget, uint texture, int level);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDrawBuffers(int n, uint[] bufs);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glCheckFramebufferStatusEXT(uint target);
+        // stencil
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glClearStencil(int s);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glStencilFunc(uint func, int refnotkeword, uint mask);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glStencilMask(uint mask);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glStencilOp(uint fail, uint zfail, uint zpass);
+
+        public void ClearStencil(int value)
+        {
+            glClearStencil(value);
+        }
+
+        public void StencilMask(uint mask)
+        {
+            glStencilMask(mask);
+        }
+
+        public void StencilFunc(uint func, int refnotkeword, uint mask)
+        {
+            glStencilFunc(func, refnotkeword, mask);
+        }
+
+        public void StencilOp(uint fail, uint zfail, uint zpass)
+        {
+            glStencilOp(fail, zfail, zpass);
+        }
     }
 }

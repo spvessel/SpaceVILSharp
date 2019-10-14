@@ -63,5 +63,9 @@ namespace OpenGL
 
         //Stencil & Scissors
         void Scissor(int x, int y, int width, int height);
+        void ClearStencil(int value);
+        void StencilMask(uint mask);
+        void StencilFunc(uint func, int refnotkeword, uint mask);
+        void StencilOp(uint fail, uint zfail, uint zpass);
     }
 }

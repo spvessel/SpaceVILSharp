@@ -1,11 +1,13 @@
 package com.spvessel.spacevil;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.nio.*;
 
 import com.spvessel.spacevil.Common.*;
 import com.spvessel.spacevil.Core.*;
+import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Flags.*;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
@@ -530,6 +532,8 @@ final class DrawEngine {
             return;
         }
 
+        boolean preEffect = drawPreEffect(shell);
+
         if (shell.isRemakeRequest()) {
             shell.makeShape();
             if (shell.isShadowDrop())
@@ -548,6 +552,9 @@ final class DrawEngine {
 
         if (shell instanceof Prototype)
             drawBorder((Prototype) shell);
+
+        if (preEffect)
+            glDisable(GL_STENCIL_TEST);
     }
 
     private void drawBorder(Prototype vi) {
@@ -642,7 +649,7 @@ final class DrawEngine {
     private void drawText(InterfaceTextContainer text) {
 
         TextPrinter textPrt = text.getLetTextures();
-//        textPrt = null;
+        //        textPrt = null;
 
         if (textPrt == null)
             return;
@@ -775,11 +782,12 @@ final class DrawEngine {
         if (_commonProcessor.ptrRelease.getY() > _tooltip.getHeight()) {
             _tooltip.setY(_commonProcessor.ptrRelease.getY() - _tooltip.getHeight() - tooltipBorderIndent.getY());
         } else {
-            _tooltip.setY(_commonProcessor.ptrRelease.getY() + CommonService.currentCursor.getCursorHeight() + tooltipBorderIndent.getY());
+            _tooltip.setY(_commonProcessor.ptrRelease.getY() + CommonService.currentCursor.getCursorHeight()
+                    + tooltipBorderIndent.getY());
         }
         // проверка справа
-        if (_commonProcessor.ptrRelease.getX() - tooltipBorderIndent.getX() + _tooltip.getWidth() > glwHandler
-                .getCoreWindow().getWidth() - tooltipBorderIndent.getX()) {
+        if (_commonProcessor.ptrRelease.getX() - tooltipBorderIndent.getX()
+                + _tooltip.getWidth() > glwHandler.getCoreWindow().getWidth() - tooltipBorderIndent.getX()) {
             _tooltip.setX(_commonProcessor.window.getWidth() - _tooltip.getWidth() - tooltipBorderIndent.getX());
         } else {
             _tooltip.setX(_commonProcessor.ptrRelease.getX() - tooltipBorderIndent.getX());
@@ -867,5 +875,49 @@ final class DrawEngine {
         _renderProcessor.drawScreenRectangle(_primitive, getItemPyramidLevel(), 0, 0,
                 _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(),
                 glwHandler.getCoreWindow().getShadeColor(), GL_TRIANGLES);
+    }
+
+    private boolean drawPreEffect(InterfaceBaseItem item) {
+        if (Effects.getEffects(item) == null)
+            return false;
+
+        List<InterfaceEffect> effects = Effects.getEffects(item);
+        glEnable(GL_STENCIL_TEST);
+        glClearStencil(1);
+        glStencilMask(0xFF);
+        glStencilFunc(GL_NEVER, 2, 0);
+        glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
+        for (InterfaceEffect effect : effects) {
+
+            if (effect instanceof InterfaceSubtractFigure) {
+                InterfaceSubtractFigure subtractFigure = (InterfaceSubtractFigure) effect;
+                List<float[]> vertex = null;
+
+                if (subtractFigure.getSubtractFigure().isFixed()) {
+                    
+                    vertex = GraphicsMathService.moveShape(
+                        subtractFigure.getSubtractFigure().getFigure(),
+                        subtractFigure.getXOffset(),
+                        subtractFigure.getYOffset(),
+                        new Area(0, 0, item.getWidth(), item.getHeight()),
+                        subtractFigure.getAlignment());
+
+                } else {
+                    vertex = GraphicsMathService.moveShape(
+                            GraphicsMathService.updateShape(subtractFigure.getSubtractFigure().getFigure(),
+                                    (int) (item.getWidth() * subtractFigure.getWidthScale()),
+                                    (int) (item.getHeight() * subtractFigure.getHeightScale()),
+                                    new Area(0, 0, item.getWidth(), item.getHeight()), subtractFigure.getAlignment()),
+                            subtractFigure.getXOffset(), subtractFigure.getYOffset());
+                }
+
+                _renderProcessor.drawDirectVertex(_primitive, vertex, 0, item.getX(), item.getY(),
+                        _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), Color.white,
+                        GL_TRIANGLES);
+
+            }
+        }
+        glStencilFunc(GL_NOTEQUAL, 2, 255);
+        return true;
     }
 }

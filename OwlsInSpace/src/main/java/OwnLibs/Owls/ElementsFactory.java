@@ -6,6 +6,7 @@ import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
+import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
 
@@ -151,31 +152,22 @@ public class ElementsFactory {
 
     public static Style getTextAreaStyle() {
         Style style = new Style();
-        // style.background = new Color(0x555555);
         style.background = new Color(70, 70, 70);
         style.font = DefaultsService.getDefaultFont();
-        // style.background = Color.RED;
-        // style.foreground = new Color(100, 100, 100);
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
         Style text_style = Style.getTextBlockStyle();
         text_style.font = DefaultsService.getDefaultFont(14);
-        // text_style.background = new Color(0x555555);
-        text_style.foreground = new Color(180, 180, 180);
+        text_style.foreground = new Color(190, 190, 190);
         text_style.getInnerStyle("selection").background = new Color(255, 255, 255, 25);
         text_style.getInnerStyle("cursor").background = new Color(0, 162, 232);
         text_style.getInnerStyle("selection").setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
         style.addInnerStyle("textedit", text_style);
 
-        Style vsb_style = Style.getSimpleVerticalScrollBarStyle();
-        vsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
-        style.addInnerStyle("vscrollbar", vsb_style);
-
-        Style hsb_style = Style.getSimpleHorizontalScrollBarStyle();
-        hsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
-        style.addInnerStyle("hscrollbar", hsb_style);
+        style.addInnerStyle("vscrollbar", getVScrollBarStyle());
+        style.addInnerStyle("hscrollbar", getHScrollBarStyle());
 
         Style menu_style = new Style();
         menu_style.background = new Color(50, 50, 50);
@@ -184,6 +176,38 @@ public class ElementsFactory {
         style.addInnerStyle("menu", menu_style);
 
         return style;
+    }
+
+    public static Style getVScrollBarStyle() {
+        Style vsb_style = Style.getSimpleVerticalScrollBarStyle();
+        vsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        vsb_style.width = 10;
+        vsb_style.setMargin(0, 0, 5, 0);
+        vsb_style.getInnerStyle("slider").setBackground(60, 60, 60);
+        vsb_style.getInnerStyle("slider").addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 0, 0, 30)));
+        vsb_style.getInnerStyle("slider").borderRadius = new CornerRadius(5);
+        vsb_style.getInnerStyle("slider").setPadding(0, 2, 0, 2);
+        vsb_style.getInnerStyle("slider").getInnerStyle("handler").setMargin(2, 0, 2, 0);
+        // vsb_style.getInnerStyle("slider").getInnerStyle("handler")
+        //         .setShadow(new Shadow(8, 0, 0, new Color(0, 0, 0, 255)));
+        // vsb_style.getInnerStyle("slider").getInnerStyle("handler").isShadowDrop = true;
+        return vsb_style;
+    }
+
+    public static Style getHScrollBarStyle() {
+        Style hsb_style = Style.getSimpleHorizontalScrollBarStyle();
+        hsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
+        hsb_style.height= 10;
+        hsb_style.setMargin(0, 0, 0, 5);
+        hsb_style.getInnerStyle("slider").setBackground(60, 60, 60);
+        hsb_style.getInnerStyle("slider").addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 0, 0, 30)));
+        hsb_style.getInnerStyle("slider").borderRadius = new CornerRadius(5);
+        hsb_style.getInnerStyle("slider").setPadding(2, 0, 2, 0);
+        hsb_style.getInnerStyle("slider").getInnerStyle("handler").setMargin(0, 2, 0, 2);
+        // vsb_style.getInnerStyle("slider").getInnerStyle("handler")
+        //         .setShadow(new Shadow(8, 0, 0, new Color(0, 0, 0, 255)));
+        // vsb_style.getInnerStyle("slider").getInnerStyle("handler").isShadowDrop = true;
+        return hsb_style;
     }
 
     public static TextArea getTextArea() {
@@ -211,6 +235,7 @@ public class ElementsFactory {
                 tArea.setFontSize(fontSize);
             }
         });
+        tArea.setScrollStepFactor(3);
         return tArea;
     }
 

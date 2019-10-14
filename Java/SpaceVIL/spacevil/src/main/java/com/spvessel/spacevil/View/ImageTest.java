@@ -44,7 +44,6 @@ public class ImageTest extends ActiveWindow {
                 // DefaultsService.getDefaultImage(EmbeddedImage.FILTER,
                 // EmbeddedImageSize.SIZE_64X64), false);
                 DefaultsService.getDefaultImage(EmbeddedImage.REFRESH, EmbeddedImageSize.SIZE_64X64), false);
-
         // DragAnchor
         TitleBar title = new TitleBar("ImageTest");
         addItem(title);
