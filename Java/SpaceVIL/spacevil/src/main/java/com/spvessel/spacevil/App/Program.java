@@ -55,14 +55,15 @@ public class Program {
         // WindowManager.enableVSync(0);
         // WindowManager.setRenderType(RenderType.ALWAYS);
 
-        WindowManager.startWith(//mw
+        WindowManager.startWith(
+            // mw
         //, mw2
-        // st
+        st
         // im
         // ft
         // lt
         // ct
-         it
+        //  it
         // tt
         // con
         // sat

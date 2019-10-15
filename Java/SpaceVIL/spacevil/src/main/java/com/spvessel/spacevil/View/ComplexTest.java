@@ -49,7 +49,7 @@ public class ComplexTest extends ActiveWindow {
         HorizontalStack toolbar = new HorizontalStack();
         toolbar.setBackground(51, 51, 51);
         toolbar.setItemName("toolbar");
-        toolbar.setSpacing(-5, 0);
+        toolbar.setSpacing(5, 0);
         toolbar.setMargin(0, 30, 0, 0);
         toolbar.setHeight(40);
         toolbar.setPadding(10, 0, 0, 0);
@@ -83,10 +83,11 @@ public class ComplexTest extends ActiveWindow {
         b4.eventMouseClick.add((sender, args) -> {
             // TreeItem ti = (TreeItem) treeview.getSelectedItem();
             // treeview.sortBrunch(ti);
-            TreeItem ti = treeview.getRootItem();
-            treeview.removeItem(ti);
-            TreeItem ti1 = new TreeItem(TreeItemType.BRANCH, "newRoot");
-            treeview.addItem(ti1);
+            // TreeItem ti = treeview.getRootItem();
+            // treeview.removeItem(ti);
+            // TreeItem ti1 = new TreeItem(TreeItemType.BRANCH, "newRoot");
+            // treeview.addItem(ti1);
+            treeview.clear();
         });
         ButtonCore b5 = getButton("b5", 26, 30, SizePolicy.FIXED);
         b5.eventMouseClick.add((sender, args) -> {
@@ -159,6 +160,13 @@ public class ComplexTest extends ActiveWindow {
                 wrap.setCellSize(wrap.getCellWidth() - 10, wrap.getCellHeight() - 10);
             }
         });
+
+        b5.setShadow(5, 0, 0, Color.BLACK);
+        b5.setShadowExtension(10, 10);
+        b5.setShadowDrop(false);
+        b5.eventMouseClick.add((sender, args) -> {
+            b5.setShadowDrop(!b5.isShadowDrop());
+        });
     }
 
     private void fillBlocks() {
@@ -186,7 +194,7 @@ public class ComplexTest extends ActiveWindow {
         style.heightPolicy = policy;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
         style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.HCENTER));
-        // style.margin = new Indents(5, 5, 5, 5);
+        style.margin = new Indents(5, 5, 5, 5);
         ItemState hovered = new ItemState();
         hovered.background = new Color(255, 255, 255, 30);
         style.addItemState(ItemStateType.HOVERED, hovered);
@@ -201,7 +209,7 @@ public class ComplexTest extends ActiveWindow {
         btn.setSizePolicy(policy, policy);
         btn.setItemName(name);
         btn.setStyle(style);
-        btn.setShadow(10, 3, 3, new Color(0, 0, 0, 160));
+        // btn.setShadow(10, 3, 3, new Color(0, 0, 0, 160));
         return btn;
     }
 

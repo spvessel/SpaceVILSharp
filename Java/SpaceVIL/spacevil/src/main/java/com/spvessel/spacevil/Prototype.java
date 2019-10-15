@@ -106,22 +106,23 @@ abstract public class Prototype implements InterfaceBaseItem {
         
         eventTextInput.clear();
 
-        eventFocusGet = null;
-        eventFocusLost = null;
-        eventResize = null;
-        eventDestroy = null;
-        eventMouseHover = null;
-        eventMouseLeave = null;
-        eventMouseClick = null;
-        eventMouseDoubleClick = null;
-        eventMousePress = null;
-        eventMouseDrag = null;
-        eventMouseDrop = null;
-        eventScrollUp = null;
-        eventScrollDown = null;
-        eventKeyPress = null;
-        eventKeyRelease = null;
-        eventTextInput = null;
+        // если это убрать то повторное использование элемента станет невозможным
+        // eventFocusGet = null;
+        // eventFocusLost = null;
+        // eventResize = null;
+        // eventDestroy = null;
+        // eventMouseHover = null;
+        // eventMouseLeave = null;
+        // eventMouseClick = null;
+        // eventMouseDoubleClick = null;
+        // eventMousePress = null;
+        // eventMouseDrag = null;
+        // eventMouseDrop = null;
+        // eventScrollUp = null;
+        // eventScrollDown = null;
+        // eventKeyPress = null;
+        // eventKeyRelease = null;
+        // eventTextInput = null;
     }
 
     public void release() {

@@ -592,7 +592,7 @@ final class DrawEngine {
 
         int fboWidth = shell.getWidth() + extension[0] + 2 * res;
         int fboHeight = shell.getHeight() + extension[1] + 2 * res;
-        if (shell.isRemakeRequest()) {
+        if (shell.isRemakeRequest() || _renderProcessor.shadowStorage.getResource(shell) == null) {
             if (stencil)
                 glDisable(GL_SCISSOR_TEST);
 

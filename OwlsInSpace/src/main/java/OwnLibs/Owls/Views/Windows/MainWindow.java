@@ -32,6 +32,7 @@ public class MainWindow extends ActiveWindow {
         public ButtonCore saveBtn;
         public ButtonCore deleteBtn;
         public ButtonCore searchBtn;
+        public ButtonCore refreshBtn;
         public ButtonToggle editBtn;
         public ButtonCore settingsBtn;
         public ButtonCore backBtn;
@@ -72,6 +73,8 @@ public class MainWindow extends ActiveWindow {
                 setPadding(2, 2, 2, 2);
                 isCentered = true;
 
+                // setAntiAliasingQuality(MSAA.MSAA_8X);
+
                 BufferedImage iBig = null;
                 BufferedImage iSmall = null;
                 try {
@@ -87,6 +90,7 @@ public class MainWindow extends ActiveWindow {
 
                 VerticalStack mainVStack = new VerticalStack();
                 mainVStack.setMargin(0, 30, 0, 0);
+                mainVStack.setSpacing(0, 1);
 
                 addItems(titleBar, mainVStack);
                 titleBar.setIcon(iSmall, 24, 24);
@@ -114,9 +118,12 @@ public class MainWindow extends ActiveWindow {
                 deleteBtn.setToolTip("Delete");
                 searchBtn = (ButtonCore) ElementsFactory.getFunctionalButton(false);
                 searchBtn.setToolTip("Search");
+                refreshBtn = (ButtonCore) ElementsFactory.getFunctionalButton(false);
+                refreshBtn.setToolTip("Refresh");
                 editBtn = (ButtonToggle) ElementsFactory.getFunctionalButton(true);
-                // editBtn.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(0x595959)));
-                editBtn.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(24, 148, 188)));
+                editBtn.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(0x595959)));
+                // editBtn.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(24, 148, 188)));
+                // editBtn.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(39, 116, 87)));
                 editBtn.setToolTip("Edit");
                 settingsBtn = (ButtonCore) ElementsFactory.getFunctionalButton(false);
                 settingsBtn.setToolTip("Settings");
@@ -126,8 +133,10 @@ public class MainWindow extends ActiveWindow {
                 backBtn.setHeight(30);
 
                 mainVStack.addItems(functionalBtnsStack);
-                functionalBtnsStack.addItems(newFileBtn, newFolderBtn, importBtn, saveBtn, deleteBtn, searchBtn,
-                                editBtn, settingsBtn);
+                functionalBtnsStack.addItems(newFileBtn, newFolderBtn, importBtn, ElementsFactory.getVerticalDivider(),
+                                saveBtn, deleteBtn, ElementsFactory.getVerticalDivider(), searchBtn, refreshBtn,
+                                ElementsFactory.getVerticalDivider(), editBtn, settingsBtn);
+                functionalBtnsStack.setShadow(1, 0, 1, Color.BLACK);
 
                 ElementsFactory.setButtonImage(newFileBtn,
                                 DefaultsService.getDefaultImage(EmbeddedImage.FILE, EmbeddedImageSize.SIZE_32X32));
@@ -145,6 +154,8 @@ public class MainWindow extends ActiveWindow {
                                 DefaultsService.getDefaultImage(EmbeddedImage.PENCIL, EmbeddedImageSize.SIZE_32X32));
                 ElementsFactory.setButtonImage(settingsBtn,
                                 DefaultsService.getDefaultImage(EmbeddedImage.GEAR, EmbeddedImageSize.SIZE_32X32));
+                ElementsFactory.setButtonImage(refreshBtn,
+                                DefaultsService.getDefaultImage(EmbeddedImage.REFRESH, EmbeddedImageSize.SIZE_32X32));
 
                 // --------------------------------------------------------------------------------------------------------------
 
