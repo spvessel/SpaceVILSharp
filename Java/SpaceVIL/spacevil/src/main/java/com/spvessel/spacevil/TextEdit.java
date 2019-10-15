@@ -91,8 +91,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     }
 
     private void onMouseDoubleClick(Object sender, MouseArgs args) {
-        if (args.button == MouseButton.BUTTON_LEFT)
+        if (args.button == MouseButton.BUTTON_LEFT) {
             selectAll();
+        }
     }
 
     private void onMousePressed(Object sender, MouseArgs args) {
@@ -132,62 +133,67 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     private void onScrollUp(Object sender, MouseArgs args) {
         int w = getTextWidth();
 
-        if (w < _cursorXMax)
+        if (w < _cursorXMax) {
             return;
+        }
         int sh = getLineXShift();
-        if (sh >= 0)
+        if (sh >= 0) {
             return;
+        }
 
         int curPos = _cursor.getX();
         int curCoord = curPos - sh;
 
         sh += scrollStep;
-        if (sh > 0)
+        if (sh > 0) {
             sh = 0;
+        }
 
         _text_object.setLineXShift(sh);
         _cursor.setX(curCoord + sh);
 
-        // curPos = _cursor.getX() - curPos;
-        // _selectedArea.setX(_selectedArea.getX() + curPos);
-        if (_justSelected)
+        if (_justSelected) {
             cancelJustSelected();
+        }
         makeSelectedArea(); //_selectFrom, _selectTo);
     }
 
     private void onScrollDown(Object sender, MouseArgs args) {
         int w = getTextWidth();
 
-        if (w < _cursorXMax)
+        if (w < _cursorXMax) {
             return;
+        }
         int sh = getLineXShift();
-        if (w + sh <= _cursorXMax)
+        if (w + sh <= _cursorXMax) {
             return;
+        }
 
         int curPos = _cursor.getX();
         int curCoord = curPos - sh;
 
         sh -= scrollStep;
-        if (w + sh < _cursorXMax)
+        if (w + sh < _cursorXMax) {
             sh = _cursorXMax - w;
+        }
 
         _text_object.setLineXShift(sh);
         _cursor.setX(curCoord + sh);
 
-        // curPos = _cursor.getX() - curPos;
-        // _selectedArea.setX(_selectedArea.getX() + curPos);
-        if (_justSelected)
+        if (_justSelected) {
             cancelJustSelected();
+        }
         makeSelectedArea(); //_selectFrom, _selectTo);
     }
 
     private void replaceCursorAccordingCoord(int realPos) {
         int w = getTextWidth();
-        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
+        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
             realPos -= getX() + (getWidth() - w) - getPadding().right - _text_object.getMargin().right
                     - _cursor.getWidth();
-        else
+        } else {
             realPos -= getX() + getPadding().left + _text_object.getMargin().left;
+        }
 
         _cursor_position = coordXToPos(realPos);
         replaceCursor();
@@ -197,14 +203,16 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         int pos = 0;
 
         List<Integer> lineLetPos = _text_object.getLetPosArray();
-        if (lineLetPos == null)
+        if (lineLetPos == null) {
             return pos;
+        }
 
         for (int i = 0; i < lineLetPos.size(); i++) {
-            if (lineLetPos.get(i) + getLineXShift() <= coordX + 3)
+            if (lineLetPos.get(i) + getLineXShift() <= coordX + 3) {
                 pos = i + 1;
-            else
+            } else {
                 break;
+            }
         }
 
         return pos;
@@ -297,17 +305,16 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
                     makeSelectedArea(); //_selectFrom, _selectTo);
                 }
             }
-        } finally
-
-        {
+        } finally {
             textInputLock.unlock();
         }
     }
 
     private int cursorPosToCoord(int cPos, boolean isx) {
         int coord = 0;
-        if (_text_object.getLetPosArray() == null)
+        if (_text_object.getLetPosArray() == null) {
             return coord;
+        }
 
         if (cPos > 0) {
             coord = _text_object.getLetPosArray().get(cPos - 1);
@@ -320,8 +327,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
             if (getLineXShift() + coord < 0) {
                 _text_object.setLineXShift(-coord);
             }
-            if (getLineXShift() + coord > _cursorXMax)
+            if (getLineXShift() + coord > _cursorXMax) {
                 _text_object.setLineXShift(_cursorXMax - coord);
+            }
         }
 
         return getLineXShift() + coord;
@@ -341,8 +349,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
             int xcp = getX() + getWidth() - w + pos - getPadding().right // - _cursor.getWidth()
                     - _text_object.getMargin().right - _cursor.getWidth();
-            if (_cursor_position == 0)
+            if (_cursor_position == 0) {
                 xcp -= _cursor.getWidth();
+            }
             _cursor.setX(xcp);
         } else {
             int cnt = getX() + getPadding().left + pos + _text_object.getMargin().left;
@@ -353,8 +362,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     }
 
     private void onTextInput(Object sender, TextInputArgs args) {
-        if (!_isEditable)
+        if (!_isEditable) {
             return;
+        }
         textInputLock.lock();
         try {
             byte[] input = ByteBuffer.allocate(4).putInt(args.character).array();
@@ -364,8 +374,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
                 unselectText();// privCutText();
                 privCutText();
             }
-            if (_justSelected)
-                cancelJustSelected(); // _justSelected = false;
+            if (_justSelected) {
+                cancelJustSelected();
+            }
 
             StringBuilder sb = new StringBuilder(privGetText());
             _cursor_position++;
@@ -382,10 +393,11 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     @Override
     public void setFocused(boolean value) {
         super.setFocused(value);
-        if (isFocused() && _isEditable)
+        if (isFocused() && _isEditable) {
             _cursor.setVisible(true);
-        else
+        } else {
             _cursor.setVisible(false);
+        }
     }
 
     /**
@@ -425,10 +437,6 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
      */
     public void setFont(Font font) {
         _text_object.setFont(font);
-        // int style = _substrate_text.getFont().getStyle();
-        // _substrate_text.setFontSize(font.getSize());
-        // _substrate_text.setFontFamily(font.getFamily());
-        // System.out.println("set font " + _substrate_text.getFont().getStyle());
         _substrate_text.setFont(
             GraphicsMathService.changeFontFamily(font.getFamily(), _substrate_text.getFont())); //new Font(font.getFamily(), _substrate_text.getFont().getStyle(), _substrate_text.getFont().getSize()));
     }
@@ -453,10 +461,12 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     private void privSetText(String text) {
         textInputLock.lock();
         try {
-            if (_substrate_text.isVisible())
+            if (_substrate_text.isVisible()) {
                 _substrate_text.setVisible(false);
-            if (text == null || text.equals(""))
+            }
+            if (text == null || text.equals("")) {
                 _substrate_text.setVisible(true);
+            }
             // _text_object.setLineXShift(_lineXShift, getWidth());
             _text_object.setItemText(text);
             _text_object.checkXShift(_cursorXMax);
@@ -470,8 +480,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
             } else {
                 nothingFlag = false;
             }
-            if (undoQueue.size() > queueCapacity)
+            if (undoQueue.size() > queueCapacity) {
                 undoQueue.pollLast();
+            }
             undoQueue.addFirst(new TextEditState(getText(), _cursor_position));
         } finally {
             textInputLock.unlock();
@@ -537,14 +548,16 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
      * Set TextEdit editable true or false
      */
     public void setEditable(boolean value) {
-        if (_isEditable == value)
+        if (_isEditable == value) {
             return;
+        }
         _isEditable = value;
 
-        if (_isEditable)
+        if (_isEditable) {
             _cursor.setVisible(true);
-        else
+        } else {
             _cursor.setVisible(false);
+        }
     }
 
     /**
@@ -562,8 +575,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         _substrate_text.checkXShift(_cursorXMax);
 
         replaceCursor();
-        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT))
+        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT)) {
             makeSelectedArea(); //_selectFrom, _selectTo);
+        }
     }
 
     /**
@@ -583,8 +597,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         // _substrate_text.setLineXShift();
 
         int scctp = _text_object.getFontDims()[0];
-        if (scctp > scrollStep)
+        if (scctp > scrollStep) {
             scrollStep = scctp;
+        }
 
         _text_object.setCursorWidth(_cursor.getWidth());
         _substrate_text.setCursorWidth(_cursor.getWidth());
@@ -611,10 +626,12 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     }
 
     private void makeSelectedArea(int fromPt, int toPt) {
-        if (fromPt == -1)
+        if (fromPt == -1) {
             fromPt = 0;
-        if (toPt == -1)
+        }
+        if (toPt == -1) {
             toPt = 0;
+        }
         fromPt = cursorPosToCoord(fromPt, false);
         toPt = cursorPosToCoord(toPt, false);
 
@@ -625,36 +642,43 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         int fromReal = Math.min(fromPt, toPt);
         int toReal = Math.max(fromPt, toPt);
 
-        if (fromReal < 0)
+        if (fromReal < 0) {
             fromReal = 0;
-        if (toReal > _cursorXMax)
+        }
+        if (toReal > _cursorXMax) {
             toReal = _cursorXMax;
+        }
 
         int width = toReal - fromReal + 1;
 
         int w = getTextWidth();
-        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax))
+        if (_text_object.getTextAlignment().contains(ItemAlignment.RIGHT) && (w < _cursorXMax)) {
             _selectedArea.setX(getX() + getWidth() - w + fromReal - getPadding().right - _text_object.getMargin().right
                     - _cursor.getWidth());
-        else
+        } else {
             _selectedArea.setX(getX() + getPadding().left + fromReal + _text_object.getMargin().left);
+        }
         _selectedArea.setWidth(width);
     }
 
     private String privGetSelectedText() {
         textInputLock.lock();
         try {
-            if (_selectFrom == -1)
+            if (_selectFrom == -1) {
                 _selectFrom = 0;
-            if (_selectTo == -1)
+            }
+            if (_selectTo == -1) {
                 _selectTo = 0;
-            if (_selectFrom == _selectTo)
+            }
+            if (_selectFrom == _selectTo) {
                 return "";
+            }
             String text = privGetText();
             int fromReal = Math.min(_selectFrom, _selectTo);
             int toReal = Math.max(_selectFrom, _selectTo);
-            if (fromReal < 0)
+            if (fromReal < 0) {
                 return "";
+            }
             String selectedText = text.substring(fromReal, toReal); // - fromReal
             return selectedText;
         } finally {
@@ -670,12 +694,14 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     }
 
     private void privPasteText(String pasteStr) {
-        if (!_isEditable)
+        if (!_isEditable) {
             return;
+        }
         textInputLock.lock();
         try {
-            if (_isSelect)
+            if (_isSelect) {
                 privCutText();
+            }
             String text = privGetText();
             String newText = text.substring(0, _cursor_position) + pasteStr + text.substring(_cursor_position);
             _cursor_position += pasteStr.length();
@@ -690,30 +716,36 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
      * Paste text
      */
     public void pasteText(String pasteStr) {
-        if (pasteStr != null)
+        if (pasteStr != null) {
             privPasteText(pasteStr);
+        }
     }
 
     private String privCutText() {
-        if (!_isEditable)
+        if (!_isEditable) {
             return "";
+        }
         textInputLock.lock();
         try {
-            if (_selectFrom == -1)
+            if (_selectFrom == -1) {
                 _selectFrom = 0;
-            if (_selectTo == -1)
+            }
+            if (_selectTo == -1) {
                 _selectTo = 0;
+            }
             String str = privGetSelectedText();
-            if (_selectFrom == _selectTo)
+            if (_selectFrom == _selectTo) {
                 return str;
+            }
             int fromReal = Math.min(_selectFrom, _selectTo);
             int toReal = Math.max(_selectFrom, _selectTo);
             StringBuilder sb = new StringBuilder(privGetText());
             _cursor_position = fromReal;
             privSetText(sb.delete(fromReal, toReal).toString()); // - fromReal
             replaceCursor();
-            if (_isSelect)
+            if (_isSelect) {
                 unselectText();
+            }
             cancelJustSelected(); // _justSelected = false;
             return str;
         } finally {
@@ -754,8 +786,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
      */
     @Override
     public void setStyle(Style style) {
-        if (style == null)
+        if (style == null) {
             return;
+        }
         super.setStyle(style);
         setForeground(style.foreground);
         setFont(style.font);
@@ -813,13 +846,15 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     private ArrayDeque<TextEditState> undoQueue;
 
     private void undoAction() {
-        if (undoQueue.size() == 1)
+        if (undoQueue.size() == 1) {
             return;
+        }
 
         TextEditState tmpText = undoQueue.pollFirst();
         if (tmpText != null) {
-            if (redoQueue.size() > queueCapacity)
+            if (redoQueue.size() > queueCapacity) {
                 redoQueue.pollLast();
+            }
             redoQueue.addFirst(new TextEditState(tmpText.textState, tmpText.cursorState));
 
             tmpText = undoQueue.pollFirst();
@@ -846,8 +881,9 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
     private ArrayDeque<TextEditState> redoQueue;
 
     private void redoAction() {
-        if (redoQueue.size() == 0)
+        if (redoQueue.size() == 0) {
             return;
+        }
 
         TextEditState tmpText = redoQueue.pollFirst();
         if (tmpText != null) {

@@ -53,13 +53,14 @@ class TextBlock extends Prototype
         _selectedArea = new CustomSelector();
 
         eventMousePress.add(this::onMousePressed);
+        eventMouseClick.add(this::onMouseClick);
+//        eventMouseDoubleClick.add(this::onDoubleClick);
         eventMouseDrag.add(this::onDragging);
         eventKeyPress.add(this::onKeyPress);
         eventKeyRelease.add(this::onKeyRelease);
         eventTextInput.add(this::onTextInput);
         eventScrollUp.add(this::onScrollUp);
         eventScrollDown.add(this::onScrollDown);
-        eventMouseDoubleClick.add(this::onDoubleClick);
 
         _cursorControlKeys = new HashSet<>(
                 Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.END, KeyCode.HOME, KeyCode.UP, KeyCode.DOWN));
@@ -73,45 +74,16 @@ class TextBlock extends Prototype
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
         undoQueue.addFirst(new TextBlockState(getText(), new Point(_cursorPosition)));
-
+        
         setCursor(EmbeddedCursor.IBEAM);
-
+        
         _isWrapText = false;
     }
-
+    
     private long _startTime = 0;
     private boolean _isDoubleClick = false;
-
-    private void onDoubleClick(Object sender, MouseArgs args) {
-        _textureStorage.textInputLock.lock();
-        try {
-            if (args.button == MouseButton.BUTTON_LEFT) {
-                replaceCursorAccordingCoord(new Point(args.position.getX(), args.position.getY()));
-                if (_isSelect) {
-                    unselectText();
-                    cancelJustSelected();
-                }
-                int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
-
-                if (wordBounds[0] != wordBounds[1]) {
-                    _isSelect = true;
-                    _selectFrom = new Point(wordBounds[0], _cursorPosition.y);
-                    _selectTo = new Point(wordBounds[1], _cursorPosition.y);
-                    _cursorPosition = new Point(_selectTo);
-                    replaceCursor();
-                    makeSelectedArea();
-                }
-
-                _startTime = System.nanoTime();
-                _isDoubleClick = true;
-            } else {
-                _isDoubleClick = false;
-            }
-        } finally {
-            _textureStorage.textInputLock.unlock();
-        }
-    }
-
+    private Point _previousClickPos = new Point();
+    
     private void onMousePressed(Object sender, MouseArgs args) {
         _textureStorage.textInputLock.lock();
         try {
@@ -121,20 +93,95 @@ class TextBlock extends Prototype
                     unselectText();
                     cancelJustSelected();
                 }
-
-                if (_isDoubleClick && (System.nanoTime() - _startTime) / 1000000 < 500) {
-                    _isSelect = true;
-                    _selectFrom = new Point(0, _cursorPosition.y);
-                    _selectTo = new Point(getLettersCountInLine(_cursorPosition.y), _cursorPosition.y);
-                    _cursorPosition = new Point(_selectTo);
-                    replaceCursor();
-                    makeSelectedArea();
-                }
             }
-            _isDoubleClick = false;
+        
         } finally {
             _textureStorage.textInputLock.unlock();
         }
+    }
+
+    private void onMouseClick(Object sender, MouseArgs args) {
+        _textureStorage.textInputLock.lock();
+        try {
+            if (args.button == MouseButton.BUTTON_LEFT) {
+                Point savePos = new Point(_cursorPosition);
+                if (isPosSame()) {
+                    if ((System.nanoTime() - _startTime) / 1000000 < 500) {
+                        if (_isDoubleClick) { //} && (System.nanoTime() - _startTime) / 1000000 < 500) {
+                            _isSelect = true;
+                            _selectFrom = new Point(0, _cursorPosition.y);
+                            _selectTo = new Point(getLettersCountInLine(_cursorPosition.y), _cursorPosition.y);
+                            _cursorPosition = new Point(_selectTo);
+                            replaceCursor();
+                            makeSelectedArea();
+
+                            _isDoubleClick = false;
+                        } else { //if double click
+                            int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
+
+                            if (wordBounds[0] != wordBounds[1]) {
+                                _isSelect = true;
+                                _selectFrom = new Point(wordBounds[0], _cursorPosition.y);
+                                _selectTo = new Point(wordBounds[1], _cursorPosition.y);
+                                _cursorPosition = new Point(_selectTo);
+                                replaceCursor();
+                                makeSelectedArea();
+                            }
+
+                            _isDoubleClick = true;
+                        }
+                        
+                    } else {
+                        _isDoubleClick = false;
+                    }
+                } else {
+                    _isDoubleClick = false;
+                }
+
+                _previousClickPos = savePos;
+                _startTime = System.nanoTime();
+            } else {
+                _isDoubleClick = false;
+            }
+        } finally {
+            _textureStorage.textInputLock.unlock();
+        }
+    }
+    
+    // private void onDoubleClick(Object sender, MouseArgs args) {
+    //     _textureStorage.textInputLock.lock();
+    //     try {
+    //         if (args.button == MouseButton.BUTTON_LEFT) {
+
+    //             int[] wordBounds = _textureStorage.findWordBounds(_cursorPosition);
+
+    //             if (wordBounds[0] != wordBounds[1]) {
+    //                 _isSelect = true;
+    //                 _selectFrom = new Point(wordBounds[0], _cursorPosition.y);
+    //                 _selectTo = new Point(wordBounds[1], _cursorPosition.y);
+    //                 _cursorPosition = new Point(_selectTo);
+    //                 replaceCursor();
+    //                 makeSelectedArea();
+    //             }
+
+    //             _startTime = System.nanoTime();
+    //             _isDoubleClick = true;
+    //         } else {
+    //             _isDoubleClick = false;
+    //         }
+    //     } finally {
+    //         _textureStorage.textInputLock.unlock();
+    //     }
+    // }
+
+    private boolean isPosSame() {
+        Point pos1 = new Point(_cursorPosition);
+        Point pos2 = new Point(_previousClickPos);
+        int tol = 5;
+        if (pos1.y != pos2.y) {
+            return false;
+        }
+        return (pos1.x - tol <= pos2.x && pos2.x <= pos1.x + tol);
     }
 
     private void onDragging(Object sender, MouseArgs args) {
@@ -944,6 +991,10 @@ class TextBlock extends Prototype
         if (getWidth() == width) {
             return;
         }
+        updateBlockWidth(width);
+    }
+
+    private void updateBlockWidth(int width) {
         Point tmpCursor = new Point(_cursorPosition);
         Point fromTmp = new Point(_selectFrom);
         Point toTmp = new Point(_selectTo);
@@ -975,6 +1026,10 @@ class TextBlock extends Prototype
         if (getHeight() == height) {
             return;
         }
+        updateBlockHeight(height);
+    }
+
+    private void updateBlockHeight(int height) {
         super.setHeight(height);
         _textureStorage.updateBlockHeight();
     }

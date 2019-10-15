@@ -33,10 +33,11 @@ namespace SpaceVIL
             _selectedArea.SetBackground(150, 150, 150);
 
             EventMousePress += OnMousePressed;
+            EventMouseClick += OnMouseClick;
+            // EventMouseDoubleClick += OnDoubleClick;
             EventMouseDrag += OnDragging;
             EventKeyPress += OnKeyPress;
             EventKeyRelease += OnKeyRelease;
-            EventMouseDoubleClick += OnDoubleClick;
 
             // style
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TextView)));
@@ -44,43 +45,7 @@ namespace SpaceVIL
 
         private Stopwatch _startTime = new Stopwatch();
         private bool _isDoubleClick = false;
-
-        private void OnDoubleClick(object sender, MouseArgs args)
-        {
-            Monitor.Enter(_textureStorage.textInputLock);
-            try
-            {
-                if (args.Button == MouseButton.ButtonLeft)
-                {
-                    ReplaceCursorAccordingCoord(new SpaceVIL.Core.Point(args.Position.GetX(), args.Position.GetY()));
-                    if (_isSelect)
-                    {
-                        UnselectText();
-                    }
-                    int[] wordBounds = _textureStorage.FindWordBounds(_cursorPosition);
-
-                    if (wordBounds[0] != wordBounds[1])
-                    {
-                        _isSelect = true;
-                        _selectFrom = new SpaceVIL.Core.Point(wordBounds[0], _cursorPosition.Y);
-                        _selectTo = new SpaceVIL.Core.Point(wordBounds[1], _cursorPosition.Y);
-                        _cursorPosition = new SpaceVIL.Core.Point(_selectTo.X, _selectTo.Y);
-                        MakeSelectedArea();
-                    }
-
-                    _startTime.Restart();
-                    _isDoubleClick = true;
-                }
-                else
-                {
-                    _isDoubleClick = false;
-                }
-            }
-            finally
-            {
-                Monitor.Exit(_textureStorage.textInputLock);
-            }
-        }
+        private SpaceVIL.Core.Point _previousClickPos = new SpaceVIL.Core.Point();
 
         private void OnMousePressed(object sender, MouseArgs args)
         {
@@ -94,22 +59,125 @@ namespace SpaceVIL
                     {
                         UnselectText();
                     }
-
-                    if (_isDoubleClick && _startTime.ElapsedMilliseconds < 500) //Select line on triple click
-                    {
-                        _isSelect = true;
-                        _selectFrom = new SpaceVIL.Core.Point(0, _cursorPosition.Y);
-                        _selectTo = new SpaceVIL.Core.Point(GetLettersCountInLine(_cursorPosition.Y), _cursorPosition.Y);
-                        _cursorPosition = new SpaceVIL.Core.Point(_selectTo.X, _selectTo.Y);
-                        MakeSelectedArea();
-                    }
                 }
-                _isDoubleClick = false;
             }
             finally
             {
                 Monitor.Exit(_textureStorage.textInputLock);
             }
+        }
+
+        private void OnMouseClick(object sender, MouseArgs args)
+        {
+            Monitor.Enter(_textureStorage.textInputLock);
+            try
+            {
+                if (args.Button == MouseButton.ButtonLeft)
+                {
+                    SpaceVIL.Core.Point savePos = new SpaceVIL.Core.Point(_cursorPosition);
+                    if (IsPosSame())
+                    {
+                        if (_startTime.ElapsedMilliseconds < 500)
+                        {
+
+                            if (_isDoubleClick) // && _startTime.ElapsedMilliseconds < 500) //Select line on triple click
+                            {
+                                _isSelect = true;
+                                _selectFrom = new SpaceVIL.Core.Point(0, _cursorPosition.Y);
+                                _selectTo = new SpaceVIL.Core.Point(GetLettersCountInLine(_cursorPosition.Y), _cursorPosition.Y);
+                                _cursorPosition = new SpaceVIL.Core.Point(_selectTo.X, _selectTo.Y);
+                                MakeSelectedArea();
+
+                                _isDoubleClick = false;
+                            }
+                            else //if double click
+                            {
+                                int[] wordBounds = _textureStorage.FindWordBounds(_cursorPosition);
+
+                                if (wordBounds[0] != wordBounds[1])
+                                {
+                                    _isSelect = true;
+                                    _selectFrom = new SpaceVIL.Core.Point(wordBounds[0], _cursorPosition.Y);
+                                    _selectTo = new SpaceVIL.Core.Point(wordBounds[1], _cursorPosition.Y);
+                                    _cursorPosition = new SpaceVIL.Core.Point(_selectTo.X, _selectTo.Y);
+                                    MakeSelectedArea();
+                                }
+
+                                // _startTime.Restart();
+                                _isDoubleClick = true;
+                            }
+                        }
+                        else
+                        {
+                            _isDoubleClick = false;
+                        }
+                    }
+                    else
+                    {
+                        _isDoubleClick = false;
+                    }
+
+                    _previousClickPos = savePos;
+                    _startTime.Restart();
+                }
+                else
+                {
+                    _isDoubleClick = false;
+                }
+            }
+            finally
+            {
+                Monitor.Exit(_textureStorage.textInputLock);
+            }
+        }
+
+        // private void OnDoubleClick(object sender, MouseArgs args)
+        // {
+        //     Monitor.Enter(_textureStorage.textInputLock);
+        //     try
+        //     {
+        //         if (args.Button == MouseButton.ButtonLeft)
+        //         {
+        //             ReplaceCursorAccordingCoord(new SpaceVIL.Core.Point(args.Position.GetX(), args.Position.GetY()));
+        //             if (_isSelect)
+        //             {
+        //                 UnselectText();
+        //             }
+        //             int[] wordBounds = _textureStorage.FindWordBounds(_cursorPosition);
+
+        //             if (wordBounds[0] != wordBounds[1])
+        //             {
+        //                 _isSelect = true;
+        //                 _selectFrom = new SpaceVIL.Core.Point(wordBounds[0], _cursorPosition.Y);
+        //                 _selectTo = new SpaceVIL.Core.Point(wordBounds[1], _cursorPosition.Y);
+        //                 _cursorPosition = new SpaceVIL.Core.Point(_selectTo.X, _selectTo.Y);
+        //                 MakeSelectedArea();
+        //             }
+
+        //             _startTime.Restart();
+        //             _isDoubleClick = true;
+        //         }
+        //         else
+        //         {
+        //             _isDoubleClick = false;
+        //         }
+        //     }
+        //     finally
+        //     {
+        //         Monitor.Exit(_textureStorage.textInputLock);
+        //     }
+        // }
+
+        private bool IsPosSame()
+        {
+            SpaceVIL.Core.Point pos1 = new SpaceVIL.Core.Point(_cursorPosition);
+            SpaceVIL.Core.Point pos2 = new SpaceVIL.Core.Point(_previousClickPos);
+            int tol = 5;
+            if (pos1.Y != pos2.Y)
+            {
+                return false;
+            }
+            return (pos1.X - tol <= pos2.X && pos2.X <= pos1.X + tol);
         }
 
         private void OnDragging(object sender, MouseArgs args)
@@ -340,9 +408,14 @@ namespace SpaceVIL
                 return;
             }
 
-            SpaceVIL.Core.Point tmpCursor = new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y);
-            SpaceVIL.Core.Point fromTmp = new SpaceVIL.Core.Point(_selectFrom.X, _selectFrom.Y);
-            SpaceVIL.Core.Point toTmp = new SpaceVIL.Core.Point(_selectTo.X, _selectTo.Y);
+            UpdateBlockWidth(width);
+        }
+
+        private void UpdateBlockWidth(int width)
+        {
+            SpaceVIL.Core.Point tmpCursor; // = new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y);
+            SpaceVIL.Core.Point fromTmp = new SpaceVIL.Core.Point(_selectFrom); //.X, _selectFrom.Y);
+            SpaceVIL.Core.Point toTmp = new SpaceVIL.Core.Point(_selectTo); //.X, _selectTo.Y);
 
             tmpCursor = _textureStorage.WrapCursorPosToReal(_cursorPosition);
             if (_isSelect)
@@ -367,12 +440,18 @@ namespace SpaceVIL
 
             ChangeHeightAccordingToText();
         }
+
         public override void SetHeight(int height)
         {
             if (GetHeight() == height)
             {
                 return;
             }
+            UpdateBlockHeight(height);
+        }
+
+        private void UpdateBlockHeight(int height)
+        {
             base.SetHeight(height);
             _textureStorage.UpdateBlockHeight();
         }

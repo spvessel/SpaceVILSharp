@@ -5,7 +5,10 @@ namespace SpaceVIL.Core
         internal int X { get; set; }
         internal int Y { get; set; }
 
-        internal Point() { }
+        internal Point() {
+            X = 0;
+            Y = 0;
+        }
 
         internal Point(int x, int y)
         {
