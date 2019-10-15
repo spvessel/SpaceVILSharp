@@ -488,7 +488,12 @@ namespace SpaceVIL
 
         private int GetLineY(int num)
         {
-            return (_lineHeight + _lineSpacer) * num;//_lineSpacer / 2 + 
+            return (_lineHeight + _lineSpacer) * num;
+        }
+
+        private int GetLineY(float num)
+        {
+            return (int)((_lineHeight + _lineSpacer) * num);
         }
 
         internal int GetLinesCount()
@@ -1224,9 +1229,17 @@ namespace SpaceVIL
             }
         }
 
+        private float _stepFactor = 1.0f;
+
+        internal void SetScrollStepFactor(float value)
+        {
+            _stepFactor = value;
+        }
+
         internal int GetScrollStep()
         {
-            return GetLineY(1);
+            // return GetLineY(1);
+            return GetLineY(_stepFactor);
         }
         internal int GetScrollYOffset()
         {

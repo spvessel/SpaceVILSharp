@@ -424,6 +424,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         return (_lineHeight + _lineSpacer) * num;
     }
 
+    private int getLineY(float num) {
+        return (int)((_lineHeight + _lineSpacer) * num);
+    }
+
     int getLinesCount() {
         return _linesList.size();
     }
@@ -1069,8 +1073,15 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         }
     }
 
+    private float _stepFactor = 1.0f;
+
+    void setScrollStepFactor(float value) {
+        _stepFactor = value;
+    }
+
     int getScrollStep() {
-        return getLineY(1);
+        // return getLineY(1);
+        return getLineY(_stepFactor);
     }
 
     int getScrollYOffset() {

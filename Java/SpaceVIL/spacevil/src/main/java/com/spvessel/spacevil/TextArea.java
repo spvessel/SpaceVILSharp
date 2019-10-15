@@ -536,4 +536,8 @@ public class TextArea extends Prototype {
         _area.setWrapText(value);
         updateHorizontalSlider();
     }
+
+    public void setScrollStepFactor(float value) {
+        _area.setScrollStepFactor(value);
+    }
 }

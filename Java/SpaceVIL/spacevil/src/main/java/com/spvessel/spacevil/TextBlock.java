@@ -1171,4 +1171,8 @@ class TextBlock extends Prototype
             _textureStorage.textInputLock.unlock();
         }
     }
+
+    void setScrollStepFactor(float value) {
+        _textureStorage.setScrollStepFactor(value);
+    }
 }

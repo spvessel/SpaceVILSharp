@@ -1,7 +1,11 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Core.Area;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.RectangleBounds;
 import com.spvessel.spacevil.Decorations.CornerRadius;
+import com.spvessel.spacevil.Flags.ItemAlignment;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
@@ -816,7 +820,7 @@ public final class GraphicsMathService {
         graphic.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
                 RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
         graphic.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        
+
         // graphic.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
         // graphic.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 
@@ -912,6 +916,108 @@ public final class GraphicsMathService {
 
     private static double sinGrad(double angleGrad) {
         return Math.sin(grad2Radian(angleGrad));
+    }
+
+    public static List<float[]> updateShape(List<float[]> triangles, int w, int h, Area area, List<ItemAlignment> alignments) {
+
+        if (triangles == null || triangles.size() == 0) {
+            return null;
+        }
+
+        // clone triangles
+        List<float[]> result = new LinkedList<>();
+        for (int i = 0; i < triangles.size(); i++) {
+            result.add(new float[] { triangles.get(i)[0], triangles.get(i)[1] });
+        }
+
+        // max and min
+        float maxX = result.stream().map(i -> i[0]).max(Float::compare).get();
+        float maxY = result.stream().map(i -> i[1]).max(Float::compare).get();
+        float minX = result.stream().map(i -> i[0]).min(Float::compare).get();
+        float minY = result.stream().map(i -> i[1]).min(Float::compare).get();
+
+        int figureWidth = Math.abs((int) (maxX - minX));
+        int figureHeight = Math.abs((int) (maxY - minY));
+
+        // x offset
+        int offsetX = 0;
+        if (alignments.contains(ItemAlignment.HCENTER)) {
+            offsetX = (area.getWidth() - figureWidth) / 2;
+        } else if (alignments.contains(ItemAlignment.RIGHT)) {
+            offsetX = area.getWidth() - figureWidth;
+        }
+
+        // y offset
+        int offsetY = 0;
+        if (alignments.contains(ItemAlignment.VCENTER)) {
+            offsetY = (area.getHeight() - figureHeight) / 2;
+        } else if (alignments.contains(ItemAlignment.BOTTOM)) {
+            offsetY = area.getHeight() - figureHeight;
+        }
+        // to the left top corner
+        for (float[] point : result) {
+            point[0] = (point[0] - minX) * w / (maxX - minX) + offsetX;
+            point[1] = (point[1] - minY) * h / (maxY - minY) + offsetY;
+        }
+
+        return result;
+    }
+
+    public static Area getFigureBounds(List<float[]> triangles) {
+        Area area = new Area();
+        // max and min
+        float maxX = triangles.stream().map(i -> i[0]).max(Float::compare).get();
+        float maxY = triangles.stream().map(i -> i[1]).max(Float::compare).get();
+        float minX = triangles.stream().map(i -> i[0]).min(Float::compare).get();
+        float minY = triangles.stream().map(i -> i[1]).min(Float::compare).get();
+        area.setHeight(Math.abs((int) (maxY - minY)));
+        area.setWidth(Math.abs((int) (maxX - minX)));
+        return area;
+    }
+
+    public static List<float[]> moveShape(List<float[]> triangles, float x, float y, Area area,
+            List<ItemAlignment> alignments) {
+        if (triangles == null || triangles.size() == 0)
+            return null;
+
+        // clone triangles
+        List<float[]> result = new LinkedList<>();
+        for (int i = 0; i < triangles.size(); i++) {
+            result.add(new float[] { triangles.get(i)[0], triangles.get(i)[1] });
+        }
+
+        // max and min
+        float maxX = result.stream().map(i -> i[0]).max(Float::compare).get();
+        float maxY = result.stream().map(i -> i[1]).max(Float::compare).get();
+        float minX = result.stream().map(i -> i[0]).min(Float::compare).get();
+        float minY = result.stream().map(i -> i[1]).min(Float::compare).get();
+
+        int figureWidth = Math.abs((int) (maxX - minX));
+        int figureHeight = Math.abs((int) (maxY - minY));
+
+        // x offset
+        int offsetX = 0;
+        if (alignments.contains(ItemAlignment.HCENTER)) {
+            offsetX = (area.getWidth() - figureWidth) / 2;
+        } else if (alignments.contains(ItemAlignment.RIGHT)) {
+            offsetX = area.getWidth() - figureWidth;
+        }
+
+        // y offset
+        int offsetY = 0;
+        if (alignments.contains(ItemAlignment.VCENTER)) {
+            offsetY = (area.getHeight() - figureHeight) / 2;
+        } else if (alignments.contains(ItemAlignment.BOTTOM)) {
+            offsetY = area.getHeight() - figureHeight;
+        }
+        
+        // to the left top corner
+        for (float[] point : result) {
+            point[0] += x + offsetX;
+            point[1] += y + offsetY;
+        }
+
+        return result;
     }
 }
 

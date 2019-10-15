@@ -1,6 +1,7 @@
 package com.spvessel.spacevil.View;
 
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
@@ -8,10 +9,19 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.TextArea;
 import com.spvessel.spacevil.Common.CommonService;
+import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Decorations.CornerRadius;
+import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Effects;
+import com.spvessel.spacevil.Decorations.ItemState;
+import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Decorations.SubtractFigure;
 import com.spvessel.spacevil.*;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.io.BufferedReader;
@@ -85,8 +95,9 @@ public class InputTest extends ActiveWindow {
         te.setWidth(300);
         te.setWidthPolicy(SizePolicy.EXPAND);
 
-//        TextArea tb = new TextArea();
-        TextView tb = new TextView();
+        TextArea tb = new TextArea();
+        // TextView tb = new TextView();
+        tb.setScrollStepFactor(1.5f);
         // tb.setMargin(2, 2, 2, 27);
         // tb.setEditable(false);
         //        tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
@@ -126,6 +137,7 @@ public class InputTest extends ActiveWindow {
         bc1.setSize(150, 30);
         ButtonCore bc2 = new ButtonCore("getWhole");
         bc2.setSize(150, 30);
+        bc2.setWidthPolicy(SizePolicy.EXPAND);
 
         layout.addItems(bc, bc1, bc2); //, sp);
 
@@ -214,6 +226,8 @@ public class InputTest extends ActiveWindow {
         // tb.rewindText();
         // tb.setWrapText(true);
         tb.setText(getBigText());
+        tb.setStyle(getTextAreaStyle());
+
         // tb.setBackground(0, 0, 0);
 
         // tb.eventKeyRelease.add((sender, args) -> {
@@ -236,6 +250,21 @@ public class InputTest extends ActiveWindow {
         //         }
         //     }
         // });
+
+        // Effects.addEffect(bc2, getStencilEffect(bc2));
+        SubtractFigure effect1 = new SubtractFigure(
+                new CustomFigure(true, GraphicsMathService.getEllipse(bc2.getHeight() + 10, bc2.getHeight() + 10, 0, 0, 32)));
+        effect1.setSizeScale(0.2f, 1f);
+        effect1.setPositionOffset(-bc2.getHeight() / 2, 0);
+        effect1.setAlignment(ItemAlignment.VCENTER);
+        Effects.addEffect(bc2, effect1);
+
+        SubtractFigure effect2 = new SubtractFigure(
+                new CustomFigure(true, GraphicsMathService.getEllipse(bc2.getHeight() + 10, bc2.getHeight() + 10, 0, 0, 32)));
+        effect2.setSizeScale(0.2f, 1f);
+        effect2.setPositionOffset(bc2.getHeight() / 2, 0);
+        effect2.setAlignment(ItemAlignment.RIGHT, ItemAlignment.VCENTER);
+        Effects.addEffect(bc2, effect2);
     }
 
     private static int countLines(String str) {
@@ -282,5 +311,84 @@ public class InputTest extends ActiveWindow {
                 + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
                 + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
                 + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" + "";
+    }
+
+    public static Style getTextAreaStyle() {
+        Style style = new Style();
+        style.background = new Color(70, 70, 70);
+        style.font = DefaultsService.getDefaultFont();
+        style.widthPolicy = SizePolicy.EXPAND;
+        style.heightPolicy = SizePolicy.EXPAND;
+        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
+
+        Style text_style = Style.getTextBlockStyle();
+        text_style.font = DefaultsService.getDefaultFont(14);
+        text_style.foreground = new Color(180, 180, 180);
+        text_style.getInnerStyle("selection").background = new Color(255, 255, 255, 25);
+        text_style.getInnerStyle("cursor").background = new Color(0, 162, 232);
+        text_style.getInnerStyle("selection").setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
+        style.addInnerStyle("textedit", text_style);
+
+        Style vsb_style = Style.getSimpleVerticalScrollBarStyle();
+        vsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.RIGHT, ItemAlignment.TOP));
+        vsb_style.width = 10;
+        vsb_style.setPadding(0, 0, 0, 0);
+        vsb_style.getInnerStyle("slider").setBackground(60, 60, 60);
+        vsb_style.getInnerStyle("slider").addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 0, 0, 40)));
+        vsb_style.getInnerStyle("slider").borderRadius = new CornerRadius(5);
+        vsb_style.getInnerStyle("slider").setPadding(0, 2, 0, 2);
+        vsb_style.getInnerStyle("slider").getInnerStyle("handler").setMargin(2, 0, 2, 0);
+        vsb_style.getInnerStyle("slider").getInnerStyle("handler")
+                .setShadow(new Shadow(8, 0, 0, new Color(0, 0, 0, 255)));
+        vsb_style.getInnerStyle("slider").getInnerStyle("handler").isShadowDrop = true;
+        style.addInnerStyle("vscrollbar", vsb_style);
+
+        Style hsb_style = Style.getSimpleHorizontalScrollBarStyle();
+        hsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
+        hsb_style.height = 10;
+        hsb_style.setMargin(0, 0, 0, 5);
+        hsb_style.getInnerStyle("slider").setBackground(60, 60, 60);
+        hsb_style.getInnerStyle("slider").addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 0, 0, 30)));
+        hsb_style.getInnerStyle("slider").borderRadius = new CornerRadius(5);
+        hsb_style.getInnerStyle("slider").setPadding(2, 0, 2, 0);
+        hsb_style.getInnerStyle("slider").getInnerStyle("handler").setMargin(0, 2, 0, 2);
+        style.addInnerStyle("hscrollbar", hsb_style);
+
+        Style menu_style = new Style();
+        menu_style.background = new Color(50, 50, 50);
+        menu_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        menu_style.setAlignment(ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+        style.addInnerStyle("menu", menu_style);
+
+        return style;
+    }
+
+    private SubtractFigure getStencilEffect(InterfaceBaseItem item) {
+        List<float[]> triangles = new LinkedList<>();
+        float side = item.getHeight() / 4f;
+        // 1
+        triangles.add(new float[] { 0, 0 });
+        triangles.add(new float[] { 0, side });
+        triangles.add(new float[] { side, 0 });
+        // 2
+        triangles.add(new float[] { item.getWidth() - side, 0 });
+        triangles.add(new float[] { item.getWidth(), side });
+        triangles.add(new float[] { item.getWidth(), 0 });
+        // 3
+        triangles.add(new float[] { 0, item.getHeight() - side });
+        triangles.add(new float[] { 0, item.getHeight() });
+        triangles.add(new float[] { side, item.getHeight() });
+        //  4
+        triangles.add(new float[] { item.getWidth(), item.getHeight() - side });
+        triangles.add(new float[] { item.getWidth() - side, item.getHeight() });
+        triangles.add(new float[] { item.getWidth(), item.getHeight() });
+
+        triangles.addAll(GraphicsMathService.getEllipse(10, 10, 5, (int) (item.getHeight() / 2f - 5.0f), 12));
+        triangles.addAll(
+                GraphicsMathService.getEllipse(10, 10, item.getWidth() - 15, (int) (item.getHeight() / 2f - 5.0f), 12));
+        CustomFigure figure = new CustomFigure(false, triangles);
+
+        SubtractFigure effect = new SubtractFigure(figure);
+        return effect;
     }
 }

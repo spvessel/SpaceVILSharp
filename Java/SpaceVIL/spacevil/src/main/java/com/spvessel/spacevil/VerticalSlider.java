@@ -4,6 +4,7 @@ import com.spvessel.spacevil.Core.EventCommonMethodState;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.Orientation;
 
@@ -68,9 +69,18 @@ public class VerticalSlider extends Prototype {
             eventValueChanged.execute(this);
     }
 
+    private int getSumOfVerticalIndents() {
+        Indents marginHandler = handler.getMargin();
+        Indents paddingSlider = getPadding();
+        int margin = marginHandler.top + marginHandler.bottom;
+        int padding = paddingSlider.top + paddingSlider.bottom;
+        return margin + padding;
+    }
+
     void updateHandler() {
-        float offset = ((float) getHeight() - handler.getHeight()) / (_max_value - _min_value) * _current_value;
-        handler.setOffset((int) offset);
+        float offset = ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight())
+                / (_max_value - _min_value) * _current_value;
+        handler.setOffset((int) offset + getPadding().top + handler.getMargin().top);
     }
 
     /**
@@ -142,7 +152,7 @@ public class VerticalSlider extends Prototype {
         _dragging = true;
         // иногда число NAN
         float result = (float) (handler.getY() - getY()) * (_max_value - _min_value)
-                / ((float) getHeight() - handler.getHeight());
+                / ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight());
         if (!Float.isNaN(result))
             setCurrentValue(result);
     }
@@ -153,8 +163,9 @@ public class VerticalSlider extends Prototype {
     protected void onTrackClick(InterfaceItem sender, MouseArgs args) {
         // Compute CurrentValue
         if (!_dragging)
-            setCurrentValue((float) (args.position.getY() - getY() - handler.getHeight() / 2)
-                    * (_max_value - _min_value) / ((float) getHeight() - handler.getHeight()));
+            setCurrentValue(
+                    (float) (args.position.getY() - getY() - handler.getHeight() / 2) * (_max_value - _min_value)
+                            / ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight()));
         _dragging = false;
     }
 

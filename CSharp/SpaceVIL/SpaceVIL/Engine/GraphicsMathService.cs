@@ -34,7 +34,7 @@ namespace SpaceVIL
             ny = x2 - x1;
 
             float k = Math.Sign((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1));
-            
+
             if (k != 0)
             {
                 nx *= k;
@@ -157,7 +157,8 @@ namespace SpaceVIL
                     cornerRadius.RightBottom = 0;
             }
 
-            if (cornerRadius.IsCornersZero()) {
+            if (cornerRadius.IsCornersZero())
+            {
                 return GetRectangle(width, height, x, y);
             }
 
@@ -320,7 +321,7 @@ namespace SpaceVIL
 
         static private List<float[]> CountCircleSector(int quadrantInd, float x0, float y0, float radius)
         {
-            int[,] quadrantAngles = new int[4, 2] { {0, 90}, {90, 180}, {180, 270}, {270, 360} };
+            int[,] quadrantAngles = new int[4, 2] { { 0, 90 }, { 90, 180 }, { 180, 270 }, { 270, 360 } };
 
             int firstAngle = quadrantAngles[quadrantInd - 1, 0];
             int lastAngle = quadrantAngles[quadrantInd - 1, 1];
@@ -1128,16 +1129,140 @@ namespace SpaceVIL
             return new Font(fontFamily, oldFont.Size, oldFont.Style);
         }
 
-        private static double Grad2Radian(double angleGrad) {
+        private static double Grad2Radian(double angleGrad)
+        {
             return (angleGrad * Math.PI / 180.0f);
         }
 
-        private static double CosGrad(double angleGrad) {
+        private static double CosGrad(double angleGrad)
+        {
             return Math.Cos(Grad2Radian(angleGrad));
         }
 
-        private static double SinGrad(double angleGrad) {
+        private static double SinGrad(double angleGrad)
+        {
             return Math.Sin(Grad2Radian(angleGrad));
+        }
+
+        public static List<float[]> UpdateShape(List<float[]> triangles, int w, int h, Area area, ItemAlignment alignments)
+        {
+            if (triangles == null || triangles.Count == 0)
+            {
+                return null;
+            }
+
+            // clone triangles
+            List<float[]> result = new List<float[]>();
+            for (int i = 0; i < triangles.Count; i++)
+            {
+                result.Add(new float[] { triangles.ElementAt(i)[0], triangles.ElementAt(i)[1] });
+            }
+
+            // max and min
+            float maxX = result.Select(_ => _[0]).Max();
+            float maxY = result.Select(_ => _[1]).Max();
+            float minX = result.Select(_ => _[0]).Min();
+            float minY = result.Select(_ => _[1]).Min();
+
+            int figureWidth = Math.Abs((int)(maxX - minX));
+            int figureHeight = Math.Abs((int)(maxY - minY));
+
+            // x offset
+            int offsetX = 0;
+            if (alignments.HasFlag(ItemAlignment.HCenter))
+            {
+                offsetX = (area.GetWidth() - figureWidth) / 2;
+            }
+            else if (alignments.HasFlag(ItemAlignment.Right))
+            {
+                offsetX = area.GetWidth() - figureWidth;
+            }
+
+            // y offset
+            int offsetY = 0;
+            if (alignments.HasFlag(ItemAlignment.VCenter))
+            {
+                offsetY = (area.GetHeight() - figureHeight) / 2;
+            }
+            else if (alignments.HasFlag(ItemAlignment.Bottom))
+            {
+                offsetY = area.GetHeight() - figureHeight;
+            }
+            // to the left top corner
+            foreach (float[] point in result)
+            {
+                point[0] = (point[0] - minX) * w / (maxX - minX) + offsetX;
+                point[1] = (point[1] - minY) * h / (maxY - minY) + offsetY;
+            }
+
+            return result;
+        }
+
+        public static Area GetFigureBounds(List<float[]> triangles)
+        {
+            Area area = new Area();
+            // max and min
+            float maxX = triangles.Select(_ => _[0]).Max();
+            float maxY = triangles.Select(_ => _[1]).Max();
+            float minX = triangles.Select(_ => _[0]).Min();
+            float minY = triangles.Select(_ => _[1]).Min();
+            area.SetHeight(Math.Abs((int)(maxY - minY)));
+            area.SetWidth(Math.Abs((int)(maxX - minX)));
+            return area;
+        }
+
+        public static List<float[]> MoveShape(List<float[]> triangles, float x, float y, Area area,
+                ItemAlignment alignments)
+        {
+            if (triangles == null || triangles.Count == 0)
+                return null;
+
+            // clone triangles
+            List<float[]> result = new List<float[]>();
+            for (int i = 0; i < triangles.Count; i++)
+            {
+                result.Add(new float[] { triangles.ElementAt(i)[0], triangles.ElementAt(i)[1] });
+            }
+
+            // max and min
+            float maxX = result.Select(_ => _[0]).Max();
+            float maxY = result.Select(_ => _[1]).Max();
+            float minX = result.Select(_ => _[0]).Min();
+            float minY = result.Select(_ => _[1]).Min();
+
+            int figureWidth = Math.Abs((int)(maxX - minX));
+            int figureHeight = Math.Abs((int)(maxY - minY));
+
+            // x offset
+            int offsetX = 0;
+            if (alignments.HasFlag(ItemAlignment.HCenter))
+            {
+                offsetX = (area.GetWidth() - figureWidth) / 2;
+            }
+            else if (alignments.HasFlag(ItemAlignment.Right))
+            {
+                offsetX = area.GetWidth() - figureWidth;
+            }
+
+            // y offset
+            int offsetY = 0;
+            if (alignments.HasFlag(ItemAlignment.VCenter))
+            {
+                offsetY = (area.GetHeight() - figureHeight) / 2;
+            }
+            else if (alignments.HasFlag(ItemAlignment.Bottom))
+            {
+                offsetY = area.GetHeight() - figureHeight;
+            }
+
+            // to the left top corner
+            foreach (float[] point in result)
+            {
+                point[0] += x + offsetX;
+                point[1] += y + offsetY;
+            }
+
+            return result;
         }
     }
 }

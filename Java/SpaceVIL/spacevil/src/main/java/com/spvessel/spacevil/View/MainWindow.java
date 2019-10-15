@@ -65,7 +65,7 @@ public class MainWindow extends ActiveWindow {
         }
         if (iBig != null && iSmall != null)
             setIcon(iBig, iSmall);
-
+        
         Frame layout = new Frame();
         layout.setBackground(70, 70, 70);
         layout.setBorderRadius(10);
@@ -171,7 +171,7 @@ public class MainWindow extends ActiveWindow {
         btn_flow.setCursor(iS, 64, 64);
         InterfaceMouseMethodState flow_click = (sender, args) -> WindowsBox.tryShow("FlowTest");
         btn_flow.eventMouseClick.add(flow_click);
-
+        
         ButtonCore btn_complex = new ButtonCore("Complex");
         btn_complex.setFont(font);
         btn_complex.setToolTip("Show Complex window.");

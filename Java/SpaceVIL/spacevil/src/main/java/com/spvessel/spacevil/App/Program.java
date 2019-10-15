@@ -5,18 +5,10 @@ import com.spvessel.spacevil.View.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import com.spvessel.spacevil.*;
-import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Decorations.*;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.ItemStateType;
-import com.spvessel.spacevil.Flags.RenderType;
 
 public class Program {
     public static void main(String[] args) {

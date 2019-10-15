@@ -1,5 +1,7 @@
 package OwnLibs;
 
+import java.awt.Color;
+
 import com.spvessel.spacevil.WindowManager;
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Flags.RenderType;
