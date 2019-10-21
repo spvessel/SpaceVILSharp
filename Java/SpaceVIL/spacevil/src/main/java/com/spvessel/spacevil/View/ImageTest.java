@@ -1,8 +1,27 @@
 package com.spvessel.spacevil.View;
 
-import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
-import com.spvessel.spacevil.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
+
+import com.spvessel.spacevil.ActiveWindow;
+import com.spvessel.spacevil.ButtonCore;
+import com.spvessel.spacevil.ComboBox;
+import com.spvessel.spacevil.Ellipse;
+import com.spvessel.spacevil.HorizontalSlider;
+import com.spvessel.spacevil.HorizontalStack;
+import com.spvessel.spacevil.ImageItem;
+import com.spvessel.spacevil.InputDialog;
+import com.spvessel.spacevil.MenuItem;
+import com.spvessel.spacevil.PopUpMessage;
+import com.spvessel.spacevil.ProgressBar;
+import com.spvessel.spacevil.Rectangle;
+import com.spvessel.spacevil.TitleBar;
+import com.spvessel.spacevil.ToolTip;
+import com.spvessel.spacevil.VerticalStack;
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.Indents;
@@ -14,16 +33,10 @@ import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
+import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.SizePolicy;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import javax.imageio.ImageIO;
 
 public class ImageTest extends ActiveWindow {
     ImageItem img;
@@ -265,6 +278,7 @@ public class ImageTest extends ActiveWindow {
             res.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
             res.setAlignment(ItemAlignment.VCENTER, ItemAlignment.LEFT);
             MenuItem restore = new MenuItem("Custom item for selection #RESTORE");
+            restore.setItemName("restore");
             restore.addItem(res);
             // combo.addItem(restore);
             // combo.setVisible(false);
@@ -277,6 +291,7 @@ public class ImageTest extends ActiveWindow {
 
             MenuItem filterItem = getMenuItem("Open Filter Function Menu",
                     DefaultsService.getDefaultImage(EmbeddedImage.FILTER, EmbeddedImageSize.SIZE_32X32));
+            filterItem.setItemName("filterItem");
             MenuItem recycleItem = getMenuItem("Open Recycle Bin",
                     DefaultsService.getDefaultImage(EmbeddedImage.RECYCLE_BIN, EmbeddedImageSize.SIZE_32X32));
             MenuItem refreshItem = getMenuItem("Refresh UI",
@@ -299,14 +314,23 @@ public class ImageTest extends ActiveWindow {
             });
 
             frame.addItem(combo);
-            // combo.setStyle(getComboBoxStyle());
-            // combo.addItem(getDot());
+
+            combo.setStyle(getComboBoxStyle());
+            combo.addItem(getDot());
             // combo.setCurrentIndex(0);
 
             ToolTip.setShadow(this, new Shadow(10, 3, 3, Color.black));
             ToolTip.setFont(this, DefaultsService.getDefaultFont(Font.ITALIC, 18));
             ToolTip.setBorder(this, new Border(new Color(10, 162, 232), new CornerRadius(10), 2));
             ToolTip.setTimeOut(this, 0);
+            eventKeyPress.add((sender, args) -> {
+                if (args.key == KeyCode.ALPHA9 && args.mods.contains(KeyMods.NO)) {
+                    combo.open();
+                }
+            });
+
+            // что-то сбивает фокус
+            // setFocus();
         }
     }
 

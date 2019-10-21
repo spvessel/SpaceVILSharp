@@ -90,7 +90,7 @@ abstract public class Prototype implements InterfaceBaseItem {
         eventFocusLost.clear();
         eventResize.clear();
         eventDestroy.clear();
-        
+
         eventMouseHover.clear();
         eventMouseLeave.clear();
         eventMouseClick.clear();
@@ -103,25 +103,26 @@ abstract public class Prototype implements InterfaceBaseItem {
 
         eventKeyPress.clear();
         eventKeyRelease.clear();
-        
+
         eventTextInput.clear();
 
-        eventFocusGet = null;
-        eventFocusLost = null;
-        eventResize = null;
-        eventDestroy = null;
-        eventMouseHover = null;
-        eventMouseLeave = null;
-        eventMouseClick = null;
-        eventMouseDoubleClick = null;
-        eventMousePress = null;
-        eventMouseDrag = null;
-        eventMouseDrop = null;
-        eventScrollUp = null;
-        eventScrollDown = null;
-        eventKeyPress = null;
-        eventKeyRelease = null;
-        eventTextInput = null;
+        // если это убрать то повторное использование элемента станет невозможным
+        // eventFocusGet = null;
+        // eventFocusLost = null;
+        // eventResize = null;
+        // eventDestroy = null;
+        // eventMouseHover = null;
+        // eventMouseLeave = null;
+        // eventMouseClick = null;
+        // eventMouseDoubleClick = null;
+        // eventMousePress = null;
+        // eventMouseDrag = null;
+        // eventMouseDrop = null;
+        // eventScrollUp = null;
+        // eventScrollDown = null;
+        // eventKeyPress = null;
+        // eventKeyRelease = null;
+        // eventTextInput = null;
     }
 
     public void release() {
@@ -563,6 +564,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public int[] getShadowExtension() {
         return _core.getShadowExtension();
     }
+
     public void setShadowExtension(int wExtension, int hExtension) {
         _core.setShadowExtension(wExtension, hExtension);
     }
@@ -779,8 +781,9 @@ abstract public class Prototype implements InterfaceBaseItem {
      * Set focus on the Prototype if its focusable
      */
     public void setFocus() {
-        if (isFocusable)
+        if (isFocusable) {
             getHandler().setFocusedItem(this);
+        }
     }
 
     protected boolean getHoverVerification(float xpos, float ypos) {

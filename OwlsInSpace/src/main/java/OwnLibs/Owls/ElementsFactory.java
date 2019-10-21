@@ -11,11 +11,13 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
 
 import OwnLibs.Owls.Views.Items.KeyWordItem;
+import OwnLibs.Owls.Views.Items.ToggledItem;
 import OwnLibs.Owls.Views.Items.FileEntryTab;
 import OwnLibs.Owls.Views.Windows.MainWindow;
 
 import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.MenuItem;
+import com.spvessel.spacevil.Rectangle;
 import com.spvessel.spacevil.TextArea;
 
 import javax.imageio.ImageIO;
@@ -36,7 +38,7 @@ public class ElementsFactory {
     public static Prototype getFunctionalButton(boolean isToggle) {
         Prototype button;
         if (isToggle)
-            button = new ButtonToggle();
+            button = new ToggledItem();
         else
             button = new ButtonCore();
 
@@ -72,17 +74,12 @@ public class ElementsFactory {
         imgFile.setMargin(4, 4, 4, 4);
         imgFile.keepAspectRatio(true);
         button.addItem(imgFile);
+        
         if (button instanceof ButtonToggle) {
-            imgFile.setColorOverlay(Color.black);
-            imgFile.setColorOverlay(false);
-            ButtonToggle btn = ((ButtonToggle) button);
-            btn.eventMouseClick.add((sender, args) -> {
-                if (btn.isToggled()) {
-                    imgFile.setColorOverlay(true);
-                } else {
-                    imgFile.setColorOverlay(false);
-                }
-            });
+            imgFile.setColorOverlay(new Color(209, 108, 108));
+            button.setShadow(5, 0, 0, Color.black);
+            button.setBackground(55, 55, 55);
+            button.setShadowDrop(false);
         }
         return button;
     }
@@ -152,14 +149,14 @@ public class ElementsFactory {
 
     public static Style getTextAreaStyle() {
         Style style = new Style();
-        style.background = new Color(70, 70, 70);
+        style.background = new Color(75, 75, 75);
         style.font = DefaultsService.getDefaultFont();
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
 
         Style text_style = Style.getTextBlockStyle();
-        text_style.font = DefaultsService.getDefaultFont(14);
+        text_style.font = DefaultsService.getDefaultFont(16);
         text_style.foreground = new Color(190, 190, 190);
         text_style.getInnerStyle("selection").background = new Color(255, 255, 255, 25);
         text_style.getInnerStyle("cursor").background = new Color(0, 162, 232);
@@ -197,7 +194,7 @@ public class ElementsFactory {
     public static Style getHScrollBarStyle() {
         Style hsb_style = Style.getSimpleHorizontalScrollBarStyle();
         hsb_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.BOTTOM));
-        hsb_style.height= 10;
+        hsb_style.height = 10;
         hsb_style.setMargin(0, 0, 0, 5);
         hsb_style.getInnerStyle("slider").setBackground(60, 60, 60);
         hsb_style.getInnerStyle("slider").addItemState(ItemStateType.HOVERED, new ItemState(new Color(0, 0, 0, 30)));
@@ -252,7 +249,7 @@ public class ElementsFactory {
     public static Style getHeaderLabelStyle() {
         Style style = Style.getLabelStyle();
         style.foreground = new Color(20, 180, 255);
-        style.font = DefaultsService.getDefaultFont(Font.BOLD, 16);
+        style.font = DefaultsService.getDefaultFont(Font.PLAIN, 16);
         style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.FIXED);
         style.height = 50;
         style.setMargin(0, 30, 0, 0);
@@ -274,5 +271,14 @@ public class ElementsFactory {
         marker.addItemState(ItemStateType.TOGGLED, new ItemState(new Color(10, 162, 232)));
 
         return style;
+    }
+
+    public static InterfaceBaseItem getVerticalDivider() {
+        Rectangle divider = new Rectangle();
+        divider.setHeightPolicy(SizePolicy.EXPAND);
+        divider.setWidth(1);
+        divider.setMargin(5, 6, 5, 6);
+        divider.setBackground(80, 80, 80);
+        return divider;
     }
 }

@@ -1,6 +1,5 @@
 package com.spvessel.spacevil;
 
-import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.ScrollBarVisibility;
 
@@ -29,7 +29,6 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
         selectionChanged.clear();
     }
 
-    public Prototype returnFocus = null;
     public ListBox itemList = new ListBox();
     private String _text_selection = "";
 
@@ -140,10 +139,12 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
             super.addItem(itemList);
             saveAdditionalControls();
             disableAdditionalControls();
-            itemList.getArea().selectionChanged.add(this::onSelectionChanged);
+            // itemList.getArea().selectionChanged.add(this::onSelectionChanged);
             itemList.getArea().eventKeyPress.add((sender, args) -> {
                 if (args.key == KeyCode.ESCAPE) {
                     hide();
+                } else if (args.key == KeyCode.ENTER && args.mods.contains(KeyMods.NO)) {
+                    onSelectionChanged();
                 }
             });
             for (InterfaceBaseItem item : _queue) {
@@ -256,8 +257,11 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     public void hide() {
         setVisible(false);
         itemList.unselect();
-        if (returnFocus != null)
-            returnFocus.setFocus();
+        if (parent.returnFocus != null) {
+            parent.setFocus();
+        } else {
+            getHandler().setFocus();
+        }
     }
 
     public void hide(MouseArgs args) {

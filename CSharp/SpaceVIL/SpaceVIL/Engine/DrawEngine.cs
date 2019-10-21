@@ -605,7 +605,7 @@ namespace SpaceVIL
 
             int fboWidth = shell.GetWidth() + extension[0] + 2 * res;
             int fboHeight = shell.GetHeight() + extension[1] + 2 * res;
-            if (shell.IsRemakeRequest())
+            if (shell.IsRemakeRequest() || _renderProcessor.ShadowStorage.GetResource(shell) == null)
             {
                 if (stencil)
                     glDisable(GL_SCISSOR_TEST);

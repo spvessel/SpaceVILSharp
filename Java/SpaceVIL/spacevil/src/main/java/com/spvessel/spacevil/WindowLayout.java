@@ -1,9 +1,10 @@
 package com.spvessel.spacevil;
 
-import static org.lwjgl.system.MemoryUtil.*;
-import java.util.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -35,7 +36,7 @@ final class WindowLayout {
             WindowsBox.initWindow(_coreWindow);
             setFocusedItem(_window);
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            System.out.println("exception: " +  ex.toString());
             return;
         } finally {
             wndLock.unlock();

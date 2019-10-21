@@ -68,10 +68,14 @@ public class Controller {
             }
         });
         // New file
-        owlWindow.homePage.newFileLabel.eventMouseClick
-                .add((sender, args) -> treeNewFileOrFolder(workDirectory, "file"));
-        owlWindow.homePage.newFolderLabel.eventMouseClick
-                .add((sender, args) -> treeNewFileOrFolder(workDirectory, "folder"));
+        owlWindow.homePage.newFileLabel.eventMouseClick.add((sender, args) -> {
+            if (args.button == MouseButton.BUTTON_LEFT)
+                treeNewFileOrFolder(workDirectory, "file");
+        });
+        owlWindow.homePage.newFolderLabel.eventMouseClick.add((sender, args) -> {
+            if (args.button == MouseButton.BUTTON_LEFT)
+                treeNewFileOrFolder(workDirectory, "folder");
+        });
         owlWindow.homePage.importFileLabel.eventMouseClick.add((sender, args) -> treeImportFile(workDirectory));
         owlWindow.homePage.settingsLabel.eventMouseClick.add((sender, args) -> setsWindow.show());
         owlWindow.homePage.quickTipsLabel.eventMouseClick.add((sender, args) -> helpWnd.show());
@@ -90,8 +94,10 @@ public class Controller {
                     && args.key == KeyCode.S) {
                 saveAllFiles();
             } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.E) {
-                owlWindow.editBtn.eventMouseClick.execute(owlWindow.editBtn, new MouseArgs());
-                getCurrentTextArea().setFocus();
+                owlWindow.editBtn.eventToggle.execute(owlWindow.editBtn, new MouseArgs());
+                TextArea current = getCurrentTextArea();
+                if (current != null)
+                    current.setFocus();
 
             } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.K) {
                 owlWindow.filePreferencesBtn.eventMouseClick.execute(owlWindow.filePreferencesBtn, new MouseArgs());
@@ -104,8 +110,11 @@ public class Controller {
                 if (!owlWindow.editBtn.isToggled()) {
                     owlWindow.editBtn.setToggled(true);
                     onEditBtnPressed(true);
+                    // owlWindow.editBtn.eventToggle.execute(owlWindow.editBtn, new MouseArgs());
                 }
-                getCurrentTextArea().setFocus();
+                TextArea current = getCurrentTextArea();
+                if (current != null)
+                    current.setFocus();
 
             } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.H) {
                 helpWnd.show();
@@ -170,7 +179,7 @@ public class Controller {
         });
 
         // Edit mode
-        owlWindow.editBtn.eventMouseClick.add((sender, args) -> onEditBtnPressed(owlWindow.editBtn.isToggled()));
+        owlWindow.editBtn.eventToggle.add((sender, args) -> onEditBtnPressed(owlWindow.editBtn.isToggled()));
 
         // Back to the files tree from search results
         owlWindow.backBtn.eventMouseClick.add((sender, args) -> {
@@ -298,6 +307,16 @@ public class Controller {
             //// owlWindow.homePage.addItemToHistoryList(record);
             // }
         });
+
+        owlWindow.refreshBtn.eventMouseClick.add((sender, args) -> {
+            owlWindow.filesTree.clear();
+            rootItem = InterfaceSupport.makeOwlItem("workspace", rootFolder, TreeItemType.BRANCH, null);
+            fillFilesTree(rootItem);
+            rootItem = InterfaceSupport.filesTreeMaker(rootFolder, rootItem);
+            tmpItem = null;
+            workDirectory = rootItem; // Копировать значения или оставить ссылку?
+            itemToDefault();
+        });
     }
 
     private void checkAndCloseWindow() {
@@ -392,11 +411,13 @@ public class Controller {
     void historyAddRecordSetEvent(HistoryRecordItem hri, String path) {
         owlWindow.homePage.addItemToHistoryList(hri);
         hri.eventMouseClick.add((sender, args) -> {
-            FileEntryTreeItem feti = InterfaceSupport.findFETIByAddress(path, rootItem);
-            if (feti == null)
-                System.out.println("No such file");
-            else
-                loadFileLauncher(feti);
+            if (args.button == MouseButton.BUTTON_LEFT) {
+                FileEntryTreeItem feti = InterfaceSupport.findFETIByAddress(path, rootItem);
+                if (feti == null)
+                    System.out.println("No such file");
+                else
+                    loadFileLauncher(feti);
+            }
         });
     }
 
@@ -849,14 +870,14 @@ public class Controller {
         input.selectAll();
         input.onCloseDialog.add(() -> {
             String result = input.getResult();
-            if (result == null) {
-                if (itemType.equals("file")) {
-                    treeNewFile(result);
-                } else if (itemType.equals("folder")) { // folder
-                    treeNewFolder(result);
-                } else { // rename
-                    renameFinished(result);
-                }
+            if (result == "") {
+                // if (itemType.equals("file")) {
+                //     treeNewFile(result);
+                // } else if (itemType.equals("folder")) { // folder
+                //     treeNewFolder(result);
+                // } else { // rename
+                //     renameFinished(result);
+                // }
                 return;
             }
 
