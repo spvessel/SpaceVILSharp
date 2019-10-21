@@ -251,28 +251,37 @@ namespace SpaceVIL
             CheckWidth(); // <- _isUpdateTextureNeed = true;
         }
 
-        internal void BreakLine(SpaceVIL.Core.Point _cursorPosition)
-        {
-            BreakLine(_cursorPosition, true);
-        }
+        // internal void BreakLine(SpaceVIL.Core.Point _cursorPosition)
+        // {
+        //     BreakLine(_cursorPosition, true);
+        // }
 
-        private void BreakLine(SpaceVIL.Core.Point _cursorPosition, bool isRealBreak)
+        internal void BreakLine(SpaceVIL.Core.Point _cursorPosition) //, bool isRealBreak)
         {
-            string newText;
-            if (_cursorPosition.X >= GetLettersCountInLine(_cursorPosition.Y))
+            string newText = "";
+            int lineNum = _cursorPosition.Y + 1;
+            AddNewLine(newText, lineNum, true); //isRealBreak); // <- CheckWidth(); //Есть в addNewLine
+
+            // if (_cursorPosition.X >= GetLettersCountInLine(_cursorPosition.Y))
+            // {
+            //     newText = "";
+            // }
+            // else
+            if (_cursorPosition.X < GetLettersCountInLine(_cursorPosition.Y))
             {
-                newText = "";
-            }
-            else
-            {
-                // TextLine tl = _linesList[_cursorPosition.Y];
-                string text = GetTextInLine(_cursorPosition.Y); //tl.GetItemText();
-                SetTextInLine(text.Substring(0, _cursorPosition.X), _cursorPosition); //_cursorPosition.Y); //tl.SetItemText(text.Substring(0, _cursorPosition.X));
+                string text = GetTextInLine(_cursorPosition.Y);
+                SetTextInLine(text.Substring(0, _cursorPosition.X), _cursorPosition);
                 newText = text.Substring(_cursorPosition.X);
             }
-            int lineNum = _cursorPosition.Y + 1;
+            // int lineNum = _cursorPosition.Y + 1;
 
-            AddNewLine(newText, lineNum, isRealBreak); // <- CheckWidth(); //Есть в addNewLine
+            // AddNewLine(newText, lineNum, isRealBreak); // <- CheckWidth(); //Есть в addNewLine
+            string changedText = GetTextInLine(lineNum);
+            if (!String.IsNullOrEmpty(changedText))
+            {
+                newText += changedText;
+            }
+            SetTextInLine(newText, new SpaceVIL.Core.Point(0, lineNum));
         }
 
         internal void Clear()
@@ -1353,6 +1362,11 @@ namespace SpaceVIL
 
             List<int> letPosArr = textLine.GetLetPosArray();
 
+            if (letPosArr.Count == 0)
+            {
+                return;
+            }
+
             List<int> listSpace = new List<int>();
             List<int> listPos = new List<int>();
 
@@ -1406,7 +1420,16 @@ namespace SpaceVIL
             }
             else
             {
-                BreakLine(breakPos, false);
+                // BreakLine(breakPos, false);
+                string newText = "";
+                if (breakPos.X < letPosArr.Count)
+                {
+                    string text = GetTextInLine(breakPos.Y);
+                    textLine.SetItemText(text.Substring(0, breakPos.X)); //SetTextInLine(text.Substring(0, breakPos.X), breakPos);
+                    newText = text.Substring(breakPos.X);
+                }
+
+                AddNewLine(newText, breakPos.y + 1, false);
             }
         }
 

@@ -96,6 +96,7 @@ public class InputTest extends ActiveWindow {
         te.setWidthPolicy(SizePolicy.EXPAND);
 
         TextArea tb = new TextArea();
+        tb.setWrapText(true);
         // TextView tb = new TextView();
         tb.setScrollStepFactor(1.5f);
         // tb.setMargin(2, 2, 2, 27);
@@ -129,6 +130,7 @@ public class InputTest extends ActiveWindow {
         //        layout.addItem(te);
 
         layout.addItem(tb);
+//        tb.setWrapText(false);
         //    tb.setStyle(Style.getTextAreaStyle());
 
         ButtonCore bc = new ButtonCore("pizdec");
@@ -227,6 +229,7 @@ public class InputTest extends ActiveWindow {
         // tb.setWrapText(true);
         tb.setText(getBigText());
         tb.setStyle(getTextAreaStyle());
+//        tb.setWrapText(true);
 
         // tb.setBackground(0, 0, 0);
 

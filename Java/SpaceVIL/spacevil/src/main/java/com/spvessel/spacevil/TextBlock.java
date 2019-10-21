@@ -1122,6 +1122,10 @@ class TextBlock extends Prototype
         _textureStorage.textInputLock.lock();
         try {
             String text = getText();
+//            if (text == null || text.equals("")) {
+//                _isWrapText = value;
+//                return;
+//            }
 
             Point cursorTmp = _cursorPosition;
             Point fromTmp = new Point();
