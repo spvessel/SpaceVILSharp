@@ -1,18 +1,22 @@
 package com.spvessel.spacevil;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.util.Arrays;
+import java.util.List;
+
 import com.spvessel.spacevil.Common.DefaultsService;
-import com.spvessel.spacevil.Core.*;
+import com.spvessel.spacevil.Core.EventCommonMethod;
+import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.InterfaceItem;
+import com.spvessel.spacevil.Core.KeyArgs;
+import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.MouseButton;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.util.Arrays;
-import java.util.List;
 
 public class ComboBox extends Prototype {
 
@@ -21,6 +25,8 @@ public class ComboBox extends Prototype {
     ButtonCore dropDown;
     CustomShape arrow;
     ComboBoxDropDown dropDownArea;
+    public Prototype returnFocus = null;
+    
     public EventCommonMethod selectionChanged = new EventCommonMethod();
 
     @Override
@@ -180,6 +186,10 @@ public class ComboBox extends Prototype {
         }
     }
 
+    public void open() {
+        showDropDownList();
+    }
+
     void isDropDownAreaOutsideClicked(MouseArgs args) {
         if (getHoverVerification(args.position.getX(), args.position.getY())) {
             isOpened = true;
@@ -209,7 +219,9 @@ public class ComboBox extends Prototype {
      * Current element in the ComboBox by index
      */
     public void setCurrentIndex(int index) {
+        Prototype currentFocus = getHandler().getFocusedItem();
         dropDownArea.setCurrentIndex(index);
+        currentFocus.setFocus();
         selection.setText(dropDownArea.getText());
         selectionChanged.execute();
     }

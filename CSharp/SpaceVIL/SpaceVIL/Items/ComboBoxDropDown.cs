@@ -16,16 +16,6 @@ namespace SpaceVIL
             SelectionChanged = null;
         }
 
-        public Prototype _returnFocus = null;
-        public void SetReturnFocus(Prototype item)
-        {
-            _returnFocus = item;
-        }
-        public Prototype GetReturnFocusItem()
-        {
-            return _returnFocus;
-        }
-
         public ListBox ItemList = new ListBox();
         private String _textSelection = String.Empty;
         public String GetText()
@@ -121,11 +111,17 @@ namespace SpaceVIL
                 base.AddItem(ItemList);
                 SaveAdditionalControls();
                 DisableAdditionalControls();
-                ItemList.GetArea().SelectionChanged += OnSelectionChanged;
+                // ItemList.GetArea().SelectionChanged += OnSelectionChanged;
                 ItemList.GetArea().EventKeyPress += (sender, args) =>
                 {
                     if (args.Key == KeyCode.Escape)
+                    {
                         Hide();
+                    }
+                    else if (args.Key == KeyCode.Enter && args.Mods == 0)
+                    {
+                        OnSelectionChanged();
+                    }
                 };
                 foreach (var item in _queue)
                     ItemList.AddItem(item);
@@ -246,7 +242,15 @@ namespace SpaceVIL
         {
             SetVisible(false);
             ItemList.Unselect();
-            _returnFocus?.SetFocus();
+
+            if (Parent.ReturnFocus != null)
+            {
+                Parent.SetFocus();
+            }
+            else
+            {
+                GetHandler().SetFocus();
+            }
         }
 
         public void Hide(MouseArgs args)

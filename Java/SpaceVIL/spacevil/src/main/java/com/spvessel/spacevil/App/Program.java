@@ -58,12 +58,12 @@ public class Program {
         WindowManager.startWith(
             // mw
         //, mw2
-        st
+        // st
         // im
         // ft
         // lt
         // ct
-        //  it
+         it
         // tt
         // con
         // sat

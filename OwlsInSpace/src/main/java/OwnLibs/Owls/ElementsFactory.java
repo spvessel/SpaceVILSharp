@@ -74,6 +74,7 @@ public class ElementsFactory {
         imgFile.setMargin(4, 4, 4, 4);
         imgFile.keepAspectRatio(true);
         button.addItem(imgFile);
+        
         if (button instanceof ButtonToggle) {
             imgFile.setColorOverlay(new Color(209, 108, 108));
             button.setShadow(5, 0, 0, Color.black);

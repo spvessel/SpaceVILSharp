@@ -223,10 +223,12 @@ public class InputTest extends ActiveWindow {
             }
         });
 
-        // tb.rewindText();
         // tb.setWrapText(true);
         tb.setText(getBigText());
         tb.setStyle(getTextAreaStyle());
+        tb.setWrapText(true);
+        tb.rewindText();
+        tb.setFocus();
 
         // tb.setBackground(0, 0, 0);
 
@@ -273,14 +275,14 @@ public class InputTest extends ActiveWindow {
     }
 
     private String getBigText() {
-        return "ajfhgajhdifuahwoi ehfoiawoeifisdfghaoisiuehgiou aoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgaj hdifuahwoiehfoiawoeifisdf ghaoisiuehgiouaoesij foaiehfouia shueighaoweigh\n"
-                + "ajfhgajhdifua hwoiehfoiawoeifisdfgh aoisiuehgiouaoesijfoaiehfouiashu eighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghao isiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifua hwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouao esijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoe ifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifu ahwoiehfoiawoeifisdfghaoisiue hgiouaoesijfoaiehfouiashueighaoweigh\n"
+        return "ajfhgajhdifuahwoi ehfoiawoeifisdfghaoisiuehgiou aoesijfoaiehfouiashueighaoweigh"
+                + "ajfhgaj hdifuahwoiehfoiawoeifisdf ghaoisiuehgiouaoesij foaiehfouia shueighaoweigh"
+                + "ajfhgajhdifua hwoiehfoiawoeifisdfgh aoisiuehgiouaoesijfoaiehfouiashu eighaoweigh"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghao isiuehgiouaoesijfoaiehfouiashueighaoweigh"
+                + "ajfhgajhdifua hwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh"
+                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouao esijfoaiehfouiashueighaoweigh"
+                + "ajfhgajhdifuahwoiehfoiawoe ifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh"
+                + "ajfhgajhdifu ahwoiehfoiawoeifisdfghaoisiue hgiouaoesijfoaiehfouiashueighaoweigh"
                 + "ajfhgajhdifuahwoiehfoi awoeifisdfghaoisiuehgiouaoesijfoaiehfoui ashueighaoweigh\n"
                 + "ajfhgajhdifu ahwoiehfoiawoeifisdfghaoisiu ehgiouaoesijfoaiehfouiashueighaoweigh\n"
                 + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesi jfoaiehfouiashueighaoweigh\n"

@@ -15,6 +15,7 @@ namespace SpaceVIL
         internal CustomShape Arrow;
         internal ComboBoxDropDown DropDownArea;
         public EventCommonMethod SelectionChanged;
+        public Prototype ReturnFocus = null;
 
         public override void Release()
         {
@@ -180,6 +181,11 @@ namespace SpaceVIL
             }
         }
 
+        public void Open()
+        {
+            ShowDropDownList();
+        }
+
         internal void IsDropDownAreaOutsideClicked(MouseArgs args)
         {
             if (GetHoverVerification(args.Position.GetX(), args.Position.GetY()))
@@ -212,7 +218,9 @@ namespace SpaceVIL
         /// </summary>
         public void SetCurrentIndex(int index)
         {
+            Prototype currentFocus = GetHandler().GetFocusedItem();
             DropDownArea.SetCurrentIndex(index);
+            currentFocus.SetFocus();
             Selection.SetText(DropDownArea.GetText());
             SelectionChanged?.Invoke();
         }
