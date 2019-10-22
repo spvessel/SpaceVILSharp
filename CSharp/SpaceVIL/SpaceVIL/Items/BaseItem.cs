@@ -315,17 +315,17 @@ namespace SpaceVIL
             SetMaxWidth(width);
             SetMaxHeight(height);
         }
-        public int[] GetSize()
+        public Core.Size GetSize()
         {
             return _itemGeometry.GetSize();
         }
-        public int[] GetMinSize()
+        public Core.Size GetMinSize()
         {
-            return new int[] { _itemGeometry.GetMinWidth(), _itemGeometry.GetMinHeight() };
+            return new Core.Size(_itemGeometry.GetMinWidth(), _itemGeometry.GetMinHeight());
         }
-        public int[] GetMaxSize()
+        public Core.Size GetMaxSize()
         {
-            return new int[] { _itemGeometry.GetMaxWidth(), _itemGeometry.GetMaxHeight() };
+            return new Core.Size(_itemGeometry.GetMaxWidth(), _itemGeometry.GetMaxHeight());
         }
 
         //behavior
@@ -594,7 +594,7 @@ namespace SpaceVIL
             _confines_y_0 = y0;
             _confines_y_1 = y1;
         }
-        public int[] GetConfines()
+        protected internal int[] GetConfines()
         {
             return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
         }

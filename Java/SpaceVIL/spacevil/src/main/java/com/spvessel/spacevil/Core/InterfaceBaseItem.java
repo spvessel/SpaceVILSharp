@@ -60,8 +60,6 @@ public interface InterfaceBaseItem
 
     void setShadow(int radius, int x, int y, Color color);
 
-    int[] getConfines();
-
     void release();
 
     boolean isRemakeRequest();

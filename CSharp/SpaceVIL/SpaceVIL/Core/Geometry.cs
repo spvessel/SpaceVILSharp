@@ -173,9 +173,9 @@ namespace SpaceVIL.Core
         }
 
         /// <returns> width amd height of the item </returns>
-        public int[] GetSize()
+        public Size GetSize()
         {
-            return new int[] { _width, _height };
+            return new Size(_width, _height);
         }
     }
 }

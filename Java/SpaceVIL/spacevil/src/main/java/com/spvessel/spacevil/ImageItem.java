@@ -21,7 +21,6 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     }
 
     private static int count = 0;
-    // private byte[] _bitmap;
     private BufferedImage _image = null;
 
     public BufferedImage getImage() {
@@ -135,9 +134,6 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         _image = ImageItem.cloneImage(image);
         _imageWidth = image.getWidth();
         _imageHeight = image.getHeight();
-        // _bitmap = createByteImage(image);
-        // image.flush();
-        // if (_isKeepAspectRatio && _bitmap != null)
         if (_isKeepAspectRatio && _image != null)
             applyAspectRatio();
         UpdateLayout();
@@ -188,7 +184,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     public void setHeight(int height) {
         super.setHeight(height);
         area.setHeight(height);
-        // if (_isKeepAspectRatio && _bitmap != null)
+
         if (_isKeepAspectRatio && _image != null)
             applyAspectRatio();
         UpdateLayout();
@@ -198,7 +194,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     public void setWidth(int width) {
         super.setWidth(width);
         area.setWidth(width);
-        // if (_isKeepAspectRatio && _bitmap != null)
+
         if (_isKeepAspectRatio && _image != null)
             applyAspectRatio();
         UpdateLayout();
@@ -234,7 +230,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     void UpdateLayout() {
         UpdateVerticalPosition();
         UpdateHorizontalPosition();
-        setNew(true);
+        setImageRemake(true);
     }
 
     private void UpdateHorizontalPosition() {
@@ -263,7 +259,6 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
 
     @Override
     public void release() {
-        // VRAMStorage.addTextureToDelete(this);
         if (_image != null)
             _image.flush();
     }
@@ -271,7 +266,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     private Lock _lock = new ReentrantLock();
     private boolean _isNew = true;
 
-    boolean isNew() {
+    protected boolean isImageRemake() {
         _lock.lock();
         try {
             return _isNew;
@@ -280,7 +275,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         }
     }
 
-    void setNew(boolean value) {
+    protected void setImageRemake(boolean value) {
         _lock.lock();
         try {
             _isNew = value;

@@ -380,7 +380,7 @@ namespace SpaceVIL
         {
             _core.SetSize(width, height);
         }
-        public int[] GetSize()
+        public Core.Size GetSize()
         {
             return _core.GetSize();
         }
@@ -392,7 +392,7 @@ namespace SpaceVIL
         {
             _core.SetMinSize(width, height);
         }
-        public int[] GetMinSize()
+        public Core.Size GetMinSize()
         {
             return _core.GetMinSize();
         }
@@ -404,7 +404,7 @@ namespace SpaceVIL
         {
             _core.SetMaxSize(width, height);
         }
-        public int[] GetMaxSize()
+        public Core.Size GetMaxSize()
         {
             return _core.GetMaxSize();
         }
@@ -489,10 +489,7 @@ namespace SpaceVIL
         /// </summary>
         public virtual void SetConfines(int x0, int x1, int y0, int y1)
         {
-            _core._confines_x_0 = x0;
-            _core._confines_x_1 = x1;
-            _core._confines_y_0 = y0;
-            _core._confines_y_1 = y1;
+            _core.SetConfines(x0, x1, y0, y1);
         }
 
         /// <summary>
@@ -816,7 +813,7 @@ namespace SpaceVIL
         /// <summary>
         /// Prototype confines
         /// </summary>
-        public int[] GetConfines()
+        protected internal int[] GetConfines()
         {
             return _core.GetConfines();
         }
@@ -826,7 +823,7 @@ namespace SpaceVIL
             return _core.GetCurrentStateType();
         }
 
-        internal void SetState(ItemStateType state)
+        protected void SetState(ItemStateType state)
         {
             _core.SetState(state);
         }

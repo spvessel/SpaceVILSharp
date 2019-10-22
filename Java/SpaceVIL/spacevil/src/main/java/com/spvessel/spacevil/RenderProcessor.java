@@ -361,7 +361,7 @@ final class RenderProcessor {
         tex.genTexture(iw, ih, bmp);
         // tex.genTexture(iw, ih, buffer);
         textureStorage.addResource(image, tex);
-        image.setNew(false);
+        image.setImageRemake(false);
 
         tex.sendUniformSample2D(shader, "tex");
         if (image.isColorOverlay()) {
@@ -384,7 +384,7 @@ final class RenderProcessor {
     void drawStoredTexture(ImageItem image, Shader shader, float ax, float ay, int width, int height, float level) {
         VramTexture tex = textureStorage.getResource(image);
         if (tex == null) {
-            image.setNew(true);
+            image.setImageRemake(true);
             return;
         }
 

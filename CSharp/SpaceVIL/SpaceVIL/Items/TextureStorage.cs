@@ -1429,7 +1429,7 @@ namespace SpaceVIL
                     newText = text.Substring(breakPos.X);
                 }
 
-                AddNewLine(newText, breakPos.y + 1, false);
+                AddNewLine(newText, breakPos.Y + 1, false);
             }
         }
 

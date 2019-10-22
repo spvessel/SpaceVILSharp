@@ -479,20 +479,25 @@ namespace SpaceVIL
             if (!root.IsVisible() || !root.IsDrawable())
                 return;
 
-            if (root is ILine)
+            ILine lineRoot = root as ILine;
+            IPoints pointsRoot = root as IPoints;
+            ITextContainer textRoot = root as ITextContainer;
+            IImageItem imageRoot = root as IImageItem;
+
+            if (lineRoot != null)
             {
                 DrawLines((root as ILine));
             }
-            if (root is IPoints)
+            if (pointsRoot != null)
             {
                 DrawPoints((root as IPoints));
             }
-            if (root is ITextContainer)
+            if (textRoot != null)
             {
                 DrawText(root as ITextContainer);
                 glDisable(GL_SCISSOR_TEST);
             }
-            if (root is IImageItem)
+            if (imageRoot != null)
             {
                 DrawShell(root);
                 glDisable(GL_SCISSOR_TEST);
@@ -785,7 +790,7 @@ namespace SpaceVIL
             ImageItem tmp = image as ImageItem;
             if (tmp != null)
             {
-                if (tmp.IsNew())
+                if (tmp.IsImageRemake())
                 {
                     _renderProcessor.DrawFreshTexture(
                         tmp, _texture,

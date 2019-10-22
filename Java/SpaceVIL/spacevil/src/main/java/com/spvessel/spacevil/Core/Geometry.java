@@ -1,4 +1,5 @@
 package com.spvessel.spacevil.Core;
+
 import com.spvessel.spacevil.*;
 
 public class Geometry implements InterfaceSize {
@@ -178,7 +179,7 @@ public class Geometry implements InterfaceSize {
     /**
      * @return width amd height of the item
      */
-    public int[] getSize() {
-        return new int[] { _width, _height };
+    public Size getSize() {
+        return new Size(_width, _height);
     }
 }

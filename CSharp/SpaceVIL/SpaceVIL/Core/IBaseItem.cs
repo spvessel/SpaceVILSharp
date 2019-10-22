@@ -31,7 +31,6 @@ namespace SpaceVIL.Core
         Position GetShadowPos();
         int[] GetShadowExtension();
         void SetShadow(int radius, int x, int y, Color color);
-        int[] GetConfines();
         void Release();
         bool IsRemakeRequest();
         void SetRemakeRequest(bool value);

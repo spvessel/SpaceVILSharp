@@ -11,6 +11,7 @@ import com.spvessel.spacevil.Core.EventKeyMethodState;
 import com.spvessel.spacevil.Core.EventMouseMethodState;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.Position;
+import com.spvessel.spacevil.Core.Size;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.CustomFigure;
@@ -27,14 +28,15 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 
 abstract public class Prototype implements InterfaceBaseItem {
 
-    public boolean isRemakeRequest() {
+    public final boolean isRemakeRequest() {
         return _core.isRemakeRequest();
     }
 
-    public void setRemakeRequest(boolean value) {
+    public final void setRemakeRequest(boolean value) {
         _core.setRemakeRequest(value);
     }
 
+    // private InterfaceVisualItem _core = new VisualItem();
     private VisualItem _core = new VisualItem();
 
     VisualItem getCore() {
@@ -105,24 +107,6 @@ abstract public class Prototype implements InterfaceBaseItem {
         eventKeyRelease.clear();
 
         eventTextInput.clear();
-
-        // если это убрать то повторное использование элемента станет невозможным
-        // eventFocusGet = null;
-        // eventFocusLost = null;
-        // eventResize = null;
-        // eventDestroy = null;
-        // eventMouseHover = null;
-        // eventMouseLeave = null;
-        // eventMouseClick = null;
-        // eventMouseDoubleClick = null;
-        // eventMousePress = null;
-        // eventMouseDrag = null;
-        // eventMouseDrop = null;
-        // eventScrollUp = null;
-        // eventScrollDown = null;
-        // eventKeyPress = null;
-        // eventKeyRelease = null;
-        // eventTextInput = null;
     }
 
     public void release() {
@@ -399,7 +383,7 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.setSize(width, height);
     }
 
-    public int[] getSize() {
+    public Size getSize() {
         return _core.getSize();
     }
 
@@ -410,7 +394,7 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.setMinSize(width, height);
     }
 
-    public int[] getMinSize() {
+    public Size getMinSize() {
         return _core.getMinSize();
     }
 
@@ -421,7 +405,7 @@ abstract public class Prototype implements InterfaceBaseItem {
         _core.setMaxSize(width, height);
     }
 
-    public int[] getMaxSize() {
+    public Size getMaxSize() {
         return _core.getMaxSize();
     }
 
@@ -501,10 +485,7 @@ abstract public class Prototype implements InterfaceBaseItem {
      * Set Prototype confines
      */
     public void setConfines(int x0, int x1, int y0, int y1) {
-        _core._confines_x_0 = x0;
-        _core._confines_x_1 = x1;
-        _core._confines_y_0 = y0;
-        _core._confines_y_1 = y1;
+        _core.setConfines(x0, x1, y0, y1);
     }
 
     /**
@@ -819,7 +800,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     /**
      * @return Prototype confines
      */
-    public int[] getConfines() {
+    protected int[] getConfines() {
         return _core.getConfines();
     }
 
@@ -827,7 +808,7 @@ abstract public class Prototype implements InterfaceBaseItem {
         return _core.getCurrentStateType();
     }
 
-    void setState(ItemStateType state) {
+    protected void setState(ItemStateType state) {
         _core.setState(state);
     }
 

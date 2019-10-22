@@ -1,14 +1,22 @@
 package com.spvessel.spacevil.View;
 
-import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.ItemStateType;
-import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.KeyMods;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
-import com.spvessel.spacevil.Flags.SizePolicy;
+import java.awt.Color;
+import java.awt.Font;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.spvessel.spacevil.ActiveWindow;
+import com.spvessel.spacevil.ButtonCore;
+import com.spvessel.spacevil.GraphicsMathService;
 import com.spvessel.spacevil.Label;
+import com.spvessel.spacevil.PasswordLine;
 import com.spvessel.spacevil.TextArea;
-import com.spvessel.spacevil.Common.CommonService;
+import com.spvessel.spacevil.TextEdit;
+import com.spvessel.spacevil.VerticalStack;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Decorations.CornerRadius;
@@ -18,19 +26,10 @@ import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Decorations.SubtractFigure;
-import com.spvessel.spacevil.*;
-
-import java.awt.*;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.ItemStateType;
+import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class InputTest extends ActiveWindow {
     Label _infoOutput;
@@ -96,9 +95,9 @@ public class InputTest extends ActiveWindow {
         te.setWidthPolicy(SizePolicy.EXPAND);
 
         TextArea tb = new TextArea();
-        tb.setWrapText(true);
+        // tb.setWrapText(true);
         // TextView tb = new TextView();
-        tb.setScrollStepFactor(1.5f);
+        tb.setScrollStepFactor(3f);
         // tb.setMargin(2, 2, 2, 27);
         // tb.setEditable(false);
         //        tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
@@ -130,7 +129,7 @@ public class InputTest extends ActiveWindow {
         //        layout.addItem(te);
 
         layout.addItem(tb);
-//        tb.setWrapText(false);
+    //    tb.setWrapText(false);
         //    tb.setStyle(Style.getTextAreaStyle());
 
         ButtonCore bc = new ButtonCore("pizdec");
@@ -320,7 +319,7 @@ public class InputTest extends ActiveWindow {
     public static Style getTextAreaStyle() {
         Style style = new Style();
         style.background = new Color(70, 70, 70);
-        style.font = DefaultsService.getDefaultFont();
+        style.font = DefaultsService.getDefaultFont(14);
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.EXPAND;
         style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));

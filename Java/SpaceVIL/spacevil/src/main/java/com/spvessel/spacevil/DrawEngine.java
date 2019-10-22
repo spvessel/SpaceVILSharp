@@ -747,7 +747,7 @@ final class DrawEngine {
         if (image instanceof ImageItem) {
             ImageItem tmp = (ImageItem) image;
 
-            if (tmp.isNew()) {
+            if (tmp.isImageRemake()) {
                 _renderProcessor.drawFreshTexture(tmp, _texture, area.getX(), area.getY(), area.getWidth(),
                         area.getHeight(), w, h, _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(),
                         getItemPyramidLevel());

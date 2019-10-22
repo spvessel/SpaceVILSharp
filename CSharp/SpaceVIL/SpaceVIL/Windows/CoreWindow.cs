@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 
@@ -315,7 +312,7 @@ namespace SpaceVIL
             return _itemGeometry.GetMaxHeight();
         }
 
-        public int[] GetSize()
+        public Core.Size GetSize()
         {
             return _itemGeometry.GetSize();
         }

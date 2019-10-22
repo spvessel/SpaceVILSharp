@@ -7,8 +7,8 @@ namespace SpaceVIL.Core
         Bitmap GetImage();
         int GetImageWidth();
         int GetImageHeight();
-        bool IsColorOverlay();
         Color GetColorOverlay();
+        bool IsColorOverlay();
         float GetRotationAngle();
         RectangleBounds GetRectangleBounds();
     }

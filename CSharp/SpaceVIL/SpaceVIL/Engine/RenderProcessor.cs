@@ -400,7 +400,7 @@ namespace SpaceVIL
             tex.GenTexture(iw, ih, bmp);
             TextureStorage.AddResource(image, tex);
 
-            image.SetNew(false);
+            image.SetImageRemake(false);
 
             tex.SendUniformSample2D(shader, "tex");
             if (image.IsColorOverlay())
@@ -429,7 +429,7 @@ namespace SpaceVIL
             VramTexture tex = TextureStorage.GetResource(image);
             if (tex == null)
             {
-                image.SetNew(true);
+                image.SetImageRemake(true);
                 return;
             }
 

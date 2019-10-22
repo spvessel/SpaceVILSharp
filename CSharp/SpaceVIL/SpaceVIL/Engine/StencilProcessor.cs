@@ -80,7 +80,7 @@ namespace SpaceVIL
             {
                 List<IBaseItem> root_items = root.GetItems();
                 foreach (var item in root_items)
-                    SetConfines(item, shell.GetConfines());
+                    SetConfines(item, parentConfines);
             }
         }
 

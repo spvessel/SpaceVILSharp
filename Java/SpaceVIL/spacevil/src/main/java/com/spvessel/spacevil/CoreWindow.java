@@ -11,6 +11,7 @@ import com.spvessel.spacevil.Core.EventMouseMethodState;
 import com.spvessel.spacevil.Core.Geometry;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.Position;
+import com.spvessel.spacevil.Core.Size;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.Indents;
@@ -295,7 +296,7 @@ public abstract class CoreWindow {
         return _itemGeometry.getMaxHeight();
     }
 
-    public int[] getSize() {
+    public Size getSize() {
         return _itemGeometry.getSize();
     }
 

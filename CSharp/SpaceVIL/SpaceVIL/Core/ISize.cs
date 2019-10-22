@@ -9,7 +9,7 @@ namespace SpaceVIL.Core
     public interface ISize
     {
         void SetSize(int width, int height);
-        int[] GetSize();
+        Size GetSize();
         void SetMinWidth(int width);
         void SetWidth(int width);
         void SetMaxWidth(int width);

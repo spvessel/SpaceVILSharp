@@ -135,8 +135,6 @@ namespace SpaceVIL
             _image = (Bitmap)image.Clone();
             _imageWidth = image.Width;
             _imageHeight = image.Height;
-            // _bitmap = CreateByteImage(image);
-            // if (_isKeepAspectRatio && _bitmap != null)
             if (_isKeepAspectRatio && _image != null)
                 ApplyAspectRatio();
             UpdateLayout();
@@ -187,7 +185,6 @@ namespace SpaceVIL
         {
             base.SetHeight(height);
             Area.SetHeight(height);
-            // if (_isKeepAspectRatio && _bitmap != null)
             if (_isKeepAspectRatio && _image != null)
                 ApplyAspectRatio();
             UpdateLayout();
@@ -197,7 +194,6 @@ namespace SpaceVIL
         {
             base.SetWidth(width);
             Area.SetWidth(width);
-            // if (_isKeepAspectRatio && _bitmap != null)
             if (_isKeepAspectRatio && _image != null)
                 ApplyAspectRatio();
             UpdateLayout();
@@ -235,7 +231,7 @@ namespace SpaceVIL
         {
             UpdateVerticalPosition();
             UpdateHorizontalPosition();
-            SetNew(true);
+            SetImageRemake(true);
         }
 
         private void UpdateHorizontalPosition()
@@ -275,7 +271,6 @@ namespace SpaceVIL
 
         public override void Release()
         {
-            // VRAMStorage.AddToDelete(this);
             if(_image != null)
                 _image.Dispose();
         }
@@ -283,7 +278,7 @@ namespace SpaceVIL
         //подумать над общим решением
         private Object _lock = new Object();
         private bool _isNew = true;
-        internal bool IsNew()
+        protected internal bool IsImageRemake()
         {
             Monitor.Enter(_lock);
             try
@@ -295,7 +290,7 @@ namespace SpaceVIL
                 Monitor.Exit(_lock);
             }
         }
-        internal void SetNew(bool value)
+        protected internal void SetImageRemake(bool value)
         {
             Monitor.Enter(_lock);
             try

@@ -4,7 +4,7 @@ public interface InterfaceSize {
 
     void setSize(int width, int height);
 
-    int[] getSize();
+    Size getSize();
 
     void setMinWidth(int width);
 

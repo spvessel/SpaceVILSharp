@@ -1,6 +1,17 @@
 package com.spvessel.spacevil;
 
-import com.spvessel.spacevil.Core.*;
+import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
+
+import com.spvessel.spacevil.Core.Geometry;
+import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.InterfaceFloating;
+import com.spvessel.spacevil.Core.InterfaceFreeLayout;
+import com.spvessel.spacevil.Core.InterfaceHLayout;
+import com.spvessel.spacevil.Core.InterfaceVLayout;
+import com.spvessel.spacevil.Core.Position;
+import com.spvessel.spacevil.Core.Size;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
@@ -8,10 +19,6 @@ import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemRule;
 import com.spvessel.spacevil.Flags.SizePolicy;
-
-import java.awt.*;
-import java.util.Arrays;
-import java.util.List;
 
 public abstract class BaseItem implements InterfaceBaseItem {
 
@@ -315,16 +322,16 @@ public abstract class BaseItem implements InterfaceBaseItem {
         setMaxHeight(height);
     }
 
-    public int[] getSize() {
+    public Size getSize() {
         return _itemGeometry.getSize();
     }
 
-    public int[] getMinSize() {
-        return new int[] { _itemGeometry.getMinWidth(), _itemGeometry.getMinHeight() };
+    public Size getMinSize() {
+        return new Size(_itemGeometry.getMinWidth(), _itemGeometry.getMinHeight());
     }
 
-    public int[] getMaxSize() {
-        return new int[] { _itemGeometry.getMaxWidth(), _itemGeometry.getMaxHeight() };
+    public Size getMaxSize() {
+        return new Size(_itemGeometry.getMaxWidth(), _itemGeometry.getMaxHeight());
     }
 
     // behavior
@@ -574,7 +581,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
         _confines_y_1 = y1;
     }
 
-    public int[] getConfines() {
+    protected int[] getConfines() {
         return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
     }
 
