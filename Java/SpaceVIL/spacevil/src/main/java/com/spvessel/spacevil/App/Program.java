@@ -9,11 +9,15 @@ import java.awt.image.BufferedImage;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.*;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.RenderType;
 
 public class Program {
     public static void main(String[] args) {
 
         com.spvessel.spacevil.Common.CommonService.initSpaceVILComponents();
+
+        WindowManager.setRenderType(RenderType.ALWAYS);
+        WindowManager.enableVSync(0);
 
         // BufferedImage cursor = null;
         // try {

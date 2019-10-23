@@ -102,10 +102,12 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
         Indents textMargin = getTextMargin();
         Indents textPadding = parent.getPadding();
+        int cursorChanges = _cursorXMax;
         _cursorXMax = parent.getWidth() - cursorWidth * 2 - textPadding.left - textPadding.right - textMargin.left
                 - textMargin.right;
-
-        setAllowWidth(); // <- updLinesXShift();
+        cursorChanges -= _cursorXMax;
+        
+        setAllowWidth((cursorChanges != 0)); // <- updLinesXShift();
     }
 
     void updateBlockHeight() {
@@ -116,9 +118,11 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
         Indents textMargin = getTextMargin();
         Indents textPadding = parent.getPadding();
+        int cursorChanges = _cursorYMax;
         _cursorYMax = parent.getHeight() - textPadding.top - textPadding.bottom - textMargin.top - textMargin.bottom;
+        cursorChanges -= _cursorYMax;
 
-        setAllowHeight(); // <- updLinesYShift();
+        setAllowHeight((cursorChanges != 0)); // <- updLinesYShift();
     }
 
     private int cursorWidth = 0;
@@ -139,8 +143,8 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         _cursorYMax = parent.getHeight() - textPadding.top - textPadding.bottom - textMargin.top - textMargin.bottom;
 
         addAllLines();
-        setAllowWidth(); // <- updLinesXShift();
-        setAllowHeight(); // <- updLinesYShift();
+        setAllowWidth(true); // <- updLinesXShift();
+        setAllowHeight(true); // <- updLinesYShift();
     }
 
     void setLineContainerAlignment(List<ItemAlignment> alignment) {
@@ -193,6 +197,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         te.setForeground(getForeground());
         te.setTextAlignment(_blockAlignment);
         te.setMargin(getTextMargin());
+        te.setAllowWidth(_cursorXMax);
+        te.setAllowHeight(_cursorYMax);
+        te.setLineYShift(getLineY(lineNum) + globalYShift);
+        te.setLineXShift(globalXShift);
 
         if (_elementFont != null) {
             te.setFont(_elementFont);
@@ -414,16 +422,20 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         _isUpdateTextureNeed = true;
     }
 
-    private void setAllowHeight() {
-        for (TextLine line : _linesList) {
-            line.setAllowHeight(_cursorYMax);
+    private void setAllowHeight(boolean isCursorChanged) {
+        if (isCursorChanged) {
+            for (TextLine line : _linesList) {
+                line.setAllowHeight(_cursorYMax);
+            }
         }
         updLinesYShift();
     }
 
-    private void setAllowWidth() {
-        for (TextLine line : _linesList) {
-            line.setAllowWidth(_cursorXMax);
+    private void setAllowWidth(boolean isCursorChanged) {
+        if (isCursorChanged) {
+            for (TextLine line : _linesList) {
+                line.setAllowWidth(_cursorXMax);
+            }
         }
         updLinesXShift();
     }

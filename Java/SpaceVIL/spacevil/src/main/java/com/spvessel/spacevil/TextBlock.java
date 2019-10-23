@@ -12,8 +12,8 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.List;
 
-class TextBlock extends Prototype
-        implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts, InterfaceFreeLayout, InterfaceTextWrap {
+class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDraggable, InterfaceTextShortcuts,
+        InterfaceFreeLayout, InterfaceTextWrap {
 
     EventCommonMethod cursorChanged = new EventCommonMethod();
     EventCommonMethod textChanged = new EventCommonMethod();
@@ -54,7 +54,7 @@ class TextBlock extends Prototype
 
         eventMousePress.add(this::onMousePressed);
         eventMouseClick.add(this::onMouseClick);
-//        eventMouseDoubleClick.add(this::onDoubleClick);
+        //        eventMouseDoubleClick.add(this::onDoubleClick);
         eventMouseDrag.add(this::onDragging);
         eventKeyPress.add(this::onKeyPress);
         eventKeyRelease.add(this::onKeyRelease);
@@ -74,16 +74,16 @@ class TextBlock extends Prototype
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
         undoQueue.addFirst(new TextBlockState(getText(), new Point(_cursorPosition)));
-        
+
         setCursor(EmbeddedCursor.IBEAM);
-        
+
         _isWrapText = false;
     }
-    
+
     private long _startTime = 0;
     private boolean _isDoubleClick = false;
     private Point _previousClickPos = new Point();
-    
+
     private void onMousePressed(Object sender, MouseArgs args) {
         _textureStorage.textInputLock.lock();
         try {
@@ -94,7 +94,7 @@ class TextBlock extends Prototype
                     cancelJustSelected();
                 }
             }
-        
+
         } finally {
             _textureStorage.textInputLock.unlock();
         }
@@ -130,7 +130,7 @@ class TextBlock extends Prototype
 
                             _isDoubleClick = true;
                         }
-                        
+
                     } else {
                         _isDoubleClick = false;
                     }
@@ -147,7 +147,7 @@ class TextBlock extends Prototype
             _textureStorage.textInputLock.unlock();
         }
     }
-    
+
     // private void onDoubleClick(Object sender, MouseArgs args) {
     //     _textureStorage.textInputLock.lock();
     //     try {
@@ -1122,10 +1122,10 @@ class TextBlock extends Prototype
         _textureStorage.textInputLock.lock();
         try {
             String text = getText();
-//            if (text == null || text.equals("")) {
-//                _isWrapText = value;
-//                return;
-//            }
+            //            if (text == null || text.equals("")) {
+            //                _isWrapText = value;
+            //                return;
+            //            }
 
             Point cursorTmp = _cursorPosition;
             Point fromTmp = new Point();

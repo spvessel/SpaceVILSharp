@@ -103,9 +103,12 @@ namespace SpaceVIL
             }
             Indents textMargin = GetTextMargin();
             Indents textPadding = parent.GetPadding();
+            int cursorChanges = _cursorXMax;
             _cursorXMax = parent.GetWidth() - cursorWidth * 2 - textPadding.Left -
                 textPadding.Right - textMargin.Left - textMargin.Right;
-            SetAllowWidth(); // <- UpdLinesXShift();
+            cursorChanges -= _cursorXMax;
+
+            SetAllowWidth((cursorChanges != 0)); // <- UpdLinesXShift();
         }
 
         internal void UpdateBlockHeight()
@@ -117,9 +120,12 @@ namespace SpaceVIL
             }
             Indents textMargin = GetTextMargin();
             Indents textPadding = parent.GetPadding();
+            int cursorChanges = _cursorYMax;
             _cursorYMax = parent.GetHeight() - textPadding.Top - textPadding.Bottom
                 - textMargin.Top - textMargin.Bottom;
-            SetAllowHeight(); // <- UpdLinesYShift();
+            cursorChanges -= _cursorYMax;
+
+            SetAllowHeight((cursorChanges != 0)); // <- UpdLinesYShift();
         }
 
         private int cursorWidth = 0;
@@ -143,8 +149,8 @@ namespace SpaceVIL
                  - textMargin.Top - textMargin.Bottom;
 
             AddAllLines();
-            SetAllowWidth(); // <- UpdLinesXShift();
-            SetAllowHeight(); // <- UpdLinesYShift();
+            SetAllowWidth(true); // <- UpdLinesXShift();
+            SetAllowHeight(true); // <- UpdLinesYShift();
         }
 
         internal void SetLineContainerAlignment(ItemAlignment alignment)
@@ -210,6 +216,11 @@ namespace SpaceVIL
             te.SetForeground(GetForeground());
             te.SetTextAlignment(_blockAlignment);
             te.SetMargin(GetTextMargin());
+            te.SetAllowWidth(_cursorXMax);
+            te.SetAllowHeight(_cursorYMax);
+            te.SetLineYShift(GetLineY(lineNum) + globalYShift);
+            te.SetLineXShift(globalXShift);
+
             if (_elementFont != null)
             {
                 te.SetFont(_elementFont);
@@ -477,20 +488,26 @@ namespace SpaceVIL
             _isUpdateTextureNeed = true;
         }
 
-        private void SetAllowHeight()
+        private void SetAllowHeight(bool isCursorChanged)
         {
-            foreach (TextLine line in _linesList)
+            if (isCursorChanged)
             {
-                line.SetAllowHeight(_cursorYMax);
+                foreach (TextLine line in _linesList)
+                {
+                    line.SetAllowHeight(_cursorYMax);
+                }
             }
             UpdLinesYShift();
         }
 
-        private void SetAllowWidth()
+        private void SetAllowWidth(bool isCursorChanged)
         {
-            foreach (TextLine line in _linesList)
+            if (isCursorChanged)
             {
-                line.SetAllowWidth(_cursorXMax);
+                foreach (TextLine line in _linesList)
+                {
+                    line.SetAllowWidth(_cursorXMax);
+                }
             }
             UpdLinesXShift();
         }

@@ -266,7 +266,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     private Lock _lock = new ReentrantLock();
     private boolean _isNew = true;
 
-    protected boolean isImageRemake() {
+    protected final boolean isImageRemake() {
         _lock.lock();
         try {
             return _isNew;
@@ -275,7 +275,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
         }
     }
 
-    protected void setImageRemake(boolean value) {
+    protected final void setImageRemake(boolean value) {
         _lock.lock();
         try {
             _isNew = value;
