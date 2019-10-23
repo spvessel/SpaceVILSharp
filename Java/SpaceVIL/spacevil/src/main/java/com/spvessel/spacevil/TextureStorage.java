@@ -366,6 +366,19 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         String text = getTextInLine(combinePos.y); //_linesList.get(topLineY).getItemText();
         text += getTextInLine(combinePos.y + 1); //_linesList.get(topLineY + 1).getItemText();
 
+        if (checkIsWrap()) {
+            int lineNum = combinePos.y + 1;
+            int lineVal = _lineBreakes.get(lineNum);
+            int prevLineVal = (lineNum > 0) ? _lineBreakes.get(lineNum - 1) : -1;
+            int nextLineVal = (lineNum < _lineBreakes.size() - 1) ? _lineBreakes.get(lineNum + 1) : lineVal;
+
+            if (prevLineVal != lineVal && lineVal == nextLineVal) {
+                for (int i = lineNum; i < _lineBreakes.size(); i++) {
+                    _lineBreakes.set(i, _lineBreakes.get(i) - 1);
+                }
+            }
+        }
+
         removeLines(combinePos.y + 1, combinePos.y + 1);
         setTextInLine(text, combinePos); //_linesList.get(topLineY).setItemText(text);
 

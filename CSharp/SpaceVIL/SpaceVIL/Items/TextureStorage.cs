@@ -420,6 +420,22 @@ namespace SpaceVIL
             string text = GetTextInLine(combinePos.Y); //_linesList[topLineY].GetItemText();
             text += GetTextInLine(combinePos.Y + 1); //_linesList[topLineY + 1].GetItemText();
 
+            if (CheckIsWrap())
+            {
+                int lineNum = combinePos.Y + 1;
+                int lineVal = _lineBreakes[lineNum];
+                int prevLineVal = (lineNum > 0) ? _lineBreakes[lineNum - 1] : -1;
+                int nextLineVal = (lineNum < _lineBreakes.Count - 1) ? _lineBreakes[lineNum + 1] : lineVal;
+                
+                if (prevLineVal != lineVal && lineVal == nextLineVal)
+                {
+                    for (int i = lineNum; i < _lineBreakes.Count; i++)
+                    {
+                        _lineBreakes[i] = _lineBreakes[i] - 1;
+                    }
+                }
+            }
+
             RemoveLines(combinePos.Y + 1, combinePos.Y + 1);
             SetTextInLine(text, combinePos); //_linesList[topLineY].SetItemText(text);
 
