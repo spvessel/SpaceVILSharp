@@ -44,6 +44,15 @@ public class EventMouseMethodState {
             return;
         for (InterfaceMouseMethodState action : events) {
             action.execute(sender, args);
+            // if (_cancel)
+            //     break;
         }
+        // _cancel = false;
     }
+
+    // boolean _cancel = false;
+
+    // public void cancel() {
+    //     _cancel = true;
+    // }
 }
