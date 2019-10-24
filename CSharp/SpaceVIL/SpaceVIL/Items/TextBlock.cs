@@ -379,7 +379,7 @@ namespace SpaceVIL
                         else
                         {
                             _cursorPosition = _textureStorage.CheckLineFits(_cursorPosition);
-                            if (args.Key == KeyCode.Backspace)//backspace
+                            if (args.Key == KeyCode.Backspace) //backspace
                             {
                                 if (_cursorPosition.X > 0)
                                 {
@@ -391,12 +391,12 @@ namespace SpaceVIL
                                 {
                                     _cursorPosition.Y--;
                                     _cursorPosition.X = GetLettersCountInLine(_cursorPosition.Y);
-                                    _textureStorage.CombineLines(_cursorPosition); //.Y);
+                                    _textureStorage.CombineLinesOrRemoveLetter(_cursorPosition, args.Key); //_textureStorage.CombineLines(_cursorPosition); //.Y);
                                     AddToUndoAndReplaceCursor();
                                 }
                                 // ReplaceCursor();
                             }
-                            if (args.Key == KeyCode.Delete)//delete
+                            if (args.Key == KeyCode.Delete) //delete
                             {
                                 if (_cursorPosition.X < GetLettersCountInLine(_cursorPosition.Y))
                                 {
@@ -404,7 +404,7 @@ namespace SpaceVIL
                                 }
                                 else if (_cursorPosition.Y < _textureStorage.GetLinesCount() - 1)
                                 {
-                                    _textureStorage.CombineLines(_cursorPosition); //.Y);
+                                    _textureStorage.CombineLinesOrRemoveLetter(_cursorPosition, args.Key); //_textureStorage.CombineLines(_cursorPosition); //.Y);
                                     AddToUndoAndReplaceCursor();
                                 }
                             }

@@ -13,6 +13,7 @@ import com.spvessel.spacevil.Core.InterfaceTextContainer;
 import com.spvessel.spacevil.Core.InterfaceTextWrap;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.KeyCode;
 
 final class TextureStorage extends Primitive implements InterfaceTextContainer {
     private static int count = 0;
@@ -362,17 +363,20 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         return outPt;
     }
 
-    void combineLines(Point combinePos) { //int topLineY) {
+    private void combineLines(Point combinePos) { //int topLineY) {
+        if (combinePos.y >= getLinesCount() - 1) {
+            return;
+        }
         String text = getTextInLine(combinePos.y); //_linesList.get(topLineY).getItemText();
         text += getTextInLine(combinePos.y + 1); //_linesList.get(topLineY + 1).getItemText();
 
         if (checkIsWrap()) {
             int lineNum = combinePos.y + 1;
-            int lineVal = _lineBreakes.get(lineNum);
+            int currentLineVal = _lineBreakes.get(lineNum);
             int prevLineVal = (lineNum > 0) ? _lineBreakes.get(lineNum - 1) : -1;
-            int nextLineVal = (lineNum < _lineBreakes.size() - 1) ? _lineBreakes.get(lineNum + 1) : lineVal;
+            int nextLineVal = (lineNum < _lineBreakes.size() - 1) ? _lineBreakes.get(lineNum + 1) : currentLineVal;
 
-            if (prevLineVal != lineVal && lineVal == nextLineVal) {
+            if (prevLineVal != currentLineVal && currentLineVal == nextLineVal) {
                 for (int i = lineNum; i < _lineBreakes.size(); i++) {
                     _lineBreakes.set(i, _lineBreakes.get(i) - 1);
                 }
@@ -383,6 +387,34 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         setTextInLine(text, combinePos); //_linesList.get(topLineY).setItemText(text);
 
         checkWidth();
+    }
+
+    void combineLinesOrRemoveLetter(Point combinePos, KeyCode keyCode) {
+        if (!checkIsWrap()) {
+            combineLines(combinePos);
+            return;
+        }
+
+        //line is not last is checked before call
+        int currentLineVal = _lineBreakes.get(combinePos.y);
+        int nextLineVal = (combinePos.y < _lineBreakes.size() - 1) ? _lineBreakes.get(combinePos.y + 1) : currentLineVal + 1;
+
+        //???
+        String currentText = getTextInLine(combinePos.y);
+        String nextText = getTextInLine(combinePos.y + 1);
+        if (currentLineVal != nextLineVal || currentText.length() == 0 || nextText.length() == 0) {
+            combineLines(combinePos);
+            return;
+        }
+
+        if (keyCode == KeyCode.BACKSPACE) {
+            combinePos.x--;
+            setTextInLine(currentText.substring(0, currentText.length() - 1), new Point(combinePos));
+        } else if (keyCode == KeyCode.DELETE) {
+            combinePos.x = 0;
+            combinePos.y++;
+            setTextInLine(nextText.substring(1), new Point(combinePos));
+        }
     }
 
     private void removeLines(int fromLine, int toLine) {

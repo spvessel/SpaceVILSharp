@@ -315,12 +315,12 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                         {
                             if (_cursorPosition.x > 0) {
                                 StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursorPosition.y));
-                                _cursorPosition.x--; //TODO
+                                _cursorPosition.x--;
                                 setTextInLine(sb.deleteCharAt(_cursorPosition.x).toString());
                             } else if (_cursorPosition.y > 0) {
-                                _cursorPosition.y--; //TODO
+                                _cursorPosition.y--;
                                 _cursorPosition.x = getLettersCountInLine(_cursorPosition.y);
-                                _textureStorage.combineLines(_cursorPosition); //.y);
+                                _textureStorage.combineLinesOrRemoveLetter(_cursorPosition, args.key); //_textureStorage.combineLines(_cursorPosition); //.y);
                                 addToUndoAndReplaceCursor();
                             }
                             //                            replaceCursor();
@@ -331,7 +331,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                                 StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursorPosition.y));
                                 setTextInLine(sb.deleteCharAt(_cursorPosition.x).toString());
                             } else if (_cursorPosition.y < _textureStorage.getLinesCount() - 1) {
-                                _textureStorage.combineLines(_cursorPosition); //.y);
+                                _textureStorage.combineLinesOrRemoveLetter(_cursorPosition, args.key); //_textureStorage.combineLines(_cursorPosition); //.y);
                                 addToUndoAndReplaceCursor();
                             }
                         }
@@ -341,7 +341,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
                     if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) // enter
                     {
                         _textureStorage.breakLine(_cursorPosition);
-                        _cursorPosition.y++; //TODO or not
+                        _cursorPosition.y++;
                         _cursorPosition.x = 0;
 
                         ////                        replaceCursor();
@@ -497,7 +497,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
             _cursorPosition = _textureStorage.checkLineFits(_cursorPosition);
 
             StringBuilder sb = new StringBuilder(_textureStorage.getTextInLine(_cursorPosition.y));
-            _cursorPosition.x++; //TODO
+            _cursorPosition.x++;
             setTextInLine(sb.insert(_cursorPosition.x - 1, str).toString());
 
             addToUndoAndReplaceCursor();
@@ -713,7 +713,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
         return _textureStorage.addXYShifts(point);
     }
 
-    private String privGetSelectedText() { //TODO
+    private String privGetSelectedText() {
         _textureStorage.textInputLock.lock();
         try {
             if (_selectFrom.x == -1 || _selectTo.x == -1) {
