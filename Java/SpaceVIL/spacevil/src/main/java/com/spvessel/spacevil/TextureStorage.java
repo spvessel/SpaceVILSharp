@@ -409,11 +409,11 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
         if (keyCode == KeyCode.BACKSPACE) {
             combinePos.x--;
-            setTextInLine(currentText.substring(0, currentText.length() - 1), new Point(combinePos));
+            setTextInLine(currentText.substring(0, currentText.length() - 1), combinePos); //new Point(combinePos));
         } else if (keyCode == KeyCode.DELETE) {
             combinePos.x = 0;
             combinePos.y++;
-            setTextInLine(nextText.substring(1), new Point(combinePos));
+            setTextInLine(nextText.substring(1), combinePos); //new Point(combinePos));
         }
     }
 
