@@ -456,11 +456,11 @@ namespace SpaceVIL
             
             //line is not last is checked before call
             int currentLineVal = _lineBreakes[combinePos.Y];
-            int nextLineVal = (combinePos.y < _lineBreakes.Count - 1) ? _lineBreakes[combinePos.y + 1] : currentLineVal + 1;
+            int nextLineVal = (combinePos.Y < _lineBreakes.Count - 1) ? _lineBreakes[combinePos.Y + 1] : currentLineVal + 1;
 
             //???
-            String currentText = GetTextInLine(combinePos.y);
-            String nextText = GetTextInLine(combinePos.y + 1);
+            String currentText = GetTextInLine(combinePos.Y);
+            String nextText = GetTextInLine(combinePos.Y + 1);
             if (currentLineVal != nextLineVal || currentText.Length == 0 || nextText.Length == 0)
             {
                 CombineLines(combinePos);
@@ -469,14 +469,14 @@ namespace SpaceVIL
 
             if (keyCode == KeyCode.Backspace)
             {
-                combinePos.x--;
-                SetTextInLine(currentText.Substring(0, currentText.Length - 1), new Point(combinePos));
+                combinePos.X--;
+                SetTextInLine(currentText.Substring(0, currentText.Length - 1), new Core.Point(combinePos));
             }
             else if (keyCode == KeyCode.Delete)
             {
-                combinePos.x = 0;
-                combinePos.y++;
-                SetTextInLine(nextText.Substring(1), new Point(combinePos));
+                combinePos.X = 0;
+                combinePos.Y++;
+                SetTextInLine(nextText.Substring(1), new Core.Point(combinePos));
             }
         }
 

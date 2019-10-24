@@ -178,8 +178,6 @@ public class InputTest extends ActiveWindow {
             //            System.out.println(getX());
         });
 
-
-
         bc1.eventMouseClick.add((sender, args) -> {
             System.out.println("first");
             // bc1.eventMouseClick.cancel();
@@ -188,10 +186,6 @@ public class InputTest extends ActiveWindow {
         bc1.eventMouseClick.add((sender, args) -> {
             System.out.println("second");
         });
-
-
-
-
 
         bc2.eventMousePress.add((sender, args) -> {
             System.out.println("pressed");
