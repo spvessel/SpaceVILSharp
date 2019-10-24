@@ -415,19 +415,23 @@ namespace SpaceVIL
             return outPt;
         }
 
-        internal void CombineLines(SpaceVIL.Core.Point combinePos) //int topLineY)
+        private void CombineLines(SpaceVIL.Core.Point combinePos) //int topLineY)
         {
+            if (combinePos.Y >= GetLinesCount() - 1)
+            {
+                return;
+            }
             string text = GetTextInLine(combinePos.Y); //_linesList[topLineY].GetItemText();
             text += GetTextInLine(combinePos.Y + 1); //_linesList[topLineY + 1].GetItemText();
 
             if (CheckIsWrap())
             {
                 int lineNum = combinePos.Y + 1;
-                int lineVal = _lineBreakes[lineNum];
+                int currentLineVal = _lineBreakes[lineNum];
                 int prevLineVal = (lineNum > 0) ? _lineBreakes[lineNum - 1] : -1;
-                int nextLineVal = (lineNum < _lineBreakes.Count - 1) ? _lineBreakes[lineNum + 1] : lineVal;
+                int nextLineVal = (lineNum < _lineBreakes.Count - 1) ? _lineBreakes[lineNum + 1] : currentLineVal;
                 
-                if (prevLineVal != lineVal && lineVal == nextLineVal)
+                if (prevLineVal != currentLineVal && currentLineVal == nextLineVal)
                 {
                     for (int i = lineNum; i < _lineBreakes.Count; i++)
                     {
@@ -440,6 +444,40 @@ namespace SpaceVIL
             SetTextInLine(text, combinePos); //_linesList[topLineY].SetItemText(text);
 
             CheckWidth();
+        }
+
+        internal void CombineLinesOrRemoveLetter(SpaceVIL.Core.Point combinePos, KeyCode keyCode)
+        {
+            if (!CheckIsWrap())
+            {
+                CombineLines(combinePos);
+                return;
+            }
+            
+            //line is not last is checked before call
+            int currentLineVal = _lineBreakes[combinePos.Y];
+            int nextLineVal = (combinePos.y < _lineBreakes.Count - 1) ? _lineBreakes[combinePos.y + 1] : currentLineVal + 1;
+
+            //???
+            String currentText = GetTextInLine(combinePos.y);
+            String nextText = GetTextInLine(combinePos.y + 1);
+            if (currentLineVal != nextLineVal || currentText.Length == 0 || nextText.Length == 0)
+            {
+                CombineLines(combinePos);
+                return;
+            }
+
+            if (keyCode == KeyCode.Backspace)
+            {
+                combinePos.x--;
+                SetTextInLine(currentText.Substring(0, currentText.Length - 1), new Point(combinePos));
+            }
+            else if (keyCode == KeyCode.Delete)
+            {
+                combinePos.x = 0;
+                combinePos.y++;
+                SetTextInLine(nextText.Substring(1), new Point(combinePos));
+            }
         }
 
         private void RemoveLines(int fromLine, int toLine)
