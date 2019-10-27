@@ -66,6 +66,14 @@ public class MainWindow extends ActiveWindow {
         public HomePage homePage;
         public HomeTab homeTab;
 
+        public ContextMenu contextTextActions;
+        public MenuItem copy;
+        public MenuItem paste;
+        public MenuItem cut;
+        public MenuItem goUp;
+        public MenuItem goDown;
+        public MenuItem wrap;
+
         @Override
         public void initWindow() {
                 setParameters("OwlWindow", "OwlWindow", 1300, 800, false);
@@ -394,6 +402,41 @@ public class MainWindow extends ActiveWindow {
                 //// ((Prototype)alertDialog.window.getItems().get(1)).addItem(bc);
                 //// inputDialog.show(Handler);
                 // });
+
+                copy = new MenuItem("Copy");
+                paste = new MenuItem("Paste");
+                cut = new MenuItem("Cut");
+                goUp = new MenuItem("Go up");
+                goDown = new MenuItem("Go down");
+                wrap = new MenuItem("Unwrap text");
+                ElementsFactory.getMenuStyle().setStyle(copy, paste, cut, wrap, goUp, goDown);
+                contextTextActions = new ContextMenu(this, copy, paste, cut, wrap, goUp, goDown);
+                contextTextActions.setBorderThickness(1);
+                contextTextActions.setBorderFill(32, 32, 32);
+                contextTextActions.setBackground(60, 60, 60);
+
+                BufferedImage copyIcon = null;
+                BufferedImage pasteIcon = null;
+                BufferedImage cutIcon = null;
+                BufferedImage goupIcon = null;
+                BufferedImage godownIcon = null;
+                BufferedImage wrapIcon = null;
+                try {
+                        copyIcon = ImageIO.read(MainWindow.class.getResourceAsStream("/images/copy.png"));
+                        pasteIcon = ImageIO.read(MainWindow.class.getResourceAsStream("/images/paste.png"));
+                        cutIcon = ImageIO.read(MainWindow.class.getResourceAsStream("/images/cut.png"));
+                        goupIcon = ImageIO.read(MainWindow.class.getResourceAsStream("/images/goup.png"));
+                        godownIcon = ImageIO.read(MainWindow.class.getResourceAsStream("/images/godown.png"));
+                        wrapIcon = ImageIO.read(MainWindow.class.getResourceAsStream("/images/wrap.png"));
+                } catch (IOException e) {
+                        System.out.println("load icons fail");
+                }
+                ElementsFactory.setMenuItemImage(copy, copyIcon);
+                ElementsFactory.setMenuItemImage(paste, pasteIcon);
+                ElementsFactory.setMenuItemImage(cut, cutIcon);
+                ElementsFactory.setMenuItemImage(goUp, goupIcon);
+                ElementsFactory.setMenuItemImage(goDown, godownIcon);
+                ElementsFactory.setMenuItemImage(wrap, wrapIcon);
         }
 
         public void setTitle(String title) {
