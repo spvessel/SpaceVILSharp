@@ -1229,19 +1229,65 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             return;
         }
 
+        boolean isLinesChanged;
+
+        if (lineNum > 0) {
+            isLinesChanged = hasThisAndNextLineCombination(lineNum - 1);
+            if (isLinesChanged) {
+                return;
+            }
+        }
+
+        if (lineNum < _lineBreakes.size() - 1) {
+            isLinesChanged = hasThisAndNextLineCombination(lineNum);
+            if (isLinesChanged) {
+                return;
+            }
+        }
+
+
+//        if (lineNum > 0) { //check if I can move something to the previous line
+//            int prevLineVal = _lineBreakes.get(lineNum - 1);
+//            if (lineVal == prevLineVal) {
+//                TextLine prevTextLine = getTextLine(lineNum - 1);
+//                String prevText = prevTextLine.getText();
+//
+//                if (prevTextLine.getWidth() < _cursorXMax) {
+//                    if (prevText.endsWith(" ")) {
+//                        int firstSpaceInd = textInLine.indexOf(" ");
+//                        if (firstSpaceInd > 0 && letPosArr.size() != 0) {
+//                            if (prevTextLine.getWidth() + letPosArr.get(firstSpaceInd - 1) < _cursorXMax) {
+//                                combineLines(new Point(prevText.length(), lineNum - 1));
+//                                return;
+//                            }
+//                        }
+//                    } else if (!textInLine.startsWith(" ")) {
+//
+//                    }
+//                }
+//
+//
+//                if (textInLine.startsWith(" ") && !prevText.endsWith(" ")) {
+//                    //move space to previous line directly, without checking
+//
+//                }
+//            }
+//        }
+//
+//        if (textLine.getWidth() < _cursorXMax) { // add something from the next line
+//            if (lineVal == nextLineVal) {
+//                TextLine nextTextLine = getTextLine(lineNum + 1);
+//                int nextLet = nextTextLine.getLetPosArray().get(0); //check needed
+//                if (textLine.getWidth() + nextLet < _cursorXMax) {
+//                    combineLines(new Point(textInLine.length(), lineNum));
+//                }
+//            }
+//            return;
+//        }
+
         int lineVal = _lineBreakes.get(lineNum);
         int nextLineVal = (lineNum < _lineBreakes.size() - 1) ? _lineBreakes.get(lineNum + 1) : lineVal + 1;
         String textInLine = textLine.getText();
-
-        if (textLine.getWidth() < _cursorXMax) { // parentAllowWidth
-            if (lineVal == nextLineVal) {
-                int nextLet = getTextLine(lineNum + 1).getLetPosArray().get(0);
-                if (textLine.getWidth() + nextLet < _cursorXMax) {
-                    combineLines(new Point(textInLine.length(), lineNum));
-                }
-            }
-            return;
-        }
 
         List<Integer> letPosArr = textLine.getLetPosArray();
 
@@ -1303,6 +1349,49 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
             addNewLine(newText, breakPos.y + 1, false);
         }
+    }
+
+    private boolean hasThisAndNextLineCombination(int lineNum) {
+        //checking before call
+        int currentLineVal = _lineBreakes.get(lineNum);
+        int nextLineVal = _lineBreakes.get(lineNum + 1);
+        if (currentLineVal == nextLineVal) {
+            TextLine currentLine = getTextLine(lineNum );
+            String currentText = currentLine.getText();
+            TextLine nextLine = getTextLine(lineNum + 1);
+            String nextText = nextLine.getText();
+
+            if (currentLine.getWidth() < _cursorXMax) {
+                List<Integer> nextLineLetPosArray = nextLine.getLetPosArray();
+
+                if (nextLineLetPosArray.size() != 0) {
+                    if (currentText.endsWith(" ")) {
+                        int firstSpaceInd = nextText.indexOf(" ");
+                        if (firstSpaceInd > 0) {
+                            if (currentLine.getWidth() + nextLineLetPosArray.get(firstSpaceInd) < _cursorXMax) {
+                                combineLines(new Point(currentText.length(), lineNum));
+                                return true;
+                            }
+                        }
+                    } else if (!nextText.startsWith(" ")) {
+                        if (nextLineLetPosArray.size() >= 3) {
+                            if (currentLine.getWidth() + nextLineLetPosArray.get(2) < _cursorXMax) {
+                                combineLines(new Point(currentText.length(), lineNum));
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Пока плохо работает из-за положения курсора
+//            if (nextText.startsWith(" ") && !currentText.endsWith(" ")) {
+//                //move space to previous line directly, without checking
+//                currentLine.setItemText(currentText + " ");
+//                nextLine.setItemText(nextText.substring(1));
+//            }
+        }
+        return false;
     }
 
     private int binarySearch(int fromInd, int toInd, List<Integer> searchingList, int testValue) {
