@@ -2,6 +2,7 @@ package OwnLibs.Owls;
 
 import OwnLibs.Owls.Views.Items.*;
 import com.spvessel.spacevil.*;
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Flags.*;
@@ -317,6 +318,50 @@ public class Controller {
             workDirectory = rootItem; // Копировать значения или оставить ссылку?
             itemToDefault();
         });
+
+        owlWindow.copy.eventMouseClick.add((sender, args) -> {
+            TextArea current = getCurrentTextArea();
+            if (current != null) {
+                CommonService.setClipboardString(current.getSelectedText());
+            }
+        });
+        owlWindow.paste.eventMouseClick.add((sender, args) -> {
+            TextArea current = getCurrentTextArea();
+            if (current != null) {
+                current.pasteText(CommonService.getClipboardString());
+            }
+        });
+        owlWindow.cut.eventMouseClick.add((sender, args) -> {
+            TextArea current = getCurrentTextArea();
+            if (current != null) {
+                CommonService.setClipboardString(current.cutText());
+            }
+        });
+        owlWindow.wrap.eventMouseClick.add((sender, args) -> {
+            TextArea current = getCurrentTextArea();
+            if (current != null) {
+                boolean wrap = !current.isWrapText();
+                current.setWrapText(wrap);
+                if (wrap) {
+                    owlWindow.wrap.setText("Wrap text");
+                } else {
+                    owlWindow.wrap.setText("Unwrap text");
+                }
+            }
+        });
+        owlWindow.goDown.eventMouseClick.add((sender, args) -> {
+            TextArea current = getCurrentTextArea();
+            if (current != null) {
+                current.vScrollBar.slider.setCurrentValue(100);
+                current.update(GeometryEventType.RESIZE_HEIGHT, 0);
+            }
+        });
+        owlWindow.goUp.eventMouseClick.add((sender, args) -> {
+            TextArea current = getCurrentTextArea();
+            if (current != null) {
+                current.rewindText();
+            }
+        });
     }
 
     private void checkAndCloseWindow() {
@@ -451,6 +496,11 @@ public class Controller {
         // owlWindow.workTabArea.updateLayout();
 
         TextArea textArea = ElementsFactory.getTextArea();
+        textArea.eventMouseClick.add((sender, args) -> {
+            owlWindow.contextTextActions.setReturnFocus(textArea);
+            owlWindow.contextTextActions.show(sender, args);
+        });
+
         // textArea.setText(""); // Переместить это в fillFields или
         // textArea.rewindText();
         owlWindow.workTabArea.addItemToTab(tab, textArea);
