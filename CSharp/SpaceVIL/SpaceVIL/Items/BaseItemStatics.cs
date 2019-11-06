@@ -105,7 +105,7 @@ namespace SpaceVIL
 
         internal static void UpdatePrototypeBehavior(IBaseItem item, Prototype parent)
         {
-            Prototype prt = (item as VisualItem)._main;
+            Prototype prt = (item as VisualItem).prototype;
             UpdateBaseItemBehavior(prt, parent);
         }
 
@@ -154,7 +154,7 @@ namespace SpaceVIL
 
         internal static void UpdatePrototypeGeometryAttr(IBaseItem item, Prototype parent, GeometryEventType type, int value)
         {
-            Prototype prt = (item as VisualItem)._main;
+            Prototype prt = (item as VisualItem).prototype;
             UpdateBaseItemGeometryAttr(prt, parent, type, value);
         }
 

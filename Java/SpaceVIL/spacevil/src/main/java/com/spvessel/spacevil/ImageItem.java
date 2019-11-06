@@ -230,7 +230,7 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     void UpdateLayout() {
         UpdateVerticalPosition();
         UpdateHorizontalPosition();
-        setImageRemake(true);
+        ItemsRefreshManager.setRefreshImage(this);
     }
 
     private void UpdateHorizontalPosition() {
@@ -261,27 +261,6 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     public void release() {
         if (_image != null)
             _image.flush();
-    }
-
-    private Lock _lock = new ReentrantLock();
-    private boolean _isNew = true;
-
-    protected final boolean isImageRemake() {
-        _lock.lock();
-        try {
-            return _isNew;
-        } finally {
-            _lock.unlock();
-        }
-    }
-
-    protected final void setImageRemake(boolean value) {
-        _lock.lock();
-        try {
-            _isNew = value;
-        } finally {
-            _lock.unlock();
-        }
     }
 
     static private BufferedImage cloneImage(BufferedImage bi) {

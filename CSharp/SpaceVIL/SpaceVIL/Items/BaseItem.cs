@@ -48,7 +48,7 @@ namespace SpaceVIL
             if (itemParent != null)
                 itemParent.RemoveItem(item);
 
-            item.SetParent((this as VisualItem)._main);
+            item.SetParent((this as VisualItem).prototype);
             itemParent = item.GetParent();
 
             if (itemParent is IFreeLayout)
@@ -223,20 +223,6 @@ namespace SpaceVIL
         }
 
         //geometry
-        private bool _remakeRequest = true;
-
-        public bool IsRemakeRequest()
-        {
-            return _remakeRequest;
-        }
-
-        public void SetRemakeRequest(bool value)
-        {
-            // if(value)
-            // Console.WriteLine(GetItemName());
-            _remakeRequest = value;
-        }
-
         private Geometry _itemGeometry = new Geometry();
 
         /// <summary>
@@ -249,7 +235,7 @@ namespace SpaceVIL
         public virtual void SetWidth(int width)
         {
             _itemGeometry.SetWidth(width);
-            SetRemakeRequest(true);
+            ItemsRefreshManager.SetRefreshShape(this);
         }
         public void SetMaxWidth(int width)
         {
@@ -278,7 +264,7 @@ namespace SpaceVIL
         public virtual void SetHeight(int height)
         {
             _itemGeometry.SetHeight(height);
-            SetRemakeRequest(true);
+            ItemsRefreshManager.SetRefreshShape(this);
         }
         public void SetMaxHeight(int height)
         {
@@ -367,12 +353,12 @@ namespace SpaceVIL
             if (_itemBehavior.GetWidthPolicy() != policy)
             {
                 _itemBehavior.SetWidthPolicy(policy);
-                SetRemakeRequest(true);
+                ItemsRefreshManager.SetRefreshShape(this);
 
                 VisualItem vItem = this as VisualItem;
                 Prototype protoItem = null;
                 if (vItem != null)
-                    protoItem = vItem._main;
+                    protoItem = vItem.prototype;
                 IFloating floatingItem = protoItem as IFloating;
                 if (floatingItem != null)
                 {
@@ -394,12 +380,12 @@ namespace SpaceVIL
             if (_itemBehavior.GetHeightPolicy() != policy)
             {
                 _itemBehavior.SetHeightPolicy(policy);
-                SetRemakeRequest(true);
+                ItemsRefreshManager.SetRefreshShape(this);
 
                 VisualItem vItem = this as VisualItem;
                 Prototype protoItem = null;
                 if (vItem != null)
-                    protoItem = vItem._main;
+                    protoItem = vItem.prototype;
                 IFloating floatingItem = protoItem as IFloating;
                 if (floatingItem != null)
                 {

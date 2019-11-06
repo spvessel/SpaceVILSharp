@@ -534,11 +534,14 @@ final class DrawEngine {
 
         boolean preEffect = drawPreEffect(shell);
 
-        if (shell.isRemakeRequest()) {
+        if (ItemsRefreshManager.isRefreshShape(shell)) {
             shell.makeShape();
+
             if (shell.isShadowDrop())
                 drawShadow(shell, stencil);
-            shell.setRemakeRequest(false);
+
+            ItemsRefreshManager.removeShape(shell);
+
             _renderProcessor.drawFreshVertex(_primitive, shell, getItemPyramidLevel(), shell.getX(), shell.getY(),
                     _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), shell.getBackground(),
                     GL_TRIANGLES);
@@ -592,7 +595,7 @@ final class DrawEngine {
 
         int fboWidth = shell.getWidth() + extension[0] + 2 * res;
         int fboHeight = shell.getHeight() + extension[1] + 2 * res;
-        if (shell.isRemakeRequest() || _renderProcessor.shadowStorage.getResource(shell) == null) {
+        if (ItemsRefreshManager.isRefreshShape(shell) || _renderProcessor.shadowStorage.getResource(shell) == null) {
             if (stencil)
                 glDisable(GL_SCISSOR_TEST);
 
@@ -648,14 +651,12 @@ final class DrawEngine {
 
     private void drawText(InterfaceTextContainer text) {
 
-        TextPrinter textPrt = text.getLetTextures();
-        //        textPrt = null;
+        InterfaceTextImage textImage = text.getTexture();
 
-        if (textPrt == null)
+        if (textImage == null)
             return;
 
-        byte[] byteBuffer = textPrt.texture;
-        if (byteBuffer == null || byteBuffer.length == 0)
+        if (textImage.isEmpty())
             return;
 
         checkOutsideBorders((InterfaceBaseItem) text);
@@ -664,12 +665,12 @@ final class DrawEngine {
                 (float) text.getForeground().getGreen() / 255.0f, (float) text.getForeground().getBlue() / 255.0f,
                 (float) text.getForeground().getAlpha() / 255.0f };
 
-        if (text.isRemakeText()) {
-            text.setRemakeText(false);
-            _renderProcessor.drawFreshText(_char, text, textPrt, _commonProcessor.window.getWidth(),
+        if (ItemsRefreshManager.isRefreshText(text)) {
+            ItemsRefreshManager.removeText(text);
+            _renderProcessor.drawFreshText(_char, text, textImage, _commonProcessor.window.getWidth(),
                     _commonProcessor.window.getHeight(), getItemPyramidLevel(), argb);
         } else {
-            _renderProcessor.drawStoredText(_char, text, textPrt, _commonProcessor.window.getWidth(),
+            _renderProcessor.drawStoredText(_char, text, textImage, _commonProcessor.window.getWidth(),
                     _commonProcessor.window.getHeight(), getItemPyramidLevel(), argb);
         }
     }
@@ -685,8 +686,8 @@ final class DrawEngine {
 
         float level = getItemPyramidLevel();
 
-        if (shell.isRemakeRequest()) {
-            shell.setRemakeRequest(false);
+        if (ItemsRefreshManager.isRefreshShape(shell)) {
+            ItemsRefreshManager.removeShape(shell);
             shell.makeShape();
 
             List<float[]> points = item.getPoints();
@@ -724,8 +725,8 @@ final class DrawEngine {
         InterfaceBaseItem shell = (InterfaceBaseItem) item;// BAD!
         checkOutsideBorders(shell);
 
-        if (shell.isRemakeRequest()) {
-            shell.setRemakeRequest(false);
+        if (ItemsRefreshManager.isRefreshShape(shell)) {
+            ItemsRefreshManager.removeShape(shell);
             shell.makeShape();
 
             _renderProcessor.drawFreshVertex(_primitive, shell, getItemPyramidLevel(), item.getX(), item.getY(),
@@ -744,22 +745,14 @@ final class DrawEngine {
         int w = image.getImageWidth(), h = image.getImageHeight();
         RectangleBounds area = image.getRectangleBounds();
 
-        if (image instanceof ImageItem) {
-            ImageItem tmp = (ImageItem) image;
-
-            if (tmp.isImageRemake()) {
-                _renderProcessor.drawFreshTexture(tmp, _texture, area.getX(), area.getY(), area.getWidth(),
-                        area.getHeight(), w, h, _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(),
-                        getItemPyramidLevel());
-            } else {
-                _renderProcessor.drawStoredTexture(tmp, _texture, area.getX(), area.getY(),
-                        _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), getItemPyramidLevel());
-            }
-            return;
+        if (ItemsRefreshManager.isRefreshImage(image)) {
+            _renderProcessor.drawFreshTexture(image, _texture, area.getX(), area.getY(), area.getWidth(),
+                    area.getHeight(), w, h, _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(),
+                    getItemPyramidLevel());
+        } else {
+            _renderProcessor.drawStoredTexture(image, _texture, area.getX(), area.getY(),
+                    _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), getItemPyramidLevel());
         }
-
-        _renderProcessor.drawTextureAsIs(_texture, image, area.getX(), area.getY(), area.getWidth(), area.getHeight(),
-                w, h, _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), getItemPyramidLevel());
     }
 
     private Pointer tooltipBorderIndent = new Pointer(10, 2);
@@ -894,13 +887,10 @@ final class DrawEngine {
                 List<float[]> vertex = null;
 
                 if (subtractFigure.getSubtractFigure().isFixed()) {
-                    
-                    vertex = GraphicsMathService.moveShape(
-                        subtractFigure.getSubtractFigure().getFigure(),
-                        subtractFigure.getXOffset(),
-                        subtractFigure.getYOffset(),
-                        new Area(0, 0, item.getWidth(), item.getHeight()),
-                        subtractFigure.getAlignment());
+
+                    vertex = GraphicsMathService.moveShape(subtractFigure.getSubtractFigure().getFigure(),
+                            subtractFigure.getXOffset(), subtractFigure.getYOffset(),
+                            new Area(0, 0, item.getWidth(), item.getHeight()), subtractFigure.getAlignment());
 
                 } else {
                     vertex = GraphicsMathService.moveShape(

@@ -9,16 +9,6 @@ namespace SpaceVIL
 {
     abstract public class Prototype : IBaseItem
     {
-        public bool IsRemakeRequest()
-        {
-            return _core.IsRemakeRequest();
-        }
-
-        public void SetRemakeRequest(bool value)
-        {
-            _core.SetRemakeRequest(value);
-        }
-
         private VisualItem _core = new VisualItem();
         internal VisualItem GetCore()
         {
@@ -37,7 +27,7 @@ namespace SpaceVIL
         {
             _core.SetItemName("VisualItem_" + count);
             count++;
-            _core._main = this;
+            _core.prototype = this;
         }
 
         /// <summary>

@@ -1,15 +1,34 @@
 package com.spvessel.spacevil.View;
 
+import com.spvessel.spacevil.ActiveWindow;
+import com.spvessel.spacevil.ButtonCore;
+import com.spvessel.spacevil.ContextMenu;
+import com.spvessel.spacevil.Frame;
+import com.spvessel.spacevil.Grid;
+import com.spvessel.spacevil.ImageItem;
+import com.spvessel.spacevil.ItemsRefreshManager;
+import com.spvessel.spacevil.MenuItem;
+import com.spvessel.spacevil.MessageBox;
+import com.spvessel.spacevil.TitleBar;
+import com.spvessel.spacevil.WindowManager;
+import com.spvessel.spacevil.WindowsBox;
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.Core.MouseArgs;
-import com.spvessel.spacevil.*;
-import com.spvessel.spacevil.App.Program;
 import com.spvessel.spacevil.Decorations.ItemState;
-import com.spvessel.spacevil.Flags.*;
+import com.spvessel.spacevil.Flags.EmbeddedImage;
+import com.spvessel.spacevil.Flags.EmbeddedImageSize;
+import com.spvessel.spacevil.Flags.HorizontalDirection;
+import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.ItemStateType;
+import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.MSAA;
+import com.spvessel.spacevil.Flags.MouseButton;
+import com.spvessel.spacevil.Flags.RenderType;
+import com.spvessel.spacevil.Flags.SizePolicy;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -91,6 +110,7 @@ public class MainWindow extends ActiveWindow {
         // addItem(ellipse);
 
         Grid grid = new Grid(1, 7);
+        grid.setItemName("layout_grid");
         grid.setBorderRadius(new CornerRadius(7, 7, 0, 0));
         grid.setMargin(0, 0, 0, 30);
         grid.setPadding(6, 6, 6, 6);
@@ -103,6 +123,7 @@ public class MainWindow extends ActiveWindow {
 
         ButtonCore btn_layout = new ButtonCore("Layout");
         // btn_layout.setTextAlignment(ItemAlignment.BOTTOM, ItemAlignment.HCENTER);
+        btn_layout.setItemName("LayoutButton");
         btn_layout.setShadow(5, 0, 0, new Color(255, 0, 255, 255));
         btn_layout.setShadowExtension(4, 4);
         btn_layout.setFont(font);
@@ -138,24 +159,24 @@ public class MainWindow extends ActiveWindow {
         btn_label.setShadow(5, 0, 0, new Color(0, 181, 255, 180));
         btn_label.setShadowExtension(4, 4);
         btn_label.setBorderRadius(6);
-        InterfaceMouseMethodState btn_action_click = (sender, args) -> {
-            setShadeColor(new Color(100, 100, 100, 125));
-            MessageBox msg = new MessageBox("Send result?", "Message:");
-            ButtonCore btnDontSave = new ButtonCore("Do not save");
-            btnDontSave.eventMouseClick.add((s, a) -> {
-                System.out.println("btnDontSave is chosen");
-            });
-            msg.addUserButton(btnDontSave, 2); // id must be > 1
-            msg.onCloseDialog.add(() -> {
-                System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
-            });
-            msg.show();
+        // InterfaceMouseMethodState btn_action_click = (sender, args) -> {
+        //     setShadeColor(new Color(100, 100, 100, 125));
+        //     MessageBox msg = new MessageBox("Send result?", "Message:");
+        //     ButtonCore btnDontSave = new ButtonCore("Do not save");
+        //     btnDontSave.eventMouseClick.add((s, a) -> {
+        //         System.out.println("btnDontSave is chosen");
+        //     });
+        //     msg.addUserButton(btnDontSave, 2); // id must be > 1
+        //     msg.onCloseDialog.add(() -> {
+        //         System.out.println(msg.getResult() + " " + msg.getUserButtonResult());
+        //     });
+        //     msg.show();
 
-            // MessageItem ms = new MessageItem("Send result?", "Message:");
-            // ms.show(this);
-            System.out.println(btn_label.isFocusable + " " + getFocusedItem().getItemName());
-        };
-        btn_label.eventMouseClick.add(btn_action_click);
+        //     // MessageItem ms = new MessageItem("Send result?", "Message:");
+        //     // ms.show(this);
+        //     System.out.println(btn_label.isFocusable + " " + getFocusedItem().getItemName());
+        // };
+        // btn_label.eventMouseClick.add(btn_action_click);
         btn_label.isFocusable = false;
 
         ButtonCore btn_flow = new ButtonCore("Flow");
@@ -222,14 +243,15 @@ public class MainWindow extends ActiveWindow {
             System.out.println("mi3 click");
         });
         MenuItem mi4 = new MenuItem("MenuItem 4");
+        ContextMenu menu = new ContextMenu(this, mi1, mi2, mi3, mi4);
         mi4.eventMouseClick.add((sender, args) -> {
             System.out.println("mi4 click");
+            menu.addItem(new MenuItem("New menuItem"));
         });
-        ContextMenu menu = new ContextMenu(this, mi1, mi2, mi3, mi4);
         menu.setReturnFocus(btn_flow);
         // menu.setBorderRadius(15);
 
-        eventMouseClick.add((sender, args) -> menu.show(sender, args));
+        // eventMouseClick.add((sender, args) -> menu.show(sender, args));
         eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.MENU) {
                 MouseArgs margs = new MouseArgs();
@@ -243,6 +265,8 @@ public class MainWindow extends ActiveWindow {
                 System.out.println(CommonService.getClipboardString());
             if (args.key == KeyCode.F)
                 System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
+            // if (args.key == KeyCode.R)
+            //     ItemsRefreshManager.printSizeOfShapes();
 
         });
 
@@ -381,8 +405,8 @@ public class MainWindow extends ActiveWindow {
         // msg.show();
         // });
 
-        ToolTip.setStyle(this, Program.getNewToolTipStyle());
-        ToolTip.addItems(this, getDecor());
+        // ToolTip.setStyle(this, Program.getNewToolTipStyle());
+        // ToolTip.addItems(this, getDecor());
     }
 
     private InterfaceBaseItem getDecor() {

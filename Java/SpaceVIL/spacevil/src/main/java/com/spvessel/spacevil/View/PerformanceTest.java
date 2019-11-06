@@ -52,10 +52,10 @@ public class PerformanceTest extends ActiveWindow {
 
         eventOnStart.add(() -> {
             // wrapTest();
-            wrapWrapTest();
+            // wrapWrapTest();
             // stackTest();
             // gridTest();
-            // shadowTest();
+            shadowTest();
         });
     }
 

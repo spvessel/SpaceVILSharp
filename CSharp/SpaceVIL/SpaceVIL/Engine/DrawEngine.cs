@@ -534,12 +534,15 @@ namespace SpaceVIL
 
             bool preEffect = DrawPreEffect(shell);
 
-            if (shell.IsRemakeRequest())
+            if (ItemsRefreshManager.IsRefreshShape(shell))
             {
                 shell.MakeShape();
+
                 if (shell.IsShadowDrop())
                     DrawShadow(shell, stencil);
-                shell.SetRemakeRequest(false);
+
+                ItemsRefreshManager.RemoveShape(shell);
+
                 _renderProcessor.DrawFreshVertex(
                     _primitive, shell, GetItemPyramidLevel(), shell.GetX(), shell.GetY(),
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
@@ -610,7 +613,7 @@ namespace SpaceVIL
 
             int fboWidth = shell.GetWidth() + extension[0] + 2 * res;
             int fboHeight = shell.GetHeight() + extension[1] + 2 * res;
-            if (shell.IsRemakeRequest() || _renderProcessor.ShadowStorage.GetResource(shell) == null)
+            if (ItemsRefreshManager.IsRefreshShape(shell) || _renderProcessor.ShadowStorage.GetResource(shell) == null)
             {
                 if (stencil)
                     glDisable(GL_SCISSOR_TEST);
@@ -671,12 +674,11 @@ namespace SpaceVIL
 
         void DrawText(ITextContainer text)
         {
-            TextPrinter textPrt = text.GetLetTextures();
-            if (textPrt == null)
+            ITextImage textImage = text.GetTexture();
+            if (textImage == null)
                 return;
 
-            byte[] byteBuffer = textPrt.Texture;
-            if ((byteBuffer == null) || (byteBuffer.Length == 0))
+            if (textImage.IsEmpty())
                 return;
 
             CheckOutsideBorders(text as IBaseItem);
@@ -687,16 +689,16 @@ namespace SpaceVIL
                 (float) text.GetForeground().B / 255.0f,
                 (float) text.GetForeground().A / 255.0f };
 
-            if (text.IsRemakeText())
+            if (ItemsRefreshManager.IsRefreshText(text))
             {
-                text.SetRemakeText(false);
-                _renderProcessor.DrawFreshText(_char, text, textPrt,
+                ItemsRefreshManager.RemoveText(text);
+                _renderProcessor.DrawFreshText(_char, text, textImage,
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                     GetItemPyramidLevel(), argb);
             }
             else
             {
-                _renderProcessor.DrawStoredText(_char, text, textPrt,
+                _renderProcessor.DrawStoredText(_char, text, textImage,
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
                     GetItemPyramidLevel(), argb);
             }
@@ -714,9 +716,9 @@ namespace SpaceVIL
 
             float level = GetItemPyramidLevel();
 
-            if (shell.IsRemakeRequest())
+            if (ItemsRefreshManager.IsRefreshShape(shell))
             {
-                shell.SetRemakeRequest(false);
+                ItemsRefreshManager.RemoveShape(shell);
                 shell.MakeShape();
 
                 List<float[]> points = item.GetPoints();
@@ -762,10 +764,11 @@ namespace SpaceVIL
 
             CheckOutsideBorders(shell);
 
-            if (shell.IsRemakeRequest())
+            if (ItemsRefreshManager.IsRefreshShape(shell))
             {
-                shell.SetRemakeRequest(false);
+                ItemsRefreshManager.RemoveShape(shell);
                 shell.MakeShape();
+
                 _renderProcessor.DrawFreshVertex(
                     _primitive, shell, GetItemPyramidLevel(), item.GetX(), item.GetY(),
                     _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
@@ -787,31 +790,22 @@ namespace SpaceVIL
             int w = image.GetImageWidth(), h = image.GetImageHeight();
             RectangleBounds area = image.GetRectangleBounds();
 
-            ImageItem tmp = image as ImageItem;
-            if (tmp != null)
+            if (ItemsRefreshManager.IsRefreshImage(image))
             {
-                if (tmp.IsImageRemake())
-                {
-                    _renderProcessor.DrawFreshTexture(
-                        tmp, _texture,
-                        area.GetX(), area.GetY(), area.GetWidth(), area.GetHeight(),
-                        w, h,
-                        _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
-                        GetItemPyramidLevel());
-                }
-                else
-                {
-                    _renderProcessor.DrawStoredTexture(
-                        tmp, _texture, area.GetX(), area.GetY(),
-                        _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
-                        GetItemPyramidLevel());
-                }
-                return;
+                _renderProcessor.DrawFreshTexture(
+                    image, _texture,
+                    area.GetX(), area.GetY(), area.GetWidth(), area.GetHeight(),
+                    w, h,
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    GetItemPyramidLevel());
             }
-            _renderProcessor.DrawTextureAsIs(
-                _texture, image, area.GetX(), area.GetY(), area.GetWidth(), area.GetHeight(),
-                w, h, _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
-                GetItemPyramidLevel());
+            else
+            {
+                _renderProcessor.DrawStoredTexture(
+                    image, _texture, area.GetX(), area.GetY(),
+                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    GetItemPyramidLevel());
+            }
         }
 
         private Pointer tooltipBorderIndent = new Pointer(10, 2);

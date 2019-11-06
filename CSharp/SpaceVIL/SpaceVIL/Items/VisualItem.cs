@@ -18,7 +18,7 @@ namespace SpaceVIL
     internal class VisualItem : BaseItem
     {
         private Object Locker = new Object();
-        internal Prototype _main;
+        internal Prototype prototype;
 
         private String _tooltip = String.Empty;
         internal String GetToolTip()
@@ -113,10 +113,10 @@ namespace SpaceVIL
         public override void RemoveItemFromListeners()
         {
             Prototype parent = GetParent();
-            parent.RemoveEventListener(GeometryEventType.ResizeWidth, this._main);
-            parent.RemoveEventListener(GeometryEventType.ResizeHeight, this._main);
-            parent.RemoveEventListener(GeometryEventType.MovedX, this._main);
-            parent.RemoveEventListener(GeometryEventType.MovedY, this._main);
+            parent.RemoveEventListener(GeometryEventType.ResizeWidth, this.prototype);
+            parent.RemoveEventListener(GeometryEventType.ResizeHeight, this.prototype);
+            parent.RemoveEventListener(GeometryEventType.MovedX, this.prototype);
+            parent.RemoveEventListener(GeometryEventType.MovedY, this.prototype);
         }
 
         internal virtual void AddItem(IBaseItem item)
@@ -652,7 +652,7 @@ namespace SpaceVIL
         internal void SetCustomFigure(CustomFigure figure)
         {
             IsCustom = figure;
-            SetRemakeRequest(true);
+            ItemsRefreshManager.SetRefreshShape(this.prototype);
         }
 
         public override void MakeShape()

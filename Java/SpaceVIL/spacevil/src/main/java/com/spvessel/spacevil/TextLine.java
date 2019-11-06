@@ -1,19 +1,16 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.InterfaceTextContainer;
+import com.spvessel.spacevil.Core.InterfaceTextImage;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-import org.lwjgl.BufferUtils;
 import com.spvessel.spacevil.SpaceVILConstants;
 
 import java.awt.*;
-import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static org.lwjgl.system.MemoryUtil.memAlloc;
 
 class TextLine extends TextItem implements InterfaceTextContainer {
     private static int count = 0;
@@ -119,7 +116,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         isBigExist = true;
     }
 
-    public TextPrinter getLetTextures() {
+    public InterfaceTextImage getTexture() {
         textLock.lock();
         try {
             CoreWindow wLayout = getHandler();
@@ -242,9 +239,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 // cacheBB.rewind();
                 _isUpdateNeed = false;
                 textPrt = new TextPrinter(cacheBB);
-                textPrt.widthTexture = bb_w;
-                textPrt.heightTexture = bb_h;
-                setRemakeText(true);
+                textPrt.setSize(bb_w, bb_h);
+                ItemsRefreshManager.setRefreshText(this);
             }
             updateCoords(parent);
             return textPrt;
@@ -418,11 +414,11 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         }
 
         int xFirstBeg = _letters.get(0).xBeg + _letters.get(0).xShift;
-        textPrt.xTextureShift = (int) alignShiftX + parent.getX() + xFirstBeg; // + _lineXShift
-        textPrt.yTextureShift = (int) alignShiftY + _lineYShift + parent.getY();
+        textPrt.setPosition((int) alignShiftX + parent.getX() + xFirstBeg,
+                (int) alignShiftY + _lineYShift + parent.getY());
 
         if (!_isRecountable) {
-            textPrt.xTextureShift += _lineXShift; //???
+            textPrt.setXOffset(textPrt.getXOffset() + _lineXShift);
         }
     }
 
@@ -540,17 +536,5 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 
     void setRecountable(boolean isRecountable) {
         _isRecountable = isRecountable;
-    }
-
-    private boolean _isRemakeText = true;
-
-    @Override
-    public void setRemakeText(boolean value) {
-        _isRemakeText = value;
-    }
-
-    @Override
-    public boolean isRemakeText() {
-        return _isRemakeText;
     }
 }

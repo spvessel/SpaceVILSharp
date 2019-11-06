@@ -182,6 +182,8 @@ public abstract class CoreWindow {
 
     public void setWindowName(String value) {
         _name = value;
+        if (windowLayout != null)
+            windowLayout.getContainer().setItemName(_name);
     }
 
     public String getWindowName() {

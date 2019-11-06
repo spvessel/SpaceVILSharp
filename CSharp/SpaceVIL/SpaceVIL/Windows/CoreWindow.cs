@@ -176,6 +176,8 @@ namespace SpaceVIL
         public void SetWindowName(String value)
         {
             _name = value;
+            if (windowLayout != null)
+                windowLayout.GetContainer().SetItemName(_name);
         }
 
         public String GetWindowName()

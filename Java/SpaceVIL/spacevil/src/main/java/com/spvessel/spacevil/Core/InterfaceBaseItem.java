@@ -61,8 +61,4 @@ public interface InterfaceBaseItem
     void setShadow(int radius, int x, int y, Color color);
 
     void release();
-
-    boolean isRemakeRequest();
-
-    void setRemakeRequest(boolean value);
 }

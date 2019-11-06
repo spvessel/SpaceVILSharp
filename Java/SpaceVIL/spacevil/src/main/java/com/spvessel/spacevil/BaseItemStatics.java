@@ -110,7 +110,7 @@ final class BaseItemStatics {
     }
 
     static void updatePrototypeBehavior(InterfaceBaseItem item, Prototype parent) {
-        Prototype prt = ((VisualItem) item)._main;
+        Prototype prt = ((VisualItem) item).prototype;
         updateBaseItemBehavior(prt, parent);
     }
 
@@ -257,7 +257,7 @@ final class BaseItemStatics {
 
     static void updatePrototypeGeometryAttr(InterfaceBaseItem item, Prototype parent, GeometryEventType type,
             int value) {
-        Prototype prt = ((VisualItem) item)._main;
+        Prototype prt = ((VisualItem) item).prototype;
         updateBaseItemGeometryAttr(prt, parent, type, value);
     }
 

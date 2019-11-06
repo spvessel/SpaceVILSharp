@@ -32,7 +32,5 @@ namespace SpaceVIL.Core
         int[] GetShadowExtension();
         void SetShadow(int radius, int x, int y, Color color);
         void Release();
-        bool IsRemakeRequest();
-        void SetRemakeRequest(bool value);
     }
 }

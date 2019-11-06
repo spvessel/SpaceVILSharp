@@ -100,6 +100,8 @@ namespace SpaceVIL
             linkEventKeyPress = ItemList.EventKeyPress;
         }
 
+        private int _selectionIndexStore = -1;
+
         /// <summary>
         /// Initialization and adding of all elements in the ComboBoxDropDown
         /// </summary>
@@ -112,6 +114,14 @@ namespace SpaceVIL
                 SaveAdditionalControls();
                 DisableAdditionalControls();
                 // ItemList.GetArea().SelectionChanged += OnSelectionChanged;
+                ItemList.GetArea().EventMouseClick += (sender, args) =>
+                {
+                    if (ItemList.GetSelection() != _selectionIndexStore)
+                    {
+                        OnSelectionChanged();
+                        _selectionIndexStore = ItemList.GetSelection();
+                    }
+                };
                 ItemList.GetArea().EventKeyPress += (sender, args) =>
                 {
                     if (args.Key == KeyCode.Escape)
@@ -162,9 +172,13 @@ namespace SpaceVIL
         public override void AddItem(IBaseItem item)
         {
             if (_init)
+            {
                 ItemList.AddItem(item);
+            }
             else
+            {
                 _queue.Add(item);
+            }
         }
 
         /// <summary>
