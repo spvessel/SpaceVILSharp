@@ -1407,22 +1407,42 @@ namespace SpaceVIL
                 return;
             }
 
+            bool isLinesChanged;
+
+            if (lineNum > 0)
+            {
+                isLinesChanged = HasThisAndNextLineCombination(lineNum - 1);
+                if (isLinesChanged)
+                {
+                    return;
+                }
+            }
+
+            if (lineNum < _lineBreakes.Count - 1)
+            {
+                isLinesChanged = HasThisAndNextLineCombination(lineNum);
+                if (isLinesChanged)
+                {
+                    return;
+                }
+            }
+
             int lineVal = _lineBreakes[lineNum];
             int nextLineVal = (lineNum < _lineBreakes.Count - 1) ? _lineBreakes[lineNum + 1] : lineVal + 1;
             String textInLine = textLine.GetText();
 
-            if (textLine.GetWidth() < _cursorXMax) // parentAllowWidth
-            {
-                if (lineVal == nextLineVal)
-                {
-                    int nextLet = GetTextLine(lineNum + 1).GetLetPosArray()[0];
-                    if (textLine.GetWidth() + nextLet < _cursorXMax)
-                    {
-                        CombineLines(new SpaceVIL.Core.Point(textInLine.Length, lineNum));
-                    }
-                }
-                return;
-            }
+            // if (textLine.GetWidth() < _cursorXMax) // parentAllowWidth
+            // {
+            //     if (lineVal == nextLineVal)
+            //     {
+            //         int nextLet = GetTextLine(lineNum + 1).GetLetPosArray()[0];
+            //         if (textLine.GetWidth() + nextLet < _cursorXMax)
+            //         {
+            //             CombineLines(new SpaceVIL.Core.Point(textInLine.Length, lineNum));
+            //         }
+            //     }
+            //     return;
+            // }
 
             List<int> letPosArr = textLine.GetLetPosArray();
 
@@ -1496,6 +1516,60 @@ namespace SpaceVIL
                 AddNewLine(newText, breakPos.Y + 1, false);
             }
         }
+
+        private bool HasThisAndNextLineCombination(int lineNum)
+        {
+            //checking before call
+            int currentLineVal = _lineBreakes[lineNum];
+            int nextLineVal = _lineBreakes[lineNum + 1];
+            if (currentLineVal == nextLineVal)
+            {
+                TextLine currentLine = GetTextLine(lineNum );
+                string currentText = currentLine.GetText();
+                TextLine nextLine = GetTextLine(lineNum + 1);
+                string nextText = nextLine.GetText();
+
+                if (currentLine.GetWidth() < _cursorXMax)
+                {
+                    List<int> nextLineLetPosArray = nextLine.GetLetPosArray();
+
+                if (nextLineLetPosArray.Count != 0)
+                {
+                    if (currentText.EndsWith(" "))
+                    {
+                        int firstSpaceInd = nextText.IndexOf(" ");
+                        if (firstSpaceInd > 0)
+                        {
+                            if (currentLine.GetWidth() + nextLineLetPosArray[firstSpaceInd] < _cursorXMax)
+                            {
+                                CombineLines(new SpaceVIL.Core.Point(currentText.Length, lineNum));
+                                return true;
+                            }
+                        }
+                    }
+                    else if (!nextText.StartsWith(" "))
+                    {
+                        if (nextLineLetPosArray.Count >= 3)
+                        {
+                            if (currentLine.GetWidth() + nextLineLetPosArray[2] < _cursorXMax)
+                            {
+                                CombineLines(new SpaceVIL.Core.Point(currentText.Length, lineNum));
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Пока плохо работает из-за положения курсора
+            // if (nextText.StartsWith(" ") && !currentText.EndsWith(" ")) {
+            //     //move space to previous line directly, without checking
+            //     currentLine.SetItemText(currentText + " ");
+            //     nextLine.SetItemText(nextText.Substring(1));
+            // }
+        }
+        return false;
+    }
 
         private int BinarySearch(int fromInd, int toInd, List<int> searchingList, int testValue)
         {
