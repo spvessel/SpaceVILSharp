@@ -48,7 +48,7 @@ namespace SpaceVIL
             {
                 Border border = CloneBorder(currentState.Border);
                 if (!item.GetBorderDirect().GetRadius().Equals(baseState.Border.GetRadius()))
-                    item.SetRemakeRequest(true);
+                    ItemsRefreshManager.SetRefreshShape(item.prototype);
 
                 item._border = border;
             }
@@ -70,7 +70,7 @@ namespace SpaceVIL
                     if (!borderCurrentState.GetRadius().Equals(borderState.GetRadius()))
                     {
                         item._border.SetRadius(borderState.GetRadius());
-                        item.SetRemakeRequest(true);
+                        ItemsRefreshManager.SetRefreshShape(item.prototype);
                     }
                 }
                 else
@@ -80,7 +80,7 @@ namespace SpaceVIL
                         if (!borderCurrentState.GetRadius().Equals(prevState.Border.GetRadius()))
                         {
                             item._border.SetRadius(prevState.Border.GetRadius());
-                            item.SetRemakeRequest(true);
+                            ItemsRefreshManager.SetRefreshShape(item.prototype);
                         }
                     }
                 }

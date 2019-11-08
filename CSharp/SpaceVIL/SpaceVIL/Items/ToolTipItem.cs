@@ -32,7 +32,8 @@ namespace SpaceVIL
         {
             SetVisible(false);
             _textObject = new Label();
-            SetItemName("ToolTip");
+            SetItemName("ToolTipItem");
+            _textObject.SetItemName("TooltipLabel");
             IsFocusable = false;
             _queue = new Queue<IBaseItem>();
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ToolTipItem)));

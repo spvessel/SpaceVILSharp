@@ -28,14 +28,6 @@ import com.spvessel.spacevil.Flags.SizePolicy;
 
 abstract public class Prototype implements InterfaceBaseItem {
 
-    public final boolean isRemakeRequest() {
-        return _core.isRemakeRequest();
-    }
-
-    public final void setRemakeRequest(boolean value) {
-        _core.setRemakeRequest(value);
-    }
-
     // private InterfaceVisualItem _core = new VisualItem();
     private VisualItem _core = new VisualItem();
 
@@ -55,7 +47,7 @@ abstract public class Prototype implements InterfaceBaseItem {
     public Prototype() {
         _core.setItemName("VisualItem_" + count);
         count++;
-        _core._main = this;
+        _core.prototype = this;
     }
 
     /**

@@ -13,84 +13,84 @@ namespace View
         // TreeView treeview = new TreeView();
         // Grid block = new Grid(2, 2);
 
-        TabView tabs = new TabView();
-        Tab tab1 = new Tab("FirstLeftTab");
-        Tab tab2 = new Tab("List1");
-        Tab tab3 = new Tab("List2");
-        TitleBar title = new TitleBar(nameof(Containers));
+        // TabView tabs = new TabView();
+        // Tab tab1 = new Tab("FirstLeftTab");
+        // Tab tab2 = new Tab("List1");
+        // Tab tab3 = new Tab("List2");
+        // TitleBar title = new TitleBar(nameof(Containers));
 
         public override void InitWindow()
         {
-            SetParameters(nameof(Containers), nameof(Containers), 700, 500, false);
+            SetParameters(nameof(Containers), nameof(Containers), 700, 500, true);
             this.SetMinSize(400, 400);
             this.IsCentered = true;
 
-            title.SetShadow(5, 0, 3, Color.FromArgb(150, 0, 0, 0));
-            this.AddItem(title);
+            // title.SetShadow(5, 0, 3, Color.FromArgb(150, 0, 0, 0));
+            // this.AddItem(title);
 
             Frame cc = new Frame();
-            cc.SetMargin(0, title.GetHeight() + 10, 0, 0);
+            // cc.SetMargin(0, title.GetHeight() + 10, 0, 0);
             cc.SetBackground(50, 50, 50);
             this.AddItem(cc);
 
-            cc.AddItem(tabs);
+            // cc.AddItem(tabs);
 
-            // tab1.SetDraggable(false);
-            // tab1.SetMaxWidth(30);
-            tabs.AddTabs(tab1, tab2, tab3,
-                new Tab("TabForTest1"),
-                new Tab("TabForTest2")//, 
-                                      // new Tab("TabForTest3"), 
-                                      // new Tab("TabForTest4"),
-                                      // new Tab("TabForTest5")
-                );
-            tabs.SetContentPolicy(SizePolicy.Expand);
+            // // tab1.SetDraggable(false);
+            // // tab1.SetMaxWidth(30);
+            // tabs.AddTabs(tab1, tab2, tab3,
+            //     new Tab("TabForTest1"),
+            //     new Tab("TabForTest2")//, 
+            //                           // new Tab("TabForTest3"), 
+            //                           // new Tab("TabForTest4"),
+            //                           // new Tab("TabForTest5")
+            //     );
+            // tabs.SetContentPolicy(SizePolicy.Expand);
 
-            EventKeyPress += (sender, args) =>
-            {
-                if (args.Key == KeyCode.Menu)
-                    foreach (Tab tab in tabs.GetTabs())
-                        tab.SetClosable(!tab.IsClosable());
-                if (args.Key == KeyCode.Delete)
-                {
-                    ClearAllTabs();
-                }
-                if (args.Key == KeyCode.Enter)
-                {
-                    if (tabs != null)
-                    {
-                        Console.WriteLine(tabs.GetTabs().Count);
-                    }
-                }
-            };
+            // EventKeyPress += (sender, args) =>
+            // {
+            //     if (args.Key == KeyCode.Menu)
+            //         foreach (Tab tab in tabs.GetTabs())
+            //             tab.SetClosable(!tab.IsClosable());
+            //     if (args.Key == KeyCode.Delete)
+            //     {
+            //         ClearAllTabs();
+            //     }
+            //     if (args.Key == KeyCode.Enter)
+            //     {
+            //         if (tabs != null)
+            //         {
+            //             Console.WriteLine(tabs.GetTabs().Count);
+            //         }
+            //     }
+            // };
 
-            Grid grid = new Grid(3, 4);
-            grid.SetBackground(255, 255, 255, 20);
-            grid.SetSpacing(20, 20);
-            grid.SetMargin(20, 30, 20, 30);
-            tabs.AddItemToTabByName("FirstLeftTab", grid);
-            // Grid subgrid = new Grid(1, 2);
-            // grid.InsertItem(subgrid, 1, 1);
+            // Grid grid = new Grid(3, 4);
+            // grid.SetBackground(255, 255, 255, 20);
+            // grid.SetSpacing(20, 20);
+            // grid.SetMargin(20, 30, 20, 30);
+            // tabs.AddItemToTabByName("FirstLeftTab", grid);
+            // // Grid subgrid = new Grid(1, 2);
+            // // grid.InsertItem(subgrid, 1, 1);
 
-            // subgrid.AddItems(new VerticalScrollBar(), new VerticalScrollBar());
-            for (int i = 0; i < 12; i++)
-            {
-                ButtonCore h_btn = GetButton("Button №" + i, 150, 50, SizePolicy.Expand);
-                h_btn.SetMaxSize(200, 100);
-                h_btn.SetBackground(121, 223, 152);
-                grid.AddItem(h_btn);
-            }
+            // // subgrid.AddItems(new VerticalScrollBar(), new VerticalScrollBar());
+            // for (int i = 0; i < 12; i++)
+            // {
+            //     ButtonCore h_btn = GetButton("Button №" + i, 150, 50, SizePolicy.Expand);
+            //     h_btn.SetMaxSize(200, 100);
+            //     h_btn.SetBackground(121, 223, 152);
+            //     grid.AddItem(h_btn);
+            // }
 
-            tab1.EventOnClose += () =>
-            {
-                Console.WriteLine("close");
-            };
+            // tab1.EventOnClose += () =>
+            // {
+            //     Console.WriteLine("close");
+            // };
 
-            // BlankItem b1 = GetBlankItem("Blank1");
+            BlankItem b1 = GetBlankItem("Blank1");
             // BlankItem b2 = GetBlankItem("Blank2");
             // BlankItem b3 = GetBlankItem("Blank3");
 
-            // cc.AddItem(b1);
+            cc.AddItem(b1);
             // b1.AddItem(b2);
             // b2.AddItem(b3);
 
@@ -98,28 +98,32 @@ namespace View
 
             // b3.SetPassEvents(false);
             // b2.SetPassEvents(false);
-            // // b2.SetPassEvents(true, InputEventType.KeyPress, InputEventType.KeyRelease);
+            // b2.SetPassEvents(true, InputEventType.KeyPress, InputEventType.KeyRelease);
 
-            // EventMouseClick += (sender, args) =>
-            // {
-            //     Console.WriteLine(sender.GetItemName() + " EventMouseClick");
-            // };
-            // EventMouseDoubleClick += (sender, args) =>
-            // {
-            //     Console.WriteLine(sender.GetItemName() + " EventMouseDoubleClick");
-            // };
-            // EventKeyPress += (sender, args) =>
-            // {
-            //     Console.WriteLine(sender.GetItemName() + " EventKeyPress");
-            // };
-            // EventKeyRelease += (sender, args) =>
-            // {
-            //     Console.WriteLine(sender.GetItemName() + " EventKeyRelease");
-            // };
-            // EventMouseHover += (sender, args) =>
-            // {
-            //     Console.WriteLine(sender.GetItemName() + " EventMouseHover");
-            // };
+            EventMouseClick += (sender, args) =>
+            {
+                // Console.WriteLine(sender.GetItemName() + " EventMouseClick");
+            };
+            EventMouseDoubleClick += (sender, args) =>
+            {
+                // Console.WriteLine(sender.GetItemName() + " EventMouseDoubleClick");
+            };
+            EventKeyPress += (sender, args) =>
+            {
+                if (args.Key == KeyCode.R)
+                {
+                    ItemsRefreshManager.PrintSizeOfShapes();
+                }
+                // Console.WriteLine(sender.GetItemName() + " EventKeyPress");
+            };
+            EventKeyRelease += (sender, args) =>
+            {
+                // Console.WriteLine(sender.GetItemName() + " EventKeyRelease");
+            };
+            EventMouseHover += (sender, args) =>
+            {
+                // Console.WriteLine(sender.GetItemName() + " EventMouseHover");
+            };
 
 
             // cc.AddItem(tabs);
@@ -447,15 +451,15 @@ namespace View
             // c3.AddItem(GetLabel("10. SpaceVIL.VerticalStack"));
         }
 
-        private void ClearAllTabs()
-        {
-            tabs.RemoveAllTabs();
-            tabs.GetParent().RemoveItem(tabs);
-            // title.RemoveItem(tabs);
-            tab1 = null;
-            tab2 = null;
-            tab3 = null;
-        }
+        // private void ClearAllTabs()
+        // {
+        //     tabs.RemoveAllTabs();
+        //     tabs.GetParent().RemoveItem(tabs);
+        //     // title.RemoveItem(tabs);
+        //     tab1 = null;
+        //     tab2 = null;
+        //     tab3 = null;
+        // }
 
         private BlankItem GetBlankItem(String name)
         {

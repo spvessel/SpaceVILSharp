@@ -23,8 +23,6 @@ import javax.swing.Timer;
 
 public final class ToolTipItem extends Prototype implements InterfaceFloating {
 
-    private static int count = 0;
-
     private Label _textObject;
 
     Label getTextLabel() {
@@ -47,8 +45,8 @@ public final class ToolTipItem extends Prototype implements InterfaceFloating {
     protected ToolTipItem() {
         setVisible(false);
         _textObject = new Label();
-        setItemName("ToolTip_" + count);
-        count++;
+        setItemName("ToolTipItem");
+        _textObject.setItemName("ToolTipLabel");
         isFocusable = false;
         _queue = new ArrayDeque<>();
         setStyle(DefaultsService.getDefaultStyle(ToolTipItem.class));

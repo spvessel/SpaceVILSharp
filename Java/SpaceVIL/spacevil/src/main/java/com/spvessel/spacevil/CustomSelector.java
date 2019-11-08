@@ -46,7 +46,7 @@ class CustomSelector extends Primitive {
         setWidth(w2 - w1);
         setHeight(h2 - h1);
         setTriangles(triangles);
-        setRemakeRequest(true);
+        ItemsRefreshManager.setRefreshShape(this);
     }
 
     /**

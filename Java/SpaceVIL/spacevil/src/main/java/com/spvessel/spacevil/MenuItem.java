@@ -21,11 +21,11 @@ public class MenuItem extends Prototype {
     public boolean isActionItem = false;
     private static int count = 0;
     private Label _textObject;
-    ContextMenu _context_menu;
+    ContextMenu contextMenu;
     private ContextMenu _sub_context_menu;
 
     public Prototype getSender() {
-        return _context_menu.getSender();
+        return contextMenu.getSender();
     }
 
     /**
@@ -253,15 +253,15 @@ public class MenuItem extends Prototype {
         args.button = MouseButton.BUTTON_RIGHT;
 
         // проверка справа
-        args.position.setX((_context_menu.getX() + _context_menu.getWidth() + 2));
+        args.position.setX((contextMenu.getX() + contextMenu.getWidth() + 2));
 
         if (args.position.getX() + _sub_context_menu.getWidth() > getHandler().getWidth()) {
-            args.position.setX((_context_menu.getX() - _sub_context_menu.getWidth() - 2));
+            args.position.setX((contextMenu.getX() - _sub_context_menu.getWidth() - 2));
         }
         // проверка снизу
         args.position.setY(getY());
         if (args.position.getY() + _sub_context_menu.getHeight() > getHandler().getHeight()) {
-            args.position.setY(_context_menu.getY() + _context_menu.getHeight() - _sub_context_menu.getHeight());
+            args.position.setY(contextMenu.getY() + contextMenu.getHeight() - _sub_context_menu.getHeight());
         }
 
         _sub_context_menu.show(this, args);

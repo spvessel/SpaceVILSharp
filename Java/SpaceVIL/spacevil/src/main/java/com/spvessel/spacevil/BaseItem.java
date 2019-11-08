@@ -59,7 +59,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
         if (itemParent != null)
             itemParent.removeItem(item);
 
-        item.setParent(((VisualItem) this)._main);
+        item.setParent(((VisualItem) this).prototype);
         itemParent = item.getParent();
 
         // refactor events verification
@@ -230,22 +230,6 @@ public abstract class BaseItem implements InterfaceBaseItem {
     }
 
     // geometry
-    private boolean _remakeRequest = true;
-
-    public boolean isRemakeRequest() {
-        return _remakeRequest;
-    }
-
-    long countttt = 0;
-
-    public void setRemakeRequest(boolean value) {
-        // if (this instanceof VisualItem)
-        //     System.out.println(
-        //             "Remake " + getItemName() + " " + ((VisualItem) this).getBorderThickness() + " "
-        //                     + ((VisualItem) this).getBorderFill() + " " + countttt++);
-        _remakeRequest = value;
-    }
-
     private Geometry _itemGeometry = new Geometry();
 
     /**
@@ -257,7 +241,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
     public void setWidth(int width) {
         _itemGeometry.setWidth(width);
-        setRemakeRequest(true);
+        ItemsRefreshManager.setRefreshShape(this);
     }
 
     public void setMaxWidth(int width) {
@@ -285,7 +269,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
 
     public void setHeight(int height) {
         _itemGeometry.setHeight(height);
-        setRemakeRequest(true);
+        ItemsRefreshManager.setRefreshShape(this);
     }
 
     public void setMaxHeight(int height) {
@@ -365,11 +349,11 @@ public abstract class BaseItem implements InterfaceBaseItem {
     public void setWidthPolicy(SizePolicy policy) {
         if (_itemBehavior.getWidthPolicy() != policy) {
             _itemBehavior.setWidthPolicy(policy);
-            setRemakeRequest(true);
+            ItemsRefreshManager.setRefreshShape(this);
 
             if (this instanceof VisualItem) {
                 VisualItem vItem = (VisualItem) this;
-                Prototype protoItem = vItem._main;
+                Prototype protoItem = vItem.prototype;
 
                 if (protoItem instanceof InterfaceFloating) {
                     if (policy == SizePolicy.EXPAND)
@@ -390,11 +374,11 @@ public abstract class BaseItem implements InterfaceBaseItem {
     public void setHeightPolicy(SizePolicy policy) {
         if (_itemBehavior.getHeightPolicy() != policy) {
             _itemBehavior.setHeightPolicy(policy);
-            setRemakeRequest(true);
+            ItemsRefreshManager.setRefreshShape(this);
 
             if (this instanceof VisualItem) {
                 VisualItem vItem = (VisualItem) this;
-                Prototype protoItem = vItem._main;
+                Prototype protoItem = vItem.prototype;
 
                 if (protoItem instanceof InterfaceFloating) {
                     if (policy == SizePolicy.EXPAND)

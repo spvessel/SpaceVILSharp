@@ -40,10 +40,10 @@ public class Program {
         ComplexTest ct = new ComplexTest();
         InputTest it = new InputTest();
         TextTest tt = new TextTest();
-        Containers con = new Containers();
+        // Containers con = new Containers();
         SideAreaTest sat = new SideAreaTest();
 
-        PerformanceTest pt = new PerformanceTest();
+        // PerformanceTest pt = new PerformanceTest();
 
         // EventTest et = new EventTest();
         // et.show();
@@ -60,14 +60,14 @@ public class Program {
         // WindowManager.setRenderType(RenderType.ALWAYS);
 
         WindowManager.startWith(
-            // mw
+            mw
         //, mw2
         // st
         // im
         // ft
         // lt
         // ct
-         it
+        //  it
         // tt
         // con
         // sat

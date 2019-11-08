@@ -78,6 +78,7 @@ namespace SpaceVIL
             ItemList.EventScrollDown = null;
             ItemList.EventMouseClick = null;
             ItemList.EventKeyPress = null;
+
             ItemList.GetArea().EventKeyPress += (sender, args) =>
             {
                 if (args.Key == KeyCode.Escape)
@@ -95,6 +96,12 @@ namespace SpaceVIL
                     }
                 }
             };
+
+            foreach (IBaseItem item in _queue)
+            {
+                ItemList.AddItem(item);
+            }
+
             _init = true;
         }
 
@@ -143,13 +150,21 @@ namespace SpaceVIL
             MenuItem tmp = (item as MenuItem);
             if (tmp != null)
             {
-                tmp._context_menu = this;
+                tmp.contextMenu = this;
                 tmp.EventMouseClick += (sender, args) =>
                 {
                     OnSelectionChanged(tmp);
                 };
             }
-            _queue.Enqueue(item);
+            if (_init)
+            {
+                ItemList.AddItem(item);
+            }
+            else
+            {
+                _queue.Enqueue(item);
+            }
+            _added = false;
         }
 
         /// <summary>
@@ -208,10 +223,6 @@ namespace SpaceVIL
                     InitElements();
                 if (!_added)
                 {
-                    foreach (IBaseItem item in _queue)
-                    {
-                        ItemList.AddItem(item);
-                    }
                     UpdateSize();
                     _added = true;
                 }
@@ -242,6 +253,7 @@ namespace SpaceVIL
                 ItemList.GetArea().SetFocus();
             }
         }
+        
         public void Show()
         {
             MouseArgs margs = new MouseArgs();

@@ -10,6 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceImageItem;
 import com.spvessel.spacevil.Core.InterfaceTextContainer;
+import com.spvessel.spacevil.Core.InterfaceTextImage;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
 
 final class RenderProcessor {
@@ -89,7 +90,7 @@ final class RenderProcessor {
 
         if (vertex == null)
             return;
-            
+
         shader.useShader();
         VramVertex store = new VramVertex();
         store.genBuffers(vertex);
@@ -138,7 +139,7 @@ final class RenderProcessor {
 
         VramVertex store = vertexStorage.getResource(item);
         if (store == null) {
-            item.setRemakeRequest(true);
+            ItemsRefreshManager.setRefreshShape(item);
             return;
         }
 
@@ -172,42 +173,41 @@ final class RenderProcessor {
         vertexStorage.addResource(item, store);
     }
 
-    void drawFreshText(Shader shader, InterfaceTextContainer item, TextPrinter printer, float w, float h, float level,
-            float[] color) {
+    void drawFreshText(Shader shader, InterfaceTextContainer item, InterfaceTextImage printer, float w, float h,
+            float level, float[] color) {
 
         textStorage.deleteResource(item);
 
-        byte[] buffer = printer.texture;
-        if (buffer == null || buffer.length == 0)
+        if (printer.isEmpty())
             return;
 
         shader.useShader();
         VramTexture store = new VramTexture();
-        store.genBuffers(0, printer.widthTexture, 0, printer.heightTexture, true);
-        store.genTexture(printer.widthTexture, printer.heightTexture, buffer);
+        store.genBuffers(0, printer.getWidth(), 0, printer.getHeight(), true);
+        store.genTexture(printer.getWidth(), printer.getHeight(), printer.getBytes());
         textStorage.addResource(item, store);
 
         store.sendUniformSample2D(shader, "tex");
-        store.sendUniform4f(shader, "position", new float[] { printer.xTextureShift, printer.yTextureShift, w, h });
+        store.sendUniform4f(shader, "position", new float[] { printer.getXOffset(), printer.getYOffset(), w, h });
         store.sendUniform1f(shader, "level", level);
         store.sendUniform4f(shader, "rgb", color);
         store.draw();
         store.unbind();
     }
 
-    void drawStoredText(Shader shader, InterfaceTextContainer item, TextPrinter printer, float w, int h, float level,
-            float[] color) {
+    void drawStoredText(Shader shader, InterfaceTextContainer item, InterfaceTextImage printer, float w, int h,
+            float level, float[] color) {
 
         VramTexture store = textStorage.getResource(item);
         if (store == null) {
-            item.setRemakeText(true);
+            ItemsRefreshManager.setRefreshText(item);
             return;
         }
         shader.useShader();
         store.bindVboIbo();
         store.bind();
         store.sendUniformSample2D(shader, "tex");
-        store.sendUniform4f(shader, "position", new float[] { printer.xTextureShift, printer.yTextureShift, w, h });
+        store.sendUniform4f(shader, "position", new float[] { printer.getXOffset(), printer.getYOffset(), w, h });
         store.sendUniform1f(shader, "level", level);
         store.sendUniform4f(shader, "rgb", color);
         store.draw();
@@ -343,8 +343,8 @@ final class RenderProcessor {
         store.clear();
     }
 
-    void drawFreshTexture(ImageItem image, Shader shader, float ax, float ay, float aw, float ah, int iw, int ih,
-            int width, int height, float level) {
+    void drawFreshTexture(InterfaceImageItem image, Shader shader, float ax, float ay, float aw, float ah, int iw,
+            int ih, int width, int height, float level) {
 
         textureStorage.deleteResource(image);
         BufferedImage bmp = image.getImage();
@@ -361,7 +361,8 @@ final class RenderProcessor {
         tex.genTexture(iw, ih, bmp);
         // tex.genTexture(iw, ih, buffer);
         textureStorage.addResource(image, tex);
-        image.setImageRemake(false);
+        
+        ItemsRefreshManager.removeImage(image);
 
         tex.sendUniformSample2D(shader, "tex");
         if (image.isColorOverlay()) {
@@ -381,10 +382,11 @@ final class RenderProcessor {
         tex.unbind();
     }
 
-    void drawStoredTexture(ImageItem image, Shader shader, float ax, float ay, int width, int height, float level) {
+    void drawStoredTexture(InterfaceImageItem image, Shader shader, float ax, float ay, int width, int height,
+            float level) {
         VramTexture tex = textureStorage.getResource(image);
         if (tex == null) {
-            image.setImageRemake(true);
+            ItemsRefreshManager.setRefreshImage(image);
             return;
         }
 
@@ -442,13 +444,22 @@ final class RenderProcessor {
     }
 
     <T> void freeResource(T resource) {
-        if (resource instanceof InterfaceTextContainer)
-            textStorage.flushResource((InterfaceTextContainer) resource);
-        if (resource instanceof InterfaceImageItem)
-            textureStorage.flushResource((InterfaceImageItem) resource);
+        if (resource instanceof InterfaceTextContainer) {
+            InterfaceTextContainer text = (InterfaceTextContainer) resource;
+            ItemsRefreshManager.removeText(text);
+            textStorage.flushResource(text);
+        }
+        if (resource instanceof InterfaceImageItem) {
+            InterfaceImageItem image = (InterfaceImageItem) resource;
+            ItemsRefreshManager.removeImage(image);
+            textureStorage.flushResource(image);
+        }
         if (resource instanceof InterfaceBaseItem) {
-            vertexStorage.flushResource((InterfaceBaseItem) resource);
-            shadowStorage.flushResource((InterfaceBaseItem) resource);
+            InterfaceBaseItem item = (InterfaceBaseItem) resource;
+            ItemsRefreshManager.removeShape(item);
+
+            vertexStorage.flushResource(item);
+            shadowStorage.flushResource(item);
         }
     }
 }

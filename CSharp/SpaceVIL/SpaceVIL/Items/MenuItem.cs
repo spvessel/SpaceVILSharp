@@ -12,12 +12,12 @@ namespace SpaceVIL
         public bool IsActionItem = false;
         static int count = 0;
         private Label _textObject;
-        internal ContextMenu _context_menu;
+        internal ContextMenu contextMenu;
         private ContextMenu _sub_context_menu;
 
         public Prototype GetSender()
         {
-            return _context_menu.GetSender();
+            return contextMenu.GetSender();
         }
 
         /// <returns> sub context menu </returns>
@@ -256,16 +256,16 @@ namespace SpaceVIL
             args.Button = MouseButton.ButtonRight;
 
             //проверка справа
-            args.Position.SetX(_context_menu.GetX() + _context_menu.GetWidth() + 2);
+            args.Position.SetX(contextMenu.GetX() + contextMenu.GetWidth() + 2);
             if (args.Position.GetX() + _sub_context_menu.GetWidth() > GetHandler().GetWidth())
             {
-                args.Position.SetX(_context_menu.GetX() - _sub_context_menu.GetWidth() - 2);
+                args.Position.SetX(contextMenu.GetX() - _sub_context_menu.GetWidth() - 2);
             }
             //проверка снизу
             args.Position.SetY(GetY());
             if (args.Position.GetY() + _sub_context_menu.GetHeight() > GetHandler().GetHeight())
             {
-                args.Position.SetY(_context_menu.GetY() + _context_menu.GetHeight() - _sub_context_menu.GetHeight());
+                args.Position.SetY(contextMenu.GetY() + contextMenu.GetHeight() - _sub_context_menu.GetHeight());
             }
 
             _sub_context_menu.Show(this, args);

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Threading;
 using SpaceVIL.Common;
@@ -231,7 +227,7 @@ namespace SpaceVIL
         {
             UpdateVerticalPosition();
             UpdateHorizontalPosition();
-            SetImageRemake(true);
+            ItemsRefreshManager.SetRefreshImage(this);
         }
 
         private void UpdateHorizontalPosition()
@@ -273,34 +269,6 @@ namespace SpaceVIL
         {
             if(_image != null)
                 _image.Dispose();
-        }
-
-        //подумать над общим решением
-        private Object _lock = new Object();
-        private bool _isNew = true;
-        protected internal bool IsImageRemake()
-        {
-            Monitor.Enter(_lock);
-            try
-            {
-                return _isNew;
-            }
-            finally
-            {
-                Monitor.Exit(_lock);
-            }
-        }
-        protected internal void SetImageRemake(bool value)
-        {
-            Monitor.Enter(_lock);
-            try
-            {
-                _isNew = value;
-            }
-            finally
-            {
-                Monitor.Exit(_lock);
-            }
         }
     }
 }

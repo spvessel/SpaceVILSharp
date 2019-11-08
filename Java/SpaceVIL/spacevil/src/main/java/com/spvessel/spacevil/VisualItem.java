@@ -20,7 +20,7 @@ final class VisualItem extends BaseItem {
 
     private Lock locker = new ReentrantLock();
 
-    Prototype _main;
+    Prototype prototype;
 
     VisualItem() {
         this("VisualItem_");
@@ -237,10 +237,10 @@ final class VisualItem extends BaseItem {
     @Override
     public void removeItemFromListeners() {
         Prototype parent = getParent();
-        parent.removeEventListener(GeometryEventType.RESIZE_WIDTH, this._main);
-        parent.removeEventListener(GeometryEventType.RESIZE_HEIGHT, this._main);
-        parent.removeEventListener(GeometryEventType.MOVED_X, this._main);
-        parent.removeEventListener(GeometryEventType.MOVED_Y, this._main);
+        parent.removeEventListener(GeometryEventType.RESIZE_WIDTH, this.prototype);
+        parent.removeEventListener(GeometryEventType.RESIZE_HEIGHT, this.prototype);
+        parent.removeEventListener(GeometryEventType.MOVED_X, this.prototype);
+        parent.removeEventListener(GeometryEventType.MOVED_Y, this.prototype);
     }
 
     void addItem(InterfaceBaseItem item) {
@@ -595,9 +595,7 @@ final class VisualItem extends BaseItem {
 
     void setCustomFigure(CustomFigure figure) {
         _is_custom = figure;
-        if (getItemName() == "_remove")
-            System.out.println(_is_custom == null);
-        setRemakeRequest(true);
+        ItemsRefreshManager.setRefreshShape(this.prototype);
     }
 
     @Override

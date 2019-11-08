@@ -7,6 +7,7 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.EventKeyMethodState;
 import com.spvessel.spacevil.Core.EventMouseMethodState;
+import com.spvessel.spacevil.Core.InputEventArgs;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceFloating;
 import com.spvessel.spacevil.Core.InterfaceItem;
@@ -129,6 +130,8 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
             linkEventKeyPress.add(action);
     }
 
+    private int _selectionIndexStore = -1;
+
     /**
      * Initialization and adding of all elements in the ContextMenu
      */
@@ -139,7 +142,14 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
             super.addItem(itemList);
             saveAdditionalControls();
             disableAdditionalControls();
-            // itemList.getArea().selectionChanged.add(this::onSelectionChanged);
+            // itemList.getArea().selectionChanged.add(() -> onSelectionChanged());
+            itemList.getArea().eventMouseClick.add((sender, args) -> {
+                if (itemList.getSelection() != _selectionIndexStore) {
+                    onSelectionChanged();
+                    _selectionIndexStore = itemList.getSelection();
+                }
+            });
+
             itemList.getArea().eventKeyPress.add((sender, args) -> {
                 if (args.key == KeyCode.ESCAPE) {
                     hide();
@@ -184,10 +194,11 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
-        if (_init)
+        if (_init) {
             itemList.addItem(item);
-        else
+        } else {
             _queue.add(item);
+        }
     }
 
     /**

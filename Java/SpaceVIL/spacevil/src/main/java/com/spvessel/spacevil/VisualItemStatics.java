@@ -49,12 +49,12 @@ final class VisualItemStatics {
         if (baseState == currentState) {
             Border border = cloneBorder(currentState.border);
             if (!item.getBorderDirect().getRadius().equals(baseState.border.getRadius())) {
-                item.setRemakeRequest(true);
+                ItemsRefreshManager.setRefreshShape(item.prototype);
             }
             item._border = border;
         }
     }
-
+    static int coubt = 0;
     static void updateVisualProperties(VisualItem item, ItemState state, ItemState prevState) {
         ItemState currentState = item.getState(item.getCurrentStateType());
         item.setBackgroundDirect(GraphicsMathService.mixColors(currentState.background, state.background));
@@ -67,13 +67,13 @@ final class VisualItemStatics {
             if (!borderState.getRadius().isCornersZero()) {
                 if (!borderCurrentState.getRadius().equals(borderState.getRadius())) {
                     item._border.setRadius(borderState.getRadius());
-                    item.setRemakeRequest(true);
+                    ItemsRefreshManager.setRefreshShape(item.prototype);
                 }
             } else {
                 if (!prevState.border.getRadius().isCornersZero()) {
                     if (!borderCurrentState.getRadius().equals(prevState.border.getRadius())) {
                         item._border.setRadius(prevState.border.getRadius());
-                        item.setRemakeRequest(true);
+                        ItemsRefreshManager.setRefreshShape(item.prototype);
                     }
                 }
             }

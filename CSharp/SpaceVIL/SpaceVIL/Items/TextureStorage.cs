@@ -1012,7 +1012,7 @@ namespace SpaceVIL
 
             if (fromPt.Y == toPt.Y)
             {
-                if (GetTextLine(fromPt.Y).GetLetTextures() == null) // _linesList[fromPt.Y].GetLetTextures() == null)
+                if (GetTextLine(fromPt.Y).GetTexture() == null) // _linesList[fromPt.Y].GetLetTextures() == null)
                 {
                     return null;
                 }
@@ -1048,7 +1048,7 @@ namespace SpaceVIL
             tmp.Y = fromPt.Y;
             xy2 = CursorPosToCoordAndGlobalShifts(tmp);
 
-            if (GetTextLine(fromPt.Y).GetLetTextures() != null) //_linesList[fromPt.Y].GetLetTextures() != null)
+            if (GetTextLine(fromPt.Y).GetTexture() != null) //_linesList[fromPt.Y].GetLetTextures() != null)
             {
                 if (xy2.X >= 0 && xy1.X <= _cursorXMax)
                 {
@@ -1075,7 +1075,7 @@ namespace SpaceVIL
             xy1 = CursorPosToCoordAndGlobalShifts(tmp);
             xy2 = CursorPosToCoordAndGlobalShifts(toPt);
 
-            if (GetTextLine(toPt.Y).GetLetTextures() != null) //_linesList[toPt.Y].GetLetTextures() != null)
+            if (GetTextLine(toPt.Y).GetTexture() != null) //_linesList[toPt.Y].GetLetTextures() != null)
             {
                 if (xy2.X >= 0 && xy1.X <= _cursorXMax)
                 {
@@ -1106,7 +1106,7 @@ namespace SpaceVIL
                 tmp.Y = i;
                 xy2 = CursorPosToCoordAndGlobalShifts(tmp);
 
-                if (GetTextLine(i).GetLetTextures() != null) //_linesList[i].GetLetTextures() != null)
+                if (GetTextLine(i).GetTexture() != null) //_linesList[i].GetLetTextures() != null)
                 {
                     if (xy2.X >= 0 && xy1.X <= _cursorXMax)
                     {
@@ -1158,7 +1158,7 @@ namespace SpaceVIL
         private bool _isUpdateTextureNeed = true;
         private TextPrinter _blockTexture = null;
         private int _firstVisibleLineNumb = -1;
-        public TextPrinter GetLetTextures()
+        public ITextImage GetTexture()
         {
             Monitor.Enter(textInputLock);
             try
@@ -1186,7 +1186,7 @@ namespace SpaceVIL
                         }
                     }
 
-                    List<TextPrinter> tpLines = new List<TextPrinter>();
+                    List<ITextImage> tpLines = new List<ITextImage>();
                     int w = 0, h = 0, bigWidth = 0;
                     int lineHeigh = (int)(GetLineY(1) * _screenScale);
                     int visibleHeight = 0;
@@ -1195,7 +1195,7 @@ namespace SpaceVIL
                     foreach (TextLine tl in _linesList)
                     {
                         inc++;
-                        TextPrinter tmp = tl.GetLetTextures();
+                        ITextImage tmp = tl.GetTexture();
                         tpLines.Add(tmp);
                         h += lineHeigh;//tmp.HeightTexture;
                         w = (w > tl.GetWidth()) ? w : tl.GetWidth();
@@ -1207,7 +1207,7 @@ namespace SpaceVIL
                         //{
                         //    int bw = 0;
                         //    if (tmp != null)
-                        int bw = tmp.WidthTexture;
+                        int bw = tmp.GetWidth();
                         bigWidth = (bigWidth > bw) ? bigWidth : bw;
                         //}
                         //w = (w > tmp.WidthTexture) ? w : tmp.WidthTexture;
@@ -1232,7 +1232,7 @@ namespace SpaceVIL
                         {
                             continue;
                         }
-                        if (tptmp.Texture == null)
+                        if (tptmp.GetBytes() == null)
                         {
                             bigOff += lineHeigh * w * 4;
                             continue;
@@ -1240,20 +1240,20 @@ namespace SpaceVIL
 
                         for (int p = 0; p < 4; p++)
                         {
-                            for (int j = 0; j < tptmp.HeightTexture; j++)
+                            for (int j = 0; j < tptmp.GetHeight(); j++)
                             {
-                                for (int i = 0; i < tptmp.WidthTexture; i++)
+                                for (int i = 0; i < tptmp.GetWidth(); i++)
                                 {
-                                    bigByte[bigOff + p + i * 4 + j * (w * 4)] = tptmp.Texture[p + i * 4 + j * (tptmp.WidthTexture * 4)];
+                                    bigByte[bigOff + p + i * 4 + j * (w * 4)] = tptmp.GetBytes()[p + i * 4 + j * (tptmp.GetWidth() * 4)];
                                 }
 
-                                for (int i = tptmp.WidthTexture; i < w; i++)
+                                for (int i = tptmp.GetWidth(); i < w; i++)
                                 {
                                     bigByte[bigOff + p + i * 4 + j * (w * 4)] = 0;
                                 }
                             }
 
-                            for (int j = tptmp.HeightTexture; j < lineHeigh; j++)
+                            for (int j = tptmp.GetHeight(); j < lineHeigh; j++)
                             {
                                 for (int i = 0; i < w; i++)
                                 {
@@ -1264,8 +1264,9 @@ namespace SpaceVIL
                         bigOff += lineHeigh * w * 4;
                     }
                     _blockTexture = new TextPrinter(bigByte); //TextPrinter tpout = new TextPrinter(bigByte);
-                    _blockTexture.WidthTexture = w; //tpout.WidthTexture = w;
-                    _blockTexture.HeightTexture = visibleHeight; // h; //tpout.HeightTexture = visibleHeight; // h;
+                    _blockTexture.SetSize(w, visibleHeight);
+                    // _blockTexture.WidthTexture = w; //tpout.WidthTexture = w;
+                    // _blockTexture.HeightTexture = visibleHeight; // h; //tpout.HeightTexture = visibleHeight; // h;
                                                                  //     tpout.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX() + cursorWidth;
                                                                  //     tpout.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY();
 
@@ -1287,7 +1288,7 @@ namespace SpaceVIL
                     //         tpout.YTextureShift += _linesList[startNumb].GetLineYShift();
 
                     _isUpdateTextureNeed = false;
-                    SetRemakeText(true);
+                    ItemsRefreshManager.SetRefreshText(this);
                 }
                 UpdateCoords(parent);
                 return _blockTexture; //tpout;
@@ -1300,12 +1301,15 @@ namespace SpaceVIL
 
         private void UpdateCoords(Prototype parent)
         {
-            _blockTexture.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX() + cursorWidth;
-            _blockTexture.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY();
+            _blockTexture.SetPosition(parent.GetPadding().Left + GetTextMargin().Left + parent.GetX() + cursorWidth,
+                parent.GetPadding().Top + GetTextMargin().Top + parent.GetY());
+            // _blockTexture.XTextureShift = parent.GetPadding().Left + GetTextMargin().Left + parent.GetX() + cursorWidth;
+            // _blockTexture.YTextureShift = parent.GetPadding().Top + GetTextMargin().Top + parent.GetY();
 
             if (_firstVisibleLineNumb > -1)
             {
-                _blockTexture.YTextureShift += _linesList[_firstVisibleLineNumb].GetLineYShift();
+                // _blockTexture.YTextureShift += _linesList[_firstVisibleLineNumb].GetLineYShift();
+                _blockTexture.SetYOffset(_blockTexture.GetYOffset() + _linesList[_firstVisibleLineNumb].GetLineYShift());
             }
         }
 
@@ -1390,17 +1394,6 @@ namespace SpaceVIL
             }
 
             return new int[] { begPt, endPt };
-        }
-
-        private bool _isRemakeText = true;
-        public void SetRemakeText(bool value)
-        {
-            _isRemakeText = value;
-        }
-
-        public bool IsRemakeText()
-        {
-            return _isRemakeText;
         }
 
         //Wrap Text Stuff---------------------------------------------------------------------------------------------------

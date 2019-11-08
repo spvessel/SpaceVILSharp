@@ -3,14 +3,11 @@ package com.spvessel.spacevil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import com.spvessel.spacevil.Core.*;
 import com.spvessel.spacevil.Decorations.Style;
 
 public class ListArea extends Prototype implements InterfaceVLayout {
-    private Lock _lock = new ReentrantLock();
 
     public EventCommonMethod selectionChanged = new EventCommonMethod();
     public EventCommonMethod itemListChanged = new EventCommonMethod();

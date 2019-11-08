@@ -164,7 +164,7 @@ namespace SpaceVIL
             VramVertex store = VertexStorage.GetResource(item);
             if (store == null)
             {
-                item.SetRemakeRequest(true);
+                ItemsRefreshManager.SetRefreshShape(item);
                 return;
             }
 
@@ -199,22 +199,21 @@ namespace SpaceVIL
         }
 
         internal void DrawFreshText(
-            Shader shader, ITextContainer item, TextPrinter printer, float w, float h,
+            Shader shader, ITextContainer item, ITextImage printer, float w, float h,
             float level, float[] color)
         {
             TextStorage.DeleteResource(item);
 
-            byte[] buffer = printer.Texture;
-            if (buffer == null || buffer.Length == 0)
+            if (printer.IsEmpty())
                 return;
 
             shader.UseShader();
             VramTexture store = new VramTexture();
-            store.GenBuffers(0, printer.WidthTexture, 0, printer.HeightTexture, true);
-            store.GenTexture(printer.WidthTexture, printer.HeightTexture, buffer);
+            store.GenBuffers(0, printer.GetWidth(), 0, printer.GetHeight(), true);
+            store.GenTexture(printer.GetWidth(), printer.GetHeight(), printer.GetBytes());
             TextStorage.AddResource(item, store);
 
-            store.SendUniform4f(shader, "position", new float[] { printer.XTextureShift, printer.YTextureShift, w, h });
+            store.SendUniform4f(shader, "position", new float[] { printer.GetXOffset(), printer.GetYOffset(), w, h });
             store.SendUniform1f(shader, "level", level);
             store.SendUniformSample2D(shader, "tex");
             store.SendUniform4f(shader, "rgb", color);
@@ -223,13 +222,13 @@ namespace SpaceVIL
         }
 
         internal void DrawStoredText(
-            Shader shader, ITextContainer item, TextPrinter printer, float w, float h,
+            Shader shader, ITextContainer item, ITextImage printer, float w, float h,
             float level, float[] color)
         {
             VramTexture store = TextStorage.GetResource(item);
             if (store == null)
             {
-                item.SetRemakeText(true);
+                ItemsRefreshManager.SetRefreshText(item);
                 return;
             }
 
@@ -237,7 +236,7 @@ namespace SpaceVIL
             store.BindVboIbo();
             store.Bind();
             store.SendUniformSample2D(shader, "tex");
-            store.SendUniform4f(shader, "position", new float[] { printer.XTextureShift, printer.YTextureShift, w, h });
+            store.SendUniform4f(shader, "position", new float[] { printer.GetXOffset(), printer.GetYOffset(), w, h });
             store.SendUniform1f(shader, "level", level);
             store.SendUniform4f(shader, "rgb", color);
             store.Draw();
@@ -380,7 +379,7 @@ namespace SpaceVIL
         }
 
         internal void DrawFreshTexture(
-            ImageItem image, Shader shader, float ax, float ay, float aw, float ah,
+            IImageItem image, Shader shader, float ax, float ay, float aw, float ah,
             int iw, int ih, int width, int height, float level)
         {
             TextureStorage.DeleteResource(image);
@@ -400,7 +399,7 @@ namespace SpaceVIL
             tex.GenTexture(iw, ih, bmp);
             TextureStorage.AddResource(image, tex);
 
-            image.SetImageRemake(false);
+            ItemsRefreshManager.RemoveImage(image);
 
             tex.SendUniformSample2D(shader, "tex");
             if (image.IsColorOverlay())
@@ -424,12 +423,12 @@ namespace SpaceVIL
         }
 
         internal void DrawStoredTexture(
-            ImageItem image, Shader shader, float ax, float ay, int width, int height, float level)
+            IImageItem image, Shader shader, float ax, float ay, int width, int height, float level)
         {
             VramTexture tex = TextureStorage.GetResource(image);
             if (tex == null)
             {
-                image.SetImageRemake(true);
+                ItemsRefreshManager.SetRefreshImage(image);
                 return;
             }
 
@@ -495,15 +494,22 @@ namespace SpaceVIL
         {
             ITextContainer text = resource as ITextContainer;
             if (text != null)
+            {
+                ItemsRefreshManager.RemoveText(text);
                 TextStorage.FlushResource(text);
+            }
 
             IImageItem image = resource as IImageItem;
             if (image != null)
+            {
+                ItemsRefreshManager.RemoveImage(image);
                 TextureStorage.FlushResource(image);
+            }
 
             IBaseItem item = resource as IBaseItem;
             if (item != null)
             {
+                ItemsRefreshManager.RemoveShape(item);
                 VertexStorage.FlushResource(item);
                 ShadowStorage.FlushResource(item);
             }

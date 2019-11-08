@@ -84,6 +84,7 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         itemList.eventScrollDown.clear();
         itemList.eventMouseClick.clear();
         itemList.eventKeyPress.clear();
+
         itemList.getArea().eventKeyPress.add((sender, args) -> {
             if (args.key == KeyCode.ESCAPE) {
                 hide();
@@ -97,6 +98,11 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
                 }
             }
         });
+
+        for (InterfaceBaseItem item : _queue) {
+            itemList.addItem(item);
+        }
+
         _init = true;
     }
 
@@ -139,15 +145,19 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
-        // (item as MenuItem)._invoked_menu = this;
         if (item instanceof MenuItem) {
             MenuItem tmp = (MenuItem) item;
-            tmp._context_menu = this;
+            tmp.contextMenu = this;
             tmp.eventMouseClick.add((sender, args) -> {
                 onSelectionChanged(tmp);
             });
         }
-        _queue.add(item);
+        if (_init) {
+            itemList.addItem(item);
+        } else {
+            _queue.add(item);
+        }
+        _added = false;
     }
 
     /**
@@ -213,9 +223,6 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
             if (!_init)
                 initElements();
             if (!_added) {
-                for (InterfaceBaseItem item : _queue) {
-                    itemList.addItem(item);
-                }
                 updateSize();
                 _added = true;
             }
@@ -263,12 +270,13 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         itemList.unselect();
         setVisible(false);
         setX(-getWidth());
+        
         if (_returnFocus != null)
             _returnFocus.setFocus();
         // else
         // getHandler().getWindow().setFocus();
     }
-    
+
     public void hide(MouseArgs args) {
         hide();
     }

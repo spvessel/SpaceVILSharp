@@ -53,7 +53,7 @@ namespace SpaceVIL
             SetWidth(w2 - w1);
             SetHeight(h2 - h1);
             SetTriangles(triangles);
-            SetRemakeRequest(true);
+            ItemsRefreshManager.SetRefreshShape(this);
         }
 
         /// <summary>

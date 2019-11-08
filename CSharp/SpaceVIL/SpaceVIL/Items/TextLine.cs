@@ -126,7 +126,7 @@ namespace SpaceVIL
             isBigExist = true;
         }
 
-        public TextPrinter GetLetTextures()
+        public ITextImage GetTexture()
         {
             Monitor.Enter(textLock);
             try
@@ -247,12 +247,9 @@ namespace SpaceVIL
                         }
                     }
                     _isUpdateNeed = false;
-                    textPrt = new TextPrinter(cacheBB)
-                    {
-                        WidthTexture = bb_w,
-                        HeightTexture = bb_h
-                    };
-                    SetRemakeText(true);
+                    textPrt = new TextPrinter(cacheBB);
+                    textPrt.SetSize(bb_w, bb_h);
+                    ItemsRefreshManager.SetRefreshText(this);
                 }
                 UpdateCoords(parent);
                 return textPrt;
@@ -442,11 +439,15 @@ namespace SpaceVIL
 
             xFirstBeg = _letters[0].xBeg + _letters[0].xShift;
 
-            textPrt.XTextureShift = (int)alignShiftX + parent.GetX() + xFirstBeg; // + _lineXShift
-            textPrt.YTextureShift = (int)alignShiftY + _lineYShift + parent.GetY();
-
+            // textPrt.XTextureShift = (int)alignShiftX + parent.GetX() + xFirstBeg; // + _lineXShift
+            // textPrt.YTextureShift = (int)alignShiftY + _lineYShift + parent.GetY();
+            textPrt.SetPosition((int)alignShiftX + parent.GetX() + xFirstBeg,
+                            (int)alignShiftY + _lineYShift + parent.GetY());
             if (!_isRecountable)
-                textPrt.XTextureShift += _lineXShift;
+            {
+                // textPrt.XTextureShift += _lineXShift;
+                textPrt.SetXOffset(textPrt.GetXOffset() + _lineXShift);
+            }
         }
 
         internal string GetText()
@@ -569,17 +570,6 @@ namespace SpaceVIL
         internal void SetRecountable(bool isRecountable)
         {
             _isRecountable = isRecountable;
-        }
-
-        private bool _isRemakeText = true;
-        public void SetRemakeText(bool value)
-        {
-            _isRemakeText = value;
-        }
-
-        public bool IsRemakeText()
-        {
-            return _isRemakeText;
         }
     }
 }
