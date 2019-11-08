@@ -228,7 +228,7 @@ public class InputTest extends ActiveWindow {
         });
 
         // tb.setWrapText(true);
-        tb.setText(getBigText());
+//        tb.setText(getBigText());
         tb.setStyle(getTextAreaStyle());
         tb.setWrapText(true);
         tb.rewindText();

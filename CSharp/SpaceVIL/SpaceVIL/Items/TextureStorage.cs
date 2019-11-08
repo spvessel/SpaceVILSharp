@@ -1434,10 +1434,6 @@ namespace SpaceVIL
                 }
             }
 
-            int lineVal = _lineBreakes[lineNum];
-            int nextLineVal = (lineNum < _lineBreakes.Count - 1) ? _lineBreakes[lineNum + 1] : lineVal + 1;
-            String textInLine = textLine.GetText();
-
             // if (textLine.GetWidth() < _cursorXMax) // parentAllowWidth
             // {
             //     if (lineVal == nextLineVal)
@@ -1450,6 +1446,15 @@ namespace SpaceVIL
             //     }
             //     return;
             // }
+
+            if (textLine.GetWidth() < _cursorXMax) // parentAllowWidth
+            {
+                return;
+            }
+
+            int lineVal = _lineBreakes[lineNum];
+            int nextLineVal = (lineNum < _lineBreakes.Count - 1) ? _lineBreakes[lineNum + 1] : lineVal + 1;
+            String textInLine = textLine.GetText();
 
             List<int> letPosArr = textLine.GetLetPosArray();
 

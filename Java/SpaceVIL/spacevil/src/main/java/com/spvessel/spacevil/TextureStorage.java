@@ -1285,6 +1285,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 //            return;
 //        }
 
+        if (textLine.getWidth() < _cursorXMax) {
+            return;
+        }
+
         int lineVal = _lineBreakes.get(lineNum);
         int nextLineVal = (lineNum < _lineBreakes.size() - 1) ? _lineBreakes.get(lineNum + 1) : lineVal + 1;
         String textInLine = textLine.getText();
