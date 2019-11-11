@@ -532,7 +532,7 @@ final class DrawEngine {
             return;
         }
 
-        boolean preEffect = drawPreEffect(shell);
+        boolean preEffect = drawPreprocessingEffects(shell);
 
         if (ItemsRefreshManager.isRefreshShape(shell)) {
             shell.makeShape();
@@ -870,18 +870,18 @@ final class DrawEngine {
                 glwHandler.getCoreWindow().getShadeColor(), GL_TRIANGLES);
     }
 
-    private boolean drawPreEffect(InterfaceBaseItem item) {
+    private boolean drawPreprocessingEffects(InterfaceBaseItem item) {
         if (Effects.getEffects(item) == null)
             return false;
 
         List<InterfaceEffect> effects = Effects.getEffects(item);
         glEnable(GL_STENCIL_TEST);
+        glClear(GL_STENCIL_BUFFER_BIT);
         glClearStencil(1);
         glStencilMask(0xFF);
         glStencilFunc(GL_NEVER, 2, 0);
         glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
         for (InterfaceEffect effect : effects) {
-
             if (effect instanceof InterfaceSubtractFigure) {
                 InterfaceSubtractFigure subtractFigure = (InterfaceSubtractFigure) effect;
                 List<float[]> vertex = null;
@@ -904,7 +904,6 @@ final class DrawEngine {
                 _renderProcessor.drawDirectVertex(_primitive, vertex, 0, item.getX(), item.getY(),
                         _commonProcessor.window.getWidth(), _commonProcessor.window.getHeight(), Color.white,
                         GL_TRIANGLES);
-
             }
         }
         glStencilFunc(GL_NOTEQUAL, 2, 255);

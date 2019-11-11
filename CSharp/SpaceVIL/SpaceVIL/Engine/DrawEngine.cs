@@ -532,7 +532,7 @@ namespace SpaceVIL
                 return;
             }
 
-            bool preEffect = DrawPreEffect(shell);
+            bool preEffect = DrawPreprocessingEffects(shell);
 
             if (ItemsRefreshManager.IsRefreshShape(shell))
             {
@@ -929,13 +929,14 @@ namespace SpaceVIL
                 GLWHandler.GetCoreWindow().GetShadeColor(), GL_TRIANGLES);
         }
 
-        private bool DrawPreEffect(IBaseItem item)
+        private bool DrawPreprocessingEffects(IBaseItem item)
         {
             if (Effects.GetEffects(item) == null)
                 return false;
 
             List<IEffect> effects = Effects.GetEffects(item);
             glEnable(GL_STENCIL_TEST);
+            glClear(GL_STENCIL_BUFFER_BIT);
             glClearStencil(1);
             glStencilMask(0xFF);
             glStencilFunc(GL_NEVER, 2, 0);

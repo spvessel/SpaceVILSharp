@@ -221,3 +221,7 @@ Java/SpaceVIL/spacevil/build/resources/main/shaders/fs_blur_old.glsl
 Java/SpaceVIL/spacevil/build/resources/main/shaders/fs_primitive.glsl
 Java/SpaceVIL/spacevil/build/resources/main/shaders/vs_primitive.glsl
 Java/SpaceVIL/spacevil/.vscode/launch.json
+Java/SpaceVIL/spacevil/bin/main/shaders/fs_blur_old.glsl
+Java/SpaceVIL/spacevil/bin/main/shaders/fs_primitive.glsl
+Java/SpaceVIL/spacevil/bin/main/shaders/vs_primitive.glsl
+OwlsInSpace/.classpath

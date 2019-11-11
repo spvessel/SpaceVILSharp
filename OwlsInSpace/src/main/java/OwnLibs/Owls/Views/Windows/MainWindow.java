@@ -251,7 +251,7 @@ public class MainWindow extends ActiveWindow {
                 filePreferencesContextMenu.setBorderThickness(1);
                 filePreferencesContextMenu.setBorderFill(32, 32, 32);
                 filePreferencesContextMenu.setBackground(60, 60, 60);
-                // filePreferencesContextMenu.setShadow(5, 2, 2, new Color(0, 0, 0, 180));
+                filePreferencesContextMenu.setShadow(5, 0, 0, new Color(0, 0, 0, 210));
 
                 miAddKeyWords = new MenuItem("Add tags");
                 miShowAttachedContent = new MenuItem("Show attached");
@@ -277,7 +277,7 @@ public class MainWindow extends ActiveWindow {
                 treeContextMenu.setBorderThickness(1);
                 treeContextMenu.setBorderFill(32, 32, 32);
                 treeContextMenu.setBackground(60, 60, 60);
-                // treeContextMenu.setShadow(5, 2, 2, new Color(0, 0, 0, 180));
+                treeContextMenu.setShadow(5, 0, 0, new Color(0, 0, 0, 210));
                 // treeContextMenu.setBorderRadius(5);
                 // treeContextMenu.itemList.setSelectionVisible(false);
                 // treeContextMenu.setReturnFocus(filesTree.getArea());
@@ -290,7 +290,7 @@ public class MainWindow extends ActiveWindow {
                 keyWordsContextMenu.setBackground(60, 60, 60);
                 keyWordsContextMenu.itemList.setSelectionVisible(false);
 
-                // keyWordsContextMenu.setShadow(5, 2, 2, new Color(0, 0, 0, 180));
+                keyWordsContextMenu.setShadow(5, 0, 0, new Color(0, 0, 0, 210));
 
                 miKWDelete = new MenuItem("Remove");
                 miKWUse = new MenuItem("Use");
@@ -414,6 +414,7 @@ public class MainWindow extends ActiveWindow {
                 contextTextActions.setBorderThickness(1);
                 contextTextActions.setBorderFill(32, 32, 32);
                 contextTextActions.setBackground(60, 60, 60);
+                contextTextActions.setShadow(5, 0, 0, new Color(0, 0, 0, 210));
 
                 BufferedImage copyIcon = null;
                 BufferedImage pasteIcon = null;
@@ -431,12 +432,12 @@ public class MainWindow extends ActiveWindow {
                 } catch (IOException e) {
                         System.out.println("load icons fail");
                 }
-                ElementsFactory.setMenuItemImage(copy, copyIcon);
-                ElementsFactory.setMenuItemImage(paste, pasteIcon);
-                ElementsFactory.setMenuItemImage(cut, cutIcon);
-                ElementsFactory.setMenuItemImage(goUp, goupIcon);
-                ElementsFactory.setMenuItemImage(goDown, godownIcon);
-                ElementsFactory.setMenuItemImage(wrap, wrapIcon);
+                ElementsFactory.setMenuItemImage(copy, copyIcon, new Color(12, 180, 105));
+                ElementsFactory.setMenuItemImage(paste, pasteIcon, new Color(173, 139, 186));
+                ElementsFactory.setMenuItemImage(cut, cutIcon, new Color(200, 116, 116));
+                ElementsFactory.setMenuItemImage(goUp, goupIcon, new Color(10, 168, 232));
+                ElementsFactory.setMenuItemImage(goDown, godownIcon, new Color(10, 168, 232));
+                ElementsFactory.setMenuItemImage(wrap, wrapIcon, new Color(150, 150, 150));
         }
 
         public void setTitle(String title) {

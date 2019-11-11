@@ -361,7 +361,7 @@ final class RenderProcessor {
         tex.genTexture(iw, ih, bmp);
         // tex.genTexture(iw, ih, buffer);
         textureStorage.addResource(image, tex);
-        
+
         ItemsRefreshManager.removeImage(image);
 
         tex.sendUniformSample2D(shader, "tex");
@@ -439,8 +439,9 @@ final class RenderProcessor {
         vertexStorage.clear();
         textureStorage.clear();
         textStorage.clear();
-        screenSquare.clear();
         shadowStorage.clear();
+        //
+        screenSquare.clear();
     }
 
     <T> void freeResource(T resource) {

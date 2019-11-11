@@ -56,18 +56,6 @@ public class Controller {
         itemToDefault();
         // fillFields();
 
-        owlWindow.eventKeyRelease.add((sender, args) -> {
-            if (args.key == KeyCode.PAGEDOWN) {
-                List<InterfaceBaseItem> list = ItemsLayoutBox.getLayoutItems(owlWindow.getWindowGuid());
-                int result = 0;
-                for (InterfaceBaseItem item : list) {
-                    if (item.getBackground().getAlpha() > 0 && item.isDrawable() && item.isVisible()) {
-                        result++;
-                    }
-                }
-                System.out.println(result);
-            }
-        });
         // New file
         owlWindow.homePage.newFileLabel.eventMouseClick.add((sender, args) -> {
             if (args.button == MouseButton.BUTTON_LEFT)

@@ -2,7 +2,9 @@ package com.spvessel.spacevil.View;
 
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.ItemState;
+import com.spvessel.spacevil.Decorations.SubtractFigure;
 import com.spvessel.spacevil.Flags.EmbeddedImage;
 import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.FileSystemEntryType;
@@ -17,6 +19,9 @@ import com.spvessel.spacevil.OpenEntryDialog.OpenDialogType;
 import com.spvessel.spacevil.MenuItem;
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.InterfaceEffect;
+import com.spvessel.spacevil.Core.InterfaceSubtractFigure;
 import com.spvessel.spacevil.Core.MouseArgs;
 
 import java.awt.Color;
@@ -309,8 +314,86 @@ public class FlowTest extends ActiveWindow {
             if (args.key == KeyCode.F)
                 System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
         });
+
+
+        int _diameter = 180;
+
+        // create items
+        InterfaceBaseItem cRed = getCircle(_diameter, new Color(255, 0, 0, 180));
+        cRed.setItemName("cRed");
+        InterfaceBaseItem cGreen = getCircle(_diameter, new Color(0, 255, 0, 180));
+        cGreen.setItemName("cGreen");
+        InterfaceBaseItem cBlue = getCircle(_diameter, new Color(0, 0, 255, 180));
+        cBlue.setItemName("cBlue");
+
+        setCircleAlignment(cRed, ItemAlignment.TOP);
+        setCircleAlignment(cGreen, ItemAlignment.LEFT, ItemAlignment.BOTTOM);
+        setCircleAlignment(cBlue, ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+
+        // add items to window
+        addItems(cGreen, cRed, cBlue);
+
+        
+        Effects.addEffect(cRed, getCircleEffect(cRed, cBlue));
+        Effects.addEffect(cRed, getCircleEffect(cRed, cGreen));
+
+        Effects.addEffect(cGreen, getCircleEffect(cGreen, cBlue));
+        Effects.addEffect(cGreen, getCircleEffect(cGreen, cRed));
+
+        Effects.addEffect(cBlue, getCircleEffect(cBlue, cRed));
+        Effects.addEffect(cBlue, getCircleEffect(cBlue, cGreen));
     }
 
+
+    public static InterfaceBaseItem getCircle(int diameter, Color color) {
+        Ellipse circle = new Ellipse(64);
+        circle.setSize(diameter, diameter);
+        circle.setBackground(color);
+        circle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        return circle;
+    }
+
+    public static void setCircleAlignment(InterfaceBaseItem circle, ItemAlignment... alignment) {
+        List<ItemAlignment> list = Arrays.asList(alignment);
+
+        int offset = circle.getWidth() / 3;
+
+        if (list.contains(ItemAlignment.TOP)) {
+            circle.setMargin(circle.getMargin().left, circle.getMargin().top - offset, circle.getMargin().right,
+                    circle.getMargin().bottom);
+        }
+
+        if (list.contains(ItemAlignment.BOTTOM)) {
+            circle.setMargin(circle.getMargin().left, circle.getMargin().top, circle.getMargin().right,
+                    circle.getMargin().bottom - offset);
+        }
+
+        if (list.contains(ItemAlignment.LEFT)) {
+            circle.setMargin(circle.getMargin().left - offset, circle.getMargin().top, circle.getMargin().right,
+                    circle.getMargin().bottom);
+        }
+
+        if (list.contains(ItemAlignment.RIGHT)) {
+            circle.setMargin(circle.getMargin().left, circle.getMargin().top, circle.getMargin().right - offset,
+                    circle.getMargin().bottom);
+        }
+    }
+
+    public static SubtractFigure getCircleEffect(InterfaceBaseItem circle, InterfaceBaseItem subtract) {
+        int diameter = circle.getHeight();
+        SubtractFigure effect = new SubtractFigure(
+                new CustomFigure(true, GraphicsMathService.getEllipse(diameter, diameter, 0, 0, 64)));
+        effect.setAlignment(ItemAlignment.VCENTER);
+
+        int xOffset = subtract.getX() - circle.getX();
+        int yOffset = subtract.getY() - circle.getY();
+
+        // effect.setSizeScale(5.0f, 1.01f);
+
+        effect.setPositionOffset(xOffset, yOffset);
+        return effect;
+    }
+    
     // private ResizableItem getBlockList() {
     // BlockList block = new BlockList();
     // // ResizableItem block = new ResizableItem();

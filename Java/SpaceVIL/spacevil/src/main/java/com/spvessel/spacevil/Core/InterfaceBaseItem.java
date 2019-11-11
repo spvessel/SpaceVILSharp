@@ -20,11 +20,11 @@ public interface InterfaceBaseItem
 
     void setConfines();
 
-    void setConfines(int x0, int x1, int y0, int y1);
+    public void setConfines(int x0, int x1, int y0, int y1);
 
     void setMargin(Indents padding);
 
-    void setMargin(int left, int top, int right, int bottom);
+    public void setMargin(int left, int top, int right, int bottom);
 
     Indents getMargin();
 
@@ -58,7 +58,7 @@ public interface InterfaceBaseItem
 
     int[] getShadowExtension();
 
-    void setShadow(int radius, int x, int y, Color color);
+    public void setShadow(int radius, int x, int y, Color color);
 
     void release();
 }

@@ -101,6 +101,18 @@ public class ElementsFactory {
         return menuItem;
     }
 
+    public static MenuItem setMenuItemImage(MenuItem menuItem, BufferedImage img, Color overlay) {
+
+        ImageItem imgFile = new ImageItem(img, false);
+        imgFile.setSizePolicy(SizePolicy.FIXED, SizePolicy.FIXED);
+        imgFile.setSize(16, 16);
+        imgFile.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        imgFile.keepAspectRatio(true);
+        imgFile.setColorOverlay(overlay);
+        menuItem.addItem(imgFile);
+        return menuItem;
+    }
+
     public static KeyWordItem getKeyWord(String word) {
         KeyWordItem kwItem = new KeyWordItem(word);
 

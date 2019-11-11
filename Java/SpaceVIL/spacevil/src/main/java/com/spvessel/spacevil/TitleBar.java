@@ -222,10 +222,6 @@ public class TitleBar extends WindowAnchor {
         _minimize.setPassEvents(false);
         _maximize.setPassEvents(false);
         _close.setPassEvents(false);
-
-        _maximize.eventMouseClick.add((sender, args) -> {
-            System.out.println(_maximize.isFocusable + " " + _minimize.isFocusable + " " + _close.isFocusable + " ");
-        });
     }
 
     /**
