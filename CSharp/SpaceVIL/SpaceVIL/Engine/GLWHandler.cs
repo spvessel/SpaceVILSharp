@@ -87,6 +87,7 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Samples, _coreWindow._msaa);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 3);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
+            // Glfw.WindowHint(Glfw.Hint.ScaleToMonitor, true);
 
             Glfw.WindowHint(Glfw.Hint.Resizable, Resizeble);
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window

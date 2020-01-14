@@ -90,6 +90,7 @@ final class GLWHandler {
         glfwWindowHint(GLFW_SAMPLES, _coreWindow._msaa.getValue());
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        // glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
         // glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE);
 
         if (resizeble)

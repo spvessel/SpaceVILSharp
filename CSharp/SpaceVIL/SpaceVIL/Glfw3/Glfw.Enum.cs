@@ -95,7 +95,8 @@ namespace Glfw3
             ContextNoError = 0x0002200a,
             ContextCreationApi = 0x0002200b,
             TranspatentFramebuffer = 131082,
-            CocoaRetinaFramebuffer = 143361
+            CocoaRetinaFramebuffer = 143361,
+            ScaleToMonitor = 139276
         }
 
         internal enum OpenGLProfile
