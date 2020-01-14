@@ -962,8 +962,9 @@ namespace SpaceVIL
                         vertex = GraphicsMathService.MoveShape(
                                 GraphicsMathService.UpdateShape(subtractFigure.GetSubtractFigure().GetFigure(),
                                         (int)(item.GetWidth() * subtractFigure.GetWidthScale()),
-                                        (int)(item.GetHeight() * subtractFigure.GetHeightScale()),
-                                        new Area(0, 0, item.GetWidth(), item.GetHeight()), subtractFigure.GetAlignment()),
+                                        (int)(item.GetHeight() * subtractFigure.GetHeightScale())
+                                        //, new Area(0, 0, item.GetWidth(), item.GetHeight()), subtractFigure.GetAlignment()
+                                        ),
                                 subtractFigure.GetXOffset(), subtractFigure.GetYOffset());
                     }
 

@@ -20,21 +20,21 @@ namespace SpaceVIL
                 CommonService.SetClipboardString(copy_str);
                 return;
             }
-            
+
             //undo
             if (args.Mods == CommonService.GetOsControlMod() && args.Key == KeyCode.Z)
             {
                 textItem.Undo();
                 return;
             }
-            
+
             //redo
             if (args.Mods == CommonService.GetOsControlMod() && args.Key == KeyCode.Y)
             {
                 textItem.Redo();
                 return;
             }
-            
+
             //select all
             if (args.Mods == CommonService.GetOsControlMod() && (args.Key == KeyCode.A || args.Key == KeyCode.a))
             {
@@ -54,12 +54,15 @@ namespace SpaceVIL
                 textItem.PasteText(paste_str);
                 return;
             }
-            
+
             //cut
             if (args.Mods == CommonService.GetOsControlMod() && args.Key == KeyCode.X)
             {
                 string cut_str = textItem.CutText();
                 // Glfw.SetClipboardString(_handler.GetWindowId(), cut_str);
+                if (cut_str == null || cut_str == "")
+                    return;
+
                 CommonService.SetClipboardString(cut_str);
                 return;
             }

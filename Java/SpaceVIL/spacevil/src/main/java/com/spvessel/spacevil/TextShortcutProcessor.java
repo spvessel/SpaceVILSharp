@@ -19,7 +19,7 @@ class TextShortcutProcessor {
             //copy
             if (args.mods.contains(CommonService.getOsControlMod()) && args.key == KeyCode.C) {
                 String copy_str = textItem.getSelectedText();
-//                glfwSetClipboardString(_handler.getWindowId(), copy_str);
+                //                glfwSetClipboardString(_handler.getWindowId(), copy_str);
                 CommonService.setClipboardString(copy_str);
                 return;
             }
@@ -37,7 +37,8 @@ class TextShortcutProcessor {
             }
 
             //select all
-            if (args.mods.contains(CommonService.getOsControlMod()) && (args.key == KeyCode.A || args.key == KeyCode.a)) {
+            if (args.mods.contains(CommonService.getOsControlMod())
+                    && (args.key == KeyCode.A || args.key == KeyCode.a)) {
                 textItem.selectAll();
                 return;
             }
@@ -45,10 +46,10 @@ class TextShortcutProcessor {
             //editable only but has inner checks------------------------------------------------------------------------
 
             //insert/paste
-            if ((args.mods.contains(CommonService.getOsControlMod()) && args.key == KeyCode.V) ||
-                    (args.mods.contains(KeyMods.SHIFT) && args.key == KeyCode.INSERT)) {
+            if ((args.mods.contains(CommonService.getOsControlMod()) && args.key == KeyCode.V)
+                    || (args.mods.contains(KeyMods.SHIFT) && args.key == KeyCode.INSERT)) {
                 String paste_str = "";
-//                paste_str = glfwGetClipboardString(_handler.getWindowId());
+                //                paste_str = glfwGetClipboardString(_handler.getWindowId());
                 paste_str = CommonService.getClipboardString();
                 textItem.pasteText(paste_str);
                 return;
@@ -57,7 +58,10 @@ class TextShortcutProcessor {
             //cut
             if (args.mods.contains(CommonService.getOsControlMod()) && args.key == KeyCode.X) {
                 String cut_str = textItem.cutText();
-//                glfwSetClipboardString(_handler.getWindowId(), cut_str);
+                //                glfwSetClipboardString(_handler.getWindowId(), cut_str);
+                if (cut_str == null || cut_str == "")
+                    return;
+                    
                 CommonService.setClipboardString(cut_str);
                 return;
             }
@@ -65,6 +69,5 @@ class TextShortcutProcessor {
         }
 
     }
-
 
 }

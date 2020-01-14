@@ -491,7 +491,7 @@ public class TextView extends Prototype implements InterfaceDraggable, Interface
 
     @Override
     public String cutText() {
-        return null;
+        return "";
     }
 
     @Override

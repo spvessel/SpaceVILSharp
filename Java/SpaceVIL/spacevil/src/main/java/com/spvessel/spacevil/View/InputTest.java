@@ -16,6 +16,7 @@ import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.PasswordLine;
 import com.spvessel.spacevil.TextArea;
 import com.spvessel.spacevil.TextEdit;
+import com.spvessel.spacevil.TextView;
 import com.spvessel.spacevil.VerticalStack;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
@@ -96,10 +97,10 @@ public class InputTest extends ActiveWindow {
         te.setWidth(300);
         te.setWidthPolicy(SizePolicy.EXPAND);
 
-        TextArea tb = new TextArea();
+        // TextArea tb = new TextArea();
         // tb.setWrapText(true);
-        // TextView tb = new TextView();
-        tb.setScrollStepFactor(3f);
+        TextView tb = new TextView();
+        // tb.setScrollStepFactor(3f);
         // tb.setMargin(2, 2, 2, 27);
         // tb.setEditable(false);
         //        tb.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
@@ -230,8 +231,8 @@ public class InputTest extends ActiveWindow {
         // tb.setWrapText(true);
 //        tb.setText(getBigText());
         tb.setStyle(getTextAreaStyle());
-        tb.setWrapText(true);
-        tb.rewindText();
+        // tb.setWrapText(true);
+        // tb.rewindText();
         tb.setFocus();
 
         // tb.setBackground(0, 0, 0);

@@ -918,7 +918,8 @@ public final class GraphicsMathService {
         return Math.sin(grad2Radian(angleGrad));
     }
 
-    public static List<float[]> updateShape(List<float[]> triangles, int w, int h, Area area, List<ItemAlignment> alignments) {
+    public static List<float[]> updateShape(List<float[]> triangles, int w, int h, Area area,
+            List<ItemAlignment> alignments) {
 
         if (triangles == null || triangles.size() == 0) {
             return null;
@@ -954,6 +955,7 @@ public final class GraphicsMathService {
         } else if (alignments.contains(ItemAlignment.BOTTOM)) {
             offsetY = area.getHeight() - figureHeight;
         }
+
         // to the left top corner
         for (float[] point : result) {
             point[0] = (point[0] - minX) * w / (maxX - minX) + offsetX;
@@ -1010,7 +1012,7 @@ public final class GraphicsMathService {
         } else if (alignments.contains(ItemAlignment.BOTTOM)) {
             offsetY = area.getHeight() - figureHeight;
         }
-        
+
         // to the left top corner
         for (float[] point : result) {
             point[0] += x + offsetX;

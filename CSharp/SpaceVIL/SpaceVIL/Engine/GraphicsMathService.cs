@@ -1144,7 +1144,9 @@ namespace SpaceVIL
             return Math.Sin(Grad2Radian(angleGrad));
         }
 
-        public static List<float[]> UpdateShape(List<float[]> triangles, int w, int h, Area area, ItemAlignment alignments)
+        public static List<float[]> UpdateShape(List<float[]> triangles, int w, int h
+        //, Area area, ItemAlignment alignments
+        )
         {
             if (triangles == null || triangles.Count == 0)
             {
@@ -1164,35 +1166,35 @@ namespace SpaceVIL
             float minX = result.Select(_ => _[0]).Min();
             float minY = result.Select(_ => _[1]).Min();
 
-            int figureWidth = Math.Abs((int)(maxX - minX));
-            int figureHeight = Math.Abs((int)(maxY - minY));
+            // int figureWidth = Math.Abs((int)(maxX - minX));
+            // int figureHeight = Math.Abs((int)(maxY - minY));
 
-            // x offset
-            int offsetX = 0;
-            if (alignments.HasFlag(ItemAlignment.HCenter))
-            {
-                offsetX = (area.GetWidth() - figureWidth) / 2;
-            }
-            else if (alignments.HasFlag(ItemAlignment.Right))
-            {
-                offsetX = area.GetWidth() - figureWidth;
-            }
+            // // x offset
+            // int offsetX = 0;
+            // if (alignments.HasFlag(ItemAlignment.HCenter))
+            // {
+            //     offsetX = (area.GetWidth() - figureWidth) / 2;
+            // }
+            // else if (alignments.HasFlag(ItemAlignment.Right))
+            // {
+            //     offsetX = area.GetWidth() - figureWidth;
+            // }
 
-            // y offset
-            int offsetY = 0;
-            if (alignments.HasFlag(ItemAlignment.VCenter))
-            {
-                offsetY = (area.GetHeight() - figureHeight) / 2;
-            }
-            else if (alignments.HasFlag(ItemAlignment.Bottom))
-            {
-                offsetY = area.GetHeight() - figureHeight;
-            }
+            // // y offset
+            // int offsetY = 0;
+            // if (alignments.HasFlag(ItemAlignment.VCenter))
+            // {
+            //     offsetY = (area.GetHeight() - figureHeight) / 2;
+            // }
+            // else if (alignments.HasFlag(ItemAlignment.Bottom))
+            // {
+            //     offsetY = area.GetHeight() - figureHeight;
+            // }
             // to the left top corner
             foreach (float[] point in result)
             {
-                point[0] = (point[0] - minX) * w / (maxX - minX) + offsetX;
-                point[1] = (point[1] - minY) * h / (maxY - minY) + offsetY;
+                point[0] = (point[0] - minX) * w / (maxX - minX);// + offsetX;
+                point[1] = (point[1] - minY) * h / (maxY - minY);// + offsetY;
             }
 
             return result;

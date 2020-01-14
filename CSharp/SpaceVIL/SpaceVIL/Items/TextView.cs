@@ -561,7 +561,7 @@ namespace SpaceVIL
 
         public String CutText()
         {
-            return null;
+            return "";
         }
 
         public void Undo()

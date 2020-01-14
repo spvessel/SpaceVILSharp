@@ -295,6 +295,7 @@ public class Controller {
             // historyAddRecordSetEvent(record);
             //// owlWindow.homePage.addItemToHistoryList(record);
             // }
+            // owlWindow.maximize();
         });
 
         owlWindow.refreshBtn.eventMouseClick.add((sender, args) -> {

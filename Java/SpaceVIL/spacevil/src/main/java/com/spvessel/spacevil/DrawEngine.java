@@ -740,6 +740,7 @@ final class DrawEngine {
     }
 
     private void drawImage(InterfaceImageItem image) {
+
         checkOutsideBorders((InterfaceBaseItem) image);
 
         int w = image.getImageWidth(), h = image.getImageHeight();
@@ -891,14 +892,15 @@ final class DrawEngine {
                     vertex = GraphicsMathService.moveShape(subtractFigure.getSubtractFigure().getFigure(),
                             subtractFigure.getXOffset(), subtractFigure.getYOffset(),
                             new Area(0, 0, item.getWidth(), item.getHeight()), subtractFigure.getAlignment());
-
                 } else {
                     vertex = GraphicsMathService.moveShape(
                             GraphicsMathService.updateShape(subtractFigure.getSubtractFigure().getFigure(),
                                     (int) (item.getWidth() * subtractFigure.getWidthScale()),
-                                    (int) (item.getHeight() * subtractFigure.getHeightScale()),
-                                    new Area(0, 0, item.getWidth(), item.getHeight()), subtractFigure.getAlignment()),
-                            subtractFigure.getXOffset(), subtractFigure.getYOffset());
+                                    (int) (item.getHeight() * subtractFigure.getHeightScale())
+                                    ,new Area(0, 0, item.getWidth(), item.getHeight()), subtractFigure.getAlignment()
+                                    ),
+                            subtractFigure.getXOffset(),
+                            subtractFigure.getYOffset());
                 }
 
                 _renderProcessor.drawDirectVertex(_primitive, vertex, 0, item.getX(), item.getY(),

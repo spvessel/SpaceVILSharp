@@ -9,6 +9,7 @@ import com.spvessel.spacevil.ActiveWindow;
 import com.spvessel.spacevil.ButtonCore;
 import com.spvessel.spacevil.ComboBox;
 import com.spvessel.spacevil.Ellipse;
+import com.spvessel.spacevil.GraphicsMathService;
 import com.spvessel.spacevil.HorizontalSlider;
 import com.spvessel.spacevil.HorizontalStack;
 import com.spvessel.spacevil.ImageItem;
@@ -24,10 +25,13 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
+import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
+import com.spvessel.spacevil.Decorations.SubtractFigure;
 import com.spvessel.spacevil.Flags.EmbeddedImage;
 import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.InputEventType;
@@ -174,6 +178,17 @@ public class ImageTest extends ActiveWindow {
                 changeImage(btn_action);
             };
             btn_action.eventMouseClick.add(btn_action_click);
+
+            SubtractFigure effect = new SubtractFigure(
+                    new CustomFigure(false, GraphicsMathService.getEllipse(20, 20, 0, 0, 64)));
+                    // new CustomFigure(false, GraphicsMathService.getRectangle(20, 20, 0, 0)));
+            effect.setAlignment(
+                // ItemAlignment.VCENTER
+            // , 
+            ItemAlignment.HCENTER
+            );
+            effect.setPositionOffset(0, 0);
+            Effects.addEffect(btn_action, effect);
 
             // Image img1 = Image.FromFile("icon.png");
             // Image img1 = Image.FromFile("battery_full.png");

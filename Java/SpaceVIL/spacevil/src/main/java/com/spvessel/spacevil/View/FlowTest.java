@@ -1,6 +1,7 @@
 package com.spvessel.spacevil.View;
 
 import com.spvessel.spacevil.*;
+import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.CustomFigure;
 import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.ItemState;
@@ -12,6 +13,7 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemRule;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.MSAA;
 import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.Side;
 import com.spvessel.spacevil.Flags.SizePolicy;
@@ -316,14 +318,15 @@ public class FlowTest extends ActiveWindow {
         });
 
 
+        setAntiAliasingQuality(MSAA.MSAA_8X);
         int _diameter = 180;
 
         // create items
-        InterfaceBaseItem cRed = getCircle(_diameter, new Color(255, 0, 0, 180));
+        InterfaceBaseItem cRed = getCircle(_diameter, new Color(255, 94, 94));
         cRed.setItemName("cRed");
-        InterfaceBaseItem cGreen = getCircle(_diameter, new Color(0, 255, 0, 180));
+        InterfaceBaseItem cGreen = getCircle(_diameter, new Color(16, 180, 111));
         cGreen.setItemName("cGreen");
-        InterfaceBaseItem cBlue = getCircle(_diameter, new Color(0, 0, 255, 180));
+        InterfaceBaseItem cBlue = getCircle(_diameter, new Color(10, 162, 232));
         cBlue.setItemName("cBlue");
 
         setCircleAlignment(cRed, ItemAlignment.TOP);
@@ -333,23 +336,23 @@ public class FlowTest extends ActiveWindow {
         // add items to window
         addItems(cGreen, cRed, cBlue);
 
-        
         Effects.addEffect(cRed, getCircleEffect(cRed, cBlue));
-        Effects.addEffect(cRed, getCircleEffect(cRed, cGreen));
+        Effects.addEffect(cRed, getCircleCenterEffect(cRed));
 
-        Effects.addEffect(cGreen, getCircleEffect(cGreen, cBlue));
         Effects.addEffect(cGreen, getCircleEffect(cGreen, cRed));
+        Effects.addEffect(cGreen, getCircleCenterEffect(cGreen));
 
-        Effects.addEffect(cBlue, getCircleEffect(cBlue, cRed));
         Effects.addEffect(cBlue, getCircleEffect(cBlue, cGreen));
+        Effects.addEffect(cBlue, getCircleCenterEffect(cBlue));
     }
-
 
     public static InterfaceBaseItem getCircle(int diameter, Color color) {
         Ellipse circle = new Ellipse(64);
         circle.setSize(diameter, diameter);
         circle.setBackground(color);
         circle.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
+        circle.setShadow(10, 0, 0, Color.BLACK);
+        circle.setShadowExtension(2, 2);
         return circle;
     }
 
@@ -359,7 +362,7 @@ public class FlowTest extends ActiveWindow {
         int offset = circle.getWidth() / 3;
 
         if (list.contains(ItemAlignment.TOP)) {
-            circle.setMargin(circle.getMargin().left, circle.getMargin().top - offset, circle.getMargin().right,
+            circle.setMargin(circle.getMargin().left, circle.getMargin().top - offset + 10, circle.getMargin().right,
                     circle.getMargin().bottom);
         }
 
@@ -381,19 +384,29 @@ public class FlowTest extends ActiveWindow {
 
     public static SubtractFigure getCircleEffect(InterfaceBaseItem circle, InterfaceBaseItem subtract) {
         int diameter = circle.getHeight();
+        float scale = 1.1f;
+        int diff = (int) (diameter * scale - diameter) / 2;
+        int xOffset = subtract.getX() - circle.getX() - diff;
+        int yOffset = subtract.getY() - circle.getY() - diff;
+
         SubtractFigure effect = new SubtractFigure(
-                new CustomFigure(true, GraphicsMathService.getEllipse(diameter, diameter, 0, 0, 64)));
-        effect.setAlignment(ItemAlignment.VCENTER);
-
-        int xOffset = subtract.getX() - circle.getX();
-        int yOffset = subtract.getY() - circle.getY();
-
-        // effect.setSizeScale(5.0f, 1.01f);
-
+                new CustomFigure(false, GraphicsMathService.getEllipse(diameter, diameter, 0, 0, 64)));
+        effect.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        effect.setSizeScale(scale, scale);
         effect.setPositionOffset(xOffset, yOffset);
+
         return effect;
     }
-    
+
+    public static SubtractFigure getCircleCenterEffect(InterfaceBaseItem circle) {
+        float scale = 0.4f;
+        int diameter = (int) (circle.getHeight() * scale);
+        SubtractFigure effect = new SubtractFigure(
+                new CustomFigure(true, GraphicsMathService.getEllipse(diameter, diameter, 0, 0, 64)));
+        effect.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
+        return effect;
+    }
+
     // private ResizableItem getBlockList() {
     // BlockList block = new BlockList();
     // // ResizableItem block = new ResizableItem();
