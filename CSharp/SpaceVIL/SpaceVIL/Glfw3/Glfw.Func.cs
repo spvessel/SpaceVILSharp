@@ -79,10 +79,10 @@ namespace Glfw3
         {
             int x, y, w, h;
             glfwGetMonitorWorkarea(monitor.Ptr, &x, &y, &w, &h);
-            xpos = x; 
-            ypos = y; 
-            width = w; 
-            height = h; 
+            xpos = x;
+            ypos = y;
+            width = w;
+            height = h;
         }
 
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
@@ -299,9 +299,26 @@ namespace Glfw3
             glfwGetFramebufferSize(window, &w, &h);
             width = w; height = h;
         }
-
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         static extern unsafe void glfwGetFramebufferSize(Int64 window, int* width, int* height);
+
+        [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        static extern unsafe void glfwGetWindowContentScale(Int64 window, float* xscale, float* yscale);
+        internal static unsafe void GetWindowContentScale(Int64 window, out float xscale, out float yscale)
+        {
+            float x, y;
+            glfwGetWindowContentScale(window, &x, &y);
+            xscale = x; yscale = y;
+        }
+
+        [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        static extern unsafe void glfwGetMonitorContentScale(Monitor monitor, float* xscale, float* yscale);
+        internal static unsafe void GetMonitorContentScale(Monitor monitor, out float xscale, out float yscale)
+        {
+            float x, y;
+            glfwGetMonitorContentScale(monitor, &x, &y);
+            xscale = x; yscale = y;
+        }
 
         internal static unsafe void GetWindowFrameSize(Int64 window, out int left, out int top, out int right, out int bottom)
         {
@@ -535,6 +552,11 @@ namespace Glfw3
 
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         static extern IntPtr glfwSetDropCallback(Int64 window, IntPtr callback);
+
+        internal static void SetWindowContentScaleCallback(Int64 window, WindowContentScaleFunc callback) => glfwSetWindowContentScaleCallback(window, Marshal.GetFunctionPointerForDelegate(callback));
+
+        [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        static extern IntPtr glfwSetWindowContentScaleCallback(Int64 window, IntPtr callback);
 
         [DllImport(kLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "glfwJoystickPresent"), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]

@@ -15,6 +15,43 @@ namespace SpaceVIL
 {
     internal sealed class DrawEngine
     {
+        internal void RestoreCommonGLSettings()
+        {
+            glEnable(GL_TEXTURE_2D);
+            glEnable(GL_BLEND);
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_BACK);
+            glEnable(GL_ALPHA_TEST);
+            glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_DST_ALPHA);
+            glEnable(GL_DEPTH_TEST);
+        }
+
+        internal void RestoreView()
+        {
+            glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+        }
+
+        internal void SetGLLayerViewport(IOpenGLLayer layer)
+        {
+            IBaseItem oglLayer = layer as IBaseItem;
+            if (oglLayer == null)
+                return;
+            SetViewPort(oglLayer);
+        }
+
+        private void SetViewPort(IBaseItem item)
+        {
+            int x = item.GetX();
+            int y = _commonProcessor.Window.GetHeight() - (item.GetY() + item.GetHeight());
+            int w = item.GetWidth();
+            int h = item.GetHeight();
+            x = (int)((float)x * _scale.GetX());
+            y = (int)((float)y * _scale.GetY());
+            w = (int)((float)w * _scale.GetX());
+            h = (int)((float)h * _scale.GetY());
+            glViewport(x, y, w, h);
+        }
+
         internal void FreeVRAMResource<T>(T resource)
         {
 
@@ -37,6 +74,8 @@ namespace SpaceVIL
         private MouseMoveProcessor _mouseMoveProcessor;
         private RenderProcessor _renderProcessor;
         private StencilProcessor _stencilProcessor;
+
+        private Scale _scale = new Scale();
 
         private float _itemPyramidLevel = 1.0f;
 
@@ -119,6 +158,7 @@ namespace SpaceVIL
             _commonProcessor.WndProcessor.ApplyIcon();
             PrepareCanvas();
             _tooltip.InitElements();
+            DrawScene();
             return true;
         }
 
@@ -128,6 +168,8 @@ namespace SpaceVIL
             try
             {
                 GLWHandler.CreateWindow();
+                _scale.SetScale(GLWHandler.GetCoreWindow().GetDpiScale().GetX(),
+                    GLWHandler.GetCoreWindow().GetDpiScale().GetY());
                 SetEventsCallbacks();
                 if (WindowManager.GetVSyncValue() != 1)
                     Glfw.SwapInterval(WindowManager.GetVSyncValue());
@@ -209,7 +251,7 @@ namespace SpaceVIL
         {
             _framebufferWidth = w;
             _framebufferHeight = h;
-            Glfw.MakeContextCurrent(_commonProcessor.Window.GetGLWID());
+            WindowManager.SetContextCurrent(_commonProcessor.Window);
             glViewport(0, 0, _framebufferWidth, _framebufferHeight);
             _renderProcessor.ScreenSquare.GenBuffers(
                 RenderProcessor.GetFullWindowRectangle(_framebufferWidth, _framebufferHeight));
@@ -219,7 +261,7 @@ namespace SpaceVIL
         internal void UpdateWindowSize()
         {
             _commonProcessor.WndProcessor.SetWindowSize(_commonProcessor.Window.GetWidth(),
-                    _commonProcessor.Window.GetHeight());
+                    _commonProcessor.Window.GetHeight(), _scale);
         }
 
         internal void UpdateWindowPosition()
@@ -262,8 +304,9 @@ namespace SpaceVIL
         private void Resize(Int64 window, int width, int height)
         {
             _tooltip.InitTimer(false);
-            GLWHandler.GetCoreWindow().SetWidthDirect(width);
-            GLWHandler.GetCoreWindow().SetHeightDirect(height);
+
+            GLWHandler.GetCoreWindow().SetWidthDirect((int)(width / _scale.GetX()));
+            GLWHandler.GetCoreWindow().SetHeightDirect((int)(height / _scale.GetY()));
 
             if (!GLWHandler.GetCoreWindow().IsBorderHidden)
             {
@@ -285,12 +328,14 @@ namespace SpaceVIL
                         }
                     }
                 }
+                // Render();
+                // GLWHandler.Swap();
             }
         }
 
         internal void SetWindowSize(int width, int height)
         {
-            _commonProcessor.WndProcessor.SetWindowSize(width, height);
+            _commonProcessor.WndProcessor.SetWindowSize(width, height, _scale);
         }
 
         private void Position(Int64 window, int xpos, int ypos)
@@ -317,7 +362,7 @@ namespace SpaceVIL
             _tooltip.InitTimer(false);
             if (!GLWHandler.Focusable)
                 return;
-            _mouseMoveProcessor.Process(wnd, xpos, ypos);
+            _mouseMoveProcessor.Process(wnd, xpos / _scale.GetX(), ypos / _scale.GetY(), _scale);
         }
 
         private void MouseClick(Int64 window, MouseButton button, InputState state, KeyMods mods)
@@ -432,6 +477,7 @@ namespace SpaceVIL
             _renderProcessor.ScreenSquare.Unbind();
         }
 
+        IList<IOpenGLLayer> oglLine = new List<IOpenGLLayer>();
         internal void FreeOnClose()
         {
             _primitive.DeleteShader();
@@ -444,6 +490,12 @@ namespace SpaceVIL
             glDeleteVertexArrays(1, GLWHandler.GVAO);
             GLWHandler.ClearEventsCallbacks();
             GLWHandler.Destroy();
+
+            while (!(oglLine.Count == 0))
+            {
+                oglLine[0].Free();
+                oglLine.RemoveAt(0);
+            }
         }
 
         internal void Render()
@@ -471,59 +523,137 @@ namespace SpaceVIL
 
         private bool CheckOutsideBorders(IBaseItem shell)
         {
-            return _stencilProcessor.Process(shell);
+            return _stencilProcessor.Process(shell, _scale);
         }
 
-        private void DrawItems(IBaseItem root)
+        private void DrawItems(IBaseItem root) // Переписать
         {
             if (!root.IsVisible() || !root.IsDrawable())
                 return;
 
-            ILine lineRoot = root as ILine;
+            ILine linesRoot = root as ILine;
             IPoints pointsRoot = root as IPoints;
             ITextContainer textRoot = root as ITextContainer;
             IImageItem imageRoot = root as IImageItem;
+            IOpenGLLayer openGLLayerRoot = root as IOpenGLLayer;
 
-            if (lineRoot != null)
+            // unique items without content meaning
+            if (linesRoot != null)
             {
-                DrawLines((root as ILine));
+                DrawCommonLines(linesRoot);
+                return;
             }
             if (pointsRoot != null)
             {
-                DrawPoints((root as IPoints));
+                DrawCommonPoints(pointsRoot);
+                return;
             }
+            if (imageRoot != null) // протестировать на вложенные элементы
+            {
+                DrawCommonImage(root, imageRoot);
+                DrawCommonContent(root);
+                return;
+            }
+
+            // unique items with posible content
             if (textRoot != null)
             {
-                DrawText(root as ITextContainer);
-                glDisable(GL_SCISSOR_TEST);
+                DrawCommonText(textRoot);
             }
-            if (imageRoot != null)
+            if (openGLLayerRoot != null)
             {
-                DrawShell(root);
-                glDisable(GL_SCISSOR_TEST);
-                DrawImage(root as IImageItem);
-                glDisable(GL_SCISSOR_TEST);
-            }
-            else
-            {
-                DrawShell(root);
-                glDisable(GL_SCISSOR_TEST);
-                Prototype rProto = root as Prototype;
-                if (rProto != null)
+                if (!oglLine.Contains(openGLLayerRoot))
                 {
-                    List<IBaseItem> list = rProto.GetItems();
-                    foreach (var child in list)
-                    {
-                        DrawItems(child);
-                    }
+                    oglLine.Add(openGLLayerRoot);
+                }
+                DrawCommonItem(root);
+                DrawCommonOpenGLLayer(openGLLayerRoot);
+
+                glClear(GL_DEPTH_BUFFER_BIT);
+                glDisable(GL_DEPTH_TEST);
+
+                DrawCommonContent(root);
+
+                glEnable(GL_DEPTH_TEST);
+                return;
+            }
+
+            // common item
+            DrawCommonItem(root);
+            DrawCommonContent(root);
+        }
+
+        private void DrawCommonContent(IBaseItem root)
+        {
+            Prototype rProto = root as Prototype;
+            if (rProto != null)
+            {
+                List<IBaseItem> list = rProto.GetItems();
+                foreach (var child in list)
+                {
+                    DrawItems(child);
                 }
             }
+        }
+
+        private void DrawCommonItem(IBaseItem root)
+        {
+            DrawShell(root);
+            glDisable(GL_SCISSOR_TEST);
+        }
+
+        private void DrawCommonLines(ILine linesRoot)
+        {
+            DrawLines(linesRoot);
+        }
+
+        private void DrawCommonPoints(IPoints pointsRoot)
+        {
+            DrawPoints(pointsRoot);
+        }
+
+        private void DrawCommonImage(IBaseItem root, IImageItem imageRoot)
+        {
+            DrawShell(root);
+            glDisable(GL_SCISSOR_TEST);
+            DrawImage(imageRoot);
+            glDisable(GL_SCISSOR_TEST);
+        }
+
+        private void DrawCommonText(ITextContainer textRoot)
+        {
+            DrawText(textRoot);
+            glDisable(GL_SCISSOR_TEST);
+        }
+
+        private void DrawCommonOpenGLLayer(IOpenGLLayer ogllRoot)
+        {
+            DrawOpenGLLayer(ogllRoot);
+            glDisable(GL_SCISSOR_TEST);
+        }
+
+        private void DrawOpenGLLayer(IOpenGLLayer ogllRoot)
+        {
+            if (!ogllRoot.IsInitialized())
+                ogllRoot.Initialize();
+
+
+            IBaseItem oglItem = ogllRoot as IBaseItem;
+            if (oglItem == null)
+                return;
+
+            bool stencil = CheckOutsideBorders(oglItem);
+
+            SetViewPort(oglItem);
+
+            ogllRoot.Draw();
+            RestoreView();
+            glDisable(GL_SCISSOR_TEST);
         }
 
         private void DrawShell(IBaseItem shell)
         {
             bool stencil = CheckOutsideBorders(shell);
-
             if (shell.GetBackground().A == 0)
             {
                 Prototype pr = shell as Prototype;
@@ -693,13 +823,16 @@ namespace SpaceVIL
             {
                 ItemsRefreshManager.RemoveText(text);
                 _renderProcessor.DrawFreshText(_char, text, textImage,
-                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    _scale,
+                    _commonProcessor.Window.GetWidth(),
+                    _commonProcessor.Window.GetHeight(),
                     GetItemPyramidLevel(), argb);
             }
             else
             {
                 _renderProcessor.DrawStoredText(_char, text, textImage,
-                    _commonProcessor.Window.GetWidth(), _commonProcessor.Window.GetHeight(),
+                    _commonProcessor.Window.GetWidth(),
+                    _commonProcessor.Window.GetHeight(),
                     GetItemPyramidLevel(), argb);
             }
         }

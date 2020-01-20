@@ -8,7 +8,28 @@ import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.spvessel.spacevil.Core.InterfaceOpenGLLayer;
+
 final class WindowLayout {
+
+    void restoreView() {
+        if (_engine != null) {
+            _engine.restoreView();
+        }
+    }
+
+    void restoreCommonGLSettings() {
+        if (_engine != null) {
+            _engine.restoreCommonGLSettings();
+        }
+    }
+
+    void setGLLayerViewport(InterfaceOpenGLLayer layer) {
+        if (_engine != null) {
+            _engine.setGLLayerViewport(layer);
+        }
+    }
+
     Lock engineLocker = new ReentrantLock();
     private Lock wndLock = new ReentrantLock();
 
@@ -36,7 +57,7 @@ final class WindowLayout {
             WindowsBox.initWindow(_coreWindow);
             setFocusedItem(_window);
         } catch (Exception ex) {
-            System.out.println("exception: " +  ex.toString());
+            ex.printStackTrace();
             return;
         } finally {
             wndLock.unlock();
@@ -134,18 +155,6 @@ final class WindowLayout {
 
     void setHidden(Boolean value) {
         _engine.glwHandler.setHidden(value);
-    }
-
-    private float _scaleWidth = 1.0f;
-    private float _scaleHeight = 1.0f;
-
-    float[] getDpiScale() {
-        return new float[] { _scaleWidth, _scaleHeight };
-    }
-
-    void setDpiScale(float w, float h) {
-        _scaleWidth = w;
-        _scaleHeight = h;
     }
 
     long getGLWID() {

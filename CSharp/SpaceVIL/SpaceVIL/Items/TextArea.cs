@@ -521,6 +521,7 @@ namespace SpaceVIL
         /// (includes visible and invisible parts of the text) </returns>
         public int GetTextWidth()
         {
+            //!!!!!!!!!!!!!!!!!!!!!!!!!
             return _area.GetWidth();
         }
 

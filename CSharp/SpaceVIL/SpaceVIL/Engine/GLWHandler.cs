@@ -11,21 +11,6 @@ namespace SpaceVIL
 {
     internal sealed class GLWHandler
     {
-        // private float _scaleWidth = 1.0f;
-        // private float _scaleHeight = 1.0f;
-        // float[] GetDpiScale()
-        // {
-        //     return new float[] { _scaleWidth, _scaleHeight };
-        // }
-        private void SetDpiScale(float w, float h)
-        {
-            // _scaleWidth = w;
-            // _scaleHeight = h;
-            // Console.WriteLine(String.Format("{0:0.0} {1:0.0}", w, h));
-            DisplayService.SetDisplayDpiScale(w);
-            _coreWindow.SetDpiScale(w, h);
-        }
-
         ///////////////////////////////////////////////
         Glfw.WindowSizeFunc ResizeCallback;
         Glfw.CursorPosFunc MouseMoveCallback;
@@ -39,6 +24,7 @@ namespace SpaceVIL
         Glfw.FramebufferSizeFunc FramebufferCallback;
         Glfw.WindowRefreshFunc WindowRefreshCallback;
         Glfw.DropFunc DropCallback;
+        // Glfw.WindowContentScaleFunc ContentScaleCallback;
         ///////////////////////////////////////////////
 
         internal bool BorderHidden;
@@ -87,7 +73,8 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.Samples, _coreWindow._msaa);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 3);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
-            // Glfw.WindowHint(Glfw.Hint.ScaleToMonitor, true);
+
+            Glfw.WindowHint(Glfw.Hint.ScaleToMonitor, true);
 
             Glfw.WindowHint(Glfw.Hint.Resizable, Resizeble);
             Glfw.WindowHint(Glfw.Hint.Decorated, !BorderHidden);//make borderless window
@@ -104,12 +91,13 @@ namespace SpaceVIL
                 LogService.Log().LogText("Create window fail - " + GetCoreWindow().GetWindowTitle());
                 throw new SpaceVILException("SpaceVILException: Create window fail - " + GetCoreWindow().GetWindowTitle());
             }
-            Glfw.MakeContextCurrent(_window);
+            WindowManager.SetContextCurrent(_coreWindow);
 
-            int w, h;
-            Glfw.GetFramebufferSize(_window, out w, out h);
+            int wFB, hFB;
+            Glfw.GetFramebufferSize(_window, out wFB, out hFB);
 
-            SetDpiScale((float)w / (float)_coreWindow.GetWidth(), (float)h / (float)_coreWindow.GetHeight());
+            // SetDpiScale((float)wFB / (float)_coreWindow.GetWidth(), (float)hFB / (float)_coreWindow.GetHeight());
+            _coreWindow.SetWindowScale((float)wFB / (float)_coreWindow.GetWidth(), (float)hFB / (float)_coreWindow.GetHeight());
 
             if (AppearInCenter)
             {
@@ -136,7 +124,7 @@ namespace SpaceVIL
         internal void SwitchContext()
         {
             Glfw.MakeContextCurrent(0);
-            Glfw.MakeContextCurrent(_window);
+            WindowManager.SetContextCurrent(_coreWindow);
         }
 
         internal void ClearEventsCallbacks()
@@ -260,6 +248,11 @@ namespace SpaceVIL
             DropCallback = function;
             Glfw.SetDropCallback(_window, DropCallback);
         }
+        // internal void SetCallbackContentScale(Glfw.WindowContentScaleFunc function)
+        // {
+        //     ContentScaleCallback = function;
+        //     Glfw.SetWindowContentScaleCallback(_window, ContentScaleCallback);
+        // }
 
         internal void SetOpacity(float level)
         {

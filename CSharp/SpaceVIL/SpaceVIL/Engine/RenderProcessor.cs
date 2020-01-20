@@ -112,7 +112,7 @@ namespace SpaceVIL
         {
             if (vertex == null)
                 return;
-                
+
             shader.UseShader();
             VramVertex store = new VramVertex();
             store.GenBuffers(vertex);
@@ -199,7 +199,7 @@ namespace SpaceVIL
         }
 
         internal void DrawFreshText(
-            Shader shader, ITextContainer item, ITextImage printer, float w, float h,
+            Shader shader, ITextContainer item, ITextImage printer, Scale scale, float w, float h,
             float level, float[] color)
         {
             TextStorage.DeleteResource(item);
@@ -209,11 +209,12 @@ namespace SpaceVIL
 
             shader.UseShader();
             VramTexture store = new VramTexture();
-            store.GenBuffers(0, printer.GetWidth(), 0, printer.GetHeight(), true);
+            store.GenBuffers(0, printer.GetWidth() / scale.GetX(), 0, printer.GetHeight() / scale.GetY(), true);
             store.GenTexture(printer.GetWidth(), printer.GetHeight(), printer.GetBytes());
             TextStorage.AddResource(item, store);
 
-            store.SendUniform4f(shader, "position", new float[] { printer.GetXOffset(), printer.GetYOffset(), w, h });
+            store.SendUniform4f(shader, "position",
+                new float[] { printer.GetXOffset(), printer.GetYOffset(), w, h });
             store.SendUniform1f(shader, "level", level);
             store.SendUniformSample2D(shader, "tex");
             store.SendUniform4f(shader, "rgb", color);
@@ -348,14 +349,10 @@ namespace SpaceVIL
             Bitmap bmp = image.GetImage();
             if (bmp == null)
                 return;
-            // byte[] buffer = image.GetPixMapImage();
-            // if (buffer == null)
-            //     return;
 
             shader.UseShader();
             VramTexture store = new VramTexture();
             store.GenBuffers(0, aw, 0, ah);
-            // store.GenTexture(iw, ih, buffer);
             store.GenTexture(iw, ih, bmp);
             store.SendUniformSample2D(shader, "tex");
             if (image.IsColorOverlay())

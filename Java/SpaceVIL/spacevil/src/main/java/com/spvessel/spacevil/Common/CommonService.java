@@ -93,7 +93,7 @@ public final class CommonService {
         cursorResizeAll = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-        DisplayService.SetDisplaySize(vidmode.width(), vidmode.height());
+        DisplayService.setDisplaySize(vidmode.width(), vidmode.height());
 
         DefaultsService.initImages();
         DefaultsService.initDefaultTheme();

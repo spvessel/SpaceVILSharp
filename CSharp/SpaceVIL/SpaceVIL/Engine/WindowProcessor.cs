@@ -20,11 +20,11 @@ namespace SpaceVIL
             _commonProcessor = commonProcessor;
         }
 
-        internal void SetWindowSize(int width, int height)
+        internal void SetWindowSize(int width, int height, Scale scale)
         {
             if (WindowsBox.GetCurrentFocusedWindow() != _commonProcessor.Window)
                 Glfw.FocusWindow(_commonProcessor.Window.GetGLWID());
-                
+
             if (_commonProcessor.Window.IsKeepAspectRatio)
             {
                 float currentW = width;
@@ -33,19 +33,19 @@ namespace SpaceVIL
                 float ratioH = _commonProcessor.Window.RatioH;
                 float xScale = (currentW / ratioW);
                 float yScale = (currentH / ratioH);
-                float scale = 0;
+                float ratio = 0;
                 Side handlerContainerSides = _commonProcessor.RootContainer._sides;
                 if (handlerContainerSides.HasFlag(Side.Left)
                         || handlerContainerSides.HasFlag(Side.Right))
-                    scale = xScale;
+                    ratio = xScale;
                 else
-                    scale = yScale;
+                    ratio = yScale;
 
-                width = (int)(ratioW * scale);
-                height = (int)(ratioH * scale);
+                width = (int)(ratioW * ratio);
+                height = (int)(ratioH * ratio);
             }
 
-            Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(), width, height);
+            Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(), (int)(width * scale.GetX()), (int)(height * scale.GetY()));
             _commonProcessor.Events.SetEvent(InputEventType.WindowResize);
         }
 

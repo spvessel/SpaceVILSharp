@@ -1173,13 +1173,13 @@ namespace SpaceVIL
                 {
                     float _screenScale = 1;
                     CoreWindow wLayout = GetHandler();
-                    if (wLayout == null || wLayout.GetDpiScale() == null)
+                    if (wLayout == null)// || Common.DisplayService.GetDpiScale() == null) // && Common.DisplayService.GetDpiScale().Length > 0) //wLayout == null || wLayout.GetDpiScale() == null)
                     {
                         _screenScale = 1;
                     }
                     else
                     {
-                        _screenScale = wLayout.GetDpiScale()[0];
+                        _screenScale = DisplayService.GetWindowDpiScale(wLayout).GetX(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
                         if (_screenScale == 0)
                         {
                             _screenScale = 1;
@@ -1192,6 +1192,7 @@ namespace SpaceVIL
                     int visibleHeight = 0;
                     _firstVisibleLineNumb = -1; // int startNumb = -1;
                     int inc = -1;
+
                     foreach (TextLine tl in _linesList)
                     {
                         inc++;
@@ -1222,7 +1223,7 @@ namespace SpaceVIL
                     //{
                     w = bigWidth;
                     //}
-
+                    // Console.WriteLine("texture width " + w + " " + GetWidth() + " " + _cursorXMax + "\n");
                     byte[] bigByte = new byte[visibleHeight * w * 4]; //h
                     int bigOff = 0;
 
@@ -1264,6 +1265,7 @@ namespace SpaceVIL
                         bigOff += lineHeigh * w * 4;
                     }
                     _blockTexture = new TextPrinter(bigByte); //TextPrinter tpout = new TextPrinter(bigByte);
+                    // Console.WriteLine("Here texture = " + w + " " + GetWidth());
                     _blockTexture.SetSize(w, visibleHeight);
                     // _blockTexture.WidthTexture = w; //tpout.WidthTexture = w;
                     // _blockTexture.HeightTexture = visibleHeight; // h; //tpout.HeightTexture = visibleHeight; // h;

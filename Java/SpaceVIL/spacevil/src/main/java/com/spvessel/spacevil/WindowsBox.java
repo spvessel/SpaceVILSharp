@@ -1,5 +1,6 @@
 package com.spvessel.spacevil;
 
+import com.spvessel.spacevil.Core.InterfaceOpenGLLayer;
 import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -150,5 +151,17 @@ public final class WindowsBox {
         for (String item : getWindowsList()) {
             System.out.println(item);
         }
+    }
+
+    public static void restoreCommonGLSettings(CoreWindow window) {
+        window.getLayout().restoreCommonGLSettings();
+    }
+
+    public static void restoreViewport(CoreWindow window) {
+        window.getLayout().restoreView();
+    }
+
+    public static void setGLLayerViewport(CoreWindow window, InterfaceOpenGLLayer layer) {
+        window.getLayout().setGLLayerViewport(layer);
     }
 }

@@ -162,5 +162,20 @@ namespace SpaceVIL
                 Console.WriteLine(item);
             }
         }
+
+        internal static void RestoreCommonGLSettings(CoreWindow window)
+        {
+            window.GetLayout().RestoreCommonGLSettings();
+        }
+
+        internal static void RestoreViewport(CoreWindow window)
+        {
+            window.GetLayout().RestoreView();
+        }
+
+        internal static void SetGLLayerViewport(CoreWindow window, IOpenGLLayer layer)
+        {
+            window.GetLayout().SetGLLayerViewport(layer);
+        }
     }
 }

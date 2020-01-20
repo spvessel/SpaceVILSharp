@@ -22,6 +22,40 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
 final class DrawEngine {
+
+    void restoreCommonGLSettings() {
+        glEnable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glEnable(GL_ALPHA_TEST);
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_DST_ALPHA);
+        glEnable(GL_DEPTH_TEST);
+    }
+
+    void restoreView() {
+        glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+    }
+
+    void setGLLayerViewport(InterfaceOpenGLLayer layer) {
+        if (!(layer instanceof InterfaceBaseItem))
+            return;
+        InterfaceBaseItem oglLayer = (InterfaceBaseItem) layer;
+        setViewPort(oglLayer);
+    }
+
+    private void setViewPort(InterfaceBaseItem item) {
+        int x = item.getX();
+        int y = _commonProcessor.window.getHeight() - (item.getY() + item.getHeight());
+        int w = item.getWidth();
+        int h = item.getHeight();
+        x = (int) ((float) x * _scale.getX());
+        y = (int) ((float) y * _scale.getY());
+        w = (int) ((float) w * _scale.getX());
+        h = (int) ((float) h * _scale.getY());
+        glViewport(x, y, w, h);
+    }
+
     <T> void freeVRAMResource(T resource) {
         if (_renderProcessor == null)
             return;
@@ -36,6 +70,8 @@ final class DrawEngine {
     private MouseMoveProcessor _mouseMoveProcessor;
     private RenderProcessor _renderProcessor;
     private StencilProcessor _stencilProcessor;
+
+    private Scale _scale = new Scale();
 
     boolean fullScreenRequest = false;
     boolean maximizeRequest = false;
@@ -120,6 +156,7 @@ final class DrawEngine {
             _commonProcessor.wndProcessor.applyIcon(_iconBig, _iconSmall);
         prepareCanvas();
         _tooltip.initElements();
+        drawScene();
         return true;
     }
 
@@ -127,6 +164,8 @@ final class DrawEngine {
         CommonService.GlobalLocker.lock();
         try {
             glwHandler.createWindow();
+            _scale.setScale(glwHandler.getCoreWindow().getDpiScale().getX(),
+                    glwHandler.getCoreWindow().getDpiScale().getY());
             setEventsCallbacks();
             GL.createCapabilities();
             if (WindowManager.getVSyncValue() != 1)
@@ -259,7 +298,7 @@ final class DrawEngine {
     private void framebuffer(long window, int w, int h) {
         _framebufferWidth = w;
         _framebufferHeight = h;
-        glfwMakeContextCurrent(_commonProcessor.window.getGLWID());
+        WindowManager.setContextCurrent(_commonProcessor.window);
         glViewport(0, 0, _framebufferWidth, _framebufferHeight);
 
         _renderProcessor.screenSquare.clear();
@@ -270,7 +309,7 @@ final class DrawEngine {
 
     void updateWindowSize() {
         _commonProcessor.wndProcessor.setWindowSize(_commonProcessor.window.getWidth(),
-                _commonProcessor.window.getHeight());
+                _commonProcessor.window.getHeight(), _scale);
     }
 
     void updateWindowPosition() {
@@ -304,8 +343,9 @@ final class DrawEngine {
 
     private void resize(long wnd, int width, int height) {
         _tooltip.initTimer(false);
-        _commonProcessor.window.setWidthDirect(width);
-        _commonProcessor.window.setHeightDirect(height);
+
+        _commonProcessor.window.setWidthDirect((int) (width / _scale.getX()));
+        _commonProcessor.window.setHeightDirect((int) (height / _scale.getY()));
 
         if (!glwHandler.getCoreWindow().isBorderHidden) {
             List<InterfaceBaseItem> list = ItemsLayoutBox.getLayoutFloatItems(_commonProcessor.window.getWindowGuid());
@@ -324,11 +364,13 @@ final class DrawEngine {
                     }
                 }
             }
+            // render();
+            // glwHandler.swap();
         }
     }
 
     void setWindowSize(int width, int height) {
-        _commonProcessor.wndProcessor.setWindowSize(width, height);
+        _commonProcessor.wndProcessor.setWindowSize(width, height, _scale);
     }
 
     private void position(long wnd, int xpos, int ypos) {
@@ -352,7 +394,7 @@ final class DrawEngine {
         _tooltip.initTimer(false);
         if (!glwHandler.focusable)
             return;
-        _mouseMoveProcessor.process(wnd, xpos, ypos);
+        _mouseMoveProcessor.process(wnd, xpos / _scale.getX(), ypos / _scale.getX(), _scale);
     }
 
     private void mouseClick(long wnd, int button, int action, int mods) {
@@ -452,6 +494,8 @@ final class DrawEngine {
         _renderProcessor.screenSquare.unbind();
     }
 
+    List<InterfaceOpenGLLayer> oglLine = new LinkedList<>();
+
     void freeOnClose() {
         _primitive.deleteShader();
         _texture.deleteShader();
@@ -463,6 +507,12 @@ final class DrawEngine {
         glDeleteVertexArrays(glwHandler.gVAO);
         glwHandler.clearEventsCallbacks();
         glwHandler.destroy();
+
+        // free ogl
+        while (!oglLine.isEmpty()) {
+            oglLine.get(0).free();
+            oglLine.remove(0);
+        }
     }
 
     void render() {
@@ -489,7 +539,7 @@ final class DrawEngine {
     }
 
     private boolean checkOutsideBorders(InterfaceBaseItem shell) {
-        return _stencilProcessor.process(shell);
+        return _stencilProcessor.process(shell, _scale);
     }
 
     private void drawItems(InterfaceBaseItem root) {
@@ -498,29 +548,79 @@ final class DrawEngine {
 
         if (root instanceof InterfaceLine) {
             drawLines((InterfaceLine) root);
+            return;
         }
         if (root instanceof InterfacePoints) {
             drawPoints((InterfacePoints) root);
-        }
-        if (root instanceof InterfaceTextContainer) {
-            drawText((InterfaceTextContainer) root);
-            glDisable(GL_SCISSOR_TEST);
+            return;
         }
         if (root instanceof InterfaceImageItem) {
             drawShell(root);
             glDisable(GL_SCISSOR_TEST);
             drawImage((InterfaceImageItem) root);
             glDisable(GL_SCISSOR_TEST);
-        } else {
+            drawCommonContent(root);
+            return;
+        }
+
+        if (root instanceof InterfaceTextContainer) {
+            drawText((InterfaceTextContainer) root);
+            glDisable(GL_SCISSOR_TEST);
+        }
+
+        if (root instanceof InterfaceOpenGLLayer) {
+            InterfaceOpenGLLayer ogl = (InterfaceOpenGLLayer) root;
+            if (!oglLine.contains(ogl)) {
+                oglLine.add(ogl);
+            }
             drawShell(root);
             glDisable(GL_SCISSOR_TEST);
-            if (root instanceof Prototype) {
-                List<InterfaceBaseItem> list = ((Prototype) root).getItems();
-                for (InterfaceBaseItem child : list) {
-                    drawItems(child);
-                }
+
+            drawCommonOpenGLLayer(ogl);
+
+            glClear(GL_DEPTH_BUFFER_BIT);
+            glDisable(GL_DEPTH_TEST);
+
+            drawCommonContent(root);
+
+            glEnable(GL_DEPTH_TEST);
+            return;
+        }
+
+        drawShell(root);
+        glDisable(GL_SCISSOR_TEST);
+        drawCommonContent(root);
+    }
+
+    private void drawCommonContent(InterfaceBaseItem root) {
+        if (root instanceof Prototype) {
+            List<InterfaceBaseItem> list = ((Prototype) root).getItems();
+            for (InterfaceBaseItem child : list) {
+                drawItems(child);
             }
         }
+    }
+
+    private void drawCommonOpenGLLayer(InterfaceOpenGLLayer ogllRoot) {
+        drawOpenGLLayer(ogllRoot);
+        glDisable(GL_SCISSOR_TEST);
+    }
+
+    private void drawOpenGLLayer(InterfaceOpenGLLayer ogllRoot) {
+        if (!ogllRoot.isInitialized())
+            ogllRoot.initialize();
+
+        if (!(ogllRoot instanceof InterfaceBaseItem))
+            return;
+
+        InterfaceBaseItem oglItem = (InterfaceBaseItem) ogllRoot;
+        boolean stencil = checkOutsideBorders(oglItem);
+
+        setViewPort(oglItem);
+
+        ogllRoot.draw();
+        restoreView();
+        glDisable(GL_SCISSOR_TEST);
     }
 
     private void drawShell(InterfaceBaseItem shell) {
@@ -667,7 +767,7 @@ final class DrawEngine {
 
         if (ItemsRefreshManager.isRefreshText(text)) {
             ItemsRefreshManager.removeText(text);
-            _renderProcessor.drawFreshText(_char, text, textImage, _commonProcessor.window.getWidth(),
+            _renderProcessor.drawFreshText(_char, text, textImage, _scale, _commonProcessor.window.getWidth(),
                     _commonProcessor.window.getHeight(), getItemPyramidLevel(), argb);
         } else {
             _renderProcessor.drawStoredText(_char, text, textImage, _commonProcessor.window.getWidth(),
@@ -896,11 +996,9 @@ final class DrawEngine {
                     vertex = GraphicsMathService.moveShape(
                             GraphicsMathService.updateShape(subtractFigure.getSubtractFigure().getFigure(),
                                     (int) (item.getWidth() * subtractFigure.getWidthScale()),
-                                    (int) (item.getHeight() * subtractFigure.getHeightScale())
-                                    ,new Area(0, 0, item.getWidth(), item.getHeight()), subtractFigure.getAlignment()
-                                    ),
-                            subtractFigure.getXOffset(),
-                            subtractFigure.getYOffset());
+                                    (int) (item.getHeight() * subtractFigure.getHeightScale()),
+                                    new Area(0, 0, item.getWidth(), item.getHeight()), subtractFigure.getAlignment()),
+                            subtractFigure.getXOffset(), subtractFigure.getYOffset());
                 }
 
                 _renderProcessor.drawDirectVertex(_primitive, vertex, 0, item.getX(), item.getY(),

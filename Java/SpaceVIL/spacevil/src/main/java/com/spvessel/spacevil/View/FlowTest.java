@@ -1,6 +1,7 @@
 package com.spvessel.spacevil.View;
 
 import com.spvessel.spacevil.*;
+import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Decorations.CustomFigure;
 import com.spvessel.spacevil.Decorations.Effects;
@@ -151,19 +152,23 @@ public class FlowTest extends ActiveWindow {
         btn3.setAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
         btn3.addItemState(ItemStateType.HOVERED, hovered);
         btn3.eventMouseClick.add((sender, args) -> {
-            for (int i = 0; i < 1; i++) {
-                for (int j = 0; j < 1; j++) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
                     ResizableItem frame = new ResizableItem();
-                    frame.setShadow(10, 5, 5, Color.RED);
+                    // frame.setShadow(10, 5, 5, Color.RED);
+                    // frame.setShadowExtension(20, 20);
+                    frame.setBorder(new Border(Color.gray, new CornerRadius(), 2));
                     frame.setPadding(5, 5, 5, 5);
                     frame.setBackground(100, 100, 100);
-                    frame.setSize(100, 100);
-                    frame.setPosition(10 + i * 103, 10 + j * 103);
-                    frame.setShadowExtension(20, 20);
+                    frame.setSize(200, 200);
+                    frame.setPosition(10 + i * 210, 10 + j * 210);
                     flow.addItem(frame);
-                    Graph graph = getGraph();
-                    graph.setPadding(5, 5, 5, 5);
-                    frame.addItem(graph);
+                    // Graph graph = getGraph();
+                    // graph.setPadding(5, 5, 5, 5);
+                    // frame.addItem(graph);
+                    OpenGLLayer ogl = new OpenGLLayer();
+                    ogl.setMargin(0, 30, 0, 0);
+                    frame.addItem(ogl);
                 }
             }
 
@@ -316,7 +321,6 @@ public class FlowTest extends ActiveWindow {
             if (args.key == KeyCode.F)
                 System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
         });
-
 
         setAntiAliasingQuality(MSAA.MSAA_8X);
         int _diameter = 180;

@@ -187,6 +187,11 @@ namespace SpaceVIL
             {
                 return new List<CoreWindow>(_windows);
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return new List<CoreWindow>();
+            }
             finally
             {
                 Monitor.Exit(_lock);
@@ -230,13 +235,13 @@ namespace SpaceVIL
                 waitfunc.Invoke();
                 foreach (CoreWindow window in list)
                 {
-                    Glfw.MakeContextCurrent(window.GetGLWID());
+                    SetContextCurrent(window);
                     window.UpdateScene();
                 }
                 CoreWindow wnd = WindowsBox.GetCurrentFocusedWindow();
                 if (wnd != null && _initializedWindows.ContainsKey(wnd))
                 {
-                    Glfw.MakeContextCurrent(wnd.GetGLWID());
+                    SetContextCurrent(wnd);
                 }
                 VerifyToCloseWindows();
                 VerifyToInitWindows();
@@ -251,7 +256,7 @@ namespace SpaceVIL
                 _windows.Remove(wnd);
                 _initializedWindows.Remove(wnd);
                 _isEmpty = (_windows.Count == 0);
-                Glfw.MakeContextCurrent(wnd.GetGLWID());
+                SetContextCurrent(wnd);
                 wnd.Dispose();
                 wnd.IsClosed = true;
             }
@@ -281,7 +286,7 @@ namespace SpaceVIL
 
         public static void StartWith(params CoreWindow[] windows)
         {
-            foreach (CoreWindow wnd in windows)
+            foreach (var wnd in windows)
             {
                 AddWindow(wnd);
             }
@@ -294,6 +299,39 @@ namespace SpaceVIL
             try
             {
                 _listWaitigForClose = new Queue<CoreWindow>(_windows);
+            }
+            finally
+            {
+                Monitor.Exit(_lock);
+            }
+        }
+
+        private static CoreWindow _currentContextedWindow = null;
+        internal static void SetContextCurrent(CoreWindow window)
+        {
+            Monitor.Enter(_lock);
+            try
+            {
+                Glfw.MakeContextCurrent(window.GetGLWID());
+                _currentContextedWindow = window;
+            }
+            finally
+            {
+                Monitor.Exit(_lock);
+            }
+        }
+
+        internal static CoreWindow GetWindowContextCurrent()
+        {
+            Monitor.Enter(_lock);
+            try
+            {
+                return _currentContextedWindow;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return null;
             }
             finally
             {

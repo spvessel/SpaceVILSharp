@@ -15,7 +15,7 @@ namespace SpaceVIL
             _commonProcessor = commonProcessor;
         }
 
-        internal void Process(Int64 wnd, double xpos, double ypos)
+        internal void Process(Int64 wnd, double xpos, double ypos, Scale scale)
         {
             _commonProcessor.PtrRelease.SetX((int)xpos);
             _commonProcessor.PtrRelease.SetY((int)ypos);
@@ -87,7 +87,7 @@ namespace SpaceVIL
                     {
                         if (CommonService.GetOSType() == OSType.Mac)
                         {
-                            _commonProcessor.WndProcessor.SetWindowSize(w, h);
+                            _commonProcessor.WndProcessor.SetWindowSize(w, h, new Scale());
                             if (handlerContainerSides.HasFlag(Side.Left) && handlerContainerSides.HasFlag(Side.Top))
                             {
                                 _commonProcessor.WndProcessor.SetWindowPos(xHandler, (_commonProcessor.HGlobal - h) + _commonProcessor.YGlobal);
@@ -103,7 +103,7 @@ namespace SpaceVIL
                         {
                             if (handlerContainerSides.HasFlag(Side.Left) || handlerContainerSides.HasFlag(Side.Top))
                                 _commonProcessor.WndProcessor.SetWindowPos(xHandler, yHandler);
-                            _commonProcessor.WndProcessor.SetWindowSize(w, h);
+                            _commonProcessor.WndProcessor.SetWindowSize(w, h, scale);
                         }
                     }
                 }

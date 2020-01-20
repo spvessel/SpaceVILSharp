@@ -79,7 +79,7 @@ public class VerticalSlider extends Prototype {
 
     void updateHandler() {
         float offset = ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight())
-                / (_max_value - _min_value) * _current_value;
+                / (_max_value - _min_value) * (_current_value - _min_value);
         handler.setOffset((int) offset + getPadding().top + handler.getMargin().top);
     }
 
@@ -152,7 +152,7 @@ public class VerticalSlider extends Prototype {
         _dragging = true;
         // иногда число NAN
         float result = (float) (handler.getY() - getY()) * (_max_value - _min_value)
-                / ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight());
+                / ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight()) + _min_value;
         if (!Float.isNaN(result))
             setCurrentValue(result);
     }

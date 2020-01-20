@@ -1,4 +1,8 @@
-﻿namespace SpaceVIL.Common
+﻿using Glfw3;
+using SpaceVIL.Core;
+using static Glfw3.Glfw;
+
+namespace SpaceVIL.Common
 {
     public static class DisplayService
     {
@@ -20,14 +24,17 @@
         }
 
         //dpi
-        private static float _dpi = 1.0f;
-        public static float GetDisplayDpiScale()
+        public static Scale GetDisplayDpiScale()
         {
-            return _dpi;
+            Monitor monitor = Glfw.GetPrimaryMonitor();
+            float x, y;
+            Glfw.GetMonitorContentScale(monitor, out x, out y);
+            return new Scale(x, y);
         }
-        internal static void SetDisplayDpiScale(float scale)
+
+        public static Scale GetWindowDpiScale(CoreWindow window)
         {
-            _dpi = scale;
+            return window.GetDpiScale();
         }
     }
 }

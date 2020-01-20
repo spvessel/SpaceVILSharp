@@ -5,6 +5,7 @@ import com.spvessel.spacevil.Core.InterfaceTextImage;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.SpaceVILConstants;
+import com.spvessel.spacevil.Common.DisplayService;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -70,11 +71,11 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 _letEndPos.add(modL.xBeg + modL.xShift + modL.width);
             }
 
-            CoreWindow wLayout = getHandler();
-            if (wLayout == null || wLayout.getDpiScale() == null) {
-                _screenScale = 0;
+            CoreWindow wLayout = (getParent() == null) ? null : getParent().getHandler();
+            if (wLayout == null) { // || wLayout.getDpiScale() == null) {
+                _screenScale = 1; //0;
             } else {
-                _screenScale = wLayout.getDpiScale()[0];
+                _screenScale = wLayout.getDpiScale().getX();
                 if (_screenScale != 1) {
                     makeBigArr();
                 }
@@ -106,7 +107,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 
         // _bigMinY = output[1];
 
-        if (_screenScale != 0) {
+        // if (_screenScale != 0) 
+        {
             _letEndPos = new LinkedList<>();
             for (Alphabet.ModifyLetter modL : _bigLetters) {
                 _letEndPos.add((int) ((float) (modL.xBeg + modL.xShift + modL.width) / _screenScale));
@@ -119,18 +121,6 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     public InterfaceTextImage getTexture() {
         textLock.lock();
         try {
-            CoreWindow wLayout = getHandler();
-            if (wLayout != null && wLayout.getDpiScale() != null) {
-                float scl = wLayout.getDpiScale()[0];
-                if (scl != _screenScale && !isBigExist) { //Это при допущении, что скейл меняется только один раз!
-                    if (_screenScale != 0 || scl != 1) {
-                        //Возможно может возникнуть проблема при переходе от большего к меньшему
-                        _screenScale = scl;
-                        makeBigArr();
-                    }
-                }
-            }
-
             int[] fontDims = getFontDims();
             int height = fontDims[2];
             if (getHeight() != height) {
@@ -140,6 +130,18 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             Prototype parent = getParent();
             if (parent == null) { //Обязательно
                 return null;
+            }
+
+            CoreWindow wLayout = parent.getHandler();
+            if (wLayout != null) { // && wLayout.getDpiScale() != null) {
+                float scl = wLayout.getDpiScale().getX();
+                if (scl != _screenScale) { //} && !isBigExist) { //Это при допущении, что скейл меняется только один раз!
+                    if (_screenScale != 0 || scl != 1) {
+                        //Возможно может возникнуть проблема при переходе от большего к меньшему
+                        _screenScale = scl;
+                        makeBigArr();
+                    }
+                }
             }
 
             if (_isRecountable) {
@@ -164,7 +166,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 
                 int xFirstBeg = _letters.get(0).xBeg + _letters.get(0).xShift;
 
-                if (_screenScale != 0 && _screenScale != 1) {
+                if (_screenScale != 1) { // 0 && _screenScale != 1) {
                     Font fontBig = new Font(getFont().getName(), getFont().getStyle(),
                             (int) (getFont().getSize() * _screenScale));
                     // Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
@@ -427,6 +429,9 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     }
 
     List<Integer> getLetPosArray() {
+        if (_isUpdateNeed) {
+            updateData();
+        }
         return _letEndPos;
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -19,9 +20,11 @@ final class StencilProcessor {
         _bounds = new HashMap<>();
     }
 
-    boolean process(InterfaceBaseItem shell) {
+    private Scale _scale = new Scale();
+    boolean process(InterfaceBaseItem shell, Scale scale) {
+        _scale.setScale(scale.getX(), scale.getY());
+        
         Prototype parent = shell.getParent();
-
         if (parent != null && _bounds.containsKey(parent)) {
 
             int[] shape = _bounds.get(parent);
@@ -87,12 +90,10 @@ final class StencilProcessor {
         int y = _commonProcessor.window.getHeight() - (parent.getY() + parent.getHeight());
         int w = parent.getWidth();
         int h = parent.getHeight();
-
-        float scale = _commonProcessor.window.getDpiScale()[0];
-        x *= scale;
-        y *= scale;
-        w *= scale;
-        h *= scale;
+        x *= _scale.getX();
+        y *= _scale.getY();
+        w *= _scale.getX();
+        h *= _scale.getY();
 
         glEnable(GL_SCISSOR_TEST);
         glScissor(x, y, w, h);

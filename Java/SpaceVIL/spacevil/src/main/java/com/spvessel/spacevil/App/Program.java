@@ -40,8 +40,9 @@ public class Program {
         ComplexTest ct = new ComplexTest();
         InputTest it = new InputTest();
         TextTest tt = new TextTest();
-        // Containers con = new Containers();
+        Containers con = new Containers();
         SideAreaTest sat = new SideAreaTest();
+        OpenGLTest oglt = new OpenGLTest();
 
         // PerformanceTest pt = new PerformanceTest();
 
@@ -60,20 +61,21 @@ public class Program {
         // WindowManager.setRenderType(RenderType.ALWAYS);
 
         WindowManager.startWith(
-            mw
-        //, mw2
-        // st
-        // im
-        // ft
-        // lt
-        // ct
-        // it
-        // tt
-        // con
-        // sat
-        // et
-        // pt
-        );
+                // mw,
+                //, mw2
+                // st
+                // im
+                // ft,
+                // lt
+                // ct
+                it
+                // tt
+                // con
+                // sat
+                // et
+                // pt
+                // oglt
+                );
     }
 
     public static Style getNewToolTipStyle() {

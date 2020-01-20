@@ -145,6 +145,9 @@ public final class WindowManager {
         _lock.lock();
         try {
             return new LinkedList<>(_windows);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new LinkedList<>();
         } finally {
             _lock.unlock();
         }
@@ -157,6 +160,7 @@ public final class WindowManager {
                 _listWaitigForClose.add(wnd);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             _lock.unlock();
         }
@@ -176,13 +180,13 @@ public final class WindowManager {
             List<CoreWindow> list = getStoredWindows();
             waitfunc.execute();
             for (CoreWindow window : list) {
-                glfwMakeContextCurrent(window.getGLWID());
+                setContextCurrent(window);
                 window.updateScene();
             }
 
             CoreWindow wnd = WindowsBox.getCurrentFocusedWindow();
             if (wnd != null && _initializedWindows.containsKey(wnd)) {
-                glfwMakeContextCurrent(wnd.getGLWID());
+                setContextCurrent(wnd);
             }
             verifyToCloseWindows();
             verifyToInitWindows();
@@ -195,7 +199,7 @@ public final class WindowManager {
             _windows.remove(wnd);
             _initializedWindows.remove(wnd);
             _isEmpty = _windows.isEmpty();
-            glfwMakeContextCurrent(wnd.getGLWID());
+            setContextCurrent(wnd);
             wnd.dispose();
             wnd.isClosed = true;
         }
@@ -229,6 +233,30 @@ public final class WindowManager {
         _lock.lock();
         try {
             _listWaitigForClose = new ArrayDeque<>(_windows);
+        } finally {
+            _lock.unlock();
+        }
+    }
+
+    private static CoreWindow _currentContextedWindow = null;
+
+    static void setContextCurrent(CoreWindow window) {
+        _lock.lock();
+        try {
+            glfwMakeContextCurrent(window.getGLWID());
+            _currentContextedWindow = window;
+        } finally {
+            _lock.unlock();
+        }
+    }
+
+    static CoreWindow getWindowContextCurrent() {
+        _lock.lock();
+        try {
+            return _currentContextedWindow;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         } finally {
             _lock.unlock();
         }

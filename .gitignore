@@ -225,3 +225,15 @@ Java/SpaceVIL/spacevil/bin/main/shaders/fs_blur_old.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/fs_primitive.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_primitive.glsl
 OwlsInSpace/.classpath
+CSharp/SpaceVIL/SpaceVIL/Glm/geometric.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/mat2.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/mat3.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/mat4.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/matrix.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/matrix_transform.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/trigonometric.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/vec2.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/vec3.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/vec4.cs
+CSharp/SpaceVIL/SpaceVIL/View/OpenGLLayerTest.cs
+CSharp/SpaceVIL/SpaceVIL/Items/OpenGLLayer.cs
