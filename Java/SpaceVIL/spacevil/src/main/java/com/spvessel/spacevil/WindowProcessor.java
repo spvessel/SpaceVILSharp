@@ -55,6 +55,13 @@ final class WindowProcessor {
             width = (int) (ratioW * ratio);
             height = (int) (ratioH * ratio);
         }
+
+        if (width > _commonProcessor.window.getMaxWidth())
+            width = _commonProcessor.window.getMaxWidth();
+
+        if (height > _commonProcessor.window.getMaxHeight())
+            height = _commonProcessor.window.getMaxHeight();
+
         glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getX()),
                 (int) (height * scale.getY()));
         _commonProcessor.events.setEvent(InputEventType.WINDOW_RESIZE);

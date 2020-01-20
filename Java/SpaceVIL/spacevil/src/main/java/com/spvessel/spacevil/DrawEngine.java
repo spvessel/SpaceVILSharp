@@ -353,7 +353,6 @@ final class DrawEngine {
                 if (item instanceof InterfaceFloating) {
                     InterfaceFloating floatItem = (InterfaceFloating) item;
                     if (floatItem.isOutsideClickClosable()) {
-
                         if (item instanceof ContextMenu) {
                             ContextMenu toClose = (ContextMenu) item;
                             if (toClose.closeDependencies(new MouseArgs()))
@@ -369,7 +368,7 @@ final class DrawEngine {
         }
     }
 
-    void setWindowSize(int width, int height) {
+    void setWindowSize(int width, int height) { 
         _commonProcessor.wndProcessor.setWindowSize(width, height, _scale);
     }
 

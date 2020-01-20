@@ -45,6 +45,12 @@ namespace SpaceVIL
                 height = (int)(ratioH * ratio);
             }
 
+            if (width > _commonProcessor.Window.GetMaxWidth())
+                width = _commonProcessor.Window.GetMaxWidth();
+
+            if (height > _commonProcessor.Window.GetMaxHeight())
+                height = _commonProcessor.Window.GetMaxHeight();
+
             Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(), (int)(width * scale.GetX()), (int)(height * scale.GetY()));
             _commonProcessor.Events.SetEvent(InputEventType.WindowResize);
         }

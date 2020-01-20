@@ -75,7 +75,7 @@ final class GLWHandler {
         glfwWindowHint(GLFW_SAMPLES, _coreWindow._msaa.getValue());
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        
+
         glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
 
         if (resizeble)
@@ -135,8 +135,8 @@ final class GLWHandler {
                 (float) hFB.get(0) / (float) _coreWindow.getHeight());
 
         if (appearInCenter) {
-            getPointer().setX((width - _coreWindow.getWidth()) / 2);
-            getPointer().setY((height - _coreWindow.getHeight()) / 2);
+            getPointer().setX((width - (int) (_coreWindow.getWidth() * _coreWindow.getDpiScale().getX())) / 2);
+            getPointer().setY((height - (int) (_coreWindow.getHeight() * _coreWindow.getDpiScale().getY())) / 2);
 
         } else {
             _coreWindow.setXDirect(_coreWindow.getX());//200);
@@ -144,8 +144,10 @@ final class GLWHandler {
             getPointer().setX(_coreWindow.getX());//200);
             getPointer().setY(_coreWindow.getY());//50);
         }
-        glfwSetWindowSizeLimits(_window, _coreWindow.getMinWidth(), _coreWindow.getMinHeight(),
-                _coreWindow.getMaxWidth(), _coreWindow.getMaxHeight());
+        glfwSetWindowSizeLimits(_window, (int) (_coreWindow.getMinWidth() * _coreWindow.getDpiScale().getX()),
+                (int) (_coreWindow.getMinHeight() * _coreWindow.getDpiScale().getY()),
+                (int) (_coreWindow.getMaxWidth() * _coreWindow.getDpiScale().getX()),
+                (int) (_coreWindow.getMaxHeight() * _coreWindow.getDpiScale().getY()));
         glfwSetWindowPos(_window, getPointer().getX(), getPointer().getY());
 
         if (_coreWindow.isKeepAspectRatio)

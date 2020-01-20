@@ -36,10 +36,10 @@ namespace SpaceVIL
         internal bool AlwaysOnTop;
         internal bool Maximized;
         internal bool Transparent;
-        private Pointer WPosition = new Pointer();
+        private Pointer _wndPosition = new Pointer();
         internal Pointer GetPointer()
         {
-            return WPosition;
+            return _wndPosition;
         }
         ///////////////////////////////////////////////
 
@@ -59,8 +59,8 @@ namespace SpaceVIL
         internal GLWHandler(CoreWindow handler)
         {
             _coreWindow = handler;
-            WPosition.SetX(0);
-            WPosition.SetY(0);
+            _wndPosition.SetX(0);
+            _wndPosition.SetY(0);
         }
 
         internal void CreateWindow()
@@ -101,8 +101,8 @@ namespace SpaceVIL
 
             if (AppearInCenter)
             {
-                GetPointer().SetX((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - _coreWindow.GetWidth()) / 2);
-                GetPointer().SetY((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - _coreWindow.GetHeight()) / 2);
+                GetPointer().SetX((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - (int)(_coreWindow.GetWidth() * _coreWindow.GetDpiScale().GetX())) / 2);
+                GetPointer().SetY((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - (int)(_coreWindow.GetHeight() * _coreWindow.GetDpiScale().GetY())) / 2);
             }
             else
             {
@@ -111,8 +111,13 @@ namespace SpaceVIL
                 GetPointer().SetX(_coreWindow.GetX());//200);
                 GetPointer().SetY(_coreWindow.GetY());//50);
             }
-            Glfw.SetWindowSizeLimits(_window, _coreWindow.GetMinWidth(), _coreWindow.GetMinHeight(), _coreWindow.GetMaxWidth(), _coreWindow.GetMaxHeight());
-            Glfw.SetWindowPos(_window, WPosition.GetX(), WPosition.GetY());
+            Glfw.SetWindowSizeLimits(_window,
+                (int)(_coreWindow.GetMinWidth() * _coreWindow.GetDpiScale().GetX()),
+                (int)(_coreWindow.GetMinHeight() * _coreWindow.GetDpiScale().GetY()),
+                (int)(_coreWindow.GetMaxWidth() * _coreWindow.GetDpiScale().GetX()),
+                (int)(_coreWindow.GetMaxHeight() * _coreWindow.GetDpiScale().GetY()));
+
+            Glfw.SetWindowPos(_window, _wndPosition.GetX(), _wndPosition.GetY());
 
             if (_coreWindow.IsKeepAspectRatio)
                 Glfw.SetWindowAspectRatio(_window, _coreWindow.RatioW, _coreWindow.RatioH);

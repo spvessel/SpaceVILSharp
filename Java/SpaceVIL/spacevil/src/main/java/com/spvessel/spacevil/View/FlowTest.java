@@ -38,11 +38,14 @@ public class FlowTest extends ActiveWindow {
     @Override
     public void initWindow() {
         isBorderHidden = true;
-        setSize(870, 1000);
+        setSize(870, 900);
         setWindowName("FlowTest");
         setWindowTitle("FlowTest");
 
-        setMinSize(500, 100);
+        setMinSize(500, 500);
+        setMaxSize(1000, 1000);
+
+        isCentered = true;
         // setBackground(45, 45, 45);
         // setPadding(2, 2, 2, 2);
 

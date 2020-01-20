@@ -56,7 +56,7 @@ public class Containers extends ActiveWindow {
         tabs = new TabView();
         tab1 = new Tab("FirstLeftTab");
         tab1.setDraggable(false);
-        tab1.setMaxWidth(30);
+        // tab1.setMaxWidth(30);
 
         tab2 = new Tab("List1");
         tab2.setClosable(true);
