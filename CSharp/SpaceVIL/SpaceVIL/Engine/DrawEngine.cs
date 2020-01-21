@@ -260,8 +260,16 @@ namespace SpaceVIL
 
         internal void UpdateWindowSize()
         {
-            _commonProcessor.WndProcessor.SetWindowSize(_commonProcessor.Window.GetWidth(),
-                    _commonProcessor.Window.GetHeight(), _scale);
+            if (CommonService.GetOSType() == OSType.Mac)
+            {
+                _commonProcessor.WndProcessor.SetWindowSize(_commonProcessor.Window.GetWidth(),
+                        _commonProcessor.Window.GetHeight(), new Scale());
+            }
+            else
+            {
+                _commonProcessor.WndProcessor.SetWindowSize(_commonProcessor.Window.GetWidth(),
+                        _commonProcessor.Window.GetHeight(), _scale);
+            }
         }
 
         internal void UpdateWindowPosition()
@@ -331,11 +339,6 @@ namespace SpaceVIL
                 // Render();
                 // GLWHandler.Swap();
             }
-        }
-
-        internal void SetWindowSize(int width, int height)
-        {
-            _commonProcessor.WndProcessor.SetWindowSize(width, height, _scale);
         }
 
         private void Position(Int64 window, int xpos, int ypos)

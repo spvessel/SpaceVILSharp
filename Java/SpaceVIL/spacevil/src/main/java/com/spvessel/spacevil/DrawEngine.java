@@ -308,8 +308,13 @@ final class DrawEngine {
     }
 
     void updateWindowSize() {
-        _commonProcessor.wndProcessor.setWindowSize(_commonProcessor.window.getWidth(),
-                _commonProcessor.window.getHeight(), _scale);
+        if (CommonService.getOSType() == OSType.MAC) {
+            _commonProcessor.wndProcessor.setWindowSize(_commonProcessor.window.getWidth(),
+                    _commonProcessor.window.getHeight(), new Scale());
+        } else {
+            _commonProcessor.wndProcessor.setWindowSize(_commonProcessor.window.getWidth(),
+                    _commonProcessor.window.getHeight(), _scale);
+        }
     }
 
     void updateWindowPosition() {
@@ -366,10 +371,6 @@ final class DrawEngine {
             // render();
             // glwHandler.swap();
         }
-    }
-
-    void setWindowSize(int width, int height) { 
-        _commonProcessor.wndProcessor.setWindowSize(width, height, _scale);
     }
 
     private void position(long wnd, int xpos, int ypos) {

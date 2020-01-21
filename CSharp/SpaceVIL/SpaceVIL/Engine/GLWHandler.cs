@@ -97,12 +97,20 @@ namespace SpaceVIL
             Glfw.GetFramebufferSize(_window, out wFB, out hFB);
 
             // SetDpiScale((float)wFB / (float)_coreWindow.GetWidth(), (float)hFB / (float)_coreWindow.GetHeight());
-            _coreWindow.SetWindowScale((float)wFB / (float)_coreWindow.GetWidth(), (float)hFB / (float)_coreWindow.GetHeight());
+            _coreWindow.SetWindowScale((float)wFB / (float)_coreWindow.GetWidth(),
+                    (float)hFB / (float)_coreWindow.GetHeight());
 
             if (AppearInCenter)
             {
-                GetPointer().SetX((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - (int)(_coreWindow.GetWidth() * _coreWindow.GetDpiScale().GetX())) / 2);
-                GetPointer().SetY((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - (int)(_coreWindow.GetHeight() * _coreWindow.GetDpiScale().GetY())) / 2);
+                int actualWndWidth = _coreWindow.GetWidth();
+                int actualWndHeight = _coreWindow.GetHeight();
+                if (CommonService.GetOSType() != OSType.Mac)
+                {
+                    actualWndWidth = (int)(_coreWindow.GetWidth() * _coreWindow.GetDpiScale().GetX());
+                    actualWndHeight = (int)(_coreWindow.GetHeight() * _coreWindow.GetDpiScale().GetY());
+                }
+                GetPointer().SetX((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - actualWndWidth) / 2);
+                GetPointer().SetY((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - actualWndHeight) / 2);
             }
             else
             {

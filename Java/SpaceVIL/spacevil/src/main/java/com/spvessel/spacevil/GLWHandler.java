@@ -6,6 +6,7 @@ import com.spvessel.spacevil.Core.Area;
 import com.spvessel.spacevil.Core.Pointer;
 import com.spvessel.spacevil.Exceptions.SpaceVILException;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
+import com.spvessel.spacevil.Flags.OSType;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
@@ -135,8 +136,14 @@ final class GLWHandler {
                 (float) hFB.get(0) / (float) _coreWindow.getHeight());
 
         if (appearInCenter) {
-            getPointer().setX((width - (int) (_coreWindow.getWidth() * _coreWindow.getDpiScale().getX())) / 2);
-            getPointer().setY((height - (int) (_coreWindow.getHeight() * _coreWindow.getDpiScale().getY())) / 2);
+            int actualWndWidth = _coreWindow.getWidth();
+            int actualWndHeight = _coreWindow.getHeight();
+            if (CommonService.getOSType() != OSType.MAC) {
+                actualWndWidth = (int) (_coreWindow.getWidth() * _coreWindow.getDpiScale().getX());
+                actualWndHeight = (int) (_coreWindow.getHeight() * _coreWindow.getDpiScale().getY());
+            }
+            getPointer().setX((width - actualWndWidth) / 2);
+            getPointer().setY((height - actualWndHeight) / 2);
 
         } else {
             _coreWindow.setXDirect(_coreWindow.getX());//200);
