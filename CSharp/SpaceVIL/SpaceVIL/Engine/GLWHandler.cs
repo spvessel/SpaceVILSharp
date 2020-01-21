@@ -24,7 +24,7 @@ namespace SpaceVIL
         Glfw.FramebufferSizeFunc FramebufferCallback;
         Glfw.WindowRefreshFunc WindowRefreshCallback;
         Glfw.DropFunc DropCallback;
-        // Glfw.WindowContentScaleFunc ContentScaleCallback;
+        Glfw.WindowContentScaleFunc ContentScaleCallback;
         ///////////////////////////////////////////////
 
         internal bool BorderHidden;
@@ -154,6 +154,7 @@ namespace SpaceVIL
             FramebufferCallback = null;
             WindowRefreshCallback = null;
             DropCallback = null;
+            ContentScaleCallback = null;
         }
 
         internal void SetCursorType(EmbeddedCursor type)
@@ -261,11 +262,11 @@ namespace SpaceVIL
             DropCallback = function;
             Glfw.SetDropCallback(_window, DropCallback);
         }
-        // internal void SetCallbackContentScale(Glfw.WindowContentScaleFunc function)
-        // {
-        //     ContentScaleCallback = function;
-        //     Glfw.SetWindowContentScaleCallback(_window, ContentScaleCallback);
-        // }
+        internal void SetCallbackContentScale(Glfw.WindowContentScaleFunc function)
+        {
+            ContentScaleCallback = function;
+            Glfw.SetWindowContentScaleCallback(_window, ContentScaleCallback);
+        }
 
         internal void SetOpacity(float level)
         {

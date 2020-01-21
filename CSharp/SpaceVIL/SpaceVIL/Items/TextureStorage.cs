@@ -176,8 +176,10 @@ namespace SpaceVIL
 
         internal int GetLettersCountInLine(int lineNum)
         {
-            if (lineNum >= _linesList.Count)
+            if (lineNum >= _linesList.Count) //возможно это плохо или очень плохо
+            {
                 return 0;
+            }
             else
             {
                 return GetTextInLine(lineNum).Length; //_linesList[lineNum].GetItemText().Length;
@@ -333,8 +335,12 @@ namespace SpaceVIL
         internal SpaceVIL.Core.Point CheckLineFits(SpaceVIL.Core.Point checkPoint)
         {
             SpaceVIL.Core.Point outPt = new SpaceVIL.Core.Point();
-            //??? check line count
             outPt.Y = checkPoint.Y;
+            //??? check line count
+            if (outPt.Y >= GetLinesCount()) {
+                outPt.Y = GetLinesCount() - 1;
+            }
+
             if (outPt.Y == -1)
             {
                 outPt.Y = 0;
@@ -352,7 +358,7 @@ namespace SpaceVIL
 
         private SpaceVIL.Core.Point CursorPosToCoord(SpaceVIL.Core.Point cPos0)
         {
-            SpaceVIL.Core.Point cPos = CheckLineFits(cPos0);
+            SpaceVIL.Core.Point cPos = CheckLineFits(cPos0); //??? moved to the ReplaceCursor
             SpaceVIL.Core.Point coord = new SpaceVIL.Core.Point(0, 0);
             coord.Y = GetLineY(cPos.Y);
 
@@ -1179,7 +1185,7 @@ namespace SpaceVIL
                     }
                     else
                     {
-                        _screenScale = DisplayService.GetWindowDpiScale(wLayout).GetX(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
+                        _screenScale = DisplayService.GetDisplayDpiScale().GetX(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
                         if (_screenScale == 0)
                         {
                             _screenScale = 1;
@@ -1631,7 +1637,7 @@ namespace SpaceVIL
 
         internal SpaceVIL.Core.Point WrapCursorPosToReal(SpaceVIL.Core.Point wrapPos)
         {
-            //Convert wrap cursor position to real position
+            //Convert wrap cursor position to the real position
             if (_lineBreakes.Count != _linesList.Count)
             {
                 return wrapPos;
@@ -1652,7 +1658,7 @@ namespace SpaceVIL
 
         internal SpaceVIL.Core.Point RealCursorPosToWrap(SpaceVIL.Core.Point realPos)
         {
-            //Convert real cursor position to wrap position
+            //Convert real cursor position to the wrap position
             if (_lineBreakes.Count != _linesList.Count)
             {
                 return realPos;

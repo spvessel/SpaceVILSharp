@@ -24,12 +24,18 @@ namespace SpaceVIL.Common
         }
 
         //dpi
+        static Scale _displayScale = new Scale();
         public static Scale GetDisplayDpiScale()
         {
-            Monitor monitor = Glfw.GetPrimaryMonitor();
-            float x, y;
-            Glfw.GetMonitorContentScale(monitor, out x, out y);
-            return new Scale(x, y);
+            // Monitor monitor = Glfw.GetPrimaryMonitor();
+            // float x, y;
+            // Glfw.GetMonitorContentScale(monitor, out x, out y);
+            // return new Scale(x, y);
+            return new Scale(_displayScale.GetX(), _displayScale.GetY());
+        }
+        internal static void SetDisplayScale(float x, float y)
+        {
+            _displayScale.SetScale(x, y);
         }
 
         public static Scale GetWindowDpiScale(CoreWindow window)

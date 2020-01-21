@@ -81,7 +81,7 @@ namespace SpaceVIL
                 }
                 else
                 {
-                    _screenScale = DisplayService.GetWindowDpiScale(wLayout).GetX(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
+                    _screenScale = DisplayService.GetDisplayDpiScale().GetX(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
                     // Console.WriteLine("scale before " + _screenScale + " " + _parentAllowWidth);
                     if (_screenScale != 1)
                     {
@@ -150,7 +150,7 @@ namespace SpaceVIL
                 CoreWindow wLayout = parent.GetHandler();
                 if (wLayout != null) // && Common.DisplayService.GetDpiScale().Length > 0)// wLayout != null && wLayout.GetDpiScale() != null)
                 {
-                    float scl = DisplayService.GetWindowDpiScale(wLayout).GetX(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
+                    float scl = DisplayService.GetDisplayDpiScale().GetX(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
                     if (scl != _screenScale) // && !isBigExist)
                     { //Это при допущении, что скейл меняется только один раз!                    
                         if (scl != 1) //_screenScale != 0 || 

@@ -172,11 +172,11 @@ final class DrawEngine {
                 glfwSwapInterval(WindowManager.getVSyncValue());
             return true;
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            ex.printStackTrace();
             glwHandler.clearEventsCallbacks();
             if (glwHandler.getWindowId() == NULL)
                 glwHandler.destroy();
-            glwHandler.getCoreWindow().getLayout().close();
+            glwHandler.getCoreWindow().close();
             return false;
         } finally {
             CommonService.GlobalLocker.unlock();
@@ -284,6 +284,17 @@ final class DrawEngine {
                 drop(window, count, paths);
             }
         });
+
+        glwHandler.setCallbackContentScale(new GLFWWindowContentScaleCallback() {
+            @Override
+            public void invoke(long window, float xscale, float yscale) {
+                contentScale(window, xscale, yscale);
+            }
+        });
+    }
+
+    private void contentScale(long window, float x, float y) {
+
     }
 
     private void drop(long window, int count, long paths) {

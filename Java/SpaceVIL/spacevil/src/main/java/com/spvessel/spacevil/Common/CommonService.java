@@ -2,6 +2,7 @@ package com.spvessel.spacevil.Common;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.FloatBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
@@ -95,6 +96,12 @@ public final class CommonService {
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         DisplayService.setDisplaySize(vidmode.width(), vidmode.height());
 
+        long monitor = glfwGetPrimaryMonitor();
+        FloatBuffer x = BufferUtils.createFloatBuffer(1);
+        FloatBuffer y = BufferUtils.createFloatBuffer(1);
+        glfwGetMonitorContentScale(monitor, x, y);
+        DisplayService.setDisplayScale(x.get(0), y.get(0));
+        
         DefaultsService.initImages();
         DefaultsService.initDefaultTheme();
 
@@ -166,7 +173,7 @@ public final class CommonService {
     public static KeyCode getOsControlKeyLeft() {
         return _controlLeft;
     }
-    
+
     public static KeyMods getOsControlMod() {
         return _controlMod;
     }

@@ -7,9 +7,7 @@ import com.spvessel.spacevil.CoreWindow;
 import com.spvessel.spacevil.Core.Scale;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.system.MemoryUtil.*;
 
 public final class DisplayService {
 
@@ -34,15 +32,18 @@ public final class DisplayService {
     }
 
     // dpi
-    private static boolean _dpiSet = false;
-    private static float _dpi = 1.0f;
-
+    static Scale _displayScale = new Scale();
     public static Scale getDisplayDpiScale() {
-        long monitor = glfwGetPrimaryMonitor();
-        FloatBuffer x = BufferUtils.createFloatBuffer(1);
-        FloatBuffer y = BufferUtils.createFloatBuffer(1);
-        glfwGetMonitorContentScale(monitor, x, y);
-        return new Scale(x.get(0), y.get(0));
+        // long monitor = glfwGetPrimaryMonitor();
+        // FloatBuffer x = BufferUtils.createFloatBuffer(1);
+        // FloatBuffer y = BufferUtils.createFloatBuffer(1);
+        // glfwGetMonitorContentScale(monitor, x, y);
+        // return new Scale(x.get(0), y.get(0));
+        return new Scale(_displayScale.getX(), _displayScale.getY());
+    }
+    static void setDisplayScale(float x, float y)
+    {
+        _displayScale.setScale(x, y);
     }
 
     public static Scale getWindowDpiScale(CoreWindow window) {

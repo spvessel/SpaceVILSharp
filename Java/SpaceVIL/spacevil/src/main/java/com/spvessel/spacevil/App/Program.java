@@ -16,8 +16,8 @@ public class Program {
 
         com.spvessel.spacevil.Common.CommonService.initSpaceVILComponents();
 
-        WindowManager.setRenderType(RenderType.ALWAYS);
-        WindowManager.enableVSync(0);
+        // WindowManager.setRenderType(RenderType.ALWAYS);
+        // WindowManager.enableVSync(0);
 
         // BufferedImage cursor = null;
         // try {
@@ -65,10 +65,10 @@ public class Program {
                 //, mw2
                 // st
                 // im
-                ft
+                // ft
                 // lt
                 // ct
-                // it
+                it
                 // tt
                 // con
                 // sat

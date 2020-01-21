@@ -60,11 +60,6 @@ namespace SpaceVIL
             _renderProcessor.FreeResource(resource);
         }
 
-        internal bool FullScreenRequest = false;
-        internal bool MaximizeRequest = false;
-        internal bool MinimizeRequest = false;
-        internal bool UpdateSizeRequest = false;
-        internal bool UpdatePositionRequest = false;
 
         private CommonProcessor _commonProcessor;
         private TextInputProcessor _textInputProcessor;
@@ -76,6 +71,12 @@ namespace SpaceVIL
         private StencilProcessor _stencilProcessor;
 
         private Scale _scale = new Scale();
+
+        internal bool FullScreenRequest = false;
+        internal bool MaximizeRequest = false;
+        internal bool MinimizeRequest = false;
+        internal bool UpdateSizeRequest = false;
+        internal bool UpdatePositionRequest = false;
 
         private float _itemPyramidLevel = 1.0f;
 
@@ -134,7 +135,7 @@ namespace SpaceVIL
         private Shader _texture;
         private Shader _char;
         private Shader _blur;
-        private Shader _clone;
+        // private Shader _clone;
 
         internal DrawEngine(CoreWindow handler)
         {
@@ -177,7 +178,7 @@ namespace SpaceVIL
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine(ex.StackTrace);
                 GLWHandler.ClearEventsCallbacks();
                 if (GLWHandler.GetWindowId() == 0)
                     GLWHandler.Destroy();
@@ -228,12 +229,21 @@ namespace SpaceVIL
             GLWHandler.SetCallbackKeyPress(KeyPress);
             GLWHandler.SetCallbackTextInput(TextInput);
             GLWHandler.SetCallbackClose(CloseWindow);
-            GLWHandler.SetCallbackPosition(Position);
             GLWHandler.SetCallbackFocus(Focus);
             GLWHandler.SetCallbackResize(Resize);
+            GLWHandler.SetCallbackPosition(Position);
             GLWHandler.SetCallbackFramebuffer(Framebuffer);
             GLWHandler.SetCallbackRefresh(Refresh);
             GLWHandler.SetCallbackDrop(Drop);
+            GLWHandler.SetCallbackContentScale(ContentScale);
+        }
+
+        private void ContentScale(Int64 window, float x, float y)
+        {
+            // Console.WriteLine(x + " " + y);
+            // _commonProcessor.Window.SetWindowScale(x, y);
+            // _scale.SetScale(x, y);
+            // DisplayService.SetDisplayScale(x, y);
         }
 
         private void Drop(Int64 window, int count, string[] paths)
@@ -253,6 +263,8 @@ namespace SpaceVIL
             _framebufferHeight = h;
             WindowManager.SetContextCurrent(_commonProcessor.Window);
             glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+
+            _renderProcessor.ScreenSquare.Clear();
             _renderProcessor.ScreenSquare.GenBuffers(
                 RenderProcessor.GetFullWindowRectangle(_framebufferWidth, _framebufferHeight));
             _renderProcessor.ScreenSquare.Unbind();

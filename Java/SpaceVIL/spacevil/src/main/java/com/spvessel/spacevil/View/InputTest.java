@@ -37,7 +37,7 @@ public class InputTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        setSize(700, 500);
+        setSize(300, 500);
         setWindowName("InputTest");
         setWindowTitle("InputTest");
 
@@ -75,7 +75,7 @@ public class InputTest extends ActiveWindow {
         // layout.setAlignment(ItemAlignment.BOTTOM);
         ///////////////////////////////////////////////////////////////////////
 
-        layout.setMargin(0, 30, 0, 30);
+        // layout.setMargin(0, 30, 0, 30);
         layout.setBackground(70, 70, 70);
         layout.setSpacing(6, 30);
         layout.setPadding(2, 2, 2, 2);

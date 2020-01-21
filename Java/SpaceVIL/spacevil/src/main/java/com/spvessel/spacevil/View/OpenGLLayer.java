@@ -102,6 +102,7 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
     private float _zCamera = 3;
     private float _aspectRatio = 1f;
     private boolean _isInit = false;
+    private int _pixelingStrenght = 4;
 
     @Override
     public void free() {
@@ -139,12 +140,10 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
     @Override
     public void draw() {
         genTexturedFBO();
-        /////////////////
-
-        glViewport(0, 0, getWidth() / 4, getHeight() / 4);
-
+        glViewport(0, 0, getWidth() / _pixelingStrenght, getHeight() / _pixelingStrenght);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+        
+        /////////////////
         glUseProgram(_shaderCommon);
         sendColorAsUniformVariable(Color.white, "lightColor");
         sendVec3AsUniformVariable(new float[] { 1.2f, 1.0f, 2.0f }, "lightPos");
@@ -159,8 +158,8 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
         glUseProgram(_shaderLamp);
         bindLampBuffer();
         glDrawArrays(GL_TRIANGLES, 0, _VBOlenght);
-
         /////////////////
+
         unbindFBO();
         RenderService.setGLLayerViewport(getHandler(), this);
 
@@ -365,7 +364,8 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
         //texture
         _texture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, _texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWidth() / 4, getHeight() / 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWidth() / _pixelingStrenght, getHeight() / _pixelingStrenght, 0,
+                GL_RGBA, GL_UNSIGNED_BYTE, 0);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -373,7 +373,8 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
 
         _depthrenderbuffer = glGenRenderbuffersEXT();
         glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, _depthrenderbuffer);
-        glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, getWidth() / 4, getHeight() / 4);
+        glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, getWidth() / _pixelingStrenght,
+                getHeight() / _pixelingStrenght);
         glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0);
 
         glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT,

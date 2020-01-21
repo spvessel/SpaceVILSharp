@@ -75,7 +75,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             if (wLayout == null) { // || wLayout.getDpiScale() == null) {
                 _screenScale = 1; //0;
             } else {
-                _screenScale = wLayout.getDpiScale().getX();
+                _screenScale = DisplayService.getDisplayDpiScale().getX();// wLayout.getDpiScale().getX();
                 if (_screenScale != 1) {
                     makeBigArr();
                 }
@@ -134,7 +134,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
 
             CoreWindow wLayout = parent.getHandler();
             if (wLayout != null) { // && wLayout.getDpiScale() != null) {
-                float scl = wLayout.getDpiScale().getX();
+                float scl = DisplayService.getDisplayDpiScale().getX();// wLayout.getDpiScale().getX();
                 if (scl != _screenScale) { //} && !isBigExist) { //Это при допущении, что скейл меняется только один раз!
                     if (_screenScale != 0 || scl != 1) {
                         //Возможно может возникнуть проблема при переходе от большего к меньшему
