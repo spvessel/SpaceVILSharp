@@ -236,7 +236,7 @@ public class Label extends Prototype implements InterfaceVLayout {
     }
 
     private int getLineY(int num) {
-        int minLineSpacer = _text_objects.get(0).getFontDims()[0];
+        int minLineSpacer = _text_objects.get(0).getFontDims().lineSpacer; //[0];
         int lineHeight = _text_objects.get(0).getHeight();
         return (lineHeight + minLineSpacer) * num;
     }

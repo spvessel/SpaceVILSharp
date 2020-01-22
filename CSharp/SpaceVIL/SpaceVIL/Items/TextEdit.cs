@@ -580,7 +580,7 @@ namespace SpaceVIL
             // _text_object.SetAllowWidth(_cursorXMax);
             // _text_object.SetLineXShift();
 
-            int scctp = _text_object.GetFontDims()[0];
+            int scctp = _text_object.GetFontDims().lineSpacer; //[0];
             if (scctp > scrollStep) scrollStep = scctp;
 
             _text_object.SetCursorWidth(_cursor.GetWidth());

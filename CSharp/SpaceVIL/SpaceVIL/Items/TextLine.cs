@@ -65,9 +65,9 @@ namespace SpaceVIL
                     _lineWidth = _letters[_letters.Count - 1].xShift + _letters[_letters.Count - 1].width +
                         _letters[_letters.Count - 1].xBeg; //xBeg не обязательно, т.к. везде 0, но вдруг
 
-                int[] fontDims = GetFontDims();
+                FontEngine.FontDimensions fontDims = GetFontDims(); //int[] fontDims = GetFontDims();
                 base.SetWidth(_lineWidth);
-                base.SetHeight(fontDims[2]);
+                base.SetHeight(fontDims.height); //fontDims[2]);
 
                 foreach (FontEngine.ModifyLetter modL in _letters)
                 {
@@ -136,8 +136,8 @@ namespace SpaceVIL
             Monitor.Enter(textLock);
             try
             {
-                int[] fontDims = GetFontDims();
-                int height = fontDims[2];
+                FontEngine.FontDimensions fontDims = GetFontDims(); //int[] fontDims = GetFontDims();
+                int height = fontDims.height; //[2];
                 if (GetHeight() != height)
                 {
                     base.SetHeight(height);
@@ -164,8 +164,10 @@ namespace SpaceVIL
 
                 if (_isRecountable)
                 {
-                    if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
+                    if (_lineYShift - fontDims.minY + height < 0 || _lineYShift - fontDims.minY > _parentAllowHeight) //(_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
+                    {
                         return null;
+                    }
                 }
                 if (_letters.Count() == 0)// && _bigLetters.Count() == 0)
                 {
@@ -189,13 +191,17 @@ namespace SpaceVIL
                         // Font fontBig = new Font(GetFont().FontFamily, (int)(GetFont().Size * _screenScale), GetFont().Style);
                         Font fontBig = GraphicsMathService.ChangeFontSize((int)(GetFont().Size * _screenScale), GetFont());
 
-                        int[] output = FontEngine.GetSpacerDims(fontBig);
-                        bb_h = output[2];
+                        FontEngine.FontDimensions bigFontDims = FontEngine.GetFontDims(fontBig); //int[] output = FontEngine.GetFontDims(fontBig);
+                        bb_h = bigFontDims.height; //output[2];
                         bb_w = _bigWidth;
                         if (_isRecountable)
-                            bb_w = _bigWidth > (int)(_parentAllowWidth * _screenScale) ? (int)(_parentAllowWidth * _screenScale) : _bigWidth;
+                        {
+                            bb_w = _bigWidth > (int)(_parentAllowWidth * _screenScale)
+                                     ? (int)(_parentAllowWidth * _screenScale)
+                                     : _bigWidth;
+                        }
 
-                        int bigMinY = output[1];
+                        int bigMinY = bigFontDims.minY; //output[1];
                         cacheBB = MakeSomeBig(bb_h, bb_w, bigMinY, 0, _letters.Count - 1);
                     }
                     else
@@ -234,7 +240,8 @@ namespace SpaceVIL
                                 continue;
                             }
 
-                            int offset = (modL.yBeg - fontDims[1]) * bb_w * 4 + (modL.xBeg + modL.xShift + widthFrom - xFirstBeg) * 4;
+                            int offset = (modL.yBeg - fontDims.minY) * bb_w * 4 //(modL.yBeg - fontDims[1]) * bb_w * 4
+                                 + (modL.xBeg + modL.xShift + widthFrom - xFirstBeg) * 4;
 
                             for (int j = 0; j < modL.height; j++)
                             {
@@ -410,8 +417,8 @@ namespace SpaceVIL
             //AddAllShifts();
             if (_letters.Count() == 0)
                 return;
-            int[] fontDims = GetFontDims();
-            int height = fontDims[2];
+            FontEngine.FontDimensions fontDims = GetFontDims(); //int[] fontDims = GetFontDims();
+            int height = fontDims.height; //fontDims[2];
 
             ItemAlignment alignments = GetTextAlignment();
             float alignShiftX = 1;
@@ -522,9 +529,9 @@ namespace SpaceVIL
         //     return lineTopCoord;
         // }
 
-        internal int[] GetFontDims()
+        internal FontEngine.FontDimensions GetFontDims()
         {
-            return FontEngine.GetSpacerDims(GetFont());
+            return FontEngine.GetFontDims(GetFont());
         }
 
         public override void SetStyle(Style style)

@@ -42,10 +42,10 @@ namespace SpaceVIL
             return fonts[font].MakeTextNew(text);
         }
 
-        internal static int[] GetSpacerDims(Font font)
+        internal static FontDimensions GetFontDims(Font font)
         {
-            if (font == null)
-                return new int[] { 0, 0, 0 };
+            // if (font == null)
+            //     return new int[] { 0, 0, 0 };
 
             if (!fonts.ContainsKey(font))
             {
@@ -61,7 +61,7 @@ namespace SpaceVIL
                 }
             }
             Alphabet a = fonts[font];
-            return new int[] { a.lineSpacer, a.alphMinY, a.alphHeight };
+            return a.fontDims; //new int[] { a.lineSpacer, a.alphMinY, a.alphHeight };
         }
 
         internal static bool SavePreloadFont(Font font)
@@ -90,10 +90,11 @@ namespace SpaceVIL
         {
             internal Font font;
             Dictionary<char, Letter> letters;
-            internal int alphMinY = Int32.MaxValue;
-            internal int alphMaxY = Int32.MinValue;
-            internal int alphHeight = 0;
-            internal int lineSpacer;
+            // internal int alphMinY = Int32.MaxValue;
+            // internal int alphMaxY = Int32.MinValue;
+            // internal int alphHeight = 0;
+            // internal int lineSpacer;
+            internal FontDimensions fontDims;
             Letter bugLetter;
 
             private readonly Object alphabetLock = new Object();
@@ -102,6 +103,7 @@ namespace SpaceVIL
             {
                 this.font = font;
                 letters = new Dictionary<char, Letter>();
+                fontDims = new FontDimensions();
 
                 MakeBugLetter();
                 FillABC();
@@ -111,18 +113,26 @@ namespace SpaceVIL
 
             private void FillSpecLetters()
             {
+                int kegel = (int)font.Size;
                 char specLet = " "[0];
-                Letter letter = new Letter(" ");
-                letters.Add(specLet, letter);
-                letter.width = letters["-"[0]].width;
-                letter.height = 0;
-                lineSpacer = (int)letter.width;
+                Letter spaceSign = new Letter(" ");
+                letters.Add(specLet, spaceSign);
+                spaceSign.width = kegel / 2; //letters["-"[0]].width;
+                spaceSign.height = 0;
+
+                fontDims.lineSpacer = letters["-"[0]].width; //(int)spaceSign.width;
+
+                fontDims.letterSpacer = (kegel / 2) / 4;
+                if (fontDims.letterSpacer < 1)
+                {
+                    fontDims.letterSpacer = 1;
+                }
 
                 specLet = "\t"[0];
-                Letter letter1 = new Letter("\t");
-                letters.Add(specLet, letter1);
-                letter1.width = letter.width * 4;
-                letter1.height = 0;
+                Letter tabSign = new Letter("\t");
+                letters.Add(specLet, tabSign);
+                tabSign.width = fontDims.lineSpacer * 4; //spaceSign.width * 4;
+                tabSign.height = 0;
 
                 //!Может стоит вернуть это, если новые модификации текста будут работать нормально
                 specLet = "\r"[0];
@@ -135,16 +145,16 @@ namespace SpaceVIL
 
             private int UpdateSpecX0(Letter letter, int x0)
             {
-                return x0 + 2; //for " " and "\t"
+                return x0 + fontDims.letterSpacer * 2; //???2; //for " " and "\t"
             }
 
             private void AddLetter(char c)
             {
                 Letter letter = MakeLetter(char.ToString(c));
                 letters.Add(c, letter);
-                alphMinY = (alphMinY > letter.minY) ? letter.minY : alphMinY;
-                alphMaxY = (alphMaxY < letter.minY + letter.height - 1) ? letter.minY + letter.height - 1 : alphMaxY;
-                alphHeight = Math.Abs(alphMaxY - alphMinY + 1);
+                fontDims.minY = (fontDims.minY > letter.minY) ? letter.minY : fontDims.minY;
+                fontDims.maxY = (fontDims.maxY < letter.minY + letter.height - 1) ? letter.minY + letter.height - 1 : fontDims.maxY;
+                fontDims.height = Math.Abs(fontDims.maxY - fontDims.minY + 1);
             }
 
             internal List<ModifyLetter> MakeTextNew(String text) //, float cof)
@@ -200,7 +210,10 @@ namespace SpaceVIL
                                 }
                             }
 
-                            if (b1) x0++;
+                            if (b1) 
+                            {
+                                x0 += fontDims.letterSpacer;//x0++;
+                            }
                             // else
                             // {
                             //     for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
@@ -352,9 +365,9 @@ namespace SpaceVIL
                 string let = Encoding.UTF32.GetString(BitConverter.GetBytes(0x25CF)); //big point
                 Letter hideSign = new Letter(let)
                 {
-                    height = alphHeight,
-                    width = (int)(alphHeight * 2 / 3f),
-                    minY = alphMinY,
+                    height = fontDims.height,
+                    width = (int)(fontDims.height * 2 / 3f),
+                    minY = fontDims.minY,
                     isSpec = false
                 };
                 float[,] arr = new float[hideSign.width, hideSign.height];
@@ -1066,6 +1079,14 @@ namespace SpaceVIL
             {
                 return _letter.arr;
             }
+        }
+
+        internal class FontDimensions {
+            internal int minY = Int32.MaxValue;
+            internal int maxY = Int32.MinValue;
+            internal int height = 0;
+            internal int lineSpacer = 1;
+            internal int letterSpacer = 1;
         }
     }
 }

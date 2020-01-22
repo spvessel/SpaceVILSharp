@@ -29,7 +29,7 @@ class FontEngine {
         return fonts.get(font).makeTextNew(text);
     }
 
-    static int[] getSpacerDims(Font font) {
+    static Alphabet.FontDimensions getFontDims(Font font) {
         if (!fonts.containsKey(font)) {
             fontLock.lock();
             try {
@@ -40,7 +40,7 @@ class FontEngine {
             }
         }
         Alphabet a = fonts.get(font);
-        return new int[]{a.lineSpacer, a.alphMinY, a.alphHeight};
+        return a.fontDims; //new int[]{a.lineSpacer, a.alphMinY, a.alphHeight};
     }
 
     static boolean savePreloadFont(Font font) {
