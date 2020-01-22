@@ -30,18 +30,19 @@ public class Program {
         // MainWindow mw2 = new MainWindow();
         // DefaultsService.setDefaultFont(new Font("Arial", Font.BOLD, 12));
 
-        MainWindow mw = new MainWindow();
-        mw.setPosition(500, 500);
+//        MainWindow mw = new MainWindow();
+//        mw.setPosition(500, 500);
 
-        SettingsTest st = new SettingsTest();
-        ImageTest im = new ImageTest();
-        FlowTest ft = new FlowTest();
-        LayoutsTest lt = new LayoutsTest();
-        ComplexTest ct = new ComplexTest();
-        InputTest it = new InputTest();
-        TextTest tt = new TextTest();
+//        SettingsTest st = new SettingsTest();
+//        ImageTest im = new ImageTest();
+//        FlowTest ft = new FlowTest();
+//        LayoutsTest lt = new LayoutsTest();
+//        ComplexTest ct = new ComplexTest();
+//        InputTest it = new InputTest();
+//        TextTest tt = new TextTest();
         // Containers con = new Containers();
-        SideAreaTest sat = new SideAreaTest();
+//        SideAreaTest sat = new SideAreaTest();
+        DPIAnalysis dpi = new DPIAnalysis();
 
         // PerformanceTest pt = new PerformanceTest();
 
@@ -60,7 +61,7 @@ public class Program {
         // WindowManager.setRenderType(RenderType.ALWAYS);
 
         WindowManager.startWith(
-            mw
+//            mw
         //, mw2
         // st
         // im
@@ -73,6 +74,7 @@ public class Program {
         // sat
         // et
         // pt
+                dpi
         );
     }
 

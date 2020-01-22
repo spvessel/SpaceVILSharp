@@ -596,7 +596,7 @@ public class TextEdit extends Prototype implements InterfaceTextEditable, Interf
         // _substrate_text.setAllowWidth(_cursorXMax);
         // _substrate_text.setLineXShift();
 
-        int scctp = _text_object.getFontDims()[0];
+        int scctp = _text_object.getFontDims().lineSpacer; //[0];
         if (scctp > scrollStep) {
             scrollStep = scctp;
         }

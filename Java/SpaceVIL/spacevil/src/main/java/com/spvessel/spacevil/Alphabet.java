@@ -15,10 +15,11 @@ import java.util.concurrent.locks.ReentrantLock;
 class Alphabet {
     Font font;
     private Map<Character, Letter> letters;
-    int alphMinY = Integer.MAX_VALUE;
-    int alphMaxY = Integer.MIN_VALUE;
-    int alphHeight = 0;
-    int lineSpacer;
+//    int alphMinY = Integer.MAX_VALUE;
+//    int alphMaxY = Integer.MIN_VALUE;
+//    int alphHeight = 0;
+//    int lineSpacer;
+    FontDimensions fontDims;
     private Letter bugLetter;
 
     private Lock alphabetLock = new ReentrantLock();
@@ -26,6 +27,7 @@ class Alphabet {
     Alphabet(Font font) {
         this.font = font;
         letters = new HashMap<>();
+        fontDims = new FontDimensions();
 
         makeBugLetter();
         fillABC();
@@ -39,7 +41,7 @@ class Alphabet {
         letters.put(specLet, letter);
         letter.width = letters.get("-".charAt(0)).width;
         letter.height = 0;
-        lineSpacer = letter.width;
+        fontDims.lineSpacer = letter.width;
 
         specLet = "\t".charAt(0);
         Letter letter1 = new Letter("\t");
@@ -61,9 +63,9 @@ class Alphabet {
     private void addLetter(char c) {
         Letter letter = makeLetter(Character.toString(c));
         letters.put(c, letter);
-        alphMinY = (alphMinY > letter.minY) ? letter.minY : alphMinY;
-        alphMaxY = (alphMaxY < letter.minY + letter.height - 1) ? letter.minY + letter.height - 1 : alphMaxY;
-        alphHeight = Math.abs(alphMaxY - alphMinY + 1);
+        fontDims.minY = (fontDims.minY > letter.minY) ? letter.minY : fontDims.minY;
+        fontDims.maxY = (fontDims.maxY < letter.minY + letter.height - 1) ? letter.minY + letter.height - 1 : fontDims.maxY;
+        fontDims.height = Math.abs(fontDims.maxY - fontDims.minY + 1);
     }
 
     List<ModifyLetter> makeTextNew(String text) {
@@ -232,9 +234,9 @@ class Alphabet {
     private void makeBigPoint() {
         String let = "\u25CF";
         Letter hideSign = new Letter(let);
-        hideSign.height = alphHeight;
-        hideSign.width = (int) (alphHeight * 2 / 3f);
-        hideSign.minY = alphMinY;
+        hideSign.height = fontDims.height;
+        hideSign.width = (int) (fontDims.height * 2 / 3f);
+        hideSign.minY = fontDims.minY;
         hideSign.isSpec = false;
         float[][] arr = new float[hideSign.width][hideSign.height];
         int rad = hideSign.height / 3 - 1, tmp;
@@ -671,5 +673,12 @@ class Alphabet {
         byte[] getArr() {
             return _letter.arr;
         }
+    }
+
+    class FontDimensions {
+        int minY = Integer.MAX_VALUE;
+        private int maxY = Integer.MIN_VALUE;
+        int height = 0;
+        int lineSpacer;
     }
 }

@@ -4,7 +4,6 @@ import com.spvessel.spacevil.Core.InterfaceTextContainer;
 import com.spvessel.spacevil.Core.InterfaceTextImage;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.SpaceVILConstants;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -62,9 +61,9 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                         + _letters.get(_letters.size() - 1).xBeg; // xBeg не обязательно, т.к. везде 0, но вдруг
             }
 
-            int[] fontDims = getFontDims();
+            Alphabet.FontDimensions fontDims = getFontDims(); //int[] fontDims = getFontDims();
             super.setWidth(_lineWidth);
-            super.setHeight(fontDims[2]);
+            super.setHeight(fontDims.height); //fontDims[2]);
 
             for (Alphabet.ModifyLetter modL : _letters) {
                 _letEndPos.add(modL.xBeg + modL.xShift + modL.width);
@@ -95,7 +94,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         //        Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
 
         _bigLetters = FontEngine.getModifyLetters(getItemText(), fontBig);
-        // int[] output = FontEngine.getSpacerDims(fontBig);
+        // int[] output = FontEngine.getFontDims(fontBig);
         // _bigHeight = output[2];
         _bigWidth = 0;
         if (_bigLetters.size() > 0) {
@@ -131,8 +130,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                 }
             }
 
-            int[] fontDims = getFontDims();
-            int height = fontDims[2];
+            Alphabet.FontDimensions fontDims = getFontDims();; //int[] fontDims = getFontDims();
+            int height = fontDims.height; //fontDims[2];
             if (getHeight() != height) {
                 super.setHeight(height);
             }
@@ -143,7 +142,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             }
 
             if (_isRecountable) {
-                if (_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight) {
+                if (_lineYShift - fontDims.minY + height < 0 || _lineYShift - fontDims.minY > _parentAllowHeight) { //(_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight) {
                     return null;
                 }
             }
@@ -169,8 +168,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                             (int) (getFont().getSize() * _screenScale));
                     // Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
 
-                    int[] output = FontEngine.getSpacerDims(fontBig);
-                    bb_h = output[2];
+                    Alphabet.FontDimensions bigFontDims = FontEngine.getFontDims(fontBig); //int[] output = FontEngine.getFontDims(fontBig);
+                    bb_h = bigFontDims.height; //output[2];
                     bb_w = _bigWidth;
                     if (_isRecountable) {
                         bb_w = _bigWidth > (int) (_parentAllowWidth * _screenScale)
@@ -178,7 +177,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                                 : _bigWidth;
                     }
 
-                    int bigMinY = output[1];
+                    int bigMinY = bigFontDims.minY; //output[1];
                     cacheBB = makeSomeBig(bb_h, bb_w, bigMinY, 0, _letters.size() - 1);
                 } else {
                     for (Alphabet.ModifyLetter modL : _letters) {
@@ -208,7 +207,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
                             continue;
                         }
 
-                        int offset = (modL.yBeg - fontDims[1]) * 4 * bb_w
+                        int offset = (modL.yBeg - fontDims.minY) * 4 * bb_w //(modL.yBeg - fontDims[1]) * 4 * bb_w
                                 + (modL.xBeg + modL.xShift + widthFrom - xFirstBeg) * 4;
 
                         for (int j = 0; j < modL.height; j++) {
@@ -383,8 +382,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     private void updateCoords(Prototype parent) {
         if (_letters.size() == 0)
             return;
-        int[] fontDims = getFontDims();
-        int height = fontDims[2];
+        Alphabet.FontDimensions fontDims = getFontDims(); // int[] fontDims = getFontDims();
+        int height = fontDims.height; //fontDims[2];
 
         List<ItemAlignment> alignments = getTextAlignment();
         float alignShiftX = 1;
@@ -479,8 +478,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     //        return lineTopCoord;
     //    }
 
-    int[] getFontDims() {
-        return FontEngine.getSpacerDims(getFont());
+    Alphabet.FontDimensions getFontDims() {
+        return FontEngine.getFontDims(getFont());
     }
 
     @Override

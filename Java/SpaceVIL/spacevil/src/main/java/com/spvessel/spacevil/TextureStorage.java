@@ -510,15 +510,15 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
         return getTextLine(0).getMargin(); //_linesList.get(0).getMargin();
     }
 
-    private int[] getDims() {
-        int[] output = getTextLine(0).getFontDims(); //_linesList.get(0).getFontDims();
-        _minLineSpacer = output[0];
-        _lineHeight = output[2];
+    private void getDims() { //int[]
+        Alphabet.FontDimensions fontDims = getTextLine(0).getFontDims(); //int[] output = getTextLine(0).getFontDims(); //_linesList.get(0).getFontDims();
+        _minLineSpacer = fontDims.lineSpacer; //output[0];
+        _lineHeight = fontDims.height; //output[2];
         //        if (_lineSpacer < _minLineSpacer)
         //            _lineSpacer = _minLineSpacer;
         setLineSpacer(_minLineSpacer);
 
-        return output;
+//        return output;
     }
 
     void setFont(Font font) {

@@ -286,7 +286,7 @@ namespace SpaceVIL
 
         private int GetLineY(int num)
         {
-            int minLineSpacer = _text_objects[0].GetFontDims()[0];
+            int minLineSpacer = _text_objects[0].GetFontDims().lineSpacer; //[0];
             int lineHeight = _text_objects[0].GetHeight();
             return (lineHeight + minLineSpacer) * num;
         }

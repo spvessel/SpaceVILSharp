@@ -595,16 +595,16 @@ namespace SpaceVIL
             return GetTextLine(0).GetMargin(); //_linesList[0].GetMargin();
         }
 
-        private int[] GetDims()
+        private void GetDims() //int[]
         {
-            int[] output = GetTextLine(0).GetFontDims(); //_linesList[0].GetFontDims();
-            _minLineSpacer = output[0];
-            _lineHeight = output[2];
+            FontEngine.FontDimensions fontDims = GetTextLine(0).GetFontDims(); //int[] output = GetTextLine(0).GetFontDims(); //_linesList[0].GetFontDims();
+            _minLineSpacer = fontDims.lineSpacer; //output[0];
+            _lineHeight = fontDims.height; //output[2];
             // if (_lineSpacer < _minLineSpacer)
             //     _lineSpacer = _minLineSpacer;
             SetLineSpacer(_minLineSpacer);
 
-            return output;
+            // return output;
         }
 
         internal void SetFont(Font font)
