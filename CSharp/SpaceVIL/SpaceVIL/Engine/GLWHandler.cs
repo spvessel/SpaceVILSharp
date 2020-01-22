@@ -93,12 +93,16 @@ namespace SpaceVIL
             }
             WindowManager.SetContextCurrent(_coreWindow);
 
-            int wFB, hFB;
-            Glfw.GetFramebufferSize(_window, out wFB, out hFB);
+            // int wFB, hFB;
+            // Glfw.GetFramebufferSize(_window, out wFB, out hFB);
 
-            // SetDpiScale((float)wFB / (float)_coreWindow.GetWidth(), (float)hFB / (float)_coreWindow.GetHeight());
-            _coreWindow.SetWindowScale((float)wFB / (float)_coreWindow.GetWidth(),
-                    (float)hFB / (float)_coreWindow.GetHeight());
+            // _coreWindow.SetWindowScale((float)wFB / (float)_coreWindow.GetWidth(),
+            //         (float)hFB / (float)_coreWindow.GetHeight());
+
+            float xScale, yScale;
+            Glfw.GetWindowContentScale(_window, out xScale, out yScale);
+            _coreWindow.SetWindowScale(xScale, yScale);
+            Console.WriteLine(_coreWindow.GetDpiScale());
 
             if (AppearInCenter)
             {

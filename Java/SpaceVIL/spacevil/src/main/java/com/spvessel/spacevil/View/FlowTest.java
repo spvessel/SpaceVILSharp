@@ -325,32 +325,32 @@ public class FlowTest extends ActiveWindow {
                 System.out.println(WindowsBox.getCurrentFocusedWindow().getWindowName());
         });
 
-        setAntiAliasingQuality(MSAA.MSAA_8X);
-        int _diameter = 180;
+        // setAntiAliasingQuality(MSAA.MSAA_8X);
+        // int _diameter = 180;
 
-        // create items
-        InterfaceBaseItem cRed = getCircle(_diameter, new Color(255, 94, 94));
-        cRed.setItemName("cRed");
-        InterfaceBaseItem cGreen = getCircle(_diameter, new Color(16, 180, 111));
-        cGreen.setItemName("cGreen");
-        InterfaceBaseItem cBlue = getCircle(_diameter, new Color(10, 162, 232));
-        cBlue.setItemName("cBlue");
+        // // create items
+        // InterfaceBaseItem cRed = getCircle(_diameter, new Color(255, 94, 94));
+        // cRed.setItemName("cRed");
+        // InterfaceBaseItem cGreen = getCircle(_diameter, new Color(16, 180, 111));
+        // cGreen.setItemName("cGreen");
+        // InterfaceBaseItem cBlue = getCircle(_diameter, new Color(10, 162, 232));
+        // cBlue.setItemName("cBlue");
 
-        setCircleAlignment(cRed, ItemAlignment.TOP);
-        setCircleAlignment(cGreen, ItemAlignment.LEFT, ItemAlignment.BOTTOM);
-        setCircleAlignment(cBlue, ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
+        // setCircleAlignment(cRed, ItemAlignment.TOP);
+        // setCircleAlignment(cGreen, ItemAlignment.LEFT, ItemAlignment.BOTTOM);
+        // setCircleAlignment(cBlue, ItemAlignment.RIGHT, ItemAlignment.BOTTOM);
 
-        // add items to window
-        addItems(cGreen, cRed, cBlue);
+        // // add items to window
+        // addItems(cGreen, cRed, cBlue);
 
-        Effects.addEffect(cRed, getCircleEffect(cRed, cBlue));
-        Effects.addEffect(cRed, getCircleCenterEffect(cRed));
+        // Effects.addEffect(cRed, getCircleEffect(cRed, cBlue));
+        // Effects.addEffect(cRed, getCircleCenterEffect(cRed));
 
-        Effects.addEffect(cGreen, getCircleEffect(cGreen, cRed));
-        Effects.addEffect(cGreen, getCircleCenterEffect(cGreen));
+        // Effects.addEffect(cGreen, getCircleEffect(cGreen, cRed));
+        // Effects.addEffect(cGreen, getCircleCenterEffect(cGreen));
 
-        Effects.addEffect(cBlue, getCircleEffect(cBlue, cGreen));
-        Effects.addEffect(cBlue, getCircleCenterEffect(cBlue));
+        // Effects.addEffect(cBlue, getCircleEffect(cBlue, cGreen));
+        // Effects.addEffect(cBlue, getCircleCenterEffect(cBlue));
     }
 
     public static InterfaceBaseItem getCircle(int diameter, Color color) {

@@ -64,6 +64,7 @@ final class WindowProcessor {
 
         glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getX()),
                 (int) (height * scale.getY()));
+
         _commonProcessor.events.setEvent(InputEventType.WINDOW_RESIZE);
     }
 
@@ -93,7 +94,7 @@ final class WindowProcessor {
         _commonProcessor.inputLocker = false;
     }
 
-    void maximizeWindow() {
+    void maximizeWindow(Scale scale) {
         _commonProcessor.inputLocker = true;
 
         if (_commonProcessor.window.isMaximized) {
@@ -105,11 +106,13 @@ final class WindowProcessor {
             _commonProcessor.events.setEvent(InputEventType.WINDOW_MAXIMIZE);
             _commonProcessor.window.isMaximized = true;
         }
-        IntBuffer w = BufferUtils.createIntBuffer(1);
-        IntBuffer h = BufferUtils.createIntBuffer(1);
-        glfwGetWindowSize(_commonProcessor.handler.getWindowId(), w, h);
-        _commonProcessor.window.setWidthDirect(w.get(0));
-        _commonProcessor.window.setHeightDirect(h.get(0));
+
+        int width = _commonProcessor.window.getWidth();
+        int height = _commonProcessor.window.getHeight();
+        
+        glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getX()),
+                (int) (height * scale.getY()));
+
         _commonProcessor.inputLocker = false;
     }
 

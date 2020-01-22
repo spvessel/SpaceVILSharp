@@ -26,4 +26,10 @@ public class Scale {
     public float getY() {
         return _y;
     }
+
+    @Override
+    public String toString()
+    {
+        return "XScale: " + _x + " YScale: " + _y;
+    }
 }

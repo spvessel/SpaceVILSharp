@@ -102,7 +102,7 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
     private float _zCamera = 3;
     private float _aspectRatio = 1f;
     private boolean _isInit = false;
-    private int _pixelingStrenght = 4;
+    private int _pixelingStrenght = 1;
 
     @Override
     public void free() {
@@ -142,7 +142,7 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
         genTexturedFBO();
         glViewport(0, 0, getWidth() / _pixelingStrenght, getHeight() / _pixelingStrenght);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+
         /////////////////
         glUseProgram(_shaderCommon);
         sendColorAsUniformVariable(Color.white, "lightColor");
@@ -174,6 +174,9 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
         glDeleteRenderbuffersEXT(_depthrenderbuffer);
         glDeleteTextures(_texture);
         glDeleteBuffers(_buffers);
+
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
     }
 
     public void refresh() {
@@ -439,9 +442,9 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
     private void sendUniformSample2D(int shader, String name) {
         int location = glGetUniformLocation(shader, name);
         if (location < 0)
-            // System.out.println("Uniform <" + name + "> not found.");
+            System.out.println("Uniform <" + name + "> not found.");
 
-            glUniform1i(location, 0);
+        glUniform1i(location, 0);
     }
 
     private void setCameraLookAt(float x, float y, float z) {

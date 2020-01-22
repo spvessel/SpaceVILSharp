@@ -51,7 +51,9 @@ namespace SpaceVIL
             if (height > _commonProcessor.Window.GetMaxHeight())
                 height = _commonProcessor.Window.GetMaxHeight();
 
-            Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(), (int)(width * scale.GetX()), (int)(height * scale.GetY()));
+            Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(), 
+                    (int)(width * scale.GetX()), (int)(height * scale.GetY()));
+
             _commonProcessor.Events.SetEvent(InputEventType.WindowResize);
         }
 
@@ -79,7 +81,7 @@ namespace SpaceVIL
             _commonProcessor.InputLocker = false;
         }
 
-        internal void MaximizeWindow()
+        internal void MaximizeWindow(Scale scale)
         {
             _commonProcessor.InputLocker = true;
             if (_commonProcessor.Window.IsMaximized)
@@ -94,10 +96,13 @@ namespace SpaceVIL
                 _commonProcessor.Events.SetEvent(InputEventType.WindowMaximize);
                 _commonProcessor.Window.IsMaximized = true;
             }
-            int w, h;
-            Glfw.GetWindowSize(_commonProcessor.Handler.GetWindowId(), out w, out h);
-            _commonProcessor.Window.SetWidthDirect(w);
-            _commonProcessor.Window.SetHeightDirect(h);
+
+            int width = _commonProcessor.Window.GetWidth();
+            int height = _commonProcessor.Window.GetHeight();
+
+            Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(), 
+                    (int)(width * scale.GetX()), (int)(height * scale.GetY()));
+                    
             _commonProcessor.InputLocker = false;
         }
 

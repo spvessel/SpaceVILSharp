@@ -135,7 +135,6 @@ namespace SpaceVIL
         private Shader _texture;
         private Shader _char;
         private Shader _blur;
-        // private Shader _clone;
 
         internal DrawEngine(CoreWindow handler)
         {
@@ -240,10 +239,17 @@ namespace SpaceVIL
 
         private void ContentScale(Int64 window, float x, float y)
         {
-            // Console.WriteLine(x + " " + y);
-            // _commonProcessor.Window.SetWindowScale(x, y);
-            // _scale.SetScale(x, y);
-            // DisplayService.SetDisplayScale(x, y);
+            _commonProcessor.Window.SetWindowScale(x, y);
+            _scale.SetScale(x, y);
+            DisplayService.SetDisplayScale(x, y);
+
+            int width, height;
+            Glfw.GetWindowSize(window, out width, out height);
+
+            GLWHandler.GetCoreWindow().SetWidthDirect((int)(width / _scale.GetX()));
+            GLWHandler.GetCoreWindow().SetHeightDirect((int)(height / _scale.GetY()));
+            // подписать на обновление при смене фактора масштабирования 
+            // (текст в фиксированных по ширине элементов не обновляется - оно и понятно)
         }
 
         private void Drop(Int64 window, int count, string[] paths)
@@ -297,7 +303,7 @@ namespace SpaceVIL
 
         internal void MaximizeWindow()
         {
-            _commonProcessor.WndProcessor.MaximizeWindow();
+            _commonProcessor.WndProcessor.MaximizeWindow(_scale);
         }
 
         internal void FullScreen()
@@ -555,17 +561,20 @@ namespace SpaceVIL
             // unique items without content meaning
             if (linesRoot != null)
             {
-                DrawCommonLines(linesRoot);
+                DrawLines(linesRoot);
                 return;
             }
             if (pointsRoot != null)
             {
-                DrawCommonPoints(pointsRoot);
+                DrawPoints(pointsRoot);
                 return;
             }
             if (imageRoot != null) // протестировать на вложенные элементы
             {
-                DrawCommonImage(root, imageRoot);
+                DrawShell(root);
+                glDisable(GL_SCISSOR_TEST);
+                DrawImage(imageRoot);
+                glDisable(GL_SCISSOR_TEST);
                 DrawCommonContent(root);
                 return;
             }
@@ -573,7 +582,8 @@ namespace SpaceVIL
             // unique items with posible content
             if (textRoot != null)
             {
-                DrawCommonText(textRoot);
+                DrawText(textRoot);
+                glDisable(GL_SCISSOR_TEST);
             }
             if (openGLLayerRoot != null)
             {
@@ -581,8 +591,10 @@ namespace SpaceVIL
                 {
                     oglLine.Add(openGLLayerRoot);
                 }
-                DrawCommonItem(root);
-                DrawCommonOpenGLLayer(openGLLayerRoot);
+                DrawShell(root);
+                glDisable(GL_SCISSOR_TEST);
+
+                DrawOpenGLLayer(openGLLayerRoot);
 
                 glClear(GL_DEPTH_BUFFER_BIT);
                 glDisable(GL_DEPTH_TEST);
@@ -594,7 +606,8 @@ namespace SpaceVIL
             }
 
             // common item
-            DrawCommonItem(root);
+            DrawShell(root);
+            glDisable(GL_SCISSOR_TEST);
             DrawCommonContent(root);
         }
 
@@ -609,42 +622,6 @@ namespace SpaceVIL
                     DrawItems(child);
                 }
             }
-        }
-
-        private void DrawCommonItem(IBaseItem root)
-        {
-            DrawShell(root);
-            glDisable(GL_SCISSOR_TEST);
-        }
-
-        private void DrawCommonLines(ILine linesRoot)
-        {
-            DrawLines(linesRoot);
-        }
-
-        private void DrawCommonPoints(IPoints pointsRoot)
-        {
-            DrawPoints(pointsRoot);
-        }
-
-        private void DrawCommonImage(IBaseItem root, IImageItem imageRoot)
-        {
-            DrawShell(root);
-            glDisable(GL_SCISSOR_TEST);
-            DrawImage(imageRoot);
-            glDisable(GL_SCISSOR_TEST);
-        }
-
-        private void DrawCommonText(ITextContainer textRoot)
-        {
-            DrawText(textRoot);
-            glDisable(GL_SCISSOR_TEST);
-        }
-
-        private void DrawCommonOpenGLLayer(IOpenGLLayer ogllRoot)
-        {
-            DrawOpenGLLayer(ogllRoot);
-            glDisable(GL_SCISSOR_TEST);
         }
 
         private void DrawOpenGLLayer(IOpenGLLayer ogllRoot)
@@ -678,7 +655,6 @@ namespace SpaceVIL
             }
 
             bool preEffect = DrawPreprocessingEffects(shell);
-
             if (ItemsRefreshManager.IsRefreshShape(shell))
             {
                 shell.MakeShape();

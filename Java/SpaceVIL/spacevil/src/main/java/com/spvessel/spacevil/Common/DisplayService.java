@@ -41,7 +41,7 @@ public final class DisplayService {
         // return new Scale(x.get(0), y.get(0));
         return new Scale(_displayScale.getX(), _displayScale.getY());
     }
-    static void setDisplayScale(float x, float y)
+    public static void setDisplayScale(float x, float y)
     {
         _displayScale.setScale(x, y);
     }

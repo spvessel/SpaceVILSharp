@@ -20,7 +20,7 @@ public class OpenGLTest extends ActiveWindow {
     @Override
     public void initWindow() {
 
-        setParameters(this.getClass().getName(), this.getClass().getName(), 800, 800, false);
+        setParameters(this.getClass().getName(), this.getClass().getName(), 800, 800, true);
 
         CustomShape star = new CustomShape(GraphicsMathService.getStar(100, 50, 6));
         star.setBackground(0xFF, 0xB5, 0x6F);

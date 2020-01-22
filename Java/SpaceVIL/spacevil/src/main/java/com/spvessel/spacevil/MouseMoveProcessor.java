@@ -94,8 +94,18 @@ final class MouseMoveProcessor {
                             _commonProcessor.handler.getPointer().setY(yHandler);
                         }
                     } else {
-                        if (handlerContainerSides.contains(Side.LEFT) || handlerContainerSides.contains(Side.TOP))
+                        boolean flagLT = false;
+                        if (handlerContainerSides.contains(Side.LEFT)) {
+                            flagLT = true;
+                            w = (int) (w / scale.getX());
+                        }
+                        if (handlerContainerSides.contains(Side.TOP)) {
+                            flagLT = true;
+                            h = (int) (h / scale.getY());
+                        }
+                        if (flagLT) {
                             _commonProcessor.wndProcessor.setWindowPos(xHandler, yHandler);
+                        }
                         _commonProcessor.wndProcessor.setWindowSize(w, h, scale);
                     }
                 }

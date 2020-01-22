@@ -175,7 +175,7 @@ namespace SpaceVIL
         }
         public virtual String GetText()
         {
-            return _text_object.GetText();
+            return _text_object.GetItemText();
         }
         public int GetTextWidth()
         {

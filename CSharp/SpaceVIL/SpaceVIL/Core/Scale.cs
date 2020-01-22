@@ -1,3 +1,5 @@
+using System;
+
 namespace SpaceVIL.Core
 {
     public class Scale
@@ -26,6 +28,11 @@ namespace SpaceVIL.Core
         public float GetY()
         {
             return _y;
+        }
+
+        public override string ToString()
+        {
+            return "XScale: " + _x.ToString(".0##") + " YScale: " + _y.ToString(".0##");
         }
     }
 }

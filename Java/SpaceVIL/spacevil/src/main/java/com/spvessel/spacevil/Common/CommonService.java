@@ -14,6 +14,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 import com.spvessel.spacevil.CoreWindow;
 import com.spvessel.spacevil.CursorImage;
+import com.spvessel.spacevil.Common.DisplayService;
 import com.spvessel.spacevil.WindowsBox;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.KeyMods;
@@ -101,6 +102,7 @@ public final class CommonService {
         FloatBuffer y = BufferUtils.createFloatBuffer(1);
         glfwGetMonitorContentScale(monitor, x, y);
         DisplayService.setDisplayScale(x.get(0), y.get(0));
+        System.out.println(DisplayService.getDisplayDpiScale());
         
         DefaultsService.initImages();
         DefaultsService.initDefaultTheme();

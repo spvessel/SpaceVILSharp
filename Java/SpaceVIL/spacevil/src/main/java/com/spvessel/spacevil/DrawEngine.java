@@ -294,7 +294,19 @@ final class DrawEngine {
     }
 
     private void contentScale(long window, float x, float y) {
+        _commonProcessor.window.setWindowScale(x, y);
+        _scale.setScale(x, y);
+        DisplayService.setDisplayScale(x, y);
 
+        IntBuffer width = BufferUtils.createIntBuffer(1);
+        IntBuffer height = BufferUtils.createIntBuffer(1);
+        glfwGetWindowSize(_commonProcessor.handler.getWindowId(), width, height);
+
+        glwHandler.getCoreWindow().setWidthDirect((int) (width.get(0) / _scale.getX()));
+        glwHandler.getCoreWindow().setHeightDirect((int) (height.get(0) / _scale.getY()));
+
+        // подписать на обновление при смене фактора масштабирования 
+        // (текст в фиксированных по ширине элементов не обновляется - оно и понятно)
     }
 
     private void drop(long window, int count, long paths) {
@@ -337,7 +349,7 @@ final class DrawEngine {
     }
 
     void maximizeWindow() {
-        _commonProcessor.wndProcessor.maximizeWindow();
+        _commonProcessor.wndProcessor.maximizeWindow(_scale);
     }
 
     void fullScreen() {
@@ -462,11 +474,11 @@ final class DrawEngine {
         }
         if (updateSizeRequest) {
             updateWindowSize();
+            _commonProcessor.events.resetEvent(InputEventType.WINDOW_RESIZE);
             updateSizeRequest = false;
         }
         if (updatePositionRequest) {
             updateWindowPosition();
-            _commonProcessor.events.resetEvent(InputEventType.WINDOW_RESIZE);
             updatePositionRequest = false;
         }
         if (!_commonProcessor.events.lastEvent().contains(InputEventType.WINDOW_RESIZE)) {
@@ -587,7 +599,7 @@ final class DrawEngine {
             drawShell(root);
             glDisable(GL_SCISSOR_TEST);
 
-            drawCommonOpenGLLayer(ogl);
+            drawOpenGLLayer(ogl);
 
             glClear(GL_DEPTH_BUFFER_BIT);
             glDisable(GL_DEPTH_TEST);
@@ -610,11 +622,6 @@ final class DrawEngine {
                 drawItems(child);
             }
         }
-    }
-
-    private void drawCommonOpenGLLayer(InterfaceOpenGLLayer ogllRoot) {
-        drawOpenGLLayer(ogllRoot);
-        glDisable(GL_SCISSOR_TEST);
     }
 
     private void drawOpenGLLayer(InterfaceOpenGLLayer ogllRoot) {

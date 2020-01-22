@@ -1,12 +1,16 @@
 package OwnLibs.Owls.Views.Windows;
 
 import com.spvessel.spacevil.*;
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Common.DefaultsService;
+import com.spvessel.spacevil.Common.DisplayService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
+import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.*;
+import com.spvessel.spacevil.Common.*;
 
 import OwnLibs.Owls.ElementsFactory;
 import OwnLibs.Owls.Views.Items.AttachSideArea;
@@ -76,7 +80,20 @@ public class MainWindow extends ActiveWindow {
 
         @Override
         public void initWindow() {
-                setParameters("OwlWindow", "OwlWindow", 1300, 800, false);
+
+                // right scaling
+                int windowWidth = 1300, windowHeight = 800;
+                Scale displayScale = DisplayService.getDisplayDpiScale();
+                int displayWidth = (int) (DisplayService.getDisplayWidth() * displayScale.getX());
+                int displayHeight = (int) (DisplayService.getDisplayHeight() * displayScale.getX());
+                if (windowWidth * displayScale.getX() > displayWidth)
+                        windowWidth = (int) (windowWidth * 0.68);
+                if (windowHeight * displayScale.getY() > displayHeight)
+                        windowHeight = (int) (windowHeight * 0.74);
+
+                System.out.println("WND_W: " + windowWidth + " WND_H: " + windowHeight);
+
+                setParameters("OwlWindow", "OwlWindow", windowWidth, windowHeight, false);
                 setMinSize(400, 400);
                 setPadding(2, 2, 2, 2);
                 isCentered = true;

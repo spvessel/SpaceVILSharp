@@ -13,6 +13,7 @@ import org.lwjgl.glfw.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 final class GLWHandler {
@@ -127,14 +128,19 @@ final class GLWHandler {
         int width = vidmode.width();
         int height = vidmode.height();
 
-        IntBuffer wFB = BufferUtils.createIntBuffer(1);
-        IntBuffer hFB = BufferUtils.createIntBuffer(1);
-        glfwGetFramebufferSize(_window, wFB, hFB);
+        // IntBuffer wFB = BufferUtils.createIntBuffer(1);
+        // IntBuffer hFB = BufferUtils.createIntBuffer(1);
+        // glfwGetFramebufferSize(_window, wFB, hFB);
 
-        // setDpiScale((float) w.get(0) / (float) _coreWindow.getWidth(),
-        //         (float) h.get(0) / (float) _coreWindow.getHeight());
-        _coreWindow.setWindowScale((float) wFB.get(0) / (float) _coreWindow.getWidth(),
-                (float) hFB.get(0) / (float) _coreWindow.getHeight());
+        // _coreWindow.setWindowScale((float) wFB.get(0) / (float) _coreWindow.getWidth(),
+        //         (float) hFB.get(0) / (float) _coreWindow.getHeight());
+
+        FloatBuffer xScale = BufferUtils.createFloatBuffer(1);
+        FloatBuffer yScale = BufferUtils.createFloatBuffer(1);
+        glfwGetWindowContentScale(_window, xScale, yScale);
+        _coreWindow.setWindowScale(xScale.get(0), yScale.get(0));
+
+        System.out.println(_coreWindow.getDpiScale().toString());
 
         if (appearInCenter) {
             int actualWndWidth = _coreWindow.getWidth();

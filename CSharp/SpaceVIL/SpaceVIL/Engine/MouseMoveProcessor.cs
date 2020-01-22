@@ -101,8 +101,21 @@ namespace SpaceVIL
                         }
                         else
                         {
-                            if (handlerContainerSides.HasFlag(Side.Left) || handlerContainerSides.HasFlag(Side.Top))
+                            bool flagLT = false;
+                            if (handlerContainerSides.HasFlag(Side.Left))
+                            {
+                                flagLT = true;
+                                w = (int)(w / scale.GetX());
+                            }
+                            if (handlerContainerSides.HasFlag(Side.Top))
+                            {
+                                flagLT = true;
+                                h = (int)(h / scale.GetY());
+                            }
+                            if (flagLT)
+                            {
                                 _commonProcessor.WndProcessor.SetWindowPos(xHandler, yHandler);
+                            }
                             _commonProcessor.WndProcessor.SetWindowSize(w, h, scale);
                         }
                     }
