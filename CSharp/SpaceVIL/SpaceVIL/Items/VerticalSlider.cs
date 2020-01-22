@@ -63,7 +63,7 @@ namespace SpaceVIL
         internal void UpdateHandler()
         {
             float offset = ((float)GetHeight() - GetSumOfVerticalIndents() - Handler.GetHeight())
-                    / (_max_value - _min_value) * _current_value;
+                    / (_max_value - _min_value) * (_current_value - _min_value);
             Handler.SetOffset((int)offset + GetPadding().Top + Handler.GetMargin().Top);
         }
 
@@ -122,7 +122,7 @@ namespace SpaceVIL
             _dragging = true;
             //иногда число NAN 
             float result = (float)(Handler.GetY() - GetY()) * (_max_value - _min_value) 
-                    / ((float)GetHeight() - GetSumOfVerticalIndents() - Handler.GetHeight());
+                    / ((float)GetHeight() - GetSumOfVerticalIndents() - Handler.GetHeight()) + _min_value;
             if (!Single.IsNaN(result))
                 SetCurrentValue(result);
         }

@@ -243,9 +243,18 @@ namespace OpenGL
             glUniform2fv(location, count, value);
         }
 
+        public void Uniform3f(int location, float v0, float v1, float v2)
+        {
+            glUniform3f(location, v0, v1, v2);
+        }
         public void Uniform4f(int location, float v0, float v1, float v2, float v3)
         {
             glUniform4f(location, v0, v1, v2, v3);
+        }
+
+        public void UniformMatrix4fv(int location, int count, bool transpose, float[] value)
+        {
+            glUniformMatrix4fv(location, count, transpose, value);
         }
 
         public void UseProgram(uint program)
@@ -309,7 +318,9 @@ namespace OpenGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDeleteBuffers(int n, uint[] buffers);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDeleteFramebuffersEXT(int n, uint[] buffers);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform1f(int location, float v0);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform3f(int location, float v0, float v1, float v2);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform4f(int location, float v0, float v1, float v2, float v3);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniformMatrix4fv(int location, int count, bool transpose, float[] value);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform1i(int location, int v0);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform1fv(int location, int count, float[] value);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glUniform2fv(int location, int count, float[] value);

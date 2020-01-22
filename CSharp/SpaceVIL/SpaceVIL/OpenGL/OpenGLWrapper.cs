@@ -236,9 +236,19 @@ namespace OpenGL
             GL.Uniform2fv(location, count, value);
         }
 
+        internal static void glUniform3f(int location, float v0, float v1, float v2)
+        {
+            GL.Uniform3f(location, v0, v1, v2);
+        }
+
         internal static void glUniform4f(int location, float v0, float v1, float v2, float v3)
         {
             GL.Uniform4f(location, v0, v1, v2, v3);
+        }
+
+        internal static void glUniformMatrix4fv(int location, int count, bool transpose, float[] value)
+        {
+            GL.UniformMatrix4fv(location, count, transpose, value);
         }
 
         internal static void glUseProgram(uint program)

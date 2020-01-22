@@ -25,7 +25,7 @@ namespace Glfw3
         internal delegate void ErrorFunc(ErrorCode error, string description);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate void FramebufferSizeFunc(Int64 window, int width, int height);
+        internal delegate void FramebufferSizeFunc(Int64 window, int width, int height);        
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void KeyFunc(Int64 window, KeyCode key, int scancode, InputState state, KeyMods mods);
@@ -59,5 +59,8 @@ namespace Glfw3
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void WindowSizeFunc(Int64 window, int width, int height);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void WindowContentScaleFunc(Int64 window, float xscale, float yscale);
     }
 }

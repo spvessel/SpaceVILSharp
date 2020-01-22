@@ -18,8 +18,10 @@ namespace SpaceVIL
             _bounds = new Dictionary<IBaseItem, int[]>();
         }
 
-        internal bool Process(IBaseItem shell)
+        private Scale _scale = new Scale();
+        internal bool Process(IBaseItem shell, Scale scale)
         {
+            _scale.SetScale(scale.GetX(), scale.GetY());
             Prototype parent = shell.GetParent();
             if (parent != null && _bounds.ContainsKey(parent))
             {
@@ -94,11 +96,10 @@ namespace SpaceVIL
             int y = _commonProcessor.Window.GetHeight() - (parent.GetY() + parent.GetHeight());
             int w = parent.GetWidth();
             int h = parent.GetHeight();
-            float scale = _commonProcessor.Window.GetDpiScale()[0];
-            x = (int)((float)x * scale);
-            y = (int)((float)y * scale);
-            w = (int)((float)w * scale);
-            h = (int)((float)h * scale);
+            x = (int)(x * _scale.GetX());
+            y = (int)(y * _scale.GetY());
+            w = (int)(w * _scale.GetX());
+            h = (int)(h * _scale.GetY());
 
             glEnable(GL_SCISSOR_TEST);
             glScissor(x, y, w, h);

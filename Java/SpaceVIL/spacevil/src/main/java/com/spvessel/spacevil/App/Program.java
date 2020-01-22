@@ -16,8 +16,8 @@ public class Program {
 
         com.spvessel.spacevil.Common.CommonService.initSpaceVILComponents();
 
-        WindowManager.setRenderType(RenderType.ALWAYS);
-        WindowManager.enableVSync(0);
+        // WindowManager.setRenderType(RenderType.ALWAYS);
+        // WindowManager.enableVSync(0);
 
         // BufferedImage cursor = null;
         // try {
@@ -39,10 +39,10 @@ public class Program {
 //        LayoutsTest lt = new LayoutsTest();
 //        ComplexTest ct = new ComplexTest();
 //        InputTest it = new InputTest();
-//        TextTest tt = new TextTest();
+       TextTest tt = new TextTest();
         // Containers con = new Containers();
 //        SideAreaTest sat = new SideAreaTest();
-        DPIAnalysis dpi = new DPIAnalysis();
+        // DPIAnalysis dpi = new DPIAnalysis();
 
         // PerformanceTest pt = new PerformanceTest();
 
@@ -61,21 +61,21 @@ public class Program {
         // WindowManager.setRenderType(RenderType.ALWAYS);
 
         WindowManager.startWith(
-//            mw
-        //, mw2
-        // st
-        // im
-        // ft
-        // lt
-        // ct
-        // it
-        // tt
-        // con
-        // sat
-        // et
-        // pt
-                dpi
-        );
+                // mw
+                //, mw2
+                // st
+                // im
+                // ft
+                // lt
+                // ct
+                it
+                // tt
+                // con
+                // sat
+                // et
+                // pt
+                // oglt
+                );
     }
 
     public static Style getNewToolTipStyle() {

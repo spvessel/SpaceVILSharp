@@ -618,6 +618,7 @@ namespace SpaceVIL
             Monitor.Enter(_textureStorage.textInputLock);
             try
             {
+                // _cursorPosition = _textureStorage.CheckLineFits(_cursorPosition);
                 SpaceVIL.Core.Point pos = AddXYShifts(_cursorPosition);
                 _cursor.SetX(pos.X);
                 _cursor.SetY(pos.Y - GetLineSpacer() / 2 + 1);
@@ -655,6 +656,8 @@ namespace SpaceVIL
         internal void SetTextMargin(Indents margin)
         {
             _textureStorage.SetTextMargin(margin);
+            _cursorPosition = _textureStorage.CheckLineFits(_cursorPosition); //???
+            ReplaceCursor(); //???
         }
 
         internal Indents GetTextMargin()
@@ -666,6 +669,7 @@ namespace SpaceVIL
         {
             _textureStorage.SetFont(font);
             _cursor.SetHeight(_textureStorage.GetCursorHeight());
+            _cursorPosition = _textureStorage.CheckLineFits(_cursorPosition); //???
             ReplaceCursor();
         }
 

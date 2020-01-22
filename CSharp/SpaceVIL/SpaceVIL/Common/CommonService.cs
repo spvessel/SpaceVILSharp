@@ -4,6 +4,7 @@ using SpaceVIL.Core;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using static Glfw3.Glfw;
 
 namespace SpaceVIL.Common
 {
@@ -109,6 +110,11 @@ namespace SpaceVIL.Common
 
             DisplayService.SetDisplaySize(Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width,
                         Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height);
+
+            Glfw.Monitor monitor = Glfw.GetPrimaryMonitor();
+            float x, y;
+            Glfw.GetMonitorContentScale(monitor, out x, out y);
+            DisplayService.SetDisplayScale(x, y);
 
             DefaultsService.InitImages();
             DefaultsService.InitDefaultTheme();

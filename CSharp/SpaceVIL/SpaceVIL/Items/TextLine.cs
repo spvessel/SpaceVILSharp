@@ -52,6 +52,7 @@ namespace SpaceVIL
             Monitor.Enter(textLock);
             try
             {
+                // isBigExist = false;
                 afterCreate = true;
                 int _lineWidth = 0;
                 String text = GetItemText();
@@ -73,12 +74,15 @@ namespace SpaceVIL
                     _letEndPos.Add(modL.xBeg + modL.xShift + modL.width);
                 }
 
-                CoreWindow wLayout = GetHandler();
-                if (wLayout == null || wLayout.GetDpiScale() == null)
-                    _screenScale = 0;
+                CoreWindow wLayout = (GetParent() == null) ? null : GetParent().GetHandler();
+                if (wLayout == null) // || Common.DisplayService.GetDpiScale() == null) // && Common.DisplayService.GetDpiScale().Length > 0) // wLayout == null || wLayout.GetDpiScale() == null)
+                {
+                    _screenScale = 1; //0;
+                }
                 else
                 {
-                    _screenScale = wLayout.GetDpiScale()[0];
+                    _screenScale = DisplayService.GetDisplayDpiScale().GetX(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
+                    // Console.WriteLine("scale before " + _screenScale + " " + _parentAllowWidth);
                     if (_screenScale != 1)
                     {
                         MakeBigArr();
@@ -100,6 +104,7 @@ namespace SpaceVIL
                 return;
             }
             // Font fontBig = new Font(GetFont().FontFamily, (int)(GetFont().Size * _screenScale), GetFont().Style);
+            // Console.WriteLine("font " + GetFont().Size + " " + cnt++);
             Font fontBig = GraphicsMathService.ChangeFontSize((int)(GetFont().Size * _screenScale), GetFont());
 
             _bigLetters = FontEngine.GetModifyLetters(GetItemText(), fontBig);
@@ -114,7 +119,7 @@ namespace SpaceVIL
 
             // _bigMinY = output[1];
 
-            if (_screenScale != 0)
+            // if (_screenScale != 0)
             {
                 _letEndPos = new List<int>();
                 foreach (FontEngine.ModifyLetter modL in _bigLetters)
@@ -131,23 +136,8 @@ namespace SpaceVIL
             Monitor.Enter(textLock);
             try
             {
-                CoreWindow wLayout = GetHandler();
-                if (wLayout != null && wLayout.GetDpiScale() != null)
-                {
-                    float scl = wLayout.GetDpiScale()[0];
-                    if (scl != _screenScale && !isBigExist)
-                    { //Это при допущении, что скейл меняется только один раз!
-                        if (_screenScale != 0 || scl != 1)
-                        {
-                            //Возможно может возникнуть проблема при переходе от большего к меньшему
-                            _screenScale = scl;
-                            MakeBigArr();
-                        }
-                    }
-                }
-
-                FontEngine.FontDimensions fontDims = GetFontDims(); //int[] fontDims = GetFontDims();
-                int height = fontDims.height; //fontDims[2];
+                int[] fontDims = GetFontDims();
+                int height = fontDims[2];
                 if (GetHeight() != height)
                 {
                     base.SetHeight(height);
@@ -157,6 +147,21 @@ namespace SpaceVIL
                 if (parent == null) //Вроде не очень-то и нужно
                     return null;
 
+                CoreWindow wLayout = parent.GetHandler();
+                if (wLayout != null) // && Common.DisplayService.GetDpiScale().Length > 0)// wLayout != null && wLayout.GetDpiScale() != null)
+                {
+                    float scl = DisplayService.GetDisplayDpiScale().GetX(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
+                    if (scl != _screenScale) // && !isBigExist)
+                    { //Это при допущении, что скейл меняется только один раз!                    
+                        if (scl != 1) //_screenScale != 0 || 
+                        {
+                            //Возможно может возникнуть проблема при переходе от большего к меньшему
+                            _screenScale = scl;
+                            MakeBigArr();
+                        }
+                    }
+                }
+
                 if (_isRecountable)
                 {
                     if (_lineYShift - fontDims.minY + height < 0 || _lineYShift - fontDims.minY > _parentAllowHeight) //(_lineYShift - fontDims[1] + height < 0 || _lineYShift - fontDims[1] > _parentAllowHeight)
@@ -164,8 +169,10 @@ namespace SpaceVIL
                         return null;
                     }
                 }
-                if (_letters.Count() == 0)
+                if (_letters.Count() == 0)// && _bigLetters.Count() == 0)
+                {
                     return new TextPrinter(); //null;
+                }
                 if (_isUpdateNeed && (_isRecountable || afterCreate))
                 {
                     afterCreate = false;
@@ -179,7 +186,7 @@ namespace SpaceVIL
 
                     int xFirstBeg = _letters[0].xBeg + _letters[0].xShift;
 
-                    if (_screenScale != 0 && _screenScale != 1)
+                    if (_screenScale != 1) //_screenScale != 0 && 
                     {
                         // Font fontBig = new Font(GetFont().FontFamily, (int)(GetFont().Size * _screenScale), GetFont().Style);
                         Font fontBig = GraphicsMathService.ChangeFontSize((int)(GetFont().Size * _screenScale), GetFont());
@@ -255,6 +262,7 @@ namespace SpaceVIL
                     }
                     _isUpdateNeed = false;
                     textPrt = new TextPrinter(cacheBB);
+                    // Console.WriteLine("textline " + base.GetWidth() + "; texture = " + bb_w + " parent " + _parentAllowWidth);
                     textPrt.SetSize(bb_w, bb_h);
                     ItemsRefreshManager.SetRefreshText(this);
                 }
@@ -464,6 +472,10 @@ namespace SpaceVIL
 
         internal List<int> GetLetPosArray()
         {
+            if (_isUpdateNeed)
+            {
+                UpdateData();
+            }
             return _letEndPos;
         }
 

@@ -8,6 +8,30 @@ namespace SpaceVIL
 {
     internal sealed class WindowLayout
     {
+        internal void RestoreView()
+        {
+            if(_engine != null)
+            {
+                _engine.RestoreView();
+            }
+        }
+
+        internal void RestoreCommonGLSettings()
+        {
+            if(_engine != null)
+            {
+                _engine.RestoreCommonGLSettings();
+            }
+        }
+
+        internal void SetGLLayerViewport(IOpenGLLayer layer)
+        {
+            if(_engine != null)
+            {
+                _engine.SetGLLayerViewport(layer);
+            }
+        }
+
         internal Object EngineLocker = new Object();
         private Object wndLock = new Object();
 
@@ -164,20 +188,6 @@ namespace SpaceVIL
         {
             _engine.GLWHandler.SetHidden(value);
             _coreWindow.IsHidden = value;
-        }
-
-        private float _scaleWidth = 1.0f;
-        private float _scaleHeight = 1.0f;
-
-        internal float[] GetDpiScale()
-        {
-            return new float[] { _scaleWidth, _scaleHeight };
-        }
-
-        internal void SetDpiScale(float w, float h)
-        {
-            _scaleWidth = w;
-            _scaleHeight = h;
         }
 
         internal Int64 GetGLWID()

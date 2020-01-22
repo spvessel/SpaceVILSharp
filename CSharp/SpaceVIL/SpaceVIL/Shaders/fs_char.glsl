@@ -7,4 +7,5 @@ void main()
 {
 	vec4 c = texture(tex, fragTexCoord);
 	finalColor = vec4(rgb.r, rgb.g, rgb.b, c.a);
+	// finalColor = vec4(1.0, 1.0, 1.0, 1.0);
 }

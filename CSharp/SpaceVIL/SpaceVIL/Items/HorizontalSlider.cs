@@ -82,7 +82,7 @@ namespace SpaceVIL
         internal void UpdateHandler()
         {
             float offset = ((float)GetWidth() - GetSumOfHorizontalIndents() - Handler.GetWidth())
-                    / (_max_value - _min_value) * _current_value;
+                    / (_max_value - _min_value) * (_current_value - _min_value);
             Handler.SetOffset((int)offset + GetPadding().Left + Handler.GetMargin().Left);
         }
 
@@ -148,10 +148,14 @@ namespace SpaceVIL
         {
             _dragging = true;
             //иногда число NAN 
+
             float result = (float)(Handler.GetX() - GetX()) * (_max_value - _min_value) 
-                    / ((float)GetWidth() - GetSumOfHorizontalIndents() - Handler.GetWidth());
+                    / ((float)GetWidth() - GetSumOfHorizontalIndents() - Handler.GetWidth()) + _min_value;
+            
             if (!Single.IsNaN(result))
+            {
                 SetCurrentValue(result);
+            }
         }
 
         protected virtual void OnTrackClick(object sender, MouseArgs args)

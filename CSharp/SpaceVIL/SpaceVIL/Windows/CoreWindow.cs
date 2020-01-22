@@ -536,16 +536,6 @@ namespace SpaceVIL
             windowLayout.SetWindow(window);
         }
 
-        internal float[] GetDpiScale()
-        {
-            return windowLayout.GetDpiScale();
-        }
-
-        internal void SetDpiScale(float w, float h)
-        {
-            windowLayout.SetDpiScale(w, h);
-        }
-
         internal int RatioW = -1;
         internal int RatioH = -1;
         internal bool IsKeepAspectRatio = false;
@@ -727,7 +717,6 @@ namespace SpaceVIL
 
         public Area GetWorkArea()
         {
-            // Glfw3.Glfw.Monitor monitor = Glfw3.Glfw.GetWindowMonitor(GetGLWID());
             Glfw3.Glfw.Monitor monitor = Glfw3.Glfw.GetPrimaryMonitor();
             if (monitor != null)
             {
@@ -736,6 +725,17 @@ namespace SpaceVIL
                 return new Area(x, y, w, h);
             }
             return null;
+        }
+
+        private Scale _windowScale = new Scale();
+        public Scale GetDpiScale()
+        {
+            return _windowScale;
+        }
+        
+        internal void SetWindowScale(float x, float y)
+        {
+            _windowScale.SetScale(x, y);
         }
     }
 }

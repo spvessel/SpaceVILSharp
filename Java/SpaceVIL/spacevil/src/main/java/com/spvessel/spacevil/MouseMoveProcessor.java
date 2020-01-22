@@ -12,6 +12,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.InterfaceDraggable;
 import com.spvessel.spacevil.Core.InterfaceWindowAnchor;
+import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.OSType;
 import com.spvessel.spacevil.Flags.Side;
@@ -24,7 +25,7 @@ final class MouseMoveProcessor {
         _commonProcessor = processor;
     }
 
-    void process(long wnd, double xpos, double ypos) {
+    void process(long wnd, double xpos, double ypos, Scale scale) {
         _commonProcessor.ptrRelease.setX((int) xpos);
         _commonProcessor.ptrRelease.setY((int) ypos);
         _commonProcessor.margs.position.setPosition((float) xpos, (float) ypos);
@@ -82,7 +83,7 @@ final class MouseMoveProcessor {
                 }
                 if (handlerContainerSides.size() != 0 && !_commonProcessor.window.isMaximized) {
                     if (CommonService.getOSType() == OSType.MAC) {
-                        _commonProcessor.wndProcessor.setWindowSize(w, h);
+                        _commonProcessor.wndProcessor.setWindowSize(w, h, new Scale());
                         if (handlerContainerSides.contains(Side.LEFT) && handlerContainerSides.contains(Side.TOP)) {
                             _commonProcessor.wndProcessor.setWindowPos(xHandler,
                                     (_commonProcessor.hGlobal - h) + _commonProcessor.yGlobal);
@@ -95,7 +96,7 @@ final class MouseMoveProcessor {
                     } else {
                         if (handlerContainerSides.contains(Side.LEFT) || handlerContainerSides.contains(Side.TOP))
                             _commonProcessor.wndProcessor.setWindowPos(xHandler, yHandler);
-                        _commonProcessor.wndProcessor.setWindowSize(w, h);
+                        _commonProcessor.wndProcessor.setWindowSize(w, h, scale);
                     }
                 }
             }

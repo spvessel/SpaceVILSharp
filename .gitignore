@@ -119,10 +119,8 @@ Java/SpaceVIL/spacevil/target/surefire-reports/TEST-com.spvessel.AppTest.xml
 *.so
 *.jnilib
 *.prefs
-<<<<<<< HEAD
 Java/SpaceVIL/spacevil/.idea/libraries/Maven__junit_junit_4_11.xml
 Java/SpaceVIL/spacevil/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml
-=======
 *.lst
 Java/SpaceVIL/spacevil/.idea/workspace.xml
 Java/SpaceVIL/spacevil/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml
@@ -133,7 +131,6 @@ Java/SpaceVIL/spacevil/.idea/workspace.xml
 Java/SpaceVIL/spacevil/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml
 Java/SpaceVIL/spacevil/.idea/libraries/lwjgl.xml
 Java/SpaceVIL/spacevil/.idea/compiler.xml
->>>>>>> 70c80ad5452860993934bfd3d8b0abbb74c59dab
 *.bin
 *.lock
 *.properties
@@ -226,3 +223,16 @@ Java/SpaceVIL/spacevil/bin/main/shaders/fs_primitive.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_primitive.glsl
 OwlsInSpace/.classpath
 Java/SpaceVIL/spacevil/src/main/java/com/spvessel/spacevil/View/DPIAnalysis.java
+CSharp/SpaceVIL/SpaceVIL/Glm/geometric.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/mat2.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/mat3.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/mat4.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/matrix.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/matrix_transform.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/trigonometric.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/vec2.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/vec3.cs
+CSharp/SpaceVIL/SpaceVIL/Glm/vec4.cs
+CSharp/SpaceVIL/SpaceVIL/View/OpenGLLayerTest.cs
+CSharp/SpaceVIL/SpaceVIL/Items/OpenGLLayer.cs
+CSharp/SpaceVIL/SpaceVIL/View/OpenGLLayer.cs

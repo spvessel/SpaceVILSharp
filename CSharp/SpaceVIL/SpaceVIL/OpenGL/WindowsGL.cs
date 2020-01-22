@@ -272,10 +272,22 @@ namespace OpenGL
             InvokeWGL<uniform2fv>("glUniform2fv")(location, count, value);
         }
 
+        public delegate void uniform3f(int location, float v0, float v1, float v2);
+        public void Uniform3f(int location, float v0, float v1, float v2)
+        {
+            InvokeWGL<uniform3f>("glUniform3f")(location, v0, v1, v2);
+        }
+
         public delegate void uniform4f(int location, float v0, float v1, float v2, float v3);
         public void Uniform4f(int location, float v0, float v1, float v2, float v3)
         {
             InvokeWGL<uniform4f>("glUniform4f")(location, v0, v1, v2, v3);
+        }
+
+        public delegate void uniformMatrix4fv(int location, int count, bool transpose, float[] value);
+        public void UniformMatrix4fv(int location, int count, bool transpose, float[] value)
+        {
+            InvokeWGL<uniformMatrix4fv>("glUniformMatrix4fv")(location, count, transpose, value);
         }
 
         public delegate void useProgram(uint program);
@@ -304,7 +316,7 @@ namespace OpenGL
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDrawArrays(uint mode, int first, int count);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDrawBuffer(uint mode);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glDrawElements(uint mode, int count, uint type, IntPtr indices);
-        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glEnable(uint cap);
+        [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glEnable(uint cap); 
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glGenTextures(int n, uint[] textures);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glScissor(int x, int y, int width, int height);
         [DllImport(LIBRARY_OPENGL, SetLastError = true)] public static extern void glTexImage2D(uint target, int level, uint internalformat, int width, int height, int border, uint format, uint type, IntPtr pixels);

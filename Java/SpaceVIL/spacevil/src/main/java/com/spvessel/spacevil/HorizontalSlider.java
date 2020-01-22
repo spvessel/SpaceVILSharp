@@ -77,7 +77,7 @@ public class HorizontalSlider extends Prototype {
 
     void updateHandler() {
         float offset = ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth())
-                / (_max_value - _min_value) * _current_value;
+                / (_max_value - _min_value) * (_current_value - _min_value);
         handler.setOffset((int) offset + getPadding().left + handler.getMargin().left);
     }
 
@@ -141,7 +141,7 @@ public class HorizontalSlider extends Prototype {
         _dragging = true;
         // иногда число NAN
         float result = (float) (handler.getX() - getX()) * (_max_value - _min_value)
-                / ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth());
+                / ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth()) + _min_value;
         if (!Float.isNaN(result))
             setCurrentValue(result);
     }

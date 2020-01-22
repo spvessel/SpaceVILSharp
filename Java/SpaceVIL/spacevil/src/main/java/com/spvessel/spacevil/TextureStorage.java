@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.spvessel.spacevil.Common.DisplayService;
 import com.spvessel.spacevil.Core.InterfaceTextContainer;
 import com.spvessel.spacevil.Core.InterfaceTextImage;
 import com.spvessel.spacevil.Core.InterfaceTextWrap;
@@ -166,7 +167,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     int getLettersCountInLine(int lineNum) {
-        if (lineNum >= _linesList.size()) {
+        if (lineNum >= _linesList.size()) { //возможно это плохо или очень плохо
             return 0;
         } else {
             return getTextInLine(lineNum).length(); //_linesList.get(lineNum).getItemText().length();
@@ -295,8 +296,12 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
 
     Point checkLineFits(Point checkPoint) {
         Point outPt = new Point();
-        // ??? check line count
         outPt.y = checkPoint.y;
+        // ??? check line count
+        if (outPt.y >= getLinesCount()) {
+            outPt.y = getLinesCount() - 1;
+        }
+
         if (outPt.y == -1) {
             outPt.y = 0;
         }
@@ -311,7 +316,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     private Point cursorPosToCoord(Point cPos0) {
-        Point cPos = checkLineFits(cPos0);
+        Point cPos = checkLineFits(cPos0); //??? moved to the replaceCursor 
         Point coord = new Point(0, 0);
         coord.y = getLineY(cPos.y);
 
@@ -1014,10 +1019,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             if (_isUpdateTextureNeed) {
                 float _screenScale = 1;
                 CoreWindow wLayout = getHandler();
-                if (wLayout == null || wLayout.getDpiScale() == null) {
+                if (wLayout == null) { // || wLayout.getDpiScale() == null) {
                     _screenScale = 1;
                 } else {
-                    _screenScale = wLayout.getDpiScale()[0];
+                    _screenScale = DisplayService.getDisplayDpiScale().getX();// wLayout.getDpiScale().getX();
                     if (_screenScale == 0) { //!= 1)
                         _screenScale = 1;
                     }
@@ -1030,6 +1035,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
                 int visibleHeight = 0;
                 _firstVisibleLineNumb = -1; // int startNumb = -1;
                 int inc = -1;
+                
                 for (TextLine tl : _linesList) {
                     inc++;
                     InterfaceTextImage tmp = tl.getTexture();
@@ -1431,7 +1437,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     Point wrapCursorPosToReal(Point wrapPos) {
-        //Convert wrap cursor position to real position
+        //Convert wrap cursor position to the real position
         if (_lineBreakes.size() != _linesList.size()) {
             return wrapPos;
         }
@@ -1449,7 +1455,7 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
     }
 
     Point realCursorPosToWrap(Point realPos) {
-        //Convert real cursor position to wrap position
+        //Convert real cursor position to the wrap position
         if (_lineBreakes.size() != _linesList.size()) {
             return realPos;
         }

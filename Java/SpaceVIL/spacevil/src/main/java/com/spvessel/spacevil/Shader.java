@@ -173,12 +173,12 @@ final class Shader {
     }
 
     void deleteShader() {
-        detachShadersCode();
+        detachShaders();
         deleteShadersID();
         glDeleteProgram(_program_id);
     }
 
-    private void detachShadersCode() {
+    private void detachShaders() {
         glDetachShader(_program_id, _shader_vertex);
         glDetachShader(_program_id, _shader_fragment);
         glDetachShader(_program_id, _shader_geometry);

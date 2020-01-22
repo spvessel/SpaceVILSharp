@@ -6,6 +6,7 @@ import com.spvessel.spacevil.Core.Area;
 import com.spvessel.spacevil.Core.Pointer;
 import com.spvessel.spacevil.Exceptions.SpaceVILException;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
+import com.spvessel.spacevil.Flags.OSType;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
@@ -15,21 +16,6 @@ import static org.lwjgl.system.MemoryUtil.*;
 import java.nio.IntBuffer;
 
 final class GLWHandler {
-
-    // private float _scaleWidth = 1.0f;
-    // private float _scaleHeight = 1.0f;
-
-    // float[] getDpiScale() {
-    // return new float[] { _scaleWidth, _scaleHeight };
-    // }
-
-    private void setDpiScale(float w, float h) {
-        // _scaleWidth = w * 2;
-        // _scaleHeight = h * 2;
-        // System.out.println(w + " " + h);
-        DisplayService.SetDisplayDpiScale(w);
-        _coreWindow.setDpiScale(w, h);
-    }
 
     ///////////////////////////////////////////////
     private GLFWWindowSizeCallback resizeCallback;
@@ -44,6 +30,7 @@ final class GLWHandler {
     private GLFWFramebufferSizeCallback framebufferCallback;
     private GLFWWindowRefreshCallback windowRefreshCallback;
     private GLFWDropCallback dropCallback;
+    private GLFWWindowContentScaleCallback contentScaleCallback;
     ///////////////////////////////////////////////
 
     Boolean borderHidden;
@@ -90,8 +77,8 @@ final class GLWHandler {
         glfwWindowHint(GLFW_SAMPLES, _coreWindow._msaa.getValue());
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        // glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-        // glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE);
+
+        glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
 
         if (resizeble)
             glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -132,23 +119,32 @@ final class GLWHandler {
             System.out.println("glfwCreateWindow fails");
             throw new SpaceVILException("Create window fails - " + getCoreWindow().getWindowTitle());
         }
-        glfwMakeContextCurrent(_window);
+
+        WindowManager.setContextCurrent(_coreWindow);
 
         long monitor = glfwGetPrimaryMonitor();
         GLFWVidMode vidmode = glfwGetVideoMode(monitor);
         int width = vidmode.width();
         int height = vidmode.height();
 
-        IntBuffer w = BufferUtils.createIntBuffer(1);
-        IntBuffer h = BufferUtils.createIntBuffer(1);
-        glfwGetFramebufferSize(_window, w, h);
+        IntBuffer wFB = BufferUtils.createIntBuffer(1);
+        IntBuffer hFB = BufferUtils.createIntBuffer(1);
+        glfwGetFramebufferSize(_window, wFB, hFB);
 
-        setDpiScale((float) w.get(0) / (float) _coreWindow.getWidth(),
-                (float) h.get(0) / (float) _coreWindow.getHeight());
+        // setDpiScale((float) w.get(0) / (float) _coreWindow.getWidth(),
+        //         (float) h.get(0) / (float) _coreWindow.getHeight());
+        _coreWindow.setWindowScale((float) wFB.get(0) / (float) _coreWindow.getWidth(),
+                (float) hFB.get(0) / (float) _coreWindow.getHeight());
 
         if (appearInCenter) {
-            getPointer().setX((width - _coreWindow.getWidth()) / 2);
-            getPointer().setY((height - _coreWindow.getHeight()) / 2);
+            int actualWndWidth = _coreWindow.getWidth();
+            int actualWndHeight = _coreWindow.getHeight();
+            if (CommonService.getOSType() != OSType.MAC) {
+                actualWndWidth = (int) (_coreWindow.getWidth() * _coreWindow.getDpiScale().getX());
+                actualWndHeight = (int) (_coreWindow.getHeight() * _coreWindow.getDpiScale().getY());
+            }
+            getPointer().setX((width - actualWndWidth) / 2);
+            getPointer().setY((height - actualWndHeight) / 2);
 
         } else {
             _coreWindow.setXDirect(_coreWindow.getX());//200);
@@ -156,8 +152,10 @@ final class GLWHandler {
             getPointer().setX(_coreWindow.getX());//200);
             getPointer().setY(_coreWindow.getY());//50);
         }
-        glfwSetWindowSizeLimits(_window, _coreWindow.getMinWidth(), _coreWindow.getMinHeight(),
-                _coreWindow.getMaxWidth(), _coreWindow.getMaxHeight());
+        glfwSetWindowSizeLimits(_window, (int) (_coreWindow.getMinWidth() * _coreWindow.getDpiScale().getX()),
+                (int) (_coreWindow.getMinHeight() * _coreWindow.getDpiScale().getY()),
+                (int) (_coreWindow.getMaxWidth() * _coreWindow.getDpiScale().getX()),
+                (int) (_coreWindow.getMaxHeight() * _coreWindow.getDpiScale().getY()));
         glfwSetWindowPos(_window, getPointer().getX(), getPointer().getY());
 
         if (_coreWindow.isKeepAspectRatio)
@@ -169,7 +167,7 @@ final class GLWHandler {
 
     void switchContext() {
         glfwMakeContextCurrent(0);
-        glfwMakeContextCurrent(_window);
+        WindowManager.setContextCurrent(_coreWindow);
     }
 
     void clearEventsCallbacks() {
@@ -185,6 +183,7 @@ final class GLWHandler {
         framebufferCallback = null;
         windowRefreshCallback = null;
         dropCallback = null;
+        contentScaleCallback = null;
     }
 
     void setCursorType(int type) {
@@ -288,6 +287,11 @@ final class GLWHandler {
     void setCallbackDrop(GLFWDropCallback function) {
         dropCallback = function;
         glfwSetDropCallback(_window, dropCallback);
+    }
+
+    void setCallbackContentScale(GLFWWindowContentScaleCallback function) {
+        contentScaleCallback = function;
+        glfwSetWindowContentScaleCallback(_window, contentScaleCallback);
     }
 
     void setHidden(Boolean value) {

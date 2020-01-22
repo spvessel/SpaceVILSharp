@@ -11,6 +11,7 @@ import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceImageItem;
 import com.spvessel.spacevil.Core.InterfaceTextContainer;
 import com.spvessel.spacevil.Core.InterfaceTextImage;
+import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
 
 final class RenderProcessor {
@@ -173,8 +174,8 @@ final class RenderProcessor {
         vertexStorage.addResource(item, store);
     }
 
-    void drawFreshText(Shader shader, InterfaceTextContainer item, InterfaceTextImage printer, float w, float h,
-            float level, float[] color) {
+    void drawFreshText(Shader shader, InterfaceTextContainer item, InterfaceTextImage printer, Scale scale, float w,
+            float h, float level, float[] color) {
 
         textStorage.deleteResource(item);
 
@@ -183,7 +184,7 @@ final class RenderProcessor {
 
         shader.useShader();
         VramTexture store = new VramTexture();
-        store.genBuffers(0, printer.getWidth(), 0, printer.getHeight(), true);
+        store.genBuffers(0, printer.getWidth() / scale.getX(), 0, printer.getHeight() / scale.getY(), true);
         store.genTexture(printer.getWidth(), printer.getHeight(), printer.getBytes());
         textStorage.addResource(item, store);
 
@@ -315,15 +316,11 @@ final class RenderProcessor {
         BufferedImage bmp = image.getImage();
         if (bmp == null)
             return;
-        // byte[] buffer = image.getPixMapImage();
-        // if (buffer == null)
-        // return;
 
         shader.useShader();
         VramTexture store = new VramTexture();
         store.genBuffers(0, aw, 0, ah);
         store.genTexture(iw, ih, bmp);
-        // store.genTexture(iw, ih, buffer);
         store.sendUniformSample2D(shader, "tex");
 
         if (image.isColorOverlay()) {

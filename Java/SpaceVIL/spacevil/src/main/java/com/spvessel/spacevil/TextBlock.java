@@ -510,6 +510,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
     private void replaceCursor() {
         _textureStorage.textInputLock.lock();
         try {
+            // _cursorPosition = _textureStorage.checkLineFits(_cursorPosition);
             Point pos = addXYShifts(_cursorPosition);
             _cursor.setX(pos.x);
             _cursor.setY(pos.y - getLineSpacer() / 2 + 1);
@@ -544,6 +545,8 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
 
     void setTextMargin(Indents margin) {
         _textureStorage.setTextMargin(margin);
+        _cursorPosition = _textureStorage.checkLineFits(_cursorPosition); //???
+        replaceCursor(); //???
     }
 
     Indents getTextMargin() {
@@ -553,6 +556,7 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
     void setFont(Font font) {
         _textureStorage.setFont(font);
         _cursor.setHeight(_textureStorage.getCursorHeight());
+        _cursorPosition = _textureStorage.checkLineFits(_cursorPosition); //???
         replaceCursor();
     }
 

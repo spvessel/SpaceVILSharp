@@ -11,6 +11,7 @@ import com.spvessel.spacevil.Core.EventMouseMethodState;
 import com.spvessel.spacevil.Core.Geometry;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.Position;
+import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Core.Size;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
@@ -488,14 +489,6 @@ public abstract class CoreWindow {
         windowLayout.setWindow(window);
     }
 
-    float[] getDpiScale() {
-        return windowLayout.getDpiScale();
-    }
-
-    void setDpiScale(float w, float h) {
-        windowLayout.setDpiScale(w, h);
-    }
-
     int ratioW = -1;
     int ratioH = -1;
     boolean isKeepAspectRatio = false;
@@ -657,7 +650,6 @@ public abstract class CoreWindow {
     }
 
     public Area getWorkArea() {
-        // long monitor = GLFW.glfwGetWindowMonitor(getGLWID());
         long monitor = GLFW.glfwGetPrimaryMonitor();
         if (monitor != NULL) {
             IntBuffer x = BufferUtils.createIntBuffer(1);
@@ -668,5 +660,16 @@ public abstract class CoreWindow {
             return new Area(x.get(0), y.get(0), w.get(0), h.get(0));
         }
         return null;
+    }
+
+    private Scale _windowScale = new Scale();
+    public Scale getDpiScale()
+    {
+        return _windowScale;
+    }
+    
+    void setWindowScale(float x, float y)
+    {
+        _windowScale.setScale(x, y);
     }
 }

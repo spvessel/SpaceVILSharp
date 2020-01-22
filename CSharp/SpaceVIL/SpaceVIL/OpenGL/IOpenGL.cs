@@ -48,7 +48,9 @@ namespace OpenGL
         void DeleteShader(uint shader);
         int GetUniformLocation(uint shader, string value);
         void Uniform1i(int location, int v0);
+        void Uniform3f(int location, float v0, float v1, float v2);
         void Uniform4f(int location, float v0, float v1, float v2, float v3);
+        void UniformMatrix4fv(int location, int count, bool transpose, float[] value);
         void Uniform1fv(int location, int count, float[] value);
         void Uniform2fv(int location, int count, float[] value);
         void Uniform1f(int location, float v0);

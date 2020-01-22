@@ -6,6 +6,7 @@ import java.util.List;
 import com.spvessel.spacevil.Core.DropArgs;
 import com.spvessel.spacevil.Core.Geometry;
 import com.spvessel.spacevil.Core.Position;
+import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.Side;
 
@@ -28,7 +29,7 @@ final class WindowProcessor {
         _commonProcessor = processor;
     }
 
-    void setWindowSize(int width, int height) {
+    void setWindowSize(int width, int height, Scale scale) {
         if (WindowsBox.getCurrentFocusedWindow() != _commonProcessor.window)
             glfwFocusWindow(_commonProcessor.window.getGLWID());
 
@@ -42,19 +43,27 @@ final class WindowProcessor {
             float xScale = (currentW / ratioW);
             float yScale = (currentH / ratioH);
 
-            float scale = 0;
+            float ratio = 0;
 
             List<Side> handlerContainerSides = _commonProcessor.rootContainer.getSides();
 
             if (handlerContainerSides.contains(Side.LEFT) || handlerContainerSides.contains(Side.RIGHT))
-                scale = xScale;
+                ratio = xScale;
             else
-                scale = yScale;
+                ratio = yScale;
 
-            width = (int) (ratioW * scale);
-            height = (int) (ratioH * scale);
+            width = (int) (ratioW * ratio);
+            height = (int) (ratioH * ratio);
         }
-        glfwSetWindowSize(_commonProcessor.handler.getWindowId(), width, height);
+
+        if (width > _commonProcessor.window.getMaxWidth())
+            width = _commonProcessor.window.getMaxWidth();
+
+        if (height > _commonProcessor.window.getMaxHeight())
+            height = _commonProcessor.window.getMaxHeight();
+
+        glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getX()),
+                (int) (height * scale.getY()));
         _commonProcessor.events.setEvent(InputEventType.WINDOW_RESIZE);
     }
 
