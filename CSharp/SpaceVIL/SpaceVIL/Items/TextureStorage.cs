@@ -1551,9 +1551,9 @@ namespace SpaceVIL
                     if (currentText.EndsWith(" "))
                     {
                         int firstSpaceInd = nextText.IndexOf(" ");
-                        if (firstSpaceInd > 0)
+                        if (firstSpaceInd > 0 && firstSpaceInd + 1 < nextLineLetPosArray.Count)
                         {
-                            if (currentLine.GetWidth() + nextLineLetPosArray[firstSpaceInd] < _cursorXMax)
+                            if (currentLine.GetWidth() + nextLineLetPosArray[firstSpaceInd + 1] < _cursorXMax)
                             {
                                 CombineLines(new SpaceVIL.Core.Point(currentText.Length, lineNum));
                                 return true;

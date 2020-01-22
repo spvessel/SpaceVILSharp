@@ -113,18 +113,26 @@ namespace SpaceVIL
 
             private void FillSpecLetters()
             {
+                int kegel = (int)font.Size;
                 char specLet = " "[0];
-                Letter letter = new Letter(" ");
-                letters.Add(specLet, letter);
-                letter.width = letters["-"[0]].width;
-                letter.height = 0;
-                fontDims.lineSpacer = (int)letter.width;
+                Letter spaceSign = new Letter(" ");
+                letters.Add(specLet, spaceSign);
+                spaceSign.width = kegel / 2; //letters["-"[0]].width;
+                spaceSign.height = 0;
+
+                fontDims.lineSpacer = letters["-"[0]].width; //(int)spaceSign.width;
+
+                fontDims.letterSpacer = (kegel / 2) / 4;
+                if (fontDims.letterSpacer < 1)
+                {
+                    fontDims.letterSpacer = 1;
+                }
 
                 specLet = "\t"[0];
-                Letter letter1 = new Letter("\t");
-                letters.Add(specLet, letter1);
-                letter1.width = letter.width * 4;
-                letter1.height = 0;
+                Letter tabSign = new Letter("\t");
+                letters.Add(specLet, tabSign);
+                tabSign.width = fontDims.lineSpacer * 4; //spaceSign.width * 4;
+                tabSign.height = 0;
 
                 //!Может стоит вернуть это, если новые модификации текста будут работать нормально
                 specLet = "\r"[0];
@@ -137,7 +145,7 @@ namespace SpaceVIL
 
             private int UpdateSpecX0(Letter letter, int x0)
             {
-                return x0 + 2; //for " " and "\t"
+                return x0 + fontDims.letterSpacer * 2; //???2; //for " " and "\t"
             }
 
             private void AddLetter(char c)
@@ -202,7 +210,10 @@ namespace SpaceVIL
                                 }
                             }
 
-                            if (b1) x0++;
+                            if (b1) 
+                            {
+                                x0 += fontDims.letterSpacer;//x0++;
+                            }
                             // else
                             // {
                             //     for (int i = Math.Max(ly0, ry0); i < Math.Min(ly1, ry1); i++)
@@ -1074,7 +1085,8 @@ namespace SpaceVIL
             internal int minY = Int32.MaxValue;
             internal int maxY = Int32.MinValue;
             internal int height = 0;
-            internal int lineSpacer;
+            internal int lineSpacer = 1;
+            internal int letterSpacer = 1;
         }
     }
 }

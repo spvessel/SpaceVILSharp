@@ -36,18 +36,25 @@ class Alphabet {
     }
 
     private void fillSpecLetters() {
+        int kegel = font.getSize();
         char specLet = " ".charAt(0);
-        Letter letter = new Letter(" ");
-        letters.put(specLet, letter);
-        letter.width = letters.get("-".charAt(0)).width;
-        letter.height = 0;
-        fontDims.lineSpacer = letter.width;
+        Letter spaceSign = new Letter(" ");
+        letters.put(specLet, spaceSign);
+        spaceSign.width = kegel / 2; //letters.get("-".charAt(0)).width;
+        spaceSign.height = 0;
+
+        fontDims.lineSpacer = letters.get("-".charAt(0)).width; //kegel / 5; //spaceSign.width;
+
+        fontDims.letterSpacer = (kegel / 2) / 4;
+        if (fontDims.letterSpacer < 1) {
+            fontDims.letterSpacer = 1;
+        }
 
         specLet = "\t".charAt(0);
-        Letter letter1 = new Letter("\t");
-        letters.put(specLet, letter1);
-        letter1.width = letter.width * 4;
-        letter1.height = 0;
+        Letter tabSign = new Letter("\t");
+        letters.put(specLet, tabSign);
+        tabSign.width = fontDims.lineSpacer * 4; //spaceSign.width * 4;
+        tabSign.height = 0;
 
         /*
          * //!Может стоит вернуть это, если новые модификации текста будут работать
@@ -57,7 +64,7 @@ class Alphabet {
     }
 
     private int updateSpecX0(Letter letter, int x0) {
-        return x0 + 2; // for " " and "\t"
+        return x0 + fontDims.letterSpacer * 2; //???2; // for " " and "\t"
     }
 
     private void addLetter(char c) {
@@ -136,7 +143,8 @@ class Alphabet {
                     // //if (!b2)
                     // // x0--;
                     // }
-                    x0++;
+
+                    x0 += fontDims.letterSpacer; //x0++;
                 }
             }
 
@@ -679,6 +687,7 @@ class Alphabet {
         int minY = Integer.MAX_VALUE;
         private int maxY = Integer.MIN_VALUE;
         int height = 0;
-        int lineSpacer;
+        int lineSpacer = 1;
+        int letterSpacer = 1;
     }
 }

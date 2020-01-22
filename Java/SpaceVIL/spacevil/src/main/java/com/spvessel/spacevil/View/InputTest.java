@@ -316,7 +316,7 @@ public class InputTest extends ActiveWindow {
                 + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
                 + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
                 + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n"
-                + "ajfhgajhdifuahwoiehfoiawoeifisdfghaoisiuehgiouaoesijfoaiehfouiashueighaoweigh\n" + "";
+                + "ajfhga jhdifuahwoieh foiawoeifisdfghaois iuehgiouaoesijfo aiehfouiashuei ghaoweigh\n" + "";
     }
 
     public static Style getTextAreaStyle() {

@@ -1299,8 +1299,8 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             return;
         }
 
-        List<Integer> listSpace = new LinkedList<>();
-        List<Integer> listPos = new LinkedList<>();
+        List<Integer> listSpace = new ArrayList<>();
+        List<Integer> listPos = new ArrayList<>();
 
         int ind = 0;
         int pos = textInLine.indexOf(" ", ind);
@@ -1371,8 +1371,8 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
                 if (nextLineLetPosArray.size() != 0) {
                     if (currentText.endsWith(" ")) {
                         int firstSpaceInd = nextText.indexOf(" ");
-                        if (firstSpaceInd > 0) {
-                            if (currentLine.getWidth() + nextLineLetPosArray.get(firstSpaceInd) < _cursorXMax) {
+                        if (firstSpaceInd > 0 && firstSpaceInd + 1 < nextLineLetPosArray.size()) {
+                            if (currentLine.getWidth() + nextLineLetPosArray.get(firstSpaceInd + 1) < _cursorXMax) {
                                 combineLines(new Point(currentText.length(), lineNum));
                                 return true;
                             }
