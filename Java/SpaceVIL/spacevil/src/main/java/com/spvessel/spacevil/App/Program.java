@@ -38,8 +38,8 @@ public class Program {
 //        FlowTest ft = new FlowTest();
 //        LayoutsTest lt = new LayoutsTest();
 //        ComplexTest ct = new ComplexTest();
-//        InputTest it = new InputTest();
-       TextTest tt = new TextTest();
+        InputTest it = new InputTest();
+//       TextTest tt = new TextTest();
         // Containers con = new Containers();
 //        SideAreaTest sat = new SideAreaTest();
         // DPIAnalysis dpi = new DPIAnalysis();

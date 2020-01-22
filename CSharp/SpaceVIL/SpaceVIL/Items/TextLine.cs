@@ -136,8 +136,8 @@ namespace SpaceVIL
             Monitor.Enter(textLock);
             try
             {
-                int[] fontDims = GetFontDims();
-                int height = fontDims[2];
+                FontEngine.FontDimensions fontDims = GetFontDims(); //int[] fontDims = GetFontDims();
+                int height = fontDims.height; //[2];
                 if (GetHeight() != height)
                 {
                     base.SetHeight(height);

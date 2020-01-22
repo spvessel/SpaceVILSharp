@@ -121,8 +121,8 @@ class TextLine extends TextItem implements InterfaceTextContainer {
     public InterfaceTextImage getTexture() {
         textLock.lock();
         try {
-            int[] fontDims = getFontDims();
-            int height = fontDims[2];
+            Alphabet.FontDimensions fontDims = getFontDims(); //int[] fontDims = getFontDims();
+            int height = fontDims.height; //[2];
             if (getHeight() != height) {
                 super.setHeight(height);
             }

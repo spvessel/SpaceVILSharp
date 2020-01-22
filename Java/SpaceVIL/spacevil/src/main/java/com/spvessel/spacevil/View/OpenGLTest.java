@@ -28,8 +28,8 @@ public class OpenGLTest extends ActiveWindow {
         star.setAlignment(ItemAlignment.HCENTER, ItemAlignment.VCENTER);
         star.setMargin(50, 80, 50, 50);
 
-        OpenGLLayer ogl = new OpenGLLayer();
-        ogl.setMargin(0, 30, 0, 0);
+//        OpenGLLayer ogl = new OpenGLLayer();
+//        ogl.setMargin(0, 30, 0, 0);
 
         ButtonCore btnRestoreView = new ButtonCore();
         btnRestoreView.isFocusable = false;
@@ -82,32 +82,33 @@ public class OpenGLTest extends ActiveWindow {
         imgRight.setRotationAngle(90);
         imgRight.setColorOverlay(Color.WHITE);
 
-        addItems(new TitleBar("OpenGLLayer"),
-                //star, 
-                ogl);
-        ogl.addItems(toolbar3D, zoom, btnRestoreView);
+        addItems(new TitleBar("OpenGLLayer")//,
+                //star,
+                //ogl
+                );
+//        ogl.addItems(toolbar3D, zoom, btnRestoreView);
         btnRestoreView.addItem(imgRefresh);
         toolbar3D.addItems(btnRotateLeft, btnRotateRight);
         btnRotateLeft.addItem(imgLeft);
         btnRotateRight.addItem(imgRight);
 
         btnRestoreView.eventMousePress.add((sender, args) -> {
-            ogl.restoreView();
+//            ogl.restoreView();
         });
 
         btnRotateLeft.eventMousePress.add((sender, args) -> {
-            ogl.rotate(KeyCode.LEFT);
+//            ogl.rotate(KeyCode.LEFT);
         });
 
         btnRotateRight.eventMousePress.add((sender, args) -> {
-            ogl.rotate(KeyCode.RIGHT);
+//            ogl.rotate(KeyCode.RIGHT);
         });
 
         zoom.eventValueChanged.add((sender) -> {
-            ogl.setZoom(zoom.getCurrentValue());
+//            ogl.setZoom(zoom.getCurrentValue());
         });
 
-        ogl.setFocus();
+//        ogl.setFocus();
         zoom.setCurrentValue(3);
     }
 }

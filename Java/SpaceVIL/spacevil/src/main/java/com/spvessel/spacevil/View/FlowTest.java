@@ -169,9 +169,9 @@ public class FlowTest extends ActiveWindow {
                     // Graph graph = getGraph();
                     // graph.setPadding(5, 5, 5, 5);
                     // frame.addItem(graph);
-                    OpenGLLayer ogl = new OpenGLLayer();
-                    ogl.setMargin(0, 30, 0, 0);
-                    frame.addItem(ogl);
+//                    OpenGLLayer ogl = new OpenGLLayer();
+//                    ogl.setMargin(0, 30, 0, 0);
+//                    frame.addItem(ogl);
                 }
             }
 
