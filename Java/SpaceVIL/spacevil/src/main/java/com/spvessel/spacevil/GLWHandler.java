@@ -129,7 +129,7 @@ final class GLWHandler {
                 NULL);
 
         if (_window == NULL) {
-            System.out.println("glfwCreateWindow fail");
+            System.out.println("glfwCreateWindow fails");
             throw new SpaceVILException("Create window fails - " + getCoreWindow().getWindowTitle());
         }
         glfwMakeContextCurrent(_window);
