@@ -225,3 +225,4 @@ Java/SpaceVIL/spacevil/bin/main/shaders/fs_blur_old.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/fs_primitive.glsl
 Java/SpaceVIL/spacevil/bin/main/shaders/vs_primitive.glsl
 OwlsInSpace/.classpath
+Java/SpaceVIL/spacevil/src/main/java/com/spvessel/spacevil/View/DPIAnalysis.java
