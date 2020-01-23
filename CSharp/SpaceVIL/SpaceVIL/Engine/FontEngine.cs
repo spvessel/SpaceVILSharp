@@ -434,8 +434,13 @@ namespace SpaceVIL
             {
                 this.name = name;
                 if (shape != null)
+                {
                     MakeLetterArrays(shape);
-                else isSpec = true;
+                }
+                else
+                {
+                    isSpec = true;
+                }
             }
 
             public Letter(String name, Bitmap bm)

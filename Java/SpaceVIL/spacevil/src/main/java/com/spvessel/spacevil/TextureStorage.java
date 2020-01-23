@@ -1019,9 +1019,10 @@ final class TextureStorage extends Primitive implements InterfaceTextContainer {
             if (_isUpdateTextureNeed) {
                 float _screenScale = 1;
                 CoreWindow wLayout = getHandler();
-                if (wLayout == null) { // || wLayout.getDpiScale() == null) {
-                    _screenScale = 1;
-                } else {
+//                if (wLayout == null) { // || wLayout.getDpiScale() == null) {
+//                    _screenScale = 1;
+//                } else {
+                if (wLayout != null) {
                     _screenScale = DisplayService.getDisplayDpiScale().getX();// wLayout.getDpiScale().getX();
                     if (_screenScale == 0) { //!= 1)
                         _screenScale = 1;

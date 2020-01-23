@@ -9,10 +9,6 @@ import java.util.*;
 import java.util.List;
 
 abstract class TextItem extends Primitive {
-//    private List<Float> _alphas;
-//    private List<Float> _interCoords;
-//    private float[] _coordinates;
-//    private float[] _colors;
     private String _itemText = "";
 
     private Font _font = DefaultsService.getDefaultFont();
@@ -29,11 +25,13 @@ abstract class TextItem extends Primitive {
 
     TextItem(String text, Font font) {
         this();
-        if (text == null)
+        if (text == null) {
             text = "";
+        }
         _itemText = text;
-        if (font != null)
+        if (font != null) {
             _font = font;
+        }
     }
 
     TextItem(String text, Font font, String name) {
@@ -46,8 +44,9 @@ abstract class TextItem extends Primitive {
     }
 
     void setItemText(String itemText) {
-        if (itemText == null)
+        if (itemText == null) {
             itemText = "";
+        }
         if (!_itemText.equals(itemText)) {
             _itemText = itemText;
             updateData();
@@ -55,16 +54,14 @@ abstract class TextItem extends Primitive {
     }
 
     Font getFont() {
-        // if(_font == null)
-        // _font = DefaultsService.GetDefaultFont();
         return _font;
     }
 
     void setFont(Font font) {
-        if (font == null)
+        if (font == null) {
             return;
+        }
         if (!_font.equals(font)) {
-        // if (_font != font)
             _font = font;
             updateData();
         }
@@ -85,8 +82,9 @@ abstract class TextItem extends Primitive {
     }
 
     void setFontFamily(String font_family) {
-        if (font_family == null)
+        if (font_family == null) {
             return;
+        }
         if (!_font.getFamily().equals(font_family)) {
             _font = GraphicsMathService.changeFontFamily(font_family, _font); //new Font(font_family, _font.getStyle(), _font.getSize());
             updateData();

@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-class TextEditRestricted extends TextEdit {
+class TextEditRestricted extends TextEditStorage {
     TextEditRestricted() {
         //super();
         eventTextInput.clear();
@@ -32,7 +32,7 @@ class TextEditRestricted extends TextEdit {
         numbers = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "0"));
 
         updateCurrentValue();
-        setEditable(false);
+//        setEditable(false);
     }
 
     private List<String> numbers;
@@ -41,37 +41,37 @@ class TextEditRestricted extends TextEdit {
     private void onMouseDoubleClick(Object sender, MouseArgs args) {
         if (args.button == MouseButton.BUTTON_LEFT) {
             selectAll();
-            setEditable(true);
+//            setEditable(true);
         }
     }
 
     private void onKeyPress(InterfaceItem sender, KeyArgs args) {
         if (args.key == KeyCode.ENTER || args.key == KeyCode.NUMPADENTER) {
-            double znc;
-            int i1, sgc;
-            String t0 = getText();
-            if (!t0.equals("-") && t0.length() > 0) {
-                String[] txt = t0.split(",|\\.");
-
-                try {
-                    znc = Integer.parseInt(txt[0]);
-                    if (txt.length > 1 && txt[1].length() > 0) {
-                        i1 = Integer.parseInt(txt[1]);
-                        sgc = txt[1].length();
-                        znc += i1 / Math.pow(10.0, sgc);
-//                    if (sgc > signsCount && sgc <= 5) {
-//                        signsCount = sgc;
-//                        rou = "%." + String.valueOf(signsCount) + "f";
-//                    }
-                    }
-                    currentValue = znc;
-                } catch (Exception e) {
-
-                }
-            }
-            updateCurrentValue();
-            setEditable(false);
+            constructCurrentValue();
         }
+    }
+
+    private void constructCurrentValue() {
+        double znc;
+        int i1, sgc;
+        String t0 = getText();
+        if (!t0.equals("-") && t0.length() > 0) {
+            String[] txt = t0.split(",|\\.");
+
+            try {
+                znc = Integer.parseInt(txt[0]);
+                if (txt.length > 1 && txt[1].length() > 0) {
+                    i1 = Integer.parseInt(txt[1]);
+                    sgc = txt[1].length();
+                    znc += i1 / Math.pow(10.0, sgc);
+                }
+                currentValue = znc;
+            } catch (Exception e) {
+
+            }
+        }
+        updateCurrentValue();
+//        setEditable(false);
     }
 
     private void onTextInput(Object sender, TextInputArgs args) {
@@ -109,8 +109,40 @@ class TextEditRestricted extends TextEdit {
         } else {
             super.pasteText("");
         }
+    }
 
+    private boolean checkValidity(String inputStr) {
+        String str = inputStr;
+        if (inputStr.startsWith("-")) {
+            str = inputStr.substring(1);
+        }
 
+        if (str.startsWith(".") || str.startsWith(",")) {
+            return false;
+        }
+
+        boolean hasDot = false;
+
+        for (int i = 0; i < str.length(); i++) {
+            String s = str.substring(i, i + 1);
+            if (!numbers.contains(s)) {
+                if ((inres == InputRestriction.DOUBLENUMBERS) && !hasDot && (s.equals(".") || s.equals(","))) {
+                    hasDot = true;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public void pasteText(String pasteStr) {
+        if (checkValidity(pasteStr)) {
+            super.pasteText(pasteStr);
+            constructCurrentValue();
+        }
     }
 
     void setInputRestriction(InputRestriction ir) {
@@ -205,13 +237,13 @@ class TextEditRestricted extends TextEdit {
     }
 
     void increaseValue() {
-        setEditable(false);
+//        setEditable(false);
         currentValue += step;
         updateCurrentValue();
     }
 
     void decreaseValue() {
-        setEditable(false);
+//        setEditable(false);
         currentValue -= step;
         updateCurrentValue();
     }

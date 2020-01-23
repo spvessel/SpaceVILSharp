@@ -456,19 +456,23 @@ public class TextArea extends Prototype {
     }
 
     public void setForeground(int r, int g, int b) {
-        _area.setForeground(r, g, b);
+        //_area.setForeground(r, g, b);
+        setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setForeground(int r, int g, int b, int a) {
-        _area.setForeground(r, g, b, a);
+        //_area.setForeground(r, g, b, a);
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public void setForeground(float r, float g, float b) {
-        _area.setForeground(r, g, b);
+        //_area.setForeground(r, g, b);
+        setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setForeground(float r, float g, float b, float a) {
-        _area.setForeground(r, g, b, a);
+        //_area.setForeground(r, g, b, a);
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public Color getForeground() {

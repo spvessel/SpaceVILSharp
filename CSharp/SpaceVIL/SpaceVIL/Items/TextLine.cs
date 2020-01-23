@@ -95,7 +95,7 @@ namespace SpaceVIL
             }
         }
 
-        private bool isBigExist = false;
+        // private bool isBigExist = false;
 
         private void MakeBigArr()
         {
@@ -128,7 +128,7 @@ namespace SpaceVIL
                 }
             }
 
-            isBigExist = true;
+            // isBigExist = true;
         }
 
         public ITextImage GetTexture()

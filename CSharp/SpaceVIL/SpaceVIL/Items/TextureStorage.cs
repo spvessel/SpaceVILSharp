@@ -1179,11 +1179,12 @@ namespace SpaceVIL
                 {
                     float _screenScale = 1;
                     CoreWindow wLayout = GetHandler();
-                    if (wLayout == null)// || Common.DisplayService.GetDpiScale() == null) // && Common.DisplayService.GetDpiScale().Length > 0) //wLayout == null || wLayout.GetDpiScale() == null)
-                    {
-                        _screenScale = 1;
-                    }
-                    else
+                    // if (wLayout == null)// || Common.DisplayService.GetDpiScale() == null) // && Common.DisplayService.GetDpiScale().Length > 0) //wLayout == null || wLayout.GetDpiScale() == null)
+                    // {
+                    //     _screenScale = 1;
+                    // }
+                    // else
+                    if (wLayout != null)
                     {
                         _screenScale = DisplayService.GetDisplayDpiScale().GetX(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
                         if (_screenScale == 0)

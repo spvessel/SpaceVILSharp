@@ -170,19 +170,23 @@ public class SpinItem extends Prototype {
     }
 
     public void setForeground(int r, int g, int b) {
-        textInput.setForeground(r, g, b);
+//        textInput.setForeground(r, g, b);
+        setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setForeground(int r, int g, int b, int a) {
-        textInput.setForeground(r, g, b, a);
+        //textInput.setForeground(r, g, b, a);
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public void setForeground(float r, float g, float b) {
-        textInput.setForeground(r, g, b);
+        //textInput.setForeground(r, g, b);
+        setForeground(GraphicsMathService.colorTransform(r, g, b));
     }
 
     public void setForeground(float r, float g, float b, float a) {
-        textInput.setForeground(r, g, b, a);
+        //textInput.setForeground(r, g, b, a);
+        setForeground(GraphicsMathService.colorTransform(r, g, b, a));
     }
 
     public Color getForeground() {
