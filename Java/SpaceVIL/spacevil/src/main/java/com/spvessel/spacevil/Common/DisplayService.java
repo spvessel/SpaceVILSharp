@@ -34,11 +34,13 @@ public final class DisplayService {
     // dpi
     static Scale _displayScale = new Scale();
     public static Scale getDisplayDpiScale() {
+        
         // long monitor = glfwGetPrimaryMonitor();
         // FloatBuffer x = BufferUtils.createFloatBuffer(1);
         // FloatBuffer y = BufferUtils.createFloatBuffer(1);
         // glfwGetMonitorContentScale(monitor, x, y);
         // return new Scale(x.get(0), y.get(0));
+
         return new Scale(_displayScale.getX(), _displayScale.getY());
     }
     public static void setDisplayScale(float x, float y)

@@ -448,7 +448,7 @@ namespace SpaceVIL
         /// <summary>
         /// Update states of the all ListBox inner items
         /// </summary>
-        public void UpdateElements()
+        public virtual void UpdateElements()
         {
             UpdateVerticalSlider();
             VScrollBar.Slider.UpdateHandler();

@@ -154,17 +154,17 @@ public class TreeItem extends Prototype {
         if (!_treeViewContainer._root.isVisible())
             level--;
         setPadding(2 + _indent_size * level, 0, 0, 0);
-        int width = getPadding().left + 10;
+        int width = getPadding().left;
         for (InterfaceBaseItem item : getItems()) {
             width += item.getWidth() + item.getMargin().left + item.getMargin().right + getSpacing().horizontal;
         }
 
         int newMinWidth = width - getSpacing().horizontal;
-        if (newMinWidth > _treeViewContainer._maxWrapperWidth) {
-            _treeViewContainer._maxWrapperWidth = newMinWidth;
+        if (newMinWidth > _treeViewContainer.maxWrapperWidth) {
+            _treeViewContainer.maxWrapperWidth = newMinWidth;
             _treeViewContainer.refreshWrapperWidth();
         } else {
-            newMinWidth = _treeViewContainer._maxWrapperWidth;
+            newMinWidth = _treeViewContainer.maxWrapperWidth;
         }
 
         setMinWidth(newMinWidth);
@@ -187,7 +187,7 @@ public class TreeItem extends Prototype {
             super.addItem(_indicator);
             super.addItem(_icon_shape);
             super.addItem(_text_object);
-            
+
             _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled()));
             _indicator.isFocusable = false;
             eventMouseDoubleClick.add((sender, args) -> {
@@ -297,7 +297,7 @@ public class TreeItem extends Prototype {
      * Update TreeItem states
      */
     public void updateLayout() {
-        _text_object.setWidth(_text_object.getTextWidth());
+        _text_object.setWidth(_text_object.getTextWidth() + 5);
         // update self width
         int offset = 0;
         int startX = getX() + getPadding().left;
@@ -363,7 +363,6 @@ public class TreeItem extends Prototype {
      */
     public void setText(String text) {
         _text_object.setText(text);
-        // _text_object.setWidth(_text_object.getTextWidth());
         updateLayout();
     }
 

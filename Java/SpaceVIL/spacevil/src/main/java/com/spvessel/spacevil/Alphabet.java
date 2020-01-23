@@ -40,12 +40,12 @@ class Alphabet {
         char specLet = " ".charAt(0);
         Letter spaceSign = new Letter(" ");
         letters.put(specLet, spaceSign);
-        spaceSign.width = kegel / 2; //letters.get("-".charAt(0)).width;
+        spaceSign.width = kegel / 3; //letters.get("-".charAt(0)).width;
         spaceSign.height = 0;
 
         fontDims.lineSpacer = letters.get("-".charAt(0)).width; //kegel / 5; //spaceSign.width;
 
-        fontDims.letterSpacer = (kegel / 2) / 4;
+        fontDims.letterSpacer = (kegel / 2) / 5;
         if (fontDims.letterSpacer < 1) {
             fontDims.letterSpacer = 1;
         }

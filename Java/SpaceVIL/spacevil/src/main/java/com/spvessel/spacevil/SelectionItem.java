@@ -2,7 +2,6 @@ package com.spvessel.spacevil;
 
 import java.util.List;
 
-// import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Flags.ItemStateType;

@@ -372,8 +372,13 @@ final class DrawEngine {
     private void resize(long wnd, int width, int height) {
         _tooltip.initTimer(false);
 
-        _commonProcessor.window.setWidthDirect((int) (width / _scale.getX()));
-        _commonProcessor.window.setHeightDirect((int) (height / _scale.getY()));
+        if (CommonService.getOSType() != OSType.MAC) {
+            _commonProcessor.window.setWidthDirect((int) (width / _scale.getX()));
+            _commonProcessor.window.setHeightDirect((int) (height / _scale.getY()));
+        } else {
+            _commonProcessor.window.setWidthDirect(width);
+            _commonProcessor.window.setHeightDirect(height);
+        }
 
         if (!glwHandler.getCoreWindow().isBorderHidden) {
             List<InterfaceBaseItem> list = ItemsLayoutBox.getLayoutFloatItems(_commonProcessor.window.getWindowGuid());
@@ -417,7 +422,12 @@ final class DrawEngine {
         _tooltip.initTimer(false);
         if (!glwHandler.focusable)
             return;
-        _mouseMoveProcessor.process(wnd, xpos / _scale.getX(), ypos / _scale.getX(), _scale);
+        if (CommonService.getOSType() != OSType.MAC) {
+            _mouseMoveProcessor.process(wnd, xpos / _scale.getX(), ypos / _scale.getX(), _scale);
+        } else {
+            _mouseMoveProcessor.process(wnd, xpos, ypos, new Scale());
+        }
+
     }
 
     private void mouseClick(long wnd, int button, int action, int mods) {

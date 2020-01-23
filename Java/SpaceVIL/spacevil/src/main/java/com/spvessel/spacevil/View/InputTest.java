@@ -22,6 +22,7 @@ import com.spvessel.spacevil.Decorations.SubtractFigure;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
+import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class InputTest extends ActiveWindow {
@@ -29,7 +30,7 @@ public class InputTest extends ActiveWindow {
 
     @Override
     public void initWindow() {
-        setSize(300, 500);
+        setSize(800, 800);
         setWindowName("InputTest");
         setWindowTitle("InputTest");
 
@@ -221,7 +222,7 @@ public class InputTest extends ActiveWindow {
 
         // tb.setWrapText(true);
         //        tb.setText(getBigText());
-        tb.setStyle(getTextAreaStyle());
+        // tb.setStyle(getTextAreaStyle());
         // tb.setWrapText(true);
         // tb.rewindText();
         tb.setFocus();
@@ -263,6 +264,23 @@ public class InputTest extends ActiveWindow {
         // effect2.setPositionOffset(bc2.getHeight() / 2, 0);
         // effect2.setAlignment(ItemAlignment.RIGHT, ItemAlignment.VCENTER);
         // Effects.addEffect(bc2, effect2);
+
+        tb.eventKeyPress.add((sender, args) -> {
+            if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.EQUAL) {
+                int fontSize = tb.getFont().getSize();
+                fontSize++;
+                if (fontSize > 32)
+                    return;
+                tb.setFontSize(fontSize);
+            } else if (args.mods.contains(KeyMods.CONTROL) && args.mods.size() == 1 && args.key == KeyCode.MINUS) {
+                int fontSize = tb.getFont().getSize();
+                fontSize--;
+                if (fontSize < 10)
+                    return;
+                tb.setFontSize(fontSize);
+            }
+        });
+
     }
 
     private static int countLines(String str) {

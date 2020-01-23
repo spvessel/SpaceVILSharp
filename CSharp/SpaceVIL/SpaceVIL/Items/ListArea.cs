@@ -241,7 +241,7 @@ namespace SpaceVIL
         {
             RemoveAllItems();
             IEnumerator<IBaseItem> node = content.GetEnumerator();
-            while(node.MoveNext())
+            while (node.MoveNext())
             {
                 SelectionItem wrapper = GetWrapper(node.Current);
                 base.AddItem(wrapper);

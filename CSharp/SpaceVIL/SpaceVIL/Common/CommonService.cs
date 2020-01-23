@@ -115,7 +115,8 @@ namespace SpaceVIL.Common
             float x, y;
             Glfw.GetMonitorContentScale(monitor, out x, out y);
             DisplayService.SetDisplayScale(x, y);
-            Console.WriteLine(DisplayService.GetDisplayDpiScale());
+
+            // Console.WriteLine(DisplayService.GetDisplayDpiScale());
 
             DefaultsService.InitImages();
             DefaultsService.InitDefaultTheme();

@@ -74,6 +74,7 @@ namespace SpaceVIL
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 3);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
 
+            // scaling window's content (does not affect on Mac OS)
             Glfw.WindowHint(Glfw.Hint.ScaleToMonitor, true);
 
             Glfw.WindowHint(Glfw.Hint.Resizable, Resizeble);
@@ -91,23 +92,22 @@ namespace SpaceVIL
                 LogService.Log().LogText("Create window fail - " + GetCoreWindow().GetWindowTitle());
                 throw new SpaceVILException("SpaceVILException: Create window fail - " + GetCoreWindow().GetWindowTitle());
             }
+
             WindowManager.SetContextCurrent(_coreWindow);
-
-            // int wFB, hFB;
-            // Glfw.GetFramebufferSize(_window, out wFB, out hFB);
-
-            // _coreWindow.SetWindowScale((float)wFB / (float)_coreWindow.GetWidth(),
-            //         (float)hFB / (float)_coreWindow.GetHeight());
 
             float xScale, yScale;
             Glfw.GetWindowContentScale(_window, out xScale, out yScale);
             _coreWindow.SetWindowScale(xScale, yScale);
-            Console.WriteLine(_coreWindow.GetDpiScale());
+
+            // Console.WriteLine(_coreWindow.GetDpiScale());
+
+            int actualWndWidth = _coreWindow.GetWidth();
+            int actualWndHeight = _coreWindow.GetHeight();
+            float xActualScale = 1f;
+            float yActualScale = 1f;
 
             if (AppearInCenter)
             {
-                int actualWndWidth = _coreWindow.GetWidth();
-                int actualWndHeight = _coreWindow.GetHeight();
                 if (CommonService.GetOSType() != OSType.Mac)
                 {
                     actualWndWidth = (int)(_coreWindow.GetWidth() * _coreWindow.GetDpiScale().GetX());
@@ -118,18 +118,24 @@ namespace SpaceVIL
             }
             else
             {
-                _coreWindow.SetXDirect(_coreWindow.GetX());//200);
-                _coreWindow.SetYDirect(_coreWindow.GetY());//50);
-                GetPointer().SetX(_coreWindow.GetX());//200);
-                GetPointer().SetY(_coreWindow.GetY());//50);
+                if (CommonService.GetOSType() != OSType.Mac)
+                {
+                    xActualScale = _coreWindow.GetDpiScale().GetX();
+                    yActualScale = _coreWindow.GetDpiScale().GetY();
+                }
+                _coreWindow.SetXDirect((int) (_coreWindow.GetY() * xActualScale));
+                _coreWindow.SetYDirect((int) (_coreWindow.GetY() * yActualScale));
+                
+                GetPointer().SetX(_coreWindow.GetX());
+                GetPointer().SetY(_coreWindow.GetY());
             }
-            Glfw.SetWindowSizeLimits(_window,
-                (int)(_coreWindow.GetMinWidth() * _coreWindow.GetDpiScale().GetX()),
-                (int)(_coreWindow.GetMinHeight() * _coreWindow.GetDpiScale().GetY()),
-                (int)(_coreWindow.GetMaxWidth() * _coreWindow.GetDpiScale().GetX()),
-                (int)(_coreWindow.GetMaxHeight() * _coreWindow.GetDpiScale().GetY()));
-
             Glfw.SetWindowPos(_window, _wndPosition.GetX(), _wndPosition.GetY());
+
+            Glfw.SetWindowSizeLimits(_window,
+                (int)(_coreWindow.GetMinWidth() * xActualScale),
+                (int)(_coreWindow.GetMinHeight() * yActualScale),
+                (int)(_coreWindow.GetMaxWidth() * xActualScale),
+                (int)(_coreWindow.GetMaxHeight() * yActualScale));
 
             if (_coreWindow.IsKeepAspectRatio)
                 Glfw.SetWindowAspectRatio(_window, _coreWindow.RatioW, _coreWindow.RatioH);
