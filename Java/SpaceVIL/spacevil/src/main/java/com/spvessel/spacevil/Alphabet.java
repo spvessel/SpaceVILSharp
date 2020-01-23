@@ -294,10 +294,11 @@ class Alphabet {
 
         Letter(String name, Shape shape) {// GraphicsPath shape) {
             this.name = name;
-            if (shape != null)
+            if (shape != null) {
                 makeLetterArrays(shape);
-            else
+            } else {
                 isSpec = true;
+            }
         }
 
         Letter(String name, BufferedImage bi) {

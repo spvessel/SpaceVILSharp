@@ -61,14 +61,14 @@ public class Program {
         // WindowManager.setRenderType(RenderType.ALWAYS);
 
         WindowManager.startWith(
-                // mw,
+//                mw,
                 //, mw2
                 // st
                 // im
-                // ft
+//                ft
                 // lt
-                ct
-                // it
+                // ct
+                 it
                 // tt
                 // con
                 // sat

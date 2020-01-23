@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceVIL
 {
-    internal class TextEditRestricted : TextEdit
+    internal class TextEditRestricted : TextEditStorage
     {
         internal TextEditRestricted()
         {
@@ -20,7 +20,7 @@ namespace SpaceVIL
             numbers = new List<String>() {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
 
             UpdateCurrentValue();
-            IsEditable = false;
+            // IsEditable = false;
         }
 
         private List<String> numbers;
@@ -30,40 +30,45 @@ namespace SpaceVIL
             if (args.Button == MouseButton.ButtonLeft)
             {
                 SelectAll();
-                IsEditable = true;
+                // IsEditable = true;
             }
         }
 
         private void OnKeyPress(IItem sender, KeyArgs args) {
             if (args.Key == KeyCode.Enter || args.Key == KeyCode.NumpadEnter)
             {
-                double znc;
-                int i1, sgc;
-                String t0 = GetText();
-                char[] delim = { ',', '.' };
-                if (!t0.Equals("-") && t0.Length > 0)
-                {
-                    String[] txt = t0.Split(delim);
-
-                    try
-                    {
-                        znc = Int32.Parse(txt[0]);
-                        if (txt.Length > 1 && txt[1].Length > 0)
-                        {
-                            i1 = Int32.Parse(txt[1]);
-                            sgc = txt[1].Length;
-                            znc += i1 / Math.Pow(10.0, sgc);
-                        }
-                        currentValue = znc;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.ToString());
-                    }
-                }
-                UpdateCurrentValue();
-                IsEditable = false;
+                ConstructCurrentValue();
             }
+        }
+
+        private void ConstructCurrentValue()
+        {
+            double znc;
+            int i1, sgc;
+            String t0 = GetText();
+            char[] delim = { ',', '.' };
+            if (!t0.Equals("-") && t0.Length > 0)
+            {
+                String[] txt = t0.Split(delim);
+
+                try
+                {
+                    znc = Int32.Parse(txt[0]);
+                    if (txt.Length > 1 && txt[1].Length > 0)
+                    {
+                        i1 = Int32.Parse(txt[1]);
+                        sgc = txt[1].Length;
+                        znc += i1 / Math.Pow(10.0, sgc);
+                    }
+                    currentValue = znc;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+            UpdateCurrentValue();
+            // IsEditable = false;
         }
 
         private void OnTextInput(Object sender, TextInputArgs args)
@@ -108,7 +113,49 @@ namespace SpaceVIL
             {
                 base.PasteText("");
             }
+        }
 
+        private bool CheckValidity(String inputStr)
+        {
+            String str = inputStr;
+            if (inputStr.StartsWith("-"))
+            {
+                str = inputStr.Substring(1);
+            }
+
+            if (str.StartsWith(".") || str.StartsWith(","))
+            {
+                return false;
+            }
+
+            bool hasDot = false;
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                String s = str.Substring(i, 1);
+                if (!numbers.Contains(s))
+                {
+                    if ((inres == InputRestriction.DoubleNumbers) && !hasDot && (str.Equals(".") || str.Equals(",")))
+                    {
+                        hasDot = true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public new void PasteText(String pasteStr)
+        {
+            if (CheckValidity(pasteStr))
+            {
+                base.PasteText(pasteStr);
+                ConstructCurrentValue();
+            }
         }
 
         internal void SetInputRestriction(InputRestriction ir)
@@ -211,14 +258,14 @@ namespace SpaceVIL
 
         internal void IncreaseValue()
         {
-            IsEditable = false;
+            // IsEditable = false;
             currentValue += step;
             UpdateCurrentValue();
         }
 
         internal void DecreaseValue()
         {
-            IsEditable = false;
+            // IsEditable = false;
             currentValue -= step;
             UpdateCurrentValue();
         }

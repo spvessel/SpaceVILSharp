@@ -9,10 +9,6 @@ namespace SpaceVIL
 {
     abstract internal class TextItem : Primitive
     {
-        // private List<float> _alphas;
-        // private List<float> _interCoords;
-        // private float[] _coordinates;
-        // private float[] _colors;
         private String _itemText = "";
 
         private Font _font = DefaultsService.GetDefaultFont();
@@ -31,27 +27,20 @@ namespace SpaceVIL
         internal TextItem(String text, Font font) : this()
         {
             if (text == null)
+            {
                 text = "";
+            }
             _itemText = text;
             if (font != null)
+            {
                 _font = font;
+            }
         }
 
         internal TextItem(String text, Font font, String name) : this(text, font)
         {
             SetItemName(name);
         }
-
-        // protected void SetRealCoords(List<float> realCoords)
-        // {
-        //     _coordinates = ToGL(realCoords);
-        // }
-        // 
-        // protected void SetAlphas(List<float> alphas)
-        // {
-        //     _alphas = alphas;
-        //     //SetColor(alphas);
-        // }
 
         internal String GetItemText()
         {
@@ -61,7 +50,9 @@ namespace SpaceVIL
         internal void SetItemText(String itemText)
         {
             if (itemText == null)
+            {
                 itemText = "";
+            }
             if (!_itemText.Equals(itemText))
             {
                 _itemText = itemText;
@@ -71,14 +62,14 @@ namespace SpaceVIL
 
         internal Font GetFont()
         {
-            // if(_font == null)
-            // _font = DefaultsService.GetDefaultFont();
             return _font;
         }
         internal void SetFont(Font font)
         {
             if (font == null)
+            {
                 return;
+            }
             if (!_font.Equals(font))
             {
                 _font = font;
@@ -104,7 +95,9 @@ namespace SpaceVIL
         internal void SetFontFamily(FontFamily font_family)
         {
             if (font_family == null)
+            {
                 return;
+            }
             if (_font.FontFamily != font_family)
             {
                 _font = GraphicsMathService.ChangeFontFamily(font_family, _font); //new Font(font_family, _font.Size, _font.Style);

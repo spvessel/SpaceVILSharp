@@ -9,15 +9,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.spvessel.spacevil.ActiveWindow;
-import com.spvessel.spacevil.ButtonCore;
-import com.spvessel.spacevil.GraphicsMathService;
-import com.spvessel.spacevil.Label;
-import com.spvessel.spacevil.PasswordLine;
-import com.spvessel.spacevil.TextArea;
-import com.spvessel.spacevil.TextEdit;
-import com.spvessel.spacevil.TextView;
-import com.spvessel.spacevil.VerticalStack;
+import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Decorations.CornerRadius;
@@ -82,19 +74,19 @@ public class InputTest extends ActiveWindow {
         layout.setPadding(2, 2, 2, 2);
         addItem(layout);
 
-        // PasswordLine password = new PasswordLine();
-        // password.setSubstrateText("Enter a password...");
+         PasswordLine password = new PasswordLine();
+         password.setSubstrateText("Enter a password...");
         // password.setTextAlignment(ItemAlignment.RIGHT);
 
-        // TextEdit te = new TextEdit();
-        // // te.setText("TextZaranee");
-        // te.setTextAlignment(ItemAlignment.RIGHT);
-        // // te.getSelectionArea().setBackground(Color.green);
-        // te.setSubstrateText("Write some text");
-        // // te.setMargin(0,0,150,0);
-        // // te.setFontSize(10);
-        // te.setWidth(300);
-        // te.setWidthPolicy(SizePolicy.EXPAND);
+         TextEdit te = new TextEdit();
+         // te.setText("TextZaranee");
+         te.setTextAlignment(ItemAlignment.RIGHT);
+         // te.getSelectionArea().setBackground(Color.green);
+         te.setSubstrateText("Write some text");
+         // te.setMargin(0,0,150,0);
+         // te.setFontSize(10);
+         te.setWidth(300);
+         te.setWidthPolicy(SizePolicy.EXPAND);
 
         TextArea tb = new TextArea();
 
@@ -124,11 +116,11 @@ public class InputTest extends ActiveWindow {
         // tb.setTextMargin(new Indents(50, 30, 30, 30));
         // tb.onTextChanged.add(() -> System.out.println("text changed"));
 
-        //        SpinItem sp = new SpinItem();
-        //        sp.setParameters(1, -5.5, 7, 0.51);
+                SpinItem sp = new SpinItem();
+                sp.setParameters(1, -5.5, 7, 0.51);
 
-        //        layout.addItem(password);
-        //        layout.addItem(te);
+        layout.addItems(password, sp);
+        layout.addItem(te);
 
         layout.addItem(tb);
         tb.setWrapText(true);

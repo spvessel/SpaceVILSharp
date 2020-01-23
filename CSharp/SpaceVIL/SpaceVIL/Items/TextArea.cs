@@ -431,19 +431,19 @@ namespace SpaceVIL
         }
         public void SetForeground(int r, int g, int b)
         {
-            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b));
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
         public void SetForeground(int r, int g, int b, int a)
         {
-            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
         public void SetForeground(float r, float g, float b)
         {
-            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b));
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
         }
         public void SetForeground(float r, float g, float b, float a)
         {
-            _area.SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
         public Color GetForeground()
         {

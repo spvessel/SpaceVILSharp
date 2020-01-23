@@ -86,7 +86,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         }
     }
 
-    private boolean isBigExist = false;
+//    private boolean isBigExist = false;
 
     private void makeBigArr() {
         if (getFont() == null) {
@@ -115,7 +115,7 @@ class TextLine extends TextItem implements InterfaceTextContainer {
             }
         }
 
-        isBigExist = true;
+//        isBigExist = true;
     }
 
     public InterfaceTextImage getTexture() {
