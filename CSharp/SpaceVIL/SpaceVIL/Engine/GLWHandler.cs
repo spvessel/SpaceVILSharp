@@ -106,6 +106,8 @@ namespace SpaceVIL
             float xActualScale = 1f;
             float yActualScale = 1f;
 
+            Area workArea = _coreWindow.GetWorkArea();
+
             if (AppearInCenter)
             {
                 if (CommonService.GetOSType() != OSType.Mac)
@@ -113,8 +115,8 @@ namespace SpaceVIL
                     actualWndWidth = (int)(_coreWindow.GetWidth() * _coreWindow.GetDpiScale().GetX());
                     actualWndHeight = (int)(_coreWindow.GetHeight() * _coreWindow.GetDpiScale().GetY());
                 }
-                GetPointer().SetX((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Width - actualWndWidth) / 2);
-                GetPointer().SetY((Glfw.GetVideoMode(Glfw.GetPrimaryMonitor()).Height - actualWndHeight) / 2);
+                GetPointer().SetX(workArea.GetX() + (workArea.GetWidth() - actualWndWidth) / 2);
+                GetPointer().SetY(workArea.GetY() + (workArea.GetHeight() - actualWndHeight) / 2);
             }
             else
             {
@@ -123,9 +125,9 @@ namespace SpaceVIL
                     xActualScale = _coreWindow.GetDpiScale().GetX();
                     yActualScale = _coreWindow.GetDpiScale().GetY();
                 }
-                _coreWindow.SetXDirect((int) (_coreWindow.GetY() * xActualScale));
-                _coreWindow.SetYDirect((int) (_coreWindow.GetY() * yActualScale));
-                
+                _coreWindow.SetXDirect((int)(_coreWindow.GetY() * xActualScale));
+                _coreWindow.SetYDirect((int)(_coreWindow.GetY() * yActualScale));
+
                 GetPointer().SetX(_coreWindow.GetX());
                 GetPointer().SetY(_coreWindow.GetY());
             }

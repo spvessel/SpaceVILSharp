@@ -1,6 +1,7 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.CommonService;
+import com.spvessel.spacevil.Core.Area;
 import com.spvessel.spacevil.Core.Pointer;
 import com.spvessel.spacevil.Exceptions.SpaceVILException;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
@@ -121,11 +122,6 @@ final class GLWHandler {
 
         WindowManager.setContextCurrent(_coreWindow);
 
-        long monitor = glfwGetPrimaryMonitor();
-        GLFWVidMode vidmode = glfwGetVideoMode(monitor);
-        int width = vidmode.width();
-        int height = vidmode.height();
-
         FloatBuffer xScale = BufferUtils.createFloatBuffer(1);
         FloatBuffer yScale = BufferUtils.createFloatBuffer(1);
         glfwGetWindowContentScale(_window, xScale, yScale);
@@ -138,13 +134,15 @@ final class GLWHandler {
         float xActualScale = 1f;
         float yActualScale = 1f;
 
+        Area workArea  = _coreWindow.getWorkArea();
+        
         if (appearInCenter) {
             if (CommonService.getOSType() != OSType.MAC) {
                 actualWndWidth = (int) (_coreWindow.getWidth() * _coreWindow.getDpiScale().getX());
                 actualWndHeight = (int) (_coreWindow.getHeight() * _coreWindow.getDpiScale().getY());
             }
-            getPointer().setX((width - actualWndWidth) / 2);
-            getPointer().setY((height - actualWndHeight) / 2);
+            getPointer().setX(workArea.getX() + (workArea.getWidth() - actualWndWidth) / 2);
+            getPointer().setY(workArea.getY() + (workArea.getHeight() - actualWndHeight) / 2);
 
         } else {
 

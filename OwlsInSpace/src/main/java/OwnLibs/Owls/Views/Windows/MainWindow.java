@@ -91,8 +91,6 @@ public class MainWindow extends ActiveWindow {
                 if (windowHeight * displayScale.getY() > displayHeight)
                         windowHeight = (int) (windowHeight * 0.74);
 
-                System.out.println("WND_W: " + windowWidth + " WND_H: " + windowHeight);
-
                 setParameters("OwlWindow", "OwlWindow", windowWidth, windowHeight, false);
                 setMinSize(400, 400);
                 setPadding(2, 2, 2, 2);
