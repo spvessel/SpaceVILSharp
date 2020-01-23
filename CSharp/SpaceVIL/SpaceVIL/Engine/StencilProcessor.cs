@@ -39,6 +39,11 @@ namespace SpaceVIL
                     int y = _commonProcessor.Window.GetHeight() - (shell.GetY() + shell.GetHeight());
                     int w = shell.GetWidth();
                     int h = shell.GetHeight();
+                    x = (int)(x * _scale.GetX());
+                    y = (int)(y * _scale.GetY());
+                    w = (int)(w * _scale.GetX());
+                    h = (int)(h * _scale.GetY());
+
                     int x1 = x + w;
                     int y1 = y + h;
 
@@ -71,11 +76,11 @@ namespace SpaceVIL
         private void SetConfines(IBaseItem shell, int[] parentConfines)
         {
             shell.SetConfines(
-                            parentConfines[0],
-                            parentConfines[1],
-                            parentConfines[2],
-                            parentConfines[3]
-                        );
+                    parentConfines[0],
+                    parentConfines[1],
+                    parentConfines[2],
+                    parentConfines[3]
+                    );
 
             Prototype root = shell as Prototype;
             if (root != null)

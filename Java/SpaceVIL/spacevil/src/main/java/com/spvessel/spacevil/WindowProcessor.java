@@ -3,11 +3,13 @@ package com.spvessel.spacevil;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.DropArgs;
 import com.spvessel.spacevil.Core.Geometry;
 import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Core.Scale;
 import com.spvessel.spacevil.Flags.InputEventType;
+import com.spvessel.spacevil.Flags.OSType;
 import com.spvessel.spacevil.Flags.Side;
 
 import java.awt.image.BufferedImage;
@@ -56,14 +58,18 @@ final class WindowProcessor {
             height = (int) (ratioH * ratio);
         }
 
-        if (width > _commonProcessor.window.getMaxWidth())
-            width = _commonProcessor.window.getMaxWidth();
+        if (CommonService.getOSType() != OSType.MAC) {
+            if (width > _commonProcessor.window.getMaxWidth())
+                width = _commonProcessor.window.getMaxWidth();
 
-        if (height > _commonProcessor.window.getMaxHeight())
-            height = _commonProcessor.window.getMaxHeight();
+            if (height > _commonProcessor.window.getMaxHeight())
+                height = _commonProcessor.window.getMaxHeight();
 
-        glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getX()),
-                (int) (height * scale.getY()));
+            glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getX()),
+                    (int) (height * scale.getY()));
+        } else {
+            glfwSetWindowSize(_commonProcessor.handler.getWindowId(), width, height);
+        }
 
         _commonProcessor.events.setEvent(InputEventType.WINDOW_RESIZE);
     }
@@ -107,11 +113,12 @@ final class WindowProcessor {
             _commonProcessor.window.isMaximized = true;
         }
 
-        int width = _commonProcessor.window.getWidth();
-        int height = _commonProcessor.window.getHeight();
-        
-        glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getX()),
-                (int) (height * scale.getY()));
+        if (CommonService.getOSType() != OSType.MAC) {
+            int width = _commonProcessor.window.getWidth();
+            int height = _commonProcessor.window.getHeight();
+            glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getX()),
+                    (int) (height * scale.getY()));
+        }
 
         _commonProcessor.inputLocker = false;
     }

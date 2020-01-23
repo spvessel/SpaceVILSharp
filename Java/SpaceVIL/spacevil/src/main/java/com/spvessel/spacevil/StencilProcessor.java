@@ -21,9 +21,11 @@ final class StencilProcessor {
     }
 
     private Scale _scale = new Scale();
+
     boolean process(InterfaceBaseItem shell, Scale scale) {
+
         _scale.setScale(scale.getX(), scale.getY());
-        
+
         Prototype parent = shell.getParent();
         if (parent != null && _bounds.containsKey(parent)) {
 
@@ -40,6 +42,10 @@ final class StencilProcessor {
                 int y = _commonProcessor.window.getHeight() - (shell.getY() + shell.getHeight());
                 int w = shell.getWidth();
                 int h = shell.getHeight();
+                x *= _scale.getX();
+                y *= _scale.getY();
+                w *= _scale.getX();
+                h *= _scale.getY();
 
                 int x1 = x + w;
                 int y1 = y + h;
@@ -62,7 +68,6 @@ final class StencilProcessor {
                     h = shape[1] + shape[3] - y;
 
                 _bounds.put(shell, new int[] { x, y, w, h });
-                // _bounds.put(shell, new int[] { shape[0], shape[1], shape[2], shape[3] });
             }
             return true;
         }

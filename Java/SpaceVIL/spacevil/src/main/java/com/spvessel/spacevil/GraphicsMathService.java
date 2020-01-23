@@ -895,11 +895,11 @@ public final class GraphicsMathService {
     }
 
     public static Font changeFontSize(int size, Font oldFont) {
-        return new Font(oldFont.getFamily(), oldFont.getStyle(), size);// oldFont.getName(), oldFont.getStyle(), size);
+        return oldFont.deriveFont(oldFont.getStyle(), size); // oldFont.getName(), oldFont.getStyle(), size);
     }
 
     public static Font changeFontStyle(int style, Font oldFont) {
-        return new Font(oldFont.getFamily(), style, oldFont.getSize());
+        return oldFont.deriveFont(style);
     }
 
     public static Font changeFontFamily(String fontFamily, Font oldFont) {

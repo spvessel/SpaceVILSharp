@@ -16,7 +16,7 @@ namespace SpaceVIL
             EventSortTree = null;
         }
 
-        internal int _maxWrapperWidth = 0;
+        internal int MaxWrapperWidth = 0;
 
         internal TreeItem _root; //nesting level = 0
 
@@ -77,6 +77,7 @@ namespace SpaceVIL
             SetItemName("TreeView_" + count);
             count++;
             _root = new TreeItem(TreeItemType.Branch, "root");
+            _root.SetItemName("Root");
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.TreeView)));
             EventSortTree += OnSortTree;
@@ -92,15 +93,15 @@ namespace SpaceVIL
             base.AddItem(_root);
             SetRootVisible(false);
             // _root.ResetIndents();
-            _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
+            MaxWrapperWidth = GetWrapper(_root).GetMinWidth();
         }
 
         internal void RefreshWrapperWidth()
         {
             foreach (SelectionItem wrp in GetArea()._mapContent.Values)
             {
-                wrp.SetMinWidth(_maxWrapperWidth);
-                wrp.GetContent().SetMinWidth(_maxWrapperWidth);
+                wrp.SetMinWidth(MaxWrapperWidth);
+                wrp.GetContent().SetMinWidth(MaxWrapperWidth);
             }
         }
 
@@ -128,6 +129,25 @@ namespace SpaceVIL
             {
                 AddItem(item);
             }
+        }
+
+        public override void UpdateElements()
+        {
+            MaxWrapperWidth = 0;
+            foreach (SelectionItem wrp in GetArea()._mapContent.Values)
+            {
+                if (!wrp.IsVisible())
+                    continue;
+                TreeItem item = wrp.GetContent() as TreeItem;
+                if (item != null)
+                {
+                    item.ResetIndents();
+                    int actualWrpWidth = GetWidth() - (GetArea().GetPadding().Left + GetArea().GetPadding().Right)
+                            - (wrp.GetMargin().Left + wrp.GetMargin().Right);
+                    wrp.SetWidth(actualWrpWidth - (VScrollBar.IsDrawable() ? VScrollBar.GetWidth() : 0));
+                }
+            }
+            base.UpdateElements();
         }
 
         void OnSortTree()
@@ -186,8 +206,8 @@ namespace SpaceVIL
                     _root.GetIndicator().SetToggled(true);
                     base.AddItem(_root);
                     SetRootVisible(false);
-                    
-                    _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
+
+                    MaxWrapperWidth = GetWrapper(_root).GetMinWidth();
                 }
                 //exception: ///////
             }
@@ -209,7 +229,7 @@ namespace SpaceVIL
             base.Clear();
             base.AddItem(_root);
             SetRootVisible(IsRootVisible());
-            _maxWrapperWidth = GetWrapper(_root).GetMinWidth();
+            MaxWrapperWidth = GetWrapper(_root).GetMinWidth();
 
         }
         public override bool RemoveItem(IBaseItem item)

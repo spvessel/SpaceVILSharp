@@ -117,12 +117,12 @@ namespace SpaceVIL
                 char specLet = " "[0];
                 Letter spaceSign = new Letter(" ");
                 letters.Add(specLet, spaceSign);
-                spaceSign.width = kegel / 2; //letters["-"[0]].width;
+                spaceSign.width = kegel / 3; //letters["-"[0]].width;
                 spaceSign.height = 0;
 
                 fontDims.lineSpacer = letters["-"[0]].width; //(int)spaceSign.width;
 
-                fontDims.letterSpacer = (kegel / 2) / 4;
+                fontDims.letterSpacer = (kegel / 2) / 5;
                 if (fontDims.letterSpacer < 1)
                 {
                     fontDims.letterSpacer = 1;

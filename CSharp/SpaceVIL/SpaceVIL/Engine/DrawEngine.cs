@@ -243,11 +243,12 @@ namespace SpaceVIL
             _scale.SetScale(x, y);
             DisplayService.SetDisplayScale(x, y);
 
-            int width, height;
-            Glfw.GetWindowSize(window, out width, out height);
+            int widthWnd, heightWnd;
+            Glfw.GetWindowSize(window, out widthWnd, out heightWnd);
 
-            GLWHandler.GetCoreWindow().SetWidthDirect((int)(width / _scale.GetX()));
-            GLWHandler.GetCoreWindow().SetHeightDirect((int)(height / _scale.GetY()));
+            GLWHandler.GetCoreWindow().SetWidthDirect((int)(widthWnd / _scale.GetX()));
+            GLWHandler.GetCoreWindow().SetHeightDirect((int)(heightWnd / _scale.GetY()));
+
             // подписать на обновление при смене фактора масштабирования 
             // (текст в фиксированных по ширине элементов не обновляется - оно и понятно)
         }
@@ -331,8 +332,16 @@ namespace SpaceVIL
         {
             _tooltip.InitTimer(false);
 
-            GLWHandler.GetCoreWindow().SetWidthDirect((int)(width / _scale.GetX()));
-            GLWHandler.GetCoreWindow().SetHeightDirect((int)(height / _scale.GetY()));
+            if (CommonService.GetOSType() != OSType.Mac)
+            {
+                GLWHandler.GetCoreWindow().SetWidthDirect((int)(width / _scale.GetX()));
+                GLWHandler.GetCoreWindow().SetHeightDirect((int)(height / _scale.GetY()));
+            }
+            else
+            {
+                _commonProcessor.Window.SetWidthDirect(width);
+                _commonProcessor.Window.SetHeightDirect(height);
+            }
 
             if (!GLWHandler.GetCoreWindow().IsBorderHidden)
             {
@@ -383,7 +392,14 @@ namespace SpaceVIL
             _tooltip.InitTimer(false);
             if (!GLWHandler.Focusable)
                 return;
-            _mouseMoveProcessor.Process(wnd, xpos / _scale.GetX(), ypos / _scale.GetY(), _scale);
+            if (CommonService.GetOSType() != OSType.Mac)
+            {
+                _mouseMoveProcessor.Process(wnd, xpos / _scale.GetX(), ypos / _scale.GetY(), _scale);
+            }
+            else
+            {
+                _mouseMoveProcessor.Process(wnd, xpos, ypos, new Scale());
+            }
         }
 
         private void MouseClick(Int64 window, MouseButton button, InputState state, KeyMods mods)

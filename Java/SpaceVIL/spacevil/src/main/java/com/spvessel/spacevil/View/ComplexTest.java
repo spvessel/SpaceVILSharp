@@ -23,7 +23,7 @@ public class ComplexTest extends ActiveWindow {
     public void initWindow() {
         isCentered = true;
         isBorderHidden = true;
-        setSize(950, 700);
+        setSize(500, 500);
         setWindowName("ComplexTest");
         setWindowTitle("ComplexTest");
 

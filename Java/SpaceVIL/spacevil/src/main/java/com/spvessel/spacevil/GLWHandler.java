@@ -1,8 +1,6 @@
 package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.CommonService;
-import com.spvessel.spacevil.Common.DisplayService;
-import com.spvessel.spacevil.Core.Area;
 import com.spvessel.spacevil.Core.Pointer;
 import com.spvessel.spacevil.Exceptions.SpaceVILException;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
@@ -14,7 +12,6 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 final class GLWHandler {
 
@@ -79,6 +76,7 @@ final class GLWHandler {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
+        // scaling window's content (does not affect on Mac OS)
         glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
 
         if (resizeble)
@@ -128,23 +126,19 @@ final class GLWHandler {
         int width = vidmode.width();
         int height = vidmode.height();
 
-        // IntBuffer wFB = BufferUtils.createIntBuffer(1);
-        // IntBuffer hFB = BufferUtils.createIntBuffer(1);
-        // glfwGetFramebufferSize(_window, wFB, hFB);
-
-        // _coreWindow.setWindowScale((float) wFB.get(0) / (float) _coreWindow.getWidth(),
-        //         (float) hFB.get(0) / (float) _coreWindow.getHeight());
-
         FloatBuffer xScale = BufferUtils.createFloatBuffer(1);
         FloatBuffer yScale = BufferUtils.createFloatBuffer(1);
         glfwGetWindowContentScale(_window, xScale, yScale);
         _coreWindow.setWindowScale(xScale.get(0), yScale.get(0));
 
-        System.out.println(_coreWindow.getDpiScale().toString());
+        // System.out.println(_coreWindow.getDpiScale().toString());
+
+        int actualWndWidth = _coreWindow.getWidth();
+        int actualWndHeight = _coreWindow.getHeight();
+        float xActualScale = 1f;
+        float yActualScale = 1f;
 
         if (appearInCenter) {
-            int actualWndWidth = _coreWindow.getWidth();
-            int actualWndHeight = _coreWindow.getHeight();
             if (CommonService.getOSType() != OSType.MAC) {
                 actualWndWidth = (int) (_coreWindow.getWidth() * _coreWindow.getDpiScale().getX());
                 actualWndHeight = (int) (_coreWindow.getHeight() * _coreWindow.getDpiScale().getY());
@@ -153,16 +147,25 @@ final class GLWHandler {
             getPointer().setY((height - actualWndHeight) / 2);
 
         } else {
-            _coreWindow.setXDirect(_coreWindow.getX());//200);
-            _coreWindow.setYDirect(_coreWindow.getY());//50);
-            getPointer().setX(_coreWindow.getX());//200);
-            getPointer().setY(_coreWindow.getY());//50);
+
+            if (CommonService.getOSType() != OSType.MAC) {
+                xActualScale = _coreWindow.getDpiScale().getX();
+                yActualScale = _coreWindow.getDpiScale().getY();
+            }
+
+            _coreWindow.setXDirect((int) (_coreWindow.getX() * xActualScale));
+            _coreWindow.setYDirect((int) (_coreWindow.getY() * yActualScale));
+
+            getPointer().setX(_coreWindow.getX());
+            getPointer().setY(_coreWindow.getY());
         }
-        glfwSetWindowSizeLimits(_window, (int) (_coreWindow.getMinWidth() * _coreWindow.getDpiScale().getX()),
-                (int) (_coreWindow.getMinHeight() * _coreWindow.getDpiScale().getY()),
-                (int) (_coreWindow.getMaxWidth() * _coreWindow.getDpiScale().getX()),
-                (int) (_coreWindow.getMaxHeight() * _coreWindow.getDpiScale().getY()));
         glfwSetWindowPos(_window, getPointer().getX(), getPointer().getY());
+
+        glfwSetWindowSizeLimits(_window, 
+                (int) (_coreWindow.getMinWidth() * xActualScale),
+                (int) (_coreWindow.getMinHeight() * yActualScale), 
+                (int) (_coreWindow.getMaxWidth() * xActualScale),
+                (int) (_coreWindow.getMaxHeight() * yActualScale));
 
         if (_coreWindow.isKeepAspectRatio)
             glfwSetWindowAspectRatio(_window, _coreWindow.ratioW, _coreWindow.ratioH);

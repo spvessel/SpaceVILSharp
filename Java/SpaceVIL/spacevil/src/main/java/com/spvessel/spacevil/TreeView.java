@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class TreeView extends ListBox {
     public EventCommonMethod eventSortTree = new EventCommonMethod();
-    
+
     @Override
     public void release() {
         eventSortTree.clear();
@@ -24,7 +24,7 @@ public class TreeView extends ListBox {
 
     TreeItem _root; // nesting level = 0
 
-    int _maxWrapperWidth = 0;
+    int maxWrapperWidth = 0;
 
     /**
      * Is root item visible
@@ -39,8 +39,10 @@ public class TreeView extends ListBox {
         if (list != null) {
             for (InterfaceBaseItem item : list) {
                 if (item instanceof TreeItem) {
-                    TreeItem tmp = (TreeItem) item;
-                    tmp.resetIndents();
+                    if (item.isVisible()) {
+                        TreeItem tmp = (TreeItem) item;
+                        tmp.resetIndents();
+                    }
                 }
             }
         }
@@ -84,6 +86,7 @@ public class TreeView extends ListBox {
         setItemName("TreeView_" + count);
         count++;
         _root = new TreeItem(TreeItemType.BRANCH, "root");
+        _root.setItemName("root");
 
         setStyle(DefaultsService.getDefaultStyle(TreeView.class));
         eventSortTree.add(this::onSortTree);
@@ -104,13 +107,13 @@ public class TreeView extends ListBox {
         setRootVisible(false);
 
         // _root.resetIndents();
-        _maxWrapperWidth = getWrapper(_root).getMinWidth();
+        maxWrapperWidth = getWrapper(_root).getMinWidth();
     }
 
     void refreshWrapperWidth() {
         for (SelectionItem wrp : getArea()._mapContent.values()) {
-            wrp.setMinWidth(_maxWrapperWidth);
-            wrp.getContent().setMinWidth(_maxWrapperWidth);
+            wrp.setMinWidth(maxWrapperWidth);
+            wrp.getContent().setMinWidth(maxWrapperWidth);
         }
     }
 
@@ -136,6 +139,23 @@ public class TreeView extends ListBox {
         for (InterfaceBaseItem item : content) {
             addItem(item);
         }
+    }
+
+    @Override
+    public void updateElements() {
+        maxWrapperWidth = 0;
+        for (SelectionItem wrp : getArea()._mapContent.values()) {
+            if (!wrp.isVisible())
+                continue;
+
+            if (wrp.getContent() instanceof TreeItem) {
+                ((TreeItem) wrp.getContent()).resetIndents();
+                int actualWrpWidth = getWidth() - (getArea().getPadding().left + getArea().getPadding().right)
+                        - (wrp.getMargin().left + wrp.getMargin().right);
+                wrp.setWidth(actualWrpWidth - (vScrollBar.isDrawable() ? vScrollBar.getWidth() : 0));
+            }
+        }
+        super.updateElements();
     }
 
     private void onSortTree() {
@@ -203,7 +223,7 @@ public class TreeView extends ListBox {
                 super.addItem(_root);
                 setRootVisible(false);
 
-                _maxWrapperWidth = getWrapper(_root).getMinWidth();
+                maxWrapperWidth = getWrapper(_root).getMinWidth();
             }
             // exception: ///////
         } else
@@ -228,7 +248,7 @@ public class TreeView extends ListBox {
         super.clear();
         super.addItem(_root);
         setRootVisible(isRootVisible());
-        _maxWrapperWidth = getWrapper(_root).getMinWidth();
+        maxWrapperWidth = getWrapper(_root).getMinWidth();
     }
 
     @Override
@@ -313,5 +333,4 @@ public class TreeView extends ListBox {
 
         updateElements();
     }
-
 }

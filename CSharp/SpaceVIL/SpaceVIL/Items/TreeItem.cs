@@ -134,27 +134,29 @@ namespace SpaceVIL
             Int32 level = _nesting_level;
             if (!_treeViewContainer._root.IsVisible())
                 level--;
+
             SetPadding(2 + _indent_size * level, 0, 0, 0);
-            int width = GetPadding().Left + 10;
+            int width = GetPadding().Left;
             foreach (IBaseItem item in GetItems())
             {
                 width += item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right + GetSpacing().Horizontal;
             }
 
             int newMinWidth = width - GetSpacing().Horizontal;
-            if (newMinWidth > _treeViewContainer._maxWrapperWidth)
+            if (newMinWidth > _treeViewContainer.MaxWrapperWidth)
             {
-                _treeViewContainer._maxWrapperWidth = newMinWidth;
+                _treeViewContainer.MaxWrapperWidth = newMinWidth;
                 _treeViewContainer.RefreshWrapperWidth();
             }
             else
             {
-                newMinWidth = _treeViewContainer._maxWrapperWidth;
+                newMinWidth = _treeViewContainer.MaxWrapperWidth;
             }
 
             SetMinWidth(newMinWidth);
             _treeViewContainer.GetWrapper(this).SetMinWidth(newMinWidth);
         }
+
         public override void InitElements()
         {
             _text_object.IsFocusable = false;
@@ -167,6 +169,10 @@ namespace SpaceVIL
                     break;
 
                 case TreeItemType.Branch:
+                    base.AddItems(_indicator);
+                    base.AddItem(_icon_shape);
+                    base.AddItem(_text_object);
+                    
                     _indicator.EventToggle += (sender, args) => OnToggleHide(_indicator.IsToggled());
                     _indicator.IsFocusable = false;
                     EventMouseDoubleClick += (sender, args) =>
@@ -174,9 +180,6 @@ namespace SpaceVIL
                         if (args.Button == MouseButton.ButtonLeft)
                             _indicator.EventToggle.Invoke(sender, args);
                     };
-                    base.AddItems(_indicator);
-                    base.AddItem(_icon_shape);
-                    base.AddItem(_text_object);
                     break;
 
                 default:
@@ -244,7 +247,6 @@ namespace SpaceVIL
                 AddTreeItem(tmp);
             else
                 base.AddItem(item);
-
         }
 
         public override void SetWidth(int width)
@@ -261,7 +263,7 @@ namespace SpaceVIL
 
         public virtual void UpdateLayout()
         {
-            _text_object.SetWidth(_text_object.GetTextWidth());
+            _text_object.SetWidth(_text_object.GetTextWidth() + 5);
             //update self width
             int offset = 0;
             int startX = GetX() + GetPadding().Left;

@@ -1,10 +1,7 @@
 package com.spvessel.spacevil.Common;
 
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.FloatBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -22,8 +19,6 @@ import com.spvessel.spacevil.Flags.OSType;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.system.Configuration;
-import org.lwjgl.system.MemoryUtil;
 
 public final class CommonService {
 
@@ -83,8 +78,6 @@ public final class CommonService {
 
         System.setProperty("java.awt.headless", "true");
         System.setProperty("org.lwjgl.opengl.Display.enableHighDPI", "false");
-        // System.setProperty("org.lwjgl.system.stackSize", Integer.toString(Integer.MAX_VALUE));
-        // org.lwjgl.system.Configuration.STACK_SIZE = new Configuration<Integer>("org.lwjgl.system.stackSize", Integer.MAX_VALUE);
 
         // cursors
         cursorArrow = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
@@ -102,7 +95,8 @@ public final class CommonService {
         FloatBuffer y = BufferUtils.createFloatBuffer(1);
         glfwGetMonitorContentScale(monitor, x, y);
         DisplayService.setDisplayScale(x.get(0), y.get(0));
-        System.out.println(DisplayService.getDisplayDpiScale());
+
+        // System.out.println(DisplayService.getDisplayDpiScale());
         
         DefaultsService.initImages();
         DefaultsService.initDefaultTheme();

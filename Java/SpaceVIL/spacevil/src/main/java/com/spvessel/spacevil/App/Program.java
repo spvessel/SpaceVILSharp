@@ -16,7 +16,7 @@ public class Program {
 
         com.spvessel.spacevil.Common.CommonService.initSpaceVILComponents();
 
-        // WindowManager.setRenderType(RenderType.ALWAYS);
+        WindowManager.setRenderType(RenderType.ALWAYS);
         // WindowManager.enableVSync(0);
 
         // BufferedImage cursor = null;
@@ -37,8 +37,8 @@ public class Program {
 //        ImageTest im = new ImageTest();
 //        FlowTest ft = new FlowTest();
 //        LayoutsTest lt = new LayoutsTest();
-//        ComplexTest ct = new ComplexTest();
-        InputTest it = new InputTest();
+       ComplexTest ct = new ComplexTest();
+        // InputTest it = new InputTest();
 //       TextTest tt = new TextTest();
         // Containers con = new Containers();
 //        SideAreaTest sat = new SideAreaTest();
@@ -61,13 +61,13 @@ public class Program {
         // WindowManager.setRenderType(RenderType.ALWAYS);
 
         WindowManager.startWith(
-                mw,
+                // mw,
                 //, mw2
                 // st
                 // im
-                ft
+                // ft
                 // lt
-                // ct
+                ct
                 // it
                 // tt
                 // con
