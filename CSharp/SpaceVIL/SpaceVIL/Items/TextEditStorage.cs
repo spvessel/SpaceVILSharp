@@ -606,7 +606,7 @@ namespace SpaceVIL
                     PrivCutText();
                 }
 
-                if ((pasteStr != null) || pasteStr.Equals(""))
+                if ((pasteStr == null) || pasteStr.Equals(""))
                 {
                     return;
                 }

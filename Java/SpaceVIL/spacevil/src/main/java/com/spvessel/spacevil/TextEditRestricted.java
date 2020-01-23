@@ -32,7 +32,7 @@ class TextEditRestricted extends TextEditStorage {
         numbers = new LinkedList<>(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "0"));
 
         updateCurrentValue();
-//        setEditable(false);
+        //        setEditable(false);
     }
 
     private List<String> numbers;
@@ -41,7 +41,7 @@ class TextEditRestricted extends TextEditStorage {
     private void onMouseDoubleClick(Object sender, MouseArgs args) {
         if (args.button == MouseButton.BUTTON_LEFT) {
             selectAll();
-//            setEditable(true);
+            //            setEditable(true);
         }
     }
 
@@ -67,11 +67,17 @@ class TextEditRestricted extends TextEditStorage {
                 }
                 currentValue = znc;
             } catch (Exception e) {
+                // e.printStackTrace();
+                if (t0.startsWith("-")) {
+                    currentValue = minValue;
+                } else {
+                    currentValue = maxValue;
+                }
 
             }
         }
         updateCurrentValue();
-//        setEditable(false);
+        //        setEditable(false);
     }
 
     private void onTextInput(Object sender, TextInputArgs args) {
@@ -82,25 +88,29 @@ class TextEditRestricted extends TextEditStorage {
         String str = new String(input, Charset.forName("UTF-32"));
         boolean isValid = false;
         switch (inres) {
-            case INTNUMBERS:
-                if (numbers.contains(str))
-                    isValid = true;
-                else if (isFirst && str.equals("-"))
-                    isValid = true;
-                else isValid = false;
-                break;
-            case DOUBLENUMBERS:
-                if (numbers.contains(str))
-                    isValid = true;
-                else if (isFirst && str.equals("-"))
-                    isValid = true;
-                else if (!isFirst && !hasDot && (str.equals(".") || str.equals(",")))
-                    isValid = true;
-                else isValid = false;
-                break;
-            default:
+        case INTNUMBERS:
+            if (numbers.contains(str))
                 isValid = true;
-                break;
+            else if (isFirst && str.equals("-"))
+                isValid = true;
+            else
+                isValid = false;
+            break;
+
+        case DOUBLENUMBERS:
+            if (numbers.contains(str))
+                isValid = true;
+            else if (isFirst && str.equals("-"))
+                isValid = true;
+            else if (!isFirst && !hasDot && (str.equals(".") || str.equals(",")))
+                isValid = true;
+            else
+                isValid = false;
+            break;
+
+        default:
+            isValid = true;
+            break;
         }
 
         if (isValid) {
@@ -185,7 +195,8 @@ class TextEditRestricted extends TextEditStorage {
 
         if (i < minSignsCount)
             i = minSignsCount;
-        else if (i > maxSignsCount) i = maxSignsCount;
+        else if (i > maxSignsCount)
+            i = maxSignsCount;
         signsCount = i;
         rou = "%." + String.valueOf(signsCount) + "f";
     }
@@ -210,8 +221,7 @@ class TextEditRestricted extends TextEditStorage {
         updateCurrentValue();
     }
 
-    public double getValue()
-    {
+    public double getValue() {
         return currentValue;
     }
 
@@ -227,23 +237,23 @@ class TextEditRestricted extends TextEditStorage {
             currentValue = maxValue;
 
         switch (inres) {
-            case INTNUMBERS:
-                setText(Integer.toString((int) currentValue));
-                break;
-            default: //case DOUBLENUMBERS:
-                setText(String.format(Locale.ROOT, rou, currentValue));
-                break;
+        case INTNUMBERS:
+            setText(Integer.toString((int) currentValue));
+            break;
+        default: //case DOUBLENUMBERS:
+            setText(String.format(Locale.ROOT, rou, currentValue));
+            break;
         }
     }
 
     void increaseValue() {
-//        setEditable(false);
+        //        setEditable(false);
         currentValue += step;
         updateCurrentValue();
     }
 
     void decreaseValue() {
-//        setEditable(false);
+        //        setEditable(false);
         currentValue -= step;
         updateCurrentValue();
     }

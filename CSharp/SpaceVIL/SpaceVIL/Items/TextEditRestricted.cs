@@ -12,8 +12,8 @@ namespace SpaceVIL
         internal TextEditRestricted()
         {
             //super();
-            
-            EventTextInput = OnTextInput;
+            EventTextInput = null;
+            EventTextInput += OnTextInput;
             EventKeyPress += OnKeyPress;
             EventMouseDoubleClick = OnMouseDoubleClick;
 
@@ -64,7 +64,14 @@ namespace SpaceVIL
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    // Console.WriteLine(ex.ToString());
+                    if (t0.StartsWith("-"))
+                    {
+                        currentValue = minValue;
+                    }
+                    else{
+                        currentValue = maxValue;
+                    }
                 }
             }
             UpdateCurrentValue();
@@ -90,6 +97,7 @@ namespace SpaceVIL
                         isValid = true;
                     else isValid = false;
                     break;
+
                 case InputRestriction.DoubleNumbers:
                     if (numbers.Contains(str))
                         isValid = true;
@@ -99,6 +107,7 @@ namespace SpaceVIL
                         isValid = true;
                     else isValid = false;
                     break;
+
                 default:
                     isValid = true;
                     break;
@@ -135,7 +144,7 @@ namespace SpaceVIL
                 String s = str.Substring(i, 1);
                 if (!numbers.Contains(s))
                 {
-                    if ((inres == InputRestriction.DoubleNumbers) && !hasDot && (str.Equals(".") || str.Equals(",")))
+                    if ((inres == InputRestriction.DoubleNumbers) && !hasDot && (s.Equals(".") || s.Equals(",")))
                     {
                         hasDot = true;
                     }
@@ -149,7 +158,7 @@ namespace SpaceVIL
             return true;
         }
 
-        public new void PasteText(String pasteStr)
+        public override void PasteText(String pasteStr)
         {
             if (CheckValidity(pasteStr))
             {
