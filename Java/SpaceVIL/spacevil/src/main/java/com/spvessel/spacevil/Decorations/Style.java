@@ -1333,22 +1333,21 @@ public class Style implements Cloneable {
      */
     public static Style getTextEditStyle() {
         Style style = new Style();
-        style.background = new Color(210, 210, 210);
-        style.foreground = new Color(25, 25, 25);
         style.font = DefaultsService.getDefaultFont(16);
-        style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.TOP));
-        style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
+        style.background = new Color(210, 210, 210);
         style.height = 30;
         style.widthPolicy = SizePolicy.EXPAND;
         style.heightPolicy = SizePolicy.FIXED;
-        style.padding = new Indents(5, 0, 5, 0);
-        // ItemState hovered = new ItemState();
-        // hovered.background = new Color(220, 220, 220, 255);
-        // style.addItemState(ItemStateType.HOVERED, hovered);
-        // ItemState focused = new ItemState();
-        // focused.background = new Color(220, 220, 220, 255);
-        // focused.border = new Border(new Color(58,156,209), new CornerRadius(), 2);
-        // style.addItemState(ItemStateType.FOCUSED, focused);
+
+        Style text_style = new Style();
+        text_style.background = new Color(0, 0, 0, 0);
+        text_style.foreground = new Color(70, 70, 70);
+        text_style.font = DefaultsService.getDefaultFont(16);
+        text_style.setSizePolicy(SizePolicy.EXPAND, SizePolicy.EXPAND);
+        text_style.setAlignment(ItemAlignment.LEFT, ItemAlignment.TOP);
+        text_style.setTextAlignment(ItemAlignment.LEFT, ItemAlignment.VCENTER);
+        text_style.padding = new Indents(5, 0, 5, 0);
+        style.addInnerStyle("text", text_style);
 
         Style cursor_style = new Style();
         cursor_style.background = new Color(60, 60, 60);
@@ -1357,19 +1356,19 @@ public class Style implements Cloneable {
         cursor_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         cursor_style.margin = new Indents(0, 5, 0, 5);
         cursor_style.isVisible = false;
-        style.addInnerStyle("cursor", cursor_style);
+        text_style.addInnerStyle("cursor", cursor_style);
 
         Style selection_style = new Style();
         selection_style.background = new Color(111, 181, 255);
         selection_style.setSizePolicy(SizePolicy.FIXED, SizePolicy.EXPAND);
         selection_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER, ItemAlignment.LEFT));
         selection_style.margin = new Indents(0, 5, 0, 5);
-        style.addInnerStyle("selection", selection_style);
+        text_style.addInnerStyle("selection", selection_style);
 
         Style substrate_style = new Style();
         substrate_style.font = DefaultsService.getDefaultFont(Font.ITALIC, 14);
         substrate_style.foreground = new Color(150, 150, 150);
-        style.addInnerStyle("substrate", substrate_style);
+        text_style.addInnerStyle("substrate", substrate_style);
 
         return style;
     }

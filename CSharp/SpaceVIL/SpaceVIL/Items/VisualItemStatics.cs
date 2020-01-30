@@ -57,7 +57,7 @@ namespace SpaceVIL
         internal static void UpdateVisualProperties(VisualItem item, ItemState state, ItemState prevState)
         {
             ItemState currentState = item.GetState(item.GetCurrentStateType());
-            item.SetBackgroundDirect(GraphicsMathService.MixColors(currentState.Background, state.Background));
+            item.SetBackgroundDirect(GraphicsMathService.MixColors(currentState.Background, prevState.Background, state.Background));
 
             Border borderCurrentState = CloneBorder(currentState.Border);
             Border borderState = CloneBorder(state.Border);

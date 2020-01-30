@@ -64,7 +64,7 @@ namespace SpaceVIL
                 }
                 catch (Exception ex)
                 {
-                    // Console.WriteLine(ex.ToString());
+                    Console.WriteLine(ex.StackTrace);
                     if (t0.StartsWith("-"))
                     {
                         currentValue = minValue;

@@ -40,6 +40,18 @@ namespace SpaceVIL
         private float _current_value = 0;
         public int Direction = 0;
 
+        bool _ignoreStep = true;
+
+        public void SetIgnoreStep(bool value)
+        {
+            _ignoreStep = value;
+        }
+
+        public bool IsIgnoreStep()
+        {
+            return _ignoreStep;
+        }
+
         /// <summary>
         /// Position value of the HorizontalSlider
         /// </summary>
@@ -55,12 +67,16 @@ namespace SpaceVIL
 
             _current_value = value;
 
+            if (!_ignoreStep)
+                _current_value = (float)Math.Round(_current_value / _step, MidpointRounding.ToEven) * _step;
+
             if (_current_value < _min_value)
                 _current_value = _min_value;
             if (_current_value > _max_value)
                 _current_value = _max_value;
 
             UpdateHandler(); //refactor!!
+
 
             if (EventValueChanged != null) EventValueChanged.Invoke(this);
         }
@@ -148,10 +164,10 @@ namespace SpaceVIL
         {
             _dragging = true;
             //иногда число NAN 
-
-            float result = (float)(Handler.GetX() - GetX()) * (_max_value - _min_value) 
+            // float value = (_max_value - _min_value) / _step ;
+            float result = (float)(Handler.GetX() - GetX()) * (_max_value - _min_value)
                     / ((float)GetWidth() - GetSumOfHorizontalIndents() - Handler.GetWidth()) + _min_value;
-            
+
             if (!Single.IsNaN(result))
             {
                 SetCurrentValue(result);

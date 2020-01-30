@@ -80,7 +80,7 @@ namespace SpaceVIL
             // SetCursor(EmbeddedCursor.IBeam);
         }
         public TextEdit(String text) : this()
-        {            
+        {
             SetText(text);
         }
 
@@ -330,7 +330,7 @@ namespace SpaceVIL
         //     int coord = 0;
         //     if (_text_object.GetLetPosArray() == null) return coord;
         //     int letCount = _text_object.GetLetPosArray().Count;
-            
+
         //     if (cPos > 0)
         //     {
         //         coord = _text_object.GetLetPosArray()[cPos - 1];
@@ -407,15 +407,15 @@ namespace SpaceVIL
         //     }
         // }
 
-        protected internal override void SetFocused(bool value)
-        {
-            _textObject.SetFocused(value);
-            // base.SetFocused(value);
-            // if (IsFocused() && _isEditable)
-            //     _cursor.SetVisible(true);
-            // else
-            //     _cursor.SetVisible(false);
-        }
+        // protected internal override void SetFocused(bool value)
+        // {
+        //     _textObject.SetFocused(value);
+        //     // base.SetFocused(value);
+        //     // if (IsFocused() && _isEditable)
+        //     //     _cursor.SetVisible(true);
+        //     // else
+        //     //     _cursor.SetVisible(false);
+        // }
 
         public void SetTextAlignment(ItemAlignment alignment)
         {
@@ -452,7 +452,8 @@ namespace SpaceVIL
             // _substrate_text.SetMargin(margin);
             _textObject.SetTextMargin(margin);
         }
-        public Indents GetTextMargin() {
+        public Indents GetTextMargin()
+        {
             return _textObject.GetTextMargin();
         }
 
@@ -570,24 +571,15 @@ namespace SpaceVIL
             // return _text_object.GetForeground();
             return _textObject.GetForeground();
         }
-        public virtual bool IsEditable
-        {
-            get { 
-                // return _isEditable;
-                return _textObject.IsEditable;
-            }
-            set
-            {
-                // if (_isEditable == value)
-                //     return;
-                // _isEditable = value;
 
-                // if (_isEditable)
-                //     _cursor.SetVisible(true);
-                // else
-                //     _cursor.SetVisible(false);
-                _textObject.IsEditable = value;
-            }
+        public bool IsEditable()
+        {
+            return _textObject.IsEditable;
+        }
+
+        public void SetEditable(bool value)
+        {
+            _textObject.IsEditable = value;
         }
 
         // public override void SetWidth(int width)
@@ -788,7 +780,12 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             base.SetStyle(style);
-            _textObject.SetStyle(style);
+            Style inner_style = style.GetInnerStyle("text");
+            if (inner_style != null)
+            {
+                _textObject.SetStyle(inner_style);
+            }
+
             // if (style == null)
             //     return;
             // base.SetStyle(style);

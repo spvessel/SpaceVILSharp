@@ -41,6 +41,16 @@ public class HorizontalSlider extends Prototype {
     private float _current_value = 0;
     public int direction = 0;
 
+    boolean _ignoreStep = true;
+
+    public void setIgnoreStep(boolean value) {
+        _ignoreStep = value;
+    }
+
+    public boolean isIgnoreStep() {
+        return _ignoreStep;
+    }
+
     /**
      * Position value of the HorizontalSlider
      */
@@ -51,6 +61,9 @@ public class HorizontalSlider extends Prototype {
             direction = 1; // down
 
         _current_value = value;
+        
+        if (!_ignoreStep)
+            _current_value = (float) Math.round(_current_value / _step) * _step;
 
         if (_current_value < _min_value)
             _current_value = _min_value;

@@ -198,7 +198,9 @@ final class WindowLayout {
     void createWindowsPair() {
         WindowsBox.createWindowsPair(_coreWindow);
         if (_coreWindow.isDialog) {
-            WindowsBox.getWindowPair(_coreWindow).setFocusable(false);
+            CoreWindow parentWindow = WindowsBox.getWindowPair(_coreWindow);
+            if (parentWindow != null)
+                parentWindow.setFocusable(false);
         }
     }
 

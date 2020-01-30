@@ -1309,24 +1309,21 @@ namespace SpaceVIL.Decorations
         public static Style GetTextEditStyle()
         {
             Style style = new Style();
-            style.Background = Color.FromArgb(255, 210, 210, 210);
-            style.Foreground = Color.FromArgb(255, 70, 70, 70);
             style.Font = DefaultsService.GetDefaultFont(16);
-            // style.Font = new Font(style.Font.FontFamily, 14, style.Font.Style);
-            style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
-            style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            style.Background = Color.FromArgb(255, 210, 210, 210);
             style.Height = 30;
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
-            style.Padding = new Indents(5, 0, 5, 0);
-            // style.AddItemState(ItemStateType.Hovered, new ItemState()
-            // {
-            //     Background = Color.FromArgb(255, 220, 220, 220)
-            // });
-            // style.AddItemState(ItemStateType.Focused, new ItemState()
-            // {
-            //     Background = Color.FromArgb(255, 220, 220, 220)
-            // });
+
+            Style text_style = new Style();
+            text_style.Background = Color.Transparent;
+            text_style.Foreground = Color.FromArgb(255, 70, 70, 70);
+            text_style.Font = DefaultsService.GetDefaultFont(16);
+            text_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            text_style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            text_style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            text_style.Padding = new Indents(5, 0, 5, 0);
+            style.AddInnerStyle("text", text_style);
 
             Style cursor_style = new Style();
             cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
@@ -1335,19 +1332,19 @@ namespace SpaceVIL.Decorations
             cursor_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
             cursor_style.Margin = new Indents(0, 5, 0, 5);
             cursor_style.IsVisible = false;
-            style.AddInnerStyle("cursor", cursor_style);
+            text_style.AddInnerStyle("cursor", cursor_style);
 
             Style selection_style = new Style();
             selection_style.Background = Color.FromArgb(255, 111, 181, 255);
             selection_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
             selection_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
             selection_style.Margin = new Indents(0, 5, 0, 5);
-            style.AddInnerStyle("selection", selection_style);
+            text_style.AddInnerStyle("selection", selection_style);
 
             Style substrate_style = new Style();
             substrate_style.Font = DefaultsService.GetDefaultFont(FontStyle.Italic, 14);
             substrate_style.Foreground = Color.FromArgb(255, 150, 150, 150);
-            style.AddInnerStyle("substrate", substrate_style);
+            text_style.AddInnerStyle("substrate", substrate_style);
 
             return style;
         }

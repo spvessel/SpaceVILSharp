@@ -47,6 +47,16 @@ public class VerticalSlider extends Prototype {
      */
     public int Direction = 0;
 
+    boolean _ignoreStep = true;
+
+    public void setIgnoreStep(boolean value) {
+        _ignoreStep = value;
+    }
+
+    public boolean isIgnoreStep() {
+        return _ignoreStep;
+    }
+
     /**
      * Sets current value of the VerticalSlider
      */
@@ -57,6 +67,9 @@ public class VerticalSlider extends Prototype {
             Direction = 1; // down
 
         _current_value = value;
+
+        if (!_ignoreStep)
+            _current_value = (float) Math.round(_current_value / _step) * _step;
 
         if (_current_value < _min_value)
             _current_value = _min_value;

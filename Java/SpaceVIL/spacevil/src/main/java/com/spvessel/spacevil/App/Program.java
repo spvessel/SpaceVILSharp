@@ -7,8 +7,10 @@ import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 import com.spvessel.spacevil.*;
+import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.*;
 import com.spvessel.spacevil.Flags.ItemAlignment;
+import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.RenderType;
 
 public class Program {
@@ -30,18 +32,27 @@ public class Program {
         // MainWindow mw2 = new MainWindow();
         // DefaultsService.setDefaultFont(new Font("Arial", Font.BOLD, 12));
 
-//        MainWindow mw = new MainWindow();
-//        mw.setPosition(500, 500);
+        // MessageBox msg = new MessageBox("Another app is already running!", "MESSAGE:");
+        // msg.getCancelButton().setVisible(false);
+        // msg.show();
+        // msg.onCloseDialog.add(() -> {
+        //     WindowManager.appExit();
+        // });
 
-//        SettingsTest st = new SettingsTest();
-//        ImageTest im = new ImageTest();
-//        FlowTest ft = new FlowTest();
-//        LayoutsTest lt = new LayoutsTest();
-    //    ComplexTest ct = new ComplexTest();
+        DefaultsService.getDefaultTheme().replaceDefaultItemStyle(TextEdit.class, getTextEditStyle());
+
+        MainWindow mw = new MainWindow();
+        mw.setPosition(500, 500);
+
+        //        SettingsTest st = new SettingsTest();
+        ImageTest im = new ImageTest();
+        //        FlowTest ft = new FlowTest();
+        LayoutsTest lt = new LayoutsTest();
+        //    ComplexTest ct = new ComplexTest();
         InputTest it = new InputTest();
-//       TextTest tt = new TextTest();
+        //       TextTest tt = new TextTest();
         // Containers con = new Containers();
-//        SideAreaTest sat = new SideAreaTest();
+        //        SideAreaTest sat = new SideAreaTest();
         // DPIAnalysis dpi = new DPIAnalysis();
 
         // PerformanceTest pt = new PerformanceTest();
@@ -60,22 +71,32 @@ public class Program {
         // WindowManager.enableVSync(0);
         // WindowManager.setRenderType(RenderType.ALWAYS);
 
-        WindowManager.startWith(
-//                mw,
-                //, mw2
-                // st
-                // im
-//                ft
-                // lt
-                // ct
-                 it
-                // tt
-                // con
-                // sat
-                // et
-                // pt
-                // oglt
-                );
+        WindowManager.startWith(mw
+        //, mw2
+        // st
+        // im
+        //                ft
+        // lt
+        // ct
+        //  it
+        // tt
+        // con
+        // sat
+        // et
+        // pt
+        // oglt
+        );
+    }
+
+    public static final Color Hover = new Color(255, 255, 255, 100);
+    public static final Color KeyBindFocused = new Color(138, 220, 255);
+
+    private static Style getTextEditStyle() {
+        Style style = Style.getTextEditStyle();
+        Style text = style.getInnerStyle("text");
+        text.addItemState(ItemStateType.HOVERED, new ItemState(Hover));
+        text.addItemState(ItemStateType.FOCUSED, new ItemState(KeyBindFocused));
+        return style;
     }
 
     public static Style getNewToolTipStyle() {

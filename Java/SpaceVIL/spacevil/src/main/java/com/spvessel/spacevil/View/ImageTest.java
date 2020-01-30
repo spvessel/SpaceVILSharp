@@ -212,6 +212,7 @@ public class ImageTest extends ActiveWindow {
             img.setColorOverlay(Color.black);
 
             HorizontalSlider h_slider = new HorizontalSlider();
+            h_slider.setStep(1);
             h_slider.setAlignment(ItemAlignment.TOP, ItemAlignment.LEFT);
             h_slider.setMargin(25, 0, 25, 0);
             h_slider.setMaxValue(360);

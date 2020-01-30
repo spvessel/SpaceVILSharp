@@ -32,6 +32,19 @@ namespace SpaceVIL
 
         private float _current_value = 0;
         public int Direction = 0;
+
+        bool _ignoreStep = true;
+
+        public void SetIgnoreStep(bool value)
+        {
+            _ignoreStep = value;
+        }
+
+        public bool IsIgnoreStep()
+        {
+            return _ignoreStep;
+        }
+
         public void SetCurrentValue(float value)
         {
             if (_current_value > value)
@@ -40,6 +53,9 @@ namespace SpaceVIL
                 Direction = 1; //down
 
             _current_value = value;
+                
+            if (!_ignoreStep)
+                _current_value = (float)Math.Round(_current_value / _step, MidpointRounding.ToEven) * _step;
 
             if (_current_value < _min_value)
                 _current_value = _min_value;
@@ -121,7 +137,7 @@ namespace SpaceVIL
         {
             _dragging = true;
             //иногда число NAN 
-            float result = (float)(Handler.GetY() - GetY()) * (_max_value - _min_value) 
+            float result = (float)(Handler.GetY() - GetY()) * (_max_value - _min_value)
                     / ((float)GetHeight() - GetSumOfVerticalIndents() - Handler.GetHeight()) + _min_value;
             if (!Single.IsNaN(result))
                 SetCurrentValue(result);

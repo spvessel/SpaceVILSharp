@@ -233,7 +233,7 @@ namespace SpaceVIL
             WindowsBox.CreateWindowsPair(_coreWindow);
             if (_coreWindow.IsDialog)
             {
-                WindowsBox.GetWindowPair(_coreWindow).SetFocusable(false);
+                WindowsBox.GetWindowPair(_coreWindow)?.SetFocusable(false);
             }
         }
 

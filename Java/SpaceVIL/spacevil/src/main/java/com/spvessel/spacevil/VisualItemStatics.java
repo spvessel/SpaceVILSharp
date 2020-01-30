@@ -54,10 +54,11 @@ final class VisualItemStatics {
             item._border = border;
         }
     }
-    static int coubt = 0;
+
     static void updateVisualProperties(VisualItem item, ItemState state, ItemState prevState) {
         ItemState currentState = item.getState(item.getCurrentStateType());
-        item.setBackgroundDirect(GraphicsMathService.mixColors(currentState.background, state.background));
+        item.setBackgroundDirect(
+                GraphicsMathService.mixColors(currentState.background, prevState.background, state.background));
 
         Border borderCurrentState = cloneBorder(currentState.border);
         Border borderState = cloneBorder(state.border);
