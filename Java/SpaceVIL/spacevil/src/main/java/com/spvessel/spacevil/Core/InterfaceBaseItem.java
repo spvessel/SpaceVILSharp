@@ -10,55 +10,55 @@ import com.spvessel.spacevil.Decorations.Style;
 public interface InterfaceBaseItem
         extends InterfaceItem, InterfaceSize, InterfacePosition, InterfaceEventUpdate, InterfaceBehavior {
 
-    void setHandler(CoreWindow handler);
+    public void setHandler(CoreWindow handler);
 
-    CoreWindow getHandler();
+    public CoreWindow getHandler();
 
-    void setParent(Prototype parent);
+    public void setParent(Prototype parent);
 
-    Prototype getParent();
+    public Prototype getParent();
 
-    void setConfines();
+    public void setConfines();
 
     public void setConfines(int x0, int x1, int y0, int y1);
 
-    void setMargin(Indents padding);
+    public void setMargin(Indents padding);
 
     public void setMargin(int left, int top, int right, int bottom);
 
-    Indents getMargin();
+    public Indents getMargin();
 
-    void initElements();
+    public void initElements();
 
-    void setStyle(Style style);
+    public void setStyle(Style style);
 
-    Style getCoreStyle();
+    public Style getCoreStyle();
 
-    boolean isDrawable();
+    public boolean isDrawable();
 
-    void setDrawable(boolean value);
+    public void setDrawable(boolean value);
 
-    boolean isVisible();
+    public boolean isVisible();
 
-    void setVisible(boolean value);
+    public void setVisible(boolean value);
 
-    boolean isShadowDrop();
+    public boolean isShadowDrop();
 
-    void setShadowDrop(boolean value);
+    public void setShadowDrop(boolean value);
 
-    void setShadowRadius(int radius);
+    public void setShadowRadius(int radius);
 
-    int getShadowRadius();
+    public int getShadowRadius();
 
-    Color getShadowColor();
+    public Color getShadowColor();
 
-    void setShadowColor(Color color);
+    public void setShadowColor(Color color);
 
-    Position getShadowPos();
+    public Position getShadowPos();
 
-    int[] getShadowExtension();
+    public int[] getShadowExtension();
 
     public void setShadow(int radius, int x, int y, Color color);
 
-    void release();
+    public void release();
 }

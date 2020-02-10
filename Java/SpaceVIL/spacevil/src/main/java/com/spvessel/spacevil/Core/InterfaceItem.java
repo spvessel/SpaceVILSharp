@@ -4,17 +4,17 @@ import java.awt.Color;
 import java.util.List;
 
 public interface InterfaceItem {
-    void setItemName(String name);
+    public void setItemName(String name);
 
-    String getItemName();
+    public String getItemName();
 
-    void setBackground(Color color);
+    public void setBackground(Color color);
 
-    Color getBackground();
+    public Color getBackground();
 
-    List<float[]> getTriangles();
+    public List<float[]> getTriangles();
 
-    void setTriangles(List<float[]> triangles);
+    public void setTriangles(List<float[]> triangles);
 
-    void makeShape();
+    public void makeShape();
 }

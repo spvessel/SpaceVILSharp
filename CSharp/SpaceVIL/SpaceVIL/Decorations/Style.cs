@@ -1872,7 +1872,8 @@ namespace SpaceVIL.Decorations
             // addressline
             Style addressline_style = GetTextEditStyle();
             addressline_style.Font = DefaultsService.GetDefaultFont(12);
-            addressline_style.SetForeground(210, 210, 210);
+            addressline_style.GetInnerStyle("text").Font = DefaultsService.GetDefaultFont(12);
+            addressline_style.GetInnerStyle("text").SetForeground(210, 210, 210);
             addressline_style.SetBackground(50, 50, 50);
             addressline_style.Height = 24;
             addressline_style.SetMargin(0, 5, 0, 0);
@@ -1880,7 +1881,8 @@ namespace SpaceVIL.Decorations
             // filenameline
             Style filenameline_style = GetTextEditStyle();
             filenameline_style.Font = DefaultsService.GetDefaultFont(12);
-            filenameline_style.SetForeground(210, 210, 210);
+            filenameline_style.GetInnerStyle("text").Font = DefaultsService.GetDefaultFont(12);
+            filenameline_style.GetInnerStyle("text").SetForeground(210, 210, 210);
             filenameline_style.SetBackground(50, 50, 50);
             filenameline_style.Height = 24;
             filenameline_style.SetMargin(0, 2, 0, 0);

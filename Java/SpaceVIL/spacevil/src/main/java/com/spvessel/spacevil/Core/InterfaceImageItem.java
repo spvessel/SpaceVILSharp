@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 public interface InterfaceImageItem {
-    BufferedImage getImage();
-    int getImageWidth();
-    int getImageHeight();
-    boolean isColorOverlay();
-    Color getColorOverlay();
-    float getRotationAngle();
-    RectangleBounds getRectangleBounds();
+    public BufferedImage getImage();
+    public int getImageWidth();
+    public int getImageHeight();
+    public boolean isColorOverlay();
+    public Color getColorOverlay();
+    public float getRotationAngle();
+    public RectangleBounds getRectangleBounds();
 }

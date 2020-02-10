@@ -1,5 +1,5 @@
 package com.spvessel.spacevil.Core;
 
 public interface InterfaceKeyMethodState {
-    void execute(InterfaceItem sender, KeyArgs args);
+    public void execute(InterfaceItem sender, KeyArgs args);
 }

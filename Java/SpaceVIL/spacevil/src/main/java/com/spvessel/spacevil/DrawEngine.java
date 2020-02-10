@@ -538,14 +538,15 @@ final class DrawEngine {
         _fboBlur.clear();
         _renderProcessor.clearResources();
         glDeleteVertexArrays(glwHandler.gVAO);
-        glwHandler.clearEventsCallbacks();
-        glwHandler.destroy();
 
         // free ogl
         while (!oglLine.isEmpty()) {
             oglLine.get(0).free();
             oglLine.remove(0);
         }
+
+        glwHandler.clearEventsCallbacks();
+        glwHandler.destroy();
     }
 
     void render() {

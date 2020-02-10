@@ -525,14 +525,15 @@ namespace SpaceVIL
             _fboBlur.Clear();
             _renderProcessor.ClearResources();
             glDeleteVertexArrays(1, GLWHandler.GVAO);
-            GLWHandler.ClearEventsCallbacks();
-            GLWHandler.Destroy();
 
             while (!(oglLine.Count == 0))
             {
                 oglLine[0].Free();
                 oglLine.RemoveAt(0);
             }
+            
+            GLWHandler.ClearEventsCallbacks();
+            GLWHandler.Destroy();
         }
 
         internal void Render()

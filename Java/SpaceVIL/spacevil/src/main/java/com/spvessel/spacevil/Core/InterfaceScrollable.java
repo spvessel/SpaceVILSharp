@@ -1,7 +1,7 @@
 package com.spvessel.spacevil.Core;
 
-interface InterfaceScrollable {
-    void invokeScrollUp(MouseArgs args);
+public interface InterfaceScrollable {
+    public void invokeScrollUp(MouseArgs args);
 
-    void invokeScrollDown(MouseArgs args);
+    public void invokeScrollDown(MouseArgs args);
 }

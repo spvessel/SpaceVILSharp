@@ -2,31 +2,31 @@ package com.spvessel.spacevil.Core;
 
 public interface InterfaceSize {
 
-    void setSize(int width, int height);
+    public void setSize(int width, int height);
 
-    Size getSize();
+    public Size getSize();
 
-    void setMinWidth(int width);
+    public void setMinWidth(int width);
 
-    void setWidth(int width);
+    public void setWidth(int width);
 
-    void setMaxWidth(int width);
+    public void setMaxWidth(int width);
 
-    int getMinWidth();
+    public int getMinWidth();
 
-    int getWidth();
+    public int getWidth();
 
-    int getMaxWidth();
+    public int getMaxWidth();
 
-    void setMinHeight(int height);
+    public void setMinHeight(int height);
 
-    void setHeight(int height);
+    public void setHeight(int height);
 
-    void setMaxHeight(int height);
+    public void setMaxHeight(int height);
 
-    int getMinHeight();
+    public int getMinHeight();
 
-    int getHeight();
+    public int getHeight();
 
-    int getMaxHeight();
+    public int getMaxHeight();
 }

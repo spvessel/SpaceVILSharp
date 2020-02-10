@@ -2,10 +2,10 @@ package com.spvessel.spacevil.Core;
 
 import com.spvessel.spacevil.CoreWindow;
 
-interface InterfacePopUp {
-    int getTimeOut();
+public interface InterfacePopUp {
+    public int getTimeOut();
 
-    void setTimeOut(int milliseconds);
+    public void setTimeOut(int milliseconds);
 
-    void execute(CoreWindow wnd, String message);
+    public void execute(CoreWindow wnd, String message);
 }

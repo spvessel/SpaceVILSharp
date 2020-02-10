@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public interface InterfaceTextContainer {
 
-    InterfaceTextImage getTexture();
+    public InterfaceTextImage getTexture();
 
-    Color getForeground();
+    public Color getForeground();
 }

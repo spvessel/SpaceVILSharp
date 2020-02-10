@@ -1917,7 +1917,8 @@ public class Style implements Cloneable {
         // addressline
         Style addressline_style = getTextEditStyle();
         addressline_style.font = DefaultsService.getDefaultFont(12);
-        addressline_style.setForeground(210, 210, 210);
+        addressline_style.getInnerStyle("text").font = DefaultsService.getDefaultFont(12);
+        addressline_style.getInnerStyle("text").setForeground(210, 210, 210);
         addressline_style.setBackground(50, 50, 50);
         addressline_style.height = 24;
         addressline_style.setMargin(0, 5, 0, 0);
@@ -1925,7 +1926,8 @@ public class Style implements Cloneable {
         // filenameline
         Style filenameline_style = getTextEditStyle();
         filenameline_style.font = DefaultsService.getDefaultFont(12);
-        filenameline_style.setForeground(210, 210, 210);
+        filenameline_style.getInnerStyle("text").font = DefaultsService.getDefaultFont(12);
+        filenameline_style.getInnerStyle("text").setForeground(210, 210, 210);
         filenameline_style.setBackground(50, 50, 50);
         filenameline_style.height = 24;
         filenameline_style.setMargin(0, 2, 0, 0);

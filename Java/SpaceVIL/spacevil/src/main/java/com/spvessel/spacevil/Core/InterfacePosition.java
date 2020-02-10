@@ -2,11 +2,11 @@ package com.spvessel.spacevil.Core;
 
 public interface InterfacePosition {
 
-    void setX(int x);
+    public void setX(int x);
 
-    int getX();
+    public int getX();
 
-    void setY(int y);
+    public void setY(int y);
 
-    int getY();
+    public int getY();
 }

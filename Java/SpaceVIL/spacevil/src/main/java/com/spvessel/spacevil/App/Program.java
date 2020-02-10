@@ -5,6 +5,8 @@ import com.spvessel.spacevil.View.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Common.DefaultsService;
@@ -46,7 +48,7 @@ public class Program {
 
         //        SettingsTest st = new SettingsTest();
         ImageTest im = new ImageTest();
-        //        FlowTest ft = new FlowTest();
+               FlowTest ft = new FlowTest();
         LayoutsTest lt = new LayoutsTest();
         //    ComplexTest ct = new ComplexTest();
         InputTest it = new InputTest();
@@ -54,6 +56,7 @@ public class Program {
         // Containers con = new Containers();
         //        SideAreaTest sat = new SideAreaTest();
         // DPIAnalysis dpi = new DPIAnalysis();
+        OpenGLTest oglt = new OpenGLTest();
 
         // PerformanceTest pt = new PerformanceTest();
 
@@ -71,7 +74,11 @@ public class Program {
         // WindowManager.enableVSync(0);
         // WindowManager.setRenderType(RenderType.ALWAYS);
 
-        WindowManager.startWith(mw
+        Calendar tmpDate = Calendar.getInstance();
+        System.out.println(new SimpleDateFormat("MMMM").format(tmpDate.getTime()) + " " + tmpDate.get(Calendar.YEAR));
+
+        WindowManager.startWith(
+            mw
         //, mw2
         // st
         // im

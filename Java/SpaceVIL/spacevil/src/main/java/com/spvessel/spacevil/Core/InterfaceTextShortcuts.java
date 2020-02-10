@@ -1,15 +1,15 @@
 package com.spvessel.spacevil.Core;
 
 public interface InterfaceTextShortcuts {
-    void pasteText(String pasteStr);
+    public void pasteText(String pasteStr);
 
-    String getSelectedText();
+    public String getSelectedText();
 
-    String cutText();
+    public String cutText();
 
-    void undo();
+    public void undo();
 
-    void redo();
+    public void redo();
 
-    void selectAll();
+    public void selectAll();
 }

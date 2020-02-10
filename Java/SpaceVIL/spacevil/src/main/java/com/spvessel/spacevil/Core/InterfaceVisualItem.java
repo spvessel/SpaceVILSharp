@@ -16,131 +16,131 @@ import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 public interface InterfaceVisualItem extends InterfaceBaseItem {
-    String getToolTip();
+    public String getToolTip();
 
-    void setToolTip(String text);
+    public void setToolTip(String text);
 
-    Spacing getSpacing();
+    public Spacing getSpacing();
 
-    void setSpacing(Spacing spacing);
+    public void setSpacing(Spacing spacing);
 
-    void setSpacing(int horizontal, int vertical);
+    public void setSpacing(int horizontal, int vertical);
 
-    Indents getPadding();
+    public Indents getPadding();
 
-    void setPadding(Indents padding);
+    public void setPadding(Indents padding);
 
-    void setPadding(int left, int top, int right, int bottom);
+    public void setPadding(int left, int top, int right, int bottom);
 
-    void setBorder(Border border);
+    public void setBorder(Border border);
 
-    void setBorderFill(Color fill);
+    public void setBorderFill(Color fill);
 
-    Color getBorderFill();
+    public Color getBorderFill();
 
-    void setBorderFill(int r, int g, int b);
+    public void setBorderFill(int r, int g, int b);
 
-    void setBorderFill(int r, int g, int b, int a);
+    public void setBorderFill(int r, int g, int b, int a);
 
-    void setBorderFill(float r, float g, float b);
+    public void setBorderFill(float r, float g, float b);
 
-    void setBorderFill(float r, float g, float b, float a);
+    public void setBorderFill(float r, float g, float b, float a);
 
-    void setBorderRadius(CornerRadius radius);
+    public void setBorderRadius(CornerRadius radius);
 
-    CornerRadius getBorderRadius();
+    public CornerRadius getBorderRadius();
 
-    void setBorderThickness(int thickness);
+    public void setBorderThickness(int thickness);
 
-    int getBorderThickness();
+    public int getBorderThickness();
 
-    void setBackground(int r, int g, int b);
+    public void setBackground(int r, int g, int b);
 
-    void setBackground(int r, int g, int b, int a);
+    public void setBackground(int r, int g, int b, int a);
 
-    void setBackground(float r, float g, float b);
+    public void setBackground(float r, float g, float b);
 
-    void setBackground(float r, float g, float b, float a);
+    public void setBackground(float r, float g, float b, float a);
 
-    void setMinSize(int width, int height);
+    public void setMinSize(int width, int height);
 
-    int[] getMinSize();
+    public int[] getMinSize();
 
-    void setMaxSize(int width, int height);
+    public void setMaxSize(int width, int height);
 
-    int[] getMaxSize();
+    public int[] getMaxSize();
 
-    void setAlignment(List<ItemAlignment> alignment);
+    public void setAlignment(List<ItemAlignment> alignment);
 
-    void setSizePolicy(SizePolicy width, SizePolicy height);
+    public void setSizePolicy(SizePolicy width, SizePolicy height);
 
-    void setShadowExtension(int wExtension, int hExtension);
+    public void setShadowExtension(int wExtension, int hExtension);
 
-    void addItemState(ItemStateType type, ItemState state);
+    public void addItemState(ItemStateType type, ItemState state);
 
-    void removeItemState(ItemStateType type);
+    public void removeItemState(ItemStateType type);
 
-    void removeAllItemStates();
+    public void removeAllItemStates();
 
-    ItemState getState(ItemStateType type);
+    public ItemState getState(ItemStateType type);
 
-    void updateState();
+    public void updateState();
 
-    void insertItem(InterfaceBaseItem item, int index);
+    public void insertItem(InterfaceBaseItem item, int index);
 
-    void addItem(InterfaceBaseItem item);
+    public void addItem(InterfaceBaseItem item);
 
-    boolean isPassEvents();
+    public boolean isPassEvents();
 
-    boolean isPassEvents(InputEventType e);
+    public boolean isPassEvents(InputEventType e);
 
-    List<InputEventType> getPassEvents();
+    public List<InputEventType> getPassEvents();
 
-    List<InputEventType> getNonPassEvents();
+    public List<InputEventType> getNonPassEvents();
 
-    void setPassEvents(boolean value);
+    public void setPassEvents(boolean value);
 
-    void setPassEvents(boolean value, InputEventType e);
+    public void setPassEvents(boolean value, InputEventType e);
 
-    void setPassEvents(boolean value, List<InputEventType> events_set);
+    public void setPassEvents(boolean value, List<InputEventType> events_set);
 
-    void setPassEvents(boolean value, InputEventType... events_set);
+    public void setPassEvents(boolean value, InputEventType... events_set);
 
-    boolean isDisabled();
+    public boolean isDisabled();
 
-    void setDisabled(boolean value);
+    public void setDisabled(boolean value);
 
-    boolean isMouseHover();
+    public boolean isMouseHover();
 
-    void setMouseHover(boolean value);
+    public void setMouseHover(boolean value);
 
-    boolean isMousePressed();
+    public boolean isMousePressed();
 
-    void setMousePressed(boolean value);
+    public void setMousePressed(boolean value);
 
-    boolean isFocused();
+    public boolean isFocused();
 
-    void setFocused(boolean value);
+    public void setFocused(boolean value);
 
-    boolean getHoverVerification(float xpos, float ypos);
+    public boolean getHoverVerification(float xpos, float ypos);
 
-    List<InterfaceBaseItem> getItems();
+    public List<InterfaceBaseItem> getItems();
 
-    boolean removeItem(InterfaceBaseItem item);
+    public boolean removeItem(InterfaceBaseItem item);
 
-    void clear();
+    public void clear();
 
-    void addEventListener(GeometryEventType type, InterfaceBaseItem listener);
+    public void addEventListener(GeometryEventType type, InterfaceBaseItem listener);
 
-    void removeEventListener(GeometryEventType type, InterfaceBaseItem listener);
+    public void removeEventListener(GeometryEventType type, InterfaceBaseItem listener);
 
-    ItemStateType getCurrentStateType();
+    public ItemStateType getCurrentStateType();
 
-    void setState(ItemStateType state);
+    public void setState(ItemStateType state);
 
-    void setContent(List<InterfaceBaseItem> content);
+    public void setContent(List<InterfaceBaseItem> content);
 
-    CustomFigure isCustomFigure();
+    public CustomFigure isCustomFigure();
 
-    void setCustomFigure(CustomFigure figure);
+    public void setCustomFigure(CustomFigure figure);
 }

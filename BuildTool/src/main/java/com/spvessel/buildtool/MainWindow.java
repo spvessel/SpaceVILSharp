@@ -28,6 +28,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -702,6 +706,7 @@ public class MainWindow extends ActiveWindow {
                 if (sCurrentLine.contains("private static String _version = ")) {
                     int ind = sCurrentLine.indexOf("=");
                     str = sCurrentLine.substring(0, ind + 2) + getFullVersion();
+                    System.out.println(str);
                 }
                 outsb.append(str);
                 outsb.append("\n");
@@ -713,6 +718,7 @@ public class MainWindow extends ActiveWindow {
             writer.write(outsb.toString());
             writer.flush();
             writer.close();
+            // System.out.println(outsb);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -791,8 +797,12 @@ public class MainWindow extends ActiveWindow {
         sb.append("-");
         sb.append(phase.getText());
         sb.append(" - ");
-        sb.append(month.getText());
-        sb.append(" 2019\";");
+        Calendar tmpDate = Calendar.getInstance();
+        // String month = new SimpleDateFormat("MMMM").format(tmpDate.getTime()).toString();
+        // sb.append(month); 
+        sb.append(getMonthByIndex(tmpDate.get(Calendar.MONTH) + 1)); 
+        sb.append(" ");
+        sb.append(tmpDate.get(Calendar.YEAR) + "\";");
         return sb.toString();
     }
 

@@ -1,15 +1,15 @@
 package com.spvessel.spacevil.Core;
 
 public interface InterfaceFloating {
-    void show();
+    public void show();
 
-    void show(InterfaceItem sender, MouseArgs args);
+    public void show(InterfaceItem sender, MouseArgs args);
 
-    void hide();
+    public void hide();
 
-    void hide(MouseArgs args);
+    public void hide(MouseArgs args);
 
-    boolean isOutsideClickClosable();
+    public boolean isOutsideClickClosable();
 
-    void setOutsideClickClosable(boolean value);
+    public void setOutsideClickClosable(boolean value);
 }

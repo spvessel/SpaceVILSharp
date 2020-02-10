@@ -4,15 +4,15 @@ import java.awt.Color;
 import java.util.List;
 
 public interface InterfaceLine extends InterfacePosition {
-    void setLineThickness(float thickness);
+    public void setLineThickness(float thickness);
 
-    float getLineThickness();
+    public float getLineThickness();
 
-    void setLineColor(Color color);
+    public void setLineColor(Color color);
 
-    Color getLineColor();
+    public Color getLineColor();
 
-    List<float[]> getPoints();
+    public List<float[]> getPoints();
 
-    void setPointsCoord(List<float[]> coord);
+    public void setPointsCoord(List<float[]> coord);
 }

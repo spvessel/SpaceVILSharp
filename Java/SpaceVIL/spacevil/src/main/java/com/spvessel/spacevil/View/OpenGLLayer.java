@@ -22,8 +22,8 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
 
-//import glm.mat._4.Mat4;
-//import glm.vec._3.Vec3;
+import glm.mat._4.Mat4;
+import glm.vec._3.Vec3;
 
 public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, InterfaceDraggable {
 
@@ -52,10 +52,10 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
 
         eventMouseDrag.add((sender, args) -> {
             float xRot = (float) (args.position.getX() - _ptr.getX()) / 2;
-//            _model = _model.rotate(radians(xRot), new Vec3(0.0f, 1.0f, 0.0f));
+           _model = _model.rotate(radians(xRot), new Vec3(0.0f, 1.0f, 0.0f));
 
             float yRot = (float) (args.position.getY() - _ptr.getY()) / 2;
-//            _model = _model.rotate(radians(yRot), new Vec3(1.0f, 0.0f, 0.0f));
+           _model = _model.rotate(radians(yRot), new Vec3(1.0f, 0.0f, 0.0f));
 
             _ptr.setPosition(args.position.getX(), args.position.getY());
         });
@@ -94,9 +94,9 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
     private int _depthrenderbuffer;
     private int _VBOlenght = 0;
     private Color _color;
-//    private Mat4 _projection;
-//    private Mat4 _view;
-//    private Mat4 _model;
+   private Mat4 _projection;
+   private Mat4 _view;
+   private Mat4 _model;
     private float _xCamera = 0;
     private float _yCamera = 0;
     private float _zCamera = 3;
@@ -125,8 +125,8 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
         genBuffers(get3DCubeVertex());
         _color = new Color(10, 162, 232);
 
-//        _projection = new Mat4().perspective(radians(45f), _aspectRatio, 0.1f, 100.0f);
-//        _model = new Mat4().identity();
+       _projection = new Mat4().perspective(radians(45f), _aspectRatio, 0.1f, 100.0f);
+       _model = new Mat4().identity();
         setCameraLookAt(_xCamera, _yCamera, _zCamera);
 
         _isInit = true;
@@ -183,15 +183,15 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
         if (!_isInit)
             return;
 
-//        _projection = new Mat4().perspective(radians(45f), _aspectRatio, 0.1f, 100.0f);
+       _projection = new Mat4().perspective(radians(45f), _aspectRatio, 0.1f, 100.0f);
     }
 
     public void restoreView() {
         _xCamera = 0;
         _yCamera = 0;
         _zCamera = 3;
-//        _projection = new Mat4().perspective(radians(45f), _aspectRatio, 0.1f, 100.0f);
-//        _model = new Mat4().identity();
+       _projection = new Mat4().perspective(radians(45f), _aspectRatio, 0.1f, 100.0f);
+       _model = new Mat4().identity();
         setCameraLookAt(_xCamera, _yCamera, _zCamera);
     }
 
@@ -218,18 +218,18 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
     }
 
     public void rotate(KeyCode code) {
-//        if (code == KeyCode.LEFT) {
-//            _model = _model.rotate(radians(1), new Vec3(0.0f, 1.0f, 0.0f));
-//        }
-//        if (code == KeyCode.RIGHT) {
-//            _model = _model.rotate(radians(-1), new Vec3(0.0f, 1.0f, 0.0f));
-//        }
-//        if (code == KeyCode.UP) {
-//            _model = _model.rotate(radians(1), new Vec3(1.0f, 0.0f, 0.0f));
-//        }
-//        if (code == KeyCode.DOWN) {
-//            _model = _model.rotate(radians(-1), new Vec3(1.0f, 0.0f, 0.0f));
-//        }
+       if (code == KeyCode.LEFT) {
+           _model = _model.rotate(radians(1), new Vec3(0.0f, 1.0f, 0.0f));
+       }
+       if (code == KeyCode.RIGHT) {
+           _model = _model.rotate(radians(-1), new Vec3(0.0f, 1.0f, 0.0f));
+       }
+       if (code == KeyCode.UP) {
+           _model = _model.rotate(radians(1), new Vec3(1.0f, 0.0f, 0.0f));
+       }
+       if (code == KeyCode.DOWN) {
+           _model = _model.rotate(radians(-1), new Vec3(1.0f, 0.0f, 0.0f));
+       }
     }
 
     private float radians(float value) {
@@ -383,9 +383,6 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
         glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT,
                 _depthrenderbuffer);
 
-        // uint[] drawBufs = new uint[] { GL_COLOR_ATTACHMENT0_EXT };
-        // glDrawBuffers(1, drawBufs);
-
         if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) != GL_FRAMEBUFFER_COMPLETE_EXT)
             System.out.println("fbo fail!");
     }
@@ -426,17 +423,17 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
         int location = glGetUniformLocation(shader, "model");
         if (location < 0)
             System.out.println("Uniform <model> not found.");
-//        glUniformMatrix4fv(location, false, toFloatBuffer(_model));
-//
-//        location = glGetUniformLocation(shader, "view");
-//        if (location < 0)
-//            System.out.println("Uniform <view> not found.");
-//        glUniformMatrix4fv(location, false, toFloatBuffer(_view));
-//
-//        location = glGetUniformLocation(shader, "projection");
-//        if (location < 0)
-//            System.out.println("Uniform <projection> not found.");
-//        glUniformMatrix4fv(location, false, toFloatBuffer(_projection));
+       glUniformMatrix4fv(location, false, toFloatBuffer(_model));
+
+       location = glGetUniformLocation(shader, "view");
+       if (location < 0)
+           System.out.println("Uniform <view> not found.");
+       glUniformMatrix4fv(location, false, toFloatBuffer(_view));
+
+       location = glGetUniformLocation(shader, "projection");
+       if (location < 0)
+           System.out.println("Uniform <projection> not found.");
+       glUniformMatrix4fv(location, false, toFloatBuffer(_projection));
     }
 
     private void sendUniformSample2D(int shader, String name) {
@@ -448,7 +445,7 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
     }
 
     private void setCameraLookAt(float x, float y, float z) {
-//        _view = new Mat4().lookAt(new Vec3(x, y, z), new Vec3(0f, 0f, 0f), new Vec3(0f, 1f, 0f));
+       _view = new Mat4().lookAt(new Vec3(x, y, z), new Vec3(0f, 0f, 0f), new Vec3(0f, 1f, 0f));
     }
 
     private List<float[]> get3DCubeVertex() {
@@ -489,11 +486,11 @@ public class OpenGLLayer extends Prototype implements InterfaceOpenGLLayer, Inte
                 new float[] { -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f }));
     }
 
-//    private FloatBuffer toFloatBuffer(Mat4 mat) {
-//        FloatBuffer bb = BufferUtils.createFloatBuffer(4 * 4);
-//        float[] array = mat.toFa_();
-//        bb.put(array);
-//        bb.rewind();
-//        return bb;
-//    }
+   private FloatBuffer toFloatBuffer(Mat4 mat) {
+       FloatBuffer bb = BufferUtils.createFloatBuffer(4 * 4);
+       float[] array = mat.toFa_();
+       bb.put(array);
+       bb.rewind();
+       return bb;
+   }
 }

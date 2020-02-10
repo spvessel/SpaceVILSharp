@@ -92,8 +92,9 @@ class TextLine extends TextItem implements InterfaceTextContainer {
         if (getFont() == null) {
             return;
         }
-        Font fontBig = new Font(getFont().getName(), getFont().getStyle(), (int) (getFont().getSize() * _screenScale));
-        //        Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
+        // Font fontBig = getFont().deriveFont(getFont().getStyle(), (int) (getFont().getSize() * _screenScale) 
+        // new Font(getFont().getName(), getFont().getStyle(), (int) (getFont().getSize() * _screenScale));
+               Font fontBig = GraphicsMathService.changeFontSize((int) (getFont().getSize() * _screenScale), getFont());
 
         _bigLetters = FontEngine.getModifyLetters(getItemText(), fontBig);
         // int[] output = FontEngine.getFontDims(fontBig);

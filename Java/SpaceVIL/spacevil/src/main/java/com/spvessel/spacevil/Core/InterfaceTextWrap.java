@@ -1,5 +1,5 @@
 package com.spvessel.spacevil.Core;
 
 public interface InterfaceTextWrap {
-    boolean isWrapText();
+    public boolean isWrapText();
 }

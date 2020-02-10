@@ -7,13 +7,12 @@ import java.util.List;
 
 public interface InterfaceBehavior{
     
-    void setAlignment(ItemAlignment... alignment);
-    List<ItemAlignment> getAlignment();
+    public void setAlignment(ItemAlignment... alignment);
+    public List<ItemAlignment> getAlignment();
 
-    void setWidthPolicy(SizePolicy policy);
-    SizePolicy getWidthPolicy();
+    public void setWidthPolicy(SizePolicy policy);
+    public SizePolicy getWidthPolicy();
 
-
-    void setHeightPolicy(SizePolicy policy);
-    SizePolicy getHeightPolicy();
+    public void setHeightPolicy(SizePolicy policy);
+    public SizePolicy getHeightPolicy();
 }

@@ -4,19 +4,19 @@ import java.awt.*;
 import java.util.List;
 
 public interface InterfacePoints {
-    void setPointThickness(float thickness);
+    public void setPointThickness(float thickness);
 
-    float getPointThickness();
+    public float getPointThickness();
 
-    void setPointColor(Color color);
+    public void setPointColor(Color color);
 
-    Color getPointColor();
+    public Color getPointColor();
 
-    void setShapePointer(List<float[]> shape);
+    public void setShapePointer(List<float[]> shape);
 
-    List<float[]> getShapePointer();
+    public List<float[]> getShapePointer();
 
-    List<float[]> getPoints();
+    public List<float[]> getPoints();
 
-    void setPointsCoord(List<float[]> coord);
+    public void setPointsCoord(List<float[]> coord);
 }

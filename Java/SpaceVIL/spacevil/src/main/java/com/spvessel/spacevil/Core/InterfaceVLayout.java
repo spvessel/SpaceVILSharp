@@ -1,5 +1,5 @@
 package com.spvessel.spacevil.Core;
 
 public interface InterfaceVLayout {
-    void updateLayout();
+    public void updateLayout();
 }

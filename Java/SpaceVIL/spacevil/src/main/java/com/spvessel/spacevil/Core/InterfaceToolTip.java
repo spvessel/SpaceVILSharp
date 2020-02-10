@@ -1,7 +1,7 @@
 package com.spvessel.spacevil.Core;
 
 public interface InterfaceToolTip {
-    int getTimeOut();
+    public int getTimeOut();
 
-    void setTimeOut(int milliseconds);
+    public void setTimeOut(int milliseconds);
 }
