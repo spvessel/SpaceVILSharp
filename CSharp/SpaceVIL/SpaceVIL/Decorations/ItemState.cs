@@ -8,8 +8,7 @@ using System.Drawing;
 namespace SpaceVIL.Decorations
 {
     /// <summary>
-    /// A class that describes state of the item and its changes according 
-    /// to state value
+    /// A class that describes state of the item and its changes according to state value.
     /// </summary>
     public class ItemState
     {
@@ -19,21 +18,25 @@ namespace SpaceVIL.Decorations
         // public string Text = null;
         // public string ImageUri = null;
         // public bool IsVisible = true;
+        /// <summary>
+        /// Getting border of the item of current state as SpaceVIL.Decorations.Border.
+        /// </summary>
         public Border Border = new Border();
 
-        public CustomFigure Shape = null;
+        /// <summary>
+        /// Getting shape of the item of current state as SpaceVIL.Decorations.Figure.
+        /// </summary>
+        public Figure Shape = null;
 
         /// <summary>
         /// Constructs an empty ItemState
         /// </summary>
-        public ItemState()
-        {
-
-        }
+        public ItemState() { }
 
         /// <summary>
-        /// Constructs an ItemState with background color
+        /// Constructs an ItemState with the specified background color.
         /// </summary>
+        /// <param name="background">A color of item as System.Drawing.Color.</param>
         public ItemState(Color background)
         {
             this.Background = background;

@@ -42,8 +42,8 @@ public class AlbumSideList extends SideArea {
         _name.setHeight(70);
 
         _albumList.setSelectionVisible(false);
-        _albumList.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        _albumList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
+        _albumList.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
+        _albumList.setHScrollBarPolicy(VisibilityPolicy.NEVER);
         _albumList.setMargin(10, 100, 10, 50);
         _albumList.vScrollBar.setStyle(Style.getSimpleVerticalScrollBarStyle());
 

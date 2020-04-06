@@ -10,12 +10,18 @@ using System.Threading;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// Grid is a class that represents a grid type container. 
+    /// Each element is in a specific grid cell. 
+    /// <para/> Cells size based on items margins, sizes and size policies.
+    /// <para/> Grid cannot receive any events, so Grid is always in the ItemState.Base state.
+    /// </summary>
     public class Grid : Prototype, IFreeLayout
     {
         static int count = 0;
 
         /// <summary>
-        /// Constructs a Grid
+        /// Drfault Grid constructor.
         /// </summary>
         private Grid()
         {
@@ -26,8 +32,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Constructs a Grid with the given rows and columns
+        /// Constructs a Grid with the given number of rows and number of columns.
         /// </summary>
+        /// <param name="rows">Number of rows.</param>
+        /// <param name="columns">Number of columns.</param>
         public Grid(int rows, int columns) : this()
         {
             _rowCount = rows;
@@ -48,6 +56,11 @@ namespace SpaceVIL
                 }
             }
         }
+        /// <summary>
+        /// Setting a new grid format with the given number of rows and number of columns.
+        /// </summary>
+        /// <param name="rows">Number of rows.</param>
+        /// <param name="columns">Number of columns.</param>
         public void SetFormat(int rows, int columns)
         {
             if (rows == _rowCount && columns == _columnCount)
@@ -82,14 +95,19 @@ namespace SpaceVIL
         private int _rowCount = 1;
 
         /// <summary>
-        /// Set count of the rows
+        /// Setting a new count of the rows.
         /// </summary>
-        public void SetRowCount(int capacity)
+        /// <param name="value">Number of rows.</param>
+        public void SetRowCount(int value)
         {
-            if (capacity != _rowCount)
-                _rowCount = capacity;
+            if (value != _rowCount)
+                _rowCount = value;
             RearrangeCells();
         }
+        /// <summary>
+        /// Getting current rows count in grid.
+        /// </summary>
+        /// <returns>Current rows count.</returns>
         public int GetRowCount()
         {
             return _rowCount;
@@ -97,23 +115,31 @@ namespace SpaceVIL
         private int _columnCount = 1;
 
         /// <summary>
-        /// Set count of the columns
+        /// Setting a new count of the columns.
         /// </summary>
-        public void SetColumnCount(int capacity)
+        /// <param name="value">Number of columns.</param>
+        public void SetColumnCount(int value)
         {
-            if (capacity != _columnCount)
-                _columnCount = capacity;
+            if (value != _columnCount)
+                _columnCount = value;
             //Need to InitCells REFACTOR!
             RearrangeCells();
         }
+        /// <summary>
+        /// Getting current columns  count in grid.
+        /// </summary>
+        /// <returns>Current columns count.</returns>
         public int GetColumnCount()
         {
             return _columnCount;
         }
 
         /// <summary>
-        /// Returns the cell by row and column number
+        /// Returns the cell by row and column number.
         /// </summary>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <returns>Cell of the Grid as SpaceVIL.Cell.</returns>
         public Cell GetCell(int row, int column)
         {
             Cell cell = null;
@@ -129,12 +155,20 @@ namespace SpaceVIL
             return cell;
         }
 
-        /// <returns> all cells list </returns>
+        /// <summary>
+        /// Getting all cells as list.
+        /// </summary>
+        /// <returns>Cells as List&lt;SpaceVIL.Core.Cell&gt;</returns>
         public List<Cell> GetAllCells()
         {
             return _cells;
         }
-
+        /// <summary>
+        /// Removing item from the Grid. if the removal was successful Cell becomes free.
+        /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>True: if the removal was successful. 
+        /// False: if the removal was unsuccessful.</returns>
         public override bool RemoveItem(IBaseItem item)
         {
             bool baseBool = base.RemoveItem(item);
@@ -143,56 +177,54 @@ namespace SpaceVIL
                 if (link.GetItem() == item)
                     link.SetItem(null);
             }
-            // UpdateLayout();
             return baseBool;
         }
-
-        public void RemoveItem(int row, int column)
+        /// <summary>
+        /// Removing item from the Grid by number of row and number of column. 
+        /// if the removal was successful Cell becomes free.
+        /// </summary>
+        /// <param name="row">Index of row.</param>
+        /// <param name="column">Index of column.</param>
+        public bool RemoveItem(int row, int column)
         {
-            if (row == _rowCount || column == _columnCount)
-                return;
+            if (row >= _rowCount || column >= _columnCount)
+                return false;
 
             IBaseItem ibi = _cells[column + row * _columnCount].GetItem();
             if (ibi != null)
             {
-                base.RemoveItem(ibi);
-                _cells[column + row * _columnCount].SetItem(null);
+                if (base.RemoveItem(ibi))
+                {
+                    _cells[column + row * _columnCount].SetItem(null);
+                    return true;
+                }
             }
+            return false;
         }
-
-        private Object Locker = new Object();
+        /// <summary>
+        /// Remove all items in the Grid.
+        /// </summary>
         public override void Clear()
         {
-            Monitor.Enter(Locker);
-            try
+            List<IBaseItem> list = GetItems();
+            while (list.Count > 0)
             {
-                List<IBaseItem> list = GetItems();
-                while (list.Count > 0)
-                    RemoveItem(list.First());
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Method - Clear");
-                Console.WriteLine(ex.StackTrace);
-            }
-            finally
-            {
-                Monitor.Exit(Locker);
+                RemoveItem(list[0]);
+                list.RemoveAt(0);
             }
         }
 
-        //overrides
         protected internal override bool GetHoverVerification(float xpos, float ypos)
         {
             return false;
         }
 
         /// <summary>
-        /// Add item to the Grid
+        /// Adding item to the Grid. 
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
-            //ignore if it is out of space, add in free cell, attach row and collumn numbers
             foreach (Cell cell in _cells)
             {
                 if (cell.GetItem() == null)
@@ -206,21 +238,27 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Insert item to the Grid by row and column number
+        /// Inserting item into the Cell by row and column index.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <param name="row">Row index.</param>
+        /// <param name="column">Column index.</param>
         public void InsertItem(IBaseItem item, int row, int column)
         {
             if (row == _rowCount || column == _columnCount)
                 return;
             base.AddItem(item);
-            //_cells[row + column * _rowCount].SetItem(item);
 
             RemoveItem(row, column);
 
             _cells[column + row * _columnCount].SetItem(item);
             UpdateLayout();
         }
-
+        /// <summary>
+        /// Inserting item into the Cell by cell index.
+        /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <param name="index">Cell index.</param>
         public override void InsertItem(IBaseItem item, int index)
         {
             if (_columnCount == 0)
@@ -232,17 +270,20 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set width of the Grid
+        /// Setting Grid width. If the value is greater/less than the maximum/minimum 
+        /// value of the width, then the width becomes equal to the maximum/minimum value.
         /// </summary>
+        /// <param name="width">Width of the Grid.</param>
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
             UpdateLayout();
         }
-
         /// <summary>
-        /// Set height of the Grid
+        /// Setting Grid height. If the value is greater/less than the maximum/minimum 
+        /// value of the height, then the height becomes equal to the maximum/minimum value.
         /// </summary>
+        /// <param name="height">Height of the Grid.</param>
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
@@ -250,24 +291,25 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set X position of the Grid
+        /// Setting X coordinate of the left-top corner of the Grid.
         /// </summary>
-        public override void SetX(int _x)
+        /// <param name="x">X position of the left-top corner.</param>
+        public override void SetX(int x)
         {
-            base.SetX(_x);
+            base.SetX(x);
             UpdateLayout();
         }
 
         /// <summary>
-        /// Set Y position of the Grid
+        /// Setting Y coordinate of the left-top corner of the Grid.
         /// </summary>
-        public override void SetY(int _y)
+        /// <param name="y">Y position of the left-top corner.</param>
+        public override void SetY(int y)
         {
-            base.SetY(_y);
+            base.SetY(y);
             UpdateLayout();
         }
 
-        //TMP
         private Int32[] colWidth;
         private Int32[] rowHeight;
         internal Int32[] GetColWidth()
@@ -281,10 +323,8 @@ namespace SpaceVIL
 
         private bool _isUpdating = false;
         /// <summary>
-        /// Update all children and grid sizes and positions
-        /// according to confines
+        /// Updating all children positions (implementation of SpaceVIL.Core.IFreeLayout).
         /// </summary>
-        //Update Layout
         public void UpdateLayout()
         {
             // Console.WriteLine("grid update");

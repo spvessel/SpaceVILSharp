@@ -458,7 +458,7 @@ namespace SpaceVIL.Common
 
             if (props.HasFlag(LogProps.IsFocused))
             {
-                outText.AppendLine("IsFocused: " + window.IsFocused);
+                outText.AppendLine("IsFocused: " + window.IsFocused());
                 outText.AppendLine();
             }
 

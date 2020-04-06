@@ -14,7 +14,7 @@ import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Core.Size;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
-import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Spacing;
@@ -22,7 +22,7 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.ItemRule;
+import com.spvessel.spacevil.Flags.ItemHoverRule;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
@@ -823,25 +823,25 @@ abstract public class Prototype implements InterfaceBaseItem {
     /**
      * Is Prototype has CustomFigure shape, return it
      */
-    public CustomFigure isCustomFigure() {
+    public Figure isCustomFigure() {
         return _core.isCustomFigure();
     }
 
     /**
      * Sets shape of the Prototype as CustomFigure
      */
-    public void setCustomFigure(CustomFigure figure) {
+    public void setCustomFigure(Figure figure) {
         _core.setCustomFigure(figure);
     }
 
     /**
      * Hover rule of the Prototype
      */
-    public ItemRule getHoverRule() {
+    public ItemHoverRule getHoverRule() {
         return _core.HoverRule;
     }
 
-    public void setHoverRule(ItemRule rule) {
+    public void setHoverRule(ItemHoverRule rule) {
         _core.HoverRule = rule;
     }
 

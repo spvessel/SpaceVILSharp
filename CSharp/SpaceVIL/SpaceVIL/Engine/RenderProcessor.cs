@@ -209,7 +209,7 @@ namespace SpaceVIL
 
             shader.UseShader();
             VramTexture store = new VramTexture();
-            store.GenBuffers(0, printer.GetWidth() / scale.GetX(), 0, printer.GetHeight() / scale.GetY(), true);
+            store.GenBuffers(0, printer.GetWidth() / scale.GetXScale(), 0, printer.GetHeight() / scale.GetYScale(), true);
             store.GenTexture(printer.GetWidth(), printer.GetHeight(), printer.GetBytes());
             TextStorage.AddResource(item, store);
 

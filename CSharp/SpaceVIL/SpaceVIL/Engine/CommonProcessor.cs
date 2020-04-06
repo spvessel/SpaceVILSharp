@@ -27,9 +27,9 @@ namespace SpaceVIL
         internal int XGlobal = 0;
         internal int YGlobal = 0;
         internal bool InputLocker = false;
-        internal Pointer PtrPress = new Pointer();
-        internal Pointer PtrRelease = new Pointer();
-        internal Pointer PtrClick = new Pointer();
+        internal Position PtrPress = new Position();
+        internal Position PtrRelease = new Position();
+        internal Position PtrClick = new Position();
         internal InputDeviceEvent Events;
 
         internal CommonProcessor()

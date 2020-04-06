@@ -1039,20 +1039,20 @@ class TextBlock extends Prototype implements InterfaceTextEditable, InterfaceDra
     }
 
     @Override
-    public void setX(int _x) {
-        if (getX() == _x) {
+    public void setX(int x) {
+        if (getX() == x) {
             return;
         }
-        super.setX(_x);
+        super.setX(x);
         updateLayout();
     }
 
     @Override
-    public void setY(int _y) {
-        if (getY() == _y) {
+    public void setY(int y) {
+        if (getY() == y) {
             return;
         }
-        super.setY(_y);
+        super.setY(y);
         updateLayout();
     }
 

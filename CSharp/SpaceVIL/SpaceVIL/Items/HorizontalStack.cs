@@ -1,30 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// HorizontalStack is a class that represents a line type container (horizontal version). 
+    /// HorizontalStack groups items one after another using content alignment, margins, paddings, 
+    /// sizes and size policies.
+    /// HorizontalStack implements SpaceVIL.Core.IHLayout.
+    /// <para/> By default ability to get focus is disabled.
+    /// <para/> HorizontalStack cannot receive any events, 
+    /// so HorizontalStack is always in the ItemState.Base state.
+    /// </summary>
     public class HorizontalStack : Prototype, IHLayout
     {
         static int count = 0;
 
         private ItemAlignment _contentAlignment = ItemAlignment.Left;
-
+        /// <summary>
+        /// Setting content alignment within HorizontalStack area. Default: ItemAlignment.Left.
+        /// <para/> Supports only: ItemAlignment.Left, ItemAlignment.HCenter, ItemAlignment.Right.
+        /// </summary>
+        /// <param name="alignment">Content alignment as SpaceVIL.Core.ItemAlignment.</param>
         public void SetContentAlignment(ItemAlignment alignment)
         {
-            if (alignment == ItemAlignment.Top || alignment == ItemAlignment.HCenter || alignment == ItemAlignment.Right)
+            if (alignment == ItemAlignment.Left || alignment == ItemAlignment.HCenter || alignment == ItemAlignment.Right)
                 _contentAlignment = alignment;
         }
-
+        /// <summary>
+        /// Getting current content alignment.
+        /// <para/> Can be: ItemAlignment.Left, ItemAlignment.HCenter, ItemAlignment.Right.
+        /// </summary>
+        /// <returns>Content alignment as SpaceVIL.Core.ItemAlignment.</returns>
         public ItemAlignment GetContentAlignment()
         {
             return _contentAlignment;
         }
 
         /// <summary>
-        /// Constructs a HorizontalStack
+        /// Default HorizontalStack constructor.
         /// </summary>
         public HorizontalStack()
         {
@@ -34,27 +49,38 @@ namespace SpaceVIL
             IsFocusable = false;
         }
 
-        //overrides
         protected internal override bool GetHoverVerification(float xpos, float ypos)
         {
             return false;
         }
 
         /// <summary>
-        /// Add item to the HorizontalStack
+        /// Adding item to the HorizontalStack. 
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
             base.AddItem(item);
             UpdateLayout();
         }
-
+        /// <summary>
+        /// Inserting item to the HorizontalStack container. 
+        /// If the count of container elements is less than the index, 
+        /// then the element is added to the end of the list.
+        /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <param name="index">Index of insertion.</param>
         public override void InsertItem(IBaseItem item, int index)
         {
             base.InsertItem(item, index);
             UpdateLayout();
         }
-
+        /// <summary>
+        /// Removing the specified item from the HorizontalStack container.
+        /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>True: if the removal was successful. 
+        /// False: if the removal was unsuccessful.</returns>
         public override bool RemoveItem(IBaseItem item)
         {
             bool result = base.RemoveItem(item);
@@ -64,8 +90,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set width of the HorizontalStack
+        /// Setting HorizontalStack width. If the value is greater/less than the maximum/minimum 
+        /// value of the width, then the width becomes equal to the maximum/minimum value.
         /// </summary>
+        /// <param name="width">Width of the HorizontalStack.</param>
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
@@ -73,17 +101,17 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set X position of the HorizontalStack
+        /// Setting X coordinate of the left-top corner of the HorizontalStack.
         /// </summary>
-        public override void SetX(int _x)
+        /// <param name="x">X position of the left-top corner.</param>
+        public override void SetX(int x)
         {
-            base.SetX(_x);
+            base.SetX(x);
             UpdateLayout();
         }
 
         /// <summary>
-        /// Update all children and HorizontalStack sizes and positions
-        /// according to confines
+        /// Updating all children positions (implementation of SpaceVIL.Core.IFreeLayout).
         /// </summary>
         public void UpdateLayout()
         {

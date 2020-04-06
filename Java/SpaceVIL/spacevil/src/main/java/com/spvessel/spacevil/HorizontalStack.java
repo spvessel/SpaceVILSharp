@@ -78,8 +78,8 @@ public class HorizontalStack extends Prototype implements InterfaceHLayout {
      * Set X position of the HorizontalStack
      */
     @Override
-    public void setX(int _x) {
-        super.setX(_x);
+    public void setX(int x) {
+        super.setX(x);
         updateLayout();
     }
 

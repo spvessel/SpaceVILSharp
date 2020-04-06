@@ -15,10 +15,7 @@ public class Indicator extends Prototype {
 
     private CustomToggle _marker;
 
-    /**
-     * @return IndicationMarker ButtonToggle type for styling
-     */
-    public ButtonToggle getIndicatorMarker() {
+    ButtonToggle getIndicatorMarker() {
         return _marker;
     }
 

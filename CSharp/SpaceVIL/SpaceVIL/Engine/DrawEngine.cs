@@ -5,7 +5,7 @@ using Glfw3;
 using System.Threading;
 using System.Drawing;
 using SpaceVIL.Core;
-using Pointer = SpaceVIL.Core.Pointer;
+using Position = SpaceVIL.Core.Position;
 using SpaceVIL.Common;
 using static OpenGL.OpenGLConstants;
 using static OpenGL.OpenGLWrapper;
@@ -45,10 +45,10 @@ namespace SpaceVIL
             int y = _commonProcessor.Window.GetHeight() - (item.GetY() + item.GetHeight());
             int w = item.GetWidth();
             int h = item.GetHeight();
-            x = (int)((float)x * _scale.GetX());
-            y = (int)((float)y * _scale.GetY());
-            w = (int)((float)w * _scale.GetX());
-            h = (int)((float)h * _scale.GetY());
+            x = (int)((float)x * _scale.GetXScale());
+            y = (int)((float)y * _scale.GetYScale());
+            w = (int)((float)w * _scale.GetXScale());
+            h = (int)((float)h * _scale.GetYScale());
             glViewport(x, y, w, h);
         }
 
@@ -168,8 +168,8 @@ namespace SpaceVIL
             try
             {
                 GLWHandler.CreateWindow();
-                _scale.SetScale(GLWHandler.GetCoreWindow().GetDpiScale().GetX(),
-                    GLWHandler.GetCoreWindow().GetDpiScale().GetY());
+                _scale.SetScale(GLWHandler.GetCoreWindow().GetDpiScale().GetXScale(),
+                    GLWHandler.GetCoreWindow().GetDpiScale().GetYScale());
                 SetEventsCallbacks();
                 if (WindowManager.GetVSyncValue() != 1)
                     Glfw.SwapInterval(WindowManager.GetVSyncValue());
@@ -246,8 +246,8 @@ namespace SpaceVIL
             int widthWnd, heightWnd;
             Glfw.GetWindowSize(window, out widthWnd, out heightWnd);
 
-            GLWHandler.GetCoreWindow().SetWidthDirect((int)(widthWnd / _scale.GetX()));
-            GLWHandler.GetCoreWindow().SetHeightDirect((int)(heightWnd / _scale.GetY()));
+            GLWHandler.GetCoreWindow().SetWidthDirect((int)(widthWnd / _scale.GetXScale()));
+            GLWHandler.GetCoreWindow().SetHeightDirect((int)(heightWnd / _scale.GetYScale()));
 
             // подписать на обновление при смене фактора масштабирования 
             // (текст в фиксированных по ширине элементов не обновляется - оно и понятно)
@@ -334,8 +334,8 @@ namespace SpaceVIL
 
             if (CommonService.GetOSType() != OSType.Mac)
             {
-                GLWHandler.GetCoreWindow().SetWidthDirect((int)(width / _scale.GetX()));
-                GLWHandler.GetCoreWindow().SetHeightDirect((int)(height / _scale.GetY()));
+                GLWHandler.GetCoreWindow().SetWidthDirect((int)(width / _scale.GetXScale()));
+                GLWHandler.GetCoreWindow().SetHeightDirect((int)(height / _scale.GetYScale()));
             }
             else
             {
@@ -394,7 +394,7 @@ namespace SpaceVIL
                 return;
             if (CommonService.GetOSType() != OSType.Mac)
             {
-                _mouseMoveProcessor.Process(wnd, xpos / _scale.GetX(), ypos / _scale.GetY(), _scale);
+                _mouseMoveProcessor.Process(wnd, xpos / _scale.GetXScale(), ypos / _scale.GetYScale(), _scale);
             }
             else
             {
@@ -531,7 +531,7 @@ namespace SpaceVIL
                 oglLine[0].Free();
                 oglLine.RemoveAt(0);
             }
-            
+
             GLWHandler.ClearEventsCallbacks();
             GLWHandler.Destroy();
         }
@@ -929,7 +929,7 @@ namespace SpaceVIL
             CheckOutsideBorders(image as IBaseItem);
 
             int w = image.GetImageWidth(), h = image.GetImageHeight();
-            RectangleBounds area = image.GetRectangleBounds();
+            Area area = image.GetAreaBounds();
 
             if (ItemsRefreshManager.IsRefreshImage(image))
             {
@@ -949,7 +949,7 @@ namespace SpaceVIL
             }
         }
 
-        private Pointer tooltipBorderIndent = new Pointer(10, 2);
+        private Position tooltipBorderIndent = new Position(10, 2);
 
         private void DrawToolTip()
         {
@@ -1072,10 +1072,12 @@ namespace SpaceVIL
 
         private bool DrawPreprocessingEffects(IBaseItem item)
         {
-            if (Effects.GetEffects(item) == null)
-                return false;
-
             List<IEffect> effects = Effects.GetEffects(item);
+            if (effects.Count == 0)
+            {
+                return false;
+            }
+
             glEnable(GL_STENCIL_TEST);
             glClear(GL_STENCIL_BUFFER_BIT);
             glClearStencil(1);

@@ -1,7 +1,7 @@
 namespace SpaceVIL.Decorations
 {
     /// <summary>
-    /// A class that store radius values for each corner of the rectangle object
+    /// A class that store radius values for each corner of the rectangle shape.
     /// </summary>
     public class CornerRadius
     {
@@ -9,7 +9,10 @@ namespace SpaceVIL.Decorations
         public float RightTop;
         public float LeftBottom;
         public float RightBottom;
-
+        /// <summary>
+        /// Checking if all corner radiuses is 0.
+        /// </summary>
+        /// <returns>True: if all corner radiuses is 0. False: if one of the corner radiuses is not 0.</returns>
         public bool IsCornersZero()
         {
             if (LeftTop != 0) return false;
@@ -18,9 +21,8 @@ namespace SpaceVIL.Decorations
             if (LeftBottom != 0) return false;
             return true;
         }
-
         /// <summary>
-        /// Constructs a CornerRadius with the same radius values for each corner of the rectangle object
+        /// Constructs a CornerRadius with the radius values from other CornerRadius object.
         /// </summary>
         public CornerRadius(CornerRadius radius)
         {
@@ -29,9 +31,8 @@ namespace SpaceVIL.Decorations
             LeftBottom = radius.LeftBottom;
             RightBottom = radius.RightBottom;
         }
-
         /// <summary>
-        /// Constructs a CornerRadius with the radius values from other CornerRadius object
+        /// Constructs a CornerRadius with the same radius values for each corner of the rectangle object. 
         /// (default radius = 0)
         /// </summary>
         public CornerRadius(float radius = 0)
@@ -43,7 +44,7 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Constructs a CornerRadius with the radius values for each corner of the rectangle object
+        /// Constructs a CornerRadius with the radius values for each corner of the rectangle object.
         /// </summary>
         public CornerRadius(float lt, float rt, float lb, float rb)
         {

@@ -11,14 +11,14 @@ import java.util.List;
 
 public class ProgressBar extends Prototype {
     private static int count = 0;
-    private TextLine _text_object;
+    private TextLine _textObject;
 
     public void setValueVisible(boolean value) {
-        _text_object.setVisible(value);
+        _textObject.setVisible(value);
     }
 
     public boolean isValueVisible() {
-        return _text_object.isVisible();
+        return _textObject.isVisible();
     }
 
     private Rectangle _rect;
@@ -34,9 +34,9 @@ public class ProgressBar extends Prototype {
         setItemName("ProgressBar_" + count);
         count++;
 
-        _text_object = new TextLine();
-        _text_object.setItemName(getItemName() + "_text_object");
-        setText("0%");
+        _textObject = new TextLine();
+        _textObject.setItemName(getItemName() + "_text_object");
+        _textObject.setItemText("0%");
         _rect = new Rectangle();
 
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ProgressBar"));
@@ -49,7 +49,7 @@ public class ProgressBar extends Prototype {
     @Override
     public void initElements() {
         // text
-        addItems(_rect, _text_object);
+        addItems(_rect, _textObject);
     }
 
     /**
@@ -93,7 +93,7 @@ public class ProgressBar extends Prototype {
         _currentValue = (_currentValue < _minValue) ? _minValue : _currentValue;
         DonePercent = (_currentValue - _minValue) / AllLength;
         String text = Math.round(DonePercent * 100f) + "%";
-        _text_object.setItemText(text);
+        _textObject.setItemText(text);
         _rect.setWidth((int) Math.round(getWidth() * DonePercent));
     }
 
@@ -102,78 +102,68 @@ public class ProgressBar extends Prototype {
      * Text alignment in the ProgressBar
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        _text_object.setTextAlignment(alignment);
+        _textObject.setTextAlignment(alignment);
     }
 
     public void setTextAlignment(List<ItemAlignment> alignment) {
-        _text_object.setTextAlignment(alignment);
+        _textObject.setTextAlignment(alignment);
     }
 
     /**
      * Text margin in the ProgressBar
      */
     public void setTextMargin(Indents margin) {
-        _text_object.setMargin(margin);
+        _textObject.setMargin(margin);
     }
 
     /**
      * Text font parameters in the ProgressBar
      */
     public void setFont(Font font) {
-        _text_object.setFont(font);
+        _textObject.setFont(font);
     }
 
     public void setFontSize(int size) {
-        _text_object.setFontSize(size);
+        _textObject.setFontSize(size);
     }
 
     public void setFontStyle(int style) {
-        _text_object.setFontStyle(style);
+        _textObject.setFontStyle(style);
     }
 
     public void setFontFamily(String font_family) {
-        _text_object.setFontFamily(font_family);
+        _textObject.setFontFamily(font_family);
     }
 
     public Font getFont() {
-        return _text_object.getFont();
+        return _textObject.getFont();
     }
-
-    /**
-     * Text in the ProgressBar
-     */
-    public void setText(String text) {
-        _text_object.setItemText(text);
-    }
-    // public String getText() {
-    // return _text_object.getText();
-    // }
 
     /**
      * Text color in the ProgressBar
      */
     public void setForeground(Color color) {
-        _text_object.setForeground(color);
+        _textObject.setForeground(color);
     }
 
     public void setForeground(int r, int g, int b) {
-        _text_object.setForeground(r, g, b);
+        _textObject.setForeground(r, g, b);
     }
 
     public void setForeground(int r, int g, int b, int a) {
-        _text_object.setForeground(r, g, b, a);
+        _textObject.setForeground(r, g, b, a);
     }
 
     public void setForeground(float r, float g, float b) {
-        _text_object.setForeground(r, g, b);
+        _textObject.setForeground(r, g, b);
     }
 
     public void setForeground(float r, float g, float b, float a) {
-        _text_object.setForeground(r, g, b, a);
+        _textObject.setForeground(r, g, b, a);
     }
 
     public Color getForeground() {
-        return _text_object.getForeground();
+        return _textObject.getForeground();
     }
 
     @Override
@@ -205,15 +195,15 @@ public class ProgressBar extends Prototype {
      * Set X position of the ProgressBar left top corner
      */
     @Override
-    public void setX(int _x) {
-        super.setX(_x);
+    public void setX(int x) {
+        super.setX(x);
         updateLayout();
     }
 
     /**
      * Update ProgressBar states
      */
-    public void updateLayout() {
+    void updateLayout() {
         updateProgressBar();
     }
 

@@ -18,7 +18,7 @@ import com.spvessel.spacevil.Prototype;
 import com.spvessel.spacevil.VerticalStack;
 import com.spvessel.spacevil.WrapGrid;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;

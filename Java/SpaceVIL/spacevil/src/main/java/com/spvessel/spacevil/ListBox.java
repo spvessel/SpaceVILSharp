@@ -8,7 +8,7 @@ import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.MouseButton;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
 import java.awt.Color;
 import java.util.LinkedList;
@@ -83,25 +83,25 @@ public class ListBox extends Prototype {
     private ContextMenu _menu;
     public VerticalScrollBar vScrollBar = new VerticalScrollBar();
     public HorizontalScrollBar hScrollBar = new HorizontalScrollBar();
-    private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.AS_NEEDED;
+    private VisibilityPolicy _vScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
 
     /**
      * Is vertical scroll bar visible
      */
-    public ScrollBarVisibility getVScrollBarVisible() {
-        return _v_scrollBarPolicy;
+    public VisibilityPolicy getVScrollBarPolicy() {
+        return _vScrollBarPolicy;
     }
 
-    public void setVScrollBarVisible(ScrollBarVisibility policy) {
-        _v_scrollBarPolicy = policy;
+    public void setVScrollBarPolicy(VisibilityPolicy policy) {
+        _vScrollBarPolicy = policy;
 
-        if (policy == ScrollBarVisibility.NEVER) {
+        if (policy == VisibilityPolicy.NEVER) {
             vScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == ScrollBarVisibility.AS_NEEDED) {
+        } else if (policy == VisibilityPolicy.AS_NEEDED) {
             vScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == ScrollBarVisibility.ALWAYS) {
+        } else if (policy == VisibilityPolicy.ALWAYS) {
             vScrollBar.setDrawable(true);
             if (!hScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -114,25 +114,25 @@ public class ListBox extends Prototype {
         vScrollBar.slider.updateHandler();
     }
 
-    private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.AS_NEEDED;
+    private VisibilityPolicy _hScrollBarPolicy = VisibilityPolicy.AS_NEEDED;
 
     /**
      * Is horizontal scroll bar visible
      */
-    public ScrollBarVisibility getHScrollBarVisible() {
-        return _h_scrollBarPolicy;
+    public VisibilityPolicy getHScrollBarPolicy() {
+        return _hScrollBarPolicy;
     }
 
-    public void setHScrollBarVisible(ScrollBarVisibility policy) {
-        _h_scrollBarPolicy = policy;
+    public void setHScrollBarPolicy(VisibilityPolicy policy) {
+        _hScrollBarPolicy = policy;
 
-        if (policy == ScrollBarVisibility.NEVER) {
+        if (policy == VisibilityPolicy.NEVER) {
             hScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == ScrollBarVisibility.AS_NEEDED) {
+        } else if (policy == VisibilityPolicy.AS_NEEDED) {
             hScrollBar.setDrawable(false);
             menu.setVisible(false);
-        } else if (policy == ScrollBarVisibility.ALWAYS) {
+        } else if (policy == VisibilityPolicy.ALWAYS) {
             hScrollBar.setDrawable(true);
             if (!vScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -256,14 +256,14 @@ public class ListBox extends Prototype {
             vScrollBar.slider.setStep(vScrollBar.slider.getMaxValue());
             v_size = 0;
             vScrollBar.slider.setCurrentValue(0);
-            if (getVScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+            if (getVScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
                 vScrollBar.setDrawable(false);
                 menu.setVisible(false);
                 _grid.updateLayout();
             }
             return;
         }
-        if (getVScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+        if (getVScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
             vScrollBar.setDrawable(true);
             if (!hScrollBar.isDrawable())
                 menu.setVisible(false);
@@ -305,14 +305,14 @@ public class ListBox extends Prototype {
             hScrollBar.slider.setStep(hScrollBar.slider.getMaxValue());
             h_size = 0;
             hScrollBar.slider.setCurrentValue(0);
-            if (getHScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+            if (getHScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
                 hScrollBar.setDrawable(false);
                 menu.setVisible(false);
                 _grid.updateLayout();
             }
             return;
         }
-        if (getHScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+        if (getHScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
             hScrollBar.setDrawable(true);
             if (!vScrollBar.isDrawable())
                 menu.setVisible(false);

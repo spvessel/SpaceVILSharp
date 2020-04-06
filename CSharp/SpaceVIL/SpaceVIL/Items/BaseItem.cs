@@ -7,6 +7,11 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// Abstract class implementation of SpaceVIL.Core.IBaseItem interface. 
+    /// <para/> SpaceVIL.Core.IBaseItem is the main interface of SpaceVIL environment. 
+    /// <para/> Contains all the necessary methods for rendering objects and interacting with them.
+    /// </summary>
     abstract public class BaseItem : IBaseItem
     {
         internal int _confines_x_0 = 0;
@@ -16,27 +21,37 @@ namespace SpaceVIL
 
         private CoreWindow _handler;
 
-        /// <param name="handler"> WindowLayout handler - window that 
-        /// contains the BaseItem </param>
+        /// <summary>
+        /// Setting the window to which the item will belong.
+        /// </summary>
+        /// <param name="handler">Window as SpaceVIL.CoreWindow.</param>
         public void SetHandler(CoreWindow handler)
         {
             _handler = handler;
         }
+        /// <summary>
+        /// Getting the window to which the item will belong.
+        /// </summary>
+        /// <returns>Window as SpaceVIL.CoreWindow.</returns>
         public CoreWindow GetHandler()
         {
             return _handler;
         }
-
-        //parent
         private Prototype _parent = null;
-
         /// <summary>
-        /// BaseItem's parent item
+        /// Getting the parent of the item.
         /// </summary>
+        /// <returns>Parent as SpaceVIL.Prototype 
+        /// (Prototype is container and can contains children).</returns>
         public Prototype GetParent()
         {
             return _parent;
         }
+        /// <summary>
+        /// Setting the parent of the item.
+        /// </summary>
+        /// <param name="parent">Parent as SpaceVIL.Prototype 
+        /// (Prototype is container and can contains children).</param>
         public void SetParent(Prototype parent)
         {
             _parent = parent;
@@ -82,10 +97,7 @@ namespace SpaceVIL
 
         internal virtual void RemoveEventListener(GeometryEventType type, IBaseItem listener) { }
 
-        /// <summary>
-        /// Item will not react on parent's changes
-        /// </summary>
-        public virtual void RemoveItemFromListeners()
+        internal virtual void RemoveItemFromListeners()
         {
             Prototype parent = GetParent();
             parent.RemoveEventListener(GeometryEventType.ResizeWidth, this);
@@ -95,7 +107,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Initialization and adding of all elements in the BaseItem
+        /// Initializing children if this BaseItem is container (SpaceVIL.Prototype).
         /// </summary>
         public virtual void InitElements() { }
 
@@ -104,39 +116,57 @@ namespace SpaceVIL
         private Indents _margin = new Indents();
 
         /// <summary>
-        /// BaseItem margin
+        /// Getting the indents of an item to offset itself relative to its container.
         /// </summary>
+        /// <returns>Margin as SpaceVIL.Decorations.Indents.</returns>
         public Indents GetMargin()
         {
             return _margin;
         }
+        /// <summary>
+        /// Setting the indents of an item to offset itself relative to its container.
+        /// </summary>
+        /// <param name="margin">Margin as SpaceVIL.Decorations.Indents.</param>
         public void SetMargin(Indents margin)
         {
             _margin = margin;
             UpdateGeometry();
             BaseItemStatics.UpdateAllLayout(this);
         }
+        /// <summary>
+        /// Setting the indents of an item to offset itself relative to its container.
+        /// </summary>
+        /// <param name="left">Indent on the left.</param>
+        /// <param name="top">Indent on the top.</param>
+        /// <param name="right">Indent on the right.</param>
+        /// <param name="bottom">Indent on the bottom.</param>
         public void SetMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
             SetMargin(new Indents(left, top, right, bottom));
         }
 
-        /// <returns>triangles list of the BaseItem's shape</returns>
+        /// <summary>
+        /// Getting triangles of item's shape.
+        /// </summary>
+        /// <returns>Points list of the shape as List of float[2] array (2D).</returns>
         public List<float[]> GetTriangles()
         {
             return _item.GetTriangles();
         }
-
         /// <summary>
-        /// Sets BaseItem's shape as triangles list
+        /// Setting triangles as item's shape.
         /// </summary>
+        /// <param name="triangles">Points list of the shape as List of float[2] array (2D).</param>
         public virtual void SetTriangles(List<float[]> triangles)
         {
             _item.SetTriangles(triangles);
         }
-
-        /// <returns>shape points list in GL coordinates, using triangles 
-        /// from getTriangles()</returns>
+        /// <summary>
+        /// Making default item's shape. Use in conjunction with 
+        /// GetTriangles() and SetTriangles() methods.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public virtual void MakeShape() { }
 
         internal List<float[]> UpdateShape()
@@ -145,40 +175,76 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Background color of the BaseItem
+        /// Setting background color of an item's shape.
         /// </summary>
+        /// <param name="color">Background color as System.Drawing.Color.</param>
         public virtual void SetBackground(Color color)
         {
             _item.SetBackground(color);
         }
+        /// <summary>
+        /// Setting background color of an item's shape in byte RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
         public virtual void SetBackground(int r, int g, int b)
         {
             _item.SetBackground(GraphicsMathService.ColorTransform(r, g, b));
         }
+        /// <summary>
+        /// Setting background color of an item in byte RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
         public virtual void SetBackground(int r, int g, int b, int a)
         {
             _item.SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+        /// <summary>
+        /// Setting background color of an item in float RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
         public virtual void SetBackground(float r, float g, float b)
         {
             _item.SetBackground(GraphicsMathService.ColorTransform(r, g, b));
         }
+        /// <summary>
+        /// Setting background color of an item in float RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
         public virtual void SetBackground(float r, float g, float b, float a)
         {
             _item.SetBackground(GraphicsMathService.ColorTransform(r, g, b, a));
         }
+        /// <summary>
+        /// Getting background color of an item.
+        /// </summary>
+        /// <returns>Background color as System.Drawing.Color.</returns>
         public virtual Color GetBackground()
         {
             return _item.GetBackground();
         }
 
         /// <summary>
-        /// BaseItem's name
+        /// Setting the name of the item.
         /// </summary>
+        /// <param name="name">Item name as System.String.</param>
         public void SetItemName(string name)
         {
             _item.SetItemName(name);
         }
+        /// <summary>
+        /// Getting the name of the item.
+        /// </summary>
+        /// <returns>Item name as System.String.</returns>
         public string GetItemName()
         {
             return _item.GetItemName();
@@ -187,29 +253,54 @@ namespace SpaceVIL
         private bool _drawable = true;
 
         /// <summary>
-        /// If BaseItem will drawn by engine
+        /// Getting the drawable (visibility) status of an item. This property used in 
+        /// conjunction with the IsVisible() property.
+        /// <para/> Explanation: an item can be visible and invisible, in some cases 
+        /// the item can be located outside the container (example: SpaceVIL.ListBox), 
+        /// and it must be invisible so as not to waste CPU / GPU resources, but in some 
+        /// cases you must control the visibility of elements that are inside container 
+        /// and should be invisible (example: SpaceVIL.TreeView).
         /// </summary>
+        /// <returns>True: if item is drawable (visible). 
+        /// False: if item is not drawable (invisible).</returns>
         public virtual bool IsDrawable()
         {
             return _drawable;
         }
+        /// <summary>
+        /// Setting the drawable (visibility) status of an item. This property used in 
+        /// conjunction with the IsVisible() property.
+        /// <para/> Explanation: an item can be visible and invisible, in some cases 
+        /// the item can be located outside the container (example: SpaceVIL.ListBox), 
+        /// and it must be invisible so as not to waste CPU / GPU resources, but in some 
+        /// cases you must control the visibility of elements that are inside container 
+        /// and should be invisible (example: SpaceVIL.TreeView).
+        /// </summary>
+        /// <param name="value">True: if item should be drawable (visible). 
+        /// False: if item should not be drawable (invisible).</param>
         public virtual void SetDrawable(bool value)
         {
             if (_drawable == value)
                 return;
             _drawable = value;
-            // UpdateInnersDrawable(value);
         }
 
         private bool _visible = true;
-
         /// <summary>
-        /// If BaseItem is visible
+        /// Getting the visibility status of an item. This property may used in 
+        /// conjunction with the IsDrawable() property.
         /// </summary>
+        /// <returns>True: if item is visible. False: if item is invisible.</returns>
         public virtual bool IsVisible()
         {
             return _visible;
         }
+        /// <summary>
+        /// Setting the visibility status of an item. This property may used in 
+        /// conjunction with the IsDrawable() property.
+        /// </summary>
+        /// <param name="value">True: if item should be visible. 
+        /// False: if item should be invisible.</param>
         public virtual void SetVisible(bool value)
         {
             if (_visible == value)
@@ -217,98 +308,160 @@ namespace SpaceVIL
             _visible = value;
         }
 
-        protected virtual void UpdateInnersDrawable(bool value)
-        {
-
-        }
-
         //geometry
         private Geometry _itemGeometry = new Geometry();
 
         /// <summary>
-        /// Width of the BaseItem
+        /// Setting the minimum width limit. Actual width cannot be less than this limit.
         /// </summary>
+        /// <param name="width"> Minimum width limit of the item. </param>
         public void SetMinWidth(int width)
         {
             _itemGeometry.SetMinWidth(width);
         }
+        /// <summary>
+        /// Setting item width. If the value is greater/less than the maximum/minimum 
+        /// value of the width, then the width becomes equal to the maximum/minimum value.
+        /// </summary>
+        /// <param name="width"> Width of the item. </param>
         public virtual void SetWidth(int width)
         {
             _itemGeometry.SetWidth(width);
             ItemsRefreshManager.SetRefreshShape(this);
         }
+        /// <summary>
+        /// Setting the maximum width limit. Actual width cannot be greater than this limit.
+        /// </summary>
+        /// <param name="width"> Maximum width limit of the item. </param>
         public void SetMaxWidth(int width)
         {
             _itemGeometry.SetMaxWidth(width);
         }
+        /// <summary>
+        /// Getting the minimum width limit.
+        /// </summary>
+        /// <returns> Minimum width limit of the item. </returns>
         public int GetMinWidth()
         {
             return _itemGeometry.GetMinWidth();
         }
+        /// <summary>
+        /// Getting item width.
+        /// </summary>
+        /// <returns> Width of the item. </returns>
         public virtual int GetWidth()
         {
             return _itemGeometry.GetWidth();
         }
+        /// <summary>
+        /// Getting the maximum width limit.
+        /// </summary>
+        /// <returns> Maximum width limit of the item. </returns>
         public int GetMaxWidth()
         {
             return _itemGeometry.GetMaxWidth();
         }
-
         /// <summary>
-        /// Height of the BaseItem
+        /// Setting the minimum height limit. Actual height cannot be less than this limit.
         /// </summary>
+        /// <param name="height"> Minimum height limit of the item. </param>
         public void SetMinHeight(int height)
         {
             _itemGeometry.SetMinHeight(height);
         }
+        /// <summary>
+        /// Setting item height. If the value is greater/less than the maximum/minimum 
+        /// value of the height, then the height becomes equal to the maximum/minimum value.
+        /// </summary>
+        /// <param name="height"> Height of the item. </param>
         public virtual void SetHeight(int height)
         {
             _itemGeometry.SetHeight(height);
             ItemsRefreshManager.SetRefreshShape(this);
         }
+        /// <summary>
+        /// Setting the maximum height limit. Actual height cannot be greater than this limit.
+        /// </summary>
+        /// <param name="height"> Maximum height limit of the item. </param>
         public void SetMaxHeight(int height)
         {
             _itemGeometry.SetMaxHeight(height);
         }
+        /// <summary>
+        /// Getting the minimum height limit.
+        /// </summary>
+        /// <returns> Minimum height limit of the item. </returns>
         public int GetMinHeight()
         {
             return _itemGeometry.GetMinHeight();
         }
+        /// <summary>
+        /// Getting item height.
+        /// </summary>
+        /// <returns> Height of the item. </returns>
         public virtual int GetHeight()
         {
             return _itemGeometry.GetHeight();
         }
+        /// <summary>
+        /// Getting the maximum height limit.
+        /// </summary>
+        /// <returns> Maximum height limit of the item. </returns>
         public int GetMaxHeight()
         {
             return _itemGeometry.GetMaxHeight();
         }
 
         /// <summary>
-        /// Size (width and height) of the BaseItem
+        /// Setting item size (width and height).
         /// </summary>
+        /// <param name="width"> Width of the item. </param>
+        /// <param name="height"> Height of the item. </param>
         public void SetSize(int width, int height)
         {
             SetWidth(width);
             SetHeight(height);
         }
+        /// <summary>
+        /// Setting minimum item size limit (width and height limits).
+        /// </summary>
+        /// <param name="width"> Minimum width limit of the item. </param>
+        /// <param name="height"> Minimum height limit of the item. </param>
         public void SetMinSize(int width, int height)
         {
             SetMinWidth(width);
             SetMinHeight(height);
         }
+        /// <summary>
+        /// Setting maximum item size limit (width and height limits).
+        /// </summary>
+        /// <param name="width"> Maximum width limit of the item. </param>
+        /// <param name="height"> Maximum height limit of the item. </param>
         public void SetMaxSize(int width, int height)
         {
             SetMaxWidth(width);
             SetMaxHeight(height);
         }
+        /// <summary>
+        /// Getting current item size.
+        /// </summary>
+        /// <returns>Item size as SpaceVIL.Core.Size.</returns>
         public Core.Size GetSize()
         {
             return _itemGeometry.GetSize();
         }
+        /// <summary>
+        /// Getting current item minimum size limit.
+        /// </summary>
+        /// <returns>Minimum item size limit as SpaceVIL.Core.Size.</returns>
         public Core.Size GetMinSize()
         {
             return new Core.Size(_itemGeometry.GetMinWidth(), _itemGeometry.GetMinHeight());
         }
+        /// <summary>
+        /// Getting current item maximum size limit.
+        /// </summary>
+        /// <returns>Minimum item size limit as SpaceVIL.Core.Size.</returns>
         public Core.Size GetMaxSize()
         {
             return new Core.Size(_itemGeometry.GetMaxWidth(), _itemGeometry.GetMaxHeight());
@@ -318,14 +471,21 @@ namespace SpaceVIL
         private Behavior _itemBehavior = new Behavior();
 
         /// <summary>
-        /// BaseItem alignment
+        /// Setting an alignment of an item's shape relative to its container. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
         /// </summary>
+        /// <param name="alignment">Alignment as SpaceVIL.Core.ItemAlignment.</param>
         public void SetAlignment(ItemAlignment alignment)
         {
             _itemBehavior.SetAlignment(alignment);
             UpdateGeometry();
             BaseItemStatics.UpdateAllLayout(this);
         }
+        /// <summary>
+        /// Setting an alignment of an item's shape relative to its container. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
+        /// </summary>
+        /// <param name="alignment">Alignment as sequence of SpaceVIL.Core.ItemAlignment.</param>
         public void SetAlignment(params ItemAlignment[] alignment)
         {
             ItemAlignment common = alignment.ElementAt(0);
@@ -334,20 +494,31 @@ namespace SpaceVIL
                     common |= alignment.ElementAt(i);
             SetAlignment(common);
         }
-
+        /// <summary>
+        /// Getting an alignment of an item's shape relative to its container. 
+        /// </summary>
+        /// <returns>Alignment as SpaceVIL.Core.ItemAlignment.</returns>
         public ItemAlignment GetAlignment()
         {
             return _itemBehavior.GetAlignment();
         }
 
         /// <summary>
-        /// BaseItem size (width and height) policy - FIXED or EXPAND
+        /// Setting the size policy of an item's shape. 
+        /// Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space).
         /// </summary>
+        /// <param name="width">Width policy of an item's shape.</param>
+        /// <param name="height">Height policy of an item's shape.</param>
         public void SetSizePolicy(SizePolicy width, SizePolicy height)
         {
             SetWidthPolicy(width);
             SetHeightPolicy(height);
         }
+        /// <summary>
+        /// Setting width policy of an item's shape. Can be Fixed (shape not changes its size) 
+        /// or Expand (shape is stretched to all available space).
+        /// </summary>
+        /// <param name="policy">Width policy as SpaceVIL.Core.SizePolicy.</param>
         public void SetWidthPolicy(SizePolicy policy)
         {
             if (_itemBehavior.GetWidthPolicy() != policy)
@@ -371,10 +542,20 @@ namespace SpaceVIL
                 BaseItemStatics.UpdateAllLayout(this);
             }
         }
+        /// <summary>
+        /// Getting width policy of an item's shape.Can be Fixed (shape not changes its size) 
+        /// or Expand (shape is stretched to all available space).
+        /// </summary>
+        /// <returns>Width policy as SpaceVIL.Core.SizePolicy.</returns>
         public SizePolicy GetWidthPolicy()
         {
             return _itemBehavior.GetWidthPolicy();
         }
+        /// <summary>
+        /// Setting height policy of an item's shape. Can be Fixed (shape not changes its size) 
+        /// or Expand (shape is stretched to all available space).
+        /// </summary>
+        /// <param name="policy">Height policy as SpaceVIL.Core.SizePolicy.</param>
         public void SetHeightPolicy(SizePolicy policy)
         {
             if (_itemBehavior.GetHeightPolicy() != policy)
@@ -399,6 +580,11 @@ namespace SpaceVIL
                 BaseItemStatics.UpdateAllLayout(this);
             }
         }
+        /// <summary>
+        /// Getting height policy of an item's shape.Can be Fixed (shape not changes its size) 
+        /// or Expand (shape is stretched to all available space).
+        /// </summary>
+        /// <returns>Height policy as SpaceVIL.Core.SizePolicy.</returns>
         public SizePolicy GetHeightPolicy()
         {
             return _itemBehavior.GetHeightPolicy();
@@ -408,40 +594,43 @@ namespace SpaceVIL
         private Position _itemPosition = new Position();
 
         /// <summary>
-        /// BaseItem (x, y) position
+        /// Setting X coordinate of the left-top corner of a shape.
         /// </summary>
+        /// <param name="x">X position of the left-top corner.</param>
         public virtual void SetX(int x)
         {
             _itemPosition.SetX(x);
         }
+        /// <summary>
+        /// Getting X coordinate of the left-top corner of a shape.
+        /// </summary>
+        /// <returns>X position of the left-top corner.</returns>
         public virtual int GetX()
         {
             return _itemPosition.GetX();
         }
+        /// <summary>
+        /// Setting Y coordinate of the left-top corner of a shape.
+        /// </summary>
+        /// <param name="y">Y position of the left-top corner.</param>
         public virtual void SetY(int y)
         {
             _itemPosition.SetY(y);
         }
+        /// <summary>
+        /// Getting Y coordinate of the left-top corner of a shape.
+        /// </summary>
+        /// <returns>Y position of the left-top corner.</returns>
         public virtual int GetY()
         {
             return _itemPosition.GetY();
         }
 
-        // internal bool IsOutConfines()
-        // {
-        //     if (
-        //         GetX() >= _confines_x_1 ||
-        //         GetX() + GetWidth() <= _confines_x_0 ||
-        //         GetY() >= _confines_y_1 ||
-        //         GetY() + GetHeight() <= _confines_y_0
-        //        )
-        //         return true;
-        //     return false;
-        // }
-
         /// <summary>
-        /// Update BaseItem's state
+        /// Updating an item size or/and position.
         /// </summary>
+        /// <param name="type">Type of event as SpaceVIL.Core.GeometryEventType.</param>
+        /// <param name="value">Value of a property that was changed.</param>
         public void Update(GeometryEventType type, int value = 0)
         {
             BaseItemStatics.UpdateGeometryAttr(this, type, value);
@@ -453,115 +642,137 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Style of the BaseItem
+        /// Setting a style that describes the appearance of an item.
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public virtual void SetStyle(Style style) { }
+        /// <summary>
+        /// Getting the core (only appearance properties without inner styles) style of an item.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public abstract Style GetCoreStyle();
 
-        // public virtual Style GetCoreStyle() { throw new NotImplementedException(); }
-
-        /// <summary>
-        /// Check and set BaseItem default style
-        /// </summary>
-        public virtual void CheckDefaults()
-        {
-            //checking all attributes
-            //SetStyle(default theme)
-            //foreach inners SetStyle(from item default style)
-
-            SetDefaults();
-        }
-        public virtual void SetDefaults() { }
-        public ItemRule HoverRule = ItemRule.Lazy;
+        public ItemHoverRule HoverRule = ItemHoverRule.Lazy;
 
         //shadow
-        private bool _is_shadow_drop = false;
-        private int _shadow_radius = 1;
-        private Color _shadow_color = Color.Black;
-        private Position _shadow_pos = new Position();
+        private bool _isShadowDrop = false;
+        private int _shadowRadius = 1;
+        private Color _shadowColor = Color.Black;
+        private Position _shadowPos = new Position();
 
         /// <summary>
-        /// BaseItem's shadow parameters. Is item has shadow
+        /// Getting the shadow visibility status of an item.
         /// </summary>
+        /// <returns>True: if shadow is visible. False: if shadow is invisible.</returns>
         public bool IsShadowDrop()
         {
-            return _is_shadow_drop;
+            return _isShadowDrop;
         }
+        /// <summary>
+        /// Setting the shadow visibility status of an item.
+        /// </summary>
+        /// <param name="value">True: if shadow should be visible. 
+        /// False: if shadow should be invisible.</param>
         public void SetShadowDrop(bool value)
         {
-            _is_shadow_drop = value;
+            _isShadowDrop = value;
         }
 
         /// <summary>
-        /// BaseItem's shadow parameters. Shadow corners radius
+        /// Setting the specified blur radius of the shadow.
+        /// <para/>Default: 0.
         /// </summary>
+        /// <param name="radius">Blur radius of the shadow.</param>
         public void SetShadowRadius(int radius)
         {
-            _shadow_radius = radius;
+            _shadowRadius = radius;
         }
+        /// <summary>
+        /// Getting the shadow blur raduis.
+        /// </summary>
+        /// <returns>The blur radius of the shadow.</returns>
         public int GetShadowRadius()
         {
-            return _shadow_radius;
+            return _shadowRadius;
         }
-
         /// <summary>
-        /// BaseItem's shadow parameters. Shadow color
+        /// Getting shadow color.
         /// </summary>
+        /// <returns>Returns the shadow color as System.Drawing.Color.</returns>
         public Color GetShadowColor()
         {
-            return _shadow_color;
+            return _shadowColor;
         }
+        /// <summary>
+        /// Setting shadow color.
+        /// </summary>
+        /// <param name="color">Shadow color as System.Drawing.Color.</param>
         public void SetShadowColor(Color color)
         {
-            _shadow_color = color;
+            _shadowColor = color;
         }
-
         /// <summary>
-        /// BaseItem's shadow parameters. Shadow position
+        /// Getting the offset of the shadow relative to the position of the item.
         /// </summary>
+        /// <returns>Shadow offset as SpaceVIL.Core.Position.</returns>
         public Position GetShadowPos()
         {
-            return _shadow_pos;
+            return _shadowPos;
         }
 
         private int _xExtension = 0;
         private int _yExtension = 0;
+        /// <summary>
+        /// Getting the values of shadow extensions in pixels.
+        /// </summary>
+        /// <returns>The values of shadow extensions.</returns>
         public int[] GetShadowExtension()
         {
             return new int[] { _xExtension, _yExtension };
         }
+        /// <summary>
+        /// Setting the values of shadow extensions in pixels.
+        /// </summary>
+        /// <param name="wExtension">Extension by width.</param>
+        /// <param name="hExtension">Extension by height.</param>
         public void SetShadowExtension(int wExtension, int hExtension)
         {
             _xExtension = wExtension;
             _yExtension = hExtension;
         }
         /// <summary>
-        /// Set BaseItem's shadow with parameters
+        /// Setting the shadow with specified blur radius, axis shifts, shadow color.
         /// </summary>
-        /// <param name="radius">Shadow corners radius (same for all corners)</param>
-        /// <param name="x">Shadow X position</param>
-        /// <param name="y">Shadow Y position</param>
-        /// <param name="color">Shadow color</param>
+        /// <param name="radius">A blur radius of the shadow.</param>
+        /// <param name="x">X shift of the shadow.</param>
+        /// <param name="y">Y shift of the shadow.</param>
+        /// <param name="color">A shadow color as System.Drawing.Color.</param>
         public void SetShadow(int radius, int x, int y, Color color)
         {
-            _is_shadow_drop = true;
-            _shadow_radius = radius;
-            _shadow_color = color;
-            _shadow_pos.SetX(x);
-            _shadow_pos.SetY(y);
+            _isShadowDrop = true;
+            _shadowRadius = radius;
+            _shadowColor = color;
+            _shadowPos.SetX(x);
+            _shadowPos.SetY(y);
         }
+        /// <summary>
+        /// Setting the shadow of an item.
+        /// </summary>
+        /// <param name="shadow">Shadow as SpaceVIL.Decorations.Shadow.</param>
         public void SetShadow(Shadow shadow)
         {
-            _is_shadow_drop = shadow.IsDrop();
-            _shadow_radius = shadow.GetRadius();
-            _shadow_color = shadow.GetColor();
-            _shadow_pos.SetX(shadow.GetXOffset());
-            _shadow_pos.SetY(shadow.GetYOffset());
+            _isShadowDrop = shadow.IsDrop();
+            _shadowRadius = shadow.GetRadius();
+            _shadowColor = shadow.GetColor();
+            _shadowPos.SetX(shadow.GetXOffset());
+            _shadowPos.SetY(shadow.GetYOffset());
         }
 
         //update
         /// <summary>
-        /// BaseItem confines
+        /// Setting the confines of the item relative to its parent's size and position.
+        /// <pata/> Example: items can be partially (or completely) outside the container (example: ListBox), 
+        /// in which case the part that is outside the container should not be visible and should not interact with the user.
         /// </summary>
         public virtual void SetConfines()
         {
@@ -573,6 +784,15 @@ namespace SpaceVIL
             _confines_y_0 = parent.GetY() + parent.GetPadding().Top;
             _confines_y_1 = parent.GetY() + parent.GetHeight() - parent.GetPadding().Bottom;
         }
+        /// <summary>
+        /// Setting the confines of the item relative to specified bounds.
+        /// <pata/> Example: items can be partially (or completely) outside the container (example: ListBox), 
+        /// in which case the part that is outside the container should not be visible and should not interact with the user.
+        /// </summary>
+        /// <param name="x0">Left X begin position.</param>
+        /// <param name="x1">Right X end position.</param>
+        /// <param name="y0">Top Y begin position.</param>
+        /// <param name="y1">Bottom Y end position.</param>
         public void SetConfines(int x0, int x1, int y0, int y1)
         {
             _confines_x_0 = x0;
@@ -584,7 +804,9 @@ namespace SpaceVIL
         {
             return new int[] { _confines_x_0, _confines_x_1, _confines_y_0, _confines_y_1 };
         }
-
+        /// <summary>
+        /// Method to describe disposing item's resources if the item was removed.
+        /// </summary>
         public virtual void Release() { }
     }
 }

@@ -19,11 +19,11 @@ public class Scale {
         _y = yScale;
     }
 
-    public float getX() {
+    public float getXScale() {
         return _x;
     }
 
-    public float getY() {
+    public float getYScale() {
         return _y;
     }
 

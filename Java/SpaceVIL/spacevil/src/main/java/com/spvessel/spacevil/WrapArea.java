@@ -87,7 +87,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
             return;
         _selection = index;
         _selectionItem = ((SelectionItem) getItems().get(index));
-        _selectionItem.setToggled(true);
+        _selectionItem.setSelected(true);
         unselectOthers(_selectionItem);
         if (_selectionItem.getContent() instanceof Prototype) {
             ((Prototype) _selectionItem.getContent()).setFocus();
@@ -99,7 +99,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
         List<InterfaceBaseItem> items = getItems();
         for (InterfaceBaseItem item : items) {
             if (!item.equals(sender)) {
-                ((SelectionItem) item).setToggled(false);
+                ((SelectionItem) item).setSelected(false);
             }
         }
     }
@@ -110,7 +110,7 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
     public void unselect() {
         _selection = -1;
         if (_selectionItem != null) {
-            _selectionItem.setToggled(false);
+            _selectionItem.setSelected(false);
             _selectionItem = null;
         }
     }
@@ -355,8 +355,8 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
      * Set X position of the ListArea
      */
     @Override
-    public void setX(int _x) {
-        super.setX(_x);
+    public void setX(int x) {
+        super.setX(x);
         updateLayout();
     }
 
@@ -364,8 +364,8 @@ public class WrapArea extends Prototype implements InterfaceFreeLayout {
      * Set Y position of the ListArea
      */
     @Override
-    public void setY(int _y) {
-        super.setY(_y);
+    public void setY(int y) {
+        super.setY(y);
         updateLayout();
     }
 

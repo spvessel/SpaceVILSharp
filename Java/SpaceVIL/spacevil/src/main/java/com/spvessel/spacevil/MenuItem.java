@@ -22,7 +22,7 @@ public class MenuItem extends Prototype {
     private static int count = 0;
     private Label _textObject;
     ContextMenu contextMenu;
-    private ContextMenu _sub_context_menu;
+    private ContextMenu _subContextMenu;
 
     public Prototype getSender() {
         return contextMenu.getSender();
@@ -32,16 +32,16 @@ public class MenuItem extends Prototype {
      * @return sub context menu
      */
     public ContextMenu getSubContextMenu() {
-        return _sub_context_menu;
+        return _subContextMenu;
     }
 
     /**
      * Is MenuItem ready to close
      */
     boolean isReadyToClose(MouseArgs args) {
-        if (_sub_context_menu != null) {
-            if (!_sub_context_menu.getHoverVerification(args.position.getX(), args.position.getY())
-                    && _sub_context_menu.closeDependencies(args))
+        if (_subContextMenu != null) {
+            if (!_subContextMenu.getHoverVerification(args.position.getX(), args.position.getY())
+                    && _subContextMenu.closeDependencies(args))
                 return true;
         }
         return false;
@@ -56,9 +56,9 @@ public class MenuItem extends Prototype {
     /**
      * Assign the context menu
      */
-    public void assignContextMenu(ContextMenu context_menu) {
-        _sub_context_menu = context_menu;
-        _sub_context_menu.setOutsideClickClosable(false);
+    public void assignContextMenu(ContextMenu contextMenu) {
+        _subContextMenu = contextMenu;
+        _subContextMenu.setOutsideClickClosable(false);
         isActionItem = true;
     }
 
@@ -89,9 +89,9 @@ public class MenuItem extends Prototype {
     /**
      * Constructs a MenuItem with assigned context menu and text
      */
-    public MenuItem(ContextMenu context_menu, String text) {
+    public MenuItem(ContextMenu contextMenu, String text) {
         this();
-        assignContextMenu(context_menu);
+        assignContextMenu(contextMenu);
         setText(text);
     }
 
@@ -123,6 +123,10 @@ public class MenuItem extends Prototype {
 
     public void setTextMargin(Indents margin) {
         _textObject.setMargin(margin);
+    }
+
+    public void setTextMargin(int left, int top, int right, int bottom) {
+        _textObject.setMargin(left, top, right, bottom);
     }
 
     /**
@@ -246,7 +250,7 @@ public class MenuItem extends Prototype {
      * Show the MenuItem
      */
     public void show() {
-        if (_sub_context_menu == null)
+        if (_subContextMenu == null)
             return;
 
         MouseArgs args = new MouseArgs();
@@ -255,34 +259,34 @@ public class MenuItem extends Prototype {
         // проверка справа
         args.position.setX((contextMenu.getX() + contextMenu.getWidth() + 2));
 
-        if (args.position.getX() + _sub_context_menu.getWidth() > getHandler().getWidth()) {
-            args.position.setX((contextMenu.getX() - _sub_context_menu.getWidth() - 2));
+        if (args.position.getX() + _subContextMenu.getWidth() > getHandler().getWidth()) {
+            args.position.setX((contextMenu.getX() - _subContextMenu.getWidth() - 2));
         }
         // проверка снизу
         args.position.setY(getY());
-        if (args.position.getY() + _sub_context_menu.getHeight() > getHandler().getHeight()) {
-            args.position.setY(contextMenu.getY() + contextMenu.getHeight() - _sub_context_menu.getHeight());
+        if (args.position.getY() + _subContextMenu.getHeight() > getHandler().getHeight()) {
+            args.position.setY(contextMenu.getY() + contextMenu.getHeight() - _subContextMenu.getHeight());
         }
 
-        _sub_context_menu.show(this, args);
+        _subContextMenu.show(this, args);
     }
 
     /**
      * Hide the MenuItem
      */
     public void hide() {
-        if (_sub_context_menu != null)
-            _sub_context_menu.hide();
+        if (_subContextMenu != null)
+            _subContextMenu.hide();
     }
 
     private void onMouseAction() {
-        if (_sub_context_menu != null) {
-            if (_sub_context_menu.isVisible()) {
+        if (_subContextMenu != null) {
+            if (_subContextMenu.isVisible()) {
                 hide();
                 MouseArgs args = new MouseArgs();
                 args.button = MouseButton.BUTTON_RIGHT;
                 args.position.setPosition(getX(), getY());
-                _sub_context_menu.closeDependencies(args);
+                _subContextMenu.closeDependencies(args);
             } else
                 show();
         }

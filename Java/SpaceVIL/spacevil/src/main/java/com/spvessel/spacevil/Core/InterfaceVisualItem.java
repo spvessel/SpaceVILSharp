@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
-import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Spacing;
@@ -140,7 +140,7 @@ public interface InterfaceVisualItem extends InterfaceBaseItem {
 
     public void setContent(List<InterfaceBaseItem> content);
 
-    public CustomFigure isCustomFigure();
+    public Figure isCustomFigure();
 
-    public void setCustomFigure(CustomFigure figure);
+    public void setCustomFigure(Figure figure);
 }

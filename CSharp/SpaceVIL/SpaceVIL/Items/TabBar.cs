@@ -10,7 +10,7 @@ namespace SpaceVIL
         private Tab _selectedTab = null;
         internal Dictionary<Tab, Frame> TabMapView;
         private List<Tab> _tabList;
-        public List<Tab> GetTabs()
+        internal List<Tab> GetTabs()
         {
             Reindexing();
             return new List<Tab>(_tabList);
@@ -24,7 +24,7 @@ namespace SpaceVIL
 
         private SizePolicy _contentPolicy = SizePolicy.Fixed;
 
-        public void SetContentPolicy(SizePolicy policy)
+        internal void SetContentPolicy(SizePolicy policy)
         {
             if (_contentPolicy == policy)
                 return;
@@ -34,7 +34,7 @@ namespace SpaceVIL
             UpdateLayout();
         }
 
-        public SizePolicy GetContentPolicy()
+        internal SizePolicy GetContentPolicy()
         {
             return _contentPolicy;
         }
@@ -92,9 +92,6 @@ namespace SpaceVIL
             };
         }
 
-        /// <summary>
-        /// Add item to the TabBar
-        /// </summary>
         public override void AddItem(IBaseItem item)
         {
             Tab tab = item as Tab;
@@ -103,7 +100,7 @@ namespace SpaceVIL
 
             if (_tabList.Count == 0)
             {
-                tab.SetToggled(true);
+                tab.SetSelected(true);
                 tab.View.SetVisible(true);
                 _selectedTab = tab;
                 _selectedTabIndex = 0;
@@ -133,7 +130,7 @@ namespace SpaceVIL
 
             if (_tabList.Count == 0)
             {
-                tab.SetToggled(true);
+                tab.SetSelected(true);
                 tab.View.SetVisible(true);
                 _selectedTab = tab;
             }
@@ -166,9 +163,6 @@ namespace SpaceVIL
             return result;
         }
 
-        /// <summary>
-        /// Set width of the TabBar
-        /// </summary>
         public override void SetWidth(int width)
         {
             int diffWidth = GetWidth() - width;
@@ -178,21 +172,13 @@ namespace SpaceVIL
             AddScrollOffset(diffWidth);
         }
 
-        /// <summary>
-        /// Set X position of the TabBar
-        /// </summary>
-        public override void SetX(int _x)
+        public override void SetX(int x)
         {
-            base.SetX(_x);
+            base.SetX(x);
             UpdateLayout();
         }
 
         private bool _isUpdating = false;
-        /// <summary>
-        /// Update all items and TabBar sizes and positions
-        /// according to confines
-        /// </summary>
-        int c = 0;
         public void UpdateLayout()
         {
             List<IBaseItem> itemList = GetItems();
@@ -396,11 +382,11 @@ namespace SpaceVIL
         {
             if (_selectedTab == sender)
                 return;
-            sender.SetToggled(true);
+            sender.SetSelected(true);
             TabMapView[sender].SetVisible(true);
             if (_selectedTab != null)
             {
-                _selectedTab.SetToggled(false);
+                _selectedTab.SetSelected(false);
                 TabMapView[_selectedTab].SetVisible(false);
             }
             _selectedTab = sender;
@@ -408,14 +394,14 @@ namespace SpaceVIL
             Reindexing();
         }
 
-        public void SelectTab(Tab tab)
+        internal void SelectTab(Tab tab)
         {
             OnTop(tab);
             UnselectOthers(tab, null);
         }
 
         private int _selectedTabIndex = 0;
-        public void SelectTab(int index)
+        internal void SelectTab(int index)
         {
             if (index < 0 || index >= _tabList.Count)
                 return;
@@ -423,26 +409,26 @@ namespace SpaceVIL
             UnselectOthers(_tabList[index], null);
         }
 
-        public int GetSelectedTabIndex()
+        internal int GetSelectedTabIndex()
         {
             return _selectedTabIndex;
         }
 
-        public Tab GetSelectedTab()
+        internal Tab GetSelectedTab()
         {
             return _selectedTab;
         }
-        public Frame GetTabFrame(Tab tab)
+        internal Frame GetTabFrame(Tab tab)
         {
             return TabMapView[tab];
         }
 
-        public List<IBaseItem> GetTabContent(Tab tab)
+        internal List<IBaseItem> GetTabContent(Tab tab)
         {
             return TabMapView[tab].GetItems();
         }
 
-        public void SelectTabByName(String tabName)
+        internal void SelectTabByName(String tabName)
         {
             foreach (Tab tab in TabMapView.Keys)
             {
@@ -454,7 +440,7 @@ namespace SpaceVIL
             }
         }
 
-        public void SelectTabByText(String tabText)
+        internal void SelectTabByText(String tabText)
         {
             foreach (Tab tab in TabMapView.Keys)
             {
@@ -483,7 +469,7 @@ namespace SpaceVIL
         /// <summary>
         /// Remove tab by name
         /// </summary>
-        public bool RemoveTabByName(String tabName)
+        internal bool RemoveTabByName(String tabName)
         {
             if (tabName == null)
                 return false;
@@ -498,7 +484,7 @@ namespace SpaceVIL
             return false;
         }
 
-        public bool RemoveTabByText(String tabText)
+        internal bool RemoveTabByText(String tabText)
         {
             if (tabText == null)
                 return false;
@@ -516,7 +502,7 @@ namespace SpaceVIL
         /// <summary>
         /// Remove tab
         /// </summary>
-        public bool RemoveTab(Tab tab)
+        internal bool RemoveTab(Tab tab)
         {
             if (tab == null)
                 return false;
@@ -525,7 +511,7 @@ namespace SpaceVIL
             return false;
         }
 
-        public bool RemoveAllTabs()
+        internal bool RemoveAllTabs()
         {
             if (_tabList.Count == 0)
                 return false;
@@ -541,7 +527,7 @@ namespace SpaceVIL
         /// <summary>
         /// Add IBaseItem item to the tab with name tabName
         /// </summary>
-        public void AddItemToTabByName(String tabName, IBaseItem item)
+        internal void AddItemToTabByName(String tabName, IBaseItem item)
         {
             foreach (var tab in TabMapView.Keys)
             {
@@ -552,7 +538,7 @@ namespace SpaceVIL
                 }
             }
         }
-        public void AddItemToTabByText(String tabText, IBaseItem item)
+        internal void AddItemToTabByText(String tabText, IBaseItem item)
         {
             foreach (var tab in TabMapView.Keys)
             {
@@ -567,7 +553,7 @@ namespace SpaceVIL
         /// <summary>
         /// Add IBaseItem item to the tab by tab
         /// </summary>
-        public void AddItemToTab(Tab tab, IBaseItem item)
+        internal void AddItemToTab(Tab tab, IBaseItem item)
         {
             if (TabMapView.ContainsKey(tab))
                 TabMapView[tab].AddItem(item);

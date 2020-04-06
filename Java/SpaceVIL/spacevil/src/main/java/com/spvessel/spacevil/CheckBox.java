@@ -203,13 +203,13 @@ public class CheckBox extends Prototype {
         setForeground(style.foreground);
         setFont(style.font);
 
-        Style inner_style = style.getInnerStyle("indicator");
-        if (inner_style != null) {
-            _indicator.setStyle(inner_style);
+        Style innerStyle = style.getInnerStyle("indicator");
+        if (innerStyle != null) {
+            _indicator.setStyle(innerStyle);
         }
-        inner_style = style.getInnerStyle("textline");
-        if (inner_style != null) {
-            _text_object.setStyle(inner_style);
+        innerStyle = style.getInnerStyle("text");
+        if (innerStyle != null) {
+            _text_object.setStyle(innerStyle);
         }
     }
 }

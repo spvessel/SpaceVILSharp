@@ -1,172 +1,21 @@
-using System.Drawing;
 using System;
+using System.Drawing;
 using System.Collections.Generic;
-using System.Drawing.Text;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.IO;
+
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 
 namespace SpaceVIL.Common
 {
-    internal class DefaultFont
-    {
-        private static DefaultFont _instance;
-        private DefaultFont() { }
-        public static DefaultFont GetInstance()
-        {
-            if (_instance == null)
-                _instance = new DefaultFont();
-            return _instance;
-        }
-
-        private PrivateFontCollection privateFontCollection = null;
-        private Font _defaultFont;
-        public void SetDefaultFont(Font font)
-        {
-            _defaultFont = font;
-        }
-        // public void SetDefaultFont(String font_path)
-        // {
-        //     Stream fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(font_path);
-        //     SetDefaultFont(fontStream);
-        // }
-        // public void SetDefaultFont(Stream font_stream)
-        // {
-        //     privateFontCollection = new PrivateFontCollection();
-
-        //     System.IntPtr data = Marshal.AllocCoTaskMem((int)font_stream.Length);
-        //     byte[] fontdata = new byte[font_stream.Length];
-        //     font_stream.Read(fontdata, 0, (int)font_stream.Length);
-        //     Marshal.Copy(fontdata, 0, data, (int)font_stream.Length);
-        //     privateFontCollection.AddMemoryFont(data, (int)font_stream.Length);
-        //     font_stream.Close();
-        //     Marshal.FreeCoTaskMem(data);
-        //     _defaultFont = new Font(privateFontCollection.Families[0], 10, FontStyle.Regular);
-        // }
-        // public Font GetDefaultFont() //объекты не инициализируются почему-то, выяснить
-        // {
-        //     if (_defaultFont == null)
-        //     {
-        //         AddFontFromMemory();
-        //         _defaultFont = new Font(privateFontCollection.Families[0], 10, FontStyle.Regular);
-        //     }
-        //     return new Font(_defaultFont.FontFamily, 10, _defaultFont.Style);
-        //     // return new Font(new FontFamily("Ubuntu"), 10, FontStyle.Regular);
-        // }
-
-        private const int defFontSize = 12;
-        public Font GetDefaultFont(int size = defFontSize) //объекты не инициализируются почему-то, выяснить
-        {
-            if (size == 0)
-            {
-                size = defFontSize;
-            }
-            if (_defaultFont == null)
-            {
-                AddFontFromMemory();
-                _defaultFont = new Font(privateFontCollection.Families[0], defFontSize, FontStyle.Regular);
-            }
-            return GraphicsMathService.ChangeFontSize(size, _defaultFont); //new Font(_defaultFont.FontFamily, size, _defaultFont.Style);
-            // return new Font(new FontFamily("Ubuntu"), size, FontStyle.Regular);
-        }
-        public Font GetDefaultFont(FontStyle style, int size)
-        {
-            if (size == 0)
-            {
-                size = defFontSize;
-            }
-            if (_defaultFont == null)
-            {
-                AddFontFromMemory();
-                _defaultFont = new Font(privateFontCollection.Families[0], size, style);
-            }
-            return new Font(_defaultFont.FontFamily, size, style);
-        }
-        // public Font GetEmbeddedFont(EmbeddedFont font, int size, FontStyle style)
-        // {
-        //     PrivateFontCollection tmp = new PrivateFontCollection();
-        //     Stream fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(GetPathEmbeddedFont(font));
-        //     System.IntPtr data = Marshal.AllocCoTaskMem((int)fontStream.Length);
-        //     byte[] fontdata = new byte[fontStream.Length];
-        //     fontStream.Read(fontdata, 0, (int)fontStream.Length);
-        //     Marshal.Copy(fontdata, 0, data, (int)fontStream.Length);
-        //     tmp.AddMemoryFont(data, (int)fontStream.Length);
-        //     fontStream.Close();
-        //     Marshal.FreeCoTaskMem(data);
-        //     return new Font(tmp.Families[0], size, style);
-        // }
-        private void AddFontFromMemory()
-        {
-            if (String.IsNullOrEmpty(_embeddedFont)) // _embeddedFont == null || _embeddedFont == String.Empty)
-                SetDefaultEmbeddedFont(EmbeddedFont.Ubuntu);
-
-            privateFontCollection = new PrivateFontCollection();
-
-            Stream fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_embeddedFont);
-            System.IntPtr data = Marshal.AllocCoTaskMem((int)fontStream.Length);
-            byte[] fontdata = new byte[fontStream.Length];
-            fontStream.Read(fontdata, 0, (int)fontStream.Length);
-            Marshal.Copy(fontdata, 0, data, (int)fontStream.Length);
-            privateFontCollection.AddMemoryFont(data, (int)fontStream.Length);
-            fontStream.Close();
-            Marshal.FreeCoTaskMem(data);
-        }
-        private String _embeddedFont = null;
-        public void SetDefaultEmbeddedFont(EmbeddedFont font)
-        {
-            switch (font)
-            {
-                case EmbeddedFont.Ubuntu:
-                    _embeddedFont = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
-                    break;
-
-                default:
-                    _embeddedFont = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
-                    break;
-            }
-        }
-        // private String GetPathEmbeddedFont(EmbeddedFont font)
-        // {
-        //     String path;
-        //     switch (font)
-        //     {
-        //         case EmbeddedFont.Ubuntu:
-        //             path = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
-        //             break;
-
-        //         default:
-        //             path = "SpaceVIL.Fonts.Ubuntu-Regular.ttf";
-        //             break;
-        //     }
-        //     return path;
-        // }
-    }
-
+    /// <summary>
+    /// DefaultsService is static class providing methods to getting SpaceVIL default common values such as font, mouse cursor, icon images. 
+    /// </summary>
     public static class DefaultsService
     {
-        private static CursorImage _defaultCursor = new CursorImage(EmbeddedCursor.Arrow);
-
-        public static void SetDefaultCursor(CursorImage cursor)
-        {
-            if (cursor == null)
-                return;
-            _defaultCursor = cursor;
-        }
-
-        public static CursorImage GetDefaultCursor()
-        {
-            return _defaultCursor;
-        }
-
-        private static ThemeStyle _defaultTheme; // = ThemeStyle.GetInstance();
-        private static DefaultFont _defaultFont; // = ThemeStyle.GetInstance();
-
         static DefaultsService()
         {
             _defaultFont = DefaultFont.GetInstance();
-            // _defaultTheme = ThemeStyle.GetInstance();
         }
 
         internal static void InitDefaultTheme()
@@ -174,57 +23,103 @@ namespace SpaceVIL.Common
             _defaultTheme = new ThemeStyle();
         }
 
+        private static Dictionary<EmbeddedImage, Bitmap> images_32 = new Dictionary<EmbeddedImage, Bitmap>();
+
+        private static Dictionary<EmbeddedImage, Bitmap> images_64 = new Dictionary<EmbeddedImage, Bitmap>();
+
+        private static CursorImage _defaultCursor = new CursorImage(EmbeddedCursor.Arrow);
+
+        private static ThemeStyle _defaultTheme;
+
+        private static DefaultFont _defaultFont;
+
+        /// <summary>
+        /// Setting default cursor image the current application.
+        /// </summary>
+        /// <param name="cursor">The mouse cursor image as SpaceVIL.Decorations.CursorImage</param>
+        public static void SetDefaultCursor(CursorImage cursor)
+        {
+            if (cursor == null)
+                return;
+            _defaultCursor = cursor;
+        }
+        /// <summary>
+        /// Getting the current default mouse cursor image.
+        /// </summary>
+        /// <returns>The mouse cursor image as SpaceVIL.Decorations.CursorImage</returns>
+        public static CursorImage GetDefaultCursor()
+        {
+            return _defaultCursor;
+        }
+
+        /// <summary>
+        /// Getting the default theme.
+        /// </summary>
+        /// <returns>The theme as SpaceVIL.Decorations.ThemeStyle</returns>
         public static ThemeStyle GetDefaultTheme()
         {
             if (_defaultTheme == null)
                 _defaultTheme = new ThemeStyle();
             return _defaultTheme;
         }
+        /// <summary>
+        /// Setting the default theme for the current application.
+        /// </summary>
+        /// <param name="theme">The theme as SpaceVIL.Decorations.ThemeStyle</param>
         public static void SetDefaultTheme(ThemeStyle theme)
         {
             _defaultTheme = theme;
         }
+
+        /// <summary>
+        /// Getting the default item style from the current default theme by its type.
+        /// </summary>
+        /// <param name="type">Item type as System.Type
+        /// <para/>Example: typeof(SpaceVIL.ButtonCore)
+        /// </param>
+        /// <returns></returns>
         public static Style GetDefaultStyle(Type type)
         {
             if (_defaultTheme == null)
                 _defaultTheme = new ThemeStyle();
             return _defaultTheme.GetThemeStyle(type);
         }
+
+        /// <summary>
+        /// Getting the current default font for the current application.
+        /// </summary>
+        /// <returns>The current default font as System.Drawing.Font</returns>
         public static Font GetDefaultFont()
         {
             return _defaultFont.GetDefaultFont();
         }
+        /// <summary>
+        /// Getting the current default font with the specified font size for the current application.
+        /// </summary>
+        /// <param name="size">A font size as System.Int32</param>
+        /// <returns>The current default font with changed font size as System.Drawing.Font</returns>
         public static Font GetDefaultFont(int size)
         {
             return _defaultFont.GetDefaultFont(size);
         }
+        /// <summary>
+        /// Getting the current default font with the specified font size and font style for the current application.
+        /// </summary>
+        /// <param name="style">A font style as System.Drawing.FontStyle</param>
+        /// <param name="size">A font size as System.Int32</param>
+        /// <returns>The current default font with changed font size and font style as System.Drawing.Font</returns>
         public static Font GetDefaultFont(FontStyle style, int size)
         {
             return _defaultFont.GetDefaultFont(style, size);
         }
-        // public static void SetDefaultEmbeddedFont(EmbeddedFont font)
-        // {
-        //     _defaultFont.SetDefaultEmbeddedFont(font);
-        // }
-        // public static void SetDefaultFont(String font_path)
-        // {
-        //     _defaultFont.SetDefaultFont(font_path);
-        // }
+        /// <summary>
+        /// Setting the default font for the current application.
+        /// </summary>
+        /// <param name="font">A font as System.Drawing.Font</param>
         public static void SetDefaultFont(Font font)
         {
             _defaultFont.SetDefaultFont(font);
         }
-        // public static void SetDefaultFont(Stream font_stream)
-        // {
-        //     _defaultFont.SetDefaultFont(font_stream);
-        // }
-        // public static Font GetEmbeddedFont(EmbeddedFont font, int size, FontStyle style)
-        // {
-        //     return _defaultFont.GetEmbeddedFont(font, size, style);
-        // }
-
-        private static Dictionary<EmbeddedImage, Bitmap> images_32 = new Dictionary<EmbeddedImage, Bitmap>();
-        private static Dictionary<EmbeddedImage, Bitmap> images_64 = new Dictionary<EmbeddedImage, Bitmap>();
 
         internal static void InitImages()
         {
@@ -317,12 +212,24 @@ namespace SpaceVIL.Common
             AddImage(stream, images_64, EmbeddedImage.LoadCircle);
         }
 
-        static void AddImage(Bitmap stream, Dictionary<EmbeddedImage, Bitmap> map, EmbeddedImage key)
+        private static void AddImage(Bitmap stream, Dictionary<EmbeddedImage, Bitmap> map, EmbeddedImage key)
         {
             if (stream != null)
                 map.Add(key, stream);
         }
 
+        /// <summary>
+        /// Getting the specified image by the type and size of the image, which is stored in the SpaceVIL framework.
+        /// </summary>
+        /// <param name="image">
+        /// An image type as SpaceVIL.Core.EmbeddedImage
+        /// <para/>Example: SpaceVIL.Core.EmbeddedImage.Gear (to get gear icon)
+        /// </param>
+        /// <param name="size">
+        /// An image size as SpaceVIL.Core.EmbeddedImageSize (only 32x32 or 64x64)
+        /// <para/>Example: SpaceVIL.Core.EmbeddedImage.Size32x32 (to get an image in 32x32 pixels)
+        /// </param>
+        /// <returns>Copy of image icon as System.Drawing.Bitmap</returns>
         public static Bitmap GetDefaultImage(EmbeddedImage image, EmbeddedImageSize size)
         {
             if (size == EmbeddedImageSize.Size32x32 && images_32.ContainsKey(image))

@@ -1240,22 +1240,22 @@ namespace SpaceVIL
             _textureStorage.UpdateBlockHeight();
         }
 
-        public override void SetX(int _x)
+        public override void SetX(int x)
         {
-            if (GetX() == _x)
+            if (GetX() == x)
             {
                 return;
             }
-            base.SetX(_x);
+            base.SetX(x);
             UpdateLayout();
         }
-        public override void SetY(int _y)
+        public override void SetY(int y)
         {
-            if (GetY() == _y)
+            if (GetY() == y)
             {
                 return;
             }
-            base.SetY(_y);
+            base.SetY(y);
             UpdateLayout();
         }
 

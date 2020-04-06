@@ -30,7 +30,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
 
     private SizePolicy _contentPolicy = SizePolicy.FIXED;
 
-    public void setContentPolicy(SizePolicy policy) {
+    void setContentPolicy(SizePolicy policy) {
         if (_contentPolicy == policy)
             return;
         _contentPolicy = policy;
@@ -39,7 +39,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         updateLayout();
     }
 
-    public SizePolicy getContentPolicy() {
+    SizePolicy getContentPolicy() {
         return _contentPolicy;
     }
 
@@ -159,13 +159,12 @@ class TabBar extends Prototype implements InterfaceHLayout {
     }
 
     @Override
-    public void setX(int _x) {
-        super.setX(_x);
+    public void setX(int x) {
+        super.setX(x);
         updateLayout();
     }
 
     private boolean _isUpdating = false;
-    int c = 0;
 
     @Override
     public void updateLayout() {
@@ -359,37 +358,37 @@ class TabBar extends Prototype implements InterfaceHLayout {
         reindexing();
     }
 
-    public void selectTab(Tab tab) {
+    void selectTab(Tab tab) {
         onTop(tab);
         unselectOthers(tab, null);
     }
 
     private int _selectedTabIndex = 0;
 
-    public void selectTab(int index) {
+    void selectTab(int index) {
         if (index < 0 || index >= _tabList.size())
             return;
         onTop(_tabList.get(index));
         unselectOthers(_tabList.get(index), null);
     }
 
-    public int getSelectedTabIndex() {
+    int getSelectedTabIndex() {
         return _selectedTabIndex;
     }
 
-    public Tab getSelectedTab() {
+    Tab getSelectedTab() {
         return _selectedTab;
     }
 
-    public Frame getTabFrame(Tab tab) {
+    Frame getTabFrame(Tab tab) {
         return tabMapView.get(tab);
     }
 
-    public List<InterfaceBaseItem> getTabContent(Tab tab) {
+    List<InterfaceBaseItem> getTabContent(Tab tab) {
         return tabMapView.get(tab).getItems();
     }
 
-    public void selectTabByName(String tabName) {
+    void selectTabByName(String tabName) {
         for (Tab tab : tabMapView.keySet()) {
             if (tabName.equals(tab.getItemName())) {
                 unselectOthers(tab, null);
@@ -398,7 +397,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         }
     }
 
-    public void selectTabByText(String tabText) {
+    void selectTabByText(String tabText) {
         for (Tab tab : tabMapView.keySet()) {
             if (tabText.equals(tab.getText())) {
                 unselectOthers(tab, null);
@@ -419,7 +418,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         onTop(_tabList.get(_selectedTabIndex));
     }
 
-    public boolean removeTabByName(String tabName) {
+    boolean removeTabByName(String tabName) {
         if (tabName == null)
             return false;
         for (Tab tab : tabMapView.keySet()) {
@@ -431,7 +430,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         return false;
     }
 
-    public boolean removeTabByText(String tabText) {
+    boolean removeTabByText(String tabText) {
         if (tabText == null)
             return false;
         for (Tab tab : tabMapView.keySet()) {
@@ -443,7 +442,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         return false;
     }
 
-    public boolean removeTab(Tab tab) {
+    boolean removeTab(Tab tab) {
         if (tab == null)
             return false;
         if (tabMapView.containsKey(tab)) {
@@ -452,7 +451,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         return false;
     }
 
-    public boolean removeAllTabs() {
+    boolean removeAllTabs() {
         if (_tabList.size() == 0)
             return false;
         Tab tab = null;
@@ -463,7 +462,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         return true;
     }
 
-    public void addItemToTabByName(String tabName, InterfaceBaseItem item) {
+    void addItemToTabByName(String tabName, InterfaceBaseItem item) {
         for (Tab tab : tabMapView.keySet()) {
             if (tabName.equals(tab.getItemName())) {
                 tabMapView.get(tab).addItem(item);
@@ -472,7 +471,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         }
     }
 
-    public void addItemToTabByText(String tabText, InterfaceBaseItem item) {
+    void addItemToTabByText(String tabText, InterfaceBaseItem item) {
         for (Tab tab : tabMapView.keySet()) {
             if (tabText.equals(tab.getText())) {
                 tabMapView.get(tab).addItem(item);
@@ -481,7 +480,7 @@ class TabBar extends Prototype implements InterfaceHLayout {
         }
     }
 
-    public void addItemToTab(Tab tab, InterfaceBaseItem item) {
+    void addItemToTab(Tab tab, InterfaceBaseItem item) {
         if (tabMapView.containsKey(tab))
             tabMapView.get(tab).addItem(item);
     }

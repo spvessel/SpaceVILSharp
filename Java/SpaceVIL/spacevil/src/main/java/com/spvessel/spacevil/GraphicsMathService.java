@@ -2,7 +2,6 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Core.Area;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
-import com.spvessel.spacevil.Core.RectangleBounds;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 

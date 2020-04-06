@@ -3,7 +3,7 @@ package com.spvessel.spacevil.Decorations;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CustomFigure {
+public class Figure {
     private List<float[]> _figure;
 
     /**
@@ -27,20 +27,22 @@ public class CustomFigure {
      * @param isFixed is CustomFigure fixed
      * @param triangles Triangles list of the CustomFigure's shape
      */
-    public CustomFigure(boolean isFixed, List<float[]> triangles) {
-        synchronized (this) {
+    public Figure(boolean isFixed, List<float[]> triangles) {
             _is_fixed = isFixed;
             _figure = new LinkedList<>(triangles);
-        }
+    }
+
+    public Figure(List<float[]> triangles) {
+            _figure = new LinkedList<>(triangles);
     }
 
     /**
      * @return new CustomFugure points list changed according to the new position (x, y)
      */
-    public List<float[]> updatePosition(int _x, int _y) {
+    public List<float[]> updatePosition(int x, int y) {
         List<float[]> result = new LinkedList<>();
         for (float[] item : _figure) {
-            result.add(new float[] { item[0] + _x, item[1] + _y, 0.0f });
+            result.add(new float[] { item[0] + x, item[1] + y, 0.0f });
         }
         return result;
     }

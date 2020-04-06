@@ -3,132 +3,116 @@ package com.spvessel.spacevil;
 import com.spvessel.spacevil.Core.Geometry;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceFreeLayout;
-import com.spvessel.spacevil.Core.InterfacePosition;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.util.List;
 
-public final class Cell extends Geometry implements InterfacePosition {
+public final class Cell extends Geometry {
     private InterfaceFreeLayout _parent = null;
 
-    /**
-     * @return parent grid of the cell
-     */
     public InterfaceFreeLayout getParentGrid() {
         return _parent;
     }
 
-    Cell(InterfaceFreeLayout grid, int row, int column) {
+    Cell(InterfaceFreeLayout grid) {
         _parent = grid;
-        _row_index = row;
-        _column_index = column;
+    }
+
+    Cell(InterfaceFreeLayout grid, int row, int column)
+    {
+        this(grid);
+        _rowIndex = row;
+        _columnIndex = column;
+    }
+
+    Cell(InterfaceFreeLayout grid, int row, int column, InterfaceBaseItem item) {
+        this(grid, row, column);
+        _itemLink = item;
     }
 
     // Indecies
-    private int _row_index = 0;
+    private int _rowIndex = 0;
 
-    /**
-     * @return cell row number
-     */
     public int getRow() {
-        return _row_index;
+        return _rowIndex;
     }
 
-    /**
-     * @param index cell row number
-     */
-    public void setRow(int index) {
-        _row_index = index;
+    void setRow(int index) {
+        _rowIndex = index;
     }
 
-    private int _column_index = 0;
+    private int _columnIndex = 0;
 
-    /**
-     * @return cell column number
-     */
     public int getColumn() {
-        return _column_index;
+        return _columnIndex;
     }
 
-    /**
-     * @param index cell column number
-     */
-    public void setColumn(int index) {
-        _column_index = index;
+    void setColumn(int index) {
+        _columnIndex = index;
     }
 
     // Position
     private int _x = 0;
     private int _y = 0;
 
-    /**
-     * X position of the cell
-     */
-    public void setX(int x) {
+    void setX(int x) {
         _x = x;
     }
+
     public int getX() {
         return _x;
     }
 
-    /**
-     * Y position of the cell
-     */
-    public void setY(int y) {
+    void setY(int y) {
         _y = y;
     }
+
     public int getY() {
         return _y;
     }
 
-    private InterfaceBaseItem _item_link = null;
+    private InterfaceBaseItem _itemLink = null;
 
-    /**
-     * @return cell item
-     */
     public InterfaceBaseItem getItem() {
-        return _item_link;
+        return _itemLink;
     }
 
-    /**
-     * Set item into cell
-     */
-    public void setItem(InterfaceBaseItem item) {
-        _item_link = item;
+    void setItem(InterfaceBaseItem item) {
+        _itemLink = item;
     }
 
     void updateBehavior() {
-        if (getParentGrid() == null || _item_link == null)
+        if (getParentGrid() == null || _itemLink == null)
             return;
 
-        List<ItemAlignment> alignment = _item_link.getAlignment();
+        List<ItemAlignment> alignment = _itemLink.getAlignment();
 
         if (alignment.contains(ItemAlignment.LEFT)) {
-            _item_link.setX(getX() + _item_link.getMargin().left);//
+            _itemLink.setX(getX() + _itemLink.getMargin().left);//
         }
         if (alignment.contains(ItemAlignment.RIGHT)) {
-            _item_link.setX(getX() + getWidth() - _item_link.getWidth() - _item_link.getMargin().right);//
+            _itemLink.setX(getX() + getWidth() - _itemLink.getWidth() - _itemLink.getMargin().right);//
         }
         if (alignment.contains(ItemAlignment.TOP)) {
-            _item_link.setY(getY() + _item_link.getMargin().top);//
+            _itemLink.setY(getY() + _itemLink.getMargin().top);//
         }
         if (alignment.contains(ItemAlignment.BOTTOM)) {
-            _item_link.setY(getY() + getHeight() - _item_link.getHeight() - _item_link.getMargin().bottom);//
+            _itemLink.setY(getY() + getHeight() - _itemLink.getHeight() - _itemLink.getMargin().bottom);//
         }
         if (alignment.contains(ItemAlignment.HCENTER)) {
-            _item_link.setX(getX() + (getWidth() - _item_link.getWidth()) / 2 + _item_link.getMargin().left
-                    - _item_link.getMargin().right);//
+            _itemLink.setX(getX() + (getWidth() - _itemLink.getWidth()) / 2 + _itemLink.getMargin().left
+                    - _itemLink.getMargin().right);//
         }
         if (alignment.contains(ItemAlignment.VCENTER)) {
-            _item_link.setY(getY() + (getHeight() - _item_link.getHeight()) / 2 + _item_link.getMargin().top
-                    - _item_link.getMargin().bottom);//
+            _itemLink.setY(getY() + (getHeight() - _itemLink.getHeight()) / 2 + _itemLink.getMargin().top
+                    - _itemLink.getMargin().bottom);//
         }
     }
 
     void printCellInfo() {
-        System.out.println("X: " + _item_link.getX() + "\n" + "Y: " + _item_link.getY() + "\n" + "Row: " + _row_index
-                + "\n" + "Column: " + _column_index + "\n" + "Width: " + getWidth() + "\n" + "ItemW: "
-                + _item_link.getWidth() + "\n" + "Height: " + getHeight() + "\n" + "ItemH: " + _item_link.getHeight()
+        System.out.println("X: " + _itemLink.getX() + "\n" + "Y: " + _itemLink.getY() + "\n" + "Row: " + _rowIndex
+                + "\n" + "Column: " + _columnIndex + "\n" + "Width: " + getWidth() + "\n" + "ItemW: "
+                + _itemLink.getWidth() + "\n" + "Height: " + getHeight() + "\n" + "ItemH: " + _itemLink.getHeight()
                 + "\n");
     }
 

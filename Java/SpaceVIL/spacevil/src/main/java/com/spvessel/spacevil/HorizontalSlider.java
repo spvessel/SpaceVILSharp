@@ -38,8 +38,7 @@ public class HorizontalSlider extends Prototype {
         eventValueChanged.clear();
     }
 
-    private float _current_value = 0;
-    public int direction = 0;
+    private float _currentValue = 0;
 
     boolean _ignoreStep = true;
 
@@ -55,20 +54,16 @@ public class HorizontalSlider extends Prototype {
      * Position value of the HorizontalSlider
      */
     public void setCurrentValue(float value) {
-        if (_current_value > value)
-            direction = -1; // up
-        else
-            direction = 1; // down
 
-        _current_value = value;
+        _currentValue = value;
         
         if (!_ignoreStep)
-            _current_value = (float) Math.round(_current_value / _step) * _step;
+            _currentValue = (float) Math.round(_currentValue / _step) * _step;
 
-        if (_current_value < _min_value)
-            _current_value = _min_value;
-        if (_current_value > _max_value)
-            _current_value = _max_value;
+        if (_currentValue < _minValue)
+            _currentValue = _minValue;
+        if (_currentValue > _maxValue)
+            _currentValue = _maxValue;
 
         updateHandler(); // refactor!!
 
@@ -77,7 +72,7 @@ public class HorizontalSlider extends Prototype {
     }
 
     public float getCurrentValue() {
-        return _current_value;
+        return _currentValue;
     }
 
     private int getSumOfHorizontalIndents() {
@@ -90,34 +85,34 @@ public class HorizontalSlider extends Prototype {
 
     void updateHandler() {
         float offset = ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth())
-                / (_max_value - _min_value) * (_current_value - _min_value);
+                / (_maxValue - _minValue) * (_currentValue - _minValue);
         handler.setOffset((int) offset + getPadding().left + handler.getMargin().left);
     }
 
-    private float _min_value = 0;
+    private float _minValue = 0;
 
     /**
      * Minimum value of the HorizontalSlider
      */
     public void setMinValue(float value) {
-        _min_value = value;
+        _minValue = value;
     }
 
     public float getMinValue() {
-        return _min_value;
+        return _minValue;
     }
 
-    private float _max_value = 100;
+    private float _maxValue = 100;
 
     /**
      * Maximum value of the HorizontalSlider
      */
     public void setMaxValue(float value) {
-        _max_value = value;
+        _maxValue = value;
     }
 
     public float getMaxValue() {
-        return _max_value;
+        return _maxValue;
     }
 
     /**
@@ -153,8 +148,8 @@ public class HorizontalSlider extends Prototype {
     {
         _dragging = true;
         // иногда число NAN
-        float result = (float) (handler.getX() - getX()) * (_max_value - _min_value)
-                / ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth()) + _min_value;
+        float result = (float) (handler.getX() - getX()) * (_maxValue - _minValue)
+                / ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth()) + _minValue;
         if (!Float.isNaN(result))
             setCurrentValue(result);
     }
@@ -162,7 +157,7 @@ public class HorizontalSlider extends Prototype {
     protected void onTrackClick(InterfaceItem sender, MouseArgs args) {
         // Compute CurrentValue
         if (!_dragging)
-            setCurrentValue((float) (args.position.getX() - getX() - handler.getWidth() / 2) * (_max_value - _min_value)
+            setCurrentValue((float) (args.position.getX() - getX() - handler.getWidth() / 2) * (_maxValue - _minValue)
                     / ((float) getWidth() - getSumOfHorizontalIndents() - handler.getWidth()));
         _dragging = false;
     }
@@ -171,8 +166,8 @@ public class HorizontalSlider extends Prototype {
      * Set X position of the HorizontalSlider
      */
     @Override
-    public void setX(int _x) {
-        super.setX(_x);
+    public void setX(int x) {
+        super.setX(x);
         updateHandler();
     }
 

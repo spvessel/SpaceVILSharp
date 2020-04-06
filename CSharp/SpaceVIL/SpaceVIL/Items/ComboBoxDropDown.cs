@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 using System.Collections.Generic;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
@@ -7,25 +6,56 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// ComboBoxDropDown is drop-down list implementation for ComboBox (see SpaceVIL.ComboBox). 
+    /// ComboBox do not contains ComboBoxDropDown in usual way (ComboBox.GetItems() does not 
+    /// return ComboBoxDropDown), they just connected with each other. Used for selecting 
+    /// option from the list. ComboBoxDropDown is a floating item (see SpaceVIL.Core.IFloating 
+    /// and  enum SpaceVIL.Core.LayoutType) and closes when mouse click outside the 
+    /// ComboBoxDropDown area.
+    /// <para/> Contains ListBox. 
+    /// <para/> Supports all events except drag and drop.
+    /// <para/> Notice: All floating items render above all others items.
+    /// </summary>
     public class ComboBoxDropDown : Prototype, IFloating
     {
         internal ComboBox Parent = null;
+        /// <summary>
+        /// Event that is invoked when one of the options is selected.
+        /// </summary>
         public EventCommonMethod SelectionChanged;
+        /// <summary>
+        /// Disposing ComboBoxDropDown resources if it was removed.
+        /// </summary>
         public override void Release()
         {
             SelectionChanged = null;
         }
-
+        /// <summary>
+        /// ListBox for storing a list of options (SpaceVIL.MenuItem).
+        /// </summary>
         public ListBox ItemList = new ListBox();
         private String _textSelection = String.Empty;
+        /// <summary>
+        /// Getting the text of selected option.
+        /// </summary>
+        /// <returns>Text of selected option.</returns>
         public String GetText()
         {
             return _textSelection;
         }
+        /// <summary>
+        /// Getting index of the current selected option in the list.
+        /// </summary>
+        /// <returns>Index of the current selected option</returns>
         public int GetCurrentIndex()
         {
             return ItemList.GetSelection();
         }
+        /// <summary>
+        /// Selecting an option from the list at the specified index.
+        /// </summary>
+        /// <param name="index">Index of option in the list.</param>
         public void SetCurrentIndex(int index)
         {
             InitElements();
@@ -38,28 +68,39 @@ namespace SpaceVIL
         private List<IBaseItem> _queue = new List<IBaseItem>();
 
         private static int count = 0;
+        /// <summary>
+        /// You can specify mouse button (see SpaceVIL.Core.MouseButton) 
+        /// that is used to open ComboBoxDropDown.
+        /// <para/> Default: SpaceVIL.Core.MouseButton.ButtonLeft.
+        /// </summary>
         public MouseButton ActiveButton = MouseButton.ButtonLeft;
-
         private bool _init = false;
         private bool _ouside = true;
-
         /// <summary>
-        /// Close the ComboBoxDropDown it mouse click is outside (true or false)
+        /// Returns True if ComboBoxDropDown (see SpaceVIL.Core.IFloating)
+        /// should closes when mouse click outside the area of ComboBoxDropDown otherwise returns False..
         /// </summary>
+        /// <returns>True: if ComboBoxDropDown closes when mouse click outside the area.
+        /// False: if ComboBoxDropDown stays opened when mouse click outside the area.</returns>
         public bool IsOutsideClickClosable()
         {
             return _ouside;
         }
+        /// <summary>
+        /// Setting boolean value of item's behavior when mouse click occurs outside the ComboBoxDropDown.
+        /// </summary>
+        /// <param name="value">True: ComboBoxDropDown should become invisible if mouse click occurs outside the item.
+        /// False: an item should stay visible if mouse click occurs outside the item.</param>
         public void SetOutsideClickClosable(bool value)
         {
             _ouside = value;
         }
 
         /// <summary>
-        /// Constructs a ComboBoxDropDown
+        /// Default ComboBoxDropDown constructor. 
+        /// ComboBoxDropDown does not pass any input events and invisible by default.
         /// </summary>
-        /// <param name="handler"> parent window for the ComboBoxDropDown </param>
-        internal ComboBoxDropDown()
+        public ComboBoxDropDown()
         {
             SetItemName("ComboBoxDropDown_" + count++);
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBoxDropDown)));
@@ -74,8 +115,8 @@ namespace SpaceVIL
 
         private void DisableAdditionalControls()
         {
-            ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
-            ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
+            ItemList.SetVScrollBarPolicy(VisibilityPolicy.Never);
+            ItemList.SetHScrollBarPolicy(VisibilityPolicy.Never);
             ItemList.EventScrollUp = null;
             ItemList.EventScrollDown = null;
             ItemList.EventMouseClick = null;
@@ -84,8 +125,8 @@ namespace SpaceVIL
 
         private void EnableAdditionalControls()
         {
-            ItemList.SetVScrollBarVisible(ScrollBarVisibility.AsNeeded);
-            ItemList.SetHScrollBarVisible(ScrollBarVisibility.AsNeeded);
+            ItemList.SetVScrollBarPolicy(VisibilityPolicy.AsNeeded);
+            ItemList.SetHScrollBarPolicy(VisibilityPolicy.AsNeeded);
             ItemList.EventScrollUp = linkEventScrollUp;
             ItemList.EventScrollDown = linkEventScrollDown;
             ItemList.EventMouseClick = linkEventMouseClick;
@@ -103,17 +144,18 @@ namespace SpaceVIL
         private int _selectionIndexStore = -1;
 
         /// <summary>
-        /// Initialization and adding of all elements in the ComboBoxDropDown
+        /// Initializing all elements in the ComboBoxDropDown. 
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void InitElements()
         {
             if (!_init)
             {
-                ItemList.DisableMenu(true);
+                ItemList.SetMenuDisabled(true);
                 base.AddItem(ItemList);
                 SaveAdditionalControls();
                 DisableAdditionalControls();
-                // ItemList.GetArea().SelectionChanged += OnSelectionChanged;
                 ItemList.GetArea().EventMouseClick += (sender, args) =>
                 {
                     if (ItemList.GetSelection() != _selectionIndexStore)
@@ -151,24 +193,27 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Returns count of the ComboBoxDropDown lines
+        /// Getting number of options in the list.
         /// </summary>
+        /// <returns>Number of options in the list.</returns>
         public int GetListCount()
         {
             return ItemList.GetListContent().Count;
         }
 
         /// <summary>
-        /// Returns ComboBoxDropDown items list
+        /// Getting all existing options (list of SpaceVIL.MenuItem objects).
         /// </summary>
+        /// <returns>Options as List&lt;SpaceVIL.MenuItem&gt;</returns>
         public List<IBaseItem> GetListContent()
         {
             return ItemList.GetListContent();
         }
 
         /// <summary>
-        /// Add item to the ComboBoxDropDown
+        /// Adding option (or any SpaceVIL.Core.IBaseItem implementation) to the ComboBoxDropDown.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
             if (_init)
@@ -182,14 +227,17 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Remove item from the ComboBoxDropDown
+        /// Removing option (or any SpaceVIL.Core.IBaseItem implementation) from the ComboBoxDropDown.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>True: if the removal was successful. 
+        /// False: if the removal was unsuccessful.</returns>
         public override bool RemoveItem(IBaseItem item)
         {
             return ItemList.RemoveItem(item);
         }
 
-        void UpdateSize()
+        private void UpdateSize()
         {
             int height = 0;// ItemList.GetPadding().Top + ItemList.GetPadding().Bottom;
             int width = GetWidth();
@@ -227,11 +275,11 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Show the ComboBoxDropDown
+        /// Shows the ComboBoxDropDown at the proper position.
         /// </summary>
-        /// <param name="sender"> the item from which the show request is sent </param>
-        /// <param name="args"> mouse click arguments (cursor position, mouse button,
-        /// mouse button press/release, etc.) </param>
+        /// <param name="sender"> The item from which the show request is sent. </param>
+        /// <param name="args"> Mouse click arguments (cursor position, mouse button,
+        /// mouse button press/release, etc.). </param>
         public void Show(IItem sender, MouseArgs args)
         {
             if (args.Button == ActiveButton)
@@ -242,6 +290,9 @@ namespace SpaceVIL
                 ItemList.GetArea().SetFocus();
             }
         }
+        /// <summary>
+        /// Shows the ComboBoxDropDown at the position (0, 0).
+        /// </summary>
         public void Show()
         {
             MouseArgs args = new MouseArgs();
@@ -250,7 +301,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Hide the ComboBoxDropDown without destroying
+        /// Hide the ComboBoxDropDown without destroying.
         /// </summary>
         public void Hide()
         {
@@ -263,22 +314,25 @@ namespace SpaceVIL
             }
             else
             {
-                GetHandler().SetFocus();
+                GetHandler().ResetFocus();
             }
         }
-
+        /// <summary>
+        /// Hide the ComboBoxDropDown without destroying with using specified mouse arguments.
+        /// </summary>
+        /// <param name="args">Arguments as SpaceVIL.Core.MouseArgs.</param>
         public void Hide(MouseArgs args)
         {
             if (!IsVisible())
                 return;
-
             Hide();
             Parent.IsDropDownAreaOutsideClicked(args);
         }
 
 
         /// <summary>
-        /// Set confines according to position and size of the ComboBoxDropDown
+        /// Overridden method for setting confines according 
+        /// to position and size of the ComboBoxDropDown (see Prototype.SetConfines()).
         /// </summary>
         public override void SetConfines()
         {
@@ -290,10 +344,11 @@ namespace SpaceVIL
             );
         }
 
-        //style
         /// <summary>
-        /// Set style of the ComboBoxDropDown
+        /// Setting style of the ComboBoxDropDown.
+        /// <para/> Inner styles: "itemlist".
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)

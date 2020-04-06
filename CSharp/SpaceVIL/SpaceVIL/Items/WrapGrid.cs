@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using System.Drawing;
 using System.Collections.Generic;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
@@ -8,83 +6,138 @@ using SpaceVIL.Common;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// WrapGrid is a container and manager of SpaceVIL.WrapArea 
+    /// (scrollable container for other elements with ability of selection, 
+    /// groups elements in cells of a certain size)
+    /// and scroll bars. WrapGrid controls scrolling, resizing and other actions of SpaceVIL.WrapArea.
+    /// <para/> Contains list area, scroll bars, scroll menu.
+    /// <para/> Supports all events except drag and drop.
+    /// </summary>
     public class WrapGrid : Prototype
     {
         static int count = 0;
-
+        /// <summary>
+        /// Returns True if internal SpaceVIL.WrapArea allocates all available space between cells 
+        /// to achieve smooth streching, otherwise returns False.
+        /// </summary>
+        /// <returns>True: if SpaceVIL.WrapArea allocates all available space between cells.
+        /// False: if space between cells is fixed.</returns>
         public bool IsStretch()
         {
             return _area.IsStretch();
         }
-
+        /// <summary>
+        /// Setting strech mode for internal SpaceVIL.WrapArea. 
+        /// SpaceVIL.WrapArea can allocates all available 
+        /// space between cells or uses fixed space between cells.
+        /// </summary>
+        /// <param name="value">True: if you want to SpaceVIL.WrapArea allocates 
+        /// all available space between cells.
+        /// False: if you want space between cells to be fixed.</param>
         public void SetStretch(bool value)
         {
             _area.SetStretch(value);
         }
-
+        /// <summary>
+        /// Getting current row count.
+        /// </summary>
+        /// <returns>Row count.</returns>
         public int GetRowCount()
         {
-            return _area._rows;
+            return _area.Rows;
         }
+        /// <summary>
+        /// Getting current column count.
+        /// </summary>
+        /// <returns>Row column.</returns>
         public int GetColumnCount()
         {
-            return _area._columns;
+            return _area.Columns;
         }
+        /// <summary>
+        /// Getting current cell width.
+        /// </summary>
+        /// <returns>Cell width.</returns>
         public int GetCellWidth()
         {
-            return _area._cellWidth;
+            return _area.CellWidth;
         }
+        /// <summary>
+        /// Getting current cell height.
+        /// </summary>
+        /// <returns>Cell height.</returns>
         public int GetCellHeight()
         {
-            return _area._cellHeight;
+            return _area.CellHeight;
         }
+        /// <summary>
+        /// Setting cell width.
+        /// </summary>
+        /// <param name="cellWidth">Cell width.</param>
         public void SetCellWidth(int cellWidth)
         {
-            _area._cellWidth = cellWidth;
+            _area.CellWidth = cellWidth;
             _area.UpdateLayout();
             UpdateSlider();
         }
+        /// <summary>
+        /// Setting cell height.
+        /// </summary>
+        /// <param name="cellHeight">Cell height.</param>
         public void SetCellHeight(int cellHeight)
         {
-            _area._cellHeight = cellHeight;
+            _area.CellHeight = cellHeight;
             _area.UpdateLayout();
             UpdateSlider();
         }
+        /// <summary>
+        /// Setting cell size.
+        /// </summary>
+        /// <param name="cellWidth">Cell width.</param>
+        /// <param name="cellHeight">Cell height.</param>
         public void SetCellSize(int cellWidth, int cellHeight)
         {
             _area.SetCellSize(cellWidth, cellHeight);
             UpdateSlider();
         }
         /// <summary>
-        /// ScrollBar moving step
+        /// Setting scroll movement step.
         /// </summary>
+        /// <param name="value">Scroll step.</param>
         public void SetScrollStep(int step)
         {
             _area.SetStep(step);
         }
+        /// <summary>
+        /// Getting scroll movement step.
+        /// </summary>
+        /// <returns>Scroll step.</returns>
         public int GetScrollStep()
         {
             return _area.GetStep();
         }
 
         /// <summary>
-        /// Selection item
+        /// Getting index of selected item.
         /// </summary>
+        /// <returns>Index of selected item.</returns>
         public int GetSelection()
         {
             return _area.GetSelection();
         }
 
         /// <summary>
-        /// Set selected item of the WrapGrid by index
+        /// Select item by index.
         /// </summary>
+        /// <param name="index">Index of selection.</param>
         public void SetSelection(int index)
         {
             _area.SetSelection(index);
         }
 
         /// <summary>
-        /// Unselect all items
+        /// Unselect selected item.
         /// </summary>
         public void Unselect()
         {
@@ -92,12 +145,19 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Is selection changes view of the item or not
+        /// Enable or disable selection ability of SpaceVIL.WrapArea.
         /// </summary>
+        /// <param name="value">True: if you want selection ability of SpaceVIL.WrapArea to be enabled. 
+        /// False: if you want selection ability of SpaceVIL.WrapArea to be disabled.</param>
         public void SetSelectionVisible(bool value)
         {
             _area.SetSelectionVisible(value);
         }
+        /// <summary>
+        /// Returns True if selection ability of SpaceVIL.WrapArea is enabled otherwise returns False.
+        /// </summary>
+        /// <returns>True: selection ability of SpaceVIL.WrapArea is enabled. 
+        /// False: selection ability of SpaceVIL.WrapArea is disabled.</returns>
         public bool IsSelectionVisible()
         {
             return _area.IsSelectionVisible();
@@ -107,57 +167,75 @@ namespace SpaceVIL
         private HorizontalStack _hlayout;
         private WrapArea _area;
 
-        /// <returns> WrapArea </returns>
+        /// <summary>
+        /// Getting list area of WrapGrid.
+        /// </summary>
+        /// <returns>List area as SpaceVIL.SpaceVIL.WrapArea.</returns>
         public WrapArea GetArea()
         {
             return _area;
         }
-
-        private ContextMenu _menu;
+        /// <summary>
+        /// Vertical scroll bar of WrapGrid.
+        /// </summary>
         public VerticalScrollBar VScrollBar;
+        /// <summary>
+        /// Horizontal scroll bar of WrapGrid.
+        /// </summary>
         public HorizontalScrollBar HScrollBar;
-        private ScrollBarVisibility _scrollBarPolicy = ScrollBarVisibility.AsNeeded;
-
+        private VisibilityPolicy _scrollBarPolicy = VisibilityPolicy.AsNeeded;
+        /// <summary>
+        /// Getting internal SpaceVIL.WrapArea orientation.
+        /// <para/> Orientation can be Orientation.Horizontal 
+        /// or Orientation.Vertical.
+        /// </summary>
+        /// <returns>Current SpaceVIL.WrapArea orientation.</returns>
         public Orientation GetOrientation()
         {
-            return _area._orientation;
+            return _area.Orientation;
         }
 
         /// <summary>
-        /// Is vertical scroll bar visible
+        /// Getting scroll bar visibility policy.
         /// </summary>
-        public ScrollBarVisibility GetScrollBarVisible()
+        /// <returns>Visibility policy as SpaceVIL.Core.VisibilityPolicy.</returns>
+        public VisibilityPolicy GetScrollBarPolicy()
         {
             return _scrollBarPolicy;
         }
-        public void SetScrollBarVisible(ScrollBarVisibility policy)
+        /// <summary>
+        /// Setting scroll bar visibility policy.
+        /// <para/> Default: SpaceVIL.Core.VisibilityPolicy.AsNeeded.
+        /// </summary>
+        /// <param name="policy">Visibility policy as SpaceVIL.Core.VisibilityPolicy.</param>
+        public void SetScrollBarPolicy(VisibilityPolicy policy)
         {
             _scrollBarPolicy = policy;
 
             if (GetOrientation() == Orientation.Horizontal)
             {
-                if (policy == ScrollBarVisibility.Never)
+                if (policy == VisibilityPolicy.Never)
                     VScrollBar.SetDrawable(false);
-                else if (policy == ScrollBarVisibility.AsNeeded)
+                else if (policy == VisibilityPolicy.AsNeeded)
                     VScrollBar.SetDrawable(false);
-                else if (policy == ScrollBarVisibility.Always)
+                else if (policy == VisibilityPolicy.Always)
                     VScrollBar.SetDrawable(true);
                 _hlayout.UpdateLayout();
             }
             else
             {
-                if (policy == ScrollBarVisibility.Never)
+                if (policy == VisibilityPolicy.Never)
                     HScrollBar.SetDrawable(false);
-                else if (policy == ScrollBarVisibility.AsNeeded)
+                else if (policy == VisibilityPolicy.AsNeeded)
                     HScrollBar.SetDrawable(false);
-                else if (policy == ScrollBarVisibility.Always)
+                else if (policy == VisibilityPolicy.Always)
                     HScrollBar.SetDrawable(true);
                 _vlayout.UpdateLayout();
             }
         }
 
         /// <summary>
-        /// Constructs a WrapGrid
+        /// Constructs a WrapGrid with specified cell width, height and orientation.
         /// </summary>
         public WrapGrid(int cellWidth, int cellHeight, Orientation orientation)
         {
@@ -305,21 +383,21 @@ namespace SpaceVIL
                 int visible_area = _area.GetHeight() - _area.GetPadding().Top - _area.GetPadding().Bottom;
                 if (visible_area < 0)
                     visible_area = 0;
-                int total = (_area._cellHeight + _area.GetSpacing().Vertical) * _area._rows - _area.GetSpacing().Vertical;
+                int total = (_area.CellHeight + _area.GetSpacing().Vertical) * _area.Rows - _area.GetSpacing().Vertical;
                 if (total <= visible_area)
                 {
                     VScrollBar.Slider.Handler.SetDrawable(false);
                     VScrollBar.Slider.SetStep(VScrollBar.Slider.GetMaxValue());
                     v_size = 0;
                     VScrollBar.Slider.SetCurrentValue(0);
-                    if (GetScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+                    if (GetScrollBarPolicy() == VisibilityPolicy.AsNeeded)
                     {
                         VScrollBar.SetDrawable(false);
                         Update();
                     }
                     return;
                 }
-                if (GetScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+                if (GetScrollBarPolicy() == VisibilityPolicy.AsNeeded)
                 {
                     VScrollBar.SetDrawable(true);
                     Update();
@@ -344,21 +422,21 @@ namespace SpaceVIL
                 int visible_area = _area.GetWidth() - _area.GetPadding().Left - _area.GetPadding().Right;
                 if (visible_area < 0)
                     visible_area = 0;
-                int total = (_area._cellWidth + _area.GetSpacing().Horizontal) * _area._columns - _area.GetSpacing().Horizontal;
+                int total = (_area.CellWidth + _area.GetSpacing().Horizontal) * _area.Columns - _area.GetSpacing().Horizontal;
                 if (total <= visible_area)
                 {
                     HScrollBar.Slider.Handler.SetDrawable(false);
                     HScrollBar.Slider.SetStep(HScrollBar.Slider.GetMaxValue());
                     h_size = 0;
                     HScrollBar.Slider.SetCurrentValue(0);
-                    if (GetScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+                    if (GetScrollBarPolicy() == VisibilityPolicy.AsNeeded)
                     {
                         HScrollBar.SetDrawable(false);
                         Update();
                     }
                     return;
                 }
-                if (GetScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+                if (GetScrollBarPolicy() == VisibilityPolicy.AsNeeded)
                 {
                     HScrollBar.SetDrawable(true);
                     Update();
@@ -389,8 +467,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set width of the ListBox
+        /// Setting item width. If the value is greater/less than the maximum/minimum 
+        /// value of the width, then the width becomes equal to the maximum/minimum value.
         /// </summary>
+        /// <param name="width"> Width of the item. </param>
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
@@ -398,8 +478,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set height of the ListBox
+        /// Setting item height. If the value is greater/less than the maximum/minimum 
+        /// value of the height, then the height becomes equal to the maximum/minimum value.
         /// </summary>
+        /// <param name="height"> Рeight of the item. </param>
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
@@ -407,8 +489,9 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Add item to the WrapGrid
+        /// Adding item to the list area of WrapGrid.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
             _area.AddItem(item);
@@ -416,8 +499,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Insert item to the WrapGrid by index
+        /// Insert item into the list area of WrapGrid by index.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <param name="index">Index of insertion.</param>
         public override void InsertItem(IBaseItem item, Int32 index)
         {
             _area.InsertItem(item, index);
@@ -425,8 +510,11 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Remove item from the WrapGrid
+        /// Removing the specified item from the list area of WrapGrid.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>True: if the removal was successful. 
+        /// False: if the removal was unsuccessful.</returns>
         public override bool RemoveItem(IBaseItem item)
         {
             List<IBaseItem> list = GetItems();
@@ -438,13 +526,18 @@ namespace SpaceVIL
             UpdateSlider();
             return b;
         }
+        /// <summary>
+        /// Removing all items from the list area of WrapGrid.
+        /// </summary>
         public override void Clear()
         {
             _area.Clear();
         }
 
         /// <summary>
-        /// Initialization and adding of all elements in the WrapGrid
+        /// Initializing all elements in the WrapGrid. 
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void InitElements()
         {
@@ -490,7 +583,11 @@ namespace SpaceVIL
             }
         }
 
-        /// <returns> list of all WrapGrid items </returns>
+        /// <summary>
+        /// Getting content of the list area of WrapGrid.
+        /// </summary>
+        /// <returns>Content of the list area as 
+        /// System.Collections.Generic.List&lt;IBaseItem&gt;</returns>
         public List<IBaseItem> GetListContent()
         {
             List<IBaseItem> result = new List<IBaseItem>();
@@ -505,49 +602,59 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set list of items
+        /// Adding all elements in the list area of WrapGrid from the given list.
         /// </summary>
+        /// <param name="content">List of items as 
+        /// System.Collections.Generic.IEnumerable&lt;IBaseItem&gt;</param>
         public virtual void SetListContent(List<IBaseItem> content)
         {
             _area.SetListContent(content);
             // UpdateSlider();
         }
-
+        /// <summary>
+        /// Getting wrapper of item.
+        /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>Wrapper of given item as SpaceVIL.SelectionItem.</returns>
         public IBaseItem GetWrapper(IBaseItem item)
         {
             return GetArea()._mapContent[item];
         }
 
-        /// <returns> selection item </returns>
+        /// <summary>
+        /// Getting selected item.
+        /// </summary>
+        /// <returns>Selected item as SpaceVIL.Core.IBaseItem</returns>
         public IBaseItem GetSelectionItem()
         {
             return _area.GetSelectionItem();
         }
 
         /// <summary>
-        /// Set style of the WrapGrid
+        /// Setting style of the WrapGrid. 
+        /// <para/> Inner styles: "area", "vscrollbar", "hscrollbar".
         /// </summary>
-        //style
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
             base.SetStyle(style);
 
-            Style inner_style = style.GetInnerStyle("vscrollbar");
-            if (inner_style != null && VScrollBar != null)
+            Style innerStyle = style.GetInnerStyle("vscrollbar");
+            if (innerStyle != null && VScrollBar != null)
             {
-                VScrollBar.SetStyle(inner_style);
+                VScrollBar.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("hscrollbar");
-            if (inner_style != null && HScrollBar != null)
+            innerStyle = style.GetInnerStyle("hscrollbar");
+            if (innerStyle != null && HScrollBar != null)
             {
-                HScrollBar.SetStyle(inner_style);
+                HScrollBar.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("area");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("area");
+            if (innerStyle != null)
             {
-                _area.SetStyle(inner_style);
+                _area.SetStyle(innerStyle);
             }
         }
     }

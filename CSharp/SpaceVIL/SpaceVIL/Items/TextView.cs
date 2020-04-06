@@ -10,6 +10,11 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// TextView is designed to display non-editable text with the ability to select and copy.
+    /// TextView wraps contained text in the current width.
+    /// <para/> Supports all events including drag and drop.
+    /// </summary>
     public class TextView : Prototype, IDraggable, ITextShortcuts, ITextWrap
     {
         private static int count = 0;
@@ -21,7 +26,9 @@ namespace SpaceVIL
         private SpaceVIL.Core.Point _selectFrom = new SpaceVIL.Core.Point(-1, 0);
         private SpaceVIL.Core.Point _selectTo = new SpaceVIL.Core.Point(-1, 0);
         private bool _isSelect = false;
-
+        /// <summary>
+        /// Default TextView constructor.
+        /// </summary>
         public TextView()
         {
             SetItemName("TextBlock_" + count);
@@ -223,12 +230,18 @@ namespace SpaceVIL
                 UnselectText();
             }
         }
-
+        /// <summary>
+        /// Getting the current text of the TextView.
+        /// </summary>
+        /// <returns>Text as System.String.</returns>
         public string GetText()
         {
             return _textureStorage.GetWholeText();
         }
-
+        /// <summary>
+        /// Setting the text.
+        /// </summary>
+        /// <param name="text">Text as System.String.</param>
         public void SetText(String text)
         {
             Monitor.Enter(_textureStorage.textInputLock);
@@ -252,7 +265,11 @@ namespace SpaceVIL
         {
             return _textureStorage.GetTextHeight();
         }
-
+        /// <summary>
+        /// Initializing all elements in the TextView.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public override void InitElements()
         {
             AddItems(_selectedArea, _textureStorage);
@@ -366,12 +383,17 @@ namespace SpaceVIL
                 Monitor.Exit(_textureStorage.textInputLock);
             }
         }
-
+        /// <summary>
+        /// Getting the current selected text.
+        /// </summary>
+        /// <returns>Current selected text</returns>
         public string GetSelectedText()
         {
             return PrivGetSelectedText();
         }
-
+        /// <summary>
+        /// Unselects the current selected text.
+        /// </summary>
         private void UnselectText()
         {
             _isSelect = false;
@@ -381,7 +403,9 @@ namespace SpaceVIL
             _selectTo.Y = 0;
             MakeSelectedArea(new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y), new SpaceVIL.Core.Point(_cursorPosition.X, _cursorPosition.Y));
         }
-
+        /// <summary>
+        /// Selecting entire text of the TextView.
+        /// </summary>
         public void SelectAll()
         {
             Monitor.Enter(_textureStorage.textInputLock);
@@ -400,7 +424,11 @@ namespace SpaceVIL
                 Monitor.Exit(_textureStorage.textInputLock);
             }
         }
-
+        /// <summary>
+        /// Setting item width. If the value is greater/less than the maximum/minimum 
+        /// value of the width, then the width becomes equal to the maximum/minimum value.
+        /// </summary>
+        /// <param name="width"> Width of the item. </param>
         public override void SetWidth(int width)
         {
             if (GetWidth() == width)
@@ -440,7 +468,11 @@ namespace SpaceVIL
 
             ChangeHeightAccordingToText();
         }
-
+        /// <summary>
+        /// Setting item height. If the value is greater/less than the maximum/minimum 
+        /// value of the height, then the height becomes equal to the maximum/minimum value.
+        /// </summary>
+        /// <param name="height"> Height of the item. </param>
         public override void SetHeight(int height)
         {
             if (GetHeight() == height)
@@ -464,8 +496,11 @@ namespace SpaceVIL
             SetHeight(textHeight);
         }
 
-        //Wrap Text Stuff---------------------------------------------------------------------------------------------------
-
+        /// <summary>
+        /// Always returns True. TextView always wraps contained text.
+        /// <para/> SpaceVIL.Core.ITextWrap implementation.
+        /// </summary>
+        /// <returns>True.</returns>
         public bool IsWrapText()
         {
             return true;
@@ -487,55 +522,135 @@ namespace SpaceVIL
         }
 
         //Decorations-------------------------------------------------------------------------------------------------------
-
+        /// <summary>
+        /// Setting indent between lines in TextView.
+        /// </summary>
+        /// <param name="lineSpacer">Indent between lines.</param>
         public void SetLineSpacer(int lineSpacer)
         {
             _textureStorage.SetLineSpacer(lineSpacer);
         }
-
+        /// <summary>
+        /// Setting current indent between lines in TextView.
+        /// </summary>
+        /// <returns>Indent between lines.</returns>
         public int GetLineSpacer()
         {
             return _textureStorage.GetLineSpacer();
         }
 
 
-        public void SetTextAlignment(ItemAlignment alignment)
+        internal void SetTextAlignment(ItemAlignment alignment)
         {
             //Ignore all changes for yet
         }
-
+        /// <summary>
+        /// Setting indents for the text to offset text relative to this TextView.
+        /// </summary>
+        /// <param name="margin">Indents as SpaceVIL.Decorations.Indents.</param>
         public void SetTextMargin(Indents margin)
         {
             _textureStorage.SetTextMargin(margin);
         }
-
+        /// <summary>
+        /// Setting indents for the text to offset text relative to TextView.
+        /// </summary>
+        /// <param name="left">Indent on the left.</param>
+        /// <param name="top">Indent on the top.</param>
+        /// <param name="right">Indent on the right.</param>
+        /// <param name="bottom">Indent on the bottom.</param>
+        public void SetTextMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
+        {
+            _textureStorage.SetTextMargin(new Indents(left, top, right, bottom));
+        }
+        /// <summary>
+        /// Getting indents of the text.
+        /// </summary>
+        /// <returns>Indents as SpaceVIL.Decorations.Indents.</returns>
         public Indents GetTextMargin()
         {
             return _textureStorage.GetTextMargin();
         }
-
+        /// <summary>
+        /// Setting font of the text.
+        /// </summary>
+        /// <param name="font">Font as System.Drawing.Font.</param>
         public void SetFont(Font font)
         {
             _textureStorage.SetFont(font);
         }
-
+        /// <summary>
+        /// Getting the current font of the text.
+        /// </summary>
+        /// <returns>Font as System.Drawing.Font.</returns>
         public Font GetFont()
         {
             return _textureStorage.GetFont();
         }
-
+        /// <summary>
+        /// Setting text color of a TextView.
+        /// </summary>
+        /// <param name="color">Color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
             _textureStorage.SetForeground(color);
         }
-
+        /// <summary>
+        /// Setting text color of a TextView in byte RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        public void SetForeground(int r, int g, int b)
+        {
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
+        }
+        /// <summary>
+        /// Setting text color of a TextView in byte RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        public void SetForeground(int r, int g, int b, int a)
+        {
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
+        }
+        /// <summary>
+        /// Setting text color of a TextView in float RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        public void SetForeground(float r, float g, float b)
+        {
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b));
+        }
+        /// <summary>
+        /// Setting text color of a TextView in float RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        public void SetForeground(float r, float g, float b, float a)
+        {
+            SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
+        }
+        /// <summary>
+        /// Getting current text color.
+        /// </summary>
+        /// <returns>Text color as System.Drawing.Color.</returns>
         public Color GetForeground()
         {
             return _textureStorage.GetForeground();
         }
 
-
-        //Style
+        /// <summary>
+        /// Setting style of the TextView.
+        /// <para/> Inner styles: "selection".
+        /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)
@@ -554,21 +669,30 @@ namespace SpaceVIL
         }
 
         //Shortcut methods disable------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Do nothing. SpaceVIL.Core.ITextShortcuts implementation.
+        /// </summary>
         public void PasteText(String pasteStr)
         {
 
         }
-
+        /// <summary>
+        /// Do nothing. SpaceVIL.Core.ITextShortcuts implementation.
+        /// </summary>
         public String CutText()
         {
             return "";
         }
-
+        /// <summary>
+        /// Do nothing. SpaceVIL.Core.ITextShortcuts implementation.
+        /// </summary>
         public void Undo()
         {
 
         }
-
+        /// <summary>
+        /// Do nothing. SpaceVIL.Core.ITextShortcuts implementation.
+        /// </summary>
         public void Redo()
         {
 

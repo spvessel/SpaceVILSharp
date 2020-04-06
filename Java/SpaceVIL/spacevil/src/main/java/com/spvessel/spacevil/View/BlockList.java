@@ -4,10 +4,10 @@ import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Decorations.CornerRadius;
 import com.spvessel.spacevil.Flags.*;
 import com.spvessel.spacevil.*;
-import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
 import java.awt.Color;
 
@@ -71,7 +71,7 @@ public class BlockList extends ResizableItem {
 
         // _text.setPadding(-1, -1, -1, -1);
         _text.setBorderRadius(new CornerRadius(3));
-        _text.setHScrollBarVisible(ScrollBarVisibility.NEVER);
+        _text.setHScrollBarPolicy(VisibilityPolicy.NEVER);
         _text.setHeight(25);
         _text.setAlignment(ItemAlignment.LEFT, ItemAlignment.BOTTOM);
         _text.setBackground(151, 203, 255);
@@ -94,7 +94,7 @@ public class BlockList extends ResizableItem {
         _btn_close.setAlignment(ItemAlignment.TOP, ItemAlignment.RIGHT);
         ItemState hovered = new ItemState(new Color(255, 255, 255, 80));
         _btn_close.addItemState(ItemStateType.HOVERED, hovered);
-        _btn_close.setCustomFigure(new CustomFigure(false, GraphicsMathService.getCross(10, 10, 3, 45)));
+        _btn_close.setCustomFigure(new Figure(false, GraphicsMathService.getCross(10, 10, 3, 45)));
         _btn_close.eventMouseClick.add((sender, args) -> Dispose());
 
         addItems(_lock, _note, _text, _palette, _btn_close);

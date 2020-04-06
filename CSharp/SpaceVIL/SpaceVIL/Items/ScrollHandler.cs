@@ -1,21 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpaceVIL.Core;
+﻿using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// ScrollHandler is part of SpaceVIL.HorizontalSlider and
+    /// SpaceVIL.VerticalSlider. ScrollHandler is responsible for 
+    /// handler dragging.
+    /// <para/> Supports all events including drag and drop.
+    /// </summary>
     public class ScrollHandler : Prototype, IDraggable
     {
         static int count = 0;
+        /// <summary>
+        /// Specify orientation of ScrollHandler.
+        /// <para/> Can be SpaceVIL.Core.Orientation.Vertical or
+        /// SpaceVIL.Core.Orientation.Horizontal.
+        /// </summary>
         public Orientation Orientation;
         private int _offset = 0;
         private int _diff = 0;
 
         /// <summary>
-        /// Constructs a ScrollHandler
+        /// Default ScrollHandler constructor.
         /// </summary>
         public ScrollHandler()
         {
@@ -26,7 +32,7 @@ namespace SpaceVIL
             IsFocusable = false;
         }
 
-        void OnMousePress(IItem sender, MouseArgs args)
+        private void OnMousePress(IItem sender, MouseArgs args)
         {
             if (Orientation == Orientation.Horizontal)
                 _diff = args.Position.GetX() - GetX();
@@ -34,7 +40,7 @@ namespace SpaceVIL
                 _diff = args.Position.GetY() - GetY();
         }
 
-        void OnDragging(IItem sender, MouseArgs args)
+        private void OnDragging(IItem sender, MouseArgs args)
         {
             int offset;
             Prototype parent = GetParent();
@@ -49,6 +55,11 @@ namespace SpaceVIL
         /// <summary>
         /// Set offset of the ScrollHandler
         /// </summary>
+        /// <summary>
+        /// Setting offset of the ScrollHandler by X axis or Y axis 
+        /// depending on Orientation property.
+        /// </summary>
+        /// <param name="offset">Offset of the ScrollHandler.</param>
         public void SetOffset(int offset)
         {
             Prototype parent = GetParent();
@@ -62,15 +73,5 @@ namespace SpaceVIL
             else
                 SetY(_offset + parent.GetY());
         }
-
-        // public void InvokeScrollUp(MouseArgs args)
-        // {
-        //     (GetParent() as IScrollable)?.InvokeScrollUp(args);
-        // }
-
-        // public void InvokeScrollDown(MouseArgs args)
-        // {
-        //     (GetParent() as IScrollable)?.InvokeScrollDown(args);
-        // }
     }
 }

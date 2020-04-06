@@ -5,6 +5,9 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL.Core
 {
+    /// <summary>
+    /// Not implemented!!!
+    /// </summary>
     public interface Interface
     {
         String GetToolTip();
@@ -131,8 +134,8 @@ namespace SpaceVIL.Core
 
         void SetContent(List<IBaseItem> content);
 
-        CustomFigure IsCustomFigure();
+        Figure IsCustomFigure();
 
-        void SetCustomFigure(CustomFigure figure);
+        void SetCustomFigure(Figure figure);
     }
 }

@@ -304,7 +304,7 @@ public abstract class CoreWindow {
     }
 
     // position
-    private Position _itemPosition = new Position(200, 50);
+    private Position _itemPosition = new Position(50, 50);
 
     void setXDirect(int x) {
         _itemPosition.setX(x);

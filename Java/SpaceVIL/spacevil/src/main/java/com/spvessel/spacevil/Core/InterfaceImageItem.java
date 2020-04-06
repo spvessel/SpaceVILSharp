@@ -10,5 +10,5 @@ public interface InterfaceImageItem {
     public boolean isColorOverlay();
     public Color getColorOverlay();
     public float getRotationAngle();
-    public RectangleBounds getRectangleBounds();
+    public Area getAreaBounds();
 }

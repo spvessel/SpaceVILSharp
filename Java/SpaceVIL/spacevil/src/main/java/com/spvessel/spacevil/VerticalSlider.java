@@ -41,11 +41,7 @@ public class VerticalSlider extends Prototype {
         eventValueChanged.clear();
     }
 
-    private float _current_value = 0;
-    /**
-     * Slider direction(1 - down direction, -1 - up direction)
-     */
-    public int Direction = 0;
+    private float _currentValue = 0;
 
     boolean _ignoreStep = true;
 
@@ -61,20 +57,15 @@ public class VerticalSlider extends Prototype {
      * Sets current value of the VerticalSlider
      */
     public void setCurrentValue(float value) {
-        if (_current_value > value)
-            Direction = -1; // up
-        else
-            Direction = 1; // down
-
-        _current_value = value;
+        _currentValue = value;
 
         if (!_ignoreStep)
-            _current_value = (float) Math.round(_current_value / _step) * _step;
+            _currentValue = (float) Math.round(_currentValue / _step) * _step;
 
-        if (_current_value < _min_value)
-            _current_value = _min_value;
-        if (_current_value > _max_value)
-            _current_value = _max_value;
+        if (_currentValue < _min_value)
+            _currentValue = _min_value;
+        if (_currentValue > _max_value)
+            _currentValue = _max_value;
 
         updateHandler(); // refactor!!
 
@@ -92,7 +83,7 @@ public class VerticalSlider extends Prototype {
 
     void updateHandler() {
         float offset = ((float) getHeight() - getSumOfVerticalIndents() - handler.getHeight())
-                / (_max_value - _min_value) * (_current_value - _min_value);
+                / (_max_value - _min_value) * (_currentValue - _min_value);
         handler.setOffset((int) offset + getPadding().top + handler.getMargin().top);
     }
 
@@ -100,7 +91,7 @@ public class VerticalSlider extends Prototype {
      * @return current value of the VerticalSlider
      */
     public float getCurrentValue() {
-        return _current_value;
+        return _currentValue;
     }
 
     private float _min_value = 0;
@@ -186,8 +177,8 @@ public class VerticalSlider extends Prototype {
      * Set Y position of the VerticalSlider
      */
     @Override
-    public void setY(int _y) {
-        super.setY(_y);
+    public void setY(int y) {
+        super.setY(y);
         updateHandler();
     }
 

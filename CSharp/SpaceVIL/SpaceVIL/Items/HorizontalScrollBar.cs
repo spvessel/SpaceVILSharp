@@ -1,25 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using SpaceVIL.Core;
+﻿using SpaceVIL.Core;
 using SpaceVIL.Common;
 using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// HorizontalScrollBar is the basic implementation of a user interface scroll bar 
+    /// (horizontal version). 
+    /// <para/> Contains arrow buttons, slider.
+    /// <para/> By default ability to get focus is disabled.
+    /// <para/> Supports all events except drag and drop.
+    /// </summary>
     public class HorizontalScrollBar : HorizontalStack
     {
         private static int count = 0;
-
+        /// <summary>
+        /// Button to scroll up.
+        /// </summary>
         public ButtonCore UpArrow = new ButtonCore();
+        /// <summary>
+        /// Button to scroll down.
+        /// </summary>
         public ButtonCore DownArrow = new ButtonCore();
+        /// <summary>
+        /// Slider for scrolling with mouse drag and drop ivents or mouse wheel.
+        /// </summary>
         public HorizontalSlider Slider = new HorizontalSlider();
 
         /// <summary>
-        /// Constructs a HorizontalScrollBar
+        /// Default HorizontalScrollBar constructor.
         /// </summary>
         public HorizontalScrollBar()
         {
@@ -51,7 +60,9 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Initialization and adding of all elements in the HorizontalScrollBar
+        /// Initializing all elements in the HorizontalScrollBar.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void InitElements()
         {
@@ -68,8 +79,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set Left and right arrows of the HorizontalScrollBar visible
+        /// Setting Up and Down arrow buttons visibility of the HorizontalScrollBar.
         /// </summary>
+        /// <param name="value">True: if you want buttons visible. 
+        /// False: if you want buttons invisible.</param>
         public void SetArrowsVisible(bool value)
         {
             UpArrow.SetVisible(value);
@@ -77,28 +90,30 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set style of the HorizontalScrollBar
+        /// Seting style of the HorizontalScrollBar.
+        /// <para/> Inner styles: "uparrow", "downarrow", "slider".
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
             base.SetStyle(style);
 
-            Style inner_style = style.GetInnerStyle("uparrow");
-            if (inner_style != null)
+            Style innerStyle = style.GetInnerStyle("uparrow");
+            if (innerStyle != null)
             {
-                UpArrow.SetStyle(inner_style);
+                UpArrow.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("downarrow");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("downarrow");
+            if (innerStyle != null)
             {
-                DownArrow.SetStyle(inner_style);
+                DownArrow.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("slider");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("slider");
+            if (innerStyle != null)
             {
-                Slider.SetStyle(inner_style);
+                Slider.SetStyle(innerStyle);
             }
         }
     }

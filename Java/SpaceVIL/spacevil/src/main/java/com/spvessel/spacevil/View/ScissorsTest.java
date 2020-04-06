@@ -5,7 +5,7 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Flags.VisibilityPolicy;
 import com.spvessel.spacevil.Flags.SizePolicy;
 import com.spvessel.spacevil.Label;
 import com.spvessel.spacevil.MenuItem;
@@ -102,8 +102,8 @@ public class ScissorsTest extends ActiveWindow {
         startBtn.setMargin(0, 15, 0, 0);
 
         TextArea textServiceInfo = new TextArea();
-        textServiceInfo.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        textServiceInfo.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+        textServiceInfo.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
+        textServiceInfo.setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
         textServiceInfo.setEditable(false);
         textServiceInfo.setFont(DefaultsService.getDefaultFont(12));
 

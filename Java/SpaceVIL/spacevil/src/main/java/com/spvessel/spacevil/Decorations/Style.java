@@ -516,7 +516,7 @@ public class Style implements Cloneable {
         textline_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
         textline_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         textline_style.margin = new Indents(10 + indicator_style.width, 0, 0, 0);
-        style.addInnerStyle("textline", textline_style);
+        style.addInnerStyle("text", textline_style);
 
         return style;
     }
@@ -1254,7 +1254,7 @@ public class Style implements Cloneable {
         textline_style.alignment = new LinkedList<>(Arrays.asList(ItemAlignment.VCENTER));
         textline_style.textAlignment = new LinkedList<>(Arrays.asList(ItemAlignment.LEFT, ItemAlignment.VCENTER));
         textline_style.margin = new Indents(10 + indicator_style.width, 0, 0, 0);
-        style.addInnerStyle("textline", textline_style);
+        style.addInnerStyle("text", textline_style);
 
         return style;
     }
@@ -1664,7 +1664,7 @@ public class Style implements Cloneable {
         indicator_style.isFixedShape = true;
         ItemState toggled = new ItemState();
         toggled.background = new Color(160, 160, 160);
-        toggled.shape = new CustomFigure(true, GraphicsMathService.getTriangle(10, 8, 0, 3, 180));
+        toggled.shape = new Figure(true, GraphicsMathService.getTriangle(10, 8, 0, 3, 180));
         indicator_style.addItemState(ItemStateType.TOGGLED, toggled);
         style.addInnerStyle("indicator", indicator_style);
 

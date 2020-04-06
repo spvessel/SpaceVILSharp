@@ -1,8 +1,7 @@
-using System;
 namespace SpaceVIL.Core
 {
-    public interface ITextEditable
-    {
-        
-    }
+    /// <summary>
+    /// An interface that describes elements containing editable text.
+    /// </summary>
+    public interface ITextEditable { }
 }

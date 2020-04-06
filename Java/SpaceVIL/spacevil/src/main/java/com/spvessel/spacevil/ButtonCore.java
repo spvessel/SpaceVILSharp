@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ButtonCore extends Prototype {
     private static int count = 0;
-    private TextLine _text_object;
+    private TextLine _textObject;
 
     /**
      * Constructs a ButtonCore
@@ -22,7 +22,7 @@ public class ButtonCore extends Prototype {
     public ButtonCore() {
         setItemName("ButtonCore_" + count);
         count++;
-        _text_object = new TextLine();
+        _textObject = new TextLine();
         eventKeyPress.add(this::onKeyPress);
         // setStyle(DefaultsService.getDefaultStyle("SpaceVIL.ButtonCore"));
         setStyle(DefaultsService.getDefaultStyle(ButtonCore.class));
@@ -47,81 +47,95 @@ public class ButtonCore extends Prototype {
      * Text alignment in the ButtonCore
      */
     public void setTextAlignment(ItemAlignment... alignment) {
-        _text_object.setTextAlignment(alignment);
+        _textObject.setTextAlignment(alignment);
     }
+
     public void setTextAlignment(List<ItemAlignment> alignment) {
-        _text_object.setTextAlignment(alignment);
+        _textObject.setTextAlignment(alignment);
     }
 
     /**
      * Text margin in the ButtonCore
      */
     public void setTextMargin(Indents margin) {
-        _text_object.setMargin(margin);
+        _textObject.setMargin(margin);
     }
-    
+
+    public void setTextMargin(int left, int top, int right, int bottom) {
+        _textObject.setMargin(left, top, right, bottom);
+    }
+
     public Indents getTextMargin() {
-        return _text_object.getMargin();
+        return _textObject.getMargin();
     }
 
     /**
      * Text font parameters in the ButtonCore
      */
     public void setFont(Font font) {
-        _text_object.setFont(font);
+        _textObject.setFont(font);
     }
+
     public void setFontSize(int size) {
-        _text_object.setFontSize(size);
+        _textObject.setFontSize(size);
     }
+
     public void setFontStyle(int style) {
-        _text_object.setFontStyle(style);
+        _textObject.setFontStyle(style);
     }
+
     public void setFontFamily(String font_family) {
-        _text_object.setFontFamily(font_family);
+        _textObject.setFontFamily(font_family);
     }
+
     public Font getFont() {
-        return _text_object.getFont();
+        return _textObject.getFont();
     }
 
     /**
      * Set text in the ButtonCore
      */
     public void setText(String text) {
-        _text_object.setItemText(text);
+        _textObject.setItemText(text);
     }
 
     public String getText() {
-        return _text_object.getItemText();
+        return _textObject.getItemText();
     }
 
     public int getTextWidth() {
-        return _text_object.getWidth();
+        return _textObject.getWidth();
     }
 
     public int getTextHeight() {
-        return _text_object.getHeight();
+        return _textObject.getHeight();
     }
 
     /**
      * Text color in the ButtonCore
      */
     public void setForeground(Color color) {
-        _text_object.setForeground(color);
+        _textObject.setForeground(color);
     }
+
     public void setForeground(int r, int g, int b) {
-        _text_object.setForeground(r, g, b);
+        _textObject.setForeground(r, g, b);
     }
+
     public void setForeground(int r, int g, int b, int a) {
-        _text_object.setForeground(r, g, b, a);
+        _textObject.setForeground(r, g, b, a);
     }
+
     public void setForeground(float r, float g, float b) {
-        _text_object.setForeground(r, g, b);
+        _textObject.setForeground(r, g, b);
     }
+
     public void setForeground(float r, float g, float b, float a) {
-        _text_object.setForeground(r, g, b, a);
+        _textObject.setForeground(r, g, b, a);
     }
+
     public Color getForeground() {
-        return _text_object.getForeground();
+        return _textObject.getForeground();
     }
 
     /**
@@ -129,7 +143,7 @@ public class ButtonCore extends Prototype {
      */
     @Override
     public void initElements() {
-        addItem(_text_object);
+        addItem(_textObject);
     }
 
     /**

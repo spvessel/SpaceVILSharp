@@ -9,6 +9,12 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// Indicator is the basic implementation of a user interface indicator which 
+    /// can be in enabled state or can be disabled state. 
+    /// Used in SpaceVIL.CheckBox and SpaceVIL.RadioButton.
+    /// <para/> Supports all events except drag and drop.
+    /// </summary>
     public class Indicator : Prototype
     {
         internal class CustomToggle : ButtonToggle
@@ -24,13 +30,17 @@ namespace SpaceVIL
         private CustomToggle _marker;
 
         /// <returns> IndicationMarker ButtonToggle type for styling </returns>
-        public ButtonToggle GetIndicatorMarker()
+        /// <summary>
+        /// Getting indicator marker.
+        /// </summary>
+        /// <returns>SpaceVIL.ButtonToggle</returns>
+        internal ButtonToggle GetIndicatorMarker()
         {
             return _marker;
         }
 
         /// <summary>
-        /// Constructs an Indicator
+        /// Default Indicator constructor.
         /// </summary>
         public Indicator()
         {
@@ -43,7 +53,9 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Initialization and adding of all elements in the Indicator
+        /// Initializing all elements in the Indicator. 
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void InitElements()
         {
@@ -53,8 +65,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set style of the Indicator
+        /// Setting style of the Indicator.
+        /// <para/> Inner styles: "marker".
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)

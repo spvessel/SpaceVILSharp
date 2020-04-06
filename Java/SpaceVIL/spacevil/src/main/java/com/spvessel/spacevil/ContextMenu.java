@@ -9,21 +9,13 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.LayoutType;
 import com.spvessel.spacevil.Flags.MouseButton;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class ContextMenu extends Prototype implements InterfaceFloating {
-    private Prototype _returnFocus = null;
-
-    public void setReturnFocus(Prototype item) {
-        _returnFocus = item;
-    }
-
-    public Prototype getReturnFocusItem() {
-        return _returnFocus;
-    }
+    public Prototype returnFocus = null;
 
     public ListBox itemList = new ListBox();
     private List<InterfaceBaseItem> _queue = new LinkedList<>();
@@ -77,8 +69,8 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     public void initElements() {
         setConfines();
         itemList.disableMenu(true);
-        itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
-        itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
+        itemList.setVScrollBarPolicy(VisibilityPolicy.NEVER);
+        itemList.setHScrollBarPolicy(VisibilityPolicy.NEVER);
         super.addItem(itemList);
         itemList.eventScrollUp.clear();
         itemList.eventScrollDown.clear();
@@ -271,8 +263,8 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setVisible(false);
         setX(-getWidth());
         
-        if (_returnFocus != null)
-            _returnFocus.setFocus();
+        if (returnFocus != null)
+            returnFocus.setFocus();
         // else
         // getHandler().getWindow().setFocus();
     }

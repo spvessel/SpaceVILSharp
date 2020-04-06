@@ -34,13 +34,13 @@ public class SplitHolder extends Prototype implements InterfaceDraggable {
      * SplitHolder size (height for the HORIZONTAL orientation,
      * width for the VERTICAL orientation)
      */
-    public void setSpacerSize(int spSize) {
-        if (_spacerSize != spSize) {
-            _spacerSize = spSize;
+    public void setDividerSize(int thickness) {
+        if (_spacerSize != thickness) {
+            _spacerSize = thickness;
             makeHolderShape();
         }
     }
-    public int getHolderSize() {
+    public int getDividerSize() {
         return _spacerSize;
     }
 

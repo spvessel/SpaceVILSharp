@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpaceVIL.Core
 {
+    /// <summary>
+    /// Multisample anti-aliasing enum.
+    /// <para/> Values: No, MSAA2x, MSAA4x, MSAA8x.
+    /// </summary>
     public enum MSAA
     {
         No = 0,
@@ -13,14 +13,20 @@ namespace SpaceVIL.Core
         MSAA4x = 4,
         MSAA8x = 8
     }
-
+    /// <summary>
+    /// Operating system types enum.
+    /// <para/> Values: Windows, Linux, Mac.
+    /// </summary>
     public enum OSType
     {
         Windows,
         Linux,
         Mac
     }
-    
+    /// <summary>
+    /// Alignment types enum.
+    /// <para/> Values: Left, Top, Right, Bottom, HCenter, VCenter.
+    /// </summary>
     [Flags]
     public enum ItemAlignment
     {
@@ -31,85 +37,117 @@ namespace SpaceVIL.Core
         HCenter = 0x10,
         VCenter = 0x20
     }
-
+    /// <summary>
+    /// Size policy types enum.
+    /// </summary>
+    /// <para/> Values: Fixed, Expand.
     [Flags]
     public enum SizePolicy
     {
-        Fixed = 0x01,//размер фиксированный, никаких изменений фигуры, только выравнивание
-        // Stretch = 0x02,//размер фиксированный, фигура растягивается в пропорциях фигуры к окну, выравнивае работает некорректно
-        Expand = 0x04,//размер плавающий, размер фигуры подстраивается под все доступное пространство, выравнивание работает корректно
-        // Ignored = 0x08//не используется (будет работать как Fixed)
+        /// <summary>
+        /// Size is fixed and cannot be changed.
+        /// </summary>
+        Fixed = 0x01,
+        /// <summary>
+        /// The form will be stretched inside the container to all available space.
+        /// </summary>
+        Expand = 0x04
     }
 
-    [Flags]
-    public enum SizeType
-    {
-        Width,
-        Height
-    };
-
+    /// <summary>
+    /// Item state types enum.
+    /// <para/> Values: Base, Hovered, Pressed, Toggled, Focused, Disabled.
+    /// </summary>
     [Flags]
     public enum ItemStateType
     {
+        /// <summary>
+        /// Base static item's condition. 
+        /// <para/> Where Item is class extended from SpaceVIL.Prototype.
+        /// </summary>
         Base = 0x01,
+        /// <summary>
+        /// Item's condition when mouse cursor inside items area. 
+        /// <para/> Where Item is class extended from SpaceVIL.Prototype.
+        /// </summary>
         Hovered = 0x02,
+        /// <summary>
+        /// Item's condition when mouse cursor inside items area and any mouse button is pressed.
+        /// <para/> Where Item is class extended from SpaceVIL.Prototype.
+        /// </summary>
         Pressed = 0x04,
+        /// <summary>
+        /// Item's condition when it is toggled.
+        /// <para/> Where Item is class extended from SpaceVIL.Prototype.
+        /// </summary>
         Toggled = 0x08,
+        /// <summary>
+        /// Item's condition when it is focused.
+        /// <para/> Where Item is class extended from SpaceVIL.Prototype.
+        /// </summary>
         Focused = 0x10,
+        /// <summary>
+        /// Item's condition when it is disabled.
+        /// <para/> Where Item is class extended from SpaceVIL.Prototype.
+        /// </summary>
         Disabled = 0x20
     };
-
-    public enum UpdateType
-    {
-        Critical,
-        CoordsOnly
-    }
-
+    /// <summary>
+    /// Orientation enum. 
+    /// <para/> Used in such items as scroll bars, sliders, wrap grid and etc.
+    /// <para/> Values: Vertical, Horizontal.
+    /// </summary>
     public enum Orientation
     {
         Vertical,
         Horizontal
     }
-
-    public enum ScrollBarVisibility
+    /// <summary>
+    /// Visibility types of item enum. Used in such items as scroll bars.
+    /// <para/> Values: Always, AsNeeded, Never.
+    /// </summary>
+    public enum VisibilityPolicy
     {
+        /// <summary>
+        /// Item is always visible.
+        /// </summary>
         Always,
+        /// <summary>
+        /// Item can be visible in some circumstances.
+        /// </summary>
         AsNeeded,
+        /// <summary>
+        /// Item is always invisible.
+        /// </summary>
         Never
     }
-
-    [Flags]
-    public enum ListPosition
+    /// <summary>
+    /// Item hovering rule types enum.
+    /// <para/> Values: Lazy, Strict.
+    /// </summary>
+    public enum ItemHoverRule
     {
-        No = 0x00,
-        Top = 0x01,
-        Bottom = 0x02,
-        Left = 0x04,
-        Right = 0x08,
-    }
-
-    public enum ItemRule
-    {
+        /// <summary>
+        /// Hover function will return True if mouse cursor located inside rectangle area of its shape even if shape is not a rectangle.
+        /// <para/> Example: Function will return True If shape is triangle and mouse cursor located outside this triangle, 
+        /// but inside rectangle area that bounds this triangle.
+        /// </summary>
         Lazy,
+        /// <summary>
+        /// Hover function will return True only if mouse cursor located inside the shape of the item.
+        /// </summary>
         Strict
     }
-
-    // public enum PrimitiveType
-    // {
-    //     No,
-    //     Rectangle,
-    //     RoundedRectangle,
-    //     Ellipse,
-    //     Triangle,
-    //     Star,
-    //     CustomShape
-    // }
 
     public enum EmbeddedFont
     {
         Ubuntu
     }
-
+    /// <summary>
+    /// Enum of event types directly related to events that change the size and position of an item.
+    /// <para/> Where Item is class extended from SpaceVIL.Prototype.
+    /// <para/> Values: Focused, MovedX, MovedY, ResizeWidth, ResizeHeight.
+    /// </summary>
     public enum GeometryEventType
     {
         Focused = 0x01,
@@ -118,13 +156,19 @@ namespace SpaceVIL.Core
         ResizeWidth = 0x08,
         ResizeHeight = 0x10
     }
-
+    /// <summary>
+    /// Enum of types of horizontal directions.
+    /// <para/> Values: FromLeftToRight, FromRightToLeft.
+    /// </summary>
     public enum HorizontalDirection
     {
         FromLeftToRight,
         FromRightToLeft,
     }
 
+    /// <summary>
+    /// Enums of types of input events.
+    /// </summary>
     [Flags]
     public enum InputEventType
     {
@@ -160,25 +204,30 @@ namespace SpaceVIL.Core
         WindowDrop = 0x2000000,
         WindowMaximize = 0x4000000,
     }
-
+    /// <summary>
+    /// Enum of types of input conditions.
+    /// <para/> Values: Release, Press, Repeat.
+    /// </summary>
     public enum InputState
     {
         Release = 0,
         Press = 1,
         Repeat = 2
     }
-
+    /// <summary>
+    /// Enum of key codes of keyboard.
+    /// </summary>
     public enum KeyCode
     {
         Unknown = -1,
 
         // Printable keys
         Space = 32,
-        Apostrophe = 39,  // '
-        Comma = 44,  // ,
-        Minus = 45,  // -
-        Period = 46,  // .
-        Slash = 47,  // /
+        Apostrophe = 39,
+        Comma = 44,
+        Minus = 45,
+        Period = 46,
+        Slash = 47,
         Alpha0 = 48,
         Alpha1 = 49,
         Alpha2 = 50,
@@ -189,8 +238,8 @@ namespace SpaceVIL.Core
         Alpha7 = 55,
         Alpha8 = 56,
         Alpha9 = 57,
-        SemiColon = 59,  // ;
-        Equal = 61,  // =
+        SemiColon = 59,
+        Equal = 61,
         A = 65,
         B = 66,
         C = 67,
@@ -245,12 +294,12 @@ namespace SpaceVIL.Core
         y = 121,
         z = 122,
 
-        LeftBracket = 91,  // [
-        Backslash = 92,  // \
-        RightBracket = 93,  // ]
-        GraveAccent = 96,  // `
-        World1 = 161, // Non-US #1
-        World2 = 162, // Non-US #2
+        LeftBracket = 91,
+        Backslash = 92,
+        RightBracket = 93,
+        GraveAccent = 96,
+        World1 = 161,
+        World2 = 162,
 
         // Function keys
         Escape = 256,
@@ -325,15 +374,23 @@ namespace SpaceVIL.Core
         Menu = 348
     }
 
+    /// <summary>
+    /// Enum of keyboard modifiers.
+    /// </summary>
     [Flags]
     public enum KeyMods
     {
         Shift = 0x0001,
         Control = 0x0002,
         Alt = 0x0004,
+        /// <summary>
+        /// Can be Windows key (in WinOS), Command key (in MacOS)
+        /// </summary>
         Super = 0x0008
     }
-
+    /// <summary>
+    /// Enum of button codes of mouse.
+    /// </summary>
     public enum MouseButton
     {
         Unknown = -1,
@@ -346,14 +403,28 @@ namespace SpaceVIL.Core
         Button7 = 6,
         Button8 = 7,
     }
-
+    /// <summary>
+    /// Enum of items types.
+    /// <para/> Values: Static, Floating, Dialog.
+    /// </summary>
     public enum LayoutType
     {
+        /// <summary>
+        /// Items whose parent LayoutType is Static.
+        /// </summary>
         Static,
+        /// <summary>
+        /// Items whose root parent LayoutType is Floating.
+        /// </summary>
         Floating,
+        /// <summary>
+        /// Items whose root parent LayoutType is Dialog.
+        /// </summary>
         Dialog
     }
-
+    /// <summary>
+    /// Enum of types of TreeItems. Used in TreeView and TreeItem.
+    /// </summary>
     public enum TreeItemType
     {
         Leaf,
@@ -364,26 +435,42 @@ namespace SpaceVIL.Core
     {
         IntNumbers, DoubleNumbers, Letters, All
     }
-
+    /// <summary>
+    /// Enum of SpaceVIL embedded images.
+    /// </summary>
     public enum EmbeddedImage
     {
         Add, ArrowLeft, ArrowUp, Eye, File, Folder, FolderPlus, Gear, Import, Lines, Loupe, RecycleBin, Refresh, Pencil, Diskette,
         Eraser, Home, User, Drive, Filter, LoadCircle
     }
+    /// <summary>
+    /// Enum of SpaceVIL embedded images sizes.
+    /// </summary>
     public enum EmbeddedImageSize
     {
         Size32x32, Size64x64
     }
+    /// <summary>
+    /// Enum of file system entry types.
+    /// <para/> Values: File, Directory.
+    /// </summary>
     public enum FileSystemEntryType
     {
         File, Directory//, Network, Drive
     }
-
+    /// <summary>
+    /// Enum of open dialog types.
+    /// <para/> Values: Open, Save.
+    /// </summary>
     public enum OpenDialogType
     {
-        Open, Save
+        Open, 
+        Save
     }
-
+    /// <summary>
+    /// Enum of types of sides.
+    /// <para/> Values: Left, Top, Right, Bottom.
+    /// </summary>
     public enum Side
     {
         Left = 0x01,
@@ -391,12 +478,18 @@ namespace SpaceVIL.Core
         Right = 0x04,
         Bottom = 0x08,
     }
-
+    /// <summary>
+    /// Enum of types of frequencies for redraw.
+    /// <para/> Values: VeryLow, Low, Medium, High, Ultra.
+    /// </summary>
     public enum RedrawFrequency
     {
         VeryLow, Low, Medium, High, Ultra
     }
-
+    /// <summary>
+    /// Enum of types of embedded mouse cursors.
+    /// <para/> Values: Arrow, IBeam, Crosshair, Hand, ResizeX, ResizeY, ResizeXY.
+    /// </summary>
     public enum EmbeddedCursor
     {
         Arrow = 0x00036001,
@@ -407,8 +500,25 @@ namespace SpaceVIL.Core
         ResizeY = 0x00036006,
         ResizeXY = 0x00036007
     }
+    /// <summary>
+    /// Enum of types render.
+    /// <para/> Values: IfNeeded, Periodic, Always.
+    /// </summary>
     public enum RenderType
     {
-        IfNeeded, Periodic, Always
+        /// <summary>
+        /// The scene is redrawn only if any input event occurs (mouse move, mouse click, 
+        /// keyboard key press, window resizing and etc.).
+        /// </summary>
+        IfNeeded,
+        /// <summary>
+        /// The scene is redrawn according to the current render frequency type 
+        /// (See SetRenderFrequency(type)) in idle and every time when any input event occurs.
+        /// </summary>
+        Periodic,
+        /// <summary>
+        /// The scene is constantly being redrawn.
+        /// </summary>
+        Always
     }
 }

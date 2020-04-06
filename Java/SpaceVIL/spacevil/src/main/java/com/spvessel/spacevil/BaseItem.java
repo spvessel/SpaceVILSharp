@@ -17,7 +17,7 @@ import com.spvessel.spacevil.Decorations.Shadow;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.GeometryEventType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.ItemRule;
+import com.spvessel.spacevil.Flags.ItemHoverRule;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 public abstract class BaseItem implements InterfaceBaseItem {
@@ -96,7 +96,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
     /**
      * Item will not react on parent's changes
      */
-    public void removeItemFromListeners() {
+    void removeItemFromListeners() {
         Prototype parent = getParent();
         parent.removeEventListener(GeometryEventType.RESIZE_WIDTH, this);
         parent.removeEventListener(GeometryEventType.RESIZE_HEIGHT, this);
@@ -459,7 +459,7 @@ public abstract class BaseItem implements InterfaceBaseItem {
     public void setDefaults() {
     }
 
-    public ItemRule HoverRule = ItemRule.LAZY;
+    public ItemHoverRule HoverRule = ItemHoverRule.LAZY;
 
     // shadow
     private boolean _is_shadow_drop = false;

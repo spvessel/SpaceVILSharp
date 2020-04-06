@@ -22,7 +22,7 @@ import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Flags.VisibilityPolicy;
 import com.spvessel.spacevil.Flags.SizePolicy;
 
 public class Containers extends ActiveWindow {
@@ -122,8 +122,8 @@ public class Containers extends ActiveWindow {
                 TextArea t = new TextArea();
                 tabs.addItemToTab(tab, t);
                 // t.setEditable(false);
-                t.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-                t.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+                t.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
+                t.setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
                 t.disableMenu(true);
                 t.menu.setDrawable(false);
 

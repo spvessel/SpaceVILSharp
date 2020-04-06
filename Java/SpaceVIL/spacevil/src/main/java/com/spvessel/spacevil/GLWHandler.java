@@ -2,7 +2,7 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.Area;
-import com.spvessel.spacevil.Core.Pointer;
+import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Exceptions.SpaceVILException;
 import com.spvessel.spacevil.Flags.EmbeddedCursor;
 import com.spvessel.spacevil.Flags.OSType;
@@ -41,9 +41,9 @@ final class GLWHandler {
     Boolean alwaysOnTop;
     Boolean maximized;
     Boolean transparent;
-    private Pointer wPosition = new Pointer();
+    private Position wPosition = new Position();
 
-    Pointer getPointer() {
+    Position getPointer() {
         return wPosition;
     }
     ///////////////////////////////////////////////
@@ -138,8 +138,8 @@ final class GLWHandler {
         
         if (appearInCenter) {
             if (CommonService.getOSType() != OSType.MAC) {
-                actualWndWidth = (int) (_coreWindow.getWidth() * _coreWindow.getDpiScale().getX());
-                actualWndHeight = (int) (_coreWindow.getHeight() * _coreWindow.getDpiScale().getY());
+                actualWndWidth = (int) (_coreWindow.getWidth() * _coreWindow.getDpiScale().getXScale());
+                actualWndHeight = (int) (_coreWindow.getHeight() * _coreWindow.getDpiScale().getYScale());
             }
             getPointer().setX(workArea.getX() + (workArea.getWidth() - actualWndWidth) / 2);
             getPointer().setY(workArea.getY() + (workArea.getHeight() - actualWndHeight) / 2);
@@ -147,15 +147,15 @@ final class GLWHandler {
         } else {
 
             if (CommonService.getOSType() != OSType.MAC) {
-                xActualScale = _coreWindow.getDpiScale().getX();
-                yActualScale = _coreWindow.getDpiScale().getY();
+                xActualScale = _coreWindow.getDpiScale().getXScale();
+                yActualScale = _coreWindow.getDpiScale().getYScale();
             }
 
             _coreWindow.setXDirect((int) (_coreWindow.getX() * xActualScale));
             _coreWindow.setYDirect((int) (_coreWindow.getY() * yActualScale));
 
-            getPointer().setX(_coreWindow.getX());
-            getPointer().setY(_coreWindow.getY());
+            getPointer().setX(_coreWindow.getX() + workArea.getX());
+            getPointer().setY(_coreWindow.getY() + workArea.getY());
         }
         glfwSetWindowPos(_window, getPointer().getX(), getPointer().getY());
 

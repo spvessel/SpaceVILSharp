@@ -1,15 +1,25 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// ResisableItem is a special container that can move and resize 
+    /// by mouse input events while inside another container. 
+    /// <para/> Te get full functionality try to use ResizableItem with 
+    /// SpaceVIL.FreeArea container.
+    /// <para/> Supports all events including drag and drop.
+    /// </summary>
     public class ResizableItem : Prototype, IDraggable
     {
-        public List<Side> _sidesExclude = new List<Side>();
-
+        private List<Side> _sidesExclude = new List<Side>();
+        /// <summary>
+        /// Specify which sides will be excluded, and these sides 
+        /// can no longer be dragged to resize the ResizableItem.
+        /// </summary>
+        /// <param name="sides">Sides for exclusion as sequence of SpaceVIL.Core.Side.</param>
         public void ExcludeSides(params Side[] sides)
         {
             foreach (Side side in sides)
@@ -18,31 +28,72 @@ namespace SpaceVIL
                     _sidesExclude.Add(side);
             }
         }
-
+        /// <summary>
+        /// Getting exclused sides. These sides cannot be dragged 
+        /// to resize the ResizableItem.
+        /// </summary>
+        /// <returns>Sides for exclusion as list of SpaceVIL.Core.Side.</returns>
         public List<Side> GetExcludedSides()
         {
             return _sidesExclude;
         }
+        /// <summary>
+        /// Removing all exclused sides. After that all sides 
+        /// can be dragged to resize the ResizableItem.
+        /// </summary>
         public void ClearExcludedSides()
         {
             _sidesExclude.Clear();
         }
 
         internal Side _sides = 0;
-
+        /// <summary>
+        /// Event that is invoked when ResizableItem moves.
+        /// </summary>
         public EventCommonMethod PositionChanged;
+        /// <summary>
+        /// Event that is invoked when ResizableItem resizes.
+        /// </summary>
         public EventCommonMethod SizeChanged;
-
+        /// <summary>
+        ///  Disposing all resources if the item was removed.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public override void Release()
         {
             PositionChanged = null;
             SizeChanged = null;
         }
-
+        /// <summary>
+        /// Property to lock ResizableItem movement and resizing.
+        /// <para/> True: to lock. False: to unlock.
+        /// <para/> Default: False.
+        /// </summary>
         public bool IsLocked = false;
-        public bool IsWResizable = true;
-        public bool IsHResizable = true;
+        /// <summary>
+        /// Property to lock ResizableItem resizing by X axis.
+        /// <para/> True: to unlock. False: to lock.
+        /// <para/> Default: True.
+        /// </summary>
+        public bool IsXResizable = true;
+        /// <summary>
+        /// Property to lock ResizableItem resizing by Y axis.
+        /// <para/> True: to unlock. False: to lock.
+        /// <para/> Default: True.
+        /// </summary>
+        public bool IsYResizable = true;
+        /// <summary>
+        /// Property to lock ResizableItem movement by X axis.
+        /// <para/> True: to unlock. False: to lock.
+        /// <para/> Default: True.
+        /// </summary>
         public bool IsXFloating = true;
+        /// <summary>
+        /// Property to lock ResizableItem movement by Y axis.
+        /// <para/> True: to unlock. False: to lock.
+        /// <para/> Default: True.
+        /// </summary>
         public bool IsYFloating = true;
 
         private bool _isMoved;
@@ -58,7 +109,7 @@ namespace SpaceVIL
         private int _diffY = 0;
 
         /// <summary>
-        /// Constructs a ResizableItem
+        /// Default ResizableItem constructor.
         /// </summary>
         public ResizableItem()
         {
@@ -154,7 +205,7 @@ namespace SpaceVIL
                     break;
 
                 case false:
-                    if (!IsWResizable && !IsHResizable)
+                    if (!IsXResizable && !IsYResizable)
                         break;
 
                     int x_handler = GetX();
@@ -202,12 +253,12 @@ namespace SpaceVIL
                             PositionChanged?.Invoke();
                         }
                         bool flag = false;
-                        if (IsWResizable && w != GetWidth())
+                        if (IsXResizable && w != GetWidth())
                         {
                             SetWidth(w);
                             flag = true;
                         }
-                        if (IsHResizable && h != GetHeight())
+                        if (IsYResizable && h != GetHeight())
                             SetHeight(h);
                         if (flag)
                             SizeChanged?.Invoke();
@@ -218,8 +269,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set width of the ResizableItem
+        /// Setting ResizableItem width. If the value is greater/less than the maximum/minimum 
+        /// value of the width, then the width becomes equal to the maximum/minimum value.
         /// </summary>
+        /// <param name="width">Width of the ResizableItem.</param>
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
@@ -227,8 +280,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set height of the ResizableItem
+        /// Setting ResizableItem height. If the value is greater/less than the maximum/minimum 
+        /// value of the height, then the height becomes equal to the maximum/minimum value.
         /// </summary>
+        /// <param name="height">Height of the ResizableItem.</param>
         public override void SetHeight(int height)
         {
             base.SetHeight(height);

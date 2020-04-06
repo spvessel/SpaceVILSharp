@@ -45,7 +45,7 @@ namespace View
                                       // new Tab("TabForTest5")
                 );
             // tabs.SetContentPolicy(SizePolicy.Expand);
-            tabs.SetContentPolicy(SizePolicy.Fixed);
+            tabs.SetTabPolicy(SizePolicy.Fixed);
 
             EventKeyPress += (sender, args) =>
             {
@@ -570,7 +570,7 @@ namespace View
             // crd.Add(new float[3] { 50.0f, 100.0f, 0.0f });
             // crd.Add(new float[3] { 150.0f, 100.0f, 0.0f });
             // graph_points.SetPointsCoord(crd);
-            graph_points.SetPointsCoord(GraphicsMathService.GetRoundSquare(300, 300, 150));
+            graph_points.SetPoints(GraphicsMathService.GetRoundSquare(300, 300, 150));
             // graph_points.SetPointsCoord(GraphicsMathService.GetTriangle(100, 100));
             // graph_points.SetShapePointer(GraphicsMathService.GetTriangle(graph_points.GetPointThickness(), graph_points.GetPointThickness()));
             // graph_points.SetWidth(300);

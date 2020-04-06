@@ -2,6 +2,9 @@ using System;
 
 namespace SpaceVIL.Core
 {
+    /// <summary>
+    /// An interface for sealed SpaceVIL OpenGL environment.
+    /// </summary>
     internal interface IVramResource
     {
         bool SendUniformSample2D(Shader shader, string name);

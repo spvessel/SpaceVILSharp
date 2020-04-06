@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
-import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
@@ -72,7 +72,7 @@ public class VisualContact extends Prototype {
         close.setHeightPolicy(SizePolicy.FIXED);
         close.setAlignment(ItemAlignment.TOP, ItemAlignment.RIGHT);
         // close.setMargin(0, 5, 0, 0);
-        close.setCustomFigure(new CustomFigure(false, GraphicsMathService.getCross(14, 14, 5, 45)));
+        close.setCustomFigure(new Figure(false, GraphicsMathService.getCross(14, 14, 5, 45)));
         ItemState hover = new ItemState();
         hover.background = new Color(255, 255, 255, 125);
         close.addItemState(ItemStateType.HOVERED, hover);

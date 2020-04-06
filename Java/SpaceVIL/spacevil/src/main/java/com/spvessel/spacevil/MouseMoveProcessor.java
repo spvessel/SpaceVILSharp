@@ -28,7 +28,7 @@ final class MouseMoveProcessor {
     void process(long wnd, double xpos, double ypos, Scale scale) {
         _commonProcessor.ptrRelease.setX((int) xpos);
         _commonProcessor.ptrRelease.setY((int) ypos);
-        _commonProcessor.margs.position.setPosition((float) xpos, (float) ypos);
+        _commonProcessor.margs.position.setPosition((int) xpos, (int) ypos);
         if (_commonProcessor.events.lastEvent().contains(InputEventType.MOUSE_PRESS)) {
             if (_commonProcessor.window.isBorderHidden && _commonProcessor.window.isResizable) {
                 int w = _commonProcessor.window.getWidth();
@@ -97,11 +97,11 @@ final class MouseMoveProcessor {
                         boolean flagLT = false;
                         if (handlerContainerSides.contains(Side.LEFT)) {
                             flagLT = true;
-                            w = (int) (w / scale.getX());
+                            w = (int) (w / scale.getXScale());
                         }
                         if (handlerContainerSides.contains(Side.TOP)) {
                             flagLT = true;
-                            h = (int) (h / scale.getY());
+                            h = (int) (h / scale.getYScale());
                         }
                         if (flagLT) {
                             _commonProcessor.wndProcessor.setWindowPos(xHandler, yHandler);

@@ -7,6 +7,11 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// ComboBox is an item allowing to select one of the many options from the list. 
+    /// <para/> Contains text, drop-down button, drop-down list. 
+    /// <para/> Supports all events except drag and drop.
+    /// </summary>
     public class ComboBox : Prototype
     {
         static int count = 0;
@@ -14,9 +19,19 @@ namespace SpaceVIL
         internal ButtonCore DropDown;
         internal CustomShape Arrow;
         internal ComboBoxDropDown DropDownArea;
+        /// <summary>
+        /// Event that is invoked when one of the options is selected.
+        /// </summary>
         public EventCommonMethod SelectionChanged;
+        /// <summary>
+        /// Property that allows to specify what item will be focused after drop-down list is closed.
+        /// </summary>
         public Prototype ReturnFocus = null;
-
+        /// <summary>
+        /// Disposing ComboBox resources if it was removed.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public override void Release()
         {
             SelectionChanged = null;
@@ -25,7 +40,7 @@ namespace SpaceVIL
         private List<MenuItem> preItemList;
 
         /// <summary>
-        /// Constructs a ComboBox
+        /// Default ComboBox constructor. Options list is empty.
         /// </summary>
         public ComboBox()
         {
@@ -42,106 +57,193 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.ComboBox)));
         }
-
+        /// <summary>
+        /// Constructs ComboBox with spesified sequence of options (as SpaceVIL.MenuItem).
+        /// </summary>
+        /// <param name="items">Sequence of options as SpaceVIL.MenuItem.</param>
         public ComboBox(params MenuItem[] items) : this()
         {
             preItemList = new List<MenuItem>(items);
         }
 
-        void OnKeyPress(object sender, KeyArgs args)
+        private void OnKeyPress(object sender, KeyArgs args)
         {
             if (args.Key == KeyCode.Enter)
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 
-        //text init
         /// <summary>
-        /// Text alignment in the ComboBox
+        /// Setting alignment of an ComboBox text of selected option. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
         /// </summary>
+        /// <param name="alignment">Text alignment as SpaceVIL.Core.ItemAlignment.</param>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             Selection.SetTextAlignment(alignment);
         }
-
         /// <summary>
-        /// Text margin in the ComboBox
+        /// Setting alignment of an ComboBox text of selected option. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
         /// </summary>
+        /// <param name="alignment">Text alignment as sequence of SpaceVIL.Core.ItemAlignment.</param>
+        public void SetTextAlignment(params ItemAlignment[] alignment)
+        {
+            Selection.SetTextAlignment(alignment);
+        }
+        /// <summary>
+        /// Setting indents for the text to offset text relative to ComboBox.
+        /// </summary>
+        /// <param name="margin">Indents as SpaceVIL.Decorations.Indents.</param>
         public void SetTextMargin(Indents margin)
         {
             Selection.SetTextMargin(margin);
         }
-
+        /// <summary>
+        /// Setting indents for the text to offset text relative to ComboBox.
+        /// </summary>
+        /// <param name="left">Indent on the left.</param>
+        /// <param name="top">Indent on the top.</param>
+        /// <param name="right">Indent on the right.</param>
+        /// <param name="bottom">Indent on the bottom.</param>
         public void SetTextMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
             Selection.SetTextMargin(new Indents(left, top, right, bottom));
         }
 
         /// <summary>
-        /// Text font parameters in the ComboBox
+        /// Setting font of the text of selected option. 
         /// </summary>
+        /// <param name="font">Font as System.Drawing.Font.</param>
         public void SetFont(Font font)
         {
             Selection.SetFont(font);
         }
+        /// <summary>
+        /// Setting font size of the text of selected option.
+        /// </summary>
+        /// <param name="size">New size of the font.</param>
         public void SetFontSize(int size)
         {
             Selection.SetFontSize(size);
         }
+        /// <summary>
+        /// Setting font style of the text of selected option.
+        /// </summary>
+        /// <param name="style">New font style as System.Drawing.FontStyle.</param>
         public void SetFontStyle(FontStyle style)
         {
             Selection.SetFontStyle(style);
         }
-        public void SetFontFamily(FontFamily font_family)
+        /// <summary>
+        /// Setting new font family of the text of selected option.
+        /// </summary>
+        /// <param name="fontFamily">New font family as System.Drawing.FontFamily.</param>
+        public void SetFontFamily(FontFamily fontFamily)
         {
-            Selection.SetFontFamily(font_family);
+            Selection.SetFontFamily(fontFamily);
         }
+        /// <summary>
+        /// Getting the current font of the text of selected option.
+        /// </summary>
+        /// <returns>Font as System.Drawing.Font.</returns>
         public Font GetFont()
         {
             return Selection.GetFont();
         }
-
         /// <summary>
-        /// Set text in the ComboBox
+        /// Setting the text of selected option.
         /// </summary>
-        public void SetText(String text)
+        /// <param name="text">Text as System.String.</param>
+        public virtual void SetText(String text)
         {
             Selection.SetText(text);
         }
-        public String GetText()
+        /// <summary>
+        /// Getting the current text  of selected option.
+        /// </summary>
+        /// <returns>Text as System.String.</returns>
+        public virtual String GetText()
         {
             return Selection.GetText();
         }
-
         /// <summary>
-        /// Text color in the ComboBox
+        /// Getting the text width (useful when you need resize ComboBox by text width).
         /// </summary>
+        /// <returns>Text width.</returns>
+        public int GetTextWidth()
+        {
+            return Selection.GetTextWidth();
+        }
+        /// <summary>
+        /// Getting the text height (useful when you need resize ComboBox by text height).
+        /// </summary>
+        /// <returns>Text height.</returns>
+        public int GetTextHeight()
+        {
+            return Selection.GetTextHeight();
+        }
+        /// <summary>
+        /// Setting text color of selected option.
+        /// </summary>
+        /// <param name="color">Color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
             Selection.SetForeground(color);
         }
+        /// <summary>
+        /// Setting text color of selected option in byte RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
             Selection.SetForeground(r, g, b);
         }
+        /// <summary>
+        /// Setting text color of selected option in byte RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
             Selection.SetForeground(r, g, b, a);
         }
+        /// <summary>
+        /// Setting text color of selected option in float RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
             Selection.SetForeground(r, g, b);
         }
+        /// <summary>
+        /// Setting text color of selected option in float RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
             Selection.SetForeground(r, g, b, a);
         }
+        /// <summary>
+        /// Getting current text color of selected option.
+        /// </summary>
+        /// <returns>Text color as System.Drawing.Color.</returns>
         public Color GetForeground()
         {
             return Selection.GetForeground();
         }
 
         /// <summary>
-        /// Initialization and adding of all elements in the ComboBox
+        /// Initializing and adding of all elements in the ComboBox 
+        /// (drop-down list, drop bown button, selection, options and etc.).
         /// </summary>
         public override void InitElements()
         {
@@ -151,7 +253,6 @@ namespace SpaceVIL
             DropDown.AddItem(Arrow);
 
             //DropDownArea
-            // DropDownArea = new ComboBoxDropDown(GetHandler());
             ItemsLayoutBox.AddItem(GetHandler(), DropDownArea, LayoutType.Floating);
             DropDownArea.Parent = this;
             DropDownArea.SelectionChanged += OnSelectionChanged;
@@ -180,7 +281,9 @@ namespace SpaceVIL
                 DropDownArea.Show(this, args);
             }
         }
-
+        /// <summary>
+        /// Opens drop-down list.
+        /// </summary>
         public void Open()
         {
             ShowDropDownList();
@@ -195,8 +298,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Add item to ComboBox list
+        /// Adding item to ComboBox. 
+        /// If item is SpaceVIL.MenuItem then it is added to the drop-down list as an option.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
             if (item is MenuItem)
@@ -206,16 +311,21 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Remove item from the ComboBox list
+        /// Removing item from ComboBox. 
+        /// If item is SpaceVIL.MenuItem then it is removed from the drop-down list.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>True: if the removal was successful. 
+        /// False: if the removal was unsuccessful.</returns>
         public override bool RemoveItem(IBaseItem item)
         {
             return DropDownArea.RemoveItem(item);
         }
 
         /// <summary>
-        /// Current element in the ComboBox by index
+        /// Selecting option by its index in the drop-down list.
         /// </summary>
+        /// <param name="index"></param>
         public void SetCurrentIndex(int index)
         {
             Prototype currentFocus = GetHandler().GetFocusedItem();
@@ -224,6 +334,10 @@ namespace SpaceVIL
             Selection.SetText(DropDownArea.GetText());
             SelectionChanged?.Invoke();
         }
+        /// <summary>
+        /// Getting index of selected option in the drop-down list.
+        /// </summary>
+        /// <returns>Index of selected option.</returns>
         public int GetCurrentIndex()
         {
             return DropDownArea.GetCurrentIndex();
@@ -235,7 +349,8 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set style of the ComboBox
+        /// Setting style of the ComboBox.
+        /// <para/> Inner styles: "selection", "dropdownbutton", "arrow", "dropdownarea".
         /// </summary>
         public override void SetStyle(Style style)
         {

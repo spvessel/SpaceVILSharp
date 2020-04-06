@@ -1,14 +1,14 @@
 using System;
 namespace SpaceVIL.Core
 {
-    public enum InputMode
+    internal enum InputMode
     {
         Cursor = 0x00033001,
         StickyKeys = 0x00033002,
         StickyMouseButton = 0x00033003
     }
 
-    public enum Joystick
+    internal enum Joystick
     {
         Joystick1 = 0,
         Joystick2 = 1,

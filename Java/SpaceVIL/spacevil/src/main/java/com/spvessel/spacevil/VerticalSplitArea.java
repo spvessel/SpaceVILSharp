@@ -25,7 +25,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
      */
     public void setSplitPosition(int position) {
         if (_init) {
-            if (position < _lMin || position > getWidth() - _splitHolder.getHolderSize() - _rMin)
+            if (position < _lMin || position > getWidth() - _splitHolder.getDividerSize() - _rMin)
                 return;
             _leftWidth = position;
             _splitHolder.setX(position + getX());
@@ -71,7 +71,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
         addItem(_splitHolder);
         _init = true;
         if (_leftWidth < 0)
-            setSplitPosition((getWidth() - _splitHolder.getHolderSize()) / 2);
+            setSplitPosition((getWidth() - _splitHolder.getDividerSize()) / 2);
         else
             setSplitPosition(_leftWidth);
     }
@@ -107,7 +107,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
     }
 
     private void checkMins() {
-        int totalSize = getWidth() - _splitHolder.getHolderSize();
+        int totalSize = getWidth() - _splitHolder.getDividerSize();
         if (totalSize < _lMin) {
             setSplitPosition(totalSize);
         } else if (totalSize <= _lMin + _rMin) {
@@ -123,8 +123,8 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
      * Set X position of the VerticalSplitArea
      */
     @Override
-    public void setX(int _x) {
-        super.setX(_x);
+    public void setX(int x) {
+        super.setX(x);
         setSplitPosition(_leftWidth);
         updateLayout();
     }
@@ -145,10 +145,10 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
                 _leftBlock.setWidth(0);
         }
 
-        tmpWidth = getWidth() - tmpWidth - _splitHolder.getHolderSize();
+        tmpWidth = getWidth() - tmpWidth - _splitHolder.getDividerSize();
 
         if (_rightBlock != null) {
-            _rightBlock.setX(_leftWidth + getX() + _splitHolder.getHolderSize());
+            _rightBlock.setX(_leftWidth + getX() + _splitHolder.getDividerSize());
             if (tmpWidth > 0)
                 _rightBlock.setWidth(tmpWidth);
             else
@@ -163,7 +163,7 @@ public class VerticalSplitArea extends Prototype implements InterfaceHLayout {
      * Set width of the SplitHolder
      */
     public void SetSplitThickness(int spWidth) {
-        _splitHolder.setSpacerSize(spWidth);
+        _splitHolder.setDividerSize(spWidth);
     }
 
     /**

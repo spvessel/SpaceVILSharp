@@ -398,6 +398,10 @@ namespace SpaceVIL
             _textObject.SetMargin(margin);
             _substrateText.SetMargin(margin);
         }
+        internal Indents GetTextMargin()
+        {
+            return _textObject.GetMargin();
+        }
         internal void SetFont(Font font)
         {
             _textObject.SetFont(font);

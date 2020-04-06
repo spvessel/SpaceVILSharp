@@ -13,11 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ResizableItem extends Prototype implements InterfaceDraggable {
-    enum Moving {
-        TRUE, FALSE
-    }
 
-    public List<Side> _sidesExclude = new LinkedList<>();
+    private List<Side> _sidesExclude = new LinkedList<>();
 
     public void excludeSides(Side... sides) {
         for (Side side : sides) {
@@ -51,7 +48,7 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
     public boolean isXFloating = true;
     public boolean isYFloating = true;
 
-    private Moving _isMoved;
+    private boolean _isMoved;
 
     private static int count = 0;
     private int _pressedX = 0;
@@ -112,21 +109,20 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
         getSides(_diffX, _diffY);
 
         if (_sides.size() == 0) {
-            _isMoved = Moving.TRUE;
+            _isMoved = true;
         } else {
-            _isMoved = Moving.FALSE;
+            _isMoved = false;
         }
     }
 
     private void onDragging(InterfaceItem sender, MouseArgs args) {
         if (isLocked)
-        return;
-        
+            return;
+
         int offset_x;
         int offset_y;
-        
-        switch (_isMoved) {
-            case TRUE:
+
+        if (_isMoved) {
             if (isXFloating) {
                 offset_x = args.position.getX() - _diffX;
                 setX(offset_x);
@@ -137,11 +133,11 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
             }
             positionChanged.execute();
             setConfines();
-            break;
+        }
 
-        case FALSE:
+        else {
             if (!isWResizable && !isHResizable)
-                break;
+                return;
 
             int x_handler = getX();
             int y_handler = getY();
@@ -193,7 +189,6 @@ public class ResizableItem extends Prototype implements InterfaceDraggable {
                     sizeChanged.execute();
             }
             setConfines();
-            break;
         }
     }
 

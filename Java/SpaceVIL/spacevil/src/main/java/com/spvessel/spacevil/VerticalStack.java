@@ -78,8 +78,8 @@ public class VerticalStack extends Prototype implements InterfaceVLayout {
      * Set Y position of the VerticalStack
      */
     @Override
-    public void setY(int _y) {
-        super.setY(_y);
+    public void setY(int y) {
+        super.setY(y);
         updateLayout();
     }
 

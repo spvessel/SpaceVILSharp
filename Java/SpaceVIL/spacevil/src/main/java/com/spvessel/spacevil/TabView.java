@@ -10,11 +10,11 @@ import java.util.List;
 public class TabView extends VerticalStack {
     private static int count = 0;
 
-    public void setContentPolicy(SizePolicy policy) {
+    public void setTabPolicy(SizePolicy policy) {
         _tabBar.setContentPolicy(policy);
     }
 
-    public SizePolicy getContentPolicy() {
+    public SizePolicy getTabPolicy() {
         return _tabBar.getContentPolicy();
     }
 

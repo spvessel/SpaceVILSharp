@@ -1,5 +1,3 @@
-using System;
-using System.Drawing;
 using System.Collections.Generic;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
@@ -7,48 +5,73 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// ContextMenu is a menu for selecting one of the available options 
+    /// from the list that perform the assigned action. ContextMenu is a floating 
+    /// item (see SpaceVIL.Core.IFloating and  enum SpaceVIL.Core.LayoutType) and 
+    /// closes when mouse click outside the ContextMenu area.
+    /// <para/> Contains ListBox. 
+    /// <para/> Supports all events except drag and drop.
+    /// <para/> Notice: All floating items render above all others items.
+    /// <para/> ContextMenu does not pass any input events and invisible by default.
+    /// </summary>
     public class ContextMenu : Prototype, IFloating
     {
-        public Prototype _returnFocus = null;
-        public void SetReturnFocus(Prototype item)
-        {
-            _returnFocus = item;
-        }
-        public Prototype GetReturnFocusItem()
-        {
-            return _returnFocus;
-        }
-
+        /// <summary>
+        /// Property that allows to specify what item will be focused after ContextMenu is closed.
+        /// </summary>
+        public Prototype ReturnFocus = null;
+        /// <summary>
+        /// ListBox for storing a list of options (SpaceVIL.MenuItem).
+        /// </summary>
         public ListBox ItemList = new ListBox();
         private Queue<IBaseItem> _queue = new Queue<IBaseItem>();
         private Prototype _sender = null;
+        /// <summary>
+        /// Getting the item that invokes ContextMenu.
+        /// </summary>
+        /// <returns>Item as SpaceVIL.Prototype.</returns>
         public Prototype GetSender()
         {
             return _sender;
         }
-
         private static int count = 0;
+        /// <summary>
+        /// You can specify mouse button (see SpaceVIL.Core.MouseButton) 
+        /// that is used to open ContextMenu.
+        /// <para/> Default: SpaceVIL.Core.MouseButton.ButtonLeft.
+        /// </summary>
         public MouseButton ActiveButton = MouseButton.ButtonRight;
 
         private bool _init = false;
         private bool _ouside = true;
 
         /// <summary>
-        /// Close the ContextMenu it mouse click is outside (true or false)
+        /// Returns True if ContextMenu (see SpaceVIL.Core.IFloating)
+        /// should closes when mouse click outside the area of ContextMenu otherwise returns False..
         /// </summary>
+        /// <returns>True: if ContextMenu closes when mouse click outside the area.
+        /// False: if ContextMenu stays opened when mouse click outside the area.</returns>
         public bool IsOutsideClickClosable()
         {
             return _ouside;
         }
+        /// <summary>
+        /// Setting boolean value of item's behavior when mouse click occurs outside the ContextMenu.
+        /// </summary>
+        /// <param name="value">True: ContextMenu should become invisible if mouse click occurs outside the item.
+        /// False: an item should stay visible if mouse click occurs outside the item.</param>
         public void SetOutsideClickClosable(bool value)
         {
             _ouside = value;
         }
 
         /// <summary>
-        /// Constructs a ContextMenu
+        /// Constructs a ContextMenu and attaches it to the specified window 
+        /// (see SpaceVIL.CoreWindow, SpaceVIL.ActiveWindow, SpaceVIL.DialogWindow).
+        /// ContextMenu does not pass any input events and invisible by default.
         /// </summary>
-        /// <param name="handler"> parent window for the ContextMenu </param>
+        /// <param name="handler">Window for attaching ContextMenu.</param>
         public ContextMenu(CoreWindow handler)
         {
             ItemsLayoutBox.AddItem(handler, this, LayoutType.Floating);
@@ -57,7 +80,12 @@ namespace SpaceVIL
             SetPassEvents(false);
             SetVisible(false);
         }
-
+        /// <summary>
+        /// Constructs a ContextMenu with specified options and attaches it to the specified window 
+        /// (see SpaceVIL.CoreWindow, SpaceVIL.ActiveWindow, SpaceVIL.DialogWindow).
+        /// </summary>
+        /// <param name="handler">Window for attaching ContextMenu.</param>
+        /// <param name="items">Sequence of options as SpaceVIL.MenuItem.</param>
         public ContextMenu(CoreWindow handler, params MenuItem[] items) : this(handler)
         {
             foreach (MenuItem item in items)
@@ -65,14 +93,16 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Initialization and adding of all elements in the ContextMenu
+        /// Initializing all elements in the ContextMenu.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void InitElements()
         {
             SetConfines();
-            ItemList.DisableMenu(true);
-            ItemList.SetVScrollBarVisible(ScrollBarVisibility.Never);
-            ItemList.SetHScrollBarVisible(ScrollBarVisibility.Never);
+            ItemList.SetMenuDisabled(true);
+            ItemList.SetVScrollBarPolicy(VisibilityPolicy.Never);
+            ItemList.SetHScrollBarPolicy(VisibilityPolicy.Never);
             base.AddItem(ItemList);
             ItemList.EventScrollUp = null;
             ItemList.EventScrollDown = null;
@@ -116,7 +146,7 @@ namespace SpaceVIL
             }
         }
 
-        void OnSelectionChanged(MenuItem sender)
+        private void OnSelectionChanged(MenuItem sender)
         {
             if (sender != null)
                 if (sender.IsActionItem)
@@ -127,30 +157,33 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Returns count of the ContextMenu lines
+        /// Getting number of options in the list.
         /// </summary>
+        /// <returns>Number of options in the list.</returns>
         public int GetListCount()
         {
             return ItemList.GetListContent().Count;
         }
 
         /// <summary>
-        /// Returns ContextMenu items list
+        /// Getting all existing options (list of SpaceVIL.MenuItem objects).
         /// </summary>
+        /// <returns>Options as List&lt;SpaceVIL.MenuItem&gt;</returns>
         public List<IBaseItem> GetListContent()
         {
             return ItemList.GetListContent();
         }
 
         /// <summary>
-        /// Add item to the ContextMenu
+        /// Adding option (or any SpaceVIL.Core.IBaseItem implementation) to the ComboBoxDropDown. 
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
             MenuItem tmp = (item as MenuItem);
             if (tmp != null)
             {
-                tmp.contextMenu = this;
+                tmp.ContextMenu = this;
                 tmp.EventMouseClick += (sender, args) =>
                 {
                     OnSelectionChanged(tmp);
@@ -168,14 +201,17 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Remove item from the ContextMenu
+        /// Removing option (or any SpaceVIL.Core.IBaseItem implementation) from the ComboBoxDropDown.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>True: if the removal was successful. 
+        /// False: if the removal was unsuccessful.</returns>
         public override bool RemoveItem(IBaseItem item)
         {
             return ItemList.RemoveItem(item);
         }
 
-        void UpdateSize()
+        private void UpdateSize()
         {
             int height = 0;
             int width = GetWidth();
@@ -210,11 +246,11 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Show the ContextMenu
+        /// Shows the ContextMenu at the proper position.
         /// </summary>
-        /// <param name="sender"> the item from which the show request is sent </param>
-        /// <param name="args"> mouse click arguments (cursor position, mouse button,
-        /// mouse button press/release, etc.) </param>
+        /// <param name="sender"> The item from which the show request is sent. </param>
+        /// <param name="args"> Mouse click arguments (cursor position, mouse button,
+        /// mouse button press/release, etc.). </param>
         public void Show(IItem sender, MouseArgs args)
         {
             if (args.Button == ActiveButton)
@@ -253,7 +289,9 @@ namespace SpaceVIL
                 ItemList.GetArea().SetFocus();
             }
         }
-        
+        /// <summary>
+        /// Shows the ContextMenu at the position (0, 0).
+        /// </summary>
         public void Show()
         {
             MouseArgs margs = new MouseArgs();
@@ -262,7 +300,9 @@ namespace SpaceVIL
         }
 
         private bool _added = false;
-
+        /// <summary>
+        /// Remove all content in the ContextMenu.
+        /// </summary>
         public override void Clear()
         {
             ItemList.Clear();
@@ -271,7 +311,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Hide the ContextMenu without destroying
+        /// Hide the ContextMenu without destroying.
         /// </summary>
         public void Hide()
         {
@@ -279,17 +319,21 @@ namespace SpaceVIL
             SetVisible(false);
             SetX(-GetWidth());
 
-            if (_returnFocus != null)
-                _returnFocus.SetFocus();
+            if (ReturnFocus != null)
+                ReturnFocus.SetFocus();
         }
-
+        /// <summary>
+        /// Hide the ContextMenu without destroying with using specified mouse arguments.
+        /// </summary>
+        /// <param name="args">Arguments as SpaceVIL.Core.MouseArgs.</param>
         public void Hide(MouseArgs args)
         {
             Hide();
         }
 
         /// <summary>
-        /// Set confines according to position and size of the ContextMenu
+        /// Overridden method for setting confines according 
+        /// to position and size of the ContextMenu (see Prototype.SetConfines()).
         /// </summary>
         public override void SetConfines()
         {
@@ -322,10 +366,11 @@ namespace SpaceVIL
             return true;
         }
 
-        //style
         /// <summary>
-        /// Set style of the ContextMenu
+        /// Setting style of the ContextMenu.
+        /// <para/> Inner styles: "itemlist".
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)
