@@ -1,18 +1,24 @@
-﻿using SpaceVIL.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System;
+using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
-    public sealed class Cell : Geometry, IPosition
+    /// <summary>
+    /// Cell is sealed class representing cell in SpaceVIL.Grid.
+    /// You cannot create instances of Cell class, only to get it for proccessing
+    /// from any instance of SpaceVIL.Grid class.
+    /// </summary>
+    public sealed class Cell : Geometry
     {
         private IFreeLayout _parent = null;
 
         /// <returns> parent grid of the cell </returns>
+        /// <summary>
+        /// Getting SpaceVIL.Core.IFreeLayout (usualy SpaceVIL.Grid) 
+        /// instance to which this Cell belongs.
+        /// </summary>
+        /// <returns>Container with cells as SpaceVIL.Core.IFreeLayout 
+        /// (usualy SpaceVIL.Grid).</returns>
         public IFreeLayout GetParentGrid()
         {
             return _parent;
@@ -23,8 +29,8 @@ namespace SpaceVIL
         }
         internal Cell(IFreeLayout grid, int row, int column) : this(grid)
         {
-            _row_index = row;
-            _column_index = column;
+            _rowIndex = row;
+            _columnIndex = column;
         }
         internal Cell(IFreeLayout grid, int row, int column, IBaseItem item) : this(grid, row, column)
         {
@@ -32,57 +38,60 @@ namespace SpaceVIL
         }
 
         //Indecies
-        private int _row_index = 0;
+        private int _rowIndex = 0;
 
-        /// <returns> cell row number </returns>
+        /// <summary>
+        /// Getting Cell row number.
+        /// </summary>
+        /// <returns>Row number.</returns>
         public int GetRow()
         {
-            return _row_index;
+            return _rowIndex;
         }
-
-        /// <param name="index"> cell row number </param>
-        public void SetRow(int index)
+        internal void SetRow(int index)
         {
-            _row_index = index;
+            _rowIndex = index;
         }
 
-        private int _column_index = 0;
-
-        /// <returns> cell column number </returns>
+        private int _columnIndex = 0;
+        /// <summary>
+        /// Getting Cell column number.
+        /// </summary>
+        /// <returns>Column number.</returns>
         public int GetColumn()
         {
-            return _column_index;
+            return _columnIndex;
         }
-
-        /// <param name="index"> cell column number </param>
-        public void SetColumn(int index)
+        internal void SetColumn(int index)
         {
-            _column_index = index;
+            _columnIndex = index;
         }
 
         //Position
         private int _x = 0;
         private int _y = 0;
 
-        /// <summary>
-        /// X position of the cell
-        /// </summary>
-        public void SetX(int x)
+        internal void SetX(int x)
         {
             _x = x;
         }
+        /// <summary>
+        /// Getting X position of the Cell.
+        /// </summary>
+        /// <returns>X position.</returns>
         public int GetX()
         {
             return _x;
         }
 
-        /// <summary>
-        /// Y position of the cell
-        /// </summary>
-        public void SetY(int y)
+        internal void SetY(int y)
         {
             _y = y;
         }
+        /// <summary>
+        /// Getting Y position of the Cell.
+        /// </summary>
+        /// <returns>Y position.</returns>
         public int GetY()
         {
             return _y;
@@ -90,14 +99,12 @@ namespace SpaceVIL
 
         private IBaseItem _itemLink = null;
 
-        /// <returns> cell item </returns>
         public IBaseItem GetItem()
         {
             return _itemLink;
         }
 
-        /// <param name="item"> Set item into cell </param>
-        public void SetItem(IBaseItem item)
+        internal void SetItem(IBaseItem item)
         {
             _itemLink = item;
         }
@@ -140,8 +147,8 @@ namespace SpaceVIL
             Console.WriteLine(
                 "X: " + _itemLink.GetX() + "\n" +
                 "Y: " + _itemLink.GetY() + "\n" +
-                "Row: " + _row_index + "\n" +
-                "Column: " + _column_index + "\n" +
+                "Row: " + _rowIndex + "\n" +
+                "Column: " + _columnIndex + "\n" +
                 "Width: " + GetWidth() + "\n" +
                 "ItemW: " + _itemLink.GetWidth() + "\n" +
                 "Height: " + GetHeight() + "\n" +

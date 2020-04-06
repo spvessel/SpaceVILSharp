@@ -2,33 +2,57 @@ using System;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using SpaceVIL;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// LoadingScreen is designed to lock the entire window 
+    /// to prevent all input events during the execution of any long time task.
+    /// <para/> Contains image and text.
+    /// <para/> Supports all events except drag and drop.
+    /// </summary>
     public class LoadingScreen : Prototype
     {
         static int count = 0;
         private ImageItem _loadIcon;
+        /// <summary>
+        /// Setting an image that should let the user know that 
+        /// another task is not yet complete, and the user must wait.
+        /// </summary>
+        /// <param name="image">Image as System.Drawing.Bitmap.</param>
         public void SetImage(Bitmap image)
         {
             _loadIcon = new ImageItem(image);
         }
-        private Label _text_object;
+        private Label _textObject;
+        /// <summary>
+        /// Setting the text that represents the progress of the unfinished task, 
+        /// visible or invisible.
+        /// </summary>
+        /// <param name="value">True: if text should be visible. 
+        /// False: if text should be invisible.</param>
         public void SetValueVisible(bool value)
         {
-            _text_object.SetVisible(value);
+            _textObject.SetVisible(value);
         }
+        /// <summary>
+        /// Returns True if text that represents the progress of 
+        /// the unfinished task is visible, otherwise returns False.
+        /// </summary>
+        /// <returns>True: if text is visible. 
+        /// False: if text is invisible.</returns>
         public bool IsValueVisible()
         {
-            return _text_object.IsVisible();
+            return _textObject.IsVisible();
         }
 
         private CoreWindow _handler = null;
-
+        /// <summary>
+        /// Default LoadingScreen constructor.
+        /// </summary>
         public LoadingScreen()
         {
             SetItemName("LoadingScreen_" + count++);
@@ -36,7 +60,7 @@ namespace SpaceVIL
             _loadIcon = new ImageItem();
             if (_loadIcon.GetImage() == null)
                 _loadIcon.SetImage(DefaultsService.GetDefaultImage(EmbeddedImage.LoadCircle, EmbeddedImageSize.Size64x64));
-            _text_object = new Label("0%");
+            _textObject = new Label("0%");
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.LoadingScreen)));
 
             EventKeyPress += (s, a) =>
@@ -45,15 +69,23 @@ namespace SpaceVIL
                     SetToClose();
             };
         }
-
+        /// <summary>
+        /// Initializing all elements in the LoadingScreen. 
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public override void InitElements()
         {
             _loadIcon.IsHover = false;
-            base.AddItems(_loadIcon, _text_object);
+            base.AddItems(_loadIcon, _textObject);
         }
 
         private int _percent = 0;
-        public void SetValue(int value)
+        /// <summary>
+        /// Setting the progress value of the unfinished task.
+        /// </summary>
+        /// <param name="value">Progress value of the unfinished task.</param>
+        public void SetCurrentValue(int value)
         {
             if (value == _percent)
                 return;
@@ -62,16 +94,23 @@ namespace SpaceVIL
                 _percent = 100;
             if (_percent < 0)
                 _percent = 0;
-            _text_object.SetText(_percent.ToString() + "%");
+            _textObject.SetText(_percent.ToString() + "%");
         }
-
-        public int GetValue()
+        /// <summary>
+        /// Getting the progress value of the unfinished task.
+        /// </summary>
+        /// <returns>Progress value of the unfinished task.</returns>
+        public int GetCurrentValue()
         {
             return _percent;
         }
 
-        Object _locker = new Object();
+        private Object _locker = new Object();
         private bool _isShouldClose = false;
+
+        /// <summary>
+        /// Informing of LoadingScreen to closes.
+        /// </summary>
         public void SetToClose()
         {
             Monitor.Enter(_locker);
@@ -109,7 +148,11 @@ namespace SpaceVIL
                 Monitor.Exit(_locker);
             }
         }
-
+        /// <summary>
+        /// Shows LoadingScreen and attaches it to the specified window 
+        /// (see SpaceVIL.CoreWindow, SpaceVIL.ActiveWindow, SpaceVIL.DialogWindow).
+        /// </summary>
+        /// <param name="handler">Window for attaching LoadingScreen.</param>
         public void Show(CoreWindow handler)
         {
             _handler = handler;
@@ -135,68 +178,119 @@ namespace SpaceVIL
             });
             thread.Start();
         }
-
+        /// <summary>
+        /// Closes LoadingScreen.
+        /// </summary>
         private void Close()
         {
             _handler.RemoveItem(this);
         }
 
         /// <summary>
-        /// Text font parameters in the LoadingScreen
+        /// Setting font of the text.
         /// </summary>
+        /// <param name="font">Font as System.Drawing.Font.</param>
         public void SetFont(Font font)
         {
-            _text_object.SetFont(font);
+            _textObject.SetFont(font);
         }
+        /// <summary>
+        /// Setting font size of the text.
+        /// </summary>
+        /// <param name="size">New size of the font.</param>
         public void SetFontSize(int size)
         {
-            _text_object.SetFontSize(size);
+            _textObject.SetFontSize(size);
         }
+        /// <summary>
+        /// Setting font style of the text.
+        /// </summary>
+        /// <param name="style">New font style as System.Drawing.FontStyle.</param>
         public void SetFontStyle(FontStyle style)
         {
-            _text_object.SetFontStyle(style);
+            _textObject.SetFontStyle(style);
         }
-        public void SetFontFamily(FontFamily font_family)
+        /// <summary>
+        /// Setting new font family of the text.
+        /// </summary>
+        /// <param name="fontFamily">New font family as System.Drawing.FontFamily.</param>
+        public void SetFontFamily(FontFamily fontFamily)
         {
-            _text_object.SetFontFamily(font_family);
+            _textObject.SetFontFamily(fontFamily);
         }
+        /// <summary>
+        /// Getting the current font of the text.
+        /// </summary>
+        /// <returns>Font as System.Drawing.Font.</returns>
         public Font GetFont()
         {
-            return _text_object.GetFont();
+            return _textObject.GetFont();
         }
 
         /// <summary>
-        /// Text color in the LoadingScreen
+        /// Setting text color of a ButtonCore.
         /// </summary>
+        /// <param name="color">Color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
-            _text_object.SetForeground(color);
+            _textObject.SetForeground(color);
         }
+        /// <summary>
+        /// Setting text color of a ButtonCore in byte RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
-            _text_object.SetForeground(r, g, b);
+            _textObject.SetForeground(r, g, b);
         }
+        /// <summary>
+        /// Setting text color of a ButtonCore in byte RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
-            _text_object.SetForeground(r, g, b, a);
+            _textObject.SetForeground(r, g, b, a);
         }
+        /// <summary>
+        /// Setting text color of a ButtonCore in float RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
-            _text_object.SetForeground(r, g, b);
+            _textObject.SetForeground(r, g, b);
         }
+        /// <summary>
+        /// Setting text color of a ButtonCore in float RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
-            _text_object.SetForeground(r, g, b, a);
+            _textObject.SetForeground(r, g, b, a);
         }
+        /// <summary>
+        /// Getting current text color.
+        /// </summary>
+        /// <returns>Text color as System.Drawing.Color.</returns>
         public Color GetForeground()
         {
-            return _text_object.GetForeground();
+            return _textObject.GetForeground();
         }
 
-        //style
         /// <summary>
-        /// Set style of the LoadingScreen
+        /// Setting style of the LoadingScreen. 
+        /// <para/> Inner styles: "text", "image".
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)
@@ -206,7 +300,7 @@ namespace SpaceVIL
             SetForeground(style.Foreground);
             SetFont(style.Font);
             //parts
-            _text_object.SetStyle(style.GetInnerStyle("text"));
+            _textObject.SetStyle(style.GetInnerStyle("text"));
             _loadIcon.SetStyle(style.GetInnerStyle("image"));
         }
     }

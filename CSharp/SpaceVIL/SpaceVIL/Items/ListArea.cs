@@ -1,24 +1,33 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using SpaceVIL.Common;
 using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// ListArea is a scrollable container for other elements with ability of selection. 
+    /// ListArea is part of SpaceVIL.ListBox which controls scrolling, resizing and etc.
+    /// <para/> Supports all events except drag and drop.
+    /// </summary>
     public class ListArea : Prototype, IVLayout
     {
         internal Dictionary<IBaseItem, SelectionItem> _mapContent = new Dictionary<IBaseItem, SelectionItem>();
         private Object _lock = new Object();
+        /// <summary>
+        /// Event that is invoked when one of the element is selected.
+        /// </summary>
         public EventCommonMethod SelectionChanged;
+        /// <summary>
+        /// Event that is invoked when one of the set of elements is changed.
+        /// </summary>
         public EventCommonMethod ItemListChanged;
-
+        /// <summary>
+        /// Disposing ListArea resources if it was removed.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public override void Release()
         {
             SelectionChanged = null;
@@ -28,12 +37,17 @@ namespace SpaceVIL
         private int _step = 30;
 
         /// <summary>
-        /// ScrollBar moving step
+        /// Setting scroll movement step.
         /// </summary>
+        /// <param name="value">Scroll step.</param>
         public void SetStep(int value)
         {
             _step = value;
         }
+        /// <summary>
+        /// Getting scroll movement step.
+        /// </summary>
+        /// <returns>Scroll step.</returns>
         public int GetStep()
         {
             return _step;
@@ -41,7 +55,10 @@ namespace SpaceVIL
 
         private int _selection = -1;
 
-        /// <returns> Number of the selected item </returns>
+        /// <summary>
+        /// Getting index of selected item.
+        /// </summary>
+        /// <returns>Index of selected item.</returns>
         public int GetSelection()
         {
             return _selection;
@@ -49,7 +66,10 @@ namespace SpaceVIL
 
         private SelectionItem _selectionItem;
 
-        /// <returns> selected item </returns>
+        /// <summary>
+        /// Getting selected item.
+        /// </summary>
+        /// <returns>Selected item as SpaceVIL.Core.IBaseItem</returns>
         public IBaseItem GetSelectedItem()
         {
             if (_selectionItem != null)
@@ -62,15 +82,16 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set selected item by index
+        /// Select item by index.
         /// </summary>
+        /// <param name="index">Index of selection.</param>
         public void SetSelection(int index)
         {
             if (!_isSelectionVisible)
                 return;
             _selection = index;
             _selectionItem = GetItems().ElementAt(index) as SelectionItem;
-            _selectionItem.SetToggled(true);
+            _selectionItem.SetSelected(true);
             UnselectOthers(_selectionItem);
             Prototype tmp = _selectionItem.GetContent() as Prototype;
             if (tmp != null)
@@ -87,28 +108,30 @@ namespace SpaceVIL
             {
                 if (!item.Equals(sender))
                 {
-                    ((SelectionItem)item).SetToggled(false);
+                    ((SelectionItem)item).SetSelected(false);
                 }
             }
         }
 
         /// <summary>
-        /// Unselect all items
+        /// Unselect selected item.
         /// </summary>
         public void Unselect()
         {
             _selection = -1;
             if (_selectionItem != null)
             {
-                _selectionItem.SetToggled(false);
+                _selectionItem.SetSelected(false);
                 _selectionItem = null;
             }
         }
 
         private bool _isSelectionVisible = true;
         /// <summary>
-        /// Is selection changes view of the item or not
+        /// Enable or disable selection ability of ListArea.
         /// </summary>
+        /// <param name="value">True: if you want selection ability of ListArea to be enabled. 
+        /// False: if you want selection ability of ListArea to be disabled.</param>
         public void SetSelectionVisible(bool value)
         {
             _isSelectionVisible = value;
@@ -119,6 +142,11 @@ namespace SpaceVIL
                 item.SetToggleVisible(_isSelectionVisible);
             }
         }
+        /// <summary>
+        /// Returns True if selection ability of ListArea is enabled otherwise returns False.
+        /// </summary>
+        /// <returns>True: selection ability of ListArea is enabled. 
+        /// False: selection ability of ListArea is disabled.</returns>
         public bool IsSelectionVisible()
         {
             return _isSelectionVisible;
@@ -127,7 +155,7 @@ namespace SpaceVIL
         static int count = 0;
 
         /// <summary>
-        /// Constructs a ListArea
+        /// Default ListArea constructor.
         /// </summary>
         public ListArea()
         {
@@ -139,11 +167,11 @@ namespace SpaceVIL
             EventKeyPress += OnKeyPress;
         }
 
-        void OnMouseClick(IItem sender, MouseArgs args) { }
-        void OnMouseDoubleClick(IItem sender, MouseArgs args) { }
-        void OnMouseHover(IItem sender, MouseArgs args) { }
+        private void OnMouseClick(IItem sender, MouseArgs args) { }
+        private void OnMouseDoubleClick(IItem sender, MouseArgs args) { }
+        private void OnMouseHover(IItem sender, MouseArgs args) { }
 
-        void OnKeyPress(IItem sender, KeyArgs args)
+        private void OnKeyPress(IItem sender, KeyArgs args)
         {
             int index = _selection;
             bool changed = false;
@@ -211,8 +239,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Insert item into the ListArea by index
+        /// Insert item into the ListArea by index.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <param name="index">Index of insertion.</param>
         public override void InsertItem(IBaseItem item, Int32 index)
         {
             SelectionItem wrapper = GetWrapper(item);
@@ -226,8 +256,9 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Add item to the ListArea
+        /// Add item to the ListArea.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
             SelectionItem wrapper = GetWrapper(item);
@@ -236,7 +267,11 @@ namespace SpaceVIL
             _mapContent.Add(item, wrapper);
             UpdateLayout();
         }
-
+        /// <summary>
+        /// Adding all elements in the ListArea from the given list.
+        /// </summary>
+        /// <param name="content">List of items as 
+        /// System.Collections.Generic.IEnumerable&lt;IBaseItem&gt;</param>
         public virtual void SetListContent(IEnumerable<IBaseItem> content)
         {
             RemoveAllItems();
@@ -251,8 +286,11 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Remove item from the ListArea
+        /// Removing the specified item from the ListArea.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>True: if the removal was successful. 
+        /// False: if the removal was unsuccessful.</returns>
         public override bool RemoveItem(IBaseItem item)
         {
             bool restore = false;
@@ -295,7 +333,9 @@ namespace SpaceVIL
             ItemListChanged?.Invoke();
             return b;
         }
-
+        /// <summary>
+        /// Removing all items from the ListArea.
+        /// </summary>
         public override void Clear()
         {
             RemoveAllItems();
@@ -322,11 +362,12 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set Y position of the ListArea
+        /// Setting Y coordinate of the left-top corner of the ListArea.
         /// </summary>
-        public override void SetY(int _y)
+        /// <param name="y">Y position of the left-top corner.</param>
+        public override void SetY(int y)
         {
-            base.SetY(_y);
+            base.SetY(y);
             UpdateLayout();
         }
 
@@ -335,12 +376,17 @@ namespace SpaceVIL
         private Int64 _xOffset = 0;
 
         /// <summary>
-        /// Vertical scroll offset in the ListArea
+        /// Getting vertical scroll offset in the ListArea.
         /// </summary>
+        /// <returns>Vertical scroll offset.</returns>
         public Int64 GetVScrollOffset()
         {
             return _yOffset;
         }
+        /// <summary>
+        /// Setting vertical scroll offset of the ListArea.
+        /// </summary>
+        /// <param name="value">Vertical scroll offset.</param>
         public void SetVScrollOffset(Int64 value)
         {
             _yOffset = value;
@@ -348,12 +394,17 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Horizontal scroll offset in the ListArea
+        /// Getting horizontal scroll offset in the ListArea.
         /// </summary>
+        /// <returns>Horizontal scroll offset.</returns>
         public Int64 GetHScrollOffset()
         {
             return _xOffset;
         }
+        /// <summary>
+        /// Setting horizontal scroll offset of the ListArea.
+        /// </summary>
+        /// <param name="value">Horizontal scroll offset.</param>
         public void SetHScrollOffset(Int64 value)
         {
             _xOffset = value;
@@ -362,8 +413,7 @@ namespace SpaceVIL
 
         private bool _isUpdating = false;
         /// <summary>
-        /// Update all children and ListArea sizes and positions
-        /// according to confines
+        /// Updating all children positions (implementation of SpaceVIL.Core.IVLayout).
         /// </summary>
         public void UpdateLayout()
         {
@@ -413,6 +463,12 @@ namespace SpaceVIL
         }
 
         private Style _selectedStyle;
+
+        /// <summary>
+        /// Setting style of the ListArea. 
+        /// <para/> Inner styles: "selection".
+        /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)

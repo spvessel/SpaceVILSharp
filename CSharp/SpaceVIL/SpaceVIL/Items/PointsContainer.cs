@@ -6,76 +6,101 @@ using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// PointsContainer is class for rendering points in graph. 
+    /// </summary>
     public class PointsContainer : Primitive, IPoints
     {
         static int count = 0;
 
         /// <summary>
-        /// Constructs a PointsContainer
+        /// Default PointsContainer constructor.
         /// </summary>
         public PointsContainer() : base(name: "PointsContainer_" + count)
         {
             SetBackground(Color.Transparent);
             count++;
         }
-
-        float _thickness = 1.0f;
-
+        private float _thickness = 1.0f;
         /// <summary>
-        /// Points thickness
+        /// Setting thickness of points.
         /// </summary>
+        /// <param name="thickness">Point thickness.</param>
         public void SetPointThickness(float thickness)
         {
             _thickness = thickness;
         }
+        /// <summary>
+        /// Getting points thickness.
+        /// </summary>
+        /// <returns>Point thickness.</returns>
         public float GetPointThickness()
         {
             return _thickness;
         }
-
-        Color _color = Color.White;
-
+        private Color _color = Color.White;
         /// <summary>
-        /// Points color
+        /// Setting points color. Default: White.
         /// </summary>
+        /// <param name="color">Points color.</param>
         public void SetPointColor(Color color)
         {
             _color = color;
         }
+        /// <summary>
+        /// Getting points color.
+        /// </summary>
+        /// <returns>Points color.</returns>
         public Color GetPointColor()
         {
             return _color;
         }
-
-        List<float[]> _shape_pointer;
-
+        private List<float[]> _shapePointer;
         /// <summary>
-        /// Shape of the points
+        /// Setting custom shape for points (if one want to use other shape than circle).
         /// </summary>
+        /// <param name="shape">Points list of the shape as List of float[2] array.</param>
         public void SetShapePointer(List<float[]> shape)
         {
             if (shape == null)
                 return;
-            _shape_pointer = shape;
+            _shapePointer = shape;
         }
+        /// <summary>
+        /// Getting points coordinates.
+        /// </summary>
+        /// <returns>Points list as List of float[2] array.</returns>
         public List<float[]> GetShapePointer()
         {
-            if (_shape_pointer == null)
-                _shape_pointer = GraphicsMathService.GetEllipse(GetPointThickness() / 2.0f, 16);
-            return _shape_pointer;
+            if (_shapePointer == null)
+                _shapePointer = GraphicsMathService.GetEllipse(GetPointThickness() / 2.0f, 16);
+            return _shapePointer;
         }
-
         /// <summary>
-        /// List of the points coordinates
+        /// Setting points coordinates.
         /// </summary>
-        public void SetPointsCoord(List<float[]> coord)
+        /// <param name="coord">Points list as List of float[2] array.</param>
+        public void SetPoints(List<float[]> coord)
         {
             List<float[]> tmp = new List<float[]>(coord);
             SetTriangles(tmp);
         }
-
         /// <summary>
-        /// Make shape according to triangles list assigned with setTriangles
+        /// Getting points coordinates.
+        /// </summary>
+        /// <returns>Points list as List of float[2] array.</returns>
+        public List<float[]> GetPoints()
+        {
+            if (GetTriangles() == null || GetTriangles().Count < 2)
+                return null;
+            return GetTriangles();
+        }
+        /// <summary>
+        /// Overridden method for stretching the points position relative 
+        /// to the current size of the item. 
+        /// Use in conjunction with GetTriangles() and SetTriangles() methods.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void MakeShape()
         {
@@ -83,13 +108,6 @@ namespace SpaceVIL
             {
                 SetTriangles(UpdateShape());
             }
-        }
-
-        public List<float[]> GetPoints()
-        {
-            if (GetTriangles() == null || GetTriangles().Count < 2)
-                return null;
-            return GetTriangles();
         }
     }
 }

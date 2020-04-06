@@ -13,7 +13,7 @@ namespace SpaceVIL
             _layout = layout;
         }
 
-        internal void AssignActionsForHoveredItem(InputEventType action, InputEventArgs args, Prototype hoveredItem,
+        internal void AssignActionsForHoveredItem(InputEventType action, IInputEventArgs args, Prototype hoveredItem,
                 List<Prototype> itemPyramid, bool isOnlyHovered)
         {
             if (isOnlyHovered)
@@ -35,7 +35,7 @@ namespace SpaceVIL
             _layout.ExecutePollActions();
         }
 
-        internal void AssignActionsForSender(InputEventType action, InputEventArgs args, Prototype sender,
+        internal void AssignActionsForSender(InputEventType action, IInputEventArgs args, Prototype sender,
                 List<Prototype> itemPyramid, bool isPassUnder)
         {
             if (!sender.IsDisabled())
@@ -58,7 +58,7 @@ namespace SpaceVIL
             _layout.ExecutePollActions();
         }
 
-        internal void AssignActionsForItemPyramid(InputEventType action, InputEventArgs args, Prototype sender,
+        internal void AssignActionsForItemPyramid(InputEventType action, IInputEventArgs args, Prototype sender,
                 List<Prototype> itemPyramid)
         {
             if (sender.IsPassEvents(action))
@@ -71,7 +71,7 @@ namespace SpaceVIL
             _layout.ExecutePollActions();
         }
 
-        private void GoThroughItemPyramid(List<Prototype> itemsList, InputEventType action, InputEventArgs args)
+        private void GoThroughItemPyramid(List<Prototype> itemsList, InputEventType action, IInputEventArgs args)
         {
             Stack<Prototype> tmp = new Stack<Prototype>(itemsList);
             while (tmp.Count != 0)

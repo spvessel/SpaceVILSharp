@@ -52,7 +52,7 @@ namespace SpaceVIL
                 height = _commonProcessor.Window.GetMaxHeight();
 
             Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(), 
-                    (int)(width * scale.GetX()), (int)(height * scale.GetY()));
+                    (int)(width * scale.GetXScale()), (int)(height * scale.GetYScale()));
 
             _commonProcessor.Events.SetEvent(InputEventType.WindowResize);
         }
@@ -101,7 +101,7 @@ namespace SpaceVIL
             int height = _commonProcessor.Window.GetHeight();
 
             Glfw.SetWindowSize(_commonProcessor.Handler.GetWindowId(), 
-                    (int)(width * scale.GetX()), (int)(height * scale.GetY()));
+                    (int)(width * scale.GetXScale()), (int)(height * scale.GetYScale()));
                     
             _commonProcessor.InputLocker = false;
         }

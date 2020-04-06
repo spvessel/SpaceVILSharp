@@ -5,6 +5,11 @@ using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// ItemsRefreshManager is a manager that allows you to add an item of a certain type to the queue for a forced refresh. 
+    /// It can be use with custom implementation of one of the types: shape, text, image. 
+    /// For example: a Bitmap change in an IImageItem implementation, a shape change in an IBaseItem implementation.
+    /// </summary>
     public static class ItemsRefreshManager
     {
         private static Object _lockShapeObject = new Object();
@@ -21,10 +26,16 @@ namespace SpaceVIL
             return vi;
         }
 
-        // SET SECTION
+        /// <summary>
+        /// Adding an IBaseItem implementation to the queue for a forced refresh.
+        /// <para/>Tips: use this function only if you want to refresh shape of an item, 
+        /// ITextContainer and IImageItem are not shapes.
+        /// </summary>
+        /// <param name="item">An item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>True: if adding is successfull. False: if an item is already in the refresh queue.</returns>
         public static bool SetRefreshShape(IBaseItem item)
         {
-            if (item is ITextContainer 
+            if (item is ITextContainer
             // || (item.GetBackground().A == 0)
             )
             {
@@ -44,7 +55,13 @@ namespace SpaceVIL
                 Monitor.Exit(_lockShapeObject);
             }
         }
-
+        /// <summary>
+        /// Adding an ITextContainer implementation to the queue for a forced refresh.
+        /// <para/>Tips: use this function only if you want to refresh text of an item, 
+        /// IBaseItem and IImageItem are not text.
+        /// </summary>
+        /// <param name="item">An item as SpaceVIL.Core.ITextContainer.</param>
+        /// <returns>True: if adding is successfull. False: if an item is already in the refresh queue.</returns>
         public static bool SetRefreshText(ITextContainer item)
         {
             Monitor.Enter(_lockTextObject);
@@ -57,7 +74,13 @@ namespace SpaceVIL
                 Monitor.Exit(_lockTextObject);
             }
         }
-
+        /// <summary>
+        /// Adding an IImageItem implementation to the queue for a forced refresh.
+        /// <para/>Tips: use this function only if you want to refresh image of an item, 
+        /// IBaseItem and ITextContainer are not images.
+        /// </summary>
+        /// <param name="item">An item as SpaceVIL.Core.IImageItem.</param>
+        /// <returns>True: if adding is successfull. False: if an item is already in the refresh queue.</returns>
         public static bool SetRefreshImage(IImageItem item)
         {
             Monitor.Enter(_lockImageObject);

@@ -36,8 +36,8 @@ namespace SpaceVIL
         internal bool AlwaysOnTop;
         internal bool Maximized;
         internal bool Transparent;
-        private Pointer _wndPosition = new Pointer();
-        internal Pointer GetPointer()
+        private Position _wndPosition = new Position();
+        internal Position GetPointer()
         {
             return _wndPosition;
         }
@@ -70,7 +70,7 @@ namespace SpaceVIL
             // Glfw.WindowHint(Glfw.Hint.AutoIconify, false);
             Glfw.WindowHint(Glfw.Hint.OpenglForwardCompat, true);
             Glfw.WindowHint(Glfw.Hint.OpenglProfile, Glfw.OpenGLProfile.Core);
-            Glfw.WindowHint(Glfw.Hint.Samples, _coreWindow._msaa);
+            Glfw.WindowHint(Glfw.Hint.Samples, _coreWindow.AntiAliasingMode);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMajor, 3);
             Glfw.WindowHint(Glfw.Hint.ContextVersionMinor, 3);
 
@@ -112,8 +112,8 @@ namespace SpaceVIL
             {
                 if (CommonService.GetOSType() != OSType.Mac)
                 {
-                    actualWndWidth = (int)(_coreWindow.GetWidth() * _coreWindow.GetDpiScale().GetX());
-                    actualWndHeight = (int)(_coreWindow.GetHeight() * _coreWindow.GetDpiScale().GetY());
+                    actualWndWidth = (int)(_coreWindow.GetWidth() * _coreWindow.GetDpiScale().GetXScale());
+                    actualWndHeight = (int)(_coreWindow.GetHeight() * _coreWindow.GetDpiScale().GetYScale());
                 }
                 GetPointer().SetX(workArea.GetX() + (workArea.GetWidth() - actualWndWidth) / 2);
                 GetPointer().SetY(workArea.GetY() + (workArea.GetHeight() - actualWndHeight) / 2);
@@ -122,16 +122,16 @@ namespace SpaceVIL
             {
                 if (CommonService.GetOSType() != OSType.Mac)
                 {
-                    xActualScale = _coreWindow.GetDpiScale().GetX();
-                    yActualScale = _coreWindow.GetDpiScale().GetY();
+                    xActualScale = _coreWindow.GetDpiScale().GetXScale();
+                    yActualScale = _coreWindow.GetDpiScale().GetYScale();
                 }
-                _coreWindow.SetXDirect((int)(_coreWindow.GetY() * xActualScale));
+                _coreWindow.SetXDirect((int)(_coreWindow.GetX() * xActualScale));
                 _coreWindow.SetYDirect((int)(_coreWindow.GetY() * yActualScale));
 
-                GetPointer().SetX(_coreWindow.GetX());
-                GetPointer().SetY(_coreWindow.GetY());
+                GetPointer().SetX(_coreWindow.GetX() + workArea.GetX());
+                GetPointer().SetY(_coreWindow.GetY() + workArea.GetY());
             }
-            Glfw.SetWindowPos(_window, _wndPosition.GetX(), _wndPosition.GetY());
+            Glfw.SetWindowPos(_window, GetPointer().GetX(), GetPointer().GetY());
 
             Glfw.SetWindowSizeLimits(_window,
                 (int)(_coreWindow.GetMinWidth() * xActualScale),

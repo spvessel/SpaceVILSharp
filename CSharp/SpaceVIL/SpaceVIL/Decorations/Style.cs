@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
@@ -11,50 +8,163 @@ using SpaceVIL.Common;
 namespace SpaceVIL.Decorations
 {
     /// <summary>
-    /// A class that describes style Settings of the object
+    /// Style is a class that describes the appearance of an element. Can contains Styles for inner items.
     /// </summary>
     public class Style
     {
-        // private Lazy<ConcurrentDictionary<String, Style>> _inner_styles = new Lazy<ConcurrentDictionary<String, Style>>(() => new ConcurrentDictionary<String, Style>());
         private Dictionary<String, Style> _inner_styles = new Dictionary<String, Style>();
-
-        //defaults values
+        /// <summary>
+        /// Background color of an item's shape. Attention: this property is required.
+        /// <para/> This property is System.Drawing.Color.
+        /// </summary>
         public Color Background;
+        /// <summary>
+        /// Color of an item's text. Can be used only if the item contains text and in this case this property is required.
+        /// <para/> This property is System.Drawing.Color.
+        /// </summary>
         public Color Foreground;
+        /// <summary>
+        /// Font of an item's text. Can be used only if the item contains text and in this case this property is required.
+        /// <para/> This property is System.Drawing.Font.
+        /// </summary>
         public Font Font = null;
+        /// <summary>
+        /// Width policy of an item's shape. Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space). Attention: this property is required.
+        /// <para/> This property is SpaceVIL.Core.SizePolicy.
+        /// </summary>
         public SizePolicy WidthPolicy;
+        /// <summary>
+        /// Height policy of an item's shape. Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space). Attention: this property is required.
+        /// <para/> This property is SpaceVIL.Core.SizePolicy.
+        /// </summary>
         public SizePolicy HeightPolicy;
+        /// <summary>
+        /// Width of an item's shape.
+        /// </summary>
         public int Width;
+        /// <summary>
+        /// Minimum width of an item's shape (shape cannot be smaller this value).
+        /// <para/> Default: 0.
+        /// </summary>
         public int MinWidth;
+        /// <summary>
+        /// Maximum width of an item's shape (shape cannot be bigger this value).
+        /// <para/> Default: 32767.
+        /// </summary>
         public int MaxWidth;
+        /// <summary>
+        /// Height of an item's shape.
+        /// </summary>
         public int Height;
+        /// <summary>
+        /// Minimum height of an item's shape (shape cannot be smaller this value).
+        /// <para/> Default: 0.
+        /// </summary>
         public int MinHeight;
+        /// <summary>
+        /// Maximum height of an item's shape (shape cannot be bigget this value).
+        /// <para/> Default: 32767.
+        /// </summary>
         public int MaxHeight;
+        /// <summary>
+        /// Alignment of an item's shape relative to its container. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
+        /// Attention: this property is required.
+        /// <para/> This property is SpaceVIL.Core.ItemAlignment.
+        /// </summary>
         public ItemAlignment Alignment;
+        /// <summary>
+        /// Alignment of an item's text. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
+        /// Can be used only if the item contains text and in this case this property is required.
+        /// <para/> This property is SpaceVIL.Core.ItemAlignment.
+        /// </summary>
         public ItemAlignment TextAlignment;
+        /// <summary>
+        /// X axis position of left-top cornet of an item's shape. This property itself is mostly ignored. Used only when creating container-type items or with SpaceVIL.FreeArea.
+        /// </summary>
         public int X;
+        /// <summary>
+        /// Y axis position of left-top cornet of an item's shape. This property itself is mostly ignored. Used only when creating container-type items or with SpaceVIL.FreeArea.
+        /// </summary>
         public int Y;
-        private Dictionary<ItemStateType, ItemState> _item_states = new Dictionary<ItemStateType, ItemState>();
-        public Indents Padding;// = new Indents();
-        public Spacing Spacing;// = new Spacing();
-        public Indents Margin;// = new Indents();
+        private Dictionary<ItemStateType, ItemState> _itemStates = new Dictionary<ItemStateType, ItemState>();
+        /// <summary>
+        /// Indents of an item to offset its children. Attention: this property is required.
+        /// <para/> This property is SpaceVIL.Decorations.Indents.
+        /// </summary>
+        public Indents Padding;
+        /// <summary>
+        /// Indents between children of a container type item. It is used mainly in containers.
+        /// <para/> This property is SpaceVIL.Decorations.Indents.
+        /// </summary>
+        public Spacing Spacing;
+        /// <summary>
+        /// Indents of an item to offset itself relative to its container. Attention: this property is required.
+        /// <para/> This property is SpaceVIL.Decorations.Indents.
+        /// </summary>
+        public Indents Margin;
+        /// <summary>
+        /// Radiuses to round the rectangular shape of the item.
+        /// </summary>
         public CornerRadius BorderRadius = new CornerRadius();
+        /// <summary>
+        /// Thickness of an item's border. 
+        /// <para/> Default: 0.
+        /// </summary>
         public int BorderThickness;
+        /// <summary>
+        /// Color of an item's border. 
+        /// <para/> This property is System.Drawing.Color.
+        /// </summary>
         public Color BorderFill;
-        public List<float[]> Shape;// = new List<float[]>();
-        public List<IBaseItem> InnerShapes;// = new List<float[]>();
-        public int ShadowRadius;
-        public int ShadowXOffset;
-        public int ShadowYOffset;
-        public bool IsShadowDrop = false;
-        public Color ShadowColor;
+        /// <summary>
+        /// A form of an item's shape. If not assigned, the shape is rectangular.
+        /// <para/> Format: System.Collections.Generic.List&lt;System.Single[]&gt;.
+        /// </summary>
+        public List<float[]> Shape;
+        /// <summary>
+        /// A flag that determines if the shape of an item can be changed or not.
+        /// <para/>True: if shape can not be resized. False: if shape can be resised. Default: False.
+        /// </summary>
         public bool IsFixedShape;
+        /// <summary>
+        /// A storage of shapes for future use. Note: not supported in the current version!
+        /// <para/> Format: System.Collections.Generic.List&lt;System.Single[]&gt;.
+        /// </summary>
+        public List<IBaseItem> InnerShapes;
+        /// <summary>
+        /// Blur radius of a shadow.
+        /// <para/> Min value: 0. Max value: 10. Default: 0.
+        /// </summary>
+        public int ShadowRadius;
+        /// <summary>
+        /// X shift of a shadow.
+        /// </summary>
+        public int ShadowXOffset;
+        /// <summary>
+        /// Y shift of a shadow.
+        /// </summary>
+        public int ShadowYOffset;
+        /// <summary>
+        /// Drop shadow flag. True: allow shadow dropping. False: not allow shadow dropping.
+        /// <para/> Default: False.
+        /// </summary>
+        public bool IsShadowDrop = false;
+        /// <summary>
+        /// Color of a shadow.
+        /// </summary>
+        public Color ShadowColor;
+        /// <summary>
+        /// A flag that determines if an item is visible or not.
+        /// <para/> True: if visible. False: if not visible. Default: True.
+        /// </summary>
         public bool IsVisible;
 
         /// <summary>
-        /// Constructs a default Style
+        /// Constructs a default Style. 
         /// </summary>
-        public Style()//default
+        public Style()
         {
             IsVisible = true;
             MaxWidth = SpaceVILConstants.SizeMaxValue;
@@ -63,8 +173,9 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Sets object size (width and height)
+        /// Setting this style for all items in sequence.
         /// </summary>
+        /// <param name="items">A sequence of items that are SpaceVIL.Core.IBaseItem.</param>
         public void SetStyle(params IBaseItem[] items)
         {
             foreach (IBaseItem item in items)
@@ -72,8 +183,10 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Sets object size (width and height)
+        /// Setting size of an item's shape.
         /// </summary>
+        /// <param name="width">Width of a shape.</param>
+        /// <param name="height">Height of a shape.</param>
         public void SetSize(int width, int height)
         {
             Width = width;
@@ -81,8 +194,10 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Sets object minimum size (width and height)
+        /// Setting minimum size of an item's shape (shape can not be smaller than specified width and height).
         /// </summary>
+        /// <param name="width">Minimum width of a shape.</param>
+        /// <param name="height">Minimum height of a shape.</param>
         public void SetMinSize(int width, int height)
         {
             MinWidth = width;
@@ -90,8 +205,10 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Sets object maximum size (width and height)
+        /// Setting maximim size of an item's shape (shape can not be bigger than specified width and height).
         /// </summary>
+        /// <param name="width">Maximim width of a shape.</param>
+        /// <param name="height">Maximim height of a shape.</param>
         public void SetMaxSize(int width, int height)
         {
             MaxWidth = width;
@@ -99,67 +216,119 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Sets object size policy (fixed or expand) for width and height
+        /// Setting the size policy of an item's shape. 
+        /// Can be Fixed (shape not changes its size) or Expand (shape is stretched to all available space).
         /// </summary>
-        public void SetSizePolicy(SizePolicy width_policy, SizePolicy height_policy)
+        /// <param name="widthPolicy">Width policy of an item's shape.</param>
+        /// <param name="heightPolicy">Height policy of an item's shape.</param>
+        public void SetSizePolicy(SizePolicy widthPolicy, SizePolicy heightPolicy)
         {
-            WidthPolicy = width_policy;
-            HeightPolicy = height_policy;
+            WidthPolicy = widthPolicy;
+            HeightPolicy = heightPolicy;
         }
 
         /// <summary>
-        /// Sets background color of the object
+        /// Setting background color of an item's shape in byte RGB format.
         /// </summary>
-        /// <overloads> Sets background color of the object </overloads>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
         public void SetBackground(int r, int g, int b)
         {
             Background = GraphicsMathService.ColorTransform(r, g, b);
         }
+        /// <summary>
+        /// Setting background color of an item's shape in byte RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
         public void SetBackground(int r, int g, int b, int a)
         {
             Background = GraphicsMathService.ColorTransform(r, g, b, a);
         }
+        /// <summary>
+        /// Setting background color of an item's shape in float RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
         public void SetBackground(float r, float g, float b)
         {
             Background = GraphicsMathService.ColorTransform(r, g, b);
         }
+        /// <summary>
+        /// Setting background color of an item's shape in float RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
         public void SetBackground(float r, float g, float b, float a)
         {
             Background = GraphicsMathService.ColorTransform(r, g, b, a);
         }
 
         /// <summary>
-        /// Sets text color of the object
+        /// Setting text color of an item in byte RGB format.
         /// </summary>
-        /// <overloads> Sets text color of the object </overloads>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
             Foreground = GraphicsMathService.ColorTransform(r, g, b);
         }
+        /// <summary>
+        /// Setting text color of an item in byte RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
             Foreground = GraphicsMathService.ColorTransform(r, g, b, a);
         }
+        /// <summary>
+        /// Setting text color of an item in float RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
             Foreground = GraphicsMathService.ColorTransform(r, g, b);
         }
+        /// <summary>
+        /// Setting text color of an item in float RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
             Foreground = GraphicsMathService.ColorTransform(r, g, b, a);
         }
 
         /// <summary>
-        /// Padding of the object
+        /// Setting indents of an item to offset its children.
         /// </summary>
+        /// <param name="padding">Padding indents as SpaceVIL.Decorations.Indents.</param>
         public void SetPadding(Indents padding)
         {
             Padding = padding;
         }
 
         /// <summary>
-        /// Padding of the object
+        /// Setting indents of an item to offset its children.
         /// </summary>
+        /// <param name="left">Indent on the left.</param>
+        /// <param name="top">Indent on the top.</param>
+        /// <param name="right">Indent on the right.</param>
+        /// <param name="bottom">Indent on the bottom.</param>
         public void SetPadding(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
             Padding.Left = left;
@@ -169,16 +338,21 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Margin of the object
+        /// Setting indents of an item to offset itself relative to its container.
         /// </summary>
+        /// <param name="margin">Indents as SpaceVIL.Decorations.Indents.</param>
         public void SetMargin(Indents margin)
         {
             Margin = margin;
         }
 
         /// <summary>
-        /// Margin of the object
+        /// Setting indents of an item to offset itself relative to its container.
         /// </summary>
+        /// <param name="left">Indent on the left.</param>
+        /// <param name="top">Indent on the top.</param>
+        /// <param name="right">Indent on the right.</param>
+        /// <param name="bottom">Indent on the bottom.</param>
         public void SetMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
         {
             Margin.Left = left;
@@ -188,16 +362,19 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Spacing of the object
+        /// Setting indents between children of a container type item.
         /// </summary>
+        /// <param name="spacing">Spacing as SpaceVIL.Decorations.Spacing.</param>
         public void SetSpacing(Spacing spacing)
         {
             Spacing = spacing;
         }
 
         /// <summary>
-        /// Spacing of the object
+        /// Setting indents between children of a container type item.
         /// </summary>
+        /// <param name="horizontal">Horizontal indent.</param>
+        /// <param name="vertical">Vertical indent.</param>
         public void SetSpacing(int horizontal = 0, int vertical = 0)
         {
             Spacing.Horizontal = horizontal;
@@ -205,8 +382,9 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Set border of the object
+        /// Setting border of an item's shape. Border consist of corner radiuses, thickness and color.
         /// </summary>
+        /// <param name="border">Border as SpaceVIL.Decorations.Border.</param>
         public void SetBorder(Border border)
         {
             BorderFill = border.GetFill();
@@ -215,18 +393,21 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Set border of the object
+        /// Setting border for an item's shape. Border consist of corner radiuses, thickness and color.
         /// </summary>
-        /// <param name="fill"> border color </param>
-        /// <param name="radius"> radius of the border corners </param>
-        /// <param name="thickness"> border thickness </param>
+        /// <param name="fill">Border color as System.Drawing.Color.</param>
+        /// <param name="radius">Radiuses of an border corners as SpaceVIL.Decorations.CornerRadius.</param>
+        /// <param name="thickness">Border thickness.</param>
         public void SetBorder(Color fill, CornerRadius radius, int thickness)
         {
             BorderFill = fill;
             BorderRadius = radius;
             BorderThickness = thickness;
         }
-
+        /// <summary>
+        /// Setting shadow for an item's shape. 
+        /// </summary>
+        /// <param name="shadow">Shadow as SpaceVIL.Decorations.Shadow</param>
         public void SetShadow(Shadow shadow)
         {
             ShadowColor = shadow.GetColor();
@@ -236,12 +417,21 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Set object alignment
+        /// Setting an Alignment of an item's shape relative to its container. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
+        /// Attention: this property is required.
         /// </summary>
+        /// <param name="alignment">Alignment as SpaceVIL.Core.ItemAlignment.</param>
         public void SetAlignment(ItemAlignment alignment)
         {
             Alignment = alignment;
         }
+        /// <summary>
+        /// Setting an Alignment of an item's shape relative to its container. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
+        /// Attention: this property is required.
+        /// </summary>
+        /// <param name="alignment">Alignment as sequence of SpaceVIL.Core.ItemAlignment.</param>
         public void SetAlignment(params ItemAlignment[] alignment)
         {
             Alignment = alignment.ElementAt(0);
@@ -253,11 +443,22 @@ namespace SpaceVIL.Decorations
                 }
             }
         }
-
+        /// <summary>
+        /// Alignment of an item's text. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
+        /// Can be used only if the item contains text and in this case this property is required.
+        /// </summary>
+        /// <param name="alignment">Text alignment as SpaceVIL.Core.ItemAlignment.</param>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             TextAlignment = alignment;
         }
+        /// <summary>
+        /// Alignment of an item's text. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
+        /// Can be used only if the item contains text and in this case this property is required.
+        /// </summary>
+        /// <param name="alignment">Text alignment as sequence of SpaceVIL.Core.ItemAlignment.</param>
         public void SetTextAlignment(params ItemAlignment[] alignment)
         {
             TextAlignment = alignment.ElementAt(0);
@@ -270,11 +471,9 @@ namespace SpaceVIL.Decorations
             }
         }
 
-        ///////////////////////////////////////////////////////////////////
-
         /// <summary>
-        /// Add inner primitives to the object (as decorations only) 
-        /// note: not supported in the current version
+        /// Adding inner primitives to the item (as decorations only).
+        /// Note: not supported in the current version!
         /// </summary>
         public void AddInnerShape(IBaseItem shape)
         {
@@ -284,80 +483,94 @@ namespace SpaceVIL.Decorations
         }
 
         /// <summary>
-        /// Set style for the child of the object
+        /// Assigning a style for an item's child by key name.
         /// </summary>
-        public void AddInnerStyle(String item_name, Style style)
+        /// <param name="keyName">Key name of a child.</param>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
+        public void AddInnerStyle(String keyName, Style style)
         {
-            if (_inner_styles.ContainsKey(item_name))
-                _inner_styles[item_name] = style;
+            if (_inner_styles.ContainsKey(keyName))
+                _inner_styles[keyName] = style;
             else
-                _inner_styles.Add(item_name, style);
+                _inner_styles.Add(keyName, style);
         }
 
         /// <summary>
-        /// Returns style of the object's child by name
+        /// Getting a child’s style by key name.
         /// </summary>
-        public Style GetInnerStyle(String item_name)
+        /// <param name="keyName">Key name of a child.</param>
+        /// <returns></returns>
+        public Style GetInnerStyle(String keyName)
         {
-            if (_inner_styles.ContainsKey(item_name))
-                return _inner_styles[item_name];
+            if (_inner_styles.ContainsKey(keyName))
+                return _inner_styles[keyName];
 
             return null;
         }
+        /// <summary>
+        /// Removing a child's style by its key name.
+        /// </summary>
+        /// <param name="keyName">Key name of a child.</param>
+        public void RemoveInnerStyle(String keyName)
+        {
+            if (_inner_styles.ContainsKey(keyName))
+                _inner_styles.Remove(keyName);
+            else
+                return;
+        }
 
         /// <summary>
-        /// Object changes its state according to the ItemState when ItemStateType 
-        /// happens
+        /// Adding visual state for an item. 
+        /// <para/> Type can be Base, Hovered, Pressed, Toggled, Focused, Disabled.
         /// </summary>
+        /// <param name="type">Type as SpaceVIL.Core.ItemStateType.</param>
+        /// <param name="state">Visual state as SpaceVIL.Decorations.ItemState.</param>
         public void AddItemState(ItemStateType type, ItemState state)
         {
-            if (_item_states.ContainsKey(type))
+            if (_itemStates.ContainsKey(type))
             {
                 state.Value = true;
-                _item_states[type] = state;
+                _itemStates[type] = state;
             }
             else
             {
-                _item_states.Add(type, state);
+                _itemStates.Add(type, state);
             }
         }
 
         /// <summary>
-        /// Returns ItemState of the object by ItemStateType name
+        /// Getting visual state of an item by type. 
+        /// <para/> Type can be Base, Hovered, Pressed, Toggled, Focused, Disabled.
         /// </summary>
+        /// <param name="type">Type as SpaceVIL.Core.ItemStateType.</param>
+        /// <returns>Visual state as SpaceVIL.Decorations.ItemState.</returns>
         public ItemState GetState(ItemStateType type)
         {
-            if (_item_states.ContainsKey(type))
-                return _item_states[type];
+            if (_itemStates.ContainsKey(type))
+                return _itemStates[type];
             return null;
         }
 
-        /// <returns> Dictionary of the ItemStateTypes and its ItemStates </returns>
+        /// <summary>
+        /// Getting all presented in the current style visual states of an item.
+        /// </summary>
+        /// <returns> Dictionary of an ItemStateTypes and its ItemStates. </returns>
         public Dictionary<ItemStateType, ItemState> GetAllStates()
         {
-            return _item_states;
+            return _itemStates;
         }
 
         /// <summary>
-        /// Remove ItemState by the ItemStateType
+        /// Removing visual state of an item by type.
+        /// <para/> Type can be Base, Hovered, Pressed, Toggled, Focused, Disabled.
         /// </summary>
+        /// <param name="type">Type as SpaceVIL.Core.ItemStateType.</param>
         public void RemoveItemState(ItemStateType type)
         {
             if (type == ItemStateType.Base)
                 return;
-            if (_item_states.ContainsKey(type))
-                _item_states.Remove(type);
-        }
-
-        /// <summary>
-        /// Remove the object's child style by name of the child
-        /// </summary>
-        public void RemoveInnerStyle(String item_name)
-        {
-            if (_inner_styles.ContainsKey(item_name))
-                _inner_styles.Remove(item_name);
-            else
-                return;
+            if (_itemStates.ContainsKey(type))
+                _itemStates.Remove(type);
         }
 
         internal static void ItemStatesSyncBase(Style style)
@@ -371,7 +584,10 @@ namespace SpaceVIL.Decorations
                 state.Value.Border = coreState.Border;
             }
         }
-
+        /// <summary>
+        /// Cloning the current style and returning a new deep copy of Style.
+        /// </summary>
+        /// <returns>Deep copy of current style as SpaceVIL.Decorations.Style.</returns>
         public Style Clone()
         {
             Style style = new Style();
@@ -415,11 +631,16 @@ namespace SpaceVIL.Decorations
             style.IsFixedShape = IsFixedShape;
 
             style.IsVisible = IsVisible;
-            style._item_states = new Dictionary<ItemStateType, ItemState>(_item_states);
+            style._itemStates = new Dictionary<ItemStateType, ItemState>(_itemStates);
 
             return style;
         }
 
+        /// <summary>
+        /// Getting a default common style. Properly filled in all the necessary properties.
+        /// <para/> Use this method to create instance of Style class instead of  using pure constructor (<c>new Style()</c>).
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetDefaultCommonStyle()
         {
             Style style = new Style();
@@ -439,7 +660,10 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for ButtonCore objects </returns>
+        /// <summary>
+        /// Getting default style for a ButtonCore item. Properly filled in all the necessary properties.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetButtonCoreStyle()
         {
             Style style = new Style();
@@ -462,7 +686,10 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for ButtonToggle objects </returns>
+        /// <summary>
+        /// Getting default style for a ButtonToggle item. Properly filled in all the necessary properties.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetButtonToggleStyle()
         {
             Style style = new Style();
@@ -492,7 +719,11 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for CheckBox objects </returns>
+        /// <summary>
+        /// Getting default style for a CheckBox item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "indicator", "text".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetCheckBoxStyle()
         {
             Style style = new Style();
@@ -517,12 +748,17 @@ namespace SpaceVIL.Decorations
             textline_style.Alignment = ItemAlignment.VCenter;
             textline_style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
             textline_style.Margin = new Indents(10 + indicator_style.Width, 0, 0, 0);
-            style.AddInnerStyle("textline", textline_style);
+            style.AddInnerStyle("text", textline_style);
 
             return style;
         }
 
-        /// <returns> default style for Indicator objects </returns>
+        /// <summary>
+        /// Getting default style for a Indicator item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "marker".
+        /// <para/> This is part of CheckBox item style.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetIndicatorStyle()
         {
             Style style = new Style();
@@ -557,7 +793,10 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for TextLine objects </returns>
+        /// <summary>
+        /// Getting default style for a text type item. Attention: not all the necessary properties properly filled.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetTextLineStyle()
         {
             Style style = new Style();
@@ -570,7 +809,11 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for ComboBox objects </returns>
+        /// <summary>
+        /// Getting default style for a ComboBox item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "selection", "dropdownbutton", "dropdownarea", "arrow".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetComboBoxStyle()
         {
             Style style = new Style();
@@ -595,34 +838,40 @@ namespace SpaceVIL.Decorations
             selection_style.Margin = new Indents(0, 0, 20, 0);
             style.AddInnerStyle("selection", selection_style);
 
-            Style dropdownbutton_style = new Style();
-            dropdownbutton_style.Width = 20;
-            dropdownbutton_style.WidthPolicy = SizePolicy.Fixed;
-            dropdownbutton_style.HeightPolicy = SizePolicy.Expand;
-            dropdownbutton_style.Alignment = ItemAlignment.Right | ItemAlignment.VCenter;
-            dropdownbutton_style.Background = Color.FromArgb(255, 255, 181, 111);
-            dropdownbutton_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style dropdownbuttonStyle = new Style();
+            dropdownbuttonStyle.Width = 20;
+            dropdownbuttonStyle.WidthPolicy = SizePolicy.Fixed;
+            dropdownbuttonStyle.HeightPolicy = SizePolicy.Expand;
+            dropdownbuttonStyle.Alignment = ItemAlignment.Right | ItemAlignment.VCenter;
+            dropdownbuttonStyle.Background = Color.FromArgb(255, 255, 181, 111);
+            dropdownbuttonStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
             });
-            style.AddInnerStyle("dropdownbutton", dropdownbutton_style);
+            style.AddInnerStyle("dropdownbutton", dropdownbuttonStyle);
 
             style.AddInnerStyle("dropdownarea", GetComboBoxDropDownStyle());
 
-            Style arrow_style = new Style();
-            arrow_style.Width = 14;
-            arrow_style.Height = 6;
-            arrow_style.WidthPolicy = SizePolicy.Fixed;
-            arrow_style.HeightPolicy = SizePolicy.Fixed;
-            arrow_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
-            arrow_style.Background = Color.FromArgb(255, 50, 50, 50);
-            arrow_style.Shape = GraphicsMathService.GetTriangle(angle: 180);
-            style.AddInnerStyle("arrow", arrow_style);
+            Style arrowStyle = new Style();
+            arrowStyle.Width = 14;
+            arrowStyle.Height = 6;
+            arrowStyle.WidthPolicy = SizePolicy.Fixed;
+            arrowStyle.HeightPolicy = SizePolicy.Fixed;
+            arrowStyle.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+            arrowStyle.Background = Color.FromArgb(255, 50, 50, 50);
+            arrowStyle.Shape = GraphicsMathService.GetTriangle(angle: 180);
+            style.AddInnerStyle("arrow", arrowStyle);
 
             return style;
         }
 
-        /// <returns> default style for ComboBoxDropDown objects </returns>
+        /// <summary>
+        /// Getting default style for a ComboBoxDropDown item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "itemlist".
+        /// <para/> Inner styles for "itemlist": "vscrollbar", "hscrollbar", "menu".
+        /// <para/> This is part of ComboBox item style.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetComboBoxDropDownStyle()
         {
             Style style = new Style();
@@ -632,38 +881,42 @@ namespace SpaceVIL.Decorations
             style.Padding = new Indents(0, 0, 0, 0);
             style.IsVisible = false;
 
-            Style itemlist_style = GetListBoxStyle();
-            itemlist_style.Background = Color.Transparent;
-            itemlist_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
-            style.AddInnerStyle("itemlist", itemlist_style);
+            Style itemlistStyle = GetListBoxStyle();
+            itemlistStyle.Background = Color.Transparent;
+            itemlistStyle.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+            style.AddInnerStyle("itemlist", itemlistStyle);
 
-            Style itemlistarea_style = itemlist_style.GetInnerStyle("area");
+            Style itemlistarea_style = itemlistStyle.GetInnerStyle("area");
             if (itemlistarea_style != null)
             {
-                itemlist_style.SetPadding(0, 0, 0, 0);
+                itemlistStyle.SetPadding(0, 0, 0, 0);
             }
 
-            Style vsb_style = GetSimpleVerticalScrollBarStyle();
-            vsb_style.Alignment = ItemAlignment.Right | ItemAlignment.Top;
-            itemlist_style.AddInnerStyle("vscrollbar", vsb_style);
+            Style vsbStyle = GetSimpleVerticalScrollBarStyle();
+            vsbStyle.Alignment = ItemAlignment.Right | ItemAlignment.Top;
+            itemlistStyle.AddInnerStyle("vscrollbar", vsbStyle);
 
-            Style hsb_style = GetHorizontalScrollBarStyle();
-            hsb_style.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
-            itemlist_style.AddInnerStyle("hscrollbar", hsb_style);
+            Style hsbStyle = GetHorizontalScrollBarStyle();
+            hsbStyle.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
+            itemlistStyle.AddInnerStyle("hscrollbar", hsbStyle);
 
-            Style menu_style = new Style();
-            menu_style.Background = Color.FromArgb(50, 50, 50);
-            menu_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            menu_style.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
-            itemlist_style.AddInnerStyle("menu", menu_style);
+            Style menuStyle = new Style();
+            menuStyle.Background = Color.FromArgb(50, 50, 50);
+            menuStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            menuStyle.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
+            itemlistStyle.AddInnerStyle("menu", menuStyle);
 
-            Style area_style = GetListAreaStyle();
-            style.AddInnerStyle("listarea", area_style);
+            Style areaStyle = GetListAreaStyle();
+            style.AddInnerStyle("listarea", areaStyle);
 
             return style;
         }
 
-        /// <returns> default style for MenuItem objects </returns>
+        /// <summary>
+        /// Getting default style for a MenuItem item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "text", "arrow".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetMenuItemStyle()
         {
             Style style = new Style();
@@ -679,25 +932,29 @@ namespace SpaceVIL.Decorations
             style.Padding = new Indents(10, 0, 10, 0);
             style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(200, 200, 200)));
 
-            Style text_style = new Style();
-            text_style.SetMargin(0, 0, 0, 0);
-            style.AddInnerStyle("text", text_style);
+            Style textStyle = new Style();
+            textStyle.SetMargin(0, 0, 0, 0);
+            style.AddInnerStyle("text", textStyle);
 
-            Style arrow_style = new Style();
-            arrow_style.Width = 6;
-            arrow_style.Height = 10;
-            arrow_style.WidthPolicy = SizePolicy.Fixed;
-            arrow_style.HeightPolicy = SizePolicy.Fixed;
-            arrow_style.Alignment = ItemAlignment.Right | ItemAlignment.VCenter;
-            arrow_style.Background = Color.FromArgb(255, 80, 80, 80);
-            arrow_style.Margin = new Indents(10, 0, 0, 0);
-            arrow_style.Shape = GraphicsMathService.GetTriangle(angle: 90);
-            style.AddInnerStyle("arrow", arrow_style);
+            Style arrowStyle = new Style();
+            arrowStyle.Width = 6;
+            arrowStyle.Height = 10;
+            arrowStyle.WidthPolicy = SizePolicy.Fixed;
+            arrowStyle.HeightPolicy = SizePolicy.Fixed;
+            arrowStyle.Alignment = ItemAlignment.Right | ItemAlignment.VCenter;
+            arrowStyle.Background = Color.FromArgb(255, 80, 80, 80);
+            arrowStyle.Margin = new Indents(10, 0, 0, 0);
+            arrowStyle.Shape = GraphicsMathService.GetTriangle(angle: 90);
+            style.AddInnerStyle("arrow", arrowStyle);
 
             return style;
         }
 
-        /// <returns> default style for ContextMenu objects </returns>
+        /// <summary>
+        /// Getting default style for a ContextMenu item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "itemlist".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetContextMenuStyle()
         {
             Style style = GetDefaultCommonStyle();
@@ -706,13 +963,13 @@ namespace SpaceVIL.Decorations
             style.SetShadow(new Shadow(10, 3, 3, Color.FromArgb(180, 0, 0, 0)));
             style.IsShadowDrop = true;
 
-            Style itemlist_style = GetListBoxStyle();
-            itemlist_style.Background = Color.Transparent;
-            itemlist_style.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
-            style.AddInnerStyle("itemlist", itemlist_style);
+            Style itemlistStyle = GetListBoxStyle();
+            itemlistStyle.Background = Color.Transparent;
+            itemlistStyle.Alignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
+            style.AddInnerStyle("itemlist", itemlistStyle);
 
-            Style area_style = itemlist_style.GetInnerStyle("area");
-            area_style.SetPadding(0, 0, 0, 0);
+            Style areaStyle = itemlistStyle.GetInnerStyle("area");
+            areaStyle.SetPadding(0, 0, 0, 0);
 
             return style;
         }
@@ -722,7 +979,10 @@ namespace SpaceVIL.Decorations
             throw new NotImplementedException();
         }
 
-        /// <returns> default style for FreeArea objects </returns>
+        /// <summary>
+        /// Getting default style for a FreeArea item. Properly filled in all the necessary properties.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetFreeAreaStyle()
         {
             Style style = new Style();
@@ -738,7 +998,10 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for Frame objects </returns>
+        /// <summary>
+        /// Getting default style for a Frame item. Properly filled in all the necessary properties.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetFrameStyle()
         {
             Style style = new Style();
@@ -752,7 +1015,10 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for Grid objects </returns>
+        /// <summary>
+        /// Getting default style for a Grid item. Properly filled in all the necessary properties.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetGridStyle()
         {
             Style style = new Style();
@@ -766,7 +1032,13 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for HorizontalScrollBar objects </returns>
+        /// <summary>
+        /// Getting default style for a HorizontalScrollBar item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "uparrow", "downarrow", "slider".
+        /// <para/> Inner styles for "slider": "track", "handler".
+        /// <para/> This is part of many items style.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetHorizontalScrollBarStyle()
         {
             Style style = new Style();
@@ -776,65 +1048,70 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Fixed;
             style.Height = 16;
 
-            Style uparrow_style = new Style();
-            uparrow_style.WidthPolicy = SizePolicy.Fixed;
-            uparrow_style.HeightPolicy = SizePolicy.Fixed;
-            uparrow_style.Background = Color.FromArgb(255, 100, 100, 100);
-            uparrow_style.Width = 16;
-            uparrow_style.Height = 16;
-            uparrow_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            uparrow_style.Shape = GraphicsMathService.GetTriangle(10, 8, 3, 4, -90);
-            uparrow_style.IsFixedShape = true;
-            uparrow_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style uparrowStyle = new Style();
+            uparrowStyle.WidthPolicy = SizePolicy.Fixed;
+            uparrowStyle.HeightPolicy = SizePolicy.Fixed;
+            uparrowStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            uparrowStyle.Width = 16;
+            uparrowStyle.Height = 16;
+            uparrowStyle.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            uparrowStyle.Shape = GraphicsMathService.GetTriangle(10, 8, 3, 4, -90);
+            uparrowStyle.IsFixedShape = true;
+            uparrowStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
             });
-            style.AddInnerStyle("uparrow", uparrow_style);
+            style.AddInnerStyle("uparrow", uparrowStyle);
 
-            Style downarrow_style = new Style();
-            downarrow_style.WidthPolicy = SizePolicy.Fixed;
-            downarrow_style.HeightPolicy = SizePolicy.Fixed;
-            downarrow_style.Background = Color.FromArgb(255, 100, 100, 100);
-            downarrow_style.Width = 16;
-            downarrow_style.Height = 16;
-            downarrow_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            downarrow_style.Shape = GraphicsMathService.GetTriangle(10, 8, 3, 4, 90);
-            downarrow_style.IsFixedShape = true;
-            downarrow_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style downarrowStyle = new Style();
+            downarrowStyle.WidthPolicy = SizePolicy.Fixed;
+            downarrowStyle.HeightPolicy = SizePolicy.Fixed;
+            downarrowStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            downarrowStyle.Width = 16;
+            downarrowStyle.Height = 16;
+            downarrowStyle.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            downarrowStyle.Shape = GraphicsMathService.GetTriangle(10, 8, 3, 4, 90);
+            downarrowStyle.IsFixedShape = true;
+            downarrowStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
             });
-            style.AddInnerStyle("downarrow", downarrow_style);
+            style.AddInnerStyle("downarrow", downarrowStyle);
 
-            Style slider_style = new Style();
-            slider_style.WidthPolicy = SizePolicy.Expand;
-            slider_style.HeightPolicy = SizePolicy.Expand;
-            slider_style.Background = Color.Transparent;
-            style.AddInnerStyle("slider", slider_style);
+            Style sliderStyle = new Style();
+            sliderStyle.WidthPolicy = SizePolicy.Expand;
+            sliderStyle.HeightPolicy = SizePolicy.Expand;
+            sliderStyle.Background = Color.Transparent;
+            style.AddInnerStyle("slider", sliderStyle);
 
-            Style track_style = new Style();
-            track_style.WidthPolicy = SizePolicy.Expand;
-            track_style.HeightPolicy = SizePolicy.Expand;
-            track_style.Background = Color.Transparent;
-            slider_style.AddInnerStyle("track", track_style);
+            Style trackStyle = new Style();
+            trackStyle.WidthPolicy = SizePolicy.Expand;
+            trackStyle.HeightPolicy = SizePolicy.Expand;
+            trackStyle.Background = Color.Transparent;
+            sliderStyle.AddInnerStyle("track", trackStyle);
 
-            Style handler_style = new Style();
-            handler_style.WidthPolicy = SizePolicy.Fixed;
-            handler_style.HeightPolicy = SizePolicy.Expand;
-            handler_style.Background = Color.FromArgb(255, 100, 100, 100);
-            handler_style.Margin = new Indents(0, 3, 0, 3);
-            handler_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            handler_style.MinWidth = 15;
-            handler_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style handlerStyle = new Style();
+            handlerStyle.WidthPolicy = SizePolicy.Fixed;
+            handlerStyle.HeightPolicy = SizePolicy.Expand;
+            handlerStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            handlerStyle.Margin = new Indents(0, 3, 0, 3);
+            handlerStyle.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            handlerStyle.MinWidth = 15;
+            handlerStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
             });
-            slider_style.AddInnerStyle("handler", handler_style);
+            sliderStyle.AddInnerStyle("handler", handlerStyle);
 
             return style;
         }
 
-        /// <returns> default simple style for HorizontalScrollBar objects </returns>
+        /// <summary>
+        /// Getting simplified style for a SimpleHorizontalScrollBar item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "uparrow", "downarrow", "slider".
+        /// <para/> Inner styles for "slider": "track", "handler".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetSimpleHorizontalScrollBarStyle()
         {
             Style style = new Style();
@@ -845,40 +1122,46 @@ namespace SpaceVIL.Decorations
             style.Padding = new Indents(2, 0, 2, 0);
             style.Height = 16;
 
-            Style uparrow_style = new Style();
-            uparrow_style.IsVisible = false;
-            style.AddInnerStyle("uparrow", uparrow_style);
+            Style uparrowStyle = new Style();
+            uparrowStyle.IsVisible = false;
+            style.AddInnerStyle("uparrow", uparrowStyle);
 
-            Style downarrow_style = new Style();
-            downarrow_style.IsVisible = false;
-            style.AddInnerStyle("downarrow", downarrow_style);
+            Style downarrowStyle = new Style();
+            downarrowStyle.IsVisible = false;
+            style.AddInnerStyle("downarrow", downarrowStyle);
 
-            Style slider_style = new Style();
-            slider_style.WidthPolicy = SizePolicy.Expand;
-            slider_style.HeightPolicy = SizePolicy.Expand;
-            slider_style.Background = Color.Transparent;
-            style.AddInnerStyle("slider", slider_style);
+            Style sliderStyle = new Style();
+            sliderStyle.WidthPolicy = SizePolicy.Expand;
+            sliderStyle.HeightPolicy = SizePolicy.Expand;
+            sliderStyle.Background = Color.Transparent;
+            style.AddInnerStyle("slider", sliderStyle);
 
-            Style track_style = new Style();
-            track_style.WidthPolicy = SizePolicy.Expand;
-            track_style.HeightPolicy = SizePolicy.Expand;
-            track_style.Background = Color.Transparent;
-            slider_style.AddInnerStyle("track", track_style);
+            Style trackStyle = new Style();
+            trackStyle.WidthPolicy = SizePolicy.Expand;
+            trackStyle.HeightPolicy = SizePolicy.Expand;
+            trackStyle.Background = Color.Transparent;
+            sliderStyle.AddInnerStyle("track", trackStyle);
 
-            Style handler_style = new Style();
-            handler_style.WidthPolicy = SizePolicy.Fixed;
-            handler_style.HeightPolicy = SizePolicy.Expand;
-            handler_style.Background = Color.FromArgb(255, 120, 120, 120);
-            handler_style.Margin = new Indents(0, 5, 0, 5);
-            handler_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            handler_style.BorderRadius = new CornerRadius(3);
-            handler_style.MinWidth = 15;
-            slider_style.AddInnerStyle("handler", handler_style);
+            Style handlerStyle = new Style();
+            handlerStyle.WidthPolicy = SizePolicy.Fixed;
+            handlerStyle.HeightPolicy = SizePolicy.Expand;
+            handlerStyle.Background = Color.FromArgb(255, 120, 120, 120);
+            handlerStyle.Margin = new Indents(0, 5, 0, 5);
+            handlerStyle.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            handlerStyle.BorderRadius = new CornerRadius(3);
+            handlerStyle.MinWidth = 15;
+            sliderStyle.AddInnerStyle("handler", handlerStyle);
 
             return style;
         }
 
-        /// <returns> default style for VerticalScrollBar objects </returns>
+        /// <summary>
+        /// Getting default style for a VerticalScrollBar item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "uparrow", "downarrow", "slider".
+        /// <para/> Inner styles for "slider": "track", "handler".
+        /// <para/> This is part of many items style.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetVerticalScrollBarStyle()
         {
             Style style = new Style();
@@ -888,65 +1171,70 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Expand;
             style.Width = 16;
 
-            Style uparrow_style = new Style();
-            uparrow_style.WidthPolicy = SizePolicy.Fixed;
-            uparrow_style.HeightPolicy = SizePolicy.Fixed;
-            uparrow_style.Background = Color.FromArgb(255, 100, 100, 100);
-            uparrow_style.Width = 16;
-            uparrow_style.Height = 16;
-            uparrow_style.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
-            uparrow_style.Shape = GraphicsMathService.GetTriangle(10, 8, 3, 4, 0);
-            uparrow_style.IsFixedShape = true;
-            uparrow_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style uparrowStyle = new Style();
+            uparrowStyle.WidthPolicy = SizePolicy.Fixed;
+            uparrowStyle.HeightPolicy = SizePolicy.Fixed;
+            uparrowStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            uparrowStyle.Width = 16;
+            uparrowStyle.Height = 16;
+            uparrowStyle.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
+            uparrowStyle.Shape = GraphicsMathService.GetTriangle(10, 8, 3, 4, 0);
+            uparrowStyle.IsFixedShape = true;
+            uparrowStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
             });
-            style.AddInnerStyle("uparrow", uparrow_style);
+            style.AddInnerStyle("uparrow", uparrowStyle);
 
-            Style downarrow_style = new Style();
-            downarrow_style.WidthPolicy = SizePolicy.Fixed;
-            downarrow_style.HeightPolicy = SizePolicy.Fixed;
-            downarrow_style.Background = Color.FromArgb(255, 100, 100, 100);
-            downarrow_style.Width = 16;
-            downarrow_style.Height = 16;
-            downarrow_style.Alignment = ItemAlignment.Bottom | ItemAlignment.HCenter;
-            downarrow_style.Shape = GraphicsMathService.GetTriangle(10, 8, 3, 4, 180);
-            downarrow_style.IsFixedShape = true;
-            downarrow_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style downarrowStyle = new Style();
+            downarrowStyle.WidthPolicy = SizePolicy.Fixed;
+            downarrowStyle.HeightPolicy = SizePolicy.Fixed;
+            downarrowStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            downarrowStyle.Width = 16;
+            downarrowStyle.Height = 16;
+            downarrowStyle.Alignment = ItemAlignment.Bottom | ItemAlignment.HCenter;
+            downarrowStyle.Shape = GraphicsMathService.GetTriangle(10, 8, 3, 4, 180);
+            downarrowStyle.IsFixedShape = true;
+            downarrowStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
             });
-            style.AddInnerStyle("downarrow", downarrow_style);
+            style.AddInnerStyle("downarrow", downarrowStyle);
 
-            Style slider_style = new Style();
-            slider_style.WidthPolicy = SizePolicy.Expand;
-            slider_style.HeightPolicy = SizePolicy.Expand;
-            slider_style.Background = Color.Transparent;
-            style.AddInnerStyle("slider", slider_style);
+            Style sliderStyle = new Style();
+            sliderStyle.WidthPolicy = SizePolicy.Expand;
+            sliderStyle.HeightPolicy = SizePolicy.Expand;
+            sliderStyle.Background = Color.Transparent;
+            style.AddInnerStyle("slider", sliderStyle);
 
-            Style track_style = new Style();
-            track_style.WidthPolicy = SizePolicy.Expand;
-            track_style.HeightPolicy = SizePolicy.Expand;
-            track_style.Background = Color.Transparent;
-            slider_style.AddInnerStyle("track", track_style);
+            Style trackStyle = new Style();
+            trackStyle.WidthPolicy = SizePolicy.Expand;
+            trackStyle.HeightPolicy = SizePolicy.Expand;
+            trackStyle.Background = Color.Transparent;
+            sliderStyle.AddInnerStyle("track", trackStyle);
 
-            Style handler_style = new Style();
-            handler_style.WidthPolicy = SizePolicy.Expand;
-            handler_style.HeightPolicy = SizePolicy.Fixed;
-            handler_style.Background = Color.FromArgb(255, 100, 100, 100);
-            handler_style.Margin = new Indents(3, 0, 3, 0);
-            handler_style.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
-            handler_style.MinHeight = 15;
-            handler_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style handlerStyle = new Style();
+            handlerStyle.WidthPolicy = SizePolicy.Expand;
+            handlerStyle.HeightPolicy = SizePolicy.Fixed;
+            handlerStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            handlerStyle.Margin = new Indents(3, 0, 3, 0);
+            handlerStyle.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
+            handlerStyle.MinHeight = 15;
+            handlerStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(40, 255, 255, 255)
             });
-            slider_style.AddInnerStyle("handler", handler_style);
+            sliderStyle.AddInnerStyle("handler", handlerStyle);
 
             return style;
         }
 
-        /// <returns> default simple style for VerticalScrollBar objects </returns>
+        /// <summary>
+        /// Getting simplified style for a SimpleVerticalScrollBar item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "uparrow", "downarrow", "slider".
+        /// <para/> Inner styles for "slider": "track", "handler".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetSimpleVerticalScrollBarStyle()
         {
             Style style = new Style();
@@ -957,40 +1245,44 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Expand;
             style.Width = 16;
 
-            Style uparrow_style = new Style();
-            uparrow_style.IsVisible = false;
-            style.AddInnerStyle("uparrow", uparrow_style);
+            Style uparrowStyle = new Style();
+            uparrowStyle.IsVisible = false;
+            style.AddInnerStyle("uparrow", uparrowStyle);
 
-            Style downarrow_style = new Style();
-            downarrow_style.IsVisible = false;
-            style.AddInnerStyle("downarrow", downarrow_style);
+            Style downarrowStyle = new Style();
+            downarrowStyle.IsVisible = false;
+            style.AddInnerStyle("downarrow", downarrowStyle);
 
-            Style slider_style = new Style();
-            slider_style.WidthPolicy = SizePolicy.Expand;
-            slider_style.HeightPolicy = SizePolicy.Expand;
-            slider_style.Background = Color.Transparent;
-            style.AddInnerStyle("slider", slider_style);
+            Style sliderStyle = new Style();
+            sliderStyle.WidthPolicy = SizePolicy.Expand;
+            sliderStyle.HeightPolicy = SizePolicy.Expand;
+            sliderStyle.Background = Color.Transparent;
+            style.AddInnerStyle("slider", sliderStyle);
 
-            Style track_style = new Style();
-            track_style.WidthPolicy = SizePolicy.Expand;
-            track_style.HeightPolicy = SizePolicy.Expand;
-            track_style.Background = Color.Transparent;
-            slider_style.AddInnerStyle("track", track_style);
+            Style trackStyle = new Style();
+            trackStyle.WidthPolicy = SizePolicy.Expand;
+            trackStyle.HeightPolicy = SizePolicy.Expand;
+            trackStyle.Background = Color.Transparent;
+            sliderStyle.AddInnerStyle("track", trackStyle);
 
-            Style handler_style = new Style();
-            handler_style.WidthPolicy = SizePolicy.Expand;
-            handler_style.HeightPolicy = SizePolicy.Fixed;
-            handler_style.Background = Color.FromArgb(255, 120, 120, 120);
-            handler_style.Margin = new Indents(5, 0, 5, 0);
-            handler_style.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
-            handler_style.BorderRadius = new CornerRadius(3);
-            handler_style.MinHeight = 15;
-            slider_style.AddInnerStyle("handler", handler_style);
+            Style handlerStyle = new Style();
+            handlerStyle.WidthPolicy = SizePolicy.Expand;
+            handlerStyle.HeightPolicy = SizePolicy.Fixed;
+            handlerStyle.Background = Color.FromArgb(255, 120, 120, 120);
+            handlerStyle.Margin = new Indents(5, 0, 5, 0);
+            handlerStyle.Alignment = ItemAlignment.Top | ItemAlignment.HCenter;
+            handlerStyle.BorderRadius = new CornerRadius(3);
+            handlerStyle.MinHeight = 15;
+            sliderStyle.AddInnerStyle("handler", handlerStyle);
 
             return style;
         }
 
-        /// <returns> default style for HorizontalSlider objects </returns>
+        /// <summary>
+        /// Getting default style for a HorizontalSlider item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "track", "handler".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetHorizontalSliderStyle()
         {
             Style style = new Style();
@@ -1001,30 +1293,34 @@ namespace SpaceVIL.Decorations
             style.Height = 25;
             style.SetAlignment(ItemAlignment.Top, ItemAlignment.Left);
 
-            Style track_style = new Style();
-            track_style.WidthPolicy = SizePolicy.Expand;
-            track_style.HeightPolicy = SizePolicy.Fixed;
-            track_style.Height = 5;
-            track_style.Alignment = ItemAlignment.VCenter;
-            track_style.Background = Color.FromArgb(255, 100, 100, 100);
-            style.AddInnerStyle("track", track_style);
+            Style trackStyle = new Style();
+            trackStyle.WidthPolicy = SizePolicy.Expand;
+            trackStyle.HeightPolicy = SizePolicy.Fixed;
+            trackStyle.Height = 5;
+            trackStyle.Alignment = ItemAlignment.VCenter;
+            trackStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            style.AddInnerStyle("track", trackStyle);
 
-            Style handler_style = new Style();
-            handler_style.WidthPolicy = SizePolicy.Fixed;
-            handler_style.HeightPolicy = SizePolicy.Expand;
-            handler_style.Width = 10;
-            handler_style.Background = Color.FromArgb(255, 255, 181, 111);
-            handler_style.Alignment = ItemAlignment.Left;
-            handler_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style handlerStyle = new Style();
+            handlerStyle.WidthPolicy = SizePolicy.Fixed;
+            handlerStyle.HeightPolicy = SizePolicy.Expand;
+            handlerStyle.Width = 10;
+            handlerStyle.Background = Color.FromArgb(255, 255, 181, 111);
+            handlerStyle.Alignment = ItemAlignment.Left;
+            handlerStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
-            style.AddInnerStyle("handler", handler_style);
+            style.AddInnerStyle("handler", handlerStyle);
 
             return style;
         }
 
-        /// <returns> default style for VerticalSlider objects </returns>
+        /// <summary>
+        /// Getting default style for a VerticalSlider item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "track", "handler".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetVerticalSliderStyle()
         {
             Style style = new Style();
@@ -1034,30 +1330,33 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Expand;
             style.Width = 25;
 
-            Style track_style = new Style();
-            track_style.WidthPolicy = SizePolicy.Fixed;
-            track_style.HeightPolicy = SizePolicy.Expand;
-            track_style.Width = 5;
-            track_style.Alignment = ItemAlignment.HCenter;
-            track_style.Background = Color.FromArgb(255, 100, 100, 100);
-            style.AddInnerStyle("track", track_style);
+            Style trackStyle = new Style();
+            trackStyle.WidthPolicy = SizePolicy.Fixed;
+            trackStyle.HeightPolicy = SizePolicy.Expand;
+            trackStyle.Width = 5;
+            trackStyle.Alignment = ItemAlignment.HCenter;
+            trackStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            style.AddInnerStyle("track", trackStyle);
 
-            Style handler_style = new Style();
-            handler_style.WidthPolicy = SizePolicy.Expand;
-            handler_style.HeightPolicy = SizePolicy.Fixed;
-            handler_style.Height = 10;
-            handler_style.Background = Color.FromArgb(255, 255, 181, 111);
-            handler_style.Alignment = ItemAlignment.Top;
-            handler_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style handlerStyle = new Style();
+            handlerStyle.WidthPolicy = SizePolicy.Expand;
+            handlerStyle.HeightPolicy = SizePolicy.Fixed;
+            handlerStyle.Height = 10;
+            handlerStyle.Background = Color.FromArgb(255, 255, 181, 111);
+            handlerStyle.Alignment = ItemAlignment.Top;
+            handlerStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
-            style.AddInnerStyle("handler", handler_style);
+            style.AddInnerStyle("handler", handlerStyle);
 
             return style;
         }
 
-        /// <returns> default style for HorizontalStack objects </returns>
+        /// <summary>
+        /// Getting default style for a HorizontalStack item. Properly filled in all the necessary properties.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetHorizontalStackStyle()
         {
             Style style = new Style();
@@ -1070,7 +1369,10 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for VerticalStack objects </returns>
+        /// <summary>
+        /// Getting default style for a VerticalStack item. Properly filled in all the necessary properties.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetVerticalStackStyle()
         {
             Style style = new Style();
@@ -1083,7 +1385,11 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for HorizontalSplitArea objects </returns>
+        /// <summary>
+        /// Getting default style for a HorizontalSplitArea item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "splitholder".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetHorizontalSplitAreaStyle()
         {
             Style style = new Style();
@@ -1093,15 +1399,19 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Expand;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
 
-            Style splitter_style = new Style();
-            splitter_style.Background = Color.FromArgb(255, 42, 42, 42);
-            splitter_style.Width = 6;
-            style.AddInnerStyle("splitholder", splitter_style);
+            Style splitterStyle = new Style();
+            splitterStyle.Background = Color.FromArgb(255, 42, 42, 42);
+            splitterStyle.Width = 6;
+            style.AddInnerStyle("splitholder", splitterStyle);
 
             return style;
         }
 
-        /// <returns> default style for VerticalSplitArea objects </returns>
+        /// <summary>
+        /// Getting default style for a VerticalSplitArea item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "splitholder".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetVerticalSplitAreaStyle()
         {
             Style style = new Style();
@@ -1111,15 +1421,18 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Expand;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
 
-            Style splitter_style = new Style();
-            splitter_style.Background = Color.FromArgb(255, 42, 42, 42);
-            splitter_style.Height = 6;
-            style.AddInnerStyle("splitholder", splitter_style);
+            Style splitterStyle = new Style();
+            splitterStyle.Background = Color.FromArgb(255, 42, 42, 42);
+            splitterStyle.Height = 6;
+            style.AddInnerStyle("splitholder", splitterStyle);
 
             return style;
         }
 
-        /// <returns> default style for Label objects </returns>
+        /// <summary>
+        /// Getting default style for a Label item. Properly filled in all the necessary properties.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetLabelStyle()
         {
             Style style = new Style();
@@ -1135,7 +1448,12 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for ListArea objects </returns>
+        /// <summary>
+        /// Getting default style for a ListArea item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "selection".
+        /// <para/> This is part of many items style.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetListAreaStyle()
         {
             Style style = new Style();
@@ -1153,7 +1471,11 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for ListBox objects </returns>
+        /// <summary>
+        /// Getting default style for a ListBox item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetListBoxStyle()
         {
             Style style = new Style();
@@ -1163,22 +1485,22 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Expand;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
 
-            Style vsb_style = GetVerticalScrollBarStyle();
-            vsb_style.Alignment = ItemAlignment.Right | ItemAlignment.Top;
-            style.AddInnerStyle("vscrollbar", vsb_style);
+            Style vsbStyle = GetVerticalScrollBarStyle();
+            vsbStyle.Alignment = ItemAlignment.Right | ItemAlignment.Top;
+            style.AddInnerStyle("vscrollbar", vsbStyle);
 
-            Style hsb_style = GetHorizontalScrollBarStyle();
-            hsb_style.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
-            style.AddInnerStyle("hscrollbar", hsb_style);
+            Style hsbStyle = GetHorizontalScrollBarStyle();
+            hsbStyle.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
+            style.AddInnerStyle("hscrollbar", hsbStyle);
 
-            Style menu_style = new Style();
-            menu_style.Background = Color.FromArgb(50, 50, 50);
-            menu_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            menu_style.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
-            style.AddInnerStyle("menu", menu_style);
+            Style menuStyle = new Style();
+            menuStyle.Background = Color.FromArgb(50, 50, 50);
+            menuStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            menuStyle.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
+            style.AddInnerStyle("menu", menuStyle);
 
-            Style area_style = GetListAreaStyle();
-            style.AddInnerStyle("area", area_style);
+            Style areaStyle = GetListAreaStyle();
+            style.AddInnerStyle("area", areaStyle);
 
             return style;
         }
@@ -1193,8 +1515,13 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for RadioButton objects </returns>
-        public static Style GetRadioButtonStyle()//нужен ли?
+        /// <summary>
+        /// Getting default style for a RadioButton item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "indicator", "text".
+        /// <para/> Inner styles of "indicator": "marker".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
+        public static Style GetRadioButtonStyle()
         {
             Style style = new Style();
 
@@ -1209,26 +1536,30 @@ namespace SpaceVIL.Decorations
             style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
             style.BorderRadius = new CornerRadius(10);
 
-            Style indicator_style = GetIndicatorStyle();
-            indicator_style.Shape = GraphicsMathService.GetEllipse();
-            style.AddInnerStyle("indicator", indicator_style);
+            Style indicatorStyle = GetIndicatorStyle();
+            indicatorStyle.Shape = GraphicsMathService.GetEllipse();
+            style.AddInnerStyle("indicator", indicatorStyle);
 
-            Style marker_style = indicator_style.GetInnerStyle("marker");
-            marker_style.Shape = GraphicsMathService.GetEllipse();
-            indicator_style.AddInnerStyle("marker", marker_style);
+            Style markerStyle = indicatorStyle.GetInnerStyle("marker");
+            markerStyle.Shape = GraphicsMathService.GetEllipse();
+            indicatorStyle.AddInnerStyle("marker", markerStyle);
 
-            Style textline_style = GetLabelStyle();
-            textline_style.WidthPolicy = SizePolicy.Expand;
-            textline_style.HeightPolicy = SizePolicy.Expand;
-            textline_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            textline_style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            textline_style.Margin = new Indents(10 + indicator_style.Width, 0, 0, 0);
-            style.AddInnerStyle("textline", textline_style);
+            Style textlineStyle = GetLabelStyle();
+            textlineStyle.WidthPolicy = SizePolicy.Expand;
+            textlineStyle.HeightPolicy = SizePolicy.Expand;
+            textlineStyle.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            textlineStyle.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            textlineStyle.Margin = new Indents(10 + indicatorStyle.Width, 0, 0, 0);
+            style.AddInnerStyle("text", textlineStyle);
 
             return style;
         }
 
-        /// <returns> default style for PasswordLine objects </returns>
+        /// <summary>
+        /// Getting default style for a PasswordLine item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "showmarker", "textedit".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetPasswordLineStyle()
         {
             Style style = new Style();
@@ -1248,13 +1579,13 @@ namespace SpaceVIL.Decorations
             //     Background = Color.FromArgb(30, 255, 255, 255)
             // });
 
-            Style marker_style = GetIndicatorStyle().GetInnerStyle("marker");
-            marker_style.Background = Color.FromArgb(0, 100, 100, 100);
-            marker_style.SetSize(20, 20);
-            marker_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            marker_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Right;
-            marker_style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
-            marker_style.RemoveItemState(ItemStateType.Hovered);
+            Style markerStyle = GetIndicatorStyle().GetInnerStyle("marker");
+            markerStyle.Background = Color.FromArgb(0, 100, 100, 100);
+            markerStyle.SetSize(20, 20);
+            markerStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            markerStyle.Alignment = ItemAlignment.VCenter | ItemAlignment.Right;
+            markerStyle.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            markerStyle.RemoveItemState(ItemStateType.Hovered);
             // marker_style.BorderRadius = new CornerRadius(5);
 
             // marker_style.AddItemState(ItemStateType.Hovered, new ItemState()
@@ -1265,7 +1596,7 @@ namespace SpaceVIL.Decorations
             // {
             //     Background = Color.FromArgb(255, 40, 40, 40)
             // });
-            style.AddInnerStyle("showmarker", marker_style);
+            style.AddInnerStyle("showmarker", markerStyle);
             style.AddInnerStyle("textedit", GetTextEncryptStyle());
 
             return style;
@@ -1282,30 +1613,35 @@ namespace SpaceVIL.Decorations
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Expand;
 
-            Style cursor_style = new Style();
-            cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
-            cursor_style.Width = 2;
-            cursor_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            cursor_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
-            cursor_style.Margin = new Indents(0, 5, 0, 5);
-            cursor_style.IsVisible = false;
-            style.AddInnerStyle("cursor", cursor_style);
+            Style cursorStyle = new Style();
+            cursorStyle.Background = Color.FromArgb(255, 60, 60, 60);
+            cursorStyle.Width = 2;
+            cursorStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            cursorStyle.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            cursorStyle.Margin = new Indents(0, 5, 0, 5);
+            cursorStyle.IsVisible = false;
+            style.AddInnerStyle("cursor", cursorStyle);
 
-            Style selection_style = new Style();
-            selection_style.Background = Color.FromArgb(255, 111, 181, 255);
-            selection_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            selection_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
-            style.AddInnerStyle("selection", selection_style);
+            Style selectionStyle = new Style();
+            selectionStyle.Background = Color.FromArgb(255, 111, 181, 255);
+            selectionStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            selectionStyle.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            style.AddInnerStyle("selection", selectionStyle);
 
-            Style substrate_style = new Style();
-            substrate_style.Font = DefaultsService.GetDefaultFont(FontStyle.Italic, 14);
-            substrate_style.Foreground = Color.FromArgb(255, 150, 150, 150);
-            style.AddInnerStyle("substrate", substrate_style);
+            Style substrateStyle = new Style();
+            substrateStyle.Font = DefaultsService.GetDefaultFont(FontStyle.Italic, 14);
+            substrateStyle.Foreground = Color.FromArgb(255, 150, 150, 150);
+            style.AddInnerStyle("substrate", substrateStyle);
 
             return style;
         }
 
-        /// <returns> default style for TextEdit objects </returns>
+        /// <summary>
+        /// Getting default style for a TextEdit item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "text".
+        /// <para/> Inner styles for "text": "cursor", "selection", "substrate".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetTextEditStyle()
         {
             Style style = new Style();
@@ -1315,41 +1651,46 @@ namespace SpaceVIL.Decorations
             style.WidthPolicy = SizePolicy.Expand;
             style.HeightPolicy = SizePolicy.Fixed;
 
-            Style text_style = new Style();
-            text_style.Background = Color.Transparent;
-            text_style.Foreground = Color.FromArgb(255, 70, 70, 70);
-            text_style.Font = DefaultsService.GetDefaultFont(16);
-            text_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            text_style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
-            text_style.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            text_style.Padding = new Indents(5, 0, 5, 0);
-            style.AddInnerStyle("text", text_style);
+            Style textStyle = new Style();
+            textStyle.Background = Color.Transparent;
+            textStyle.Foreground = Color.FromArgb(255, 70, 70, 70);
+            textStyle.Font = DefaultsService.GetDefaultFont(16);
+            textStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            textStyle.Alignment = ItemAlignment.Left | ItemAlignment.Top;
+            textStyle.TextAlignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            textStyle.Padding = new Indents(5, 0, 5, 0);
+            style.AddInnerStyle("text", textStyle);
 
-            Style cursor_style = new Style();
-            cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
-            cursor_style.Width = 2;
-            cursor_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            cursor_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
-            cursor_style.Margin = new Indents(0, 5, 0, 5);
-            cursor_style.IsVisible = false;
-            text_style.AddInnerStyle("cursor", cursor_style);
+            Style cursorStyle = new Style();
+            cursorStyle.Background = Color.FromArgb(255, 60, 60, 60);
+            cursorStyle.Width = 2;
+            cursorStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            cursorStyle.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            cursorStyle.Margin = new Indents(0, 5, 0, 5);
+            cursorStyle.IsVisible = false;
+            textStyle.AddInnerStyle("cursor", cursorStyle);
 
-            Style selection_style = new Style();
-            selection_style.Background = Color.FromArgb(255, 111, 181, 255);
-            selection_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            selection_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
-            selection_style.Margin = new Indents(0, 5, 0, 5);
-            text_style.AddInnerStyle("selection", selection_style);
+            Style selectionStyle = new Style();
+            selectionStyle.Background = Color.FromArgb(255, 111, 181, 255);
+            selectionStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            selectionStyle.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            selectionStyle.Margin = new Indents(0, 5, 0, 5);
+            textStyle.AddInnerStyle("selection", selectionStyle);
 
-            Style substrate_style = new Style();
-            substrate_style.Font = DefaultsService.GetDefaultFont(FontStyle.Italic, 14);
-            substrate_style.Foreground = Color.FromArgb(255, 150, 150, 150);
-            text_style.AddInnerStyle("substrate", substrate_style);
+            Style substrateStyle = new Style();
+            substrateStyle.Font = DefaultsService.GetDefaultFont(FontStyle.Italic, 14);
+            substrateStyle.Foreground = Color.FromArgb(255, 150, 150, 150);
+            textStyle.AddInnerStyle("substrate", substrateStyle);
 
             return style;
         }
 
-        /// <returns> default style for TextBlock objects </returns>
+        /// <summary>
+        /// Getting default style for a sealed TextBlock item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "cursor", "selection".
+        /// <para/> This is part of TextArea item style as "textedit".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetTextBlockStyle()
         {
             Style style = new Style();
@@ -1362,22 +1703,26 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Expand;
             style.Padding = new Indents(5, 5, 5, 5);
 
-            Style cursor_style = new Style();
-            cursor_style.Background = Color.FromArgb(255, 60, 60, 60);
-            cursor_style.Width = 2;
-            cursor_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            cursor_style.IsVisible = false;
-            style.AddInnerStyle("cursor", cursor_style);
+            Style cursorStyle = new Style();
+            cursorStyle.Background = Color.FromArgb(255, 60, 60, 60);
+            cursorStyle.Width = 2;
+            cursorStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            cursorStyle.IsVisible = false;
+            style.AddInnerStyle("cursor", cursorStyle);
 
-            Style selection_style = new Style();
-            selection_style.Background = Color.FromArgb(255, 111, 181, 255);
-            selection_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            style.AddInnerStyle("selection", selection_style);
+            Style selectionStyle = new Style();
+            selectionStyle.Background = Color.FromArgb(255, 111, 181, 255);
+            selectionStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            style.AddInnerStyle("selection", selectionStyle);
 
             return style;
         }
 
-        /// <returns> default style for TextArea objects </returns>
+        /// <summary>
+        /// Getting default style for a TextArea item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "textedit", "vscrollbar", "hscrollbar", "menu".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetTextAreaStyle()
         {
             Style style = new Style();
@@ -1388,26 +1733,31 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Expand;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
 
-            Style text_style = GetTextBlockStyle();
-            style.AddInnerStyle("textedit", text_style);
+            Style textStyle = GetTextBlockStyle();
+            style.AddInnerStyle("textedit", textStyle);
 
-            Style vsb_style = GetVerticalScrollBarStyle();
-            vsb_style.Alignment = ItemAlignment.Right | ItemAlignment.Top;
-            style.AddInnerStyle("vscrollbar", vsb_style);
+            Style vsbStyle = GetVerticalScrollBarStyle();
+            vsbStyle.Alignment = ItemAlignment.Right | ItemAlignment.Top;
+            style.AddInnerStyle("vscrollbar", vsbStyle);
 
-            Style hsb_style = GetHorizontalScrollBarStyle();
-            hsb_style.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
-            style.AddInnerStyle("hscrollbar", hsb_style);
+            Style hsbStyle = GetHorizontalScrollBarStyle();
+            hsbStyle.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
+            style.AddInnerStyle("hscrollbar", hsbStyle);
 
-            Style menu_style = new Style();
-            menu_style.Background = Color.FromArgb(50, 50, 50);
-            menu_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            menu_style.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
-            style.AddInnerStyle("menu", menu_style);
+            Style menuStyle = new Style();
+            menuStyle.Background = Color.FromArgb(50, 50, 50);
+            menuStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            menuStyle.SetAlignment(ItemAlignment.Right | ItemAlignment.Bottom);
+            style.AddInnerStyle("menu", menuStyle);
 
             return style;
         }
 
+        /// <summary>
+        /// Getting default style for a TextView item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "selection".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetTextViewStyle()
         {
             Style style = new Style();
@@ -1419,15 +1769,19 @@ namespace SpaceVIL.Decorations
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.SetPadding(5, 5, 5, 5);
 
-            Style selection_style = new Style();
-            selection_style.Background = Color.FromArgb(40, 255, 255, 255);
-            selection_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            style.AddInnerStyle("selection", selection_style);
+            Style selectionStyle = new Style();
+            selectionStyle.Background = Color.FromArgb(40, 255, 255, 255);
+            selectionStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            style.AddInnerStyle("selection", selectionStyle);
 
             return style;
         }
 
-        /// <returns> default style for PopUpMessage objects </returns>
+        /// <summary>
+        /// Getting default style for a PopUpMessage item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "closebutton".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetPopUpMessageStyle()
         {
             Style style = new Style();
@@ -1448,24 +1802,28 @@ namespace SpaceVIL.Decorations
                 Background = Color.FromArgb(3, 255, 255, 255)
             });
 
-            Style close_style = new Style();
-            close_style.Background = Color.FromArgb(255, 100, 100, 100);
-            close_style.SetSize(10, 10);
-            close_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            close_style.Alignment = ItemAlignment.Top | ItemAlignment.Right;
-            close_style.Margin = new Indents(0, 5, 0, 5);
-            close_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style closeStyle = new Style();
+            closeStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            closeStyle.SetSize(10, 10);
+            closeStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            closeStyle.Alignment = ItemAlignment.Top | ItemAlignment.Right;
+            closeStyle.Margin = new Indents(0, 5, 0, 5);
+            closeStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(60, 255, 255, 255)
             });
-            close_style.Shape = GraphicsMathService.GetCross(10, 10, 3, 45);
-            close_style.IsFixedShape = false;
-            style.AddInnerStyle("closebutton", close_style);
+            closeStyle.Shape = GraphicsMathService.GetCross(10, 10, 3, 45);
+            closeStyle.IsFixedShape = false;
+            style.AddInnerStyle("closebutton", closeStyle);
 
             return style;
         }
 
-        /// <returns> default style for ProgressBar objects </returns>
+        /// <summary>
+        /// Getting default style for a ProgressBar item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "progressbar".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetProgressBarStyle()
         {
             Style style = new Style();
@@ -1478,16 +1836,20 @@ namespace SpaceVIL.Decorations
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
             style.TextAlignment = ItemAlignment.HCenter | ItemAlignment.VCenter;
 
-            Style pgbar_style = new Style();
-            pgbar_style.Background = Color.FromArgb(255, 0, 191, 255);
-            pgbar_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            pgbar_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
-            style.AddInnerStyle("progressbar", pgbar_style);
+            Style pgbarStyle = new Style();
+            pgbarStyle.Background = Color.FromArgb(255, 0, 191, 255);
+            pgbarStyle.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            pgbarStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Expand);
+            style.AddInnerStyle("progressbar", pgbarStyle);
 
             return style;
         }
 
-        /// <returns> default style for ToolTip objects </returns>
+        /// <summary>
+        /// Getting default style for a ToolTip item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "text".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetToolTipStyle()
         {
             Style style = new Style();
@@ -1503,18 +1865,22 @@ namespace SpaceVIL.Decorations
             style.Padding = new Indents(5, 5, 5, 5);
             style.BorderRadius = new CornerRadius(4);
 
-            Style text_style = new Style();
-            text_style.Background = Color.Transparent;
-            text_style.WidthPolicy = SizePolicy.Expand;
-            text_style.HeightPolicy = SizePolicy.Expand;
-            text_style.Alignment = ItemAlignment.VCenter | ItemAlignment.HCenter;
-            text_style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.HCenter;
-            style.AddInnerStyle("text", text_style);
+            Style textStyle = new Style();
+            textStyle.Background = Color.Transparent;
+            textStyle.WidthPolicy = SizePolicy.Expand;
+            textStyle.HeightPolicy = SizePolicy.Expand;
+            textStyle.Alignment = ItemAlignment.VCenter | ItemAlignment.HCenter;
+            textStyle.TextAlignment = ItemAlignment.VCenter | ItemAlignment.HCenter;
+            style.AddInnerStyle("text", textStyle);
 
             return style;
         }
 
-        /// <returns> default style for TitleBar objects </returns>
+        /// <summary>
+        /// Getting default style for a TitleBar item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "closebutton", "minimizebutton", "maximizebutton", "title".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetTitleBarStyle()
         {
             Style style = new Style();
@@ -1531,65 +1897,73 @@ namespace SpaceVIL.Decorations
             style.Padding = new Indents(10, 0, 5, 0);
             style.Spacing = new Spacing(5);
 
-            Style close_style = new Style();
-            close_style.Background = Color.FromArgb(255, 100, 100, 100);
-            close_style.SetSize(15, 15);
-            close_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            close_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Right;
-            close_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style closeStyle = new Style();
+            closeStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            closeStyle.SetSize(15, 15);
+            closeStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            closeStyle.Alignment = ItemAlignment.VCenter | ItemAlignment.Right;
+            closeStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(255, 186, 95, 97)
             });
-            close_style.Shape = GraphicsMathService.GetCross(15, 15, 2, 45);
-            close_style.IsFixedShape = true;
-            style.AddInnerStyle("closebutton", close_style);
+            closeStyle.Shape = GraphicsMathService.GetCross(15, 15, 2, 45);
+            closeStyle.IsFixedShape = true;
+            style.AddInnerStyle("closebutton", closeStyle);
 
-            Style minimize_style = new Style();
-            minimize_style.Background = Color.FromArgb(255, 100, 100, 100);
-            minimize_style.SetSize(12, 15);
-            minimize_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            minimize_style.Alignment = ItemAlignment.Bottom | ItemAlignment.Right;
-            minimize_style.Margin = new Indents(0, 0, 5, 9);
-            minimize_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style minimizeStyle = new Style();
+            minimizeStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            minimizeStyle.SetSize(12, 15);
+            minimizeStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            minimizeStyle.Alignment = ItemAlignment.Bottom | ItemAlignment.Right;
+            minimizeStyle.Margin = new Indents(0, 0, 5, 9);
+            minimizeStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 Background = Color.FromArgb(80, 255, 255, 255)
             });
-            minimize_style.Shape = GraphicsMathService.GetRectangle(15, 2, 0, 13);
-            minimize_style.IsFixedShape = true;
-            style.AddInnerStyle("minimizebutton", minimize_style);
+            minimizeStyle.Shape = GraphicsMathService.GetRectangle(15, 2, 0, 13);
+            minimizeStyle.IsFixedShape = true;
+            style.AddInnerStyle("minimizebutton", minimizeStyle);
 
-            Style maximize_style = new Style();
+            Style maximizeStyle = new Style();
 
-            maximize_style.BorderThickness = 2;
-            maximize_style.BorderFill = Color.FromArgb(255, 100, 100, 100);
+            maximizeStyle.BorderThickness = 2;
+            maximizeStyle.BorderFill = Color.FromArgb(255, 100, 100, 100);
 
-            maximize_style.SetSize(12, 12);
-            maximize_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            maximize_style.Alignment = ItemAlignment.Bottom | ItemAlignment.Right;
-            maximize_style.Margin = new Indents(0, 0, 0, 9);
-            maximize_style.Padding = new Indents(2, 2, 2, 2);
+            maximizeStyle.SetSize(12, 12);
+            maximizeStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            maximizeStyle.Alignment = ItemAlignment.Bottom | ItemAlignment.Right;
+            maximizeStyle.Margin = new Indents(0, 0, 0, 9);
+            maximizeStyle.Padding = new Indents(2, 2, 2, 2);
 
             ItemState hovered = new ItemState();
             hovered.Border.SetFill(Color.FromArgb(255, 84, 124, 94));
-            maximize_style.AddItemState(ItemStateType.Hovered, hovered);
-            maximize_style.Shape = GraphicsMathService.GetRectangle();
-            style.AddInnerStyle("maximizebutton", maximize_style);
+            maximizeStyle.AddItemState(ItemStateType.Hovered, hovered);
+            maximizeStyle.Shape = GraphicsMathService.GetRectangle();
+            style.AddInnerStyle("maximizebutton", maximizeStyle);
 
-            Style title_style = new Style();
-            title_style.Margin = new Indents(10, 0, 0, 0);
-            style.AddInnerStyle("title", title_style);
+            Style titleStyle = new Style();
+            titleStyle.Margin = new Indents(10, 0, 0, 0);
+            style.AddInnerStyle("title", titleStyle);
 
             return style;
         }
 
-        /// <returns> default style for TreeView objects </returns>
+        /// <summary>
+        /// Getting default style for a TreeView item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetTreeViewStyle()
         {
             Style style = GetListBoxStyle();
             return style;
         }
 
-        /// <returns> default style for TreeItem objects </returns>
+        /// <summary>
+        /// Getting default style for a TreeItem item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "indicator", "branchicon", "leaficon".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetTreeItemStyle()
         {
             Style style = new Style();
@@ -1606,43 +1980,47 @@ namespace SpaceVIL.Decorations
             hovered.Background = Color.FromArgb(30, 255, 255, 255);
             style.AddItemState(ItemStateType.Hovered, hovered);
 
-            Style indicator_style = new Style();//GetButtonToggleStyle();
-            indicator_style.Background = Color.FromArgb(255, 32, 32, 32);
-            indicator_style.Foreground = Color.FromArgb(255, 210, 210, 210);
-            indicator_style.Font = DefaultsService.GetDefaultFont();
-            indicator_style.SetSize(15, 15);
-            indicator_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            indicator_style.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
-            indicator_style.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
-            indicator_style.Shape = GraphicsMathService.GetTriangle(10, 8, 0, 3, 90);
-            indicator_style.IsFixedShape = true;
+            Style indicatorStyle = new Style();
+            indicatorStyle.Background = Color.FromArgb(255, 32, 32, 32);
+            indicatorStyle.Foreground = Color.FromArgb(255, 210, 210, 210);
+            indicatorStyle.Font = DefaultsService.GetDefaultFont();
+            indicatorStyle.SetSize(15, 15);
+            indicatorStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            indicatorStyle.Alignment = ItemAlignment.Left | ItemAlignment.VCenter;
+            indicatorStyle.TextAlignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            indicatorStyle.Shape = GraphicsMathService.GetTriangle(10, 8, 0, 3, 90);
+            indicatorStyle.IsFixedShape = true;
             ItemState toggled = new ItemState();
             toggled.Background = Color.FromArgb(255, 160, 160, 160);
-            toggled.Shape = new CustomFigure(true, GraphicsMathService.GetTriangle(10, 8, 0, 3, 180));
-            indicator_style.AddItemState(ItemStateType.Toggled, toggled);
-            style.AddInnerStyle("indicator", indicator_style);
+            toggled.Shape = new Figure(true, GraphicsMathService.GetTriangle(10, 8, 0, 3, 180));
+            indicatorStyle.AddItemState(ItemStateType.Toggled, toggled);
+            style.AddInnerStyle("indicator", indicatorStyle);
 
-            Style branch_icon_style = new Style();
-            branch_icon_style.Background = Color.FromArgb(255, 106, 185, 255);
-            branch_icon_style.SetSize(14, 9);
-            branch_icon_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            branch_icon_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
-            branch_icon_style.Shape = GraphicsMathService.GetFolderIconShape(20, 15, 0, 0);
-            style.AddInnerStyle("branchicon", branch_icon_style);
+            Style branchIconStyle = new Style();
+            branchIconStyle.Background = Color.FromArgb(255, 106, 185, 255);
+            branchIconStyle.SetSize(14, 9);
+            branchIconStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            branchIconStyle.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            branchIconStyle.Shape = GraphicsMathService.GetFolderIconShape(20, 15, 0, 0);
+            style.AddInnerStyle("branchicon", branchIconStyle);
 
-            Style leaf_icon_style = new Style();
-            leaf_icon_style.Background = Color.FromArgb(255, 129, 187, 133);
-            leaf_icon_style.SetSize(6, 6);
-            leaf_icon_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            leaf_icon_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
-            leaf_icon_style.Shape = GraphicsMathService.GetEllipse(3, 16);
-            leaf_icon_style.Margin = new Indents(2, 0, 0, 0);
-            style.AddInnerStyle("leaficon", leaf_icon_style);
+            Style leafIconStyle = new Style();
+            leafIconStyle.Background = Color.FromArgb(255, 129, 187, 133);
+            leafIconStyle.SetSize(6, 6);
+            leafIconStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            leafIconStyle.Alignment = ItemAlignment.VCenter | ItemAlignment.Left;
+            leafIconStyle.Shape = GraphicsMathService.GetEllipse(3, 16);
+            leafIconStyle.Margin = new Indents(2, 0, 0, 0);
+            style.AddInnerStyle("leaficon", leafIconStyle);
 
             return style;
         }
 
-        /// <returns> default style for SpinItem objects </returns>
+        /// <summary>
+        /// Getting default style for a SpinItem item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "uparrow", "downarrow", "buttonsarea", "textedit".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetSpinItemStyle()
         {
             Style style = new Style();
@@ -1654,48 +2032,53 @@ namespace SpaceVIL.Decorations
             style.MinHeight = 10;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
 
-            Style uparrow_style = GetButtonCoreStyle();
-            uparrow_style.WidthPolicy = SizePolicy.Expand;
-            uparrow_style.HeightPolicy = SizePolicy.Expand;
-            uparrow_style.SetMargin(4, 4, 4, 5);
-            uparrow_style.Background = Color.FromArgb(255, 50, 50, 50);
-            uparrow_style.Alignment = ItemAlignment.Top | ItemAlignment.VCenter;
-            uparrow_style.Shape = GraphicsMathService.GetTriangle(12, 6, 0, 0, 0);
-            uparrow_style.IsFixedShape = true;
+            Style uparrowStyle = GetButtonCoreStyle();
+            uparrowStyle.WidthPolicy = SizePolicy.Expand;
+            uparrowStyle.HeightPolicy = SizePolicy.Expand;
+            uparrowStyle.SetMargin(4, 4, 4, 5);
+            uparrowStyle.Background = Color.FromArgb(255, 50, 50, 50);
+            uparrowStyle.Alignment = ItemAlignment.Top | ItemAlignment.VCenter;
+            uparrowStyle.Shape = GraphicsMathService.GetTriangle(12, 6, 0, 0, 0);
+            uparrowStyle.IsFixedShape = true;
 
             ItemState hovered = new ItemState();
             hovered.Background = Color.FromArgb(30, 255, 255, 255);
-            uparrow_style.AddItemState(ItemStateType.Hovered, hovered);
+            uparrowStyle.AddItemState(ItemStateType.Hovered, hovered);
 
-            style.AddInnerStyle("uparrow", uparrow_style);
+            style.AddInnerStyle("uparrow", uparrowStyle);
 
-            Style downarrow_style = GetButtonCoreStyle();
-            downarrow_style.WidthPolicy = SizePolicy.Expand;
-            downarrow_style.HeightPolicy = SizePolicy.Expand;
-            downarrow_style.SetMargin(4, 5, 4, 4);
-            downarrow_style.Background = Color.FromArgb(255, 50, 50, 50);
-            downarrow_style.Alignment = ItemAlignment.Bottom | ItemAlignment.VCenter;
-            downarrow_style.Shape = GraphicsMathService.GetTriangle(12, 6, 0, 0, 180);
-            downarrow_style.IsFixedShape = true;
-            downarrow_style.AddItemState(ItemStateType.Hovered, hovered);
-            style.AddInnerStyle("downarrow", downarrow_style);
+            Style downarrowStyle = GetButtonCoreStyle();
+            downarrowStyle.WidthPolicy = SizePolicy.Expand;
+            downarrowStyle.HeightPolicy = SizePolicy.Expand;
+            downarrowStyle.SetMargin(4, 5, 4, 4);
+            downarrowStyle.Background = Color.FromArgb(255, 50, 50, 50);
+            downarrowStyle.Alignment = ItemAlignment.Bottom | ItemAlignment.VCenter;
+            downarrowStyle.Shape = GraphicsMathService.GetTriangle(12, 6, 0, 0, 180);
+            downarrowStyle.IsFixedShape = true;
+            downarrowStyle.AddItemState(ItemStateType.Hovered, hovered);
+            style.AddInnerStyle("downarrow", downarrowStyle);
 
-            Style btns_area = GetVerticalStackStyle();
-            btns_area.WidthPolicy = SizePolicy.Fixed;
-            btns_area.HeightPolicy = SizePolicy.Expand;
-            btns_area.Width = 20;
-            btns_area.Background = Color.FromArgb(255, 255, 181, 111);
-            btns_area.Alignment = ItemAlignment.Right | ItemAlignment.VCenter;
-            style.AddInnerStyle("buttonsarea", btns_area);
+            Style btnsArea = GetVerticalStackStyle();
+            btnsArea.WidthPolicy = SizePolicy.Fixed;
+            btnsArea.HeightPolicy = SizePolicy.Expand;
+            btnsArea.Width = 20;
+            btnsArea.Background = Color.FromArgb(255, 255, 181, 111);
+            btnsArea.Alignment = ItemAlignment.Right | ItemAlignment.VCenter;
+            style.AddInnerStyle("buttonsarea", btnsArea);
 
-            Style text_input = GetTextEditStyle();
-            text_input.HeightPolicy = SizePolicy.Expand;
-            text_input.TextAlignment = ItemAlignment.Right;
-            style.AddInnerStyle("textedit", text_input);
+            Style textInput = GetTextEditStyle();
+            textInput.HeightPolicy = SizePolicy.Expand;
+            textInput.TextAlignment = ItemAlignment.Right;
+            style.AddInnerStyle("textedit", textInput);
 
             return style;
         }
-
+        /// <summary>
+        /// Getting default style for a DialogItem item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "window".
+        /// <para/> This is part of OpenEntryDialog item style.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetDialogItemStyle()
         {
             Style style = new Style();
@@ -1707,21 +2090,25 @@ namespace SpaceVIL.Decorations
             style.Margin = new Indents();
             style.Spacing = new Spacing();
 
-            Style window_style = GetFrameStyle();
-            window_style.SetSize(300, 150);
-            window_style.SetMinSize(300, 150);
-            window_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            window_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
-            window_style.SetPadding(2, 2, 2, 2);
-            window_style.SetBackground(45, 45, 45);
-            window_style.SetShadow(new Shadow(5, 3, 3, Color.FromArgb(180, 0, 0, 0)));
-            window_style.IsShadowDrop = true;
+            Style windowStyle = GetFrameStyle();
+            windowStyle.SetSize(300, 150);
+            windowStyle.SetMinSize(300, 150);
+            windowStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            windowStyle.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            windowStyle.SetPadding(2, 2, 2, 2);
+            windowStyle.SetBackground(45, 45, 45);
+            windowStyle.SetShadow(new Shadow(5, 3, 3, Color.FromArgb(180, 0, 0, 0)));
+            windowStyle.IsShadowDrop = true;
 
-            style.AddInnerStyle("window", window_style);
+            style.AddInnerStyle("window", windowStyle);
 
             return style;
         }
-
+        /// <summary>
+        /// Getting default style for a MessageItem item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "window", "button", "toolbar", "userbar", "message", "layout".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetMessageItemStyle()
         {
             Style style = new Style();
@@ -1730,55 +2117,59 @@ namespace SpaceVIL.Decorations
             style.SetBackground(0, 0, 0, 150);
             style.BorderRadius = new CornerRadius();
 
-            Style window_style = GetFrameStyle();
-            window_style.SetSize(300, 150);
-            window_style.SetMinSize(300, 150);
-            window_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            window_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
-            window_style.SetPadding(2, 2, 2, 2);
-            window_style.SetBackground(45, 45, 45);
-            style.AddInnerStyle("window", window_style);
+            Style windowStyle = GetFrameStyle();
+            windowStyle.SetSize(300, 150);
+            windowStyle.SetMinSize(300, 150);
+            windowStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            windowStyle.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            windowStyle.SetPadding(2, 2, 2, 2);
+            windowStyle.SetBackground(45, 45, 45);
+            style.AddInnerStyle("window", windowStyle);
 
-            Style ok_style = GetButtonCoreStyle();
-            ok_style.SetBackground(100, 255, 150);
-            ok_style.SetSize(100, 30);
-            ok_style.SetAlignment(ItemAlignment.Left, ItemAlignment.VCenter);
-            ok_style.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(120, 0, 0, 0)));
-            ok_style.IsShadowDrop = true;
-            style.AddInnerStyle("button", ok_style);
+            Style okStyle = GetButtonCoreStyle();
+            okStyle.SetBackground(100, 255, 150);
+            okStyle.SetSize(100, 30);
+            okStyle.SetAlignment(ItemAlignment.Left, ItemAlignment.VCenter);
+            okStyle.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(120, 0, 0, 0)));
+            okStyle.IsShadowDrop = true;
+            style.AddInnerStyle("button", okStyle);
 
-            Style toolbar_style = GetHorizontalStackStyle();
-            toolbar_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
-            toolbar_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            toolbar_style.SetSpacing(10, 0);
-            toolbar_style.SetPadding(0, 0, 0, 0);
-            toolbar_style.SetMargin(0, 0, 0, 0);
-            style.AddInnerStyle("toolbar", toolbar_style);
+            Style toolbarStyle = GetHorizontalStackStyle();
+            toolbarStyle.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
+            toolbarStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            toolbarStyle.SetSpacing(10, 0);
+            toolbarStyle.SetPadding(0, 0, 0, 0);
+            toolbarStyle.SetMargin(0, 0, 0, 0);
+            style.AddInnerStyle("toolbar", toolbarStyle);
 
-            Style userbar_style = GetHorizontalStackStyle();
-            userbar_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
-            userbar_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            userbar_style.SetSpacing(10, 0);
-            userbar_style.SetPadding(0, 0, 0, 0);
-            userbar_style.SetMargin(0, 0, 0, 0);
-            style.AddInnerStyle("userbar", userbar_style);
+            Style userbarStyle = GetHorizontalStackStyle();
+            userbarStyle.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
+            userbarStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            userbarStyle.SetSpacing(10, 0);
+            userbarStyle.SetPadding(0, 0, 0, 0);
+            userbarStyle.SetMargin(0, 0, 0, 0);
+            style.AddInnerStyle("userbar", userbarStyle);
 
-            Style msg_style = GetLabelStyle();
-            msg_style.SetAlignment(ItemAlignment.Top, ItemAlignment.VCenter);
-            msg_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
-            msg_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            msg_style.SetMargin(10, 0, 10, 40);
-            style.AddInnerStyle("message", msg_style);
+            Style msgStyle = GetLabelStyle();
+            msgStyle.SetAlignment(ItemAlignment.Top, ItemAlignment.VCenter);
+            msgStyle.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
+            msgStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            msgStyle.SetMargin(10, 0, 10, 40);
+            style.AddInnerStyle("message", msgStyle);
 
-            Style layout_style = GetFrameStyle();
-            layout_style.SetMargin(0, 30, 0, 0);
-            layout_style.SetPadding(6, 6, 6, 15);
-            layout_style.SetBackground(255, 255, 255, 20);
-            style.AddInnerStyle("layout", layout_style);
+            Style layoutStyle = GetFrameStyle();
+            layoutStyle.SetMargin(0, 30, 0, 0);
+            layoutStyle.SetPadding(6, 6, 6, 15);
+            layoutStyle.SetBackground(255, 255, 255, 20);
+            style.AddInnerStyle("layout", layoutStyle);
 
             return style;
         }
 
+        /// <summary>
+        /// Getting default style for a window itself. Properly filled in all the necessary properties.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetWindowContainerStyle()
         {
             Style style = new Style();
@@ -1793,6 +2184,11 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <summary>
+        /// Getting default style for a FileSystemEntry item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "icon", "text".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetFileSystemEntryStyle()
         {
             Style style = new Style();
@@ -1806,20 +2202,27 @@ namespace SpaceVIL.Decorations
             style.SetPadding(10, 0, 0, 0);
             style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(30, 255, 255, 255)));
 
-            Style icon_style = GetFrameStyle();
-            icon_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            icon_style.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
+            Style iconStyle = GetFrameStyle();
+            iconStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            iconStyle.SetAlignment(ItemAlignment.VCenter | ItemAlignment.Left);
 
-            style.AddInnerStyle("icon", icon_style);
+            style.AddInnerStyle("icon", iconStyle);
 
-            Style text_style = new Style();
-            text_style.SetMargin(24, 0, 0, 0);
+            Style textStyle = new Style();
+            textStyle.SetMargin(24, 0, 0, 0);
 
-            style.AddInnerStyle("text", text_style);
+            style.AddInnerStyle("text", textStyle);
 
             return style;
         }
 
+        /// <summary>
+        /// Getting default style for a OpenEntryDialog item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "window", "layout", "toolbar", "toolbarbutton", 
+        /// "addressline", "filenameline", "list", "controlpanel", "okbutton", 
+        /// "cancelbutton", "filter", "filtertext", "divider".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetOpenEntryDialogStyle()
         {
             // common
@@ -1833,113 +2236,118 @@ namespace SpaceVIL.Decorations
             style.Spacing = new Spacing();
 
             // window
-            Style window_style = GetDialogItemStyle().GetInnerStyle("window");
-            window_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            window_style.SetMargin(150, 20, 150, 20);
-            style.AddInnerStyle("window", window_style);
+            Style windowStyle = GetDialogItemStyle().GetInnerStyle("window");
+            windowStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            windowStyle.SetMargin(150, 20, 150, 20);
+            style.AddInnerStyle("window", windowStyle);
             // layout
-            Style layout_style = GetVerticalStackStyle();
-            layout_style.SetMargin(0, 30, 0, 0);
-            layout_style.SetPadding(6, 6, 6, 6);
-            layout_style.SetSpacing(0, 2);
-            layout_style.SetBackground(255, 255, 255, 20);
-            style.AddInnerStyle("layout", layout_style);
+            Style layoutStyle = GetVerticalStackStyle();
+            layoutStyle.SetMargin(0, 30, 0, 0);
+            layoutStyle.SetPadding(6, 6, 6, 6);
+            layoutStyle.SetSpacing(0, 2);
+            layoutStyle.SetBackground(255, 255, 255, 20);
+            style.AddInnerStyle("layout", layoutStyle);
             // toolbar
-            Style toolbar_style = GetHorizontalStackStyle();
-            toolbar_style.HeightPolicy = SizePolicy.Fixed;
-            toolbar_style.Height = 30;
-            toolbar_style.SetBackground(40, 40, 40);
-            toolbar_style.SetSpacing(3, 0);
-            toolbar_style.SetPadding(6, 0, 0, 0);
-            style.AddInnerStyle("toolbar", toolbar_style);
+            Style toolbarStyle = GetHorizontalStackStyle();
+            toolbarStyle.HeightPolicy = SizePolicy.Fixed;
+            toolbarStyle.Height = 30;
+            toolbarStyle.SetBackground(40, 40, 40);
+            toolbarStyle.SetSpacing(3, 0);
+            toolbarStyle.SetPadding(6, 0, 0, 0);
+            style.AddInnerStyle("toolbar", toolbarStyle);
             // toolbarbutton
-            Style toolbarbutton_style = Style.GetButtonCoreStyle();
-            toolbarbutton_style.SetSize(24, 30);
-            toolbarbutton_style.Background = toolbar_style.Background;
-            toolbarbutton_style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(60, 255, 255, 255)));
-            toolbarbutton_style.AddItemState(ItemStateType.Pressed, new ItemState(Color.FromArgb(30, 255, 255, 255)));
-            toolbarbutton_style.BorderRadius = new CornerRadius();
-            toolbarbutton_style.SetPadding(3, 6, 3, 6);
-            style.AddInnerStyle("toolbarbutton", toolbarbutton_style);
+            Style toolbarbuttonStyle = Style.GetButtonCoreStyle();
+            toolbarbuttonStyle.SetSize(24, 30);
+            toolbarbuttonStyle.Background = toolbarStyle.Background;
+            toolbarbuttonStyle.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(60, 255, 255, 255)));
+            toolbarbuttonStyle.AddItemState(ItemStateType.Pressed, new ItemState(Color.FromArgb(30, 255, 255, 255)));
+            toolbarbuttonStyle.BorderRadius = new CornerRadius();
+            toolbarbuttonStyle.SetPadding(3, 6, 3, 6);
+            style.AddInnerStyle("toolbarbutton", toolbarbuttonStyle);
             // buttonhidden
-            Style buttonhidden_style = GetButtonToggleStyle();
-            buttonhidden_style.SetSize(24, 30);
-            buttonhidden_style.BorderRadius = new CornerRadius();
-            buttonhidden_style.Background = toolbar_style.Background;
-            buttonhidden_style.SetPadding(4, 6, 4, 6);
-            buttonhidden_style.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(30, 153, 91)));
-            style.AddInnerStyle("buttonhidden", buttonhidden_style);
+            Style buttonhiddenStyle = GetButtonToggleStyle();
+            buttonhiddenStyle.SetSize(24, 30);
+            buttonhiddenStyle.BorderRadius = new CornerRadius();
+            buttonhiddenStyle.Background = toolbarStyle.Background;
+            buttonhiddenStyle.SetPadding(4, 6, 4, 6);
+            buttonhiddenStyle.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(30, 153, 91)));
+            style.AddInnerStyle("buttonhidden", buttonhiddenStyle);
             // addressline
-            Style addressline_style = GetTextEditStyle();
-            addressline_style.Font = DefaultsService.GetDefaultFont(12);
-            addressline_style.GetInnerStyle("text").Font = DefaultsService.GetDefaultFont(12);
-            addressline_style.GetInnerStyle("text").SetForeground(210, 210, 210);
-            addressline_style.SetBackground(50, 50, 50);
-            addressline_style.Height = 24;
-            addressline_style.SetMargin(0, 5, 0, 0);
-            style.AddInnerStyle("addressline", addressline_style);
+            Style addresslineStyle = GetTextEditStyle();
+            addresslineStyle.Font = DefaultsService.GetDefaultFont(12);
+            addresslineStyle.GetInnerStyle("text").Font = DefaultsService.GetDefaultFont(12);
+            addresslineStyle.GetInnerStyle("text").SetForeground(210, 210, 210);
+            addresslineStyle.SetBackground(50, 50, 50);
+            addresslineStyle.Height = 24;
+            addresslineStyle.SetMargin(0, 5, 0, 0);
+            style.AddInnerStyle("addressline", addresslineStyle);
             // filenameline
-            Style filenameline_style = GetTextEditStyle();
-            filenameline_style.Font = DefaultsService.GetDefaultFont(12);
-            filenameline_style.GetInnerStyle("text").Font = DefaultsService.GetDefaultFont(12);
-            filenameline_style.GetInnerStyle("text").SetForeground(210, 210, 210);
-            filenameline_style.SetBackground(50, 50, 50);
-            filenameline_style.Height = 24;
-            filenameline_style.SetMargin(0, 2, 0, 0);
-            style.AddInnerStyle("filenameline", filenameline_style);
+            Style filenamelineStyle = GetTextEditStyle();
+            filenamelineStyle.Font = DefaultsService.GetDefaultFont(12);
+            filenamelineStyle.GetInnerStyle("text").Font = DefaultsService.GetDefaultFont(12);
+            filenamelineStyle.GetInnerStyle("text").SetForeground(210, 210, 210);
+            filenamelineStyle.SetBackground(50, 50, 50);
+            filenamelineStyle.Height = 24;
+            filenamelineStyle.SetMargin(0, 2, 0, 0);
+            style.AddInnerStyle("filenameline", filenamelineStyle);
             // list
-            Style list_style = GetListBoxStyle();
-            style.AddInnerStyle("list", list_style);
+            Style listStyle = GetListBoxStyle();
+            style.AddInnerStyle("list", listStyle);
             // controlpanel
-            Style controlpanel_style = GetFrameStyle();
-            controlpanel_style.HeightPolicy = SizePolicy.Fixed;
-            controlpanel_style.Height = 45;
-            controlpanel_style.SetBackground(45, 45, 45);
-            controlpanel_style.SetPadding(6, 6, 6, 6);
-            style.AddInnerStyle("controlpanel", controlpanel_style);
+            Style controlpanelStyle = GetFrameStyle();
+            controlpanelStyle.HeightPolicy = SizePolicy.Fixed;
+            controlpanelStyle.Height = 45;
+            controlpanelStyle.SetBackground(45, 45, 45);
+            controlpanelStyle.SetPadding(6, 6, 6, 6);
+            style.AddInnerStyle("controlpanel", controlpanelStyle);
             // button
-            Style okbutton_style = GetButtonCoreStyle();
-            okbutton_style.SetSize(100, 30);
-            okbutton_style.SetAlignment(ItemAlignment.VCenter, ItemAlignment.Right);
-            okbutton_style.SetMargin(0, 0, 110, 0);
-            okbutton_style.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(180, 0, 0, 0)));
-            okbutton_style.IsShadowDrop = true;
-            style.AddInnerStyle("okbutton", okbutton_style);
+            Style okbuttonStyle = GetButtonCoreStyle();
+            okbuttonStyle.SetSize(100, 30);
+            okbuttonStyle.SetAlignment(ItemAlignment.VCenter, ItemAlignment.Right);
+            okbuttonStyle.SetMargin(0, 0, 110, 0);
+            okbuttonStyle.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(180, 0, 0, 0)));
+            okbuttonStyle.IsShadowDrop = true;
+            style.AddInnerStyle("okbutton", okbuttonStyle);
 
-            Style cancelbutton_style = GetButtonCoreStyle();
-            cancelbutton_style.SetSize(100, 30);
-            cancelbutton_style.SetAlignment(ItemAlignment.VCenter, ItemAlignment.Right);
-            cancelbutton_style.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(180, 0, 0, 0)));
-            cancelbutton_style.IsShadowDrop = true;
-            style.AddInnerStyle("cancelbutton", cancelbutton_style);
+            Style cancelbuttonStyle = GetButtonCoreStyle();
+            cancelbuttonStyle.SetSize(100, 30);
+            cancelbuttonStyle.SetAlignment(ItemAlignment.VCenter, ItemAlignment.Right);
+            cancelbuttonStyle.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(180, 0, 0, 0)));
+            cancelbuttonStyle.IsShadowDrop = true;
+            style.AddInnerStyle("cancelbutton", cancelbuttonStyle);
 
-            Style filter_style = GetButtonCoreStyle();
-            filter_style.SetSize(24, 30);
-            filter_style.BorderRadius = new CornerRadius();
-            filter_style.SetBackground(35, 35, 35);
-            filter_style.SetPadding(4, 6, 4, 6);
-            filter_style.SetMargin(5, 0, 0, 0);
-            style.AddInnerStyle("filter", filter_style);
+            Style filterStyle = GetButtonCoreStyle();
+            filterStyle.SetSize(24, 30);
+            filterStyle.BorderRadius = new CornerRadius();
+            filterStyle.SetBackground(35, 35, 35);
+            filterStyle.SetPadding(4, 6, 4, 6);
+            filterStyle.SetMargin(5, 0, 0, 0);
+            style.AddInnerStyle("filter", filterStyle);
 
-            Style filtertext_style = GetLabelStyle();
-            filtertext_style.WidthPolicy = SizePolicy.Fixed;
-            filtertext_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
-            filtertext_style.SetPadding(10, 2, 10, 0);
-            filtertext_style.SetMargin(-3, 0, 0, 0);
-            filtertext_style.SetBackground(55, 55, 55);
-            filtertext_style.Font = DefaultsService.GetDefaultFont();
-            style.AddInnerStyle("filtertext", filtertext_style);
+            Style filtertextStyle = GetLabelStyle();
+            filtertextStyle.WidthPolicy = SizePolicy.Fixed;
+            filtertextStyle.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
+            filtertextStyle.SetPadding(10, 2, 10, 0);
+            filtertextStyle.SetMargin(-3, 0, 0, 0);
+            filtertextStyle.SetBackground(55, 55, 55);
+            filtertextStyle.Font = DefaultsService.GetDefaultFont();
+            style.AddInnerStyle("filtertext", filtertextStyle);
 
-            Style divider_style = GetFrameStyle();
-            divider_style.WidthPolicy = SizePolicy.Fixed;
-            divider_style.Width = 1;
-            divider_style.SetBackground(55, 55, 55);
-            divider_style.SetMargin(0, 3, 0, 3);
-            style.AddInnerStyle("divider", divider_style);
+            Style dividerStyle = GetFrameStyle();
+            dividerStyle.WidthPolicy = SizePolicy.Fixed;
+            dividerStyle.Width = 1;
+            dividerStyle.SetBackground(55, 55, 55);
+            dividerStyle.SetMargin(0, 3, 0, 3);
+            style.AddInnerStyle("divider", dividerStyle);
 
             return style;
         }
 
+        /// <summary>
+        /// Getting default style for a InputDialog item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "window", "button", "textedit", "layout", "toolbar".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetInputDialogStyle()
         {
             Style style = new Style();
@@ -1951,49 +2359,53 @@ namespace SpaceVIL.Decorations
             style.Margin = new Indents();
             style.Spacing = new Spacing();
 
-            Style window_style = GetFrameStyle();
-            window_style.SetSize(300, 150);
-            window_style.SetMinSize(300, 150);
-            window_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            window_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
-            window_style.SetPadding(2, 2, 2, 2);
-            window_style.SetBackground(45, 45, 45);
-            style.AddInnerStyle("window", window_style);
+            Style windowStyle = GetFrameStyle();
+            windowStyle.SetSize(300, 150);
+            windowStyle.SetMinSize(300, 150);
+            windowStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            windowStyle.SetAlignment(ItemAlignment.HCenter, ItemAlignment.VCenter);
+            windowStyle.SetPadding(2, 2, 2, 2);
+            windowStyle.SetBackground(45, 45, 45);
+            style.AddInnerStyle("window", windowStyle);
 
-            Style ok_style = GetButtonCoreStyle();
-            ok_style.SetBackground(100, 255, 150);
-            ok_style.Foreground = Color.Black;
-            ok_style.SetSize(100, 30);
-            ok_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            ok_style.SetAlignment(ItemAlignment.Left, ItemAlignment.Bottom);
-            ok_style.SetMargin(0, 0, 0, 0);
-            ok_style.BorderRadius = new CornerRadius();
-            ok_style.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(120, 0, 0, 0)));
-            ok_style.IsShadowDrop = true;
-            ok_style.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(80, 255, 255, 255)));
-            style.AddInnerStyle("button", ok_style);
+            Style okStyle = GetButtonCoreStyle();
+            okStyle.SetBackground(100, 255, 150);
+            okStyle.Foreground = Color.Black;
+            okStyle.SetSize(100, 30);
+            okStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            okStyle.SetAlignment(ItemAlignment.Left, ItemAlignment.Bottom);
+            okStyle.SetMargin(0, 0, 0, 0);
+            okStyle.BorderRadius = new CornerRadius();
+            okStyle.SetShadow(new Shadow(5, 2, 2, Color.FromArgb(120, 0, 0, 0)));
+            okStyle.IsShadowDrop = true;
+            okStyle.AddItemState(ItemStateType.Hovered, new ItemState(Color.FromArgb(80, 255, 255, 255)));
+            style.AddInnerStyle("button", okStyle);
 
-            Style text_style = GetTextEditStyle();
-            text_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Top);
-            text_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
-            text_style.SetMargin(0, 15, 0, 0);
-            style.AddInnerStyle("textedit", text_style);
+            Style textStyle = GetTextEditStyle();
+            textStyle.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Top);
+            textStyle.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.Left);
+            textStyle.SetMargin(0, 15, 0, 0);
+            style.AddInnerStyle("textedit", textStyle);
 
-            Style layout_style = GetFrameStyle();
-            layout_style.SetMargin(0, 30, 0, 0);
-            layout_style.SetPadding(6, 6, 6, 15);
-            layout_style.SetBackground(255, 255, 255, 20);
-            style.AddInnerStyle("layout", layout_style);
+            Style layoutStyle = GetFrameStyle();
+            layoutStyle.SetMargin(0, 30, 0, 0);
+            layoutStyle.SetPadding(6, 6, 6, 15);
+            layoutStyle.SetBackground(255, 255, 255, 20);
+            style.AddInnerStyle("layout", layoutStyle);
 
-            Style toolbar_style = GetHorizontalStackStyle();
-            toolbar_style.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
-            toolbar_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            toolbar_style.SetSpacing(10, 0);
-            style.AddInnerStyle("toolbar", toolbar_style);
+            Style toolbarStyle = GetHorizontalStackStyle();
+            toolbarStyle.SetAlignment(ItemAlignment.HCenter, ItemAlignment.Bottom);
+            toolbarStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            toolbarStyle.SetSpacing(10, 0);
+            style.AddInnerStyle("toolbar", toolbarStyle);
 
             return style;
         }
 
+        /// <summary>
+        /// Getting default style for a SelectionItem item. Properly filled in all the necessary properties.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetSelectionItemStyle()
         {
             Style style = new Style();
@@ -2004,6 +2416,13 @@ namespace SpaceVIL.Decorations
             style.AddItemState(ItemStateType.Toggled, new ItemState(Color.FromArgb(50, 255, 255, 255)));
             return style;
         }
+
+        /// <summary>
+        /// Getting default style for a WrapArea item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "selection".
+        /// <para/> This is part of WrapGrid item style as "area".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetWrapAreaStyle()
         {
             Style style = new Style();
@@ -2015,11 +2434,18 @@ namespace SpaceVIL.Decorations
             style.Padding = new Indents(2, 2, 2, 2);
             style.Spacing = new Spacing(0, 5);
 
-            Style selection_style = GetSelectionItemStyle();
-            style.AddInnerStyle("selection", selection_style);
+            Style selectionStyle = GetSelectionItemStyle();
+            style.AddInnerStyle("selection", selectionStyle);
 
             return style;
         }
+
+        /// <summary>
+        /// Getting default style for a WrapGrid item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "area", "vscrollbar", "hscrollbar".
+        /// <para/> Inner styles for "area": see Style.GetWrapAreaStyle().
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetWrapGridStyle()
         {
             Style style = new Style();
@@ -2029,20 +2455,25 @@ namespace SpaceVIL.Decorations
             style.HeightPolicy = SizePolicy.Expand;
             style.Alignment = ItemAlignment.Left | ItemAlignment.Top;
 
-            Style vsb_style = GetVerticalScrollBarStyle();
-            vsb_style.Alignment = ItemAlignment.Right | ItemAlignment.Top;
-            style.AddInnerStyle("vscrollbar", vsb_style);
+            Style vsbStyle = GetVerticalScrollBarStyle();
+            vsbStyle.Alignment = ItemAlignment.Right | ItemAlignment.Top;
+            style.AddInnerStyle("vscrollbar", vsbStyle);
 
-            Style hsb_style = GetHorizontalScrollBarStyle();
-            hsb_style.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
-            style.AddInnerStyle("hscrollbar", hsb_style);
+            Style hsbStyle = GetHorizontalScrollBarStyle();
+            hsbStyle.Alignment = ItemAlignment.Left | ItemAlignment.Bottom;
+            style.AddInnerStyle("hscrollbar", hsbStyle);
 
-            Style area_style = GetWrapAreaStyle();
-            style.AddInnerStyle("area", area_style);
+            Style areaStyle = GetWrapAreaStyle();
+            style.AddInnerStyle("area", areaStyle);
 
             return style;
         }
 
+        /// <summary>
+        /// Getting default style for a SideArea item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "window", "closebutton".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetSideAreaStyle()
         {
             Style style = new Style();
@@ -2051,31 +2482,36 @@ namespace SpaceVIL.Decorations
             style.SetBackground(0, 0, 0, 130);
             style.BorderRadius = new CornerRadius(0);
 
-            Style window_style = GetFrameStyle();
-            window_style.SetPadding(2, 2, 2, 2);
-            window_style.SetBackground(40, 40, 40);
-            window_style.SetAlignment(ItemAlignment.Top, ItemAlignment.Left);
-            style.AddInnerStyle("window", window_style);
+            Style windowStyle = GetFrameStyle();
+            windowStyle.SetPadding(2, 2, 2, 2);
+            windowStyle.SetBackground(40, 40, 40);
+            windowStyle.SetAlignment(ItemAlignment.Top, ItemAlignment.Left);
+            style.AddInnerStyle("window", windowStyle);
 
-            Style close_style = new Style();
-            close_style.SetMargin(0, 5, 0, 0);
-            close_style.Font = DefaultsService.GetDefaultFont();
-            close_style.Background = Color.FromArgb(100, 100, 100);
-            close_style.Foreground = Color.Transparent;
-            close_style.SetSize(15, 15);
-            close_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            close_style.Alignment = ItemAlignment.Top | ItemAlignment.Right;
-            close_style.TextAlignment = ItemAlignment.Right | ItemAlignment.Top;
+            Style closeStyle = new Style();
+            closeStyle.SetMargin(0, 5, 0, 0);
+            closeStyle.Font = DefaultsService.GetDefaultFont();
+            closeStyle.Background = Color.FromArgb(100, 100, 100);
+            closeStyle.Foreground = Color.Transparent;
+            closeStyle.SetSize(15, 15);
+            closeStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            closeStyle.Alignment = ItemAlignment.Top | ItemAlignment.Right;
+            closeStyle.TextAlignment = ItemAlignment.Right | ItemAlignment.Top;
             ItemState close_hovered = new ItemState();
             close_hovered.Background = Color.FromArgb(186, 95, 97);
-            close_style.AddItemState(ItemStateType.Hovered, close_hovered);
+            closeStyle.AddItemState(ItemStateType.Hovered, close_hovered);
 
-            close_style.Shape = GraphicsMathService.GetCross(15, 15, 2, 45);
-            close_style.IsFixedShape = true;
-            style.AddInnerStyle("closebutton", close_style);
+            closeStyle.Shape = GraphicsMathService.GetCross(15, 15, 2, 45);
+            closeStyle.IsFixedShape = true;
+            style.AddInnerStyle("closebutton", closeStyle);
 
             return style;
         }
+
+        /// <summary>
+        /// Getting default style for a ImageItem item. Properly filled in all the necessary properties.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetImageItemStyle()
         {
             Style style = new Style();
@@ -2086,6 +2522,11 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
+        /// <summary>
+        /// Getting default style for a LoadingScreen item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "text", "image".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetLoadingScreenStyle()
         {
             Style style = new Style();
@@ -2093,22 +2534,28 @@ namespace SpaceVIL.Decorations
             style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
             style.SetBackground(0, 0, 0, 150);
 
-            Style text_style = GetLabelStyle();
-            text_style.SetAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
+            Style textStyle = GetLabelStyle();
+            textStyle.SetAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
             // text_style.WidthPolicy = SizePolicy.Fixed;
             // text_style.Width = 64;
             // text_style.SetMargin(0, 0, 15, 0);
-            text_style.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
-            text_style.Font = DefaultsService.GetDefaultFont(FontStyle.Bold, 14);
-            style.AddInnerStyle("text", text_style);
+            textStyle.SetTextAlignment(ItemAlignment.VCenter, ItemAlignment.HCenter);
+            textStyle.Font = DefaultsService.GetDefaultFont(FontStyle.Bold, 14);
+            style.AddInnerStyle("text", textStyle);
 
-            Style image_style = GetImageItemStyle();
-            image_style.SetMaxSize(64, 64);
-            style.AddInnerStyle("image", image_style);
+            Style imageStyle = GetImageItemStyle();
+            imageStyle.SetMaxSize(64, 64);
+            style.AddInnerStyle("image", imageStyle);
 
             return style;
         }
 
+        /// <summary>
+        /// Getting default style for a Tab item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "text", "closebutton", "view".
+        /// <para/> This is part of TabView item style as "tab".
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetTabStyle()
         {
             Style style = new Style();
@@ -2139,30 +2586,35 @@ namespace SpaceVIL.Decorations
             Style textStyle = GetLabelStyle();
             style.AddInnerStyle("text", textStyle);
 
-            Style close_style = new Style();
-            close_style.Background = Color.FromArgb(255, 100, 100, 100);
-            close_style.SetSize(10, 10);
-            close_style.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
-            close_style.Alignment = ItemAlignment.VCenter | ItemAlignment.Right;
-            close_style.AddItemState(ItemStateType.Hovered, new ItemState()
+            Style closeStyle = new Style();
+            closeStyle.Background = Color.FromArgb(255, 100, 100, 100);
+            closeStyle.SetSize(10, 10);
+            closeStyle.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
+            closeStyle.Alignment = ItemAlignment.VCenter | ItemAlignment.Right;
+            closeStyle.AddItemState(ItemStateType.Hovered, new ItemState()
             {
                 // Background = Color.FromArgb(255, 186, 95, 97)
                 Background = Color.FromArgb(255, 0, 162, 232)
             });
-            close_style.Shape = GraphicsMathService.GetCross(10, 10, 2, 45);
-            close_style.IsFixedShape = true;
-            style.AddInnerStyle("closebutton", close_style);
+            closeStyle.Shape = GraphicsMathService.GetCross(10, 10, 2, 45);
+            closeStyle.IsFixedShape = true;
+            style.AddInnerStyle("closebutton", closeStyle);
 
-            Style view_style = new Style();
-            view_style.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
-            view_style.Background = Color.FromArgb(255, 71, 71, 71);
-            view_style.IsVisible = false;
-            view_style.Padding = new Indents(2, 2, 2, 2);
-            style.AddInnerStyle("view", view_style);
+            Style viewStyle = new Style();
+            viewStyle.SetSizePolicy(SizePolicy.Expand, SizePolicy.Expand);
+            viewStyle.Background = Color.FromArgb(255, 71, 71, 71);
+            viewStyle.IsVisible = false;
+            viewStyle.Padding = new Indents(2, 2, 2, 2);
+            style.AddInnerStyle("view", viewStyle);
 
             return style;
         }
 
+        /// <summary>
+        /// Getting default style for a TabBar item. Properly filled in all the necessary properties.
+        /// <para/> This is part of TabView item style.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetTabBarStyle()
         {
             Style style = GetHorizontalStackStyle();
@@ -2170,7 +2622,12 @@ namespace SpaceVIL.Decorations
             return style;
         }
 
-        /// <returns> default style for TabView objects </returns>
+        /// <summary>
+        /// Getting default style for a *** item. Properly filled in all the necessary properties.
+        /// <para/> Inner styles: "tabbar", "tab", "viewarea".
+        /// <para/> Inner styles for "tab": see Style.GetTabStyle().
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public static Style GetTabViewStyle()
         {
             Style style = GetVerticalStackStyle();

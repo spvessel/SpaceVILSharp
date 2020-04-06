@@ -136,9 +136,9 @@ namespace Glfw3
         [StructLayout(LayoutKind.Sequential)]
         internal struct Cursor : IEquatable<Cursor>
         {
-            public static readonly Cursor None = new Cursor(IntPtr.Zero);
+            internal static readonly Cursor None = new Cursor(IntPtr.Zero);
 
-            public IntPtr Ptr;
+            internal IntPtr Ptr;
 
             internal Cursor(IntPtr ptr)
             {

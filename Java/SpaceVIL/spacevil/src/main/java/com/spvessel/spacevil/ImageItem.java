@@ -2,21 +2,19 @@ package com.spvessel.spacevil;
 
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceImageItem;
-import com.spvessel.spacevil.Core.RectangleBounds;
+import com.spvessel.spacevil.Core.Area;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ImageItem extends Prototype implements InterfaceImageItem {
 
-    private RectangleBounds area = new RectangleBounds();
+    private Area area = new Area();
 
-    public RectangleBounds getRectangleBounds() {
+    public Area getAreaBounds() {
         return area;
     }
 
@@ -201,14 +199,14 @@ public class ImageItem extends Prototype implements InterfaceImageItem {
     }
 
     @Override
-    public void setX(int _x) {
-        super.setX(_x);
+    public void setX(int x) {
+        super.setX(x);
         UpdateLayout();
     }
 
     @Override
-    public void setY(int _y) {
-        super.setY(_y);
+    public void setY(int y) {
+        super.setY(y);
         UpdateLayout();
     }
 

@@ -6,84 +6,109 @@ using SpaceVIL.Decorations;
 namespace SpaceVIL
 {
     /// <summary>
-    /// Part of HorizontalScrollBar
+    /// HorizontalSlider is the basic implementation of a user interface slider (horizontal version).
+    /// <para/> Contains track, handler.
+    /// <para/> Supports all events including drag and drop 
+    /// (internal handler (SpaceVIL.ScrollHandler) supports drag and drop events).
     /// </summary>
     public class HorizontalSlider : Prototype
     {
         static int count = 0;
-
+        /// <summary>
+        /// Slider track.
+        /// </summary>
         public Rectangle Track = new Rectangle();
+        /// <summary>
+        /// Slider handler.
+        /// </summary>
         public ScrollHandler Handler = new ScrollHandler();
 
         #region Values definition
         //Values
         private float _step = 1.0f;
-
         /// <summary>
-        /// HorizontalSlider moving step when HorizontalScrollBar arrows pressed
+        /// Setting slider movement step.
         /// </summary>
+        /// <param name="value">Slider step.</param>
         public void SetStep(float value)
         {
             _step = value;
         }
+        /// <summary>
+        /// Getting slider movement step.
+        /// </summary>
+        /// <returns>Slider step.</returns>
         public float GetStep()
         {
             return _step;
         }
-
+        /// <summary>
+        /// Event that is invoked when value of the slider is changed.
+        /// </summary>
         public EventCommonMethodState EventValueChanged;
+        /// <summary>
+        /// Disposing all resources if the item was removed.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public override void Release()
         {
             EventValueChanged = null;
         }
 
-        private float _current_value = 0;
-        public int Direction = 0;
+        private float _currentValue = 0;
 
         bool _ignoreStep = true;
-
+        /// <summary>
+        /// Ignoring slider step (affects only on animation). 
+        /// Set False if you want the slider to move strictly in steps.
+        /// <para/> Default: True.
+        /// </summary>
+        /// <param name="value">True: if you want to ignore step. 
+        /// False: if you do not want to ignore step. </param>
         public void SetIgnoreStep(bool value)
         {
             _ignoreStep = value;
         }
-
+        /// <summary>
+        /// Returns True if slider movement ignore steps otherwise returns False.
+        /// </summary>
+        /// <returns>True: if movement step is ignored. 
+        /// False: if movement step is not ignored. </returns>
         public bool IsIgnoreStep()
         {
             return _ignoreStep;
         }
 
         /// <summary>
-        /// Position value of the HorizontalSlider
+        /// Setting the current slider value. If the value is greater/less than the maximum/minimum 
+        /// slider value, then the slider value becomes equal to the maximum/minimum value.
         /// </summary>
+        /// <param name="value">Slider value</param>
         public void SetCurrentValue(float value)
         {
-            //if (value == _current_value)
-            //    return;
-
-            if (_current_value > value)
-                Direction = -1; //up
-            else
-                Direction = 1; //down
-
-            _current_value = value;
+            _currentValue = value;
 
             if (!_ignoreStep)
-                _current_value = (float)Math.Round(_current_value / _step, MidpointRounding.ToEven) * _step;
+                _currentValue = (float)Math.Round(_currentValue / _step, MidpointRounding.ToEven) * _step;
 
-            if (_current_value < _min_value)
-                _current_value = _min_value;
-            if (_current_value > _max_value)
-                _current_value = _max_value;
+            if (_currentValue < _minValue)
+                _currentValue = _minValue;
+            if (_currentValue > _maxValue)
+                _currentValue = _maxValue;
 
             UpdateHandler(); //refactor!!
 
 
             if (EventValueChanged != null) EventValueChanged.Invoke(this);
         }
-
+        /// <summary>
+        /// Getting the current slider value.
+        /// </summary>
+        /// <returns>Slider value.</returns>
         public float GetCurrentValue()
         {
-            return _current_value;
+            return _currentValue;
         }
 
         private int GetSumOfHorizontalIndents()
@@ -98,41 +123,52 @@ namespace SpaceVIL
         internal void UpdateHandler()
         {
             float offset = ((float)GetWidth() - GetSumOfHorizontalIndents() - Handler.GetWidth())
-                    / (_max_value - _min_value) * (_current_value - _min_value);
+                    / (_maxValue - _minValue) * (_currentValue - _minValue);
             Handler.SetOffset((int)offset + GetPadding().Left + Handler.GetMargin().Left);
         }
 
-        private float _min_value = 0;
+        private float _minValue = 0;
 
         /// <summary>
-        /// Minimum value of the HorizontalSlider
+        /// Setting the minimum slider value limit. 
+        /// Slider value cannot be less than this limit.
         /// </summary>
+        /// <param name="value">Minimum slider value limit.</param>
         public void SetMinValue(float value)
         {
-            _min_value = value;
+            _minValue = value;
         }
+        /// <summary>
+        /// Getting the current minimum slider value limit.
+        /// </summary>
+        /// <returns>Minimum slider value limit.</returns>
         public float GetMinValue()
         {
-            return _min_value;
+            return _minValue;
         }
 
-        private float _max_value = 100;
-
+        private float _maxValue = 100;
         /// <summary>
-        /// Maximum value of the HorizontalSlider
+        /// Setting the maximum slider value limit. 
+        /// Slider value cannot be greater than this limit.
         /// </summary>
+        /// <param name="value">Maximum slider value limit.</param>
         public void SetMaxValue(float value)
         {
-            _max_value = value;
+            _maxValue = value;
         }
+        /// <summary>
+        /// Getting the current maximum slider value limit.
+        /// </summary>
+        /// <returns>Maximum slider value limit.</returns>
         public float GetMaxValue()
         {
-            return _max_value;
+            return _maxValue;
         }
         #endregion///////////
 
         /// <summary>
-        /// Constructs a HorizontalSlider
+        /// Default HorizontalSlider constructor.
         /// </summary>
         public HorizontalSlider()
         {
@@ -146,7 +182,9 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Initialization and adding of all elements in the HorizontalSlider
+        /// Initializing all elements in the HorizontalSlider.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void InitElements()
         {
@@ -165,8 +203,8 @@ namespace SpaceVIL
             _dragging = true;
             //иногда число NAN 
             // float value = (_max_value - _min_value) / _step ;
-            float result = (float)(Handler.GetX() - GetX()) * (_max_value - _min_value)
-                    / ((float)GetWidth() - GetSumOfHorizontalIndents() - Handler.GetWidth()) + _min_value;
+            float result = (float)(Handler.GetX() - GetX()) * (_maxValue - _minValue)
+                    / ((float)GetWidth() - GetSumOfHorizontalIndents() - Handler.GetWidth()) + _minValue;
 
             if (!Single.IsNaN(result))
             {
@@ -180,23 +218,26 @@ namespace SpaceVIL
             if (!_dragging)
                 SetCurrentValue(
                     (float)(args.Position.GetX() - GetX() - Handler.GetWidth() / 2)
-                    * (_max_value - _min_value)
+                    * (_maxValue - _minValue)
                     / ((float)GetWidth() - GetSumOfHorizontalIndents() - Handler.GetWidth()));
             _dragging = false;
         }
 
         /// <summary>
-        /// Set X position of the HorizontalSlider
+        /// Setting X coordinate of the left-top corner of the HorizontalSlider.
         /// </summary>
-        public override void SetX(int _x)
+        /// <param name="x">X position of the left-top corner.</param>
+        public override void SetX(int x)
         {
-            base.SetX(_x);
+            base.SetX(x);
             UpdateHandler();
         }
 
         /// <summary>
-        /// Set style of the HorizontalSlider
+        /// Seting style of the HorizontalSlider.
+        /// <para/> Inner styles: "track", "handler".
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)

@@ -184,7 +184,7 @@ final class RenderProcessor {
 
         shader.useShader();
         VramTexture store = new VramTexture();
-        store.genBuffers(0, printer.getWidth() / scale.getX(), 0, printer.getHeight() / scale.getY(), true);
+        store.genBuffers(0, printer.getWidth() / scale.getXScale(), 0, printer.getHeight() / scale.getYScale(), true);
         store.genTexture(printer.getWidth(), printer.getHeight(), printer.getBytes());
         textStorage.addResource(item, store);
 

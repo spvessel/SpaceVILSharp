@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
-using SpaceVIL;
 using SpaceVIL.Core;
 using SpaceVIL.Common;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace SpaceVIL
+namespace SpaceVIL.Decorations
 {
+    /// <summary>
+    /// Class CursorImage provides features for creating custom cursors. It can also be used with several standards types of cursor images (Arrow, IBeam, Crosshair, Hand and etc.).
+    /// </summary>
     public sealed class CursorImage
     {
         private Glfw3.Glfw.Cursor _cursor;
@@ -19,7 +18,10 @@ namespace SpaceVIL
         }
 
         private byte[] _bitmap;
-
+        /// <summary>
+        /// Constructor for creating cursor with standards types of cursor images (Arrow, IBeam, Crosshair, Hand and etc.).
+        /// </summary>
+        /// <param name="type">Cursor image as SpaceVIL.Core.EmbeddedCursor enum.</param>
         public CursorImage(EmbeddedCursor type)
         {
             switch (type)
@@ -49,7 +51,10 @@ namespace SpaceVIL
             _imageHeight = 25;
             _imageWidth = 25;
         }
-
+        /// <summary>
+        /// Constructor for creating cursor with custom bitmap image.
+        /// </summary>
+        /// <param name="bitmap">Cursor image as System.Drawing.Bitmap class.</param>
         public CursorImage(Bitmap bitmap)
         {
             if (bitmap == null)
@@ -58,6 +63,12 @@ namespace SpaceVIL
             _bitmap = GetImagePixels(bitmap);
             CreateCursor(bitmap);
         }
+        /// <summary>
+        /// Constructor for creating cursor with custom bitmap image with the specified size.
+        /// </summary>
+        /// <param name="bitmap">Cursor image as System.Drawing.Bitmap class.</param>
+        /// <param name="width">Desired width.</param>
+        /// <param name="height">Desired height.</param>
         public CursorImage(Bitmap bitmap, int width, int height)
         {
             if (bitmap == null)
@@ -79,17 +90,26 @@ namespace SpaceVIL
 
         private int _imageWidth;
         private int _imageHeight;
-
+        /// <summary>
+        /// Getting cursor image width.
+        /// </summary>
+        /// <returns>The width of the image.</returns>
         public int GetCursorWidth()
         {
             return _imageWidth;
         }
-
+        /// <summary>
+        /// Getting cursor image height.
+        /// </summary>
+        /// <returns>The height of the image.</returns>
         public int GetCursorHeight()
         {
             return _imageHeight;
         }
-
+        /// <summary>
+        /// Setting new image for cursor.
+        /// </summary>
+        /// <param name="image">Cursor image as System.Drawing.Bitmap.</param>
         public void SetImage(Bitmap image)
         {
             if (image == null)
@@ -125,20 +145,6 @@ namespace SpaceVIL
                 result[index++] = a;
             }
             return result;
-            
-            // Bitmap bmp = new Bitmap(bitmap);
-            // for (int j = 0; j < bitmap.Height; j++)
-            // {
-            //     for (int i = 0; i < bitmap.Width; i++)
-            //     {
-            //         Color pixel = bmp.GetPixel(i, j);
-            //         _map.Add(pixel.R);
-            //         _map.Add(pixel.G);
-            //         _map.Add(pixel.B);
-            //         _map.Add(pixel.A);
-            //     }
-            // }
-            // return _map.ToArray();
         }
     }
 }

@@ -18,7 +18,7 @@ import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.MouseButton;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
 public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
 
@@ -87,8 +87,8 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     private EventKeyMethodState linkEventKeyPress = new EventKeyMethodState();
 
     private void disableAdditionalControls() {
-        itemList.setVScrollBarVisible(ScrollBarVisibility.NEVER);
-        itemList.setHScrollBarVisible(ScrollBarVisibility.NEVER);
+        itemList.setVScrollBarPolicy(VisibilityPolicy.NEVER);
+        itemList.setHScrollBarPolicy(VisibilityPolicy.NEVER);
         if (itemList.eventScrollUp.size() != 0)
             itemList.eventScrollUp.clear();
         if (itemList.eventScrollDown.size() != 0)
@@ -100,8 +100,8 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     private void enableAdditionalControls() {
-        itemList.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        itemList.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+        itemList.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
+        itemList.setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
 
         for (InterfaceMouseMethodState action : linkEventScrollUp.getActions())
             itemList.eventScrollUp.add(action);

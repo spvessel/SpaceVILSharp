@@ -1,5 +1,5 @@
 package com.spvessel.spacevil.Flags;
 
-public enum ItemRule {
+public enum ItemHoverRule {
     LAZY, STRICT
 }

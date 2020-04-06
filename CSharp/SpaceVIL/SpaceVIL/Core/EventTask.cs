@@ -9,6 +9,6 @@ namespace SpaceVIL.Core
     {
         internal InputEventType Action = 0;
         internal Prototype Item = null;
-        internal InputEventArgs Args = null;
+        internal IInputEventArgs Args = null;
     }
 }

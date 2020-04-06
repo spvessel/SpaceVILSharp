@@ -6,11 +6,12 @@ using SpaceVIL.Core;
 
 namespace SpaceVIL
 {
-    public delegate void EventWindowDropMethod(IItem sender, DropArgs args);
-
     internal sealed class WContainer : Prototype//, IWindow
     {
-        public EventWindowDropMethod EventDrop;
+        /// <summary>
+        /// Event that is invoked when drag and drop files and folders.
+        /// </summary>
+        internal EventWindowDropMethod EventDrop;
 
         public override void Release()
         {
@@ -38,7 +39,7 @@ namespace SpaceVIL
             // };
         }
 
-        void setEvents()
+        private void setEvents()
         {
             EventFocusGet += (sender) =>
             {
@@ -142,9 +143,9 @@ namespace SpaceVIL
 
         internal Side GetSides(float xpos, float ypos) //проблемы с глобальным курсором
         {
-            if(!GetHandler().IsBorderHidden)
+            if (!GetHandler().IsBorderHidden)
                 return 0;
-                
+
             if (xpos <= SpaceVILConstants.BorderCursorTolerance)
             {
                 _sides |= Side.Left;

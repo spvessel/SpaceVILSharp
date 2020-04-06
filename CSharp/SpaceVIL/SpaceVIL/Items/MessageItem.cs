@@ -7,15 +7,23 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// MessageItem - an imitation of modal window for displaying any messages with ability to reply to them. 
+    /// It supports custom toolbar to make user's reply flexible.
+    /// <para/> Contains ok button, cancel button, titlebar, toolbar. 
+    /// <para/> Supports all events except drag and drop.
+    /// </summary>
     public class MessageItem : DialogItem
     {
         static int count = 0;
 
         private bool _result = false;
 
-        /**
-         * Get MessageItem boolean result
-         */
+        /// <summary>
+        /// Getting MessageItem result.
+        /// <para/> Default: False
+        /// </summary>
+        /// <returns>True: OK button was clicked. False: Close button or Cancel button was clicked.</returns>
         public bool GetResult()
         {
             return _result;
@@ -23,7 +31,10 @@ namespace SpaceVIL
 
         Dictionary<ButtonCore, Int32> _userMap = new Dictionary<ButtonCore, Int32>();
         ButtonCore _userButtonResult = null;
-
+        /// <summary>
+        /// Getting result from custom toolbar (if it was created).
+        /// </summary>
+        /// <returns>Id of clicked button (see AddUserButton(ButtonCore button, int id)).</returns>
         public int GetUserButtonResult()
         {
             if (_userButtonResult != null && _userMap.ContainsKey(_userButtonResult))
@@ -35,25 +46,41 @@ namespace SpaceVIL
         private Frame _msg_layout;
         private Label _msg;
         private ButtonCore _ok;
-
+        /// <summary>
+        /// Getting OK button for appearance customizing or assigning new actions.
+        /// </summary>
+        /// <returns>MessageItem's OK button as SpaceVIL.ButtonCore.</returns>
         public ButtonCore GetOkButton()
         {
             return _ok;
         }
 
         private ButtonCore _cancel;
-
+        /// <summary>
+        /// Getting CANCEL button for appearance customizing or assigning new actions.
+        /// </summary>
+        /// <returns>MessageItem's CANCEL button as SpaceVIL.ButtonCore.</returns>
         public ButtonCore GetCancelButton()
         {
             return _cancel;
         }
 
+        /// <summary>
+        /// Setting CANCEL button visible of invisible.
+        /// </summary>
+        /// <param name="value">True: if you want CANCEL button to be visible. 
+        /// False:if you want CANCEL button to be invisible.</param>
+        public void SetCancelVisible(bool value)
+        {
+            _cancel.SetVisible(value);
+        }
+
         private HorizontalStack _toolbar;
         private HorizontalStack _userbar;
 
-        /**
-         * Constructs a MessageItem
-         */
+        /// <summary>
+        /// Default MessageItem constructor.
+        /// </summary>
         public MessageItem()
         {
             SetItemName("MessageItem_" + count);
@@ -78,38 +105,54 @@ namespace SpaceVIL
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MessageItem)));
         }
 
-        /**
-         * Constructs a MessageItem with message and title
-         */
+        /// <summary>
+        /// Constructs a MessageItem with specified message and title.
+        /// </summary>
+        /// <param name="message">Message to a user as System.String.</param>
+        /// <param name="title">Title of MessageItem as System.String.</param>
         public MessageItem(String message, String title) : this()
         {
             _titleBar.SetText(title);
             _msg.SetText(message);
         }
 
-        /**
-         * MessageItem text
-         */
+        /// <summary>
+        /// Setting a text of message of MessageItem.
+        /// </summary>
+        /// <param name="text">Text of message as System.String.</param>
         public void SetMessageText(String text)
         {
             _msg.SetText(text);
         }
-
+        /// <summary>
+        /// Getting the current text of message of MessageItem.
+        /// </summary>
+        /// <returns>The current text of message as System.String.</returns>
         public String GetMessageText()
         {
             return _msg.GetText();
         }
-
+        /// <summary>
+        /// Setting a text of title of MessageItem.
+        /// </summary>
+        /// <param name="title">Text of title as System.String.</param>
         public void SetTitle(String title)
         {
             _titleBar.SetText(title);
         }
-
+        /// <summary>
+        /// Getting the current text of title of MessageItem.
+        /// </summary>
+        /// <returns>The current text of title as System.String.</returns>
         public String GetTitle()
         {
             return _titleBar.GetText();
         }
-
+        /// <summary>
+        /// Initializing all elements in the Messagetem. 
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public override void InitElements()
         {
             // important!
@@ -202,14 +245,19 @@ namespace SpaceVIL
             };
         }
 
-
+        /// <summary>
+        /// Shows MessageItem and attaches it to the specified window 
+        /// (see SpaceVIL.CoreWindow, SpaceVIL.ActiveWindow, SpaceVIL.DialogWindow).
+        /// </summary>
+        /// <param name="handler">Window for attaching MessageItem.</param>
         public override void Show(CoreWindow handler)
         {
             _result = false;
             base.Show(handler);
         }
-
-
+        /// <summary>
+        /// Closes MessageItem.
+        /// </summary>
         public override void Close()
         {
             OnCloseDialog?.Invoke();
@@ -217,7 +265,11 @@ namespace SpaceVIL
         }
 
         private List<ButtonCore> _queue = new List<ButtonCore>();
-
+        /// <summary>
+        /// Adding a custom user button to toolbal with the specified ID.
+        /// </summary>
+        /// <param name="button">User button as SpaceVIL.ButtonCore.</param>
+        /// <param name="id">Button's ID as System.Int32.</param>
         public void AddUserButton(ButtonCore button, int id)
         {
             if (id == -1 || id == 0 || id == 1)
@@ -240,50 +292,60 @@ namespace SpaceVIL
         }
 
         private Style _btnStyle = null;
-
+        /// <summary>
+        /// Getting the current style of a custom user button (that placed into user's toolbar).
+        /// </summary>
+        /// <returns>The current style of custom user button as SpaceVIL.Decorations.Style.</returns>
         public Style GetDialogButtonStyle()
         {
             return _btnStyle;
         }
-
+        /// <summary>
+        /// Setting a style for a custom user button (that placed into user's toolbar).
+        /// </summary>
+        /// <param name="style">A style for custom user button as SpaceVIL.Decorations.Style.</param>
         public void SetDialogButtonStyle(Style style)
         {
             _btnStyle = style;
         }
-
+        /// <summary>
+        /// Setting a style for entire MessageBox.
+        /// <para/> Inner styles: "message", "layout", "toolbar", "userbar" (custom toolbar), "button".
+        /// </summary>
+        /// <param name="style">A style for MessageBox as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
             base.SetStyle(style);
 
-            Style inner_style = style.GetInnerStyle("message");
-            if (inner_style != null)
+            Style innerStyle = style.GetInnerStyle("message");
+            if (innerStyle != null)
             {
-                _msg.SetStyle(inner_style);
+                _msg.SetStyle(innerStyle);
                 Console.WriteLine(_msg.GetMargin().Bottom);
             }
-            inner_style = style.GetInnerStyle("layout");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("layout");
+            if (innerStyle != null)
             {
-                _msg_layout.SetStyle(inner_style);
+                _msg_layout.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("toolbar");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("toolbar");
+            if (innerStyle != null)
             {
-                _toolbar.SetStyle(inner_style);
+                _toolbar.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("userbar");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("userbar");
+            if (innerStyle != null)
             {
-                _userbar.SetStyle(inner_style);
+                _userbar.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("button");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("button");
+            if (innerStyle != null)
             {
-                _btnStyle = inner_style.Clone();
-                _ok.SetStyle(inner_style);
-                _cancel.SetStyle(inner_style);
+                _btnStyle = innerStyle.Clone();
+                _ok.SetStyle(innerStyle);
+                _cancel.SetStyle(innerStyle);
             }
         }
     }

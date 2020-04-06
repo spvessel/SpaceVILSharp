@@ -1,28 +1,45 @@
-using System;
-using System.Drawing;
 using SpaceVIL.Common;
 using SpaceVIL.Core;
 using System.Collections.Generic;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// VerticalStack is a class that represents a line type container (vertical version). 
+    /// VerticalStack groups items one after another using content alignment, margins, paddings, 
+    /// sizes and size policies.
+    /// VerticalStack implements SpaceVIL.Core.IHLayout.
+    /// By default ability to get focus is disabled.
+    /// <para/> VerticalStack cannot receive any events, 
+    /// so VerticalStack is always in the ItemState.Base state.
+    /// </summary>
     public class VerticalStack : Prototype, IVLayout
     {
         static int count = 0;
 
         private ItemAlignment _contentAlignment = ItemAlignment.Top;
-
+        /// <summary>
+        /// Setting content alignment within VerticalStack area. Default: ItemAlignment.Left.
+        /// <para/> Supports only: ItemAlignment.Left, ItemAlignment.HCenter, ItemAlignment.Right.
+        /// </summary>
+        /// <param name="alignment">Content alignment as SpaceVIL.Core.ItemAlignment.</param>
         public void SetContentAlignment(ItemAlignment alignment)
         {
             if (alignment == ItemAlignment.Top || alignment == ItemAlignment.VCenter || alignment == ItemAlignment.Bottom)
                 _contentAlignment = alignment;
         }
-
+        /// <summary>
+        /// Getting current content alignment.
+        /// <para/> Can be: ItemAlignment.Left, ItemAlignment.HCenter, ItemAlignment.Right.
+        /// </summary>
+        /// <returns>Content alignment as SpaceVIL.Core.ItemAlignment.</returns>
         public ItemAlignment GetContentAlignment()
         {
             return _contentAlignment;
         }
-
+        /// <summary>
+        /// Default VerticalStack constructor.
+        /// </summary>
         public VerticalStack()
         {
             SetItemName("VerticalStack_" + count);
@@ -32,23 +49,37 @@ namespace SpaceVIL
 
         }
 
-        //overrides
         protected internal override bool GetHoverVerification(float xpos, float ypos)
         {
             return false;
         }
-
+        /// <summary>
+        /// Adding item to the VerticalStack. 
+        /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
             base.AddItem(item);
             UpdateLayout();
         }
+        /// <summary>
+        /// Inserting item to the VerticalStack container. 
+        /// If the number of container elements is less than the index, 
+        /// then the element is added to the end of the list.
+        /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <param name="index">Index of insertion.</param>
         public override void InsertItem(IBaseItem item, int index)
         {
             base.InsertItem(item, index);
             UpdateLayout();
         }
-
+        /// <summary>
+        /// Removing the specified item from the VerticalStack container.
+        /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>True: if the removal was successful. 
+        /// False: if the removal was unsuccessful.</returns>
         public override bool RemoveItem(IBaseItem item)
         {
             bool result = base.RemoveItem(item);
@@ -56,17 +87,28 @@ namespace SpaceVIL
                 UpdateLayout();
             return result;
         }
+        /// <summary>
+        /// Setting VerticalStack height. If the value is greater/less than the maximum/minimum 
+        /// value of the height, then the height becomes equal to the maximum/minimum value.
+        /// </summary>
+        /// <param name="height">Weight of the VerticalStack.</param>
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
             UpdateLayout();
         }
-        public override void SetY(int _y)
+        /// <summary>
+        /// Setting Y coordinate of the left-top corner of the VerticalStack.
+        /// </summary>
+        /// <param name="y">Y position of the left-top corner.</param>
+        public override void SetY(int y)
         {
-            base.SetY(_y);
+            base.SetY(y);
             UpdateLayout();
         }
-
+        /// <summary>
+        /// Updating all children positions (implementation of SpaceVIL.Core.IFreeLayout).
+        /// </summary>
         public void UpdateLayout()
         {
             int total_space = GetHeight() - GetPadding().Top - GetPadding().Bottom;
@@ -87,7 +129,8 @@ namespace SpaceVIL
                     }
                     else
                     {
-                        if (child.GetMaxHeight() < total_space) {
+                        if (child.GetMaxHeight() < total_space)
+                        {
                             maxHeightExpands.Add(child.GetMaxHeight() + child.GetMargin().Top + child.GetMargin().Bottom);
                         }
                         expanded_count++;
@@ -102,24 +145,30 @@ namespace SpaceVIL
 
             maxHeightExpands.Sort();
 
-            while (true) {
+            while (true)
+            {
                 if (expanded_count == 0)
                     break;
 
                 if (free_space > expanded_count)
                     height_for_expanded = free_space / expanded_count;
 
-                if (height_for_expanded <= 1 || maxHeightExpands.Count == 0) {
+                if (height_for_expanded <= 1 || maxHeightExpands.Count == 0)
+                {
                     break;
                 }
 
-                if (height_for_expanded > maxHeightExpands[0]) {
-                    while (maxHeightExpands.Count > 0 && height_for_expanded > maxHeightExpands[0]) {
+                if (height_for_expanded > maxHeightExpands[0])
+                {
+                    while (maxHeightExpands.Count > 0 && height_for_expanded > maxHeightExpands[0])
+                    {
                         free_space -= maxHeightExpands[0];
                         maxHeightExpands.RemoveAt(0);
                         expanded_count--;
                     }
-                } else {
+                }
+                else
+                {
                     break;
                 }
             }
@@ -128,7 +177,8 @@ namespace SpaceVIL
             int startY = GetY() + GetPadding().Top;
             bool isFirstExpand = false;
             int diff = (free_space - height_for_expanded * expanded_count);
-            if (expanded_count != 0 && diff > 0) {
+            if (expanded_count != 0 && diff > 0)
+            {
                 isFirstExpand = true;
             }
 
@@ -155,8 +205,10 @@ namespace SpaceVIL
                                 child.SetHeight(child.GetMaxHeight()); //?
                             }
 
-                            if (isFirstExpand) {
-                                if (child.GetHeight() + diff < child.GetMaxHeight()) {
+                            if (isFirstExpand)
+                            {
+                                if (child.GetHeight() + diff < child.GetMaxHeight())
+                                {
                                     child.SetHeight(child.GetHeight() + diff);
                                     isFirstExpand = false;
                                 }

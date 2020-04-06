@@ -14,7 +14,7 @@ public class ItemState {
     // public string Text = null;
     // public string ImageUri = null;
     // public bool IsVisible = true;
-    public CustomFigure shape = null;
+    public Figure shape = null;
 
     /**
      * Constructs an empty ItemState

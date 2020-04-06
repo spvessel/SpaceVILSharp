@@ -21,7 +21,7 @@ namespace View
             EventKeyRelease += (sender, args) =>
             {
                 if (args.Key == KeyCode.Space)
-                    Console.WriteLine(ItemsLayoutBox.GetListOfItemsNames(this).Length);
+                    Console.WriteLine(ItemsLayoutBox.GetListOfItemsNames(this).Count);
             };
 
             EventOnStart += () =>

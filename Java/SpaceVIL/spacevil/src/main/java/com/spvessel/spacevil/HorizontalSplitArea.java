@@ -25,7 +25,7 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
      */
     public void setSplitPosition(int position) {
         if (_init) {
-            if (position < _tMin || position > getHeight() - _splitHolder.getHolderSize() - _bMin)
+            if (position < _tMin || position > getHeight() - _splitHolder.getDividerSize() - _bMin)
                 return;
             _topHeight = position;
             _splitHolder.setY(position + getY());
@@ -71,7 +71,7 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
         addItem(_splitHolder);
         _init = true;
         if (_topHeight < 0)
-            setSplitPosition((getHeight() - _splitHolder.getHolderSize()) / 2);
+            setSplitPosition((getHeight() - _splitHolder.getDividerSize()) / 2);
         else
             setSplitPosition(_topHeight);
     }
@@ -107,7 +107,7 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
     }
 
     private void checkMins() {
-        int totalSize = getHeight() - _splitHolder.getHolderSize();
+        int totalSize = getHeight() - _splitHolder.getDividerSize();
         if (totalSize < _tMin) {
             setSplitPosition(totalSize);
         } else if (totalSize <= _tMin + _bMin) {
@@ -123,8 +123,8 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
      * Set Y position of the HorizontalSplitArea
      */
     @Override
-    public void setY(int _y) {
-        super.setY(_y);
+    public void setY(int y) {
+        super.setY(y);
         setSplitPosition(_topHeight);
         updateLayout();
     }
@@ -145,10 +145,10 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
                 _topBlock.setHeight(0);
         }
 
-        tmpHeight = getHeight() - tmpHeight - _splitHolder.getHolderSize();
+        tmpHeight = getHeight() - tmpHeight - _splitHolder.getDividerSize();
 
         if (_bottomBlock != null) {
-            _bottomBlock.setY(_topHeight + getY() + _splitHolder.getHolderSize());
+            _bottomBlock.setY(_topHeight + getY() + _splitHolder.getDividerSize());
             if (tmpHeight >= 0)
                 _bottomBlock.setHeight(tmpHeight);
             else
@@ -163,7 +163,7 @@ public class HorizontalSplitArea extends Prototype implements InterfaceVLayout {
      * Set height of the SplitHolder
      */
     public void setSplitThickness(int spHeight) {
-        _splitHolder.setSpacerSize(spHeight);
+        _splitHolder.setDividerSize(spHeight);
     }
 
     /**

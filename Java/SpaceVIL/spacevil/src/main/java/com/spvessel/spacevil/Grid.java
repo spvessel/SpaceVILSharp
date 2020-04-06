@@ -30,8 +30,8 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
      */
     public Grid(int rows, int columns) {
         this();
-        _row_count = rows;
-        _column_count = columns;
+        _rowCount = rows;
+        _columnCount = columns;
         initCells();
     }
 
@@ -40,19 +40,19 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
 
     void initCells() {
         _cells = new LinkedList<>();
-        for (int i = 0; i < _row_count; i++) {
-            for (int j = 0; j < _column_count; j++) {
+        for (int i = 0; i < _rowCount; i++) {
+            for (int j = 0; j < _columnCount; j++) {
                 _cells.add(new Cell(this, i, j));
             }
         }
     }
 
     public void setFormat(int rows, int columns) {
-        if (rows == _row_count && columns == _column_count)
+        if (rows == _rowCount && columns == _columnCount)
             return;
 
-        _row_count = rows;
-        _column_count = columns;
+        _rowCount = rows;
+        _columnCount = columns;
         rearrangeCells();
     }
 
@@ -76,35 +76,35 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
         updateLayout();
     }
 
-    private int _row_count = 1;
+    private int _rowCount = 1;
 
     /**
      * Set count of the rows
      */
-    public void setRowCount(int capacity) {
-        if (capacity != _row_count)
-            _row_count = capacity;
+    public void setRowCount(int value) {
+        if (value != _rowCount)
+            _rowCount = value;
         rearrangeCells();
     }
 
     public int getRowCount() {
-        return _row_count;
+        return _rowCount;
     }
 
-    private int _column_count = 1;
+    private int _columnCount = 1;
 
     /**
      * Set count of the columns
      */
-    public void setColumnCount(int capacity) {
-        if (capacity != _column_count)
-            _column_count = capacity;
+    public void setColumnCount(int value) {
+        if (value != _columnCount)
+            _columnCount = value;
         // Need to initCells REFACTOR!
         rearrangeCells();
     }
 
     public int getColumnCount() {
-        return _column_count;
+        return _columnCount;
     }
 
     /**
@@ -113,7 +113,7 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     public Cell getCell(int row, int column) {
         Cell cell = null;
         try {
-            cell = _cells.get(column + row * _column_count);
+            cell = _cells.get(column + row * _columnCount);
         } catch (Exception ex) {
             System.out.println("Cells row and column out of range.\n" + ex.toString());
             return cell;
@@ -152,31 +152,26 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     /**
      * Remove the item from the Grid by row and column number
      */
-    public void removeItem(int row, int column) {
-        if (row == _row_count || column == _column_count)
-            return;
+    public boolean removeItem(int row, int column) {
+        if (row >= _rowCount || column >= _columnCount)
+            return false;
 
-        InterfaceBaseItem ibi = _cells.get(column + row * _column_count).getItem();
+        InterfaceBaseItem ibi = _cells.get(column + row * _columnCount).getItem();
         if (ibi != null) {
-            super.removeItem(ibi);
-            _cells.get(column + row * _column_count).setItem(null);
+            if (super.removeItem(ibi)) {
+                _cells.get(column + row * _columnCount).setItem(null);
+                return true;
+            }
         }
+        return false;
     }
-
-    private Lock locker = new ReentrantLock();
 
     @Override
     public void clear() {
-        locker.lock();
-        try {
-            List<InterfaceBaseItem> list = getItems();
-            while (!list.isEmpty())
-                removeItem(list.get(0));
-        } catch (Exception ex) {
-            System.out.println("Method - Clear");
-            ex.printStackTrace();
-        } finally {
-            locker.unlock();
+        List<InterfaceBaseItem> list = getItems();
+        while (!list.isEmpty()) {
+            removeItem(list.get(0));
+            list.remove(0);
         }
     }
 
@@ -201,29 +196,29 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
      * Insert item to the Grid by row and column number
      */
     public void insertItem(InterfaceBaseItem item, int row, int column) {
-        if (row == _row_count || column == _column_count)
+        if (row == _rowCount || column == _columnCount)
             return;
         super.addItem(item);
         // _cells[row + column * _row_count].setItem(item);
 
-//        InterfaceBaseItem ibi = _cells.get(column + row * _column_count).getItem();
-//        if (ibi != null) {
-//            removeItem(ibi);
-//        }
+        //        InterfaceBaseItem ibi = _cells.get(column + row * _column_count).getItem();
+        //        if (ibi != null) {
+        //            removeItem(ibi);
+        //        }
 
         removeItem(row, column);
 
-        _cells.get(column + row * _column_count).setItem(item);
+        _cells.get(column + row * _columnCount).setItem(item);
         updateLayout();
     }
 
     @Override
     public void insertItem(InterfaceBaseItem item, int index) {
-        if (_column_count == 0)
+        if (_columnCount == 0)
             return;
         int row, column;
-        row = index / _column_count;
-        column = index - row * _column_count;
+        row = index / _columnCount;
+        column = index - row * _columnCount;
         insertItem(item, row, column);
     }
 
@@ -240,8 +235,8 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
      * Set X position of the Grid
      */
     @Override
-    public void setX(int _x) {
-        super.setX(_x);
+    public void setX(int x) {
+        super.setX(x);
         updateLayout();
     }
 
@@ -258,8 +253,8 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
      * Set Y position of the Grid
      */
     @Override
-    public void setY(int _y) {
-        super.setY(_y);
+    public void setY(int y) {
+        super.setY(y);
         updateLayout();
     }
 
@@ -276,6 +271,7 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     }
 
     private boolean _isUpdating = false;
+
     /**
      * Update all children and grid sizes and positions according to confines
      */
@@ -295,10 +291,10 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
 
         int x_offset = 0;
         int y_offset = 0;
-        for (int r = 0; r < _row_count; r++) {
+        for (int r = 0; r < _rowCount; r++) {
             int index = 0;
-            for (int c = 0; c < _column_count; c++) {
-                index = c + r * _column_count;
+            for (int c = 0; c < _columnCount; c++) {
+                index = c + r * _columnCount;
 
                 InterfaceBaseItem item = _cells.get(index).getItem();
 
@@ -331,17 +327,17 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
     }
 
     private int[] getRowsHeight() {
-        int[] rows_height = new int[_row_count];
+        int[] rows_height = new int[_rowCount];
         List<int[]> list_height = new LinkedList<>();
 
         int total_space = getHeight() - getPadding().top - getPadding().bottom;
         int free_space = total_space;
-        int prefer_height = (total_space - getSpacing().vertical * (_row_count - 1)) / _row_count;
-        int count = _row_count;
+        int prefer_height = (total_space - getSpacing().vertical * (_rowCount - 1)) / _rowCount;
+        int count = _rowCount;
 
-        for (int r = 0; r < _row_count; r++) {
-            for (int c = 0; c < _column_count; c++) {
-                InterfaceBaseItem item = _cells.get(c + r * _column_count).getItem();
+        for (int r = 0; r < _rowCount; r++) {
+            for (int c = 0; c < _columnCount; c++) {
+                InterfaceBaseItem item = _cells.get(c + r * _columnCount).getItem();
 
                 if (item == null || !item.isVisible() || !item.isDrawable()) {
                     list_height.add(new int[] { r, -1 });
@@ -357,11 +353,11 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
         }
         ///////////
         List<Integer[]> m_height = new LinkedList<>();
-        for (int r = 0; r < _row_count; r++) {
+        for (int r = 0; r < _rowCount; r++) {
             int max = -10;
-            for (int c = 0; c < _column_count; c++) {
-                if (list_height.get(c + r * _column_count)[1] > max)
-                    max = list_height.get(c + r * _column_count)[1];
+            for (int c = 0; c < _columnCount; c++) {
+                if (list_height.get(c + r * _columnCount)[1] > max)
+                    max = list_height.get(c + r * _columnCount)[1];
             }
             m_height.add(new Integer[] { r, max });
             if (max == -1) {
@@ -390,24 +386,24 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
 
         m_height.sort((li1, li2) -> li1[0].compareTo(li2[0]));
 
-        for (int i = 0; i < _row_count; i++)
+        for (int i = 0; i < _rowCount; i++)
             rows_height[i] = m_height.get(i)[1];
 
         return rows_height;
     }
 
     private int[] getColumnsWidth() {
-        int[] columns_width = new int[_column_count];
+        int[] columns_width = new int[_columnCount];
         List<int[]> list_width = new LinkedList<>();
 
         int total_space = getWidth() - getPadding().left - getPadding().right;
         int free_space = total_space;
-        int prefer_width = (total_space - getSpacing().horizontal * (_column_count - 1)) / _column_count;
-        int count = _column_count;
+        int prefer_width = (total_space - getSpacing().horizontal * (_columnCount - 1)) / _columnCount;
+        int count = _columnCount;
 
-        for (int c = 0; c < _column_count; c++) {
-            for (int r = 0; r < _row_count; r++) {
-                InterfaceBaseItem item = _cells.get(c + r * _column_count).getItem();
+        for (int c = 0; c < _columnCount; c++) {
+            for (int r = 0; r < _rowCount; r++) {
+                InterfaceBaseItem item = _cells.get(c + r * _columnCount).getItem();
                 if (item == null || !item.isVisible() || !item.isDrawable()) {
                     list_width.add(new int[] { c, -1 });
                     continue;
@@ -422,11 +418,11 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
         }
         //////////
         List<Integer[]> m_width = new LinkedList<>();
-        for (int c = 0; c < _column_count; c++) {
+        for (int c = 0; c < _columnCount; c++) {
             int max = -10;
-            for (int r = 0; r < _row_count; r++) {
-                if (list_width.get(r + c * _row_count)[1] > max)
-                    max = list_width.get(r + c * _row_count)[1];
+            for (int r = 0; r < _rowCount; r++) {
+                if (list_width.get(r + c * _rowCount)[1] > max)
+                    max = list_width.get(r + c * _rowCount)[1];
             }
             m_width.add(new Integer[] { c, max });
             if (max == -1) {
@@ -455,7 +451,7 @@ public class Grid extends Prototype implements InterfaceFreeLayout {
 
         m_width.sort((li1, li2) -> li1[0].compareTo(li2[0]));
 
-        for (int i = 0; i < _column_count; i++)
+        for (int i = 0; i < _columnCount; i++)
             columns_width[i] = m_width.get(i)[1];
 
         return columns_width;

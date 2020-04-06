@@ -2,7 +2,7 @@ package com.spvessel.spacevil.View;
 
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.RedrawFrequency;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Flags.VisibilityPolicy;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceMouseMethodState;
 

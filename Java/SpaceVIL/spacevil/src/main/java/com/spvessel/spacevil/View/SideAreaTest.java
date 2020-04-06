@@ -10,7 +10,7 @@ import com.spvessel.spacevil.GraphicsMathService;
 import com.spvessel.spacevil.SideArea;
 import com.spvessel.spacevil.TitleBar;
 import com.spvessel.spacevil.Triangle;
-import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Flags.ItemAlignment;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.MSAA;
@@ -76,27 +76,27 @@ public class SideAreaTest extends ActiveWindow {
         switch (area.getAttachSide()) {
         case LEFT:
             btn.setSize(s1, s2);
-            btn.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, -90)));
+            btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, -90)));
             btn.setMargin(0, 0, offset, 0);
             break;
 
         case RIGHT:
             btn.setSize(s1, s2);
-            btn.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 90)));
+            btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 90)));
             btn.setMargin(offset, 0, 0, 0);
             break;
 
         case TOP:
             btn.setBackground(90, 210, 255);
             btn.setSize(s2, s1);
-            btn.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
+            btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
             btn.setMargin(0, 0, 0, offset);
             break;
 
         case BOTTOM:
             btn.setBackground(1, 110, 190);
             btn.setSize(s2, s1);
-            btn.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
+            btn.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
             btn.setMargin(0, offset, 0, 0);
             break;
 

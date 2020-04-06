@@ -15,7 +15,7 @@ import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.FileSystemEntryType;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.MouseButton;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
 public class OpenEntryDialog extends OpenDialog {
     private String _result = null;
@@ -157,8 +157,8 @@ public class OpenEntryDialog extends OpenDialog {
         _btnFilter.addItem(filter);
         _controlPanel.addItems(_btnOpen, _btnCancel);
 
-        _fileList.setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
-        _fileList.setVScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+        _fileList.setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
+        _fileList.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
         _btnBackward.eventMouseClick.add((sender, args) -> pathBackward());
         _btnUpward.eventMouseClick.add((sender, args) -> pathUpward());
         _btnHome.eventMouseClick.add((sender, args) -> {
@@ -358,7 +358,7 @@ public class OpenEntryDialog extends OpenDialog {
         for (int i = 0; i < exts.length; i++) {
             String[] line = exts[i].split(";");
             String key = line[0];
-            String regex = line[1].toLowerCase().replaceAll("[!*]", "");
+            String regex = line[1].toLowerCase().replaceAll("[!*]", "").replaceAll("\\s", "");
             if (_extensionFilter.containsKey(key))
                 _extensionFilter.replace(key, regex.split(","));
             else

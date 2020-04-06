@@ -1,6 +1,10 @@
 package com.spvessel.spacevil;
 
+/**
+ * An interface for sealed SpaceVIL OpenGL environment.
+ */
 interface InterfaceVramResource {
+
     boolean sendUniformSample2D(Shader shader, String name);
 
     boolean sendUniform4f(Shader shader, String name, float[] array);

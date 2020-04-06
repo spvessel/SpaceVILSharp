@@ -7,48 +7,68 @@ using System.Threading.Tasks;
 namespace SpaceVIL.Core
 {
     /// <summary>
-    /// Class describes position of the item
+    /// Position is a class representing the location of a 2D coordinate integer point.
     /// </summary>
     public class Position : IPosition
     {
-        public Position()
-        {
-
-        }
-
+        /// <summary>
+        /// Default Position constructor.
+        /// </summary>
+        public Position() { }
+        /// <summary>
+        /// Position constructor with specified X and Y coordinates.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public Position(int x, int y)
         {
             _x = x;
             _y = y;
         }
-        
+
         private int _x = 0;
         private int _y = 0;
 
-        /// <param name="x"> X position of the item </param>
+        /// <summary>
+        /// Setting X position of the 2D point.
+        /// </summary>
+        /// <param name="x"> X position of the 2D point. </param>
         public void SetX(int x)
         {
             _x = x;
         }
 
-        /// <returns> X position of the item </returns>
+        /// <summary>
+        /// Getting X position of the 2D point.
+        /// </summary>
+        /// <returns> X position of the 2D point. </returns>
         public int GetX()
         {
             return _x;
         }
 
-        /// <param name="y"> Y position of the item </param>
+        /// <summary>
+        /// Setting Y position of the 2D point.
+        /// </summary>
+        /// <param name="y"> Y position of the 2D point. </param>
         public void SetY(int y)
         {
             _y = y;
         }
 
-        /// <returns> Y position of the item </returns>
+        /// <summary>
+        /// Getting Y position of the 2D point.
+        /// </summary>
+        /// <returns> Y position of the 2D point. </returns>
         public int GetY()
         {
             return _y;
         }
-
+        /// <summary>
+        /// Setting 2D point position.
+        /// </summary>
+        /// <param name="x"> X position of the 2D point. </param>
+        /// <param name="y"> Y position of the 2D point. </param>
         public void SetPosition(int x, int y)
         {
             SetX(x);

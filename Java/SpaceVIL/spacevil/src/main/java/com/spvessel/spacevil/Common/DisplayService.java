@@ -41,7 +41,7 @@ public final class DisplayService {
         // glfwGetMonitorContentScale(monitor, x, y);
         // return new Scale(x.get(0), y.get(0));
 
-        return new Scale(_displayScale.getX(), _displayScale.getY());
+        return new Scale(_displayScale.getXScale(), _displayScale.getYScale());
     }
     public static void setDisplayScale(float x, float y)
     {

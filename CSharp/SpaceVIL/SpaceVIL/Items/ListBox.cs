@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
 using SpaceVIL.Core;
@@ -8,40 +7,52 @@ using SpaceVIL.Common;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// ListBox is a container for SpaceVIL.ListArea 
+    /// (scrollable container for other elements with ability of selection)
+    /// and scroll bars. ListBox controls scrolling, resizing and other actions of SpaceVIL.ListArea.
+    /// <para/> Contains list area, scroll bars, menu button, navigation context menu.
+    /// <para/> Supports all events except drag and drop.
+    /// </summary>
     public class ListBox : Prototype
     {
         static int count = 0;
 
         /// <summary>
-        /// ScrollBar moving step
+        /// Setting scroll movement step.
         /// </summary>
-        public void SetScrollStep(int step)
+        /// <param name="value">Scroll step.</param>
+        public void SetScrollStep(int value)
         {
-            _area.SetStep(step);
+            _area.SetStep(value);
         }
+        /// <summary>
+        /// Getting scroll movement step.
+        /// </summary>
+        /// <returns>Scroll step.</returns>
         public int GetScrollStep()
         {
             return _area.GetStep();
         }
-
         /// <summary>
-        /// Selection item
+        /// Getting index of selected item.
         /// </summary>
+        /// <returns>Index of selected item.</returns>
         public int GetSelection()
         {
             return _area.GetSelection();
         }
-
         /// <summary>
-        /// Set selected item of the ListBox by index
+        /// Select item by index.
         /// </summary>
+        /// <param name="index">Index of selection.</param>
         public void SetSelection(int index)
         {
             _area.SetSelection(index);
         }
 
         /// <summary>
-        /// Unselect all items
+        /// Unselect selected item.
         /// </summary>
         public void Unselect()
         {
@@ -49,64 +60,91 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Is selection changes view of the item or not
+        /// Enable or disable selection ability of ListArea.
         /// </summary>
+        /// <param name="value">True: if you want selection ability of ListArea to be enabled. 
+        /// False: if you want selection ability of ListArea to be disabled.</param>
         public void SetSelectionVisible(bool value)
         {
             _area.SetSelectionVisible(value);
         }
+        /// <summary>
+        /// Returns True if selection ability of ListArea is enabled otherwise returns False.
+        /// </summary>
+        /// <returns>True: selection ability of ListArea is enabled. 
+        /// False: selection ability of ListArea is disabled.</returns>
         public bool IsSelectionVisible()
         {
             return _area.IsSelectionVisible();
         }
-
+        /// <summary>
+        /// Interactive item to show the navigation context menu.
+        /// </summary>
         public BlankItem Menu = new BlankItem();
-        private bool _is_menu_disabled = false;
+        private bool _isMenuDisabled = false;
 
         /// <summary>
-        /// Is ListBox menu disabled
+        /// Setting the navigation context menu to disable or enable.
         /// </summary>
-        public void DisableMenu(bool value)
+        /// <param name="value">True: if you want to disable navigation context menu. 
+        /// False: if you want to enable navigation context menu. </param>
+        public void SetMenuDisabled(bool value)
         {
-            _is_menu_disabled = value;
+            _isMenuDisabled = value;
         }
 
         private Grid _grid = new Grid(2, 2);
         private ListArea _area = new ListArea();
 
-        /// <returns> ListArea </returns>
+        /// <summary>
+        /// Getting list area of ListBox.
+        /// </summary>
+        /// <returns>List area as SpaceVIL.ListArea.</returns>
         public ListArea GetArea()
         {
             return _area;
         }
 
         private ContextMenu _menu;
+        /// <summary>
+        /// Vertical scroll bar of ListBox.
+        /// </summary>
         public VerticalScrollBar VScrollBar = new VerticalScrollBar();
+        /// <summary>
+        /// Horizontal scroll bar of ListBox.
+        /// </summary>
         public HorizontalScrollBar HScrollBar = new HorizontalScrollBar();
-        private ScrollBarVisibility _v_scrollBarPolicy = ScrollBarVisibility.AsNeeded;
+        private VisibilityPolicy _vScrollBarPolicy = VisibilityPolicy.AsNeeded;
+        private VisibilityPolicy _hScrollBarPolicy = VisibilityPolicy.AsNeeded;
 
         /// <summary>
-        /// Is vertical scroll bar visible
+        /// Getting vertical scroll bar visibility policy.
         /// </summary>
-        public ScrollBarVisibility GetVScrollBarVisible()
+        /// <returns>Visibility policy as SpaceVIL.Core.VisibilityPolicy.</returns>
+        public VisibilityPolicy GetVScrollBarPolicy()
         {
-            return _v_scrollBarPolicy;
+            return _vScrollBarPolicy;
         }
-        public void SetVScrollBarVisible(ScrollBarVisibility policy)
+        /// <summary>
+        /// Setting vertical scroll bar visibility policy.
+        /// <para/> Default: SpaceVIL.Core.VisibilityPolicy.AsNeeded.
+        /// </summary>
+        /// <param name="policy">Visibility policy as SpaceVIL.Core.VisibilityPolicy.</param>
+        public void SetVScrollBarPolicy(VisibilityPolicy policy)
         {
-            _v_scrollBarPolicy = policy;
+            _vScrollBarPolicy = policy;
 
-            if (policy == ScrollBarVisibility.Never)
+            if (policy == VisibilityPolicy.Never)
             {
                 VScrollBar.SetDrawable(false);
                 Menu.SetVisible(false);
             }
-            else if (policy == ScrollBarVisibility.AsNeeded)
+            else if (policy == VisibilityPolicy.AsNeeded)
             {
                 VScrollBar.SetDrawable(false);
                 Menu.SetVisible(false);
             }
-            else if (policy == ScrollBarVisibility.Always)
+            else if (policy == VisibilityPolicy.Always)
             {
                 VScrollBar.SetDrawable(true);
                 if (!HScrollBar.IsDrawable())
@@ -120,30 +158,34 @@ namespace SpaceVIL
             HScrollBar.Slider.UpdateHandler();
         }
 
-        private ScrollBarVisibility _h_scrollBarPolicy = ScrollBarVisibility.AsNeeded;
-
         /// <summary>
-        /// Is horizontal scroll bar visible
+        /// Getting horizontal scroll bar visibility policy.
         /// </summary>
-        public ScrollBarVisibility GetHScrollBarVisible()
+        /// <returns>Visibility policy as SpaceVIL.Core.VisibilityPolicy.</returns>
+        public VisibilityPolicy GetHScrollBarPolicy()
         {
-            return _h_scrollBarPolicy;
+            return _hScrollBarPolicy;
         }
-        public void SetHScrollBarVisible(ScrollBarVisibility policy)
+        /// <summary>
+        /// Setting horizontal scroll bar visibility policy.
+        /// <para/> Default: SpaceVIL.Core.VisibilityPolicy.AsNeeded.
+        /// </summary>
+        /// <param name="policy">Visibility policy as SpaceVIL.Core.VisibilityPolicy.</param>
+        public void SetHScrollBarPolicy(VisibilityPolicy policy)
         {
-            _h_scrollBarPolicy = policy;
+            _hScrollBarPolicy = policy;
 
-            if (policy == ScrollBarVisibility.Never)
+            if (policy == VisibilityPolicy.Never)
             {
                 HScrollBar.SetDrawable(false);
                 Menu.SetVisible(false);
             }
-            else if (policy == ScrollBarVisibility.AsNeeded)
+            else if (policy == VisibilityPolicy.AsNeeded)
             {
                 HScrollBar.SetDrawable(false);
                 Menu.SetVisible(false);
             }
-            else if (policy == ScrollBarVisibility.Always)
+            else if (policy == VisibilityPolicy.Always)
             {
                 HScrollBar.SetDrawable(true);
                 if (!VScrollBar.IsDrawable())
@@ -158,7 +200,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Constructs a ListBox
+        /// Default ListBox constructor.
         /// </summary>
         public ListBox()
         {
@@ -283,7 +325,7 @@ namespace SpaceVIL
                 VScrollBar.Slider.SetStep(VScrollBar.Slider.GetMaxValue());
                 v_size = 0;
                 VScrollBar.Slider.SetCurrentValue(0);
-                if (GetVScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+                if (GetVScrollBarPolicy() == VisibilityPolicy.AsNeeded)
                 {
                     VScrollBar.SetDrawable(false);
                     Menu.SetVisible(false);
@@ -291,7 +333,7 @@ namespace SpaceVIL
                 }
                 return;
             }
-            if (GetVScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+            if (GetVScrollBarPolicy() == VisibilityPolicy.AsNeeded)
             {
                 VScrollBar.SetDrawable(true);
                 if (!HScrollBar.IsDrawable())
@@ -340,7 +382,7 @@ namespace SpaceVIL
                 HScrollBar.Slider.SetStep(HScrollBar.Slider.GetMaxValue());
                 h_size = 0;
                 HScrollBar.Slider.SetCurrentValue(0);
-                if (GetHScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+                if (GetHScrollBarPolicy() == VisibilityPolicy.AsNeeded)
                 {
                     HScrollBar.SetDrawable(false);
                     Menu.SetVisible(false);
@@ -348,7 +390,7 @@ namespace SpaceVIL
                 }
                 return;
             }
-            if (GetHScrollBarVisible() == ScrollBarVisibility.AsNeeded)
+            if (GetHScrollBarPolicy() == VisibilityPolicy.AsNeeded)
             {
                 HScrollBar.SetDrawable(true);
                 if (!VScrollBar.IsDrawable())
@@ -388,8 +430,10 @@ namespace SpaceVIL
         // }
 
         /// <summary>
-        /// Set width of the ListBox
+        /// Setting item width. If the value is greater/less than the maximum/minimum 
+        /// value of the width, then the width becomes equal to the maximum/minimum value.
         /// </summary>
+        /// <param name="width"> Width of the item. </param>
         public override void SetWidth(int width)
         {
             base.SetWidth(width);
@@ -398,8 +442,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set height of the ListBox
+        /// Setting item height. If the value is greater/less than the maximum/minimum 
+        /// value of the height, then the height becomes equal to the maximum/minimum value.
         /// </summary>
+        /// <param name="height"> Height of the item. </param>
         public override void SetHeight(int height)
         {
             base.SetHeight(height);
@@ -408,26 +454,30 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Add item to the ListBox
+        /// Adding item to the list area of ListBox.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
             _area.AddItem(item);
             UpdateElements();
         }
-
         /// <summary>
-        /// Insert item to the ListBox by index
+        /// Insert item into the list area of ListBox by index.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <param name="index">Index of insertion.</param>
         public override void InsertItem(IBaseItem item, Int32 index)
         {
             _area.InsertItem(item, index);
             UpdateElements();
         }
-
         /// <summary>
-        /// Remove item from the ListBox
+        /// Removing the specified item from the list area of ListBox.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>True: if the removal was successful. 
+        /// False: if the removal was unsuccessful.</returns>
         public override bool RemoveItem(IBaseItem item)
         {
             List<IBaseItem> list = GetItems();
@@ -440,13 +490,16 @@ namespace SpaceVIL
             _area.SetFocus();
             return b;
         }
+        /// <summary>
+        /// Removing all items from the list area of ListBox.
+        /// </summary>
         public override void Clear()
         {
             _area.Clear();
         }
 
         /// <summary>
-        /// Update states of the all ListBox inner items
+        /// Updating all ListBox inner items.
         /// </summary>
         public virtual void UpdateElements()
         {
@@ -457,7 +510,9 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Initialization and adding of all elements in the ListBox
+        /// Initializing all elements in the ListBox. 
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void InitElements()
         {
@@ -487,7 +542,7 @@ namespace SpaceVIL
             HScrollBar.Slider.EventValueChanged += (sender) => { UpdateHListArea(); };
 
             // create menu
-            if (!_is_menu_disabled)
+            if (!_isMenuDisabled)
             {
                 _menu = new ContextMenu(GetHandler());
                 _menu.SetBackground(60, 60, 60);
@@ -527,7 +582,7 @@ namespace SpaceVIL
                 _menu.AddItems(go_up_left, go_down_right, go_up, go_down);
                 Menu.EventMouseClick += (sender, args) =>
                 {
-                    if (!_is_menu_disabled)
+                    if (!_isMenuDisabled)
                         _menu.Show(sender, args);
                 };
                 _menu.ActiveButton = MouseButton.ButtonLeft;
@@ -535,7 +590,11 @@ namespace SpaceVIL
             }
         }
 
-        /// <returns> list of all ListBox items </returns>
+        /// <summary>
+        /// Getting content of the list area of ListBox.
+        /// </summary>
+        /// <returns>Content of the list area as 
+        /// System.Collections.Generic.List&lt;IBaseItem&gt;</returns>
         public List<IBaseItem> GetListContent()
         {
             List<IBaseItem> result = new List<IBaseItem>();
@@ -550,28 +609,39 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set list of items
+        /// Adding all elements in the list area of ListBox from the given list.
         /// </summary>
+        /// <param name="content">List of items as 
+        /// System.Collections.Generic.IEnumerable&lt;IBaseItem&gt;</param>
         public virtual void SetListContent(IEnumerable<IBaseItem> content)
         {
             _area.SetListContent(content);
             UpdateElements();
         }
-
+        /// <summary>
+        /// Getting wrapper of item.
+        /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>Wrapper of given item as SpaceVIL.SelectionItem.</returns>
         public SelectionItem GetWrapper(IBaseItem item)
         {
             return GetArea()._mapContent[item];
         }
 
-        /// <returns> selection item </returns>
+        /// <summary>
+        /// Getting selected item.
+        /// </summary>
+        /// <returns>Selected item as SpaceVIL.Core.IBaseItem</returns>
         public IBaseItem GetSelectedItem()
         {
             return _area.GetSelectedItem();
         }
 
         /// <summary>
-        /// Set style of the ListBox
+        /// Setting style of the ListBox. 
+        /// <para/> Inner styles: "area", "vscrollbar", "hscrollbar", "menu".
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         //style
         public override void SetStyle(Style style)
         {
@@ -579,25 +649,25 @@ namespace SpaceVIL
                 return;
             base.SetStyle(style);
 
-            Style inner_style = style.GetInnerStyle("vscrollbar");
-            if (inner_style != null)
+            Style innerStyle = style.GetInnerStyle("vscrollbar");
+            if (innerStyle != null)
             {
-                VScrollBar.SetStyle(inner_style);
+                VScrollBar.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("hscrollbar");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("hscrollbar");
+            if (innerStyle != null)
             {
-                HScrollBar.SetStyle(inner_style);
+                HScrollBar.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("menu");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("menu");
+            if (innerStyle != null)
             {
-                Menu.SetStyle(inner_style);
+                Menu.SetStyle(innerStyle);
             }
-            inner_style = style.GetInnerStyle("area");
-            if (inner_style != null)
+            innerStyle = style.GetInnerStyle("area");
+            if (innerStyle != null)
             {
-                _area.SetStyle(inner_style);
+                _area.SetStyle(innerStyle);
             }
         }
     }

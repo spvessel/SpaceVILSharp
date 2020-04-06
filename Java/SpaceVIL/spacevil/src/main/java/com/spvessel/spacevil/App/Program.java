@@ -44,7 +44,7 @@ public class Program {
         DefaultsService.getDefaultTheme().replaceDefaultItemStyle(TextEdit.class, getTextEditStyle());
 
         MainWindow mw = new MainWindow();
-        mw.setPosition(500, 500);
+        // mw.setPosition(500, 500);
 
         //        SettingsTest st = new SettingsTest();
         ImageTest im = new ImageTest();

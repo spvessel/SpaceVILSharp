@@ -3,7 +3,7 @@ package com.spvessel.spacevil.View;
 import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Decorations.Border;
 import com.spvessel.spacevil.Decorations.CornerRadius;
-import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.SubtractFigure;
@@ -11,7 +11,7 @@ import com.spvessel.spacevil.Flags.EmbeddedImage;
 import com.spvessel.spacevil.Flags.EmbeddedImageSize;
 import com.spvessel.spacevil.Flags.FileSystemEntryType;
 import com.spvessel.spacevil.Flags.ItemAlignment;
-import com.spvessel.spacevil.Flags.ItemRule;
+import com.spvessel.spacevil.Flags.ItemHoverRule;
 import com.spvessel.spacevil.Flags.ItemStateType;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.MSAA;
@@ -128,7 +128,7 @@ public class FlowTest extends ActiveWindow {
         });
         // btn1.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
         btn1.setMargin(0, 0, 20, 0);
-        btn1.setHoverRule(ItemRule.STRICT);
+        btn1.setHoverRule(ItemHoverRule.STRICT);
 
         ButtonCore btn2 = new ButtonCore();
         btn2.setBackground(121, 223, 152);
@@ -142,8 +142,8 @@ public class FlowTest extends ActiveWindow {
             InputDialog id = new InputDialog("title", "actionName", "defaultText");
             id.show(this);
         });
-        btn2.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
-        btn2.setHoverRule(ItemRule.STRICT);
+        btn2.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
+        btn2.setHoverRule(ItemHoverRule.STRICT);
 
         // btn add_at_end
         ButtonCore btn3 = new ButtonCore();
@@ -194,8 +194,8 @@ public class FlowTest extends ActiveWindow {
             // });
             // task.start();
         });
-        btn3.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
-        btn3.setHoverRule(ItemRule.STRICT);
+        btn3.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
+        btn3.setHoverRule(ItemHoverRule.STRICT);
 
         ButtonCore btn4 = new ButtonCore();
         btn4.setBackground(187, 102, 187);
@@ -226,8 +226,8 @@ public class FlowTest extends ActiveWindow {
             // popUpInfo.setHeight(200);
             // popUpInfo.show(this);
         });
-        btn4.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
-        btn4.setHoverRule(ItemRule.STRICT);
+        btn4.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 0)));
+        btn4.setHoverRule(ItemHoverRule.STRICT);
 
         ButtonCore btn5 = new ButtonCore();
         btn5.setBackground(238, 174, 128);
@@ -253,8 +253,8 @@ public class FlowTest extends ActiveWindow {
             opd.setDefaultPath("D:\\");
             opd.show(this);
         });
-        btn5.setCustomFigure(new CustomFigure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
-        btn5.setHoverRule(ItemRule.STRICT);
+        btn5.setCustomFigure(new Figure(false, GraphicsMathService.getTriangle(30, 30, 0, 0, 180)));
+        btn5.setHoverRule(ItemHoverRule.STRICT);
 
         // adding buttons
         toolbar.addItems(btn1, btn2, btn3, btn4, btn5);
@@ -397,7 +397,7 @@ public class FlowTest extends ActiveWindow {
         int yOffset = subtract.getY() - circle.getY() - diff;
 
         SubtractFigure effect = new SubtractFigure(
-                new CustomFigure(false, GraphicsMathService.getEllipse(diameter, diameter, 0, 0, 64)));
+                new Figure(false, GraphicsMathService.getEllipse(diameter, diameter, 0, 0, 64)));
         effect.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
         effect.setSizeScale(scale, scale);
         effect.setPositionOffset(xOffset, yOffset);
@@ -409,7 +409,7 @@ public class FlowTest extends ActiveWindow {
         float scale = 0.4f;
         int diameter = (int) (circle.getHeight() * scale);
         SubtractFigure effect = new SubtractFigure(
-                new CustomFigure(true, GraphicsMathService.getEllipse(diameter, diameter, 0, 0, 64)));
+                new Figure(true, GraphicsMathService.getEllipse(diameter, diameter, 0, 0, 64)));
         effect.setAlignment(ItemAlignment.VCENTER, ItemAlignment.HCENTER);
         return effect;
     }

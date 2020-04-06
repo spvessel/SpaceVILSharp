@@ -22,12 +22,12 @@ abstract public class Primitive extends BaseItem {
 
     /**
      * Set item position
-     * @param _x X position of the item left top corner
-     * @param _y Y position of the item left top corner
+     * @param x X position of the item left top corner
+     * @param y Y position of the item left top corner
      */
-    public void setPosition(int _x, int _y) {
-        this.setX(_x);
-        this.setY(_y);
+    public void setPosition(int x, int y) {
+        this.setX(x);
+        this.setY(y);
     }
 
     // style

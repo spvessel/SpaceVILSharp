@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.spvessel.spacevil.Decorations.Border;
-import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.Indents;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Spacing;
@@ -229,7 +229,7 @@ final class VisualItemStatics {
         }
 
         if (style.shape != null) {
-            item.setCustomFigure(new CustomFigure(style.isFixedShape, style.shape));
+            item.setCustomFigure(new Figure(style.isFixedShape, style.shape));
             core_state.shape = item.isCustomFigure();
         }
         item.addItemState(ItemStateType.BASE, core_state);

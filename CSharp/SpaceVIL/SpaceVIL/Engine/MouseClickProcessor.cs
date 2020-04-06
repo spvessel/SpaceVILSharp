@@ -66,10 +66,10 @@ namespace SpaceVIL
                 Glfw.GetCursorPos(_commonProcessor.Handler.GetWindowId(), out x, out y);
                 _commonProcessor.GetHoverPrototype((int)x, (int)y, m_state);
                 lastHovered = _commonProcessor.HoveredItem;
-                _commonProcessor.Margs.Position.SetPosition((float)x, (float)y);
-                _commonProcessor.PtrRelease.SetPosition((float)x, (float)y);
-                _commonProcessor.PtrPress.SetPosition((float)x, (float)y);
-                _commonProcessor.PtrClick.SetPosition((float)x, (float)y);
+                _commonProcessor.Margs.Position.SetPosition((int)x, (int)y);
+                _commonProcessor.PtrRelease.SetPosition((int)x, (int)y);
+                _commonProcessor.PtrPress.SetPosition((int)x, (int)y);
+                _commonProcessor.PtrClick.SetPosition((int)x, (int)y);
             }
 
             if (!_commonProcessor.GetHoverPrototype(_commonProcessor.PtrRelease.GetX(), 
@@ -147,7 +147,7 @@ namespace SpaceVIL
 
                         if (f.IsFocusable)
                         {
-                            if (f is WindowAnchor)
+                            if (f is IWindowAnchor)
                                 _commonProcessor.RootContainer.SaveLastFocus(_commonProcessor.FocusedItem);
                             else
                             {

@@ -16,7 +16,7 @@ import com.spvessel.spacevil.Common.CommonService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Core.InterfaceFloating;
 import com.spvessel.spacevil.Core.MouseArgs;
-import com.spvessel.spacevil.Core.Pointer;
+import com.spvessel.spacevil.Core.Position;
 import com.spvessel.spacevil.Flags.InputEventType;
 
 final class CommonProcessor {
@@ -39,9 +39,9 @@ final class CommonProcessor {
     int xGlobal = 0;
     int yGlobal = 0;
     boolean inputLocker = false;
-    Pointer ptrPress = new Pointer();
-    Pointer ptrRelease = new Pointer();
-    Pointer ptrClick = new Pointer();
+    Position ptrPress = new Position();
+    Position ptrRelease = new Position();
+    Position ptrClick = new Position();
     InputDeviceEvent events;
 
     CommonProcessor() {

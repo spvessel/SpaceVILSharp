@@ -8,6 +8,11 @@ using System.Collections.Generic;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// ToolTipItem is sealed class representing basic user unterface tooltip. 
+    /// You cannot work with this class directly.
+    /// Use SpaceVIL.ToolTip instead.
+    /// </summary>
     public sealed class ToolTipItem : Prototype, IFloating
     {
         private Label _textObject;
@@ -25,8 +30,6 @@ namespace SpaceVIL
         {
             return _timeout;
         }
-
-        // private static ToolTip _instance = null;
 
         internal ToolTipItem()
         {

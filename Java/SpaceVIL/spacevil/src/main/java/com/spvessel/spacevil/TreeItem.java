@@ -79,10 +79,15 @@ public class TreeItem extends Prototype {
         resetIndents();
     }
 
-    /**
-     * Is the TreeItem root
-     */
-    public boolean isRoot = false;
+    private boolean _isRoot = false;
+
+    public boolean isRoot() {
+        return _isRoot;
+    }
+    void setRoot(boolean value) {
+        _isRoot = value;
+    }
+
     long index = 0;
     private TreeItemType _item_type;
 
@@ -177,28 +182,28 @@ public class TreeItem extends Prototype {
     @Override
     public void initElements() {
         switch (_item_type) {
-        case LEAF:
-            _icon_shape.setMargin(2, 0, 0, 0);
-            super.addItem(_icon_shape);
-            super.addItem(_text_object);
-            break;
+            case LEAF:
+                _icon_shape.setMargin(2, 0, 0, 0);
+                super.addItem(_icon_shape);
+                super.addItem(_text_object);
+                break;
 
-        case BRANCH:
-            super.addItem(_indicator);
-            super.addItem(_icon_shape);
-            super.addItem(_text_object);
+            case BRANCH:
+                super.addItem(_indicator);
+                super.addItem(_icon_shape);
+                super.addItem(_text_object);
 
-            _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled()));
-            _indicator.isFocusable = false;
-            eventMouseDoubleClick.add((sender, args) -> {
-                if (args.button == MouseButton.BUTTON_LEFT)
-                    _indicator.eventToggle.execute(sender, args);
-            });
-            break;
+                _indicator.eventToggle.add((sender, args) -> onToggleHide(_indicator.isToggled()));
+                _indicator.isFocusable = false;
+                eventMouseDoubleClick.add((sender, args) -> {
+                    if (args.button == MouseButton.BUTTON_LEFT)
+                        _indicator.eventToggle.execute(sender, args);
+                });
+                break;
 
-        default:
-            super.addItem(_text_object);
-            break;
+            default:
+                super.addItem(_text_object);
+                break;
         }
         _text_object.isFocusable = false;
     }
@@ -288,8 +293,8 @@ public class TreeItem extends Prototype {
      * Set TreeItem X position
      */
     @Override
-    public void setX(int _x) {
-        super.setX(_x);
+    public void setX(int x) {
+        super.setX(x);
         updateLayout();
     }
 

@@ -12,13 +12,6 @@ namespace SpaceVIL.Decorations
     /// </summary>
     public class Border
     {
-        // private CornerRadius _border_radius;
-        // public CornerRadius Radius
-        // {
-        //     Get { return _border_radius; }
-        //     Set { _border_radius = value; }
-        // }
-
         private CornerRadius _border_radius;
 
         /// <returns> Radius of the border's corners </returns>

@@ -9,10 +9,19 @@ using System.IO;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// OpenEntryDialog is user interface element for browsing file system 
+    /// to select a file or folder to open or save.
+    /// Support create/rename/delete files and folders, navigate shortcuts, file filtering.
+    /// <para/> Supports all events except drag and drop.
+    /// </summary>
     public class OpenEntryDialog : OpenDialog
     {
         private String _result = null;
-
+        /// <summary>
+        /// Getting full path of selected fyle system entry.
+        /// </summary>
+        /// <returns>Full path of selected fyle system entry.</returns>
         public String GetResult()
         {
             return _result;
@@ -42,7 +51,10 @@ namespace SpaceVIL
         private Stack<String> _filesTrack = new Stack<String>();
         private Bitmap _folder = null;
         private Bitmap _file = null;
-
+        /// <summary>
+        /// Setting the default path that will be opened when OpenEntryDialog is shown.
+        /// </summary>
+        /// <param name="path">Default path to open.</param>
         public void SetDefaultPath(String path)
         {
             _addressLine.SetText(path);
@@ -50,7 +62,14 @@ namespace SpaceVIL
 
         private FileSystemEntryType _entryType = FileSystemEntryType.File;
         private OpenDialogType _dialogType = OpenDialogType.Open;
-
+        /// <summary>
+        /// Constructs OpenEntryDialog with title text, entry type and dialog type. 
+        /// <para/> Entry type can be FileSystemEntryType.File or FileSystemEntryType.Directory. 
+        /// <para/> Dialog type can be OpenDialogType.Open or OpenDialogType.Save.
+        /// </summary>
+        /// <param name="title">Title text.</param>
+        /// <param name="entryType">Entry type as SpaceVIL.Core.FileSystemEntryType.</param>
+        /// <param name="dialogType">Dialog type as SpaceVIL.Core.OpenDialogType.</param>
         public OpenEntryDialog(String title, FileSystemEntryType entryType, OpenDialogType dialogType)
         {
             SetTitle(title);
@@ -75,7 +94,7 @@ namespace SpaceVIL
             _fileList = new ListBox();
             _fileName = new TextEdit();
             _controlPanel = new Frame();
-            
+
             if (dialogType == OpenDialogType.Save)
                 _btnOpen = new ButtonCore("Save");
             else
@@ -85,10 +104,24 @@ namespace SpaceVIL
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.OpenEntryDialog)));
         }
-
+        /// <summary>
+        /// Constructs OpenEntryDialog with title text, entry type. Dialog type is OpenDialogType.Open.
+        /// <para/> Entry type can be FileSystemEntryType.File or FileSystemEntryType.Directory. 
+        /// </summary>
+        /// <param name="title">Title text.</param>
+        /// <param name="entryType">Entry type as SpaceVIL.Core.FileSystemEntryType.</param>
         public OpenEntryDialog(String title, FileSystemEntryType entryType) : this(title, entryType, OpenDialogType.Open) { }
+        /// <summary>
+        /// Constructs OpenEntryDialog with title text. Entry type is FileSystemEntryType.File. 
+        /// Dialog type is OpenDialogType.Open.
+        /// </summary>
+        /// <param name="title">Title text.</param>
         public OpenEntryDialog(String title) : this(title, FileSystemEntryType.File) { }
-
+        /// <summary>
+        /// Initializing all elements in the OpenEntryDialog.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public override void InitElements()
         {
             // important!
@@ -138,8 +171,8 @@ namespace SpaceVIL
             _btnFilter.AddItem(filter);
             _controlPanel.AddItems(_btnOpen, _btnCancel);
 
-            _fileList.SetHScrollBarVisible(ScrollBarVisibility.AsNeeded);
-            _fileList.SetVScrollBarVisible(ScrollBarVisibility.AsNeeded);
+            _fileList.SetHScrollBarPolicy(VisibilityPolicy.AsNeeded);
+            _fileList.SetVScrollBarPolicy(VisibilityPolicy.AsNeeded);
             _btnBackward.EventMouseClick += (sender, args) => { PathBackward(); };
             _btnUpward.EventMouseClick += (sender, args) => { PathUpward(); };
             _btnHome.EventMouseClick += (sender, args) =>
@@ -358,7 +391,9 @@ namespace SpaceVIL
                 return;
             _fileName.SetText(fse.GetText());
         }
-
+        /// <summary>
+        /// Refresh opened folder.
+        /// </summary>
         public void RefreshFolder()
         {
             String path = _addressLine.GetText(); // need some check
@@ -373,14 +408,20 @@ namespace SpaceVIL
 
         private Dictionary<String, String[]> _extensionFilter = new Dictionary<String, String[]>();
 
-        // "All files (*.*);*.*"
+        /// <summary>
+        /// Adding file filter extensions. 
+        /// <para/> Rule: "filter name (*.ext1, *.ext2, *.extN) ; *.ext1, *.ext2, *.extN&quot;
+        /// <para/> Example 1: "Text files (*.txt) ; *.txt&quot;
+        /// <para/> Example 2: "Images (*.png, *.bmp, *.jpg) ; *.png, *.bmp, *.jpg&quot;
+        /// </summary>
+        /// <param name="exts"></param>
         public void AddFilterExtensions(params String[] exts)
         {
             for (int i = 0; i < exts.Length; i++)
             {
                 String[] line = exts[i].Split(';');
                 String key = line[0];
-                String regex = line[1].ToLower().Replace("*", "");
+                String regex = line[1].ToLower().Replace("*", "").Replace(" ", "");
                 if (_extensionFilter.ContainsKey(key))
                     _extensionFilter[key] = regex.Split(',');
                 else
@@ -525,13 +566,23 @@ namespace SpaceVIL
                 _result = _addressLine.GetText() + Path.DirectorySeparatorChar + _fileName.GetText();
             Close();
         }
-
+        /// <summary>
+        /// Shows OpenEntryDialog and attaches it to the specified window 
+        /// (see SpaceVIL.CoreWindow, SpaceVIL.ActiveWindow, SpaceVIL.DialogWindow).
+        /// </summary>
+        /// <param name="handler">Window for attaching InputDialog.</param>
         public override void Show(CoreWindow handler)
         {
             base.Show(handler);
             _fileList.GetArea().SetFocus();
         }
-
+        /// <summary>
+        /// Setting style of the OpenEntryDialog.
+        /// <para/> Inner styles: "window", "layout", "toolbar", "toolbarbutton",
+        /// "buttonhidden", "addressline", "filenameline", "list", "controlpanel", 
+        /// "okbutton", "cancelbutton", "filter", "filtertext", "divider".
+        /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)

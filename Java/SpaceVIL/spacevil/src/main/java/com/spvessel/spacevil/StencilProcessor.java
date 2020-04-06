@@ -24,7 +24,7 @@ final class StencilProcessor {
 
     boolean process(InterfaceBaseItem shell, Scale scale) {
 
-        _scale.setScale(scale.getX(), scale.getY());
+        _scale.setScale(scale.getXScale(), scale.getYScale());
 
         Prototype parent = shell.getParent();
         if (parent != null && _bounds.containsKey(parent)) {
@@ -42,10 +42,10 @@ final class StencilProcessor {
                 int y = _commonProcessor.window.getHeight() - (shell.getY() + shell.getHeight());
                 int w = shell.getWidth();
                 int h = shell.getHeight();
-                x *= _scale.getX();
-                y *= _scale.getY();
-                w *= _scale.getX();
-                h *= _scale.getY();
+                x *= _scale.getXScale();
+                y *= _scale.getYScale();
+                w *= _scale.getXScale();
+                h *= _scale.getYScale();
 
                 int x1 = x + w;
                 int y1 = y + h;
@@ -95,10 +95,10 @@ final class StencilProcessor {
         int y = _commonProcessor.window.getHeight() - (parent.getY() + parent.getHeight());
         int w = parent.getWidth();
         int h = parent.getHeight();
-        x *= _scale.getX();
-        y *= _scale.getY();
-        w *= _scale.getX();
-        h *= _scale.getY();
+        x *= _scale.getXScale();
+        y *= _scale.getYScale();
+        w *= _scale.getXScale();
+        h *= _scale.getYScale();
 
         glEnable(GL_SCISSOR_TEST);
         glScissor(x, y, w, h);

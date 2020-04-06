@@ -11,7 +11,7 @@ public final class MouseArgs extends InputEventArgs {
     public MouseButton button;
     public InputState state;
     public List<KeyMods> mods;
-    public Pointer position = new Pointer();
+    public Position position = new Position();
 
     @Override
     public void clear() {
@@ -19,6 +19,6 @@ public final class MouseArgs extends InputEventArgs {
         state = InputState.RELEASE;
         mods = new LinkedList<>();
         mods.add(KeyMods.NO);
-        position.clear();
+        position.setPosition(0, 0);
     }
 }

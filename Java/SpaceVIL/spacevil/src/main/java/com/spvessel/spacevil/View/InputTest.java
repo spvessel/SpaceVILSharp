@@ -13,7 +13,7 @@ import com.spvessel.spacevil.*;
 import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Decorations.CornerRadius;
-import com.spvessel.spacevil.Decorations.CustomFigure;
+import com.spvessel.spacevil.Decorations.Figure;
 import com.spvessel.spacevil.Decorations.Effects;
 import com.spvessel.spacevil.Decorations.ItemState;
 import com.spvessel.spacevil.Decorations.Shadow;
@@ -402,7 +402,7 @@ public class InputTest extends ActiveWindow {
         triangles.addAll(GraphicsMathService.getEllipse(10, 10, 5, (int) (item.getHeight() / 2f - 5.0f), 12));
         triangles.addAll(
                 GraphicsMathService.getEllipse(10, 10, item.getWidth() - 15, (int) (item.getHeight() / 2f - 5.0f), 12));
-        CustomFigure figure = new CustomFigure(false, triangles);
+        Figure figure = new Figure(false, triangles);
 
         SubtractFigure effect = new SubtractFigure(figure);
         return effect;

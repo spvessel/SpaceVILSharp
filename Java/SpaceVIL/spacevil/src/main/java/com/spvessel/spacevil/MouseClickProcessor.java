@@ -10,6 +10,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.system.MemoryStack;
 
 import com.spvessel.spacevil.Core.InterfaceDraggable;
+import com.spvessel.spacevil.Core.InterfaceWindowAnchor;
 import com.spvessel.spacevil.Flags.InputEventType;
 import com.spvessel.spacevil.Flags.InputState;
 import com.spvessel.spacevil.Flags.KeyMods;
@@ -151,7 +152,7 @@ final class MouseClickProcessor {
                     if (f.equals(_commonProcessor.hoveredItem) && _commonProcessor.hoveredItem.isDisabled())
                         continue;
                     if (f.isFocusable) {
-                        if (f instanceof WindowAnchor)
+                        if (f instanceof InterfaceWindowAnchor)
                             _commonProcessor.handler.getCoreWindow().getLayout().getContainer()
                                     .saveLastFocus(_commonProcessor.focusedItem);
                         else {

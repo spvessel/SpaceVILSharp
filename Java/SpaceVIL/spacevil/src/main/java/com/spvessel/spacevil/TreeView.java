@@ -4,7 +4,7 @@ import com.spvessel.spacevil.Common.DefaultsService;
 import com.spvessel.spacevil.Core.EventCommonMethod;
 import com.spvessel.spacevil.Core.InterfaceBaseItem;
 import com.spvessel.spacevil.Decorations.Style;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Flags.VisibilityPolicy;
 import com.spvessel.spacevil.Flags.TreeItemType;
 
 import java.util.LinkedList;
@@ -91,7 +91,7 @@ public class TreeView extends ListBox {
         setStyle(DefaultsService.getDefaultStyle(TreeView.class));
         eventSortTree.add(this::onSortTree);
 
-        setHScrollBarVisible(ScrollBarVisibility.AS_NEEDED);
+        setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
     }
 
     /**
@@ -101,7 +101,7 @@ public class TreeView extends ListBox {
     public void initElements() {
         super.initElements();
         _root._treeViewContainer = this;
-        _root.isRoot = true;
+        _root.setRoot(true);
         _root.getIndicator().setToggled(true);
         super.addItem(_root);
         setRootVisible(false);
@@ -218,7 +218,7 @@ public class TreeView extends ListBox {
             if (item instanceof TreeItem) {
                 _root = (TreeItem) item;
                 _root._treeViewContainer = this;
-                _root.isRoot = true;
+                _root.setRoot(true);
                 _root.getIndicator().setToggled(true);
                 super.addItem(_root);
                 setRootVisible(false);

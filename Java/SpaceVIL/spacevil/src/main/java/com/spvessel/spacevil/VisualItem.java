@@ -57,25 +57,25 @@ final class VisualItem extends BaseItem {
         }
     }
 
-    void setPosition(int _x, int _y) {
-        this.setX(_x);
-        this.setY(_y);
+    void setPosition(int x, int y) {
+        this.setX(x);
+        this.setY(y);
     }
 
     @Override
-    public void setX(int _x) {
-        int value = _x - getX();
+    public void setX(int x) {
+        int value = x - getX();
         if (value != 0) {
-            super.setX(_x);
+            super.setX(x);
             eventManager.notifyListeners(GeometryEventType.MOVED_X, value);
         }
     }
 
     @Override
-    public void setY(int _y) {
-        int value = _y - getY();
+    public void setY(int y) {
+        int value = y - getY();
         if (value != 0) {
-            super.setY(_y);
+            super.setY(y);
             eventManager.notifyListeners(GeometryEventType.MOVED_Y, value);
         }
     }
@@ -235,7 +235,7 @@ final class VisualItem extends BaseItem {
     }
 
     @Override
-    public void removeItemFromListeners() {
+    void removeItemFromListeners() {
         Prototype parent = getParent();
         parent.removeEventListener(GeometryEventType.RESIZE_WIDTH, this.prototype);
         parent.removeEventListener(GeometryEventType.RESIZE_HEIGHT, this.prototype);
@@ -587,13 +587,13 @@ final class VisualItem extends BaseItem {
         return VisualItemStatics.getHoverVerification(this, xpos, ypos);
     }
 
-    private CustomFigure _is_custom = null;
+    private Figure _is_custom = null;
 
-    final CustomFigure isCustomFigure() {
+    final Figure isCustomFigure() {
         return _is_custom;
     }
 
-    void setCustomFigure(CustomFigure figure) {
+    void setCustomFigure(Figure figure) {
         _is_custom = figure;
         ItemsRefreshManager.setRefreshShape(this.prototype);
     }

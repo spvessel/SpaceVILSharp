@@ -3,11 +3,15 @@ using Glfw3;
 using SpaceVIL.Core;
 using System.Threading;
 using System.Runtime.InteropServices;
-using System.ComponentModel;
-using static Glfw3.Glfw;
+using SpaceVIL.Decorations;
 
 namespace SpaceVIL.Common
 {
+    /// <summary>
+    /// DisplayService is static class providing methods to getting basic information 
+    /// about the SpaceVIL framework, OS attributes, 
+    /// initializing the SpaceVIL framework and working with clipboard.
+    /// </summary>
     public static class CommonService
     {
         private static String _version = "0.3.1.4-ALPHA - February 2019";
@@ -18,6 +22,10 @@ namespace SpaceVIL.Common
         private static String _platform = "Core";
 #endif
 
+        /// <summary>
+        /// Getting basic information about SpaceVIL such as version, date, platform and os.
+        /// </summary>
+        /// <returns>The information as System.String.</returns>
         public static String GetSpaceVILInfo()
         {
             if (!_isOSSet)
@@ -33,6 +41,10 @@ namespace SpaceVIL.Common
 
         private static SpaceVIL.Core.OSType _osType;
 
+        /// <summary>
+        /// Getting the current OS type.
+        /// </summary>
+        /// <returns>The OS type as SpaceVIL.Core.OSType.</returns>
         public static SpaceVIL.Core.OSType GetOSType()
         {
             return _osType;
@@ -68,6 +80,10 @@ namespace SpaceVIL.Common
             _isOSSet = true;
         }
 
+        /// <summary>
+        /// Initializing the mandatory SpaceVIL common components (GLFW, default values and etc.).
+        /// </summary>
+        /// <returns>True: if initialization is successful. False: if initialization is unsuccessful.</returns>
         public static bool InitSpaceVILComponents()
         {
             if (!_isOSSet)
@@ -142,6 +158,10 @@ namespace SpaceVIL.Common
             freeMemoryThread.Start();
         }
 
+        /// <summary>
+        /// Getting stored text in clipboard.
+        /// </summary>
+        /// <returns>The text as System.String.</returns>
         public static String GetClipboardString()
         {
             CoreWindow window = WindowsBox.GetCurrentFocusedWindow();
@@ -152,7 +172,10 @@ namespace SpaceVIL.Common
                 return String.Empty;
             return Glfw.GetClipboardString(id);
         }
-
+        /// <summary>
+        /// Placing the specified text to the clipboard.
+        /// </summary>
+        /// <param name="text">The text as System.String.</param>
         public static void SetClipboardString(String text)
         {
             CoreWindow window = WindowsBox.GetCurrentFocusedWindow();
@@ -168,16 +191,26 @@ namespace SpaceVIL.Common
         private static KeyCode _controlLeft = KeyCode.LeftControl;
         private static KeyMods _controlMod = KeyMods.Control;
 
+        /// <summary>
+        /// Getting the default right "control" key KeyCode of current OS (for Mac OS - Command key)
+        /// </summary>
+        /// <returns>The keyboard key as SpaceVIL.Core.KeyCode</returns>
         public static KeyCode GetOsControlKeyRight()
         {
             return _controlRight;
         }
-
+        /// <summary>
+        /// Getting the default left "control" key KeyCode of current OS (for Mac OS - Command key)
+        /// </summary>
+        /// <returns>The keyboard key as SpaceVIL.Core.KeyCode</returns>
         public static KeyCode GetOsControlKeyLeft()
         {
             return _controlLeft;
         }
-
+        /// <summary>
+        /// Getting the default "control" modifier KeyCode of current OS (for Mac OS - Command key)
+        /// </summary>
+        /// <returns>The keyboard modifier as SpaceVIL.Core.KeyMods</returns>
         public static KeyMods GetOsControlMod()
         {
             return _controlMod;

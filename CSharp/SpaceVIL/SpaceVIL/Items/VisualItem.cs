@@ -9,11 +9,40 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// Common type of events. No arguments.
+    /// </summary>
     public delegate void EventCommonMethod();
+    /// <summary>
+    /// Common type of events with one argument: sender.
+    /// </summary>
+    /// <param name="sender">Sender as SpaceVIL.Core.IItem.</param>
     public delegate void EventCommonMethodState(IItem sender);
+    /// <summary>
+    /// Mouse type of event with two arguments: sender, args.
+    /// </summary>
+    /// <param name="sender">Sender as SpaceVIL.Core.IItem.</param>
+    /// <param name="args">Mouse arguments as SpaceVIL.Core.MouseArgs.</param>
     public delegate void EventMouseMethodState(IItem sender, MouseArgs args);
+    /// <summary>
+    /// Key type of event with two arguments: sender, args.
+    /// </summary>
+    /// <param name="sender">Sender as SpaceVIL.Core.IItem.</param>
+    /// <param name="args">Key arguments as SpaceVIL.Core.KeyArgs.</param>
     public delegate void EventKeyMethodState(IItem sender, KeyArgs args);
+    /// <summary>
+    /// Text input type of event with two arguments: sender, args.
+    /// </summary>
+    /// <param name="sender">Sender as SpaceVIL.Core.IItem.</param>
+    /// <param name="args">Text input arguments as SpaceVIL.Core.TextInputArgs.</param>
     public delegate void EventInputTextMethodState(IItem sender, TextInputArgs args);
+
+    /// <summary>
+    /// Drop type of event with two arguments: sender, args.
+    /// </summary>
+    /// <param name="sender">Sender as SpaceVIL.Core.IItem.</param>
+    /// <param name="args">Drop arguments as SpaceVIL.Core.DropArgs.</param>
+    public delegate void EventWindowDropMethod(IItem sender, DropArgs args);
 
     internal class VisualItem : BaseItem
     {
@@ -110,7 +139,7 @@ namespace SpaceVIL
                 (item as BaseItem).RemoveItemFromListeners();
         }
 
-        public override void RemoveItemFromListeners()
+        internal override void RemoveItemFromListeners()
         {
             Prototype parent = GetParent();
             parent.RemoveEventListener(GeometryEventType.ResizeWidth, this.prototype);
@@ -415,26 +444,26 @@ namespace SpaceVIL
                 eventManager.NotifyListeners(GeometryEventType.ResizeHeight, value);
             }
         }
-        internal void SetPosition(int _x, int _y)
+        internal void SetPosition(int x, int y)
         {
-            this.SetX(_x);
-            this.SetY(_y);
+            this.SetX(x);
+            this.SetY(y);
         }
-        public override void SetX(int _x)
+        public override void SetX(int x)
         {
-            int value = _x - GetX();
+            int value = x - GetX();
             if (value != 0)
             {
-                base.SetX(_x);
+                base.SetX(x);
                 eventManager.NotifyListeners(GeometryEventType.MovedX, value);
             }
         }
-        public override void SetY(int _y)
+        public override void SetY(int y)
         {
-            int value = _y - GetY();
+            int value = y - GetY();
             if (value != 0)
             {
-                base.SetY(_y);
+                base.SetY(y);
                 eventManager.NotifyListeners(GeometryEventType.MovedY, value);
             }
         }
@@ -559,13 +588,6 @@ namespace SpaceVIL
             //foreach inner item focusable value set?
         }
 
-        protected override void UpdateInnersDrawable(bool value)
-        {
-            foreach (var item in _content)
-            {
-                item.SetVisible(value);
-            }
-        }
         //common methods
         internal void AddItemState(ItemStateType type, ItemState state)
         {
@@ -644,12 +666,12 @@ namespace SpaceVIL
             return VisualItemStatics.GetHoverVerification(this, xpos, ypos);
         }
 
-        CustomFigure IsCustom = null;
-        internal CustomFigure IsCustomFigure()
+        Figure IsCustom = null;
+        internal Figure IsCustomFigure()
         {
             return IsCustom;
         }
-        internal void SetCustomFigure(CustomFigure figure)
+        internal void SetCustomFigure(Figure figure)
         {
             IsCustom = figure;
             ItemsRefreshManager.SetRefreshShape(this.prototype);

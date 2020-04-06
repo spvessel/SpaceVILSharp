@@ -49,10 +49,10 @@ final class DrawEngine {
         int y = _commonProcessor.window.getHeight() - (item.getY() + item.getHeight());
         int w = item.getWidth();
         int h = item.getHeight();
-        x = (int) ((float) x * _scale.getX());
-        y = (int) ((float) y * _scale.getY());
-        w = (int) ((float) w * _scale.getX());
-        h = (int) ((float) h * _scale.getY());
+        x = (int) ((float) x * _scale.getXScale());
+        y = (int) ((float) y * _scale.getYScale());
+        w = (int) ((float) w * _scale.getXScale());
+        h = (int) ((float) h * _scale.getYScale());
         glViewport(x, y, w, h);
     }
 
@@ -164,8 +164,8 @@ final class DrawEngine {
         CommonService.GlobalLocker.lock();
         try {
             glwHandler.createWindow();
-            _scale.setScale(glwHandler.getCoreWindow().getDpiScale().getX(),
-                    glwHandler.getCoreWindow().getDpiScale().getY());
+            _scale.setScale(glwHandler.getCoreWindow().getDpiScale().getXScale(),
+                    glwHandler.getCoreWindow().getDpiScale().getYScale());
             setEventsCallbacks();
             GL.createCapabilities();
             if (WindowManager.getVSyncValue() != 1)
@@ -302,8 +302,8 @@ final class DrawEngine {
         IntBuffer height = BufferUtils.createIntBuffer(1);
         glfwGetWindowSize(_commonProcessor.handler.getWindowId(), width, height);
 
-        glwHandler.getCoreWindow().setWidthDirect((int) (width.get(0) / _scale.getX()));
-        glwHandler.getCoreWindow().setHeightDirect((int) (height.get(0) / _scale.getY()));
+        glwHandler.getCoreWindow().setWidthDirect((int) (width.get(0) / _scale.getXScale()));
+        glwHandler.getCoreWindow().setHeightDirect((int) (height.get(0) / _scale.getYScale()));
 
         // подписать на обновление при смене фактора масштабирования 
         // (текст в фиксированных по ширине элементов не обновляется - оно и понятно)
@@ -373,8 +373,8 @@ final class DrawEngine {
         _tooltip.initTimer(false);
 
         if (CommonService.getOSType() != OSType.MAC) {
-            _commonProcessor.window.setWidthDirect((int) (width / _scale.getX()));
-            _commonProcessor.window.setHeightDirect((int) (height / _scale.getY()));
+            _commonProcessor.window.setWidthDirect((int) (width / _scale.getXScale()));
+            _commonProcessor.window.setHeightDirect((int) (height / _scale.getYScale()));
         } else {
             _commonProcessor.window.setWidthDirect(width);
             _commonProcessor.window.setHeightDirect(height);
@@ -423,7 +423,7 @@ final class DrawEngine {
         if (!glwHandler.focusable)
             return;
         if (CommonService.getOSType() != OSType.MAC) {
-            _mouseMoveProcessor.process(wnd, xpos / _scale.getX(), ypos / _scale.getX(), _scale);
+            _mouseMoveProcessor.process(wnd, xpos / _scale.getXScale(), ypos / _scale.getXScale(), _scale);
         } else {
             _mouseMoveProcessor.process(wnd, xpos, ypos, new Scale());
         }
@@ -873,7 +873,7 @@ final class DrawEngine {
         checkOutsideBorders((InterfaceBaseItem) image);
 
         int w = image.getImageWidth(), h = image.getImageHeight();
-        RectangleBounds area = image.getRectangleBounds();
+        Area area = image.getAreaBounds();
 
         if (ItemsRefreshManager.isRefreshImage(image)) {
             _renderProcessor.drawFreshTexture(image, _texture, area.getX(), area.getY(), area.getWidth(),
@@ -885,7 +885,7 @@ final class DrawEngine {
         }
     }
 
-    private Pointer tooltipBorderIndent = new Pointer(10, 2);
+    private Position tooltipBorderIndent = new Position(10, 2);
 
     private void drawToolTip() {
         if (!_tooltip.isVisible())

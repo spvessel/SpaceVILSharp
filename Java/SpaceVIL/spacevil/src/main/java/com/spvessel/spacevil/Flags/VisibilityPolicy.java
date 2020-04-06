@@ -1,5 +1,5 @@
 package com.spvessel.spacevil.Flags;
 
-public enum ScrollBarVisibility {
+public enum VisibilityPolicy {
     ALWAYS, AS_NEEDED, NEVER
 }

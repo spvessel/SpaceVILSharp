@@ -10,19 +10,19 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 
 public class SubtractFigure implements InterfaceSubtractFigure, InterfaceEffect {
 
-    public SubtractFigure(CustomFigure figure) {
+    public SubtractFigure(Figure figure) {
         setSubtractFigure(figure);
     }
 
-    private CustomFigure _figure = null;
+    private Figure _figure = null;
 
     @Override
-    public void setSubtractFigure(CustomFigure figure) {
+    public void setSubtractFigure(Figure figure) {
         _figure = figure;
     }
 
     @Override
-    public CustomFigure getSubtractFigure() {
+    public Figure getSubtractFigure() {
         return _figure;
     }
 

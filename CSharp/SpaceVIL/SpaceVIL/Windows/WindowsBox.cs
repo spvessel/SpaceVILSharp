@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
 using SpaceVIL.Core;
 
 namespace SpaceVIL
@@ -15,16 +11,105 @@ namespace SpaceVIL
     }
 
     /// <summary>
-    /// A storage-class that provides an access to existing window layouts by name and Guid
+    /// WindowsBox is a storage-class that provides an access to existing windows by name and Guid
     /// </summary>
     public static class WindowsBox
     {
-        static internal HashSet<CoreWindow> windows = new HashSet<CoreWindow>();
-        static internal Dictionary<Guid, CoreWindow> windowsGuid = new Dictionary<Guid, CoreWindow>();
-        static internal Dictionary<CoreWindow, CoreWindow> pairs = new Dictionary<CoreWindow, CoreWindow>();
-        static internal CoreWindow lastFocusedWindow;
+        /// <summary>
+        /// Trying to show a window by its GUID.
+        /// </summary>
+        /// <param name="guid">GUID of the window.</param>
+        /// <returns>True: if window with such GUID is exist. False: if window with such GUID is not exist.</returns>
+        public static bool TryShow(Guid guid)
+        {
+            CoreWindow wnd = WindowsBox.GetWindowInstance(guid);
+            if (wnd != null)
+            {
+                wnd.Show();
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// Trying to show a window by its name.
+        /// </summary>
+        /// <param name="name">Name of the window.</param>
+        /// <returns>True: if window with such name is exist. False: if window with such name is not exist.</returns>
+        public static bool TryShow(String name)
+        {
+            CoreWindow wnd = WindowsBox.GetWindowInstance(name);
+            if (wnd != null)
+            {
+                wnd.Show();
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// Getting a window instance by its name.
+        /// </summary>
+        /// <param name="name">Name of the window.</param>
+        /// <returns>CoreWindow link: if window with such name is exist. NULL: if window with such name is not exist.</returns>
+        public static CoreWindow GetWindowInstance(string name)
+        {
+            foreach (CoreWindow wnd in windows)
+            {
+                if (wnd.GetWindowName().Equals(name))
+                    return wnd;
+            }
+            return null;
+        }
+        /// <summary>
+        /// Getting a window instance by its GUID.
+        /// </summary>
+        /// <param name="guid">GUID of the window.</param>
+        /// <returns>CoreWindow link: if window with such GUID is exist. NULL: if window with such GUID is not exist.</returns>
+        public static CoreWindow GetWindowInstance(Guid guid)
+        {
+            if (windowsGuid.ContainsKey(guid))
+                return windowsGuid[guid];
+            else return null;
+        }
+        /// <summary>
+        /// Getting the current focused window.
+        /// </summary>
+        /// <returns>The current focused window as SpaceVIL.CoreWindow.</returns>
+        public static CoreWindow GetCurrentFocusedWindow()
+        {
+            return lastFocusedWindow;
+        }
+        /// <summary>
+        /// Getting the list of existing windows in the application.
+        /// </summary>
+        /// <returns>The list of existing windows.</returns>
+        public static List<String> GetWindowsList()
+        {
+            List<String> result = new List<String>();
 
-        static internal void InitWindow(CoreWindow _layout)
+            foreach (CoreWindow wl in windows)
+            {
+                result.Add(wl.GetWindowName());
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// Printing all existing windows in the application.
+        /// </summary>
+        public static void PrintStoredWindows()
+        {
+            foreach (var item in GetWindowsList())
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        internal static HashSet<CoreWindow> windows = new HashSet<CoreWindow>();
+        internal static Dictionary<Guid, CoreWindow> windowsGuid = new Dictionary<Guid, CoreWindow>();
+        internal static Dictionary<CoreWindow, CoreWindow> pairs = new Dictionary<CoreWindow, CoreWindow>();
+        internal static CoreWindow lastFocusedWindow;
+
+        internal static void InitWindow(CoreWindow _layout)
         {
             if (windowsGuid.ContainsKey(_layout.GetWindowGuid()))
                 return;
@@ -52,63 +137,25 @@ namespace SpaceVIL
 
             ItemsLayoutBox.AddItem(_layout, container, LayoutType.Static);
         }
-        static internal void RemoveWindow(CoreWindow _layout)
+
+        internal static void RemoveWindow(CoreWindow _layout)
         {
             windows.Remove(_layout);
             windowsGuid.Remove(_layout.GetWindowGuid());
             _layout.Release();
         }
 
-        static public bool TryShow(Guid guid)
-        {
-            CoreWindow wnd = WindowsBox.GetWindowInstance(guid);
-            if (wnd != null)
-            {
-                wnd.Show();
-                return true;
-            }
-            return false;
-        }
-
-        static public bool TryShow(String name)
-        {
-            CoreWindow wnd = WindowsBox.GetWindowInstance(name);
-            if (wnd != null)
-            {
-                wnd.Show();
-                return true;
-            }
-            return false;
-        }
-
-        static public CoreWindow GetWindowInstance(string name)
-        {
-            foreach (CoreWindow wnd in windows)
-            {
-                if (wnd.GetWindowName().Equals(name))
-                    return wnd;
-            }
-            return null;
-        }
-
-        static public CoreWindow GetWindowInstance(Guid guid)
-        {
-            if (windowsGuid.ContainsKey(guid))
-                return windowsGuid[guid];
-            else return null;
-        }
-
-        static internal void CreateWindowsPair(CoreWindow wnd)
+        internal static void CreateWindowsPair(CoreWindow wnd)
         {
             AddToWindowDispatcher(wnd);
         }
 
-        static internal void DestroyWindowsPair(CoreWindow wnd)
+        internal static void DestroyWindowsPair(CoreWindow wnd)
         {
             RemoveFromWindowDispatcher(wnd);
         }
 
-        static internal CoreWindow GetWindowPair(CoreWindow wnd)
+        internal static CoreWindow GetWindowPair(CoreWindow wnd)
         {
             if (pairs.ContainsKey(wnd))
                 return pairs[wnd];
@@ -116,51 +163,26 @@ namespace SpaceVIL
                 return null;
         }
 
-        static void AddToWindowDispatcher(CoreWindow wnd)
+        internal static void AddToWindowDispatcher(CoreWindow wnd)
         {
             if (!pairs.ContainsKey(wnd))
                 pairs.Add(wnd, lastFocusedWindow);
         }
 
-        static internal void SetCurrentFocusedWindow(CoreWindow wnd)
+        internal static void SetCurrentFocusedWindow(CoreWindow wnd)
         {
             lastFocusedWindow = wnd;
         }
 
-        public static CoreWindow GetCurrentFocusedWindow()
-        {
-            return lastFocusedWindow;
-        }
-
-        static internal void SetFocusedWindow(CoreWindow window)
+        internal static void SetFocusedWindow(CoreWindow window)
         {
             window.SetFocus(true);
         }
 
-        static internal void RemoveFromWindowDispatcher(CoreWindow wnd)
+        internal static void RemoveFromWindowDispatcher(CoreWindow wnd)
         {
             if (pairs.ContainsKey(wnd))
                 pairs.Remove(wnd);
-        }
-
-        static public List<String> GetWindowsList()
-        {
-            List<String> result = new List<String>();
-
-            foreach (CoreWindow wl in windows)
-            {
-                result.Add(wl.GetWindowName());
-            }
-
-            return result;
-        }
-
-        static public void PrintStoredWindows()
-        {
-            foreach (var item in GetWindowsList())
-            {
-                Console.WriteLine(item);
-            }
         }
 
         internal static void RestoreCommonGLSettings(CoreWindow window)

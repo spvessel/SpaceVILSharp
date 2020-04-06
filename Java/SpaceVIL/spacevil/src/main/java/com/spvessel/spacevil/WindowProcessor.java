@@ -65,8 +65,8 @@ final class WindowProcessor {
             if (height > _commonProcessor.window.getMaxHeight())
                 height = _commonProcessor.window.getMaxHeight();
 
-            glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getX()),
-                    (int) (height * scale.getY()));
+            glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getXScale()),
+                    (int) (height * scale.getYScale()));
         } else {
             glfwSetWindowSize(_commonProcessor.handler.getWindowId(), width, height);
         }
@@ -116,8 +116,8 @@ final class WindowProcessor {
         if (CommonService.getOSType() != OSType.MAC) {
             int width = _commonProcessor.window.getWidth();
             int height = _commonProcessor.window.getHeight();
-            glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getX()),
-                    (int) (height * scale.getY()));
+            glfwSetWindowSize(_commonProcessor.handler.getWindowId(), (int) (width * scale.getXScale()),
+                    (int) (height * scale.getYScale()));
         }
 
         _commonProcessor.inputLocker = false;

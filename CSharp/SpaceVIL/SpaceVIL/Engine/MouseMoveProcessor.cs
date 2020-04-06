@@ -19,7 +19,7 @@ namespace SpaceVIL
         {
             _commonProcessor.PtrRelease.SetX((int)xpos);
             _commonProcessor.PtrRelease.SetY((int)ypos);
-            _commonProcessor.Margs.Position.SetPosition((float)xpos, (float)ypos);
+            _commonProcessor.Margs.Position.SetPosition((int)xpos, (int)ypos);
             if (_commonProcessor.Events.LastEvent().HasFlag(InputEventType.MousePress))
             {
                 if (_commonProcessor.Window.IsBorderHidden && _commonProcessor.Window.IsResizable)
@@ -105,12 +105,12 @@ namespace SpaceVIL
                             if (handlerContainerSides.HasFlag(Side.Left))
                             {
                                 flagLT = true;
-                                w = (int)(w / scale.GetX());
+                                w = (int)(w / scale.GetXScale());
                             }
                             if (handlerContainerSides.HasFlag(Side.Top))
                             {
                                 flagLT = true;
-                                h = (int)(h / scale.GetY());
+                                h = (int)(h / scale.GetYScale());
                             }
                             if (flagLT)
                             {
@@ -125,7 +125,7 @@ namespace SpaceVIL
                     int xClick = _commonProcessor.PtrClick.GetX();
                     int yClick = _commonProcessor.PtrClick.GetY();
                     _commonProcessor.DraggableItem = _commonProcessor.IsInListHoveredItems<IDraggable>();
-                    Prototype anchor = _commonProcessor.IsInListHoveredItems<WindowAnchor>();
+                    Prototype anchor = _commonProcessor.IsInListHoveredItems<IWindowAnchor>();
                     if (_commonProcessor.DraggableItem != null
                         && _commonProcessor.DraggableItem.Equals(_commonProcessor.HoveredItem)
                         )

@@ -1186,7 +1186,7 @@ namespace SpaceVIL
                     // else
                     if (wLayout != null)
                     {
-                        _screenScale = DisplayService.GetDisplayDpiScale().GetX(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
+                        _screenScale = DisplayService.GetDisplayDpiScale().GetXScale(); //Common.DisplayService.GetDpiScale()[0]; //wLayout.GetDpiScale()[0];
                         if (_screenScale == 0)
                         {
                             _screenScale = 1;

@@ -6,6 +6,10 @@ using Glfw3;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// WindowManager is a static class that is designed to manage instances of a window and entire application. 
+    /// Provides control for changing render frequency, render type, vertical sync, adding/closing windows, exiting the app and more.
+    /// </summary>
     public static class WindowManager
     {
         private static Object _lock = new Object();
@@ -17,29 +21,41 @@ namespace SpaceVIL
         private static float _intervalAssigned = 1.0f / 10.0f;
         private static RedrawFrequency _frequency = RedrawFrequency.Low;
 
-        public static void SetRenderFrequency(RedrawFrequency value)
+        /// <summary>
+        /// Setting the frequency of redrawing scene in idle state. 
+        /// The higher the level, the more computer resources are used. 
+        /// Default: SpaceVIL.Core.RedrawFrequency.Low
+        /// <para/>Can be: 
+        /// <para/>VeryLow - 1 frame per second, 
+        /// <para/>Low - up to 10 frames per second, 
+        /// <para/>Medium - up to 30 frames per second,
+        /// <para/>High - up to 60 frames per second,
+        /// <para/>Ultra - up to 120 frames per second,
+        /// </summary>
+        /// <param name="level">A frequency level as SpaceVIL.Core.RedrawFrequency</param>
+        public static void SetRenderFrequency(RedrawFrequency level)
         {
             Monitor.Enter(_lock);
             try
             {
-                _frequency = value;
-                if (value == RedrawFrequency.VeryLow)
+                _frequency = level;
+                if (level == RedrawFrequency.VeryLow)
                 {
                     _intervalAssigned = _intervalVeryLow;
                 }
-                if (value == RedrawFrequency.Low)
+                if (level == RedrawFrequency.Low)
                 {
                     _intervalAssigned = _intervalLow;
                 }
-                else if (value == RedrawFrequency.Medium)
+                else if (level == RedrawFrequency.Medium)
                 {
                     _intervalAssigned = _intervalMedium;
                 }
-                else if (value == RedrawFrequency.High)
+                else if (level == RedrawFrequency.High)
                 {
                     _intervalAssigned = _intervalHigh;
                 }
-                else if (value == RedrawFrequency.Ultra)
+                else if (level == RedrawFrequency.Ultra)
                 {
                     _intervalAssigned = _intervalUltra;
                 }
@@ -54,52 +70,10 @@ namespace SpaceVIL
                 Monitor.Exit(_lock);
             }
         }
-
-        private static int _vsync = 1;
-
-        public static void EnableVSync(int value)
-        {
-            if (_isRunning)
-                return;
-            _vsync = value;
-        }
-
-        public static int GetVSyncValue()
-        {
-            return _vsync;
-        }
-
-        public static void SetRenderType(RenderType value)
-        {
-            Monitor.Enter(_lock);
-            try
-            {
-                waitfunc = null;
-                if (value == RenderType.IfNeeded)
-                {
-                    waitfunc += () => Glfw.WaitEvents();
-                }
-                else if (value == RenderType.Periodic)
-                {
-                    waitfunc += () => Glfw.WaitEventsTimeout(GetCurrentFrequency());
-                }
-                else if (value == RenderType.Always)
-                {
-                    waitfunc += () => Glfw.PollEvents();
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Method - SetRenderType");
-                Console.WriteLine(ex.StackTrace);
-            }
-            finally
-            {
-                Monitor.Exit(_lock);
-            }
-        }
-
+        /// <summary>
+        /// Getting the current render frequency interval between two frames.
+        /// </summary>
+        /// <returns>The current frequency interval as float value.</returns>
         private static float GetCurrentFrequency()
         {
             Monitor.Enter(_lock);
@@ -109,7 +83,7 @@ namespace SpaceVIL
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Method - SetFrequency");
+                Console.WriteLine("Method - GetCurrentFrequency");
                 Console.WriteLine(ex.StackTrace);
                 return _intervalLow;
             }
@@ -118,7 +92,10 @@ namespace SpaceVIL
                 Monitor.Exit(_lock);
             }
         }
-
+        /// <summary>
+        /// Getting the current render frequency.
+        /// </summary>
+        /// <returns>The current render frequency as SpaceVIL.Core.RedrawFrequency.</returns>
         public static RedrawFrequency GetRenderFrequency()
         {
             Monitor.Enter(_lock);
@@ -139,6 +116,73 @@ namespace SpaceVIL
             }
         }
 
+        private static int _vsync = 1;
+
+        /// <summary>
+        /// Setting the vsync value. If value is 0 - vsync is OFF, if other value - vsync is ON. 
+        /// The total amount of FPS calculated by the formula: 1.0 / Math.Abs(value) * DisplayRefreshRate, 
+        /// so if value is 2 (or -2) and dysplay refresh rate is 60 then 1.0 / 2 * 60 = 30 fps.
+        /// Default: 1 - ENABLE.
+        /// </summary>
+        /// <param name="value">Value of vsync.</param>
+        public static void EnableVSync(int value)
+        {
+            if (_isRunning)
+                return;
+            _vsync = value;
+        }
+        /// <summary>
+        /// Getting the current vsync value. If value is 0 - vsync is OFF, if other value - vsync is ON. 
+        /// The total amount of FPS calculated by the formula: 1.0 / Math.Abs(value) * DisplayRefreshRate, 
+        /// so if value is 2 (or -2) and dysplay refresh rate is 60 then 1.0 / 2 * 60 = 30 fps.
+        /// Default: 1 - ENABLE.
+        /// </summary>
+        /// <returns>The current vsync value</returns>
+        public static int GetVSyncValue()
+        {
+            return _vsync;
+        }
+        /// <summary>
+        /// Setting the common render type. Default: SpaceVIL.Core.RenderType.Periodic.
+        /// <para/>Can be:
+        /// <para/>IfNeeded - the scene is redrawn only if any input event occurs (mouse move, mouse click, 
+        /// keyboard key press, window resizing and etc.), 
+        /// <para/>Periodic - the scene is redrawn according to the current render frequency type 
+        /// (See SetRenderFrequency(type)) in idle and every time when any input event occurs, 
+        /// <para/>Always - the scene is constantly being redrawn.
+        /// </summary>
+        /// <param name="type">A render type as SpaceVIL.Core.RenderType.</param>
+        public static void SetRenderType(RenderType type)
+        {
+            Monitor.Enter(_lock);
+            try
+            {
+                waitfunc = null;
+                if (type == RenderType.IfNeeded)
+                {
+                    waitfunc += () => Glfw.WaitEvents();
+                }
+                else if (type == RenderType.Periodic)
+                {
+                    waitfunc += () => Glfw.WaitEventsTimeout(GetCurrentFrequency());
+                }
+                else if (type == RenderType.Always)
+                {
+                    waitfunc += () => Glfw.PollEvents();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Method - SetRenderType");
+                Console.WriteLine(ex.StackTrace);
+            }
+            finally
+            {
+                Monitor.Exit(_lock);
+            }
+        }
+
         private static Dictionary<CoreWindow, bool> _initializedWindows = new Dictionary<CoreWindow, bool>();
         private static List<CoreWindow> _windows = new List<CoreWindow>();
         private static Queue<CoreWindow> _listWaitigForInit = new Queue<CoreWindow>();
@@ -152,6 +196,10 @@ namespace SpaceVIL
 
         private static bool _isEmpty = true;
 
+        /// <summary>
+        /// Adding a window to rendering queue. After adding the window shows up immediately.
+        /// </summary>
+        /// <param name="wnd">Any CoreWindow instance.</param>
         public static void AddWindow(CoreWindow wnd)
         {
             Monitor.Enter(_lock);
@@ -197,7 +245,10 @@ namespace SpaceVIL
                 Monitor.Exit(_lock);
             }
         }
-
+        /// <summary>
+        /// Closing the specified window if it exist in render queue.
+        /// </summary>
+        /// <param name="wnd">Any CoreWindow instance.</param>
         public static void CloseWindow(CoreWindow wnd)
         {
             Monitor.Enter(_lock);
@@ -219,7 +270,7 @@ namespace SpaceVIL
         }
 
         private static EventCommonMethod waitfunc;
-        static void Run()
+        internal static void Run()
         {
             foreach (CoreWindow wnd in _windows)
             {
@@ -284,6 +335,10 @@ namespace SpaceVIL
             }
         }
 
+        /// <summary>
+        /// Launching the applications and showing all specified windows.
+        /// </summary>
+        /// <param name="windows">A sequence of any amount of CoreWindow instances.</param>
         public static void StartWith(params CoreWindow[] windows)
         {
             foreach (var wnd in windows)
@@ -292,7 +347,9 @@ namespace SpaceVIL
             }
             Run();
         }
-
+        /// <summary>
+        /// Exiting the current application. All windows will be closed and all their EventClose will be executed.
+        /// </summary>
         public static void AppExit()
         {
             Monitor.Enter(_lock);

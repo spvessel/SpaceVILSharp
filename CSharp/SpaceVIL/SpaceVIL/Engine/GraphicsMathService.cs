@@ -51,12 +51,12 @@ namespace SpaceVIL
     }
 
     /// <summary>
-    /// Class with some functions for constructing custom figures
+    /// GraphicsMathService is a static class with static methods for working with colors, fonts, shapes and images.
     /// </summary>
     public static class GraphicsMathService
     {
         /// <summary>
-        /// Mix two or more colors
+        /// Mixing two or more colors into one.
         /// </summary>
         public static Color MixColors(params Color[] m_colors)
         {
@@ -106,15 +106,24 @@ namespace SpaceVIL
             }
             return Color.FromArgb((int)a, (int)r, (int)g, (int)b);
         }
-
+        /// <summary>
+        /// Getting clone of the specified color.
+        /// </summary>
+        /// <param name="color">Color for cloning as System.Drawing.Color.</param>
+        /// <returns>Copy of specified color as System.Drawing.Color.</returns>
         public static Color CloneColor(Color color)
         {
             return Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
         /// <summary>
-        /// Make rectangle as two triangles by its width, height and top left corner position (x, y)
+        /// Making a rectangle as two triangles by its width, height and top left corner position (x, y).
         /// </summary>
+        /// <param name="w">Width of rectangle (default = 100).</param>
+        /// <param name="h">Height of rectangle (default = 100).</param>
+        /// <param name="x">X position of rectangle (default = 0).</param>
+        /// <param name="y">Y position of rectangle (default = 0).</param>
+        /// <returns>Rectangle points list as List of float[2] array.</returns>
         static public List<float[]> GetRectangle(float w = 100, float h = 100, float x = 0, float y = 0)
         {
             return new List<float[]>
@@ -130,14 +139,14 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Make a rectangle with roundness corners
+        /// Making a rectangle with roundness corners.
         /// </summary>
-        /// <param name="cornerRadius"> radius values for all corners </param>
-        /// <param name="width"> rectangle width (default = 100) </param>
-        /// <param name="height"> rectangle height (default = 100) </param>
-        /// <param name="x"> X position (left top corner) of the result object (default = 0) </param>
-        /// <param name="y"> Y position (left top corner) of the result object (default = 0) </param>
-        /// <returns> Points list of the rectangle with roundness corners </returns>
+        /// <param name="cornerRadius"> Radius values for all corners as SpaceVIL.Decorations.CornerRadius.</param>
+        /// <param name="width"> Rectangle width (default = 100). </param>
+        /// <param name="height"> Rectangle height (default = 100). </param>
+        /// <param name="x"> X position (left top corner) of the result object (default = 0). </param>
+        /// <param name="y"> Y position (left top corner) of the result object (default = 0). </param>
+        /// <returns> Points list of the shape with roundness corners as List of float[2] array.</returns>
         static public List<float[]> GetRoundSquare(CornerRadius cornerRadius, float width = 100, float height = 100, int x = 0, int y = 0)
         {
             if (width <= 0 || height <= 0)
@@ -241,14 +250,14 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Make a rectangle with roundness corners
+        /// Making a rectangle with roundness corners.
         /// </summary>
-        /// <param name="width"> rectangle width (default = 100) </param>
-        /// <param name="height"> rectangle height (default = 100) </param>
-        /// <param name="radius"> same radius value for each corner (default = 0) </param>
-        /// <param name="x"> X position (left top corner) of the result object (default = 0) </param>
-        /// <param name="y"> Y position (left top corner) of the result object (default = 0) </param>
-        /// <returns> Points list of the rectangle with roundness corners </returns>
+        /// <param name="width"> Rectangle width (default = 100). </param>
+        /// <param name="height"> Rectangle height (default = 100). </param>
+        /// <param name="radius"> Same radius value for each corner (default = 0). </param>
+        /// <param name="x"> X position (left top corner) of the result object (default = 0). </param>
+        /// <param name="y"> Y position (left top corner) of the result object (default = 0). </param>
+        /// <returns> Points list of the shape with roundness corners as List of float[2] array.</returns>
         static public List<float[]> GetRoundSquare(float width = 100, float height = 100, float radius = 0.0f, int x = 0, int y = 0)
         {
             if (width <= 0 || height <= 0)
@@ -318,7 +327,6 @@ namespace SpaceVIL
             return triangles;
         }
 
-
         static private List<float[]> CountCircleSector(int quadrantInd, float x0, float y0, float radius)
         {
             int[,] quadrantAngles = new int[4, 2] { { 0, 90 }, { 90, 180 }, { 180, 270 }, { 270, 360 } };
@@ -381,11 +389,12 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Make a star figure
+        /// Making a star figure with specified outer radius, inner radius and number of points.
         /// </summary>
-        /// <param name="R"> Circumscribed circle radius </param>
-        /// <param name="r"> Incircle radius </param>
-        /// <param name="n"> vertices count </param>
+        /// <param name="R"> Circumscribed circle radius (default = 100). </param>
+        /// <param name="r"> Incircle radius (default = 50). </param>
+        /// <param name="n"> vertices count (default = 5). </param>
+        /// <returns> Points list of the shape as List of float[2] array.</returns>
         static public List<float[]> GetStar(float R = 100, float r = 50, int n = 5)
         {
             float x_center = r;
@@ -464,8 +473,11 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Make a regular polygon
+        /// Making a regular polygon with specified radius and number of edges.
         /// </summary>
+        /// <param name="r">Radius of regular polygon.</param>
+        /// <param name="n">Number of edges of regular polygon.</param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
         static public List<float[]> GetRegularPolygon(float r = 100, int n = 6)
         {
             float x_center = r;
@@ -501,9 +513,11 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Make an ellipse with two equal radii (i. e. circle)
+        /// Making an ellipse with two equal radii (i. e. circle).
         /// </summary>
-        /// <param name="n"> points count on the ellipse border (default = 32) </param>
+        /// <param name="r">Radius of a circle (default = 100).</param>
+        /// <param name="n"> Points count on the ellipse border (default = 32). </param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
         static public List<float[]> GetEllipse(float r = 100, int n = 32)
         {
             float x_center = r;
@@ -539,13 +553,14 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Make an ellipse
+        /// Making an ellipse.
         /// </summary>
-        /// <param name="w"> ellipse width </param>
-        /// <param name="h"> ellipse height </param>
-        /// <param name="x"> X position of the left top corner (ellipse center in x + w/2) (default = 0) </param>
-        /// <param name="y"> Y position of the left top corner (ellipse center in y + h/2) (default = 0) </param>
-        /// <param name="n"> points count on the ellipse border (default = 32) </param>
+        /// <param name="w"> Ellipse width. </param>
+        /// <param name="h"> Ellipse height. </param>
+        /// <param name="x"> X position of the left top corner (ellipse center in x + w/2) (default = 0). </param>
+        /// <param name="y"> Y position of the left top corner (ellipse center in y + h/2) (default = 0). </param>
+        /// <param name="n"> points count on the ellipse border (default = 32). </param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
         static public List<float[]> GetEllipse(float w, float h, int x = 0, int y = 0, int n = 32)
         {
             float rX = w / 2;
@@ -582,9 +597,14 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Make a triangle with corners in (x + w/2, y), (x, y + h), (x + w, y + h), rotated on angle degrees
+        /// Making a triangle with corners in (x + w/2, y), (x, y + h), (x + w, y + h), rotated on angle degrees.
         /// </summary>
-        /// <param name="angle"> rotation angle for the triangle in degrees (default = 0) </param>
+        /// <param name="w">Triangle width (default = 100).</param>
+        /// <param name="h">Triangle height (default = 100).</param>
+        /// <param name="x">Triangle X offset (default = 0).</param>
+        /// <param name="y">Triangle Y offset (default = 0).</param>
+        /// <param name="angle"> Rotation angle for the triangle in degrees (default = 0). </param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
         static public List<float[]> GetTriangle(float w = 100, float h = 100, int x = 0, int y = 0, int angle = 0)
         {
             float x0 = x + w / 2;
@@ -632,12 +652,13 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Make cross figure
+        /// Making cross shape with specified width, height, thickness and rotation angle.
         /// </summary>
-        /// <param name="w"> cross width </param>
-        /// <param name="h"> cross height </param>
-        /// <param name="thickness"> cross parts thickness </param>
-        /// <param name="alpha"> cross rotation angle in degrees </param>
+        /// <param name="w"> Cross width. </param>
+        /// <param name="h"> Cross height. </param>
+        /// <param name="thickness"> Cross parts thickness. </param>
+        /// <param name="alpha"> Cross rotation angle in degrees. </param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
         static public List<float[]> GetCross(float w, float h, float thickness, int alpha)
         {
             List<float[]> figure = new List<float[]>();
@@ -702,7 +723,14 @@ namespace SpaceVIL
             }
             return figure;
         }
-
+        /// <summary>
+        /// Rotating the specified shape.
+        /// </summary>
+        /// <param name="w">Width of the shape.</param>
+        /// <param name="h">Height of the shape.</param>
+        /// <param name="angle">Rotation angle in degrees.</param>
+        /// <param name="triangles">Triangles list of the specified shape.</param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
         static public List<float[]> RotateShape(float w, float h, float angle, List<float[]> triangles)
         {
             if (triangles == null)
@@ -719,6 +747,14 @@ namespace SpaceVIL
             }
             return triangles;
         }
+        /// <summary>
+        /// Making an arrow shape.
+        /// </summary>
+        /// <param name="w">Arrow width.</param>
+        /// <param name="h">Arrow height.</param>
+        /// <param name="thickness">Arrow thickness.</param>
+        /// <param name="alpha">Rotation angle in degrees.</param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
         static public List<float[]> GetArrow(float w, float h, float thickness, int alpha)
         {
             List<float[]> figure = new List<float[]>();
@@ -815,8 +851,12 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Move shape by X or/and Y direction
+        /// Moving the specified shape by X or/and Y direction.
         /// </summary>
+        /// <param name="shape">Triangles list of the specified shape.</param>
+        /// <param name="x">X axis shift.</param>
+        /// <param name="y">Y axis shift.</param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
         public static List<float[]> MoveShape(List<float[]> shape, float x, float y)
         {
             if (shape.Count == 0)
@@ -839,8 +879,13 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Make folder icon shape as three rectangles
+        /// Making folder icon shape.
         /// </summary>
+        /// <param name="w">Shape width (default = 20).</param>
+        /// <param name="h">Shape width (default = 15).</param>
+        /// <param name="x">Shape X axis shift (default = 0).</param>
+        /// <param name="y">Shape Y axis shift (default = 0).</param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
         public static List<float[]> GetFolderIconShape(float w = 20.0f, float h = 15.0f, float x = 0, float y = 0)
         {
             List<float[]> triangles = new List<float[]>();
@@ -851,15 +896,15 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Make a rectangle border with roundness corners
+        /// Making a rectangle border with roundness corners.
         /// </summary>
-        /// <param name="width"> rectangle border width </param>
-        /// <param name="height"> rectangle border height </param>
-        /// <param name="radius"> same radius value for each corner </param>
-        /// <param name="thickness"> border thickness </param>
-        /// <param name="x"> X position (left top corner) of the result object </param>
-        /// <param name="y"> Y position (left top corner) of the result object </param>
-        /// <returns> Points list of the rectangle border with roundness corners </returns>
+        /// <param name="width"> Rectangle border width. </param>
+        /// <param name="height"> Rectangle border height. </param>
+        /// <param name="radius"> Same radius value for each corner. </param>
+        /// <param name="thickness"> Border thickness. </param>
+        /// <param name="x"> X position (left top corner) of the result shape. </param>
+        /// <param name="y"> Y position (left top corner) of the result shape. </param>
+        /// <returns> Points list of the rectangle border with roundness corners as List of float[2] array.</returns>
         public static List<float[]> GetRoundSquareBorder(float width, float height, float radius, float thickness, int x, int y)
         {
             if (radius < 0)
@@ -923,15 +968,15 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Make a rectangle border with roundness corners
+        /// Making a rectangle border with roundness corners.
         /// </summary>
-        /// <param name="cornerRadius"> radius values for all corners </param>
-        /// <param name="width"> rectangle border width </param>
-        /// <param name="height"> rectangle border height </param>
-        /// <param name="thickness"> border thickness </param>
-        /// <param name="x"> X position (left top corner) of the result object </param>
-        /// <param name="y"> Y position (left top corner) of the result object </param>
-        /// <returns> Points list of the rectangle border with roundness corners </returns>
+        /// <param name="cornerRadius"> Radius values for all corners as SpaceVIL.Decorations.CornerRadius.</param>
+        /// <param name="width"> Rectangle border width. </param>
+        /// <param name="height"> Rectangle border height. </param>
+        /// <param name="thickness"> Border thickness. </param>
+        /// <param name="x"> X position (left top corner) of the result shape. </param>
+        /// <param name="y"> Y position (left top corner) of the result shape. </param>
+        /// <returns> Points list of the rectangle border with roundness corners as List of float[2] array</returns>
         static public List<float[]> GetRoundSquareBorder(CornerRadius cornerRadius, float width, float height, float thickness, int x, int y)
         {
             if (width <= 0 || height <= 0)
@@ -1058,7 +1103,13 @@ namespace SpaceVIL
             }
             return clockwise;
         }
-
+        /// <summary>
+        /// Smooth scaling the specified image by new size.
+        /// </summary>
+        /// <param name="img">Image as System.Drawing.Bitmap.</param>
+        /// <param name="w">New width of the image.</param>
+        /// <param name="h">New height of the image.</param>
+        /// <returns>Scaled image as System.Drawing.Bitmap.</returns>
         public static Bitmap ScaleBitmap(Bitmap img, int w, int h)
         {
             float boundW = w;
@@ -1081,7 +1132,13 @@ namespace SpaceVIL
 
             return bmp;
         }
-
+        /// <summary>
+        /// Making System.Drawing.Color from specified byte RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <returns>Color as System.Drawing.Color.</returns>
         public static Color ColorTransform(int r, int g, int b)
         {
             if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
@@ -1089,7 +1146,14 @@ namespace SpaceVIL
             if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
             return Color.FromArgb(255, r, g, b);
         }
-
+        /// <summary>
+        /// Making System.Drawing.Color from specified byte RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <returns>Color as System.Drawing.Color.</returns>
         public static Color ColorTransform(int r, int g, int b, int a)
         {
             if (r < 0) r = Math.Abs(r); if (r > 255) r = 255;
@@ -1097,7 +1161,13 @@ namespace SpaceVIL
             if (b < 0) b = Math.Abs(b); if (b > 255) b = 255;
             return Color.FromArgb(a, r, g, b);
         }
-
+        /// <summary>
+        /// Making System.Drawing.Color from specified float RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <returns>Color as System.Drawing.Color.</returns>
         public static Color ColorTransform(float r, float g, float b)
         {
             if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
@@ -1105,7 +1175,14 @@ namespace SpaceVIL
             if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
             return Color.FromArgb(255, (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
         }
-
+        /// <summary>
+        /// Making System.Drawing.Color from specified float RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <returns>Color as System.Drawing.Color.</returns>
         public static Color ColorTransform(float r, float g, float b, float a)
         {
             if (r < 0) r = Math.Abs(r); if (r > 1.0f) r = 1.0f;
@@ -1113,17 +1190,32 @@ namespace SpaceVIL
             if (b < 0) b = Math.Abs(b); if (b > 1.0f) b = 1.0f;
             return Color.FromArgb((int)(a * 255.0f), (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
         }
-
+        /// <summary>
+        /// Changing font size.
+        /// </summary>
+        /// <param name="size">New size of the font.</param>
+        /// <param name="oldFont">Font as System.Drawing.Font.</param>
+        /// <returns>New sized font as System.Drawing.Font.</returns>
         public static Font ChangeFontSize(int size, Font oldFont)
         {
             return new Font(oldFont.FontFamily, size, oldFont.Style);
         }
-
+        /// <summary>
+        /// Changing font style.
+        /// </summary>
+        /// <param name="size">New style of the font.</param>
+        /// <param name="oldFont">Font as System.Drawing.Font.</param>
+        /// <returns>New styled font as System.Drawing.Font.</returns>
         public static Font ChangeFontStyle(FontStyle style, Font oldFont)
         {
             return new Font(oldFont.FontFamily, oldFont.Size, style);
         }
-
+        /// <summary>
+        /// Changing font family.
+        /// </summary>
+        /// <param name="size">New font family of the font.</param>
+        /// <param name="oldFont">Font as System.Drawing.Font.</param>
+        /// <returns>New font as System.Drawing.Font.</returns>
         public static Font ChangeFontFamily(FontFamily fontFamily, Font oldFont)
         {
             return new Font(fontFamily, oldFont.Size, oldFont.Style);
@@ -1144,9 +1236,14 @@ namespace SpaceVIL
             return Math.Sin(Grad2Radian(angleGrad));
         }
 
-        public static List<float[]> UpdateShape(List<float[]> triangles, int w, int h
-        //, Area area, ItemAlignment alignments
-        )
+        /// <summary>
+        /// Updating the specified shape by its new size (streching by new size).
+        /// </summary>
+        /// <param name="triangles">Triangles list of the specified shape.</param>
+        /// <param name="w">New shape width.</param>
+        /// <param name="h">New shape height.</param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
+        public static List<float[]> UpdateShape(List<float[]> triangles, int w, int h)
         {
             if (triangles == null || triangles.Count == 0)
             {
@@ -1199,7 +1296,11 @@ namespace SpaceVIL
 
             return result;
         }
-
+        /// <summary>
+        /// Getting a shape's bounds as SpaceVIL.Core.Area.
+        /// </summary>
+        /// <param name="triangles">Triangles list of the specified shape.</param>
+        /// <returns>Shape's bounds as SpaceVIL.Core.Area.</returns>
         public static Area GetFigureBounds(List<float[]> triangles)
         {
             Area area = new Area();
@@ -1213,6 +1314,15 @@ namespace SpaceVIL
             return area;
         }
 
+        /// <summary>
+        /// Moving the specified shape relative to the specified area, specifiedalignment and specified shifts.
+        /// </summary>
+        /// <param name="triangles">Triangles list of the specified shape.</param>
+        /// <param name="x">X axis shift.</param>
+        /// <param name="y">Y axis shift.</param>
+        /// <param name="area">Area as SpaceVIL.Core.Area.</param>
+        /// <param name="alignments">Alignment as SpaceVIL.Core.ItemAlignment.</param>
+        /// <returns>Points list of the shape as List of float[2] array.</returns>
         public static List<float[]> MoveShape(List<float[]> triangles, float x, float y, Area area,
                 ItemAlignment alignments)
         {

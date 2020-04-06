@@ -51,14 +51,14 @@ namespace RadialMenu
             RadialMenuButton.EventMouseClick += (sender, args) =>
             {
                 Hide();
-                GetHandler().SetFocus();
+                GetHandler().ResetFocus();
             };
             EventMouseDrag += OnMouseDrag;
             EventMousePress += OnMousePress;
             _init = true;
         }
 
-        Pointer _beginPos = new Pointer();
+        Position _beginPos = new Position();
         private void OnMousePress(IItem sender, MouseArgs args)
         {
             _beginPos.SetPosition(args.Position.GetX(), args.Position.GetY());
@@ -69,7 +69,7 @@ namespace RadialMenu
                 indent += Math.PI;
         }
 
-        Pointer _dragPos = new Pointer();
+        Position _dragPos = new Position();
         private void OnMouseDrag(IItem sender, MouseArgs args)
         {
             _dragPos.SetPosition(args.Position.GetX(), args.Position.GetY());

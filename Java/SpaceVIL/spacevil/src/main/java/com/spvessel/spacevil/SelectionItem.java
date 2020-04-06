@@ -27,10 +27,10 @@ public class SelectionItem extends Prototype {
         _item = content;
 
         eventMouseClick.add((sender, args) -> {
-            if (isToggled() || !_visibility)
+            if (isSelected() || !_visibility)
                 return;
-            setToggled(true);
-            uncheckOthers(sender);
+            setSelected(true);
+            unselectOthers(sender);
         });
     }
 
@@ -67,11 +67,11 @@ public class SelectionItem extends Prototype {
     /**
      * Is ButtonToggle toggled (boolean)
      */
-    public boolean isToggled() {
+    public boolean isSelected() {
         return _toggled;
     }
 
-    public void setToggled(boolean value) {
+    public void setSelected(boolean value) {
         _toggled = value;
         if (value == true)
             setState(ItemStateType.TOGGLED);
@@ -79,11 +79,11 @@ public class SelectionItem extends Prototype {
             setState(ItemStateType.BASE);
     }
 
-    private void uncheckOthers(InterfaceItem sender) {
+    private void unselectOthers(InterfaceItem sender) {
         List<InterfaceBaseItem> items = getParent().getItems();
         for (InterfaceBaseItem item : items) {
             if (item instanceof SelectionItem && !item.equals(this)) {
-                ((SelectionItem) item).setToggled(false);
+                ((SelectionItem) item).setSelected(false);
             }
         }
     }

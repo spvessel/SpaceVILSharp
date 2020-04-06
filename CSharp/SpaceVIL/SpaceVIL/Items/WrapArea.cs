@@ -1,53 +1,81 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using SpaceVIL.Common;
 using SpaceVIL.Core;
-using System.Threading;
 using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// WrapArea is a scrollable container for other elements with ability of selection. 
+    /// WrapArea groups elements in cells of a certain size. 
+    /// It can be oriented vertically or horizontally.
+    /// WrapArea is part of SpaceVIL.WrapGrid which controls scrolling, resizing and etc.
+    /// <para/> Supports all events except drag and drop.
+    /// </summary>
     public class WrapArea : Prototype, IFreeLayout
     {
         internal Dictionary<IBaseItem, SelectionItem> _mapContent = new Dictionary<IBaseItem, SelectionItem>();
         private Object _lock = new Object();
+        /// <summary>
+        /// Event that is invoked when one of the element is selected.
+        /// </summary>
         public EventCommonMethod SelectionChanged;
+        /// <summary>
+        /// Event that is invoked when one of the set of elements is changed.
+        /// </summary>
         public EventCommonMethod ItemListChanged;
-
+        /// <summary>
+        /// Disposing ComboBoxDropDown resources if it was removed.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public override void Release()
         {
             SelectionChanged = null;
             ItemListChanged = null;
         }
 
-        internal int _rows = 0;
-        internal int _columns = 0;
+        internal int Rows = 0;
+        internal int Columns = 0;
 
         private int _step = 30;
 
         /// <summary>
-        /// ScrollBar moving step
+        /// Setting scroll movement step.
         /// </summary>
+        /// <param name="value">Scroll step.</param>
         public void SetStep(int value)
         {
             _step = value;
         }
+        /// <summary>
+        /// Getting scroll movement step.
+        /// </summary>
+        /// <returns>Scroll step.</returns>
         public int GetStep()
         {
             return _step;
         }
 
         private bool _isStretch = false;
-
+        /// <summary>
+        /// Returns True if WrapArea allocates all available space between cells 
+        /// to achieve smooth streching, otherwise returns False.
+        /// </summary>
+        /// <returns>True: if WrapArea allocates all available space between cells.
+        /// False: if space between cells is fixed.</returns>
         public bool IsStretch()
         {
             return _isStretch;
         }
-
+        /// <summary>
+        /// Setting strech mode for WrapArea. WrapArea can allocates all available 
+        /// space between cells or uses fixed space between cells.
+        /// </summary>
+        /// <param name="value">True: if you want to WrapArea allocates 
+        /// all available space between cells.
+        /// False: if you want space between cells to be fixed.</param>
         public void SetStretch(bool value)
         {
             if (value == _isStretch)
@@ -58,7 +86,10 @@ namespace SpaceVIL
 
         private int _selection = -1;
 
-        /// <returns> Number of the selected item </returns>
+        /// <summary>
+        /// Getting index of selected item.
+        /// </summary>
+        /// <returns>Index of selected item.</returns>
         public int GetSelection()
         {
             return _selection;
@@ -66,7 +97,10 @@ namespace SpaceVIL
 
         private SelectionItem _selectionItem;
 
-        /// <returns> selected item </returns>
+        /// <summary>
+        /// Getting selected item.
+        /// </summary>
+        /// <returns>Selected item as SpaceVIL.Core.IBaseItem</returns>
         public IBaseItem GetSelectionItem()
         {
             if (_selectionItem != null)
@@ -77,13 +111,17 @@ namespace SpaceVIL
         {
             return _selectionItem;
         }
+        /// <summary>
+        /// Select item by index.
+        /// </summary>
+        /// <param name="index">Index of selection.</param>
         public void SetSelection(int index)
         {
             if (!_isSelectionVisible)
                 return;
             _selection = index;
             _selectionItem = GetItems().ElementAt(index) as SelectionItem;
-            _selectionItem.SetToggled(true);
+            _selectionItem.SetSelected(true);
             UnselectOthers(_selectionItem);
             Prototype tmp = _selectionItem.GetContent() as Prototype;
             if (tmp != null)
@@ -100,25 +138,29 @@ namespace SpaceVIL
             {
                 if (!item.Equals(sender))
                 {
-                    ((SelectionItem)item).SetToggled(false);
+                    ((SelectionItem)item).SetSelected(false);
                 }
             }
         }
-
+        /// <summary>
+        /// Unselect selected item.
+        /// </summary>
         public void Unselect()
         {
             _selection = -1;
             if (_selectionItem != null)
             {
-                _selectionItem.SetToggled(false);
+                _selectionItem.SetSelected(false);
                 _selectionItem = null;
             }
         }
 
         private bool _isSelectionVisible = true;
         /// <summary>
-        /// Is selection changes view of the item or not
+        /// Enable or disable selection ability of WrapArea.
         /// </summary>
+        /// <param name="value">True: if you want selection ability of WrapArea to be enabled. 
+        /// False: if you want selection ability of WrapArea to be disabled.</param>
         public void SetSelectionVisible(bool value)
         {
             _isSelectionVisible = value;
@@ -129,53 +171,58 @@ namespace SpaceVIL
                 item.SetToggleVisible(_isSelectionVisible);
             }
         }
+        /// <summary>
+        /// Returns True if selection ability of WrapArea is enabled otherwise returns False.
+        /// </summary>
+        /// <returns>True: selection ability of WrapArea is enabled. 
+        /// False: selection ability of WrapArea is disabled.</returns>
         public bool IsSelectionVisible()
         {
             return _isSelectionVisible;
         }
 
         static int count = 0;
-        internal int _cellWidth = 0;
-        internal int _cellHeight = 0;
+        internal int CellWidth = 0;
+        internal int CellHeight = 0;
         internal void SetCellSize(int cellWidth, int cellHeight)
         {
-            _cellWidth = cellWidth;
-            _cellHeight = cellHeight;
+            CellWidth = cellWidth;
+            CellHeight = cellHeight;
             UpdateLayout();
         }
 
         /// <summary>
-        /// Constructs a WrapArea
+        /// Default WrapArea constructor.
         /// </summary>
         public WrapArea(int cellWidth, int cellHeight, Orientation orientation)
         {
             SetItemName("WrapArea_" + count);
             count++;
-            _orientation = orientation;
-            _cellWidth = cellWidth;
-            _cellHeight = cellHeight;
+            Orientation = orientation;
+            CellWidth = cellWidth;
+            CellHeight = cellHeight;
             EventMouseClick += OnMouseClick;
             EventMouseDoubleClick += OnMouseDoubleClick;
             EventMouseHover += OnMouseHover;
             EventKeyPress += OnKeyPress;
         }
 
-        void OnMouseClick(IItem sender, MouseArgs args) { }
-        void OnMouseDoubleClick(IItem sender, MouseArgs args) { }
-        void OnMouseHover(IItem sender, MouseArgs args) { }
-        void OnKeyPress(IItem sender, KeyArgs args)
+        private void OnMouseClick(IItem sender, MouseArgs args) { }
+        private void OnMouseDoubleClick(IItem sender, MouseArgs args) { }
+        private void OnMouseHover(IItem sender, MouseArgs args) { }
+        private void OnKeyPress(IItem sender, KeyArgs args)
         {
             int index = _selection;
             int x, y;
-            if (_orientation == Orientation.Horizontal)
+            if (Orientation == Orientation.Horizontal)
             {
-                x = _selection % _columns;
-                y = _selection / _columns;
+                x = _selection % Columns;
+                y = _selection / Columns;
             }
             else
             {
-                x = _selection / _rows;
-                y = _selection % _rows;
+                x = _selection / Rows;
+                y = _selection % Rows;
             }
             List<IBaseItem> list = GetItems();
             switch (args.Key)
@@ -190,8 +237,8 @@ namespace SpaceVIL
                     break;
                 case KeyCode.Down:
                     y++;
-                    if (y >= _rows)
-                        y = _rows - 1;
+                    if (y >= Rows)
+                        y = Rows - 1;
                     index = GetIndexByCoord(x, y);
                     if (index >= list.Count)
                         index = list.Count - 1;
@@ -209,8 +256,8 @@ namespace SpaceVIL
                     break;
                 case KeyCode.Right:
                     x++;
-                    if (x >= _columns)
-                        x = _columns - 1;
+                    if (x >= Columns)
+                        x = Columns - 1;
                     index = GetIndexByCoord(x, y);
                     if (index >= list.Count)
                         index = list.Count - 1;
@@ -227,13 +274,13 @@ namespace SpaceVIL
 
         private int GetIndexByCoord(int x, int y)
         {
-            if (_orientation == Orientation.Horizontal)
+            if (Orientation == Orientation.Horizontal)
             {
-                return (x + y * _columns);
+                return (x + y * Columns);
             }
             else
             {
-                return (y + x * _rows);
+                return (y + x * Rows);
             }
         }
 
@@ -243,7 +290,7 @@ namespace SpaceVIL
             wrapper.SetStyle(_selectedStyle);
 
             wrapper.SetToggleVisible(_isSelectionVisible);
-            wrapper.SetSize(_cellWidth, _cellHeight);
+            wrapper.SetSize(CellWidth, CellHeight);
             wrapper.SetSizePolicy(SizePolicy.Fixed, SizePolicy.Fixed);
             wrapper.EventMouseClick += (sender, args) =>
             {
@@ -264,8 +311,10 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Insert item to the WrapArea by row and column number
+        /// Insert item into the WrapArea by index.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <param name="index">Index of insertion.</param>
         public override void InsertItem(IBaseItem item, int index)
         {
             SelectionItem wrapper = GetWrapper(item);
@@ -278,8 +327,9 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Add item to the WrapArea
+        /// Add item to the WrapArea.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
             SelectionItem wrapper = GetWrapper(item);
@@ -287,8 +337,12 @@ namespace SpaceVIL
             _mapContent.Add(item, wrapper);
             UpdateLayout();
         }
-
-        public virtual void SetListContent(List<IBaseItem> content)
+        /// <summary>
+        /// Adding all elements in the WrapArea from the given list.
+        /// </summary>
+        /// <param name="content">List of items as 
+        /// System.Collections.Generic.IEnumerable&lt;IBaseItem&gt;</param>
+        public virtual void SetListContent(IEnumerable<IBaseItem> content)
         {
             RemoveAllItems();
             foreach (IBaseItem item in content)
@@ -302,8 +356,11 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Remove item from the WrapArea
+        /// Removing the specified item from the WrapArea.
         /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
+        /// <returns>True: if the removal was successful. 
+        /// False: if the removal was unsuccessful.</returns>
         public override bool RemoveItem(IBaseItem item)
         {
             bool restore = false;
@@ -345,7 +402,9 @@ namespace SpaceVIL
             ItemListChanged?.Invoke();
             return b;
         }
-
+        /// <summary>
+        /// Removing all items from the WrapArea.
+        /// </summary>
         public override void Clear()
         {
             RemoveAllItems();
@@ -371,41 +430,48 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set X position of the WrapArea
+        /// Setting X coordinate of the left-top corner of the WrapArea.
         /// </summary>
-        public override void SetX(int _x)
+        /// <param name="x">Y position of the left-top corner.</param>
+        public override void SetX(int x)
         {
-            base.SetX(_x);
+            base.SetX(x);
             UpdateLayout();
         }
 
         /// <summary>
-        /// Set Y position of the WrapArea
+        /// Setting Y coordinate of the left-top corner of the WrapArea.
         /// </summary>
-        public override void SetY(int _y)
+        /// <param name="y">Y position of the left-top corner.</param>
+        public override void SetY(int y)
         {
-            base.SetY(_y);
+            base.SetY(y);
             UpdateLayout();
         }
 
         //update content position
-        internal Orientation _orientation = Orientation.Horizontal;
+        internal Orientation Orientation = Orientation.Horizontal;
         private Int64 _yOffset = 0;
         private Int64 _xOffset = 0;
 
         /// <summary>
-        /// Vertical scroll offset in the WrapArea
+        /// Getting vertical scroll offset in the WrapArea.
         /// </summary>
+        /// <returns>Vertical scroll offset.</returns>
         public Int64 GetScrollOffset()
         {
-            if (_orientation == Orientation.Horizontal)
+            if (Orientation == Orientation.Horizontal)
                 return _yOffset;
             else
                 return _xOffset;
         }
+        /// <summary>
+        /// Setting vertical scroll offset of the WrapArea.
+        /// </summary>
+        /// <param name="value">Vertical scroll offset.</param>
         public void SetScrollOffset(Int64 value)
         {
-            if (_orientation == Orientation.Horizontal)
+            if (Orientation == Orientation.Horizontal)
                 _yOffset = value;
             else
                 _xOffset = value;
@@ -414,10 +480,8 @@ namespace SpaceVIL
 
         private bool _isUpdating = false;
         /// <summary>
-        /// Update all children and WrapArea sizes and positions
-        /// according to confines
+        /// Updating all children positions (implementation of SpaceVIL.Core.IFreeLayout).
         /// </summary>
-        //Update Layout
         public void UpdateLayout()
         {
             List<IBaseItem> list = GetItems();
@@ -428,18 +492,18 @@ namespace SpaceVIL
             Int64 offset = (-1) * GetScrollOffset();
             Int64 x = GetX() + GetPadding().Left;
             Int64 y = GetY() + GetPadding().Top;
-            if (_orientation == Orientation.Horizontal)
+            if (Orientation == Orientation.Horizontal)
             {
                 //update
                 Int64 globalY = y + offset;
                 int w = GetWidth() - GetPadding().Left - GetPadding().Right;
-                int itemCount = (w + GetSpacing().Horizontal) / (_cellWidth + GetSpacing().Horizontal);
+                int itemCount = (w + GetSpacing().Horizontal) / (CellWidth + GetSpacing().Horizontal);
                 int column = 0;
                 int row = 0;
-                _columns = (itemCount > list.Count) ? list.Count : itemCount;
-                if (_columns == 0)
+                Columns = (itemCount > list.Count) ? list.Count : itemCount;
+                if (Columns == 0)
                 {
-                    _columns = 1;
+                    Columns = 1;
                     itemCount = 1;
                 }
 
@@ -447,10 +511,10 @@ namespace SpaceVIL
                 int xOffset = 0;
                 if (_isStretch && itemCount < list.Count)
                 {
-                    int freeSpace = w - ((_cellWidth + GetSpacing().Horizontal) * _columns) - GetSpacing().Horizontal;
-                    xOffset = freeSpace / _columns;
-                    if (_columns > 1)
-                        xOffset = freeSpace / (_columns - 1);
+                    int freeSpace = w - ((CellWidth + GetSpacing().Horizontal) * Columns) - GetSpacing().Horizontal;
+                    xOffset = freeSpace / Columns;
+                    if (Columns > 1)
+                        xOffset = freeSpace / (Columns - 1);
                 }
 
                 foreach (IBaseItem item in list)
@@ -458,10 +522,10 @@ namespace SpaceVIL
                     if (!item.IsVisible())
                         continue;
 
-                    item.SetSize(_cellWidth, _cellHeight);
+                    item.SetSize(CellWidth, CellHeight);
 
-                    item.SetX((int)(x + (_cellWidth + GetSpacing().Horizontal + xOffset) * column));
-                    int itemY = (int)(globalY + (_cellHeight + GetSpacing().Vertical) * row);
+                    item.SetX((int)(x + (CellWidth + GetSpacing().Horizontal + xOffset) * column));
+                    int itemY = (int)(globalY + (CellHeight + GetSpacing().Vertical) * row);
                     item.SetY(itemY);
                     item.SetConfines();
                     column++;
@@ -473,14 +537,14 @@ namespace SpaceVIL
                     //top check
                     if (itemY < y)
                     {
-                        if (itemY + _cellHeight <= y)
+                        if (itemY + CellHeight <= y)
                             item.SetDrawable(false);
                         else
                             item.SetDrawable(true);
                         continue;
                     }
                     //bottom check
-                    if (itemY + _cellHeight > GetY() + GetHeight() - GetPadding().Bottom)
+                    if (itemY + CellHeight > GetY() + GetHeight() - GetPadding().Bottom)
                     {
                         if (itemY >= GetY() + GetHeight() - GetPadding().Bottom)
                             item.SetDrawable(false);
@@ -492,20 +556,20 @@ namespace SpaceVIL
                 }
                 if (list.Count % itemCount == 0)
                     row--;
-                _rows = row + 1;
+                Rows = row + 1;
             }
-            else if (_orientation == Orientation.Vertical)
+            else if (Orientation == Orientation.Vertical)
             {
                 //update
                 Int64 globalX = x + offset;
                 int h = GetHeight() - GetPadding().Top - GetPadding().Bottom;
-                int itemCount = (h + GetSpacing().Vertical) / (_cellHeight + GetSpacing().Vertical);
+                int itemCount = (h + GetSpacing().Vertical) / (CellHeight + GetSpacing().Vertical);
                 int column = 0;
                 int row = 0;
-                _rows = (itemCount > list.Count) ? list.Count : itemCount;
-                if (_rows == 0)
+                Rows = (itemCount > list.Count) ? list.Count : itemCount;
+                if (Rows == 0)
                 {
-                    _rows = 1;
+                    Rows = 1;
                     itemCount = 1;
                 }
 
@@ -513,10 +577,10 @@ namespace SpaceVIL
                 int yOffset = 0;
                 if (_isStretch && itemCount < list.Count)
                 {
-                    int freeSpace = h - ((_cellHeight + GetSpacing().Vertical + yOffset) * _rows) - GetSpacing().Vertical;
-                    yOffset = freeSpace / _rows;
-                    if (_rows > 1)
-                        yOffset = freeSpace / (_rows - 1);
+                    int freeSpace = h - ((CellHeight + GetSpacing().Vertical + yOffset) * Rows) - GetSpacing().Vertical;
+                    yOffset = freeSpace / Rows;
+                    if (Rows > 1)
+                        yOffset = freeSpace / (Rows - 1);
                 }
 
                 foreach (IBaseItem item in list)
@@ -524,10 +588,10 @@ namespace SpaceVIL
                     if (!item.IsVisible())
                         continue;
 
-                    item.SetSize(_cellWidth, _cellHeight);
+                    item.SetSize(CellWidth, CellHeight);
 
-                    item.SetY((int)(y + (_cellHeight + GetSpacing().Vertical + yOffset) * row));
-                    int itemX = (int)(globalX + (_cellWidth + GetSpacing().Horizontal) * column);
+                    item.SetY((int)(y + (CellHeight + GetSpacing().Vertical + yOffset) * row));
+                    int itemX = (int)(globalX + (CellWidth + GetSpacing().Horizontal) * column);
                     item.SetX(itemX);
                     item.SetConfines();
                     row++;
@@ -539,14 +603,14 @@ namespace SpaceVIL
                     //left check
                     if (itemX < x)
                     {
-                        if (itemX + _cellWidth <= x)
+                        if (itemX + CellWidth <= x)
                             item.SetDrawable(false);
                         else
                             item.SetDrawable(true);
                         continue;
                     }
                     //right check
-                    if (itemX + _cellWidth > GetX() + GetWidth() - GetPadding().Left)
+                    if (itemX + CellWidth > GetX() + GetWidth() - GetPadding().Left)
                     {
                         if (itemX >= GetX() + GetWidth() - GetPadding().Left)
                             item.SetDrawable(false);
@@ -558,12 +622,17 @@ namespace SpaceVIL
                 }
                 if (list.Count % itemCount == 0)
                     column--;
-                _columns = column + 1;
+                Columns = column + 1;
             }
             _isUpdating = false;
         }
 
         private Style _selectedStyle;
+        /// <summary>
+        /// Setting style of the WrapArea. 
+        /// <para/> Inner styles: "selection".
+        /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)

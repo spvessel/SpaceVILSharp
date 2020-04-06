@@ -125,9 +125,9 @@ namespace SpaceVIL
         {
             switch (item.HoverRule)
             {
-                case ItemRule.Lazy:
+                case ItemHoverRule.Lazy:
                     return LazyHoverVerification(item, xpos, ypos);
-                case ItemRule.Strict:
+                case ItemHoverRule.Strict:
                     return StrictHoverVerification(item, xpos, ypos);
                 default:
                     return false;
@@ -227,7 +227,7 @@ namespace SpaceVIL
             }
             if (style.Shape != null)
             {
-                item.SetCustomFigure(new CustomFigure(style.IsFixedShape, style.Shape));
+                item.SetCustomFigure(new Figure(style.IsFixedShape, style.Shape));
                 core_state.Shape = item.IsCustomFigure();
             }
             item.AddItemState(ItemStateType.Base, core_state);

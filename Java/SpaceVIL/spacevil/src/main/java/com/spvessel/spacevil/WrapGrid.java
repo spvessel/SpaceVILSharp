@@ -7,7 +7,7 @@ import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Decorations.Style;
 import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.Orientation;
-import com.spvessel.spacevil.Flags.ScrollBarVisibility;
+import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -109,7 +109,7 @@ public class WrapGrid extends Prototype {
 
     public VerticalScrollBar vScrollBar;
     public HorizontalScrollBar hScrollBar;
-    private ScrollBarVisibility _scrollBarPolicy = ScrollBarVisibility.AS_NEEDED;
+    private VisibilityPolicy _scrollBarPolicy = VisibilityPolicy.AS_NEEDED;
 
     public Orientation getOrientation() {
         return _area._orientation;
@@ -118,27 +118,27 @@ public class WrapGrid extends Prototype {
     /**
      * Is vertical scroll bar visible
      */
-    public ScrollBarVisibility getScrollBarVisible() {
+    public VisibilityPolicy getScrollBarPolicy() {
         return _scrollBarPolicy;
     }
 
-    public void setScrollBarVisible(ScrollBarVisibility policy) {
+    public void setScrollBarPolicy(VisibilityPolicy policy) {
         _scrollBarPolicy = policy;
 
         if (getOrientation() == Orientation.HORIZONTAL) {
-            if (policy == ScrollBarVisibility.NEVER)
+            if (policy == VisibilityPolicy.NEVER)
                 vScrollBar.setDrawable(false);
-            else if (policy == ScrollBarVisibility.AS_NEEDED)
+            else if (policy == VisibilityPolicy.AS_NEEDED)
                 vScrollBar.setDrawable(false);
-            else if (policy == ScrollBarVisibility.ALWAYS)
+            else if (policy == VisibilityPolicy.ALWAYS)
                 vScrollBar.setDrawable(true);
             _hlayout.updateLayout();
         } else {
-            if (policy == ScrollBarVisibility.NEVER)
+            if (policy == VisibilityPolicy.NEVER)
                 hScrollBar.setDrawable(false);
-            else if (policy == ScrollBarVisibility.AS_NEEDED)
+            else if (policy == VisibilityPolicy.AS_NEEDED)
                 hScrollBar.setDrawable(false);
-            else if (policy == ScrollBarVisibility.ALWAYS)
+            else if (policy == VisibilityPolicy.ALWAYS)
                 hScrollBar.setDrawable(true);
             _vlayout.updateLayout();
         }
@@ -161,7 +161,7 @@ public class WrapGrid extends Prototype {
         }
 
         setStyle(DefaultsService.getDefaultStyle(WrapGrid.class));
-        setScrollBarVisible(_scrollBarPolicy);
+        setScrollBarPolicy(_scrollBarPolicy);
 
         // events
         eventMouseClick.add((sender, args) -> {
@@ -279,13 +279,13 @@ public class WrapGrid extends Prototype {
                 vScrollBar.slider.setStep(vScrollBar.slider.getMaxValue());
                 v_size = 0;
                 vScrollBar.slider.setCurrentValue(0);
-                if (getScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+                if (getScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
                     vScrollBar.setDrawable(false);
                     update();
                 }
                 return;
             }
-            if (getScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+            if (getScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
                 vScrollBar.setDrawable(true);
                 update();
             }
@@ -313,13 +313,13 @@ public class WrapGrid extends Prototype {
                 hScrollBar.slider.setStep(hScrollBar.slider.getMaxValue());
                 h_size = 0;
                 hScrollBar.slider.setCurrentValue(0);
-                if (getScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+                if (getScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
                     hScrollBar.setDrawable(false);
                     update();
                 }
                 return;
             }
-            if (getScrollBarVisible() == ScrollBarVisibility.AS_NEEDED) {
+            if (getScrollBarPolicy() == VisibilityPolicy.AS_NEEDED) {
                 hScrollBar.setDrawable(true);
                 update();
             }

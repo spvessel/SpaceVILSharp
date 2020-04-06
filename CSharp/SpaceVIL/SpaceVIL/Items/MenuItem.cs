@@ -7,23 +7,40 @@ using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
-    public class MenuItem : Prototype //not finished
+    /// <summary>
+    /// MenuItem is designed to be an option in menu type items 
+    /// such as SpaceVIL.ContextMenu and ComboBoxDropDown.
+    /// <para/> Contains text and arrow.
+    /// <para/> Supports all events except drag and drop.
+    /// </summary>
+    public class MenuItem : Prototype
     {
+        /// <summary>
+        /// Property to mark this MenuItem as active type (such MenuItem can show another SpaceVIL.ContextMenu). 
+        /// True this MenuItem is active otherwise False.
+        /// <para/> Default: False.
+        /// </summary>
         public bool IsActionItem = false;
         static int count = 0;
         private Label _textObject;
-        internal ContextMenu contextMenu;
-        private ContextMenu _sub_context_menu;
-
+        internal ContextMenu ContextMenu;
+        private ContextMenu _subContextMenu;
+        /// <summary>
+        /// Getting the item that invokes ContextMenu of this MenuItem.
+        /// </summary>
+        /// <returns>Item as SpaceVIL.Prototype.</returns>
         public Prototype GetSender()
         {
-            return contextMenu.GetSender();
+            return ContextMenu.GetSender();
         }
-
-        /// <returns> sub context menu </returns>
+        /// <summary>
+        /// Getting the assigned SpaceVIL.ContextMenu. 
+        /// If MenuItem is active type it can invoke assigned SpaceVIL.ContextMenu.
+        /// </summary>
+        /// <returns></returns>
         public ContextMenu GetSubContextMenu()
         {
-            return _sub_context_menu;
+            return _subContextMenu;
         }
 
         /// <summary>
@@ -31,10 +48,10 @@ namespace SpaceVIL
         /// </summary>
         internal bool IsReadyToClose(MouseArgs args)
         {
-            if (_sub_context_menu != null)
+            if (_subContextMenu != null)
             {
-                if (!_sub_context_menu.GetHoverVerification(args.Position.GetX(), args.Position.GetY())
-                    && _sub_context_menu.CloseDependencies(args))
+                if (!_subContextMenu.GetHoverVerification(args.Position.GetX(), args.Position.GetY())
+                    && _subContextMenu.CloseDependencies(args))
                     return true;
             }
             return false;
@@ -48,17 +65,19 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Assign the context menu
+        /// Assigning SpaceVIL.ContextMenu to this MenuItem. 
+        /// In this case MenuItem becomes active type and can invoke assigned SpaceVIL.ContextMenu.
         /// </summary>
-        public void AssignContextMenu(ContextMenu context_menu)
+        /// <param name="contextMenu">Assigned context menu as SpaceVIL.ContextMenu.</param>
+        public void AssignContextMenu(ContextMenu contextMenu)
         {
             IsActionItem = true;
-            _sub_context_menu = context_menu;
-            _sub_context_menu.SetOutsideClickClosable(false);
+            _subContextMenu = contextMenu;
+            _subContextMenu.SetOutsideClickClosable(false);
         }
 
         /// <summary>
-        /// Constructs a MenuItem
+        /// Default MenuItem constructor.
         /// </summary>
         public MenuItem()
         {
@@ -74,19 +93,22 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Constructs a MenuItem with text
+        /// Constructs a MenuItem with text.
         /// </summary>
+        /// <param name="text">Text for MenuItem.</param>
         public MenuItem(String text = "") : this()
         {
             SetText(text);
         }
 
         /// <summary>
-        /// Constructs a MenuItem with assigned context menu and text
+        /// Constructs a MenuItem with text and assigns context menu.
         /// </summary>
-        public MenuItem(ContextMenu context_menu, String text = "") : this()
+        /// <param name="contextMenu">Assigned context menu as SpaceVIL.ContextMenu.</param>
+        /// <param name="text">Text for MenuItem.</param>
+        public MenuItem(ContextMenu contextMenu, String text = "") : this()
         {
-            AssignContextMenu(context_menu);
+            AssignContextMenu(contextMenu);
             SetText(text);
         }
 
@@ -96,98 +118,192 @@ namespace SpaceVIL
                 EventMouseClick?.Invoke(this, new MouseArgs());
         }
 
-        //text init
-        /// <returns> text width in the MenuItem </returns>
+        /// <summary>
+        /// Getting the text width (useful when you need resize item by text width).
+        /// </summary>
+        /// <returns>Text width.</returns>
         public int GetTextWidth()
         {
             return _textObject.GetTextWidth();
         }
 
-        /// <returns> text height in the MenuItem </returns>
+        /// <summary>
+        /// Getting the text height (useful when you need resize item by text height).
+        /// </summary>
+        /// <returns>Text height.</returns>
         public int GetTextHeight()
         {
             return _textObject.GetTextHeight();
         }
 
         /// <summary>
-        /// Text alignment in the MenuItem
+        /// Setting alignment of the text. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
         /// </summary>
+        /// <param name="alignment">Text alignment as SpaceVIL.Core.ItemAlignment.</param>
         public void SetTextAlignment(ItemAlignment alignment)
         {
             _textObject.SetTextAlignment(alignment);
         }
+        /// <summary>
+        /// Setting alignment of the text. 
+        /// Combines with alignment by vertically (Top, VCenter, Bottom) and horizontally (Left, HCenter, Right). 
+        /// </summary>
+        /// <param name="alignment">Text alignment as sequence of SpaceVIL.Core.ItemAlignment.</param>
         public void SetTextAlignment(params ItemAlignment[] alignment)
         {
             _textObject.SetTextAlignment(alignment);
         }
 
         /// <summary>
-        /// Text margin in the MenuItem
+        /// Getting indents of the text.
         /// </summary>
+        /// <returns>Indents as SpaceVIL.Decorations.Indents.</returns>
         public Indents GetTextMargin()
         {
             return _textObject.GetMargin();
         }
 
+        /// <summary>
+        /// Setting indents for the text to offset text relative to this MenuItem.
+        /// </summary>
+        /// <param name="margin">Indents as SpaceVIL.Decorations.Indents.</param>
         public void SetTextMargin(Indents margin)
         {
             _textObject.SetMargin(margin);
         }
-
         /// <summary>
-        /// Text font in the MenuItem
+        /// Setting indents for the text to offset text relative to MenuItem.
         /// </summary>
+        /// <param name="left">Indent on the left.</param>
+        /// <param name="top">Indent on the top.</param>
+        /// <param name="right">Indent on the right.</param>
+        /// <param name="bottom">Indent on the bottom.</param>
+        public void SetTextMargin(int left = 0, int top = 0, int right = 0, int bottom = 0)
+        {
+            _textObject.SetMargin(left, top, right, bottom);
+        }
+        /// <summary>
+        /// Setting font of the text.
+        /// </summary>
+        /// <param name="font">Font as System.Drawing.Font.</param>
         public void SetFont(Font font)
         {
             _textObject.SetFont(font);
         }
+        /// <summary>
+        /// Setting font size of the text.
+        /// </summary>
+        /// <param name="size">New size of the font.</param>
+        public void SetFontSize(int size)
+        {
+            _textObject.SetFontSize(size);
+        }
+        /// <summary>
+        /// Setting font style of the text.
+        /// </summary>
+        /// <param name="style">New font style as System.Drawing.FontStyle.</param>
+        public void SetFontStyle(FontStyle style)
+        {
+            _textObject.SetFontStyle(style);
+        }
+        /// <summary>
+        /// Setting new font family of the text.
+        /// </summary>
+        /// <param name="fontFamily">New font family as System.Drawing.FontFamily.</param>
+        public void SetFontFamily(FontFamily fontFamily)
+        {
+            _textObject.SetFontFamily(fontFamily);
+        }
+        /// <summary>
+        /// Getting the current font of the text.
+        /// </summary>
+        /// <returns>Font as System.Drawing.Font.</returns>
         public Font GetFont()
         {
             return _textObject.GetFont();
         }
 
         /// <summary>
-        /// MenuItem text
+        /// Setting the text.
         /// </summary>
-        public void SetText(String text)
+        /// <param name="text">Text as System.String.</param>
+        public virtual void SetText(String text)
         {
             _textObject.SetText(text);
         }
-        public String GetText()
+        /// <summary>
+        /// Getting the current text of the MenuItem.
+        /// </summary>
+        /// <returns>Text as System.String.</returns>
+        public virtual String GetText()
         {
             return _textObject.GetText();
         }
 
         /// <summary>
-        /// Text color in the MenuItem
+        /// Setting text color of a MenuItem.
         /// </summary>
+        /// <param name="color">Color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
             _textObject.SetForeground(color);
         }
+        /// <summary>
+        /// Setting text color of a MenuItem in byte RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
             _textObject.SetForeground(r, g, b);
         }
+        /// <summary>
+        /// Setting text color of a MenuItem in byte RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
+        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
+        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
             _textObject.SetForeground(r, g, b, a);
         }
+        /// <summary>
+        /// Setting text color of a MenuItem in float RGB format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
             _textObject.SetForeground(r, g, b);
         }
+        /// <summary>
+        /// Setting text color of a MenuItem in float RGBA format.
+        /// </summary>
+        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
             _textObject.SetForeground(r, g, b, a);
         }
+        /// <summary>
+        /// Getting current text color.
+        /// </summary>
+        /// <returns>Text color as System.Drawing.Color.</returns>
         public Color GetForeground()
         {
             return _textObject.GetForeground();
         }
 
         /// <summary>
-        /// Initialization and adding of all elements in the MenuItem
+        /// Initializing all elements in the MenuItem.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
         /// </summary>
         public override void InitElements()
         {
@@ -202,15 +318,20 @@ namespace SpaceVIL
         }
 
         private List<IBaseItem> _queue = new List<IBaseItem>();
-
+        /// <summary>
+        /// Adding item into the container (this).
+        /// </summary>
+        /// <param name="item">Item as SpaceVIL.Core.IBaseItem.</param>
         public override void AddItem(IBaseItem item)
         {
             _queue.Add(item);
         }
 
         /// <summary>
-        /// Set style of the MenuItem
+        /// Setting style of the MenuItem.
+        /// <para/> Inner styles: "arrow", "text".
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         //style
         public override void SetStyle(Style style)
         {
@@ -237,59 +358,60 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Customize shape of the MenuItem's arrow
+        /// Adding custom arrow shape.
         /// </summary>
+        /// <param name="arrow">Arrow shape as SpaceVIL.CustomShape.</param>
         public void AddArrow(CustomShape arrow)
         {
             _arrow = arrow;
         }
 
         /// <summary>
-        /// Show the MenuItem
+        /// Shows the assigned ContextMenu at the proper position. Only if this MeniItem is active type.
         /// </summary>
         public void Show()
         {
-            if (_sub_context_menu == null)
+            if (_subContextMenu == null)
                 return;
 
             MouseArgs args = new MouseArgs();
             args.Button = MouseButton.ButtonRight;
 
             //проверка справа
-            args.Position.SetX(contextMenu.GetX() + contextMenu.GetWidth() + 2);
-            if (args.Position.GetX() + _sub_context_menu.GetWidth() > GetHandler().GetWidth())
+            args.Position.SetX(ContextMenu.GetX() + ContextMenu.GetWidth() + 2);
+            if (args.Position.GetX() + _subContextMenu.GetWidth() > GetHandler().GetWidth())
             {
-                args.Position.SetX(contextMenu.GetX() - _sub_context_menu.GetWidth() - 2);
+                args.Position.SetX(ContextMenu.GetX() - _subContextMenu.GetWidth() - 2);
             }
             //проверка снизу
             args.Position.SetY(GetY());
-            if (args.Position.GetY() + _sub_context_menu.GetHeight() > GetHandler().GetHeight())
+            if (args.Position.GetY() + _subContextMenu.GetHeight() > GetHandler().GetHeight())
             {
-                args.Position.SetY(contextMenu.GetY() + contextMenu.GetHeight() - _sub_context_menu.GetHeight());
+                args.Position.SetY(ContextMenu.GetY() + ContextMenu.GetHeight() - _subContextMenu.GetHeight());
             }
 
-            _sub_context_menu.Show(this, args);
+            _subContextMenu.Show(this, args);
         }
 
         /// <summary>
-        /// Hide the MenuItem
+        /// Hides the assigned ContextMenu. Only if this MeniItem is active type.
         /// </summary>
         public void Hide()
         {
-            _sub_context_menu?.Hide();
+            _subContextMenu?.Hide();
         }
 
         private void OnMouseAction()
         {
-            if (_sub_context_menu != null)
+            if (_subContextMenu != null)
             {
-                if (_sub_context_menu.IsVisible())
+                if (_subContextMenu.IsVisible())
                 {
                     Hide();
                     MouseArgs args = new MouseArgs();
                     args.Button = MouseButton.ButtonRight;
                     args.Position.SetPosition(GetX(), GetY());
-                    _sub_context_menu.CloseDependencies(args);
+                    _subContextMenu.CloseDependencies(args);
                 }
                 else
                     Show();

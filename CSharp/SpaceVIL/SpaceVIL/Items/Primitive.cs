@@ -2,12 +2,16 @@
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// The Primitive is an abstract extension of BaseItem for primitive non-interactive items.
+    /// <para/> Exemples of subclasses: SpaceVIL.Ellipse, SpaceVIL.Rectangle, SpaceVIL.Triangle and etc.
+    /// </summary>
     abstract public class Primitive : BaseItem
     {
         /// <summary>
-        /// Constructs a Primitive
+        /// Default constructor of Primitive class.
         /// </summary>
-        /// <param name="name"> item name </param>
+        /// <param name="name"> Item name of Primitive. </param>
         public Primitive(
             string name = "Primitive_")
         {
@@ -15,28 +19,26 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set item position
+        /// Setting item position.
         /// </summary>
-        /// <param name="_x"> X position of the item left top corner </param>
-        /// <param name="_y"> Y position of the item left top corner </param>
-        public void SetPosition(int _x, int _y)
+        /// <param name="x"> X position of the left top corner. </param>
+        /// <param name="y"> Y position of the left top corner. </param>
+        public void SetPosition(int x, int y)
         {
-            this.SetX(_x);
-            this.SetY(_y);
+            this.SetX(x);
+            this.SetY(y);
         }
 
         //style
-        internal bool _is_style_set = false;
-
         /// <summary>
-        /// Set style of the Primitive
+        /// Setting a style that describes the appearance of an item.
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)
                 return;
 
-            _is_style_set = true;
             SetBackground(style.Background);
             SetSizePolicy(style.WidthPolicy, style.HeightPolicy);
             SetSize(style.Width, style.Height);
@@ -50,7 +52,10 @@ namespace SpaceVIL
                 SetTriangles(style.Shape);
         }
 
-        /// <returns> style of the Primitive </returns>
+        /// <summary>
+        /// Getting the core (only appearance properties without inner styles) style of an item.
+        /// </summary>
+        /// <returns>Style as SpaceVIL.Decorations.Style.</returns>
         public override Style GetCoreStyle()
         {
             Style style = new Style();

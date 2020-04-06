@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using SpaceVIL.Core;
+﻿using SpaceVIL.Core;
 using SpaceVIL.Decorations;
 
 namespace SpaceVIL
 {
+    /// <summary>
+    /// SplitHolder is part of SpaceVIL.HorizontalSplitArea and
+    /// SpaceVIL.VerticalSplitArea. SplitHolder is responsible for 
+    /// handler dragging.
+    /// <para/> Supports all events including drag and drop.
+    /// </summary>
     public class SplitHolder : Prototype, IDraggable
     {
         private static int count = 0;
@@ -16,8 +16,11 @@ namespace SpaceVIL
         private int _spacerSize = 6;
 
         /// <summary>
-        /// Constructs a SplitHolder with orientation (HORIZONTAL or VERTICAL)
+        /// Constructs a SplitHolder with the specified orientation.
+        /// <para/> Orientation can be Orientation.Horizontal 
+        /// or Orientation.Vertical.
         /// </summary>
+        /// <param name="orientation">Orientation of SplitHolder.</param>
         public SplitHolder(Orientation orientation)
         {
             _orientation = orientation;
@@ -28,18 +31,22 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// SplitHolder size (height for the HORIZONTAL orientation,
-        /// width for the VERTICAL orientation)
+        /// Setting thickness of SplitHolder divider.
         /// </summary>
-        public void SetSpacerSize(int spSize)
+        /// <param name="thickness">Thickness of SplitHolder divider.</param>
+        public void SetDividerSize(int thickness)
         {
-            if (_spacerSize != spSize)
+            if (_spacerSize != thickness)
             {
-                _spacerSize = spSize;
+                _spacerSize = thickness;
                 MakeHolderShape();
             }
         }
-        public int GetHolderSize()
+        /// <summary>
+        /// Getting thickness of SplitHolder divider.
+        /// </summary>
+        /// <returns>Thickness of SplitHolder divider.</returns>
+        public int GetDividerSize()
         {
             return _spacerSize;
         }
@@ -64,15 +71,20 @@ namespace SpaceVIL
             }
         }
 
-        /// <returns> Orientation of the SplitHolder (Horizontal or Vertical) </returns>
+        /// <summary>
+        /// Getting SplitHolder orientation.
+        /// <para/> Orientation can be Orientation.Horizontal 
+        /// or Orientation.Vertical.
+        /// </summary>
+        /// <returns>Current SplitHolder orientation.</returns>
         public Orientation GetOrientation()
         {
             return _orientation;
         }
-
         /// <summary>
-        /// Set style of the SplitHolder
+        /// Setting style of the SplitHolder.
         /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)
