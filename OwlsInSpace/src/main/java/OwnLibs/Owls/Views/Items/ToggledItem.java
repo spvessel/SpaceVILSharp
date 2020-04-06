@@ -9,9 +9,10 @@ public class ToggledItem extends ButtonToggle {
     @Override
     public void setToggled(boolean value) {
         super.setToggled(value);
-        if (value)
+        if (value) {
             setShadowDrop(true);
-        else
+        } else {
             setShadowDrop(false);
+        }
     }
 }

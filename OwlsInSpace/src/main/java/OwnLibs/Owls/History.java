@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.*;
 
-public class History {
+class History {
 
     private static final long serialVersionUID = -6879691495422628222L;
 
@@ -28,16 +28,16 @@ public class History {
     // return list;
     // }
 
-    String _path;
+    private String _path;
 
-    public History(Controller controller) {
+    History(Controller controller) {
         _controller = controller;
         _path = "history.cfg";
         historyPairs = new LinkedHashMap<>();
 
     }
 
-    public void addRecord(String record) {
+    void addRecord(String record) {
         if (historyPairs.containsKey(record)) {
             historyPairs.get(record).remove();
         }
@@ -53,18 +53,17 @@ public class History {
         HistoryRecordItem hri = new HistoryRecordItem(recordPath);
         historyPairs.put(recordPath, hri);
         _controller.historyAddRecordSetEvent(hri, recordPath);
-        hri.eventOnRemove.add(() -> {
-            removeRecord(hri);
-        });
+        hri.eventOnRemove.add(() ->
+            removeRecord(hri));
     }
 
-    public void removeRecord(HistoryRecordItem hri) {
-        if (historyPairs.containsKey(hri.getRecordPath())) {
+    private void removeRecord(HistoryRecordItem hri) {
+//        if (historyPairs.containsKey(hri.getRecordPath())) {
             historyPairs.remove(hri.getRecordPath());
-        }
+//        }
     }
 
-    public void clearRecords() {
+    private void clearRecords() {
         for (HistoryRecordItem hri : historyPairs.values()) {
             hri.remove();
         }
@@ -85,7 +84,7 @@ public class History {
         }
     }
 
-    public void serialize() {
+    void serialize() {
         try {
             FileOutputStream fos = new FileOutputStream(_path);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -99,7 +98,7 @@ public class History {
         }
     }
 
-    public void deserialize() {
+    void deserialize() {
         try {
             File f = new File(_path);
             if (!f.exists()) {
