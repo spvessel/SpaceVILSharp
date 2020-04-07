@@ -1,5 +1,10 @@
 package com.spvessel.spacevil;
 
+/**
+ * DialogWindow is an abstract class for modal window instances.
+ * <p> DialogWindow extends CoreWindow class. 
+ * CoreWindow is an abstract class containing an implementation of common functionality for a window.
+ */
 public abstract class DialogWindow extends CoreWindow {
 
     /**
@@ -11,6 +16,9 @@ public abstract class DialogWindow extends CoreWindow {
         isCentered = true;
     }
 
+    /**
+     * Show the DialogWindow.
+     */
     @Override
     public void show() {
         initWindow();

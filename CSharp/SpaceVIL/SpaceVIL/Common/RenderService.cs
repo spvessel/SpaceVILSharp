@@ -11,7 +11,7 @@ namespace SpaceVIL.Common
         /// <summary>
         /// Restoring initial SpaceVIL OpenGL settings for the specified window (if they have been changed).
         /// </summary>
-        /// <param name="window">A window as SpaceVIL.CoreWindow</param>
+        /// <param name="window">A window as SpaceVIL.CoreWindow.</param>
         public static void RestoreCommonGLSettings(CoreWindow window)
         {
             WindowsBox.RestoreCommonGLSettings(window);
@@ -19,16 +19,16 @@ namespace SpaceVIL.Common
         /// <summary>
         /// Restoring initial OpenGL viewport for the specified window (if it was changed).
         /// </summary>
-        /// <param name="window">A window as SpaceVIL.CoreWindow</param>
+        /// <param name="window">A window as SpaceVIL.CoreWindow.</param>
         public static void RestoreViewport(CoreWindow window)
         {
             WindowsBox.RestoreViewport(window);
         }
         /// <summary>
-        /// Setting custom viewport by the specified window and SpaceVIL.Core.IOpenGLLayer
+        /// Setting custom viewport by the specified window and SpaceVIL.Core.IOpenGLLayer.
         /// </summary>
-        /// <param name="window">A window as SpaceVIL.CoreWindow</param>
-        /// <param name="layer">An item that etends Prototype and implements SpaceVIL.Core.IOpenGLLayer</param>
+        /// <param name="window">A window as SpaceVIL.CoreWindow.</param>
+        /// <param name="layer">An item that etends Prototype and implements SpaceVIL.Core.IOpenGLLayer.</param>
         public static void SetGLLayerViewport(CoreWindow window, IOpenGLLayer layer)
         {
             WindowsBox.SetGLLayerViewport(window, layer);

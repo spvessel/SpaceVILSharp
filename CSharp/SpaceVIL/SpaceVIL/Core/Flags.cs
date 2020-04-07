@@ -13,6 +13,7 @@ namespace SpaceVIL.Core
         MSAA4x = 4,
         MSAA8x = 8
     }
+
     /// <summary>
     /// Operating system types enum.
     /// <para/> Values: Windows, Linux, Mac.
@@ -23,6 +24,7 @@ namespace SpaceVIL.Core
         Linux,
         Mac
     }
+
     /// <summary>
     /// Alignment types enum.
     /// <para/> Values: Left, Top, Right, Bottom, HCenter, VCenter.
@@ -37,10 +39,11 @@ namespace SpaceVIL.Core
         HCenter = 0x10,
         VCenter = 0x20
     }
+
     /// <summary>
     /// Size policy types enum.
-    /// </summary>
     /// <para/> Values: Fixed, Expand.
+    /// </summary>
     [Flags]
     public enum SizePolicy
     {
@@ -48,6 +51,7 @@ namespace SpaceVIL.Core
         /// Size is fixed and cannot be changed.
         /// </summary>
         Fixed = 0x01,
+
         /// <summary>
         /// The form will be stretched inside the container to all available space.
         /// </summary>
@@ -66,32 +70,38 @@ namespace SpaceVIL.Core
         /// <para/> Where Item is class extended from SpaceVIL.Prototype.
         /// </summary>
         Base = 0x01,
+
         /// <summary>
         /// Item's condition when mouse cursor inside items area. 
         /// <para/> Where Item is class extended from SpaceVIL.Prototype.
         /// </summary>
         Hovered = 0x02,
+
         /// <summary>
         /// Item's condition when mouse cursor inside items area and any mouse button is pressed.
         /// <para/> Where Item is class extended from SpaceVIL.Prototype.
         /// </summary>
         Pressed = 0x04,
+
         /// <summary>
         /// Item's condition when it is toggled.
         /// <para/> Where Item is class extended from SpaceVIL.Prototype.
         /// </summary>
         Toggled = 0x08,
+
         /// <summary>
         /// Item's condition when it is focused.
         /// <para/> Where Item is class extended from SpaceVIL.Prototype.
         /// </summary>
         Focused = 0x10,
+
         /// <summary>
         /// Item's condition when it is disabled.
         /// <para/> Where Item is class extended from SpaceVIL.Prototype.
         /// </summary>
         Disabled = 0x20
     };
+
     /// <summary>
     /// Orientation enum. 
     /// <para/> Used in such items as scroll bars, sliders, wrap grid and etc.
@@ -102,6 +112,7 @@ namespace SpaceVIL.Core
         Vertical,
         Horizontal
     }
+
     /// <summary>
     /// Visibility types of item enum. Used in such items as scroll bars.
     /// <para/> Values: Always, AsNeeded, Never.
@@ -112,15 +123,18 @@ namespace SpaceVIL.Core
         /// Item is always visible.
         /// </summary>
         Always,
+
         /// <summary>
         /// Item can be visible in some circumstances.
         /// </summary>
         AsNeeded,
+
         /// <summary>
         /// Item is always invisible.
         /// </summary>
         Never
     }
+
     /// <summary>
     /// Item hovering rule types enum.
     /// <para/> Values: Lazy, Strict.
@@ -133,16 +147,21 @@ namespace SpaceVIL.Core
         /// but inside rectangle area that bounds this triangle.
         /// </summary>
         Lazy,
+        
         /// <summary>
         /// Hover function will return True only if mouse cursor located inside the shape of the item.
         /// </summary>
         Strict
     }
 
+    /// <summary>
+    /// Enum of SpaceVIL embedded fonts.
+    /// </summary>
     public enum EmbeddedFont
     {
         Ubuntu
     }
+
     /// <summary>
     /// Enum of event types directly related to events that change the size and position of an item.
     /// <para/> Where Item is class extended from SpaceVIL.Prototype.
@@ -156,6 +175,7 @@ namespace SpaceVIL.Core
         ResizeWidth = 0x08,
         ResizeHeight = 0x10
     }
+
     /// <summary>
     /// Enum of types of horizontal directions.
     /// <para/> Values: FromLeftToRight, FromRightToLeft.
@@ -204,6 +224,7 @@ namespace SpaceVIL.Core
         WindowDrop = 0x2000000,
         WindowMaximize = 0x4000000,
     }
+
     /// <summary>
     /// Enum of types of input conditions.
     /// <para/> Values: Release, Press, Repeat.
@@ -214,6 +235,7 @@ namespace SpaceVIL.Core
         Press = 1,
         Repeat = 2
     }
+
     /// <summary>
     /// Enum of key codes of keyboard.
     /// </summary>
@@ -388,6 +410,7 @@ namespace SpaceVIL.Core
         /// </summary>
         Super = 0x0008
     }
+
     /// <summary>
     /// Enum of button codes of mouse.
     /// </summary>
@@ -403,6 +426,7 @@ namespace SpaceVIL.Core
         Button7 = 6,
         Button8 = 7,
     }
+
     /// <summary>
     /// Enum of items types.
     /// <para/> Values: Static, Floating, Dialog.
@@ -413,15 +437,18 @@ namespace SpaceVIL.Core
         /// Items whose parent LayoutType is Static.
         /// </summary>
         Static,
+
         /// <summary>
         /// Items whose root parent LayoutType is Floating.
         /// </summary>
         Floating,
+
         /// <summary>
         /// Items whose root parent LayoutType is Dialog.
         /// </summary>
         Dialog
     }
+
     /// <summary>
     /// Enum of types of TreeItems. Used in TreeView and TreeItem.
     /// </summary>
@@ -431,10 +458,11 @@ namespace SpaceVIL.Core
         Branch
     }
 
-    public enum InputRestriction
-    {
-        IntNumbers, DoubleNumbers, Letters, All
-    }
+    // public enum InputRestriction
+    // {
+    //     IntNumbers, DoubleNumbers, Letters, All
+    // }
+
     /// <summary>
     /// Enum of SpaceVIL embedded images.
     /// </summary>

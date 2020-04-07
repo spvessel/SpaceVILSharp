@@ -148,7 +148,7 @@ final class WindowProcessor {
     void focus(long wnd, boolean value) {
         _commonProcessor.events.resetAllEvents();
         _commonProcessor.toolTip.initTimer(false);
-        _commonProcessor.window.isFocused = value;
+        _commonProcessor.window.setFocus(value);
         if (value) {
             if (_commonProcessor.handler.focusable) {
                 WindowsBox.setCurrentFocusedWindow(_commonProcessor.window);

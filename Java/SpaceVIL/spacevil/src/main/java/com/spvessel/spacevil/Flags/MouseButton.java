@@ -1,5 +1,8 @@
 package com.spvessel.spacevil.Flags;
 
+/**
+ * Enum of button codes of mouse.
+ */
 public enum MouseButton {
     UNKNOWN(-1),
     // BUTTON_1(0), BUTTON_2(1), BUTTON_3(2),

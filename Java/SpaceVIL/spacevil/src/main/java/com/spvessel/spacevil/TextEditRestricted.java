@@ -4,7 +4,6 @@ import com.spvessel.spacevil.Core.InterfaceItem;
 import com.spvessel.spacevil.Core.KeyArgs;
 import com.spvessel.spacevil.Core.MouseArgs;
 import com.spvessel.spacevil.Core.TextInputArgs;
-import com.spvessel.spacevil.Flags.InputRestriction;
 import com.spvessel.spacevil.Flags.KeyCode;
 import com.spvessel.spacevil.Flags.MouseButton;
 
@@ -256,5 +255,9 @@ class TextEditRestricted extends TextEditStorage {
         //        setEditable(false);
         currentValue -= step;
         updateCurrentValue();
+    }
+
+    enum InputRestriction {
+        INTNUMBERS, DOUBLENUMBERS, LETTERS, ALL
     }
 }

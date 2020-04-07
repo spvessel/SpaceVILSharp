@@ -13,14 +13,17 @@ namespace SpaceVIL.Core
         /// An item on which the drop event occurs.
         /// </summary>
         public Prototype Item = null;
+
         /// <summary>
         /// Number of selected paths.
         /// </summary>
         public int Count = -1;
+
         /// <summary>
         /// List of selected paths.
         /// </summary>
         public List<String> Paths = null;
+        
         /// <summary>
         /// Clearing DropArgs.
         /// </summary>

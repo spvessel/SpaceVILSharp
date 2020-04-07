@@ -15,65 +15,114 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+/**
+ * DefaultsService is static class providing methods to getting SpaceVIL default common values such as font, mouse cursor, icon images. 
+ */
 public final class DefaultsService {
+    private DefaultsService() {
+        // _default_font = DefaultFont.getInstance();
+    }
+    
+    static void initDefaultTheme() {
+        _default_theme = new ThemeStyle();
+    }
+    
+    private static Map<EmbeddedImage, BufferedImage> images_32 = new HashMap<>();
+
+    private static Map<EmbeddedImage, BufferedImage> images_64 = new HashMap<>();
 
     private static CursorImage _defaultCursor = new CursorImage(EmbeddedCursor.ARROW);
 
+    private static ThemeStyle _default_theme; // = ThemeStyle.GetInstance();
+
+    private static DefaultFont _default_font = DefaultFont.getInstance();;
+
+    /**
+     * Setting default cursor image the current application.
+     * @param cursor The mouse cursor image as com.spvessel.spacevil.CursorImage
+     */
     public static void setDefaultCursor(CursorImage cursor) {
-        if (cursor == null)
+        if (cursor == null) {
             return;
+        }
         _defaultCursor = cursor;
     }
 
+    /**
+     * Getting the current default mouse cursor image.
+     * @return The mouse cursor image as com.spvessel.spacevil.CursorImage
+     */
     public static CursorImage getDefaultCursor() {
         return _defaultCursor;
     }
 
-    private static ThemeStyle _default_theme; // = ThemeStyle.GetInstance();
-    private static DefaultFont _default_font = DefaultFont.getInstance();;
-
-    private DefaultsService() {
-        // _default_font = DefaultFont.getInstance();
-    }
-
+    /**
+     * Getting the default theme.
+     * @return The theme as The theme as SpaceVIL.Decorations.ThemeStyle
+     */
     public static ThemeStyle getDefaultTheme() {
-        if (_default_theme == null)
+        if (_default_theme == null) {
             _default_theme = new ThemeStyle();
+        }
         return _default_theme;
     }
 
-    static void initDefaultTheme() {
-        _default_theme = new ThemeStyle();
-    }
-
+    /**
+     * Setting the default theme for the current application.
+     * @param theme The theme as com.spvessel.spacevil.Decorations.ThemeStyle
+     */
     public static void setDefaultTheme(ThemeStyle theme) {
         _default_theme = theme;
     }
 
+    /**
+     * Getting the default item style from the current default theme by its type.
+     * @param type Item type as java.lang.Class&lt?&gt
+     * <p> Example: typeof(com.spvessel.spacevil.ButtonCore)
+     * @return Style as com.spvessel.spacevil.Decorations.Style.
+     */
     public static Style getDefaultStyle(Class<?> type) {
-        if (_default_theme == null)
+        if (_default_theme == null) {
             _default_theme = new ThemeStyle();
+        }
         return _default_theme.getThemeStyle(type);
     }
-
-    public static void setDefaultFont(Font font) {
-        _default_font.setDefaultFont(font);
-    }
-
+    
+    /**
+     * Getting the current default font for the current application.
+     * @return The current default font as java.awt.Font
+     */
     public static Font getDefaultFont() {
         return _default_font.getDefaultFont();
     }
-
+    
+    /**
+     * Getting the current default font with the specified font size for the current application.
+     * @param size A font size as integer value
+     * @return The current default font with changed font size as java.awt.Font
+     */
     public static Font getDefaultFont(int size) {
         return _default_font.getDefaultFont(size);
     }
-
+    
+    /**
+     * Getting the current default font with the specified font size and font style for the current application.
+     * @param style A font style as integer value
+     * @param size A font size as integer value
+     * @return The current default font with changed font size and font style as java.awt.Font
+     */
     public static Font getDefaultFont(int style, int size) {
         return _default_font.getDefaultFont(style, size);
     }
-
-    private static Map<EmbeddedImage, BufferedImage> images_32 = new HashMap<>();
-    private static Map<EmbeddedImage, BufferedImage> images_64 = new HashMap<>();
+    
+    /**
+     * Setting the default font for the current application.
+     * @param font A font as java.awt.Font
+     */
+    public static void setDefaultFont(Font font) {
+        _default_font.setDefaultFont(font);
+    }
+    
 
     static void initImages() {
         /////////////// 32
@@ -176,10 +225,17 @@ public final class DefaultsService {
             map.put(key, image);
     }
 
+    /**
+     * Getting the specified image by the type and size of the image, which is stored in the SpaceVIL framework.
+     * @param image An image type as com.spvessel.spacevil.Flags.EmbeddedImage
+     * <p> Example: com.spvessel.spacevil.Flags.EmbeddedImage.GEAR (to get gear icon)
+     * @param size An image size as com.spvessel.spacevil.Flags.EmbeddedImageSize (only 32x32 or 64x64)
+     * <p> Example: com.spvessel.spacevil.Flags.EmbeddedImageSize.SIZE_32X32 (to get an image in 32x32 pixels)
+     * @return Copy of image icon as java.awt.image.BufferedImage
+     */
     public static BufferedImage getDefaultImage(EmbeddedImage image, EmbeddedImageSize size) {
         if (size == EmbeddedImageSize.SIZE_32X32) {
             return images_32.get(image);
-
         } else if (size == EmbeddedImageSize.SIZE_64X64) {
             return images_64.get(image);
         }

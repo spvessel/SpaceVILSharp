@@ -120,6 +120,7 @@ namespace SpaceVIL
         /// <returns> CoreWindow unique ID </returns>
         public Guid GetWindowGuid() { return windowGuid; }
 
+        // ------------------------------------------------------------------------------------------
         /// <summary>
         /// Setting window background color.
         /// </summary>
@@ -157,7 +158,7 @@ namespace SpaceVIL
         /// </summary>
         /// <param name="r">Red (0.0f - 1.0f)</param>
         /// <param name="g">Green (0.0f - 1.0f)</param>
-        /// <param name="b">Blur (0.0f - 1.0f)</param>
+        /// <param name="b">Blue (0.0f - 1.0f)</param>
         public void SetBackground(float r, float g, float b)
         {
             windowLayout.GetContainer().SetBackground(GraphicsMathService.ColorTransform(r, g, b));
@@ -168,7 +169,7 @@ namespace SpaceVIL
         /// </summary>
         /// <param name="r">Red (0.0f - 1.0f)</param>
         /// <param name="g">Green (0.0f - 1.0f)</param>
-        /// <param name="b">Blur (0.0f - 1.0f)</param>
+        /// <param name="b">Blue (0.0f - 1.0f)</param>
         /// <param name="a">Alpha (0.0f - 1.0f)</param>
         public void SetBackground(float r, float g, float b, float a)
         {
@@ -183,6 +184,7 @@ namespace SpaceVIL
         {
             return windowLayout.GetContainer().GetBackground();
         }
+
         /// <summary>
         /// Setting padding indents. Padding is the space that’s inside the element between the element and the border.
         /// </summary>
@@ -191,6 +193,7 @@ namespace SpaceVIL
         {
             windowLayout.GetContainer().SetPadding(padding);
         }
+
         /// <summary>
         /// Setting padding indents. Padding is the space that’s inside the element between the element and the border.
         /// </summary>
@@ -269,7 +272,9 @@ namespace SpaceVIL
         {
             _name = value;
             if (windowLayout != null)
+            {
                 windowLayout.GetContainer().SetItemName(_name);
+            }
         }
         /// <summary>
         /// Getting the window name.
@@ -364,17 +369,21 @@ namespace SpaceVIL
         {
             _itemGeometry.SetMinWidth(width);
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetMinWidth(width);
+            }
         }
         /// <summary>
         /// Setting the window minimum height.
         /// </summary>
-        /// <param name="width">Minimum height in pixels.</param>
+        /// <param name="height">Minimum height in pixels.</param>
         public void SetMinHeight(int height)
         {
             _itemGeometry.SetMinHeight(height);
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetMinHeight(height);
+            }
         }
         /// <summary>
         /// Setting the minimum window size in pixels: width and height.
@@ -395,17 +404,21 @@ namespace SpaceVIL
         {
             _itemGeometry.SetMaxWidth(width);
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetMaxWidth(width);
+            }
         }
         /// <summary>
         /// Setting the window maximum height.
         /// </summary>
-        /// <param name="width">Maximum height in pixels.</param>
+        /// <param name="height">Maximum height in pixels.</param>
         public void SetMaxHeight(int height)
         {
             _itemGeometry.SetMaxHeight(height);
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetMaxHeight(height);
+            }
         }
         /// <summary>
         /// Setting the maximum window size in pixels: width and height.
@@ -483,14 +496,16 @@ namespace SpaceVIL
             _itemPosition.SetX(x);
         }
         /// <summary>
-        /// Setting the window x-coordinate (the upper left window corner). Relocating the window at specified x-coordinate.
+        /// Setting the window x-coordinate (the left-top window corner). Relocating the window at specified x-coordinate.
         /// </summary>
         /// <param name="x">X-Coordinate.</param>
         public void SetX(int x)
         {
             SetXDirect(x);
             if (windowLayout.IsGLWIDValid())
+            {
                 windowLayout.UpdatePosition();
+            }
         }
         /// <summary>
         /// Getting the current window x-coordinate.
@@ -501,20 +516,22 @@ namespace SpaceVIL
             return _itemPosition.GetX();
         }
 
-        public void SetYDirect(int y)
+        internal void SetYDirect(int y)
         {
             _itemPosition.SetY(y);
         }
 
         /// <summary>
-        /// Setting the window y-coordinate (the upper left window corner). Relocating the window at specified y-coordinate.
+        /// Setting the window y-coordinate (the left-top window corner). Relocating the window at specified y-coordinate.
         /// </summary>
         /// <param name="y">Y-Coordinate.</param>
         public void SetY(int y)
         {
             SetYDirect(y);
             if (windowLayout.IsGLWIDValid())
+            {
                 windowLayout.UpdatePosition();
+            }
         }
         /// <summary>
         /// Getting the current window y-coordinate.
@@ -526,7 +543,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Setting the window x-coordinate and y-coordinate (the upper left window corner). Relocating the window at specified coordinates.
+        /// Setting the window x-coordinate and y-coordinate (the left-top window corner). Relocating the window at specified coordinates.
         /// </summary>
         /// <param name="x">X-Coordinate.</param>
         /// <param name="y">Y-Coordinate.</param>
@@ -535,10 +552,12 @@ namespace SpaceVIL
             _itemPosition.SetPosition(x, y);
 
             if (windowLayout.IsGLWIDValid())
+            {
                 windowLayout.UpdatePosition();
+            }
         }
         /// <summary>
-        /// Setting the window x-coordinate and y-coordinate (the upper left window corner). Relocating the window at specified coordinates.
+        /// Setting the window x-coordinate and y-coordinate (the left-top window corner). Relocating the window at specified coordinates.
         /// </summary>
         /// <param name="position">X-coordinate and Y-coordinate provided as SpaceVIL.Core.Position</param>
         public void SetPosition(Position position)
@@ -546,7 +565,9 @@ namespace SpaceVIL
             _itemPosition.SetPosition(position.GetX(), position.GetY());
 
             if (windowLayout.IsGLWIDValid())
+            {
                 windowLayout.UpdatePosition();
+            }
         }
         /// <summary>
         /// Getting the current window position.
@@ -579,64 +600,75 @@ namespace SpaceVIL
         /// <para/>Default: False.
         /// </summary>
         public bool IsDialog;
+
         /// <summary>
         /// <para/>A flag that determines whether the current window is in closed state or not.
         /// <para/>True: window is closed. False: window is opened.
         /// <para/>Default: True.
         /// </summary>
         public bool IsClosed;
+
         /// <summary>
         /// <para/>A flag that determines whether the current window is in hidden state or not.
         /// <para/>True: window is hidden. False: window is unhidden.
         /// <para/>Default: False.
         /// </summary>
         public bool IsHidden;
+
         /// <summary>
         /// <para/>A flag that determines whether the current window can be resize or not.
         /// <para/>True: window is resizable. False: window is NOT resizable.
         /// <para/>Default: True.
         /// </summary>
         public bool IsResizable;
+
         /// <summary>
         /// <para/>A flag that determines whether the current window is always on top of all other windows or not.
         /// <para/>True: window is on top. False: window is NOT on top.
         /// <para/>Default: False.
         /// </summary>
         public bool IsAlwaysOnTop;
+
         /// <summary>
         /// <para/>A flag that shows/hides native the current window border decoration.
         /// <para/>True: native window border is HIDDEN. False: native window border is SHOWN.
         /// <para/>Default: False.
         /// </summary>
         public bool IsBorderHidden;
+        
         /// <summary>
         /// <para/>A flag that determines whether the current window will first appear in the center of the screen or not.
         /// <para/>True: window is centered. False: window is NOT centered.
         /// <para/>Default: True.
         /// </summary>
         public bool IsCentered;
+
         /// <para/>A flag that determines whether the current window can be in focused state or not.
         /// <para/>True: window is focusable. False: window is NOT focusable.
         /// <para/>Default: True.
         public bool IsFocusable;
+
         /// <summary>
         /// <para/>A flag that determines whether the current window can be closed if the mouse is clicked outside of the current window or not.
         /// <para/>True: window can be closed if the mouse is clicked outside. False: window can NOT be closed if the mouse is clicked outside.
         /// <para/>Default: False.
         /// </summary>
         public bool IsOutsideClickClosable;
+
         /// <summary>
         /// <para/>A flag that determines whether the current window will first appear maximized or not.
         /// <para/>True: window will first appear maximized. False: window will NOT first appear maximized.
         /// <para/>Default: False.
         /// </summary>
         public bool IsMaximized;
+
         /// <summary>
         /// <para/>A flag that determines whether the current window can be transparent or not.
         /// <para/>True: window can be transparent. False: window can NOT be transparent.
         /// <para/>Default: False.
         /// </summary>
         public bool IsTransparent;
+
         /// <summary>
         /// <para/>A flag that determines whether the current window will first appear in fullscreen mode or not.
         /// <para/>True: window will first appear in fullscreen mode. False: window will NOT first appear in fullscreen mode.
@@ -679,10 +711,14 @@ namespace SpaceVIL
         public void SetFocus(bool value)
         {
             if (_isFocused == value)
+            {
                 return;
+            }
             _isFocused = value;
             if (value)
+            {
                 windowLayout.SetFocus();
+            }
         }
 
         /// <summary>
@@ -795,7 +831,7 @@ namespace SpaceVIL
         /// Lets to set the rendering frequency.
         /// Default: SpaceVIL.Core.RedrawFrequency.Low
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">Rendering frequency as SpaceVIL.Core.RedrawFrequency.</param>
         public void SetRenderFrequency(RedrawFrequency value)
         {
             WindowManager.SetRenderFrequency(value);
@@ -813,10 +849,12 @@ namespace SpaceVIL
         /// Lets to describe the actions when the window starts.
         /// </summary>
         public EventCommonMethod EventOnStart;
+
         /// <summary>
         /// Lets to describe the actions when closing the window.
         /// </summary>
         public EventCommonMethod EventClose;
+
         /// <summary>
         /// Lets to describe the actions when you drag&drop files/folders to the current window.
         /// </summary>
@@ -862,6 +900,7 @@ namespace SpaceVIL
         /// Not implemented yet.
         /// </summary>
         public EventCommonMethodState EventResize;
+
         /// <summary>
         /// ATTENTION!
         /// Not implemented yet.
@@ -872,46 +911,57 @@ namespace SpaceVIL
         /// Lets to describe the actions when mouse cursor hovers the root item of the window.
         /// </summary>
         public EventMouseMethodState EventMouseHover;
+
         /// <summary>
         /// Lets to describe the actions when mouse cursor leaves the root item of the window.
         /// </summary>
         public EventMouseMethodState EventMouseLeave;
+
         /// <summary>
         /// Lets to describe the actions when the root item of the window was clicked.
         /// </summary>
         public EventMouseMethodState EventMouseClick;
+
         /// <summary>
         /// Lets to describe the actions when the root item of the window was double clicked.
         /// </summary>
         public EventMouseMethodState EventMouseDoubleClick;
+
         /// <summary>
         /// Lets to describe the actions when the root item of the window was pressed.
         /// </summary>
         public EventMouseMethodState EventMousePress;
+
         /// <summary>
         /// Lets to describe the actions when the mouse button was pressed and moved inside the root item of the window.
         /// </summary>
         public EventMouseMethodState EventMouseDrag;
+        
         /// <summary>
         /// Lets to describe the actions when the mouse button was released after dragging.
         /// </summary>
         public EventMouseMethodState EventMouseDrop;
+
         /// <summary>
         /// Lets to describe the actions when mouse wheel scrolls up.
         /// </summary>
         public EventMouseMethodState EventScrollUp;
+
         /// <summary>
         /// Lets to describe the actions when mouse wheel scrolls down.
         /// </summary>
         public EventMouseMethodState EventScrollDown;
+
         /// <summary>
         /// Lets to describe the actions when a keyboard key was pressed.
         /// </summary>
         public EventKeyMethodState EventKeyPress;
+
         /// <summary>
         /// Lets to describe the actions when a keyboard key was released.
         /// </summary>
         public EventKeyMethodState EventKeyRelease;
+
         /// <summary>
         /// Lets to describe the actions when you type text.
         /// </summary>
@@ -947,8 +997,11 @@ namespace SpaceVIL
         public void SetBorder(Border border)
         {
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetBorder(border);
+            }
         }
+
         /// <summary>
         /// Setting the color of the window border.
         /// </summary>
@@ -956,54 +1009,69 @@ namespace SpaceVIL
         public void SetBorderFill(Color fill)
         {
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetBorderFill(fill);
+            }
         }
+
         /// <summary>
         /// Setting the color of the window border.
         /// </summary>
         /// <param name="r">Red (0 - 255)</param>
         /// <param name="g">Green (0 - 255)</param>
-        /// <param name="b">Blur (0 - 255)</param>
+        /// <param name="b">Blue (0 - 255)</param>
         public void SetBorderFill(int r, int g, int b)
         {
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetBorderFill(r, g, b);
+            }
         }
+
         /// <summary>
         /// Setting the color of the window border.
         /// </summary>
         /// <param name="r">Red (0 - 255)</param>
         /// <param name="g">Green (0 - 255)</param>
-        /// <param name="b">Blur (0 - 255)</param>
+        /// <param name="b">Blue (0 - 255)</param>
         /// <param name="a">Alpha (0 - 255)</param>
         public void SetBorderFill(int r, int g, int b, int a)
         {
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetBorderFill(r, g, b, a);
+            }
         }
+
         /// <summary>
         /// Setting the color of the window border.
         /// </summary>
         /// <param name="r">Red (0.0f - 1.0f)</param>
         /// <param name="g">Green (0.0f - 1.0f)</param>
-        /// <param name="b">Blur (0.0f - 1.0f)</param>
+        /// <param name="b">Blue (0.0f - 1.0f)</param>
         public void SetBorderFill(float r, float g, float b)
         {
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetBorderFill(r, g, b);
+            }
         }
+
         /// <summary>
         /// Setting the color of the window border.
         /// </summary>
         /// <param name="r">Red (0.0f - 1.0f)</param>
         /// <param name="g">Green (0.0f - 1.0f)</param>
-        /// <param name="b">Blur (0.0f - 1.0f)</param>
+        /// <param name="b">Blue (0.0f - 1.0f)</param>
         /// <param name="a">Alpha (0.0f - 1.0f)</param>
         public void SetBorderFill(float r, float g, float b, float a)
         {
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetBorderFill(r, g, b, a);
+            }
         }
+
         /// <summary>
         /// Setting the corner radii of the window border.
         /// </summary>
@@ -1011,8 +1079,11 @@ namespace SpaceVIL
         public void SetBorderRadius(CornerRadius radius)
         {
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetBorderRadius(radius);
+            }
         }
+
         /// <summary>
         /// Setting the common corner radius of the window border.
         /// </summary>
@@ -1020,8 +1091,11 @@ namespace SpaceVIL
         public void SetBorderRadius(int radius)
         {
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetBorderRadius(new CornerRadius(radius));
+            }
         }
+
         /// <summary>
         /// Setting the window border thickness.
         /// </summary>
@@ -1029,8 +1103,11 @@ namespace SpaceVIL
         public void SetBorderThickness(int thickness)
         {
             if (windowLayout.GetContainer() != null)
+            {
                 windowLayout.GetContainer().SetBorderThickness(thickness);
+            }
         }
+
         /// <summary>
         /// Getting the current window border corner radii.
         /// </summary>
@@ -1038,9 +1115,12 @@ namespace SpaceVIL
         public CornerRadius GetBorderRadius()
         {
             if (windowLayout.GetContainer() != null)
+            {
                 return windowLayout.GetContainer().GetBorderRadius();
+            }
             return null;
         }
+
         /// <summary>
         /// Getting the current window border thickness.
         /// </summary>
@@ -1048,9 +1128,12 @@ namespace SpaceVIL
         public int GetBorderThickness()
         {
             if (windowLayout.GetContainer() != null)
+            {
                 return windowLayout.GetContainer().GetBorderThickness();
+            }
             return 0;
         }
+
         /// <summary>
         /// Getting the current window border color.
         /// </summary>
@@ -1058,9 +1141,12 @@ namespace SpaceVIL
         public Color GetBorderFill()
         {
             if (windowLayout.GetContainer() != null)
+            {
                 return windowLayout.GetContainer().GetBorderFill();
+            }
             return Color.Transparent;
         }
+
         /// <summary>
         /// Getting the GLFW ID of the window.
         /// </summary>
@@ -1097,48 +1183,53 @@ namespace SpaceVIL
         {
             windowLayout.SetShadeColor(color);
         }
+
         /// <summary>
         /// Setting the dimmer color of the window. The dimmer appears when the current window opens a dialog window.
         /// </summary>
         /// <param name="r">Red (0 - 255)</param>
         /// <param name="g">Green (0 - 255)</param>
-        /// <param name="b">Blur (0 - 255)</param>
+        /// <param name="b">Blue (0 - 255)</param>
         public void SetShadeColor(int r, int g, int b)
         {
             windowLayout.SetShadeColor(r, g, b);
         }
+
         /// <summary>
         /// Setting the dimmer color of the window. The dimmer appears when the current window opens a dialog window.
         /// </summary>
         /// <param name="r">Red (0 - 255)</param>
         /// <param name="g">Green (0 - 255)</param>
-        /// <param name="b">Blur (0 - 255)</param>
+        /// <param name="b">Blue (0 - 255)</param>
         /// <param name="a">Alpha (0 - 255)</param>
         public void SetShadeColor(int r, int g, int b, int a)
         {
             windowLayout.SetShadeColor(r, g, b, a);
         }
+
         /// <summary>
         /// Setting the dimmer color of the window. The dimmer appears when the current window opens a dialog window.
         /// </summary>
         /// <param name="r">Red (0.0f - 1.0f)</param>
         /// <param name="g">Green (0.0f - 1.0f)</param>
-        /// <param name="b">Blur (0.0f - 1.0f)</param>
+        /// <param name="b">Blue (0.0f - 1.0f)</param>
         public void SetShadeColor(float r, float g, float b)
         {
             windowLayout.SetShadeColor(r, g, b);
         }
+
         /// <summary>
         /// Setting the dimmer color of the window. The dimmer appears when the current window opens a dialog window.
         /// </summary>
         /// <param name="r">Red (0.0f - 1.0f)</param>
         /// <param name="g">Green (0.0f - 1.0f)</param>
-        /// <param name="b">Blur (0.0f - 1.0f)</param>
+        /// <param name="b">Blue (0.0f - 1.0f)</param>
         /// <param name="a">Alpha (0.0f - 1.0f)</param>
         public void SetShadeColor(float r, float g, float b, float a)
         {
             windowLayout.SetShadeColor(r, g, b, a);
         }
+
         /// <summary>
         /// Getting the current dimmer color.
         /// </summary>
@@ -1152,10 +1243,11 @@ namespace SpaceVIL
         {
             GetLayout().FreeVRAMResource(resource);
         }
+
         /// <summary>
         /// Getting the area of a primary monitor. The work area not occupied by global task bars or menu bars.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Work area as SpaceVIL.Core.Area</returns>
         public Area GetWorkArea()
         {
             Glfw3.Glfw.Monitor monitor = Glfw3.Glfw.GetPrimaryMonitor();
@@ -1169,6 +1261,7 @@ namespace SpaceVIL
         }
 
         private Scale _windowScale = new Scale();
+        
         /// <summary>
         /// Get DPI scale for the current window.
         /// </summary>

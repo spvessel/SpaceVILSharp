@@ -7,9 +7,19 @@ import com.spvessel.spacevil.Flags.ItemAlignment;
 
 import java.util.List;
 
+/**
+ * Cell is sealed class representing cell in SpaceVIL.Grid. 
+ * You cannot create instances of Cell class, only to get it for proccessing 
+ * from any instance of SpaceVIL.Grid class.
+ */
 public final class Cell extends Geometry {
     private InterfaceFreeLayout _parent = null;
 
+    /**
+     * Getting SpaceVIL.Core.IFreeLayout (usualy SpaceVIL.Grid) 
+     * instance to which this Cell belongs.
+     * @return Container with cells as com.spvessel.spacevil.Core.InterfaceFreeLayout (usualy SpaceVIL.Grid).
+     */
     public InterfaceFreeLayout getParentGrid() {
         return _parent;
     }
@@ -33,6 +43,10 @@ public final class Cell extends Geometry {
     // Indecies
     private int _rowIndex = 0;
 
+    /**
+     * Getting Cell row number.
+     * @return Row number.
+     */
     public int getRow() {
         return _rowIndex;
     }
@@ -43,6 +57,10 @@ public final class Cell extends Geometry {
 
     private int _columnIndex = 0;
 
+    /**
+     * Getting Cell column number.
+     * @return Column number.
+     */
     public int getColumn() {
         return _columnIndex;
     }
@@ -59,6 +77,10 @@ public final class Cell extends Geometry {
         _x = x;
     }
 
+    /**
+     * Getting X position of the Cell.
+     * @return X position.
+     */
     public int getX() {
         return _x;
     }
@@ -67,12 +89,20 @@ public final class Cell extends Geometry {
         _y = y;
     }
 
+    /**
+     * Getting Y position of the Cell.
+     * @return Y position.
+     */
     public int getY() {
         return _y;
     }
 
     private InterfaceBaseItem _itemLink = null;
 
+    /**
+     * Getting contained item in the Cell
+     * @return Item as com.spvessel.spacevil.Core.InterfaceBaseItem
+     */
     public InterfaceBaseItem getItem() {
         return _itemLink;
     }

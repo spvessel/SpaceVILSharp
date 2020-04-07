@@ -14,7 +14,7 @@ namespace SpaceVIL
     public abstract class ActiveWindow : CoreWindow
     {
         /// <summary>
-        /// Constructs a ActiveWindow
+        /// Constructs an ActiveWindow
         /// </summary>
         public ActiveWindow() : base()
         {

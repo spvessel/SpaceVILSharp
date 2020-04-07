@@ -6,6 +6,7 @@ namespace SpaceVIL.Core
     public class Area
     {
         private int _x, _y, _w, _h;
+
         /// <summary>
         /// Default constructor. All values are zero.
         /// </summary>
@@ -13,6 +14,7 @@ namespace SpaceVIL.Core
         {
             _x = _y = _w = _h = 0;
         }
+
         /// <summary>
         /// Constructs a Area with specified position and size.
         /// </summary>
@@ -27,6 +29,7 @@ namespace SpaceVIL.Core
             _w = w;
             _h = h;
         }
+
         /// <summary>
         /// Setting X position.
         /// </summary>
@@ -35,6 +38,7 @@ namespace SpaceVIL.Core
         {
             _x = value;
         }
+
         /// <summary>
         /// Setting Y position.
         /// </summary>
@@ -43,6 +47,7 @@ namespace SpaceVIL.Core
         {
             _y = value;
         }
+
         /// <summary>
         /// Setting area width.
         /// </summary>
@@ -51,6 +56,7 @@ namespace SpaceVIL.Core
         {
             _w = value;
         }
+
         /// <summary>
         /// Setting area height.
         /// </summary>
@@ -59,6 +65,7 @@ namespace SpaceVIL.Core
         {
             _h = value;
         }
+
         /// <summary>
         /// Getting X position.
         /// </summary>
@@ -67,6 +74,7 @@ namespace SpaceVIL.Core
         {
             return _x;
         }
+
         /// <summary>
         /// Getting Y position.
         /// </summary>
@@ -75,6 +83,7 @@ namespace SpaceVIL.Core
         {
             return _y;
         }
+
         /// <summary>
         /// Getting area width.
         /// </summary>
@@ -83,6 +92,7 @@ namespace SpaceVIL.Core
         {
             return _w;
         }
+
         /// <summary>
         /// Getting area height.
         /// </summary>
@@ -91,6 +101,7 @@ namespace SpaceVIL.Core
         {
             return _h;
         }
+        
         /// <summary>
         /// Setting all area attributes.
         /// </summary>

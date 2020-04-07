@@ -35,6 +35,7 @@ namespace SpaceVIL
 
         private Dictionary<ButtonCore, Int32> _userMap = new Dictionary<ButtonCore, Int32>();
         private ButtonCore _userButtonResult = null;
+
         /// <summary>
         /// Getting result from custom toolbar (if it was created).
         /// </summary>
@@ -42,24 +43,28 @@ namespace SpaceVIL
         public int GetUserButtonResult()
         {
             if (_userButtonResult != null && _userMap.ContainsKey(_userButtonResult))
+            {
                 return _userMap[_userButtonResult];
+            }
             return -1;
         }
 
         private TitleBar _titleBar;
-        private Frame _msg_layout;
-        private Label _msg;
-        private ButtonCore _ok;
+        private Frame _msgLayout;
+        private Label _msgLabel;
+        private ButtonCore _okButton;
+
         /// <summary>
         /// Getting OK button for appearance customizing or assigning new actions.
         /// </summary>
         /// <returns>MessageBox's OK button as SpaceVIL.ButtonCore.</returns>
         public ButtonCore GetOkButton()
         {
-            return _ok;
+            return _okButton;
         }
 
         private ButtonCore _cancel;
+
         /// <summary>
         /// Getting CANCEL button for appearance customizing or assigning new actions.
         /// </summary>
@@ -71,6 +76,7 @@ namespace SpaceVIL
 
         private HorizontalStack _toolbar;
         private HorizontalStack _userbar;
+
         /// <summary>
         /// Default MessageBox constructor.
         /// </summary>
@@ -80,9 +86,9 @@ namespace SpaceVIL
             count++;
 
             _titleBar = new TitleBar();
-            _msg_layout = new Frame();
-            _msg = new Label();
-            _ok = GetButton("OK");
+            _msgLayout = new Frame();
+            _msgLabel = new Label();
+            _okButton = GetButton("OK");
             _cancel = GetButton("Cancel");
 
             _toolbar = new HorizontalStack();
@@ -91,7 +97,9 @@ namespace SpaceVIL
             EventKeyPress += (sender, args) =>
             {
                 if (args.Key == KeyCode.Escape)
+                {
                     Close();
+                }
             };
 
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.MessageItem)));
@@ -106,24 +114,27 @@ namespace SpaceVIL
         {
             SetWindowTitle(title);
             _titleBar.SetText(title);
-            _msg.SetText(message);
+            _msgLabel.SetText(message);
         }
+
         /// <summary>
         /// Setting a text of message of MessageBox.
         /// </summary>
         /// <param name="text">Text of message as System.String.</param>
         public void SetMessageText(String text)
         {
-            _msg.SetText(text);
+            _msgLabel.SetText(text);
         }
+
         /// <summary>
         /// Getting the current text of message of MessageBox.
         /// </summary>
         /// <returns>The current text of message as System.String.</returns>
         public String GetMessageText()
         {
-            return _msg.GetText();
+            return _msgLabel.GetText();
         }
+
         /// <summary>
         /// Setting a text of title of MessageBox.
         /// </summary>
@@ -132,6 +143,7 @@ namespace SpaceVIL
         {
             _titleBar.SetText(title);
         }
+
         /// <summary>
         /// Getting the current text of title of MessageBox.
         /// </summary>
@@ -155,10 +167,12 @@ namespace SpaceVIL
             int w_global = 0;
 
             // toolbar size
-            int w = _ok.GetWidth() + _ok.GetMargin().Left + _ok.GetMargin().Right;
+            int w = _okButton.GetWidth() + _okButton.GetMargin().Left + _okButton.GetMargin().Right;
             if (_cancel.IsVisible())
+            {
                 w = w * 2 + 10;
-            _toolbar.SetSize(w, _ok.GetHeight() + _ok.GetMargin().Top + _ok.GetMargin().Bottom);
+            }
+            _toolbar.SetSize(w, _okButton.GetHeight() + _okButton.GetMargin().Top + _okButton.GetMargin().Bottom);
             w_global += w;
 
             bool isEmpty = true;
@@ -179,13 +193,17 @@ namespace SpaceVIL
 
             SetMinWidth(w_global);
             if (GetWidth() < w_global)
+            {
                 SetWidth(w_global);
-            int w_text = _msg.GetTextWidth() + _msg_layout.GetMargin().Left + _msg_layout.GetMargin().Right
-            + _msg_layout.GetPadding().Left + _msg_layout.GetPadding().Right + _msg.GetMargin().Left
-            + _msg.GetMargin().Right + _msg.GetPadding().Left + _msg.GetPadding().Right + 10;
+            }
+            int w_text = _msgLabel.GetTextWidth() + _msgLayout.GetMargin().Left + _msgLayout.GetMargin().Right
+            + _msgLayout.GetPadding().Left + _msgLayout.GetPadding().Right + _msgLabel.GetMargin().Left
+            + _msgLabel.GetMargin().Right + _msgLabel.GetPadding().Left + _msgLabel.GetPadding().Right + 10;
             if (GetWidth() < w_text)
+            {
                 SetWidth(w_text);
-            AddItems(_titleBar, _msg_layout);
+            }
+            AddItems(_titleBar, _msgLayout);
             GetLayout().GetContainer().Update(GeometryEventType.ResizeWidth, 0);
 
 
@@ -194,11 +212,11 @@ namespace SpaceVIL
                 _toolbar.SetAlignment(ItemAlignment.Right, ItemAlignment.Bottom);
                 int right = _toolbar.GetWidth() + _toolbar.GetMargin().Left + _toolbar.GetMargin().Right + 10;
                 _userbar.SetMargin(0, 0, right / 2, 0);
-                _msg_layout.AddItems(_msg, _userbar, _toolbar);
+                _msgLayout.AddItems(_msgLabel, _userbar, _toolbar);
             }
             else
             {
-                _msg_layout.AddItems(_msg, _toolbar);
+                _msgLayout.AddItems(_msgLabel, _toolbar);
             }
 
             // queue
@@ -209,15 +227,15 @@ namespace SpaceVIL
                     _userbar.AddItem(btn);
                 }
             }
-            _toolbar.AddItems(_ok, _cancel);
-            _userMap.Add(_ok, 1);
+            _toolbar.AddItems(_okButton, _cancel);
+            _userMap.Add(_okButton, 1);
             _userMap.Add(_titleBar.GetCloseButton(), 0);
             _userMap.Add(_cancel, -1);
             // buttons
-            _ok.SetItemName("OK");
-            _ok.EventMouseClick += (sender, args) =>
+            _okButton.SetItemName("OK");
+            _okButton.EventMouseClick += (sender, args) =>
             {
-                _userButtonResult = _ok;
+                _userButtonResult = _okButton;
                 _result = true;
                 Close();
             };
@@ -254,6 +272,7 @@ namespace SpaceVIL
         }
 
         private List<ButtonCore> _queue = new List<ButtonCore>();
+
         /// <summary>
         /// Adding a custom user button to toolbal with the specified ID.
         /// </summary>
@@ -281,6 +300,7 @@ namespace SpaceVIL
         }
 
         private Style _btnStyle = null;
+
         /// <summary>
         /// Getting the current style of a custom user button (that placed into user's toolbar).
         /// </summary>
@@ -289,6 +309,7 @@ namespace SpaceVIL
         {
             return _btnStyle;
         }
+
         /// <summary>
         /// Setting a style for a custom user button (that placed into user's toolbar).
         /// </summary>
@@ -297,6 +318,7 @@ namespace SpaceVIL
         {
             _btnStyle = style;
         }
+
         /// <summary>
         /// Setting a style for entire MessageBox.
         /// <para/> Inner styles: "window", "message", "layout", "toolbar", "userbar" (custom toolbar), "button".
@@ -305,7 +327,9 @@ namespace SpaceVIL
         public void SetStyle(Style style)
         {
             if (style == null)
+            {
                 return;
+            }
 
             Style innerStyle = style.GetInnerStyle("window");
             if (innerStyle != null)
@@ -318,12 +342,12 @@ namespace SpaceVIL
             innerStyle = style.GetInnerStyle("message");
             if (innerStyle != null)
             {
-                _msg.SetStyle(innerStyle);
+                _msgLabel.SetStyle(innerStyle);
             }
             innerStyle = style.GetInnerStyle("layout");
             if (innerStyle != null)
             {
-                _msg_layout.SetStyle(innerStyle);
+                _msgLayout.SetStyle(innerStyle);
             }
             innerStyle = style.GetInnerStyle("toolbar");
             if (innerStyle != null)
@@ -339,7 +363,7 @@ namespace SpaceVIL
             if (innerStyle != null)
             {
                 _btnStyle = innerStyle.Clone();
-                _ok.SetStyle(innerStyle);
+                _okButton.SetStyle(innerStyle);
                 _cancel.SetStyle(innerStyle);
             }
         }

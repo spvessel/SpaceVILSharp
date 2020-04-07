@@ -40,9 +40,12 @@ namespace SpaceVIL.Common
         public static void SetDefaultCursor(CursorImage cursor)
         {
             if (cursor == null)
+            {
                 return;
+            }
             _defaultCursor = cursor;
         }
+
         /// <summary>
         /// Getting the current default mouse cursor image.
         /// </summary>
@@ -59,9 +62,12 @@ namespace SpaceVIL.Common
         public static ThemeStyle GetDefaultTheme()
         {
             if (_defaultTheme == null)
+            {
                 _defaultTheme = new ThemeStyle();
+            }
             return _defaultTheme;
         }
+
         /// <summary>
         /// Setting the default theme for the current application.
         /// </summary>
@@ -77,11 +83,13 @@ namespace SpaceVIL.Common
         /// <param name="type">Item type as System.Type
         /// <para/>Example: typeof(SpaceVIL.ButtonCore)
         /// </param>
-        /// <returns></returns>
+        /// <returns>Style as SpaceVIL.Decorations.Style</returns>
         public static Style GetDefaultStyle(Type type)
         {
             if (_defaultTheme == null)
+            {
                 _defaultTheme = new ThemeStyle();
+            }
             return _defaultTheme.GetThemeStyle(type);
         }
 

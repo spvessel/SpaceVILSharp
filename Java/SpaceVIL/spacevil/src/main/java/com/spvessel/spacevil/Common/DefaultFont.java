@@ -11,8 +11,9 @@ final class DefaultFont {
     private DefaultFont() {}
 
     public static DefaultFont getInstance() {
-        if (_instance == null)
+        if (_instance == null) {
             _instance = new DefaultFont();
+        }
         return _instance;
     }
 

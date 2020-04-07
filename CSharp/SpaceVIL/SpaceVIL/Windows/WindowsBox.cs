@@ -11,7 +11,7 @@ namespace SpaceVIL
     }
 
     /// <summary>
-    /// WindowsBox is a storage-class that provides an access to existing windows by name and Guid
+    /// WindowsBox is a storage-class that provides an access to existing windows by name and Guid.
     /// </summary>
     public static class WindowsBox
     {
@@ -30,6 +30,7 @@ namespace SpaceVIL
             }
             return false;
         }
+
         /// <summary>
         /// Trying to show a window by its name.
         /// </summary>
@@ -45,6 +46,7 @@ namespace SpaceVIL
             }
             return false;
         }
+
         /// <summary>
         /// Getting a window instance by its name.
         /// </summary>
@@ -55,7 +57,9 @@ namespace SpaceVIL
             foreach (CoreWindow wnd in windows)
             {
                 if (wnd.GetWindowName().Equals(name))
+                {
                     return wnd;
+                }
             }
             return null;
         }
@@ -67,8 +71,10 @@ namespace SpaceVIL
         public static CoreWindow GetWindowInstance(Guid guid)
         {
             if (windowsGuid.ContainsKey(guid))
+            {
                 return windowsGuid[guid];
-            else return null;
+            }
+            return null;
         }
         /// <summary>
         /// Getting the current focused window.
@@ -78,6 +84,7 @@ namespace SpaceVIL
         {
             return lastFocusedWindow;
         }
+
         /// <summary>
         /// Getting the list of existing windows in the application.
         /// </summary>
@@ -93,6 +100,7 @@ namespace SpaceVIL
 
             return result;
         }
+
         /// <summary>
         /// Printing all existing windows in the application.
         /// </summary>
@@ -112,7 +120,9 @@ namespace SpaceVIL
         internal static void InitWindow(CoreWindow _layout)
         {
             if (windowsGuid.ContainsKey(_layout.GetWindowGuid()))
+            {
                 return;
+            }
 
             windows.Add(_layout);
             windowsGuid.Add(_layout.GetWindowGuid(), _layout);
@@ -158,15 +168,18 @@ namespace SpaceVIL
         internal static CoreWindow GetWindowPair(CoreWindow wnd)
         {
             if (pairs.ContainsKey(wnd))
+            {
                 return pairs[wnd];
-            else
-                return null;
+            }
+            return null;
         }
 
         internal static void AddToWindowDispatcher(CoreWindow wnd)
         {
             if (!pairs.ContainsKey(wnd))
+            {
                 pairs.Add(wnd, lastFocusedWindow);
+            }
         }
 
         internal static void SetCurrentFocusedWindow(CoreWindow wnd)
@@ -176,13 +189,18 @@ namespace SpaceVIL
 
         internal static void SetFocusedWindow(CoreWindow window)
         {
-            window.SetFocus(true);
+            if (window == null)
+            {
+                window.SetFocus(true);
+            }
         }
 
         internal static void RemoveFromWindowDispatcher(CoreWindow wnd)
         {
             if (pairs.ContainsKey(wnd))
+            {
                 pairs.Remove(wnd);
+            }
         }
 
         internal static void RestoreCommonGLSettings(CoreWindow window)

@@ -12,7 +12,6 @@ namespace SpaceVIL
     {
         private IFreeLayout _parent = null;
 
-        /// <returns> parent grid of the cell </returns>
         /// <summary>
         /// Getting SpaceVIL.Core.IFreeLayout (usualy SpaceVIL.Grid) 
         /// instance to which this Cell belongs.
@@ -54,6 +53,7 @@ namespace SpaceVIL
         }
 
         private int _columnIndex = 0;
+
         /// <summary>
         /// Getting Cell column number.
         /// </summary>
@@ -75,6 +75,7 @@ namespace SpaceVIL
         {
             _x = x;
         }
+
         /// <summary>
         /// Getting X position of the Cell.
         /// </summary>
@@ -88,6 +89,7 @@ namespace SpaceVIL
         {
             _y = y;
         }
+        
         /// <summary>
         /// Getting Y position of the Cell.
         /// </summary>
@@ -99,6 +101,10 @@ namespace SpaceVIL
 
         private IBaseItem _itemLink = null;
 
+        /// <summary>
+        /// Getting contained item in the Cell
+        /// </summary>
+        /// <returns>Item as SpaceVIL.Core.IBaseItem</returns>
         public IBaseItem GetItem()
         {
             return _itemLink;

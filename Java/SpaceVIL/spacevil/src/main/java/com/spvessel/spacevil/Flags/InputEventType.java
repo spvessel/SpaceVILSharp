@@ -1,5 +1,8 @@
 package com.spvessel.spacevil.Flags;
 
+/**
+ * Enums of types of input events.
+ */
 public enum InputEventType {
     EMPTY(0), FOCUS_GET(0x01), FOCUS_LOST(0x02), RESIZED(0x04), DESTROYED(0x08), VALUE_CHANGED(0x10),
     SELECTION_CHANGED(0x20), INDEX_CHANGED(0x40),

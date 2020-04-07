@@ -23,7 +23,7 @@ namespace SpaceVIL.Common
 #endif
 
         /// <summary>
-        /// Getting basic information about SpaceVIL such as version, date, platform and os.
+        /// Getting basic information about SpaceVIL such as version, date, platform and OS.
         /// </summary>
         /// <returns>The information as System.String.</returns>
         public static String GetSpaceVILInfo()
@@ -166,12 +166,17 @@ namespace SpaceVIL.Common
         {
             CoreWindow window = WindowsBox.GetCurrentFocusedWindow();
             if (window == null)
+            {
                 return "";
+            }
             Int64 id = window.GetGLWID();
             if (id == 0)
+            {
                 return String.Empty;
+            }
             return Glfw.GetClipboardString(id);
         }
+
         /// <summary>
         /// Placing the specified text to the clipboard.
         /// </summary>
@@ -180,10 +185,14 @@ namespace SpaceVIL.Common
         {
             CoreWindow window = WindowsBox.GetCurrentFocusedWindow();
             if (window == null)
+            {
                 return;
+            }
             Int64 id = window.GetGLWID();
             if (id == 0)
+            {
                 return;
+            }
             Glfw.SetClipboardString(id, text);
         }
 

@@ -278,5 +278,10 @@ namespace SpaceVIL
             currentValue -= step;
             UpdateCurrentValue();
         }
+
+        enum InputRestriction
+        {
+            IntNumbers, DoubleNumbers, Letters, All
+        }
     }
 }

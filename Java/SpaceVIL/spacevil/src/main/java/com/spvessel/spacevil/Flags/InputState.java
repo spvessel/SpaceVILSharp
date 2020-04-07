@@ -1,5 +1,9 @@
 package com.spvessel.spacevil.Flags;
 
+/**
+ * Enum of types of input conditions.
+ * <p> Values: Release, Press, Repeat.
+ */
 public enum InputState {
     RELEASE(0), PRESS(1), REPEAT(2);
 

@@ -1,5 +1,9 @@
 package com.spvessel.spacevil.Flags;
 
+/**
+ * Multisample anti-aliasing enum.
+ * <p> Values: No, MSAA2x, MSAA4x, MSAA8x.
+ */
 public enum MSAA {
     NO(0), MSAA_2X(2), MSAA_4X(4), MSAA_8X(8);
 

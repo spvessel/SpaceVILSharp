@@ -20,10 +20,12 @@ namespace SpaceVIL
     public class ComboBoxDropDown : Prototype, IFloating
     {
         internal ComboBox Parent = null;
+
         /// <summary>
         /// Event that is invoked when one of the options is selected.
         /// </summary>
         public EventCommonMethod SelectionChanged;
+
         /// <summary>
         /// Disposing ComboBoxDropDown resources if it was removed.
         /// </summary>
@@ -31,11 +33,13 @@ namespace SpaceVIL
         {
             SelectionChanged = null;
         }
+
         /// <summary>
         /// ListBox for storing a list of options (SpaceVIL.MenuItem).
         /// </summary>
         public ListBox ItemList = new ListBox();
         private String _textSelection = String.Empty;
+
         /// <summary>
         /// Getting the text of selected option.
         /// </summary>
@@ -44,6 +48,7 @@ namespace SpaceVIL
         {
             return _textSelection;
         }
+
         /// <summary>
         /// Getting index of the current selected option in the list.
         /// </summary>
@@ -52,6 +57,7 @@ namespace SpaceVIL
         {
             return ItemList.GetSelection();
         }
+
         /// <summary>
         /// Selecting an option from the list at the specified index.
         /// </summary>
@@ -63,22 +69,27 @@ namespace SpaceVIL
             ItemList.SetSelection(index);
             MenuItem selection = ItemList.GetSelectedItem() as MenuItem;
             if (selection != null)
+            {
                 _textSelection = selection.GetText();
+            }
         }
         private List<IBaseItem> _queue = new List<IBaseItem>();
 
         private static int count = 0;
+
         /// <summary>
         /// You can specify mouse button (see SpaceVIL.Core.MouseButton) 
         /// that is used to open ComboBoxDropDown.
         /// <para/> Default: SpaceVIL.Core.MouseButton.ButtonLeft.
         /// </summary>
         public MouseButton ActiveButton = MouseButton.ButtonLeft;
+
         private bool _init = false;
         private bool _ouside = true;
+
         /// <summary>
         /// Returns True if ComboBoxDropDown (see SpaceVIL.Core.IFloating)
-        /// should closes when mouse click outside the area of ComboBoxDropDown otherwise returns False..
+        /// should closes when mouse click outside the area of ComboBoxDropDown otherwise returns False.
         /// </summary>
         /// <returns>True: if ComboBoxDropDown closes when mouse click outside the area.
         /// False: if ComboBoxDropDown stays opened when mouse click outside the area.</returns>
@@ -86,6 +97,7 @@ namespace SpaceVIL
         {
             return _ouside;
         }
+
         /// <summary>
         /// Setting boolean value of item's behavior when mouse click occurs outside the ComboBoxDropDown.
         /// </summary>
@@ -176,7 +188,9 @@ namespace SpaceVIL
                     }
                 };
                 foreach (var item in _queue)
+                {
                     ItemList.AddItem(item);
+                }
                 _queue = null;
                 _init = true;
             }
@@ -186,8 +200,9 @@ namespace SpaceVIL
         private void OnSelectionChanged()
         {
             MenuItem selection = ItemList.GetSelectedItem() as MenuItem;
-            if (selection != null)
+            if (selection != null) {
                 _textSelection = selection.GetText();
+            }
             Hide();
             SelectionChanged?.Invoke();
         }
@@ -239,7 +254,7 @@ namespace SpaceVIL
 
         private void UpdateSize()
         {
-            int height = 0;// ItemList.GetPadding().Top + ItemList.GetPadding().Bottom;
+            int height = ItemList.GetPadding().Top + ItemList.GetPadding().Bottom;
             int width = GetWidth();
             List<IBaseItem> list = ItemList.GetListContent();
             foreach (var item in list)
@@ -255,10 +270,14 @@ namespace SpaceVIL
                     tmp += m.GetTextWidth() + m.GetMargin().Left + m.GetMargin().Right + m.GetPadding().Left + m.GetPadding().Right;
                 }
                 else
+                {
                     tmp = tmp + item.GetWidth() + item.GetMargin().Left + item.GetMargin().Right;
+                }
 
                 if (width < tmp)
+                {
                     width = tmp;
+                }
             }
             if ((GetY() + height) > GetHandler().GetHeight())
             {
@@ -324,7 +343,9 @@ namespace SpaceVIL
         public void Hide(MouseArgs args)
         {
             if (!IsVisible())
+            {
                 return;
+            }
             Hide();
             Parent.IsDropDownAreaOutsideClicked(args);
         }
@@ -352,7 +373,9 @@ namespace SpaceVIL
         public override void SetStyle(Style style)
         {
             if (style == null)
+            {
                 return;
+            }
             base.SetStyle(style);
             Style inner_style = style.GetInnerStyle("itemlist");
             if (inner_style != null)

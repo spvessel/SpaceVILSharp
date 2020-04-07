@@ -20,6 +20,11 @@ import com.spvessel.spacevil.Flags.OSType;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWVidMode;
 
+/**
+ * DisplayService is static class providing methods to getting basic information 
+ * about the SpaceVIL framework, OS attributes, 
+ * initializing the SpaceVIL framework and working with clipboard.
+ */
 public final class CommonService {
 
     private CommonService() {
@@ -27,6 +32,10 @@ public final class CommonService {
 
     private static String _version = "0.3.1-ALPHA - January 2019";
 
+    /**
+     * Getting basic information about SpaceVIL such as version, date, platform and OS.
+     * @return The information as java.lang.String.
+     */
     public static String getSpaceVILInfo() {
 
         String info = "SpaceVIL version: " + _version + "\n" + "Platform: JVM \n" + "OS type: "
@@ -55,6 +64,10 @@ public final class CommonService {
     public static long cursorResizeV;
     public static long cursorResizeAll;
 
+    /**
+     * Initializing the mandatory SpaceVIL common components (GLFW, default values and etc.).
+     * @return True: if initialization is successful. False: if initialization is unsuccessful.
+     */
     public static boolean initSpaceVILComponents() {
         String OS = System.getProperty("os.name").toLowerCase();
         if (isWindows(OS)) {
@@ -133,23 +146,35 @@ public final class CommonService {
         return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
     }
 
+    /**
+     * Getting stored text in clipboard.
+     * @return The text as java.lang.String.
+     */
     public static String getClipboardString() {
         CoreWindow window = WindowsBox.getCurrentFocusedWindow();
-        if (window == null)
+        if (window == null) {
             return "";
+        }
         long id = window.getGLWID();
-        if (id == NULL)
+        if (id == NULL) {
             return "";
+        }
         return glfwGetClipboardString(id);
     }
 
+    /**
+     * Placing the specified text to the clipboard.
+     * @param text The text as java.lang.String
+     */
     public static void setClipboardString(String text) {
         CoreWindow window = WindowsBox.getCurrentFocusedWindow();
-        if (window == null)
+        if (window == null) {
             return;
+        }
         long id = window.getGLWID();
-        if (id == NULL)
+        if (id == NULL) {
             return;
+        }
         byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
         ByteBuffer bb = BufferUtils.createByteBuffer(bytes.length + 1);
         bb.put(bytes);
@@ -162,14 +187,26 @@ public final class CommonService {
     private static KeyCode _controlLeft = KeyCode.LEFTCONTROL;
     private static KeyMods _controlMod = KeyMods.CONTROL;
 
+    /**
+     * Getting the default right "control" key KeyCode of current OS (for Mac OS - Command key)
+     * @return The keyboard key as com.spvessel.spacevil.Flags.KeyCode
+     */
     public static KeyCode getOsControlKeyRight() {
         return _controlRight;
     }
 
+    /**
+     * Getting the default left "control" key KeyCode of current OS (for Mac OS - Command key)
+     * @return The keyboard key as com.spvessel.spacevil.Flags.KeyCode
+     */
     public static KeyCode getOsControlKeyLeft() {
         return _controlLeft;
     }
 
+    /**
+     * Getting the default "control" modifier KeyCode of current OS (for Mac OS - Command key)
+     * @return The keyboard modifier as com.spvessel.spacevil.Flags.KeyCode
+     */
     public static KeyMods getOsControlMod() {
         return _controlMod;
     }

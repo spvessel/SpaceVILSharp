@@ -20,59 +20,108 @@ import com.spvessel.spacevil.Flags.KeyMods;
 import com.spvessel.spacevil.Flags.MouseButton;
 import com.spvessel.spacevil.Flags.VisibilityPolicy;
 
+/**
+ * ComboBoxDropDown is drop-down list implementation for ComboBox (see SpaceVIL.ComboBox). 
+ * ComboBox do not contains ComboBoxDropDown in usual way (ComboBox.GetItems() does not 
+ * return ComboBoxDropDown), they just connected with each other. Used for selecting 
+ * option from the list. ComboBoxDropDown is a floating item (see SpaceVIL.Core.IFloating 
+ * and  enum SpaceVIL.Core.LayoutType) and closes when mouse click outside the 
+ * ComboBoxDropDown area.
+ * <p> Contains ListBox. 
+ * <p> Supports all events except drag and drop.
+ * <p> Notice: All floating items render above all others items.
+ */
 public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
 
     ComboBox parent = null;
+
+    /**
+     * Event that is invoked when one of the options is selected.
+     */
     public EventCommonMethod selectionChanged = new EventCommonMethod();
 
+    /**
+     * Disposing ComboBoxDropDown resources if it was removed.
+     */
     @Override
     public void release() {
         selectionChanged.clear();
     }
 
+    /**
+     * ListBox for storing a list of options (com.spvessel.spacevil.MenuItem).
+     */
     public ListBox itemList = new ListBox();
-    private String _text_selection = "";
+    private String _textSelection = "";
 
+    /**
+     * Getting the text of selected option.
+     * @return Text of selected option.
+     */
     public String getText() {
-        return _text_selection;
+        return _textSelection;
     }
 
+    /**
+     * Getting index of the current selected option in the list.
+     * @return Index of the current selected option
+     */
     public int getCurrentIndex() {
         return itemList.getSelection();
     }
 
+    /**
+     * Selecting an option from the list at the specified index.
+     * @param index Index of option in the list.
+     */
     public void setCurrentIndex(int index) {
-        if (!_init)
+        // if (!_init) {
             initElements();
+        // }
 
         itemList.setSelection(index);
         if (itemList.getSelectedItem() instanceof MenuItem) {
             MenuItem selection = (MenuItem) itemList.getSelectedItem();
-            _text_selection = selection.getText();
+            _textSelection = selection.getText();
         }
     }
 
     private List<InterfaceBaseItem> _queue = new LinkedList<>();
 
     private static int count = 0;
+
+    /**
+     * You can specify mouse button (see SpaceVIL.Core.MouseButton) 
+     * that is used to open ComboBoxDropDown.
+     * <p> Default: com.spvessel.spacevil.Flags.MouseButton.BUTTON_LEFT.
+     */
     public MouseButton activeButton = MouseButton.BUTTON_LEFT;
 
     private boolean _init = false;
     private boolean _ouside = true;
 
     /**
-     * Close the ContextMenu it mouse click is outside (true or false)
+     * Returns True if ComboBoxDropDown (see com.spvessel.spacevil.Core.InterfaceFloating)
+     * should closes when mouse click outside the area of ComboBoxDropDown otherwise returns False.
+     * @return True: if ComboBoxDropDown closes when mouse click outside the area.
+     * False: if ComboBoxDropDown stays opened when mouse click outside the area.
      */
     public boolean isOutsideClickClosable() {
         return _ouside;
     }
 
+    /**
+     * Setting boolean value of item's behavior when mouse click occurs outside the ComboBoxDropDown.
+     * @param value True: ComboBoxDropDown should become invisible if mouse click occurs outside the item.
+     * False: an item should stay visible if mouse click occurs outside the item.
+     */
     public void setOutsideClickClosable(boolean value) {
         _ouside = value;
     }
 
     /**
-     * Constructs a ContextMenu
+     * Default ComboBoxDropDown constructor. 
+     * ComboBoxDropDown does not pass any input events and invisible by default.
      */
     public ComboBoxDropDown() {
         setItemName("ComboBoxDropDown_" + count++);
@@ -89,51 +138,65 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     private void disableAdditionalControls() {
         itemList.setVScrollBarPolicy(VisibilityPolicy.NEVER);
         itemList.setHScrollBarPolicy(VisibilityPolicy.NEVER);
-        if (itemList.eventScrollUp.size() != 0)
+        if (itemList.eventScrollUp.size() != 0) {
             itemList.eventScrollUp.clear();
-        if (itemList.eventScrollDown.size() != 0)
+        }
+        if (itemList.eventScrollDown.size() != 0) {
             itemList.eventScrollDown.clear();
-        if (itemList.eventMouseClick.size() != 0)
+        }
+        if (itemList.eventMouseClick.size() != 0) {
             itemList.eventMouseClick.clear();
-        if (itemList.eventKeyPress.size() != 0)
+        }
+        if (itemList.eventKeyPress.size() != 0) {
             itemList.eventKeyPress.clear();
+        }
     }
 
     private void enableAdditionalControls() {
         itemList.setVScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
         itemList.setHScrollBarPolicy(VisibilityPolicy.AS_NEEDED);
 
-        for (InterfaceMouseMethodState action : linkEventScrollUp.getActions())
+        for (InterfaceMouseMethodState action : linkEventScrollUp.getActions()) {
             itemList.eventScrollUp.add(action);
+        }
 
-        for (InterfaceMouseMethodState action : linkEventScrollDown.getActions())
+        for (InterfaceMouseMethodState action : linkEventScrollDown.getActions()) {
             itemList.eventScrollDown.add(action);
+        }
 
-        for (InterfaceMouseMethodState action : linkEventMouseClick.getActions())
+        for (InterfaceMouseMethodState action : linkEventMouseClick.getActions()) {
             itemList.eventMouseClick.add(action);
+        }
 
-        for (InterfaceKeyMethodState action : linkEventKeyPress.getActions())
+        for (InterfaceKeyMethodState action : linkEventKeyPress.getActions()) {
             itemList.eventKeyPress.add(action);
+        }
     }
 
     private void saveAdditionalControls() {
-        for (InterfaceMouseMethodState action : itemList.eventScrollUp.getActions())
+        for (InterfaceMouseMethodState action : itemList.eventScrollUp.getActions()) {
             linkEventScrollUp.add(action);
+        }
 
-        for (InterfaceMouseMethodState action : itemList.eventScrollDown.getActions())
+        for (InterfaceMouseMethodState action : itemList.eventScrollDown.getActions()) {
             linkEventScrollDown.add(action);
+        }
 
-        for (InterfaceMouseMethodState action : itemList.eventMouseClick.getActions())
+        for (InterfaceMouseMethodState action : itemList.eventMouseClick.getActions()) {
             linkEventMouseClick.add(action);
+        }
 
-        for (InterfaceKeyMethodState action : itemList.eventKeyPress.getActions())
+        for (InterfaceKeyMethodState action : itemList.eventKeyPress.getActions()) {
             linkEventKeyPress.add(action);
+        }
     }
 
     private int _selectionIndexStore = -1;
 
     /**
-     * Initialization and adding of all elements in the ContextMenu
+     * Initializing all elements in the ComboBoxDropDown. 
+     * <p> Notice: This method is mainly for overriding only. SpaceVIL calls 
+     * this method if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -169,28 +232,31 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     private void onSelectionChanged() {
         if (itemList.getSelectedItem() instanceof MenuItem) {
             MenuItem selection = (MenuItem) itemList.getSelectedItem();
-            _text_selection = selection.getText();
+            _textSelection = selection.getText();
         }
         hide();
         selectionChanged.execute();
     }
 
     /**
-     * Returns count of the ContextMenu lines
+     * Getting number of options in the list.
+     * @return Number of options in the list.
      */
     public int getListCount() {
         return itemList.getListContent().size();
     }
 
     /**
-     * Returns ContextMenu items list
+     * Getting all existing options (list of com.spvessel.spacevil.MenuItem objects).
+     * @return Options as List&lt;com.spvessel.spacevil.MenuItem&gt;
      */
     public List<InterfaceBaseItem> getListContent() {
         return itemList.getListContent();
     }
 
     /**
-     * Add item to the ContextMenu
+     * Adding option (or any com.spvessel.spacevil.Core.InterfaceBaseItem implementation) to the ComboBoxDropDown.
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
@@ -202,7 +268,10 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Remove item from the ContextMenu
+     * Removing option (or any com.spvessel.spacevil.Core.InterfaceBaseItem implementation) from the ComboBoxDropDown.
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem
+     * @return True: if the removal was successful. 
+     * False: if the removal was unsuccessful.
      */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
@@ -223,11 +292,13 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
                 MenuItem m = (MenuItem) item;
                 tmp += m.getTextWidth() + m.getMargin().left + m.getMargin().right + m.getPadding().left
                         + m.getPadding().right;
-            } else
+            } else {
                 tmp = tmp + item.getWidth() + item.getMargin().left + item.getMargin().right;
+            }
 
-            if (width < tmp)
+            if (width < tmp) {
                 width = tmp;
+            }
         }
         if ((getY() + height) > getHandler().getHeight()) {
             enableAdditionalControls();
@@ -241,11 +312,11 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Show the ContextMenu
+     * Shows the ComboBoxDropDown at the proper position.
      * 
-     * @param sender the item from which the show request is sent
-     * @param args   mouse click arguments (cursor position, mouse button, mouse
-     *               button press/release, etc.)
+     * @param sender The item from which the show request is sent.
+     * @param args   Mouse click arguments (cursor position, mouse button, mouse
+     *               button press/release, etc.).
      */
     public void show(InterfaceItem sender, MouseArgs args) {
         if (args.button.getValue() == activeButton.getValue()) {
@@ -256,6 +327,9 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
         }
     }
 
+    /**
+     * Shows the ComboBoxDropDown at the position (0, 0).
+     */
     public void show() {
         MouseArgs args = new MouseArgs();
         args.button = activeButton;
@@ -263,7 +337,7 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Hide the ContextMenu without destroying
+     * Hide the ContextMenu without destroying.
      */
     public void hide() {
         setVisible(false);
@@ -271,20 +345,26 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
         if (parent.returnFocus != null) {
             parent.setFocus();
         } else {
-            getHandler().setFocus();
+            getHandler().resetFocus();
         }
     }
 
+    /**
+     * Hide the ComboBoxDropDown without destroying with using specified mouse arguments.
+     * @param args Arguments as com.spvessel.spacevil.Core.MouseArgs.
+     */
     public void hide(MouseArgs args) {
-        if (!isVisible())
+        if (!isVisible()) {
             return;
+        }
 
         hide();
         parent.isDropDownAreaOutsideClicked(args);
     }
 
     /**
-     * Set confines according to position and size of the ContextMenu
+     * Overridden method for setting confines according 
+     * to position and size of the ComboBoxDropDown (see Prototype.setConfines()).
      */
     @Override
     public void setConfines() {
@@ -292,12 +372,15 @@ public class ComboBoxDropDown extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Set style of the ContextMenu
+     * Setting style of the ComboBoxDropDown.
+     * <p> Inner styles: "itemlist".
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {
-        if (style == null)
+        if (style == null) {
             return;
+        }
         super.setStyle(style);
         Style inner_style = style.getInnerStyle("itemlist");
         if (inner_style != null) {

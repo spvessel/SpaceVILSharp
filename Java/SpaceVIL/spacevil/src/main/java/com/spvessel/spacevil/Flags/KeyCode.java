@@ -1,5 +1,8 @@
 package com.spvessel.spacevil.Flags;
 
+/**
+ * Enum of key codes of keyboard.
+ */
 public enum KeyCode {
     UNKNOWN(-1),
 

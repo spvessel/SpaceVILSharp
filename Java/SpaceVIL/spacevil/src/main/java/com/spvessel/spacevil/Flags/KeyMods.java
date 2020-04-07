@@ -4,8 +4,18 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+/**
+ * Enum of keyboard modifiers.
+ */
 public enum KeyMods {
-    NO(0), SHIFT(1), CONTROL(2), ALT(4), SUPER(8);
+    NO(0),
+    SHIFT(1),
+    CONTROL(2),
+    ALT(4),
+    /**
+     * Can be Windows key (in WinOS), Command key (in MacOS)
+     */
+    SUPER(8);
 
     private final int mods;
 
