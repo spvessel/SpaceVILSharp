@@ -185,7 +185,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of selected option.
         /// </summary>
-        /// <param name="color">Color as System.Drawing.Color.</param>
+        /// <param name="color">Text color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
             Selection.SetForeground(color);
@@ -193,9 +193,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of selected option in byte RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
             Selection.SetForeground(r, g, b);
@@ -203,10 +203,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of selected option in byte RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
             Selection.SetForeground(r, g, b, a);
@@ -214,9 +214,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of selected option in float RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
             Selection.SetForeground(r, g, b);
@@ -224,10 +224,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of selected option in float RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
             Selection.SetForeground(r, g, b, a);
@@ -325,7 +325,7 @@ namespace SpaceVIL
         /// <summary>
         /// Selecting option by its index in the drop-down list.
         /// </summary>
-        /// <param name="index"></param>
+        /// <param name="index">Index in the drop-down list.</param>
         public void SetCurrentIndex(int index)
         {
             Prototype currentFocus = GetHandler().GetFocusedItem();
@@ -351,6 +351,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting style of the ComboBox.
         /// <para/> Inner styles: "selection", "dropdownbutton", "arrow", "dropdownarea".
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         /// </summary>
         public override void SetStyle(Style style)
         {

@@ -463,48 +463,48 @@ final class VisualItem extends BaseItem {
     }
 
     // common properties
-    private List<InputEventType> _pass_events = new LinkedList<>();
+    private List<InputEventType> _blockedEvents = new LinkedList<>();
 
     boolean isPassEvents() {
-        return (_pass_events.size() == 0);
+        return (_blockedEvents.size() == 0);
     }
 
     List<InputEventType> getPassEvents() {
         List<InputEventType> result = Arrays.asList(InputEventType.values());
-        return result.stream().filter(e -> !_pass_events.contains(e)).collect(Collectors.toList());
+        return result.stream().filter(e -> !_blockedEvents.contains(e)).collect(Collectors.toList());
     }
 
-    List<InputEventType> getNonPassEvents() {
-        return _pass_events;
+    List<InputEventType> getBlockedEvents() {
+        return _blockedEvents;
     }
 
     void setPassEvents(boolean value) {
         if (!value) {
             for (InputEventType e : Arrays.asList(InputEventType.values())) {
-                _pass_events.add(e);
+                _blockedEvents.add(e);
             }
         } else {
-            _pass_events.clear();
+            _blockedEvents.clear();
         }
     }
 
     void setPassEvents(boolean value, InputEventType e) {
         if (!value) {
-            if (!_pass_events.contains(e))
-                _pass_events.add(e);
+            if (!_blockedEvents.contains(e))
+                _blockedEvents.add(e);
         } else {
-            if (_pass_events.contains(e))
-                _pass_events.remove(e);
+            if (_blockedEvents.contains(e))
+                _blockedEvents.remove(e);
         }
     }
 
     void setPassEvents(boolean value, List<InputEventType> event_set) {
         if (!value) {
-            _pass_events = event_set;
+            _blockedEvents = event_set;
         } else {
             for (InputEventType e : event_set) {
-                if (_pass_events.contains(e))
-                    _pass_events.remove(e);
+                if (_blockedEvents.contains(e))
+                    _blockedEvents.remove(e);
             }
         }
     }
@@ -571,13 +571,6 @@ final class VisualItem extends BaseItem {
     // public void setFocusable() {
     //     // foreach inner item focusable value set?
     // }
-
-    @Override
-    void updateInnersDrawable(boolean value) {
-        for (InterfaceBaseItem item : _content) {
-            item.setVisible(value);
-        }
-    }
 
     void updateState() {
         VisualItemStatics.updateState(this);

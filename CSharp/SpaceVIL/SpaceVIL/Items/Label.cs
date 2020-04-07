@@ -103,7 +103,7 @@ namespace SpaceVIL
             SetTextAlignment(common);
         }
         /// <summary>
-        /// Getting alignment of an Label text. 
+        /// Getting alignment of a Label text. 
         /// </summary>
         /// <returns>Text alignment as SpaceVIL.Core.ItemAlignment.</returns>
         public ItemAlignment GetTextAlignment()
@@ -133,6 +133,10 @@ namespace SpaceVIL
         {
             SetTextMargin(new Indents(left, top, right, bottom));
         }
+        /// <summary>
+        /// Getting indents of the text.
+        /// </summary>
+        /// <returns>Indents as SpaceVIL.Decorations.Indents.</returns>
         public Indents GetTextMargin()
         {
             return _textObjects[0].GetMargin();
@@ -274,7 +278,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a Label.
         /// </summary>
-        /// <param name="color">Color as System.Drawing.Color.</param>
+        /// <param name="color">Text color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
             foreach (TextLine tl in _textObjects)
@@ -285,9 +289,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a Label in byte RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
             foreach (TextLine tl in _textObjects)
@@ -298,10 +302,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a Label in byte RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
             foreach (TextLine tl in _textObjects)
@@ -312,9 +316,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a Label in float RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
             foreach (TextLine tl in _textObjects)
@@ -325,10 +329,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a Label in float RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
             foreach (TextLine tl in _textObjects)

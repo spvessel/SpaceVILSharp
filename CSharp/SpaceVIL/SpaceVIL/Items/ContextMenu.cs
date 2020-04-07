@@ -39,7 +39,7 @@ namespace SpaceVIL
         /// <summary>
         /// You can specify mouse button (see SpaceVIL.Core.MouseButton) 
         /// that is used to open ContextMenu.
-        /// <para/> Default: SpaceVIL.Core.MouseButton.ButtonLeft.
+        /// <para/> Default: SpaceVIL.Core.MouseButton.ButtonRight.
         /// </summary>
         public MouseButton ActiveButton = MouseButton.ButtonRight;
 
@@ -48,7 +48,7 @@ namespace SpaceVIL
 
         /// <summary>
         /// Returns True if ContextMenu (see SpaceVIL.Core.IFloating)
-        /// should closes when mouse click outside the area of ContextMenu otherwise returns False..
+        /// should closes when mouse click outside the area of ContextMenu otherwise returns False.
         /// </summary>
         /// <returns>True: if ContextMenu closes when mouse click outside the area.
         /// False: if ContextMenu stays opened when mouse click outside the area.</returns>
@@ -377,10 +377,10 @@ namespace SpaceVIL
                 return;
             base.SetStyle(style);
 
-            Style inner_style = style.GetInnerStyle("itemlist");
-            if (inner_style != null)
+            Style innerStyle = style.GetInnerStyle("itemlist");
+            if (innerStyle != null)
             {
-                ItemList.SetStyle(inner_style);
+                ItemList.SetStyle(innerStyle);
             }
         }
     }

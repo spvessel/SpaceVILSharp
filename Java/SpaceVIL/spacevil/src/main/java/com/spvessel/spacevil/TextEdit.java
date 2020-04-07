@@ -23,14 +23,6 @@ public class TextEdit extends Prototype { //implements InterfaceTextEditable, In
 
     private TextEditStorage _textObject;
 
-    /**
-     * @return selection area Rectangle for styling
-     */
-    public Rectangle getSelectionArea() {
-        //        return _selectedArea;
-        return _textObject.getSelectionArea();
-    }
-
     //    private int _selectFrom = -1;
     //    private int _selectTo = -1;
     //    private boolean _isSelect = false;

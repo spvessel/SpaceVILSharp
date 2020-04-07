@@ -134,8 +134,8 @@ final class GLWHandler {
         float xActualScale = 1f;
         float yActualScale = 1f;
 
-        Area workArea  = _coreWindow.getWorkArea();
-        
+        Area workArea = _coreWindow.getWorkArea();
+
         if (appearInCenter) {
             if (CommonService.getOSType() != OSType.MAC) {
                 actualWndWidth = (int) (_coreWindow.getWidth() * _coreWindow.getDpiScale().getXScale());
@@ -159,10 +159,8 @@ final class GLWHandler {
         }
         glfwSetWindowPos(_window, getPointer().getX(), getPointer().getY());
 
-        glfwSetWindowSizeLimits(_window, 
-                (int) (_coreWindow.getMinWidth() * xActualScale),
-                (int) (_coreWindow.getMinHeight() * yActualScale), 
-                (int) (_coreWindow.getMaxWidth() * xActualScale),
+        glfwSetWindowSizeLimits(_window, (int) (_coreWindow.getMinWidth() * xActualScale),
+                (int) (_coreWindow.getMinHeight() * yActualScale), (int) (_coreWindow.getMaxWidth() * xActualScale),
                 (int) (_coreWindow.getMaxHeight() * yActualScale));
 
         if (_coreWindow.isKeepAspectRatio)
@@ -194,28 +192,29 @@ final class GLWHandler {
     }
 
     void setCursorType(int type) {
-        switch (type) {
-        case EmbeddedCursor.ARROW:
-            glfwSetCursor(_window, CommonService.cursorArrow);
-            break;
-        case EmbeddedCursor.IBEAM:
-            glfwSetCursor(_window, CommonService.cursorInput);
-            break;
-        case EmbeddedCursor.CROSSHAIR:
-            glfwSetCursor(_window, CommonService.cursorResizeAll);
-            break;
-        case EmbeddedCursor.HAND:
-            glfwSetCursor(_window, CommonService.cursorHand);
-            break;
-        case EmbeddedCursor.RESIZE_X:
-            glfwSetCursor(_window, CommonService.cursorResizeH);
-            break;
-        case EmbeddedCursor.RESIZE_Y:
-            glfwSetCursor(_window, CommonService.cursorResizeV);
-            break;
-        default:
-            glfwSetCursor(_window, CommonService.cursorArrow);
-            break;
+        EmbeddedCursor cursor = EmbeddedCursor.valueOf(type);
+        switch (cursor) {
+            case ARROW:
+                glfwSetCursor(_window, CommonService.cursorArrow);
+                break;
+            case IBEAM:
+                glfwSetCursor(_window, CommonService.cursorInput);
+                break;
+            case CROSSHAIR:
+                glfwSetCursor(_window, CommonService.cursorResizeAll);
+                break;
+            case HAND:
+                glfwSetCursor(_window, CommonService.cursorHand);
+                break;
+            case RESIZE_X:
+                glfwSetCursor(_window, CommonService.cursorResizeH);
+                break;
+            case RESIZE_Y:
+                glfwSetCursor(_window, CommonService.cursorResizeV);
+                break;
+            default:
+                glfwSetCursor(_window, CommonService.cursorArrow);
+                break;
         }
     }
 

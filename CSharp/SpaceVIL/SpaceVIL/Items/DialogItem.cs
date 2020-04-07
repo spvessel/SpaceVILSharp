@@ -13,10 +13,13 @@ namespace SpaceVIL
     abstract public class DialogItem : Prototype, IDialogItem
     {
         static int count = 0;
+        /// <summary>
+        /// Window area of DialogItem.
+        /// </summary>
         public ResizableItem Window = new ResizableItem();
 
         /// <summary>
-        /// Constructs a DialogItem
+        /// Constructs a DialogItem.
         /// </summary>
         public DialogItem()
         {
@@ -25,13 +28,17 @@ namespace SpaceVIL
             SetPassEvents(false);
             SetStyle(DefaultsService.GetDefaultStyle(typeof(SpaceVIL.DialogItem)));
         }
-
+        /// <summary>
+        /// Initializing all elements in the DialogItem.
+        /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
+        /// this method if necessary and no need to call it manually.
+        /// </summary>
         public override void InitElements()
         {
             AddItem(Window);
         }
 
-        CoreWindow _handler = null;
+        private CoreWindow _handler = null;
         /// <summary>
         /// Shows DialogItem and attaches it to the specified window 
         /// (see SpaceVIL.CoreWindow, SpaceVIL.ActiveWindow, SpaceVIL.DialogWindow).
@@ -55,17 +62,23 @@ namespace SpaceVIL
         /// <para/> Event type: SpaceVIL.EventCommonMethod.
         /// <para/> Function arguments: none.
         /// </summary>
-        /// /// <summary>
-        /// Disposing item's resources if the item was removed.
+        public EventCommonMethod OnCloseDialog;
+
+        /// <summary>
+        /// Disposing DialogItem resources if the it was removed.
         /// <para/> Notice: This method is mainly for overriding only. SpaceVIL calls 
         /// this method if necessary and no need to call it manually.
         /// </summary>
-        public EventCommonMethod OnCloseDialog;
         public override void Release()
         {
             OnCloseDialog = null;
         }
 
+        /// <summary>
+        /// Setting style of the DialogItem.
+        /// <para/> Inner styles: "window".
+        /// </summary>
+        /// <param name="style">Style as SpaceVIL.Decorations.Style.</param>
         public override void SetStyle(Style style)
         {
             if (style == null)

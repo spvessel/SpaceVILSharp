@@ -34,13 +34,13 @@ namespace SpaceVIL.Core
         Prototype GetParent();
         /// <summary>
         /// Setting the confines of the item relative to its parent's size and position.
-        /// <pata/> Example: items can be partially (or completely) outside the container (example: ListBox), 
+        /// <para/> Example: items can be partially (or completely) outside the container (example: ListBox), 
         /// in which case the part that is outside the container should not be visible and should not interact with the user.
         /// </summary>
         void SetConfines();
         /// <summary>
         /// Setting the confines of the item relative to specified bounds.
-        /// <pata/> Example: items can be partially (or completely) outside the container (example: ListBox), 
+        /// <para/> Example: items can be partially (or completely) outside the container (example: ListBox), 
         /// in which case the part that is outside the container should not be visible and should not interact with the user.
         /// </summary>
         /// <param name="x0">Left X begin position.</param>

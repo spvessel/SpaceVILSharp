@@ -469,33 +469,62 @@ namespace SpaceVIL
         }
 
         // common properties
-        private InputEventType _pass_events = 0x00;
+        private InputEventType _blockedEvents = 0x00;
 
         internal bool IsPassEvents()
         {
-            if (_pass_events == 0x00)
+            if (_blockedEvents == 0x00)
                 return true;
             return false;
         }
 
-        internal InputEventType GetPassEvents()
+        internal bool IsPassEvents(InputEventType e)
         {
-            return _pass_events;
+            if (_blockedEvents.HasFlag(e))
+                return false;
+            return true;
+        }
+
+        internal List<InputEventType> GetBlockedEvents()
+        {
+            List<InputEventType> list = new List<InputEventType>();
+            foreach (InputEventType type in Enum.GetValues(typeof(InputEventType)))
+            {
+                if (_blockedEvents.HasFlag(type))
+                {
+                    list.Add(type);
+                }
+            }
+
+            return list;
+        }
+
+        internal List<InputEventType> GetPassEvents()
+        {
+            List<InputEventType> list = new List<InputEventType>();
+            foreach (InputEventType type in Enum.GetValues(typeof(InputEventType)))
+            {
+                if (!_blockedEvents.HasFlag(type))
+                {
+                    list.Add(type);
+                }
+            }
+
+            return list;
         }
 
         internal void SetPassEvents(bool value)
         {
             if (!value)
             {
-                List<InputEventType> list = Enum.GetValues(typeof(InputEventType)).Cast<InputEventType>().ToList();
-                foreach (InputEventType e in list)
+                foreach (InputEventType e in Enum.GetValues(typeof(InputEventType)))
                 {
-                    _pass_events |= e;
+                    _blockedEvents |= e;
                 }
             }
             else
             {
-                _pass_events = 0x00;
+                _blockedEvents = 0x00;
             }
         }
 
@@ -503,12 +532,12 @@ namespace SpaceVIL
         {
             if (!value)
             {
-                _pass_events |= e;
+                _blockedEvents |= e;
             }
             else
             {
-                if (_pass_events.HasFlag(e))
-                    _pass_events &= ~e;
+                if (_blockedEvents.HasFlag(e))
+                    _blockedEvents &= ~e;
             }
         }
 

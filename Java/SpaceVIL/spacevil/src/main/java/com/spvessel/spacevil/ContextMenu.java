@@ -14,39 +14,87 @@ import com.spvessel.spacevil.Flags.VisibilityPolicy;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * ContextMenu is a menu for selecting one of the available options from the
+ * list that perform the assigned action. ContextMenu is a floating item (see
+ * com.spvessel.spacevil.Core.InterfaceFloating and enum
+ * com.spvessel.spacevil.Flags.LayoutType) and closes when mouse click outside
+ * the ContextMenu area.
+ * <p>
+ * Contains ListBox.
+ * <p>
+ * Supports all events except drag and drop.
+ * <p>
+ * Notice: All floating items render above all others items.
+ * <p>
+ * ContextMenu does not pass any input events and invisible by default.
+ */
 public class ContextMenu extends Prototype implements InterfaceFloating {
+    /**
+     * Property that allows to specify what item will be focused after ContextMenu
+     * is closed.
+     */
     public Prototype returnFocus = null;
-
+    /**
+     * ListBox for storing a list of options (com.spvessel.spacevil.MenuItem).
+     */
     public ListBox itemList = new ListBox();
     private List<InterfaceBaseItem> _queue = new LinkedList<>();
 
     private Prototype _sender = null;
 
+    /**
+     * Getting the item that invokes ContextMenu.
+     * 
+     * @return Item as com.spvessel.spacevil.Prototype.
+     */
     public Prototype getSender() {
         return _sender;
     }
 
     private static int count = 0;
+    /**
+     * You can specify mouse button (see com.spvessel.spacevil.Flags.MouseButton)
+     * that is used to open ContextMenu.
+     * <p>
+     * Default: com.spvessel.spacevil.Flags.MouseButton.BUTTON_RIGHT.
+     */
     public MouseButton activeButton = MouseButton.BUTTON_RIGHT;
 
     private boolean _init = false;
     private boolean _ouside = true;
 
     /**
-     * Close the ContextMenu it mouse click is outside (true or false)
+     * Returns True if ContextMenu (see
+     * com.spvessel.spacevil.Core.InterfaceFloating) should closes when mouse click
+     * outside the area of ContextMenu otherwise returns False.
+     * 
+     * @return True: if ContextMenu closes when mouse click outside the area. False:
+     *         if ContextMenu stays opened when mouse click outside the area.
      */
     public boolean isOutsideClickClosable() {
         return _ouside;
     }
 
+    /**
+     * Setting boolean value of item's behavior when mouse click occurs outside the
+     * ContextMenu.
+     * 
+     * @param value True: ContextMenu should become invisible if mouse click occurs
+     *              outside the item. False: an item should stay visible if mouse
+     *              click occurs outside the item.
+     */
     public void setOutsideClickClosable(boolean value) {
         _ouside = value;
     }
 
     /**
-     * Constructs a ContextMenu
+     * Constructs a ContextMenu and attaches it to the specified window (see
+     * com.spvessel.spacevil.CoreWindow, com.spvessel.spacevil.ActiveWindow,
+     * com.spvessel.spacevil.DialogWindow). ContextMenu does not pass any input
+     * events and invisible by default.
      * 
-     * @param handler parent window for the ContextMenu
+     * @param handler Window for attaching ContextMenu.
      */
     public ContextMenu(CoreWindow handler) {
         ItemsLayoutBox.addItem(handler, this, LayoutType.FLOATING);
@@ -56,6 +104,14 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         setVisible(false);
     }
 
+    /**
+     * Constructs a ContextMenu with specified options and attaches it to the
+     * specified window (see com.spvessel.spacevil.CoreWindow,
+     * com.spvessel.spacevil.ActiveWindow, com.spvessel.spacevil.DialogWindow).
+     * 
+     * @param handler Window for attaching ContextMenu.
+     * @param items   Sequence of options as com.spvessel.spacevil.MenuItem.
+     */
     public ContextMenu(CoreWindow handler, MenuItem... items) {
         this(handler);
         for (MenuItem item : items)
@@ -63,7 +119,10 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Initialization and adding of all elements in the ContextMenu
+     * Initializing all elements in the ContextMenu.
+     * <p>
+     * Notice: This method is mainly for overriding only. SpaceVIL calls this method
+     * if necessary and no need to call it manually.
      */
     @Override
     public void initElements() {
@@ -119,21 +178,29 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Returns count of the ContextMenu lines
+     * Getting number of options in the list.
+     * 
+     * @return Number of options in the list.
      */
     public int getListCount() {
         return itemList.getListContent().size();
     }
 
     /**
-     * Returns ContextMenu items list
+     * Getting all existing options (list of com.spvessel.spacevil.MenuItem
+     * objects).
+     * 
+     * @return Options as List&lt;com.spvessel.spacevil.MenuItem&gt;
      */
     public List<InterfaceBaseItem> getListContent() {
         return itemList.getListContent();
     }
 
     /**
-     * Add item to the ContextMenu
+     * Adding option (or any com.spvessel.spacevil.Core.InterfaceBaseItem
+     * implementation) to the ComboBoxDropDown.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
      */
     @Override
     public void addItem(InterfaceBaseItem item) {
@@ -153,7 +220,12 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Remove item from the ContextMenu
+     * Removing option (or any com.spvessel.spacevil.Core.InterfaceBaseItem
+     * implementation) from the ComboBoxDropDown.
+     * 
+     * @param item Item as com.spvessel.spacevil.Core.InterfaceBaseItem.
+     * @return True: if the removal was successful. False: if the removal was
+     *         unsuccessful.
      */
     @Override
     public boolean removeItem(InterfaceBaseItem item) {
@@ -204,11 +276,11 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Show the ContextMenu
+     * Shows the ContextMenu at the proper position.
      * 
-     * @param sender the item from which the show request is sent
-     * @param args   mouse click arguments (cursor position, mouse button, mouse
-     *               button press/release, etc.)
+     * @param sender The item from which the show request is sent.
+     * @param args   Mouse click arguments (cursor position, mouse button, mouse
+     *               button press/release, etc.).
      */
     public void show(InterfaceItem sender, MouseArgs args) {
         if (args.button.equals(activeButton)) {
@@ -240,6 +312,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
         }
     }
 
+    /**
+     * Shows the ContextMenu at the position (0, 0).
+     */
     public void show() {
         MouseArgs margs = new MouseArgs();
         margs.button = MouseButton.BUTTON_RIGHT;
@@ -248,6 +323,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
 
     private boolean _added = false;
 
+    /**
+     * Remove all content in the ContextMenu.
+     */
     @Override
     public void clear() {
         itemList.clear();
@@ -256,25 +334,29 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Hide the ContextMenu without destroying
+     * Hide the ContextMenu without destroying.
      */
     public void hide() {
         itemList.unselect();
         setVisible(false);
         setX(-getWidth());
-        
+
         if (returnFocus != null)
             returnFocus.setFocus();
-        // else
-        // getHandler().getWindow().setFocus();
     }
 
+    /**
+     * Hide the ContextMenu without destroying with using specified mouse arguments.
+     * 
+     * @param args Arguments as com.spvessel.spacevil.Core.MouseArgs.
+     */
     public void hide(MouseArgs args) {
         hide();
     }
 
     /**
-     * Set confines according to position and size of the ContextMenu
+     * Overridden method for setting confines according to position and size of the
+     * ContextMenu (see Prototype.setConfines()).
      */
     @Override
     public void setConfines() {
@@ -282,7 +364,11 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
     }
 
     /**
-     * Set style of the ContextMenu
+     * Setting style of the ContextMenu.
+     * <p>
+     * Inner styles: "itemlist".
+     * 
+     * @param style Style as com.spvessel.spacevil.Decorations.Style.
      */
     @Override
     public void setStyle(Style style) {
@@ -290,13 +376,9 @@ public class ContextMenu extends Prototype implements InterfaceFloating {
             return;
         super.setStyle(style);
 
-        Style inner_style = style.getInnerStyle("itemlist");
-        if (inner_style != null) {
-            itemList.setStyle(inner_style);
-        }
-        inner_style = style.getInnerStyle("listarea");
-        if (inner_style != null) {
-            itemList.getArea().setStyle(inner_style);
+        Style innerStyle = style.getInnerStyle("itemlist");
+        if (innerStyle != null) {
+            itemList.setStyle(innerStyle);
         }
     }
 }

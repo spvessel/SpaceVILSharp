@@ -462,7 +462,7 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a TextArea.
         /// </summary>
-        /// <param name="color">Color as System.Drawing.Color.</param>
+        /// <param name="color">Text color as System.Drawing.Color.</param>
         public void SetForeground(Color color)
         {
             _area.SetForeground(color);
@@ -470,9 +470,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a TextArea in byte RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b)
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b));
@@ -480,10 +480,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a TextArea in byte RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0 - 255)</param>
-        /// <param name="g">Green bits of a color. Range: (0 - 255)</param>
-        /// <param name="b">Blue bits of a color. Range: (0 - 255)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0 - 255)</param>
+        /// <param name="r">Red color component. Range: (0 - 255)</param>
+        /// <param name="g">Green color component. Range: (0 - 255)</param>
+        /// <param name="b">Blue color component. Range: (0 - 255)</param>
+        /// <param name="a">Alpha color component. Range: (0 - 255)</param>
         public void SetForeground(int r, int g, int b, int a)
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
@@ -491,9 +491,9 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a TextArea in float RGB format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b)
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b));
@@ -501,10 +501,10 @@ namespace SpaceVIL
         /// <summary>
         /// Setting text color of a TextArea in float RGBA format.
         /// </summary>
-        /// <param name="r">Red bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="g">Green bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="b">Blue bits of a color. Range: (0.0f - 1.0f)</param>
-        /// <param name="a">Alpha bits of a color. Range: (0.0f - 1.0f)</param>
+        /// <param name="r">Red color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="g">Green color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="b">Blue color component. Range: (0.0f - 1.0f)</param>
+        /// <param name="a">Alpha color component. Range: (0.0f - 1.0f)</param>
         public void SetForeground(float r, float g, float b, float a)
         {
             SetForeground(GraphicsMathService.ColorTransform(r, g, b, a));
@@ -631,7 +631,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Getting the text height (useful when you need resize item by text height).
+        /// Getting the text height.
         /// </summary>
         /// <returns>Text height.</returns>
         public int GetTextHeight()
@@ -640,7 +640,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Set TextArea focused/unfocused
+        /// Setting focus on TextArea if it is focusable.
         /// </summary>
         public override void SetFocus()
         {
@@ -648,7 +648,7 @@ namespace SpaceVIL
         }
 
         /// <summary>
-        /// Setting focus on TextArea if it is focusable.
+        /// Deletes all text in the TextArea.
         /// </summary>
         public override void Clear()
         {
@@ -673,7 +673,7 @@ namespace SpaceVIL
             _area.PasteText(text);
         }
         /// <summary>
-        /// Cuts the current selected text and save it to the clipboard buffer.
+        /// Cuts and returns the current selected text.
         /// </summary>
         /// <returns>Selected text.</returns>
         public string CutText()
@@ -683,7 +683,7 @@ namespace SpaceVIL
         /// <summary>
         /// Getting the current selected text.
         /// </summary>
-        /// <returns>Current selected text</returns>
+        /// <returns>Current selected text.</returns>
         public string GetSelectedText()
         {
             return _area.GetSelectedText();
